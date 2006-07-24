@@ -2,6 +2,7 @@
 // TODO: provide platform independent means of demangling, 
 // or at least support for different compilers
 // this is platform dependant for gnu compilers
+#ifdef __GNUG__
 #include <cxxabi.h> // __cxa_demangle
 
 std::string test::demangle(char const *name){
@@ -10,3 +11,8 @@ std::string test::demangle(char const *name){
 	::free(toBeFreed);
 	return result;
 }
+#else
+std::string test::demangle(char const *name){
+	return std::string(name);
+}
+#endif
