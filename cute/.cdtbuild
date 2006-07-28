@@ -8,6 +8,7 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug.124331478" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug">
 <option id="gnu.cpp.compiler.option.include.paths.1950858045" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="c:\\cygwin\\usr\\include\\boost-1_33_1"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cute}&quot;"/>
 </option>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug.1176648616" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug"/>

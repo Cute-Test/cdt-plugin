@@ -22,15 +22,20 @@ struct timing_listener:Listener{
 		Listener::start(t);
 		timer.start();
 	}
-	void success(test const &t, char const *msg){
+	void taketime(){
 		currentTest= timer.stop();
 		allTests+=currentTest;
+	}
+	void success(test const &t, char const *msg){
+		taketime();
 		Listener::success(t,timer.timingMessage(msg,currentTest).c_str());
 	}
 	void failure(test const &t,cute_exception const &e){
+		taketime();
 		Listener::failure(t,e);
 	}
 	void error(test const &t,char const *what){
+		taketime();
 		Listener::error(t,what);
 	}
 	timing_listener_helper timer;
