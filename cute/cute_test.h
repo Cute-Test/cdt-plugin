@@ -2,8 +2,8 @@
 #define CUTE_TEST_H_
 #include <boost/function.hpp>
 // make plain functions as tests more 'cute':
-#define CUTE(name) test((name),#name)
-
+#define CUTE(name) cute::test((name),#name)
+namespace cute {
 template <typename> struct cute_expect;
 
 struct test{
@@ -34,4 +34,5 @@ private:
 	a_test theTest;
 	std::string name_;
 };
+}
 #endif /*CUTE_TEST_H_*/

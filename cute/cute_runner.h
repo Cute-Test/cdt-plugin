@@ -2,44 +2,47 @@
 #define CUTE_RUNNER_H_
 #include "cute_test.h"
 #include "cute_suite.h"
-#include "cute_signaler.h"
-template <typename Signaler=null_signaler>
-struct runner : Signaler{
-	runner():Signaler(){}
-	runner(Signaler &s):Signaler(s){}
+#include "cute_listener.h"
+namespace cute {
+template <typename Listener=null_listener>
+struct runner : Listener{
+	runner():Listener(){}
+	runner(Listener &s):Listener(s){}
 	void operator()(test &t){
 		runit(t);
 	}
 	void operator()(suite &s){
+		Listener::begin(s);
 		for(suite::iterator it=s.begin();
 		    it != s.end();
 		    ++it){
 		    	this->runit(*it);
 		    }
+		Listener::end(s);
 		// avoid bind dependency: std::for_each(s.begin(),s.end(),boost::bind(&runner::runit,this,_1));
 	}
 private:
 	void runit(test &t){
 		try {
-			Signaler::start(t);
+			Listener::start(t);
 			t();
-			Signaler::success(t,"OK");
+			Listener::success(t,"OK");
 		} catch (cute_exception const &e){
-			Signaler::failure(t,e);
+			Listener::failure(t,e);
 		} catch (std::exception const &exc){
-			Signaler::error(t,test::demangle(exc.what()).c_str());
+			Listener::error(t,test::demangle(exc.what()).c_str());
 		} catch (std::string &s){
-			Signaler::error(t,s.c_str());
+			Listener::error(t,s.c_str());
 		} catch (char const *&cs) {
-			Signaler::error(t,cs);
+			Listener::error(t,cs);
 		} catch(...) {
-			Signaler::error(t,"unknown exception thrown");
+			Listener::error(t,"unknown exception thrown");
 		}
 	}
 };
-template <typename Signaler>
-runner<Signaler> makeRunner(Signaler &s){
-	return runner<Signaler>(s);
+template <typename Listener>
+runner<Listener> makeRunner(Listener &s){
+	return runner<Listener>(s);
 }
-
+}
 #endif /*CUTE_RUNNER_H_*/

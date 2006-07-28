@@ -2,6 +2,7 @@
 #define CUTE_EXPECT_H_
 #include "cute.h"
 #include "cute_test.h"
+namespace cute{
 template <typename EXCEPTION>
 struct cute_expect{
 	test theTest;
@@ -22,6 +23,7 @@ struct cute_expect{
 		       + test::demangle(typeid(EXCEPTION).name());
 	}
 };
-#define CUTE_EXPECT(tt,exc) cute_expect<exc>(tt,__FILE__,__LINE__)
+}
+#define CUTE_EXPECT(tt,exc) cute::cute_expect<exc>(tt,__FILE__,__LINE__)
 
 #endif /*CUTE_EXPECT_H_*/

@@ -2,6 +2,7 @@
 
 #include <sstream>
 
+namespace cute {
 using namespace std;
 
 std::string cute_exception::what()const{
@@ -9,3 +10,4 @@ std::string cute_exception::what()const{
 		out << filename << ":" << lineno << ": testcase failed: " << reason ;
 		return out.str();
 }	
+}
