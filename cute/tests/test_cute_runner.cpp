@@ -55,7 +55,9 @@ void test_cute_runner(){
 	assertEquals(3u,run.errormessages.size());
 	assertEquals("error",run.errormessages[0]);
 	assertEquals("error",run.errormessages[1]);
-	assertEquals("std::exception",run.errormessages[2]);
+	std::string errormsg2=run.errormessages[2];
+	std::string errmsgexpected="exception";
+	assertEquals(errmsgexpected,errormsg2.substr(errormsg2.size()-errmsgexpected.size()));
 	assertEquals(1u,run.successmessages.size());
 	assertEquals("OK",run.successmessages[0]);
 	

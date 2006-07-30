@@ -1,11 +1,12 @@
 #include "cute_equals.h"
 #include <cmath>
+#include <limits>
 namespace cute{
 	std::string diff_values(std::string const &exp,std::string const &act){
 		typedef std::string::const_iterator iter;
 		std::pair<iter,iter> differ=mismatch(exp.begin(),exp.end(),act.begin());
 		std::ostringstream os;
-		os << " pos " << differ.first-exp.begin() << " (\""
+		os << " pos " << std::distance(exp.begin(),differ.first) << " (\""
 		   <<exp.substr(differ.first-exp.begin())<<"\",\""
 		   <<act.substr(differ.second-act.begin())<<"\")";
 		return os.str();

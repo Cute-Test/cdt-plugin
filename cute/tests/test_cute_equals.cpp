@@ -2,6 +2,7 @@
 #include "cute.h"
 #include "cute_equals.h"
 #include "cute_expect.h"
+#include <limits>
 namespace {
 // the following code triggers some warnings about equating signed/unsigned
 // that is intentional

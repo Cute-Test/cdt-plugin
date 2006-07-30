@@ -17,7 +17,8 @@ void test_cute_macro(){
 }
 void test_functor(){
 	cute::test t = for_cute_equals_test::Test();
-	assertEquals("for_cute_equals_test::Test",t.name()); 
+	std::string typesuffix= "for_cute_equals_test::Test";
+	assertEquals(typesuffix,t.name().substr(t.name().size()-typesuffix.size())); 
 }
 }
 cute::suite test_cute_test(){

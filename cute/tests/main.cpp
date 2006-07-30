@@ -23,7 +23,6 @@
 
 using namespace cute;
 void test0(){
-	sleep(2);
 	t_assert(true);
 }
 void test1(){
