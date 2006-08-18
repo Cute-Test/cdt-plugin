@@ -17,10 +17,6 @@ struct test{
 	template <typename VoidFunctor>
 	test(VoidFunctor const &t):theTest(t),name_(demangle(typeid(t).name())){}
 	
-	// keept the orignal test's name with expected exceptions
-	template <typename Exception>
-	test(cute_expect<Exception> const &t):theTest(t),name_(t.name()){}
-	
 	// this is for functors derived from member function pointers, i.e. test classes
 	template <typename VoidFunctor>
 	test(VoidFunctor const &t,std::string name):theTest(t),name_(name){}
