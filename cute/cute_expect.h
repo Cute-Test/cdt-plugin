@@ -17,13 +17,12 @@ struct cute_expect{
 		} catch(EXCEPTION &e) {
 		}
 	}
-	std::string name() const { return theTest.name();}
 	std::string what() const{
 		return theTest.name() + " expecting " 
 		       + test::demangle(typeid(EXCEPTION).name());
 	}
 };
 }
-#define CUTE_EXPECT(tt,exc) cute::cute_expect<exc>(tt,__FILE__,__LINE__)
+#define CUTE_EXPECT(tt,exc) cute::test(cute::cute_expect<exc>(tt,__FILE__,__LINE__),tt.name())
 
 #endif /*CUTE_EXPECT_H_*/

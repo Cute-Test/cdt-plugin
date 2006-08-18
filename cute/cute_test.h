@@ -4,7 +4,6 @@
 // make plain functions as tests more 'cute':
 #define CUTE(name) cute::test((name),#name)
 namespace cute {
-template <typename> struct cute_expect;
 
 struct test{
 	typedef void(*testfunction)(); 
