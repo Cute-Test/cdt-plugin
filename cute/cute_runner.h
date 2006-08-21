@@ -8,25 +8,28 @@ template <typename Listener=null_listener>
 struct runner : Listener{
 	runner():Listener(){}
 	runner(Listener &s):Listener(s){}
-	void operator()(test &t){
-		runit(t);
+	bool operator()(test &t){
+		return runit(t);
 	}
-	void operator()(suite &s){
+	bool operator()(suite &s){
 		Listener::begin(s);
+		bool result=true;
 		for(suite::iterator it=s.begin();
+		// avoid bind dependency: std::for_each(s.begin(),s.end(),boost::bind(&runner::runit,this,_1));
 		    it != s.end();
 		    ++it){
-		    	this->runit(*it);
+		    	result = this->runit(*it) && result;
 		    }
 		Listener::end(s);
-		// avoid bind dependency: std::for_each(s.begin(),s.end(),boost::bind(&runner::runit,this,_1));
+		return result;
 	}
 private:
-	void runit(test &t){
+	bool runit(test &t){
 		try {
 			Listener::start(t);
 			t();
 			Listener::success(t,"OK");
+			return true;
 		} catch (cute_exception const &e){
 			Listener::failure(t,e);
 		} catch (std::exception const &exc){
@@ -38,6 +41,7 @@ private:
 		} catch(...) {
 			Listener::error(t,"unknown exception thrown");
 		}
+		return false;
 	}
 };
 template <typename Listener>

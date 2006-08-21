@@ -42,14 +42,16 @@ void test_cute_runner(){
 	cute::runner<mock_listener> run;
 	suite s;
 	s += CUTE(test_success);
+	t_assert(run(s));
 	s += CUTE(test_failure);
 	s += CUTE(test_error_cstr);
 	s += CUTE(test_error_string);
 	s += CUTE(test_error_exception);
-	run(s);
-	assertEquals(1,run.begincount);
-	assertEquals(1,run.endcount);
-	assertEquals(1,run.successcount);
+	bool result=run(s);
+	t_assert(!result);
+	assertEquals(2,run.begincount);
+	assertEquals(2,run.endcount);
+	assertEquals(2,run.successcount);
 	assertEquals(1,run.failurecount);
 	assertEquals(3,run.errorcount);
 	assertEquals(3u,run.errormessages.size());
@@ -58,7 +60,7 @@ void test_cute_runner(){
 	std::string errormsg2=run.errormessages[2];
 	std::string errmsgexpected="exception";
 	assertEquals(errmsgexpected,errormsg2.substr(errormsg2.size()-errmsgexpected.size()));
-	assertEquals(1u,run.successmessages.size());
+	assertEquals(2u,run.successmessages.size());
 	assertEquals("OK",run.successmessages[0]);
 	
 }
