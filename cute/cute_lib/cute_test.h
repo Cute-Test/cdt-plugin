@@ -1,0 +1,32 @@
+#ifndef CUTE_TEST_H_
+#define CUTE_TEST_H_
+#include <boost/function.hpp>
+// make plain functions as tests more 'cute':
+#define CUTE(name) cute::test((name),#name)
+namespace cute {
+
+struct test{
+	typedef void(*testfunction)(); 
+	std::string name()const{ return name_;}
+
+	// functor types can (almost) spell their name
+	template <typename VoidFunctor>
+	test(VoidFunctor const &t):theTest(t),name_(demangle(typeid(t).name())){}
+	
+	// for CUTE, where a name is given explicitely
+	// or for functors derived from member function pointers, i.e. test classes
+	template <typename VoidFunctor>
+	test(VoidFunctor const &t,std::string name):theTest(t),name_(name){}
+	
+	void operator()()const{ theTest(); }
+	
+	// this shouldn't belong here, but where?
+	// needs adaptation for different compilers
+	static std::string demangle(char const *name);
+private:
+	typedef boost::function<void()> a_test;
+	a_test theTest;
+	std::string name_;
+};
+}
+#endif /*CUTE_TEST_H_*/
