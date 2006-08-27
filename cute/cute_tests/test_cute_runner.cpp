@@ -12,13 +12,17 @@ struct mock_listener {
 	int successcount;
 	int failurecount;
 	int errorcount;
+	std::vector<std::string> infomessages;
 	std::vector<std::string>  errormessages;
 	std::vector<std::string>  successmessages;
 	mock_listener()
 	:begincount(0),endcount(0),startcount(0)
 	,successcount(0),failurecount(0),errorcount(0){}
-	void begin(suite const &s){++begincount;}
-	void end(suite const &s){++endcount;}
+	void begin(suite const &s,char const *info){
+		++begincount;
+		infomessages.push_back(info);
+	}
+	void end(suite const &s,char const *info){++endcount;}
 	void start(test const &t){++startcount;}
 	void success(test const &t, char const *ok){
 		++successcount;
@@ -42,18 +46,21 @@ void test_cute_runner(){
 	cute::runner<mock_listener> run;
 	suite s;
 	s += CUTE(test_success);
-	t_assert(run(s));
+	t_assert(run(s,"single success test suite"));
 	s += CUTE(test_failure);
 	s += CUTE(test_error_cstr);
 	s += CUTE(test_error_string);
 	s += CUTE(test_error_exception);
-	bool result=run(s);
-	t_assert(!result);
+	bool result=run(s,"test_cute_runner_suite");
+	t_assert(!result); 
 	assertEquals(2,run.begincount);
 	assertEquals(2,run.endcount);
 	assertEquals(2,run.successcount);
 	assertEquals(1,run.failurecount);
 	assertEquals(3,run.errorcount);
+	assertEquals(2,run.infomessages.size());
+	assertEquals("single success test suite",run.infomessages[0]);
+	assertEquals("test_cute_runner_suite",run.infomessages[1]);
 	assertEquals(3u,run.errormessages.size());
 	assertEquals("error",run.errormessages[0]);
 	assertEquals("error",run.errormessages[1]);

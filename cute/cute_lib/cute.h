@@ -3,13 +3,10 @@
 #include <string>
 namespace cute{
 struct cute_exception {
-	std::string reason;
-	std::string filename;
-	int lineno;
+	const std::string reason;
+	const std::string filename;
+	const int lineno;
 
-	cute_exception(char const *r,char const *f, int line)
-	:reason(r),filename(f),lineno(line)
-	{ 	}
 	cute_exception(std::string const &r,char const *f, int line)
 	:reason(r),filename(f),lineno(line)
 	{ 	}

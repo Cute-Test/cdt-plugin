@@ -11,16 +11,15 @@ struct runner : Listener{
 	bool operator()(test const &t){
 		return runit(t);
 	}
-	bool operator()(suite const &s){
-		Listener::begin(s);
+	bool operator()(suite const &s,char const *info=""){
+		Listener::begin(s,info);
 		bool result=true;
 		for(suite::const_iterator it=s.begin();
-		// avoid bind dependency: std::for_each(s.begin(),s.end(),boost::bind(&runner::runit,this,_1));
 		    it != s.end();
 		    ++it){
 		    	result = this->runit(*it) && result;
 		    }
-		Listener::end(s);
+		Listener::end(s,info);
 		return result;
 	}
 private:

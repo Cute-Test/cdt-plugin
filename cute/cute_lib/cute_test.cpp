@@ -13,6 +13,7 @@ std::string test::demangle(char const *name){
 }
 }
 #else
+// this default works reasonably with MSVC71
 namespace cute {
 std::string test::demangle(char const *name){
 	return std::string(name);

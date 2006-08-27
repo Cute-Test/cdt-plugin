@@ -6,8 +6,8 @@ namespace cute{
 template <typename EXCEPTION>
 struct cute_expect{
 	test theTest;
-	char const *filename;
-	int  lineno;
+	char const * const filename;
+	int const  lineno;
 	cute_expect(test const &t,char const *file,int line)
 	:theTest(t), filename(file), lineno(line){}
 	void operator()(){

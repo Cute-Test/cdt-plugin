@@ -5,12 +5,57 @@ int lifeTheUniverseAndEverything = 41;
 void mysimpletest(){
     t_assert(lifeTheUniverseAndEverything == 6*7);
 }
-
 #include <iostream>
 #include "cute_runner.h"
-#include "ostream_listener.h"
-int main(){
+int main1(){
 	using namespace std;
 
-	cute::runner<cute::ostream_listener>()(CUTE(mysimpletest));
+	if (cute::runner<>()(mysimpletest)){
+		cout << "OK" << endl;
+	} else {
+		cout << "failed" << endl;
+	}	
+	return 0;
+}
+
+#include "ostream_listener.h"
+int main2(){
+	using namespace std;
+
+	return cute::runner<cute::ostream_listener>()(mysimpletest);
+}
+
+
+#include "cute_test.h"
+#include "cute_equals.h"
+int anothertest(){
+	assertEquals(42,lifeTheUniverseAndEverything);
+	return 0;
+}
+
+cute::test tests[]={
+	CUTE(mysimpletest)
+	,mysimpletest
+	,CUTE(anothertest)
+};
+
+struct ATestFunctor {
+	void operator()(){
+		assertEqualsDelta(42.0,static_cast<double>(lifeTheUniverseAndEverything),0.001);
+	}
+};
+#include "cute_suite.h"
+int main3(){
+	using namespace std;
+
+	cute::runner<cute::ostream_listener> run;
+	cute::suite s(tests,tests+(sizeof(tests)/sizeof(tests[0])));
+	s+=ATestFunctor();
+	return run(s,"suite");
+}
+
+int main(){
+	main1();
+	main2();
+	main3();
 }

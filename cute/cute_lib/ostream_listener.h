@@ -10,8 +10,8 @@ class ostream_listener
 public:
 	ostream_listener(); // use cerr!
 	ostream_listener(std::ostream &os):out(os) {} 
-	void begin(suite const &t){}
-	void end(suite const &t){}
+	void begin(suite const &t,char const *info);
+	void end(suite const &t, char const *info);
 	void start(test const &t);
 	void success(test const &t, char const *msg);
 	void failure(test const &t,cute_exception const &e);

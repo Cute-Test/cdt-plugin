@@ -29,11 +29,9 @@ namespace {
 			assertEqualsDelta(__LINE__,e.lineno,10);
 		}
 	}
-	// TODO: check if the error-message format is useful and reasonable
-	// might be too "elaborate" with "testcase failed:"
 	void test_what(){
 		cute::cute_exception ex("foo","file",42);
-		assertEquals("file:42: testcase failed: foo",ex.what());
+		assertEquals("file:42: foo",ex.what());
 	}
 }
 

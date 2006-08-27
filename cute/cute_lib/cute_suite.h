@@ -4,7 +4,7 @@
 #include <vector>
 namespace cute {
 typedef std::vector<test> suite;
-// convenience operator for appending suites
+// convenience operator for appending to suites
 suite &operator+=(suite &left, suite const &right);
 suite &operator+=(suite &left, test const &right);
 

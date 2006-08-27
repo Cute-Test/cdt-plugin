@@ -17,7 +17,8 @@ std::string diff_values(EXPECTED const &expected
 // special cases for strings
 std::string diff_values(std::string const &,std::string const &);
 std::string diff_values(char const * const &exp,std::string const &act);
-				
+
+// TODO: some magic might be possible with boost::mpl... leave that for the moment
 template <typename EXPECTED, typename ACTUAL>
 void assert_equal(EXPECTED const &expected
 				,ACTUAL const &actual

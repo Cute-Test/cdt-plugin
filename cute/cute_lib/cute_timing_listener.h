@@ -1,8 +1,8 @@
 #ifndef CUTE_TIMING_SIGNALER_H_
 #define CUTE_TIMING_SIGNALER_H_
 #include "cute_listener.h"
-// a listener that can wrap others, like ostream_listener
-// TODO: should have system dependent parts in cpp file.
+// TODO: not yet working on windows..... BROKEN...
+// TODO: should use a system (independent) type for hires-timer
 namespace cute {
 struct timing_listener_helper{
 	long long laststart;

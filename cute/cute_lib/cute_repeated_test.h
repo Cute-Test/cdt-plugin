@@ -4,16 +4,16 @@
 namespace cute{
 
 struct repeated_test {
-	repeated_test(test const &t,int n):theTest(t),repetitions(n){}
+	repeated_test(test const &t,unsigned int n):theTest(t),repetitions(n){}
 	void operator()(){
-		for (int i=0;i<repetitions;++i){
+		for (unsigned int i=0;i<repetitions;++i){
 			theTest();
 		}
 	}
 	test theTest;
-	const int repetitions;
+	const unsigned int repetitions;
 };
 }
-#define CUTE_REPEAT(aTest,n) cute::test(cute::repeated_test(aTest,(n)),#aTest " " #n " times repeated")
-#define CUTE_REPEAT_TEST(aTest,n) cute::test(cute::repeated_test(aTest,(n)),aTest.name()+" " #n " times repeated")
+#define CUTE_REPEAT(aTestFunction,n) cute::test(cute::repeated_test((aTestFunction),(n)),#aTestFunction " " #n " times repeated")
+#define CUTE_REPEAT_TEST(aTestObject,n) cute::test(cute::repeated_test((aTestObject),(n)),aTestObject.name()+" " #n " times repeated")
 #endif /*CUTE_REPEATED_TEST_H_*/
