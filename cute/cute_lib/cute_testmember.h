@@ -5,11 +5,11 @@
 namespace cute {
 template <typename TestClass>
 test makeMemberFunctionTest(TestClass &t,void (TestClass::*fun)(),char const *name){
-	return test(boost::bind(fun,boost::ref(t)),test::demangle(typeid(t).name())+"::"+name);
+	return test(boost::bind(fun,boost::ref(t)),test::demangle(typeid(TestClass).name())+"::"+name);
 }
 template <typename TestClass>
 test makeMemberFunctionTest(TestClass const &t,void (TestClass::*fun)()const,char const *name){
-	return test(boost::bind(fun,boost::cref(t)),test::demangle(typeid(t).name())+"::"+name);
+	return test(boost::bind(fun,boost::cref(t)),test::demangle(typeid(TestClass).name())+"::"+name);
 }
 template <typename TestClass,typename MemFun>
 struct incarnate_for_member_function {

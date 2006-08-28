@@ -6,14 +6,14 @@ namespace cute{
 template <typename EXCEPTION>
 struct cute_expect{
 	test theTest;
-	char const * const filename;
-	int const  lineno;
+	std::string filename;
+	int  lineno;
 	cute_expect(test const &t,char const *file,int line)
 	:theTest(t), filename(file), lineno(line){}
 	void operator()(){
 		try{
 			theTest();
-			throw cute_exception(what(),filename,lineno);
+			throw cute_exception(what(),filename.c_str(),lineno);
 		} catch(EXCEPTION &e) {
 		}
 	}
