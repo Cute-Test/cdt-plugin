@@ -7,13 +7,9 @@ namespace cute {
 
 struct test{
 	// (real) functor types can (almost) spell their name
+	// but a name can also be given explicitely, e.g. for CUTE()
 	template <typename VoidFunctor>
-	test(VoidFunctor const &t):theTest(t),name_(demangle(typeid(t).name())){}
-
-	// for CUTE, or where a name is given explicitely
-	// or for functors derived from member function pointers, i.e. test classes
-	template <typename VoidFunctor>
-	test(VoidFunctor const &t,std::string name):theTest(t),name_(name){}
+	test(VoidFunctor const &t, std::string name = demangle(typeid(VoidFunctor).name())):theTest(t),name_(name){}
 	
 	void operator()()const{ theTest(); }
 
