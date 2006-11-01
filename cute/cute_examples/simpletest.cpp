@@ -3,7 +3,7 @@
 int lifeTheUniverseAndEverything = 41;
 
 void mysimpletest(){
-    t_assert(lifeTheUniverseAndEverything == 6*7);
+    ASSERT(lifeTheUniverseAndEverything == 6*7);
 }
 #include <iostream>
 #include "cute_runner.h"
@@ -29,7 +29,7 @@ int main2(){
 #include "cute_test.h"
 #include "cute_equals.h"
 int anothertest(){
-	assertEquals(42,lifeTheUniverseAndEverything);
+	ASSERT_EQUAL(42,lifeTheUniverseAndEverything);
 	return 0;
 }
 
@@ -41,7 +41,7 @@ cute::test tests[]={
 
 struct ATestFunctor {
 	void operator()(){
-		assertEqualsDelta(42.0,static_cast<double>(lifeTheUniverseAndEverything),0.001);
+		ASSERT_EQUAL_DELTA(42.0,static_cast<double>(lifeTheUniverseAndEverything),0.001);
 	}
 };
 #include "cute_suite.h"

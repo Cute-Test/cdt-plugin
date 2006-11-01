@@ -3,7 +3,6 @@
 	<name>cute_examples</name>
 	<comment></comment>
 	<projects>
-		<project>cute_lib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
