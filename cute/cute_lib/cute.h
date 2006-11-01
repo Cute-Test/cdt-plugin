@@ -10,12 +10,12 @@ struct cute_exception {
 	cute_exception(std::string const &r,char const *f, int line)
 	:reason(r),filename(f),lineno(line)
 	{ 	}
-	std::string what() const ;
+	char const * what() const { return reason.c_str(); }
 };
 }
-#define t_assertm(msg,cond) if (!(cond)) throw cute::cute_exception((msg),__FILE__,__LINE__)
-#define t_assert(cond) t_assertm(#cond,cond)
-#define t_fail() t_assertm("fail()",false)
-#define t_failm(msg) t_assertm(msg,false)
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::cute_exception((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+#define FAIL() ASSERTM("FAIL()",false)
+#define FAILM(msg) ASSERTM(msg,false)
 
 #endif /*CUTE_H_*/
