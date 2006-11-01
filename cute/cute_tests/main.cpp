@@ -7,6 +7,7 @@
 #include "cute_counting_listener.h"
 #include "cute_suite_test.h"
 #include "cute_test_incarnate.h"
+#include "vstudio_listener.h"
 #include <iostream>
 
 #include "test_cute_equals.h"
@@ -53,6 +54,8 @@ struct to_incarnate_without : to_incarnate {
 	to_incarnate_without():to_incarnate(std::cout){}
 };
 // TODO: more tests for infrastructure
+
+
 int main(){
 	using namespace std;
 	suite s;
@@ -70,15 +73,14 @@ int main(){
 	s += CUTE_INCARNATE(to_incarnate_without);
 	s += CUTE_INCARNATE_WITH_CONTEXT(to_incarnate,boost::ref(std::cout));
 	s += CUTE_CONTEXT_MEMFUN(boost::ref(std::cerr),to_incarnate,operator());
-	// TODO: test_timing_listener
 	// TODO: test_ostream_listener
 	// TODO: test_counting_listener
 	// TODO: collecting listener?
-	ostream_listener coutsig(cout);
 	suite s2;
-	runner<counting_listener<ostream_listener> >   run;
+	runner<counting_listener<vstudio_listener> > run;
 	run(s);
 	cerr << flush;
 	cerr << run.numberOfTests << " Tests " << endl;
 	cerr << run.failedTests << " failed" << endl;
+	return run.failedTests;
 }

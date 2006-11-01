@@ -142,6 +142,9 @@
 			<File
 				RelativePath="..\ostream_listener.h">
 			</File>
+			<File
+				RelativePath="..\vstudio_listener.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
