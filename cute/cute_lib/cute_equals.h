@@ -11,11 +11,11 @@ namespace cute {
 // TODO: should I provide overloads for EXPECTED == ACTUAL?
 	template <typename EXPECTED, typename ACTUAL>
 	std::string diff_values(EXPECTED const &expected
-							,ACTUAL const & actual){
+						,ACTUAL const & actual){
 		// construct a simple message...
-		std::ostringstream os;
-		os << "(" << expected<<","<<actual<<")";
-		return os.str();
+	std::ostringstream os;
+	os << "(" << expected<<","<<actual<<")";
+	return os.str();
 	}
 // special cases for strings
 	inline	std::string diff_values(std::string const &exp,std::string const &act){
@@ -43,8 +43,8 @@ namespace cute {
 				,char const *msg
 				,char const *file
 				,int line) {
-		if (expected == actual) return;
-		throw cute_exception(msg + diff_values(expected,actual),file,line);
+	if (expected == actual) return;
+	throw cute_exception(msg + diff_values(expected,actual),file,line);
 	}
 	template <typename EXPECTED, typename ACTUAL, typename DELTA>
 	void assert_equal_delta(EXPECTED const &expected
@@ -53,8 +53,8 @@ namespace cute {
 				,char const *msg
 				,char const *file
 				,int line) {
-		if (std::abs(expected-actual)< std::abs(delta)) return;
-		throw cute_exception(msg + diff_values(expected,actual),file,line);
+	if (std::abs(expected-actual)< std::abs(delta)) return;
+	throw cute_exception(msg + diff_values(expected,actual),file,line);
 	}
 // TODO: provide this for float as well. (and combinations?)
 	template <>
