@@ -9,8 +9,8 @@ void mysimpletest(){
 #include "cute_runner.h"
 int main1(){
 	using namespace std;
-
-	if (cute::runner<>()(mysimpletest)){
+	cute::test t=CUTE(mysimpletest);
+	if (cute::runner<>()(t)){
 		cout << "OK" << endl;
 	} else {
 		cout << "failed" << endl;
@@ -22,7 +22,7 @@ int main1(){
 int main2(){
 	using namespace std;
 
-	return cute::runner<cute::ostream_listener>()(mysimpletest);
+	return cute::runner<cute::ostream_listener>()(CUTE(mysimpletest));
 }
 
 
@@ -34,9 +34,15 @@ int anothertest(){
 }
 
 cute::test tests[]={
+#ifdef __GNUG__
 	CUTE(mysimpletest)
 	,mysimpletest
 	,CUTE(anothertest)
+#else /* for MSVC... */
+	CUTE(mysimpletest)
+	,CUTE(mysimpletest)
+	,CUTE(reinterpret_cast<void(*)()>(anothertest))
+#endif
 };
 
 struct ATestFunctor {
