@@ -5,33 +5,35 @@
 namespace {
 	void test_fail_macro(){
 		try {
-			t_fail();
+			FAIL();
 			throw "should have failed";
 		} catch (cute::cute_exception &e){
-			assertEquals(__FILE__,e.filename);
+			ASSERT_EQUAL(__FILE__,e.filename);
 			std::string what=e.what();
-			std::string fail("fail()");
-			assertEquals(fail,e.reason);
-			assertEquals(fail,what.substr(what.size()-fail.size()));
-			assertEqualsDelta(__LINE__,e.lineno,10);
+			std::string fail("FAIL()");
+			ASSERT_EQUAL(fail,e.reason);
+			ASSERT_EQUAL(fail,what.substr(what.size()-fail.size()));
+			ASSERT_EQUAL_DELTA(__LINE__,e.lineno,10);
 		}
 	}
 	void test_t_assert_macro(){
 		try {
-			t_assert(0);
+			ASSERT(0);
 			throw "should have failed";
 		} catch (cute::cute_exception &e){
-			assertEquals(__FILE__,e.filename);
+			ASSERT_EQUAL(__FILE__,e.filename);
 			std::string what=e.what();
 			std::string msg("0");
-			assertEquals(msg,e.reason);
-			assertEquals(msg,what.substr(what.size()-msg.size()));
-			assertEqualsDelta(__LINE__,e.lineno,10);
+			ASSERT_EQUAL(msg,e.reason);
+			ASSERT_EQUAL(msg,what.substr(what.size()-msg.size()));
+			ASSERT_EQUAL_DELTA(__LINE__,e.lineno,10);
 		}
 	}
 	void test_what(){
 		cute::cute_exception ex("foo","file",42);
-		assertEquals("file:42: foo",ex.what());
+		ASSERT_EQUAL(std::string("foo"),ex.what());
+		ASSERT_EQUAL(42,ex.lineno);
+		ASSERT_EQUAL("file",ex.filename);
 	}
 }
 

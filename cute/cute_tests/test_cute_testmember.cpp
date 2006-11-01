@@ -10,24 +10,24 @@ struct TestClass{
 	TestClass(int j):i(j){} // for incarnation
 	void test1(){ 
 		++callcounter;
-		assertEquals(1,i++);
+		ASSERT_EQUAL(1,i++);
 	}
 	void test2() const {  
 		++callcounter;
-		t_assert(true);
+		ASSERT(true);
 	}
 	void test3() {  
 		++callcounter;
-		assertEquals(2,i++);
+		ASSERT_EQUAL(2,i++);
 		++i;
 	}
 	void test_incarnate(){ 
 		++callcounter;
-		assertEquals(42,i++);
+		ASSERT_EQUAL(42,i++);
 	}
 	void test_incarnate_const() const { 
 		++callcounter;
-		assertEquals(43,i);
+		ASSERT_EQUAL(43,i);
 	}
 };
 int TestClass::callcounter=0;
@@ -39,7 +39,7 @@ void test_members_simple(){
 	s3 += CUTE_SMEMFUN(TestClass,test1);
 	cute::test t=CUTE_SUITE_TEST(s3);
 	t();
-	assertEquals(13,TestClass::callcounter);
+	ASSERT_EQUAL(13,TestClass::callcounter);
 }
 void test_members_object(){
 	TestClass tc;
@@ -50,8 +50,8 @@ void test_members_object(){
 	s3 += CUTE_MEMFUN(tc,TestClass,test3);
 	cute::test t=CUTE_SUITE_TEST(s3);
 	t();
-	assertEquals(4,tc.i);
-	assertEquals(23,TestClass::callcounter);
+	ASSERT_EQUAL(4,tc.i);
+	ASSERT_EQUAL(23,TestClass::callcounter);
 }
 void test_members_incarnate(){
 	cute::suite s;
@@ -60,7 +60,7 @@ void test_members_incarnate(){
 	cute::test t= CUTE_SUITE_TEST(s);
 	TestClass::callcounter=30;
 	t();
-	assertEquals(32,TestClass::callcounter);
+	ASSERT_EQUAL(32,TestClass::callcounter);
 }
 
 

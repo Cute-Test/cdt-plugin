@@ -12,16 +12,16 @@ namespace {
 		}
 		void operator()(){
 			++counter;
-			assertEquals(43,counter);
+			ASSERT_EQUAL(43,counter);
 		}
 	};
 	int IncarnationTest::counter = 0;
 	void test_simple_incarnate(){
 		IncarnationTest::counter = 0;
 		cute::test t = CUTE_INCARNATE(IncarnationTest);
-		assertEquals(0,IncarnationTest::counter);
+		ASSERT_EQUAL(0,IncarnationTest::counter);
 		t();
-		assertEquals(4242,IncarnationTest::counter);
+		ASSERT_EQUAL(4242,IncarnationTest::counter);
 	}
 
 	struct IncarnateContextTest {
@@ -31,7 +31,7 @@ namespace {
 		}
 		void operator()(){
 			++counter;
-			assertEquals(11,counter);
+			ASSERT_EQUAL(11,counter);
 		}
 		~IncarnateContextTest(){
 			counter=1010;
@@ -40,9 +40,9 @@ namespace {
 	void test_context_incarnate(){
 		int counter=0;
 		cute::test t = CUTE_INCARNATE_WITH_CONTEXT(IncarnateContextTest,boost::ref(counter));
-		assertEquals(0,counter);
+		ASSERT_EQUAL(0,counter);
 		t();
-		assertEquals(1010,counter);
+		ASSERT_EQUAL(1010,counter);
 	}
 }
 

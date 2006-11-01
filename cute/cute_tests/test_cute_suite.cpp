@@ -7,10 +7,10 @@ namespace {
 }
 void test_cute_suite(){
 	cute::suite s;
-	assertEquals(0u,s.size());
+	ASSERT_EQUAL(0u,s.size());
 	s += CUTE(atest);
 	s += CUTE(atest);
-	assertEquals(2u,s.size());
+	ASSERT_EQUAL(2u,s.size());
 	s += s;
-	assertEquals(4u,s.size());
+	ASSERT_EQUAL(4u,s.size());
 }

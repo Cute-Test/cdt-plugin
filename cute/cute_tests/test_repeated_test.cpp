@@ -12,10 +12,10 @@ struct TestRepetition {
 void repeat_test(){
 	TestRepetition toRepeat;
 	CUTE_REPEAT(boost::ref(toRepeat),5)();
-	assertEquals(5,toRepeat.n);
+	ASSERT_EQUAL(5,toRepeat.n);
 }
 void would_fail_if_run(){
-	t_fail();
+	FAIL();
 }
 void repeat_0_test(){
 	CUTE_REPEAT(CUTE(would_fail_if_run),0)();

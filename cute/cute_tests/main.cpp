@@ -6,7 +6,6 @@
 #include "cute_testmember.h"
 #include "cute_counting_listener.h"
 #include "cute_suite_test.h"
-#include "cute_timing_listener.h"
 #include "cute_test_incarnate.h"
 #include <iostream>
 
@@ -23,14 +22,14 @@
 
 using namespace cute;
 void test0(){
-	t_assert(true);
+	ASSERT(true);
 }
 void test1(){
-	t_assert(false);
+	ASSERT(false);
 }
 void test2(){
-	assertEquals(1,1);
-	assertEquals(1,2);
+	ASSERT_EQUAL(1,1);
+	ASSERT_EQUAL(1,2);
 }
 struct test3{
 	void operator()(){
@@ -77,10 +76,9 @@ int main(){
 	// TODO: collecting listener?
 	ostream_listener coutsig(cout);
 	suite s2;
-	runner<timing_listener<counting_listener<ostream_listener> > >  run;
+	runner<counting_listener<ostream_listener> >   run;
 	run(s);
 	cerr << flush;
 	cerr << run.numberOfTests << " Tests " << endl;
 	cerr << run.failedTests << " failed" << endl;
-	cerr << run.allTests << " ms duration for tests" << endl;
 }

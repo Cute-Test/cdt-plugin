@@ -8,7 +8,7 @@ namespace {
 // dummy tests	
 int counter=0;
 void testOK(){ ++counter; }
-void testFails() { --counter; t_fail();}
+void testFails() { --counter; FAIL();}
 // tests:
 void test_suite_OK(){
 	cute::suite s;
@@ -18,7 +18,7 @@ void test_suite_OK(){
 	s += CUTE(testOK);
 	cute::test t = CUTE_SUITE_TEST(s);
 	t();
-	assertEquals(s.size(),counter);
+	ASSERT_EQUAL(s.size(),counter);
 }
 void test_suite_fails(){
 	cute::suite suite_that_fails;
@@ -32,7 +32,7 @@ void test_suite_fails(){
 		t();
 		throw "should have failed";
 	} catch (cute::cute_exception &e){
-		assertEquals(1,counter);
+		ASSERT_EQUAL(1,counter);
 	}
 }
 }
