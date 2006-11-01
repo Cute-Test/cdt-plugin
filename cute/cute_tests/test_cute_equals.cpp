@@ -30,7 +30,7 @@ void test_equals_int_fails() {
 	try {
 		ASSERT_EQUAL(42,43);
 		throw "should have failed"; // make this another error!
-	} catch(cute::cute_exception &e){
+	} catch(cute::cute_exception &){
 	}
 }
 const double eps=std::numeric_limits<double>::epsilon();
@@ -38,7 +38,7 @@ void test_equals_double_fails() {
 	try {
 		ASSERT_EQUAL(1.0,1.0+11*eps);
 		throw "should have failed"; // make this another error!
-	} catch(cute::cute_exception &e){
+	} catch(cute::cute_exception &){
 	}
 }
 void test_equals_double(){

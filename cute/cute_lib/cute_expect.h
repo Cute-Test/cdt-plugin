@@ -14,7 +14,7 @@ struct cute_expect{
 		try{
 			theTest();
 			throw cute_exception(what(),filename.c_str(),lineno);
-		} catch(EXCEPTION &e) {
+		} catch(EXCEPTION &) {
 		}
 	}
 	std::string what() const{

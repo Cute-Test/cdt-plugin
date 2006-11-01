@@ -31,7 +31,7 @@ void test_suite_fails(){
 	try {
 		t();
 		throw "should have failed";
-	} catch (cute::cute_exception &e){
+	} catch (cute::cute_exception &){
 		ASSERT_EQUAL(1,counter);
 	}
 }

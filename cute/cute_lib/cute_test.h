@@ -2,16 +2,9 @@
 #define CUTE_TEST_H_
 #include <boost/function.hpp>
 // make plain functions as tests more 'cute':
-#define CUTE(name) cute::test((name),#name)
 namespace cute {
-
+typedef void (*VoidFunction)();
 struct test{
-	// (real) functor types can (almost) spell their name
-	// but a name can also be given explicitely, e.g. for CUTE()
-	template <typename VoidFunctor>
-	test(VoidFunctor const &t ):theTest(t),name_(demangle(typeid(VoidFunctor).name())){}
-	template <typename VoidFunctor>
-	test(VoidFunctor const &t, std::string name):theTest(t),name_(name){}
 	
 	void operator()()const{ theTest(); }
 	std::string name()const{ return name_;}
@@ -27,11 +20,15 @@ struct test{
 	template <typename VoidFunctor>
 	test(VoidFunctor const &t, std::string name = demangle(typeid(VoidFunctor).name()))
 	:theTest(t),name_(name){}
-	
+#ifndef __GNUG__ /* overload for dumber MSVC that won't deduce above ctor when using CUTE() macro: */
+	test(VoidFunction const &t, std::string const &name):theTest(t),name_(name){}
+#endif	
 private:
 	boost::function<void()> theTest;
 	std::string name_;
 };
+#define CUTE(name) cute::test((name),(#name))
+
 // TODO: provide platform independent means of demangling, 
 // or at least support for different compilers
 // this is platform dependant for gnu compilers
