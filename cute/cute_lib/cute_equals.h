@@ -20,8 +20,12 @@ namespace cute {
 // special cases for strings
 	inline	std::string diff_values(std::string const &exp,std::string const &act){
 		typedef std::string::const_iterator iter;
-		std::pair<iter,iter> differ=mismatch(exp.begin(),exp.end(),act.begin());
+		std::string const *expp = &exp;
+		std::string const *actp = &act;
+		if (exp.length() > act.length()) std::swap(expp,actp);
+		std::pair<iter,iter> differ=mismatch(expp->begin(),expp->end(),actp->begin());
 		std::ostringstream os;
+		if (exp.length() > act.length()) std::swap(differ.first,differ.second);
 		os << " pos " << std::distance(exp.begin(),differ.first) << " (\""
 		   <<exp.substr(differ.first-exp.begin())<<"\",\""
 		   <<act.substr(differ.second-act.begin())<<"\")";
