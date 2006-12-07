@@ -30,7 +30,7 @@ struct timing_listener:Listener{
 		taketime();
 		Listener::success(t,timer.timingMessage(msg,currentTest).c_str());
 	}
-	void failure(test const &t,cute_exception const &e){
+	void failure(test const &t,test_failure const &e){
 		taketime();
 		Listener::failure(t,e);
 	}
