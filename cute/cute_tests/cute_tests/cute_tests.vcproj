@@ -171,9 +171,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{50C308B0-B930-4EC8-BDA1-4645E88E3BBB}"
-			Name="cute_lib"/>
 	</References>
 	<Files>
 		<Filter
