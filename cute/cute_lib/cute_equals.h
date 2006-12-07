@@ -8,14 +8,14 @@
 
 namespace cute {
 // overload the following for your purpose of presenting a difference
-// TODO: should I provide overloads for EXPECTED == ACTUAL?
-	template <typename EXPECTED, typename ACTUAL>
-	std::string diff_values(EXPECTED const &expected
-						,ACTUAL const & actual){
+// TODO: should I provide overloads for ExpectedValue == ActualValue?
+	template <typename ExpectedValue, typename ActualValue>
+	std::string diff_values(ExpectedValue const &expected
+						,ActualValue const & actual){
 		// construct a simple message...
-	std::ostringstream os;
-	os << "(" << expected<<","<<actual<<")";
-	return os.str();
+		std::ostringstream os;
+		os << "(" << expected<<","<<actual<<")";
+		return os.str();
 	}
 // special cases for strings
 	inline	std::string diff_values(std::string const &exp,std::string const &act){
@@ -41,24 +41,26 @@ namespace cute {
 //std::string diff_values(char const * const &exp,std::string const &act);
 
 // TODO: some magic might be possible with boost::mpl... leave that for the moment
-	template <typename EXPECTED, typename ACTUAL>
-	void assert_equal(EXPECTED const &expected
-				,ACTUAL const &actual
+	template <typename ExpectedValue, typename ActualValue>
+	void assert_equal(ExpectedValue const &expected
+				,ActualValue const &actual
 				,char const *msg
 				,char const *file
 				,int line) {
-	if (expected == actual) return;
-	throw test_failure(msg + diff_values(expected,actual),file,line);
+					// should get rid of signed-unsigned warning below... 
+					// but this requires trickery or more overloading
+		if (expected == actual) return;
+		throw test_failure(msg + diff_values(expected,actual),file,line);
 	}
-	template <typename EXPECTED, typename ACTUAL, typename DELTA>
-	void assert_equal_delta(EXPECTED const &expected
-				,ACTUAL const &actual
-				,DELTA const &delta
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+	void assert_equal_delta(ExpectedValue const &expected
+				,ActualValue const &actual
+				,DeltaValue const &delta
 				,char const *msg
 				,char const *file
 				,int line) {
-	if (std::abs(expected-actual)< std::abs(delta)) return;
-	throw test_failure(msg + diff_values(expected,actual),file,line);
+		if (std::abs(expected-actual)< std::abs(delta)) return;
+		throw test_failure(msg + diff_values(expected,actual),file,line);
 	}
 // TODO: provide this for float as well. (and combinations?)
 	template <>
@@ -100,8 +102,6 @@ namespace cute {
 		if (std::abs(expected-actual) <= std::abs(delta) ) return;
 		throw test_failure(msg + diff_values(expected,actual),file,line);
 	}
-
-
 }
 
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
