@@ -1,7 +1,7 @@
 #include "cute_runner.h"
 #include "cute_listener.h"
 #include "cute_suite.h"
-#include "cute.h"
+#include "cute_base.h"
 #include "cute_equals.h"
 using namespace cute;
 namespace {
@@ -28,7 +28,7 @@ struct mock_listener {
 		++successcount;
 		successmessages.push_back(ok);
 	}
-	void failure(test const &t,cute_exception const &e){++failurecount;}
+	void failure(test const &t,test_failure const &e){++failurecount;}
 	void error(test const &t,char const *what){
 		++errorcount;
 		errormessages.push_back(what);
@@ -36,7 +36,7 @@ struct mock_listener {
 };
 
 void test_success(){}
-void test_failure(){ ASSERT(false);}
+void test_failing(){ ASSERT(false);}
 void test_error_cstr(){ throw "error";}
 void test_error_exception() { throw std::exception();}
 void test_error_string(){ throw std::string("error");}
@@ -47,7 +47,7 @@ void test_cute_runner(){
 	suite s;
 	s += CUTE(test_success);
 	ASSERT(run(s,"single success test suite"));
-	s += CUTE(test_failure);
+	s += CUTE(test_failing);
 	s += CUTE(test_error_cstr);
 	s += CUTE(test_error_string);
 	s += CUTE(test_error_exception);

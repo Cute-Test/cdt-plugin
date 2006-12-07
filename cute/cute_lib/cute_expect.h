@@ -1,6 +1,6 @@
 #ifndef CUTE_EXPECT_H_
 #define CUTE_EXPECT_H_
-#include "cute.h"
+#include "cute_base.h"
 #include "cute_test.h"
 namespace cute{
 template <typename EXCEPTION>
@@ -13,7 +13,7 @@ struct cute_expect{
 	void operator()(){
 		try{
 			theTest();
-			throw cute_exception(what(),filename.c_str(),lineno);
+			throw test_failure(what(),filename.c_str(),lineno);
 		} catch(EXCEPTION &) {
 		}
 	}

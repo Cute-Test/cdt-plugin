@@ -20,7 +20,7 @@ namespace cute{
 		void success(test const &t, char const *msg){
 			std::cerr <<  t.name() <<" " << msg<< std::endl;
 		}
-		void failure(test const &t,cute_exception const &e){
+		void failure(test const &t,test_failure const &e){
 			out << e.filename << "(" << e.lineno << ") : testcase failed: " <<e.reason << " in " << t.name()<< std::endl;
 			OutputDebugString(out.str().c_str());
 			std::cerr << out.str() << std::flush;

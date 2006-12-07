@@ -1,7 +1,7 @@
 #include "test_cute_suite_test.h"
 
 #include "cute_suite_test.h"
-#include "cute.h"
+#include "cute_base.h"
 #include "cute_equals.h"
 
 namespace {
@@ -31,7 +31,7 @@ void test_suite_fails(){
 	try {
 		t();
 		throw "should have failed";
-	} catch (cute::cute_exception &){
+	} catch (cute::test_failure &){
 		ASSERT_EQUAL(1,counter);
 	}
 }

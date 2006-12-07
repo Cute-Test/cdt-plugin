@@ -1,7 +1,7 @@
 #ifndef CUTE_EQUALS_H_
 #define CUTE_EQUALS_H_
 
-#include "cute.h"
+#include "cute_base.h"
 #include <sstream>
 #include <cmath>
 #include <limits>
@@ -48,7 +48,7 @@ namespace cute {
 				,char const *file
 				,int line) {
 	if (expected == actual) return;
-	throw cute_exception(msg + diff_values(expected,actual),file,line);
+	throw test_failure(msg + diff_values(expected,actual),file,line);
 	}
 	template <typename EXPECTED, typename ACTUAL, typename DELTA>
 	void assert_equal_delta(EXPECTED const &expected
@@ -58,7 +58,7 @@ namespace cute {
 				,char const *file
 				,int line) {
 	if (std::abs(expected-actual)< std::abs(delta)) return;
-	throw cute_exception(msg + diff_values(expected,actual),file,line);
+	throw test_failure(msg + diff_values(expected,actual),file,line);
 	}
 // TODO: provide this for float as well. (and combinations?)
 	template <>
@@ -98,7 +98,7 @@ namespace cute {
 				,char const *file
 				,int line) {
 		if (std::abs(expected-actual) <= std::abs(delta) ) return;
-		throw cute_exception(msg + diff_values(expected,actual),file,line);
+		throw test_failure(msg + diff_values(expected,actual),file,line);
 	}
 
 

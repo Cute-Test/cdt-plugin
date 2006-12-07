@@ -1,5 +1,5 @@
 #include "cute_expect.h"
-#include "cute.h"
+#include "cute_base.h"
 #include "cute_equals.h"
 #include "cute_runner.h"
 #include "ostream_listener.h"

@@ -1,5 +1,5 @@
 #include "test_cute_equals.h"
-#include "cute.h"
+#include "cute_base.h"
 #include "cute_equals.h"
 #include "cute_expect.h"
 #include <limits>
@@ -30,7 +30,7 @@ void test_equals_int_fails() {
 	try {
 		ASSERT_EQUAL(42,43);
 		throw "should have failed"; // make this another error!
-	} catch(cute::cute_exception &){
+	} catch(cute::test_failure &){
 	}
 }
 const double eps=std::numeric_limits<double>::epsilon();
@@ -38,7 +38,7 @@ void test_equals_double_fails() {
 	try {
 		ASSERT_EQUAL(1.0,1.0+11*eps);
 		throw "should have failed"; // make this another error!
-	} catch(cute::cute_exception &){
+	} catch(cute::test_failure &){
 	}
 }
 void test_equals_double(){
@@ -52,7 +52,7 @@ void test_equals_strings_fails(){
 	try {
 		ASSERT_EQUAL("error",std::string("eror"));
 		throw "should have failed";
-	}catch(cute::cute_exception &e){
+	}catch(cute::test_failure &e){
 		ASSERT_EQUAL_DELTA(__LINE__,e.lineno,5);
 		ASSERT_EQUAL(__FILE__,e.filename);
 	}

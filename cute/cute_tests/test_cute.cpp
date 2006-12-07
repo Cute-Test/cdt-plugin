@@ -1,5 +1,5 @@
 #include "test_cute.h"
-#include "cute.h"
+#include "cute_base.h"
 #include "cute_equals.h"
 
 namespace {
@@ -7,7 +7,7 @@ namespace {
 		try {
 			FAIL();
 			throw "should have failed";
-		} catch (cute::cute_exception &e){
+		} catch (cute::test_failure &e){
 			ASSERT_EQUAL(__FILE__,e.filename);
 			std::string what=e.what();
 			std::string fail("FAIL()");
@@ -20,7 +20,7 @@ namespace {
 		try {
 			ASSERT(0);
 			throw "should have failed";
-		} catch (cute::cute_exception &e){
+		} catch (cute::test_failure &e){
 			ASSERT_EQUAL(__FILE__,e.filename);
 			std::string what=e.what();
 			std::string msg("0");
@@ -30,7 +30,7 @@ namespace {
 		}
 	}
 	void test_what(){
-		cute::cute_exception ex("foo","file",42);
+		cute::test_failure ex("foo","file",42);
 		ASSERT_EQUAL(std::string("foo"),ex.what());
 		ASSERT_EQUAL(42,ex.lineno);
 		ASSERT_EQUAL("file",ex.filename);

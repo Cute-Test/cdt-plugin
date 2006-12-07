@@ -1,6 +1,6 @@
 #include "test_repeated_test.h"
 #include "cute_repeated_test.h"
-#include "cute.h"
+#include "cute_base.h"
 #include "cute_equals.h"
 using namespace cute;
 namespace {

@@ -22,7 +22,7 @@ struct counting_listener:Listener{
 		++successfulTests;
 		Listener::success(t,msg);
 	}
-	void failure(test const &t,cute_exception const &e){
+	void failure(test const &t,test_failure const &e){
 		++failedTests;
 		Listener::failure(t,e);
 	}

@@ -29,7 +29,7 @@ private:
 			t();
 			Listener::success(t,"OK");
 			return true;
-		} catch (cute_exception const &e){
+		} catch (cute::test_failure const &e){
 			Listener::failure(t,e);
 		} catch (std::exception const &exc){
 			Listener::error(t,test::demangle(exc.what()).c_str());

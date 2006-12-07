@@ -22,7 +22,7 @@ public:
 	void success(test const &t, char const *msg){
 		out <<  t.name() <<" " << msg<< std::endl;
 	}
-	void failure(test const &t,cute_exception const &e){
+	void failure(test const &t,test_failure const &e){
 		out << e.filename << ":" << e.lineno << ": testcase failed: " <<e.reason << " in " << t.name()<< std::endl;
 	}
 	void error(test const &t, char const *what){
