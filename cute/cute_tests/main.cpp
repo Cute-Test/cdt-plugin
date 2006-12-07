@@ -1,12 +1,7 @@
-#include "cute_expect.h"
-#include "cute_base.h"
-#include "cute_equals.h"
+#include "cute.h"
 #include "cute_runner.h"
 #include "ostream_listener.h"
-#include "cute_testmember.h"
 #include "cute_counting_listener.h"
-#include "cute_suite_test.h"
-#include "cute_test_incarnate.h"
 #include "vstudio_listener.h"
 #include <iostream>
 

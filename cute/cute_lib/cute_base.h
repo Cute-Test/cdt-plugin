@@ -1,5 +1,5 @@
-#ifndef CUTE_H_
-#define CUTE_H_
+#ifndef CUTE_BASE_H_
+#define CUTE_BASE_H_
 #include <string>
 namespace cute{
 	struct test_failure {
@@ -18,4 +18,4 @@ namespace cute{
 #define FAIL() ASSERTM("FAIL()",false)
 #define FAILM(msg) ASSERTM(msg,false)
 
-#endif /*CUTE_H_*/
+#endif /*CUTE_BASE_H_*/
