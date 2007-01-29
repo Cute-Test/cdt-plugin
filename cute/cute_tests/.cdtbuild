@@ -3,31 +3,32 @@
 
 <ManagedProjectBuildInfo>
 <project id="cute_tests.cdt.managedbuild.target.gnu.cygwin.exe.1130569510" name="Executable (Gnu on Windows)" projectType="cdt.managedbuild.target.gnu.cygwin.exe">
-<configuration id="cdt.managedbuild.config.gnu.cygwin.exe.debug.568952719" name="Debug" description="" parent="cdt.managedbuild.config.gnu.cygwin.exe.debug" artifactName="cute_tests" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" artifactExtension="exe" cleanCommand="rm -rf">
-<toolChain superClass="cdt.managedbuild.toolchain.gnu.cygwin.exe.debug" id="cdt.managedbuild.toolchain.gnu.cygwin.exe.debug.870488805" name="GCC Tool Chain">
-<tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug" id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug.1352437343" name="GCC C++ Compiler">
-<option superClass="gnu.cpp.compiler.option.include.paths" id="gnu.cpp.compiler.option.include.paths.1814759885" valueType="includePath">
-<listOptionValue value="&quot;../../cute_lib&quot;" builtIn="false"/>
-<listOptionValue value="&quot;C:\cygwin\usr\include\boost-1_33_1&quot;" builtIn="false"/>
+<configuration artifactExtension="exe" artifactName="cute_tests" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.cygwin.exe.debug.568952719" name="Debug" parent="cdt.managedbuild.config.gnu.cygwin.exe.debug">
+<toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.exe.debug.870488805" name="GCC Tool Chain" superClass="cdt.managedbuild.toolchain.gnu.cygwin.exe.debug">
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug.1352437343" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug">
+<option id="gnu.cpp.compiler.option.include.paths.1814759885" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="&quot;../../cute_lib&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\cygwin\usr\include\boost-1_33_1&quot;"/>
 </option>
+<option id="gnu.cpp.compiler.option.other.other.225527469" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 --pedantic" valueType="string"/>
 </tool>
-<tool superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug" id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug.1647500595" name="GCC C Compiler"/>
-<tool superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug" id="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug.1747292673" name="GCC C Linker"/>
-<tool superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug" id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug.1908559163" name="GCC C++ Linker">
-<option superClass="gnu.cpp.link.option.paths" id="gnu.cpp.link.option.paths.363684237" valueType="stringList"/>
-<option superClass="gnu.cpp.link.option.libs" id="gnu.cpp.link.option.libs.531759478" valueType="libs"/>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug.1647500595" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug.1747292673" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug.1908559163" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug">
+<option id="gnu.cpp.link.option.paths.363684237" superClass="gnu.cpp.link.option.paths"/>
+<option id="gnu.cpp.link.option.libs.531759478" superClass="gnu.cpp.link.option.libs"/>
 </tool>
-<tool superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.debug" id="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.debug.1986301531" name="GCC Assembler"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.debug.1986301531" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.debug"/>
 <macros/>
 </toolChain>
 </configuration>
-<configuration id="cdt.managedbuild.config.gnu.cygwin.exe.release.1489075407" name="Release" description="" parent="cdt.managedbuild.config.gnu.cygwin.exe.release" artifactName="cute_tests" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" artifactExtension="exe" cleanCommand="rm -rf">
-<toolChain superClass="cdt.managedbuild.toolchain.gnu.cygwin.exe.release" id="cdt.managedbuild.toolchain.gnu.cygwin.exe.release.128756733" name="GCC Tool Chain">
-<tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.release" id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.release.1235320374" name="GCC C++ Compiler"/>
-<tool superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.release" id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.release.801678573" name="GCC C Compiler"/>
-<tool superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.release" id="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.release.697012714" name="GCC C Linker"/>
-<tool superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.release" id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.release.1547151920" name="GCC C++ Linker"/>
-<tool superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.release" id="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.release.1870498699" name="GCC Assembler"/>
+<configuration artifactExtension="exe" artifactName="cute_tests" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.cygwin.exe.release.1489075407" name="Release" parent="cdt.managedbuild.config.gnu.cygwin.exe.release">
+<toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.exe.release.128756733" name="GCC Tool Chain" superClass="cdt.managedbuild.toolchain.gnu.cygwin.exe.release">
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.release.1235320374" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.release"/>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.release.801678573" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.exe.release"/>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.release.697012714" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.release"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.release.1547151920" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.release"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.release.1870498699" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.exe.release"/>
 </toolChain>
 </configuration>
 <macros/>

@@ -2,7 +2,7 @@
 #include "cute_runner.h"
 #include "ostream_listener.h"
 #include "cute_counting_listener.h"
-#include "vstudio_listener.h"
+#include "ide_listener.h"
 #include <iostream>
 
 #include "test_cute_equals.h"
@@ -17,11 +17,21 @@
 #include "test_cute.h"
 
 using namespace cute;
-void test0(){
+static int simpleTestfunctionCalled=0;
+void simpleTestFunction(){
+	++simpleTestfunctionCalled;
+	std::cerr << "simpleTestFunction run no:"<< simpleTestfunctionCalled << std::endl;
 	ASSERT(true);
+	throw std::exception();
 }
-void test1(){
+struct SimpleTestFunctionCalledTest {
+	void operator()(){
+		ASSERT_EQUAL(2,simpleTestfunctionCalled);
+	}
+};
+void shouldFailButNotThrowStdException(){
 	ASSERT(false);
+	throw std::exception();
 }
 void test2(){
 	ASSERT_EQUAL(1,1);
@@ -55,6 +65,10 @@ int main(){
 	using namespace std;
 	suite s;
 	s += test_cute_equals();
+	s += CUTE(simpleTestFunction);
+	s += CUTE_EXPECT(CUTE(simpleTestFunction),std::exception);
+	s += SimpleTestFunctionCalledTest();
+	s += CUTE_EXPECT(CUTE(shouldFailButNotThrowStdException),cute::test_failure);
 	s += CUTE_SUITE_TEST(test_cute_expect());
 	s += CUTE_SUITE_TEST(test_repeated_test());
 	s += CUTE(test_cute_runner);
@@ -71,11 +85,12 @@ int main(){
 	// TODO: test_ostream_listener
 	// TODO: test_counting_listener
 	// TODO: collecting listener?
-	suite s2;
-	runner<counting_listener<vstudio_listener> > run;
+	runner<counting_listener<ide_listener> > run;
 	run(s);
+
 	cerr << flush;
 	cerr << run.numberOfTests << " Tests " << endl;
-	cerr << run.failedTests << " failed" << endl;
+	cerr << run.failedTests << " failed - expect 0 failures" << endl;
+	cerr << run.errors << " errors - expect 1 error" << endl;
 	return run.failedTests;
 }
