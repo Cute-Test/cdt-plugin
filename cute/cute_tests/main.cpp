@@ -26,7 +26,7 @@ void simpleTestFunction(){
 }
 struct SimpleTestFunctionCalledTest {
 	void operator()(){
-		ASSERT_EQUAL(2,simpleTestfunctionCalled);
+		ASSERT_EQUALM("look at cute::test ctor overload",2,simpleTestfunctionCalled);
 	}
 };
 void shouldFailButNotThrowStdException(){
