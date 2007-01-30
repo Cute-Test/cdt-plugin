@@ -17,12 +17,11 @@ int main1(){
 	}	
 	return 0;
 }
-
-#include "vstudio_listener.h"
+#include "ide_listener.h"
 int main2(){
 	using namespace std;
 
-	return cute::runner<cute::vstudio_listener>()(CUTE(mysimpletest));
+	return cute::runner<cute::ide_listener>()(CUTE(mysimpletest));
 }
 
 
@@ -54,7 +53,7 @@ struct ATestFunctor {
 int main3(){
 	using namespace std;
 
-	cute::runner<cute::vstudio_listener> run;
+	cute::runner<cute::ide_listener> run;
 	cute::suite s(tests,tests+(sizeof(tests)/sizeof(tests[0])));
 	s+=ATestFunctor();
 	return run(s,"suite");
