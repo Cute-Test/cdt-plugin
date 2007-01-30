@@ -20,7 +20,6 @@ namespace cute {
 		test(VoidFunctor const &t, std::string name = demangle(typeid(VoidFunctor).name()))
 		:theTest(t),name_(name){}
 #ifndef __GNUG__ /* might no longer be needed after fixed CUTE macro */
-#if !defined(__GNUG__) || (__GNUG__ >= 4) 
         /* overload for dumber MSVC that won't deduce above ctor when using CUTE() macro: */
         /* and also for newer version 4 GNU compilers that seem to share that deficiency more silently */
 		test(VoidFunction const &t, std::string const &name):theTest(t),name_(name){}
