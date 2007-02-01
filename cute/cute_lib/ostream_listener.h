@@ -1,5 +1,5 @@
-#ifndef STREAM_SIGNALER_H_
-#define STREAM_SIGNALER_H_
+#ifndef OSTREAM_LISTENER_H_
+#define OSTREAM_LISTENER_H_
 #include "cute_listener.h"
 #include <iostream>
 namespace cute {
@@ -30,4 +30,4 @@ namespace cute {
 		}
 	};
 }
-#endif /*STREAM_SIGNALER_H_*/
+#endif /*OSTREAM_LISTENER_H_*/

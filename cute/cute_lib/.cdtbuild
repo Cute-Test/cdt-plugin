@@ -3,7 +3,7 @@
 
 <ManagedProjectBuildInfo>
 <project id="cute_lib.cdt.managedbuild.target.gnu.cygwin.lib.1868301099" name="Static Library (Gnu on Windows)" projectType="cdt.managedbuild.target.gnu.cygwin.lib">
-<configuration artifactExtension="a" artifactName="cute_lib" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.cygwin.lib.debug.1143369891" name="Debug" parent="cdt.managedbuild.config.gnu.cygwin.lib.debug">
+<configuration artifactExtension="" artifactName="" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.config.gnu.cygwin.lib.debug.1143369891" name="Debug" parent="cdt.managedbuild.config.gnu.cygwin.lib.debug">
 <toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.lib.debug.1634006446" name="GCC Tool Chain" superClass="cdt.managedbuild.toolchain.gnu.cygwin.lib.debug">
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.lib.debug.608372027" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.lib.debug">
 <option id="gnu.cpp.compiler.option.include.paths.979860787" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">

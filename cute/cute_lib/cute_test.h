@@ -3,7 +3,6 @@
 #include <boost/function.hpp>
 // make plain functions as tests more 'cute':
 namespace cute {
-	typedef void (*VoidFunction)();
 	struct test{
 		void operator()()const{ theTest(); }
 		std::string name()const{ return name_;}
@@ -15,7 +14,8 @@ namespace cute {
 		static std::string demangle(char const *name);
 	
 		// (real) functor types can (almost) spell their name
-		// but a name can also be given explicitely, e.g. for CUTE()
+		// but a name can also be given explicitely, e.g. for CUTE() macro
+		// for simple test functions
 		template <typename VoidFunctor>
 		test(VoidFunctor const &t, std::string name = demangle(typeid(VoidFunctor).name()))
 		:theTest(t),name_(name){}

@@ -1,5 +1,5 @@
-#ifndef CUTE_COUNTING_SIGNALER_H_
-#define CUTE_COUNTING_SIGNALER_H_
+#ifndef CUTE_COUNTING_LISTENER_H_
+#define CUTE_COUNTING_LISTENER_H_
 #include "cute_listener.h"
 namespace cute{
 	template <typename Listener=null_listener>
@@ -7,9 +7,11 @@ namespace cute{
 		counting_listener()
 		:Listener()
 		,numberOfTests(0),successfulTests(0),failedTests(0),errors(0),numberOfSuites(0){}
+	
 		counting_listener(Listener const &s)
 		:Listener(s)
 		,numberOfTests(0),successfulTests(0),failedTests(0),errors(0),numberOfSuites(0){}
+
 		void begin(suite const &s, char const *info){
 			++numberOfSuites;
 			Listener::begin(s,info);
@@ -37,4 +39,4 @@ namespace cute{
 		int numberOfSuites;
 	};
 }
-#endif /*CUTE_COUNTING_SIGNALER_H_*/
+#endif /*CUTE_COUNTING_LISTENER_H_*/
