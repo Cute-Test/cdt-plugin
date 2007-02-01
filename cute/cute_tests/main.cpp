@@ -1,6 +1,5 @@
 #include "cute.h"
 #include "cute_runner.h"
-#include "ostream_listener.h"
 #include "cute_counting_listener.h"
 #include "ide_listener.h"
 #include <iostream>
@@ -17,6 +16,8 @@
 #include "test_cute.h"
 
 using namespace cute;
+// some brain dead test cases to find out my bug using function 
+// names without & as function pointers
 static int simpleTestfunctionCalled=0;
 void simpleTestFunction(){
 	++simpleTestfunctionCalled;
@@ -33,16 +34,18 @@ void shouldFailButNotThrowStdException(){
 	ASSERT(false);
 	throw std::exception();
 }
+// demonstrates how to write equality tests
 void test2(){
 	ASSERT_EQUAL(1,1);
 	ASSERT_EQUAL(1,2);
 }
+// demonstrates how to write test functors
 struct test3{
 	void operator()(){
 		throw std::exception();
 	}
 };
-
+// demonstrates how test objects are incarnated
 struct to_incarnate{
 	std::ostream &out;
 	to_incarnate(std::ostream &os):out(os){
@@ -58,13 +61,12 @@ struct to_incarnate{
 struct to_incarnate_without : to_incarnate {
 	to_incarnate_without():to_incarnate(std::cout){}
 };
-// TODO: more tests for infrastructure
-
 
 int main(){
 	using namespace std;
 	suite s;
 	s += test_cute_equals();
+	// the following test produces the one expected error, since it throws
 	s += CUTE(simpleTestFunction);
 	s += CUTE_EXPECT(CUTE(simpleTestFunction),std::exception);
 	s += SimpleTestFunctionCalledTest();
@@ -82,9 +84,7 @@ int main(){
 	s += CUTE_INCARNATE(to_incarnate_without);
 	s += CUTE_INCARNATE_WITH_CONTEXT(to_incarnate,boost::ref(std::cout));
 	s += CUTE_CONTEXT_MEMFUN(boost::ref(std::cerr),to_incarnate,operator());
-	// TODO: test_ostream_listener
-	// TODO: test_counting_listener
-	// TODO: collecting listener?
+	
 	runner<counting_listener<ide_listener> > run;
 	run(s);
 
