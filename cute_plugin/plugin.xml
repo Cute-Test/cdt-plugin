@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="ch.hsr.ifs.cutelauncher.CuteLauncherDelegate"
+            id="ch.hsr.ifs.cutelauncher.launchConfig"
+            modes="run"
+            name="CUTE Test"
+            />
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            icon="icons/obj16/c_app.gif"
+            configTypeID="ch.hsr.ifs.cutelauncher.launchConfig"
+            id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
+      </launchConfigurationTypeImage>
+  </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="ch.hsr.ifs.cutelauncher.CuteRunLaunchConfigTabGroup"
+            id="ch.hsr.ifs.cutelauncher.launchConfigurationTabGroup"
+            type="ch.hsr.ifs.cutelauncher.launchConfig"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            label="CUTE Test"
+            icon="icons/obj16/c_app.gif"
+            modes="run"
+            class="ch.hsr.ifs.cutelauncher.CuteLaunchShortcut"
+            id="ch.hsr.ifs.cutelauncher.cuteShortcut">
+         <contextualLaunch>
+           <enablement>
+             <with variable="selection">
+               <count value="1"/>
+               <iterate>
+                 <or>
+                 	<test property="org.eclipse.cdt.launch.isExecutable"/>
+                 	<instanceof value="org.eclipse.cdt.internal.core.model.CProject"/>
+                 </or>
+               </iterate>
+             </with>
+           </enablement>
+           <contextLabel
+         	  mode="run"
+         	  label="CUTE Test"/>
+  		 </contextualLaunch>
+         <perspective
+               id="org.eclipse.cdt.ui.CPerspective">
+         </perspective>
+         <perspective
+               id="org.eclipse.debug.ui.DebugPerspective">
+         </perspective>
+      </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.eclipse.cdt.ui.views"
+            class="ch.hsr.ifs.cutelauncher.ui.TestRunnerView"
+            fastViewWidthRatio="0.5"
+            icon="icons/obj16/c_app.gif"
+            id="ch.hsr.ifs.cutelauncher.resultView"
+            name="CUTE Results"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.cdt.ui.newCCWizards"
+            class="ch.hsr.ifs.cutelauncher.ui.NewManagedCuteProjectWizard"
+            finalPerspective="org.eclipse.cdt.ui.CPerspective"
+            icon="icons/obj16/c_app.gif"
+            id="ch.hsr.ifs.cutelauncher.managedProjectWizard"
+            name="Managed CUTE Testproject"
+            project="true"/>
+   </extension>
+
+</plugin>
