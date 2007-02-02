@@ -1,5 +1,5 @@
-#ifndef CUTE_SIGNALER_H_
-#define CUTE_SIGNALER_H_
+#ifndef CUTE_LISTENER_H_
+#define CUTE_LISTENER_H_
 #include "cute_base.h"
 #include "cute_test.h"
 #include "cute_suite.h"
@@ -13,4 +13,5 @@ namespace cute {
 		void error(test const &t,char const *what){}
 	};
 }
-#endif
+#endif /* CUTE_LISTENER_H_ */
+

@@ -1,13 +1,16 @@
 #ifndef ECLIPSE_LISTENER_H_
 #define ECLIPSE_LISTENER_H_
-#include "cute_listener.h"
+#include "ostream_listener.h"
 #include <iostream>
 namespace cute {
 
-	class eclipse_listener
+	class eclipse_listener 
 	{
 	public:
-		eclipse_listener(){}
+		eclipse_listener() {}
+		void start(test const &t){
+			std::cout << "#starting: " <<t.name()<< std::endl;
+		}
 		
 		void begin(suite const &t,char const *info){
 			std::cout << "#beginning:" << info << ":" << t.size() << std::endl;
@@ -24,10 +27,6 @@ namespace cute {
 		void error(test const &t, char const *what){
 			std::cout << "#error:" << what << ":" << t.name() << std::endl;
 		}
-		void start(test const &t){
-			std::cout << "#starting:" << t.name() << std::endl;
-		}
 	};
 }
-
 #endif /*ECLIPSE_LISTENER_H_*/
