@@ -82,7 +82,7 @@ public class NewManagedCuteProjectWizard extends NewManagedCCProjectWizard {
 						String[] paths = option.getIncludePaths();
 						String[] newPath = new String[paths.length + 1];
 						System.arraycopy(paths, 0, newPath, 0, paths.length);
-						newPath[newPath.length -1] = "${workspace_loc:" + cuteFolder.getFullPath().toString() + "}";
+						newPath[newPath.length -1] = "\"${workspace_loc:" + cuteFolder.getFullPath().toString() + "}\"";
 						ManagedBuildManager.setOption(configuration, tool[0], option, newPath);
 					}
 				}
