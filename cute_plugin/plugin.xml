@@ -13,7 +13,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
-            icon="icons/obj16/c_app.gif"
+            icon="icons/obj16/cute_app.gif"
             configTypeID="ch.hsr.ifs.cutelauncher.launchConfig"
             id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
       </launchConfigurationTypeImage>
@@ -29,7 +29,7 @@
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             label="CUTE Test"
-            icon="icons/obj16/c_app.gif"
+            icon="icons/obj16/cute_app.gif"
             modes="run"
             class="ch.hsr.ifs.cutelauncher.CuteLaunchShortcut"
             id="ch.hsr.ifs.cutelauncher.cuteShortcut">
@@ -63,7 +63,7 @@
             category="org.eclipse.cdt.ui.views"
             class="ch.hsr.ifs.cutelauncher.ui.TestRunnerView"
             fastViewWidthRatio="0.5"
-            icon="icons/obj16/c_app.gif"
+            icon="icons/obj16/cute_app.gif"
             id="ch.hsr.ifs.cutelauncher.resultView"
             name="CUTE Results"/>
    </extension>
@@ -73,7 +73,7 @@
             category="org.eclipse.cdt.ui.newCCWizards"
             class="ch.hsr.ifs.cutelauncher.ui.NewManagedCuteProjectWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
-            icon="icons/obj16/c_app.gif"
+            icon="icons/obj16/cute_app.gif"
             id="ch.hsr.ifs.cutelauncher.managedProjectWizard"
             name="Managed CUTE Testproject"
             project="true"/>
