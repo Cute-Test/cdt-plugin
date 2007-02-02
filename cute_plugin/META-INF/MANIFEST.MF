@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Cute Launcher
 Bundle-SymbolicName: ch.hsr.ifs.cutelauncher;singleton:=true
-Bundle-Version: 0.2.1
+Bundle-Version: 0.3.0
 Bundle-Activator: ch.hsr.ifs.cutelauncher.CuteLauncherPlugin
 Bundle-Vendor: IFS Institute for Software
 Bundle-Localization: plugin
@@ -22,5 +22,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.cdt.managedbuilder.core
 Eclipse-LazyStart: true
-Export-Package: ch.hsr.ifs.cutelauncher
+Export-Package: ch.hsr.ifs.cutelauncher,
+ ch.hsr.ifs.cutelauncher.model,
+ ch.hsr.ifs.cutelauncher.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

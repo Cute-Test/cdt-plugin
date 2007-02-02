@@ -8,8 +8,7 @@ void runSuite(){
 	//TODO add your test here
 	
 	cute::eclipse_listener lis;
-	cute::runner<cute::eclipse_listener> run = cute::makeRunner(lis);
-	run(s, "The Suite");
+	cute::makeRunner(lis)(s, "The Suite");
 }
 
 int main(){
