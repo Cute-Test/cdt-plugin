@@ -58,12 +58,21 @@ void test_equals_strings_fails(){
 	}
 }
 void test_diff_values(){
-	ASSERT_EQUAL("(1,2)",cute::diff_values(1,2));
-	ASSERT_EQUAL(" pos 2 (\"ror\",\"or\")",cute::diff_values("error",std::string("eror")));
+	ASSERT_EQUAL(" expected:\t1\tbut was:\t2\t",cute::diff_values(1,2));
+	ASSERT_EQUAL(" expected:\t" "error\\n" "\tbut was:\t" "eror\\t\t",cute::diff_values("error\n",std::string("eror\t")));
 }
+void test_backslashQuoteTabNewline(){
+	std::string in("Hallo");
+	ASSERT(in == cute::backslashQuoteTabNewline(in));
+	std::string shouldQuote("Hi\nPeter\\tab\t ");
+	std::string shouldQuoteQuoted("Hi\\nPeter\\\\tab\\t ");
+	ASSERT(shouldQuoteQuoted == cute::backslashQuoteTabNewline(shouldQuote));
+}
+
 } // namespace
 cute::suite test_cute_equals(){
 	cute::suite s;
+	s += CUTE(test_backslashQuoteTabNewline); 
 	s += CUTE(test_equals_OK);
 	s += CUTE(test_equals_int_fails);
 	s += CUTE(test_assertEqualsDelta);
