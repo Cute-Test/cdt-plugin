@@ -73,7 +73,7 @@ public class CutePatternListener implements IPatternMatchListener{
 			IRegion reg = doc.getLineInformation(doc.getLineOfOffset(event.getOffset()));
 			String line = doc.get(reg.getOffset(), reg.getLength());
 			
-			String[] parts = line.split(":");
+			String[] parts = line.split("§");
 			if(parts[0].equals(BEGINNING)) {
 				for (TestEventHandler handler : handlers) {
 					handler.handleBeginning(reg, parts);

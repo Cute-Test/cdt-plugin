@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import org.eclipse.compare.CompareConfiguration;
+import org.eclipse.compare.IEncodedStreamContentAccessor;
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.compare.contentmergeviewer.TextMergeViewer;
 import org.eclipse.compare.structuremergeviewer.DiffNode;
@@ -32,6 +33,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 import ch.hsr.ifs.cutelauncher.model.TestCase;
+import ch.hsr.ifs.cutelauncher.model.TestFailure;
+import ch.hsr.ifs.cutelauncher.model.TestResult;
 
 /**
  * @author Emanuel Graf
@@ -39,7 +42,7 @@ import ch.hsr.ifs.cutelauncher.model.TestCase;
  */
 public class CuteCompareResultDialog extends TrayDialog {
 	
-	private static class CompareElement implements ITypedElement {
+	private static class CompareElement implements ITypedElement, IEncodedStreamContentAccessor {
 	    private String fContent;
 	    
 	    public CompareElement(String content) {
@@ -64,12 +67,11 @@ public class CuteCompareResultDialog extends TrayDialog {
         public String getCharset() throws CoreException {
             return "UTF-8"; //$NON-NLS-1$
         }
+
 	}
 	
 	
 	private TextMergeViewer compareViewer;
-    private String expected = "expected";
-    private String actual = "actual";
     TestCase test;
 
 	public CuteCompareResultDialog(Shell shell, TestCase test) {
@@ -97,9 +99,9 @@ public class CuteCompareResultDialog extends TrayDialog {
 	
 	private Control createCompareViewer(ComparePane pane) {
 		final CompareConfiguration compareConfiguration= new CompareConfiguration();
-	    compareConfiguration.setLeftLabel("Expected"); 
+	    compareConfiguration.setLeftLabel("Expected:"); 
 	    compareConfiguration.setLeftEditable(false);
-	    compareConfiguration.setRightLabel("Actual");	 
+	    compareConfiguration.setRightLabel("Actual:");	 
 	    compareConfiguration.setRightEditable(false);
 	    compareConfiguration.setProperty(CompareConfiguration.IGNORE_WHITESPACE, Boolean.FALSE);
 
@@ -123,7 +125,12 @@ public class CuteCompareResultDialog extends TrayDialog {
 	public void setCompareViewerInput(TestCase test) {
 		this.test = test;
 		if (! compareViewer.getControl().isDisposed()) {
-			compareViewer.setInput(new DiffNode(new CompareElement(expected), new CompareElement(actual)));
+			TestResult result = test.getResult();
+			if (result instanceof TestFailure) {
+				TestFailure failure = (TestFailure) result;
+				compareViewer.setInput(new DiffNode(new CompareElement(failure.getExpected()), new CompareElement(failure.getWas())));
+			}
+			
 		}
 	}
 	

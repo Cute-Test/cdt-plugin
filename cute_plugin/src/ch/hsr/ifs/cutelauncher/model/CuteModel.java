@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2007 Institute for Software, HSR Hochschule fï¿½r Technik  
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -47,23 +47,23 @@ public class CuteModel {
 		TestSession session;
 		IFile file;
 		int lineNumber;
-		String msg;
+		TestResult result;
 		TestStatus status;
 		TestCase tCase;
 		
-		public UpdateJob(TestSession session, IFile file, int lineNumber, String msg, TestStatus status, TestCase tCase) {
+		public UpdateJob(TestSession session, IFile file, int lineNumber, TestResult result, TestStatus status, TestCase tCase) {
 			super("UpdateJob");
 			this.session = session;
 			this.file = file;
 			this.lineNumber = lineNumber;
-			this.msg = msg;
+			this.result = result;
 			this.status = status;
 			this.tCase = tCase;
 		}
 
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			tCase.endTest(file, lineNumber, msg, status);
+			tCase.endTest(file, lineNumber, result, status);
 			runnerView = showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage());
 			if(runnerView != null) {
 				runnerView.update(session);
@@ -162,7 +162,16 @@ public class CuteModel {
 	
 	public void endCurrentTestCase(IFile file, int lineNumber, String msg, TestStatus status, TestCase tCase) {
 		TestSession session = new TestSession(root);
-		new UpdateJob(session, file, lineNumber, msg, status, tCase).schedule();
+		TestResult result;
+		switch (status) {
+		case failure:
+			result = new TestFailure(msg);
+			break;
+		default:
+			result = new TestResult(msg);
+			break;
+		}
+		new UpdateJob(session, file, lineNumber, result, status, tCase).schedule();
 	}
 
 	public void endSuite() {

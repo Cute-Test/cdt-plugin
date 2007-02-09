@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2007 Institute for Software, HSR Hochschule fï¿½r Technik  
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -27,7 +27,7 @@ public class TestCase implements TestElement {
 	
 	private int lineNumber = -1;
 	
-	private String msg = "";
+	private TestResult result;
 	
 	private TestSuite suite = null;
 
@@ -62,7 +62,7 @@ public class TestCase implements TestElement {
 	}
 	
 	public String getMessage() {
-		return msg;
+		return result.getMsg();
 	}
 
 	@Override
@@ -70,14 +70,16 @@ public class TestCase implements TestElement {
 		return getName();
 	}
 	
-	public void endTest(IFile file, int lineNumber, String msg, TestStatus status) {
+	public void endTest(IFile file, int lineNumber, TestResult result, TestStatus status) {
 		this.file = file;
 		this.lineNumber = lineNumber;
-		this.msg = msg;
+		this.result = result;
 		this.status = status;
 		suite.endTest(this);
 	}
 	
-	
+	public TestResult getResult() {
+		return result;
+	}
 
 }

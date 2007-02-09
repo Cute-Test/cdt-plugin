@@ -9,36 +9,33 @@
 namespace cute {
 // overload the following for your purpose of presenting a difference
 // TODO: should I provide overloads for ExpectedValue == ActualValue?
+	static inline std::string backslashQuoteTabNewline(std::string const &input){
+		std::string result;
+		result.reserve(input.size());
+		for (std::string::size_type i=0; i < input.length() ; ++i){
+			switch(input[i]) {
+				case '\n': result += "\\n"; break;
+				case '\t': result += "\\t"; break;
+				case '\\': result += "\\\\"; break;
+				default: result += input[i];
+			}
+		}
+		return result;
+				
+	}
 	template <typename ExpectedValue, typename ActualValue>
 	std::string diff_values(ExpectedValue const &expected
 						,ActualValue const & actual){
-		// construct a simple message...
+		// construct a simple message...to be parsed by IDE support
+		std::ostringstream exp;
+		exp << expected;
+		std::ostringstream act;
+		act << actual;
 		std::ostringstream os;
-		os << "(" << expected<<","<<actual<<")";
+		os << " expected:\t" << cute::backslashQuoteTabNewline(exp.str())<<"\tbut was:\t"<<cute::backslashQuoteTabNewline(act.str())<<"\t";
 		return os.str();
 	}
-// special cases for strings
-	inline	std::string diff_values(std::string const &exp,std::string const &act){
-		typedef std::string::const_iterator iter;
-		std::string const *expp = &exp;
-		std::string const *actp = &act;
-		if (exp.length() > act.length()) std::swap(expp,actp);
-		std::pair<iter,iter> differ=mismatch(expp->begin(),expp->end(),actp->begin());
-		std::ostringstream os;
-		if (exp.length() > act.length()) std::swap(differ.first,differ.second);
-		os << " pos " << std::distance(exp.begin(),differ.first) << " (\""
-		   <<exp.substr(differ.first-exp.begin())<<"\",\""
-		   <<act.substr(differ.second-act.begin())<<"\")";
-		return os.str();
-	}
-	inline	std::string diff_values(char const * const &exp,std::string const &act){
-		return diff_values(std::string(exp),act);
-	}
-	inline	std::string diff_values(char const * const &exp,char const *act){
-		return diff_values(std::string(exp),std::string(act));
-	}
-//std::string diff_values(std::string const &,std::string const &);
-//std::string diff_values(char const * const &exp,std::string const &act);
+
 
 // TODO: some magic might be possible with boost::mpl... leave that for the moment
 	template <typename ExpectedValue, typename ActualValue>
@@ -50,7 +47,7 @@ namespace cute {
 					// should get rid of signed-unsigned warning below... 
 					// but this requires trickery or more overloading
 		if (expected == actual) return;
-		throw test_failure(msg + diff_values(expected,actual),file,line);
+		throw test_failure(cute::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
 	}
 	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
 	void assert_equal_delta(ExpectedValue const &expected
@@ -60,7 +57,7 @@ namespace cute {
 				,char const *file
 				,int line) {
 		if (std::abs(expected-actual)< std::abs(delta)) return;
-		throw test_failure(msg + diff_values(expected,actual),file,line);
+		throw test_failure(cute::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
 	}
 // TODO: provide this for float as well. (and combinations?)
 	template <>
@@ -100,12 +97,12 @@ namespace cute {
 				,char const *file
 				,int line) {
 		if (std::abs(expected-actual) <= std::abs(delta) ) return;
-		throw test_failure(msg + diff_values(expected,actual),file,line);
+		throw test_failure(cute::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
 	}
 }
 
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
-#define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " expected but was " #actual, expected,actual)
+#define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, expected,actual)
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
-#define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " expected with error " #delta " but was " #actual,expected,actual,delta)
+#define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,expected,actual,delta)
 #endif /*CUTE_EQUALS_H_*/
