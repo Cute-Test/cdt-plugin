@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
@@ -85,7 +86,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		ComparePane pane = new ComparePane(composite, SWT.BORDER | SWT.FLAT);
+		ViewForm pane = new ViewForm(composite, SWT.BORDER | SWT.FLAT);
 		GridData data= new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL);
 		data.widthHint= convertWidthInCharsToPixels(120);
 		data.heightHint= convertHeightInCharsToPixels(13);
@@ -97,7 +98,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 		return composite;
 	}
 	
-	private Control createCompareViewer(ComparePane pane) {
+	private Control createCompareViewer(ViewForm pane) {
 		final CompareConfiguration compareConfiguration= new CompareConfiguration();
 	    compareConfiguration.setLeftLabel("Expected:"); 
 	    compareConfiguration.setLeftEditable(false);
