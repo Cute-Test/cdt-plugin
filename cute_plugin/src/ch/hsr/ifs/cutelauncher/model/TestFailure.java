@@ -31,7 +31,7 @@ public class TestFailure extends TestResult {
 		Pattern pattern = Pattern.compile(REG_EXP);
 		Matcher matcher = pattern.matcher(msg);
 		if(matcher.find()) {
-			this.msg = matcher.group(2);
+			this.msg = unquoteMsg(matcher.group(2));
 			expected = unquote(matcher.group(4));
 			was = unquote(matcher.group(8));
 		}
@@ -55,6 +55,11 @@ public class TestFailure extends TestResult {
 	
 	public String getWas() {
 		return was;
+	}
+	
+	private String unquoteMsg(String text) {
+		String ret = text.replaceAll("\\{2}+", "\\");
+		return ret;
 	}
 	
 	private String unquote(String text) {
