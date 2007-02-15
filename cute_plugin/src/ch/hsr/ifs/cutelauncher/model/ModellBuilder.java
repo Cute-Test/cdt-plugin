@@ -9,17 +9,15 @@
  * Contributors: 
  * Emanuel Graf - initial API and implementation 
  ******************************************************************************/
-package ch.hsr.ifs.cutelauncher;
+package ch.hsr.ifs.cutelauncher.model;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.cutelauncher.model.CuteModel;
-import ch.hsr.ifs.cutelauncher.model.TestCase;
-import ch.hsr.ifs.cutelauncher.model.TestStatus;
-import ch.hsr.ifs.cutelauncher.model.TestSuite;
+import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
+import ch.hsr.ifs.cutelauncher.TestEventHandler;
 
 /**
  * @author egraf

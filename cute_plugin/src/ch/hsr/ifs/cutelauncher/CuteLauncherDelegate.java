@@ -36,6 +36,8 @@ import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
 
+import ch.hsr.ifs.cutelauncher.model.ModellBuilder;
+
 /**
  * @author egraf
  *
