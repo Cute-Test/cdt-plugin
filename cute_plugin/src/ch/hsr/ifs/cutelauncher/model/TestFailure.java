@@ -58,7 +58,7 @@ public class TestFailure extends TestResult {
 	}
 	
 	private String unquoteMsg(String text) {
-		String ret = text.replaceAll("\\{2}+", "\\");
+		String ret = text.replaceAll("\\\\{2}+", "\\\\");
 		return ret;
 	}
 	
