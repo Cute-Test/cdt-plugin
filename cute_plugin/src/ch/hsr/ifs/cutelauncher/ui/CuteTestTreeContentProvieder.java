@@ -53,6 +53,9 @@ public class CuteTestTreeContentProvieder implements ITreeContentProvider {
 		if (inputElement instanceof TestSession) {
 			TestSession session = (TestSession) inputElement;
 			return new Object[] {session.getRoot()};
+		}else if (inputElement instanceof TestSuite) {
+			TestSuite suite = (TestSuite) inputElement;
+			return suite.getCases().toArray();
 		}
 		return null;
 	}

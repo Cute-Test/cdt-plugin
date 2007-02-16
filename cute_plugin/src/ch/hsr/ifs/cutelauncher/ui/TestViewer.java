@@ -11,24 +11,69 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
+import java.util.Vector;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.progress.UIJob;
 
+import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
+import ch.hsr.ifs.cutelauncher.model.ISessionListener;
+import ch.hsr.ifs.cutelauncher.model.ITestElementListener;
+import ch.hsr.ifs.cutelauncher.model.NotifyEvent;
 import ch.hsr.ifs.cutelauncher.model.TestCase;
 import ch.hsr.ifs.cutelauncher.model.TestElement;
 import ch.hsr.ifs.cutelauncher.model.TestSession;
 import ch.hsr.ifs.cutelauncher.model.TestSuite;
 
-public class TestViewer extends Composite {
+public class TestViewer extends Composite implements ITestElementListener, ISessionListener{
 	
+	private final class UpdateTestElement extends UIJob {
+		private UpdateTestElement(String name, TestElement element) {
+			super(name);
+			this.element = element;
+		}
+		
+		private TestElement element;
+
+		@Override
+		public IStatus runInUIThread(IProgressMonitor monitor) {
+			treeViewer.refresh(element, true);
+			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+		}
+	}
+	
+	private final class ShowNewTest extends UIJob {
+		private ShowNewTest(String name, TestSuite suite, TestCase tCase) {
+			super(name);
+			this.suite = suite;
+			this.tCase = tCase;
+		}
+		
+		private TestSuite suite;
+		private TestCase tCase;
+
+		@Override
+		public IStatus runInUIThread(IProgressMonitor monitor) {
+			treeViewer.refresh(suite, true);
+			treeViewer.reveal(tCase);
+			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+		}
+	}
+
 	private class TestResultViewer extends StyledText {
 		private class TestResultDClickListener extends MouseAdapter{
 
@@ -65,18 +110,26 @@ public class TestViewer extends Composite {
 	private SashForm sashForm = null;
 	private TreeViewer treeViewer = null;
 	private TestResultViewer testResultViewer = null;
+	
+	private TestSession session;
+	private TestSuite suite;
+	private Vector<TestCase> tCases = new Vector<TestCase>();
+	
 	public TestViewer(Composite parent, int style) {
 		super(parent, style);
+		CuteLauncherPlugin.getModel().addListener(this);
 		initialize();
+		addDisposeListener(new DisposeListener() {
+
+			public void widgetDisposed(DisposeEvent e) {
+				CuteLauncherPlugin.getModel().removeListener(TestViewer.this);
+			}
+		});
 	}
-	
+
 	public void reset(TestSession session) {
 		testResultViewer.setText("");
-		update(session);
-	}
-	
-	public void update(TestSession suite) {
-		treeViewer.setInput(suite);
+		treeViewer.setInput(session);
 	}
 	
 	public void showTestDetails(TestElement testElement) {
@@ -111,6 +164,59 @@ public class TestViewer extends Composite {
 		treeViewer.addDoubleClickListener(new CuteTestDClickListener());
 		testResultViewer = new TestResultViewer(sashForm, SWT.FLAT);
 		testResultViewer.setIndent(5);
+	}
+
+	public void modelCanged(TestElement source, NotifyEvent event) {
+		UIJob job = null;
+		if (source instanceof TestSuite) {
+			switch(event.getType()) {
+			case newTest:
+				TestCase tCase = (TestCase)event.getElement();
+				tCase.addTestElementListener(this);
+				tCases.add(tCase);
+				job = new ShowNewTest("Show new Test", suite, tCase);
+				job.schedule();
+				break;
+			case suiteFinished:
+				job = new UpdateTestElement("Show new Test", suite);
+				job.schedule();
+				break;
+			}
+		}else if (source instanceof TestCase) {
+			switch (event.getType()) {
+			case testFinished:
+				job = new UpdateTestElement("Update Test", source);
+				job.schedule();
+				break;
+			}
+		}
+		
+		if(job != null) {
+			job.schedule();
+		}
+	}
+
+	public void sessionStarted(TestSession session) {
+		this.session = session;
+		if(suite != null) {
+			suite.removeTestElementListener(this);
+		}
+		for (TestCase tCase : tCases) {
+			tCase.removeTestElementListener(this);
+		}
+		tCases.clear();
+		suite = session.getRoot();
+		suite.addTestElementListener(this);	
+		UIJob job = new UIJob("Reset TestViewer") {
+
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				reset(TestViewer.this.session);
+				return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+			}
+			
+		};
+		job.schedule();
 	}
 
 }

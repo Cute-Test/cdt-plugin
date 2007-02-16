@@ -17,9 +17,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import ch.hsr.ifs.cutelauncher.model.TestSession;
-import ch.hsr.ifs.cutelauncher.model.TestSuite;
-
 public class TestRunnerView extends ViewPart {
 
 	public static final String ID = "ch.hsr.ifs.cutelauncher.resultView";
@@ -36,19 +33,12 @@ public class TestRunnerView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		// TODO Auto-generated method stub
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		top = new Composite(parent, SWT.NONE);
 		top.setLayout(gridLayout);
 		createTopPanel();
 		createTestViewer();
-	}
-
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
-
 	}
 	
 	public boolean isCreated() {
@@ -98,38 +88,7 @@ public class TestRunnerView extends ViewPart {
 		cuteProgressBar.setLayoutData(gridData2);
 	}
 
-	public void reset() {
-		counterPanel.reset();
-		cuteProgressBar.reset();
-	}
-	
-	public void reset(TestSession session) {
-		reset();
-		TestSuite suite = session.getRoot();
-		setTotal(suite.getTotalTests(), 0);
-		testViewer.reset(session);
-	}
-	
-	public void setTotal(int total, int run) {
-		counterPanel.setTotal(total);
-		counterPanel.setRun(run);
-		cuteProgressBar.reset(false, false, run, total);
-	}
-	
-	public void update(TestSession session) {
-		TestSuite suite = session.getRoot();
-		counterPanel.setRun(suite.getRun());
-		counterPanel.setFailures(suite.getFailure());
-		counterPanel.setErrors(suite.getError());
-		int failuresAndErrors = suite.getFailure() + suite.getError();
-		cuteProgressBar.step(failuresAndErrors);
-		cuteProgressBar.refresh(failuresAndErrors > 0);
-		testViewer.update(session);
-	}
-	
-	public void addTest(TestSession session	) {
-		testViewer.update(session);
-	}
+
 
 	/**
 	 * This method initializes testViewer	
@@ -143,6 +102,10 @@ public class TestRunnerView extends ViewPart {
 		gridData3.grabExcessVerticalSpace = true;
 		testViewer = new TestViewer(top, SWT.NONE);
 		testViewer.setLayoutData(gridData3);
+	}
+
+	@Override
+	public void setFocus() {
 	}
 
 

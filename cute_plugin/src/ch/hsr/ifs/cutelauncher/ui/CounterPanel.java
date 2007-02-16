@@ -11,6 +11,9 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -20,14 +23,21 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
+import ch.hsr.ifs.cutelauncher.model.ISessionListener;
+import ch.hsr.ifs.cutelauncher.model.ITestElementListener;
+import ch.hsr.ifs.cutelauncher.model.NotifyEvent;
+import ch.hsr.ifs.cutelauncher.model.TestElement;
+import ch.hsr.ifs.cutelauncher.model.TestSession;
+import ch.hsr.ifs.cutelauncher.model.TestSuite;
 
 /**
  * @author egraf
  *
  */
-public class CounterPanel extends Composite {
+public class CounterPanel extends Composite implements ITestElementListener, ISessionListener {
 
 	private Label runLabel = null;
 	private Label runText = null;
@@ -40,11 +50,13 @@ public class CounterPanel extends Composite {
 	private Label failedLabel = null;
 	private Label failedText = null;
 	
+	private TestSuite suite;
+	
 	private int total;
 
 	public CounterPanel(Composite parent, int style) {
 		super(parent, style);
-		
+		CuteLauncherPlugin.getModel().addListener(this);
 		initialize();
 	}
 
@@ -102,6 +114,7 @@ public class CounterPanel extends Composite {
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				disposeIcons();
+				CuteLauncherPlugin.getModel().removeListener(CounterPanel.this);
 			}
 		});
 		
@@ -139,11 +152,57 @@ public class CounterPanel extends Composite {
 		redraw();
 	}
 
-	public void reset() {
-		setTotal(0);
-		setRun(0);
-		setFailures(0);
-		setErrors(0);
+	public void reset(TestSession session) {
+		if(suite != null) {
+			suite.removeTestElementListener(this);
+		}
+		suite = session.getRoot();
+		suite.addTestElementListener(this);
+		
+		updateNumbers();
+	}
+
+	private void updateNumbers() {
+		setTotal(suite.getTotalTests());
+		setRun(suite.getRun());
+		setFailures(suite.getFailure());
+		setErrors(suite.getError());
+	}
+
+	public void modelCanged(TestElement source, NotifyEvent event) {
+		if(source == suite) {
+			if(event.getType() == NotifyEvent.EventType.newTest || event.getType() == NotifyEvent.EventType.suiteFinished ) {
+				UIJob job = new UIJob("Update CounterPanel Job") {
+
+					@Override
+					public IStatus runInUIThread(IProgressMonitor monitor) {
+						updateNumbers();
+						return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+					}
+					
+				};
+				job.schedule();
+			}
+		}
+		
+	}
+
+	public void sessionStarted(TestSession session) {
+		if(suite != null) {
+			suite.removeTestElementListener(this);
+		}
+		suite = session.getRoot();
+		suite.addTestElementListener(this);
+		UIJob job = new UIJob("Update CounterPanel Job") {
+
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				updateNumbers();
+				return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+			}
+			
+		};
+		job.schedule();
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,21"

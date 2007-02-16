@@ -68,6 +68,15 @@ public class NewManagedCuteProjectWizard extends NewManagedCCProjectWizard {
 		setIncludePaths(monitor, cuteFolder);
 	}
 	
+	
+	
+	@Override
+	public void addPages() {
+//		Add the default page for all new managed projects 
+		super.addPages();
+		
+	}
+
 	private void setIncludePaths(IProgressMonitor monitor, IFolder cuteFolder) {
 		IManagedBuildInfo bInfo = null;
 		bInfo = ManagedBuildManager.getBuildInfo(newProject);

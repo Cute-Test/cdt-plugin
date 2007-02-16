@@ -11,10 +11,30 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.model;
 
-public interface TestElement {
+import java.util.Vector;
+
+public abstract class TestElement {
+	
+	protected Vector<ITestElementListener> listeners = new Vector<ITestElementListener>();
 
 	public abstract String getName();
 
 	public abstract TestStatus getStatus();
+	
+	public void addTestElementListener(ITestElementListener lis) {
+		if(!listeners.contains(lis)) {
+			listeners.add(lis);
+		}
+	}
+	
+	public void removeTestElementListener(ITestElementListener lis) {
+		listeners.remove(lis);
+	}
+	
+	protected void notifyListeners(NotifyEvent event) {
+		for (ITestElementListener lis : listeners) {
+			lis.modelCanged(this, event);
+		}
+	}
 
 }

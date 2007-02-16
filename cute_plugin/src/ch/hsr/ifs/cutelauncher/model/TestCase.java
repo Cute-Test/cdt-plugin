@@ -17,7 +17,7 @@ import org.eclipse.core.resources.IFile;
  * @author egraf
  *
  */
-public class TestCase implements TestElement {
+public class TestCase extends TestElement {
 	
 	private TestStatus status;
 	
@@ -76,6 +76,7 @@ public class TestCase implements TestElement {
 		this.result = result;
 		this.status = status;
 		suite.endTest(this);
+		notifyListeners(new NotifyEvent(NotifyEvent.EventType.testFinished, this));
 	}
 	
 	public TestResult getResult() {

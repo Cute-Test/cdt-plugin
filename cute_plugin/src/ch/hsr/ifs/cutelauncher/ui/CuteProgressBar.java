@@ -11,6 +11,9 @@
  *******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -25,11 +28,20 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.progress.UIJob;
+
+import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
+import ch.hsr.ifs.cutelauncher.model.ISessionListener;
+import ch.hsr.ifs.cutelauncher.model.ITestElementListener;
+import ch.hsr.ifs.cutelauncher.model.NotifyEvent;
+import ch.hsr.ifs.cutelauncher.model.TestElement;
+import ch.hsr.ifs.cutelauncher.model.TestSession;
+import ch.hsr.ifs.cutelauncher.model.TestSuite;
 
 /**
  * A progress bar with a red/green indication for success or failure.
  */
-public class CuteProgressBar extends Canvas {
+public class CuteProgressBar extends Canvas implements ITestElementListener, ISessionListener{
 	private static final int DEFAULT_WIDTH = 160;
 	private static final int DEFAULT_HEIGHT = 18;
 
@@ -42,9 +54,11 @@ public class CuteProgressBar extends Canvas {
 	private boolean fError;
 	private boolean fStopped= false;
 	
+	private TestSuite suite;
+	
 	public CuteProgressBar(Composite parent) {
 		super(parent, SWT.NONE);
-		
+		CuteLauncherPlugin.getModel().addListener(this);
 		addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent e) {
 				fColorBarWidth= scale(fCurrentTickCount);
@@ -61,6 +75,7 @@ public class CuteProgressBar extends Canvas {
 				fFailureColor.dispose();
 				fOKColor.dispose();
 				fStoppedColor.dispose();
+				CuteLauncherPlugin.getModel().removeListener(CuteProgressBar.this);
 			}
 		});
 		Display display= parent.getDisplay();
@@ -73,24 +88,13 @@ public class CuteProgressBar extends Canvas {
 		fMaxTickCount= max;
 	}
 		
-	public void reset() {
+	private void reset() {
 		fError= false;
 		fStopped= false;
-		fCurrentTickCount= 0;
-		fMaxTickCount= 0;
+		fCurrentTickCount= suite.getRun();
+		fMaxTickCount= suite.getTotalTests();
 		fColorBarWidth= 0;
 		redraw();
-	}
-	
-	public void reset(boolean hasErrors, boolean stopped, int ticksDone, int maximum) {
-		boolean noChange= fError == hasErrors && fStopped == stopped && fCurrentTickCount == ticksDone && fMaxTickCount == maximum;
-		fError= hasErrors;
-		fStopped= stopped;
-		fCurrentTickCount= ticksDone;
-		fMaxTickCount= maximum;
-		fColorBarWidth= scale(ticksDone);
-		if (! noChange)
-			redraw();
 	}
 	
 	private void paintStep(int startX, int endX) {
@@ -158,8 +162,8 @@ public class CuteProgressBar extends Canvas {
 		return size;
 	}
 	
-	public void step(int failures) {
-		fCurrentTickCount++;
+	public void update(int run, int failures) {
+		fCurrentTickCount = run;
 		int x= fColorBarWidth;
 
 		fColorBarWidth= scale(fCurrentTickCount);
@@ -176,6 +180,43 @@ public class CuteProgressBar extends Canvas {
 	public void refresh(boolean hasErrors) {
 		fError= hasErrors;
 		redraw();
+	}
+
+	public void modelCanged(TestElement source, NotifyEvent event) {
+		if(source == suite) {
+			if(event.getType() == NotifyEvent.EventType.testFinished || event.getType() == NotifyEvent.EventType.suiteFinished) {
+				UIJob job = new UIJob("Update Progessbar") {
+
+					@Override
+					public IStatus runInUIThread(IProgressMonitor monitor) {
+						update(suite.getRun(), suite.getError() + suite.getFailure());
+						return new Status(IStatus.OK,CuteLauncherPlugin.PLUGIN_ID,IStatus.OK,"", null);
+					}
+					
+				};
+				job.schedule();
+			}
+		}
+	}
+
+	public void sessionStarted(TestSession session) {
+		if(suite != null) {
+			suite.removeTestElementListener(this);
+		}
+		suite = session.getRoot();
+		suite.addTestElementListener(this);
+		
+		UIJob job = new UIJob("Reset Progessbar") {
+
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				reset();
+				return new Status(IStatus.OK,CuteLauncherPlugin.PLUGIN_ID,IStatus.OK,"", null);
+			}
+			
+		};
+		job.schedule();
+		
 	}
 	
 }

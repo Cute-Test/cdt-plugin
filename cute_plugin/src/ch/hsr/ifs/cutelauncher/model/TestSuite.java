@@ -17,7 +17,7 @@ import java.util.Vector;
  * @author egraf
  *
  */
-public class TestSuite implements TestElement {
+public class TestSuite extends TestElement {
 	
 	private String name = "";
 	
@@ -52,6 +52,7 @@ public class TestSuite implements TestElement {
 	public void add(TestCase tCase) {
 		cases.add(tCase);
 		tCase.setSuite(this);
+		notifyListeners(new NotifyEvent(NotifyEvent.EventType.newTest, tCase));
 	}
 	
 	protected void endTest(TestCase tCase) {
@@ -66,6 +67,7 @@ public class TestSuite implements TestElement {
 			++error;
 			break;
 		}
+		notifyListeners(new NotifyEvent(NotifyEvent.EventType.testFinished, tCase));
 	}
 	
 	private void setEndStatus() {
@@ -116,7 +118,7 @@ public class TestSuite implements TestElement {
 
 	public void end() {
 		setEndStatus();
-		
+		notifyListeners(new NotifyEvent(NotifyEvent.EventType.suiteFinished, this));
 	}
 
 }

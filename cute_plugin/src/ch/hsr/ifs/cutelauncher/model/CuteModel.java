@@ -11,6 +11,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.model;
 
+import java.util.Vector;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -25,143 +27,72 @@ import ch.hsr.ifs.cutelauncher.ui.TestRunnerView;
 
 public class CuteModel {
 	
-	private final class ResetJob extends UIJob {
-		TestSession session;
+	private final class ShowResultView extends UIJob{
+		public ShowResultView() {
+			super("Show Result View");
+		}
 		
-		public ResetJob(TestSession session) {
-			super("CuteUpdater");
-			this.session = session;
+		private TestRunnerView showTestRunnerViewPartInActivePage(TestRunnerView testRunner) {
+			IWorkbenchPart activePart= null;
+			IWorkbenchPage page= null;
+			try {
+				if (testRunner != null && testRunner.isCreated())
+					return testRunner;
+				page= CuteLauncherPlugin.getActivePage();
+				if (page == null)
+					return null;
+				activePart= page.getActivePart();
+
+				return (TestRunnerView) page.showView(TestRunnerView.ID);
+			} catch (PartInitException pie) {
+				CuteLauncherPlugin.log(pie);
+				return null;
+			} finally{
+				//restore focus stolen by the creation of the result view
+				if (page != null && activePart != null)
+					page.activate(activePart);
+			}
+		}
+
+		private TestRunnerView findTestRunnerViewPartInActivePage() {
+			IWorkbenchPage page= CuteLauncherPlugin.getActivePage();
+			if (page == null)
+				return null;
+			return (TestRunnerView) page.findView(TestRunnerView.ID);
 		}
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			runnerView = showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage());
-			if(runnerView != null) {
-				runnerView.reset(session);
+			if (showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage()) == null) {
+				return new Status(IStatus.WARNING, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"Could not show TestResultView",null);
+			}else {
+				return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
 			}
-			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
 		}
+		
 	}
 	
-	private final class UpdateJob extends UIJob{
-		
-		TestSession session;
-		IFile file;
-		int lineNumber;
-		TestResult result;
-		TestStatus status;
-		TestCase tCase;
-		
-		public UpdateJob(TestSession session, IFile file, int lineNumber, TestResult result, TestStatus status, TestCase tCase) {
-			super("UpdateJob");
-			this.session = session;
-			this.file = file;
-			this.lineNumber = lineNumber;
-			this.result = result;
-			this.status = status;
-			this.tCase = tCase;
-		}
-
-		@Override
-		public IStatus runInUIThread(IProgressMonitor monitor) {
-			tCase.endTest(file, lineNumber, result, status);
-			runnerView = showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage());
-			if(runnerView != null) {
-				runnerView.update(session);
-			}
-			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
-		}
-
-	}
-
-	private final class AddTestJob extends UIJob{
-
-		TestSession session;
-
-		public AddTestJob(TestSession session) {
-			super("AddTestJob");
-			this.session = session;
-		}
-
-		@Override
-		public IStatus runInUIThread(IProgressMonitor monitor) {
-			runnerView = showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage());
-			if(runnerView != null) {
-				runnerView.addTest(session);
-			}
-			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
-		}
-
-	}
+	private Vector<ISessionListener> sessionListeners = new Vector<ISessionListener>();
 	
-	private final class EndSuiteJob extends UIJob{
-
-		TestSession session;
-
-		public EndSuiteJob(TestSession session) {
-			super("EndSuiteJob");
-			this.session = session;
-		}
-
-		@Override
-		public IStatus runInUIThread(IProgressMonitor monitor) {
-			session.getRoot().end();
-			runnerView = showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage());
-			if(runnerView != null) {
-				runnerView.addTest(session);
-			}
-			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
-		}
-
-	}
 
 	private TestSuite root;
-	private TestRunnerView runnerView;
 
 	public void startNewRun(TestSuite root) {
 		TestSession session = new TestSession(root);
-		ResetJob job = new ResetJob(session);
-		job.schedule();
 		this.root = root;
-
+		UIJob job = new ShowResultView();
+		job.schedule();
+		try {
+			job.join();
+		} catch (InterruptedException e) {
+		}
+		notifyListener(session);
 	}
 	
 	public void addTest(TestCase test) {
 		root.add(test);
-		TestSession session = new TestSession(root);
-		new AddTestJob(session).schedule();
-	}
-	
-	private TestRunnerView showTestRunnerViewPartInActivePage(TestRunnerView testRunner) {
-		IWorkbenchPart activePart= null;
-		IWorkbenchPage page= null;
-		try {
-			if (testRunner != null && testRunner.isCreated())
-				return testRunner;
-			page= CuteLauncherPlugin.getActivePage();
-			if (page == null)
-				return null;
-			activePart= page.getActivePart();
-
-			return (TestRunnerView) page.showView(TestRunnerView.ID);
-		} catch (PartInitException pie) {
-			CuteLauncherPlugin.log(pie);
-			return null;
-		} finally{
-			//restore focus stolen by the creation of the result view
-			if (page != null && activePart != null)
-				page.activate(activePart);
-		}
-	}
-
-	private TestRunnerView findTestRunnerViewPartInActivePage() {
-		IWorkbenchPage page= CuteLauncherPlugin.getActivePage();
-		if (page == null)
-			return null;
-		return (TestRunnerView) page.findView(TestRunnerView.ID);
 	}
 	
 	public void endCurrentTestCase(IFile file, int lineNumber, String msg, TestStatus status, TestCase tCase) {
-		TestSession session = new TestSession(root);
 		TestResult result;
 		switch (status) {
 		case failure:
@@ -171,12 +102,27 @@ public class CuteModel {
 			result = new TestResult(msg);
 			break;
 		}
-		new UpdateJob(session, file, lineNumber, result, status, tCase).schedule();
+		tCase.endTest(file, lineNumber, result, status);
 	}
 
 	public void endSuite() {
-		TestSession session = new TestSession(root);
-		new EndSuiteJob(session).schedule();
+		root.end();
+	}
+	
+	public void addListener(ISessionListener lis) {
+		if(!sessionListeners.contains(lis)) {
+			sessionListeners.add(lis);
+		}
+	}
+	
+	public void removeListener(ISessionListener lis) {
+		sessionListeners.remove(lis);
+	}
+	
+	private void notifyListener(TestSession session) {
+		for (ISessionListener lis : sessionListeners) {
+			lis.sessionStarted(session);
+		}
 	}
 
 }
