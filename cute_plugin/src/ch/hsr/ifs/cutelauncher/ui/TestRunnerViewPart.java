@@ -11,25 +11,35 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
-public class TestRunnerView extends ViewPart {
+import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 
-	public static final String ID = "ch.hsr.ifs.cutelauncher.resultView";
+public class TestRunnerViewPart extends ViewPart {
+
+	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
 
 	private Composite top = null;
 
 	private Composite TopPanel = null;
+	
+	protected boolean autoScroll = true;
 
 	private CounterPanel counterPanel = null;
 
 	private CuteProgressBar cuteProgressBar = null;
 
 	private TestViewer testViewer = null;
+
+	private ScrollLockAction scrollLockAction;
+	private FailuresOnlyFilterAction failureOnlyAction;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -39,10 +49,25 @@ public class TestRunnerView extends ViewPart {
 		top.setLayout(gridLayout);
 		createTopPanel();
 		createTestViewer();
+		configureToolbar();
 	}
 	
 	public boolean isCreated() {
 		return counterPanel != null;
+	}
+	
+	private void configureToolbar() {
+		IActionBars actionBars= getViewSite().getActionBars();
+		IToolBarManager toolBar= actionBars.getToolBarManager();
+		
+		scrollLockAction= new ScrollLockAction(this);
+		scrollLockAction.setChecked(!autoScroll);
+		
+		failureOnlyAction = new FailuresOnlyFilterAction();
+		failureOnlyAction.setChecked(false);
+		
+		toolBar.add(failureOnlyAction);
+		toolBar.add(scrollLockAction);
 	}
 
 	/**
@@ -100,12 +125,36 @@ public class TestRunnerView extends ViewPart {
 		gridData3.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		gridData3.verticalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		gridData3.grabExcessVerticalSpace = true;
-		testViewer = new TestViewer(top, SWT.NONE);
+		testViewer = new TestViewer(top, SWT.NONE, this);
 		testViewer.setLayoutData(gridData3);
 	}
 
 	@Override
 	public void setFocus() {
+	}
+
+	public boolean isAutoScroll() {
+		return autoScroll;
+	}
+
+	public void setAutoScroll(boolean autoScroll) {
+		this.autoScroll = autoScroll;
+	}
+	
+	private class FailuresOnlyFilterAction extends Action {
+		public FailuresOnlyFilterAction() {
+			super("Show Failures Only", AS_CHECK_BOX);
+			setToolTipText("Show Failures Only");
+			setImageDescriptor(CuteLauncherPlugin.getImageDescriptor("obj16/failures.gif")); //$NON-NLS-1$
+		}
+
+		public void run() {
+			setShowFailuresOnly(isChecked());
+		}
+	}
+
+	public void setShowFailuresOnly(boolean b) {
+		testViewer.setFailuresOnly(b);		
 	}
 
 

@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -69,7 +71,9 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			treeViewer.refresh(suite, true);
-			treeViewer.reveal(tCase);
+			if(viewPart.isAutoScroll()){
+				treeViewer.reveal(tCase);
+			}
 			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
 		}
 	}
@@ -106,6 +110,27 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		}
 		
 	}
+	
+	private final class FailuresOnlyFilter extends ViewerFilter{
+
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element) {
+			if (element instanceof TestElement) {
+				TestElement testElement = (TestElement) element;
+				switch(testElement.getStatus()) {
+				case running:
+				case error:
+				case failure:
+					return true;
+				default:
+					return false;
+				}
+			}else {
+				return true;
+			}
+		}
+		
+	}
 
 	private SashForm sashForm = null;
 	private TreeViewer treeViewer = null;
@@ -115,8 +140,14 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	private TestSuite suite;
 	private Vector<TestCase> tCases = new Vector<TestCase>();
 	
-	public TestViewer(Composite parent, int style) {
+	private TestRunnerViewPart viewPart;
+	
+	private boolean failureOnly = false;
+	private FailuresOnlyFilter failuresOnlyFilter = new FailuresOnlyFilter();;
+	
+	public TestViewer(Composite parent, int style, TestRunnerViewPart viewPart) {
 		super(parent, style);
+		this.viewPart = viewPart;
 		CuteLauncherPlugin.getModel().addListener(this);
 		initialize();
 		addDisposeListener(new DisposeListener() {
@@ -218,5 +249,19 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		};
 		job.schedule();
 	}
+	
+	public void setFailuresOnly(boolean failureOnly) {
+		this.failureOnly = failureOnly;
+		updateFilters();
+	}
+
+	private void updateFilters() {
+		if(failureOnly) {
+			treeViewer.addFilter(failuresOnlyFilter);
+		}else {
+			treeViewer.removeFilter(failuresOnlyFilter);
+		}
+	}
+
 
 }

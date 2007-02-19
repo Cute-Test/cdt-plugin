@@ -61,10 +61,10 @@
          point="org.eclipse.ui.views">
       <view
             category="org.eclipse.cdt.ui.views"
-            class="ch.hsr.ifs.cutelauncher.ui.TestRunnerView"
+            class="ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"
             fastViewWidthRatio="0.5"
             icon="icons/obj16/cute_app.gif"
-            id="ch.hsr.ifs.cutelauncher.resultView"
+            id="ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"
             name="CUTE Results"/>
    </extension>
    <extension
@@ -76,7 +76,8 @@
             icon="icons/obj16/cute_app.gif"
             id="ch.hsr.ifs.cutelauncher.managedProjectWizard"
             name="Managed CUTE Testproject"
-            project="true"/>
+            project="true">
+      </wizard>
    </extension>
 
 </plugin>

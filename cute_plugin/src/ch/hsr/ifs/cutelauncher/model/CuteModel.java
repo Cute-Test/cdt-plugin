@@ -23,7 +23,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
-import ch.hsr.ifs.cutelauncher.ui.TestRunnerView;
+import ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart;
 
 public class CuteModel {
 	
@@ -32,7 +32,7 @@ public class CuteModel {
 			super("Show Result View");
 		}
 		
-		private TestRunnerView showTestRunnerViewPartInActivePage(TestRunnerView testRunner) {
+		private TestRunnerViewPart showTestRunnerViewPartInActivePage(TestRunnerViewPart testRunner) {
 			IWorkbenchPart activePart= null;
 			IWorkbenchPage page= null;
 			try {
@@ -43,7 +43,7 @@ public class CuteModel {
 					return null;
 				activePart= page.getActivePart();
 
-				return (TestRunnerView) page.showView(TestRunnerView.ID);
+				return (TestRunnerViewPart) page.showView(TestRunnerViewPart.ID);
 			} catch (PartInitException pie) {
 				CuteLauncherPlugin.log(pie);
 				return null;
@@ -54,11 +54,11 @@ public class CuteModel {
 			}
 		}
 
-		private TestRunnerView findTestRunnerViewPartInActivePage() {
+		private TestRunnerViewPart findTestRunnerViewPartInActivePage() {
 			IWorkbenchPage page= CuteLauncherPlugin.getActivePage();
 			if (page == null)
 				return null;
-			return (TestRunnerView) page.findView(TestRunnerView.ID);
+			return (TestRunnerViewPart) page.findView(TestRunnerViewPart.ID);
 		}
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
