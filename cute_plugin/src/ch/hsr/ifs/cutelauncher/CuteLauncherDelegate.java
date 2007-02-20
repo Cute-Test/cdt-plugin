@@ -86,7 +86,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			if (console instanceof TextConsole) {
 				TextConsole textCons = (TextConsole) console;
 				ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons);
-				ModellBuilder modelHandler = new ModellBuilder(exePath);
+				ModellBuilder modelHandler = new ModellBuilder(exePath, launch);
 				CutePatternListener listener = new CutePatternListener();
 				listener.addHandler(handler);
 				listener.addHandler(modelHandler);

@@ -11,17 +11,25 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.model;
 
+import org.eclipse.debug.core.ILaunch;
+
 public class TestSession{
 	private TestSuite root;
+	
+	private ILaunch launch;
 
-	public TestSession(TestSuite root) {
+	public TestSession(TestSuite root, ILaunch launch) {
 		super();
 		this.root = root;
+		this.launch = launch;
 	}
 
 	public TestSuite getRoot() {
 		return root;
 	}
-	
+
+	public ILaunch getLaunch() {
+		return launch;
+	}
 	
 }

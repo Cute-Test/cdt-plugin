@@ -14,8 +14,11 @@ package ch.hsr.ifs.cutelauncher.ui;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -31,6 +34,8 @@ import ch.hsr.ifs.cutelauncher.model.TestSession;
 public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 
 	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
+
+	public static final String RERUN_LAST_COMMAND = "ch.hsr.ifs.cutelauncher.rerunLast";
 
 	private Composite top = null;
 
@@ -48,6 +53,9 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	private FailuresOnlyFilterAction failureOnlyAction;
 	private Action showNextFailureAction;
 	private Action showPreviousFailureAction;
+	private RerunLastTestAction rerunLastTestAction;
+
+	private TestSession session;
 	
 	
 
@@ -86,10 +94,15 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		showPreviousFailureAction = new ShowPreviousFailureAction(this);
 		showPreviousFailureAction.setEnabled(false);
 		
+		rerunLastTestAction = new RerunLastTestAction();
+		rerunLastTestAction.setEnabled(false);
+		
 		toolBar.add(showNextFailureAction);
 		toolBar.add(showPreviousFailureAction);
 		toolBar.add(failureOnlyAction);
 		toolBar.add(scrollLockAction);
+		toolBar.add(new Separator());
+		toolBar.add(rerunLastTestAction);
 	}
 
 	/**
@@ -174,9 +187,34 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 			setShowFailuresOnly(isChecked());
 		}
 	}
+	
+	private class RerunLastTestAction extends Action{
+		public RerunLastTestAction() {
+			setText("Rerun Test"); 
+			setToolTipText("Rerun Test");
+			setDisabledImageDescriptor(CuteLauncherPlugin.getImageDescriptor("dlcl16/relaunch.gif")); //$NON-NLS-1$
+			setHoverImageDescriptor(CuteLauncherPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
+			setImageDescriptor(CuteLauncherPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
+			setEnabled(false);
+			setActionDefinitionId(RERUN_LAST_COMMAND);
+		}
+		
+		public void run(){
+			rerunTestRun();
+		}
+
+	}
 
 	public void setShowFailuresOnly(boolean b) {
 		testViewer.setFailuresOnly(b);		
+	}
+
+	public void rerunTestRun() {
+		if (session != null && session.getLaunch().getLaunchConfiguration() != null) {
+			ILaunchConfiguration configuration= session.getLaunch().getLaunchConfiguration();
+			DebugUITools.launch(configuration, session.getLaunch().getLaunchMode());
+		}
+		
 	}
 
 	public void selectNextFailure() {
@@ -188,26 +226,27 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	}
 
 	public void sessionFinished(TestSession session) {
-		if(session.getRoot().hasErrorOrFailure()) {
-			new UIJob("Show first Failure") {
+		new UIJob("Show first Failure") {
 
-				@Override
-				public IStatus runInUIThread(IProgressMonitor monitor) {
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				rerunLastTestAction.setEnabled(true);
+				if(TestRunnerViewPart.this.session.getRoot().hasErrorOrFailure()) {
 					showNextFailureAction.setEnabled(true);
 					showPreviousFailureAction.setEnabled(true);
 					testViewer.selectFirstFailure();
-					return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
 				}
-				
-			}.schedule();
-			
-		}
-		
+				return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+			}
+
+		}.schedule();		
 	}
 
 	public void sessionStarted(TestSession session) {
+		this.session = session;
 		showNextFailureAction.setEnabled(false);
-		showPreviousFailureAction.setEnabled(false);		
+		showPreviousFailureAction.setEnabled(false);
+		rerunLastTestAction.setEnabled(false);
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="148,36,771,201"

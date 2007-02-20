@@ -14,6 +14,7 @@ package ch.hsr.ifs.cutelauncher.model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.debug.core.ILaunch;
 import org.eclipse.jface.text.IRegion;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
@@ -28,12 +29,13 @@ public class ModellBuilder implements TestEventHandler {
 	private CuteModel model = CuteLauncherPlugin.getModel();
 	private IPath rtPath;
 	private TestCase currentTestCase;
+	private ILaunch launch;
 	
 	
-	
-	public ModellBuilder(IPath exePath) {
+	public ModellBuilder(IPath exePath, ILaunch launch) {
 		super();
-		this.rtPath = exePath.removeLastSegments(1);;
+		this.rtPath = exePath.removeLastSegments(1);
+		this.launch = launch;
 	}
 
 	public void handleError(IRegion reg, String[] parts) {
@@ -49,7 +51,7 @@ public class ModellBuilder implements TestEventHandler {
 	}
 
 	public void handleBeginning(IRegion reg, String[] parts) {
-		model.startNewRun(new TestSuite(parts[1], Integer.parseInt(parts[2]), TestStatus.running));
+		model.startNewRun(new TestSuite(parts[1], Integer.parseInt(parts[2]), TestStatus.running), launch);
 		
 	}
 

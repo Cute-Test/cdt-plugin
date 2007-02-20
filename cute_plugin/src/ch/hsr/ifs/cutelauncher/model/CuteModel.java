@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.ILaunch;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -79,8 +80,8 @@ public class CuteModel {
 
 	private TestSession session;
 
-	public void startNewRun(TestSuite root) {
-		session = new TestSession(root);
+	public void startNewRun(TestSuite root, ILaunch launch) {
+		session = new TestSession(root, launch);
 		this.root = root;
 		UIJob job = new ShowResultView();
 		job.schedule();
