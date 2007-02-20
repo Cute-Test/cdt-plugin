@@ -28,7 +28,8 @@ public class CutePatternListener implements IPatternMatchListener{
 	private static final String FAILURE = "#failure";
 	private static final String SUCCESS = "#success";
 	private static final String ERROR = "#error";
-	private static final String STARTSUITE = "#starting"; 
+	private static final String STARTSUITE = "#starting";
+	private static final String SEP_STRING = new String(new char[] {0x1F});
 	
 	private static final String REGEX = "("+ BEGINNING + "|" + ENDING + "|" + SUCCESS + "|"+ STARTSUITE + "|" + FAILURE + "|" + ERROR + ")(.*)(\\n)";
 	private TextConsole console; 
@@ -71,9 +72,9 @@ public class CutePatternListener implements IPatternMatchListener{
 		try {
 			IDocument doc = console.getDocument();
 			IRegion reg = doc.getLineInformation(doc.getLineOfOffset(event.getOffset()));
-			String line = doc.get(reg.getOffset(), reg.getLength());
-			
-			String[] parts = line.split("§");
+			String line = doc.get(reg.getOffset(), reg.getLength());;
+
+			String[] parts = line.split(SEP_STRING);
 			if(parts[0].equals(BEGINNING)) {
 				for (TestEventHandler handler : handlers) {
 					handler.handleBeginning(reg, parts);

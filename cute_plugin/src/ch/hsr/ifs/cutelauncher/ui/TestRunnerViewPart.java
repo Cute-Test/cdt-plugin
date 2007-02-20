@@ -40,8 +40,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener, ID
 
 	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
 
-	public static final String RERUN_LAST_COMMAND = "ch.hsr.ifs.cutelauncher.rerunLast";
-
 	private Composite top = null;
 
 	private Composite TopPanel = null;
@@ -225,7 +223,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener, ID
 			setHoverImageDescriptor(CuteLauncherPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
 			setImageDescriptor(CuteLauncherPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
 			setEnabled(false);
-			setActionDefinitionId(RERUN_LAST_COMMAND);
 		}
 		
 		public void run(){
