@@ -18,5 +18,7 @@ package ch.hsr.ifs.cutelauncher.model;
 public interface ISessionListener {
 	
 	public void sessionStarted(TestSession session);
+	
+	public void sessionFinished(TestSession session);
 
 }

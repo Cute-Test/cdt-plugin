@@ -76,8 +76,11 @@ public class CuteModel {
 
 	private TestSuite root;
 
+
+	private TestSession session;
+
 	public void startNewRun(TestSuite root) {
-		TestSession session = new TestSession(root);
+		session = new TestSession(root);
 		this.root = root;
 		UIJob job = new ShowResultView();
 		job.schedule();
@@ -85,7 +88,7 @@ public class CuteModel {
 			job.join();
 		} catch (InterruptedException e) {
 		}
-		notifyListener(session);
+		notifyListenerSessionStart(session);
 	}
 	
 	public void addTest(TestCase test) {
@@ -107,6 +110,7 @@ public class CuteModel {
 
 	public void endSuite() {
 		root.end();
+		notifyListenerSessionEnd(session);
 	}
 	
 	public void addListener(ISessionListener lis) {
@@ -119,9 +123,15 @@ public class CuteModel {
 		sessionListeners.remove(lis);
 	}
 	
-	private void notifyListener(TestSession session) {
+	private void notifyListenerSessionStart(TestSession session) {
 		for (ISessionListener lis : sessionListeners) {
 			lis.sessionStarted(session);
+		}
+	}
+	
+	private void notifyListenerSessionEnd(TestSession session) {
+		for (ISessionListener lis : sessionListeners) {
+			lis.sessionFinished(session);
 		}
 	}
 

@@ -218,5 +218,9 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 		job.schedule();
 		
 	}
+
+	public void sessionFinished(TestSession session) {
+		// Do nothing
+	}
 	
 }

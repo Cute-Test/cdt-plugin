@@ -205,4 +205,8 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 		job.schedule();
 	}
 
+	public void sessionFinished(TestSession session) {
+		// Do nothing
+	}
+
 }  //  @jve:decl-index=0:visual-constraint="10,21"

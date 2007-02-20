@@ -11,6 +11,9 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -19,10 +22,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
+import ch.hsr.ifs.cutelauncher.model.ISessionListener;
+import ch.hsr.ifs.cutelauncher.model.TestSession;
 
-public class TestRunnerViewPart extends ViewPart {
+public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 
 	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
 
@@ -40,6 +46,15 @@ public class TestRunnerViewPart extends ViewPart {
 
 	private ScrollLockAction scrollLockAction;
 	private FailuresOnlyFilterAction failureOnlyAction;
+	private Action showNextFailureAction;
+	private Action showPreviousFailureAction;
+	
+	
+
+	public TestRunnerViewPart() {
+		super();
+		CuteLauncherPlugin.getModel().addListener(this);
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -66,6 +81,13 @@ public class TestRunnerViewPart extends ViewPart {
 		failureOnlyAction = new FailuresOnlyFilterAction();
 		failureOnlyAction.setChecked(false);
 		
+		showNextFailureAction = new ShowNextFailureAction(this);
+		showNextFailureAction.setEnabled(false);
+		showPreviousFailureAction = new ShowPreviousFailureAction(this);
+		showPreviousFailureAction.setEnabled(false);
+		
+		toolBar.add(showNextFailureAction);
+		toolBar.add(showPreviousFailureAction);
 		toolBar.add(failureOnlyAction);
 		toolBar.add(scrollLockAction);
 	}
@@ -157,5 +179,35 @@ public class TestRunnerViewPart extends ViewPart {
 		testViewer.setFailuresOnly(b);		
 	}
 
+	public void selectNextFailure() {
+		testViewer.selectNextFailure();		
+	}
+	
+	public void selectPrevFailure() {
+		testViewer.selectPrevFailure();
+	}
+
+	public void sessionFinished(TestSession session) {
+		if(session.getRoot().hasErrorOrFailure()) {
+			new UIJob("Show first Failure") {
+
+				@Override
+				public IStatus runInUIThread(IProgressMonitor monitor) {
+					showNextFailureAction.setEnabled(true);
+					showPreviousFailureAction.setEnabled(true);
+					testViewer.selectFirstFailure();
+					return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+				}
+				
+			}.schedule();
+			
+		}
+		
+	}
+
+	public void sessionStarted(TestSession session) {
+		showNextFailureAction.setEnabled(false);
+		showPreviousFailureAction.setEnabled(false);		
+	}
 
 }  //  @jve:decl-index=0:visual-constraint="148,36,771,201"

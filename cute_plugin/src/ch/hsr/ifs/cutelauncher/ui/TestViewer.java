@@ -16,6 +16,7 @@ import java.util.Vector;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -39,6 +40,7 @@ import ch.hsr.ifs.cutelauncher.model.NotifyEvent;
 import ch.hsr.ifs.cutelauncher.model.TestCase;
 import ch.hsr.ifs.cutelauncher.model.TestElement;
 import ch.hsr.ifs.cutelauncher.model.TestSession;
+import ch.hsr.ifs.cutelauncher.model.TestStatus;
 import ch.hsr.ifs.cutelauncher.model.TestSuite;
 
 public class TestViewer extends Composite implements ITestElementListener, ISessionListener{
@@ -250,6 +252,11 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		job.schedule();
 	}
 	
+	public void sessionFinished(TestSession session) {
+		
+		
+	}
+	
 	public void setFailuresOnly(boolean failureOnly) {
 		this.failureOnly = failureOnly;
 		updateFilters();
@@ -262,6 +269,71 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			treeViewer.removeFilter(failuresOnlyFilter);
 		}
 	}
+
+	public void selectNextFailure() {
+		if(suite.hasErrorOrFailure()) {
+			Object firstElement = getSelectedElement();
+			if (firstElement instanceof TestCase) {
+				TestCase tCase = (TestCase) firstElement;
+				treeViewer.setSelection(new StructuredSelection(findNextFailure(tCase)), true);
+			}else {
+				treeViewer.setSelection(new StructuredSelection(findNextFailure(null)), true);
+			}
+			
+		}
+	}
+
+	private Object getSelectedElement() {
+		StructuredSelection selection = (StructuredSelection) treeViewer.getSelection();
+		Object firstElement = selection.getFirstElement();
+		return firstElement;
+	}
+
+	public void selectFirstFailure() {
+		treeViewer.setSelection(new StructuredSelection(findNextFailure(null)), true);
+	}
+	
+	public void selectPrevFailure() {
+		if(suite.hasErrorOrFailure()) {
+			Object firstElement = getSelectedElement();
+			if (firstElement instanceof TestCase) {
+				TestCase tCase = (TestCase) firstElement;
+				treeViewer.setSelection(new StructuredSelection(findPrevFailure(tCase)), true);
+			}else { //show first Failure
+				treeViewer.setSelection(new StructuredSelection(findNextFailure(null)), true);
+			}
+			
+		}
+		
+	}
+	
+	private Object findPrevFailure(TestCase selected) {
+		Vector<TestCase> tests = suite.getCases();
+		int index = tests.indexOf(selected);
+		TestCase prevFailure;
+		for(int i = index -1; i > 0;--i) {
+			prevFailure = tests.elementAt(i);
+			if(prevFailure.getStatus() == TestStatus.failure || prevFailure.getStatus() == TestStatus.error) {
+				return prevFailure;
+			}
+		}
+		return selected;
+	}
+
+	private TestCase findNextFailure(TestCase selected) {
+		Vector<TestCase> tests = suite.getCases();
+		int index = tests.indexOf(selected);
+		TestCase nextFailure;
+		for(int i = index + 1; i < tests.size();++i) {
+			nextFailure = tests.elementAt(i);
+			if(nextFailure.getStatus() == TestStatus.failure || nextFailure.getStatus() == TestStatus.error) {
+				return nextFailure;
+			}
+		}
+		return selected;
+	}
+
+
 
 
 }

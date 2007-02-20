@@ -107,6 +107,10 @@ public class TestSuite extends TestElement {
 	public int getTotalTests() {
 		return totalTests;
 	}
+	
+	public boolean hasErrorOrFailure() {
+		return failure + error > 0;
+	}
 
 	public int getRun() {
 		return success + failure + error;
