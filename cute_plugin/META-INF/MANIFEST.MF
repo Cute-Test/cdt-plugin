@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Cute Launcher
 Bundle-SymbolicName: ch.hsr.ifs.cutelauncher;singleton:=true
-Bundle-Version: 0.4.0
+Bundle-Version: 0.5.0
 Bundle-Activator: ch.hsr.ifs.cutelauncher.CuteLauncherPlugin
 Bundle-Vendor: IFS Institute for Software
 Bundle-Localization: plugin

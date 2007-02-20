@@ -14,7 +14,12 @@ package ch.hsr.ifs.cutelauncher.ui;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -31,7 +36,7 @@ import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 import ch.hsr.ifs.cutelauncher.model.ISessionListener;
 import ch.hsr.ifs.cutelauncher.model.TestSession;
 
-public class TestRunnerViewPart extends ViewPart implements ISessionListener {
+public class TestRunnerViewPart extends ViewPart implements ISessionListener, IDebugEventSetListener {
 
 	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
 
@@ -56,6 +61,8 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	private RerunLastTestAction rerunLastTestAction;
 
 	private TestSession session;
+
+	private StopAction stopAction;
 	
 	
 
@@ -97,12 +104,16 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		rerunLastTestAction = new RerunLastTestAction();
 		rerunLastTestAction.setEnabled(false);
 		
+		stopAction = new StopAction();
+		stopAction.setEnabled(false);
+		
 		toolBar.add(showNextFailureAction);
 		toolBar.add(showPreviousFailureAction);
 		toolBar.add(failureOnlyAction);
 		toolBar.add(scrollLockAction);
 		toolBar.add(new Separator());
 		toolBar.add(rerunLastTestAction);
+		toolBar.add(stopAction);
 	}
 
 	/**
@@ -176,6 +187,24 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		this.autoScroll = autoScroll;
 	}
 	
+	private final class SessionFinishedUIJob extends UIJob {
+		private SessionFinishedUIJob(String name) {
+			super(name);
+		}
+
+		@Override
+		public IStatus runInUIThread(IProgressMonitor monitor) {
+			rerunLastTestAction.setEnabled(true);
+			stopAction.setEnabled(false);
+			if(TestRunnerViewPart.this.session.getRoot().hasErrorOrFailure()) {
+				showNextFailureAction.setEnabled(true);
+				showPreviousFailureAction.setEnabled(true);
+				testViewer.selectFirstFailure();
+			}
+			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+		}
+	}
+
 	private class FailuresOnlyFilterAction extends Action {
 		public FailuresOnlyFilterAction() {
 			super("Show Failures Only", AS_CHECK_BOX);
@@ -204,9 +233,37 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		}
 
 	}
+	
+	private class StopAction extends Action{
+		public StopAction() {
+			setText("Stop JUnit Test");
+			setToolTipText("Stop CuTe Test Run");
+			setDisabledImageDescriptor(CuteLauncherPlugin.getImageDescriptor("dlcl16/stop.gif")); //$NON-NLS-1$
+			setHoverImageDescriptor(CuteLauncherPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
+			setImageDescriptor(CuteLauncherPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
+		}
+
+		public void run() {
+			stopTest();
+			setEnabled(false);
+		}
+	}
 
 	public void setShowFailuresOnly(boolean b) {
 		testViewer.setFailuresOnly(b);		
+	}
+
+	public void stopTest() {
+		if(session != null) {
+			try {
+				for(IProcess process : session.getLaunch().getProcesses()) {
+					process.terminate();
+				}
+				new SessionFinishedUIJob("Process Stopped").schedule();
+			}catch(DebugException de) {
+				
+			}
+		}
 	}
 
 	public void rerunTestRun() {
@@ -226,27 +283,26 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	}
 
 	public void sessionFinished(TestSession session) {
-		new UIJob("Show first Failure") {
-
-			@Override
-			public IStatus runInUIThread(IProgressMonitor monitor) {
-				rerunLastTestAction.setEnabled(true);
-				if(TestRunnerViewPart.this.session.getRoot().hasErrorOrFailure()) {
-					showNextFailureAction.setEnabled(true);
-					showPreviousFailureAction.setEnabled(true);
-					testViewer.selectFirstFailure();
-				}
-				return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
-			}
-
-		}.schedule();		
+		DebugPlugin.getDefault().removeDebugEventListener(this);
+		new SessionFinishedUIJob("Show first Failure").schedule();		
 	}
 
 	public void sessionStarted(TestSession session) {
 		this.session = session;
+		DebugPlugin.getDefault().addDebugEventListener(this);
 		showNextFailureAction.setEnabled(false);
 		showPreviousFailureAction.setEnabled(false);
 		rerunLastTestAction.setEnabled(false);
+		stopAction.setEnabled(true);
+	}
+
+	public void handleDebugEvents(DebugEvent[] events) {
+		for(DebugEvent event : events) {
+			if(event.getSource().equals(session.getLaunch().getProcesses()[0])|| event.getKind() == DebugEvent.TERMINATE) {
+				new SessionFinishedUIJob("Process killed").schedule();
+			}
+		}
+		
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="148,36,771,201"
