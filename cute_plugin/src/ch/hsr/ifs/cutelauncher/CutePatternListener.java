@@ -23,15 +23,7 @@ import org.eclipse.ui.console.TextConsole;
 
 public class CutePatternListener implements IPatternMatchListener{
 	
-	private static final String BEGINNING = "#beginning";
-	private static final String ENDING = "#ending";
-	private static final String FAILURE = "#failure";
-	private static final String SUCCESS = "#success";
-	private static final String ERROR = "#error";
-	private static final String STARTSUITE = "#starting";
-	private static final String SEP_STRING = new String(new char[] {0x1F});
-	
-	private static final String REGEX = "("+ BEGINNING + "|" + ENDING + "|" + SUCCESS + "|"+ STARTSUITE + "|" + FAILURE + "|" + ERROR + ")(.*)(\\n)";
+	private static final String REGEX =  TestEventHandler.LINE_QUALIFIER + "("+ TestEventHandler.BEGINNING + "|" + TestEventHandler.ENDING + "|" + TestEventHandler.SUCCESS + "|"+ TestEventHandler.STARTTEST + "|" + TestEventHandler.FAILURE + "|" + TestEventHandler.ERROR + ")(.*)(\\n)";
 	private TextConsole console; 
 	private Vector<TestEventHandler> handlers;
 
@@ -44,7 +36,7 @@ public class CutePatternListener implements IPatternMatchListener{
 	}
 
 	public String getLineQualifier() {
-		return "#";
+		return TestEventHandler.LINE_QUALIFIER;
 	}
 
 	public String getPattern() {
@@ -73,32 +65,8 @@ public class CutePatternListener implements IPatternMatchListener{
 			IDocument doc = console.getDocument();
 			IRegion reg = doc.getLineInformation(doc.getLineOfOffset(event.getOffset()));
 			String line = doc.get(reg.getOffset(), reg.getLength());;
-
-			String[] parts = line.split(SEP_STRING);
-			if(parts[0].equals(BEGINNING)) {
-				for (TestEventHandler handler : handlers) {
-					handler.handleBeginning(reg, parts);
-				}
-			}else if(parts[0].equals(ENDING)) {
-				for (TestEventHandler handler : handlers) {
-					handler.handleEnding(reg, parts);
-				}
-			}else if(parts[0].equals(FAILURE)) {
-				for (TestEventHandler handler : handlers) {
-					handler.handleFailure(reg, parts);
-				}
-			}else if(parts[0].equals(SUCCESS)) {
-				for (TestEventHandler handler : handlers) {
-					handler.handleSuccess(reg, parts);
-				}
-			}else if(parts[0].equals(ERROR)) {
-				for (TestEventHandler handler : handlers) {
-					handler.handleError(reg, parts);
-				}
-			}else if(parts[0].equals(STARTSUITE)) {
-				for (TestEventHandler handler : handlers) {
-					handler.handleTestStart(reg, parts);
-				}
+			for (TestEventHandler handler : handlers) {
+				handler.handle(reg,line);
 			}
 		} catch (BadLocationException e) {
 			e.printStackTrace();

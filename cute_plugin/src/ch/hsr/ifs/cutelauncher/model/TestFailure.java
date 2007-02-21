@@ -34,6 +34,8 @@ public class TestFailure extends TestResult {
 			this.msg = unquoteMsg(matcher.group(2));
 			expected = unquote(matcher.group(4));
 			was = unquote(matcher.group(8));
+		}else {
+			this.msg = msg;
 		}
 	}
 
@@ -42,10 +44,12 @@ public class TestFailure extends TestResult {
 	public String getMsg() {
 		StringBuilder strBuild = new StringBuilder();
 		strBuild.append(msg);
-		strBuild.append(' ');
-		strBuild.append(expected);
-		strBuild.append(" but was: ");
-		strBuild.append(was);
+		if(expected != null && was != null) {
+			strBuild.append(' ');
+			strBuild.append(expected);
+			strBuild.append(" but was: ");
+			strBuild.append(was);
+		}
 		return strBuild.toString();
 	}
 	

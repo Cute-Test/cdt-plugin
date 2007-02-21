@@ -24,7 +24,7 @@ import ch.hsr.ifs.cutelauncher.TestEventHandler;
  * @author egraf
  *
  */
-public class ModellBuilder implements TestEventHandler {
+public class ModellBuilder extends TestEventHandler {
 	
 	private CuteModel model = CuteLauncherPlugin.getModel();
 	private IPath rtPath;
@@ -38,32 +38,32 @@ public class ModellBuilder implements TestEventHandler {
 		this.launch = launch;
 	}
 
-	public void handleError(IRegion reg, String[] parts) {
-		model.endCurrentTestCase(null, -1, parts[1], TestStatus.error, currentTestCase);
+	public void handleError(IRegion reg, String testName, String msg) {
+		model.endCurrentTestCase(null, -1, msg, TestStatus.error, currentTestCase);
 	}
 
-	public void handleSuccess(IRegion reg, String[] parts) {
-		model.endCurrentTestCase(null, -1, parts[2], TestStatus.success, currentTestCase);	
+	public void handleSuccess(IRegion reg, String name, String msg) {
+		model.endCurrentTestCase(null, -1, msg, TestStatus.success, currentTestCase);	
 	}
 
-	public void handleEnding(IRegion reg, String[] parts) {
+	public void handleEnding(IRegion reg, String suitename) {
 		model.endSuite();		
 	}
 
-	public void handleBeginning(IRegion reg, String[] parts) {
-		model.startNewRun(new TestSuite(parts[1], Integer.parseInt(parts[2]), TestStatus.running), launch);
+	public void handleBeginning(IRegion reg, String suitename, String suitesize) {
+		model.startNewRun(new TestSuite(suitename, Integer.parseInt(suitesize), TestStatus.running), launch);
 		
 	}
 
-	public void handleFailure(IRegion reg, String[] parts){
-		IPath filePath = rtPath.append(parts[1]);
+	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason){
+		IPath filePath = rtPath.append(fileName);
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
-		int lineNumber = Integer.parseInt(parts[2]);
-		model.endCurrentTestCase(file, lineNumber, parts[3], TestStatus.failure, currentTestCase);
+		int lineNumber = Integer.parseInt(lineNo);
+		model.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase);
 	}
 
-	public void handleTestStart(IRegion reg, String[] parts) {
-		currentTestCase = new TestCase(parts[1]);
+	public void handleTestStart(IRegion reg, String suitename) {
+		currentTestCase = new TestCase(suitename);
 		model.addTest(currentTestCase);		
 	}
 

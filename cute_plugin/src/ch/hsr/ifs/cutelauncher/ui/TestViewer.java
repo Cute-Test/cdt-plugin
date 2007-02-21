@@ -196,6 +196,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		treeViewer.addSelectionChangedListener(new CuteTestSelecetionListener(this));
 		treeViewer.addDoubleClickListener(new CuteTestDClickListener());
 		testResultViewer = new TestResultViewer(sashForm, SWT.FLAT);
+		testResultViewer.setEditable(false);
 		testResultViewer.setIndent(5);
 	}
 
@@ -311,7 +312,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		Vector<TestCase> tests = suite.getCases();
 		int index = tests.indexOf(selected);
 		TestCase prevFailure;
-		for(int i = index -1; i > 0;--i) {
+		for(int i = index -1; i >= 0;--i) {
 			prevFailure = tests.elementAt(i);
 			if(prevFailure.getStatus() == TestStatus.failure || prevFailure.getStatus() == TestStatus.error) {
 				return prevFailure;

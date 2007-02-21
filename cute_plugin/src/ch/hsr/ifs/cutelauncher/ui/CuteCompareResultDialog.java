@@ -47,7 +47,11 @@ public class CuteCompareResultDialog extends TrayDialog {
 	    private String fContent;
 	    
 	    public CompareElement(String content) {
-	        fContent= content;
+	    	if(content == null) {
+	    		fContent = "no Data";
+	    	}else {
+	    		fContent= content;
+	    	}
 	    }
 	    public String getName() {
 	        return "<no name>"; //$NON-NLS-1$
@@ -129,7 +133,9 @@ public class CuteCompareResultDialog extends TrayDialog {
 			TestResult result = test.getResult();
 			if (result instanceof TestFailure) {
 				TestFailure failure = (TestFailure) result;
-				compareViewer.setInput(new DiffNode(new CompareElement(failure.getExpected()), new CompareElement(failure.getWas())));
+				CompareElement expected = new CompareElement(failure.getExpected());
+				CompareElement was = new CompareElement(failure.getWas());
+				compareViewer.setInput(new DiffNode(expected, was));
 			}
 			
 		}

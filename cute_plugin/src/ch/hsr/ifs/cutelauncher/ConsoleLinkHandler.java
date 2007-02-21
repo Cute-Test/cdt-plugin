@@ -24,7 +24,7 @@ import org.eclipse.ui.console.TextConsole;
  * @author egraf
  *
  */
-public class ConsoleLinkHandler implements TestEventHandler {
+public class ConsoleLinkHandler extends TestEventHandler {
 	
 	private TextConsole console; 
 	private IPath rtPath;
@@ -38,27 +38,27 @@ public class ConsoleLinkHandler implements TestEventHandler {
 	}
 
 
-	public void handleBeginning(IRegion reg, String[] parts) {
+	public void handleBeginning(IRegion reg, String suitename, String suitesize) {
 	}
 
 
-	public void handleEnding(IRegion reg, String[] parts) {
+	public void handleEnding(IRegion reg, String suitename) {
 	}
 
 
-	public void handleError(IRegion reg, String[] parts) {
+	public void handleError(IRegion reg, String testName, String msg) {
 		
 	}
 
-	public void handleSuccess(IRegion reg, String[] parts) {
+	public void handleSuccess(IRegion reg, String name, String msg) {
 	}
 
-	public void handleFailure(IRegion reg, String[] parts) {
+	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
 		
 		try {
-			IPath filePath = rtPath.append(parts[1]);
+			IPath filePath = rtPath.append(fileName);
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
-			int lineNumber = Integer.parseInt(parts[2]);
+			int lineNumber = Integer.parseInt(lineNo);
 			IHyperlink link = new FileLink(file, null,-1,-1,lineNumber);
 			console.addHyperlink(link, reg.getOffset(), reg.getLength());
 		} catch (BadLocationException e) {
@@ -68,7 +68,7 @@ public class ConsoleLinkHandler implements TestEventHandler {
 	}
 
 
-	public void handleTestStart(IRegion reg, String[] parts) {
+	public void handleTestStart(IRegion reg, String suitename) {
 	}
 
 
