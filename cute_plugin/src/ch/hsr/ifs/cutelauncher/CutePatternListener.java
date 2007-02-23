@@ -23,7 +23,7 @@ import org.eclipse.ui.console.TextConsole;
 
 public class CutePatternListener implements IPatternMatchListener{
 	
-	private static final String REGEX =  TestEventHandler.LINE_QUALIFIER + "("+ TestEventHandler.BEGINNING + "|" + TestEventHandler.ENDING + "|" + TestEventHandler.SUCCESS + "|"+ TestEventHandler.STARTTEST + "|" + TestEventHandler.FAILURE + "|" + TestEventHandler.ERROR + ")(.*)(\\n)";
+	private static final String REGEX =  TestEventHandler.LINE_QUALIFIER + "("+ TestEventHandler.BEGINNING + "|" + TestEventHandler.ENDING + "|" + TestEventHandler.SUCCESS + "|"+ TestEventHandler.STARTTEST + "|" + TestEventHandler.FAILURE + "|" + TestEventHandler.ERROR + "|" + TestEventHandler.SESSIONSTART + "|" + TestEventHandler.SESSIONEND + ")(.*)(\\n)";
 	private TextConsole console; 
 	private Vector<TestEventHandler> handlers;
 

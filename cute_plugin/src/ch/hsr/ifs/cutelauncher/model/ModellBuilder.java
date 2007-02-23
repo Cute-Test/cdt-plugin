@@ -31,11 +31,10 @@ public class ModellBuilder extends TestEventHandler {
 	private TestCase currentTestCase;
 	private ILaunch launch;
 	
-	
 	public ModellBuilder(IPath exePath, ILaunch launch) {
 		super();
 		this.rtPath = exePath.removeLastSegments(1);
-		this.launch = launch;
+		this.launch = launch; 
 	}
 
 	public void handleError(IRegion reg, String testName, String msg) {
@@ -47,12 +46,11 @@ public class ModellBuilder extends TestEventHandler {
 	}
 
 	public void handleEnding(IRegion reg, String suitename) {
-		model.endSuite();		
+		model.endSuite();
 	}
 
 	public void handleBeginning(IRegion reg, String suitename, String suitesize) {
-		model.startNewRun(new TestSuite(suitename, Integer.parseInt(suitesize), TestStatus.running), launch);
-		
+		model.startSuite(new TestSuite(suitename, Integer.parseInt(suitesize), TestStatus.running));
 	}
 
 	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason){
@@ -65,6 +63,16 @@ public class ModellBuilder extends TestEventHandler {
 	public void handleTestStart(IRegion reg, String suitename) {
 		currentTestCase = new TestCase(suitename);
 		model.addTest(currentTestCase);		
+	}
+
+	@Override
+	public void handleSessionEnd() {
+		model.endSession();
+	}
+
+	@Override
+	public void handleSessionStart() {
+		model.startSession(launch);
 	}
 
 

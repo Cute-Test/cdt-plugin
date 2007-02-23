@@ -72,4 +72,14 @@ public class ConsoleLinkHandler extends TestEventHandler {
 	}
 
 
+	@Override
+	public void handleSessionEnd() {
+	}
+
+
+	@Override
+	public void handleSessionStart() {
+	}
+
+
 }

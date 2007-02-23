@@ -16,6 +16,10 @@ import java.util.Vector;
 public abstract class TestElement {
 	
 	protected Vector<ITestElementListener> listeners = new Vector<ITestElementListener>();
+	
+	public abstract ITestComposite getParent();
+	
+	public abstract void setParent(ITestComposite parent);
 
 	public abstract String getName();
 

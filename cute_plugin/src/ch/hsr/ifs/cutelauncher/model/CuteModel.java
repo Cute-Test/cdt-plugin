@@ -61,6 +61,7 @@ public class CuteModel {
 				return null;
 			return (TestRunnerViewPart) page.findView(TestRunnerViewPart.ID);
 		}
+		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			if (showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage()) == null) {
@@ -75,14 +76,14 @@ public class CuteModel {
 	private Vector<ISessionListener> sessionListeners = new Vector<ISessionListener>();
 	
 
-	private TestSuite root;
+	private ITestComposite currentParent;
 
 
 	private TestSession session;
 
-	public void startNewRun(TestSuite root, ILaunch launch) {
-		session = new TestSession(root, launch);
-		this.root = root;
+	public void startSession(ILaunch launch) {
+		session = new TestSession(launch);
+		currentParent = session;
 		UIJob job = new ShowResultView();
 		job.schedule();
 		try {
@@ -92,8 +93,15 @@ public class CuteModel {
 		notifyListenerSessionStart(session);
 	}
 	
+	public void startSuite(TestSuite suite) {
+		currentParent.addTestElement(suite);
+		currentParent = suite;
+	}
+	
 	public void addTest(TestCase test) {
-		root.add(test);
+		if(currentParent != null) {
+			currentParent.addTestElement(test);
+		}
 	}
 	
 	public void endCurrentTestCase(IFile file, int lineNumber, String msg, TestStatus status, TestCase tCase) {
@@ -110,7 +118,15 @@ public class CuteModel {
 	}
 
 	public void endSuite() {
-		root.end();
+		if (currentParent instanceof TestSuite) {
+			TestSuite suite = (TestSuite) currentParent;
+			suite.end();
+			currentParent = suite.getParent();
+		}
+		
+	}
+	
+	public void endSession() {
 		notifyListenerSessionEnd(session);
 	}
 	
@@ -135,5 +151,5 @@ public class CuteModel {
 			lis.sessionFinished(session);
 		}
 	}
-
+	
 }

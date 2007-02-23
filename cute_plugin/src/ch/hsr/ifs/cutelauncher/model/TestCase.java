@@ -29,7 +29,7 @@ public class TestCase extends TestElement {
 	
 	private TestResult result;
 	
-	private TestSuite suite = null;
+	private ITestComposite parent = null;
 
 	public TestCase(String name) {
 		super();
@@ -37,12 +37,12 @@ public class TestCase extends TestElement {
 		status = TestStatus.running;
 	}
 
-	public TestElement getSuite() {
-		return suite;
+	public ITestComposite getParent() {
+		return parent;
 	}
 
-	public void setSuite(TestSuite suite) {
-		this.suite = suite;
+	public void setParent(ITestComposite parent) {
+		this.parent = parent;
 	}
 
 	public IFile getFile() {
@@ -75,7 +75,6 @@ public class TestCase extends TestElement {
 		this.lineNumber = lineNumber;
 		this.result = result;
 		this.status = status;
-		suite.endTest(this);
 		notifyListeners(new NotifyEvent(NotifyEvent.EventType.testFinished, this));
 	}
 	

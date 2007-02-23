@@ -32,16 +32,17 @@ import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 import ch.hsr.ifs.cutelauncher.model.ISessionListener;
+import ch.hsr.ifs.cutelauncher.model.ITestComposite;
+import ch.hsr.ifs.cutelauncher.model.ITestCompositeListener;
 import ch.hsr.ifs.cutelauncher.model.ITestElementListener;
 import ch.hsr.ifs.cutelauncher.model.NotifyEvent;
 import ch.hsr.ifs.cutelauncher.model.TestElement;
 import ch.hsr.ifs.cutelauncher.model.TestSession;
-import ch.hsr.ifs.cutelauncher.model.TestSuite;
 
 /**
  * A progress bar with a red/green indication for success or failure.
  */
-public class CuteProgressBar extends Canvas implements ITestElementListener, ISessionListener{
+public class CuteProgressBar extends Canvas implements ITestElementListener, ISessionListener, ITestCompositeListener{
 	private static final int DEFAULT_WIDTH = 160;
 	private static final int DEFAULT_HEIGHT = 18;
 
@@ -54,7 +55,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	private boolean fError;
 	private boolean fStopped= false;
 	
-	private TestSuite suite;
+	private TestSession session;
 	
 	public CuteProgressBar(Composite parent) {
 		super(parent, SWT.NONE);
@@ -91,8 +92,8 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	private void reset() {
 		fError= false;
 		fStopped= false;
-		fCurrentTickCount= suite.getRun();
-		fMaxTickCount= suite.getTotalTests();
+		fCurrentTickCount= session.getRun();
+		fMaxTickCount= session.getTotalTests();
 		fColorBarWidth= 0;
 		redraw();
 	}
@@ -162,7 +163,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 		return size;
 	}
 	
-	public void update(int run, int failures) {
+	private void update(int run, int failures) {
 		fCurrentTickCount = run;
 		int x= fColorBarWidth;
 
@@ -176,6 +177,20 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 			fColorBarWidth= getClientArea().width-1;
 		paintStep(x, fColorBarWidth);
 	}
+	
+	private void update(int run, int failures, int total) {
+		fCurrentTickCount = run;
+		fMaxTickCount= total;
+
+		fColorBarWidth= scale(fCurrentTickCount);
+
+		if (!fError && failures > 0) {
+			fError= true;
+		}
+		if (fCurrentTickCount == fMaxTickCount)
+			fColorBarWidth= getClientArea().width-1;
+		redraw();
+	}
 
 	public void refresh(boolean hasErrors) {
 		fError= hasErrors;
@@ -183,31 +198,35 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	}
 
 	public void modelCanged(TestElement source, NotifyEvent event) {
-		if(source == suite) {
-			if(event.getType() == NotifyEvent.EventType.testFinished || event.getType() == NotifyEvent.EventType.suiteFinished) {
-				UIJob job = new UIJob("Update Progessbar") {
+		if(event.getType() == NotifyEvent.EventType.testFinished || event.getType() == NotifyEvent.EventType.suiteFinished) {
+			UIJob job = new UIJob("Update Progessbar") {
 
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						update(suite.getRun(), suite.getError() + suite.getFailure());
-						return new Status(IStatus.OK,CuteLauncherPlugin.PLUGIN_ID,IStatus.OK,"", null);
-					}
-					
-				};
-				job.schedule();
-			}
+				@Override
+				public boolean belongsTo(Object family) {
+					return CuteLauncherPlugin.PLUGIN_ID.equals(family);
+				}
+				
+				@Override
+				public IStatus runInUIThread(IProgressMonitor monitor) {
+					update(session.getRun(), session.getError() + session.getFailure());
+					return new Status(IStatus.OK,CuteLauncherPlugin.PLUGIN_ID,IStatus.OK,"", null);
+				}
+
+			};
+			job.schedule();
 		}
 	}
 
 	public void sessionStarted(TestSession session) {
-		if(suite != null) {
-			suite.removeTestElementListener(this);
-		}
-		suite = session.getRoot();
-		suite.addTestElementListener(this);
-		
+		this.session = session;
+		session.addListener(this);
 		UIJob job = new UIJob("Reset Progessbar") {
 
+			@Override
+			public boolean belongsTo(Object family) {
+				return CuteLauncherPlugin.PLUGIN_ID.equals(family);
+			}
+			
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				reset();
@@ -221,6 +240,25 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 	public void sessionFinished(TestSession session) {
 		// Do nothing
+	}
+
+	public void newTestElement(ITestComposite source, TestElement newElement) {
+		newElement.addTestElementListener(this);
+		UIJob job = new UIJob("Update Progessbar") {
+
+			@Override
+			public boolean belongsTo(Object family) {
+				return CuteLauncherPlugin.PLUGIN_ID.equals(family);
+			}
+			
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				update(session.getRun(), session.getError() + session.getFailure(), session.getTotalTests());
+				return new Status(IStatus.OK,CuteLauncherPlugin.PLUGIN_ID,IStatus.OK,"", null);
+			}
+
+		};
+		job.schedule();
 	}
 	
 }

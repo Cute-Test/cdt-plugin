@@ -14,10 +14,7 @@ package ch.hsr.ifs.cutelauncher.ui;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.DebugUITools;
@@ -36,7 +33,7 @@ import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 import ch.hsr.ifs.cutelauncher.model.ISessionListener;
 import ch.hsr.ifs.cutelauncher.model.TestSession;
 
-public class TestRunnerViewPart extends ViewPart implements ISessionListener, IDebugEventSetListener {
+public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 
 	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
 
@@ -66,7 +63,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener, ID
 
 	public TestRunnerViewPart() {
 		super();
-		CuteLauncherPlugin.getModel().addListener(this);
+		CuteLauncherPlugin.getModel().addListener(this);		
 	}
 
 	@Override
@@ -194,7 +191,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener, ID
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			rerunLastTestAction.setEnabled(true);
 			stopAction.setEnabled(false);
-			if(TestRunnerViewPart.this.session.getRoot().hasErrorOrFailure()) {
+			if(TestRunnerViewPart.this.session.hasErrorOrFailure()) {
 				showNextFailureAction.setEnabled(true);
 				showPreviousFailureAction.setEnabled(true);
 				testViewer.selectFirstFailure();
@@ -280,26 +277,16 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener, ID
 	}
 
 	public void sessionFinished(TestSession session) {
-		DebugPlugin.getDefault().removeDebugEventListener(this);
-		new SessionFinishedUIJob("Show first Failure").schedule();		
+		SessionFinishedUIJob sessionFinishedUIJob = new SessionFinishedUIJob("Process killed");
+		sessionFinishedUIJob.schedule();
 	}
 
 	public void sessionStarted(TestSession session) {
 		this.session = session;
-		DebugPlugin.getDefault().addDebugEventListener(this);
 		showNextFailureAction.setEnabled(false);
 		showPreviousFailureAction.setEnabled(false);
 		rerunLastTestAction.setEnabled(false);
 		stopAction.setEnabled(true);
-	}
-
-	public void handleDebugEvents(DebugEvent[] events) {
-		for(DebugEvent event : events) {
-			if(event.getSource().equals(session.getLaunch().getProcesses()[0])|| event.getKind() == DebugEvent.TERMINATE) {
-				new SessionFinishedUIJob("Process killed").schedule();
-			}
-		}
-		
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="148,36,771,201"

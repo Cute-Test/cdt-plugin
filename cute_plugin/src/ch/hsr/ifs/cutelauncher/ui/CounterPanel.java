@@ -27,17 +27,30 @@ import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 import ch.hsr.ifs.cutelauncher.model.ISessionListener;
+import ch.hsr.ifs.cutelauncher.model.ITestComposite;
+import ch.hsr.ifs.cutelauncher.model.ITestCompositeListener;
 import ch.hsr.ifs.cutelauncher.model.ITestElementListener;
 import ch.hsr.ifs.cutelauncher.model.NotifyEvent;
 import ch.hsr.ifs.cutelauncher.model.TestElement;
 import ch.hsr.ifs.cutelauncher.model.TestSession;
-import ch.hsr.ifs.cutelauncher.model.TestSuite;
 
 /**
  * @author egraf
  *
  */
-public class CounterPanel extends Composite implements ITestElementListener, ISessionListener {
+public class CounterPanel extends Composite implements ITestElementListener, ISessionListener, ITestCompositeListener {
+
+	private final class UpdateCounterPanelJob extends UIJob {
+		private UpdateCounterPanelJob(String name) {
+			super(name);
+		}
+
+		@Override
+		public IStatus runInUIThread(IProgressMonitor monitor) {
+			updateNumbers();
+			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+		}
+	}
 
 	private Label runLabel = null;
 	private Label runText = null;
@@ -50,7 +63,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 	private Label failedLabel = null;
 	private Label failedText = null;
 	
-	private TestSuite suite;
+	private TestSession session;
 	
 	private int total;
 
@@ -152,61 +165,37 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 		redraw();
 	}
 
-	public void reset(TestSession session) {
-		if(suite != null) {
-			suite.removeTestElementListener(this);
-		}
-		suite = session.getRoot();
-		suite.addTestElementListener(this);
-		
+	public void reset(TestSession session) {		
 		updateNumbers();
 	}
 
 	private void updateNumbers() {
-		setTotal(suite.getTotalTests());
-		setRun(suite.getRun());
-		setFailures(suite.getFailure());
-		setErrors(suite.getError());
+		setTotal(session.getTotalTests());
+		setRun(session.getRun());
+		setFailures(session.getFailure());
+		setErrors(session.getError());
 	}
 
 	public void modelCanged(TestElement source, NotifyEvent event) {
-		if(source == suite) {
-			if(event.getType() == NotifyEvent.EventType.newTest || event.getType() == NotifyEvent.EventType.suiteFinished ) {
-				UIJob job = new UIJob("Update CounterPanel Job") {
-
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						updateNumbers();
-						return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
-					}
-					
-				};
-				job.schedule();
-			}
-		}
-		
+		UIJob job = new UpdateCounterPanelJob("Update CounterPanel Job");
+		job.schedule();
 	}
 
 	public void sessionStarted(TestSession session) {
-		if(suite != null) {
-			suite.removeTestElementListener(this);
-		}
-		suite = session.getRoot();
-		suite.addTestElementListener(this);
-		UIJob job = new UIJob("Update CounterPanel Job") {
-
-			@Override
-			public IStatus runInUIThread(IProgressMonitor monitor) {
-				updateNumbers();
-				return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
-			}
-			
-		};
+		this.session = session;
+		session.addListener(this);
+		UIJob job = new UpdateCounterPanelJob("Update CounterPanel Job");
 		job.schedule();
 	}
 
 	public void sessionFinished(TestSession session) {
 		// Do nothing
+	}
+
+	public void newTestElement(ITestComposite source, TestElement newElement) {
+		UIJob job = new UpdateCounterPanelJob("Update CounterPanel Job");
+		newElement.addTestElementListener(this);
+		job.schedule();
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,21"

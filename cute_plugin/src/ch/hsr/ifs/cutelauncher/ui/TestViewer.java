@@ -35,6 +35,8 @@ import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 import ch.hsr.ifs.cutelauncher.model.ISessionListener;
+import ch.hsr.ifs.cutelauncher.model.ITestComposite;
+import ch.hsr.ifs.cutelauncher.model.ITestCompositeListener;
 import ch.hsr.ifs.cutelauncher.model.ITestElementListener;
 import ch.hsr.ifs.cutelauncher.model.NotifyEvent;
 import ch.hsr.ifs.cutelauncher.model.TestCase;
@@ -43,38 +45,43 @@ import ch.hsr.ifs.cutelauncher.model.TestSession;
 import ch.hsr.ifs.cutelauncher.model.TestStatus;
 import ch.hsr.ifs.cutelauncher.model.TestSuite;
 
-public class TestViewer extends Composite implements ITestElementListener, ISessionListener{
+public class TestViewer extends Composite implements ITestElementListener, ISessionListener, ITestCompositeListener{
 	
 	private final class UpdateTestElement extends UIJob {
-		private UpdateTestElement(String name, TestElement element) {
+		private UpdateTestElement(String name, TestElement element, boolean reveal) {
 			super(name);
 			this.element = element;
+			this.reveal = reveal;
 		}
 		
 		private TestElement element;
-
+		private boolean reveal;
+		
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			treeViewer.refresh(element, true);
+			if(reveal) {
+				treeViewer.reveal(element);
+			}
 			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
 		}
 	}
 	
 	private final class ShowNewTest extends UIJob {
-		private ShowNewTest(String name, TestSuite suite, TestCase tCase) {
+		private ShowNewTest(String name, ITestComposite composite, TestElement newElement) {
 			super(name);
-			this.suite = suite;
-			this.tCase = tCase;
+			this.parent = composite;
+			this.element = newElement;
 		}
 		
-		private TestSuite suite;
-		private TestCase tCase;
+		private ITestComposite parent;
+		private TestElement element;
 
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
-			treeViewer.refresh(suite, true);
+			treeViewer.refresh(parent, true);
 			if(viewPart.isAutoScroll()){
-				treeViewer.reveal(tCase);
+				treeViewer.reveal(element);
 			}
 			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
 		}
@@ -139,8 +146,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	private TestResultViewer testResultViewer = null;
 	
 	private TestSession session;
-	private TestSuite suite;
-	private Vector<TestCase> tCases = new Vector<TestCase>();
+	private Vector<TestElement> elemets = new Vector<TestElement>();
 	
 	private TestRunnerViewPart viewPart;
 	
@@ -202,29 +208,15 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 
 	public void modelCanged(TestElement source, NotifyEvent event) {
 		UIJob job = null;
-		if (source instanceof TestSuite) {
-			switch(event.getType()) {
-			case newTest:
-				TestCase tCase = (TestCase)event.getElement();
-				tCase.addTestElementListener(this);
-				tCases.add(tCase);
-				job = new ShowNewTest("Show new Test", suite, tCase);
-				job.schedule();
-				break;
-			case suiteFinished:
-				job = new UpdateTestElement("Show new Test", suite);
-				job.schedule();
-				break;
-			}
-		}else if (source instanceof TestCase) {
-			switch (event.getType()) {
-			case testFinished:
-				job = new UpdateTestElement("Update Test", source);
-				job.schedule();
-				break;
-			}
+		switch(event.getType()) {
+		case suiteFinished:
+			job = new UpdateTestElement("Show new Test", event.getElement(), false);
+			break;
+		case testFinished:
+			job = new UpdateTestElement("Update Test", event.getElement(), true);
+			break;
 		}
-		
+
 		if(job != null) {
 			job.schedule();
 		}
@@ -232,16 +224,13 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 
 	public void sessionStarted(TestSession session) {
 		this.session = session;
-		if(suite != null) {
-			suite.removeTestElementListener(this);
-		}
-		for (TestCase tCase : tCases) {
-			tCase.removeTestElementListener(this);
-		}
-		tCases.clear();
-		suite = session.getRoot();
-		suite.addTestElementListener(this);	
+		session.addListener(this);
 		UIJob job = new UIJob("Reset TestViewer") {
+			
+			@Override
+			public boolean belongsTo(Object family) {
+				return CuteLauncherPlugin.PLUGIN_ID.equals(family);
+			}
 
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -254,7 +243,6 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 	
 	public void sessionFinished(TestSession session) {
-		
 		
 	}
 	
@@ -272,7 +260,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 
 	public void selectNextFailure() {
-		if(suite.hasErrorOrFailure()) {
+		if(session.hasErrorOrFailure()) {
 			Object firstElement = getSelectedElement();
 			if (firstElement instanceof TestCase) {
 				TestCase tCase = (TestCase) firstElement;
@@ -291,11 +279,41 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 
 	public void selectFirstFailure() {
-		treeViewer.setSelection(new StructuredSelection(findNextFailure(null)), true);
+		treeViewer.setSelection(new StructuredSelection(findFirstFailure()), true);
 	}
 	
+	private TestElement findFirstFailure() {
+		Vector<TestElement> elements = session.getElements();
+		for (TestElement element : elements) {
+			if(element.getStatus() == TestStatus.failure || element.getStatus() == TestStatus.error) {
+				if (element instanceof ITestComposite) {
+					ITestComposite composite = (ITestComposite) element;
+					return findNextChildFailure(composite);
+				}else {
+					return element;
+				}
+			}
+		}
+		return null;
+	}
+
+	private TestElement findNextChildFailure(ITestComposite composite) {
+		Vector<? extends TestElement> elements = composite.getElements();
+		for (TestElement element : elements) {
+			if(element.getStatus() == TestStatus.failure || element.getStatus() == TestStatus.error) {
+				if (element instanceof ITestComposite) {
+					ITestComposite newComposite = (ITestComposite) element;
+					return findNextChildFailure(newComposite);
+				}else {
+					return element;
+				}
+			}
+		}
+		return null;
+	}
+
 	public void selectPrevFailure() {
-		if(suite.hasErrorOrFailure()) {
+		if(session.hasErrorOrFailure()) {
 			Object firstElement = getSelectedElement();
 			if (firstElement instanceof TestCase) {
 				TestCase tCase = (TestCase) firstElement;
@@ -308,10 +326,10 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		
 	}
 	
-	private Object findPrevFailure(TestCase selected) {
-		Vector<TestCase> tests = suite.getCases();
+	private TestElement findPrevFailure(TestCase selected) {
+		Vector<TestElement> tests = session.getElements();
 		int index = tests.indexOf(selected);
-		TestCase prevFailure;
+		TestElement prevFailure;
 		for(int i = index -1; i >= 0;--i) {
 			prevFailure = tests.elementAt(i);
 			if(prevFailure.getStatus() == TestStatus.failure || prevFailure.getStatus() == TestStatus.error) {
@@ -321,10 +339,10 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		return selected;
 	}
 
-	private TestCase findNextFailure(TestCase selected) {
-		Vector<TestCase> tests = suite.getCases();
+	private TestElement findNextFailure(TestCase selected) {
+		Vector<? extends TestElement> tests = selected.getParent().getElements();
 		int index = tests.indexOf(selected);
-		TestCase nextFailure;
+		TestElement nextFailure;
 		for(int i = index + 1; i < tests.size();++i) {
 			nextFailure = tests.elementAt(i);
 			if(nextFailure.getStatus() == TestStatus.failure || nextFailure.getStatus() == TestStatus.error) {
@@ -334,7 +352,15 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		return selected;
 	}
 
-
-
+	public void newTestElement(ITestComposite source, TestElement newElement) {
+		newElement.addTestElementListener(this);
+		if (newElement instanceof ITestComposite) {
+			ITestComposite composite = (ITestComposite) newElement;
+			composite.addListener(this);
+		}
+		elemets.add(newElement);
+		UIJob job = new ShowNewTest("Show new Test", newElement.getParent(), newElement);
+		job.schedule();		
+	}
 
 }

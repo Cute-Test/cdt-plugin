@@ -15,30 +15,8 @@ package ch.hsr.ifs.cutelauncher.model;
  * @author Emanuel Graf
  *
  */
-public class NotifyEvent {
+public interface ITestCompositeListener {
 	
-	public enum EventType{
-		testFinished,
-		suiteFinished
-	}
-	
-	private EventType type;
-	
-	private TestElement element;
-	
-	public NotifyEvent(EventType type, TestElement element) {
-		super();
-		this.type = type;
-		this.element = element;
-	}
-
-	public EventType getType() {
-		return type;
-	}
-	
-	public TestElement getElement() {
-		return element;
-	}
+	public void newTestElement(ITestComposite source, TestElement newElement);
 
 }
-

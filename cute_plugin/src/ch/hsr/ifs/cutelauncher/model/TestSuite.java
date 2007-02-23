@@ -17,9 +17,11 @@ import java.util.Vector;
  * @author egraf
  *
  */
-public class TestSuite extends TestElement {
+public class TestSuite extends TestElement implements ITestComposite, ITestElementListener {
 	
 	private String name = "";
+	
+	private ITestComposite parent;
 	
 	private int totalTests = 0; 
 	private int success = 0;
@@ -28,17 +30,16 @@ public class TestSuite extends TestElement {
 	
 	private TestStatus status;
 	
-	private Vector<TestCase> cases = new Vector<TestCase>();
+	private Vector<TestElement> cases = new Vector<TestElement>();
+	private Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();
+	
+	
 
 	public TestSuite(String name, int totalTests, TestStatus status) {
 		super();
 		this.name = name;
 		this.totalTests = totalTests;
 		this.status = status;
-	}
-
-	public Vector<TestCase> getCases() {
-		return cases;
 	}
 
 	public String getName() {
@@ -48,14 +49,8 @@ public class TestSuite extends TestElement {
 	public TestStatus getStatus() {
 		return status;
 	}
-	
-	public void add(TestCase tCase) {
-		cases.add(tCase);
-		tCase.setSuite(this);
-		notifyListeners(new NotifyEvent(NotifyEvent.EventType.newTest, tCase));
-	}
-	
-	protected void endTest(TestCase tCase) {
+		
+	protected void endTest(TestElement tCase) {
 		switch(tCase.getStatus()) {
 		case success:
 			++success;
@@ -71,7 +66,7 @@ public class TestSuite extends TestElement {
 	}
 	
 	private void setEndStatus() {
-		for (TestCase tCase : cases) {
+		for (TestElement tCase : cases) {
 			switch (status) {
 			case running:
 				status = tCase.getStatus();
@@ -123,6 +118,46 @@ public class TestSuite extends TestElement {
 	public void end() {
 		setEndStatus();
 		notifyListeners(new NotifyEvent(NotifyEvent.EventType.suiteFinished, this));
+	}
+
+	public void addTestElement(TestElement element) {
+		cases.add(element);
+		element.setParent(this);
+		element.addTestElementListener(this);
+		for (ITestCompositeListener lis : listeners) {
+			lis.newTestElement(this, element);
+		}
+	}
+
+	public Vector<TestElement> getElements() {
+		return cases;
+	}
+
+	@Override
+	public ITestComposite getParent() {
+		return parent;
+	}
+
+	@Override
+	public void setParent(ITestComposite parent) {
+		this.parent = parent;
+	}
+
+	public void modelCanged(TestElement source, NotifyEvent event) {
+		if(event.getType() == NotifyEvent.EventType.testFinished) {
+			endTest(source);
+		}
+		
+	}
+
+	public void addListener(ITestCompositeListener listener) {
+		if(!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+
+	public void removeListener(ITestCompositeListener listener) {
+		listeners.remove(listener);
 	}
 
 }
