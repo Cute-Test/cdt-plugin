@@ -194,7 +194,9 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 			if(TestRunnerViewPart.this.session.hasErrorOrFailure()) {
 				showNextFailureAction.setEnabled(true);
 				showPreviousFailureAction.setEnabled(true);
-				testViewer.selectFirstFailure();
+				if(isAutoScroll()) {
+					testViewer.selectFirstFailure();
+				}
 			}
 			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
 		}

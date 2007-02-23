@@ -62,7 +62,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			treeViewer.refresh(element, true);
-			if(reveal) {
+			if(reveal && viewPart.isAutoScroll()) {
 				treeViewer.reveal(element);
 			}
 			return new Status(IStatus.OK, CuteLauncherPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
