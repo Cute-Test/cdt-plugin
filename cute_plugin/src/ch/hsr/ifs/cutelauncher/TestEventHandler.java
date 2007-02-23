@@ -28,20 +28,18 @@ public abstract class TestEventHandler {
 	public static final String SUCCESS = "success";
 	public static final String ERROR = "error";
 	public static final String STARTTEST = "starting";
-	public static final String SESSIONSTART = "sessionStart";
-	public static final String SESSIONEND = "sessionEnd";
 
-	public abstract void handleBeginning(IRegion reg, String suitename, String suitesize);
+	protected abstract void handleBeginning(IRegion reg, String suitename, String suitesize);
 
-	public abstract void handleTestStart(IRegion reg, String testname);
+	protected abstract void handleTestStart(IRegion reg, String testname);
 
-	public abstract void handleError(IRegion reg, String testName, String msg);
+	protected abstract void handleError(IRegion reg, String testName, String msg);
 
-	public abstract void handleSuccess(IRegion reg, String name, String msg);
+	protected abstract void handleSuccess(IRegion reg, String name, String msg);
 
-	public abstract void handleEnding(IRegion reg, String suitename);
+	protected abstract void handleEnding(IRegion reg, String suitename);
 
-	public abstract void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason);
+	protected abstract void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason);
 	
 	public abstract void handleSessionStart();
 	
@@ -76,10 +74,6 @@ public abstract class TestEventHandler {
 			}else if(line.startsWith(ERROR, LINEPREFIXLENGTH)) {
 				Matcher m = createMatcher(TESTERRORLINE, line);
 				handleError(reg, m.group(1), m.group(2));
-			}else if(line.startsWith(SESSIONSTART,LINEPREFIXLENGTH)) {
-				handleSessionStart();
-			}else if(line.startsWith(SESSIONEND, LINEPREFIXLENGTH)) {
-				handleSessionEnd();
 			}
 		}catch(CoreException e) {
 			CuteLauncherPlugin.getDefault().getLog().log(e.getStatus());

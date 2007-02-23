@@ -12,7 +12,7 @@ void runSuite(){
 }
 
 int main(){
-	runSuite();
+    runSuite();
 }
 
 

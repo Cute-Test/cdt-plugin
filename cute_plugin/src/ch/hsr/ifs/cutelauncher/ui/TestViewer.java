@@ -11,6 +11,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
+import java.util.AbstractList;
+import java.util.ListIterator;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -140,6 +142,30 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		}
 		
 	}
+	
+	private final class ReverseVector<T> extends Vector<T> {
+
+		private static final long serialVersionUID = -7493342763899946849L;
+		
+		private Vector<? extends T> vec;
+		
+		public ReverseVector(Vector<? extends T> vec){
+			this.vec = vec;
+		}
+
+		@Override
+		public synchronized T get(int index) {
+			return vec.get(vec.size() - index -1 );
+		}
+
+		@Override
+		public synchronized int size() {
+			return vec.size();
+		}
+		
+		
+		
+	}
 
 	private SashForm sashForm = null;
 	private TreeViewer treeViewer = null;
@@ -266,7 +292,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 				TestCase tCase = (TestCase) firstElement;
 				treeViewer.setSelection(new StructuredSelection(findNextFailure(tCase)), true);
 			}else {
-				treeViewer.setSelection(new StructuredSelection(findNextFailure(null)), true);
+				treeViewer.setSelection(new StructuredSelection(findFirstFailure()));
 			}
 			
 		}
@@ -288,7 +314,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			if(element.getStatus() == TestStatus.failure || element.getStatus() == TestStatus.error) {
 				if (element instanceof ITestComposite) {
 					ITestComposite composite = (ITestComposite) element;
-					return findNextChildFailure(composite);
+					return findNextChildFailure(composite, false);
 				}else {
 					return element;
 				}
@@ -297,13 +323,16 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		return null;
 	}
 
-	private TestElement findNextChildFailure(ITestComposite composite) {
+	private TestElement findNextChildFailure(ITestComposite composite, boolean revese) {
 		Vector<? extends TestElement> elements = composite.getElements();
+		if(revese) {
+			elements = new ReverseVector<TestElement>(elements);
+		}
 		for (TestElement element : elements) {
 			if(element.getStatus() == TestStatus.failure || element.getStatus() == TestStatus.error) {
 				if (element instanceof ITestComposite) {
 					ITestComposite newComposite = (ITestComposite) element;
-					return findNextChildFailure(newComposite);
+					return findNextChildFailure(newComposite, false);
 				}else {
 					return element;
 				}
@@ -312,6 +341,52 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		return null;
 	}
 
+	private TestElement findNextFailure(TestCase selected) {
+		TestElement nextFailure = findNextSiblingFailure(selected, false);
+		if(nextFailure != null) {
+			return nextFailure;
+		}else {
+		return findNextFailureInParent(selected.getParent(), selected, false);
+		}
+	}
+
+	private TestElement findNextFailureInParent(ITestComposite current, TestCase selected, boolean reverse) {
+		if (current instanceof TestElement) {
+			TestElement tElement = (TestElement) current;
+			TestElement nextFailure = findNextSiblingFailure(tElement, reverse);
+			if(nextFailure != null) {
+				return nextFailure;
+			}else {
+				return findNextFailureInParent(tElement.getParent(), selected, reverse);
+			}
+		}else {
+			return selected;
+		}
+	}
+
+	private TestElement findNextSiblingFailure(TestElement tElement, boolean reverse) {
+		Vector<? extends TestElement> tests = tElement.getParent().getElements();
+		int index = tests.indexOf(tElement) + 1;
+		if(reverse) {
+			tests = new ReverseVector<TestElement>(tests);
+			index = tests.size() - index + 1;
+		}
+		ListIterator<? extends TestElement> it = ((AbstractList<? extends TestElement>)tests).listIterator(index);
+		TestElement nextFailure;
+		while(it.hasNext()) {
+			nextFailure = it.next();
+			if(nextFailure.getStatus() == TestStatus.failure || nextFailure.getStatus() == TestStatus.error) {
+				if (nextFailure instanceof ITestComposite) {
+					ITestComposite composite = (ITestComposite) nextFailure;
+					return findNextChildFailure(composite, reverse);
+				}else {
+					return nextFailure;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public void selectPrevFailure() {
 		if(session.hasErrorOrFailure()) {
 			Object firstElement = getSelectedElement();
@@ -319,37 +394,19 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 				TestCase tCase = (TestCase) firstElement;
 				treeViewer.setSelection(new StructuredSelection(findPrevFailure(tCase)), true);
 			}else { //show first Failure
-				treeViewer.setSelection(new StructuredSelection(findNextFailure(null)), true);
+				treeViewer.setSelection(new StructuredSelection(findFirstFailure()), true);
 			}
-			
-		}
-		
+		}	
 	}
 	
+	
 	private TestElement findPrevFailure(TestCase selected) {
-		Vector<TestElement> tests = session.getElements();
-		int index = tests.indexOf(selected);
-		TestElement prevFailure;
-		for(int i = index -1; i >= 0;--i) {
-			prevFailure = tests.elementAt(i);
-			if(prevFailure.getStatus() == TestStatus.failure || prevFailure.getStatus() == TestStatus.error) {
-				return prevFailure;
-			}
+		TestElement nextFailure = findNextSiblingFailure(selected, true);
+		if(nextFailure != null) {
+			return nextFailure;
+		}else {
+		return findNextFailureInParent(selected.getParent(), selected, true);
 		}
-		return selected;
-	}
-
-	private TestElement findNextFailure(TestCase selected) {
-		Vector<? extends TestElement> tests = selected.getParent().getElements();
-		int index = tests.indexOf(selected);
-		TestElement nextFailure;
-		for(int i = index + 1; i < tests.size();++i) {
-			nextFailure = tests.elementAt(i);
-			if(nextFailure.getStatus() == TestStatus.failure || nextFailure.getStatus() == TestStatus.error) {
-				return nextFailure;
-			}
-		}
-		return selected;
 	}
 
 	public void newTestElement(ITestComposite source, TestElement newElement) {

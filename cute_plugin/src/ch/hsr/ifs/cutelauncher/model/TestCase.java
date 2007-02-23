@@ -62,7 +62,11 @@ public class TestCase extends TestElement {
 	}
 	
 	public String getMessage() {
-		return result.getMsg();
+		if(result == null) {
+			return "";
+		}else {
+			return result.getMsg();
+		}
 	}
 
 	@Override

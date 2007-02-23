@@ -127,6 +127,10 @@ public class CuteModel {
 	}
 	
 	public void endSession() {
+		if (currentParent instanceof TestSuite) {
+			TestSuite suite = (TestSuite) currentParent;
+			suite.end();
+		}
 		notifyListenerSessionEnd(session);
 	}
 	

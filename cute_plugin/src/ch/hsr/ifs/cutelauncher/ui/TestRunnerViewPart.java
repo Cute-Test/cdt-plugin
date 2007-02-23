@@ -239,7 +239,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 
 		public void run() {
 			stopTest();
-			setEnabled(false);
+//			setEnabled(false);
 		}
 	}
 
@@ -253,7 +253,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 				for(IProcess process : session.getLaunch().getProcesses()) {
 					process.terminate();
 				}
-				new SessionFinishedUIJob("Process Stopped").schedule();
+//				new SessionFinishedUIJob("Process Stopped").schedule();
 			}catch(DebugException de) {
 				
 			}
@@ -277,7 +277,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	}
 
 	public void sessionFinished(TestSession session) {
-		SessionFinishedUIJob sessionFinishedUIJob = new SessionFinishedUIJob("Process killed");
+		SessionFinishedUIJob sessionFinishedUIJob = new SessionFinishedUIJob("Session Over");
 		sessionFinishedUIJob.schedule();
 	}
 

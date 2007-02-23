@@ -23,7 +23,7 @@ import org.eclipse.ui.console.TextConsole;
 
 public class CutePatternListener implements IPatternMatchListener{
 	
-	private static final String REGEX =  TestEventHandler.LINE_QUALIFIER + "("+ TestEventHandler.BEGINNING + "|" + TestEventHandler.ENDING + "|" + TestEventHandler.SUCCESS + "|"+ TestEventHandler.STARTTEST + "|" + TestEventHandler.FAILURE + "|" + TestEventHandler.ERROR + "|" + TestEventHandler.SESSIONSTART + "|" + TestEventHandler.SESSIONEND + ")(.*)(\\n)";
+	private static final String REGEX =  TestEventHandler.LINE_QUALIFIER + "("+ TestEventHandler.BEGINNING + "|" + TestEventHandler.ENDING + "|" + TestEventHandler.SUCCESS + "|"+ TestEventHandler.STARTTEST + "|" + TestEventHandler.FAILURE + "|" + TestEventHandler.ERROR + ")(.*)(\\n)";
 	private TextConsole console; 
 	private Vector<TestEventHandler> handlers;
 
@@ -44,10 +44,16 @@ public class CutePatternListener implements IPatternMatchListener{
 	}
 
 	public void connect(TextConsole console) {
-		this.console = console; 
+		this.console = console;
+		for (TestEventHandler handler : handlers) {
+			handler.handleSessionStart();
+		}
 	}
 
 	public void disconnect() {
+		for (TestEventHandler handler : handlers) {
+			handler.handleSessionEnd();
+		}
 		console = null;
 	}
 	
