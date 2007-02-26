@@ -1,0 +1,5 @@
+! Cute Feature
+
+plugin@ch.hsr.ifs.cutelauncher=@cuteTag@,:pserver:egraf@wiki.ita.hsr.ch:/home/cvs,cdtCbP2,cute_plugin
+feature@ch.hsr.ifs.cute=@cuteTag@,:pserver:egraf@wiki.ita.hsr.ch:/home/cvs,cdtCbP2,cute_feature
+
