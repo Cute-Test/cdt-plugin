@@ -64,7 +64,7 @@
 	</condition>
 	<cvs cvsRoot=":extssh:egraf@wiki.ita.hsr.ch:/home/cvs"
 	       package="cute"
-	       dest="${buildDirectory}/results"
+	       dest="${buildDirectory}"
 	  />
 	<antcall target="applyPatches"/>
 </target>
