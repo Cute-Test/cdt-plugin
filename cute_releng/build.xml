@@ -14,7 +14,7 @@
 		<property name="baseLocation" value="${buildDirectory}/eclipse"/>
 		<property name="eclipse.home" value="${buildDirectory}/eclipse"/>
 		<property name="pde.build.scripts" value="${eclipse.home}/plugins/org.eclipse.pde.build/scripts"/>
-		<property name="eclipseDist" value="eclipse-SDK-3.2.1-linux-gtk"/>
+		<property name="eclipseDist" value="eclipse-SDK-3.2.2-linux-gtk-cdt"/>
 		<property name="collectingFolder" value="eclipse"/>
 		<property name="archivePrefix" value="eclipse"/>
 		<property name="buildType" value="I" />
