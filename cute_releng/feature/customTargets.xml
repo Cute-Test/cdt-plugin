@@ -66,6 +66,11 @@
 	       package="cute"
 	       dest="${buildDirectory}"
 	  />
+	<copy todir="${buildDirectory}/plugins/ch.hsr.ifs.cutelauncher/cute">
+		<fileset dir="${buildDirectory}/cute/cute_lib" >
+ 		   <include name="*.h"/>
+		</fileset>
+	</copy>
 	<antcall target="applyPatches"/>
 </target>
 
