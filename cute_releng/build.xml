@@ -59,7 +59,11 @@
 		<condition property="hasErrors">
 			<contains string="${compileLog}" substring=" ERROR"/>
 		</condition>
-		<!--<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>-->
+		<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>
+		<replace file="${zipsdir}/index.html">
+			<replacefilter token="@branchVersion@" value="${branchVersion}"/>
+			<replacefilter token="@buildId@" value="${buildId}"/>
+		</replace>
 	</target>
 
 	<target name="unpackzip" if="onWindows">
