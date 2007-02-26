@@ -7,7 +7,7 @@
 <target name="allElements">
 	<ant antfile="${genericTargets}" target="${target}" >
 		<property name="type" value="feature" />
-		<property name="id" value="org.eclipse.cdt" />
+		<property name="id" value="ch.hsr.ifs.cute" />
 	</ant>
 </target>
 
@@ -18,68 +18,22 @@
 <!-- Add one target for each root element and each configuration -->
 <!-- ===================================================================== -->
 
+<!--
 <target name="assemble.org.eclipse.cdt.aix.motif.ppc">
 	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
 		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-aix.ppc.tar.gz"/>
 	</ant>
 </target>
-
-<target name="assemble.org.eclipse.cdt.linux.gtk.x86">
-	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-linux.x86.tar.gz"/>
-	</ant>
-</target>
-
-<target name="assemble.org.eclipse.cdt.linux.gtk.x86_64">
-	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-linux.x86_64.tar.gz"/>
-	</ant>
-</target>
-
-<target name="assemble.org.eclipse.cdt.linux.gtk.ppc">
-	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-linux.ppc.tar.gz"/>
-	</ant>
-</target>
-
-<target name="assemble.org.eclipse.cdt.linux.gtk.ia64">
-	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-linux.ia64.tar.gz"/>
-	</ant>
-</target>
-
-<target name="assemble.org.eclipse.cdt.macosx.carbon.ppc">
-	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-macosx.ppc.tar.gz"/>
-	</ant>
-</target>
-
-<target name="assemble.org.eclipse.cdt.qnx.photon.x86">
-	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-qnx.x86.tar.gz"/>
-	</ant>
-</target>
-
-<target name="assemble.org.eclipse.cdt.solaris.motif.sparc">
-	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-solaris.sparc.tar.gz"/>
-	</ant>
-</target>
-
-<target name="assemble.org.eclipse.cdt.win32.win32.x86">
-	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-win32.x86.zip"/>
-	</ant>
-</target>
+-->
 
 <!-- ===================================================================== -->
 <!-- Check out map files from correct repository -->
 <!-- Replace values for cvsRoot, package and mapVersionTag as desired. -->
 <!-- ===================================================================== -->
 <target name="getMapFiles">
-	<copy file="${builder}/../maps/cdt.map" todir="${buildDirectory}/maps"/>
-	<replace file="${buildDirectory}/maps/cdt.map">
-		<replacefilter token="@cdtTag@" value="${cdtTag}"/>
+	<copy file="${builder}/../maps/cute.map" todir="${buildDirectory}/maps"/>
+	<replace file="${buildDirectory}/maps/cute.map">
+		<replacefilter token="@cuteTag@" value="${cuteTag}"/>
 	</replace>
 </target>
 
