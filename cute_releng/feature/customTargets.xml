@@ -62,6 +62,10 @@
 	<condition property="patchesAvailable">
 		<available file="${builder}/patch.xml"/>
 	</condition>
+	<cvs cvsRoot=":extssh:egraf@wiki.ita.hsr.ch:/home/cvs"
+	       package="cute"
+	       dest="${buildDirectory}/results"
+	  />
 	<antcall target="applyPatches"/>
 </target>
 
