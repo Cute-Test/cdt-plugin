@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="CuTe"
-      label="CuTe Feature"
+      id="ch.hsr.ifs.cute"
+      label="%pluginName"
       version="0.1.0"
-      provider-name="Institute for Software, HSR Hochschule für Technik  Rapperswil, University of applied sciences">
+      provider-name="%providerName">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description>
+      %description
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright>
+      %copyright
    </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
-   </license>
 
    <requires>
       <import plugin="org.eclipse.ui"/>
