@@ -18,13 +18,13 @@
 <!-- Add one target for each root element and each configuration -->
 <!-- ===================================================================== -->
 
-<!--
-<target name="assemble.org.eclipse.cdt.aix.motif.ppc">
+
+<target name="assemble.ch.hsr.ifs.cute">
 	<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-		<property name="archiveName" value="org.eclipse.cdt-${branchVersion}-${buildId}-aix.ppc.tar.gz"/>
+		<property name="archiveName" value="ch.hsr.ifs.cute-${branchVersion}-${buildId}.tar.gz"/>
 	</ant>
 </target>
--->
+
 
 <!-- ===================================================================== -->
 <!-- Check out map files from correct repository -->
