@@ -58,7 +58,7 @@
 		<condition property="hasErrors">
 			<contains string="${compileLog}" substring=" ERROR"/>
 		</condition>
-		<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>
+		<!--<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>-->
 	</target>
 
 	<target name="unpackzip" if="onWindows">
