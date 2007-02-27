@@ -22,7 +22,7 @@
 		<property name="buildType" value="I" />
 		<property name="buildId" value="${buildType}${timestamp}"/>
 		<property name="zipsdir" value="${buildDirectory}/${buildType}.${buildId}"/>
-		<property name="UpdateSiteStagingLocation" value="${buildDirectory}/updateSite"/>
+		<property name="UpdateSiteStagingLocation" value="${zipsdir}/updateSite"/>
 		<property name="milestonedir" value="${buildDirectory}/${milestone}"/>
 		<property name="buildingOSGi" value="true"/>
 		<property name="eclipseRoot" value=":pserver:anonymous@dev.eclipse.org:/home/eclipse"/>
@@ -56,10 +56,10 @@
 		<concat destfile="${zipsdir}/compilelog.txt">
 			<fileset dir="${buildDirectory}/plugins" includes="**/*.bin.log"/>
 		</concat>
-		<loadfile property="compileLog" srcFile="${zipsdir}/compilelog.txt"/>
+		<!--<loadfile property="compileLog" srcFile="${zipsdir}/compilelog.txt"/>
 		<condition property="hasErrors">
 			<contains string="${compileLog}" substring=" ERROR"/>
-		</condition>
+		</condition>-->
 		<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>
 		<replace file="${zipsdir}/index.html">
 			<replacefilter token="@branchVersion@" value="${branchVersion}"/>
