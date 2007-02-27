@@ -81,10 +81,10 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	protected ILaunchConfiguration findLaunchConfiguration(IBinary bin, String mode) {
 		ILaunchConfiguration configuration = null;
 		ILaunchConfigurationType configType = getCuteLaunchConfigType();
-		List candidateConfigs = Collections.EMPTY_LIST;
+		List<ILaunchConfiguration> candidateConfigs = Collections.emptyList();
 		try {
 			ILaunchConfiguration[] configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(configType);
-			candidateConfigs = new ArrayList(configs.length);
+			candidateConfigs = new ArrayList<ILaunchConfiguration>(configs.length);
 			for (int i = 0; i < configs.length; i++) {
 				ILaunchConfiguration config = configs[i];
 				IPath programPath = AbstractCLaunchDelegate.getProgramPath(config);
@@ -123,7 +123,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			if ( debugConfig == null ) {
 				// Prompt the user if more then 1 debugger.
 				ICDebugConfiguration[] debugConfigs = CDebugCorePlugin.getDefault().getActiveDebugConfigurations();
-				List debugList = new ArrayList(debugConfigs.length);
+				List<ICDebugConfiguration> debugList = new ArrayList<ICDebugConfiguration>(debugConfigs.length);
 				for (int i = 0; i < debugConfigs.length; i++) {
 					String platform = debugConfigs[i].getPlatform();
 					if (debugConfigs[i].supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
@@ -352,7 +352,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			if (elements.length == 1 && elements[0] instanceof IBinary) {
 				bin = (IBinary)elements[0];
 			} else {
-				final List results = new ArrayList();
+				final List<IBinary> results = new ArrayList<IBinary>();
 				ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
 				IRunnableWithProgress runnable = new IRunnableWithProgress() {
 					public void run(IProgressMonitor pm) throws InterruptedException {
