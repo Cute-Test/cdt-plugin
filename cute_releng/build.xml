@@ -9,7 +9,7 @@
 	<target name="init">
 		<!-- <touch file="${user.home}/.cvspass" /> -->
 		<tstamp/>
-		<property name="branchVersion" value="0.1.0"/>
+		<property name="branchVersion" value="1.0.0"/>
 		<property name="timestamp" value="${DSTAMP}${TSTAMP}" />
 		<property name="forceContextQualifier" value="${timestamp}"/>
 		<property name="buildDirectory" value="${basedir}/results" />
@@ -22,9 +22,9 @@
 		<property name="buildType" value="I" />
 		<property name="buildId" value="${buildType}${timestamp}"/>
 		<property name="zipsdir" value="${buildDirectory}/${buildType}.${buildId}"/>
+		<property name="UpdateSiteStagingLocation" value="${buildDirectory}/updateSite"/>
 		<property name="milestonedir" value="${buildDirectory}/${milestone}"/>
 		<property name="buildingOSGi" value="true"/>
-		<property name="messagefile" value="message.in"/>
 		<property name="eclipseRoot" value=":pserver:anonymous@dev.eclipse.org:/home/eclipse"/>
 		<property name="baseos" value="${osgi.os}"/>
 		<property name="basews" value="${osgi.ws}"/>
