@@ -13,6 +13,8 @@ public class PatternListenerSuite {
 		suite.addTestSuite(PatternListenerSuiteTest.class);
 		suite.addTestSuite(PatternListenerTestSuccessTest.class);
 		suite.addTestSuite(PatternListenerTestFailedTest.class);
+		suite.addTestSuite(PatternListenerTestEqualsFailed.class);
+		suite.addTestSuite(PatternListenerErrorTest.class);
 		//$JUnit-END$
 		return suite;
 	}

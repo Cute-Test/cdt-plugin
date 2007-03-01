@@ -1,0 +1,2 @@
+#starting test4
+#error test4 resistance is futile

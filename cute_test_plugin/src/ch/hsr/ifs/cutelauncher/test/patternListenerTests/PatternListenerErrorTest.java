@@ -20,20 +20,20 @@ import ch.hsr.ifs.cutelauncher.TestEventHandler;
  * @author Emanuel Graf
  *
  */
-public class PatternListenerTestSuccessTest extends PatternListenerTest {
-	
-	private static final String TEST_NAME_EXP = "test";
+public class PatternListenerErrorTest extends PatternListenerTest {
+
+	private static final String TEST_NAME_EXP = "test4";
 	private static final int OFFSET_START_EXP = 0;
-	private static final int OFFSET_END_EXP = 15;
-	private static final String MSG_EXP = "OK";
+	private static final int OFFSET_END_EXP = 16;
+	private static final String MSG_EXP = "resistance is futile";
 	
 	private String testNameStart;
 	private int offsetStart = -1;
 	private String testNameEnd;
-	private String msgEnd;
+	private String msg;
 	private int offsetEnd;
 	
-	final class TestSuccessHandler extends TestEventHandler{
+	final class ErrorHandler extends TestEventHandler{
 
 		@Override
 		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
@@ -47,12 +47,14 @@ public class PatternListenerTestSuccessTest extends PatternListenerTest {
 
 		@Override
 		protected void handleError(IRegion reg, String testName, String msg) {
-//			 Do nothing
+			offsetEnd = reg.getOffset();
+			testNameEnd = testName;
+			PatternListenerErrorTest.this.msg = msg;
 		}
 
 		@Override
 		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-			// Do nothing
+//			Do nothing
 		}
 
 		@Override
@@ -67,9 +69,7 @@ public class PatternListenerTestSuccessTest extends PatternListenerTest {
 
 		@Override
 		protected void handleSuccess(IRegion reg, String name, String msg) {
-			testNameEnd = name;
-			msgEnd = msg;
-			offsetEnd = reg.getOffset();
+//			 Do nothing
 		}
 
 		@Override
@@ -78,16 +78,6 @@ public class PatternListenerTestSuccessTest extends PatternListenerTest {
 			offsetStart = reg.getOffset();
 		}
 		
-	}
-
-	@Override
-	protected void addTestEventHandler(CutePatternListener lis) {
-		lis.addHandler(new TestSuccessHandler());
-	}
-
-	@Override
-	protected String getInputFile() {
-		return "testDefs/patternListenerTests/successTest.txt";
 	}
 	
 	public void testTestStart() {
@@ -98,7 +88,17 @@ public class PatternListenerTestSuccessTest extends PatternListenerTest {
 	public void testTestEnd() {
 		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
 		assertEquals("Testend Offset", OFFSET_END_EXP, offsetEnd);
-		assertEquals("Message", MSG_EXP, msgEnd);
+		assertEquals("Message", MSG_EXP, msg);
+	}
+
+	@Override
+	protected void addTestEventHandler(CutePatternListener lis) {
+		lis.addHandler(new ErrorHandler());
+	}
+
+	@Override
+	protected String getInputFile() {
+		return "testDefs/patternListenerTests/errorTest.txt";
 	}
 
 }
