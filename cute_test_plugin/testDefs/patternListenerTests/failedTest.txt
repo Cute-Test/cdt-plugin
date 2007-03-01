@@ -1,0 +1,2 @@
+#starting test
+#failure test ../src/Test.cpp:7 false
