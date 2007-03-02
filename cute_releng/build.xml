@@ -85,7 +85,7 @@
 	    <ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
-		<antcall target="unpack">
+		<antcall target="unpackzip">
 			<param name="srcPrefix" value="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}"/>
 			<param name="dest" value="${buildDirectory}"/>
 		</antcall>

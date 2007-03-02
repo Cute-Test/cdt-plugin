@@ -25,7 +25,7 @@
 
 	<target name="assemble.ch.hsr.ifs.cute.test">
 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-			<property name="archiveName" value="ch.hsr.ife.cute.test-${branchVersion}-${buildId}.zip"/>
+			<property name="archiveName" value="ch.hsr.ifs.cute.test-${branchVersion}-${buildId}.zip"/>
 		</ant>
 	</target>
 
