@@ -286,7 +286,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 
 	public void selectNextFailure() {
-		if(session.hasErrorOrFailure()) {
+		if(getSession().hasErrorOrFailure()) {
 			Object firstElement = getSelectedElement();
 			if (firstElement instanceof TestCase) {
 				TestCase tCase = (TestCase) firstElement;
@@ -309,7 +309,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 	
 	private TestElement findFirstFailure() {
-		Vector<TestElement> elements = session.getElements();
+		Vector<TestElement> elements = getSession().getElements();
 		for (TestElement element : elements) {
 			if(element.getStatus() == TestStatus.failure || element.getStatus() == TestStatus.error) {
 				if (element instanceof ITestComposite) {
@@ -321,6 +321,13 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			}
 		}
 		return null;
+	}
+
+	private TestSession getSession() {
+		if(session == null) {
+			session = CuteLauncherPlugin.getModel().getSession();
+		}
+		return session;
 	}
 
 	private TestElement findNextChildFailure(ITestComposite composite, boolean revese) {
@@ -388,7 +395,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 	
 	public void selectPrevFailure() {
-		if(session.hasErrorOrFailure()) {
+		if(getSession().hasErrorOrFailure()) {
 			Object firstElement = getSelectedElement();
 			if (firstElement instanceof TestCase) {
 				TestCase tCase = (TestCase) firstElement;
