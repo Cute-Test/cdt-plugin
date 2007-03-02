@@ -37,6 +37,10 @@ public class ModellBuilder extends TestEventHandler {
 		this.launch = launch; 
 	}
 
+	public ModellBuilder(IPath path) {
+		this(path, null);
+	}
+
 	public void handleError(IRegion reg, String testName, String msg) {
 		model.endCurrentTestCase(null, -1, msg, TestStatus.error, currentTestCase);
 	}
