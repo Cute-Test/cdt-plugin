@@ -35,6 +35,7 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
+import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.model.ModellBuilder;
 
@@ -84,6 +85,12 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			IProcess proc = launch.getProcesses()[0];
 			IConsole console = DebugUITools.getConsole(proc);
 			if (console instanceof TextConsole) {
+				UIJob job = new ShowResultView();
+				job.schedule();
+				try {
+					job.join();
+				} catch (InterruptedException e) {
+				}
 				TextConsole textCons = (TextConsole) console;
 				ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons);
 				ModellBuilder modelHandler = new ModellBuilder(exePath, launch);
