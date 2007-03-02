@@ -5,7 +5,7 @@ feature@ch.hsr.ifs.cute=@cuteTag@,:extssh:egraf@wiki.ita.hsr.ch:/home/cvs,cuteEg
 
 ! Test Feature
 plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,:extssh:egraf@wiki.ita.hsr.ch:/home/cvs,cuteEgraf,cute_test_plugin
-plugin@org.eclipse.test=R3_2_2,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
+plugin@org.eclipse.test=HEAD,:pserver:cdt@cvsi.hsr.ch:/opt/cvsroot/cdtast/cvs,cdtCbP2,DA_Code/org.eclipse.test
 fragment@org.eclipse.ant.optional.junit=R3_2_2,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 feature@ch.hsr.ifs.cute.test=@cuteTag@,:extssh:egraf@wiki.ita.hsr.ch:/home/cvs,cuteEgraf,cute_test_feature
 
