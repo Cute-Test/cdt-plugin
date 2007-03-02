@@ -82,9 +82,9 @@
 	</target>
 	
 	<target name="test" depends="init" unless="hasErrors">
-	<!--	<ant antfile="build.xml" dir="${pde.build.scripts}">
+	    <ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
-		</ant>
+		</ant><!--
 		<antcall target="unpack">
 			<param name="srcPrefix" value="${zipsdir}/org.eclipse.cdt-${branchVersion}-${buildId}-${osgi.os}.${osgi.arch}"/>
 			<param name="dest" value="${buildDirectory}"/>
@@ -99,7 +99,7 @@
 		</ant>
 		<xslt style="${basedir}/JUNIT.XSL"
 			in="${buildDirectory}/eclipse/org.eclipse.cdt.testing.xml"
-			out="${zipsdir}/junits.html"/> -->
+			out="${zipsdir}/junits.html"/>-->
 		
 	</target>
 	

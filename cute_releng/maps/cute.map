@@ -3,3 +3,7 @@
 plugin@ch.hsr.ifs.cutelauncher=@cuteTag@,:extssh:egraf@wiki.ita.hsr.ch:/home/cvs,cuteEgraf,cute_plugin
 feature@ch.hsr.ifs.cute=@cuteTag@,:extssh:egraf@wiki.ita.hsr.ch:/home/cvs,cuteEgraf,cute_feature
 
+! Test Feature
+plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,:extssh:egraf@wiki.ita.hsr.ch:/home/cvs,cuteEgraf,cute_test_plugin
+feature@ch.hsr.ifs.cute.test=@cuteTag@,:extssh:egraf@wiki.ita.hsr.ch:/home/cvs,cuteEgraf,cute_test_feature
+
