@@ -12,11 +12,11 @@ umask 0022
 
 cd `dirname $0`
 
-mkdir -p tools
-cd tools
-cvs -d:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse \
-	-Q checkout -r R3_2_1 org.eclipse.releng.basebuilder
-cd ..
+#mkdir -p tools
+#cd tools
+#cvs -d:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse \
+#	-Q checkout -r R3_2_1 org.eclipse.releng.basebuilder
+#cd ..
 
 java -jar tools/org.eclipse.releng.basebuilder/startup.jar \
 	-ws gtk -application org.eclipse.ant.core.antRunner $*
