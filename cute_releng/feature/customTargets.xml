@@ -21,7 +21,7 @@
 
 	<target name="assemble.ch.hsr.ifs.cute">
 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
-			<property name="archiveName" value="ch.hsr.ifs.cute-${branchVersion}-${buildId}.tar.gz"/>
+			<property name="archiveName" value="ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip"/>
 		</ant>
 	</target>
 
