@@ -16,14 +16,13 @@ import java.util.Vector;
 import org.eclipse.debug.core.ILaunch;
 
 public class TestSession implements ITestComposite{
-	private Vector<TestElement> rootElements;
+	private Vector<TestElement> rootElements = new Vector<TestElement>();
 	private Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();;
 	
 	private ILaunch launch;
 
 	public TestSession(ILaunch launch) {
 		super();
-		rootElements = new Vector<TestElement>();
 		this.launch = launch;
 	}
 

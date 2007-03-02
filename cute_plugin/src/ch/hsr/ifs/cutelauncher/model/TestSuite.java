@@ -66,23 +66,27 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 	}
 	
 	private void setEndStatus() {
-		for (TestElement tCase : cases) {
-			switch (status) {
-			case running:
-				status = tCase.getStatus();
-				break;
-			case success:
-				if(tCase.getStatus() != TestStatus.success) {
+		if(cases.size() == 0) {
+			status = TestStatus.success;
+		}else {
+			for (TestElement tCase : cases) {
+				switch (status) {
+				case running:
 					status = tCase.getStatus();
+					break;
+				case success:
+					if(tCase.getStatus() != TestStatus.success) {
+						status = tCase.getStatus();
+					}
+					break;
+				case failure:
+					if(tCase.getStatus() == TestStatus.error) {
+						status = tCase.getStatus();
+					}
+					break;
+				default:
+					//nothing
 				}
-				break;
-			case failure:
-				if(tCase.getStatus() == TestStatus.error) {
-					status = tCase.getStatus();
-				}
-				break;
-			default:
-				//nothing
 			}
 		}
 	}
