@@ -15,12 +15,13 @@ import org.eclipse.jface.text.IRegion;
 
 import ch.hsr.ifs.cutelauncher.CutePatternListener;
 import ch.hsr.ifs.cutelauncher.TestEventHandler;
+import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
 
 /**
  * @author Emanuel Graf
  *
  */
-public class PatternListenerErrorTest extends PatternListenerTest {
+public class PatternListenerErrorTest extends ConsoleTest {
 
 	private static final String TEST_NAME_EXP = "test4";
 	private static final int OFFSET_START_EXP = 0;

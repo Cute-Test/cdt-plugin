@@ -15,13 +15,14 @@ import org.eclipse.jface.text.IRegion;
 
 import ch.hsr.ifs.cutelauncher.CutePatternListener;
 import ch.hsr.ifs.cutelauncher.TestEventHandler;
+import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
 
 
 /**
  * @author Emanuel Graf
  *
  */
-public class PatternListenerSessionStartEndTest extends PatternListenerTest {
+public class PatternListenerSessionStartEndTest extends ConsoleTest {
 
 	boolean sessionStarted = false;
 	boolean sessionEnded = false;

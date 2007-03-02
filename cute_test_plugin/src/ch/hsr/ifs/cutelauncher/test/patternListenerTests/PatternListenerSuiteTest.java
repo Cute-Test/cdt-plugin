@@ -15,12 +15,13 @@ import org.eclipse.jface.text.IRegion;
 
 import ch.hsr.ifs.cutelauncher.CutePatternListener;
 import ch.hsr.ifs.cutelauncher.TestEventHandler;
+import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
 
 /**
  * @author Emanuel Graf
  *
  */
-public class PatternListenerSuiteTest extends PatternListenerTest {
+public class PatternListenerSuiteTest extends ConsoleTest {
 
 	private static final int START_OFFSET_EXP = 14;
 	private static final int END_OFFSET_EXP = 42;

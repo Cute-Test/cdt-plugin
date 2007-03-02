@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cutelauncher.test.patternListenerTests;
+package ch.hsr.ifs.cutelauncher.test;
 
 import junit.framework.TestCase;
 
@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import ch.hsr.ifs.cutelauncher.CutePatternListener;
 import ch.hsr.ifs.cutelauncher.test.internal.console.FileInputTextConsole;
 
-public abstract class PatternListenerTest extends TestCase {
+public abstract class ConsoleTest extends TestCase {
 
 	protected FileInputTextConsole tc;
 	protected CutePatternListener cpl;
