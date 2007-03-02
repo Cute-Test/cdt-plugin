@@ -1,0 +1,165 @@
+/*******************************************************************************
+ * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik  
+ * Rapperswil, University of applied sciences
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html  
+ * 
+ * Contributors: 
+ * Emanuel Graf & Guido Zgraggen- initial API and implementation 
+ ******************************************************************************/
+package ch.hsr.ifs.cutelauncher.test.modelBuilderTests;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Vector;
+
+import junit.framework.Test;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.osgi.framework.Bundle;
+
+import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
+import ch.hsr.ifs.cutelauncher.CutePatternListener;
+import ch.hsr.ifs.cutelauncher.model.ModellBuilder;
+import ch.hsr.ifs.cutelauncher.model.TestCase;
+import ch.hsr.ifs.cutelauncher.model.TestElement;
+import ch.hsr.ifs.cutelauncher.model.TestFailure;
+import ch.hsr.ifs.cutelauncher.model.TestResult;
+import ch.hsr.ifs.cutelauncher.model.TestSession;
+import ch.hsr.ifs.cutelauncher.model.TestSuite;
+import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
+import ch.hsr.ifs.cutelauncher.test.TestPlugin;
+
+/**
+ * @author Emanuel Graf
+ *
+ */
+public class ModelBuilderTest extends ConsoleTest {
+	
+	private static final String SEPARATOR = ", ";
+	private String inputFile;
+
+	public ModelBuilderTest(String inputFile) {
+		super();
+		this.inputFile = inputFile;
+	}
+	
+	public static Test suite(String inputFile) {
+		junit.framework.TestSuite suite = new junit.framework.TestSuite(inputFile.substring(inputFile.lastIndexOf('/') + 1,inputFile.length()-4));
+		suite.addTest(new ModelBuilderTest(inputFile));
+		return suite;
+	}
+
+	@Override
+	protected void addTestEventHandler(CutePatternListener lis) {
+		lis.addHandler(new ModellBuilder(new Path("")));
+	}
+	
+	@Override
+	protected String getInputFile() {
+		return inputFile;
+	}
+	
+	protected String getExpected() throws CoreException {
+		Bundle bundle = TestPlugin.getDefault().getBundle();
+		Path path = new Path(getInputFile());
+		try {
+			String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
+			BufferedReader br = new BufferedReader(new FileReader(file2));
+			return br.readLine();
+		}catch (IOException e) {
+			throw new CoreException(new Status(IStatus.ERROR, TestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
+		}
+	}
+	
+	
+	@Override
+	public String getName() {
+		return inputFile;
+	}
+
+	@Override
+	protected void runTest() throws Throwable {
+		TestSession session = CuteLauncherPlugin.getModel().getSession();
+		assertEquals(getExpected(), getSessionString(session));
+	}
+
+	private String getSessionString(TestSession session) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Session{");
+		Vector<TestElement> rootElements = session.getRootElements();
+		writeElements(sb, rootElements);
+		sb.append('}');
+		return sb.toString();
+	}
+
+	private void writeTestCase(TestCase tcase, StringBuffer sb) {
+		sb.append("Testcase(");
+		sb.append(tcase.getName());
+		sb.append(SEPARATOR);
+		sb.append(tcase.getStatus().toString());
+		sb.append(SEPARATOR);
+		sb.append(tcase.getFile());
+		sb.append(SEPARATOR);
+		sb.append(tcase.getLineNumber());
+		sb.append(SEPARATOR);
+		writeTestResult(tcase.getResult(), sb);
+		sb.append(')');
+	}
+
+	private void writeTestResult(TestResult result, StringBuffer sb) {
+		sb.append("Result(");
+		sb.append(result.getMsg());
+		if (result instanceof TestFailure) {
+			TestFailure failure = (TestFailure) result;
+			sb.append(SEPARATOR);
+			sb.append(failure.getExpected());
+			sb.append(SEPARATOR);
+			sb.append(failure.getWas());
+		}
+		sb.append(')');
+		
+	}
+
+	private void writeSuite(TestSuite suite, StringBuffer sb) {
+		sb.append("Suite(");
+		sb.append(suite.getName());
+		sb.append(SEPARATOR);
+		sb.append(suite.getStatus().toString());
+		sb.append(SEPARATOR);
+		sb.append(suite.getTotalTests());
+		sb.append(SEPARATOR);
+		sb.append(suite.getRun());
+		sb.append(SEPARATOR);
+		sb.append(suite.getSuccess());
+		sb.append(SEPARATOR);
+		sb.append(suite.getFailure());
+		sb.append(SEPARATOR);
+		sb.append(suite.getError());
+		sb.append("){");
+		Vector<TestElement> elements = suite.getElements();
+		writeElements(sb, elements);
+		sb.append('}');
+		
+	}
+
+	private void writeElements(StringBuffer sb, Vector<TestElement> elements) {
+		for (TestElement element : elements) {
+			if (element instanceof TestSuite) {
+				TestSuite suite1 = (TestSuite) element;
+				writeSuite(suite1, sb);
+			}else if (element instanceof TestCase) {
+				TestCase tcase = (TestCase) element;
+				writeTestCase(tcase, sb);
+			}
+		}
+	}
+
+}

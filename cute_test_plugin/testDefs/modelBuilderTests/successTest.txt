@@ -1,0 +1,3 @@
+Session{Testcase(test, success, null, -1, Result(OK))}
+#starting test
+#success test OK
