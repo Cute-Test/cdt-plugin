@@ -1,0 +1,46 @@
+<!-- CUTE Plugin Cruisecontrol Autobuild delegate script -->
+<project name="build-cute"
+        default="build"
+        basedir="checkout/">
+	<target name="build" depends="clean, checkoutReleng">
+		<exec executable="${basedir}/cute_releng/build.sh" failonerror="false" resultproperty="error"/>
+
+		<copy todir="cute_releng/results/dist" 
+			flatten="true">
+			<fileset dir="cute_releng/results">
+				<include name="I*/*.html"/>
+				<include name="I*/*.txt"/>
+				<include name="I*/*.zip"/>
+				<include name="I*/*.tar.gz"/>
+			</fileset>
+		</copy>
+		<property file="${basedir}/cute_releng/results/buildResults.props"/>
+		<echo message="Resulat des ref Test: ${ch.hsr.ifs.cutelauncher.test}"/>
+		<condition property="failedTest">
+			<not>
+				<equals arg1="true" arg2="${ch.hsr.ifs.cutelauncher.test}"/>
+			</not>
+		</condition>
+		<fail if="failedTest" message="Test failed"/>
+
+		<echo message="${error}" />
+		<condition property="failedBuild">
+			<not>
+				<equals arg1="0" arg2="${error}"/>
+			</not>
+		</condition>
+		<fail if="failedBuild" message="Build failed"/>
+	</target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: checkoutReleng                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="checkoutReleng" depends="clean">
+            <cvs cvsroot="extssh:egraf@wiki.ita.hsr.ch:/home/cvs" command="co cute_releng"/>
+    </target>
+
+
+	<target name="clean">
+		<delete dir="${basedir}/cute_releng/results"/>
+	</target>
+</project>
