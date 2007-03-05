@@ -20,7 +20,7 @@
 	</target>
 	
 	<target name="cute-tests" depends="init">
-		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
+		<ant target="ui-test" antfile="${library-file}" dir="${eclipse-home}">
 			<property name="data-dir" value="${cute-loc}"/>
 			<property name="plugin-name" value="ch.hsr.ifs.cutelauncher.test"/>
 			<property name="classname" value="ch.hsr.ifs.cutelauncher.test.AllTests"/>
