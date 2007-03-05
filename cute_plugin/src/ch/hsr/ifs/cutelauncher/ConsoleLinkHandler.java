@@ -62,7 +62,6 @@ public class ConsoleLinkHandler extends TestEventHandler {
 			IHyperlink link = new FileLink(file, null,-1,-1,lineNumber);
 			console.addHyperlink(link, reg.getOffset(), reg.getLength());
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

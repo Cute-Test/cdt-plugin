@@ -11,15 +11,14 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.test.hyperlinksTests;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
+import java.util.Vector;
+
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.ui.console.IHyperlink;
 
 import ch.hsr.ifs.cutelauncher.ConsoleLinkHandler;
 import ch.hsr.ifs.cutelauncher.CutePatternListener;
 import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
+import ch.hsr.ifs.cutelauncher.test.internal.console.FileInputTextConsole;
 
 /**
  * @author Emanuel Graf
@@ -39,15 +38,24 @@ public class HyperlinkTest extends ConsoleTest {
 	protected String getInputFile() {
 		return "testDefs/hyperlinkTests/linkTest.txt";
 	}
+	
+	
+
+	@Override
+	protected FileInputTextConsole getConsole() {
+		return new HyperlinkTestConsole(getInputFile());
+	}
 
 	public void testLinks() {
-		IHyperlink[] links = tc.getHyperlinks();
-		try {
-			Job.getJobManager().join(tc, new NullProgressMonitor());
-		} catch (OperationCanceledException e) {
-		} catch (InterruptedException e) {
+		if (tc instanceof HyperlinkTestConsole) {
+			HyperlinkTestConsole linkConsole = (HyperlinkTestConsole) tc;
+			Vector<TestHyperlinks> links = linkConsole.getLinks();
+			assertEquals(1, links.size());
+			TestHyperlinks link = links.firstElement();
+			assertEquals(138, link.getOffset());
+			assertEquals(76, link.getLength());
 		}
-		assertEquals(1, links.length);
+		
 	}
 
 }

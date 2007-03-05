@@ -17,13 +17,17 @@ public abstract class ConsoleTest extends TestCase {
 	 * @throws java.lang.Exception
 	 */
 	protected void setUp() throws Exception {
-		tc = new FileInputTextConsole(getInputFile());
+		tc = getConsole();
 		cpl = new CutePatternListener();
 		addTestEventHandler(cpl);
 		tc.addPatternMatchListener(cpl);
 		tc.startTest();
 		Job.getJobManager().join(tc, new NullProgressMonitor());
 		
+	}
+
+	protected FileInputTextConsole getConsole() {
+		return new FileInputTextConsole(getInputFile());
 	}
 	
 	protected abstract String getInputFile();
