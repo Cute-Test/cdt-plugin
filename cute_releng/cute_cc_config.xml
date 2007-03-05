@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<cruisecontrol>
+    
+  <!--PROJEKT cute -->
+  <project name="Cute" buildafterfailed="false">
+    <listeners>
+      <currentbuildstatuslistener file="?"/>
+    </listeners>
+    <!-- Defines where cruise looks for changes, to decide
+        whether to run the build -->
+    <modificationset requiremodification="true" quietperiod="120">
+    	<cvs localworkingcopy="/etc/cruisecontrol/cdt/checkout/DA_Code/org.eclipse.cdt.core"/>
+        <cvs localworkingcopy="/etc/cruisecontrol/cdt/checkout/DA_Code/org.eclipse.cdt.core.tests" />
+    	<cvs localworkingcopy="/etc/cruisecontrol/cdt/checkout/DA_Code/org.eclipse.cdt.hsrrefactoring" />
+    	<cvs localworkingcopy="/etc/cruisecontrol/cdt/checkout/DA_Code/org.eclipse.cdt.hsrrefactoring.tests" />
+    	<cvs localworkingcopy="/etc/cruisecontrol/cdt/checkout/DA_Code/org.eclipse.cdt.releng" />
+   </modificationset>
+    <!-- Configures the actual build loop, how often and which
+         build file/target -->
+    <schedule interval="300">
+      <ant buildfile="cute-build.xml" uselogger="true" antworkingdir="/?/cute" />
+
+    </schedule>
+
+    <!-- directory to write build logs to -->
+    <log logdir="?/cute">
+      <merge file="?/checkout/cute_releng/results/eclipse/ch.hsr.ifs.cute.test.xml"/>
+      <gzip every="5" unit="DAY" />
+      <delete every="20" unit="DAY" />
+    </log>
+
+    <!-- Publishers are run *after* a build completes -->
+    <publishers>
+     <htmlemail mailhost="smtp.hsr.ch" returnaddress="egraf@hsr.ch" returnname="buildmaster" buildresultsurl="?" spamwhilebroken="false" css="?/cruisecontrol.css" xsldir="?/cruisecontrol/xsl/" subjectprefix="[CUTE-CC]">
+          <map alias="egraf" address="egraf@hsr.ch" />
+          <failure address="egraf@hsr.ch" reportWhenFixed="true" />
+      </htmlemail>
+      <artifactspublisher dir="?/checkout/cutereleng/results/dist" dest="?/logs/cute" />
+    </publishers>
+  </project>
+  
+</cruisecontrol>
