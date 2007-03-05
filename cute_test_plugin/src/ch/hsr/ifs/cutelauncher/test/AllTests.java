@@ -11,9 +11,9 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Cute Plugin All Tests");
 		//$JUnit-BEGIN$
-		suite.addTest(PatternListenerSuite.suite());
+//		suite.addTest(PatternListenerSuite.suite());
 		suite.addTest(HyperlinkSuite.suite());
-		suite.addTest(ModelBuilderSuite.suite());
+//		suite.addTest(ModelBuilderSuite.suite());
 		//$JUnit-END$
 		return suite;
 	}
