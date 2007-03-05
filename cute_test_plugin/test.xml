@@ -1,4 +1,4 @@
-<project name="CDT Automated Tests" default="run" basedir=".">
+<project name="Cute Automated Tests" default="run" basedir=".">
 
 	<property name="library-file" value="${eclipse-home}/plugins/org.eclipse.test/library.xml"/>
 	<property name="cute-loc" value="${eclipse-home}/cute_folder"/>
