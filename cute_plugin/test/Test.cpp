@@ -1,16 +1,22 @@
 #include "cute.h"
-#include "eclipse_listener.h"
+#include "ide_listener.h"
 #include "cute_runner.h"
 
+namespace {
+
+void thisIsATest() {
+	ASSERTM("start writing tests", false);	
+}
 
 void runSuite(){
 	cute::suite s;
 	//TODO add your test here
-	
-	cute::eclipse_listener lis;
+	s.push_back(CUTE(thisIsATest));
+	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
 
+}
 int main(){
     runSuite();
 }
