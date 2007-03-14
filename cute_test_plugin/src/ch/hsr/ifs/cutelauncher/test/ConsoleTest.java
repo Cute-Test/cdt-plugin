@@ -22,8 +22,11 @@ public abstract class ConsoleTest extends TestCase {
 		addTestEventHandler(cpl);
 		tc.addPatternMatchListener(cpl);
 		tc.startTest();
+		try {
 		Job.getJobManager().join(tc, new NullProgressMonitor());
-		
+		} catch (InterruptedException e){
+			/* org.eclipse.core.internal.jobs.JobManager.join doesn't catch from sleep*/
+		}
 	}
 
 	protected FileInputTextConsole getConsole() {
