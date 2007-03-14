@@ -56,17 +56,10 @@ namespace cute {
 				,char const *msg
 				,char const *file
 				,int line) {
-		if (std::abs(expected-actual)< std::abs(delta)) return;
+		if (!(std::abs(delta)  < std::abs(expected-actual))) return;
 		throw test_failure(cute::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
 	}
 // TODO: provide this for float as well. (and combinations?)
-	template <>
-	inline
-	void assert_equal<double,double>(double const &expected
-				,double const &actual
-				,char const *msg
-				,char const *file
-				,int line);
 	template <>
 	inline
 	void assert_equal_delta<double,double,double>(double const &expected
@@ -74,7 +67,10 @@ namespace cute {
 				,double const &delta
 				,char const *msg
 				,char const *file
-				,int line);
+				,int line) {
+		if (!(std::abs(delta) < std::abs(expected-actual))  ) return;
+		throw test_failure(cute::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
+	}
 
 	template <>
 	inline
@@ -87,17 +83,6 @@ namespace cute {
 		// and should use assert_equal_delta
 		const double delta=10*std::numeric_limits<double>::epsilon()*expected;
 		assert_equal_delta(expected,actual,delta,msg,file,line);
-	}
-	template <>
-	inline
-	void assert_equal_delta<double,double,double>(double const &expected
-				,double const &actual
-				,double const &delta
-				,char const *msg
-				,char const *file
-				,int line) {
-		if (std::abs(expected-actual) <= std::abs(delta) ) return;
-		throw test_failure(cute::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
 	}
 }
 
