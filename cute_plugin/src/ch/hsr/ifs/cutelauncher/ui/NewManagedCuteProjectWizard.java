@@ -106,7 +106,7 @@ public class NewManagedCuteProjectWizard extends NewManagedCCProjectWizard {
 		if (monitor == null) {
 			monitor= new NullProgressMonitor();
 		}
-		monitor.beginTask(NewFolderWizardMessages.getString("NewSourceFolderWizardPage.operation"), 3); //$NON-NLS-1$
+		monitor.beginTask("Create CUTE Source Folder", 3);
 		try {
 			String relPath= "cute";
 				
