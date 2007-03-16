@@ -22,6 +22,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -34,6 +37,8 @@ import ch.hsr.ifs.cutelauncher.model.ISessionListener;
 import ch.hsr.ifs.cutelauncher.model.TestSession;
 
 public class TestRunnerViewPart extends ViewPart implements ISessionListener {
+	
+	private enum Orientation{horizontal, vertical}; 
 
 	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
 
@@ -48,6 +53,10 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	private CuteProgressBar cuteProgressBar = null;
 
 	private TestViewer testViewer = null;
+	
+	private Composite parent;
+	
+	private Orientation currentOrientation = Orientation.horizontal;
 
 	private ScrollLockAction scrollLockAction;
 	private FailuresOnlyFilterAction failureOnlyAction;
@@ -68,13 +77,32 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		this.parent = parent;
+		addResizeListener(parent);
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
+		gridLayout.marginWidth = 0;
+		gridLayout.horizontalSpacing = 0;
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
+		GridData gdata = new GridData();
+		gdata.grabExcessHorizontalSpace = true;
 		top = new Composite(parent, SWT.NONE);
 		top.setLayout(gridLayout);
+		top.setLayoutData(gdata);
 		createTopPanel();
 		createTestViewer();
 		configureToolbar();
+	}
+	
+	private void addResizeListener(Composite parent) {
+		parent.addControlListener(new ControlListener() {
+			public void controlMoved(ControlEvent e) {
+			}
+			public void controlResized(ControlEvent e) {
+				computeOrientation();
+			}
+		});
 	}
 	
 	public boolean isCreated() {
@@ -168,6 +196,31 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		gridData3.grabExcessVerticalSpace = true;
 		testViewer = new TestViewer(top, SWT.NONE, this);
 		testViewer.setLayoutData(gridData3);
+	}
+	
+	private void computeOrientation() {
+			Point size= parent.getSize();
+			if (size.x != 0 && size.y != 0) {
+				if (size.x > size.y) 
+					setOrientation(Orientation.horizontal);
+				else 
+					setOrientation(Orientation.vertical);
+			}
+	}
+
+	private void setOrientation(Orientation orientation) {
+		testViewer.setOrientation(orientation == Orientation.horizontal);
+		currentOrientation = orientation;
+		GridLayout layout= (GridLayout) TopPanel.getLayout();
+		setCounterColumns(layout); 
+		parent.layout();
+	}
+
+	private void setCounterColumns(GridLayout layout) {
+		if (currentOrientation == Orientation.horizontal)
+			layout.numColumns= 2; 
+		else
+			layout.numColumns= 1;
 	}
 
 	@Override

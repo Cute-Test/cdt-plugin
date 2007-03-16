@@ -76,7 +76,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 	private void initialize() {
 		GridData gridData7 = new GridData();
 		gridData7.grabExcessHorizontalSpace = false;
-		gridData7.horizontalIndent = 25;
+		gridData7.horizontalIndent = 7;
 		GridData gridData6 = new GridData();
 		gridData6.grabExcessHorizontalSpace = false;
 		GridData gridData5 = new GridData();
@@ -84,7 +84,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 		gridData5.horizontalAlignment = org.eclipse.swt.layout.GridData.END;
 		GridData gridData4 = new GridData();
 		gridData4.grabExcessHorizontalSpace = false;
-		gridData4.horizontalIndent = 25;
+		gridData4.horizontalIndent = 7;
 		GridData gridData3 = new GridData();
 		gridData3.grabExcessHorizontalSpace = false;
 		GridData gridData2 = new GridData();
@@ -92,7 +92,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 		gridData2.horizontalAlignment = org.eclipse.swt.layout.GridData.END;
 		GridData gridData1 = new GridData();
 		gridData1.grabExcessHorizontalSpace = false;
-		gridData1.horizontalIndent = 25;
+		gridData1.horizontalIndent = 7;
 		GridData gridData = new GridData();
 		gridData.grabExcessHorizontalSpace = false;
 		GridLayout gridLayout = new GridLayout();

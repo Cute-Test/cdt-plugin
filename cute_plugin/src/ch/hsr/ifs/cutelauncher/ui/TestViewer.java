@@ -204,9 +204,13 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	private void initialize() {
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
+		gridLayout.marginWidth = 0;
+		gridLayout.horizontalSpacing = 0;
+		gridLayout.marginWidth = 1;
+		gridLayout.marginHeight = 0;
 		createSashForm();
 		this.setLayout(gridLayout);
-		setSize(new Point(300, 200));
+//		setSize(new Point(300, 200));
 	}
 
 	/**
@@ -214,13 +218,8 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	 *
 	 */
 	private void createSashForm() {
-		GridData gridData = new GridData();
-		gridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.verticalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		sashForm = new SashForm(this, SWT.HORIZONTAL);
-		sashForm.setLayoutData(gridData);
+		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer = new TreeViewer(sashForm, SWT.FLAT);
 		treeViewer.setContentProvider(new CuteTestTreeContentProvieder());
 		treeViewer.setLabelProvider(new CuteTestLabelProvider());
@@ -392,6 +391,12 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			}
 		}
 		return null;
+	}
+	
+	protected void setOrientation(boolean horizontal) {
+		if ((sashForm == null) || sashForm.isDisposed())
+			return;
+		sashForm.setOrientation(horizontal ? SWT.HORIZONTAL : SWT.VERTICAL);
 	}
 	
 	public void selectPrevFailure() {
