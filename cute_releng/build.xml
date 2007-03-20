@@ -57,10 +57,12 @@
 		<concat destfile="${zipsdir}/compilelog.txt">
 			<fileset dir="${buildDirectory}/plugins" includes="**/*.bin.log"/>
 		</concat>
+		<!--
 		<loadfile property="compileLog" srcFile="${zipsdir}/compilelog.txt" failonerror=""/>
 		<condition property="hasErrors">
 			<contains string="${compileLog}" substring=" ERROR"/>
 		</condition>
+		-->
 		<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>
 		<replace file="${zipsdir}/index.html">
 			<replacefilter token="@branchVersion@" value="${branchVersion}"/>
