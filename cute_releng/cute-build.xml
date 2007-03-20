@@ -1,10 +1,24 @@
 <!-- CUTE Plugin Cruisecontrol Autobuild delegate script -->
 <project name="build-cute"
         default="build"
-        basedir="checkout/">
-	<target name="build" depends="clean, checkoutReleng">
-		<exec executable="${basedir}/cute_releng/build.sh" failonerror="false" resultproperty="error"/>
+        basedir="cute">
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: checkoutBaseBuilder                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="checkoutBaseBuilder" unless="builder.available">
+		<mkdir dir="cute_releng/tools" />
+		<cvs cvsroot=":pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="R3_2_1" dest="cute_releng/tools" />
+	</target>
 
+	<target name="build" depends="clean, checkoutReleng">
+		<available file="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/startup.jar" property="builder.available"/>
+		<antcall target="checkoutBaseBuilder"/>
+
+		<java jar="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/startup.jar" fork="true" 
+			failonerror="true" dir="${basedir}/cute_releng">
+			<arg line="-ws gtk -application org.eclipse.ant.core.antRunner" />
+		</java>
+		
 		<copy todir="cute_releng/results/dist" 
 			flatten="true">
 			<fileset dir="cute_releng/results">
@@ -31,13 +45,13 @@
 		</condition>
 		<fail if="failedBuild" message="Build failed"/>
 	</target>
-	
+
 	<!-- - - - - - - - - - - - - - - - - - 
           target: checkoutReleng                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="checkoutReleng" depends="clean">
-            <cvs cvsroot="egraf@wiki.ita.hsr.ch:/home/cvs" command="co cute_releng"/>
-    </target>
+	<target name="checkoutReleng" depends="clean">
+		<cvs cvsroot="egraf@wiki.ita.hsr.ch:/home/cvs" command="co cute_releng"/>
+	</target>
 
 
 	<target name="clean">
