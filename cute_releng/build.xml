@@ -57,10 +57,10 @@
 		<concat destfile="${zipsdir}/compilelog.txt">
 			<fileset dir="${buildDirectory}/plugins" includes="**/*.bin.log"/>
 		</concat>
-		<!--<loadfile property="compileLog" srcFile="${zipsdir}/compilelog.txt"/>
+		<loadfile property="compileLog" srcFile="${zipsdir}/compilelog.txt" failonerror=""/>
 		<condition property="hasErrors">
 			<contains string="${compileLog}" substring=" ERROR"/>
-		</condition>-->
+		</condition>
 		<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>
 		<replace file="${zipsdir}/index.html">
 			<replacefilter token="@branchVersion@" value="${branchVersion}"/>
@@ -86,11 +86,8 @@
 	    <ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
-		<antcall target="unpackzip">
-			<param name="srcPrefix" value="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}"/>
-			<param name="dest" value="${buildDirectory}"/>
-		</antcall>
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${branchVersion}-${buildId}.zip" dest="${buildDirectory}"/>
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${buildDirectory}"/>
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${buildDirectory}"/>
 		<ant antfile="test.xml" dir="${buildDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
 			<property name="eclipse-home" value="${buildDirectory}/eclipse"/>
 			<property name="library-file" value="${buildDirectory}/eclipse/plugins/org.eclipse.test_3.1.0/library.xml"/>
