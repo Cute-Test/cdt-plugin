@@ -15,7 +15,7 @@
 		<antcall target="checkoutBaseBuilder"/>
 
 		<java jar="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/startup.jar" fork="true" 
-			failonerror="true" dir="${basedir}/cute_releng">
+			failonerror="true" dir="${basedir}/cute_releng" resultproperty="error">
 			<arg line="-ws gtk -application org.eclipse.ant.core.antRunner" />
 		</java>
 		
@@ -37,7 +37,7 @@
 		</condition>
 		<fail if="failedTest" message="Test failed"/>
 
-		<echo message="${error}" />
+		<echo message=" ${error}" />
 		<condition property="failedBuild">
 			<not>
 				<equals arg1="0" arg2="${error}"/>
