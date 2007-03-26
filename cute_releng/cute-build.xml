@@ -2,6 +2,9 @@
 <project name="build-cute"
         default="build"
         basedir="cute">
+	
+	<property name="features.dir" value="cute_releng/results/dist/updateSite/features"/>
+	<property name="plugins.dir" value="cute_releng/results/dist/updateSite/plugins"/>
 	<!-- - - - - - - - - - - - - - - - - - 
           target: checkoutBaseBuilder                      
          - - - - - - - - - - - - - - - - - -->
@@ -9,8 +12,17 @@
 		<mkdir dir="cute_releng/tools" />
 		<cvs cvsroot=":pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="R3_2_1" dest="cute_releng/tools" />
 	</target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="init">
+        <mkdir dir="${features.dir}"/>
+		<mkdir dir="${plugins.dir}"/>
+    </target>
 
-	<target name="build" depends="clean, checkoutReleng">
+
+	<target name="build" depends="clean, init, checkoutReleng">
 		<available file="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/startup.jar" property="builder.available"/>
 		<antcall target="checkoutBaseBuilder"/>
 
@@ -18,7 +30,7 @@
 			failonerror="true" dir="${basedir}/cute_releng" resultproperty="error">
 			<arg line="-ws gtk -application org.eclipse.ant.core.antRunner" />
 		</java>
-		
+
 		<copy todir="cute_releng/results/dist" 
 			flatten="true">
 			<fileset dir="cute_releng/results">
@@ -28,7 +40,17 @@
 				<include name="I*/*.tar.gz"/>
 			</fileset>
 		</copy>
-		<property file="${basedir}/cute_releng/results/buildResults.props"/>
+		<copy todir="${features.dir}" flatten="true">
+			<fileset dir="cute_releng/results">
+				<include name="I*/updateSite/features/*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${plugins.dir}" flatten="true">
+			<fileset dir="cute_releng/results">
+				<include name="I*/updateSite/plugins/*.jar" />
+			</fileset>
+		</copy>
+		<property file="${basedir}/cute_releng/results/buildResults.props" />
 		<echo message="Resulat des ref Test: ${ch.hsr.ifs.cutelauncher.test}"/>
 		<condition property="failedTest">
 			<not>

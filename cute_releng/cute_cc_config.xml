@@ -32,7 +32,7 @@
 	    
 	    <!-- Publishers are run *after* a build completes -->
 	    <publishers>
-		    <htmlemail mailhost="smtp.hsr.ch" returnaddress="egraf@hsr.ch" returnname="buildmaster" buildresultsurl="http://lechuck.dyndns.org:8080/cruisecontrol/buildresults/cdt" spamwhilebroken="false" css="/usr/share/cruisecontrol/webapps/cruisecontrol/css/cruisecontrol.css" xsldir="/usr/share/cruisecontrol/webapps/cruisecontrol/xsl/" subjectprefix="[CUTE-CC]">
+		    <htmlemail mailhost="smtp.hsr.ch" returnaddress="egraf@hsr.ch" returnname="buildmaster" buildresultsurl="http://lechuck.dyndns.org:8080/cruisecontrol/buildresults/cute" spamwhilebroken="false" css="/usr/share/cruisecontrol/webapps/cruisecontrol/css/cruisecontrol.css" xsldir="/usr/share/cruisecontrol/webapps/cruisecontrol/xsl/" subjectprefix="[CUTE-CC]">
 			    <always address="egraf@hsr.ch"/>
       </htmlemail>
       <artifactspublisher dir="/usr/share/cruisecontrol/projects/cute/cute_releng/results/dist" dest="/usr/share/cruisecontrol/artifacts/cute" />
