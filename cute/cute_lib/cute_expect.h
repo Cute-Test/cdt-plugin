@@ -25,4 +25,13 @@ namespace cute{
 }
 #define CUTE_EXPECT(tt,exc) cute::test(cute::cute_expect<exc>(tt,__FILE__,__LINE__),tt.name())
 
+#define ASSERT_THROWSM(msg,code,exc) \
+	do { \
+		try { \
+			(code) ; \
+			FAILM(#msg); \
+		} catch(exc &e){} \
+	} while(0) 
+#define ASSERT_THROWS(code,exc) ASSERT_THROWSM(" expecting " #code " to throw " #exc,code,exc)
+
 #endif /*CUTE_EXPECT_H_*/
