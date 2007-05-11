@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cutelauncher;singleton:=true
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.0.2.qualifier
 Bundle-Activator: ch.hsr.ifs.cutelauncher.CuteLauncherPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -12,10 +12,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.debug.ui,
  org.eclipse.cdt.launch,
  org.eclipse.core.resources,
- org.eclipse.cdt.core,
+ org.eclipse.cdt.core;bundle-version="[3.1.0,4.0.0)",
  org.eclipse.ui.console,
  org.eclipse.jface.text,
- org.eclipse.cdt.debug.core,
+ org.eclipse.cdt.debug.core;bundle-version="[3.1.0,4.0.0)",
  org.eclipse.cdt.ui,
  org.eclipse.cdt.managedbuilder.ui,
  org.eclipse.ui.ide,

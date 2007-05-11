@@ -25,8 +25,6 @@ namespace cute {
 		void start(test const &t){
 			std::cout << "#starting " <<t.name()<< std::endl;
 		}
-
-
 		
 		void begin(suite const &t,char const *info){
 			std::cout << "#beginning " << info << " " << t.size() << std::endl;

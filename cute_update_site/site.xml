@@ -3,7 +3,7 @@
    <description url="http://ifs.hsr.ch/cute/updatesite/">
       Eclipse Cute Plugin
    </description>
-   <feature url="features/ch.hsr.ifs.cute_1.0.0.200702271408.jar" id="ch.hsr.ifs.cute" version="1.0.0.200702271408">
+   <feature url="features/ch.hsr.ifs.cute_1.0.2.200705081028.jar" id="ch.hsr.ifs.cute" version="1.0.2.200705081028">
       <category name="Cute Plugin"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute_1.0.1.200703261100.jar" id="ch.hsr.ifs.cute" version="1.0.1.200703261100">
