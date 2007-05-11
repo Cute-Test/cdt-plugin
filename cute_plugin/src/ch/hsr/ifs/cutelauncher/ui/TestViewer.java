@@ -18,7 +18,9 @@ import java.util.Vector;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -94,8 +96,11 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				CuteCompareResultAction action = new CuteCompareResultAction(test, TestViewer.this.getShell());
-				action.run();
+				TestCase test = getTreeSelection();
+				if(test != null){
+					CuteCompareResultAction action = new CuteCompareResultAction(test, TestViewer.this.getShell());
+					action.run();
+				}
 			}
 
 					
@@ -430,6 +435,18 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		elemets.add(newElement);
 		UIJob job = new ShowNewTest("Show new Test", newElement.getParent(), newElement);
 		job.schedule();		
+	}
+	
+	protected TestCase getTreeSelection() {
+		ISelection sel = treeViewer.getSelection();
+		if (sel instanceof TreeSelection) {
+			TreeSelection treeSel = (TreeSelection) sel;
+			if (treeSel.getFirstElement() instanceof TestCase) {
+				TestCase testCase = (TestCase) treeSel.getFirstElement();
+				return testCase;
+			}
+		}
+		return null;
 	}
 
 }
