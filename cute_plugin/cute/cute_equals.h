@@ -17,6 +17,7 @@ namespace cute {
 				case '\n': result += "\\n"; break;
 				case '\t': result += "\\t"; break;
 				case '\\': result += "\\\\"; break;
+				case '\r': result += "\\r"; break;
 				default: result += input[i];
 			}
 		}
