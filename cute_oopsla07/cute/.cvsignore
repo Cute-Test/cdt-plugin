@@ -1,0 +1,8 @@
+*.aux
+*.blg
+*.bbl
+*.dvi
+*.backup
+*.pdf
+sigproc-sp.tex
+sample.tex
