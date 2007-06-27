@@ -78,11 +78,15 @@ with a listener passed as template parameter.
 
 %TODO Codebeispiel aus aktuellem CUTE-plug-in
 \begin{verbatim}
-int main(){
-    using namespace std;
+void runSuite(){
+  cute::suite s;
+  s.push_back(CUTE(mysimpletest));
+  cute::ide_listener lis;
+  cute::makeRunner(lis)(s, "The Suite");
+}
 
-    cute::runner<cute::ostream_listener>()
-       (CUTE(mysimpletest));
+int main(){
+  runSuite();
 }
 \end{verbatim}
 
@@ -111,7 +115,12 @@ CUTE's result view provieds all the important features Java developer know from 
  \item test navigator
  \item diff-viewer for failing tests
 \end{itemize}
-%TODO bild test navigator
+
+\begin{center}
+ \includegraphics[bb=0 0 481 185]{results.png}
+ % results.png: 481x185 pixel, 72dpi, 16.97x6.53 cm, bb=0 0 481 185
+\end{center}
+
 
 \section{Requirements and Outlook}
 CUTE needs \verb|boost::bind| and \verb|boost::function| from the Boost\footnote{\url{http://www.boost.org/}} 
