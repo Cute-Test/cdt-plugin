@@ -28,7 +28,7 @@ Emanuel Graf\\
 
 \maketitle
 \begin{abstract}
-This article describes the design and use of the CUTE C++ testing framework and the integration into the Eclipse C++ Development Tooling.
+This article describes the design and use of the CUTE C++ testing framework and its integration into the Eclipse C++ Development Tooling.
 
 Unit testing suports code quality and is a corner stone of agile software development. CUTE and its Eclipse Plugin are a easy to use testing framework for C++.
 
@@ -39,10 +39,10 @@ Unit testing suports code quality and is a corner stone of agile software develo
 \keywords{Unit Testing, C++, Eclipse}
 
 \section{Introduction}
-Automated unit testing supports high quality of program code, even under inevitable change and refactoring. As a side effect, unit tested code often has a better structure. Java developers are used to unit testing because of JUnit and its tight integration into IDEs like Eclipse. C++ programmers lacked the tool support for easy-to-use unit testing, even though the language's complexity asks for it. Refactoring and simplifying C++ code without tests is very hard.
+Automated unit testing supports high quality of program code, even under inevitable change and refactoring. As a side effect, unit tested code often has a better structure. Java developers are used to unit testing because of JUnit and its tight integration into IDEs like Eclipse. C++ programmers lacked the tool support for easy-to-use unit testing, even though the language's complexity asks for it. Refactoring and simplifying C++ code without tests is very hard and error-prone.
 
 \section{Using CUTE}
-Writing a unit test using CUTE is simple. A test is a simple void function there is no need to inherit from a test class.
+Writing a unit test using CUTE is simple. A test is a simple parameterless void function there is no need to inherit from a test class.
 \begin{verbatim}
 #include "cute.h"
 int theAnswer = 42;
@@ -54,7 +54,7 @@ void mysimpletest(){
 In addition each test has a name, so that it can be easier identified. That name is either given during given during construction using the CUTE() macro or derived from the function's typeid.
 
 Since C++ lack some of the reflection mechanisms available in Java, we have to write our own main function for testing. For simple cases we only instantiate a runner
-object and pass our test for running it. Reporting the test results is so commen, that CUTE provides a means to configure the runner with a listener passed as template parameter.
+object and pass our test for running it. Reporting the test results is so common, that CUTE provides a means to configure the runner with a listener passed as template parameter.
 \begin{verbatim}
 int main(){
     using namespace std;
@@ -67,14 +67,14 @@ int main(){
 \subsection{Test Suites}
 Running a single test is not very usefull. But having a lager collection larger collection of test cases an running them  after every check in on a build server, is what makes unit testing so powerfull. So there is a need for running many tests at once.
 
-CUTE don't uses the Composite Design Pattern \cite{DesignPatterns} for implementing the container for these test cases. Instead test suites in CUTE are vectors containing a sequence of test cases. Thus we can avoid the strong coupling caused by inheritance and the lower cohesion in the container classe, because we don't need to support the composite interface. Test cases can be added to the suite 
+CUTE don't uses the Composite Design Pattern \cite{DesignPatterns} for implementing the container for these test cases. Instead test suites in CUTE are vectors containing a sequence of test cases. Thus we can avoid the strong coupling caused by inheritance and the lower cohesion in the container class, because the container don't need to support the composite interface. Test cases can be added to the suite using the \verb|push_back()| method inherited from vector or the overloaded \verb|+=| operator.
 
 \section{Eclipse CDT Integration}
-A good integration into a development environment simplifies the use of a testing framework in the normal work. Additionally a good integration can improve the developers acceptance to write tests, so writing test code becomes a natural part of writing source code.
+A good integration into a development environment simplifies the use of a testing framework. Additionally a good integration can improve the developers acceptance to write tests, so writing unit tests becomes a natural part of writing source code.
 
-The CUTE Eclipse Plug in integrates the CUTE testing framework into the Eclipse C/C++ Development Tooling (CDT)\cite{CDT} similar to the JUnit integration for the Eclipse Java Development Tools\cite{JDT}. The Plugin's project creation wizards supports the developer by setting up a project including the necessary CUTE headers and the corresponding compiler and linker settings. A specialized wizard exists to create a test project for an already existing library project.
+The CUTE Eclipse Plug\footnote{Update Site: \url{http://ifs.hsr.ch/cute/updatesite/}} in integrates the CUTE testing framework into the Eclipse C/C++ Development Tooling (CDT)\footnote{\url{http://www.eclipse.org/cdt/}} similar to the JUnit integration for the Eclipse Java Development Tools\footnote{\url{http://www.eclipse.org/jdt/}}. The Plugin's project creation wizards supports the developer by setting up a project including the necessary CUTE headers and the corresponding compiler and linker settings. A specialized wizard exists to create a test project for an already existing library project.
 
-The Plugin uses the standard cute runner with specical output listener that writes the test results to \verb|std::cout| using a defined format. This output is parsed and a internal model of the test and there result is build. The results of the test are presented to the developer by the result view.
+The Plugin uses the standard cute runner with specical output listener that writes the test results to \verb|std::cout| using a defined format. This output is parsed and a internal model of the test and there result is build. The results of the tests are presented to the developer by the result view. Therefore the result view can be used with other test frameworks as long as they provied the same output as the \verb|cute::eclipse_listener|.
 
 CUTE's result view provieds all the important features Java developer know from the JUnit-Plugin:
 \begin{itemize}
@@ -83,6 +83,10 @@ CUTE's result view provieds all the important features Java developer know from 
  \item diff-viewer for failing tests
 \end{itemize}
 
+\section{Requirements and Outlook}
+CUTE needs the Boost\footnote{\url{http://www.boost.org/}} headers.
+
+There are many ideas for extending CUTE to make it a more convenient environment to live in. For example, better integration into other IDEs like Visual Studio.
 
 \bibliographystyle{abbrv}
 %\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this
