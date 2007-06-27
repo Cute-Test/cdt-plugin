@@ -31,8 +31,8 @@ Emanuel Graf\\
 This article describes the design and use of the CUTE C++ testing framework and its integration into the 
 Eclipse C++ Development Tooling.
 
-Unit testing suports code quality and is a corner stone of agile software development. CUTE and its 
-Eclipse plug-in are a easy to use testing framework for C++.
+Unit testing supports code quality and is a corner stone of agile software development. CUTE and its 
+Eclipse plug-in are an easy to use C++ testing framework.
 
 \end{abstract}
 
@@ -59,9 +59,9 @@ void mysimpletest(){
 }
 \end{verbatim}
 In addition each test has a name, so that it can be easier identified. That name is either given during 
-given during construction using the CUTE() macro or derived from the function's typeid.
+construction using the CUTE() macro or derived from the function's typeid.
 
-Running a single test is not very usefull. But having a larger collection larger collection of test cases an 
+Running a single test is not very usefull. But having a larger collection of test cases and 
 running them  after every check in on a build server, is what makes unit testing so powerful. So there is 
 a need for running many tests at once.
 
@@ -76,7 +76,6 @@ function for testing. For simple cases we only instantiate a runner object and p
 running it. Reporting the test results is so common, that CUTE provides a means to configure the runner 
 with a listener passed as template parameter.
 
-%TODO Codebeispiel aus aktuellem CUTE-plug-in
 \begin{verbatim}
 void runSuite(){
   cute::suite s;
@@ -103,24 +102,28 @@ supports the developer by setting up a project including the necessary CUTE head
 compiler and linker settings. A specialized wizard exists to create a test project for an already 
 existing library project.
 
-The plug-in uses the standard cute runner with specical output listener that writes the test results to 
-\verb|std::cout| using a defined format. This output is parsed and a internal model of the test and there 
+The plug-in uses the standard cute runner with a special output listener that writes the test results to 
+\verb|std::cout| using a defined format. This output is parsed and an internal model of the test and there 
 result is build. The results of the tests are presented to the developer by the result view. Therefore the 
 result view can be used with other test frameworks as long as they provied the same output as the 
 \verb|cute::eclipse_listener|.
 
-CUTE's result view provieds all the important features Java developer know from the JUnit-plug-in:
+CUTE's result view provides all the important features Java developer know from the JUnit-plug-in:
 \begin{itemize}
  \item Red / Green Bar
  \item test navigator
  \item diff-viewer for failing tests
 \end{itemize}
 
- \includegraphics[width=0.5\textwidth]{results.png}
+\begin{figure}
+ \centering
+ \includegraphics[width=0.48\textwidth]{results.png}
+ \caption{\label{result View}CUTE result view}
+\end{figure}
 
 \section{Requirements and Outlook}
 CUTE needs \verb|boost::bind| and \verb|boost::function| from the Boost\footnote{\url{http://www.boost.org/}} 
-library that are part of the proposal C++ standard extension \verb|std::tr1|.
+library that are part of the proposed C++ standard extension \verb|std::tr1|.
 
 There are many ideas for extending CUTE to make it a more convenient environment to live in. 
 For example, better integration into other IDEs like Visual Studio.
