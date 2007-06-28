@@ -32,15 +32,15 @@
      objecttolerance="10"
      inkscape:pageopacity="0.98823529"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.32"
-     inkscape:cx="2548.9064"
-     inkscape:cy="2372.4986"
+     inkscape:zoom="0.45254834"
+     inkscape:cx="48.262198"
+     inkscape:cy="2507.1154"
      inkscape:document-units="px"
-     inkscape:current-layer="g10779"
+     inkscape:current-layer="layer3"
      inkscape:window-width="1592"
      inkscape:window-height="1140"
-     inkscape:window-x="2"
-     inkscape:window-y="31"
+     inkscape:window-x="0"
+     inkscape:window-y="33"
      showguides="true"
      inkscape:guide-bbox="true"
      width="170cm"
@@ -52,7 +52,7 @@
        id="linearGradient3541">
       <stop
          offset="0"
-         style="stop-color:#ec5757;stop-opacity:1;"
+         style="stop-color:#57ec5e;stop-opacity:1;"
          id="stop3543" />
       <stop
          offset="1"
@@ -67,29 +67,29 @@
          id="stop7117" />
       <stop
          offset="1"
-         style="stop-color:#ea1c1c;stop-opacity:0;"
+         style="stop-color:#2eea1c;stop-opacity:0;"
          id="stop7119" />
     </linearGradient>
     <linearGradient
        id="linearGradient5698">
       <stop
          offset="0"
-         style="stop-color:#ffe1e1;stop-opacity:1;"
+         style="stop-color:#34cb5a;stop-opacity:1;"
          id="stop5700" />
       <stop
          offset="1"
-         style="stop-color:#ea1c1c;stop-opacity:0;"
+         style="stop-color:#1cea29;stop-opacity:0;"
          id="stop5702" />
     </linearGradient>
     <linearGradient
        id="linearGradient5684">
       <stop
          offset="0"
-         style="stop-color:#ec5757;stop-opacity:1;"
+         style="stop-color:#00ff48;stop-opacity:1;"
          id="stop5686" />
       <stop
          offset="1"
-         style="stop-color:#eec7c7;stop-opacity:1;"
+         style="stop-color:#05ff2b;stop-opacity:0.55102038;"
          id="stop5688" />
     </linearGradient>
     <filter
@@ -114,38 +114,6 @@
       <feGaussianBlur
          stdDeviation="3.0990967"
          id="feGaussianBlur7133"
-         inkscape:collect="always" />
-    </filter>
-    <filter
-       id="filter7258"
-       inkscape:collect="always">
-      <feGaussianBlur
-         stdDeviation="0.32032904"
-         id="feGaussianBlur7260"
-         inkscape:collect="always" />
-    </filter>
-    <filter
-       id="filter9183"
-       inkscape:collect="always">
-      <feGaussianBlur
-         stdDeviation="1.9950079"
-         id="feGaussianBlur9185"
-         inkscape:collect="always" />
-    </filter>
-    <filter
-       id="filter14101"
-       inkscape:collect="always">
-      <feGaussianBlur
-         stdDeviation="1.9950079"
-         id="feGaussianBlur14103"
-         inkscape:collect="always" />
-    </filter>
-    <filter
-       id="filter15076"
-       inkscape:collect="always">
-      <feGaussianBlur
-         stdDeviation="0.73656275"
-         id="feGaussianBlur15078"
          inkscape:collect="always" />
     </filter>
     <filter
@@ -956,26 +924,6 @@
        y2="589.39862" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient5684"
-       id="linearGradient10761"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(6.4841742,0,0,4.5306945,-1576.8064,-1177.7513)"
-       x1="371.78571"
-       y1="460.57648"
-       x2="371.78571"
-       y2="589.39862" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient5698"
-       id="linearGradient10763"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(6.4193325,0,0,4.4853876,-1552.1202,-1153.9795)"
-       x1="371.78571"
-       y1="460.57648"
-       x2="371.78571"
-       y2="589.39862" />
-    <linearGradient
-       inkscape:collect="always"
        xlink:href="#linearGradient7115"
        id="linearGradient10765"
        gradientUnits="userSpaceOnUse"
@@ -1096,36 +1044,6 @@
        y2="589.39862" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient5698"
-       id="linearGradient12040"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(6.4841742,0,0,4.5306945,1551.7776,-1177.7513)"
-       x1="371.78571"
-       y1="460.57648"
-       x2="371.78571"
-       y2="589.39862" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient7115"
-       id="linearGradient12042"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
-       x1="371.78571"
-       y1="460.57648"
-       x2="371.78571"
-       y2="589.39862" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient5684"
-       id="linearGradient12060"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(6.4841742,0,0,4.5306945,1591.7774,-1178.5615)"
-       x1="371.78571"
-       y1="460.57648"
-       x2="371.78571"
-       y2="589.39862" />
-    <linearGradient
-       inkscape:collect="always"
        xlink:href="#linearGradient5684"
        id="linearGradient2564"
        gradientUnits="userSpaceOnUse"
@@ -1140,6 +1058,306 @@
        id="linearGradient2605"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(2.5201789,0,0,13.093832,4675.1109,-5233.2576)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient9255"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,5.068258)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7115"
+       id="linearGradient9257"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient10292"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.5242176,0,0,12.603733,3486.509,-4899.6122)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient11763"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,5.068258)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7115"
+       id="linearGradient11765"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient11769"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,5.068258)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7115"
+       id="linearGradient11771"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient11773"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.4841742,0,0,4.5306945,1591.7774,-1178.5615)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient11775"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.4841742,0,0,4.5306945,1551.7776,-1177.7513)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7115"
+       id="linearGradient11777"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient11781"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,5.068258)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient11814"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.2676959,0,0,15.590033,193.90068,-5291.1004)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient11824"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.4746837,0,0,4.5306945,153.76118,-1094.0124)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient11894"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.5242176,0,0,12.603733,1868.7062,-3942.1979)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7115"
+       id="linearGradient11911"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient11930"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.4920517,0,0,12.558796,-1581.6888,-3917.8914)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient11941"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.4193325,0,0,4.4853876,-1554.9386,-1095.9467)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient11944"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(6.4841742,0,0,4.5306945,-1579.6248,-1119.7185)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient11974"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,9.3687835,4675.1109,-3517.5882)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient12021"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,9.3687835,4675.1109,-3517.5882)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient12023"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,13.093832,4675.1109,-5233.2576)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7115"
+       id="linearGradient12025"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient12027"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,3.4537247,4655.6458,937.4035)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient12029"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,3.4537247,4655.6458,937.4035)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7115"
+       id="linearGradient12031"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient12046"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,12.401317,4646.9859,-3836.1765)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7115"
+       id="linearGradient12049"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.99,0,0,0.99,5.5928639,-74.931742)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient12051"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,13.093832,4675.1109,-5233.2576)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5684"
+       id="linearGradient12092"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,4.6986434,4632.361,-1184.6706)"
+       x1="371.78571"
+       y1="460.57648"
+       x2="371.78571"
+       y2="589.39862" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5698"
+       id="linearGradient12095"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5201789,0,0,3.4537247,4655.6458,937.4035)"
        x1="371.78571"
        y1="460.57648"
        x2="371.78571"
@@ -1199,186 +1417,74 @@
        x="13.598886"
        height="569.58606" />
     <rect
-       height="126.93214"
-       x="269.71072"
-       ry="16.73793"
-       y="461.03897"
-       transform="matrix(4.730733,0,0,5.9605448,2044.4674,-1874.2655)"
-       width="225.57858"
-       id="rect2821"
-       style="fill:none;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6819)" />
+       height="442.8168"
+       x="5308.709"
+       y="987.41376"
+       ry="58.39212"
+       width="574.24078"
+       id="rect10503"
+       style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter11474)"
+       transform="matrix(1,0,0,1.3604568,0,-353.03639)" />
     <rect
-       height="126.93214"
-       x="269.71072"
-       ry="16.73793"
-       y="461.03897"
-       transform="matrix(5.0841549,0,0,6.5886318,1909.2838,-2203.7002)"
+       style="fill:url(#linearGradient12092);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="rect3429"
+       width="574.24078"
+       ry="79.439957"
+       y="979.41376"
+       x="5304.709"
+       height="602.43317" />
+    <rect
+       height="442.8168"
+       x="5327.9937"
+       y="2528.1077"
+       ry="58.39212"
+       width="574.24078"
+       id="rect9526"
+       style="fill:url(#linearGradient12095);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter10499)"
+       transform="matrix(0.99,0,0,1.3468523,32.866356,-2422.5616)" />
+    <rect
+       style="opacity:0.79615383;fill:url(#linearGradient12031);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)"
+       id="rect3433"
        width="225.57858"
-       id="rect3814"
-       style="fill:none;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6819)" />
+       ry="16.73793"
+       y="381.03897"
+       transform="matrix(-2.4242909,0,0,-0.9791572,6516.49,1494.4744)"
+       x="269.71072"
+       height="126.93214" />
+    <text
+       xml:space="preserve"
+       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
+       id="text3441"
+       y="1073.71"
+       x="5450.9556"><tspan
+         style="font-family:URW Gothic L"
+         sodipodi:role="line"
+         id="tspan3443"
+         y="1073.71"
+         x="5450.9556">Contact</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:36px;display:inline"
+       id="text3445"
+       y="1280.7456"
+       x="5357.188"><tspan
+         style="font-size:40px;font-family:URW Gothic L"
+         sodipodi:role="line"
+         id="tspan3451"
+         y="1280.7456"
+         x="5357.188">Prof. Peter Sommerlad</tspan><tspan
+         id="tspan3311"
+         style="font-size:40px;font-family:URW Gothic L"
+         sodipodi:role="line"
+         y="1330.7456"
+         x="5357.188">+41 55 222 4984</tspan><tspan
+         style="font-size:40px;font-family:URW Gothic L"
+         sodipodi:role="line"
+         y="1380.7456"
+         x="5357.188"
+         id="tspan3513">peter.sommerlad@hsr.ch</tspan></text>
     <g
-       id="g10779">
-      <g
-         transform="translate(20.465216,91.931122)"
-         id="g11478">
-        <rect
-           height="442.8168"
-           x="5331.9937"
-           y="2536.1077"
-           ry="58.39212"
-           width="574.24078"
-           id="rect10503"
-           style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter11474)" />
-        <rect
-           style="fill:url(#linearGradient2761);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
-           id="rect3429"
-           width="574.24078"
-           ry="58.39212"
-           y="2528.1077"
-           x="5327.9937"
-           height="442.8168" />
-        <rect
-           height="442.8168"
-           x="5327.9937"
-           y="2528.1077"
-           ry="58.39212"
-           width="574.24078"
-           id="rect9526"
-           style="fill:url(#linearGradient2763);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter10499)"
-           transform="matrix(0.99,0,0,0.99,56.15114,27.495161)" />
-        <rect
-           style="opacity:0.79615383;fill:url(#linearGradient2765);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)"
-           id="rect3433"
-           width="225.57858"
-           ry="16.73793"
-           y="381.03897"
-           transform="matrix(-2.4242909,0,0,-0.9791572,6539.7748,3043.1683)"
-           x="269.71072"
-           height="126.93214" />
-        <text
-           xml:space="preserve"
-           style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
-           id="text3441"
-           y="2622.4038"
-           x="5474.2402"><tspan
-             style="font-family:URW Gothic L"
-             sodipodi:role="line"
-             id="tspan3443"
-             y="2622.4038"
-             x="5474.2402">Contact</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-size:36px;display:inline"
-           id="text3445"
-           y="2741.9395"
-           x="5371.0977"><tspan
-             style="font-family:URW Gothic L"
-             sodipodi:role="line"
-             id="tspan3451"
-             y="2741.9395"
-             x="5371.0977">Prof. Peter Sommerlad</tspan><tspan
-             id="tspan3311"
-             style="font-family:URW Gothic L"
-             sodipodi:role="line"
-             y="2786.9395"
-             x="5371.0977">+41 55 222 4984</tspan><tspan
-             style="font-family:URW Gothic L"
-             sodipodi:role="line"
-             y="2831.9395"
-             x="5371.0977"
-             id="tspan3511">peter.sommerlad@hsr.ch</tspan><tspan
-             style="font-family:URW Gothic L"
-             sodipodi:role="line"
-             y="2876.9395"
-             x="5371.0977"
-             id="tspan3513" /></text>
-      </g>
-      <g
-         transform="translate(4786.8673,1482.8132)"
-         id="g2492">
-        <rect
-           style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter11474)"
-           id="rect2953"
-           width="574.24078"
-           ry="58.39212"
-           y="1727.813"
-           x="565.59161"
-           height="442.8168"
-           transform="matrix(1.1013135,0,0,1,-56.896828,0)" />
-        <rect
-           height="442.8168"
-           x="561.59161"
-           y="1719.813"
-           ry="58.39212"
-           width="632.41913"
-           id="rect2955"
-           style="fill:url(#linearGradient2767);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
-        <rect
-           transform="matrix(1.0903004,0,0,0.99,-5244.3601,-780.7994)"
-           style="fill:url(#linearGradient2769);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter10499)"
-           id="rect2957"
-           width="574.24078"
-           ry="58.39212"
-           y="2528.1077"
-           x="5327.9937"
-           height="442.8168" />
-        <rect
-           height="126.93214"
-           x="269.71072"
-           transform="matrix(-2.6699044,0,0,-0.9791572,1896.1424,2234.8738)"
-           y="381.03897"
-           ry="16.73793"
-           width="225.57858"
-           id="rect2959"
-           style="opacity:0.79615383;fill:url(#linearGradient2771);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)" />
-        <text
-           x="684.86115"
-           y="1814.1091"
-           id="text2967"
-           style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
-           xml:space="preserve"><tspan
-             x="684.86115"
-             y="1814.1091"
-             id="tspan2969"
-             sodipodi:role="line"
-             style="font-family:URW Gothic L">Download</tspan></text>
-        <text
-           x="604.69562"
-           y="1933.6448"
-           id="text2971"
-           style="font-size:36px;display:inline"
-           xml:space="preserve"><tspan
-             x="604.69562"
-             y="1933.6448"
-             sodipodi:role="line"
-             style="font-family:URW Gothic L"
-             id="tspan3010">The plug-ins can be down-</tspan><tspan
-             x="604.69562"
-             y="1978.6448"
-             sodipodi:role="line"
-             style="letter-spacing:0.91895866;font-family:URW Gothic L"
-             id="tspan2482">loaded from our update </tspan><tspan
-             x="604.69562"
-             y="2023.6448"
-             sodipodi:role="line"
-             style="font-family:URW Gothic L"
-             id="tspan2490">site at:</tspan><tspan
-             x="604.69562"
-             y="2068.6448"
-             sodipodi:role="line"
-             style="font-family:URW Gothic L"
-             id="tspan3012" /><tspan
-             x="604.69562"
-             y="2113.6448"
-             sodipodi:role="line"
-             style="font-family:URW Gothic L"
-             id="tspan3014">http://ifs.hsr.ch/cute/updatesite/</tspan><tspan
-             id="tspan2979"
-             x="604.69562"
-             y="2158.6448"
-             sodipodi:role="line"
-             style="font-family:URW Gothic L" /></text>
-      </g>
+       id="g12053">
       <rect
          style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter9625)"
          id="rect8654"
@@ -1387,18 +1493,18 @@
          y="809.4519"
          x="5353.459"
          height="1678.8162"
-         transform="matrix(1,0,0,0.7174465,0,228.71347)" />
+         transform="matrix(1,0,0,0.9496731,-28.125,1122.7465)" />
       <rect
-         height="1201.2118"
-         x="5347.459"
-         y="797.4519"
-         ry="73.478409"
+         height="1590.0259"
+         x="5319.334"
+         y="1875.5769"
+         ry="97.26226"
          width="574.24078"
          id="rect3405"
-         style="fill:url(#linearGradient2564);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
+         style="fill:url(#linearGradient12046);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
       <rect
-         transform="matrix(0.99,0,0,0.7093818,56.345794,240.1482)"
-         style="fill:url(#linearGradient2605);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter10602)"
+         transform="matrix(0.99,0,0,0.938998,28.220794,1137.8824)"
+         style="fill:url(#linearGradient12051);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter10602)"
          id="rect9629"
          width="574.24078"
          ry="102.69358"
@@ -1408,20 +1514,20 @@
       <rect
          height="126.93214"
          x="269.71072"
-         transform="matrix(-2.4242909,0,0,-0.9791572,6559.2399,1312.5128)"
+         transform="matrix(-2.4242909,0,0,-0.9791572,6531.1149,2390.6378)"
          y="381.03897"
          ry="16.73793"
          width="225.57858"
          id="rect3409"
-         style="opacity:0.79615383;fill:url(#linearGradient10777);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)" />
+         style="opacity:0.79615383;fill:url(#linearGradient12049);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)" />
       <text
-         x="5535.0811"
-         y="891.74805"
+         x="5506.9561"
+         y="1969.873"
          id="text3417"
          style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
          xml:space="preserve"><tspan
-           x="5535.0811"
-           y="891.74805"
+           x="5506.9561"
+           y="1969.873"
            id="tspan3419"
            sodipodi:role="line"
            style="font-family:URW Gothic L">Team</tspan></text>
@@ -1430,234 +1536,262 @@
          width="245"
          height="313"
          id="image2507"
-         x="5509.8823"
-         y="1487.4188"
+         x="5481.7573"
+         y="2565.5439"
          xlink:href="emanuel.jpg" />
       <text
          xml:space="preserve"
          style="font-size:36px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:URW Gothic L"
-         x="5633.6865"
-         y="1852.8468"
+         x="5605.5615"
+         y="2930.9717"
          id="text2526"><tspan
            id="tspan2540"
            sodipodi:role="line"
-           x="5633.6865"
-           y="1852.8468">Emanuel Graf</tspan><tspan
+           x="5605.5615"
+           y="2930.9717">Emanuel Graf</tspan><tspan
            id="tspan2548"
            sodipodi:role="line"
-           x="5633.6865"
-           y="1897.8468">emanuel.graf@hsr.ch</tspan></text>
+           x="5605.5615"
+           y="2975.9717">emanuel.graf@hsr.ch</tspan></text>
       <image
          sodipodi:absref="/home/misto/share/thomas2.png"
          width="245"
          height="313"
          id="image2517"
-         x="5509.8823"
-         y="987.46252"
+         x="5481.7573"
+         y="2065.5874"
          xlink:href="peter.jpg" />
       <text
          id="text2520"
-         y="1353.9186"
-         x="5634.6846"
+         y="2432.0435"
+         x="5606.5596"
          style="font-size:36px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:URW Gothic L"
          xml:space="preserve"><tspan
            id="tspan2524"
-           y="1353.9186"
-           x="5634.6846"
+           y="2432.0435"
+           x="5606.5596"
            sodipodi:role="line">Peter Sommerlad</tspan><tspan
            id="tspan2546"
-           y="1398.9186"
-           x="5634.6846"
+           y="2477.0435"
+           x="5606.5596"
            sodipodi:role="line">peter.sommerlad@hsr.ch</tspan></text>
     </g>
     <g
-       id="g10649"
-       transform="translate(92.182633,-111.52758)">
-      <rect
-         style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6769)"
-         id="rect7565"
-         width="227.85715"
-         transform="matrix(4.5306945,0,0,4.5306945,647.2929,-1177.7513)"
-         y="462.89789"
-         ry="16.907"
-         x="270"
-         height="128.21428" />
-      <rect
-         style="fill:url(#linearGradient10890);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
-         id="rect7567"
-         width="1032.3511"
-         ry="76.600449"
-         y="908.97992"
-         x="1865.0786"
-         height="580.89972" />
-      <rect
-         style="fill:url(#linearGradient10892);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6819)"
-         id="rect7569"
-         width="225.57858"
-         transform="matrix(4.5306945,0,0,4.5306945,647.2929,-1177.7513)"
-         y="461.03897"
-         ry="16.73793"
-         x="269.71072"
-         height="126.93214" />
-      <rect
-         style="opacity:0.79615383;fill:url(#linearGradient10894);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)"
-         id="rect7571"
-         width="225.57858"
-         ry="16.73793"
-         y="381.03897"
-         transform="matrix(-4.4191071,0,0,-0.9791572,4064.871,1424.0404)"
-         x="269.71072"
-         height="126.93214" />
-      <g
-         style="display:inline"
-         id="g7577"
-         transform="matrix(4.5,0,0,4.5,663.5789,-1157.1855)" />
-      <text
-         xml:space="preserve"
-         style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
-         id="text7573"
-         y="1003.2761"
-         x="2251.0825"><tspan
-           style="font-family:URW Gothic L"
-           sodipodi:role="line"
-           id="tspan7575"
-           y="1003.2761"
-           x="2251.0825">Mission</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-size:56px;font-weight:normal;display:inline"
-         id="text7583"
-         y="1222.8115"
-         x="1926.1829"><tspan
-           style="font-size:56px;font-weight:normal;letter-spacing:1.88714767;font-family:URW Gothic L"
-           sodipodi:role="line"
-           id="tspan7597"
-           y="1222.8115"
-           x="1926.1829">Extend the Ruby Development </tspan><tspan
-           style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
-           sodipodi:role="line"
-           id="tspan7634"
-           y="1292.8115"
-           x="1926.1829">Tools with refactoring capabilities.</tspan></text>
-    </g>
+       transform="matrix(6.4308191,0,0,4.5,140.23297,-1268.7131)"
+       id="g7577"
+       style="display:inline" />
+    <text
+       xml:space="preserve"
+       style="font-size:200px"
+       id="text3555"
+       y="460.34253"
+       x="1361.855"><tspan
+         style="font-size:200px"
+         sodipodi:role="line"
+         id="tspan3557"
+         y="460.34253"
+         x="1361.855">CUTE: C++ Unit Testing Easier</tspan></text>
+    <image
+       y="204.69646"
+       x="146.38254"
+       id="image11956"
+       height="400.94058"
+       width="908.79858"
+       sodipodi:absref="/home/misto/repos/r2/doc/oopsla_poster/ifs_logo.png"
+       xlink:href="ifs_logo.png" />
+    <image
+       y="205.63881"
+       x="5163.6641"
+       id="image11980"
+       height="400.77237"
+       width="609.90118"
+       sodipodi:absref="/home/misto/repos/r2/doc/oopsla_poster/member_eclipse_logo.png"
+       xlink:href="member_eclipse_logo.png" />
     <g
-       id="g10663"
-       transform="translate(0,-110.71718)">
-      <rect
-         style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6698)"
-         id="rect5727"
-         width="1477.4653"
-         ry="76.600449"
-         y="920.97992"
-         x="159.07861"
-         height="580.89972" />
-      <rect
-         height="580.89972"
-         x="153.07861"
-         y="908.97992"
-         ry="76.600449"
-         width="1477.4653"
-         id="rect3711"
-         style="fill:url(#linearGradient10761);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
-      <rect
-         style="fill:url(#linearGradient10763);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter5723)"
-         id="rect3781"
-         width="1462.6907"
-         ry="75.834442"
-         y="911.8844"
-         x="160.46594"
-         height="575.0907" />
-      <rect
-         style="opacity:0.79615383;fill:url(#linearGradient10765);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)"
-         id="rect4845"
-         width="225.57858"
-         transform="matrix(-6.4150149,0,0,-1.098769,3340.8579,1484.7997)"
-         y="381.03897"
-         ry="16.73793"
-         x="269.71072"
-         height="126.93214" />
-      <text
-         xml:space="preserve"
-         style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
-         id="text4847"
-         y="1011.4655"
-         x="415.89655"><tspan
-           sodipodi:role="line"
-           style="font-family:URW Gothic L"
-           id="tspan4849"
-           y="1011.4655"
-           x="415.89655">Implemented Refactorings</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-size:36px;font-weight:normal;text-align:justify;text-anchor:start;display:inline"
-         id="text4857"
-         y="1140.0012"
-         x="192.26649"><tspan
-           sodipodi:role="line"
-           style="font-family:URW Gothic L"
-           id="tspan4883"
-           y="1140.0012"
-           x="192.26649">• Convert Local Variable to Field</tspan><tspan
-           sodipodi:role="line"
-           style="font-family:URW Gothic L"
-           id="tspan4987"
-           y="1185.0012"
-           x="192.26649">• Extract Method</tspan><tspan
-           sodipodi:role="line"
-           style="font-family:URW Gothic L"
-           id="tspan4991"
-           y="1230.0012"
-           x="192.26649">• Generate Accessors, Contructor</tspan><tspan
-           sodipodi:role="line"
-           style="font-family:URW Gothic L"
-           id="tspan4993"
-           y="1275.0012"
-           x="192.26649">• Inline Class, Method and Local Variable</tspan><tspan
-           sodipodi:role="line"
-           style="font-family:URW Gothic L"
-           id="tspan4995"
-           y="1320.0012"
-           x="192.26649">• Merge Class Parts</tspan><tspan
-           sodipodi:role="line"
-           style="font-family:URW Gothic L"
-           id="tspan5009"
-           y="1365.0012"
-           x="192.26649">• Move Method and Field</tspan></text>
-      <text
-         x="980.26648"
-         y="1140.0012"
-         id="text3339"
-         style="font-size:36px;font-weight:normal;text-align:justify;text-anchor:start;display:inline"
-         xml:space="preserve"><tspan
-           x="980.26648"
-           y="1140.0012"
-           id="tspan3353"
-           style="font-family:URW Gothic L"
-           sodipodi:role="line">• Override Method</tspan><tspan
-           x="980.26648"
-           y="1185.0012"
-           id="tspan3355"
-           style="font-family:URW Gothic L"
-           sodipodi:role="line">• Push Down Method</tspan><tspan
-           x="980.26648"
-           y="1230.0012"
-           id="tspan3357"
-           style="font-family:URW Gothic L"
-           sodipodi:role="line">• Rename Class, Module, File, </tspan><tspan
-           x="980.26648"
-           y="1275.0012"
-           style="font-family:URW Gothic L"
-           sodipodi:role="line"
-           id="tspan3359">   Method, Field and Local Variable</tspan><tspan
-           x="980.26648"
-           y="1320.0012"
-           id="tspan3361"
-           style="font-family:URW Gothic L"
-           sodipodi:role="line">• Split Local Variable</tspan></text>
-    </g>
+       transform="matrix(4.5,0,0,4.5,-1032.3835,-368.52122)"
+       id="g9241"
+       style="display:inline" />
+    <rect
+       ry="0"
+       y="2254.0986"
+       x="2230.4194"
+       height="0"
+       width="17.67767"
+       id="rect9265"
+       style="fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       height="580.89972"
+       x="156.26019"
+       y="979.01276"
+       ry="76.600449"
+       width="1477.4653"
+       id="rect5727"
+       style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6698)" />
+    <rect
+       style="fill:url(#linearGradient11944);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="rect3711"
+       width="1477.4653"
+       ry="76.600449"
+       y="967.01276"
+       x="150.26019"
+       height="580.89972" />
+    <rect
+       height="575.0907"
+       x="157.64752"
+       y="969.91724"
+       ry="75.834442"
+       width="1462.6907"
+       id="rect3781"
+       style="fill:url(#linearGradient11941);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter5723)" />
+    <rect
+       height="126.93214"
+       x="269.71072"
+       ry="16.73793"
+       y="381.03897"
+       transform="matrix(-6.4150149,0,0,-1.098769,3338.0395,1542.8325)"
+       width="225.57858"
+       id="rect4845"
+       style="opacity:0.79615383;fill:url(#linearGradient10765);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)" />
+    <text
+       x="715.07812"
+       y="1069.4983"
+       id="text4847"
+       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
+       xml:space="preserve"><tspan
+         x="715.07812"
+         y="1069.4983"
+         id="tspan4849"
+         style="font-family:URW Gothic L"
+         sodipodi:role="line">CUTE Highlights</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:56px;font-weight:normal;display:inline"
+       id="text9219"
+       y="1266.8385"
+       x="309.61349"><tspan
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         sodipodi:role="line"
+         id="tspan9223"
+         y="1266.8385"
+         x="309.61349">• Easy to use</tspan><tspan
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         sodipodi:role="line"
+         y="1336.8385"
+         x="309.61349"
+         id="tspan9229">• modern C++</tspan><tspan
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         sodipodi:role="line"
+         y="1406.8385"
+         x="309.61349"
+         id="tspan9227">• Integrated into Eclipse CDT</tspan></text>
+    <rect
+       height="128.21428"
+       x="270"
+       ry="16.907"
+       y="462.89789"
+       transform="matrix(6.4920517,0,0,12.558796,-1594.6726,-3917.8914)"
+       width="227.85715"
+       id="rect9233"
+       style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6769)" />
+    <rect
+       height="1610.2169"
+       x="150.29779"
+       y="1866.3942"
+       ry="212.33154"
+       width="1479.2604"
+       id="rect9235"
+       style="fill:url(#linearGradient11930);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
+    <rect
+       height="126.93214"
+       x="269.71072"
+       ry="16.73793"
+       y="461.03897"
+       transform="matrix(6.4920517,0,0,12.558796,-1594.6726,-3917.8914)"
+       width="225.57858"
+       id="rect9237"
+       style="fill:url(#linearGradient9255);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6819)" />
+    <rect
+       height="126.93214"
+       x="269.71072"
+       transform="matrix(-6.2681807,0,0,-1.1336666,3269.5945,2481.7363)"
+       y="381.03897"
+       ry="16.73793"
+       width="225.57858"
+       id="rect9239"
+       style="opacity:0.79615383;fill:url(#linearGradient9257);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)" />
+    <text
+       x="677.46082"
+       y="1965.1099"
+       id="text9243"
+       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
+       xml:space="preserve"><tspan
+         x="677.46082"
+         y="1965.1099"
+         id="tspan9245"
+         sodipodi:role="line"
+         style="font-family:URW Gothic L">Writing Tests</tspan></text>
+    <text
+       x="289.16531"
+       y="2251.0283"
+       id="text9247"
+       style="font-size:56px;font-weight:normal;display:inline"
+       xml:space="preserve"><tspan
+         id="tspan9261"
+         x="289.16531"
+         y="2251.0283"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">Writing a Test with CUTE is simple. A test is a</tspan><tspan
+         id="tspan9267"
+         x="289.16531"
+         y="2321.0283"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">simple parameterless void function there is no</tspan><tspan
+         id="tspan9269"
+         x="289.16531"
+         y="2391.0283"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">need to inherit from a test class.</tspan></text>
+    <rect
+       ry="18.867523"
+       y="2593.7288"
+       x="287.50925"
+       height="468.43289"
+       width="1202.056"
+       id="rect9271"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.02532971px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       id="text10242"
+       y="2668.8464"
+       x="421.74402"
+       style="font-size:56px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch"
+       xml:space="preserve"><tspan
+         y="2668.8464"
+         x="421.74402"
+         id="tspan10244"
+         sodipodi:role="line">#include &quot;cute.h&quot;</tspan><tspan
+         id="tspan10246"
+         y="2738.8464"
+         x="421.74402"
+         sodipodi:role="line">int theAnswer = 42;</tspan><tspan
+         id="tspan10248"
+         y="2808.8464"
+         x="421.74402"
+         sodipodi:role="line" /><tspan
+         id="tspan10250"
+         y="2878.8464"
+         x="421.74402"
+         sodipodi:role="line">void mySimpleTest(){</tspan><tspan
+         id="tspan10252"
+         y="2948.8464"
+         x="421.74402"
+         sodipodi:role="line">   ASSERT(theAnswer == 6*7);</tspan><tspan
+         id="tspan10254"
+         y="3018.8464"
+         x="421.74402"
+         sodipodi:role="line">}</tspan></text>
     <g
        id="g12063"
-       transform="translate(0,-110.71738)">
+       transform="translate(294.93631,71.290872)">
       <rect
          height="580.89972"
          x="3327.6624"
@@ -1667,7 +1801,7 @@
          id="rect6702"
          style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7673)" />
       <rect
-         style="fill:url(#linearGradient12060);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+         style="fill:url(#linearGradient11773);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
          id="rect3749"
          width="1477.4653"
          ry="76.600449"
@@ -1682,9 +1816,9 @@
          ry="76.600449"
          width="1477.4653"
          id="rect7677"
-         style="fill:url(#linearGradient12040);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter8650)" />
+         style="fill:url(#linearGradient11775);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter8650)" />
       <rect
-         style="opacity:0.79615383;fill:url(#linearGradient12042);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)"
+         style="opacity:0.79615383;fill:url(#linearGradient11777);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)"
          id="rect7663"
          width="225.57858"
          ry="16.73793"
@@ -1696,13 +1830,13 @@
          xml:space="preserve"
          style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
          id="text7665"
-         y="1011.4657"
-         x="3617.2681"><tspan
+         y="1008.3407"
+         x="3482.8931"><tspan
            style="font-family:URW Gothic L"
            sodipodi:role="line"
            id="tspan7667"
-           y="1011.4657"
-           x="3617.2681">Ruby Development Tools</tspan></text>
+           y="1008.3407"
+           x="3482.8931">C/C++ Development Tooling CDT</tspan></text>
       <text
          xml:space="preserve"
          style="font-size:36px;font-weight:normal;text-align:justify;text-anchor:start;display:inline"
@@ -1740,32 +1874,295 @@
            y="1361.5271"
            x="3356.9348">are now part of their web development suite.</tspan></text>
     </g>
+    <rect
+       height="128.21428"
+       x="270"
+       ry="16.907"
+       y="462.89789"
+       transform="matrix(6.5242176,0,0,12.603733,1855.6581,-3942.1979)"
+       width="227.85715"
+       id="rect10256"
+       style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6769)" />
+    <rect
+       height="1615.9786"
+       x="3609.2739"
+       y="1862.785"
+       ry="213.09131"
+       width="1486.5896"
+       id="rect10258"
+       style="fill:url(#linearGradient11894);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
+    <rect
+       height="126.93214"
+       x="269.71072"
+       ry="16.73793"
+       y="461.03897"
+       transform="matrix(6.5242176,0,0,12.603733,1855.6581,-3942.1979)"
+       width="225.57858"
+       id="rect10260"
+       style="fill:url(#linearGradient11781);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6819)" />
+    <rect
+       height="126.93214"
+       x="269.71072"
+       transform="matrix(-6.3635313,0,0,-1.1350454,6785.2223,2478.8755)"
+       y="381.03897"
+       ry="16.73793"
+       width="225.57858"
+       id="rect10262"
+       style="opacity:0.79615383;fill:url(#linearGradient11911);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)" />
+    <text
+       x="3745.8643"
+       y="2123.5945"
+       id="text10268"
+       style="font-size:56px;font-weight:normal;display:inline"
+       xml:space="preserve"><tspan
+         id="tspan10274"
+         x="3745.8643"
+         y="2123.5945"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">The CUTE Plug-in integrates the test framework</tspan><tspan
+         id="tspan11275"
+         x="3745.8643"
+         y="2193.5945"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">into the Eclipse CDT. The main features are:</tspan><tspan
+         id="tspan11277"
+         x="3745.8643"
+         y="2263.5945"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">• wizard creating test frame</tspan><tspan
+         id="tspan11279"
+         x="3745.8643"
+         y="2333.5945"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">• test navigator with green/red bar</tspan><tspan
+         id="tspan11281"
+         x="3745.8643"
+         y="2403.5945"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">• diff-viewer for failing tests  </tspan></text>
+    <image
+       y="2493.3843"
+       x="3864.2014"
+       id="image11343"
+       height="359.27573"
+       width="973.93982"
+       sodipodi:absref="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster/resultViewer.png"
+       xlink:href="resultViewer.png" />
+    <image
+       y="2893.8418"
+       x="3864.3064"
+       id="image11386"
+       height="351.64661"
+       width="973.7301"
+       sodipodi:absref="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster/diffViewer.png"
+       xlink:href="diffViewer.png" />
+    <rect
+       height="128.21428"
+       x="270"
+       ry="16.907"
+       y="462.89789"
+       transform="matrix(6.4746837,0,0,4.5306945,140.81209,-1094.0124)"
+       width="227.85715"
+       id="rect7565"
+       style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6769)" />
+    <rect
+       height="580.89972"
+       x="1881.1141"
+       y="992.71881"
+       ry="76.600449"
+       width="1475.3029"
+       id="rect7567"
+       style="fill:url(#linearGradient11824);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
+    <rect
+       height="126.93214"
+       x="269.71072"
+       ry="16.73793"
+       y="461.03897"
+       transform="matrix(6.4746837,0,0,4.5306945,140.81209,-1094.0124)"
+       width="225.57858"
+       id="rect7569"
+       style="fill:url(#linearGradient11763);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6819)" />
+    <rect
+       height="126.93214"
+       x="269.71072"
+       transform="matrix(-6.3152174,0,0,-0.9791572,5024.7735,1507.7793)"
+       y="381.03897"
+       ry="16.73793"
+       width="225.57858"
+       id="rect7571"
+       style="opacity:0.79615383;fill:url(#linearGradient11765);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)" />
+    <text
+       x="2161.4888"
+       y="1076.0775"
+       id="text7573"
+       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
+       xml:space="preserve"><tspan
+         x="2161.4888"
+         y="1076.0775"
+         id="tspan7575"
+         sodipodi:role="line"
+         style="font-family:URW Gothic L">Download and Resources</tspan></text>
+    <text
+       x="1932.8434"
+       y="1212.8004"
+       id="text7583"
+       style="font-size:56px;font-weight:normal;display:inline"
+       xml:space="preserve"><tspan
+         x="1932.8434"
+         y="1212.8004"
+         id="tspan7634"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">The Plug-in can be downloaded from the update</tspan><tspan
+         x="1932.8434"
+         y="1282.8004"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         id="tspan11949">site at: http://ifs.hsr.ch/cute/updatesite/</tspan><tspan
+         x="1932.8434"
+         y="1352.8004"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         id="tspan11959" /><tspan
+         x="1932.8434"
+         y="1422.8004"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         id="tspan11953">Futher information about CUTE are available at</tspan><tspan
+         x="1932.8434"
+         y="1492.8004"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         id="tspan11957">the instituts website: http://ifs.hsr.ch</tspan></text>
+    <rect
+       style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6769)"
+       id="rect11501"
+       width="227.85715"
+       transform="matrix(6.47886,0,0,12.558795,140.05478,-3894.9839)"
+       y="462.89789"
+       ry="16.907"
+       x="270"
+       height="128.21428" />
+    <rect
+       style="fill:url(#linearGradient11814);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="rect11503"
+       width="1476.2545"
+       ry="212.33154"
+       y="1889.3015"
+       x="1881.4794"
+       height="1610.2169" />
+    <rect
+       style="fill:url(#linearGradient11769);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter6819)"
+       id="rect11505"
+       width="225.57858"
+       transform="matrix(6.47886,0,0,12.558795,140.05478,-3894.9839)"
+       y="461.03897"
+       ry="16.73793"
+       x="269.71072"
+       height="126.93214" />
+    <rect
+       style="opacity:0.79615383;fill:url(#linearGradient11771);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)"
+       id="rect11507"
+       width="225.57858"
+       ry="16.73793"
+       y="381.03897"
+       transform="matrix(-6.3192908,0,0,-1.0626201,5035.3477,2478.0813)"
+       x="269.71072"
+       height="126.93214" />
     <text
        xml:space="preserve"
-       style="font-size:200px"
-       id="text3555"
-       y="460.34253"
-       x="1361.855"><tspan
-         style="font-size:200px"
+       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
+       id="text11509"
+       y="1998.9547"
+       x="2233.6736"><tspan
+         style="font-family:URW Gothic L"
          sodipodi:role="line"
-         id="tspan3557"
-         y="460.34253"
-         x="1361.855">CUTE: C++ Unit Testing Easier</tspan></text>
-    <image
-       y="204.69646"
-       x="146.38254"
-       id="image11956"
-       height="400.94058"
-       width="908.79858"
-       sodipodi:absref="/home/misto/repos/r2/doc/oopsla_poster/ifs_logo.png"
-       xlink:href="ifs_logo.png" />
-    <image
-       y="205.63881"
-       x="5163.6641"
-       id="image11980"
-       height="400.77237"
-       width="609.90118"
-       sodipodi:absref="/home/misto/repos/r2/doc/oopsla_poster/member_eclipse_logo.png"
-       xlink:href="member_eclipse_logo.png" />
+         id="tspan11511"
+         y="1998.9547"
+         x="2233.6736">Test Suites and Runner</tspan></text>
+    <text
+       x="2038.7244"
+       y="2254.5337"
+       id="text11642"
+       style="font-size:56px;font-weight:normal;display:inline"
+       xml:space="preserve"><tspan
+         id="tspan11648"
+         x="2038.7244"
+         y="2254.5337"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">A Test Suites collects serveral test cases using </tspan><tspan
+         x="2038.7244"
+         y="2324.5337"
+         sodipodi:role="line"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         id="tspan11673">a vector.</tspan></text>
+    <g
+       id="g11865"
+       transform="translate(-13.344648,26.516504)">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.42777252px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline"
+         id="rect11650"
+         width="1400.5273"
+         height="779.59937"
+         x="1931.2998"
+         y="2469.2722"
+         ry="31.400675" />
+      <text
+         xml:space="preserve"
+         style="font-size:56px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Courier 10 Pitch"
+         x="1966.4413"
+         y="2535.3499"
+         id="text11652"><tspan
+           sodipodi:role="line"
+           x="1966.4413"
+           y="2535.3499"
+           id="tspan11664">void runSuite(){</tspan><tspan
+           id="tspan11847"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="2605.3499">  cute::suite s;</tspan><tspan
+           id="tspan11851"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="2675.3499">  s.push_back(CUTE(mySimpleTest));</tspan><tspan
+           id="tspan11853"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="2745.3499">  cute::ide_listener lis;</tspan><tspan
+           id="tspan11855"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="2815.3499">  cute::makeRunner(lis)(s, &quot;The Suite&quot;);</tspan><tspan
+           id="tspan11849"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="2885.3499">}</tspan><tspan
+           id="tspan11857"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="2955.3499" /><tspan
+           id="tspan11859"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="3025.3499">int main(){</tspan><tspan
+           id="tspan11861"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="3095.3499">  runSuite();</tspan><tspan
+           id="tspan11863"
+           sodipodi:role="line"
+           x="1966.4413"
+           y="3165.3499">}</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
+       id="text11879"
+       y="1966.5424"
+       x="4017.8936"><tspan
+         style="font-family:URW Gothic L"
+         sodipodi:role="line"
+         id="tspan11881"
+         y="1966.5424"
+         x="4017.8936">CUTE Eclipse Plug-in</tspan></text>
   </g>
 </svg>
