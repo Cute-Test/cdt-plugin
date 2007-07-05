@@ -18,9 +18,9 @@ import java.io.UnsupportedEncodingException;
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.IEncodedStreamContentAccessor;
 import org.eclipse.compare.ITypedElement;
-import org.eclipse.compare.contentmergeviewer.TextMergeViewer;
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
@@ -32,6 +32,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
 
 import ch.hsr.ifs.cutelauncher.model.TestCase;
 import ch.hsr.ifs.cutelauncher.model.TestFailure;
@@ -76,8 +77,10 @@ public class CuteCompareResultDialog extends TrayDialog {
 	}
 	
 	
-	private TextMergeViewer compareViewer;
+	private CuteTextMergeViewer compareViewer;
     TestCase test;
+//	private ToolBarManager tbm;
+//	private ShowWhiteSpaceAction action;
 
 	public CuteCompareResultDialog(Shell shell, TestCase test) {
 		super(shell);
@@ -91,11 +94,18 @@ public class CuteCompareResultDialog extends TrayDialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		ViewForm pane = new ViewForm(composite, SWT.BORDER | SWT.FLAT);
+		Control control = createCompareViewer(pane);
 		GridData data= new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL);
 		data.widthHint= convertWidthInCharsToPixels(120);
 		data.heightHint= convertHeightInCharsToPixels(13);
 		pane.setLayoutData(data);
-		Control control = createCompareViewer(pane);
+		ToolBar tb = new ToolBar(pane, SWT.BORDER|SWT.FLAT);
+		ToolBarManager tbm = new ToolBarManager(tb);
+		ShowWhiteSpaceAction action = new ShowWhiteSpaceAction(compareViewer);
+		tbm.add(action);
+		tbm.update(true);;
+		pane.setTopRight(tb);
+		
 		pane.setContent(control);
 		GridData gd= new GridData(GridData.FILL_BOTH);
 		control.setLayoutData(gd);
@@ -110,7 +120,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 	    compareConfiguration.setRightEditable(false);
 	    compareConfiguration.setProperty(CompareConfiguration.IGNORE_WHITESPACE, Boolean.FALSE);
 
-	    compareViewer = new TextMergeViewer(pane, SWT.NONE, compareConfiguration);
+	    compareViewer = new CuteTextMergeViewer(pane, SWT.NONE, compareConfiguration);
 	    setCompareViewerInput(test);
 
 	    Control control= compareViewer.getControl();
@@ -122,6 +132,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 	    return control;
 		
 	}
+	
 
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, "OK", true); 
@@ -144,6 +155,10 @@ public class CuteCompareResultDialog extends TrayDialog {
     protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Result Comparison");
+	}
+
+	public void refresh() {
+		compareViewer.refresh();		
 	}
 
 	

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2007 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -9,14 +9,16 @@
  * Contributors: 
  * Emanuel Graf - initial API and implementation 
  ******************************************************************************/
-package ch.hsr.ifs.cutelauncher.model;
+package ch.hsr.ifs.cutelauncher.ui;
+
+import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 
 /**
  * @author Emanuel Graf
  *
  */
-public interface ITestElementListener {
+public class PreferenceConstants {
 	
-	public void modelCanged(TestElement source, NotifyEvent event);
+	public static final String SHOW_WHITESPACES = CuteLauncherPlugin.PLUGIN_ID + "SHOW_WHITESPACES"; 
 
 }

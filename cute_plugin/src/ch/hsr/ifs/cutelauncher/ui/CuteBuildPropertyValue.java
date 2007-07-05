@@ -9,34 +9,20 @@
  * Contributors: 
  * Emanuel Graf - initial API and implementation 
  ******************************************************************************/
-package ch.hsr.ifs.cutelauncher.model;
+package ch.hsr.ifs.cutelauncher.ui;
 
-import java.util.Vector;
+import org.eclipse.cdt.managedbuilder.buildproperties.IBuildPropertyValue;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 
-/**
- * @author Emanuel Graf
- *
- */
-public interface ITestComposite {
+public class CuteBuildPropertyValue implements IBuildPropertyValue{
 
-	public abstract int getError();
+	public String getId() {
+		return ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_EXE;
+	}
 
-	public abstract int getFailure();
-
-	public abstract int getSuccess();
-
-	public abstract int getTotalTests();
-
-	public abstract int getRun();
 	
-	public abstract Vector<? extends TestElement> getElements();
+	public String getName() {
+		return "Cute Project";
+	}
 	
-	public void addTestElement(TestElement element);
-	
-	public boolean hasErrorOrFailure();
-	
-	public void addListener(ITestCompositeListener listener);
-	
-	public void removeListener(ITestCompositeListener listener);
-
 }

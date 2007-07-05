@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2007 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -9,36 +9,23 @@
  * Contributors: 
  * Emanuel Graf - initial API and implementation 
  ******************************************************************************/
-package ch.hsr.ifs.cutelauncher.model;
+package ch.hsr.ifs.cutelauncher.ui;
+
+import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.jface.preference.IPreferenceStore;
+
+import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 
 /**
  * @author Emanuel Graf
  *
  */
-public class NotifyEvent {
-	
-	public enum EventType{
-		testFinished,
-		suiteFinished
-	}
-	
-	private EventType type;
-	
-	private TestElement element;
-	
-	public NotifyEvent(EventType type, TestElement element) {
-		super();
-		this.type = type;
-		this.element = element;
-	}
+public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
-	public EventType getType() {
-		return type;
-	}
-	
-	public TestElement getElement() {
-		return element;
+	@Override
+	public void initializeDefaultPreferences() {
+		IPreferenceStore store = CuteLauncherPlugin.getDefault().getPreferenceStore();
+		store.setDefault(PreferenceConstants.SHOW_WHITESPACES, false);
 	}
 
 }
-

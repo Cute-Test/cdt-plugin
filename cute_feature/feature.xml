@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute"
       label="%featureName"
-      version="1.0.2.qualifier"
+      version="1.1.0.qualifier"
       provider-name="%providerName"
       image="eclipse_update_120.jpg">
 
@@ -27,18 +27,18 @@
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="org.eclipse.cdt.launch"/>
+      <import plugin="org.eclipse.cdt.launch" version="4.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.cdt.core"/>
       <import plugin="org.eclipse.ui.console"/>
       <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.cdt.debug.core"/>
       <import plugin="org.eclipse.cdt.ui"/>
       <import plugin="org.eclipse.cdt.managedbuilder.ui"/>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.cdt.managedbuilder.core"/>
       <import plugin="org.eclipse.compare"/>
+      <import plugin="org.eclipse.cdt.core" version="4.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.debug.core" version="4.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

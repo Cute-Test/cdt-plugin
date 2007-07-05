@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik
  * Rapperswil, University of applied sciences
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License v1.0 
- * which accompanies this distribution, and is available at 
- * http://www.eclipse.org/legal/epl-v10.html  
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: 
- * Emanuel Graf - initial API and implementation 
+ * Contributors:
+ * Emanuel Graf - initial API and implementation
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
@@ -31,7 +31,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -118,7 +117,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 				TestCase tCase = (TestCase) test;
 				this.test = tCase;
 				testResultViewer.setText(tCase.getMessage());
-				redraw();			
+				redraw();
 			}else if (test instanceof TestSuite) {
 				testResultViewer.setText("");
 				redraw();
@@ -182,7 +181,8 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	private TestRunnerViewPart viewPart;
 	
 	private boolean failureOnly = false;
-	private FailuresOnlyFilter failuresOnlyFilter = new FailuresOnlyFilter();;
+	private FailuresOnlyFilter failuresOnlyFilter = new FailuresOnlyFilter();
+	private CuteTestDClickListener cuteTestDClickListener;;
 	
 	public TestViewer(Composite parent, int style, TestRunnerViewPart viewPart) {
 		super(parent, style);
@@ -219,7 +219,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 
 	/**
-	 * This method initializes sashForm	
+	 * This method initializes sashForm
 	 *
 	 */
 	private void createSashForm() {
@@ -230,7 +230,8 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		treeViewer.setLabelProvider(new CuteTestLabelProvider());
 		treeViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
 		treeViewer.addSelectionChangedListener(new CuteTestSelecetionListener(this));
-		treeViewer.addDoubleClickListener(new CuteTestDClickListener());
+		cuteTestDClickListener = new CuteTestDClickListener(session);
+		treeViewer.addDoubleClickListener(cuteTestDClickListener);
 		testResultViewer = new TestResultViewer(sashForm, SWT.FLAT);
 		testResultViewer.setEditable(false);
 		testResultViewer.setIndent(5);
@@ -255,6 +256,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	public void sessionStarted(TestSession session) {
 		this.session = session;
 		session.addListener(this);
+		cuteTestDClickListener.setSession(session);
 		UIJob job = new UIJob("Reset TestViewer") {
 			
 			@Override
@@ -306,6 +308,18 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		StructuredSelection selection = (StructuredSelection) treeViewer.getSelection();
 		Object firstElement = selection.getFirstElement();
 		return firstElement;
+	}
+	
+	protected TestCase getTreeSelection() {
+		ISelection sel = treeViewer.getSelection();
+		if (sel instanceof TreeSelection) {
+			TreeSelection treeSel = (TreeSelection) sel;
+			if (treeSel.getFirstElement() instanceof TestCase) {
+				TestCase testCase = (TestCase) treeSel.getFirstElement();
+				return testCase;
+			}
+		}
+		return null;
 	}
 
 	public void selectFirstFailure() {
@@ -413,7 +427,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			}else { //show first Failure
 				treeViewer.setSelection(new StructuredSelection(findFirstFailure()), true);
 			}
-		}	
+		}
 	}
 	
 	
@@ -434,19 +448,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		}
 		elemets.add(newElement);
 		UIJob job = new ShowNewTest("Show new Test", newElement.getParent(), newElement);
-		job.schedule();		
-	}
-	
-	protected TestCase getTreeSelection() {
-		ISelection sel = treeViewer.getSelection();
-		if (sel instanceof TreeSelection) {
-			TreeSelection treeSel = (TreeSelection) sel;
-			if (treeSel.getFirstElement() instanceof TestCase) {
-				TestCase testCase = (TestCase) treeSel.getFirstElement();
-				return testCase;
-			}
-		}
-		return null;
+		job.schedule();
 	}
 
 }

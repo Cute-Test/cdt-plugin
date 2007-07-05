@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html  
  * 
  * Contributors: 
- * Emanuel Graf & Guido Zgraggen- initial API and implementation 
+ * Emanuel Graf - initial API and implementation 
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.model;
 

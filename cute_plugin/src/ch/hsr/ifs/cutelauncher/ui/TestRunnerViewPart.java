@@ -66,8 +66,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 
 	private TestSession session;
 
-	private StopAction stopAction;
-	
+	private StopAction stopAction;	
 	
 
 	public TestRunnerViewPart() {

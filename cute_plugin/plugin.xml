@@ -67,17 +67,78 @@
             id="ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"
             name="CUTE Results"/>
    </extension>
+   
    <extension
-         point="org.eclipse.ui.newWizards">
+         id="cute wizard"
+         name="cute wizard"
+         point="org.eclipse.cdt.ui.CDTWizard">
       <wizard
-            category="org.eclipse.cdt.ui.newCCWizards"
-            class="ch.hsr.ifs.cutelauncher.ui.NewManagedCuteProjectWizard"
-            finalPerspective="org.eclipse.cdt.ui.CPerspective"
-            icon="icons/obj16/cute_app.gif"
-            id="ch.hsr.ifs.cutelauncher.managedProjectWizard"
-            name="Managed CUTE Testproject"
-            project="true">
+            class="ch.hsr.ifs.cutelauncher.ui.NewCuteProjectWizard"
+            name="CUTE">
       </wizard>
-   </extension>
+      <wizard
+            class="ch.hsr.ifs.cutelauncher.ui.NewCuteLibProjectWizard"
+            name="CUTE Library Test Project"
+            parent="ch.hsr.ifs.cutelauncher.ui.NewCuteProjectWizard">
+      </wizard>
 
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
+            class="ch.hsr.ifs.cutelauncher.ui.CutePrefPage"
+            id="ch.hsr.ifs.cutelauncher.prefPage"
+            name="CUTE">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="ch.hsr.ifs.cutelauncher.ui.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         id="id1"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="ch.hsr.ifs.cutelauncher.CuteNature">
+         </run>
+      </runtime>
+   </extension>
+<!--
+   <extension
+         point="org.eclipse.cdt.managedbuilder.ui.newWizardPages">
+      <wizardPage
+            ID="ch.hsr.ifs.cutelauncher.ui.LibRefPage"
+            operationClass="ch.hsr.ifs.cutelauncher.ui.LibRefRunnable"
+            pageClass="ch.hsr.ifs.cutelauncher.ui.LibReferencePage">
+         <projectType
+               projectTypeID="ch.hsr.ifs.cutelauncher.libTestProjectType">
+         </projectType>
+      </wizardPage>
+   </extension>
+   
+   <extension
+         point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
+      <projectType
+            buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe"
+            id="ch.hsr.ifs.cutelauncher.projectType"
+            isAbstract="false"
+            isTest="false"
+            name="Cute Project"
+            superClass="cdt.managedbuild.target.gnu.exe">
+      </projectType>
+      <projectType
+            buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe"
+            id="ch.hsr.ifs.cutelauncher.libTestProjectType"
+            isAbstract="false"
+            isTest="false"
+            name="Cute Library Test Project"
+            superClass="ch.hsr.ifs.cutelauncher.projectType">
+      </projectType>
+   </extension>
+	-->
 </plugin>

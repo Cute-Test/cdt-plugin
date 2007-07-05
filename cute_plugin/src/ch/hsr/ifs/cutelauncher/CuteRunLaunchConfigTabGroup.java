@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2007 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -11,7 +11,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher;
 
-import org.eclipse.cdt.launch.internal.ui.MigratingCEnvironmentTab;
 import org.eclipse.cdt.launch.ui.CArgumentsTab;
 import org.eclipse.cdt.launch.ui.CMainTab;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
@@ -26,7 +25,6 @@ public class CuteRunLaunchConfigTabGroup extends
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 				new CMainTab(true),
 				new CArgumentsTab(),
-				new MigratingCEnvironmentTab(),
 				new CommonTab() 
 			};
 			setTabs(tabs);

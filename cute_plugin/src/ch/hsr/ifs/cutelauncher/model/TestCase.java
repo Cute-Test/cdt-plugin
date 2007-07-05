@@ -14,7 +14,7 @@ package ch.hsr.ifs.cutelauncher.model;
 import org.eclipse.core.resources.IFile;
 
 /**
- * @author egraf
+ * @author Emanuel Graf
  *
  */
 public class TestCase extends TestElement {
@@ -37,10 +37,12 @@ public class TestCase extends TestElement {
 		status = TestStatus.running;
 	}
 
+	@Override
 	public ITestComposite getParent() {
 		return parent;
 	}
 
+	@Override
 	public void setParent(ITestComposite parent) {
 		this.parent = parent;
 	}
@@ -49,10 +51,12 @@ public class TestCase extends TestElement {
 		return file;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public TestStatus getStatus() {
 		return status;
 	}

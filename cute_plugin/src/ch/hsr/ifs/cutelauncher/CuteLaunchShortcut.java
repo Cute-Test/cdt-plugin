@@ -7,6 +7,7 @@
  *
  * Contributors:
  * QNX Software Systems - Initial API and implementation
+ * Institue for Software Emanuel Graf - Adaption for CUTE
  *******************************************************************************/
 package ch.hsr.ifs.cutelauncher;
 
@@ -115,7 +116,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				String platform = defaultConfig.getPlatform();
 				if (defaultConfig.supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
 					if (platform.equals("*") || platform.equals(os)) { //$NON-NLS-1$
-						if (defaultConfig.supportsCPU(programCPU)) 
+						if (defaultConfig.supportsCPU(programCPU))
 							debugConfig = defaultConfig;
 					}
 				}
@@ -128,7 +129,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 					String platform = debugConfigs[i].getPlatform();
 					if (debugConfigs[i].supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
 						if (platform.equals("*") || platform.equals(os)) { //$NON-NLS-1$
-							if (debugConfigs[i].supportsCPU(programCPU)) 
+							if (debugConfigs[i].supportsCPU(programCPU))
 								debugList.add(debugConfigs[i]);
 						}
 					}
@@ -209,10 +210,11 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	private ICDebugConfiguration chooseDebugConfig(ICDebugConfiguration[] debugConfigs, String mode) {
 		ILabelProvider provider = new LabelProvider() {
 			/**
-			 * The <code>LabelProvider</code> implementation of this 
+			 * The <code>LabelProvider</code> implementation of this
 			 * <code>ILabelProvider</code> method returns the element's <code>toString</code>
 			 * string. Subclasses may override.
 			 */
+			@Override
 			public String getText(Object element) {
 				if (element == null) {
 					return ""; //$NON-NLS-1$
@@ -224,8 +226,8 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		};
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), provider);
 		dialog.setElements(debugConfigs);
-		dialog.setTitle(getDebugConfigDialogTitleString(debugConfigs, mode)); 
-		dialog.setMessage(getDebugConfigDialogMessageString(debugConfigs, mode)); 
+		dialog.setTitle(getDebugConfigDialogTitleString(debugConfigs, mode));
+		dialog.setMessage(getDebugConfigDialogMessageString(debugConfigs, mode));
 		dialog.setMultipleSelection(false);
 		int result = dialog.open();
 		provider.dispose();
@@ -254,12 +256,13 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 * launch configurations.  Return the chosen config, or <code>null</code> if the
 	 * user cancelled the dialog.
 	 */
+	@SuppressWarnings("unchecked")
 	protected ILaunchConfiguration chooseConfiguration(List configList, String mode) {
 		IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), labelProvider);
 		dialog.setElements(configList.toArray());
-		dialog.setTitle(getLaunchSelectionDialogTitleString(configList, mode)); 
-		dialog.setMessage(getLaunchSelectionDialogMessageString(configList, mode)); 
+		dialog.setTitle(getLaunchSelectionDialogTitleString(configList, mode));
+		dialog.setMessage(getLaunchSelectionDialogMessageString(configList, mode));
 		dialog.setMultipleSelection(false);
 		int result = dialog.open();
 		labelProvider.dispose();
@@ -269,10 +272,12 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String getLaunchSelectionDialogTitleString(List configList, String mode) {
 		return LaunchMessages.getString("CApplicationLaunchShortcut.LaunchConfigSelection");  //$NON-NLS-1$
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected String getLaunchSelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
 			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseLaunchConfigToDebug");  //$NON-NLS-1$
@@ -287,8 +292,10 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 * 
 	 * @return the selected binary or <code>null</code> if none.
 	 */
+	@SuppressWarnings("unchecked")
 	protected IBinary chooseBinary(List binList, String mode) {
 		ILabelProvider programLabelProvider = new CElementLabelProvider() {
+			@Override
 			public String getText(Object element) {
 				if (element instanceof IBinary) {
 					IBinary bin = (IBinary)element;
@@ -301,6 +308,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		};
 
 		ILabelProvider qualifierLabelProvider = new CElementLabelProvider() {
+			@Override
 			public String getText(Object element) {
 				if (element instanceof IBinary) {
 					IBinary bin = (IBinary)element;
@@ -328,10 +336,12 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected String getBinarySelectionDialogTitleString(List binList, String mode) {
 		return LaunchMessages.getString("CApplicationLaunchShortcut.CLocalApplication");  //$NON-NLS-1$
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected String getBinarySelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
 			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseLocalAppToDebug");  //$NON-NLS-1$

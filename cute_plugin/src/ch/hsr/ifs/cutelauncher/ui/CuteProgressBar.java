@@ -8,6 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *     Stephan Michels, stephan@apache.org - 104944 [JUnit] Unnecessary code in JUnitProgressBar
+ *     Institute for Software, Emanuel Graf - Adaption for CUTE
  *******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
