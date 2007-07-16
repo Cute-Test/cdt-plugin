@@ -2,8 +2,6 @@
 #include "ide_listener.h"
 #include "cute_runner.h"
 
-namespace {
-
 void thisIsATest() {
 	ASSERTM("start writing tests", false);	
 }
@@ -16,7 +14,6 @@ void runSuite(){
 	cute::makeRunner(lis)(s, "The Suite");
 }
 
-}
 int main(){
     runSuite();
 }
