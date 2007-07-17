@@ -12,6 +12,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.IName;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
@@ -94,13 +96,15 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 				if(!projects[i].getElementName().equals(session.getLaunch().getLaunchConfiguration().getName()))
 					continue;
 				IIndex index = CCorePlugin.getIndexManager().getIndex(projects[i]);
-				//TODO Doesn't work for test methods in an anonymous namespace
-				IIndexBinding[] bindings = index.findBindings(testCaseName.toCharArray(), IndexFilter.ALL,new NullProgressMonitor());
+				Pattern p = Pattern.compile(testCaseName);
+				IIndexBinding[] bindings = index.findBindings(p, false, IndexFilter.ALL, new NullProgressMonitor());
 				for (int bi = 0; bindings != null && bi < bindings.length; ++bi) {
 					IIndexBinding binding = bindings[bi];
 					if (binding == null)
 						continue;
-					IName[] definition = index.findDefinitions(binding);
+					
+					//TODO Doesn't work for test methods in an anonymous namespace
+					IName[] definition = index.findDefinitions(index.adaptBinding(binding));
 					if (definition == null || definition.length == 0)
 						continue;
 					IASTFileLocation loc = definition[0].getFileLocation();
