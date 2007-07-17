@@ -147,7 +147,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 			set.add(entries[i]);
 		}
 		set.add(entry);
-		return (ICSourceEntry[])set.toArray(new ICSourceEntry[set.size()]);
+		return set.toArray(new ICSourceEntry[set.size()]);
 	}
 	
 	
@@ -211,17 +211,17 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	
 	protected void setOptionInConfig(String value, IConfiguration config,
 			IOption[] options, IHoldsOptions optionHolder, int optionType) throws BuildException {
-				for (int i = 0; i < options.length; i++) {
-					IOption option = options[i];
-					if (option.getValueType() == optionType) {
-						String[] includePaths = getStrategy(optionType).getValues(option);
-						String[] newPaths = new String[includePaths.length + 1];
-						System.arraycopy(includePaths, 0, newPaths, 0, includePaths.length);
-						newPaths[includePaths.length] = value;
-						ManagedBuildManager.setOption(config, optionHolder, option, newPaths);
-					}
-				}
+		for (int i = 0; i < options.length; i++) {
+			IOption option = options[i];
+			if (option.getValueType() == optionType) {
+				String[] includePaths = getStrategy(optionType).getValues(option);
+				String[] newPaths = new String[includePaths.length + 1];
+				System.arraycopy(includePaths, 0, newPaths, 0, includePaths.length);
+				newPaths[includePaths.length] = value;
+				ManagedBuildManager.setOption(config, optionHolder, option, newPaths);
 			}
+		}
+	}
 
 	protected IFile getTestMainFile(IProject project) {
 		return project.getFile("src/Test.cpp");
