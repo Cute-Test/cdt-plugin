@@ -82,6 +82,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		IFolder cuteFolder = createFolder(project, "cute");
 		addCuteFiles(cuteFolder, new NullProgressMonitor());
 		setIncludePaths(cuteFolder.getFullPath(), project);
+		ManagedBuildManager.saveBuildInfo(project, true);
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				getTestMainFile(project), true);
 	}
@@ -187,7 +188,6 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
 		setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH);
 	}
-
 
 
 	protected void setOptionInAllConfigs(IProject project, String value, int optionType)
