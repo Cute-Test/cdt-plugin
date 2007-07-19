@@ -108,37 +108,4 @@
          </run>
       </runtime>
    </extension>
-<!--
-   <extension
-         point="org.eclipse.cdt.managedbuilder.ui.newWizardPages">
-      <wizardPage
-            ID="ch.hsr.ifs.cutelauncher.ui.LibRefPage"
-            operationClass="ch.hsr.ifs.cutelauncher.ui.LibRefRunnable"
-            pageClass="ch.hsr.ifs.cutelauncher.ui.LibReferencePage">
-         <projectType
-               projectTypeID="ch.hsr.ifs.cutelauncher.libTestProjectType">
-         </projectType>
-      </wizardPage>
-   </extension>
-   
-   <extension
-         point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
-      <projectType
-            buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe"
-            id="ch.hsr.ifs.cutelauncher.projectType"
-            isAbstract="false"
-            isTest="false"
-            name="Cute Project"
-            superClass="cdt.managedbuild.target.gnu.exe">
-      </projectType>
-      <projectType
-            buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe"
-            id="ch.hsr.ifs.cutelauncher.libTestProjectType"
-            isAbstract="false"
-            isTest="false"
-            name="Cute Library Test Project"
-            superClass="ch.hsr.ifs.cutelauncher.projectType">
-      </projectType>
-   </extension>
-	-->
 </plugin>
