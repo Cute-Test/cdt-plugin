@@ -108,4 +108,15 @@
          </run>
       </runtime>
    </extension>
-</plugin>
+ <extension
+         point="org.eclipse.mylyn.tasks.core.templates">
+      <repository
+            addAutomatically="true"
+            anonymous="true"
+            label="CUTE Trac"
+            repositoryKind="trac"
+            urlRepository="http://r2.ifs.hsr.ch/cute"
+            version="XML_RPC">
+      </repository>
+   </extension> 
+   </plugin>
