@@ -40,7 +40,7 @@ Design, Languages, Verification
 Unit Testing, C++, Eclipse
 
 \section{Introduction}
-Automated unit testing supports high quality of program code, even under inevitable change and 
+Automated unit testing supports high quality of program code, especially under inevitable change and 
 refactoring. As a side effect, unit tested code often has a better structure. Java developers are 
 used to unit testing because of JUnit and its tight integration into IDEs like Eclipse. C++ programmers 
 lacked the tool support for easy-to-use unit testing, even though the language's complexity asks for it. 
@@ -54,7 +54,7 @@ at least six classes you have to deal with to get things up and running. You eve
 you want to inherit from TestCase or TestFixture for your simple test case you intend to write.
 
 \section{Using CUTE}
-Writing a unit test using CUTE is simple. A test is a simple parameterless void function there is no 
+Writing a unit test using CUTE is simple. A test is a simple parameterless void function, there is no 
 need to inherit from a test class.
 \begin{verbatim}
 #include "cute.h"
@@ -64,22 +64,22 @@ void mysimpletest(){
   ASSERT(theAnswer == 6*7);
 }
 \end{verbatim}
-In addition each test has a name, so that it can be easier identified. That name is either given during 
+In addition each test has a name, which identifies it. That name is either given during 
 construction using the CUTE() macro or derived from the function's typeid.
 
-Running a single test is not very usefull. But having a larger collection of test cases and 
-running them  after every check in on a build server, is what makes unit testing so powerful. So there is 
+Running a single test is not very useful. But having a larger collection of test cases and 
+running them  after every check-in on a build server, is what makes unit testing so powerful. So there is 
 a need for running many tests at once.
 
-CUTE don't uses the Composite Design Pattern \cite{DesignPatterns} for implementing the container for 
+CUTE doesn't use the Composite Design Pattern \cite{DesignPatterns} for implementing the container for 
 these test cases. Instead test suites in CUTE are vectors containing a sequence of test cases. Thus we 
 can avoid the strong coupling caused by inheritance and the lower cohesion in the container class, because 
-the container don't need to support the composite interface. Test cases can be added to the suite using 
+the container doesn't need to support the composite interface. Test cases can be added to the suite using 
 the \verb|push_back()| method inherited from vector or the overloaded \verb|+=| operator.
 
-Since C++ lack some of the reflection mechanisms available in Java, we have to write our own main 
+Since C++ lacks some of the reflection mechanisms available in Java, we have to write our own main 
 function for testing. For simple cases we only instantiate a runner object and pass our test for 
-running it.
+execution.
 
 Reporting the test results is so common that CUTE provides a means to configure the runner 
 with a listener passed as template parameter.
@@ -102,21 +102,21 @@ A good integration into a development environment simplifies the use of a testin
 a good integration can improve the developers acceptance to write tests, so writing unit tests becomes 
 a natural part of writing source code.
 
-The CUTE Eclipse Plug-in\footnote{Update Site: \url{http://ifs.hsr.ch/cute/updatesite/}} integrates the 
+The CUTE Eclipse plug-in\footnote{Update Site: \url{http://ifs.hsr.ch/cute/updatesite/}} integrates the 
 CUTE testing framework into the Eclipse C/C++ Development Tooling (CDT)
 \footnote{\url{http://www.eclipse.org/cdt/}} similar to the JUnit integration for the Eclipse Java 
 Development Tools\footnote{\url{http://www.eclipse.org/jdt/}}. The plug-in's project creation wizards 
-supports the developer by setting up a project including the necessary CUTE headers and the corresponding 
+support the developer by setting up a project including the necessary CUTE headers and the corresponding 
 compiler and linker settings. A specialized wizard exists to create a test project for an already 
 existing library project.
 
 The plug-in uses the standard cute runner with a special output listener that writes the test results to 
-\verb|std::cout| using a defined format. This output is parsed and an internal model of the test and there 
-result is build. The results of the tests are presented to the developer by the result view. Therefore the 
-result view can be used with other test frameworks as long as they provied the same output as the 
+\verb|std::cout| using a defined format. A model representing the test cases including there results is build
+ by parsing the test output. The results of the tests are presented to the developer by the result view. Therefore the 
+result view can be used with other test frameworks as long as they provide the same output as the 
 \verb|cute::eclipse_listener|.
 
-CUTE's result view provides all the important features Java developer know from the JUnit-plug-in:
+CUTE's result view provides all the important features Java developers know from the JUnit-plug-in:
 \begin{itemize}
  \item Red / Green Bar
  \item test navigator
@@ -135,7 +135,7 @@ CUTE's result view provides all the important features Java developer know from 
 CUTE needs \verb|boost::bind| and \verb|boost::function| from the Boost\footnote{\url{http://www.boost.org/}} 
 library that are part of the proposed C++ standard extension \verb|std::tr1|.
 
-There are many ideas for extending CUTE to make it a more convenient environment to live in. 
+There are many ideas for extending CUTE to make it a more convenient environment to work with. 
 For example, better integration into other IDEs like Visual Studio.
 
 \begin{thebibliography}{}
