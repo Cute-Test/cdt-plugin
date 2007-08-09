@@ -1,44 +1,43 @@
-\documentclass{acm_proc_article-sp}
+\documentclass[10pt]{sigplanconf}
 
+\usepackage{amsmath}
+\usepackage[T1]{fontenc}
 \usepackage{url}
+\usepackage{graphicx}
+
 
 \begin{document}
 
+\authorpermission
+\conferenceinfo{OOPSLA'07,} {October 21--25, 2007, Montr{\'e}al, Qu{\'e}bec, Canada.} 
+\CopyrightYear{2007} 
+\copyrightdata{978-1-59593-786-5/07/0010}
+
+
 \title{CUTE: C++ Unit Testing Easier}
 
-\numberofauthors{2}
-
-\author{
-% 1st. author
-\alignauthor
-Peter Sommerlad\\
-       \affaddr{Institute for Software}\\
-       \affaddr{Oberseestrasse 10}\\
-       \affaddr{8640 Rapperswil}\\
-       \email{peter.sommerlad@hsr.ch}
-% 2nd. author
-\alignauthor
-Emanuel Graf\\
-       \affaddr{Institute for Software}\\
-       \affaddr{Oberseestrasse 10}\\
-       \affaddr{8640 Rapperswil}\\
-       \email{emanuel.graf@hsr.ch}
-}
-
+\authorinfo{Peter Sommerlad\and Emanuel Graf}
+           { IFS Institute for Software at HSR Rapperswil\\
+Oberseestr. 10, CH-8640 Rapperswil, Switzerland}
+           {\{peter.sommerlad,emanuel.graf\}@hsr.ch}
 
 \maketitle
+
 \begin{abstract}
 This article describes the design and use of the CUTE C++ testing framework and its integration into the 
-Eclipse C++ Development Tooling.\cite{CppUnitCookbook} 
+Eclipse C++ Development Tooling.
 
 Unit testing supports code quality and is a corner stone of agile software development. CUTE and its 
 Eclipse plug-in are an easy to use C++ testing framework.
-
 \end{abstract}
 
+\category{D}{2}{5}[Testing tools (e.g., data generators, coverage testing)]
 
+\terms
+Design, Languages, Verification
 
-\keywords{Unit Testing, C++, Eclipse}
+\keywords
+Unit Testing, C++, Eclipse
 
 \section{Introduction}
 Automated unit testing supports high quality of program code, even under inevitable change and 
@@ -46,6 +45,13 @@ refactoring. As a side effect, unit tested code often has a better structure. Ja
 used to unit testing because of JUnit and its tight integration into IDEs like Eclipse. C++ programmers 
 lacked the tool support for easy-to-use unit testing, even though the language's complexity asks for it. 
 Refactoring and simplifying C++ code without tests is very hard and error-prone.
+
+\section{Problems with CPPUnit}
+One disadvantage of the well-known CPPUnit is that you have to write a subclass to have your own test case.
+Inheritance is a very strong coupling between classes. Requiring a test-case class to inherit from a 
+CPPUnit-framework class couples both closely together. The CPPUnit tutorial \cite{CppUnitCookbook} lists 
+at least six classes you have to deal with to get things up and running. You even have to decide if 
+you want to inherit from TestCase or TestFixture for your simple test case you intend to write.
 
 \section{Using CUTE}
 Writing a unit test using CUTE is simple. A test is a simple parameterless void function there is no 
@@ -73,9 +79,11 @@ the \verb|push_back()| method inherited from vector or the overloaded \verb|+=| 
 
 Since C++ lack some of the reflection mechanisms available in Java, we have to write our own main 
 function for testing. For simple cases we only instantiate a runner object and pass our test for 
-running it. Reporting the test results is so common, that CUTE provides a means to configure the runner 
-with a listener passed as template parameter.
+running it.
 
+Reporting the test results is so common that CUTE provides a means to configure the runner 
+with a listener passed as template parameter.
+\newpage
 \begin{verbatim}
 void runSuite(){
   cute::suite s;
@@ -116,9 +124,11 @@ CUTE's result view provides all the important features Java developer know from 
 \end{itemize}
 
 \begin{figure}
- \centering
- \includegraphics[width=0.48\textwidth]{results.png}
- \caption{\label{result View}CUTE result view}
+ \begin{center}
+ \includegraphics[width=0.45\textwidth]{results}
+\end{center}
+ \caption{CUTE Result View}
+\label{result View}
 \end{figure}
 
 \section{Requirements and Outlook}
@@ -128,10 +138,20 @@ library that are part of the proposed C++ standard extension \verb|std::tr1|.
 There are many ideas for extending CUTE to make it a more convenient environment to live in. 
 For example, better integration into other IDEs like Visual Studio.
 
-\bibliographystyle{abbrv}
-%\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this
-\bibliography{bibliography}
+\begin{thebibliography}{}
 
-\balancecolumns
-% That's all folks!
+\bibitem{CppUnitCookbook}
+M.~Feathers and B.~Lepilleur.
+\newblock Cppunit cookbook.
+\newblock
+  \url{http://cppunit.sourceforge.net/doc/lastest/cppunit_cookbook.html}.
+
+\bibitem{DesignPatterns}
+E.~Gamma, R.~Helm, R.~Johnson, and J.~Vlissides.
+\newblock {\em Design Patterns}.
+\newblock Addison-Wesley Professional, July 1997.
+
+\end{thebibliography}
+
 \end{document}
+1-59593-090-6/05/0007
