@@ -14,14 +14,14 @@
    id="svg4705"
    sodipodi:version="0.32"
    inkscape:version="0.45"
-   sodipodi:docbase="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster"
+   sodipodi:docbase="/home/egraf/workspaces/cute/cute_oopsla07/cute/poster"
    sodipodi:docname="poster.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster/poster.png"
    inkscape:export-xdpi="40"
    inkscape:export-ydpi="40"
    version="1.0"
-   sodipodi:modified="TRUE">
+   sodipodi:modified="true">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -32,11 +32,11 @@
      objecttolerance="10"
      inkscape:pageopacity="0.98823529"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.90509668"
-     inkscape:cx="4345.6605"
-     inkscape:cy="2439.4997"
+     inkscape:zoom="0.64"
+     inkscape:cx="2493.8598"
+     inkscape:cy="1178.0623"
      inkscape:document-units="px"
-     inkscape:current-layer="g3820"
+     inkscape:current-layer="g3752"
      inkscape:window-width="1592"
      inkscape:window-height="1140"
      inkscape:window-x="2"
@@ -2048,7 +2048,7 @@
              x="2038.7244"
              y="2254.5337"
              sodipodi:role="line"
-             style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">A Test Suites collects serveral test cases using </tspan><tspan
+             style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">A Test Suite collects several test cases using </tspan><tspan
              x="2038.7244"
              y="2324.5337"
              sodipodi:role="line"
