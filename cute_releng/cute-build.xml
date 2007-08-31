@@ -50,6 +50,7 @@
 				<include name="I*/updateSite/plugins/*.jar" />
 			</fileset>
 		</copy>
+		<!--
 		<property file="${basedir}/cute_releng/results/buildResults.props" />
 		<echo message="Resulat des ref Test: ${ch.hsr.ifs.cutelauncher.test}"/>
 		<condition property="failedTest">
@@ -66,6 +67,7 @@
 			</not>
 		</condition>
 		<fail if="failedBuild" message="Build failed"/>
+		-->
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
