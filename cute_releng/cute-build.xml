@@ -50,9 +50,7 @@
 				<include name="I*/updateSite/plugins/*.jar" />
 			</fileset>
 		</copy>
-		<!--
 		<property file="${basedir}/cute_releng/results/buildResults.props" />
-		<echo message="Resulat des ref Test: ${ch.hsr.ifs.cutelauncher.test}"/>
 		<condition property="failedTest">
 			<not>
 				<equals arg1="true" arg2="${ch.hsr.ifs.cutelauncher.test}"/>
@@ -60,21 +58,19 @@
 		</condition>
 		<fail if="failedTest" message="Test failed"/>
 
-		<echo message=" ${error}" />
 		<condition property="failedBuild">
 			<not>
 				<equals arg1="0" arg2="${error}"/>
 			</not>
 		</condition>
 		<fail if="failedBuild" message="Build failed"/>
-		-->
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
           target: checkoutReleng                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="checkoutReleng" depends="clean">
-		<cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" command="co cute_releng" reallyquiet= "true"/>
+		<cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" command="co cute_releng" reallyquiet="true" />
 	</target>
 
 
