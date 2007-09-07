@@ -26,7 +26,7 @@ public class PatternListenerTestEqualsFailed extends ConsoleTest {
 	private static final String TEST_NAME_EXP = "test1";
 	private static final int OFFSET_START_EXP = 0;
 	private static final int OFFSET_END_EXP = 16;
-	private static final String MSG_EXP = "Hall expected:	42	but was:	43	";
+	private static final String MSG_EXP = "Hallo expected:	42	but was:	43	";
 	private static final Object TEST_FILE_NAME_EXP = "../src/Test.cpp";
 	private static final int LINE_NO_EXP = 6;
 	
