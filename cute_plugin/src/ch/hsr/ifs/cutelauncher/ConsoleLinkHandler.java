@@ -21,7 +21,7 @@ import org.eclipse.ui.console.IHyperlink;
 import org.eclipse.ui.console.TextConsole;
 
 /**
- * @author egraf
+ * @author Emanuel Graf (IFS)
  *
  */
 public class ConsoleLinkHandler extends TestEventHandler {
@@ -38,21 +38,26 @@ public class ConsoleLinkHandler extends TestEventHandler {
 	}
 
 
+	@Override
 	public void handleBeginning(IRegion reg, String suitename, String suitesize) {
 	}
 
 
+	@Override
 	public void handleEnding(IRegion reg, String suitename) {
 	}
 
 
+	@Override
 	public void handleError(IRegion reg, String testName, String msg) {
 		
 	}
 
+	@Override
 	public void handleSuccess(IRegion reg, String name, String msg) {
 	}
 
+	@Override
 	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
 		
 		try {
@@ -67,6 +72,7 @@ public class ConsoleLinkHandler extends TestEventHandler {
 	}
 
 
+	@Override
 	public void handleTestStart(IRegion reg, String suitename) {
 	}
 
