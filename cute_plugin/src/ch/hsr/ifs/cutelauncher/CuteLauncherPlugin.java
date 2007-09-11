@@ -35,7 +35,7 @@ import ch.hsr.ifs.cutelauncher.model.CuteModel;
 public class CuteLauncherPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cutelancher";
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cutelauncher";
 
 	// The shared instance
 	private static CuteLauncherPlugin plugin;

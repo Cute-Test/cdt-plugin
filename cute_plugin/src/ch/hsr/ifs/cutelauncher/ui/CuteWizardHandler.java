@@ -51,6 +51,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
+import ch.hsr.ifs.cutelauncher.CuteNature;
 
 /**
  * @author Emanuel Graf
@@ -99,7 +100,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 
 
 	private void createCuteProject(IProject project) throws CoreException {
-//		CuteNature.addNature(project, new NullProgressMonitor());
+		CuteNature.addCuteNature(project, new NullProgressMonitor());
 		createCuteProjectFolders(project);
 	}
 

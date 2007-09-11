@@ -100,13 +100,17 @@
       </initializer>
    </extension>
    <extension
-         id="id1"
+         id="ch.hsr.ifs.cutelauncher.cutenature"
+         name="CUTE Project Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
                class="ch.hsr.ifs.cutelauncher.CuteNature">
          </run>
       </runtime>
+      <requires-nature
+            id="org.eclipse.cdt.core.cnature">
+      </requires-nature>
    </extension>
  <extension
          point="org.eclipse.mylyn.tasks.core.templates">
@@ -118,5 +122,13 @@
             urlRepository="http://r2.ifs.hsr.ch/cute"
             version="XML_RPC">
       </repository>
-   </extension> 
+   </extension>
+ <extension
+       point="org.eclipse.ui.ide.projectNatureImages">
+    <image
+          icon="icons/ovr16/cute_ovr.gif"
+          id="ch.hsr.ifs.cutelauncher.cuteProjectImage"
+          natureId="ch.hsr.ifs.cutelauncher.cutenature">
+    </image>
+ </extension> 
    </plugin>
