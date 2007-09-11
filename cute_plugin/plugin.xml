@@ -130,5 +130,24 @@
           id="ch.hsr.ifs.cutelauncher.cuteProjectImage"
           natureId="ch.hsr.ifs.cutelauncher.cutenature">
     </image>
+ </extension>
+ <extension
+       point="org.eclipse.ui.popupMenus">
+    <objectContribution
+          adaptable="true"
+          id="ch.hsr.ifs.cutelauncher.convertObjectContribution1"
+          objectClass="org.eclipse.cdt.core.model.ICProject">
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.ConvertProjectAction"
+             enablesFor="1"
+             id="ch.hsr.ifs.cutelauncher.convertProjectAction"
+             label="Convert to CUTE 1.2 Project"
+             menubarPath="additions">
+       </action>
+       <filter
+             name="projectNature"
+             value="org.eclipse.cdt.core.ccnature">
+       </filter>
+    </objectContribution>
  </extension> 
    </plugin>
