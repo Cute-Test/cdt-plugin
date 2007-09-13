@@ -13,6 +13,7 @@ package ch.hsr.ifs.cutelauncher.ui;
 
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -90,8 +91,8 @@ public class ConvertProjectAction extends ActionDelegate implements
 
 
 	private boolean checkProject(ICProject project2) {
-		// TODO Auto-generated method stub
-		return false;
+		IPath cutePath = project2.getProject().getLocation().append("cute").append("cute.h");
+		return cutePath.makeAbsolute().toFile().exists();
 	}
 
 
