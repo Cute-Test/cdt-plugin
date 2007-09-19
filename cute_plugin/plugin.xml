@@ -149,5 +149,30 @@
              value="org.eclipse.cdt.core.ccnature">
        </filter>
     </objectContribution>
- </extension> 
+    <viewerContribution
+          id="ch.hsr.ifs.cutelauncher.cEditorContribution"
+          targetID="#CEditorContext">
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunction"
+             definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
+             id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
+             label="New Test Function"
+             menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
+       </action>
+       <menu
+             id="ch.hsr.ifs.cutelauncher.testCodeMenu"
+             label="Test Code"
+             path="org.eclipse.cdt.ui.source.menu">
+       </menu>
+    </viewerContribution>
+ </extension>
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          categoryId="org.eclipse.cdt.ui.category.source"
+          description="Create new test function."
+          id="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
+          name="New Test Function">
+    </command>
+ </extension>
    </plugin>

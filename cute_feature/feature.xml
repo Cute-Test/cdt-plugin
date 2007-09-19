@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute"
       label="%featureName"
-      version="1.1.1.qualifier"
+      version="1.2.0.qualifier"
       provider-name="%providerName"
       image="eclipse_update_120.jpg">
 
@@ -38,6 +38,7 @@
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.3.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.managedbuilder.core" version="4.0.0" match="compatible"/>
       <import plugin="org.eclipse.compare" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.editors"/>
    </requires>
 
    <plugin

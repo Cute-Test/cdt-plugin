@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cutelauncher;singleton:=true
-Bundle-Version: 1.1.1.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cutelauncher.CuteLauncherPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.3.0,4.0.0)",
  org.eclipse.compare;bundle-version="[3.3.0,4.0.0)",
  org.eclipse.mylyn.tasks.core;bundle-version="[2.0.0,3.0.0)";resolution:=optional,
  org.eclipse.mylyn.trac.core;bundle-version="[2.0.0,3.0.0)";resolution:=optional,
- org.eclipse.mylyn.trac.ui;bundle-version="[2.0.0,3.0.0)";resolution:=optional
+ org.eclipse.mylyn.trac.ui;bundle-version="[2.0.0,3.0.0)";resolution:=optional,
+ org.eclipse.ui.editors
 Eclipse-LazyStart: true
 Export-Package: ch.hsr.ifs.cutelauncher,
  ch.hsr.ifs.cutelauncher.model,
