@@ -31,29 +31,26 @@ import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.InsertEdit;
-import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
-import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.IDocumentProvider;
+
 
 /**
  * @author Emanuel Graf
  *
  */
-public class NewTestFunction implements IEditorActionDelegate {
+public class NewTestFunctionAction {
 	
+	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
+
 	private final class SuitPushBackFinder extends ASTVisitor {
 		private IASTName suiteDeclName = null;
 		
@@ -86,55 +83,36 @@ public class NewTestFunction implements IEditorActionDelegate {
 			return suiteDeclName;
 		}
 	}
-
-	private IEditorPart editor;
 	
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	public MultiTextEdit createEdit(TextEditor ceditor,
+			IEditorInput editorInput, IDocument doc, String funcName)
+			throws CoreException {
+		MultiTextEdit mEdit = new MultiTextEdit();
+		ISelection sel = ceditor.getSelectionProvider().getSelection();
+		if (sel != null && sel instanceof TextSelection) {
+			TextSelection selection = (TextSelection) sel;
 
+			if (editorInput instanceof FileEditorInput) {
+				IFile editorFile = ((FileEditorInput) editorInput).getFile();
+				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
+				int insertFileOffset = getInsertOffset(astTu, selection);
+				SuitPushBackFinder suitPushBackFinder = new SuitPushBackFinder();
+				astTu.accept(suitPushBackFinder);
 
-	public void run(IAction action) {
-		try {	
-			if (editor != null && editor instanceof TextEditor) {
-				TextEditor ceditor = (TextEditor) editor;
-				ISelection sel = ceditor.getSelectionProvider().getSelection();
-				if(sel != null && sel instanceof TextSelection) {
-					TextSelection selection = (TextSelection)sel;
-					IEditorInput editorInput = ceditor.getEditorInput();
-					if (editorInput instanceof FileEditorInput) {
-						IFile editorFile = ((FileEditorInput) editorInput).getFile();
-						IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
-						int insertFileOffset = getInsertOffset(astTu, selection);
-						IDocumentProvider prov = ceditor.getDocumentProvider();
-						IDocument doc = prov.getDocument(editorInput);
-						MultiTextEdit mEdit = new MultiTextEdit();
-						
-						mEdit.addChild(createdEdit(insertFileOffset, doc, "thisIsATestFunc"));
-						mEdit.addChild(createPushBackEdit(editorFile, doc, astTu, "thisIsATestFunc"));
-						mEdit.apply(doc);
-					}
-				}
+				mEdit.addChild(createdEdit(insertFileOffset, doc, funcName));
+				mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
+						funcName, suitPushBackFinder));
+
 			}
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedTreeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
+		}
+		return mEdit;
 	}
 
 
-	private TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName) {
+	private TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitPushBackFinder suitPushBackFinder) {
 		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
-		SuitPushBackFinder suitPushBackFinder = new SuitPushBackFinder();
-		astTu.accept(suitPushBackFinder);
+		
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
 			IASTName name = suitPushBackFinder.getSuiteDeclName();
 			IBinding binding = name.resolveBinding();
@@ -192,15 +170,15 @@ public class NewTestFunction implements IEditorActionDelegate {
 	private TextEdit createdEdit(int insertTestFuncFileOffset, IDocument doc, String funcName) {
 		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		StringBuilder builder = new StringBuilder();
-		builder.append(newLine);
-		builder.append(newLine);
 		builder.append("void ");
 		builder.append(funcName);
 		builder.append("(){");
 		builder.append(newLine);
-		builder.append("\tASSERTM(\"start writing tests\", false);");
+		builder.append(TEST_STMT);
 		builder.append(newLine);
 		builder.append("}");
+		builder.append(newLine);
+		builder.append(newLine);
 		TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
 		return iedit;
 	}
@@ -221,7 +199,7 @@ public class NewTestFunction implements IEditorActionDelegate {
 			int nodeOffset = declaration.getFileLocation().getNodeOffset();
 			int nodeLength = declaration.getFileLocation().asFileLocation().getNodeLength();
 			if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength)) {
-				return (nodeOffset + nodeLength);
+				return (nodeOffset);
 			}else if(selOffset <= nodeOffset) {
 				return selOffset;
 			}
@@ -229,14 +207,8 @@ public class NewTestFunction implements IEditorActionDelegate {
 		return selOffset;
 	}
 
-
-	public void selectionChanged(IAction action, ISelection selection) {
-	}
-
-	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-		editor = targetEditor;
-	}
 	
 	
 
 }
+

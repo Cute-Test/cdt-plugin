@@ -153,7 +153,7 @@
           id="ch.hsr.ifs.cutelauncher.cEditorContribution"
           targetID="#CEditorContext">
        <action
-             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunction"
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
              id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
              label="New Test Function"
@@ -174,5 +174,14 @@
           id="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
           name="New Test Function">
     </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.bindings">
+    <key
+          commandId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
+          contextId="org.eclipse.cdt.ui.cEditorScope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+M3+Z">
+    </key>
  </extension>
    </plugin>
