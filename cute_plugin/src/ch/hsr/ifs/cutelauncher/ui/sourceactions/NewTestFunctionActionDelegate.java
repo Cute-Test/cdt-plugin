@@ -30,8 +30,10 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
@@ -45,13 +47,19 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 	private IEditorPart editor;
 	
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
 	}
 
 
 	public void run(IAction action) {
-		try {	
+		try {
+			if(editor == null) {
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				 if (page.isEditorAreaVisible()
+				      && page.getActiveEditor() != null
+				      && page.getActiveEditor() instanceof TextEditor) {
+				         editor = page.getActiveEditor();
+				 }
+			}
 			if (editor != null && editor instanceof TextEditor) {
 				NewTestFunctionAction newFuncAction = new NewTestFunctionAction();
 				TextEditor ceditor = (TextEditor) editor;
@@ -89,7 +97,6 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 				linkedModeUI.enter();
 				
 			}
-			System.err.println("error");
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,9 +133,7 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 	}
 
 
-	public void init(IWorkbenchWindow window) {
-		// TODO Auto-generated method stub
-		
+	public void init(IWorkbenchWindow window) {	
 	}
 	
 	

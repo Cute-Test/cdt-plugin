@@ -163,6 +163,9 @@
              id="ch.hsr.ifs.cutelauncher.testCodeMenu"
              label="Test Code"
              path="org.eclipse.cdt.ui.source.menu">
+          <groupMarker
+                name="ch.hsr.ifs.cutelauncher.testCodeMenu">
+          </groupMarker>
        </menu>
     </viewerContribution>
  </extension>
@@ -181,7 +184,25 @@
           commandId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
           contextId="org.eclipse.cdt.ui.cEditorScope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="M1+M3+Z">
+          sequence="M1+M3+F">
     </key>
+ </extension>
+ <extension
+       point="org.eclipse.ui.actionSets">
+    <actionSet
+          id="ch.hsr.ifr.cutelauncher.sourceGeneratorActions"
+          label="Test Source Actions"
+          visible="true">
+       <menu
+             id="ch.hsr.ifs.cutelauncher.menu"
+             label="Test Source Generators">
+       </menu>
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
+             id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
+             label="New Test Function">
+       </action>
+    </actionSet>
  </extension>
    </plugin>
