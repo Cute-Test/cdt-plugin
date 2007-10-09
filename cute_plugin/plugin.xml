@@ -143,6 +143,7 @@
              id="ch.hsr.ifs.cutelauncher.convertProjectAction"
              label="Convert to CUTE 1.2 Project"
              menubarPath="additions">
+             
        </action>
        <filter
              name="projectNature"
@@ -202,7 +203,18 @@
              definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
              id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
              label="New Test Function">
+          
        </action>
     </actionSet>
+ </extension>
+ <extension
+       point="org.eclipse.core.expressions.propertyTesters">
+    <propertyTester
+          class="ch.hsr.ifs.cutelauncher.ui.ProjectNaturePropertyTester"
+          id="ch.hsr.ifs.cutelauncher.projectNatureTester"
+          namespace="ch.hsr.ifs.cutelauncher"
+          properties="isCuteProject"
+          type="org.eclipse.core.resources.natures">
+    </propertyTester>
  </extension>
    </plugin>
