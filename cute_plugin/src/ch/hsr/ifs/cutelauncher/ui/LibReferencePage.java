@@ -117,12 +117,16 @@ public class LibReferencePage extends MBSCustomPage {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (IProject project : projects) {
 			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-			IConfiguration[] configs = info.getManagedProject().getConfigurations();
-			IBuildProperty artifactType = configs[0].getBuildProperties().getProperty(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_ID);
-			String artifactTypeName = artifactType.getValue().getId();
-			if(artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_SHAREDLIB)||
-					artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_STATICLIB)) {
-				libProjects.add(project);
+			if(info != null) {
+				IConfiguration[] configs = info.getManagedProject().getConfigurations();
+				IBuildProperty artifactType = configs[0].getBuildProperties().getProperty(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_ID);
+				if(artifactType != null) {
+					String artifactTypeName = artifactType.getValue().getId();
+					if(artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_SHAREDLIB)||
+							artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_STATICLIB)) {
+						libProjects.add(project);
+					}
+				}
 			}
 		}
 		return libProjects;
