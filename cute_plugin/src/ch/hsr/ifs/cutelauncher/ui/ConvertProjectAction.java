@@ -11,7 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
-import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -34,7 +34,7 @@ import ch.hsr.ifs.cutelauncher.CuteNature;
 public class ConvertProjectAction extends ActionDelegate implements
 		IObjectActionDelegate {
 	
-	private ICProject project; 
+	private IProject project; 
 
 	/**
 	 * 
@@ -53,9 +53,8 @@ public class ConvertProjectAction extends ActionDelegate implements
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection sel = (IStructuredSelection) selection;
 			Object obj = sel.getFirstElement();
-			if (obj instanceof ICProject) {
-				 ICProject project = (ICProject)obj;				 
-				 // Save the selected project.
+			if (obj instanceof IProject) {
+				IProject project = (IProject)obj;
 				 setSelectedProject(project);
 				 return;
 			}
@@ -64,7 +63,7 @@ public class ConvertProjectAction extends ActionDelegate implements
 	}
 
 
-	private void setSelectedProject(ICProject project) {
+	private void setSelectedProject(IProject project) {
 		this.project = project;		
 	}
 
@@ -74,15 +73,15 @@ public class ConvertProjectAction extends ActionDelegate implements
 		Shell shell = CuteLauncherPlugin.getActiveWorkbenchWindow().getShell();
 		
 		try {
-			String[] natureIds = project.getProject().getDescription().getNatureIds();
+			String[] natureIds = project.getDescription().getNatureIds();
 			if(hasCuteNature(natureIds)) {
 				MessageDialog.openInformation(shell, "Project is already converted", "This project is already a CUTE 1.2 project.");
 			}else if(checkProject(project)){
-				CuteNature.addCuteNature(project.getProject(), new NullProgressMonitor());
-				project.getProject().close(new NullProgressMonitor());
-				project.getProject().open(new NullProgressMonitor());
+				CuteNature.addCuteNature(project, new NullProgressMonitor());
+				project.close(new NullProgressMonitor());
+				project.open(new NullProgressMonitor());
 			}else {
-				MessageDialog.openError(shell, "No CUTE Project", "This is no CUTE Project.");
+				MessageDialog.openError(shell, "No CUTE Project", "This is not a valid CUTE Project.");
 			}
 		} catch (CoreException e) {
 			MessageDialog.openError(shell, "Can't convert Project", "Can't convert Project. " + e.getMessage());
@@ -90,8 +89,8 @@ public class ConvertProjectAction extends ActionDelegate implements
 	}
 
 
-	private boolean checkProject(ICProject project2) {
-		IPath cutePath = project2.getProject().getLocation().append("cute").append("cute.h");
+	private boolean checkProject(IProject project2) {
+		IPath cutePath = project2.getLocation().append("cute").append("cute.h");
 		return cutePath.makeAbsolute().toFile().exists();
 	}
 

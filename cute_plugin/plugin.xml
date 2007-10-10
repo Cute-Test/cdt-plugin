@@ -136,7 +136,7 @@
     <objectContribution
           adaptable="true"
           id="ch.hsr.ifs.cutelauncher.convertObjectContribution1"
-          objectClass="org.eclipse.cdt.core.model.ICProject">
+          objectClass="org.eclipse.core.resources.IProject">
        <action
              class="ch.hsr.ifs.cutelauncher.ui.ConvertProjectAction"
              enablesFor="1"
@@ -207,6 +207,7 @@
        </action>
     </actionSet>
  </extension>
+ <!--
  <extension
        point="org.eclipse.core.expressions.propertyTesters">
     <propertyTester
@@ -217,4 +218,5 @@
           type="org.eclipse.core.resources.natures">
     </propertyTester>
  </extension>
+ -->
    </plugin>
