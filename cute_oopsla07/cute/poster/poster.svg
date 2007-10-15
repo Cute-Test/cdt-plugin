@@ -13,15 +13,14 @@
    height="3780"
    id="svg4705"
    sodipodi:version="0.32"
-   inkscape:version="0.45"
+   inkscape:version="0.45.1"
    sodipodi:docbase="/home/egraf/workspaces/cute/cute_oopsla07/cute/poster"
    sodipodi:docname="poster.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster/poster.png"
    inkscape:export-xdpi="40"
    inkscape:export-ydpi="40"
-   version="1.0"
-   sodipodi:modified="true">
+   version="1.0">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -32,15 +31,15 @@
      objecttolerance="10"
      inkscape:pageopacity="0.98823529"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.64"
-     inkscape:cx="2493.8598"
-     inkscape:cy="1178.0623"
+     inkscape:zoom="0.22627417"
+     inkscape:cx="2945.356"
+     inkscape:cy="1877.0821"
      inkscape:document-units="px"
-     inkscape:current-layer="g3752"
-     inkscape:window-width="1592"
-     inkscape:window-height="1140"
-     inkscape:window-x="2"
-     inkscape:window-y="33"
+     inkscape:current-layer="layer3"
+     inkscape:window-width="1600"
+     inkscape:window-height="1146"
+     inkscape:window-x="0"
+     inkscape:window-y="31"
      showguides="true"
      inkscape:guide-bbox="true"
      width="170cm"
@@ -1687,29 +1686,21 @@
        xml:space="preserve"
        style="font-size:200px"
        id="text3555"
-       y="460.34253"
-       x="1361.855"><tspan
+       y="469.77106"
+       x="1617.5667"><tspan
          style="font-size:200px"
          sodipodi:role="line"
          id="tspan3557"
-         y="460.34253"
-         x="1361.855">CUTE: C++ Unit Testing Easier</tspan></text>
+         y="469.77106"
+         x="1617.5667">CUTE: C++ Unit Testing Easier</tspan></text>
     <image
-       y="204.69646"
+       y="214.125"
        x="146.38254"
        id="image11956"
        height="400.94058"
        width="908.79858"
        sodipodi:absref="/home/misto/repos/r2/doc/oopsla_poster/ifs_logo.png"
        xlink:href="ifs_logo.png" />
-    <image
-       y="205.63881"
-       x="5163.6641"
-       id="image11980"
-       height="400.77237"
-       width="609.90118"
-       sodipodi:absref="/home/misto/repos/r2/doc/oopsla_poster/member_eclipse_logo.png"
-       xlink:href="member_eclipse_logo.png" />
     <g
        transform="matrix(4.5,0,0,4.5,-1032.3835,-368.52122)"
        id="g9241"
@@ -2259,7 +2250,12 @@
            sodipodi:role="line"
            y="2403.5945"
            x="3745.8643"
-           id="tspan11281">• diff-viewer for failing tests  </tspan></text>
+           id="tspan11281">• diff-viewer for failing tests</tspan><tspan
+           style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+           sodipodi:role="line"
+           y="2473.5945"
+           x="3745.8643"
+           id="tspan2472">• test function code generator  </tspan></text>
       <image
          xlink:href="resultViewer.png"
          sodipodi:absref="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster/resultViewer.png"
@@ -2267,7 +2263,7 @@
          height="359.27573"
          id="image11343"
          x="3864.2014"
-         y="2493.3843" />
+         y="2533.3843" />
       <image
          xlink:href="diffViewer.png"
          sodipodi:absref="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster/diffViewer.png"
@@ -2275,7 +2271,7 @@
          height="351.64661"
          id="image11386"
          x="3864.3064"
-         y="2893.8418" />
+         y="2933.8418" />
       <rect
          rx="16.73793"
          height="126.93214"
@@ -2298,5 +2294,13 @@
            sodipodi:role="line"
            style="font-family:URW Gothic L">CUTE Eclipse Plug-in</tspan></text>
     </g>
+    <image
+       y="215.86061"
+       x="5248.7998"
+       id="image2469"
+       height="397.46936"
+       width="596"
+       sodipodi:absref="/home/egraf/workspaces/cute/cute_oopsla07/cute/poster/cute_logo_frutiger_inFlag.png"
+       xlink:href="cute_logo_frutiger_inFlag.png" />
   </g>
 </svg>
