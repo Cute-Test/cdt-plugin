@@ -13,6 +13,7 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -61,6 +62,9 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 				 }
 			}
 			if (editor != null && editor instanceof TextEditor) {
+				if(editor.isDirty()){
+					editor.doSave(new NullProgressMonitor());
+				}
 				NewTestFunctionAction newFuncAction = new NewTestFunctionAction();
 				TextEditor ceditor = (TextEditor) editor;
 				IEditorInput editorInput = ceditor.getEditorInput();
