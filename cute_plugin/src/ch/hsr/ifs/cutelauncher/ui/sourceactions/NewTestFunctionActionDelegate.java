@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.RewriteSessionEditProcessor;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.link.LinkedModeModel;
 import org.eclipse.jface.text.link.LinkedModeUI;
@@ -74,20 +75,23 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 				String funcName = "newTestFunction";
 				
 				MultiTextEdit mEdit = newFuncAction.createEdit(ceditor, editorInput, doc, funcName);
-				mEdit.apply(doc);
+				RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
+				processor.performEdits();
 				
-				ISourceViewer viewer = ((CEditor)editor).getViewer();
+				ISourceViewer viewer = ((CEditor)editor).getViewer();				
 				LinkedModeModel model = new LinkedModeModel();
 				
 				LinkedPositionGroup group = new LinkedPositionGroup();
 				
 				TextEdit[] edits = mEdit.getChildren();
+				int totalEditLength = 0;
 				for (TextEdit textEdit : edits) {
 					String insert = ((InsertEdit)textEdit).getText();
 					if(insert.contains(funcName)) {
 						int start = textEdit.getOffset();
 						int indexOfFuncName = insert.indexOf(funcName);
-						group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName, funcName.length()));
+						group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName + totalEditLength, funcName.length()));
+						totalEditLength += insert.length();
 					}
 				}
 				
