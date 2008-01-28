@@ -67,11 +67,12 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		}
 		monitor.worked( 1 );
 		try {
-			IPath exePath = verifyProgramPath( config );
+			IPath exePath=verifyProgramPath( config );
 			File wd = getWorkingDirectory( config );
 			if ( wd == null ) {
 				wd = new File( System.getProperty( "user.home", "." ) ); //$NON-NLS-1$ //$NON-NLS-2$
 			}
+			
 			String arguments[] = getProgramArgumentsArray( config );
 			ArrayList<String> command = new ArrayList<String>( 1 + arguments.length );
 			command.add( exePath.toOSString() );
@@ -92,8 +93,8 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				} catch (InterruptedException e) {
 				}
 				TextConsole textCons = (TextConsole) console;
-				ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons);
-				ModellBuilder modelHandler = new ModellBuilder(exePath, launch);
+				ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons,config);
+				ModellBuilder modelHandler = new ModellBuilder(exePath, launch,config);
 				CutePatternListener listener = new CutePatternListener();
 				listener.addHandler(handler);
 				listener.addHandler(modelHandler);
@@ -141,4 +142,5 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		return p;
 	}
 
+	
 }

@@ -357,6 +357,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 * @param mode
 	 */
 	private void searchAndLaunch(final Object[] elements, String mode) {
+		System.out.println("CuteLaunchShortcut>searchAndLaunch");
 		if (elements != null && elements.length > 0) {
 			IBinary bin = null;
 			if (elements.length == 1 && elements[0] instanceof IBinary) {
@@ -382,6 +383,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 												for (int j = 0; j < bins.length; j++) {
 													if (bins[j].isExecutable()) {
 														results.add(bins[j]);
+														System.out.println("CuteLaunchShortcut>bin results:"+bins[j]);
 													}
 												}
 											} catch (CModelException e) {

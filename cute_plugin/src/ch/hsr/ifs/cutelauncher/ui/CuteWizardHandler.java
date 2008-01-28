@@ -113,7 +113,9 @@ public class CuteWizardHandler extends MBSWizardHandler {
 				
 		if(CCorePlugin.getDefault().isNewStyleProject(project.getProject())){
 			ICSourceEntry newEntry = new CSourceEntry(folder, null, 0);
+			System.out.println("****"+newEntry+"???");
 			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
+			System.out.println("****"+des+"???");
 			addEntryToAllCfgs(des, newEntry, false);
 			CCorePlugin.getDefault().setProjectDescription(project.getProject(), des, false, new NullProgressMonitor());
 		}

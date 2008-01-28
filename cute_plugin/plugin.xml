@@ -83,6 +83,14 @@
       </wizard>
 
    </extension>
+ <extension
+       point="org.eclipse.cdt.ui.CDTWizard">
+    <wizard
+          class="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizard"
+          name="CUTE Suite Module"
+          parent="ch.hsr.ifs.cutelauncher.ui.NewCuteProjectWizard">
+    </wizard>
+ </extension>
    
    <extension
          point="org.eclipse.ui.preferencePages">

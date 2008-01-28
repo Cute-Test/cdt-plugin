@@ -45,7 +45,7 @@ public class CuteLauncherPlugin extends AbstractUIPlugin {
 	private final CuteModel model = new CuteModel();
 	
 	private Display display;
-	
+		
 	/**
 	 * The constructor
 	 */

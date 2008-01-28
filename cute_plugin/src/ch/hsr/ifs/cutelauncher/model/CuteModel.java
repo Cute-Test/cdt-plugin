@@ -99,5 +99,4 @@ public class CuteModel {
 	public TestSession getSession() {
 		return session;
 	}
-	
 }
