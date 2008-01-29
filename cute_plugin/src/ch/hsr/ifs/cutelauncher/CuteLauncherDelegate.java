@@ -93,16 +93,8 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				} catch (InterruptedException e) {
 				}
 				TextConsole textCons = (TextConsole) console;
-				if(config!=null && config.getAttribute("useCustomSrcPath", false)){
-					try{
-						String rootpath=org.eclipse.core.runtime.Platform.getLocation().toOSString();
-						String customSrcPath=config.getAttribute("customSrcPath","");
-						String fileSeparator=System.getProperty("file.separator");
-						exePath=new org.eclipse.core.runtime.Path(rootpath+customSrcPath+fileSeparator);
-					}catch(CoreException ce){CuteLauncherPlugin.getDefault().getLog().log(ce.getStatus());}
-				}else{
-					exePath=exePath.removeLastSegments(1);
-				}
+
+				exePath=sourcelookupPath(config,exePath);
 				
 				ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons);
 				ModellBuilder modelHandler = new ModellBuilder(exePath, launch);
@@ -116,6 +108,19 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			monitor.done();
 		}		
 	}
+	
+	public IPath sourcelookupPath(ILaunchConfiguration config, IPath exePath){
+		try{
+		if(config!=null && config.getAttribute("useCustomSrcPath", false)){
+			String rootpath=org.eclipse.core.runtime.Platform.getLocation().toOSString();
+			String customSrcPath=config.getAttribute("customSrcPath","");
+			String fileSeparator=System.getProperty("file.separator");
+			return new org.eclipse.core.runtime.Path(rootpath+customSrcPath+fileSeparator);
+		}else{
+			return exePath.removeLastSegments(1);
+		}}catch(CoreException ce){CuteLauncherPlugin.getDefault().getLog().log(ce.getStatus());}
+		return exePath;//on error, log and make no changes
+ 	}
 	//String rootpath=ResourcesPlugin.getWorkspace().getRoot().getFullPath().toOSString();
 	//the above does not return the location in the OS  
 	/*fileName:MakeTest.cpp
