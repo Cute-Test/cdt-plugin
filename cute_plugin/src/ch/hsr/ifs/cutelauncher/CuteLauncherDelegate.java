@@ -93,8 +93,19 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				} catch (InterruptedException e) {
 				}
 				TextConsole textCons = (TextConsole) console;
-				ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons,config);
-				ModellBuilder modelHandler = new ModellBuilder(exePath, launch,config);
+				if(config!=null && config.getAttribute("useCustomSrcPath", false)){
+					try{
+						String rootpath=org.eclipse.core.runtime.Platform.getLocation().toOSString();
+						String customSrcPath=config.getAttribute("customSrcPath","");
+						String fileSeparator=System.getProperty("file.separator");
+						exePath=new org.eclipse.core.runtime.Path(rootpath+customSrcPath+fileSeparator);
+					}catch(CoreException ce){CuteLauncherPlugin.getDefault().getLog().log(ce.getStatus());}
+				}else{
+					exePath=exePath.removeLastSegments(1);
+				}
+				
+				ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons);
+				ModellBuilder modelHandler = new ModellBuilder(exePath, launch);
 				CutePatternListener listener = new CutePatternListener();
 				listener.addHandler(handler);
 				listener.addHandler(modelHandler);
@@ -105,7 +116,12 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			monitor.done();
 		}		
 	}
-	
+	//String rootpath=ResourcesPlugin.getWorkspace().getRoot().getFullPath().toOSString();
+	//the above does not return the location in the OS  
+	/*fileName:MakeTest.cpp
+	filePath:D:/runtime-EclipseApplication/sourcePathTestingPrj/src/MakeTest.cpp
+	rtpath:D:/runtime-EclipseApplication/sourcePathTestingPrj/src/bin
+	file:L/sourcePathTestingPrj/src/MakeTest.cpp	*/
 	protected Process exec( String[] cmdLine, String[] environ, File workingDirectory, boolean usePty ) throws CoreException {
 		Process p = null;
 		try {
@@ -141,6 +157,5 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		}
 		return p;
 	}
-
 	
 }

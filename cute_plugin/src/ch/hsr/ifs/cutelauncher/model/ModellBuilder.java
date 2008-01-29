@@ -16,8 +16,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 import ch.hsr.ifs.cutelauncher.TestEventHandler;
 
@@ -31,16 +29,11 @@ public class ModellBuilder extends TestEventHandler {
 	private IPath rtPath;
 	private TestCase currentTestCase;
 	private ILaunch launch;
-	private ILaunchConfiguration config;
-	
-	public ModellBuilder(IPath exePath, ILaunch launch,ILaunchConfiguration config) {
-		super();
-		this.rtPath = exePath.removeLastSegments(1);
-		this.launch = launch; 
-		this.config=config;
-	}
+		
 	public ModellBuilder(IPath exePath, ILaunch launch) {
-		this(exePath,launch,null);
+		super();
+		this.rtPath = exePath;
+		this.launch = launch; 
 	}
 	public ModellBuilder(IPath path) {
 		this(path, null);
@@ -63,31 +56,13 @@ public class ModellBuilder extends TestEventHandler {
 	}
 
 	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason){
-		IPath filePath=null;
-		
-		if(config==null)filePath = rtPath.append(fileName);
-		else{
-			try{
-				if(false==config.getAttribute("useCustomSrcPath", false))filePath = rtPath.append(fileName);	
-				else{
-					String rootpath=org.eclipse.core.runtime.Platform.getLocation().toOSString();
-					String customSrcPath=config.getAttribute("customSrcPath","");
-					String fileSeparator=System.getProperty("file.separator");
-					filePath=new org.eclipse.core.runtime.Path(rootpath+customSrcPath+fileSeparator+fileName);
-				}
-			}catch(CoreException ce){CuteLauncherPlugin.getDefault().getLog().log(ce.getStatus());}
-		}
-		//String rootpath=ResourcesPlugin.getWorkspace().getRoot().getFullPath().toOSString();
-		//the above does not return the location in the OS  
+		IPath filePath=rtPath.append(fileName);
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
 		int lineNumber = Integer.parseInt(lineNo);
 		model.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase);
-		/*fileName:MakeTest.cpp
-		filePath:D:/runtime-EclipseApplication/sourcePathTestingPrj/src/MakeTest.cpp
-		rtpath:D:/runtime-EclipseApplication/sourcePathTestingPrj/src/bin
-		file:L/sourcePathTestingPrj/src/MakeTest.cpp	*/
+		
 	}
-
+	
 	public void handleTestStart(IRegion reg, String suitename) {
 		currentTestCase = new TestCase(suitename);
 		model.addTest(currentTestCase);		
