@@ -13,6 +13,8 @@ public class AllTests {
 		suite.addTest(PatternListenerSuite.suite());
 //		suite.addTest(HyperlinkSuite.suite()); // TODO need ui-test
 		suite.addTest(ModelBuilderSuite.suite());
+		//suite.addTest(new DelegateTest("testSourcelookupCustomPath"));
+		suite.addTest(DelegateTest.suite());
 		//$JUnit-END$
 		return suite;
 	}
