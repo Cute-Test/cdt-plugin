@@ -38,7 +38,7 @@ import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.model.ModellBuilder;
-
+import ch.hsr.ifs.cutelauncher.ui.CustomisedLaunchConfigTab;
 /**
  * @author egraf
  *
@@ -77,7 +77,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			ArrayList<String> command = new ArrayList<String>( 1 + arguments.length );
 			command.add( exePath.toOSString() );
 			command.addAll( Arrays.asList( arguments ) );
-			String[] commandArray = (String[])command.toArray( new String[command.size()] );
+			String[] commandArray = command.toArray( new String[command.size()] );
 			boolean usePty = config.getAttribute( "ch.hsr.ifs.cutelauncher.useTerminal", true);
 			monitor.worked( 2 );
 			Process process = exec( commandArray, getEnvironment( config ), wd, usePty );
@@ -111,9 +111,9 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 	
 	public IPath sourcelookupPath(ILaunchConfiguration config, IPath exePath){
 		try{
-		if(config!=null && config.getAttribute("useCustomSrcPath", false)){
+		if(config!=null && config.getAttribute(CustomisedLaunchConfigTab.USE_CUSTOM_SRC_PATH, false)){
 			String rootpath=org.eclipse.core.runtime.Platform.getLocation().toOSString();
-			String customSrcPath=config.getAttribute("customSrcPath","");
+			String customSrcPath=config.getAttribute(CustomisedLaunchConfigTab.CUSTOM_SRC_PATH,"");
 			String fileSeparator=System.getProperty("file.separator");
 			return new org.eclipse.core.runtime.Path(rootpath+customSrcPath+fileSeparator);
 		}else{

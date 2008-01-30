@@ -81,17 +81,13 @@
             name="CUTE Library Test Project"
             parent="ch.hsr.ifs.cutelauncher.ui.NewCuteProjectWizard">
       </wizard>
-
-   </extension>
- <extension
-       point="org.eclipse.cdt.ui.CDTWizard">
     <wizard
           class="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizard"
           name="CUTE Suite Module"
           parent="ch.hsr.ifs.cutelauncher.ui.NewCuteProjectWizard">
     </wizard>
- </extension>
-   
+   </extension>
+    
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -214,6 +210,15 @@
           
        </action>
     </actionSet>
+ </extension>
+ <extension
+       point="org.eclipse.pde.ui.templates">
+    <template
+          class="ch.hsr.ifs.cutelauncher.ui.CuteSuiteTemplate"
+          contributingId="cute_plugin.template1"
+          id="cute_plugin.template1"
+          name="new cute suite template">
+    </template>
  </extension>
  <!--
  <extension

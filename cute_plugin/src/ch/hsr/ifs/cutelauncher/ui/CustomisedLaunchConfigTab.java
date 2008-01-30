@@ -48,6 +48,8 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 //import org.eclipse.jface.window.Window;
 
 public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
+	public static final String CUSTOM_SRC_PATH = "customSrcPath";
+	public static final String USE_CUSTOM_SRC_PATH = "useCustomSrcPath";
 	protected Label descriptionLabel;
 	private Button fLocalRadioButton;
 	private Button fCustomSrcRadioButton;
@@ -158,13 +160,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	 */
 	private IContainer getContainer(String path) {
 		Path containerPath = new Path(path);
-		return (IContainer) getWorkspaceRoot().findMember(containerPath);
-	}
-	/**
-	 * Convenience method for getting the workspace root.
-	 */
-	private IWorkspaceRoot getWorkspaceRoot() {
-		return ResourcesPlugin.getWorkspace().getRoot();
+		return (IContainer) ResourcesPlugin.getWorkspace().getRoot().findMember(containerPath);
 	}
 	/**
 	 * Provides a persistable dialog for selecting the shared project location
@@ -193,11 +189,11 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try{
-		boolean flag=configuration.getAttribute("useCustomSrcPath", false);
+		boolean flag=configuration.getAttribute(USE_CUSTOM_SRC_PATH, false);
 		if(flag){
 			fCustomSrcRadioButton.setSelection(true);
 			setSharedEnabled(true);
-			fCustomSrcLocationText.setText(configuration.getAttribute("customSrcPath",""));
+			fCustomSrcLocationText.setText(configuration.getAttribute(CUSTOM_SRC_PATH,""));
 		}else{
 			fLocalRadioButton.setSelection(true);
 			setSharedEnabled(false);
@@ -205,11 +201,11 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 		}catch(CoreException ce){CuteLauncherPlugin.getDefault().getLog().log(ce.getStatus());}
 	}
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute("useCustomSrcPath",isShared());
-		configuration.setAttribute("customSrcPath",fCustomSrcLocationText.getText());
+		configuration.setAttribute(USE_CUSTOM_SRC_PATH,isShared());
+		configuration.setAttribute(CUSTOM_SRC_PATH,fCustomSrcLocationText.getText());
 	}
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute("useCustomSrcPath",false);
+		configuration.setAttribute(USE_CUSTOM_SRC_PATH,false);
 	}
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		if(isShared() && fCustomSrcLocationText.getText().equals("")){
