@@ -211,15 +211,6 @@
        </action>
     </actionSet>
  </extension>
- <extension
-       point="org.eclipse.pde.ui.templates">
-    <template
-          class="ch.hsr.ifs.cutelauncher.ui.CuteSuiteTemplate"
-          contributingId="cute_plugin.template1"
-          id="cute_plugin.template1"
-          name="new cute suite template">
-    </template>
- </extension>
  <!--
  <extension
        point="org.eclipse.core.expressions.propertyTesters">

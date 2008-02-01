@@ -58,15 +58,9 @@ import ch.hsr.ifs.cutelauncher.CuteNature;
  *
  */
 public class CuteWizardHandler extends MBSWizardHandler {
-	
-	
-
 	public CuteWizardHandler(Composite p, IWizard w) {
-		
 		super(new CuteBuildPropertyValue(), p, w);
 	}
-
-	
 	
 	@Override
 	public void createProject(IProject project, boolean defaults,
@@ -75,7 +69,18 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		createCuteProject(project);
 	}
 
+	@Override
+	public void createProject(IProject project, boolean defaults)
+			throws CoreException {
+		super.createProject(project, defaults);
+		createCuteProject(project);
+	}
 
+	private void createCuteProject(IProject project) throws CoreException {
+		CuteNature.addCuteNature(project, new NullProgressMonitor());
+		createCuteProjectFolders(project);
+	}
+	
 	protected void createCuteProjectFolders(IProject project)
 			throws CoreException {
 		IFolder srcFolder = createFolder(project, "src");
@@ -87,23 +92,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				getTestMainFile(project), true);
 	}
-
-
-
-	@Override
-	public void createProject(IProject project, boolean defaults)
-			throws CoreException {
-		super.createProject(project, defaults);
-		createCuteProject(project);
-	}
-
-
-
-	private void createCuteProject(IProject project) throws CoreException {
-		CuteNature.addCuteNature(project, new NullProgressMonitor());
-		createCuteProjectFolders(project);
-	}
-
+	
 	private IFolder createFolder(IProject project, String relPath)
 			throws CoreException {
 		IFolder folder= project.getProject().getFolder(relPath);
@@ -113,15 +102,13 @@ public class CuteWizardHandler extends MBSWizardHandler {
 				
 		if(CCorePlugin.getDefault().isNewStyleProject(project.getProject())){
 			ICSourceEntry newEntry = new CSourceEntry(folder, null, 0);
-			System.out.println("****"+newEntry+"???");
 			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
-			System.out.println("****"+des+"???");
 			addEntryToAllCfgs(des, newEntry, false);
 			CCorePlugin.getDefault().setProjectDescription(project.getProject(), des, false, new NullProgressMonitor());
 		}
 		return folder;
 	}
-	
+
 	private void createFolder(IFolder folder, boolean force, boolean local, IProgressMonitor monitor) throws CoreException {
 		if (!folder.exists()) {
 			IContainer parent= folder.getParent();
@@ -141,7 +128,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 			cfg.setSourceEntries(entries);
 		}
 	}
-	
+		
 	private ICSourceEntry[] addEntry(ICSourceEntry[] entries, ICSourceEntry entry, boolean removeProj){
 		Set<ICSourceEntry> set = new HashSet<ICSourceEntry>();
 		for(int i = 0; i < entries.length; i++){
@@ -153,7 +140,6 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		set.add(entry);
 		return set.toArray(new ICSourceEntry[set.size()]);
 	}
-	
 	
 	@SuppressWarnings("unchecked")
 	private void addCuteFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
@@ -172,7 +158,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void addTestFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
+	protected void addTestFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
 		Enumeration en = CuteLauncherPlugin.getDefault().getBundle().findEntries("templates/projecttemplates/src", "*.cpp", false);
 		while(en.hasMoreElements()) {
 			URL url = (URL)en.nextElement();
@@ -191,7 +177,6 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
 		setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH);
 	}
-
 
 	protected void setOptionInAllConfigs(IProject project, String value, int optionType)
 			throws CoreException {
