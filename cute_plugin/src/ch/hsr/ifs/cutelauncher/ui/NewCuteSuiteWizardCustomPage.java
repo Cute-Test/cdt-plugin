@@ -18,18 +18,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 
-	private final CDTConfigWizardPage conifgPage;
+	private final CDTConfigWizardPage configPage;
 	private final IWizardPage startingWizardPage;
 	
-	public NewCuteSuiteWizardCustomPage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage){
+	public NewCuteSuiteWizardCustomPage(CDTConfigWizardPage configWizardPage, IWizardPage startingWizardPage){
 		pageID="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage";
-		this.conifgPage = configWizardPage;
-		this.startingWizardPage = staringWizardPage;
+		this.configPage = configWizardPage;
+		this.startingWizardPage = startingWizardPage;
 	}
 
 	@Override
 	public IWizardPage getNextPage() {
-		return conifgPage;
+		return configPage;
 	}
 
 	@Override
@@ -39,7 +39,9 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	
 	@Override
 	protected boolean isCustomPageComplete() {
-		if(suitenameText.getText().equals("")){ 
+		if(suitenameText.getText().equals("")){
+			//since canFinish cannot be overwritten from this class, 
+			//we will need to accept a default name, which is better design 
 			errmsg="Please enter a suite name.";
 			return false;
 		}
@@ -82,6 +84,8 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	    suitenameText.addModifyListener(new ModifyListener() {
 	    	public void modifyText(ModifyEvent e){
 			IWizardContainer iwc=getWizard().getContainer();
+			//have to call one by one as 
+			//org.eclipse.jface.wizard.Wizard.Dialog.update() is protected 
 			iwc.updateButtons();
 			iwc.updateMessage();
 			iwc.updateTitleBar();

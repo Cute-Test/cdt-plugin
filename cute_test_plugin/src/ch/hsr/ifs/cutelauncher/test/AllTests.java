@@ -15,6 +15,7 @@ public class AllTests {
 		suite.addTest(ModelBuilderSuite.suite());
 		//suite.addTest(new DelegateTest("testSourcelookupCustomPath"));
 		suite.addTest(SourceLookupPathTest.suite());
+		suite.addTest(CuteSuiteWizardHandlerTest.suite());
 		//$JUnit-END$
 		return suite;
 	}

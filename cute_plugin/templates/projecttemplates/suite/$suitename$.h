@@ -1,1 +1,1 @@
-extern cute::suite make_suite_$suiteName$();
+extern cute::suite make_suite_$suitename$();

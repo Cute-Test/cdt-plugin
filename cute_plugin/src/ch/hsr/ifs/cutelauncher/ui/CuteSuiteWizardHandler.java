@@ -33,32 +33,41 @@ import org.eclipse.swt.widgets.Composite;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
-	private final NewCuteSuiteWizardCustomPage libRefPage;
+	private final NewCuteSuiteWizardCustomPage suitewizPage;
+	
+	//for unit testing
+	public CuteSuiteWizardHandler(String suitename){
+		this(null,null);
+		this.suitename=suitename;
+	}
 	public CuteSuiteWizardHandler(Composite p, IWizard w) {
 		super( p, w);
-		libRefPage = new NewCuteSuiteWizardCustomPage(getConfigPage(), getStartingPage());
-		libRefPage.setPreviousPage(getStartingPage());
-		libRefPage.setWizard(getWizard());
+		suitewizPage = new NewCuteSuiteWizardCustomPage(getConfigPage(), getStartingPage());
+		suitewizPage.setPreviousPage(getStartingPage());
+		suitewizPage.setWizard(getWizard());
 		MBSCustomPageManager.init();
-		MBSCustomPageManager.addStockPage(libRefPage, libRefPage.getPageID());
+		MBSCustomPageManager.addStockPage(suitewizPage, suitewizPage.getPageID());
 	}
 	@Override
 	public IWizardPage getSpecificPage() {
-		
-		return libRefPage;
+		return suitewizPage;
 	}
-	
+
 	String suitename;
 	
 	@Override
 	public void addTestFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
-		suitename=libRefPage.getSuiteName();
+		suitename=suitewizPage.getSuiteName();
+		copyFiles(folder,monitor);
+	}
+	//extract method for unit testing
+	public void copyFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
 		copyFile(folder,monitor,"Test.cpp","Test.cpp");
 		copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp");
 		copyFile(folder,monitor,"$suitename$.h",suitename+".h");
 	}
 	@SuppressWarnings("unchecked")
-	private void copyFile(IFolder folder, IProgressMonitor monitor,String templateFilename, String targetFilename)throws CoreException{
+	protected void copyFile(IFolder folder, IProgressMonitor monitor,String templateFilename, String targetFilename)throws CoreException{
 		Enumeration en = CuteLauncherPlugin.getDefault().getBundle().findEntries("templates/projecttemplates/suite", templateFilename, false);
 		if(en.hasMoreElements()){
 			URL url = (URL)en.nextElement();
@@ -76,12 +85,13 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 	
 	//parse the template source file for $suitename$ and replace it with the user's entry
-	private ByteArrayInputStream implantActualsuitename(URL url)throws IOException{
+	public ByteArrayInputStream implantActualsuitename(URL url)throws IOException{
 		BufferedReader br=new BufferedReader(new InputStreamReader(url.openStream()));
 		StringBuffer buffer = new StringBuffer();
+		String linesep=System.getProperty("line.separator");
 		while(br.ready()){
 			String a=br.readLine();
-			buffer.append(a.replaceAll("[$]suitename[$]", suitename)+"\n");
+			buffer.append(a.replaceAll("[$]suitename[$]", suitename)+linesep);
 		}
 		return new ByteArrayInputStream(buffer.toString().getBytes());
 	}
