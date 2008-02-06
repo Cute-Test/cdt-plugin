@@ -159,11 +159,33 @@
           targetID="#CEditorContext">
        <action
              class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
+             definitionId="cute_plugin.command1"
+             id="ch.hsr.ifs.cutelauncher.addTestMemberSuiteAction"
+             label="Add Test Member to Suite"
+             menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
+       </action>
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
+             definitionId="cute_plugin.command1"
+             id="ch.hsr.ifs.cutelauncher.addTestFunctorSuiteAction"
+             label="Add Test Functor to Suite"
+             menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
+       </action>
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
+             definitionId="cute_plugin.command1"
+             id="ch.hsr.ifs.cutelauncher.addTestFunctionSuiteAction"
+             label="Add Test Function to Suite"
+             menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
+       </action>
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
              id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
              label="New Test Function"
              menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
        </action>
+       
        <menu
              id="ch.hsr.ifs.cutelauncher.testCodeMenu"
              label="Test Code"
@@ -172,6 +194,15 @@
                 name="ch.hsr.ifs.cutelauncher.testCodeMenu">
           </groupMarker>
        </menu>
+       <menu
+             id="addTestMenu"
+             label="Add Test"
+             path="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
+          <groupMarker
+                name="addTestGroup">
+          </groupMarker>
+       </menu>
+
     </viewerContribution>
  </extension>
  <extension
@@ -181,6 +212,12 @@
           description="Create new test function."
           id="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
           name="New Test Function">
+    </command>
+    <command
+          categoryId="org.eclipse.cdt.ui.category.source"
+          description="Add existing function to current Suite"
+          id="cute_plugin.command1"
+          name="Add Test Function to Suite">
     </command>
  </extension>
  <extension

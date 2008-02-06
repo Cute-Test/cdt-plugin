@@ -72,6 +72,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 			Bundle bundle = TestPlugin.getDefault().getBundle();
 			Path path = new Path("testDefs/SuiteWizTest.cpp");
 			URL url=FileLocator.toFileURL(FileLocator.find(bundle, path, null));
+			
 			ByteArrayInputStream bais=cswh.implantActualsuitename(url);
 			
 			Bundle bundle1 = TestPlugin.getDefault().getBundle();

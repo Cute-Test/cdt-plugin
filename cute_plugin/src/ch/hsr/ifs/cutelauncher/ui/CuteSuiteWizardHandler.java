@@ -87,7 +87,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	//parse the template source file for $suitename$ and replace it with the user's entry
 	public ByteArrayInputStream implantActualsuitename(URL url)throws IOException{
 		BufferedReader br=new BufferedReader(new InputStreamReader(url.openStream()));
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		String linesep=System.getProperty("line.separator");
 		while(br.ready()){
 			String a=br.readLine();
