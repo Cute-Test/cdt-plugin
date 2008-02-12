@@ -172,7 +172,7 @@
              menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
        </action>
        <action
-             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctiontoSuiteDelegate"
              definitionId="cute_plugin.command1"
              id="ch.hsr.ifs.cutelauncher.addTestFunctionSuiteAction"
              label="Add Test Function to Suite"
@@ -185,7 +185,7 @@
              label="New Test Function"
              menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
        </action>
-       
+
        <menu
              id="ch.hsr.ifs.cutelauncher.testCodeMenu"
              label="Test Code"

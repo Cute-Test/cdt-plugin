@@ -3,7 +3,7 @@
 #include "cute_runner.h"
 #include "$suitename$.h"
 
-void runSuite(){
+void runTest(){
 	cute::suite s=make_suite_$suitename$();
 	
 	cute::ide_listener lis;
@@ -11,7 +11,7 @@ void runSuite(){
 }
 
 int main(){
-    runSuite();
+    runTests();
 }
 
 

@@ -11,7 +11,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
-import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
@@ -26,9 +25,6 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
-import org.eclipse.cdt.core.index.IIndex;
-import org.eclipse.cdt.core.model.CoreModelUtil;
-import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -47,13 +43,13 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author Emanuel Graf
  *
  */
-public class NewTestFunctionAction {
+public class NewTestFunctionAction extends AbstractFunctionAction{
 	
 	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
 
 	private final class SuitPushBackFinder extends ASTVisitor {
 		private IASTName suiteDeclName = null;
-		
+
 		
 		{
 			shouldVisitStatements = true;
@@ -85,6 +81,7 @@ public class NewTestFunctionAction {
 	}
 	
 	
+	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
 			throws CoreException {
@@ -183,29 +180,6 @@ public class NewTestFunctionAction {
 		return iedit;
 	}
 
-
-	private IASTTranslationUnit getASTTranslationUnit(IFile editorFile)
-			throws CoreException {
-		ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
-		IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
-		IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
-		return astTu;
-	}
-
-	private int getInsertOffset(IASTTranslationUnit astTu, TextSelection selection) {
-		int selOffset = selection.getOffset();
-		IASTDeclaration[] decls = astTu.getDeclarations();
-		for (IASTDeclaration declaration : decls) {
-			int nodeOffset = declaration.getFileLocation().getNodeOffset();
-			int nodeLength = declaration.getFileLocation().asFileLocation().getNodeLength();
-			if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength)) {
-				return (nodeOffset);
-			}else if(selOffset <= nodeOffset) {
-				return selOffset;
-			}
-		}
-		return selOffset;
-	}
 
 	
 	

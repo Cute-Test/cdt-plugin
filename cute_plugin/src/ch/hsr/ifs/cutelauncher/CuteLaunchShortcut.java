@@ -134,7 +134,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 						}
 					}
 				}
-				debugConfigs = (ICDebugConfiguration[]) debugList.toArray(new ICDebugConfiguration[0]);
+				debugConfigs = debugList.toArray(new ICDebugConfiguration[0]);
 				if (debugConfigs.length == 1) {
 					debugConfig = debugConfigs[0];
 				} else if (debugConfigs.length > 1) {
@@ -145,7 +145,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				configuration = createConfiguration(bin, debugConfig);
 			}
 		} else if (candidateCount == 1) {
-			configuration = (ILaunchConfiguration) candidateConfigs.get(0);
+			configuration = candidateConfigs.get(0);
 		} else {
 			// Prompt the user to choose a config.  A null result means the user
 			// cancelled the dialog, in which case this method returns null,
@@ -357,7 +357,6 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 * @param mode
 	 */
 	private void searchAndLaunch(final Object[] elements, String mode) {
-		System.out.println("CuteLaunchShortcut>searchAndLaunch");
 		if (elements != null && elements.length > 0) {
 			IBinary bin = null;
 			if (elements.length == 1 && elements[0] instanceof IBinary) {
@@ -415,7 +414,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				} else if (count > 1) {
 					bin = chooseBinary(results, mode);
 				} else {
-					bin = (IBinary)results.get(0);
+					bin = results.get(0);
 				}
 			}
 			if (bin != null) {
