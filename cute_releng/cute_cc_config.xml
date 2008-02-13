@@ -9,11 +9,17 @@
 	    </listeners>
 	    
 	    <modificationset requiremodification="true" quietperiod="120">
-		    <cvs localworkingcopy="/usr/share/cruisecontrol/projects/cute/cute_test_feature"/>
+		    <!-- <cvs localworkingcopy="/usr/share/cruisecontrol/projects/cute/cute_test_feature"/>
 		    <cvs localworkingcopy="/usr/share/cruisecontrol/projects/cute/cute_test_plugin" />
 		    <cvs localworkingcopy="/usr/share/cruisecontrol/projects/cute/cute_feature" />
 		    <cvs localworkingcopy="/usr/share/cruisecontrol/projects/cute/cute_plugin" />
-		    <cvs localworkingcopy="/usr/share/cruisecontrol/projects/cute/cute_releng" />
+		    <cvs localworkingcopy="/usr/share/cruisecontrol/projects/cute/cute_releng" />  -->
+		    
+		    <cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" module="cute_plugin"/>
+		    <cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" module="cute_feature"/>
+		    <cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" module="cute_test_plugin"/>
+		    <cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" module="cute_test_feature"/>
+		    <cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" module="cute_releng"/>
 	    </modificationset>
 	    
 	    <schedule interval="300">
