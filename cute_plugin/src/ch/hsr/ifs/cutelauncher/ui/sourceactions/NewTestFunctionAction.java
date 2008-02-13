@@ -11,20 +11,14 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
-import org.eclipse.cdt.core.dom.ast.ASTVisitor;
-import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
-import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -47,7 +41,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	
 	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
 
-	private final class SuitPushBackFinder extends ASTVisitor {
+	/*private final class SuitePushBackFinder extends ASTVisitor {
 		private IASTName suiteDeclName = null;
 
 		
@@ -55,6 +49,8 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 			shouldVisitStatements = true;
 		}
 
+		//save the name of the last AST element containing "cute::suite"
+		//issue of multi suite in a file
 		@Override
 		public int leave(IASTStatement statement) {
 			if (statement instanceof IASTDeclarationStatement) {
@@ -78,7 +74,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		public IASTName getSuiteDeclName() {
 			return suiteDeclName;
 		}
-	}
+	}*/
 	
 	
 	@Override
@@ -94,7 +90,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
 				int insertFileOffset = getInsertOffset(astTu, selection);
-				SuitPushBackFinder suitPushBackFinder = new SuitPushBackFinder();
+				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
 
 				mEdit.addChild(createdEdit(insertFileOffset, doc, funcName));
@@ -107,7 +103,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	}
 
 
-	private TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitPushBackFinder suitPushBackFinder) {
+	private TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
 		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
@@ -137,7 +133,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		
 	}
 
-
+	/*find the point of last "push_back" */
 	private IASTStatement getLastPushBack(IASTName[] refs) {
 		IASTName lastPushBack = null;
 		for (IASTName name : refs) {
@@ -179,10 +175,6 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
 		return iedit;
 	}
-
-
-	
-	
 
 }
 

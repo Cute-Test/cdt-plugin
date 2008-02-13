@@ -28,7 +28,7 @@ public abstract class AbstractFunctionAction {
 		return astTu;
 	}
 
-	//shift the insertion point out syntactical block  
+	//shift the insertion point out syntactical block, relative to user selection point/current cursor location
 	protected int getInsertOffset(IASTTranslationUnit astTu, TextSelection selection) {
 		int selOffset = selection.getOffset();
 		IASTDeclaration[] decls = astTu.getDeclarations();
