@@ -2,7 +2,14 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ITranslationUnit;
@@ -10,7 +17,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.TextUtilities;
+import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 
@@ -43,6 +53,66 @@ public abstract class AbstractFunctionAction {
 		}
 		return selOffset;
 	}
+	
+	
+	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
+		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
+		
+		if(suitPushBackFinder.getSuiteDeclName() != null) {
+			IASTName name = suitPushBackFinder.getSuiteDeclName();
+			IBinding binding = name.resolveBinding();
+			IASTName[] refs = astTu.getReferences(binding);
+			IASTStatement lastPushBack = getLastPushBack(refs);
+
+			StringBuilder builder = new StringBuilder();
+			builder.append(newLine);
+			builder.append("\t");
+			builder.append(name.toString());
+			builder.append(".push_back(CUTE(");
+			builder.append(funcName);
+			builder.append("));");
+			
+			if(lastPushBack != null) {
+				IASTFileLocation fileLocation = lastPushBack.getFileLocation();
+				InsertEdit edit = new InsertEdit(fileLocation.getNodeOffset() + fileLocation.getNodeLength(), builder.toString());
+				return edit;
+			}else {//case where no push_back was found, use cute::suite location 
+				IASTFileLocation fileLocation = suitPushBackFinder.getSuiteNode().getParent().getFileLocation();
+				InsertEdit edit = new InsertEdit(fileLocation.getNodeOffset() + fileLocation.getNodeLength(), builder.toString());
+				return edit;
+			}
+		}else {
+			//TODO case of no cute::suite found
+			
+			return null;
+		}
+	}
+	
+	/*find the point of last "push_back" */
+	protected IASTStatement getLastPushBack(IASTName[] refs) {
+		IASTName lastPushBack = null;
+		for (IASTName name : refs) {
+			if(name.getParent().getParent() instanceof ICPPASTFieldReference) {
+				IASTFieldReference fRef = (ICPPASTFieldReference) name.getParent().getParent();
+				if(fRef.getFieldName().toString().equals("push_back")) {
+					lastPushBack = name;
+				}
+			}
+		}
+		return getParentStatement(lastPushBack);
+	}
+
+	protected IASTStatement getParentStatement(IASTName lastPushBack) {
+		IASTNode node = lastPushBack;
+		while(node != null) {
+			if (node instanceof IASTStatement) {
+				return (IASTStatement) node;
+			}
+			node = node.getParent();
+		}
+		return null;
+	}
+	
 }
 //http://www.ibm.com/developerworks/library/os-ecl-cdt3/index.html?S_TACT=105AGX44&S_CMP=EDU
 //Building a CDT-based editor

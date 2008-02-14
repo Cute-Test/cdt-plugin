@@ -42,21 +42,9 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
 		editor = targetEditor;
 	}
-
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void init(IWorkbenchWindow window) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void dispose() {}
+	public void init(IWorkbenchWindow window) {}
+	public void selectionChanged(IAction action, ISelection selection) {}
 	
 	/*ensure texteditor is the active window, save previous changes first*/
 	protected boolean isCorrectEditor(){
@@ -76,8 +64,7 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 		}
 		return false;
 	}
-	
-	//http://www.eclipse.org/articles/article.php?file=Article-JavaCodeManipulation_AST/index.html
+
 	public void run(IAction action) {
 		try {
 			if(!isCorrectEditor())return;
@@ -98,7 +85,7 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 			
 			LinkedPositionGroup group = new LinkedPositionGroup();
 			
-			/*linking the name together for the 1st edit, subsequent changes would need refactoring:rename*/
+			/*linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename*/
 			TextEdit[] edits = mEdit.getChildren();
 			int totalEditLength = 0;
 			for (TextEdit textEdit : edits) {
@@ -119,21 +106,22 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 			linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
 			linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
 			linkedModeUI.enter();
-
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();// TODO exception not managed
+			System.out.println(e.getMessage());
 		} catch (MalformedTreeException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		} 
-		
 	}
 
 	abstract int getCursorEndPosition(TextEdit[] edits, String newLine);
 	abstract int getExitPositionLength();
 }
+/*setActiveEditor
+selection change
+run*/
+//http://www.eclipse.org/articles/article.php?file=Article-JavaCodeManipulation_AST/index.html

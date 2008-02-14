@@ -2,28 +2,23 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
+import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
-import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
-import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTStatement;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTExpressionList;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTLiteralExpression;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTUnaryExpression;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
@@ -49,28 +44,8 @@ public class AddTestFunctiontoSuiteDelegate extends AbstractFunctionActionDelega
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {return 0;}
 	@Override
 	int getExitPositionLength(){return 0;}
-	/*
-	@Override
-	int getCursorEndPosition(TextEdit[] edits, String newLine) {
-		for (TextEdit textEdit : edits) {
-			String insert = ((InsertEdit)textEdit).getText();
-			if(insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
-				return (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
-			}
-		}
-		return edits[0].getOffset() + edits[0].getLength();
-	}
-	@Override
-	int getExitPositionLength(){
-		return NewTestFunctionAction.TEST_STMT.trim().length();
-	}*/
-}/*set editor
-selection change
-run*/
-
+}
 class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
-	//go up ast 
-	//find surrounding body and then mark name
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
@@ -83,12 +58,10 @@ class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
 			if (editorInput instanceof FileEditorInput) {
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
-				//int insertFileOffset = getInsertOffset(astTu, selection);
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
 
-				//mEdit.addChild(createdEdit(insertFileOffset, doc, funcName));
-				String fname=getFunctionNameAtCursor(astTu, selection);
+				String fname=getFunctionNameAtCursor(astTu, selection,suitPushBackFinder);
 				if(!dontAddFlag && !checkNameExist(astTu,fname,suitPushBackFinder))
 				{
 					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
@@ -100,24 +73,32 @@ class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
 	}
 	boolean dontAddFlag=false;
 	//find function name within selected cursor location
-	public String getFunctionNameAtCursor(IASTTranslationUnit astTu,TextSelection selection){
+	public String getFunctionNameAtCursor(IASTTranslationUnit astTu,TextSelection selection,
+			SuitePushBackFinder suitPushBackFinder){
 		IASTDeclaration selectedNode=getDeclarationAtCursor(astTu,selection);
 		IASTNode node = selectedNode;
+		dontAddFlag=false;
 		while(node != null) {
 			if (node instanceof IASTFunctionDefinition) {
-				/*IASTName name=((ICPPASTFunctionDeclarator)node).getName();
-				return name.toString();*/
-				CPPASTFunctionDefinition a1=(CPPASTFunctionDefinition)node;
-				IASTFunctionDeclarator b1=a1.getDeclarator();
-				IASTName c1=b1.getName();
-				return c1.toString();
+				IASTFunctionDefinition functionDefinition=(IASTFunctionDefinition)node;
+
+				IASTSimpleDeclSpecifier specifier=(IASTSimpleDeclSpecifier)functionDefinition.getDeclSpecifier();
+				//check for 'void'
+				if(specifier.getType()!=IASTSimpleDeclSpecifier.t_void ||
+						//don't add the function that cute::suite was declared in, else recursive loop 
+						node.contains(suitPushBackFinder.getSuiteNode())){
+					dontAddFlag=true;
+					return "";
+				}
+				IASTName name=functionDefinition.getDeclarator().getName();
+				return name.toString();
 			}
 			node = node.getParent();
 		}
 		dontAddFlag=true;
 		return "";
 	}
-	//checking existing suite for the name already
+
 	protected IASTDeclaration getDeclarationAtCursor(IASTTranslationUnit astTu, TextSelection selection) {
 		int selOffset = selection.getOffset();
 		IASTDeclaration[] decls = astTu.getDeclarations();
@@ -131,7 +112,7 @@ class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
 		return null;
 	}
 	
-
+	//checking existing suite for the name of the function
 	//ensure it is not already added into suite
 	public boolean checkNameExist(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
@@ -143,75 +124,21 @@ class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
 					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
 					if(fRef.getFieldName().toString().equals("push_back")) {
 						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
-						IASTFunctionCallExpression ex=(IASTFunctionCallExpression)callex.getParameterExpression();
-						CPPASTExpressionList thelist=(CPPASTExpressionList)ex.getParameterExpression();
-						IASTExpression unlist[]=thelist.getExpressions();
-						CPPASTUnaryExpression aa=(CPPASTUnaryExpression)unlist[1];
-						CPPASTLiteralExpression bb=(CPPASTLiteralExpression)aa.getOperand();
-						String theName=bb.toString();
+						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
+						IASTExpressionList thelist=(IASTExpressionList)innercallex.getParameterExpression();
+						IASTExpression innerlist[]=thelist.getExpressions();
+						IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
+						IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();
+						String theName=literalex.toString();
 						if(theName.equals(fname))return true;
 					}
 				}
 			}
-			
-		}else ;//TODO need to create suite
+		}else{//TODO need to create suite
+			//@see getLastPushBack() for adding the very 1st push back
+		}
 		
 		return false;
 	}
-	private TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
-		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
-		
-		if(suitPushBackFinder.getSuiteDeclName() != null) {
-			IASTName name = suitPushBackFinder.getSuiteDeclName();
-			IBinding binding = name.resolveBinding();
-			IASTName[] refs = astTu.getReferences(binding);
-			IASTStatement lastPushBack = getLastPushBack(refs);
-			if(lastPushBack != null) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(newLine);
-				builder.append("\t");
-				builder.append(name.toString());
-				builder.append(".push_back(CUTE(");
-				builder.append(funcName);
-				builder.append("));");
-				IASTFileLocation fileLocation = lastPushBack.getFileLocation();
-				InsertEdit edit = new InsertEdit(fileLocation.getNodeOffset() + fileLocation.getNodeLength(), builder.toString());
-				return edit;
-			}else {
-				//TODO Errorhandling
-				return null;
-			}
-		}else {
-			//TODO Errorhandling
-			return null;
-		}
-		
-	}
 
-	/*find the point of last "push_back" */
-	private IASTStatement getLastPushBack(IASTName[] refs) {
-		IASTName lastPushBack = null;
-		for (IASTName name : refs) {
-			if(name.getParent().getParent() instanceof ICPPASTFieldReference) {
-				IASTFieldReference fRef = (ICPPASTFieldReference) name.getParent().getParent();
-				if(fRef.getFieldName().toString().equals("push_back")) {
-					lastPushBack = name;
-				}
-			}
-		}
-		if(lastPushBack == null);//TODO no pushback found do something abt it
-		return getParentStatement(lastPushBack);
-	}
-
-	private IASTStatement getParentStatement(IASTName lastPushBack) {
-		IASTNode node = lastPushBack;
-		while(node != null) {
-			if (node instanceof IASTStatement) {
-				return (IASTStatement) node;
-			}
-			node = node.getParent();
-		}
-		return null;
-	}
-	
 }
