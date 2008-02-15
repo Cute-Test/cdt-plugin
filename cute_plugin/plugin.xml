@@ -165,7 +165,7 @@
              menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
        </action>
        <action
-             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctortoSuiteDelegate"
              definitionId="cute_plugin.command1"
              id="ch.hsr.ifs.cutelauncher.addTestFunctorSuiteAction"
              label="Add Test Functor to Suite"

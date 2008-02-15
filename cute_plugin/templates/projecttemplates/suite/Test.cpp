@@ -11,7 +11,7 @@ void runTest(){
 }
 
 int main(){
-    runTests();
+    runTest();
 }
 
 
