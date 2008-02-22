@@ -53,7 +53,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 				mEdit.addChild(createdEdit(insertFileOffset, doc, funcName));
 				mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 						funcName, suitPushBackFinder));
-
+				//TODO check for duplicate push_back
 			}
 		}
 		return mEdit;

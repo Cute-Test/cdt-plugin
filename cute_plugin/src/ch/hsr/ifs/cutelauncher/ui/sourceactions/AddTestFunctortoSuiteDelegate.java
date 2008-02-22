@@ -1,24 +1,34 @@
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
+import java.util.ArrayList;
+
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisiblityLabel;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.TextUtilities;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
+
+import ch.hsr.ifs.cutelauncher.EclipseConsole;
 public class AddTestFunctortoSuiteDelegate extends
 		AbstractFunctionActionDelegate {
 	public AddTestFunctortoSuiteDelegate(){
@@ -43,62 +53,105 @@ class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
 			throws CoreException{
-		if (editorInput instanceof FileEditorInput) {
-			IFile editorFile = ((FileEditorInput) editorInput).getFile();
-			IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
-			scanforParenthesesOperator(astTu);
+		
+		ISelection sel = ceditor.getSelectionProvider().getSelection();
+		if (sel != null && sel instanceof TextSelection) {
+			TextSelection selection = (TextSelection) sel;
+			if (editorInput instanceof FileEditorInput) {
+				IFile editorFile = ((FileEditorInput) editorInput).getFile();
+				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
+				
+				MessageConsoleStream stream = EclipseConsole.getConsole();
+				
+				//scanforParenthesesOperator1(astTu);
+				NodeAtCursorFinder n= new NodeAtCursorFinder(selection.getOffset());
+				astTu.accept(n);
+				
+				OperatorParenthesesFinder o=new OperatorParenthesesFinder();
+				astTu.accept(o);
+				
+				String fname=nameAtCursor(o.getAL(),n.getNode(),stream);
+				if(fname.equals(""))return null;
+				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
+				astTu.accept(suitPushBackFinder);
+				
+				if(!checkNameExist(astTu,fname+"()",suitPushBackFinder)){
+					MultiTextEdit mEdit = new MultiTextEdit();
+					
+					String newLine = TextUtilities.getDefaultLineDelimiter(doc);
+					StringBuilder builder = new StringBuilder();
+					builder.append(newLine);
+					builder.append("\t");
+					IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
+					builder.append(name.toString());
+					builder.append(".push_back(");
+					builder.append(fname+"()");
+					builder.append(");");
+										
+					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
+							suitPushBackFinder,builder));
+					return mEdit;
+				}
+								
+				stream.println(n.getBounded()+"wa");
+				stream.println(n.get()+"wa");
+				stream.println(n.getNode()+"w");
+			}
 		}
 		return null;
 	}
-	protected void scanforParenthesesOperator(IASTTranslationUnit astTu){
-		MessageConsole console = new MessageConsole("My Console", null);
-		console.activate();
-		ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{ console });
-		MessageConsoleStream stream = console.newMessageStream();
+	protected String nameAtCursor(ArrayList<IASTName> operatorParenthesesNode,IASTNode node,MessageConsoleStream stream ){
 		
-		IASTDeclaration[] decls = astTu.getDeclarations();
-		stream.println("{");
-		for (IASTDeclaration declaration : decls) {
-			IASTDeclaration tempdeclaration=declaration;
-			if(tempdeclaration instanceof ICPPASTTemplateDeclaration){
-				ICPPASTTemplateDeclaration ee=(ICPPASTTemplateDeclaration)tempdeclaration;
-				tempdeclaration=ee.getDeclaration();
-			}
-						
-			if(tempdeclaration instanceof IASTSimpleDeclaration){
-				IASTSimpleDeclaration o=(IASTSimpleDeclaration)tempdeclaration;
-				IASTCompositeTypeSpecifier dd=(IASTCompositeTypeSpecifier)o.getDeclSpecifier();
-				IASTDeclaration[] ee=dd.getMembers(); 
-				for(IASTDeclaration ff:ee){
-					if(ff instanceof IASTSimpleDeclaration){
-						IASTSimpleDeclaration gg=(IASTSimpleDeclaration)ff;
-						for(IASTDeclarator hh:gg.getDeclarators()){
-							if(hh instanceof ICPPASTFunctionDeclarator){
-								ICPPASTFunctionDeclarator ii=(ICPPASTFunctionDeclarator)hh;
-								stream.println(ii.getName().toString());
-							}
+		if(node instanceof IASTStatement){
+			//hunt for function call, either within normal function or within a class
+				if(node instanceof IASTCompoundStatement){
+					IASTStatement a[]=((IASTCompoundStatement)node).getStatements();
+					//search for function call close to cursor
+					//if non is found, go up and use the function 
+					stream.println(a[0].toString());
+					for(IASTStatement b:a){
+						if(b instanceof IASTExpressionStatement){
+							System.out.println(b);
+							IASTIdExpression e=(IASTIdExpression)((IASTFunctionCallExpression)(((IASTExpressionStatement)b).getExpression())).getFunctionNameExpression();
+							//when user select a method in the normal class
+							stream.println(e.getName().toString());
+							return e.getName().toString();
 						}
 					}
-					
-					/*for(IASTDeclarator gg:ff)
-					if(gg instanceof ICPPASTFunctionDeclarator){
-						//ICPPASTFunctionDeclarator gg=(ICPPASTFunctionDeclarator)ff;
-						//ff.getName()
-						stream.println(ff.getName().toString());
-					}*/
 				}
+			}else if(node instanceof IASTDeclaration){
+				if(node instanceof ICPPASTVisiblityLabel){
+					//public: private:
+					node=node.getParent().getParent();
+				}
+				boolean operatorMatchFlag=false;
+				for(IASTName i:operatorParenthesesNode){
+					if(node.contains(i)){
+						operatorMatchFlag=true;
+						break;
+					}
+				}if(!operatorMatchFlag)return "";
 				
-				//for (IASTDeclSpecifier bb : dd) {
-				//	stream.println(dd.getName().toString());
-				
-				//IASTFunctionDeclarator p=o.getDeclarator();
-				
-				//if("operator "+o.OP_PAREN==o.toString())
-				//stream.println(o.getName().toString());
+				//check also operator() doesnt have parameters, or at least default binded
+				//check for function not virtual and has a method body
+				//visibilitylabel: private cannot
+				if(node instanceof IASTSimpleDeclaration){//simple class case
+					/*class TFunctor
+					   {
+						   private:
+						   public:  
+						   ***but cannot handle the function within
+						   ***visibilitylabel cannot handle
+					 	}*/
+					IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)node).getDeclSpecifier())).getName();
+					return i.toString();
+				}else 
+					if(node instanceof ICPPASTTemplateDeclaration){//template class case
+						//template <class TClass> 
+						IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
+						return i.toString();
+					}
 			}
-				
-		}stream.println("}");
-		
-		
+		return ""; 
 	}
 }
