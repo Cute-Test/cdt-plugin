@@ -16,7 +16,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -32,6 +31,7 @@ public class AddTestFunctiontoSuiteDelegate extends AbstractFunctionActionDelega
 	int getExitPositionLength(){return 0;}
 }
 class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
+	
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
@@ -78,9 +78,8 @@ class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
 						fdeclarator.takesVarArgs() ||
 						fpara.length>0
 						){
-					MessageConsoleStream err=EclipseConsole.getConsole();
-					err.println("not add"+fdeclarator.getName().toString());
-					EclipseConsole.showConsole();
+					EclipseConsole.print("Unable to perform AddTestFunctiontoSuite");
+					
 					dontAddFlag=true;
 					return "";
 				}

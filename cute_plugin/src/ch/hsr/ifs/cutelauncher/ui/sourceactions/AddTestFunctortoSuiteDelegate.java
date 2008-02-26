@@ -37,13 +37,11 @@ public class AddTestFunctortoSuiteDelegate extends
 	
 	@Override
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	int getExitPositionLength() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -72,10 +70,11 @@ class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				
 				String fname=nameAtCursor(o.getAL(),n.getNode(),stream);
 				if(fname.equals(""))return null;
+				
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
 				
-				if(!checkNameExist(astTu,fname+"()",suitPushBackFinder)){
+				if(!checkNameExist(astTu,fname,suitPushBackFinder)){//??? +()
 					MultiTextEdit mEdit = new MultiTextEdit();
 					
 					String newLine = TextUtilities.getDefaultLineDelimiter(doc);
@@ -101,57 +100,57 @@ class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 		return null;
 	}
 	protected String nameAtCursor(ArrayList<IASTName> operatorParenthesesNode,IASTNode node,MessageConsoleStream stream ){
-		
 		if(node instanceof IASTStatement){
 			//hunt for function call, either within normal function or within a class
-				if(node instanceof IASTCompoundStatement){
-					IASTStatement a[]=((IASTCompoundStatement)node).getStatements();
-					//search for function call close to cursor
-					//if non is found, go up and use the function 
-					stream.println(a[0].toString());
-					for(IASTStatement b:a){
-						if(b instanceof IASTExpressionStatement){
-							System.out.println(b);
-							IASTIdExpression e=(IASTIdExpression)((IASTFunctionCallExpression)(((IASTExpressionStatement)b).getExpression())).getFunctionNameExpression();
-							//when user select a method in the normal class
-							stream.println(e.getName().toString());
-							return e.getName().toString();
-						}
+			if(node instanceof IASTCompoundStatement){
+				IASTStatement a[]=((IASTCompoundStatement)node).getStatements();
+				//search for function call close to cursor
+				//if non is found, go up and use the function 
+				EclipseConsole.println(a[0].toString());
+				for(IASTStatement b:a){
+					if(b instanceof IASTExpressionStatement){
+						//System.out.println(b);
+						IASTIdExpression e=(IASTIdExpression)((IASTFunctionCallExpression)(((IASTExpressionStatement)b).getExpression())).getFunctionNameExpression();
+						//when user select a method in the normal class
+						stream.println(e.getName().toString());
+						return e.getName().toString();
 					}
 				}
-			}else if(node instanceof IASTDeclaration){
-				if(node instanceof ICPPASTVisiblityLabel){
-					//public: private:
-					node=node.getParent().getParent();
-				}
-				boolean operatorMatchFlag=false;
-				for(IASTName i:operatorParenthesesNode){
-					if(node.contains(i)){
-						operatorMatchFlag=true;
-						break;
-					}
-				}if(!operatorMatchFlag)return "";
-				
-				//check also operator() doesnt have parameters, or at least default binded
-				//check for function not virtual and has a method body
-				//visibilitylabel: private cannot
-				if(node instanceof IASTSimpleDeclaration){//simple class case
-					/*class TFunctor
-					   {
-						   private:
-						   public:  
-						   ***but cannot handle the function within
-						   ***visibilitylabel cannot handle
-					 	}*/
-					IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)node).getDeclSpecifier())).getName();
-					return i.toString();
-				}else 
-					if(node instanceof ICPPASTTemplateDeclaration){//template class case
-						//template <class TClass> 
-						IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
-						return i.toString();
-					}
 			}
+		}else if(node instanceof IASTDeclaration){
+			if(node instanceof ICPPASTVisiblityLabel){
+				//public: private: protected: for class
+				node=node.getParent().getParent();
+				//FIXME operator() is private,protected in a class/struct??
+			}
+			
+			//check class, struct at cursor for operator()
+			boolean operatorMatchFlag=false;
+			for(IASTName i:operatorParenthesesNode){
+				if(node.contains(i)){
+					operatorMatchFlag=true;
+					break;
+				}
+			}if(!operatorMatchFlag)return "";
+
+			//check also operator() doesnt have parameters, or at least default binded
+			//check for function not virtual and has a method body
+			//visibilitylabel: private cannot
+			if(node instanceof IASTSimpleDeclaration){//simple class case
+				/*class TFunctor{
+					private:
+					public:  
+				 ***but cannot handle the function within
+				}*/
+				IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)node).getDeclSpecifier())).getName();
+				return i.toString();
+			}else 
+				if(node instanceof ICPPASTTemplateDeclaration){//template class case
+					//template <class TClass> 
+					IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
+					return i.toString();
+				}
+		}
 		return ""; 
 	}
 }

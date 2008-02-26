@@ -13,7 +13,7 @@ public class EclipseConsole {
 		if(null == stream) {
 			console = new MessageConsole("Cute Plugin Console",null);
 			//,CuteLauncherPlugin.getImageDescriptor("obj16/cute_app.gif")); //FIXME
-			console.activate();
+			//console.activate();
 			ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{ console });
 			MessageConsoleStream s = console.newMessageStream();
 			stream=s;
@@ -24,6 +24,16 @@ public class EclipseConsole {
 	
 	public static void showConsole(){
 		console.activate();
+	}
+	public static void print(String s){
+		MessageConsoleStream stream1=getConsole();
+		stream1.print(s);
+		showConsole();
+	}
+	public static void println(String s){
+		MessageConsoleStream stream1=getConsole();
+		stream1.println(s);
+		showConsole();
 	}
 	//stream.println("Hello, world!");
 }

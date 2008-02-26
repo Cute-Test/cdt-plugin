@@ -1,0 +1,76 @@
+// <--this is a test comment block
+// caret are parse to indicate current cursor location for that test
+// 
+//test before function
+^void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+//expected results
+void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}
+
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+//test within functions
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runT^est();
+}
+//expected results
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}
+
+int main(){
+    runTest();
+}
+//test at end
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}^
+//expected results
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+int main(){
+    runTest();
+}
+void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}

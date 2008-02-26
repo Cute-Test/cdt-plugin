@@ -4,10 +4,6 @@ import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
 
 public class NodeAtCursorFinder extends ASTVisitor {
 	int selOffset,dist=Integer.MAX_VALUE;
@@ -20,14 +16,7 @@ public class NodeAtCursorFinder extends ASTVisitor {
 	}
 	public NodeAtCursorFinder(int offset){
 		selOffset=offset;
-		
-		MessageConsole console = new MessageConsole("My Console", null);
-		console.activate();
-		ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{ console });
-		stream = console.newMessageStream();
-		
 	}
-	MessageConsoleStream stream;
 	@Override
 	public int leave(IASTDeclaration declaration) {
 		int nodeOffset = declaration.getFileLocation().getNodeOffset();
@@ -58,16 +47,13 @@ public class NodeAtCursorFinder extends ASTVisitor {
 	void setNode(IASTNode node) {
 		this.node = node;
 		count+=1;
-		
-		stream.println(node.toString());
-		
 	}
 	public int get(){return count;}
 	public IASTNode getNode() {
 		return node;
 	}
 	
-	}
+}
 /*
 select any class with operator()
 
