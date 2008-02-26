@@ -67,10 +67,7 @@ public class SourceActionsTest extends BaseTestFramework {
 			super(offset,0);
 		}
 	}
-	
-	public final void testSourcelookupCustomPath() {
 
-	}
 	// org.eclipse.cdt.ui.tests/ui/org.eclipse.cdt.ui.tests.text/BasicCeditor
 	//@see org.eclipse.cdt.ui.tests.text.BasicCeditorTest#setUpEditor
 	public final void testNewTestFunction(){
@@ -134,7 +131,6 @@ public class SourceActionsTest extends BaseTestFramework {
 	}
 	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
-		//ts.addTest(new SourceLookupPathTest("testSourcelookupCustomPath"));
 		ts.addTest(new SourceActionsTest("testNewTestFunction"));
 		return ts;
 	}
