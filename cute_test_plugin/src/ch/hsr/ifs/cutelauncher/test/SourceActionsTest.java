@@ -12,7 +12,6 @@ import junit.framework.TestSuite;
 import org.eclipse.cdt.core.tests.BaseTestFramework;
 import org.eclipse.cdt.internal.core.model.ext.SourceRange;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
-import org.eclipse.cdt.ui.tests.text.Accessor;
 import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.FileLocator;
@@ -21,13 +20,15 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.RewriteSessionEditProcessor;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.osgi.framework.Bundle;
 
+import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
+import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctiontoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
 
 public class SourceActionsTest extends BaseTestFramework {
@@ -40,7 +41,7 @@ public class SourceActionsTest extends BaseTestFramework {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		rtc=new ReadTestCase();
+		
 	}
 	private static CEditor ceditor;
 	@Override
@@ -59,16 +60,26 @@ public class SourceActionsTest extends BaseTestFramework {
 			super(offset,0);
 		}
 	}
+	public final void testAddTestFunctionAll(){
+		rtc=new ReadTestCase("testDefs/sourceActions/addTestfunction.txt");
+		//AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
+		AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
+		for(int i=0;i<4;i++){
+			testNewTestFunction(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
+		}
+	}
 	
 	public final void testNewTestFunctionAll(){
+		rtc=new ReadTestCase("testDefs/sourceActions/newTestfunction.txt");
+		NewTestFunctionAction functionAction=new NewTestFunctionAction();
 		for(int i=0;i<4;i++){
-			testNewTestFunction(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i));
+			testNewTestFunction(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
 		}//skipped "at end2 with pushback duplicated" at position4 
 	}
 	
 	// org.eclipse.cdt.ui.tests/ui/org.eclipse.cdt.ui.tests.text/BasicCeditor
 	//@see org.eclipse.cdt.ui.tests.text.BasicCeditorTest#setUpEditor
-	public final void testNewTestFunction(String testname,String testSrcCode, int cursorpos, String expectedOutput){
+	public final void testNewTestFunction(String testname,String testSrcCode, int cursorpos, String expectedOutput,AbstractFunctionAction functionAction){
 		try{
 		IFile inputFile=importFile("A.cpp",testSrcCode);
 		/*ITranslationUnit tu= CoreModelUtil.findTranslationUnit(inputFile);
@@ -79,20 +90,23 @@ public class SourceActionsTest extends BaseTestFramework {
 		IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 		assertNotNull(editor);
 		assertTrue(editor instanceof CEditor);
-		CEditor ceditor= (CEditor) editor;
+		ceditor= (CEditor) editor; //dup err
 		IEditorInput editorInput = ceditor.getEditorInput();
-		StyledText fTextWidget= ceditor.getViewer().getTextWidget();
+		/*StyledText fTextWidget= ceditor.getViewer().getTextWidget();
 		assertNotNull(fTextWidget);
-		Accessor fAccessor= new Accessor(fTextWidget, StyledText.class);
-		IDocument fDocument= ceditor.getDocumentProvider().getDocument(((IEditorPart)ceditor).getEditorInput());
+		Accessor fAccessor= new Accessor(fTextWidget, StyledText.class);*/
+		
+		Object ele=(editor).getEditorInput();
+		IDocumentProvider idp=ceditor.getDocumentProvider();
+		IDocument fDocument= idp.getDocument(ele);
+		//IDocument fDocument= ceditor.getDocumentProvider().getDocument(((IEditorPart)ceditor).getEditorInput());
 		assertNotNull(fDocument);
 
 		//different to BasicCEditorTest#setCaret
-		//***ceditor.setSelection(new mySourceRange(cursorpos),false);
+		//**faulty**ceditor.setSelection(new mySourceRange(cursorpos),false);
 		ceditor.getSelectionProvider().setSelection(new TextSelection(cursorpos, 0));
 				
 		// execute actions 
-		NewTestFunctionAction functionAction=new NewTestFunctionAction();
 		MultiTextEdit mEdit = functionAction.createEdit(ceditor, editorInput, fDocument, "newTestFunction");
 		
 		RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(fDocument, mEdit, TextEdit.CREATE_UNDO);
@@ -116,11 +130,12 @@ public class SourceActionsTest extends BaseTestFramework {
 				IIndexManager.FOREVER, NULL_PROGRESS_MONITOR);
 		assertTrue(joined);
 		*/
-		}catch(Exception e){e.printStackTrace();}
+		}catch(Exception e){e.printStackTrace();fail(e.toString());}
 	}
 	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
 		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
+		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
 		return ts;
 	}
 	
@@ -134,13 +149,13 @@ class ReadTestCase{
 	enum state{TEST, SAVETEST, EXPECTED, SAVEEXPECTED, CURSOR};
 	state m;
 		
-	public ReadTestCase(){
+	public ReadTestCase(String file){
 		StringBuilder builder=new StringBuilder();
 
 		String newline= System.getProperty("line.separator"); 
 		try{
 		String testnametmp=null;
-		BufferedReader br=readTest();
+		BufferedReader br=readTest(file);
 		while(br.ready()){
 			String str=br.readLine();
 			if(str.startsWith("//test")){
@@ -181,9 +196,9 @@ class ReadTestCase{
 		
 		parseForCursorPos();
 	}
-	public static BufferedReader readTest() throws IOException{
+	public static BufferedReader readTest(String file) throws IOException{
 		Bundle bundle1 = TestPlugin.getDefault().getBundle();
-		Path path1 = new Path("testDefs/sourceActions/newTestfunction.txt");
+		Path path1 = new Path(file);
 		URL url1=FileLocator.toFileURL(FileLocator.find(bundle1, path1, null));
 		//BufferedInputStream bis=new BufferedInputStream(url1.openStream());
 		BufferedReader br=new BufferedReader(new InputStreamReader(url1.openStream()));

@@ -1,0 +1,104 @@
+//test typical case cursor at functiondeclarator
+void thisIsAl^soATest22(){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected
+void thisIsAlsoATest22(){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(thisIsAlsoATest22));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//test typical case cursor at function body
+void thisIsAlsoATest22(){
+	int cx=1,^dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected
+void thisIsAlsoATest22(){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(thisIsAlsoATest22));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//test already added 
+void thisIsAl^soATest22(){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(thisIsAlsoATest22));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected
+void thisIsAlsoATest22(){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(thisIsAlsoATest22));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//test function with var arg
+void thisIsAlso^ATest24(...){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected
+void thisIsAlsoATest24(...){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//test function with parameter
+void thisIsAlsoATest23(int x, double y){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected
+void thisIsAlsoATest23(int x, double y){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
