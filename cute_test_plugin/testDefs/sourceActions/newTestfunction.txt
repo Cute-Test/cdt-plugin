@@ -68,9 +68,67 @@ void runTest(){
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
+
+int main(){
+    runTest();
+}void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}
+
+
+//test at end2
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+^
+//expected results
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
 int main(){
     runTest();
 }
 void newTestFunction(){
 	ASSERTM("start writing tests", false);
 }
+
+
+//test at end2 with pushback duplicated
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+^
+//expected results
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}
+
+
+//

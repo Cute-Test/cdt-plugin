@@ -18,14 +18,13 @@ public class AllTests {
 		suite.addTest(ModelBuilderSuite.suite());
 		suite.addTest(SourceLookupPathTest.suite());
 		
-		//requires UI
 		Bundle b = org.eclipse.core.runtime.Platform.getBundle("org.eclipse.ui");
 		if ((b==null) || (b.getState() != Bundle.ACTIVE) || (! org.eclipse.ui.PlatformUI.isWorkbenchRunning())) {
-		//headless
-		}else{
+			//headless mode
+		}else{//requires UI
 			suite.addTest(CuteSuiteWizardHandlerTest.suite());
 			suite.addTest(HyperlinkSuite.suite()); 
-			suite.addTest(SourceActionsTest.suite());
+			suite.addTest(SourceActionsTest.suite());//write to hdd, may reduce life of hdd 
 		}
 		//$JUnit-END$
 		return suite;

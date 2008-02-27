@@ -134,13 +134,17 @@ public abstract class AbstractFunctionAction {
 					if(fRef.getFieldName().toString().equals("push_back")) {
 						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
 						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
-						IASTExpressionList thelist=(IASTExpressionList)innercallex.getParameterExpression();
+						IASTExpression thelist=innercallex.getParameterExpression();
 						String theName;
 						if(thelist!=null){
-							IASTExpression innerlist[]=thelist.getExpressions();
-							IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
-							IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();
-							theName=literalex.toString();
+							if(thelist instanceof IASTExpressionList){//????
+								IASTExpression innerlist[]=((IASTExpressionList)thelist).getExpressions();
+								IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
+								IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();
+								theName=literalex.toString();
+							}else{//for newtestfunction , addfunction
+								theName=((CPPASTIdExpression)thelist).getName().toString();
+							}
 						}else{//handle functor nodes
 							CPPASTIdExpression a=(CPPASTIdExpression)innercallex.getFunctionNameExpression();
 							theName=a.getName().toString();

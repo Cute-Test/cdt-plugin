@@ -50,10 +50,13 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
 
+				
 				mEdit.addChild(createdEdit(insertFileOffset, doc, funcName));
+
+				//FIXME this check for existing pushback might have unwanted side effect, breaking linkmodel
+				//if(!checkNameExist(astTu,funcName,suitPushBackFinder))
 				mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 						funcName, suitPushBackFinder));
-				//TODO check for duplicate push_back
 			}
 		}
 		return mEdit;

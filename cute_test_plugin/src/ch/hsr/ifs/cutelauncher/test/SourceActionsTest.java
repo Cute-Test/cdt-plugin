@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.RewriteSessionEditProcessor;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
@@ -37,18 +36,11 @@ public class SourceActionsTest extends BaseTestFramework {
 	public SourceActionsTest(String name) {
 		super(name);
  	}
-	LaunchConfigurationStub lcs;
-	ch.hsr.ifs.cutelauncher.CuteLauncherDelegate cld;
 	ReadTestCase rtc;
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		cld=new ch.hsr.ifs.cutelauncher.CuteLauncherDelegate();
-
 		rtc=new ReadTestCase();
-		
-		
-		
 	}
 	private static CEditor ceditor;
 	@Override
@@ -62,19 +54,24 @@ public class SourceActionsTest extends BaseTestFramework {
 		super.tearDown();
 	}
 	
-	class mySourceRange extends SourceRange{
+	class mySourceRange extends SourceRange{//for setting current cursor position
 		public mySourceRange(int offset){
 			super(offset,0);
 		}
 	}
-
+	
+	public final void testNewTestFunctionAll(){
+		for(int i=0;i<4;i++){
+			testNewTestFunction(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i));
+		}//skipped "at end2 with pushback duplicated" at position4 
+	}
+	
 	// org.eclipse.cdt.ui.tests/ui/org.eclipse.cdt.ui.tests.text/BasicCeditor
 	//@see org.eclipse.cdt.ui.tests.text.BasicCeditorTest#setUpEditor
-	public final void testNewTestFunction(){
+	public final void testNewTestFunction(String testname,String testSrcCode, int cursorpos, String expectedOutput){
 		try{
-		IFile inputFile=importFile("A.cpp",rtc.test.get(0));
-		/*
-		ITranslationUnit tu= CoreModelUtil.findTranslationUnit(inputFile);
+		IFile inputFile=importFile("A.cpp",testSrcCode);
+		/*ITranslationUnit tu= CoreModelUtil.findTranslationUnit(inputFile);
 		
 		IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
 		IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
@@ -89,15 +86,12 @@ public class SourceActionsTest extends BaseTestFramework {
 		Accessor fAccessor= new Accessor(fTextWidget, StyledText.class);
 		IDocument fDocument= ceditor.getDocumentProvider().getDocument(((IEditorPart)ceditor).getEditorInput());
 		assertNotNull(fDocument);
-		
-		ISelection sel = ceditor.getSelectionProvider().getSelection();
-		if (sel != null && sel instanceof TextSelection) {
-			TextSelection selection = (TextSelection) sel;
-		}assertNotNull(sel);
-		
-		// execute actions different to BasicCEditorTest#setCaret
-		ceditor.setSelection(new mySourceRange(rtc.cursorpos.get(0)),false);
 
+		//different to BasicCEditorTest#setCaret
+		//***ceditor.setSelection(new mySourceRange(cursorpos),false);
+		ceditor.getSelectionProvider().setSelection(new TextSelection(cursorpos, 0));
+				
+		// execute actions 
 		NewTestFunctionAction functionAction=new NewTestFunctionAction();
 		MultiTextEdit mEdit = functionAction.createEdit(ceditor, editorInput, fDocument, "newTestFunction");
 		
@@ -106,16 +100,11 @@ public class SourceActionsTest extends BaseTestFramework {
 		
 		//retrieve the edited source
 		String results=fDocument.get();
-		System.out.println(results);
 		//handling save dialog prompt 
 		ceditor.doSave(new NullProgressMonitor());
 		//compare it 
-		assertEquals("result unexpected.",rtc.expected.get(0),results);
-		
-		System.out.println("\n\n"+rtc.expected.get(0));
-
-		
-		//discarding the changes as clean up
+		assertEquals("result unexpected."+testname+"("+cursorpos+")",expectedOutput,results);
+		//TODO discarding the changes as clean up
 		
 		/*
 		CCorePlugin.getIndexManager().setIndexerId(cproject,
@@ -131,30 +120,32 @@ public class SourceActionsTest extends BaseTestFramework {
 	}
 	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
-		ts.addTest(new SourceActionsTest("testNewTestFunction"));
+		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
 		return ts;
 	}
 	
 }
 class ReadTestCase{
+	public ArrayList<String> testname=new ArrayList<String>();
 	public ArrayList<Integer> cursorpos=new ArrayList<Integer>();
 	public ArrayList<String> test=new ArrayList<String>();
-	public ArrayList expected=new ArrayList<String>();
+	public ArrayList<String> expected=new ArrayList<String>();
 	
 	enum state{TEST, SAVETEST, EXPECTED, SAVEEXPECTED, CURSOR};
 	state m;
-	
 		
 	public ReadTestCase(){
 		StringBuilder builder=new StringBuilder();
 
 		String newline= System.getProperty("line.separator"); 
 		try{
+		String testnametmp=null;
 		BufferedReader br=readTest();
 		while(br.ready()){
 			String str=br.readLine();
 			if(str.startsWith("//test")){
 				m=state.SAVEEXPECTED;
+				testnametmp=str.substring(6);
 			}
 			if(str.startsWith("//expected")){
 				m=state.SAVETEST;continue;
@@ -165,6 +156,7 @@ class ReadTestCase{
 				builder.append(str+newline);
 				break;
 			case SAVETEST:
+				testname.add(testnametmp);
 				test.add(builder.toString());
 				builder=new StringBuilder();
 				m=state.EXPECTED;
@@ -201,12 +193,11 @@ class ReadTestCase{
 		for(String str:test){
 			cursorpos.add(str.indexOf("^"));
 		}
-		for(int i=0;i<test.size();i++){
+		for(int i=0;i<test.size();i++){//remove caret from test
 			String str=test.get(i);
 			test.remove(i);
 			test.add(i, str.replaceAll("[\\^]",""));
 		}
 		
 	}
-	
-}
+}//future instead of testing text, parsing AST might bring more flexibility 
