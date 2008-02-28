@@ -22,8 +22,8 @@ public class AllTests {
 		if ((b==null) || (b.getState() != Bundle.ACTIVE) || (! org.eclipse.ui.PlatformUI.isWorkbenchRunning())) {
 			//headless mode
 		}else{//requires UI
+			suite.addTest(HyperlinkSuite.suite());
 			suite.addTest(CuteSuiteWizardHandlerTest.suite());
-			suite.addTest(HyperlinkSuite.suite()); 
 			suite.addTest(SourceActionsTest.suite());//write to hdd, may reduce life of hdd 
 		}
 		//$JUnit-END$

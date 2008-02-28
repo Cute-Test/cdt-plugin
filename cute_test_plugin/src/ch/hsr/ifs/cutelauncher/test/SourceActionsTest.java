@@ -61,21 +61,38 @@ public class SourceActionsTest extends BaseTestFramework {
 			super(offset,0);
 		}
 	}
+	//FIXME JUnit dblclick not working as tests doesnt have direct src mapping 
+	public final static void generateFunctorTest(TestSuite ts){
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
+		final AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
+		for(int i=0;i<rtc1.testname.size();i++){
+			if(5==i)continue;
+			final int j=i;
+			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name
+			junit.framework.TestCase test = new SourceActionsTest("generateFunctorTest"+i+displayname) {
+				@Override
+				public void runTest() {
+					generateTest(rtc1.testname.get(j),rtc1.test.get(j),rtc1.cursorpos.get(j).intValue(),rtc1.expected.get(j),functionAction);
+				}
+			};
+			ts.addTest(test);
+		}
+	}
+	/*@deprecated
 	public final void testAddTestFunctorAll(){
 		rtc=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
 		//AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
 		AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
-		for(int i=0;i<3;i++){
-			testNewTestFunction(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
+		for(int i=0;i<rtc.testname.size();i++){
+			generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
 		}
-	}
+	}*/
 	
 	public final void testAddTestFunctionAll(){
-		rtc=new ReadTestCase("testDefs/sourceActions/addTestfunction.txt");
-		//AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
+		rtc=new ReadTestCase("testDefs/sourceActions/addTestfunction.cpp");
 		AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
-		for(int i=0;i<4;i++){
-			testNewTestFunction(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
+		for(int i=0;i<rtc.testname.size();i++){
+			generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
 		}
 	}
 	
@@ -83,17 +100,16 @@ public class SourceActionsTest extends BaseTestFramework {
 		rtc=new ReadTestCase("testDefs/sourceActions/newTestfunction.txt");
 		NewTestFunctionAction functionAction=new NewTestFunctionAction();
 		for(int i=0;i<4;i++){
-			testNewTestFunction(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
-		}//skipped "at end2 with pushback duplicated" at position4 
+			generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
+		}//skipped "at end2 with pushback duplicated" at position4 @see NewTestFunctionAction#createEdit 
 	}
 	
 	// org.eclipse.cdt.ui.tests/ui/org.eclipse.cdt.ui.tests.text/BasicCeditor
 	//@see org.eclipse.cdt.ui.tests.text.BasicCeditorTest#setUpEditor
-	public final void testNewTestFunction(String testname,String testSrcCode, int cursorpos, String expectedOutput,AbstractFunctionAction functionAction){
+	public final void generateTest(String testname,String testSrcCode, int cursorpos, String expectedOutput,AbstractFunctionAction functionAction){
 		try{
 		IFile inputFile=importFile("A.cpp",testSrcCode);
 		/*ITranslationUnit tu= CoreModelUtil.findTranslationUnit(inputFile);
-		
 		IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
 		IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
 		*/
@@ -119,6 +135,8 @@ public class SourceActionsTest extends BaseTestFramework {
 		// execute actions 
 		MultiTextEdit mEdit = functionAction.createEdit(ceditor, editorInput, fDocument, "newTestFunction");
 		
+		assertNotNull(fDocument);
+		assertNotNull(mEdit);
 		RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(fDocument, mEdit, TextEdit.CREATE_UNDO);
 		processor.performEdits();
 		
@@ -128,7 +146,7 @@ public class SourceActionsTest extends BaseTestFramework {
 		ceditor.doSave(new NullProgressMonitor());
 		//compare it 
 		assertEquals("result unexpected."+testname+"("+cursorpos+")",expectedOutput,results);
-		//TODO discarding the changes as clean up
+		//TODO discarding the changes as clean up, instead of writing to disk and then deleting it
 		
 		/*
 		CCorePlugin.getIndexManager().setIndexerId(cproject,
@@ -140,18 +158,19 @@ public class SourceActionsTest extends BaseTestFramework {
 				IIndexManager.FOREVER, NULL_PROGRESS_MONITOR);
 		assertTrue(joined);
 		*/
-		}catch(Exception e){e.printStackTrace();fail(e.toString());}
+		}catch(Exception e){e.printStackTrace();fail(testname+"\n"+e.getMessage());}
 	}
-	public static Test suite(){
+	public static Test suite(){//FIXME unable to continue testing after failing
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
 		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
 		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
-		ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
+		//ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
+		generateFunctorTest(ts);
 		return ts;
 	}
 	
 }
-class ReadTestCase{
+class ReadTestCase{//TODO checking for null values
 	public ArrayList<String> testname=new ArrayList<String>();
 	public ArrayList<Integer> cursorpos=new ArrayList<Integer>();
 	public ArrayList<String> test=new ArrayList<String>();

@@ -52,7 +52,7 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				astTu.accept(o);
 				
 				String fname=nameAtCursor(o.getAL(),n.getNode(),stream);
-				if(fname.equals(""))return null;
+				if(fname.equals(""))return new MultiTextEdit();//FIXME potential bug point
 				
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
@@ -130,8 +130,11 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 			}else 
 				if(node instanceof ICPPASTTemplateDeclaration){//template class case
 					//template <class TClass> 
-					IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
-					return i.toString();
+					//shouldnt happen as requires the template to be initialised
+					stream.println("template class declarations selected, unable to add as functor.");
+					//IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
+					//return i.toString();
+					return "";
 				}
 		}
 		return ""; 

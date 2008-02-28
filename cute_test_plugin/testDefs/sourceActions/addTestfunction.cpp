@@ -102,3 +102,15 @@ void runTest(){
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
+//test recursive
+void run^Test(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
