@@ -29,6 +29,7 @@ import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctiontoSuiteAction;
+import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctortoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
 
 public class SourceActionsTest extends BaseTestFramework {
@@ -60,6 +61,15 @@ public class SourceActionsTest extends BaseTestFramework {
 			super(offset,0);
 		}
 	}
+	public final void testAddTestFunctorAll(){
+		rtc=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
+		//AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
+		AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
+		for(int i=0;i<3;i++){
+			testNewTestFunction(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
+		}
+	}
+	
 	public final void testAddTestFunctionAll(){
 		rtc=new ReadTestCase("testDefs/sourceActions/addTestfunction.txt");
 		//AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
@@ -136,6 +146,7 @@ public class SourceActionsTest extends BaseTestFramework {
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
 		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
 		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
+		ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
 		return ts;
 	}
 	
