@@ -3,18 +3,18 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 import java.util.ArrayList;
 
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
+import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
-import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
-import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisiblityLabel;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -43,8 +43,7 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
 				
 				MessageConsoleStream stream = EclipseConsole.getConsole();
-				
-				//scanforParenthesesOperator1(astTu);
+				//FIXME merge the vistors
 				NodeAtCursorFinder n= new NodeAtCursorFinder(selection.getOffset());
 				astTu.accept(n);
 				
@@ -83,7 +82,7 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 		return new MultiTextEdit();
 	}
 	protected String nameAtCursor(ArrayList<IASTName> operatorParenthesesNode,IASTNode node,MessageConsoleStream stream ){
-		if(node instanceof IASTStatement){
+		/*if(node instanceof IASTStatement){
 			//hunt for function call, either within normal function or within a class
 			if(node instanceof IASTCompoundStatement){
 				IASTStatement a[]=((IASTCompoundStatement)node).getStatements();
@@ -100,7 +99,8 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					}
 				}
 			}
-		}else if(node instanceof IASTDeclaration){
+		}*/
+		if(node instanceof IASTDeclaration){
 			if(node instanceof ICPPASTVisiblityLabel){
 				//public: private: protected: for class
 				node=node.getParent().getParent();
@@ -114,19 +114,33 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					operatorMatchFlag=true;
 					break;
 				}
-			}if(!operatorMatchFlag)return "";
+			}
+			if(node instanceof IASTSimpleDeclaration || node instanceof IASTFunctionDefinition){
+				if(node.getParent() instanceof ICPPASTCompositeTypeSpecifier){
+					IASTNode tmp=node.getParent();
+					for(IASTName i:operatorParenthesesNode){
+						if(tmp.contains(i)){
+							operatorMatchFlag=true;
+							break;
+						}
+					}
+				}
+			}
+			if(!operatorMatchFlag){stream.println("no matching operator() found at current cursor location.");return "";}
 
 			//check also operator() doesnt have parameters, or at least default binded
 			//check for function not virtual and has a method body
-			//visibilitylabel: private cannot
 			if(node instanceof IASTSimpleDeclaration){//simple class case
 				/*class TFunctor{
 					private:
 					public:  
 				 ***but cannot handle the function within
 				}*/
-				IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)node).getDeclSpecifier())).getName();
-				return i.toString();
+				IASTDeclSpecifier aa=(((IASTSimpleDeclaration)node).getDeclSpecifier());
+				if(null!=aa && aa instanceof IASTCompositeTypeSpecifier){
+					IASTName i=((IASTCompositeTypeSpecifier)aa).getName();
+					return i.toString();
+				}
 			}else 
 				if(node instanceof ICPPASTTemplateDeclaration){//template class case
 					//template <class TClass> 
@@ -136,6 +150,28 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					//return i.toString();
 					return "";
 				}
+		}
+		
+		IASTNode parentNode=node;
+		while(!(parentNode instanceof IASTFunctionDefinition ||
+				parentNode instanceof IASTSimpleDeclaration||
+				parentNode instanceof ICPPASTTranslationUnit)){
+			parentNode=parentNode.getParent();
+		}
+		if(parentNode instanceof IASTFunctionDefinition){
+			stream.println("IASTFunctionDefinition");
+			if(parentNode.getParent() instanceof CPPASTCompositeTypeSpecifier)
+				//handle the simple class case, cursor at methods
+				return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
+			if(parentNode.getParent() instanceof IASTTranslationUnit){
+				stream.println("function selected. TODO trigger addfunctiontosuite");
+			}
+		}else if(parentNode instanceof IASTSimpleDeclaration){
+			if(parentNode.getParent() instanceof CPPASTCompositeTypeSpecifier)
+				//handle the simple class case, cursor at methods
+				return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
+		}else if(parentNode instanceof ICPPASTTranslationUnit){
+			stream.println("ICPPASTTranslationUnit");
 		}
 		return ""; 
 	}

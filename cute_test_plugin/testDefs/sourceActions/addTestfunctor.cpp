@@ -121,7 +121,7 @@ void runTest(){
 	cute::makeRunner(lis)(s, "The Suite");
 }
 ///////////////////////////////////////
-//test class functor (cursor at function)
+//test class functor (cursor at function declaration)
 class ExternalDecl//: public TFunctor
 {
 	public:
@@ -143,6 +143,93 @@ class ExternalDecl//: public TFunctor
 void runTest(){
 	cute::suite s=make_suite_s();
 	s.push_back(ExternalDecl());
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor (cursor at non virtual function)
+class ExternalDecl//: public TFunctor
+{
+	public:
+		virtual void operator()();
+		virtual void Call(const char* string){}
+		int theCo^inIsin();
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class ExternalDecl//: public TFunctor
+{
+	public:
+		virtual void operator()();
+		virtual void Call(const char* string){}
+		int theCoinIsin();
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(ExternalDecl());
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor (cursor at function definition)
+class ExternalDecl//: public TFunctor
+{
+	public:
+		virtual void operator()();
+		virtual void Call(const char* string){}
+		int theCoinIsin();
+		int foo(){ret^urn 0;}
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class ExternalDecl//: public TFunctor
+{
+	public:
+		virtual void operator()();
+		virtual void Call(const char* string){}
+		int theCoinIsin();
+		int foo(){return 0;}
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(ExternalDecl());
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor (operator with parameters)
+class ExternalDecl//: public TFunctor
+{
+	public:
+		virtual void o^perator()(int x);
+		virtual void Call(const char* string){}
+		int theCoinIsin();
+		int foo(){return 0;}
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class ExternalDecl//: public TFunctor
+{
+	public:
+		virtual void operator()(int x);
+		virtual void Call(const char* string){}
+		int theCoinIsin();
+		int foo(){return 0;}
+};
+void runTest(){
+	cute::suite s=make_suite_s();
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
@@ -186,6 +273,39 @@ template <class TClass> class TSpecificFunctor : public TFunctor
    };
 void runTest(){
 	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor with constructor taking one parameter
+class ExternalDecl//: public TFunctor
+{
+	int value;
+	public:
+		ExternalDecl(int x):value(x){}
+		virtual void o^perator()(int x);
+		virtual void Call(const char* string){}
+		int theCoinIsin();
+		int foo(){return 0;}
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class ExternalDecl//: public TFunctor
+{
+	public:
+		ExternalDecl(int x):value(x){}
+		virtual void operator()(int x);
+		virtual void Call(const char* string){}
+		int theCoinIsin();
+		int foo(){return 0;}
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(ExternalDecl(initalise value));
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
