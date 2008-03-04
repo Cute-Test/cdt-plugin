@@ -40,8 +40,8 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	@Override
 	protected boolean isCustomPageComplete() {
 		if(suitenameText.getText().equals("")){
-			//since canFinish cannot be overwritten from this class, 
-			//we will need to accept a default name, which is better design 
+			//since IWizard#canFinish() cannot be overwritten from this class, thus unable to disable the finish button, 
+			//we will need to use a default name for empty textfield as a work around
 			errmsg="Please enter a suite name.";
 			return false;
 		}
@@ -58,12 +58,9 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	private Text suitenameText=null;
 	
 	public void createControl(Composite parent) {
-		//descriptionLabel=new Label(n_comp,SWT.NONE);
-	    //descriptionLabel.setText("This is for unmanaged project to set the source folder for Cute Plug-in to scan.");
 		composite = new Composite(parent, SWT.NULL);
 		
 		GridLayout layout = new GridLayout(3, true);
-		//layout.numColumns = 2;
 		layout.marginHeight = 0;
 		layout.marginWidth = 5;
 		composite.setLayout(layout);
@@ -91,7 +88,6 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 			iwc.updateTitleBar();
 			iwc.updateWindowTitle();}
 		});	
-	    //no access to canFinish() so have to use default values instead 
 	}
 
 	public String getSuiteName(){

@@ -30,6 +30,9 @@ import org.eclipse.ui.part.FileEditorInput;
 import ch.hsr.ifs.cutelauncher.EclipseConsole;
 
 public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
+	private boolean constructorNeedParameterFlag=false;
+	private final MessageConsoleStream stream = EclipseConsole.getConsole();
+	
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
@@ -42,8 +45,7 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
 				
-				MessageConsoleStream stream = EclipseConsole.getConsole();
-				//FIXME merge the vistors
+				//FIXME merge the visitors
 				NodeAtCursorFinder n= new NodeAtCursorFinder(selection.getOffset());
 				astTu.accept(n);
 				
@@ -52,11 +54,13 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				
 				String fname=nameAtCursor(o.getAL(),n.getNode(),stream);
 				if(fname.equals(""))return new MultiTextEdit();//FIXME potential bug point
+
+				constructorNeedParameterFlag=checkForConstructorWithParameters(astTu,n.getNode());
 				
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
 				
-				if(!checkNameExist(astTu,fname,suitPushBackFinder)){//??? +()
+				if(!checkNameExist(astTu,fname,suitPushBackFinder)){
 					MultiTextEdit mEdit = new MultiTextEdit();
 					
 					String newLine = TextUtilities.getDefaultLineDelimiter(doc);
@@ -66,40 +70,20 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
 					builder.append(name.toString());
 					builder.append(".push_back(");
-					builder.append(fname+"()");
+					if(constructorNeedParameterFlag)builder.append(fname+"(pArAmEtRs_ReQuIrEd)");
+					else builder.append(fname+"()");
 					builder.append(");");
 										
 					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 							suitPushBackFinder,builder));
 					return mEdit;
 				}
-								
-				stream.println(n.getBounded()+"wa");
-				stream.println(n.get()+"wa");
-				stream.println(n.getNode()+"w");
 			}
 		}
 		return new MultiTextEdit();
 	}
+	
 	protected String nameAtCursor(ArrayList<IASTName> operatorParenthesesNode,IASTNode node,MessageConsoleStream stream ){
-		/*if(node instanceof IASTStatement){
-			//hunt for function call, either within normal function or within a class
-			if(node instanceof IASTCompoundStatement){
-				IASTStatement a[]=((IASTCompoundStatement)node).getStatements();
-				//search for function call close to cursor
-				//if non is found, go up and use the function 
-				EclipseConsole.println(a[0].toString());
-				for(IASTStatement b:a){
-					if(b instanceof IASTExpressionStatement){
-						//System.out.println(b);
-						IASTIdExpression e=(IASTIdExpression)((IASTFunctionCallExpression)(((IASTExpressionStatement)b).getExpression())).getFunctionNameExpression();
-						//when user select a method in the normal class
-						stream.println(e.getName().toString());
-						return e.getName().toString();
-					}
-				}
-			}
-		}*/
 		if(node instanceof IASTDeclaration){
 			if(node instanceof ICPPASTVisiblityLabel){
 				//public: private: protected: for class
@@ -126,8 +110,22 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					}
 				}
 			}
-			if(!operatorMatchFlag){stream.println("no matching operator() found at current cursor location.");return "";}
-
+			if(node instanceof ICPPASTTemplateDeclaration){//template class case
+				//template <class TClass> 
+				//shouldnt happen as requires the template to be initialised
+				stream.println("template class declarations selected, unable to add as functor.");
+				//IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
+				//return i.toString();
+				return "";
+			}
+			if(!operatorMatchFlag){
+				stream.println("no matching operator() found at current cursor location.");
+				if(getWantedTypeParent(node).getParent() instanceof IASTTranslationUnit){
+					stream.println("function selected.");//TODO trigger addfunctiontosuite
+				}
+				return "";
+			}
+			
 			//check also operator() doesnt have parameters, or at least default binded
 			//check for function not virtual and has a method body
 			if(node instanceof IASTSimpleDeclaration){//simple class case
@@ -141,38 +139,60 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					IASTName i=((IASTCompositeTypeSpecifier)aa).getName();
 					return i.toString();
 				}
-			}else 
-				if(node instanceof ICPPASTTemplateDeclaration){//template class case
-					//template <class TClass> 
-					//shouldnt happen as requires the template to be initialised
-					stream.println("template class declarations selected, unable to add as functor.");
-					//IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
-					//return i.toString();
-					return "";
-				}
+			}	
 		}
 		
-		IASTNode parentNode=node;
+		//FIXME wouldnt be detected as preprocess statement NodeAtCursorFinder returns null
+		/*if(node instanceof IASTPreprocessorStatement){
+			stream.println("preprocessor statement selected, unable to add as functor.");
+			return "";
+		}*/
+		
+		/*IASTNode parentNode=node;
 		while(!(parentNode instanceof IASTFunctionDefinition ||
 				parentNode instanceof IASTSimpleDeclaration||
 				parentNode instanceof ICPPASTTranslationUnit)){
 			parentNode=parentNode.getParent();
-		}
+		}*/
+		IASTNode parentNode=getWantedTypeParent(node);
 		if(parentNode instanceof IASTFunctionDefinition){
-			stream.println("IASTFunctionDefinition");
 			if(parentNode.getParent() instanceof CPPASTCompositeTypeSpecifier)
 				//handle the simple class case, cursor at methods
 				return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
-			if(parentNode.getParent() instanceof IASTTranslationUnit){
-				stream.println("function selected. TODO trigger addfunctiontosuite");
-			}
+
 		}else if(parentNode instanceof IASTSimpleDeclaration){
 			if(parentNode.getParent() instanceof CPPASTCompositeTypeSpecifier)
 				//handle the simple class case, cursor at methods
 				return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
-		}else if(parentNode instanceof ICPPASTTranslationUnit){
-			stream.println("ICPPASTTranslationUnit");
 		}
+
+		stream.println("Unable to add as functor for cursor position.");
 		return ""; 
 	}
+	
+	public IASTNode getWantedTypeParent(IASTNode node){
+		IASTNode parentNode=node, prevNode=node;
+		while(!(parentNode instanceof IASTFunctionDefinition ||
+				parentNode instanceof IASTSimpleDeclaration||
+				parentNode instanceof ICPPASTTranslationUnit)){
+			try{
+			prevNode=parentNode;	
+			parentNode=parentNode.getParent();
+			}catch(NullPointerException npe){return prevNode;}
+		}return parentNode;
+	}
+
+	public boolean checkForConstructorWithParameters(IASTTranslationUnit astTu,IASTNode node){
+		FunctionFinder ff=new FunctionFinder();
+		astTu.accept(ff);
+		for(Object i:ff.getClassStruct()){
+			//stream.println(ff.getSimpleDeclarationNodeName((IASTSimpleDeclaration)(i))+"");
+			if(((IASTNode)i).contains(node)){
+				ArrayList<IASTDeclaration> constructors=ff.getConstructors((IASTSimpleDeclaration)i);				
+				return ff.haveParameters(constructors);
+			}
+		}
+		return false;
+	}
+	
 }

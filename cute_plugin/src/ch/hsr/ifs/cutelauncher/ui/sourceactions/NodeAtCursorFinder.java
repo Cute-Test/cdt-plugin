@@ -54,10 +54,3 @@ public class NodeAtCursorFinder extends ASTVisitor {
 	}
 	
 }
-/*
-select any class with operator()
-
-or any functioncallexp and resolve it 
-
-or any line with it 
-*/

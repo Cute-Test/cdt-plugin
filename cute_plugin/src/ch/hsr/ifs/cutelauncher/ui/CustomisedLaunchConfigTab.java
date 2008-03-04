@@ -13,39 +13,35 @@ package ch.hsr.ifs.cutelauncher.ui;
 
 import org.eclipse.cdt.launch.ui.CLaunchConfigurationTab;
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
+import org.eclipse.debug.internal.ui.SWTFactory;
+import org.eclipse.debug.internal.ui.launchConfigurations.LaunchConfigurationsMessages;
+import org.eclipse.debug.ui.IDebugUIConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 import ch.hsr.ifs.cutelauncher.model.CuteModel;
-
-//import org.eclipse.debug.core.*;
-import org.eclipse.debug.internal.ui.DebugUIPlugin;
-import org.eclipse.debug.internal.ui.SWTFactory;
-import org.eclipse.debug.internal.ui.launchConfigurations.LaunchConfigurationsMessages;
-import org.eclipse.debug.ui.*;
-import org.eclipse.jface.dialogs.IDialogSettings;
-//import org.eclipse.jface.viewers.ILabelProvider;
-//import org.eclipse.jface.window.Window;
 
 public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	public static final String CUSTOM_SRC_PATH = "customSrcPath";
@@ -86,6 +82,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 		
 		fCustomSrcRadioButton = createRadioButton(n_comp, "Custom path:");
 		fCustomSrcRadioButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent evt) {
 				handleSharedRadioButtonSelected();
 			}
@@ -94,6 +91,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 		fCustomSrcLocationText.addModifyListener(fBasicModifyListener);
 		fCustomSrcLocationButton = createPushButton(n_comp, LaunchConfigurationsMessages.CommonTab__Browse_6, null);	 
 		fCustomSrcLocationButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent evt) {
 				handleSharedLocationButtonSelected();
 			}
@@ -103,7 +101,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	/**
 	 * Modify listener that simply updates the owning launch configuration dialog.
 	 */
-	private ModifyListener fBasicModifyListener = new ModifyListener() {
+	private final ModifyListener fBasicModifyListener = new ModifyListener() {
 		public void modifyText(ModifyEvent evt) {
 			updateLaunchConfigurationDialog();
 		}
@@ -128,7 +126,6 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	 * @return true if the radio button is selected, false otherwise
 	 */
 	private boolean isShared() {
-		//cm.setUseCustomSrcPath(fSharedRadioButton.getSelection());
 		return fCustomSrcRadioButton.getSelection();
 	}
 
@@ -173,6 +170,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 			super(parentShell, initialRoot, allowNewContainerName, message);
 		}
 
+		@Override
 		protected IDialogSettings getDialogBoundsSettings() {
 			IDialogSettings settings = DebugUIPlugin.getDefault().getDialogSettings();
 			IDialogSettings section = settings.getSection(SETTINGS_ID);
@@ -207,6 +205,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(USE_CUSTOM_SRC_PATH,false);
 	}
+	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		if(isShared() && fCustomSrcLocationText.getText().equals("")){
 			setErrorMessage("No source path selected.");

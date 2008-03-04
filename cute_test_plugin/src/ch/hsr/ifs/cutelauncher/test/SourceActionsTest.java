@@ -10,7 +10,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.cdt.core.tests.BaseTestFramework;
-import org.eclipse.cdt.internal.core.model.ext.SourceRange;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
@@ -56,17 +55,17 @@ public class SourceActionsTest extends BaseTestFramework {
 		super.tearDown();
 	}
 	
-	class mySourceRange extends SourceRange{//for setting current cursor position
+	/*class mySourceRange extends SourceRange{//for setting current cursor position
 		public mySourceRange(int offset){
 			super(offset,0);
 		}
-	}
-	//FIXME JUnit dblclick not working as tests doesnt have direct src mapping 
+	}*/
+	//FIXME JUnit dblclick not working as tests doesnt have direct src mapping, if double click jmp to test file?
 	public final static void generateFunctorTest(TestSuite ts){
 		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
 		final AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
 		for(int i=0;i<rtc1.testname.size();i++){
-			//if(5==i)continue;
+			//if(12!=i)continue;
 			final int j=i;
 			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name
 			junit.framework.TestCase test = new SourceActionsTest("generateFunctorTest"+i+displayname) {
@@ -109,10 +108,7 @@ public class SourceActionsTest extends BaseTestFramework {
 	public final void generateTest(String testname,String testSrcCode, int cursorpos, String expectedOutput,AbstractFunctionAction functionAction){
 		try{
 		IFile inputFile=importFile("A.cpp",testSrcCode);
-		/*ITranslationUnit tu= CoreModelUtil.findTranslationUnit(inputFile);
-		IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
-		IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
-		*/
+
 		IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 		assertNotNull(editor);
 		assertTrue(editor instanceof CEditor);
@@ -147,17 +143,7 @@ public class SourceActionsTest extends BaseTestFramework {
 		//compare it 
 		assertEquals("result unexpected."+testname+"("+cursorpos+")",expectedOutput,results);
 		//TODO discarding the changes as clean up, instead of writing to disk and then deleting it
-		
-		/*
-		CCorePlugin.getIndexManager().setIndexerId(cproject,
-				IPDOMManager.ID_FAST_INDEXER);
-		//TestPlugin.getDefault().getLog().addLogListener(this);
-		//Activator.getDefault().getLog().addLogListener(this);
-		CCorePlugin.getIndexManager().reindex(cproject);
-		boolean joined = CCorePlugin.getIndexManager().joinIndexer(
-				IIndexManager.FOREVER, NULL_PROGRESS_MONITOR);
-		assertTrue(joined);
-		*/
+				
 		}catch(Exception e){e.printStackTrace();fail(testname+"\n"+e.getMessage());}
 	}
 	public static Test suite(){//FIXME unable to continue testing after failing
@@ -246,3 +232,18 @@ class ReadTestCase{//TODO checking for null values
 		
 	}
 }//future instead of testing text, parsing AST might bring more flexibility 
+/* Random possible useful snippet 
+	ITranslationUnit tu= CoreModelUtil.findTranslationUnit(inputFile);
+	IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
+	IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
+
+		CCorePlugin.getIndexManager().setIndexerId(cproject,
+				IPDOMManager.ID_FAST_INDEXER);
+		//TestPlugin.getDefault().getLog().addLogListener(this);
+		//Activator.getDefault().getLog().addLogListener(this);
+		CCorePlugin.getIndexManager().reindex(cproject);
+		boolean joined = CCorePlugin.getIndexManager().joinIndexer(
+				IIndexManager.FOREVER, NULL_PROGRESS_MONITOR);
+		assertTrue(joined);
+
+*/

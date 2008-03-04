@@ -17,10 +17,6 @@ import org.eclipse.swt.graphics.Image;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 
-
-/*
- * 
- */
 public class NewCuteSuiteWizard extends NewCuteProjectWizard {
 	/*
 	 * left hand side tree

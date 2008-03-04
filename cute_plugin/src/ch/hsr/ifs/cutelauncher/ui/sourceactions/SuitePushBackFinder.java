@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cutelauncher.ui.sourceactions;
+                                     package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
