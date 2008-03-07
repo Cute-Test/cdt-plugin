@@ -118,7 +118,10 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 		} 
 	}
 
+	//set the final cursor position @see AbstractFunctionActionDelegate#run
 	abstract int getCursorEndPosition(TextEdit[] edits, String newLine);
+
+	//set the final cursor end position @see AbstractFunctionActionDelegate#run
 	abstract int getExitPositionLength();
 }
 /*setActiveEditor

@@ -23,7 +23,6 @@ public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegat
 	public NewTestFunctionActionDelegate(){
 		super("newTestFunction",new NewTestFunctionAction());
 	}
-	//set the final cursor position @see AbstractFunctionActionDelegate#run
 	@Override
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {
 		for (TextEdit textEdit : edits) {
@@ -34,7 +33,7 @@ public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegat
 		}
 		return edits[0].getOffset() + edits[0].getLength();
 	}
-	//set the final cursor end position @see AbstractFunctionActionDelegate#run
+
 	@Override
 	int getExitPositionLength(){
 		return NewTestFunctionAction.TEST_STMT.trim().length();

@@ -37,3 +37,4 @@ public class EclipseConsole {
 	}
 	//stream.println("Hello, world!");
 }
+//@see http://www.jevon.org/wiki/Writing_to_a_Console_in_Eclipse

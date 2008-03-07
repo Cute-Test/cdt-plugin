@@ -126,13 +126,13 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				return "";
 			}
 			
-			//check also operator() doesnt have parameters, or at least default binded
-			//check for function not virtual and has a method body
+			//TODO check also operator() doesnt have parameters, or at least default binded
+			//TODO check for function not virtual and has a method body
 			if(node instanceof IASTSimpleDeclaration){//simple class case
 				/*class TFunctor{
 					private:
 					public:  
-				 ***but cannot handle the function within
+				 ***but cannot handle the methods 
 				}*/
 				IASTDeclSpecifier aa=(((IASTSimpleDeclaration)node).getDeclSpecifier());
 				if(null!=aa && aa instanceof IASTCompositeTypeSpecifier){
@@ -147,25 +147,12 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 			stream.println("preprocessor statement selected, unable to add as functor.");
 			return "";
 		}*/
-		
-		/*IASTNode parentNode=node;
-		while(!(parentNode instanceof IASTFunctionDefinition ||
-				parentNode instanceof IASTSimpleDeclaration||
-				parentNode instanceof ICPPASTTranslationUnit)){
-			parentNode=parentNode.getParent();
-		}*/
+
 		IASTNode parentNode=getWantedTypeParent(node);
-		if(parentNode instanceof IASTFunctionDefinition){
-			if(parentNode.getParent() instanceof CPPASTCompositeTypeSpecifier)
+		if(parentNode instanceof IASTFunctionDefinition || 
+				parentNode instanceof IASTSimpleDeclaration)
 				//handle the simple class case, cursor at methods
 				return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
-
-		}else if(parentNode instanceof IASTSimpleDeclaration){
-			if(parentNode.getParent() instanceof CPPASTCompositeTypeSpecifier)
-				//handle the simple class case, cursor at methods
-				return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
-		}
-
 		stream.println("Unable to add as functor for cursor position.");
 		return ""; 
 	}
@@ -188,8 +175,8 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 		for(Object i:ff.getClassStruct()){
 			//stream.println(ff.getSimpleDeclarationNodeName((IASTSimpleDeclaration)(i))+"");
 			if(((IASTNode)i).contains(node)){
-				ArrayList<IASTDeclaration> constructors=ff.getConstructors((IASTSimpleDeclaration)i);				
-				return ff.haveParameters(constructors);
+				ArrayList<IASTDeclaration> constructors=ASTHelper.getConstructors((IASTSimpleDeclaration)i);				
+				return ASTHelper.haveParameters(constructors);
 			}
 		}
 		return false;

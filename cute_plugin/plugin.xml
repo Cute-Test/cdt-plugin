@@ -158,7 +158,7 @@
           id="ch.hsr.ifs.cutelauncher.cEditorContribution"
           targetID="#CEditorContext">
        <action
-             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate"
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestMembertoSuiteDelegate"
              definitionId="cute_plugin.command1"
              id="ch.hsr.ifs.cutelauncher.addTestMemberSuiteAction"
              label="Add Test Member to Suite"
