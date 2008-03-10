@@ -14,7 +14,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisiblityLabel;
 
 public class ASTHelper {
-	public static String getSimpleDeclarationNodeName(IASTSimpleDeclaration simpleDeclaration){
+	public static String getClassStructName(IASTSimpleDeclaration simpleDeclaration){
 		IASTDeclSpecifier declspecifier=simpleDeclaration.getDeclSpecifier();
 		if(declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier){
 			return ((ICPPASTCompositeTypeSpecifier)declspecifier).getName().toString();
@@ -68,10 +68,10 @@ public class ASTHelper {
 		return false;
 	}
 	
-	public static ArrayList<IASTDeclaration> getPublicMethods(IASTSimpleDeclaration simpleDeclaration){
+	public static ArrayList<IASTDeclaration> getPublicMethods(IASTSimpleDeclaration cppClass){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
 		
-		IASTDeclSpecifier declspecifier=simpleDeclaration.getDeclSpecifier();
+		IASTDeclSpecifier declspecifier=cppClass.getDeclSpecifier();
 		if(declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier){
 			ICPPASTCompositeTypeSpecifier cts=(ICPPASTCompositeTypeSpecifier)declspecifier;
 			String className=cts.getName().toString();
@@ -93,6 +93,19 @@ public class ASTHelper {
 						ispublicVisibility=false;
 					continue;
 				}
+				
+				String methodName="";
+				if(members[i] instanceof IASTSimpleDeclaration){
+					IASTSimpleDeclaration simpleDeclaration1=(IASTSimpleDeclaration)members[i];
+					IASTDeclarator declarator[]=simpleDeclaration1.getDeclarators();
+					methodName=declarator[0].getName().toString();
+					
+				}else if(members[i] instanceof IASTFunctionDefinition){
+					IASTFunctionDefinition funcdef=(IASTFunctionDefinition)members[i];
+					IASTFunctionDeclarator funcdeclarator=funcdef.getDeclarator();
+					methodName=funcdeclarator.getName().toString();
+				}
+				if(className.equals(methodName))continue;
 				
 				if(ispublicVisibility){
 					result.add(members[i]);

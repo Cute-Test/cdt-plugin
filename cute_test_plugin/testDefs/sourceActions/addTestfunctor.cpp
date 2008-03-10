@@ -529,3 +529,62 @@ void runTest(){
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
+///////////////////////////////////////
+//test struct functor nested (cursor at outer struct)
+struct aStructWithoutVisiblity{
+	bool operat^or() (){ASSERTM("start writing tests", false);return false;}
+	void a();
+	struct bStruct{
+		int theOne;
+		double theD;
+	};
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+struct aStructWithoutVisiblity{
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+	void a();
+	struct bStruct{
+		int theOne;
+		double theD;
+	};
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(aStructWithoutVisiblity());
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test struct functor nested (cursor at inner struct without operator)
+struct aStructWithoutVisiblity{
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+	void a();
+	struct bStruct{
+		int the^One;
+		double theD;
+	};
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+struct aStructWithoutVisiblity{
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+	void a();
+	struct bStruct{
+		int theOne;
+		double theD;
+	};
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
