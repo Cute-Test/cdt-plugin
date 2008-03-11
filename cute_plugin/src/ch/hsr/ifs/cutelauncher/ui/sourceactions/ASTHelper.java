@@ -11,6 +11,8 @@ import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisiblityLabel;
 
 public class ASTHelper {
@@ -18,6 +20,21 @@ public class ASTHelper {
 		IASTDeclSpecifier declspecifier=simpleDeclaration.getDeclSpecifier();
 		if(declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier){
 			return ((ICPPASTCompositeTypeSpecifier)declspecifier).getName().toString();
+		}
+		return "";
+	}
+	public static String getMethodName(IASTDeclaration declaration){
+		if(declaration instanceof IASTFunctionDefinition){
+			IASTFunctionDefinition fd=(IASTFunctionDefinition)declaration;
+			IASTFunctionDeclarator fdd=fd.getDeclarator();
+			String fname=fdd.getName().toString();
+			return fname;
+		}else if(declaration instanceof IASTSimpleDeclaration){
+			IASTSimpleDeclaration sd=(IASTSimpleDeclaration)declaration;
+			IASTDeclarator sdd[]=sd.getDeclarators();
+			if(sdd.length==0)return "";
+			String sname=sdd[0].getName().toString();
+			return sname;
 		}
 		return "";
 	}
@@ -98,20 +115,60 @@ public class ASTHelper {
 				if(members[i] instanceof IASTSimpleDeclaration){
 					IASTSimpleDeclaration simpleDeclaration1=(IASTSimpleDeclaration)members[i];
 					IASTDeclarator declarator[]=simpleDeclaration1.getDeclarators();
-					methodName=declarator[0].getName().toString();
+					if(declarator !=null && declarator.length>0)
+						methodName=declarator[0].getName().toString();
 					
 				}else if(members[i] instanceof IASTFunctionDefinition){
 					IASTFunctionDefinition funcdef=(IASTFunctionDefinition)members[i];
 					IASTFunctionDeclarator funcdeclarator=funcdef.getDeclarator();
 					methodName=funcdeclarator.getName().toString();
 				}
-				if(className.equals(methodName))continue;
+				if(className.equals(methodName))continue;//constructor
 				
 				if(ispublicVisibility){
 					result.add(members[i]);
 				}
 			}
 		}
+		return result;
+	}
+	
+	public static ArrayList<IASTSimpleDeclaration> removeTemplateClasses(ArrayList<IASTSimpleDeclaration> cppClassStruct){
+		ArrayList<IASTSimpleDeclaration> result=new ArrayList<IASTSimpleDeclaration>();
+		
+		for(IASTSimpleDeclaration simpleDeclaration:cppClassStruct){
+			if(simpleDeclaration.getParent() instanceof ICPPASTTemplateDeclaration)continue;
+			result.add(simpleDeclaration);
+		}
+		return result;
+	}
+	
+	public static ArrayList<IASTDeclaration> getStaticMethods(ArrayList<IASTDeclaration> member){
+		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
+	
+		for(IASTDeclaration m:member){
+			if(m instanceof IASTSimpleDeclaration){
+				IASTSimpleDeclaration simpleDeclaration1=(IASTSimpleDeclaration)m;
+				IASTDeclSpecifier specifier=simpleDeclaration1.getDeclSpecifier();
+				if(specifier.getStorageClass()==IASTDeclSpecifier.sc_static)result.add(m);
+			}else if(m instanceof IASTFunctionDefinition){
+				IASTFunctionDefinition funcdef=(IASTFunctionDefinition)m;
+				IASTDeclSpecifier specifier=funcdef.getDeclSpecifier();
+				if(specifier.getStorageClass()==IASTDeclSpecifier.sc_static)result.add(m);
+			}
+		}
+		return result;
+	}
+	
+	public static ArrayList<IASTSimpleDeclaration> getClassStructVariables(ArrayList<IASTSimpleDeclaration> variablesList){
+		ArrayList<IASTSimpleDeclaration> result=new ArrayList<IASTSimpleDeclaration>();
+		
+		for(IASTSimpleDeclaration i:variablesList){
+			if(i.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier){
+				result.add(i);
+			}
+		}
+		
 		return result;
 	}
 }

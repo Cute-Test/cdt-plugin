@@ -13,6 +13,8 @@ public class FunctionFinder extends ASTVisitor {
 	ArrayList<IASTSimpleDeclaration> alSimpleDeclarationOnly=new ArrayList<IASTSimpleDeclaration>();
 	boolean parseForSimpleDeclaration=false;
 	ArrayList<IASTSimpleDeclaration> alClassStructOnly=new ArrayList<IASTSimpleDeclaration>();
+	ArrayList<IASTSimpleDeclaration> alVariables=new ArrayList<IASTSimpleDeclaration>();
+	
 	boolean parseClassStructOnly=false;
 	
 	{
@@ -36,6 +38,7 @@ public class FunctionFinder extends ASTVisitor {
 		return alSimpleDeclarationOnly;
 	}
 	
+	//template class are also returned
 	public ArrayList<IASTSimpleDeclaration> getClassStruct(){
 		if(!parseClassStructOnly){
 			ArrayList<IASTSimpleDeclaration> altmp=getSimpleDeclaration();
@@ -44,11 +47,16 @@ public class FunctionFinder extends ASTVisitor {
 				IASTDeclSpecifier declspecifier=i.getDeclSpecifier();
 				if(declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier){
 					alClassStructOnly.add(i);
-				}
+				}else
+					alVariables.add(i);
 			}
 			
 			parseClassStructOnly=true;
 		}
 		return alClassStructOnly;
+	}
+	public ArrayList<IASTSimpleDeclaration> getVariables(){
+		getClassStruct();
+		return alVariables;
 	}
 }
