@@ -8,11 +8,17 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.ui.IEditorInput;
@@ -61,17 +67,64 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		LabelProvider lp=new LabelProvider(); 
 		myTree wcp=new myTree(ff, classStruct, classStructInstances);
 				
-		ElementTreeSelectionDialog etsd=new ElementTreeSelectionDialog(new Shell(CuteLauncherPlugin.getDisplay()),lp,wcp);
-		etsd.setInput(wcp.root);
+		ElementTreeSelectionDialog etsd=new myETSD(new Shell(CuteLauncherPlugin.getDisplay()),lp,wcp);
 		etsd.setTitle("Select Method to add to suite");
-		
+		etsd.setAllowMultiple(false);
 		etsd.setBlockOnOpen(true);
-		if(etsd.open()==ElementTreeSelectionDialog.OK){
-			
+		etsd.setInput(wcp.root);
+		
+		etsd.create();
+		Button button=etsd.getOkButton();
+		button.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageConsoleStream stream=EclipseConsole.getConsole();
+				stream.println("selected");
+				
+			}
+		});
+		
+		boolean allowToClose=false;
+		while(allowToClose==false){
+			//??? move out of loop
+			int status=etsd.open();
+			if(status==ElementTreeSelectionDialog.OK){
+				Object selectedObject=etsd.getFirstResult();
+				
+				if(selectedObject instanceof Container)continue;
+				allowToClose=true;
+				break;
+			}
+			if(status==ElementTreeSelectionDialog.CANCEL){
+				allowToClose=true;
+				break;
+			}
 		}
+			
 	}
 }
 
+class myETSD extends ElementTreeSelectionDialog{
+    
+	public myETSD(Shell parent,
+            ILabelProvider labelProvider, ITreeContentProvider contentProvider){
+		super(parent,labelProvider,contentProvider);
+	}
+		
+	// @see SelectionStatusDialog#updateButtonsEnableState
+    @Override
+	protected void updateButtonsEnableState(IStatus status) {
+        Button okButton = getOkButton();
+        Object selectedObject=getFirstResult();
+        
+        if (okButton != null && !okButton.isDisposed() && !(selectedObject instanceof Container)) {
+			okButton.setEnabled(!status.matches(IStatus.ERROR));
+		}
+        if(selectedObject instanceof Container){
+        	okButton.setEnabled(false);
+        }
+    }
+}
 
 class myTree extends TreeNodeContentProvider{
 	
