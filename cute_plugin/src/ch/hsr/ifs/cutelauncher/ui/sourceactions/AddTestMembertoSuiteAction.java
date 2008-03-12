@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -74,8 +75,8 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 
 class myTree extends TreeNodeContentProvider{
 	
-	public ArrayList containers=new ArrayList();
-	public final Container root=new Container(null);
+	public ArrayList<Container> containers=new ArrayList<Container>();
+	public final Container root=new Container(null,true);
 	
  	public myTree(	FunctionFinder ff, 
 					ArrayList<IASTSimpleDeclaration> classStruct, 
@@ -88,7 +89,7 @@ class myTree extends TreeNodeContentProvider{
 			ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(i);
 			ArrayList<IASTDeclaration> staticMethods=ASTHelper.getStaticMethods(publicMethods);
 			
-			Container c=new Container(i);
+			Container c=new Container(i,false);
 			for(IASTDeclaration j:staticMethods){
 				Method method=new Method(c,j);
 				c.add(method);
@@ -97,10 +98,29 @@ class myTree extends TreeNodeContentProvider{
 		}
 		
 		for(IASTSimpleDeclaration i:classStructInstances){
-			stream.println("instances:"+ASTHelper.getClassStructName((i))+"");
-			ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(i);
+			stream.println("instances:"+ASTHelper.getVariableName((i))+"");
+			if(i.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier){
+				ICPPASTNamedTypeSpecifier namedSpecifier=(ICPPASTNamedTypeSpecifier)i.getDeclSpecifier();
+				String typename=namedSpecifier.getName().toString();
 			
-			
+				//resolve to type
+				IASTSimpleDeclaration targetType=null;
+				for(Container c:containers){
+					if(ASTHelper.getClassStructName(c.simpleDeclaration).equals(typename)){
+						targetType=c.simpleDeclaration;
+					}
+				}
+				if(targetType==null)continue;
+							
+				ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(targetType);
+				
+				Container c=new Container(i,true);
+				for(IASTDeclaration j:publicMethods){
+					Method method=new Method(c,j);
+					c.add(method);
+				}
+				containers.add(c);
+			}
 		}
 	}
 	
@@ -139,11 +159,18 @@ class myTree extends TreeNodeContentProvider{
 class Container {
 	public IASTSimpleDeclaration simpleDeclaration; 
 	public ArrayList<Method> methods=new ArrayList<Method>();
+	public final boolean isInstance;
 	
-	public Container(IASTSimpleDeclaration i){simpleDeclaration = i;}
+	public Container(IASTSimpleDeclaration i,boolean isInstance){simpleDeclaration = i;this.isInstance=isInstance;}
 	public void add(Object element){methods.add((Method)element);}
 	@Override
-	public String toString(){return ASTHelper.getClassStructName(simpleDeclaration);}
+	public String toString(){
+		if(isInstance){
+			return ASTHelper.getVariableName(simpleDeclaration);
+		}else 
+			return ASTHelper.getClassStructName(simpleDeclaration);
+	}
+	
 }
 class Method{
 	public IASTDeclaration declaration;

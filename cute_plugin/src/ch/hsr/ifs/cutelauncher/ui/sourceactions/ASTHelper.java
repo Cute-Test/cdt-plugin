@@ -123,6 +123,7 @@ public class ASTHelper {
 					IASTFunctionDeclarator funcdeclarator=funcdef.getDeclarator();
 					methodName=funcdeclarator.getName().toString();
 				}
+				if(methodName=="")continue;
 				if(className.equals(methodName))continue;//constructor
 				
 				if(ispublicVisibility){
@@ -170,5 +171,12 @@ public class ASTHelper {
 		}
 		
 		return result;
+	}
+	public static String getVariableName(IASTSimpleDeclaration variable){
+		IASTDeclarator declarators[]=variable.getDeclarators();
+		if(declarators !=null && declarators.length>0){
+			return declarators[0].getName().toString();
+		}
+		return "";
 	}
 }
