@@ -3,6 +3,7 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 import java.util.ArrayList;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
@@ -11,6 +12,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -55,15 +57,20 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				ArrayList<IASTSimpleDeclaration> variablesList=ff.getVariables();
 				ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
 				
-				Dialog(ff, withoutTemplate, classStructInstances);
+				MultiTextEdit mEdit =Dialog(astTu, editorFile,doc,ff, withoutTemplate, classStructInstances);
+				return mEdit;
 		
+								
 			}
 		}
 
 		return new MultiTextEdit();
 	}
 
-	public void Dialog(FunctionFinder ff, ArrayList<IASTSimpleDeclaration> classStruct, ArrayList<IASTSimpleDeclaration> classStructInstances){
+	//filter for just public non static without parameters class
+	public MultiTextEdit Dialog(IASTTranslationUnit astTu,IFile editorFile,IDocument doc,
+			FunctionFinder ff, ArrayList<IASTSimpleDeclaration> classStruct, ArrayList<IASTSimpleDeclaration> classStructInstances){
+		
 		LabelProvider lp=new LabelProvider(); 
 		myTree wcp=new myTree(ff, classStruct, classStructInstances);
 				
@@ -86,7 +93,6 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		
 		boolean allowToClose=false;
 		while(allowToClose==false){
-			//??? move out of loop
 			int status=etsd.open();
 			if(status==ElementTreeSelectionDialog.OK){
 				Object selectedObject=etsd.getFirstResult();
@@ -100,7 +106,47 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				break;
 			}
 		}
+		
+		Object selectedObject=etsd.getFirstResult();
+		Method child=(Method)selectedObject;
+		Container parent=child.getParent();
+		
+		MessageConsoleStream stream=EclipseConsole.getConsole();
+		stream.println("selected:"+parent.toString()+"."+child.toString()+"()");
+		
+		//parent.toString()+"."+child.toString()+"()";
+		
+		
+
+		SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
+		astTu.accept(suitPushBackFinder);
+		
+		//TODO modify checkNameExist for detecting name with classes
+			MultiTextEdit mEdit = new MultiTextEdit();
 			
+			String newLine = TextUtilities.getDefaultLineDelimiter(doc);
+			StringBuilder builder = new StringBuilder();
+			builder.append(newLine);
+			builder.append("\t");
+			IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
+			builder.append(name.toString());
+			builder.append(".push_back(");
+			
+			if(parent.isInstance==Container.InstanceType){
+				builder.append("CUTE_MEMFUN("+parent.toString()+","+parent.classTypeName+","+child.toString()+")");
+			}
+			if(parent.isInstance==Container.ClassType){
+				builder.append("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
+			}
+			builder.append(");");
+			
+			mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
+					suitPushBackFinder,builder));
+			return mEdit;
+		
+		/*	s.push_back(CUTE_SMEMFUN(aStruct,helo));
+	s.push_back(CUTE_MEMFUN(thatStruct,aStruct,helo));*/
+		
 	}
 }
 
@@ -140,14 +186,18 @@ class myTree extends TreeNodeContentProvider{
 		for(IASTSimpleDeclaration i:classStruct){
 			stream.println("class:"+ASTHelper.getClassStructName((i))+"");
 			ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(i);
-			ArrayList<IASTDeclaration> staticMethods=ASTHelper.getStaticMethods(publicMethods);
+			ArrayList<IASTDeclaration> nonStaticMethods=ASTHelper.getNonStaticMethods(publicMethods);
+			ArrayList<IASTDeclaration> removedParameters=ASTHelper.getParameterlessMethods(nonStaticMethods);
+			ArrayList<IASTDeclaration> removedVoid=ASTHelper.getVoidMethods(removedParameters);
+			ArrayList<IASTDeclaration> removedUnion=ASTHelper.removeUnion(removedVoid);
 			
-			Container c=new Container(i,false);
-			for(IASTDeclaration j:staticMethods){
+			Container c=new Container(i,Container.ClassType);
+			for(IASTDeclaration j:removedUnion){
 				Method method=new Method(c,j);
 				c.add(method);
 			}
-			containers.add(c);
+			if(!ASTHelper.isUnion(i))
+				containers.add(c);
 		}
 		
 		for(IASTSimpleDeclaration i:classStructInstances){
@@ -165,9 +215,9 @@ class myTree extends TreeNodeContentProvider{
 				}
 				if(targetType==null)continue;
 							
-				ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(targetType);
+				ArrayList<IASTDeclaration> publicMethods=ASTHelper.getVoidMethods(ASTHelper.getParameterlessMethods(ASTHelper.getNonStaticMethods(ASTHelper.getPublicMethods(targetType))));
 				
-				Container c=new Container(i,true);
+				Container c=new Container(i,Container.InstanceType,ASTHelper.getClassStructName(targetType));
 				for(IASTDeclaration j:publicMethods){
 					Method method=new Method(c,j);
 					c.add(method);
@@ -210,11 +260,24 @@ class myTree extends TreeNodeContentProvider{
 }
 
 class Container {
+	public static final boolean InstanceType=true; 
+	public static final boolean ClassType=false;
+	
 	public IASTSimpleDeclaration simpleDeclaration; 
 	public ArrayList<Method> methods=new ArrayList<Method>();
 	public final boolean isInstance;
+	public String classTypeName="";
 	
-	public Container(IASTSimpleDeclaration i,boolean isInstance){simpleDeclaration = i;this.isInstance=isInstance;}
+	public Container(IASTSimpleDeclaration i,boolean isInstance){
+		simpleDeclaration = i;
+		this.isInstance=isInstance;
+	}
+	public Container(IASTSimpleDeclaration i,boolean isInstance, String classTypeName){
+		this(i,isInstance);
+		this.classTypeName=classTypeName;
+	}
+	
+	
 	public void add(Object element){methods.add((Method)element);}
 	@Override
 	public String toString(){
@@ -236,3 +299,13 @@ class Method{
 }
 
 // nested case of struct/class ?
+
+/*
+ * foo operator() int d 
+shouldnt be shown
+
+remove operator()
+
+duplicate entry detection
+ * 
+ * */

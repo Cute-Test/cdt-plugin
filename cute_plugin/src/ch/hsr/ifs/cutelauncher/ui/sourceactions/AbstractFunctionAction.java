@@ -18,6 +18,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFieldReference;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -135,7 +137,7 @@ public abstract class AbstractFunctionAction {
 						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
 						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
 						IASTExpression thelist=innercallex.getParameterExpression();
-						String theName;
+						String theName="";
 						if(thelist!=null){
 							if(thelist instanceof IASTExpressionList){//????
 								IASTExpression innerlist[]=((IASTExpressionList)thelist).getExpressions();
@@ -146,8 +148,13 @@ public abstract class AbstractFunctionAction {
 								theName=((CPPASTIdExpression)thelist).getName().toString();
 							}
 						}else{//handle functor nodes
-							CPPASTIdExpression a=(CPPASTIdExpression)innercallex.getFunctionNameExpression();
-							theName=a.getName().toString();
+							if(innercallex instanceof CPPASTIdExpression){
+								CPPASTIdExpression a=(CPPASTIdExpression)innercallex.getFunctionNameExpression();
+								theName=a.getName().toString();
+							}else if(innercallex instanceof CPPASTFunctionCallExpression){
+								CPPASTFieldReference a=(CPPASTFieldReference)((CPPASTFunctionCallExpression)innercallex).getFunctionNameExpression();
+								theName=a.getFieldName().toString();
+							}
 						}
 						if(theName.equals(fname))return true;
 					}
