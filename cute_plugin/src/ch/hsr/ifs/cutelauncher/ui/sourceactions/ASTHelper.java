@@ -65,24 +65,27 @@ public class ASTHelper {
 		}
 		return result;
 	}
-	public static boolean haveParameters(ArrayList<IASTDeclaration> al){
-		
-		for(IASTDeclaration i:al){
-			if(i instanceof IASTFunctionDefinition){
-				IASTFunctionDefinition fd=(IASTFunctionDefinition)i;
-				ICPPASTFunctionDeclarator fdd=(ICPPASTFunctionDeclarator)fd.getDeclarator();
-				IASTParameterDeclaration fpara[]=fdd.getParameters();
-				if(fdd.takesVarArgs() ||fpara.length>0) return true;				
-			}else if(i instanceof IASTSimpleDeclaration){
-				IASTSimpleDeclaration sd=(IASTSimpleDeclaration)i;
-				IASTDeclarator sdd[]=sd.getDeclarators();
-				
-				for(int j=0;j<sdd.length;j++){
-					ICPPASTFunctionDeclarator fd=(ICPPASTFunctionDeclarator)sdd[j];
-					IASTParameterDeclaration fpara[]=fd.getParameters();
-					if(fd.takesVarArgs() || fpara!=null && fpara.length>0) return true;
-				}
+	public static boolean haveParameters(IASTDeclaration i){
+		if(i instanceof IASTFunctionDefinition){
+			IASTFunctionDefinition fd=(IASTFunctionDefinition)i;
+			ICPPASTFunctionDeclarator fdd=(ICPPASTFunctionDeclarator)fd.getDeclarator();
+			IASTParameterDeclaration fpara[]=fdd.getParameters();
+			if(fdd.takesVarArgs() ||fpara.length>0) return true;				
+		}else if(i instanceof IASTSimpleDeclaration){
+			IASTSimpleDeclaration sd=(IASTSimpleDeclaration)i;
+			IASTDeclarator sdd[]=sd.getDeclarators();
+			
+			for(int j=0;j<sdd.length;j++){
+				ICPPASTFunctionDeclarator fd=(ICPPASTFunctionDeclarator)sdd[j];
+				IASTParameterDeclaration fpara[]=fd.getParameters();
+				if(fd.takesVarArgs() || fpara!=null && fpara.length>0) return true;
 			}
+		}
+		return false;
+	}
+	public static boolean haveParameters(ArrayList<IASTDeclaration> al){
+		for(IASTDeclaration i:al){
+			if(haveParameters(i)){return true;}
 		}
 		return false;
 	}
@@ -90,7 +93,9 @@ public class ASTHelper {
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
 		
 		for(IASTDeclaration i:al){
-			if(i instanceof IASTFunctionDefinition){
+			if(!haveParameters(i))result.add(i);
+			
+			/*if(i instanceof IASTFunctionDefinition){
 				IASTFunctionDefinition fd=(IASTFunctionDefinition)i;
 				ICPPASTFunctionDeclarator fdd=(ICPPASTFunctionDeclarator)fd.getDeclarator();
 				IASTParameterDeclaration fpara[]=fdd.getParameters();
@@ -104,14 +109,15 @@ public class ASTHelper {
 					ICPPASTFunctionDeclarator fd=(ICPPASTFunctionDeclarator)sdd[j];
 					IASTParameterDeclaration fpara[]=fd.getParameters();
 					if(fd.takesVarArgs() || fpara!=null && fpara.length>0) continue;
-					result.add(i);
+					result.add(i);   //BUG POINT
 				}
-			}
+			}*/
 		}
 		return result;
 	}	
 	public static boolean isVoid(IASTDeclaration i){
 		boolean result=false;
+		
 		if(i instanceof IASTFunctionDefinition){
 			IASTFunctionDefinition fd=(IASTFunctionDefinition)i;
 			IASTSimpleDeclSpecifier specifier=(IASTSimpleDeclSpecifier)fd.getDeclSpecifier();
@@ -121,6 +127,7 @@ public class ASTHelper {
 			IASTSimpleDeclSpecifier specifier=(IASTSimpleDeclSpecifier)sd.getDeclSpecifier();
 			if(specifier.getType()==IASTSimpleDeclSpecifier.t_void)result=true;
 		}		
+		
 		return result;
 	}
 	public static ArrayList<IASTDeclaration> removeVoidMethods(ArrayList<IASTDeclaration> member){
@@ -130,8 +137,8 @@ public class ASTHelper {
 			if(!isVoid(simpleDeclaration))
 			result.add(simpleDeclaration);
 		}
-		return result;
 		
+		return result;
 	}
 	public static ArrayList<IASTDeclaration> getVoidMethods(ArrayList<IASTDeclaration> member){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
@@ -140,8 +147,8 @@ public class ASTHelper {
 			if(isVoid(simpleDeclaration))
 			result.add(simpleDeclaration);
 		}
+
 		return result;
-		
 	}
 	public static ArrayList<IASTDeclaration> getPublicMethods(IASTSimpleDeclaration cppClass){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
@@ -150,8 +157,7 @@ public class ASTHelper {
 		if(declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier){
 			ICPPASTCompositeTypeSpecifier cts=(ICPPASTCompositeTypeSpecifier)declspecifier;
 			String className=cts.getName().toString();
-			IASTDeclaration members[]=cts.getMembers();
-			
+						
 			boolean ispublicVisibility=false;
 			if(cts.getKey()==ICPPASTCompositeTypeSpecifier.k_struct)ispublicVisibility=true;
 			else if(cts.getKey()==ICPPASTCompositeTypeSpecifier.k_class)ispublicVisibility=false;
@@ -160,6 +166,7 @@ public class ASTHelper {
 				return result;
 			}
 			
+			IASTDeclaration members[]=cts.getMembers();
 			for(int i=0;i<members.length;i++){
 				if(members[i] instanceof ICPPASTVisiblityLabel){
 					int visbility=((ICPPASTVisiblityLabel)members[i]).getVisibility();
@@ -220,21 +227,21 @@ public class ASTHelper {
 	}
 	public static ArrayList<IASTDeclaration> getNonStaticMethods(ArrayList<IASTDeclaration> member){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
-	
+		
 		for(IASTDeclaration m:member){
+			IASTDeclSpecifier specifier=null;;
 			if(m instanceof IASTSimpleDeclaration){
 				IASTSimpleDeclaration simpleDeclaration1=(IASTSimpleDeclaration)m;
-				IASTDeclSpecifier specifier=simpleDeclaration1.getDeclSpecifier();
-				if(specifier.getStorageClass()!=IASTDeclSpecifier.sc_static)result.add(m);
+				specifier=simpleDeclaration1.getDeclSpecifier();
 			}else if(m instanceof IASTFunctionDefinition){
 				IASTFunctionDefinition funcdef=(IASTFunctionDefinition)m;
-				IASTDeclSpecifier specifier=funcdef.getDeclSpecifier();
-				if(specifier.getStorageClass()!=IASTDeclSpecifier.sc_static)result.add(m);
+				specifier=funcdef.getDeclSpecifier();
 			}
+			if(specifier != null && specifier.getStorageClass()!=IASTDeclSpecifier.sc_static)result.add(m);
 		}
 		return result;
 	} 
-	
+	//remove the primitives variables
 	public static ArrayList<IASTSimpleDeclaration> getClassStructVariables(ArrayList<IASTSimpleDeclaration> variablesList){
 		ArrayList<IASTSimpleDeclaration> result=new ArrayList<IASTSimpleDeclaration>();
 		
@@ -257,9 +264,12 @@ public class ASTHelper {
 		boolean result=false;
 		if(variable instanceof IASTSimpleDeclaration){
 			IASTSimpleDeclaration simpleDeclaration=(IASTSimpleDeclaration)variable;
-			IASTDeclSpecifier cts=simpleDeclaration.getDeclSpecifier();
-			if(cts instanceof IASTCompositeTypeSpecifier)
-			if(((IASTCompositeTypeSpecifier)cts).getKey()==IASTCompositeTypeSpecifier.k_union)return true;
+			IASTDeclSpecifier specifier=simpleDeclaration.getDeclSpecifier();
+			if(specifier instanceof IASTCompositeTypeSpecifier){
+				IASTCompositeTypeSpecifier cts=(IASTCompositeTypeSpecifier)specifier;
+				if(cts.getKey()==IASTCompositeTypeSpecifier.k_union)
+					return true;
+			}
 		}
 		return result;
 	}

@@ -57,7 +57,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				ArrayList<IASTSimpleDeclaration> variablesList=ff.getVariables();
 				ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
 				
-				MultiTextEdit mEdit =Dialog(astTu, editorFile,doc,ff, withoutTemplate, classStructInstances);
+				MultiTextEdit mEdit =Dialog(astTu, editorFile,doc, withoutTemplate, classStructInstances);
 				return mEdit;
 		
 								
@@ -67,12 +67,62 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		return new MultiTextEdit();
 	}
 
+	public void setUnitTestingMode(IAddMemberMethod unitTestingMockObject){
+		unitTestingMode=true;
+		this.unitTestingMockObject=unitTestingMockObject;
+	}
+	boolean unitTestingMode=false;
+	IAddMemberMethod unitTestingMockObject=null;
+	
 	//filter for just public non static without parameters class
 	public MultiTextEdit Dialog(IASTTranslationUnit astTu,IFile editorFile,IDocument doc,
-			FunctionFinder ff, ArrayList<IASTSimpleDeclaration> classStruct, ArrayList<IASTSimpleDeclaration> classStructInstances){
+			ArrayList<IASTSimpleDeclaration> classStruct, ArrayList<IASTSimpleDeclaration> classStructInstances){
+		
+		Object selectedObject;
+		if(!unitTestingMode)
+			selectedObject=showTreeUI(classStruct,classStructInstances);
+		else 
+			selectedObject=unitTestingMockObject;
+		
+		IAddMemberMethod child=(IAddMemberMethod)selectedObject;
+		IAddMemberContainer parent=child.getParent();
+		
+		MessageConsoleStream stream=EclipseConsole.getConsole();
+		stream.println("selected:"+parent.toString()+"."+child.toString()+"()");
+		
+		SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
+		astTu.accept(suitPushBackFinder);
+		
+		//TODO modify checkNameExist for detecting name with classes
+			MultiTextEdit mEdit = new MultiTextEdit();
+			
+			String newLine = TextUtilities.getDefaultLineDelimiter(doc);
+			StringBuilder builder = new StringBuilder();
+			builder.append(newLine);
+			builder.append("\t");
+			IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
+			builder.append(name.toString());
+			builder.append(".push_back(");
+			
+			if(parent.isInstance==IAddMemberContainer.InstanceType){
+				builder.append("CUTE_MEMFUN("+parent.toString()+","+parent.classTypeName+","+child.toString()+")");
+			}
+			if(parent.isInstance==IAddMemberContainer.ClassType){
+				builder.append("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
+			}
+			builder.append(");");
+			
+			mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
+					suitPushBackFinder,builder));
+			return mEdit;
+	}
+
+	private Object showTreeUI(
+			ArrayList<IASTSimpleDeclaration> classStruct,
+			ArrayList<IASTSimpleDeclaration> classStructInstances) {
 		
 		LabelProvider lp=new LabelProvider(); 
-		myTree wcp=new myTree(ff, classStruct, classStructInstances);
+		myTree wcp=new myTree(classStruct, classStructInstances);
 				
 		ElementTreeSelectionDialog etsd=new myETSD(new Shell(CuteLauncherPlugin.getDisplay()),lp,wcp);
 		etsd.setTitle("Select Method to add to suite");
@@ -97,7 +147,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			if(status==ElementTreeSelectionDialog.OK){
 				Object selectedObject=etsd.getFirstResult();
 				
-				if(selectedObject instanceof Container)continue;
+				if(selectedObject instanceof IAddMemberContainer)continue;
 				allowToClose=true;
 				break;
 			}
@@ -106,47 +156,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				break;
 			}
 		}
-		
-		Object selectedObject=etsd.getFirstResult();
-		Method child=(Method)selectedObject;
-		Container parent=child.getParent();
-		
-		MessageConsoleStream stream=EclipseConsole.getConsole();
-		stream.println("selected:"+parent.toString()+"."+child.toString()+"()");
-		
-		//parent.toString()+"."+child.toString()+"()";
-		
-		
-
-		SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
-		astTu.accept(suitPushBackFinder);
-		
-		//TODO modify checkNameExist for detecting name with classes
-			MultiTextEdit mEdit = new MultiTextEdit();
-			
-			String newLine = TextUtilities.getDefaultLineDelimiter(doc);
-			StringBuilder builder = new StringBuilder();
-			builder.append(newLine);
-			builder.append("\t");
-			IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
-			builder.append(name.toString());
-			builder.append(".push_back(");
-			
-			if(parent.isInstance==Container.InstanceType){
-				builder.append("CUTE_MEMFUN("+parent.toString()+","+parent.classTypeName+","+child.toString()+")");
-			}
-			if(parent.isInstance==Container.ClassType){
-				builder.append("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
-			}
-			builder.append(");");
-			
-			mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
-					suitPushBackFinder,builder));
-			return mEdit;
-		
-		/*	s.push_back(CUTE_SMEMFUN(aStruct,helo));
-	s.push_back(CUTE_MEMFUN(thatStruct,aStruct,helo));*/
-		
+		return etsd.getFirstResult();
 	}
 }
 
@@ -163,10 +173,10 @@ class myETSD extends ElementTreeSelectionDialog{
         Button okButton = getOkButton();
         Object selectedObject=getFirstResult();
         
-        if (okButton != null && !okButton.isDisposed() && !(selectedObject instanceof Container)) {
+        if (okButton != null && !okButton.isDisposed() && !(selectedObject instanceof IAddMemberContainer)) {
 			okButton.setEnabled(!status.matches(IStatus.ERROR));
 		}
-        if(selectedObject instanceof Container){
+        if(selectedObject instanceof IAddMemberContainer){
         	okButton.setEnabled(false);
         }
     }
@@ -174,11 +184,10 @@ class myETSD extends ElementTreeSelectionDialog{
 
 class myTree extends TreeNodeContentProvider{
 	
-	public ArrayList<Container> containers=new ArrayList<Container>();
-	public final Container root=new Container(null,true);
+	public ArrayList<IAddMemberContainer> containers=new ArrayList<IAddMemberContainer>();
+	public final IAddMemberContainer root=new Container(null,true);
 	
- 	public myTree(	FunctionFinder ff, 
-					ArrayList<IASTSimpleDeclaration> classStruct, 
+ 	public myTree(	ArrayList<IASTSimpleDeclaration> classStruct, 
 					ArrayList<IASTSimpleDeclaration> classStructInstances){
 		
 		MessageConsoleStream stream=EclipseConsole.getConsole();
@@ -191,13 +200,13 @@ class myTree extends TreeNodeContentProvider{
 			ArrayList<IASTDeclaration> removedVoid=ASTHelper.getVoidMethods(removedParameters);
 			ArrayList<IASTDeclaration> removedUnion=ASTHelper.removeUnion(removedVoid);
 			
-			Container c=new Container(i,Container.ClassType);
+			IAddMemberContainer c=new Container(i,IAddMemberContainer.ClassType);
 			for(IASTDeclaration j:removedUnion){
-				Method method=new Method(c,j);
+				IAddMemberMethod method=new Method(c,j);
 				c.add(method);
 			}
-			if(!ASTHelper.isUnion(i))
-				containers.add(c);
+			
+			containers.add(c);
 		}
 		
 		for(IASTSimpleDeclaration i:classStructInstances){
@@ -208,18 +217,18 @@ class myTree extends TreeNodeContentProvider{
 			
 				//resolve to type
 				IASTSimpleDeclaration targetType=null;
-				for(Container c:containers){
-					if(ASTHelper.getClassStructName(c.simpleDeclaration).equals(typename)){
-						targetType=c.simpleDeclaration;
+				for(IAddMemberContainer c:containers){
+					if(ASTHelper.getClassStructName(c.getSimpleDeclaration()).equals(typename)){
+						targetType=c.getSimpleDeclaration();
 					}
 				}
 				if(targetType==null)continue;
 							
-				ArrayList<IASTDeclaration> publicMethods=ASTHelper.getVoidMethods(ASTHelper.getParameterlessMethods(ASTHelper.getNonStaticMethods(ASTHelper.getPublicMethods(targetType))));
+				ArrayList<IASTDeclaration> publicMethods=ASTHelper.removeUnion(ASTHelper.getVoidMethods(ASTHelper.getParameterlessMethods(ASTHelper.getNonStaticMethods(ASTHelper.getPublicMethods(targetType)))));
 				
-				Container c=new Container(i,Container.InstanceType,ASTHelper.getClassStructName(targetType));
+				IAddMemberContainer c=new Container(i,IAddMemberContainer.InstanceType,ASTHelper.getClassStructName(targetType));
 				for(IASTDeclaration j:publicMethods){
-					Method method=new Method(c,j);
+					IAddMemberMethod method=new Method(c,j);
 					c.add(method);
 				}
 				containers.add(c);
@@ -237,39 +246,36 @@ class myTree extends TreeNodeContentProvider{
 		Object[] result=new Object[0];
 		if(parentElement==root){
 			return containers.toArray();
-		}else if(parentElement instanceof Container){
-			Container container=(Container)parentElement;
-			return container.methods.toArray();
+		}else if(parentElement instanceof IAddMemberContainer){
+			IAddMemberContainer container=(IAddMemberContainer)parentElement;
+			return container.getMethods().toArray();
 		}
 		return result;
 	}
 	@Override
 	public boolean hasChildren(Object element){
-		if(element instanceof Container){
-			if(((Container)element).methods.size()>0)return true;
+		if(element instanceof IAddMemberContainer){
+			if(((IAddMemberContainer)element).getMethods().size()>0)return true;
 		}
 		return false;
 	}
 	@Override
 	public Object getParent(Object element){
 		if(element==root)return root;
-		if(element instanceof Container){return root;}
-		if(element instanceof Method){return ((Method)element).getParent();}
+		if(element instanceof IAddMemberContainer){return root;}
+		if(element instanceof Method){return ((IAddMemberMethod)element).getParent();}
 		return "thisShouldntHappen";
 	}
 }
 
-class Container {
-	public static final boolean InstanceType=true; 
-	public static final boolean ClassType=false;
-	
-	public IASTSimpleDeclaration simpleDeclaration; 
-	public ArrayList<Method> methods=new ArrayList<Method>();
+class Container implements IAddMemberContainer {
+	private IASTSimpleDeclaration simpleDeclaration; 
+	private ArrayList<Method> methods=new ArrayList<Method>();
 	public final boolean isInstance;
 	public String classTypeName="";
 	
 	public Container(IASTSimpleDeclaration i,boolean isInstance){
-		simpleDeclaration = i;
+		setSimpleDeclaration(i);
 		this.isInstance=isInstance;
 	}
 	public Container(IASTSimpleDeclaration i,boolean isInstance, String classTypeName){
@@ -278,22 +284,46 @@ class Container {
 	}
 	
 	
-	public void add(Object element){methods.add((Method)element);}
+	/* (non-Javadoc)
+	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer#add(java.lang.Object)
+	 */
+	public void add(Object element){getMethods().add((Method)element);}
+	/* (non-Javadoc)
+	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer#toString()
+	 */
 	@Override
 	public String toString(){
 		if(isInstance){
-			return ASTHelper.getVariableName(simpleDeclaration);
+			return ASTHelper.getVariableName(getSimpleDeclaration());
 		}else 
-			return ASTHelper.getClassStructName(simpleDeclaration);
+			return ASTHelper.getClassStructName(getSimpleDeclaration());
+	}
+	public void setSimpleDeclaration(IASTSimpleDeclaration simpleDeclaration) {
+		this.simpleDeclaration = simpleDeclaration;
+	}
+	public IASTSimpleDeclaration getSimpleDeclaration() {
+		return simpleDeclaration;
+	}
+	public void setMethods(ArrayList<Method> methods) {
+		this.methods = methods;
+	}
+	public ArrayList<Method> getMethods() {
+		return methods;
 	}
 	
 }
-class Method{
+class Method implements IAddMemberMethod{
 	public IASTDeclaration declaration;
-	Container container;
+	IAddMemberContainer container;
 	
-	public Method(Container c, IASTDeclaration i){container=c;declaration=i;}
-	public Container getParent(){return container;}
+	public Method(IAddMemberContainer c, IASTDeclaration i){container=c;declaration=i;}
+	/* (non-Javadoc)
+	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod#getParent()
+	 */
+	public IAddMemberContainer getParent(){return container;}
+	/* (non-Javadoc)
+	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod#toString()
+	 */
 	@Override
 	public String toString(){return ASTHelper.getMethodName(declaration);}
 }
@@ -301,7 +331,8 @@ class Method{
 // nested case of struct/class ?
 
 /*
- * foo operator() int d 
+ * 
+foo operator() int d 
 shouldnt be shown
 
 remove operator()

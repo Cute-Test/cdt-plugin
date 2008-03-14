@@ -101,7 +101,7 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 			model.addGroup(group);
 			model.forceInstall();
 			
-			/*after pressing enter of 1st edit, select "assert" line from start to end of it*/
+			/*after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it*/
 			LinkedModeUI linkedModeUI = new EditorLinkedModeUI(model, viewer);
 			linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
 			linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);

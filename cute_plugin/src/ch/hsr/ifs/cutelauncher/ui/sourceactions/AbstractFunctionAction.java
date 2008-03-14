@@ -152,8 +152,16 @@ public abstract class AbstractFunctionAction {
 								CPPASTIdExpression a=(CPPASTIdExpression)innercallex.getFunctionNameExpression();
 								theName=a.getName().toString();
 							}else if(innercallex instanceof CPPASTFunctionCallExpression){
-								CPPASTFieldReference a=(CPPASTFieldReference)((CPPASTFunctionCallExpression)innercallex).getFunctionNameExpression();
-								theName=a.getFieldName().toString();
+								CPPASTFunctionCallExpression fce=(CPPASTFunctionCallExpression)innercallex;
+								IASTExpression expression=fce.getFunctionNameExpression();
+								if(expression instanceof CPPASTFieldReference){
+									CPPASTFieldReference a=(CPPASTFieldReference)expression;
+									theName=a.getFieldName().toString();	
+								}
+								if(expression instanceof CPPASTIdExpression){
+									CPPASTIdExpression a=(CPPASTIdExpression)expression;
+									theName=a.getName().toString();
+								}
 							}
 						}
 						if(theName.equals(fname))return true;

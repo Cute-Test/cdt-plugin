@@ -1,10 +1,4 @@
-package ch.hsr.ifs.cutelauncher.test;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.ArrayList;
+package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -13,9 +7,7 @@ import org.eclipse.cdt.core.tests.BaseTestFramework;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.RewriteSessionEditProcessor;
 import org.eclipse.jface.text.TextSelection;
@@ -24,11 +16,11 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctiontoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctortoSuiteAction;
+import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestMembertoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
 
 public class SourceActionsTest extends BaseTestFramework {
@@ -60,12 +52,36 @@ public class SourceActionsTest extends BaseTestFramework {
 			super(offset,0);
 		}
 	}*/
+	public final static IAddMemberMethod makeMockObject(){
+		return null;
+	}
+	public final static void generateMemberTest(TestSuite ts){
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.cpp");
+		final AddTestMembertoSuiteAction functionAction=new AddTestMembertoSuiteAction();
+				
+		functionAction.setUnitTestingMode(makeMockObject());
+		
+		for(int i=0;i<rtc1.testname.size();i++){
+			//if(1!=i)continue;
+			final int j=i;
+			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name
+			junit.framework.TestCase test = new SourceActionsTest("generateMemberTest"+i+displayname) {
+				@Override
+				public void runTest() {
+					generateTest(rtc1.testname.get(j),rtc1.test.get(j),rtc1.cursorpos.get(j).intValue(),rtc1.expected.get(j),functionAction);
+				}
+			};
+			ts.addTest(test);
+		}
+	}
+	
+	
 	//FIXME JUnit dblclick not working as tests doesnt have direct src mapping, if double click jmp to test file?
 	public final static void generateFunctorTest(TestSuite ts){
 		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
 		final AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
 		for(int i=0;i<rtc1.testname.size();i++){
-			//if(12!=i)continue;
+			//if(1!=i)continue;
 			final int j=i;
 			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name
 			junit.framework.TestCase test = new SourceActionsTest("generateFunctorTest"+i+displayname) {
@@ -152,86 +168,12 @@ public class SourceActionsTest extends BaseTestFramework {
 		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
 		//ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
 		generateFunctorTest(ts);
+		generateMemberTest(ts);
 		return ts;
 	}
 	
 }
-class ReadTestCase{//TODO checking for null values
-	public ArrayList<String> testname=new ArrayList<String>();
-	public ArrayList<Integer> cursorpos=new ArrayList<Integer>();
-	public ArrayList<String> test=new ArrayList<String>();
-	public ArrayList<String> expected=new ArrayList<String>();
-	
-	enum state{TEST, SAVETEST, EXPECTED, SAVEEXPECTED, CURSOR};
-	state m;
-		
-	public ReadTestCase(String file){
-		StringBuilder builder=new StringBuilder();
-
-		String newline= System.getProperty("line.separator"); 
-		try{
-		String testnametmp=null;
-		BufferedReader br=readTest(file);
-		while(br.ready()){
-			String str=br.readLine();
-			if(str.startsWith("//test")){
-				m=state.SAVEEXPECTED;
-				testnametmp=str.substring(6);
-			}
-			if(str.startsWith("//expected")){
-				m=state.SAVETEST;continue;
-			}
-			if(str.startsWith("//")&& m!=state.SAVEEXPECTED)continue;
-			switch(m){
-			case TEST:
-				builder.append(str+newline);
-				break;
-			case SAVETEST:
-				testname.add(testnametmp);
-				test.add(builder.toString());
-				builder=new StringBuilder();
-				m=state.EXPECTED;
-			case EXPECTED:
-				builder.append(str+newline);
-				break;
-			case SAVEEXPECTED:
-				if(builder.length()>0){
-					expected.add(builder.toString());
-					builder=new StringBuilder();
-				}
-				m=state.TEST;
-				break;
-			}
-		}
-		}catch(IOException ioe){ioe.printStackTrace();}
-		//handle the last expected
-		if(builder.length()>0){
-			expected.add(builder.toString());
-			builder=new StringBuilder();
-		}
-		
-		parseForCursorPos();
-	}
-	public static BufferedReader readTest(String file) throws IOException{
-		Bundle bundle1 = TestPlugin.getDefault().getBundle();
-		Path path1 = new Path(file);
-		URL url1=FileLocator.toFileURL(FileLocator.find(bundle1, path1, null));
-		//BufferedInputStream bis=new BufferedInputStream(url1.openStream());
-		BufferedReader br=new BufferedReader(new InputStreamReader(url1.openStream()));
-		return br;
-	}
-	public void parseForCursorPos(){
-		for(String str:test){
-			cursorpos.add(str.indexOf("^"));
-		}
-		for(int i=0;i<test.size();i++){//remove caret from test
-			String str=test.get(i);
-			test.remove(i);
-			test.add(i, str.replaceAll("[\\^]",""));
-		}
-		
-	}
-}//future instead of testing text, parsing AST might bring more flexibility 
+//future instead of testing text, parsing AST might bring more flexibility 
 /* Random possible useful snippet 
 	ITranslationUnit tu= CoreModelUtil.findTranslationUnit(inputFile);
 	IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
