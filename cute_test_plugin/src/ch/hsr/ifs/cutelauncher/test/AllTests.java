@@ -8,6 +8,7 @@ import org.osgi.framework.Bundle;
 import ch.hsr.ifs.cutelauncher.test.hyperlinksTests.HyperlinkSuite;
 import ch.hsr.ifs.cutelauncher.test.modelBuilderTests.ModelBuilderSuite;
 import ch.hsr.ifs.cutelauncher.test.patternListenerTests.PatternListenerSuite;
+import ch.hsr.ifs.cutelauncher.test.ui.sourceactions.SourceActionsTest;
 
 public class AllTests {
 
@@ -24,7 +25,7 @@ public class AllTests {
 		}else{//requires UI
 			suite.addTest(HyperlinkSuite.suite());
 			suite.addTest(CuteSuiteWizardHandlerTest.suite());
-			//suite.addTest(SourceActionsTest.suite());//write to hdd, may reduce life of hdd 
+			suite.addTest(SourceActionsTest.suite());//write to hdd, may reduce life of hdd 
 		}
 		//$JUnit-END$
 		return suite;

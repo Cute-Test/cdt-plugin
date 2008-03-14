@@ -270,7 +270,7 @@ class myTree extends TreeNodeContentProvider{
 
 class Container implements IAddMemberContainer {
 	private IASTSimpleDeclaration simpleDeclaration; 
-	private ArrayList<Method> methods=new ArrayList<Method>();
+	private ArrayList<IAddMemberMethod> methods=new ArrayList<IAddMemberMethod>();
 	public final boolean isInstance;
 	public String classTypeName="";
 	
@@ -287,7 +287,7 @@ class Container implements IAddMemberContainer {
 	/* (non-Javadoc)
 	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer#add(java.lang.Object)
 	 */
-	public void add(Object element){getMethods().add((Method)element);}
+	public void add(Object element){getMethods().add((IAddMemberMethod)element);}
 	/* (non-Javadoc)
 	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer#toString()
 	 */
@@ -304,10 +304,10 @@ class Container implements IAddMemberContainer {
 	public IASTSimpleDeclaration getSimpleDeclaration() {
 		return simpleDeclaration;
 	}
-	public void setMethods(ArrayList<Method> methods) {
+	public void setMethods(ArrayList<IAddMemberMethod> methods) {
 		this.methods = methods;
 	}
-	public ArrayList<Method> getMethods() {
+	public ArrayList<IAddMemberMethod> getMethods() {
 		return methods;
 	}
 	

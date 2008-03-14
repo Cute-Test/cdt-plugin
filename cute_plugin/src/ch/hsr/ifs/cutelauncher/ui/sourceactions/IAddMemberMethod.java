@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
-interface IAddMemberMethod {
+public interface IAddMemberMethod {
 
 	public abstract IAddMemberContainer getParent();
 

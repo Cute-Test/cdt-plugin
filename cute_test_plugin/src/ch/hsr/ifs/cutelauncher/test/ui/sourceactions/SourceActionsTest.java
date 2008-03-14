@@ -21,6 +21,7 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctiontoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctortoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestMembertoSuiteAction;
+import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
 
 public class SourceActionsTest extends BaseTestFramework {
@@ -53,7 +54,10 @@ public class SourceActionsTest extends BaseTestFramework {
 		}
 	}*/
 	public final static IAddMemberMethod makeMockObject(){
-		return null;
+		StubContainer container=new StubContainer("foo");
+		StubMethod method=new StubMethod("cow4",container);
+		
+		return method;
 	}
 	public final static void generateMemberTest(TestSuite ts){
 		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.cpp");
