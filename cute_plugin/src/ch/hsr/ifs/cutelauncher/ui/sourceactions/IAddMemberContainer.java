@@ -8,7 +8,6 @@ public interface IAddMemberContainer {
 
 	public static final boolean InstanceType = true;
 	public static final boolean ClassType = false;
-	//public String classTypeName="";
 	
 	public abstract void add(Object element);
 

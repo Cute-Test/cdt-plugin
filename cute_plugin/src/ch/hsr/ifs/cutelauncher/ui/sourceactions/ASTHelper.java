@@ -284,4 +284,31 @@ public class ASTHelper {
 		
 		return result;
 	}
+	public static boolean isOperator(IASTSimpleDeclaration variable){
+		if(getVariableName(variable).equals("operator ()"))return true;
+		return false;
+	}
+	public static boolean isOperator(IASTFunctionDefinition variable){
+		IASTFunctionDeclarator declarator=variable.getDeclarator();
+		if(declarator.getName().toString().equals("operator ()"))return true;		
+		return false;
+	}
+	public static ArrayList<IASTDeclaration> removeOperator(ArrayList<IASTDeclaration> variablesList){
+		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
+		
+		for(IASTDeclaration m:variablesList){
+			IASTDeclSpecifier specifier=null;;
+			if(m instanceof IASTSimpleDeclaration){
+				IASTSimpleDeclaration simpleDeclaration1=(IASTSimpleDeclaration)m;
+				if(!isOperator(simpleDeclaration1))result.add(m);
+				
+			}else if(m instanceof IASTFunctionDefinition){
+				IASTFunctionDefinition funcdef=(IASTFunctionDefinition)m;
+				specifier=funcdef.getDeclSpecifier();
+				
+				if(!isOperator(funcdef))result.add(m);
+			}
+		}
+		return result;
+	}
 }

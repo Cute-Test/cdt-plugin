@@ -178,6 +178,8 @@ class myETSD extends ElementTreeSelectionDialog{
 		}
         if(selectedObject instanceof IAddMemberContainer){
         	okButton.setEnabled(false);
+        	getTreeViewer().setExpandedState(selectedObject, true);
+        	getTreeViewer().refresh(selectedObject, false);
         }
     }
 }
@@ -199,9 +201,10 @@ class myTree extends TreeNodeContentProvider{
 			ArrayList<IASTDeclaration> removedParameters=ASTHelper.getParameterlessMethods(nonStaticMethods);
 			ArrayList<IASTDeclaration> removedVoid=ASTHelper.getVoidMethods(removedParameters);
 			ArrayList<IASTDeclaration> removedUnion=ASTHelper.removeUnion(removedVoid);
+			ArrayList<IASTDeclaration> removedOperator=ASTHelper.removeOperator(removedUnion);
 			
 			IAddMemberContainer c=new Container(i,IAddMemberContainer.ClassType);
-			for(IASTDeclaration j:removedUnion){
+			for(IASTDeclaration j:removedOperator){
 				IAddMemberMethod method=new Method(c,j);
 				c.add(method);
 			}
@@ -332,16 +335,6 @@ class Method implements IAddMemberMethod{
 	@Override
 	public String toString(){return ASTHelper.getMethodName(declaration);}
 }
+// @see http://www.eclipse.org/articles/Article-TreeViewer/TreeViewerArticle.htm
 
 // nested case of struct/class ?
-
-/*
- * 
-foo operator() int d 
-shouldnt be shown
-
-remove operator()
-
-duplicate entry detection
- * 
- * */
