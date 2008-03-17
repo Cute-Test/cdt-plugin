@@ -104,10 +104,10 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			builder.append(name.toString());
 			builder.append(".push_back(");
 			
-			if(parent.isInstance==IAddMemberContainer.InstanceType){
-				builder.append("CUTE_MEMFUN("+parent.toString()+","+parent.classTypeName+","+child.toString()+")");
+			if(parent.isInstance()==IAddMemberContainer.InstanceType){
+				builder.append("CUTE_MEMFUN("+parent.toString()+","+parent.getClassTypeName()+","+child.toString()+")");
 			}
-			if(parent.isInstance==IAddMemberContainer.ClassType){
+			if(parent.isInstance()==IAddMemberContainer.ClassType){
 				builder.append("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
 			}
 			builder.append(");");
@@ -271,7 +271,7 @@ class myTree extends TreeNodeContentProvider{
 class Container implements IAddMemberContainer {
 	private IASTSimpleDeclaration simpleDeclaration; 
 	private ArrayList<IAddMemberMethod> methods=new ArrayList<IAddMemberMethod>();
-	public final boolean isInstance;
+	private final boolean isInstance;
 	public String classTypeName="";
 	
 	public Container(IASTSimpleDeclaration i,boolean isInstance){
@@ -310,7 +310,12 @@ class Container implements IAddMemberContainer {
 	public ArrayList<IAddMemberMethod> getMethods() {
 		return methods;
 	}
-	
+	public boolean isInstance(){
+		return isInstance;
+	}
+	public String getClassTypeName(){
+		return classTypeName;
+	}
 }
 class Method implements IAddMemberMethod{
 	public IASTDeclaration declaration;

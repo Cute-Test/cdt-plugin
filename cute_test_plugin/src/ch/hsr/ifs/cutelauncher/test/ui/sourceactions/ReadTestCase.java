@@ -17,8 +17,9 @@ class ReadTestCase{//TODO checking for null values
 	public ArrayList<Integer> cursorpos=new ArrayList<Integer>();
 	public ArrayList<String> test=new ArrayList<String>();
 	public ArrayList<String> expected=new ArrayList<String>();
+	public ArrayList<String> parameter=new ArrayList<String>();
 	
-	enum state{TEST, SAVETEST, EXPECTED, SAVEEXPECTED, CURSOR};
+	enum state{TEST, SAVETEST, EXPECTED, SAVEEXPECTED, CURSOR, PARAMETER};
 	state m;
 		
 	public ReadTestCase(String file){
@@ -37,7 +38,13 @@ class ReadTestCase{//TODO checking for null values
 			if(str.startsWith("//expected")){
 				m=state.SAVETEST;continue;
 			}
+			if(str.startsWith("//parameter ")){
+				int startoffset="//parameter ".length();
+				parameter.add(str.substring(startoffset));
+				continue;
+			}
 			if(str.startsWith("//")&& m!=state.SAVEEXPECTED)continue;
+
 			switch(m){
 			case TEST:
 				builder.append(str+newline);
@@ -65,7 +72,9 @@ class ReadTestCase{//TODO checking for null values
 			expected.add(builder.toString());
 			builder=new StringBuilder();
 		}
-		
+		/*parameter.add(" foo cow4");
+		parameter.add(" foo cow4");*/
+
 		parseForCursorPos();
 	}
 	public static BufferedReader readTest(String file) throws IOException{

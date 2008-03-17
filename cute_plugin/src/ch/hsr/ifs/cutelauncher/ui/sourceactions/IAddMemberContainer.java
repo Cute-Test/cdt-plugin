@@ -8,8 +8,7 @@ public interface IAddMemberContainer {
 
 	public static final boolean InstanceType = true;
 	public static final boolean ClassType = false;
-	public final boolean isInstance=false;
-	public String classTypeName="";
+	//public String classTypeName="";
 	
 	public abstract void add(Object element);
 
@@ -18,4 +17,6 @@ public interface IAddMemberContainer {
 	public abstract IASTSimpleDeclaration getSimpleDeclaration();
 	public abstract void setMethods(ArrayList<IAddMemberMethod> methods);
 	public abstract ArrayList<IAddMemberMethod> getMethods();
+	public abstract boolean isInstance();
+	public abstract String getClassTypeName();
 }

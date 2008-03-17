@@ -1,5 +1,6 @@
 ///////////////////////////////////////
 //test addmember SMEMFUN 
+//parameter foo cow4 C
 class foo{
 public:
 	void cow4(){
@@ -28,6 +29,7 @@ void runSuite(){
 }
 ///////////////////////////////////////
 //test addmember MEMFUN 
+//parameter abc cow4 I
 class foo{
 public:
 	void cow4(){

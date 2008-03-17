@@ -9,11 +9,14 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 
 public class StubContainer implements IAddMemberContainer {
 
-	String s;
+	String s, classTypeName;
 	private final ArrayList<IAddMemberMethod> methods=new ArrayList<IAddMemberMethod>();
-	
-	public StubContainer(String s){
+	public boolean isInstance=false;
+		
+	public StubContainer(String s, boolean isInstance2){
 		this.s=s;
+		this.isInstance=isInstance2;
+		this.classTypeName="foo";
 	}
 	@Override
 	public String toString(){
@@ -40,5 +43,10 @@ public class StubContainer implements IAddMemberContainer {
 		// TODO Auto-generated method stub
 
 	}
-
+	public boolean isInstance(){
+		return isInstance;
+	}
+	public String getClassTypeName(){
+		return classTypeName;
+	}
 }
