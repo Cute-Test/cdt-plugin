@@ -49,8 +49,6 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				NodeAtCursorFinder n= new NodeAtCursorFinder(selection.getOffset());
 				astTu.accept(n);
 		
-				MessageConsoleStream stream=EclipseConsole.getConsole();
-				
 				FunctionFinder ff=new FunctionFinder();
 				astTu.accept(ff);
 				ArrayList<IASTSimpleDeclaration> withoutTemplate =ASTHelper.removeTemplateClasses(ff.getClassStruct());
@@ -59,8 +57,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				
 				MultiTextEdit mEdit =Dialog(astTu, editorFile,doc, withoutTemplate, classStructInstances);
 				return mEdit;
-		
-								
+				
 			}
 		}
 
@@ -73,8 +70,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 	}
 	boolean unitTestingMode=false;
 	IAddMemberMethod unitTestingMockObject=null;
-	
-	//filter for just public non static without parameters class
+
 	public MultiTextEdit Dialog(IASTTranslationUnit astTu,IFile editorFile,IDocument doc,
 			ArrayList<IASTSimpleDeclaration> classStruct, ArrayList<IASTSimpleDeclaration> classStructInstances){
 		
@@ -85,38 +81,43 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			selectedObject=unitTestingMockObject;
 		
 		IAddMemberMethod child=(IAddMemberMethod)selectedObject;
-		IAddMemberContainer parent=child.getParent();
-		
+				
 		MessageConsoleStream stream=EclipseConsole.getConsole();
-		stream.println("selected:"+parent.toString()+"."+child.toString()+"()");
-		
+				
 		SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 		astTu.accept(suitPushBackFinder);
 		
 		//TODO modify checkNameExist for detecting name with classes
-			MultiTextEdit mEdit = new MultiTextEdit();
-			
-			String newLine = TextUtilities.getDefaultLineDelimiter(doc);
-			StringBuilder builder = new StringBuilder();
-			builder.append(newLine);
-			builder.append("\t");
-			IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
-			builder.append(name.toString());
-			builder.append(".push_back(");
-			
-			if(parent.isInstance()==IAddMemberContainer.InstanceType){
-				builder.append("CUTE_MEMFUN("+parent.toString()+","+parent.getClassTypeName()+","+child.toString()+")");
-			}
-			if(parent.isInstance()==IAddMemberContainer.ClassType){
-				builder.append("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
-			}
-			builder.append(");");
-			
-			mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
-					suitPushBackFinder,builder));
-			return mEdit;
+		MultiTextEdit mEdit = new MultiTextEdit();
+		
+		StringBuilder builder = createPushBack(doc,suitPushBackFinder,child);
+		
+		mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
+				suitPushBackFinder,builder));
+		return mEdit;
 	}
-
+	private StringBuilder createPushBack(IDocument doc,SuitePushBackFinder suitPushBackFinder,IAddMemberMethod child){
+		StringBuilder builder=new StringBuilder();
+		IAddMemberContainer parent=child.getParent();
+		
+		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
+		builder.append(newLine);
+		builder.append("\t");
+		IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
+		builder.append(name.toString());
+		builder.append(".push_back(");
+		
+		if(parent.isInstance()==IAddMemberContainer.InstanceType){
+			builder.append("CUTE_MEMFUN("+parent.toString()+","+parent.getClassTypeName()+","+child.toString()+")");
+		}
+		if(parent.isInstance()==IAddMemberContainer.ClassType){
+			builder.append("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
+		}
+		builder.append(");");
+		
+		return builder;
+	}
+	
 	private Object showTreeUI(
 			ArrayList<IASTSimpleDeclaration> classStruct,
 			ArrayList<IASTSimpleDeclaration> classStructInstances) {
@@ -137,7 +138,6 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			public void widgetSelected(SelectionEvent e) {
 				MessageConsoleStream stream=EclipseConsole.getConsole();
 				stream.println("selected");
-				
 			}
 		});
 		
@@ -195,7 +195,7 @@ class myTree extends TreeNodeContentProvider{
 		MessageConsoleStream stream=EclipseConsole.getConsole();
 		
 		for(IASTSimpleDeclaration i:classStruct){
-			stream.println("class:"+ASTHelper.getClassStructName((i))+"");
+			//stream.println("class:"+ASTHelper.getClassStructName((i))+"");
 			ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(i);
 			ArrayList<IASTDeclaration> nonStaticMethods=ASTHelper.getNonStaticMethods(publicMethods);
 			ArrayList<IASTDeclaration> removedParameters=ASTHelper.getParameterlessMethods(nonStaticMethods);
@@ -213,7 +213,7 @@ class myTree extends TreeNodeContentProvider{
 		}
 		
 		for(IASTSimpleDeclaration i:classStructInstances){
-			stream.println("instances:"+ASTHelper.getVariableName((i))+"");
+			//stream.println("instances:"+ASTHelper.getVariableName((i))+"");
 			if(i.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier){
 				ICPPASTNamedTypeSpecifier namedSpecifier=(ICPPASTNamedTypeSpecifier)i.getDeclSpecifier();
 				String typename=namedSpecifier.getName().toString();
@@ -286,14 +286,7 @@ class Container implements IAddMemberContainer {
 		this.classTypeName=classTypeName;
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer#add(java.lang.Object)
-	 */
 	public void add(Object element){getMethods().add((IAddMemberMethod)element);}
-	/* (non-Javadoc)
-	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer#toString()
-	 */
 	@Override
 	public String toString(){
 		if(isInstance){
@@ -325,13 +318,7 @@ class Method implements IAddMemberMethod{
 	IAddMemberContainer container;
 	
 	public Method(IAddMemberContainer c, IASTDeclaration i){container=c;declaration=i;}
-	/* (non-Javadoc)
-	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod#getParent()
-	 */
 	public IAddMemberContainer getParent(){return container;}
-	/* (non-Javadoc)
-	 * @see ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod#toString()
-	 */
 	@Override
 	public String toString(){return ASTHelper.getMethodName(declaration);}
 }

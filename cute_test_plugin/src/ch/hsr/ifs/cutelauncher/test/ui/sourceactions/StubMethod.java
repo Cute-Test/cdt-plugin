@@ -5,11 +5,11 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 
 public class StubMethod implements IAddMemberMethod {
 
-	String s;
+	String name;
 	IAddMemberContainer parent; 
 	
 	public StubMethod(String s,IAddMemberContainer parent){
-		this.s=s;
+		this.name=s;
 		this.parent=parent;
 	}
 	public IAddMemberContainer getParent() {
@@ -17,6 +17,6 @@ public class StubMethod implements IAddMemberMethod {
 	}
 	@Override
 	public String toString(){
-		return s;
+		return name;
 	}
 }

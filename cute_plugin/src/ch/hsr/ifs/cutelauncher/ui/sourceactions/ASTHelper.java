@@ -94,24 +94,6 @@ public class ASTHelper {
 		
 		for(IASTDeclaration i:al){
 			if(!haveParameters(i))result.add(i);
-			
-			/*if(i instanceof IASTFunctionDefinition){
-				IASTFunctionDefinition fd=(IASTFunctionDefinition)i;
-				ICPPASTFunctionDeclarator fdd=(ICPPASTFunctionDeclarator)fd.getDeclarator();
-				IASTParameterDeclaration fpara[]=fdd.getParameters();
-				if(fdd.takesVarArgs() ||fpara.length>0) continue;				
-				result.add(i);
-			}else if(i instanceof IASTSimpleDeclaration){
-				IASTSimpleDeclaration sd=(IASTSimpleDeclaration)i;
-				IASTDeclarator sdd[]=sd.getDeclarators();
-				
-				for(int j=0;j<sdd.length;j++){
-					ICPPASTFunctionDeclarator fd=(ICPPASTFunctionDeclarator)sdd[j];
-					IASTParameterDeclaration fpara[]=fd.getParameters();
-					if(fd.takesVarArgs() || fpara!=null && fpara.length>0) continue;
-					result.add(i);   //BUG POINT
-				}
-			}*/
 		}
 		return result;
 	}	
@@ -130,26 +112,26 @@ public class ASTHelper {
 		
 		return result;
 	}
+	
 	public static ArrayList<IASTDeclaration> removeVoidMethods(ArrayList<IASTDeclaration> member){
-		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
-		
-		for(IASTDeclaration simpleDeclaration:member){
-			if(!isVoid(simpleDeclaration))
-			result.add(simpleDeclaration);
-		}
-		
-		return result;
+		return scanVoidMethods(member,false);
 	}
+	
 	public static ArrayList<IASTDeclaration> getVoidMethods(ArrayList<IASTDeclaration> member){
+		return scanVoidMethods(member,true);
+	}
+	
+	private static ArrayList<IASTDeclaration> scanVoidMethods(ArrayList<IASTDeclaration> member,boolean flag){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
 		
 		for(IASTDeclaration simpleDeclaration:member){
-			if(isVoid(simpleDeclaration))
+			if(isVoid(simpleDeclaration)==flag)
 			result.add(simpleDeclaration);
 		}
 
-		return result;
+		return result;		
 	}
+	
 	public static ArrayList<IASTDeclaration> getPublicMethods(IASTSimpleDeclaration cppClass){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
 		
@@ -225,6 +207,7 @@ public class ASTHelper {
 		}
 		return result;
 	}
+	
 	public static ArrayList<IASTDeclaration> getNonStaticMethods(ArrayList<IASTDeclaration> member){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
 		
@@ -239,6 +222,7 @@ public class ASTHelper {
 			}
 			if(specifier != null && specifier.getStorageClass()!=IASTDeclSpecifier.sc_static)result.add(m);
 		}
+		
 		return result;
 	} 
 	//remove the primitives variables
@@ -253,6 +237,7 @@ public class ASTHelper {
 		
 		return result;
 	}
+	
 	public static String getVariableName(IASTSimpleDeclaration variable){
 		IASTDeclarator declarators[]=variable.getDeclarators();
 		if(declarators !=null && declarators.length>0){
@@ -260,8 +245,8 @@ public class ASTHelper {
 		}
 		return "";
 	}
+	
 	public static boolean isUnion(IASTDeclaration variable){
-		boolean result=false;
 		if(variable instanceof IASTSimpleDeclaration){
 			IASTSimpleDeclaration simpleDeclaration=(IASTSimpleDeclaration)variable;
 			IASTDeclSpecifier specifier=simpleDeclaration.getDeclSpecifier();
@@ -271,7 +256,7 @@ public class ASTHelper {
 					return true;
 			}
 		}
-		return result;
+		return false;
 	}
 	public static ArrayList<IASTDeclaration> removeUnion(ArrayList<IASTDeclaration> variablesList){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
@@ -299,8 +284,8 @@ public class ASTHelper {
 		for(IASTDeclaration m:variablesList){
 			IASTDeclSpecifier specifier=null;;
 			if(m instanceof IASTSimpleDeclaration){
-				IASTSimpleDeclaration simpleDeclaration1=(IASTSimpleDeclaration)m;
-				if(!isOperator(simpleDeclaration1))result.add(m);
+				IASTSimpleDeclaration simpleDeclaration=(IASTSimpleDeclaration)m;
+				if(!isOperator(simpleDeclaration))result.add(m);
 				
 			}else if(m instanceof IASTFunctionDefinition){
 				IASTFunctionDefinition funcdef=(IASTFunctionDefinition)m;

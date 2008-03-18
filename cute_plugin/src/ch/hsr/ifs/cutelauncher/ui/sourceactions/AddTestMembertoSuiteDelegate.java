@@ -23,7 +23,6 @@ public class AddTestMembertoSuiteDelegate extends
 	
 }
 /*http://www.eclipsezone.com/eclipse/forums/t107165.html*/
-
 /*
 a tree
 recursively 

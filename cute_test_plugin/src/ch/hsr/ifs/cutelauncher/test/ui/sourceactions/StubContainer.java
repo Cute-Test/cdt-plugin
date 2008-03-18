@@ -9,18 +9,18 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 
 public class StubContainer implements IAddMemberContainer {
 
-	String s, classTypeName;
+	String name, classTypeName;
 	private final ArrayList<IAddMemberMethod> methods=new ArrayList<IAddMemberMethod>();
 	public boolean isInstance=false;
 		
 	public StubContainer(String s, boolean isInstance2){
-		this.s=s;
+		this.name=s;
 		this.isInstance=isInstance2;
 		this.classTypeName="foo";
 	}
 	@Override
 	public String toString(){
-		return s;
+		return name;
 	}
 	public void add(Object element){methods.add((IAddMemberMethod)element);}
 
@@ -28,20 +28,15 @@ public class StubContainer implements IAddMemberContainer {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public IASTSimpleDeclaration getSimpleDeclaration() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public void setMethods(ArrayList<IAddMemberMethod> methods) {
 		// TODO Auto-generated method stub
-
 	}
-
 	public void setSimpleDeclaration(IASTSimpleDeclaration simpleDeclaration) {
 		// TODO Auto-generated method stub
-
 	}
 	public boolean isInstance(){
 		return isInstance;
