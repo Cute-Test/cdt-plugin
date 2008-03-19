@@ -282,15 +282,12 @@ public class ASTHelper {
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
 		
 		for(IASTDeclaration m:variablesList){
-			IASTDeclSpecifier specifier=null;;
 			if(m instanceof IASTSimpleDeclaration){
 				IASTSimpleDeclaration simpleDeclaration=(IASTSimpleDeclaration)m;
 				if(!isOperator(simpleDeclaration))result.add(m);
 				
 			}else if(m instanceof IASTFunctionDefinition){
 				IASTFunctionDefinition funcdef=(IASTFunctionDefinition)m;
-				specifier=funcdef.getDeclSpecifier();
-				
 				if(!isOperator(funcdef))result.add(m);
 			}
 		}

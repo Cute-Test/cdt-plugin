@@ -9,7 +9,7 @@ public class NodeAtCursorFinder extends ASTVisitor {
 	int selOffset,dist=Integer.MAX_VALUE;
 	boolean bounded=false;
 	private IASTNode node;
-	int spread=Integer.MAX_VALUE;
+
 	{
 		shouldVisitDeclarations=true;//simple declaration, template declaration
 		shouldVisitStatements=true;//expressionstmt

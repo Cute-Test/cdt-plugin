@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -82,8 +83,6 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		
 		IAddMemberMethod child=(IAddMemberMethod)selectedObject;
 				
-		MessageConsoleStream stream=EclipseConsole.getConsole();
-				
 		SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 		astTu.accept(suitPushBackFinder);
 		
@@ -118,6 +117,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		return builder;
 	}
 	
+	private ElementTreeSelectionDialog etsd;
 	private Object showTreeUI(
 			ArrayList<IASTSimpleDeclaration> classStruct,
 			ArrayList<IASTSimpleDeclaration> classStructInstances) {
@@ -125,7 +125,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		LabelProvider lp=new LabelProvider(); 
 		myTree wcp=new myTree(classStruct, classStructInstances);
 				
-		ElementTreeSelectionDialog etsd=new myETSD(new Shell(CuteLauncherPlugin.getDisplay()),lp,wcp);
+		etsd=new myETSD(new Shell(CuteLauncherPlugin.getDisplay()),lp,wcp);
 		etsd.setTitle("Select Method to add to suite");
 		etsd.setAllowMultiple(false);
 		etsd.setBlockOnOpen(true);
@@ -182,6 +182,10 @@ class myETSD extends ElementTreeSelectionDialog{
         	getTreeViewer().refresh(selectedObject, false);
         }
     }
+    @Override
+	public TreeViewer getTreeViewer(){
+    	return super.getTreeViewer();
+    }
 }
 
 class myTree extends TreeNodeContentProvider{
@@ -191,8 +195,6 @@ class myTree extends TreeNodeContentProvider{
 	
  	public myTree(	ArrayList<IASTSimpleDeclaration> classStruct, 
 					ArrayList<IASTSimpleDeclaration> classStructInstances){
-		
-		MessageConsoleStream stream=EclipseConsole.getConsole();
 		
 		for(IASTSimpleDeclaration i:classStruct){
 			//stream.println("class:"+ASTHelper.getClassStructName((i))+"");

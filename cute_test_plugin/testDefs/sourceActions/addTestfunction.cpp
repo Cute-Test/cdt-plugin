@@ -114,3 +114,23 @@ void runTest(){
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
+//test checkNameExist thelist!=null && thelist instanceof IASTExpressionList
+void anotherTest(){
+	ASSERTM^("start writing tests", false);
+}
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(anotherTest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected
+void anotherTest(){
+	ASSERTM("start writing tests", false);
+}
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(anotherTest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}

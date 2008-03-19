@@ -24,7 +24,6 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestMembertoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
-
 public class SourceActionsTest extends BaseTestFramework {
 
 	protected static final NullProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
@@ -48,7 +47,26 @@ public class SourceActionsTest extends BaseTestFramework {
 		}*/
 		super.tearDown();
 	}
-	
+	/*public final void testTree(){
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
+		try{
+			IFile fileToBeOpened = null;
+			IEditorInput editorInput = new myEditorInput();
+			IWorkbenchWindow window=PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			IWorkbenchPage page = window.getActivePage();
+			page.openEditor(editorInput, "org.eclipse.ui.DefaultTextEdtior"); 
+			
+			
+			
+		}catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
+	}
+	class myEditorInput implements IStorageEditorInput{
+		public IStorage getStorage() throws CoreException{
+			return null;
+		}
+		
+	}*/
+		
 	/*class mySourceRange extends SourceRange{//for setting current cursor position
 		public mySourceRange(int offset){
 			super(offset,0);
@@ -170,11 +188,12 @@ public class SourceActionsTest extends BaseTestFramework {
 	}
 	public static Test suite(){//FIXME unable to continue testing after failing
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
-		//ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
+		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
 		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
 		//ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
-		//generateFunctorTest(ts);
-		//generateMemberTest(ts);
+		generateFunctorTest(ts);
+		generateMemberTest(ts);
+		ts.addTest(new SourceActionsTest("testTree"));
 		return ts;
 	}
 	
