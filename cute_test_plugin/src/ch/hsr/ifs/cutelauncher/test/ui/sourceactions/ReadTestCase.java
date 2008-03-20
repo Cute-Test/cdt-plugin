@@ -97,3 +97,4 @@ class ReadTestCase{//TODO checking for null values
 		
 	}
 }
+//bug when only got test but no expected 

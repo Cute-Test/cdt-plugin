@@ -1,8 +1,18 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.cdt.core.model.CoreModelUtil;
+import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.tests.BaseTestFramework;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
@@ -15,12 +25,15 @@ import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
+import ch.hsr.ifs.cutelauncher.ui.sourceactions.ASTHelper;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctiontoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctortoSuiteAction;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestMembertoSuiteAction;
+import ch.hsr.ifs.cutelauncher.ui.sourceactions.FunctionFinder;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
@@ -66,7 +79,53 @@ public class SourceActionsTest extends BaseTestFramework {
 		}
 		
 	}*/
+	public final void testTree(){
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
+		try{
+			IFile inputFile=importFile("A.cpp",rtc1.expected.get(0));
+			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
+			ceditor= (CEditor) editor;
+			IEditorInput editorInput = ceditor.getEditorInput();
+			
+			IFile editorFile = ((FileEditorInput) editorInput).getFile();
+			
+			ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
+			IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
+			IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
+			
+			FunctionFinder ff=new FunctionFinder();
+			astTu.accept(ff);
+			ArrayList<IASTSimpleDeclaration> withoutTemplate =ASTHelper.removeTemplateClasses(ff.getClassStruct());
+			ArrayList<IASTSimpleDeclaration> variablesList=ff.getVariables();
+			ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
+			
+			final Field fields[] =AddTestMembertoSuiteAction.class.getDeclaredFields();
+			AddTestMembertoSuiteAction atms=new AddTestMembertoSuiteAction();
+			atms.setUnitTestingMode(null);
+			
+			for (int i = 0; i < fields.length; i++) {
+			      System.out.println("Field: " + fields[i]);
+			}
+			
+			final Method[] methods = AddTestMembertoSuiteAction.class.getDeclaredMethods();
+		    for (int i = 0; i < methods.length; ++i) {
+		      if (methods[i].getName().equals("showTreeUI")) {
+		        final Object params[] = {withoutTemplate,classStructInstances};
+		        methods[i].setAccessible(true);
+		        Object ret = methods[i].invoke(atms, params);
+		        System.out.println(ret);
+		        assertEquals("test123",ret.toString(),"func");
+		      }
+		    }
+		    
+		    ArrayList<IAddMemberContainer> al=atms.getRootContainer();
+		    System.out.println("");
+		    
+		    		    
+		}catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
+	}
 		
+	
 	/*class mySourceRange extends SourceRange{//for setting current cursor position
 		public mySourceRange(int offset){
 			super(offset,0);
@@ -188,11 +247,13 @@ public class SourceActionsTest extends BaseTestFramework {
 	}
 	public static Test suite(){//FIXME unable to continue testing after failing
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
+		/*
 		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
 		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
 		//ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
 		generateFunctorTest(ts);
 		generateMemberTest(ts);
+		*/
 		ts.addTest(new SourceActionsTest("testTree"));
 		return ts;
 	}

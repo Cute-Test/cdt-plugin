@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -118,28 +119,20 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 	}
 	
 	private ElementTreeSelectionDialog etsd;
+	private myTree wcp;
 	private Object showTreeUI(
 			ArrayList<IASTSimpleDeclaration> classStruct,
 			ArrayList<IASTSimpleDeclaration> classStructInstances) {
 		
-		LabelProvider lp=new LabelProvider(); 
-		myTree wcp=new myTree(classStruct, classStructInstances);
-				
-		etsd=new myETSD(new Shell(CuteLauncherPlugin.getDisplay()),lp,wcp);
-		etsd.setTitle("Select Method to add to suite");
-		etsd.setAllowMultiple(false);
-		etsd.setBlockOnOpen(true);
-		etsd.setInput(wcp.root);
-		
-		etsd.create();
-		Button button=etsd.getOkButton();
-		button.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				MessageConsoleStream stream=EclipseConsole.getConsole();
-				stream.println("selected");
-			}
-		});
+		internalInitTree(classStruct,classStructInstances);
+		if(unitTestingMode){
+			etsd.setBlockOnOpen(false);
+			TreeViewer tv=((myETSD)etsd).getTreeViewer();
+			Object[] containers=wcp.getElements(wcp.root);
+			ArrayList<IAddMemberMethod> al=((Container)containers[0]).getMethods();
+			tv.setSelection(new StructuredSelection(al.get(0)));
+		}else
+			etsd.setBlockOnOpen(true);
 		
 		boolean allowToClose=false;
 		while(allowToClose==false){
@@ -157,6 +150,28 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			}
 		}
 		return etsd.getFirstResult();
+	}
+	private void internalInitTree(ArrayList<IASTSimpleDeclaration> classStruct,ArrayList<IASTSimpleDeclaration> classStructInstances){
+		LabelProvider lp=new LabelProvider(); 
+		wcp=new myTree(classStruct, classStructInstances);
+				
+		etsd=new myETSD(new Shell(CuteLauncherPlugin.getDisplay()),lp,wcp);
+		etsd.setTitle("Select Method to add to suite");
+		etsd.setAllowMultiple(false);
+		etsd.setInput(wcp.root);
+		
+		etsd.create();
+		Button button=etsd.getOkButton();
+		button.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageConsoleStream stream=EclipseConsole.getConsole();
+				stream.println("selected");
+			}
+		});
+	}
+	public ArrayList<IAddMemberContainer> getRootContainer(){
+		return wcp.containers;
 	}
 }
 
