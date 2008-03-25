@@ -294,7 +294,7 @@ class myTree extends TreeNodeContentProvider{
 
 class Container implements IAddMemberContainer {
 	private IASTSimpleDeclaration simpleDeclaration; 
-	private ArrayList<IAddMemberMethod> methods=new ArrayList<IAddMemberMethod>();
+	private final ArrayList<IAddMemberMethod> methods=new ArrayList<IAddMemberMethod>();
 	private final boolean isInstance;
 	public String classTypeName="";
 	
@@ -322,7 +322,7 @@ class Container implements IAddMemberContainer {
 		return simpleDeclaration;
 	}
 	public void setMethods(ArrayList<IAddMemberMethod> methods) {
-		this.methods = methods;
+		//this.methods = methods;
 	}
 	public ArrayList<IAddMemberMethod> getMethods() {
 		return methods;

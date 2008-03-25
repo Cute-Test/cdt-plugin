@@ -130,7 +130,7 @@ void runTest(){
 int main(){
     runTest();
 }
-//test at end2 with pushback duplicated
+//test at end2 with pushback duplicated (checknameExist test)
 void runTest(){
 	cute::suite s=make_suite_s();
 	s.push_back(CUTE(newTestFunction));

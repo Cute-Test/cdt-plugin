@@ -81,7 +81,12 @@ public class SourceActionsTest extends BaseTestFramework {
 	public final void testTree(){
 		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
 		try{
-			IFile inputFile=importFile("A.cpp",rtc1.test.get(0));
+			IFile inputFile222=importFile("A.cpp",rtc1.test.get(0));
+			//**********
+			IFile inputFile = (IFile)MyDynamicProxyClass.newInstance(inputFile222, new Class[]
+			{ IFile.class });
+			
+			//**********
 			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 			ceditor= (CEditor) editor;
 			IEditorInput editorInput = ceditor.getEditorInput();
@@ -263,14 +268,14 @@ public class SourceActionsTest extends BaseTestFramework {
 	}
 	public static Test suite(){//FIXME unable to continue testing after failing
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
-		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
 		/*
+		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
 		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
 		//ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
 		generateFunctorTest(ts);
 		generateMemberTest(ts);
-		
-		ts.addTest(new SourceActionsTest("testTree"));*/
+		*/
+		ts.addTest(new SourceActionsTest("testTree"));
 		return ts;
 	}
 	
