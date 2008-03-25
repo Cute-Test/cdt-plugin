@@ -129,6 +129,9 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			etsd.setBlockOnOpen(false);
 			TreeViewer tv=((myETSD)etsd).getTreeViewer();
 			Object[] containers=wcp.getElements(wcp.root);
+			
+			tv.setSelection(new StructuredSelection(containers[0]));
+			
 			ArrayList<IAddMemberMethod> al=((Container)containers[0]).getMethods();
 			tv.setSelection(new StructuredSelection(al.get(0)));
 		}else
@@ -226,7 +229,8 @@ class myTree extends TreeNodeContentProvider{
 				c.add(method);
 			}
 			
-			containers.add(c);
+			if(removedOperator.size()!=0)
+				containers.add(c);
 		}
 		
 		for(IASTSimpleDeclaration i:classStructInstances){

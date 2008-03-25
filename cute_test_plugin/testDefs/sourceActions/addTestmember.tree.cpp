@@ -68,3 +68,4 @@ int main(){
     std::cout<<"complete";
 }
 //expected
+[foo(func, cow4), aStruct(helo), boo(func, operator (), cow4), coo(func, operator (), cow4), thatStruct(helo), abc(func, operator (), cow4)]

@@ -588,3 +588,27 @@ void runTest(){
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
+///////////////////////////////////////
+//test struct functor pushback
+struct aStructWithoutVisiblity{
+	bool op^erator() (){ASSERTM("start writing tests", false);return false;}
+	void a();
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(dummyTest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+struct aStructWithoutVisiblity{
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+	void a();
+};
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(dummyTest));
+	s.push_back(aStructWithoutVisiblity());
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}

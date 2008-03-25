@@ -1,6 +1,5 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -82,7 +81,7 @@ public class SourceActionsTest extends BaseTestFramework {
 	public final void testTree(){
 		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
 		try{
-			IFile inputFile=importFile("A.cpp",rtc1.expected.get(0));
+			IFile inputFile=importFile("A.cpp",rtc1.test.get(0));
 			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 			ceditor= (CEditor) editor;
 			IEditorInput editorInput = ceditor.getEditorInput();
@@ -99,13 +98,14 @@ public class SourceActionsTest extends BaseTestFramework {
 			ArrayList<IASTSimpleDeclaration> variablesList=ff.getVariables();
 			ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
 			
-			final Field fields[] =AddTestMembertoSuiteAction.class.getDeclaredFields();
+			
 			AddTestMembertoSuiteAction atms=new AddTestMembertoSuiteAction();
 			atms.setUnitTestingMode(null);
 			
+			/*final Field fields[] =AddTestMembertoSuiteAction.class.getDeclaredFields();
 			for (int i = 0; i < fields.length; i++) {
 			      System.out.println("Field: " + fields[i]);
-			}
+			}*/
 			
 			final Method[] methods = AddTestMembertoSuiteAction.class.getDeclaredMethods();
 		    for (int i = 0; i < methods.length; ++i) {
@@ -119,8 +119,24 @@ public class SourceActionsTest extends BaseTestFramework {
 		    }
 		    
 		    ArrayList<IAddMemberContainer> al=atms.getRootContainer();
-		    System.out.println("");
+		    StringBuilder builder=new StringBuilder();
+		    builder.append("[");
+		    for(IAddMemberContainer i:al){
+		    	builder.append(i.toString()+"(");
+		    	for(IAddMemberMethod j:i.getMethods()){
+		    		builder.append(j.toString()+", ");
+		    	}
+		    	//remove last comma, case of empty methods is not possible as removed in myTree
+		    	builder.deleteCharAt(builder.length()-1);
+		    	builder.deleteCharAt(builder.length()-1); 
+		    	builder.append("), ");
+		    }
+		    builder.deleteCharAt(builder.length()-1);
+		    builder.deleteCharAt(builder.length()-1);
 		    
+		    builder.append("]");
+		    builder.append(System.getProperty("line.separator"));
+		    assertEquals("",rtc1.expected.get(0),builder.toString());
 		    		    
 		}catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
 	}
@@ -197,7 +213,7 @@ public class SourceActionsTest extends BaseTestFramework {
 	public final void testNewTestFunctionAll(){
 		rtc=new ReadTestCase("testDefs/sourceActions/newTestfunction.txt");
 		NewTestFunctionAction functionAction=new NewTestFunctionAction();
-		for(int i=0;i<4;i++){
+		for(int i=0;i<6;i++){
 			generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
 		}//skipped "at end2 with pushback duplicated" at position4 @see NewTestFunctionAction#createEdit 
 	}
@@ -247,14 +263,14 @@ public class SourceActionsTest extends BaseTestFramework {
 	}
 	public static Test suite(){//FIXME unable to continue testing after failing
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
-		/*
 		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
+		/*
 		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
 		//ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
 		generateFunctorTest(ts);
 		generateMemberTest(ts);
-		*/
-		ts.addTest(new SourceActionsTest("testTree"));
+		
+		ts.addTest(new SourceActionsTest("testTree"));*/
 		return ts;
 	}
 	

@@ -103,6 +103,33 @@ void newTestFunction(){
 }
 
 
+//test existing pushback 
+^void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(dummyFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+//expected results
+void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}
+
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(CUTE(dummyFunction));
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
 //test at end2 with pushback duplicated
 void runTest(){
 	cute::suite s=make_suite_s();
@@ -131,4 +158,3 @@ void newTestFunction(){
 }
 
 
-//
