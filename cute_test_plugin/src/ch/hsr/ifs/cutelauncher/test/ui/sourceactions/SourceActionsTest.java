@@ -118,7 +118,7 @@ public class SourceActionsTest extends BaseTestFramework {
 		        final Object params[] = {withoutTemplate,classStructInstances};
 		        methods[i].setAccessible(true);
 		        Object ret = methods[i].invoke(atms, params);
-		        System.out.println(ret);
+		        //System.out.println(ret);
 		        assertEquals("test123",ret.toString(),"func");
 		      }
 		    }
@@ -143,6 +143,8 @@ public class SourceActionsTest extends BaseTestFramework {
 		    builder.append(System.getProperty("line.separator"));
 		    assertEquals("",rtc1.expected.get(0),builder.toString());
 		    		    
+		    MyDynamicProxyClass.printUniqueCall();
+		    
 		}catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
 	}
 		
