@@ -17,6 +17,7 @@ import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
+
 import ch.hsr.ifs.cutelauncher.ui.CustomisedLaunchConfigTab;
 
 public class CuteRunLaunchConfigTabGroup extends
@@ -27,7 +28,8 @@ public class CuteRunLaunchConfigTabGroup extends
 				new CMainTab(true),
 				new CArgumentsTab(),
 				new CommonTab(),
-				new CustomisedLaunchConfigTab()
+				new CustomisedLaunchConfigTab(),
+				new org.eclipse.debug.ui.EnvironmentTab()
 			};
 			setTabs(tabs);
 	}
