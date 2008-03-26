@@ -27,9 +27,9 @@ public class CuteRunLaunchConfigTabGroup extends
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 				new CMainTab(true),
 				new CArgumentsTab(),
+				new org.eclipse.debug.ui.EnvironmentTab(),
 				new CommonTab(),
-				new CustomisedLaunchConfigTab(),
-				new org.eclipse.debug.ui.EnvironmentTab()
+				new CustomisedLaunchConfigTab()
 			};
 			setTabs(tabs);
 	}
