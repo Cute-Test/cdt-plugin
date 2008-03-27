@@ -51,6 +51,8 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				OperatorParenthesesFinder o=new OperatorParenthesesFinder();
 				astTu.accept(o);
 				
+				ArrayList al=o.getAL();
+								
 				String fname=nameAtCursor(o.getAL(),n.getNode(),stream);
 				if(fname.equals(""))return new MultiTextEdit();//FIXME potential bug point
 
