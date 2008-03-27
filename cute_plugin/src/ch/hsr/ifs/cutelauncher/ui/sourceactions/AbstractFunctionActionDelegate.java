@@ -73,6 +73,7 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 			IEditorInput editorInput = ceditor.getEditorInput();
 			IDocumentProvider prov = ceditor.getDocumentProvider();
 			IDocument doc = prov.getDocument(editorInput);
+			
 			String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 			functionAction.setNewline(newLine);
 			

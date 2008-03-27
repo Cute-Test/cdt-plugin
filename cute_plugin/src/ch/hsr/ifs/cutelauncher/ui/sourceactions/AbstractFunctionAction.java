@@ -25,7 +25,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
@@ -65,12 +64,11 @@ public abstract class AbstractFunctionAction {
 		return selOffset;
 	}
 	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
-		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		StringBuilder builder = new StringBuilder();
-		builder.append(PushBackString(newLine,suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")"));
+		builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")"));
 		return createPushBackEdit(editorFile,doc,astTu,suitPushBackFinder,builder);
 	}
-	protected String PushBackString(String newLine, String suite, String insidePushback){
+	protected String PushBackString(String suite, String insidePushback){
 		StringBuilder builder = new StringBuilder();
 		builder.append(newLine+"\t");
 		builder.append(suite.toString());

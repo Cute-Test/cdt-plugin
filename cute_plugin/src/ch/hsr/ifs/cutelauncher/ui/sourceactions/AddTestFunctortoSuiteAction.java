@@ -67,7 +67,7 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					String insidePushback;
 					if(constructorNeedParameterFlag)insidePushback=(fname+"(pArAmEtRs_ReQuIrEd)");
 					else insidePushback=(fname+"()");
-					builder.append(PushBackString(newLine, suitPushBackFinder.getSuiteDeclName().toString(),insidePushback));
+					builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),insidePushback));
 					
 					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 							suitPushBackFinder,builder));
