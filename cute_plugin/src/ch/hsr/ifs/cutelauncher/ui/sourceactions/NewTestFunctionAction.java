@@ -113,7 +113,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 						}
 					
 				}catch(ClassCastException e){}
-				}	
+			}	
 		}else{//TODO need to create suite
 			//@see getLastPushBack() for adding the very 1st push back
 		}
