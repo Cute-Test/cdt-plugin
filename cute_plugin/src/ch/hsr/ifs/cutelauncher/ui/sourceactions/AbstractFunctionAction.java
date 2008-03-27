@@ -36,6 +36,8 @@ public abstract class AbstractFunctionAction {
 	public abstract MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
 			throws CoreException;
+	String newLine;
+	public void setNewline(String newline){this.newLine=newline;}
 	
 	//return the CDT representation of the file under modification 
 	protected IASTTranslationUnit getASTTranslationUnit(IFile editorFile)

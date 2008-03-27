@@ -19,7 +19,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.ui.IEditorInput;
@@ -63,7 +62,6 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				if(!checkNameExist(astTu,fname,suitPushBackFinder)){
 					MultiTextEdit mEdit = new MultiTextEdit();
 					
-					String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 					StringBuilder builder = new StringBuilder();
 					
 					String insidePushback;

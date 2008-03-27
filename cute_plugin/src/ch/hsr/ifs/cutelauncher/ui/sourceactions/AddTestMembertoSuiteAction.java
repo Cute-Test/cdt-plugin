@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -98,8 +97,6 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 	private StringBuilder createPushBack(IDocument doc,SuitePushBackFinder suitPushBackFinder,IAddMemberMethod child){
 		StringBuilder builder=new StringBuilder();
 		IAddMemberContainer parent=child.getParent();
-		
-		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		
 		String insidePushback="";
 		if(parent.isInstance()==IAddMemberContainer.InstanceType){

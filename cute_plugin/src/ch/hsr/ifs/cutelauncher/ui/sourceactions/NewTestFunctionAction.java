@@ -16,7 +16,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
@@ -64,7 +63,6 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 
 	//adding the new test function
 	private TextEdit createdEdit(int insertTestFuncFileOffset, IDocument doc, String funcName) {
-		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		StringBuilder builder = new StringBuilder();
 		builder.append("void ");
 		builder.append(funcName);
