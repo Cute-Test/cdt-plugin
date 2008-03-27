@@ -11,7 +11,17 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
+import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
+import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -54,6 +64,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 
 				//FIXME this check for existing pushback might have unwanted side effect, breaking linkmodel
 				//if(!checkNameExist(astTu,funcName,suitPushBackFinder))
+				if(!checkPushback(astTu,funcName,suitPushBackFinder))
 				mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 						funcName, suitPushBackFinder));
 			}
@@ -75,5 +86,49 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		builder.append(newLine);
 		TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
 		return iedit;
+	}
+	private boolean checkPushback(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
+		if(suitPushBackFinder.getSuiteDeclName() != null) {
+			IASTName name = suitPushBackFinder.getSuiteDeclName();
+			IBinding binding = name.resolveBinding();
+			IASTName[] refs = astTu.getReferences(binding);
+			for (IASTName name1 : refs) {
+				try{
+				if(name1.getParent().getParent() instanceof ICPPASTFieldReference) {
+					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
+					if(fRef.getFieldName().toString().equals("push_back")) {
+						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
+						if(callex instanceof IASTFunctionCallExpression){
+							IASTExpression innercallex=callex.getParameterExpression();
+							//if(innercallex instanceof IASTFunctionCallExpression){
+								IASTFunctionCallExpression innercallex1=(IASTFunctionCallExpression)innercallex;
+								IASTExpression thelist=innercallex1.getParameterExpression();
+								String theName="";
+								if(thelist!=null){
+									if(thelist instanceof IASTExpressionList){//????
+										IASTExpression innerlist[]=((IASTExpressionList)thelist).getExpressions();
+										IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
+										IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();
+										theName=literalex.toString();
+									}else{//for newtestfunction , addfunction
+										theName=((CPPASTIdExpression)thelist).getName().toString();
+									}
+								}
+								if(theName.equals(fname))return true;
+							//}
+						}
+						
+					}
+				}
+				
+				}catch(ClassCastException e){
+					System.out.println("");
+				}
+			}
+		}else{//TODO need to create suite
+			//@see getLastPushBack() for adding the very 1st push back
+		}
+		
+		return false;
 	}
 }

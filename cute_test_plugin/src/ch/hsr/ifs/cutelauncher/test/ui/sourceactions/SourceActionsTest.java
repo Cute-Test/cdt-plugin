@@ -221,7 +221,8 @@ public class SourceActionsTest extends BaseTestFramework {
 	public final void testNewTestFunctionAll(){
 		rtc=new ReadTestCase("testDefs/sourceActions/newTestfunction.txt");
 		NewTestFunctionAction functionAction=new NewTestFunctionAction();
-		for(int i=0;i<6;i++){
+		for(int i=0;i<rtc.testname.size();i++){
+			//if(i<rtc.testname.size()-1)continue;
 			generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
 		}//skipped "at end2 with pushback duplicated" at position4 @see NewTestFunctionAction#createEdit 
 	}

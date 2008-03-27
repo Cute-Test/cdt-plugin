@@ -130,6 +130,35 @@ void runTest(){
 int main(){
     runTest();
 }
+//test pushback with functor taking in one parameter
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(functor(2));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+^
+//expected results
+void runTest(){
+	cute::suite s=make_suite_s();
+	s.push_back(functor(2));
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}
+
+
 //test at end2 with pushback duplicated (checknameExist test)
 void runTest(){
 	cute::suite s=make_suite_s();
@@ -158,3 +187,4 @@ void newTestFunction(){
 }
 
 
+//

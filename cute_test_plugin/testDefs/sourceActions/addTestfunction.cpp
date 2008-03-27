@@ -155,3 +155,26 @@ void runSuite(){
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
+//test pushback with functor taking in one parameter
+void anotherTest(){
+	ASSERTM^("start writing tests", false);
+}
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTest));
+	s.push_back(functor(2));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected
+void anotherTest(){
+	ASSERTM("start writing tests", false);
+}
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTest));
+	s.push_back(functor(2));
+	s.push_back(CUTE(anotherTest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
