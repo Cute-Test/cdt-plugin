@@ -349,7 +349,7 @@ template <class TClass> class TSpecificFunctor : public TFunctor
       // them in two private variables
       TSpecificFunctor(TClass* _pt2Object, void(TClass::*_fpt)(const char*))
          { pt2Object = _pt2Object;  fpt=_fpt; };
-         void operator()(){;}   
+      void operator()(){;}   
    };
 void runTest(){
 	cute::suite s=make_suite_s();

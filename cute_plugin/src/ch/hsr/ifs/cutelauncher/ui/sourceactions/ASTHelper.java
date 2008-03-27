@@ -77,6 +77,8 @@ public class ASTHelper {
 			IASTDeclarator sdd[]=sd.getDeclarators();
 			
 			for(int j=0;j<sdd.length;j++){
+				if(!(sdd[j] instanceof ICPPASTFunctionDeclarator))continue;
+				//insert test case
 				ICPPASTFunctionDeclarator fd=(ICPPASTFunctionDeclarator)sdd[j];
 				IASTParameterDeclaration fpara[]=fd.getParameters();
 				if(fd.takesVarArgs() || fpara!=null && fpara.length>0) return true;

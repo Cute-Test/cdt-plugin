@@ -106,7 +106,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			insidePushback=("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
 		}
 		builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),insidePushback));
-				
+					
 		return builder;
 	}
 	

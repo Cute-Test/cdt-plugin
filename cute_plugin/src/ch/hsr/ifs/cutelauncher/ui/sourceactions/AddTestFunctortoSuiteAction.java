@@ -5,16 +5,24 @@ import java.util.ArrayList;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisiblityLabel;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFieldReference;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -52,8 +60,7 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				astTu.accept(o);
 				
 				ArrayList al=o.getAL();
-				o.printParent();
-				
+								
 				String fname=nameAtCursor(o.getAL(),n.getNode(),stream);
 				if(fname.equals(""))return new MultiTextEdit();//FIXME potential bug point
 
@@ -62,7 +69,8 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
 				
-				if(!checkNameExist(astTu,fname,suitPushBackFinder)){
+				//if(!checkNameExist(astTu,fname,suitPushBackFinder)){
+				if(!checkPushback(astTu,fname,suitPushBackFinder)){
 					MultiTextEdit mEdit = new MultiTextEdit();
 					
 					StringBuilder builder = new StringBuilder();
@@ -108,14 +116,23 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					}
 				}
 			}
-			if(node instanceof ICPPASTTemplateDeclaration){//template class case
+			/*if(node instanceof ICPPASTTemplateDeclaration){
 				//template <class TClass> 
 				//shouldnt happen as requires the template to be initialised
 				stream.println("template class declarations selected, unable to add as functor.");
 				//IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
 				//return i.toString();
 				return "";
+			}*/
+			IASTNode checkforTemplate=node;
+			//template class case
+			while(!(checkforTemplate instanceof ICPPASTTranslationUnit)){
+				if(checkforTemplate instanceof ICPPASTTemplateDeclaration){
+					stream.println("template class declarations selected, unable to add as functor. (2)");return "";
+				}
+				checkforTemplate=checkforTemplate.getParent();
 			}
+			
 			if(!operatorMatchFlag){
 				stream.println("no matching operator() found at current cursor location.");
 				if(getWantedTypeParent(node).getParent() instanceof IASTTranslationUnit){
@@ -179,5 +196,49 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 		}
 		return false;
 	}
-	
+	private boolean checkPushback(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
+		if(suitPushBackFinder.getSuiteDeclName() != null) {
+			IASTName name = suitPushBackFinder.getSuiteDeclName();
+			IBinding binding = name.resolveBinding();
+			IASTName[] refs = astTu.getReferences(binding);
+			for (IASTName name1 : refs) {
+				try{
+				if(name1.getParent().getParent() instanceof ICPPASTFieldReference) {
+					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
+					if(fRef.getFieldName().toString().equals("push_back")) {
+						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
+						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
+						IASTExpression thelist=innercallex.getParameterExpression();
+						String theName="";
+						if(thelist!=null){
+						}else{
+							if(innercallex instanceof CPPASTIdExpression){
+								CPPASTIdExpression a=(CPPASTIdExpression)innercallex.getFunctionNameExpression();
+								theName=a.getName().toString();
+							}else if(innercallex instanceof CPPASTFunctionCallExpression){
+								CPPASTFunctionCallExpression fce=(CPPASTFunctionCallExpression)innercallex;
+								IASTExpression expression=fce.getFunctionNameExpression();
+								if(expression instanceof CPPASTFieldReference){
+									CPPASTFieldReference a=(CPPASTFieldReference)expression;
+									theName=a.getFieldName().toString();	
+								}
+								if(expression instanceof CPPASTIdExpression){
+									CPPASTIdExpression a=(CPPASTIdExpression)expression;
+									theName=a.getName().toString();
+								}
+							}
+						}
+						if(theName.equals(fname))return true;
+					}
+				}
+				}catch(ClassCastException e){}
+			}
+		}else{//TODO need to create suite
+			//@see getLastPushBack() for adding the very 1st push back
+		}
+		
+		return false;
+		
+	}
+
 }
