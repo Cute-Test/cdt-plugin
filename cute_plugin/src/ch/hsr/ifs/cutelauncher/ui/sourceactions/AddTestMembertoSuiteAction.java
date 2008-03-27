@@ -3,7 +3,6 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 import java.util.ArrayList;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
@@ -101,20 +100,16 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		IAddMemberContainer parent=child.getParent();
 		
 		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
-		builder.append(newLine);
-		builder.append("\t");
-		IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
-		builder.append(name.toString());
-		builder.append(".push_back(");
 		
+		String insidePushback="";
 		if(parent.isInstance()==IAddMemberContainer.InstanceType){
-			builder.append("CUTE_MEMFUN("+parent.toString()+","+parent.getClassTypeName()+","+child.toString()+")");
+			insidePushback=("CUTE_MEMFUN("+parent.toString()+","+parent.getClassTypeName()+","+child.toString()+")");
 		}
 		if(parent.isInstance()==IAddMemberContainer.ClassType){
-			builder.append("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
+			insidePushback=("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
 		}
-		builder.append(");");
-		
+		builder.append(PushBackString(newLine, suitPushBackFinder.getSuiteDeclName().toString(),insidePushback));
+				
 		return builder;
 	}
 	

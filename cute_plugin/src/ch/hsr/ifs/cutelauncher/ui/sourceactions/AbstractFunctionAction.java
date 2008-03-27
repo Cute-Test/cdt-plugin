@@ -59,21 +59,25 @@ public abstract class AbstractFunctionAction {
 				return selOffset;
 			}
 		}
+		//handle case where insertion point is after pushback
 		return selOffset;
 	}
-	
 	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
 		String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		StringBuilder builder = new StringBuilder();
-		builder.append(newLine);
-		builder.append("\t");
-		IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
-		builder.append(name.toString());
-		builder.append(".push_back(CUTE(");
-		builder.append(funcName);
-		builder.append("));");
+		builder.append(PushBackString(newLine,suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")"));
 		return createPushBackEdit(editorFile,doc,astTu,suitPushBackFinder,builder);
 	}
+	protected String PushBackString(String newLine, String suite, String insidePushback){
+		StringBuilder builder = new StringBuilder();
+		builder.append(newLine+"\t");
+		builder.append(suite.toString());
+		builder.append(".push_back(");
+		builder.append(insidePushback);
+		builder.append(");");
+		return builder.toString();
+	}
+	
 	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder, StringBuilder builder) {
 				
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
@@ -125,6 +129,7 @@ public abstract class AbstractFunctionAction {
 	
 	//checking existing suite for the name of the function
 	//ensure it is not already added into suite
+	//only works for add function, functor
 	public boolean checkNameExist(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
 			IASTName name = suitPushBackFinder.getSuiteDeclName();

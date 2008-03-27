@@ -65,15 +65,12 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 					
 					String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 					StringBuilder builder = new StringBuilder();
-					builder.append(newLine);
-					builder.append("\t");
-					IASTName name = suitPushBackFinder.getSuiteDeclName();//XXX
-					builder.append(name.toString());
-					builder.append(".push_back(");
-					if(constructorNeedParameterFlag)builder.append(fname+"(pArAmEtRs_ReQuIrEd)");
-					else builder.append(fname+"()");
-					builder.append(");");
-										
+					
+					String insidePushback;
+					if(constructorNeedParameterFlag)insidePushback=(fname+"(pArAmEtRs_ReQuIrEd)");
+					else insidePushback=(fname+"()");
+					builder.append(PushBackString(newLine, suitPushBackFinder.getSuiteDeclName().toString(),insidePushback));
+					
 					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 							suitPushBackFinder,builder));
 					return mEdit;

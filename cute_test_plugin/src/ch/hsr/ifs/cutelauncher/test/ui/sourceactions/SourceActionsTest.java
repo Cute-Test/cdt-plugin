@@ -270,13 +270,12 @@ public class SourceActionsTest extends BaseTestFramework {
 	}
 	public static Test suite(){//FIXME unable to continue testing after failing
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
-		/*
 		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
 		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
 		//ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
 		generateFunctorTest(ts);
 		generateMemberTest(ts);
-		*/
+		
 		ts.addTest(new SourceActionsTest("testTree"));
 		return ts;
 	}

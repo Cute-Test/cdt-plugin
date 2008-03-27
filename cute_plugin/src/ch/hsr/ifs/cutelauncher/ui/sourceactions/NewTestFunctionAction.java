@@ -47,9 +47,9 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
 				int insertFileOffset = getInsertOffset(astTu, selection);
+
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
-
 				
 				mEdit.addChild(createdEdit(insertFileOffset, doc, funcName));
 

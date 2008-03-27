@@ -320,6 +320,43 @@ void runTest(){
 	cute::makeRunner(lis)(s, "The Suite");
 }
 ///////////////////////////////////////
+//test template class functor (cursor at function, no changes expected)
+template <class TClass> class TSpecificFunctor : public TFunctor
+   {
+   private:
+      void (TClass::*fpt)(const char*);   // pointer to member function
+      TClass* pt2Object;                  // pointer to object
+   public:
+      // constructor - takes pointer to an object and pointer to a member and stores
+      // them in two private variables
+      TSpecificFunctor(TClass* _pt2Object, void(TClass::*_fpt)(const char*))
+         { pt2Object = _pt2Object;  fpt=_fpt; };
+      void ope^rator()(){;}   
+   };
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+template <class TClass> class TSpecificFunctor : public TFunctor
+   {
+   private:
+      void (TClass::*fpt)(const char*);   // pointer to member function
+      TClass* pt2Object;                  // pointer to object
+   public:
+      // constructor - takes pointer to an object and pointer to a member and stores
+      // them in two private variables
+      TSpecificFunctor(TClass* _pt2Object, void(TClass::*_fpt)(const char*))
+         { pt2Object = _pt2Object;  fpt=_fpt; };
+         void operator()(){;}   
+   };
+void runTest(){
+	cute::suite s=make_suite_s();
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
 //test class functor adding a normal function
 void hel^o(){int d=0;}
 void runTest(){

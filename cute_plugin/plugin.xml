@@ -196,7 +196,7 @@
        </menu>
        <menu
              id="addTestMenu"
-             label="Add Test (in development)"
+             label="Add Test"
              path="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
           <groupMarker
                 name="addTestGroup">
