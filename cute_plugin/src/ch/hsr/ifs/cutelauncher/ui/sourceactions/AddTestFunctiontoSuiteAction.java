@@ -6,16 +6,16 @@ import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFieldReference;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -120,30 +120,17 @@ public class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
 						IASTExpression thelist=innercallex.getParameterExpression();
 						String theName="";
 						if(thelist!=null){
-							if(thelist instanceof IASTExpressionList){
-							}else{//for 3rd test case ***already added***
+							if(thelist instanceof IASTExpressionList){//normal run only
+								IASTExpression innerlist[]=((IASTExpressionList)thelist).getExpressions();
+								IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
+								IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();
+								theName=literalex.toString();
+							}else{//both normal run and unit test
 								theName=((CPPASTIdExpression)thelist).getName().toString();
 							}
-						}else{//**** block not executed in UNIT Test
-							if(innercallex instanceof CPPASTIdExpression){
-								CPPASTIdExpression a=(CPPASTIdExpression)innercallex.getFunctionNameExpression();
-								theName=a.getName().toString();
-							}else if(innercallex instanceof CPPASTFunctionCallExpression){
-								CPPASTFunctionCallExpression fce=(CPPASTFunctionCallExpression)innercallex;
-								IASTExpression expression=fce.getFunctionNameExpression();
-								if(expression instanceof CPPASTFieldReference){
-									CPPASTFieldReference a=(CPPASTFieldReference)expression;
-									theName=a.getFieldName().toString();	
-								}
-								if(expression instanceof CPPASTIdExpression){
-									CPPASTIdExpression a=(CPPASTIdExpression)expression;
-									theName=a.getName().toString();
-								}
-							}
 						}
-						
 						if(theName.equals(fname))return true;
-						}
+					}
 					
 				}catch(ClassCastException e){}
 			}	

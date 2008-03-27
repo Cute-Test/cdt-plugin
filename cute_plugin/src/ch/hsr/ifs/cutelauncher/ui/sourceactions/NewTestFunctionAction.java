@@ -101,6 +101,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 						String theName="";
 						if(thelist!=null){
 							if(thelist instanceof IASTExpressionList){//known issue:path executed during normal program run
+								//**** block not executed in UNIT Test
 								IASTExpression innerlist[]=((IASTExpressionList)thelist).getExpressions();
 								IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
 								IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();

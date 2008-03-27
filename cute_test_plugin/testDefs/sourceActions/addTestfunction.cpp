@@ -156,6 +156,9 @@ void runSuite(){
 	cute::makeRunner(lis)(s, "The Suite");
 }
 //test pushback with functor taking in one parameter
+#include "cute.h"
+#include "ide_listener.h"
+#include "cute_runner.h"
 void anotherTest(){
 	ASSERTM^("start writing tests", false);
 }
@@ -167,6 +170,9 @@ void runSuite(){
 	cute::makeRunner(lis)(s, "The Suite");
 }
 //expected
+#include "cute.h"
+#include "ide_listener.h"
+#include "cute_runner.h"
 void anotherTest(){
 	ASSERTM("start writing tests", false);
 }
