@@ -85,6 +85,8 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
 		return iedit;
 	}
+	//checking existing suite for the name of the function
+	//ensure it is not already added into suite
 	private boolean checkPushback(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
 			IASTName name = suitPushBackFinder.getSuiteDeclName();

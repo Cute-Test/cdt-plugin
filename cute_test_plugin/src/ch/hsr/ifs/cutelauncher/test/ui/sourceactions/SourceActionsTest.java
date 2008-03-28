@@ -189,6 +189,7 @@ public class SourceActionsTest extends BaseTestFramework {
 		final AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
 		for(int i=0;i<rtc1.testname.size();i++){
 			//if(1!=i)continue;
+			//if(i<32)continue;
 			final int j=i;
 			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name
 			junit.framework.TestCase test = new SourceActionsTest("generateFunctorTest"+i+displayname) {

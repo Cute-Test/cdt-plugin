@@ -192,7 +192,7 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 		if(parentNode instanceof IASTFunctionDefinition || 
 				parentNode instanceof IASTSimpleDeclaration){
 				//handle the simple class case, cursor at methods
-			if(!(parentNode.getParent() instanceof ICPPASTTranslationUnit))	
+			//if(!(parentNode.getParent() instanceof ICPPASTTranslationUnit))	
 			return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
 		}
 		stream.println("Unable to add as functor for cursor position.");
