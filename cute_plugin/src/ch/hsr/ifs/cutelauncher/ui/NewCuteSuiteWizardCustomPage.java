@@ -91,7 +91,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	}
 
 	public String getSuiteName(){
-		if(suitenameText.getText().equals(""))return "suite";
+		if(suitenameText==null ||suitenameText.getText().equals(""))return "suite";
 		return suitenameText.getText();
 	}
 	public void dispose() {
