@@ -205,14 +205,14 @@ class myTree extends TreeNodeContentProvider{
 	
  	public myTree(	ArrayList<IASTSimpleDeclaration> classStruct, 
 					ArrayList<IASTSimpleDeclaration> classStructInstances){
-		
+		MessageConsoleStream stream=EclipseConsole.getConsole();
 		for(IASTSimpleDeclaration i:classStruct){
-			//stream.println("class:"+ASTHelper.getClassStructName((i))+"");
+			stream.println("class:"+ASTHelper.getClassStructName((i))+"");
 			ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(i);
 			ArrayList<IASTDeclaration> nonStaticMethods=ASTHelper.getNonStaticMethods(publicMethods);
 			ArrayList<IASTDeclaration> removedParameters=ASTHelper.getParameterlessMethods(nonStaticMethods);
-			ArrayList<IASTDeclaration> removedVoid=ASTHelper.getVoidMethods(removedParameters);
-			ArrayList<IASTDeclaration> removedUnion=ASTHelper.removeUnion(removedVoid);
+			ArrayList<IASTDeclaration> onlyVoid=removedParameters;//ASTHelper.getVoidMethods(removedParameters);
+			ArrayList<IASTDeclaration> removedUnion=ASTHelper.removeUnion(onlyVoid);
 			ArrayList<IASTDeclaration> removedOperator=ASTHelper.removeOperator(removedUnion);
 			
 			IAddMemberContainer c=new Container(i,IAddMemberContainer.ClassType);
@@ -226,7 +226,7 @@ class myTree extends TreeNodeContentProvider{
 		}
 		
 		for(IASTSimpleDeclaration i:classStructInstances){
-			//stream.println("instances:"+ASTHelper.getVariableName((i))+"");
+			stream.println("instances:"+ASTHelper.getVariableName((i))+"");
 			if(i.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier){
 				ICPPASTNamedTypeSpecifier namedSpecifier=(ICPPASTNamedTypeSpecifier)i.getDeclSpecifier();
 				String typename=namedSpecifier.getName().toString();
@@ -247,7 +247,7 @@ class myTree extends TreeNodeContentProvider{
 					IAddMemberMethod method=new Method(c,j);
 					c.add(method);
 				}
-				containers.add(c);
+				if(publicMethods.size()!=0)containers.add(c);
 			}
 		}
 	}

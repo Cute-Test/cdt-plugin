@@ -97,6 +97,31 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 				//FIXME operator() is private,protected in a class/struct??
 			}
 			
+			try{
+				//check class for public operator() 
+				IASTNode tmp1=node;
+				while(!(tmp1.getParent() instanceof ICPPASTCompositeTypeSpecifier) && !(tmp1.getParent() instanceof ICPPASTTranslationUnit)){
+					tmp1=tmp1.getParent();
+				}
+				if(tmp1.getParent() instanceof ICPPASTCompositeTypeSpecifier)tmp1=tmp1.getParent().getParent();
+				if(tmp1 instanceof IASTSimpleDeclaration){
+					ArrayList<IASTDeclaration> al=ASTHelper.getPublicMethods((IASTSimpleDeclaration)tmp1);
+					boolean publicOperatorExist=false;
+					for(IASTDeclaration i:al){
+						if(ASTHelper.getMethodName(i).equals("operator ()")){
+							publicOperatorExist=true;break;
+						}
+					}
+					if(!publicOperatorExist){
+						stream.println("no public operator ()");
+						return "";
+					}
+				}
+				System.out.println("");
+			}catch(NullPointerException npe){npe.printStackTrace();}
+			catch(ClassCastException cce){cce.printStackTrace();}
+			
+			
 			//check class, struct at cursor for operator()
 			boolean operatorMatchFlag=false;
 			for(IASTName i:operatorParenthesesNode){
@@ -165,9 +190,11 @@ public class AddTestFunctortoSuiteAction extends AbstractFunctionAction{
 
 		IASTNode parentNode=getWantedTypeParent(node);
 		if(parentNode instanceof IASTFunctionDefinition || 
-				parentNode instanceof IASTSimpleDeclaration)
+				parentNode instanceof IASTSimpleDeclaration){
 				//handle the simple class case, cursor at methods
-				return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
+			if(!(parentNode.getParent() instanceof ICPPASTTranslationUnit))	
+			return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
+		}
 		stream.println("Unable to add as functor for cursor position.");
 		return ""; 
 	}

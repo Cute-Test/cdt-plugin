@@ -649,3 +649,196 @@ void runTest(){
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
+///////////////////////////////////////
+//test struct functor without operator
+struct testCa^se2{
+private:
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+struct testCase2{
+private:
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test struct functor without operator (at visibility)
+struct testCase2{
+priv^ate:
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+struct testCase2{
+private:
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test struct functor without operator (at method)
+struct testCase2{
+private:
+	bo^ol operator() (){ASSERTM("start writing tests", false);return false;}
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+struct testCase2{
+private:
+	bool operator() (){ASSERTM("start writing tests", false);return false;}
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor constructor cursor at class 
+class te^stCase4{
+	int value;
+	public:
+		testCase4(int x):value(x){}
+		void operator()(){};
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class testCase4{
+	int value;
+	public:
+		testCase4(int x):value(x){}
+		void operator()(){};
+};
+void runSuite(){
+	cute::suite s;
+	s.push_back(testCase4(pArAmEtRs_ReQuIrEd));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor constructor cursor at visbility 
+class testCase4{
+	int value;
+	pub^lic:
+		testCase4(int x):value(x){}
+		virtual void operator()();
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class testCase4{
+	int value;
+	public:
+		testCase4(int x):value(x){}
+		virtual void operator()();
+};
+void runSuite(){
+	cute::suite s;
+	s.push_back(testCase4(pArAmEtRs_ReQuIrEd));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor constructor cursor at constructor 
+class testCase4{
+	int value;
+	public:
+		testCas^e4(int x):value(x){}
+		virtual void operator()();
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class testCase4{
+	int value;
+	public:
+		testCase4(int x):value(x){}
+		virtual void operator()();
+};
+void runSuite(){
+	cute::suite s;
+	s.push_back(testCase4(pArAmEtRs_ReQuIrEd));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor constructor cursor at method 
+class testCase4{
+	int value;
+	public:
+		testCase4(int x):value(x){}
+		virtual void oper^ator()();
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class testCase4{
+	int value;
+	public:
+		testCase4(int x):value(x){}
+		virtual void operator()();
+};
+void runSuite(){
+	cute::suite s;
+	s.push_back(testCase4(pArAmEtRs_ReQuIrEd));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+///////////////////////////////////////
+//test class functor constructor cursor at arg 
+class testCase4{
+	int value;
+	public:
+		testCase4(int x):value(x){}
+		virtual void operator()(^);
+};
+void runSuite(){
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class testCase4{
+	int value;
+	public:
+		testCase4(int x):value(x){}
+		virtual void operator()();
+};
+void runSuite(){
+	cute::suite s;
+	s.push_back(testCase4(pArAmEtRs_ReQuIrEd));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
