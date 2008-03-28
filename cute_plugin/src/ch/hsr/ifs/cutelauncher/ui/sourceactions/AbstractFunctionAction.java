@@ -118,60 +118,6 @@ public abstract class AbstractFunctionAction {
 		}
 		return null;
 	}
-	/*
-	//checking existing suite for the name of the function
-	//ensure it is not already added into suite
-	//only works for add function, functor
-	public boolean checkNameExist(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
-		if(suitPushBackFinder.getSuiteDeclName() != null) {
-			IASTName name = suitPushBackFinder.getSuiteDeclName();
-			IBinding binding = name.resolveBinding();
-			IASTName[] refs = astTu.getReferences(binding);
-			for (IASTName name1 : refs) {
-				if(name1.getParent().getParent() instanceof ICPPASTFieldReference) {
-					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
-					if(fRef.getFieldName().toString().equals("push_back")) {
-						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
-						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
-						IASTExpression thelist=innercallex.getParameterExpression();
-						String theName="";
-						if(thelist!=null){
-							if(thelist instanceof IASTExpressionList){//????
-								IASTExpression innerlist[]=((IASTExpressionList)thelist).getExpressions();
-								IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
-								IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();
-								theName=literalex.toString();
-							}else{//for newtestfunction , addfunction
-								theName=((CPPASTIdExpression)thelist).getName().toString();
-							}
-						}else{//handle functor nodes
-							if(innercallex instanceof CPPASTIdExpression){
-								CPPASTIdExpression a=(CPPASTIdExpression)innercallex.getFunctionNameExpression();
-								theName=a.getName().toString();
-							}else if(innercallex instanceof CPPASTFunctionCallExpression){
-								CPPASTFunctionCallExpression fce=(CPPASTFunctionCallExpression)innercallex;
-								IASTExpression expression=fce.getFunctionNameExpression();
-								if(expression instanceof CPPASTFieldReference){
-									CPPASTFieldReference a=(CPPASTFieldReference)expression;
-									theName=a.getFieldName().toString();	
-								}
-								if(expression instanceof CPPASTIdExpression){
-									CPPASTIdExpression a=(CPPASTIdExpression)expression;
-									theName=a.getName().toString();
-								}
-							}
-						}
-						if(theName.equals(fname))return true;
-					}
-				}
-			}
-		}else{//TODO need to create suite
-			//@see getLastPushBack() for adding the very 1st push back
-		}
-		
-		return false;
-	}
-	*/
 	
 }
 //http://www.ibm.com/developerworks/library/os-ecl-cdt3/index.html?S_TACT=105AGX44&S_CMP=EDU
