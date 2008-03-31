@@ -69,3 +69,27 @@ int main(){
 }
 //expected
 [foo(func, cow, cow4, poulet), aStruct(helo), boo(func, operator (), cow4), coo(func, operator (), cow4), thatStruct(helo), abc(func, operator (), cow4)]
+//test Tree instances without class struct
+#include "cute.h"
+#include "ide_listener.h"
+#include "cute_runner.h"
+#include "HJsuite.h"
+class functor{
+public:
+	void operator()(){
+		ASSERTM("start writing tests", false);
+	}
+};
+functor myfunctor;
+void runTest(){
+	cute::suite s=make_suite_HJsuite();
+	s.push_back(functor());
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runTest();
+}
+//expected
+[myfunctor(operator())]

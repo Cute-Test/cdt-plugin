@@ -80,6 +80,8 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		else 
 			selectedObject=unitTestingMockObject;
 		
+		if(selectedObject == null)return new MultiTextEdit();
+		
 		IAddMemberMethod child=(IAddMemberMethod)selectedObject;
 				
 		SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
@@ -234,6 +236,8 @@ class myTree extends TreeNodeContentProvider{
 			
 				//resolve to type
 				IASTSimpleDeclaration targetType=null;
+				//INCORRECT ASSUMATIONS as there are classes that are not being added above, 
+				//but can be added via instance type
 				for(IAddMemberContainer c:containers){
 					if(ASTHelper.getClassStructName(c.getSimpleDeclaration()).equals(typename)){
 						targetType=c.getSimpleDeclaration();
