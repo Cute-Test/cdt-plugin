@@ -161,9 +161,10 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MessageConsoleStream stream=EclipseConsole.getConsole();
-				stream.println("selected");
+				//stream.println("selected");
 			}
 		});
+		if(wcp.containers.size()==0)button.setEnabled(false);
 	}
 	public ArrayList<IAddMemberContainer> getRootContainer(){
 		return wcp.containers;
@@ -207,7 +208,7 @@ class myTree extends TreeNodeContentProvider{
 					ArrayList<IASTSimpleDeclaration> classStructInstances){
 		MessageConsoleStream stream=EclipseConsole.getConsole();
 		for(IASTSimpleDeclaration i:classStruct){
-			stream.println("class:"+ASTHelper.getClassStructName((i))+"");
+			//stream.println("class:"+ASTHelper.getClassStructName((i))+"");
 			ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(i);
 			ArrayList<IASTDeclaration> nonStaticMethods=ASTHelper.getNonStaticMethods(publicMethods);
 			ArrayList<IASTDeclaration> removedParameters=ASTHelper.getParameterlessMethods(nonStaticMethods);
@@ -226,7 +227,7 @@ class myTree extends TreeNodeContentProvider{
 		}
 		
 		for(IASTSimpleDeclaration i:classStructInstances){
-			stream.println("instances:"+ASTHelper.getVariableName((i))+"");
+			//stream.println("instances:"+ASTHelper.getVariableName((i))+"");
 			if(i.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier){
 				ICPPASTNamedTypeSpecifier namedSpecifier=(ICPPASTNamedTypeSpecifier)i.getDeclSpecifier();
 				String typename=namedSpecifier.getName().toString();
@@ -277,7 +278,7 @@ class myTree extends TreeNodeContentProvider{
 	}
 	@Override
 	public Object getParent(Object element){
-		if(element==root)return root;
+		if(element==root)return root;//potential recursive loop
 		if(element instanceof IAddMemberContainer){return root;}
 		if(element instanceof Method){return ((IAddMemberMethod)element).getParent();}
 		return "thisShouldntHappen";

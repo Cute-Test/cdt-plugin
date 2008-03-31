@@ -100,14 +100,16 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 				}
 			}
 			
-			model.addGroup(group);
-			model.forceInstall();
+			if(!group.isEmpty()){
+				model.addGroup(group);
+				model.forceInstall();
 			
-			/*after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it*/
-			LinkedModeUI linkedModeUI = new EditorLinkedModeUI(model, viewer);
-			linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
-			linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
-			linkedModeUI.enter();
+				/*after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it*/
+				LinkedModeUI linkedModeUI = new EditorLinkedModeUI(model, viewer);
+				linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
+				linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
+				linkedModeUI.enter();
+			}
 		} catch (CoreException e) {
 			e.printStackTrace();// TODO exception not managed
 			System.out.println(e.getMessage());
