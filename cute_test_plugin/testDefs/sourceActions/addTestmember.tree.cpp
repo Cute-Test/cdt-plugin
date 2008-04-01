@@ -68,7 +68,7 @@ int main(){
     std::cout<<"complete";
 }
 //expected
-[foo(func, cow, cow4, poulet), aStruct(helo), boo(func, operator (), cow4), coo(func, operator (), cow4), thatStruct(helo), abc(func, operator (), cow4)]
+[foo(func, operator (), cow, cow4, poulet), aStruct(helo), boo(func, operator (), cow4), coo(func, operator (), cow4), thatStruct(helo), abc(func, operator (), cow4)]
 //test Tree instances without class struct
 #include "cute.h"
 #include "ide_listener.h"

@@ -90,10 +90,36 @@ void runSuite(){
 	cute::makeRunner(lis)(s, "The Suite");
 }
 ///////////////////////////////////////
-//	test addmember SMEMFUN operator 
-//	parameter foo operator() C
-//  >not tested as UI constraint such that foo.operator() wouldnt be selected
-///////////////////////////////////////
+//test addmember SMEMFUN operator 
+//parameter foo operator() C
+class foo{
+public:
+	void operator()(){
+		std::cout<<"operator()\n";
+		ASSERTM("operator()", false);
+	};
+}
+void runSuite(){
+	foo abc;
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//expected 
+class foo{
+public:
+	void operator()(){
+		std::cout<<"operator()\n";
+		ASSERTM("operator()", false);
+	};
+}
+void runSuite(){
+	foo abc;
+	cute::suite s;
+	s.push_back(CUTE_SMEMFUN(foo,operator()));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
 ///////////////////////////////////////
 //test addmember MEMFUN pushback dup 
 //parameter abc operator() I

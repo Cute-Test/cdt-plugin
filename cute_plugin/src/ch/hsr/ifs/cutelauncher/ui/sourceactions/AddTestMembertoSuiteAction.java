@@ -216,15 +216,14 @@ class myTree extends TreeNodeContentProvider{
 			ArrayList<IASTDeclaration> removedParameters=ASTHelper.getParameterlessMethods(nonStaticMethods);
 			ArrayList<IASTDeclaration> onlyVoid=removedParameters;//ASTHelper.getVoidMethods(removedParameters);
 			ArrayList<IASTDeclaration> removedUnion=ASTHelper.removeUnion(onlyVoid);
-			ArrayList<IASTDeclaration> removedOperator=ASTHelper.removeOperator(removedUnion);
-			
+						
 			IAddMemberContainer c=new Container(i,IAddMemberContainer.ClassType);
-			for(IASTDeclaration j:removedOperator){
+			for(IASTDeclaration j:removedUnion){
 				IAddMemberMethod method=new Method(c,j);
 				c.add(method);
 			}
 			
-			if(removedOperator.size()!=0)
+			if(removedUnion.size()!=0)
 				containers.add(c);
 		}
 		
