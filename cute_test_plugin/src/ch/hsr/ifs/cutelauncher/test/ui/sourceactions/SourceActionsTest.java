@@ -191,6 +191,7 @@ public class SourceActionsTest extends BaseTestFramework {
 	
 	//FIXME JUnit dblclick not working as tests doesnt have direct src mapping, if double click jmp to test file?
 	public final static void generateFunctorTest(TestSuite ts){
+		TestSuite functorTS=new TestSuite("addTestFunctor Tests");
 		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
 		final AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
 		for(int i=0;i<rtc1.testname.size();i++){
@@ -204,18 +205,11 @@ public class SourceActionsTest extends BaseTestFramework {
 					generateTest(rtc1.testname.get(j),rtc1.test.get(j),rtc1.cursorpos.get(j).intValue(),rtc1.expected.get(j),functionAction);
 				}
 			};
-			ts.addTest(test);
+			functorTS.addTest(test);
 		}
+		ts.addTest(functorTS);
 	}
-	/*@deprecated
-	public final void testAddTestFunctorAll(){
-		rtc=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
-		//AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
-		AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
-		for(int i=0;i<rtc.testname.size();i++){
-			generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
-		}
-	}*/
+	
 	
 	public final void testAddTestFunctionAll(){
 		rtc=new ReadTestCase("testDefs/sourceActions/addTestfunction.cpp");
@@ -224,7 +218,24 @@ public class SourceActionsTest extends BaseTestFramework {
 			generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
 		}
 	}
-	
+	public final static void generateFunctionTest(TestSuite ts){
+		TestSuite functorTS=new TestSuite("addTestFunction Tests");
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestfunction.cpp");
+		final AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
+		for(int i=0;i<rtc1.testname.size();i++){
+			final int j=i;
+			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name
+			junit.framework.TestCase test = new SourceActionsTest("addTestFunction"+i+displayname) {
+				@Override
+				public void runTest() {
+					generateTest(rtc1.testname.get(j),rtc1.test.get(j),rtc1.cursorpos.get(j).intValue(),rtc1.expected.get(j),functionAction);
+				}
+			};
+			functorTS.addTest(test);
+		}
+		ts.addTest(functorTS);
+	}
+
 	public final void testNewTestFunctionAll(){
 		rtc=new ReadTestCase("testDefs/sourceActions/newTestfunction.txt");
 		NewTestFunctionAction functionAction=new NewTestFunctionAction();
@@ -233,6 +244,24 @@ public class SourceActionsTest extends BaseTestFramework {
 			generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
 		}//skipped "at end2 with pushback duplicated" at position4 @see NewTestFunctionAction#createEdit 
 	}
+	public final static void generateNewFunctionTest(TestSuite ts){
+		TestSuite functorTS=new TestSuite("newTestFunction Tests");
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/newTestfunction.txt");
+		final NewTestFunctionAction functionAction=new NewTestFunctionAction();
+		for(int i=0;i<rtc1.testname.size();i++){
+			final int j=i;
+			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name
+			junit.framework.TestCase test = new SourceActionsTest("newTestFunction"+i+displayname) {
+				@Override
+				public void runTest() {
+					generateTest(rtc1.testname.get(j),rtc1.test.get(j),rtc1.cursorpos.get(j).intValue(),rtc1.expected.get(j),functionAction);
+				}
+			};
+			functorTS.addTest(test);
+		}
+		ts.addTest(functorTS);
+	}
+	
 	
 	// org.eclipse.cdt.ui.tests/ui/org.eclipse.cdt.ui.tests.text/BasicCeditor
 	//@see org.eclipse.cdt.ui.tests.text.BasicCeditorTest#setUpEditor
@@ -282,14 +311,24 @@ public class SourceActionsTest extends BaseTestFramework {
 	}
 	public static Test suite(){//FIXME unable to continue testing after failing
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
-		ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
-		ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
+		
+		boolean speedupMode=true;
+		if(speedupMode){
+			ts.addTest(new SourceActionsTest("testNewTestFunctionAll"));
+			ts.addTest(new SourceActionsTest("testAddTestFunctionAll"));
+		}else{
+			generateNewFunctionTest(ts);
+			generateFunctionTest(ts);
+		}
 		//ts.addTest(new SourceActionsTest("testAddTestFunctorAll"));
 		generateFunctorTest(ts);
-		generateMemberTest(ts);
 		
-		ts.addTest(new SourceActionsTest("treeTest1"));
-		ts.addTest(new SourceActionsTest("treeTest2"));
+		TestSuite addMemberTS=new TestSuite("addMembertoSuite Tests");
+		generateMemberTest(addMemberTS);
+		addMemberTS.addTest(new SourceActionsTest("treeTest1"));
+		addMemberTS.addTest(new SourceActionsTest("treeTest2"));
+		ts.addTest(addMemberTS);
+
 		return ts;
 	}
 	
@@ -308,5 +347,22 @@ public class SourceActionsTest extends BaseTestFramework {
 		boolean joined = CCorePlugin.getIndexManager().joinIndexer(
 				IIndexManager.FOREVER, NULL_PROGRESS_MONITOR);
 		assertTrue(joined);
+
+*/
+//////////////////////////////////////////////
+// Design document
+/* This piece of code will generate and run the test, but on first failure stop.
+ * advantage is that there is only one test case, instead of 20 thus reduced scrolling in the junit window. 
+ * this is faster in performance then create test case. which introduces about 2 extra sec.
+ */ /*
+@deprecated
+public final void testAddTestFunctorAll(){
+	rtc=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
+	//AddTestFunctiontoSuiteAction functionAction=new AddTestFunctiontoSuiteAction();
+	AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
+	for(int i=0;i<rtc.testname.size();i++){
+		generateTest(rtc.testname.get(i),rtc.test.get(i),rtc.cursorpos.get(i).intValue(),rtc.expected.get(i),functionAction);
+	}
+}
 
 */
