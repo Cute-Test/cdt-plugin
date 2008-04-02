@@ -81,6 +81,8 @@ public:
 	}
 };
 functor myfunctor;
+class jj{
+};
 void runTest(){
 	cute::suite s=make_suite_HJsuite();
 	s.push_back(functor());
@@ -92,4 +94,4 @@ int main(){
     runTest();
 }
 //expected
-[myfunctor(operator())]
+[myfunctor(operator()),jj()]

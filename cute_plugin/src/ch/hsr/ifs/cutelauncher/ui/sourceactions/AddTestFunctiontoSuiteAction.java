@@ -1,22 +1,13 @@
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTExpression;
-import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
-import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
-import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
-import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
-import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -29,7 +20,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import ch.hsr.ifs.cutelauncher.EclipseConsole;
 
-public class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
+public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 	
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
@@ -104,41 +95,4 @@ public class AddTestFunctiontoSuiteAction extends AbstractFunctionAction{
 		}
 		return null;
 	}
-	
-	@SuppressWarnings("restriction")
-	private boolean checkPushback(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
-		if(suitPushBackFinder.getSuiteDeclName() != null) {
-			IASTName name = suitPushBackFinder.getSuiteDeclName();
-			IBinding binding = name.resolveBinding();
-			IASTName[] refs = astTu.getReferences(binding);
-			for (IASTName name1 : refs) {
-				try{
-					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
-					if(fRef.getFieldName().toString().equals("push_back")) {
-						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
-						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
-						IASTExpression thelist=innercallex.getParameterExpression();
-						String theName="";
-						if(thelist!=null){
-							if(thelist instanceof IASTExpressionList){//normal run only
-								IASTExpression innerlist[]=((IASTExpressionList)thelist).getExpressions();
-								IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
-								IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();
-								theName=literalex.toString();
-							}else{//both normal run and unit test
-								theName=((CPPASTIdExpression)thelist).getName().toString();
-							}
-						}
-						if(theName.equals(fname))return true;
-					}
-					
-				}catch(ClassCastException e){}
-			}	
-		}else{//TODO need to create suite
-			//@see getLastPushBack() for adding the very 1st push back
-		}
-		
-		return false;
-	}
-
 }
