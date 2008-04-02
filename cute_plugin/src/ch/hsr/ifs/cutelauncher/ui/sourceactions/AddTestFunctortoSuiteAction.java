@@ -61,7 +61,6 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
 				
-				//if(!checkNameExist(astTu,fname,suitPushBackFinder)){
 				if(!checkPushback(astTu,fname,suitPushBackFinder)){
 					MultiTextEdit mEdit = new MultiTextEdit();
 					

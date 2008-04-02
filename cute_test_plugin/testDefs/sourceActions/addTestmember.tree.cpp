@@ -94,4 +94,4 @@ int main(){
     runTest();
 }
 //expected
-[myfunctor(operator()),jj()]
+[functor(operator ()), myfunctor(operator ())]

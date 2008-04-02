@@ -79,10 +79,18 @@ public class SourceActionsTest extends BaseTestFramework {
 		}
 		
 	}*/
-	public final void testTree(){
+	public final void treeTest1(){
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
+		testTree(rtc1.test.get(0),rtc1.expected.get(0),"func");
+	}
+	public final void treeTest2(){
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
+		testTree(rtc1.test.get(1),rtc1.expected.get(1),"operator ()");
+	}
+	public final void testTree(String srcCodes,String expectedTree, String firstObjName){
 		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
 		try{
-			IFile inputFile222=importFile("A.cpp",rtc1.test.get(0));
+			IFile inputFile222=importFile("A.cpp",srcCodes);
 			//**********
 			IFile inputFile = (IFile)MyDynamicProxyClass.newInstance(inputFile222, new Class[]
 			{ IFile.class });
@@ -120,7 +128,7 @@ public class SourceActionsTest extends BaseTestFramework {
 		        methods[i].setAccessible(true);
 		        Object ret = methods[i].invoke(atms, params);
 		        //System.out.println(ret);
-		        assertEquals("test123",ret.toString(),"func");
+		        assertEquals("Selecting the first object in tree",ret.toString(),firstObjName);
 		      }
 		    }
 		    
@@ -142,14 +150,12 @@ public class SourceActionsTest extends BaseTestFramework {
 		    
 		    builder.append("]");
 		    builder.append(System.getProperty("line.separator"));
-		    assertEquals("",rtc1.expected.get(0),builder.toString());
+		    assertEquals("",expectedTree,builder.toString());
 		    		    
 		    MyDynamicProxyClass.printUniqueCall();
 		    
 		}catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
 	}
-		
-	
 	/*class mySourceRange extends SourceRange{//for setting current cursor position
 		public mySourceRange(int offset){
 			super(offset,0);
@@ -282,7 +288,8 @@ public class SourceActionsTest extends BaseTestFramework {
 		generateFunctorTest(ts);
 		generateMemberTest(ts);
 		
-		ts.addTest(new SourceActionsTest("testTree"));
+		ts.addTest(new SourceActionsTest("treeTest1"));
+		ts.addTest(new SourceActionsTest("treeTest2"));
 		return ts;
 	}
 	

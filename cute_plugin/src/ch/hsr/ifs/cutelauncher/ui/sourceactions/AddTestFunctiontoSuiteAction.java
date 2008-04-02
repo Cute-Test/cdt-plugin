@@ -38,7 +38,7 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 				astTu.accept(suitPushBackFinder);
 
 				String fname=getFunctionNameAtCursor(astTu, selection,suitPushBackFinder);
-				//if(!dontAddFlag && !checkNameExist(astTu,fname,suitPushBackFinder))
+
 				if(!dontAddFlag && !checkPushback(astTu,fname,suitPushBackFinder))
 				{
 					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
