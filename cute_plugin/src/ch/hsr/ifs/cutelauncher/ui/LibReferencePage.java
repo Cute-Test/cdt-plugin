@@ -43,15 +43,15 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 public class LibReferencePage extends MBSCustomPage {
 	
 	private Composite composite;
-	private CDTConfigWizardPage conifgPage;
+	private final CDTConfigWizardPage configPage;
 
     private CheckboxTableViewer listViewer;
 	private Vector<IProject> libProjects;
-	private IWizardPage startingWizardPage;
+	private final IWizardPage startingWizardPage;
 
 	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage) {
 		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage";
-		this.conifgPage = configWizardPage;
+		this.configPage = configWizardPage;
 		this.startingWizardPage = staringWizardPage;
 	}
 
@@ -201,7 +201,7 @@ public class LibReferencePage extends MBSCustomPage {
 
 	@Override
 	public IWizardPage getNextPage() {
-		return conifgPage;
+		return configPage;
 	}
 
 	@Override

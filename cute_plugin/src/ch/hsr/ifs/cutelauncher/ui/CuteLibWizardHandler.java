@@ -13,7 +13,6 @@ package ch.hsr.ifs.cutelauncher.ui;
 
 import java.util.Vector;
 
-import org.eclipse.cdt.core.settings.model.ICOutputEntry;
 import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
@@ -39,7 +38,7 @@ import org.eclipse.swt.widgets.Composite;
 public class CuteLibWizardHandler extends CuteWizardHandler {
 	
 	
-	private LibReferencePage libRefPage;
+	private final LibReferencePage libRefPage;
 	public CuteLibWizardHandler(Composite p, IWizard w) {
 		
 		super( p, w);
@@ -67,15 +66,29 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	private void createLibSetings(IProject project) throws CoreException {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
-			setLibReferences(project, libProject);
+			setToolChainIncludePath(project, libProject);
+		}
+		
+		setProjectReference(project, projects);
+	}
+
+	private void setProjectReference(IProject project, Vector<IProject> projects)
+			throws CoreException {
+		if(projects.size()>0){
+			IProjectDescription desc = project.getDescription();
+			IProject iproject[]=new IProject[projects.size()];
+			
+			for(int x=0;x<projects.size();x++){
+				iproject[x]=projects.elementAt(x);
+			}
+			
+			desc.setReferencedProjects(iproject);
+			project.setDescription(desc, IResource.KEEP_HISTORY, new NullProgressMonitor());
 		}
 	}
 	
 	
-
-
-
-	private void setLibReferences(IProject project, IProject libProject) throws CoreException {
+	private void setToolChainIncludePath(IProject project, IProject libProject) throws CoreException {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject);
 		IConfiguration config = info.getDefaultConfiguration();
 		ICSourceEntry[] sources = config.getSourceEntries();
@@ -87,23 +100,15 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 				setIncludePaths(libProject.getFolder(location).getFullPath(), project);
 			}
 		}
+		/*
 		ICOutputEntry[]  dirs = config.getBuildData().getOutputDirectories();
 		for (ICOutputEntry outputEntry : dirs) {
 			IPath location = outputEntry.getFullPath();
-			setLibraryPaths(libProject.getFolder(location.removeFirstSegments(1)), project);
+			IPath location1=location.removeFirstSegments(1);
+			IFolder prjPath=libProject.getFolder(location1);
+			setLibraryPaths(prjPath, project);
 			setLibName(config.getArtifactName(), project);
-		}
-		
-		setProjectReference(project, libProject);
-		
-	}
-
-
-
-	private void setProjectReference(IProject project, IProject libProject) throws CoreException {
-		IProjectDescription desc = project.getDescription();
-		desc.setReferencedProjects(new IProject[] {libProject});
-		project.setDescription(desc, IResource.KEEP_HISTORY, new NullProgressMonitor());
+		}*/
 	}
 
 	@Override
