@@ -13,6 +13,7 @@ package ch.hsr.ifs.cutelauncher.ui;
 
 import java.util.Vector;
 
+import org.eclipse.cdt.core.settings.model.ICOutputEntry;
 import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
@@ -20,7 +21,6 @@ import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -42,11 +42,15 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	public CuteLibWizardHandler(Composite p, IWizard w) {
 		
 		super( p, w);
-		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage());
+		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(),w.getContainer());
 		libRefPage.setPreviousPage(getStartingPage());
 		libRefPage.setWizard(getWizard());
 		MBSCustomPageManager.init();
 		MBSCustomPageManager.addStockPage(libRefPage, libRefPage.getPageID());
+		
+//		CDTMainWizardPage page = (CDTMainWizardPage)getStartingPage();
+//		String prjname=page.getProjectName();
+//		page.setPageComplete(true);
 	}
 
 	@Override
@@ -87,6 +91,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		}
 	}
 	
+
 	
 	private void setToolChainIncludePath(IProject project, IProject libProject) throws CoreException {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject);
@@ -100,15 +105,18 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 				setIncludePaths(libProject.getFolder(location).getFullPath(), project);
 			}
 		}
-		/*
+		
 		ICOutputEntry[]  dirs = config.getBuildData().getOutputDirectories();
 		for (ICOutputEntry outputEntry : dirs) {
 			IPath location = outputEntry.getFullPath();
-			IPath location1=location.removeFirstSegments(1);
-			IFolder prjPath=libProject.getFolder(location1);
-			setLibraryPaths(prjPath, project);
+			if(location.segmentCount()== 0){
+				setLibraryPaths(libProject.getFullPath(), project);	
+			}else{
+				//IPath location1=location.removeFirstSegments(1);
+				setLibraryPaths(libProject.getFolder(location).getFullPath(), project);	
+			}
 			setLibName(config.getArtifactName(), project);
-		}*/
+		}
 	}
 
 	@Override
@@ -117,20 +125,18 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		return libRefPage;
 	}
 
-	protected void setLibraryPaths(IFolder libFolder, IProject project)
+	protected void setLibraryPaths(IPath libFolder, IProject project)
 			throws CoreException {
-				String path = "\"${workspace_loc:" + libFolder.getFullPath().toPortableString() + "}\"";
+				String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\"";
 				setOptionInAllConfigs(project, path, IOption.LIBRARY_PATHS);
 			}
-	
-	
 	
 	protected void setLibName(String libName, IProject project) throws CoreException {
 		setOptionInAllConfigs(project, libName, IOption.LIBRARIES);
 	}
 
 	
-
+	
 	@Override
 	protected GetOptionsStrategy getStrategy(int optionType) {
 		switch (optionType) {
@@ -146,7 +152,21 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		
 	}
 
-
+	/*
+	@Override
+	public String getErrorMessage(){
+		//solution check librefpage visible or not
+		if(libRefPage ==null)return null;
+		return "Please Select Library for testing";
+	}*/
+	
+	@Override
+	public boolean canFinich() {
+		if(libRefPage ==null)return false;
+		Vector<IProject> projects = libRefPage.getCheckedProjects();
+		if(projects.size()<1)return false;
+		return true;
+	}
 
 	private class LibraryPathsStrategy implements GetOptionsStrategy{
 
@@ -164,3 +184,4 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		
 	}
 }
+//to convert IFolder to IPath use (IResource)IFolder.getFullPath()

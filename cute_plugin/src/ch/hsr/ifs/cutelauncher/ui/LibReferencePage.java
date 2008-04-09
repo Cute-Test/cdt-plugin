@@ -22,11 +22,14 @@ import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -40,7 +43,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  * @author Emanuel Graf
  *
  */
-public class LibReferencePage extends MBSCustomPage {
+public class LibReferencePage extends MBSCustomPage implements ICheckStateListener{
 	
 	private Composite composite;
 	private final CDTConfigWizardPage configPage;
@@ -48,16 +51,19 @@ public class LibReferencePage extends MBSCustomPage {
     private CheckboxTableViewer listViewer;
 	private Vector<IProject> libProjects;
 	private final IWizardPage startingWizardPage;
-
-	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage) {
+	private final IWizardContainer wizardDialog;
+	
+	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc) {
 		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage";
 		this.configPage = configWizardPage;
 		this.startingWizardPage = staringWizardPage;
+		wizardDialog=wc;
 	}
 
 	@Override
 	protected boolean isCustomPageComplete() {
 		// TODO Auto-generated method stub
+		if(getCheckedProjects().size()<1)return false;
 		return true;
 	}
 
@@ -82,7 +88,7 @@ public class LibReferencePage extends MBSCustomPage {
         listViewer.setContentProvider(getContentProvider());
         listViewer.setComparator(new ViewerComparator());
 		listViewer.setInput(libProjects);
-        
+        listViewer.addCheckStateListener(this);
 	}
 	
 	private IContentProvider getContentProvider() {
@@ -150,7 +156,8 @@ public class LibReferencePage extends MBSCustomPage {
 
 	public String getErrorMessage()
 	{
-		return null;
+		//return null;
+		return "Please Select Library for testing";
 	}
 
 	public Image getImage()
@@ -211,6 +218,8 @@ public class LibReferencePage extends MBSCustomPage {
 
 	public Vector<IProject> getCheckedProjects() {
 		Vector<IProject> checkedProjects = new Vector<IProject>();
+		if(listViewer==null)return checkedProjects;
+		
 		for(Object obj :listViewer.getCheckedElements()) {
 			if (obj instanceof IProject) {
 				checkedProjects.add((IProject) obj);
@@ -220,6 +229,8 @@ public class LibReferencePage extends MBSCustomPage {
 		return checkedProjects;
 	}
 	
-	
+	public void checkStateChanged(CheckStateChangedEvent event){
+		wizardDialog.updateButtons();
+	}
 
 }
