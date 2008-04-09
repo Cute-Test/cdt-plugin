@@ -88,6 +88,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		IFolder cuteFolder = createFolder(project, "cute");
 		addCuteFiles(cuteFolder, new NullProgressMonitor());
 		setIncludePaths(cuteFolder.getFullPath(), project);
+		
 		ManagedBuildManager.saveBuildInfo(project, true);
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				getTestMainFile(project), true);

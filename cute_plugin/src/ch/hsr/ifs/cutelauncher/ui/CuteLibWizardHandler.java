@@ -30,6 +30,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 
 /**
  * @author Emanuel Graf
@@ -47,10 +49,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		libRefPage.setWizard(getWizard());
 		MBSCustomPageManager.init();
 		MBSCustomPageManager.addStockPage(libRefPage, libRefPage.getPageID());
-		
-//		CDTMainWizardPage page = (CDTMainWizardPage)getStartingPage();
-//		String prjname=page.getProjectName();
-//		page.setPageComplete(true);
 	}
 
 	@Override
@@ -74,6 +72,10 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		}
 		
 		setProjectReference(project, projects);
+		
+		ManagedBuildManager.saveBuildInfo(project, true);
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+				getTestMainFile(project), true);
 	}
 
 	private void setProjectReference(IProject project, Vector<IProject> projects)
@@ -152,14 +154,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		
 	}
 
-	/*
-	@Override
-	public String getErrorMessage(){
-		//solution check librefpage visible or not
-		if(libRefPage ==null)return null;
-		return "Please Select Library for testing";
-	}*/
-	
 	@Override
 	public boolean canFinich() {
 		if(libRefPage ==null)return false;
