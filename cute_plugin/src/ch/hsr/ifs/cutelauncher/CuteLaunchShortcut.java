@@ -188,10 +188,10 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_ID, debugConfig.getID());
 			
 			ICProject project=bin.getCProject();
-			
+
 			String os = Platform.getOS();
 			if(os.equals(Platform.OS_WIN32))setWin32PATH(wc, project);
-			
+			if(os.equals(Platform.OS_LINUX))setLinuxLDLIBRARYPATH();
 			
 			config = wc.doSave();
 		} catch (CoreException ce) {
@@ -199,13 +199,18 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		}
 		return config;
 	}
-
+	
+	private void setLinuxLDLIBRARYPATH(){
+		
+	}
+	
 	private void setWin32PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException {
 		String path=getBuildEnvironmentVariable("PATH",project);
 		String pathSeparator=System.getProperty("path.separator");
-		if(!(path.charAt(path.length()-1)+"").equals(pathSeparator))
-		path+=pathSeparator;
+		if(!path.equals(""))
+			if( !(path.charAt(path.length()-1)+"").equals(pathSeparator))
+				path+=pathSeparator;
 		
 		IProject[] libProject=getReferencedProjects(project);
 		String libPath=generateLibPath(libProject,pathSeparator);
