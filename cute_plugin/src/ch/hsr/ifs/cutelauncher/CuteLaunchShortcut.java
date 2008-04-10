@@ -187,62 +187,10 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN);
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_ID, debugConfig.getID());
 			
-			//getting via from launchConfiguration
-//			EnvironmentVariable[] elements = new EnvironmentVariable[0];
-			Map m=null;
-			try {
-				m = wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map) null);
-				//ILaunchManager.getNativeEnvironment()
-			} catch (CoreException e) {
-				//DebugUIPlugin.log(new Status(IStatus.ERROR, DebugUIPlugin.getUniqueIdentifier(), IStatus.ERROR, "Error reading configuration", e)); //$NON-NLS-1$
-				CuteLauncherPlugin.log(e);
-			}
-			if (m != null && !m.isEmpty()) {
-//				elements = new EnvironmentVariable[m.size()];
-//				String[] varNames = new String[m.size()];
-//				m.keySet().toArray(varNames);
-//				for (int i = 0; i < m.size(); i++) {
-//					elements[i] = new EnvironmentVariable(varNames[i], (String) m.get(varNames[i]));
-//				}
-				
-			}
 			ICProject project=bin.getCProject();
 			
-			String path=getBuildEnvironmentVariable("PATH",project);
-			String pathSeparator=System.getProperty("path.separator");
-			if(!(path.charAt(path.length()-1)+"").equals(pathSeparator))
-			path+=pathSeparator;
-			
-			IProject[] libProject=getReferencedProjects(project);
-			String libPath=generateLibPath(libProject,pathSeparator);
-			
-			
-			
-			
-			
-			//how to add variable to the launch configuration
-//			 String aa[]=bin.getNeededSharedLibs();
-//			 System.out.println(aa);
-//			 
-
-			//Map m3=getBuildEnvironmentVariables(project);//project.getOptions(true);//get information abt formatter etc
-			Map m3=new TreeMap();
-			System.out.println(m3.get("PATH"));
-			m3.put("PATH", path+libPath);//path+libPath
-			System.out.println(m3.get("PATH"));
-//			java.util.Set set=m3.keySet();
-//			java.util.Iterator i=set.iterator();
-//			
-//			for(Object v=i.next();i.hasNext();v=i.next()){
-//				System.out.println(v);
-//			}
-			//Append extended path via project refer
-			//ATTR_APPEND_ENVIRONMENT_VARIABLES  ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ENVIROMENT_MAP
-//			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ENVIROMENT_MAP, m);
-			wc.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, m3);
-//			wc.setAttribute(ILaunchManager.ATTR_APPEND_ENVIRONMENT_VARIABLES, true);
-			
-			
+			String os = Platform.getOS();
+			if(os.equals(Platform.OS_WIN32))setWin32PATH(wc, project);
 			
 			
 			config = wc.doSave();
@@ -252,6 +200,43 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return config;
 	}
 
+	private void setWin32PATH(ILaunchConfigurationWorkingCopy wc,
+			ICProject project) throws CoreException {
+		String path=getBuildEnvironmentVariable("PATH",project);
+		String pathSeparator=System.getProperty("path.separator");
+		if(!(path.charAt(path.length()-1)+"").equals(pathSeparator))
+		path+=pathSeparator;
+		
+		IProject[] libProject=getReferencedProjects(project);
+		String libPath=generateLibPath(libProject,pathSeparator);
+
+		//Map m3=project.getOptions(true);//get information abt formatter etc
+//		Map m3=getBuildEnvironmentVariables(project);//get the entire build env variables
+		Map map=new TreeMap();
+		map.put("PATH", path+libPath);
+		wc.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, map);
+//		wc.setAttribute(ILaunchManager.ATTR_APPEND_ENVIRONMENT_VARIABLES, true);
+	}
+
+	private String getBuildEnvironmentVariable(String key,ICProject project) {
+		String result="";
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project.getUnderlyingResource());
+		if (info != null) {
+			IConfiguration ic=info.getDefaultConfiguration();
+			IEnvironmentVariableProvider evp=ManagedBuildManager.getEnvironmentVariableProvider();
+			IEnvironmentVariable ev=evp.getVariable(key, ic, false);
+			result=ev.getValue();	
+		}
+		return result;
+	}
+
+	private IProject[] getReferencedProjects(ICProject project) throws CoreException {
+		IProject prj=project.getProject();
+		IProjectDescription desc = prj.getDescription();
+		IProject ref[]=desc.getReferencedProjects();
+		return ref;
+	}
+	
 	private String generateLibPath(IProject[] libProject, String pathSeparator) {
 		if(libProject.length<1)return "";
 		
@@ -277,25 +262,6 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return result;
 	}
 	
-	private IProject[] getReferencedProjects(ICProject project) throws CoreException {
-		IProject prj=project.getProject();
-		IProjectDescription desc = prj.getDescription();
-		IProject ref[]=desc.getReferencedProjects();
-		return ref;
-	}
-
-	private String getBuildEnvironmentVariable(String key,ICProject project) {
-		String result="";
-		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project.getUnderlyingResource());
-		if (info != null) {
-			IConfiguration ic=info.getDefaultConfiguration();
-			IEnvironmentVariableProvider evp=ManagedBuildManager.getEnvironmentVariableProvider();
-			IEnvironmentVariable ev=evp.getVariable(key, ic, false);
-			result=ev.getValue();	
-		}
-		return result;
-	}
-
 	private Map getBuildEnvironmentVariables(ICProject project) {
 		Map result=new TreeMap();
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project.getUnderlyingResource());
@@ -556,3 +522,23 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	}
 
 }
+
+
+//code snip for getting variables from workingconfig 
+//Map m=null;
+//try {
+//	m = wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map) null);
+//	//ILaunchManager.getNativeEnvironment()
+//} catch (CoreException e) {
+//	//DebugUIPlugin.log(new Status(IStatus.ERROR, DebugUIPlugin.getUniqueIdentifier(), IStatus.ERROR, "Error reading configuration", e)); //$NON-NLS-1$
+//	CuteLauncherPlugin.log(e);
+//}
+//if (m != null && !m.isEmpty()) {
+//	elements = new EnvironmentVariable[m.size()];
+//	String[] varNames = new String[m.size()];
+//	m.keySet().toArray(varNames);
+//	for (int i = 0; i < m.size(); i++) {
+//		elements[i] = new EnvironmentVariable(varNames[i], (String) m.get(varNames[i]));
+//	}
+//	
+//}
