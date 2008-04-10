@@ -15,18 +15,29 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
 import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.IBinary;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.core.settings.model.ICOutputEntry;
+import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.debug.core.CDebugCorePlugin;
 import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
 import org.eclipse.cdt.debug.core.ICDebugConfiguration;
 import org.eclipse.cdt.launch.AbstractCLaunchDelegate;
 import org.eclipse.cdt.launch.internal.ui.LaunchMessages;
 import org.eclipse.cdt.launch.internal.ui.LaunchUIPlugin;
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
+import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
 import org.eclipse.cdt.ui.CElementLabelProvider;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -175,6 +186,65 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_START_MODE,
 				ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN);
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_ID, debugConfig.getID());
+			
+			//getting via from launchConfiguration
+//			EnvironmentVariable[] elements = new EnvironmentVariable[0];
+			Map m=null;
+			try {
+				m = wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map) null);
+				//ILaunchManager.getNativeEnvironment()
+			} catch (CoreException e) {
+				//DebugUIPlugin.log(new Status(IStatus.ERROR, DebugUIPlugin.getUniqueIdentifier(), IStatus.ERROR, "Error reading configuration", e)); //$NON-NLS-1$
+				CuteLauncherPlugin.log(e);
+			}
+			if (m != null && !m.isEmpty()) {
+//				elements = new EnvironmentVariable[m.size()];
+//				String[] varNames = new String[m.size()];
+//				m.keySet().toArray(varNames);
+//				for (int i = 0; i < m.size(); i++) {
+//					elements[i] = new EnvironmentVariable(varNames[i], (String) m.get(varNames[i]));
+//				}
+				
+			}
+			ICProject project=bin.getCProject();
+			
+			String path=getBuildEnvironmentVariable("PATH",project);
+			String pathSeparator=System.getProperty("path.separator");
+			if(!(path.charAt(path.length()-1)+"").equals(pathSeparator))
+			path+=pathSeparator;
+			
+			IProject[] libProject=getReferencedProjects(project);
+			String libPath=generateLibPath(libProject,pathSeparator);
+			
+			
+			
+			
+			
+			//how to add variable to the launch configuration
+//			 String aa[]=bin.getNeededSharedLibs();
+//			 System.out.println(aa);
+//			 
+
+			//Map m3=getBuildEnvironmentVariables(project);//project.getOptions(true);//get information abt formatter etc
+			Map m3=new TreeMap();
+			System.out.println(m3.get("PATH"));
+			m3.put("PATH", path+libPath);//path+libPath
+			System.out.println(m3.get("PATH"));
+//			java.util.Set set=m3.keySet();
+//			java.util.Iterator i=set.iterator();
+//			
+//			for(Object v=i.next();i.hasNext();v=i.next()){
+//				System.out.println(v);
+//			}
+			//Append extended path via project refer
+			//ATTR_APPEND_ENVIRONMENT_VARIABLES  ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ENVIROMENT_MAP
+//			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ENVIROMENT_MAP, m);
+			wc.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, m3);
+//			wc.setAttribute(ILaunchManager.ATTR_APPEND_ENVIRONMENT_VARIABLES, true);
+			
+			
+			
+			
 			config = wc.doSave();
 		} catch (CoreException ce) {
 			CuteLauncherPlugin.log(ce);
@@ -182,6 +252,66 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return config;
 	}
 
+	private String generateLibPath(IProject[] libProject, String pathSeparator) {
+		if(libProject.length<1)return "";
+		
+		String result="";
+		
+		for(int x=0;x<libProject.length;x++){
+			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject[x]);
+			IConfiguration config = info.getDefaultConfiguration();
+			ICSourceEntry[] sources = config.getSourceEntries();
+			ICOutputEntry[]  dirs = config.getBuildData().getOutputDirectories();	
+			for (ICOutputEntry outputEntry : dirs) {
+				IPath location = outputEntry.getFullPath();
+				IPath parameter;
+				if(location.segmentCount()== 0){
+					parameter=libProject[x].getFullPath();
+				}else{
+					parameter=libProject[x].getFolder(location).getFullPath();	
+				}
+				result+= "${workspace_loc:" + parameter.toPortableString() + "}"+pathSeparator;
+			}	
+		}
+		
+		return result;
+	}
+	
+	private IProject[] getReferencedProjects(ICProject project) throws CoreException {
+		IProject prj=project.getProject();
+		IProjectDescription desc = prj.getDescription();
+		IProject ref[]=desc.getReferencedProjects();
+		return ref;
+	}
+
+	private String getBuildEnvironmentVariable(String key,ICProject project) {
+		String result="";
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project.getUnderlyingResource());
+		if (info != null) {
+			IConfiguration ic=info.getDefaultConfiguration();
+			IEnvironmentVariableProvider evp=ManagedBuildManager.getEnvironmentVariableProvider();
+			IEnvironmentVariable ev=evp.getVariable(key, ic, false);
+			result=ev.getValue();	
+		}
+		return result;
+	}
+
+	private Map getBuildEnvironmentVariables(ICProject project) {
+		Map result=new TreeMap();
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project.getUnderlyingResource());
+		if (info != null) {
+			IConfiguration ic=info.getDefaultConfiguration();
+			IEnvironmentVariableProvider evp=ManagedBuildManager.getEnvironmentVariableProvider();
+			IEnvironmentVariable[] ev=evp.getVariables(ic, false);
+			
+			for(IEnvironmentVariable iev:ev){
+				result.put(iev.getName(), iev.getValue());
+			}
+			
+		}
+		return result;
+	}
+	
 	/**
 	 * Method getCLaunchConfigType.
 	 * @return ILaunchConfigurationType

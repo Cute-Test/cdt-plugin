@@ -30,8 +30,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 
 /**
  * @author Emanuel Graf
@@ -74,8 +72,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		setProjectReference(project, projects);
 		
 		ManagedBuildManager.saveBuildInfo(project, true);
-		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-				getTestMainFile(project), true);
 	}
 
 	private void setProjectReference(IProject project, Vector<IProject> projects)

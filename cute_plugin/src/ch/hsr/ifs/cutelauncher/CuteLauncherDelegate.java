@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 import org.eclipse.cdt.launch.AbstractCLaunchDelegate;
 import org.eclipse.cdt.launch.internal.ui.LaunchMessages;
@@ -30,6 +31,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.IStatusHandler;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.DebugUITools;
@@ -80,7 +82,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			String[] commandArray = command.toArray( new String[command.size()] );
 			boolean usePty = config.getAttribute( "ch.hsr.ifs.cutelauncher.useTerminal", true);
 			monitor.worked( 2 );
-			Process process = exec( commandArray, getEnvironment( config ), wd, usePty );
+			Process process = exec( commandArray, this.getEnvironment( config ), wd, usePty );
 			monitor.worked( 6 );
 			DebugPlugin.newProcess( launch, process, renderProcessLabel( commandArray[0] ) );
 			IProcess proc = launch.getProcesses()[0];
@@ -107,6 +109,19 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		finally {
 			monitor.done();
 		}		
+	}
+	
+	@Override
+	protected String[] getEnvironment(ILaunchConfiguration config) throws CoreException{
+		Map map = config.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map)null);
+		if(map==null)return super.getEnvironment( config );
+		
+		String[] array = DebugPlugin.getDefault().getLaunchManager().getEnvironment(config);
+		if (array == null) {
+			return new String[0];
+		}
+		return array;
+		
 	}
 	
 	public IPath sourcelookupPath(ILaunchConfiguration config, IPath exePath){
