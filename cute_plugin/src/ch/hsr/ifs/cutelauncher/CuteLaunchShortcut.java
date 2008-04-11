@@ -191,7 +191,8 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 			String os = Platform.getOS();
 			if(os.equals(Platform.OS_WIN32))setWin32PATH(wc, project);
-			if(os.equals(Platform.OS_LINUX))setLinuxLDLIBRARYPATH();
+			if(os.equals(Platform.OS_LINUX))setLinuxLD_LIBRARY_PATH(wc, project);
+			if(os.equals(Platform.OS_MACOSX))setMacDYLD_LIBRARY_PATH(wc, project);
 			
 			config = wc.doSave();
 		} catch (CoreException ce) {
@@ -200,14 +201,22 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return config;
 	}
 	
-	private void setLinuxLDLIBRARYPATH(){
-		
+	private void setMacDYLD_LIBRARY_PATH(ILaunchConfigurationWorkingCopy wc,
+			ICProject project) throws CoreException{
+		setEnvironmentVariable(wc,project,"DYLD_LIBRARY_PATH");
 	}
-	
+	private void setLinuxLD_LIBRARY_PATH(ILaunchConfigurationWorkingCopy wc,
+			ICProject project) throws CoreException{
+		setEnvironmentVariable(wc,project,"LD_LIBRARY_PATH");
+	}
 	private void setWin32PATH(ILaunchConfigurationWorkingCopy wc,
-			ICProject project) throws CoreException {
-		String path=getBuildEnvironmentVariable("PATH",project);
-		String pathSeparator=System.getProperty("path.separator");
+			ICProject project) throws CoreException{
+		setEnvironmentVariable(wc,project,"PATH");
+	}
+	private void setEnvironmentVariable(ILaunchConfigurationWorkingCopy wc,
+			ICProject project,String environmentVariableName) throws CoreException {
+		String path=getBuildEnvironmentVariable(environmentVariableName,project);
+		String pathSeparator=System.getProperty("path.separator");//assumption that it is only 1 char wide
 		if(!path.equals(""))
 			if( !(path.charAt(path.length()-1)+"").equals(pathSeparator))
 				path+=pathSeparator;
@@ -218,7 +227,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		//Map m3=project.getOptions(true);//get information abt formatter etc
 //		Map m3=getBuildEnvironmentVariables(project);//get the entire build env variables
 		Map map=new TreeMap();
-		map.put("PATH", path+libPath);
+		map.put(environmentVariableName, path+libPath);
 		wc.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, map);
 //		wc.setAttribute(ILaunchManager.ATTR_APPEND_ENVIRONMENT_VARIABLES, true);
 	}

@@ -154,10 +154,11 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 		return new String("Choose the Library Project to test");
 	}
 
+	boolean errorMessageFlag=false;
 	public String getErrorMessage()
 	{
-		//return null;
-		return "Please Select Library for testing";
+		if(errorMessageFlag)return "Please Select Library for testing";
+		return null;
 	}
 
 	public Image getImage()
@@ -230,6 +231,11 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 	}
 	
 	public void checkStateChanged(CheckStateChangedEvent event){
+		Vector<IProject> list=getCheckedProjects();
+		if(list.size()<1)errorMessageFlag=true;
+		else errorMessageFlag=false;
+		
+		wizardDialog.updateMessage();
 		wizardDialog.updateButtons();
 	}
 
