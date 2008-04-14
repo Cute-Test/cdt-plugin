@@ -55,7 +55,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 			if (editorInput instanceof FileEditorInput) {
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
-				int insertFileOffset = getInsertOffset(astTu, selection);
+				insertFileOffset = getInsertOffset(astTu, selection);
 
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);

@@ -24,6 +24,10 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 
 public abstract class AbstractFunctionAction {
+	int insertFileOffset=-1;
+	int pushbackOffset=-1;
+	int pushbackLength=-1;
+	
 	public abstract MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
 			throws CoreException;
@@ -78,15 +82,17 @@ public abstract class AbstractFunctionAction {
 			IASTName[] refs = astTu.getReferences(binding);
 			IASTStatement lastPushBack = getLastPushBack(refs);
 
+			IASTFileLocation fileLocation; 
 			if(lastPushBack != null) {
-				IASTFileLocation fileLocation = lastPushBack.getFileLocation();
-				InsertEdit edit = new InsertEdit(fileLocation.getNodeOffset() + fileLocation.getNodeLength(), builder.toString());
-				return edit;
+				fileLocation = lastPushBack.getFileLocation();
 			}else {//case where no push_back was found, use cute::suite location 
-				IASTFileLocation fileLocation = suitPushBackFinder.getSuiteNode().getParent().getFileLocation();
-				InsertEdit edit = new InsertEdit(fileLocation.getNodeOffset() + fileLocation.getNodeLength(), builder.toString());
-				return edit;
+				fileLocation = suitPushBackFinder.getSuiteNode().getParent().getFileLocation();
 			}
+			pushbackOffset=fileLocation.getNodeOffset() + fileLocation.getNodeLength();
+			InsertEdit edit = new InsertEdit(pushbackOffset, builder.toString());
+			pushbackLength=builder.toString().length();
+			
+			return edit;
 		}else {
 			//TODO case of no cute::suite found
 			
