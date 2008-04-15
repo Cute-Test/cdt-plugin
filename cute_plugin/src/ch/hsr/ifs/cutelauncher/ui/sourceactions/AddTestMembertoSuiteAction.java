@@ -9,6 +9,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -60,8 +61,9 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				
 			}
 		}
-
-		return new MultiTextEdit();
+		
+		//return new MultiTextEdit();
+		throw new CoreException(new Status(IStatus.ERROR, "ch.hsr.ifs.cutelauncher", 0,"human", null));
 	}
 
 	public void setUnitTestingMode(IAddMemberMethod unitTestingMockObject){

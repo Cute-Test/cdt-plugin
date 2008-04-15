@@ -6,6 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -53,6 +54,15 @@ public abstract class AbstractFunctionAction {
 			if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength)) {
 				return (nodeOffset);
 			}else if(selOffset <= nodeOffset) {
+				//Shift out of preprocessor statements
+				IASTPreprocessorStatement[] listPreprocessor=astTu.getAllPreprocessorStatements();
+				for(int x=0;x<listPreprocessor.length;x++){
+					nodeOffset = listPreprocessor[x].getFileLocation().getNodeOffset();
+					nodeLength = listPreprocessor[x].getFileLocation().asFileLocation().getNodeLength();
+					if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength)) {
+						return nodeOffset;
+					}
+				}
 				return selOffset;
 			}
 		}

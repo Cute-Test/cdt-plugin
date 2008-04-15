@@ -187,4 +187,55 @@ void newTestFunction(){
 }
 
 
+//test shift out of preprocessor statement
+#include "cute.h"
+#inc^lude "ide_listener.h"
+#include "cute_runner.h"
+
+void thisIsATest() {
+	ASSERTM("start writing tests", false);	
+}
+
+void runSuite(){
+	cute::suite s;
+	//TODO add your test here
+	s.push_back(CUTE(thisIsATest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runSuite();
+}
+
+
+
+//expected results
+#include "cute.h"
+void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}
+
+#include "ide_listener.h"
+#include "cute_runner.h"
+
+void thisIsATest() {
+	ASSERTM("start writing tests", false);	
+}
+
+void runSuite(){
+	cute::suite s;
+	//TODO add your test here
+	s.push_back(CUTE(thisIsATest));
+	s.push_back(CUTE(newTestFunction));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+
+int main(){
+    runSuite();
+}
+
+
+
 //

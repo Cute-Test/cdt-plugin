@@ -30,7 +30,6 @@ public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegat
 			String insert = ((InsertEdit)textEdit).getText();
 			if(insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
 
-				System.out.println(functionAction.insertFileOffset + " "+ functionAction.pushbackOffset);
 				if(functionAction.insertFileOffset==-1 || functionAction.pushbackOffset==-1)//abnormal conditions
 					return (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
 				if(functionAction.insertFileOffset < functionAction.pushbackOffset)
