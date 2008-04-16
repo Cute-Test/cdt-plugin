@@ -27,7 +27,7 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 	 * 
 	 */
 	public ProjectNaturePropertyTester() {
-		System.out.println("PropTester K'tor");
+//		System.out.println("PropTester K'tor");
 	}
 
 	/* (non-Javadoc)
