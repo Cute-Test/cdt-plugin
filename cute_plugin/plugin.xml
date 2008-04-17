@@ -39,6 +39,7 @@
                <count value="1"/>
                <iterate>
                   <and>
+                  <!-- <test property="org.eclipse.debug.ui.matchesPattern" value="*.kmt"></test> -->
                      <test
                            forcePluginActivation="true"
                            property="ch.hsr.ifs.projectNature1"
