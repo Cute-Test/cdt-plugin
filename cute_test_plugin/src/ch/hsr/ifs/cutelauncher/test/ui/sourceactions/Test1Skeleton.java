@@ -1,6 +1,5 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
-import org.eclipse.cdt.core.tests.BaseTestFramework;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
@@ -17,7 +16,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
 
-public abstract class Test1Skeleton extends BaseTestFramework {
+public abstract class Test1Skeleton extends MemoryBaseTestFramework {
 	public Test1Skeleton() {
 		super("");
  	}
@@ -43,8 +42,19 @@ public abstract class Test1Skeleton extends BaseTestFramework {
 	//@see org.eclipse.cdt.ui.tests.text.BasicCeditorTest#setUpEditor
 	public final void generateTest(String testname,String testSrcCode, int cursorpos, String expectedOutput,AbstractFunctionAction functionAction){
 		try{
+//		IFile inputFile222=importFile("A.cpp",testSrcCode);
 		IFile inputFile=importFile("A.cpp",testSrcCode);
+		//**********
+//		IFile inputFile = (IFile)MyDynamicProxyClass.newInstance(inputFile222, new Class[]
+//		{ IFile.class });
+//		
+		//**********
+//		IFile file = project.getProject().getFile("A.cpp");
+//		InputStream stream = new ByteArrayInputStream( "".getBytes() );
+//		file.create( stream, false, monitor );
+//		IFile inputFile=new MemoryFileStub(file.getFullPath(),(Workspace)file.getWorkspace());
 
+		
 		IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 		assertNotNull(editor);
 		assertTrue(editor instanceof CEditor);
@@ -84,5 +94,10 @@ public abstract class Test1Skeleton extends BaseTestFramework {
 		//TODO discarding the changes as clean up, instead of writing to disk and then deleting it
 				
 		}catch(Exception e){e.printStackTrace();fail(testname+"\n"+e.getMessage());}
+		
+//		System.out.println(testname);
+//		MyDynamicProxyClass.printUniqueCall();
+//		System.out.println("####################");
+		Recorder.store(MyDynamicProxyClass.getUniqueCall());
 	}
 }

@@ -4,10 +4,10 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 public class SourceActionsTest {
 
-	public static Test suite(){//FIXME unable to continue testing after failing
+	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
 		
-		boolean speedupMode=true;
+		boolean speedupMode=false;
 				
 		ts.addTest(TestNewFunction.suite(speedupMode));
 		ts.addTest(TestAddFunction.suite(speedupMode));

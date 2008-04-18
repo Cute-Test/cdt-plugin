@@ -14,6 +14,11 @@ public class MyDynamicProxyClass implements java.lang.reflect.InvocationHandler
 	public Object invoke(Object proxy, Method m, Object[] args) throws Throwable
 	{
 		try {
+			
+			if(args!=null && args.length>0){
+				if(proxy==args[0] && m.toString().equals("public boolean java.lang.Object.equals(java.lang.Object)"))
+					return true;
+			}
 			//Beware, it is obj, not via proxy
 			//invoke(proxy,args) results in recursive loop
 			//System.out.println(m);
@@ -37,7 +42,7 @@ public class MyDynamicProxyClass implements java.lang.reflect.InvocationHandler
 				interfaces,
 				new MyDynamicProxyClass(obj));
 	}
-	public HashSet getUniqueCall(){
+	public static HashSet getUniqueCall(){
 		return hs;
 	}
 	public static void printUniqueCall(){
