@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
+import junit.framework.TestCase;
+
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
@@ -15,8 +17,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
-
-public abstract class Test1Skeleton extends MemoryBaseTestFramework {
+public abstract class Test1Skeleton extends TestCase{ 
+	//extends MemoryBaseTestFramework {
 	public Test1Skeleton() {
 		super("");
  	}
@@ -43,7 +45,7 @@ public abstract class Test1Skeleton extends MemoryBaseTestFramework {
 	public final void generateTest(String testname,String testSrcCode, int cursorpos, String expectedOutput,AbstractFunctionAction functionAction){
 		try{
 //		IFile inputFile222=importFile("A.cpp",testSrcCode);
-		IFile inputFile=importFile("A.cpp",testSrcCode);
+		IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
 		//**********
 //		IFile inputFile = (IFile)MyDynamicProxyClass.newInstance(inputFile222, new Class[]
 //		{ IFile.class });

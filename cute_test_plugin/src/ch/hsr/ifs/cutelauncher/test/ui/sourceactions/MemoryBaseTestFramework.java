@@ -37,7 +37,7 @@ public class MemoryBaseTestFramework extends TestCase {
     static protected FileManager 			fileManager;
 	static protected boolean				indexDisabled=false;
 	
-	{
+	static {
         if( CCorePlugin.getDefault() != null && CCorePlugin.getDefault().getCoreModel() != null){
 			//(CCorePlugin.getDefault().getCoreModel().getIndexManager()).reset();
 			monitor = new NullProgressMonitor();
@@ -48,7 +48,7 @@ public class MemoryBaseTestFramework extends TestCase {
 			final String projectName="memoryPrj";
 						
 	        try {
-	            cproject = createCCProject("RegressionTestProject", "bin", IPDOMManager.ID_NO_INDEXER); //$NON-NLS-1$ //$NON-NLS-2$
+	            cproject = createCCProject("MemRegressionTestProject", "bin", IPDOMManager.ID_NO_INDEXER); //$NON-NLS-1$ //$NON-NLS-2$
 		        
 	            project = cproject.getProject();
 	        	
@@ -99,7 +99,8 @@ public class MemoryBaseTestFramework extends TestCase {
 	        	//Set the id of the source indexer extension point as a session property to allow
 	    		//index manager to instantiate it
 	    		project.setSessionProperty(IndexManager.indexerIDKey, sourceIndexerID);*/
-	    		
+	        	
+	            System.out.println("static initializer"+project.getLocationURI());
 	        } catch ( CoreException e ) {
 	            /*boo*/
 	        }
@@ -227,21 +228,23 @@ public class MemoryBaseTestFramework extends TestCase {
         if( project == null || !project.exists() )
             return;
         
-        IResource [] members = project.members();
-        for( int i = 0; i < members.length; i++ ){
-            if( members[i].getName().equals( ".project" ) || members[i].getName().equals( ".cproject" ) ) //$NON-NLS-1$ //$NON-NLS-2$
-                continue;
-            if (members[i].getName().equals(".settings"))
-            	continue;
-            try{
-                members[i].delete( false, monitor );
-            } catch( Throwable e ){
-                /*boo*/
-            }
-        }
+//        IResource [] members = project.members();
+//        for( int i = 0; i < members.length; i++ ){
+//            if( members[i].getName().equals( ".project" ) || members[i].getName().equals( ".cproject" ) ) //$NON-NLS-1$ //$NON-NLS-2$
+//                continue;
+//            if (members[i].getName().equals(".settings"))
+//            	continue;
+//            try{
+//                members[i].delete( false, monitor );
+//            } catch( Throwable e ){
+//                /*boo*/
+//            }
+//        }
 	}
-    protected IFile importFile(String fileName, String contents ) throws Exception{
+    //protected IFile importFile(String fileName, String contents ) throws Exception{
+    public static IFile importFile(String fileName, String contents ) throws Exception{
 		//Obtain file handle
+//    	System.out.println(project.getLocationURI());
 		IFile file = project.getProject().getFile(fileName);
 		
 		InputStream stream = new ByteArrayInputStream( contents.getBytes() );
@@ -254,11 +257,12 @@ public class MemoryBaseTestFramework extends TestCase {
 		fileManager.addFile(file);
 		
 //		IFileSystem fileSystem = EFS.getFileSystem("memory");
-//		IFileStore store=fileSystem.getStore(new java.net.URI("/RegressionTestProject/A.cpp"));
+//		IFileStore store=fileSystem.getStore(new java.net.URI("/MemRegressionTestProject/A.cpp"));
 //		InputStream is=store.openInputStream(0, null);
 //		BufferedReader br=new BufferedReader(new InputStreamReader(is));
 //		System.out.println(br.readLine());
 		
 		return file;
 	}
+    
 }
