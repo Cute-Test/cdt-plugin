@@ -16,9 +16,10 @@ public class Recorder {
 	
 	public static void printUniqueCall(){
 		if(hs!=null){
-		for(String i:hs){
-			System.out.println(i);
-		}System.out.println("###########");
+			System.out.println("###########Start");
+			for(String i:hs){
+				System.out.println(i);
+			}System.out.println("###########End");
 		}else System.out.println("nothing");
 			
 	}

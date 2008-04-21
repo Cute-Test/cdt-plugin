@@ -30,7 +30,6 @@ public class TestAddMember extends Test1Skeleton {
 				@Override
 				public void runTest() {
 					generateTest(rtc1.testname.get(j),rtc1.test.get(j),rtc1.cursorpos.get(j).intValue(),rtc1.expected.get(j),functionAction);
-					Recorder.printUniqueCall();
 				}
 			};
 			ts.addTest(test);

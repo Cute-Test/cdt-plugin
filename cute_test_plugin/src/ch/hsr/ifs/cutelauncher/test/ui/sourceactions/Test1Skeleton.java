@@ -18,7 +18,8 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
 public abstract class Test1Skeleton extends TestCase{ 
-	//extends MemoryBaseTestFramework {
+	//extends BaseTestFramework{
+	
 	public Test1Skeleton() {
 		super("");
  	}
@@ -44,18 +45,27 @@ public abstract class Test1Skeleton extends TestCase{
 	//@see org.eclipse.cdt.ui.tests.text.BasicCeditorTest#setUpEditor
 	public final void generateTest(String testname,String testSrcCode, int cursorpos, String expectedOutput,AbstractFunctionAction functionAction){
 		try{
-//		IFile inputFile222=importFile("A.cpp",testSrcCode);
-		IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
 		//**********
+		//Original CDT based hdd test, (require this class to extend BaseTestFramework)	
+//		IFile inputFile=importFile("A.cpp",testSrcCode);
+
+		//**********
+		//Memory only EFS based
+		IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
+
+		//**********
+		//Reflection based to see which method are called 
+//		IFile inputFile222=importFile("A.cpp",testSrcCode);
 //		IFile inputFile = (IFile)MyDynamicProxyClass.newInstance(inputFile222, new Class[]
 //		{ IFile.class });
 //		
 		//**********
+		//Exception based Test to find candidate for overwriting the methods called 
 //		IFile file = project.getProject().getFile("A.cpp");
 //		InputStream stream = new ByteArrayInputStream( "".getBytes() );
 //		file.create( stream, false, monitor );
 //		IFile inputFile=new MemoryFileStub(file.getFullPath(),(Workspace)file.getWorkspace());
-
+		//**********
 		
 		IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 		assertNotNull(editor);
@@ -75,8 +85,6 @@ public abstract class Test1Skeleton extends TestCase{
 		String newLine = TextUtilities.getDefaultLineDelimiter(fDocument);
 		functionAction.setNewline(newLine);
 		
-		//different to BasicCEditorTest#setCaret
-		//**faulty**ceditor.setSelection(new mySourceRange(cursorpos),false);
 		ceditor.getSelectionProvider().setSelection(new TextSelection(cursorpos, 0));
 				
 		// execute actions 
@@ -101,5 +109,9 @@ public abstract class Test1Skeleton extends TestCase{
 //		MyDynamicProxyClass.printUniqueCall();
 //		System.out.println("####################");
 		Recorder.store(MyDynamicProxyClass.getUniqueCall());
+	}
+	
+	public final void testDisplayDynamicProxyRecordedResult(){
+		Recorder.printUniqueCall();
 	}
 }

@@ -19,6 +19,8 @@ public class SourceActionsTest {
 
 		ts.addTest(MemoryEFS.suite());
 		
+		ts.addTest(new TestAddFunction("testDisplayDynamicProxyRecordedResult"));
+		
 		return ts;
 	}
 	
