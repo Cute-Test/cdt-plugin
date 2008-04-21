@@ -17,6 +17,8 @@ public class SourceActionsTest {
 		TestAddMember.generateMemberTest(addMemberTS);
 		ts.addTest(addMemberTS);
 
+		ts.addTest(MemoryEFS.suite());
+		
 		return ts;
 	}
 	

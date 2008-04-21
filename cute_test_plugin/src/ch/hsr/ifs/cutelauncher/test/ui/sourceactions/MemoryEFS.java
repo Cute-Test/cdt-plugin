@@ -14,10 +14,9 @@ import junit.framework.TestSuite;
 import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.CProjectNature;
-import org.eclipse.cdt.core.ICExtensionReference;
 import org.eclipse.cdt.core.dom.IPDOMManager;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.core.settings.model.ICProjectDescription;
+import org.eclipse.cdt.core.testplugin.CProjectHelper;
 import org.eclipse.cdt.core.testplugin.CTestPlugin;
 import org.eclipse.cdt.internal.core.pdom.indexer.IndexerPreferences;
 import org.eclipse.core.filesystem.EFS;
@@ -58,18 +57,6 @@ public class MemoryEFS extends TestCase {
 		
 		try {
 		final java.net.URI loc=	new java.net.URI("memory:/");
-//		ws.run(new IWorkspaceRunnable() {
-//			public void run(IProgressMonitor monitor) throws CoreException {
-//				IWorkspaceRoot root = ws.getRoot();
-//				IProject project = root.getProject(projectName);
-//
-//				//based on org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard.createNewProject()
-//				final IProjectDescription description = ws.newProjectDescription(projectName);
-//				description.setLocationURI(loc);
-//				
-//				project.create(description,monitor);
-//				
-//		}}, null);
 		
 		ws.run(new IWorkspaceRunnable() {
 
@@ -97,14 +84,14 @@ public class MemoryEFS extends TestCase {
 			
 			if (!project.hasNature(CProjectNature.C_NATURE_ID)) {
 				String projectId = CTestPlugin.PLUGIN_ID + ".TestProject";
-				addNatureToProject(project, CProjectNature.C_NATURE_ID, null);
+				CProjectHelper.addNatureToProject(project, CProjectNature.C_NATURE_ID, null);
 //				CCorePlugin.getDefault().mapCProjectOwner(project, projectId, false);
 			}
-			addDefaultBinaryParser(project);
+			CProjectHelper.addDefaultBinaryParser(project);
 			
 			ICProject cproject = CCorePlugin.getDefault().getCoreModel().create(project);
 			if (!cproject.getProject().hasNature(CCProjectNature.CC_NATURE_ID)) {
-				addNatureToProject(cproject.getProject(), CCProjectNature.CC_NATURE_ID, null);
+				CProjectHelper.addNatureToProject(cproject.getProject(), CCProjectNature.CC_NATURE_ID, null);
 			}
 		
 		}}, null);	
@@ -133,8 +120,10 @@ public class MemoryEFS extends TestCase {
 		
 		//validation stage
 		IFileSystem fileSystem = EFS.getFileSystem("memory");
+		
 		//FIXME: no idea why the full URI doesnt work???
 //		IFileStore store=fileSystem.getStore(new java.net.URI("/"+projectName+"/"+"B.cpp"));
+		
 		IFileStore store=fileSystem.getStore(new java.net.URI("B.cpp"));
 		InputStream is=store.openInputStream(0, null);
 		BufferedReader br=new BufferedReader(new InputStreamReader(is));
@@ -149,33 +138,8 @@ public class MemoryEFS extends TestCase {
 		}
 		
 	}
-	
-	
-	public static void addNatureToProject(IProject proj, String natureId, IProgressMonitor monitor) throws CoreException {
-		IProjectDescription description = proj.getDescription();
-		String[] prevNatures = description.getNatureIds();
-		String[] newNatures = new String[prevNatures.length + 1];
-		System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
-		newNatures[prevNatures.length] = natureId;
-		description.setNatureIds(newNatures);
-		proj.setDescription(description, monitor);
-	}
-	
-	public static boolean addDefaultBinaryParser(IProject project) throws CoreException {
-		ICExtensionReference[] binaryParsers= CCorePlugin.getDefault().getBinaryParserExtensions(project);
-		if (binaryParsers == null || binaryParsers.length == 0) {
-			ICProjectDescription desc= CCorePlugin.getDefault().getProjectDescription(project);
-			if (desc == null) {
-				return false;
-			}
-			
-			desc.getDefaultSettingConfiguration().create(CCorePlugin.BINARY_PARSER_UNIQ_ID, CCorePlugin.DEFAULT_BINARY_PARSER_UNIQ_ID);
-			CCorePlugin.getDefault().setProjectDescription(project, desc);
-		}
-		return true;
-	}
-	
-	// c&p org.eclipse.ui.dialogs.WizardNewFileCreationPage
+		
+	// copy&paste org.eclipse.ui.dialogs.WizardNewFileCreationPage
 //	IFile createFileHandle(IPath filePath) {
 //		return IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getFile(
 //				filePath);
