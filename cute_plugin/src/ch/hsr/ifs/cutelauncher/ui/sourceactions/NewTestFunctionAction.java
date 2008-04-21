@@ -85,6 +85,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
 		return iedit;
 	}
+
 	//checking existing suite for the name of the function
 	//ensure it is not already added into suite
 	private boolean checkPushback(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
@@ -122,5 +123,25 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		}
 		
 		return false;
+	}
+	
+	
+	
+	
+	public static TextEdit testOnlyCreatedEdit(int insertTestFuncFileOffset,String newLine){
+		NewTestFunctionAction ntfa=new NewTestFunctionAction();
+		ntfa.setNewline(newLine);
+		return ntfa.createdEdit(insertTestFuncFileOffset, null, "newTestFunction");
+	}
+	public static TextEdit testOnlyPushBackString(int insertloc,String newLine){
+		NewTestFunctionAction ntfa=new NewTestFunctionAction();
+		ntfa.setNewline(newLine);
+		
+		String s=ntfa.PushBackString("s","CUTE(newTestFunction)");
+		StringBuilder builder = new StringBuilder();
+		builder.append(s);
+		
+		InsertEdit edit = new InsertEdit(insertloc, builder.toString());
+		return edit;
 	}
 }

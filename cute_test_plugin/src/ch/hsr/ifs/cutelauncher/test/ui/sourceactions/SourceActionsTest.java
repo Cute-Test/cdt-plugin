@@ -6,9 +6,10 @@ public class SourceActionsTest {
 
 	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
+
+		ts.addTest(MemoryEFS.suite());
 		
 		boolean speedupMode=false;
-				
 		ts.addTest(TestNewFunction.suite(speedupMode));
 		ts.addTest(TestAddFunction.suite(speedupMode));
 		ts.addTest(TestAddFunctor.suite(speedupMode));
@@ -16,10 +17,10 @@ public class SourceActionsTest {
 		TestSuite addMemberTS=TestAddMemberTree.suite();
 		TestAddMember.generateMemberTest(addMemberTS);
 		ts.addTest(addMemberTS);
-
-		ts.addTest(MemoryEFS.suite());
 		
 		ts.addTest(new TestAddFunction("testDisplayDynamicProxyRecordedResult"));
+		
+		ts.addTest(NewTestFunctionActionDelegateTest.suite());
 		
 		return ts;
 	}

@@ -46,4 +46,16 @@ public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegat
 	int getExitPositionLength(){
 		return NewTestFunctionAction.TEST_STMT.trim().length();
 	}
+	
+	
+	
+	
+	
+	public static int testOnlyGetCursorEndPosition(TextEdit[] edits, String newLine, int i,int j,int k){
+		NewTestFunctionActionDelegate ntfad=new NewTestFunctionActionDelegate();
+		ntfad.functionAction.testOnlyParameter(i,j,k);
+		return ntfad.getCursorEndPosition(edits,newLine);
+	}
+	
+
 }

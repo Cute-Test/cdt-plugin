@@ -1,4 +1,6 @@
 //direct copy&paste org.eclipse.cdt.core.tests.BaseTestFramework
+//To use this class would require org.eclipse.ui.examples.filesystem.zip
+//and patched_CdtMacroSupplier.zip Line211-18
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
 import java.io.ByteArrayInputStream;

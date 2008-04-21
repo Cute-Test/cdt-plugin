@@ -25,9 +25,9 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 
 public abstract class AbstractFunctionAction {
-	int insertFileOffset=-1;
-	int pushbackOffset=-1;
-	int pushbackLength=-1;
+	protected int insertFileOffset=-1;
+	protected int pushbackOffset=-1;
+	protected int pushbackLength=-1;
 	
 	public abstract MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
@@ -133,6 +133,15 @@ public abstract class AbstractFunctionAction {
 			node = node.getParent();
 		}
 		return null;
+	}
+	
+	
+	
+	
+	public void testOnlyParameter(int insertFileOffset,int pushbackLength,int pushbackOffset ){
+		this.insertFileOffset=insertFileOffset;
+		this.pushbackOffset=pushbackOffset;
+		this.pushbackLength=pushbackLength;
 	}
 	
 }
