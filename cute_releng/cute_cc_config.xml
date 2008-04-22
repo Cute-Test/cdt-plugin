@@ -22,7 +22,7 @@
 		    <cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" module="cute_releng"/>
 	    </modificationset>
 	    
-	    <schedule interval="300">
+	    <schedule interval="3000">
 		    <ant buildfile="cute-build.xml" uselogger="true" antworkingdir="/usr/share/cruisecontrol/projects" />
 		    
 	    </schedule>
