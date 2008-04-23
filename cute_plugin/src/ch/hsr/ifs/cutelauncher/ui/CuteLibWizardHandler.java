@@ -11,9 +11,14 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICOutputEntry;
+import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
@@ -53,16 +58,45 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	public void createProject(IProject project, boolean defaults)
 			throws CoreException {
 		super.createProject(project, defaults);
-		createLibSetings(project);
+//		createLibSetings(project);
+		createCDTProjectReference(project);
 	}
 	
 	@Override
 	public void createProject(IProject project, boolean defaults,
 			boolean onFinish) throws CoreException {
 		super.createProject(project, defaults, onFinish);
-		createLibSetings(project);
+//		createLibSetings(project);
+		createCDTProjectReference(project);
 	}
 
+	
+	//@see org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/projectmodel/tests/ProjectModelTests.testReferences()
+	private void createCDTProjectReference(IProject project) throws CoreException {
+		CoreModel coreModel = CoreModel.getDefault();
+		ICProjectDescription des4 = coreModel.getProjectDescription(project);
+		ICConfigurationDescription dess[] = des4.getConfigurations();
+	
+		Vector<IProject> projects = libRefPage.getCheckedProjects();
+
+		Map map=null;
+		for(int x=0;x<dess.length;x++){
+			if(x==0){
+				map= new HashMap();
+				for(IProject p:projects){
+					String prjname=p.getName();
+					map.put(prjname, "");		
+				}
+			}
+			dess[x].setReferenceInfo(map);
+		}
+		coreModel.setProjectDescription(project, des4);
+		for(IProject p:projects){
+			String prjname=p.getName();
+			setLibName(prjname,project);	
+		}
+	}
+	
 	private void createLibSetings(IProject project) throws CoreException {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
