@@ -2,6 +2,7 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
@@ -19,7 +20,10 @@ public class NodeAtCursorFinder extends ASTVisitor {
 	}
 	@Override
 	public int leave(IASTDeclaration declaration) {
-		int nodeOffset = declaration.getFileLocation().getNodeOffset();
+		IASTFileLocation tmp=declaration.getFileLocation();
+		if(tmp==null)return super.leave(declaration);
+
+		int nodeOffset = tmp.getNodeOffset();
 		int nodeLength = declaration.getFileLocation().asFileLocation().getNodeLength();
 		if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength) && dist>selOffset-nodeOffset) {
 			bounded=true;
