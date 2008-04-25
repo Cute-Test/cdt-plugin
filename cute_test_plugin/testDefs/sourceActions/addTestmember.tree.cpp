@@ -95,3 +95,48 @@ int main(){
 }
 //expected
 [functor(operator ()), myfunctor(operator ())]
+//test Tree Empty
+#include <iostream>
+#include "cute.h"
+#include "ide_listener.h"
+#include "cute_runner.h"
+
+void thisIsATest23a() {
+	//int c=0;
+	std::string str2="Now is the time1..." ;
+	std::string str1( "Now is the\ttime..." );
+	ASSERT_EQUALM("msg from asseration", str1,str2);
+}
+void thisIsAlsoATest22(){
+	int cx=1,dx=1;
+	ASSERT(cx==dx);
+}
+
+
+int testT(){
+	return 1;
+}
+
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(thisIsAlsoATest22));
+	s.push_back(CUTE(thisIsATest23a));
+	
+	
+	//TODO add your test here
+
+
+
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite1112233");
+}
+
+
+
+int main(){
+	std::cout<< "Testing the pathing"<<std::endl;
+	runSuite();
+}
+
+//expected
+[]

@@ -67,6 +67,7 @@ public class ASTHelper {
 		return result;
 	}
 	public static boolean haveParameters(IASTDeclaration i){
+		try{
 		if(i instanceof IASTFunctionDefinition){
 			IASTFunctionDefinition fd=(IASTFunctionDefinition)i;
 			ICPPASTFunctionDeclarator fdd=(ICPPASTFunctionDeclarator)fd.getDeclarator();
@@ -84,6 +85,7 @@ public class ASTHelper {
 				if(fd.takesVarArgs() || fpara!=null && fpara.length>0) return true;
 			}
 		}
+		}catch(ClassCastException cce){return false;}
 		return false;
 	}
 	public static boolean haveParameters(ArrayList<IASTDeclaration> al){
@@ -103,15 +105,18 @@ public class ASTHelper {
 	public static boolean isVoid(IASTDeclaration i){
 		boolean result=false;
 		
+		try{
 		if(i instanceof IASTFunctionDefinition){
-			IASTFunctionDefinition fd=(IASTFunctionDefinition)i;
+			IASTFunctionDefinition fd=(IASTFunctionDefinition)i;			
 			IASTSimpleDeclSpecifier specifier=(IASTSimpleDeclSpecifier)fd.getDeclSpecifier();
 			if(specifier.getType()==IASTSimpleDeclSpecifier.t_void)result=true;
 		}else if(i instanceof IASTSimpleDeclaration){
 			IASTSimpleDeclaration sd=(IASTSimpleDeclaration)i;
+			//CPPASTNamedTypeSpecifier returned via getDeclSpecifier?  
 			IASTSimpleDeclSpecifier specifier=(IASTSimpleDeclSpecifier)sd.getDeclSpecifier();
 			if(specifier.getType()==IASTSimpleDeclSpecifier.t_void)result=true;
 		}		
+		}catch(ClassCastException cce){return false;}
 		
 		return result;
 	}

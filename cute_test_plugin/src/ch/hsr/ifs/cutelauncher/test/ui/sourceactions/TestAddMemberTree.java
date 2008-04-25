@@ -26,8 +26,14 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 
 public class TestAddMemberTree extends BaseTestFramework {
+	
+	static ReadTestCase rtc1;
+	
 	public TestAddMemberTree(String name) {
 		super(name);
+		if(rtc1==null){
+			rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
+		}
  	}
 	
 	private static CEditor ceditor;
@@ -43,15 +49,13 @@ public class TestAddMemberTree extends BaseTestFramework {
 	}
 	
 	public final void treeTest1(){
-		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
 		testTree(rtc1.test.get(0),rtc1.expected.get(0),"func");
 	}
 	public final void treeTest2(){
-		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
 		testTree(rtc1.test.get(1),rtc1.expected.get(1),"operator ()");
 	}
 	public final void testTree(String srcCodes,String expectedTree, String firstObjName){
-		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
+//		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
 		try{
 			IFile inputFile222=importFile("A.cpp",srcCodes);
 			//**********
@@ -119,10 +123,55 @@ public class TestAddMemberTree extends BaseTestFramework {
 		    
 		}catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
 	}
+	
+	public final void treeTest3(){
+		try{
+			ArrayList al=rtc1.test;
+			IFile inputFile=importFile("A.cpp",rtc1.test.get(2));
+			
+			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
+			ceditor= (CEditor) editor;
+			IEditorInput editorInput = ceditor.getEditorInput();
+			
+			IFile editorFile = ((FileEditorInput) editorInput).getFile();
+			
+			ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
+			IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
+			IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
+			
+			FunctionFinder ff=new FunctionFinder();
+			astTu.accept(ff);
+			ArrayList<IASTSimpleDeclaration> withoutTemplate =ASTHelper.removeTemplateClasses(ff.getClassStruct());
+			ArrayList<IASTSimpleDeclaration> variablesList=ff.getVariables();
+			ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
+			
+			
+			AddTestMembertoSuiteAction atms=new AddTestMembertoSuiteAction();
+			atms.setUnitTestingMode(null);
+			
+			
+			final Method[] methods = AddTestMembertoSuiteAction.class.getDeclaredMethods();
+		    for (int i = 0; i < methods.length; ++i) {
+		      if (methods[i].getName().equals("internalInitTree")) {
+		        final Object params[] = {withoutTemplate,classStructInstances};
+		        methods[i].setAccessible(true);
+		        Object ret = methods[i].invoke(atms, params);
+
+		      }
+		    }
+			
+			assertTrue(true);
+		}catch(ClassCastException e){fail("Unhandled Cast");}
+		catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
+		
+		
+	}
+	
 	public static TestSuite suite(){
 		TestSuite addMemberTS=new TestSuite("addMembertoSuite Tests");
 		addMemberTS.addTest(new TestAddMemberTree("treeTest1"));
 		addMemberTS.addTest(new TestAddMemberTree("treeTest2"));
+		//addMemberTS.addTest(new TestAddMemberTree("treeTest3"));
 		return addMemberTS;
 	}
 }
