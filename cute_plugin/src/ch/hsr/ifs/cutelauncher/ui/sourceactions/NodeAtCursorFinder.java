@@ -21,6 +21,7 @@ public class NodeAtCursorFinder extends ASTVisitor {
 	@Override
 	public int leave(IASTDeclaration declaration) {
 		IASTFileLocation tmp=declaration.getFileLocation();
+		
 		if(tmp==null)return super.leave(declaration);
 
 		int nodeOffset = tmp.getNodeOffset();
