@@ -89,28 +89,16 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 			}
 			
 			try{
-				//check class for public operator() 
-				IASTNode tmp1=node;
-				while(!(tmp1.getParent() instanceof ICPPASTCompositeTypeSpecifier) && !(tmp1.getParent() instanceof ICPPASTTranslationUnit)){
-					tmp1=tmp1.getParent();
-				}
-				if(tmp1.getParent() instanceof ICPPASTCompositeTypeSpecifier)tmp1=tmp1.getParent().getParent();
-				if(tmp1 instanceof IASTSimpleDeclaration){
-					ArrayList<IASTDeclaration> al=ASTHelper.getPublicMethods((IASTSimpleDeclaration)tmp1);
-					boolean publicOperatorExist=false;
-					for(IASTDeclaration i:al){
-						if(ASTHelper.getMethodName(i).equals("operator ()")){
-							publicOperatorExist=true;break;
-						}
-					}
-					if(!publicOperatorExist){
-						stream.println("no public operator ()");
-						return "";
-					}
-				}
-				System.out.println("");
+			
+				boolean flag=checkClassForPublicOperatorParentesis(node);
+				if(!flag){stream.println("no public operator ()");return "";}
+			
 			}catch(NullPointerException npe){npe.printStackTrace();}
 			catch(ClassCastException cce){cce.printStackTrace();}
+			
+			boolean flag=isTemplateClass(node);
+			if(flag){stream.println("template class declarations selected, unable to add as functor. (2)");return "";}
+	
 			
 			
 			//check class, struct at cursor for operator()
@@ -121,34 +109,10 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 					break;
 				}
 			}
-			if(node instanceof IASTSimpleDeclaration || node instanceof IASTFunctionDefinition){
-				if(node.getParent() instanceof ICPPASTCompositeTypeSpecifier){
-					IASTNode tmp=node.getParent();
-					for(IASTName i:operatorParenthesesNode){
-						if(tmp.contains(i)){
-							operatorMatchFlag=true;
-							break;
-						}
-					}
-				}
-			}
-			/*if(node instanceof ICPPASTTemplateDeclaration){
-				//template <class TClass> 
-				//shouldnt happen as requires the template to be initialised
-				stream.println("template class declarations selected, unable to add as functor.");
-				//IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
-				//return i.toString();
-				return "";
-			}*/
-			IASTNode checkforTemplate=node;
-			//template class case
-			while(!(checkforTemplate instanceof ICPPASTTranslationUnit)){
-				if(checkforTemplate instanceof ICPPASTTemplateDeclaration){
-					stream.println("template class declarations selected, unable to add as functor. (2)");return "";
-				}
-				checkforTemplate=checkforTemplate.getParent();
-			}
-			
+						
+			operatorMatchFlag = isVirtualOperatorDeclared(
+					operatorParenthesesNode, node, operatorMatchFlag);
+						
 			if(!operatorMatchFlag){
 				stream.println("no matching operator() found at current cursor location.");
 				if(getWantedTypeParent(node).getParent() instanceof IASTTranslationUnit){
@@ -188,6 +152,61 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 		}
 		stream.println("Unable to add as functor for cursor position.");
 		return ""; 
+	}
+
+	//handle case of virtual operator not declared
+	private boolean isVirtualOperatorDeclared(
+			ArrayList<IASTName> operatorParenthesesNode, IASTNode node,
+			boolean operatorMatchFlag) {
+		if(node instanceof IASTSimpleDeclaration || node instanceof IASTFunctionDefinition){
+			if(node.getParent() instanceof ICPPASTCompositeTypeSpecifier){
+				IASTNode tmp=node.getParent();
+				for(IASTName i:operatorParenthesesNode){
+					if(tmp.contains(i)){
+						operatorMatchFlag=true;
+						break;
+					}
+				}
+			}
+		}
+		return operatorMatchFlag;
+	}
+
+	/*if(node instanceof ICPPASTTemplateDeclaration){
+	//template <class TClass> 
+	//shouldnt happen as requires the template to be initialised
+	stream.println("template class declarations selected, unable to add as functor.");
+	//IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
+	//return i.toString();
+	return "";
+}*/
+	private boolean isTemplateClass(IASTNode checkforTemplate) {
+		while(!(checkforTemplate instanceof ICPPASTTranslationUnit)){
+			if(checkforTemplate instanceof ICPPASTTemplateDeclaration){
+				return true;
+			}
+			checkforTemplate=checkforTemplate.getParent();
+		}
+		return false;
+	}
+
+	private boolean checkClassForPublicOperatorParentesis(IASTNode node) {
+		IASTNode tmp1=node;
+		while(!(tmp1.getParent() instanceof ICPPASTCompositeTypeSpecifier) && !(tmp1.getParent() instanceof ICPPASTTranslationUnit)){
+			tmp1=tmp1.getParent();
+		}
+		if(tmp1.getParent() instanceof ICPPASTCompositeTypeSpecifier)tmp1=tmp1.getParent().getParent();
+		
+		boolean publicOperatorExist=false;
+		if(tmp1 instanceof IASTSimpleDeclaration){
+			ArrayList<IASTDeclaration> al=ASTHelper.getPublicMethods((IASTSimpleDeclaration)tmp1);
+			for(IASTDeclaration i:al){
+				if(ASTHelper.getMethodName(i).equals("operator ()")){
+					publicOperatorExist=true;break;
+				}
+			}
+		}
+		return publicOperatorExist;
 	}
 	
 	public IASTNode getWantedTypeParent(IASTNode node){
