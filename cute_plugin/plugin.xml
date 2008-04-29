@@ -218,6 +218,12 @@
                 name="addTestGroup">
           </groupMarker>
        </menu>
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.Trigger"
+             id="ch.hsr.ifs.cutelauncher.TriggerTest"
+             label="TriggerTest(Development use)"
+             menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
+       </action>
 
     </viewerContribution>
  </extension>
@@ -285,6 +291,37 @@
           properties="projectNature1"
           type="org.eclipse.core.runtime.IAdaptable">
     </propertyTester>
+ </extension>
+ <extension
+       point="org.eclipse.ui.propertyPages">
+    <page
+          class="org.eclipse.ui.internal.ide.dialogs.ProjectReferencePage"
+          id="org.eclipse.ui.propertypages.project.reference"
+          name="Project ReferencesQQQQQQ">
+       <enabledWhen>
+          <adapt
+                type="org.eclipse.core.resources.IProject">
+          </adapt>
+       </enabledWhen>
+       <filter
+             name="projectNature"
+             value="ch.hsr.ifs.cutelauncher.cutenature">
+       </filter>
+    </page>
+ </extension>
+ <extension
+       id="cuteProblem"
+       name="Cute Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.core.resources.problemmarker">
+    </super>
+    <super
+          type="org.eclipse.core.resources.textmarker">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
  </extension>
  <!--
  <extension

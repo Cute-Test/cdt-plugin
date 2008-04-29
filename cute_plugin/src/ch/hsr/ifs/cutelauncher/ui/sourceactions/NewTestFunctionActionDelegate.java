@@ -11,6 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
+import org.eclipse.jface.text.link.LinkedModeUI;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.TextEdit;
 
@@ -26,6 +27,7 @@ public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegat
 	}
 	@Override
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {
+		int result=edits[0].getOffset() + edits[0].getLength();
 		for (TextEdit textEdit : edits) {
 			String insert = ((InsertEdit)textEdit).getText();
 			if(insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
@@ -33,13 +35,17 @@ public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegat
 				if(functionAction.insertFileOffset==-1 || //error check
 				   functionAction.pushbackOffset==-1 ||   //error check	
 				   functionAction.insertFileOffset < functionAction.pushbackOffset) //before pushback
-					return (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
-				else{
-					return (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim())+functionAction.pushbackLength );
+				{
+					result=(textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
+					break;
+				}else{
+					result=(textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim())+functionAction.pushbackLength );
+					break;
 				}
 			}
 		}
-		return edits[0].getOffset() + edits[0].getLength();
+		System.out.println(result);
+		return result;
 	}
 
 	@Override
@@ -57,5 +63,8 @@ public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegat
 		return ntfad.getCursorEndPosition(edits,newLine);
 	}
 	
-
+	public LinkedModeUI testOnlyGetLinkedMode(){
+		return linkedModeUI;
+	}
+	
 }

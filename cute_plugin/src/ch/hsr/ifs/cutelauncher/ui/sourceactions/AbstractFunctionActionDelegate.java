@@ -32,6 +32,7 @@ import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 public abstract class AbstractFunctionActionDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate{
 
 	protected IEditorPart editor;
+	protected LinkedModeUI linkedModeUI; 
 	protected final String funcName;//used for linking during 1st edit
 	protected final AbstractFunctionAction functionAction;  
 	protected AbstractFunctionActionDelegate(String funcName, AbstractFunctionAction functionAction){
@@ -99,13 +100,14 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 					totalEditLength += insert.length();
 				}
 			}
-			
+			System.out.println("there are group "+group.getPositions().length);
 			if(!group.isEmpty()){
 				model.addGroup(group);
 				model.forceInstall();
 			
 				/*after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it*/
-				LinkedModeUI linkedModeUI = new EditorLinkedModeUI(model, viewer);
+				linkedModeUI = new EditorLinkedModeUI(model, viewer);
+				System.out.println(getCursorEndPosition(edits, newLine)+"!"+getExitPositionLength());
 				linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
 				linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
 				linkedModeUI.enter();

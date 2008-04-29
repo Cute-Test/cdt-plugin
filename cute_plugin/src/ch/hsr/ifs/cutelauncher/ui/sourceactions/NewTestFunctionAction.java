@@ -65,6 +65,9 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 				if(!checkPushback(astTu,funcName,suitPushBackFinder))
 				mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 						funcName, suitPushBackFinder));
+				else{
+					createProblemMarker((FileEditorInput) editorInput, "Duplicate Pushback name", 0);
+				}
 			}
 		}
 		return mEdit;
@@ -114,12 +117,13 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 							}
 						}
 						if(theName.equals(fname))return true;
-						}
+					}
 					
 				}catch(ClassCastException e){}
 			}	
 		}else{//TODO need to create suite
-			//@see getLastPushBack() for adding the very 1st push back
+			
+			//@see AbstractFunctionAction.getLastPushBack() for adding the very 1st push back
 		}
 		
 		return false;

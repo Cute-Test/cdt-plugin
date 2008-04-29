@@ -58,16 +58,16 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	public void createProject(IProject project, boolean defaults)
 			throws CoreException {
 		super.createProject(project, defaults);
-//		createLibSetings(project);
-		createCDTProjectReference(project);
+		createLibSetings(project);
+//		createCDTProjectReference(project);
 	}
 	
 	@Override
 	public void createProject(IProject project, boolean defaults,
 			boolean onFinish) throws CoreException {
 		super.createProject(project, defaults, onFinish);
-//		createLibSetings(project);
-		createCDTProjectReference(project);
+		createLibSetings(project);
+//		createCDTProjectReference(project);
 	}
 
 	

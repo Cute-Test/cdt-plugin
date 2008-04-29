@@ -117,6 +117,7 @@ public class CuteLauncherPlugin extends AbstractUIPlugin {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Error", e)); //$NON-NLS-1$
 	}
 
+	//PDE runtime:Error Log view
 	public static void log(IStatus status) {
 		getDefault().getLog().log(status);
 	}

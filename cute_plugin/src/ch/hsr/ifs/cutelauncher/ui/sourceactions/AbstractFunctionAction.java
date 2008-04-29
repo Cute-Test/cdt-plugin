@@ -15,6 +15,7 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
@@ -23,6 +24,7 @@ import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.part.FileEditorInput;
 
 public abstract class AbstractFunctionAction {
 	protected int insertFileOffset=-1;
@@ -135,6 +137,19 @@ public abstract class AbstractFunctionAction {
 		return null;
 	}
 	
+	public void createProblemMarker(FileEditorInput editorInput,String message,int lineNo){
+		
+		try {
+			IFile editorFile = (editorInput).getFile();
+			IMarker marker = editorFile.createMarker("org.eclipse.cdt.core.problem");
+		    marker.setAttribute(IMarker.MESSAGE, "cute:"+message);
+		    marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+		    if(lineNo!=0)marker.setAttribute(IMarker.LINE_NUMBER, lineNo);
+		    marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+	   } catch (CoreException e) {
+	      // You need to handle the cases where attribute value is rejected
+	   }
+	}
 	
 	
 	

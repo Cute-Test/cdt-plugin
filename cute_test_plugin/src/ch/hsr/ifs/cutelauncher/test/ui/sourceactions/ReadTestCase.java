@@ -22,7 +22,7 @@ class ReadTestCase{//TODO checking for null values
 	enum state{TEST, SAVETEST, EXPECTED, SAVEEXPECTED, CURSOR, PARAMETER};
 	state m;
 		
-	public ReadTestCase(String file){
+	public ReadTestCase(String file,boolean parseCursor){
 		StringBuilder builder=new StringBuilder();
 
 		String newline= System.getProperty("line.separator"); 
@@ -75,8 +75,12 @@ class ReadTestCase{//TODO checking for null values
 		/*parameter.add(" foo cow4");
 		parameter.add(" foo cow4");*/
 
-		parseForCursorPos();
+		if(parseCursor)parseForCursorPos();
 	}
+	public ReadTestCase(String file){
+		this(file,true);
+	}
+	
 	public static BufferedReader readTest(String file) throws IOException{
 		Bundle bundle1 = TestPlugin.getDefault().getBundle();
 		Path path1 = new Path(file);
@@ -89,12 +93,27 @@ class ReadTestCase{//TODO checking for null values
 		for(String str:test){
 			cursorpos.add(str.indexOf("^"));
 		}
-		for(int i=0;i<test.size();i++){//remove caret from test
+		removeCaretFromTest();
+	}
+	public Integer[] parseForMultiCursorPosition(){
+		ArrayList<Integer> result=new ArrayList<Integer>();
+		for(String str:test){
+			int x=0;
+			while(x!=-1){
+				x=str.indexOf("^",x);
+				if(x!=-1){result.add(x);x+=1;}
+			}
+		}
+	
+		return result.toArray(new Integer[0]);
+	}
+
+	public void removeCaretFromTest(){
+		for(int i=0;i<test.size();i++){
 			String str=test.get(i);
 			test.remove(i);
 			test.add(i, str.replaceAll("[\\^]",""));
-		}
-		
+		}		
 	}
 }
 //bug when only got test but no expected 
