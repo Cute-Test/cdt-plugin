@@ -6,8 +6,11 @@ import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.link.ILinkedModeListener;
 import org.eclipse.jface.text.link.LinkedModeUI;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -19,11 +22,10 @@ public class TestBugFixes extends Test1Skeleton {
 		super(name);
  	}
 	
-	public void testNewTestFunctionWithBadLocationException(){
+	public void testNewTestFunctionhighlight(){
 		ReadTestCase rtc=new ReadTestCase("testDefs/sourceActions/bugfix.cpp",false);
 
-		Integer[] c=rtc.parseForMultiCursorPosition();
-		Integer[] cursorpos={c[0],261};
+		Integer[] cursorpos={212,261};
 		rtc.removeCaretFromTest();
 		String testSrcCode=rtc.test.get(0);
 		
@@ -33,96 +35,100 @@ public class TestBugFixes extends Test1Skeleton {
 			assertNotNull(editor);
 			assertTrue(editor instanceof CEditor);
 			ceditor=(CEditor)editor;
-			
-			//set cursor pos 
 			ISelectionProvider selectionProvider=ceditor.getSelectionProvider();
+			
 			selectionProvider.setSelection(new TextSelection(cursorpos[0], 0));
 			
 			NewTestFunctionActionDelegate ntfad=new NewTestFunctionActionDelegate();
 			ntfad.run(null);
 			
-			LinkedModeUI linked=ntfad.testOnlyGetLinkedMode();
-			org.eclipse.jface.text.IRegion region=linked.getSelectedRegion();
-			System.out.println("1st pos "+region.getOffset()+" "+region.getLength());
-			getResult(editor, region);
+			LinkedModeUI linked1stCopy=ntfad.testOnlyGetLinkedMode();
+
+			//set cursor location to be at the newly created newTest^Function
+			selectionProvider.setSelection(new TextSelection(cursorpos[1], 0));
+			ntfad.run(null);
 			
+			LinkedModeUI linked2ndCopy=ntfad.testOnlyGetLinkedMode();
+			org.eclipse.jface.text.IRegion region=linked2ndCopy.getSelectedRegion();
+			prettyPrintRegion(region);
+			
+			//leave(ILinkedModeListener.UPDATE_CARET);
+			//default access, so need reflection
+			boolean flag=true;
 			final java.lang.reflect.Method[] methods = LinkedModeUI.class.getDeclaredMethods();
 		    for (int i = 0; i < methods.length; ++i) {
-		      if (methods[i].getName().equals("next")) {
-		        final Object params[] = {};
+		      if (methods[i].getName().equals("leave")) {
+		        final Object params[] = {ILinkedModeListener.UPDATE_CARET};
 		        methods[i].setAccessible(true);
-		        Object ret = methods[i].invoke(linked, params);
+		        Object ret = methods[i].invoke(linked2ndCopy, params);
 		        //System.out.println(ret);
 		        //assertEquals("Selecting the first object in tree",ret.toString(),firstObjName);
+		        flag=false;
 		      }
 		    }
+			assertFalse(flag);
+		    
+			String results = getText(editor);
 			
-		    region=linked.getSelectedRegion();
-			System.out.println("next "+region.getOffset()+" "+region.getLength());
-			getResult(editor, region);
+			prettyPrintRegion(region);
+//			System.out.println("KKK\n"+results.substring(region.getOffset(),region.getOffset()+region.getLength()));    
 			
-//			System.out.println("Setting cursor position 2 "+cursorpos[1]);
-			selectionProvider.setSelection(new TextSelection(cursorpos[1], 0));
-			NewTestFunctionActionDelegate ntfad1=new NewTestFunctionActionDelegate();
-			ntfad1.run(null);
-						
-			linked=ntfad.testOnlyGetLinkedMode();
-			region=linked.getSelectedRegion();
-			System.out.println("before "+region.getOffset()+" "+region.getLength());
+			ISelection see=selectionProvider.getSelection();
+			TextSelection selection = (TextSelection) see;
+//			System.out.println("texteditor:"+selection.getOffset()+" "+selection.getLength());
 			
+			results = getText(editor);
+//			System.out.println("["+results.substring(selection.getOffset(),selection.getOffset()+selection.getLength())+"]");
+			results=results.substring(selection.getOffset(),selection.getOffset()+selection.getLength());
 			
-			getResult(editor, region);
-			
-//			IWorkbenchWindow workbench = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-//			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-//			
-//			IWorkbenchPart part = page.getActivePartReference().getPart(true);
-//			
-//			// Create a fake PopupMenuExtender so we can get some data back.
-//			final MenuManager fakeMenuManager = new MenuManager();
-//			fakeMenuManager.add(new GroupMarker(
-//					org.eclipse.ui.IWorkbenchActionConstants.MB_ADDITIONS));
-//			final PopupMenuExtender extender = new PopupMenuExtender(null,
-//					fakeMenuManager, selectionProvider, part);
-//			
-//			extender.menuAboutToShow(fakeMenuManager);
-//
-//			fakeMenuManager.setVisible(true);
-//			
-//			Thread.sleep(3000);
-//			
-//			extender.dispose();
-//
-//			// Check to see if the appropriate object contributions are present.
-//			final IContributionItem[] items = fakeMenuManager.getItems();
-			
-						
-//			IMenuManager editMenu= menu.findMenuUsingPath(IWorkbenchActionConstants.M_EDIT);
-			
-			System.out.println();
-			
+			String expected="ASSERTM(\"start writing tests\", false);";
+			assertEquals("",expected,results);
 			
 		}catch(Exception e){e.printStackTrace();fail("\n"+e.getMessage());}
 		
 	}
 
-	private void getResult(IEditorPart editor,
-			org.eclipse.jface.text.IRegion region) {
+	private String getText(IEditorPart editor) {
 		Object ele=(editor).getEditorInput();
 		IDocumentProvider idp=ceditor.getDocumentProvider();
 		IDocument fDocument= idp.getDocument(ele);
-		String results=fDocument.get();
-//		System.out.println(results);
-		
-		System.out.println(region.getOffset()+" "+region.getLength());
-		System.out.println("KKK\n"+results.substring(region.getOffset(),region.getOffset()+region.getLength()));
+		return fDocument.get();
+	}
+
+	private void prettyPrintRegion(IRegion region){
+		System.out.println("region:"+region.getOffset()+" "+region.getLength());
 	}
 	
 	public static TestSuite suite(){
-		TestSuite functorTS=new TestSuite("bug fix Tests");
-		functorTS.addTest(new TestBugFixes("testNewTestFunctionWithBadLocationException"));
-		return functorTS;
-	
+		TestSuite ts=new TestSuite("bug fix Tests");
+		ts.addTest(new TestBugFixes("testNewTestFunctionhighlight"));
+		return ts;
 	}
-	
 }
+
+
+//IWorkbenchWindow workbench = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+//IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+//
+//IWorkbenchPart part = page.getActivePartReference().getPart(true);
+//
+//// Create a fake PopupMenuExtender so we can get some data back.
+//final MenuManager fakeMenuManager = new MenuManager();
+//fakeMenuManager.add(new GroupMarker(
+//		org.eclipse.ui.IWorkbenchActionConstants.MB_ADDITIONS));
+//final PopupMenuExtender extender = new PopupMenuExtender(null,
+//		fakeMenuManager, selectionProvider, part);
+//
+//extender.menuAboutToShow(fakeMenuManager);
+//
+//fakeMenuManager.setVisible(true);
+//
+//Thread.sleep(3000);
+//
+//extender.dispose();
+//
+//// Check to see if the appropriate object contributions are present.
+//final IContributionItem[] items = fakeMenuManager.getItems();
+
+			
+//IMenuManager editMenu= menu.findMenuUsingPath(IWorkbenchActionConstants.M_EDIT);

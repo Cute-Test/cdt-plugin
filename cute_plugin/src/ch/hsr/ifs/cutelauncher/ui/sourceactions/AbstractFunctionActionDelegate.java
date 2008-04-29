@@ -100,14 +100,14 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 					totalEditLength += insert.length();
 				}
 			}
-			System.out.println("there are group "+group.getPositions().length);
+			
 			if(!group.isEmpty()){
 				model.addGroup(group);
 				model.forceInstall();
 			
 				/*after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it*/
 				linkedModeUI = new EditorLinkedModeUI(model, viewer);
-				System.out.println(getCursorEndPosition(edits, newLine)+"!"+getExitPositionLength());
+//				System.out.println(getCursorEndPosition(edits, newLine)+"!"+getExitPositionLength());
 				linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
 				linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
 				linkedModeUI.enter();

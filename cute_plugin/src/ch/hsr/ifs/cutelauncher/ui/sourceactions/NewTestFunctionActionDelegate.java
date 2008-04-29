@@ -44,7 +44,6 @@ public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegat
 				}
 			}
 		}
-		System.out.println(result);
 		return result;
 	}
 

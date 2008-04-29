@@ -184,6 +184,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		
 	}
 
+	//bugzilla #210116:on CDT spelling error
 	@Override
 	public boolean canFinich() {
 		if(libRefPage ==null)return false;
