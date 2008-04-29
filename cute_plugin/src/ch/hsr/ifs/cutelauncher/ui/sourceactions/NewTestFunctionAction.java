@@ -47,6 +47,11 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
 			throws CoreException {
+		
+		insertFileOffset=-1;
+		pushbackOffset=-1;
+		pushbackLength=-1;
+		
 		MultiTextEdit mEdit = new MultiTextEdit();
 		ISelection sel = ceditor.getSelectionProvider().getSelection();
 		if (sel != null && sel instanceof TextSelection) {

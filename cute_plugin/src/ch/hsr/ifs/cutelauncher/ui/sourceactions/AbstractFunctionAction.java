@@ -27,9 +27,9 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
 public abstract class AbstractFunctionAction {
-	protected int insertFileOffset=-1;
-	protected int pushbackOffset=-1;
-	protected int pushbackLength=-1;
+	protected int insertFileOffset=-1; //for NewTestFunctionAction use only, need to reset value in createEdit
+	protected int pushbackOffset=-1;   //for NewTestFunctionAction use only, need to reset value in createEdit
+	protected int pushbackLength=-1;   //for NewTestFunctionAction use only, need to reset value in createEdit
 	
 	public abstract MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
