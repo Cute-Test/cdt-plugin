@@ -18,7 +18,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
 public abstract class Test1Skeleton extends TestCase{ 
-	//extends BaseTestFramework{
+	//extends org.eclipse.cdt.core.tests.BaseTestFramework{
 	
 	public Test1Skeleton() {
 		super("");

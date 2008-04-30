@@ -50,7 +50,7 @@ public class TestBugFixes extends Test1Skeleton {
 			
 			LinkedModeUI linked2ndCopy=ntfad.testOnlyGetLinkedMode();
 			org.eclipse.jface.text.IRegion region=linked2ndCopy.getSelectedRegion();
-			prettyPrintRegion(region);
+//			prettyPrintRegion(region);
 			
 			//leave(ILinkedModeListener.UPDATE_CARET);
 			//default access, so need reflection
@@ -70,7 +70,7 @@ public class TestBugFixes extends Test1Skeleton {
 		    
 			String results = getText(editor);
 			
-			prettyPrintRegion(region);
+//			prettyPrintRegion(region);
 //			System.out.println("KKK\n"+results.substring(region.getOffset(),region.getOffset()+region.getLength()));    
 			
 			ISelection see=selectionProvider.getSelection();
