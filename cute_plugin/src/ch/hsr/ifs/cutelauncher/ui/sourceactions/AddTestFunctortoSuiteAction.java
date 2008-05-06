@@ -40,6 +40,8 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 		ISelection sel = ceditor.getSelectionProvider().getSelection();
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
+			problemMarkerErrorLineNumber=selection.getStartLine()+1;
+			
 			if (editorInput instanceof FileEditorInput) {
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
@@ -74,6 +76,9 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 							suitPushBackFinder,builder));
 					return mEdit;
+				}else{
+					createProblemMarker((FileEditorInput) editorInput, 
+							"unable to add test functor. Duplicate Pushback name", problemMarkerErrorLineNumber);
 				}
 			}
 		}

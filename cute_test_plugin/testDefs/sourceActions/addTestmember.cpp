@@ -1,4 +1,6 @@
 ///////////////////////////////////////
+// notice all of class/struct doesnt end with semicolon, might be an issue
+///////////////////////////////////////
 //test addmember SMEMFUN 
 //parameter foo cow4 C
 class foo{

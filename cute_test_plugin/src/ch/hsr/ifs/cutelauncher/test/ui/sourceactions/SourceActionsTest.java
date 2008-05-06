@@ -21,6 +21,7 @@ public class SourceActionsTest {
 //		ts.addTest(new TestAddFunction("testDisplayDynamicProxyRecordedResult"));
 		
 		ts.addTest(NewTestFunctionActionDelegateTest.suite());
+		ts.addTest(TestProblemMarkers.suite());
 		ts.addTest(TestBugFixes.suite());
 		
 		return ts;

@@ -46,6 +46,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			IEditorInput editorInput, IDocument doc, String funcName)
 			throws CoreException {
 		
+		problemMarkerErrorLineNumber=0;
 		ISelection sel = ceditor.getSelectionProvider().getSelection();
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
@@ -104,7 +105,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 					suitPushBackFinder,builder));
 		}else{
-			createProblemMarker((FileEditorInput) editorInput, "Duplicate Pushback name "+builder.toString(), 0);
+			createProblemMarker((FileEditorInput) editorInput, "Duplicate Pushback name "+builder.toString(), problemMarkerErrorLineNumber);
 		}
 		return mEdit;
 	}
@@ -129,8 +130,11 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 							int nodeOffset = innercallex.getFileLocation().getNodeOffset();
 							int nodeLength = innercallex.getFileLocation().asFileLocation().getNodeLength();
 							
-							if(doc.get(nodeOffset, nodeLength).equals(stripped))
+							if(doc.get(nodeOffset, nodeLength).equals(stripped)){
+								problemMarkerErrorLineNumber=name1.getFileLocation().getStartingLineNumber();
 								return true;
+							}
+								
 						}
 					
 					}

@@ -20,7 +20,6 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 	
-	int problemMarkerLineNo=0;
 	IEditorInput editorInput;
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
@@ -32,7 +31,7 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 		ISelection sel = ceditor.getSelectionProvider().getSelection();
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
-			problemMarkerLineNo=selection.getStartLine()+1;
+			problemMarkerErrorLineNumber=selection.getStartLine()+1;
 			
 			if (editorInput instanceof FileEditorInput) {
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
@@ -49,7 +48,7 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 						fname, suitPushBackFinder));
 					}else{
 						createProblemMarker((FileEditorInput) editorInput, 
-								"unable to add test function. Duplicate Pushback name", problemMarkerLineNo);
+								"unable to add test function. Duplicate Pushback name", problemMarkerErrorLineNumber);
 					}
 			}
 		}
@@ -105,7 +104,7 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 		if(condition[2])result.append("(function taking variable parameters)");
 		if(condition[3])result.append("(function with parameters)");
 		
-		createProblemMarker((FileEditorInput) editorInput, "fail to AddTestFunctiontoSuite "+result, problemMarkerLineNo);
+		createProblemMarker((FileEditorInput) editorInput, "fail to AddTestFunctiontoSuite "+result, problemMarkerErrorLineNumber);
 	}
 	
 	protected IASTDeclaration getDeclarationAtCursor(IASTTranslationUnit astTu, TextSelection selection) {

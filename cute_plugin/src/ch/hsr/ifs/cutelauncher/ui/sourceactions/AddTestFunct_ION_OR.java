@@ -35,7 +35,10 @@ abstract public class AddTestFunct_ION_OR extends AbstractFunctionAction {
 						}else{
 							theName=functorAST(innercallex);
 						}
-						if(theName.equals(fname))return true;
+						if(theName.equals(fname)){
+							problemMarkerErrorLineNumber=name1.getFileLocation().getStartingLineNumber();
+							return true;
+						}
 					}
 					
 				}catch(ClassCastException e){}

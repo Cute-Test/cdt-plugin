@@ -27,6 +27,7 @@ public abstract class AbstractFunctionAction {
 	protected int insertFileOffset=-1; //for NewTestFunctionAction use only, need to reset value in createEdit
 	protected int pushbackOffset=-1;   //for NewTestFunctionAction use only, need to reset value in createEdit
 	protected int pushbackLength=-1;   //for NewTestFunctionAction use only, need to reset value in createEdit
+	int problemMarkerErrorLineNumber=0;
 	
 	public abstract MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
