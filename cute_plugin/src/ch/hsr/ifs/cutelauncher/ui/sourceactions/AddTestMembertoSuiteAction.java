@@ -3,8 +3,14 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 import java.util.ArrayList;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -56,7 +62,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				ArrayList<IASTSimpleDeclaration> variablesList=ff.getVariables();
 				ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
 				
-				MultiTextEdit mEdit =Dialog(astTu, editorFile,doc, withoutTemplate, classStructInstances);
+				MultiTextEdit mEdit =Dialog(astTu, editorFile,doc, withoutTemplate, classStructInstances,editorInput);
 				return mEdit;
 				
 			}
@@ -74,7 +80,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 	IAddMemberMethod unitTestingMockObject=null;
 
 	public MultiTextEdit Dialog(IASTTranslationUnit astTu,IFile editorFile,IDocument doc,
-			ArrayList<IASTSimpleDeclaration> classStruct, ArrayList<IASTSimpleDeclaration> classStructInstances){
+			ArrayList<IASTSimpleDeclaration> classStruct, ArrayList<IASTSimpleDeclaration> classStructInstances,IEditorInput editorInput){
 		
 		Object selectedObject;
 		if(!unitTestingMode)
@@ -94,9 +100,47 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		
 		StringBuilder builder = createPushBack(doc,suitPushBackFinder,child);
 		
-		mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
-				suitPushBackFinder,builder));
+		if(!checkPushback(astTu, doc,suitPushBackFinder,child,builder)){
+			mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
+					suitPushBackFinder,builder));
+		}else{
+			createProblemMarker((FileEditorInput) editorInput, "Duplicate Pushback name "+builder.toString(), 0);
+		}
 		return mEdit;
+	}
+	
+	//based on AddTestFunct_ION_OR.checkPushback
+	private boolean checkPushback(IASTTranslationUnit astTu, IDocument doc,SuitePushBackFinder suitPushBackFinder,IAddMemberMethod child,StringBuilder builder){
+		if(suitPushBackFinder.getSuiteDeclName() != null) {
+			IASTName name = suitPushBackFinder.getSuiteDeclName();
+			IBinding binding = name.resolveBinding();
+			IASTName[] refs = astTu.getReferences(binding);
+
+			String stripped=builder.substring(builder.indexOf("(")+1,builder.lastIndexOf(")"));
+			for (IASTName name1 : refs) {
+				try{
+					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
+					if(fRef.getFieldName().toString().equals("push_back")) {
+						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
+						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
+						
+						IASTExpression thelist=innercallex.getParameterExpression();
+						if(thelist!=null){
+							int nodeOffset = innercallex.getFileLocation().getNodeOffset();
+							int nodeLength = innercallex.getFileLocation().asFileLocation().getNodeLength();
+							
+							if(doc.get(nodeOffset, nodeLength).equals(stripped))
+								return true;
+						}
+					
+					}
+					
+				}catch(ClassCastException e){}
+				catch(org.eclipse.jface.text.BadLocationException be){}
+			}
+		}
+		
+		return false;
 	}
 	private StringBuilder createPushBack(IDocument doc,SuitePushBackFinder suitPushBackFinder,IAddMemberMethod child){
 		StringBuilder builder=new StringBuilder();
