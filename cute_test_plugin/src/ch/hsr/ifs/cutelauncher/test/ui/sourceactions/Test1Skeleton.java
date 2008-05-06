@@ -107,7 +107,7 @@ public abstract class Test1Skeleton extends TestCase{
 //		System.out.println(testname);
 //		MyDynamicProxyClass.printUniqueCall();
 //		System.out.println("####################");
-		Recorder.store(MyDynamicProxyClass.getUniqueCall());
+//		Recorder.store(MyDynamicProxyClass.getUniqueCall());
 		
 	}
 	

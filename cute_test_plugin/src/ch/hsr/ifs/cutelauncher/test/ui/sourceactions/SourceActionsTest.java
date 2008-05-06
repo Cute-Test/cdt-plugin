@@ -18,7 +18,7 @@ public class SourceActionsTest {
 		TestAddMember.generateMemberTest(addMemberTS);
 		ts.addTest(addMemberTS);
 		
-		ts.addTest(new TestAddFunction("testDisplayDynamicProxyRecordedResult"));
+//		ts.addTest(new TestAddFunction("testDisplayDynamicProxyRecordedResult"));
 		
 		ts.addTest(NewTestFunctionActionDelegateTest.suite());
 		ts.addTest(TestBugFixes.suite());

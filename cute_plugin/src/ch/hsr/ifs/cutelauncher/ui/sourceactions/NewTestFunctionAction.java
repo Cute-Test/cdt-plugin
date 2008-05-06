@@ -44,7 +44,8 @@ import org.eclipse.ui.part.FileEditorInput;
 public class NewTestFunctionAction extends AbstractFunctionAction{
 	
 	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
-
+	int problemMarkerErrorLineNumber=0;
+	
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
@@ -53,6 +54,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		insertFileOffset=-1;
 		pushbackOffset=-1;
 		pushbackLength=-1;
+		problemMarkerErrorLineNumber=0;
 		
 		MultiTextEdit mEdit = new MultiTextEdit();
 		ISelection sel = ceditor.getSelectionProvider().getSelection();
@@ -73,7 +75,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 				mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 						funcName, suitPushBackFinder));
 				else{
-					createProblemMarker((FileEditorInput) editorInput, "Duplicate Pushback name", 0);
+					createProblemMarker((FileEditorInput) editorInput, "Duplicate Pushback name", problemMarkerErrorLineNumber);
 				}
 			}
 		}
@@ -123,7 +125,10 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 								theName=((CPPASTIdExpression)thelist).getName().toString();
 							}
 						}
-						if(theName.equals(fname))return true;
+						if(theName.equals(fname)){
+							problemMarkerErrorLineNumber=name1.getFileLocation().getStartingLineNumber();
+							return true;
+						}
 					}
 					
 				}catch(ClassCastException e){}
