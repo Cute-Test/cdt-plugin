@@ -81,7 +81,7 @@ public class ConvertProjectAction extends ActionDelegate implements
 				project.close(new NullProgressMonitor());
 				project.open(new NullProgressMonitor());
 			}else {
-				MessageDialog.openError(shell, "No CUTE Project", "This is not a valid CUTE Project.");
+				MessageDialog.openError(shell, "No CUTE Project", "This is not a valid CUTE Project.\nCUTE header files should be located in "+project.getName()+"/cute/");
 			}
 		} catch (CoreException e) {
 			MessageDialog.openError(shell, "Can't convert Project", "Can't convert Project. " + e.getMessage());

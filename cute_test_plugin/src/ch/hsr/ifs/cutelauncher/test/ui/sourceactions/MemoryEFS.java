@@ -138,7 +138,7 @@ public class MemoryEFS extends TestCase {
 		}
 		
 	}
-		
+
 	// copy&paste org.eclipse.ui.dialogs.WizardNewFileCreationPage
 //	IFile createFileHandle(IPath filePath) {
 //		return IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getFile(

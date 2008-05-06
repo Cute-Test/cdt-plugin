@@ -1,12 +1,10 @@
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
 import org.eclipse.cdt.core.CCorePlugin;
-import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -18,7 +16,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.TextSelection;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
@@ -46,31 +43,6 @@ public abstract class AbstractFunctionAction {
 		return astTu;
 	}
 
-	//shift the insertion point out syntactical block, relative to user(selection point/current cursor)location
-	protected int getInsertOffset(IASTTranslationUnit astTu, TextSelection selection) {
-		int selOffset = selection.getOffset();
-		IASTDeclaration[] decls = astTu.getDeclarations();
-		for (IASTDeclaration declaration : decls) {
-			int nodeOffset = declaration.getFileLocation().getNodeOffset();
-			int nodeLength = declaration.getFileLocation().asFileLocation().getNodeLength();
-			if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength)) {
-				return (nodeOffset);
-			}else if(selOffset <= nodeOffset) {
-				//Shift out of preprocessor statements
-				IASTPreprocessorStatement[] listPreprocessor=astTu.getAllPreprocessorStatements();
-				for(int x=0;x<listPreprocessor.length;x++){
-					nodeOffset = listPreprocessor[x].getFileLocation().getNodeOffset();
-					nodeLength = listPreprocessor[x].getFileLocation().asFileLocation().getNodeLength();
-					if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength)) {
-						return nodeOffset;
-					}
-				}
-				return selOffset;
-			}
-		}
-		//handle case where insertion point is after pushback
-		return selOffset;
-	}
 	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")"));
@@ -144,6 +116,7 @@ public abstract class AbstractFunctionAction {
 			IMarker marker = editorFile.createMarker("org.eclipse.cdt.core.problem");
 		    marker.setAttribute(IMarker.MESSAGE, "cute:"+message);
 		    marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+		    marker.setAttribute(IMarker.TRANSIENT, true);
 		    if(lineNo!=0)marker.setAttribute(IMarker.LINE_NUMBER, lineNo);
 		    marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 	   } catch (CoreException e) {

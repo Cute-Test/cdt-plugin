@@ -292,7 +292,7 @@
           type="org.eclipse.core.runtime.IAdaptable">
     </propertyTester>
  </extension>
- <extension
+ <!--<extension
        point="org.eclipse.ui.propertyPages">
     <page
           class="org.eclipse.ui.internal.ide.dialogs.ProjectReferencePage"
@@ -308,7 +308,7 @@
              value="ch.hsr.ifs.cutelauncher.cutenature">
        </filter>
     </page>
- </extension>
+ </extension>-->
  <extension
        id="cuteProblem"
        name="Cute Problem"
@@ -320,7 +320,7 @@
           type="org.eclipse.core.resources.textmarker">
     </super>
     <persistent
-          value="true">
+          value="false">
     </persistent>
  </extension>
  <!--

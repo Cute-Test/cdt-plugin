@@ -102,13 +102,13 @@ public abstract class Test1Skeleton extends TestCase{
 		//compare it 
 		assertEquals("result unexpected."+testname+"("+cursorpos+")",expectedOutput,results);
 		//TODO discarding the changes as clean up, instead of writing to disk and then deleting it
-				
 		}catch(Exception e){e.printStackTrace();fail(testname+"\n"+e.getMessage());}
 		
 //		System.out.println(testname);
 //		MyDynamicProxyClass.printUniqueCall();
 //		System.out.println("####################");
 		Recorder.store(MyDynamicProxyClass.getUniqueCall());
+		
 	}
 	
 	public final void testDisplayDynamicProxyRecordedResult(){

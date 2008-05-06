@@ -2,6 +2,11 @@ package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -15,6 +20,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -36,7 +42,45 @@ public class Trigger extends AbstractFunctionActionDelegate {
 	@Override
 	public void run(IAction action) {
 		System.out.println("Trigger");
-		test2();
+		getProjectNature();
+//		test2();
+	}
+	
+	private IProject project; 
+	
+	public void getProjectNature(){
+		try {
+			IWorkbenchWindow w=CuteLauncherPlugin.getActiveWorkbenchWindow();
+			IWorkbenchPage p=CuteLauncherPlugin.getActivePage();
+			IEditorReference[] er=p.getEditorReferences();
+			
+			IFile f=((FileEditorInput)(p.getActiveEditor().getEditorInput())).getFile();
+			project=f.getProject();	
+			String[] natureIds = project.getDescription().getNatureIds();
+			for(String s:natureIds){
+				System.out.println(s);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void test3(){
+		//delete all cute marker 
+		final IWorkspace ws = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot resource = ws.getRoot();
+		IMarker[] problems = null;
+		int depth = IResource.DEPTH_INFINITE;
+		try {
+		   problems = resource.findMarkers(IMarker.PROBLEM, true, depth);
+		   for(IMarker i:problems){
+			   String cc=(String)i.getAttribute(IMarker.MESSAGE);
+			   if(cc.startsWith("cute:"))
+				   i.delete();
+		   }
+		} catch (CoreException e) {
+		   // something went wrong
+		}
 	}
 	public void test1(){
 		CuteLauncherPlugin.getDefault().getLog()

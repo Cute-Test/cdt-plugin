@@ -18,19 +18,22 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
-import ch.hsr.ifs.cutelauncher.EclipseConsole;
-
 public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 	
+	int problemMarkerLineNo=0;
+	IEditorInput editorInput;
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
 			throws CoreException{
+		
+		this.editorInput=editorInput;
 		MultiTextEdit mEdit = new MultiTextEdit();
 		ISelection sel = ceditor.getSelectionProvider().getSelection();
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
-
+			problemMarkerLineNo=selection.getStartLine()+1;
+			
 			if (editorInput instanceof FileEditorInput) {
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
@@ -39,11 +42,15 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 
 				String fname=getFunctionNameAtCursor(astTu, selection,suitPushBackFinder);
 
-				if(!dontAddFlag && !checkPushback(astTu,fname,suitPushBackFinder))
-				{
+				if(!dontAddFlag)
+					if(!checkPushback(astTu,fname,suitPushBackFinder))
+					{
 					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 						fname, suitPushBackFinder));
-				}
+					}else{
+						createProblemMarker((FileEditorInput) editorInput, 
+								"unable to add test function. Duplicate Pushback name", problemMarkerLineNo);
+					}
 			}
 		}
 		return mEdit;
@@ -69,7 +76,15 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 						fdeclarator.takesVarArgs() ||
 						fpara.length>0
 						){
-					EclipseConsole.print("Unable to perform AddTestFunctiontoSuite");
+//					EclipseConsole.print("Unable to perform AddTestFunctiontoSuite");
+					
+					boolean condition[]={
+						specifier.getType()!=IASTSimpleDeclSpecifier.t_void,	
+						node.contains(suitPushBackFinder.getSuiteNode()),
+						fdeclarator.takesVarArgs(),
+						fpara.length>0
+					};
+					postErrorMarker(condition);
 					
 					dontAddFlag=true;
 					return "";
@@ -83,6 +98,16 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 		return "";
 	}
 
+	protected void postErrorMarker(boolean condition[]){
+		StringBuilder result=new StringBuilder();
+		if(condition[0])result.append("(return not void)");
+		if(condition[1])result.append("(unable to add function where cute::suite was declared)");
+		if(condition[2])result.append("(function taking variable parameters)");
+		if(condition[3])result.append("(function with parameters)");
+		
+		createProblemMarker((FileEditorInput) editorInput, "fail to AddTestFunctiontoSuite "+result, problemMarkerLineNo);
+	}
+	
 	protected IASTDeclaration getDeclarationAtCursor(IASTTranslationUnit astTu, TextSelection selection) {
 		int selOffset = selection.getOffset();
 		IASTDeclaration[] decls = astTu.getDeclarations();

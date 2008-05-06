@@ -11,12 +11,14 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui.sourceactions;
 
+import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -132,6 +134,32 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		}
 		
 		return false;
+	}
+	
+	//shift the insertion point out syntactical block, relative to user(selection point/current cursor)location
+	protected int getInsertOffset(IASTTranslationUnit astTu, TextSelection selection) {
+		int selOffset = selection.getOffset();
+		IASTDeclaration[] decls = astTu.getDeclarations();
+		for (IASTDeclaration declaration : decls) {
+			int nodeOffset = declaration.getFileLocation().getNodeOffset();
+			int nodeLength = declaration.getFileLocation().asFileLocation().getNodeLength();
+			if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength)) {
+				return (nodeOffset);
+			}else if(selOffset <= nodeOffset) {
+				//Shift out of preprocessor statements
+				IASTPreprocessorStatement[] listPreprocessor=astTu.getAllPreprocessorStatements();
+				for(int x=0;x<listPreprocessor.length;x++){
+					nodeOffset = listPreprocessor[x].getFileLocation().getNodeOffset();
+					nodeLength = listPreprocessor[x].getFileLocation().asFileLocation().getNodeLength();
+					if(selOffset > nodeOffset && selOffset < (nodeOffset+ nodeLength)) {
+						return nodeOffset;
+					}
+				}
+				return selOffset;
+			}
+		}
+		//handle case where insertion point is after pushback
+		return selOffset;
 	}
 	
 	
