@@ -104,6 +104,21 @@ public class TestProblemMarkers extends Test1Skeleton {
 		assertTrue(flag);
 	}
 	
+	@Override
+	public void tearDown() throws Exception{
+		IEditorInput editorInput = ceditor.getEditorInput();
+		IFile editorFile = ((FileEditorInput)editorInput).getFile();
+		
+		IMarker[] problems = null;
+		int depth = IResource.DEPTH_INFINITE;
+		
+		problems = editorFile.findMarkers(IMarker.PROBLEM, true, depth);
+		   
+		for(IMarker marker:problems){
+			marker.delete();
+		}
+	}
+	
 	public static TestSuite suite(){
 		TestSuite result=new TestSuite("Problem markers test");
 		
@@ -113,6 +128,5 @@ public class TestProblemMarkers extends Test1Skeleton {
 		result.addTest(new TestProblemMarkers("testAddMember"));
 		return result;
 	}
-		
 	
 }
