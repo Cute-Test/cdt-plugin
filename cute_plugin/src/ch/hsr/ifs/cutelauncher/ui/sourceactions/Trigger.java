@@ -141,7 +141,6 @@ public class Trigger extends AbstractFunctionActionDelegate {
 
 		fakeMenuManager.setVisible(true);
 		System.out.println();
-		System.out.println();
 	}
 	
 	@Override
