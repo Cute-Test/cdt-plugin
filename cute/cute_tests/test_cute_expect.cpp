@@ -21,6 +21,9 @@ void test_throws_with_code(){
 void test_throws_with_message() {
 	ASSERT_THROWSM("oops",throws_std_exception(),std::exception);
 }
+void test_throwing_with_demangle_failure() {
+	throw std::logic_error("NOT A VALID TYPE NAME");
+}
 }
 cute::suite test_cute_expect() {
 	cute::suite s;
@@ -31,6 +34,7 @@ cute::suite test_cute_expect() {
 	s += CUTE_EXPECT(CUTE(test_doesntthrow),cute::test_failure);
 	s += CUTE(test_throws_with_code);
 	s += CUTE(test_throws_with_message);
+	s.push_back(CUTE(test_throwing_with_demangle_failure));
 	return s; 
 }
 

@@ -91,6 +91,6 @@ int main(){
 	cerr << flush;
 	cerr << run.numberOfTests << " Tests " << endl;
 	cerr << run.failedTests << " failed - expect 0 failures" << endl;
-	cerr << run.errors << " errors - expect 1 error" << endl;
+	cerr << run.errors << " errors - expect 2 errors" << endl;
 	return run.failedTests;
 }

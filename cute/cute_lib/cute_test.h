@@ -32,8 +32,9 @@ namespace cute {
 #ifdef __GNUG__
 #include <cxxabi.h> // __cxa_demangle
 	inline std::string test::demangle(char const *name){
+		if (!name) return "unknown";
 		char *toBeFreed = __cxxabiv1::__cxa_demangle(name,0,0,0);
-		std::string result(toBeFreed);
+		std::string result(toBeFreed?toBeFreed:name);
 		::free(toBeFreed);
 		return result;
 	}
@@ -41,7 +42,7 @@ namespace cute {
 #else
 	// this default works reasonably with MSVC71 and 8
 	inline std::string test::demangle(char const *name){
-		return std::string(name);
+		return std::string(name?name:"unknown");
 	}
 #endif
 	
