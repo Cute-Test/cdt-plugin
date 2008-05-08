@@ -26,24 +26,25 @@ namespace cute {
 	};
 #define CUTE(name) cute::test((&name),(#name))
 	
-	// TODO: provide platform independent means of demangling, 
-	// or at least support for different compilers
-	// this is platform dependant for gnu compilers
-#ifdef __GNUG__
-#include <cxxabi.h> // __cxa_demangle
-	inline std::string test::demangle(char const *name){
-		char *toBeFreed = __cxxabiv1::__cxa_demangle(name,0,0,0);
-		std::string result(toBeFreed);
-		::free(toBeFreed);
-		return result;
+		// TODO: provide platform independent means of demangling, 
+		// or at least support for different compilers
+		// this is platform dependant for gnu compilers
+	#ifdef __GNUG__
+	#include <cxxabi.h> // __cxa_demangle
+		inline std::string test::demangle(char const *name){
+			if (!name) return "unknown";
+			char *toBeFreed = __cxxabiv1::__cxa_demangle(name,0,0,0);
+			std::string result(toBeFreed?toBeFreed:name);
+			::free(toBeFreed);
+			return result;
+		}
+		
+	#else
+		// this default works reasonably with MSVC71 and 8
+		inline std::string test::demangle(char const *name){
+			return std::string(name?name:"unknown");
+		}
+	#endif
+		
 	}
-	
-#else
-	// this default works reasonably with MSVC71 and 8
-	inline std::string test::demangle(char const *name){
-		return std::string(name);
-	}
-#endif
-	
-}
-#endif /*CUTE_TEST_H_*/
+	#endif /*CUTE_TEST_H_*/
