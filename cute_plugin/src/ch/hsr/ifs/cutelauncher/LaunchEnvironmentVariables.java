@@ -6,7 +6,6 @@ import java.util.TreeMap;
 import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.settings.model.ICOutputEntry;
-import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
@@ -89,7 +88,7 @@ public class LaunchEnvironmentVariables {
 		for(int x=0;x<libProject.length;x++){
 			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject[x]);
 			IConfiguration config = info.getDefaultConfiguration();
-			ICSourceEntry[] sources = config.getSourceEntries();
+//			ICSourceEntry[] sources = config.getSourceEntries();
 			ICOutputEntry[]  dirs = config.getBuildData().getOutputDirectories();	
 			for (ICOutputEntry outputEntry : dirs) {
 				IPath location = outputEntry.getFullPath();

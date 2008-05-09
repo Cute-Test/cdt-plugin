@@ -4,15 +4,13 @@ import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFieldReference;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 
 abstract public class AddTestFunct_ION_OR extends AbstractFunctionAction {
 
@@ -58,25 +56,25 @@ abstract public class AddTestFunct_ION_OR extends AbstractFunctionAction {
 			IASTLiteralExpression literalex=(IASTLiteralExpression)unaryex.getOperand();
 			theName=literalex.toString();
 		}else{//both normal run and unit test
-			theName=((CPPASTIdExpression)thelist).getName().toString();
+			theName=((IASTIdExpression)thelist).getName().toString();
 		}
 		return theName;
 	}
 
 	protected String functorAST(IASTFunctionCallExpression innercallex){
 		String theName="";
-		if(innercallex instanceof CPPASTIdExpression){
-			CPPASTIdExpression a=(CPPASTIdExpression)innercallex.getFunctionNameExpression();
+		if(innercallex instanceof IASTIdExpression){
+			IASTIdExpression a=(IASTIdExpression)innercallex.getFunctionNameExpression();
 			theName=a.getName().toString();
-		}else if(innercallex instanceof CPPASTFunctionCallExpression){
-			CPPASTFunctionCallExpression fce=(CPPASTFunctionCallExpression)innercallex;
+		}else if(innercallex instanceof IASTFunctionCallExpression){
+			IASTFunctionCallExpression fce=innercallex;
 			IASTExpression expression=fce.getFunctionNameExpression();
-			if(expression instanceof CPPASTFieldReference){
-				CPPASTFieldReference a=(CPPASTFieldReference)expression;
+			if(expression instanceof ICPPASTFieldReference){
+				ICPPASTFieldReference a=(ICPPASTFieldReference)expression;
 				theName=a.getFieldName().toString();	
 			}
-			if(expression instanceof CPPASTIdExpression){
-				CPPASTIdExpression a=(CPPASTIdExpression)expression;
+			if(expression instanceof IASTIdExpression){
+				IASTIdExpression a=(IASTIdExpression)expression;
 				theName=a.getName().toString();
 			}
 		}

@@ -70,9 +70,9 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 //		createCDTProjectReference(project);
 	}
 
-	
+	@SuppressWarnings("unchecked")
 	//@see org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/projectmodel/tests/ProjectModelTests.testReferences()
-	private void createCDTProjectReference(IProject project) throws CoreException {
+	protected void createCDTProjectReference(IProject project) throws CoreException {
 		CoreModel coreModel = CoreModel.getDefault();
 		ICProjectDescription des4 = coreModel.getProjectDescription(project);
 		ICConfigurationDescription dess[] = des4.getConfigurations();
