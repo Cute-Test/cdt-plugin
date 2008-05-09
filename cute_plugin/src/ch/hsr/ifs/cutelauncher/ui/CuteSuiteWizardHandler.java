@@ -91,6 +91,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 			String a=br.readLine();
 			buffer.append(a.replaceAll("[$]suitename[$]", suitename)+linesep);
 		}
+		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());
 	}
 }

@@ -141,7 +141,7 @@ public class Trigger extends AbstractFunctionActionDelegate {
 
 		fakeMenuManager.setVisible(true);
 		System.out.println();
-	}
+}
 	
 	@Override
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {

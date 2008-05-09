@@ -42,6 +42,7 @@ public class LaunchEnvironmentVariables {
 			ICProject project) throws CoreException{
 		setEnvironmentVariable(wc,project,"PATH");
 	}
+	@SuppressWarnings("unchecked")
 	private static void setEnvironmentVariable(ILaunchConfigurationWorkingCopy wc,
 			ICProject project,String environmentVariableName) throws CoreException {
 		String path=getBuildEnvironmentVariable(environmentVariableName,project);
@@ -105,7 +106,8 @@ public class LaunchEnvironmentVariables {
 		return result;
 	}
 	
-	private static Map getBuildEnvironmentVariables(ICProject project) {
+	@SuppressWarnings("unchecked")
+	public static Map getBuildEnvironmentVariables(ICProject project) {
 		Map result=new TreeMap();
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project.getUnderlyingResource());
 		if (info != null) {
