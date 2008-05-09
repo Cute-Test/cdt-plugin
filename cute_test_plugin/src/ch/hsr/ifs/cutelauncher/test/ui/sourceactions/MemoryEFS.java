@@ -17,7 +17,6 @@ import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.cdt.core.dom.IPDOMManager;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.testplugin.CProjectHelper;
-import org.eclipse.cdt.core.testplugin.CTestPlugin;
 import org.eclipse.cdt.internal.core.pdom.indexer.IndexerPreferences;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -41,6 +40,7 @@ public class MemoryEFS extends TestCase {
 	public void testCheckforMemoryOnlyEFS(){
 		try {
 			IFileSystem fileSystem = EFS.getFileSystem("memory");
+			fileSystem.toString();
 			//System.out.println(fileSystem.toString());
 		} catch (CoreException e) {
 			fail("no memory fs found:"+e);
@@ -52,7 +52,7 @@ public class MemoryEFS extends TestCase {
 	public void testCreateCProject(){
 		//based on CProjectHelper.createCProject
 		final IWorkspace ws = ResourcesPlugin.getWorkspace();
-		final ICProject newProject[] = new ICProject[1];
+//		final ICProject newProject[] = new ICProject[1];
 		final String projectName="memoryPrj";
 		
 		try {
@@ -83,7 +83,7 @@ public class MemoryEFS extends TestCase {
 			}
 			
 			if (!project.hasNature(CProjectNature.C_NATURE_ID)) {
-				String projectId = CTestPlugin.PLUGIN_ID + ".TestProject";
+//				String projectId = CTestPlugin.PLUGIN_ID + ".TestProject";
 				CProjectHelper.addNatureToProject(project, CProjectNature.C_NATURE_ID, null);
 //				CCorePlugin.getDefault().mapCProjectOwner(project, projectId, false);
 			}

@@ -45,8 +45,8 @@ public class MemoryBaseTestFramework extends TestCase {
 			
 			workspace = ResourcesPlugin.getWorkspace();
 			
-			final ICProject newProject[] = new ICProject[1];
-			final String projectName="memoryPrj";
+//			final ICProject newProject[] = new ICProject[1];
+//			final String projectName="memoryPrj";
 						
 	        try {
 	            cproject = myCreateCCProject("MemRegressionTestProject", "bin", IPDOMManager.ID_NO_INDEXER); //$NON-NLS-1$ //$NON-NLS-2$

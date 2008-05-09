@@ -2,6 +2,7 @@ package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
 import java.util.HashSet;
 
+@SuppressWarnings("unchecked")
 public class Recorder {
 	static HashSet<String> hs;
 	

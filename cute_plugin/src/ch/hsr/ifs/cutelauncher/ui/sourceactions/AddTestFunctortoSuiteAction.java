@@ -14,7 +14,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisiblityLabel;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -53,7 +52,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 				OperatorParenthesesFinder o=new OperatorParenthesesFinder();
 				astTu.accept(o);
 				
-				ArrayList al=o.getAL();
+//				ArrayList al=o.getAL();
 								
 				String fname=nameAtCursor(o.getAL(),n.getNode(),stream);
 				if(fname.equals(""))return new MultiTextEdit();//FIXME potential bug point
@@ -153,7 +152,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 				parentNode instanceof IASTSimpleDeclaration){
 				//handle the simple class case, cursor at methods
 			//if(!(parentNode.getParent() instanceof ICPPASTTranslationUnit))	
-			return ((CPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
+			return ((ICPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
 		}
 		stream.println("Unable to add as functor for cursor position.");
 		return ""; 

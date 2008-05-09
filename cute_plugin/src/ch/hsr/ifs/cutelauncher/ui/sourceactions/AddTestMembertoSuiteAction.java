@@ -212,7 +212,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		button.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageConsoleStream stream=EclipseConsole.getConsole();
+//				MessageConsoleStream stream=EclipseConsole.getConsole();
 				//stream.println("selected");
 			}
 		});

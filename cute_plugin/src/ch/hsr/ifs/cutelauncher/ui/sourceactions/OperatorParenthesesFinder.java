@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
 public class OperatorParenthesesFinder extends ASTVisitor {
-	ArrayList al=new ArrayList();
+	ArrayList<IASTName> al=new ArrayList<IASTName>();
 	
 	{
 		shouldVisitNames=true;
@@ -29,7 +29,7 @@ public class OperatorParenthesesFinder extends ASTVisitor {
 		}
 		return super.leave(name);
 	}
-	public ArrayList getAL(){return al;}
+	public ArrayList<IASTName> getAL(){return al;}
 	
 	public void printParent(){
 		for(Object i:al){

@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
-import java.util.Map;
-
 import junit.framework.TestSuite;
 
 import org.eclipse.core.resources.IFile;
@@ -89,7 +87,7 @@ public class TestProblemMarkers extends Test1Skeleton {
 		   
 		   for(IMarker marker:problems){
 			   String msg=(String)marker.getAttribute(IMarker.MESSAGE);
-			   Map map=marker.getAttributes();
+//			   Map map=marker.getAttributes();
 			  
 			   if(msg!=null && msg.startsWith("cute:")){
 				   int lineno=((Integer)marker.getAttribute(IMarker.LINE_NUMBER,-1)).intValue();

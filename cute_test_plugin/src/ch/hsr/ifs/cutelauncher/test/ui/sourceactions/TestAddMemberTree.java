@@ -124,9 +124,9 @@ public class TestAddMemberTree extends BaseTestFramework {
 		}catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public final void treeTest3(){
 		try{
-			ArrayList al=rtc1.test;
 			IFile inputFile=importFile("A.cpp",rtc1.test.get(2));
 			
 			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);

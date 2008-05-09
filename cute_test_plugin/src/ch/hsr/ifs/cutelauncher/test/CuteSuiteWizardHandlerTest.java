@@ -12,8 +12,6 @@ import junit.framework.TestSuite;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -39,8 +37,8 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	public final void testAddTestFiles() {
 		try{
 			IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
-			IWorkspace iws=ResourcesPlugin.getWorkspace();
-			IProjectDescription prjdesc=iws.newProjectDescription("CSWHT");
+//			IWorkspace iws=ResourcesPlugin.getWorkspace();
+//			IProjectDescription prjdesc=iws.newProjectDescription("CSWHT");
 			IProject prj=iwsr.getProject("CSWHT");
 			prj.create(new NullProgressMonitor());
 			prj.open(new NullProgressMonitor());
