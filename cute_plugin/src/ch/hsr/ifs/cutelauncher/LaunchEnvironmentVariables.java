@@ -41,6 +41,7 @@ public class LaunchEnvironmentVariables {
 			ICProject project) throws CoreException{
 		setEnvironmentVariable(wc,project,"PATH");
 	}
+	//caveat:not for generic environment variable
 	@SuppressWarnings("unchecked")
 	private static void setEnvironmentVariable(ILaunchConfigurationWorkingCopy wc,
 			ICProject project,String environmentVariableName) throws CoreException {
@@ -51,6 +52,7 @@ public class LaunchEnvironmentVariables {
 				path+=pathSeparator;
 		
 		IProject[] libProject=getReferencedProjects(project);
+		if(libProject.length==0)return;
 		String libPath=generateLibPath(libProject,pathSeparator);
 
 //		Map m3=project.getOptions(true);//get information abt formatter etc
@@ -68,7 +70,8 @@ public class LaunchEnvironmentVariables {
 			IConfiguration ic=info.getDefaultConfiguration();
 			IEnvironmentVariableProvider evp=ManagedBuildManager.getEnvironmentVariableProvider();
 			IEnvironmentVariable ev=evp.getVariable(key, ic, false);
-			result=ev.getValue();	
+			if(ev!=null)
+				result=ev.getValue();	
 		}
 		return result;
 	}
