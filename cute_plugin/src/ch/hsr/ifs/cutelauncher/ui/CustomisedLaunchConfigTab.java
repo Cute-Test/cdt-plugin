@@ -128,7 +128,11 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	}
 
 	//////////////////////////////
-	/// based on CDT CommonTab
+	/// based on CommonTab
+//	@see org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup
+//	@see org.eclipse.cdt.launch.internal.ui.LocalRunLaunchConfigurationTabGroup
+//	@see org.eclipse.debug.ui.CommonTab
+//	see extension org.eclipse.debug.ui.launchConfigurationTabGroups
 	/**
 	 * Handles the shared location button being selected
 	 */

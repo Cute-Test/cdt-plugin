@@ -21,9 +21,11 @@
    <feature url="features/ch.hsr.ifs.cute_1.3.0.200803311217.jar" id="ch.hsr.ifs.cute" version="1.3.0.200803311217">
       <category name="Cute Plugin"/>
    </feature>
-   <!--<feature url="features/ch.hsr.ifs.cute_1.3.0.200804011646.jar" id="ch.hsr.ifs.cute" version="1.3.0.200804011646">
+   <!--
+   <feature url="features/ch.hsr.ifs.cute_1.3.0.200804011646.jar" id="ch.hsr.ifs.cute" version="1.3.0.200804011646">
       <category name="Cute Plugin"/>
-   </feature>-->
+   </feature>
+   -->
    <feature url="features/ch.hsr.ifs.cute_1.3.2.200805140005.jar" id="ch.hsr.ifs.cute" version="1.3.2.200805140005">
       <category name="Cute Plugin"/>
    </feature>
