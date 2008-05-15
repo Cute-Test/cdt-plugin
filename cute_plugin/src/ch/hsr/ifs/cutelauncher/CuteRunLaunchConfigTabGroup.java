@@ -42,7 +42,7 @@ import ch.hsr.ifs.cutelauncher.ui.CustomisedLaunchConfigTab;
 
 public class CuteRunLaunchConfigTabGroup extends
 		AbstractLaunchConfigurationTabGroup {
-
+	
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 				new CMainTab(true),
@@ -54,6 +54,8 @@ public class CuteRunLaunchConfigTabGroup extends
 			setTabs(tabs);
 	}
 
+	//set default values for environment variables during the very first create
+	//trigger via Run as Dialog>new launch configuration button
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		
@@ -73,6 +75,7 @@ public class CuteRunLaunchConfigTabGroup extends
 	///////////////////////////////////////////
 	// direct copy and paste from 
 	// @see org.eclipse.cdt.launch.ui.CLaunchConfigurationTab
+	// this is to hunt for current CProject
 	//////////////////////////////////////////
 	protected ICElement getContext(ILaunchConfiguration config, String platform) {
 		String projectName = null;

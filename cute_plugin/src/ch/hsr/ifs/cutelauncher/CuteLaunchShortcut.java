@@ -60,13 +60,13 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	public void launch(IEditorPart editor, String mode) {
 		searchAndLaunch(new Object[] { editor.getEditorInput()}, mode);
 	}
-
+	//project explorer exe
 	public void launch(ISelection selection, String mode) {
 		if (selection instanceof IStructuredSelection) {
 			searchAndLaunch(((IStructuredSelection) selection).toArray(), mode);
 		}
 	}
-
+	//internal to CuteLaunchShortcut
 	public void launch(IBinary bin, String mode) {
         ILaunchConfiguration config = findLaunchConfiguration(bin, mode);
         if (config != null) {
@@ -82,21 +82,11 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	protected ILaunchConfiguration findLaunchConfiguration(IBinary bin, String mode) {
 		ILaunchConfiguration configuration = null;
 		ILaunchConfigurationType configType = getCuteLaunchConfigType();
+		
 		List<ILaunchConfiguration> candidateConfigs = Collections.emptyList();
 		try {
 			ILaunchConfiguration[] configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(configType);
-			candidateConfigs = new ArrayList<ILaunchConfiguration>(configs.length);
-			for (int i = 0; i < configs.length; i++) {
-				ILaunchConfiguration config = configs[i];
-				IPath programPath = AbstractCLaunchDelegate.getProgramPath(config);
-				String projectName = AbstractCLaunchDelegate.getProjectName(config);
-				IPath name = bin.getResource().getProjectRelativePath();
-				if (programPath != null && programPath.equals(name)) {
-					if (projectName != null && projectName.equals(bin.getCProject().getProject().getName())) {
-						candidateConfigs.add(config);
-					}
-				}
-			}
+			candidateConfigs = createCandidateConfigList(bin, configs);
 		} catch (CoreException e) {
 			LaunchUIPlugin.log(e);
 		}
@@ -153,6 +143,26 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			configuration = chooseConfiguration(candidateConfigs, mode);
 		}
 		return configuration;
+	}
+
+	private List<ILaunchConfiguration> createCandidateConfigList(IBinary bin,
+			ILaunchConfiguration[] configs) throws CoreException {
+		
+		List<ILaunchConfiguration> candidateConfigs;
+		candidateConfigs = new ArrayList<ILaunchConfiguration>(configs.length);
+		
+		for (int i = 0; i < configs.length; i++) {
+			ILaunchConfiguration config = configs[i];
+			IPath programPath = AbstractCLaunchDelegate.getProgramPath(config);
+			String projectName = AbstractCLaunchDelegate.getProjectName(config);
+			IPath name = bin.getResource().getProjectRelativePath();
+			if (programPath != null && programPath.equals(name)) {
+				if (projectName != null && projectName.equals(bin.getCProject().getProject().getName())) {
+					candidateConfigs.add(config);
+				}
+			}
+		}
+		return candidateConfigs;
 	}
 
 	/**
@@ -369,42 +379,8 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			} else {
 				final List<IBinary> results = new ArrayList<IBinary>();
 				ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-				IRunnableWithProgress runnable = new IRunnableWithProgress() {
-					public void run(IProgressMonitor pm) throws InterruptedException {
-						int nElements = elements.length;
-						pm.beginTask("Looking for executables", nElements); //$NON-NLS-1$
-						try {
-							IProgressMonitor sub = new SubProgressMonitor(pm, 1);
-							for (int i = 0; i < nElements; i++) {
-								if (elements[i] instanceof IAdaptable) {
-									IResource r = (IResource) ((IAdaptable) elements[i]).getAdapter(IResource.class);
-									if (r != null) {
-										ICProject cproject = CoreModel.getDefault().create(r.getProject());
-										if (cproject != null) {
-											try {
-												IBinary[] bins = cproject.getBinaryContainer().getBinaries();
-
-												for (int j = 0; j < bins.length; j++) {
-													if (bins[j].isExecutable()) {
-														results.add(bins[j]);
-														System.out.println("CuteLaunchShortcut>bin results:"+bins[j]);
-													}
-												}
-											} catch (CModelException e) {
-											}
-										}
-									}
-								}
-								if (pm.isCanceled()) {
-									throw new InterruptedException();
-								}
-								sub.done();
-							}
-						} finally {
-							pm.done();
-						}
-					}
-				};
+				IRunnableWithProgress runnable =new RunnableWithProgressToScanForExecutableImpl(elements,results);
+				
 				try {
 					dialog.run(true, true, runnable);
 				} catch (InterruptedException e) {
@@ -413,6 +389,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 					MessageDialog.openError(getShell(), LaunchMessages.getString("CApplicationLaunchShortcut.Application_Launcher"), e.getMessage()); //$NON-NLS-1$
 					return;
 				}
+				
 				int count = results.size();
 				if (count == 0) {
 					MessageDialog.openError(getShell(), LaunchMessages.getString("CApplicationLaunchShortcut.Application_Launcher"), LaunchMessages.getString("CApplicationLaunchShortcut.Launch_failed_no_binaries")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -422,6 +399,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 					bin = results.get(0);
 				}
 			}
+			
 			if (bin != null) {
 				launch(bin, mode);
 			}
@@ -432,6 +410,53 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 }
 
+class RunnableWithProgressToScanForExecutableImpl implements IRunnableWithProgress{
+	final List<IBinary> results;
+	final Object[] elements;
+	
+	public RunnableWithProgressToScanForExecutableImpl(Object[] elements, List<IBinary> results){
+		this.elements=elements;
+		this.results=results;
+	}
+	public void run(IProgressMonitor pm) throws InterruptedException {
+		int nElements = elements.length;
+		pm.beginTask("Looking for executables", nElements); //$NON-NLS-1$
+		try {
+			IProgressMonitor sub = new SubProgressMonitor(pm, 1);
+			for (int i = 0; i < nElements; i++) {
+				if (elements[i] instanceof IAdaptable) {
+					IResource r = (IResource) ((IAdaptable) elements[i]).getAdapter(IResource.class);
+					if (r != null) {
+						ICProject cproject = CoreModel.getDefault().create(r.getProject());
+						if (cproject != null) {
+							try {
+								getExecutable(cproject,results);
+							} catch (CModelException e) {}
+						}
+					}
+				}
+				if (pm.isCanceled()) {
+					throw new InterruptedException();
+				}
+				sub.done();
+			}
+		} finally {
+			pm.done();
+		}
+	}
+	
+	private void getExecutable(ICProject cproject, List<IBinary> results) throws CModelException{
+		IBinary[] bins = cproject.getBinaryContainer().getBinaries();
+
+		for (int j = 0; j < bins.length; j++) {
+			if (bins[j].isExecutable()) {
+				results.add(bins[j]);
+				System.out.println("CuteLaunchShortcut>bin results:"+bins[j]);
+			}
+		}						
+	}
+	
+}
 
 //code snip for getting variables from workingconfig 
 //Map m=null;

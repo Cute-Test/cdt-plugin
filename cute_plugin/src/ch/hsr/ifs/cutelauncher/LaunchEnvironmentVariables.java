@@ -31,19 +31,20 @@ public class LaunchEnvironmentVariables {
 	
 	private static void setMacDYLD_LIBRARY_PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setEnvironmentVariable(wc,project,"DYLD_LIBRARY_PATH");
+		setPathEnvironmentVariable(wc,project,"DYLD_LIBRARY_PATH");
 	}
 	private static void setLinuxLD_LIBRARY_PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setEnvironmentVariable(wc,project,"LD_LIBRARY_PATH");
+		setPathEnvironmentVariable(wc,project,"LD_LIBRARY_PATH");
 	}
 	private static void setWin32PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setEnvironmentVariable(wc,project,"PATH");
+		setPathEnvironmentVariable(wc,project,"PATH");
 	}
+	
 	//caveat:not for generic environment variable
 	@SuppressWarnings("unchecked")
-	private static void setEnvironmentVariable(ILaunchConfigurationWorkingCopy wc,
+	private static void setPathEnvironmentVariable(ILaunchConfigurationWorkingCopy wc,
 			ICProject project,String environmentVariableName) throws CoreException {
 		String path=getBuildEnvironmentVariable(environmentVariableName,project);
 		String pathSeparator=System.getProperty("path.separator");//assumption that it is only 1 char wide
