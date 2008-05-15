@@ -159,12 +159,11 @@ public class ASTHelper {
 			IASTDeclaration members[]=cts.getMembers();
 			for(int i=0;i<members.length;i++){
 				if(members[i] instanceof ICPPASTVisiblityLabel){
-					int visbility=((ICPPASTVisiblityLabel)members[i]).getVisibility();
-					if(visbility==ICPPASTVisiblityLabel.v_public)ispublicVisibility=true;
-					if(visbility==ICPPASTVisiblityLabel.v_private || visbility==ICPPASTVisiblityLabel.v_protected)
-						ispublicVisibility=false;
+					ispublicVisibility=changeVisibilityMode((ICPPASTVisiblityLabel)members[i]);
 					continue;
 				}
+				
+				if(!ispublicVisibility)continue;
 				
 				String methodName="";
 				if(members[i] instanceof IASTSimpleDeclaration){
@@ -181,12 +180,17 @@ public class ASTHelper {
 				if(methodName=="")continue;
 				if(className.equals(methodName))continue;//constructor
 				
-				if(ispublicVisibility){
-					result.add(members[i]);
-				}
+				result.add(members[i]);
+				
 			}
 		}
 		return result;
+	}
+	private static boolean changeVisibilityMode(ICPPASTVisiblityLabel node){
+		int visbility=node.getVisibility();
+		if(visbility==ICPPASTVisiblityLabel.v_public)return true;
+		//assume v_private v_protected
+		return false;
 	}
 	
 	public static ArrayList<IASTSimpleDeclaration> removeTemplateClasses(ArrayList<IASTSimpleDeclaration> cppClassStruct){
