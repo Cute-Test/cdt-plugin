@@ -19,6 +19,7 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate;
 
 public class TestBugFixes //extends Test1Skeleton {
 	extends org.eclipse.cdt.core.tests.BaseTestFramework{
+	
 	public TestBugFixes(String name) {
 		super(name);
  	}
@@ -106,6 +107,17 @@ public class TestBugFixes //extends Test1Skeleton {
 		ts.addTest(new TestBugFixes("testNewTestFunctionhighlight"));
 		return ts;
 	}
+	@Override
+	protected void tearDown () throws Exception {
+		EditorTestHelper.closeEditor(ceditor);
+		/*if (fCProject != null)
+			CProjectHelper.delete(fCProject);
+		if (fNonCProject != null) {
+			ResourceHelper.delete(fNonCProject);
+		}*/
+		super.tearDown();
+	}
+	
 }
 
 

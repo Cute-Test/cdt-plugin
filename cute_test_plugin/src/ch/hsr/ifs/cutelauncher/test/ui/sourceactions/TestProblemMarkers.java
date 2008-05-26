@@ -115,6 +115,8 @@ public class TestProblemMarkers extends Test1Skeleton {
 		for(IMarker marker:problems){
 			marker.delete();
 		}
+		
+		super.tearDown();
 	}
 	
 	public static TestSuite suite(){
