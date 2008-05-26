@@ -70,6 +70,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 //		createCDTProjectReference(project);
 	}
 
+	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=229085
 	@SuppressWarnings("unchecked")
 	//@see org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/projectmodel/tests/ProjectModelTests.testReferences()
 	protected void createCDTProjectReference(IProject project) throws CoreException {
