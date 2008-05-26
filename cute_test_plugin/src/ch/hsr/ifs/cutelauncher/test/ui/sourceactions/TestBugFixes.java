@@ -17,11 +17,12 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate;
 
-public class TestBugFixes extends Test1Skeleton {
+public class TestBugFixes //extends Test1Skeleton {
+	extends org.eclipse.cdt.core.tests.BaseTestFramework{
 	public TestBugFixes(String name) {
 		super(name);
  	}
-	
+	protected static CEditor ceditor;
 	public void testNewTestFunctionhighlight(){
 		ReadTestCase rtc=new ReadTestCase("testDefs/sourceActions/bugfix.cpp",false);
 
@@ -30,7 +31,8 @@ public class TestBugFixes extends Test1Skeleton {
 		String testSrcCode=rtc.test.get(0);
 		
 		try{
-			IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
+			//IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
+			IFile inputFile=importFile("A.cpp",testSrcCode);
 			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 			assertNotNull(editor);
 			assertTrue(editor instanceof CEditor);

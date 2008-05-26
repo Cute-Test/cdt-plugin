@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
-import junit.framework.TestCase;
-
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
@@ -17,8 +15,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
-public abstract class Test1Skeleton extends TestCase{ 
-	//extends org.eclipse.cdt.core.tests.BaseTestFramework{
+public abstract class Test1Skeleton //extends TestCase{ 
+	extends org.eclipse.cdt.core.tests.BaseTestFramework{
 	
 	public Test1Skeleton() {
 		super("");
@@ -47,11 +45,11 @@ public abstract class Test1Skeleton extends TestCase{
 		try{
 		//**********
 		//Original CDT based hdd test, (require this class to extend BaseTestFramework)	
-//		IFile inputFile=importFile("A.cpp",testSrcCode);
+		IFile inputFile=importFile("A.cpp",testSrcCode);
 
 		//**********
 		//Memory only EFS based
-		IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
+//		IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
 
 		//**********
 		//Reflection based to see which method are called 
