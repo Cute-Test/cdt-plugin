@@ -1,14 +1,17 @@
 package ch.hsr.ifs.cutelauncher.ui;
 
 import org.eclipse.cdt.core.CConventions;
+import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.DialogField;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.IDialogFieldListener;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.LayoutUtil;
+import org.eclipse.cdt.internal.ui.wizards.dialogfields.SelectionButtonDialogField;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.StringDialogField;
 import org.eclipse.cdt.internal.ui.wizards.filewizard.AbstractFileCreationWizardPage;
 import org.eclipse.cdt.internal.ui.wizards.filewizard.NewFileWizardMessages;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -20,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -28,6 +32,7 @@ public class NewSuiteFileCreationWizardPage extends
 
 	private ITranslationUnit fNewFileTU = null;
 	private final StringDialogField fNewFileDialogField;
+	private final SelectionButtonDialogField fSelection;
 	
 	public NewSuiteFileCreationWizardPage(){
 		super("Custom Suite");
@@ -40,7 +45,12 @@ public class NewSuiteFileCreationWizardPage extends
 				handleFieldChanged(NEW_FILE_ID);
 			}
 		});
-		fNewFileDialogField.setLabelText("Suite name:"); //$NON-NLS-1$
+		fNewFileDialogField.setLabelText("Suite name:");
+		
+		fSelection=new SelectionButtonDialogField(SWT.CHECK);
+		fSelection.setLabelText("Link to runner ");
+		//generate list of runners
+		//prompt selection
 	}
 	@Override
 	public void createFile(IProgressMonitor monitor) throws CoreException {
@@ -60,10 +70,17 @@ public class NewSuiteFileCreationWizardPage extends
 	            	IWorkspace workspace = ResourcesPlugin.getWorkspace();
 	            	IWorkspaceRoot root = workspace.getRoot();
 	            	IFolder folder=root.getFolder(folderPath);
+	            	//fails when selection on project resource
 	            	String filename=fNewFileDialogField.getText();
 	            	String suitename=filename;//filename.substring(0,filename.lastIndexOf("."));
 	            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
 	            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
+	            	
+	            	IFile cppFile=folder.getFile(suitename+".cpp");
+	            	if(cppFile!=null){
+	            		//fNewFileTU = (ITranslationUnit) CoreModel.getDefault().
+	            		fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
+	            	}
 	            }
 	        } finally {
 	            monitor.done();
@@ -76,7 +93,15 @@ public class NewSuiteFileCreationWizardPage extends
 		fNewFileDialogField.doFillIntoGrid(parent, nColumns);
 		Text textControl = fNewFileDialogField.getTextControl(null);
 		LayoutUtil.setWidthHint(textControl, getMaxFieldWidth());
-		textControl.addFocusListener(new StatusFocusListener(NEW_FILE_ID));	
+		textControl.addFocusListener(new StatusFocusListener(NEW_FILE_ID));
+		/*
+		Composite p=new Composite(parent,SWT.NO_FOCUS);
+		GridData gd= new GridData(GridData.BEGINNING);
+		gd.horizontalSpan= 1;
+		p.setLayoutData(gd);*/
+		createSeparator(parent,nColumns);
+		fSelection.doFillIntoGrid(parent, nColumns);
+		
 	}
 
 	@Override
