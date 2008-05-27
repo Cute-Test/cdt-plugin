@@ -323,6 +323,41 @@
           value="false">
     </persistent>
  </extension>
+ <extension
+       point="org.eclipse.ui.newWizards">
+    <wizard
+          category="org.eclipse.cdt.ui.newCCWizards"
+          finalPerspective="org.eclipse.cdt.ui.CPerspective"
+          icon="icons/ovr16/cute_ovr.gif"
+          id="cute_plugin.wizard1"
+          name="Suite File">
+    <class class="ch.hsr.ifs.cutelauncher.ui.NewSuiteFileCreationWizard">
+            <parameter name="cfile" value="true"/>
+         </class>
+         <description>
+            Adding new suite.
+         </description>
+    </wizard>
+ </extension>
+   <extension
+       point="org.eclipse.ui.navigator.navigatorContent">
+ <commonWizard
+            associatedExtensionId="org.eclipse.cdt.ui.navigator.content"
+            menuGroupId="org.eclipse.cdt.ui"
+            type="new"
+            wizardId="cute_plugin.wizard1">
+		 <enablement>
+			<or>
+				<instanceof value="org.eclipse.cdt.core.model.ICElement" />	
+	            <adapt type="org.eclipse.core.resources.IProject">
+	               <test
+	                     property="org.eclipse.core.resources.projectNature"
+	                     value="org.eclipse.cdt.core.cnature"/>
+	            </adapt>
+			</or>
+         </enablement>
+	   </commonWizard>
+ </extension>	   
  <!--
  <extension
        point="org.eclipse.core.expressions.propertyTesters">

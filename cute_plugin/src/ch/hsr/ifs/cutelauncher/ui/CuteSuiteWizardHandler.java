@@ -60,18 +60,18 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 	//extract method for unit testing
 	public void copyFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
-		copyFile(folder,monitor,"Test.cpp","Test.cpp");
-		copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp");
-		copyFile(folder,monitor,"$suitename$.h",suitename+".h");
+		copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename);
+		copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename);
+		copyFile(folder,monitor,"$suitename$.h",suitename+".h",suitename);
 	}
 	@SuppressWarnings("unchecked")
-	protected void copyFile(IFolder folder, IProgressMonitor monitor,String templateFilename, String targetFilename)throws CoreException{
+	public static void copyFile(IFolder folder, IProgressMonitor monitor,String templateFilename, String targetFilename,String suitename)throws CoreException{
 		Enumeration en = CuteLauncherPlugin.getDefault().getBundle().findEntries("templates/projecttemplates/suite", templateFilename, false);
 		if(en.hasMoreElements()){
 			URL url = (URL)en.nextElement();
 			IFile targetFile = folder.getFile(targetFilename);
 			try {				
-				ByteArrayInputStream str=implantActualsuitename(url);
+				ByteArrayInputStream str=implantActualsuitename(url,suitename);
 				
 				targetFile.create(str,IResource.FORCE , new SubProgressMonitor(monitor,1));
 			} catch (IOException e) {
@@ -83,7 +83,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 	
 	//parse the template source file for $suitename$ and replace it with the user's entry
-	public ByteArrayInputStream implantActualsuitename(URL url)throws IOException{
+	public static ByteArrayInputStream implantActualsuitename(URL url, String suitename)throws IOException{
 		BufferedReader br=new BufferedReader(new InputStreamReader(url.openStream()));
 		StringBuilder buffer = new StringBuilder();
 		String linesep=System.getProperty("line.separator");
@@ -94,4 +94,5 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());
 	}
+
 }
