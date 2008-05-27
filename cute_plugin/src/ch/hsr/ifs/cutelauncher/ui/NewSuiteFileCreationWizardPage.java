@@ -9,7 +9,11 @@ import org.eclipse.cdt.internal.ui.wizards.dialogfields.LayoutUtil;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.StringDialogField;
 import org.eclipse.cdt.internal.ui.wizards.filewizard.AbstractFileCreationWizardPage;
 import org.eclipse.cdt.internal.ui.wizards.filewizard.NewFileWizardMessages;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -22,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 public class NewSuiteFileCreationWizardPage extends
 		AbstractFileCreationWizardPage {
 
-	private final ITranslationUnit fNewFileTU = null;
+	private ITranslationUnit fNewFileTU = null;
 	private final StringDialogField fNewFileDialogField;
 	
 	public NewSuiteFileCreationWizardPage(){
@@ -36,7 +40,7 @@ public class NewSuiteFileCreationWizardPage extends
 				handleFieldChanged(NEW_FILE_ID);
 			}
 		});
-		fNewFileDialogField.setLabelText("Suite filename:"); //$NON-NLS-1$
+		fNewFileDialogField.setLabelText("Suite name:"); //$NON-NLS-1$
 	}
 	@Override
 	public void createFile(IProgressMonitor monitor) throws CoreException {
@@ -45,12 +49,22 @@ public class NewSuiteFileCreationWizardPage extends
             if (monitor == null)
 	            monitor = new NullProgressMonitor();
             try {
-//	            fNewFileTU = null;
+	            fNewFileTU = null;
 //	            IFile newFile = NewSourceFileGenerator.createSourceFile(filePath, true, monitor);
 //	            if (newFile != null) {
 //	            	fNewFileTU = (ITranslationUnit) CoreModel.getDefault().create(newFile);
 //	            }
-//            	CuteSuiteWizardHandler.copyFile(folder, monitor, templateFilename, targetFilename, suitename);            	
+	            IPath folderPath = getSourceFolderFullPath();
+	            if(folderPath!=null){
+//	            	IProject project=getCurrentProject();
+	            	IWorkspace workspace = ResourcesPlugin.getWorkspace();
+	            	IWorkspaceRoot root = workspace.getRoot();
+	            	IFolder folder=root.getFolder(folderPath);
+	            	String filename=fNewFileDialogField.getText();
+	            	String suitename=filename;//filename.substring(0,filename.lastIndexOf("."));
+	            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
+	            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
+	            }
 	        } finally {
 	            monitor.done();
 	        }
@@ -106,8 +120,12 @@ public class NewSuiteFileCreationWizardPage extends
 		if (convStatus.getSeverity() == IStatus.ERROR) {
 			status.setError(NewFileWizardMessages.getFormattedString("NewSourceFileCreationWizardPage.error.InvalidFileName", convStatus.getMessage())); //$NON-NLS-1$
 			return status;
-		} else if (convStatus.getSeverity() == IStatus.WARNING) {
+		} /*else if (convStatus.getSeverity() == IStatus.WARNING) {
 			status.setWarning(NewFileWizardMessages.getFormattedString("NewSourceFileCreationWizardPage.warning.FileNameDiscouraged", convStatus.getMessage())); //$NON-NLS-1$
+		}*/
+		if(!fNewFileDialogField.getText().matches("^\\w+$")){
+			status.setError("Invalid identifier. Only letters, digits and underscore are accepted."); //$NON-NLS-1$
+			return status;
 		}
 		return status;
 	}
