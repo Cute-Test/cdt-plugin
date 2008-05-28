@@ -9,28 +9,13 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.ui;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.Enumeration;
-
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
-
-import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	private final NewCuteSuiteWizardCustomPage suitewizPage;
 	
@@ -61,11 +46,11 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 	//extract method for unit testing
 	public void copyFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
-		copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename);
-		copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename);
-		copyFile(folder,monitor,"$suitename$.h",suitename+".h",suitename);
+		SuiteTemplateCopyUtil.copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename);
+		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename);
+		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.h",suitename+".h",suitename);
 	}
-	
+	/*
 	public static void copyFile(IProject folder, IProgressMonitor monitor,String templateFilename, String targetFilename,String suitename)throws CoreException{
 		IFile targetFile = folder.getFile(targetFilename);
 		copyFile(targetFile,monitor,templateFilename,suitename);
@@ -105,5 +90,5 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 		}
 		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());
-	}
+	}*/
 }

@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler;
+import ch.hsr.ifs.cutelauncher.ui.SuiteTemplateCopyUtil;
 
 public class CuteSuiteWizardHandlerTest extends TestCase {
 
@@ -71,7 +72,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 			Path path = new Path("testDefs/SuiteWizTest.cpp");
 			URL url=FileLocator.toFileURL(FileLocator.find(bundle, path, null));
 			
-			ByteArrayInputStream bais=cswh.implantActualsuitename(url,"theSuiteName");
+			ByteArrayInputStream bais=SuiteTemplateCopyUtil.implantActualsuitename(url,"theSuiteName");
 			
 			Bundle bundle1 = TestPlugin.getDefault().getBundle();
 			Path path1 = new Path("testDefs/SuiteWizTestResult.cpp");
