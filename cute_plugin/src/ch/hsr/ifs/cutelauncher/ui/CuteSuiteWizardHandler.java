@@ -19,6 +19,7 @@ import java.util.Enumeration;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -64,12 +65,23 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 		copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename);
 		copyFile(folder,monitor,"$suitename$.h",suitename+".h",suitename);
 	}
-	@SuppressWarnings("unchecked")
+	
+	public static void copyFile(IProject folder, IProgressMonitor monitor,String templateFilename, String targetFilename,String suitename)throws CoreException{
+		IFile targetFile = folder.getFile(targetFilename);
+		copyFile(targetFile,monitor,templateFilename,suitename);
+	}
+	
 	public static void copyFile(IFolder folder, IProgressMonitor monitor,String templateFilename, String targetFilename,String suitename)throws CoreException{
+		IFile targetFile = folder.getFile(targetFilename);
+		copyFile(targetFile,monitor,templateFilename,suitename);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void copyFile (IFile targetFile, IProgressMonitor monitor,String templateFilename,String suitename)throws CoreException{
 		Enumeration en = CuteLauncherPlugin.getDefault().getBundle().findEntries("templates/projecttemplates/suite", templateFilename, false);
 		if(en.hasMoreElements()){
 			URL url = (URL)en.nextElement();
-			IFile targetFile = folder.getFile(targetFilename);
+			
 			try {				
 				ByteArrayInputStream str=implantActualsuitename(url,suitename);
 				
@@ -94,5 +106,4 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());
 	}
-
 }

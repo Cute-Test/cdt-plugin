@@ -23,3 +23,6 @@ public class NewSuiteFileCreationWizard extends AbstractFileCreationWizard {
         fPage.init(getSelection());
     }
 }
+
+//bug with selection at project resource
+//regex issue

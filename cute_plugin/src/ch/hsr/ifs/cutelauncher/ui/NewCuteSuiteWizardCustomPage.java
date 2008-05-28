@@ -77,7 +77,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		gd.horizontalSpan =2;
 		suitenameText = SWTFactory.createSingleText(composite, 2);
 		suitenameText.setLayoutData(gd); 
-		suitenameText.setText("suite");
+		suitenameText.setText("DefaultSuiteName");
 	    suitenameText.addModifyListener(new ModifyListener() {
 	    	public void modifyText(ModifyEvent e){
 			IWizardContainer iwc=getWizard().getContainer();

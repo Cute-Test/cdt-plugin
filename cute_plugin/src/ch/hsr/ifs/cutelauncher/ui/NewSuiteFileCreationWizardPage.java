@@ -13,6 +13,7 @@ import org.eclipse.cdt.internal.ui.wizards.filewizard.AbstractFileCreationWizard
 import org.eclipse.cdt.internal.ui.wizards.filewizard.NewFileWizardMessages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -60,34 +61,55 @@ public class NewSuiteFileCreationWizardPage extends
 	            monitor = new NullProgressMonitor();
             try {
 	            fNewFileTU = null;
-//	            IFile newFile = NewSourceFileGenerator.createSourceFile(filePath, true, monitor);
-//	            if (newFile != null) {
-//	            	fNewFileTU = (ITranslationUnit) CoreModel.getDefault().create(newFile);
-//	            }
 	            IPath folderPath = getSourceFolderFullPath();
 	            if(folderPath!=null){
 //	            	IProject project=getCurrentProject();
 	            	IWorkspace workspace = ResourcesPlugin.getWorkspace();
 	            	IWorkspaceRoot root = workspace.getRoot();
-	            	IFolder folder=root.getFolder(folderPath);
-	            	//fails when selection on project resource
-	            	String filename=fNewFileDialogField.getText();
-	            	String suitename=filename;//filename.substring(0,filename.lastIndexOf("."));
-	            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
-	            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
+
+	            	String suitename=fNewFileDialogField.getText();
 	            	
-	            	IFile cppFile=folder.getFile(suitename+".cpp");
-	            	if(cppFile!=null){
-	            		//fNewFileTU = (ITranslationUnit) CoreModel.getDefault().
-	            		fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
+	            	if(folderPath.segmentCount()==1){
+	            		IProject folder=root.getProject(folderPath.toPortableString());
+	            		CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
+		            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
+		            	IFile cppFile=folder.getFile(suitename+".cpp");
+		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
+	            	}else{
+	            		IFolder folder=root.getFolder(folderPath);	
+	            		CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
+		            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
+		            	IFile cppFile=folder.getFile(suitename+".cpp");
+		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}
+	            	
+	            	/*
+	            	IFile cppFile=folder.getFile(suitename+".cpp");
+	            	if(cppFile!=null){// && fSelection.isSelected()){
+	            		fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
+	            		
+	            		IIndex index = CCorePlugin.getIndexManager().getIndex(fNewFileTU.getCProject());
+	            		
+	            		IProgressMonitor sub = new SubProgressMonitor(monitor,1);
+
+	            		IIndexBinding[] bindings= index.findBindings("runner".toCharArray(),IndexFilter.ALL,sub);
+	            		sub.done();
+//	            		IName name=
+//	            		IIndexBinding binding=index.findBinding(name);
+//	            		
+	            		
+	            		NewSuiteFileGenerator nsfg=new NewSuiteFileGenerator(cppFile);
+		            	nsfg.parse();	
+	            	}*/
 	            }
 	        } finally {
 	            monitor.done();
 	        }
         }
 	}
-
+	
+	
+	
 	@Override
 	protected void createFileControls(Composite parent, int nColumns) {
 		fNewFileDialogField.doFillIntoGrid(parent, nColumns);
@@ -157,7 +179,7 @@ public class NewSuiteFileCreationWizardPage extends
 
 	@Override
 	public ITranslationUnit getCreatedFileTU() {
-		return fNewFileTU;
+		return fNewFileTU; //used to create an editor window to show to the user
 	}
 
 	@Override
