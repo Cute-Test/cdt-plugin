@@ -71,14 +71,14 @@ public class NewSuiteFileCreationWizardPage extends
 	            	
 	            	if(folderPath.segmentCount()==1){
 	            		IProject folder=root.getProject(folderPath.toPortableString());
-	            		CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
-		            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
+	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
+	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
 		            	IFile cppFile=folder.getFile(suitename+".cpp");
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}else{
 	            		IFolder folder=root.getFolder(folderPath);	
-	            		CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
-		            	CuteSuiteWizardHandler.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
+	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
+	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
 		            	IFile cppFile=folder.getFile(suitename+".cpp");
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}
