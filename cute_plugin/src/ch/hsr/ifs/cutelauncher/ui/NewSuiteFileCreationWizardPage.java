@@ -100,7 +100,15 @@ public class NewSuiteFileCreationWizardPage extends
 	            		
 	            		NewSuiteFileGenerator nsfg=new NewSuiteFileGenerator(cppFile);
 		            	nsfg.parse();	
-	            	}*/
+	            	}
+	            	core indexer 
+
+find binding 
+get binding 
+after location translation unit 
+
+	            	*
+	            	*/
 	            }
 	        } finally {
 	            monitor.done();
@@ -170,7 +178,7 @@ public class NewSuiteFileCreationWizardPage extends
 		} /*else if (convStatus.getSeverity() == IStatus.WARNING) {
 			status.setWarning(NewFileWizardMessages.getFormattedString("NewSourceFileCreationWizardPage.warning.FileNameDiscouraged", convStatus.getMessage())); //$NON-NLS-1$
 		}*/
-		if(!fNewFileDialogField.getText().matches("^\\w+$")){
+		if(!fNewFileDialogField.getText().matches("\\w+")){
 			status.setError("Invalid identifier. Only letters, digits and underscore are accepted."); //$NON-NLS-1$
 			return status;
 		}
