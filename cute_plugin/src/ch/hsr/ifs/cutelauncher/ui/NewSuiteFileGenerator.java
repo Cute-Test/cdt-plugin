@@ -15,9 +15,9 @@ import org.eclipse.core.runtime.CoreException;
 
 public class NewSuiteFileGenerator {
 	IASTTranslationUnit tu;
-	public NewSuiteFileGenerator(IFile translationUnit){
+	public NewSuiteFileGenerator(IFile cppFile){
 		try{
-		tu=getASTTranslationUnit(translationUnit);
+		tu=getASTTranslationUnit(cppFile);
 		}catch(CoreException e){
 			e.printStackTrace();
 		}

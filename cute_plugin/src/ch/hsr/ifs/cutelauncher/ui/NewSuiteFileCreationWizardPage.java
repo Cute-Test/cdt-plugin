@@ -1,7 +1,14 @@
 package ch.hsr.ifs.cutelauncher.ui;
 
 import org.eclipse.cdt.core.CConventions;
+import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.cdt.core.index.IIndexBinding;
+import org.eclipse.cdt.core.index.IIndexFile;
+import org.eclipse.cdt.core.index.IndexFilter;
+import org.eclipse.cdt.core.index.IndexLocationFactory;
 import org.eclipse.cdt.core.model.CoreModelUtil;
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.DialogField;
@@ -24,6 +31,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -69,20 +77,50 @@ public class NewSuiteFileCreationWizardPage extends
 
 	            	String suitename=fNewFileDialogField.getText();
 	            	
+	            	IFile cppFile;
 	            	if(folderPath.segmentCount()==1){
 	            		IProject folder=root.getProject(folderPath.toPortableString());
 	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
 	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
-		            	IFile cppFile=folder.getFile(suitename+".cpp");
+		            	cppFile=folder.getFile(suitename+".cpp");
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}else{
 	            		IFolder folder=root.getFolder(folderPath);	
 	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
 	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
-		            	IFile cppFile=folder.getFile(suitename+".cpp");
+		            	cppFile=folder.getFile(suitename+".cpp");
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}
 	            	
+	            	if(cppFile!=null){// && fSelection.isSelected()){
+	            		//@see org.eclipse.cdt.core.tests/parser/org.eclipse.cdt.internal.index.tests.IndexBugsTests
+	            		fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
+	            		ICProject fCProject=fNewFileTU.getCProject();
+//	            		CCorePlugin.getIndexManager().reindex(fCProject);
+	            		IIndex index = CCorePlugin.getIndexManager().getIndex(fCProject);
+	            		String a=CCorePlugin.getIndexManager().getIndexerId(fCProject);
+	            		System.out.println(a);         		
+	            		try{
+	            			IProgressMonitor subMonitor = new SubProgressMonitor(monitor,1);
+	            			waitUntilFileIsIndexed(index, cppFile, 8000,subMonitor);
+	            			index.acquireReadLock();
+		            		try {
+		            			IProgressMonitor sub = new SubProgressMonitor(monitor,1);
+		    	            	
+			            		IIndexBinding[] bindings= index.findBindings("theX".toCharArray(),IndexFilter.ALL,sub);	
+			            		System.out.println("binding"+bindings.length);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}finally{
+								index.releaseReadLock();
+							}
+	            		}catch(InterruptedException ie){
+	            			ie.printStackTrace();
+	            		}catch(Exception e){
+	            			e.printStackTrace();
+	            		}
+	            		
+	            	}
 	            	/*
 	            	IFile cppFile=folder.getFile(suitename+".cpp");
 	            	if(cppFile!=null){// && fSelection.isSelected()){
@@ -116,6 +154,29 @@ after location translation unit
         }
 	}
 	
+	public static void waitUntilFileIsIndexed(IIndex index, IFile file, int maxmillis,IProgressMonitor p) throws Exception {
+		long endTime= System.currentTimeMillis() + maxmillis;
+		int timeLeft= maxmillis;
+		while (timeLeft >= 0) {
+//			Assert.assertTrue(CCorePlugin.getIndexManager().joinIndexer(timeLeft, new NullProgressMonitor()));
+			System.out.println("joinIndexer"+CCorePlugin.getIndexManager().joinIndexer(timeLeft, p));
+			index.acquireReadLock();
+			try {
+				IIndexFile pfile= index.getFile(IndexLocationFactory.getWorkspaceIFL(file));
+				if (pfile != null && pfile.getTimestamp() >= file.getLocalTimeStamp()) {
+					return;
+				}
+			}
+			finally {
+				index.releaseReadLock();
+			}
+			
+			Thread.sleep(50);
+			timeLeft= (int) (endTime-System.currentTimeMillis());
+		}
+//		Assert.fail("Indexing " + file.getFullPath() + " did not complete in time!");
+		System.out.println("Indexing " + file.getFullPath() + " did not complete in time!");
+	}
 	
 	
 	@Override
