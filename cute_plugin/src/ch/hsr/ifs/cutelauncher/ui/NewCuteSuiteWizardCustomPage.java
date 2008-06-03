@@ -45,6 +45,10 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 			errmsg="Please enter a suite name.";
 			return false;
 		}
+		if(!suitenameText.getText().matches("\\w+")){
+			errmsg="invalid suite name. Only alphanumeric and underscore.";
+			return false;
+		}
 		errmsg=null;
 		return true;
 	}
@@ -58,6 +62,9 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	private Text suitenameText=null;
 	
 	public void createControl(Composite parent) {
+		createControl(parent, true);
+	}
+	public void createControl(Composite parent,final boolean flag) {
 		composite = new Composite(parent, SWT.NULL);
 		
 		GridLayout layout = new GridLayout(3, true);
@@ -80,19 +87,24 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		suitenameText.setText("DefaultSuiteName");
 	    suitenameText.addModifyListener(new ModifyListener() {
 	    	public void modifyText(ModifyEvent e){
-			IWizardContainer iwc=getWizard().getContainer();
-			//have to call one by one as 
-			//org.eclipse.jface.wizard.Wizard.Dialog.update() is protected 
-			iwc.updateButtons();
-			iwc.updateMessage();
-			iwc.updateTitleBar();
-			iwc.updateWindowTitle();}
+	    	if(flag){	
+				IWizardContainer iwc=getWizard().getContainer();
+				//have to call one by one as 
+				//org.eclipse.jface.wizard.Wizard.Dialog.update() is protected 
+				iwc.updateButtons();
+				iwc.updateMessage();
+				iwc.updateTitleBar();
+				iwc.updateWindowTitle();}}
 		});	
 	}
-
+	
 	public String getSuiteName(){
-		if(suitenameText==null ||suitenameText.getText().equals(""))return "suite";
+		if(suitenameText==null ||suitenameText.getText().equals("")||!suitenameText.getText().matches("\\w+"))return "suite";
 		return suitenameText.getText();
+	}
+	//for unit testing
+	public void setSuiteName(String s){
+		suitenameText.setText(s);
 	}
 	public void dispose() {
 		composite.dispose();

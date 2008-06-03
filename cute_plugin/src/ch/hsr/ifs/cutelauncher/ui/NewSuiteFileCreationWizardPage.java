@@ -3,12 +3,9 @@ package ch.hsr.ifs.cutelauncher.ui;
 import org.eclipse.cdt.core.CConventions;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.index.IIndex;
-import org.eclipse.cdt.core.index.IIndexBinding;
 import org.eclipse.cdt.core.index.IIndexFile;
-import org.eclipse.cdt.core.index.IndexFilter;
 import org.eclipse.cdt.core.index.IndexLocationFactory;
 import org.eclipse.cdt.core.model.CoreModelUtil;
-import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.DialogField;
@@ -31,7 +28,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -92,6 +88,7 @@ public class NewSuiteFileCreationWizardPage extends
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}
 	            	
+	            	/*
 	            	if(cppFile!=null){// && fSelection.isSelected()){
 	            		//@see org.eclipse.cdt.core.tests/parser/org.eclipse.cdt.internal.index.tests.IndexBugsTests
 	            		fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
@@ -120,7 +117,7 @@ public class NewSuiteFileCreationWizardPage extends
 	            			e.printStackTrace();
 	            		}
 	            		
-	            	}
+	            	}*/
 	            	/*
 	            	IFile cppFile=folder.getFile(suitename+".cpp");
 	            	if(cppFile!=null){// && fSelection.isSelected()){
