@@ -12,7 +12,7 @@ import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cutelauncher.test.TestPlugin;
 
-class ReadTestCase{//TODO checking for null values
+public class ReadTestCase{//TODO checking for null values
 	public ArrayList<String> testname=new ArrayList<String>();
 	public ArrayList<Integer> cursorpos=new ArrayList<Integer>();
 	public ArrayList<String> test=new ArrayList<String>();
