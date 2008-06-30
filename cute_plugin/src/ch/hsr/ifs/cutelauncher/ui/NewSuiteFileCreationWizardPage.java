@@ -2,11 +2,13 @@ package ch.hsr.ifs.cutelauncher.ui;
 
 import org.eclipse.cdt.core.CConventions;
 import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.dom.ILinkage;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexFile;
 import org.eclipse.cdt.core.index.IndexLocationFactory;
 import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.corext.codemanipulation.StubUtility;
 import org.eclipse.cdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.DialogField;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.IDialogFieldListener;
@@ -14,7 +16,6 @@ import org.eclipse.cdt.internal.ui.wizards.dialogfields.LayoutUtil;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.SelectionButtonDialogField;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.StringDialogField;
 import org.eclipse.cdt.internal.ui.wizards.filewizard.AbstractFileCreationWizardPage;
-import org.eclipse.cdt.internal.ui.wizards.filewizard.NewFileWizardMessages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.text.templates.Template;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -39,6 +41,7 @@ public class NewSuiteFileCreationWizardPage extends
 	private final StringDialogField fNewFileDialogField;
 	private final SelectionButtonDialogField fSelection;
 	
+	@SuppressWarnings("restriction")
 	public NewSuiteFileCreationWizardPage(){
 		super("Custom Suite");
 		
@@ -57,6 +60,7 @@ public class NewSuiteFileCreationWizardPage extends
 		//generate list of runners
 		//prompt selection
 	}
+	@SuppressWarnings("restriction")
 	@Override
 	public void createFile(IProgressMonitor monitor) throws CoreException {
         IPath filePath = getFileFullPath();
@@ -159,7 +163,7 @@ after location translation unit
 			System.out.println("joinIndexer"+CCorePlugin.getIndexManager().joinIndexer(timeLeft, p));
 			index.acquireReadLock();
 			try {
-				IIndexFile pfile= index.getFile(IndexLocationFactory.getWorkspaceIFL(file));
+				IIndexFile pfile= index.getFile(ILinkage.CPP_LINKAGE_ID, IndexLocationFactory.getWorkspaceIFL(file));
 				if (pfile != null && pfile.getTimestamp() >= file.getLocalTimeStamp()) {
 					return;
 				}
@@ -176,6 +180,7 @@ after location translation unit
 	}
 	
 	
+	@SuppressWarnings("restriction")
 	@Override
 	protected void createFileControls(Composite parent, int nColumns) {
 		fNewFileDialogField.doFillIntoGrid(parent, nColumns);
@@ -192,6 +197,7 @@ after location translation unit
 		
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
 	protected IStatus fileNameChanged() {
 		StatusInfo status = new StatusInfo();
@@ -204,7 +210,7 @@ after location translation unit
 		
 		IPath sourceFolderPath = getSourceFolderFullPath();
 		if (sourceFolderPath == null || !sourceFolderPath.isPrefixOf(filePath)) {
-			status.setError(NewFileWizardMessages.getString("NewSourceFileCreationWizardPage.error.FileNotInSourceFolder")); //$NON-NLS-1$
+			status.setError("File must be inside source folder.");
 			return status;
 		}
 		
@@ -212,11 +218,11 @@ after location translation unit
 		IResource file = getWorkspaceRoot().findMember(filePath);
 		if (file != null && file.exists()) {
 	    	if (file.getType() == IResource.FILE) {
-	    		status.setError(NewFileWizardMessages.getString("NewSourceFileCreationWizardPage.error.FileExists")); //$NON-NLS-1$
+	    		status.setError("File already exists.");
 	    	} else if (file.getType() == IResource.FOLDER) {
-	    		status.setError(NewFileWizardMessages.getString("NewSourceFileCreationWizardPage.error.MatchingFolderExists")); //$NON-NLS-1$
+	    		status.setError("A folder with the same name already exists.");
 	    	} else {
-	    		status.setError(NewFileWizardMessages.getString("NewSourceFileCreationWizardPage.error.MatchingResourceExists")); //$NON-NLS-1$
+	    		status.setError("A resource with the same name already exists.");
 	    	}
 			return status;
 		}
@@ -225,13 +231,13 @@ after location translation unit
 		IPath folderPath = filePath.removeLastSegments(1).makeRelative();
 		IResource folder = getWorkspaceRoot().findMember(folderPath);
 		if (folder == null || !folder.exists() || (folder.getType() != IResource.PROJECT && folder.getType() != IResource.FOLDER)) {
-		    status.setError(NewFileWizardMessages.getFormattedString("NewSourceFileCreationWizardPage.error.FolderDoesNotExist", folderPath)); //$NON-NLS-1$
+		    status.setError("Folder " + folderPath + " does not exist." );
 			return status;
 		}
 
 		IStatus convStatus = CConventions.validateSourceFileName(getCurrentProject(), filePath.lastSegment());
 		if (convStatus.getSeverity() == IStatus.ERROR) {
-			status.setError(NewFileWizardMessages.getFormattedString("NewSourceFileCreationWizardPage.error.InvalidFileName", convStatus.getMessage())); //$NON-NLS-1$
+			status.setError("File name is not valid " + convStatus.getMessage() + ".");
 			return status;
 		} /*else if (convStatus.getSeverity() == IStatus.WARNING) {
 			status.setWarning(NewFileWizardMessages.getFormattedString("NewSourceFileCreationWizardPage.warning.FileNameDiscouraged", convStatus.getMessage())); //$NON-NLS-1$
@@ -248,6 +254,7 @@ after location translation unit
 		return fNewFileTU; //used to create an editor window to show to the user
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
 	public IPath getFileFullPath() {
 		String str = fNewFileDialogField.getText();
@@ -263,9 +270,16 @@ after location translation unit
 	    return path;
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
 	protected void setFocus() {
 		fNewFileDialogField.setFocus();
+	}
+	@SuppressWarnings("restriction")
+	@Override
+	protected Template[] getApplicableTemplates() {
+		return StubUtility.getFileTemplatesForContentTypes(
+				new String[] { CCorePlugin.CONTENT_TYPE_CXXHEADER, CCorePlugin.CONTENT_TYPE_CHEADER, CCorePlugin.CONTENT_TYPE_CXXSOURCE }, null);
 	}
 
 }

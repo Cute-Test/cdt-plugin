@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import junit.framework.TestSuite;
 
 import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.dom.ILinkage;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.index.IIndex;
@@ -66,7 +67,8 @@ public class ExperimentCIndexer extends IndexerBaseTestFramework{
 		return ts;
 	}
 
-	/** @see org.eclipse.cdt.core.testplugin.util.TestSourceReader
+	/** 
+	 * @see org.eclipse.cdt.core.testplugin.util.TestSourceReader
 	 * Waits until the given file is indexed. Fails if this does not happen within the
 	 * given time. 
 	 * @param file
@@ -81,7 +83,7 @@ public class ExperimentCIndexer extends IndexerBaseTestFramework{
 			Assert.assertTrue(CCorePlugin.getIndexManager().joinIndexer(timeLeft, new NullProgressMonitor()));
 			index.acquireReadLock();
 			try {
-				IIndexFile pfile= index.getFile(IndexLocationFactory.getWorkspaceIFL(file));
+				IIndexFile pfile= index.getFile(ILinkage.CPP_LINKAGE_ID, IndexLocationFactory.getWorkspaceIFL(file));
 				if (pfile != null && pfile.getTimestamp() >= file.getLocalTimeStamp()) {
 					return;
 				}

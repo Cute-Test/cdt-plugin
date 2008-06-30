@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisiblityLabel;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 
 public class ASTHelper {
 	public static String getClassStructName(IASTSimpleDeclaration simpleDeclaration){
@@ -158,8 +158,8 @@ public class ASTHelper {
 			
 			IASTDeclaration members[]=cts.getMembers();
 			for(int i=0;i<members.length;i++){
-				if(members[i] instanceof ICPPASTVisiblityLabel){
-					ispublicVisibility=changeVisibilityMode((ICPPASTVisiblityLabel)members[i]);
+				if(members[i] instanceof ICPPASTVisibilityLabel){
+					ispublicVisibility=changeVisibilityMode((ICPPASTVisibilityLabel)members[i]);
 					continue;
 				}
 				
@@ -186,9 +186,9 @@ public class ASTHelper {
 		}
 		return result;
 	}
-	private static boolean changeVisibilityMode(ICPPASTVisiblityLabel node){
+	private static boolean changeVisibilityMode(ICPPASTVisibilityLabel node){
 		int visbility=node.getVisibility();
-		if(visbility==ICPPASTVisiblityLabel.v_public)return true;
+		if(visbility==ICPPASTVisibilityLabel.v_public)return true;
 		//assume v_private v_protected
 		return false;
 	}

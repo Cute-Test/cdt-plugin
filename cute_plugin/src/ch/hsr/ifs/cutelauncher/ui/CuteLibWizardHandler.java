@@ -187,7 +187,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 
 	//bugzilla #210116:on CDT spelling error
 	@Override
-	public boolean canFinich() {
+	public boolean canFinish() {
 		if(libRefPage ==null)return false;
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		if(projects.size()<1)return false;

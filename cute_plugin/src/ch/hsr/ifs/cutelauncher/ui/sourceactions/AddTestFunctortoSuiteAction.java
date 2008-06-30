@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisiblityLabel;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -86,7 +86,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 	
 	protected String nameAtCursor(ArrayList<IASTName> operatorParenthesesNode,IASTNode node,MessageConsoleStream stream ){
 		if(node instanceof IASTDeclaration){
-			if(node instanceof ICPPASTVisiblityLabel){
+			if(node instanceof ICPPASTVisibilityLabel){
 				//public: private: protected: for class
 				node=node.getParent().getParent();
 				//FIXME operator() is private,protected in a class/struct??
