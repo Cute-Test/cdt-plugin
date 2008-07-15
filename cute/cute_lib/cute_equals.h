@@ -1,3 +1,23 @@
+/*********************************************************************************
+ * This file is part of CUTE.
+ *
+ * CUTE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CUTE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2007 Peter Sommerlad
+ *
+ *********************************************************************************/
+
 #ifndef CUTE_EQUALS_H_
 #define CUTE_EQUALS_H_
 
@@ -22,7 +42,7 @@ namespace cute {
 			}
 		}
 		return result;
-				
+
 	}
 	template <typename ExpectedValue, typename ActualValue>
 	std::string diff_values(ExpectedValue const &expected
@@ -45,7 +65,7 @@ namespace cute {
 				,char const *msg
 				,char const *file
 				,int line) {
-					// should get rid of signed-unsigned warning below... 
+					// should get rid of signed-unsigned warning below...
 					// but this requires trickery or more overloading
 		if (expected == actual) return;
 		throw test_failure(cute::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);

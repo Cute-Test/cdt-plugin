@@ -1,3 +1,23 @@
+/*********************************************************************************
+ * This file is part of CUTE.
+ *
+ * CUTE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CUTE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2007 Peter Sommerlad
+ *
+ *********************************************************************************/
+
 #ifndef CUTE_EXPECT_H_
 #define CUTE_EXPECT_H_
 #include "cute_base.h"
@@ -18,7 +38,7 @@ namespace cute{
 			}
 		}
 		std::string what() const{
-			return theTest.name() + " expecting " 
+			return theTest.name() + " expecting "
 			       + test::demangle(typeid(ExpectedException).name());
 		}
 	};
@@ -31,7 +51,7 @@ namespace cute{
 			(code) ; \
 			FAILM(#msg); \
 		} catch(exc &e){} \
-	} while(0) 
+	} while(0)
 #define ASSERT_THROWS(code,exc) ASSERT_THROWSM(" expecting " #code " to throw " #exc,code,exc)
 
 #endif /*CUTE_EXPECT_H_*/
