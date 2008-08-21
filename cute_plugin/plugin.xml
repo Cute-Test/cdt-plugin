@@ -237,19 +237,19 @@
     </command>
     <command
           categoryId="org.eclipse.cdt.ui.category.source"
-          description="Add existing test member to current Suite"
+          description="%addMemberToSuitDesc"
           id="ch.hsr.ifs.cutelauncher.addTestMemberCommand"
           name="Add Test Member to Suite">
     </command>
     <command
           categoryId="org.eclipse.cdt.ui.category.source"
-          description="Add existing functor to current Suite"
+          description="%addFtorToSuiteDesc"
           id="ch.hsr.ifs.cutelauncher.addTestFunctorCommand"
           name="Add Test Functor to Suite">
     </command>
     <command
           categoryId="org.eclipse.cdt.ui.category.source"
-          description="Add existing function to current Suite"
+          description="%addFuncToSuiteDesc"
           id="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
           name="Add Test Function to Suite">
     </command>
@@ -279,6 +279,30 @@
              id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
              label="New Test Function">
           
+       </action>
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctiontoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
+             id="ch.hsr.ifs.cutelauncher.addFunctionToSuiteAction"
+             label="Add Test Function to Suite"
+             style="push"
+             tooltip="%addFuncToSuiteDesc">
+       </action>
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctortoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestFunctorCommand"
+             id="ch.hsr.ifs.cutelauncher.addFunctorToSuiteAction"
+             label="Add Test Functor to Suite"
+             style="push"
+             tooltip="%addFtorToSuiteDesc">
+       </action>
+       <action
+             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestMembertoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestMemberCommand"
+             id="ch.hsr.ifs.cutelauncher.addMemberToSuiteAction"
+             label="Add Test Member to Suite"
+             style="push"
+             tooltip="%addMemberToSuitDesc">
        </action>
     </actionSet>
  </extension>
