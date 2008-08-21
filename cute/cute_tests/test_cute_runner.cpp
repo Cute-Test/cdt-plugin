@@ -1,3 +1,23 @@
+/*********************************************************************************
+ * This file is part of CUTE.
+ *
+ * CUTE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CUTE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2006 Peter Sommerlad
+ *
+ *********************************************************************************/
+
 #include "cute_runner.h"
 #include "cute_listener.h"
 #include "cute_suite.h"
@@ -52,7 +72,7 @@ void test_cute_runner(){
 	s += CUTE(test_error_string);
 	s += CUTE(test_error_exception);
 	bool result=run(s,"test_cute_runner_suite");
-	ASSERT(!result); 
+	ASSERT(!result);
 	ASSERT_EQUAL(2,run.begincount);
 	ASSERT_EQUAL(2,run.endcount);
 	ASSERT_EQUAL(2,run.successcount);
@@ -69,5 +89,5 @@ void test_cute_runner(){
 	ASSERT_EQUAL(errmsgexpected,errormsg2.substr(errormsg2.size()-errmsgexpected.size()));
 	ASSERT_EQUAL(2u,run.successmessages.size());
 	ASSERT_EQUAL("OK",run.successmessages[0]);
-	
+
 }

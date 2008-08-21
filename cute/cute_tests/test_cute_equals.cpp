@@ -1,3 +1,23 @@
+/*********************************************************************************
+ * This file is part of CUTE.
+ *
+ * CUTE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CUTE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2007 Peter Sommerlad
+ *
+ *********************************************************************************/
+
 #include "test_cute_equals.h"
 #include "cute_base.h"
 #include "cute_equals.h"
@@ -72,7 +92,7 @@ void test_backslashQuoteTabNewline(){
 } // namespace
 cute::suite test_cute_equals(){
 	cute::suite s;
-	s += CUTE(test_backslashQuoteTabNewline); 
+	s += CUTE(test_backslashQuoteTabNewline);
 	s += CUTE(test_equals_OK);
 	s += CUTE(test_equals_int_fails);
 	s += CUTE(test_assertEqualsDelta);

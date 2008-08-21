@@ -1,3 +1,23 @@
+/*********************************************************************************
+ * This file is part of CUTE.
+ *
+ * CUTE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CUTE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2006 Peter Sommerlad
+ *
+ *********************************************************************************/
+
 #include "test_cute_testmember.h"
 #include "cute_testmember.h"
 #include "cute_equals.h"
@@ -8,24 +28,24 @@ struct TestClass{
 	int i;
 	TestClass():i(1){}
 	TestClass(int j):i(j){} // for incarnation
-	void test1(){ 
+	void test1(){
 		++callcounter;
 		ASSERT_EQUAL(1,i++);
 	}
-	void test2() const {  
+	void test2() const {
 		++callcounter;
 		ASSERT(true);
 	}
-	void test3() {  
+	void test3() {
 		++callcounter;
 		ASSERT_EQUAL(2,i++);
 		++i;
 	}
-	void test_incarnate(){ 
+	void test_incarnate(){
 		++callcounter;
 		ASSERT_EQUAL(42,i++);
 	}
-	void test_incarnate_const() const { 
+	void test_incarnate_const() const {
 		++callcounter;
 		ASSERT_EQUAL(43,i);
 	}
@@ -69,7 +89,7 @@ void test_members_incarnate(){
 cute::suite test_cute_testmember(){
 	cute::suite s;
 	s += CUTE(test_members_simple);
-	s += CUTE(test_members_object);	
-	s += CUTE(test_members_incarnate);	
+	s += CUTE(test_members_object);
+	s += CUTE(test_members_incarnate);
 	return s;
 }

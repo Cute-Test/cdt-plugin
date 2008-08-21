@@ -1,3 +1,23 @@
+/*********************************************************************************
+ * This file is part of CUTE.
+ *
+ * CUTE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CUTE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2008 Peter Sommerlad
+ *
+ *********************************************************************************/
+
 #include "cute.h"
 #include "cute_runner.h"
 #include "cute_counting_listener.h"
@@ -16,7 +36,7 @@
 #include "test_cute.h"
 
 using namespace cute;
-// some brain dead test cases to find out my bug using function 
+// some brain dead test cases to find out my bug using function
 // names without & as function pointers
 static int simpleTestfunctionCalled=0;
 void simpleTestFunction(){
@@ -84,7 +104,7 @@ int main(){
 	s += CUTE_INCARNATE(to_incarnate_without);
 	s += CUTE_INCARNATE_WITH_CONTEXT(to_incarnate,boost::ref(std::cout));
 	s += CUTE_CONTEXT_MEMFUN(boost::ref(std::cerr),to_incarnate,operator());
-	
+
 	runner<counting_listener<ide_listener> > run;
 	run(s);
 
