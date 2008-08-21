@@ -30,4 +30,5 @@
 #include "cute_test_incarnate.h"
 #include "cute_test.h"
 #include "cute_testmember.h"
+#include "cute_version.h"
 #endif /*CUTE_H_*/
