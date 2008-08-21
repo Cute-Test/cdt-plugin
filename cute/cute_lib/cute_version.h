@@ -17,5 +17,9 @@
  * Copyright 2008 Emanuel Graf
  *
  *********************************************************************************/
- 
-#define CUTE_VERSION "1.0.0"
+#ifndef CUTE_VERSION_H_
+#define CUTE_VERSION_H_
+
+#define CUTE_LIB_VERSION "1.0.0"
+
+#endif /*CUTE_VERSION_H_*/
