@@ -451,7 +451,6 @@ class RunnableWithProgressToScanForExecutableImpl implements IRunnableWithProgre
 		for (int j = 0; j < bins.length; j++) {
 			if (bins[j].isExecutable()) {
 				results.add(bins[j]);
-				System.out.println("CuteLaunchShortcut>bin results:"+bins[j]);
 			}
 		}						
 	}
