@@ -103,11 +103,6 @@ public class MemoryEFS extends TestCase {
 			fail("project not exist.");
 		}
 		
-//		final IPath containerPath = project.getFullPath();
-//		IPath newFilePath = containerPath.append("B.cpp");
-//		final IFile newFileHandle = createFileHandle(newFilePath);
-//		final InputStream initialContents =null;
-		
 		IFile file = project.getProject().getFile("B.cpp");
 		InputStream stream = new ByteArrayInputStream("Hello World".getBytes() );
 		if( file.exists() )
@@ -139,11 +134,6 @@ public class MemoryEFS extends TestCase {
 		
 	}
 
-	// copy&paste org.eclipse.ui.dialogs.WizardNewFileCreationPage
-//	IFile createFileHandle(IPath filePath) {
-//		return IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getFile(
-//				filePath);
-//	}
 	
 	
 	public static Test suite(){

@@ -25,7 +25,7 @@ public class AllTests {
 		}else{//requires UI
 			suite.addTest(HyperlinkSuite.suite());
 			suite.addTest(CuteSuiteWizardHandlerTest.suite());
-			suite.addTest(SourceActionsTest.suite());//write to hdd, may reduce life of hdd
+			suite.addTest(SourceActionsTest.suite());
 		}
 		//$JUnit-END$
 		return suite;

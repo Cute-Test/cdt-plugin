@@ -176,14 +176,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 		return operatorMatchFlag;
 	}
 
-	/*if(node instanceof ICPPASTTemplateDeclaration){
-	//template <class TClass> 
-	//shouldnt happen as requires the template to be initialised
-	stream.println("template class declarations selected, unable to add as functor.");
-	//IASTName i=((IASTCompositeTypeSpecifier)(((IASTSimpleDeclaration)((ICPPASTTemplateDeclaration)node).getDeclaration()).getDeclSpecifier())).getName();
-	//return i.toString();
-	return "";
-}*/
+
 	private boolean isTemplateClass(IASTNode checkforTemplate) {
 		while(!(checkforTemplate instanceof ICPPASTTranslationUnit)){
 			if(checkforTemplate instanceof ICPPASTTemplateDeclaration){

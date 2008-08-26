@@ -456,22 +456,3 @@ class RunnableWithProgressToScanForExecutableImpl implements IRunnableWithProgre
 	}
 	
 }
-
-//code snip for getting variables from workingconfig 
-//Map m=null;
-//try {
-//	m = wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map) null);
-//	//ILaunchManager.getNativeEnvironment()
-//} catch (CoreException e) {
-//	//DebugUIPlugin.log(new Status(IStatus.ERROR, DebugUIPlugin.getUniqueIdentifier(), IStatus.ERROR, "Error reading configuration", e)); //$NON-NLS-1$
-//	CuteLauncherPlugin.log(e);
-//}
-//if (m != null && !m.isEmpty()) {
-//	elements = new EnvironmentVariable[m.size()];
-//	String[] varNames = new String[m.size()];
-//	m.keySet().toArray(varNames);
-//	for (int i = 0; i < m.size(); i++) {
-//		elements[i] = new EnvironmentVariable(varNames[i], (String) m.get(varNames[i]));
-//	}
-//	
-//}

@@ -83,10 +83,6 @@ public class TestAddMemberTree extends BaseTestFramework {
 			AddTestMembertoSuiteAction atms=new AddTestMembertoSuiteAction();
 			atms.setUnitTestingMode(null);
 			
-			/*final Field fields[] =AddTestMembertoSuiteAction.class.getDeclaredFields();
-			for (int i = 0; i < fields.length; i++) {
-			      System.out.println("Field: " + fields[i]);
-			}*/
 			
 			final Method[] methods = AddTestMembertoSuiteAction.class.getDeclaredMethods();
 		    for (int i = 0; i < methods.length; ++i) {
@@ -175,23 +171,3 @@ public class TestAddMemberTree extends BaseTestFramework {
 		return addMemberTS;
 	}
 }
-
-/*public final void testTree(){
-final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
-try{
-	IFile fileToBeOpened = null;
-	IEditorInput editorInput = new myEditorInput();
-	IWorkbenchWindow window=PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-	IWorkbenchPage page = window.getActivePage();
-	page.openEditor(editorInput, "org.eclipse.ui.DefaultTextEdtior"); 
-	
-	
-	
-}catch(Exception e){e.printStackTrace();fail("testTree\n"+e.getMessage());}
-}
-class myEditorInput implements IStorageEditorInput{
-public IStorage getStorage() throws CoreException{
-	return null;
-}
-
-}*/
