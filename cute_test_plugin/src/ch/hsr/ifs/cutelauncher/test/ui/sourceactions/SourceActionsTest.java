@@ -7,7 +7,7 @@ public class SourceActionsTest {
 	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
 
-		ts.addTest(MemoryEFS.suite());
+//		ts.addTest(MemoryEFS.suite());
 		
 		boolean speedupMode=false;
 		ts.addTest(TestNewFunction.suite(speedupMode));

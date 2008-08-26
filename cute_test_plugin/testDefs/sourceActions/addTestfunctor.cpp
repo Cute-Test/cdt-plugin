@@ -856,7 +856,7 @@ void runSuite(){
 	cute::makeRunner(lis)(s, "The Suite");
 }
 //expected 
-class testCase4{//^ no constructor shown
+class testCase4{// no constructor shown
 	int value;
 	public:
 		testCase4(int x):value(x){}

@@ -33,7 +33,8 @@ public class NewTestFunctionActionDelegateTest extends TestCase {
 		
 		int result=NewTestFunctionActionDelegate.testOnlyGetCursorEndPosition(edits,newLine,72,38,328);
 				
-		assertEquals(98,result);
+		int expected = 96 + newLine.length();
+		assertEquals(expected,result);
 	}
 
 	public final void testGetCursorEndPosition_afterPushback() {
