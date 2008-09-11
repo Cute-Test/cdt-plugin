@@ -70,7 +70,7 @@
           target: checkoutReleng                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="checkoutReleng" depends="clean">
-		<cvs cvsroot="cruisecontrol@wiki.ita.hsr.ch:/home/cvs" command="co cute_releng" reallyquiet="true" />
+		<cvs cvsroot="cruisecontrol@wiki.ifs.hsr.ch:/home/cvs" command="co cute_releng" reallyquiet="true" />
 	</target>
 
 

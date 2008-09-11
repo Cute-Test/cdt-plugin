@@ -1,10 +1,10 @@
 ! Cute Feature
 
-plugin@ch.hsr.ifs.cutelauncher=@cuteTag@,:extssh:cruisecontrol@wiki.ita.hsr.ch:/home/cvs,kaw4epru,cute_plugin
-feature@ch.hsr.ifs.cute=@cuteTag@,:extssh:cruisecontrol@wiki.ita.hsr.ch:/home/cvs,kaw4epru,cute_feature
+plugin@ch.hsr.ifs.cutelauncher=@cuteTag@,:extssh:cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_plugin
+feature@ch.hsr.ifs.cute=@cuteTag@,:extssh:cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_feature
 
 ! Test Feature
-plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,:extssh:cruisecontrol@wiki.ita.hsr.ch:/home/cvs,kaw4epru,cute_test_plugin
+plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,:extssh:cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_test_plugin
 fragment@org.eclipse.ant.optional.junit=R3_2_2,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
-feature@ch.hsr.ifs.cute.test=@cuteTag@,:extssh:cruisecontrol@wiki.ita.hsr.ch:/home/cvs,kaw4epru,cute_test_feature
+feature@ch.hsr.ifs.cute.test=@cuteTag@,:extssh:cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_test_feature
 
