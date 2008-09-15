@@ -1,7 +1,7 @@
 ! Cute Feature
 
-plugin@ch.hsr.ifs.cutelauncher=@cuteTag@,:extssh:cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_plugin
-feature@ch.hsr.ifs.cute=@cuteTag@,:extssh:cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_feature
+plugin@ch.hsr.ifs.cutelauncher=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_plugin
+feature@ch.hsr.ifs.cute=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_feature
 
 ! Test Feature
 plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,:extssh:cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,cruisecontrol,cute_test_plugin

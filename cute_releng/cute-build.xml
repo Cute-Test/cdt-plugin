@@ -10,7 +10,7 @@
          - - - - - - - - - - - - - - - - - -->
 	<target name="checkoutBaseBuilder" unless="builder.available">
 		<mkdir dir="cute_releng/tools" />
-		<cvs cvsroot=":pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="R3_2_1" dest="cute_releng/tools" />
+		<cvs cvsroot=":pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="RC2_34" dest="cute_releng/tools" />
 	</target>
 	
 	<!-- - - - - - - - - - - - - - - - - - 
@@ -23,12 +23,12 @@
 
 
 	<target name="build" depends="clean, init, checkoutReleng">
-		<available file="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/startup.jar" property="builder.available"/>
+		<available file="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/plugins/org.eclipse.equinox.launcher.jar" property="builder.available"/>
 		<antcall target="checkoutBaseBuilder"/>
 
-		<java jar="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/startup.jar" fork="true" 
+		<java jar="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/plugins/org.eclipse.equinox.launcher.jar" fork="true" 
 			failonerror="true" dir="${basedir}/cute_releng" resultproperty="error">
-			<arg line="-ws gtk -application org.eclipse.ant.core.antRunner" />
+			<arg line="-ws gtk -os linux -application org.eclipse.ant.core.antRunner" />
 		</java>
 
 		<copy todir="cute_releng/results/dist" 
