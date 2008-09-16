@@ -19,13 +19,14 @@ public class AllTests {
 		suite.addTest(ModelBuilderSuite.suite());
 		suite.addTest(SourceLookupPathTest.suite());
 		suite.addTest(HyperlinkSuite.suite());
+		suite.addTest(CuteSuiteWizardHandlerTest.suite());
 		
 		Bundle b = org.eclipse.core.runtime.Platform.getBundle("org.eclipse.ui");
 		if ((b==null) || (b.getState() != Bundle.ACTIVE) || (! org.eclipse.ui.PlatformUI.isWorkbenchRunning())) {
 			//headless mode
 		}else{//requires UI
 			
-			suite.addTest(CuteSuiteWizardHandlerTest.suite());
+			
 			suite.addTest(SourceActionsTest.suite());
 		}
 		//$JUnit-END$
