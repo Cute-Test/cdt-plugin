@@ -7,7 +7,6 @@
 	<target name="build" depends="hi,zips,test"/>
 	
 	<target name="init">
-		<!-- <touch file="${user.home}/.cvspass" /> -->
 		<tstamp/>
 		<property name="branchVersion" value="1.6.0"/>
 		<property name="testVersion" value="1.6.0"/>
@@ -54,15 +53,6 @@
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/feature" />
 		</ant>
-		<concat destfile="${zipsdir}/compilelog.txt">
-			<fileset dir="${buildDirectory}/plugins" includes="**/*.bin.log"/>
-		</concat>
-		<!--
-		<loadfile property="compileLog" srcFile="${zipsdir}/compilelog.txt" failonerror=""/>
-		<condition property="hasErrors">
-			<contains string="${compileLog}" substring=" ERROR"/>
-		</condition>
-		-->
 		<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>
 		<replace file="${zipsdir}/index.html">
 			<replacefilter token="@branchVersion@" value="${branchVersion}"/>
@@ -102,7 +92,5 @@
 			out="${zipsdir}/junits.html"/>
 		
 	</target>
-	
-	
 	
 </project>
