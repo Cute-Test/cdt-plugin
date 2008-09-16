@@ -52,7 +52,7 @@ public class HyperlinkTest extends ConsoleTest {
 			Vector<TestHyperlinks> links = linkConsole.getLinks();
 			assertEquals(1, links.size());
 			TestHyperlinks link = links.firstElement();
-			assertEquals(137, link.getOffset());
+			assertEquals(138, link.getOffset());
 			assertEquals(76, link.getLength());
 		}
 		
