@@ -23,7 +23,13 @@
 		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
 			<property name="data-dir" value="${cute-loc}"/>
 			<property name="plugin-name" value="ch.hsr.ifs.cutelauncher.test"/>
-			<property name="classname" value="ch.hsr.ifs.cutelauncher.test.AllTests"/>
+			<property name="classname" value="ch.hsr.ifs.cutelauncher.test.AllCoreTests"/>
+			<property name="failOnProblem" value="true"/>
+		</ant>
+		<ant target="ui-test" antfile="${library-file}" dir="${eclipse-home}">
+			<property name="data-dir" value="${cute-loc}"/>
+			<property name="plugin-name" value="ch.hsr.ifs.cutelauncher.test"/>
+			<property name="classname" value="ch.hsr.ifs.cutelauncher.test.AllUiTests"/>
 			<property name="failOnProblem" value="true"/>
 		</ant>
 	</target>
