@@ -56,8 +56,8 @@
 			<available file="${basedir}/cute_releng/results/eclipse/ch.hsr.ifs.cutelauncher.test.AllUiTests.xml" />
 		</condition>
 
-		<echo message="expected = ${testsuites.testsuite(errors)}" />
-		<echo message="is = ${testsuites.testsuite(errors)}" />
+		<echo level="info" message="expected = ${testsuites.testsuite(errors)}" />
+		<echo level="info" message="is = ${testsuites.testsuite(errors)}" />
 
 		<condition property="testsFailed">
 			<not>
