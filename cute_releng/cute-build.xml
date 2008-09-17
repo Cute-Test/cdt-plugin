@@ -2,7 +2,7 @@
 <project name="build-cute"
         default="build"
         basedir="cute">
-	
+
 	<property name="features.dir" value="cute_releng/results/dist/updateSite/features"/>
 	<property name="plugins.dir" value="cute_releng/results/dist/updateSite/plugins"/>
 	<!-- - - - - - - - - - - - - - - - - - 
@@ -12,14 +12,14 @@
 		<mkdir dir="cute_releng/tools" />
 		<cvs cvsroot=":pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="RC2_34" dest="cute_releng/tools" />
 	</target>
-	
+
 	<!-- - - - - - - - - - - - - - - - - - 
           target: init                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="init">
-        <mkdir dir="${features.dir}"/>
+	<target name="init">
+		<mkdir dir="${features.dir}"/>
 		<mkdir dir="${plugins.dir}"/>
-    </target>
+	</target>
 
 
 	<target name="build" depends="clean, init, checkoutReleng">
@@ -50,20 +50,21 @@
 				<include name="I*/updateSite/plugins/*.jar" />
 			</fileset>
 		</copy>
-		<property file="${basedir}/cute_releng/results/buildResults.props" />
-		<condition property="failedTest">
-			<not>
-				<equals arg1="true" arg2="${ch.hsr.ifs.cutelauncher.test}"/>
-			</not>
-		</condition>
-		<fail if="failedTest" message="Test failed"/>
+		<xmlproperty file="${basedir}/cute_releng/results/eclipse/ch.hsr.ifs.cute.test.xml" />
 
-		<condition property="failedBuild">
+		<condition property="expected" value="0,0" else="0">
+			<available file="${basedir}/cute_releng/results/eclipse/ch.hsr.ifs.cutelauncher.test.AllUiTests.xml" />
+		</condition>
+
+		<echo message="expected = ${testsuites.testsuite(errors)}" />
+		<echo message="is = ${testsuites.testsuite(errors)}" />
+
+		<condition property="testsFailed">
 			<not>
-				<equals arg1="0" arg2="${error}"/>
+				<equals arg1="${expected}" arg2="${testsuites.testsuite(errors)}" />
 			</not>
 		</condition>
-		<fail if="failedBuild" message="Build failed"/>
+		<fail if="testsFailed" message="Tests failed" />
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
