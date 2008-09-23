@@ -35,6 +35,7 @@
 			<os family="windows"/>
 		</condition>
 		<mkdir dir="${buildDirectory}"/>
+		<mkdir dir="${testReports}"/>
 	</target>
 	
 	<target name="fetch" depends="init">
