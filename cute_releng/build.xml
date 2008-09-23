@@ -29,6 +29,7 @@
 		<property name="baseos" value="${osgi.os}"/>
 		<property name="basews" value="${osgi.ws}"/>
 		<property name="basearch" value="${osgi.arch}"/>
+		<property name="testReports" value="${zipsdir}/testReports"/>
 		<property name="tagname" value="v${timestamp}"/>
 		<condition property="onWindows">
 			<os family="windows"/>
@@ -75,6 +76,8 @@
 	</target>
 	
 	<target name="test" depends="init" unless="hasErrors">
+		
+		<record name="${testReports}/testsLog.txt" action="start" loglevel="verbose"/>
 	    <ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
@@ -90,6 +93,7 @@
 		<xslt style="${basedir}/JUNIT.XSL"
 			in="${buildDirectory}/eclipse/ch.hsr.ifs.cute.test.xml"
 			out="${zipsdir}/junits.html"/>
+		<record name="${testReports}/testsLog.txt" action="stop"/>
 		
 	</target>
 	
