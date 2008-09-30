@@ -75,7 +75,7 @@ public class PatternListenerSessionStartEndTest extends ConsoleTest {
 	}
 
 	public void testSessionStart() {
-		assertTrue("No session Start", !sessionStarted);
+		assertTrue("No session Start", sessionStarted);
 	}
 	
 	public void testSessionEnd() {
