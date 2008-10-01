@@ -53,7 +53,7 @@ public abstract class AbstractFunctionAction {
 		StringBuilder builder = new StringBuilder();
 		builder.append(newLine+"\t");
 		builder.append(suite.toString());
-		builder.append(".push_back2(");
+		builder.append(".push_back(");
 		builder.append(insidePushback);
 		builder.append(");");
 		return builder.toString();
