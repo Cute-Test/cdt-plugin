@@ -218,13 +218,6 @@
                 name="addTestGroup">
           </groupMarker>
        </menu>
-       <!--<action
-             class="ch.hsr.ifs.cutelauncher.ui.sourceactions.Trigger"
-             id="ch.hsr.ifs.cutelauncher.TriggerTest"
-             label="TriggerTest(Development use)"
-             menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
-       </action> -->
-
     </viewerContribution>
  </extension>
  <extension
