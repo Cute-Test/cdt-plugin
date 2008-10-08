@@ -22,13 +22,6 @@ public class NewSuiteFileGenerator {
 			e.printStackTrace();
 		}
 	}
-
-	public void parse(){
-		TemplateVisitor tv=new TemplateVisitor();
-		tu.accept(tv);	
-		ArrayList al=tv.al;
-		System.out.println();
-	}
 	
 	//return the CDT representation of the file under modification 
 	protected IASTTranslationUnit getASTTranslationUnit(IFile editorFile)
@@ -45,7 +38,7 @@ class TemplateVisitor extends ASTVisitor{
 	{
 		shouldVisitNames =true;
 	}
-	public ArrayList al=new java.util.ArrayList();
+	public ArrayList<IASTName> al=new java.util.ArrayList<IASTName>();
 	
 	@Override
 	public int visit(IASTName name) {

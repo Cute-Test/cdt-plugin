@@ -258,7 +258,6 @@ class myTree extends TreeNodeContentProvider{
 	
  	public myTree(	ArrayList<IASTSimpleDeclaration> classStruct, 
 					ArrayList<IASTSimpleDeclaration> classStructInstances){
-		MessageConsoleStream stream=EclipseConsole.getConsole();
 		for(IASTSimpleDeclaration i:classStruct){
 			//stream.println("class:"+ASTHelper.getClassStructName((i))+"");
 			ArrayList<IASTDeclaration> publicMethods=ASTHelper.getPublicMethods(i);

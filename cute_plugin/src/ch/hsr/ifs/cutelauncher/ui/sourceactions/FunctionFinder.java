@@ -26,7 +26,6 @@ public class FunctionFinder extends ASTVisitor {
 		al.add(declaration);
 		return super.leave(declaration);		
 	}
-	public ArrayList getAL(){return al;}
 	
 	public ArrayList<IASTSimpleDeclaration> getSimpleDeclaration(){
 		if(!parseForSimpleDeclaration){
