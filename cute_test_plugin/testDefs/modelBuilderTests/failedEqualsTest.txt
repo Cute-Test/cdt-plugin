@@ -1,3 +1,0 @@
-Session{Testcase(test1, failure, null, 6, Result(Hallo expected: 42 but was: 43, 42, 43))}
-#starting test1
-#failure test1 ../src/Test.cpp:6 Hallo expected:	42	but was:	43	

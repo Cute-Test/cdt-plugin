@@ -18,7 +18,8 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
 
 public class TestProblemMarkers extends Test1Skeleton {
-	static ReadTestCase rtc=new ReadTestCase("testDefs/sourceActions/ProblemMarkers.cpp");
+	private static final String TEST_DEFS = "testDefs/cute/sourceActions/ProblemMarkers.cpp";
+	static ReadTestCase rtc=new ReadTestCase(TEST_DEFS);
 
 	public TestProblemMarkers(String name) {
 		super(name);

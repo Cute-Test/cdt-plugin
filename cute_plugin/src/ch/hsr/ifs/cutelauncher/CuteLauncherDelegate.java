@@ -11,8 +11,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher;
 
-import gtest.eclipse.plugin.GTestConsoleEventParser;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +40,7 @@ import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cutelauncher.event.ConsoleEventParser;
+import ch.hsr.ifs.cutelauncher.event.CuteConsoleEventParser;
 import ch.hsr.ifs.cutelauncher.model.ModellBuilder;
 import ch.hsr.ifs.cutelauncher.ui.CustomisedLaunchConfigTab;
 /**
@@ -114,8 +113,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 	}
 
 	protected ConsoleEventParser getConsoleEventParser() {
-//		return new CuteConsoleEventParser();
-		return new GTestConsoleEventParser();
+		return new CuteConsoleEventParser();
 	}
 	
 	@Override

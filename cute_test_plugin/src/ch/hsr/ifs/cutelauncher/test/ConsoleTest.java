@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cutelauncher.test;
 
-import gtest.eclipse.plugin.GTestConsoleEventParser;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,8 +29,7 @@ public abstract class ConsoleTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-//		useCUTE();
-		useGTest();
+		useCUTE();
 		prepareTest();
 	}
 	
@@ -46,11 +43,7 @@ public abstract class ConsoleTest extends TestCase {
 		consoleEventParser = new CuteConsoleEventParser();
 		filePathRoot = "testDefs/cute/";
 	}
-	
-	private void useGTest() {
-		consoleEventParser = new GTestConsoleEventParser();
-		filePathRoot = "testDefs/gtest/";
-	}
+
 
 	private void prepareTest() {
 		tc = getConsole();

@@ -18,6 +18,3 @@ public class AllUiTests {
 	}
 
 }
-//adding just a single test example
-//suite.addTest(new DelegateTest("testSourcelookupCustomPath"));
-//@see http://mea-bloga.blogspot.com/2007/07/am-i-headless.html

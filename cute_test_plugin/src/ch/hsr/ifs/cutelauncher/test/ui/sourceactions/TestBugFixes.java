@@ -20,12 +20,13 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate;
 public class TestBugFixes //extends Test1Skeleton {
 	extends org.eclipse.cdt.core.tests.BaseTestFramework{
 	
+	private static final String TEST_DEFS = "testDefs/cute/sourceActions/bugfix.cpp";
 	public TestBugFixes(String name) {
 		super(name);
  	}
 	protected static CEditor ceditor;
 	public void testNewTestFunctionhighlight(){
-		ReadTestCase rtc=new ReadTestCase("testDefs/sourceActions/bugfix.cpp",false);
+		ReadTestCase rtc=new ReadTestCase(TEST_DEFS,false);
 
 		Integer[] cursorpos={212,261};
 		rtc.removeCaretFromTest();

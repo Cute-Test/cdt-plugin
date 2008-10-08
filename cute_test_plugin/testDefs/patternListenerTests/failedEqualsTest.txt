@@ -1,2 +1,0 @@
-#starting test1
-#failure test1 ../src/Test.cpp:6 Hallo expected:	42	but was:	43	

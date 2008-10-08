@@ -1,3 +1,0 @@
-Session{Testcase(test4, error, null, -1, Result(resistance is futile))}
-#starting test4
-#error test4 resistance is futile

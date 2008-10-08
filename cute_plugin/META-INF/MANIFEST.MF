@@ -28,6 +28,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.3.0,4.0.0)",
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cutelauncher,
+ ch.hsr.ifs.cutelauncher.event,
  ch.hsr.ifs.cutelauncher.model,
  ch.hsr.ifs.cutelauncher.ui,
  ch.hsr.ifs.cutelauncher.ui.sourceactions

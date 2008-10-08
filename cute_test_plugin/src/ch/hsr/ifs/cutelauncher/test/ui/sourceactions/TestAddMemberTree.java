@@ -27,12 +27,13 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 
 public class TestAddMemberTree extends BaseTestFramework {
 	
+	private static final String TEST_DEFS = "testDefs/cute/sourceActions/addTestMember.tree.cpp";
 	static ReadTestCase rtc1;
 	
 	public TestAddMemberTree(String name) {
 		super(name);
 		if(rtc1==null){
-			rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.tree.cpp");
+			rtc1=new ReadTestCase(TEST_DEFS);
 		}
  	}
 	

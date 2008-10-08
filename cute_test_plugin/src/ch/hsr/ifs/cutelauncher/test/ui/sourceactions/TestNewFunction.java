@@ -4,11 +4,13 @@ import junit.framework.TestSuite;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
 
 public class TestNewFunction extends Test1Skeleton {
+	private static final String TEST_DEFS = "testDefs/cute/sourceActions/newTestfunction.txt";
+
 	public TestNewFunction(String name) {
 		super(name);
  	}
 	public final void testNewTestFunctionAll(){
-		ReadTestCase rtc=new ReadTestCase("testDefs/sourceActions/newTestfunction.txt");
+		ReadTestCase rtc=new ReadTestCase(TEST_DEFS);
 		NewTestFunctionAction functionAction=new NewTestFunctionAction();
 		for(int i=0;i<rtc.testname.size();i++){
 			//if(i<rtc.testname.size()-1)continue;
@@ -17,7 +19,7 @@ public class TestNewFunction extends Test1Skeleton {
 	}
 	public final static TestSuite generateNewFunctionTest(){
 		TestSuite functorTS=new TestSuite("newTestFunction Tests");
-		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/newTestfunction.txt");
+		final ReadTestCase rtc1=new ReadTestCase(TEST_DEFS);
 		final NewTestFunctionAction functionAction=new NewTestFunctionAction();
 		for(int i=0;i<rtc1.testname.size();i++){
 			final int j=i;

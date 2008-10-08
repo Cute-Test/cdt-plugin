@@ -4,17 +4,17 @@ import junit.framework.TestSuite;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctortoSuiteAction;
 
 public class TestAddFunctor extends Test1Skeleton {
+	private static final String TEST_DEFS = "testDefs/cute/sourceActions/addTestfunctor.cpp";
+
 	public TestAddFunctor(String name) {
 		super(name);
  	}
 	
 	public final static TestSuite generateFunctorTest(){
 		TestSuite functorTS=new TestSuite("addTestFunctor Tests");
-		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestfunctor.cpp");
+		final ReadTestCase rtc1=new ReadTestCase(TEST_DEFS);
 		final AddTestFunctortoSuiteAction functionAction=new AddTestFunctortoSuiteAction();
 		for(int i=0;i<rtc1.testname.size();i++){
-			//if(1!=i)continue;
-			//if(i<32)continue;
 			final int j=i;
 			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name
 			junit.framework.TestCase test = new TestAddFunctor("generateFunctorTest"+i+displayname) {
@@ -29,13 +29,7 @@ public class TestAddFunctor extends Test1Skeleton {
 	}
 	
 	public static TestSuite suite(boolean speedupMode){
-//		if(speedupMode){
-//			TestSuite functorTS=new TestSuite("addTestFunctor Tests");
-//			functorTS.addTest(new TestAddFunction("testAddTestFunctionAll"));
-//			return functorTS;
-//		}else{
-			return generateFunctorTest();
-//		}
+		return generateFunctorTest();
 	}
-	
+
 }

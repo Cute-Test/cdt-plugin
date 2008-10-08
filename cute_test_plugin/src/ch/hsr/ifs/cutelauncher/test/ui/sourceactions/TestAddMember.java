@@ -6,6 +6,7 @@ import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer;
 import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
 
 public class TestAddMember extends Test1Skeleton {
+	private static final String TEST_DEFS = "testDefs/cute/sourceActions/addTestMember.cpp";
 	public TestAddMember(String name) {
 		super(name);
  	}
@@ -17,7 +18,7 @@ public class TestAddMember extends Test1Skeleton {
 		return method;
 	}
 	public final static void generateMemberTest(TestSuite ts){
-		final ReadTestCase rtc1=new ReadTestCase("testDefs/sourceActions/addTestMember.cpp");
+		final ReadTestCase rtc1=new ReadTestCase(TEST_DEFS);
 				
 		for(int i=0;i<rtc1.testname.size();i++){
 			//if(1!=i)continue;
