@@ -13,16 +13,15 @@ package ch.hsr.ifs.cutelauncher.test.patternListenerTests;
 
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.cutelauncher.CutePatternListener;
-import ch.hsr.ifs.cutelauncher.TestEventHandler;
-import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
+import ch.hsr.ifs.cutelauncher.ConsolePatternListener;
+import ch.hsr.ifs.cutelauncher.event.TestEventHandler;
 
 
 /**
  * @author Emanuel Graf
  *
  */
-public class PatternListenerSessionStartEndTest extends ConsoleTest {
+public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 
 	boolean sessionStarted = false;
 	boolean sessionEnded = false;
@@ -83,15 +82,13 @@ public class PatternListenerSessionStartEndTest extends ConsoleTest {
 	}
 
 	@Override
-	protected void addTestEventHandler(CutePatternListener lis) {
+	protected void addTestEventHandler(ConsolePatternListener lis) {
 		lis.addHandler(new SessionStartEndHandler());
 	}
 
 	@Override
-	protected String getInputFile() {
-		return "testDefs/patternListenerTests/sessionTest.txt";
+	protected String getInputFileName() {
+		return "sessionTest.txt";
 	}
 	
-	
-
 }

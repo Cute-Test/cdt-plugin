@@ -1,0 +1,2 @@
+#starting xUnitTest
+#failure xUnitTest ../src/sample1_unittest.cc:104 evaluated: `Factorial(0)`, expected: <3> but was: <1>

@@ -11,6 +11,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher;
 
+import gtest.eclipse.plugin.GTestConsoleEventParser;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
 
+import ch.hsr.ifs.cutelauncher.event.ConsoleEventParser;
 import ch.hsr.ifs.cutelauncher.model.ModellBuilder;
 import ch.hsr.ifs.cutelauncher.ui.CustomisedLaunchConfigTab;
 /**
@@ -58,7 +61,6 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			monitor = new NullProgressMonitor();
 		}
 		runLocalApplication(configuration, launch, monitor);
-		
 	}
 	
 	
@@ -100,7 +102,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				
 				ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons);
 				ModellBuilder modelHandler = new ModellBuilder(exePath, launch);
-				CutePatternListener listener = new CutePatternListener();
+				ConsolePatternListener listener = new ConsolePatternListener(getConsoleEventParser());
 				listener.addHandler(handler);
 				listener.addHandler(modelHandler);
 				textCons.addPatternMatchListener(listener);
@@ -109,6 +111,11 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		finally {
 			monitor.done();
 		}		
+	}
+
+	protected ConsoleEventParser getConsoleEventParser() {
+//		return new CuteConsoleEventParser();
+		return new GTestConsoleEventParser();
 	}
 	
 	@Override

@@ -1,0 +1,6 @@
+#sessionStart
+#beginning TestSuite1 42
+#ending TestSuite1
+#beginning TestSuite2 1
+#ending TestSuite2
+#sessionEnd

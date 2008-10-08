@@ -11,22 +11,15 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.test.modelBuilderTests;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Vector;
 
 import junit.framework.Test;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
-import ch.hsr.ifs.cutelauncher.CutePatternListener;
+import ch.hsr.ifs.cutelauncher.ConsolePatternListener;
 import ch.hsr.ifs.cutelauncher.model.ModellBuilder;
 import ch.hsr.ifs.cutelauncher.model.TestCase;
 import ch.hsr.ifs.cutelauncher.model.TestElement;
@@ -35,7 +28,6 @@ import ch.hsr.ifs.cutelauncher.model.TestResult;
 import ch.hsr.ifs.cutelauncher.model.TestSession;
 import ch.hsr.ifs.cutelauncher.model.TestSuite;
 import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
-import ch.hsr.ifs.cutelauncher.test.TestPlugin;
 
 /**
  * @author Emanuel Graf
@@ -52,34 +44,21 @@ public class ModelBuilderTest extends ConsoleTest {
 	}
 	
 	public static Test suite(String inputFile) {
-		junit.framework.TestSuite suite = new junit.framework.TestSuite(inputFile.substring(inputFile.lastIndexOf('/') + 1,inputFile.length()-4));
+		String testName = inputFile.split("\\.")[0];
+		junit.framework.TestSuite suite = new junit.framework.TestSuite(testName);
 		suite.addTest(new ModelBuilderTest(inputFile));
 		return suite;
 	}
 
 	@Override
-	protected void addTestEventHandler(CutePatternListener lis) {
+	protected void addTestEventHandler(ConsolePatternListener lis) {
 		lis.addHandler(new ModellBuilder(new Path("")));
 	}
 	
-	@Override
-	protected String getInputFile() {
-		return inputFile;
-	}
-	
 	protected String getExpected() throws CoreException {
-		Bundle bundle = TestPlugin.getDefault().getBundle();
-		Path path = new Path(getInputFile());
-		try {
-			String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
-			BufferedReader br = new BufferedReader(new FileReader(file2));
-			return br.readLine();
-		}catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, TestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
-		}
+		return firstConsoleLine();
 	}
-	
-	
+
 	@Override
 	public String getName() {
 		return inputFile;
@@ -160,6 +139,11 @@ public class ModelBuilderTest extends ConsoleTest {
 				writeTestCase(tcase, sb);
 			}
 		}
+	}
+
+	@Override
+	public String getInputFilePath() {
+		return "modelBuilderTests/" + inputFile;
 	}
 
 }

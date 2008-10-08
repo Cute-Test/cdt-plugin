@@ -11,42 +11,34 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.test.patternListenerTests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.cutelauncher.CutePatternListener;
-import ch.hsr.ifs.cutelauncher.TestEventHandler;
-import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
+import ch.hsr.ifs.cutelauncher.ConsolePatternListener;
+import ch.hsr.ifs.cutelauncher.event.TestEventHandler;
 
 /**
  * @author Emanuel Graf
  *
  */
-public class PatternListenerSuiteTest extends ConsoleTest {
-
-	private static final int START_OFFSET_EXP = 14;
-	private static final int END_OFFSET_EXP = 42;
-	private static final int SUITE_SIZE_EXP = 42;
-	private static final String SUITE_NAME = "The Lib Suite";
-	
-	int startOffset = -1;
-	int endLineNo = -1;
-	int suiteSize = -1;
-	String suiteNameStart;
-	String suiteNameEnde;
+public class PatternListenerSuiteTest extends PatternListenerBase {
+	List<Integer> suiteSize = new ArrayList<Integer>();
+	List<String> suiteNameStart = new ArrayList<String>();
+	List<String> suiteNameEnded = new ArrayList<String>();
 
 	private final class ListenerTestHandler extends TestEventHandler{
 
 		@Override
 		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
-			startOffset = reg.getOffset();
-			suiteNameStart = suitename;
-			suiteSize = Integer.parseInt(suitesize);
+			suiteNameStart.add(suitename);
+			suiteSize.add(Integer.parseInt(suitesize));
 		}
 
 		@Override
 		protected void handleEnding(IRegion reg, String suitename) {
-			endLineNo = reg.getOffset();
-			suiteNameEnde = suitename;	
+			suiteNameEnded.add(suitename);
 		}
 
 		@Override
@@ -81,26 +73,33 @@ public class PatternListenerSuiteTest extends ConsoleTest {
 		
 	}
 	
-	public void testSuiteStart() {
-		assertEquals("Start Offset", START_OFFSET_EXP, startOffset);
-		assertEquals("Suite Name Test", SUITE_NAME, suiteNameStart);
-		assertEquals("Suite Size", SUITE_SIZE_EXP, suiteSize);
+	public void testFirstStarted() {
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0));
+		assertEquals("Suite Size", new Integer(42), suiteSize.get(0));
 	}
 	
-	public void testSuiteEnd() {
-		assertEquals("End Offset", END_OFFSET_EXP, endLineNo);
-		assertEquals("Suite Name Test", SUITE_NAME, suiteNameEnde);
+	public void testFirstEnded() {
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameEnded.get(0));
+	}
+	
+	public void testLastStarted() {
+		assertEquals("Suite Name Test", "TestSuite2", suiteNameStart.get(1));
+		assertEquals("Suite Size", new Integer(1), suiteSize.get(1));
+	}
+	
+	public void testLastEnded() {
+		assertEquals("Suite Name Test", "TestSuite2", suiteNameEnded.get(1));
 	}
 	
 	
 	@Override
-	protected void addTestEventHandler(CutePatternListener lis) {
+	protected void addTestEventHandler(ConsolePatternListener lis) {
 		lis.addHandler(new ListenerTestHandler());
 	}
 
 	@Override
-	protected String getInputFile() {
-		return "testDefs/patternListenerTests/suiteTest.txt";
+	protected String getInputFileName() {
+		return "suiteTest.txt";
 	}
 
 }

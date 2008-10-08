@@ -15,6 +15,7 @@ public class PatternListenerSuite {
 		suite.addTestSuite(PatternListenerTestFailedTest.class);
 		suite.addTestSuite(PatternListenerTestEqualsFailed.class);
 		suite.addTestSuite(PatternListenerErrorTest.class);
+		suite.addTestSuite(PatternListenerStoryTest.class);
 		//$JUnit-END$
 		return suite;
 	}

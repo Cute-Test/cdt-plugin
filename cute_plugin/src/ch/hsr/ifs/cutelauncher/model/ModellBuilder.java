@@ -16,8 +16,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.jface.text.IRegion;
+
 import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
-import ch.hsr.ifs.cutelauncher.TestEventHandler;
+import ch.hsr.ifs.cutelauncher.event.TestEventHandler;
 
 /**
  * @author egraf

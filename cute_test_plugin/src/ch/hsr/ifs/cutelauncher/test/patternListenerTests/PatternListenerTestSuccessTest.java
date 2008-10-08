@@ -13,26 +13,21 @@ package ch.hsr.ifs.cutelauncher.test.patternListenerTests;
 
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.cutelauncher.CutePatternListener;
-import ch.hsr.ifs.cutelauncher.TestEventHandler;
-import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
+import ch.hsr.ifs.cutelauncher.ConsolePatternListener;
+import ch.hsr.ifs.cutelauncher.event.TestEventHandler;
 
 /**
  * @author Emanuel Graf
  *
  */
-public class PatternListenerTestSuccessTest extends ConsoleTest {
+public class PatternListenerTestSuccessTest extends PatternListenerBase {
 	
-	private static final String TEST_NAME_EXP = "test";
-	private static final int OFFSET_START_EXP = 0;
-	private static final int OFFSET_END_EXP = 15;
+	private static final String TEST_NAME_EXP = "xUnitTest";
 	private static final String MSG_EXP = "OK";
 	
 	private String testNameStart;
-	private int offsetStart = -1;
 	private String testNameEnd;
 	private String msgEnd;
-	private int offsetEnd;
 	
 	final class TestSuccessHandler extends TestEventHandler{
 
@@ -70,36 +65,32 @@ public class PatternListenerTestSuccessTest extends ConsoleTest {
 		protected void handleSuccess(IRegion reg, String name, String msg) {
 			testNameEnd = name;
 			msgEnd = msg;
-			offsetEnd = reg.getOffset();
 		}
 
 		@Override
 		protected void handleTestStart(IRegion reg, String testname) {
 			testNameStart = testname;
-			offsetStart = reg.getOffset();
 		}
 		
 	}
 
 	@Override
-	protected void addTestEventHandler(CutePatternListener lis) {
+	protected void addTestEventHandler(ConsolePatternListener lis) {
 		lis.addHandler(new TestSuccessHandler());
-	}
-
-	@Override
-	protected String getInputFile() {
-		return "testDefs/patternListenerTests/successTest.txt";
 	}
 	
 	public void testTestStart() {
 		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
-		assertEquals("Teststart Offset", OFFSET_START_EXP, offsetStart);
 	}
 	
 	public void testTestEnd() {
 		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
-		assertEquals("Testend Offset", OFFSET_END_EXP, offsetEnd);
 		assertEquals("Message", MSG_EXP, msgEnd);
+	}
+	
+	@Override
+	protected String getInputFileName() {
+		return "successTest.txt";
 	}
 
 }

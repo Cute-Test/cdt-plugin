@@ -11,86 +11,103 @@
  ******************************************************************************/
 package ch.hsr.ifs.cutelauncher.test.patternListenerTests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.text.IRegion;
 
 import ch.hsr.ifs.cutelauncher.ConsolePatternListener;
 import ch.hsr.ifs.cutelauncher.event.TestEventHandler;
-import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
 
 /**
- * @author Emanuel Graf
+ * @author Mike Bria
  *
  */
-public class PatternListenerErrorTest extends PatternListenerBase {
-	private static final String TEST_NAME_EXP = "xUnitTest";
-	private static final String MSG_EXP = "instance of 'std::exception'";
+public class PatternListenerStoryTest extends PatternListenerBase {
+
+	int startOffset = -1;
+	int endLineNo = -1;
 	
-	private String testNameStart;
-	private String testNameEnd;
-	private String msg;
-	
-	final class ErrorHandler extends TestEventHandler{
+	List<Integer> suiteSize = new ArrayList<Integer>();
+	List<String> suiteNameStart = new ArrayList<String>();
+	List<String> suiteNameEnded = new ArrayList<String>();
+
+	private final class ListenerTestHandler extends TestEventHandler{
 
 		@Override
 		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
-//			 Do nothing
+			suiteNameStart.add(suitename);
+			suiteSize.add(Integer.parseInt(suitesize));
 		}
 
 		@Override
 		protected void handleEnding(IRegion reg, String suitename) {
-//			 Do nothing
+			suiteNameEnded.add(suitename);
 		}
 
 		@Override
 		protected void handleError(IRegion reg, String testName, String msg) {
-			testNameEnd = testName;
-			PatternListenerErrorTest.this.msg = msg;
+//			 do nothing	
 		}
 
 		@Override
 		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-//			Do nothing
+//			 do nothing	
 		}
 
 		@Override
 		public void handleSessionEnd() {
-//			 Do nothing
+//			 do nothing	
 		}
 
 		@Override
 		public void handleSessionStart() {
-//			 Do nothing
+//			 do nothing	
 		}
 
 		@Override
 		protected void handleSuccess(IRegion reg, String name, String msg) {
-//			 Do nothing
+//			 do nothing	
 		}
 
 		@Override
 		protected void handleTestStart(IRegion reg, String testname) {
-			testNameStart = testname;
+			// do nothing			
 		}
 		
 	}
 	
-	public void testTestStart() {
-		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
+	public void testTODO() throws Exception {
+		
 	}
 	
-	public void testTestEnd() {
-		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
-		assertEquals("Message", MSG_EXP, msg);
-	}
-
+//	public void testFirstStarted() {
+//		assertEquals("Suite Name Test", "xUnitTest1", suiteNameStart.get(0));
+//		assertEquals("Suite Size", new Integer(42), suiteSize.get(0));
+//	}
+//	
+//	public void testFirstEnded() {
+//		assertEquals("Suite Name Test", "xUnitTest1", suiteNameEnded.get(0));
+//	}
+//	
+//	public void testLastStarted() {
+//		assertEquals("Suite Name Test", "xUnitTest2", suiteNameStart.get(1));
+//		assertEquals("Suite Size", new Integer(6), suiteSize.get(1));
+//	}
+//	
+//	public void testLastEnded() {
+//		assertEquals("Suite Name Test", "xUnitTest2", suiteNameEnded.get(1));
+//	}
+	
+	
 	@Override
 	protected void addTestEventHandler(ConsolePatternListener lis) {
-		lis.addHandler(new ErrorHandler());
+		lis.addHandler(new ListenerTestHandler());
 	}
 
 	@Override
 	protected String getInputFileName() {
-		return "errorTest.txt";
+		return "storytest.txt";
 	}
 
 }

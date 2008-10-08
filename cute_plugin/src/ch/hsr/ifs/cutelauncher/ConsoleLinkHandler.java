@@ -20,6 +20,8 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.ui.console.IHyperlink;
 import org.eclipse.ui.console.TextConsole;
 
+import ch.hsr.ifs.cutelauncher.event.TestEventHandler;
+
 /**
  * @author Emanuel Graf (IFS)
  *
