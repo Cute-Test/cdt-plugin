@@ -14,7 +14,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.AbstractFunctionAction;
+import ch.hsr.ifs.cute.ui.sourceactions.AbstractFunctionAction;
 public abstract class Test1Skeleton //extends TestCase{ 
 	extends org.eclipse.cdt.core.tests.BaseTestFramework{
 	

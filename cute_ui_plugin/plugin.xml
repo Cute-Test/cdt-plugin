@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+<extension
+       point="org.eclipse.ui.newWizards">
+    <wizard
+          category="org.eclipse.cdt.ui.newCCWizards"
+          finalPerspective="org.eclipse.cdt.ui.CPerspective"
+          icon="icons/ovr16/cute_ovr.gif"
+          id="cute_plugin.wizard1"
+          name="Suite File">
+    <class class="ch.hsr.ifs.cute.ui.project.wizard.NewSuiteFileCreationWizard">
+            <parameter name="cfile" value="true"/>
+         </class>
+         <description>
+            Adding new suite.
+         </description>
+    </wizard>
+ </extension>
+ <extension
+       point="org.eclipse.ui.actionSets">
+    <actionSet
+          id="ch.hsr.ifr.cutelauncher.sourceGeneratorActions"
+          label="Test Source Actions"
+          visible="true">
+       <menu
+             id="ch.hsr.ifs.cutelauncher.menu"
+             label="Test Source Generators">
+       </menu>
+       <action
+             class="ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
+             id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
+             label="New Test Function">
+          
+       </action>
+       <action
+             class="ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctiontoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
+             id="ch.hsr.ifs.cutelauncher.addFunctionToSuiteAction"
+             label="Add Test Function to Suite"
+             style="push"
+             tooltip="%addFuncToSuiteDesc">
+       </action>
+       <action
+             class="ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctortoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestFunctorCommand"
+             id="ch.hsr.ifs.cutelauncher.addFunctorToSuiteAction"
+             label="Add Test Functor to Suite"
+             style="push"
+             tooltip="%addFtorToSuiteDesc">
+       </action>
+       <action
+             class="ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestMemberCommand"
+             id="ch.hsr.ifs.cutelauncher.addMemberToSuiteAction"
+             label="Add Test Member to Suite"
+             style="push"
+             tooltip="%addMemberToSuitDesc">
+       </action>
+    </actionSet>
+ </extension>
+ 
+  <extension
+       point="org.eclipse.ui.popupMenus">
+    <objectContribution
+          adaptable="true"
+          id="ch.hsr.ifs.cutelauncher.convertObjectContribution1"
+          objectClass="org.eclipse.core.resources.IProject">
+       <action
+             class="ch.hsr.ifs.cute.ui.project.wizard.ConvertProjectAction"
+             enablesFor="1"
+             icon="icons/ovr16/cute_ovr.gif"
+             id="ch.hsr.ifs.cutelauncher.convertProjectAction"
+             label="Convert to CUTE 1.2 Project"
+             menubarPath="additions">
+             
+       </action>
+       <filter
+             name="projectNature"
+             value="org.eclipse.cdt.core.ccnature">
+       </filter>
+    </objectContribution>
+    <viewerContribution
+          id="ch.hsr.ifs.cutelauncher.cEditorContribution"
+          targetID="#CEditorContext">
+       <action
+             class="ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestMemberCommand"
+             id="ch.hsr.ifs.cutelauncher.addTestMemberSuiteAction"
+             label="Add Test Member to Suite"
+             menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
+       </action>
+       <action
+             class="ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctortoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestFunctorCommand"
+             id="ch.hsr.ifs.cutelauncher.addTestFunctorSuiteAction"
+             label="Add Test Functor to Suite"
+             menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
+       </action>
+       <action
+             class="ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctiontoSuiteDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
+             id="ch.hsr.ifs.cutelauncher.addTestFunctionSuiteAction"
+             label="Add Test Function to Suite"
+             menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
+       </action>
+       <action
+             class="ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate"
+             definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
+             id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
+             label="New Test Function"
+             menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
+       </action>
+
+       <menu
+             id="ch.hsr.ifs.cutelauncher.testCodeMenu"
+             label="Test Code"
+             path="org.eclipse.cdt.ui.source.menu">
+          <groupMarker
+                name="ch.hsr.ifs.cutelauncher.testCodeMenu">
+          </groupMarker>
+       </menu>
+       <menu
+             id="addTestMenu"
+             label="Add Test"
+             path="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
+          <groupMarker
+                name="addTestGroup">
+          </groupMarker>
+       </menu>
+    </viewerContribution>
+ </extension>
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          categoryId="org.eclipse.cdt.ui.category.source"
+          description="Create new test function."
+          id="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
+          name="New Test Function">
+    </command>
+    <command
+          categoryId="org.eclipse.cdt.ui.category.source"
+          description="%addMemberToSuitDesc"
+          id="ch.hsr.ifs.cutelauncher.addTestMemberCommand"
+          name="Add Test Member to Suite">
+    </command>
+    <command
+          categoryId="org.eclipse.cdt.ui.category.source"
+          description="%addFtorToSuiteDesc"
+          id="ch.hsr.ifs.cutelauncher.addTestFunctorCommand"
+          name="Add Test Functor to Suite">
+    </command>
+    <command
+          categoryId="org.eclipse.cdt.ui.category.source"
+          description="%addFuncToSuiteDesc"
+          id="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
+          name="Add Test Function to Suite">
+    </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.bindings">
+    <key
+          commandId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
+          contextId="org.eclipse.cdt.ui.cEditorScope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+M3+F">
+    </key>
+ </extension>
+ 
+ <extension
+       point="org.eclipse.core.expressions.propertyTesters">
+    <propertyTester
+          class="ch.hsr.ifs.cute.ui.project.ProjectNaturePropertyTester"
+          id="ch.hsr.ifs.ProjectNaturePropertyTester"
+          namespace="ch.hsr.ifs"
+          properties="projectNature1"
+          type="org.eclipse.core.runtime.IAdaptable">
+    </propertyTester>
+ </extension>
+
+ <extension
+       id="cuteProblem"
+       name="Cute Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.core.resources.problemmarker">
+    </super>
+    <super
+          type="org.eclipse.core.resources.textmarker">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
+ </extension>
+   <extension
+       point="org.eclipse.ui.navigator.navigatorContent">
+ <commonWizard
+            associatedExtensionId="org.eclipse.cdt.ui.navigator.content"
+            menuGroupId="org.eclipse.cdt.ui"
+            type="new"
+            wizardId="cute_plugin.wizard1">
+		 <enablement>
+			<or>
+				<instanceof value="org.eclipse.cdt.core.model.ICElement" />	
+	            <adapt type="org.eclipse.core.resources.IProject">
+	               <test
+	                     property="org.eclipse.core.resources.projectNature"
+	                     value="org.eclipse.cdt.core.cnature"/>
+	            </adapt>
+			</or>
+         </enablement>
+	   </commonWizard>
+ </extension>
+ 
+    <extension
+         id="ch.hsr.ifs.cutelauncher.cutenature"
+         name="CUTE Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="ch.hsr.ifs.cute.ui.project.CuteNature">
+         </run>
+      </runtime>
+      <requires-nature
+            id="org.eclipse.cdt.core.cnature">
+      </requires-nature>
+   </extension>
+ <extension
+         point="org.eclipse.mylyn.tasks.core.templates">
+      <repository
+            addAutomatically="true"
+            anonymous="true"
+            label="CUTE Trac"
+            repositoryKind="trac"
+            urlRepository="http://r2.ifs.hsr.ch/cute"
+            version="XML_RPC">
+      </repository>
+   </extension>
+ <extension
+       point="org.eclipse.ui.ide.projectNatureImages">
+    <image
+          icon="icons/ovr16/cute_ovr.gif"
+          id="ch.hsr.ifs.cutelauncher.cuteProjectImage"
+          natureId="ch.hsr.ifs.cutelauncher.cutenature">
+    </image>
+ </extension>
+ 
+    <extension
+         id="cute wizard"
+         name="cute wizard"
+         point="org.eclipse.cdt.ui.CDTWizard">
+      <wizard
+            class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteLibProjectWizard"
+            name="CUTE">
+      </wizard>
+      <wizard
+            class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteLibProjectWizard"
+            name="CUTE Library Test Project"
+            parent="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizard">
+      </wizard>
+    <wizard
+          class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizard"
+          name="CUTE Suite Module"
+          parent="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard">
+    </wizard>
+   </extension>
+
+</plugin>

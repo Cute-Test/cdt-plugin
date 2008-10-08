@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
+import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberContainer;
+import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberMethod;
 
 public class StubContainer implements IAddMemberContainer {
 

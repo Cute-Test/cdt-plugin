@@ -19,11 +19,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.ASTHelper;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestMembertoSuiteAction;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.FunctionFinder;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
+import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
+import ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteAction;
+import ch.hsr.ifs.cute.ui.sourceactions.FunctionFinder;
+import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberContainer;
+import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberMethod;
 
 public class TestAddMemberTree extends BaseTestFramework {
 	

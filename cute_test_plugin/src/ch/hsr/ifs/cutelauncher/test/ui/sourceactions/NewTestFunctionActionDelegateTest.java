@@ -7,8 +7,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionAction;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate;
+import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionAction;
+import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate;
 
 public class NewTestFunctionActionDelegateTest extends TestCase {
 

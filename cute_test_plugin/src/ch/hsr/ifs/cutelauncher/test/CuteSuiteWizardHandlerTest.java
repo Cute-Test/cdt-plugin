@@ -22,9 +22,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Bundle;
 
-import ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler;
-import ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage;
-import ch.hsr.ifs.cutelauncher.ui.SuiteTemplateCopyUtil;
+import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
+import ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizardCustomPage;
+import ch.hsr.ifs.cute.ui.project.wizard.SuiteTemplateCopyUtil;
 
 public class CuteSuiteWizardHandlerTest extends TestCase {
 

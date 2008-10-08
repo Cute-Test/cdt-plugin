@@ -1,9 +1,9 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
 import junit.framework.TestSuite;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestMembertoSuiteAction;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
+import ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteAction;
+import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberContainer;
+import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberMethod;
 
 public class TestAddMember extends Test1Skeleton {
 	private static final String TEST_DEFS = "testDefs/cute/sourceActions/addTestMember.cpp";

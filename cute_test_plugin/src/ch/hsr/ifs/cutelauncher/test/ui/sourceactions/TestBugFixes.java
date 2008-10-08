@@ -15,7 +15,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.NewTestFunctionActionDelegate;
+import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate;
 
 public class TestBugFixes //extends Test1Skeleton {
 	extends org.eclipse.cdt.core.tests.BaseTestFramework{

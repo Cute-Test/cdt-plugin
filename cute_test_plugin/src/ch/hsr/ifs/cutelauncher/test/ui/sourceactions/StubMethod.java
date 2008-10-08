@@ -1,7 +1,7 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberContainer;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.IAddMemberMethod;
+import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberContainer;
+import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberMethod;
 
 public class StubMethod implements IAddMemberMethod {
 

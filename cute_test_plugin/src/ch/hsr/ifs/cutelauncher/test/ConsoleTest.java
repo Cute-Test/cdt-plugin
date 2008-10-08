@@ -15,9 +15,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.Bundle;
 
-import ch.hsr.ifs.cutelauncher.ConsolePatternListener;
-import ch.hsr.ifs.cutelauncher.event.ConsoleEventParser;
-import ch.hsr.ifs.cutelauncher.event.CuteConsoleEventParser;
+import ch.hsr.ifs.cute.core.ConsolePatternListener;
+import ch.hsr.ifs.cute.core.event.ConsoleEventParser;
+import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
 import ch.hsr.ifs.cutelauncher.test.internal.console.FileInputTextConsole;
 
 public abstract class ConsoleTest extends TestCase {

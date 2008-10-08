@@ -1,7 +1,7 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
 import junit.framework.TestSuite;
-import ch.hsr.ifs.cutelauncher.ui.sourceactions.AddTestFunctortoSuiteAction;
+import ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctortoSuiteAction;
 
 public class TestAddFunctor extends Test1Skeleton {
 	private static final String TEST_DEFS = "testDefs/cute/sourceActions/addTestfunctor.cpp";

@@ -18,15 +18,15 @@ import junit.framework.Test;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.cutelauncher.CuteLauncherPlugin;
-import ch.hsr.ifs.cutelauncher.ConsolePatternListener;
-import ch.hsr.ifs.cutelauncher.model.ModellBuilder;
-import ch.hsr.ifs.cutelauncher.model.TestCase;
-import ch.hsr.ifs.cutelauncher.model.TestElement;
-import ch.hsr.ifs.cutelauncher.model.TestFailure;
-import ch.hsr.ifs.cutelauncher.model.TestResult;
-import ch.hsr.ifs.cutelauncher.model.TestSession;
-import ch.hsr.ifs.cutelauncher.model.TestSuite;
+import ch.hsr.ifs.cute.core.ConsolePatternListener;
+import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.core.model.ModellBuilder;
+import ch.hsr.ifs.cute.core.model.TestCase;
+import ch.hsr.ifs.cute.core.model.TestElement;
+import ch.hsr.ifs.cute.core.model.TestFailure;
+import ch.hsr.ifs.cute.core.model.TestResult;
+import ch.hsr.ifs.cute.core.model.TestSession;
+import ch.hsr.ifs.cute.core.model.TestSuite;
 import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
 
 /**
@@ -66,7 +66,7 @@ public class ModelBuilderTest extends ConsoleTest {
 
 	@Override
 	protected void runTest() throws Throwable {
-		TestSession session = CuteLauncherPlugin.getModel().getSession();
+		TestSession session = CuteCorePlugin.getModel().getSession();
 		assertEquals(getExpected(), getSessionString(session));
 	}
 
