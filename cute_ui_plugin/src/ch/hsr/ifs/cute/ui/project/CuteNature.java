@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.ui.UiPlugin;
 
 /**
  * @author Emanuel Graf
@@ -29,7 +30,7 @@ import ch.hsr.ifs.cute.core.CuteCorePlugin;
  */
 public class CuteNature implements IProjectNature {
 	
-	public static final String CUTE_NATURE_ID = CuteCorePlugin.PLUGIN_ID + ".cutenature"; //$NON-NLS-1$
+	public static final String CUTE_NATURE_ID = UiPlugin.PLUGIN_ID + ".cutenature"; //$NON-NLS-1$
 	
 	private IProject project;
 

@@ -41,6 +41,7 @@ public class NewSuiteFileCreationWizardPage extends
 	private ITranslationUnit fNewFileTU = null;
 	private final StringDialogField fNewFileDialogField;
 	private final SelectionButtonDialogField fSelection;
+	private String lastUsedTemplate = "";
 	
 	@SuppressWarnings("restriction")
 	public NewSuiteFileCreationWizardPage(){
@@ -281,6 +282,15 @@ after location translation unit
 	protected Template[] getApplicableTemplates() {
 		return StubUtility.getFileTemplatesForContentTypes(
 				new String[] { CCorePlugin.CONTENT_TYPE_CXXHEADER, CCorePlugin.CONTENT_TYPE_CHEADER, CCorePlugin.CONTENT_TYPE_CXXSOURCE }, null);
+	}
+	
+	@Override
+	public String getLastUsedTemplateName() {
+		return lastUsedTemplate;
+	}
+	@Override
+	public void saveLastUsedTemplateName(String name) {
+		lastUsedTemplate = name;
 	}
 
 }

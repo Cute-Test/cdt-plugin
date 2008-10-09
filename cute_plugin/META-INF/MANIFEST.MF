@@ -19,7 +19,11 @@ Require-Bundle: org.eclipse.cdt.core;bundle-version="[5.0.0,6.0.0)",
  org.eclipse.compare,
  org.eclipse.jface.text,
  org.eclipse.debug.ui,
- org.eclipse.cdt.launch
+ org.eclipse.cdt.launch,
+ org.eclipse.ui.console;bundle-version="3.3.0",
+ org.eclipse.cdt.debug.core,
+ org.eclipse.cdt.ui,
+ org.eclipse.cdt.managedbuilder.core
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.core,

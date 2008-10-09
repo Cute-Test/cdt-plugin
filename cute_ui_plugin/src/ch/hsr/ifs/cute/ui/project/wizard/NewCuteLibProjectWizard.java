@@ -26,7 +26,7 @@ public class NewCuteLibProjectWizard extends NewCuteProjectWizard {
 	@Override
 	protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
 		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.gif").createImage();
-		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.libProjectType", null, "Cute Library Test Project", true, handler, proImg);
+		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.libProjectType", null, "Cute Library Test Project", false, handler, proImg);
 	}
 
 	@Override

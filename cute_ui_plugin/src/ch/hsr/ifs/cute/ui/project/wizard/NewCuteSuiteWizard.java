@@ -23,7 +23,7 @@ public class NewCuteSuiteWizard extends NewCuteProjectWizard {
 	@Override
 	protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
 		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.gif").createImage();
-		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.SuiteProjectType", null, "Cute Suite Module", true, handler, proImg);
+		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.SuiteProjectType", null, "Cute Suite Module", false, handler, proImg);
 	}
 
 	/*

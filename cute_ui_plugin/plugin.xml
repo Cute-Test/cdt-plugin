@@ -214,7 +214,7 @@
  </extension>
  
     <extension
-         id="ch.hsr.ifs.cutelauncher.cutenature"
+         id="ch.hsr.ifs.cute.ui.cutenature"
          name="CUTE Project Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
@@ -226,6 +226,7 @@
             id="org.eclipse.cdt.core.cnature">
       </requires-nature>
    </extension>
+ 
  <extension
          point="org.eclipse.mylyn.tasks.core.templates">
       <repository
@@ -242,7 +243,7 @@
     <image
           icon="icons/ovr16/cute_ovr.gif"
           id="ch.hsr.ifs.cutelauncher.cuteProjectImage"
-          natureId="ch.hsr.ifs.cutelauncher.cutenature">
+          natureId="ch.hsr.ifs.cute.ui.cutenature">
     </image>
  </extension>
  
@@ -251,7 +252,7 @@
          name="cute wizard"
          point="org.eclipse.cdt.ui.CDTWizard">
       <wizard
-            class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteLibProjectWizard"
+            class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard"
             name="CUTE">
       </wizard>
       <wizard
