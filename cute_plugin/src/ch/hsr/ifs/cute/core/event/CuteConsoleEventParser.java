@@ -18,6 +18,14 @@ import java.util.regex.Pattern;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IRegion;
 
+import ch.hsr.ifs.cute.framework.event.ConsoleEventParser;
+import ch.hsr.ifs.cute.framework.event.SuiteBeginEvent;
+import ch.hsr.ifs.cute.framework.event.SuiteEndEvent;
+import ch.hsr.ifs.cute.framework.event.TestErrorEvent;
+import ch.hsr.ifs.cute.framework.event.TestFailureEvent;
+import ch.hsr.ifs.cute.framework.event.TestStartEvent;
+import ch.hsr.ifs.cute.framework.event.TestSuccessEvent;
+
 public class CuteConsoleEventParser extends ConsoleEventParser {
 
 	private static final String LINE_QUALIFIER = "#";

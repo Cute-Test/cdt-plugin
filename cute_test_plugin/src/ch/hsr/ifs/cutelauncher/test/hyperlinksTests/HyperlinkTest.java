@@ -15,9 +15,9 @@ import java.util.Vector;
 
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.cute.core.ConsoleLinkHandler;
-import ch.hsr.ifs.cute.core.ConsolePatternListener;
-import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
+import ch.hsr.ifs.cute.framework.ConsolePatternListener;
+import ch.hsr.ifs.cute.framework.ui.ConsoleLinkHandler;
+import ch.hsr.ifs.cutelauncher.test.internal.console.ConsoleTest;
 import ch.hsr.ifs.cutelauncher.test.internal.console.FileInputTextConsole;
 
 /**

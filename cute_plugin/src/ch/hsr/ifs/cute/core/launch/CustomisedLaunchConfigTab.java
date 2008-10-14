@@ -39,8 +39,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.core.model.CuteModel;
+import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.model.CuteModel;
 
+@SuppressWarnings("restriction")
 public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	public static final String CUSTOM_SRC_PATH = "customSrcPath";
 	public static final String USE_CUSTOM_SRC_PATH = "useCustomSrcPath";
@@ -50,7 +52,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	private Text fCustomSrcLocationText;
 	private Button fCustomSrcLocationButton;
 	
-	protected CuteModel cm=CuteCorePlugin.getModel();
+	protected CuteModel cm=CuteFrameworkPlugin.getModel();
 	
 	public void createControl(Composite parent) {
 	    Font font = parent.getFont();

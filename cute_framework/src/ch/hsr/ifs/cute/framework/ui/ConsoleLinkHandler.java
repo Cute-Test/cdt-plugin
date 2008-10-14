@@ -9,7 +9,7 @@
  * Contributors: 
  * Emanuel Graf - initial API and implementation 
  ******************************************************************************/
-package ch.hsr.ifs.cute.framework;
+package ch.hsr.ifs.cute.framework.ui;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;

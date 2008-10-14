@@ -39,13 +39,13 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.cute.core.ConsoleLinkHandler;
-import ch.hsr.ifs.cute.core.ConsolePatternListener;
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.core.ShowResultView;
-import ch.hsr.ifs.cute.core.event.ConsoleEventParser;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
-import ch.hsr.ifs.cute.core.model.ModellBuilder;
+import ch.hsr.ifs.cute.framework.ConsolePatternListener;
+import ch.hsr.ifs.cute.framework.event.ConsoleEventParser;
+import ch.hsr.ifs.cute.framework.model.ModellBuilder;
+import ch.hsr.ifs.cute.framework.ui.ConsoleLinkHandler;
+import ch.hsr.ifs.cute.framework.ui.ShowResultView;
 /**
  * @author egraf
  *

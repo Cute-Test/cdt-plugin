@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cutelauncher.test;
+package ch.hsr.ifs.cutelauncher.test.internal.console;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,12 +15,13 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.Bundle;
 
-import ch.hsr.ifs.cute.core.ConsolePatternListener;
-import ch.hsr.ifs.cute.core.event.ConsoleEventParser;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
-import ch.hsr.ifs.cutelauncher.test.internal.console.FileInputTextConsole;
+import ch.hsr.ifs.cute.framework.ConsolePatternListener;
+import ch.hsr.ifs.cute.framework.event.ConsoleEventParser;
+import ch.hsr.ifs.cutelauncher.test.TestPlugin;
 
 public abstract class ConsoleTest extends TestCase {
+
 	private ConsoleEventParser consoleEventParser;
 	protected String filePathRoot;
 	

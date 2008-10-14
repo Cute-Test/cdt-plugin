@@ -31,13 +31,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.core.EclipseConsole;
 
 public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 

@@ -18,16 +18,16 @@ import junit.framework.Test;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.cute.core.ConsolePatternListener;
-import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.core.model.ModellBuilder;
-import ch.hsr.ifs.cute.core.model.TestCase;
-import ch.hsr.ifs.cute.core.model.TestElement;
-import ch.hsr.ifs.cute.core.model.TestFailure;
-import ch.hsr.ifs.cute.core.model.TestResult;
-import ch.hsr.ifs.cute.core.model.TestSession;
-import ch.hsr.ifs.cute.core.model.TestSuite;
-import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
+import ch.hsr.ifs.cute.framework.ConsolePatternListener;
+import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.model.ModellBuilder;
+import ch.hsr.ifs.cute.framework.model.TestCase;
+import ch.hsr.ifs.cute.framework.model.TestElement;
+import ch.hsr.ifs.cute.framework.model.TestFailure;
+import ch.hsr.ifs.cute.framework.model.TestResult;
+import ch.hsr.ifs.cute.framework.model.TestSession;
+import ch.hsr.ifs.cute.framework.model.TestSuite;
+import ch.hsr.ifs.cutelauncher.test.internal.console.ConsoleTest;
 
 /**
  * @author Emanuel Graf
@@ -66,7 +66,7 @@ public class ModelBuilderTest extends ConsoleTest {
 
 	@Override
 	protected void runTest() throws Throwable {
-		TestSession session = CuteCorePlugin.getModel().getSession();
+		TestSession session = CuteFrameworkPlugin.getModel().getSession();
 		assertEquals(getExpected(), getSessionString(session));
 	}
 

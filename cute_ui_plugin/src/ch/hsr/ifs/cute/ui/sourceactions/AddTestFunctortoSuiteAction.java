@@ -25,11 +25,8 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
-import ch.hsr.ifs.cute.core.EclipseConsole;
-
 public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 	private boolean constructorNeedParameterFlag=false;
-	private final MessageConsoleStream stream = EclipseConsole.getConsole();
 	
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
@@ -54,7 +51,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 				
 //				ArrayList al=o.getAL();
 								
-				String fname=nameAtCursor(o.getAL(),n.getNode(),stream);
+				String fname=nameAtCursor(o.getAL(),n.getNode());
 				if(fname.equals(""))return new MultiTextEdit();//FIXME potential bug point
 
 				constructorNeedParameterFlag=checkForConstructorWithParameters(astTu,n.getNode());
@@ -84,7 +81,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 		return new MultiTextEdit();
 	}
 	
-	protected String nameAtCursor(ArrayList<IASTName> operatorParenthesesNode,IASTNode node,MessageConsoleStream stream ){
+	protected String nameAtCursor(ArrayList<IASTName> operatorParenthesesNode,IASTNode node){
 		if(node instanceof IASTDeclaration){
 			if(node instanceof ICPPASTVisibilityLabel){
 				//public: private: protected: for class
@@ -95,13 +92,13 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 			try{
 			
 				boolean flag=checkClassForPublicOperatorParentesis(node);
-				if(!flag){stream.println("no public operator ()");return "";}
+				if(!flag){return "";}
 			
 			}catch(NullPointerException npe){npe.printStackTrace();}
 			catch(ClassCastException cce){cce.printStackTrace();}
 			
 			boolean flag=isTemplateClass(node);
-			if(flag){stream.println("template class declarations selected, unable to add as functor. (2)");return "";}
+			if(flag){return "";}
 	
 			
 			
@@ -118,10 +115,6 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 					operatorParenthesesNode, node, operatorMatchFlag);
 						
 			if(!operatorMatchFlag){
-				stream.println("no matching operator() found at current cursor location.");
-				if(getWantedTypeParent(node).getParent() instanceof IASTTranslationUnit){
-					stream.println("function selected.");//TODO trigger addfunctiontosuite
-				}
 				return "";
 			}
 			
@@ -154,7 +147,6 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 			//if(!(parentNode.getParent() instanceof ICPPASTTranslationUnit))	
 			return ((ICPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
 		}
-		stream.println("Unable to add as functor for cursor position.");
 		return ""; 
 	}
 

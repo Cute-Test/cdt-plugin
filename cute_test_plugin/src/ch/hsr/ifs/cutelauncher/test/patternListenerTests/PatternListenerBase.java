@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cutelauncher.test.patternListenerTests;
 
-import ch.hsr.ifs.cutelauncher.test.ConsoleTest;
+import ch.hsr.ifs.cutelauncher.test.internal.console.ConsoleTest;
 
 public abstract class PatternListenerBase extends ConsoleTest {
 	@Override

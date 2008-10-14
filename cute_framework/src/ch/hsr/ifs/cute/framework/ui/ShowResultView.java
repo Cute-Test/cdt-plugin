@@ -9,7 +9,7 @@
  * Contributors: 
  * Emanuel Graf - initial API and implementation 
  ******************************************************************************/
-package ch.hsr.ifs.cute.framework;
+package ch.hsr.ifs.cute.framework.ui;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -19,7 +19,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.cute.framework.ui.TestRunnerViewPart;
+import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
 
 public class ShowResultView extends UIJob{
 

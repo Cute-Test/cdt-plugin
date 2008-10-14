@@ -49,4 +49,18 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="ch.hsr.ifs.cute.framework"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

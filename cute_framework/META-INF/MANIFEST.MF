@@ -7,21 +7,20 @@ Bundle-Activator: ch.hsr.ifs.cute.framework.CuteFrameworkPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.cdt.core;bundle-version="[5.0.0,6.0.0)",
- org.eclipse.jface,
- org.eclipse.ui.workbench,
- org.eclipse.core.runtime;bundle-version="3.4.0",
- org.eclipse.ui.ide,
- org.eclipse.compare,
- org.eclipse.jface.text,
- org.eclipse.debug.ui,
- org.eclipse.ui.console;bundle-version="3.3.0",
- org.eclipse.ui.workbench.texteditor
+ org.eclipse.jface;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.ui.workbench;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.ui.ide;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.compare;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.jface.text;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.debug.ui;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.ui.console;bundle-version="[3.3.0,4.0.0)",
+ org.eclipse.ui.workbench.texteditor;bundle-version="[3.4.0,4.0.0)"
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.framework,
  ch.hsr.ifs.cute.framework.event,
  ch.hsr.ifs.cute.framework.model,
  ch.hsr.ifs.cute.framework.preference,
- ch.hsr.ifs.cute.framework.template.processes,
  ch.hsr.ifs.cute.framework.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
