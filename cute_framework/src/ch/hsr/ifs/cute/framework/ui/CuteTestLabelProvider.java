@@ -25,15 +25,15 @@ import ch.hsr.ifs.cute.framework.model.TestSuite;
  */
 public class CuteTestLabelProvider  extends LabelProvider {
 	
-	private Image suiteRun = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiterun.gif").createImage();
-	private Image suiteOk = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiteok.gif").createImage();
-	private Image suiteFail = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuitefail.gif").createImage();
-	private Image suiteError = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiteerror.gif").createImage();
+	private Image suiteRun = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiterun.gif").createImage(); //$NON-NLS-1$
+	private Image suiteOk = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiteok.gif").createImage(); //$NON-NLS-1$
+	private Image suiteFail = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuitefail.gif").createImage(); //$NON-NLS-1$
+	private Image suiteError = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiteerror.gif").createImage(); //$NON-NLS-1$
 	
-	private Image testRun = CuteFrameworkPlugin.getImageDescriptor("obj16/testrun.gif").createImage();
-	private Image testOk = CuteFrameworkPlugin.getImageDescriptor("obj16/testok.gif").createImage();
-	private Image testFail = CuteFrameworkPlugin.getImageDescriptor("obj16/testfail.gif").createImage();
-	private Image testError = CuteFrameworkPlugin.getImageDescriptor("obj16/testerr.gif").createImage();
+	private Image testRun = CuteFrameworkPlugin.getImageDescriptor("obj16/testrun.gif").createImage(); //$NON-NLS-1$
+	private Image testOk = CuteFrameworkPlugin.getImageDescriptor("obj16/testok.gif").createImage(); //$NON-NLS-1$
+	private Image testFail = CuteFrameworkPlugin.getImageDescriptor("obj16/testfail.gif").createImage(); //$NON-NLS-1$
+	private Image testError = CuteFrameworkPlugin.getImageDescriptor("obj16/testerr.gif").createImage(); //$NON-NLS-1$
 
 	public Image getImage(Object element) {
 		if (element instanceof TestSuite) {

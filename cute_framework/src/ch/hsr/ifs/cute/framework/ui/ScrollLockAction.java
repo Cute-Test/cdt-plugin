@@ -14,6 +14,7 @@ package ch.hsr.ifs.cute.framework.ui;
 import org.eclipse.jface.action.Action;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.Messages;
 
 /**
  * @author Emanuel Graf
@@ -24,9 +25,9 @@ public class ScrollLockAction extends Action {
 	private TestRunnerViewPart view;
 	
 	public ScrollLockAction(TestRunnerViewPart view) {
-		super("Scroll Lock");
+		super(Messages.getString("ScrollLockAction.ScrollLock")); //$NON-NLS-1$
 		this.view = view;
-		setToolTipText("Scroll Lock"); 
+		setToolTipText(Messages.getString("ScrollLockAction.ScrollLock"));  //$NON-NLS-1$
 		setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/lock.gif")); //$NON-NLS-1$
 		setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$
 		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$

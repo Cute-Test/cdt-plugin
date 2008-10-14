@@ -14,6 +14,7 @@ package ch.hsr.ifs.cute.framework.ui;
 import org.eclipse.jface.action.Action;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.Messages;
 import ch.hsr.ifs.cute.framework.preference.PreferenceConstants;
 
 /**
@@ -25,10 +26,10 @@ public class ShowWhiteSpaceAction extends Action {
 	private CuteTextMergeViewer viewer;
 	
 	public ShowWhiteSpaceAction(CuteTextMergeViewer compareViewer) {
-		super("Show Whitespace Characters", AS_CHECK_BOX); 
+		super(Messages.getString("ShowWhiteSpaceAction.ShowWhitespace"), AS_CHECK_BOX);  //$NON-NLS-1$
 		viewer = compareViewer;
 		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/show_whitespace_chars.gif")); //$NON-NLS-1$
-		setToolTipText("Show Whitespace Characters");
+		setToolTipText(Messages.getString("ShowWhiteSpaceAction.ShowWhitespace")); //$NON-NLS-1$
 		setChecked(CuteFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES));
 	}
 

@@ -20,11 +20,12 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.Messages;
 
 public class ShowResultView extends UIJob{
 
 	public ShowResultView() {
-		super("Show Result View");
+		super(Messages.getString("ShowResultView.ShowResultView")); //$NON-NLS-1$
 	}
 	
 	private TestRunnerViewPart showTestRunnerViewPartInActivePage(TestRunnerViewPart testRunner) {
@@ -59,9 +60,9 @@ public class ShowResultView extends UIJob{
 	@Override
 	public IStatus runInUIThread(IProgressMonitor monitor) {
 		if (showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage()) == null) {
-			return new Status(IStatus.WARNING, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,"Could not show TestResultView",null);
+			return new Status(IStatus.WARNING, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("ShowResultView.CouldNotShow"),null); //$NON-NLS-1$
 		}else {
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("ShowResultView.OK"),null); //$NON-NLS-1$
 		}
 	}
 	

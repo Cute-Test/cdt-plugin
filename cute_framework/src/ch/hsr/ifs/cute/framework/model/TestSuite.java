@@ -19,7 +19,7 @@ import java.util.Vector;
  */
 public class TestSuite extends TestElement implements ITestComposite, ITestElementListener {
 	
-	private String name = "";
+	private String name = ""; //$NON-NLS-1$
 	
 	private ITestComposite parent;
 	

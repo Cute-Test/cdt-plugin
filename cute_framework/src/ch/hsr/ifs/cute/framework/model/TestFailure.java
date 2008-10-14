@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  */
 public class TestFailure extends TestResult {
 	
-	private static final String REG_EXP = "((.*)(\t)(.*)(\t)(.*)(\t)(.*)(\t))";
+	private static final String REG_EXP = "((.*)(\t)(.*)(\t)(.*)(\t)(.*)(\t))"; //$NON-NLS-1$
 	
 	protected String expected;
 	protected String was;
@@ -47,7 +47,7 @@ public class TestFailure extends TestResult {
 		if(expected != null && was != null) {
 			strBuild.append(' ');
 			strBuild.append(expected);
-			strBuild.append(" but was: ");
+			strBuild.append(" but was: "); //$NON-NLS-1$
 			strBuild.append(was);
 		}
 		return strBuild.toString();
@@ -62,15 +62,15 @@ public class TestFailure extends TestResult {
 	}
 	
 	private String unquoteMsg(String text) {
-		String ret = text.replaceAll("\\\\{2}+", "\\\\");
+		String ret = text.replaceAll("\\\\{2}+", "\\\\");  //$NON-NLS-1$//$NON-NLS-2$
 		return ret;
 	}
 	
 	private String unquote(String text) {
-		String ret = text.replaceAll("\\\\t", "\t");
-		ret = ret.replaceAll("\\\\n", "\n");
-		ret = ret.replaceAll("\\\\r", "\r");
-		ret = ret.replaceAll("\\{2}+", "\\");
+		String ret = text.replaceAll("\\\\t", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+		ret = ret.replaceAll("\\\\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		ret = ret.replaceAll("\\\\r", "\r"); //$NON-NLS-1$ //$NON-NLS-2$
+		ret = ret.replaceAll("\\{2}+", "\\"); //$NON-NLS-1$ //$NON-NLS-2$
 		return ret;
 	}
 

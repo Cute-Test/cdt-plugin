@@ -21,7 +21,7 @@ public class TestResult {
 	protected String msg;
 	
 	protected TestResult() {
-		msg = "";
+		msg = ""; //$NON-NLS-1$
 	}
 
 	public TestResult(String msg) {

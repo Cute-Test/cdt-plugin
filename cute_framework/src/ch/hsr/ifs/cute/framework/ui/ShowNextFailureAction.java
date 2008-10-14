@@ -14,6 +14,7 @@ package ch.hsr.ifs.cute.framework.ui;
 import org.eclipse.jface.action.Action;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.Messages;
 
 /**
  * @author Emanuel Graf
@@ -24,11 +25,11 @@ public class ShowNextFailureAction extends Action {
 	private TestRunnerViewPart trViewPart;
 
 	public ShowNextFailureAction(TestRunnerViewPart trViewPart) {
-		super("Next Failure");  
+		super(Messages.getString("ShowNextFailureAction.ShowNextFailedTest"));   //$NON-NLS-1$
 		setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/select_next.gif")); //$NON-NLS-1$
 		setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/select_next.gif")); //$NON-NLS-1$
 		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/select_next.gif")); //$NON-NLS-1$
-		setToolTipText("Show Next Failed Test"); 
+		setToolTipText(Messages.getString("ShowNextFailureAction.ShowNextFailedTest"));  //$NON-NLS-1$
 		this.trViewPart = trViewPart;
 	}
 

@@ -68,16 +68,16 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 	
 	private TextViewer getSourceViewer(ViewerLocation loc) throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		Class<?> class1 = ((TextMergeViewer)this).getClass().getSuperclass();
-		String fieldName = "";
+		String fieldName = ""; //$NON-NLS-1$
 		switch (loc) {
 		case LEFT:
-			fieldName = "fLeft";
+			fieldName = "fLeft"; //$NON-NLS-1$
 			break;
 		case RIGHT:
-			fieldName = "fRight";
+			fieldName = "fRight"; //$NON-NLS-1$
 			break;
 		case CENTER:
-			fieldName = "fAncestor";
+			fieldName = "fAncestor"; //$NON-NLS-1$
 			break;
 		}
 		
@@ -141,13 +141,13 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 	private WhitespaceCharacterPainter getWhitespaceCharacterPainter(
 			Object viewer) {
 		try {
-			Class<?> viewerClass = Class.forName("org.eclipse.jface.text.TextViewer");
-			Field painterMgField = viewerClass.getDeclaredField("fPaintManager");
+			Class<?> viewerClass = Class.forName("org.eclipse.jface.text.TextViewer"); //$NON-NLS-1$
+			Field painterMgField = viewerClass.getDeclaredField("fPaintManager"); //$NON-NLS-1$
 			painterMgField.setAccessible(true);
 			PaintManager pm = (PaintManager)painterMgField.get(viewer);
 			
 			Class<? extends PaintManager> classPm = pm.getClass();
-			Field painterListField = classPm.getDeclaredField("fPainters");
+			Field painterListField = classPm.getDeclaredField("fPainters"); //$NON-NLS-1$
 			painterListField.setAccessible(true);
 			List painters = (List) painterListField.get(pm);
 			for (Object object : painters) {

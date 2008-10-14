@@ -19,6 +19,6 @@ import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
  */
 public class PreferenceConstants {
 	
-	public static final String SHOW_WHITESPACES = CuteFrameworkPlugin.PLUGIN_ID + "SHOW_WHITESPACES"; 
+	public static final String SHOW_WHITESPACES = CuteFrameworkPlugin.PLUGIN_ID + "SHOW_WHITESPACES";  //$NON-NLS-1$
 
 }

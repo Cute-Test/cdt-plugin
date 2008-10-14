@@ -14,6 +14,7 @@ package ch.hsr.ifs.cute.framework.ui;
 import org.eclipse.jface.action.Action;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.Messages;
 
 /**
  * @author Emanuel Graf
@@ -24,11 +25,11 @@ public class ShowPreviousFailureAction extends Action {
 	private TestRunnerViewPart trViewPart;
 
 	public ShowPreviousFailureAction(TestRunnerViewPart trViewPart) {
-		super("Previous Failure");
+		super(Messages.getString("ShowPreviousFailureAction.ShowPreviousFaildTest")); //$NON-NLS-1$
 		setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/select_prev.gif")); //$NON-NLS-1$
 		setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif")); //$NON-NLS-1$
 		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif")); //$NON-NLS-1$
-		setToolTipText("Show Previous Failed Test"); 
+		setToolTipText(Messages.getString("ShowPreviousFailureAction.ShowPreviousFaildTest"));  //$NON-NLS-1$
 		this.trViewPart = trViewPart;
 	}
 

@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.Messages;
 
 /**
  * @author Emanuel Graf
@@ -30,12 +31,12 @@ public class CutePrefPage extends FieldEditorPreferencePage implements IWorkbenc
 	public CutePrefPage() {
 		super(GRID);
 		setPreferenceStore(CuteFrameworkPlugin.getDefault().getPreferenceStore());
-		setDescription("Cute Preferences Page");
+		setDescription(Messages.getString("CutePrefPage.CutePrefPage")); //$NON-NLS-1$
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new BooleanFieldEditor(PreferenceConstants.SHOW_WHITESPACES, "Show whitespaces in result comparison.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.SHOW_WHITESPACES, Messages.getString("CutePrefPage.ShowWhitespace"), getFieldEditorParent())); //$NON-NLS-1$
 
 	}
 
@@ -45,7 +46,7 @@ public class CutePrefPage extends FieldEditorPreferencePage implements IWorkbenc
 
 	@Override
 	public Image getImage() {
-		return CuteFrameworkPlugin.getImageDescriptor("obj16/cute_app.gif").createImage();
+		return CuteFrameworkPlugin.getImageDescriptor("obj16/cute_app.gif").createImage(); //$NON-NLS-1$
 	}
 	
 	

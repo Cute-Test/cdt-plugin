@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 
+import ch.hsr.ifs.cute.framework.Messages;
 import ch.hsr.ifs.cute.framework.model.TestCase;
 import ch.hsr.ifs.cute.framework.model.TestFailure;
 import ch.hsr.ifs.cute.framework.model.TestResult;
@@ -49,7 +50,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 	    
 	    public CompareElement(String content) {
 	    	if(content == null) {
-	    		fContent = "no Data";
+	    		fContent = "no Data"; //$NON-NLS-1$
 	    	}else {
 	    		fContent= content;
 	    	}
@@ -112,9 +113,9 @@ public class CuteCompareResultDialog extends TrayDialog {
 	
 	private Control createCompareViewer(ViewForm pane) {
 		final CompareConfiguration compareConfiguration= new CompareConfiguration();
-	    compareConfiguration.setLeftLabel("Expected:"); 
+	    compareConfiguration.setLeftLabel(Messages.getString("CuteCompareResultDialog.Expected"));  //$NON-NLS-1$
 	    compareConfiguration.setLeftEditable(false);
-	    compareConfiguration.setRightLabel("Actual:");	 
+	    compareConfiguration.setRightLabel(Messages.getString("CuteCompareResultDialog.Actual"));	  //$NON-NLS-1$
 	    compareConfiguration.setRightEditable(false);
 	    compareConfiguration.setProperty(CompareConfiguration.IGNORE_WHITESPACE, Boolean.FALSE);
 
@@ -133,7 +134,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 	
 
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, "OK", true); 
+		createButton(parent, IDialogConstants.OK_ID, Messages.getString("CuteCompareResultDialog.OK"), true);  //$NON-NLS-1$
 	}
 	
 	public void setCompareViewerInput(TestCase test) {
@@ -152,7 +153,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 	
     protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Result Comparison");
+		newShell.setText(Messages.getString("CuteCompareResultDialog.ResultComparison")); //$NON-NLS-1$
 	}
 
 	public void refresh() {

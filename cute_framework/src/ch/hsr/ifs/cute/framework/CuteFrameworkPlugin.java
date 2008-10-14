@@ -35,7 +35,7 @@ import ch.hsr.ifs.cute.framework.model.CuteModel;
 public class CuteFrameworkPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.framework";
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.framework"; //$NON-NLS-1$
 
 	// The shared instance
 	private static CuteFrameworkPlugin plugin;

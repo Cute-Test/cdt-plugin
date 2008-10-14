@@ -51,9 +51,9 @@ public abstract class ConsoleEventParser {
 	
 	protected void throwLineParsingException(IRegion reg, String line,
 			Exception e) {
-		throw new RuntimeException("Failure parsing console event {<line="
-				+ line + ">, <Reg=" + reg
-				+ ">} into TestEvent.  Check log for more information.", e);
+		throw new RuntimeException("Failure parsing console event {<line=" //$NON-NLS-1$
+				+ line + ">, <Reg=" + reg //$NON-NLS-1$
+				+ ">} into TestEvent.  Check log for more information.", e); //$NON-NLS-1$
 	}
 
 	protected Matcher matcherFor(Pattern pattern, String line)
@@ -61,7 +61,7 @@ public abstract class ConsoleEventParser {
 		Matcher m = pattern.matcher(line);
 		if (!m.matches()) {
 			throw new CoreException(new Status(Status.ERROR,
-					CuteFrameworkPlugin.PLUGIN_ID, 1, "Pattern don't match",
+					CuteFrameworkPlugin.PLUGIN_ID, 1, "Pattern don't match", //$NON-NLS-1$
 					null));
 		}
 		return m;
@@ -71,13 +71,13 @@ public abstract class ConsoleEventParser {
 		StringBuffer buffer = new StringBuffer();
 		for (int i = 0; i < fragments.length; i++) {
 			if (i > 0)
-				buffer.append("|");
+				buffer.append("|"); //$NON-NLS-1$
 			buffer.append(fragments[i]);
 		}
 		return buffer.toString();
 	}
 
 	protected static String escapeForRegex(String string) {
-		return string.replace("]", "\\]").replace("[", "\\[");
+		return string.replace("]", "\\]").replace("[", "\\[");   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
 	}
 }

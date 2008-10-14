@@ -33,6 +33,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.Messages;
 import ch.hsr.ifs.cute.framework.model.ISessionListener;
 import ch.hsr.ifs.cute.framework.model.TestSession;
 
@@ -40,7 +41,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	
 	private enum Orientation{horizontal, vertical}; 
 
-	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
+	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"; //$NON-NLS-1$
 
 	private Composite top = null;
 
@@ -250,14 +251,14 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 					testViewer.selectFirstFailure();
 				}
 			}
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,"OK",null);
+			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("TestRunnerViewPart.OK"),null); //$NON-NLS-1$
 		}
 	}
 
 	private class FailuresOnlyFilterAction extends Action {
 		public FailuresOnlyFilterAction() {
-			super("Show Failures Only", AS_CHECK_BOX);
-			setToolTipText("Show Failures Only");
+			super(Messages.getString("TestRunnerViewPart.ShowFailuresOnly"), AS_CHECK_BOX); //$NON-NLS-1$
+			setToolTipText(Messages.getString("TestRunnerViewPart.ShowFailuresOnly")); //$NON-NLS-1$
 			setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/failures.gif")); //$NON-NLS-1$
 		}
 
@@ -268,8 +269,8 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	
 	private class RerunLastTestAction extends Action{
 		public RerunLastTestAction() {
-			setText("Rerun Test"); 
-			setToolTipText("Rerun Test");
+			setText(Messages.getString("TestRunnerViewPart.RerunTest"));  //$NON-NLS-1$
+			setToolTipText(Messages.getString("TestRunnerViewPart.RerunTest")); //$NON-NLS-1$
 			setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/relaunch.gif")); //$NON-NLS-1$
 			setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
 			setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
@@ -284,8 +285,8 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	
 	private class StopAction extends Action{
 		public StopAction() {
-			setText("Stop JUnit Test");
-			setToolTipText("Stop CuTe Test Run");
+			setText(Messages.getString("TestRunnerViewPart.StopCuteTestF")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("TestRunnerViewPart.StopCuteTest")); //$NON-NLS-1$
 			setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/stop.gif")); //$NON-NLS-1$
 			setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
 			setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
@@ -331,7 +332,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	}
 
 	public void sessionFinished(TestSession session) {
-		SessionFinishedUIJob sessionFinishedUIJob = new SessionFinishedUIJob("Session Over");
+		SessionFinishedUIJob sessionFinishedUIJob = new SessionFinishedUIJob(Messages.getString("TestRunnerViewPart.SessionOver")); //$NON-NLS-1$
 		sessionFinishedUIJob.schedule();
 	}
 

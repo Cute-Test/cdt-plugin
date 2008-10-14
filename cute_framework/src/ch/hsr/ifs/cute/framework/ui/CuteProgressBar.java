@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.Messages;
 import ch.hsr.ifs.cute.framework.model.ISessionListener;
 import ch.hsr.ifs.cute.framework.model.ITestComposite;
 import ch.hsr.ifs.cute.framework.model.ITestCompositeListener;
@@ -200,7 +201,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 	public void modelCanged(TestElement source, NotifyEvent event) {
 		if(event.getType() == NotifyEvent.EventType.testFinished || event.getType() == NotifyEvent.EventType.suiteFinished) {
-			UIJob job = new UIJob("Update Progessbar") {
+			UIJob job = new UIJob(Messages.getString("CuteProgressBar.UpdateProgressbar")) { //$NON-NLS-1$
 
 				@Override
 				public boolean belongsTo(Object family) {
@@ -210,7 +211,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
 					update(session.getRun(), session.getError() + session.getFailure());
-					return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null);
+					return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
 				}
 
 			};
@@ -221,7 +222,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	public void sessionStarted(TestSession session) {
 		this.session = session;
 		session.addListener(this);
-		UIJob job = new UIJob("Reset Progessbar") {
+		UIJob job = new UIJob(Messages.getString("CuteProgressBar.ResetProgressbar")) { //$NON-NLS-1$
 
 			@Override
 			public boolean belongsTo(Object family) {
@@ -231,7 +232,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				reset();
-				return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null);
+				return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
 			}
 			
 		};
@@ -245,7 +246,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 	public void newTestElement(ITestComposite source, TestElement newElement) {
 		newElement.addTestElementListener(this);
-		UIJob job = new UIJob("Update Progessbar") {
+		UIJob job = new UIJob(Messages.getString("CuteProgressBar.UpdateProgressbar")) { //$NON-NLS-1$
 
 			@Override
 			public boolean belongsTo(Object family) {
@@ -255,7 +256,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				update(session.getRun(), session.getError() + session.getFailure(), session.getTotalTests());
-				return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null);
+				return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
 			}
 
 		};
