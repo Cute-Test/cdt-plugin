@@ -19,7 +19,6 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.internal.ui.SWTFactory;
-import org.eclipse.debug.internal.ui.launchConfigurations.LaunchConfigurationsMessages;
 import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
@@ -44,8 +43,9 @@ import ch.hsr.ifs.cute.framework.model.CuteModel;
 
 @SuppressWarnings("restriction")
 public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
-	public static final String CUSTOM_SRC_PATH = "customSrcPath";
-	public static final String USE_CUSTOM_SRC_PATH = "useCustomSrcPath";
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	public static final String CUSTOM_SRC_PATH = "customSrcPath"; //$NON-NLS-1$
+	public static final String USE_CUSTOM_SRC_PATH = "useCustomSrcPath"; //$NON-NLS-1$
 	protected Label descriptionLabel;
 	private Button fLocalRadioButton;
 	private Button fCustomSrcRadioButton;
@@ -67,20 +67,20 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	    comp.setFont(font);
 	    GridData gd;
 	    	    
-	    Group group = SWTFactory.createGroup(comp, "Source Folder Selection", 3, 2, GridData.FILL_HORIZONTAL);
+	    Group group = SWTFactory.createGroup(comp, ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceFolderSelection"), 3, 2, GridData.FILL_HORIZONTAL); //$NON-NLS-1$
 		Composite n_comp = SWTFactory.createComposite(group, parent.getFont(), 3, 3, GridData.FILL_BOTH, 0, 0);
 		descriptionLabel=new Label(n_comp,SWT.NONE);
-	    descriptionLabel.setText("This is for unmanaged project to set the source folder for Cute Plug-in to scan.");
+	    descriptionLabel.setText(ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceDescText")); //$NON-NLS-1$
 	    gd = new GridData();
 		gd.horizontalSpan = 3;
 		descriptionLabel.setLayoutData(gd);
 	    
-		fLocalRadioButton = createRadioButton(n_comp, "Default");
+		fLocalRadioButton = createRadioButton(n_comp, ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.Default")); //$NON-NLS-1$
 		gd = new GridData();
 		gd.horizontalSpan = 3;
 		fLocalRadioButton.setLayoutData(gd);
 		
-		fCustomSrcRadioButton = createRadioButton(n_comp, "Custom path:");
+		fCustomSrcRadioButton = createRadioButton(n_comp, ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.CustomPath")); //$NON-NLS-1$
 		fCustomSrcRadioButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent evt) {
@@ -89,7 +89,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 		});
 		fCustomSrcLocationText = SWTFactory.createSingleText(n_comp, 1);
 		fCustomSrcLocationText.addModifyListener(fBasicModifyListener);
-		fCustomSrcLocationButton = createPushButton(n_comp, LaunchConfigurationsMessages.CommonTab__Browse_6, null);	 
+		fCustomSrcLocationButton = createPushButton(n_comp, EMPTY_STRING, null);	 
 		fCustomSrcLocationButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent evt) {
@@ -144,7 +144,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 		SharedLocationSelectionDialog dialog = new SharedLocationSelectionDialog(getShell(),
 				   currentContainer,
 				   false,
-				   LaunchConfigurationsMessages.CommonTab_Select_a_location_for_the_launch_configuration_13);
+				   EMPTY_STRING);
 		dialog.showClosedProjects(false);
 		dialog.open();
 		Object[] results = dialog.getResult();	
@@ -186,7 +186,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	}
 	//////////////////////////////
 	public String getName() {
-		return "Source lookup path";
+		return ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.LookupPath"); //$NON-NLS-1$
 	}
 
 	public void initializeFrom(ILaunchConfiguration configuration) {
@@ -195,7 +195,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 		if(flag){
 			fCustomSrcRadioButton.setSelection(true);
 			setSharedEnabled(true);
-			fCustomSrcLocationText.setText(configuration.getAttribute(CUSTOM_SRC_PATH,""));
+			fCustomSrcLocationText.setText(configuration.getAttribute(CUSTOM_SRC_PATH,EMPTY_STRING));
 		}else{
 			fLocalRadioButton.setSelection(true);
 			setSharedEnabled(false);
@@ -211,8 +211,8 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	}
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
-		if(isShared() && fCustomSrcLocationText.getText().equals("")){
-			setErrorMessage("No source path selected.");
+		if(isShared() && fCustomSrcLocationText.getText().equals(EMPTY_STRING)){
+			setErrorMessage(ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.NoSourcePathSelected")); //$NON-NLS-1$
 			return false;
 		}
 		return true;

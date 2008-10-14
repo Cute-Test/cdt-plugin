@@ -19,6 +19,8 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
 public class LaunchEnvironmentVariables {
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
 	public static void apply(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
 		
@@ -31,15 +33,15 @@ public class LaunchEnvironmentVariables {
 	
 	private static void setMacDYLD_LIBRARY_PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setPathEnvironmentVariable(wc,project,"DYLD_LIBRARY_PATH");
+		setPathEnvironmentVariable(wc,project,"DYLD_LIBRARY_PATH"); //$NON-NLS-1$
 	}
 	private static void setLinuxLD_LIBRARY_PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setPathEnvironmentVariable(wc,project,"LD_LIBRARY_PATH");
+		setPathEnvironmentVariable(wc,project,"LD_LIBRARY_PATH"); //$NON-NLS-1$
 	}
 	private static void setWin32PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setPathEnvironmentVariable(wc,project,"PATH");
+		setPathEnvironmentVariable(wc,project,"PATH"); //$NON-NLS-1$
 	}
 	
 	//caveat:not for generic environment variable
@@ -47,9 +49,9 @@ public class LaunchEnvironmentVariables {
 	private static void setPathEnvironmentVariable(ILaunchConfigurationWorkingCopy wc,
 			ICProject project,String environmentVariableName) throws CoreException {
 		String path=getBuildEnvironmentVariable(environmentVariableName,project);
-		String pathSeparator=System.getProperty("path.separator");//assumption that it is only 1 char wide
-		if(!path.equals(""))
-			if( !(path.charAt(path.length()-1)+"").equals(pathSeparator))
+		String pathSeparator=System.getProperty("path.separator");//assumption that it is only 1 char wide //$NON-NLS-1$
+		if(!path.equals(EMPTY_STRING))
+			if( !(path.charAt(path.length()-1)+EMPTY_STRING).equals(pathSeparator))
 				path+=pathSeparator;
 		
 		IProject[] libProject=getReferencedProjects(project);
@@ -65,7 +67,7 @@ public class LaunchEnvironmentVariables {
 	}
 
 	private static String getBuildEnvironmentVariable(String key,ICProject project) {
-		String result="";
+		String result=EMPTY_STRING;
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project.getUnderlyingResource());
 		if (info != null) {
 			IConfiguration ic=info.getDefaultConfiguration();
@@ -85,9 +87,9 @@ public class LaunchEnvironmentVariables {
 	}
 	
 	private static String generateLibPath(IProject[] libProject, String pathSeparator) {
-		if(libProject.length<1)return "";
+		if(libProject.length<1)return EMPTY_STRING;
 		
-		String result="";
+		String result=EMPTY_STRING;
 		
 		for(int x=0;x<libProject.length;x++){
 			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject[x]);
@@ -102,7 +104,7 @@ public class LaunchEnvironmentVariables {
 				}else{
 					parameter=libProject[x].getFolder(location).getFullPath();	
 				}
-				result+= "${workspace_loc:" + parameter.toPortableString() + "}"+pathSeparator;
+				result+= "${workspace_loc:" + parameter.toPortableString() + "}"+pathSeparator; //$NON-NLS-1$ //$NON-NLS-2$
 			}	
 		}
 		

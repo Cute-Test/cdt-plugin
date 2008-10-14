@@ -7,7 +7,7 @@
             delegate="ch.hsr.ifs.cute.core.launch.CuteLauncherDelegate"
             id="ch.hsr.ifs.cutelauncher.launchConfig"
             modes="run"
-            name="CUTE Test"
+            name="%launchConfigurationType.name.0"
             />
    </extension>
    <extension
@@ -28,7 +28,7 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            label="CUTE Test"
+            label="%shortcut.label.0"
             icon="icons/obj16/cute_app.gif"
             modes="run"
             class="ch.hsr.ifs.cute.core.launch.CuteLaunchShortcut"
@@ -61,7 +61,7 @@
            </enablement>
            <contextLabel
          	  mode="run"
-         	  label="CUTE Test"/>
+         	  label="%contextLabel.label.0"/>
   		 </contextualLaunch>
       </shortcut>
    </extension>

@@ -55,7 +55,7 @@ public class CopyCuteFiles extends ProcessRunner {
 				throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Copy Cute files failure: template source not found:" + sourceDir)); //$NON-NLS-1$
 			}
 		} catch (IOException e1) {
-			throw new ProcessFailureException("Copy Cute files failure: template source not found: " + sourceDir);
+			throw new ProcessFailureException("Copy Cute files failure: template source not found: " + sourceDir); //$NON-NLS-1$
 		}
 
 		File[] filenames = getFiles(path);
@@ -68,9 +68,9 @@ public class CopyCuteFiles extends ProcessRunner {
 				copyFile(projectHandle, targetDir, file, contents);
 				projectHandle.refreshLocal(IResource.DEPTH_INFINITE, null);
 			} catch (IOException e) {
-				throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Could not open File: " + file.getAbsolutePath()));
+				throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Could not open File: " + file.getAbsolutePath())); //$NON-NLS-1$
 			} catch (CoreException e) {
-				throw new ProcessFailureException("Could not write File: " + e.getMessage(), e);
+				throw new ProcessFailureException("Could not write File: " + e.getMessage(), e); //$NON-NLS-1$
 			}
 		}
 		
@@ -78,7 +78,7 @@ public class CopyCuteFiles extends ProcessRunner {
 
 	private void copyFile(IProject projectHandle, String targetDir, File file,
 			InputStream contents) throws CoreException {
-		IFile iFile = projectHandle.getFile(targetDir + "/" + file.getName());
+		IFile iFile = projectHandle.getFile(targetDir + "/" + file.getName()); //$NON-NLS-1$
 		if (!iFile.getParent().exists()) {
 			ProcessHelper.mkdirs(projectHandle, projectHandle.getFolder(iFile.getParent().getProjectRelativePath()));
 		}
@@ -97,10 +97,10 @@ public class CopyCuteFiles extends ProcessRunner {
 			return file.listFiles(new FilenameFilter() {
 
 				public boolean accept(File dir, String name) {
-					return name.endsWith(".h");
+					return name.endsWith(".h"); //$NON-NLS-1$
 				}});
 		}else {
-			throw new ProcessFailureException("Source is not a Direcotry");
+			throw new ProcessFailureException("Source is not a Direcotry"); //$NON-NLS-1$
 		}
 	}
 

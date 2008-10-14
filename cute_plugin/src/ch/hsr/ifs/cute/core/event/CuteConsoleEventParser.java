@@ -28,27 +28,27 @@ import ch.hsr.ifs.cute.framework.event.TestSuccessEvent;
 
 public class CuteConsoleEventParser extends ConsoleEventParser {
 
-	private static final String LINE_QUALIFIER = "#";
+	private static final String LINE_QUALIFIER = "#"; //$NON-NLS-1$
 	private static final int LINEPREFIXLENGTH = LINE_QUALIFIER.length();
-	private static final String BEGINNING = "beginning";
-	private static final String ENDING = "ending";
-	private static final String STARTTEST = "starting";
-	private static final String SUCCESS = "success";
-	private static final String FAILURE = "failure";
-	private static final String ERROR = "error";
+	private static final String BEGINNING = "beginning"; //$NON-NLS-1$
+	private static final String ENDING = "ending"; //$NON-NLS-1$
+	private static final String STARTTEST = "starting"; //$NON-NLS-1$
+	private static final String SUCCESS = "success"; //$NON-NLS-1$
+	private static final String FAILURE = "failure"; //$NON-NLS-1$
+	private static final String ERROR = "error"; //$NON-NLS-1$
 
 	private static Pattern SUITEBEGINNINGLINE = Pattern.compile(LINE_QUALIFIER
-			+ BEGINNING + " (.*) (\\d+)$");
+			+ BEGINNING + " (.*) (\\d+)$"); //$NON-NLS-1$
 	private static Pattern SUITEENDINGLINE = Pattern.compile(LINE_QUALIFIER
-			+ ENDING + " (.*)$");
+			+ ENDING + " (.*)$"); //$NON-NLS-1$
 	private static Pattern TESTSTARTLINE = Pattern.compile(LINE_QUALIFIER
-			+ STARTTEST + " (.*)$");
+			+ STARTTEST + " (.*)$"); //$NON-NLS-1$
 	private static Pattern TESTFAILURELINE = Pattern.compile(LINE_QUALIFIER
-			+ FAILURE + " (.*) (.*):(\\d+) (.*)$");
+			+ FAILURE + " (.*) (.*):(\\d+) (.*)$"); //$NON-NLS-1$
 	private static Pattern TESTSUCESSLINE = Pattern.compile(LINE_QUALIFIER
-			+ SUCCESS + " (.*) (.*)$");
+			+ SUCCESS + " (.*) (.*)$"); //$NON-NLS-1$
 	private static Pattern TESTERRORLINE = Pattern.compile(LINE_QUALIFIER
-			+ ERROR + " (.*?) (.*)$");
+			+ ERROR + " (.*?) (.*)$"); //$NON-NLS-1$
 
 	public String getLineQualifier() {
 		return escapeForRegex(LINE_QUALIFIER);
@@ -56,10 +56,10 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
 
 	public final String getComprehensiveLinePattern() {
 		return escapeForRegex(LINE_QUALIFIER
-				+ "("
+				+ "(" //$NON-NLS-1$
 				+ regExUnion(new String[] { LINE_QUALIFIER, BEGINNING, ENDING,
 						SUCCESS, STARTTEST, FAILURE, ERROR, }))
-				+ ")(.*)(\\n)";
+				+ ")(.*)(\\n)"; //$NON-NLS-1$
 	}
 
 	protected void extractTestEventsFor(IRegion reg, String line)

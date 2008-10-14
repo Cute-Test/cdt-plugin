@@ -33,7 +33,7 @@ import org.osgi.framework.BundleContext;
 public class CuteCorePlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.core";
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.core"; //$NON-NLS-1$
 
 	// The shared instance
 	private static CuteCorePlugin plugin;

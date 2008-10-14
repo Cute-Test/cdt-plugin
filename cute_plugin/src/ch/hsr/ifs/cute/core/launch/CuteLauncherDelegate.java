@@ -84,7 +84,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			command.add( exePath.toOSString() );
 			command.addAll( Arrays.asList( arguments ) );
 			String[] commandArray = command.toArray( new String[command.size()] );
-			boolean usePty = config.getAttribute( "ch.hsr.ifs.cutelauncher.useTerminal", true);
+			boolean usePty = config.getAttribute( "ch.hsr.ifs.cutelauncher.useTerminal", true); //$NON-NLS-1$
 			monitor.worked( 2 );
 			Process process = exec( commandArray, this.getEnvironment( config ), wd, usePty );
 			monitor.worked( 6 );
@@ -119,6 +119,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		return new CuteConsoleEventParser();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected String[] getEnvironment(ILaunchConfiguration config) throws CoreException{
 		Map map = config.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map)null);
@@ -136,8 +137,8 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		try{
 		if(config!=null && config.getAttribute(CustomisedLaunchConfigTab.USE_CUSTOM_SRC_PATH, false)){
 			String rootpath=org.eclipse.core.runtime.Platform.getLocation().toOSString();
-			String customSrcPath=config.getAttribute(CustomisedLaunchConfigTab.CUSTOM_SRC_PATH,"");
-			String fileSeparator=System.getProperty("file.separator");
+			String customSrcPath=config.getAttribute(CustomisedLaunchConfigTab.CUSTOM_SRC_PATH,""); //$NON-NLS-1$
+			String fileSeparator=System.getProperty("file.separator"); //$NON-NLS-1$
 			return new org.eclipse.core.runtime.Path(rootpath+customSrcPath+fileSeparator);
 		}else{
 			return exePath.removeLastSegments(1);

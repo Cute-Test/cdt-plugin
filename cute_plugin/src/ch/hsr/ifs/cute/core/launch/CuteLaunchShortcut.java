@@ -204,7 +204,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 * @return ILaunchConfigurationType
 	 */
 	protected ILaunchConfigurationType getCuteLaunchConfigType() {
-		return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig");
+		return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig"); //$NON-NLS-1$
 	}
 
 	protected ILaunchManager getLaunchManager() {

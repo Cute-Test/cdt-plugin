@@ -67,7 +67,7 @@ public class CuteRunLaunchConfigTabGroup extends
 		public void performApply(ILaunchConfigurationWorkingCopy configuration){}
 		public void createControl(Composite parent){}
 		public void initializeFrom(ILaunchConfiguration configuration){}		
-		public String getName(){return "";}
+		public String getName(){return "";} //$NON-NLS-1$
 		public void setDefaults(ILaunchConfigurationWorkingCopy configuration){}
 		
 		public ICElement getContext1(ILaunchConfiguration config, String platform){
