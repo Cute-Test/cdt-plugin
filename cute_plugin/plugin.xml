@@ -63,12 +63,6 @@
          	  mode="run"
          	  label="CUTE Test"/>
   		 </contextualLaunch>
-         <perspective
-               id="org.eclipse.cdt.ui.CPerspective">
-         </perspective>
-         <perspective
-               id="org.eclipse.debug.ui.DebugPerspective">
-         </perspective>
       </shortcut>
    </extension>
 	   
