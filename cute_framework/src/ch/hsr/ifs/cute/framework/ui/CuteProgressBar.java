@@ -56,6 +56,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	private Color fStoppedColor;
 	private boolean fError;
 	private boolean fStopped= false;
+	private Messages msg = CuteFrameworkPlugin.getMessages();
 	
 	private TestSession session;
 	
@@ -201,7 +202,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 	public void modelCanged(TestElement source, NotifyEvent event) {
 		if(event.getType() == NotifyEvent.EventType.testFinished || event.getType() == NotifyEvent.EventType.suiteFinished) {
-			UIJob job = new UIJob(Messages.getString("CuteProgressBar.UpdateProgressbar")) { //$NON-NLS-1$
+			UIJob job = new UIJob(msg.getString("CuteProgressBar.UpdateProgressbar")) { //$NON-NLS-1$
 
 				@Override
 				public boolean belongsTo(Object family) {
@@ -222,7 +223,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	public void sessionStarted(TestSession session) {
 		this.session = session;
 		session.addListener(this);
-		UIJob job = new UIJob(Messages.getString("CuteProgressBar.ResetProgressbar")) { //$NON-NLS-1$
+		UIJob job = new UIJob(msg.getString("CuteProgressBar.ResetProgressbar")) { //$NON-NLS-1$
 
 			@Override
 			public boolean belongsTo(Object family) {
@@ -246,7 +247,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 	public void newTestElement(ITestComposite source, TestElement newElement) {
 		newElement.addTestElementListener(this);
-		UIJob job = new UIJob(Messages.getString("CuteProgressBar.UpdateProgressbar")) { //$NON-NLS-1$
+		UIJob job = new UIJob(msg.getString("CuteProgressBar.UpdateProgressbar")) { //$NON-NLS-1$
 
 			@Override
 			public boolean belongsTo(Object family) {

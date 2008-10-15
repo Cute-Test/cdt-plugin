@@ -51,6 +51,8 @@ import ch.hsr.ifs.cute.framework.model.TestSuite;
 
 public class TestViewer extends Composite implements ITestElementListener, ISessionListener, ITestCompositeListener{
 	
+	private static Messages msg = CuteFrameworkPlugin.getMessages();
+	
 	private final class UpdateTestElement extends UIJob {
 		private UpdateTestElement(String name, TestElement element, boolean reveal) {
 			super(name);
@@ -67,7 +69,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			if(reveal && viewPart.isAutoScroll()) {
 				treeViewer.reveal(element);
 			}
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("TestViewer.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
 		}
 	}
 	
@@ -87,7 +89,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			if(viewPart.isAutoScroll()){
 				treeViewer.reveal(element);
 			}
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("TestViewer.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
 		}
 	}
 
@@ -242,10 +244,10 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		UIJob job = null;
 		switch(event.getType()) {
 		case suiteFinished:
-			job = new UpdateTestElement(Messages.getString("TestViewer.ShowNewTest"), event.getElement(), false); //$NON-NLS-1$
+			job = new UpdateTestElement(msg.getString("TestViewer.ShowNewTest"), event.getElement(), false); //$NON-NLS-1$
 			break;
 		case testFinished:
-			job = new UpdateTestElement(Messages.getString("TestViewer.UpdateTest"), event.getElement(), true); //$NON-NLS-1$
+			job = new UpdateTestElement(msg.getString("TestViewer.UpdateTest"), event.getElement(), true); //$NON-NLS-1$
 			break;
 		}
 
@@ -258,7 +260,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		this.session = session;
 		session.addListener(this);
 		cuteTestDClickListener.setSession(session);
-		UIJob job = new UIJob(Messages.getString("TestViewer.ResetTestViewer")) { //$NON-NLS-1$
+		UIJob job = new UIJob(msg.getString("TestViewer.ResetTestViewer")) { //$NON-NLS-1$
 			
 			@Override
 			public boolean belongsTo(Object family) {
@@ -268,7 +270,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				reset(TestViewer.this.session);
-				return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("TestViewer.OK"),null); //$NON-NLS-1$
+				return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
 			}
 			
 		};
@@ -437,7 +439,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		if(nextFailure != null) {
 			return nextFailure;
 		}else {
-			return findNextFailureInParent(selected.getParent(), selected, true);
+		return findNextFailureInParent(selected.getParent(), selected, true);
 		}
 	}
 
@@ -448,7 +450,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			composite.addListener(this);
 		}
 		elemets.add(newElement);
-		UIJob job = new ShowNewTest(Messages.getString("TestViewer.ShowNewTest"), newElement.getParent(), newElement); //$NON-NLS-1$
+		UIJob job = new ShowNewTest(msg.getString("TestViewer.ShowNewTest"), newElement.getParent(), newElement); //$NON-NLS-1$
 		job.schedule();
 	}
 

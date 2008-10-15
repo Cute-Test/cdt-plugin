@@ -23,13 +23,14 @@ import ch.hsr.ifs.cute.framework.Messages;
 public class ShowPreviousFailureAction extends Action {
 	
 	private TestRunnerViewPart trViewPart;
+	private static Messages msg = CuteFrameworkPlugin.getMessages();
 
 	public ShowPreviousFailureAction(TestRunnerViewPart trViewPart) {
-		super(Messages.getString("ShowPreviousFailureAction.ShowPreviousFaildTest")); //$NON-NLS-1$
+		super(msg.getString("ShowPreviousFailureAction.ShowPrevFailedTest")); //$NON-NLS-1$
 		setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/select_prev.gif")); //$NON-NLS-1$
 		setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif")); //$NON-NLS-1$
 		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif")); //$NON-NLS-1$
-		setToolTipText(Messages.getString("ShowPreviousFailureAction.ShowPreviousFaildTest"));  //$NON-NLS-1$
+		setToolTipText(msg.getString("ShowPreviousFailureAction.ShowPrevFailedTest"));  //$NON-NLS-1$
 		this.trViewPart = trViewPart;
 	}
 

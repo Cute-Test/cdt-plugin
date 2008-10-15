@@ -40,6 +40,8 @@ import ch.hsr.ifs.cute.framework.model.TestSession;
  *
  */
 public class CounterPanel extends Composite implements ITestElementListener, ISessionListener, ITestCompositeListener {
+	
+	private Messages msg = CuteFrameworkPlugin.getMessages();
 
 	private final class UpdateCounterPanelJob extends UIJob {
 		private UpdateCounterPanelJob(String name) {
@@ -49,7 +51,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			updateNumbers();
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("CounterPanel.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("CounterPanel.Ok"),null); //$NON-NLS-1$
 		}
 	}
 
@@ -99,30 +101,30 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 8;
 		runLabel = new Label(this, SWT.NONE);
-		runLabel.setText(Messages.getString("CounterPanel.Runs")); //$NON-NLS-1$
+		runLabel.setText(msg.getString("CounterPanel.Runs")); //$NON-NLS-1$
 		runLabel.setLayoutData(gridData);
 		runText = new Label(this, SWT.READ_ONLY);
-		runText.setText(Messages.getString("CounterPanel.ZeroSlashZero")); //$NON-NLS-1$
+		runText.setText(msg.getString("CounterPanel.ZeroSlashZero")); //$NON-NLS-1$
 		runText.setLayoutData(gridData1);
 		errorImageLabel = new Label(this, SWT.NONE);
 		errorImage.setBackground(errorImageLabel.getBackground());
 		errorImageLabel.setImage(errorImage);
 		errorImageLabel.setLayoutData(gridData2);
 		errorLabel = new Label(this, SWT.NONE);
-		errorLabel.setText(Messages.getString("CounterPanel.Errors")); //$NON-NLS-1$
+		errorLabel.setText(msg.getString("CounterPanel.Errors")); //$NON-NLS-1$
 		errorLabel.setLayoutData(gridData3);
 		errorText = new Label(this, SWT.READ_ONLY);
-		errorText.setText(Messages.getString("CounterPanel.Zero")); //$NON-NLS-1$
+		errorText.setText(msg.getString("CounterPanel.Zero")); //$NON-NLS-1$
 		errorText.setLayoutData(gridData4);
 		failedImageLabel = new Label(this, SWT.NONE);
 		failedImage.setBackground(failedImageLabel.getBackground());
 		failedImageLabel.setImage(failedImage);
 		failedImageLabel.setLayoutData(gridData5);
 		failedLabel = new Label(this, SWT.NONE);
-		failedLabel.setText(Messages.getString("CounterPanel.Failures")); //$NON-NLS-1$
+		failedLabel.setText(msg.getString("CounterPanel.Failures")); //$NON-NLS-1$
 		failedLabel.setLayoutData(gridData6);
 		failedText = new Label(this, SWT.READ_ONLY);
-		failedText.setText(Messages.getString("CounterPanel.Zero")); //$NON-NLS-1$
+		failedText.setText(msg.getString("CounterPanel.Zero")); //$NON-NLS-1$
 		failedText.setLayoutData(gridData7);
 		
 		addDisposeListener(new DisposeListener() {
@@ -147,7 +149,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 	}
 	
 	public void setRun(int run) {
-		runText.setText(Integer.toString(run) + Messages.getString("CounterPanel.Slash") + Integer.toString(total)); //$NON-NLS-1$
+		runText.setText(Integer.toString(run) + msg.getString("CounterPanel.Slash") + Integer.toString(total)); //$NON-NLS-1$
 		runText.pack(true);
 		layout();
 		redraw();
@@ -178,14 +180,14 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 	}
 
 	public void modelCanged(TestElement source, NotifyEvent event) {
-		UIJob job = new UpdateCounterPanelJob(Messages.getString("CounterPanel.UpdateCounterPanelJob")); //$NON-NLS-1$
+		UIJob job = new UpdateCounterPanelJob(msg.getString("CounterPanel.UpdateCounterPanelJob")); //$NON-NLS-1$
 		job.schedule();
 	}
 
 	public void sessionStarted(TestSession session) {
 		this.session = session;
 		session.addListener(this);
-		UIJob job = new UpdateCounterPanelJob(Messages.getString("CounterPanel.UpdateCounterPanelJob")); //$NON-NLS-1$
+		UIJob job = new UpdateCounterPanelJob(msg.getString("CounterPanel.UpdateCounterPanelJob")); //$NON-NLS-1$
 		job.schedule();
 	}
 
@@ -194,7 +196,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 	}
 
 	public void newTestElement(ITestComposite source, TestElement newElement) {
-		UIJob job = new UpdateCounterPanelJob(Messages.getString("CounterPanel.UpdateCounterPanelJob")); //$NON-NLS-1$
+		UIJob job = new UpdateCounterPanelJob(msg.getString("CounterPanel.UpdateCounterPanelJob")); //$NON-NLS-1$
 		newElement.addTestElementListener(this);
 		job.schedule();
 	}

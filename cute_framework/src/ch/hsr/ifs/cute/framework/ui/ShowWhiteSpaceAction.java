@@ -24,12 +24,13 @@ import ch.hsr.ifs.cute.framework.preference.PreferenceConstants;
 public class ShowWhiteSpaceAction extends Action {
 
 	private CuteTextMergeViewer viewer;
+	private static Messages msg = CuteFrameworkPlugin.getMessages();
 	
 	public ShowWhiteSpaceAction(CuteTextMergeViewer compareViewer) {
-		super(Messages.getString("ShowWhiteSpaceAction.ShowWhitespace"), AS_CHECK_BOX);  //$NON-NLS-1$
+		super(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"), AS_CHECK_BOX);  //$NON-NLS-1$
 		viewer = compareViewer;
 		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/show_whitespace_chars.gif")); //$NON-NLS-1$
-		setToolTipText(Messages.getString("ShowWhiteSpaceAction.ShowWhitespace")); //$NON-NLS-1$
+		setToolTipText(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar")); //$NON-NLS-1$
 		setChecked(CuteFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES));
 	}
 

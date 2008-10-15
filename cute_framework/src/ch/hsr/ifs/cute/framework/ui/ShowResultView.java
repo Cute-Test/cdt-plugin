@@ -23,9 +23,11 @@ import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
 import ch.hsr.ifs.cute.framework.Messages;
 
 public class ShowResultView extends UIJob{
+	
+	private static Messages msg = CuteFrameworkPlugin.getMessages();
 
 	public ShowResultView() {
-		super(Messages.getString("ShowResultView.ShowResultView")); //$NON-NLS-1$
+		super(msg.getString("ShowResultView.ShowResultView")); //$NON-NLS-1$
 	}
 	
 	private TestRunnerViewPart showTestRunnerViewPartInActivePage(TestRunnerViewPart testRunner) {
@@ -60,9 +62,9 @@ public class ShowResultView extends UIJob{
 	@Override
 	public IStatus runInUIThread(IProgressMonitor monitor) {
 		if (showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage()) == null) {
-			return new Status(IStatus.WARNING, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("ShowResultView.CouldNotShow"),null); //$NON-NLS-1$
+			return new Status(IStatus.WARNING, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("ShowResultView.CouldNotShowResultView"),null); //$NON-NLS-1$
 		}else {
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,Messages.getString("ShowResultView.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("ShowResultView.OK"),null); //$NON-NLS-1$
 		}
 	}
 	

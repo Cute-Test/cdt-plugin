@@ -26,17 +26,17 @@ import ch.hsr.ifs.cute.framework.Messages;
  */
 public class CutePrefPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	
-	
+	private Messages msg = CuteFrameworkPlugin.getMessages();
 
 	public CutePrefPage() {
 		super(GRID);
 		setPreferenceStore(CuteFrameworkPlugin.getDefault().getPreferenceStore());
-		setDescription(Messages.getString("CutePrefPage.CutePrefPage")); //$NON-NLS-1$
+		setDescription(msg.getString("CutePrefPage.CuteRefPage")); //$NON-NLS-1$
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new BooleanFieldEditor(PreferenceConstants.SHOW_WHITESPACES, Messages.getString("CutePrefPage.ShowWhitespace"), getFieldEditorParent())); //$NON-NLS-1$
+		addField(new BooleanFieldEditor(PreferenceConstants.SHOW_WHITESPACES, msg.getString("CutePrefPage.ShowWhiteSpaces"), getFieldEditorParent())); //$NON-NLS-1$
 
 	}
 

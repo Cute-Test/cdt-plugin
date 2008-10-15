@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 
+import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
 import ch.hsr.ifs.cute.framework.Messages;
 import ch.hsr.ifs.cute.framework.model.TestCase;
 import ch.hsr.ifs.cute.framework.model.TestFailure;
@@ -44,6 +45,8 @@ import ch.hsr.ifs.cute.framework.model.TestResult;
  *
  */
 public class CuteCompareResultDialog extends TrayDialog {
+	
+	private Messages msg = CuteFrameworkPlugin.getMessages();
 	
 	private static class CompareElement implements ITypedElement, IEncodedStreamContentAccessor {
 	    private String fContent;
@@ -113,9 +116,9 @@ public class CuteCompareResultDialog extends TrayDialog {
 	
 	private Control createCompareViewer(ViewForm pane) {
 		final CompareConfiguration compareConfiguration= new CompareConfiguration();
-	    compareConfiguration.setLeftLabel(Messages.getString("CuteCompareResultDialog.Expected"));  //$NON-NLS-1$
+	    compareConfiguration.setLeftLabel(msg.getString("CuteCompareResultDialog.Expected"));  //$NON-NLS-1$
 	    compareConfiguration.setLeftEditable(false);
-	    compareConfiguration.setRightLabel(Messages.getString("CuteCompareResultDialog.Actual"));	  //$NON-NLS-1$
+	    compareConfiguration.setRightLabel(msg.getString("CuteCompareResultDialog.Actual"));	  //$NON-NLS-1$
 	    compareConfiguration.setRightEditable(false);
 	    compareConfiguration.setProperty(CompareConfiguration.IGNORE_WHITESPACE, Boolean.FALSE);
 
@@ -134,7 +137,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 	
 
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, Messages.getString("CuteCompareResultDialog.OK"), true);  //$NON-NLS-1$
+		createButton(parent, IDialogConstants.OK_ID, msg.getString("CuteCompareResultDialog.Ok"), true);  //$NON-NLS-1$
 	}
 	
 	public void setCompareViewerInput(TestCase test) {
@@ -153,7 +156,7 @@ public class CuteCompareResultDialog extends TrayDialog {
 	
     protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(Messages.getString("CuteCompareResultDialog.ResultComparison")); //$NON-NLS-1$
+		newShell.setText(msg.getString("CuteCompareResultDialog.ResultComparison")); //$NON-NLS-1$
 	}
 
 	public void refresh() {

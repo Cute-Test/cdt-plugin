@@ -23,11 +23,12 @@ import ch.hsr.ifs.cute.framework.Messages;
 public class ScrollLockAction extends Action {
 	
 	private TestRunnerViewPart view;
+	private static Messages msg = CuteFrameworkPlugin.getMessages();
 	
 	public ScrollLockAction(TestRunnerViewPart view) {
-		super(Messages.getString("ScrollLockAction.ScrollLock")); //$NON-NLS-1$
+		super(msg.getString("ScrollLockAction.ScrollLock")); //$NON-NLS-1$
 		this.view = view;
-		setToolTipText(Messages.getString("ScrollLockAction.ScrollLock"));  //$NON-NLS-1$
+		setToolTipText(msg.getString("ScrollLockAction.ScrollLock"));  //$NON-NLS-1$
 		setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/lock.gif")); //$NON-NLS-1$
 		setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$
 		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$

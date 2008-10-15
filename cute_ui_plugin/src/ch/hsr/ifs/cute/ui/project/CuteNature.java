@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 
 /**

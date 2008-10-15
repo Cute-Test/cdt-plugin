@@ -16,7 +16,7 @@ import org.osgi.framework.BundleContext;
 public class UiPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.ui";
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static UiPlugin plugin;

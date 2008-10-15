@@ -38,7 +38,7 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 		
 //		System.out.println("test "+receiver+" "+property+" "+expectedValue);
 		
-		if (property.equals("projectNature1")) {
+		if (property.equals("projectNature1")) { //$NON-NLS-1$
 			try {
 				if(receiver instanceof IResource){
 					IResource res = (IResource) receiver;
