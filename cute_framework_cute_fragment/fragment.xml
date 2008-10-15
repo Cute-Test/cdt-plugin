@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<fragment>
+   <extension
+         point="ch.hsr.ifs.cute.framework.Messages">
+      <MessageProvider
+            class="ch.hsr.ifs.cute.framework.CuteFrameworkPlugin">
+      </MessageProvider>
+   </extension>
+
+</fragment>
