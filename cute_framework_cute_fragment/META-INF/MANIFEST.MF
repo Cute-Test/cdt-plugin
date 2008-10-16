@@ -8,4 +8,4 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: ch.hsr.ifs.cute.framework
 Bundle-Localization: plugin
 Bundle-Vendor: %providerName
-Bundle-ClassPath: .
+Bundle-ClassPath: library.jar

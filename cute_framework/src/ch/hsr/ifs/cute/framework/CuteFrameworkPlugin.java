@@ -14,9 +14,13 @@ package ch.hsr.ifs.cute.framework;
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
@@ -109,21 +113,22 @@ public class CuteFrameworkPlugin extends AbstractUIPlugin {
 	}
 	
 	public static Messages getMessages(){
-		
-		return new CuteMessages();
-//		try{
-//			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteFrameworkPlugin.PLUGIN_ID, "Messages"); //$NON-NLS-1$
-//			if (extension != null) {
-//				IExtension[] extensions = extension.getExtensions();
-//				for (IExtension extension2 : extensions) {
-//					IConfigurationElement[] configElements = extension2.getConfigurationElements();
-//					System.out.println(configElements[0].getName());
-//					return (Messages) configElements[0].createExecutableExtension("class"); //$NON-NLS-1$
-//				}
-//			}
-//		} catch (CoreException e) {
-//		}
-//		return null;		
+		try{
+			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteFrameworkPlugin.PLUGIN_ID, "Messages"); //$NON-NLS-1$
+			if (extension != null) {
+				IExtension[] extensions = extension.getExtensions();
+				for (IExtension extension2 : extensions) {
+					IConfigurationElement[] configElements = extension2.getConfigurationElements();
+					String className =configElements[0].getAttribute("class"); //$NON-NLS-1$
+					Class<?> obj = getDefault().getBundle().loadClass(className);
+					return (Messages) obj.newInstance();
+				}
+			}
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
+		}
+		return null;		
 	}
 	
 	private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {

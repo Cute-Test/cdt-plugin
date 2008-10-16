@@ -10,6 +10,7 @@ public class CuteMessages implements Messages {
 			.getBundle(BUNDLE_NAME);
 
 	public CuteMessages() {
+		System.out.println("K'tor");
 	}
 
 	/* (non-Javadoc)

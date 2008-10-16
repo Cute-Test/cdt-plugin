@@ -4,7 +4,7 @@
    <extension
          point="ch.hsr.ifs.cute.framework.Messages">
       <MessageProvider
-            class="ch.hsr.ifs.cute.framework.CuteFrameworkPlugin">
+            class="ch.hsr.ifs.cute.framework.CuteMessages">
       </MessageProvider>
    </extension>
 
