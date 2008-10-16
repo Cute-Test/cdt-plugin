@@ -94,6 +94,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		createTopPanel();
 		createTestViewer();
 		configureToolbar();
+		setPartName(msg.getString("TestRunnerViewPart.Name")); //$NON-NLS-1$
 	}
 	
 	private void addResizeListener(Composite parent) {
