@@ -145,12 +145,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		}}catch(CoreException ce){CuteCorePlugin.getDefault().getLog().log(ce.getStatus());}
 		return exePath;//on error, log and make no changes
  	}
-	//String rootpath=ResourcesPlugin.getWorkspace().getRoot().getFullPath().toOSString();
-	//the above does not return the location in the OS  
-	/*fileName:MakeTest.cpp
-	filePath:D:/runtime-EclipseApplication/sourcePathTestingPrj/src/MakeTest.cpp
-	rtpath:D:/runtime-EclipseApplication/sourcePathTestingPrj/src/bin
-	file:L/sourcePathTestingPrj/src/MakeTest.cpp	*/
+
 	protected Process exec( String[] cmdLine, String[] environ, File workingDirectory, boolean usePty ) throws CoreException {
 		Process p = null;
 		try {
