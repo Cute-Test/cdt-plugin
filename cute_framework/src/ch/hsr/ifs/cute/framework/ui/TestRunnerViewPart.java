@@ -33,6 +33,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.ImageProvider;
 import ch.hsr.ifs.cute.framework.Messages;
 import ch.hsr.ifs.cute.framework.model.ISessionListener;
 import ch.hsr.ifs.cute.framework.model.TestSession;
@@ -95,6 +96,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		createTestViewer();
 		configureToolbar();
 		setPartName(msg.getString("TestRunnerViewPart.Name")); //$NON-NLS-1$
+		setTitleImage(CuteFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage());
 	}
 	
 	private void addResizeListener(Composite parent) {

@@ -32,6 +32,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 import ch.hsr.ifs.cute.framework.model.CuteModel;
+import ch.hsr.ifs.cute.framework.ui.FallbackImageProvider;
+import ch.hsr.ifs.cute.framework.ui.FallbackMessages;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -96,6 +98,25 @@ public class CuteFrameworkPlugin extends AbstractUIPlugin {
 		return createImageDescriptor(getDefault().getBundle(), path);
 	}
 	
+	public static ImageProvider getImageProvider() {
+		try{
+			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteFrameworkPlugin.PLUGIN_ID, "ImageProvider"); //$NON-NLS-1$
+			if (extension != null) {
+				IExtension[] extensions = extension.getExtensions();
+				for (IExtension extension2 : extensions) {
+					IConfigurationElement[] configElements = extension2.getConfigurationElements();
+					String className =configElements[0].getAttribute("class"); //$NON-NLS-1$
+					Class<?> obj = getDefault().getBundle().loadClass(className);
+					return (ImageProvider) obj.newInstance();
+				}
+			}
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
+		}
+		return new FallbackImageProvider();
+	}
+	
 	public static IWorkbenchWindow getActiveWorkbenchWindow() {
 		if (plugin == null)
 			return null;
@@ -128,7 +149,7 @@ public class CuteFrameworkPlugin extends AbstractUIPlugin {
 		} catch (InstantiationException e) {
 		} catch (IllegalAccessException e) {
 		}
-		return null;		
+		return new FallbackMessages();		
 	}
 	
 	private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {

@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.cute.framework.ImageProvider;
 import ch.hsr.ifs.cute.framework.Messages;
 
 /**
@@ -41,12 +42,11 @@ public class CutePrefPage extends FieldEditorPreferencePage implements IWorkbenc
 	}
 
 	public void init(IWorkbench workbench) {
-		// Do nothing		
 	}
 
 	@Override
 	public Image getImage() {
-		return CuteFrameworkPlugin.getImageDescriptor("obj16/cute_app.gif").createImage(); //$NON-NLS-1$
+		return CuteFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage();
 	}
 	
 	

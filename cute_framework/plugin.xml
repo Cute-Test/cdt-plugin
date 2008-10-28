@@ -2,13 +2,14 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="Messages" name="Cute Messages" schema="schema/Messages.exsd"/>
+   <extension-point id="ImageProvider" name="ImageProvider" schema="schema/ImageProvider.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <view
             category="org.eclipse.cdt.ui.views"
             class="ch.hsr.ifs.cute.framework.ui.TestRunnerViewPart"
             fastViewWidthRatio="0.5"
-            icon="icons/obj16/cute_app.gif"
+            icon="icons/obj16/empty_app.gif"
             id="ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"
             name="%result.view.name"/>
    </extension>
