@@ -107,7 +107,6 @@ public abstract class AbstractFunctionActionDelegate implements IEditorActionDel
 			
 				/*after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it*/
 				linkedModeUI = new EditorLinkedModeUI(model, viewer);
-//				System.out.println(getCursorEndPosition(edits, newLine)+"!"+getExitPositionLength());
 				linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
 				linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
 				linkedModeUI.enter();

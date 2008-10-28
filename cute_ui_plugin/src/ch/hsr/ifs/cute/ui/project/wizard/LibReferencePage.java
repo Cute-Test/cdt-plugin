@@ -54,7 +54,7 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 	private final IWizardContainer wizardDialog;
 	
 	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc) {
-		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage";
+		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
 		this.startingWizardPage = staringWizardPage;
 		wizardDialog=wc;
@@ -68,7 +68,7 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 	}
 
 	public String getName() {
-		return "Reference to Library Page";
+		return Messages.getString("LibReferencePage.ReferenceToLib"); //$NON-NLS-1$
 	}
 
 	public void createControl(Composite parent) {
@@ -151,13 +151,13 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 
 	public String getDescription()
 	{
-		return new String("Choose the Library Project to test");
+		return new String(Messages.getString("LibReferencePage.ChooseLib")); //$NON-NLS-1$
 	}
 
 	boolean errorMessageFlag=false;
 	public String getErrorMessage()
 	{
-		if(errorMessageFlag)return "Please Select Library for testing";
+		if(errorMessageFlag)return Messages.getString("LibReferencePage.SelectLib"); //$NON-NLS-1$
 		return null;
 	}
 
@@ -174,7 +174,7 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 
 	public String getTitle()
 	{
-		return new String("Library Project Test");
+		return new String(Messages.getString("LibReferencePage.LibProjectTest")); //$NON-NLS-1$
 	}
 
 	public void performHelp()

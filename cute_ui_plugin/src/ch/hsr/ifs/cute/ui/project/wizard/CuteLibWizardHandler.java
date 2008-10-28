@@ -87,7 +87,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 				map= new HashMap();
 				for(IProject p:projects){
 					String prjname=p.getName();
-					map.put(prjname, "");		
+					map.put(prjname, "");		 //$NON-NLS-1$
 				}
 			}
 			dess[x].setReferenceInfo(map);
@@ -161,7 +161,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 
 	protected void setLibraryPaths(IPath libFolder, IProject project)
 			throws CoreException {
-				String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\"";
+				String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
 				setOptionInAllConfigs(project, path, IOption.LIBRARY_PATHS);
 			}
 	

@@ -23,7 +23,7 @@ import org.eclipse.text.edits.TextEdit;
 public class NewTestFunctionActionDelegate extends AbstractFunctionActionDelegate {
 	
 	public NewTestFunctionActionDelegate(){
-		super("newTestFunction",new NewTestFunctionAction());
+		super("newTestFunction",new NewTestFunctionAction()); //$NON-NLS-1$
 	}
 	@Override
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {

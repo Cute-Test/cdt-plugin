@@ -23,5 +23,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.3.0,4.0.0)",
  ch.hsr.ifs.cute.framework;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cute.ui.project.wizard,
+Export-Package: ch.hsr.ifs.cute.ui,
+ ch.hsr.ifs.cute.ui.project,
+ ch.hsr.ifs.cute.ui.project.wizard,
  ch.hsr.ifs.cute.ui.sourceactions
+Bundle-Localization: plugin

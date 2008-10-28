@@ -4,7 +4,7 @@ import org.eclipse.text.edits.TextEdit;
 public class AddTestFunctortoSuiteDelegate extends
 		AbstractFunctionActionDelegate {
 	public AddTestFunctortoSuiteDelegate(){
-		super("AddTestFunctortoSuite",new AddTestFunctortoSuiteAction());
+		super("AddTestFunctortoSuite",new AddTestFunctortoSuiteAction()); //$NON-NLS-1$
 	}
 	
 	@Override
@@ -18,6 +18,3 @@ public class AddTestFunctortoSuiteDelegate extends
 	}
 
 }
-//required to split action & delegate into separate physical file else 
-//junit wouldnt be able to access the action class
-//@see http://rcpquickstart.wordpress.com/2007/06/20/unit-testing-plug-ins-with-fragments/

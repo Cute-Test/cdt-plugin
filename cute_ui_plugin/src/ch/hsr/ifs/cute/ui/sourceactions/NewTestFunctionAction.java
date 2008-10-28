@@ -43,7 +43,7 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public class NewTestFunctionAction extends AbstractFunctionAction{
 	
-	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
+	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);"; //$NON-NLS-1$
 	int problemMarkerErrorLineNumber=0;
 	
 	@Override
@@ -75,7 +75,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 				mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 						funcName, suitPushBackFinder));
 				else{
-					createProblemMarker((FileEditorInput) editorInput, "Duplicate Pushback name", problemMarkerErrorLineNumber);
+					createProblemMarker((FileEditorInput) editorInput, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber); //$NON-NLS-1$
 				}
 			}
 		}
@@ -85,13 +85,13 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	//adding the new test function
 	private TextEdit createdEdit(int insertTestFuncFileOffset, IDocument doc, String funcName) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("void ");
+		builder.append("void "); //$NON-NLS-1$
 		builder.append(funcName);
-		builder.append("(){");
+		builder.append("(){"); //$NON-NLS-1$
 		builder.append(newLine);
 		builder.append(TEST_STMT);
 		builder.append(newLine);
-		builder.append("}");
+		builder.append("}"); //$NON-NLS-1$
 		builder.append(newLine);
 		builder.append(newLine);
 		TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
@@ -108,12 +108,12 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 			for (IASTName name1 : refs) {
 				try{
 					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
-					if(fRef.getFieldName().toString().equals("push_back")) {
+					if(fRef.getFieldName().toString().equals("push_back")) { //$NON-NLS-1$
 						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
 						IASTExpression innercallex=callex.getParameterExpression();
 						IASTFunctionCallExpression innercallex1=(IASTFunctionCallExpression)innercallex;
 						IASTExpression thelist=innercallex1.getParameterExpression();
-						String theName="";
+						String theName=""; //$NON-NLS-1$
 						if(thelist!=null){
 							if(thelist instanceof IASTExpressionList){//known issue:path executed during normal program run
 								//**** block not executed in UNIT Test
@@ -168,7 +168,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		int selectedLineNo=selection.getStartLine();
 		IRegion iregion= doc.getLineInformation(selectedLineNo);
 		String text=doc.get(iregion.getOffset(), iregion.getLength());
-		if(text.startsWith("#include")){
+		if(text.startsWith("#include")){ //$NON-NLS-1$
 			return iregion.getOffset();
 		}
 		
@@ -185,13 +185,13 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	public static TextEdit testOnlyCreatedEdit(int insertTestFuncFileOffset,String newLine){
 		NewTestFunctionAction ntfa=new NewTestFunctionAction();
 		ntfa.setNewline(newLine);
-		return ntfa.createdEdit(insertTestFuncFileOffset, null, "newTestFunction");
+		return ntfa.createdEdit(insertTestFuncFileOffset, null, "newTestFunction"); //$NON-NLS-1$
 	}
 	public static TextEdit testOnlyPushBackString(int insertloc,String newLine){
 		NewTestFunctionAction ntfa=new NewTestFunctionAction();
 		ntfa.setNewline(newLine);
 		
-		String s=ntfa.PushBackString("s","CUTE(newTestFunction)");
+		String s=ntfa.PushBackString("s","CUTE(newTestFunction)"); //$NON-NLS-1$ //$NON-NLS-2$
 		StringBuilder builder = new StringBuilder();
 		builder.append(s);
 		

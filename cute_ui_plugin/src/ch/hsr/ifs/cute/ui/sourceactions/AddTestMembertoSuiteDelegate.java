@@ -5,7 +5,7 @@ import org.eclipse.text.edits.TextEdit;
 public class AddTestMembertoSuiteDelegate extends
 		AbstractFunctionActionDelegate {
 	public AddTestMembertoSuiteDelegate(){
-		super("AddTestMember",new AddTestMembertoSuiteAction());
+		super("AddTestMember",new AddTestMembertoSuiteAction()); //$NON-NLS-1$
 	}
 	
 	
@@ -22,16 +22,3 @@ public class AddTestMembertoSuiteDelegate extends
 	}
 	
 }
-/*http://www.eclipsezone.com/eclipse/forums/t107165.html*/
-/*
-a tree
-recursively 
-display classes/structs (static methods, or inner stuff) 
-
-@see http://www.eclipse.org/articles/Article-TreeViewer/TreeViewerArticle.htm
-
-* if static method of a class selected without parameters add it 
-* if an instance is selected display the methods and superclass methods also
-*/
-
-

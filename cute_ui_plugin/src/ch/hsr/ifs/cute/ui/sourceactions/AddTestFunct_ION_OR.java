@@ -14,7 +14,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 
 abstract public class AddTestFunct_ION_OR extends AbstractFunctionAction {
 
-	@SuppressWarnings("restriction")
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
 	protected boolean checkPushback(IASTTranslationUnit astTu,String fname,SuitePushBackFinder suitPushBackFinder){
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
 			IASTName name = suitPushBackFinder.getSuiteDeclName();
@@ -23,11 +24,11 @@ abstract public class AddTestFunct_ION_OR extends AbstractFunctionAction {
 			for (IASTName name1 : refs) {
 				try{
 					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
-					if(fRef.getFieldName().toString().equals("push_back")) {
+					if(fRef.getFieldName().toString().equals("push_back")) { //$NON-NLS-1$
 						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
 						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
 						IASTExpression thelist=innercallex.getParameterExpression();
-						String theName="";
+						String theName=EMPTY_STRING;
 						if(thelist!=null){
 							theName=functionAST(thelist);
 						}else{
@@ -49,7 +50,7 @@ abstract public class AddTestFunct_ION_OR extends AbstractFunctionAction {
 	}
 	
 	protected String functionAST(IASTExpression thelist){
-		String theName="";
+		String theName=EMPTY_STRING;
 		if(thelist instanceof IASTExpressionList){//normal run only
 			IASTExpression innerlist[]=((IASTExpressionList)thelist).getExpressions();
 			IASTUnaryExpression unaryex=(IASTUnaryExpression)innerlist[1];
@@ -62,7 +63,7 @@ abstract public class AddTestFunct_ION_OR extends AbstractFunctionAction {
 	}
 
 	protected String functorAST(IASTFunctionCallExpression innercallex){
-		String theName="";
+		String theName=EMPTY_STRING;
 		if(innercallex instanceof IASTIdExpression){
 			IASTIdExpression a=(IASTIdExpression)innercallex.getFunctionNameExpression();
 			theName=a.getName().toString();

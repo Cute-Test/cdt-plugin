@@ -32,7 +32,7 @@ public class SuiteTemplateCopyUtil {
 
 	@SuppressWarnings("unchecked")
 	public static void copyFile (IFile targetFile, IProgressMonitor monitor,String templateFilename,String suitename)throws CoreException{
-		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/suite", templateFilename, false);
+		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/suite", templateFilename, false); //$NON-NLS-1$
 		if(en.hasMoreElements()){
 			URL url = (URL)en.nextElement();
 			
@@ -44,7 +44,7 @@ public class SuiteTemplateCopyUtil {
 				throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,e.getMessage(), e));
 			}
 		}else{
-			throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,"missing suite template files", null));
+			throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,"missing suite template files", null)); //$NON-NLS-1$
 		}
 	}
 	
@@ -52,10 +52,10 @@ public class SuiteTemplateCopyUtil {
 	public static ByteArrayInputStream implantActualsuitename(URL url, String suitename)throws IOException{
 		BufferedReader br=new BufferedReader(new InputStreamReader(url.openStream()));
 		StringBuilder buffer = new StringBuilder();
-		String linesep=System.getProperty("line.separator");
+		String linesep=System.getProperty("line.separator"); //$NON-NLS-1$
 		while(br.ready()){
 			String a=br.readLine();
-			buffer.append(a.replaceAll("[$]suitename[$]", suitename)+linesep);
+			buffer.append(a.replaceAll("[$]suitename[$]", suitename)+linesep); //$NON-NLS-1$
 		}
 		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());

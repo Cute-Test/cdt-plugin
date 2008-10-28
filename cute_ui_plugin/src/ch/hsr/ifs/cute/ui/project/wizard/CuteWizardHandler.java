@@ -83,9 +83,9 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	
 	protected void createCuteProjectFolders(IProject project)
 			throws CoreException {
-		IFolder srcFolder = createFolder(project, "src");
+		IFolder srcFolder = createFolder(project, "src"); //$NON-NLS-1$
 		addTestFiles(srcFolder, new NullProgressMonitor());
-		IFolder cuteFolder = createFolder(project, "cute");
+		IFolder cuteFolder = createFolder(project, "cute"); //$NON-NLS-1$
 		addCuteFiles(cuteFolder, new NullProgressMonitor());
 		setIncludePaths(cuteFolder.getFullPath(), project);
 		
@@ -144,10 +144,10 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	
 	@SuppressWarnings("unchecked")
 	private void addCuteFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
-		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/cute", "*.h", false);
+		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/cute", "*.h", false); //$NON-NLS-1$ //$NON-NLS-2$
 		while(en.hasMoreElements()) {
 			URL url = (URL)en.nextElement();
-			String[] elements = url.getFile().split("/");
+			String[] elements = url.getFile().split("/"); //$NON-NLS-1$
 			String filename = elements[elements.length-1];
 			IFile targetFile = folder.getFile(filename);
 			try {
@@ -160,10 +160,10 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	
 	@SuppressWarnings("unchecked")
 	protected void addTestFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
-		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/src", "*.cpp", false);
+		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/src", "*.cpp", false); //$NON-NLS-1$ //$NON-NLS-2$
 		while(en.hasMoreElements()) {
 			URL url = (URL)en.nextElement();
-			String[] elements = url.getFile().split("/");
+			String[] elements = url.getFile().split("/"); //$NON-NLS-1$
 			String filename = elements[elements.length-1];
 			IFile targetFile = folder.getFile(filename);
 			try {
@@ -175,7 +175,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	}
 	
 	protected void setIncludePaths(IPath cuteFolder, IProject project) throws CoreException {
-		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
+		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
 		setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH);
 	}
 
@@ -213,7 +213,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	}
 
 	protected IFile getTestMainFile(IProject project) {
-		return project.getFile("src/Test.cpp");
+		return project.getFile("src/Test.cpp"); //$NON-NLS-1$
 	}
 	
 	protected GetOptionsStrategy getStrategy(int optionType) {
@@ -222,7 +222,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 			return new IncludePathStrategy();
 
 		default:
-			throw new IllegalArgumentException("Illegal Argument: "+optionType);
+			throw new IllegalArgumentException("Illegal Argument: "+optionType); //$NON-NLS-1$
 		}
 	}
 

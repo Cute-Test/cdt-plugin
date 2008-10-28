@@ -46,16 +46,16 @@ public abstract class AbstractFunctionAction {
 
 	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")"));
+		builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")")); //$NON-NLS-1$ //$NON-NLS-2$
 		return createPushBackEdit(editorFile,doc,astTu,suitPushBackFinder,builder);
 	}
 	protected String PushBackString(String suite, String insidePushback){
 		StringBuilder builder = new StringBuilder();
-		builder.append(newLine+"\t");
+		builder.append(newLine+"\t"); //$NON-NLS-1$
 		builder.append(suite.toString());
-		builder.append(".push_back(");
+		builder.append(".push_back("); //$NON-NLS-1$
 		builder.append(insidePushback);
-		builder.append(");");
+		builder.append(");"); //$NON-NLS-1$
 		return builder.toString();
 	}
 	
@@ -91,7 +91,7 @@ public abstract class AbstractFunctionAction {
 		for (IASTName name : refs) {
 			if(name.getParent().getParent() instanceof ICPPASTFieldReference) {
 				IASTFieldReference fRef = (ICPPASTFieldReference) name.getParent().getParent();
-				if(fRef.getFieldName().toString().equals("push_back")) {
+				if(fRef.getFieldName().toString().equals("push_back")) { //$NON-NLS-1$
 					lastPushBack = name;
 				}
 			}
@@ -114,8 +114,8 @@ public abstract class AbstractFunctionAction {
 		
 		try {
 			IFile editorFile = (editorInput).getFile();
-			IMarker marker = editorFile.createMarker("org.eclipse.cdt.core.problem");
-		    marker.setAttribute(IMarker.MESSAGE, "cute:"+message);
+			IMarker marker = editorFile.createMarker("org.eclipse.cdt.core.problem"); //$NON-NLS-1$
+		    marker.setAttribute(IMarker.MESSAGE, "cute:"+message); //$NON-NLS-1$
 		    marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 		    marker.setAttribute(IMarker.TRANSIENT, true);
 		    if(lineNo!=0)marker.setAttribute(IMarker.LINE_NUMBER, lineNo);

@@ -19,12 +19,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 
 public class ASTHelper {
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
 	public static String getClassStructName(IASTSimpleDeclaration simpleDeclaration){
 		IASTDeclSpecifier declspecifier=simpleDeclaration.getDeclSpecifier();
 		if(declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier){
 			return ((ICPPASTCompositeTypeSpecifier)declspecifier).getName().toString();
 		}
-		return "";
+		return EMPTY_STRING;
 	}
 	public static String getMethodName(IASTDeclaration declaration){
 		if(declaration instanceof IASTFunctionDefinition){
@@ -35,11 +37,11 @@ public class ASTHelper {
 		}else if(declaration instanceof IASTSimpleDeclaration){
 			IASTSimpleDeclaration sd=(IASTSimpleDeclaration)declaration;
 			IASTDeclarator sdd[]=sd.getDeclarators();
-			if(sdd.length==0)return "";
+			if(sdd.length==0)return EMPTY_STRING;
 			String sname=sdd[0].getName().toString();
 			return sname;
 		}
-		return "";
+		return EMPTY_STRING;
 	}
 	public static ArrayList<IASTDeclaration> getConstructors(IASTSimpleDeclaration simpleDeclaration){
 		ArrayList<IASTDeclaration> result=new ArrayList<IASTDeclaration>();
@@ -165,7 +167,7 @@ public class ASTHelper {
 				
 				if(!ispublicVisibility)continue;
 				
-				String methodName="";
+				String methodName=EMPTY_STRING;
 				if(members[i] instanceof IASTSimpleDeclaration){
 					IASTSimpleDeclaration simpleDeclaration1=(IASTSimpleDeclaration)members[i];
 					IASTDeclarator declarator[]=simpleDeclaration1.getDeclarators();
@@ -177,7 +179,7 @@ public class ASTHelper {
 					IASTFunctionDeclarator funcdeclarator=funcdef.getDeclarator();
 					methodName=funcdeclarator.getName().toString();
 				}
-				if(methodName=="")continue;
+				if(methodName==EMPTY_STRING)continue;
 				if(className.equals(methodName))continue;//constructor
 				
 				result.add(members[i]);
@@ -255,7 +257,7 @@ public class ASTHelper {
 		if(declarators !=null && declarators.length>0){
 			return declarators[0].getName().toString();
 		}
-		return "";
+		return EMPTY_STRING;
 	}
 	
 	public static boolean isUnion(IASTDeclaration variable){
@@ -282,12 +284,12 @@ public class ASTHelper {
 		return result;
 	}
 	public static boolean isOperator(IASTSimpleDeclaration variable){
-		if(getVariableName(variable).equals("operator ()"))return true;
+		if(getVariableName(variable).equals(Messages.getString("ASTHelper.Operator")))return true; //$NON-NLS-1$
 		return false;
 	}
 	public static boolean isOperator(IASTFunctionDefinition variable){
 		IASTFunctionDeclarator declarator=variable.getDeclarator();
-		if(declarator.getName().toString().equals("operator ()"))return true;		
+		if(declarator.getName().toString().equals(Messages.getString("ASTHelper.Operator")))return true;		 //$NON-NLS-1$
 		return false;
 	}
 	public static ArrayList<IASTDeclaration> removeOperator(ArrayList<IASTDeclaration> variablesList){

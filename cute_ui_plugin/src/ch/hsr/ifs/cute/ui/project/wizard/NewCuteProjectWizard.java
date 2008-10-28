@@ -42,8 +42,8 @@ public class NewCuteProjectWizard extends AbstractCWizard {
 	}
 
 	protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
-		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.gif").createImage();
-		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.projectType", null, "Cute Project", false, handler, proImg);
+		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.gif").createImage(); //$NON-NLS-1$
+		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.projectType", null, Messages.getString("NewCuteProjectWizard.CuteProject"), false, handler, proImg); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected CuteWizardHandler getHandler(IWizard wizard) {

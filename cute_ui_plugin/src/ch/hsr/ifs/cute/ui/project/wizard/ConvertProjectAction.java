@@ -75,22 +75,22 @@ public class ConvertProjectAction extends ActionDelegate implements
 		try {
 			String[] natureIds = project.getDescription().getNatureIds();
 			if(hasCuteNature(natureIds)) {
-				MessageDialog.openInformation(shell, "Project is already converted", "This project is already a CUTE 1.2 project.");
+				MessageDialog.openInformation(shell, Messages.getString("ConvertProjectAction.AlreadyConverted"), Messages.getString("ConvertProjectAction.AlreadyCute1_2")); //$NON-NLS-1$ //$NON-NLS-2$
 			}else if(checkProject(project)){
 				CuteNature.addCuteNature(project, new NullProgressMonitor());
 				project.close(new NullProgressMonitor());
 				project.open(new NullProgressMonitor());
 			}else {
-				MessageDialog.openError(shell, "No CUTE Project", "This is not a valid CUTE Project.\nCUTE header files should be located in "+project.getName()+"/cute/");
+				MessageDialog.openError(shell, Messages.getString("ConvertProjectAction.NoCuteProject"), Messages.getString("ConvertProjectAction.NoValidCuteProject")+project.getName()+Messages.getString("ConvertProjectAction.CuteFolder")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		} catch (CoreException e) {
-			MessageDialog.openError(shell, "Can't convert Project", "Can't convert Project. " + e.getMessage());
+			MessageDialog.openError(shell, Messages.getString("ConvertProjectAction.CantConvert"), Messages.getString("ConvertProjectAction.CantConvert2") + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 
 	private boolean checkProject(IProject project2) {
-		IPath cutePath = project2.getLocation().append("cute").append("cute.h");
+		IPath cutePath = project2.getLocation().append("cute").append("cute.h"); //$NON-NLS-1$ //$NON-NLS-2$
 		return cutePath.makeAbsolute().toFile().exists();
 	}
 

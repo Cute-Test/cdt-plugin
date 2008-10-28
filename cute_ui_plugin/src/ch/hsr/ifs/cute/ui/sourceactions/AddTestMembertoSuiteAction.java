@@ -36,8 +36,11 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.ui.UiPlugin;
 
 public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
+
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
@@ -68,7 +71,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		}
 		
 		//return new MultiTextEdit();
-		throw new CoreException(new Status(IStatus.ERROR, "ch.hsr.ifs.cutelauncher", 0,"human", null));
+		throw new CoreException(new Status(IStatus.ERROR, UiPlugin.PLUGIN_ID, 0,"human", null)); //$NON-NLS-1$
 	}
 
 	public void setUnitTestingMode(IAddMemberMethod unitTestingMockObject){
@@ -103,7 +106,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
 					suitPushBackFinder,builder));
 		}else{
-			createProblemMarker((FileEditorInput) editorInput, "Duplicate Pushback name "+builder.toString(), problemMarkerErrorLineNumber);
+			createProblemMarker((FileEditorInput) editorInput, Messages.getString("AddTestMembertoSuiteAction.DuplicatePusback")+builder.toString(), problemMarkerErrorLineNumber); //$NON-NLS-1$
 		}
 		return mEdit;
 	}
@@ -115,11 +118,11 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 			IBinding binding = name.resolveBinding();
 			IASTName[] refs = astTu.getReferences(binding);
 
-			String stripped=builder.substring(builder.indexOf("(")+1,builder.lastIndexOf(")"));
+			String stripped=builder.substring(builder.indexOf("(")+1,builder.lastIndexOf(")")); //$NON-NLS-1$ //$NON-NLS-2$
 			for (IASTName name1 : refs) {
 				try{
 					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
-					if(fRef.getFieldName().toString().equals("push_back")) {
+					if(fRef.getFieldName().toString().equals("push_back")) { //$NON-NLS-1$
 						IASTFunctionCallExpression callex=(IASTFunctionCallExpression)name1.getParent().getParent().getParent();
 						IASTFunctionCallExpression innercallex=(IASTFunctionCallExpression)callex.getParameterExpression();
 						
@@ -148,12 +151,12 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		StringBuilder builder=new StringBuilder();
 		IAddMemberContainer parent=child.getParent();
 		
-		String insidePushback="";
+		String insidePushback=EMPTY_STRING;
 		if(parent.isInstance()==IAddMemberContainer.InstanceType){
-			insidePushback=("CUTE_MEMFUN("+parent.toString()+","+parent.getClassTypeName()+","+child.toString()+")");
+			insidePushback=("CUTE_MEMFUN("+parent.toString()+","+parent.getClassTypeName()+","+child.toString()+")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
 		if(parent.isInstance()==IAddMemberContainer.ClassType){
-			insidePushback=("CUTE_SMEMFUN("+parent.toString()+","+child.toString()+")");
+			insidePushback=(Messages.getString("AddTestMembertoSuiteAction.11")+parent.toString()+Messages.getString("AddTestMembertoSuiteAction.12")+child.toString()+")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),insidePushback));
 					
@@ -201,7 +204,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		wcp=new myTree(classStruct, classStructInstances);
 				
 		etsd=new myETSD(new Shell(CuteCorePlugin.getDisplay()),lp,wcp);
-		etsd.setTitle("Select Method to add to suite");
+		etsd.setTitle(Messages.getString("AddTestMembertoSuiteAction.SelectMethod")); //$NON-NLS-1$
 		etsd.setAllowMultiple(false);
 		etsd.setInput(wcp.root);
 		
@@ -331,7 +334,7 @@ class myTree extends TreeNodeContentProvider{
 		if(element==root)return root;//potential recursive loop
 		if(element instanceof IAddMemberContainer){return root;}
 		if(element instanceof Method){return ((IAddMemberMethod)element).getParent();}
-		return "thisShouldntHappen";
+		return Messages.getString("AddTestMembertoSuiteAction.thisShouldHappen"); //$NON-NLS-1$
 	}
 }
 
@@ -339,7 +342,7 @@ class Container implements IAddMemberContainer {
 	private IASTSimpleDeclaration simpleDeclaration; 
 	private final ArrayList<IAddMemberMethod> methods=new ArrayList<IAddMemberMethod>();
 	private final boolean isInstance;
-	public String classTypeName="";
+	public String classTypeName=""; //$NON-NLS-1$
 	
 	public Container(IASTSimpleDeclaration i,boolean isInstance){
 		setSimpleDeclaration(i);

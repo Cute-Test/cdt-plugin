@@ -21,11 +21,11 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 	private boolean constructorNeedParameterFlag=false;
 	
 	@Override
@@ -48,11 +48,9 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 				
 				OperatorParenthesesFinder o=new OperatorParenthesesFinder();
 				astTu.accept(o);
-				
-//				ArrayList al=o.getAL();
 								
 				String fname=nameAtCursor(o.getAL(),n.getNode());
-				if(fname.equals(""))return new MultiTextEdit();//FIXME potential bug point
+				if(fname.equals(EMPTY_STRING))return new MultiTextEdit();//FIXME potential bug point
 
 				constructorNeedParameterFlag=checkForConstructorWithParameters(astTu,n.getNode());
 				
@@ -65,8 +63,8 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 					StringBuilder builder = new StringBuilder();
 					
 					String insidePushback;
-					if(constructorNeedParameterFlag)insidePushback=(fname+"(pArAmEtRs_ReQuIrEd)");
-					else insidePushback=(fname+"()");
+					if(constructorNeedParameterFlag)insidePushback=(fname+"(pArAmEtRs_ReQuIrEd)"); //$NON-NLS-1$
+					else insidePushback=(fname+"()"); //$NON-NLS-1$
 					builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),insidePushback));
 					
 					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
@@ -74,7 +72,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 					return mEdit;
 				}else{
 					createProblemMarker((FileEditorInput) editorInput, 
-							"unable to add test functor. Duplicate Pushback name", problemMarkerErrorLineNumber);
+							Messages.getString("AddTestFunctortoSuiteAction.UnableToAddTestFunctor"), problemMarkerErrorLineNumber); //$NON-NLS-1$
 				}
 			}
 		}
@@ -92,13 +90,13 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 			try{
 			
 				boolean flag=checkClassForPublicOperatorParentesis(node);
-				if(!flag){return "";}
+				if(!flag){return EMPTY_STRING;}
 			
 			}catch(NullPointerException npe){npe.printStackTrace();}
 			catch(ClassCastException cce){cce.printStackTrace();}
 			
 			boolean flag=isTemplateClass(node);
-			if(flag){return "";}
+			if(flag){return EMPTY_STRING;}
 	
 			
 			
@@ -115,7 +113,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 					operatorParenthesesNode, node, operatorMatchFlag);
 						
 			if(!operatorMatchFlag){
-				return "";
+				return EMPTY_STRING;
 			}
 			
 			//TODO check also operator() doesnt have parameters, or at least default binded
@@ -147,7 +145,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 			//if(!(parentNode.getParent() instanceof ICPPASTTranslationUnit))	
 			return ((ICPPASTCompositeTypeSpecifier)(parentNode.getParent())).getName().toString();
 		}
-		return ""; 
+		return EMPTY_STRING; 
 	}
 
 	//handle case of virtual operator not declared
@@ -190,7 +188,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 		if(tmp1 instanceof IASTSimpleDeclaration){
 			ArrayList<IASTDeclaration> al=ASTHelper.getPublicMethods((IASTSimpleDeclaration)tmp1);
 			for(IASTDeclaration i:al){
-				if(ASTHelper.getMethodName(i).equals("operator ()")){
+				if(ASTHelper.getMethodName(i).equals(Messages.getString("AddTestFunctortoSuiteAction.Operator"))){ //$NON-NLS-1$
 					publicOperatorExist=true;break;
 				}
 			}

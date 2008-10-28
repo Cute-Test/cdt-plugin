@@ -8,12 +8,12 @@
           finalPerspective="org.eclipse.cdt.ui.CPerspective"
           icon="icons/ovr16/cute_ovr.gif"
           id="cute_plugin.wizard1"
-          name="Suite File">
+          name="%wizard.name.Suite">
     <class class="ch.hsr.ifs.cute.ui.project.wizard.NewSuiteFileCreationWizard">
             <parameter name="cfile" value="true"/>
          </class>
          <description>
-            Adding new suite.
+            %wizard.description.AddingSuite
          </description>
     </wizard>
  </extension>
@@ -21,24 +21,24 @@
        point="org.eclipse.ui.actionSets">
     <actionSet
           id="ch.hsr.ifr.cutelauncher.sourceGeneratorActions"
-          label="Test Source Actions"
+          label="%actionSet.label.TestSourceActions"
           visible="true">
        <menu
              id="ch.hsr.ifs.cutelauncher.menu"
-             label="Test Source Generators">
+             label="%menu.label.TestSourceGenereators">
        </menu>
        <action
              class="ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
              id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
-             label="New Test Function">
+             label="%action.label.NewTestFunction">
           
        </action>
        <action
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctiontoSuiteDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
              id="ch.hsr.ifs.cutelauncher.addFunctionToSuiteAction"
-             label="Add Test Function to Suite"
+             label="%action.label.AddTestFunction"
              style="push"
              tooltip="%addFuncToSuiteDesc">
        </action>
@@ -46,7 +46,7 @@
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctortoSuiteDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.addTestFunctorCommand"
              id="ch.hsr.ifs.cutelauncher.addFunctorToSuiteAction"
-             label="Add Test Functor to Suite"
+             label="%action.label.AddFunctor"
              style="push"
              tooltip="%addFtorToSuiteDesc">
        </action>
@@ -54,7 +54,7 @@
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.addTestMemberCommand"
              id="ch.hsr.ifs.cutelauncher.addMemberToSuiteAction"
-             label="Add Test Member to Suite"
+             label="%action.label.AddTestMember"
              style="push"
              tooltip="%addMemberToSuitDesc">
        </action>
@@ -72,7 +72,7 @@
              enablesFor="1"
              icon="icons/ovr16/cute_ovr.gif"
              id="ch.hsr.ifs.cutelauncher.convertProjectAction"
-             label="Convert to CUTE 1.2 Project"
+             label="%action.label.ConvertProject"
              menubarPath="additions">
              
        </action>
@@ -88,34 +88,34 @@
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.addTestMemberCommand"
              id="ch.hsr.ifs.cutelauncher.addTestMemberSuiteAction"
-             label="Add Test Member to Suite"
+             label="%action.label.AddTestMember2"
              menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
        </action>
        <action
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctortoSuiteDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.addTestFunctorCommand"
              id="ch.hsr.ifs.cutelauncher.addTestFunctorSuiteAction"
-             label="Add Test Functor to Suite"
+             label="%action.label.AddFunctor2"
              menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
        </action>
        <action
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctiontoSuiteDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
              id="ch.hsr.ifs.cutelauncher.addTestFunctionSuiteAction"
-             label="Add Test Function to Suite"
+             label="%action.label.AddTestFunction2"
              menubarPath="org.eclipse.cdt.ui.source.menu/addTestMenu/addTestGroup">
        </action>
        <action
              class="ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate"
              definitionId="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
              id="ch.hsr.ifs.cutelauncher.newTestFunctionAction"
-             label="New Test Function"
+             label="%action.label.NewTestFunction2"
              menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
        </action>
 
        <menu
              id="ch.hsr.ifs.cutelauncher.testCodeMenu"
-             label="Test Code"
+             label="%menu.label.TestCode"
              path="org.eclipse.cdt.ui.source.menu">
           <groupMarker
                 name="ch.hsr.ifs.cutelauncher.testCodeMenu">
@@ -123,7 +123,7 @@
        </menu>
        <menu
              id="addTestMenu"
-             label="Add Test"
+             label="%menu.label.AddTest"
              path="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cutelauncher.testCodeMenu">
           <groupMarker
                 name="addTestGroup">
@@ -135,27 +135,27 @@
        point="org.eclipse.ui.commands">
     <command
           categoryId="org.eclipse.cdt.ui.category.source"
-          description="Create new test function."
+          description="%command.description.CreateTestFunction"
           id="ch.hsr.ifs.cutelauncher.newTestFunctionCommand"
-          name="New Test Function">
+          name="%command.name.NewTestFunction">
     </command>
     <command
           categoryId="org.eclipse.cdt.ui.category.source"
           description="%addMemberToSuitDesc"
           id="ch.hsr.ifs.cutelauncher.addTestMemberCommand"
-          name="Add Test Member to Suite">
+          name="%command.name.AddTestMember">
     </command>
     <command
           categoryId="org.eclipse.cdt.ui.category.source"
           description="%addFtorToSuiteDesc"
           id="ch.hsr.ifs.cutelauncher.addTestFunctorCommand"
-          name="Add Test Functor to Suite">
+          name="%command.name.AddFunctor">
     </command>
     <command
           categoryId="org.eclipse.cdt.ui.category.source"
           description="%addFuncToSuiteDesc"
           id="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
-          name="Add Test Function to Suite">
+          name="%command.name.AddTestFunction">
     </command>
  </extension>
  <extension

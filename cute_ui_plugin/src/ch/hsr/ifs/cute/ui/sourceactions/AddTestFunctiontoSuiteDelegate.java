@@ -4,7 +4,7 @@ import org.eclipse.text.edits.TextEdit;
 public class AddTestFunctiontoSuiteDelegate extends AbstractFunctionActionDelegate {
 	
 	public AddTestFunctiontoSuiteDelegate(){
-		super("AddTestFunctiontoSuite",new AddTestFunctiontoSuiteAction());
+		super("AddTestFunctiontoSuite",new AddTestFunctiontoSuiteAction()); //$NON-NLS-1$
 	}
 	@Override
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {return 0;}

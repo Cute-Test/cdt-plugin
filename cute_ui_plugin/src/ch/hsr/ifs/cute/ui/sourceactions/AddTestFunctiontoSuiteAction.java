@@ -20,6 +20,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 	
+	private static final String STRING = ""; //$NON-NLS-1$
 	IEditorInput editorInput;
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
@@ -48,7 +49,7 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 						fname, suitPushBackFinder));
 					}else{
 						createProblemMarker((FileEditorInput) editorInput, 
-								"unable to add test function. Duplicate Pushback name", problemMarkerErrorLineNumber);
+								Messages.getString("AddTestFunctiontoSuiteAction.0DuplicatedName"), problemMarkerErrorLineNumber); //$NON-NLS-1$
 					}
 			}
 		}
@@ -66,7 +67,7 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 				IASTFunctionDefinition functionDefinition=(IASTFunctionDefinition)node;
 				ICPPASTFunctionDeclarator fdeclarator=(ICPPASTFunctionDeclarator)functionDefinition.getDeclarator();
 				IASTParameterDeclaration fpara[]=fdeclarator.getParameters();
-				
+
 				IASTSimpleDeclSpecifier specifier=(IASTSimpleDeclSpecifier)functionDefinition.getDeclSpecifier();
 				//check for 'void'
 				if(specifier.getType()!=IASTSimpleDeclSpecifier.t_void ||
@@ -74,19 +75,18 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 						node.contains(suitPushBackFinder.getSuiteNode())||
 						fdeclarator.takesVarArgs() ||
 						fpara.length>0
-						){
-//					EclipseConsole.print("Unable to perform AddTestFunctiontoSuite");
-					
+				){
+
 					boolean condition[]={
-						specifier.getType()!=IASTSimpleDeclSpecifier.t_void,	
-						node.contains(suitPushBackFinder.getSuiteNode()),
-						fdeclarator.takesVarArgs(),
-						fpara.length>0
+							specifier.getType()!=IASTSimpleDeclSpecifier.t_void,	
+							node.contains(suitPushBackFinder.getSuiteNode()),
+							fdeclarator.takesVarArgs(),
+							fpara.length>0
 					};
 					postErrorMarker(condition);
-					
+
 					dontAddFlag=true;
-					return "";
+					return STRING;
 				}
 				IASTName name=functionDefinition.getDeclarator().getName();
 				return name.toString();
@@ -94,17 +94,17 @@ public class AddTestFunctiontoSuiteAction extends AddTestFunct_ION_OR{
 			node = node.getParent();
 		}
 		dontAddFlag=true;
-		return "";
+		return STRING;
 	}
 
 	protected void postErrorMarker(boolean condition[]){
 		StringBuilder result=new StringBuilder();
-		if(condition[0])result.append("(return not void)");
-		if(condition[1])result.append("(unable to add function where cute::suite was declared)");
-		if(condition[2])result.append("(function taking variable parameters)");
-		if(condition[3])result.append("(function with parameters)");
+		if(condition[0])result.append(Messages.getString("AddTestFunctiontoSuiteAction.ReturnIsNotVoid")); //$NON-NLS-1$
+		if(condition[1])result.append(Messages.getString("AddTestFunctiontoSuiteAction.UnableToAddFunction")); //$NON-NLS-1$
+		if(condition[2])result.append(Messages.getString("AddTestFunctiontoSuiteAction.FunctionTakingVariableParameters")); //$NON-NLS-1$
+		if(condition[3])result.append(Messages.getString("AddTestFunctiontoSuiteAction.FunctionWithParameters")); //$NON-NLS-1$
 		
-		createProblemMarker((FileEditorInput) editorInput, "fail to AddTestFunctiontoSuite "+result, problemMarkerErrorLineNumber);
+		createProblemMarker((FileEditorInput) editorInput, Messages.getString("AddTestFunctiontoSuiteAction.FailToAddTestFunctiontoSuite")+result, problemMarkerErrorLineNumber); //$NON-NLS-1$
 	}
 	
 	protected IASTDeclaration getDeclarationAtCursor(IASTTranslationUnit astTu, TextSelection selection) {

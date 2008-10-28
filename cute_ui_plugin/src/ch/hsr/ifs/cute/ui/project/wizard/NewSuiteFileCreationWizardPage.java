@@ -41,13 +41,13 @@ public class NewSuiteFileCreationWizardPage extends
 	private ITranslationUnit fNewFileTU = null;
 	private final StringDialogField fNewFileDialogField;
 	private final SelectionButtonDialogField fSelection;
-	private String lastUsedTemplate = "";
+	private String lastUsedTemplate = ""; //$NON-NLS-1$
 	
 	@SuppressWarnings("restriction")
 	public NewSuiteFileCreationWizardPage(){
-		super("Custom Suite");
+		super(Messages.getString("NewSuiteFileCreationWizardPage.CustomSuite")); //$NON-NLS-1$
 		
-		setDescription("Create a new Suite");
+		setDescription(Messages.getString("NewSuiteFileCreationWizardPage.CreateNewSuite")); //$NON-NLS-1$
 		
 		fNewFileDialogField = new StringDialogField();
 		fNewFileDialogField.setDialogFieldListener(new IDialogFieldListener() {
@@ -55,10 +55,10 @@ public class NewSuiteFileCreationWizardPage extends
 				handleFieldChanged(NEW_FILE_ID);
 			}
 		});
-		fNewFileDialogField.setLabelText("Suite name:");
+		fNewFileDialogField.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.SuiteName")); //$NON-NLS-1$
 		
 		fSelection=new SelectionButtonDialogField(SWT.CHECK);
-		fSelection.setLabelText("Link to runner ");
+		fSelection.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.LinkToRunner")); //$NON-NLS-1$
 		//generate list of runners
 		//prompt selection
 	}
@@ -82,15 +82,15 @@ public class NewSuiteFileCreationWizardPage extends
 	            	IFile cppFile;
 	            	if(folderPath.segmentCount()==1){
 	            		IProject folder=root.getProject(folderPath.toPortableString());
-	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
-	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
-		            	cppFile=folder.getFile(suitename+".cpp");
+	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		 //$NON-NLS-1$ //$NON-NLS-2$
+	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename); //$NON-NLS-1$ //$NON-NLS-2$
+		            	cppFile=folder.getFile(suitename+".cpp"); //$NON-NLS-1$
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}else{
 	            		IFolder folder=root.getFolder(folderPath);	
-	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		
-	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename);
-		            	cppFile=folder.getFile(suitename+".cpp");
+	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		 //$NON-NLS-1$ //$NON-NLS-2$
+	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename); //$NON-NLS-1$ //$NON-NLS-2$
+		            	cppFile=folder.getFile(suitename+".cpp"); //$NON-NLS-1$
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}
 	            	
@@ -161,8 +161,6 @@ after location translation unit
 		long endTime= System.currentTimeMillis() + maxmillis;
 		int timeLeft= maxmillis;
 		while (timeLeft >= 0) {
-//			Assert.assertTrue(CCorePlugin.getIndexManager().joinIndexer(timeLeft, new NullProgressMonitor()));
-			System.out.println("joinIndexer"+CCorePlugin.getIndexManager().joinIndexer(timeLeft, p));
 			index.acquireReadLock();
 			try {
 				IIndexFile pfile= index.getFile(ILinkage.CPP_LINKAGE_ID, IndexLocationFactory.getWorkspaceIFL(file));
@@ -177,8 +175,6 @@ after location translation unit
 			Thread.sleep(50);
 			timeLeft= (int) (endTime-System.currentTimeMillis());
 		}
-//		Assert.fail("Indexing " + file.getFullPath() + " did not complete in time!");
-		System.out.println("Indexing " + file.getFullPath() + " did not complete in time!");
 	}
 	
 	
@@ -206,13 +202,13 @@ after location translation unit
 		
 		IPath filePath = getFileFullPath();
 		if (filePath == null) {
-			status.setError("Enter Suite Name"); 
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.EnterSuiteName"));  //$NON-NLS-1$
 			return status;
 		}
 		
 		IPath sourceFolderPath = getSourceFolderFullPath();
 		if (sourceFolderPath == null || !sourceFolderPath.isPrefixOf(filePath)) {
-			status.setError("File must be inside source folder.");
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FileMustBeInsideSourceFolder")); //$NON-NLS-1$
 			return status;
 		}
 		
@@ -220,11 +216,11 @@ after location translation unit
 		IResource file = getWorkspaceRoot().findMember(filePath);
 		if (file != null && file.exists()) {
 	    	if (file.getType() == IResource.FILE) {
-	    		status.setError("File already exists.");
+	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FileAlreadyExist")); //$NON-NLS-1$
 	    	} else if (file.getType() == IResource.FOLDER) {
-	    		status.setError("A folder with the same name already exists.");
+	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FolderAlreadyExists")); //$NON-NLS-1$
 	    	} else {
-	    		status.setError("A resource with the same name already exists.");
+	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.ResourceAlreadyExists")); //$NON-NLS-1$
 	    	}
 			return status;
 		}
@@ -233,18 +229,18 @@ after location translation unit
 		IPath folderPath = filePath.removeLastSegments(1).makeRelative();
 		IResource folder = getWorkspaceRoot().findMember(folderPath);
 		if (folder == null || !folder.exists() || (folder.getType() != IResource.PROJECT && folder.getType() != IResource.FOLDER)) {
-		    status.setError("Folder " + folderPath + " does not exist." );
+		    status.setError(Messages.getString("NewSuiteFileCreationWizardPage.Folder") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.DoesNotExist") ); //$NON-NLS-1$ //$NON-NLS-2$
 			return status;
 		}
 
 		IStatus convStatus = CConventions.validateSourceFileName(getCurrentProject(), filePath.lastSegment());
 		if (convStatus.getSeverity() == IStatus.ERROR) {
-			status.setError("File name is not valid " + convStatus.getMessage() + ".");
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.0") + convStatus.getMessage() + "."); //$NON-NLS-1$ //$NON-NLS-2$
 			return status;
 		} /*else if (convStatus.getSeverity() == IStatus.WARNING) {
 			status.setWarning(NewFileWizardMessages.getFormattedString("NewSourceFileCreationWizardPage.warning.FileNameDiscouraged", convStatus.getMessage())); //$NON-NLS-1$
 		}*/
-		if(!fNewFileDialogField.getText().matches("\\w+")){
+		if(!fNewFileDialogField.getText().matches("\\w+")){ //$NON-NLS-1$
 			status.setError("Invalid identifier. Only letters, digits and underscore are accepted."); //$NON-NLS-1$
 			return status;
 		}

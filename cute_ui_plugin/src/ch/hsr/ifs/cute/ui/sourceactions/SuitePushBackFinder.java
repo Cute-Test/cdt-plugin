@@ -30,7 +30,7 @@ public class SuitePushBackFinder extends ASTVisitor {
 				IASTDeclSpecifier declSpec = sDecl.getDeclSpecifier();
 				if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
 					ICPPASTNamedTypeSpecifier nDeclSpec = (ICPPASTNamedTypeSpecifier) declSpec;
-					if(nDeclSpec.getName().toString().equals("cute::suite")) {
+					if(nDeclSpec.getName().toString().equals("cute::suite")) { //$NON-NLS-1$
 						suiteDeclName = sDecl.getDeclarators()[0].getName();
 						suiteLocation=nDeclSpec;
 					}

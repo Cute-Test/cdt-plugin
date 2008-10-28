@@ -2,7 +2,6 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 
 import org.eclipse.cdt.managedbuilder.ui.wizards.CDTConfigWizardPage;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
-import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -22,7 +21,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	private final IWizardPage startingWizardPage;
 	
 	public NewCuteSuiteWizardCustomPage(CDTConfigWizardPage configWizardPage, IWizardPage startingWizardPage){
-		pageID="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage";
+		pageID="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
 		this.startingWizardPage = startingWizardPage;
 	}
@@ -39,14 +38,14 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	
 	@Override
 	protected boolean isCustomPageComplete() {
-		if(suitenameText.getText().equals("")){
+		if(suitenameText.getText().equals("")){ //$NON-NLS-1$
 			//since IWizard#canFinish() cannot be overwritten from this class, thus unable to disable the finish button, 
 			//we will need to use a default name for empty textfield as a work around
-			errmsg="Please enter a suite name.";
+			errmsg=Messages.getString("NewCuteSuiteWizardCustomPage.EnterSuiteName"); //$NON-NLS-1$
 			return false;
 		}
-		if(!suitenameText.getText().matches("\\w+")){
-			errmsg="invalid suite name. Only alphanumeric and underscore.";
+		if(!suitenameText.getText().matches("\\w+")){ //$NON-NLS-1$
+			errmsg=Messages.getString("NewCuteSuiteWizardCustomPage.InvalidSuiteName"); //$NON-NLS-1$
 			return false;
 		}
 		errmsg=null;
@@ -54,7 +53,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	}
 
 	public String getName() {
-		return "Set Suite Name";
+		return Messages.getString("NewCuteSuiteWizardCustomPage.SetSuiteName"); //$NON-NLS-1$
 	}
 	
 	private Composite composite=null;
@@ -77,14 +76,14 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		gd = new GridData();
 		gd.horizontalSpan =1;
 		suitenameLabel=new Label(composite,SWT.NONE);
-		suitenameLabel.setText("Test Suite Name:");
+		suitenameLabel.setText(Messages.getString("NewCuteSuiteWizardCustomPage.TestSuiteName")); //$NON-NLS-1$
 		suitenameLabel.setLayoutData(gd);
 		
 	    gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan =2;
-		suitenameText = SWTFactory.createSingleText(composite, 2);
+		suitenameText = createSingleText(composite, 2);
 		suitenameText.setLayoutData(gd); 
-		suitenameText.setText("DefaultSuiteName");
+		suitenameText.setText(Messages.getString("NewCuteSuiteWizardCustomPage.DefaultSuiteName")); //$NON-NLS-1$
 	    suitenameText.addModifyListener(new ModifyListener() {
 	    	public void modifyText(ModifyEvent e){
 	    	if(flag){	
@@ -98,8 +97,17 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		});	
 	}
 	
+	private Text createSingleText(Composite parent, int hspan) {
+    	Text t = new Text(parent, SWT.SINGLE | SWT.BORDER);
+    	t.setFont(parent.getFont());
+    	GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+    	gd.horizontalSpan = hspan;
+    	t.setLayoutData(gd);
+    	return t;
+    }
+	
 	public String getSuiteName(){
-		if(suitenameText==null ||suitenameText.getText().equals("")||!suitenameText.getText().matches("\\w+"))return "suite";
+		if(suitenameText==null ||suitenameText.getText().equals("")||!suitenameText.getText().matches("\\w+"))return Messages.getString("NewCuteSuiteWizardCustomPage.suite"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return suitenameText.getText();
 	}
 	//for unit testing
@@ -115,7 +123,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	}
 
 	public String getDescription() {
-		return "for the user to specify a custom suite name.";
+		return Messages.getString("NewCuteSuiteWizardCustomPage.CustomSuiteName"); //$NON-NLS-1$
 	}
 
 	String errmsg=null;
@@ -128,11 +136,11 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	}
 
 	public String getMessage() {
-		return "New Test Suite Name";
+		return Messages.getString("NewCuteSuiteWizardCustomPage.NewTestSuiteName"); //$NON-NLS-1$
 	}
 
 	public String getTitle() {
-		return "Suite Name";
+		return Messages.getString("NewCuteSuiteWizardCustomPage.SuiteName"); //$NON-NLS-1$
 	}
 
 	public void performHelp() {

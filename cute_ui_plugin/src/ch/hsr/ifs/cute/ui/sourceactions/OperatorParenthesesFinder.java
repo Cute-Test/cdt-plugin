@@ -20,7 +20,7 @@ public class OperatorParenthesesFinder extends ASTVisitor {
 	
 	@Override
 	public int leave(IASTName name) {
-		if(name.toString().equals("operator ()")){
+		if(name.toString().equals("operator ()")){ //$NON-NLS-1$
 			if(name.getParent() instanceof ICPPASTFunctionDeclarator){
 				ICPPASTFunctionDeclarator fdeclarator=(ICPPASTFunctionDeclarator)name.getParent();
 				IASTParameterDeclaration fpara[]=fdeclarator.getParameters();
@@ -39,7 +39,7 @@ public class OperatorParenthesesFinder extends ASTVisitor {
 			
 			if(declaration instanceof IASTSimpleDeclaration){
 				String name=ASTHelper.getClassStructName((IASTSimpleDeclaration)declaration);
-				if(name.equals("")){
+				if(name.equals("")){ //$NON-NLS-1$
 					declaration=(IASTDeclaration)declaration.getParent().getParent();
 					String name2=ASTHelper.getClassStructName((IASTSimpleDeclaration)declaration);
 					System.out.println(name2);

@@ -45,7 +45,7 @@ class TemplateVisitor extends ASTVisitor{
 		if(name instanceof ICPPASTTemplateId){
 			ICPPASTTemplateId t=(ICPPASTTemplateId)name;
 			IASTName name1=t.getTemplateName();
-			if(name1.toString().equals("cute::runner"))
+			if(name1.toString().equals("cute::runner")) //$NON-NLS-1$
 				al.add(name);
 			System.out.println(name1.toString());
 		}
