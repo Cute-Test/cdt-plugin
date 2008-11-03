@@ -16,7 +16,7 @@
 		<property name="baseLocation" value="${buildDirectory}/eclipse"/>
 		<property name="eclipse.home" value="${buildDirectory}/eclipse"/>
 		<property name="pde.build.scripts" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.4.0.v20080522/scripts"/>
-		<property name="eclipseDist" value="eclipse-cpp-ganymede-linux-gtk"/>
+		<property name="eclipseDist" value="eclipse-cpp-ganymede-SR1-linux-gtk"/>
 		<property name="collectingFolder" value="eclipse"/>
 		<property name="archivePrefix" value="eclipse"/>
 		<property name="buildType" value="I" />
