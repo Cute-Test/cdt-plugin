@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: ch.hsr.ifs.cutelauncher.test
+Bundle-SymbolicName: ch.hsr.ifs.cutelauncher.test;singleton:=true
 Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cutelauncher.test.TestPlugin
 Bundle-Vendor: %pluginProvider
@@ -29,3 +29,9 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.4.0,4.0.0)",
  ch.hsr.ifs.cute.ui;bundle-version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: ch.hsr.ifs.cutelauncher.test,
+ ch.hsr.ifs.cutelauncher.test.hyperlinksTests,
+ ch.hsr.ifs.cutelauncher.test.internal.console;x-internal:=true,
+ ch.hsr.ifs.cutelauncher.test.modelBuilderTests,
+ ch.hsr.ifs.cutelauncher.test.patternListenerTests,
+ ch.hsr.ifs.cutelauncher.test.ui.sourceactions
