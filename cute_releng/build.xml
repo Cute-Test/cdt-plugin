@@ -8,7 +8,7 @@
 	
 	<target name="init">
 		<tstamp/>
-		<property name="branchVersion" value="1.6.0"/>
+		<property name="branchVersion" value="2.0.0"/>
 		<property name="testVersion" value="1.6.0"/>
 		<property name="timestamp" value="${DSTAMP}${TSTAMP}" />
 		<property name="forceContextQualifier" value="${timestamp}"/>
