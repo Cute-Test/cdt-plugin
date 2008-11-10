@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.event.TestEventHandler;
 
 /**
@@ -26,7 +26,7 @@ import ch.hsr.ifs.test.framework.event.TestEventHandler;
  */
 public class ModellBuilder extends TestEventHandler {
 	
-	private CuteModel model = CuteFrameworkPlugin.getModel();
+	private CuteModel model = TestFrameworkPlugin.getModel();
 	private IPath rtPath;
 	private TestCase currentTestCase;
 	private ILaunch launch;

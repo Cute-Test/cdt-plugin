@@ -36,7 +36,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.model.ISessionListener;
 import ch.hsr.ifs.test.framework.model.ITestComposite;
@@ -51,7 +51,7 @@ import ch.hsr.ifs.test.framework.model.TestSuite;
 
 public class TestViewer extends Composite implements ITestElementListener, ISessionListener, ITestCompositeListener{
 	
-	private static Messages msg = CuteFrameworkPlugin.getMessages();
+	private static Messages msg = TestFrameworkPlugin.getMessages();
 	
 	private final class UpdateTestElement extends UIJob {
 		private UpdateTestElement(String name, TestElement element, boolean reveal) {
@@ -69,7 +69,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			if(reveal && viewPart.isAutoScroll()) {
 				treeViewer.reveal(element);
 			}
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
 		}
 	}
 	
@@ -89,7 +89,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			if(viewPart.isAutoScroll()){
 				treeViewer.reveal(element);
 			}
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
 		}
 	}
 
@@ -190,12 +190,12 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	public TestViewer(Composite parent, int style, TestRunnerViewPart viewPart) {
 		super(parent, style);
 		this.viewPart = viewPart;
-		CuteFrameworkPlugin.getModel().addListener(this);
+		TestFrameworkPlugin.getModel().addListener(this);
 		initialize();
 		addDisposeListener(new DisposeListener() {
 
 			public void widgetDisposed(DisposeEvent e) {
-				CuteFrameworkPlugin.getModel().removeListener(TestViewer.this);
+				TestFrameworkPlugin.getModel().removeListener(TestViewer.this);
 			}
 		});
 	}
@@ -264,13 +264,13 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			
 			@Override
 			public boolean belongsTo(Object family) {
-				return CuteFrameworkPlugin.PLUGIN_ID.equals(family);
+				return TestFrameworkPlugin.PLUGIN_ID.equals(family);
 			}
 
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				reset(TestViewer.this.session);
-				return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
+				return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
 			}
 			
 		};
@@ -346,7 +346,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 
 	private TestSession getSession() {
 		if(session == null) {
-			session = CuteFrameworkPlugin.getModel().getSession();
+			session = TestFrameworkPlugin.getModel().getSession();
 		}
 		return session;
 	}

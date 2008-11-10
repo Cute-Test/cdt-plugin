@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 
 public abstract class ConsoleEventParser {
 	protected List<TestEvent> testEvents;
@@ -37,7 +37,7 @@ public abstract class ConsoleEventParser {
 		try {
 			extractTestEventsFor(reg, line);
 		} catch (CoreException e) {
-			CuteFrameworkPlugin.getDefault().getLog().log(e.getStatus());
+			TestFrameworkPlugin.getDefault().getLog().log(e.getStatus());
 			throwLineParsingException(reg, line, e);
 		} catch (Exception e) {
 			throwLineParsingException(reg, line, e);
@@ -61,7 +61,7 @@ public abstract class ConsoleEventParser {
 		Matcher m = pattern.matcher(line);
 		if (!m.matches()) {
 			throw new CoreException(new Status(Status.ERROR,
-					CuteFrameworkPlugin.PLUGIN_ID, 1, "Pattern don't match", //$NON-NLS-1$
+					TestFrameworkPlugin.PLUGIN_ID, 1, "Pattern don't match", //$NON-NLS-1$
 					null));
 		}
 		return m;

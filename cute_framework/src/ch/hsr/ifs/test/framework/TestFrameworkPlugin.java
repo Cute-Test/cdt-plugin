@@ -38,13 +38,13 @@ import ch.hsr.ifs.test.framework.ui.FallbackMessages;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class CuteFrameworkPlugin extends AbstractUIPlugin {
+public class TestFrameworkPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "ch.hsr.ifs.test.framework"; //$NON-NLS-1$
 
 	// The shared instance
-	private static CuteFrameworkPlugin plugin;
+	private static TestFrameworkPlugin plugin;
 	
 	private static final IPath ICONS_PATH= new Path("$nl$/icons"); //$NON-NLS-1$
 	
@@ -55,7 +55,7 @@ public class CuteFrameworkPlugin extends AbstractUIPlugin {
 	/**
 	 * The constructor
 	 */
-	public CuteFrameworkPlugin() {
+	public TestFrameworkPlugin() {
 		plugin = this;
 	}
 
@@ -76,7 +76,7 @@ public class CuteFrameworkPlugin extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static CuteFrameworkPlugin getDefault() {
+	public static TestFrameworkPlugin getDefault() {
 		return plugin;
 	}
 	
@@ -100,7 +100,7 @@ public class CuteFrameworkPlugin extends AbstractUIPlugin {
 	
 	public static ImageProvider getImageProvider() {
 		try{
-			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteFrameworkPlugin.PLUGIN_ID, "ImageProvider"); //$NON-NLS-1$
+			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "ImageProvider"); //$NON-NLS-1$
 			if (extension != null) {
 				IExtension[] extensions = extension.getExtensions();
 				for (IExtension extension2 : extensions) {
@@ -135,7 +135,7 @@ public class CuteFrameworkPlugin extends AbstractUIPlugin {
 	
 	public static Messages getMessages(){
 		try{
-			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteFrameworkPlugin.PLUGIN_ID, "Messages"); //$NON-NLS-1$
+			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "Messages"); //$NON-NLS-1$
 			if (extension != null) {
 				IExtension[] extensions = extension.getExtensions();
 				for (IExtension extension2 : extensions) {

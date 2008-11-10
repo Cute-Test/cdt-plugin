@@ -49,7 +49,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.model.TestCase;
 import ch.hsr.ifs.test.framework.model.TestSession;
 import ch.hsr.ifs.test.framework.model.TestStatus;
@@ -118,14 +118,14 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 
 			}
 		} catch (CModelException e) {
-			CuteFrameworkPlugin.log(e);
+			TestFrameworkPlugin.log(e);
 		} catch (CoreException e) {
-			CuteFrameworkPlugin.log(e);
+			TestFrameworkPlugin.log(e);
 		}
 	}
 
 	private void openEditor(IFile file, int lineNumberOrOffset, boolean isOffset) {
-		IWorkbenchWindow window = CuteFrameworkPlugin.getActiveWorkbenchWindow();
+		IWorkbenchWindow window = TestFrameworkPlugin.getActiveWorkbenchWindow();
 		if (window != null) {
 			IWorkbenchPage page = window.getActivePage();
 			if (page != null) {
@@ -139,7 +139,7 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 						provider.connect(input);
 					} catch (CoreException e) {
 						// unable to link
-						CuteFrameworkPlugin.log(e);
+						TestFrameworkPlugin.log(e);
 						return;
 					}
 					IDocument document = provider.getDocument(input);
@@ -150,19 +150,19 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 								textEditor.selectAndReveal(region.getOffset(), region.getLength());
 					} catch (BadLocationException e) {
 						// unable to link
-						CuteFrameworkPlugin.log(e);
+						TestFrameworkPlugin.log(e);
 					}
 					provider.disconnect(input);
 					}
 				} catch (PartInitException e) {
-					CuteFrameworkPlugin.log(e);
+					TestFrameworkPlugin.log(e);
 				}
 			}
 		}
 	}
 	
 	private String getEditorId(IFile file) {
-			IWorkbench workbench= CuteFrameworkPlugin.getDefault().getWorkbench();
+			IWorkbench workbench= TestFrameworkPlugin.getDefault().getWorkbench();
 			// If there is a registered editor for the file use it.
 			IEditorDescriptor desc = workbench.getEditorRegistry().getDefaultEditor(file.getName(), getFileContentType(file));
 			if (desc == null) {

@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.model.ISessionListener;
 import ch.hsr.ifs.test.framework.model.ITestComposite;
@@ -41,7 +41,7 @@ import ch.hsr.ifs.test.framework.model.TestSession;
  */
 public class CounterPanel extends Composite implements ITestElementListener, ISessionListener, ITestCompositeListener {
 	
-	private Messages msg = CuteFrameworkPlugin.getMessages();
+	private Messages msg = TestFrameworkPlugin.getMessages();
 
 	private final class UpdateCounterPanelJob extends UIJob {
 		private UpdateCounterPanelJob(String name) {
@@ -51,14 +51,14 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			updateNumbers();
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("CounterPanel.Ok"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("CounterPanel.Ok"),null); //$NON-NLS-1$
 		}
 	}
 
 	private Label runLabel = null;
 	private Label runText = null;
-	private Image errorImage = CuteFrameworkPlugin.getImageDescriptor("tcr/error.gif").createImage(); //$NON-NLS-1$
-	private Image failedImage = CuteFrameworkPlugin.getImageDescriptor("tcr/failed.gif").createImage(); //$NON-NLS-1$
+	private Image errorImage = TestFrameworkPlugin.getImageDescriptor("tcr/error.gif").createImage(); //$NON-NLS-1$
+	private Image failedImage = TestFrameworkPlugin.getImageDescriptor("tcr/failed.gif").createImage(); //$NON-NLS-1$
 	private Label errorImageLabel = null;
 	private Label errorLabel = null;
 	private Label errorText = null;
@@ -72,7 +72,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 
 	public CounterPanel(Composite parent, int style) {
 		super(parent, style);
-		CuteFrameworkPlugin.getModel().addListener(this);
+		TestFrameworkPlugin.getModel().addListener(this);
 		initialize();
 	}
 
@@ -130,7 +130,7 @@ public class CounterPanel extends Composite implements ITestElementListener, ISe
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				disposeIcons();
-				CuteFrameworkPlugin.getModel().removeListener(CounterPanel.this);
+				TestFrameworkPlugin.getModel().removeListener(CounterPanel.this);
 			}
 		});
 		

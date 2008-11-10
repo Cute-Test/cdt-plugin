@@ -13,7 +13,7 @@ package ch.hsr.ifs.test.framework.ui;
 
 import org.eclipse.jface.action.Action;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
 
 /**
@@ -23,15 +23,15 @@ import ch.hsr.ifs.test.framework.Messages;
 public class ScrollLockAction extends Action {
 	
 	private TestRunnerViewPart view;
-	private static Messages msg = CuteFrameworkPlugin.getMessages();
+	private static Messages msg = TestFrameworkPlugin.getMessages();
 	
 	public ScrollLockAction(TestRunnerViewPart view) {
 		super(msg.getString("ScrollLockAction.ScrollLock")); //$NON-NLS-1$
 		this.view = view;
 		setToolTipText(msg.getString("ScrollLockAction.ScrollLock"));  //$NON-NLS-1$
-		setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/lock.gif")); //$NON-NLS-1$
-		setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$
-		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/lock.gif")); //$NON-NLS-1$
+		setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$
+		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$
 		setChecked(false);		
 	}
 

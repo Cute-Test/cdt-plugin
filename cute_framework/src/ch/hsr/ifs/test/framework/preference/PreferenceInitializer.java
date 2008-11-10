@@ -14,7 +14,7 @@ package ch.hsr.ifs.test.framework.preference;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 
 /**
  * @author Emanuel Graf
@@ -24,7 +24,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = CuteFrameworkPlugin.getDefault().getPreferenceStore();
+		IPreferenceStore store = TestFrameworkPlugin.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.SHOW_WHITESPACES, false);
 	}
 

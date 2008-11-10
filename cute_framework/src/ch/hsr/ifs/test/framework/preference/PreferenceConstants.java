@@ -11,7 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.test.framework.preference;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 
 /**
  * @author Emanuel Graf
@@ -19,6 +19,6 @@ import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
  */
 public class PreferenceConstants {
 	
-	public static final String SHOW_WHITESPACES = CuteFrameworkPlugin.PLUGIN_ID + "SHOW_WHITESPACES";  //$NON-NLS-1$
+	public static final String SHOW_WHITESPACES = TestFrameworkPlugin.PLUGIN_ID + "SHOW_WHITESPACES";  //$NON-NLS-1$
 
 }

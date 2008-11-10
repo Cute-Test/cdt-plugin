@@ -14,7 +14,7 @@ package ch.hsr.ifs.test.framework.ui;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.model.TestCase;
 import ch.hsr.ifs.test.framework.model.TestElement;
 import ch.hsr.ifs.test.framework.model.TestSuite;
@@ -25,15 +25,15 @@ import ch.hsr.ifs.test.framework.model.TestSuite;
  */
 public class CuteTestLabelProvider  extends LabelProvider {
 	
-	private Image suiteRun = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiterun.gif").createImage(); //$NON-NLS-1$
-	private Image suiteOk = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiteok.gif").createImage(); //$NON-NLS-1$
-	private Image suiteFail = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuitefail.gif").createImage(); //$NON-NLS-1$
-	private Image suiteError = CuteFrameworkPlugin.getImageDescriptor("obj16/tsuiteerror.gif").createImage(); //$NON-NLS-1$
+	private Image suiteRun = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiterun.gif").createImage(); //$NON-NLS-1$
+	private Image suiteOk = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiteok.gif").createImage(); //$NON-NLS-1$
+	private Image suiteFail = TestFrameworkPlugin.getImageDescriptor("obj16/tsuitefail.gif").createImage(); //$NON-NLS-1$
+	private Image suiteError = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiteerror.gif").createImage(); //$NON-NLS-1$
 	
-	private Image testRun = CuteFrameworkPlugin.getImageDescriptor("obj16/testrun.gif").createImage(); //$NON-NLS-1$
-	private Image testOk = CuteFrameworkPlugin.getImageDescriptor("obj16/testok.gif").createImage(); //$NON-NLS-1$
-	private Image testFail = CuteFrameworkPlugin.getImageDescriptor("obj16/testfail.gif").createImage(); //$NON-NLS-1$
-	private Image testError = CuteFrameworkPlugin.getImageDescriptor("obj16/testerr.gif").createImage(); //$NON-NLS-1$
+	private Image testRun = TestFrameworkPlugin.getImageDescriptor("obj16/testrun.gif").createImage(); //$NON-NLS-1$
+	private Image testOk = TestFrameworkPlugin.getImageDescriptor("obj16/testok.gif").createImage(); //$NON-NLS-1$
+	private Image testFail = TestFrameworkPlugin.getImageDescriptor("obj16/testfail.gif").createImage(); //$NON-NLS-1$
+	private Image testError = TestFrameworkPlugin.getImageDescriptor("obj16/testerr.gif").createImage(); //$NON-NLS-1$
 
 	public Image getImage(Object element) {
 		if (element instanceof TestSuite) {

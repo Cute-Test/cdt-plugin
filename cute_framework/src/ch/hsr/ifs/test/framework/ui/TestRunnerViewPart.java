@@ -32,7 +32,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.ImageProvider;
 import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.model.ISessionListener;
@@ -69,12 +69,12 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	private TestSession session;
 
 	private StopAction stopAction;
-	private static Messages msg = CuteFrameworkPlugin.getMessages();
+	private static Messages msg = TestFrameworkPlugin.getMessages();
 	
 
 	public TestRunnerViewPart() {
 		super();
-		CuteFrameworkPlugin.getModel().addListener(this);		
+		TestFrameworkPlugin.getModel().addListener(this);		
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		createTestViewer();
 		configureToolbar();
 		setPartName(msg.getString("TestRunnerViewPart.Name")); //$NON-NLS-1$
-		setTitleImage(CuteFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage());
+		setTitleImage(TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage());
 	}
 	
 	private void addResizeListener(Composite parent) {
@@ -255,7 +255,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 					testViewer.selectFirstFailure();
 				}
 			}
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestRunnerViewPart.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestRunnerViewPart.OK"),null); //$NON-NLS-1$
 		}
 	}
 
@@ -263,7 +263,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		public FailuresOnlyFilterAction() {
 			super(msg.getString("TestRunnerViewPart.ShowFailuresOnly"), AS_CHECK_BOX); //$NON-NLS-1$
 			setToolTipText(msg.getString("TestRunnerViewPart.ShowFailuresOnly")); //$NON-NLS-1$
-			setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/failures.gif")); //$NON-NLS-1$
+			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/failures.gif")); //$NON-NLS-1$
 		}
 
 		public void run() {
@@ -275,9 +275,9 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		public RerunLastTestAction() {
 			setText(msg.getString("TestRunnerViewPart.RerunTest"));  //$NON-NLS-1$
 			setToolTipText(msg.getString("TestRunnerViewPart.RerunTest")); //$NON-NLS-1$
-			setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/relaunch.gif")); //$NON-NLS-1$
-			setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
-			setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/relaunch.gif")); //$NON-NLS-1$
+			setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
+			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
 			setEnabled(false);
 		}
 		
@@ -291,9 +291,9 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		public StopAction() {
 			setText(msg.getString("TestRunnerViewPart.StopCuteTestRun")); //$NON-NLS-1$
 			setToolTipText(msg.getString("TestRunnerViewPart.StopCuteTestRun")); //$NON-NLS-1$
-			setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/stop.gif")); //$NON-NLS-1$
-			setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
-			setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/stop.gif")); //$NON-NLS-1$
+			setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
+			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
 		}
 
 		public void run() {

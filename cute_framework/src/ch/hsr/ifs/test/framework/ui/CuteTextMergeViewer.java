@@ -24,7 +24,7 @@ import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.WhitespaceCharacterPainter;
 import org.eclipse.swt.widgets.Composite;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.preference.PreferenceConstants;
 
 /**
@@ -54,7 +54,7 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 	protected void configureTextViewer(TextViewer textViewer) {
 		super.configureTextViewer(textViewer);
 		WhitespaceCharacterPainter whitespaceCharPainter = null;
-		if(CuteFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES)) {
+		if(TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES)) {
 			whitespaceCharPainter= new WhitespaceCharacterPainter(textViewer);
 			textViewer.addPainter(whitespaceCharPainter);
 		}
@@ -167,7 +167,7 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 
 
 	private void logException(Exception e) {
-		CuteFrameworkPlugin.log(new Status(IStatus.ERROR, CuteFrameworkPlugin.PLUGIN_ID,e.getMessage(), e));
+		TestFrameworkPlugin.log(new Status(IStatus.ERROR, TestFrameworkPlugin.PLUGIN_ID,e.getMessage(), e));
 		
 	}
 

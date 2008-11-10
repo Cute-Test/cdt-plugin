@@ -17,7 +17,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.ImageProvider;
 import ch.hsr.ifs.test.framework.Messages;
 
@@ -27,11 +27,11 @@ import ch.hsr.ifs.test.framework.Messages;
  */
 public class CutePrefPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	
-	private Messages msg = CuteFrameworkPlugin.getMessages();
+	private Messages msg = TestFrameworkPlugin.getMessages();
 
 	public CutePrefPage() {
 		super(GRID);
-		setPreferenceStore(CuteFrameworkPlugin.getDefault().getPreferenceStore());
+		setPreferenceStore(TestFrameworkPlugin.getDefault().getPreferenceStore());
 		setDescription(msg.getString("CutePrefPage.CuteRefPage")); //$NON-NLS-1$
 	}
 
@@ -46,7 +46,7 @@ public class CutePrefPage extends FieldEditorPreferencePage implements IWorkbenc
 
 	@Override
 	public Image getImage() {
-		return CuteFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage();
+		return TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage();
 	}
 	
 	

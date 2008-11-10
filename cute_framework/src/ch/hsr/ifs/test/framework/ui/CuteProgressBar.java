@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.model.ISessionListener;
 import ch.hsr.ifs.test.framework.model.ITestComposite;
@@ -56,13 +56,13 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	private Color fStoppedColor;
 	private boolean fError;
 	private boolean fStopped= false;
-	private Messages msg = CuteFrameworkPlugin.getMessages();
+	private Messages msg = TestFrameworkPlugin.getMessages();
 	
 	private TestSession session;
 	
 	public CuteProgressBar(Composite parent) {
 		super(parent, SWT.NONE);
-		CuteFrameworkPlugin.getModel().addListener(this);
+		TestFrameworkPlugin.getModel().addListener(this);
 		addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent e) {
 				fColorBarWidth= scale(fCurrentTickCount);
@@ -79,7 +79,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 				fFailureColor.dispose();
 				fOKColor.dispose();
 				fStoppedColor.dispose();
-				CuteFrameworkPlugin.getModel().removeListener(CuteProgressBar.this);
+				TestFrameworkPlugin.getModel().removeListener(CuteProgressBar.this);
 			}
 		});
 		Display display= parent.getDisplay();
@@ -206,13 +206,13 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 				@Override
 				public boolean belongsTo(Object family) {
-					return CuteFrameworkPlugin.PLUGIN_ID.equals(family);
+					return TestFrameworkPlugin.PLUGIN_ID.equals(family);
 				}
 				
 				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
 					update(session.getRun(), session.getError() + session.getFailure());
-					return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
+					return new Status(IStatus.OK,TestFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
 				}
 
 			};
@@ -227,13 +227,13 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 			@Override
 			public boolean belongsTo(Object family) {
-				return CuteFrameworkPlugin.PLUGIN_ID.equals(family);
+				return TestFrameworkPlugin.PLUGIN_ID.equals(family);
 			}
 			
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				reset();
-				return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
+				return new Status(IStatus.OK,TestFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
 			}
 			
 		};
@@ -251,13 +251,13 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 			@Override
 			public boolean belongsTo(Object family) {
-				return CuteFrameworkPlugin.PLUGIN_ID.equals(family);
+				return TestFrameworkPlugin.PLUGIN_ID.equals(family);
 			}
 			
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				update(session.getRun(), session.getError() + session.getFailure(), session.getTotalTests());
-				return new Status(IStatus.OK,CuteFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
+				return new Status(IStatus.OK,TestFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
 			}
 
 		};

@@ -19,12 +19,12 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
 
 public class ShowResultView extends UIJob{
 	
-	private static Messages msg = CuteFrameworkPlugin.getMessages();
+	private static Messages msg = TestFrameworkPlugin.getMessages();
 
 	public ShowResultView() {
 		super(msg.getString("ShowResultView.ShowResultView")); //$NON-NLS-1$
@@ -36,14 +36,14 @@ public class ShowResultView extends UIJob{
 		try {
 			if (testRunner != null && testRunner.isCreated())
 				return testRunner;
-			page= CuteFrameworkPlugin.getActivePage();
+			page= TestFrameworkPlugin.getActivePage();
 			if (page == null)
 				return null;
 			activePart= page.getActivePart();
 
 			return (TestRunnerViewPart) page.showView(TestRunnerViewPart.ID);
 		} catch (PartInitException pie) {
-			CuteFrameworkPlugin.log(pie);
+			TestFrameworkPlugin.log(pie);
 			return null;
 		} finally{
 			//restore focus stolen by the creation of the result view
@@ -53,7 +53,7 @@ public class ShowResultView extends UIJob{
 	}
 
 	private TestRunnerViewPart findTestRunnerViewPartInActivePage() {
-		IWorkbenchPage page= CuteFrameworkPlugin.getActivePage();
+		IWorkbenchPage page= TestFrameworkPlugin.getActivePage();
 		if (page == null)
 			return null;
 		return (TestRunnerViewPart) page.findView(TestRunnerViewPart.ID);
@@ -62,9 +62,9 @@ public class ShowResultView extends UIJob{
 	@Override
 	public IStatus runInUIThread(IProgressMonitor monitor) {
 		if (showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage()) == null) {
-			return new Status(IStatus.WARNING, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("ShowResultView.CouldNotShowResultView"),null); //$NON-NLS-1$
+			return new Status(IStatus.WARNING, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("ShowResultView.CouldNotShowResultView"),null); //$NON-NLS-1$
 		}else {
-			return new Status(IStatus.OK, CuteFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("ShowResultView.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("ShowResultView.OK"),null); //$NON-NLS-1$
 		}
 	}
 	

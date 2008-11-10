@@ -13,7 +13,7 @@ package ch.hsr.ifs.test.framework.ui;
 
 import org.eclipse.jface.action.Action;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
 
 /**
@@ -23,13 +23,13 @@ import ch.hsr.ifs.test.framework.Messages;
 public class ShowNextFailureAction extends Action {
 	
 	private TestRunnerViewPart trViewPart;
-	private static Messages msg = CuteFrameworkPlugin.getMessages();
+	private static Messages msg = TestFrameworkPlugin.getMessages();
 
 	public ShowNextFailureAction(TestRunnerViewPart trViewPart) {
 		super(msg.getString("ShowNextFailureAction.ShowNextFailedTest"));   //$NON-NLS-1$
-		setDisabledImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/select_next.gif")); //$NON-NLS-1$
-		setHoverImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/select_next.gif")); //$NON-NLS-1$
-		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("obj16/select_next.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/select_next.gif")); //$NON-NLS-1$
+		setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_next.gif")); //$NON-NLS-1$
+		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_next.gif")); //$NON-NLS-1$
 		setToolTipText(msg.getString("ShowNextFailureAction.ShowNextFailedTest"));  //$NON-NLS-1$
 		this.trViewPart = trViewPart;
 	}

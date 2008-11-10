@@ -17,7 +17,7 @@ import java.util.TreeMap;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.ImageProvider;
 
 /**
@@ -34,7 +34,7 @@ public class CuteImageProvider extends ImageProvider {
 
 	@Override
 	public ImageDescriptor getImage(int key) {
-		return CuteFrameworkPlugin.getImageDescriptor(getPath(key));
+		return TestFrameworkPlugin.getImageDescriptor(getPath(key));
 	}
 
 	protected String getPath(int key) {

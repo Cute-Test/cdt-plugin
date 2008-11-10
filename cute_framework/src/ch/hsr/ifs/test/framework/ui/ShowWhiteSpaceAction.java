@@ -13,7 +13,7 @@ package ch.hsr.ifs.test.framework.ui;
 
 import org.eclipse.jface.action.Action;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.preference.PreferenceConstants;
 
@@ -24,20 +24,20 @@ import ch.hsr.ifs.test.framework.preference.PreferenceConstants;
 public class ShowWhiteSpaceAction extends Action {
 
 	private CuteTextMergeViewer viewer;
-	private static Messages msg = CuteFrameworkPlugin.getMessages();
+	private static Messages msg = TestFrameworkPlugin.getMessages();
 	
 	public ShowWhiteSpaceAction(CuteTextMergeViewer compareViewer) {
 		super(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"), AS_CHECK_BOX);  //$NON-NLS-1$
 		viewer = compareViewer;
-		setImageDescriptor(CuteFrameworkPlugin.getImageDescriptor("dlcl16/show_whitespace_chars.gif")); //$NON-NLS-1$
+		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/show_whitespace_chars.gif")); //$NON-NLS-1$
 		setToolTipText(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar")); //$NON-NLS-1$
-		setChecked(CuteFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES));
+		setChecked(TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES));
 	}
 
 	@Override
 	public void run() {
-		boolean show = ! CuteFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES);
-		CuteFrameworkPlugin.getDefault().getPreferenceStore().setValue(PreferenceConstants.SHOW_WHITESPACES, show);
+		boolean show = ! TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES);
+		TestFrameworkPlugin.getDefault().getPreferenceStore().setValue(PreferenceConstants.SHOW_WHITESPACES, show);
 		viewer.showWhitespaces(show);
 	}
 

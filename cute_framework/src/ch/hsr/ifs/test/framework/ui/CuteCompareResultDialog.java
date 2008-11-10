@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 
-import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.model.TestCase;
 import ch.hsr.ifs.test.framework.model.TestFailure;
@@ -46,7 +46,7 @@ import ch.hsr.ifs.test.framework.model.TestResult;
  */
 public class CuteCompareResultDialog extends TrayDialog {
 	
-	private Messages msg = CuteFrameworkPlugin.getMessages();
+	private Messages msg = TestFrameworkPlugin.getMessages();
 	
 	private static class CompareElement implements ITypedElement, IEncodedStreamContentAccessor {
 	    private String fContent;
