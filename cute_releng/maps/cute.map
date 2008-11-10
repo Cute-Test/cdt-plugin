@@ -1,8 +1,8 @@
 ! Cute Feature
 
 plugin@ch.hsr.ifs.cute.core=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_plugin
-plugin@ch.hsr.ifs.cute.framework=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework
-fragment@ch.hsr.ifs.cute.framework.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework_cute_fragment
+plugin@ch.hsr.ifs.test.framework=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework
+fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework_cute_fragment
 plugin@ch.hsr.ifs.cute.ui=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_ui_plugin
 feature@ch.hsr.ifs.cute=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_feature
 

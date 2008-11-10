@@ -18,16 +18,16 @@ import junit.framework.Test;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.cute.framework.ConsolePatternListener;
-import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
-import ch.hsr.ifs.cute.framework.model.ModellBuilder;
-import ch.hsr.ifs.cute.framework.model.TestCase;
-import ch.hsr.ifs.cute.framework.model.TestElement;
-import ch.hsr.ifs.cute.framework.model.TestFailure;
-import ch.hsr.ifs.cute.framework.model.TestResult;
-import ch.hsr.ifs.cute.framework.model.TestSession;
-import ch.hsr.ifs.cute.framework.model.TestSuite;
 import ch.hsr.ifs.cutelauncher.test.internal.console.ConsoleTest;
+import ch.hsr.ifs.test.framework.ConsolePatternListener;
+import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.model.ModellBuilder;
+import ch.hsr.ifs.test.framework.model.TestCase;
+import ch.hsr.ifs.test.framework.model.TestElement;
+import ch.hsr.ifs.test.framework.model.TestFailure;
+import ch.hsr.ifs.test.framework.model.TestResult;
+import ch.hsr.ifs.test.framework.model.TestSession;
+import ch.hsr.ifs.test.framework.model.TestSuite;
 
 /**
  * @author Emanuel Graf

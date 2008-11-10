@@ -17,6 +17,9 @@ import java.util.TreeMap;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.ImageProvider;
+
 /**
  * @author egraf
  *

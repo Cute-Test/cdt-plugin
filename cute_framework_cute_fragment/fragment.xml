@@ -2,13 +2,13 @@
 <?eclipse version="3.2"?>
 <fragment>
    <extension
-         point="ch.hsr.ifs.cute.framework.Messages">
+         point="ch.hsr.ifs.test.framework.Messages">
       <MessageProvider
             class="ch.hsr.ifs.cute.framework.CuteMessages">
       </MessageProvider>
    </extension>
    <extension
-         point="ch.hsr.ifs.cute.framework.ImageProvider">
+         point="ch.hsr.ifs.test.framework.ImageProvider">
       <ImageProvider
             class="ch.hsr.ifs.cute.framework.CuteImageProvider">
       </ImageProvider>

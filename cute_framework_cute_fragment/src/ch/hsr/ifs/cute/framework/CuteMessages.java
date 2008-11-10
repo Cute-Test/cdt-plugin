@@ -3,6 +3,8 @@ package ch.hsr.ifs.cute.framework;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import ch.hsr.ifs.test.framework.Messages;
+
 public class CuteMessages implements Messages {
 	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.framework.messages"; //$NON-NLS-1$
 

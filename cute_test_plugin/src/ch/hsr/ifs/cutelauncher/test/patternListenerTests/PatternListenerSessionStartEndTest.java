@@ -13,8 +13,8 @@ package ch.hsr.ifs.cutelauncher.test.patternListenerTests;
 
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.cute.framework.ConsolePatternListener;
-import ch.hsr.ifs.cute.framework.event.TestEventHandler;
+import ch.hsr.ifs.test.framework.ConsolePatternListener;
+import ch.hsr.ifs.test.framework.event.TestEventHandler;
 
 
 /**

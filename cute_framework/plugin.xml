@@ -7,7 +7,7 @@
          point="org.eclipse.ui.views">
       <view
             category="org.eclipse.cdt.ui.views"
-            class="ch.hsr.ifs.cute.framework.ui.TestRunnerViewPart"
+            class="ch.hsr.ifs.test.framework.ui.TestRunnerViewPart"
             fastViewWidthRatio="0.5"
             icon="icons/obj16/empty_app.gif"
             id="ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"
@@ -18,7 +18,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
-            class="ch.hsr.ifs.cute.framework.preference.CutePrefPage"
+            class="ch.hsr.ifs.test.framework.preference.CutePrefPage"
             id="ch.hsr.ifs.cutelauncher.prefPage"
             name="%pref.page.name">
       </page>
@@ -26,7 +26,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="ch.hsr.ifs.cute.framework.preference.PreferenceInitializer">
+            class="ch.hsr.ifs.test.framework.preference.PreferenceInitializer">
       </initializer>
    </extension>
 

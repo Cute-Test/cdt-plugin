@@ -38,8 +38,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.framework.CuteFrameworkPlugin;
-import ch.hsr.ifs.cute.framework.model.CuteModel;
+import ch.hsr.ifs.test.framework.CuteFrameworkPlugin;
+import ch.hsr.ifs.test.framework.model.CuteModel;
 
 @SuppressWarnings("restriction")
 public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {

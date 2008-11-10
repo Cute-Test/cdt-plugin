@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: ch.hsr.ifs.cute.framework;singleton:=true
+Bundle-SymbolicName: ch.hsr.ifs.test.framework;singleton:=true
 Bundle-Version: 2.0.0.qualifier
-Bundle-Activator: ch.hsr.ifs.cute.framework.CuteFrameworkPlugin
+Bundle-Activator: ch.hsr.ifs.test.framework.CuteFrameworkPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.cdt.core;bundle-version="[5.0.0,6.0.0)",
@@ -19,9 +19,9 @@ Require-Bundle: org.eclipse.cdt.core;bundle-version="[5.0.0,6.0.0)",
  org.eclipse.osgi.util;bundle-version="3.1.300"
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cute.framework,
- ch.hsr.ifs.cute.framework.event,
- ch.hsr.ifs.cute.framework.model,
- ch.hsr.ifs.cute.framework.preference,
- ch.hsr.ifs.cute.framework.ui
+Export-Package: ch.hsr.ifs.test.framework,
+ ch.hsr.ifs.test.framework.event,
+ ch.hsr.ifs.test.framework.model,
+ ch.hsr.ifs.test.framework.preference,
+ ch.hsr.ifs.test.framework.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
