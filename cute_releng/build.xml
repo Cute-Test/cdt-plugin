@@ -86,7 +86,7 @@
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${buildDirectory}"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${buildDirectory}"/>
 		<unzip src="${buildDirectory}/eclipse/plugins/${cuteTest}.jar"
-			dest="${buildDirectory}/eclipse/plugins"/>
+			dest="${buildDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
 		<ant antfile="test.xml" dir="${buildDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
 			<property name="eclipse-home" value="${buildDirectory}/eclipse"/>
 			<property name="library-file" value="${buildDirectory}/eclipse/plugins/org.eclipse.test_3.2.0/library.xml"/>
