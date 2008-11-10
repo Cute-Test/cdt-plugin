@@ -15,7 +15,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import ch.hsr.ifs.cute.ui.sourceactions.AbstractFunctionAction;
-public abstract class Test1Skeleton //extends TestCase{ 
+public abstract class Test1Skeleton 
 	extends org.eclipse.cdt.core.tests.BaseTestFramework{
 	
 	public Test1Skeleton() {

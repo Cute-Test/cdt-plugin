@@ -842,28 +842,3 @@ void runSuite(){
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
-///////////////////////////////////////
-//test class functor with parameter constructor without semicolon at the end trac tix23
-class testCase4{//^ no constructor shown
-	int value;
-	public:
-		testCase4(int x):value(x){}
-		virtual void operator()();
-}
-void runSuite(){
-	cute::suite s;
-	cute::ide_listener lis;
-	cute::makeRunner(lis)(s, "The Suite");
-}
-//expected 
-class testCase4{// no constructor shown
-	int value;
-	public:
-		testCase4(int x):value(x){}
-		virtual void operator()();
-}
-void runSuite(){
-	cute::suite s;
-	cute::ide_listener lis;
-	cute::makeRunner(lis)(s, "The Suite");
-}
