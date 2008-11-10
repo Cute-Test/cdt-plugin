@@ -9,7 +9,7 @@
 	<target name="init">
 		<tstamp/>
 		<property name="branchVersion" value="2.0.0"/>
-		<property name="testVersion" value="1.6.0"/>
+		<property name="testVersion" value="2.0.0"/>
 		<property name="timestamp" value="${DSTAMP}${TSTAMP}" />
 		<property name="forceContextQualifier" value="${timestamp}"/>
 		<property name="buildDirectory" value="${basedir}/results" />
@@ -31,6 +31,7 @@
 		<property name="basearch" value="${osgi.arch}"/>
 		<property name="testReports" value="${zipsdir}/testReports"/>
 		<property name="tagname" value="v${timestamp}"/>
+		<property name="cuteTest" value="ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
 		<condition property="onWindows">
 			<os family="windows"/>
 		</condition>
@@ -84,6 +85,8 @@
 		</ant>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${buildDirectory}"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${buildDirectory}"/>
+		<unzip src="${buildDirectory}/eclipse/plugins/${cuteTest}.jar"
+			dest="${buildDirectory}/eclipse/plugins"/>
 		<ant antfile="test.xml" dir="${buildDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
 			<property name="eclipse-home" value="${buildDirectory}/eclipse"/>
 			<property name="library-file" value="${buildDirectory}/eclipse/plugins/org.eclipse.test_3.2.0/library.xml"/>
