@@ -39,7 +39,7 @@ namespace cute{
 		}
 		std::string what() const{
 			return theTest.name() + " expecting "
-			       + test::demangle(typeid(ExpectedException).name());
+			       + demangle(typeid(ExpectedException).name());
 		}
 	};
 }
