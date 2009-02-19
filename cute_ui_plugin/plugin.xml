@@ -63,24 +63,6 @@
  
   <extension
        point="org.eclipse.ui.popupMenus">
-    <objectContribution
-          adaptable="true"
-          id="ch.hsr.ifs.cutelauncher.convertObjectContribution1"
-          objectClass="org.eclipse.core.resources.IProject">
-       <action
-             class="ch.hsr.ifs.cute.ui.project.wizard.ConvertProjectAction"
-             enablesFor="1"
-             icon="icons/ovr16/cute_ovr.gif"
-             id="ch.hsr.ifs.cutelauncher.convertProjectAction"
-             label="%action.label.ConvertProject"
-             menubarPath="additions">
-             
-       </action>
-       <filter
-             name="projectNature"
-             value="org.eclipse.cdt.core.ccnature">
-       </filter>
-    </objectContribution>
     <viewerContribution
           id="ch.hsr.ifs.cutelauncher.cEditorContribution"
           targetID="#CEditorContext">

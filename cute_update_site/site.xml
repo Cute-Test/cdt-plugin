@@ -30,5 +30,6 @@
    <feature url="features/ch.hsr.ifs.cute_1.6.0.200809150950.jar" id="ch.hsr.ifs.cute" version="1.6.0.200809150950">
       <category name="Cute Plugin"/>
    </feature>
+   <feature url="features/ch.hsr.ifs.cute_2.0.0.200902191706.jar" id="ch.hsr.ifs.cute" version="2.0.0.200902191706"/>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
 </site>

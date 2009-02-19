@@ -63,7 +63,7 @@ class LaunchConfigurationStub extends org.eclipse.debug.internal.core.LaunchConf
 	final boolean useCustomSrcPathProperty;
 	final String customSrcPathProperty;
 	public LaunchConfigurationStub(boolean value1, String value2) {
-		super(ResourcesPlugin.getWorkspace().getRoot().getFileForLocation((IPath) new Path(""))); //$NON-NLS-1$
+		super(new Path("")); //$NON-NLS-1$
 		useCustomSrcPathProperty=value1;
 		customSrcPathProperty=value2;
 	}
