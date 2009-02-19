@@ -23,16 +23,16 @@
 #include "cute_equals.h"
 #include "cute_expect.h"
 #include <limits>
-namespace {
-// the following code triggers some warnings about equating signed/unsigned
-// that is intentional
+
+
+
 void test_equals_OK() {
 	int fourtytwo = 42;
 	unsigned long fourtytwoL = 42UL;
 	char fourtytwoC = '\042';
 	ASSERT_EQUAL(42,fourtytwo);
 	ASSERT_EQUAL(42UL,fourtytwoL);
-	ASSERT_EQUAL(42,fourtytwoL);
+	ASSERT_EQUAL(42u,fourtytwoL);
 	ASSERT_EQUAL(42UL,fourtytwo);
 	ASSERT_EQUAL('\042',fourtytwoC);
 	ASSERT_EQUAL(042,fourtytwoC);
@@ -60,13 +60,25 @@ void test_equals_double_fails() {
 		throw "should have failed"; // make this another error!
 	} catch(cute::test_failure &){
 	}
-}
-void test_equals_double(){
+}void test_equals_double_zero(){
 	ASSERT_EQUAL(0.0,0.0);
-	ASSERT_EQUAL(1.0,1.0+eps);
-	ASSERT_EQUAL(-1.0,-1.0+eps);
+}
+void test_equals_double_one_one_plus_eps(){
+		ASSERT_EQUAL(1.0,1.0+eps);
+}
+void test_equals_double_minusone_minusone_plus_eps(){
+		ASSERT_EQUAL(-1.0,-1.0+eps);
+}
+
+
+
+
+void test_equals_double(){
 	ASSERT_EQUAL_DELTA(1e3,1001.0,1.0);
-	ASSERT_EQUAL(10e14,10e14+1);
+	ASSERT_EQUAL(10e14,1+10e14);
+}
+void test_equals_float(){
+	ASSERT_EQUAL(float(10e7),float(100+10e7)); // assume 6 digit "precision" delta
 }
 void test_equals_strings_fails(){
 	try {
@@ -83,15 +95,18 @@ void test_diff_values(){
 }
 void test_backslashQuoteTabNewline(){
 	std::string in("Hallo");
-	ASSERT(in == cute::backslashQuoteTabNewline(in));
+	ASSERT(in == cute::equals_impl::backslashQuoteTabNewline(in));
 	std::string shouldQuote("Hi\nPeter\\tab\t ");
 	std::string shouldQuoteQuoted("Hi\\nPeter\\\\tab\\t ");
-	ASSERT(shouldQuoteQuoted == cute::backslashQuoteTabNewline(shouldQuote));
+	ASSERT(shouldQuoteQuoted == cute::equals_impl::backslashQuoteTabNewline(shouldQuote));
 }
 
-} // namespace
 cute::suite test_cute_equals(){
 	cute::suite s;
+	s.push_back(CUTE(test_equals_float));
+	s.push_back(CUTE(test_equals_double_zero));
+	s.push_back(CUTE(test_equals_double_one_one_plus_eps));
+	s.push_back(CUTE(test_equals_double_minusone_minusone_plus_eps));
 	s += CUTE(test_backslashQuoteTabNewline);
 	s += CUTE(test_equals_OK);
 	s += CUTE(test_equals_int_fails);

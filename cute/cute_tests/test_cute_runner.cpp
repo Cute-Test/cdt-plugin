@@ -26,12 +26,12 @@
 using namespace cute;
 namespace {
 struct mock_listener {
-	int begincount;
-	int endcount;
-	int startcount;
-	int successcount;
-	int failurecount;
-	int errorcount;
+	unsigned int begincount;
+	unsigned int endcount;
+	unsigned int startcount;
+	unsigned int successcount;
+	unsigned int failurecount;
+	unsigned int errorcount;
 	std::vector<std::string> infomessages;
 	std::vector<std::string>  errormessages;
 	std::vector<std::string>  successmessages;
@@ -78,7 +78,7 @@ void test_cute_runner(){
 	ASSERT_EQUAL(2,run.successcount);
 	ASSERT_EQUAL(1,run.failurecount);
 	ASSERT_EQUAL(3,run.errorcount);
-	ASSERT_EQUAL(2,run.infomessages.size());
+	ASSERT_EQUAL(2u,run.infomessages.size());
 	ASSERT_EQUAL("single success test suite",run.infomessages[0]);
 	ASSERT_EQUAL("test_cute_runner_suite",run.infomessages[1]);
 	ASSERT_EQUAL(3u,run.errormessages.size());

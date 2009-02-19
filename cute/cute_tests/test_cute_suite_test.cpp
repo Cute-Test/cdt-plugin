@@ -26,7 +26,7 @@
 
 namespace {
 // dummy tests
-int counter=0;
+size_t counter=0;
 void testOK(){ ++counter; }
 void testFails() { --counter; FAIL();}
 // tests:
@@ -52,7 +52,7 @@ void test_suite_fails(){
 		t();
 		throw "should have failed";
 	} catch (cute::test_failure &){
-		ASSERT_EQUAL(1,counter);
+		ASSERT_EQUAL(1u,counter);
 	}
 }
 }

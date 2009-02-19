@@ -38,7 +38,7 @@ inline std::string demangle(char const *name){
 }
 #else
 namespace cute {
-// this default works reasonably with MSVC71 and 8
+// this default works reasonably with MSVC71 and 8, hopefully for others as well
 inline std::string demangle(char const *name){
 	return std::string(name?name:"unknown");
 }
