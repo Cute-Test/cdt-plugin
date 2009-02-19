@@ -14,23 +14,35 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007 Peter Sommerlad
+ * Copyright 2009 Peter Sommerlad
  *
  *********************************************************************************/
 
-#ifndef IDE_LISTENER_H_
-#define IDE_LISTENER_H_
-#include "eclipse_listener.h"
-#include "vstudio_listener.h"
-namespace cute
-{
-// assume that we compile with gnu when using Eclipse CDT.
-// vstudio_listener is broken for VS later than 2003, TODO!
-#if defined(__GNUG__)
-typedef eclipse_listener ide_listener;
-#else
-typedef vstudio_listener ide_listener;
-#endif
-}
+#ifndef CUTE_DEMANGLE_H_
+#define CUTE_DEMANGLE_H_
+#include <string>
+// needs adaptation for different compilers
+// dependency to demangle is a given,
+// otherwise we have to use macros everywhere
+#ifdef __GNUG__
+#include <cxxabi.h> // __cxa_demangle
+namespace cute {
 
-#endif /*IDE_LISTENER_H_*/
+inline std::string demangle(char const *name){
+	if (!name) return "unknown";
+	char *toBeFreed = abi::__cxa_demangle(name,0,0,0);
+	std::string result(toBeFreed?toBeFreed:name);
+	::free(toBeFreed);
+	return result;
+}
+}
+#else
+namespace cute {
+// this default works reasonably with MSVC71 and 8, hopefully for others as well
+inline std::string demangle(char const *name){
+	return std::string(name?name:"unknown");
+}
+}
+#endif
+
+#endif /* CUTE_DEMANGLE_H_ */

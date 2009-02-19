@@ -22,6 +22,7 @@
 #define CUTE_EXPECT_H_
 #include "cute_base.h"
 #include "cute_test.h"
+// TODO: determine if CUTE_EXPECT is really needed or if ASSERT_THROWS would be sufficient
 namespace cute{
 	template <typename ExpectedException>
 	struct cute_expect{
@@ -39,12 +40,14 @@ namespace cute{
 		}
 		std::string what() const{
 			return theTest.name() + " expecting "
-			       + test::demangle(typeid(ExpectedException).name());
+			       + demangle(typeid(ExpectedException).name());
 		}
 	};
 }
 #define CUTE_EXPECT(tt,exc) cute::test(cute::cute_expect<exc>(tt,__FILE__,__LINE__),tt.name())
 
+// should we allow arbitrary code and remove the parentheses around the macro expansion?
+// not now, strange compilation side-effects might result.
 #define ASSERT_THROWSM(msg,code,exc) \
 	do { \
 		try { \
