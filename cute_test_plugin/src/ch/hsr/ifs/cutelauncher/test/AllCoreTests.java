@@ -12,7 +12,7 @@ public class AllCoreTests {
 		//$JUnit-BEGIN$
 		suite.addTest(PatternListenerSuite.suite());
 		suite.addTest(ModelBuilderSuite.suite());
-		suite.addTest(SourceLookupPathTest.suite());
+//		suite.addTest(SourceLookupPathTest.suite());
 
 		//$JUnit-END$
 		return suite;
