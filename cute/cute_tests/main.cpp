@@ -81,16 +81,23 @@ struct to_incarnate{
 struct to_incarnate_without : to_incarnate {
 	to_incarnate_without():to_incarnate(std::cout){}
 };
-
+void test_SimpleTestFunctionThrows(){
+	ASSERT_THROWS(simpleTestFunction(),std::exception);
+}
+void test_shouldFailThrowsFailure(){
+	ASSERT_THROWS(shouldFailButNotThrowStdException(),cute::test_failure);
+}
 int main(){
 	using namespace std;
 	suite s;
 	s += test_cute_equals();
 	// the following test produces the one expected error, since it throws
 	s += CUTE(simpleTestFunction);
-	s += CUTE_EXPECT(CUTE(simpleTestFunction),std::exception);
+	s += CUTE(test_SimpleTestFunctionThrows);
+//	s += CUTE_EXPECT(CUTE(simpleTestFunction),std::exception);
 	s += SimpleTestFunctionCalledTest();
-	s += CUTE_EXPECT(CUTE(shouldFailButNotThrowStdException),cute::test_failure);
+	s += CUTE(test_shouldFailThrowsFailure);
+//	s += CUTE_EXPECT(CUTE(shouldFailButNotThrowStdException),cute::test_failure);
 	s += CUTE_SUITE_TEST(test_cute_expect());
 	s += CUTE_SUITE_TEST(test_repeated_test());
 	s += CUTE(test_cute_runner);

@@ -21,7 +21,7 @@
 #include "test_cute_equals.h"
 #include "cute_base.h"
 #include "cute_equals.h"
-#include "cute_expect.h"
+#include "cute_throws.h"
 #include <limits>
 
 

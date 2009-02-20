@@ -19,7 +19,7 @@
  *********************************************************************************/
 
 #include "test_cute_expect.h"
-#include "cute_expect.h"
+#include "cute_throws.h"
 #include <exception>
 using namespace cute;
 namespace {
@@ -33,6 +33,7 @@ void test_throws() {
 	ASSERT_THROWS( throws_std_exception() , std::exception);
 }
 void test_doesntthrow() {
+	// the following code will issue a warning when compiled!
 	ASSERT_THROWS(1+1,std::exception);
 }
 void test_throws_with_code(){
@@ -44,14 +45,29 @@ void test_throws_with_message() {
 void test_throwing_with_demangle_failure() {
 	throw std::logic_error("NOT A VALID TYPE NAME");
 }
+void test_fails_throws(){
+	ASSERT_THROWS(CUTE(no_exception)(),std::exception);
+}
+void test_that_fails_throws_failure(){
+	ASSERT_THROWS(CUTE(test_fails_throws)(),cute::test_failure);
+}
+void test_that_throws_throws(){
+	ASSERT_THROWS(CUTE(throws_std_exception)(),std::exception);
+}
+void test_that_doesnt_throw_fails_when_expected_to_throws(){
+	ASSERT_THROWS(CUTE(test_doesntthrow)(),cute::test_failure);
+}
 }
 cute::suite test_cute_expect() {
 	cute::suite s;
-	cute::test fails=CUTE_EXPECT(CUTE(no_exception), std::exception);
-	s += CUTE_EXPECT(fails,cute::test_failure);
-	s += CUTE_EXPECT(CUTE(throws_std_exception),std::exception);
+//	cute::test fails=CUTE_EXPECT(CUTE(no_exception), std::exception);
+//	s += CUTE_EXPECT(fails,cute::test_failure);
+	s += CUTE(test_that_fails_throws_failure);
+//	s += CUTE_EXPECT(CUTE(throws_std_exception),std::exception);
+	s += CUTE(test_that_throws_throws);
 	s += CUTE(test_throws);
-	s += CUTE_EXPECT(CUTE(test_doesntthrow),cute::test_failure);
+//	s += CUTE_EXPECT(CUTE(test_doesntthrow),cute::test_failure);
+	s += CUTE(test_that_doesnt_throw_fails_when_expected_to_throws);
 	s += CUTE(test_throws_with_code);
 	s += CUTE(test_throws_with_message);
 	s.push_back(CUTE(test_throwing_with_demangle_failure));
