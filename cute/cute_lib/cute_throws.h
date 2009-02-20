@@ -14,47 +14,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007 Peter Sommerlad
+ * Copyright 2007-2009 Peter Sommerlad
  *
  *********************************************************************************/
 
-#ifndef CUTE_EXPECT_H_
-#define CUTE_EXPECT_H_
+#ifndef CUTE_THROWS_H_
+#define CUTE_THROWS_H_
 #include "cute_base.h"
-#include "cute_test.h"
-// TODO: determine if CUTE_EXPECT is really needed or if ASSERT_THROWS would be sufficient
-namespace cute{
-	template <typename ExpectedException>
-	struct cute_expect{
-		test theTest;
-		std::string filename;
-		int  lineno;
-		cute_expect(test const &t,char const *file,int line)
-		:theTest(t), filename(file), lineno(line){}
-		void operator()(){
-			try{
-				theTest();
-				throw test_failure(what(),filename.c_str(),lineno);
-			} catch(ExpectedException &) {
-			}
-		}
-		std::string what() const{
-			return theTest.name() + " expecting "
-			       + demangle(typeid(ExpectedException).name());
-		}
-	};
-}
-#define CUTE_EXPECT(tt,exc) cute::test(cute::cute_expect<exc>(tt,__FILE__,__LINE__),tt.name())
 
 // should we allow arbitrary code and remove the parentheses around the macro expansion?
 // not now, strange compilation side-effects might result.
 #define ASSERT_THROWSM(msg,code,exc) \
 	do { \
 		try { \
-			(code) ; \
+			{ code ; } \
 			FAILM(#msg); \
 		} catch(exc &e){} \
 	} while(0)
 #define ASSERT_THROWS(code,exc) ASSERT_THROWSM(" expecting " #code " to throw " #exc,code,exc)
 
-#endif /*CUTE_EXPECT_H_*/
+#endif /*CUTE_THROWS_H_*/
