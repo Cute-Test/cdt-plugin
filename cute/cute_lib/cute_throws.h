@@ -29,7 +29,7 @@
 		try { \
 			{ code ; } \
 			FAILM(#msg); \
-		} catch(exc &e){} \
+		} catch(exc &){} \
 	} while(0)
 #define ASSERT_THROWS(code,exc) ASSERT_THROWSM(" expecting " #code " to throw " #exc,code,exc)
 
