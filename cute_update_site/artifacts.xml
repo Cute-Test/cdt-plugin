@@ -3,14 +3,14 @@
 <repository name='file:/C:/Dokumente und Einstellungen/Emanuel/WS/cute/cute_update_site/ - artifacts' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1235059621553'/>
+    <property name='p2.timestamp' value='1235382418690'/>
   </properties>
   <mappings size='3'>
     <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
     <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
     <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
   </mappings>
-  <artifacts size='27'>
+  <artifacts size='32'>
     <artifact classifier='org.eclipse.update.feature' id='ch.hsr.ifs.cute' version='1.3.0.200803311217'>
       <properties size='2'>
         <property name='artifact.size' value='24113'/>
@@ -45,17 +45,17 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='org.eclipse.update.feature' id='ch.hsr.ifs.cute' version='1.3.2.200805140005'>
-      <properties size='2'>
-        <property name='artifact.size' value='24112'/>
-        <property name='download.size' value='24112'/>
-      </properties>
-    </artifact>
     <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cutelauncher' version='1.5.0.200806301632'>
       <properties size='3'>
         <property name='artifact.size' value='223788'/>
         <property name='download.size' value='223788'/>
         <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='ch.hsr.ifs.cute' version='1.3.2.200805140005'>
+      <properties size='2'>
+        <property name='artifact.size' value='24112'/>
+        <property name='download.size' value='24112'/>
       </properties>
     </artifact>
     <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cute.core' version='2.0.0.200902191706'>
@@ -65,17 +65,23 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cutelauncher' version='1.6.0.200809150950'>
-      <properties size='3'>
-        <property name='artifact.size' value='246052'/>
-        <property name='download.size' value='246052'/>
-        <property name='download.contentType' value='application/zip'/>
+    <artifact classifier='org.eclipse.update.feature' id='ch.hsr.ifs.cute' version='2.0.1.200902231046'>
+      <properties size='2'>
+        <property name='artifact.size' value='24119'/>
+        <property name='download.size' value='24119'/>
       </properties>
     </artifact>
     <artifact classifier='org.eclipse.update.feature' id='ch.hsr.ifs.cute' version='1.3.0.200804011646'>
       <properties size='2'>
         <property name='artifact.size' value='24113'/>
         <property name='download.size' value='24113'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cutelauncher' version='1.6.0.200809150950'>
+      <properties size='3'>
+        <property name='artifact.size' value='246052'/>
+        <property name='download.size' value='246052'/>
+        <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
     <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cutelauncher' version='1.0.3.200707231034'>
@@ -110,6 +116,20 @@
         <property name='download.size' value='24105'/>
       </properties>
     </artifact>
+    <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cute.ui' version='2.0.0.200902231046'>
+      <properties size='3'>
+        <property name='artifact.size' value='173243'/>
+        <property name='download.size' value='173243'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='ch.hsr.ifs.test.framework' version='2.0.0.200902231046'>
+      <properties size='3'>
+        <property name='artifact.size' value='107823'/>
+        <property name='download.size' value='107823'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
     <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cutelauncher' version='1.3.2.200805140005'>
       <properties size='3'>
         <property name='artifact.size' value='214965'/>
@@ -134,6 +154,13 @@
       <properties size='2'>
         <property name='artifact.size' value='24029'/>
         <property name='download.size' value='24029'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cute.core' version='2.0.1.200902231046'>
+      <properties size='3'>
+        <property name='artifact.size' value='84055'/>
+        <property name='download.size' value='84055'/>
+        <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
     <artifact classifier='org.eclipse.update.feature' id='ch.hsr.ifs.cute' version='1.1.1.200707311524'>
@@ -178,6 +205,13 @@
       <properties size='3'>
         <property name='artifact.size' value='5384'/>
         <property name='download.size' value='5384'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cute.cuteExtensions' version='2.0.0.200902231046'>
+      <properties size='3'>
+        <property name='artifact.size' value='5383'/>
+        <property name='download.size' value='5383'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
