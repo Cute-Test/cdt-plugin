@@ -25,6 +25,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.ui.project,
+ ch.hsr.ifs.cute.ui.project.headers,
  ch.hsr.ifs.cute.ui.project.wizard,
  ch.hsr.ifs.cute.ui.sourceactions
 Bundle-Localization: plugin

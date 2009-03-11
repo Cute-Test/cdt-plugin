@@ -19,6 +19,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 
 	private final CDTConfigWizardPage configPage;
 	private final IWizardPage startingWizardPage;
+	private CuteVersionComposite cuteVersionComp;
 	
 	public NewCuteSuiteWizardCustomPage(CDTConfigWizardPage configWizardPage, IWizardPage startingWizardPage){
 		pageID="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage"; //$NON-NLS-1$
@@ -63,24 +64,45 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	public void createControl(Composite parent) {
 		createControl(parent, true);
 	}
+	
 	public void createControl(Composite parent,final boolean flag) {
+		
 		composite = new Composite(parent, SWT.NULL);
 		
-		GridLayout layout = new GridLayout(3, true);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 3;
+		layout.makeColumnsEqualWidth = true;
 		layout.marginHeight = 0;
 		layout.marginWidth = 5;
 		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		GridData gd;
+		
 		gd = new GridData();
-		gd.horizontalSpan =1;
+		gd.horizontalAlignment = SWT.BEGINNING | SWT.FILL;
+		gd.horizontalSpan = 3;
+		gd.grabExcessHorizontalSpace = true;
+
+		Composite tempComposite = new Composite(composite, SWT.NULL);
+		GridLayout tempLayout = new GridLayout();
+		tempLayout.marginTop = 0;
+		tempLayout.marginWidth = 0;
+		tempLayout.marginBottom = 5;
+		tempComposite.setLayout(tempLayout);
+		tempComposite.setLayoutData(gd);	
+		cuteVersionComp = new CuteVersionComposite(tempComposite);
+		cuteVersionComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		
+		gd = new GridData();
+		gd.horizontalSpan = 1;
 		suitenameLabel=new Label(composite,SWT.NONE);
 		suitenameLabel.setText(Messages.getString("NewCuteSuiteWizardCustomPage.TestSuiteName")); //$NON-NLS-1$
 		suitenameLabel.setLayoutData(gd);
 		
-	    gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan =2;
+	    gd = new GridData();
+	    gd.horizontalSpan = 2;
+	    gd.horizontalAlignment = SWT.FILL;
 		suitenameText = createSingleText(composite, 2);
 		suitenameText.setLayoutData(gd); 
 		suitenameText.setText(Messages.getString("NewCuteSuiteWizardCustomPage.DefaultSuiteName")); //$NON-NLS-1$
@@ -94,7 +116,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 				iwc.updateMessage();
 				iwc.updateTitleBar();
 				iwc.updateWindowTitle();}}
-		});	
+		});
 	}
 	
 	private Text createSingleText(Composite parent, int hspan) {
@@ -110,6 +132,12 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		if(suitenameText==null ||suitenameText.getText().equals("")||!suitenameText.getText().matches("\\w+"))return Messages.getString("NewCuteSuiteWizardCustomPage.suite"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return suitenameText.getText();
 	}
+	
+	
+	public String getCuteVersion() {
+		return cuteVersionComp.getVersionString();
+	}
+	
 	//for unit testing
 	public void setSuiteName(String s){
 		suitenameText.setText(s);

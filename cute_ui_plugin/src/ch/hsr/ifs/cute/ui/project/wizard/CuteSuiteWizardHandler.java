@@ -12,10 +12,12 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
+
+import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	private final NewCuteSuiteWizardCustomPage suitewizPage;
@@ -39,16 +41,20 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 
 	String suitename;
+
 	
 	@Override
-	public void addTestFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
+	protected void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
+			IFolder cuteFolder) throws CoreException {
 		suitename=suitewizPage.getSuiteName();
-		copyFiles(folder,monitor);
+		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
+		cuteVersion.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename);
+		
 	}
-	//extract method for unit testing
-	public void copyFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
-		SuiteTemplateCopyUtil.copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
-		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
-		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.h",suitename+".h",suitename); //$NON-NLS-1$ //$NON-NLS-2$
+	@Override
+	protected ICuteHeaders getCuteVersion() {
+		return getCuteVersion("Cute Headers 1.5.0"); //$NON-NLS-1$
 	}
+
+	
 }

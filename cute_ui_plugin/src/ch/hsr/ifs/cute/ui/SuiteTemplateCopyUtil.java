@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.ui.project.wizard;
+package ch.hsr.ifs.cute.ui;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -17,8 +17,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
-import ch.hsr.ifs.cute.core.CuteCorePlugin;
-
 public class SuiteTemplateCopyUtil {
 	public static void copyFile(IProject folder, IProgressMonitor monitor,String templateFilename, String targetFilename,String suitename)throws CoreException{
 		IFile targetFile = folder.getFile(targetFilename);
@@ -32,7 +30,7 @@ public class SuiteTemplateCopyUtil {
 
 	@SuppressWarnings("unchecked")
 	public static void copyFile (IFile targetFile, IProgressMonitor monitor,String templateFilename,String suitename)throws CoreException{
-		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/suite", templateFilename, false); //$NON-NLS-1$
+		Enumeration en = UiPlugin.getDefault().getBundle().findEntries("templates/projecttemplates/suite", templateFilename, false); //$NON-NLS-1$
 		if(en.hasMoreElements()){
 			URL url = (URL)en.nextElement();
 			
@@ -41,10 +39,10 @@ public class SuiteTemplateCopyUtil {
 				
 				targetFile.create(str,IResource.FORCE , new SubProgressMonitor(monitor,1));
 			} catch (IOException e) {
-				throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,e.getMessage(), e));
+				throw new CoreException(new Status(IStatus.ERROR,UiPlugin.PLUGIN_ID,42,e.getMessage(), e));
 			}
 		}else{
-			throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,"missing suite template files", null)); //$NON-NLS-1$
+			throw new CoreException(new Status(IStatus.ERROR,UiPlugin.PLUGIN_ID,42,"missing suite template files", null)); //$NON-NLS-1$
 		}
 	}
 	

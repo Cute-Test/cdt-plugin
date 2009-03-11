@@ -13,9 +13,12 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.CSourceEntry;
@@ -31,6 +34,7 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
+import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -46,22 +50,43 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
+import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author Emanuel Graf
  *
  */
 public class CuteWizardHandler extends MBSWizardHandler {
+	
+	private CuteVersionWizardPage cuteVersionWizardPage;
+
+	@Override
+	public IWizardPage getSpecificPage() {
+		return cuteVersionWizardPage;
+	}
+
 	public CuteWizardHandler(Composite p, IWizard w) {
 		super(new CuteBuildPropertyValue(), p, w);
+		cuteVersionWizardPage = new CuteVersionWizardPage(getStartingPage(), getConfigPage());
+		cuteVersionWizardPage.setWizard(w);
+		
+		MBSCustomPageManager.init();
+		MBSCustomPageManager.addStockPage(cuteVersionWizardPage, cuteVersionWizardPage.getPageID());
 	}
 	
+	@Override
+	public boolean canFinish() {
+		return true;
+	}
+
 	@Override
 	public void createProject(IProject project, boolean defaults,
 			boolean onFinish) throws CoreException {
@@ -84,14 +109,28 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	protected void createCuteProjectFolders(IProject project)
 			throws CoreException {
 		IFolder srcFolder = createFolder(project, "src"); //$NON-NLS-1$
-		addTestFiles(srcFolder, new NullProgressMonitor());
-		IFolder cuteFolder = createFolder(project, "cute"); //$NON-NLS-1$
-		addCuteFiles(cuteFolder, new NullProgressMonitor());
-		setIncludePaths(cuteFolder.getFullPath(), project);
+		ICuteHeaders cuteVersion = getCuteVersion();
 		
+		
+		IFolder cuteFolder = createFolder(project, "cute"); //$NON-NLS-1$
+		
+		
+		copyFiles(srcFolder, cuteVersion, cuteFolder);
+		
+		setIncludePaths(cuteFolder.getFullPath(), project);
 		ManagedBuildManager.saveBuildInfo(project, true);
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				getTestMainFile(project), true);
+	}
+
+	protected ICuteHeaders getCuteVersion() {
+		return getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
+	}
+
+	protected void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
+			IFolder cuteFolder) throws CoreException {
+		cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
+		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
 	}
 	
 	private IFolder createFolder(IProject project, String relPath)
@@ -142,38 +181,16 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		return set.toArray(new ICSourceEntry[set.size()]);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void addCuteFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
-		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/cute", "*.h", false); //$NON-NLS-1$ //$NON-NLS-2$
-		while(en.hasMoreElements()) {
-			URL url = (URL)en.nextElement();
-			String[] elements = url.getFile().split("/"); //$NON-NLS-1$
-			String filename = elements[elements.length-1];
-			IFile targetFile = folder.getFile(filename);
-			try {
-				targetFile.create(url.openStream(),IResource.FORCE , new SubProgressMonitor(monitor,1));
-			} catch (IOException e) {
-				throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,e.getMessage(), e));
-			}
+	protected ICuteHeaders getCuteVersion(String cuteVersionString) {
+		SortedSet<ICuteHeaders> headers = UiPlugin.getInstalledCuteHeaders();
+		for (ICuteHeaders cuteHeaders : headers) {
+			if(cuteVersionString.equals(cuteHeaders.getVersionString()))
+				return cuteHeaders;
 		}
+		
+		return null;
 	}
-	
-	@SuppressWarnings("unchecked")
-	protected void addTestFiles(IFolder folder, IProgressMonitor monitor) throws CoreException {
-		Enumeration en = CuteCorePlugin.getDefault().getBundle().findEntries("templates/projecttemplates/src", "*.cpp", false); //$NON-NLS-1$ //$NON-NLS-2$
-		while(en.hasMoreElements()) {
-			URL url = (URL)en.nextElement();
-			String[] elements = url.getFile().split("/"); //$NON-NLS-1$
-			String filename = elements[elements.length-1];
-			IFile targetFile = folder.getFile(filename);
-			try {
-				targetFile.create(url.openStream(),IResource.FORCE , new SubProgressMonitor(monitor,1));
-			} catch (IOException e) {
-				throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,e.getMessage(), e));
-			}
-		}
-	}
-	
+
 	protected void setIncludePaths(IPath cuteFolder, IProject project) throws CoreException {
 		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
 		setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH);

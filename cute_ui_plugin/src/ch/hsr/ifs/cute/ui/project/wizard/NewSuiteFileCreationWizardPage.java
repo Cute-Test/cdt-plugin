@@ -34,6 +34,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import ch.hsr.ifs.cute.ui.SuiteTemplateCopyUtil;
+
 
 public class NewSuiteFileCreationWizardPage extends
 		AbstractFileCreationWizardPage {
@@ -94,62 +96,6 @@ public class NewSuiteFileCreationWizardPage extends
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}
 	            	
-	            	/*
-	            	if(cppFile!=null){// && fSelection.isSelected()){
-	            		//@see org.eclipse.cdt.core.tests/parser/org.eclipse.cdt.internal.index.tests.IndexBugsTests
-	            		fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
-	            		ICProject fCProject=fNewFileTU.getCProject();
-//	            		CCorePlugin.getIndexManager().reindex(fCProject);
-	            		IIndex index = CCorePlugin.getIndexManager().getIndex(fCProject);
-	            		String a=CCorePlugin.getIndexManager().getIndexerId(fCProject);
-	            		System.out.println(a);         		
-	            		try{
-	            			IProgressMonitor subMonitor = new SubProgressMonitor(monitor,1);
-	            			waitUntilFileIsIndexed(index, cppFile, 8000,subMonitor);
-	            			index.acquireReadLock();
-		            		try {
-		            			IProgressMonitor sub = new SubProgressMonitor(monitor,1);
-		    	            	
-			            		IIndexBinding[] bindings= index.findBindings("theX".toCharArray(),IndexFilter.ALL,sub);	
-			            		System.out.println("binding"+bindings.length);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}finally{
-								index.releaseReadLock();
-							}
-	            		}catch(InterruptedException ie){
-	            			ie.printStackTrace();
-	            		}catch(Exception e){
-	            			e.printStackTrace();
-	            		}
-	            		
-	            	}*/
-	            	/*
-	            	IFile cppFile=folder.getFile(suitename+".cpp");
-	            	if(cppFile!=null){// && fSelection.isSelected()){
-	            		fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
-	            		
-	            		IIndex index = CCorePlugin.getIndexManager().getIndex(fNewFileTU.getCProject());
-	            		
-	            		IProgressMonitor sub = new SubProgressMonitor(monitor,1);
-
-	            		IIndexBinding[] bindings= index.findBindings("runner".toCharArray(),IndexFilter.ALL,sub);
-	            		sub.done();
-//	            		IName name=
-//	            		IIndexBinding binding=index.findBinding(name);
-//	            		
-	            		
-	            		NewSuiteFileGenerator nsfg=new NewSuiteFileGenerator(cppFile);
-		            	nsfg.parse();	
-	            	}
-	            	core indexer 
-
-find binding 
-get binding 
-after location translation unit 
-
-	            	*
-	            	*/
 	            }
 	        } finally {
 	            monitor.done();

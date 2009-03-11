@@ -52,6 +52,7 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 	private Vector<IProject> libProjects;
 	private final IWizardPage startingWizardPage;
 	private final IWizardContainer wizardDialog;
+	private CuteVersionComposite cuteVersionComp;
 	
 	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc) {
 		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage"; //$NON-NLS-1$
@@ -76,6 +77,8 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 		composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		cuteVersionComp = new CuteVersionComposite(composite);
 
 		listViewer = CheckboxTableViewer.newCheckList(composite, SWT.TOP
                 | SWT.BORDER);
@@ -228,6 +231,10 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 			}
 		}
 		return checkedProjects;
+	}
+	
+	public String getCuteVersionString() {
+		return cuteVersionComp.getVersionString();
 	}
 	
 	public void checkStateChanged(CheckStateChangedEvent event){
