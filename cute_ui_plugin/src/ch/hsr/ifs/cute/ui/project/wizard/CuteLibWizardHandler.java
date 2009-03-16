@@ -62,7 +62,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 			throws CoreException {
 		super.createProject(project, defaults);
 		createLibSetings(project);
-//		createCDTProjectReference(project);
 	}
 	
 	@Override
@@ -70,7 +69,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 			boolean onFinish) throws CoreException {
 		super.createProject(project, defaults, onFinish);
 		createLibSetings(project);
-//		createCDTProjectReference(project);
 	}
 
 	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=229085
@@ -201,7 +199,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		if(libRefPage ==null)return false;
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		if(projects.size()<1)return false;
-		return true;
+		return libRefPage.isCustomPageComplete();
 	}
 
 	private class LibraryPathsStrategy implements GetOptionsStrategy{

@@ -4,6 +4,7 @@ import org.eclipse.cdt.internal.ui.CPluginImages;
 import org.eclipse.cdt.internal.ui.wizards.filewizard.AbstractFileCreationWizard;
 import org.eclipse.cdt.ui.CUIPlugin;
 //based on @see org.eclipse.cdt.ui/org.eclipse.cdt.internal.ui.wizards.filewizard.NewSourceFileCreationWizard
+@SuppressWarnings("restriction")
 public class NewSuiteFileCreationWizard extends AbstractFileCreationWizard {
     public NewSuiteFileCreationWizard() {
         super();
@@ -23,6 +24,3 @@ public class NewSuiteFileCreationWizard extends AbstractFileCreationWizard {
         fPage.init(getSelection());
     }
 }
-
-//bug with selection at project resource
-//regex issue

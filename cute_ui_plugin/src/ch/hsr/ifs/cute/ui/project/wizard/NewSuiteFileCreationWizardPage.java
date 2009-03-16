@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Text;
 import ch.hsr.ifs.cute.ui.SuiteTemplateCopyUtil;
 
 
+@SuppressWarnings("restriction")
 public class NewSuiteFileCreationWizardPage extends
 		AbstractFileCreationWizardPage {
 

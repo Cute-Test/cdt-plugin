@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="Headers" name="Cute Headers" schema="schema/ch.hsr.ifs.cute.ui.headers.exsd"/>
+   <extension-point id="Headers" name="%extension-point.name.0" schema="schema/ch.hsr.ifs.cute.ui.headers.exsd"/>
 <extension
        point="org.eclipse.ui.newWizards">
     <wizard
@@ -164,7 +164,7 @@
 
  <extension
        id="cuteProblem"
-       name="Cute Problem"
+       name="%extension.name.0"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.core.resources.problemmarker">
@@ -198,7 +198,7 @@
  
     <extension
          id="ch.hsr.ifs.cute.ui.cutenature"
-         name="CUTE Project Nature"
+         name="%extension.name.1"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
@@ -232,7 +232,7 @@
  
     <extension
          id="cute wizard"
-         name="cute wizard"
+         name="%extension.name.2"
          point="org.eclipse.cdt.ui.CDTWizard">
       <wizard
             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard"

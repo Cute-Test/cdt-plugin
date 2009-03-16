@@ -39,6 +39,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
+import ch.hsr.ifs.cute.ui.UiPlugin;
+
 /**
  * @author Emanuel Graf
  *
@@ -53,18 +55,24 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 	private final IWizardPage startingWizardPage;
 	private final IWizardContainer wizardDialog;
 	private CuteVersionComposite cuteVersionComp;
+	private ImageDescriptor imageDesc;
 	
 	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc) {
 		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
 		this.startingWizardPage = staringWizardPage;
 		wizardDialog=wc;
+		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
 	}
 
 	@Override
 	protected boolean isCustomPageComplete() {
-		// TODO Auto-generated method stub
-		if(getCheckedProjects().size()<1)return false;
+		if (getCheckedProjects().size() < 1) {
+			return false;
+		}
+		if (!cuteVersionComp.isComplete()) {
+			return false;
+		}
 		return true;
 	}
 
@@ -84,6 +92,7 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
                 | SWT.BORDER);
         GridData data = new GridData(GridData.FILL_BOTH);
         data.grabExcessHorizontalSpace = true;
+        data.verticalIndent = 20;
         listViewer.getTable().setLayoutData(data);
         
         listViewer.setLabelProvider(WorkbenchLabelProvider
@@ -161,12 +170,13 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 	public String getErrorMessage()
 	{
 		if(errorMessageFlag)return Messages.getString("LibReferencePage.SelectLib"); //$NON-NLS-1$
-		return null;
+		return cuteVersionComp.getErrorMessage();
 	}
 
 	public Image getImage()
 	{
-		return wizard.getDefaultPageImage();
+//		return wizard.getDefaultPageImage();
+		return imageDesc.createImage();
 	}
 
 	public String getMessage()
@@ -192,11 +202,6 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 
 	}
 
-	public void setImageDescriptor(ImageDescriptor image)
-	{
-		// do nothing
-
-	}
 
 	public void setTitle(String title)
 	{
@@ -244,6 +249,10 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 		
 		wizardDialog.updateMessage();
 		wizardDialog.updateButtons();
+	}
+
+	public void setImageDescriptor(ImageDescriptor image) {
+		// do nothing
 	}
 
 }

@@ -15,16 +15,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+
+import ch.hsr.ifs.cute.ui.UiPlugin;
 public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 
 	private final CDTConfigWizardPage configPage;
 	private final IWizardPage startingWizardPage;
 	private CuteVersionComposite cuteVersionComp;
+	private ImageDescriptor imageDesc;
 	
 	public NewCuteSuiteWizardCustomPage(CDTConfigWizardPage configWizardPage, IWizardPage startingWizardPage){
 		pageID="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
 		this.startingWizardPage = startingWizardPage;
+		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -47,6 +51,10 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		}
 		if(!suitenameText.getText().matches("\\w+")){ //$NON-NLS-1$
 			errmsg=Messages.getString("NewCuteSuiteWizardCustomPage.InvalidSuiteName"); //$NON-NLS-1$
+			return false;
+		}
+		if (!cuteVersionComp.isComplete()) {
+			errmsg = cuteVersionComp.getErrorMessage();
 			return false;
 		}
 		errmsg=null;
@@ -96,6 +104,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		
 		gd = new GridData();
 		gd.horizontalSpan = 1;
+		gd.verticalIndent = 20;
 		suitenameLabel=new Label(composite,SWT.NONE);
 		suitenameLabel.setText(Messages.getString("NewCuteSuiteWizardCustomPage.TestSuiteName")); //$NON-NLS-1$
 		suitenameLabel.setLayoutData(gd);
@@ -103,6 +112,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	    gd = new GridData();
 	    gd.horizontalSpan = 2;
 	    gd.horizontalAlignment = SWT.FILL;
+	    gd.verticalIndent = 20;
 		suitenameText = createSingleText(composite, 2);
 		suitenameText.setLayoutData(gd); 
 		suitenameText.setText(Messages.getString("NewCuteSuiteWizardCustomPage.DefaultSuiteName")); //$NON-NLS-1$
@@ -160,7 +170,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	}
 
 	public Image getImage() {
-		return wizard.getDefaultPageImage();
+		return imageDesc.createImage();
 	}
 
 	public String getMessage() {

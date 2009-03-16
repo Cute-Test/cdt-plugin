@@ -14,7 +14,6 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 import java.util.SortedSet;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -45,6 +44,17 @@ public class CuteVersionComposite extends Composite {
 		return combo.getText();
 	}
 	
+	public String getErrorMessage() {
+		if(combo.getItems().length == 0) {
+			return "No Cute version installed. Please visit our update site.";
+		}
+		return null;
+	}
+	
+	public boolean isComplete() {
+		return !combo.getText().equals("");
+	}
+	
 	private void createCuteVersionCompsite(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout(2, false);
@@ -54,7 +64,7 @@ public class CuteVersionComposite extends Composite {
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		
 		Label label = new Label(composite, SWT.HORIZONTAL);
-		label.setText("Cute Version:");
+		label.setText(Messages.getString("CuteVersionComposite.CuteVersion")); //$NON-NLS-1$
 		
 		combo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN);
 		SortedSet<ICuteHeaders> set = UiPlugin.getInstalledCuteHeaders();

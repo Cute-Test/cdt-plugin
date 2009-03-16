@@ -29,6 +29,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 
+@SuppressWarnings("restriction")
 public abstract class AbstractFunctionActionDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate{
 
 	protected IEditorPart editor;

@@ -11,12 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -40,7 +35,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,7 +42,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
@@ -75,7 +68,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 
 	public CuteWizardHandler(Composite p, IWizard w) {
 		super(new CuteBuildPropertyValue(), p, w);
-		cuteVersionWizardPage = new CuteVersionWizardPage(getStartingPage(), getConfigPage());
+		cuteVersionWizardPage = new CuteVersionWizardPage( getConfigPage(), getStartingPage());
 		cuteVersionWizardPage.setWizard(w);
 		
 		MBSCustomPageManager.init();
@@ -84,7 +77,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	
 	@Override
 	public boolean canFinish() {
-		return true;
+		return cuteVersionWizardPage.isCustomPageComplete();
 	}
 
 	@Override

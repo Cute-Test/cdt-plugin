@@ -51,9 +51,14 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 		cuteVersion.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename);
 		
 	}
+	
 	@Override
 	protected ICuteHeaders getCuteVersion() {
 		return getCuteVersion("Cute Headers 1.5.0"); //$NON-NLS-1$
+	}
+	@Override
+	public boolean canFinish() {
+		return suitewizPage.isCustomPageComplete();
 	}
 
 	
