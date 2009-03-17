@@ -43,6 +43,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	
 	@Override
 	protected boolean isCustomPageComplete() {
+		if(suitenameText == null && cuteVersionComp == null) return false;
 		if(suitenameText.getText().equals("")){ //$NON-NLS-1$
 			//since IWizard#canFinish() cannot be overwritten from this class, thus unable to disable the finish button, 
 			//we will need to use a default name for empty textfield as a work around

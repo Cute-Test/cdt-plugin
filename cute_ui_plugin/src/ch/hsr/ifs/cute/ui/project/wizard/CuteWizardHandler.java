@@ -77,7 +77,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	
 	@Override
 	public boolean canFinish() {
-		return cuteVersionWizardPage.isCustomPageComplete();
+		return cuteVersionWizardPage != null ? cuteVersionWizardPage.isCustomPageComplete() : false;
 	}
 
 	@Override

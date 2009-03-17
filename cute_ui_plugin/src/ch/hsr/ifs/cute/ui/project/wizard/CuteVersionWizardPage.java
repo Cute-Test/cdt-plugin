@@ -47,7 +47,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 
 	@Override
 	protected boolean isCustomPageComplete() {
-		return cuteVersionComp.isComplete();
+		return cuteVersionComp != null ? cuteVersionComp.isComplete() : false;
 	}
 
 	public String getName() {
