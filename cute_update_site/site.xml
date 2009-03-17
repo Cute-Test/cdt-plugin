@@ -37,4 +37,5 @@
       <category name="Cute Plugin"/>
    </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
+   <category-def name="Cute" label="Cute"/>
 </site>
