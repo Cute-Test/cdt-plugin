@@ -54,7 +54,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	
 	@Override
 	protected ICuteHeaders getCuteVersion() {
-		return getCuteVersion("Cute Headers 1.5.0"); //$NON-NLS-1$
+		return getCuteVersion(suitewizPage.getCuteVersion());
 	}
 	@Override
 	public boolean canFinish() {

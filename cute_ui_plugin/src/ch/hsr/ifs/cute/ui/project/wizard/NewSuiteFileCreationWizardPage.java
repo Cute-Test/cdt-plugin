@@ -46,7 +46,6 @@ public class NewSuiteFileCreationWizardPage extends
 	private final SelectionButtonDialogField fSelection;
 	private String lastUsedTemplate = ""; //$NON-NLS-1$
 	
-	@SuppressWarnings("restriction")
 	public NewSuiteFileCreationWizardPage(){
 		super(Messages.getString("NewSuiteFileCreationWizardPage.CustomSuite")); //$NON-NLS-1$
 		
@@ -65,7 +64,6 @@ public class NewSuiteFileCreationWizardPage extends
 		//generate list of runners
 		//prompt selection
 	}
-	@SuppressWarnings("restriction")
 	@Override
 	public void createFile(IProgressMonitor monitor) throws CoreException {
         IPath filePath = getFileFullPath();
@@ -125,7 +123,6 @@ public class NewSuiteFileCreationWizardPage extends
 	}
 	
 	
-	@SuppressWarnings("restriction")
 	@Override
 	protected void createFileControls(Composite parent, int nColumns) {
 		fNewFileDialogField.doFillIntoGrid(parent, nColumns);
@@ -142,7 +139,6 @@ public class NewSuiteFileCreationWizardPage extends
 		
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
 	protected IStatus fileNameChanged() {
 		StatusInfo status = new StatusInfo();
@@ -199,7 +195,6 @@ public class NewSuiteFileCreationWizardPage extends
 		return fNewFileTU; //used to create an editor window to show to the user
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
 	public IPath getFileFullPath() {
 		String str = fNewFileDialogField.getText();
@@ -215,12 +210,11 @@ public class NewSuiteFileCreationWizardPage extends
 	    return path;
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
 	protected void setFocus() {
 		fNewFileDialogField.setFocus();
 	}
-	@SuppressWarnings("restriction")
+
 	@Override
 	protected Template[] getApplicableTemplates() {
 		return StubUtility.getFileTemplatesForContentTypes(

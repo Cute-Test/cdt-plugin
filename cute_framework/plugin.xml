@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="Messages" name="Cute Messages" schema="schema/Messages.exsd"/>
-   <extension-point id="ImageProvider" name="ImageProvider" schema="schema/ImageProvider.exsd"/>
+   <extension-point id="Messages" name="%extension-point.name.1" schema="schema/Messages.exsd"/>
+   <extension-point id="ImageProvider" name="%extension-point.name.0" schema="schema/ImageProvider.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <view

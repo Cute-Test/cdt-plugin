@@ -46,13 +46,13 @@ public class CuteVersionComposite extends Composite {
 	
 	public String getErrorMessage() {
 		if(combo.getItems().length == 0) {
-			return "No Cute version installed. Please visit our update site.";
+			return Messages.getString("CuteVersionComposite.NoCuteInstalled"); //$NON-NLS-1$
 		}
 		return null;
 	}
 	
 	public boolean isComplete() {
-		return !combo.getText().equals("");
+		return !combo.getText().equals(""); //$NON-NLS-1$
 	}
 	
 	private void createCuteVersionCompsite(Composite parent) {

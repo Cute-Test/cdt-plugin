@@ -3,30 +3,6 @@
    <description url="http://ifs.hsr.ch/cute/updatesite/">
       Eclipse Cute Plugin
    </description>
-   <feature url="features/ch.hsr.ifs.cute_1.0.3.200707231034.jar" id="ch.hsr.ifs.cute" version="1.0.3.200707231034">
-      <category name="Cute Plugin"/>
-   </feature>
-   <feature url="features/ch.hsr.ifs.cute_1.1.0.200707230928.jar" id="ch.hsr.ifs.cute" version="1.1.0.200707230928">
-      <category name="Cute Plugin"/>
-   </feature>
-   <feature url="features/ch.hsr.ifs.cute_1.1.1.200707311524.jar" id="ch.hsr.ifs.cute" version="1.1.1.200707311524">
-      <category name="Cute Plugin"/>
-   </feature>
-   <feature url="features/ch.hsr.ifs.cute_1.2.0.200710090826.jar" id="ch.hsr.ifs.cute" version="1.2.0.200710090826">
-      <category name="Cute Plugin"/>
-   </feature>
-   <feature url="features/ch.hsr.ifs.cute_1.2.1.200710100948.jar" id="ch.hsr.ifs.cute" version="1.2.1.200710100948">
-      <category name="Cute Plugin"/>
-   </feature>
-   <feature url="features/ch.hsr.ifs.cute_1.3.0.200803311217.jar" id="ch.hsr.ifs.cute" version="1.3.0.200803311217">
-      <category name="Cute Plugin"/>
-   </feature>
-   <feature url="features/ch.hsr.ifs.cute_1.3.2.200805140005.jar" id="ch.hsr.ifs.cute" version="1.3.2.200805140005">
-      <category name="Cute Plugin"/>
-   </feature>
-   <feature url="features/ch.hsr.ifs.cute_1.5.0.200806301632.jar" id="ch.hsr.ifs.cute" version="1.5.0.200806301632">
-      <category name="Cute Plugin"/>
-   </feature>
    <feature url="features/ch.hsr.ifs.cute_1.6.0.200809150950.jar" id="ch.hsr.ifs.cute" version="1.6.0.200809150950">
       <category name="Cute Plugin"/>
    </feature>
@@ -36,6 +12,15 @@
    <feature url="features/ch.hsr.ifs.cute_2.0.1.200902231046.jar" id="ch.hsr.ifs.cute" version="2.0.1.200902231046">
       <category name="Cute Plugin"/>
    </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_5_1.0.0.200903171437.jar" id="ch.hsr.ifs.cute.headers.1_5" version="1.0.0.200903171437">
+      <category name="Cute Headers"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute_2.1.0.200903171437.jar" id="ch.hsr.ifs.cute" version="2.1.0.200903171437">
+      <category name="Cute Plugin"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_0_1.0.0.200903171437.jar" id="ch.hsr.ifs.cute.headers.1_0" version="1.0.0.200903171437">
+      <category name="Cute Headers"/>
+   </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
-   <category-def name="Cute" label="Cute"/>
+   <category-def name="Cute Headers" label="Cute Headers"/>
 </site>
