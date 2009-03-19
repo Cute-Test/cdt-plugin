@@ -70,7 +70,7 @@ public class CuteNature implements IProjectNature {
 	/**
 	 * Utility method for removing a project nature from a project.
 	 * 
-	 * @param proj
+	 * @param project
 	 *            the project to remove the nature from
 	 * @param natureId
 	 *            the nature id to remove

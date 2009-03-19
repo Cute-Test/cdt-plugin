@@ -42,7 +42,7 @@
                      <test
                            forcePluginActivation="true"
                            property="ch.hsr.ifs.projectNature1"
-                           value="ch.hsr.ifs.cutelauncher.cutenature">
+                           value="ch.hsr.ifs.cute.ui.cutenature">
                      </test>
                      <or>
                         <test
