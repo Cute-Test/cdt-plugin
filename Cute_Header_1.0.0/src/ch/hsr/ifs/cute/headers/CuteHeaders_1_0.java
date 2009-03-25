@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
@@ -78,24 +79,34 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 
 	private void copyFilesToFolder(IFolder folder, IProgressMonitor monitor,
 			List<URL> urls) throws CoreException {
+		SubMonitor mon = SubMonitor.convert(monitor, urls.size());
 		for (URL url : urls) {
 			String[] elements = url.getFile().split("/"); //$NON-NLS-1$
 			String filename = elements[elements.length-1];
+			mon.subTask("Copy " + filename);
 			IFile targetFile = folder.getFile(filename);
 			try {
 				targetFile.create(url.openStream(),IResource.FORCE , new SubProgressMonitor(monitor,1));
 			} catch (IOException e) {
 				throw new CoreException(new Status(IStatus.ERROR,Activator.PLUGIN_ID,42,e.getMessage(), e));
 			}
+			mon.worked(1);
 		}
 	}
 
 	public void copySuiteFiles(IFolder folder, IProgressMonitor monitor,
 			String suitename) throws CoreException {
 		
+		SubMonitor mon = SubMonitor.convert(monitor, 3);
+		mon.subTask("Copy Test.cpp");
 		SuiteTemplateCopyUtil.copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
+		mon.worked(1);
+		mon.subTask("Copy Suite");
 		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
+		mon.worked(1);
 		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.h",suitename+".h",suitename); //$NON-NLS-1$ //$NON-NLS-2$
+		mon.worked(1);
+		mon.done();
 	}
 
 	public void copyTestFiles(IFolder folder, IProgressMonitor monitor)
