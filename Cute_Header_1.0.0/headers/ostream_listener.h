@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007-2009 Peter Sommerlad
+ * Copyright 2007 Peter Sommerlad
  *
  *********************************************************************************/
 
@@ -23,7 +23,7 @@
 #include "cute_listener.h"
 #include <iostream>
 namespace cute {
-	// a "root" listener displaying output, use it as an example on how to build your own, e.g., for XML output
+	// a "root" listener displaying output, may be should be templatized as well
 	class ostream_listener
 	{
 		std::ostream &out;

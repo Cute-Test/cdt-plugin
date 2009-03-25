@@ -24,8 +24,6 @@
 #include "vstudio_listener.h"
 namespace cute
 {
-// assume that we compile with gnu when using Eclipse CDT.
-// vstudio_listener is broken for VS later than 2003, TODO!
 #if defined(__GNUG__)
 typedef eclipse_listener ide_listener;
 #else

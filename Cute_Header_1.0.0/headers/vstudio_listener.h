@@ -14,14 +14,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2006-2009 Peter Sommerlad
+ * Copyright 2006 Peter Sommerlad
  *
  *********************************************************************************/
 
 #ifndef VSTUDIO_LISTENER_H
 #define VSTUDIO_LISTENER_H
 // Windows listener for debug mode: allows selection of assert failing source line
-// TODO: vstudio_listener is broken for VS later than 2003, because OutputDebugString no longer works as before
 #ifndef __GNUG__
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -54,7 +53,7 @@ namespace cute{
 	};
 }
 #else
-// cheat for gnu use ostream_listener instead, so the type is defined
+// cheat for gnu use ostream_listener instead
 #include "ostream_listener.h"
 namespace cute{
 	typedef cute::ostream_listener vstudio_listener;

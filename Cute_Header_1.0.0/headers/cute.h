@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2006-2009 Peter Sommerlad
+ * Copyright 2006 Peter Sommerlad
  *
  *********************************************************************************/
 
@@ -23,7 +23,7 @@
 // all CUTE includes for writing tests and suites
 #include "cute_base.h"
 #include "cute_equals.h"
-#include "cute_throws.h"
+#include "cute_expect.h"
 #include "cute_repeated_test.h"
 #include "cute_suite_test.h"
 #include "cute_suite.h"

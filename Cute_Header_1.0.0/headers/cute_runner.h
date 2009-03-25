@@ -52,7 +52,7 @@ namespace cute {
 			} catch (cute::test_failure const &e){
 				Listener::failure(t,e);
 			} catch (std::exception const &exc){
-				Listener::error(t,demangle(exc.what()).c_str());
+				Listener::error(t,test::demangle(exc.what()).c_str());
 			} catch (std::string &s){
 				Listener::error(t,s.c_str());
 			} catch (char const *&cs) {
