@@ -140,6 +140,14 @@
           id="ch.hsr.ifs.cutelauncher.addTestFunctionCommand"
           name="%command.name.AddTestFunction">
     </command>
+    <command
+          id="ch.hsr.ifs.cute.ui.changeCuteVersion"
+          name="%command.name.0">
+    </command>
+    <command
+          id="ch.hsr.ifs.cute.ui.changeCuteVersionAction"
+          name="%command.name.1">
+    </command>
  </extension>
  <extension
        point="org.eclipse.ui.bindings">
@@ -249,5 +257,32 @@
           parent="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard">
     </wizard>
    </extension>
+    <extension
+          point="org.eclipse.ui.popupMenus">
+       <objectContribution
+             id="cute_ui_plugin.objectContribution1"
+             objectClass="org.eclipse.core.resources.IProject">
+         <visibility>
+              <objectState
+                 name="projectNature"
+                 value="ch.hsr.ifs.cute.ui.cutenature"/>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.cute.ui"
+               label="%menu.label.0"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="update"/>
+         </menu>
+          <action
+                class="ch.hsr.ifs.cute.ui.actions.ChangeCuteVersionAction"
+                definitionId="ch.hsr.ifs.cute.ui.changeCuteVersion"
+                id="i"
+                label="%action.label.0"
+                menubarPath="ch.hsr.ifs.cute.ui/update"
+                style="push">
+          </action>
+       </objectContribution>
+    </extension>
 
 </plugin>
