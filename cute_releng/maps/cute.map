@@ -2,9 +2,17 @@
 
 plugin@ch.hsr.ifs.cute.core=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_plugin
 plugin@ch.hsr.ifs.test.framework=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework
+plugin@ch.hsr.ifs.cute.headers.1_0=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute_Header_1.0.0
+plugin@ch.hsr.ifs.cute.headers.1_5=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute_Header_1.5.0
 fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework_cute_fragment
 plugin@ch.hsr.ifs.cute.ui=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_ui_plugin
 feature@ch.hsr.ifs.cute=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_feature
+feature@ch.hsr.ifs.cute.headers.1_5=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute.1_5_Feature
+feature@ch.hsr.ifs.cute.headers.1_0=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute.1_0_Feature
+
+! Framework
+plugin@ch.hsr.ifs.test.framework=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework
+fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework_cute_fragment
 
 ! Test Feature
 plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_plugin
