@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.SortedSet;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -22,9 +23,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Bundle;
 
+import ch.hsr.ifs.cute.ui.SuiteTemplateCopyUtil;
+import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
 import ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizardCustomPage;
-import ch.hsr.ifs.cute.ui.project.wizard.SuiteTemplateCopyUtil;
 
 public class CuteSuiteWizardHandlerTest extends TestCase {
 
@@ -38,6 +41,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		cswh=new CuteSuiteWizardHandler("theSuiteName");
 	}
 
+	@SuppressWarnings("nls")
 	public final void testAddTestFiles() {
 		try{
 			IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
@@ -46,19 +50,21 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 			IProject prj=iwsr.getProject("CSWHT");
 			prj.create(new NullProgressMonitor());
 			prj.open(new NullProgressMonitor());
-			IFolder folder= prj.getProject().getFolder("/src");
-			folder.create(true, true, new NullProgressMonitor());
+			IFolder srcFolder= prj.getProject().getFolder("/src");
+			srcFolder.create(true, true, new NullProgressMonitor());
+			IFolder cuteFolder= prj.getProject().getFolder("/cute");
+			cuteFolder.create(true, true, new NullProgressMonitor());
 			
-			cswh.copyFiles(folder,new NullProgressMonitor());
+			cswh.copyFiles(srcFolder,getCuteHeader("Cute Headers 1.5.0"), cuteFolder);
 			//for indirect reference, check dependencies
 			
-			IFile file=folder.getFile("Test.cpp");
+			IFile file=srcFolder.getFile("Test.cpp");
 			if(file.exists()){
 				file.delete(true, false, new NullProgressMonitor());
 				assertFalse(file.exists());
 			}
-			IFile file1=folder.getFile("theSuiteName.cpp");
-			IFile file2=folder.getFile("theSuiteName.h");
+			IFile file1=srcFolder.getFile("suite.cpp");
+			IFile file2=srcFolder.getFile("suite.h");
 						
 			assertTrue(file1.exists());
 			assertTrue(file2.exists());
@@ -69,6 +75,16 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		}catch(CoreException ce){fail(ce.getMessage());}
 	}
 	
+	private ICuteHeaders getCuteHeader(String version) {
+		SortedSet<ICuteHeaders> headers = UiPlugin.getInstalledCuteHeaders();
+		for (ICuteHeaders cuteHeaders : headers) {
+			if(version.equals(cuteHeaders.getVersionString()))
+				return cuteHeaders;
+		}
+		
+		return null;
+	}
+
 	public final void testImplantActualsuitename() {
 		try{
 			Bundle bundle = TestPlugin.getDefault().getBundle();

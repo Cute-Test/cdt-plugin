@@ -44,7 +44,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 
 	
 	@Override
-	protected void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
+	public void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
 			IFolder cuteFolder) throws CoreException {
 		suitename=suitewizPage.getSuiteName();
 		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());

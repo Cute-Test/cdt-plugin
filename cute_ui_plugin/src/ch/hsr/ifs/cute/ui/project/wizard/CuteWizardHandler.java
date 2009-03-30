@@ -120,7 +120,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		return getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
 	}
 
-	protected void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
+	public void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
 			IFolder cuteFolder) throws CoreException {
 		cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
 		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());

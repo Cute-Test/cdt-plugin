@@ -62,7 +62,6 @@ public class CuteHeades_1_5 implements ICuteHeaders {
 	}
 
 	public String getVersionString() {
-		// TODO Auto-generated method stub
 		return "Cute Headers 1.5.0"; //$NON-NLS-1$
 	}
 
