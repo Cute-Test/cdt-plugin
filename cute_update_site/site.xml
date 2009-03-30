@@ -12,13 +12,13 @@
    <feature url="features/ch.hsr.ifs.cute_2.0.1.200902231046.jar" id="ch.hsr.ifs.cute" version="2.0.1.200902231046">
       <category name="Cute Plugin"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_5_1.0.0.200903171437.jar" id="ch.hsr.ifs.cute.headers.1_5" version="1.0.0.200903171437">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_5_1.0.0.200903261404.jar" id="ch.hsr.ifs.cute.headers.1_5" version="1.0.0.200903261404">
       <category name="Cute Headers"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute_2.1.0.200903171437.jar" id="ch.hsr.ifs.cute" version="2.1.0.200903171437">
+   <feature url="features/ch.hsr.ifs.cute_2.1.0.200903261104.jar" id="ch.hsr.ifs.cute" version="2.1.0.200903261104">
       <category name="Cute Plugin"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_0_1.0.0.200903171437.jar" id="ch.hsr.ifs.cute.headers.1_0" version="1.0.0.200903171437">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_0_1.0.0.200903261404.jar" id="ch.hsr.ifs.cute.headers.1_0" version="1.0.0.200903261404">
       <category name="Cute Headers"/>
    </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
