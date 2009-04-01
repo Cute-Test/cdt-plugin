@@ -5,7 +5,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -59,11 +58,12 @@ public class SourceLookupPathTest extends TestCase {
 	}
 }
 //extend LaunchConfiguration as its constructor is protected 
+@SuppressWarnings("restriction")
 class LaunchConfigurationStub extends org.eclipse.debug.internal.core.LaunchConfiguration implements ILaunchConfiguration{ 
 	final boolean useCustomSrcPathProperty;
 	final String customSrcPathProperty;
 	public LaunchConfigurationStub(boolean value1, String value2) {
-		super(new Path("")); //$NON-NLS-1$
+		super((IFile) new Path("")); //$NON-NLS-1$
 		useCustomSrcPathProperty=value1;
 		customSrcPathProperty=value2;
 	}

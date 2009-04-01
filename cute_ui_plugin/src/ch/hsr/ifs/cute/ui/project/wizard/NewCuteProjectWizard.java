@@ -38,7 +38,6 @@ public class NewCuteProjectWizard extends AbstractCWizard {
 		}
 		EntryDescriptor data = getEntryDescriptor(handler);
 		return new EntryDescriptor[] {data};
-
 	}
 
 	protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
@@ -49,7 +48,5 @@ public class NewCuteProjectWizard extends AbstractCWizard {
 	protected CuteWizardHandler getHandler(IWizard wizard) {
 		return new CuteWizardHandler(parent, wizard);
 	}
-	
-	
 
 }

@@ -93,6 +93,19 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		super.createProject(project, defaults);
 		createCuteProject(project);
 	}
+	
+	
+
+	@Override
+	public void createProject(IProject proj, boolean defaults, IProgressMonitor monitor) throws CoreException {
+		super.createProject(proj, defaults, monitor);
+		createCuteProject(proj);
+	}
+	
+	public void createProject(IProject project, boolean defaults, boolean onFinish, IProgressMonitor monitor) throws CoreException{
+		super.createProject(project, defaults, onFinish, monitor);
+		createCuteProject(project);
+	}
 
 	private void createCuteProject(IProject project) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
