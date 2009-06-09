@@ -219,17 +219,6 @@
    </extension>
  
  <extension
-         point="org.eclipse.mylyn.tasks.core.templates">
-      <repository
-            addAutomatically="true"
-            anonymous="true"
-            label="CUTE Trac"
-            repositoryKind="trac"
-            urlRepository="http://r2.ifs.hsr.ch/cute"
-            version="XML_RPC">
-      </repository>
-   </extension>
- <extension
        point="org.eclipse.ui.ide.projectNatureImages">
     <image
           icon="icons/ovr16/cute_ovr.gif"
@@ -283,6 +272,17 @@
                 style="push">
           </action>
        </objectContribution>
+    </extension>
+    <extension
+          point="org.eclipse.mylyn.tasks.core.templates">
+       <repository
+             addAutomatically="true"
+             anonymous="true"
+             label="CUTE Trac"
+             repositoryKind="trac"
+             urlRepository="http://r2.ifs.hsr.ch/cute"
+             version="XML_RPC">
+       </repository>
     </extension>
 
 </plugin>

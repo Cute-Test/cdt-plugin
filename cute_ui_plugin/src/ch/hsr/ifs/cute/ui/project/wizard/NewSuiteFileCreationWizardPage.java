@@ -8,6 +8,7 @@ import org.eclipse.cdt.core.index.IIndexFile;
 import org.eclipse.cdt.core.index.IndexLocationFactory;
 import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.core.model.CProject;
 import org.eclipse.cdt.internal.corext.codemanipulation.StubUtility;
 import org.eclipse.cdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.DialogField;
@@ -41,10 +42,10 @@ import ch.hsr.ifs.cute.ui.SuiteTemplateCopyUtil;
 public class NewSuiteFileCreationWizardPage extends
 		AbstractFileCreationWizardPage {
 
+	private static final String KEY_LAST_USED_TEMPLATE = "LastUsedTemplateName";
 	private ITranslationUnit fNewFileTU = null;
 	private final StringDialogField fNewFileDialogField;
 	private final SelectionButtonDialogField fSelection;
-	private String lastUsedTemplate = ""; //$NON-NLS-1$
 	
 	public NewSuiteFileCreationWizardPage(){
 		super(Messages.getString("NewSuiteFileCreationWizardPage.CustomSuite")); //$NON-NLS-1$
@@ -222,12 +223,25 @@ public class NewSuiteFileCreationWizardPage extends
 	}
 	
 	@Override
-	public String getLastUsedTemplateName() {
-		return lastUsedTemplate;
+	public String getDefaultTemplateName() {
+		String name = getDialogSettings().get(KEY_LAST_USED_TEMPLATE);
+		if (name == null) {
+			IProject project = getCurrentProject();
+			if (project != null) {
+				String contentType = CProject.hasCCNature(project) ?
+						CCorePlugin.CONTENT_TYPE_CXXHEADER : CCorePlugin.CONTENT_TYPE_CHEADER;
+				Template[] templates =
+						StubUtility.getFileTemplatesForContentTypes(new String[] { contentType }, null);
+				if (templates.length != 0) {
+					name = templates[0].getName();
+				}
+			}
+		}
+		return name;
 	}
 	@Override
 	public void saveLastUsedTemplateName(String name) {
-		lastUsedTemplate = name;
+		getDialogSettings().put(KEY_LAST_USED_TEMPLATE, name);		
 	}
 
 }
