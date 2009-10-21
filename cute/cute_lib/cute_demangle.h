@@ -26,6 +26,7 @@
 // otherwise we have to use macros everywhere
 #ifdef __GNUG__
 #include <cxxabi.h> // __cxa_demangle
+#include <cstdlib> // ::free() 
 namespace cute {
 
 inline std::string demangle(char const *name){
