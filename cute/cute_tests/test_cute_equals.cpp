@@ -24,7 +24,8 @@
 #include "cute_throws.h"
 #include <limits>
 
-
+#include <iostream>
+#include <iomanip>
 
 void test_equals_OK() {
 	int fourtytwo = 42;
@@ -69,13 +70,53 @@ void test_equals_double_one_one_plus_eps(){
 void test_equals_double_minusone_minusone_plus_eps(){
 		ASSERT_EQUAL(-1.0,-1.0+eps);
 }
-
-
-
-
+// how to solve the following
+void test_equals_int_signed_char(){
+	ASSERT_EQUAL(-1,static_cast<signed char>(-1));
+}
+void test_equals_int_double(){
+	ASSERT_EQUAL(-42,-42.0);
+}
+void test_equals_float_unsigned_long(){
+	ASSERT_EQUAL(42.0f,42UL);
+}
+void test_equals_unsinged_minus_one_signed_minus_one(){
+	ASSERT_EQUAL(static_cast<unsigned char>(-1),static_cast<signed char>(-1));
+}
+void test_equals_signed_limit_short(){
+	ASSERT_EQUAL(std::numeric_limits<signed short>::max(),static_cast<unsigned long>(std::numeric_limits<signed short>::max()));
+}
+void test_equals_unsigned_limit_short(){
+	ASSERT_EQUAL(std::numeric_limits<unsigned short>::max(),static_cast<unsigned long>(std::numeric_limits<unsigned short>::max()));
+}
+void test_equals_unsignedshortlimit_long(){
+	unsigned short max = std::numeric_limits<unsigned short>::max();
+	ASSERT_EQUAL(max,static_cast<long>(max));
+}
+void test_equql_bool_bool(){
+	ASSERT_EQUAL(true,true);
+}
+void test_equal_bool_int(){
+	ASSERT_EQUAL(true,1);
+}
+void test_equal_int_bool(){
+	ASSERT_EQUAL(0,false);
+}
+enum dummy { zero,one};
+void test_equal_enum_int(){
+	// cannot use an (anonymous) local enum for the following
+	ASSERT_EQUAL(zero,0);
+	ASSERT_EQUAL(one,1);
+}
+// the following should somehow use numeric_limits<> to be exact?
 void test_equals_double(){
 	ASSERT_EQUAL_DELTA(1e3,1001.0,1.0);
 	ASSERT_EQUAL(10e14,1+10e14);
+}
+void test_equals_double_with_numberic_limits(){
+	double eps=std::numeric_limits<double>::epsilon();
+	ASSERT_EQUAL(1.0,1.0+10*eps);
+    ASSERT_THROWS(ASSERT_EQUAL(1.0,1.0+11*eps),cute::test_failure);
 }
 void test_equals_float(){
 	ASSERT_EQUAL(float(10e7),float(100+10e7)); // assume 6 digit "precision" delta
@@ -107,6 +148,18 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_equals_double_zero));
 	s.push_back(CUTE(test_equals_double_one_one_plus_eps));
 	s.push_back(CUTE(test_equals_double_minusone_minusone_plus_eps));
+	s.push_back(CUTE(test_equals_int_signed_char));
+	s.push_back(CUTE(test_equals_int_double));
+	s.push_back(CUTE(test_equals_float_unsigned_long));
+	s.push_back(CUTE(test_equals_unsinged_minus_one_signed_minus_one));
+	s.push_back(CUTE(test_equals_signed_limit_short));
+	s.push_back(CUTE(test_equals_unsigned_limit_short));
+	s.push_back(CUTE(test_equals_unsignedshortlimit_long));
+	s.push_back(CUTE(test_equql_bool_bool));
+	s.push_back(CUTE(test_equal_bool_int));
+	s.push_back(CUTE(test_equal_int_bool));
+	s.push_back(CUTE(test_equal_enum_int));
+	s.push_back(CUTE(test_equals_double_with_numberic_limits));
 	s += CUTE(test_backslashQuoteTabNewline);
 	s += CUTE(test_equals_OK);
 	s += CUTE(test_equals_int_fails);

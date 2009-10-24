@@ -19,7 +19,20 @@
  *********************************************************************************/
 #ifndef CUTE_TEST_H_
 #define CUTE_TEST_H_
+#if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#define USE_STD0X 1
+#endif
+
+#if defined(USE_TR1)
+#include <tr1/functional>
+namespace boost_or_tr1 = std::tr1;
+#elif defined(USE_STD0X)
+#include <functional>
+namespace boost_or_tr1 = std;
+#else
 #include <boost/function.hpp>
+namespace boost_or_tr1 = boost;
+#endif
 #include "cute_demangle.h"
 // make plain functions as tests more 'cute':
 namespace cute {
@@ -37,7 +50,7 @@ namespace cute {
 		:theTest(t),name_(name){}
 
 	private:
-		boost::function<void()> theTest;
+		boost_or_tr1::function<void()> theTest;
 		std::string name_;
 	};
 

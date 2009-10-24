@@ -31,7 +31,7 @@ struct TestRepetition {
 };
 void repeat_test(){
 	TestRepetition toRepeat;
-	CUTE_REPEAT(boost::ref(toRepeat),5)();
+	CUTE_REPEAT(boost_or_tr1::ref(toRepeat),5)();
 	ASSERT_EQUAL(5,toRepeat.n);
 }
 void would_fail_if_run(){

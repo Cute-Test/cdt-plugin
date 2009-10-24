@@ -21,15 +21,17 @@
 #ifndef CUTE_TESTMEMBER_H_
 #define CUTE_TESTMEMBER_H_
 #include "cute_test.h"
+#if ! defined(USE_TR1) && ! defined(USE_STD0X)
 #include <boost/bind.hpp>
+#endif
 namespace cute {
 	template <typename TestClass>
 	test makeMemberFunctionTest(TestClass &t,void (TestClass::*fun)(),char const *name){
-		return test(boost::bind(fun,boost::ref(t)),demangle(typeid(TestClass).name())+"::"+name);
+		return test(boost_or_tr1::bind(fun,boost_or_tr1::ref(t)),demangle(typeid(TestClass).name())+"::"+name);
 	}
 	template <typename TestClass>
 	test makeMemberFunctionTest(TestClass const &t,void (TestClass::*fun)()const,char const *name){
-		return test(boost::bind(fun,boost::cref(t)),demangle(typeid(TestClass).name())+"::"+name);
+		return test(boost_or_tr1::bind(fun,boost_or_tr1::cref(t)),demangle(typeid(TestClass).name())+"::"+name);
 	}
 	template <typename TestClass,typename MemFun>
 	struct incarnate_for_member_function {

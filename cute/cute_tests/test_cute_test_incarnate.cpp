@@ -59,7 +59,7 @@ namespace {
 	};
 	void test_context_incarnate(){
 		int counter=0;
-		cute::test t = CUTE_INCARNATE_WITH_CONTEXT(IncarnateContextTest,boost::ref(counter));
+		cute::test t = CUTE_INCARNATE_WITH_CONTEXT(IncarnateContextTest,boost_or_tr1::ref(counter));
 		ASSERT_EQUAL(0,counter);
 		t();
 		ASSERT_EQUAL(1010,counter);

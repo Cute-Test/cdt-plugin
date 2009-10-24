@@ -37,5 +37,4 @@ namespace cute{
 #define ASSERT(cond) ASSERTM(#cond,cond)
 #define FAIL() ASSERTM("FAIL()",false)
 #define FAILM(msg) ASSERTM(msg,false)
-
 #endif /*CUTE_BASE_H_*/

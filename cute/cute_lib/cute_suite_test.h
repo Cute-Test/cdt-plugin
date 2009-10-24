@@ -21,7 +21,17 @@
 #ifndef CUTE_SUITE_TEST_H_
 #define CUTE_SUITE_TEST_H_
 #include "cute_suite.h"
+#if defined(USE_TR1)
+#include <tr1/functional>
+// bind already given by <functional> in cute_test.h from cute_suite.h
+namespace boost_or_tr1 = std::tr1;
+#elif defined(USE_STD0X)
+#include <functional>
+namespace boost_or_tr1 = std;
+#else
 #include <boost/bind.hpp>
+namespace boost_or_tr1 = boost;
+#endif
 #include <algorithm>
 namespace cute{
 	// make a whole suite a test, failure stops the suite's execution
@@ -29,7 +39,10 @@ namespace cute{
 		suite theSuite;
 		suite_test(suite const &s):theSuite(s){}
 		void operator()(){
-			std::for_each(theSuite.begin(),theSuite.end(),boost::bind(&test::operator(),_1));
+#if defined(USE_STD0X) || defined(USE_TR1)
+			using namespace boost_or_tr1::placeholders;
+#endif
+			std::for_each(theSuite.begin(),theSuite.end(),boost_or_tr1::bind(&test::operator(),_1));
 		}
 	};
 }

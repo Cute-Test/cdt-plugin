@@ -27,11 +27,19 @@
 #include <limits>
 #include <ostream>
 #include <sstream>
+#if defined(USE_STD0X)
+#include <type_traits>
+#else
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
-#include <boost/type_traits/make_unsigned.hpp>
+#include <boost/type_traits/make_signed.hpp>
+#endif
 namespace cute {
-
+#if defined(USE_STD0X)
+	namespace impl_place_for_traits = std;
+#else
+	namespace impl_place_for_traits = boost;
+#endif
 	namespace equals_impl {
 		static inline std::string backslashQuoteTabNewline(std::string const &input){
 			std::string result;
@@ -116,26 +124,90 @@ namespace cute {
 		}
 		template <typename ExpectedValue, typename ActualValue, bool select_non_floating_point_type>
 		bool do_equals_floating(ExpectedValue const &expected
-					,ActualValue const &actual,const boost::integral_constant<bool, select_non_floating_point_type>&){
+					,ActualValue const &actual,const impl_place_for_traits::integral_constant<bool, select_non_floating_point_type>&){
 			return expected==actual; // normal case for most types uses operator==!
 		}
 		template <typename ExpectedValue, typename ActualValue>
 		bool do_equals_floating(ExpectedValue const &expected
-					,ActualValue const &actual,const boost::true_type&){
+					,ActualValue const &actual,const impl_place_for_traits::true_type&){
 			const ExpectedValue automatic_delta_masking_last_significant_digit=(10*std::numeric_limits<ExpectedValue>::epsilon())*expected;
 			return do_equals_floating_with_delta(expected,actual,automatic_delta_masking_last_significant_digit);
 		}
+		// TMP-overload dispatch for floating points 2 bool params --> 4 overloads
 		template <typename ExpectedValue, typename ActualValue, bool select_non_integral_type>
 		bool do_equals(ExpectedValue const &expected
-					,ActualValue const &actual,const boost::integral_constant<bool, select_non_integral_type>&){
-			return do_equals_floating(expected,actual,boost::is_floating_point<ExpectedValue>());
+					,ActualValue const &actual
+					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&exp_is_integral
+					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&act_is_integral){
+			return do_equals_floating(expected,actual,impl_place_for_traits::is_floating_point<ExpectedValue>());
 		}
+		template <typename ExpectedValue, typename ActualValue, bool select_non_integral_type>
+		bool do_equals(ExpectedValue const &expected
+					,ActualValue const &actual
+					,const impl_place_for_traits::false_type&,const impl_place_for_traits::false_type&){
+			return do_equals_floating(expected,actual,impl_place_for_traits::is_floating_point<ActualValue>());
+		}
+		template <typename ExpectedValue, typename ActualValue, bool select_non_integral_type>
+		bool do_equals(ExpectedValue const &expected
+					,ActualValue const &actual
+					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&exp_is_integral
+					,const impl_place_for_traits::true_type&){
+			return do_equals_floating(expected,actual,impl_place_for_traits::is_floating_point<ExpectedValue>());
+		}
+		template <typename ExpectedValue, typename ActualValue, bool select_non_integral_type>
+		bool do_equals(ExpectedValue const &expected
+					,ActualValue const &actual
+					,const impl_place_for_traits::true_type&,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&act_is_integral){
+			return do_equals_floating(expected,actual,impl_place_for_traits::is_floating_point<ActualValue>());
+		}
+		// can I get rid of the following complexity by doing a do_equals_integral
+		// parameterized by is_signed<ExpectedValue>==is_signed<ActualValue> or nofBits<A> < nofBits<B>
+
+
+		// this is an optimization for avoiding if and sign-extend overhead if both int types are the same as below
+		template <typename IntType>
+		bool do_equals(IntType const &expected
+					,IntType const &actual
+					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
+			return expected==actual;
+		}
+		// bool cannot be made signed, therefore we need the following three overloads, also to avoid ambiguity
+		template <typename IntType>
+		bool do_equals(bool const &expected
+					,IntType const &actual
+					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
+			return expected==actual;
+		}
+		template <typename IntType>
+		bool do_equals(IntType const &expected
+					,bool const &actual
+					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
+			return expected==actual;
+		}
+		// do not forget the inline on a non-template overload!
+		// this overload is needed to actually avoid ambiguity for comparing bool==bool as a best match
+		inline bool do_equals(bool const &expected
+				      ,bool const &actual
+				      , const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
+			return expected==actual;
+		}
+		template <typename IntegralType>
+		size_t nof_bits(IntegralType const &){
+			return std::numeric_limits<IntegralType>::digits;
+		}
+		// will not work if either type is bool, therefore the overloads above.
 		template <typename ExpectedValue, typename ActualValue>
 		bool do_equals(ExpectedValue const &expected
-					,ActualValue const &actual,const boost::true_type&){
-				typedef typename boost::make_unsigned<ExpectedValue>::type ex_u;
-				typedef typename boost::make_unsigned<ActualValue>::type ac_u;
-			return ex_u(expected)==ac_u(actual); // unsigned equality for integral types is OK, it avoids warnings
+					,ActualValue const &actual
+					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
+			typedef typename impl_place_for_traits::make_signed<ExpectedValue>::type ex_s;
+			typedef typename impl_place_for_traits::make_signed<ActualValue>::type ac_s;
+				// need to sign extend with the longer type, should work...
+			    // might be done through more template meta prog tricks....but...
+				if (nof_bits(expected) < nof_bits(actual))
+					return static_cast<ac_s>(expected) == static_cast<ac_s>(actual);
+				else
+					return static_cast<ex_s>(expected) == static_cast<ex_s>(actual);
 		}
 	} // namespace equals_impl
 	template <typename ExpectedValue, typename ActualValue>
@@ -144,7 +216,11 @@ namespace cute {
 				,char const *msg
 				,char const *file
 				,int line) {
-		if (equals_impl::do_equals(expected,actual,boost::is_integral<ExpectedValue>())) return;
+		// unfortunately there is no is_integral_but_not_bool_or_enum
+		typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+		typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+		if (equals_impl::do_equals(expected,actual,exp_integral(),act_integral()))
+			return;
 		throw test_failure(equals_impl::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
 	}
 

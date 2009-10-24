@@ -91,14 +91,13 @@ int main(){
 	using namespace std;
 	suite s;
 	s += test_cute_equals();
-	// the following test produces the one expected error, since it throws
+	// the following test produces one of the 2 expected errors, since it throws
 	s += CUTE(simpleTestFunction);
 	s += CUTE(test_SimpleTestFunctionThrows);
-//	s += CUTE_EXPECT(CUTE(simpleTestFunction),std::exception);
 	s += SimpleTestFunctionCalledTest();
 	s += CUTE(test_shouldFailThrowsFailure);
-//	s += CUTE_EXPECT(CUTE(shouldFailButNotThrowStdException),cute::test_failure);
-	s += CUTE_SUITE_TEST(test_cute_expect());
+	suite throwing=test_cute_expect();
+	s.insert(s.end(),throwing.begin(),throwing.end());
 	s += CUTE_SUITE_TEST(test_repeated_test());
 	s += CUTE(test_cute_runner);
 	s += CUTE_SUITE_TEST(test_cute_suite_test());
@@ -109,14 +108,14 @@ int main(){
 	s += CUTE_SUITE_TEST(test_cute());
 	//---
 	s += CUTE_INCARNATE(to_incarnate_without);
-	s += CUTE_INCARNATE_WITH_CONTEXT(to_incarnate,boost::ref(std::cout));
-	s += CUTE_CONTEXT_MEMFUN(boost::ref(std::cerr),to_incarnate,operator());
+	s += CUTE_INCARNATE_WITH_CONTEXT(to_incarnate,boost_or_tr1::ref(std::cout));
+	s += CUTE_CONTEXT_MEMFUN(boost_or_tr1::ref(std::cerr),to_incarnate,operator());
 
 	runner<counting_listener<ide_listener> > run;
 	run(s);
 
 	cerr << flush;
-	cerr << run.numberOfTests << " Tests " << endl;
+	cerr << run.numberOfTests << " Tests - expect 47" << endl;
 	cerr << run.failedTests << " failed - expect 0 failures" << endl;
 	cerr << run.errors << " errors - expect 2 errors" << endl;
 	return run.failedTests;
