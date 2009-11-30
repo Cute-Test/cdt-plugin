@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description url="http://ifs.hsr.ch/cute/updatesite/">
+   <description name="Cute Update Site" url="http://ifs.hsr.ch/cute/updatesite/">
       Eclipse Cute Plugin
    </description>
    <feature url="features/ch.hsr.ifs.cute_1.6.0.200809150950.jar" id="ch.hsr.ifs.cute" version="1.6.0.200809150950">
@@ -26,6 +26,9 @@
    </feature>
    <feature url="features/ch.hsr.ifs.cute_2.2.0.200906250847.jar" id="ch.hsr.ifs.cute" version="2.2.0.200906250847">
       <category name="Cute Plugin"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_6_1.0.0.200911241025.jar" id="ch.hsr.ifs.cute.headers.1_6" version="1.0.0.200911241025">
+      <category name="Cute Headers"/>
    </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
    <category-def name="Cute Headers" label="Cute Headers"/>
