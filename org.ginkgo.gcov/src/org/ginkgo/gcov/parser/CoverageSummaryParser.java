@@ -182,8 +182,6 @@ public class CoverageSummaryParser implements IParser {
 					cov.setElementType("File");
 					String[] ps = matcher.group(1).split("/");
 
-					System.out.println(matcher.group(1));
-
 					cov.setElementName(ps[ps.length - 1]);
 
 					continue;

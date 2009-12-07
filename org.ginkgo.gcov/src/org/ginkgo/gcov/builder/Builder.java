@@ -29,8 +29,6 @@ public abstract class Builder extends IncrementalProjectBuilder {
 	}
 	class SampleResourceCleanVisitor implements IResourceVisitor {
 		public boolean visit(IResource resource) {
-			
-			System.out.println(resource + " " + resource.getName());
 
 			IProject project = resource.getProject();
 			try
@@ -49,7 +47,6 @@ public abstract class Builder extends IncrementalProjectBuilder {
 				String name = resource.getName();
 				if(name.endsWith(".c")||name.endsWith(".cpp")){
 					deleteMarkers((IFile) resource);
-
 
 				}else if(name.endsWith(".gcda")||name.endsWith(".gcno")||name.endsWith(".gcov")){
 					try {

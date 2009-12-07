@@ -46,7 +46,6 @@ public class CoverageLabelProvider extends OwnerDrawLabelProvider {
 				IProject p = (IProject) element;
 				if (p.isOpen()) {
 					String n = p.getFullPath().toOSString();
-					System.out.println("Project: " + n);
 					totalLine = Integer.parseInt(p
 							.getPersistentProperty(new QualifiedName(n,
 									"totalLine")));

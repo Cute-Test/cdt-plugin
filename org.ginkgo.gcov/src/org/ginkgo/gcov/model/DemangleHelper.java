@@ -53,10 +53,6 @@ public class DemangleHelper {
 			Process process;
 			String command = "sh -c 'gcov -f -b " + file.getName();
 
-			System.out.println(file.getAbsolutePath());
-			System.out.println(file.getCanonicalPath());
-			System.out.println(file.getParent());
-			System.out.println(file.getPath());
 			process = runtime.exec(command, null, file.getParentFile());
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					process.getInputStream()));

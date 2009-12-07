@@ -107,14 +107,6 @@ public class Action implements IObjectActionDelegate {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-
-		String errorText = process.getStreamsProxy().getErrorStreamMonitor()
-				.getContents();
-		System.out.println(errorText);
-
-		String outputText = process.getStreamsProxy().getOutputStreamMonitor()
-				.getContents();
-		System.out.println(outputText);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -163,14 +155,6 @@ public class Action implements IObjectActionDelegate {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-
-		String errorText = process.getStreamsProxy().getErrorStreamMonitor()
-				.getContents();
-		System.out.println(errorText);
-
-		String outputText = process.getStreamsProxy().getOutputStreamMonitor()
-				.getContents();
-		System.out.println(outputText);
 	}
 
 }
