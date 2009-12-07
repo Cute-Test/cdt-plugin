@@ -20,19 +20,13 @@ public class ToggleUnCoveredLineAction implements
 	private String vrpk;
 
 	public void dispose() {
-		// TODO �����������ꂽ���\�b�h�E�X�^�u
-
 	}
 
 	public void init(IWorkbenchWindow window) {
 		AnnotationPreferenceLookup a = EditorsUI
 				.getAnnotationPreferenceLookup();
 		AnnotationPreference ap = a.getAnnotationPreference(ANNOTATION_ID);
-		// IPreferenceStore pre =
-		// EditorsPlugin.getDefault().getPreferenceStore();
 		IPreferenceStore pre = GcovPlugin.getDefault().getPreferenceStore();
-		// boolean aa = !ap.getTextPreferenceValue();
-		// boolean ab = !ap.getHighlightPreferenceValue();
 
 		hpk = ap.getHighlightPreferenceKey();
 		tpk = ap.getTextPreferenceKey();
@@ -51,8 +45,6 @@ public class ToggleUnCoveredLineAction implements
 		AnnotationPreferenceLookup a = EditorsUI
 				.getAnnotationPreferenceLookup();
 		AnnotationPreference ap = a.getAnnotationPreference(ANNOTATION_ID);
-		// IPreferenceStore pre =
-		// EditorsPlugin.getDefault().getPreferenceStore();
 		IPreferenceStore pre = GcovPlugin.getDefault().getPreferenceStore();
 		boolean hpv;
 		boolean tpv;
@@ -71,7 +63,6 @@ public class ToggleUnCoveredLineAction implements
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO �����������ꂽ���\�b�h�E�X�^�u
 
 	}
 

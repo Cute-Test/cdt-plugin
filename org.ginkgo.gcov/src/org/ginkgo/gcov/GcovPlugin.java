@@ -17,10 +17,12 @@ public class GcovPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static GcovPlugin plugin;
+	@SuppressWarnings("deprecation")
 	private ArrayList<IPropertyChangeListener> myListeners;
 	/**
 	 * The constructor
 	 */
+	@SuppressWarnings("deprecation")
 	public GcovPlugin() {
 		myListeners=new ArrayList<IPropertyChangeListener>();
 	}
@@ -63,15 +65,18 @@ public class GcovPlugin extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 	// A public method that allows listener registration
+	@SuppressWarnings("deprecation")
 	public void addPropertyChangeListener(IPropertyChangeListener listener) {
 		if(!myListeners.contains(listener))
 			myListeners.add(listener);
 	}
 
 	// A public method that allows listener registration
+	@SuppressWarnings("deprecation")
 	public void removePropertyChangeListener(IPropertyChangeListener listener) {
 		myListeners.remove(listener);
 	}
+	@SuppressWarnings("deprecation")
 	public ArrayList<IPropertyChangeListener> getMyListeners() {
 		return myListeners;
 	}

@@ -39,6 +39,7 @@ public class LineCoverageParser implements IParser {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void parse(IFile file) {
 		String lineNum = null;
 		String execCount = null;

@@ -19,32 +19,20 @@ public class ToggleCoveredLineAction implements IWorkbenchWindowActionDelegate {
 	String vrpk;
 
 	public void dispose() {
-		// TODO �����������ꂽ���\�b�h�E�X�^�u
 
 	}
 
 	public void init(IWorkbenchWindow window) {
-		// TODO �����������ꂽ���\�b�h�E�X�^�u
 		AnnotationPreferenceLookup a = EditorsUI
 				.getAnnotationPreferenceLookup();
 		AnnotationPreference ap = a.getAnnotationPreference(ANNOTATION_ID);
-		// IPreferenceStore pre =
-		// EditorsPlugin.getDefault().getPreferenceStore();
 		IPreferenceStore pre = GcovPlugin.getDefault().getPreferenceStore();
 
-		// boolean aa = !ap.getTextPreferenceValue();
-		// boolean ab = !ap.getHighlightPreferenceValue();
-		boolean hpv;
-		boolean tpv;
-		boolean ahpv;
-		boolean atpv;
 		hpk = ap.getHighlightPreferenceKey();
 		tpk = ap.getTextPreferenceKey();
 		ovrk = ap.getOverviewRulerPreferenceKey();
 		vrpk = ap.getVerticalRulerPreferenceKey();
 
-		hpv = pre.getBoolean(hpk);
-		tpv = pre.getBoolean(tpk);
 		pre.setValue(hpk, true);
 		pre.setValue(tpk, true);
 		pre.setValue(ovrk, true);
@@ -57,8 +45,6 @@ public class ToggleCoveredLineAction implements IWorkbenchWindowActionDelegate {
 		AnnotationPreferenceLookup a = EditorsUI
 				.getAnnotationPreferenceLookup();
 		AnnotationPreference ap = a.getAnnotationPreference(ANNOTATION_ID);
-		// IPreferenceStore pre =
-		// EditorsPlugin.getDefault().getPreferenceStore();
 		IPreferenceStore pre = GcovPlugin.getDefault().getPreferenceStore();
 		boolean hpv;
 		boolean tpv;
@@ -81,7 +67,6 @@ public class ToggleCoveredLineAction implements IWorkbenchWindowActionDelegate {
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO �����������ꂽ���\�b�h�E�X�^�u
 
 	}
 

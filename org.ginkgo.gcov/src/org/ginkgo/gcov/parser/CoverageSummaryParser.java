@@ -75,12 +75,9 @@ public class CoverageSummaryParser implements IParser {
 		return messageConsole;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void parse(IFile file) {
-
-		// String[] cmdLine = {"pwd"};
 		String[] cmdLine = { "gcov", "-f", "-b", file.getName()};
-		// String[] cmdLine = { "sh", "-c",
-		// "gcov -f -b " + file.getName() + " | c++filt -n" };
 
 		IPath workingDirectory = file.getParent().getLocation();
 		File workingDir = null;
@@ -88,8 +85,6 @@ public class CoverageSummaryParser implements IParser {
 			workingDir = workingDirectory.toFile();
 		}
 		String[] envp = null;
-		// String[] envp =
-		// DebugPlugin.getDefault().getLaunchManager().getEnvironment(configuration);
 
 		Process p = null;
 		try {
@@ -142,13 +137,11 @@ public class CoverageSummaryParser implements IParser {
 	private void printOutput(MessageConsole console, String outputText) {
 		MessageConsoleStream outputStream = console.newMessageStream();
 		outputStream.setActivateOnWrite(false);
-		// outputStream.setActivateOnWrite(true);
 		outputStream.println(outputText);
 	}
 
 	private void printError(MessageConsole console, String errorText) {
 		MessageConsoleStream errorStream = console.newMessageStream();
-		// errorStream.setActivateOnWrite(false);
 		errorStream.setActivateOnWrite(true);
 		if (errorText != null && !errorText.equals("")) {
 			errorStream.println(errorText);
@@ -158,10 +151,6 @@ public class CoverageSummaryParser implements IParser {
 	private void printCommand(MessageConsole console, String cmd) {
 		MessageConsoleStream commandStream = console.newMessageStream();
 		commandStream.setActivateOnWrite(false);
-		// commandStream.setActivateOnWrite(true);
-		// commandStream.setColor(new
-		// Color(Workbench.getInstance().getDisplay(),
-		// 0, 0, 255));
 
 		Display display = Display.getCurrent();
 		if (display == null)
@@ -178,20 +167,13 @@ public class CoverageSummaryParser implements IParser {
 		CoverageData cov = new CoverageData();
 		cov.setTimeStamp(new Timestamp(timeStamp));
 
-		// System.out.println(project.getResourceAttributes().getFullPath().toOSString());
-
 		try {
 			while ((line = in.readLine()) != null) {
 				Matcher matcher = funcPattern.matcher(line);
 				if (matcher.find()) {
 					cov.setElementType("Function");
 					String functionName = matcher.group(1);
-					functionName = DemangleHelper.demangleName(functionName);
-					// gcov adds some letters to a function name. Often
-					// something like this _Z11 at the beginning and v at the
-					// end (except main function)
-					// partly solved gcov problem with a regular expression
-					// (look at funcPattern)
+					functionName = DemangleHelper.demangle(functionName);
 					cov.setElementName(functionName);
 					continue;
 				}
@@ -240,12 +222,10 @@ public class CoverageSummaryParser implements IParser {
 			listeners = new ArrayList<ICoverageListener>();
 			IExtensionRegistry registry = Platform.getExtensionRegistry();
 
-			// �g���|�C���g���擾
 			IExtensionPoint point = registry.getExtensionPoint(GcovPlugin
 					.getDefault().getBundle().getSymbolicName()
 					+ ".listeners");
 
-			// �R���g���r���[�g���ꂽ�g�����擾
 			IExtension[] extensions = point.getExtensions();
 
 			for (int i = 0; i < extensions.length; i++) {
@@ -254,7 +234,6 @@ public class CoverageSummaryParser implements IParser {
 				for (int j = 0; j < elements.length; j++) {
 					if (elements[j].getName().equals("provider")) {
 						try {
-							// class�����Ŏw�肳�ꂽ�N���X�̃C���X�^���X���擾
 							ICoverageListener provider = (ICoverageListener) elements[j]
 									.createExecutableExtension("class");
 							listeners.add(provider);

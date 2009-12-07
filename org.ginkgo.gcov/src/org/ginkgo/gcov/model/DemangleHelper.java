@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DemangleHelper {
-	public static final String FILT_COMMAND = "c++filt -n ";
 	public static final String MAIN = "main";
 
 	private static final Map<String, String> parameterMap = new HashMap<String, String>() {
@@ -47,39 +46,13 @@ public class DemangleHelper {
 		}
 	};
 
-	// K = const; V=volatile; VK= const volatile; (N=Nested name)
-
-	public static String demangleName(String functionName) {
-		Runtime runtime = Runtime.getRuntime();
-		Process process;
-		StringBuffer demangledName = new StringBuffer();
-		try {
-			process = runtime.exec(FILT_COMMAND + functionName);
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					process.getInputStream()));
-			String line;
-			while ((line = br.readLine()) != null) {
-				demangledName.append(line);
-			}
-			if (MAIN.equals(functionName))
-				demangledName.append("()");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return demangledName.toString();
-	}
-
 	public static String demangle(File file) {
 		StringBuffer demangledName = new StringBuffer();
 		try {
 			Runtime runtime = Runtime.getRuntime();
 			Process process;
-			String command = "sh -c 'gcov -f -b " + file.getName() + " | "
-					+ "c++filt -n'";
+			String command = "sh -c 'gcov -f -b " + file.getName();
 
-			// String[] command2 = new String[] { "sh", "-c",
-			// "'gcov -f -b " + file.getName() + " | " + "c++filt -n'" };
-			// String command2 = "sh - c ls";
 			System.out.println(file.getAbsolutePath());
 			System.out.println(file.getCanonicalPath());
 			System.out.println(file.getParent());
@@ -98,8 +71,6 @@ public class DemangleHelper {
 					demangledName.append(line);
 				}
 			}
-			// if (MAIN.equals(functionName))
-			// demangledName.append("()");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

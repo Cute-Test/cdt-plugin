@@ -19,8 +19,6 @@ import org.eclipse.swt.widgets.Event;
 
 public class CoverageLabelProvider extends OwnerDrawLabelProvider {
 
-	// private static final String BINARIES = "Binaries";
-
 	private TreeViewerColumn column;
 	private TreeViewer viewer;
 
@@ -32,13 +30,11 @@ public class CoverageLabelProvider extends OwnerDrawLabelProvider {
 
 	// @Override
 	protected void measure(Event event, Object element) {
-		// TODO Ž©“®�¶�¬‚³‚ê‚½ƒ�ƒ\ƒbƒh�EƒXƒ^ƒu
 
 	}
 
 	// @Override
 	protected void paint(Event event, Object element) {
-		// TODO Ž©“®�¶�¬‚³‚ê‚½ƒ�ƒ\ƒbƒh�EƒXƒ^ƒu
 		int totalLine = 133;
 		int coverLine = 20;
 		int offset = 2;
@@ -98,7 +94,6 @@ public class CoverageLabelProvider extends OwnerDrawLabelProvider {
 				coverLine = 0;
 				return;
 			} catch (CoreException e) {
-				// TODO Ž©“®�¶�¬‚³‚ê‚½ catch ƒuƒ�ƒbƒN
 				e.printStackTrace();
 			}
 		} else {

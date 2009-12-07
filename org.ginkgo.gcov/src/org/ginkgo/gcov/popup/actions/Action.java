@@ -63,22 +63,18 @@ public class Action implements IObjectActionDelegate {
 		}
 	}
 
-	/* copy from CoverageSummaryParser */
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void parse(IFile file1) {
 
-		// String[] cmdLine = {"pwd"};
-		/*********/
 		String[] cmdLine = { "lcov", "-c", "-d", ".", "-o", "app.info" };
 		IPath workingDirectory = project.getLocation();
-		/*********/
+
 		File workingDir = null;
 		if (workingDirectory != null) {
 			workingDir = workingDirectory.toFile();
 		}
 		String[] envp = null;
-		// String[] envp =
-		// DebugPlugin.getDefault().getLaunchManager().getEnvironment(configuration);
-
 		Process p = null;
 		try {
 			p = DebugPlugin.exec(cmdLine, workingDir, envp);
@@ -92,20 +88,11 @@ public class Action implements IObjectActionDelegate {
 		processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
 
 		if (p != null) {
-			// monitor.beginTask(NLS.bind(ExternalToolsProgramMessages.ProgramLaunchDelegate_3,
-			// new String[] {configuration.getName()}),
-			// IProgressMonitor.UNKNOWN);
 			process = DebugPlugin.newProcess(new Launch(null,
 					ILaunchManager.RUN_MODE, null), p, programName,
 					processAttributes);
-			// process = DebugPlugin.newProcess(launch, p,
-			// location.toOSString(), processAttributes);
 			if (process == null) {
 				p.destroy();
-				// throw new CoreException(new Status(IStatus.ERROR,
-				// IExternalToolConstants.PLUGIN_ID,
-				// IExternalToolConstants.ERR_INTERNAL_ERROR,
-				// ExternalToolsProgramMessages.ProgramLaunchDelegate_4, null));
 			}
 
 		}
@@ -130,21 +117,17 @@ public class Action implements IObjectActionDelegate {
 		System.out.println(outputText);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void parse2(IFile file1) {
 
-		// String[] cmdLine = {"pwd"};
-		/*********/
 		String[] cmdLine = { "genhtml", "-o", "doc", "-p", "`pwd`",
 				"--num-space", "4", "-f", "app.info" };
 		IPath workingDirectory = project.getLocation();
-		/*********/
 		File workingDir = null;
 		if (workingDirectory != null) {
 			workingDir = workingDirectory.toFile();
 		}
 		String[] envp = null;
-		// String[] envp =
-		// DebugPlugin.getDefault().getLaunchManager().getEnvironment(configuration);
 
 		Process p = null;
 		try {
@@ -159,20 +142,11 @@ public class Action implements IObjectActionDelegate {
 		processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
 
 		if (p != null) {
-			// monitor.beginTask(NLS.bind(ExternalToolsProgramMessages.ProgramLaunchDelegate_3,
-			// new String[] {configuration.getName()}),
-			// IProgressMonitor.UNKNOWN);
 			process = DebugPlugin.newProcess(new Launch(null,
 					ILaunchManager.RUN_MODE, null), p, programName,
 					processAttributes);
-			// process = DebugPlugin.newProcess(launch, p,
-			// location.toOSString(), processAttributes);
 			if (process == null) {
 				p.destroy();
-				// throw new CoreException(new Status(IStatus.ERROR,
-				// IExternalToolConstants.PLUGIN_ID,
-				// IExternalToolConstants.ERR_INTERNAL_ERROR,
-				// ExternalToolsProgramMessages.ProgramLaunchDelegate_4, null));
 			}
 
 		}
