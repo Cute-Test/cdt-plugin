@@ -41,7 +41,7 @@
 	
 	<target name="fetch" depends="init">
 		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
-			<property name="builder" value="${basedir}/feature"/>
+			<property name="builder" value="${basedir}/cute"/>
 		</ant>
 	</target>
 	
