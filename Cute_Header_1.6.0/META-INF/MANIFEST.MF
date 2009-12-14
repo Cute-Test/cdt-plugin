@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cute.headers.1_6;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.headers.Activator
-Bundle-Vendor: %pluginName
+Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  ch.hsr.ifs.cute.ui;bundle-version="2.0.0",
