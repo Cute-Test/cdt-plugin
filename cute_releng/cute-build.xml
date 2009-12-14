@@ -10,7 +10,7 @@
          - - - - - - - - - - - - - - - - - -->
 	<target name="checkoutBaseBuilder" unless="builder.available">
 		<mkdir dir="cute_releng/tools" />
-		<cvs cvsroot=":pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="RC2_34" dest="cute_releng/tools" />
+		<cvs cvsroot="anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="R35_RC4" dest="cute_releng/tools" />
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
