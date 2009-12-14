@@ -15,7 +15,7 @@
 		<property name="buildDirectory" value="${basedir}/results" />
 		<property name="baseLocation" value="${buildDirectory}/eclipse"/>
 		<property name="eclipse.home" value="${buildDirectory}/eclipse"/>
-		<property name="pde.build.scripts" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.4.0.v20080522/scripts"/>
+		<property name="pde.build.scripts" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.5.0.v20090527-1800/scripts"/>
 		<property name="eclipseDist" value="eclipse-cpp-galileo-SR1-linux-gtk"/>
 		<property name="collectingFolder" value="eclipse"/>
 		<property name="archivePrefix" value="eclipse"/>
