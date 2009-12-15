@@ -18,6 +18,6 @@ fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:
 
 ! Test Feature
 plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_plugin
-fragment@org.eclipse.ant.optional.junit=R3_2_2,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
+fragment@org.eclipse.ant.optional.junit=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 feature@ch.hsr.ifs.cute.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_feature
 
