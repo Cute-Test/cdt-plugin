@@ -40,7 +40,7 @@
 	</target>
 	
 	<target name="fetch" depends="init">
-		<echo>Fetch Hallo</echo>
+		<echo message="Fetch Hallo"/>
 		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
 			<property name="builder" value="${basedir}/cute"/>
 		</ant>
