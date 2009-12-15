@@ -55,7 +55,7 @@
 	
 	<target name="zips" depends="init,unzip">
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
-			<property name="builder" value="${basedir}/feature" />
+			<property name="builder" value="${basedir}/cute" />
 		</ant>
 		<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>
 		<replace file="${zipsdir}/index.html">
