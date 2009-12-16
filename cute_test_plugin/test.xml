@@ -28,6 +28,7 @@
 			<property name="classname" value="ch.hsr.ifs.cutelauncher.test.AllCoreTests"/>
 			<property name="failOnProblem" value="true"/>
 		</ant>
+		<echo message="ui-tests"/>
 		<ant target="ui-test" antfile="${library-file}" dir="${eclipse-home}">
 			<property name="data-dir" value="${cute-loc}"/>
 			<property name="plugin-name" value="ch.hsr.ifs.cutelauncher.test"/>
