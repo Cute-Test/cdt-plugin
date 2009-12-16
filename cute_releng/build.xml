@@ -84,7 +84,7 @@
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${buildDirectory}/eclipse/dropins"/>
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${buildDirectory}/dropins"/>
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${buildDirectory}/eclipse/dropins"/>
 		<unzip src="${buildDirectory}/eclipse/dropins/eclipse/plugins/${cuteTest}.jar"
 			dest="${buildDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
 		<ant antfile="test.xml" dir="${buildDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
