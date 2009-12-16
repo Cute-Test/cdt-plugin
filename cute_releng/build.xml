@@ -4,7 +4,15 @@
 		<echo message="${eclipse.home}"/>
 	</target>
 	
-	<target name="build" depends="hi,zips,test"/>
+	<target name="build" depends="hi,clean,zips,test"/>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: clean                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clean">
+    	<delete dir="${basedir}/results"/>
+    	<delete dir="${basedir}/test"/>
+    </target>
 	
 	<target name="init">
 		<tstamp/>
