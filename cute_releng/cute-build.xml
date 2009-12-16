@@ -77,5 +77,6 @@
 
 	<target name="clean">
 		<delete dir="${basedir}/cute_releng/results"/>
+		<delete dir="${basedir}/cute_releng/test"/>
 	</target>
 </project>
