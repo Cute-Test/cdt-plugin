@@ -1,6 +1,6 @@
 <project name="Cute Automated Tests" default="run" basedir=".">
 
-	<property name="library-file" value="${eclipse-home}/plugins/org.eclipse.test/library.xml"/>
+	<property name="library-file" value="${eclipse-home}/plugins/org.eclipse.test_3.2.100/library.xml"/>
 	<property name="cute-loc" value="${eclipse-home}/cute_folder"/>
 	<property name="failed" value="false"/>
 
