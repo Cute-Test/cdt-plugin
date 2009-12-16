@@ -40,7 +40,6 @@
 	</target>
 	
 	<target name="fetch" depends="init">
-		<echo message="Fetch Hallo"/>
 		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
 			<property name="builder" value="${basedir}/cute"/>
 		</ant>
@@ -90,7 +89,7 @@
 			dest="${buildDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
 		<ant antfile="test.xml" dir="${buildDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
 			<property name="eclipse-home" value="${buildDirectory}/eclipse"/>
-			<property name="library-file" value="${buildDirectory}/eclipse/plugins/org.eclipse.test_3.2.0/library.xml"/>
+			<property name="library-file" value="${buildDirectory}/eclipse/plugins/org.eclipse.test_3.2.100/library.xml"/>
 			<property name="os" value="${baseos}"/>
 			<property name="ws" value="${basews}"/>
 			<property name="arch" value="${basearch}"/>
