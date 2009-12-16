@@ -4,7 +4,7 @@
 		<echo message="${eclipse.home}"/>
 	</target>
 	
-	<target name="build" depends="hi,clean,zips,test"/>
+	<target name="build" depends="hi,clean,zips"/>
 	
 	<!-- - - - - - - - - - - - - - - - - - 
           target: clean                      
