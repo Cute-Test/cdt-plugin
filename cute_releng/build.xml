@@ -3,17 +3,17 @@
 	<target name="hi">
 		<echo message="${eclipse.home}"/>
 	</target>
-	
+
 	<target name="build" depends="hi,clean,zips"/>
-	
+
 	<!-- - - - - - - - - - - - - - - - - - 
           target: clean                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="clean">
-    	<delete dir="${basedir}/results"/>
-    	<delete dir="${basedir}/test"/>
-    </target>
-	
+	<target name="clean">
+		<delete dir="${basedir}/results"/>
+		<delete dir="${basedir}/test"/>
+	</target>
+
 	<target name="init">
 		<tstamp/>
 		<property name="branchVersion" value="2.0.0"/>
@@ -47,20 +47,29 @@
 		<mkdir dir="${buildDirectory}"/>
 		<mkdir dir="${testReports}"/>
 	</target>
-	
+
 	<target name="fetch" depends="init">
 		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
-			<property name="builder" value="${basedir}/cute"/>
+			<property name="builder" value="${basedir}/cute" />
+		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
+			<property name="builder" value="${basedir}/header10" />
+		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
+			<property name="builder" value="${basedir}/header15" />
+		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
+			<property name="builder" value="${basedir}/header16" />
 		</ant>
 	</target>
-	
+
 	<target name="unzip" depends="init" unless="dontUnzip">
 		<antcall target="unpack">
 			<param name="srcPrefix" value="${eclipseDist}"/>
 			<param name="dest" value="${buildDirectory}"/>
 		</antcall>
 	</target>
-	
+
 	<target name="zips" depends="init,unzip">
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/cute" />
@@ -85,11 +94,11 @@
 		<antcall target="unpackzip"/>
 		<antcall target="unpacktar"/>
 	</target>
-	
+
 	<target name="test" depends="init" unless="hasErrors">
-		
+
 		<record name="${testReports}/testsLog.txt" action="start" loglevel="verbose"/>
-	    <ant antfile="build.xml" dir="${pde.build.scripts}">
+		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
 		<antcall target="unpack">
@@ -111,7 +120,7 @@
 			in="${testDirectory}/eclipse/ch.hsr.ifs.cute.test.xml"
 			out="${zipsdir}/junits.html"/>
 		<record name="${testReports}/testsLog.txt" action="stop"/>
-		
+
 	</target>
-	
+
 </project>
