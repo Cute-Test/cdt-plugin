@@ -13,6 +13,7 @@
 		<property name="timestamp" value="${DSTAMP}${TSTAMP}" />
 		<property name="forceContextQualifier" value="${timestamp}"/>
 		<property name="buildDirectory" value="${basedir}/results" />
+		<property name="testDirectory" value="${basedir}/test" />
 		<property name="baseLocation" value="${buildDirectory}/eclipse"/>
 		<property name="eclipse.home" value="${buildDirectory}/eclipse"/>
 		<property name="pde.build.scripts" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.5.0.v20090527-1800/scripts"/>
@@ -83,19 +84,23 @@
 	    <ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${buildDirectory}/eclipse/dropins"/>
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${buildDirectory}/eclipse/dropins"/>
-		<unzip src="${buildDirectory}/eclipse/dropins/eclipse/plugins/${cuteTest}.jar"
-			dest="${buildDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
-		<ant antfile="test.xml" dir="${buildDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
-			<property name="eclipse-home" value="${buildDirectory}/eclipse"/>
-			<property name="library-file" value="${buildDirectory}/eclipse/plugins/org.eclipse.test_3.2.100/library.xml"/>
+		<antcall target="unpack">
+			<param name="srcPrefix" value="${eclipseDist}"/>
+			<param name="dest" value="${testDirectory}"/>
+		</antcall>
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${testDirectory}"/>
+		<unzip src="${testDirectory}/eclipse/plugins/${cuteTest}.jar"
+			dest="${testDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
+		<ant antfile="test.xml" dir="${testDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
+			<property name="eclipse-home" value="${testDirectory}/eclipse"/>
+			<property name="library-file" value="${testDirectory}/eclipse/plugins/org.eclipse.test_3.2.100/library.xml"/>
 			<property name="os" value="${baseos}"/>
 			<property name="ws" value="${basews}"/>
 			<property name="arch" value="${basearch}"/>
 		</ant>
 		<xslt style="${basedir}/JUNIT.XSL"
-			in="${buildDirectory}/eclipse/ch.hsr.ifs.cute.test.xml"
+			in="${testDirectory}/eclipse/ch.hsr.ifs.cute.test.xml"
 			out="${zipsdir}/junits.html"/>
 		<record name="${testReports}/testsLog.txt" action="stop"/>
 		
