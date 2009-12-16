@@ -74,10 +74,19 @@
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/cute" />
 		</ant>
-		<copy file="buildindex.html" tofile="${zipsdir}/index.html"/>
+		<ant antfile="build.xml" dir="${pde.build.scripts}">
+			<property name="builder" value="${basedir}/header10" />
+		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}">
+			<property name="builder" value="${basedir}/header15" />
+		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}">
+			<property name="builder" value="${basedir}/header16" />
+		</ant>
+		<copy file="buildindex.html" tofile="${zipsdir}/index.html" />
 		<replace file="${zipsdir}/index.html">
-			<replacefilter token="@branchVersion@" value="${branchVersion}"/>
-			<replacefilter token="@buildId@" value="${buildId}"/>
+			<replacefilter token="@branchVersion@" value="${branchVersion}" />
+			<replacefilter token="@buildId@" value="${buildId}" />
 		</replace>
 	</target>
 
