@@ -101,7 +101,6 @@
 		<unzip src="${testDirectory}/eclipse/plugins/${cuteTest}.jar"
 			dest="${testDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
 		<ant antfile="test.xml" dir="${testDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
-			<property name="eclipse-home" value="${testDirectory}/eclipse"/>
 			<property name="library-file" value="${testDirectory}/eclipse/plugins/org.eclipse.test_3.2.100/library.xml"/>
 			<property name="os" value="${baseos}"/>
 			<property name="ws" value="${basews}"/>
