@@ -91,16 +91,16 @@
 	</target>
 
 	<target name="test" depends="init" unless="hasErrors">
-
-		<record name="${testReports}/testsLog.txt" action="start" loglevel="verbose"/>
+		<antcall target="unzip">
+			<param name="dest" value="${testDirectory}" />
+		</antcall>
+		<record name="${testReports}/testsLog.txt" action="start" loglevel="verbose" />
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
-		<antcall target="unzip">
-			<param name="dest" value="${testDirectory}"/>
-		</antcall>
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_0-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
+
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}" />
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_0-${branchVersion}-${buildId}.zip" dest="${testDirectory}" />
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_5-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${testDirectory}"/>
 		<unzip src="${testDirectory}/eclipse/plugins/${cuteTest}.jar"
