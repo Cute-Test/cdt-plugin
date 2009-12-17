@@ -93,10 +93,7 @@
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
-		<antcall target="unpack">
-			<param name="srcPrefix" value="${eclipseDist}"/>
-			<param name="dest" value="${testDirectory}"/>
-		</antcall>
+		<antcall target="unzip"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_0-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_5-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
