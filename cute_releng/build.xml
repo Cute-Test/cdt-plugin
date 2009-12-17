@@ -63,11 +63,14 @@
 	<target name="unzip" depends="init" unless="dontUnzip">
 		<exec dir="${buildDirectory}" executable="tar">
 			<arg value="xfz"/>
-			<arg value="../${eclipseDist}"/>
+			<arg value="${dest}"/>
 		</exec>
 	</target>
 
-	<target name="zips" depends="init,unzip">
+	<target name="zips" depends="init">
+		<antcall target="unzip">
+			<property name="dest" value="../${eclipseDist}" />
+		</antcall>
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/cute" />
 		</ant>
@@ -93,7 +96,9 @@
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
-		<antcall target="unzip"/>
+		<antcall target="unzip">
+			<param name="dest" value="${testDirectory}"/>
+		</antcall>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_0-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_5-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
