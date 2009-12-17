@@ -64,7 +64,8 @@
 	</target>
 
 	<target name="unzip" depends="init" unless="dontUnzip">
-		<untar src="${eclipseDist}" dest="${buildDirectory}" compression="gzip" />
+		<exec dir="${buildDirectory}" command="tar xvfz ${eclipseDist}" />
+		<!-- <untar src="${eclipseDist}" dest="${buildDirectory}" compression="gzip" /> -->
 	</target>
 
 	<target name="zips" depends="init,unzip">
