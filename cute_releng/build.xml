@@ -91,6 +91,7 @@
 	</target>
 
 	<target name="test" depends="init" unless="hasErrors">
+		<mkdir dir="${testDirectory}"/>
 		<antcall target="unzip">
 			<param name="dest" value="${testDirectory}" />
 		</antcall>
