@@ -4,7 +4,7 @@
 		<echo message="${eclipse.home}"/>
 	</target>
 
-	<target name="build" depends="hi,clean,zips"/>
+	<target name="build" depends="hi,clean,zips,test"/>
 
 	<!-- - - - - - - - - - - - - - - - - - 
           target: clean                      
@@ -68,7 +68,6 @@
 			<arg value="xvfz"/>
 			<arg value="../${eclipseDist}"/>
 		</exec>
-		<!-- <untar src="${eclipseDist}" dest="${buildDirectory}" compression="gzip" /> --> 
 	</target>
 
 	<target name="zips" depends="init,unzip">
