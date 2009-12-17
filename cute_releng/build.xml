@@ -69,7 +69,7 @@
 
 	<target name="zips" depends="init">
 		<antcall target="unzip">
-			<property name="dest" value="../${eclipseDist}" />
+			<param name="dest" value="../${eclipseDist}" />
 		</antcall>
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/cute" />
