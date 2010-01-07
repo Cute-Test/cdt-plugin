@@ -275,15 +275,5 @@
          </visibility>
       </objectContribution>
    </extension>
-   <extension
-         point="org.eclipse.cdt.managedbuilder.ui.newWizardPages">
-      <wizardPage
-            ID="org.ginkgo.gcov.wizardPage1"
-            pageClass="org.ginkgo.gcov.WizardPage1">
-         <nature
-               natureID="org.ginkgo.gcov.sampleNature">
-         </nature>
-      </wizardPage>
-   </extension>
 
 </plugin>

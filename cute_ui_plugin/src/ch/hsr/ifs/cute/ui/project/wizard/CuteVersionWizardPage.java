@@ -16,9 +16,12 @@ import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -36,6 +39,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	private final IWizardPage startingWizardPage;
 	private CuteVersionComposite cuteVersionComp;
 	private ImageDescriptor imageDesc;
+	protected boolean enableGcov = false;
 
 	public CuteVersionWizardPage(CDTConfigWizardPage configWizardPage,
 			IWizardPage staringWizardPage) {
@@ -43,6 +47,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 		this.configPage = configWizardPage;
 		this.startingWizardPage = staringWizardPage;
 		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
+		
 	}
 
 	@Override
@@ -60,6 +65,18 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		cuteVersionComp = new CuteVersionComposite(composite);
+		
+		//TODO: CHeck for toolchain
+		final Button check = new Button(composite, SWT.CHECK);
+		check.setText("Enable gcov");
+		check.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				enableGcov = check.getSelection();
+			}
+			
+		});
 	}
 
 	public void dispose() {
@@ -80,12 +97,10 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	}
 
 	public Image getImage() {
-		// return wizard.getDefaultPageImage();
 		return imageDesc.createImage();
 	}
 
 	public String getMessage() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

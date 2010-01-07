@@ -35,6 +35,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -47,6 +48,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.ginkgo.gcov.builder.SampleNature;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.ui.UiPlugin;
@@ -59,6 +61,14 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
  */
 public class CuteWizardHandler extends MBSWizardHandler {
 	
+	private static final String GCOV_LINKER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99";
+	private static final String GNU_CPP_LINK_OPTION_FLAGS = "gnu.cpp.link.option.flags";
+	private static final String GNU_CPP_LINKER_ID = "cdt.managedbuild.tool.gnu.cpp.linker";
+	private static final String GNU_C_COMPILER_OPTION_MISC_OTHER = "gnu.c.compiler.option.misc.other";
+	private static final String GNU_C_COMPILER_ID = "cdt.managedbuild.tool.gnu.c.compiler";
+	private static final String GNU_CPP_COMPILER_OPTION_OTHER_OTHER = "gnu.cpp.compiler.option.other.other";
+	private static final String GNU_CPP_COMPILER_ID = "cdt.managedbuild.tool.gnu.cpp.compiler";
+	private static final String GCOV_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99 ";
 	private CuteVersionWizardPage cuteVersionWizardPage;
 
 	@Override
@@ -110,8 +120,55 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	private void createCuteProject(IProject project) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
 		createCuteProjectFolders(project);
+		if(cuteVersionWizardPage.enableGcov) {
+			configGcov(project);
+		}
 	}
 	
+	private void configGcov(IProject project) throws CoreException {
+		setGcovNature(project);
+		try {
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+		IConfiguration[] configs = info.getManagedProject().getConfigurations();
+		for (IConfiguration config : configs) {
+			if(config.getParent().getId().equals("cdt.managedbuild.config.gnu.exe.debug")) {
+				setOptionInTool(config, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_COMPILER_FLAGS);
+				setOptionInTool(config, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_COMPILER_FLAGS);
+				setOptionInTool(config, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
+				
+			}
+		}
+		} catch (BuildException e) {
+			throw new CoreException(new Status(IStatus.ERROR,UiPlugin.PLUGIN_ID,e.getMessage(),e));
+		}
+		
+	}
+
+	private void setOptionInTool(IConfiguration config, String toolId, String optionId, String optionValue)
+			throws BuildException {
+		ITool[] tools = config.getToolsBySuperClassId(toolId);
+		for (ITool tool : tools) {
+			IOption option = tool.getOptionById(optionId);
+			option.setValue(option.getDefaultValue() == null ? optionValue : option.getDefaultValue().toString().trim() + " " + optionValue);
+		}
+	}
+
+	private void setGcovNature(IProject project) throws CoreException {
+		IProjectDescription description = project.getDescription();
+		String[] natures = description.getNatureIds();
+//		has nature?
+		for (int i = 0; i < natures.length; i++) {
+			if(SampleNature.NATURE_ID.equals(natures[i])){
+				return;
+			}
+		}
+		String[] newNatures = new String[natures.length + 1];
+		System.arraycopy(natures, 0, newNatures, 0, natures.length);
+		newNatures[natures.length] = SampleNature.NATURE_ID;
+		description.setNatureIds(newNatures);
+		project.setDescription(description, null);
+	}
+
 	protected void createCuteProjectFolders(IProject project)
 			throws CoreException {
 		IFolder srcFolder = createFolder(project, "src"); //$NON-NLS-1$
