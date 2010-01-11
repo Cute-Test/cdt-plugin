@@ -13,7 +13,7 @@
          </run>
       </builder>
    </extension>
-
+<!--
    <extension
          id="sampleBuilder"
          name="GCov Project View Builder"
@@ -24,7 +24,7 @@
                class="org.ginkgo.gcov.builder.CoverageSummaryBuilder">
          </run>
       </builder>
-   </extension>
+   </extension>-->
    <extension
          id="sampleNature"
          name="Nature sample project"
@@ -161,16 +161,6 @@
       </actionSet>
    </extension>
    <extension
-         point="org.eclipse.ui.views">
-      <view
-            category="org.eclipse.cdt.ui.views"
-            class="org.ginkgo.gcov.navigator.Navigator"
-            icon="icons/cover.gif"
-            id="org.ginkgo.gcov.view"
-            name="C Projects with Coverage">
-      </view>
-   </extension>
-   <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewer
             viewerId="org.ginkgo.gcov.view">
@@ -223,57 +213,9 @@
       </dragAssistant>
    </extension>
    <extension
-         point="org.eclipse.ui.propertyPages">
-      <page
-            class="org.ginkgo.gcov.properties.WorkbenchPropertyPage1"
-            id="org.ginkgo.gcov.page1"
-            name="C Coverage">
-         <enabledWhen>
-            <adapt
-                  type="org.eclipse.core.resources.IProject">
-            </adapt>
-         </enabledWhen>
-      </page>
-   </extension>
-   <extension
          point="org.ginkgo.gcov.listeners">
       <provider
             class="org.ginkgo.gcov.builder.CoverageLister">
       </provider>
    </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            id="org.ginkgo.gcov.contribution1"
-            objectClass="org.eclipse.core.resources.IProject">
-         <menu
-               id="org.ginkgo.gcov.menu1"
-               label="C/C++ Coverage"
-               path="additions">
-            <separator
-                  name="group1">
-            </separator>
-         </menu>
-         <action
-               class="org.ginkgo.gcov.popup.actions.Action"
-               enablesFor="1"
-               id="org.ginkgo.gcov.newAction"
-               label="output coverage as html"
-               menubarPath="org.ginkgo.gcov.menu1/group1">
-         </action>
-         <visibility>
-            <or>
-               <objectState
-                     name="projectNature"
-                     value="org.eclipse.cdt.managedbuilder.core.managedBuildNature">
-               </objectState>
-               <objectState
-                     name="projectNature"
-                     value="org.eclipse.cdt.make.core.makeNature">
-               </objectState>
-            </or>
-         </visibility>
-      </objectContribution>
-   </extension>
-
 </plugin>

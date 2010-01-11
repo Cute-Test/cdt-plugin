@@ -52,7 +52,7 @@ public class CoverageSummaryParser implements IParser {
 		// following regular expression should filter them out
 		// funcPattern = Pattern
 		// .compile("Function `?([_Z][A-Za-z]*[0-9]+)([a-z].+)?v'");
-		funcPattern = Pattern.compile("Function `(.+)'");
+		funcPattern = Pattern.compile("Function `?([_Z][A-Za-z]*[0-9]+)([a-z].+)?v'");
 		filePattern = Pattern.compile("File `(.+)'");
 		coveragePattern = Pattern.compile("Lines executed:(.+)% of (.+)$");
 	}
@@ -172,7 +172,7 @@ public class CoverageSummaryParser implements IParser {
 				Matcher matcher = funcPattern.matcher(line);
 				if (matcher.find()) {
 					cov.setElementType("Function");
-					String functionName = matcher.group(1);
+					String functionName = matcher.group(2);
 					functionName = DemangleHelper.demangle(functionName);
 					cov.setElementName(functionName);
 					continue;

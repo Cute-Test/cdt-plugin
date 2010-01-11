@@ -53,7 +53,6 @@ public class LineCoverageParser implements IParser {
 		} catch (CoreException e1) {
 			e1.printStackTrace();
 		}
-		System.out.println(sourceFile);
 		if (sourceFile == null) {
 			return;
 		}
