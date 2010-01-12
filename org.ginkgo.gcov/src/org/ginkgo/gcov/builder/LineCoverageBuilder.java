@@ -13,10 +13,10 @@ public class LineCoverageBuilder extends Builder {
 	public static final String BUILDER_ID = "org.ginkgo.gcov.markerBuilder";
 
 	public void checkXML(IResource resource) {
-		if (resource instanceof IFile && resource.getName().endsWith(".gcov")) {
+		if (resource instanceof IFile && (resource.getName().endsWith(".cpp")|| resource.getName().endsWith(".h"))) {
 			IFile file = (IFile) resource;
 			LineCoverageParser.deleteMarkers(file);
-//			XMLErrorHandler reporter = new XMLErrorHandler(file);
+			//			XMLErrorHandler reporter = new XMLErrorHandler(file);
 			try {
 				getParser().parse(file);
 			} catch (Exception e1) {
