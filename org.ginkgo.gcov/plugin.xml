@@ -3,12 +3,12 @@
 <plugin>
    <extension-point id="listeners" name="Test listeners" schema="schema/listeners.exsd"/>
    <extension
-         id="sampleNature"
-         name="Nature sample project"
+         id="GcovNature"
+         name="Gcov Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="org.ginkgo.gcov.SampleNature">
+               class="org.ginkgo.gcov.GcovNature">
          </run>
       </runtime>
    </extension>

@@ -4,12 +4,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 
-public class SampleNature implements IProjectNature {
+public class GcovNature implements IProjectNature {
 
 	/**
 	 * ID of this project nature
 	 */
-	public static final String NATURE_ID = "org.ginkgo.gcov.sampleNature";
+	public static final String NATURE_ID = "org.ginkgo.gcov.GcovNature";
 
 	private IProject project;
 

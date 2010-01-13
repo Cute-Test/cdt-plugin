@@ -48,7 +48,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.ginkgo.gcov.SampleNature;
+import org.ginkgo.gcov.GcovNature;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.ui.UiPlugin;
@@ -158,13 +158,13 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		String[] natures = description.getNatureIds();
 //		has nature?
 		for (int i = 0; i < natures.length; i++) {
-			if(SampleNature.NATURE_ID.equals(natures[i])){
+			if(GcovNature.NATURE_ID.equals(natures[i])){
 				return;
 			}
 		}
 		String[] newNatures = new String[natures.length + 1];
 		System.arraycopy(natures, 0, newNatures, 0, natures.length);
-		newNatures[natures.length] = SampleNature.NATURE_ID;
+		newNatures[natures.length] = GcovNature.NATURE_ID;
 		description.setNatureIds(newNatures);
 		project.setDescription(description, null);
 	}
