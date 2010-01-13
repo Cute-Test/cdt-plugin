@@ -15,13 +15,23 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.settings.model.ICProjectDescription;
+import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.launch.AbstractCLaunchDelegate;
 import org.eclipse.cdt.launch.internal.ui.LaunchMessages;
 import org.eclipse.cdt.launch.internal.ui.LaunchUIPlugin;
 import org.eclipse.cdt.utils.pty.PTY;
 import org.eclipse.cdt.utils.spawner.ProcessFactory;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,6 +48,7 @@ import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
+import org.ginkgo.gcov.parser.LineCoverageParser;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
@@ -109,17 +120,71 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				listener.addHandler(modelHandler);
 				textCons.addPatternMatchListener(listener);
 			}
+			IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
+			IFile exeFile = wsRoot.getFile(exePath.makeRelativeTo(wsRoot.getRawLocation()));
+			updateGcov(exeFile.getProject());
+			
 		}
 		finally {
 			monitor.done();
 		}		
 	}
 
+	private void updateGcov(IProject iProject) {
+		ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(iProject);
+		ICSourceEntry[] sourceEntries = desc.getActiveConfiguration().getSourceEntries();
+		List<ICSourceEntry> sourceEntriesList = new ArrayList<ICSourceEntry>();
+		for (ICSourceEntry icSourceEntry : sourceEntries) {
+			if(!icSourceEntry.getLocation().lastSegment().equals("cute")) {
+				sourceEntriesList.add(icSourceEntry);
+			}
+		}
+		try {
+			iProject.accept(new SourceFileVisitor(sourceEntriesList));
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private class SourceFileVisitor implements IResourceVisitor{
+		
+
+		private List<ICSourceEntry> sourceEntries;
+		private LineCoverageParser parser = new LineCoverageParser();
+
+		public SourceFileVisitor(List<ICSourceEntry> sourceEntriesList) {
+			this.sourceEntries = sourceEntriesList;
+		}
+
+		public boolean visit(IResource resource) throws CoreException {
+			for (ICSourceEntry sourceEntry : sourceEntries) {
+				if(sourceEntry.getLocation().isPrefixOf(resource.getLocation()) && isNotInExclusion(sourceEntry, resource)) {
+					if (resource instanceof IFile) {
+						IFile file = (IFile) resource;
+						if(file.getName().endsWith("cpp") || file.getName().endsWith("h")) {
+							parser.parse(file);
+						}
+					}
+				}
+			}
+			return true;
+		}
+
+		private boolean isNotInExclusion(ICSourceEntry sourceEntry, IResource resource) {
+			for (IPath exPath : sourceEntry.getExclusionPatterns()) {
+				if(sourceEntry.getLocation().append(exPath).isPrefixOf(resource.getLocation())) {
+					return false;
+				}
+			}
+			return true;
+		}
+		}
+
 	protected ConsoleEventParser getConsoleEventParser() {
 		return new CuteConsoleEventParser();
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected String[] getEnvironment(ILaunchConfiguration config) throws CoreException{
 		Map map = config.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map)null);

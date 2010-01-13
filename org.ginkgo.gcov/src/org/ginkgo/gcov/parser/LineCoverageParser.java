@@ -17,13 +17,6 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
-import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 public class LineCoverageParser implements IParser {
@@ -33,7 +26,6 @@ public class LineCoverageParser implements IParser {
 	public static final String COVERAGE_MARKER_TYPE = "org.ginkgo.gcov.CoverageMarker";
 
 	private IFile gcovFile = null;
-	private String consoleName = "gcov console";
 
 	private class MyResourceVisitor implements IResourceVisitor {
 		private String sourceFileName;
@@ -60,23 +52,7 @@ public class LineCoverageParser implements IParser {
 
 	}
 	
-	private MessageConsole getConsole() {
-		IConsoleManager manager = ConsolePlugin.getDefault().getConsoleManager();
-		IConsole[] consoles = manager.getConsoles();
-		MessageConsole messageConsole = null;
-		for (IConsole console : consoles) {
-			if(console.getName().equals(consoleName)){
-				messageConsole = (MessageConsole) console;
-				break;
-			}
-		}
-		if(messageConsole == null){
-			messageConsole = new MessageConsole(consoleName, null);
-			manager.addConsoles(new IConsole[] {messageConsole});
-		}
-		return messageConsole;
-	}
-	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void runGcov(IFile file, IPath workingDirectory) {
 		String[] cmdLine = {"gcov","-f","-b",file.getName()};
 		File workingDir = null;
@@ -115,70 +91,8 @@ public class LineCoverageParser implements IParser {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		MessageConsole console = getConsole();
-		String cmd = generateCommandLine(cmdLine);
-		process.setAttribute(IProcess.ATTR_CMDLINE, cmd);
+
 		
-		printCommand(console, cmd);
-		
-		String errorText = process.getStreamsProxy().getErrorStreamMonitor().getContents();
-		printError(console, errorText);
-		
-		String outputText = process.getStreamsProxy().getOutputStreamMonitor().getContents();
-		printOutput(console, outputText);
-	}
-	
-	private void printOutput(MessageConsole console, String outputText) {
-		MessageConsoleStream outputStream = console.newMessageStream();
-		outputStream.setActivateOnWrite(false);
-		outputStream.println(outputText);
-	}
-
-
-	private void printError(MessageConsole console, String errorText) {
-		MessageConsoleStream errorStream = console.newMessageStream();
-		errorStream.setActivateOnWrite(true);
-		if (errorText != null && !errorText.equals("")){
-		errorStream.println(errorText);
-		}
-	}
-
-	private void printCommand(MessageConsole console, String cmd) {
-		MessageConsoleStream commandStream = console.newMessageStream();
-		commandStream.setActivateOnWrite(false);
-		commandStream.setColor(new Color(Workbench.getInstance().getDisplay(),0,0,255));
-
-		commandStream.print(">");
-		commandStream.println(cmd);
-	}
-	
-	private String generateCommandLine(String[] commandLine) {
-		if (commandLine.length < 1)
-			return ""; //$NON-NLS-1$
-		StringBuffer buf= new StringBuffer();
-		for (int i= 0; i < commandLine.length; i++) {
-			buf.append(' ');
-			char[] characters= commandLine[i].toCharArray();
-			StringBuffer command= new StringBuffer();
-			boolean containsSpace= false;
-			for (int j = 0; j < characters.length; j++) {
-				char character= characters[j];
-				if (character == '\"') {
-					command.append('\\');
-				} else if (character == ' ') {
-					containsSpace = true;
-				}
-				command.append(character);
-			}
-			if (containsSpace) {
-				buf.append('\"');
-				buf.append(command);
-				buf.append('\"');
-			} else {
-				buf.append(command);
-			}
-		}	
-		return buf.toString();
 	}
 
 	@SuppressWarnings("rawtypes")

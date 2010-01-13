@@ -3,43 +3,14 @@
 <plugin>
    <extension-point id="listeners" name="Test listeners" schema="schema/listeners.exsd"/>
    <extension
-         id="markerBuilder"
-         name="GCov Code Marker Builder"
-         point="org.eclipse.core.resources.builders">
-      <builder
-            hasNature="true">
-         <run
-               class="org.ginkgo.gcov.builder.LineCoverageBuilder">
-         </run>
-      </builder>
-   </extension>
-<!--
-   <extension
-         id="sampleBuilder"
-         name="GCov Project View Builder"
-         point="org.eclipse.core.resources.builders">
-      <builder
-            hasNature="true">
-         <run
-               class="org.ginkgo.gcov.builder.CoverageSummaryBuilder">
-         </run>
-      </builder>
-   </extension>-->
-   <extension
          id="sampleNature"
          name="Nature sample project"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="org.ginkgo.gcov.builder.SampleNature">
+               class="org.ginkgo.gcov.SampleNature">
          </run>
       </runtime>
-      <builder
-            id="org.ginkgo.gcov.sampleBuilder">
-      </builder>
-      <builder
-            id="org.ginkgo.gcov.markerBuilder">
-      </builder>
    </extension>
    <extension
          id="coverageMarker"
@@ -160,62 +131,5 @@
          </action>
       </actionSet>
    </extension>
-   <extension
-         point="org.eclipse.ui.navigator.viewer">
-      <viewer
-            viewerId="org.ginkgo.gcov.view">
-      </viewer>
-      <viewerContentBinding
-            viewerId="org.ginkgo.gcov.view">
-         <includes>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resourceContent">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.filters.*">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.linkHelper">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.workingSets">
-            </contentExtension>
-         </includes>
-      </viewerContentBinding>
-      <viewerContentBinding
-            viewerId="org.ginkgo.gcov.view">
-         <includes>
-            <contentExtension
-                  pattern="org.eclipse.cdt.ui.navigator.content">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.cdt.ui.navigator.filters.*">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.cdt.ui.wizards.*">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.cdt.ui.navigator.linkHelper">
-            </contentExtension>
-         </includes>
-      </viewerContentBinding>
-      <viewerActionBinding
-            viewerId="org.ginkgo.gcov.view">
-         <includes>
-            <actionExtension
-                  pattern="org.eclipse.ui.navigator.resources.*">
-            </actionExtension>
-         </includes>
-      </viewerActionBinding>
-      <dragAssistant
-            class="org.eclipse.cdt.internal.ui.navigator.CNavigatorDragAdapterAssistant"
-            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
-      </dragAssistant>
-   </extension>
-   <extension
-         point="org.ginkgo.gcov.listeners">
-      <provider
-            class="org.ginkgo.gcov.builder.CoverageLister">
-      </provider>
-   </extension>
+
 </plugin>
