@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -48,6 +49,7 @@ import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
+import org.ginkgo.gcov.GcovPlugin;
 import org.ginkgo.gcov.parser.LineCoverageParser;
 import org.ginkgo.gcov.parser.ModelBuilderLineParser;
 
@@ -149,9 +151,26 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 	
 	private class SourceFileVisitor implements IResourceVisitor{
 		
+		class ParseJob extends Job{
+
+			private IFile file;
+			private LineCoverageParser parser = new ModelBuilderLineParser();
+
+			public ParseJob(IFile file) {
+				super("gcov parse " + file.getName());
+				this.file = file;
+			}
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				parser.parse(file);
+				return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK");
+			}
+			
+		}
+		
 
 		private List<ICSourceEntry> sourceEntries;
-		private LineCoverageParser parser = new ModelBuilderLineParser();
 
 		public SourceFileVisitor(List<ICSourceEntry> sourceEntriesList) {
 			this.sourceEntries = sourceEntriesList;
@@ -163,12 +182,18 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 					if (resource instanceof IFile) {
 						IFile file = (IFile) resource;
 						if(file.getName().endsWith("cpp")) {
-							parser.parse(file);
+							parse(file);
 						}
 					}
 				}
 			}
 			return true;
+		}
+
+		protected void parse(final IFile file) throws CoreException {
+			ParseJob job = new ParseJob(file);
+			job.schedule();
+			
 		}
 
 		private boolean isNotInExclusion(ICSourceEntry sourceEntry, IResource resource) {

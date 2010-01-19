@@ -64,7 +64,6 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 			}
 
 		}
-		
 		for (Function f : file.getFunctions()) {
 			for (Line l : f.getLines()) {
 				switch (l.getStatus()) {

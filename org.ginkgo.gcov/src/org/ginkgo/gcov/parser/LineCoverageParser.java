@@ -78,9 +78,6 @@ public abstract class LineCoverageParser {
 	}
 
 	public void parse(IFile cppFile) {
-		String lineNum = null;
-		String execCount = null;
-		String line = null;
 		IFile gcovFile = null;
 	
 		IProject project = cppFile.getProject();
@@ -121,12 +118,14 @@ public abstract class LineCoverageParser {
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected void createMarker(IFile cppFile, int lineNum, String message, String uncoverMarkerType) throws CoreException {
+	protected void  createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
 		Map attributes = new HashMap();
 		MarkerUtilities.setMessage(attributes, message);
 		MarkerUtilities.setLineNumber(attributes, lineNum);
 		MarkerUtilities.createMarker(cppFile, attributes,
-				uncoverMarkerType);
+				type);
+
+		
 	}
 
 	public LineCoverageParser() {
