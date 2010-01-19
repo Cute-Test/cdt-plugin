@@ -49,6 +49,7 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
 import org.ginkgo.gcov.parser.LineCoverageParser;
+import org.ginkgo.gcov.parser.ModelBuilderLineParser;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
@@ -150,7 +151,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		
 
 		private List<ICSourceEntry> sourceEntries;
-		private LineCoverageParser parser = new LineCoverageParser();
+		private LineCoverageParser parser = new ModelBuilderLineParser();
 
 		public SourceFileVisitor(List<ICSourceEntry> sourceEntriesList) {
 			this.sourceEntries = sourceEntriesList;
@@ -161,7 +162,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				if(sourceEntry.getLocation().isPrefixOf(resource.getLocation()) && isNotInExclusion(sourceEntry, resource)) {
 					if (resource instanceof IFile) {
 						IFile file = (IFile) resource;
-						if(file.getName().endsWith("cpp") || file.getName().endsWith("h")) {
+						if(file.getName().endsWith("cpp")) {
 							parser.parse(file);
 						}
 					}

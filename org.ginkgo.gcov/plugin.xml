@@ -28,7 +28,7 @@
          name="lineCoverMarker"
          point="org.eclipse.core.resources.markers">
       <super
-            type="org.ginkgo.gcov.coverageMarker">
+            type="ch.hsr.ifs.cute.gcov.coverageMarker">
       </super>
       <persistent
             value="true">
@@ -39,7 +39,18 @@
          name="lineUnCoverMarker"
          point="org.eclipse.core.resources.markers">
       <super
-            type="org.ginkgo.gcov.coverageMarker">
+            type="ch.hsr.ifs.cute.gcov.coverageMarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+    <extension
+         id="linePartialCoverMarker"
+         name="linePartialCoverMarker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="ch.hsr.ifs.cute.gcov.coverageMarker">
       </super>
       <persistent
             value="true">
@@ -48,20 +59,24 @@
    <extension
          point="org.eclipse.ui.editors.annotationTypes">
       <type
-            markerType="org.ginkgo.gcov.lineCoverMarker"
-            name="org.ginkgo.gcov.lineCoverAnnotationType">
+            markerType="ch.hsr.ifs.cute.gcov.lineCoverMarker"
+            name="ch.hsr.ifs.cute.gcov.lineCoverAnnotationType">
       </type>
       <type
-            markerType="org.ginkgo.gcov.lineUnCoverMarker"
-            name="org.ginkgo.gcov.lineUnCoverAnnotationType">
+            markerType="ch.hsr.ifs.cute.gcov.lineUnCoverMarker"
+            name="ch.hsr.ifs.cute.gcov.lineUnCoverAnnotationType">
+      </type>
+      <type
+            markerType="ch.hsr.ifs.cute.gcov.linePartialCoverMarker"
+            name="ch.hsr.ifs.cute.gcov.linePartialCoverAnnotationType">
       </type>
    </extension>
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-            annotationType="org.ginkgo.gcov.lineCoverAnnotationType"
+            annotationType="ch.hsr.ifs.cute.gcov.lineCoverAnnotationType"
             colorPreferenceKey="lineCoverColor"
-            colorPreferenceValue="30,200,30"
+            colorPreferenceValue="192,255,192"
             contributesToHeader="true"
             highlightPreferenceKey="lineCoverHighlight"
             highlightPreferenceValue="true"
@@ -81,11 +96,11 @@
             verticalRulerPreferenceValue="true">
       </specification>
       <specification
-            annotationType="org.ginkgo.gcov.lineUnCoverAnnotationType"
+            annotationType="ch.hsr.ifs.cute.gcov.lineUnCoverAnnotationType"
             colorPreferenceKey="lineUnCoverColor"
-            colorPreferenceValue="255,0,0"
+            colorPreferenceValue="255,160,160"
             contributesToHeader="true"
-            highlightPreferenceKey="lineUnCoverHighlight"
+            highlightPreferenceKey="lineCoverHighlight"
             highlightPreferenceValue="true"
             includeOnPreferencePage="true"
             isGoToNextNavigationTarget="false"
@@ -100,6 +115,28 @@
             textPreferenceValue="true"
             textStylePreferenceValue="IBEAM"
             verticalRulerPreferenceKey="lineUnCoverVerticalRuler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+      <specification
+            annotationType="ch.hsr.ifs.cute.gcov.linePartialCoverAnnotationType"
+            colorPreferenceKey="linePartialCoverColor"
+            colorPreferenceValue="255,255,128"
+            contributesToHeader="true"
+            highlightPreferenceKey="linePartialCoverHighlight"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            isGoToNextNavigationTarget="false"
+            isGoToPreviousNavigationTarget="false"
+            label="Line Partially Covered"
+            overviewRulerPreferenceKey="linePartialCoverOverviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            showInNextPrevDropdownToolbarAction="true"
+            showInNextPrevDropdownToolbarActionKey="linePartialCoverNextPrev"
+            textPreferenceKey="linePartialCoverText"
+            textPreferenceValue="true"
+            textStylePreferenceValue="IBEAM"
+            verticalRulerPreferenceKey="linePartialCoverVerticalRuler"
             verticalRulerPreferenceValue="true">
       </specification>
    </extension>

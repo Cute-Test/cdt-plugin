@@ -1,4 +1,15 @@
-package org.ginkgo.gcov.model;
+/*******************************************************************************
+ * Copyright (c) 2009, 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html  
+ * 
+ * Contributors: 
+ * Institute for Software (IFS)- initial API and implementation 
+ ******************************************************************************/
+package ch.hsr.ifs.cute.gcov.model;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,10 +18,15 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Michel Rothmund & Emanuel Graf IFS
+ *
+ */
 public class DemangleHelper {
 	public static final String MAIN = "main";
 
 	private static final Map<String, String> parameterMap = new HashMap<String, String>() {
+
 		{
 			put("v", ""); // void
 			put("b", "bool");

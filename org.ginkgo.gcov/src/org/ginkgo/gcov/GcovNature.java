@@ -13,24 +13,6 @@ public class GcovNature implements IProjectNature {
 
 	private IProject project;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.core.resources.IProjectNature#configure()
-	 */
-	public void configure() throws CoreException {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.core.resources.IProjectNature#deconfigure()
-	 */
-	public void deconfigure() throws CoreException {
-
-	}
-
 	
 	/*
 	 * (non-Javadoc)
@@ -48,6 +30,12 @@ public class GcovNature implements IProjectNature {
 	 */
 	public void setProject(IProject project) {
 		this.project = project;
+	}
+
+	public void configure() throws CoreException {		
+	}
+
+	public void deconfigure() throws CoreException {
 	}
 
 }
