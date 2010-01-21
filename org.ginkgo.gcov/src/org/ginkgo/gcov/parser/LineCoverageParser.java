@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html  
+ * 
+ * Contributors: 
+ * Institute for Software (IFS)- initial API and implementation 
+ ******************************************************************************/
 package org.ginkgo.gcov.parser;
 
 import java.io.File;
@@ -6,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -14,7 +26,6 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.ui.texteditor.MarkerUtilities;
 
 public abstract class LineCoverageParser {
 
@@ -25,7 +36,7 @@ public abstract class LineCoverageParser {
 	protected abstract void parse(IFile cppFile, IFile gcovFile) throws CoreException, IOException;
 
 
-	public static void deleteMarkers(IFile file) {
+	public void deleteMarkers(IFile file) {
 		try {
 			file.deleteMarkers(COVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 			file.deleteMarkers(UNCOVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
@@ -117,15 +128,11 @@ public abstract class LineCoverageParser {
 	
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected void  createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
-		Map attributes = new HashMap();
-		MarkerUtilities.setMessage(attributes, message);
-		MarkerUtilities.setLineNumber(attributes, lineNum);
-		MarkerUtilities.createMarker(cppFile, attributes,
-				type);
-
-		
+	protected IMarker  createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
+		IMarker marker = cppFile.createMarker(type);
+		marker.setAttribute(IMarker.LINE_NUMBER, lineNum);
+		marker.setAttribute(IMarker.MESSAGE, message);
+		return marker;		
 	}
 
 	public LineCoverageParser() {
