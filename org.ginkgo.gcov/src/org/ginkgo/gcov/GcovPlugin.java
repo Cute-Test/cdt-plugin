@@ -1,8 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html  
+ * 
+ * Contributors: 
+ * Institute for Software (IFS)- initial API and implementation 
+ ******************************************************************************/
 package org.ginkgo.gcov;
 
-import java.util.ArrayList;
-
-import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -13,18 +21,14 @@ import org.osgi.framework.BundleContext;
 public class GcovPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.ginkgo.gcov";
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.gcov";
 
 	// The shared instance
 	private static GcovPlugin plugin;
-	@SuppressWarnings("deprecation")
-	private ArrayList<IPropertyChangeListener> myListeners;
 	/**
 	 * The constructor
 	 */
-	@SuppressWarnings("deprecation")
 	public GcovPlugin() {
-		myListeners=new ArrayList<IPropertyChangeListener>();
 	}
 
 	/*
@@ -64,20 +68,5 @@ public class GcovPlugin extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
-	// A public method that allows listener registration
-	@SuppressWarnings("deprecation")
-	public void addPropertyChangeListener(IPropertyChangeListener listener) {
-		if(!myListeners.contains(listener))
-			myListeners.add(listener);
-	}
 
-	// A public method that allows listener registration
-	@SuppressWarnings("deprecation")
-	public void removePropertyChangeListener(IPropertyChangeListener listener) {
-		myListeners.remove(listener);
-	}
-	@SuppressWarnings("deprecation")
-	public ArrayList<IPropertyChangeListener> getMyListeners() {
-		return myListeners;
-	}
 }
