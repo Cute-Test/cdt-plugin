@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.core,
  org.eclipse.cdt.managedbuilder.ui
 Export-Package: ch.hsr.ifs.cute.gcov.model,
- org.ginkgo.gcov,
- org.ginkgo.gcov.parser
+ ch.hsr.ifs.cute.gcov.parser,
+ org.ginkgo.gcov
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

@@ -9,7 +9,7 @@
  * Contributors: 
  * Institute for Software (IFS)- initial API and implementation 
  ******************************************************************************/
-package org.ginkgo.gcov.parser;
+package ch.hsr.ifs.cute.gcov.parser;
 
 import java.io.File;
 import java.io.IOException;
