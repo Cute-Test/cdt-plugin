@@ -13,11 +13,12 @@ package org.ginkgo.gcov.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -26,21 +27,19 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.ui.texteditor.MarkerUtilities;
+import org.ginkgo.gcov.GcovPlugin;
 
 public abstract class LineCoverageParser {
 
-	public static final String UNCOVER_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.lineUnCoverMarker";
-	public static final String COVER_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.lineCoverMarker";
-	public static final String PARTIALLY_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.linePartialCoverMarker";
-
-	protected abstract void parse(IFile cppFile, IFile gcovFile) throws CoreException, IOException;
+	protected abstract void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException;
 
 
 	public void deleteMarkers(IFile file) {
 		try {
-			file.deleteMarkers(COVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
-			file.deleteMarkers(UNCOVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
-			file.deleteMarkers(PARTIALLY_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+			file.deleteMarkers(GcovPlugin.COVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+			file.deleteMarkers(GcovPlugin.UNCOVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+			file.deleteMarkers(GcovPlugin.PARTIALLY_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 		} catch (CoreException ce) {
 		}
 	}
@@ -111,7 +110,9 @@ public abstract class LineCoverageParser {
 			
 			
 			deleteMarkers(cppFile);
-			parse(cppFile, gcovFile);
+			GcovPlugin.getDefault().getcModel().clearModel();
+			parse(cppFile, new InputStreamReader(gcovFile
+					.getContents()));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -128,11 +129,12 @@ public abstract class LineCoverageParser {
 	
 	}
 
-	protected IMarker  createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
-		IMarker marker = cppFile.createMarker(type);
-		marker.setAttribute(IMarker.LINE_NUMBER, lineNum);
-		marker.setAttribute(IMarker.MESSAGE, message);
-		return marker;		
+	@SuppressWarnings("rawtypes")
+	protected void createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
+		Map attributes = new HashMap();
+		MarkerUtilities.setMessage(attributes, message);
+		MarkerUtilities.setLineNumber(attributes, lineNum);
+		MarkerUtilities.createMarker(cppFile, attributes, type);	
 	}
 
 	public LineCoverageParser() {

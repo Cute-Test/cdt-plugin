@@ -13,12 +13,13 @@ package org.ginkgo.gcov.parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.ginkgo.gcov.GcovPlugin;
 
 import ch.hsr.ifs.cute.gcov.model.Branch;
 import ch.hsr.ifs.cute.gcov.model.CoverageStatus;
@@ -41,10 +42,9 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 	Line currentLine;
 
 	@Override
-	protected void parse(IFile cppFile, IFile gcovFile) throws CoreException, IOException {
-		file = new File(cppFile);
-		BufferedReader in = new BufferedReader(new InputStreamReader(gcovFile
-				.getContents()));
+	protected void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException {
+		file = GcovPlugin.getDefault().getcModel().addFileToModel(cppFile);
+		BufferedReader in = new BufferedReader(gcovFile);
 		String line;
 		while ((line = in.readLine()) != null) {
 			Matcher functionMatcher = FUNCTION_PATTERN.matcher(line);
@@ -68,13 +68,13 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 			for (Line l : f.getLines()) {
 				switch (l.getStatus()) {
 				case Covered:
-					createMarker(cppFile, l.getNr(), "covered", COVER_MARKER_TYPE);
+					createMarker(cppFile, l.getNr(), "covered", GcovPlugin.COVER_MARKER_TYPE);
 					break;
 				case PartiallyCovered:
-					createMarker(cppFile, l.getNr(), "partially covered", PARTIALLY_MARKER_TYPE);
+					createMarker(cppFile, l.getNr(), "partially covered", GcovPlugin.PARTIALLY_MARKER_TYPE);
 					break;
 				case Uncovered:
-					createMarker(cppFile, l.getNr(), "uncovered", UNCOVER_MARKER_TYPE);
+					createMarker(cppFile, l.getNr(), "uncovered", GcovPlugin.UNCOVER_MARKER_TYPE);
 					break;
 				default:
 					break;

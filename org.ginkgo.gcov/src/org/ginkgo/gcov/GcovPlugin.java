@@ -11,9 +11,13 @@
  ******************************************************************************/
 package org.ginkgo.gcov;
 
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import ch.hsr.ifs.cute.gcov.model.CoverageModel;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -25,10 +29,18 @@ public class GcovPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static GcovPlugin plugin;
+
+	public static final String GCOV_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.coverageMarker";
+	public static final String UNCOVER_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.lineUnCoverMarker";
+	public static final String COVER_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.lineCoverMarker";
+	public static final String PARTIALLY_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.linePartialCoverMarker";
+	private CoverageModel cModel = new CoverageModel();
+	
 	/**
 	 * The constructor
 	 */
 	public GcovPlugin() {
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(new ResourceChangeListner(), IResourceChangeEvent.POST_CHANGE);
 	}
 
 	/*
@@ -56,6 +68,10 @@ public class GcovPlugin extends AbstractUIPlugin {
 	 */
 	public static GcovPlugin getDefault() {
 		return plugin;
+	}
+
+	public CoverageModel getcModel() {
+		return cModel;
 	}
 
 	/**
