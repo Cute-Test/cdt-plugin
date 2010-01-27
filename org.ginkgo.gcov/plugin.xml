@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="listeners" name="Test listeners" schema="schema/listeners.exsd"/>
    <extension
          id="GcovNature"
          name="Gcov Nature"
