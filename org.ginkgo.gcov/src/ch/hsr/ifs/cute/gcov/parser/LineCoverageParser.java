@@ -32,7 +32,7 @@ import org.ginkgo.gcov.GcovPlugin;
 
 public abstract class LineCoverageParser {
 
-	protected abstract void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException;
+	public abstract void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException;
 
 
 	public void deleteMarkers(IFile file) {

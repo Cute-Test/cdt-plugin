@@ -42,7 +42,7 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 	Line currentLine;
 
 	@Override
-	protected void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException {
+	public void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException {
 		file = GcovPlugin.getDefault().getcModel().addFileToModel(cppFile);
 		BufferedReader in = new BufferedReader(gcovFile);
 		String line;
