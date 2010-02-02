@@ -35,16 +35,12 @@ public class ChangeCuteVersionAction implements IWorkbenchWindowActionDelegate {
 	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#dispose()
 	 */
 	public void dispose() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#init(org.eclipse.ui.IWorkbenchWindow)
 	 */
 	public void init(IWorkbenchWindow window) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)

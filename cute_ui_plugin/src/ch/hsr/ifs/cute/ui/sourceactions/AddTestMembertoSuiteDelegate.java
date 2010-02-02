@@ -11,13 +11,11 @@ public class AddTestMembertoSuiteDelegate extends
 	
 	@Override
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	int getExitPositionLength() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	
