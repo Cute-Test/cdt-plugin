@@ -9,7 +9,7 @@
  * Contributors: 
  * Institute for Software (IFS)- initial API and implementation 
  ******************************************************************************/
-package org.ginkgo.gcov;
+package ch.hsr.ifs.cute.gcov;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;

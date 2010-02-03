@@ -48,9 +48,9 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.ginkgo.gcov.GcovNature;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;

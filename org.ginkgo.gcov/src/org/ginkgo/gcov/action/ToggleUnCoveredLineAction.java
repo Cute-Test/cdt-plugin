@@ -8,7 +8,8 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.texteditor.AnnotationPreference;
 import org.eclipse.ui.texteditor.AnnotationPreferenceLookup;
-import org.ginkgo.gcov.GcovPlugin;
+
+import ch.hsr.ifs.cute.gcov.GcovPlugin;
 
 public class ToggleUnCoveredLineAction implements
 		IWorkbenchWindowActionDelegate {

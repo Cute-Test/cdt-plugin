@@ -9,7 +9,7 @@
  * Contributors: 
  * Institute for Software (IFS)- initial API and implementation 
  ******************************************************************************/
-package org.ginkgo.gcov;
+package ch.hsr.ifs.cute.gcov;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -17,7 +17,6 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.cute.gcov.GcovBuilder;
 
 public class GcovNature implements IProjectNature {
 

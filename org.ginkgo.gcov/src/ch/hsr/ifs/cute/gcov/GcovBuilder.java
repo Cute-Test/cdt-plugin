@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.ginkgo.gcov.GcovPlugin;
 
 /**
  * @author Emanuel Graf IFS
@@ -38,6 +37,7 @@ public class GcovBuilder extends IncrementalProjectBuilder {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		

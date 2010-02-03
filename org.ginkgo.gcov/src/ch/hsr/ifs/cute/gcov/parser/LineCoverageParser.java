@@ -28,7 +28,8 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.ui.texteditor.MarkerUtilities;
-import org.ginkgo.gcov.GcovPlugin;
+
+import ch.hsr.ifs.cute.gcov.GcovPlugin;
 
 public abstract class LineCoverageParser {
 

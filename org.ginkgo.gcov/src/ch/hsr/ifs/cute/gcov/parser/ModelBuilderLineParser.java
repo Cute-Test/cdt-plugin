@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.ginkgo.gcov.GcovPlugin;
 
+import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.gcov.model.Branch;
 import ch.hsr.ifs.cute.gcov.model.CoverageStatus;
 import ch.hsr.ifs.cute.gcov.model.File;

@@ -49,10 +49,10 @@ import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
-import org.ginkgo.gcov.GcovPlugin;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
+import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.gcov.parser.LineCoverageParser;
 import ch.hsr.ifs.cute.gcov.parser.ModelBuilderLineParser;
 import ch.hsr.ifs.test.framework.ConsolePatternListener;

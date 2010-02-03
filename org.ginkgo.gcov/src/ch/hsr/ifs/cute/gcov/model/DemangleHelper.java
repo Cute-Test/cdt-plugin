@@ -22,6 +22,7 @@ import java.util.Map;
  * @author Michel Rothmund & Emanuel Graf IFS
  *
  */
+@SuppressWarnings("serial")
 public class DemangleHelper {
 	public static final String MAIN = "main";
 
@@ -52,6 +53,7 @@ public class DemangleHelper {
 		}
 	};
 
+	@SuppressWarnings("unused")
 	private static final Map<String, String> pointerMap = new HashMap<String, String>() {
 		{
 			put("P", "*");

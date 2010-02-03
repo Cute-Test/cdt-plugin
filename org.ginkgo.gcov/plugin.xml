@@ -7,7 +7,7 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="org.ginkgo.gcov.GcovNature">
+               class="ch.hsr.ifs.cute.gcov.GcovNature">
          </run>
       </runtime>
       <builder
