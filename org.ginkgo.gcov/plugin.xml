@@ -10,6 +10,9 @@
                class="org.ginkgo.gcov.GcovNature">
          </run>
       </runtime>
+      <builder
+            id="ch.hsr.ifs.cute.gcov.gcovBuilder">
+      </builder>
    </extension>
    <extension
          id="coverageMarker"
@@ -163,9 +166,21 @@
                state="true"
                style="toggle"
                toolbarPath="sampleGroup"
-               tooltip="pref">
+     
+             tooltip="pref">
          </action>
       </actionSet>
+   </extension>
+   <extension
+         id="gcovBuilder"
+         name="Gcov Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="ch.hsr.ifs.cute.gcov.GcovBuilder">
+         </run>
+      </builder>
    </extension>
 
 </plugin>
