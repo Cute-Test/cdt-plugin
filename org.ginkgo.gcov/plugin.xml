@@ -153,5 +153,11 @@
          </run>
       </builder>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="ch.hsr.ifs.cute.gcov.GcovStartup">
+      </startup>
+   </extension>
 
 </plugin>
