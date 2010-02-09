@@ -33,7 +33,6 @@ public class CoverageModel {
 		File f = new File(file);
 		fileMap.put(file, f);
 		return f;
-		
 	}
 
 	public File getModelForFile(IFile file) {

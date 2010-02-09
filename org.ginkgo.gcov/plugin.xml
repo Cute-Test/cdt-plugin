@@ -102,7 +102,7 @@
             colorPreferenceKey="lineUnCoverColor"
             colorPreferenceValue="255,160,160"
             contributesToHeader="true"
-            highlightPreferenceKey="lineCoverHighlight"
+            highlightPreferenceKey="lineUnCoverHighlight"
             highlightPreferenceValue="true"
             includeOnPreferencePage="true"
             isGoToNextNavigationTarget="false"
@@ -141,35 +141,6 @@
             verticalRulerPreferenceKey="linePartialCoverVerticalRuler"
             verticalRulerPreferenceValue="true">
       </specification>
-   </extension>
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="sampleAction.actionSet"
-            label="A sample set of actions"
-            visible="true">
-         <action
-               class="org.ginkgo.gcov.action.ToggleCoveredLineAction"
-               icon="icons/cover.gif"
-               id="sampleaction.actions.PrefAction"
-               label="cover(&amp;S)"
-               state="true"
-               style="toggle"
-               toolbarPath="sampleGroup"
-               tooltip="pref">
-         </action>
-         <action
-               class="org.ginkgo.gcov.action.ToggleUnCoveredLineAction"
-               icon="icons/uncover.gif"
-               id="sampleaction.actions.UncoverAction"
-               label="uncover(&amp;S)"
-               state="true"
-               style="toggle"
-               toolbarPath="sampleGroup"
-     
-             tooltip="pref">
-         </action>
-      </actionSet>
    </extension>
    <extension
          id="gcovBuilder"

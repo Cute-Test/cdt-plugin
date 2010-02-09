@@ -90,7 +90,7 @@ public abstract class LineCoverageParser {
 
 	public void parse(IFile cppFile) {
 		IFile gcovFile = null;
-	
+		deleteMarkers(cppFile);
 		IProject project = cppFile.getProject();
 		String gcnoFileName = cppFile.getName().replace(cppFile.getFileExtension(),"gcno");
 		IFile gcnoFile= null;
@@ -109,8 +109,6 @@ public abstract class LineCoverageParser {
 				return;
 			}
 			
-			
-			deleteMarkers(cppFile);
 			GcovPlugin.getDefault().getcModel().clearModel();
 			parse(cppFile, new InputStreamReader(gcovFile
 					.getContents()));
