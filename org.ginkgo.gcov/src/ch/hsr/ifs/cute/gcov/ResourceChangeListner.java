@@ -30,10 +30,7 @@ public class ResourceChangeListner implements IResourceChangeListener {
 	public void resourceChanged(IResourceChangeEvent event) {
 		IResourceDelta delta = event.getDelta();
 		IResourceDelta[] deltas = new IResourceDelta[] {delta};
-
 		processDeltas(deltas);
-		
-
 	}
 
 	protected void processDeltas(IResourceDelta[] deltas) {
@@ -44,16 +41,15 @@ public class ResourceChangeListner implements IResourceChangeListener {
 				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 				CoverageModel CovModel = GcovPlugin.getDefault().getcModel();
 				File mF = CovModel.getModelForFile(file);
-				if(mF != null) {
-					int flags = iResourceDelta.getFlags();
-					if((flags & IResourceDelta.CONTENT) != 0 || (flags& IResourceDelta.REPLACED) != 0) {
+				int flags = iResourceDelta.getFlags();
+				if((flags & IResourceDelta.CONTENT) != 0 || (flags& IResourceDelta.REPLACED) != 0) {
+					if(mF != null) {
 						CovModel.removeFileFromModel(file);
-						new DeleteMarkerJob(file).schedule();						
 					}
+					new DeleteMarkerJob(file).schedule();						
 				}
 			}catch(Exception e) {}
 			processDeltas(iResourceDelta.getAffectedChildren());
-
 		}
 	}
 

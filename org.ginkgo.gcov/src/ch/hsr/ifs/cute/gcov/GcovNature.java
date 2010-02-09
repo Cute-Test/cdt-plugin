@@ -71,7 +71,6 @@ public class GcovNature implements IProjectNature {
 
 	public void deconfigure() throws CoreException {
 		IProjectDescription description = getProject().getDescription();
-
 		ICommand[] commands = description.getBuildSpec();
 		deconfigureBuilder(commands, description, GcovBuilder.BUILDER_ID);
 	}
