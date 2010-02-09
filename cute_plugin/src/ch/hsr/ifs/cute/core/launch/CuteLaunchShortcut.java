@@ -187,6 +187,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_START_MODE,
 				ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN);
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_ID, debugConfig.getID());
+			wc.setMappedResources(new IResource[] {bin.getCProject().getProject()});
 			
 			ICProject project=bin.getCProject();
 
