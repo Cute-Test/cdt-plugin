@@ -2,6 +2,7 @@
 #include "ide_listener.h"
 #include "cute_runner.h"
 #include "$suitename$.h"
+
 //Version 1.0.0
 void runTest(){
 	cute::suite s=make_suite_$suitename$();

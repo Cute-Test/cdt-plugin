@@ -48,7 +48,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 			IFolder cuteFolder) throws CoreException {
 		suitename=suitewizPage.getSuiteName();
 		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
-		cuteVersion.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename);
+		cuteVersion.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
 		
 	}
 	

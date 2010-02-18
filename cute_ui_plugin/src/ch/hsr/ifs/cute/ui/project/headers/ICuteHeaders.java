@@ -25,6 +25,6 @@ public interface ICuteHeaders {
 	String getVersionString();
 	void copyHeaderFiles(IFolder folder, IProgressMonitor monitor) throws CoreException;
 	void copyTestFiles(IFolder folder, IProgressMonitor monitor) throws CoreException;
-	void copySuiteFiles(IFolder folder, IProgressMonitor monitor, String suiteName) throws CoreException;
+	void copySuiteFiles(IFolder folder, IProgressMonitor monitor, String suiteName, boolean copyTestCPP) throws CoreException;
 
 }

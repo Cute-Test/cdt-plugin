@@ -94,12 +94,16 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 	}
 
 	public void copySuiteFiles(IFolder folder, IProgressMonitor monitor,
-			String suitename) throws CoreException {
-		
-		SubMonitor mon = SubMonitor.convert(monitor, 3);
-		mon.subTask("Copy Test.cpp");
-		SuiteTemplateCopyUtil.copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
-		mon.worked(1);
+			String suitename, boolean copyTestCPP) throws CoreException {
+		SubMonitor mon;
+		if(copyTestCPP) {
+			mon = SubMonitor.convert(monitor, 3);
+			mon.subTask("Copy Test.cpp");
+			SuiteTemplateCopyUtil.copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
+			mon.worked(1);
+		}else {
+			mon = SubMonitor.convert(monitor, 2);
+		}
 		mon.subTask("Copy Suite");
 		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
 		mon.worked(1);
