@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.tests.BaseTestFramework;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
-import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
+import org.eclipse.cdt.ui.testplugin.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;

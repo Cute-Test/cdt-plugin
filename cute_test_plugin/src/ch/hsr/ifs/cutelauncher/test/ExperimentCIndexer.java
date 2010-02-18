@@ -12,7 +12,7 @@ import org.eclipse.cdt.core.index.IIndexFile;
 import org.eclipse.cdt.core.index.IndexFilter;
 import org.eclipse.cdt.core.index.IndexLocationFactory;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
-import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
+import org.eclipse.cdt.ui.testplugin.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;

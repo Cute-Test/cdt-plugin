@@ -1,7 +1,7 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
 import org.eclipse.cdt.internal.ui.editor.CEditor;
-import org.eclipse.cdt.ui.tests.text.EditorTestHelper;
+import org.eclipse.cdt.ui.testplugin.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
