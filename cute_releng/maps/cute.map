@@ -7,6 +7,7 @@ plugin@ch.hsr.ifs.cute.headers.1_5=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home
 plugin@ch.hsr.ifs.cute.headers.1_6=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute_Header_1.6.0
 fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework_cute_fragment
 plugin@ch.hsr.ifs.cute.ui=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_ui_plugin
+plugin@ch.hsr.ifs.cute.gcov=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,org.ginkgo.gcov
 feature@ch.hsr.ifs.cute=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_feature
 feature@ch.hsr.ifs.cute.headers.1_5=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute.1_5_Feature
 feature@ch.hsr.ifs.cute.headers.1_0=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute.1_0_Feature
@@ -18,6 +19,7 @@ fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:
 
 ! Test Feature
 plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_plugin
+plugin@ch.hsr.ifs.cute.gcov.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,gcov_test
 fragment@org.eclipse.ant.optional.junit=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 feature@ch.hsr.ifs.cute.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_feature
 
