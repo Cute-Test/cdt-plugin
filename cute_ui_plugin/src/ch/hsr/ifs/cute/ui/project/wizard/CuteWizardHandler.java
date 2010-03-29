@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik
+ * Copyright (c) 2007, 2010 Institute for Software, HSR Hochschule für Technik
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.CSourceEntry;
@@ -42,6 +41,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -119,6 +119,8 @@ public class CuteWizardHandler extends MBSWizardHandler {
 
 	private void createCuteProject(IProject project) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
+		QualifiedName key = new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME);
+		project.setPersistentProperty(key, getCuteVersion().getVersionString());
 		createCuteProjectFolders(project);
 		if(cuteVersionWizardPage.enableGcov) {
 			configGcov(project);
@@ -187,7 +189,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	}
 
 	protected ICuteHeaders getCuteVersion() {
-		return getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
+		return UiPlugin.getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
 	}
 
 	public void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
@@ -244,16 +246,6 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		return set.toArray(new ICSourceEntry[set.size()]);
 	}
 	
-	protected ICuteHeaders getCuteVersion(String cuteVersionString) {
-		SortedSet<ICuteHeaders> headers = UiPlugin.getInstalledCuteHeaders();
-		for (ICuteHeaders cuteHeaders : headers) {
-			if(cuteVersionString.equals(cuteHeaders.getVersionString()))
-				return cuteHeaders;
-		}
-		
-		return null;
-	}
-
 	protected void setIncludePaths(IPath cuteFolder, IProject project) throws CoreException {
 		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
 		setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik
+ * Copyright (c) 2007, 2010 Institute for Software, HSR Hochschule für Technik
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
+import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 
@@ -190,7 +191,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 
 	@Override
 	protected ICuteHeaders getCuteVersion() {
-		return getCuteVersion(libRefPage.getCuteVersionString());
+		return UiPlugin.getCuteVersion(libRefPage.getCuteVersionString());
 	}
 
 	//bugzilla #210116:on CDT spelling error

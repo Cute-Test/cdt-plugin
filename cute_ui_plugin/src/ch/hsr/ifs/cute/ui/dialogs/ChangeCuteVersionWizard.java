@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2009, 2010 Institute for Software, HSR Hochschule für Technik  
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
@@ -70,6 +71,7 @@ public class ChangeCuteVersionWizard extends Wizard {
 						mon.worked(1);
 					}
 					cuteVersion.copyHeaderFiles(cuteFolder, mon.newChild(files.length));
+					project.setPersistentProperty(new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME), cuteVersion.getVersionString());
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2008, 2010 Institute for Software, HSR Hochschule für Technik  
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -17,6 +17,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
+import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
@@ -54,7 +55,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	
 	@Override
 	protected ICuteHeaders getCuteVersion() {
-		return getCuteVersion(suitewizPage.getCuteVersion());
+		return UiPlugin.getCuteVersion(suitewizPage.getCuteVersion());
 	}
 	@Override
 	public boolean canFinish() {

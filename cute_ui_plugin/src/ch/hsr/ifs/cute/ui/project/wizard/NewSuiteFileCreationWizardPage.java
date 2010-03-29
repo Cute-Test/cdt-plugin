@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2008, 2010 Institute for Software, HSR Hochschule für Technik  
+ * Rapperswil, University of applied sciences
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html  
+ * 
+ * Contributors: 
+ * Emanuel Graf - initial API and implementation 
+ ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
 import org.eclipse.cdt.core.CConventions;
@@ -35,7 +46,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import ch.hsr.ifs.cute.ui.SuiteTemplateCopyUtil;
+import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 
 @SuppressWarnings("restriction")
@@ -75,7 +87,6 @@ public class NewSuiteFileCreationWizardPage extends
 	            fNewFileTU = null;
 	            IPath folderPath = getSourceFolderFullPath();
 	            if(folderPath!=null){
-//	            	IProject project=getCurrentProject();
 	            	IWorkspace workspace = ResourcesPlugin.getWorkspace();
 	            	IWorkspaceRoot root = workspace.getRoot();
 
@@ -84,14 +95,16 @@ public class NewSuiteFileCreationWizardPage extends
 	            	IFile cppFile;
 	            	if(folderPath.segmentCount()==1){
 	            		IProject folder=root.getProject(folderPath.toPortableString());
-	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		 //$NON-NLS-1$ //$NON-NLS-2$
-	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename); //$NON-NLS-1$ //$NON-NLS-2$
+	            		ICuteHeaders headers = UiPlugin.getCuteVersionString(folder);
+	            		IFolder pfolder = folder.getFolder("/");
+	            		headers.copySuiteFiles(pfolder, monitor, suitename, true);
 		            	cppFile=folder.getFile(suitename+".cpp"); //$NON-NLS-1$
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}else{
+	            		IProject project = root.getProject(folderPath.segments()[0]);
+	            		ICuteHeaders headers = UiPlugin.getCuteVersionString(project);
 	            		IFolder folder=root.getFolder(folderPath);	
-	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.cpp", suitename+".cpp", suitename);		 //$NON-NLS-1$ //$NON-NLS-2$
-	            		SuiteTemplateCopyUtil.copyFile(folder, monitor, "$suitename$.h", suitename+".h", suitename); //$NON-NLS-1$ //$NON-NLS-2$
+	            		headers.copySuiteFiles(folder, monitor, suitename, false);
 		            	cppFile=folder.getFile(suitename+".cpp"); //$NON-NLS-1$
 		            	if(cppFile!=null)fNewFileTU =CoreModelUtil.findTranslationUnit(cppFile);
 	            	}
@@ -102,7 +115,6 @@ public class NewSuiteFileCreationWizardPage extends
 	        }
         }
 	}
-	
 	public static void waitUntilFileIsIndexed(IIndex index, IFile file, int maxmillis,IProgressMonitor p) throws Exception {
 		long endTime= System.currentTimeMillis() + maxmillis;
 		int timeLeft= maxmillis;
@@ -130,11 +142,6 @@ public class NewSuiteFileCreationWizardPage extends
 		Text textControl = fNewFileDialogField.getTextControl(null);
 		LayoutUtil.setWidthHint(textControl, getMaxFieldWidth());
 		textControl.addFocusListener(new StatusFocusListener(NEW_FILE_ID));
-		/*
-		Composite p=new Composite(parent,SWT.NO_FOCUS);
-		GridData gd= new GridData(GridData.BEGINNING);
-		gd.horizontalSpan= 1;
-		p.setLayoutData(gd);*/
 		createSeparator(parent,nColumns);
 		fSelection.doFillIntoGrid(parent, nColumns);
 		
@@ -181,9 +188,7 @@ public class NewSuiteFileCreationWizardPage extends
 		if (convStatus.getSeverity() == IStatus.ERROR) {
 			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.0") + convStatus.getMessage() + "."); //$NON-NLS-1$ //$NON-NLS-2$
 			return status;
-		} /*else if (convStatus.getSeverity() == IStatus.WARNING) {
-			status.setWarning(NewFileWizardMessages.getFormattedString("NewSourceFileCreationWizardPage.warning.FileNameDiscouraged", convStatus.getMessage())); //$NON-NLS-1$
-		}*/
+		}
 		if(!fNewFileDialogField.getText().matches("\\w+")){ //$NON-NLS-1$
 			status.setError("Invalid identifier. Only letters, digits and underscore are accepted."); //$NON-NLS-1$
 			return status;

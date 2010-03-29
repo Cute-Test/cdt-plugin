@@ -1,9 +1,29 @@
+/*******************************************************************************
+ * Copyright (c) 2007, 2010 Institute for Software, HSR Hochschule für Technik  
+ * Rapperswil, University of applied sciences
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html  
+ * 
+ * Contributors: 
+ * Emanuel Graf - initial API and implementation 
+ ******************************************************************************/
 package ch.hsr.ifs.cute.ui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -11,6 +31,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
@@ -31,6 +52,8 @@ public class UiPlugin extends AbstractUIPlugin {
 	private static UiPlugin plugin;
 	
 	private static final IPath ICONS_PATH= new Path("$nl$/icons"); //$NON-NLS-1$
+
+	public static final String CUTE_VERSION_PROPERTY_NAME = "cuteVersion";
 	
 	/**
 	 * The constructor
@@ -54,6 +77,47 @@ public class UiPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+	}
+
+	public static ICuteHeaders getCuteVersion(String cuteVersionString) {
+		SortedSet<ICuteHeaders> headers = getInstalledCuteHeaders();
+		for (ICuteHeaders cuteHeaders : headers) {
+			if(cuteVersionString.equals(cuteHeaders.getVersionString()))
+				return cuteHeaders;
+		}
+		
+		return null;
+	}
+
+	public static ICuteHeaders getCuteVersionString(IProject project) throws CoreException {
+		QualifiedName key = new QualifiedName(PLUGIN_ID, CUTE_VERSION_PROPERTY_NAME);
+		String versionString = project.getPersistentProperty(key);
+		if(versionString != null) {
+			return getCuteVersion(versionString);
+		}else { //find out version by parsing the version header
+			IResource res = project.findMember("cute/cute_version.h");
+			if (res instanceof IFile) {
+				String cuteVersionstring = "";
+				IFile file = (IFile) res;
+				BufferedReader br = new BufferedReader(new InputStreamReader(file.getContents()));
+				String line;
+				try {
+					Pattern versPtr = Pattern.compile("#define CUTE_LIB_VERSION \\\"(\\d\\.\\d\\.\\d)\\\"$");
+					while((line = br.readLine()) != null	) {
+						Matcher matcher = versPtr.matcher(line);
+						if(matcher.matches()) {
+							cuteVersionstring = "Cute Headers " + matcher.group(1);
+							project.setPersistentProperty(key, cuteVersionstring);
+							break;
+						}
+					}
+					return getCuteVersion(cuteVersionstring);
+				} catch (IOException e) {
+				}
+			}
+			//fallback
+			return getInstalledCuteHeaders().first();
+		}
 	}
 
 	/**
