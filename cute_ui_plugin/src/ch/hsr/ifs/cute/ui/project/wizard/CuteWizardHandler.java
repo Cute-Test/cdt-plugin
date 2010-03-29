@@ -68,7 +68,8 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	private static final String GNU_C_COMPILER_ID = "cdt.managedbuild.tool.gnu.c.compiler";
 	private static final String GNU_CPP_COMPILER_OPTION_OTHER_OTHER = "gnu.cpp.compiler.option.other.other";
 	private static final String GNU_CPP_COMPILER_ID = "cdt.managedbuild.tool.gnu.cpp.compiler";
-	private static final String GCOV_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99 ";
+	private static final String GCOV_C_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99 ";
+	private static final String GCOV_CPP_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage ";
 	private CuteVersionWizardPage cuteVersionWizardPage;
 
 	@Override
@@ -125,6 +126,8 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		if(cuteVersionWizardPage.enableGcov) {
 			configGcov(project);
 		}
+		ManagedBuildManager.saveBuildInfo(project, true);
+		
 	}
 	
 	private void configGcov(IProject project) throws CoreException {
@@ -134,11 +137,11 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
 		for (IConfiguration config : configs) {
 			if(config.getParent().getId().equals("cdt.managedbuild.config.gnu.exe.debug")) {
-				setOptionInTool(config, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_COMPILER_FLAGS);
-				setOptionInTool(config, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_COMPILER_FLAGS);
+				setOptionInTool(config, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_FLAGS);
+				setOptionInTool(config, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_FLAGS);
 				setOptionInTool(config, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
-				
 			}
+			
 		}
 		} catch (BuildException e) {
 			throw new CoreException(new Status(IStatus.ERROR,UiPlugin.PLUGIN_ID,e.getMessage(),e));
@@ -151,7 +154,8 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		ITool[] tools = config.getToolsBySuperClassId(toolId);
 		for (ITool tool : tools) {
 			IOption option = tool.getOptionById(optionId);
-			option.setValue(option.getDefaultValue() == null ? optionValue : option.getDefaultValue().toString().trim() + " " + optionValue);
+			String value = option.getDefaultValue() == null ? optionValue : option.getDefaultValue().toString().trim() + " " + optionValue;
+			ManagedBuildManager.setOption(config, tool, option, value);
 		}
 	}
 
@@ -183,7 +187,6 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		copyFiles(srcFolder, cuteVersion, cuteFolder);
 		
 		setIncludePaths(cuteFolder.getFullPath(), project);
-		ManagedBuildManager.saveBuildInfo(project, true);
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				getTestMainFile(project), true);
 	}
