@@ -137,7 +137,7 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 
 
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private WhitespaceCharacterPainter getWhitespaceCharacterPainter(
 			Object viewer) {
 		try {

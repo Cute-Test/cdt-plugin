@@ -118,7 +118,7 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 				
 			}
 
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({ "rawtypes" })
 			public Object[] getElements(Object inputElement) {
 				if (inputElement instanceof Vector) {
 					Vector vec = (Vector) inputElement;

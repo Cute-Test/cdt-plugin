@@ -18,6 +18,10 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 
 
+/**
+ * @author Emanuel Graf IFS
+ *
+ */
 public class GcovNature implements IProjectNature {
 
 	/**

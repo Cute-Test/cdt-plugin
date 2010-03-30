@@ -28,7 +28,7 @@ public class SuiteTemplateCopyUtil {
 		copyFile(targetFile,monitor,templateFilename,suitename);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	public static void copyFile (IFile targetFile, IProgressMonitor monitor,String templateFilename,String suitename)throws CoreException{
 		Enumeration en = Activator.getDefault().getBundle().findEntries("suite", templateFilename, false); //$NON-NLS-1$
 		if(en.hasMoreElements()){

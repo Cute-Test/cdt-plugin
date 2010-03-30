@@ -73,7 +73,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	}
 
 	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=229085
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	//@see org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/projectmodel/tests/ProjectModelTests.testReferences()
 	protected void createCDTProjectReference(IProject project) throws CoreException {
 		CoreModel coreModel = CoreModel.getDefault();
@@ -82,16 +82,16 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 
-		Map map=null;
+		Map prjRefs=null;
 		for(int x=0;x<dess.length;x++){
 			if(x==0){
-				map= new HashMap();
+				prjRefs= new HashMap();
 				for(IProject p:projects){
 					String prjname=p.getName();
-					map.put(prjname, "");		 //$NON-NLS-1$
+					prjRefs.put(prjname, "");		 //$NON-NLS-1$
 				}
 			}
-			dess[x].setReferenceInfo(map);
+			dess[x].setReferenceInfo(prjRefs);
 		}
 		coreModel.setProjectDescription(project, des4);
 		for(IProject p:projects){

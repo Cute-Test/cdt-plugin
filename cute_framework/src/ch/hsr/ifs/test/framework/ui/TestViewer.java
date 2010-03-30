@@ -36,8 +36,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.model.ISessionListener;
 import ch.hsr.ifs.test.framework.model.ITestComposite;
 import ch.hsr.ifs.test.framework.model.ITestCompositeListener;
@@ -107,8 +107,6 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 
 					
 		}
-		
-		TestCase test;
 
 		public TestResultViewer(Composite parent, int style) {
 			super(parent, style);
@@ -118,7 +116,6 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		public void showTestDetail(TestElement test) {
 			if (test instanceof TestCase) {
 				TestCase tCase = (TestCase) test;
-				this.test = tCase;
 				testResultViewer.setText(tCase.getMessage());
 				redraw();
 			}else if (test instanceof TestSuite) {

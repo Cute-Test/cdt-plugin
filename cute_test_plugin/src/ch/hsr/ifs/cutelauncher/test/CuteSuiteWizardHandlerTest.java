@@ -1,9 +1,5 @@
 package ch.hsr.ifs.cutelauncher.test;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URL;
 import java.util.SortedSet;
 
 import junit.framework.Test;
@@ -16,14 +12,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.osgi.framework.Bundle;
 
-import ch.hsr.ifs.cute.ui.SuiteTemplateCopyUtil;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
@@ -85,27 +77,6 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		return null;
 	}
 
-	public final void testImplantActualsuitename() {
-		try{
-			Bundle bundle = TestPlugin.getDefault().getBundle();
-			Path path = new Path("testDefs/SuiteWizTest.cpp");
-			URL url=FileLocator.toFileURL(FileLocator.find(bundle, path, null));
-			
-			ByteArrayInputStream bais=SuiteTemplateCopyUtil.implantActualsuitename(url,"theSuiteName");
-			
-			Bundle bundle1 = TestPlugin.getDefault().getBundle();
-			Path path1 = new Path("testDefs/SuiteWizTestResult.cpp");
-			URL url1=FileLocator.toFileURL(FileLocator.find(bundle1, path1, null));
-			BufferedInputStream bis=new BufferedInputStream(url1.openStream());
-			
-			if(bais.available()!=bis.available())fail("File size mismatch."+bais.available()+" "+bis.available());
-			while(bis.available()>0){
-				//System.out.println((char)bais.read()+" "+(char)bis.read());
-				//System.out.println(bais.read()+" "+bis.read());
-				assertEquals("different char detected",bais.read(), bis.read());
-			}
-		}catch(IOException e){fail(e.getMessage());}
-	}
 	public final void testNewCuteSuiteWizardCustomPageForValidIdentifier(){
 		NewCuteSuiteWizardCustomPage ncsw=new NewCuteSuiteWizardCustomPage(null,null);
 

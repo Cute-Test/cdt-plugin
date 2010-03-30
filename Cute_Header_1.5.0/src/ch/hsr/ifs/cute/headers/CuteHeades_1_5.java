@@ -47,7 +47,7 @@ public class CuteHeades_1_5 implements ICuteHeaders {
 		return getFileListe("headers", "*.*");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private List<URL> getFileListe(String path, String filePattern) {
 		Enumeration en = Activator.getDefault().getBundle().findEntries(path, filePattern, false);
 		List<URL>list = new ArrayList<URL>();
