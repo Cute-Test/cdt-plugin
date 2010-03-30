@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -69,6 +70,21 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	public void createProject(IProject project, boolean defaults,
 			boolean onFinish) throws CoreException {
 		super.createProject(project, defaults, onFinish);
+		createLibSetings(project);
+	}
+	
+	
+
+	@Override
+	public void createProject(IProject proj, boolean defaults, IProgressMonitor monitor) throws CoreException {
+		super.createProject(proj, defaults, monitor);
+		createLibSetings(proj);
+	}
+
+	@Override
+	public void createProject(IProject project, boolean defaults, boolean onFinish, IProgressMonitor monitor)
+			throws CoreException {
+		super.createProject(project, defaults, onFinish, monitor);
 		createLibSetings(project);
 	}
 
@@ -150,7 +166,12 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 				//IPath location1=location.removeFirstSegments(1);
 				setLibraryPaths(libProject.getFolder(location).getFullPath(), project);	
 			}
-			setLibName(config.getArtifactName(), project);
+			String artifactName = config.getArtifactName();
+			if(artifactName.equalsIgnoreCase("${ProjName}")) {
+				setLibName(libProject.getName(), project);
+			}else{
+				setLibName(artifactName, project);
+			}
 		}
 	}
 
