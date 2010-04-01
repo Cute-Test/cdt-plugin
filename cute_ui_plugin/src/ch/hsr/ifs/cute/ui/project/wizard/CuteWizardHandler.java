@@ -79,7 +79,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 
 	public CuteWizardHandler(Composite p, IWizard w) {
 		super(new CuteBuildPropertyValue(), p, w);
-		cuteVersionWizardPage = new CuteVersionWizardPage( getConfigPage(), getStartingPage());
+		cuteVersionWizardPage = new CuteVersionWizardPage( getConfigPage(), getStartingPage(), this);
 		cuteVersionWizardPage.setWizard(w);
 		
 		MBSCustomPageManager.init();

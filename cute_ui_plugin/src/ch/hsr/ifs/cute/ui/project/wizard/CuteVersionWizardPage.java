@@ -11,6 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
+import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.ui.wizards.CDTConfigWizardPage;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -39,14 +40,16 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	private final IWizardPage startingWizardPage;
 	private CuteVersionComposite cuteVersionComp;
 	private ImageDescriptor imageDesc;
+	private CuteWizardHandler handler;
 	protected boolean enableGcov = false;
 
 	public CuteVersionWizardPage(CDTConfigWizardPage configWizardPage,
-			IWizardPage staringWizardPage) {
+			IWizardPage staringWizardPage, CuteWizardHandler cuteWizardHandler) {
 		pageID = "ch.hsr.ifs.cutelauncher.ui.CuteVersionPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
 		this.startingWizardPage = staringWizardPage;
 		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
+		handler = cuteWizardHandler;
 		
 	}
 
@@ -67,16 +70,20 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 		cuteVersionComp = new CuteVersionComposite(composite);
 		
 		//TODO: CHeck for toolchain
-		final Button check = new Button(composite, SWT.CHECK);
-		check.setText("Enable gcov");
-		check.addSelectionListener(new SelectionAdapter() {
+		IToolChain[] tcs = handler.getSelectedToolChains();
+		if(tcs[0].getBaseId().contains("gnu")){
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				enableGcov = check.getSelection();
-			}
-			
-		});
+			final Button check = new Button(composite, SWT.CHECK);
+			check.setText("Enable gcov");
+			check.addSelectionListener(new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					enableGcov = check.getSelection();
+				}
+
+			});
+		}
 	}
 
 	public void dispose() {
