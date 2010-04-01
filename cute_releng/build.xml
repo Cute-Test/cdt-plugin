@@ -100,13 +100,13 @@
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
 
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}" />
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_0-${branchVersion}-${buildId}.zip" dest="${testDirectory}" />
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_5-${branchVersion}-${buildId}.zip" dest="${testDirectory}"/>
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${testDirectory}"/>
-		<unzip src="${testDirectory}/eclipse/plugins/${cuteTest}.jar"
-			dest="${testDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
-		<ant antfile="test.xml" dir="${testDirectory}/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins" />
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_0-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins" />
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_5-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
+		<unzip src="${testDirectory}/eclipse/dropins/eclipse/plugins/${cuteTest}.jar"
+			dest="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
+		<ant antfile="test.xml" dir="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
 			<property name="eclipse-home" value="${testDirectory}/eclipse"/>
 			<property name="library-file" value="${testDirectory}/eclipse/dropins/test/plugins/org.eclipse.test_3.3.0/library.xml"/>
 			<property name="os" value="${baseos}"/>
