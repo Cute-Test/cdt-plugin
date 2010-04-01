@@ -5,17 +5,19 @@ import junit.framework.TestSuite;
 import ch.hsr.ifs.cutelauncher.test.modelBuilderTests.ModelBuilderSuite;
 import ch.hsr.ifs.cutelauncher.test.patternListenerTests.PatternListenerSuite;
 
-public class AllCoreTests {
+public class AllCoreTests extends TestSuite{
+	
+	
+
+	public AllCoreTests() {
+		super("Cute Plugin All Core Tests");
+		addTest(PatternListenerSuite.suite());
+		addTest(ModelBuilderSuite.suite());
+//		addTest(SourceLookupPathTest.suite());
+	}
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite("Cute Plugin All Core Tests");
-		//$JUnit-BEGIN$
-		suite.addTest(PatternListenerSuite.suite());
-		suite.addTest(ModelBuilderSuite.suite());
-//		suite.addTest(SourceLookupPathTest.suite());
-
-		//$JUnit-END$
-		return suite;
+		return new AllCoreTests();
 	}
 
 }
