@@ -17,7 +17,7 @@
 	<target name="init">
 		<tstamp/>
 		<property name="branchVersion" value="3.0.0"/>
-		<property name="testVersion" value="3.0.0"/>
+		<property name="testVersion" value="2.0.0"/>
 		<property name="timestamp" value="${DSTAMP}${TSTAMP}" />
 		<property name="forceContextQualifier" value="${timestamp}"/>
 		<property name="buildDirectory" value="${basedir}/results" />
