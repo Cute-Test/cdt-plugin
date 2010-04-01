@@ -16,8 +16,8 @@
 
 	<target name="init">
 		<tstamp/>
-		<property name="branchVersion" value="2.0.0"/>
-		<property name="testVersion" value="2.0.0"/>
+		<property name="branchVersion" value="3.0.0"/>
+		<property name="testVersion" value="3.0.0"/>
 		<property name="timestamp" value="${DSTAMP}${TSTAMP}" />
 		<property name="forceContextQualifier" value="${timestamp}"/>
 		<property name="buildDirectory" value="${basedir}/results" />
@@ -25,7 +25,7 @@
 		<property name="baseLocation" value="${buildDirectory}/eclipse"/>
 		<property name="eclipse.home" value="${buildDirectory}/eclipse"/>
 		<property name="pde.build.scripts" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.5.0.v20090527-1800/scripts"/>
-		<property name="eclipseDist" value="eclipse-cpp-galileo-SR1-linux-gtk.tar.gz"/>
+		<property name="eclipseDist" value="eclipse-SDK-3.6M6-linux-gtk-x86_64.tar.gz"/>
 		<property name="collectingFolder" value="eclipse"/>
 		<property name="archivePrefix" value="eclipse"/>
 		<property name="buildType" value="I" />
