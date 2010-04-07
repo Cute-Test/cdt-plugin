@@ -137,11 +137,14 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
 		for (IConfiguration config : configs) {
 			if(config.getParent().getId().equals("cdt.managedbuild.config.gnu.exe.debug")) {
-				setOptionInTool(config, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_FLAGS);
-				setOptionInTool(config, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_FLAGS);
-				setOptionInTool(config, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
+				IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, "gcov");
+				newConfig.setName("Debug Gcov");
+				setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_FLAGS);
+				setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_FLAGS);
+				setOptionInTool(newConfig, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
+				ManagedBuildManager.setDefaultConfiguration(project, newConfig);
+				ManagedBuildManager.setSelectedConfiguration(project, newConfig);
 			}
-			
 		}
 		} catch (BuildException e) {
 			throw new CoreException(new Status(IStatus.ERROR,UiPlugin.PLUGIN_ID,e.getMessage(),e));
