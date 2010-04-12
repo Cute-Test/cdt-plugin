@@ -89,34 +89,27 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	@Override
 	public boolean canFinish() {
 		return cuteVersionWizardPage != null ? cuteVersionWizardPage.isCustomPageComplete() : false;
+	}	
+
+	@Override
+	public void postProcess(IProject newProject, boolean created) {
+		if (created) {
+			doTemplatesPostProcess(newProject);
+			doCustom(newProject);
+		}
 	}
 
 	@Override
-	public void createProject(IProject project, boolean defaults,
-			boolean onFinish) throws CoreException {
-		super.createProject(project, defaults, onFinish);
-		createCuteProject(project);
+	protected void doCustom(IProject newProject) {
+		// TODO Auto-generated method stub
+		super.doCustom(newProject);
+		try {
+			createCuteProject(newProject);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
-	@Override
-	public void createProject(IProject project, boolean defaults)
-			throws CoreException {
-		super.createProject(project, defaults);
-		createCuteProject(project);
-	}
-	
-	
-
-	@Override
-	public void createProject(IProject proj, boolean defaults, IProgressMonitor monitor) throws CoreException {
-		super.createProject(proj, defaults, monitor);
-		createCuteProject(proj);
-	}
-	
-	public void createProject(IProject project, boolean defaults, boolean onFinish, IProgressMonitor monitor) throws CoreException{
-		super.createProject(project, defaults, onFinish, monitor);
-		createCuteProject(project);
-	}
 
 	private void createCuteProject(IProject project) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
@@ -132,6 +125,11 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	
 	private void configGcov(IProject project) throws CoreException {
 		setGcovNature(project);
+		addGcovConfig(project);
+		
+	}
+
+	public IConfiguration addGcovConfig(IProject project) throws CoreException {
 		try {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
@@ -144,12 +142,13 @@ public class CuteWizardHandler extends MBSWizardHandler {
 				setOptionInTool(newConfig, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
 				ManagedBuildManager.setDefaultConfiguration(project, newConfig);
 				ManagedBuildManager.setSelectedConfiguration(project, newConfig);
+				return newConfig;
 			}
 		}
 		} catch (BuildException e) {
 			throw new CoreException(new Status(IStatus.ERROR,UiPlugin.PLUGIN_ID,e.getMessage(),e));
 		}
-		
+		return null;
 	}
 
 	private void setOptionInTool(IConfiguration config, String toolId, String optionId, String optionValue)
