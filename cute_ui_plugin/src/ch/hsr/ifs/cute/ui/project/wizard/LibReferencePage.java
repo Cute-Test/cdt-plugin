@@ -16,6 +16,7 @@ import java.util.Vector;
 import org.eclipse.cdt.managedbuilder.buildproperties.IBuildProperty;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.CDTConfigWizardPage;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
@@ -32,9 +33,12 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
@@ -56,11 +60,14 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 	private final IWizardContainer wizardDialog;
 	private CuteVersionComposite cuteVersionComp;
 	private ImageDescriptor imageDesc;
+	private CuteWizardHandler handler;
+	protected boolean enableGcov = false;
 	
-	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc) {
+	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc, CuteWizardHandler cuteWizardHandler) {
 		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
 		this.startingWizardPage = staringWizardPage;
+		this.handler = cuteWizardHandler;
 		wizardDialog=wc;
 		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
 	}
@@ -87,6 +94,20 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		cuteVersionComp = new CuteVersionComposite(composite);
+		IToolChain[] tcs = handler.getSelectedToolChains();
+		if(tcs[0].getBaseId().contains("gnu")){
+
+			final Button check = new Button(composite, SWT.CHECK);
+			check.setText("Enable gcov");
+			check.addSelectionListener(new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					setEnableGcov(check.getSelection());
+				}
+
+			});
+		}
 
 		listViewer = CheckboxTableViewer.newCheckList(composite, SWT.TOP
                 | SWT.BORDER);
@@ -253,6 +274,14 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 
 	public void setImageDescriptor(ImageDescriptor image) {
 		// do nothing
+	}
+
+	public void setEnableGcov(boolean enableGcov) {
+		this.enableGcov = enableGcov;
+	}
+
+	public boolean isEnableGcov() {
+		return enableGcov;
 	}
 
 }

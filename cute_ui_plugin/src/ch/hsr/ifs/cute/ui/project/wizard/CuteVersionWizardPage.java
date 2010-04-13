@@ -69,7 +69,6 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 
 		cuteVersionComp = new CuteVersionComposite(composite);
 		
-		//TODO: CHeck for toolchain
 		IToolChain[] tcs = handler.getSelectedToolChains();
 		if(tcs[0].getBaseId().contains("gnu")){
 

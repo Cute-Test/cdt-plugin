@@ -101,22 +101,25 @@ public class CuteWizardHandler extends MBSWizardHandler {
 
 	@Override
 	protected void doCustom(IProject newProject) {
-		// TODO Auto-generated method stub
 		super.doCustom(newProject);
+		createCuteProjectSettings(newProject);
+	}
+
+	protected void createCuteProjectSettings(IProject newProject) {
 		try {
-			createCuteProject(newProject);
+			createCuteProject(newProject, cuteVersionWizardPage.enableGcov);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 	}
 
 
-	private void createCuteProject(IProject project) throws CoreException {
+	protected void createCuteProject(IProject project, boolean enableGcov) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
 		QualifiedName key = new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME);
 		project.setPersistentProperty(key, getCuteVersion().getVersionString());
 		createCuteProjectFolders(project);
-		if(cuteVersionWizardPage.enableGcov) {
+		if(enableGcov) {
 			configGcov(project);
 		}
 		ManagedBuildManager.saveBuildInfo(project, true);
@@ -134,7 +137,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
 		for (IConfiguration config : configs) {
-			if(config.getParent().getId().equals("cdt.managedbuild.config.gnu.exe.debug")) {
+			if(config.getParent().getId().contains("debug")) {
 				IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, "gcov");
 				newConfig.setName("Debug Gcov");
 				setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_FLAGS);

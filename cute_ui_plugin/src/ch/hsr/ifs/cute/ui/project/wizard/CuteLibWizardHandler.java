@@ -31,7 +31,6 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -52,7 +51,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	public CuteLibWizardHandler(Composite p, IWizard w) {
 		
 		super( p, w);
-		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(),w.getContainer());
+		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(),w.getContainer(), this);
 		libRefPage.setPreviousPage(getStartingPage());
 		libRefPage.setWizard(getWizard());
 		MBSCustomPageManager.init();
@@ -60,32 +59,13 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	}
 
 	@Override
-	public void createProject(IProject project, boolean defaults)
-			throws CoreException {
-		super.createProject(project, defaults);
-		createLibSetings(project);
-	}
-	
-	@Override
-	public void createProject(IProject project, boolean defaults,
-			boolean onFinish) throws CoreException {
-		super.createProject(project, defaults, onFinish);
-		createLibSetings(project);
-	}
-	
-	
-
-	@Override
-	public void createProject(IProject proj, boolean defaults, IProgressMonitor monitor) throws CoreException {
-		super.createProject(proj, defaults, monitor);
-		createLibSetings(proj);
-	}
-
-	@Override
-	public void createProject(IProject project, boolean defaults, boolean onFinish, IProgressMonitor monitor)
-			throws CoreException {
-		super.createProject(project, defaults, onFinish, monitor);
-		createLibSetings(project);
+	protected void createCuteProjectSettings(IProject newProject) {
+		try {
+			createCuteProject(newProject, libRefPage.enableGcov);
+			createLibSetings(newProject, libRefPage.enableGcov);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=229085
@@ -116,14 +96,15 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		}
 	}
 	
-	private void createLibSetings(IProject project) throws CoreException {
+	private void createLibSetings(IProject project, boolean enableGcov) throws CoreException {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
 			setToolChainIncludePath(project, libProject);
+			if(enableGcov) {
+				addGcovConfig(libProject);
+			}
 		}
-		
 		setProjectReference(project, projects);
-		
 		ManagedBuildManager.saveBuildInfo(project, true);
 	}
 
