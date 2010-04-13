@@ -78,7 +78,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	}
 
 	public final void testNewCuteSuiteWizardCustomPageForValidIdentifier(){
-		NewCuteSuiteWizardCustomPage ncsw=new NewCuteSuiteWizardCustomPage(null,null);
+		NewCuteSuiteWizardCustomPage ncsw=new NewCuteSuiteWizardCustomPage(null,null, null);
 
 		Composite parent=new Composite(new org.eclipse.swt.widgets.Shell(),SWT.NO_FOCUS);
 		ncsw.createControl(parent,false);

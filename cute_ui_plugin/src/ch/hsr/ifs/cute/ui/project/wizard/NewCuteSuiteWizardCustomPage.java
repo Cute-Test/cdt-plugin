@@ -1,5 +1,6 @@
 package ch.hsr.ifs.cute.ui.project.wizard;
 
+import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.ui.wizards.CDTConfigWizardPage;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -8,9 +9,12 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -23,11 +27,14 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	private final IWizardPage startingWizardPage;
 	private CuteVersionComposite cuteVersionComp;
 	private ImageDescriptor imageDesc;
+	protected boolean enableGcov;
+	private CuteSuiteWizardHandler handler;
 	
-	public NewCuteSuiteWizardCustomPage(CDTConfigWizardPage configWizardPage, IWizardPage startingWizardPage){
+	public NewCuteSuiteWizardCustomPage(CDTConfigWizardPage configWizardPage, IWizardPage startingWizardPage, CuteSuiteWizardHandler cuteSuiteWizardHandler){
 		pageID="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
 		this.startingWizardPage = startingWizardPage;
+		this.handler = cuteSuiteWizardHandler;
 		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
 	}
 
@@ -101,6 +108,21 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		tempComposite.setLayoutData(gd);	
 		cuteVersionComp = new CuteVersionComposite(tempComposite);
 		cuteVersionComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		IToolChain[] tcs = handler.getSelectedToolChains();
+		if(tcs[0].getBaseId().contains("gnu")){
+
+			final Button check = new Button(tempComposite, SWT.CHECK);
+			check.setText("Enable gcov");
+			check.addSelectionListener(new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					enableGcov = check.getSelection();
+				}
+
+			});
+		}
 
 		
 		gd = new GridData();

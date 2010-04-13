@@ -11,6 +11,7 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
@@ -22,6 +23,7 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	private final NewCuteSuiteWizardCustomPage suitewizPage;
+	String suitename;
 	
 	//for unit testing
 	public CuteSuiteWizardHandler(String suitename){
@@ -30,7 +32,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 	public CuteSuiteWizardHandler(Composite p, IWizard w) {
 		super( p, w);
-		suitewizPage = new NewCuteSuiteWizardCustomPage(getConfigPage(), getStartingPage());
+		suitewizPage = new NewCuteSuiteWizardCustomPage(getConfigPage(), getStartingPage(), this);
 		suitewizPage.setPreviousPage(getStartingPage());
 		suitewizPage.setWizard(getWizard());
 		MBSCustomPageManager.init();
@@ -40,9 +42,15 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	public IWizardPage getSpecificPage() {
 		return suitewizPage;
 	}
-
-	String suitename;
-
+	
+	@Override
+	protected void createCuteProjectSettings(IProject newProject) {
+		try {
+			createCuteProject(newProject, suitewizPage.enableGcov);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
@@ -61,6 +69,5 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	public boolean canFinish() {
 		return suitewizPage.isCustomPageComplete();
 	}
-
 	
 }
