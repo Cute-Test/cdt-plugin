@@ -81,6 +81,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 	
 	
 	private void runLocalApplication( ILaunchConfiguration config, ILaunch launch, IProgressMonitor monitor ) throws CoreException {
+		
 		monitor.beginTask( LaunchMessages.getString( "LocalCDILaunchDelegate.0" ), 10 ); //$NON-NLS-1$
 		if ( monitor.isCanceled() ) {
 			return;
@@ -88,6 +89,9 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		monitor.worked( 1 );
 		try {
 			IPath exePath=verifyProgramPath( config );
+			IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
+			IFile exeFile = wsRoot.getFile(exePath.makeRelativeTo(wsRoot.getRawLocation()));
+			cleanGcdaFilesInRefedProjects(exeFile.getProject());
 			File wd = getWorkingDirectory( config );
 			if ( wd == null ) {
 				wd = new File( System.getProperty( "user.home", "." ) ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -123,14 +127,39 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				listener.addHandler(modelHandler);
 				textCons.addPatternMatchListener(listener);
 			}
-			IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
-			IFile exeFile = wsRoot.getFile(exePath.makeRelativeTo(wsRoot.getRawLocation()));
 			updateGcov(exeFile.getProject());
+			for(IProject refProj :exeFile.getProject().getReferencedProjects()) {
+				updateGcov(refProj);
+			}
 			
 		}
 		finally {
 			monitor.done();
 		}		
+	}
+
+	private void cleanGcdaFilesInRefedProjects(IProject project) throws CoreException {
+		for(IProject refProj : project.getReferencedProjects()) {
+			cleanGcdaFilesinProject(refProj);
+		}
+		
+	}
+
+	private void cleanGcdaFilesinProject(IProject refProj) throws CoreException {
+		refProj.accept(new IResourceVisitor() {
+			
+			public boolean visit(IResource resource) throws CoreException {
+				if (resource instanceof IFile) {
+					IFile file = (IFile) resource;
+					String fileExtension = file.getFileExtension();
+					if(fileExtension != null && fileExtension.equals("gcda")) {
+						file.delete(true, new NullProgressMonitor());
+					}
+				}
+				return true;
+			}
+		});
+		
 	}
 
 	private void updateGcov(IProject iProject) {
