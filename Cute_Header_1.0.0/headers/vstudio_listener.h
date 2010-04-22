@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2006 Peter Sommerlad
+ * Copyright 2006-2009 Peter Sommerlad
  *
  *********************************************************************************/
 
 #ifndef VSTUDIO_LISTENER_H
 #define VSTUDIO_LISTENER_H
 // Windows listener for debug mode: allows selection of assert failing source line
+// TODO: vstudio_listener is broken for VS later than 2003, because OutputDebugString no longer works as before
 #ifndef __GNUG__
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -29,7 +30,6 @@
 namespace cute{
 	class vstudio_listener
 	{
-		std::ostringstream out;
 	public:
 		void begin(suite const &t,char const *info){
 		}
@@ -41,11 +41,13 @@ namespace cute{
 			std::cerr <<  t.name() <<" " << msg<< std::endl;
 		}
 		void failure(test const &t,test_failure const &e){
+			std::ostringstream out;
 			out << e.filename << "(" << e.lineno << ") : testcase failed: " <<e.reason << " in " << t.name()<< std::endl;
 			OutputDebugString(out.str().c_str());
 			std::cerr << out.str() << std::flush;
 		}
 		void error(test const &t, char const *what){
+			std::ostringstream out;
 			out << what << " in " << t.name() << std::endl;
 			OutputDebugString(out.str().c_str());
 			std::cerr << out.str() << std::flush;
@@ -53,7 +55,7 @@ namespace cute{
 	};
 }
 #else
-// cheat for gnu use ostream_listener instead
+// cheat for gnu use ostream_listener instead, so the type is defined
 #include "ostream_listener.h"
 namespace cute{
 	typedef cute::ostream_listener vstudio_listener;
