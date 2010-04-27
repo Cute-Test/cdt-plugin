@@ -30,6 +30,15 @@
    <feature url="features/ch.hsr.ifs.cute.headers.1_6_1.0.0.200911241025.jar" id="ch.hsr.ifs.cute.headers.1_6" version="1.0.0.200911241025">
       <category name="Cute Headers"/>
    </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_0_1.1.2.201004270944.jar" id="ch.hsr.ifs.cute.headers.1_0" version="1.1.2.201004270944">
+      <category name="Cute Headers"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_5_1.1.2.201004270944.jar" id="ch.hsr.ifs.cute.headers.1_5" version="1.1.2.201004270944">
+      <category name="Cute Headers"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_6_1.1.2.201004270944.jar" id="ch.hsr.ifs.cute.headers.1_6" version="1.1.2.201004270944">
+      <category name="Cute Headers"/>
+   </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
    <category-def name="Cute Headers" label="Cute Headers"/>
 </site>
