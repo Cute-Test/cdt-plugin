@@ -68,7 +68,7 @@ namespace cute {
 		template <typename T, bool select>
 		struct select_built_in_shift_if {
 			std::ostream &os;
-			select_built_in_shift_if(std::ostream &os):os(os){}
+			select_built_in_shift_if(std::ostream &ros):os(ros){}
 			std::ostream& operator()(T const &t){
 				return os << t ; // default uses operator<<(std::ostream&,T const&)
 			}
@@ -77,7 +77,7 @@ namespace cute {
 		template <typename T>
 		struct select_built_in_shift_if<T,false> {
 			std::ostream &os;
-			select_built_in_shift_if(std::ostream &os):os(os){}
+			select_built_in_shift_if(std::ostream &ros):os(ros){}
 			std::ostream & operator()(T const &t){
 				return os << "operator << not defined for type " <<cute::demangle(typeid(T).name());
 			}
