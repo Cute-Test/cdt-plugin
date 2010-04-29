@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="CUTE Help Table of Contents">
+	<topic label="Getting Started"  href="html/gettingStarted.html"> 
+		<topic label="Organize your code" href="html/organizeCode.html"/>
+  <topic href="html/projectTypes.html" label="Project Types">
+  </topic> 
+	</topic>
+</toc>
