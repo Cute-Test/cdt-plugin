@@ -4,3 +4,6 @@ Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cute.help; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: %providerName
+Require-Bundle: org.eclipse.ui.intro,
+ org.eclipse.ui.intro.universal,
+ org.eclipse.ui
