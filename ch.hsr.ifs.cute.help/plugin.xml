@@ -16,7 +16,7 @@
          point="org.eclipse.ui.intro.configExtension">
       <configExtension
             configId="org.eclipse.ui.intro.universalConfig"
-            content="intro/tutorial.xml">
+            content="intro/cute_tutorial.xml">
       </configExtension>
    </extension>
 

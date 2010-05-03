@@ -1,0 +1,2 @@
+a#cute img { background-image : url(graphics/cute_intro.png); }
+a#cute:hover img { background-image : url(graphics/cute_intro_hov.png); }
