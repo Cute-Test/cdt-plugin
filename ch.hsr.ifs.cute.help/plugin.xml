@@ -18,6 +18,10 @@
             configId="org.eclipse.ui.intro.universalConfig"
             content="intro/cute_tutorial.xml">
       </configExtension>
+      <configExtension
+            configId="org.eclipse.ui.intro.universalConfig"
+            content="intro/cute_overview.xml">
+      </configExtension>
    </extension>
 
 </plugin>

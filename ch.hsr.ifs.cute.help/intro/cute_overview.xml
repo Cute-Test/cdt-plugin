@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<introContent>
+  	<extensionContent id="ch.hsr.ifs.cute.help" style="css/overview.css" 
+  	                  alt-style="css/overview.properties"
+  	                  name="Cute C++ Unit Testing Easier" path="overview/@">
+  	    <group id="content-group" style-id="content-group">
+    	<link style-id="content-link" label="Cute C++ Unit Testing Easier" 
+       		      url="http://org.eclipse.ui.intro/showHelpTopic?id=/ch.hsr.ifs.cute.help/html/overview.html"  
+       		      id="cute">
+          		<text>Learn more about Cute.</text></link>
+       	</group>
+  	</extensionContent>
+ 
+
+</introContent>

@@ -2,9 +2,13 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="CUTE Help Table of Contents">
+   <topic href="html/overview.html" label="Overview">
+   </topic>
 	<topic label="Getting Started"  href="html/gettingStarted.html"> 
 		<topic label="Organize your code" href="html/organizeCode.html"/>
   <topic href="html/projectTypes.html" label="Project Types">
   </topic> 
 	</topic>
+ <topic href="html/whatsNew.html" label="What&apos;s new in Cute 3.0">
+ </topic>
 </toc>
