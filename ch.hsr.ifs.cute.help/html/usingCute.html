@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="stylesheet" type="text/css" href="../help.css" />
+<title>Using Cute</title>
+</head>
+
+<body>
+<h1>Using Cute</h1>
+<p>This article describes my attempt to leverage more modern C++
+libraries and features to make the writing of unit tests easier in C++.
+For example, one disadvantage of CPPUnit is that you have to write a
+subclass to have your own test case. This is a lot of programmer
+overhead, especially when you want to start small.</p>
+
+<p>I was inspired by Kevlin Henney's Java testing framework called
+JUTLAND (Java Unit Testing: Light, Adaptable 'n' Discreet), and the
+corresponding presentation he gave at JAOO 2005. In addition, I wondered
+if I could come up with a design that is similarly orthogonal, easily
+extendable and also much simpler to use than current C++ unit testing
+approaches.</p>
+
+<p>You will learn how to use CUTE in your projects and also some of
+the more modern C++ coding techniques employed for its implementation. I
+also ask you to give me feedback to further simplify and improve CUTE.
+Even during the writing of this article I recognized simplification
+potential and refactored CUTE accordingly. Porting and testing onto
+other compilers not available to me is also an appreciated contribution.
+</p>
+
+<h2>My Problems with CPPUnit</h2>
+<p>Inheritance is a very strong coupling between classes. Requiring
+a test-case class to inherit from a CPPUnit-framework class couples both
+closely together. The CPPUnit tutorial [ CPPUnitCookbook ] lists at
+least 6 classes you have to deal with to get things up and running. You
+even have to decide if you want to inherit from TestCase or TestFixture
+for your simple test case you intend to write. I do not want to go into
+more details, but I show how I would like to write tests.</p>
+<pre class='code'> 
+#include "cute.h"
+int lifeTheUniverseAndEverything = 42;
+ 
+void mysimpletest(){
+    ASSERT(lifeTheUniverseAndEverything == 6*7);
+}
+</pre>
+<p>That's it. A simple test is a simple void function. Done
+(almost).</p>
+<p>In addition CPPUnit stems from a time of non-standard C++
+compilers, where more modern features of the language just have not been
+available broadly. This limits its design from a modern perspective.</p>
+<p>Today, all relevant compilers (with the exception of the still in
+use MSVC6) are able to compile most of standard C++ and the proposed
+std::tr1 libraries from Boost.</p>
+
+<h2>Running a single Test</h2>
+
+<p>Since we lack some of the reflection mechanisms available in
+Java, you have to write your own main function for testing with CUTE.
+For simple cases this is straightforward. As with CPPUnit you have to
+instantiate a runner object and pass your test for running it. The
+simplest possible way, producing some output is:</p> 
+
+<pre class='code'> 
+#include &lt;iostream&gt;
+#include "cute_runner.h"
+int main(){
+	using namespace std;
+ 
+	if (cute::runner&lt;&gt;()(mysimpletest)){
+		cout &lt;&lt; "OK" &lt;&lt; endl;
+	} else {
+		cout &lt;&lt; "failed" &lt;&lt; endl;
+	}	
+}
+</pre>
+<p>
+OK, not very impressing yet, but simple. Reporting test outcome is so
+common, that CUTE provides a means to configure the runner with a
+so-called "listener". You already might have wondered what these
+template-brackets with cute::runner where about. So we can change that
+to the following: 
+</p>
+<pre class='code'> 
+int main(){
+	using namespace std;
+ 
+	cute::runner&lt;cute::ostream_listener&gt;()(mysimpletest);
+}
+</pre>
+<pre> "void () () OK"</pre>
+<p>is what we get from that one.</p>
+<p>For a better integration into Visual Studio and Eclipse CDT CUTE
+now provides a <code>cute::ide_listener</code> that allows to navigate
+from failure messages to their source, and even provide a red/green bar
+UI withing Eclipse CDT.</p>
+<p>We know that a void function without any arguments succeeded to
+run. This shows C++ introspection limitation, which only provides type
+information, not function names. But the preprocessor can help us. So
+making our test cuter by applying the macro CUTE(), helps us: 
+</p>
+<pre class='code'> 
+	cute::runner&lt;cute::ostream_listener&gt;()(CUTE(mysimpletest));
+</pre> 
+<p>This achieves the output "mysimpletest OK". Not too interesting.
+However, if we make our test case fail by setting deep thought's answer
+to 41 instead of 42, we get</p>
+<pre> ../simpletest.cpp:6: testcase failed: lifeTheUniverseAndEverything == 6*7 in mysimpletest
+</pre>
+<p>That is everything we need to track down the failures origin and
+even some context helping with a first guess. You already guessed that
+the preprocessor macro ASSERT() from cute.h contains the magic for
+collecting this interesting information.</p>
+<p>Note that all classes presented in the following are in namespace
+cute, that I omit from the definitions shown for brevity.</p>
+<p></p>
+
+</body>
+</html>

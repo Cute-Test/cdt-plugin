@@ -9,6 +9,10 @@
   <topic href="html/projectTypes.html" label="Project Types">
   </topic> 
 	</topic>
+ <topic href="html/usingCute.html" label="Using Cute">
+    <topic href="html/howThingsWorl.html" label="How things work">
+    </topic>
+ </topic>
  <topic href="html/whatsNew.html" label="What&apos;s new in Cute 3.0">
  </topic>
 </toc>
