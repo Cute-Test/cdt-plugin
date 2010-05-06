@@ -12,7 +12,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
-            icon="icons/obj16/cute_app.gif"
+            icon="icons/obj16/cute_app.png"
             configTypeID="ch.hsr.ifs.cutelauncher.launchConfig"
             id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
       </launchConfigurationTypeImage>
@@ -28,7 +28,7 @@
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             label="%shortcut.label.0"
-            icon="icons/obj16/cute_app.gif"
+            icon="icons/obj16/cute_app.png"
             modes="run"
             class="ch.hsr.ifs.cute.core.launch.CuteLaunchShortcut"
             id="ch.hsr.ifs.cutelauncher.cuteShortcut">

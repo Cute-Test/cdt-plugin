@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute"
       label="%featureName"
-      version="2.3.0.qualifier"
+      version="3.0.0.qualifier"
       provider-name="%providerName"
       image="eclipse_update_120.jpg">
 
@@ -81,5 +81,11 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

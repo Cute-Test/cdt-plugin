@@ -70,10 +70,10 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 		cuteVersionComp = new CuteVersionComposite(composite);
 		
 		IToolChain[] tcs = handler.getSelectedToolChains();
-		if(tcs[0].getBaseId().contains("gnu")){
+		if(tcs[0].getBaseId().contains("gnu")){ //$NON-NLS-1$
 
 			final Button check = new Button(composite, SWT.CHECK);
-			check.setText("Enable gcov");
+			check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov")); //$NON-NLS-1$
 			check.addSelectionListener(new SelectionAdapter() {
 
 				@Override

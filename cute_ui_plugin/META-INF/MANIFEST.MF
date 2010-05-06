@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cute.ui;singleton:=true
-Bundle-Version: 2.3.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.ui.UiPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui;bundle-version="[3.3.0,4.0.0)",
@@ -15,10 +15,10 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.3.0,4.0.0)",
  org.eclipse.debug.ui;bundle-version="[3.4.0,4.0.0)",
  org.eclipse.cdt.ui;bundle-version="[5.1.0,6.0.0)",
  org.eclipse.jface.text;bundle-version="[3.4.0,4.0.0)",
+ ch.hsr.ifs.cute.gcov;bundle-version="[1.0.0,2.0.0)",
  ch.hsr.ifs.cute.core;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.cdt.managedbuilder.ui;bundle-version="[5.1.0,8.0.0)",
- org.eclipse.core.expressions;bundle-version="[3.4.0,4.0.0)",
- ch.hsr.ifs.cute.gcov;bundle-version="[0.2.2,1.0.0)"
+ org.eclipse.core.expressions;bundle-version="[3.4.0,4.0.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.ui,

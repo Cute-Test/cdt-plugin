@@ -24,18 +24,27 @@ import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.IOption;
+import org.eclipse.cdt.managedbuilder.core.ITool;
+import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.BuildAction;
 
+import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -99,13 +108,26 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	private void createLibSetings(IProject project, boolean enableGcov) throws CoreException {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
-			setToolChainIncludePath(project, libProject);
-			if(enableGcov) {
+			if(enableGcov && libProjectNeedGcovConfig(libProject)) {
 				addGcovConfig(libProject);
+				BuildAction buildAction = new BuildAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), IncrementalProjectBuilder.INCREMENTAL_BUILD);
+				buildAction.selectionChanged(new StructuredSelection(libProject));
+				buildAction.run();
 			}
+			setToolChainIncludePath(project, libProject);
 		}
 		setProjectReference(project, projects);
 		ManagedBuildManager.saveBuildInfo(project, true);
+	}
+
+	private boolean libProjectNeedGcovConfig(IProject libProject) {
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject);
+		for (String name : info.getConfigurationNames()) {
+			if(name.equalsIgnoreCase("debug gcov")) { //$NON-NLS-1$
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private void setProjectReference(IProject project, Vector<IProject> projects)
@@ -124,10 +146,11 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	}
 	
 
-	
+
 	private void setToolChainIncludePath(IProject project, IProject libProject) throws CoreException {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject);
 		IConfiguration config = info.getDefaultConfiguration();
+		IConfiguration[] configs = info.getManagedProject().getConfigurations();
 		ICSourceEntry[] sources = config.getSourceEntries();
 		for (ICSourceEntry sourceEntry : sources) {
 			IPath location = sourceEntry.getFullPath();
@@ -137,22 +160,23 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 				setIncludePaths(libProject.getFolder(location).getFullPath(), project);
 			}
 		}
-		
-		ICOutputEntry[]  dirs = config.getBuildData().getOutputDirectories();
-		for (ICOutputEntry outputEntry : dirs) {
-			IPath location = outputEntry.getFullPath();
-			if(location.segmentCount()== 0){
-				setLibraryPaths(libProject.getFullPath(), project);	
-			}else{
-				//IPath location1=location.removeFirstSegments(1);
-				setLibraryPaths(libProject.getFolder(location).getFullPath(), project);	
+		for(IConfiguration configuration : configs) {
+			ICOutputEntry[]  dirs = configuration.getBuildData().getOutputDirectories();
+			for (ICOutputEntry outputEntry : dirs) {
+				IPath location = outputEntry.getFullPath();
+				if(location.segmentCount()== 0){
+					setLibraryPaths(libProject.getFullPath(), project, configuration);	
+				}else{
+					//IPath location1=location.removeFirstSegments(1);
+					setLibraryPaths(libProject.getFolder(location).getFullPath(), project, configuration);	
+				}
 			}
-			String artifactName = config.getArtifactName();
-			if(artifactName.equalsIgnoreCase("${ProjName}")) {
-				setLibName(libProject.getName(), project);
-			}else{
-				setLibName(artifactName, project);
-			}
+		}
+		String artifactName = config.getArtifactName();
+		if(artifactName.equalsIgnoreCase("${ProjName}")) { //$NON-NLS-1$
+			setLibName(libProject.getName(), project);
+		}else{
+			setLibName(artifactName, project);
 		}
 	}
 
@@ -162,12 +186,33 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		return libRefPage;
 	}
 
-	protected void setLibraryPaths(IPath libFolder, IProject project)
+	protected void setLibraryPaths(IPath libFolder, IProject project, IConfiguration configuration)
 			throws CoreException {
 				String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
-				setOptionInAllConfigs(project, path, IOption.LIBRARY_PATHS);
+				IConfiguration targetConfig = findSameConfig(configuration, project);
+				try {
+					IToolChain toolChain = targetConfig.getToolChain();
+					setOptionInConfig(path, targetConfig, toolChain.getOptions(), toolChain, IOption.LIBRARY_PATHS);
+					ITool[] tools = targetConfig.getTools();
+					for(int j=0; j<tools.length; j++) {
+						setOptionInConfig(path, targetConfig, tools[j].getOptions(), tools[j], IOption.LIBRARY_PATHS);
+					}
+				} catch (BuildException be) {
+					throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,be.getMessage(), be));
+				}
 			}
 	
+	private IConfiguration findSameConfig(IConfiguration configuration, IResource project) {
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+		IConfiguration[] configs = info.getManagedProject().getConfigurations();
+		for (IConfiguration iConfiguration : configs) {
+			if(iConfiguration.getName().equals(configuration.getName())) {
+				return iConfiguration;
+			}
+		}
+		return info.getDefaultConfiguration();
+	}
+
 	protected void setLibName(String libName, IProject project) throws CoreException {
 		setOptionInAllConfigs(project, libName, IOption.LIBRARIES);
 	}
