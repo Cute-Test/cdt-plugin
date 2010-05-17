@@ -29,6 +29,8 @@
 #include <sstream>
 #if defined(USE_STD0X)
 #include <type_traits>
+#elif defined(USE_TR1)
+#include <tr1/type_traits>
 #else
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
@@ -37,6 +39,8 @@
 namespace cute {
 #if defined(USE_STD0X)
 	namespace impl_place_for_traits = std;
+#elif defined(USE_TR1)
+	namespace impl_place_for_traits = std::tr1;
 #else
 	namespace impl_place_for_traits = boost;
 #endif
@@ -195,11 +199,59 @@ namespace cute {
 		size_t nof_bits(IntegralType const &){
 			return std::numeric_limits<IntegralType>::digits;
 		}
+#if defined(USE_TR1)
+		template <typename ExpectedValue, typename ActualValue>
+		bool do_equals_integral(ExpectedValue const &expected
+				,ActualValue const &actual
+				,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
+			if (nof_bits(expected) < nof_bits(actual))
+						return static_cast<ActualValue>(expected) == actual;
+			else
+						return expected == static_cast<ExpectedValue>(actual);
+			return false;
+		}
+		template <typename ExpectedValue, typename ActualValue>
+		bool do_equals_integral(ExpectedValue const &expected
+				,ActualValue const &actual
+				,const impl_place_for_traits::false_type&,const impl_place_for_traits::true_type&){
+//TODO complicated case, one signed one unsigned type. since it is about equality casting to the longer should work?
+			if (sizeof(ExpectedValue) >	sizeof(ActualValue))
+				return expected==static_cast<ExpectedValue>(actual);
+			else
+				return static_cast<ActualValue>(expected) == actual;
+		}
+		template <typename ExpectedValue, typename ActualValue>
+		bool do_equals_integral(ExpectedValue const &expected
+				,ActualValue const &actual
+				,const impl_place_for_traits::true_type&,const impl_place_for_traits::false_type&){
+//TODO
+			if (sizeof(ExpectedValue) < sizeof(ActualValue))
+				return static_cast<ActualValue>(expected)==	actual;
+			else
+				return expected == static_cast<ExpectedValue>(actual);
+		}
+		template <typename ExpectedValue, typename ActualValue>
+		bool do_equals_integral(ExpectedValue const &expected
+				,ActualValue const &actual
+				,const impl_place_for_traits::false_type&,const impl_place_for_traits::false_type&){
+			if (nof_bits(expected) < nof_bits(actual))
+						return static_cast<ActualValue>(expected) == actual;
+			else
+						return expected == static_cast<ExpectedValue>(actual);
+			return false;
+		}
+#endif
 		// will not work if either type is bool, therefore the overloads above.
 		template <typename ExpectedValue, typename ActualValue>
 		bool do_equals(ExpectedValue const &expected
 					,ActualValue const &actual
 					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
+#if defined(USE_TR1)
+			return do_equals_integral(expected,actual,
+					impl_place_for_traits::is_signed<ExpectedValue>()
+					,impl_place_for_traits::is_signed<ActualValue>());
+#else
+// TODO: replace the following code with a dispatcher on signed/unsigned
 			typedef typename impl_place_for_traits::make_signed<ExpectedValue>::type ex_s;
 			typedef typename impl_place_for_traits::make_signed<ActualValue>::type ac_s;
 				// need to sign extend with the longer type, should work...
@@ -208,6 +260,7 @@ namespace cute {
 					return static_cast<ac_s>(expected) == static_cast<ac_s>(actual);
 				else
 					return static_cast<ex_s>(expected) == static_cast<ex_s>(actual);
+#endif
 		}
 	} // namespace equals_impl
 	template <typename ExpectedValue, typename ActualValue>
