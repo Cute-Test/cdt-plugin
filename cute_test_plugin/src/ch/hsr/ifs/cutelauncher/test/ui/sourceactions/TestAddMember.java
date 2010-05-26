@@ -1,7 +1,7 @@
 package ch.hsr.ifs.cutelauncher.test.ui.sourceactions;
 
 import junit.framework.TestSuite;
-import ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteAction;
+import ch.hsr.ifs.cute.ui.sourceactions.AddTestMemberToSuiteAction;
 import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberContainer;
 import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberMethod;
 
@@ -23,7 +23,7 @@ public class TestAddMember extends Test1Skeleton {
 		for(int i=0;i<rtc1.testname.size();i++){
 			//if(1!=i)continue;
 			final int j=i;
-			final AddTestMembertoSuiteAction functionAction=new AddTestMembertoSuiteAction();
+			final AddTestMemberToSuiteAction functionAction=new AddTestMemberToSuiteAction();
 			functionAction.setUnitTestingMode(makeMockObject(rtc1.parameter.get(j)));
 						
 			String displayname=rtc1.testname.get(j).replaceAll("[()]", "*");//JUnit unable to display () as name

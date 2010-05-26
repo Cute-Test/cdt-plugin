@@ -20,7 +20,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
 import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
-import ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteAction;
+import ch.hsr.ifs.cute.ui.sourceactions.AddTestMemberToSuiteAction;
 import ch.hsr.ifs.cute.ui.sourceactions.FunctionFinder;
 import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberContainer;
 import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberMethod;
@@ -81,11 +81,11 @@ public class TestAddMemberTree extends BaseTestFramework {
 			ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
 			
 			
-			AddTestMembertoSuiteAction atms=new AddTestMembertoSuiteAction();
+			AddTestMemberToSuiteAction atms=new AddTestMemberToSuiteAction();
 			atms.setUnitTestingMode(null);
 			
 			
-			final Method[] methods = AddTestMembertoSuiteAction.class.getDeclaredMethods();
+			final Method[] methods = AddTestMemberToSuiteAction.class.getDeclaredMethods();
 		    for (int i = 0; i < methods.length; ++i) {
 		      if (methods[i].getName().equals("showTreeUI")) {
 		        final Object params[] = {withoutTemplate,classStructInstances};
@@ -143,11 +143,11 @@ public class TestAddMemberTree extends BaseTestFramework {
 			ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
 			
 			
-			AddTestMembertoSuiteAction atms=new AddTestMembertoSuiteAction();
+			AddTestMemberToSuiteAction atms=new AddTestMemberToSuiteAction();
 			atms.setUnitTestingMode(null);
 			
 			
-			final Method[] methods = AddTestMembertoSuiteAction.class.getDeclaredMethods();
+			final Method[] methods = AddTestMemberToSuiteAction.class.getDeclaredMethods();
 		    for (int i = 0; i < methods.length; ++i) {
 		      if (methods[i].getName().equals("internalInitTree")) {
 		        final Object params[] = {withoutTemplate,classStructInstances};

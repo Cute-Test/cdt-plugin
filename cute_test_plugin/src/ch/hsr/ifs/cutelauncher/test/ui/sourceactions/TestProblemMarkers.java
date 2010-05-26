@@ -12,7 +12,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import ch.hsr.ifs.cute.ui.sourceactions.AbstractFunctionAction;
 import ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctiontoSuiteAction;
 import ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctortoSuiteAction;
-import ch.hsr.ifs.cute.ui.sourceactions.AddTestMembertoSuiteAction;
+import ch.hsr.ifs.cute.ui.sourceactions.AddTestMemberToSuiteAction;
 import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberContainer;
 import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberMethod;
 import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionAction;
@@ -47,7 +47,7 @@ public class TestProblemMarkers extends Test1Skeleton {
 	
 	
 	public final void testAddMember(){
-		final AddTestMembertoSuiteAction functionAction=new AddTestMembertoSuiteAction();
+		final AddTestMemberToSuiteAction functionAction=new AddTestMemberToSuiteAction();
 		int i=3;
 		
 		functionAction.setUnitTestingMode(makeMockObject(rtc.parameter.get(i)));

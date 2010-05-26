@@ -38,7 +38,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 
-public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
+public class AddTestMemberToSuiteAction extends AbstractFunctionAction {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -64,7 +64,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				ArrayList<IASTSimpleDeclaration> variablesList=ff.getVariables();
 				ArrayList<IASTSimpleDeclaration> classStructInstances=ASTHelper.getClassStructVariables(variablesList);
 				
-				MultiTextEdit mEdit =Dialog(astTu, editorFile,doc, withoutTemplate, classStructInstances,editorInput);
+				MultiTextEdit mEdit =showDialog(astTu, editorFile,doc, withoutTemplate, classStructInstances,editorInput);
 				return mEdit;
 				
 			}
@@ -81,7 +81,7 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 	boolean unitTestingMode=false;
 	IAddMemberMethod unitTestingMockObject=null;
 
-	public MultiTextEdit Dialog(IASTTranslationUnit astTu,IFile editorFile,IDocument doc,
+	public MultiTextEdit showDialog(IASTTranslationUnit astTu,IFile editorFile,IDocument doc,
 			ArrayList<IASTSimpleDeclaration> classStruct, ArrayList<IASTSimpleDeclaration> classStructInstances,IEditorInput editorInput){
 		
 		Object selectedObject;
@@ -163,30 +163,30 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 		return builder;
 	}
 	
-	private ElementTreeSelectionDialog etsd;
-	private myTree wcp;
+	private ElementTreeSelectionDialog treeDialog;
+	private TreeContenProvider contentProv;
 	private Object showTreeUI(
 			ArrayList<IASTSimpleDeclaration> classStruct,
 			ArrayList<IASTSimpleDeclaration> classStructInstances) {
 		
 		internalInitTree(classStruct,classStructInstances);
 		if(unitTestingMode){
-			etsd.setBlockOnOpen(false);
-			TreeViewer tv=((myETSD)etsd).getTreeViewer();
-			Object[] containers=wcp.getElements(wcp.root);
+			treeDialog.setBlockOnOpen(false);
+			TreeViewer tv=((MethodElementTreeSelectionDialog)treeDialog).getTreeViewer();
+			Object[] containers=contentProv.getElements(contentProv.root);
 			
 			tv.setSelection(new StructuredSelection(containers[0]));
 			
 			ArrayList<IAddMemberMethod> al=((Container)containers[0]).getMethods();
 			tv.setSelection(new StructuredSelection(al.get(0)));
 		}else
-			etsd.setBlockOnOpen(true);
+			treeDialog.setBlockOnOpen(true);
 		
 		boolean allowToClose=false;
 		while(allowToClose==false){
-			int status=etsd.open();
+			int status=treeDialog.open();
 			if(status==ElementTreeSelectionDialog.OK){
-				Object selectedObject=etsd.getFirstResult();
+				Object selectedObject=treeDialog.getFirstResult();
 				
 				if(selectedObject instanceof IAddMemberContainer)continue;
 				allowToClose=true;
@@ -197,19 +197,19 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				break;
 			}
 		}
-		return etsd.getFirstResult();
+		return treeDialog.getFirstResult();
 	}
 	private void internalInitTree(ArrayList<IASTSimpleDeclaration> classStruct,ArrayList<IASTSimpleDeclaration> classStructInstances){
 		LabelProvider lp=new LabelProvider(); 
-		wcp=new myTree(classStruct, classStructInstances);
+		contentProv=new TreeContenProvider(classStruct, classStructInstances);
 				
-		etsd=new myETSD(new Shell(CuteCorePlugin.getDisplay()),lp,wcp);
-		etsd.setTitle(Messages.getString("AddTestMembertoSuiteAction.SelectMethod")); //$NON-NLS-1$
-		etsd.setAllowMultiple(false);
-		etsd.setInput(wcp.root);
+		treeDialog=new MethodElementTreeSelectionDialog(new Shell(CuteCorePlugin.getDisplay()),lp,contentProv);
+		treeDialog.setTitle(Messages.getString("AddTestMembertoSuiteAction.SelectMethod")); //$NON-NLS-1$
+		treeDialog.setAllowMultiple(false);
+		treeDialog.setInput(contentProv.root);
 		
-		etsd.create();
-		Button button=etsd.getOkButton();
+		treeDialog.create();
+		Button button=treeDialog.getOkButton();
 		button.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -217,16 +217,16 @@ public class AddTestMembertoSuiteAction extends AbstractFunctionAction {
 				//stream.println("selected");
 			}
 		});
-		if(wcp.containers.size()==0)button.setEnabled(false);
+		if(contentProv.containers.size()==0)button.setEnabled(false);
 	}
 	public ArrayList<IAddMemberContainer> getRootContainer(){
-		return wcp.containers;
+		return contentProv.containers;
 	}
 }
 
-class myETSD extends ElementTreeSelectionDialog{
+class MethodElementTreeSelectionDialog extends ElementTreeSelectionDialog{
     
-	public myETSD(Shell parent,
+	public MethodElementTreeSelectionDialog(Shell parent,
             ILabelProvider labelProvider, ITreeContentProvider contentProvider){
 		super(parent,labelProvider,contentProvider);
 	}
@@ -252,12 +252,12 @@ class myETSD extends ElementTreeSelectionDialog{
     }
 }
 
-class myTree extends TreeNodeContentProvider{
+class TreeContenProvider extends TreeNodeContentProvider{
 	
 	public ArrayList<IAddMemberContainer> containers=new ArrayList<IAddMemberContainer>();
 	public final IAddMemberContainer root=new Container(null,true);
 	
- 	public myTree(	ArrayList<IASTSimpleDeclaration> classStruct, 
+ 	public TreeContenProvider(	ArrayList<IASTSimpleDeclaration> classStruct, 
 					ArrayList<IASTSimpleDeclaration> classStructInstances){
 		for(IASTSimpleDeclaration i:classStruct){
 			//stream.println("class:"+ASTHelper.getClassStructName((i))+"");
