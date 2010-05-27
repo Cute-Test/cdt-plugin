@@ -5,7 +5,7 @@ import org.eclipse.text.edits.TextEdit;
 public class AddTestMembertoSuiteDelegate extends
 		AbstractFunctionActionDelegate {
 	public AddTestMembertoSuiteDelegate(){
-		super("AddTestMember",new AddTestMemberToSuiteAction()); //$NON-NLS-1$
+		super("AddTestMember",new AddMemberFunctionToSuite()); //$NON-NLS-1$
 	}
 	
 	

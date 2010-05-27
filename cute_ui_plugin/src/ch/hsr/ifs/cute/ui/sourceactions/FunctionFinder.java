@@ -5,17 +5,18 @@ import java.util.ArrayList;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 
 public class FunctionFinder extends ASTVisitor {
-	ArrayList<IASTDeclaration> al=new ArrayList<IASTDeclaration>();
-	ArrayList<IASTSimpleDeclaration> alSimpleDeclarationOnly=new ArrayList<IASTSimpleDeclaration>();
-	boolean parseForSimpleDeclaration=false;
-	ArrayList<IASTSimpleDeclaration> alClassStructOnly=new ArrayList<IASTSimpleDeclaration>();
-	ArrayList<IASTSimpleDeclaration> alVariables=new ArrayList<IASTSimpleDeclaration>();
-	
-	boolean parseClassStructOnly=false;
+	private ArrayList<IASTDeclaration> al=new ArrayList<IASTDeclaration>();
+	private ArrayList<IASTSimpleDeclaration> alSimpleDeclarationOnly=null;
+	private ArrayList<IASTSimpleDeclaration> alClassStructOnly=null;
+	private ArrayList<IASTSimpleDeclaration> alVariables=null;
+
 	
 	{
 		shouldVisitDeclarations=true;//Visbility, SimpleDeclaration,TemplateDeclaration, Function Defn
@@ -28,18 +29,34 @@ public class FunctionFinder extends ASTVisitor {
 	}
 	
 	public ArrayList<IASTSimpleDeclaration> getSimpleDeclaration(){
-		if(!parseForSimpleDeclaration){
+		if(alSimpleDeclarationOnly == null){
+			alSimpleDeclarationOnly=new ArrayList<IASTSimpleDeclaration>();
 			for(IASTDeclaration i:al){
 				if(i instanceof IASTSimpleDeclaration)alSimpleDeclarationOnly.add((IASTSimpleDeclaration)i);
 			}
-			parseForSimpleDeclaration=true;
 		}
 		return alSimpleDeclarationOnly;
 	}
 	
+	public ArrayList<IASTFunctionDefinition> getMemberFuntions(){
+		ArrayList<IASTFunctionDefinition> defs = new ArrayList<IASTFunctionDefinition>();
+		for (IASTDeclaration decl : al) {
+			if (decl instanceof IASTFunctionDefinition) {
+				IASTFunctionDefinition funcDef = (IASTFunctionDefinition) decl;
+				IBinding funcBind = funcDef.getDeclarator().getName().resolveBinding();
+				if(funcBind instanceof ICPPMethod) {
+					defs.add(funcDef);
+				}
+			}
+		}
+		return defs;
+	}
+	
 	//template class are also returned
 	public ArrayList<IASTSimpleDeclaration> getClassStruct(){
-		if(!parseClassStructOnly){
+		if(alClassStructOnly == null){
+			alClassStructOnly=new ArrayList<IASTSimpleDeclaration>();
+			alVariables=new ArrayList<IASTSimpleDeclaration>();
 			ArrayList<IASTSimpleDeclaration> altmp=getSimpleDeclaration();
 			
 			for(IASTSimpleDeclaration i:altmp){
@@ -49,8 +66,6 @@ public class FunctionFinder extends ASTVisitor {
 				}else
 					alVariables.add(i);
 			}
-			
-			parseClassStructOnly=true;
 		}
 		return alClassStructOnly;
 	}

@@ -67,7 +67,7 @@ public class AddTestFunctortoSuiteAction extends AddTestFunct_ION_OR{
 					else insidePushback=(fname+"()"); //$NON-NLS-1$
 					builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),insidePushback));
 					
-					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
+					mEdit.addChild(createPushBackEdit(editorFile, astTu,
 							suitPushBackFinder,builder));
 					return mEdit;
 				}else{

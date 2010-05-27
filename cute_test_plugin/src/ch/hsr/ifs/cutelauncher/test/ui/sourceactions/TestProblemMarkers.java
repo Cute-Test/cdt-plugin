@@ -12,7 +12,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import ch.hsr.ifs.cute.ui.sourceactions.AbstractFunctionAction;
 import ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctiontoSuiteAction;
 import ch.hsr.ifs.cute.ui.sourceactions.AddTestFunctortoSuiteAction;
-import ch.hsr.ifs.cute.ui.sourceactions.AddTestMemberToSuiteAction;
 import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberContainer;
 import ch.hsr.ifs.cute.ui.sourceactions.IAddMemberMethod;
 import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionAction;
@@ -45,16 +44,6 @@ public class TestProblemMarkers extends Test1Skeleton {
 		generateProblemMarkerTest(rtc, functionAction, i);
 	}
 	
-	
-	public final void testAddMember(){
-		final AddTestMemberToSuiteAction functionAction=new AddTestMemberToSuiteAction();
-		int i=3;
-		
-		functionAction.setUnitTestingMode(makeMockObject(rtc.parameter.get(i)));
-		
-		String parameters[]=rtc.parameter.get(i).trim().split(" ");
-		generateProblemMarkerTest(rtc, functionAction, i,Integer.valueOf(parameters[3]));
-	}
 	public final static IAddMemberMethod makeMockObject(String parameter){
 		System.out.println("["+parameter +"]");
 		String parameters[]=parameter.trim().split(" ");

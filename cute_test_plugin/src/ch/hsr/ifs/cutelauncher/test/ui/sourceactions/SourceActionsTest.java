@@ -13,10 +13,6 @@ public class SourceActionsTest {
 		ts.addTest(TestNewFunction.suite(speedupMode));
 		ts.addTest(TestAddFunction.suite(speedupMode));
 		ts.addTest(TestAddFunctor.suite(speedupMode));
-				
-		TestSuite addMemberTS=TestAddMemberTree.suite();
-		TestAddMember.generateMemberTest(addMemberTS);
-		ts.addTest(addMemberTS);
 		
 //		ts.addTest(new TestAddFunction("testDisplayDynamicProxyRecordedResult"));
 		

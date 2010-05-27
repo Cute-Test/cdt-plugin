@@ -47,7 +47,7 @@ public abstract class AbstractFunctionAction {
 	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(PushBackString(suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")")); //$NON-NLS-1$ //$NON-NLS-2$
-		return createPushBackEdit(editorFile,doc,astTu,suitPushBackFinder,builder);
+		return createPushBackEdit(editorFile,astTu,suitPushBackFinder,builder);
 	}
 	protected String PushBackString(String suite, String insidePushback){
 		StringBuilder builder = new StringBuilder();
@@ -59,7 +59,7 @@ public abstract class AbstractFunctionAction {
 		return builder.toString();
 	}
 	
-	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder, StringBuilder builder) {
+	protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder, StringBuilder builder) {
 				
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
 			IASTName name = suitPushBackFinder.getSuiteDeclName();
