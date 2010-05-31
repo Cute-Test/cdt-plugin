@@ -68,7 +68,7 @@ public class AddMemberFunctionToSuite extends AbstractFunctionAction {
 		sb.append(suitPushBackFinder.getSuiteDeclName().toString());
 		sb.append(".push_back(CUTE_SMEMFUN(");
 		IASTName[] names = qName.getNames();
-		if (names.length > 2) {
+		if (names.length >= 2) {
 			sb.append(names[names.length -2]);
 			sb.append(", ");
 			sb.append(names[names.length-1]);
