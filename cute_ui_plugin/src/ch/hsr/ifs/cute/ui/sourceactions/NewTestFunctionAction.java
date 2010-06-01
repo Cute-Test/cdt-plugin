@@ -15,11 +15,14 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
+import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -29,6 +32,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
@@ -42,10 +46,22 @@ import org.eclipse.ui.part.FileEditorInput;
  *
  */
 public class NewTestFunctionAction extends AbstractFunctionAction{
+	//TODO create Strategy or new Superclass
 	
 	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);"; //$NON-NLS-1$
 	int problemMarkerErrorLineNumber=0;
+	protected int insertFileOffset;
+	protected int pushbackOffset;
+	protected int pushbackLength;
+	private String newLine;
+	private String funcName;
 	
+	
+	public NewTestFunctionAction(String funcName) {
+		super();
+		this.funcName = funcName;
+	}
+
 	@Override
 	public MultiTextEdit createEdit(TextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, String funcName)
@@ -55,6 +71,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		pushbackOffset=-1;
 		pushbackLength=-1;
 		problemMarkerErrorLineNumber=0;
+		newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		
 		MultiTextEdit mEdit = new MultiTextEdit();
 		ISelection sel = ceditor.getSelectionProvider().getSelection();
@@ -80,6 +97,73 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 			}
 		}
 		return mEdit;
+	}
+	
+	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(pushBackString(suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")")); //$NON-NLS-1$ //$NON-NLS-2$
+		return createPushBackEdit(editorFile,astTu,suitPushBackFinder,builder);
+	}
+	
+	protected String pushBackString(String suite, String insidePushback){
+		StringBuilder builder = new StringBuilder();
+		builder.append(newLine+"\t"); //$NON-NLS-1$
+		builder.append(suite.toString());
+		builder.append(".push_back("); //$NON-NLS-1$
+		builder.append(insidePushback);
+		builder.append(");"); //$NON-NLS-1$
+		return builder.toString();
+	}
+	
+	/*find the point of last "push_back" */
+	protected IASTStatement getLastPushBack(IASTName[] refs) {
+		IASTName lastPushBack = null;
+		for (IASTName name : refs) {
+			if(name.getParent().getParent() instanceof ICPPASTFieldReference) {
+				IASTFieldReference fRef = (ICPPASTFieldReference) name.getParent().getParent();
+				if(fRef.getFieldName().toString().equals("push_back")) { //$NON-NLS-1$
+					lastPushBack = name;
+				}
+			}
+		}
+		return getParentStatement(lastPushBack);
+	}
+	
+	protected IASTStatement getParentStatement(IASTName lastPushBack) {
+		IASTNode node = lastPushBack;
+		while(node != null) {
+			if (node instanceof IASTStatement) {
+				return (IASTStatement) node;
+			}
+			node = node.getParent();
+		}
+		return null;
+	}
+	
+	protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder, StringBuilder builder) {
+		
+		if(suitPushBackFinder.getSuiteDeclName() != null) {
+			IASTName name = suitPushBackFinder.getSuiteDeclName();
+			IBinding binding = name.resolveBinding();
+			IASTName[] refs = astTu.getReferences(binding);
+			IASTStatement lastPushBack = getLastPushBack(refs);
+
+			IASTFileLocation fileLocation; 
+			if(lastPushBack != null) {
+				fileLocation = lastPushBack.getFileLocation();
+			}else {//case where no push_back was found, use cute::suite location 
+				fileLocation = suitPushBackFinder.getSuiteNode().getParent().getFileLocation();
+			}
+			pushbackOffset=fileLocation.getNodeOffset() + fileLocation.getNodeLength();
+			InsertEdit edit = new InsertEdit(pushbackOffset, builder.toString());
+			pushbackLength=builder.toString().length();
+			
+			return edit;
+		}else {
+			//TODO case of no cute::suite found
+			
+			return null;
+		}
 	}
 
 	//adding the new test function
@@ -182,16 +266,15 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	
 	
 	
-	public static TextEdit testOnlyCreatedEdit(int insertTestFuncFileOffset,String newLine){
-		NewTestFunctionAction ntfa=new NewTestFunctionAction();
-		ntfa.setNewline(newLine);
+	public static TextEdit testOnlyCreatedEdit(int insertTestFuncFileOffset){
+		NewTestFunctionAction ntfa=new NewTestFunctionAction("newTestFunction");
 		return ntfa.createdEdit(insertTestFuncFileOffset, null, "newTestFunction"); //$NON-NLS-1$
 	}
-	public static TextEdit testOnlyPushBackString(int insertloc,String newLine){
-		NewTestFunctionAction ntfa=new NewTestFunctionAction();
-		ntfa.setNewline(newLine);
+	
+	public static TextEdit testOnlyPushBackString(int insertloc){
 		
-		String s=ntfa.PushBackString("s","CUTE(newTestFunction)"); //$NON-NLS-1$ //$NON-NLS-2$
+		NewTestFunctionAction ntfa=new NewTestFunctionAction(null);
+		String s=ntfa.pushBackString("s","CUTE(newTestFunction)"); //$NON-NLS-1$ //$NON-NLS-2$
 		StringBuilder builder = new StringBuilder();
 		builder.append(s);
 		

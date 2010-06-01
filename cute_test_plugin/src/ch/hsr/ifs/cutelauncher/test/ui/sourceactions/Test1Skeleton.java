@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.RewriteSessionEditProcessor;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
@@ -57,9 +56,6 @@ public abstract class Test1Skeleton
 		IDocumentProvider idp=ceditor.getDocumentProvider();
 		IDocument fDocument= idp.getDocument(ele);
 		assertNotNull(fDocument);
-
-		String newLine = TextUtilities.getDefaultLineDelimiter(fDocument);
-		functionAction.setNewline(newLine);
 		
 		ceditor.getSelectionProvider().setSelection(new TextSelection(cursorpos, 0));
 				

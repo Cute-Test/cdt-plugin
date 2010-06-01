@@ -8,16 +8,6 @@ public class SourceActionsTest {
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
 
 //		ts.addTest(MemoryEFS.suite());
-		
-		boolean speedupMode=false;
-		ts.addTest(TestNewFunction.suite(speedupMode));
-		ts.addTest(TestAddFunction.suite(speedupMode));
-		ts.addTest(TestAddFunctor.suite(speedupMode));
-		
-//		ts.addTest(new TestAddFunction("testDisplayDynamicProxyRecordedResult"));
-		
-		ts.addTest(NewTestFunctionActionDelegateTest.suite());
-		ts.addTest(TestProblemMarkers.suite());
 		ts.addTest(TestBugFixes.suite());
 		
 		return ts;
