@@ -13,13 +13,10 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
-import ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizardCustomPage;
 
 public class CuteSuiteWizardHandlerTest extends TestCase {
 
@@ -77,25 +74,9 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		return null;
 	}
 
-	public final void testNewCuteSuiteWizardCustomPageForValidIdentifier(){
-		NewCuteSuiteWizardCustomPage ncsw=new NewCuteSuiteWizardCustomPage(null,null, null);
-
-		Composite parent=new Composite(new org.eclipse.swt.widgets.Shell(),SWT.NO_FOCUS);
-		ncsw.createControl(parent,false);
-
-		
-		ncsw.setSuiteName("**/invalidname");
-		assertEquals("incorrect regex",ncsw.getSuiteName(),"suite");
-
-		ncsw.setSuiteName("validname44");
-		assertEquals("incorrect regex",ncsw.getSuiteName(),"validname44");
-
-	}
 	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler");
 		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles"));
-		ts.addTest(new CuteSuiteWizardHandlerTest("testImplantActualsuitename"));
-		ts.addTest(new CuteSuiteWizardHandlerTest("testNewCuteSuiteWizardCustomPageForValidIdentifier"));
 		return ts;
 	}
 }

@@ -7,7 +7,6 @@ import ch.hsr.ifs.cutelauncher.test.patternListenerTests.PatternListenerSuite;
 
 public class AllCoreTests extends TestSuite{
 	
-	
 
 	public AllCoreTests() {
 		super("Cute Plugin All Core Tests");
@@ -21,6 +20,4 @@ public class AllCoreTests extends TestSuite{
 	}
 
 }
-//adding just a single test example
-//suite.addTest(new DelegateTest("testSourcelookupCustomPath"));
-//@see http://mea-bloga.blogspot.com/2007/07/am-i-headless.html
+
