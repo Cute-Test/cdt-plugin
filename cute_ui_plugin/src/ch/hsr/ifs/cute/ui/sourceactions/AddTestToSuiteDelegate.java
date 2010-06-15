@@ -56,6 +56,7 @@ public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbench
 			RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
 			processor.performEdits();
 			saveEditor(editor);
+			this.editor = null;
 		} catch (CoreException e) {
 			e.printStackTrace();
 		} catch (MalformedTreeException e) {

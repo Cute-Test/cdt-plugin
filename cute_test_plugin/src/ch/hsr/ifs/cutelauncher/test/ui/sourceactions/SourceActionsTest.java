@@ -7,7 +7,6 @@ public class SourceActionsTest {
 	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
 
-//		ts.addTest(MemoryEFS.suite());
 		ts.addTest(TestBugFixes.suite());
 		
 		return ts;
