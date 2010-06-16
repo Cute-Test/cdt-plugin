@@ -135,7 +135,9 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-		} 
+		}finally {
+			editor = null;
+		}
 	}
 	
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {

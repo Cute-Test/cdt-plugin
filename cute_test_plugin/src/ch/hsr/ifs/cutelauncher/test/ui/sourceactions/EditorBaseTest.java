@@ -26,6 +26,7 @@ import org.eclipse.cdt.ui.testplugin.Accessor;
 import org.eclipse.cdt.ui.testplugin.DisplayHelper;
 import org.eclipse.cdt.ui.testplugin.EditorTestHelper;
 import org.eclipse.cdt.ui.tests.BaseUITestCase;
+import org.eclipse.cdt.ui.tests.refactoring.TestHelper;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
@@ -46,6 +47,7 @@ import ch.hsr.ifs.cutelauncher.test.TestPlugin;
  * @author Emanuel Graf IFS
  *
  */
+@SuppressWarnings("restriction")
 public class EditorBaseTest extends BaseUITestCase {
 	
 	protected static final int INDEXER_WAIT_TIME = 8000;
@@ -89,7 +91,6 @@ public class EditorBaseTest extends BaseUITestCase {
 		return cProject.getProject();
 	}
 	
-	@SuppressWarnings("restriction")
 	protected CEditor openEditor(IFile file) throws PartInitException {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		CEditor editor= (CEditor) IDE.openEditor(page, file);
@@ -100,9 +101,32 @@ public class EditorBaseTest extends BaseUITestCase {
 	public StringBuffer[] getContentsForTest(int sections) throws IOException {
 		return TestSourceReader.getContentsForTest(TestPlugin.getDefault().getBundle(), "src", getClass(), getName(), sections);
 	}
+	
+	protected void type(String text, int keyCode, int stateMask, CEditor editor) {
+		for (char c : text.toCharArray()) {
+			sendTypeEvent(c, keyCode, stateMask, editor);
+		}
+		waitForDisplay();
+		
+	}
 
-	protected void type(char character, int keyCode, int stateMask, CEditor cEditor) {
-		StyledText textWidget = cEditor.getViewer().getTextWidget();
+	protected void type(char character, int keyCode, int stateMask, CEditor editor) {
+		sendTypeEvent(character, keyCode, stateMask, editor);
+		waitForDisplay();
+		
+	}
+	
+	protected void waitForDisplay() {
+		new DisplayHelper() {
+			@Override
+			protected boolean condition() {
+				return false;
+			}
+		}.waitForCondition(EditorTestHelper.getActiveDisplay(), 200);
+	}
+
+	protected void sendTypeEvent(char character, int keyCode, int stateMask, CEditor editor) {
+		StyledText textWidget = editor.getViewer().getTextWidget();
 		assertNotNull(textWidget);
 		Accessor accessor= new Accessor(textWidget, StyledText.class);
 		Event event= new Event();
@@ -110,14 +134,6 @@ public class EditorBaseTest extends BaseUITestCase {
 		event.keyCode= keyCode;
 		event.stateMask= stateMask;
 		accessor.invoke("handleKeyDown", new Object[] {event});
-		
-		new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				return false;
-			}
-		}.waitForCondition(EditorTestHelper.getActiveDisplay(), 200);
-		
 	}
 	
 	protected String getCodeFromIFile(IFile file) throws Exception {
@@ -138,5 +154,23 @@ public class EditorBaseTest extends BaseUITestCase {
 				IHandlerService hs  = (IHandlerService) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(IHandlerService.class);
 				hs.executeCommand(commandId, null);
 			}
+
+	protected IFile createFile(String fileContent, String fileName) throws Exception {
+		IFile file= createFile(getProject(), fileName, fileContent);
+		waitForIndexer(index, file, INDEXER_WAIT_TIME);
+		return file;
+	}
+
+	protected CEditor runCommand(IFile file, int selectionStart, int selechtionLength, String command) throws Exception {
+		CEditor editor= openEditor(file);
+		editor.selectAndReveal(selectionStart, selechtionLength);
+		executeCommand(command);
+		return editor;
+	}
+
+	protected void assertFileContent(IFile file, String expectedContent) throws Exception {
+		String newContent = getCodeFromIFile(file);
+		assertEquals(TestHelper.unifyNewLines(expectedContent), TestHelper.unifyNewLines(newContent));
+	}
 
 }
