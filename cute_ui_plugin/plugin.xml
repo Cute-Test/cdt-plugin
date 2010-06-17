@@ -229,5 +229,27 @@
           </action>
        </objectContribution>
     </extension>
+    <extension
+         point="org.eclipse.cdt.codan.core.checkers"
+         id="org.eclipse.cdt.codan.core.internal.checkers">
+       <checker
+             class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestChecker"
+             id="ch.hsr.ifs.cute.ui.unregisteredTestChecker"
+             name="Unregistered Test Checker">
+      <problem
+            category="ch.hsr.ifs.cute.cuteProblemCategory"
+            defaultEnabled="true"
+            defaultSeverity="Warning"
+            id="ch.hsr.ifs.cute.unregisteredTestMarker"
+            messagePattern="Testfunction is not registered."
+            name="Unregistered Test Marker"
+            markerType="org.eclipse.cdt.codan.core.codanProblem">
+      </problem>
+      </checker>
+       <category
+             id="ch.hsr.ifs.cute.cuteProblemCategory"
+             name="Potentional Cute Problem">
+       </category>
+   </extension>
 
 </plugin>
