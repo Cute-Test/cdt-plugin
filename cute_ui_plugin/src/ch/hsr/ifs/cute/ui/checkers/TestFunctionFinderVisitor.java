@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
-import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
-import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTStandardFunctionDeclarator;
 
 class TestFunctionFinderVisitor extends ASTVisitor{
@@ -43,7 +41,7 @@ class TestFunctionFinderVisitor extends ASTVisitor{
 	private boolean isTestFunction(IASTDeclaration declaration) {
 		if (declaration instanceof IASTFunctionDefinition) {
 			IASTFunctionDefinition funcDef = (IASTFunctionDefinition) declaration;
-			if(isVoidFunction(funcDef) && hasNoParameters(funcDef)) {
+			if(hasNoParameters(funcDef)) {
 				if(containsAssert(funcDef)) {
 					return true;
 				}
@@ -56,17 +54,6 @@ class TestFunctionFinderVisitor extends ASTVisitor{
 		AssertStatementCheckVisitor checker = new AssertStatementCheckVisitor();
 		funcDef.getBody().accept(checker);
 		return checker.hasAssertStmt;
-	}
-
-	private boolean isVoidFunction(IASTFunctionDefinition funcDef) {
-		IASTDeclSpecifier declSpec = funcDef.getDeclSpecifier();
-		if (declSpec instanceof IASTSimpleDeclSpecifier) {
-			IASTSimpleDeclSpecifier simpDeclSpec = (IASTSimpleDeclSpecifier) declSpec;
-			if(simpDeclSpec.getType() == IASTSimpleDeclSpecifier.t_void) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private boolean hasNoParameters(IASTFunctionDefinition funcDef) {
