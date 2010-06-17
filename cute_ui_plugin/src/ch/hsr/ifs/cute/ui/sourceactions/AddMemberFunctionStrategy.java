@@ -12,7 +12,9 @@
 package ch.hsr.ifs.cute.ui.sourceactions;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
@@ -39,7 +41,13 @@ public class AddMemberFunctionStrategy extends AddStrategy{
 	}
 
 	public MultiTextEdit addMemberToSuite() {
-		StringBuilder builder = getString((ICPPASTQualifiedName) name, suitPushBackFinder);
+		StringBuilder builder;
+		if (name instanceof ICPPASTQualifiedName) {
+			ICPPASTQualifiedName qName = (ICPPASTQualifiedName) name;
+			builder = getString(qName, suitPushBackFinder);
+		}else {
+			builder = getString(name, suitPushBackFinder);
+		}
 		MultiTextEdit edit = new MultiTextEdit();
 		edit.addChild(createPushBackEdit(editorFile, astTu, suitPushBackFinder, builder));
 		return edit;
@@ -57,6 +65,28 @@ public class AddMemberFunctionStrategy extends AddStrategy{
 			sb.append("));");
 		}
 		return sb;
+	}
+	
+	private StringBuilder getString(IASTName name, SuitePushBackFinder suitPushBackFinder) {
+		StringBuilder sb = new StringBuilder(newLine + "\t"); // s.push_back(CUTE_SMEMFUN(TestClass,test2);");
+		sb.append(suitPushBackFinder.getSuiteDeclName().toString());
+		sb.append(".push_back(CUTE_SMEMFUN(");
+		String className  = getClassName(name);
+		sb.append(className);
+		sb.append(", ");
+		sb.append(name.toString());
+		sb.append("));");
+		return sb;
+	}
+
+	private String getClassName(IASTName name2) {
+		IASTNode n = null;
+		for(n = name; n != null && !(n instanceof ICPPASTCompositeTypeSpecifier); n = n.getParent()) {}
+		if(n != null) {
+			ICPPASTCompositeTypeSpecifier comType = (ICPPASTCompositeTypeSpecifier)n;
+			return comType.getName().toString();
+		}
+		return "";
 	}
 
 	@Override

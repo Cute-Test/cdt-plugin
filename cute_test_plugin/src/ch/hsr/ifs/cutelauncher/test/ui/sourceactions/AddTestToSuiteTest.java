@@ -79,6 +79,31 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 	
+	//struct AllTests{
+	//	void testit() { ASSERT(true); }
+	//};
+	//
+	//cute::suite make_suite_Suite3(){
+	//	cute::suite s;
+	//	return s;
+	//}
+	
+	//struct AllTests{
+	//	void testit() { ASSERT(true); }
+	//};
+	//
+	//cute::suite make_suite_Suite3(){
+	//	cute::suite s;
+	//	s.push_back(CUTE_SMEMFUN(AllTests, testit));
+	//	return s;
+	//}
+	public void testAddMemberFunctionInSameFileToSuite() throws Exception {
+		StringBuffer[] contentsForTest = getContentsForTest(2);
+		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
+		runCommand(file,contentsForTest[0].indexOf("ASSERT"), 3, COMMAND_ID);
+		assertFileContent(file, contentsForTest[1].toString());
+	}
+	
 	
 	//class Suite3{
 	//

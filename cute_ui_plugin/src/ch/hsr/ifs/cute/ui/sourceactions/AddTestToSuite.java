@@ -8,7 +8,6 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.core.resources.IFile;
@@ -49,12 +48,11 @@ public class AddTestToSuite extends AbstractFunctionAction {
 					SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 					astTu.accept(suitPushBackFinder);
 					IASTName name = def.getDeclarator().getName();
-					if(name instanceof ICPPASTQualifiedName) {
-						adder = new AddMemberFunctionStrategy(doc,editorFile, astTu, name, suitPushBackFinder);
-					}else if(name instanceof ICPPASTOperatorName &&
+					if(name instanceof ICPPASTOperatorName &&
 							name.toString().contains("()")) {
 						adder = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), editorFile);
-						
+					}else {
+						adder = new AddMemberFunctionStrategy(doc, editorFile, astTu, name, suitPushBackFinder);
 					}
 				}else if(def != null && isFunction(def)) {
 					SuitePushBackFinder finder = new SuitePushBackFinder();
