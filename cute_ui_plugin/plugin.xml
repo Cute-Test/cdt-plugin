@@ -251,5 +251,12 @@
              name="Potentional Cute Problem">
        </category>
    </extension>
+    <extension
+          point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
+       <resolution
+             class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestResolution"
+             problemId="ch.hsr.ifs.cute.unregisteredTestMarker">
+       </resolution>
+    </extension>
 
 </plugin>
