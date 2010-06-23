@@ -235,20 +235,20 @@
        <checker
              class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestChecker"
              id="ch.hsr.ifs.cute.ui.unregisteredTestChecker"
-             name="Unregistered Test Checker">
+             name="%checker.name">
       <problem
             category="ch.hsr.ifs.cute.cuteProblemCategory"
             defaultEnabled="true"
             defaultSeverity="Warning"
             id="ch.hsr.ifs.cute.unregisteredTestMarker"
-            messagePattern="Testfunction is not registered."
-            name="Unregistered Test Marker"
+            messagePattern="%problem.messagePattern"
+            name="%problem.name"
             markerType="org.eclipse.cdt.codan.core.codanProblem">
       </problem>
       </checker>
        <category
              id="ch.hsr.ifs.cute.cuteProblemCategory"
-             name="Potentional Cute Problem">
+             name="%category.name">
        </category>
    </extension>
     <extension

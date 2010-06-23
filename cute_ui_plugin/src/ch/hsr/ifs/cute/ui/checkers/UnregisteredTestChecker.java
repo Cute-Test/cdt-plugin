@@ -17,10 +17,14 @@ import java.util.List;
 import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 
 /**
  * @author Emanuel Graf IFS
@@ -60,10 +64,29 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 					return compType.getName().toString();
 				}
 			}else {
-				return funcDef.getDeclarator().getName().toString();
+				IASTName funcName = funcDef.getDeclarator().getName();
+				IBinding bind = funcName.resolveBinding();
+				if (bind instanceof ICPPMethod) {
+					if(!(funcName instanceof ICPPASTQualifiedName)) {
+						return getQualifiedName(funcDef);
+					}
+				}
+				return funcName.toString();
 			}
 		}
 		return null;
+	}
+
+	private String getQualifiedName(IASTFunctionDefinition funcDef) {
+		IASTName funcName = funcDef.getDeclarator().getName();
+		IASTNode n;
+		String className = "";
+		for(n = funcDef; n != null && !(n instanceof ICPPASTCompositeTypeSpecifier); n = n.getParent()) {}
+		if(n != null) {
+			ICPPASTCompositeTypeSpecifier struct = (ICPPASTCompositeTypeSpecifier)n;
+			className = struct.getName().toString();
+		}
+		return className + "::" + funcName.toString();
 	}
 
 	protected boolean isFunctor(IASTFunctionDefinition funcDef) {

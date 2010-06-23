@@ -38,13 +38,14 @@ import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * @author Emanuel Graf
  *
  */
+@SuppressWarnings("deprecation")
 public class NewTestFunctionAction extends AbstractFunctionAction{
 	//TODO create Strategy or new Superclass
 	
@@ -63,8 +64,8 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	}
 
 	@Override
-	public MultiTextEdit createEdit(TextEditor ceditor,
-			IEditorInput editorInput, IDocument doc, String funcName)
+	public MultiTextEdit createEdit(ITextEditor ceditor,
+			IEditorInput editorInput, IDocument doc, ISelection sel)
 			throws CoreException {
 		
 		insertFileOffset=-1;
@@ -74,7 +75,6 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		
 		MultiTextEdit mEdit = new MultiTextEdit();
-		ISelection sel = ceditor.getSelectionProvider().getSelection();
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
 

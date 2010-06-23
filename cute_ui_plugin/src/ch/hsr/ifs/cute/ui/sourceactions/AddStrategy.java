@@ -36,6 +36,7 @@ import org.eclipse.text.edits.TextEdit;
  * @author Emanuel Graf IFS
  *
  */
+@SuppressWarnings("deprecation")
 public abstract class AddStrategy {
 	
 	protected static final String EMPTY_STRING = "";

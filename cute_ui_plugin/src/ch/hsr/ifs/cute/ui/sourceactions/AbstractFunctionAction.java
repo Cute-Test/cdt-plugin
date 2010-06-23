@@ -9,17 +9,18 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 public abstract class AbstractFunctionAction {
 
 	int problemMarkerErrorLineNumber=0;
 	
-	public abstract MultiTextEdit createEdit(TextEditor ceditor,
-			IEditorInput editorInput, IDocument doc, String funcName)
+	public abstract MultiTextEdit createEdit(ITextEditor ceditor,
+			IEditorInput editorInput, IDocument doc, ISelection selection)
 			throws CoreException;
 	
 	//return the CDT representation of the file under modification 

@@ -29,9 +29,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
@@ -154,8 +156,29 @@ public class UiPlugin extends AbstractUIPlugin {
 		}
 		return headers;
 	}
+
+	/**
+	 * Logs the specified status with this plug-in's log.
+	 * 
+	 * @param status
+	 *            status to log
+	 */
+	public static void log(IStatus status) {
+		getDefault().getLog().log(status);
+	}
 	
-	
+
+	/**
+	 * Logs an internal error with the specified throwable
+	 * 
+	 * @param e
+	 *            the exception to be logged
+	 */
+	public static void log(Throwable e) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, "Internal Error", e)); //$NON-NLS-1$
+	}
+
+
 	private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {
 		URL url= FileLocator.find(bundle, path, null);
 		return ImageDescriptor.createFromURL(url);

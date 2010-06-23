@@ -57,6 +57,7 @@ import org.eclipse.ui.dialogs.TwoPaneElementSelector;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 
+@SuppressWarnings({"restriction", "deprecation"})
 public class CuteLaunchShortcut implements ILaunchShortcut {
 
 	public void launch(IEditorPart editor, String mode) {
@@ -274,7 +275,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 * launch configurations.  Return the chosen config, or <code>null</code> if the
 	 * user cancelled the dialog.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	protected ILaunchConfiguration chooseConfiguration(List configList, String mode) {
 		IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), labelProvider);
@@ -290,12 +291,12 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	protected String getLaunchSelectionDialogTitleString(List configList, String mode) {
 		return LaunchMessages.getString("CApplicationLaunchShortcut.LaunchConfigSelection");  //$NON-NLS-1$
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes"})
 	protected String getLaunchSelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
 			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseLaunchConfigToDebug");  //$NON-NLS-1$
@@ -310,7 +311,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 * 
 	 * @return the selected binary or <code>null</code> if none.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	protected IBinary chooseBinary(List binList, String mode) {
 		ILabelProvider programLabelProvider = new CElementLabelProvider() {
 			@Override
@@ -354,12 +355,12 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes"})
 	protected String getBinarySelectionDialogTitleString(List binList, String mode) {
 		return LaunchMessages.getString("CApplicationLaunchShortcut.CLocalApplication");  //$NON-NLS-1$
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	protected String getBinarySelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
 			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseLocalAppToDebug");  //$NON-NLS-1$

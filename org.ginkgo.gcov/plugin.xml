@@ -3,7 +3,7 @@
 <plugin>
    <extension
          id="GcovNature"
-         name="Gcov Nature"
+         name="%extension.name"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
@@ -16,7 +16,7 @@
    </extension>
    <extension
          id="coverageMarker"
-         name="coverageMarker"
+         name="%extension.name.0"
          point="org.eclipse.core.resources.markers">
       <persistent
             value="true">
@@ -27,7 +27,7 @@
    </extension>
    <extension
          id="lineCoverMarker"
-         name="lineCoverMarker"
+         name="%extension.name.1"
          point="org.eclipse.core.resources.markers">
       <super
             type="ch.hsr.ifs.cute.gcov.coverageMarker">
@@ -38,7 +38,7 @@
    </extension>
    <extension
          id="lineUnCoverMarker"
-         name="lineUnCoverMarker"
+         name="%extension.name.2"
          point="org.eclipse.core.resources.markers">
       <super
             type="ch.hsr.ifs.cute.gcov.coverageMarker">
@@ -49,7 +49,7 @@
    </extension>
     <extension
          id="linePartialCoverMarker"
-         name="linePartialCoverMarker"
+         name="%extension.name.3"
          point="org.eclipse.core.resources.markers">
       <super
             type="ch.hsr.ifs.cute.gcov.coverageMarker">
@@ -85,7 +85,7 @@
             includeOnPreferencePage="true"
             isGoToNextNavigationTarget="false"
             isGoToPreviousNavigationTarget="false"
-            label="Line Covered"
+            label="%specification.label"
             overviewRulerPreferenceKey="lineCoverOverviewRuler"
             overviewRulerPreferenceValue="true"
             presentationLayer="0"
@@ -107,7 +107,7 @@
             includeOnPreferencePage="true"
             isGoToNextNavigationTarget="false"
             isGoToPreviousNavigationTarget="false"
-            label="Line Not Covered"
+            label="%specification.label.0"
             overviewRulerPreferenceKey="lineUnCoverOverviewRuler"
             overviewRulerPreferenceValue="true"
             presentationLayer="0"
@@ -129,7 +129,7 @@
             includeOnPreferencePage="true"
             isGoToNextNavigationTarget="false"
             isGoToPreviousNavigationTarget="false"
-            label="Line Partially Covered"
+            label="%specification.label.1"
             overviewRulerPreferenceKey="linePartialCoverOverviewRuler"
             overviewRulerPreferenceValue="true"
             presentationLayer="0"
@@ -144,7 +144,7 @@
    </extension>
    <extension
          id="gcovBuilder"
-         name="Gcov Builder"
+         name="%extension.name.4"
          point="org.eclipse.core.resources.builders">
       <builder
             hasNature="true">

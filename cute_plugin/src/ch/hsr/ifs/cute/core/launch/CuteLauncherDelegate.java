@@ -64,6 +64,7 @@ import ch.hsr.ifs.test.framework.ui.ShowResultView;
  * @author egraf
  *
  */
+@SuppressWarnings({"restriction", "deprecation"})
 public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 
 	@Override
@@ -80,6 +81,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 	}
 	
 	
+
 	private void runLocalApplication( ILaunchConfiguration config, ILaunch launch, IProgressMonitor monitor ) throws CoreException {
 		
 		monitor.beginTask( LaunchMessages.getString( "LocalCDILaunchDelegate.0" ), 10 ); //$NON-NLS-1$

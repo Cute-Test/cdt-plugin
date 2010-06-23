@@ -3,6 +3,7 @@ package ch.hsr.ifs.cutelauncher.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import ch.hsr.ifs.cutelauncher.test.hyperlinksTests.HyperlinkSuite;
+import ch.hsr.ifs.cutelauncher.test.ui.checkers.UnregisteredTestFunctionCheckerTest;
 import ch.hsr.ifs.cutelauncher.test.ui.sourceactions.SourceActionsTest;
 
 public class AllUiTests extends TestSuite{
@@ -12,6 +13,7 @@ public class AllUiTests extends TestSuite{
 		addTest(HyperlinkSuite.suite());
 		addTest(CuteSuiteWizardHandlerTest.suite());
 		addTest(SourceActionsTest.suite());
+		addTestSuite(UnregisteredTestFunctionCheckerTest.class);
 	}
 	
 	public static Test suite() throws Exception {

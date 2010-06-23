@@ -20,6 +20,7 @@ import org.eclipse.ui.IEditorPart;
 
 import ch.hsr.ifs.cutelauncher.test.ui.sourceactions.ReadTestCase;
 
+@SuppressWarnings("restriction")
 public class ExperimentCIndexer extends IndexerBaseTestFramework{
 	static final IProgressMonitor NPM= new NullProgressMonitor();
 	

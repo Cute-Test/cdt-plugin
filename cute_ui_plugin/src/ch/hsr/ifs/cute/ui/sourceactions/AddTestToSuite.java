@@ -17,8 +17,8 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 public class AddTestToSuite extends AbstractFunctionAction {
 
@@ -27,8 +27,8 @@ public class AddTestToSuite extends AbstractFunctionAction {
 	}
 
 	@Override
-	public MultiTextEdit createEdit(TextEditor ceditor, IEditorInput editorInput, IDocument doc, String funcName) throws CoreException {
-		ISelection sel = ceditor.getSelectionProvider().getSelection();
+	public MultiTextEdit createEdit(ITextEditor ceditor, IEditorInput editorInput, IDocument doc, ISelection sel) throws CoreException {
+		
 		AddStrategy adder = new NullStrategy(doc);
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;

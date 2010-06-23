@@ -45,7 +45,7 @@ public class LaunchEnvironmentVariables {
 	}
 	
 	//caveat:not for generic environment variable
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static void setPathEnvironmentVariable(ILaunchConfigurationWorkingCopy wc,
 			ICProject project,String environmentVariableName) throws CoreException {
 		String path=getBuildEnvironmentVariable(environmentVariableName,project);
@@ -111,9 +111,8 @@ public class LaunchEnvironmentVariables {
 		return result;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static Map getBuildEnvironmentVariables(ICProject project) {
-		Map result=new TreeMap();
+	public static Map<String, String> getBuildEnvironmentVariables(ICProject project) {
+		Map<String, String> result=new TreeMap<String, String>();
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project.getUnderlyingResource());
 		if (info != null) {
 			IConfiguration ic=info.getDefaultConfiguration();

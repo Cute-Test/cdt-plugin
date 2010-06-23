@@ -45,6 +45,7 @@ import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
  * @author Emanuel Graf
  *
  */
+@SuppressWarnings("restriction")
 public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
 	protected IEditorPart editor;
 	protected LinkedModeUI linkedModeUI; 
@@ -82,7 +83,6 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 		return false;
 	}
 
-	@SuppressWarnings("restriction")
 	public void run(IAction action) {
 		try {
 			if(!isCorrectEditor())return;
@@ -91,8 +91,8 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 			IEditorInput editorInput = ceditor.getEditorInput();
 			IDocumentProvider prov = ceditor.getDocumentProvider();
 			IDocument doc = prov.getDocument(editorInput);
-			
-			MultiTextEdit mEdit = functionAction.createEdit(ceditor, editorInput, doc, funcName);
+			ISelection sel = ceditor.getSelectionProvider().getSelection();
+			MultiTextEdit mEdit = functionAction.createEdit(ceditor, editorInput, doc, sel);
 			
 			RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
 			processor.performEdits();

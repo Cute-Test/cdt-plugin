@@ -6,7 +6,6 @@ import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.ui.testplugin.EditorTestHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.link.ILinkedModeListener;
 import org.eclipse.jface.text.link.LinkedModeUI;
@@ -17,6 +16,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate;
 
+@SuppressWarnings("restriction")
 public class TestBugFixes //extends Test1Skeleton {
 	extends org.eclipse.cdt.core.tests.BaseTestFramework{
 	
@@ -46,15 +46,14 @@ public class TestBugFixes //extends Test1Skeleton {
 			NewTestFunctionActionDelegate ntfad=new NewTestFunctionActionDelegate();
 			ntfad.run(null);
 			
-			LinkedModeUI linked1stCopy=ntfad.testOnlyGetLinkedMode();
+			ntfad.testOnlyGetLinkedMode();
 
 			//set cursor location to be at the newly created newTest^Function
 			selectionProvider.setSelection(new TextSelection(cursorpos[1], 0));
 			ntfad.run(null);
 			
 			LinkedModeUI linked2ndCopy=ntfad.testOnlyGetLinkedMode();
-			org.eclipse.jface.text.IRegion region=linked2ndCopy.getSelectedRegion();
-//			prettyPrintRegion(region);
+			linked2ndCopy.getSelectedRegion();
 			
 			//leave(ILinkedModeListener.UPDATE_CARET);
 			//default access, so need reflection
@@ -64,7 +63,7 @@ public class TestBugFixes //extends Test1Skeleton {
 		      if (methods[i].getName().equals("leave")) {
 		        final Object params[] = {ILinkedModeListener.UPDATE_CARET};
 		        methods[i].setAccessible(true);
-		        Object ret = methods[i].invoke(linked2ndCopy, params);
+		        methods[i].invoke(linked2ndCopy, params);
 		        //System.out.println(ret);
 		        //assertEquals("Selecting the first object in tree",ret.toString(),firstObjName);
 		        flag=false;
@@ -98,10 +97,6 @@ public class TestBugFixes //extends Test1Skeleton {
 		IDocument fDocument= idp.getDocument(ele);
 		return fDocument.get();
 	}
-
-	private void prettyPrintRegion(IRegion region){
-		System.out.println("region:"+region.getOffset()+" "+region.getLength());
-	}
 	
 	public static TestSuite suite(){
 		TestSuite ts=new TestSuite("bug fix Tests");
@@ -122,28 +117,6 @@ public class TestBugFixes //extends Test1Skeleton {
 }
 
 
-//IWorkbenchWindow workbench = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-//IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-//
-//IWorkbenchPart part = page.getActivePartReference().getPart(true);
-//
-//// Create a fake PopupMenuExtender so we can get some data back.
-//final MenuManager fakeMenuManager = new MenuManager();
-//fakeMenuManager.add(new GroupMarker(
-//		org.eclipse.ui.IWorkbenchActionConstants.MB_ADDITIONS));
-//final PopupMenuExtender extender = new PopupMenuExtender(null,
-//		fakeMenuManager, selectionProvider, part);
-//
-//extender.menuAboutToShow(fakeMenuManager);
-//
-//fakeMenuManager.setVisible(true);
-//
-//Thread.sleep(3000);
-//
-//extender.dispose();
-//
-//// Check to see if the appropriate object contributions are present.
-//final IContributionItem[] items = fakeMenuManager.getItems();
 
 			
 //IMenuManager editMenu= menu.findMenuUsingPath(IWorkbenchActionConstants.M_EDIT);

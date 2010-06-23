@@ -51,7 +51,8 @@ public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbench
 			IDocument doc = prov.getDocument(editorInput);
 
 			MultiTextEdit mEdit;
-			mEdit = functionAction.createEdit(ceditor, editorInput, doc, null);
+			ISelection sel = ceditor.getSelectionProvider().getSelection();
+			mEdit = functionAction.createEdit(ceditor, editorInput, doc, sel);
 
 			RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
 			processor.performEdits();
