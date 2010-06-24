@@ -25,6 +25,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 		super("Add Test to Suite");
 	}
 	
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//struct testStruct{
 	//	void operator() (){
 	//		ASSERTM("functor", true);
@@ -36,6 +37,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//struct testStruct{
 	//	void operator() (){
 	//		ASSERTM("functor", true);
@@ -50,10 +52,11 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	public void testAddFunctorToSuite() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "functor.cpp");
-		runCommand(file, contentsForTest[0].indexOf("ASSERT"), 3, COMMAND_ID );
+		runCommand(file, contentsForTest[0].indexOf("functor"), 3, COMMAND_ID );
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 	
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//void theTestFunction(){
 	//	ASSERTM("theTest", true);
 	//}
@@ -63,6 +66,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//void theTestFunction(){
 	//	ASSERTM("theTest", true);
 	//}
@@ -75,12 +79,13 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	public void testAddFunctionToSuite() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
-		runCommand(file,contentsForTest[0].indexOf("ASSERT"), 3, COMMAND_ID);
+		runCommand(file,contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID);
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 	
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//struct AllTests{
-	//	void testit() { ASSERT(true); }
+	//	void testit() { ASSERTM("theTest",true); }
 	//};
 	//
 	//cute::suite make_suite_Suite3(){
@@ -88,8 +93,9 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//struct AllTests{
-	//	void testit() { ASSERT(true); }
+	//	void testit() { ASSERTM("theTest",true); }
 	//};
 	//
 	//cute::suite make_suite_Suite3(){
@@ -100,7 +106,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	public void testAddMemberFunctionInSameFileToSuite() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
-		runCommand(file,contentsForTest[0].indexOf("ASSERT"), 3, COMMAND_ID);
+		runCommand(file,contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID);
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 	
@@ -112,6 +118,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//};
 	
 	//#include "suite.h"
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//
 	//cute::suite make_suite_Suite3(){
 	//	cute::suite s;
@@ -121,10 +128,11 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//
 	//void Suite3::test()
 	//{
-	//	ASSERT(true);
+	//	ASSERTM("theTest", true);
 	//}
 	
 	//#include "suite.h"
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//
 	//cute::suite make_suite_Suite3(){
 	//	cute::suite s;
@@ -135,13 +143,13 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//
 	//void Suite3::test()
 	//{
-	//	ASSERT(true);
+	//	ASSERTM("theTest", true);
 	//}
 	public void testAddMemberFunctionToSuite() throws Exception{
 		StringBuffer[] contentsForTest = getContentsForTest(3);
 		createFile(contentsForTest[0].toString(), "suite.h");
 		IFile file = createFile(contentsForTest[1].toString(), "suite.cpp"); 
-		runCommand(file,contentsForTest[1].indexOf("ASSERT"), 3, COMMAND_ID);
+		runCommand(file,contentsForTest[1].indexOf("theTest"), 3, COMMAND_ID);
 		assertFileContent(file, contentsForTest[2].toString());
 	}
 	

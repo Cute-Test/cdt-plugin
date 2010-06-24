@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.ui.checkers;
+package ch.hsr.ifs.cute.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
