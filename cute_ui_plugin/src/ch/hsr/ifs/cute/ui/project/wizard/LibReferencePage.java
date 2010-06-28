@@ -202,7 +202,6 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 
 	public String getMessage()
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 

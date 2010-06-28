@@ -113,6 +113,7 @@ public class UiPlugin extends AbstractUIPlugin {
 							break;
 						}
 					}
+					br.close();
 					return getCuteVersion(cuteVersionstring);
 				} catch (IOException e) {
 				}
