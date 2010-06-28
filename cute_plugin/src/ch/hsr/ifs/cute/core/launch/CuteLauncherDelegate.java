@@ -52,6 +52,7 @@ import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
+import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.gcov.parser.LineCoverageParser;
 import ch.hsr.ifs.cute.gcov.parser.ModelBuilderLineParser;
@@ -93,7 +94,8 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			IPath exePath=verifyProgramPath( config );
 			IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 			IFile exeFile = wsRoot.getFile(exePath.makeRelativeTo(wsRoot.getRawLocation()));
-			cleanGcdaFilesInRefedProjects(exeFile.getProject());
+			IProject project = exeFile.getProject();
+			cleanGcdaFilesInRefedProjects(project);
 			File wd = getWorkingDirectory( config );
 			if ( wd == null ) {
 				wd = new File( System.getProperty( "user.home", "." ) ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -129,11 +131,13 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				listener.addHandler(modelHandler);
 				textCons.addPatternMatchListener(listener);
 			}
-			updateGcov(exeFile.getProject());
-			for(IProject refProj :exeFile.getProject().getReferencedProjects()) {
-				updateGcov(refProj);
+
+			if(project.hasNature(GcovNature.NATURE_ID)) {
+				updateGcov(project);
+				for(IProject refProj :project.getReferencedProjects()) {
+					updateGcov(refProj);
+				}
 			}
-			
 		}
 		finally {
 			monitor.done();
@@ -169,8 +173,11 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		ICSourceEntry[] sourceEntries = desc.getActiveConfiguration().getSourceEntries();
 		List<ICSourceEntry> sourceEntriesList = new ArrayList<ICSourceEntry>();
 		for (ICSourceEntry icSourceEntry : sourceEntries) {
-			if(!icSourceEntry.getLocation().lastSegment().equals("cute")) {
-				sourceEntriesList.add(icSourceEntry);
+			IPath location = icSourceEntry.getLocation();
+			if(location != null) {
+				if(location.lastSegment() != null && !location.lastSegment().equals("cute")) {
+					sourceEntriesList.add(icSourceEntry);
+				}
 			}
 		}
 		try {
