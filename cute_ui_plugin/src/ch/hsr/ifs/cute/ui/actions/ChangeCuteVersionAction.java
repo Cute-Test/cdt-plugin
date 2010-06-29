@@ -65,8 +65,7 @@ public class ChangeCuteVersionAction implements IWorkbenchWindowActionDelegate {
 				project = (IProject) treeSel.getFirstElement();
 				
 			}
-		};
-
+		}
 	}
 
 }

@@ -172,11 +172,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		IProjectDescription description = project.getDescription();
 		String[] natures = description.getNatureIds();
 //		has nature?
-		for (int i = 0; i < natures.length; i++) {
-			if(GcovNature.NATURE_ID.equals(natures[i])){
-				return;
-			}
-		}
+		if(project.hasNature(GcovNature.NATURE_ID))return;
 		String[] newNatures = new String[natures.length + 1];
 		System.arraycopy(natures, 0, newNatures, 0, natures.length);
 		newNatures[natures.length] = GcovNature.NATURE_ID;
