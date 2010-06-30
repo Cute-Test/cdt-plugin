@@ -139,9 +139,8 @@ public abstract class AddStrategy {
 		if(innercallex instanceof IASTIdExpression){
 			IASTIdExpression a=(IASTIdExpression)innercallex.getFunctionNameExpression();
 			theName=a.getName().toString();
-		}else if(innercallex instanceof IASTFunctionCallExpression){
-			IASTFunctionCallExpression fce=innercallex;
-			IASTExpression expression=fce.getFunctionNameExpression();
+		}else{
+			IASTExpression expression=innercallex.getFunctionNameExpression();
 			if(expression instanceof ICPPASTFieldReference){
 				ICPPASTFieldReference a=(ICPPASTFieldReference)expression;
 				theName=a.getFieldName().toString();	
