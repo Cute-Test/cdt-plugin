@@ -134,6 +134,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		
 	}
 
+	//TODO verschieben in GCOV Plugin Nature
 	public IConfiguration addGcovConfig(IProject project) throws CoreException {
 		try {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
@@ -306,7 +307,7 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		}
 	}
 
-	private class IncludePathStrategy implements GetOptionsStrategy{
+	private static class IncludePathStrategy implements GetOptionsStrategy{
 
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getIncludePaths();
