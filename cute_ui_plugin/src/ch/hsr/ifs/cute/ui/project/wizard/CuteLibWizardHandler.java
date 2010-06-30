@@ -45,6 +45,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.BuildAction;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -109,7 +110,8 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
 			if(enableGcov && libProjectNeedGcovConfig(libProject)) {
-				addGcovConfig(libProject);
+				GcovNature.addGcovNature(libProject, new NullProgressMonitor());
+				GcovNature.addGcovConfig(libProject);
 				BuildAction buildAction = new BuildAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), IncrementalProjectBuilder.INCREMENTAL_BUILD);
 				buildAction.selectionChanged(new StructuredSelection(libProject));
 				buildAction.run();

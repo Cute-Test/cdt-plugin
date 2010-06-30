@@ -34,7 +34,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -61,17 +60,6 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
  */
 public class CuteWizardHandler extends MBSWizardHandler {
 	
-	private static final String MACOSX_LINKER_OPTION_FLAGS = "macosx.cpp.link.option.flags";
-	private static final String GCOV_LINKER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99"; //$NON-NLS-1$
-	private static final String GNU_CPP_LINK_OPTION_FLAGS = "gnu.cpp.link.option.flags"; //$NON-NLS-1$
-	private static final String GNU_CPP_LINKER_ID = "cdt.managedbuild.tool.gnu.cpp.linker"; //$NON-NLS-1$
-	private static final String MAC_CPP_LINKER_ID = "cdt.managedbuild.tool.macosx.cpp.linker"; //$NON-NLS-1$
-	private static final String GNU_C_COMPILER_OPTION_MISC_OTHER = "gnu.c.compiler.option.misc.other"; //$NON-NLS-1$
-	private static final String GNU_C_COMPILER_ID = "cdt.managedbuild.tool.gnu.c.compiler"; //$NON-NLS-1$
-	private static final String GNU_CPP_COMPILER_OPTION_OTHER_OTHER = "gnu.cpp.compiler.option.other.other"; //$NON-NLS-1$
-	private static final String GNU_CPP_COMPILER_ID = "cdt.managedbuild.tool.gnu.cpp.compiler"; //$NON-NLS-1$
-	private static final String GCOV_C_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99 "; //$NON-NLS-1$
-	private static final String GCOV_CPP_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage "; //$NON-NLS-1$
 	private CuteVersionWizardPage cuteVersionWizardPage;
 
 	@Override
@@ -129,56 +117,8 @@ public class CuteWizardHandler extends MBSWizardHandler {
 	}
 	
 	private void configGcov(IProject project) throws CoreException {
-		setGcovNature(project);
-		addGcovConfig(project);
-		
-	}
-
-	//TODO verschieben in GCOV Plugin Nature
-	public IConfiguration addGcovConfig(IProject project) throws CoreException {
-		try {
-		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-		IConfiguration[] configs = info.getManagedProject().getConfigurations();
-		for (IConfiguration config : configs) {
-			if(config.getParent().getId().contains("debug")) { //$NON-NLS-1$
-				IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, "gcov"); //$NON-NLS-1$
-				newConfig.setName("Debug Gcov"); //$NON-NLS-1$
-				setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_FLAGS);
-				setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_FLAGS);
-				setOptionInTool(newConfig, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
-				setOptionInTool(newConfig, MAC_CPP_LINKER_ID, MACOSX_LINKER_OPTION_FLAGS, GCOV_LINKER_FLAGS);
-				ManagedBuildManager.setDefaultConfiguration(project, newConfig);
-				ManagedBuildManager.setSelectedConfiguration(project, newConfig);
-				
-				return newConfig;
-			}
-		}
-		} catch (BuildException e) {
-			throw new CoreException(new Status(IStatus.ERROR,UiPlugin.PLUGIN_ID,e.getMessage(),e));
-		}
-		return null;
-	}
-
-	private void setOptionInTool(IConfiguration config, String toolId, String optionId, String optionValue)
-			throws BuildException {
-		ITool[] tools = config.getToolsBySuperClassId(toolId);
-		for (ITool tool : tools) {
-			IOption option = tool.getOptionById(optionId);
-			String value = option.getDefaultValue() == null ? optionValue : option.getDefaultValue().toString().trim() + " " + optionValue; //$NON-NLS-1$
-			ManagedBuildManager.setOption(config, tool, option, value);
-		}
-	}
-
-	private void setGcovNature(IProject project) throws CoreException {
-		IProjectDescription description = project.getDescription();
-		String[] natures = description.getNatureIds();
-//		has nature?
-		if(project.hasNature(GcovNature.NATURE_ID))return;
-		String[] newNatures = new String[natures.length + 1];
-		System.arraycopy(natures, 0, newNatures, 0, natures.length);
-		newNatures[natures.length] = GcovNature.NATURE_ID;
-		description.setNatureIds(newNatures);
-		project.setDescription(description, null);
+		GcovNature.addGcovNature(project, new NullProgressMonitor());
+		GcovNature.addGcovConfig(project);		
 	}
 
 	protected void createCuteProjectFolders(IProject project)
