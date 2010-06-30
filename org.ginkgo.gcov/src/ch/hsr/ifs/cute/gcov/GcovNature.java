@@ -58,7 +58,7 @@ public class GcovNature implements IProjectNature {
 
 	private IProject project;
 	
-	public static void addCuteNature(IProject project, IProgressMonitor mon) throws CoreException {
+	public static void addGcovNature(IProject project, IProgressMonitor mon) throws CoreException {
 		addNature(project, NATURE_ID, mon);
 	}
 
