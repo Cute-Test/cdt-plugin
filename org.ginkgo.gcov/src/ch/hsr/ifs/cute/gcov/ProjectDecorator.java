@@ -32,18 +32,15 @@ public class ProjectDecorator implements ILightweightLabelDecorator{
 	private static final ImageDescriptor GCOV_DEACT_ICON = AbstractUIPlugin.imageDescriptorFromPlugin(GcovPlugin.PLUGIN_ID, "icons/ovr16/gcov_deact_ovr.gif"); //$NON-NLS-1$;;
 
 
-	public void addListener(ILabelProviderListener listener) {
-	}
+	public void addListener(ILabelProviderListener listener) {}
 
-	public void dispose() {
-	}
+	public void dispose() {}
 
 	public boolean isLabelProperty(Object element, String property) {
 		return false;
 	}
 
-	public void removeListener(ILabelProviderListener listener) {
-	}
+	public void removeListener(ILabelProviderListener listener) {}
 
 		
 
@@ -51,7 +48,7 @@ public class ProjectDecorator implements ILightweightLabelDecorator{
 		if (element instanceof IProject) {
 			IProject proj = (IProject)element;
 			try {
-				if(proj.hasNature(GcovNature.NATURE_ID)) {					
+				if(proj.exists() && proj.hasNature(GcovNature.NATURE_ID)) {					
 					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
 					IConfiguration config = info.getDefaultConfiguration();
 					if(config.getId().equals(GcovNature.GCOV_CONFG_ID)){

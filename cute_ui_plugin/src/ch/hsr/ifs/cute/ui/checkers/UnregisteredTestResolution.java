@@ -79,8 +79,7 @@ public class UnregisteredTestResolution extends AbstarctCodanCMarkerResolution {
 
 
 	@Override
-	public void apply(IMarker marker, IDocument document) {
-	}
+	public void apply(IMarker marker, IDocument document) {}
 
 
 }
