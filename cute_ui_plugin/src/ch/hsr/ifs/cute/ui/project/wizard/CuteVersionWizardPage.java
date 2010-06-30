@@ -95,7 +95,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	}
 
 	public String getDescription() {
-		return new String(Messages.getString("CuteVersionWizardPage.ChooseCuteVersion")); //$NON-NLS-1$
+		return Messages.getString("CuteVersionWizardPage.ChooseCuteVersion"); //$NON-NLS-1$
 	}
 
 	public String getErrorMessage() {
@@ -111,7 +111,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	}
 
 	public String getTitle() {
-		return new String(Messages.getString("CuteVersionWizardPage.CuteVersion")); //$NON-NLS-1$
+		return Messages.getString("CuteVersionWizardPage.CuteVersion"); //$NON-NLS-1$
 	}
 
 	public void performHelp() {

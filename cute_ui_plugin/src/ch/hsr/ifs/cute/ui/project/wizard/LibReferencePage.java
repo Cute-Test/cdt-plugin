@@ -184,7 +184,7 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 
 	public String getDescription()
 	{
-		return new String(Messages.getString("LibReferencePage.ChooseLib")); //$NON-NLS-1$
+		return Messages.getString("LibReferencePage.ChooseLib"); //$NON-NLS-1$
 	}
 
 	boolean errorMessageFlag=false;
@@ -207,7 +207,7 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 
 	public String getTitle()
 	{
-		return new String(Messages.getString("LibReferencePage.LibProjectTest")); //$NON-NLS-1$
+		return Messages.getString("LibReferencePage.LibProjectTest"); //$NON-NLS-1$
 	}
 
 	public void performHelp()
