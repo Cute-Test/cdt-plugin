@@ -22,7 +22,7 @@
             id="ch.hsr.ifs.cute.gcov.decorator"
             label="Gcov Decorator"
             lightweight="true"
-            state="false">
+            state="true">
          <description>
             Gcov Project
          </description>

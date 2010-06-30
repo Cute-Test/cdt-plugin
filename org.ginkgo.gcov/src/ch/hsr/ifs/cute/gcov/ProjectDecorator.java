@@ -11,6 +11,9 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov;
 
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -25,7 +28,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  */
 public class ProjectDecorator implements ILightweightLabelDecorator {
 
-	private static final ImageDescriptor GCOV = AbstractUIPlugin.imageDescriptorFromPlugin(GcovPlugin.PLUGIN_ID, "icons/ovr16/gcov_ovr.gif"); //$NON-NLS-1$;
+	private static final ImageDescriptor GCOV_ICON = AbstractUIPlugin.imageDescriptorFromPlugin(GcovPlugin.PLUGIN_ID, "icons/ovr16/gcov_ovr.gif"); //$NON-NLS-1$;
+	private static final ImageDescriptor GCOV_DEACT_ICON = AbstractUIPlugin.imageDescriptorFromPlugin(GcovPlugin.PLUGIN_ID, "icons/ovr16/gcov_deact_ovr.gif"); //$NON-NLS-1$;;
 
 
 
@@ -49,7 +53,14 @@ public class ProjectDecorator implements ILightweightLabelDecorator {
 			IProject proj = (IProject)element;
 			try {
 				if(proj.hasNature(GcovNature.NATURE_ID)) {
-					decoration.addOverlay(GCOV, IDecoration.BOTTOM_LEFT);
+					
+					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
+					IConfiguration config = info.getDefaultConfiguration();
+					if(config.getId().equals(GcovNature.GCOV_CONFG_ID)){
+						decoration.addOverlay(GCOV_ICON, IDecoration.BOTTOM_LEFT);
+					}else {
+						decoration.addOverlay(GCOV_DEACT_ICON, IDecoration.BOTTOM_LEFT);
+					}
 				}
 			} catch (CoreException e) {
 				e.printStackTrace();
