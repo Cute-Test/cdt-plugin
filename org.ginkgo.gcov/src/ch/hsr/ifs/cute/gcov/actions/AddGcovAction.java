@@ -34,13 +34,12 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate{
 	 * 
 	 */
 	public AddGcovAction() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public void run(IAction action) {
 		if(project != null) {
 			try {
-				GcovNature.addCuteNature(project, new NullProgressMonitor());
+				GcovNature.addGcovNature(project, new NullProgressMonitor());
 				GcovNature.addGcovConfig(project);
 			} catch (CoreException e) {
 				e.printStackTrace();
@@ -61,13 +60,9 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate{
 	}
 
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void init(IWorkbenchWindow window) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

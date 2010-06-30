@@ -37,7 +37,6 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate{
 	 * 
 	 */
 	public RemoveGcovAction() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public void run(IAction action) {
@@ -76,13 +75,9 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate{
 	}
 
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void init(IWorkbenchWindow window) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
