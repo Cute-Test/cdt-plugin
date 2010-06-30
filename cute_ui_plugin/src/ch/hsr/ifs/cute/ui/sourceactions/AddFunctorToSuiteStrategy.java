@@ -77,7 +77,7 @@ public class AddFunctorToSuiteStrategy extends AddStrategy {
 		return new MultiTextEdit();
 	}
 	
-	public boolean checkForConstructorWithParameters(IASTTranslationUnit astTu,IASTNode node){
+	private boolean checkForConstructorWithParameters(IASTTranslationUnit astTu,IASTNode node){
 		FunctionFinder ff=new FunctionFinder();
 		astTu.accept(ff);
 		for(Object i:ff.getClassStruct()){
@@ -137,7 +137,7 @@ public class AddFunctorToSuiteStrategy extends AddStrategy {
 		return operatorMatchFlag;
 	}
 	
-	public IASTNode getWantedTypeParent(IASTNode node){
+	private IASTNode getWantedTypeParent(IASTNode node){
 		IASTNode parentNode=node, prevNode=node;
 		while(!(parentNode instanceof IASTFunctionDefinition ||
 				parentNode instanceof IASTSimpleDeclaration||
