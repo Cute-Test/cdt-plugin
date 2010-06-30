@@ -26,11 +26,10 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * @author Emanuel Graf IFS
  *
  */
-public class ProjectDecorator implements ILightweightLabelDecorator {
+public class ProjectDecorator implements ILightweightLabelDecorator{
 
 	private static final ImageDescriptor GCOV_ICON = AbstractUIPlugin.imageDescriptorFromPlugin(GcovPlugin.PLUGIN_ID, "icons/ovr16/gcov_ovr.gif"); //$NON-NLS-1$;
 	private static final ImageDescriptor GCOV_DEACT_ICON = AbstractUIPlugin.imageDescriptorFromPlugin(GcovPlugin.PLUGIN_ID, "icons/ovr16/gcov_deact_ovr.gif"); //$NON-NLS-1$;;
-
 
 
 	public void addListener(ILabelProviderListener listener) {
@@ -52,8 +51,7 @@ public class ProjectDecorator implements ILightweightLabelDecorator {
 		if (element instanceof IProject) {
 			IProject proj = (IProject)element;
 			try {
-				if(proj.hasNature(GcovNature.NATURE_ID)) {
-					
+				if(proj.hasNature(GcovNature.NATURE_ID)) {					
 					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
 					IConfiguration config = info.getDefaultConfiguration();
 					if(config.getId().equals(GcovNature.GCOV_CONFG_ID)){
