@@ -11,6 +11,9 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov.actions;
 
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -41,6 +44,20 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate{
 		if(project != null) {
 			try {
 				GcovNature.removeCuteNature(project, new NullProgressMonitor());
+				IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+				IConfiguration[] configs = info.getManagedProject().getConfigurations();
+				if(ManagedBuildManager.getSelectedConfiguration(project).getId().equals(GcovNature.GCOV_CONFG_ID)){
+					for (IConfiguration config : configs) {
+						if(config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) { //$NON-NLS-1$
+							ManagedBuildManager.setSelectedConfiguration(project, config);
+							ManagedBuildManager.setDefaultConfiguration(project, config);
+							continue;
+						}
+					}
+				}
+				info.getManagedProject().removeConfiguration(GcovNature.GCOV_CONFG_ID);
+				ManagedBuildManager.updateCoreSettings(project);
+				
 			} catch (CoreException e) {
 				e.printStackTrace();
 			};

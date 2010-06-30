@@ -41,12 +41,15 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate{
 		if(project != null) {
 			try {
 				GcovNature.addCuteNature(project, new NullProgressMonitor());
+				GcovNature.addGcovConfig(project);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 			project = null;
 		}
 	}
+	
+	
 
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof TreeSelection) {

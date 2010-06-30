@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.text,
  org.eclipse.cdt.ui,
  org.eclipse.cdt.core,
- org.eclipse.cdt.managedbuilder.ui
+ org.eclipse.cdt.managedbuilder.ui,
+ org.eclipse.cdt.managedbuilder.core;bundle-version="7.0.0"
 Export-Package: ch.hsr.ifs.cute.gcov,
  ch.hsr.ifs.cute.gcov.model;uses:="org.eclipse.core.resources",
  ch.hsr.ifs.cute.gcov.parser;uses:="org.eclipse.core.resources,org.eclipse.core.runtime,ch.hsr.ifs.cute.gcov.model"
