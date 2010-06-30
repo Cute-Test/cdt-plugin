@@ -16,8 +16,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 public abstract class AbstractFunctionAction {
-
-	int problemMarkerErrorLineNumber=0;
 	
 	public abstract MultiTextEdit createEdit(ITextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, ISelection selection)
