@@ -51,9 +51,9 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 				if(receiver instanceof IBinary){
 					IBinary bin=(IBinary)receiver;
 					IProject proj = bin.getCProject().getProject();
-					boolean result=proj != null;
-					boolean result1=proj.isAccessible();
-					boolean result2= proj.hasNature(toString(expectedValue));
+					boolean result= proj!= null;
+					boolean result1= proj!=null ? proj.isAccessible(): false;
+					boolean result2= proj!=null ? proj.hasNature(toString(expectedValue)):false;
 					return result && result1 && result2;
 				}
 			} catch (CoreException e) {
