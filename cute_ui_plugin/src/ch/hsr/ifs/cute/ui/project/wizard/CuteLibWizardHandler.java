@@ -250,7 +250,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		return libRefPage.isCustomPageComplete();
 	}
 
-	private class LibraryPathsStrategy implements GetOptionsStrategy{
+	private static class LibraryPathsStrategy implements GetOptionsStrategy{
 
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getBasicStringListValue();
@@ -258,7 +258,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		
 	}
 	
-	private class LibrariesStrategy implements GetOptionsStrategy{
+	private static class LibrariesStrategy implements GetOptionsStrategy{
 
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getLibraries();
