@@ -34,7 +34,6 @@ public class GcovBuilder extends IncrementalProjectBuilder {
 	 * 
 	 */
 	public GcovBuilder() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@SuppressWarnings("rawtypes")

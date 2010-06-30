@@ -70,13 +70,11 @@ public class FileInputTextConsole extends TextConsole {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public IPageBookViewPage createPage(IConsoleView view) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

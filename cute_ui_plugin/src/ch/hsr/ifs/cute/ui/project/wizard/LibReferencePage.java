@@ -129,14 +129,10 @@ public class LibReferencePage extends MBSCustomPage implements ICheckStateListen
 
 			
 			public void dispose() {
-				// TODO Auto-generated method stub
-				
 			}
 
 			public void inputChanged(Viewer viewer, Object oldInput,
 					Object newInput) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@SuppressWarnings({ "rawtypes" })

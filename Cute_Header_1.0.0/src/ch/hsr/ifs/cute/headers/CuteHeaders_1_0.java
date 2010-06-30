@@ -39,7 +39,6 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 	 * 
 	 */
 	public CuteHeaders_1_0() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@SuppressWarnings("nls")
