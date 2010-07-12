@@ -11,21 +11,25 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
-import org.eclipse.cdt.managedbuilder.core.IToolChain;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.cdt.managedbuilder.ui.wizards.CDTConfigWizardPage;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 
 /**
@@ -34,14 +38,14 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
  */
 public class CuteVersionWizardPage extends MBSCustomPage {
 
-	private Composite composite;
+	protected Composite composite;
 	private final CDTConfigWizardPage configPage;
 
 	private final IWizardPage startingWizardPage;
 	private CuteVersionComposite cuteVersionComp;
 	private ImageDescriptor imageDesc;
 	private CuteWizardHandler handler;
-	protected boolean enableGcov = false;
+	private ArrayList<ICuteWizardAddition> additions;
 
 	public CuteVersionWizardPage(CDTConfigWizardPage configWizardPage,
 			IWizardPage staringWizardPage, CuteWizardHandler cuteWizardHandler) {
@@ -68,21 +72,10 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		cuteVersionComp = new CuteVersionComposite(composite);
-		
-		IToolChain[] tcs = handler.getSelectedToolChains();
-		if(tcs[0].getBaseId().contains("gnu")){ //$NON-NLS-1$
-
-			final Button check = new Button(composite, SWT.CHECK);
-			check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov")); //$NON-NLS-1$
-			check.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					enableGcov = check.getSelection();
-				}
-
-			});
+		for (ICuteWizardAddition addition : getAdditions()) {
+			addition.createComposite(composite);
 		}
+		
 	}
 
 	public void dispose() {
@@ -150,6 +143,28 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 
 	public void setImageDescriptor(ImageDescriptor image) {
 		// do nothing
+	}
+
+	public List<ICuteWizardAddition> getAdditions() {
+		if(additions == null) {
+			additions = new ArrayList<ICuteWizardAddition>();
+			try{
+				IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(UiPlugin.PLUGIN_ID, "wizardAddition"); //$NON-NLS-1$
+				if (extension != null) {
+					IExtension[] extensions = extension.getExtensions();
+					for (IExtension extension2 : extensions) {
+						IConfigurationElement[] configElements = extension2.getConfigurationElements();
+						String className =configElements[0].getAttribute("compositeProvider"); //$NON-NLS-1$
+						Class<?> obj = Platform.getBundle(extension2.getContributor().getName()).loadClass(className);
+						additions.add((ICuteWizardAddition) obj.newInstance());
+					}
+				}
+			} catch (ClassNotFoundException e) {
+			} catch (InstantiationException e) {
+			} catch (IllegalAccessException e) {
+			}
+		}
+		return additions;
 	}
 
 }

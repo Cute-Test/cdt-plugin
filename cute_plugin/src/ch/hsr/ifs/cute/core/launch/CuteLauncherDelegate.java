@@ -18,9 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.cdt.core.CCorePlugin;
-import org.eclipse.cdt.core.settings.model.ICProjectDescription;
-import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.launch.AbstractCLaunchDelegate;
 import org.eclipse.cdt.launch.internal.ui.LaunchMessages;
 import org.eclipse.cdt.launch.internal.ui.LaunchUIPlugin;
@@ -28,17 +25,18 @@ import org.eclipse.cdt.utils.pty.PTY;
 import org.eclipse.cdt.utils.spawner.ProcessFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -52,10 +50,6 @@ import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
-import ch.hsr.ifs.cute.gcov.GcovNature;
-import ch.hsr.ifs.cute.gcov.GcovPlugin;
-import ch.hsr.ifs.cute.gcov.parser.LineCoverageParser;
-import ch.hsr.ifs.cute.gcov.parser.ModelBuilderLineParser;
 import ch.hsr.ifs.test.framework.ConsolePatternListener;
 import ch.hsr.ifs.test.framework.event.ConsoleEventParser;
 import ch.hsr.ifs.test.framework.model.ModellBuilder;
@@ -95,7 +89,7 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 			IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 			IFile exeFile = wsRoot.getFile(exePath.makeRelativeTo(wsRoot.getRawLocation()));
 			IProject project = exeFile.getProject();
-			cleanGcdaFilesInRefedProjects(project);
+			notifyBeforeLaunch(project);
 			File wd = getWorkingDirectory( config );
 			if ( wd == null ) {
 				wd = new File( System.getProperty( "user.home", "." ) ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -132,117 +126,44 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 				textCons.addPatternMatchListener(listener);
 			}
 
-			if(project.hasNature(GcovNature.NATURE_ID)) {
-				updateGcov(project);
-				for(IProject refProj :project.getReferencedProjects()) {
-					updateGcov(refProj);
-				}
-			}
+			notifyAfterLaunch(project);
 		}
 		finally {
 			monitor.done();
 		}		
 	}
 
-	private void cleanGcdaFilesInRefedProjects(IProject project) throws CoreException {
-		for(IProject refProj : project.getReferencedProjects()) {
-			cleanGcdaFilesinProject(refProj);
-		}
-		
-	}
-
-	private void cleanGcdaFilesinProject(IProject refProj) throws CoreException {
-		refProj.accept(new IResourceVisitor() {
-			
-			public boolean visit(IResource resource) throws CoreException {
-				if (resource instanceof IFile) {
-					IFile file = (IFile) resource;
-					String fileExtension = file.getFileExtension();
-					if(fileExtension != null && fileExtension.equals("gcda")) {
-						file.delete(true, new NullProgressMonitor());
-					}
-				}
-				return true;
-			}
-		});
-		
-	}
-
-	private void updateGcov(IProject iProject) {
-		ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(iProject);
-		ICSourceEntry[] sourceEntries = desc.getActiveConfiguration().getSourceEntries();
-		List<ICSourceEntry> sourceEntriesList = new ArrayList<ICSourceEntry>();
-		for (ICSourceEntry icSourceEntry : sourceEntries) {
-			IPath location = icSourceEntry.getLocation();
-			if(location != null) {
-				if(location.lastSegment() != null && !location.lastSegment().equals("cute")) {
-					sourceEntriesList.add(icSourceEntry);
-				}
-			}
-		}
-		try {
-			iProject.accept(new SourceFileVisitor(sourceEntriesList));
-		} catch (CoreException e) {
-			e.printStackTrace();
+	protected void notifyAfterLaunch(IProject project) throws CoreException {
+		for (ILaunchObserver observer : getObservers()) {
+			observer.notifyAfterLaunch(project);
 		}
 	}
-	
-	private class SourceFileVisitor implements IResourceVisitor{
-		
-		class ParseJob extends Job{
 
-			private IFile file;
-			private LineCoverageParser parser = new ModelBuilderLineParser();
-
-			public ParseJob(IFile file) {
-				super("gcov parse " + file.getName());
-				this.file = file;
-			}
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				parser.parse(file);
-				return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK");
-			}
-			
+	protected void notifyBeforeLaunch(IProject project) throws CoreException {
+		for (ILaunchObserver observer : getObservers()) {
+			observer.notifyBeforeLaunch(project);
 		}
-		
+	}
 
-		private List<ICSourceEntry> sourceEntries;
-
-		public SourceFileVisitor(List<ICSourceEntry> sourceEntriesList) {
-			this.sourceEntries = sourceEntriesList;
-		}
-
-		public boolean visit(IResource resource) throws CoreException {
-			for (ICSourceEntry sourceEntry : sourceEntries) {
-				if(sourceEntry.getLocation().isPrefixOf(resource.getLocation()) && isNotInExclusion(sourceEntry, resource)) {
-					if (resource instanceof IFile) {
-						IFile file = (IFile) resource;
-						if(file.getName().endsWith("cpp")) {
-							parse(file);
-						}
-					}
+	private List<ILaunchObserver> getObservers() {
+		List<ILaunchObserver> additions = new ArrayList<ILaunchObserver>();
+		try{
+			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteCorePlugin.PLUGIN_ID, "launchObserver"); //$NON-NLS-1$
+			if (extension != null) {
+				IExtension[] extensions = extension.getExtensions();
+				for (IExtension extension2 : extensions) {
+					IConfigurationElement[] configElements = extension2.getConfigurationElements();
+					String className =configElements[0].getAttribute("class"); //$NON-NLS-1$
+					Class<?> obj = Platform.getBundle(extension2.getContributor().getName()).loadClass(className);
+					additions.add((ILaunchObserver) obj.newInstance());
 				}
 			}
-			return true;
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
 		}
-
-		protected void parse(final IFile file) throws CoreException {
-			ParseJob job = new ParseJob(file);
-			job.schedule();
-			
-		}
-
-		private boolean isNotInExclusion(ICSourceEntry sourceEntry, IResource resource) {
-			for (IPath exPath : sourceEntry.getExclusionPatterns()) {
-				if(sourceEntry.getLocation().append(exPath).isPrefixOf(resource.getLocation())) {
-					return false;
-				}
-			}
-			return true;
-		}
-		}
+		return additions;
+	}
 
 	protected ConsoleEventParser getConsoleEventParser() {
 		return new CuteConsoleEventParser();

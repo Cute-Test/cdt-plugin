@@ -46,7 +46,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	@Override
 	protected void createCuteProjectSettings(IProject newProject) {
 		try {
-			createCuteProject(newProject, suitewizPage.enableGcov);
+			createCuteProject(newProject);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}

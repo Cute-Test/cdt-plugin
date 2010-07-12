@@ -24,6 +24,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import ch.hsr.ifs.cute.gcov.GcovNature;
+import ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler;
 
 /**
  * @author Emanuel Graf IFS
@@ -45,7 +46,7 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate{
 				GcovNature.removeCuteNature(project, new NullProgressMonitor());
 				IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 				IConfiguration[] configs = info.getManagedProject().getConfigurations();
-				if(ManagedBuildManager.getSelectedConfiguration(project).getId().equals(GcovNature.GCOV_CONFG_ID)){
+				if(ManagedBuildManager.getSelectedConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)){
 					for (IConfiguration config : configs) {
 						if(config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) { //$NON-NLS-1$
 							ManagedBuildManager.setSelectedConfiguration(project, config);
@@ -54,7 +55,7 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate{
 						}
 					}
 				}
-				info.getManagedProject().removeConfiguration(GcovNature.GCOV_CONFG_ID);
+				info.getManagedProject().removeConfiguration(GcovAdditionHandler.GCOV_CONFG_ID);
 				ManagedBuildManager.updateCoreSettings(project);
 				
 			} catch (CoreException e) {

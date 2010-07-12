@@ -31,21 +31,17 @@ import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.BuildAction;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.gcov.GcovNature;
+import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -71,8 +67,8 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	@Override
 	protected void createCuteProjectSettings(IProject newProject) {
 		try {
-			createCuteProject(newProject, libRefPage.enableGcov);
-			createLibSetings(newProject, libRefPage.enableGcov);
+			createCuteProject(newProject);
+			createLibSetings(newProject);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -106,15 +102,11 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		}
 	}
 	
-	private void createLibSetings(IProject project, boolean enableGcov) throws CoreException {
+	private void createLibSetings(IProject project) throws CoreException {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
-			if(enableGcov && libProjectNeedGcovConfig(libProject)) {
-				GcovNature.addGcovNature(libProject, new NullProgressMonitor());
-				GcovNature.addGcovConfig(libProject);
-				BuildAction buildAction = new BuildAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), IncrementalProjectBuilder.INCREMENTAL_BUILD);
-				buildAction.selectionChanged(new StructuredSelection(libProject));
-				buildAction.run();
+			for (ICuteWizardAddition addition : libRefPage.getAdditions()) {
+				addition.getHandler().configureLibProject(libProject);
 			}
 			setToolChainIncludePath(project, libProject);
 		}
@@ -122,15 +114,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		ManagedBuildManager.saveBuildInfo(project, true);
 	}
 
-	private boolean libProjectNeedGcovConfig(IProject libProject) {
-		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject);
-		for (String name : info.getConfigurationNames()) {
-			if(name.equalsIgnoreCase("debug gcov")) { //$NON-NLS-1$
-				return false;
-			}
-		}
-		return true;
-	}
+	
 
 	private void setProjectReference(IProject project, Vector<IProject> projects)
 			throws CoreException {

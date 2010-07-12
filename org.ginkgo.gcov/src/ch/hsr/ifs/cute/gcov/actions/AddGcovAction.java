@@ -21,6 +21,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import ch.hsr.ifs.cute.gcov.GcovNature;
+import ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler;
 
 /**
  * @author Emanuel Graf IFS
@@ -40,7 +41,7 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate{
 		if(project != null) {
 			try {
 				GcovNature.addGcovNature(project, new NullProgressMonitor());
-				GcovNature.addGcovConfig(project);
+				new GcovAdditionHandler().addGcovConfig(project);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}

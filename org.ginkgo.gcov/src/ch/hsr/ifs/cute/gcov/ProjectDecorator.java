@@ -22,6 +22,8 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler;
+
 /**
  * @author Emanuel Graf IFS
  *
@@ -51,7 +53,7 @@ public class ProjectDecorator implements ILightweightLabelDecorator{
 				if(proj.exists() && proj.hasNature(GcovNature.NATURE_ID)) {					
 					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
 					IConfiguration config = info.getDefaultConfiguration();
-					if(config.getId().equals(GcovNature.GCOV_CONFG_ID)){
+					if(config.getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)){
 						decoration.addOverlay(GCOV_ICON, IDecoration.BOTTOM_LEFT);
 					}else {
 						decoration.addOverlay(GCOV_DEACT_ICON, IDecoration.BOTTOM_LEFT);

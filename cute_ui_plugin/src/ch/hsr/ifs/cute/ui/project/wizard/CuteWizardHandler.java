@@ -12,6 +12,7 @@
 package ch.hsr.ifs.cute.ui.project.wizard;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.cdt.core.CCorePlugin;
@@ -49,7 +50,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.gcov.GcovNature;
+import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
@@ -97,29 +98,32 @@ public class CuteWizardHandler extends MBSWizardHandler {
 
 	protected void createCuteProjectSettings(IProject newProject) {
 		try {
-			createCuteProject(newProject, cuteVersionWizardPage.enableGcov);
+			createCuteProject(newProject);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 	}
 
 
-	protected void createCuteProject(IProject project, boolean enableGcov) throws CoreException {
+	protected void createCuteProject(IProject project) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
 		QualifiedName key = new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME);
 		project.setPersistentProperty(key, getCuteVersion().getVersionString());
 		createCuteProjectFolders(project);
-		if(enableGcov) {
-			configGcov(project);
-		}
+		callAdditionalHandlers(project);
 		ManagedBuildManager.saveBuildInfo(project, true);
 		
 	}
-	
-	private void configGcov(IProject project) throws CoreException {
-		GcovNature.addGcovNature(project, new NullProgressMonitor());
-		GcovNature.addGcovConfig(project);		
+
+	private void callAdditionalHandlers(IProject project) throws CoreException {
+		List<ICuteWizardAddition> adds = cuteVersionWizardPage.getAdditions();
+		for (ICuteWizardAddition addition : adds) {
+			addition.getHandler().configureProject(project);
+		}
+		
+		
 	}
+
 
 	protected void createCuteProjectFolders(IProject project)
 			throws CoreException {
