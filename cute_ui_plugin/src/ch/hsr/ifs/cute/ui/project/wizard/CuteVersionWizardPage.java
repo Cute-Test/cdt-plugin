@@ -156,7 +156,8 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 						IConfigurationElement[] configElements = extension2.getConfigurationElements();
 						String className =configElements[0].getAttribute("compositeProvider"); //$NON-NLS-1$
 						Class<?> obj = Platform.getBundle(extension2.getContributor().getName()).loadClass(className);
-						additions.add((ICuteWizardAddition) obj.newInstance());
+						Object newInstance = obj.newInstance();
+						additions.add((ICuteWizardAddition) newInstance);
 					}
 				}
 			} catch (ClassNotFoundException e) {

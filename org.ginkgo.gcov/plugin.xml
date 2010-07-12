@@ -242,5 +242,17 @@
           </action>
        </objectContribution>
     </extension>
+   <extension
+         point="ch.hsr.ifs.cute.core.launchObserver">
+      <launchObserver
+            class="ch.hsr.ifs.cute.gcov.parser.LaunchObserver">
+      </launchObserver>
+   </extension>
+   <extension
+         point="ch.hsr.ifs.cute.ui.wizardAddition">
+      <wizardAddition
+            compositeProvider="ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler">
+      </wizardAddition>
+   </extension>
 
 </plugin>
