@@ -251,7 +251,7 @@
    <extension
          point="ch.hsr.ifs.cute.ui.wizardAddition">
       <wizardAddition
-            compositeProvider="ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler">
+            compositeProvider="ch.hsr.ifs.cute.gcov.ui.GcovWizardAddition">
       </wizardAddition>
    </extension>
 

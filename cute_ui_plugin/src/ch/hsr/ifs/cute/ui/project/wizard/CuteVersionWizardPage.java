@@ -155,8 +155,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 					for (IExtension extension2 : extensions) {
 						IConfigurationElement[] configElements = extension2.getConfigurationElements();
 						String className =configElements[0].getAttribute("compositeProvider"); //$NON-NLS-1$
-						Class<?> obj = Platform.getBundle(extension2.getContributor().getName()).loadClass(className);
-						Object newInstance = obj.newInstance();
+						Object newInstance = ((Class<?>) Platform.getBundle(extension2.getContributor().getName()).loadClass(className)).newInstance();
 						additions.add((ICuteWizardAddition) newInstance);
 					}
 				}

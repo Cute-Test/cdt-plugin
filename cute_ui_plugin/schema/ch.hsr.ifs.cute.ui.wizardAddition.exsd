@@ -55,7 +55,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":ch.hsr.ifs.cute.ui.WizardPageAddition"/>
+                  <meta.attribute kind="java" basedOn=":ch.hsr.ifs.cute.ui.ICuteWizardAddition"/>
                </appInfo>
             </annotation>
          </attribute>
