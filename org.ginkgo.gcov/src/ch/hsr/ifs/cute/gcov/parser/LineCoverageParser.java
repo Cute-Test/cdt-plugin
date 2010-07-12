@@ -110,8 +110,10 @@ public abstract class LineCoverageParser {
 			}
 			
 			GcovPlugin.getDefault().getcModel().clearModel();
-			parse(cppFile, new InputStreamReader(gcovFile
-					.getContents()));
+			if(gcovFile != null) {
+				parse(cppFile, new InputStreamReader(gcovFile
+						.getContents()));
+			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
