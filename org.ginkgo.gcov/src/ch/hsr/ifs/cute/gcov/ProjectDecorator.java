@@ -54,9 +54,9 @@ public class ProjectDecorator implements ILightweightLabelDecorator{
 					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
 					IConfiguration config = info.getDefaultConfiguration();
 					if(config.getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)){
-						decoration.addOverlay(GCOV_ICON, IDecoration.BOTTOM_LEFT);
+						decoration.addOverlay(GCOV_ICON, IDecoration.BOTTOM_RIGHT);
 					}else {
-						decoration.addOverlay(GCOV_DEACT_ICON, IDecoration.BOTTOM_LEFT);
+						decoration.addOverlay(GCOV_DEACT_ICON, IDecoration.BOTTOM_RIGHT);
 					}
 				}
 			} catch (CoreException e) {
