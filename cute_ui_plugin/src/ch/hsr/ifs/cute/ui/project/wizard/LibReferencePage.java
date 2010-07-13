@@ -34,6 +34,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
+import ch.hsr.ifs.cute.ui.IIncludeStrategyProvider;
+
 /**
  * @author Emanuel Graf
  *
@@ -44,7 +46,7 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 	private Vector<IProject> libProjects;
 	private final IWizardContainer wizardDialog;
 	
-	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc, CuteWizardHandler cuteWizardHandler) {
+	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc, IIncludeStrategyProvider cuteWizardHandler) {
 		super(configWizardPage, staringWizardPage, cuteWizardHandler);
 		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage"; //$NON-NLS-1$
 		wizardDialog=wc;

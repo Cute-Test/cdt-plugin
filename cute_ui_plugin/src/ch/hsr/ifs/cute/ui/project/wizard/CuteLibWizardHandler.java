@@ -41,7 +41,9 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
+import ch.hsr.ifs.cute.ui.ProjectTools;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -141,9 +143,9 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		for (ICSourceEntry sourceEntry : sources) {
 			IPath location = sourceEntry.getFullPath();
 			if(location.segmentCount()== 0) {
-				setIncludePaths(libProject.getFullPath(), project);
+				ProjectTools.setIncludePaths(libProject.getFullPath(), project, this);
 			}else {
-				setIncludePaths(libProject.getFolder(location).getFullPath(), project);
+				ProjectTools.setIncludePaths(libProject.getFolder(location).getFullPath(), project, this);
 			}
 		}
 		for(IConfiguration configuration : configs) {
@@ -178,10 +180,10 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 				IConfiguration targetConfig = findSameConfig(configuration, project);
 				try {
 					IToolChain toolChain = targetConfig.getToolChain();
-					setOptionInConfig(path, targetConfig, toolChain.getOptions(), toolChain, IOption.LIBRARY_PATHS);
+					ProjectTools.setOptionInConfig(path, targetConfig, toolChain.getOptions(), toolChain, IOption.LIBRARY_PATHS, this);
 					ITool[] tools = targetConfig.getTools();
 					for(int j=0; j<tools.length; j++) {
-						setOptionInConfig(path, targetConfig, tools[j].getOptions(), tools[j], IOption.LIBRARY_PATHS);
+						ProjectTools.setOptionInConfig(path, targetConfig, tools[j].getOptions(), tools[j], IOption.LIBRARY_PATHS, this);
 					}
 				} catch (BuildException be) {
 					throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,be.getMessage(), be));
@@ -200,13 +202,13 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	}
 
 	protected void setLibName(String libName, IProject project) throws CoreException {
-		setOptionInAllConfigs(project, libName, IOption.LIBRARIES);
+		ProjectTools.setOptionInAllConfigs(project, libName, IOption.LIBRARIES, this);
 	}
 
 	
 	
 	@Override
-	protected GetOptionsStrategy getStrategy(int optionType) {
+	public GetOptionsStrategy getStrategy(int optionType) {
 		switch (optionType) {
 		case IOption.LIBRARY_PATHS:
 			return new LibraryPathsStrategy();

@@ -9,7 +9,7 @@
  * Contributors:
  * Emanuel Graf - initial API and implementation
  ******************************************************************************/
-package ch.hsr.ifs.cute.ui.project.wizard;
+package ch.hsr.ifs.cute.ui;
 
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IOption;

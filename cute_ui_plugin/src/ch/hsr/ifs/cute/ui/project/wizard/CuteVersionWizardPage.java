@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
+import ch.hsr.ifs.cute.ui.IIncludeStrategyProvider;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 
 /**
@@ -44,11 +45,11 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	private final IWizardPage startingWizardPage;
 	private CuteVersionComposite cuteVersionComp;
 	private ImageDescriptor imageDesc;
-	private CuteWizardHandler handler;
+	private IIncludeStrategyProvider handler;
 	private ArrayList<ICuteWizardAddition> additions;
 
 	public CuteVersionWizardPage(CDTConfigWizardPage configWizardPage,
-			IWizardPage staringWizardPage, CuteWizardHandler cuteWizardHandler) {
+			IWizardPage staringWizardPage, IIncludeStrategyProvider cuteWizardHandler) {
 		pageID = "ch.hsr.ifs.cutelauncher.ui.CuteVersionPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
 		this.startingWizardPage = staringWizardPage;

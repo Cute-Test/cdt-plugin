@@ -11,46 +11,29 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.cdt.core.CCorePlugin;
-import org.eclipse.cdt.core.settings.model.CSourceEntry;
-import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
-import org.eclipse.cdt.core.settings.model.ICProjectDescription;
-import org.eclipse.cdt.core.settings.model.ICSourceEntry;
-import org.eclipse.cdt.core.settings.model.WriteAccessException;
-import org.eclipse.cdt.managedbuilder.core.BuildException;
-import org.eclipse.cdt.managedbuilder.core.IConfiguration;
-import org.eclipse.cdt.managedbuilder.core.IHoldsOptions;
-import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.IOption;
-import org.eclipse.cdt.managedbuilder.core.ITool;
-import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
-import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
+import ch.hsr.ifs.cute.ui.IIncludeStrategyProvider;
+import ch.hsr.ifs.cute.ui.IncludePathStrategy;
+import ch.hsr.ifs.cute.ui.ProjectTools;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
@@ -59,7 +42,7 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
  * @author Emanuel Graf
  *
  */
-public class CuteWizardHandler extends MBSWizardHandler {
+public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrategyProvider {
 	
 	private CuteVersionWizardPage cuteVersionWizardPage;
 
@@ -127,16 +110,16 @@ public class CuteWizardHandler extends MBSWizardHandler {
 
 	protected void createCuteProjectFolders(IProject project)
 			throws CoreException {
-		IFolder srcFolder = createFolder(project, "src"); //$NON-NLS-1$
+		IFolder srcFolder = ProjectTools.createFolder(project, "src", true); //$NON-NLS-1$
 		ICuteHeaders cuteVersion = getCuteVersion();
 		
 		
-		IFolder cuteFolder = createFolder(project, "cute"); //$NON-NLS-1$
+		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", true); //$NON-NLS-1$
 		
 		
 		copyFiles(srcFolder, cuteVersion, cuteFolder);
 		
-		setIncludePaths(cuteFolder.getFullPath(), project);
+		ProjectTools.setIncludePaths(cuteFolder.getFullPath(), project, this);
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				getTestMainFile(project), true);
 	}
@@ -151,97 +134,11 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
 	}
 	
-	private IFolder createFolder(IProject project, String relPath)
-			throws CoreException {
-		IFolder folder= project.getProject().getFolder(relPath);
-		if (!folder.exists()) {
-			createFolder(folder, true, true, new NullProgressMonitor());
-		}
-				
-		if(CCorePlugin.getDefault().isNewStyleProject(project.getProject())){
-			ICSourceEntry newEntry = new CSourceEntry(folder, null, 0);
-			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
-			addEntryToAllCfgs(des, newEntry, false);
-			CCorePlugin.getDefault().setProjectDescription(project.getProject(), des, false, new NullProgressMonitor());
-		}
-		return folder;
-	}
-
-	private void createFolder(IFolder folder, boolean force, boolean local, IProgressMonitor monitor) throws CoreException {
-		if (!folder.exists()) {
-			IContainer parent= folder.getParent();
-			if (parent instanceof IFolder) {
-				createFolder((IFolder)parent, force, local, null);
-			}
-			folder.create(force, local, monitor);
-		}
-	}
-	
-	private void addEntryToAllCfgs(ICProjectDescription des, ICSourceEntry entry, boolean removeProj) throws WriteAccessException, CoreException{
-		ICConfigurationDescription cfgs[] = des.getConfigurations();
-		for(int i = 0; i < cfgs.length; i++){
-			ICConfigurationDescription cfg = cfgs[i];
-			ICSourceEntry[] entries = cfg.getSourceEntries();
-			entries = addEntry(entries, entry, removeProj);
-			cfg.setSourceEntries(entries);
-		}
-	}
-		
-	private ICSourceEntry[] addEntry(ICSourceEntry[] entries, ICSourceEntry entry, boolean removeProj){
-		Set<ICSourceEntry> set = new HashSet<ICSourceEntry>();
-		for(int i = 0; i < entries.length; i++){
-			if(removeProj && new Path(entries[i].getValue()).segmentCount() == 1)
-				continue;
-			
-			set.add(entries[i]);
-		}
-		set.add(entry);
-		return set.toArray(new ICSourceEntry[set.size()]);
-	}
-	
-	protected void setIncludePaths(IPath cuteFolder, IProject project) throws CoreException {
-		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
-		setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH);
-	}
-
-	protected void setOptionInAllConfigs(IProject project, String value, int optionType)
-			throws CoreException {
-		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-		IConfiguration[] configs = info.getManagedProject().getConfigurations();
-		try{
-			for(IConfiguration conf : configs){
-				IToolChain toolChain = conf.getToolChain();
-				setOptionInConfig(value, conf, toolChain.getOptions(), toolChain, optionType);
-
-				ITool[] tools = conf.getTools();
-				for(int j=0; j<tools.length; j++) {
-					setOptionInConfig(value, conf, tools[j].getOptions(), tools[j], optionType);
-				}
-			}
-		}catch (BuildException be){
-			throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,be.getMessage(), be));
-		}
-	}
-	
-	protected void setOptionInConfig(String value, IConfiguration config,
-			IOption[] options, IHoldsOptions optionHolder, int optionType) throws BuildException {
-		for (int i = 0; i < options.length; i++) {
-			IOption option = options[i];
-			if (option.getValueType() == optionType) {
-				String[] includePaths = getStrategy(optionType).getValues(option);
-				String[] newPaths = new String[includePaths.length + 1];
-				System.arraycopy(includePaths, 0, newPaths, 0, includePaths.length);
-				newPaths[includePaths.length] = value;
-				ManagedBuildManager.setOption(config, optionHolder, option, newPaths);
-			}
-		}
-	}
-
 	protected IFile getTestMainFile(IProject project) {
 		return project.getFile("src/Test.cpp"); //$NON-NLS-1$
 	}
 	
-	protected GetOptionsStrategy getStrategy(int optionType) {
+	public GetOptionsStrategy getStrategy(int optionType) {
 		switch (optionType) {
 		case IOption.INCLUDE_PATH:
 			return new IncludePathStrategy();
@@ -249,14 +146,6 @@ public class CuteWizardHandler extends MBSWizardHandler {
 		default:
 			throw new IllegalArgumentException("Illegal Argument: "+optionType); //$NON-NLS-1$
 		}
-	}
-
-	private static class IncludePathStrategy implements GetOptionsStrategy{
-
-		public String[] getValues(IOption option) throws BuildException {
-			return option.getIncludePaths();
-		}
-		
 	}
 
 
