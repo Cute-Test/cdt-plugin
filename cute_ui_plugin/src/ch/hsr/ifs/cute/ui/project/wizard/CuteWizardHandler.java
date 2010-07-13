@@ -11,18 +11,23 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
+import org.eclipse.cdt.managedbuilder.ui.properties.ManagedBuilderUIPlugin;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
@@ -74,36 +79,51 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	}
 
 	@Override
-	protected void doCustom(IProject newProject) {
+	protected void doCustom(final IProject newProject) {
 		super.doCustom(newProject);
-		createCuteProjectSettings(newProject);
+		IRunnableWithProgress op = new IRunnableWithProgress() {
+			
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+				createCuteProjectSettings(newProject, monitor);
+			}
+		};
+		try {
+			getWizard().getContainer().run(false, true, op);
+		} catch (InvocationTargetException e) {
+			ManagedBuilderUIPlugin.log(e);
+		} catch (InterruptedException e) {
+			ManagedBuilderUIPlugin.log(e);
+		}
+		
 	}
 
-	protected void createCuteProjectSettings(IProject newProject) {
+	protected void createCuteProjectSettings(IProject newProject, IProgressMonitor monitor) {
 		try {
-			createCuteProject(newProject);
+			createCuteProject(newProject, monitor);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 	}
 
 
-	protected void createCuteProject(IProject project) throws CoreException {
+	protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
 		QualifiedName key = new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME);
 		project.setPersistentProperty(key, getCuteVersion().getVersionString());
 		createCuteProjectFolders(project);
-		callAdditionalHandlers(project);
+		callAdditionalHandlers(project, pm);
 		ManagedBuildManager.saveBuildInfo(project, true);
 		
 	}
 
-	private void callAdditionalHandlers(IProject project) throws CoreException {
+	private void callAdditionalHandlers(IProject project, IProgressMonitor pm) throws CoreException {
 		List<ICuteWizardAddition> adds = cuteVersionWizardPage.getAdditions();
+		SubMonitor mon = SubMonitor.convert(pm, adds.size());
 		for (ICuteWizardAddition addition : adds) {
-			addition.getHandler().configureProject(project);
+			addition.getHandler().configureProject(project, mon);
+			mon.worked(1);
 		}
-		
+		mon.done();
 		
 	}
 

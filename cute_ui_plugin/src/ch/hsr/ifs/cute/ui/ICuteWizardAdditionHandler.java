@@ -13,6 +13,7 @@ package ch.hsr.ifs.cute.ui;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author Emanuel Graf IFS
@@ -20,7 +21,7 @@ import org.eclipse.core.runtime.CoreException;
  */
 public interface ICuteWizardAdditionHandler {
 	
-	public void configureProject(IProject project) throws CoreException;
+	public void configureProject(IProject project, IProgressMonitor pm) throws CoreException;
 	
 	public void configureLibProject(IProject project) throws CoreException;
 

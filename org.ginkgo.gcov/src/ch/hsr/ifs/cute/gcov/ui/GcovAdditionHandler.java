@@ -20,9 +20,10 @@ import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.BuildAction;
@@ -37,9 +38,9 @@ import ch.hsr.ifs.cute.ui.ICuteWizardAdditionHandler;
  */
 public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 	
-	public static final String GCOV_CONFG_ID = "gcov";
+	public static final String GCOV_CONFG_ID = "gcov"; //$NON-NLS-1$
 	
-	private static final String MACOSX_LINKER_OPTION_FLAGS = "macosx.cpp.link.option.flags";
+	private static final String MACOSX_LINKER_OPTION_FLAGS = "macosx.cpp.link.option.flags"; //$NON-NLS-1$
 	private static final String GCOV_LINKER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99"; //$NON-NLS-1$
 	private static final String GNU_CPP_LINK_OPTION_FLAGS = "gnu.cpp.link.option.flags"; //$NON-NLS-1$
 	private static final String GNU_CPP_LINKER_ID = "cdt.managedbuild.tool.gnu.cpp.linker"; //$NON-NLS-1$
@@ -61,11 +62,13 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 		this.addition = addition;
 	}
 
-	public void configureProject(IProject project) throws CoreException {
+	public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
+		SubMonitor mon = SubMonitor.convert(pm, 2);
 		if(isGcovEnabled()) {
-			GcovNature.addGcovNature(project, new NullProgressMonitor());
+			GcovNature.addGcovNature(project, mon);
 			addGcovConfig(project);	
 		}
+		mon.done();
 	}
 
 	protected boolean isGcovEnabled() {

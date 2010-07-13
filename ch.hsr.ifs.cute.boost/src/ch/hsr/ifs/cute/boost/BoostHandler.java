@@ -49,8 +49,10 @@ public class BoostHandler implements ICuteWizardAdditionHandler, IIncludeStrateg
 	}
 
 	@Override
-	public void configureProject(IProject project) throws CoreException {
+	public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
+		SubMonitor mon = SubMonitor.convert(pm, 2);
 		if(addition.copyBoost) {
+			mon.beginTask("Create Boost Folders", 2);
 			IFolder boostSrcFolder = ProjectTools.createFolder(project, "boost", true); //$NON-NLS-1$
 			IFolder boostFolder = ProjectTools.createFolder(project, "boost/boost", false); //$NON-NLS-1$
 			List<URL> urls = getBoostFiles("boost"); //$NON-NLS-1$
@@ -58,6 +60,7 @@ public class BoostHandler implements ICuteWizardAdditionHandler, IIncludeStrateg
 			
 			ProjectTools.setIncludePaths(boostSrcFolder.getFullPath(), project, this);
 		}
+		mon.done();
 	}
 	
 	@SuppressWarnings("rawtypes")

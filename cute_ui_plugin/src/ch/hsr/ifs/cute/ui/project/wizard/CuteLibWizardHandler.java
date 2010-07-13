@@ -33,6 +33,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -67,9 +68,9 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	}
 
 	@Override
-	protected void createCuteProjectSettings(IProject newProject) {
+	protected void createCuteProjectSettings(IProject newProject, IProgressMonitor pm) {
 		try {
-			createCuteProject(newProject);
+			createCuteProject(newProject, pm);
 			createLibSetings(newProject);
 		} catch (CoreException e) {
 			e.printStackTrace();

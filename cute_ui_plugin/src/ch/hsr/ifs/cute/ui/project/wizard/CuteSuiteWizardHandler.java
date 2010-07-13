@@ -13,6 +13,7 @@ import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -44,9 +45,9 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 	
 	@Override
-	protected void createCuteProjectSettings(IProject newProject) {
+	protected void createCuteProjectSettings(IProject newProject, IProgressMonitor pm) {
 		try {
-			createCuteProject(newProject);
+			createCuteProject(newProject, pm);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
