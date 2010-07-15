@@ -13,6 +13,7 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
 class AssertStatementCheckVisitor extends ASTVisitor{
 	
+	@SuppressWarnings("nls")
 	private static Set<String> asserts = new HashSet<String>(Arrays.asList(
 			"ASSERT", "ASSERTM", 
 			"FAIL", "FAILM",

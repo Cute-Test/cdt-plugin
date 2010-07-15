@@ -47,7 +47,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 			List<String> registeredFunctionNames) {
 		for (IASTDeclaration iastDeclaration : testFunctions) {
 			if(!(registeredFunctionNames.contains(getName(iastDeclaration)))) {
-				reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastDeclaration);
+				reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastDeclaration); //$NON-NLS-1$
 			}
 		}
 		
@@ -80,13 +80,13 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 	private String getQualifiedName(IASTFunctionDefinition funcDef) {
 		IASTName funcName = funcDef.getDeclarator().getName();
 		IASTNode n;
-		String className = "";
+		String className = ""; //$NON-NLS-1$
 		for(n = funcDef; n != null && !(n instanceof ICPPASTCompositeTypeSpecifier); n = n.getParent()) {}
 		if(n != null) {
 			ICPPASTCompositeTypeSpecifier struct = (ICPPASTCompositeTypeSpecifier)n;
 			className = struct.getName().toString();
 		}
-		return className + "::" + funcName.toString();
+		return className + "::" + funcName.toString(); //$NON-NLS-1$
 	}
 
 	protected boolean isFunctor(IASTFunctionDefinition funcDef) {

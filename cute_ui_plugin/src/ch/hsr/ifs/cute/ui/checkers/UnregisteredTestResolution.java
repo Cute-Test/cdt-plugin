@@ -41,7 +41,7 @@ public class UnregisteredTestResolution extends AbstarctCodanCMarkerResolution {
 
 
 	public String getLabel() {
-		return "Add test to suite";
+		return Messages.UnregisteredTestResolution_0;
 	}
 
 	

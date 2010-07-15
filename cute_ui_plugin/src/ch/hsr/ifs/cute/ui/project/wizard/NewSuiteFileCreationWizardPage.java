@@ -11,7 +11,11 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 import org.eclipse.cdt.core.CConventions;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICContainer;
@@ -21,6 +25,7 @@ import org.eclipse.cdt.core.model.ISourceRoot;
 import org.eclipse.cdt.internal.corext.util.CModelUtil;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.cdt.internal.ui.viewsupport.IViewPartInputProvider;
+import org.eclipse.cdt.internal.ui.wizards.dialogfields.ComboDialogField;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.LayoutUtil;
 import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.cdt.utils.PathUtil;
@@ -38,14 +43,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
@@ -73,6 +84,10 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	private IStatus fNewFileStatus;
 	private int fLastFocusedField;
 	private boolean fPageVisible;
+	private ICProject cProject;
+	private RunnerFinder runnerFinder;
+	private ComboDialogField runnerComboField;
+	private List<IASTFunctionDefinition> runners;
 	
 	public NewSuiteFileCreationWizardPage(){
 		super(Messages.getString("NewSuiteFileCreationWizardPage.1")); //$NON-NLS-1$
@@ -99,6 +114,9 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		linkToRunnerCheck.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.LinkToRunner")); //$NON-NLS-1$
 		//generate list of runners
 		//prompt selection
+		runnerComboField= new ComboDialogField(SWT.READ_ONLY);
+		runnerComboField.setLabelText("Choose run method");
+		
 		
 		fSourceFolderStatus = STATUS_OK;
 		fNewFileStatus = STATUS_OK;
@@ -136,7 +154,9 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	            		IFolder folder=root.getFolder(folderPath);	
 	            		headers.copySuiteFiles(folder, monitor, suitename, false);
 	            	}
-	            	
+	            	if(linkToRunnerCheck.isSelected()) {
+	            		addSuiteToRunner(suitename, runnerComboField.getSelectionIndex());
+	            	}
 	            }
 	        } finally {
 	            monitor.done();
@@ -144,13 +164,80 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
         }
 	}
 	
+	private void addSuiteToRunner(String suitename, int selectionIndex) throws CoreException {
+		IASTFunctionDefinition testRunner = runners.get(selectionIndex);
+		LinkSuiteToRunnerProcessor processor = new LinkSuiteToRunnerProcessor(testRunner, suitename);
+		Change change = processor.getLinkSuiteToRunnerChange();
+		change.perform(new NullProgressMonitor());
+		
+		
+		
+	}
+
 	private void createFileControls(Composite parent, int nColumns) {
 		newFileDialogField.doFillIntoGrid(parent, nColumns);
 		Text textControl = newFileDialogField.getTextControl(null);
 		LayoutUtil.setWidthHint(textControl, convertWidthInCharsToPixels(50));
 		textControl.addFocusListener(new StatusFocusListener(NEW_FILE_ID));
 		createSeparator(parent,nColumns);
+		final Button button = (Button) linkToRunnerCheck.doFillIntoGrid(parent, nColumns)[0];
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean selection = button.getSelection();
+				runnerComboField.setEnabled(selection);
+				setErrorMessage(null);
+				if(selection) {
+					String[] runners2 = getRunners();
+					if(runners2.length == 0) {
+						setErrorMessage("No test runner found.");
+						runnerComboField.setEnabled(false);
+					}
+					runnerComboField.setItems(runners2);
+					if(runners2.length == 1) {
+						runnerComboField.selectItem(0);
+					}
+				}
+			}
+		});
 		linkToRunnerCheck.doFillIntoGrid(parent, nColumns);
+		
+		runnerComboField.doFillIntoGrid(parent, nColumns);
+		Combo comboControl= runnerComboField.getComboControl(null);
+		LayoutUtil.setWidthHint(comboControl, convertWidthInCharsToPixels(50));
+		runnerComboField.setEnabled(false);
+	}
+	
+	private String[] getRunners() {
+		try {
+			if(runners == null) {
+				getWizard().getContainer().run(true, false, new IRunnableWithProgress() {
+					
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						try {
+							runners = runnerFinder.findTestRunners(monitor);
+						} catch (CoreException e) {
+							throw new InvocationTargetException(e);
+						}
+						
+					}
+				});
+
+			}
+			String[] runnerStrings = new String[runners.size()];
+			int i = 0;
+			for (IASTFunctionDefinition func : runners) {
+				runnerStrings[i++] = func.getDeclarator().getName().toString();
+			}
+			return runnerStrings;
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		//TODO error Message
+		return new String[]{"No Test Runners found"};
 	}
 	
 	private void createSeparator(Composite composite, int nColumns) {
@@ -245,7 +332,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 
 		createSourceFolderControls(composite, nColumns);
 
-		createFileControls(composite, nColumns - 1);
+		createFileControls(composite, nColumns);
 		(new Composite(composite, SWT.NO_FOCUS)).setLayoutData(new GridData(1, 1));
 
 		composite.layout();
@@ -457,6 +544,8 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 
 	public void init(IStructuredSelection selection) {
 		ICElement celem = getInitialCElement(selection);
+		cProject = celem.getCProject();
+		runnerFinder = new RunnerFinder(cProject);
     	initFields(celem);
     	doStatusUpdate();
 	}

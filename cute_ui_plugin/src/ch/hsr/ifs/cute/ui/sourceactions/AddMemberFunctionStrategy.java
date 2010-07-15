@@ -54,28 +54,28 @@ public class AddMemberFunctionStrategy extends AddStrategy{
 	}
 
 	private StringBuilder getString(ICPPASTQualifiedName qName, SuitePushBackFinder suitPushBackFinder) {
-		StringBuilder sb = new StringBuilder(newLine + "\t"); // s.push_back(CUTE_SMEMFUN(TestClass,test2);");
+		StringBuilder sb = new StringBuilder(newLine + "\t"); // s.push_back(CUTE_SMEMFUN(TestClass,test2);"); //$NON-NLS-1$
 		sb.append(suitPushBackFinder.getSuiteDeclName().toString());
-		sb.append(".push_back(CUTE_SMEMFUN(");
+		sb.append(".push_back(CUTE_SMEMFUN("); //$NON-NLS-1$
 		IASTName[] names = qName.getNames();
 		if (names.length >= 2) {
 			sb.append(names[names.length -2]);
-			sb.append(", ");
+			sb.append(", "); //$NON-NLS-1$
 			sb.append(names[names.length-1]);
-			sb.append("));");
+			sb.append("));"); //$NON-NLS-1$
 		}
 		return sb;
 	}
 	
 	private StringBuilder getString(IASTName name, SuitePushBackFinder suitPushBackFinder) {
-		StringBuilder sb = new StringBuilder(newLine + "\t"); // s.push_back(CUTE_SMEMFUN(TestClass,test2);");
+		StringBuilder sb = new StringBuilder(newLine + "\t"); // s.push_back(CUTE_SMEMFUN(TestClass,test2);"); //$NON-NLS-1$
 		sb.append(suitPushBackFinder.getSuiteDeclName().toString());
-		sb.append(".push_back(CUTE_SMEMFUN(");
+		sb.append(".push_back(CUTE_SMEMFUN("); //$NON-NLS-1$
 		String className  = getClassName(name);
 		sb.append(className);
-		sb.append(", ");
+		sb.append(", "); //$NON-NLS-1$
 		sb.append(name.toString());
-		sb.append("));");
+		sb.append("));"); //$NON-NLS-1$
 		return sb;
 	}
 
@@ -86,7 +86,7 @@ public class AddMemberFunctionStrategy extends AddStrategy{
 			ICPPASTCompositeTypeSpecifier comType = (ICPPASTCompositeTypeSpecifier)n;
 			return comType.getName().toString();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	@Override

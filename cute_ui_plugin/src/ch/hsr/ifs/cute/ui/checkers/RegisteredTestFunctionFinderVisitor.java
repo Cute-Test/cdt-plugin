@@ -35,6 +35,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
  */
 public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 	
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
 	{
 		shouldVisitStatements = true;
 	}
@@ -57,7 +59,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 				IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declStmt.getDeclaration();
 				if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
 					ICPPASTNamedTypeSpecifier nameDeclSpec = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
-					if(nameDeclSpec.getName().toString().equals("cute::suite")) {
+					if(nameDeclSpec.getName().toString().equals("cute::suite")) { //$NON-NLS-1$
 						IASTName suiteName = simpDecl.getDeclarators()[0].getName();
 						IBinding suiteBinding = suiteName.resolveBinding();
 						IASTName[] suiteRefs = suiteName.getTranslationUnit().getReferences(suiteBinding);
@@ -86,7 +88,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 		if(isFunctorPushBack(arguments)) {
 			return getFunctorName(arguments);
 		}
-		return "";
+		return EMPTY_STRING;
 	}
 
 	private String getFunctorName(IASTInitializerClause[] arguments) {
@@ -95,7 +97,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 			IASTIdExpression idExp = (IASTIdExpression)funcCall.getFunctionNameExpression();
 			return idExp.getName().toString();
 		}
-		return "";
+		return EMPTY_STRING;
 	}
 
 	private boolean isFunctorPushBack(IASTInitializerClause[] arguments) {
@@ -119,13 +121,13 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 				}
 			}
 		}
-		return "";
+		return EMPTY_STRING;
 	}
 
 	private boolean isSimpleMemberFunctionPushBack(IASTInitializerClause[] arguments) {
 		if(arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression)arguments[0];
-			return functionNameIs(funcCall, "cute::makeSimpleMemberFunctionTest");
+			return functionNameIs(funcCall, "cute::makeSimpleMemberFunctionTest"); //$NON-NLS-1$
 		}
 		return false;
 	}
@@ -141,13 +143,13 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 				}
 			}
 		}
-		return "";
+		return EMPTY_STRING;
 	}
 
 	private boolean isFunctionPushBack(IASTInitializerClause[] arguments) {
 		if(arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression)arguments[0];
-			return functionNameIs(funcCall, "cute::test");
+			return functionNameIs(funcCall, "cute::test"); //$NON-NLS-1$
 		}
 		return false;
 	}
@@ -165,7 +167,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 		if(funcCall != null) {
 			if (funcCall.getFunctionNameExpression() instanceof IASTFieldReference) {
 				IASTFieldReference idExp = (IASTFieldReference) funcCall.getFunctionNameExpression();
-				if(idExp.getFieldName().toString().equals("push_back")){
+				if(idExp.getFieldName().toString().equals("push_back")){ //$NON-NLS-1$
 					return true;
 				}
 			}
