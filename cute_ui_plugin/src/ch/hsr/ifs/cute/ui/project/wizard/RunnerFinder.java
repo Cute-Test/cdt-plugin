@@ -52,6 +52,27 @@ import org.eclipse.core.runtime.SubMonitor;
 @SuppressWarnings("restriction")
 public class RunnerFinder {
 
+	private final class NameFinder extends CPPASTVisitor {
+		private final String string;
+		{
+			shouldVisitNames = true;
+		}
+		IASTName name = null;
+
+		private NameFinder(String string) {
+			this.string = string;
+		}
+
+		@Override
+		public int visit(IASTName name) {
+			if(string.equals(new String(name.getSimpleID()))){
+				this.name = name;
+				return ASTVisitor.PROCESS_ABORT;
+			}
+			return super.visit(name);
+		}
+	}
+
 	private final class TestRunnerVisitor extends ASTVisitor {
 		private boolean res = false;
 		{
@@ -99,7 +120,7 @@ public class RunnerFinder {
 		return testRunnersFunctions;
 	}
 
-	private List<IASTFunctionDefinition> getTestRunnersFunctions(IASTFunctionDefinition mainFunc) {
+	private List<IASTFunctionDefinition> getTestRunnersFunctions(IASTFunctionDefinition mainFunc) throws CoreException {
 		if(mainFunc == null)return Collections.emptyList();
 		List<IASTFunctionCallExpression> funcCalls = getFunctionCalls(mainFunc);
 		List<IASTFunctionDefinition> testRunners = new ArrayList<IASTFunctionDefinition>();
@@ -109,17 +130,33 @@ public class RunnerFinder {
 				IBinding bind = idExp.getName().resolveBinding();
 				IASTName[] defs = mainFunc.getTranslationUnit().getDefinitionsInAST(bind);
 				if(defs.length >0) {
-					IASTFunctionDefinition funcDef = getFunctionDefinition(defs[0]);
-					if(isTestRunner(funcDef)) {
-						testRunners.add(funcDef);
-					}
+					addTestRunnerFuncDef(testRunners, defs);
 				}else {
-					//TODO
+					IIndexName[] indexDefs = index.findDefinitions(bind);
+					IASTTranslationUnit ast = getAST(indexDefs[0]);
+					IASTName name = findName(ast, new String(indexDefs[0].getSimpleID()));
+					defs = ast.getDeclarationsInAST(name.resolveBinding());
+					if(defs.length > 0) {
+						addTestRunnerFuncDef(testRunners, defs);
+					}
 				}
 			}
 		}
 		
 		return testRunners;
+	}
+
+	private IASTName findName(IASTTranslationUnit ast, final String string) {
+		NameFinder vis = new NameFinder(string);
+		ast.accept(vis);
+		return vis.name;
+	}
+
+	protected void addTestRunnerFuncDef(List<IASTFunctionDefinition> testRunners, IASTName[] defs) {
+		IASTFunctionDefinition funcDef = getFunctionDefinition(defs[0]);
+		if(isTestRunner(funcDef)) {
+			testRunners.add(funcDef);
+		}
 	}
 
 	private boolean isTestRunner(IASTFunctionDefinition funcDef) {

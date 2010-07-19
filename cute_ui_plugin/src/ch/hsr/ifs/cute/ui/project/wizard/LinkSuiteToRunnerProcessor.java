@@ -133,7 +133,7 @@ public class LinkSuiteToRunnerProcessor {
 	private IASTName getListenerName() {
 		ListenerFinder finder = new ListenerFinder();
 		testRunner.getBody().accept(finder);
-		return finder.listener != null ? finder.listener : nodeFactory.newName();
+		return finder.listener != null ? finder.listener.copy() : nodeFactory.newName();
 	}
 
 	private IASTStatement createMakeSuiteStmt() {
@@ -182,6 +182,6 @@ final class ListenerFinder extends CPPASTVisitor {
 				}
 			}
 		}
-		return ASTVisitor.PROCESS_SKIP;
+		return ASTVisitor.PROCESS_CONTINUE;
 	}
 }
