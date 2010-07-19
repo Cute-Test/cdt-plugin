@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule für Technik  
+ * Copyright (c) 2007, 2010 Institute for Software, HSR Hochschule für Technik  
  * Rapperswil, University of applied sciences
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -18,15 +18,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.debug.core.CDebugUtils;
 import org.eclipse.cdt.launch.AbstractCLaunchDelegate;
 import org.eclipse.cdt.launch.internal.ui.LaunchMessages;
 import org.eclipse.cdt.launch.internal.ui.LaunchUIPlugin;
 import org.eclipse.cdt.utils.pty.PTY;
 import org.eclipse.cdt.utils.spawner.ProcessFactory;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -59,7 +58,7 @@ import ch.hsr.ifs.test.framework.ui.ShowResultView;
  * @author egraf
  *
  */
-@SuppressWarnings({"restriction", "deprecation"})
+@SuppressWarnings({"restriction"})
 public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 
 	@Override
@@ -85,10 +84,9 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		}
 		monitor.worked( 1 );
 		try {
-			IPath exePath=verifyProgramPath( config );
-			IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
-			IFile exeFile = wsRoot.getFile(exePath.makeRelativeTo(wsRoot.getRawLocation()));
-			IProject project = exeFile.getProject();
+			IPath exePath=CDebugUtils.verifyProgramPath( config );
+			ICProject cProject = CDebugUtils.verifyCProject(config);
+			IProject project = cProject.getProject();
 			notifyBeforeLaunch(project);
 			File wd = getWorkingDirectory( config );
 			if ( wd == null ) {
