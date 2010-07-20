@@ -12,17 +12,16 @@
  ******************************************************************************/
 package ch.hsr.ifs.test.framework.ui;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.cdt.core.CCorePlugin;
-import org.eclipse.cdt.core.dom.IName;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
+import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.index.IndexFilter;
 import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.core.parser.util.ArrayUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -60,6 +59,7 @@ import ch.hsr.ifs.test.framework.model.TestStatus;
  */
 public class CuteTestDClickListener implements IDoubleClickListener {
 	
+	private static final String REGEX = "::"; //$NON-NLS-1$
 	private TestSession session = null;
 
 	public CuteTestDClickListener(TestSession session) {
@@ -88,7 +88,7 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 	}
 
 
-	// TODO could this be done simpler?
+
 	private void openEditorForNonFailingTestCase(String testCaseName) {
 		try {
 			ICProject[] projects = CoreModel.getDefault().getCModel().getCProjects();
@@ -96,15 +96,24 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 				if(!projects[i].getElementName().equals(session.getLaunch().getLaunchConfiguration().getName()))
 					continue;
 				IIndex index = CCorePlugin.getIndexManager().getIndex(projects[i]);
-				Pattern p = Pattern.compile(testCaseName);
-				IIndexBinding[] bindings = index.findBindings(p, false, IndexFilter.ALL, new NullProgressMonitor());
+				boolean fullyQualified = isQualifiedName(testCaseName);
+				IIndexBinding[] bindings;
+				if(fullyQualified) {
+					String[] names = removeEmptyNames(testCaseName.split(REGEX));
+					char[][] namesChar = new char[names.length][];
+					for(int j = 0; j < names.length; ++j) {
+						namesChar[j] = names[j].toCharArray();
+					}
+					bindings = index.findBindings(namesChar, IndexFilter.ALL, new NullProgressMonitor());
+				}else {
+					bindings = index.findBindings(testCaseName.toCharArray(), false, IndexFilter.ALL, new NullProgressMonitor());
+				}
 				for (int bi = 0; bindings != null && bi < bindings.length; ++bi) {
 					IIndexBinding binding = bindings[bi];
 					if (binding == null)
 						continue;
 					
-					//TODO Doesn't work for test methods in an anonymous namespace
-					IName[] definition = index.findDefinitions(index.adaptBinding(binding));
+					IIndexName[] definition = index.findDefinitions(index.adaptBinding(binding));
 					if (definition == null || definition.length == 0)
 						continue;
 					IASTFileLocation loc = definition[0].getFileLocation();
@@ -123,6 +132,19 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 			TestFrameworkPlugin.log(e);
 		}
 	}
+
+	private String[] removeEmptyNames(String[] split) {
+		for (int i = 0; i < split.length; i++) {
+			if(split[i].length() == 0)split[i] = null;
+		}
+		return ArrayUtil.removeNulls(split);
+	}
+
+
+	private boolean isQualifiedName(String testCaseName) {
+		return testCaseName.contains(REGEX);
+	}
+
 
 	private void openEditor(IFile file, int lineNumberOrOffset, boolean isOffset) {
 		IWorkbenchWindow window = TestFrameworkPlugin.getActiveWorkbenchWindow();
