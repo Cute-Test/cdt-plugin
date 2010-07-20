@@ -4,7 +4,7 @@
       label="%featureName"
       version="1.42.0.qualifier">
 
-    <description>
+   <description>
       %description
    </description>
 
@@ -26,7 +26,7 @@
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.ui" version="4.0.0" match="greaterOrEqual"/>
-      <import plugin="ch.hsr.ifs.cute.core" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

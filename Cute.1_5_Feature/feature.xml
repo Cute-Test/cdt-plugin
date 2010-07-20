@@ -24,9 +24,9 @@
    <requires>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="ch.hsr.ifs.cute.ui" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources" version="3.4.1" match="greaterOrEqual"/>
       <import feature="ch.hsr.ifs.cute" version="2.1.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.ui" version="2.2.1"/>
+      <import plugin="org.eclipse.core.resources" version="3.4.1" match="compatible"/>
    </requires>
 
    <plugin

@@ -36,26 +36,28 @@
       <import plugin="org.eclipse.cdt.ui" version="5.1.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.managedbuilder.core" version="6.0.0"/>
       <import plugin="ch.hsr.ifs.test.framework" version="2.2.0" match="compatible"/>
-      <import plugin="ch.hsr.ifs.cute.gcov" version="1.0.0" match="compatible"/>
       <import plugin="org.eclipse.ui" version="3.3.0" match="compatible"/>
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.ui.editors" version="3.4.0" match="compatible"/>
-      <import plugin="ch.hsr.ifs.cute.core" version="2.0.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.managedbuilder.ui" version="5.1.0"/>
       <import plugin="org.eclipse.core.expressions" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.codan.core" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.ui" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.compare" version="3.4.0" match="compatible"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.ui.navigator"/>
       <import plugin="org.eclipse.debug.core"/>
-      <import plugin="org.eclipse.text"/>
       <import plugin="org.eclipse.ui.intro"/>
       <import plugin="org.eclipse.ui.intro.universal"/>
       <import plugin="org.eclipse.help"/>
       <import feature="org.eclipse.cdt" version="6.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.codan.core" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.codan.ui" version="1.0.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.cdt.codan.feature" version="1.0.0.qualifier"/>
+      <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="compatible"/>
+      <import plugin="org.eclipse.ltk.core.refactoring" version="3.5.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.views" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.ui" version="4.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
