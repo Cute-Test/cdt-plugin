@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
@@ -13,13 +14,12 @@
    height="3780"
    id="svg4705"
    sodipodi:version="0.32"
-   inkscape:version="0.45.1"
-   sodipodi:docbase="/home/egraf/workspaces/cute/cute_oopsla07/cute/poster"
+   inkscape:version="0.47 r22583"
    sodipodi:docname="poster.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/home/misto/cute_poster.png"
-   inkscape:export-xdpi="30"
-   inkscape:export-ydpi="30"
+   inkscape:export-filename="/home/egraf/workspaces/cute/cuteHead/cute_oopsla07/cute/poster/posterLarge.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
    version="1.0">
   <sodipodi:namedview
      id="base"
@@ -31,22 +31,31 @@
      objecttolerance="10"
      inkscape:pageopacity="0.98823529"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.22627417"
-     inkscape:cx="2806.6625"
-     inkscape:cy="1874.0639"
+     inkscape:zoom="0.7071068"
+     inkscape:cx="5456.9838"
+     inkscape:cy="1882.8475"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      inkscape:window-width="1600"
-     inkscape:window-height="1146"
-     inkscape:window-x="0"
-     inkscape:window-y="31"
+     inkscape:window-height="1145"
+     inkscape:window-x="1596"
+     inkscape:window-y="32"
      showguides="true"
      inkscape:guide-bbox="true"
      width="170cm"
      height="106.68cm"
-     units="cm" />
+     units="cm"
+     showgrid="false"
+     inkscape:window-maximized="1" />
   <defs
      id="defs4707">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 1890 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="6023.6221 : 1890 : 1"
+       inkscape:persp3d-origin="3011.811 : 1260 : 1"
+       id="perspective330" />
     <linearGradient
        id="linearGradient3541">
       <stop
@@ -1534,7 +1543,7 @@
        xlink:href="#linearGradient5698"
        id="linearGradient3550"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(6.4193325,0,0,12.269865,158.26971,-3835.141)"
+       gradientTransform="matrix(6.4193325,0,0,12.269865,158.26971,-3837.141)"
        x1="371.78571"
        y1="460.57648"
        x2="371.78571"
@@ -1709,6 +1718,27 @@
        y1="460.57648"
        x2="371.78571"
        y2="589.39862" />
+    <inkscape:perspective
+       id="perspective3144"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3158"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3172"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <metadata
      id="metadata4710">
@@ -1718,6 +1748,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1886,13 +1917,13 @@
        id="g4170"
        transform="translate(0,-60)">
       <image
-         sodipodi:absref="/home/misto/share/lukas2.png"
-         width="245"
-         height="313"
-         id="image2507"
-         x="5481.7573"
+         sodipodi:absref="/home/egraf/workspaces/cute/cuteHead/cute_oopsla07/cute/poster/emanuel.jpg"
+         xlink:href="emanuel.jpg"
          y="2718.092"
-         xlink:href="emanuel.jpg" />
+         x="5481.7573"
+         id="image2507"
+         height="313"
+         width="245" />
       <text
          xml:space="preserve"
          style="font-size:36px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:URW Gothic L"
@@ -1912,13 +1943,13 @@
        id="g4176"
        transform="translate(0,20)">
       <image
-         sodipodi:absref="/home/misto/share/thomas2.png"
-         width="245"
-         height="313"
-         id="image2517"
-         x="5481.7573"
+         sodipodi:absref="/home/egraf/workspaces/cute/cuteHead/cute_oopsla07/cute/poster/peter.jpg"
+         xlink:href="peter.jpg"
          y="2038.1355"
-         xlink:href="peter.jpg" />
+         x="5481.7573"
+         id="image2517"
+         height="313"
+         width="245" />
       <text
          id="text2520"
          y="2404.5916"
@@ -1950,13 +1981,13 @@
          y="469.77106"
          x="1617.5667">CUTE: C++ Unit Testing Easier</tspan></text>
     <image
-       y="214.125"
-       x="146.38254"
-       id="image11956"
-       height="400.94058"
+       sodipodi:absref="/home/egraf/workspaces/cute/cuteHead/cute_oopsla07/cute/poster/ifs_logo.png"
+       xlink:href="ifs_logo.png"
        width="908.79858"
-       sodipodi:absref="/home/misto/repos/r2/doc/oopsla_poster/ifs_logo.png"
-       xlink:href="ifs_logo.png" />
+       height="400.94058"
+       id="image11956"
+       x="146.38254"
+       y="214.125" />
     <g
        transform="matrix(4.5,0,0,4.5,-1032.3835,-368.52122)"
        id="g9241"
@@ -2015,25 +2046,31 @@
          sodipodi:role="line">CUTE Highlights</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:56px;font-weight:normal;display:inline"
+       style="font-size:56px;font-weight:normal;display:inline;-inkscape-font-specification:URW Gothic L Book;font-family:URW Gothic L;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
        id="text9219"
-       y="1266.8385"
-       x="309.61349"><tspan
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+       y="1245.5802"
+       x="309.61349"
+       sodipodi:linespacing="125%"><tspan
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
          sodipodi:role="line"
          id="tspan9223"
-         y="1266.8385"
+         y="1245.5802"
          x="309.61349">• easy to use</tspan><tspan
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
          sodipodi:role="line"
-         y="1336.8385"
+         y="1315.5802"
          x="309.61349"
          id="tspan9229">• modern C++</tspan><tspan
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
          sodipodi:role="line"
-         y="1406.8385"
+         y="1385.5802"
          x="309.61349"
-         id="tspan9227">• integrated into Eclipse CDT</tspan></text>
+         id="tspan9227">• integrated into Eclipse CDT</tspan><tspan
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+         sodipodi:role="line"
+         y="1455.5802"
+         x="309.61349"
+         id="tspan3162">• integrated gcov coverage analysis</tspan></text>
     <rect
        rx="76.600449"
        style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter3660)"
@@ -2072,74 +2109,76 @@
        height="126.93214"
        rx="16.73793" />
     <text
-       x="673.21979"
+       x="494.68375"
        y="1907.5641"
        id="text9243"
-       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
+       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Sans"
        xml:space="preserve"><tspan
-         x="673.21979"
+         x="494.68375"
          y="1907.5641"
          id="tspan9245"
          sodipodi:role="line"
-         style="font-family:URW Gothic L">Writing Tests</tspan></text>
+         style="font-family:URW Gothic L">Writing Tests and Suites</tspan></text>
     <text
-       x="289.16531"
-       y="2251.0283"
+       x="275.12494"
+       y="2049.0283"
        id="text9247"
-       style="font-size:56px;font-weight:normal;display:inline"
-       xml:space="preserve"><tspan
+       style="font-size:53px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;display:inline;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book"
+       xml:space="preserve"
+       sodipodi:linespacing="125%"><tspan
          id="tspan9261"
-         x="289.16531"
-         y="2251.0283"
+         x="275.12494"
+         y="2049.0283"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">Writing a Test with CUTE is simple. A test is a</tspan><tspan
+         style="font-size:53px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.86152351000000005;writing-mode:lr;text-anchor:start;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book">Writing a Test with CUTE is simple. A test is a</tspan><tspan
          id="tspan9267"
-         x="289.16531"
-         y="2321.0283"
+         x="275.12494"
+         y="2115.2783"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">simple parameterless void function there is no</tspan><tspan
+         style="font-size:53px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.86152351000000005;writing-mode:lr;text-anchor:start;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book">simple parameterless void function there is no</tspan><tspan
          id="tspan9269"
-         x="289.16531"
-         y="2391.0283"
+         x="275.12494"
+         y="2181.5283"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">need to inherit from a test class.</tspan></text>
+         style="font-size:53px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.86152351000000005;writing-mode:lr;text-anchor:start;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book">need to inherit from a test class.</tspan></text>
     <rect
-       ry="18.867523"
-       y="2593.7288"
-       x="287.50925"
-       height="468.43289"
-       width="1202.056"
+       ry="13.395361"
+       y="2231.2666"
+       x="261.66232"
+       height="332.57294"
+       width="1262.196"
        id="rect9271"
-       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.02532971px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.88528752px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <text
        id="text10242"
-       y="2668.8464"
-       x="341.74402"
-       style="font-size:56px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch"
-       xml:space="preserve"><tspan
-         y="2668.8464"
-         x="341.74402"
+       y="2306.4541"
+       x="315.22751"
+       style="font-size:43px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Monospace;-inkscape-font-specification:Monospace;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:100%"
+       xml:space="preserve"
+       sodipodi:linespacing="100%"><tspan
+         y="2306.4541"
+         x="315.22751"
          id="tspan10244"
          sodipodi:role="line">#include &quot;cute.h&quot;</tspan><tspan
          id="tspan10246"
-         y="2738.8464"
-         x="341.74402"
+         y="2376.4541"
+         x="315.22751"
          sodipodi:role="line">int theAnswer = 42;</tspan><tspan
          id="tspan10248"
-         y="2808.8464"
-         x="341.74402"
+         y="2446.4541"
+         x="315.22751"
          sodipodi:role="line" /><tspan
          id="tspan10250"
-         y="2878.8464"
-         x="341.74402"
+         y="2516.4541"
+         x="315.22751"
          sodipodi:role="line">void mySimpleTest(){</tspan><tspan
          id="tspan10252"
-         y="2948.8464"
-         x="341.74402"
+         y="2586.4541"
+         x="315.22751"
          sodipodi:role="line">   ASSERT(theAnswer == 6*7);</tspan><tspan
          id="tspan10254"
-         y="3018.8464"
-         x="341.74402"
+         y="2656.4541"
+         x="315.22751"
          sodipodi:role="line">}</tspan></text>
     <rect
        style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter3532)"
@@ -2190,36 +2229,39 @@
          sodipodi:role="line"
          style="font-family:URW Gothic L">Download and Resources</tspan></text>
     <text
-       x="1926.0518"
+       x="1993.3466"
        y="1212.8004"
        id="text7583"
-       style="font-size:56px;font-weight:normal;display:inline"
-       xml:space="preserve"><tspan
-         x="1926.0518"
+       style="font-size:56px;font-weight:normal;display:inline;-inkscape-font-specification:URW Gothic L Book;font-family:URW Gothic L;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+       xml:space="preserve"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
+         x="1993.3466"
          y="1212.8004"
-         id="tspan7634"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">The Plug-in can be downloaded from the update</tspan><tspan
-         x="1926.0518"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+         id="tspan3156">The Plug-in can be installed from the Eclipse </tspan><tspan
+         x="1993.3466"
          y="1282.8004"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
-         id="tspan11949">site at: http://ifs.hsr.ch/cute/updatesite/</tspan><tspan
-         x="1926.0518"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+         id="tspan3160">Marketplace or downloaded from the update</tspan><tspan
+         x="1993.3466"
          y="1352.8004"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
-         id="tspan11959" /><tspan
-         x="1926.0518"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+         id="tspan11949">site at: http://ifs.hsr.ch/cute/updatesite/</tspan><tspan
+         x="1993.3466"
          y="1422.8004"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
-         id="tspan11953">Futher information about CUTE are available at</tspan><tspan
-         x="1926.0518"
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+         id="tspan11959" /><tspan
+         x="1993.3466"
          y="1492.8004"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
-         id="tspan11957">the institute's website: http://ifs.hsr.ch</tspan></text>
+         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351000000005;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+         id="tspan11957" /></text>
     <rect
        rx="76.600449"
        height="1589.0625"
@@ -2242,11 +2284,11 @@
        rx="76.600449"
        height="1573.1719"
        x="1870.856"
-       y="1816.0703"
+       y="1814.0703"
        ry="76.600449"
        width="1462.6907"
        id="rect3674"
-       style="fill:url(#linearGradient3550);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter3712)" />
+       style="fill:url(#linearGradient3550);fill-opacity:1;stroke:none;display:inline;filter:url(#filter3712)" />
     <rect
        height="126.93214"
        x="269.71072"
@@ -2259,84 +2301,86 @@
        rx="16.73793" />
     <text
        xml:space="preserve"
-       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Liberation Sans"
+       style="font-size:72px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Sans"
        id="text11509"
        y="1919.4441"
-       x="2212.9592"><tspan
+       x="2169.4026"><tspan
          style="font-family:URW Gothic L"
          sodipodi:role="line"
          id="tspan11511"
          y="1919.4441"
-         x="2212.9592">Test Suites and Runner</tspan></text>
+         x="2169.4026">Gcov Coverage Analysis</tspan></text>
     <text
-       x="2031.9327"
-       y="2254.5337"
+       x="292.13568"
+       y="2661.2832"
        id="text11642"
-       style="font-size:56px;font-weight:normal;display:inline"
-       xml:space="preserve"><tspan
+       style="font-size:53px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;display:inline;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book"
+       xml:space="preserve"
+       sodipodi:linespacing="125%"><tspan
          id="tspan11648"
-         x="2031.9327"
-         y="2254.5337"
+         x="292.13568"
+         y="2661.2832"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">A Test Suite collects several test cases using </tspan><tspan
-         x="2031.9327"
-         y="2324.5337"
+         style="font-size:53px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.86152351000000005;writing-mode:lr;text-anchor:start;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book">A Test Suite collects several test cases using </tspan><tspan
+         x="292.13568"
+         y="2727.5332"
          sodipodi:role="line"
-         style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L"
+         style="font-size:53px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.86152351000000005;writing-mode:lr;text-anchor:start;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book"
          id="tspan11673">a vector.</tspan></text>
     <rect
-       rx="31.402851"
-       ry="27.488447"
-       y="2495.7073"
-       x="1991.0819"
-       height="682.5354"
-       width="1254.8497"
+       rx="31.405058"
+       ry="23.786789"
+       y="2769.6631"
+       x="246.14282"
+       height="590.6236"
+       width="1254.9379"
        id="rect11650"
-       style="font-size:48px;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.26454973px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline" />
+       style="font-size:48px;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.17637014px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline" />
     <text
        id="text11652"
-       y="2571.8665"
-       x="2046.3051"
-       style="font-size:48px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Courier 10 Pitch"
-       xml:space="preserve"><tspan
+       y="2839.8665"
+       x="315.22751"
+       style="font-size:43px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Monospace;-inkscape-font-specification:Monospace"
+       xml:space="preserve"
+       sodipodi:linespacing="125%"><tspan
          id="tspan11664"
-         y="2571.8665"
-         x="2046.3051"
+         y="2839.8665"
+         x="315.22751"
          sodipodi:role="line">void runSuite(){</tspan><tspan
-         y="2631.8665"
-         x="2046.3051"
+         y="2893.6165"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11847">  cute::suite s;</tspan><tspan
-         y="2691.8665"
-         x="2046.3051"
+         y="2947.3665"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11851">  s.push_back(CUTE(mySimpleTest));</tspan><tspan
-         y="2751.8665"
-         x="2046.3051"
+         y="3001.1165"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11853">  cute::ide_listener lis;</tspan><tspan
-         y="2811.8665"
-         x="2046.3051"
+         y="3054.8665"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11855">  cute::makeRunner(lis)(s, &quot;The Suite&quot;);</tspan><tspan
-         y="2871.8665"
-         x="2046.3051"
+         y="3108.6165"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11849">}</tspan><tspan
-         y="2931.8665"
-         x="2046.3051"
+         y="3162.3665"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11857" /><tspan
-         y="2991.8665"
-         x="2046.3051"
+         y="3216.1165"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11859">int main(){</tspan><tspan
-         y="3051.8665"
-         x="2046.3051"
+         y="3269.8665"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11861">  runSuite();</tspan><tspan
-         y="3111.8665"
-         x="2046.3051"
+         y="3323.6165"
+         x="315.22751"
          sodipodi:role="line"
          id="tspan11863">}</tspan></text>
     <rect
@@ -2397,12 +2441,12 @@
          y="1214.4471"
          id="tspan4833"
          sodipodi:role="line"
-         style="font-weight:normal;text-align:justify;letter-spacing:0.62656271;text-anchor:start;font-family:URW Gothic L">The C/C++ Development Tooling (CDT) are a set of Eclipse plugin-ins which</tspan><tspan
+         style="font-weight:normal;text-align:justify;letter-spacing:0.62656271;text-anchor:start;font-family:URW Gothic L">The C/C++ Development Tooling (CDT) are a set of Eclipse plug-in-ins which</tspan><tspan
          id="tspan2507"
          x="3641.8682"
          y="1259.4471"
          sodipodi:role="line"
-         style="font-weight:normal;text-align:justify;letter-spacing:0.62656271;text-anchor:start;font-family:URW Gothic L">provied a fully featured C/C++ IDE.  The main focus of the CDT is to support</tspan><tspan
+         style="font-weight:normal;text-align:justify;letter-spacing:0.62656271;text-anchor:start;font-family:URW Gothic L">provide a fully featured C/C++ IDE.  The main focus of the CDT is to support</tspan><tspan
          id="tspan2509"
          x="3641.8682"
          y="1304.4471"
@@ -2422,7 +2466,7 @@
          y="1439.4471"
          id="tspan7746"
          sodipodi:role="line"
-         style="font-weight:normal;text-align:justify;text-anchor:start;font-family:URW Gothic L">The CDT is an offical Eclipse Foundation project.</tspan></text>
+         style="font-weight:normal;text-align:justify;text-anchor:start;font-family:URW Gothic L">The CDT is an official Eclipse Foundation project.</tspan></text>
     <rect
        rx="76.600449"
        style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter3668)"
@@ -2487,21 +2531,21 @@
          sodipodi:role="line"
          style="font-size:56px;font-weight:normal;letter-spacing:-0.86152351;font-family:URW Gothic L">• test function code generator  </tspan></text>
     <image
-       y="2533.3843"
-       x="3858.6179"
-       id="image11343"
-       height="359.27573"
+       sodipodi:absref="/home/egraf/workspaces/cute/cuteHead/cute_oopsla07/cute/poster/resultViewer.png"
+       xlink:href="resultViewer.png"
        width="973.93982"
-       sodipodi:absref="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster/resultViewer.png"
-       xlink:href="resultViewer.png" />
+       height="359.27573"
+       id="image11343"
+       x="3858.6179"
+       y="2533.3843" />
     <image
-       y="2933.8418"
-       x="3858.7229"
-       id="image11386"
-       height="351.64661"
+       sodipodi:absref="/home/egraf/workspaces/cute/cuteHead/cute_oopsla07/cute/poster/diffViewer.png"
+       xlink:href="diffViewer.png"
        width="973.7301"
-       sodipodi:absref="/home/egraf/workspaces/cdt_org_ref/oopsla/cute/poster/diffViewer.png"
-       xlink:href="diffViewer.png" />
+       height="351.64661"
+       id="image11386"
+       x="3858.7229"
+       y="2933.8418" />
     <rect
        style="opacity:0.79615383;fill:url(#linearGradient4108);fill-opacity:1;stroke:none;stroke-width:11.49400043;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter7131)"
        id="rect3704"
@@ -2524,12 +2568,42 @@
          y="1917.0681"
          x="3985.4348">CUTE Eclipse Plug-in</tspan></text>
     <image
-       y="215.86061"
-       x="5248.7998"
-       id="image2469"
-       height="397.46936"
+       sodipodi:absref="/home/egraf/workspaces/cute/cuteHead/cute_oopsla07/cute/poster/cute_logo_frutiger_inFlag.png"
+       xlink:href="cute_logo_frutiger_inFlag.png"
        width="596"
-       sodipodi:absref="/home/egraf/workspaces/cute/cute_oopsla07/cute/poster/cute_logo_frutiger_inFlag.png"
-       xlink:href="cute_logo_frutiger_inFlag.png" />
+       height="397.46936"
+       id="image2469"
+       x="5248.7998"
+       y="215.86061" />
+    <image
+       y="2348.5"
+       x="2045.7013"
+       id="image3174"
+       height="941"
+       width="1113"
+       xlink:href="file:///home/egraf/workspaces/cute/cuteHead/cute_oopsla07/cute/poster/coverage.png" />
+    <text
+       xml:space="preserve"
+       style="font-size:56px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Book"
+       x="1984.5333"
+       y="2066"
+       id="text3178"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3180"
+         x="1984.5333"
+         y="2066">The gcov Feature for CUTE creates a build</tspan><tspan
+         sodipodi:role="line"
+         x="1984.5333"
+         y="2136"
+         id="tspan3182">configuration to get coverage data from the </tspan><tspan
+         sodipodi:role="line"
+         x="1984.5333"
+         y="2206"
+         id="tspan3184">compiler and run gcov to get coverage data</tspan><tspan
+         sodipodi:role="line"
+         x="1984.5333"
+         y="2276"
+         id="tspan3186">and visualizes the data in the editor.</tspan></text>
   </g>
 </svg>
