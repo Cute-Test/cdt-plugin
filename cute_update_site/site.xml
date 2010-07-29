@@ -57,16 +57,16 @@
    <feature url="features/ch.hsr.ifs.cute.gcov.feature_1.1.0.201007271101.jar" id="ch.hsr.ifs.cute.gcov.feature" version="1.1.0.201007271101">
       <category name="OptFeatures"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_0_1.1.4.201007270846.jar" id="ch.hsr.ifs.cute.headers.1_0" version="1.1.4.201007270846">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_0_1.1.4.201007281446.jar" id="ch.hsr.ifs.cute.headers.1_0" version="1.1.4.201007281446">
       <category name="Cute Headers"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_5_1.1.5.201007270846.jar" id="ch.hsr.ifs.cute.headers.1_5" version="1.1.5.201007270846">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_5_1.1.5.201007281446.jar" id="ch.hsr.ifs.cute.headers.1_5" version="1.1.5.201007281446">
       <category name="Cute Headers"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_6_1.1.5.201007270846.jar" id="ch.hsr.ifs.cute.headers.1_6" version="1.1.5.201007270846">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_6_1.1.5.201007281446.jar" id="ch.hsr.ifs.cute.headers.1_6" version="1.1.5.201007281446">
       <category name="Cute Headers"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute_4.0.0.201007271102.jar" id="ch.hsr.ifs.cute" version="4.0.0.201007271102">
+   <feature url="features/ch.hsr.ifs.cute_4.0.0.201007290846.jar" id="ch.hsr.ifs.cute" version="4.0.0.201007290846">
       <category name="Cute Plugin"/>
    </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
