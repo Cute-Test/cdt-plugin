@@ -71,5 +71,5 @@
    </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
    <category-def name="Cute Headers" label="Cute Headers"/>
-   <category-def name="OptFeatures" label="Optional Features"/>
+   <category-def name="OptFeatures" label="Cute Optional Features"/>
 </site>
