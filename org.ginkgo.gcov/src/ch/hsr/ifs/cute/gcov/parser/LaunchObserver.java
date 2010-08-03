@@ -57,7 +57,7 @@ public class LaunchObserver implements ILaunchObserver {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
 					String fileExtension = file.getFileExtension();
-					if(fileExtension != null && fileExtension.equals("gcda")) {
+					if(fileExtension != null && fileExtension.equals("gcda")) { //$NON-NLS-1$
 						file.delete(true, new NullProgressMonitor());
 					}
 				}
@@ -85,7 +85,7 @@ public class LaunchObserver implements ILaunchObserver {
 		for (ICSourceEntry icSourceEntry : sourceEntries) {
 			IPath location = icSourceEntry.getLocation();
 			if (location != null) {
-				if (location.lastSegment() != null && !location.lastSegment().equals("cute")) {
+				if (location.lastSegment() != null && !location.lastSegment().equals("cute")) { //$NON-NLS-1$
 					sourceEntriesList.add(icSourceEntry);
 				}
 			}
@@ -112,7 +112,7 @@ public class LaunchObserver implements ILaunchObserver {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				parser.parse(file);
-				return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK");
+				return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK"); //$NON-NLS-1$
 			}
 
 		}
@@ -129,7 +129,7 @@ public class LaunchObserver implements ILaunchObserver {
 						&& isNotInExclusion(sourceEntry, resource)) {
 					if (resource instanceof IFile) {
 						IFile file = (IFile) resource;
-						if (file.getName().endsWith("cpp")) {
+						if (file.getName().endsWith("cpp")) { //$NON-NLS-1$
 							parse(file);
 						}
 					}

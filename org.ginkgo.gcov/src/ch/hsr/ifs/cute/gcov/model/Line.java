@@ -67,7 +67,7 @@ public class Line {
 
 	@Override
 	public String toString() {
-		return nr + " " + status;
+		return nr + " " + status; //$NON-NLS-1$
 	}
 	
 	

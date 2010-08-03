@@ -47,7 +47,7 @@ public abstract class LineCoverageParser {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void runGcov(IFile file, IPath workingDirectory) {
-		String[] cmdLine = {"gcov","-f","-b",file.getName()};
+		String[] cmdLine = {"gcov","-f","-b",file.getName()}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File workingDir = null;
 		if(workingDirectory != null){
 			workingDir = workingDirectory.toFile();
@@ -92,7 +92,7 @@ public abstract class LineCoverageParser {
 		IFile gcovFile = null;
 		deleteMarkers(cppFile);
 		IProject project = cppFile.getProject();
-		String gcnoFileName = cppFile.getName().replace(cppFile.getFileExtension(),"gcno");
+		String gcnoFileName = cppFile.getName().replace(cppFile.getFileExtension(),"gcno"); //$NON-NLS-1$
 		IFile gcnoFile= null;
 		try {
 	
@@ -103,7 +103,7 @@ public abstract class LineCoverageParser {
 			
 			runGcov(cppFile, gcnoFile.getParent().getLocation());
 	
-			String gcovFileName = cppFile.getName().concat(".gcov");
+			String gcovFileName = cppFile.getName().concat(".gcov"); //$NON-NLS-1$
 			gcovFile = findFile(project, gcovFileName);
 			if (gcovFileName == null) {
 				return;

@@ -32,7 +32,7 @@ public class GcovNature implements IProjectNature {
 	/**
 	 * ID of this project nature
 	 */
-	public static final String NATURE_ID = "ch.hsr.ifs.cute.gcov.GcovNature";
+	public static final String NATURE_ID = "ch.hsr.ifs.cute.gcov.GcovNature"; //$NON-NLS-1$
 
 	private IProject project;
 	

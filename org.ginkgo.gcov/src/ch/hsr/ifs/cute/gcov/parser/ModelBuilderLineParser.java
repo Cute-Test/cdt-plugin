@@ -33,9 +33,9 @@ import ch.hsr.ifs.cute.gcov.model.Line;
  */
 public class ModelBuilderLineParser extends LineCoverageParser {
 	
-	private static final Pattern LINE_PATTERN = Pattern.compile("(.*)(\\d+|-|#####):(\\s*)(\\d+):(.*)$");
-	private static final Pattern FUNCTION_PATTERN = Pattern.compile("(function )(\\w*)( called )(\\d+)( returned \\d+\\% blocks executed )(\\d+)(\\%)(.*)$");
-	private static final Pattern BRANCH_PATTERN = Pattern.compile("(branch\\s+)(\\d+)(\\s+taken\\s+)(\\d+)(\\%)(.*)$");
+	private static final Pattern LINE_PATTERN = Pattern.compile("(.*)(\\d+|-|#####):(\\s*)(\\d+):(.*)$"); //$NON-NLS-1$
+	private static final Pattern FUNCTION_PATTERN = Pattern.compile("(function )(\\w*)( called )(\\d+)( returned \\d+\\% blocks executed )(\\d+)(\\%)(.*)$"); //$NON-NLS-1$
+	private static final Pattern BRANCH_PATTERN = Pattern.compile("(branch\\s+)(\\d+)(\\s+taken\\s+)(\\d+)(\\%)(.*)$"); //$NON-NLS-1$
 	
 	File file;
 	Function currentFunction;
@@ -68,13 +68,13 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 			for (Line l : f.getLines()) {
 				switch (l.getStatus()) {
 				case Covered:
-					createMarker(cppFile, l.getNr(), "covered", GcovPlugin.COVER_MARKER_TYPE);
+					createMarker(cppFile, l.getNr(), "covered", GcovPlugin.COVER_MARKER_TYPE); //$NON-NLS-1$
 					break;
 				case PartiallyCovered:
-					createMarker(cppFile, l.getNr(), "partially covered", GcovPlugin.PARTIALLY_MARKER_TYPE);
+					createMarker(cppFile, l.getNr(), "partially covered", GcovPlugin.PARTIALLY_MARKER_TYPE); //$NON-NLS-1$
 					break;
 				case Uncovered:
-					createMarker(cppFile, l.getNr(), "uncovered", GcovPlugin.UNCOVER_MARKER_TYPE);
+					createMarker(cppFile, l.getNr(), "uncovered", GcovPlugin.UNCOVER_MARKER_TYPE); //$NON-NLS-1$
 					break;
 				default:
 					break;
@@ -97,10 +97,10 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 		try {
 			String count = lineMatcher.group(2);
 			int lineNumber = Integer.parseInt(lineMatcher.group(4));
-			if(count.equalsIgnoreCase("#####")) {
+			if(count.equalsIgnoreCase("#####")) { //$NON-NLS-1$
 				currentLine = new Line(lineNumber, CoverageStatus.Uncovered);
 				currentFunction.addLine(currentLine);
-			}else if(count.equalsIgnoreCase("-")) {
+			}else if(count.equalsIgnoreCase("-")) { //$NON-NLS-1$
 
 			}else{
 				int i = Integer.parseInt(count);

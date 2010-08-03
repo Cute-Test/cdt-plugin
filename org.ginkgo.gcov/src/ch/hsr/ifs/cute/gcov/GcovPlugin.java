@@ -25,15 +25,15 @@ import ch.hsr.ifs.cute.gcov.model.CoverageModel;
 public class GcovPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.gcov";
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.gcov"; //$NON-NLS-1$
 
 	// The shared instance
 	private static GcovPlugin plugin;
 
-	public static final String GCOV_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.coverageMarker";
-	public static final String UNCOVER_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.lineUnCoverMarker";
-	public static final String COVER_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.lineCoverMarker";
-	public static final String PARTIALLY_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.linePartialCoverMarker";
+	public static final String GCOV_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.coverageMarker"; //$NON-NLS-1$
+	public static final String UNCOVER_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.lineUnCoverMarker"; //$NON-NLS-1$
+	public static final String COVER_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.lineCoverMarker"; //$NON-NLS-1$
+	public static final String PARTIALLY_MARKER_TYPE = "ch.hsr.ifs.cute.gcov.linePartialCoverMarker"; //$NON-NLS-1$
 	private CoverageModel cModel = new CoverageModel();
 	
 	/**

@@ -22,6 +22,9 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import ch.hsr.ifs.cute.ui.ASTUtil;
 
+/**
+ * @since 4.0
+ */
 public class AddTestToSuite extends AbstractFunctionAction {
 
 	public AddTestToSuite() {
@@ -52,7 +55,7 @@ public class AddTestToSuite extends AbstractFunctionAction {
 						astTu.accept(suitPushBackFinder);
 						IASTName name = def.getDeclarator().getName();
 						if(name instanceof ICPPASTOperatorName &&
-								name.toString().contains("()")) {
+								name.toString().contains("()")) { //$NON-NLS-1$
 							adder = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), editorFile);
 						}else {
 							adder = new AddMemberFunctionStrategy(doc, editorFile, astTu, name, suitPushBackFinder);
@@ -79,7 +82,7 @@ public class AddTestToSuite extends AbstractFunctionAction {
 						IASTFunctionDefinition funcDef = (IASTFunctionDefinition) iastDeclaration;
 						IASTName funcName = funcDef.getDeclarator().getName();
 						if(funcName instanceof ICPPASTOperatorName &&
-								funcName.toString().contains("()")) {
+								funcName.toString().contains("()")) { //$NON-NLS-1$
 							return funcDef;
 						}
 						

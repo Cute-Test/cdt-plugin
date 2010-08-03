@@ -58,7 +58,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 	public CuteWizardHandler(Composite p, IWizard w) {
 		super(new CuteBuildPropertyValue(), p, w);
-		cuteVersionWizardPage = new CuteVersionWizardPage( getConfigPage(), getStartingPage(), this);
+		cuteVersionWizardPage = new CuteVersionWizardPage( getConfigPage(), getStartingPage());
 		cuteVersionWizardPage.setWizard(w);
 		
 		MBSCustomPageManager.init();

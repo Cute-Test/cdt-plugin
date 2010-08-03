@@ -81,7 +81,7 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
 		for (IConfiguration config : configs) {
 			if(config.getParent().getId().contains("debug")) { //$NON-NLS-1$
-				IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, GCOV_CONFG_ID); //$NON-NLS-1$
+				IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, GCOV_CONFG_ID);
 				newConfig.setName("Debug Gcov"); //$NON-NLS-1$
 				setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_FLAGS);
 				setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_FLAGS);

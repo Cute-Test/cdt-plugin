@@ -10,6 +10,7 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
+import org.eclipse.cdt.internal.ui.util.SWTUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -20,11 +21,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import org.eclipse.cdt.internal.ui.util.SWTUtil;
-
 /**
  * Dialog field containing a label, text control and a button control.
+ * @since 4.0
  */
+@SuppressWarnings("restriction")
 public class StringButtonDialogField extends StringDialogField {
 		
 	private Button fBrowseButton;

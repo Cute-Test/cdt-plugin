@@ -288,7 +288,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	 * @since 4.0
 	 */
 	public static TextEdit testOnlyCreatedEdit(int insertTestFuncFileOffset){
-		NewTestFunctionAction ntfa=new NewTestFunctionAction("newTestFunction");
+		NewTestFunctionAction ntfa=new NewTestFunctionAction("newTestFunction"); //$NON-NLS-1$
 		return ntfa.createdEdit(insertTestFuncFileOffset, null, "newTestFunction"); //$NON-NLS-1$
 	}
 	

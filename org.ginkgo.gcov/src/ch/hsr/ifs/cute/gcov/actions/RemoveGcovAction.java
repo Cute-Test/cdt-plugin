@@ -48,7 +48,7 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate{
 				IConfiguration[] configs = info.getManagedProject().getConfigurations();
 				if(ManagedBuildManager.getSelectedConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)){
 					for (IConfiguration config : configs) {
-						if(config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) { //$NON-NLS-1$
+						if(config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) { //$NON-NLS-1$ //$NON-NLS-2$
 							ManagedBuildManager.setSelectedConfiguration(project, config);
 							ManagedBuildManager.setDefaultConfiguration(project, config);
 							continue;

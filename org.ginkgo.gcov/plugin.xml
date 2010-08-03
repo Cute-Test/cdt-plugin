@@ -20,11 +20,11 @@
       <decorator
             class="ch.hsr.ifs.cute.gcov.ProjectDecorator"
             id="ch.hsr.ifs.cute.gcov.decorator"
-            label="Gcov Decorator"
+            label="%decorator.label"
             lightweight="true"
             state="true">
          <description>
-            Gcov Project
+            %decorator.description
          </description>
       </decorator>
    </extension>

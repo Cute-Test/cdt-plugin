@@ -27,9 +27,15 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	private final IWizardPage startingWizardPage;
 	private CuteVersionComposite cuteVersionComp;
 	private ImageDescriptor imageDesc;
+	/**
+	 * @since 4.0
+	 */
 	protected boolean enableGcov;
 	private CuteSuiteWizardHandler handler;
 	
+	/**
+	 * @since 4.0
+	 */
 	public NewCuteSuiteWizardCustomPage(CDTConfigWizardPage configWizardPage, IWizardPage startingWizardPage, CuteSuiteWizardHandler cuteSuiteWizardHandler){
 		pageID="ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage"; //$NON-NLS-1$
 		this.configPage = configWizardPage;
@@ -110,7 +116,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		cuteVersionComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		IToolChain[] tcs = handler.getSelectedToolChains();
-		if(tcs[0].getBaseId().contains("gnu")){
+		if(tcs[0].getBaseId().contains("gnu")){ //$NON-NLS-1$
 
 			final Button check = new Button(tempComposite, SWT.CHECK);
 			check.setText("Enable gcov");
@@ -167,6 +173,9 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 	}
 	
 	
+	/**
+	 * @since 4.0
+	 */
 	public String getCuteVersion() {
 		return cuteVersionComp.getVersionString();
 	}

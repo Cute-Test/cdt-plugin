@@ -24,7 +24,7 @@ public class Branch {
 	public Branch(int taken) {
 		super();
 		if(taken < 0 || taken > 100) {
-			throw new IllegalArgumentException("Coverage must be between 0 and 100%");
+			throw new IllegalArgumentException("Coverage must be between 0 and 100%"); //$NON-NLS-1$
 		}
 		this.taken = taken;
 		switch (taken) {
@@ -52,7 +52,7 @@ public class Branch {
 
 	@Override
 	public String toString() {
-		return "Branch taken: " + taken + " " + status;
+		return "Branch taken: " + taken + " " + status; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	

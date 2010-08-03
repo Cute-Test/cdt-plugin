@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  */
 public class GcovBuilder extends IncrementalProjectBuilder {
 	
-	public static final String BUILDER_ID = GcovPlugin.PLUGIN_ID + ".gcovBuilder";
+	public static final String BUILDER_ID = GcovPlugin.PLUGIN_ID + ".gcovBuilder"; //$NON-NLS-1$
 
 	/**
 	 * 
@@ -52,7 +52,7 @@ public class GcovBuilder extends IncrementalProjectBuilder {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
 					String fileExt = file.getFileExtension();
-					if(fileExt != null && (fileExt.equals("gcno")|| fileExt.equals("gcda")||fileExt.equals("gcov"))) {
+					if(fileExt != null && (fileExt.equals("gcno")|| fileExt.equals("gcda")||fileExt.equals("gcov"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						file.delete(true, new NullProgressMonitor());
 					}
 				}

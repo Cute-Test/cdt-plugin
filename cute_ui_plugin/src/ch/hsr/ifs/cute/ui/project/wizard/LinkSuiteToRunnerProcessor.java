@@ -74,7 +74,6 @@ public class LinkSuiteToRunnerProcessor {
 		return change;
 	}
 
-	@SuppressWarnings("restriction")
 	private Change getIncludeChange() {
 		IASTTranslationUnit tu = testRunner.getTranslationUnit();
 		IPath implPath = new Path(tu.getContainingFilename());

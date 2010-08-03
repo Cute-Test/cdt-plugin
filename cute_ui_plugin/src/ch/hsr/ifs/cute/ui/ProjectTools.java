@@ -44,6 +44,7 @@ import ch.hsr.ifs.cute.core.CuteCorePlugin;
 
 /**
  * @author Emanuel Graf IFS
+ * @since 4.0
  *
  */
 public class ProjectTools {

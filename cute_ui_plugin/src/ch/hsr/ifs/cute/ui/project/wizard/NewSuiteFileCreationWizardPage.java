@@ -123,6 +123,9 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		fLastFocusedField = 0;
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	public IPath getSourceFolderFullPath() {
 		String text = sourceFolderDialogField.getText();
 		if (text.length() > 0)
@@ -318,6 +321,9 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	    return path;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public void createControl(Composite parent) {
 		initializeDialogUnits(parent);
 
@@ -519,6 +525,9 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		return null;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public void setSourceFolderFullPath(IPath folderPath, boolean update) {
 		String str = (folderPath != null) ? folderPath.makeRelative().toString() : ""; //.makeRelative().toString(); //$NON-NLS-1$
 		sourceFolderDialogField.setTextWithoutUpdate(str);
@@ -542,6 +551,9 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		}
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public void init(IStructuredSelection selection) {
 		ICElement celem = getInitialCElement(selection);
 		cProject = celem.getCProject();
