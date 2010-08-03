@@ -52,7 +52,7 @@ public class BoostHandler implements ICuteWizardAdditionHandler, IIncludeStrateg
 	public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
 		SubMonitor mon = SubMonitor.convert(pm, 2);
 		if(addition.copyBoost) {
-			mon.beginTask("Create Boost Folders", 2);
+			mon.beginTask(Messages.BoostHandler_beginTaskFolders, 2);
 			IFolder boostSrcFolder = ProjectTools.createFolder(project, "boost", true); //$NON-NLS-1$
 			IFolder boostFolder = ProjectTools.createFolder(project, "boost/boost", false); //$NON-NLS-1$
 			List<URL> urls = getBoostFiles("boost"); //$NON-NLS-1$

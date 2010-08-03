@@ -105,7 +105,7 @@ public class LaunchObserver implements ILaunchObserver {
 			private LineCoverageParser parser = new ModelBuilderLineParser();
 
 			public ParseJob(IFile file) {
-				super("gcov parse " + file.getName());
+				super(Messages.LaunchObserver_parse + file.getName());
 				this.file = file;
 			}
 

@@ -41,9 +41,8 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 	public CuteHeaders_1_0() {
 	}
 
-	@SuppressWarnings("nls")
 	private List<URL> getHeaderFiles() {
-		return getFileListe("headers", "*.*");
+		return getFileListe("headers", "*.*"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -64,9 +63,8 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 		return "Cute Headers 1.0.0"; //$NON-NLS-1$
 	}
 
-	@SuppressWarnings("nls")
 	private List<URL> getTestFiles() {
-		return getFileListe("test", "*.*");
+		return getFileListe("test", "*.*"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void copyHeaderFiles(IFolder folder, IProgressMonitor monitor)
@@ -81,7 +79,7 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 		for (URL url : urls) {
 			String[] elements = url.getFile().split("/"); //$NON-NLS-1$
 			String filename = elements[elements.length-1];
-			mon.subTask("Copy " + filename);
+			mon.subTask(Messages.CuteHeaders_1_0_copy + filename);
 			IFile targetFile = folder.getFile(filename);
 			try {
 				targetFile.create(url.openStream(),IResource.FORCE , new SubProgressMonitor(monitor,1));
@@ -97,13 +95,13 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 		SubMonitor mon;
 		if(copyTestCPP) {
 			mon = SubMonitor.convert(monitor, 3);
-			mon.subTask("Copy Test.cpp");
+			mon.subTask(Messages.CuteHeaders_1_0_copyTestCPP);
 			SuiteTemplateCopyUtil.copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
 			mon.worked(1);
 		}else {
 			mon = SubMonitor.convert(monitor, 2);
 		}
-		mon.subTask("Copy Suite");
+		mon.subTask(Messages.CuteHeaders_1_0_copySuite);
 		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
 		mon.worked(1);
 		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.h",suitename+".h",suitename); //$NON-NLS-1$ //$NON-NLS-2$

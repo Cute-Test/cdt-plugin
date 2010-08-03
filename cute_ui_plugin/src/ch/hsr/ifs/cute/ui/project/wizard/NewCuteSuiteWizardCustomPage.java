@@ -119,7 +119,7 @@ public class NewCuteSuiteWizardCustomPage extends MBSCustomPage {
 		if(tcs[0].getBaseId().contains("gnu")){ //$NON-NLS-1$
 
 			final Button check = new Button(tempComposite, SWT.CHECK);
-			check.setText("Enable gcov");
+			check.setText(Messages.getString("NewCuteSuiteWizardCustomPage.enableGcov")); //$NON-NLS-1$
 			check.addSelectionListener(new SelectionAdapter() {
 
 				@Override

@@ -115,7 +115,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		//generate list of runners
 		//prompt selection
 		runnerComboField= new ComboDialogField(SWT.READ_ONLY);
-		runnerComboField.setLabelText("Choose run method");
+		runnerComboField.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.chooseRunMethod")); //$NON-NLS-1$
 		
 		
 		fSourceFolderStatus = STATUS_OK;
@@ -194,7 +194,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 				if(selection) {
 					String[] runners2 = getRunners();
 					if(runners2.length == 0) {
-						setErrorMessage("No test runner found.");
+						setErrorMessage(Messages.getString("NewSuiteFileCreationWizardPage.noTestRunners")); //$NON-NLS-1$
 						runnerComboField.setEnabled(false);
 					}
 					runnerComboField.setItems(runners2);
@@ -240,7 +240,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			e.printStackTrace();
 		}
 		//TODO error Message
-		return new String[]{"No Test Runners found"};
+		return new String[]{Messages.getString("NewSuiteFileCreationWizardPage.noRunners")}; //$NON-NLS-1$
 	}
 	
 	private void createSeparator(Composite composite, int nColumns) {
