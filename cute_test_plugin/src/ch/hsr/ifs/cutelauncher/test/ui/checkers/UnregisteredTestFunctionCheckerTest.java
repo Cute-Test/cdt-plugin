@@ -192,7 +192,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		try {
 			TestPlugin plugin = TestPlugin.getDefault();
 			return TestSourceReader.getContentsForTest(plugin.getBundle(),
-					"src", getClass(), getName(), sections);
+					"src", getClass(), getName(), sections); //$NON-NLS-1$
 		} catch (IOException e) {
 			fail(e.getMessage());
 			return null;

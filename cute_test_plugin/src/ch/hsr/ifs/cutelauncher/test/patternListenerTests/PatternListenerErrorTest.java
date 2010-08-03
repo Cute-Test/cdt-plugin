@@ -21,8 +21,8 @@ import ch.hsr.ifs.test.framework.event.TestEventHandler;
  *
  */
 public class PatternListenerErrorTest extends PatternListenerBase {
-	private static final String TEST_NAME_EXP = "xUnitTest";
-	private static final String MSG_EXP = "instance of 'std::exception'";
+	private static final String TEST_NAME_EXP = "xUnitTest"; //$NON-NLS-1$
+	private static final String MSG_EXP = "instance of 'std::exception'"; //$NON-NLS-1$
 	
 	private String testNameStart;
 	private String testNameEnd;
@@ -74,12 +74,12 @@ public class PatternListenerErrorTest extends PatternListenerBase {
 	}
 	
 	public void testTestStart() {
-		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
+		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart); //$NON-NLS-1$
 	}
 	
 	public void testTestEnd() {
-		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
-		assertEquals("Message", MSG_EXP, msg);
+		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd); //$NON-NLS-1$
+		assertEquals("Message", MSG_EXP, msg); //$NON-NLS-1$
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class PatternListenerErrorTest extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "errorTest.txt";
+		return "errorTest.txt"; //$NON-NLS-1$
 	}
 
 }

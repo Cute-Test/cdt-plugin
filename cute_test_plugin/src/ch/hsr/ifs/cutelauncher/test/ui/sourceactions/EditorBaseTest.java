@@ -70,7 +70,7 @@ public class EditorBaseTest extends BaseUITestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		cProject= CProjectHelper.createCCProject("cuteTest", "bin", IPDOMManager.ID_FAST_INDEXER);
+		cProject= CProjectHelper.createCCProject("cuteTest", "bin", IPDOMManager.ID_FAST_INDEXER);  //$NON-NLS-1$//$NON-NLS-2$
 		CCorePlugin.getIndexManager().joinIndexer(INDEXER_WAIT_TIME, npm());
 		index= CCorePlugin.getIndexManager().getIndex(cProject);
 	}
@@ -99,7 +99,7 @@ public class EditorBaseTest extends BaseUITestCase {
 	}
 	
 	public StringBuffer[] getContentsForTest(int sections) throws IOException {
-		return TestSourceReader.getContentsForTest(TestPlugin.getDefault().getBundle(), "src", getClass(), getName(), sections);
+		return TestSourceReader.getContentsForTest(TestPlugin.getDefault().getBundle(), "src", getClass(), getName(), sections); //$NON-NLS-1$
 	}
 	
 	protected void type(String text, int keyCode, int stateMask, CEditor editor) {
@@ -133,7 +133,7 @@ public class EditorBaseTest extends BaseUITestCase {
 		event.character= character;
 		event.keyCode= keyCode;
 		event.stateMask= stateMask;
-		accessor.invoke("handleKeyDown", new Object[] {event});
+		accessor.invoke("handleKeyDown", new Object[] {event}); //$NON-NLS-1$
 	}
 	
 	protected String getCodeFromIFile(IFile file) throws Exception {

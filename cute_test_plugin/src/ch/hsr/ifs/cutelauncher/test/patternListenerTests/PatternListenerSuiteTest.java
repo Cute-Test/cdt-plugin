@@ -74,21 +74,21 @@ public class PatternListenerSuiteTest extends PatternListenerBase {
 	}
 	
 	public void testFirstStarted() {
-		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0));
-		assertEquals("Suite Size", new Integer(42), suiteSize.get(0));
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0)); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals("Suite Size", new Integer(42), suiteSize.get(0)); //$NON-NLS-1$
 	}
 	
 	public void testFirstEnded() {
-		assertEquals("Suite Name Test", "TestSuite1", suiteNameEnded.get(0));
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameEnded.get(0)); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	public void testLastStarted() {
-		assertEquals("Suite Name Test", "TestSuite2", suiteNameStart.get(1));
-		assertEquals("Suite Size", new Integer(1), suiteSize.get(1));
+		assertEquals("Suite Name Test", "TestSuite2", suiteNameStart.get(1)); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals("Suite Size", new Integer(1), suiteSize.get(1)); //$NON-NLS-1$
 	}
 	
 	public void testLastEnded() {
-		assertEquals("Suite Name Test", "TestSuite2", suiteNameEnded.get(1));
+		assertEquals("Suite Name Test", "TestSuite2", suiteNameEnded.get(1)); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	
@@ -99,7 +99,7 @@ public class PatternListenerSuiteTest extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "suiteTest.txt";
+		return "suiteTest.txt"; //$NON-NLS-1$
 	}
 
 }

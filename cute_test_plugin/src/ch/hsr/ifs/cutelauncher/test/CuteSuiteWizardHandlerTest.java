@@ -27,7 +27,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		cswh=new CuteSuiteWizardHandler("theSuiteName");
+		cswh=new CuteSuiteWizardHandler("theSuiteName"); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("nls")
@@ -75,8 +75,8 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	}
 
 	public static Test suite(){
-		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler");
-		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles"));
+		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler"); //$NON-NLS-1$
+		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles")); //$NON-NLS-1$
 		return ts;
 	}
 }

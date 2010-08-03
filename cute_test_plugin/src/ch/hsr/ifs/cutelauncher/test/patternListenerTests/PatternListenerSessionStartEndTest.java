@@ -74,11 +74,11 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 	}
 
 	public void testSessionStart() {
-		assertTrue("No session Start", sessionStarted);
+		assertTrue("No session Start", sessionStarted); //$NON-NLS-1$
 	}
 	
 	public void testSessionEnd() {
-		assertTrue("No session End", sessionEnded);
+		assertTrue("No session End", sessionEnded); //$NON-NLS-1$
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "sessionTest.txt";
+		return "sessionTest.txt"; //$NON-NLS-1$
 	}
 	
 }

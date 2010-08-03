@@ -22,9 +22,9 @@ import ch.hsr.ifs.test.framework.event.TestEventHandler;
  */
 public class PatternListenerTestEqualsFailed extends PatternListenerBase {
 	
-	private static final String TEST_NAME_EXP = "xUnitTest";
-	private static final String MSG_EXP = "evaluated: `Factorial(0)`, expected: <3> but was: <1>";
-	private static final Object TEST_FILE_NAME_EXP = "../src/sample1_unittest.cc";
+	private static final String TEST_NAME_EXP = "xUnitTest"; //$NON-NLS-1$
+	private static final String MSG_EXP = "evaluated: `Factorial(0)`, expected: <3> but was: <1>"; //$NON-NLS-1$
+	private static final Object TEST_FILE_NAME_EXP = "../src/sample1_unittest.cc"; //$NON-NLS-1$
 	private static final int LINE_NO_EXP = 104;
 	
 	private String testNameStart;
@@ -80,14 +80,14 @@ public class PatternListenerTestEqualsFailed extends PatternListenerBase {
 		
 	}
 	public void testTestStart() {
-		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
+		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart); //$NON-NLS-1$
 	}
 	
 	public void testTestEnd() {
-		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
-		assertEquals("Message", MSG_EXP, msg);
-		assertEquals("Filename", TEST_FILE_NAME_EXP, testFileName);
-		assertEquals("Line", LINE_NO_EXP, lineNr);
+		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd); //$NON-NLS-1$
+		assertEquals("Message", MSG_EXP, msg); //$NON-NLS-1$
+		assertEquals("Filename", TEST_FILE_NAME_EXP, testFileName); //$NON-NLS-1$
+		assertEquals("Line", LINE_NO_EXP, lineNr); //$NON-NLS-1$
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class PatternListenerTestEqualsFailed extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "failedEqualsTest.txt";
+		return "failedEqualsTest.txt"; //$NON-NLS-1$
 	}
 
 }

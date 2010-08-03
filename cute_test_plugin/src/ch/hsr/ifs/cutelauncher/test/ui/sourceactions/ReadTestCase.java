@@ -25,25 +25,25 @@ public class ReadTestCase{//TODO checking for null values
 	public ReadTestCase(String file,boolean parseCursor){
 		StringBuilder builder=new StringBuilder();
 
-		String newline= System.getProperty("line.separator"); 
+		String newline= System.getProperty("line.separator");  //$NON-NLS-1$
 		try{
 		String testnametmp=null;
 		BufferedReader br=readTest(file);
 		while(br.ready()){
 			String str=br.readLine();
-			if(str.startsWith("//test")){
+			if(str.startsWith("//test")){ //$NON-NLS-1$
 				m=state.SAVEEXPECTED;
 				testnametmp=str.substring(6);
 			}
-			if(str.startsWith("//expected")){
+			if(str.startsWith("//expected")){ //$NON-NLS-1$
 				m=state.SAVETEST;continue;
 			}
-			if(str.startsWith("//parameter ")){
-				int startoffset="//parameter ".length();
+			if(str.startsWith("//parameter ")){ //$NON-NLS-1$
+				int startoffset="//parameter ".length(); //$NON-NLS-1$
 				parameter.add(str.substring(startoffset));
 				continue;
 			}
-			if(str.startsWith("//")&& m!=state.SAVEEXPECTED)continue;
+			if(str.startsWith("//")&& m!=state.SAVEEXPECTED)continue; //$NON-NLS-1$
 
 			switch(m){
 			case TEST:
@@ -91,7 +91,7 @@ public class ReadTestCase{//TODO checking for null values
 	}
 	public void parseForCursorPos(){
 		for(String str:test){
-			cursorpos.add(str.indexOf("^"));
+			cursorpos.add(str.indexOf("^")); //$NON-NLS-1$
 		}
 		removeCaretFromTest();
 	}
@@ -100,7 +100,7 @@ public class ReadTestCase{//TODO checking for null values
 		for(String str:test){
 			int x=0;
 			while(x!=-1){
-				x=str.indexOf("^",x);
+				x=str.indexOf("^",x); //$NON-NLS-1$
 				if(x!=-1){result.add(x);x+=1;}
 			}
 		}
@@ -112,7 +112,7 @@ public class ReadTestCase{//TODO checking for null values
 		for(int i=0;i<test.size();i++){
 			String str=test.get(i);
 			test.remove(i);
-			test.add(i, str.replaceAll("[\\^]",""));
+			test.add(i, str.replaceAll("[\\^]","")); //$NON-NLS-1$ //$NON-NLS-2$
 		}		
 	}
 }

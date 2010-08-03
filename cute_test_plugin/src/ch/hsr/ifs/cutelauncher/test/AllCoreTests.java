@@ -9,7 +9,7 @@ public class AllCoreTests extends TestSuite{
 	
 
 	public AllCoreTests() {
-		super("Cute Plugin All Core Tests");
+		super("Cute Plugin All Core Tests"); //$NON-NLS-1$
 		addTest(PatternListenerSuite.suite());
 		addTest(ModelBuilderSuite.suite());
 //		addTest(SourceLookupPathTest.suite());

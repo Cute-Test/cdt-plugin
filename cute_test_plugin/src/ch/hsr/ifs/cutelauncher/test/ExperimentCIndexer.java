@@ -29,14 +29,14 @@ public class ExperimentCIndexer extends IndexerBaseTestFramework{
 	}
 	
 	public void testTryCindexer(){
-		final ReadTestCase rtc1=new ReadTestCase("testDefs/TryCindexer.cpp");
+		final ReadTestCase rtc1=new ReadTestCase("testDefs/TryCindexer.cpp"); //$NON-NLS-1$
 		
 		try {
 			CCorePlugin.getIndexManager().reindex(cproject);
 			IIndex fIndex= CCorePlugin.getIndexManager().getIndex(cproject);
 			
 			
-			IFile inputFile=importFile("A.cpp",rtc1.expected.get(0));
+			IFile inputFile=importFile("A.cpp",rtc1.expected.get(0)); //$NON-NLS-1$
 			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 			assertNotNull(editor);
 			assertTrue(editor instanceof CEditor);
@@ -47,7 +47,7 @@ public class ExperimentCIndexer extends IndexerBaseTestFramework{
 			index.acquireReadLock();
 			
 			try {
-				IBinding[] bs= index.findBindings("s1".toCharArray(), IndexFilter.ALL, NPM);
+				IBinding[] bs= index.findBindings("s1".toCharArray(), IndexFilter.ALL, NPM); //$NON-NLS-1$
 				assertEquals(1, bs.length); 
 				assertTrue(bs[0] instanceof ICPPClassType);
 				assertEquals(2, ((ICPPClassType)bs[0]).getDeclaredMethods().length);
@@ -63,8 +63,8 @@ public class ExperimentCIndexer extends IndexerBaseTestFramework{
 	
 	
 	public static TestSuite suite(){
-		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.test.Cindexer");
-		ts.addTest(new ExperimentCIndexer("testTryCindexer"));
+		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.test.Cindexer"); //$NON-NLS-1$
+		ts.addTest(new ExperimentCIndexer("testTryCindexer")); //$NON-NLS-1$
 		return ts;
 	}
 
@@ -96,7 +96,7 @@ public class ExperimentCIndexer extends IndexerBaseTestFramework{
 			Thread.sleep(50);
 			timeLeft= (int) (endTime-System.currentTimeMillis());
 		}
-		Assert.fail("Indexing " + file.getFullPath() + " did not complete in time!");
+		Assert.fail("Indexing " + file.getFullPath() + " did not complete in time!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 }

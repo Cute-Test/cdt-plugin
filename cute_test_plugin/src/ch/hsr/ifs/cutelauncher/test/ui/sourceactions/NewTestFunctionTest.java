@@ -22,10 +22,10 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 @SuppressWarnings("restriction")
 public class NewTestFunctionTest extends EditorBaseTest {
 	
-	private static final String COMMAND_ID = "ch.hsr.ifs.cute.newTestFunctionCommand";
+	private static final String COMMAND_ID = "ch.hsr.ifs.cute.newTestFunctionCommand"; //$NON-NLS-1$
 
 	public NewTestFunctionTest(){
-		super("New Test Function");
+		super("New Test Function"); //$NON-NLS-1$
 	}
 	
 	//
@@ -46,9 +46,9 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//}
 	public void testNewTestFunction() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
-		IFile file = createFile(contentsForTest[0].toString(), "function.cpp");
+		IFile file = createFile(contentsForTest[0].toString(), "function.cpp"); //$NON-NLS-1$
 		CEditor cEditor = runCommand(file, 0, 2, COMMAND_ID);
-		type("newTest", 0, 0, cEditor);
+		type("newTest", 0, 0, cEditor); //$NON-NLS-1$
 		cEditor.doSave(new NullProgressMonitor());
 		assertFileContent(file, contentsForTest[1].toString());
 	}
@@ -71,11 +71,11 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//}
 	public void testNewTestFunctionChangeBody() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
-		IFile file = createFile(contentsForTest[0].toString(), "body.cpp");
+		IFile file = createFile(contentsForTest[0].toString(), "body.cpp"); //$NON-NLS-1$
 		CEditor cEditor = runCommand(file, 0, 2, COMMAND_ID);
-		type("newTest", 0, 0, cEditor);
+		type("newTest", 0, 0, cEditor); //$NON-NLS-1$
 		type('\t', 0, 0, cEditor);
-		type("ASSERT(true);", 0, 0, cEditor);
+		type("ASSERT(true);", 0, 0, cEditor); //$NON-NLS-1$
 		cEditor.doSave(new NullProgressMonitor());
 		assertFileContent(file, contentsForTest[1].toString());
 	}

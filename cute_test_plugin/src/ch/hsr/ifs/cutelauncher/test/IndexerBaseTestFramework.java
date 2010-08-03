@@ -102,7 +102,7 @@ abstract public class IndexerBaseTestFramework extends TestCase {
         for( int i = 0; i < members.length; i++ ){
             if( members[i].getName().equals( ".project" ) || members[i].getName().equals( ".cproject" ) ) //$NON-NLS-1$ //$NON-NLS-2$
                 continue;
-            if (members[i].getName().equals(".settings"))
+            if (members[i].getName().equals(".settings")) //$NON-NLS-1$
             	continue;
             try{
                 members[i].delete( false, monitor );

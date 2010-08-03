@@ -107,7 +107,7 @@ public class PatternListenerStoryTest extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "storytest.txt";
+		return "storytest.txt"; //$NON-NLS-1$
 	}
 
 }

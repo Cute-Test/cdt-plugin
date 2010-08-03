@@ -20,7 +20,7 @@ import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate;
 public class TestBugFixes //extends Test1Skeleton {
 	extends org.eclipse.cdt.core.tests.BaseTestFramework{
 	
-	private static final String TEST_DEFS = "testDefs/cute/sourceActions/bugfix.cpp";
+	private static final String TEST_DEFS = "testDefs/cute/sourceActions/bugfix.cpp"; //$NON-NLS-1$
 	public TestBugFixes(String name) {
 		super(name);
  	}
@@ -34,7 +34,7 @@ public class TestBugFixes //extends Test1Skeleton {
 		
 		try{
 			//IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
-			IFile inputFile=importFile("A.cpp",testSrcCode);
+			IFile inputFile=importFile("A.cpp",testSrcCode); //$NON-NLS-1$
 			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 			assertNotNull(editor);
 			assertTrue(editor instanceof CEditor);
@@ -60,7 +60,7 @@ public class TestBugFixes //extends Test1Skeleton {
 			boolean flag=true;
 			final java.lang.reflect.Method[] methods = LinkedModeUI.class.getDeclaredMethods();
 		    for (int i = 0; i < methods.length; ++i) {
-		      if (methods[i].getName().equals("leave")) {
+		      if (methods[i].getName().equals("leave")) { //$NON-NLS-1$
 		        final Object params[] = {ILinkedModeListener.UPDATE_CARET};
 		        methods[i].setAccessible(true);
 		        methods[i].invoke(linked2ndCopy, params);
@@ -84,10 +84,10 @@ public class TestBugFixes //extends Test1Skeleton {
 //			System.out.println("["+results.substring(selection.getOffset(),selection.getOffset()+selection.getLength())+"]");
 			results=results.substring(selection.getOffset(),selection.getOffset()+selection.getLength());
 			
-			String expected="ASSERTM(\"start writing tests\", false);";
-			assertEquals("",expected,results);
+			String expected="ASSERTM(\"start writing tests\", false);"; //$NON-NLS-1$
+			assertEquals("",expected,results); //$NON-NLS-1$
 			
-		}catch(Exception e){e.printStackTrace();fail("\n"+e.getMessage());}
+		}catch(Exception e){e.printStackTrace();fail("\n"+e.getMessage());} //$NON-NLS-1$
 		
 	}
 
@@ -99,8 +99,8 @@ public class TestBugFixes //extends Test1Skeleton {
 	}
 	
 	public static TestSuite suite(){
-		TestSuite ts=new TestSuite("bug fix Tests");
-		ts.addTest(new TestBugFixes("testNewTestFunctionhighlight"));
+		TestSuite ts=new TestSuite("bug fix Tests"); //$NON-NLS-1$
+		ts.addTest(new TestBugFixes("testNewTestFunctionhighlight")); //$NON-NLS-1$
 		return ts;
 	}
 	@Override

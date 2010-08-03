@@ -22,8 +22,8 @@ import ch.hsr.ifs.test.framework.event.TestEventHandler;
  */
 public class PatternListenerTestSuccessTest extends PatternListenerBase {
 	
-	private static final String TEST_NAME_EXP = "xUnitTest";
-	private static final String MSG_EXP = "OK";
+	private static final String TEST_NAME_EXP = "xUnitTest"; //$NON-NLS-1$
+	private static final String MSG_EXP = "OK"; //$NON-NLS-1$
 	
 	private String testNameStart;
 	private String testNameEnd;
@@ -80,17 +80,17 @@ public class PatternListenerTestSuccessTest extends PatternListenerBase {
 	}
 	
 	public void testTestStart() {
-		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
+		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart); //$NON-NLS-1$
 	}
 	
 	public void testTestEnd() {
-		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
-		assertEquals("Message", MSG_EXP, msgEnd);
+		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd); //$NON-NLS-1$
+		assertEquals("Message", MSG_EXP, msgEnd); //$NON-NLS-1$
 	}
 	
 	@Override
 	protected String getInputFileName() {
-		return "successTest.txt";
+		return "successTest.txt"; //$NON-NLS-1$
 	}
 
 }

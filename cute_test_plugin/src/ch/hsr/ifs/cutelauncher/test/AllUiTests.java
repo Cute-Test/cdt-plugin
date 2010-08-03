@@ -9,7 +9,7 @@ import ch.hsr.ifs.cutelauncher.test.ui.sourceactions.SourceActionsTest;
 public class AllUiTests extends TestSuite{
 
 	public AllUiTests() {
-		super("Cute Plugin All UI Tests");
+		super("Cute Plugin All UI Tests"); //$NON-NLS-1$
 		addTest(HyperlinkSuite.suite());
 		addTest(CuteSuiteWizardHandlerTest.suite());
 		addTest(SourceActionsTest.suite());

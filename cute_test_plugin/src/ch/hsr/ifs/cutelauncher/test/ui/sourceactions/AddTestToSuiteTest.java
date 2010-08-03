@@ -19,10 +19,10 @@ import org.eclipse.core.resources.IFile;
  */
 public class AddTestToSuiteTest extends EditorBaseTest {
 
-	private static final String COMMAND_ID = "ch.hsr.ifs.cute.addTestCommand";
+	private static final String COMMAND_ID = "ch.hsr.ifs.cute.addTestCommand"; //$NON-NLS-1$
 
 	public AddTestToSuiteTest() {
-		super("Add Test to Suite");
+		super("Add Test to Suite"); //$NON-NLS-1$
 	}
 	
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
@@ -51,8 +51,8 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	public void testAddFunctorToSuite() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
-		IFile file = createFile(contentsForTest[0].toString(), "functor.cpp");
-		runCommand(file, contentsForTest[0].indexOf("functor"), 3, COMMAND_ID );
+		IFile file = createFile(contentsForTest[0].toString(), "functor.cpp"); //$NON-NLS-1$
+		runCommand(file, contentsForTest[0].indexOf("functor"), 3, COMMAND_ID ); //$NON-NLS-1$
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 	
@@ -78,8 +78,8 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	public void testAddFunctionToSuite() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
-		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
-		runCommand(file,contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID);
+		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp"); //$NON-NLS-1$
+		runCommand(file,contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID); //$NON-NLS-1$
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 	
@@ -105,8 +105,8 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	public void testAddMemberFunctionInSameFileToSuite() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
-		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
-		runCommand(file,contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID);
+		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp"); //$NON-NLS-1$
+		runCommand(file,contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID); //$NON-NLS-1$
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 	
@@ -147,9 +147,9 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	public void testAddMemberFunctionToSuite() throws Exception{
 		StringBuffer[] contentsForTest = getContentsForTest(3);
-		createFile(contentsForTest[0].toString(), "suite.h");
-		IFile file = createFile(contentsForTest[1].toString(), "suite.cpp"); 
-		runCommand(file,contentsForTest[1].indexOf("theTest"), 3, COMMAND_ID);
+		createFile(contentsForTest[0].toString(), "suite.h"); //$NON-NLS-1$
+		IFile file = createFile(contentsForTest[1].toString(), "suite.cpp");  //$NON-NLS-1$
+		runCommand(file,contentsForTest[1].indexOf("theTest"), 3, COMMAND_ID); //$NON-NLS-1$
 		assertFileContent(file, contentsForTest[2].toString());
 	}
 	

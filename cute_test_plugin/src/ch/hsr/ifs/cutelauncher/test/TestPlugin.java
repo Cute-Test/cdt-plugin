@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class TestPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cutelauncher.test";
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cutelauncher.test"; //$NON-NLS-1$
 
 	// The shared instance
 	private static TestPlugin plugin;

@@ -7,7 +7,7 @@ public class PatternListenerSuite {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
-				"Pattern Listener Suite");
+				"Pattern Listener Suite"); //$NON-NLS-1$
 		//$JUnit-BEGIN$
 		suite.addTestSuite(PatternListenerSessionStartEndTest.class);
 		suite.addTestSuite(PatternListenerSuiteTest.class);

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="cute_test_plugin" version="2">
+    <resource path="src/ch/hsr/ifs/cutelauncher/test/SourceLookupPathTest.java" type="ch.hsr.ifs.cutelauncher.test.LaunchConfigurationStub">
+        <filter id="574619656">
+            <message_arguments>
+                <message_argument value="ILaunchConfiguration"/>
+                <message_argument value="LaunchConfigurationStub"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/ch/hsr/ifs/cutelauncher/test/ui/sourceactions/EditorBaseTest.java" type="ch.hsr.ifs.cutelauncher.test.ui.sourceactions.EditorBaseTest">
+        <filter id="643842064">
+            <message_arguments>
+                <message_argument value="CEditor"/>
+                <message_argument value="EditorBaseTest"/>
+                <message_argument value="openEditor(IFile)"/>
+            </message_arguments>
+        </filter>
+        <filter id="643842064">
+            <message_arguments>
+                <message_argument value="CEditor"/>
+                <message_argument value="EditorBaseTest"/>
+                <message_argument value="runCommand(IFile, int, int, String)"/>
+            </message_arguments>
+        </filter>
+        <filter id="643846161">
+            <message_arguments>
+                <message_argument value="CEditor"/>
+                <message_argument value="EditorBaseTest"/>
+                <message_argument value="sendTypeEvent(char, int, int, CEditor)"/>
+            </message_arguments>
+        </filter>
+        <filter id="643846161">
+            <message_arguments>
+                <message_argument value="CEditor"/>
+                <message_argument value="EditorBaseTest"/>
+                <message_argument value="type(String, int, int, CEditor)"/>
+            </message_arguments>
+        </filter>
+        <filter id="643846161">
+            <message_arguments>
+                <message_argument value="CEditor"/>
+                <message_argument value="EditorBaseTest"/>
+                <message_argument value="type(char, int, int, CEditor)"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/ch/hsr/ifs/cutelauncher/test/ui/sourceactions/TestBugFixes.java" type="ch.hsr.ifs.cutelauncher.test.ui.sourceactions.TestBugFixes">
+        <filter id="627060751">
+            <message_arguments>
+                <message_argument value="CEditor"/>
+                <message_argument value="TestBugFixes"/>
+                <message_argument value="ceditor"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>
