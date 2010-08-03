@@ -34,12 +34,13 @@ import org.eclipse.text.edits.TextEdit;
 
 /**
  * @author Emanuel Graf IFS
+ * @since 4.0
  *
  */
 @SuppressWarnings("deprecation")
 public abstract class AddStrategy {
 	
-	protected static final String EMPTY_STRING = "";
+	protected static final String EMPTY_STRING = ""; //$NON-NLS-1$
 	protected int insertFileOffset=-1; //for NewTestFunctionAction use only, need to reset value in createEdit
 	protected int pushbackOffset=-1;   //for NewTestFunctionAction use only, need to reset value in createEdit
 	protected int pushbackLength=-1;   //for NewTestFunctionAction use only, need to reset value in createEdit

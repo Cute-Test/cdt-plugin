@@ -26,6 +26,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 
+/**
+ * @since 4.0
+ */
 public class StringDialogField extends DialogField {
 		
 	private String fText;

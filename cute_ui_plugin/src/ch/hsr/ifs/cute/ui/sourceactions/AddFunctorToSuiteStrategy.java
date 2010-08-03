@@ -31,6 +31,7 @@ import org.eclipse.text.edits.MultiTextEdit;
 
 /**
  * @author Emanuel Graf IFS
+ * @since 4.0
  *
  */
 public class AddFunctorToSuiteStrategy extends AddStrategy {

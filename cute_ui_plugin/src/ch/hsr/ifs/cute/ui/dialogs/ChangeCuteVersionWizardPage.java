@@ -24,6 +24,7 @@ import ch.hsr.ifs.cute.ui.project.wizard.CuteVersionComposite;
 
 /**
  * @author egraf
+ * @since 4.0
  *
  */
 public class ChangeCuteVersionWizardPage extends WizardPage {

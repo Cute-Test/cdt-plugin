@@ -43,18 +43,31 @@ import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 
 /**
  * @author Emanuel Graf
+ * @since 4.0
  *
  */
 @SuppressWarnings("restriction")
 public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
+	/**
+	 * @since 4.0
+	 */
 	protected IEditorPart editor;
+	/**
+	 * @since 4.0
+	 */
 	protected LinkedModeUI linkedModeUI; 
+	/**
+	 * @since 4.0
+	 */
 	protected final String funcName;//used for linking during 1st edit
+	/**
+	 * @since 4.0
+	 */
 	protected final NewTestFunctionAction functionAction;  
 	
 	public NewTestFunctionActionDelegate(){
-		this.funcName="newTestFunction";
-		this.functionAction= new NewTestFunctionAction("newTestFunction");
+		this.funcName="newTestFunction"; //$NON-NLS-1$
+		this.functionAction= new NewTestFunctionAction("newTestFunction"); //$NON-NLS-1$
 	}
 	
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {

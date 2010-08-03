@@ -17,6 +17,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+/**
+ * @since 4.0
+ */
 public class LayoutUtil {
 	
 	/**

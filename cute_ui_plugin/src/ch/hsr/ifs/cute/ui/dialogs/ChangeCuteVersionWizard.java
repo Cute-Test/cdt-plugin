@@ -31,6 +31,7 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author egraf
+ * @since 4.0
  *
  */
 public class ChangeCuteVersionWizard extends Wizard {

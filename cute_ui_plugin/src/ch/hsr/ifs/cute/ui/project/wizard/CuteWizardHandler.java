@@ -97,6 +97,9 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	protected void createCuteProjectSettings(IProject newProject, IProgressMonitor monitor) {
 		try {
 			createCuteProject(newProject, monitor);
@@ -106,6 +109,9 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	}
 
 
+	/**
+	 * @since 4.0
+	 */
 	protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
 		QualifiedName key = new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME);
@@ -144,10 +150,16 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 				getTestMainFile(project), true);
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	protected ICuteHeaders getCuteVersion() {
 		return UiPlugin.getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
 			IFolder cuteFolder) throws CoreException {
 		cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
@@ -158,6 +170,9 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		return project.getFile("src/Test.cpp"); //$NON-NLS-1$
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	public GetOptionsStrategy getStrategy(int optionType) {
 		switch (optionType) {
 		case IOption.INCLUDE_PATH:

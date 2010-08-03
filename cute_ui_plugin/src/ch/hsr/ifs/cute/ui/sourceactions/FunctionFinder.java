@@ -38,6 +38,9 @@ public class FunctionFinder extends ASTVisitor {
 		return alSimpleDeclarationOnly;
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	public ArrayList<IASTFunctionDefinition> getMemberFuntions(){
 		ArrayList<IASTFunctionDefinition> defs = new ArrayList<IASTFunctionDefinition>();
 		for (IASTDeclaration decl : al) {

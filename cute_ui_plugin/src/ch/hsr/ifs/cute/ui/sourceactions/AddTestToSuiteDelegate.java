@@ -20,6 +20,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
+/**
+ * @since 4.0
+ */
 public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
 	
 	private IEditorPart editor;

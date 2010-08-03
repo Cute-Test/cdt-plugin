@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author egraf
+ * @since 4.0
  *
  */
 public interface ICuteHeaders {

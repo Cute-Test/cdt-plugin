@@ -46,6 +46,9 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 	private Vector<IProject> libProjects;
 	private final IWizardContainer wizardDialog;
 	
+	/**
+	 * @since 4.0
+	 */
 	public LibReferencePage(CDTConfigWizardPage configWizardPage, IWizardPage staringWizardPage, IWizardContainer wc, IIncludeStrategyProvider cuteWizardHandler) {
 		super(configWizardPage, staringWizardPage, cuteWizardHandler);
 		pageID = "ch.hsr.ifs.cutelauncher.ui.LibRefPage"; //$NON-NLS-1$

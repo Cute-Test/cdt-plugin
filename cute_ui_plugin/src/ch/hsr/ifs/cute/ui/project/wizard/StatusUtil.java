@@ -11,12 +11,12 @@
 package ch.hsr.ifs.cute.ui.project.wizard;
 
 import org.eclipse.core.runtime.IStatus;
-
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.dialogs.IMessageProvider;
 
 /**
  * A utility class to work with IStatus.
+ * @since 4.0
  */
 public class StatusUtil {
 

@@ -51,13 +51,25 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	
 	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);"; //$NON-NLS-1$
 	int problemMarkerErrorLineNumber=0;
+	/**
+	 * @since 4.0
+	 */
 	protected int insertFileOffset;
+	/**
+	 * @since 4.0
+	 */
 	protected int pushbackOffset;
+	/**
+	 * @since 4.0
+	 */
 	protected int pushbackLength;
 	private String newLine;
 	private String funcName;
 	
 	
+	/**
+	 * @since 4.0
+	 */
 	public NewTestFunctionAction(String funcName) {
 		super();
 		this.funcName = funcName;
@@ -105,6 +117,9 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		return createPushBackEdit(editorFile,astTu,suitPushBackFinder,builder);
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	protected String pushBackString(String suite, String insidePushback){
 		StringBuilder builder = new StringBuilder();
 		builder.append(newLine+"\t"); //$NON-NLS-1$
@@ -140,6 +155,9 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		return null;
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder, StringBuilder builder) {
 		
 		if(suitPushBackFinder.getSuiteDeclName() != null) {
@@ -266,11 +284,17 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 	
 	
 	
+	/**
+	 * @since 4.0
+	 */
 	public static TextEdit testOnlyCreatedEdit(int insertTestFuncFileOffset){
 		NewTestFunctionAction ntfa=new NewTestFunctionAction("newTestFunction");
 		return ntfa.createdEdit(insertTestFuncFileOffset, null, "newTestFunction"); //$NON-NLS-1$
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	public static TextEdit testOnlyPushBackString(int insertloc){
 		
 		NewTestFunctionAction ntfa=new NewTestFunctionAction(null);

@@ -175,6 +175,9 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		return libRefPage;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	protected void setLibraryPaths(IPath libFolder, IProject project, IConfiguration configuration)
 			throws CoreException {
 				String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$

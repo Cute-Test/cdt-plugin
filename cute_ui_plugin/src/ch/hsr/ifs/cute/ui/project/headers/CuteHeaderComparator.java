@@ -16,6 +16,7 @@ import java.util.Comparator;
 
 /**
  * @author egraf
+ * @since 4.0
  *
  */
 public class CuteHeaderComparator implements Comparator<ICuteHeaders> {

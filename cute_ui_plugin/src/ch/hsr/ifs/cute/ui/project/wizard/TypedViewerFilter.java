@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 
 /**
  * Viewer filter used in selection dialogs.
+ * @since 4.0
  */
 public class TypedViewerFilter extends ViewerFilter {
 

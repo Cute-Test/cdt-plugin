@@ -18,6 +18,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
+/**
+ * @since 4.0
+ */
 public class DialogField {
 
 	private Label fLabel;

@@ -45,8 +45,10 @@ import org.eclipse.text.edits.TextEdit;
 
 /**
  * @author Emanuel Graf IFS
+ * @since 4.0
  *
  */
+@SuppressWarnings("restriction")
 public class LinkSuiteToRunnerProcessor {
 
 	private static final String STRING = "\""; //$NON-NLS-1$
@@ -72,13 +74,14 @@ public class LinkSuiteToRunnerProcessor {
 		return change;
 	}
 
+	@SuppressWarnings("restriction")
 	private Change getIncludeChange() {
 		IASTTranslationUnit tu = testRunner.getTranslationUnit();
 		IPath implPath = new Path(tu.getContainingFilename());
 		IFile file= ResourceLookup.selectFileForLocation(implPath, null);
-		TextFileChange change = new TextFileChange("include", file);
+		TextFileChange change = new TextFileChange("include", file); //$NON-NLS-1$
 		int offset = getMaxIncludeOffset(tu) + 1;
-		String text = "#include \"" + suiteName + ".h\"\n";
+		String text = "#include \"" + suiteName + ".h\"\n";  //$NON-NLS-1$//$NON-NLS-2$
 		TextEdit edit = new InsertEdit(offset, text);
 		change.setEdit(edit);
 		return change;

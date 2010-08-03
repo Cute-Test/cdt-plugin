@@ -25,6 +25,7 @@ import ch.hsr.ifs.cute.ui.dialogs.ChangeCuteVersionWizard;
 
 /**
  * @author egraf
+ * @since 4.0
  *
  */
 public class ChangeCuteVersionAction implements IWorkbenchWindowActionDelegate {

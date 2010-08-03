@@ -55,7 +55,10 @@ public class UiPlugin extends AbstractUIPlugin {
 	
 	private static final IPath ICONS_PATH= new Path("$nl$/icons"); //$NON-NLS-1$
 
-	public static final String CUTE_VERSION_PROPERTY_NAME = "cuteVersion";
+	/**
+	 * @since 4.0
+	 */
+	public static final String CUTE_VERSION_PROPERTY_NAME = "cuteVersion"; //$NON-NLS-1$
 	
 	/**
 	 * The constructor
@@ -81,6 +84,9 @@ public class UiPlugin extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public static ICuteHeaders getCuteVersion(String cuteVersionString) {
 		SortedSet<ICuteHeaders> headers = getInstalledCuteHeaders();
 		for (ICuteHeaders cuteHeaders : headers) {
@@ -91,24 +97,27 @@ public class UiPlugin extends AbstractUIPlugin {
 		return null;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public static ICuteHeaders getCuteVersionString(IProject project) throws CoreException {
 		QualifiedName key = new QualifiedName(PLUGIN_ID, CUTE_VERSION_PROPERTY_NAME);
 		String versionString = project.getPersistentProperty(key);
 		if(versionString != null) {
 			return getCuteVersion(versionString);
 		}else { //find out version by parsing the version header
-			IResource res = project.findMember("cute/cute_version.h");
+			IResource res = project.findMember("cute/cute_version.h"); //$NON-NLS-1$
 			if (res instanceof IFile) {
-				String cuteVersionstring = "";
+				String cuteVersionstring = ""; //$NON-NLS-1$
 				IFile file = (IFile) res;
 				BufferedReader br = new BufferedReader(new InputStreamReader(file.getContents()));
 				String line;
 				try {
-					Pattern versPtr = Pattern.compile("#define CUTE_LIB_VERSION \\\"(\\d\\.\\d\\.\\d)\\\"$");
+					Pattern versPtr = Pattern.compile("#define CUTE_LIB_VERSION \\\"(\\d\\.\\d\\.\\d)\\\"$"); //$NON-NLS-1$
 					while((line = br.readLine()) != null	) {
 						Matcher matcher = versPtr.matcher(line);
 						if(matcher.matches()) {
-							cuteVersionstring = "Cute Headers " + matcher.group(1);
+							cuteVersionstring = "Cute Headers " + matcher.group(1); //$NON-NLS-1$
 							project.setPersistentProperty(key, cuteVersionstring);
 							break;
 						}
@@ -134,11 +143,17 @@ public class UiPlugin extends AbstractUIPlugin {
 	}
 	
 	
+	/**
+	 * @since 4.0
+	 */
 	public static ImageDescriptor getImageDescriptor(String relativePath) {
 		IPath path= ICONS_PATH.append(relativePath);
 		return createImageDescriptor(getDefault().getBundle(), path);
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	public static SortedSet<ICuteHeaders> getInstalledCuteHeaders(){
 		SortedSet<ICuteHeaders> headers = new TreeSet<ICuteHeaders>(new CuteHeaderComparator());
 		try{
@@ -164,6 +179,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	 * 
 	 * @param status
 	 *            status to log
+	 * @since 4.0
 	 */
 	public static void log(IStatus status) {
 		getDefault().getLog().log(status);
@@ -175,6 +191,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	 * 
 	 * @param e
 	 *            the exception to be logged
+	 * @since 4.0
 	 */
 	public static void log(Throwable e) {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, "Internal Error", e)); //$NON-NLS-1$

@@ -24,6 +24,9 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
+/**
+ * @since 4.0
+ */
 public class SourceFolderSelectionDialog extends ElementTreeSelectionDialog {
     
     private static final Class<?>[] VALIDATOR_CLASSES = new Class<?>[] { ICContainer.class, ICProject.class };

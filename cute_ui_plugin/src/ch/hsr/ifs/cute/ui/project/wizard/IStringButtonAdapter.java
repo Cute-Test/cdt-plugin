@@ -10,6 +10,9 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
+/**
+ * @since 4.0
+ */
 public interface IStringButtonAdapter {
 	
 	void changeControlPressed(DialogField field);

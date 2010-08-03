@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Label;
 
 /**
  * Dialog field containing a label and a combo control.
+ * @since 4.0
  */
 public class ComboDialogField extends DialogField {
 		

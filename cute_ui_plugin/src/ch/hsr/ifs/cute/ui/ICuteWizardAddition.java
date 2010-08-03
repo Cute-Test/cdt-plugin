@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * @author Emanuel Graf IFS
+ * @since 4.0
  *
  */
 public interface ICuteWizardAddition {

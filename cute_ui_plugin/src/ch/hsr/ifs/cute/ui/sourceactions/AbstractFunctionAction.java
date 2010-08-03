@@ -17,6 +17,9 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 public abstract class AbstractFunctionAction {
 	
+	/**
+	 * @since 4.0
+	 */
 	public abstract MultiTextEdit createEdit(ITextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, ISelection selection)
 			throws CoreException;

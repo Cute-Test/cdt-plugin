@@ -18,6 +18,7 @@ import org.eclipse.cdt.core.dom.ast.IASTStandardFunctionDeclarator;
 
 /**
  * @author Emanuel Graf IFS
+ * @since 4.0
  *
  */
 public class ASTUtil {

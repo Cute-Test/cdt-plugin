@@ -131,12 +131,18 @@ public class CuteLauncherDelegate extends AbstractCLaunchDelegate {
 		}		
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	protected void notifyAfterLaunch(IProject project) throws CoreException {
 		for (ILaunchObserver observer : getObservers()) {
 			observer.notifyAfterLaunch(project);
 		}
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	protected void notifyBeforeLaunch(IProject project) throws CoreException {
 		for (ILaunchObserver observer : getObservers()) {
 			observer.notifyBeforeLaunch(project);

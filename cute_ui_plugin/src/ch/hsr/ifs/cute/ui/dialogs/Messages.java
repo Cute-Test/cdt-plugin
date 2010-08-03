@@ -3,6 +3,9 @@ package ch.hsr.ifs.cute.ui.dialogs;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * @since 4.0
+ */
 public class Messages {
 	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.ui.dialogs.messages"; //$NON-NLS-1$
 

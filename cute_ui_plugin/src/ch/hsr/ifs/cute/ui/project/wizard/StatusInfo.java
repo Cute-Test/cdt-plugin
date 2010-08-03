@@ -11,14 +11,14 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
-import org.eclipse.core.runtime.IStatus;
-
 import org.eclipse.cdt.ui.CUIPlugin;
+import org.eclipse.core.runtime.IStatus;
 
 /**
  * A settable IStatus
  * Can be an error, warning, info or ok. For error, info and warning states,
  * a message describes the problem
+ * @since 4.0
  */
 public class StatusInfo implements IStatus {
 	

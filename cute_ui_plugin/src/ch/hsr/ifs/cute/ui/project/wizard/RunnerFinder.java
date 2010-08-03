@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.SubMonitor;
 
 /**
  * @author Emanuel Graf IFS
+ * @since 4.0
  *
  */
 @SuppressWarnings("restriction")
@@ -112,9 +113,9 @@ public class RunnerFinder {
 
 	public List<IASTFunctionDefinition> findTestRunners(IProgressMonitor monitor) throws CoreException {
 		SubMonitor mon = SubMonitor.convert(monitor, 2);
-		mon.beginTask("Find main() function", 1);
+		mon.beginTask(Messages.getString("RunnerFinder.findMain"), 1); //$NON-NLS-1$
 		IASTFunctionDefinition mainFunc = findMain();
-		mon.beginTask("Find test runners", 1);
+		mon.beginTask(Messages.getString("RunnerFinder.findRunners"), 1); //$NON-NLS-1$
 		List<IASTFunctionDefinition> testRunnersFunctions = getTestRunnersFunctions(mainFunc);
 		mon.done();
 		return testRunnersFunctions;

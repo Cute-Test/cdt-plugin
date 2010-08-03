@@ -35,6 +35,7 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
 
 /**
  * @author Emanuel Graf
+ * @since 4.0
  * 
  */
 public class CuteVersionWizardPage extends MBSCustomPage {

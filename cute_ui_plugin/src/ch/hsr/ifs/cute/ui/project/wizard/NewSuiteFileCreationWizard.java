@@ -40,6 +40,9 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
         page.init(getSelection());
     }
 
+    /**
+	 * @since 4.0
+	 */
     public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
 		selection= currentSelection;
 	}
@@ -48,6 +51,9 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 		return selection;
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	protected ISchedulingRule getSchedulingRule() {
 		return ResourcesPlugin.getWorkspace().getRoot(); // look all by default
 	}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="cute_ui_plugin" version="2">
+    <resource path="src/ch/hsr/ifs/cute/ui/project/wizard/CuteWizardHandler.java" type="ch.hsr.ifs.cute.ui.project.wizard.CuteWizardHandler">
+        <filter id="571473929">
+            <message_arguments>
+                <message_argument value="MBSWizardHandler"/>
+                <message_argument value="CuteWizardHandler"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

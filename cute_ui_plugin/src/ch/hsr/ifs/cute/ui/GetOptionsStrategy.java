@@ -16,6 +16,7 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
 
 /**
  * @author Emanuel Graf
+ * @since 4.0
  *
  */
 public interface GetOptionsStrategy {

@@ -21,6 +21,7 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
  * Implementation of a <code>ISelectionValidator</code> to validate the
  * type of an element.
  * Empty selections are not accepted.
+ * @since 4.0
  */
 public class TypedElementSelectionValidator implements ISelectionStatusValidator {
 
