@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="cute_framework" version="2">
+    <resource path="src/ch/hsr/ifs/test/framework/ui/TestViewer.java" type="ch.hsr.ifs.test.framework.ui.TestViewer$TestResultViewer">
+        <filter id="571473929">
+            <message_arguments>
+                <message_argument value="StyledText"/>
+                <message_argument value="TestResultViewer"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>
