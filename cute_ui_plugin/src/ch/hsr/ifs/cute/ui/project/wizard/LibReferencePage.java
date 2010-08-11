@@ -13,8 +13,13 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 
 import java.util.Vector;
 
+import org.eclipse.cdt.managedbuilder.buildproperties.IBuildProperty;
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.CDTConfigWizardPage;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -64,7 +69,7 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 
 	public void createControl(Composite parent) {
 		super.createControl(parent);
-
+		libProjects = getLibProjects();
 		listViewer = CheckboxTableViewer.newCheckList(composite, SWT.TOP
                 | SWT.BORDER);
         GridData data = new GridData(GridData.FILL_BOTH);
@@ -140,5 +145,25 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 		
 		wizardDialog.updateMessage();
 		wizardDialog.updateButtons();
+	}
+	
+	private Vector<IProject> getLibProjects() {
+		Vector<IProject> libProjects = new Vector<IProject>();
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		for (IProject project : projects) {
+			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+			if(info != null) {
+				IConfiguration[] configs = info.getManagedProject().getConfigurations();
+				IBuildProperty artifactType = configs[0].getBuildProperties().getProperty(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_ID);
+				if(artifactType != null) {
+					String artifactTypeName = artifactType.getValue().getId();
+					if(artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_SHAREDLIB)||
+							artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_STATICLIB)) {
+						libProjects.add(project);
+					}
+				}
+			}
+		}
+		return libProjects;
 	}
 }
