@@ -69,6 +69,9 @@
    <feature url="features/ch.hsr.ifs.cute_4.0.0.201007290846.jar" id="ch.hsr.ifs.cute" version="4.0.0.201007290846">
       <category name="Cute Plugin"/>
    </feature>
+   <feature url="features/ch.hsr.ifs.cute_4.0.1.201008111325.jar" id="ch.hsr.ifs.cute" version="4.0.1.201008111325">
+      <category name="Cute Plugin"/>
+   </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
    <category-def name="Cute Headers" label="Cute Headers"/>
    <category-def name="OptFeatures" label="Cute Optional Features"/>
