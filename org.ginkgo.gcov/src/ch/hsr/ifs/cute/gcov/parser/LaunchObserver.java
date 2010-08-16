@@ -29,9 +29,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import ch.hsr.ifs.cute.core.launch.ILaunchObserver;
 import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
+import ch.hsr.ifs.test.framework.launch.ILaunchObserver;
 
 /**
  * @author Emanuel Graf IFS

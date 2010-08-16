@@ -9,14 +9,14 @@
  * Contributors: 
  * Institute for Software (IFS)- initial API and implementation 
  ******************************************************************************/
-package ch.hsr.ifs.cute.core.launch;
+package ch.hsr.ifs.test.framework.launch;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Emanuel Graf IFS
- * @since 3.0
+ * @since 2.3
  *
  */
 public interface ILaunchObserver {

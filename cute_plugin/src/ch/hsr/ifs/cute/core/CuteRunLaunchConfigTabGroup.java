@@ -24,8 +24,8 @@ import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.swt.widgets.Composite;
 
-import ch.hsr.ifs.cute.core.launch.CustomisedLaunchConfigTab;
 import ch.hsr.ifs.cute.core.launch.LaunchEnvironmentVariables;
+import ch.hsr.ifs.test.framework.launch.CustomisedLaunchConfigTab;
 
 public class CuteRunLaunchConfigTabGroup extends
 		AbstractLaunchConfigurationTabGroup {

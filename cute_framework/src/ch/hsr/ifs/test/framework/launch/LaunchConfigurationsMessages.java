@@ -1,10 +1,13 @@
-package ch.hsr.ifs.cute.core;
+package ch.hsr.ifs.test.framework.launch;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * @since 2.3
+ */
 public class LaunchConfigurationsMessages {
-	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.core.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "ch.hsr.ifs.test.framework.launch.messages"; //$NON-NLS-1$
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
 			.getBundle(BUNDLE_NAME);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="launchObserver" name="%extension-point.name" schema="schema/launchObserver.exsd"/>
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
@@ -18,7 +17,7 @@
             id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
       </launchConfigurationTypeImage>
   </extension>
-   <extension
+  <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
             class="ch.hsr.ifs.cute.core.CuteRunLaunchConfigTabGroup"

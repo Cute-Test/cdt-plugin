@@ -3,6 +3,7 @@
 <plugin>
    <extension-point id="Messages" name="%extension-point.name.1" schema="schema/Messages.exsd"/>
    <extension-point id="ImageProvider" name="%extension-point.name.0" schema="schema/ImageProvider.exsd"/>
+   <extension-point id="launchObserver" name="%extension-point.name" schema="schema/launchObserver.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <view

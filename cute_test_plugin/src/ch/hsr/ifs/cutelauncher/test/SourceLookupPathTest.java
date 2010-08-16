@@ -10,7 +10,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
-import ch.hsr.ifs.cute.core.launch.CustomisedLaunchConfigTab;
+import ch.hsr.ifs.test.framework.launch.CustomisedLaunchConfigTab;
+import ch.hsr.ifs.test.framework.launch.TestLauncherDelegate;
 
 public class SourceLookupPathTest extends TestCase {
 
@@ -18,7 +19,7 @@ public class SourceLookupPathTest extends TestCase {
 		super(m);
 	}
 	LaunchConfigurationStub lcs;
-	ch.hsr.ifs.cute.core.launch.CuteLauncherDelegate cld;
+	TestLauncherDelegate cld;
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();

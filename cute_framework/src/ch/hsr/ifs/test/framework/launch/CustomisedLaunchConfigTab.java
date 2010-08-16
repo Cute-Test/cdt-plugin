@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html  
  * 
  ******************************************************************************/
-package ch.hsr.ifs.cute.core.launch;
+package ch.hsr.ifs.test.framework.launch;
 
 import org.eclipse.cdt.launch.ui.CLaunchConfigurationTab;
 import org.eclipse.core.resources.IContainer;
@@ -37,10 +37,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
-import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.model.CuteModel;
 
+/**
+ * @since 2.3
+ */
 @SuppressWarnings("restriction")
 public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
@@ -67,20 +69,20 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	    comp.setFont(font);
 	    GridData gd;
 	    	    
-	    Group group = SWTFactory.createGroup(comp, ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceFolderSelection"), 3, 2, GridData.FILL_HORIZONTAL); //$NON-NLS-1$
+	    Group group = SWTFactory.createGroup(comp, LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceFolderSelection"), 3, 2, GridData.FILL_HORIZONTAL); //$NON-NLS-1$
 		Composite n_comp = SWTFactory.createComposite(group, parent.getFont(), 3, 3, GridData.FILL_BOTH, 0, 0);
 		descriptionLabel=new Label(n_comp,SWT.NONE);
-	    descriptionLabel.setText(ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceDescText")); //$NON-NLS-1$
+	    descriptionLabel.setText(LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceDescText")); //$NON-NLS-1$
 	    gd = new GridData();
 		gd.horizontalSpan = 3;
 		descriptionLabel.setLayoutData(gd);
 	    
-		fLocalRadioButton = createRadioButton(n_comp, ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.Default")); //$NON-NLS-1$
+		fLocalRadioButton = createRadioButton(n_comp, LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.Default")); //$NON-NLS-1$
 		gd = new GridData();
 		gd.horizontalSpan = 3;
 		fLocalRadioButton.setLayoutData(gd);
 		
-		fCustomSrcRadioButton = createRadioButton(n_comp, ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.CustomPath")); //$NON-NLS-1$
+		fCustomSrcRadioButton = createRadioButton(n_comp, LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.CustomPath")); //$NON-NLS-1$
 		fCustomSrcRadioButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent evt) {
@@ -186,7 +188,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	}
 	//////////////////////////////
 	public String getName() {
-		return ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.LookupPath"); //$NON-NLS-1$
+		return LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.LookupPath"); //$NON-NLS-1$
 	}
 
 	public void initializeFrom(ILaunchConfiguration configuration) {
@@ -200,7 +202,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 			fLocalRadioButton.setSelection(true);
 			setSharedEnabled(false);
 		}
-		}catch(CoreException ce){CuteCorePlugin.getDefault().getLog().log(ce.getStatus());}
+		}catch(CoreException ce){TestFrameworkPlugin.getDefault().getLog().log(ce.getStatus());}
 	}
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(USE_CUSTOM_SRC_PATH,isShared());
@@ -212,7 +214,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		if(isShared() && fCustomSrcLocationText.getText().equals(EMPTY_STRING)){
-			setErrorMessage(ch.hsr.ifs.cute.core.LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.NoSourcePathSelected")); //$NON-NLS-1$
+			setErrorMessage(LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.NoSourcePathSelected")); //$NON-NLS-1$
 			return false;
 		}
 		return true;
