@@ -38,34 +38,42 @@ public class CuteTestLabelProvider  extends LabelProvider {
 	public Image getImage(Object element) {
 		if (element instanceof TestSuite) {
 			TestElement suite = (TestElement) element;
-			switch (suite.getStatus()) {
-			case running:
-				return suiteRun;
-			case success:
-				return suiteOk;
-			case failure:
-				return suiteFail;
-			case error:
-				return suiteError;
-			default:
-				throw new IllegalArgumentException(String.valueOf(element));
-			}
+			return getSuiteImage(suite);
 		}else if (element instanceof TestCase) {
 			TestCase tCase = (TestCase) element;
-			switch (tCase.getStatus()) {
-			case running:
-				return testRun;
-			case success:
-				return testOk;
-			case failure:
-				return testFail;
-			case error:
-				return testError;
-			default:
-				throw new IllegalArgumentException(String.valueOf(element));
-			}
+			return getTestCaseImage(tCase);
 		}else {
 			throw new IllegalArgumentException(String.valueOf(element));
+		}
+	}
+
+	protected Image getTestCaseImage(TestCase tCase) {
+		switch (tCase.getStatus()) {
+		case running:
+			return testRun;
+		case success:
+			return testOk;
+		case failure:
+			return testFail;
+		case error:
+			return testError;
+		default:
+			throw new IllegalArgumentException(String.valueOf(tCase));
+		}
+	}
+
+	protected Image getSuiteImage(TestElement suite) {
+		switch (suite.getStatus()) {
+		case running:
+			return suiteRun;
+		case success:
+			return suiteOk;
+		case failure:
+			return suiteFail;
+		case error:
+			return suiteError;
+		default:
+			throw new IllegalArgumentException(String.valueOf(suite));
 		}
 	}
 

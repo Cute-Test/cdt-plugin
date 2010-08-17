@@ -133,6 +133,9 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 		return activeWorkbenchWindow.getActivePage();
 	}
 	
+	/**
+	 * @since 3.0
+	 */
 	public static Messages getMessages(){
 		try{
 			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "Messages"); //$NON-NLS-1$

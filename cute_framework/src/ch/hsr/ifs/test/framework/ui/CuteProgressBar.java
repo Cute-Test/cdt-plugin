@@ -31,8 +31,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.model.ISessionListener;
 import ch.hsr.ifs.test.framework.model.ITestComposite;
 import ch.hsr.ifs.test.framework.model.ITestCompositeListener;
@@ -133,7 +133,12 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 		return value; 
 	}
 	
-	private void drawBevelRect(GC gc, int x, int y, int w, int h, Color topleft, Color bottomright) {
+	private void drawBevelRect(GC gc, Rectangle rect, Color topleft, Color bottomright) {
+		int x = rect.x;
+		int y = rect.y;
+		int w = rect.width-1;
+		int h = rect.height-1;
+		
 		gc.setForeground(topleft);
 		gc.drawLine(x, y, x+w-1, y);
 		gc.drawLine(x, y, x, y+h-1);
@@ -149,7 +154,7 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 			
 		Rectangle rect= getClientArea();
 		gc.fillRectangle(rect);
-		drawBevelRect(gc, rect.x, rect.y, rect.width-1, rect.height-1,
+		drawBevelRect(gc, rect,
 			disp.getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW),
 			disp.getSystemColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
 		

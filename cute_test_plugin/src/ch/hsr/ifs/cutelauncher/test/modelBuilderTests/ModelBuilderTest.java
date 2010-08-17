@@ -19,8 +19,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cutelauncher.test.internal.console.ConsoleTest;
-import ch.hsr.ifs.test.framework.ConsolePatternListener;
 import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
+import ch.hsr.ifs.test.framework.launch.ConsolePatternListener;
 import ch.hsr.ifs.test.framework.model.ModellBuilder;
 import ch.hsr.ifs.test.framework.model.TestCase;
 import ch.hsr.ifs.test.framework.model.TestElement;

@@ -41,7 +41,7 @@ import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.model.CuteModel;
 
 /**
- * @since 2.3
+ * @since 3.0
  */
 @SuppressWarnings("restriction")
 public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {

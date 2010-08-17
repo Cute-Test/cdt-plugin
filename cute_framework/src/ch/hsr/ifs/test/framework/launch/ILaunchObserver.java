@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Emanuel Graf IFS
- * @since 2.3
+ * @since 3.0
  *
  */
 public interface ILaunchObserver {

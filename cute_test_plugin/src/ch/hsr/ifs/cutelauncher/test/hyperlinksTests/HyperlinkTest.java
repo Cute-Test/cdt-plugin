@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cutelauncher.test.internal.console.ConsoleTest;
 import ch.hsr.ifs.cutelauncher.test.internal.console.FileInputTextConsole;
-import ch.hsr.ifs.test.framework.ConsolePatternListener;
+import ch.hsr.ifs.test.framework.launch.ConsolePatternListener;
 import ch.hsr.ifs.test.framework.ui.ConsoleLinkHandler;
 
 /**

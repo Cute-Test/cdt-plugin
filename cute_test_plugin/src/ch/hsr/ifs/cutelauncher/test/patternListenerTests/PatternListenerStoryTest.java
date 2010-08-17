@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.test.framework.ConsolePatternListener;
 import ch.hsr.ifs.test.framework.event.TestEventHandler;
+import ch.hsr.ifs.test.framework.launch.ConsolePatternListener;
 
 /**
  * @author Mike Bria

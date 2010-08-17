@@ -19,8 +19,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 
 public class ShowResultView extends UIJob{
 	

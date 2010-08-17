@@ -4,7 +4,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * @since 2.3
+ * @since 3.0
  */
 public class LaunchConfigurationsMessages {
 	private static final String BUNDLE_NAME = "ch.hsr.ifs.test.framework.launch.messages"; //$NON-NLS-1$

@@ -36,7 +36,6 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.progress.UIJob;
 
-import ch.hsr.ifs.test.framework.ConsolePatternListener;
 import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.event.ConsoleEventParser;
 import ch.hsr.ifs.test.framework.model.ModellBuilder;

@@ -13,8 +13,8 @@ package ch.hsr.ifs.test.framework.ui;
 
 import org.eclipse.jface.action.Action;
 
-import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 
 /**
  * @author Emanuel Graf

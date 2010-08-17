@@ -34,8 +34,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 
-import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.Messages;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.model.TestCase;
 import ch.hsr.ifs.test.framework.model.TestFailure;
 import ch.hsr.ifs.test.framework.model.TestResult;

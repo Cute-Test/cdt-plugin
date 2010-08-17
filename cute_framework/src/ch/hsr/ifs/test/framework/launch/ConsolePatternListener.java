@@ -10,7 +10,7 @@
  * Emanuel Graf - initial API and implementation 
  * Industrial Logic, Inc.:  Mike Bria & John Tangney - enhancements to support additional C++ unit testing frameworks, such as GTest
  ******************************************************************************/
-package ch.hsr.ifs.test.framework;
+package ch.hsr.ifs.test.framework.launch;
 
 import java.util.List;
 import java.util.Vector;
@@ -27,6 +27,9 @@ import ch.hsr.ifs.test.framework.event.ConsoleEventParser;
 import ch.hsr.ifs.test.framework.event.TestEvent;
 import ch.hsr.ifs.test.framework.event.TestEventHandler;
 
+/**
+ * @since 3.0
+ */
 public class ConsolePatternListener implements IPatternMatchListener {
 	private TextConsole console;
 	private ConsoleEventParser eventParser;

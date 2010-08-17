@@ -17,9 +17,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.ImageProvider;
-import ch.hsr.ifs.test.framework.Messages;
 
 /**
  * @author Emanuel Graf

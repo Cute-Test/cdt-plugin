@@ -32,9 +32,9 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
+import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.ImageProvider;
-import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.model.ISessionListener;
 import ch.hsr.ifs.test.framework.model.TestSession;
 

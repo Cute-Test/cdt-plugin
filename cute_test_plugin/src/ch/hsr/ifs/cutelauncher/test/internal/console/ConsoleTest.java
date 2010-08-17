@@ -17,8 +17,8 @@ import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
 import ch.hsr.ifs.cutelauncher.test.TestPlugin;
-import ch.hsr.ifs.test.framework.ConsolePatternListener;
 import ch.hsr.ifs.test.framework.event.ConsoleEventParser;
+import ch.hsr.ifs.test.framework.launch.ConsolePatternListener;
 
 public abstract class ConsoleTest extends TestCase {
 
