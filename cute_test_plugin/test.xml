@@ -22,7 +22,7 @@
 	<target name="cute-tests" depends="init">
 		<echo message="cute-tests"/>
 		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
-			<property name="launchTarget" value="java-test"/>
+			<property name="launchTarget" value="eclipse-test"/>
 			<property name="data-dir" value="${cute-loc}"/>
 			<property name="plugin-name" value="ch.hsr.ifs.cute.testing"/>
 			<property name="classname" value="ch.hsr.ifs.cute.test.AllCoreTests"/>
