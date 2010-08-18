@@ -1,16 +1,16 @@
 <!-- CUTE Plugin Cruisecontrol Autobuild delegate script -->
 <project name="build-cute"
         default="build"
-        basedir="cute">
+        basedir=".">
 
-	<property name="features.dir" value="cute_releng/results/dist/updateSite/features"/>
-	<property name="plugins.dir" value="cute_releng/results/dist/updateSite/plugins"/>
+	<property name="features.dir" value="results/dist/updateSite/features"/>
+	<property name="plugins.dir" value="results/dist/updateSite/plugins"/>
 	<!-- - - - - - - - - - - - - - - - - - 
           target: checkoutBaseBuilder                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="checkoutBaseBuilder" unless="builder.available">
-		<mkdir dir="cute_releng/tools" />
-		<cvs cvsroot="anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="R35_RC4" dest="cute_releng/tools" />
+		<mkdir dir="tools" />
+		<cvs cvsroot=":pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="R36_RC4" dest="tools" />
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
@@ -22,18 +22,18 @@
 	</target>
 
 
-	<target name="build" depends="clean, init, checkoutReleng">
-		<available file="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/plugins/org.eclipse.equinox.launcher.jar" property="builder.available"/>
+	<target name="build" depends="clean, init">
+		<available file="${basedir}/tools/org.eclipse.releng.basebuilder/plugins/org.eclipse.equinox.launcher.jar" property="builder.available"/>
 		<antcall target="checkoutBaseBuilder"/>
 
-		<java jar="${basedir}/cute_releng/tools/org.eclipse.releng.basebuilder/plugins/org.eclipse.equinox.launcher.jar" fork="true" 
-			failonerror="true" dir="${basedir}/cute_releng" resultproperty="error">
+		<java jar="${basedir}/tools/org.eclipse.releng.basebuilder/plugins/org.eclipse.equinox.launcher.jar" fork="true" 
+			failonerror="true" dir="${basedir}" resultproperty="error">
 			<arg line="-ws gtk -os linux -application org.eclipse.ant.core.antRunner" />
 		</java>
 
-		<copy todir="cute_releng/results/dist" 
+		<copy todir="results/dist" 
 			flatten="true">
-			<fileset dir="cute_releng/results">
+			<fileset dir="results">
 				<include name="I*/*.html"/>
 				<include name="I*/*.txt"/>
 				<include name="I*/*.zip"/>
@@ -41,19 +41,19 @@
 			</fileset>
 		</copy>
 		<copy todir="${features.dir}" flatten="true">
-			<fileset dir="cute_releng/results">
+			<fileset dir="results">
 				<include name="I*/updateSite/features/*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${plugins.dir}" flatten="true">
-			<fileset dir="cute_releng/results">
+			<fileset dir="results">
 				<include name="I*/updateSite/plugins/*.jar" />
 			</fileset>
 		</copy>
-		<xmlproperty file="${basedir}/cute_releng/results/eclipse/ch.hsr.ifs.cute.test.xml" />
+		<xmlproperty file="${basedir}/results/eclipse/ch.hsr.ifs.cute.test.xml" />
 
 		<condition property="expected" value="0,0" else="0">
-			<available file="${basedir}/cute_releng/results/eclipse/ch.hsr.ifs.cutelauncher.test.AllUiTests.xml" />
+			<available file="${basedir}/results/eclipse/ch.hsr.ifs.cutelauncher.test.AllUiTests.xml" />
 		</condition>
 
 		<echo level="info" message="expected = ${testsuites.testsuite(errors)}" />
@@ -67,16 +67,8 @@
 		<fail if="testsFailed" message="Tests failed" />
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
-          target: checkoutReleng                      
-         - - - - - - - - - - - - - - - - - -->
-	<target name="checkoutReleng" depends="clean">
-		<cvs cvsroot="cruisecontrol@wiki.ifs.hsr.ch:/home/cvs" command="co cute_releng" reallyquiet="true" />
-	</target>
-
-
 	<target name="clean">
-		<delete dir="${basedir}/cute_releng/results"/>
-		<delete dir="${basedir}/cute_releng/test"/>
+		<delete dir="${basedir}/results"/>
+		<delete dir="${basedir}/test"/>
 	</target>
 </project>

@@ -5,6 +5,7 @@ plugin@ch.hsr.ifs.test.framework=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/c
 plugin@ch.hsr.ifs.cute.headers.1_0=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute_Header_1.0.0
 plugin@ch.hsr.ifs.cute.headers.1_5=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute_Header_1.5.0
 plugin@ch.hsr.ifs.cute.headers.1_6=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,Cute_Header_1.6.0
+plugin@ch.hsr.ifs.cute.help=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.help
 fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework_cute_fragment
 plugin@ch.hsr.ifs.cute.ui=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_ui_plugin
 plugin@ch.hsr.ifs.cute.gcov=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,org.ginkgo.gcov

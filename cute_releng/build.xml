@@ -16,15 +16,15 @@
 	<target name="init">
 		<tstamp/>
 		<property name="branchVersion" value="3.0.0"/>
-		<property name="testVersion" value="2.0.0"/>
+		<property name="testVersion" value="3.0.1"/>
 		<property name="timestamp" value="${DSTAMP}${TSTAMP}" />
 		<property name="forceContextQualifier" value="${timestamp}"/>
 		<property name="buildDirectory" value="${basedir}/results" />
 		<property name="testDirectory" value="${basedir}/test" />
 		<property name="baseLocation" value="${buildDirectory}/eclipse"/>
 		<property name="eclipse.home" value="${buildDirectory}/eclipse"/>
-		<property name="pde.build.scripts" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.5.0.v20090527-1800/scripts"/>
-		<property name="eclipseDist" value="eclipse-SDK-3.6M6-linux-gtk-x86_64.tar.gz"/>
+		<property name="pde.build.scripts" value="${eclipse.home}/plugins/org.eclipse.pde.build_3.6.0.v20100603/scripts"/>
+		<property name="eclipseDist" value="eclipse.tar.gz"/>
 		<property name="collectingFolder" value="eclipse"/>
 		<property name="archivePrefix" value="eclipse"/>
 		<property name="buildType" value="I" />
@@ -107,7 +107,7 @@
 			dest="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
 		<ant antfile="test.xml" dir="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
 			<property name="eclipse-home" value="${testDirectory}/eclipse"/>
-			<property name="library-file" value="${testDirectory}/eclipse/dropins/test/plugins/org.eclipse.test_3.3.0/library.xml"/>
+			<property name="library-file" value="${testDirectory}/eclipse/plugins/org.eclipse.test_3.3.0/library.xml"/>
 			<property name="os" value="${baseos}"/>
 			<property name="ws" value="${basews}"/>
 			<property name="arch" value="${basearch}"/>
