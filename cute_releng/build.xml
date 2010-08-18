@@ -39,7 +39,7 @@
 		<property name="basearch" value="${osgi.arch}"/>
 		<property name="testReports" value="${zipsdir}/testReports"/>
 		<property name="tagname" value="v${timestamp}"/>
-		<property name="cuteTest" value="ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
+		<property name="cuteTest" value="ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}"/>
 		<mkdir dir="${buildDirectory}"/>
 		<mkdir dir="${testReports}"/>
 	</target>
@@ -105,7 +105,7 @@
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
 		<unzip src="${testDirectory}/eclipse/dropins/eclipse/plugins/${cuteTest}.jar"
 			dest="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}"/>
-		<ant antfile="test.xml" dir="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cutelauncher.test_${testVersion}.${forceContextQualifier}">
+		<ant antfile="test.xml" dir="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}">
 			<property name="eclipse-home" value="${testDirectory}/eclipse"/>
 			<property name="library-file" value="${testDirectory}/eclipse/plugins/org.eclipse.test_3.3.0/library.xml"/>
 			<property name="os" value="${baseos}"/>

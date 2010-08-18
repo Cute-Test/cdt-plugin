@@ -19,7 +19,7 @@ plugin@ch.hsr.ifs.test.framework=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/c
 fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework_cute_fragment
 
 ! Test Feature
-plugin@ch.hsr.ifs.cutelauncher.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_plugin
+plugin@ch.hsr.ifs.cute.testing=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_plugin
 plugin@ch.hsr.ifs.cute.gcov.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,gcov_test
 fragment@org.eclipse.ant.optional.junit=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 feature@ch.hsr.ifs.cute.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_feature

@@ -53,7 +53,7 @@
 		<xmlproperty file="${basedir}/results/eclipse/ch.hsr.ifs.cute.test.xml" />
 
 		<condition property="expected" value="0,0" else="0">
-			<available file="${basedir}/results/eclipse/ch.hsr.ifs.cutelauncher.test.AllUiTests.xml" />
+			<available file="${basedir}/results/eclipse/ch.hsr.ifs.cute.test.AllUiTests.xml" />
 		</condition>
 
 		<echo level="info" message="expected = ${testsuites.testsuite(errors)}" />

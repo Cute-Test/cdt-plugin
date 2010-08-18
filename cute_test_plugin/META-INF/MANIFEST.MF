@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: ch.hsr.ifs.cutelauncher.test;singleton:=true
+Bundle-SymbolicName: ch.hsr.ifs.cute.testing;singleton:=true
 Bundle-Version: 3.0.1.qualifier
-Bundle-Activator: ch.hsr.ifs.cutelauncher.test.TestPlugin
+Bundle-Activator: ch.hsr.ifs.cute.test.TestPlugin
 Bundle-Vendor: %pluginProvider
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.4.0,4.0.0)",
@@ -30,10 +30,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.4.0,4.0.0)",
  org.eclipse.cdt.codan.core.cxx;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: ch.hsr.ifs.cutelauncher.test,
- ch.hsr.ifs.cutelauncher.test.hyperlinksTests,
- ch.hsr.ifs.cutelauncher.test.internal.console,
- ch.hsr.ifs.cutelauncher.test.modelBuilderTests,
- ch.hsr.ifs.cutelauncher.test.patternListenerTests,
- ch.hsr.ifs.cutelauncher.test.ui.checkers,
- ch.hsr.ifs.cutelauncher.test.ui.sourceactions
+Export-Package: ch.hsr.ifs.cute.test,
+ ch.hsr.ifs.cute.test.hyperlinksTests,
+ ch.hsr.ifs.cute.test.internal.console,
+ ch.hsr.ifs.cute.test.modelBuilderTests,
+ ch.hsr.ifs.cute.test.patternListenerTests,
+ ch.hsr.ifs.cute.test.ui.checkers,
+ ch.hsr.ifs.cute.test.ui.sourceactions
