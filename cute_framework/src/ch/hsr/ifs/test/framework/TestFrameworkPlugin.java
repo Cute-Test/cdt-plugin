@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -49,8 +48,6 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 	private static final IPath ICONS_PATH= new Path("$nl$/icons"); //$NON-NLS-1$
 	
 	private final CuteModel model = new CuteModel();
-	
-	private Display display;
 		
 	/**
 	 * The constructor
@@ -62,7 +59,6 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		display = Display.getCurrent();
 	}
 
 	@Override
@@ -171,10 +167,6 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 	
 	public static CuteModel getModel() {
 		return getDefault().model;
-	}
-	
-	public static Display getDisplay() {
-		return getDefault().display;
 	}
 
 }
