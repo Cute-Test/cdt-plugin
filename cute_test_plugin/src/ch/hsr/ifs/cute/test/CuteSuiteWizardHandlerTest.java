@@ -31,7 +31,25 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	}
 
 	@SuppressWarnings("nls")
-	public final void testAddTestFiles() {
+	public final void testAddTestFiles1_5() {
+		String cuteVersion = "Cute Headers 1.5.0";
+		addTestFiles(cuteVersion);
+	}
+	
+	@SuppressWarnings("nls")
+	public final void testAddTestFiles1_6() {
+		String cuteVersion = "Cute Headers 1.6.0";
+		addTestFiles(cuteVersion);
+	}
+	
+	@SuppressWarnings("nls")
+	public final void testAddTestFiles1_0() {
+		String cuteVersion = "Cute Headers 1.0.0";
+		addTestFiles(cuteVersion);
+	}
+
+	@SuppressWarnings("nls")
+	private void addTestFiles(String cuteVersion) {
 		try{
 			IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
 //			IWorkspace iws=ResourcesPlugin.getWorkspace();
@@ -44,7 +62,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 			IFolder cuteFolder= prj.getProject().getFolder("/cute");
 			cuteFolder.create(true, true, new NullProgressMonitor());
 			
-			cswh.copyFiles(srcFolder,getCuteHeader("Cute Headers 1.5.0"), cuteFolder);
+			cswh.copyFiles(srcFolder,getCuteHeader(cuteVersion), cuteFolder);
 			//for indirect reference, check dependencies
 			
 			IFile file=srcFolder.getFile("Test.cpp");
@@ -76,7 +94,9 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 
 	public static Test suite(){
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler"); //$NON-NLS-1$
-		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles")); //$NON-NLS-1$
+		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles1_0")); //$NON-NLS-1$
+		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles1_5")); //$NON-NLS-1$
+		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles1_6")); //$NON-NLS-1$
 		return ts;
 	}
 }
