@@ -24,10 +24,22 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		super(m);
 	}
 	CuteSuiteWizardHandler cswh=null;
+	private IFolder srcFolder;
+	private IFolder cuteFolder;
+	private IProject project;
+	@SuppressWarnings("nls")
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		cswh=new CuteSuiteWizardHandler("theSuiteName"); //$NON-NLS-1$
+		IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
+		project = iwsr.getProject("CSWHT");
+		project.create(new NullProgressMonitor());
+		project.open(new NullProgressMonitor());
+		srcFolder = project.getProject().getFolder("/src");
+		srcFolder.create(true, true, new NullProgressMonitor());
+		cuteFolder = project.getProject().getFolder("/cute");
+		cuteFolder.create(true, true, new NullProgressMonitor());
 	}
 
 	@SuppressWarnings("nls")
@@ -51,17 +63,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	@SuppressWarnings("nls")
 	private void addTestFiles(String cuteVersion) {
 		try{
-			IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
-//			IWorkspace iws=ResourcesPlugin.getWorkspace();
-//			IProjectDescription prjdesc=iws.newProjectDescription("CSWHT");
-			IProject prj=iwsr.getProject("CSWHT");
-			prj.create(new NullProgressMonitor());
-			prj.open(new NullProgressMonitor());
-			IFolder srcFolder= prj.getProject().getFolder("/src");
-			srcFolder.create(true, true, new NullProgressMonitor());
-			IFolder cuteFolder= prj.getProject().getFolder("/cute");
-			cuteFolder.create(true, true, new NullProgressMonitor());
-			
+					
 			cswh.copyFiles(srcFolder,getCuteHeader(cuteVersion), cuteFolder);
 			//for indirect reference, check dependencies
 			
@@ -76,12 +78,21 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 			assertTrue(file1.exists());
 			assertTrue(file2.exists());
 			//clean up
-			file1.delete(true, false, new NullProgressMonitor());
-			file2.delete(true, false, new NullProgressMonitor());
-			prj.delete(true, new NullProgressMonitor());
+			
 		}catch(CoreException ce){fail(ce.getMessage());}
 	}
 	
+	
+	
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		project.delete(true, new NullProgressMonitor());
+		project = null;
+		cuteFolder = null;
+		srcFolder = null;
+	}
+
 	private ICuteHeaders getCuteHeader(String version) {
 		SortedSet<ICuteHeaders> headers = UiPlugin.getInstalledCuteHeaders();
 		for (ICuteHeaders cuteHeaders : headers) {
