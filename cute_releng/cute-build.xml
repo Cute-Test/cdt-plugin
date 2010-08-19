@@ -50,7 +50,7 @@
 				<include name="I*/updateSite/plugins/*.jar" />
 			</fileset>
 		</copy>
-		<xmlproperty file="${basedir}/results/eclipse/ch.hsr.ifs.cute.test.xml" />
+		<xmlproperty file="${basedir}/test/results/eclipse/ch.hsr.ifs.cute.test.xml" />
 
 		<condition property="expected" value="0,0" else="0">
 			<available file="${basedir}/results/eclipse/ch.hsr.ifs.cute.test.AllUiTests.xml" />
