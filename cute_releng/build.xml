@@ -61,7 +61,7 @@
 
 	<target name="unzip" depends="init" unless="dontUnzip">
 		<exec dir="${dest}" executable="tar">
-			<arg value="xvfz"/>
+			<arg value="xfz"/>
 			<arg value="../${eclipseDist}"/>
 		</exec>
 	</target>
