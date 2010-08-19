@@ -15,8 +15,8 @@
 
 	<target name="init">
 		<tstamp/>
-		<property name="branchVersion" value="3.0.0"/>
-		<property name="testVersion" value="3.0.1"/>
+		<property name="branchVersion" value="4.1.0"/>
+		<property name="testVersion" value="4.1.0"/>
 		<property name="timestamp" value="${DSTAMP}${TSTAMP}" />
 		<property name="forceContextQualifier" value="${timestamp}"/>
 		<property name="buildDirectory" value="${basedir}/results" />
@@ -57,6 +57,11 @@
 		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
 			<property name="builder" value="${basedir}/header16" />
 		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
+			<property name="builder" value="${basedir}/gcov" />
+		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}" target="preBuild">
+			<property name="builder" value="${basedir}/boost" />			</ant>
 	</target>
 
 	<target name="unzip" depends="init" unless="dontUnzip">
@@ -82,6 +87,12 @@
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/header16" />
 		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}">
+			<property name="builder" value="${basedir}/gcov" />
+		</ant>
+		<ant antfile="build.xml" dir="${pde.build.scripts}">
+			<property name="builder" value="${basedir}/boost" />
+		</ant>
 		<copy file="buildindex.html" tofile="${zipsdir}/index.html" />
 		<replace file="${zipsdir}/index.html">
 			<replacefilter token="@branchVersion@" value="${branchVersion}" />
@@ -100,10 +111,11 @@
 		</ant>
 
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins" />
-		<!--<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_6-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
-		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_5-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/> -->
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_6-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
+		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_5-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_0-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins" />
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
+		
 		<unzip src="${testDirectory}/eclipse/dropins/eclipse/plugins/${cuteTest}.jar"
 			dest="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}"/>
 		<ant antfile="test.xml" dir="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}">

@@ -24,3 +24,10 @@ plugin@ch.hsr.ifs.cute.gcov.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/c
 fragment@org.eclipse.ant.optional.junit=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 feature@ch.hsr.ifs.cute.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_feature
 
+!boost
+feature@ch.hsr.ifs.cute.boost.feature=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.boost.feature
+plugin@ch.hsr.ifs.cute.boost=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.boost
+
+!gcov
+feature@ch.hsr.ifs.cute.gcov.feature=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.gcov.feature
+plugin@ch.hsr.ifs.cute.gcov=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,org.ginkgo.gcov
