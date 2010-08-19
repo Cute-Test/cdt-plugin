@@ -28,7 +28,6 @@ public class BoostWizardAddition implements ICuteWizardAddition {
 
 	boolean copyBoost;
 
-	@Override
 	public void createComposite(Composite comp) {
 		final Button check = new Button(comp, SWT.CHECK);
 		check.setText(Messages.BoostWizardAddition_0);
@@ -42,7 +41,6 @@ public class BoostWizardAddition implements ICuteWizardAddition {
 		});
 	}
 
-	@Override
 	public ICuteWizardAdditionHandler getHandler() {
 		return new BoostHandler(this);
 	}

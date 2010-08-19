@@ -48,7 +48,7 @@ public class BoostHandler implements ICuteWizardAdditionHandler, IIncludeStrateg
 		this.addition = boostWizardAddition;
 	}
 
-	@Override
+
 	public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
 		SubMonitor mon = SubMonitor.convert(pm, 2);
 		if(addition.copyBoost) {
@@ -97,12 +97,12 @@ public class BoostHandler implements ICuteWizardAdditionHandler, IIncludeStrateg
 		}
 	}
 
-	@Override
+
 	public void configureLibProject(IProject project) throws CoreException {
 		//Do nothing
 	}
 
-	@Override
+
 	public GetOptionsStrategy getStrategy(int optionType) {
 		switch (optionType) {
 		case IOption.INCLUDE_PATH:
