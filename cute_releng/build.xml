@@ -170,9 +170,9 @@
 		<antcall target="installPlugin">
 			<param name="installIU" value="ch.hsr.ifs.cute.test.feature.group/3.0.1.${timestamp}"/>
 		</antcall>
-		<unzip src="${testDirectory}/eclipse/dropins/eclipse/plugins/${cuteTest}.jar"
-			dest="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}"/>
-		<ant antfile="test.xml" dir="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}">
+		<unzip src="${testDirectory}/eclipse/plugins/${cuteTest}.jar"
+			dest="${testDirectory}/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}"/>
+		<ant antfile="test.xml" dir="${testDirectory}/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}">
 			<property name="eclipse-home" value="${testDirectory}/eclipse"/>
 			<property name="library-file" value="${testDirectory}/eclipse/plugins/org.eclipse.test_3.3.0/library.xml"/>
 			<property name="os" value="${baseos}"/>
