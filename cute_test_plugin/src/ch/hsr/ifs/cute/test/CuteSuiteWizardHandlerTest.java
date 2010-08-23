@@ -99,6 +99,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 
 	private ICuteHeaders getCuteHeader(String version) {
 		SortedSet<ICuteHeaders> headers = UiPlugin.getInstalledCuteHeaders();
+		System.out.println("Headers-L " + headers.size());
 		for (ICuteHeaders cuteHeaders : headers) {
 			if(version.equals(cuteHeaders.getVersionString()))
 				return cuteHeaders;
