@@ -140,7 +140,7 @@
 		</antcall>
 		<record name="${testReports}/testsLog.txt" action="start" loglevel="verbose" />
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
-			<property name="builder" value="${basedir}/testing" />
+			<param name="builder" value="${basedir}/testing" />
 		</ant>
 		<!--
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins" />
