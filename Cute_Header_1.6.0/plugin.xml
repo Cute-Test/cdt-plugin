@@ -4,7 +4,7 @@
    <extension
          point="ch.hsr.ifs.cute.ui.Headers">
       <CuteHeader
-            class="ch.hsr.ifs.cute.headers.CuteHeades_1_6">
+            class="ch.hsr.ifs.cute.headers.CuteHeaders_1_6">
       </CuteHeader>
    </extension>
 

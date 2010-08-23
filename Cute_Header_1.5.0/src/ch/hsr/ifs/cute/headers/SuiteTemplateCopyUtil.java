@@ -30,7 +30,7 @@ public class SuiteTemplateCopyUtil {
 
 	@SuppressWarnings({ "rawtypes" })
 	public static void copyFile (IFile targetFile, IProgressMonitor monitor,String templateFilename,String suitename)throws CoreException{
-		Enumeration en = Activator.getDefault().getBundle().findEntries("suite", templateFilename, false); //$NON-NLS-1$
+		Enumeration en = CuteHeaders15Plugin.getDefault().getBundle().findEntries("suite", templateFilename, false); //$NON-NLS-1$
 		if(en.hasMoreElements()){
 			URL url = (URL)en.nextElement();
 			
@@ -39,10 +39,10 @@ public class SuiteTemplateCopyUtil {
 				
 				targetFile.create(str,IResource.FORCE , new SubProgressMonitor(monitor,1));
 			} catch (IOException e) {
-				throw new CoreException(new Status(IStatus.ERROR,Activator.PLUGIN_ID,42,e.getMessage(), e));
+				throw new CoreException(new Status(IStatus.ERROR,CuteHeaders15Plugin.PLUGIN_ID,42,e.getMessage(), e));
 			}
 		}else{
-			throw new CoreException(new Status(IStatus.ERROR,Activator.PLUGIN_ID,42,"missing suite template files", null)); //$NON-NLS-1$
+			throw new CoreException(new Status(IStatus.ERROR,CuteHeaders15Plugin.PLUGIN_ID,42,"missing suite template files", null)); //$NON-NLS-1$
 		}
 	}
 	

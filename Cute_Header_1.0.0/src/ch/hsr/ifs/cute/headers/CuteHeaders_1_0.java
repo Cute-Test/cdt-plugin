@@ -47,7 +47,7 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 
 	@SuppressWarnings("rawtypes")
 	private List<URL> getFileListe(String path, String filePattern) {
-		Enumeration en = Activator.getDefault().getBundle().findEntries(path, filePattern, false);
+		Enumeration en = CuteHeaders10Plugin.getDefault().getBundle().findEntries(path, filePattern, false);
 		List<URL>list = new ArrayList<URL>();
 		while (en.hasMoreElements()) {
 			list.add((URL) en.nextElement());
@@ -84,7 +84,7 @@ public class CuteHeaders_1_0 implements ICuteHeaders {
 			try {
 				targetFile.create(url.openStream(),IResource.FORCE , new SubProgressMonitor(monitor,1));
 			} catch (IOException e) {
-				throw new CoreException(new Status(IStatus.ERROR,Activator.PLUGIN_ID,42,e.getMessage(), e));
+				throw new CoreException(new Status(IStatus.ERROR,CuteHeaders10Plugin.PLUGIN_ID,42,e.getMessage(), e));
 			}
 			mon.worked(1);
 		}

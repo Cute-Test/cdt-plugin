@@ -14,7 +14,7 @@
    <feature url="features/ch.hsr.ifs.cute.headers.1_0_2.0.0.@timeStamp@.jar" id="ch.hsr.ifs.cute.headers.1_0" version="2.0.0.@timeStamp@">
       <category name="Cute Headers"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_5_1.1.6.@timeStamp@.jar" id="ch.hsr.ifs.cute.headers.1_5" version="1.1.6.@timeStamp@">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_5_2.0.0.@timeStamp@.jar" id="ch.hsr.ifs.cute.headers.1_5" version="2.0.0.@timeStamp@">
       <category name="Cute Headers"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.headers.1_6_2.0.0.@timeStamp@.jar" id="ch.hsr.ifs.cute.headers.1_6" version="2.0.0.@timeStamp@">

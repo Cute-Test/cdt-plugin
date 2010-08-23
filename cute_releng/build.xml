@@ -156,7 +156,7 @@
 			<param name="installIU" value="ch.hsr.ifs.cute.headers.1_6.feature.group/2.0.0.${timestamp}"/>
 		</antcall>
 		<antcall target="installPlugin">
-			<param name="installIU" value="ch.hsr.ifs.cute.headers.1_5.feature.group/1.1.6.${timestamp}"/>
+			<param name="installIU" value="ch.hsr.ifs.cute.headers.1_5.feature.group/2.0.0.${timestamp}"/>
 		</antcall>
 		<antcall target="installPlugin">
 			<param name="installIU" value="ch.hsr.ifs.cute.headers.1_0.feature.group/2.0.0.${timestamp}"/>

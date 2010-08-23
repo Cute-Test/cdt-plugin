@@ -31,23 +31,24 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author egraf
+ * @since 1.2
  *
  */
-public class CuteHeades_1_6 implements ICuteHeaders {
+public class CuteHeaders_1_5 implements ICuteHeaders {
 
 	/**
 	 * 
 	 */
-	public CuteHeades_1_6() {
+	public CuteHeaders_1_5() {
 	}
 
 	private List<URL> getHeaderFiles() {
 		return getFileListe("headers", "*.*"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings("rawtypes")
 	private List<URL> getFileListe(String path, String filePattern) {
-		Enumeration en = Activator.getDefault().getBundle().findEntries(path, filePattern, false);
+		Enumeration en = CuteHeaders15Plugin.getDefault().getBundle().findEntries(path, filePattern, false);
 		List<URL>list = new ArrayList<URL>();
 		while (en.hasMoreElements()) {
 			list.add((URL) en.nextElement());
@@ -56,11 +57,11 @@ public class CuteHeades_1_6 implements ICuteHeaders {
 	}
 
 	public double getVersionNumber() {
-		return 1.60;
+		return 1.50;
 	}
 
 	public String getVersionString() {
-		return "Cute Headers 1.6.0"; //$NON-NLS-1$
+		return "Cute Headers 1.5.0"; //$NON-NLS-1$
 	}
 
 	private List<URL> getTestFiles() {
@@ -79,12 +80,12 @@ public class CuteHeades_1_6 implements ICuteHeaders {
 		for (URL url : urls) {
 			String[] elements = url.getFile().split("/"); //$NON-NLS-1$
 			String filename = elements[elements.length-1];
-			mon.subTask(Messages.CuteHeades_1_6_copy + filename);
+			mon.subTask(Messages.CuteHeades_1_5_copy + filename);
 			IFile targetFile = folder.getFile(filename);
 			try {
 				targetFile.create(url.openStream(),IResource.FORCE , new SubProgressMonitor(monitor,1));
 			} catch (IOException e) {
-				throw new CoreException(new Status(IStatus.ERROR,Activator.PLUGIN_ID,42,e.getMessage(), e));
+				throw new CoreException(new Status(IStatus.ERROR,CuteHeaders15Plugin.PLUGIN_ID,42,e.getMessage(), e));
 			}
 			mon.worked(1);
 			mon.done();
@@ -96,13 +97,13 @@ public class CuteHeades_1_6 implements ICuteHeaders {
 		SubMonitor mon;
 		if(copyTestCPP) {
 			mon = SubMonitor.convert(monitor, 3);
-			mon.subTask(Messages.CuteHeades_1_6_copyTestCPP);
+			mon.subTask(Messages.CuteHeades_1_5_copyTestCPP);
 			SuiteTemplateCopyUtil.copyFile(folder,monitor,"Test.cpp","Test.cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
 			mon.worked(1);
 		}else {
 			mon = SubMonitor.convert(monitor, 2);
 		}
-		mon.subTask(Messages.CuteHeades_1_6_copySuite);
+		mon.subTask(Messages.CuteHeades_1_5_copySuite);
 		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.cpp",suitename+".cpp",suitename); //$NON-NLS-1$ //$NON-NLS-2$
 		mon.worked(1);
 		SuiteTemplateCopyUtil.copyFile(folder,monitor,"$suitename$.h",suitename+".h",suitename); //$NON-NLS-1$ //$NON-NLS-2$

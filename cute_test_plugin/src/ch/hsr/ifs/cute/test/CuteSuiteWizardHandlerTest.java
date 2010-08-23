@@ -31,7 +31,6 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		
 		cswh=new CuteSuiteWizardHandler("theSuiteName"); //$NON-NLS-1$
 		IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
 		project = iwsr.getProject("CSWHT");
