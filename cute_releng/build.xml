@@ -142,13 +142,16 @@
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
 			<property name="builder" value="${basedir}/testing" />
 		</ant>
-
+		<!--
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins" />
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_6-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_5-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.headers.1_0-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins" />
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
-		
+		-->
+		<antcall target="installPlugin">
+			<property name="installIU" value="ch.hsr.ifs.cute.feature.group/${branchVersion}.${buildId}"/>
+		</antcall>
 		<unzip src="${testDirectory}/eclipse/dropins/eclipse/plugins/${cuteTest}.jar"
 			dest="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}"/>
 		<ant antfile="test.xml" dir="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}">
@@ -164,5 +167,18 @@
 		<record name="${testReports}/testsLog.txt" action="stop"/>
 
 	</target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: installPlugin                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="installPlugin">
+    	<property name="launcher" value="${testDirectory}/eclipse/plugins/org.eclipse.equinox.launcher.jar"/>
+    	<java jar="${launcherTest}" fork="true" timeout="10800000" jvm="${jvm1.5}" failonerror="true" maxmemory="768m" dir="${buildDirectory}/eclipse">
+    	            <arg line="-application org.eclipse.equinox.p2.director" />
+    	            <arg line="-nosplash"/>
+    	        	<arg line="-repository file:${UpdateSiteStagingLocation}"/>
+    	        	<arg line="-installIU ${installIU}"/>"
+    	        </java>
+    </target>
 
 </project>
