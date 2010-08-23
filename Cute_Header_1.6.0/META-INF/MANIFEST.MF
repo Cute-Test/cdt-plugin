@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cute.headers.1_6;singleton:=true
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.headers.Activator
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,

@@ -3,7 +3,7 @@ package ch.hsr.ifs.cute.headers;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @since 1.2
+ * @since 2.0
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.headers.messages"; //$NON-NLS-1$
