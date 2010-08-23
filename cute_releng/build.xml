@@ -39,6 +39,7 @@
 		<property name="basearch" value="${osgi.arch}"/>
 		<property name="testReports" value="${zipsdir}/testReports"/>
 		<property name="tagname" value="v${timestamp}"/>
+		<property name="jvm1.5" value="java"/>
 		<property name="cuteTest" value="ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}"/>
 		<mkdir dir="${buildDirectory}"/>
 		<mkdir dir="${testReports}"/>
