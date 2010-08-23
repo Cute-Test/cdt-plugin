@@ -24,7 +24,6 @@
       <import plugin="org.eclipse.jface.text" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.debug.ui" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.4.0" match="compatible"/>
-      <import plugin="org.eclipse.cdt.managedbuilder.ui" version="5.0.1"/>
       <import plugin="org.eclipse.cdt.ui" version="5.0.1"/>
       <import plugin="org.eclipse.cdt.core.tests" version="5.0.1"/>
       <import plugin="org.eclipse.cdt.core" version="5.0.1"/>
@@ -40,6 +39,7 @@
       <import plugin="org.eclipse.cdt.codan.checkers" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.core" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.ui" version="7.0.0" match="compatible"/>
    </requires>
 
    <plugin
