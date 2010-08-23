@@ -106,6 +106,15 @@
 	<!-- Steps to do after the build is done. -->
 	<!-- ===================================================================== -->
 	<target name="postBuild">
+		<!-- Create the directory structure -->
+		<mkdir dir="${UpdateSiteStagingLocation}" />
+		<mkdir dir="${UpdateSiteStagingLocation}/features" />
+		<mkdir dir="${UpdateSiteStagingLocation}/plugins" />
+		<!-- Build the jar files -->
+		<antcall target="allElements">
+			<param name="genericTargets" value="${builder}/customTargets.xml" />
+			<param name="target" value="updateSiteExport"/>
+		</antcall>
 	</target>
 	
 	<target name="updateSiteExport">
