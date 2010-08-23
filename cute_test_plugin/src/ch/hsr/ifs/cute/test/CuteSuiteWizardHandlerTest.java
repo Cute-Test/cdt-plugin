@@ -13,6 +13,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 
 import ch.hsr.ifs.cute.headers.CuteHeaders10Plugin;
 import ch.hsr.ifs.cute.headers.CuteHeaders_1_0;
@@ -59,9 +60,10 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	@SuppressWarnings("nls")
 	public final void testAddTestFiles1_0() {
 		assertNotNull(CuteHeaders10Plugin.getDefault());
+		assertNotNull(Platform.getBundle(CuteHeaders10Plugin.PLUGIN_ID));
 		CuteHeaders_1_0 t = new CuteHeaders_1_0();
 		String cuteVersion = "Cute Headers 1.0.0";
-		addTestFiles(cuteVersion);
+		addTestFiles(t);
 	}
 
 	@SuppressWarnings("nls")
@@ -88,7 +90,27 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		}catch(CoreException ce){fail(ce.getMessage());}
 	}
 	
-	
+	@SuppressWarnings("nls")
+	private void addTestFiles(ICuteHeaders cuteHeader ) {
+		try{
+
+			cswh.copyFiles(srcFolder,cuteHeader, cuteFolder);
+			//for indirect reference, check dependencies
+			
+			IFile file=srcFolder.getFile("Test.cpp");
+			if(file.exists()){
+				file.delete(true, false, new NullProgressMonitor());
+				assertFalse(file.exists());
+			}
+			IFile file1=srcFolder.getFile("suite.cpp");
+			IFile file2=srcFolder.getFile("suite.h");
+						
+			assertTrue(file1.exists());
+			assertTrue(file2.exists());
+			//clean up
+			
+		}catch(CoreException ce){fail(ce.getMessage());}
+	}
 	
 	@Override
 	protected void tearDown() throws Exception {
