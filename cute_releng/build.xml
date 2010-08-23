@@ -172,12 +172,12 @@
           target: installPlugin                      
          - - - - - - - - - - - - - - - - - -->
     <target name="installPlugin">
-    	<property name="launcherTest" value="${testDirectory}/eclipse/plugins/org.eclipse.equinox.launcher.jar"/>
+    	<property name="launcherTest" value="${testDirectory}/eclipse/plugins/org.eclipse.equinox.launcher_1.1.0.v20100507.jar"/>
     	<java jar="${launcherTest}" fork="true" failonerror="true" maxmemory="768m" dir="${testDirectory}/eclipse">
     		<arg line="-application org.eclipse.equinox.p2.director" />
     	    <arg line="-nosplash"/>
     	    <arg line="-repository file:${UpdateSiteStagingLocation}"/>
-    	    <arg line="-installIU ${installIU}"/>"
+    	    <arg line="-installIU ${installIU}"/>
     	</java>
     </target>
 
