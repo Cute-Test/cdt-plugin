@@ -36,7 +36,7 @@
       <import plugin="org.eclipse.jface.text" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.ui" version="5.2.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0" match="compatible"/>
-      <import plugin="ch.hsr.ifs.test.framework" version="2.2.0" match="compatible"/>
+      <import plugin="ch.hsr.ifs.test.framework" version="3.0.0" match="compatible"/>
       <import plugin="org.eclipse.ui" version="3.3.0" match="compatible"/>
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.ui.editors" version="3.4.0" match="compatible"/>
