@@ -140,7 +140,7 @@
 		</antcall>
 		<record name="${testReports}/testsLog.txt" action="start" loglevel="verbose" />
 		<ant antfile="build.xml" dir="${pde.build.scripts}">
-			<param name="builder" value="${basedir}/testing" />
+			<property name="builder" value="${basedir}/testing" />
 		</ant>
 		<!--
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute-${branchVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins" />
@@ -150,7 +150,7 @@
 		<unzip src="${zipsdir}/ch.hsr.ifs.cute.test-${testVersion}-${buildId}.zip" dest="${testDirectory}/eclipse/dropins"/>
 		-->
 		<antcall target="installPlugin">
-			<property name="installIU" value="ch.hsr.ifs.cute.feature.group/${branchVersion}.${buildId}"/>
+			<param name="installIU" value="ch.hsr.ifs.cute.feature.group/${branchVersion}.${buildId}"/>
 		</antcall>
 		<unzip src="${testDirectory}/eclipse/dropins/eclipse/plugins/${cuteTest}.jar"
 			dest="${testDirectory}/eclipse/dropins/eclipse/plugins/ch.hsr.ifs.cute.testing_${testVersion}.${forceContextQualifier}"/>
