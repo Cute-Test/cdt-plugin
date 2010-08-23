@@ -42,6 +42,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		cuteFolder = project.getProject().getFolder("/cute");
 		cuteFolder.create(true, true, new NullProgressMonitor());
 		CuteHeaders10Plugin.getDefault().getBundle().start();
+		Thread.sleep(2000);
 	}
 
 	@SuppressWarnings("nls")
