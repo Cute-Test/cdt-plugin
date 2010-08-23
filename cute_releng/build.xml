@@ -105,7 +105,7 @@
          ================================= -->
     <target name="updateSite" depends="zips" description="build updatesite">
     	<copy file="buildsite.xml" tofile="${UpdateSiteStagingLocation}/site.xml"/>
-    	<replace file="${buildDirectory}/site/eclipse/site.xml">
+    	<replace file="${UpdateSiteStagingLocation}/site.xml">
     		<replacefilter token="@timeStamp@" value="${timestamp}"/>
     	</replace>
     	<antcall target="generate.p2.metadata"/>
