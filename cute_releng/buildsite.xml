@@ -3,6 +3,7 @@
    <category-def name="Cute Plugin" label="Cute Plugin"/>
    <category-def name="Cute Headers" label="Cute Headers"/>
    <category-def name="OptFeatures" label="Cute Optional Features"/>
+   <category-def name="TestFeatures" label="Cute Test Features"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.boost.feature_1.42.0.@timeStamp@.jar" id="ch.hsr.ifs.cute.boost.feature" version="1.42.0.@timeStamp@">
       <category name="OptFeatures"/>
@@ -21,5 +22,8 @@
    </feature>
   <feature url="features/ch.hsr.ifs.cute_4.1.0.@timeStamp@.jar" id="ch.hsr.ifs.cute" version="4.1.0.@timeStamp@">
       <category name="Cute Plugin"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.test_3.0.1.@timeStamp@.jar" id="ch.hsr.ifs.cute.test" version="3.0.1.@timeStamp@">
+      <category name="TestFeatures"/>
    </feature>
 </site>
