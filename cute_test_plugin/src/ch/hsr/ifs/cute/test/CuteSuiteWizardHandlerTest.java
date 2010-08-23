@@ -41,7 +41,6 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		srcFolder.create(true, true, new NullProgressMonitor());
 		cuteFolder = project.getProject().getFolder("/cute");
 		cuteFolder.create(true, true, new NullProgressMonitor());
-		Thread.sleep(10000);
 	}
 
 	@SuppressWarnings("nls")

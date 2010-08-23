@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Xvfb -ac &
+Xvfb -ac -extension RANDR &
 export DISPLAY=:0
 
 
