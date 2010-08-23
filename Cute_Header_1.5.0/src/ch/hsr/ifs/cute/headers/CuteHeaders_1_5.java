@@ -31,7 +31,7 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author egraf
- * @since 1.2
+ * @since 2.0
  *
  */
 public class CuteHeaders_1_5 implements ICuteHeaders {
