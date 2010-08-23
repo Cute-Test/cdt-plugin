@@ -14,6 +14,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import ch.hsr.ifs.cute.headers.CuteHeaders10Plugin;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
@@ -40,6 +41,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		srcFolder.create(true, true, new NullProgressMonitor());
 		cuteFolder = project.getProject().getFolder("/cute");
 		cuteFolder.create(true, true, new NullProgressMonitor());
+		CuteHeaders10Plugin.getDefault().getBundle().start();
 	}
 
 	@SuppressWarnings("nls")
