@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.cute.headers.CuteHeaders10Plugin;
+import ch.hsr.ifs.cute.headers.CuteHeaders_1_0;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
@@ -58,6 +59,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	@SuppressWarnings("nls")
 	public final void testAddTestFiles1_0() {
 		assertNotNull(CuteHeaders10Plugin.getDefault());
+		CuteHeaders_1_0 t = new CuteHeaders_1_0();
 		String cuteVersion = "Cute Headers 1.0.0";
 		addTestFiles(cuteVersion);
 	}
@@ -99,7 +101,6 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 
 	private ICuteHeaders getCuteHeader(String version) {
 		SortedSet<ICuteHeaders> headers = UiPlugin.getInstalledCuteHeaders();
-		System.out.println("Headers-L " + headers.size());
 		for (ICuteHeaders cuteHeaders : headers) {
 			if(version.equals(cuteHeaders.getVersionString()))
 				return cuteHeaders;
