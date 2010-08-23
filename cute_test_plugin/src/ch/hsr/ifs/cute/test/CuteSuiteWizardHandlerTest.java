@@ -41,8 +41,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		srcFolder.create(true, true, new NullProgressMonitor());
 		cuteFolder = project.getProject().getFolder("/cute");
 		cuteFolder.create(true, true, new NullProgressMonitor());
-		CuteHeaders10Plugin.getDefault().getBundle().start();
-		Thread.sleep(2000);
+		Thread.sleep(10000);
 	}
 
 	@SuppressWarnings("nls")
@@ -59,6 +58,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	
 	@SuppressWarnings("nls")
 	public final void testAddTestFiles1_0() {
+		assertNotNull(CuteHeaders10Plugin.getDefault());
 		String cuteVersion = "Cute Headers 1.0.0";
 		addTestFiles(cuteVersion);
 	}
