@@ -50,21 +50,11 @@
 				<include name="I*/updateSite/plugins/*.jar" />
 			</fileset>
 		</copy>
-		<xmlproperty file="${basedir}/test/eclipse/ch.hsr.ifs.cute.test.xml" />
-
-		<condition property="expected" value="0,0" else="0">
-			<available file="${basedir}/test/eclipse/ch.hsr.ifs.cute.test.AllUiTests.xml" />
-		</condition>
-
-		<echo level="info" message="expected = ${testsuites.testsuite(errors)}" />
-		<echo level="info" message="is = ${testsuites.testsuite(errors)}" />
-
-		<condition property="testsFailed">
-			<not>
-				<equals arg1="${expected}" arg2="${testsuites.testsuite(errors)}" />
-			</not>
-		</condition>
-		<fail if="testsFailed" message="Tests failed" />
+		<copy todir="${plugins.dir}" flatten="true">
+			<fileset dir="results">
+				<include name="I*/updateSite/*.xml" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="clean">

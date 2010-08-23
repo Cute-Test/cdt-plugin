@@ -13,6 +13,8 @@ package ch.hsr.ifs.cute.test.ui.sourceactions;
 
 import org.eclipse.core.resources.IFile;
 
+import ch.hsr.ifs.cute.ui.UiPlugin;
+
 /**
  * @author Emanuel Graf IFS
  *
@@ -23,6 +25,12 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 
 	public AddTestToSuiteTest() {
 		super("Add Test to Suite"); //$NON-NLS-1$
+	}
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		UiPlugin.getDefault().getLog();
 	}
 	
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
