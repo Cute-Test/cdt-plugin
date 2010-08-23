@@ -12,6 +12,7 @@
 package ch.hsr.ifs.cute.test.ui.sourceactions;
 
 import org.eclipse.core.resources.IFile;
+import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cute.ui.UiPlugin;
 
@@ -30,7 +31,6 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		UiPlugin.getDefault().getLog();
 	}
 	
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
@@ -58,6 +58,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	public void testAddFunctorToSuite() throws Exception {
+		assertEquals(Bundle.ACTIVE, UiPlugin.getDefault().getBundle().getState());
 		StringBuffer[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "functor.cpp"); //$NON-NLS-1$
 		runCommand(file, contentsForTest[0].indexOf("functor"), 3, COMMAND_ID ); //$NON-NLS-1$
