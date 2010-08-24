@@ -43,7 +43,7 @@ import ch.hsr.ifs.test.framework.ui.ConsoleLinkHandler;
 import ch.hsr.ifs.test.framework.ui.ShowResultView;
 
 /**
- * @since 2.3
+ * @since 3.0
  */
 @SuppressWarnings("restriction")
 public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {

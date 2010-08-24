@@ -47,6 +47,9 @@ public class CuteTestLabelProvider  extends LabelProvider {
 		}
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	protected Image getTestCaseImage(TestCase tCase) {
 		switch (tCase.getStatus()) {
 		case running:
@@ -62,6 +65,9 @@ public class CuteTestLabelProvider  extends LabelProvider {
 		}
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	protected Image getSuiteImage(TestElement suite) {
 		switch (suite.getStatus()) {
 		case running:
