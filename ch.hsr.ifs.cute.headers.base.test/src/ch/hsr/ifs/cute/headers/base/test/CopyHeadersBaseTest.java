@@ -1,13 +1,13 @@
 package ch.hsr.ifs.cute.headers.base.test;
 
+import junit.framework.TestCase;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
-
-import junit.framework.TestCase;
 
 public abstract class CopyHeadersBaseTest extends TestCase {
 
@@ -38,10 +38,10 @@ public abstract class CopyHeadersBaseTest extends TestCase {
 	}
 
 	@SuppressWarnings("nls")
-	protected void checkSuiteFiles() {
+	protected void checkSuiteFiles(String suiteName) {
 						
-			IFile file1=srcFolder.getFile("suite.cpp");
-			IFile file2=srcFolder.getFile("suite.h");
+			IFile file1=srcFolder.getFile(suiteName + ".cpp");
+			IFile file2=srcFolder.getFile(suiteName + ".h");
 						
 			assertTrue(file1.exists());
 			assertTrue(file2.exists());

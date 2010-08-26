@@ -59,19 +59,6 @@
 	<!-- Steps to do after fetching the build elements -->
 	<!-- ===================================================================== -->
 	<target name="postFetch">
-		<condition property="patchesAvailable">
-			<available file="${builder}/patch.xml"/>
-		</condition>
-		<cvs cvsRoot="cruisecontrol@wiki.ifs.hsr.ch:/home/cvs"
-	       package="cute"
-	       dest="${buildDirectory}"
-	  />
-		<copy todir="${buildDirectory}/plugins/ch.hsr.ifs.cutelauncher/cute" overwrite="true">
-			<fileset dir="${buildDirectory}/cute/cute_lib" >
-				<include name="*.h"/>
-			</fileset>
-		</copy>
-		<antcall target="applyPatches"/>
 	</target>
 
 	<target name="applyPatches" if="patchesAvailable">

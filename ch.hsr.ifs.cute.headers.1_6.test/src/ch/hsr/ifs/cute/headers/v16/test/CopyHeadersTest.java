@@ -14,8 +14,9 @@ public class CopyHeadersTest extends CopyHeadersBaseTest {
 	}
 	public final void testCopySuiteFiles() throws CoreException {
 		CuteHeaders_1_6 h = new CuteHeaders_1_6();
-		h.copySuiteFiles(srcFolder, new NullProgressMonitor(), "TestSuite", true); //$NON-NLS-1$
-		checkSuiteFiles();
+		String suitename = "TestSuite"; //$NON-NLS-1$
+		h.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
+		checkSuiteFiles(suitename);
 	}
 
 }
