@@ -50,7 +50,7 @@ public abstract class CopyHeadersBaseTest extends TestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		project.delete(true, new NullProgressMonitor());
+//		project.delete(true, new NullProgressMonitor());
 		project = null;
 		cuteFolder = null;
 		srcFolder = null;
