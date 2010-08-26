@@ -41,7 +41,7 @@
 			<property name="launchTarget" value="eclipse-test"/>
 			<property name="vmargs" value="-Xms256m -Xmx1024m"/>
 			<property name="data-dir" value="${cute-loc}"/>
-			<property name="plugin-name" value="ch.hsr.ifs.cute.gcov.test.AllGcovTests"/>
+			<property name="plugin-name" value="ch.hsr.ifs.cute.gcov.test"/>
 			<property name="classname" value="ch.hsr.ifs.cute.gcov.test.AllGcovTests"/>
 			<property name="failOnProblem" value="true"/>
 		</ant>
