@@ -26,3 +26,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.cdt.codan.core.test;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Export-Package: ch.hsr.ifs.cute.ui.test,
+ ch.hsr.ifs.cute.ui.test.checkers,
+ ch.hsr.ifs.cute.ui.test.sourceactions
