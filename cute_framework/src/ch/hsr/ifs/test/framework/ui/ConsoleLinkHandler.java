@@ -14,7 +14,6 @@ package ch.hsr.ifs.test.framework.ui;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.debug.ui.console.FileLink;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.ui.console.IHyperlink;
@@ -26,16 +25,27 @@ import ch.hsr.ifs.test.framework.event.TestEventHandler;
  * @author Emanuel Graf (IFS)
  *
  */
-public class ConsoleLinkHandler extends TestEventHandler {
+public class ConsoleLinkHandler extends TestEventHandler{
 	
 	private TextConsole console; 
 	private IPath rtPath;
+	private ILinkFactory linkFactory;
 
 	public ConsoleLinkHandler(IPath exePath, TextConsole console) {
-		super();
-		rtPath =exePath;
-		this.console = console;
+		this(exePath, console, new ConsoleLinkFactory());
 	}
+
+	/**
+	 * @since 3.0
+	 */
+	public ConsoleLinkHandler(IPath rtPath, TextConsole console, ILinkFactory linkFactory) {
+		super();
+		this.console = console;
+		this.rtPath = rtPath;
+		this.linkFactory = linkFactory;
+	}
+
+
 
 
 	@Override
@@ -63,7 +73,7 @@ public class ConsoleLinkHandler extends TestEventHandler {
 		try {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
 			int lineNumber = Integer.parseInt(lineNo);
-			IHyperlink link = new FileLink(file, null,-1,-1,lineNumber);
+			IHyperlink link = linkFactory.createLink(file, lineNumber, null, -1, -1);
 			console.addHyperlink(link, reg.getOffset(), reg.getLength());
 		} catch (BadLocationException e) {
 			e.printStackTrace();

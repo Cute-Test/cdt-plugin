@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: ch.hsr.ifs.cute.headers.base.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: ch.hsr.ifs.cute.headers.base.test.HeaderBasePlugin
+Bundle-Vendor: %Bundle-Vendor
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources;bundle-version="3.6.0",
+ org.junit;bundle-version="4.8.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: ch.hsr.ifs.cute.headers.base.test

@@ -5,7 +5,6 @@
 
 
 	<target name="init">
-		<echo message="test init"/>
 		<tstamp/>
 	</target>
 
@@ -24,8 +23,8 @@
 		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
 			<property name="launchTarget" value="eclipse-test"/>
 			<property name="data-dir" value="${cute-loc}"/>
-			<property name="plugin-name" value="ch.hsr.ifs.cute.testing"/>
-			<property name="classname" value="ch.hsr.ifs.cute.test.AllCoreTests"/>
+			<property name="plugin-name" value="ch.hsr.ifs.cute.core.test"/>
+			<property name="classname" value="ch.hsr.ifs.core.test.AllCoreTests"/>
 			<property name="failOnProblem" value="true"/>
 		</ant>
 		<echo message="ui-tests"/>
@@ -34,7 +33,43 @@
 			<property name="vmargs" value="-Xms256m -Xmx1024m"/>
 			<property name="data-dir" value="${cute-loc}"/>
 			<property name="plugin-name" value="ch.hsr.ifs.cute.testing"/>
-			<property name="classname" value="ch.hsr.ifs.cute.test.AllUiTests"/>
+			<property name="classname" value="ch.hsr.ifs.cute.ui.test.AllUiTests"/>
+			<property name="failOnProblem" value="true"/>
+		</ant>
+		<echo message="Gcov-tests"/>
+		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
+			<property name="launchTarget" value="eclipse-test"/>
+			<property name="vmargs" value="-Xms256m -Xmx1024m"/>
+			<property name="data-dir" value="${cute-loc}"/>
+			<property name="plugin-name" value="ch.hsr.ifs.cute.core.test"/>
+			<property name="classname" value="ch.hsr.ifs.cute.gcov.test.AllGcovTests"/>
+			<property name="failOnProblem" value="true"/>
+		</ant>
+		<echo message="Header 1.0 tests"/>
+		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
+			<property name="launchTarget" value="eclipse-test"/>
+			<property name="vmargs" value="-Xms256m -Xmx1024m"/>
+			<property name="data-dir" value="${cute-loc}"/>
+			<property name="plugin-name" value="ch.hsr.ifs.cute.headers.1_0.test"/>
+			<property name="classname" value="ch.hsr.ifs.cute.headers.v10.test.Headers1_0Suite"/>
+			<property name="failOnProblem" value="true"/>
+		</ant>
+		<echo message="Header 1.5 tests"/>
+		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
+			<property name="launchTarget" value="eclipse-test"/>
+			<property name="vmargs" value="-Xms256m -Xmx1024m"/>
+			<property name="data-dir" value="${cute-loc}"/>
+			<property name="plugin-name" value="ch.hsr.ifs.cute.headers.1_5.test"/>
+			<property name="classname" value="ch.hsr.ifs.cute.headers.v15.test.Headers1_5Suite"/>
+			<property name="failOnProblem" value="true"/>
+		</ant>
+		<echo message="Header 1.6 tests"/>
+		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
+			<property name="launchTarget" value="eclipse-test"/>
+			<property name="vmargs" value="-Xms256m -Xmx1024m"/>
+			<property name="data-dir" value="${cute-loc}"/>
+			<property name="plugin-name" value="ch.hsr.ifs.cute.headers.1_6.test"/>
+			<property name="classname" value="ch.hsr.ifs.cute.headers.v16.test.Headers1_6Suite"/>
 			<property name="failOnProblem" value="true"/>
 		</ant>
 	</target>

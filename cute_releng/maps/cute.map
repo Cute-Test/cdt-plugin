@@ -19,10 +19,17 @@ plugin@ch.hsr.ifs.test.framework=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/c
 fragment@ch.hsr.ifs.cute.cuteExtensions=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_framework_cute_fragment
 
 ! Test Feature
-plugin@ch.hsr.ifs.cute.testing=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_plugin
-plugin@ch.hsr.ifs.cute.gcov.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,gcov_test
 fragment@org.eclipse.ant.optional.junit=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 feature@ch.hsr.ifs.cute.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_feature
+plugin@ch.hsr.ifs.cute.core.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.test.framework.test
+plugin@ch.hsr.ifs.cute.headers.1_0.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.headers.1_0.test
+plugin@ch.hsr.ifs.cute.headers.1_5.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.headers.1_5.test
+plugin@ch.hsr.ifs.cute.headers.1_6.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.headers.1_6.test
+plugin@ch.hsr.ifs.cute.headers.base.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.headers.base.test
+plugin@ch.hsr.ifs.cute.ui.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.ui.test
+
+plugin@ch.hsr.ifs.cute.testing=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,cute_test_plugin
+plugin@ch.hsr.ifs.cute.gcov.test=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,gcov_test
 
 !boost
 feature@ch.hsr.ifs.cute.boost.feature=@cuteTag@,cruisecontrol@wiki.ifs.hsr.ch:/home/cvs,,ch.hsr.ifs.cute.boost.feature

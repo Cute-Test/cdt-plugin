@@ -22,7 +22,7 @@
       <import plugin="org.eclipse.ui" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.ui.console" version="3.3.0" match="compatible"/>
       <import plugin="org.eclipse.jface.text" version="3.4.0" match="compatible"/>
-      <import plugin="org.eclipse.debug.ui" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.ui" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.managedbuilder.ui" version="7.0.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.ui" version="5.0.1"/>
@@ -39,14 +39,80 @@
       <import plugin="org.eclipse.cdt.codan.checkers" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.core" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="ch.hsr.ifs.cute.ui" version="4.0.0"/>
       <import plugin="ch.hsr.ifs.cute.headers.1_0" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.headers.1_5" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.headers.1_6" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.ui" version="4.0.0" match="greaterOrEqual"/>
+      <import plugin="org.junit" version="4.8.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.console" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.text" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.debug.ui" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.test.framework" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.gcov" version="0.2.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.headers.base.test" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.core" version="5.1.0" match="compatible"/>
+      <import plugin="org.eclipse.jface" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.compare" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.launch" version="6.0.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.debug.core" version="7.0.0" match="compatible"/>
    </requires>
 
    <plugin
          id="ch.hsr.ifs.cute.testing"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.core.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.gcov.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.headers.1_0.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.headers.1_5.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.headers.1_6.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.headers.base.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.test.framework"
          download-size="0"
          install-size="0"
          version="0.0.0"
