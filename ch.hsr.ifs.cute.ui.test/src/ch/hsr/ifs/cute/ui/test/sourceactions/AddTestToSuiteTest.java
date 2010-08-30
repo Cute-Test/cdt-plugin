@@ -11,7 +11,11 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.test.sourceactions;
 
+import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cute.ui.UiPlugin;
@@ -31,6 +35,9 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		// fWindow is an IWorkbenchWindow.
+		IWorkbenchWindow fWindow= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		fWindow.openPage(CUIPlugin.ID_CPERSPECTIVE, ResourcesPlugin.getWorkspace());
 	}
 	
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
