@@ -6,6 +6,7 @@
 
 	<target name="init">
 		<tstamp/>
+		<unzip dest="${cute-loc}" src="${basedir}/ws.zip"/>
 	</target>
 
 	<target name="cleanup">
