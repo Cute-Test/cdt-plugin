@@ -94,7 +94,7 @@ public class EditorBaseTest extends BaseUITestCase {
 	protected CEditor openEditor(IFile file) throws PartInitException {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		CEditor editor= (CEditor) IDE.openEditor(page, file);
-		EditorTestHelper.joinReconciler(EditorTestHelper.getSourceViewer(editor), 100, 500, 10);
+		EditorTestHelper.joinReconciler(EditorTestHelper.getSourceViewer(editor), 100, 1000, 10);
 		return editor;
 	}
 	
