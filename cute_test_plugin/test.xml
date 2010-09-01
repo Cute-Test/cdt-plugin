@@ -34,7 +34,7 @@
 			<property name="vmargs" value="-Xms256m -Xmx1024m"/>
 			<property name="data-dir" value="${cute-loc}"/>
 			<property name="plugin-name" value="ch.hsr.ifs.cute.ui.test"/>
-			<property name="classname" value="ch.hsr.ifs.cute.ui.test.AllUiTests"/>
+			<property name="classname" value="ch.hsr.ifs.cute.ui.test.UiCITests"/>
 			<property name="failOnProblem" value="true"/>
 		</ant>
 		<echo message="Gcov-tests"/>
