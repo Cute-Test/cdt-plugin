@@ -18,6 +18,7 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.cdt.utils.spawner.ProcessFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -46,7 +47,7 @@ public abstract class LineCoverageParser {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected void runGcov(IFile file, IPath workingDirectory) throws CoreException {
+	protected void runGcov(IFile file, IPath workingDirectory) throws CoreException, IOException {
 		String[] cmdLine = {"gcov","-f","-b",file.getName()}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File workingDir = null;
 		if(workingDirectory != null){
@@ -65,6 +66,8 @@ public abstract class LineCoverageParser {
 		processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
 		
 		if (p != null) {
+			ProcessFactory factory = ProcessFactory.getFactory();
+			p = factory.exec(cmdLine, envp, workingDir);
 			process = DebugPlugin.newProcess(new Launch(null,ILaunchManager.RUN_MODE,null), p, programName, processAttributes);
 			if (process == null) {
 				p.destroy();
