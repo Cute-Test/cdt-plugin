@@ -25,8 +25,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
@@ -59,7 +57,7 @@ public abstract class LineCoverageParser {
 		
 		p = DebugPlugin.exec(cmdLine, workingDir, envp);
 	
-		IProcess process = null;
+//		IProcess process = null;
 		
 		String programName = cmdLine[0];
 		Map processAttributes = new HashMap();
@@ -68,22 +66,25 @@ public abstract class LineCoverageParser {
 		if (p != null) {
 			ProcessFactory factory = ProcessFactory.getFactory();
 			p = factory.exec(cmdLine, envp, workingDir);
-			process = DebugPlugin.newProcess(new Launch(null,ILaunchManager.RUN_MODE,null), p, programName, processAttributes);
-			if (process == null) {
-				p.destroy();
-			}else{
-				while (!process.isTerminated()) {
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e) {
-					}
-				}
+//			process = DebugPlugin.newProcess(new Launch(null,ILaunchManager.RUN_MODE,null), p, programName, processAttributes);
+//			if (process == null) {
+//				p.destroy();
+//			}else{
+//				while (!process.isTerminated()) {
+//					try {
+//						Thread.sleep(50);
+//					} catch (InterruptedException e) {
+//					}
+//				}
 				try {
+					try {
+						p.waitFor();
+					} catch (InterruptedException e) {}
 					file.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
-			}
+//			}
 		}
 	}
 
