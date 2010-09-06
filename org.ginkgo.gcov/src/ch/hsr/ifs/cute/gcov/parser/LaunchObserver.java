@@ -11,6 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov.parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,7 +112,13 @@ public class LaunchObserver implements ILaunchObserver {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				parser.parse(file);
+				try {
+					parser.parse(file);
+				} catch (CoreException e) {
+					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
+				} catch (IOException e) {
+					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
+				}
 				return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK"); //$NON-NLS-1$
 			}
 

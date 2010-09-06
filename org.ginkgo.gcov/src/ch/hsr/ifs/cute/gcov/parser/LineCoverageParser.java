@@ -46,7 +46,7 @@ public abstract class LineCoverageParser {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected void runGcov(IFile file, IPath workingDirectory) {
+	protected void runGcov(IFile file, IPath workingDirectory) throws CoreException {
 		String[] cmdLine = {"gcov","-f","-b",file.getName()}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File workingDir = null;
 		if(workingDirectory != null){
@@ -55,11 +55,9 @@ public abstract class LineCoverageParser {
 		String[] envp = null;
 	
 		Process p = null;
-		try {
-			p = DebugPlugin.exec(cmdLine, workingDir, envp);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+		
+		p = DebugPlugin.exec(cmdLine, workingDir, envp);
+	
 		IProcess process = null;
 		
 		String programName = cmdLine[0];
@@ -70,25 +68,23 @@ public abstract class LineCoverageParser {
 			process = DebugPlugin.newProcess(new Launch(null,ILaunchManager.RUN_MODE,null), p, programName, processAttributes);
 			if (process == null) {
 				p.destroy();
+			}else{
+				while (!process.isTerminated()) {
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+					}
+				}
+				try {
+					file.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
 			}
-			
 		}
-		while (!process.isTerminated()) {
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-			}
-		}
-		try {
-			file.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-	
-		
 	}
 
-	public void parse(IFile cppFile) {
+	public void parse(IFile cppFile) throws CoreException, IOException {
 		IFile gcovFile = null;
 		deleteMarkers(cppFile);
 		IProject project = cppFile.getProject();
@@ -115,10 +111,6 @@ public abstract class LineCoverageParser {
 						.getContents()));
 			}
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 	}
