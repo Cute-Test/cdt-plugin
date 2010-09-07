@@ -48,7 +48,12 @@ public abstract class LineCoverageParser {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void runGcov(IFile file, IPath workingDirectory) throws CoreException, IOException {
-		String[] cmdLine = {"sh","-c","'gcov","-f","-b",file.getName()+"'"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String[] cmdLine;
+		if(runningCygwin()){
+			cmdLine = getCygwinGcovCommand(file);
+		}else{
+			cmdLine = getGcovCommand(file);
+		}
 		File workingDir = null;
 		if(workingDirectory != null){
 			workingDir = workingDirectory.toFile();
@@ -83,6 +88,20 @@ public abstract class LineCoverageParser {
 				}
 			}
 		}
+	}
+
+	private String[] getGcovCommand(IFile file) {
+		String[] cmdLine = {"gcov","-f","-b",file.getName()}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return cmdLine;
+	}
+
+	private boolean runningCygwin() {
+		return true;
+	}
+
+	private String[] getCygwinGcovCommand(IFile file) {
+		String[] cmdLine = {"sh","-c","'gcov","-f","-b",file.getName()+"'"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return cmdLine;
 	}
 
 	public void parse(IFile cppFile) throws CoreException, IOException {
