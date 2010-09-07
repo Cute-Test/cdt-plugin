@@ -100,11 +100,12 @@ public abstract class LineCoverageParser {
 	private boolean runningCygwin(IProject project) {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 		IConfiguration config = info.getManagedProject().getConfigurations()[0];
-		return config.getParent().getId().contains("cygwin");
+		return config.getParent().getId().contains("cygwin"); //$NON-NLS-1$
 	}
 
 	private String[] getCygwinGcovCommand(IFile file) {
-		String[] cmdLine = {"sh","-c","'gcov","-f","-b",file.getName()+"'"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		@SuppressWarnings("nls")
+		String[] cmdLine = {"sh","-c","'gcov","-f","-b",file.getName()+"'"};
 		return cmdLine;
 	}
 
