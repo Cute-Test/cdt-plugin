@@ -18,7 +18,9 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.cdt.utils.spawner.ProcessFactory;
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -47,9 +49,9 @@ public abstract class LineCoverageParser {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected void runGcov(IFile file, IPath workingDirectory) throws CoreException, IOException {
+	protected void runGcov(IFile file, IPath workingDirectory, IProject project) throws CoreException, IOException {
 		String[] cmdLine;
-		if(runningCygwin()){
+		if(runningCygwin(project)){
 			cmdLine = getCygwinGcovCommand(file);
 		}else{
 			cmdLine = getGcovCommand(file);
@@ -95,8 +97,10 @@ public abstract class LineCoverageParser {
 		return cmdLine;
 	}
 
-	private boolean runningCygwin() {
-		return true;
+	private boolean runningCygwin(IProject project) {
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+		IConfiguration config = info.getManagedProject().getConfigurations()[0];
+		return config.getParent().getId().contains("cygwin");
 	}
 
 	private String[] getCygwinGcovCommand(IFile file) {
@@ -117,7 +121,7 @@ public abstract class LineCoverageParser {
 				return;
 			}
 			
-			runGcov(cppFile, gcnoFile.getParent().getLocation());
+			runGcov(cppFile, gcnoFile.getParent().getLocation(), project);
 	
 			String gcovFileName = cppFile.getName().concat(".gcov"); //$NON-NLS-1$
 			gcovFile = findFile(project, gcovFileName);
