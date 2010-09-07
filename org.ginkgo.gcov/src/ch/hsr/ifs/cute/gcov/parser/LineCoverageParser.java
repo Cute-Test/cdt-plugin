@@ -25,6 +25,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
@@ -46,7 +48,7 @@ public abstract class LineCoverageParser {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void runGcov(IFile file, IPath workingDirectory) throws CoreException, IOException {
-		String[] cmdLine = {"gcov","-f","-b",file.getName()}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String[] cmdLine = {"sh","-c","'gcov","-f","-b",file.getName()+"'"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File workingDir = null;
 		if(workingDirectory != null){
 			workingDir = workingDirectory.toFile();
@@ -57,34 +59,29 @@ public abstract class LineCoverageParser {
 		
 		p = DebugPlugin.exec(cmdLine, workingDir, envp);
 	
-//		IProcess process = null;
+		IProcess process = null;
 		
 		String programName = cmdLine[0];
 		Map processAttributes = new HashMap();
 		processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
 		
 		if (p != null) {
-			ProcessFactory factory = ProcessFactory.getFactory();
-			p = factory.exec(cmdLine, envp, workingDir);
-//			process = DebugPlugin.newProcess(new Launch(null,ILaunchManager.RUN_MODE,null), p, programName, processAttributes);
-//			if (process == null) {
-//				p.destroy();
-//			}else{
-//				while (!process.isTerminated()) {
-//					try {
-//						Thread.sleep(50);
-//					} catch (InterruptedException e) {
-//					}
-//				}
-				try {
+			process = DebugPlugin.newProcess(new Launch(null,ILaunchManager.RUN_MODE,null), p, programName, processAttributes);
+			if (process == null) {
+				p.destroy();
+			}else{
+				while (!process.isTerminated()) {
 					try {
-						p.waitFor();
-					} catch (InterruptedException e) {}
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+					}
+				}
+				try {
 					file.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
-//			}
+			}
 		}
 	}
 
