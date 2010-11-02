@@ -141,6 +141,15 @@ void test_backslashQuoteTabNewline(){
 	std::string shouldQuoteQuoted("Hi\\nPeter\\\\tab\\t ");
 	ASSERT(shouldQuoteQuoted == cute::equals_impl::backslashQuoteTabNewline(shouldQuote));
 }
+void test_equalsTwoNaNFails()
+{
+    ASSERT_THROWS(ASSERT_EQUAL(std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN()),cute::test_failure);
+}
+
+void test_doubleEqualsWithANaNFails(){
+	ASSERT_THROWS(ASSERT_EQUAL_DELTA(0.0,std::numeric_limits<double>::quiet_NaN(),1.0),cute::test_failure);
+}
+
 
 cute::suite test_cute_equals(){
 	cute::suite s;
@@ -160,6 +169,8 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_equal_int_bool));
 	s.push_back(CUTE(test_equal_enum_int));
 	s.push_back(CUTE(test_equals_double_with_numberic_limits));
+	s.push_back(CUTE(test_doubleEqualsWithANaNFails));
+	s.push_back(CUTE(test_doubleEqualsWithANaNFails));
 	s += CUTE(test_backslashQuoteTabNewline);
 	s += CUTE(test_equals_OK);
 	s += CUTE(test_equals_int_fails);
