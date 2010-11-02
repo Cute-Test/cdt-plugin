@@ -120,7 +120,7 @@ namespace cute {
 		bool do_equals_floating_with_delta(ExpectedValue const &expected
 				,ActualValue const &actual
 				,DeltaValue const &delta) {
-			return !(std::abs(delta)  < std::abs(expected-actual));
+			return std::abs(delta)  >= std::abs(expected-actual);
 		}
 		template <typename ExpectedValue, typename ActualValue, bool select_non_floating_point_type>
 		bool do_equals_floating(ExpectedValue const &expected
