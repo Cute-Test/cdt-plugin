@@ -123,7 +123,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	}
 
 	private void callAdditionalHandlers(IProject project, IProgressMonitor pm) throws CoreException {
-		List<ICuteWizardAddition> adds = cuteVersionWizardPage.getAdditions();
+		List<ICuteWizardAddition> adds = getAdditions();
 		SubMonitor mon = SubMonitor.convert(pm, adds.size());
 		for (ICuteWizardAddition addition : adds) {
 			addition.getHandler().configureProject(project, mon);
@@ -131,6 +131,13 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		}
 		mon.done();
 		
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	protected List<ICuteWizardAddition> getAdditions() {
+		return cuteVersionWizardPage.getAdditions();
 	}
 
 

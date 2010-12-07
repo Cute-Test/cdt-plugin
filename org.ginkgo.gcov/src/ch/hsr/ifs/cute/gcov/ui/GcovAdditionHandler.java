@@ -51,6 +51,8 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 	private static final String GNU_CPP_COMPILER_ID = "cdt.managedbuild.tool.gnu.cpp.compiler"; //$NON-NLS-1$
 	private static final String GCOV_C_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99 "; //$NON-NLS-1$
 	private static final String GCOV_CPP_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage "; //$NON-NLS-1$
+	private static final String GCOV_CPP_COMPILER_LIB_FLAGS = GCOV_CPP_COMPILER_FLAGS + "-lgcov "; //$NON-NLS-1$
+	private static final String GCOV_C_COMPILER_LIB_FLAGS = GCOV_C_COMPILER_FLAGS + "-lgcov "; //$NON-NLS-1$
 	
 	
 	private GcovWizardAddition addition;
@@ -98,6 +100,30 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 		}
 		return null;
 	}
+	
+	public IConfiguration addGcovLibConfig(IProject project) throws CoreException {
+		try {
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+		IConfiguration[] configs = info.getManagedProject().getConfigurations();
+		for (IConfiguration config : configs) {
+			if(config.getParent().getId().contains("debug")) { //$NON-NLS-1$
+				IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, GCOV_CONFG_ID);
+				newConfig.setName("Debug Gcov"); //$NON-NLS-1$
+				setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_LIB_FLAGS);
+				setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_LIB_FLAGS);
+				setOptionInTool(newConfig, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
+				setOptionInTool(newConfig, MAC_CPP_LINKER_ID, MACOSX_LINKER_OPTION_FLAGS, GCOV_LINKER_FLAGS);
+				ManagedBuildManager.setDefaultConfiguration(project, newConfig);
+				ManagedBuildManager.setSelectedConfiguration(project, newConfig);
+				
+				return newConfig;
+			}
+		}
+		} catch (BuildException e) {
+			throw new CoreException(new Status(IStatus.ERROR,GcovPlugin.PLUGIN_ID,e.getMessage(),e));
+		}
+		return null;
+	}
 
 	private void setOptionInTool(IConfiguration config, String toolId, String optionId, String optionValue)
 	throws BuildException {
@@ -111,7 +137,7 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 
 	public void configureLibProject(IProject libProject) throws CoreException {
 		if(isGcovEnabled() && libProjectNeedGcovConfig(libProject)) {
-			addGcovConfig(libProject);
+			addGcovLibConfig(libProject);
 			BuildAction buildAction = new BuildAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), IncrementalProjectBuilder.INCREMENTAL_BUILD);
 			buildAction.selectionChanged(new StructuredSelection(libProject));
 			buildAction.run();

@@ -12,6 +12,7 @@
 package ch.hsr.ifs.cute.ui.project.wizard;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -108,13 +109,17 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	private void createLibSetings(IProject project) throws CoreException {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
-			for (ICuteWizardAddition addition : libRefPage.getAdditions()) {
+			for (ICuteWizardAddition addition : getAdditions()) {
 				addition.getHandler().configureLibProject(libProject);
 			}
 			setToolChainIncludePath(project, libProject);
 		}
 		setProjectReference(project, projects);
 		ManagedBuildManager.saveBuildInfo(project, true);
+	}
+
+	protected List<ICuteWizardAddition> getAdditions() {
+		return libRefPage.getAdditions();
 	}
 
 	
