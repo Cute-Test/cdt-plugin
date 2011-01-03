@@ -13,6 +13,7 @@ package ch.hsr.ifs.cute.gcov;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceStatus;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -39,6 +40,13 @@ public class DeleteMarkerJob extends Job {
 			file.deleteMarkers(GcovPlugin.UNCOVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 			file.deleteMarkers(GcovPlugin.PARTIALLY_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 		} catch (CoreException e) {
+			IStatus s = e.getStatus();
+			if (s instanceof IResourceStatus) {
+				IResourceStatus resStatus = (IResourceStatus) s;
+				if(resStatus.getCode() == IResourceStatus.RESOURCE_NOT_FOUND) {
+					return Status.OK_STATUS;
+				}
+			}
 			e.printStackTrace();
 			return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getLocalizedMessage());
 		}

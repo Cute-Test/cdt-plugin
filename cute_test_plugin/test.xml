@@ -38,7 +38,7 @@
 			<property name="failOnProblem" value="true"/>
 		</ant>
 		<echo message="Gcov-tests"/>
-		<ant target="ui-test" antfile="${library-file}" dir="${eclipse-home}">
+		<ant target="core-test" antfile="${library-file}" dir="${eclipse-home}">
 			<property name="launchTarget" value="eclipse-test"/>
 			<property name="vmargs" value="-Xms256m -Xmx1024m"/>
 			<property name="data-dir" value="${cute-loc}"/>
