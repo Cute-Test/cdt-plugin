@@ -8,7 +8,7 @@ public class SourceActionsTest {
 		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions"); //$NON-NLS-1$
 
 		ts.addTest(TestBugFixes.suite());
-		ts.addTestSuite(AddTestToSuiteTest.class);
+//		ts.addTestSuite(AddTestToSuiteTest.class);
 		ts.addTestSuite(NewTestFunctionTest.class);
 		
 		return ts;
