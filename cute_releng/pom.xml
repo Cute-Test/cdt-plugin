@@ -30,7 +30,7 @@
 		<module>../cute_plugin</module>
 		<module>../cute_test_plugin</module>
 		<module>../ch.hsr.ifs.cute.help</module>
-		<module>../cute_ui_pluing</module>
+		<module>../cute_ui_plugin</module>
 		<module>../ch.hsr.ifs.cute.ui.test</module>
 		<!-- CUTE Headers -->
 		<module>../ch.hsr.ifs.cute.headers.base.test</module>
