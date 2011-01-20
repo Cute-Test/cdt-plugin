@@ -28,7 +28,7 @@
 		<module>../cute_framework</module>
 		<module>../cute_framework_cute_fragment</module>
 		<module>../cute_plugin</module>
-		<module>../cute_test_plugin</module>
+		<!--<module>../cute_test_plugin</module>-->
 		<module>../ch.hsr.ifs.cute.help</module>
 		<module>../cute_ui_plugin</module>
 		<module>../ch.hsr.ifs.cute.ui.test</module>
