@@ -19,7 +19,7 @@
 	        	<artifactId>maven-osgi-test-plugin</artifactId>
 		        <version>0.10.0</version>
     		    <configuration>
-    		    	<testSuite>ch.hsr.ifs.core.test</testSuite>
+    		    	<testSuite>ch.hsr.ifs.cute.core.test</testSuite>
 					<testClass>ch.hsr.ifs.core.test.AllCoreTests</testClass>
         			<useUIHarness>false</useUIHarness>
 			</configuration>

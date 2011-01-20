@@ -62,12 +62,12 @@
       <import plugin="org.eclipse.cdt.debug.core" version="7.0.0" match="compatible"/>
    </requires>
 
-   <plugin
+   <!--<plugin
          id="ch.hsr.ifs.cute.testing"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false"/>
+         unpack="false"/>-->
 
    <plugin
          id="ch.hsr.ifs.cute.core.test"
