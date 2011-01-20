@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ch.hsr.ifs</groupId>
+	<artifactId>ch.hsr.ifs.cute.parent</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<properties>
+		<tycho-version>0.10.0</tycho-version>
+		<eclipse-version>helios</eclipse-version>
+	</properties>
+	<repositories>
+		<repository>
+			<id>helios-release</id>
+			<url>http://download.eclipse.org/releases/${eclipse-version}/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>galileo-cdt-release</id>
+			<url>http://download.eclipse.org/tools/cdt/releases/${eclipse-version}/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+	<modules>
+		<!-- CUTE Plugin -->
+		<module>../cute_feature</module>
+		<module>../cute_test_feature</module>
+		<module>../cute_framework</module>
+		<module>../cute_framework_cute_fragment</module>
+		<module>../cute_plugin</module>
+		<module>../cute_test_plugin</module>
+		<module>../ch.hsr.ifs.cute.help</module>
+		<module>../cute_ui_pluing</module>
+		<module>../ch.hsr.ifs.cute.ui.test</module>
+		<!-- CUTE Headers -->
+		<module>ch.hsr.ifs.cute.headers.base.test</module>
+		<module>ch.hsr.ifs.cute.headers.1_0.feature</module>
+		<module>ch.hsr.ifs.cute.headers.1_0</module>
+		<module>ch.hsr.ifs.cute.headers.1_0.test</module>
+		<module>ch.hsr.ifs.cute.headers.1_5.feature</module>
+		<module>ch.hsr.ifs.cute.headers.1_5</module>
+		<module>ch.hsr.ifs.cute.headers.1_5.test</module>
+		<module>ch.hsr.ifs.cute.headers.1_6.feature</module>
+		<module>ch.hsr.ifs.cute.headers.1_6</module>
+		<module>ch.hsr.ifs.cute.headers.1_6.test</module>
+		<!-- GCOV -->
+		<module>ch.hsr.ifs.cute.gcov.feature</module>
+		<module>ch.hsr.ifs.cute.gcov</module>
+		<module>ch.hsr.ifs.cute.gcov.test</module>
+		<!-- BOOST -->
+		<module>ch.hsr.ifs.cute.boost.feature</module>
+		<module>ch.hsr.ifs.cute.boost</module>
+		<!-- Refactoring Preview -->
+		<module>ch.hsr.ifs.cute.refactoringPreview.toogleFunction.feature</module>
+		<module>ch.hsr.ifs.cute.refactoringPreview.toggleFunction</module>
+	</modules>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<resolver>p2</resolver>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+ 
