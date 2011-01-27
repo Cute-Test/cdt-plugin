@@ -19,7 +19,7 @@
 	        	<artifactId>maven-osgi-test-plugin</artifactId>
 		        <version>0.10.0</version>
     		    <configuration>
-    		    	<testSuite>ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests</testSuite>
+    		    	<testSuite>ch.hsr.ifs.cute.refactoringPreview.toggleFunction.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.AllTests</testClass>
         			<useUIHarness>false</useUIHarness>
         			<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
