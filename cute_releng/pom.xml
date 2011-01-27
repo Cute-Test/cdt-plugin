@@ -57,11 +57,9 @@
 		<module>../ch.hsr.ifs.cute.boost.feature</module>
 		<module>../ch.hsr.ifs.cute.boost</module>
 		<!-- Refactoring Preview -->
-		<!--  Does not build
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toogleFunction.feature</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toggleFunction</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toggleFunction.test</module>
-		-->
 	</modules>
 	<build>
 		<plugins>
