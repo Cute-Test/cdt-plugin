@@ -17,6 +17,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.core,
  org.eclipse.cdt.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.cdt.internal.ui.refactoring,
+ org.eclipse.ui
 Export-Package: ch.hsr.ifs.cute.refactoringpreview.togglefunction.implement,
  ch.hsr.ifs.cute.refactoringpreview.togglefunction.toggle
 Bundle-ActivationPolicy: lazy
