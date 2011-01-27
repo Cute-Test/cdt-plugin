@@ -21,7 +21,7 @@
     		    <configuration>
     		    	<testSuite>ch.hsr.ifs.cute.refactoringPreview.toggleFunction.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.AllTests</testClass>
-        			<useUIHarness>false</useUIHarness>
+        			<useUIHarness>true</useUIHarness>
         			<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
 			</configuration>
     	  	</plugin>
