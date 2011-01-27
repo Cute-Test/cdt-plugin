@@ -70,7 +70,7 @@ public class NewImplementRefactoring extends CRefactoring {
 	}
 
 	private void collectAddChange(ModificationCollector collector) {
-		IASTName declaratorName = new DeclaratorFinder((TextSelection) selection, unit).getName();
+		IASTName declaratorName = new DeclaratorFinder((TextSelection) selection, getUnit()).getName();
 		CPPASTSimpleDeclaration declaration = ToggleNodeHelper.getAncestorOfType(
 				declaratorName, IASTSimpleDeclaration.class);
 		
@@ -103,7 +103,7 @@ public class NewImplementRefactoring extends CRefactoring {
 			rewrite = collector.rewriterForTranslationUnit(parent.getTranslationUnit());
 		}
 		else {
-			rewrite = collector.rewriterForTranslationUnit(unit);
+			rewrite = collector.rewriterForTranslationUnit(getUnit());
 		}
 		TextEditGroup edit = new TextEditGroup("Toggle");
 		rewrite.replace(declaration, func, edit);
@@ -117,14 +117,14 @@ public class NewImplementRefactoring extends CRefactoring {
 			return klass;
 		}
 		else {
-			return unit;
+			return getUnit();
 		}
 	}
 
 	private void restoreLeadingComments(
 			IASTSimpleDeclaration oldDeclaration,
 			IASTFunctionDefinition func, ASTRewrite rewrite, TextEditGroup edit) {
-		String leadingcomment = ToggleNodeHelper.getLeadingComments(oldDeclaration, unit);
+		String leadingcomment = ToggleNodeHelper.getLeadingComments(oldDeclaration, getUnit());
 		String declSpec = func.getDeclSpecifier().toString();
 		rewrite.replace(func.getDeclSpecifier(), new ASTLiteralNode(leadingcomment + declSpec), edit);
 	}
