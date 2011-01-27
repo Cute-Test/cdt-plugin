@@ -22,6 +22,7 @@
     		    	<testSuite>ch.hsr.ifs.cute.ui.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.ui.test.AllUiTests</testClass>
         			<useUIHarness>true</useUIHarness>
+        			<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
 			</configuration>
     	  	</plugin>
 	    </plugins>
