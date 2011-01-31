@@ -66,7 +66,7 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 
 	private void runLocalApplication(ILaunchConfiguration config, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		
-		monitor.beginTask( LaunchMessages.getString( "LocalCDILaunchDelegate.0" ), 10 ); //$NON-NLS-1$
+		monitor.beginTask( LaunchMessages.LocalCDILaunchDelegate_0, 10 ); //$NON-NLS-1$
 		if ( monitor.isCanceled() ) {
 			return;
 		}

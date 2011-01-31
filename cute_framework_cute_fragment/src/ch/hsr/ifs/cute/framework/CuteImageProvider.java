@@ -17,11 +17,12 @@ import java.util.TreeMap;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 import ch.hsr.ifs.test.framework.ImageProvider;
+import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
 
 /**
  * @author egraf
+ * @since 3.1
  *
  */
 public class CuteImageProvider extends ImageProvider {

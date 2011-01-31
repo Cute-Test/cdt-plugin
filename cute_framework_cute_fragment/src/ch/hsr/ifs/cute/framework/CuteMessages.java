@@ -5,6 +5,9 @@ import java.util.ResourceBundle;
 
 import ch.hsr.ifs.test.framework.Messages;
 
+/**
+ * @since 3.1
+ */
 public class CuteMessages implements Messages {
 	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.framework.messages"; //$NON-NLS-1$
 

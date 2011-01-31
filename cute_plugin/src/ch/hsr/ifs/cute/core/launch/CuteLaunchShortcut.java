@@ -24,7 +24,6 @@ import org.eclipse.cdt.debug.core.CDebugCorePlugin;
 import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
 import org.eclipse.cdt.debug.core.ICDebugConfiguration;
 import org.eclipse.cdt.launch.AbstractCLaunchDelegate;
-import org.eclipse.cdt.launch.internal.ui.LaunchMessages;
 import org.eclipse.cdt.launch.internal.ui.LaunchUIPlugin;
 import org.eclipse.cdt.ui.CElementLabelProvider;
 import org.eclipse.core.resources.IResource;
@@ -257,16 +256,16 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	}
 
 	protected String getDebugConfigDialogTitleString(ICDebugConfiguration [] configList, String mode) {
-		return LaunchMessages.getString("CApplicationLaunchShortcut.LaunchDebugConfigSelection");  //$NON-NLS-1$
+		return "Launch Debug Configuration Selection";  //$NON-NLS-1$
 	}
 	
 	protected String getDebugConfigDialogMessageString(ICDebugConfiguration [] configList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseConfigToDebug");  //$NON-NLS-1$
+			return "Choose a debug configuration to debug";  //$NON-NLS-1$
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseConfigToRun");  //$NON-NLS-1$
+			return "Choose a configuration to run";  //$NON-NLS-1$
 		}
-		return LaunchMessages.getString("CApplicationLaunchShortcut.Invalid_launch_mode_1"); //$NON-NLS-1$
+		return "Invalid launch mode."; //$NON-NLS-1$
 	}
 
 
@@ -293,17 +292,17 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 	@SuppressWarnings({ "rawtypes" })
 	protected String getLaunchSelectionDialogTitleString(List configList, String mode) {
-		return LaunchMessages.getString("CApplicationLaunchShortcut.LaunchConfigSelection");  //$NON-NLS-1$
+		return "Launch Configuration Selection";  //$NON-NLS-1$
 	}
 	
 	@SuppressWarnings({ "rawtypes"})
 	protected String getLaunchSelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseLaunchConfigToDebug");  //$NON-NLS-1$
+			return "Choose a debug configuration to debug";  //$NON-NLS-1$
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseLaunchConfigToRun");  //$NON-NLS-1$
+			return "Choose a configuration to run";  //$NON-NLS-1$
 		}
-		return LaunchMessages.getString("CApplicationLaunchShortcut.Invalid_launch_mode_2"); //$NON-NLS-1$
+		return "Invalid launch mode."; //$NON-NLS-1$
 	}
 
 	/**
@@ -345,8 +344,8 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		dialog.setElements(binList.toArray());
 		dialog.setTitle(getBinarySelectionDialogTitleString(binList, mode));
 		dialog.setMessage(getBinarySelectionDialogMessageString(binList, mode));
-		dialog.setUpperListLabel(LaunchMessages.getString("Launch.common.BinariesColon")); //$NON-NLS-1$
-		dialog.setLowerListLabel(LaunchMessages.getString("Launch.common.QualifierColon")); //$NON-NLS-1$
+		dialog.setUpperListLabel("Binaries:"); //$NON-NLS-1$
+		dialog.setLowerListLabel("Qualifier:"); //$NON-NLS-1$
 		dialog.setMultipleSelection(false);
 		if (dialog.open() == Window.OK) {
 			return (IBinary) dialog.getFirstResult();
@@ -357,17 +356,17 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	
 	@SuppressWarnings({ "rawtypes"})
 	protected String getBinarySelectionDialogTitleString(List binList, String mode) {
-		return LaunchMessages.getString("CApplicationLaunchShortcut.CLocalApplication");  //$NON-NLS-1$
+		return "C Local Application";  //$NON-NLS-1$
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
 	protected String getBinarySelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseLocalAppToDebug");  //$NON-NLS-1$
+			return "Choose a local application to debug";  //$NON-NLS-1$
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return LaunchMessages.getString("CApplicationLaunchShortcut.ChooseLocalAppToRun");  //$NON-NLS-1$
+			return "Choose a local application to run";  //$NON-NLS-1$
 		}
-		return LaunchMessages.getString("CApplicationLaunchShortcut.Invalid_launch_mode_3"); //$NON-NLS-1$
+		return "Invalid launch mode."; //$NON-NLS-1$
 	}
 
 	/**
@@ -390,13 +389,13 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				} catch (InterruptedException e) {
 					return;
 				} catch (InvocationTargetException e) {
-					MessageDialog.openError(getShell(), LaunchMessages.getString("CApplicationLaunchShortcut.Application_Launcher"), e.getMessage()); //$NON-NLS-1$
+					MessageDialog.openError(getShell(), "Application Launcher", e.getMessage()); //$NON-NLS-1$
 					return;
 				}
 				
 				int count = results.size();
 				if (count == 0) {
-					MessageDialog.openError(getShell(), LaunchMessages.getString("CApplicationLaunchShortcut.Application_Launcher"), LaunchMessages.getString("CApplicationLaunchShortcut.Launch_failed_no_binaries")); //$NON-NLS-1$ //$NON-NLS-2$
+					MessageDialog.openError(getShell(), "Application Launcher", "Launch failed. Binary not found."); //$NON-NLS-1$ //$NON-NLS-2$
 				} else if (count > 1) {
 					bin = chooseBinary(results, mode);
 				} else {
@@ -408,7 +407,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				launch(bin, mode);
 			}
 		} else {
-			MessageDialog.openError(getShell(), LaunchMessages.getString("CApplicationLaunchShortcut.Application_Launcher"), LaunchMessages.getString("CApplicationLaunchShortcut.Launch_failed_no_project_selected")); //$NON-NLS-1$ //$NON-NLS-2$
+			MessageDialog.openError(getShell(), "Application Launcher", "Launch failed no project selected"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
