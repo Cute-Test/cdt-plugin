@@ -23,10 +23,10 @@ inline int A::foo()
 
 //!TestVirtualSpecifierFromInHeaderToImplementation
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
+//%CPP
 //@.config
 filename=A.h
 //@A.h
-#include <string>
 
 class A {
     virtual int /*$*/foo/*$$*/();
@@ -37,7 +37,6 @@ inline int A::foo()
     return 0;
 }
 //=
-#include <string>
 
 class A {
     virtual int foo();
