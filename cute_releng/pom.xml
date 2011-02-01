@@ -15,16 +15,6 @@
 			<url>http://download.eclipse.org/releases/staging/</url>
 			<layout>p2</layout>
 		</repository>
-		<repository>
-			<id>helios-release</id>
-			<url>http://download.eclipse.org/releases/${eclipse-version}/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>galileo-cdt-release</id>
-			<url>http://download.eclipse.org/tools/cdt/releases/${eclipse-version}/</url>
-			<layout>p2</layout>
-		</repository>
 	</repositories>
 	<modules>
 		<!-- CUTE Plugin -->
