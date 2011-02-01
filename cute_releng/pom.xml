@@ -15,6 +15,11 @@
 			<url>http://download.eclipse.org/releases/staging/</url>
 			<layout>p2</layout>
 		</repository>
+		<repository>
+			<id>cdt milestone</id>
+			<url>jar:file:/home/hudson/cdt-master-8.0.0-I201101300007.zip!/</url>
+			<layout>p2</layout>
+		</repository>
 	</repositories>
 	<modules>
 		<!-- CUTE Plugin -->
