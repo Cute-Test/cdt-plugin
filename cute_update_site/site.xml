@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="Cute Update Site" url="http://ifs.hsr.ch/cute/updatesite/">
+   <description name="Cute Update Site" url="http://www.cute-test.com/updatesite/">
       Eclipse Cute Plugin
    </description>
    <feature url="features/ch.hsr.ifs.cute_2.0.0.200902191706.jar" id="ch.hsr.ifs.cute" version="2.0.0.200902191706">
@@ -83,7 +83,7 @@
    <category-def name="OptFeatures" label="Cute Optional Features"/>
    <category-def name="refPreview" label="Refactoring Preview">
       <description>
-         Preview of new Refactorings
+         Preview of new refactorings
       </description>
    </category-def>
 </site>

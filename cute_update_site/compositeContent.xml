@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<repository name='Cute Metadata Site'
+type='org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository' version='1'>
+  <properties size='1'>
+    <property name='p2.timestamp' value='1280389226910'/>
+  </properties>
+  <children size='2'>
+    <child location='cute_update_site'/>
+    <child location='http://download.eclipse.org/tools/cdt/releases/helios/'/>
+  </children>
+</repository>
