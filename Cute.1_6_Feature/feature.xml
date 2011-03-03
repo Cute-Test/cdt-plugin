@@ -18,7 +18,7 @@
    </license>
 
    <url>
-      <update label="%updateSiteName" url="http://ifs.hsr.ch/cute/updatesite/"/>
+      <update label="%updateSiteName" url="http://www.cute-test.com/updatesite/"/>
    </url>
 
    <requires>

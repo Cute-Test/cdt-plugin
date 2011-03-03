@@ -19,7 +19,7 @@
    </license>
 
    <url>
-      <update label="%updateSiteName" url="http://ifs.hsr.ch/cute/updatesite/"/>
+      <update label="%updateSiteName" url="http://www.cute-test.com/updatesite/"/>
       <discovery label="CDT update site" url="http://download.eclipse.org/tools/cdt/releases/helios/"/>
    </url>
 
