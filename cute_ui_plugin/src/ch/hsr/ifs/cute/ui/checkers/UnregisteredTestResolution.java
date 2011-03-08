@@ -11,7 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.checkers;
 
-import org.eclipse.cdt.codan.ui.AbstarctCodanCMarkerResolution;
+import org.eclipse.cdt.codan.ui.AbstractCodanCMarkerResolution;
 import org.eclipse.cdt.codan.ui.CodanEditorUtility;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -34,7 +34,7 @@ import ch.hsr.ifs.cute.ui.sourceactions.AddTestToSuite;
  * @author Emanuel Graf IFS
  *
  */
-public class UnregisteredTestResolution extends AbstarctCodanCMarkerResolution {
+public class UnregisteredTestResolution extends AbstractCodanCMarkerResolution {
 
 	public UnregisteredTestResolution() {
 	}
