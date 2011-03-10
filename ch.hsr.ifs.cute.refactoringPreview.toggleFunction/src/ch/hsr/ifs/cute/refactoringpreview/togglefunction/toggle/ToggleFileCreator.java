@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.internal.ui.refactoring.Container;
 import org.eclipse.cdt.internal.ui.refactoring.CreateFileChange;
+import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -24,11 +25,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.UIPlugin;
 
 @SuppressWarnings("restriction")
 public class ToggleFileCreator {
 
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	private static final String H = ".h"; //$NON-NLS-1$
 	private ToggleRefactoringContext context;
 	private String ending;
 
@@ -45,12 +47,12 @@ public class ToggleFileCreator {
 			filename = context.getDefinition().getContainingFilename();
 		}
 		String other;
-		if (ending.equals(".h")) {
-			other = ".cpp";
+		if (ending.equals(H)) {
+			other = ".cpp"; //$NON-NLS-1$
 		} else {
-			other = ".h";
+			other = H;
 		}
-		filename = filename.replaceAll("\\w*" + other + "$", "") + getNewFileName();
+		filename = filename.replaceAll("\\w*" + other + "$", EMPTY_STRING) + getNewFileName();  //$NON-NLS-1$//$NON-NLS-2$
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filename));
 		IASTTranslationUnit result = null;
 		try {
@@ -59,7 +61,7 @@ public class ToggleFileCreator {
 		} catch (CoreException e) {
 		}
 		if (result == null) {
-			throw new NotSupportedException("Cannot find translation unit for sibling file");
+			throw new NotSupportedException(Messages.ToggleFileCreator_NoTuForSibling);
 		}
 		return result;
 	}
@@ -69,10 +71,10 @@ public class ToggleFileCreator {
 		String filename = getNewFileName();
 		try {
 			change = new CreateFileChange(filename, new	Path(getPath()+filename), 
-					"", context.getSelectionFile().getCharset());
+					EMPTY_STRING, context.getSelectionFile().getCharset());
 			change.perform(new NullProgressMonitor());
 		} catch (CoreException e) {
-			throw new NotSupportedException("Cannot create new filechange");
+			throw new NotSupportedException(Messages.ToggleFileCreator_CanNotCreateNewFile);
 		}
 	}
 	
@@ -82,17 +84,16 @@ public class ToggleFileCreator {
 		}
 		final Container<Boolean> answer = new Container<Boolean>();
 		Runnable r = new Runnable() {
-			@Override
 			public void run() {
-				Shell shell = UIPlugin.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell();
+				Shell shell = CUIPlugin.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell();
 				String functionname;
 				if (context.getDeclaration() != null) {
 					functionname = context.getDeclaration().getRawSignature();
 				} else {
 					functionname = context.getDefinition().getDeclarator().getRawSignature();
 				}
-				boolean createnew = MessageDialog.openQuestion(shell, "New Implementation file?", 
-						"Create a new file named: " + getNewFileName() + " and move " + functionname + "?");
+				boolean createnew = MessageDialog.openQuestion(shell, Messages.ToggleFileCreator_NewImplFile, 
+						Messages.ToggleFileCreator_CreateNewFile + getNewFileName() + Messages.ToggleFileCreator_andMove + functionname + Messages.ToggleFileCreator_QMark);
 				answer.setObject(createnew);
 			}
 		};
@@ -101,7 +102,7 @@ public class ToggleFileCreator {
 	}
 
 	public String getIncludeStatement() {
-		return "#include \"" + ToggleNodeHelper.getFilenameWithoutExtension(getNewFileName()) + ".h\"";
+		return "#include \"" + ToggleNodeHelper.getFilenameWithoutExtension(getNewFileName()) + ".h\"";  //$NON-NLS-1$//$NON-NLS-2$
 	}
 	
 	private String getNewFileName() {
@@ -110,6 +111,6 @@ public class ToggleFileCreator {
 	
 	private String getPath() {
 		String result = context.getSelectionFile().getFullPath().toOSString();
-		return result.replaceAll("(\\w)*\\.(\\w)*", "");
+		return result.replaceAll("(\\w)*\\.(\\w)*", EMPTY_STRING); //$NON-NLS-1$
 	}
 }

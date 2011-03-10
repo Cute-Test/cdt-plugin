@@ -28,6 +28,7 @@ void A::member()
     // body comment
     return;
 }
+
 //!HeaderToImplTryCatchComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
 //@.config
@@ -59,7 +60,14 @@ try
 {
     // body comment
     return;
-}catch /*1*/ (int e) { /*2*/ }catch /*3*/ (int e) { /*4*/ }
+}
+catch(/*1*/int e){
+    /*2*/
+}
+catch(/*3*/int e){
+    /*4*/
+}
+
 //!HeaderToImplTopComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
 //@.config
@@ -79,7 +87,7 @@ class A {
     void member();
 };
 
-// Top comment
+
 
 //@A.cpp
 #include "A.h"
@@ -93,6 +101,7 @@ void A::member()
     // body comment
     return;
 }
+
 //!HeaderToImplFreeFuncTopComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
 //@.config
@@ -119,3 +128,4 @@ void member()
 {
     return;
 }
+

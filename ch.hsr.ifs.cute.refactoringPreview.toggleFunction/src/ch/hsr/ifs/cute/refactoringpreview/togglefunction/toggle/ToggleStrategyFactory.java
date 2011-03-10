@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -24,7 +24,7 @@ public class ToggleStrategyFactory {
 
 	public IToggleRefactoringStrategy getAppropriateStategy() {
 		if (context.getDefinition() == null)
-			throw new NotSupportedException("cannot work without function defintion");
+			throw new NotSupportedException(Messages.ToggleStrategyFactory_NoDefinitionFound);
 		if (!context.getDefinitionUnit().isHeaderUnit())
 			return new ToggleFromImplementationToHeaderOrClassStrategy(context);
 		if (isInClassSituation())
@@ -33,7 +33,7 @@ public class ToggleStrategyFactory {
 			return new ToggleFromInHeaderToClassStrategy(context);
 		if (isinHeaderSituation())
 			return new ToggleFromInHeaderToImplementationStrategy(context);
-		throw new NotSupportedException("Unsupported situation for moving function body.");
+		throw new NotSupportedException(Messages.ToggleStrategyFactory_UnsupportedSituation);
 	}
 	
 	private boolean isinHeaderSituation() {

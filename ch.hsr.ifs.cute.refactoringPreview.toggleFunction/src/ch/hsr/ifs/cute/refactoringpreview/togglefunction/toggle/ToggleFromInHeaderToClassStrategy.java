@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -11,17 +11,23 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.refactoringpreview.togglefunction.toggle;
 
+import java.util.List;
+
+import org.eclipse.cdt.core.dom.ast.IASTComment;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCatchHandler;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionWithTryBlock;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.cdt.core.dom.rewrite.ASTRewrite.CommentPosition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
-import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.text.edits.TextEditGroup;
 
@@ -33,9 +39,9 @@ public class ToggleFromInHeaderToClassStrategy implements IToggleRefactoringStra
 
 	public ToggleFromInHeaderToClassStrategy(ToggleRefactoringContext context) {
 		if (isFreeFunction(context))
-			throw new NotSupportedException("Cannot toggle templated free function");
+			throw new NotSupportedException(Messages.ToggleFromInHeaderToClassStrategy_CanNotToggleTemplateFreeFunction);
 		this.context = context;
-		this.infoText =  new TextEditGroup("Toggle function body placement");
+		this.infoText =  new TextEditGroup(Messages.EditGroupName);
 	}
 
 	private boolean isFreeFunction(ToggleRefactoringContext context) {
@@ -51,18 +57,26 @@ public class ToggleFromInHeaderToClassStrategy implements IToggleRefactoringStra
 				IASTCompositeTypeSpecifier.class) == null);
 	}
 
-	@Override
 	public void run(ModificationCollector modifications) {
 		ASTRewrite rewriter = removeDefinition(modifications);
 		IASTFunctionDefinition newDefinition = getNewDefinition();
-		ASTRewrite newRewriter = replaceDeclarationWithDefinition(rewriter, newDefinition);
+		replaceDeclarationWithDefinition(rewriter, newDefinition);
+		
 		IASTNode parentTemplateDeclaration = 
 			ToggleNodeHelper.getParentTemplateDeclaration(context.getDeclaration());
 		if (parentTemplateDeclaration instanceof ICPPASTTemplateDeclaration) {
-			restoreBody(newRewriter, newDefinition);
 		} else {
-			restoreBody(rewriter, newDefinition);
 			restoreLeadingComments(rewriter, newDefinition);
+		}
+	}
+
+	private void restoreLeadingComments(ASTRewrite rewriter, IASTFunctionDefinition newDefinition) {
+		List<IASTComment>comments = rewriter.getComments(context.getDefinition().getParent(), CommentPosition.leading);
+		if(comments != null) {
+			for (IASTComment comment : comments) {
+				rewriter.addComment(newDefinition, comment, CommentPosition.leading);
+				rewriter.remove(comment, infoText);
+			}
 		}
 	}
 
@@ -76,6 +90,15 @@ public class ToggleFromInHeaderToClassStrategy implements IToggleRefactoringStra
 	private IASTFunctionDefinition getNewDefinition() {
 		IASTFunctionDefinition newDefinition = ToggleNodeHelper.createInClassDefinition(
 				context.getDeclaration(), context.getDefinition(), context.getDefinitionUnit());
+		newDefinition.setBody(context.getDefinition().getBody().copy(CopyStyle.withLocations));
+		if (newDefinition instanceof ICPPASTFunctionWithTryBlock) {
+			ICPPASTFunctionWithTryBlock newTryFun = (ICPPASTFunctionWithTryBlock) newDefinition;
+			ICPPASTFunctionWithTryBlock oldTryFun = (ICPPASTFunctionWithTryBlock) context.getDefinition();
+			for (ICPPASTCatchHandler catchH : oldTryFun.getCatchHandlers()) {
+				newTryFun.addCatchHandler(catchH.copy(CopyStyle.withLocations));
+			}
+		}
+		
 		IASTNode parent = ToggleNodeHelper.getAncestorOfType(context.getDefinition(), 
 				ICPPASTCompositeTypeSpecifier.class);
 		if (parent != null) {
@@ -93,22 +116,5 @@ public class ToggleFromInHeaderToClassStrategy implements IToggleRefactoringStra
 				context.getDeclaration(), CPPASTSimpleDeclaration.class);
 		ASTRewrite newRewriter = rewriter.replace(fullDeclaration, newDefinition, infoText);
 		return newRewriter;
-	}
-
-	private void restoreBody(ASTRewrite rewriter,
-			IASTFunctionDefinition newDefinition) {
-		String body = ToggleNodeHelper.getBody(context.getDefinition(), context.getDefinitionUnit());
-		rewriter.replace(newDefinition.getBody(), new ASTLiteralNode(body), infoText);
-	}
-
-	private void restoreLeadingComments(ASTRewrite rewriter,
-			IASTFunctionDefinition newDefinition) {
-		String newDeclSpec = newDefinition.getDeclSpecifier().toString();
-		String declarationLeading = ToggleNodeHelper.getLeadingComments(
-				context.getDeclaration(), context.getDeclarationUnit());
-		String definitionLeading = ToggleNodeHelper.getLeadingComments(
-				context.getDefinition(), context.getDefinitionUnit());
-		rewriter.replace(newDefinition.getDeclSpecifier(), new ASTLiteralNode(
-				declarationLeading + definitionLeading + newDeclSpec), infoText);
 	}
 }

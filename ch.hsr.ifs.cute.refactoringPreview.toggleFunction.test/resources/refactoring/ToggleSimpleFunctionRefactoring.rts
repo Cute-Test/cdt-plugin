@@ -26,8 +26,9 @@ private:
 
 inline int A::function()
 {
-        return 0;
-    }
+    return 0;
+}
+
 
 //!TestSimpleFunctionInHeaderToImplementation
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -76,6 +77,7 @@ int A::function()
     return 0;
 }
 
+
 //!TestSimpleFunctionInImplementationToInClass
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
 //@.config
@@ -117,8 +119,8 @@ class A {
 public:
     int function()
     {
-    return 0;
-}
+        return 0;
+    }
 private:
     int a;
 };

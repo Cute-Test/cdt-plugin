@@ -19,7 +19,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTReturnStatement;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleTypeConstructorExpression;
-import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoringDescription;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
@@ -107,8 +106,6 @@ public class NewImplementRefactoring extends CRefactoring {
 		}
 		TextEditGroup edit = new TextEditGroup("Toggle");
 		rewrite.replace(declaration, func, edit);
-		if (parent instanceof ICPPASTCompositeTypeSpecifier)
-			restoreLeadingComments(declaration, func, rewrite, edit);
 	}
 
 	private IASTNode getParent(IASTSimpleDeclaration declaration) {
@@ -119,13 +116,5 @@ public class NewImplementRefactoring extends CRefactoring {
 		else {
 			return getUnit();
 		}
-	}
-
-	private void restoreLeadingComments(
-			IASTSimpleDeclaration oldDeclaration,
-			IASTFunctionDefinition func, ASTRewrite rewrite, TextEditGroup edit) {
-		String leadingcomment = ToggleNodeHelper.getLeadingComments(oldDeclaration, getUnit());
-		String declSpec = func.getDeclSpecifier().toString();
-		rewrite.replace(func.getDeclSpecifier(), new ASTLiteralNode(leadingcomment + declSpec), edit);
 	}
 }

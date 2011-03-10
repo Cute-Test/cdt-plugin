@@ -23,8 +23,8 @@ namespace N {
     };
     inline void A::foo()
     {
-            return;
-        }
+        return;
+    }
 }
 //!TestSimpleNamespaceInHeaderToImplementationWithinNSDefinition
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -71,6 +71,7 @@ namespace N
     {
         return;
     }
+
 }
 
 //!TestSimpleNamespaceInHeaderToImplementationWithNSDefinitionInImpl
@@ -89,6 +90,7 @@ namespace N {
     {
         return;
     }
+
 }
 //=
 #include <iostream>
@@ -98,6 +100,7 @@ namespace N {
     class A {
         void foo();
     };
+
 }
 //@A.cpp
 #include "A.h"
@@ -169,8 +172,9 @@ namespace N
 {
     void A::foo()
     {
-    return;
-}
+        return;
+    }
+
 }
 
 //!TestSimpleNamespaceFromImplementationToInHeader
@@ -213,8 +217,8 @@ namespace N {
     class A {
         void foo()
         {
-    return;
-}
+            return;
+        }
     };
 }
 //!TestRemoveEmptyNamespaceFromImplentation
@@ -249,7 +253,7 @@ namespace N {
     class A {
         void foo()
         {
-        return;
-    }
+            return;
+        }
     };
 }

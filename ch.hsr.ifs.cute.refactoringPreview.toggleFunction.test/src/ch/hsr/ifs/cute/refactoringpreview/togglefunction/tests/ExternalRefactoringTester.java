@@ -15,8 +15,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.eclipse.cdt.ui.tests.refactoring.Messages;
 import org.eclipse.cdt.ui.tests.refactoring.RefactoringBaseTest;
 import org.eclipse.cdt.ui.tests.refactoring.TestSourceFile;
 import org.eclipse.core.runtime.FileLocator;
@@ -125,42 +124,38 @@ public class ExternalRefactoringTester extends TestSuite {
 	
 
 	
-	private static RefactoringBaseTest createTestClass(String className, String testName, Vector<TestSourceFile> files) throws Exception {
-		
-		
+	private static RefactoringBaseTest createTestClass(String className, String testName, Collection<TestSourceFile> files) throws Exception {
 		try {
 			Class<?> refClass = Class.forName(className);
-			Class<?> paratypes[] = new Class[2];
-			paratypes[0] = testName.getClass();
-			paratypes[1] = files.getClass();
-			Constructor<?> ct = refClass.getConstructor(paratypes);
-			Object arglist[] = new Object[2];
-			arglist[0] = testName;
-			arglist[1] = files;
-			RefactoringBaseTest test = (RefactoringBaseTest) ct.newInstance(arglist);
-			for (TestSourceFile file : files) {
-				TextSelection sel = file.getSelection();
-				if(sel != null) {
-					test.setFileWithSelection(file.getName());
-					test.setSelection(sel);
-					break;
+			if (testName == null) {
+				testName = refClass.getSimpleName();
+			}
+			Constructor<?>[] constructors = refClass.getConstructors();
+			for (Constructor<?> ctor : constructors) {
+				Object arglist[] = new Object[] { testName, files };
+				if (ctor.getParameterTypes().length == arglist.length) {
+					RefactoringBaseTest test = null;
+					try {
+						test = (RefactoringBaseTest) ctor.newInstance(arglist);
+					} catch (IllegalArgumentException e) {
+						continue;
+					}
+					for (TestSourceFile file : files) {
+						TextSelection sel = file.getSelection();
+						if (sel != null) {
+							test.setFileWithSelection(file.getName());
+							test.setSelection(sel);
+							break;
+						}
+					}
+					return test;
 				}
 			}
-			return test;
+			throw new Exception(className + " class does not provide required constructor"); //$NON-NLS-1$
 		} catch (ClassNotFoundException e) {
-			throw new Exception(Messages.getString("RefactoringTester.UnknownTestClass") + " " + e.getMessage()); //$NON-NLS-1$
-		} catch (SecurityException e) {
-			throw new Exception(Messages.getString("RefactoringTester.SecurityException"), e); //$NON-NLS-1$
-		} catch (NoSuchMethodException e) {
-			throw new Exception(Messages.getString("RefactoringTester.ConstructorError")); //$NON-NLS-1$
-		} catch (IllegalArgumentException e) {
-			throw new Exception(Messages.getString("RefactoringTester.IllegalArgument"), e); //$NON-NLS-1$
-		} catch (InstantiationException e) {
-			throw new Exception(Messages.getString("RefactoringTester.InstantiationException"), e); //$NON-NLS-1$
-		} catch (IllegalAccessException e) {
-			throw new Exception(Messages.getString("RefactoringTester.IllegalAccessException"), e); //$NON-NLS-1$
-		} catch (InvocationTargetException e) {
-			throw new Exception(Messages.getString("RefactoringTester.InvocationTargetException"), e); //$NON-NLS-1$
+			throw new Exception("Unknown test class " + className); //$NON-NLS-1$
+		} catch (Exception e) {
+			throw new Exception(e.getClass().getSimpleName() + " diring creation of test " + className, e); //$NON-NLS-1$
 		}
 	}
 
@@ -198,10 +193,9 @@ public class ExternalRefactoringTester extends TestSuite {
 	
 	private static String getNameOfTest(String line) {
 		Matcher matcherBeginOfTest = createMatcherFromString(testRegexp, line);
-		if(matcherBeginOfTest.find())
+		if (matcherBeginOfTest.find())
 			return matcherBeginOfTest.group(1);
-		else
-			return Messages.getString("RefactoringTester.NotNamed"); //$NON-NLS-1$
+		return null;
 	}
 	
 	private static boolean lineMatchesBeginOfResult(String line) {

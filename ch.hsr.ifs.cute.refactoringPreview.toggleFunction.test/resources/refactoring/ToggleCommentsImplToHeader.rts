@@ -22,9 +22,9 @@ class A {
 class A {
     void member()
     {
-    // body comment
-    return;
-}
+        // body comment
+        return;
+    }
 };
 //!ImplToHeaderTopComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -50,10 +50,10 @@ class A {
 //=
 class A {
     // Definition comment
-void member()
+    void member()
     {
-    return;
-}
+        return;
+    }
 };
 //!ImplToHeaderTryCatchComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -79,13 +79,17 @@ class A {
 //=
 class A {
     // Definition comment
-void member()
+    void member()
     try
     {
-    return;
-}/*1*/
-catch (int e) { /*2*/ }/*3*/
-catch (int e) { /*4*/ }
+        return;
+    } /*1*/
+    catch(int e){
+        /*2*/
+    }
+     /*3*/catch(int e){
+        /*4*/
+    }
 };
 //!ImplToHeaderBodyCommentWithoutDeclaration
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -114,6 +118,7 @@ void member()
     // body comment
     return;
 }
+
 //!ImplToHeaderTopCommentWithoutDeclaration
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
 //@.config
@@ -144,3 +149,4 @@ void member()
     // body comment
     return;
 }
+

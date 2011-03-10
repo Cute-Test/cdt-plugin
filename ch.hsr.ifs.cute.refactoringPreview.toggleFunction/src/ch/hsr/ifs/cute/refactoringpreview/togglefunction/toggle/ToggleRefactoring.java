@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -24,7 +24,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ui.ide.IDE;
@@ -37,17 +37,17 @@ import org.eclipse.ui.ide.IDE;
 @SuppressWarnings("restriction")
 public class ToggleRefactoring extends CRefactoring {
 
-	private TextSelection selection;
+	private ITextSelection selection;
 	private IToggleRefactoringStrategy strategy;
 	protected ToggleRefactoringContext context;
 	private IIndex fIndex;
 	
-	public ToggleRefactoring(IFile file, TextSelection selection, ICProject proj) {
+	public ToggleRefactoring(IFile file, ITextSelection selection, ICProject proj) {
 		super(file, selection, null, proj);
 		if (selection == null || file == null || project == null)
-			initStatus.addFatalError("Invalid selection");
+			initStatus.addFatalError(Messages.ToggleRefactoring_InvalidSelection);
 		if (!IDE.saveAllEditors(new IResource[] {ResourcesPlugin.getWorkspace().getRoot()}, false))
-			initStatus.addFatalError("Cannot save files");
+			initStatus.addFatalError(Messages.ToggleRefactoring_CanNotSaveFiles);
 		this.selection = selection;
 	}
 
@@ -55,9 +55,9 @@ public class ToggleRefactoring extends CRefactoring {
 	public RefactoringStatus checkInitialConditions(IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		try {
-			pm.subTask("waiting for indexer");
+			pm.subTask(Messages.ToggleRefactoring_WaitingForIndexer);
 			prepareIndexer(pm);
-			pm.subTask("analyzing user text selection");
+			pm.subTask(Messages.ToggleRefactoring_AnalyseSelection);
 			context = new ToggleRefactoringContext(fIndex, file, selection);
 			strategy = new ToggleStrategyFactory(context).getAppropriateStategy();
 		} catch (InterruptedException e) {
@@ -75,10 +75,10 @@ public class ToggleRefactoring extends CRefactoring {
 		while (!im.isProjectIndexed(project)) {
 			im.joinIndexer(500, pm);
 			if (pm.isCanceled())
-				throw new NotSupportedException("not able to work without the indexer");
+				throw new NotSupportedException(Messages.ToggleRefactoring_NoIndex);
 		}
 		if (!im.isProjectIndexed(project))
-			throw new NotSupportedException("not able to work without the indexer");
+			throw new NotSupportedException(Messages.ToggleRefactoring_NoIndex);
 		IndexerPreferences.set(project.getProject(), IndexerPreferences.KEY_INDEX_UNUSED_HEADERS_WITH_DEFAULT_LANG, Boolean.TRUE.toString());
 		fIndex = CCorePlugin.getIndexManager().getIndex(project);
 		fIndex.acquireReadLock();
@@ -87,7 +87,7 @@ public class ToggleRefactoring extends CRefactoring {
 	@Override
 	protected void collectModifications(IProgressMonitor pm,
 			ModificationCollector modifications) throws CoreException {
-		pm.subTask("calculating required code modifications");
+		pm.subTask(Messages.ToggleRefactoring_CalculateModifications);
 		strategy.run(modifications);
 	}
 

@@ -38,8 +38,8 @@ namespace N {
     class A {
         void foo()
         {
-    return;
-}
+            return;
+        }
     };
 }
 //!TestImplementationToClassWithDeclarationSelected
@@ -64,8 +64,8 @@ namespace N {
     class A {
         void foo()
         {
-    return;
-}
+            return;
+        }
     };
 }
 

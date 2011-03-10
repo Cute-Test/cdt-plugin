@@ -23,8 +23,9 @@ class A {
 
 inline void A::B::member(int a, int b)
 {
-            return;
-        }
+    return;
+}
+
 
 //!TestNestedClassInHeaderToImplementation
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -73,6 +74,7 @@ void A::B::member(int a, int b)
     return;
 }
 
+
 //!TestNestedClassInImplementationToClass
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
 //@.config
@@ -113,7 +115,7 @@ class A {
     class B {
         void member(int a, int b)
         {
-    return;
-}
+            return;
+        }
     };
 };

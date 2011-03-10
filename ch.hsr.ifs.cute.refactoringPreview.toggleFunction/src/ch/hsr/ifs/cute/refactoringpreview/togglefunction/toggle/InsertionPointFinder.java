@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -13,12 +13,12 @@ package ch.hsr.ifs.cute.refactoringpreview.togglefunction.toggle;
 
 import java.util.ArrayList;
 
+import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
@@ -76,7 +76,7 @@ public class InsertionPointFinder {
 	}
 	
 	/**
-	 * @param unit, the translation unit where to find the definitions
+	 * @param unit the translation unit where to find the definitions
 	 */
 	private static void findAllDefinitionsoutSideClass(IASTTranslationUnit unit) {
 		final ArrayList<ICPPASTFunctionDefinition> definitions = new ArrayList<ICPPASTFunctionDefinition>();
@@ -85,7 +85,7 @@ public class InsertionPointFinder {
 			return;
 		}
 		unit.accept(
-			new CPPASTVisitor() {
+			new ASTVisitor() {
 				{
 					shouldVisitDeclarations = true;
 				}
@@ -107,7 +107,7 @@ public class InsertionPointFinder {
 		final ArrayList<ICPPASTFunctionDeclarator> declarations = new ArrayList<ICPPASTFunctionDeclarator>();
 		
 		klass.accept(
-				new CPPASTVisitor() {
+				new ASTVisitor() {
 				{
 					shouldVisitDeclarators = true;
 				}
@@ -134,7 +134,7 @@ public class InsertionPointFinder {
 		final Container<ICPPASTCompositeTypeSpecifier> result = new Container<ICPPASTCompositeTypeSpecifier>();
 
 		unit.accept(
-			new CPPASTVisitor() {
+			new ASTVisitor() {
 			{
 				shouldVisitDeclSpecifiers = true;
 			}

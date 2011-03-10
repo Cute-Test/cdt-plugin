@@ -21,6 +21,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 @SuppressWarnings("restriction")
 class EmptyRefactoringDescription extends CRefactoringDescription {
+	@SuppressWarnings("nls")
 	public EmptyRefactoringDescription() {
 		super("id", "proj", "desc", "comment", 0, new HashMap<String, String>());
 	}

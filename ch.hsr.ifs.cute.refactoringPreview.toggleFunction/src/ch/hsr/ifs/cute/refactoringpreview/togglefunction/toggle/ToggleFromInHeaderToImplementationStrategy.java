@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -11,17 +11,41 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.refactoringpreview.togglefunction.toggle;
 
+import java.util.List;
+
+import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTArrayModifier;
+import org.eclipse.cdt.core.dom.ast.IASTComment;
+import org.eclipse.cdt.core.dom.ast.IASTCopyLocation;
+import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTEnumerationSpecifier.IASTEnumerator;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
+import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
+import org.eclipse.cdt.core.dom.ast.IASTProblem;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTTypeId;
+import org.eclipse.cdt.core.dom.ast.c.ICASTDesignator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCapture;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCatchHandler;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionWithTryBlock;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateParameter;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.cdt.core.dom.rewrite.ASTRewrite.CommentPosition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName;
 import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
@@ -38,11 +62,10 @@ public class ToggleFromInHeaderToImplementationStrategy implements IToggleRefact
 	private ASTLiteralNode includenode;
 
 	public ToggleFromInHeaderToImplementationStrategy(final ToggleRefactoringContext context) {
-		this.infoText = new TextEditGroup("Toggle function body placement");
+		this.infoText = new TextEditGroup(Messages.EditGroupName);
 		this.context = context;
 	}
 
-	@Override
 	public void run(ModificationCollector collector) {
 		newFileCheck();
 		ICPPASTFunctionDefinition newDefinition = getNewDefinition();
@@ -80,22 +103,154 @@ public class ToggleFromInHeaderToImplementationStrategy implements IToggleRefact
 				context.getDeclarationUnit());
 		ASTRewrite newRewriter = implRewrite.insertBefore(insertionParent, 
 				insertionPoint, newDefinition, infoText);
+		copyCommentsToNewFile(newDefinition, newRewriter, collector.rewriterForTranslationUnit(context.getDefinitionUnit()));
+		restoreLeadingComments(newDefinition, newRewriter, collector);
+	}
+
+	private void copyCommentsToNewFile(ICPPASTFunctionDefinition newDefinition, final ASTRewrite newRewriter,
+			final ASTRewrite oldRewriter) {
+		newDefinition.accept(new ASTVisitor(true) {
+			
+			private void copy(IASTNode node) {
+				copyComments(node, newRewriter, oldRewriter, CommentPosition.leading);
+				copyComments(node, newRewriter, oldRewriter, CommentPosition.trailing);
+				copyComments(node, newRewriter, oldRewriter, CommentPosition.freestanding);
+			}
+
+			private void copyComments(IASTNode node, ASTRewrite newRewriter, ASTRewrite oldRewriter,
+					CommentPosition pos) {
+				if (node.getNodeLocations().length > 0 && node.getNodeLocations()[0] instanceof IASTCopyLocation) {
+					IASTCopyLocation copyLoc = (IASTCopyLocation) node.getNodeLocations()[0];
+					List<IASTComment> comments = oldRewriter.getComments(copyLoc.getOriginalNode(), pos);
+					for (IASTComment comment : comments) {
+						newRewriter.addComment(node, comment, pos);
+					}
+				}
+				
+			}
+
+			@Override
+			public int visit(IASTName name) {
+				copy(name);
+				return super.visit(name);
+			}
+
+			@Override
+			public int visit(IASTDeclaration declaration) {
+				copy(declaration);
+				return super.visit(declaration);
+			}
+
+			@Override
+			public int visit(IASTInitializer initializer) {
+				copy(initializer);
+				return super.visit(initializer);
+			}
+
+			@Override
+			public int visit(IASTParameterDeclaration parameterDeclaration) {
+				copy(parameterDeclaration);
+				return super.visit(parameterDeclaration);
+			}
+
+			@Override
+			public int visit(IASTDeclarator declarator) {
+				copy(declarator);
+				return super.visit(declarator);
+			}
+
+			@Override
+			public int visit(IASTDeclSpecifier declSpec) {
+				copy(declSpec);
+				return super.visit(declSpec);
+			}
+
+			@Override
+			public int visit(IASTArrayModifier arrayModifier) {
+				copy(arrayModifier);
+				return super.visit(arrayModifier);
+			}
+
+			@Override
+			public int visit(IASTPointerOperator ptrOperator) {
+				copy(ptrOperator);
+				return super.visit(ptrOperator);
+			}
+
+			@Override
+			public int visit(IASTExpression expression) {
+				copy(expression);
+				return super.visit(expression);
+			}
+
+			@Override
+			public int visit(IASTStatement statement) {
+				copy(statement);
+				return super.visit(statement);
+			}
+
+			@Override
+			public int visit(IASTTypeId typeId) {
+				copy(typeId);
+				return super.visit(typeId);
+			}
+
+			@Override
+			public int visit(IASTEnumerator enumerator) {
+				copy(enumerator);
+				return super.visit(enumerator);
+			}
+
+			@Override
+			public int visit(IASTProblem problem) {
+				copy(problem);
+				return super.visit(problem);
+			}
+
+			@Override
+			public int visit(ICPPASTBaseSpecifier baseSpecifier) {
+				copy(baseSpecifier);
+				return super.visit(baseSpecifier);
+			}
+
+			@Override
+			public int visit(ICPPASTNamespaceDefinition namespaceDefinition) {
+				copy(namespaceDefinition);
+				return super.visit(namespaceDefinition);
+			}
+
+			@Override
+			public int visit(ICPPASTTemplateParameter templateParameter) {
+				copy(templateParameter);
+				return super.visit(templateParameter);
+			}
+
+			@Override
+			public int visit(ICPPASTCapture capture) {
+				copy(capture);
+				return super.visit(capture);
+			}
+
+			@Override
+			public int visit(ICASTDesignator designator) {
+				copy(designator);
+				return super.visit(designator);
+			}
+		});
 		
-		restoreBody(newDefinition, newRewriter);
-		restoreLeadingComments(newDefinition, newRewriter);
 	}
 
 	private void newFileCheck() {
 		impl_unit = context.getTUForSiblingFile();
 		if (this.impl_unit == null) {
-			ToggleFileCreator filecreator = new ToggleFileCreator(context, ".cpp");
+			ToggleFileCreator filecreator = new ToggleFileCreator(context, ".cpp"); //$NON-NLS-1$
 			if (filecreator.askUserForFileCreation(context)) {
 				filecreator.createNewFile();
 				impl_unit = filecreator.loadTranslationUnit();
 				includenode = new ASTLiteralNode(filecreator.getIncludeStatement());
 			}
 			else {
-				throw new NotSupportedException("Cannot create new Implementation File");
+				throw new NotSupportedException(Messages.ToggleFromInHeaderToImplementationStrategy_CanNotCreateImplFile);
 			}
 		}
 	}
@@ -122,19 +277,18 @@ public class ToggleFromInHeaderToImplementationStrategy implements IToggleRefact
 		return insertion_point;
 	}
 
-	private void restoreBody(ICPPASTFunctionDefinition newDefinition,
-			ASTRewrite newRewriter) {
-		String body = ToggleNodeHelper.getBody(context.getDefinition(), context.getDefinitionUnit());
-		newRewriter.replace(newDefinition.getBody(), new ASTLiteralNode(body), infoText);
-	}
-
 	private void restoreLeadingComments(
-			ICPPASTFunctionDefinition newDefinition, ASTRewrite newRewriter) {
-		String definitionLeading = ToggleNodeHelper.getLeadingComments(
-				context.getDefinition(), context.getDefinitionUnit());
-		String newDeclSpec = newDefinition.getDeclSpecifier().toString();
-		newRewriter.replace(newDefinition.getDeclSpecifier(),
-				new ASTLiteralNode(definitionLeading + newDeclSpec), infoText);
+			ICPPASTFunctionDefinition newDefinition, ASTRewrite newRewriter, ModificationCollector collector) {
+		ASTRewrite rw = collector.rewriterForTranslationUnit(context.getDefinitionUnit());
+		List<IASTComment>comments = rw.getComments(context.getDefinition(), CommentPosition.leading);
+		if(comments != null) {
+			for (IASTComment comment : comments) {
+				newRewriter.addComment(newDefinition, comment, CommentPosition.leading);
+				if(context.getDeclaration() != null) {
+					rw.remove(comment, infoText);
+				}
+			}
+		}
 	}
 
 	private void replaceDefinitionWithDeclaration(
@@ -148,10 +302,18 @@ public class ToggleFromInHeaderToImplementationStrategy implements IToggleRefact
 	private ICPPASTFunctionDefinition getNewDefinition() {
 		ICPPASTFunctionDefinition newDefinition =
 			ToggleNodeHelper.createFunctionSignatureWithEmptyBody(
-					context.getDefinition().getDeclSpecifier().copy(), 
-					context.getDefinition().getDeclarator().copy(), 
-					context.getDefinition().copy());
+				context.getDefinition().getDeclSpecifier().copy(CopyStyle.withLocations), context
+						.getDefinition().getDeclarator().copy(CopyStyle.withLocations), context
+						.getDefinition().copy(CopyStyle.withLocations));
 		newDefinition.getDeclSpecifier().setInline(false);
+		newDefinition.setBody(context.getDefinition().getBody().copy(CopyStyle.withLocations));
+		if (newDefinition instanceof ICPPASTFunctionWithTryBlock) {
+			ICPPASTFunctionWithTryBlock newTryFun = (ICPPASTFunctionWithTryBlock) newDefinition;
+			ICPPASTFunctionWithTryBlock oldTryFun = (ICPPASTFunctionWithTryBlock) context.getDefinition();
+			for (ICPPASTCatchHandler catchHandler : oldTryFun.getCatchHandlers()) {				
+				newTryFun.addCatchHandler(catchHandler.copy(CopyStyle.withLocations));
+			}
+		}
 		return newDefinition;
 	}
 
@@ -181,7 +343,8 @@ public class ToggleFromInHeaderToImplementationStrategy implements IToggleRefact
 	private CPPASTNamespaceDefinition createNamespace(
 			ICPPASTNamespaceDefinition parent_namespace) {
 		CPPASTNamespaceDefinition insertionParent = new CPPASTNamespaceDefinition(
-				parent_namespace.getName().copy());
+parent_namespace.getName()
+				.copy(CopyStyle.withLocations));
 		insertionParent.setParent(impl_unit);
 		return insertionParent;
 	}
@@ -195,7 +358,7 @@ public class ToggleFromInHeaderToImplementationStrategy implements IToggleRefact
 	private IASTNode searchNamespaceInImplementation(final IASTName name) {
 		final Container<IASTNode> result = new Container<IASTNode>();
 		this.impl_unit.accept(
-				new CPPASTVisitor() {
+new ASTVisitor() {
 					{
 						shouldVisitNamespaces = true;
 					}

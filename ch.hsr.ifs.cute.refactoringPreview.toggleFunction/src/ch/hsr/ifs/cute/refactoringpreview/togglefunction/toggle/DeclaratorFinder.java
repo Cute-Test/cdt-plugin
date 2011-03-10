@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -20,7 +20,7 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.ITextSelection;
 
 /**
  * Given a selection and a translation unit, this class finds a
@@ -31,14 +31,14 @@ public class DeclaratorFinder {
 
 	private IASTFunctionDeclarator foundDeclarator;
 
-	public DeclaratorFinder(TextSelection selection, IASTTranslationUnit unit) {
+	public DeclaratorFinder(ITextSelection selection, IASTTranslationUnit unit) {
 		foundDeclarator = findDeclaratorInSelection(selection, unit);
 
 		if (foundDeclarator == null) {
-			throw new NotSupportedException("cannot work without declarator");
+			throw new NotSupportedException(Messages.DeclaratorFinder_NoDeclarator);
 		}
 		if (isPartOfAStatement(foundDeclarator)) {
-			throw new NotSupportedException("Nested function declarations not supported");
+			throw new NotSupportedException(Messages.DeclaratorFinder_NestedFunction);
 		}
 	}
 
@@ -47,11 +47,12 @@ public class DeclaratorFinder {
 	}
 
 	private IASTFunctionDeclarator findDeclaratorInSelection(
-			TextSelection selection, IASTTranslationUnit unit) {
+ITextSelection selection,
+			IASTTranslationUnit unit) {
 		return findAffectedNode(selection, unit);
 	}
 
-	private IASTFunctionDeclarator findAffectedNode(TextSelection selection,
+	private IASTFunctionDeclarator findAffectedNode(ITextSelection selection,
 			IASTTranslationUnit unit) {
 		IASTNode firstNodeInsideSelection = unit.getNodeSelector(null)
 				.findFirstContainedNode(selection.getOffset(),

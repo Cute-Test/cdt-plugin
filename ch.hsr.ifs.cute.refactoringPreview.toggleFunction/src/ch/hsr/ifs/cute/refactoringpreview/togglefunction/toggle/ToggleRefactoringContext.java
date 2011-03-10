@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -17,8 +17,8 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.index.IIndex;
-import org.eclipse.cdt.core.index.IIndexBinding;
 import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.internal.ui.refactoring.utils.TranslationUnitHelper;
@@ -26,7 +26,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.cute.refactoringpreview.togglefunction.IndexToASTNameHelper;
 
@@ -40,12 +40,12 @@ public class ToggleRefactoringContext {
 	private IIndex index;
 	private IASTTranslationUnit selectionUnit;
 	private IFile selectionFile;
-	private IIndexBinding binding;
+	private IBinding binding;
 	private IASTName selectionName;
 	private boolean defaultAnswer;
 	private boolean settedDefaultAnswer;
 
-	public ToggleRefactoringContext(IIndex index, IFile file, TextSelection selection) {
+	public ToggleRefactoringContext(IIndex index, IFile file, ITextSelection selection) {
 		this.index = index;
 		this.selectionFile = file;
 		findSelectionUnit();
@@ -55,13 +55,16 @@ public class ToggleRefactoringContext {
 		findDefinition();
 	}
 
-	public void findSelectedFunctionDeclarator(TextSelection selection) {
+	public void findSelectedFunctionDeclarator(ITextSelection selection) {
 		selectionName = new DeclaratorFinder(selection, selectionUnit).getName();
 	}
 
 	public void findBinding() {
 		try {
 			binding = index.findBinding(selectionName);
+			if(binding == null) {
+				binding = selectionName.resolveBinding();
+			}
 		} catch (CoreException e) {
 		}
 	}
@@ -72,7 +75,7 @@ public class ToggleRefactoringContext {
 			IIndexName[] decnames = index.findNames(binding, IIndex.FIND_DECLARATIONS);
 			if (decnames.length > 1)
 				throw new NotSupportedException(
-						"multiple declarations would result in ambiguous results");
+						Messages.ToggleRefactoringContext_MultipleDeclarations);
 			for (IIndexName iname : decnames) {
 				selectionUnit = getTUForNameinFile(iname);
 				IASTName astname = IndexToASTNameHelper.findMatchingASTName(
@@ -91,7 +94,7 @@ public class ToggleRefactoringContext {
 		try {
 			IIndexName[] defnames = index.findNames(binding, IIndex.FIND_DEFINITIONS);
 			if (defnames.length > 1) {
-				throw new NotSupportedException("one-definition-rule broken");
+				throw new NotSupportedException(Messages.ToggleRefactoringContext_MultipleDefinitions);
 			}
 			for (IIndexName iname : defnames) {
 				IASTTranslationUnit unit = getTUForNameinFile(iname);
@@ -106,7 +109,7 @@ public class ToggleRefactoringContext {
 		} catch (CoreException e) {
 		}
 		if (targetDefinition == null)
-			throw new NotSupportedException("cannot work without definition");
+			throw new NotSupportedException(Messages.ToggleRefactoringContext_NoDefinitionFound);
 	}
 
 	public IASTFunctionDeclarator getDeclaration() {
@@ -147,7 +150,7 @@ public class ToggleRefactoringContext {
 		} catch (Exception e) {
 		}
 		if (selectionUnit == null)
-			throw new NotSupportedException("not able to work without translation unit");
+			throw new NotSupportedException(Messages.ToggleRefactoringContext_NoTuFound);
 	}
 
 	private IASTTranslationUnit getTUForNameinFile(IIndexName iname)

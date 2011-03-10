@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 Institute for Software, HSR Hochschule fuer Technik  
+ * Copyright (c) 2011 Institute for Software, HSR Hochschule fuer Technik  
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
@@ -15,27 +15,28 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.INodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCatchHandler;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionWithTryBlock;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
-import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.text.edits.TextEditGroup;
 
 @SuppressWarnings("restriction")
 public class ToggleFromClassToInHeaderStrategy implements IToggleRefactoringStrategy {
 
-	protected TextEditGroup infoText = new TextEditGroup("Toggle function body placement");
+	protected TextEditGroup infoText = new TextEditGroup(Messages.EditGroupName);
 	private ToggleRefactoringContext context;
 
 	public ToggleFromClassToInHeaderStrategy(ToggleRefactoringContext context) {
 		if (isInClass(context.getDeclaration()) && isInClass(context.getDefinition()))
-			throw new NotSupportedException("Definition and Declaration both inside class. Behavoir is undefined.");
+			throw new NotSupportedException(Messages.ToggleFromClassToInHeaderStrategy_DefAndDecInsideClass);
 		this.context = context;
 	}
 
@@ -50,16 +51,22 @@ public class ToggleFromClassToInHeaderStrategy implements IToggleRefactoringStra
 		IASTSimpleDeclaration newDeclaration = getNewDeclaration();
 		ASTRewrite rewriter = replaceDefinitionWithDeclaration(modifications, newDeclaration);
 		IASTNode insertion_point = getInsertionPoint(parentNamespace);
-		ASTRewrite newRewriter = rewriter.insertBefore(parentNamespace, 
+		rewriter.insertBefore(parentNamespace, 
 				insertion_point, newDefinition, infoText);
-		restoreBody(newDefinition, newRewriter);
-		restoreLeadingComments(newDeclaration, rewriter);
 	}
 
 	private IASTNode getNewDefinition(IASTNode parentNamespace) {
 		IASTNode newDefinition = ToggleNodeHelper.getQualifiedNameDefinition(
 				context.getDefinition(), context.getDefinitionUnit(), parentNamespace);
-		
+		((IASTFunctionDefinition) newDefinition).setBody(context.getDefinition().getBody()
+				.copy(CopyStyle.withLocations));
+		if (newDefinition instanceof ICPPASTFunctionWithTryBlock) {
+			ICPPASTFunctionWithTryBlock newTryFun = (ICPPASTFunctionWithTryBlock) newDefinition;
+			ICPPASTFunctionWithTryBlock oldTryFun = (ICPPASTFunctionWithTryBlock) context.getDefinition();
+			for (ICPPASTCatchHandler catchH : oldTryFun.getCatchHandlers()) {
+				newTryFun.addCatchHandler(catchH.copy(CopyStyle.withLocations));
+			}
+		}
 		ICPPASTTemplateDeclaration templdecl = ToggleNodeHelper.getTemplateDeclaration(
 				context.getDefinition(), (IASTFunctionDefinition) newDefinition);
 		if (templdecl != null) {
@@ -93,31 +100,14 @@ public class ToggleFromClassToInHeaderStrategy implements IToggleRefactoringStra
 		return rewriter;
 	}
 
-	private void restoreBody(IASTNode newDefinition, ASTRewrite newRewriter) {
-		ICPPASTFunctionDefinition funcDefinition = ToggleNodeHelper.getFunctionDefinition(newDefinition);
-		String bodyWithComments = ToggleNodeHelper.getBody(
-				context.getDefinition(), context.getDefinitionUnit());
-		newRewriter.replace(funcDefinition.getBody(), 
-				new ASTLiteralNode(bodyWithComments), infoText);
-	}
-
-	private void restoreLeadingComments(IASTSimpleDeclaration newDeclaration,
-			ASTRewrite rewriter) {
-		String leadingDefComments = ToggleNodeHelper.getLeadingComments(
-				context.getDefinition(), context.getDefinitionUnit());
-		String leadingDecComments = ToggleNodeHelper.getLeadingComments(
-				context.getDeclaration(), context.getDeclarationUnit());
-		String newDeclSpec = newDeclaration.getDeclSpecifier().toString();
-		rewriter.replace(newDeclaration.getDeclSpecifier(), new ASTLiteralNode(
-				leadingDecComments + leadingDefComments + newDeclSpec), infoText);
-	}
-
 	private IASTSimpleDeclaration getNewDeclaration() {
-		CPPNodeFactory factory = new CPPNodeFactory();
-		IASTDeclSpecifier newDeclSpecifier = context.getDefinition().getDeclSpecifier().copy();
+		INodeFactory factory = context.getDefinitionUnit().getASTNodeFactory();
+		IASTDeclSpecifier newDeclSpecifier = context.getDefinition().getDeclSpecifier()
+				.copy(CopyStyle.withLocations);
 		newDeclSpecifier.setInline(false);
 		IASTSimpleDeclaration newDeclaration = factory.newSimpleDeclaration(newDeclSpecifier);
-		IASTFunctionDeclarator newDeclarator = context.getDefinition().getDeclarator().copy();
+		IASTFunctionDeclarator newDeclarator = context.getDefinition().getDeclarator()
+				.copy(CopyStyle.withLocations);
 		newDeclaration.addDeclarator(newDeclarator);
 		newDeclaration.setParent(context.getDefinition().getParent());
 		return newDeclaration;

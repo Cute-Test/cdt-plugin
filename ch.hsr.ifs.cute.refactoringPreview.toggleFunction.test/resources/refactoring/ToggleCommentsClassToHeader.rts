@@ -17,9 +17,10 @@ class A {
 
 inline void A::member()
 {
-        // return comment
-        return;
-    }
+    // return comment
+    return;
+}
+
 
 //!ClassToHeaderTopCommentOrder
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -43,8 +44,9 @@ class A {
 
 inline void A::member()
 {
-        return;
-    }
+    return;
+}
+
 
 //!ClassToHeaderCatchComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -67,10 +69,12 @@ class A {
 inline void A::member()
 try
 {
-        return;
-    }catch (int i) {
-        // catch comment
-    }
+    return;
+}
+catch(int i){
+    // catch comment
+}
+
 
 //!ClassToHeaderTopComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -92,8 +96,9 @@ class A {
 
 inline void A::member()
 {
-        return;
-    }
+    return;
+}
+
 
 //!ClassToHeaderTemplateTopComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -116,10 +121,12 @@ class A {
 
 };
 
+// Top comment
 template<typename T> inline T A::member()
 {
-        return T();
-    }
+    return T();
+}
+
 
 //!ClassToHeaderTrailingComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -139,8 +146,8 @@ class A {
 
 inline void A::member()
 {
-        return;
-    }// Trailing comment
+    return;
+} // Trailing comment
 
 
 //!ClassToHeaderTrailingCommentWithTryBlock
@@ -163,10 +170,11 @@ class A {
 inline void A::member()
 try
 {
-        return;
-    }catch (int e) {
-    }// Trailing comment
-
+    return;
+}
+catch(int e){
+}
+ // Trailing comment
 
 //!ClassToHeaderTrailingMultipleCommentsInTryBlock
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -191,13 +199,13 @@ class A {
 inline int A::member()
 try
 {
-        // aans
-    }/* one */
-catch (int i) {
-        // zwaa
-    }/* two */
-catch (int j) {
-        // draa
-    }/* three */
-
+    // aans
+} /* one */
+catch(int i){
+    // zwaa
+}
+ /* two */catch(int j){
+    // draa
+}
+ /* three */
 

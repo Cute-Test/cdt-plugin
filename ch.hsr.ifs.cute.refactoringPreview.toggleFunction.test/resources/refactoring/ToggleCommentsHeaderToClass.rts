@@ -17,9 +17,9 @@ template<typename T>
 class A {
     T member()
     {
-    // body comment
-    return T();
-}
+        // body comment
+        return T();
+    }
 };
 
 
@@ -45,18 +45,18 @@ inline T A<T>::member()
 //=
 template<typename T>
 class A {
-	// First comment
-	// Second comment
-// Third comment
-// Fourth comment
-T member()
+	// Third comment
+    // Fourth comment
+    // First comment
+    // Second comment
+    T member()
     {
-    return T();
-}
+        return T();
+    }
 };
 
-// Third comment
-// Fourth comment
+
+
 
 //!HeaderToClassTryCatchComment
 //#ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.toggle.ToggleRefactoringTest
@@ -82,13 +82,15 @@ class A {
     T member()
     try
     {
-    // body comment
-    return T();
-}catch(int e) {
-    // Catch 1
-}catch(int e) {
-    // Catch 2
-}
+        // body comment
+        return T();
+    }
+    catch(int e){
+        // Catch 1
+    }
+    catch(int e){
+        // Catch 2
+    }
 };
 
 
@@ -118,9 +120,10 @@ class A {
     template<typename U, typename V>
     T member()
     {
-    // body comment
-    return T();
-}
+        // body comment
+        return T();
+    }
+
 
 };
 
@@ -144,11 +147,11 @@ template<typename T> inline T A<T>::member() {
 template<typename T>
 class A {
     // Top comment
-T member()
+    T member()
     {
-    return T();
-}
+        return T();
+    }
 };
 
-// Top comment
+
 
