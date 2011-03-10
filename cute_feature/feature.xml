@@ -46,7 +46,7 @@
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.managedbuilder.ui" version="7.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.core" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.core.cxx" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.ui" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="compatible"/>
       <import plugin="org.eclipse.compare" version="3.4.0" match="compatible"/>
