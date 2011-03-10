@@ -16,11 +16,8 @@ import java.util.Vector;
 public abstract class TestElement {
 	
 	protected Vector<ITestElementListener> listeners = new Vector<ITestElementListener>();
+	private ITestComposite parent;
 	
-	public abstract ITestComposite getParent();
-	
-	public abstract void setParent(ITestComposite parent);
-
 	public abstract String getName();
 
 	public abstract TestStatus getStatus();
@@ -39,6 +36,14 @@ public abstract class TestElement {
 		for (ITestElementListener lis : listeners) {
 			lis.modelCanged(this, event);
 		}
+	}
+
+	public ITestComposite getParent() {
+		return parent;
+	}
+
+	public void setParent(ITestComposite parent) {
+		this.parent = parent;
 	}
 
 }

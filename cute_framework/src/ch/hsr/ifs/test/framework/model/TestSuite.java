@@ -21,8 +21,6 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 	
 	private String name = ""; //$NON-NLS-1$
 	
-	private ITestComposite parent;
-	
 	private int totalTests = 0; 
 	private int success = 0;
 	private int failure = 0;
@@ -119,9 +117,19 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 		return getName();
 	}
 
-	public void end() {
+	/**
+	 * @since 3.0
+	 */
+	public void end(TestCase currentTestCase) {
+		if(testsPerformed() != getTotalTests() && currentTestCase != null) {
+			currentTestCase.endTest(null, 0, new TestResult("Test ended unexpectedly"), TestStatus.error); //$NON-NLS-1$
+		}
 		setEndStatus();
 		notifyListeners(new NotifyEvent(NotifyEvent.EventType.suiteFinished, this));
+	}
+
+	private int testsPerformed() {
+		return error + failure + success;
 	}
 
 	public void addTestElement(TestElement element) {
@@ -135,16 +143,6 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 
 	public Vector<TestElement> getElements() {
 		return cases;
-	}
-
-	@Override
-	public ITestComposite getParent() {
-		return parent;
-	}
-
-	@Override
-	public void setParent(ITestComposite parent) {
-		this.parent = parent;
 	}
 
 	public void modelCanged(TestElement source, NotifyEvent event) {

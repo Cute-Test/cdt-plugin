@@ -60,16 +60,19 @@ public class CuteModel {
 	public void endSuite() {
 		if (currentParent instanceof TestSuite) {
 			TestSuite suite = (TestSuite) currentParent;
-			suite.end();
+			suite.end(null);
 			currentParent = suite.getParent();
 		}
 		
 	}
 	
-	public void endSession() {
+	/**
+	 * @since 3.0
+	 */
+	public void endSession(TestCase currentTestCase) {
 		if (currentParent instanceof TestSuite) {
 			TestSuite suite = (TestSuite) currentParent;
-			suite.end();
+			suite.end(currentTestCase);
 		}
 		notifyListenerSessionEnd(session);
 	}

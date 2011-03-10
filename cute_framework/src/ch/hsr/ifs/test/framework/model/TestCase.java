@@ -29,22 +29,10 @@ public class TestCase extends TestElement {
 	
 	private TestResult result;
 	
-	private ITestComposite parent = null;
-
 	public TestCase(String name) {
 		super();
 		this.name = name;
 		status = TestStatus.running;
-	}
-
-	@Override
-	public ITestComposite getParent() {
-		return parent;
-	}
-
-	@Override
-	public void setParent(ITestComposite parent) {
-		this.parent = parent;
 	}
 
 	public IFile getFile() {

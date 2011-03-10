@@ -42,10 +42,12 @@ public class ModellBuilder extends TestEventHandler {
 
 	public void handleError(IRegion reg, String testName, String msg) {
 		model.endCurrentTestCase(null, -1, msg, TestStatus.error, currentTestCase);
+		currentTestCase = null;
 	}
 
 	public void handleSuccess(IRegion reg, String name, String msg) {
-		model.endCurrentTestCase(null, -1, msg, TestStatus.success, currentTestCase);	
+		model.endCurrentTestCase(null, -1, msg, TestStatus.success, currentTestCase);
+		currentTestCase = null;
 	}
 
 	public void handleEnding(IRegion reg, String suitename) {
@@ -61,6 +63,7 @@ public class ModellBuilder extends TestEventHandler {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
 		int lineNumber = Integer.parseInt(lineNo);
 		model.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase);
+		currentTestCase = null;
 		
 	}
 	
@@ -71,13 +74,12 @@ public class ModellBuilder extends TestEventHandler {
 
 	@Override
 	public void handleSessionEnd() {
-		model.endSession();
+		model.endSession(currentTestCase);
 	}
 
 	@Override
 	public void handleSessionStart() {
 		model.startSession(launch);
 	}
-
 
 }
