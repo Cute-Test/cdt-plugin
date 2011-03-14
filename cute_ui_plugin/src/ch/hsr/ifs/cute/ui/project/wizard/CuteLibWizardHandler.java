@@ -11,12 +11,11 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICOutputEntry;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
@@ -30,13 +29,11 @@ import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -78,33 +75,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		}
 	}
 
-	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=229085
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	//@see org.eclipse.cdt.managedbuilder.core.tests/tests/org/eclipse/cdt/projectmodel/tests/ProjectModelTests.testReferences()
-	protected void createCDTProjectReference(IProject project) throws CoreException {
-		CoreModel coreModel = CoreModel.getDefault();
-		ICProjectDescription des4 = coreModel.getProjectDescription(project);
-		ICConfigurationDescription dess[] = des4.getConfigurations();
-	
-		Vector<IProject> projects = libRefPage.getCheckedProjects();
-
-		Map prjRefs=null;
-		for(int x=0;x<dess.length;x++){
-			if(x==0){
-				prjRefs= new HashMap();
-				for(IProject p:projects){
-					String prjname=p.getName();
-					prjRefs.put(prjname, "");		 //$NON-NLS-1$
-				}
-			}
-			dess[x].setReferenceInfo(prjRefs);
-		}
-		coreModel.setProjectDescription(project, des4);
-		for(IProject p:projects){
-			String prjname=p.getName();
-			setLibName(prjname,project);	
-		}
-	}
 	
 	private void createLibSetings(IProject project) throws CoreException {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
@@ -127,15 +97,16 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	private void setProjectReference(IProject project, Vector<IProject> projects)
 			throws CoreException {
 		if(projects.size()>0){
-			IProjectDescription desc = project.getDescription();
-			IProject iproject[]=new IProject[projects.size()];
-			
-			for(int x=0;x<projects.size();x++){
-				iproject[x]=projects.elementAt(x);
+			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
+			ICConfigurationDescription cfgs[] = des.getConfigurations();
+			for (ICConfigurationDescription config : cfgs) {
+				Map<String, String> refMap = config.getReferenceInfo();
+				for (IProject refProject : projects) {
+					refMap.put(refProject.getName(), ""); //$NON-NLS-1$
+				}
+				config.setReferenceInfo(refMap);
 			}
-			
-			desc.setReferencedProjects(iproject);
-			project.setDescription(desc, IResource.KEEP_HISTORY, new NullProgressMonitor());
+			CCorePlugin.getDefault().setProjectDescription(project, des);
 		}
 	}
 	
