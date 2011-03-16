@@ -17,7 +17,7 @@
 		</repository>
 		<repository>
 			<id>cdt milestone</id>
-			<url>jar:http://download.eclipse.org/tools/cdt/builds/8.0.0/I.I201103111317/cdt-master-8.0.0-I201103111317.zip!/</url>
+			<url>jar:file:/home/hudson/cdt-master-8.0.0-I201103160005.zip!/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
