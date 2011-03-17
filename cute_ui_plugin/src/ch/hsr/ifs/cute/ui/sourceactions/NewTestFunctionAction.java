@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -98,7 +99,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 				astTu.accept(suitPushBackFinder);
 				
-				mEdit.addChild(createdEdit(insertFileOffset, doc, funcName));
+				mEdit.addChild(createdEdit(getInsertOffset(suitPushBackFinder, astTu), doc, funcName));
 
 				if(!checkPushback(astTu,funcName,suitPushBackFinder))
 				mEdit.addChild(createPushBackEdit(editorFile, doc, astTu,
@@ -110,7 +111,28 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 		}
 		return mEdit;
 	}
+
+	private int getInsertOffset(SuitePushBackFinder suitePushBackFinder, IASTTranslationUnit astTu) {
+		IASTName name = suitePushBackFinder.getSuiteDeclName();
+		if(name != null) {
+			IBinding binding = name.resolveBinding();
+			IASTName[] refs = astTu.getReferences(binding);
+			IASTStatement lastPushBackStmt = getLastPushBack(refs);
+			IASTFunctionDefinition funDef = getFunctionDefinition(lastPushBackStmt);
+			int offset = funDef.getFileLocation().getNodeOffset();
+			return insertFileOffset < offset ? insertFileOffset : offset;
+		}
+		return insertFileOffset;
+	}
 	
+	private IASTFunctionDefinition getFunctionDefinition(IASTStatement lastPushBackStmt) {
+		IASTNode node = lastPushBackStmt;
+		while(!(node instanceof IASTFunctionDefinition)) {
+			node = node.getParent();
+		}
+		return (IASTFunctionDefinition)node;
+	}
+
 	protected TextEdit createPushBackEdit(IFile editorFile, IDocument doc, IASTTranslationUnit astTu, String funcName, SuitePushBackFinder suitPushBackFinder) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(pushBackString(suitPushBackFinder.getSuiteDeclName().toString(),"CUTE("+funcName+")")); //$NON-NLS-1$ //$NON-NLS-2$
