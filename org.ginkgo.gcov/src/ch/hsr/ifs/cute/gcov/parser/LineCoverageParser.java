@@ -86,9 +86,11 @@ public abstract class LineCoverageParser {
 				try {
 					file.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (CoreException e) {
-					e.printStackTrace();
+					GcovPlugin.log(e);
 				}
 			}
+		}else {
+			GcovPlugin.log("Could not create gcov process"); //$NON-NLS-1$
 		}
 	}
 
@@ -136,7 +138,7 @@ public abstract class LineCoverageParser {
 						.getContents()));
 			}
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			GcovPlugin.log(e);
 		}
 	}
 

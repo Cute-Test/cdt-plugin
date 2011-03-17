@@ -13,6 +13,8 @@ package ch.hsr.ifs.cute.gcov;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -83,6 +85,19 @@ public class GcovPlugin extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+	
+	public static void log(String message) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, message));
+	}
+	
+	public static void log(Throwable e) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Error", e)); //$NON-NLS-1$
+	}
+
+	//PDE runtime:Error Log view
+	public static void log(IStatus status) {
+		getDefault().getLog().log(status);
 	}
 
 }
