@@ -118,9 +118,11 @@ public class NewTestFunctionAction extends AbstractFunctionAction{
 			IBinding binding = name.resolveBinding();
 			IASTName[] refs = astTu.getReferences(binding);
 			IASTStatement lastPushBackStmt = getLastPushBack(refs);
-			IASTFunctionDefinition funDef = getFunctionDefinition(lastPushBackStmt);
-			int offset = funDef.getFileLocation().getNodeOffset();
-			return insertFileOffset < offset ? insertFileOffset : offset;
+			if(lastPushBackStmt != null) {
+				IASTFunctionDefinition funDef = getFunctionDefinition(lastPushBackStmt);
+				int offset = funDef.getFileLocation().getNodeOffset();
+				return insertFileOffset < offset ? insertFileOffset : offset;
+			}
 		}
 		return insertFileOffset;
 	}

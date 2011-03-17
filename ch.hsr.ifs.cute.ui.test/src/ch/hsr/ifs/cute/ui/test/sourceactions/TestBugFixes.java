@@ -33,7 +33,6 @@ public class TestBugFixes //extends Test1Skeleton {
 		String testSrcCode=rtc.test.get(0);
 		
 		try{
-			//IFile inputFile=MemoryBaseTestFramework.importFile("A.cpp",testSrcCode);
 			IFile inputFile=importFile("A.cpp",testSrcCode); //$NON-NLS-1$
 			IEditorPart editor= EditorTestHelper.openInEditor(inputFile, true);
 			assertNotNull(editor);
@@ -64,24 +63,17 @@ public class TestBugFixes //extends Test1Skeleton {
 		        final Object params[] = {ILinkedModeListener.UPDATE_CARET};
 		        methods[i].setAccessible(true);
 		        methods[i].invoke(linked2ndCopy, params);
-		        //System.out.println(ret);
-		        //assertEquals("Selecting the first object in tree",ret.toString(),firstObjName);
 		        flag=false;
 		      }
 		    }
 			assertFalse(flag);
 		    
-			String results = getText(editor);
-			
-//			prettyPrintRegion(region);
-//			System.out.println("KKK\n"+results.substring(region.getOffset(),region.getOffset()+region.getLength()));    
+			String results = getText(editor);  
 			
 			ISelection see=selectionProvider.getSelection();
 			TextSelection selection = (TextSelection) see;
-//			System.out.println("texteditor:"+selection.getOffset()+" "+selection.getLength());
 			
 			results = getText(editor);
-//			System.out.println("["+results.substring(selection.getOffset(),selection.getOffset()+selection.getLength())+"]");
 			results=results.substring(selection.getOffset(),selection.getOffset()+selection.getLength());
 			
 			String expected="ASSERTM(\"start writing tests\", false);"; //$NON-NLS-1$
