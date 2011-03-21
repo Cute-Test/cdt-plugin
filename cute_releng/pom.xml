@@ -55,6 +55,8 @@
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toogleFunction.feature</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toggleFunction</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toggleFunction.test</module>
+		<!--  update site -->
+		<module>../ch.hsr.ifs.cute.buildUpdateSite</module>
 	</modules>
 	<build>
 		<plugins>
