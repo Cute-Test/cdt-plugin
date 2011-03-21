@@ -77,6 +77,7 @@ public abstract class LineCoverageParser {
 			process = DebugPlugin.newProcess(new Launch(null,ILaunchManager.RUN_MODE,null), p, programName, processAttributes);
 			if (process == null) {
 				p.destroy();
+				GcovPlugin.log("Gcov Process is null"); //$NON-NLS-1$
 			}else{
 				while (!process.isTerminated()) {
 					try {
