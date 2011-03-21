@@ -16,9 +16,9 @@ import ch.hsr.ifs.cute.refactoringpreview.togglefunction.tests.ExternalRefactori
  * Provides a facility to append performance statistics to a separate file.
  */
 public class PerformanceTestPrinter extends PerformanceTestCase {
-	private static final String TEST_RESULTS_FILE = "performanceResults.txt";
-	private static final String TEST_RESOURCE_DIRECTORY = "resources/refactoring/togglePerformance/";
-	private static final String EXECUTING_TEST_CLASS = "ToggleRefactoringTest";
+	private static final String TEST_RESULTS_FILE = "performanceResults.txt"; //$NON-NLS-1$
+	private static final String TEST_RESOURCE_DIRECTORY = "resources/refactoring/togglePerformance/"; //$NON-NLS-1$
+	private static final String EXECUTING_TEST_CLASS = "ToggleRefactoringTest"; //$NON-NLS-1$
 	private static final int DEFAULT_SAMPLE_SIZE = 100;
 	private static PrintStream resultsFile;
 	private PrintStream outstreamBackup;
@@ -27,6 +27,7 @@ public class PerformanceTestPrinter extends PerformanceTestCase {
 		setupTestResultFileRedirection();
 	}
 
+	@SuppressWarnings("nls")
 	private void setupTestResultFileRedirection() {
 		if (resultsFile != null)
 			return;

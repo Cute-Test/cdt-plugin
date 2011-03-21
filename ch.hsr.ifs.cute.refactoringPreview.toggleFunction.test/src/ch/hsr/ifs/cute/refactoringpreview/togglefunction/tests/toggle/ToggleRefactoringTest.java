@@ -26,10 +26,11 @@ public class ToggleRefactoringTest extends RefactoringTest {
 	@Override
 	protected void configureRefactoring(Properties refactoringProperties) {
 		fatalError = Boolean.valueOf(refactoringProperties.getProperty("fatalerror", "false")).booleanValue(); //$NON-NLS-1$ //$NON-NLS-2$
-		newFileCreation = Boolean.valueOf(refactoringProperties.getProperty("newfilecreation", "false")).booleanValue();
+		newFileCreation = Boolean.valueOf(refactoringProperties.getProperty("newfilecreation", "false")).booleanValue();  //$NON-NLS-1$//$NON-NLS-2$
 		newfiles = separateNewFiles(refactoringProperties);
 	}
 
+	@SuppressWarnings("nls")
 	private String[] separateNewFiles(Properties refactoringProperties) {
 		return String.valueOf(refactoringProperties.getProperty("newfiles", "")).replace(" ", "").split(",");
 	}

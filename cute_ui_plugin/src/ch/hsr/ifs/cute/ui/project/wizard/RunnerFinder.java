@@ -28,7 +28,6 @@ import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
@@ -53,7 +52,7 @@ import org.eclipse.core.runtime.SubMonitor;
 @SuppressWarnings("restriction")
 public class RunnerFinder {
 
-	private final class NameFinder extends CPPASTVisitor {
+	private final class NameFinder extends ASTVisitor {
 		private final String string;
 		{
 			shouldVisitNames = true;
@@ -211,7 +210,7 @@ public class RunnerFinder {
 
 	private IASTName findDefinitionInTranslationUnit(IASTTranslationUnit transUnit, final IIndexName indexName) {
 		final Container<IASTName> defName = new Container<IASTName>();
-		transUnit.accept(new CPPASTVisitor() {
+		transUnit.accept(new ASTVisitor() {
 			{
 				shouldVisitNames = true;
 			}

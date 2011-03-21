@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.IName;
+import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexName;
@@ -48,7 +48,7 @@ public class IndexToASTNameHelper {
 	}
 
 	private static boolean isUnnamedName(IASTName name) {
-		return name.getFileLocation() == null && "".equals(name.toString());
+		return name.getFileLocation() == null && "".equals(name.toString()); //$NON-NLS-1$
 	}
 
 	private static boolean isQualifiedName(IASTName name) {
@@ -56,7 +56,7 @@ public class IndexToASTNameHelper {
 	}
 }
 
-class IndexNameToAstNameMatcher extends CPPASTVisitor {
+class IndexNameToAstNameMatcher extends ASTVisitor {
 
 	private IASTName result;
 	private IBinding bindingToFind;
@@ -101,7 +101,7 @@ class IndexNameToAstNameMatcher extends CPPASTVisitor {
 	}
 }
 
-class BindingToAstNameMatcher extends CPPASTVisitor {
+class BindingToAstNameMatcher extends ASTVisitor {
 
 	private List<IASTName> results = new ArrayList<IASTName>();
 	private IBinding bindingToFind;

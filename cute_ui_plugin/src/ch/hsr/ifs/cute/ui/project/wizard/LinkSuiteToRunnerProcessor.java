@@ -26,7 +26,6 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
@@ -164,7 +163,7 @@ public class LinkSuiteToRunnerProcessor {
 
 }
 
-final class ListenerFinder extends CPPASTVisitor {
+final class ListenerFinder extends ASTVisitor {
 	IASTName listener = null;
 	{
 		shouldVisitStatements = true;

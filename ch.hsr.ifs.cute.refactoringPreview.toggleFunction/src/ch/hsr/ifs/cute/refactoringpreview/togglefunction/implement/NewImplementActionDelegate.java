@@ -30,8 +30,8 @@ public class NewImplementActionDelegate implements IWorkbenchWindowActionDelegat
 	@Override
 	public void run(IAction action) {
 		if (!initialize()) {
-			MessageDialog.openInformation(window.getShell(), "Information",
-					"Implement function body is not available.");
+			MessageDialog.openInformation(window.getShell(), "Information", //$NON-NLS-1$
+					"Implement function body is not available."); //$NON-NLS-1$
 			return;
 		}
 		runRefactoring(new NewImplementRefactoring(file, selection, project));

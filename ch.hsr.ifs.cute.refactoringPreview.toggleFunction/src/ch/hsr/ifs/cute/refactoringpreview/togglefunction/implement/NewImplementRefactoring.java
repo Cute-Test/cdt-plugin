@@ -50,7 +50,7 @@ public class NewImplementRefactoring extends CRefactoring {
 
 	@Override
 	protected RefactoringDescriptor getRefactoringDescriptor() {
-		return new CRefactoringDescription("id1", "proj1", "desc1", "comment1",
+		return new CRefactoringDescription("id1", "proj1", "desc1", "comment1",  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				0, new HashMap<String, String>()) {
 			@Override
 			public Refactoring createRefactoring(RefactoringStatus status)
@@ -104,7 +104,7 @@ public class NewImplementRefactoring extends CRefactoring {
 		else {
 			rewrite = collector.rewriterForTranslationUnit(getUnit());
 		}
-		TextEditGroup edit = new TextEditGroup("Toggle");
+		TextEditGroup edit = new TextEditGroup("Toggle"); //$NON-NLS-1$
 		rewrite.replace(declaration, func, edit);
 	}
 
