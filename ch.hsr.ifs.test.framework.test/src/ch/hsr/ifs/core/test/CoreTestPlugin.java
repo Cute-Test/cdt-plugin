@@ -11,6 +11,10 @@ package ch.hsr.ifs.core.test;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
+/**
+ * @author Emanuel Graf IFS
+ *
+ */
 public class CoreTestPlugin extends Plugin {
 
 	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.core.test"; //$NON-NLS-1$

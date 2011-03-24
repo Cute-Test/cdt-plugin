@@ -10,6 +10,10 @@ package ch.hsr.ifs.core.test.patternlistener;
 
 import ch.hsr.ifs.core.test.ConsoleTest;
 
+/**
+ * @author Emanuel Graf IFS
+ *
+ */
 public abstract class PatternListenerBase extends ConsoleTest {
 	@Override
 	protected String getInputFilePath() {

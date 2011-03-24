@@ -11,6 +11,10 @@ package ch.hsr.ifs.core.test.patternlistener;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+/**
+ * @author Emanuel Graf IFS
+ *
+ */
 public class PatternListenerSuite {
 
 	public static Test suite() {

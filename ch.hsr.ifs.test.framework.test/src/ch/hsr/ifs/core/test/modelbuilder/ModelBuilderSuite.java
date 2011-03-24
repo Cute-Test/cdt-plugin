@@ -11,6 +11,10 @@ package ch.hsr.ifs.core.test.modelbuilder;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+/**
+ * @author Emanuel Graf IFS
+ *
+ */
 public class ModelBuilderSuite {
 
 	public static Test suite() {

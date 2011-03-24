@@ -1,14 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2010 QNX Software Systems and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     QNX Software Systems - initial API and implementation
- *     Anton Leherbauer (Wind River Systems)
- *******************************************************************************/
+ * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Switzerland, http://ifs.hsr.ch
+ * 
+ * Permission to use, copy, and/or distribute this software for any
+ * purpose without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
 import org.eclipse.cdt.core.model.ICContainer;

@@ -14,6 +14,10 @@ import ch.hsr.ifs.core.test.hyperlink.HyperlinkSuite;
 import ch.hsr.ifs.core.test.modelbuilder.ModelBuilderSuite;
 import ch.hsr.ifs.core.test.patternlistener.PatternListenerSuite;
 
+/**
+ * @author Emanuel Graf IFS
+ *
+ */
 public class AllCoreTests extends TestSuite{
 	
 

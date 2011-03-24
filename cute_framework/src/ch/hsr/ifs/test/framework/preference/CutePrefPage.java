@@ -1,13 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2007 Institute for Software, HSR Hochschule fuer Technik  
- * Rapperswil, University of applied sciences
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License v1.0 
- * which accompanies this distribution, and is available at 
- * http://www.eclipse.org/legal/epl-v10.html  
+ * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Switzerland, http://ifs.hsr.ch
  * 
- * Contributors: 
- * Emanuel Graf - initial API and implementation 
+ * Permission to use, copy, and/or distribute this software for any
+ * purpose without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
 package ch.hsr.ifs.test.framework.preference;
 
@@ -17,9 +14,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import ch.hsr.ifs.test.framework.ImageProvider;
 import ch.hsr.ifs.test.framework.Messages;
 import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
-import ch.hsr.ifs.test.framework.ImageProvider;
 
 /**
  * @author Emanuel Graf

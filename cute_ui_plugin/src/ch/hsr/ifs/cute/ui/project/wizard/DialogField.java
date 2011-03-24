@@ -1,13 +1,11 @@
 /*******************************************************************************
- *  Copyright (c) 2005, 2008 IBM Corporation and others.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
+ * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Switzerland, http://ifs.hsr.ch
  * 
- *  Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+ * Permission to use, copy, and/or distribute this software for any
+ * purpose without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
 import org.eclipse.core.runtime.Assert;

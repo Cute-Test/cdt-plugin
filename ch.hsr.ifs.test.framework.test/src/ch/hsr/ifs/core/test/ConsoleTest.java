@@ -28,6 +28,10 @@ import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
 import ch.hsr.ifs.test.framework.event.ConsoleEventParser;
 import ch.hsr.ifs.test.framework.launch.ConsolePatternListener;
 
+/**
+ * @author Emanuel Graf IFS
+ *
+ */
 public abstract class ConsoleTest extends TestCase {
 
 	private ConsoleEventParser consoleEventParser;
