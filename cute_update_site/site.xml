@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_0.feature_2.0.0.201103241047.jar" id="ch.hsr.ifs.cute.headers.1_0.feature" version="2.0.0.201103241047">
+      <category name="Cute Headers"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_5.feature_2.0.0.201103241047.jar" id="ch.hsr.ifs.cute.headers.1_5.feature" version="2.0.0.201103241047">
+      <category name="Cute Headers"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_6.feature_2.0.0.201103241047.jar" id="ch.hsr.ifs.cute.headers.1_6.feature" version="2.0.0.201103241047">
+      <category name="Cute Headers"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.boost.feature_1.42.0.201103241047.jar" id="ch.hsr.ifs.cute.boost.feature" version="1.42.0.201103241047">
+      <category name="OptFeatures"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.gcov.feature_1.1.1.201103241047.jar" id="ch.hsr.ifs.cute.gcov.feature" version="1.1.1.201103241047">
+      <category name="OptFeatures"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.refactoringPreview.toogleFunction.feature_1.0.0.201103241047.jar" id="ch.hsr.ifs.cute.refactoringPreview.toogleFunction.feature" version="1.0.0.201103241047">
+      <category name="refPreview"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute_4.1.1.201103241047.jar" id="ch.hsr.ifs.cute" version="4.1.1.201103241047">
+      <category name="Cute Plugin"/>
+   </feature>
+   <category-def name="Cute Plugin" label="Cute Plugin"/>
+   <category-def name="Cute Headers" label="Cute Headers"/>
+   <category-def name="OptFeatures" label="Cute Optional Features"/>
+   <category-def name="refPreview" label="Refactoring Preview">
+      <description>
+         Preview of new refactorings
+      </description>
+   </category-def>
+</site>
