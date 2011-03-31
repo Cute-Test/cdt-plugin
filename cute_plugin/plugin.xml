@@ -37,6 +37,7 @@
              <with variable="selection">
                <count value="1"/>
                <iterate>
+               <or>
                   <and>
                      <test
                            forcePluginActivation="true"
@@ -55,6 +56,18 @@
                         </instanceof>
                      </or>
                   </and>
+                  <and>
+                    <test
+                        forcePluginActivation="true"
+                        property="ch.hsr.ifs.projectNature1"
+                        value="ch.hsr.ifs.cute.ui.cutenature">
+                    </test>
+                    <instanceof value="org.eclipse.ui.IFileEditorInput"/>
+                    <adapt type="org.eclipse.core.resources.IResource">
+                        <adapt type="org.eclipse.cdt.core.model.ICElement"/>
+                    </adapt>
+            	</and>
+               </or>
                </iterate>
              </with>
            </enablement>

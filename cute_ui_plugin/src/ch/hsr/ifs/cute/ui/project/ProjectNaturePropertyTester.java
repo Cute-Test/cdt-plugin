@@ -13,6 +13,7 @@ import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * @author Emanuel Graf
@@ -24,7 +25,6 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 	 * 
 	 */
 	public ProjectNaturePropertyTester() {
-//		System.out.println("PropTester K'tor");
 	}
 
 	/* (non-Javadoc)
@@ -32,11 +32,13 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 	 */
 	public boolean test(Object receiver, String property, Object[] args,
 			Object expectedValue) {
-		
-//		System.out.println("test "+receiver+" "+property+" "+expectedValue);
-		
+		System.out.println(receiver);
 		if (property.equals("projectNature1")) { //$NON-NLS-1$
 			try {
+				if(receiver instanceof FileEditorInput) {
+					FileEditorInput fei = (FileEditorInput)receiver;
+					receiver = fei.getFile(); //The IResource part will take care of the rest.
+				}
 				if(receiver instanceof IResource){
 					IResource res = (IResource) receiver;
 					IProject proj = res.getProject();
@@ -53,6 +55,7 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 					boolean result2= proj!=null ? proj.hasNature(toString(expectedValue)):false;
 					return result && result1 && result2;
 				}
+				
 			} catch (CoreException e) {
 				return false;
 			}
