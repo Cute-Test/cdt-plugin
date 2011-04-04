@@ -21,6 +21,9 @@
    <feature url="features/ch.hsr.ifs.cute_4.2.0.qualifier.jar" id="ch.hsr.ifs.cute" version="4.2.0.qualifier">
       <category name="Cute Plugin"/>
    </feature>
+   <feature url="features/ch.hsr.ifs.cute.refactoringPreview.clonewar.feature_1.0.0.qualifier.jar" id="ch.hsr.ifs.cute.refactoringPreview.clonewar.feature" version="1.0.0.qualifier">
+      <category name="refPreview"/>
+   </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
    <category-def name="Cute Headers" label="Cute Headers"/>
    <category-def name="OptFeatures" label="Cute Optional Features"/>
