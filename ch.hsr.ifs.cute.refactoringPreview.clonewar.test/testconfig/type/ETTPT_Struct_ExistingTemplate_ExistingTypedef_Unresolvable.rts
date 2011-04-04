@@ -1,0 +1,22 @@
+//!ETTPT: Struct, existing template, existing typedef, unresolvable.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPT_Struct_ExistingTemplate_ExistingTypedef_Unresolvable.h
+//@ETTPT_Struct_ExistingTemplate_ExistingTypedef_Unresolvable.h
+#include <vector>
+template<typename T> struct /*$*/fooT/*$$*/
+{
+    T i;
+    int j;
+};
+
+typedef fooT<fooT> foo;
+//=
+#include <vector>
+template<typename T> struct fooT
+{
+    T i;
+    int j;
+};
+
+typedef fooT<fooT> foo;

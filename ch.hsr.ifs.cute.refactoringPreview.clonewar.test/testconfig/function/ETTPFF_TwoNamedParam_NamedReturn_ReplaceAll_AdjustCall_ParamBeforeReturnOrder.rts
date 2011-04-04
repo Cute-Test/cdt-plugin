@@ -1,0 +1,47 @@
+//!ETTPFF: Two named param, void return, replace all, adjust call, param before return order.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.h
+//@ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.h
+struct foobar
+{
+};
+
+struct foobar2
+{
+};
+
+void /*$*/setValue/*$$*/(foobar2 value, foobar f)
+{
+
+}
+//=
+struct foobar
+{
+};
+
+struct foobar2
+{
+};
+
+template<typename T1, typename T2, typename T3> T3 setValue(T2 value, T1 f)
+{
+}
+
+
+//@ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.cpp
+#include "ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.h"
+int main()
+{
+	foobar f;
+	foobar2 r;
+	setValue(r,f);
+}
+//=
+#include "ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.h"
+int main()
+{
+	foobar f;
+	foobar2 r;
+	setValue<foobar,foobar2,void>(r,f);
+}

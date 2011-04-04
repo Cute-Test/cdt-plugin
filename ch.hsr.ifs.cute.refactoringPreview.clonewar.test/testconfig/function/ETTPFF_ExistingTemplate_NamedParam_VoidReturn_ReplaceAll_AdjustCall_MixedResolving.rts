@@ -1,0 +1,47 @@
+//!ETTPFF: Existing Template, named param, void return, replace all, adjust call, mixed resolving.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.h
+//@ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.h
+template<typename T, typename U> void /*$*/setValue/*$$*/(T value1, U value2)
+{
+
+}
+//=
+template<typename U, typename T, typename T1> T1 setValue(T value1, U value2)
+{
+}
+
+
+//@ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.cpp
+#include "ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.h"
+struct foobar
+{
+};
+
+struct foobar2
+{
+};
+
+int main()
+{
+	foobar f;
+	foobar2 ff;
+	setValue<>(f,ff);
+}
+//=
+#include "ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.h"
+struct foobar
+{
+};
+
+struct foobar2
+{
+};
+
+int main()
+{
+	foobar f;
+	foobar2 ff;
+	setValue<foobar2,foobar,void>(f,ff);
+}

@@ -1,0 +1,19 @@
+//!ETTPFF: Template type as parameter, replace nested named type.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPFF_TemplTypeParam_ReplaceNamedNested.h
+//@ETTPFF_TemplTypeParam_ReplaceNamedNested.h
+#include <vector>
+struct foobar;
+void /*$*/sort/*$$*/(std::vector<foobar> vector)
+{
+
+}
+//=
+#include <vector>
+struct foobar;
+template<typename T1> void sort(std::vector<T1> vector)
+{
+}
+
+

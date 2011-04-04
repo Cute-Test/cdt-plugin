@@ -1,0 +1,18 @@
+//!ETTPT: Struct, named type field, replace all, default on.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPT_Struct_NamedTypeField_ReplaceAll_DefaultOn.h
+//@ETTPT_Struct_NamedTypeField_ReplaceAll_DefaultOn.h
+struct /*$*/foo/*$$*/
+{
+	foo i;
+};
+//=
+template<typename T1 = foo> struct fooT
+{
+    T1 i;
+};
+
+
+typedef fooT<> foo;
+

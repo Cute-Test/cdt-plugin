@@ -1,0 +1,16 @@
+//!ETTPFF: Two simple param, void return, replace all.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPFF_TwoSimpleParam_VoidReturn_ReplaceAll.h
+//@ETTPFF_TwoSimpleParam_VoidReturn_ReplaceAll.h
+void /*$*/max/*$$*/(int first, int second)
+{
+    return first > second ? first : second;
+}
+//=
+template<typename T2, typename T1> T2 max(T1 first, T1 second)
+{
+    return first > second ? first : second;
+}
+
+

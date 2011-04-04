@@ -1,0 +1,12 @@
+//!DummyTest
+//#ch.hsr.cdt.clonewar.test.dummy.DummyRefactoringTest
+//@.config
+filename=DummyTest.h
+//@DummyTest.h
+void /*$*/dummyTest/*$$*/(){};
+//=
+void dummyTest(){};
+//@DummyTest.cpp
+#include "DummyTest.h"
+//=
+#include "DummyTest.h"

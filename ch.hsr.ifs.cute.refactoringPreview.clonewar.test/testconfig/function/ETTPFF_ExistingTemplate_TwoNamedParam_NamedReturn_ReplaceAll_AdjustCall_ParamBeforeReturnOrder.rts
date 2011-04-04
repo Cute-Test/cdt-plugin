@@ -1,0 +1,47 @@
+//!ETTPFF: Existing Template, two named param, named return, replace all, adjust call, param before return order.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.h
+//@ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.h
+struct foobar
+{
+};
+
+struct foobar2
+{
+};
+
+template<typename T> foobar2 /*$*/setValue/*$$*/(T value, foobar f)
+{
+
+}
+//=
+struct foobar
+{
+};
+
+struct foobar2
+{
+};
+
+template<typename T, typename T1, typename T2> T2 setValue(T value, T1 f)
+{
+}
+
+
+//@ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.cpp
+#include "ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.h"
+int main()
+{
+	foobar f;
+	foobar2 r;
+	r = setValue(f,f);
+}
+//=
+#include "ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.h"
+int main()
+{
+	foobar f;
+	foobar2 r;
+	r = setValue<foobar,foobar,foobar2>(f,f);
+}

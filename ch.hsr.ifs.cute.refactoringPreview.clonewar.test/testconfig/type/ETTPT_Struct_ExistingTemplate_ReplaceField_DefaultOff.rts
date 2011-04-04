@@ -1,0 +1,18 @@
+//!ETTPT: Struct, existing template, replace field, default off.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPT_Struct_ExistingTemplate_ReplaceField_DefaultOff.h
+//@ETTPT_Struct_ExistingTemplate_ReplaceField_DefaultOff.h
+#include <vector>
+template<typename T> struct /*$*/foo/*$$*/
+{
+    T i;
+    int j;
+};
+//=
+#include <vector>
+template<typename T> struct foo
+{
+    T i;
+    int j;
+};

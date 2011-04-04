@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tests>
+	<!-- ETTPFF/ETTPMF Tests -->
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TemplTypeBody_ReplaceSimpleNested.rts</TestConfig>
+		<Description>ETTPFF: Template type in body, replace nested simple type</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NestedOnlyConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TemplTypeBody_ReplaceNamedNested.rts</TestConfig>
+		<Description>ETTPFF: Template type in body, replace nested named type</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NestedOnlyConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TemplTypeParam_ReplaceSimpleNested.rts</TestConfig>
+		<Description>ETTPFF: Template type as parameter, replace nested simple type</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NestedOnlyConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TemplTypeParam_ReplaceNamedNested.rts</TestConfig>
+		<Description>ETTPFF: Template type as parameter, replace nested named type</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NestedOnlyConfigurationStrategy</TestStrategy>
+	</Test>	
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TemplTypeReturn_ReplaceSimpleNested.rts</TestConfig>
+		<Description>ETTPFF: Template type as return, replace nested simple type</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NestedOnlyConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TemplTypeReturn_ReplaceNamedNested.rts</TestConfig>
+		<Description>ETTPFF: Template type as return, replace nested named type</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NestedOnlyConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_NamedParam_VoidReturn_ReplaceAll_AdjustCall.rts</TestConfig>
+		<Description>ETTPFF: Named param, void return, replace all, adjust call</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_NamedParam_NamedReturn_ReplaceAll_AdjustCall.rts</TestConfig>
+		<Description>ETTPFF: Named param, Named return, replace all, adjust call</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_NamedParam_NamedReturn_NamedBody_ReplaceAll_AdjustCall.rts</TestConfig>
+		<Description>ETTPFF: Named param, named return, named body, replace all, adjust call.</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TwoSimpleParam_VoidReturn_ReplaceAll.rts</TestConfig>
+		<Description>ETTPFF: Two simple param, void return, replace all</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPMF_TwoSimpleParam_VoidReturn_ReplaceAll.rts</TestConfig>
+		<Description>ETTPMF: Two simple param, void return, replace all</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TwoSimpleParam_SimpleReturn_ReplaceAll.rts</TestConfig>
+		<Description>ETTPFF: Two simple param, simple return, replace all</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TwoSimpleParam_SimpleReturn_FirstParamSelection_ReplaceSelected.rts</TestConfig>
+		<Description>ETTPFF: Two simple param, void return, first param selection, replace selected</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TwoSimpleParam_SimpleReturn_SecondParamSelection_ReplaceSelected.rts</TestConfig>
+		<Description>ETTPFF: Two simple param, void return, second param selection, replace selected</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TwoSimpleParam_SimpleReturn_ReturnSelection_ReplaceSelected.rts</TestConfig>
+		<Description>ETTPFF: Two simple param, simple return, return selection, replace selected</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_DifferentSimpleParam_DifferentReturn_SimpleBody_ReplaceAll.rts</TestConfig>
+		<Description>ETTPFF: Different simple params, different return, simple body, replace all</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TwoSimpleParam_SimpleReturn_SimleBody_ReplaceAll.rts</TestConfig>
+		<Description>ETTPFF: Two simple param, simple return, simple body, replace all</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_ExistingTemplate_SimpleParam_VoidReturn_ReplaceAll_AdjustCall.rts</TestConfig>
+		<Description>ETTPFF: Existing Template, simple param, void return, replace all, adjust call</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_ExistingTemplate_SimpleParam_VoidReturn_ReplaceAll_AdjustCall_ParamBeforeReturnOrder.rts</TestConfig>
+		<Description>ETTPFF: Existing Template, simple param, void return, replace all, adjust call, param before return order</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_ParamBeforeReturnOrder.rts</TestConfig>
+		<Description>ETTPFF: Existing Template, named param, void return, replace all, adjust call, param before return order</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall_ParamBeforeReturnOrder.rts</TestConfig>
+		<Description>ETTPFF: Existing Template, two named param, named return, replace all, adjust call, param before return order</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustMultipleCallDifferentTypes_ParamBeforeReturnOrder.rts</TestConfig>
+		<Description>ETTPFF: Existing Template, named param, void return, replace all, adjust multiple call different types, param before return order</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall_ParamBeforeReturnOrder.rts</TestConfig>
+		<Description>ETTPFF: Two named param, void return, replace all, adjust call, param before return order</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_CallHasTemplateParams.rts</TestConfig>
+		<Description>ETTPFF: Existing Template, named param, void return, replace all, adjust call, call has template params</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_ResolveBySecondParam.rts</TestConfig>
+		<Description>ETTPFF: Existing Template, named param, void return, replace all, adjust call, resolve by second param</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.rts</TestConfig>
+		<Description>ETTPFF: Existing Template, named param, void return, replace all, adjust call, mixed resolving</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
+	</Test>
+	
+	<!-- ETTPT Tests -->
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_NamedTypeField_ReplaceAll_DefaultOn.rts</TestConfig>
+		<Description>ETTPT: Struct, named type field, replace all, default on</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_SimpleTypeField_ReplaceAll_DefaultOn.rts</TestConfig>
+		<Description>ETTPT: Struct, simple type field, replace all, default on</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_TemplateTypeField_ReplaceNested_DefaultOn.rts</TestConfig>
+		<Description>ETTPT: Struct, template type field, replace nested, default on</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NestedOnlyConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_TemplateTypeField_ReplaceTemplate_DefaultOn.rts</TestConfig>
+		<Description>ETTPT: Struct, template type field, replace template, default on</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NonNestedOnlyConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_NamedTypeField_ReplaceAll_DefaultOff.rts</TestConfig>
+		<Description>ETTPT: Struct, named type field, replace all, default off</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NoDefaultingConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_ExistingTemplate_ReplaceField_DefaultOff.rts</TestConfig>
+		<Description>ETTPT: Struct, existing template, replace field, default off</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionErrorCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_ExistingTemplate_ReplaceField_DefaultOn.rts</TestConfig>
+		<Description>ETTPT: Struct, existing template, replace field, default on</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_ExistingTemplate_ExistingTypedef_ReplaceField_DefaultOn.rts</TestConfig>
+		<Description>ETTPT: Struct, existing template, existing typedef, replace field, default on</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_ExistingTemplate_ExistingTypedef_ReplaceField_DefaultOff.rts</TestConfig>
+		<Description>ETTPT: Struct, existing template, existing typedef, replace field, default off</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NoDefaultingConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_ExistingTemplate_ExistingTypedef_Unresolvable.rts</TestConfig>
+		<Description>ETTPT: Struct, existing template, existing typedef, unresolvable</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionErrorCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.rts</TestConfig>
+		<Description>ETTPT: Struct, named type field, single selection, replace all, default on</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+</Tests>

@@ -1,0 +1,29 @@
+//!ETTPFF: Existing Template, simple param, void return, replace all, adjust call.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPFF_ExistingTemplate_SimpleParam_VoidReturn_ReplaceAll_AdjustCall.h
+//@ETTPFF_ExistingTemplate_SimpleParam_VoidReturn_ReplaceAll_AdjustCall.h
+template<typename T> void /*$*/setValue/*$$*/(T value)
+{
+
+}
+//=
+template<typename T1, typename T> T1 setValue(T value)
+{
+}
+
+
+//@ETTPFF_ExistingTemplate_SimpleParam_VoidReturn_ReplaceAll_AdjustCall.cpp
+#include "ETTPFF_ExistingTemplate_SimpleParam_VoidReturn_ReplaceAll_AdjustCall.h"
+
+int main()
+{
+	setValue(5);
+}
+//=
+#include "ETTPFF_ExistingTemplate_SimpleParam_VoidReturn_ReplaceAll_AdjustCall.h"
+
+int main()
+{
+	setValue<void>(5);
+}

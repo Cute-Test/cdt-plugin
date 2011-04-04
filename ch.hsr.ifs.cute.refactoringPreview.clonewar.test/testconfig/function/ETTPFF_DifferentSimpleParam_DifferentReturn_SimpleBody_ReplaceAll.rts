@@ -1,0 +1,18 @@
+//!ETTPFF: Different simple params, different return, simple body, replace all.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPFF_DifferentSimpleParam_DifferentReturn_SimpleBody_ReplaceAll.h
+//@ETTPFF_DifferentSimpleParam_DifferentReturn_SimpleBody_ReplaceAll.h
+double /*$*/sum/*$$*/(long first, int second)
+{
+	int temp = first + second;
+    return temp;
+}
+//=
+template<typename T3, typename T2, typename T1> T3 sum(T2 first, T1 second)
+{
+    T1 temp = first + second;
+    return temp;
+}
+
+
