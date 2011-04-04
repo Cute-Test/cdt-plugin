@@ -12,7 +12,7 @@
   	<artifactId>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</artifactId>
   	<version>1.0.0.qualifier</version>
   	<packaging>eclipse-test-plugin</packaging>
-  	<build>
+  	<!--<build>
 		<sourceDirectory>src</sourceDirectory>
     	<plugins>
 	    	<plugin>
@@ -26,5 +26,5 @@
 			</configuration>
     	  	</plugin>
 	    </plugins>
-	</build>
+	</build> -->
 </project>
