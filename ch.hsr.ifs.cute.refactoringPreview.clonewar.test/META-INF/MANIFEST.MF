@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CloneWar Test
 Bundle-SymbolicName: ch.hsr.ifs.cute.refactoringPreview.clonewar.test
-Bundle-Version: 1.0.0.70
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.refactoringPreview.clonewar.test.Activator
 Bundle-Vendor: HSR
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
