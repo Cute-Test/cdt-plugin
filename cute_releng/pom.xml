@@ -55,6 +55,10 @@
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toogleFunction.feature</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toggleFunction</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.toggleFunction.test</module>
+		
+		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module>
+		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
+		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>
 		<!--  update site -->
 		<module>../ch.hsr.ifs.cute.buildUpdateSite</module>
 	</modules>
