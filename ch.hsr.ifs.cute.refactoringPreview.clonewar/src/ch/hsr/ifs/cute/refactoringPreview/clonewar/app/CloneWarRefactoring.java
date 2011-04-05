@@ -1,9 +1,9 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.app;
 
+import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICElement;
@@ -122,7 +122,7 @@ public class CloneWarRefactoring extends CRefactoring {
      * 
      * @author ythrier(at)hsr.ch
      */
-    private class RefactoringResolver extends CPPASTVisitor {
+    private class RefactoringResolver extends ASTVisitor {
         private Region region_;
         private Transform refactoring_;
 

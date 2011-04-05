@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTParameterDeclaration;
@@ -37,7 +37,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.Tra
  * @author ythrier(at)hsr.ch
  */
 @SuppressWarnings("restriction")
-public class ASTTypeVisitor extends CPPASTVisitor {
+public class ASTTypeVisitor extends ASTVisitor {
     private Map<ASTKeyPair, Class<? extends TransformAction>> registry_ = new HashMap<ASTKeyPair, Class<? extends TransformAction>>();
     private Map<TypeInformation, List<TransformAction>> actions_ = new HashMap<TypeInformation, List<TransformAction>>();
     private List<TypeInformation> typeInformations_ = new ArrayList<TypeInformation>();

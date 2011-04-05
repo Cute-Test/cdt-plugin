@@ -27,6 +27,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionCheck
  * strategies.
  * @author ythrier(at)hsr.ch
  */
+@SuppressWarnings("nls")
 public class TestConfiguration {
 	
 	/**

@@ -12,6 +12,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.test.dummy.DummyTest;
  * Merging all junit tests into a suite.
  * @author ythrier(at)hsr.ch
  */
+@SuppressWarnings("nls")
 public class AllTests {
 	
 	/**
