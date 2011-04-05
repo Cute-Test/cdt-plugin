@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: CloneWar Test
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: ch.hsr.ifs.cute.refactoringPreview.clonewar.test
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.refactoringPreview.clonewar.test.Activator
-Bundle-Vendor: HSR
+Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.cdt.ui.tests;bundle-version="5.1.0",
