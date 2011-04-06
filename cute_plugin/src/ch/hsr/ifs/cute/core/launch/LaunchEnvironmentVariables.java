@@ -93,19 +93,21 @@ public class LaunchEnvironmentVariables {
 		
 		for(int x=0;x<libProject.length;x++){
 			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject[x]);
-			IConfiguration config = info.getDefaultConfiguration();
-//			ICSourceEntry[] sources = config.getSourceEntries();
-			ICOutputEntry[]  dirs = config.getBuildData().getOutputDirectories();	
-			for (ICOutputEntry outputEntry : dirs) {
-				IPath location = outputEntry.getFullPath();
-				IPath parameter;
-				if(location.segmentCount()== 0){
-					parameter=libProject[x].getFullPath();
-				}else{
-					parameter=libProject[x].getFolder(location).getFullPath();	
+			if(info != null) {
+				IConfiguration config = info.getDefaultConfiguration();
+				//			ICSourceEntry[] sources = config.getSourceEntries();
+				ICOutputEntry[]  dirs = config.getBuildData().getOutputDirectories();	
+				for (ICOutputEntry outputEntry : dirs) {
+					IPath location = outputEntry.getFullPath();
+					IPath parameter;
+					if(location.segmentCount()== 0){
+						parameter=libProject[x].getFullPath();
+					}else{
+						parameter=libProject[x].getFolder(location).getFullPath();	
+					}
+					result+= "${workspace_loc:" + parameter.toPortableString() + "}"+pathSeparator; //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				result+= "${workspace_loc:" + parameter.toPortableString() + "}"+pathSeparator; //$NON-NLS-1$ //$NON-NLS-2$
-			}	
+			}
 		}
 		
 		return result;
