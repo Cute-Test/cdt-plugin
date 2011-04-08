@@ -20,6 +20,9 @@
 
 #ifndef CUTE_EQUALS_H_
 #define CUTE_EQUALS_H_
+#if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#define USE_STD0X 1
+#endif
 
 #include "cute_base.h"
 #include "cute_demangle.h"
