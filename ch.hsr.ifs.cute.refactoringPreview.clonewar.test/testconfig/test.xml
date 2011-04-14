@@ -183,7 +183,6 @@
 		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
 		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
 	</Test>
-	
 	<!-- ETTPT Tests -->
 	<Test>
 		<TestConfig>testconfig/type/ETTPT_Struct_NamedTypeField_ReplaceAll_DefaultOn.rts</TestConfig>

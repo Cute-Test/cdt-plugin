@@ -18,6 +18,7 @@
          </menu>
          <action
                class="ch.hsr.ifs.cute.refactoringPreview.clonewar.app.CloneWarActionDelegate"
+               definitionId="ch.hsr.ifs.cute.refactoringPreview.clonewar.command"
                id="ch.hsr.cdt.clonewar"
                label="%action.label"
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"

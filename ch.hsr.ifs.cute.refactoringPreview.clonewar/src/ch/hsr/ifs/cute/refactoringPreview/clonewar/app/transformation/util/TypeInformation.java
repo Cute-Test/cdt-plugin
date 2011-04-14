@@ -234,4 +234,10 @@ public class TypeInformation implements Comparable<TypeInformation> {
     public boolean hasDefaultType() {
         return (defaultType_ != null);
     }
+
+    @Override
+    public String toString() {
+        return "TypeInformation [type_=" + type_ + "; TemplName = " + templateName_ + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    }
+    
 }

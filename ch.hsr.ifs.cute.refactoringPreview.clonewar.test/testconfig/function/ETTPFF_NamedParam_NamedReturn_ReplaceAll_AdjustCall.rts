@@ -9,7 +9,7 @@ AnotherStruct /*$*/max/*$$*/(foobar first, foobar second)
 }
 //=
 #include "Foobar.h"
-template<typename T2, typename T1> T2 max(T1 first, T1 second)
+template<typename T1, typename T2> T1 max(T2 first, T2 second)
 {
 }
 

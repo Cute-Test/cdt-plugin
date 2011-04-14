@@ -20,9 +20,10 @@ public abstract class TemplateChangeAction implements ConfigChangeAction {
      * @param config
      */
     protected void proposeUniqueNames(TransformConfiguration config) {
-        Set<String> usedNames = findUsedNames(config.getAllTypes());
+        List<TypeInformation> allTypes = config.getAllTypes();
+        Set<String> usedNames = findUsedNames(allTypes);
         int i = 1;
-        for (TypeInformation type : config.getAllTypes()) {
+        for (TypeInformation type : allTypes) {
             if (type.getTemplateName().isEmpty()) {
                 while (usedNames.contains(BASE_TEMPLATE_NAME + i))
                     i++;

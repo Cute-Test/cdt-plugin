@@ -24,7 +24,7 @@ struct foobar2
 {
 };
 
-template<typename T1, typename T2, typename T3> T3 setValue(T2 value, T1 f)
+template<typename T1, typename T2, typename T3> T3 setValue(T1 value, T2 f)
 {
 }
 
@@ -43,5 +43,5 @@ int main()
 {
 	foobar f;
 	foobar2 r;
-	setValue<foobar,foobar2,void>(r,f);
+	setValue<foobar2,foobar,void>(r,f);
 }

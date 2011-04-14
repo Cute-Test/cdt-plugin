@@ -1,10 +1,12 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
@@ -38,9 +40,15 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.Tra
  */
 @SuppressWarnings("restriction")
 public class ASTTypeVisitor extends ASTVisitor {
-    private Map<ASTKeyPair, Class<? extends TransformAction>> registry_ = new HashMap<ASTKeyPair, Class<? extends TransformAction>>();
-    private Map<TypeInformation, List<TransformAction>> actions_ = new HashMap<TypeInformation, List<TransformAction>>();
-    private List<TypeInformation> typeInformations_ = new ArrayList<TypeInformation>();
+    private final Map<ASTKeyPair, Class<? extends TransformAction>> registry_ = new HashMap<ASTKeyPair, Class<? extends TransformAction>>();
+    private final Map<TypeInformation, List<TransformAction>> actions_ = new TreeMap<TypeInformation, List<TransformAction>>(
+            new Comparator<TypeInformation>() {
+
+                @Override
+                public int compare(TypeInformation o1, TypeInformation o2) {
+                    return o1.toString().compareTo(o2.toString());
+                }});
+    private final List<TypeInformation> typeInformations_ = new ArrayList<TypeInformation>();
     private Iterator<TypeInformation> typeInfoIterator_;
     private boolean secondRun_ = false;
     private Exception exception_;
@@ -101,9 +109,10 @@ public class ASTTypeVisitor extends ASTVisitor {
      * @return Map of types and actions.
      */
     public Map<TypeInformation, List<TransformAction>> getActionMap() {
-        if (!secondRun_)
+        if (!secondRun_) {
             throw new IllegalStateException(
                     "Reading action map before second run not allowed!");
+        }
         return actions_;
     }
 
@@ -132,8 +141,9 @@ public class ASTTypeVisitor extends ASTVisitor {
      *            Declaration specifier.
      */
     private void performFirstRun(IASTDeclSpecifier declSpec) {
-        if (!hasAction(declSpec))
+        if (!hasAction(declSpec)) {
             return;
+        }
         typeInformations_.add(createTypeInfo(declSpec));
     }
 
@@ -153,11 +163,13 @@ public class ASTTypeVisitor extends ASTVisitor {
             typeInfoIterator_ = typeInformations_.iterator();
             secondRun_ = true;
         }
-        if (!hasAction(declSpec))
+        if (!hasAction(declSpec)) {
             return;
-        if (!typeInfoIterator_.hasNext())
+        }
+        if (!typeInfoIterator_.hasNext()) {
             throw new IllegalArgumentException(
                     "Not traversing the same AST structure!");
+        }
         TypeInformation typeInfo = typeInfoIterator_.next();
         if (!actions_.containsKey(typeInfo)) {
             actions_.put(typeInfo, new ArrayList<TransformAction>());

@@ -9,9 +9,9 @@ double /*$*/sum/*$$*/(long first, int second)
     return temp;
 }
 //=
-template<typename T3, typename T2, typename T1> T3 sum(T2 first, T1 second)
+template<typename T1, typename T2, typename T3> T1 sum(T3 first, T2 second)
 {
-    T1 temp = first + second;
+    T2 temp = first + second;
     return temp;
 }
 
