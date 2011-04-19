@@ -59,15 +59,16 @@ public class ETTPFunctionTransform extends Transform {
      */
     @Override
     public void postprocess(RefactoringStatus status) {
-        if (isTemplate())
+        if (isTemplate()) {
             callReferenceLookup_ = new FunctionSpecializedReferenceLookupStrategy();
-        else
+        } else {
             callReferenceLookup_ = new FunctionNormalReferenceLookupStrategy();
+        }
         try {
             callExpressions_ = callReferenceLookup_
                     .findAllReferences(getFunctionName());
         } catch (Exception e) {
-            status.addError(e.getMessage());
+            status.addError(e.toString());
         }
     }
 
@@ -86,8 +87,9 @@ public class ETTPFunctionTransform extends Transform {
      */
     @Override
     protected void modificationPostprocessing(ModificationCollector collector) {
-        if (!shouldAdjustCalls())
+        if (!shouldAdjustCalls()) {
             return;
+        }
         for (ICPPASTFunctionCallExpression call : callExpressions_) {
             processCall(call, collector);
         }
@@ -110,10 +112,12 @@ public class ETTPFunctionTransform extends Transform {
                 break;
             }
         }
-        if (returnType == null)
+        if (returnType == null) {
             return false;
-        if (!getConfig().getReturnTypeAction(returnType).shouldPerform())
+        }
+        if (!getConfig().getReturnTypeAction(returnType).shouldPerform()) {
             return false;
+        }
         return !hasParamAndReturnAction(getConfig().getActionsOf(returnType));
     }
 
@@ -128,8 +132,9 @@ public class ETTPFunctionTransform extends Transform {
      */
     private boolean hasParamAndReturnAction(List<TransformAction> actions) {
         for (TransformAction action : actions) {
-            if (action.isParameterAction())
+            if (action.isParameterAction()) {
                 return true;
+            }
         }
         return false;
     }
@@ -145,8 +150,9 @@ public class ETTPFunctionTransform extends Transform {
     private void processCall(ICPPASTFunctionCallExpression call,
             ModificationCollector collector) {
         List<TypeInformation> typesToIncludeInCall = getTypesToIncludeInCall();
-        if (isTemplate())
+        if (isTemplate()) {
             resolveMissingTypes(typesToIncludeInCall, call);
+        }
         adjustCall(typesToIncludeInCall, call, collector);
     }
 
@@ -248,8 +254,9 @@ public class ETTPFunctionTransform extends Transform {
                 .getTemplateParameters();
         int templateArgumentPos = 0;
         for (ICPPASTTemplateParameter param : templParams) {
-            if (isSameType(type.getType(), getBinding(param)))
+            if (isSameType(type.getType(), getBinding(param))) {
                 break;
+            }
             templateArgumentPos++;
         }
         CPPASTTemplateId funcCallExpr = getTemplateId(call);
@@ -287,25 +294,30 @@ public class ETTPFunctionTransform extends Transform {
         int paramPos = 0;
         for (ICPPASTParameterDeclaration param : getFunctionDeclarator()
                 .getParameters()) {
-            if (isSameType(type.getType(), getType(param)))
+            if (isSameType(type.getType(), getType(param))) {
                 break;
+            }
             paramPos++;
         }
         IASTInitializerClause[] arguments = call.getArguments();
         type.setCallSpecificDefaultType(createDeclSpecifier(getIType(arguments[paramPos])));
     }
-    
+
     private IType getIType(IASTInitializerClause clause) {
-        if (clause == null)
+        if (clause == null) {
             return null;
-        if (clause instanceof IASTExpression)
+        }
+        if (clause instanceof IASTExpression) {
             return ((IASTExpression) clause).getExpressionType();
-        if (clause instanceof IASTTypeId)
+        }
+        if (clause instanceof IASTTypeId) {
             return CPPVisitor.createType(((IASTTypeId) clause).getAbstractDeclarator());
-        if (clause instanceof IASTParameterDeclaration)
+        }
+        if (clause instanceof IASTParameterDeclaration) {
             return CPPVisitor.createType(((IASTParameterDeclaration) clause).getDeclarator());
+        }
         return null;
-        
+
     }
 
     /**
@@ -428,11 +440,13 @@ public class ETTPFunctionTransform extends Transform {
     protected void createTemplateParameter(
             List<ICPPASTSimpleTypeTemplateParameter> templParams,
             TypeInformation type) {
-        if (!getConfig().hasPerformableAction(type))
+        if (!getConfig().hasPerformableAction(type)) {
             return;
+        }
         ICPPASTSimpleTypeTemplateParameter param = createTemplateParam(type);
-        if (type.shouldDefault())
+        if (type.shouldDefault()) {
             param.setDefaultType(createTypeId(type));
+        }
         templParams.add(param);
     }
 
