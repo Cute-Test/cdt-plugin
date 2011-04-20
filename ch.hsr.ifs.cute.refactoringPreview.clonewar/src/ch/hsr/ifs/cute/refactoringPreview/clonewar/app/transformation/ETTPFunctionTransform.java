@@ -35,7 +35,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.TextEditGroup;
 
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.TransformAction;
-import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.action.ConfigChangeAction;
+import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.action.IConfigChangeAction;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.action.FunctionOrderingChangeAction;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeInformation;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.referencelookup.FunctionNormalReferenceLookupStrategy;
@@ -427,7 +427,7 @@ public class ETTPFunctionTransform extends Transform {
      * {@inheritDoc}
      */
     @Override
-    protected void addConfigChangeActions(List<ConfigChangeAction> configChanges) {
+    protected void addConfigChangeActions(List<IConfigChangeAction> configChanges) {
         addNameChangeAction(configChanges);
         addSingleSelectionChangeAction(configChanges);
         configChanges.add(new FunctionOrderingChangeAction());

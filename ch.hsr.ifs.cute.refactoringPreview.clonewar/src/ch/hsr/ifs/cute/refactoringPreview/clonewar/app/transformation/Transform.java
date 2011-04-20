@@ -21,7 +21,7 @@ import org.eclipse.text.edits.TextEditGroup;
 
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.TransformAction;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.TransformConfiguration;
-import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.action.ConfigChangeAction;
+import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.action.IConfigChangeAction;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.action.ExistingTemplateChangeAction;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.action.NewTemplateChangeAction;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.action.SingleSelectionChangeAction;
@@ -37,7 +37,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  */
 @SuppressWarnings("restriction")
 public abstract class Transform {
-    private List<ConfigChangeAction> configChanges_ = new ArrayList<ConfigChangeAction>();
+    private List<IConfigChangeAction> configChanges_ = new ArrayList<IConfigChangeAction>();
     private CPPASTNodeFactory nodeFactory_ = new CPPASTNodeFactory();
     private TransformConfiguration configuration_;
     private IASTTranslationUnit translationUnit_;
@@ -175,7 +175,7 @@ public abstract class Transform {
      *            Status.
      */
     private void applyConfigChanges(RefactoringStatus status) {
-        for (ConfigChangeAction configChange : configChanges_) {
+        for (IConfigChangeAction configChange : configChanges_) {
             configChange.applyChange(getConfig(), status);
         }
     }
@@ -322,7 +322,7 @@ public abstract class Transform {
      *            List to add the config changes.
      */
     protected abstract void addConfigChangeActions(
-            List<ConfigChangeAction> configChanges);
+            List<IConfigChangeAction> configChanges);
 
     /**
      * Make post-processing of the change.
@@ -386,7 +386,7 @@ public abstract class Transform {
      * @param configChanges
      *            List to add the action to.
      */
-    protected void addNameChangeAction(List<ConfigChangeAction> configChanges) {
+    protected void addNameChangeAction(List<IConfigChangeAction> configChanges) {
         if (isTemplate())
             configChanges.add(new ExistingTemplateChangeAction(
                     getTemplateDeclaration()));
@@ -401,7 +401,7 @@ public abstract class Transform {
      *            List to add the action to.
      */
     protected void addSingleSelectionChangeAction(
-            List<ConfigChangeAction> configChanges) {
+            List<IConfigChangeAction> configChanges) {
         if (hasSingleSelection())
             configChanges.add(new SingleSelectionChangeAction(
                     getOriginalNode(), getCopyNode(), getSingleSelection()));

@@ -10,7 +10,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  * 
  * @author ythrier(at)hsr.ch
  */
-public class TypeOrderingChangeAction implements ConfigChangeAction {
+public class TypeOrderingChangeAction implements IConfigChangeAction {
 
     /**
      * {@inheritDoc}

@@ -12,7 +12,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  * 
  * @author ythrier(at)hsr.ch
  */
-public class FunctionOrderingChangeAction implements ConfigChangeAction {
+public class FunctionOrderingChangeAction implements IConfigChangeAction {
 
     /**
      * {@inheritDoc}

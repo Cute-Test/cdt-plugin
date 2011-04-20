@@ -11,7 +11,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.Tra
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.TransformConfiguration;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeInformation;
 
-public abstract class TemplateChangeAction implements ConfigChangeAction {
+public abstract class TemplateChangeAction implements IConfigChangeAction {
     private static final String BASE_TEMPLATE_NAME = "T";
 
     /**

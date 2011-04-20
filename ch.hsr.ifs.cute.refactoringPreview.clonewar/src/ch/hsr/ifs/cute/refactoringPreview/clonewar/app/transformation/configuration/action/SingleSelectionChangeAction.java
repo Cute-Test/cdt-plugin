@@ -12,7 +12,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configurat
  * 
  * @author ythrier(at)hsr.ch
  */
-public class SingleSelectionChangeAction implements ConfigChangeAction {
+public class SingleSelectionChangeAction implements IConfigChangeAction {
     private IASTNode originalParentNode_;
     private IASTNode copyParentNode_;
     private IASTNode originalSubNode_;

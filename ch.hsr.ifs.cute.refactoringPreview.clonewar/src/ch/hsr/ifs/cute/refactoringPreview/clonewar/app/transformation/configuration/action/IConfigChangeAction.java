@@ -10,7 +10,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configurat
  * 
  * @author ythrier(at)hsr.ch
  */
-public interface ConfigChangeAction {
+public interface IConfigChangeAction {
 
     /**
      * Apply the change to the configuration.
