@@ -100,7 +100,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		try {
 			createCuteProject(newProject, monitor);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			UiPlugin.log(e);
 		}
 	}
 
