@@ -13,7 +13,6 @@ import java.util.List;
 
 import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
-import org.eclipse.cdt.managedbuilder.ui.properties.ManagedBuilderUIPlugin;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
 import org.eclipse.core.resources.IFile;
@@ -45,8 +44,8 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
  *
  */
 public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrategyProvider {
-	
-	private CuteVersionWizardPage cuteVersionWizardPage;
+
+	private final CuteVersionWizardPage cuteVersionWizardPage;
 
 	@Override
 	public IWizardPage getSpecificPage() {
@@ -57,15 +56,15 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		super(new CuteBuildPropertyValue(), p, w);
 		cuteVersionWizardPage = new CuteVersionWizardPage( getConfigPage(), getStartingPage());
 		cuteVersionWizardPage.setWizard(w);
-		
+
 		MBSCustomPageManager.init();
 		MBSCustomPageManager.addStockPage(cuteVersionWizardPage, cuteVersionWizardPage.getPageID());
 	}
-	
+
 	@Override
 	public boolean canFinish() {
 		return cuteVersionWizardPage != null ? cuteVersionWizardPage.isCustomPageComplete() : false;
-	}	
+	}
 
 	@Override
 	public void postProcess(IProject newProject, boolean created) {
@@ -79,7 +78,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	protected void doCustom(final IProject newProject) {
 		super.doCustom(newProject);
 		IRunnableWithProgress op = new IRunnableWithProgress() {
-			
+
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				createCuteProjectSettings(newProject, monitor);
 			}
@@ -87,11 +86,11 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		try {
 			getWizard().getContainer().run(false, true, op);
 		} catch (InvocationTargetException e) {
-			ManagedBuilderUIPlugin.log(e);
+			UiPlugin.log(e);
 		} catch (InterruptedException e) {
-			ManagedBuilderUIPlugin.log(e);
+			UiPlugin.log(e);
 		}
-		
+
 	}
 
 	/**
@@ -116,7 +115,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		createCuteProjectFolders(project);
 		callAdditionalHandlers(project, pm);
 		ManagedBuildManager.saveBuildInfo(project, true);
-		
+
 	}
 
 	private void callAdditionalHandlers(IProject project, IProgressMonitor pm) throws CoreException {
@@ -127,7 +126,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 			mon.worked(1);
 		}
 		mon.done();
-		
+
 	}
 
 	/**
@@ -142,13 +141,13 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 			throws CoreException {
 		IFolder srcFolder = ProjectTools.createFolder(project, "src", true); //$NON-NLS-1$
 		ICuteHeaders cuteVersion = getCuteVersion();
-		
-		
+
+
 		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", true); //$NON-NLS-1$
-		
-		
+
+
 		copyFiles(srcFolder, cuteVersion, cuteFolder);
-		
+
 		ProjectTools.setIncludePaths(cuteFolder.getFullPath(), project, this);
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				getTestMainFile(project), true);
@@ -169,11 +168,11 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
 		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
 	}
-	
+
 	protected IFile getTestMainFile(IProject project) {
 		return project.getFile("src/Test.cpp"); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * @since 4.0
 	 */
