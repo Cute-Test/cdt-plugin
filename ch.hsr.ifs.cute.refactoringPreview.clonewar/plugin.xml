@@ -10,9 +10,6 @@
                id="org.eclipse.jdt.ui.refactoring.menu"
                label="%menu.label">
             <separator
-                  name="reorgGroup">
-            </separator>
-            <separator
                   name="codingGroup">
             </separator>
          </menu>
@@ -22,7 +19,6 @@
                id="ch.hsr.cdt.clonewar"
                label="%action.label"
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
-               style="push"
                toolbarPath="codingGroup">
          </action>
       </actionSet>
@@ -32,7 +28,7 @@
       <command
             categoryId="org.eclipse.cdt.ui.category.refactoring"
             id="ch.hsr.ifs.cute.refactoringPreview.clonewar.command"
-            name="CloneWar Command">
+            name="%command.name">
       </command>
    </extension>
 
