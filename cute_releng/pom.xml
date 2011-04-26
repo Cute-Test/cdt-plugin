@@ -58,7 +58,7 @@
 		
 		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
-		<!-- don't build the test <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module> -->
+		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>
 		<!--  update site -->
 		<module>../ch.hsr.ifs.cute.buildUpdateSite</module>
 	</modules>
