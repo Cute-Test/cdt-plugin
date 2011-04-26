@@ -1,5 +1,6 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.referencelookup;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -19,7 +20,7 @@ import org.eclipse.core.runtime.CoreException;
  */
 @SuppressWarnings("restriction")
 public class FunctionSpecializedReferenceLookupStrategy extends
-        AbstractReferenceLookupStrategy<ICPPASTFunctionCallExpression> {
+AbstractReferenceLookupStrategy<ICPPASTFunctionCallExpression> {
 
     /**
      * {@inheritDoc}
@@ -31,8 +32,9 @@ public class FunctionSpecializedReferenceLookupStrategy extends
                 name, index)) {
             IIndexName[] callIndexes = index.findNames(binding,
                     IIndex.FIND_ALL_OCCURRENCES);
-            for (IIndexName callIndex : callIndexes)
+            for (IIndexName callIndex : callIndexes) {
                 processCall(callIndex, calls);
+            }
         }
     }
 
@@ -49,7 +51,11 @@ public class FunctionSpecializedReferenceLookupStrategy extends
      */
     private List<? extends IBinding> findSpecializations(IASTName name,
             IIndex index) throws CoreException {
-        return IndexUI.findSpecializations(getBinding(index, name));
+        IBinding binding = getBinding(index, name);
+        if (binding == null) {
+            return Collections.emptyList();
+        }
+        return IndexUI.findSpecializations(binding);
     }
 
     /**
