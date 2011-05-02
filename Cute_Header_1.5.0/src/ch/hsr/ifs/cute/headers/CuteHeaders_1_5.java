@@ -54,11 +54,11 @@ public class CuteHeaders_1_5 implements ICuteHeaders {
 	}
 
 	public double getVersionNumber() {
-		return 1.50;
+		return 1.53;
 	}
 
 	public String getVersionString() {
-		return "Cute Headers 1.5.0"; //$NON-NLS-1$
+		return "Cute Headers 1.5.3"; //$NON-NLS-1$
 	}
 
 	private List<URL> getTestFiles() {
@@ -68,7 +68,7 @@ public class CuteHeaders_1_5 implements ICuteHeaders {
 	public void copyHeaderFiles(IFolder folder, IProgressMonitor monitor)
 			throws CoreException {
 		copyFilesToFolder(folder, monitor, getHeaderFiles());
-		
+
 	}
 
 	private void copyFilesToFolder(IFolder folder, IProgressMonitor monitor,
@@ -111,7 +111,7 @@ public class CuteHeaders_1_5 implements ICuteHeaders {
 	public void copyTestFiles(IFolder folder, IProgressMonitor monitor)
 			throws CoreException {
 		copyFilesToFolder(folder, monitor, getTestFiles());
-		
+
 	}
 
 }
