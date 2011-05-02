@@ -3,10 +3,10 @@
    <feature url="features/ch.hsr.ifs.cute.headers.1_0.feature_2.0.0.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_0.feature" version="2.0.0.qualifier">
       <category name="Cute Headers"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_5.feature_2.0.0.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_5.feature" version="2.0.0.qualifier">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_5.feature_2.0.1.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_5.feature" version="2.0.0.qualifier">
       <category name="Cute Headers"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_6.feature_2.0.0.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_6.feature" version="2.0.0.qualifier">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_6.feature_2.0.1.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_6.feature" version="2.0.0.qualifier">
       <category name="Cute Headers"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.boost.feature_1.42.0.qualifier.jar" id="ch.hsr.ifs.cute.boost.feature" version="1.42.0.qualifier">
