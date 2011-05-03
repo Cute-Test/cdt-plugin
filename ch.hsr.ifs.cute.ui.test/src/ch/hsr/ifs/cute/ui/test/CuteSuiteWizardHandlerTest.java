@@ -20,7 +20,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.cute.headers.CuteHeaders_1_0;
+import ch.hsr.ifs.cute.headers.CuteHeaders_1_6;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
 
@@ -47,9 +47,9 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		cuteFolder = project.getProject().getFolder("/cute");
 		cuteFolder.create(true, true, new NullProgressMonitor());
 	}
-	
+
 	public final void testAddTestFiles() {
-		CuteHeaders_1_0 h = new CuteHeaders_1_0();
+		CuteHeaders_1_6 h = new CuteHeaders_1_6();
 		addTestFiles(h);
 	}
 
@@ -59,7 +59,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 
 			cswh.copyFiles(srcFolder,cuteHeader, cuteFolder);
 			//for indirect reference, check dependencies
-			
+
 			IFile file=srcFolder.getFile("Test.cpp");
 			if(file.exists()){
 				file.delete(true, false, new NullProgressMonitor());
@@ -67,14 +67,14 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 			}
 			IFile file1=srcFolder.getFile("suite.cpp");
 			IFile file2=srcFolder.getFile("suite.h");
-						
+
 			assertTrue(file1.exists());
 			assertTrue(file2.exists());
 			//clean up
-			
+
 		}catch(CoreException ce){fail(ce.getMessage());}
 	}
-	
+
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
