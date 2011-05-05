@@ -9,6 +9,7 @@ package ch.hsr.ifs.cute.swtbottest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
@@ -31,6 +32,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
@@ -96,6 +98,7 @@ public class CuteProjectWizardTest {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IProject proj = workspace.getRoot().getProject(projectName);
 		assertNotNull("No Project", proj);
+		assertTrue(proj.hasNature(CuteNature.CUTE_NATURE_ID));
 		IFolder cuteFolder =  proj.getFolder("cute");
 		assertNotNull(cuteFolder);
 		ICuteHeaders header = UiPlugin.getCuteVersionString(proj);
@@ -108,6 +111,7 @@ public class CuteProjectWizardTest {
 		String projectName = executeProjectWizard(1, false, false);
 		IProject proj = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		assertNotNull("No Project", proj);
+		assertTrue(proj.hasNature(CuteNature.CUTE_NATURE_ID));
 		IFolder cuteFolder =  proj.getFolder("cute");
 		assertNotNull(cuteFolder);
 		ICuteHeaders header = UiPlugin.getCuteVersionString(proj);
