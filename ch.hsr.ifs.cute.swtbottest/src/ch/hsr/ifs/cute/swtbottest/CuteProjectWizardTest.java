@@ -156,7 +156,7 @@ public class CuteProjectWizardTest {
 		bot.button("Finish").click();
 		ICondition cond = new ShellOpenCondition(shell);
 		cond.init(bot);
-		bot.waitUntil(cond);
+		bot.waitUntil(cond,10000);
 		return projectName;
 	}
 
