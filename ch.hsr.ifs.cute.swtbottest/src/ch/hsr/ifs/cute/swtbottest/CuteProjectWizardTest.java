@@ -87,6 +87,11 @@ public class CuteProjectWizardTest {
 		String projectName = "CuteProject";
 		bot.textWithLabel("Project name:").setText(projectName);
 		SWTBotTree swtTree = bot.tree();
+		System.out.println("Enable all Toolchains");
+		bot.checkBox("Show project types and toolchains only if they are supported on the platform").click();
+		//		sleep();
+		//		bot.list().select("Linux GCC");
+		//		sleep();
 		System.out.println("Select Cute Proj");
 		swtTree.select("Cute Project");
 		System.out.println("Next click");
