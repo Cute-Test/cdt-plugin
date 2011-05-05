@@ -12,6 +12,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swtbot.eclipse.finder;bundle-version="2.0.4",
  org.hamcrest;bundle-version="1.1.0",
  org.eclipse.core.resources;bundle-version="3.7.100",
- ch.hsr.ifs.cute.ui;bundle-version="4.0.2"
+ ch.hsr.ifs.cute.ui;bundle-version="4.0.2",
+ ch.hsr.ifs.cute.boost;bundle-version="1.42.0",
+ ch.hsr.ifs.cute.core;bundle-version="3.0.0",
+ ch.hsr.ifs.cute.gcov;bundle-version="1.2.2",
+ ch.hsr.ifs.cute.headers.1_5;bundle-version="2.0.1",
+ ch.hsr.ifs.cute.headers.1_6;bundle-version="2.0.1",
+ ch.hsr.ifs.test.framework;bundle-version="3.0.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
