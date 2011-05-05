@@ -20,6 +20,11 @@
 			<url>jar:file:/home/hudson/cdt-master-8.0.0-I201105021546.zip!/</url>
 			<layout>p2</layout>
 		</repository>
+		<repository>
+			<id>swtbot</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
+		</repository>
 	</repositories>
 	<modules>
 		<!-- CUTE Plugin -->
@@ -33,6 +38,7 @@
 		<module>../cute_ui_plugin</module>
 		<module>../ch.hsr.ifs.cute.ui.test</module>
 		<module>../ch.hsr.ifs.test.framework.test</module>
+		<module>../ch.hsr.ifs.cute.swtbottest</module>
 		<!-- CUTE Headers -->
 		<module>../ch.hsr.ifs.cute.headers.base.test</module>
 		<module>../Cute.1_0_Feature</module>

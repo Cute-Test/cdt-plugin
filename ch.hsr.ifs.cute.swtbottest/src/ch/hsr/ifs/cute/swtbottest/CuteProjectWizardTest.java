@@ -59,7 +59,7 @@ public class CuteProjectWizardTest {
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		bot = new SWTWorkbenchBot();
-		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
+		//		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("nls")
