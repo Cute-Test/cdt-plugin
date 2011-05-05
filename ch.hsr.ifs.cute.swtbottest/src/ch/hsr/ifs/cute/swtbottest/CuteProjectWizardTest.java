@@ -13,6 +13,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
+import org.eclipse.cdt.core.settings.model.ICSourceEntry;
+import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -93,16 +95,34 @@ public class CuteProjectWizardTest {
 
 	@SuppressWarnings("nls")
 	@Test
-	public void cuteProjectWizardHeaderIndex0() throws CoreException {
+	public void cuteProjectWizardHeaderIndex0() throws CoreException, BuildException {
 		String projectName = executeProjectWizard(0, false, false);
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IProject proj = workspace.getRoot().getProject(projectName);
 		assertNotNull("No Project", proj);
 		assertTrue(proj.hasNature(CuteNature.CUTE_NATURE_ID));
-		IFolder cuteFolder =  proj.getFolder("cute");
-		assertNotNull(cuteFolder);
 		ICuteHeaders header = UiPlugin.getCuteVersionString(proj);
 		assertEquals(header.getVersionString(), cuteVersion);
+		assertSrcFolderCreated(projectName, proj, "cute");
+	}
+
+	private void assertSrcFolderCreated(String projectName, IProject proj, String folderName) throws CoreException{
+		IFolder cuteFolder =  proj.getFolder(folderName);
+		assertNotNull(cuteFolder);
+		ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(proj, false);
+		checkSrcEntryExist(projectName, folderName, desc);
+	}
+
+	@SuppressWarnings("nls")
+	private void checkSrcEntryExist(String projectName, String folderName, ICProjectDescription desc) {
+		ICSourceEntry[] srcEntries = desc.getActiveConfiguration().getSourceEntries();
+		boolean cuteSrcEntryFound = false;
+		for (ICSourceEntry entry : srcEntries) {
+			if(entry.getName().equals("/"+ projectName + "/"+ folderName)) {
+				cuteSrcEntryFound = true;
+			}
+		}
+		assertTrue(cuteSrcEntryFound);
 	}
 
 	@SuppressWarnings("nls")
@@ -125,10 +145,7 @@ public class CuteProjectWizardTest {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IProject proj = workspace.getRoot().getProject(projectName);
 		assertNotNull("No Project", proj);
-		IFolder boost = proj.getFolder("boost");
-		assertNotNull(boost);
-		ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(proj, false);
-		desc.getActiveConfiguration().getFolderDescriptions();
+		assertSrcFolderCreated(projectName, proj, "boost");
 	}
 
 	@SuppressWarnings("nls")
