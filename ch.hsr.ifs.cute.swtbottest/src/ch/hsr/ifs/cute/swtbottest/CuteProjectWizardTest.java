@@ -77,17 +77,22 @@ public class CuteProjectWizardTest {
 
 	@SuppressWarnings("nls")
 	private String executeProjectWizard() {
+		System.out.println("Open perspective");
 		bot.perspectiveByLabel("C/C++").activate();
+		System.out.println("new Project menu");
 		bot.menu("File").menu("New").menu("Project...").click();
 		final SWTBotShell shell = bot.shell("New Project");
 		shell.activate();
+		System.out.println("C++ Project");
 		bot.tree().expandNode("C/C++").select("C++ Project");
 		bot.button("Next >").click();
+		System.out.println("Set Proj Name");
 		String projectName = "CuteProject";
 		bot.textWithLabel("Project name:").setText(projectName);
 		SWTBotTree swtTree = bot.tree();
 		swtTree.select("Cute Project");
 		bot.button("Next >").click();
+		System.out.println("set cute version");
 		bot.comboBox().setSelection(0);
 		cuteVersion = bot.comboBox().selection();
 		bot.checkBox("Copy Boost headers into Project").click();
