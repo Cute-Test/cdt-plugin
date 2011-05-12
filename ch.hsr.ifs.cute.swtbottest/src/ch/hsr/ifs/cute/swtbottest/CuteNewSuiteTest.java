@@ -88,7 +88,7 @@ public class CuteNewSuiteTest {
 		bot.text(1).setText("TestSuite");
 		assertTrue(bot.comboBox().itemCount() >= 1);
 		bot.button("Finish").click();
-		bot.waitUntil(Conditions.shellCloses(shell), 10000);
+		bot.waitUntil(Conditions.shellCloses(shell), 20000);
 		ICProject proj = CCorePlugin.getDefault().getCoreModel().create(ResourcesPlugin.getWorkspace().getRoot().getProject("cute"));
 		assertTrue(proj.exists());
 		IProject project = proj.getProject();
