@@ -65,8 +65,6 @@ public class CuteNewSuiteTest {
 		shell.pressShortcut(SWT.ALT, 'a');
 		URL location = Activator.getDefault().getBundle().getResource("cuteTestProject.zip");
 		location = FileLocator.toFileURL(location);
-		System.out.println(location);
-		System.out.println(location.getPath());
 		bot.text(1).setText(location.getPath());
 		shell.pressShortcut(SWT.ALT, 'e');
 		bot.button("Finish").click();
