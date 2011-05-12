@@ -62,7 +62,9 @@ public class CuteNewSuiteTest {
 		shell.pressShortcut(SWT.ALT, 'a');
 		String location = Activator.getDefault().getBundle().getLocation();
 		System.out.println(location);
-		String archive = (location + "cuteTestProject.zip").substring(15);
+		int pos = location.indexOf("file:");
+		String archive = (location + "cuteTestProject.zip").substring(pos + 5);
+		System.out.println(archive);
 		bot.text(1).setText(archive);
 		shell.pressShortcut(SWT.ALT, 'e');
 		bot.button("Finish").click();
