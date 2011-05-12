@@ -92,9 +92,9 @@ public class RunnerFinder {
 
 	private static final int AST_STYLE = ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT | ITranslationUnit.AST_SKIP_INDEXED_HEADERS;
 	private IIndex index;
-	private ICProject project;
-	
-	
+	private final ICProject project;
+
+
 
 	public RunnerFinder(ICProject project) {
 		this.project = project;
@@ -118,29 +118,40 @@ public class RunnerFinder {
 	}
 
 	private List<IASTFunctionDefinition> getTestRunnersFunctions(IASTFunctionDefinition mainFunc) throws CoreException {
-		if(mainFunc == null)return Collections.emptyList();
-		List<IASTFunctionCallExpression> funcCalls = getFunctionCalls(mainFunc);
-		List<IASTFunctionDefinition> testRunners = new ArrayList<IASTFunctionDefinition>();
-		for (IASTFunctionCallExpression callExpression : funcCalls) {
-			if (callExpression.getFunctionNameExpression() instanceof IASTIdExpression) {
-				IASTIdExpression idExp = (IASTIdExpression) callExpression.getFunctionNameExpression();
-				IBinding bind = idExp.getName().resolveBinding();
-				IASTName[] defs = mainFunc.getTranslationUnit().getDefinitionsInAST(bind);
-				if(defs.length >0) {
-					addTestRunnerFuncDef(testRunners, defs);
-				}else {
-					IIndexName[] indexDefs = index.findDefinitions(bind);
-					IASTTranslationUnit ast = getAST(indexDefs[0]);
-					IASTName name = findName(ast, new String(indexDefs[0].getSimpleID()));
-					defs = ast.getDeclarationsInAST(name.resolveBinding());
-					if(defs.length > 0) {
+		if(mainFunc == null) {
+			return Collections.emptyList();
+		}
+		IIndex index = mainFunc.getTranslationUnit().getIndex();
+
+		try {
+			index.acquireReadLock();
+			List<IASTFunctionCallExpression> funcCalls = getFunctionCalls(mainFunc);
+			List<IASTFunctionDefinition> testRunners = new ArrayList<IASTFunctionDefinition>();
+			for (IASTFunctionCallExpression callExpression : funcCalls) {
+				if (callExpression.getFunctionNameExpression() instanceof IASTIdExpression) {
+					IASTIdExpression idExp = (IASTIdExpression) callExpression.getFunctionNameExpression();
+					IBinding bind = idExp.getName().resolveBinding();
+					IASTName[] defs = mainFunc.getTranslationUnit().getDefinitionsInAST(bind);
+					if(defs.length >0) {
 						addTestRunnerFuncDef(testRunners, defs);
+					}else {
+						IIndexName[] indexDefs = index.findDefinitions(bind);
+						IASTTranslationUnit ast = getAST(indexDefs[0]);
+						IASTName name = findName(ast, new String(indexDefs[0].getSimpleID()));
+						defs = ast.getDeclarationsInAST(name.resolveBinding());
+						if(defs.length > 0) {
+							addTestRunnerFuncDef(testRunners, defs);
+						}
 					}
 				}
 			}
+
+			return testRunners;
+		} catch (InterruptedException e) {
+		}finally {
+			index.releaseReadLock();
 		}
-		
-		return testRunners;
+		return Collections.emptyList();
 	}
 
 	private IASTName findName(IASTTranslationUnit ast, final String string) {
@@ -216,7 +227,7 @@ public class RunnerFinder {
 			public int visit(IASTName name) {
 				if (name.isDefinition() && name.getNodeLocations().length > 0) {
 					IASTNodeLocation nodeLocation = name.getNodeLocations()[0];
-					if (indexName.getNodeOffset() == nodeLocation.getNodeOffset() 
+					if (indexName.getNodeOffset() == nodeLocation.getNodeOffset()
 							&& indexName.getNodeLength() == nodeLocation.getNodeLength()
 							&& new Path(indexName.getFileLocation().getFileName()).equals(new Path(nodeLocation.asFileLocation().getFileName()))) {
 						defName.setObject(name);

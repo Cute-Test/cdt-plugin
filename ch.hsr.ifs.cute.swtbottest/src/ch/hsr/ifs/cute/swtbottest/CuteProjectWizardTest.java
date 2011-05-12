@@ -20,11 +20,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
-import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.junit.After;
@@ -44,53 +42,12 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class CuteProjectWizardTest {
 
-	private final class JoinableMonitor extends NullProgressMonitor {
-		public boolean isDone = false;
-
-		@Override
-		public synchronized void done() {
-			isDone = true;
-			notifyAll();
-		}
-
-		public synchronized void join() {
-			while(!isDone) {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private final class ShellOpenCondition extends DefaultCondition {
-		private final SWTBotShell shell;
-
-		private ShellOpenCondition(SWTBotShell shell) {
-			this.shell = shell;
-		}
-
-		@Override
-		public boolean test() throws Exception {
-
-			return !shell.isActive();
-		}
-
-		@Override
-		public String getFailureMessage() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	}
-
-	private static SWTWorkbenchBot bot;
 	private String cuteVersion;
+	protected static SWTWorkbenchBot bot;
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		bot = new SWTWorkbenchBot();
-		//		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("nls")
@@ -171,10 +128,13 @@ public class CuteProjectWizardTest {
 			bot.checkBox("Enable coverage analysis using gcov").click();
 		}
 		bot.button("Finish").click();
-		ICondition cond = new ShellOpenCondition(shell);
-		cond.init(bot);
-		bot.waitUntil(cond,10000);
+		bot.waitUntil(Conditions.shellCloses(shell),10000);
 		return projectName;
+	}
+
+	@AfterClass
+	public static void sleep() {
+		bot.sleep(2000);
 	}
 
 	@After
@@ -186,11 +146,6 @@ public class CuteProjectWizardTest {
 			project.delete(true, monitor);
 			monitor.join();
 		}
-	}
-
-	@AfterClass
-	public static void sleep() {
-		bot.sleep(2000);
 	}
 
 }
