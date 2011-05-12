@@ -58,7 +58,7 @@
       <import plugin="org.eclipse.jface" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.ui.workbench" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.compare" version="3.4.0" match="compatible"/>
-      <import plugin="org.eclipse.cdt.launch" version="6.0.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.launch" version="6.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.debug.core" version="7.0.0" match="compatible"/>
    </requires>
 
@@ -117,5 +117,11 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.swtbottest"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
