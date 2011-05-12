@@ -10,7 +10,9 @@ package ch.hsr.ifs.cute.swtbottest;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.model.ICProject;
@@ -20,6 +22,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -51,7 +54,7 @@ public class CuteNewSuiteTest {
 
 	@SuppressWarnings("nls")
 	@Before
-	public void setup() throws CoreException {
+	public void setup() throws CoreException, IOException {
 		bot.perspectiveByLabel("C/C++").activate();
 		bot.menu("File").menu("Import...").click();
 		final SWTBotShell shell = bot.shell("Import");
@@ -60,12 +63,11 @@ public class CuteNewSuiteTest {
 		expandNode.select("Existing Projects into Workspace");
 		bot.button("Next >").click();
 		shell.pressShortcut(SWT.ALT, 'a');
-		String location = Activator.getDefault().getBundle().getLocation();
+		URL location = Activator.getDefault().getBundle().getResource("cuteTestProject.zip");
+		location = FileLocator.toFileURL(location);
 		System.out.println(location);
-		int pos = location.indexOf("file:");
-		String archive = (location + "cuteTestProject.zip").substring(pos + 5);
-		System.out.println(archive);
-		bot.text(1).setText(archive);
+		System.out.println(location.getPath());
+		bot.text(1).setText(location.getPath());
 		shell.pressShortcut(SWT.ALT, 'e');
 		bot.button("Finish").click();
 		bot.waitUntil(Conditions.shellCloses(shell),10000);
