@@ -60,7 +60,9 @@ public class CuteNewSuiteTest {
 		expandNode.select("Existing Projects into Workspace");
 		bot.button("Next >").click();
 		shell.pressShortcut(SWT.ALT, 'a');
-		String archive = (Activator.getDefault().getBundle().getLocation() + "cuteTestProject.zip").substring(15);
+		String location = Activator.getDefault().getBundle().getLocation();
+		System.out.println(location);
+		String archive = (location + "cuteTestProject.zip").substring(15);
 		bot.text(1).setText(archive);
 		shell.pressShortcut(SWT.ALT, 'e');
 		bot.button("Finish").click();
