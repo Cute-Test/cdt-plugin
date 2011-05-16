@@ -16,7 +16,6 @@ Require-Bundle: org.eclipse.ui,
  ch.hsr.ifs.cute.ui;bundle-version="4.0.2",
  ch.hsr.ifs.cute.boost;bundle-version="1.42.0",
  ch.hsr.ifs.cute.core;bundle-version="3.0.0",
- ch.hsr.ifs.cute.gcov;bundle-version="1.2.2",
  ch.hsr.ifs.cute.headers.1_5;bundle-version="2.0.1",
  ch.hsr.ifs.cute.headers.1_6;bundle-version="2.0.1",
  ch.hsr.ifs.test.framework;bundle-version="3.0.2",
@@ -24,7 +23,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.managedbuilder.core;bundle-version="8.0.0",
  org.eclipse.cdt.managedbuilder.gnu.ui;bundle-version="8.0.0",
  org.eclipse.cdt.managedbuilder.ui;bundle-version="8.0.0",
- org.eclipse.cdt.sdk;bundle-version="8.0.0",
  org.apache.log4j;bundle-version="1.2.13"
 Eclipse-RegisterBuddy: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

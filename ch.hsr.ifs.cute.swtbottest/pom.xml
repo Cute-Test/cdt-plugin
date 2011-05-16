@@ -19,7 +19,7 @@
 				<artifactId>maven-osgi-test-plugin</artifactId>
 				<version>0.10.0</version>
 				<configuration>
-					<argLine>-Xmx1024m</argLine>
+					<argLine>-Xmx2048m</argLine>
 					<testSuite>ch.hsr.ifs.cute.swtbottest</testSuite>
 					<testClass>ch.hsr.ifs.cute.swtbottest.AllTests</testClass>
 					<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
