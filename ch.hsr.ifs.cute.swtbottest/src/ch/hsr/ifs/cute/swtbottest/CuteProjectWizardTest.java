@@ -146,6 +146,7 @@ public class CuteProjectWizardTest {
 			project.delete(true, monitor);
 			monitor.join();
 		}
+		System.gc();
 	}
 
 }

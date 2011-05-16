@@ -124,6 +124,7 @@ public class CuteNewSuiteTest {
 			project.delete(true, monitor);
 			monitor.join();
 		}
+		System.gc();
 	}
 
 	@AfterClass
