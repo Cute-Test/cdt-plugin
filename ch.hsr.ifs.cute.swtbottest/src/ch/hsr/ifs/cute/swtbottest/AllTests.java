@@ -5,7 +5,9 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ CuteProjectWizardTest.class, CuteNewSuiteTest.class})
+@SuiteClasses({ CuteProjectWizardTest.class,
+	//	CuteNewSuiteTest.class
+})
 public class AllTests {
 
 }
