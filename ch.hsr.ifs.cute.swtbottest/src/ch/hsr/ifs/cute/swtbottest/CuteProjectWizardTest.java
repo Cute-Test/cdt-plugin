@@ -128,7 +128,7 @@ public class CuteProjectWizardTest {
 			bot.checkBox("Enable coverage analysis using gcov").click();
 		}
 		bot.button("Finish").click();
-		bot.waitUntil(Conditions.shellCloses(shell),10000);
+		bot.waitUntil(Conditions.shellCloses(shell),50000);
 		return projectName;
 	}
 
