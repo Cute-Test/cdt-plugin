@@ -24,39 +24,48 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 public abstract class AbstractFunctionAction {
-	
+
 	/**
 	 * @since 4.0
 	 */
 	public abstract MultiTextEdit createEdit(ITextEditor ceditor,
 			IEditorInput editorInput, IDocument doc, ISelection selection)
-			throws CoreException;
-	
-	//return the CDT representation of the file under modification 
+					throws CoreException;
+
+	//return the CDT representation of the file under modification
 	protected IASTTranslationUnit getASTTranslationUnit(IFile editorFile)
 			throws CoreException {
 		ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
-		IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());	
-		IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
-		return astTu;
+		IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());
+		try {
+			index.acquireReadLock();
+			IASTTranslationUnit astTu = tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
+			return astTu;
+		} catch (InterruptedException e) {
+		}finally {
+			index.releaseReadLock();
+		}
+		return null;
 	}
 
-	
+
 	public void createProblemMarker(FileEditorInput editorInput,String message,int lineNo){
-		
+
 		try {
 			IFile editorFile = (editorInput).getFile();
 			IMarker marker = editorFile.createMarker("org.eclipse.cdt.core.problem"); //$NON-NLS-1$
-		    marker.setAttribute(IMarker.MESSAGE, "cute:"+message); //$NON-NLS-1$
-		    marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-		    marker.setAttribute(IMarker.TRANSIENT, true);
-		    if(lineNo!=0)marker.setAttribute(IMarker.LINE_NUMBER, lineNo);
-		    marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-	   } catch (CoreException e) {
-	      // You need to handle the cases where attribute value is rejected
-	   }
+			marker.setAttribute(IMarker.MESSAGE, "cute:"+message); //$NON-NLS-1$
+			marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+			marker.setAttribute(IMarker.TRANSIENT, true);
+			if(lineNo!=0) {
+				marker.setAttribute(IMarker.LINE_NUMBER, lineNo);
+			}
+			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+		} catch (CoreException e) {
+			// You need to handle the cases where attribute value is rejected
+		}
 	}
-	
+
 }
 //http://www.ibm.com/developerworks/library/os-ecl-cdt3/index.html?S_TACT=105AGX44&S_CMP=EDU
 //Building a CDT-based editor

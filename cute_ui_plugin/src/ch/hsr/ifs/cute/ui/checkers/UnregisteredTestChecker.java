@@ -37,10 +37,10 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		RegisteredTestFunctionFinderVisitor registeredFunctionFinder = new RegisteredTestFunctionFinderVisitor();
 		ast.accept(testFunctionFinder);
 		ast.accept(registeredFunctionFinder);
-		markUnregisteredFinctions(testFunctionFinder.getTestFunctions(), registeredFunctionFinder.getRegisteredFunctionNames());
+		markUnregisteredFunctions(testFunctionFinder.getTestFunctions(), registeredFunctionFinder.getRegisteredFunctionNames());
 	}
 
-	private void markUnregisteredFinctions(List<IASTDeclaration> testFunctions,
+	private void markUnregisteredFunctions(List<IASTDeclaration> testFunctions,
 			List<String> registeredFunctionNames) {
 		for (IASTDeclaration iastDeclaration : testFunctions) {
 			if(!(registeredFunctionNames.contains(getName(iastDeclaration)))) {

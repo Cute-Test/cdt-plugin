@@ -20,7 +20,7 @@ import ch.hsr.ifs.cute.ui.test.UiTestPlugin;
  *
  */
 public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
-	
+
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//#define ASSERT(cond) ASSERTM(#cond,cond)
 	//
@@ -35,7 +35,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		loadCodeAndRun(getAboveComment());
 		checkErrorLine(4);
 	}
-	
+
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//#define ASSERT(cond) ASSERTM(#cond,cond)
 	//#define CUTE(name) cute::test((&name),(#name))
@@ -52,7 +52,28 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		loadCodeAndRun(getAboveComment());
 		checkNoErrors();
 	}
-	
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//#define ASSERT(cond) ASSERTM(#cond,cond)
+	//#define CUTE(name) cute::test((&name),(#name))
+	//
+	//void thisIsATest(){
+	//	ASSERT(true);
+	//}
+	//
+	//void unregisteredTest(){
+	//    ASSERT(true);
+	//}
+	//
+	//void runSuite() {
+	//	cute::suite s;
+	//	s.push_back(CUTE(thisIsATest));
+	//}
+	public void testRegisteredTestFunction2() {
+		loadCodeAndRun(getAboveComment());
+		checkErrorLine(9);
+	}
+
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//#define ASSERT(cond) ASSERTM(#cond,cond)
 	//
@@ -69,7 +90,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		loadCodeAndRun(getAboveComment());
 		checkErrorLine(5);
 	}
-	
+
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//#define ASSERT(cond) ASSERTM(#cond,cond)
 	//
@@ -87,7 +108,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		loadCodeAndRun(getAboveComment());
 		checkNoErrors();
 	}
-	
+
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//#define ASSERT(cond) ASSERTM(#cond,cond)
 	//#define CUTE_SMEMFUN(TestClass,MemberFunctionName) \
@@ -109,7 +130,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		loadCodeAndRun(getAboveComment());
 		checkNoErrors();
 	}
-	
+
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//#define ASSERT(cond) ASSERTM(#cond,cond)
 	//#define CUTE_SMEMFUN(TestClass,MemberFunctionName) \
@@ -130,7 +151,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		loadCodeAndRun(getAboveComment());
 		checkErrorLine(9);
 	}
-	
+
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//#define ASSERT(cond) ASSERTM(#cond,cond)
 	//#define CUTE_SMEMFUN(TestClass,MemberFunctionName) \
@@ -155,7 +176,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		loadCodeAndRun(getAboveComment());
 		checkNoErrors();
 	}
-	
+
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//#define ASSERT(cond) ASSERTM(#cond,cond)
 	//#define CUTE_SMEMFUN(TestClass,MemberFunctionName) \
@@ -179,12 +200,13 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		loadCodeAndRun(getAboveComment());
 		checkErrorLine(13);
 	}
-	
+
 	@Override
 	public boolean isCpp() {
 		return true;
 	}
 
+	@Override
 	protected StringBuffer[] getContents(int sections) {
 		try {
 			UiTestPlugin plugin = UiTestPlugin.getDefault();

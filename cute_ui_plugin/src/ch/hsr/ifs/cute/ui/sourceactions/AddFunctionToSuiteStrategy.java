@@ -10,9 +10,12 @@ package ch.hsr.ifs.cute.ui.sourceactions;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
+
+import ch.hsr.ifs.cute.ui.UiPlugin;
 
 /**
  * @author Emanuel Graf IFS
@@ -20,15 +23,15 @@ import org.eclipse.text.edits.MultiTextEdit;
  *
  */
 public class AddFunctionToSuiteStrategy extends AddStrategy {
-	
-	
 
-	private SuitePushBackFinder suitPushBackFinder;
-	private IASTName name;
-	private IASTTranslationUnit astTu;
-	private IFile file;
-	private IDocument doc;
-	
+
+
+	private final SuitePushBackFinder suitPushBackFinder;
+	private final IASTName name;
+	private final IASTTranslationUnit astTu;
+	private final IFile file;
+	private final IDocument doc;
+
 
 	public AddFunctionToSuiteStrategy(IDocument doc, IFile file, IASTTranslationUnit tu, IASTName iastName, SuitePushBackFinder finder) {
 		super(doc);
@@ -37,12 +40,15 @@ public class AddFunctionToSuiteStrategy extends AddStrategy {
 		this.astTu = tu;
 		this.name = iastName;
 		this.suitPushBackFinder = finder;
-		
+
 	}
 
 	@Override
 	public MultiTextEdit getEdit() {
 		//TODO do not add the function holding the suite
+		IIndex index = astTu.getIndex();
+		try {
+			index.acquireReadLock();
 			MultiTextEdit mEdit = new MultiTextEdit();
 			String name = this.name.toString();
 			if(!checkPushback(astTu,name,suitPushBackFinder))
@@ -50,7 +56,13 @@ public class AddFunctionToSuiteStrategy extends AddStrategy {
 				mEdit.addChild(createPushBackEdit(file, doc, astTu,
 						name, suitPushBackFinder));
 			}
-		return mEdit;
+			return mEdit;
+		} catch (InterruptedException e) {
+			UiPlugin.log(e);
+		}finally {
+			index.releaseReadLock();
+		}
+		return new MultiTextEdit();
 	}
 
 }
