@@ -38,7 +38,7 @@
 		<module>../cute_ui_plugin</module>
 		<module>../ch.hsr.ifs.cute.ui.test</module>
 		<module>../ch.hsr.ifs.test.framework.test</module>
-		<module>../ch.hsr.ifs.cute.swtbottest</module>
+		<!--<module>../ch.hsr.ifs.cute.swtbottest</module> -->
 		<!-- CUTE Headers -->
 		<module>../ch.hsr.ifs.cute.headers.base.test</module>
 		<module>../Cute.1_0_Feature</module>
