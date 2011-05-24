@@ -17,7 +17,7 @@ public class SourceActionsTest {
 
 		ts.addTest(TestBugFixes.suite());
 		ts.addTestSuite(AddTestToSuiteTest.class);
-		//		ts.addTestSuite(NewTestFunctionTest.class);
+		ts.addTestSuite(NewTestFunctionTest.class);
 
 		return ts;
 	}
