@@ -41,9 +41,6 @@
 		<!--<module>../ch.hsr.ifs.cute.swtbottest</module> -->
 		<!-- CUTE Headers -->
 		<module>../ch.hsr.ifs.cute.headers.base.test</module>
-		<module>../Cute.1_0_Feature</module>
-		<module>../Cute_Header_1.0.0</module>
-		<module>../ch.hsr.ifs.cute.headers.1_0.test</module>
 		<module>../Cute.1_5_Feature</module>
 		<module>../Cute_Header_1.5.0</module>
 		<module>../ch.hsr.ifs.cute.headers.1_5.test</module>
