@@ -32,7 +32,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	cute::suite s;
 	//}
 	public void testUnregisteredTestFunction() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkErrorLine(4);
 	}
 
@@ -49,7 +49,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	s.push_back(CUTE(thisIsATest));
 	//}
 	public void testRegisteredTestFunction() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkNoErrors();
 	}
 
@@ -70,7 +70,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	s.push_back(CUTE(thisIsATest));
 	//}
 	public void testRegisteredTestFunction2() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkErrorLine(9);
 	}
 
@@ -87,7 +87,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	cute::suite s;
 	//}
 	public void testUnregisteredFunctor() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkErrorLine(5);
 	}
 
@@ -105,7 +105,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	s.push_back(testFunctor());
 	//}
 	public void testRegisteredFunctor() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkNoErrors();
 	}
 
@@ -115,6 +115,11 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//cute::makeSimpleMemberFunctionTest<TestClass>(\
 	//		&TestClass::MemberFunctionName,\
 	//		#MemberFunctionName)
+	//
+	//namespace cute{
+	//template <typename TestClass, typename MemFun>
+	//  test makeSimpleMemberFunctionTest(MemFun fun,char const *name);
+	//}
 	//
 	//struct testStruct{
 	//	void testIt(){
@@ -127,7 +132,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	s.push_back(CUTE_SMEMFUN(testStruct, testIt));
 	//}
 	public void testRegisteredMemberFunctionInline() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkNoErrors();
 	}
 
@@ -148,7 +153,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	cute::suite s;
 	//}
 	public void testUnregisteredMemberFunctionInline() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkErrorLine(9);
 	}
 
@@ -158,6 +163,11 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//cute::makeSimpleMemberFunctionTest<TestClass>(\
 	//		&TestClass::MemberFunctionName,\
 	//		#MemberFunctionName)
+	//
+	//namespace cute{
+	//template <typename TestClass, typename MemFun>
+	//  test makeSimpleMemberFunctionTest(MemFun fun,char const *name);
+	//}
 	//
 	//struct testStruct{
 	//	void testIt();
@@ -173,7 +183,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	s.push_back(CUTE_SMEMFUN(testStruct, testIt));
 	//}
 	public void testRegisteredMemberFunction() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkNoErrors();
 	}
 
@@ -197,7 +207,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//	cute::suite s;
 	//}
 	public void testUnregisteredMemberFunction() {
-		loadCodeAndRun(getAboveComment());
+		loadCodeAndRunCpp(getAboveComment());
 		checkErrorLine(13);
 	}
 
