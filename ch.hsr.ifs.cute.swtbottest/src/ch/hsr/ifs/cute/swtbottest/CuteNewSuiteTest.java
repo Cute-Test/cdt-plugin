@@ -74,7 +74,7 @@ public class CuteNewSuiteTest {
 
 	@SuppressWarnings("nls")
 	@Test
-	public void newSuiteTest() throws Exception {
+	public void newSuiteTestLinkRunnner() throws Exception {
 		SWTBot projBot = bot.viewByTitle("Project Explorer").bot();
 		SWTBotTreeItem tItem = projBot.tree().expandNode("cute").expandNode("src").getNode("Test.cpp");
 		tItem.doubleClick();
@@ -101,6 +101,30 @@ public class CuteNewSuiteTest {
 		assertTrue(content.contains("#include \"TestSuite.h\""));
 		assertTrue(content.contains("cute::suite TestSuite = make_suite_TestSuite();"));
 		assertTrue(content.contains("cute::makeRunner(lis)(TestSuite, \"TestSuite\");"));
+	}
+
+	@SuppressWarnings("nls")
+	@Test
+	public void newSuiteTest() throws Exception {
+		SWTBot projBot = bot.viewByTitle("Project Explorer").bot();
+		SWTBotTreeItem tItem = projBot.tree().expandNode("cute").expandNode("src").getNode("Test.cpp");
+		tItem.doubleClick();
+		tItem.select();
+		bot.menu("File").menu("New").menu("Suite File").click();
+		final SWTBotShell shell = bot.shell("New Cute Suite File");
+		shell.activate();
+		bot.text(1).setText("TestSuite");
+		bot.button("Finish").click();
+		bot.waitUntil(Conditions.shellCloses(shell), 50000);
+		ICProject proj = CCorePlugin.getDefault().getCoreModel().create(ResourcesPlugin.getWorkspace().getRoot().getProject("cute"));
+		assertTrue(proj.exists());
+		IProject project = proj.getProject();
+		IFile file = project.getFile("src/TestSuite.h");
+		assertTrue(file.exists());
+		file = project.getFile("src/TestSuite.cpp");
+		assertTrue(file.exists());
+		file = project.getFile("src/Test.cpp");
+		assertTrue(file.exists());
 	}
 
 	private String getCodeFromIFile(IFile file) throws Exception {
