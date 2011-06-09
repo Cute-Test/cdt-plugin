@@ -32,6 +32,7 @@ public class ModelBuilderSuite {
 		suite.addTest(ModelBuilderTest.suite("failedEqualsTest.txt")); //$NON-NLS-1$
 		suite.addTest(ModelBuilderTest.suite("errorTest.txt")); //$NON-NLS-1$
 		suite.addTest(ModelBuilderTest.suite("successTest.txt")); //$NON-NLS-1$
+		suite.addTest(ModelBuilderTest.suite("outputInTest.txt")); //$NON-NLS-1$
 		//$JUnit-END$
 		return suite;
 	}

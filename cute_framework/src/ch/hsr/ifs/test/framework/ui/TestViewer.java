@@ -47,19 +47,19 @@ import ch.hsr.ifs.test.framework.model.TestStatus;
 import ch.hsr.ifs.test.framework.model.TestSuite;
 
 public class TestViewer extends Composite implements ITestElementListener, ISessionListener, ITestCompositeListener{
-	
+
 	private static Messages msg = TestFrameworkPlugin.getMessages();
-	
+
 	private final class UpdateTestElement extends UIJob {
 		private UpdateTestElement(String name, TestElement element, boolean reveal) {
 			super(name);
 			this.element = element;
 			this.reveal = reveal;
 		}
-		
-		private TestElement element;
-		private boolean reveal;
-		
+
+		private final TestElement element;
+		private final boolean reveal;
+
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			treeViewer.refresh(element, true);
@@ -69,16 +69,16 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
 		}
 	}
-	
+
 	private final class ShowNewTest extends UIJob {
 		private ShowNewTest(String name, ITestComposite composite, TestElement newElement) {
 			super(name);
 			this.parent = composite;
 			this.element = newElement;
 		}
-		
-		private ITestComposite parent;
-		private TestElement element;
+
+		private final ITestComposite parent;
+		private final TestElement element;
 
 		@Override
 		public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -102,14 +102,14 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 				}
 			}
 
-					
+
 		}
 
 		public TestResultViewer(Composite parent, int style) {
 			super(parent, style);
 			addMouseListener(new TestResultDClickListener());
 		}
-		
+
 		public void showTestDetail(TestElement test) {
 			if (test instanceof TestCase) {
 				TestCase tCase = (TestCase) test;
@@ -120,9 +120,9 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 				redraw();
 			}
 		}
-		
+
 	}
-	
+
 	private final class FailuresOnlyFilter extends ViewerFilter{
 
 		@Override
@@ -141,15 +141,15 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 				return true;
 			}
 		}
-		
+
 	}
-	
+
 	private final class ReverseVector<T> extends Vector<T> {
 
 		private static final long serialVersionUID = -7493342763899946849L;
-		
-		private Vector<? extends T> vec;
-		
+
+		private final Vector<? extends T> vec;
+
 		public ReverseVector(Vector<? extends T> vec){
 			this.vec = vec;
 		}
@@ -163,24 +163,24 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		public synchronized int size() {
 			return vec.size();
 		}
-		
-		
-		
+
+
+
 	}
 
 	private SashForm sashForm = null;
 	private TreeViewer treeViewer = null;
 	private TestResultViewer testResultViewer = null;
-	
+
 	private TestSession session;
-	private Vector<TestElement> elemets = new Vector<TestElement>();
-	
-	private TestRunnerViewPart viewPart;
-	
+	private final Vector<TestElement> elemets = new Vector<TestElement>();
+
+	private final TestRunnerViewPart viewPart;
+
 	private boolean failureOnly = false;
-	private FailuresOnlyFilter failuresOnlyFilter = new FailuresOnlyFilter();
+	private final FailuresOnlyFilter failuresOnlyFilter = new FailuresOnlyFilter();
 	private CuteTestDClickListener cuteTestDClickListener;;
-	
+
 	public TestViewer(Composite parent, int style, TestRunnerViewPart viewPart) {
 		super(parent, style);
 		this.viewPart = viewPart;
@@ -198,7 +198,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		testResultViewer.setText(""); //$NON-NLS-1$
 		treeViewer.setInput(session);
 	}
-	
+
 	public void showTestDetails(TestElement testElement) {
 		testResultViewer.showTestDetail(testElement);
 	}
@@ -212,7 +212,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		gridLayout.marginHeight = 0;
 		createSashForm();
 		this.setLayout(gridLayout);
-//		setSize(new Point(300, 200));
+		//		setSize(new Point(300, 200));
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		treeViewer.addSelectionChangedListener(new CuteTestSelecetionListener(this));
 		cuteTestDClickListener = new CuteTestDClickListener(session);
 		treeViewer.addDoubleClickListener(cuteTestDClickListener);
-		testResultViewer = new TestResultViewer(sashForm, SWT.FLAT);
+		testResultViewer = new TestResultViewer(sashForm, SWT.WRAP);
 		testResultViewer.setEditable(false);
 		testResultViewer.setIndent(5);
 	}
@@ -255,7 +255,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		session.addListener(this);
 		cuteTestDClickListener.setSession(session);
 		UIJob job = new UIJob(msg.getString("TestViewer.ResetTestViewer")) { //$NON-NLS-1$
-			
+
 			@Override
 			public boolean belongsTo(Object family) {
 				return TestFrameworkPlugin.PLUGIN_ID.equals(family);
@@ -266,15 +266,15 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 				reset(TestViewer.this.session);
 				return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestViewer.OK"),null); //$NON-NLS-1$
 			}
-			
+
 		};
 		job.schedule();
 	}
-	
+
 	public void sessionFinished(TestSession session) {
-		
+
 	}
-	
+
 	public void setFailuresOnly(boolean failureOnly) {
 		this.failureOnly = failureOnly;
 		updateFilters();
@@ -297,7 +297,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			}else {
 				treeViewer.setSelection(new StructuredSelection(findFirstFailure()));
 			}
-			
+
 		}
 	}
 
@@ -306,7 +306,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		Object firstElement = selection.getFirstElement();
 		return firstElement;
 	}
-	
+
 	protected TestCase getTreeSelection() {
 		ISelection sel = treeViewer.getSelection();
 		if (sel instanceof TreeSelection) {
@@ -322,7 +322,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	public void selectFirstFailure() {
 		treeViewer.setSelection(new StructuredSelection(findFirstFailure()), true);
 	}
-	
+
 	private TestElement findFirstFailure() {
 		Vector<TestElement> elements = getSession().getElements();
 		for (TestElement element : elements) {
@@ -368,7 +368,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		if(nextFailure != null) {
 			return nextFailure;
 		}else {
-		return findNextFailureInParent(selected.getParent(), selected, false);
+			return findNextFailureInParent(selected.getParent(), selected, false);
 		}
 	}
 
@@ -408,13 +408,14 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		}
 		return null;
 	}
-	
+
 	protected void setOrientation(boolean horizontal) {
-		if ((sashForm == null) || sashForm.isDisposed())
+		if ((sashForm == null) || sashForm.isDisposed()) {
 			return;
+		}
 		sashForm.setOrientation(horizontal ? SWT.HORIZONTAL : SWT.VERTICAL);
 	}
-	
+
 	public void selectPrevFailure() {
 		if(getSession().hasErrorOrFailure()) {
 			Object firstElement = getSelectedElement();
@@ -426,14 +427,14 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			}
 		}
 	}
-	
-	
+
+
 	private TestElement findPrevFailure(TestCase selected) {
 		TestElement nextFailure = findNextSiblingFailure(selected, true);
 		if(nextFailure != null) {
 			return nextFailure;
 		}else {
-		return findNextFailureInParent(selected.getParent(), selected, true);
+			return findNextFailureInParent(selected.getParent(), selected, true);
 		}
 	}
 

@@ -22,51 +22,80 @@ import ch.hsr.ifs.test.framework.event.TestEventHandler;
  *
  */
 public class ModellBuilder extends TestEventHandler {
-	
-	private CuteModel model = TestFrameworkPlugin.getModel();
-	private IPath rtPath;
+
+	private final CuteModel model = TestFrameworkPlugin.getModel();
+	private final IPath rtPath;
+	private TestCase lastTestCase;
 	private TestCase currentTestCase;
-	private ILaunch launch;
-		
+	private final ILaunch launch;
+
 	public ModellBuilder(IPath exePath, ILaunch launch) {
 		super();
 		this.rtPath = exePath;
-		this.launch = launch; 
+		this.launch = launch;
 	}
 	public ModellBuilder(IPath path) {
 		this(path, null);
 	}
 
+	@Override
 	public void handleError(IRegion reg, String testName, String msg) {
-		model.endCurrentTestCase(null, -1, msg, TestStatus.error, currentTestCase);
+		if(currentTestCase != null) {
+			model.endCurrentTestCase(null, -1, msg, TestStatus.error, currentTestCase);
+			endTestCase();
+		}else {
+			unexpectedTestCaseEnd();
+		}
+	}
+	private void unexpectedTestCaseEnd() {
+		if(lastTestCase != null) {
+			model.endCurrentTestCase(null, -1, Messages.ModellBuilder_0, TestStatus.error, lastTestCase);
+		}
+
+	}
+	private void endTestCase() {
+		lastTestCase = currentTestCase;
 		currentTestCase = null;
 	}
 
+	@Override
 	public void handleSuccess(IRegion reg, String name, String msg) {
-		model.endCurrentTestCase(null, -1, msg, TestStatus.success, currentTestCase);
-		currentTestCase = null;
+		if(currentTestCase != null) {
+			model.endCurrentTestCase(null, -1, msg, TestStatus.success, currentTestCase);
+			endTestCase();
+		}else {
+			unexpectedTestCaseEnd();
+		}
 	}
 
+	@Override
 	public void handleEnding(IRegion reg, String suitename) {
 		model.endSuite();
 	}
 
+	@Override
 	public void handleBeginning(IRegion reg, String suitename, String suitesize) {
 		model.startSuite(new TestSuite(suitename, Integer.parseInt(suitesize), TestStatus.running));
 	}
 
+	@Override
 	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason){
-		IPath filePath=rtPath.append(fileName);
-		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
-		int lineNumber = Integer.parseInt(lineNo);
-		model.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase);
-		currentTestCase = null;
-		
+		if(currentTestCase != null) {
+			IPath filePath=rtPath.append(fileName);
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
+			int lineNumber = Integer.parseInt(lineNo);
+			model.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase);
+			endTestCase();
+		}else {
+			unexpectedTestCaseEnd();
+		}
+
 	}
-	
+
+	@Override
 	public void handleTestStart(IRegion reg, String suitename) {
 		currentTestCase = new TestCase(suitename);
-		model.addTest(currentTestCase);		
+		model.addTest(currentTestCase);
 	}
 
 	@Override
