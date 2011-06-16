@@ -1,0 +1,303 @@
+//!CallPrivateInStructFromOutside
+//@A.cpp
+struct B
+{
+private:
+    int foo()
+    {
+        return int();
+    }
+};
+
+void test()
+{
+    B b;
+    int x = b.foo();
+}
+//=
+struct B
+{
+    int foo()
+    {
+        return int();
+    }
+
+private:
+};
+
+void test()
+{
+    B b;
+    int x = b.foo();
+}
+//!CallPrivateInStructFromInside
+//@.config
+nomarkers=true
+//@A.cpp
+struct B
+{
+    void foo()
+    {
+        bar();
+    }
+private:
+    void bar()
+    {
+    }
+};
+//=
+struct B
+{
+    void foo()
+    {
+        bar();
+    }
+private:
+    void bar()
+    {
+    }
+};
+//!CallDefaultInClassFromOutside
+//@A.cpp
+class B
+{
+    void foo()
+    {
+    }
+};
+
+void test()
+{
+    B b;
+    b.foo();
+}
+//=
+class B
+{
+public:
+    void foo()
+    {
+    }
+};
+
+void test()
+{
+    B b;
+    b.foo();
+}
+//!CallDefaultInClassFromInside
+//@.config
+nomarkers=true
+//@A.cpp
+class B 
+{
+    void foo()
+    {
+        bar();
+    }
+    void bar()
+    {
+    }
+};
+//=
+class B 
+{
+    void foo()
+    {
+        bar();
+    }
+    void bar()
+    {
+    }
+};
+//!InsertAtRightPositionStruct
+//@A.cpp
+struct B
+{
+public:
+private:
+    void foo()
+    {
+    }
+};
+
+void test()
+{
+    B b;
+    b.foo();
+}
+//=
+struct B
+{
+public:
+    void foo()
+    {
+    }
+
+private:
+};
+
+void test()
+{
+    B b;
+    b.foo();
+}
+//!PreserveCommentsWhenHiding
+//@A.cpp
+struct B{
+private:
+    // comment above function
+    int foo()
+    {
+        // comment inside function
+    }
+};
+void test() {
+    B b;
+    int x = b.foo();
+}
+//=
+struct B{
+    // comment above function
+    int foo()
+    {
+        // comment inside function
+    }
+
+private:
+};
+void test() {
+    B b;
+    int x = b.foo();
+}
+//!PreserveMacrosWhenHiding
+//@A.cpp
+class Klasse
+{
+    int foo(int i = __LINE__) {
+        return __LINE__;
+    }
+};
+int main() {
+    Klasse k;
+    int x = k.foo(42);
+    return 0;
+}
+//=
+class Klasse
+{
+public:
+    int foo(int i = __LINE__) {
+        return __LINE__;
+    }
+};
+int main() {
+    Klasse k;
+    int x = k.foo(42);
+    return 0;
+}
+//!TestChangeInOtherFiles
+//@A.cpp
+#include "B.h"
+
+void test() {
+    B b;
+    b.member();
+}
+//=
+#include "B.h"
+
+void test() {
+    B b;
+    b.member();
+}
+//@B.h
+#ifndef B_H_
+#define B_H_
+
+class B
+{
+    void member()
+    {
+    }
+};
+#endif /* B_H_ */
+//=
+#ifndef B_H_
+#define B_H_
+
+class B
+{
+public:
+    void member()
+    {
+    }
+};
+#endif /* B_H_ */
+//!PrivateFunctionDeclaration
+//@A.cpp
+class B
+{
+    int foo();
+};
+
+void test()
+{
+    B b;
+    int x = b.foo();
+}
+//=
+class B
+{
+public:
+    int foo();
+};
+
+void test()
+{
+    B b;
+    int x = b.foo();
+}
+//!PrivateMemberVariable
+//@A.cpp
+class B
+{
+    int foo;
+};
+
+void test()
+{
+    B b;
+    int x = b.foo;
+}
+//=
+class B
+{
+public:
+    int foo;
+};
+
+void test()
+{
+    B b;
+    int x = b.foo;
+}
+//!NoMarkerForInternalCalls
+//@.config
+nomarkers=true
+//@A.cpp
+class A {
+    int blah;
+public:
+	void member() {
+		this->blah++;
+	}
+};
+//=
+class A {
+    int blah;
+public:
+	void member() {
+		this->blah++;
+	}
+};

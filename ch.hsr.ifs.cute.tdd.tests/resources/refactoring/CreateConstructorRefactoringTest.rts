@@ -1,0 +1,260 @@
+//!SimpleInt
+//@A.cpp
+struct A {
+};
+
+void test()
+{
+    A a(1);
+}
+//=
+struct A {
+     A(const int & i)
+    {
+    }
+};
+
+void test()
+{
+    A a(1);
+}
+//!SimpleDouble
+//@A.cpp
+struct A {
+};
+
+void test()
+{
+    A a(1.0);
+}
+//=
+struct A {
+     A(const double & d)
+    {
+    }
+};
+
+void test()
+{
+    A a(1.0);
+}
+//!MultipleArgumentsJustOneParam
+//@A.cpp
+struct A {
+     A(const int & i)
+    {
+    }
+};
+
+void test()
+{
+    A a(2, 2);
+}
+//=
+struct A {
+     A(const int & i, const int & j)
+    {
+    }
+
+    A(const int & i)
+    {
+    }
+};
+
+void test()
+{
+    A a(2, 2);
+}
+//!OneArgMultipleParam
+//@A.cpp
+struct A {
+    A(const int & i, const int & j)
+    {
+    }
+};
+
+void test()
+{
+    A a(2);
+}
+//=
+struct A {
+    A(const int & i)
+    {
+    }
+
+    A(const int & i, const int & j)
+    {
+    }
+};
+
+void test()
+{
+    A a(2);
+}
+//!TypeArgument
+//@A.cpp
+struct Type {
+};
+
+struct A {
+};
+
+void test()
+{
+    Type t;
+    A a(t);
+}
+//=
+struct Type {
+};
+
+struct A {
+     A(Type & t)
+    {
+    }
+};
+
+void test()
+{
+    Type t;
+    A a(t);
+}
+//!SameParameterLength
+//@A.cpp
+struct A {
+    A(const std::string & s, const int & i)
+    {
+    }
+};
+
+void test()
+{
+    A a(1, 1);
+}
+//=
+struct A {
+    A(const int & i, const int & j)
+    {
+    }
+
+    A(const std::string & s, const int & i)
+    {
+    }
+};
+
+void test()
+{
+    A a(1, 1);
+}
+//!DoFindSameConstructors
+//@.config
+nomarkers=true
+//@A.cpp
+struct A {
+    A(const int & i, const int & j)
+    {
+    }
+};
+
+void test()
+{
+    A a(1, 1);
+}
+//=
+struct A {
+    A(const int & i, const int & j)
+    {
+    }
+};
+
+void test()
+{
+    A a(1, 1);
+}
+//!DefaultCtorNeeded
+//@A.cpp
+struct A {
+    A(const int & i)
+    {
+    }
+};
+
+void test()
+{
+    A a(1);
+    A b();
+}
+//=
+struct A {
+    A()
+    {
+    }
+
+    A(const int & i)
+    {
+    }
+};
+
+void test()
+{
+    A a(1);
+    A b();
+}
+//!NoMarkerifEqualInitializer
+//@.config
+nomarkers=true
+//@A.cpp
+struct Type {
+     Type getMe() const
+    {
+        return this;
+    }
+
+    Type(const int & i)
+    {
+    }
+
+};
+
+void newTestFunction(){
+    Type t(3);
+    Type u = t.getMe();
+}
+//=
+struct Type {
+     Type getMe() const
+    {
+        return this;
+    }
+
+    Type(const int & i)
+    {
+    }
+
+};
+
+void newTestFunction(){
+    Type t(3);
+    Type u = t.getMe();
+}
+//!ConstructorWithTemplate
+//@A.cpp
+template <typename T>
+struct A {      
+};
+
+void test() {
+    A<double> a(3);
+}
+//=
+template <typename T>
+struct A {
+     A(const int & i)
+    {
+    }
+};
+
+void test() {
+    A<double> a(3);
+}

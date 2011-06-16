@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
+            markerType="org.eclipse.cdt.codan.core.codanProblem">
+      </markerResolutionGenerator>
+      
+      <markerResolutionGenerator
+            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
+            markerType="org.eclipse.cdt.codan.core.codanSemanticProblem">
+      </markerResolutionGenerator>
+      
+      <markerResolutionGenerator
+            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
+            markerType="org.eclipse.cdt.core.problem">
+      </markerResolutionGenerator>
+   </extension>
+
+   <extension point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.FreeOperatorCreationQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createtype.CreateTypeQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.NormalFunctionCreationQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.NormalFreeFunctionCreationQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.CreateConstructorCreationQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createvariable.CreateMemberVariableQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR">
+      </resolution>
+      <resolution
+             class="ch.hsr.ifs.cute.tdd.createvariable.CreateLocalVariableQuickFix"
+             problemId="ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.changevisibility.ChangeVisibilityQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.MemberOperatorCreationQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.FreeOperatorCreationQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.NormalFreeFunctionCreationQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createnamespace.CreateNamespaceQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.tdd.createtype.CreateTypeQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR">
+      </resolution>
+       <resolution
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.StaticFunctionCreationQuickFix"
+            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR">
+      </resolution>
+   </extension>
+   
+  <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.FreeFunctionProblemChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.freefunctionproblemchecker"
+           name="Free function resolution checker">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"
+           name="Free function could not be resolved">
+        </problem>
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"
+           name="Free function could not be resolved">
+        </problem>
+     </checker>
+  </extension>
+  
+   <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.MemberFunctionProblemChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.memberfunctionproblemchecker"
+           name="Memberfunction resolution checker">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR"
+           name="Memberfunction could not be resolved">
+        </problem>
+     </checker>
+  </extension>
+  
+  <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.WrongArgumentChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.wrongargumentchecker"
+           name="Invalid argument checker">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR"
+           name="Invalid arguments">
+        </problem>
+         <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"
+           name="Invalid arguments">
+        </problem>
+     </checker>
+  </extension>
+  
+   <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblemChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.typeresolutionproblemchecker"
+           name="Type resolution checker">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"
+           name="Type could not be resolved">
+        </problem>
+     </checker>
+  </extension>
+  
+  <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblemChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.variableresolutionproblemchecker"
+           name="Varable resolution checker">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"
+           name="Variable could not be resolved">
+        </problem>
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR"
+           name="Member variable could not be resolved">
+        </problem>
+     </checker>
+  </extension>
+
+    <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.privatemethodchecker"
+           name="Private member function accessor">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"
+           name="Private member function called from outside">
+        </problem>
+     </checker>
+  </extension>
+
+    <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.missingconstructorchecker"
+           name="Missing Constructor Checker">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR"
+           name="Constructor could not be resolved">
+        </problem>
+     </checker>
+  </extension>
+  
+  <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.missingoperatorchecker"
+           name="Missing Operator Checker">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"
+           name="Operator could not be resolved">
+        </problem>
+     </checker>
+  </extension>
+  
+  <extension
+        point="org.eclipse.cdt.codan.core.checkers">
+     <checker
+           class="ch.hsr.ifs.cute.tdd.codan.checkers.MissingNamespaceChecker"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.missingnamespacechecker"
+           name="Missing namespace resolution checker">
+        <problem
+           defaultSeverity="Error"
+           id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR"
+           name="Namespace could not be resolved">
+        </problem>
+     </checker>
+  </extension>
+  
+  <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.cdt.ui.category.refactoring"
+            id="ch.hsr.ifs.cute.tdd.extractCommand"
+            name="%refactoringToggleRefactoring.label">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="ch.hsr.ifs.cute.tdd.extractCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="SHIFT+ALT+P">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="%CodingActionSet.description"
+            id="org.eclipse.cdt.ui.CodingActionSet"
+            label="%CodingActionSet.label"
+            visible="false">
+         <menu
+               id="org.eclipse.jdt.ui.source.menu"
+               label="%Source.menu.label"
+               path="edit">
+            <separator
+                  name="codeGroup">
+            </separator>
+         </menu>
+         <action
+               class="ch.hsr.ifs.cute.tdd.extract.ExtractActionDelegate"
+               definitionId="ch.hsr.ifs.cute.tdd.extractCommand"
+               id="ch.hsr.ifs.cute.tdd.action4"
+               label="%refactoringToggleRefactoring.label"
+               menubarPath="org.eclipse.jdt.ui.source.menu/codeGroup"
+               style="push">
+         </action>
+      </actionSet>
+   </extension>
+</plugin>

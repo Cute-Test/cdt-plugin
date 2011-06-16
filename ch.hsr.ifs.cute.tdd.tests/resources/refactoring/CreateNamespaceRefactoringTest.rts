@@ -1,0 +1,50 @@
+//!SingleNameSpaceCreation
+//@A.cpp
+void test() {
+    X::foo();
+}
+//=
+namespace X
+{
+}
+void test() {
+    X::foo();
+}
+//!NestedNamespaceCreation
+//@A.cpp
+namespace X
+{
+}
+void test() {
+    X::Y::foo();
+}
+//=
+namespace X
+{
+    namespace Y
+    {
+    }
+}
+void test() {
+    X::Y::foo();
+}
+//!NamespaceCreationInClass
+//@A.cpp
+struct A
+{
+};
+void test()
+{
+    A::Y::foo();
+}
+//=
+struct A
+{
+    namespace Y
+    {
+    }
+};
+void test()
+{
+    A::Y::foo();
+}

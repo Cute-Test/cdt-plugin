@@ -1,0 +1,230 @@
+//!TestSimpleVariableCreation
+//@A.cpp
+void func()
+{
+    int x = 1;
+    y = x;
+}
+//=
+void func()
+{
+    int x = 1;
+    int y;
+    y = x;
+}
+//!TestNamedTypeVariableCreation
+//@A.cpp
+struct B
+{
+};
+
+void func()
+{
+    B b1;
+    b2 = b1;
+}
+//=
+struct B
+{
+};
+
+void func()
+{
+    B b1;
+    B b2;
+    b2 = b1;
+}
+//!SimpleMacro
+//@A.cpp
+#define MACRO(c) c
+
+void test()
+{
+    MACRO(k);
+}
+//=
+#define MACRO(c) c
+
+void test()
+{
+    int k;
+    MACRO(k);
+}
+//!NamedTypeVariable
+//@A.cpp
+void func()
+{
+    b.member();
+}
+//=
+void func()
+{
+    int b;
+    b.member();
+}
+//!TestCuteMacroVariableCreation_ASSERT
+//@Test.cpp
+#include <string>
+namespace cute{
+    struct test_failure {
+        std::string reason;
+        std::string filename;
+        int lineno;
+
+        test_failure(std::string const &r,char const *f, int line)
+        :reason(r),filename(f),lineno(line)
+        {   }
+        char const * what() const { return reason.c_str(); }
+    };
+}
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+
+void blah(){
+    ASSERT(k);
+}
+//=
+#include <string>
+namespace cute{
+    struct test_failure {
+        std::string reason;
+        std::string filename;
+        int lineno;
+
+        test_failure(std::string const &r,char const *f, int line)
+        :reason(r),filename(f),lineno(line)
+        {   }
+        char const * what() const { return reason.c_str(); }
+    };
+}
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+
+void blah(){
+    bool k;
+    ASSERT(k);
+}
+//!TestCuteMacroVariableCreation_ASSERT_EQUALS
+//@Test.cpp
+namespace cute {
+    template <typename ExpectedValue, typename ActualValue>
+        void assert_equal(ExpectedValue const &expected
+                    ,ActualValue const &actual
+                    ,char const *msg
+                    ,char const *file
+                    ,int line) {
+            // unfortunately there is no is_integral_but_not_bool_or_enum
+            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+    }
+}
+#define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
+#define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
+
+void test(){
+    ASSERT_EQUAL(42, k.member());
+}
+//=
+namespace cute {
+    template <typename ExpectedValue, typename ActualValue>
+        void assert_equal(ExpectedValue const &expected
+                    ,ActualValue const &actual
+                    ,char const *msg
+                    ,char const *file
+                    ,int line) {
+            // unfortunately there is no is_integral_but_not_bool_or_enum
+            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+    }
+}
+#define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
+#define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
+
+void test(){
+    int k;
+    ASSERT_EQUAL(42, k.member());
+}
+//!TestCuteMacroVariableCreation_ASSERT_EQUALS_DELTA
+//@Test.cpp
+namespace cute {
+    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+        void assert_equal_delta(ExpectedValue const &expected
+                    ,ActualValue const &actual
+                    ,DeltaValue const &delta
+                    ,char const *msg
+                    ,char const *file
+                    ,int line) {
+        }
+}
+#define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
+#define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
+
+void testKreis(){
+    ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
+}
+//=
+namespace cute {
+    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+        void assert_equal_delta(ExpectedValue const &expected
+                    ,ActualValue const &actual
+                    ,DeltaValue const &delta
+                    ,char const *msg
+                    ,char const *file
+                    ,int line) {
+        }
+}
+#define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
+#define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
+
+void testKreis(){
+    int b;
+    ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
+}
+//!TestCuteMacroVariableCreation_ASSERT_EQUALS_DELTA_M
+//@Test.cpp
+namespace cute {
+    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+        void assert_equal_delta(ExpectedValue const &expected
+                    ,ActualValue const &actual
+                    ,DeltaValue const &delta
+                    ,char const *msg
+                    ,char const *file
+                    ,int line) {
+        }
+}
+#define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
+#define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
+
+void testKreis(){
+    ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
+}
+//=
+namespace cute {
+    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+        void assert_equal_delta(ExpectedValue const &expected
+                    ,ActualValue const &actual
+                    ,DeltaValue const &delta
+                    ,char const *msg
+                    ,char const *file
+                    ,int line) {
+        }
+}
+#define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
+#define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
+
+void testKreis(){
+    int b;
+    ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
+}
+//!CreateVariableIfFieldref
+//@A.cpp
+void func()
+{
+    x.y();
+}
+//=
+void func()
+{
+    int x;
+    x.y();
+}

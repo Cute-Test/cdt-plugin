@@ -1,0 +1,18 @@
+//!CreateStaticFunctions
+//@A.cpp
+struct X
+{
+};
+void test() {
+    X::foo();
+}
+//=
+struct X
+{
+    static void foo()
+    {
+    }
+};
+void test() {
+    X::foo();
+}

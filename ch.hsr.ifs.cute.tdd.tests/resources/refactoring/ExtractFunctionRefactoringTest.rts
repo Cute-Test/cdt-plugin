@@ -1,0 +1,80 @@
+//!ExtractFreeFunction
+//@.config
+nomarkers=true
+typeextraction=true
+newfiles=foo.h
+ignorecomments=true
+//@A.h
+void /*$*/foo/*$$*/() {}
+//=
+#include "foo.h"
+
+
+//@foo.h
+//=
+#ifndef FOO_H_
+#define FOO_H_
+
+
+
+void foo() {}
+
+#endif /* FOO_H_ */
+//!ExtractTemplatedFunction
+//@.config
+nomarkers=true
+typeextraction=true
+newfiles=foo.h
+ignorecomments=true
+//@A.h
+
+template<typename T>
+T /*$*/foo/*$$*/(T arg) {
+	return T();
+}
+//=
+#include "foo.h"
+
+
+//@foo.h
+//=
+#ifndef FOO_H_
+#define FOO_H_
+
+
+
+template<typename T>
+T foo(T arg) {
+	return T();
+}
+
+#endif /* FOO_H_ */
+//!ExtractNestedTemplatedFunction
+//@.config
+nomarkers=true
+typeextraction=true
+newfiles=foo.h
+ignorecomments=true
+//@A.h
+
+template<typename T, typename U>
+U /*$*/foo/*$$*/(T arg) {
+	return U();
+}
+//=
+#include "foo.h"
+
+
+//@foo.h
+//=
+#ifndef FOO_H_
+#define FOO_H_
+
+
+
+template<typename T, typename U>
+U foo(T arg) {
+	return U();
+}
+
+#endif /* FOO_H_ */

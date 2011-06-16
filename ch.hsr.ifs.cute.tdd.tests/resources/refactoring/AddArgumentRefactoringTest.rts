@@ -1,0 +1,270 @@
+//!AddIntegerArgument
+//@A.cpp
+void func(int i) { }
+void testFunc() {
+	func();
+}
+//=
+void func(int i) { }
+void testFunc() {
+	func(_);
+}
+//!AddTwoIntegerArguments
+//@A.cpp
+void func(int i, int j) { }
+void testFunc() {
+	func();
+}
+//=
+void func(int i, int j) { }
+void testFunc() {
+	func(_, _);
+}
+//!AddOneIntegerArgument
+//@A.cpp
+void func(int i, int j) { }
+void testFunc() {
+	func(0);
+}
+//=
+void func(int i, int j) { }
+void testFunc() {
+	func(0, _);
+}
+//!InsertTypeArgument
+//@.config
+nomarkers=true
+//@A.cpp
+struct Type {};
+void func(Type t, int i) { }
+void testFunc() {
+	func(0);
+}
+//=
+struct Type {};
+void func(Type t, int i) { }
+void testFunc() {
+	func(0);
+}
+//!RecognizeBasicTypesAsMatchingArguments
+//@A.cpp
+void func(char c, int i) { }
+void testFunc() {
+	func(42);
+}
+//=
+void func(char c, int i) { }
+void testFunc() {
+	func(42, _);
+}
+//!RecognizeIds
+//@A.cpp
+void func(int i, int j) { }
+void testFunc() {
+	int i = 42;
+	func(i);
+}
+//=
+void func(int i, int j) { }
+void testFunc() {
+	int i = 42;
+	func(i, _);
+}
+//!RecognizeFunctionCalls
+//@A.cpp
+void func(int i, int j) { }
+int foo() {return 42;}
+void testFunc() {
+	func(foo());
+}
+//=
+void func(int i, int j) { }
+int foo() {return 42;}
+void testFunc() {
+	func(foo(), _);
+}
+//!TestFirstCandidate
+//@.config
+candidate=0
+//@A.cpp
+struct A {
+    void func(int i)
+    {
+    }
+    void func(int i, int j)
+    {
+    }
+    void func(int i, int j, int k)
+    {
+    }
+};
+
+void test()
+{
+    A a;
+    a.func();
+}
+//=
+struct A {
+    void func(int i)
+    {
+    }
+    void func(int i, int j)
+    {
+    }
+    void func(int i, int j, int k)
+    {
+    }
+};
+
+void test()
+{
+    A a;
+    a.func(_);
+}
+//!TestSecondCandidate
+//@.config
+candidate=1
+//@A.cpp
+struct A {
+    void func(int i)
+    {
+    }
+    void func(int i, int j)
+    {
+    }
+    void func(int i, int j, int k)
+    {
+    }
+};
+
+void test()
+{
+    A a;
+    a.func();
+}
+//=
+struct A {
+    void func(int i)
+    {
+    }
+    void func(int i, int j)
+    {
+    }
+    void func(int i, int j, int k)
+    {
+    }
+};
+
+void test()
+{
+    A a;
+    a.func(_, _);
+}
+//!TestThirdCandidate
+//@.config
+candidate=2
+//@A.cpp
+struct A {
+    void func(int i)
+    {
+    }
+    void func(int i, int j)
+    {
+    }
+    void func(int i, int j, int k)
+    {
+    }
+};
+
+void test()
+{
+    A a;
+    a.func();
+}
+//=
+struct A {
+    void func(int i)
+    {
+    }
+    void func(int i, int j)
+    {
+    }
+    void func(int i, int j, int k)
+    {
+    }
+};
+
+void test()
+{
+    A a;
+    a.func(_, _, _);
+}
+//!DontOfferAddArgsThatCantBeAppended
+//@.config
+nomarkers=true
+//@A.cpp
+#include<string>
+void foo(std::string, int);
+void test() {
+  foo(42);
+}
+//=
+#include<string>
+void foo(std::string, int);
+void test() {
+  foo(42);
+}
+//!CheckStringandCharArrays
+//@.config
+nomarkers=true
+//@A.cpp
+#include <string>
+
+void foo(std::string s)
+{
+}
+
+void test() {
+    foo("asdfs");
+}
+//=
+#include <string>
+
+void foo(std::string s)
+{
+}
+
+void test() {
+    foo("asdfs");
+}
+//!RemoveSingleLastArgument
+//@A.cpp
+void foo() {
+}
+
+void test() {
+    foo(3);
+}
+//=
+void foo() {
+}
+
+void test() {
+    foo();
+}
+//!RemoveBunchLastArguments
+//@A.cpp
+void foo(int i) {
+}
+
+void test() {
+    foo(3, 2.3, "asdf", 2);
+}
+//=
+void foo(int i) {
+}
+
+void test() {
+    foo(3);
+}

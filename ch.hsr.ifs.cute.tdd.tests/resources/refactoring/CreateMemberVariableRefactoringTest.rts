@@ -1,0 +1,270 @@
+//!TestCreateMemberVariableFromInitializerList
+//@A.cpp
+struct B
+{
+	B(int i) : member(i) {}
+};
+//=
+struct B
+{
+	B(int i) : member(i) {}
+
+private:
+    int member;
+};
+//!TestCreateMemberVariableFromInitializerListWithType
+//@A.cpp
+struct B
+{
+	B(B i) : member(i) {}
+};
+//=
+struct B
+{
+	B(B i) : member(i) {}
+
+private:
+    B member;
+};
+//!TestCreateMemberVariableFromCall
+//@A.cpp
+struct B {
+};
+void test() {
+    B b;
+    double d = b.member;
+}
+//=
+struct B {
+    double member;
+};
+void test() {
+    B b;
+    double d = b.member;
+}
+//!TestCreateMemberVariableFromCallWithType
+//@A.cpp
+struct B {
+};
+void test() {
+    B b;
+    B b2 = b.member;
+}
+//=
+struct B {
+    B member;
+};
+void test() {
+    B b;
+    B b2 = b.member;
+}
+//!CreatePublicMemberForClass
+//@A.cpp
+class B {
+};
+void test() {
+    B b;
+    int i = b.member;
+}
+//=
+class B {
+public:
+    int member;
+};
+void test() {
+    B b;
+    int i = b.member;
+}
+//!CreateMemberFromThis
+//@A.cpp
+class A {
+	void member() {
+		this->membVar;
+	}
+};
+//=
+class A {
+	void *membVar;
+    void member() {
+		this->membVar;
+	}
+};
+//!CreateBasicTypeMemberFromThis
+//@A.cpp
+class A {
+	void member() {
+		this->membVar = 42;
+	}
+};
+//=
+class A {
+    int membVar;
+	void member() {
+		this->membVar = 42;
+	}
+};
+//!CreateBasicTypeMemberFromThisReference
+//@A.cpp
+class A {
+	void member() {
+		(*this).membVar = 42;
+	}
+};
+//=
+class A {
+    int membVar;
+	void member() {
+		(*this).membVar = 42;
+	}
+};
+//!CreateStringMemberFromThisReference
+//@A.cpp
+class A {
+	void member() {
+		(*this).membVar = "ImNoCharArray";
+	}
+};
+//=
+class A {
+    std::string membVar;
+	void member() {
+		(*this).membVar = "ImNoCharArray";
+	}
+};
+//!CreateStringMemberFromThisPointerReference
+//@A.cpp
+class A {
+	void member() {
+		this->membVar = "ImNoCharArray";
+	}
+};
+//=
+class A {
+    std::string membVar;
+	void member() {
+		this->membVar = "ImNoCharArray";
+	}
+};
+//!CreateMemberOutOfCompoundAssignment
+//@A.cpp
+class A {
+	void member() {
+		double number;
+		this->membVar = number+1;
+	}
+};
+//=
+class A {
+    double membVar;
+	void member() {
+		double number;
+		this->membVar = number+1;
+	}
+};
+//!CreateIntegerArray
+//@A.cpp
+struct B {
+};
+void test() {
+    B b;
+    b.array = {1, 2, 3};
+}
+//=
+struct B {
+private:
+    int array[3];
+};
+void test() {
+    B b;
+    b.array = {1, 2, 3};
+}
+//!CreateTypeArray
+//@A.cpp
+class B {
+};
+void test() {
+    B b, b1, b2, b3;
+    b.array = {b1, b2, b3};
+}
+//=
+class B {
+    B array[3];
+};
+void test() {
+    B b, b1, b2, b3;
+    b.array = {b1, b2, b3};
+}
+//!CreateStringArrayNotPossibleAssumeInt
+//@A.cpp
+class B {
+};
+void test() {
+    B b;
+    b.array = {"string1", "string2", "string3"};
+}
+//=
+class B {
+    int array[3];
+};
+void test() {
+    B b;
+    b.array = {"string1", "string2", "string3"};
+}
+//!TemplateInitializer
+//@A.cpp
+template <typename T>
+class A
+{
+public:
+    A(T & t) : memVar(t)
+    {
+    }
+};
+//=
+template <typename T>
+class A
+{
+    T memVar;
+public:
+    A(T & t) : memVar(t)
+    {
+    }
+};
+//!InitializerListInitializer
+//@A.cpp
+class A
+{
+public:
+    A() : memVar({1,2,3}) {
+    }
+};
+//=
+class A
+{
+    int memVar[3];
+public:
+    A() : memVar({1,2,3}) {
+    }
+};
+//!ConstructorCallInInitializerClause
+//@A.cpp
+struct B {
+	B(int, double);
+};
+class A
+{
+    A(): membVar(B(0, 0.0))
+    {
+    }
+};
+//=
+struct B {
+	B(int, double);
+};
+class A
+{
+    B membVar;
+    A(): membVar(B(0, 0.0))
+    {
+    }
+};
