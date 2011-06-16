@@ -33,11 +33,13 @@
 		<module>../cute_framework</module>
 		<module>../cute_framework_cute_fragment</module>
 		<module>../cute_plugin</module>
+		<module>../ch.hsr.ifs.cute.tdd</module>
 		<!--<module>../cute_test_plugin</module>-->
 		<module>../ch.hsr.ifs.cute.help</module>
 		<module>../cute_ui_plugin</module>
 		<module>../ch.hsr.ifs.cute.ui.test</module>
 		<module>../ch.hsr.ifs.test.framework.test</module>
+		<module>../ch.hsr.ifs.cute.tdd.tests</module>
 		<!--<module>../ch.hsr.ifs.cute.swtbottest</module> -->
 		<!-- CUTE Headers -->
 		<module>../ch.hsr.ifs.cute.headers.base.test</module>
