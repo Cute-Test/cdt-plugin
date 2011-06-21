@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -30,6 +30,7 @@ import ch.hsr.ifs.cute.tdd.TddQuickFix;
 @SuppressWarnings("restriction")
 public abstract class QuickFixTest extends QuickFixTestCase {
 
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -54,7 +55,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 			fail("No markers found, but could also be an indexer problem.");
 		}
 	}
-	
+
 	public String getCommentOfTest() {
 		return getCommentOfMethod(getName());
 	}
@@ -72,7 +73,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 		return Activator.getDefault().getBundle();
 	}
 
-	public String runQuickFix(Class<? extends TddQuickFix> klass, String qfmessage) {	
+	public String runQuickFix(Class<? extends TddQuickFix> klass, String qfmessage) {
 		getQuickFix(klass, qfmessage).run(getFirstMarker());
 		try {
 			return loadFile(currentIFile.getContents());
@@ -106,7 +107,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 
 	private boolean hasRightType(IMarker m) {
 		return getType(m).equals("org.eclipse.cdt.codan.core.codanProblem") &&
-			CodanProblemMarker.getProblemId(m).equals(getId());
+				CodanProblemMarker.getProblemId(m).equals(getId());
 	}
 
 	private String getType(IMarker m) {
@@ -158,12 +159,12 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 		assertTrue(resolutions.length > 0);
 		for(IMarkerResolution resolution: resolutions) {
 			if (klass == resolution.getClass()) {
-				TddQuickFix tddqf = (TddQuickFix)resolution; 
+				TddQuickFix tddqf = (TddQuickFix)resolution;
 				tddqf.isApplicable(marker);
 				if (tddqf.getLabel().equals(qfmessage)) {
 					return (TddQuickFix) resolution;
 				} else {
-					System.err.println("Type of resolution matches, but message does not! Possible Typo?");
+					System.err.println("Type of resolution matches, but message does not! Quickfix: " + tddqf.getLabel() + " message: " + qfmessage+ " Possible Typo?");
 				}
 			}
 		}
