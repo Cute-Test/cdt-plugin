@@ -47,9 +47,9 @@ public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 			throws BadLocationException {
 		if (lmi.getReturnStatment()) {
 			lmi.addPosition(rec.getRetBegin(),
-					rec.getRetLength() - "()".length(), rec.getSpecBegin());
+					rec.getRetLength() - "()".length(), rec.getSpecBegin()); //$NON-NLS-1$
 			lmi.addPosition(
-					rec.getRetBegin() + rec.getRetLength() - "(".length(), 0);
+					rec.getRetBegin() + rec.getRetLength() - "(".length(), 0); //$NON-NLS-1$
 		} else {
 			lmi.addPosition(rec.getBracketPosition(), 0);
 		}
@@ -72,7 +72,7 @@ public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 		lmi.addPositions(rec.getParameterPositions());
 		handleReturn(rec, lmi);
 		if (lmi.getConst()) {
-			lmi.addPosition(rec.getConstOffset(), "const".length());
+			lmi.addPosition(rec.getConstOffset(), "const".length()); //$NON-NLS-1$
 		}
 	}
 }

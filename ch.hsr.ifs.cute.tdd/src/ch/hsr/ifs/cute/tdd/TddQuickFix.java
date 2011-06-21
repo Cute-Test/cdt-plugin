@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -34,7 +34,7 @@ import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
 @SuppressWarnings("restriction")
 public abstract class TddQuickFix extends AbstractCodanCMarkerResolution implements
-		IMarkerResolution2 {
+IMarkerResolution2 {
 
 	protected IMarker marker;
 	protected ICProject project;
@@ -84,7 +84,7 @@ public abstract class TddQuickFix extends AbstractCodanCMarkerResolution impleme
 			return getDocument().get(begin, end - begin);
 		} catch (BadLocationException e) {
 			CUIPlugin.log(e);
-			return "";
+			return ""; //$NON-NLS-1$
 		} catch (NullPointerException e) { // only for tests
 			return getProblemArgument(marker, 2);
 		}
@@ -125,7 +125,7 @@ public abstract class TddQuickFix extends AbstractCodanCMarkerResolution impleme
 			}
 			new LinkedProposalModelPresenter().enterLinkedMode(getEditor().getViewer(), getEditor(), model);
 		} catch (BadLocationException e) {
-			TddHelper.showErrorOnStatusLine("Assisted text editing not available");
+			TddHelper.showErrorOnStatusLine(Messages.TddQuickFix_0);
 		}
 	}
 

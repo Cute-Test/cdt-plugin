@@ -30,15 +30,15 @@ import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 
 	private static IMarkerResolution[] MARKER_RESOLUTION_TYPE = new IMarkerResolution[]{};
-	public static final String MSG_QUICK_FIX_ACTION_ADD = "Add";
-	public static final String MSG_QUICK_FIX_ACTION_REMOVE = "Remove";
-	public static final String MSG_QUICK_FIX_ARGUMENT = "&0 argument(s) '&1' to match '&2'";
-	public static final String ASSIGN_SEPARATOR = "==";
-	public static final String CANDIDATE_SEPARATOR = ":candidate ";
-	public static final String PARAMETERS = "targetParameters" + ASSIGN_SEPARATOR;
-	public static final String ADD_ARGUMENTS = "addArguments" + ASSIGN_SEPARATOR;
-	public static final String REMOVE_ARGUMENTS = "removeArguments" + ASSIGN_SEPARATOR;
-	public static final String SEPARATOR = "°";
+	public static final String MSG_QUICK_FIX_ACTION_ADD = Messages.AddArgumentQFGenerator_0;
+	public static final String MSG_QUICK_FIX_ACTION_REMOVE = Messages.AddArgumentQFGenerator_1;
+	public static final String MSG_QUICK_FIX_ARGUMENT = Messages.AddArgumentQFGenerator_2;
+	public static final String ASSIGN_SEPARATOR = "=="; //$NON-NLS-1$
+	public static final String CANDIDATE_SEPARATOR = ":candidate "; //$NON-NLS-1$
+	public static final String PARAMETERS = "targetParameters" + ASSIGN_SEPARATOR; //$NON-NLS-1$
+	public static final String ADD_ARGUMENTS = "addArguments" + ASSIGN_SEPARATOR; //$NON-NLS-1$
+	public static final String REMOVE_ARGUMENTS = "removeArguments" + ASSIGN_SEPARATOR; //$NON-NLS-1$
+	public static final String SEPARATOR = "°"; //$NON-NLS-1$
 	public static final int REQUIRED_MARKER_ARGUMENTS = 4;
 
 	@Override
@@ -85,25 +85,25 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 	private String getMessage(String function, String candidate) {
 		String[] args = candidate.split(SEPARATOR);
 		if (args.length < 2 || !(args[0].startsWith(ADD_ARGUMENTS) || (args[0].startsWith(REMOVE_ARGUMENTS))) || !args[1].startsWith(PARAMETERS)) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		String action = null;
 		if (args[0].startsWith(ADD_ARGUMENTS)) {
-			action = MSG_QUICK_FIX_ARGUMENT.replace("&0", MSG_QUICK_FIX_ACTION_ADD);
+			action = MSG_QUICK_FIX_ARGUMENT.replace(Messages.AddArgumentQFGenerator_10, MSG_QUICK_FIX_ACTION_ADD);
 		} else if (args[0].startsWith(REMOVE_ARGUMENTS)) {
-			action = MSG_QUICK_FIX_ARGUMENT.replace("&0", MSG_QUICK_FIX_ACTION_REMOVE);
+			action = MSG_QUICK_FIX_ARGUMENT.replace("&0", MSG_QUICK_FIX_ACTION_REMOVE); //$NON-NLS-1$
 		}
-		String toBeAddedArguments =	"";
+		String toBeAddedArguments =	""; //$NON-NLS-1$
 		String[] toBeAddedArgumentsline = args[0].split(ASSIGN_SEPARATOR);
 		if (toBeAddedArgumentsline.length > 1) {
 			toBeAddedArguments = toBeAddedArgumentsline[1];
 		}
 		String[] targetParameterline = args[1].split(ASSIGN_SEPARATOR);
-		String targetParameter = "";
+		String targetParameter = ""; //$NON-NLS-1$
 		if (targetParameterline.length > 1) {
 			targetParameter = targetParameterline[1];
 		}
-		return action.replace("&1", toBeAddedArguments).replace("&2", function + "(" + targetParameter + ")");
+		return action.replace("&1", toBeAddedArguments).replace("&2", function + "(" + targetParameter + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	private String[] getCandidates(CodanArguments ca) {
@@ -117,7 +117,7 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 	public String getProblemID(IMarker marker) {
 		String problemId = CodanProblemMarker.getProblemId(marker);
 		if (problemId == null) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		return problemId;
 	}

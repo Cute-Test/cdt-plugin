@@ -59,10 +59,10 @@ public class CreateTypeRefactoring extends CRefactoring3 {
 		ArrayList<ICPPASTSimpleTypeTemplateParameter> result = new ArrayList<ICPPASTSimpleTypeTemplateParameter>();
 		String args = ca.getTemplateArgs();
 		if (!(args.isEmpty())) {
-			int templateCount = args.split(",").length;
+			int templateCount = args.split(",").length; //$NON-NLS-1$
 			for (int i = 0; i < templateCount; i++, startChar++) {
 				isTemplateSituation = true;
-				String newName = startChar + "";
+				String newName = startChar + ""; //$NON-NLS-1$
 				CPPASTSimpleTypeTemplateParameter templparam = new CPPASTSimpleTypeTemplateParameter();
 				templparam.setDefaultType(null);
 				templparam.setName(new CPPASTName(newName.toCharArray()));

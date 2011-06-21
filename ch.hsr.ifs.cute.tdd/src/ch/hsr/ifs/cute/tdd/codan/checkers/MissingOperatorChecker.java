@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -34,13 +34,13 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 @SuppressWarnings("restriction")
 public class MissingOperatorChecker extends AbstractIndexAstChecker {
 
-	public static final String ERR_ID_OperatorResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR";
+	public static final String ERR_ID_OperatorResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
 		ast.accept(new MissingOperatorVisitor());
 	}
-	
+
 	class MissingOperatorVisitor extends ASTVisitor {
 		{
 			shouldVisitExpressions = true;
@@ -81,9 +81,9 @@ public class MissingOperatorChecker extends AbstractIndexAstChecker {
 					if (!operandDefined(uexpr)) {
 						return PROCESS_CONTINUE;
 					}
-					String operatorname = new String(operator.toCharArray()).replaceAll("operator ", "");
+					String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
 					if (operatorname != null && isAppropriateType(uexpr.getOperand())) {
-						CodanArguments ca = new CodanArguments(operatorname, "Operator '" + operatorname + "' could not be found", ":operator");
+						CodanArguments ca = new CodanArguments(operatorname, Messages.MissingOperatorChecker_3 + operatorname + Messages.MissingOperatorChecker_4, ":operator"); //$NON-NLS-1$
 						reportProblem(ERR_ID_OperatorResolutionProblem_HSR,	expression, ca.toArray());
 						return PROCESS_SKIP;
 					}
@@ -94,15 +94,15 @@ public class MissingOperatorChecker extends AbstractIndexAstChecker {
 				if (!operatorFound(inames)) {
 					if (isAppropriateType(binex.getOperand1())) {
 						OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex);
-						String operatorname = new String(operator.toCharArray()).replaceAll("operator ", "");
-						
+						String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+
 						String typename = expression.getExpressionType().toString();
-						CodanArguments ca = new CodanArguments(operatorname, "Cannot resolve operator" + operatorname + " in type " + typename, ":operator");
+						CodanArguments ca = new CodanArguments(operatorname, Messages.MissingOperatorChecker_8 + operatorname + Messages.MissingOperatorChecker_9 + typename, ":operator"); //$NON-NLS-1$
 						reportProblem(ERR_ID_OperatorResolutionProblem_HSR, binex, ca.toArray());
 						return PROCESS_SKIP;
 					}
 				}
-			} 
+			}
 			return PROCESS_CONTINUE;
 		}
 
@@ -167,12 +167,12 @@ public class MissingOperatorChecker extends AbstractIndexAstChecker {
 			}
 			return false;
 		}
-		
+
 		private IASTIdExpression getLastIDExpression(IASTNode selectedNode) {
 			calculateLastIDExpression(selectedNode);
 			return possibleresult;
 		}
-		
+
 		//TODO: remove duplicated -> creatememberfunctionrefactoring
 		private IASTIdExpression possibleresult = null;
 

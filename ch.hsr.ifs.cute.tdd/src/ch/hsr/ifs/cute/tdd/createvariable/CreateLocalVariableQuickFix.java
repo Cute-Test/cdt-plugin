@@ -25,7 +25,7 @@ public class CreateLocalVariableQuickFix extends TddQuickFix {
 
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create local variable " + ca.getName() + "";
+		return Messages.CreateLocalVariableQuickFix_0 + ca.getName() + Messages.CreateLocalVariableQuickFix_1;
 	}
 	
 	@Override

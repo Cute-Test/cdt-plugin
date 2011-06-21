@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -28,8 +28,8 @@ import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 
 @SuppressWarnings("restriction")
 public class OperatorCreationStrategy implements IFunctionCreationStrategy {
-	
-	private boolean isFree;
+
+	private final boolean isFree;
 
 	public OperatorCreationStrategy(boolean isFree) {
 		this.isFree = isFree;
@@ -37,7 +37,7 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 
 	@Override
 	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, IASTNode owningType, String name, TextSelection selection) {
-		ICPPASTFunctionDeclarator decl = new CPPASTFunctionDeclarator(new CPPASTOperatorName(("operator" + name).toCharArray()));
+		ICPPASTFunctionDeclarator decl = new CPPASTFunctionDeclarator(new CPPASTOperatorName(("operator" + name).toCharArray())); //$NON-NLS-1$
 		CPPASTBinaryExpression binex = ToggleNodeHelper.getAncestorOfType(selectedName, IASTBinaryExpression.class);
 		CPPASTUnaryExpression unex = ToggleNodeHelper.getAncestorOfType(selectedName, IASTUnaryExpression.class);
 		if (binex != null) {
@@ -66,8 +66,8 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 		if (isFree) {
 			decl.setConst(false);
 		}
-		
-		fdef.setParent(owningType);		
+
+		fdef.setParent(owningType);
 		return fdef;
 	}
 }

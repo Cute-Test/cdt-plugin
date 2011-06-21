@@ -23,6 +23,6 @@ public class StaticFunctionCreationQuickFix extends
 	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create static function " + ca.getName();
+		return Messages.StaticFunctionCreationQuickFix_0 + ca.getName();
 	}
 }

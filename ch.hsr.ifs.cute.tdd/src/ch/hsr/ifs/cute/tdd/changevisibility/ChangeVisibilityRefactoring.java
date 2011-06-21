@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -35,8 +35,8 @@ import ch.hsr.ifs.cute.tdd.TypeHelper;
 @SuppressWarnings("restriction")
 public class ChangeVisibilityRefactoring extends CRefactoring3 {
 
-	private String nameToSearch;
-	private TextSelection selection;
+	private final String nameToSearch;
+	private final TextSelection selection;
 
 	public ChangeVisibilityRefactoring(ISelection selection,
 			String name, RefactoringASTCache astCache) {
@@ -56,7 +56,7 @@ public class ChangeVisibilityRefactoring extends CRefactoring3 {
 		typeSpec.accept(memberfinder);
 		IASTNode function = memberfinder.getFoundNode();
 		if (function == null) {
-			TddHelper.showErrorOnStatusLine("Cannot change visibility here.");
+			TddHelper.showErrorOnStatusLine(Messages.ChangeVisibilityRefactoring_0);
 			return;
 		}
 
@@ -65,10 +65,10 @@ public class ChangeVisibilityRefactoring extends CRefactoring3 {
 
 		TddHelper.insertMember(function, typeSpec, rewrite);
 	}
-	
+
 	class MethodFindVisitor extends ASTVisitor {
 		private final NodeContainer container;
-		private String nameToSearch;
+		private final String nameToSearch;
 		{
 			shouldVisitNames = true;
 		}
@@ -82,14 +82,14 @@ public class ChangeVisibilityRefactoring extends CRefactoring3 {
 		public int visit(IASTName name) {
 			IBinding binding = name.resolveBinding();
 			if (binding instanceof ICPPMember) {
-				String bindingname = binding.getName().replaceAll("\\(\\w*\\)", "");
+				String bindingname = binding.getName().replaceAll("\\(\\w*\\)", "");  //$NON-NLS-1$//$NON-NLS-2$
 				if (bindingname.equals(nameToSearch)) {
 					ICPPASTCompositeTypeSpecifier typeSpec = ToggleNodeHelper
 							.getAncestorOfType(name, ICPPASTCompositeTypeSpecifier.class);
 					if (typeSpec != null)
 					{
 						IASTNode function = ToggleNodeHelper
-							.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
+								.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
 						if (function == null) {
 							function = ToggleNodeHelper.getAncestorOfType(name, IASTSimpleDeclaration.class);
 						}

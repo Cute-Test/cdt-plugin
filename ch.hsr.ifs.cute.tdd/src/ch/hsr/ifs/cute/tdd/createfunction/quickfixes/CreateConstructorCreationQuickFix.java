@@ -26,7 +26,7 @@ public class CreateConstructorCreationQuickFix extends AbstractFunctionCreationQ
 	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create constructor " + ca.getName();
+		return Messages.CreateConstructorCreationQuickFix_0 + ca.getName();
 	}
 
 	@Override

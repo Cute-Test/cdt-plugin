@@ -186,7 +186,7 @@ public class TypeHelper {
 	}
 
 	public static boolean isString(IType type) {
-		return type instanceof IBinding && ((IBinding)type).getName().equals("string");
+		return type instanceof IBinding && ((IBinding)type).getName().equals("string"); //$NON-NLS-1$
 	}
 
 	public static boolean isString(IASTInitializerClause argument) {
@@ -225,7 +225,7 @@ public class TypeHelper {
 				return null;
 			}
 			if (type.getDeclSpecifier() == null) {
-				throw new OperationCanceledException("No declarationSpecifier of type could be found");
+				throw new OperationCanceledException(Messages.TypeHelper_1);
 			}
 			if (type instanceof ICPPASTCompositeTypeSpecifier) {
 				return (ICPPASTCompositeTypeSpecifier) type;
@@ -245,7 +245,7 @@ public class TypeHelper {
 		} else {
 			IASTExpression owner = fieldref.getFieldOwner();
 			if (!(owner.getExpressionType() instanceof IBinding)) {
-				throw new OperationCanceledException("Could not resolve type " + owner);
+				throw new OperationCanceledException(Messages.TypeHelper_2 + owner);
 			}
 			IBinding expressionType = (IBinding) owner.getExpressionType();
 			typename = expressionType.getName();

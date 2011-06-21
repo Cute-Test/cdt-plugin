@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -32,7 +32,7 @@ public class Activator extends AbstractUIPlugin {
 	public class ActivationListener implements BundleListener {
 		@Override
 		public void bundleChanged(BundleEvent event) {
-			if (!event.getBundle().getSymbolicName().equals("ch.hsr.eclipse.cdt") && event.getType() == BundleEvent.STARTED) {
+			if (!event.getBundle().getSymbolicName().equals("ch.hsr.eclipse.cdt") && event.getType() == BundleEvent.STARTED) { //$NON-NLS-1$
 				return;
 			}
 			activateHSRProblems();
@@ -48,7 +48,7 @@ public class Activator extends AbstractUIPlugin {
 		private void activateHSRProblems() {
 			IProblem[] problems = CodanRuntime.getInstance().getCheckersRegistry().getWorkspaceProfile().getProblems();
 			for (IProblem problem : problems) {
-				if (!problem.getId().contains("HSR") && problem instanceof CodanProblem) {
+				if (!problem.getId().contains("HSR") && problem instanceof CodanProblem) { //$NON-NLS-1$
 					((CodanProblem) problem).setEnabled(false);
 				}
 			}
@@ -57,23 +57,25 @@ public class Activator extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "ch.hsr.eclipse.cdt"; //$NON-NLS-1$
 	public static URL IMG_OBJS_CORRECTION_REMOVE;
-	
+
 	private static Activator plugin;
 	private static final String IMG_OBJS_CORRECTION_REMOVE_PATH = "icons/obj16/remove_correction.gif"; //$NON-NLS-1$
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		context.addBundleListener(new ActivationListener());
 		plugin = this;
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 	}
 
 	public static Activator getDefault() {
 		if (plugin == null) {
-			throw new RuntimeException("Plugin not active, cannot access activator.");
+			throw new RuntimeException(Messages.Activator_0);
 		}
 		return plugin;
 	}

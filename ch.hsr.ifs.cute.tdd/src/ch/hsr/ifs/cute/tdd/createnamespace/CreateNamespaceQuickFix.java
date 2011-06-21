@@ -21,7 +21,7 @@ public class CreateNamespaceQuickFix extends TddQuickFix {
 	@Override
 	public String getLabel() {
 		CodanArguments ca = new CodanArguments(marker);
-		return "Create namespace " + ca.getName();
+		return Messages.CreateNamespaceQuickFix_0 + ca.getName();
 	}
 
 	@Override

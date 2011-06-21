@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -61,7 +61,7 @@ public class TddHelper {
 		if (project != null) {
 			for (IResource r : project.getProject().members()) {
 				//FIXME: only cpp files work here, this could be a bug
-				if (r instanceof IFile && r.getName().endsWith("cpp")) {
+				if (r instanceof IFile && r.getName().endsWith("cpp")) { //$NON-NLS-1$
 					return (IFile) r;
 				}
 			}
@@ -101,7 +101,7 @@ public class TddHelper {
 			ICPPASTDeclSpecifier returndeclspec = spec.copy(CopyStyle.withLocations);
 			returndeclspec.setStorageClass(ICPPASTDeclSpecifier.sc_unspecified);
 			ICPPASTSimpleTypeConstructorExpression returntype =
-				new CPPASTSimpleTypeConstructorExpression(returndeclspec, new CPPASTConstructorInitializer());
+					new CPPASTSimpleTypeConstructorExpression(returndeclspec, new CPPASTConstructorInitializer());
 			returnstmt.setReturnValue(returntype);
 			return returnstmt;
 		}
@@ -110,7 +110,7 @@ public class TddHelper {
 
 	private static boolean TypeVoid(CPPASTBaseDeclSpecifier spec) {
 		return (spec instanceof IASTSimpleDeclSpecifier) &&
-			((IASTSimpleDeclSpecifier) spec).getType() == IASTSimpleDeclSpecifier.t_void;
+				((IASTSimpleDeclSpecifier) spec).getType() == IASTSimpleDeclSpecifier.t_void;
 	}
 
 	public static void insertMember(IASTNode member,
@@ -146,7 +146,7 @@ public class TddHelper {
 			}
 		}
 	}
-	
+
 	private static void insertNamespaceMember(IASTNode partToInsert,
 			CPPASTNamespaceDefinition owningType, ASTRewrite rewrite) {
 		rewrite.insertBefore(owningType, null, partToInsert, null);
@@ -216,9 +216,9 @@ public class TddHelper {
 	public static boolean nameNotFoundProblem(IProblemBinding problemBinding) {
 		return problemBinding.getID() == IProblemBinding.SEMANTIC_NAME_NOT_FOUND;
 	}
-	
+
 	public static boolean isInvalidType(IProblemBinding problemBinding) {
-		return problemBinding.getID() == IProblemBinding.SEMANTIC_INVALID_TYPE; 
+		return problemBinding.getID() == IProblemBinding.SEMANTIC_INVALID_TYPE;
 	}
 
 	public static boolean isFunctionCall(IASTNode parentNode) {

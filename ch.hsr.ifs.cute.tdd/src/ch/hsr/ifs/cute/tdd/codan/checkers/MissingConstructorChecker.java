@@ -42,7 +42,7 @@ import ch.hsr.ifs.cute.tdd.TypeHelper;
 public class MissingConstructorChecker extends AbstractIndexAstChecker {
 	
 	public static final String ERR_ID_MissingConstructorResolutionProblem_HSR = 
-		"ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR";
+		"ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR"; //$NON-NLS-1$
 	
 	@Override
 	public void processAst(final IASTTranslationUnit ast) {
@@ -86,8 +86,8 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 							if (!found) {
 								IASTName reportedNode = simpledec.getDeclarators()[0].getName();
 								String missingName = new String(comptypeSpec.getName().getSimpleID());
-								String message = "No such constructor for type " + missingName;
-								CodanArguments ca = new CodanArguments(missingName , message, ":ctor");
+								String message = Messages.MissingConstructorChecker_1 + missingName;
+								CodanArguments ca = new CodanArguments(missingName , message, ":ctor"); //$NON-NLS-1$
 								reportProblem(ERR_ID_MissingConstructorResolutionProblem_HSR, reportedNode, ca.toArray());
 							}
 						}

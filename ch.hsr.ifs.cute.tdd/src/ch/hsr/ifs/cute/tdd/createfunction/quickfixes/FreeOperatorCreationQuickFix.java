@@ -31,7 +31,7 @@ public class FreeOperatorCreationQuickFix extends
 	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create free operator " + ca.getName();
+		return Messages.FreeOperatorCreationQuickFix_0 + ca.getName();
 	}
 
 	@Override

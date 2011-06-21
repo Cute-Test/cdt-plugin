@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -44,8 +44,8 @@ import org.eclipse.jface.text.TextSelection;
 @SuppressWarnings("restriction")
 public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 
-	private TextSelection selection;
-	private NodeContainer container;
+	private final TextSelection selection;
+	private final NodeContainer container;
 
 	{
 		shouldVisitStatements = true;
@@ -111,14 +111,14 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 					if (binex.getOperand1() instanceof ICPPASTBinaryExpression) {
 						binex = (ICPPASTBinaryExpression) binex.getOperand1();
 					}
-					IType type = binex.getExpressionType();
+					binex.getExpressionType();
 					//give a typedef a change to insert it's name
 					if (binex.getOperand1() instanceof CPPASTIdExpression) {
 						CPPASTIdExpression idex = (CPPASTIdExpression) binex.getOperand1();
 						IASTName xname = idex.getName();
-						IBinding var = (IBinding) xname.resolveBinding();
+						IBinding var = xname.resolveBinding();
 						if (var instanceof IVariable) {
-							type = ((IVariable) var).getType();
+							((IVariable) var).getType();
 						}
 					}
 					System.out.println();
@@ -131,10 +131,10 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 						if (unex.getOperand() instanceof CPPASTIdExpression) {
 							CPPASTIdExpression idex = (CPPASTIdExpression) unex.getOperand();
 							IASTName xname = idex.getName();
-							IBinding var = (IBinding) xname.resolveBinding();
+							IBinding var = xname.resolveBinding();
 							if (var instanceof IVariable) {
 								type = ((IVariable) var).getType();
-								if (type instanceof ITypedef) {									
+								if (type instanceof ITypedef) {
 									return handleType(type);
 								}
 							}
@@ -142,7 +142,7 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 					}
 					return handleType(ex.getExpressionType());
 				}
-				
+
 			} if (stmt instanceof ICPPASTIfStatement) {
 				handleType(new CPPBasicType(IBasicType.Kind.eBoolean, 0));
 			}

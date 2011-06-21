@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -25,8 +25,8 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 @SuppressWarnings("restriction")
 public class PrivateMethodChecker extends AbstractIndexAstChecker {
 
-	public static final String ERR_ID_PrivateMethodChecker_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR";
-	
+	public static final String ERR_ID_PrivateMethodChecker_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"; //$NON-NLS-1$
+
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
 		ast.accept(new ASTVisitor() {
@@ -49,11 +49,11 @@ public class PrivateMethodChecker extends AbstractIndexAstChecker {
 				if (ArrayUtil.contains(methods, member) || ArrayUtil.contains(fields, member)) {
 					if (member.getVisibility() == ICPPMember.v_private) {
 						String memberName = new String(name.getSimpleID());
-						CodanArguments ca = new CodanArguments(memberName, memberName + " is not visible", ":visibility");
+						CodanArguments ca = new CodanArguments(memberName, memberName + Messages.PrivateMethodChecker_1, ":visibility"); //$NON-NLS-1$
 						reportProblem(ERR_ID_PrivateMethodChecker_HSR, name.getLastName(), ca.toArray());
 					}// else if (member.getVisibility() == ICPPMember.v_protected) {
-					 // Not implemented
-					 //}
+					// Not implemented
+					//}
 				}
 				return PROCESS_CONTINUE;
 			}

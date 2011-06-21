@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -27,12 +27,14 @@ import org.eclipse.ltk.core.refactoring.Change;
 @SuppressWarnings("restriction")
 public class ChangeRecorder {
 
-	private static final String SEPARATOR = ", ";
+	private static final String _ = "_"; //$NON-NLS-1$
+	private static final String RETURN = "return "; //$NON-NLS-1$
+	private static final String SEPARATOR = ", "; //$NON-NLS-1$
 	private int markerOffset;
 	private final IDocument document;
 	private final Change change;
-	private NestedEdit edit;
-	private String markerText;
+	private final NestedEdit edit;
+	private final String markerText;
 	private boolean success;
 
 	public ChangeRecorder(int markerOffset, IDocument documentWithMarker,
@@ -55,7 +57,7 @@ public class ChangeRecorder {
 			calculateOffsets(lengthBefore);
 			success = true;
 		} catch (CoreException e) {
-			throw new RuntimeException("Failed to apply changes.");
+			throw new RuntimeException(Messages.ChangeRecorder_1);
 		}
 	}
 
@@ -78,27 +80,29 @@ public class ChangeRecorder {
 				return i;
 			}
 		}
-		throw new NotSupportedException("Could not determine end of declaration specifier.");
+		throw new NotSupportedException(Messages.ChangeRecorder_2);
 	}
 
 	public int getSpecBegin() throws BadLocationException {
 		int offset = getDeclaratorOffset();
 		for (; offset >= 0; offset--) {
-			if (document.getChar(offset) == '\n')
+			if (document.getChar(offset) == '\n') {
 				break;
+			}
 		}
 		offset++;
 		for (; offset <= document.getLength(); offset++) {
-			if (!Character.isWhitespace(document.getChar(offset)))
+			if (!Character.isWhitespace(document.getChar(offset))) {
 				break;
+			}
 		}
 		return offset;
 	}
 
 	private int getDeclaratorOffset() {
 		int offset = edit.absoluteIndexOf(markerText);
-		if (markerText.matches(".*[()-+|=<>]+.*")) {
-			offset = edit.absoluteIndexOf("operator");
+		if (markerText.matches(".*[()-+|=<>]+.*")) { //$NON-NLS-1$
+			offset = edit.absoluteIndexOf("operator"); //$NON-NLS-1$
 		}
 		return offset;
 	}
@@ -120,7 +124,7 @@ public class ChangeRecorder {
 				return i;
 			}
 		}
-		throw new NotSupportedException("Could not determine end of marked statement.");
+		throw new NotSupportedException(Messages.ChangeRecorder_5);
 	}
 
 	public String getSpecifier() throws BadLocationException {
@@ -137,7 +141,7 @@ public class ChangeRecorder {
 	}
 
 	public int getRetBegin() {
-		return edit.getOffset() + edit.getText().indexOf("return ") + "return ".length();
+		return edit.getOffset() + edit.getText().indexOf(RETURN) + RETURN.length();
 	}
 
 	public IDocument getDocument() {
@@ -147,9 +151,10 @@ public class ChangeRecorder {
 	public List<Position> getParameterPositions() throws BadLocationException {
 		List<Position> list = new ArrayList<Position>();
 		List<String> params = Arrays.asList(extractParameters());
-		if (params.get(0).isEmpty())
+		if (params.get(0).isEmpty()) {
 			return list;
-		if (params.contains("_")) {
+		}
+		if (params.contains(_)) {
 			list.addAll(getAddArgumentPositions(params));
 			return list;
 		}
@@ -193,7 +198,7 @@ public class ChangeRecorder {
 		}
 		return list;
 	}
-	
+
 	private List<Position> getAddArgumentPositions(List<String> params) throws BadLocationException {
 		List<Position> list = new ArrayList<Position>();
 		int offset = getParameterOffset();
@@ -201,14 +206,14 @@ public class ChangeRecorder {
 			int beginOfName = offset + param.lastIndexOf(' ') + 1;
 			int nameLength = param.length() - param.lastIndexOf(' ') - 1;
 			offset += param.length() + SEPARATOR.length();
-			if (!param.equals("_")) {
+			if (!param.equals(_)) {
 				continue;
 			}
 			list.add(new Position(beginOfName, nameLength));
 		}
 		return list;
 	}
-	
+
 	private int getParameterOffset() throws BadLocationException {
 		int begin = getParameterEnd();
 		while (begin > 0 && document.getChar(begin) != '(') {
@@ -226,7 +231,7 @@ public class ChangeRecorder {
 	}
 
 	public int getConstOffset() {
-		return edit.getOffset() + edit.getText().indexOf(") const") + 2;
+		return edit.getOffset() + edit.getText().indexOf(Messages.ChangeRecorder_10) + 2;
 	}
 
 	public boolean isSuccessful() {

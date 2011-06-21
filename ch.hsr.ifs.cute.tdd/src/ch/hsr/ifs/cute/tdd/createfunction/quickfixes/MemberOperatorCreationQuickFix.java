@@ -26,7 +26,7 @@ public class MemberOperatorCreationQuickFix extends AbstractFunctionCreationQuic
 	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create operator " + ca.getName();
+		return Messages.MemberOperatorCreationQuickFix_0 + ca.getName();
 	}
 
 	@Override

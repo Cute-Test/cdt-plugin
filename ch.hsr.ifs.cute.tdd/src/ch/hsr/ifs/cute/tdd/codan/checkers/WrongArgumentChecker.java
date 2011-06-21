@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
-import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -36,15 +35,18 @@ import ch.hsr.ifs.cute.tdd.addArgument.AddArgumentRefactoring;
 @SuppressWarnings("restriction")
 public class WrongArgumentChecker extends AbstractIndexAstChecker {
 
-	public static final String ERR_ID_InvalidArguments_HSR = "ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR";
-	public static final String ERR_ID_InvalidArguments_FREE_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR";
+	private static final String COMMA_SPACE = ", "; //$NON-NLS-1$
+	public static final String ERR_ID_InvalidArguments_HSR = "ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR"; //$NON-NLS-1$
+	public static final String ERR_ID_InvalidArguments_FREE_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"; //$NON-NLS-1$
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
 		ast.accept(new WrongArgumentProblemVisitor());
 	}
-	
+
 	public class WrongArgumentProblemVisitor extends AbstractResolutionProblemVisitor {
+
 
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
@@ -55,7 +57,7 @@ public class WrongArgumentChecker extends AbstractIndexAstChecker {
 			List<IASTInitializerClause> oldArgs = Arrays.asList(call.getArguments());
 			IBinding[] candidates = problemBinding.getCandidateBindings();
 			candidates = removeDuplicates(candidates);
-			String contextString = "";
+			String contextString = EMPTY_STRING;
 			String ERR_ID = null;
 			int argNr;
 			for (argNr = 0; argNr < candidates.length; argNr++) {
@@ -73,14 +75,14 @@ public class WrongArgumentChecker extends AbstractIndexAstChecker {
 						return;
 					}
 					if (argNr > 0) {
-						contextString += ":candidate ";
+						contextString += ":candidate "; //$NON-NLS-1$
 					}
 					contextString += getContextString(name, newArgs, candidate);
 				}
 			}
 			String missingName = new String(name.getLastName().getSimpleID());
-			String message = "Invalid Arguments to " + missingName;
-			CodanArguments ca = new CodanArguments(missingName, message, ":candidate");
+			String message = Messages.WrongArgumentChecker_4 + missingName;
+			CodanArguments ca = new CodanArguments(missingName, message, ":candidate"); //$NON-NLS-1$
 			ca.setCandidate(argNr);
 			ca.setCandidates(contextString);
 			assert(ca.toArray().length >= AddArgumentQFGenerator.REQUIRED_MARKER_ARGUMENTS);
@@ -100,8 +102,8 @@ public class WrongArgumentChecker extends AbstractIndexAstChecker {
 						continue;
 					}
 					for(int k=0; arglist1.length == arglist2.length && k < arglist1.length; k++) {
-						ICPPParameter param1 = ((ICPPParameter)arglist1[k]);
-						ICPPParameter param2 = ((ICPPParameter)arglist2[k]);
+						ICPPParameter param1 = arglist1[k];
+						ICPPParameter param2 = arglist2[k];
 						if (param1.getType().isSameType(param2.getType())) {
 							same=true;
 							continue;
@@ -127,9 +129,9 @@ public class WrongArgumentChecker extends AbstractIndexAstChecker {
 	private String getContextString(IASTName name, List<IASTInitializerClause> newArgs, ICPPFunction candidate) {
 		return getArgumentNames(name, candidate) + AddArgumentQFGenerator.SEPARATOR + getParameterNames(name, candidate);
 	}
-	
+
 	private String getArgumentNames(IASTName name, ICPPFunction candidate) {
-		String result = "";
+		String result = EMPTY_STRING;
 		IASTFunctionCallExpression call = ToggleNodeHelper.getAncestorOfType(name, IASTFunctionCallExpression.class);
 		List<IASTInitializerClause> oldArgs = Arrays.asList(call.getArguments());
 		ICPPParameter[] newParams = candidate.getParameters();
@@ -137,18 +139,18 @@ public class WrongArgumentChecker extends AbstractIndexAstChecker {
 			result += AddArgumentQFGenerator.REMOVE_ARGUMENTS;
 			for (int i = 0; i < oldArgs.size(); i++) {
 				if (i >= newParams.length) {
-					result += ASTTypeUtil.getType(TypeHelper.getTypeOf((IASTExpression) oldArgs.get(i))) + ", ";
+					result += ASTTypeUtil.getType(TypeHelper.getTypeOf(oldArgs.get(i))) + COMMA_SPACE;
 				}
 			}
 		} else {
 			result = AddArgumentQFGenerator.ADD_ARGUMENTS;
 			for (int i = 0; i < newParams.length; i++) {
 				if (i >= oldArgs.size()) {
-					result += ASTTypeUtil.getType(newParams[i].getType()) + ", ";
+					result += ASTTypeUtil.getType(newParams[i].getType()) + COMMA_SPACE;
 				}
 			}
 		}
-		if (result.endsWith(", ")) {
+		if (result.endsWith(COMMA_SPACE)) {
 			result = result.substring(0, result.length() - 2);
 		}
 		return result;
@@ -162,7 +164,7 @@ public class WrongArgumentChecker extends AbstractIndexAstChecker {
 		IBinding binding = name.resolveBinding();
 		if (binding instanceof IProblemBinding) {
 			for (ICPPParameter p : candidate.getParameters()) {
-				result += ASTTypeUtil.getType(p.getType()) + ", ";
+				result += ASTTypeUtil.getType(p.getType()) + COMMA_SPACE;
 			}
 		}
 		return result.substring(0, result.length() - 2);

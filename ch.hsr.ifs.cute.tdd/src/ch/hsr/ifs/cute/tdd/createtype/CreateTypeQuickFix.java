@@ -30,7 +30,7 @@ public class CreateTypeQuickFix extends TddQuickFix {
 
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create type '" + ca.getName() + "'";
+		return Messages.CreateTypeQuickFix_0 + ca.getName() + Messages.CreateTypeQuickFix_1;
 	}
 
 	@Override
@@ -53,9 +53,9 @@ public class CreateTypeQuickFix extends TddQuickFix {
 
 	public static Proposal[] getTypeProposals() {
 		return new Proposal[] {
-				new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0),
-				new Proposal("struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0),
-				new Proposal("enum", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_ENUMERATION), 0)
+				new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0), //$NON-NLS-1$
+				new Proposal("struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0), //$NON-NLS-1$
+				new Proposal("enum", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_ENUMERATION), 0) //$NON-NLS-1$
 		};
 	}
 }

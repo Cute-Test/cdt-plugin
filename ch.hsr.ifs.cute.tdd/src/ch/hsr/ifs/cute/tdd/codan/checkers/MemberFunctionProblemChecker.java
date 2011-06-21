@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -23,7 +23,7 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 @SuppressWarnings("restriction")
 public class MemberFunctionProblemChecker extends AbstractIndexAstChecker {
 
-	public static final String ERR_ID_MethodResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR";
+	public static final String ERR_ID_MethodResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
@@ -54,7 +54,7 @@ public class MemberFunctionProblemChecker extends AbstractIndexAstChecker {
 			}
 			if (problemBinding.getCandidateBindings().length == 0) {
 				String missingName = new String(name.getSimpleID());
-				CodanArguments ca = new CodanArguments(missingName, "Function '" + missingName + "'could no be resolved", ":memberfunc");
+				CodanArguments ca = new CodanArguments(missingName, Messages.MemberFunctionProblemChecker_1 + missingName + Messages.MemberFunctionProblemChecker_2, ":memberfunc"); //$NON-NLS-1$
 				reportProblem(ERR_ID_MethodResolutionProblem_HSR, name.getLastName(), ca.toArray());
 			}
 		}

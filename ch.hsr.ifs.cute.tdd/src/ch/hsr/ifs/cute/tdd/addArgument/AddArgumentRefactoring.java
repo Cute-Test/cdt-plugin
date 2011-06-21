@@ -43,7 +43,7 @@ import ch.hsr.ifs.cute.tdd.TypeHelper;
 @SuppressWarnings("restriction")
 public class AddArgumentRefactoring extends CRefactoring3 {
 
-	private static final String PLACEHOLDER = "_";
+	private static final String PLACEHOLDER = "_"; //$NON-NLS-1$
 	private ITextSelection selection;
 	private int candidatenr;
 
@@ -69,7 +69,7 @@ public class AddArgumentRefactoring extends CRefactoring3 {
 			selection = Activator.getDefault().getEditorSelection();
 			call = findFunctionCall(unit, selection);
 			if (call == null) {
-				throw new OperationCanceledException("Could not find function call");
+				throw new OperationCanceledException(Messages.AddArgumentRefactoring_1);
 			}
 		}
 		return call;
@@ -103,14 +103,14 @@ public class AddArgumentRefactoring extends CRefactoring3 {
 		if (candidates.length > nr && candidates[nr] instanceof ICPPFunction) {
 			return (ICPPFunction) candidates[nr];
 		}
-		throw new OperationCanceledException("No candidate functions found.");
+		throw new OperationCanceledException(Messages.AddArgumentRefactoring_2);
 	}
 
 	private IProblemBinding getProblemBinding(IASTFunctionCallExpression caller) {
 		IASTExpression fnameexpr = caller.getFunctionNameExpression();
 		IBinding binding = findProblemName(fnameexpr);
 		if (binding == null || !(binding instanceof IProblemBinding)) {
-			throw new OperationCanceledException("No bindings found");
+			throw new OperationCanceledException(Messages.AddArgumentRefactoring_3);
 		}
 		return (IProblemBinding) binding;
 	}
@@ -124,7 +124,7 @@ public class AddArgumentRefactoring extends CRefactoring3 {
 				return binding;
 			}
 		}
-		throw new OperationCanceledException("Could not determine function name");
+		throw new OperationCanceledException(Messages.AddArgumentRefactoring_4);
 	}
 
 	public static List<IASTInitializerClause> getNewArguments(

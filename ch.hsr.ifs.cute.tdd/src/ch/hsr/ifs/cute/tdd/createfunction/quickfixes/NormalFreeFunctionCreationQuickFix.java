@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -30,7 +30,7 @@ public class NormalFreeFunctionCreationQuickFix extends AbstractFunctionCreation
 	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create free function " + ca.getName();
+		return Messages.NormalFreeFunctionCreationQuickFix_0 + ca.getName();
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -46,18 +46,20 @@ import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 @SuppressWarnings("restriction")
 public class ParameterHelper {
 
+	private static final String STD_STRING = "std::string"; //$NON-NLS-1$
+
 	public static void addTo(IASTFunctionCallExpression caller, ICPPASTFunctionDeclarator decl) {
 		HashMap<String, Boolean> used = new HashMap<String, Boolean>();
 		ArrayList<ICPPASTParameterDeclaration> parameters = getParameterFrom(caller, used);
 		addParametersToDeclarator(decl, parameters);
 	}
-	
+
 	public static void addTo(CPPASTDeclarator declarator, ICPPASTFunctionDeclarator decl) {
 		HashMap<String, Boolean> used = new HashMap<String, Boolean>();
 		ArrayList<ICPPASTParameterDeclaration> parameters = getParameterFrom(declarator, used);
 		addParametersToDeclarator(decl, parameters);
 	}
-	
+
 	private static void addParametersToDeclarator(ICPPASTFunctionDeclarator decl,
 			ArrayList<ICPPASTParameterDeclaration> parameters) {
 		for (ICPPASTParameterDeclaration parameter: parameters) {
@@ -77,7 +79,7 @@ public class ParameterHelper {
 		}
 		return new ArrayList<ICPPASTParameterDeclaration>();
 	}
-	
+
 	private static ArrayList<ICPPASTParameterDeclaration> addArgumentsToList(IASTInitializerClause[] arguments, HashMap<String, Boolean> used) {
 		ArrayList<ICPPASTParameterDeclaration> list = new ArrayList<ICPPASTParameterDeclaration>();
 		for (IASTInitializerClause arg: arguments) {
@@ -115,7 +117,7 @@ public class ParameterHelper {
 		}
 		return true;
 	}
-	
+
 	public static boolean hasEqualTypeAs(ICPPASTParameterDeclaration first, ICPPASTParameterDeclaration second) {
 		return TypeHelper.hasSameType(first.getDeclSpecifier(), second.getDeclSpecifier());
 	}
@@ -131,7 +133,7 @@ public class ParameterHelper {
 		else if (TypeHelper.isString(litexpr)) {
 			spec = handlestring();
 			//TODO: get this string out of here
-			fallBackVarName = new String("std::string").toLowerCase();
+			fallBackVarName = new String(STD_STRING).toLowerCase();
 		} else {
 			IType type = litexpr.getExpressionType();
 			boolean needsConst = true;
@@ -165,24 +167,24 @@ public class ParameterHelper {
 	}
 
 	private static ICPPASTDeclSpecifier handlethis(IASTLiteralExpression lit) {
-			IASTCompositeTypeSpecifier parentType = ToggleNodeHelper.findClassInAncestors(lit);
-			if (parentType == null) {
-				throw new NotSupportedException("this pointer can not be used in non member function");
-			}
-			CPPASTNamedTypeSpecifier d = new CPPASTNamedTypeSpecifier();
-			d.setName(parentType.getName().copy());
-			d.setConst(true);
-			return d;
+		IASTCompositeTypeSpecifier parentType = ToggleNodeHelper.findClassInAncestors(lit);
+		if (parentType == null) {
+			throw new NotSupportedException(Messages.ParameterHelper_1);
 		}
+		CPPASTNamedTypeSpecifier d = new CPPASTNamedTypeSpecifier();
+		d.setName(parentType.getName().copy());
+		d.setConst(true);
+		return d;
+	}
 
 	static ICPPASTDeclSpecifier handlestring() {
-			CPPASTNamedTypeSpecifier declspec = new CPPASTNamedTypeSpecifier();
-			char[] typename = "std::string".toCharArray();
-			declspec.setName(new CPPASTName(typename));
-			declspec.setConst(true);
-			return declspec;
-		}
-	
+		CPPASTNamedTypeSpecifier declspec = new CPPASTNamedTypeSpecifier();
+		char[] typename = STD_STRING.toCharArray();
+		declspec.setName(new CPPASTName(typename));
+		declspec.setConst(true);
+		return declspec;
+	}
+
 	private static ICPPASTDeclarator getParameterDeclarator(String fallBackName, HashMap<String, Boolean> used) {
 		String newName = getParameterCharacter(fallBackName, used);
 		used.put(newName, true);
@@ -190,7 +192,7 @@ public class ParameterHelper {
 		d.addPointerOperator(new CPPASTReferenceOperator(false));
 		return d;
 	}
-	
+
 	private static ICPPASTDeclarator getParameterDeclarator(IASTIdExpression node, HashMap<String, Boolean> used) {
 		String newName = getParameterName(used, node);
 		used.put(newName, true);
@@ -198,11 +200,12 @@ public class ParameterHelper {
 		d.addPointerOperator(new CPPASTReferenceOperator(false));
 		return d;
 	}
-	
+
 	private static String getParameterName(HashMap<String, Boolean> used, IASTIdExpression node) {
 		String newName = new String(node.getName().getSimpleID());
-		if (used.get(newName) != null)
+		if (used.get(newName) != null) {
 			newName = newName + 1;
+		}
 		while (used.get(newName) != null) {
 			newName = newName.substring(0, newName.length() - 1)
 					+ (char) (newName.charAt(newName.length() - 1) + 1);
@@ -211,13 +214,13 @@ public class ParameterHelper {
 	}
 
 	private static String getParameterCharacter(String fallBackVarName, HashMap<String, Boolean> used) {
-		String newName = new String(fallBackVarName.charAt(0) + "").toLowerCase();
+		String newName = new String(fallBackVarName.charAt(0) + "").toLowerCase(); //$NON-NLS-1$
 		while (used.get(newName) != null) {
-			newName = (char) (newName.charAt(0) + 1) + "";
+			newName = (char) (newName.charAt(0) + 1) + ""; //$NON-NLS-1$
 		}
 		return newName;
 	}
-	
+
 	private static String getFallBackName(IType type) {
 		if (type instanceof ITypedef) {
 			return ASTTypeUtil.getQualifiedName((ICPPBinding) type).substring(0,1);

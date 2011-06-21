@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Cute TDD Plugin
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: ch.hsr.ifs.cute.tdd;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.tdd.Activator
@@ -92,4 +92,4 @@ Export-Package: ch.hsr.ifs.cute.tdd;
    org.eclipse.cdt.internal.ui.refactoring"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Bundle-Vendor: IFS Institute for Software
+Bundle-Vendor: %Bundle-Vendor

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -21,8 +21,8 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 @SuppressWarnings("restriction")
 public class FreeFunctionProblemChecker extends AbstractIndexAstChecker {
 
-	public static final String ERR_ID_FunctionResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR";
-	public static final String ERR_ID_FunctionResolutionProblem_STATIC_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR";
+	public static final String ERR_ID_FunctionResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"; //$NON-NLS-1$
+	public static final String ERR_ID_FunctionResolutionProblem_STATIC_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"; //$NON-NLS-1$
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
@@ -45,7 +45,7 @@ public class FreeFunctionProblemChecker extends AbstractIndexAstChecker {
 				for(IASTName partname: qname.getNames()) {
 					if (partname == qname.getLastName()) {
 						String missingName = new String(name.getSimpleID());
-						CodanArguments ca = new CodanArguments(missingName, "Could not resolve static function " + missingName, ":staticfreefunc");
+						CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_2 + missingName, ":staticfreefunc"); //$NON-NLS-1$
 						reportProblem(ERR_ID_FunctionResolutionProblem_STATIC_HSR, partname, ca.toArray());
 					}
 					if (partname.resolveBinding() instanceof IProblemBinding) {
@@ -54,7 +54,7 @@ public class FreeFunctionProblemChecker extends AbstractIndexAstChecker {
 				}
 			}
 			String missingName = new String(name.getSimpleID());
-			CodanArguments ca = new CodanArguments(missingName, "Could not resolve function " + missingName, ":freefunc");
+			CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_4 + missingName, ":freefunc"); //$NON-NLS-1$
 			reportProblem(ERR_ID_FunctionResolutionProblem_HSR, name.getLastName(), ca.toArray());
 		}
 	}

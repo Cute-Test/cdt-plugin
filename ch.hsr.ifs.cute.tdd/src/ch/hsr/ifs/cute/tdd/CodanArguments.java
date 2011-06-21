@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -15,22 +15,23 @@ import org.eclipse.core.resources.IMarker;
 
 @SuppressWarnings("restriction")
 public class CodanArguments {
-	
+
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 	private String name;
 	private String message;
 	private String strategy;
 	private int candNr = 0;
 	private String candidates;
 	private String templateargs;
-	
+
 	public CodanArguments(IMarker marker) {
 		if (marker != null && CodanProblemMarker.getProblemArguments(marker).length != 6) {
 			return;
 		}
 		try {
-		setMessage(CodanProblemMarker.getMessage(marker)); //argument 0
-		setName(CodanProblemMarker.getProblemArgument(marker, 1));
-		setStrategy(CodanProblemMarker.getProblemArgument(marker, 2));
+			setMessage(CodanProblemMarker.getMessage(marker)); //argument 0
+			setName(CodanProblemMarker.getProblemArgument(marker, 1));
+			setStrategy(CodanProblemMarker.getProblemArgument(marker, 2));
 			try {
 				int candidateNr = new Integer(CodanProblemMarker.getProblemArgument(marker, 3));
 				setCandidate(candidateNr);
@@ -44,23 +45,23 @@ public class CodanArguments {
 		} catch (ArrayIndexOutOfBoundsException e) {
 		}
 	}
-	
+
 	public CodanArguments(String missingName, String message, String strategy) {
 		setName(missingName);
 		setMessage(message);
 		setStrategy(strategy);
 		setCandidate(0);
-		setCandidates("");
-		setTemplateArgs("");
+		setCandidates(EMPTY_STRING);
+		setTemplateArgs(EMPTY_STRING);
 	}
 
-	
+
 	public Object[] toArray() {
 		ArrayList<String> result = new ArrayList<String>();
 		result.add(getMessage());
 		result.add(getName());
 		result.add(getStrategy());
-		result.add(getCandidateNr() + "");
+		result.add(getCandidateNr() + EMPTY_STRING);
 		result.add(getCandidates());
 		result.add(getTemplateArgs());
 		String[] s = new String[5];
@@ -106,7 +107,7 @@ public class CodanArguments {
 	public void setCandidates(String candidates) {
 		this.candidates = candidates;
 	}
-	
+
 	public String getCandidates() {
 		return candidates;
 	}
@@ -116,25 +117,25 @@ public class CodanArguments {
 	}
 
 	public boolean isFreeOperator() {
-		if (getStrategy().equals(":freeoperator")) {
+		if (getStrategy().equals(":freeoperator")) { //$NON-NLS-1$
 			return true;
 		}
 		return false;
 	}
 
 	public boolean isOperatorCase() {
-		return getStrategy().endsWith("operator");
+		return getStrategy().endsWith("operator"); //$NON-NLS-1$
 	}
 
 	public boolean isStaticCase() {
-		return getStrategy().equals(":staticfreefunc");
+		return getStrategy().equals(":staticfreefunc"); //$NON-NLS-1$
 	}
 
 	public boolean isCtorCase() {
-		return getStrategy().equals(":ctor");
+		return getStrategy().equals(":ctor"); //$NON-NLS-1$
 	}
 
 	public boolean isMemberVariableCase() {
-		return getStrategy().equals(":memberVariable");
+		return getStrategy().equals(":memberVariable"); //$NON-NLS-1$
 	}
 }

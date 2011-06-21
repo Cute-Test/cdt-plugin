@@ -64,7 +64,7 @@ public class LinkedModeInformation {
 	}
 
 	public void addPosition(int offset, int length) {
-		LinkedProposalPositionGroup group = new LinkedProposalPositionGroup("group" + offset);
+		LinkedProposalPositionGroup group = new LinkedProposalPositionGroup("group" + offset); //$NON-NLS-1$
 		group.addPosition(new Position(offset, length));
 		getGroups().add(group);
 	}
@@ -72,9 +72,9 @@ public class LinkedModeInformation {
 	public void addPosition(int offset, int length, int siblingPosition) {
 		LinkedProposalPositionGroup group = getGroup(siblingPosition);
 		if (group == null)
-			throw new RuntimeException("No existing group has been found on position " + siblingPosition);
+			throw new RuntimeException(Messages.LinkedModeInformation_1 + siblingPosition);
 		if (group.getPositions()[0].getLength() != length)
-			throw new RuntimeException("Inserted position and sibling are not of the same length");
+			throw new RuntimeException(Messages.LinkedModeInformation_2);
 		group.addPosition(new Position(offset, length, 1));
 	}
 

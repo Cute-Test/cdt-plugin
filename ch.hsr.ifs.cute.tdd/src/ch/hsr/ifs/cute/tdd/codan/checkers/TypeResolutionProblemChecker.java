@@ -30,7 +30,7 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 @SuppressWarnings("restriction")
 public class TypeResolutionProblemChecker extends AbstractIndexAstChecker {
 
-	public static final String ERR_ID_TypeResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR";
+	public static final String ERR_ID_TypeResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
@@ -52,7 +52,7 @@ public class TypeResolutionProblemChecker extends AbstractIndexAstChecker {
 				
 			String missingName = new String(name.getSimpleID());
 			String strategy;
-			String message = "Type '" + missingName + "' could not be resolved";
+			String message = Messages.TypeResolutionProblemChecker_1 + missingName + Messages.TypeResolutionProblemChecker_2;
 			ICPPASTNamedTypeSpecifier nts = ToggleNodeHelper.getAncestorOfType(name, CPPASTNamedTypeSpecifier.class);
 			ICPPASTTemplateId templid = null;
 			if (nts != null && nts.getName() instanceof ICPPASTTemplateId) {
@@ -60,18 +60,18 @@ public class TypeResolutionProblemChecker extends AbstractIndexAstChecker {
 			} else if (name instanceof ICPPASTTemplateId) {
 				templid = (ICPPASTTemplateId) name;
 			}
-			String args = "";
+			String args = ""; //$NON-NLS-1$
 			if (templid != null) {
-				strategy = ":templtype";
+				strategy = ":templtype"; //$NON-NLS-1$
 				for(IASTNode node: templid.getTemplateArguments()) {
 					if (node instanceof CPPASTTypeId) {
 						IASTDeclSpecifier declspec = ((CPPASTTypeId) node).getDeclSpecifier();
-						args += declspec.getRawSignature() + ",";
+						args += declspec.getRawSignature() + ","; //$NON-NLS-1$
 					}
 				}
 				args = args.substring(0, args.length()-1);
 			} else {
-				strategy = ":type";
+				strategy = ":type"; //$NON-NLS-1$
 			}
 			CodanArguments ca = new CodanArguments(missingName, message, strategy);
 			if (!args.isEmpty()) {

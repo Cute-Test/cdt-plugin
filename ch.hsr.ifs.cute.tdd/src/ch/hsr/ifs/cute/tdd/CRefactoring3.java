@@ -44,7 +44,7 @@ public abstract class CRefactoring3 extends CRefactoring2 {
 			RefactoringASTCache astCache) {
 		super(element, selection, null, astCache);
 		if (!IDE.saveAllEditors(new IResource[] {ResourcesPlugin.getWorkspace().getRoot()}, false)) {
-			initStatus.addFatalError("Cannot save files");
+			initStatus.addFatalError(Messages.CRefactoring3_0);
 		}
 		this.selection = (TextSelection) selection;
 	}

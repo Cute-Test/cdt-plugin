@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -29,8 +29,8 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 @SuppressWarnings("restriction")
 public class VariableResolutionProblemChecker extends AbstractIndexAstChecker {
 
-	public static final String ERR_ID_VariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR";
-	public static final String ERR_ID_MemberVariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR";
+	public static final String ERR_ID_VariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"; //$NON-NLS-1$
+	public static final String ERR_ID_MemberVariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
@@ -67,17 +67,17 @@ public class VariableResolutionProblemChecker extends AbstractIndexAstChecker {
 				}
 				String missingName = name.getBinding().getName();
 				if (parent instanceof ICPPASTConstructorChainInitializer) {
-					CodanArguments args = new CodanArguments(missingName, "Cannot resolve member variable", ":memberVariable");
+					CodanArguments args = new CodanArguments(missingName, Messages.VariableResolutionProblemChecker_2, ":memberVariable"); //$NON-NLS-1$
 					reportProblem(TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR, name, args.toArray());
 				} else if (parent instanceof IASTFieldReference) {
 					if (ToggleNodeHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null) {
 						return;
 					}
-					CodanArguments args = new CodanArguments(missingName, "Cannot resolve member variable", ":memberVariable");
+					CodanArguments args = new CodanArguments(missingName, Messages.VariableResolutionProblemChecker_4, ":memberVariable"); //$NON-NLS-1$
 					reportProblem(TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR, name, args.toArray());
 				} else {
-					String message = "Symbol '" + missingName + "' could not be resolved";
-					CodanArguments ca = new CodanArguments(missingName, message, ":variable");
+					String message = Messages.VariableResolutionProblemChecker_6 + missingName + Messages.VariableResolutionProblemChecker_7;
+					CodanArguments ca = new CodanArguments(missingName, message, ":variable"); //$NON-NLS-1$
 					reportProblem(ERR_ID_VariableResolutionProblem_HSR, name, ca.toArray());
 				}
 			}

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -24,28 +24,30 @@ import org.eclipse.text.edits.TextEdit;
 @SuppressWarnings("restriction")
 public class NestedEdit {
 
+	private static final String EMPTY_String = ""; //$NON-NLS-1$
 	private TextEdit source;
 
 	public NestedEdit(Change change) {
-		source = new InsertEdit(0, "");
+		source = new InsertEdit(0, EMPTY_String);
 		try {
 			CompositeChange cc = (CompositeChange)change;
 			CompositeChange comp = (CompositeChange) cc.getChildren()[0];
 			TextChange edit = (TextChange) comp.getChildren()[0];
-			source = (TextEdit) edit.getEdit().getChildren()[0];
+			source = edit.getEdit().getChildren()[0];
 		} catch (ClassCastException e1) {
-			throw new NotSupportedException("Unsupported change found.");
+			throw new NotSupportedException(Messages.NestedEdit_0);
 		} catch (ArrayIndexOutOfBoundsException e2) {
-			throw new NotSupportedException("Unsupported change found.");
+			throw new NotSupportedException(Messages.NestedEdit_1);
 		}
 	}
 
 	public String getText() {
-		if (source instanceof InsertEdit)
+		if (source instanceof InsertEdit) {
 			return ((InsertEdit)source).getText();
-		else if (source instanceof ReplaceEdit)
+		} else if (source instanceof ReplaceEdit) {
 			return ((ReplaceEdit)source).getText();
-		return "";
+		}
+		return EMPTY_String;
 	}
 
 	/**
@@ -57,12 +59,12 @@ public class NestedEdit {
 
 	/**
 	 * @return greater zero if the edit replaces some text
-	 * @return zero if the edit only inserts text at a certain position  
+	 * @return zero if the edit only inserts text at a certain position
 	 */
 	public int getLength() {
 		return source.getLength();
 	}
-	
+
 	/**
 	 * @return length of the text that will be inserted by this edit
 	 */

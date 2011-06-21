@@ -25,7 +25,7 @@ public class CreateMemberVariableQuickFix extends TddQuickFix {
 
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create member variable " + ca.getName();
+		return Messages.CreateMemberVariableQuickFix_0 + ca.getName();
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -18,8 +18,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 
 public class MissingNamespaceChecker extends AbstractIndexAstChecker {
-	
-	public static final String ERR_ID_NamespaceResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR";
+
+	public static final String ERR_ID_NamespaceResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
@@ -27,6 +27,7 @@ public class MissingNamespaceChecker extends AbstractIndexAstChecker {
 	}
 
 	class MissingNamespaceVisitor extends AbstractResolutionProblemVisitor	 {
+		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
 			if (name instanceof ICPPASTQualifiedName) {
 				ICPPASTQualifiedName qname = (ICPPASTQualifiedName) name;
@@ -37,7 +38,7 @@ public class MissingNamespaceChecker extends AbstractIndexAstChecker {
 					IBinding b = partname.resolveBinding();
 					if (b instanceof IProblemBinding) {
 						String nodename = new String(partname.getSimpleID());
-						CodanArguments ca = new CodanArguments(nodename, "Could not resolve namespace: " + nodename, ":namespace");
+						CodanArguments ca = new CodanArguments(nodename, Messages.MissingNamespaceChecker_1 + nodename, ":namespace"); //$NON-NLS-1$
 						reportProblem(ERR_ID_NamespaceResolutionProblem_HSR, partname, ca.toArray());
 						return;
 					}

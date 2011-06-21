@@ -18,7 +18,7 @@ import ch.hsr.ifs.cute.tdd.TddQuickFix;
 public class ChangeVisibilityQuickFix extends TddQuickFix {
 
 	public String getLabel() {
-		return "Change visibility of '" + ca.getName() + "'";
+		return Messages.ChangeVisibilityQuickFix_0 + ca.getName() + Messages.ChangeVisibilityQuickFix_1;
 	}
 
 	@Override

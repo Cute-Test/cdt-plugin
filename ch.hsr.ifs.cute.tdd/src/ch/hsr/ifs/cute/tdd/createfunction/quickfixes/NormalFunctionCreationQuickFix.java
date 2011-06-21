@@ -31,7 +31,7 @@ public class NormalFunctionCreationQuickFix extends
 	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
-		return "Create function " + ca.getName();
+		return Messages.NormalFunctionCreationQuickFix_0 + ca.getName();
 	}
 	
 	@Override

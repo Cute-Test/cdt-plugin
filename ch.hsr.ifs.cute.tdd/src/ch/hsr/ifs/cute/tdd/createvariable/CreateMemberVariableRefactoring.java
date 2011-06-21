@@ -80,7 +80,7 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 		CPPASTDeclarator newDeclarator;
 		if (isArray) {
 			assert(initClause instanceof IASTInitializerList);
-			IASTExpression size = new CPPASTLiteralExpression(ICPPASTLiteralExpression.lk_integer_constant, (((IASTInitializerList) initClause).getSize() + "").toCharArray());
+			IASTExpression size = new CPPASTLiteralExpression(ICPPASTLiteralExpression.lk_integer_constant, (((IASTInitializerList) initClause).getSize() + "").toCharArray()); //$NON-NLS-1$
 			CPPASTArrayDeclarator array = new CPPASTArrayDeclarator(variableName.copy());
 			array.addArrayModifier(new CPPASTArrayModifier(size));
 			newDeclarator = array;
@@ -178,7 +178,7 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 	}
 
 	private CPPASTNamedTypeSpecifier createStringDeclSpec() {
-		return new CPPASTNamedTypeSpecifier(new CPPASTName("std::string".toCharArray()));
+		return new CPPASTNamedTypeSpecifier(new CPPASTName("std::string".toCharArray())); //$NON-NLS-1$
 	}
 
 	public static IASTDeclSpecifier createVoidDeclSpec() {
