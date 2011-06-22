@@ -3,13 +3,13 @@
 	<parent>
 		<groupId>ch.hsr.ifs</groupId>
 		<artifactId>ch.hsr.ifs.cute.parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 		<relativePath>../cute_releng</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.tdd</artifactId>
-	<version>1.0.1.qualifier</version>
+	<version>1.0.0.qualifier</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
