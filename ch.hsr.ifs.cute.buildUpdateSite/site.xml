@@ -15,7 +15,7 @@
    <feature url="features/ch.hsr.ifs.cute.gcov.feature_1.1.1.qualifier.jar" id="ch.hsr.ifs.cute.gcov.feature" version="1.1.1.qualifier">
       <category name="OptFeatures"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute_4.2.0.qualifier.jar" id="ch.hsr.ifs.cute" version="4.2.0.qualifier">
+   <feature url="features/ch.hsr.ifs.cute_4.2.1.qualifier.jar" id="ch.hsr.ifs.cute" version="4.2.1.qualifier">
       <category name="Cute Plugin"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.refactoringPreview.clonewar.feature_1.0.0.qualifier.jar" id="ch.hsr.ifs.cute.refactoringPreview.clonewar.feature" version="1.0.0.qualifier">

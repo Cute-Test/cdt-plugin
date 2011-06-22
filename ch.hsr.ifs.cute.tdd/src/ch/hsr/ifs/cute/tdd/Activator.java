@@ -32,7 +32,7 @@ public class Activator extends AbstractUIPlugin {
 	public class ActivationListener implements BundleListener {
 		@Override
 		public void bundleChanged(BundleEvent event) {
-			if (!event.getBundle().getSymbolicName().equals("ch.hsr.eclipse.cdt") && event.getType() == BundleEvent.STARTED) { //$NON-NLS-1$
+			if (!event.getBundle().getSymbolicName().equals("ch.hsr.ifs.cute.tdd") && event.getType() == BundleEvent.STARTED) { //$NON-NLS-1$
 				return;
 			}
 			activateHSRProblems();
@@ -55,7 +55,7 @@ public class Activator extends AbstractUIPlugin {
 		}
 	}
 
-	public static final String PLUGIN_ID = "ch.hsr.eclipse.cdt"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.tdd"; //$NON-NLS-1$
 	public static URL IMG_OBJS_CORRECTION_REMOVE;
 
 	private static Activator plugin;
