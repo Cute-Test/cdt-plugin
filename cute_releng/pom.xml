@@ -11,15 +11,15 @@
 	</properties>
 	<repositories>
 		<repository>
-			<id>indigo-staging</id>
-			<url>http://download.eclipse.org/releases/staging/</url>
+			<id>indigo</id>
+			<url>http://download.eclipse.org/releases/indigo</url>
 			<layout>p2</layout>
 		</repository>
-		<repository>
+		<!--<repository>
 			<id>cdt milestone</id>
 			<url>jar:file:/home/hudson/cdt-master-8.0.0-I201105021546.zip!/</url>
 			<layout>p2</layout>
-		</repository>
+		</repository> -->
 		<repository>
 			<id>swtbot</id>
 			<layout>p2</layout>
