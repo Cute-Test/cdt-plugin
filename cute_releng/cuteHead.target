@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.6"?>
+
+<target name="cuteHead" sequenceNumber="8">
+<locations>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
+<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
+<unit id="org.eclipse.swtbot.forms.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
+<unit id="org.eclipse.swtbot.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
+<repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
+</location>
+<location id="org.eclipse.platform.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.platform" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rcp.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.sdk" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.help.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rcp" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.platform.source" path="${eclipse_home}" type="Feature"/>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.cdt.feature.group" version="8.0.0.201106081058"/>
+<unit id="org.eclipse.cdt.sdk.feature.group" version="8.0.0.201106081058"/>
+<repository location="http://download.eclipse.org/releases/indigo"/>
+</location>
+<location path="${workspace_loc}/cute_releng" type="Directory"/>
+</locations>
+</target>
