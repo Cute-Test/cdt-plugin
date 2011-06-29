@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?compositeArtifactRepository version='1.0.0'?>
-<repository name='"Eclipse Project Test Site"'
+<repository name='Cute C++ Unit Testing Easier'
     type='org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository' 
     version='1.0.0'>
   <properties size='1'>
@@ -8,6 +8,6 @@
   </properties>
   <children size='2'>
     <child location='http://www.cute-test.com/updatesite/cute'/>
-    <child location='http://download.eclipse.org/tools/cdt/releases/helios/'/>
+    <child location='http://download.eclipse.org/tools/cdt/releases/indigo/'/>
   </children>
 </repository>
