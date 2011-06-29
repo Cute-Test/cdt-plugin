@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="cuteHead" sequenceNumber="15">
+<target name="cuteHead" sequenceNumber="18">
 <locations>
 <location id="org.eclipse.rcp" path="${eclipse_home}" type="Feature"/>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
@@ -17,5 +17,8 @@
 <repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
 <location path="${workspace_loc}/cute_releng" type="Directory"/>
+<location id="org.eclipse.sdk" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.platform" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.pde" path="${eclipse_home}" type="Feature"/>
 </locations>
 </target>
