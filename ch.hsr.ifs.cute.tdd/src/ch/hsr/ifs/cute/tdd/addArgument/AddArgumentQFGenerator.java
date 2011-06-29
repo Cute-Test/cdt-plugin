@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ * 
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -40,6 +40,7 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 	public static final String REMOVE_ARGUMENTS = "removeArguments" + ASSIGN_SEPARATOR; //$NON-NLS-1$
 	public static final String SEPARATOR = "°"; //$NON-NLS-1$
 	public static final int REQUIRED_MARKER_ARGUMENTS = 4;
+	private static final String IMG_OBJS_CORRECTION_REMOVE_PATH = "obj16/remove_correction.gif"; //$NON-NLS-1$
 
 	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {
@@ -59,8 +60,8 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 	}
 
 	private boolean isResolutionPossible(IMarker marker) {
-		String pid = getProblemID(marker); 
-		if (pid != null && !((pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_HSR)) 
+		String pid = getProblemID(marker);
+		if (pid != null && !((pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_HSR))
 				|| pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR))) {
 			return false;
 		}
@@ -75,7 +76,7 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 			if (message.startsWith(MSG_QUICK_FIX_ACTION_ADD)) {
 				image = CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CORRECTION_ADD);
 			} else {
-				image = CDTSharedImages.getImage(Activator.IMG_OBJS_CORRECTION_REMOVE.toString());
+				image = Activator.getImageDescriptor(IMG_OBJS_CORRECTION_REMOVE_PATH).createImage();
 			}
 			return new AddArgumentQuickFix(message, candidateNr, image);
 		}

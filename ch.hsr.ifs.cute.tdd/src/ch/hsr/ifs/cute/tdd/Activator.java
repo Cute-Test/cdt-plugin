@@ -13,12 +13,13 @@ import java.net.URL;
 import org.eclipse.cdt.codan.core.CodanRuntime;
 import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.internal.core.model.CodanProblem;
-import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
@@ -36,13 +37,6 @@ public class Activator extends AbstractUIPlugin {
 				return;
 			}
 			activateHSRProblems();
-			loadPictures();
-		}
-
-		private void loadPictures() {
-			IPath IMG_OBJS_PATH = new Path(IMG_OBJS_CORRECTION_REMOVE_PATH);
-			IMG_OBJS_CORRECTION_REMOVE = FileLocator.find(getDefault().getBundle(), IMG_OBJS_PATH, null);
-			CDTSharedImages.register(IMG_OBJS_CORRECTION_REMOVE);
 		}
 
 		private void activateHSRProblems() {
@@ -56,10 +50,11 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.tdd"; //$NON-NLS-1$
-	public static URL IMG_OBJS_CORRECTION_REMOVE;
+
+	private static final IPath ICONS_PATH = new Path("$nl$/icons"); //$NON-NLS-1$
 
 	private static Activator plugin;
-	private static final String IMG_OBJS_CORRECTION_REMOVE_PATH = "icons/obj16/remove_correction.gif"; //$NON-NLS-1$
+
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -78,6 +73,16 @@ public class Activator extends AbstractUIPlugin {
 			throw new RuntimeException(Messages.Activator_0);
 		}
 		return plugin;
+	}
+
+	public static ImageDescriptor getImageDescriptor(String relativePath) {
+		IPath path= ICONS_PATH.append(relativePath);
+		return createImageDescriptor(getDefault().getBundle(), path);
+	}
+
+	private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {
+		URL url= FileLocator.find(bundle, path, null);
+		return ImageDescriptor.createFromURL(url);
 	}
 
 	public ITextSelection getEditorSelection() {
