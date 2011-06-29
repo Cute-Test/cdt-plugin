@@ -260,4 +260,26 @@
          </action>
       </actionSet>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="ch.hsr.ifs.cute.tdd.cEditorContribution"
+            targetID="#CEditorContext">
+         <action
+               class="ch.hsr.ifs.cute.tdd.extract.ExtractActionDelegate"
+               definitionId="ch.hsr.ifs.cute.tdd.extractCommand"
+               id="ch.hsr.ifs.cute.tdd.action1"
+               label="%action.label"
+               menubarPath="org.eclipse.cdt.ui.refactoring.menu/reorgGroup">
+         </action>
+         <menu
+               id="ch.hsr.ifs.cute.tdd.refactormenu"
+               label="%menu.label.0"
+               path="org.eclipse.cdt.ui.refactoring.menu">
+            <separator
+                  name="reorgGroup">
+            </separator>
+         </menu>
+      </viewerContribution>
+   </extension>
 </plugin>
