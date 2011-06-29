@@ -39,7 +39,6 @@
       <import plugin="org.eclipse.cdt.codan.checkers" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.core" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="ch.hsr.ifs.cute.headers.1_0" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.headers.1_5" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.headers.1_6" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.ui" version="4.0.0" match="greaterOrEqual"/>
@@ -71,13 +70,6 @@
 
    <plugin
          id="ch.hsr.ifs.cute.gcov.test"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="ch.hsr.ifs.cute.headers.1_0.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
