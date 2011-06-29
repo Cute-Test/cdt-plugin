@@ -239,11 +239,11 @@
          point="org.eclipse.ui.actionSets">
       <actionSet
             description="%actionSet.description"
-            id="org.eclipse.cdt.ui.CodingActionSet"
+            id="ch.hsr.ifs.cute.tdd.actionSet"
             label="%actionSet.label"
-            visible="false">
+            visible="true">
          <menu
-               id="org.eclipse.jdt.ui.source.menu"
+               id="org.eclipse.jdt.ui.refactoring.menu"
                label="%menu.label"
                path="edit">
             <separator
@@ -255,7 +255,7 @@
                definitionId="ch.hsr.ifs.cute.tdd.extractCommand"
                id="ch.hsr.ifs.cute.tdd.action4"
                label="%action.label"
-               menubarPath="org.eclipse.jdt.ui.source.menu/codeGroup"
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codeGroup"
                style="push">
          </action>
       </actionSet>
