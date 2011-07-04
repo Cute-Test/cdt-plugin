@@ -247,7 +247,7 @@
                label="%menu.label"
                path="edit">
             <separator
-                  name="codeGroup">
+                  name="reorgGroup">
             </separator>
          </menu>
          <action
