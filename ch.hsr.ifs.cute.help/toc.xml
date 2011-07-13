@@ -10,7 +10,9 @@
   </topic> 
 	</topic>
  <topic href="html/usingCute.html" label="Using Cute">
-    <topic href="html/howThingsWorl.html" label="How things work">
+    <topic href="html/howThingsWork.html" label="How things work">
+    </topic>
+    <topic href="html/tdd.html" label="Using the TDD feature">
     </topic>
  </topic>
  <topic href="html/whatsNew.html" label="What&apos;s new in Cute 3.0">
