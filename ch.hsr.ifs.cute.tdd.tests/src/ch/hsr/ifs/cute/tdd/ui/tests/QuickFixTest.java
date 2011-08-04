@@ -34,6 +34,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
+		System.setProperty("line.separator", "\n");
 		enableAllProblems();
 		loadcode(getCommentOfMethod("getCode"), true);
 		indexFiles();

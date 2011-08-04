@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IEnumeration;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
@@ -159,7 +160,7 @@ public class MissingOperatorChecker extends AbstractIndexAstChecker {
 			if (type instanceof CPPQualifierType) {
 				type = ((CPPQualifierType) type).getType();
 			}
-			if (type instanceof IBasicType) {
+			if (type instanceof IBasicType || type instanceof IEnumeration) {
 				return false;
 			}
 			if (operand instanceof IASTIdExpression) {

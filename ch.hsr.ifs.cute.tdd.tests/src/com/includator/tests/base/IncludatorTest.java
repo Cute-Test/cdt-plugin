@@ -133,7 +133,7 @@ public abstract class IncludatorTest extends IncludatorBaseTest {
 		String line;
 		while((line = br.readLine()) != null) {
 			code.append(line);
-			code.append('\n');
+			code.append(NL);
 		}
 		br.close();
 		return code.toString();

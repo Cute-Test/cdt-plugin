@@ -135,6 +135,23 @@ void func()
     B b;
     b==3;
 }
+//!Recognize Enum Assignment As OK
+//@.config
+nomarkers=true
+//@Test.cpp
+typedef enum {RED, GREEN, BLUE} Color;
+
+void thisIsATest() {
+	Color c;
+	c = RED;
+}
+//=
+typedef enum {RED, GREEN, BLUE} Color;
+
+void thisIsATest() {
+	Color c;
+	c = RED;
+}
 //!ASSERTOperatorDectectionUnary
 //@Test.cpp
 #include <string>

@@ -98,7 +98,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 			}
 			if (noMarker) {
 				IMarker[] markers = getCodanMarker();
-				assertEquals(0, markers.length);
+				assertEquals("This test is expected to yield no markers.", 0, markers.length);
 			} else {
 				IMarker[] markers = getCodanMarker();
 				assertTrue(markers.length > 0);
@@ -148,7 +148,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 		for (Entry<String, TestSourceFile> entry : fileMap.entrySet())
 		{
 		    TestSourceFile file = entry.getValue();
-		    //normaly we have only one selection
+		    //Normally we have only one selection
 		    if (file.getSelection() == null)
 		    	continue;
 		    setSelection(file.getSelection());
