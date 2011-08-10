@@ -26,6 +26,6 @@ public abstract class AbstractResolutionProblemVisitor extends ASTVisitor {
 		}
 		return PROCESS_CONTINUE;
 	}
-
+	
 	protected abstract void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name);
 }

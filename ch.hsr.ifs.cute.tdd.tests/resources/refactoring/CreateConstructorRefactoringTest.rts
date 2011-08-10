@@ -147,6 +147,40 @@ void test()
 {
     A a(1, 1);
 }
+//!Create Constructor from Function Call Expression
+//@A.cpp
+struct Rnd {
+    int getInt(){
+        return 4; //Random number determined by rolling a die
+    }
+};
+
+struct A {
+};
+
+void test()
+{
+    Rnd r;
+    A a(r.getInt());
+}
+//=
+struct Rnd {
+    int getInt(){
+        return 4; //Random number determined by rolling a die
+    }
+};
+
+struct A {
+     A(const int & rgetInt)
+    {
+    }
+};
+
+void test()
+{
+    Rnd r;
+    A a(r.getInt());
+}
 //!DoFindSameConstructors
 //@.config
 nomarkers=true
@@ -171,6 +205,45 @@ struct A {
 void test()
 {
     A a(1, 1);
+}
+//!Find Constructor from Function Call Expression
+//@.config
+nomarkers=true
+//@A.cpp
+struct Rnd {
+    int getInt(){
+        return 4; //Random number determined by rolling a die
+    }
+};
+
+struct A {
+     A(const int & rgetInt)
+    {
+    }
+};
+
+void test()
+{
+    Rnd r;
+    A a(r.getInt());
+}
+//=
+struct Rnd {
+    int getInt(){
+        return 4; //Random number determined by rolling a die
+    }
+};
+
+struct A {
+     A(const int & rgetInt)
+    {
+    }
+};
+
+void test()
+{
+    Rnd r;
+    A a(r.getInt());
 }
 //!DefaultCtorNeeded
 //@A.cpp
@@ -200,43 +273,6 @@ void test()
 {
     A a(1);
     A b();
-}
-//!NoMarkerifEqualInitializer
-//@.config
-nomarkers=true
-//@A.cpp
-struct Type {
-     Type getMe() const
-    {
-        return this;
-    }
-
-    Type(const int & i)
-    {
-    }
-
-};
-
-void newTestFunction(){
-    Type t(3);
-    Type u = t.getMe();
-}
-//=
-struct Type {
-     Type getMe() const
-    {
-        return this;
-    }
-
-    Type(const int & i)
-    {
-    }
-
-};
-
-void newTestFunction(){
-    Type t(3);
-    Type u = t.getMe();
 }
 //!ConstructorWithTemplate
 //@A.cpp

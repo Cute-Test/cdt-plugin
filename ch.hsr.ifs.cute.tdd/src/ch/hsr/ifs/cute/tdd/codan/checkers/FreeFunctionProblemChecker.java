@@ -23,7 +23,7 @@ public class FreeFunctionProblemChecker extends AbstractIndexAstChecker {
 
 	public static final String ERR_ID_FunctionResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"; //$NON-NLS-1$
 	public static final String ERR_ID_FunctionResolutionProblem_STATIC_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"; //$NON-NLS-1$
-
+	
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
 		ast.accept(new FreeFunctionProblemVisitor());

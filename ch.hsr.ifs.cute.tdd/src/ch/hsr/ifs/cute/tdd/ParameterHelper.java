@@ -15,11 +15,13 @@ import java.util.Iterator;
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
@@ -83,18 +85,32 @@ public class ParameterHelper {
 	private static ArrayList<ICPPASTParameterDeclaration> addArgumentsToList(IASTInitializerClause[] arguments, HashMap<String, Boolean> used) {
 		ArrayList<ICPPASTParameterDeclaration> list = new ArrayList<ICPPASTParameterDeclaration>();
 		for (IASTInitializerClause arg: arguments) {
-			CPPASTIdExpression posId = TddHelper.getChildofType(arg, CPPASTIdExpression.class);
-			if (posId != null) {
-				arg = posId;
+			IASTExpression posId = TddHelper.getChildofType(arg, IASTExpression.class);
+			if(posId == null){
+				System.err.println("Expression is null for " + arg.getRawSignature());
 			}
-			if (arg instanceof CPPASTLiteralExpression) {
-				list.add(createParamDeclFrom((CPPASTLiteralExpression) arg, used));
+			else if (posId instanceof CPPASTLiteralExpression) {
+				list.add(createParamDeclFrom((CPPASTLiteralExpression) posId, used));
 			}
-			if (arg instanceof CPPASTIdExpression) {
-				list.add(createParamDeclFrom((CPPASTIdExpression) arg, used));
+			else if (posId instanceof CPPASTIdExpression) {
+				list.add(createParamDeclFrom((CPPASTIdExpression) posId, used));
 			}
+			else {
+				list.add(createParamDeclFrom(posId.getExpressionType(), arg.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "")));
+			}
+			
 		}
 		return list;
+	}
+	
+	public static ICPPASTParameterDeclaration createParamDeclFrom(IType type, String nameHint) {
+		type = TypeHelper.windDownToRealType(type, true);
+		ICPPASTDeclSpecifier spec = TypeHelper.getDeclarationSpecifierOfType(type);
+		spec.setConst(true);
+			
+		CPPASTDeclarator declarator = new CPPASTDeclarator(new CPPASTName(nameHint.toCharArray()));
+		declarator.addPointerOperator(new CPPASTReferenceOperator(false));
+		return CPPNodeFactory.getDefault().newParameterDeclaration(spec, declarator);
 	}
 
 	public static boolean haveSameParameter(IASTInitializer initializer, CPPASTFunctionDeclarator declarator) {
