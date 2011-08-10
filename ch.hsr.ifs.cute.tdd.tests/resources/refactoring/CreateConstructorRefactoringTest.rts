@@ -245,7 +245,99 @@ void test()
     Rnd r;
     A a(r.getInt());
 }
-//!DefaultCtorNeeded
+//!No Constructor for Reference Initialization
+//@.config
+nomarkers=true
+//@A.cpp
+struct A {
+};
+
+void test()
+{
+	A a1;
+    A & a2(a1);
+}
+//=
+struct A {
+};
+
+void test()
+{
+	A a1;
+    A & a2(a1);
+}
+//!No Constructor for Pointer Initialization
+//@.config
+nomarkers=true
+//@A.cpp
+struct A {
+};
+
+void test()
+{
+	A a1;
+    A * a2(&a1);
+}
+//=
+struct A {
+};
+
+void test()
+{
+	A a1;
+    A * a2(&a1);
+}
+//!No Constructor for Typedef Reference Initialization
+//@.config
+nomarkers=true
+//@A.cpp
+struct A {
+};
+
+typedef A & AToo;
+
+void test()
+{
+	A a1;
+    AToo a2(a1);
+}
+//=
+struct A {
+};
+
+typedef A & AToo;
+
+void test()
+{
+	A a1;
+    AToo a2(a1);
+}
+//!No Constructor for Typdef Pointer Initialization
+//@.config
+nomarkers=true
+//@A.cpp
+struct A {
+};
+
+typedef A * AToo;
+
+void test()
+{
+	A a1;
+    AToo a2(&a1);
+}
+//=
+struct A {
+};
+
+typedef A * AToo;
+
+void test()
+{
+	A a1;
+    AToo a2(&a1);
+}
+//!Default Ctor Needed
 //@A.cpp
 struct A {
     A(const int & i)
@@ -256,7 +348,7 @@ struct A {
 void test()
 {
     A a(1);
-    A b();
+    A b;
 }
 //=
 struct A {
@@ -272,7 +364,31 @@ struct A {
 void test()
 {
     A a(1);
-    A b();
+    A b;
+}
+//!Typedef Ctor Required
+//@A.cpp
+struct A {
+};
+
+typedef A AToo;
+
+void test()
+{
+    AToo a(1);
+}
+//=
+struct A {
+     A(const int & i)
+    {
+    }
+};
+
+typedef A AToo;
+
+void test()
+{
+    AToo a(1);
 }
 //!ConstructorWithTemplate
 //@A.cpp

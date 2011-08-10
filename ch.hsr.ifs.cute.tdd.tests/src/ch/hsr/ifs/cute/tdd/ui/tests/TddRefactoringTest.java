@@ -101,7 +101,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 				assertEquals("This test is expected to yield no markers.", 0, markers.length);
 			} else {
 				IMarker[] markers = getCodanMarker();
-				assertTrue(markers.length > 0);
+				assertTrue("At leat one marker expected.", markers.length > 0);
 				IMarker marker = markers[0];
 				IDocument doc = openDocument(marker);
 				setSelection(new TextSelection(doc, getOffset(marker, doc), EMPTY_SELECTION));

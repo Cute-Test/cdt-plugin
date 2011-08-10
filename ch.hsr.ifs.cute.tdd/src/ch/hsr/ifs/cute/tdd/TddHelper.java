@@ -19,12 +19,17 @@ import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
+import org.eclipse.cdt.core.dom.ast.IType;
+import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.IWorkingCopy;
@@ -317,5 +322,18 @@ public class TddHelper {
 			node = node.getParent();
 		}
 		return result;
+	}
+
+	public static boolean hasPointerOrRefType(ICPPASTDeclarator declarator) {
+		if(declarator == null){
+			return false;
+		}
+		IBinding declBinding = declarator.getName().resolveBinding();
+		if(declBinding instanceof IVariable){
+			IType type = ((IVariable) declBinding).getType();
+			return type instanceof ICPPReferenceType || type instanceof IPointerType;
+		}
+
+		return false;
 	}
 }

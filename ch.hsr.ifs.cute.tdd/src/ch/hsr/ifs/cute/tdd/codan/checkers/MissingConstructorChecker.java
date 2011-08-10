@@ -9,6 +9,7 @@
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
 import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
+import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
@@ -16,11 +17,12 @@ import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
@@ -30,7 +32,6 @@ import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
-import ch.hsr.ifs.cute.tdd.TypeHelper;
 
 @SuppressWarnings("restriction")
 public class MissingConstructorChecker extends AbstractIndexAstChecker {
@@ -49,15 +50,11 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 	}
 
 	private final class MissingConstructorVisitor extends ASTVisitor {
-		private final IASTTranslationUnit ast;
-		private final RefactoringASTCache astCache;
 		{
 			shouldVisitDeclarations = true;
 		}
 
 		private MissingConstructorVisitor(ICProject project, IASTTranslationUnit ast, RefactoringASTCache astCache) {
-			this.ast = ast;
-			this.astCache = astCache;
 		}
 
 		@Override
@@ -68,27 +65,31 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 				ICPPASTNamedTypeSpecifier typespec = TddHelper.getChildofType(simpledec, CPPASTNamedTypeSpecifier.class);
 				ICPPASTDeclarator declarator = TddHelper.getChildofType(simpledec, ICPPASTDeclarator.class);
 				IASTImplicitNameOwner nameowner = TddHelper.getChildofType(simpledec, IASTImplicitNameOwner.class);
-
-				if (declstmt != null && typespec != null && declarator != null && nameowner != null) {
+				boolean hasPointerOrRefType = TddHelper.hasPointerOrRefType(declarator);
+				
+				if (declstmt != null && typespec != null && declarator != null && nameowner != null && !hasPointerOrRefType ) {
 					if ((simpledec.getDeclSpecifier() instanceof CPPASTNamedTypeSpecifier)) {
-						CPPASTCompositeTypeSpecifier comptypeSpec = (CPPASTCompositeTypeSpecifier) TypeHelper.getTypeDefinitonOfName(ast, new String(typespec.getName()
-								.getSimpleID()), astCache);
-						reportUnresolvableConstructorCalls(simpledec, comptypeSpec);
+						IBinding typeBinding = typespec.getName().resolveBinding();
+						if(typeBinding instanceof IType){
+							String typeName = ASTTypeUtil.getType((IType)typeBinding, true);
+							if(!(typeName.contains("&") || typeName.contains("*"))){
+								reportUnresolvableConstructorCalls(simpledec, typeName);
+							}
+						}
 					}
 				}
 			}
 			return PROCESS_CONTINUE;
 		}
 
-		private void reportUnresolvableConstructorCalls(CPPASTSimpleDeclaration simpledec, CPPASTCompositeTypeSpecifier comptypeSpec) {
+		private void reportUnresolvableConstructorCalls(CPPASTSimpleDeclaration simpledec, String typename) {
 			for (IASTDeclarator ctorDecl : simpledec.getDeclarators()) {
 				if (ctorDecl instanceof IASTImplicitNameOwner) {
 					IASTImplicitName[] implicitNames = ((IASTImplicitNameOwner) ctorDecl).getImplicitNames();
 					if (implicitNames.length == 0) {
 						IASTName reportedNode = ctorDecl.getName();
-						String missingName = new String(comptypeSpec.getName().getSimpleID());
-						String message = Messages.MissingConstructorChecker_1 + missingName;
-						CodanArguments ca = new CodanArguments(missingName, message, ":ctor"); //$NON-NLS-1$
+						String message = Messages.MissingConstructorChecker_1 + typename;
+						CodanArguments ca = new CodanArguments(typename, message, ":ctor"); //$NON-NLS-1$
 						reportProblem(ERR_ID_MissingConstructorResolutionProblem_HSR, reportedNode, ca.toArray());
 					}
 				}
