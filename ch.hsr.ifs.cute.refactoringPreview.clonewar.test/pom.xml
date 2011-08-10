@@ -18,7 +18,7 @@
 	    	<plugin>
     	    	<groupId>org.sonatype.tycho</groupId>
 	        	<artifactId>maven-osgi-test-plugin</artifactId>
-		        <version>0.10.0</version>
+		        <version>${tycho-version}</version>
     		    <configuration>
     		    	<testSuite>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AllTests</testClass>
