@@ -13,6 +13,7 @@ import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTBinaryExpression;
@@ -36,7 +37,7 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 	}
 
 	@Override
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, IASTNode owningType, String name, TextSelection selection) {
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, ICPPASTCompositeTypeSpecifier owningType, String name, TextSelection selection) {
 		ICPPASTFunctionDeclarator decl = new CPPASTFunctionDeclarator(new CPPASTOperatorName(("operator" + name).toCharArray())); //$NON-NLS-1$
 		CPPASTBinaryExpression binex = ToggleNodeHelper.getAncestorOfType(selectedName, IASTBinaryExpression.class);
 		CPPASTUnaryExpression unex = ToggleNodeHelper.getAncestorOfType(selectedName, IASTUnaryExpression.class);

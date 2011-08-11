@@ -25,28 +25,23 @@ import org.eclipse.jface.text.TextSelection;
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
 
 @SuppressWarnings("restriction")
-public class ConstructorCreationStrategy implements IFunctionCreationStrategy{
+public class ConstructorCreationStrategy implements IFunctionCreationStrategy {
 
 	@Override
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit,
-			IASTNode selectedName, IASTNode owningType, String name,
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, ICPPASTCompositeTypeSpecifier owningType, String name,
 			TextSelection selection) {
-		//FIXME: maybe not needed, why is this here called with owningtype not compositetype
-		if (owningType instanceof ICPPASTCompositeTypeSpecifier) {
-			ICPPASTCompositeTypeSpecifier ctype = (ICPPASTCompositeTypeSpecifier) owningType;
-			IASTName newFuncDeclName = ctype.getName().copy();
-			CPPASTFunctionDeclarator funcdecl = new CPPASTFunctionDeclarator(newFuncDeclName);
-		
-			CPPASTDeclarator declarator = ToggleNodeHelper.getAncestorOfType(selectedName, CPPASTDeclarator.class);
-			ParameterHelper.addTo(declarator, funcdecl);
-			
-			CPPASTNamedTypeSpecifier declspec = new CPPASTNamedTypeSpecifier();
-			declspec.setName(new CPPASTName());
-			CPPASTFunctionDefinition fd = new CPPASTFunctionDefinition(declspec, funcdecl, new CPPASTCompoundStatement());
-			fd.setParent(owningType);
-			return fd;
-		}
-		return null;
-	}
 
+		IASTName newFuncDeclName = owningType.getName().copy();
+		CPPASTFunctionDeclarator funcdecl = new CPPASTFunctionDeclarator(newFuncDeclName);
+
+		CPPASTDeclarator declarator = ToggleNodeHelper.getAncestorOfType(selectedName, CPPASTDeclarator.class);
+		ParameterHelper.addTo(declarator, funcdecl);
+
+		CPPASTNamedTypeSpecifier declspec = new CPPASTNamedTypeSpecifier();
+		declspec.setName(new CPPASTName());
+		CPPASTFunctionDefinition fd = new CPPASTFunctionDefinition(declspec, funcdecl, new CPPASTCompoundStatement());
+		fd.setParent(owningType);
+		return fd;
+
+	}
 }

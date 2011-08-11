@@ -10,6 +10,7 @@ package ch.hsr.ifs.cute.tdd.createfunction.strategies;
 
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.jface.text.TextSelection;
@@ -17,7 +18,7 @@ import org.eclipse.jface.text.TextSelection;
 public class StaticFunctionCreationStrategy extends NormalFunctionCreationStrategy {
 
 	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit,
-			IASTNode selectedName, IASTNode owningType, String name,
+			IASTNode selectedName, ICPPASTCompositeTypeSpecifier owningType, String name,
 			TextSelection selection) {
 		ICPPASTFunctionDefinition function = super.getFunctionDefinition(localunit, selectedName, owningType, name, selection);
 		ICPPASTSimpleDeclSpecifier simpledec = (ICPPASTSimpleDeclSpecifier) function.getDeclSpecifier();

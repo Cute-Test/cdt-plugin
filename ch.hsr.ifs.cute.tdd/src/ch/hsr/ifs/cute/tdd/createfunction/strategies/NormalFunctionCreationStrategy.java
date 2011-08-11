@@ -11,6 +11,7 @@ package ch.hsr.ifs.cute.tdd.createfunction.strategies;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator;
@@ -27,7 +28,7 @@ public class NormalFunctionCreationStrategy implements
 
 	@Override
 	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit,
-			IASTNode selectedName, IASTNode owningType, String name,
+			IASTNode selectedName, ICPPASTCompositeTypeSpecifier owningType, String name,
 			TextSelection selection) {
 		ICPPASTFunctionDeclarator dec = new CPPASTFunctionDeclarator(new CPPASTName(name.toCharArray()));
 		IASTFunctionCallExpression caller = ToggleNodeHelper.getAncestorOfType(selectedName, IASTFunctionCallExpression.class);

@@ -28,6 +28,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
 import org.eclipse.cdt.core.dom.ast.IVariable;
@@ -54,7 +55,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassType;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPQualifierType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable;
 import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
@@ -124,18 +124,30 @@ public class TypeHelper {
 		return fallBackIntDeclSpec;
 	}
 
-	static boolean hasQualifierType(IType type) {
+	static boolean hasConstPart(IType type) {
 		if (type instanceof ITypeContainer) {
-			if (type instanceof CPPQualifierType) {
-				if (((CPPQualifierType) type).isConst()) {
+			if (type instanceof IQualifierType) {
+				if (((IQualifierType) type).isConst()) {
 					return true;
 				}
 			}
-			return hasQualifierType(((ITypeContainer) type).getType());
+			return hasConstPart(((ITypeContainer) type).getType());
 		}
 		return false;
 	}
 
+	static boolean hasVolatilePart(IType type) {
+		if (type instanceof ITypeContainer) {
+			if (type instanceof IQualifierType) {
+				if (((IQualifierType) type).isVolatile()) {
+					return true;
+				}
+			}
+			return hasVolatilePart(((ITypeContainer) type).getType());
+		}
+		return false;
+	}
+	
 	public static boolean haveSameType(IASTInitializerClause argument, ICPPParameter parameter) {
 		IType paramtype = windDownToRealType(parameter.getType(), true);
 		if (argument instanceof IASTExpression) {

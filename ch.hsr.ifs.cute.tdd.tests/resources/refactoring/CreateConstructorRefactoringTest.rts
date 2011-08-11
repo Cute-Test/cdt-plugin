@@ -181,7 +181,49 @@ void test()
     Rnd r;
     A a(r.getInt());
 }
-//!DoFindSameConstructors
+//!Create Constructor from Chained Function Call Expression
+//@A.cpp
+struct Rnd {
+    int getInt(){
+        return 4; //Random number determined by rolling a die
+    }
+};
+
+struct A {
+};
+
+Rnd getRnd(){
+  return Rnd();
+}
+
+void test()
+{
+    Rnd r;
+    A a(getRnd().getInt());
+}
+//=
+struct Rnd {
+    int getInt(){
+        return 4; //Random number determined by rolling a die
+    }
+};
+
+struct A {
+     A(const int & getRndgetInt)
+    {
+    }
+};
+
+Rnd getRnd(){
+  return Rnd();
+}
+
+void test()
+{
+    Rnd r;
+    A a(getRnd().getInt());
+}
+//!Find Matching Constructor
 //@.config
 nomarkers=true
 //@A.cpp
@@ -389,6 +431,52 @@ typedef A AToo;
 void test()
 {
     AToo a(1);
+}
+//!Composite Type Specifier Declaration
+//@A.cpp
+struct S {
+} s(1);
+//=
+struct S {
+     S(const int & i)
+    {
+    }
+} s(1);
+//!Local Composite Type Specifier Declaration
+//@A.cpp
+void test()
+{
+	struct S {
+	} s(1);
+}
+//=
+void test()
+{
+	struct S {
+	     S(const int & i)
+	    {
+	    }
+	} s(1);
+}
+//!Constructor for Multiple Declarators
+//@A.cpp
+struct S {
+};
+
+void test()
+{
+    S s1(1), s2(5);
+}
+//=	
+struct S {
+     S(const int & i)
+    {
+    }
+};
+
+void test()
+{
+    S s1(1), s2(5);
 }
 //!ConstructorWithTemplate
 //@A.cpp

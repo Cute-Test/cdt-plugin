@@ -85,7 +85,7 @@ struct Klass {
 };
 //=
 struct Klass {
-    void blah(const Klass & k)
+    void blah(const Klass *const & k)
     {
     }
 
@@ -289,4 +289,170 @@ void func(const int & i, const int & j, const double & d, const int & var)
 void test()
 {
     func(2, 3, 2.3, var);
+}
+//!Pointer Parameter
+//@A.cpp
+struct P{};
+
+void test()
+{
+    P * p;
+    func(p);
+}
+//=
+struct P{};
+
+void func(P *& p)
+{
+}
+
+void test()
+{
+    P * p;
+    func(p);
+}
+//!Pointer to Const Parameter
+//@A.cpp
+struct P{};
+
+void test()
+{
+    P const * p;
+    func(p);
+}
+//=
+struct P{};
+
+void func(const P *& p)
+{
+}
+
+void test()
+{
+    P const * p;
+    func(p);
+}
+//!Const Pointer Parameter
+//@A.cpp
+struct P{};
+
+void test()
+{
+    P * const p;
+    func(p);
+}
+//=
+struct P{};
+
+void func(P *const & p)
+{
+}
+
+void test()
+{
+    P * const p;
+    func(p);
+}
+//!Const Pointer to Const Parameter
+//@A.cpp
+struct P{};
+
+void test()
+{
+    P const * const p;
+    func(p);
+}
+//=
+struct P{};
+
+void func(const P *const & p)
+{
+}
+
+void test()
+{
+    P const * const p;
+    func(p);
+}
+//!Const Volatile Pointer Parameter
+//@A.cpp
+struct P{};
+
+void test()
+{
+    P * const volatile p;
+    func(p);
+}
+//=
+struct P{};
+
+void func(P *const volatile & p)
+{
+}
+
+void test()
+{
+    P * const volatile p;
+    func(p);
+}
+//!Pointer to Const Volatile Parameter
+//@A.cpp
+struct P{};
+
+void test()
+{
+    P const volatile * p;
+    func(p);
+}
+//=
+struct P{};
+
+void func(const volatile P *& p)
+{
+}
+
+void test()
+{
+    P const volatile * p;
+    func(p);
+}
+//!Pointer Pointer Parameter
+//@A.cpp
+struct P{};
+
+void test()
+{
+    P ** p;
+    func(p);
+}
+//=
+struct P{};
+
+void func(P **& p)
+{
+}
+
+void test()
+{
+    P ** p;
+    func(p);
+}
+//!Pointer Parameter from Expression
+//@A.cpp
+struct P{};
+
+void test()
+{
+    func(new P());
+}
+//=
+struct P{};
+
+void func(P *const & newP)
+{
+}
+
+void test()
+{
+    func(new P());
 }
