@@ -49,6 +49,9 @@
 		<module>../Cute.1_6_Feature</module>
 		<module>../Cute_Header_1.6.0</module>
 		<module>../ch.hsr.ifs.cute.headers.1_6.test</module>
+		<module>../Cute.1_7_Feature</module>
+		<module>../Cute_Header_1.7.0</module>
+		<module>../ch.hsr.ifs.cute.headers.1_7.test</module>
 		<!-- GCOV -->
 		<module>../ch.hsr.ifs.cute.gcov.feature</module>
 		<module>../org.ginkgo.gcov</module>

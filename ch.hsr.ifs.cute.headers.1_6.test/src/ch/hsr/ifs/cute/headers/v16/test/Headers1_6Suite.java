@@ -18,7 +18,7 @@ import junit.framework.TestSuite;
 public class Headers1_6Suite extends TestSuite {
 	
 	public Headers1_6Suite() {
-		super("All Headers 1.5 Tests"); //$NON-NLS-1$
+		super("All Headers 1.6 Tests"); //$NON-NLS-1$
 		addTestSuite(CopyHeadersTest.class);
 	}
 
