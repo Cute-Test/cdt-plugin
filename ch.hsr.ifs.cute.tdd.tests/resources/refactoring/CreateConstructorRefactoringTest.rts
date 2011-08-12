@@ -287,6 +287,21 @@ void test()
     Rnd r;
     A a(r.getInt());
 }
+//!No Constructor for Typedef Enum
+//@.config
+nomarkers=true
+//@A.cpp
+typedef enum {RED, GREEN, BLUE} Color;
+
+void test() {
+	Color c;
+}
+//=
+typedef enum {RED, GREEN, BLUE} Color;
+
+void test() {
+	Color c;
+}
 //!No Constructor for Reference Initialization
 //@.config
 nomarkers=true

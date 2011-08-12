@@ -22,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IEnumeration;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICProject;
@@ -29,6 +30,7 @@ import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
+import ch.hsr.ifs.cute.tdd.TypeHelper;
 
 public class MissingConstructorChecker extends AbstractIndexAstChecker {
 
@@ -59,7 +61,7 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 				if (typespec instanceof IASTNamedTypeSpecifier && typespec.getStorageClass() != IASTDeclSpecifier.sc_typedef) {
 					IASTNamedTypeSpecifier namedTypespec = (IASTNamedTypeSpecifier) typespec;
 					IBinding typeBinding = namedTypespec.getName().resolveBinding();
-					if (typeBinding instanceof IType) {
+					if (isConstructableType(typeBinding)) {
 						String typeName = ASTTypeUtil.getType((IType) typeBinding, true);
 						if (!(typeName.contains("&") || typeName.contains("*"))) {
 							reportUnresolvableConstructorCalls(simpleDecl, typeName);
@@ -72,6 +74,20 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 				}
 			}
 			return PROCESS_CONTINUE;
+		}
+
+		private boolean isConstructableType(IBinding typeBinding) {
+			if(typeBinding instanceof IType){
+				IType type = (IType) typeBinding;
+				IType bareType = TypeHelper.windDownToRealType(type, false);
+				if(bareType instanceof IEnumeration){
+					return false;
+				}
+				return true;
+				
+			}
+			
+			return false;
 		}
 
 

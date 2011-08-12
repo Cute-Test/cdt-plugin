@@ -22,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTPointer;
 import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
+import org.eclipse.cdt.core.dom.ast.IArrayType;
 import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
@@ -40,6 +41,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTParameterDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTPointer;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTReferenceOperator;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPArrayType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassInstance;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
@@ -202,25 +204,27 @@ public class ParameterHelper {
 	}
 
 	private static ICPPASTDeclarator getParameterDeclarator(IASTName parameterName, IType type) {
+		ICPPASTDeclarator paramDecl = assembleDeclarator(parameterName, type);
+
+		paramDecl.addPointerOperator(new CPPASTReferenceOperator(false));
+		return paramDecl;
+	}
+
+	private static ICPPASTDeclarator assembleDeclarator(IASTName parameterName, IType type) {
 		ICPPASTDeclarator paramDecl;
 		if (type instanceof IPointerType) {
 			paramDecl = getPointerParameterDeclarator(parameterName, (IPointerType) type);
 		} else {
 			paramDecl = new CPPASTDeclarator(parameterName);
 		}
-
-		paramDecl.addPointerOperator(new CPPASTReferenceOperator(false));
 		return paramDecl;
 	}
 
+
 	private static ICPPASTDeclarator getPointerParameterDeclarator(IASTName parameterName, IPointerType type) {
-		ICPPASTDeclarator paramDecl;
 		IType pointedType = type.getType();
-		if (pointedType instanceof IPointerType) {
-			paramDecl = getPointerParameterDeclarator(parameterName, (IPointerType) pointedType);
-		} else {
-			paramDecl = new CPPASTDeclarator(parameterName);
-		}
+		ICPPASTDeclarator paramDecl = assembleDeclarator(parameterName, pointedType);
+
 		CPPASTPointer ptrOperator = new CPPASTPointer();
 		ptrOperator.setConst(type.isConst());
 		ptrOperator.setVolatile(type.isVolatile());
