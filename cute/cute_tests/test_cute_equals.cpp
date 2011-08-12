@@ -227,6 +227,16 @@ void test_not_has_end_member_for_int(){
 	ASSERT(not cute::equals_impl::to_string_detail::has_begin_end_const_member<int>::value);
 }
 
+void test_equalsTwoNaNFails()
+{
+    ASSERT_THROWS(ASSERT_EQUAL(std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN()),cute::test_failure);
+}
+
+void test_doubleEqualsWithANaNFails(){
+	ASSERT_THROWS(ASSERT_EQUAL_DELTA(0.0,std::numeric_limits<double>::quiet_NaN(),1.0),cute::test_failure);
+}
+
+
 cute::suite test_cute_equals(){
 	cute::suite s;
 	s.push_back(CUTE(test_equals_float));
@@ -255,7 +265,6 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_output_for_vector_set_int_empty));
 	s.push_back(CUTE(test_non_outputable));
 	s.push_back(CUTE(test_doubleEqualsWithANaNFails));
-	s.push_back(CUTE(test_equalsTwoNaNFails));
 	s += CUTE(test_backslashQuoteTabNewline);
 	s += CUTE(test_equals_OK);
 	s += CUTE(test_equals_int_fails);

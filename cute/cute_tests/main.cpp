@@ -115,7 +115,7 @@ int main(){
 	run(s);
 
 	cerr << flush;
-	cerr << run.numberOfTests << " Tests - expect 58" << endl;
+	cerr << run.numberOfTests << " Tests - expect 57" << endl;
 	cerr << run.failedTests << " failed - expect 0 failures" << endl;
 	cerr << run.errors << " errors - expect 2 errors" << endl;
 	return run.failedTests;
