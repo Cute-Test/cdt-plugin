@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ch.hsr.ifs</groupId>
+		<artifactId>ch.hsr.ifs.cute.parent</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../cute_releng</relativePath>
+	</parent>
+	<groupId>ch.hsr.ifs</groupId>
+	<artifactId>ch.hsr.ifs.cute.headers.1_7.test</artifactId>
+	<version>1.0.1.qualifier</version>
+	<packaging>eclipse-test-plugin</packaging>
+	<build>
+    	<sourceDirectory>src</sourceDirectory>
+    	<plugins>
+	    	<plugin>
+    	    	<groupId>org.sonatype.tycho</groupId>
+	        	<artifactId>maven-osgi-test-plugin</artifactId>
+		        <version>${tycho-version}</version>
+    		    <configuration>
+    		    	<testSuite>ch.hsr.ifs.cute.headers.1_7.test</testSuite>
+					<testClass>ch.hsr.ifs.cute.headers.v17.test.Headers1_7Suite</testClass>
+        			<useUIHarness>false</useUIHarness>
+        			<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
+			</configuration>
+    	  	</plugin>
+	    </plugins>
+	</build>
+</project>
