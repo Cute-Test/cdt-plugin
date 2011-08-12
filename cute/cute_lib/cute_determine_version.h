@@ -14,35 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007-2009 Peter Sommerlad, Emanuel Graf
+ * Copyright 2007-2011 Peter Sommerlad
  *
  *********************************************************************************/
-#ifndef CUTE_TEST_H_
-#define CUTE_TEST_H_
-#include "cute_determine_version.h"
-#include "cute_determine_library.h"
-#include "cute_demangle.h"
-// make plain functions as tests more 'cute':
-namespace cute {
 
-	struct test{
-		void operator()()const{ theTest(); }
-		std::string name()const{ return name_;}
+#ifndef CUTE_DETERMINE_VERSION_H_
+#define CUTE_DETERMINE_VERSION_H_
+#if defined(__GXX_EXPERIMENTAL_CXX0X__) && not defined(USE_TR1)
+#define USE_STD0X 1
+#endif
 
-
-		// (real) functor types can (almost) spell their name
-		// but a name can also be given explicitely, e.g. for CUTE() macro
-		// for simple test functions
-		template <typename VoidFunctor>
-		test(VoidFunctor const &t, std::string sname = demangle(typeid(VoidFunctor).name()))
-		:theTest(t),name_(sname){}
-
-	private:
-		boost_or_tr1::function<void()> theTest;
-		std::string name_;
-	};
-
-}
-#define CUTE(name) cute::test((&name),(#name))
-
-#endif /*CUTE_TEST_H_*/
+#endif /*CUTE_DETERMINE_VERSION_H_*/

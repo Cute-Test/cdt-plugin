@@ -21,9 +21,8 @@
 #ifndef CUTE_TESTMEMBER_H_
 #define CUTE_TESTMEMBER_H_
 #include "cute_test.h"
-#if ! defined(USE_TR1) && ! defined(USE_STD0X)
-#include <boost/bind.hpp>
-#endif
+#include "cute_determine_version.h"
+#include "cute_determine_library.h"
 namespace cute {
 	template <typename TestClass>
 	test makeMemberFunctionTest(TestClass &t,void (TestClass::*fun)(),char const *name){

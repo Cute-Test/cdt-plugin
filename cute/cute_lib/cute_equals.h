@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007-2009 Peter Sommerlad, Emanuel Graf
+ * Copyright 2007-2011 Peter Sommerlad, Emanuel Graf
  *
  *********************************************************************************/
 
@@ -25,11 +25,13 @@
 #endif
 
 #include "cute_base.h"
+#include "cute_determine_version.h"
 #include "cute_demangle.h"
 #include <cmath>
 #include <limits>
 #include <ostream>
 #include <sstream>
+#include <algorithm>
 #if defined(USE_STD0X)
 #include <type_traits>
 #elif defined(USE_TR1)
@@ -48,6 +50,10 @@ namespace cute {
 	namespace impl_place_for_traits = boost;
 #endif
 	namespace equals_impl {
+
+		template <typename T>
+		std::ostream &to_stream(std::ostream &os,T const &t); // recursion needs forward
+
 		static inline std::string backslashQuoteTabNewline(std::string const &input){
 			std::string result;
 			result.reserve(input.size());
@@ -73,19 +79,82 @@ namespace cute {
 			struct is_output_streamable_impl {
 				static std::basic_ostream<CharT,Traits> & f();
 				static T const & g();
-				enum e { value = (sizeof(char) != sizeof(f()<<g())) };
+				enum e { value = (sizeof(char) != sizeof(f()<<g())) }; // assumes sizeof(char)!=sizeof(ostream&)
+			};
+			template <class CONT>
+			struct has_begin_end_const_member {
+				template <typename T, T, T> struct type_check;
+				template <typename C> static typename C::const_iterator test(
+						type_check<typename C::const_iterator (C::*)()const,&C::begin, &C::end>*);
+				template <typename C> static char test(...);
+				enum e { value = (sizeof(char) != sizeof(test<CONT>(0)))
+				};
 			};
 		}
 		template <class T, class CharT=char, class Traits=std::char_traits<CharT> >
 		struct is_output_streamable {
 			enum e { value=to_string_detail::is_output_streamable_impl<T,CharT,Traits>::value };
 		};
+		// detect standard container conforming begin() end() iterator accessors.
+		// might employ begin/end traits from c++0x for loop in the future. --> select_container
+		template <typename T>
+		struct printItWithDelimiter
+		{
+			std::ostream &os;
+			bool first; // allow use of for_each algorithm
+			printItWithDelimiter(std::ostream &os):os(os),first(true){}
+			void operator()(T const &t){
+				if (!first) os<<',';
+				else first=false;
+				os << '\n'; // use newlines so that CUTE's plug-in result viewer gives nice diffs
+				equals_impl::to_stream<T>(os,t);
+			}
+		};
+		//try print_pair with specialization of template function instead:
+		// the generic version prints about missing operator<< that is the last resort
+		template <typename T>
+		std::ostream &print_pair(std::ostream &os,T const &t){
+			return os << "no operator<<(ostream&, " <<cute::demangle(typeid(T).name())<<')';
+		}
+		//the std::pair overload is useful for std::map etc. however,
+		template <typename K, typename V>
+		std::ostream &print_pair(std::ostream &os,std::pair<K,V> const &p){
+			os << '[' ;
+			equals_impl::to_stream(os,p.first);
+			os << " -> ";
+			equals_impl::to_stream(os,p.second);
+			os << ']';
+			return os;
+		}
+
+		template <typename T, bool select>
+		struct select_container {
+			std::ostream &os;
+			select_container(std::ostream &os):os(os){}
+			std::ostream& operator()(T const &t){
+				printItWithDelimiter<typename T::value_type> printer(os);
+				os << cute::demangle(typeid(T).name()) << '{';
+				std::for_each(t.begin(),t.end(),printer);
+				return os << '}';
+			}
+		};
+
+		template <typename T>
+		struct select_container<T,false> {
+			std::ostream &os;
+			select_container(std::ostream &os):os(os){}
+			std::ostream & operator()(T const &t){
+				//  look for std::pair. a future with tuple might be useful as well, but not now.
+				return print_pair(os,t); // here a simple template function overload works.
+			}
+		};
+
 		template <typename T, bool select>
 		struct select_built_in_shift_if {
 			std::ostream &os;
 			select_built_in_shift_if(std::ostream &ros):os(ros){}
 			std::ostream& operator()(T const &t){
-				return os << t ; // default uses operator<<(std::ostream&,T const&)
+				return os << t ; // default uses operator<<(std::ostream&,T const&) if available
 			}
 		};
 
@@ -94,7 +163,8 @@ namespace cute {
 			std::ostream &os;
 			select_built_in_shift_if(std::ostream &ros):os(ros){}
 			std::ostream & operator()(T const &t){
-				return os << "operator << not defined for type " <<cute::demangle(typeid(T).name());
+				// if no operator<< is found, try if it is a container or std::pair
+				return select_container<T,to_string_detail::has_begin_end_const_member<T>::value >(os)(t);
 			}
 		};
 		template <typename T>
