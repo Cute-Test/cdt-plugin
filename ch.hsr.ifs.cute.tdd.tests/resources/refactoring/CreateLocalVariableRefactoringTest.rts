@@ -228,3 +228,22 @@ void func()
     int x;
     x.y();
 }
+//!No Variable for Non-typedef Enum Assignment
+//@.config
+nomarkers=true
+//@A.cpp
+enum Color{RED, GREEN, BLUE};
+
+void func()
+{
+    Color c;
+    c = RED;
+}
+//=
+enum Color{RED, GREEN, BLUE};
+
+void func()
+{
+    Color c;
+    c = RED;
+}

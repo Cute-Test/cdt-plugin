@@ -54,7 +54,7 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 
 		@Override
 		public int visit(IASTDeclaration declaration) {
-			if (declaration instanceof IASTSimpleDeclaration) {
+			if (declaration instanceof IASTSimpleDeclaration && !isMemberDeclaration(declaration)) {
 				IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
 				IASTDeclSpecifier typespec = simpleDecl.getDeclSpecifier();
 				
@@ -74,6 +74,10 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 				}
 			}
 			return PROCESS_CONTINUE;
+		}
+
+		private boolean isMemberDeclaration(IASTDeclaration declaration) {
+			return declaration.getParent() instanceof IASTCompositeTypeSpecifier;
 		}
 
 		private boolean isConstructableType(IBinding typeBinding) {

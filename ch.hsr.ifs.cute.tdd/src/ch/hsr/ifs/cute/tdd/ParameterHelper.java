@@ -22,15 +22,21 @@ import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTPointer;
 import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
+import org.eclipse.cdt.core.dom.ast.IArrayType;
+import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IPointerType;
+import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTArrayDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayDeclarator;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTConstructorInitializer;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
@@ -87,7 +93,6 @@ public class ParameterHelper {
 		for (IASTInitializerClause arg : arguments) {
 			IASTExpression posId = TddHelper.getChildofType(arg, IASTExpression.class);
 			if (posId == null) {
-				System.err.println("Expression is null for " + arg.getRawSignature());
 			} else if (posId instanceof CPPASTLiteralExpression) {
 				list.add(createParamDeclFrom((CPPASTLiteralExpression) posId, used));
 			} else if (posId instanceof CPPASTIdExpression) {
@@ -106,7 +111,7 @@ public class ParameterHelper {
 		ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
 
 		IASTName parameterName = createParameterName(nameHint, used);
-		ICPPASTDeclarator decl = getParameterDeclarator(parameterName, type);
+		ICPPASTDeclarator decl = getParameterDeclarator(parameterName, type, false);
 
 		if (!makeLastPtrOpConst(decl)) {
 			spec.setConst(true);
@@ -121,7 +126,7 @@ public class ParameterHelper {
 
 		String nameHint = new String(idexpr.getName().getSimpleID());
 		IASTName parameterName = createParameterName(nameHint, used);
-		IASTDeclarator declarator = getParameterDeclarator(parameterName, type);
+		IASTDeclarator declarator = getParameterDeclarator(parameterName, type, false);
 		return CPPNodeFactory.getDefault().newParameterDeclaration(spec, declarator);
 	}
 
@@ -137,6 +142,7 @@ public class ParameterHelper {
 	public static ICPPASTParameterDeclaration createParamDeclFrom(IASTLiteralExpression litexpr, HashMap<String, Boolean> used) {
 		ICPPASTDeclSpecifier spec;
 		String fallBackVarName = null;
+		boolean skipConstCharArray = false;
 		if (TypeHelper.isThisPointer(litexpr)) {
 			spec = handlethis(litexpr);
 			IASTCompositeTypeSpecifier parentType = ToggleNodeHelper.findClassInAncestors(litexpr);
@@ -145,6 +151,7 @@ public class ParameterHelper {
 			spec = createAnonymousStringDeclSpecifier();
 			// TODO: get this string out of here
 			fallBackVarName = new String(STD_STRING).toLowerCase();
+			skipConstCharArray = true;
 		} else {
 			IType type = litexpr.getExpressionType();
 			type = TypeHelper.windDownToRealType(type, true);
@@ -156,7 +163,7 @@ public class ParameterHelper {
 		
 		String newName = getParameterCharacter(fallBackVarName, used);
 		used.put(newName, true);	
-		IASTDeclarator declarator = getParameterDeclarator(new CPPASTName(newName.toCharArray()), litexpr.getExpressionType() );
+		IASTDeclarator declarator = getParameterDeclarator(new CPPASTName(newName.toCharArray()), litexpr.getExpressionType(), skipConstCharArray);
 		makeLastPtrOpConst(declarator);
 		
 		return CPPNodeFactory.getDefault().newParameterDeclaration(spec, declarator);
@@ -201,17 +208,21 @@ public class ParameterHelper {
 		return declspec;
 	}
 
-	private static ICPPASTDeclarator getParameterDeclarator(IASTName parameterName, IType type) {
-		ICPPASTDeclarator paramDecl = assembleDeclarator(parameterName, type);
+	private static ICPPASTDeclarator getParameterDeclarator(IASTName parameterName, IType type, boolean skipConstCharArray) {
+		ICPPASTDeclarator paramDecl = assembleDeclarator(parameterName, type, skipConstCharArray);
 
-		paramDecl.addPointerOperator(new CPPASTReferenceOperator(false));
+		if(!(paramDecl instanceof ICPPASTArrayDeclarator)){
+			paramDecl.addPointerOperator(new CPPASTReferenceOperator(false));
+		}
 		return paramDecl;
 	}
 
-	private static ICPPASTDeclarator assembleDeclarator(IASTName parameterName, IType type) {
+	private static ICPPASTDeclarator assembleDeclarator(IASTName parameterName, IType type, boolean skipConstCharArray) {
 		ICPPASTDeclarator paramDecl;
 		if (type instanceof IPointerType) {
 			paramDecl = getPointerParameterDeclarator(parameterName, (IPointerType) type);
+		} else if (type instanceof IArrayType && !(skipConstCharArray && isConstCharArray(type))) {
+			paramDecl = getArrayParameterDeclarator(parameterName, (IArrayType) type);
 		} else {
 			paramDecl = new CPPASTDeclarator(parameterName);
 		}
@@ -219,9 +230,34 @@ public class ParameterHelper {
 	}
 
 
+	private static boolean isConstCharArray(IType type) {
+		if(type instanceof IArrayType){
+			IArrayType arrType = (IArrayType) type;
+			IType arrayedType = arrType.getType();
+			if(arrayedType instanceof IQualifierType){
+				IQualifierType qualifierType = (IQualifierType) arrayedType;
+				IType qualifiedType = qualifierType.getType();
+				if(qualifierType.isConst() && qualifiedType instanceof IBasicType){
+					IBasicType basicType = (IBasicType) qualifiedType;
+					return basicType.getKind() == IBasicType.Kind.eChar;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static ICPPASTDeclarator getArrayParameterDeclarator(IASTName parameterName, IArrayType type) {
+
+		CPPASTArrayDeclarator arrayDecl = new CPPASTArrayDeclarator(parameterName);
+		CPPASTArrayModifier arrayModifier = new CPPASTArrayModifier();
+		arrayDecl.addArrayModifier(arrayModifier);
+
+		return arrayDecl;
+	}
+
 	private static ICPPASTDeclarator getPointerParameterDeclarator(IASTName parameterName, IPointerType type) {
 		IType pointedType = type.getType();
-		ICPPASTDeclarator paramDecl = assembleDeclarator(parameterName, pointedType);
+		ICPPASTDeclarator paramDecl = assembleDeclarator(parameterName, pointedType, false);
 
 		CPPASTPointer ptrOperator = new CPPASTPointer();
 		ptrOperator.setConst(type.isConst());
@@ -262,7 +298,6 @@ public class ParameterHelper {
 		return null;
 	}
 
-	// TODO: to parameterhelper
 	public static void addEmptyIntParameter(ICPPASTFunctionDeclarator decl) {
 		CPPASTParameterDeclaration paramdecl = new CPPASTParameterDeclaration();
 		paramdecl.setDeclarator(new CPPASTDeclarator(new CPPASTName()));

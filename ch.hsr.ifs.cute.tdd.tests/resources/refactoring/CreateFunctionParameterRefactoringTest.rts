@@ -456,3 +456,77 @@ void test()
 {
     func(new P());
 }
+//!Array Parameter
+//@A.cpp
+void test(){
+	int iArr[];
+	foo(iArr);
+}
+//=
+void foo(int iArr[])
+{
+}
+
+void test(){
+	int iArr[];
+	foo(iArr);
+}
+//!String Array Parameter
+//@A.cpp
+namespace std
+{
+    struct string{};
+}
+
+void test(){
+	std::string sArr[];
+	foo(sArr);
+}
+//=
+namespace std
+{
+    struct string{};
+}
+
+void foo(std::string sArr[])
+{
+}
+
+void test(){
+	std::string sArr[];
+	foo(sArr);
+}
+//!Const Char Pointer from Non-Literal
+//@A.cpp
+void test(){
+	const char * str = "Hello";
+	foo(str);
+}
+//=
+void foo(const char *& str)
+{
+}
+
+void test(){
+	const char * str = "Hello";
+	foo(str);
+}
+//!Create typedef-Type Parameter
+//@A.cpp
+typedef int I;
+
+void test(){
+    I i = 5;
+	foo(i);
+}
+//=
+typedef int I;
+
+void foo(I & i)
+{
+}
+
+void test(){
+    I i = 5;
+	foo(i);
+}

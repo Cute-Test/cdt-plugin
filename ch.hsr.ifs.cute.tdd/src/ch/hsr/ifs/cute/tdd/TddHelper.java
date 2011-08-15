@@ -9,6 +9,7 @@
 package ch.hsr.ifs.cute.tdd;
 
 
+import org.eclipse.cdt.core.dom.ast.IASTArrayDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
@@ -327,6 +328,9 @@ public class TddHelper {
 	public static boolean hasPointerOrRefType(IASTDeclarator declarator) {
 		if(declarator == null){
 			return false;
+		}
+		if(declarator instanceof IASTArrayDeclarator) {
+			return true;
 		}
 		IBinding declBinding = declarator.getName().resolveBinding();
 		if(declBinding instanceof IVariable){
