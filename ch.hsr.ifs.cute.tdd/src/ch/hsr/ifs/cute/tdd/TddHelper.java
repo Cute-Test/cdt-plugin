@@ -126,13 +126,13 @@ public class TddHelper {
 			if (publiclabel == null) {
 				insertBeforeAnyLabel(member, type, rewrite);
 			} else {
-				insertAtPublicLabel(member, type, rewrite, publiclabel);
+				insertAtVisibilityLabel(member, type, rewrite, publiclabel);
 			}
 		} else if (type.getKey() == ICPPASTCompositeTypeSpecifier.k_class) {
 			if (publiclabel == null) {
 				publiclabel = createAndInsertVisibilityLabel(type, rewrite, ICPPASTVisibilityLabel.v_public);
 			}
-			insertAtPublicLabel(member, type, rewrite, publiclabel);
+			insertAtVisibilityLabel(member, type, rewrite, publiclabel);
 		}
 	}
 
@@ -143,12 +143,12 @@ public class TddHelper {
 			if (label == null) {
 				label = createAndInsertVisibilityLabel(type, rewrite, ICPPASTVisibilityLabel.v_private);
 			}
-			insertAtPublicLabel(member, type, rewrite, label);
+			insertAtVisibilityLabel(member, type, rewrite, label);
 		} else if (type.getKey() == ICPPASTCompositeTypeSpecifier.k_class) {
 			if (label == null) {
 				insertBeforeAnyLabel(member, type, rewrite);
 			} else {
-				insertAtPublicLabel(member, type, rewrite, label);
+				insertAtVisibilityLabel(member, type, rewrite, label);
 			}
 		}
 	}
@@ -158,13 +158,13 @@ public class TddHelper {
 		rewrite.insertBefore(owningType, null, partToInsert, null);
 	}
 
-	private static void insertAtPublicLabel(IASTNode func,
+	private static void insertAtVisibilityLabel(IASTNode node,
 			final ICPPASTCompositeTypeSpecifier typespec, ASTRewrite rewrite,
-			IASTNode publiclabel) {
-		IASTNode newFunc = func.copy(CopyStyle.withLocations);
-		newFunc.setParent(publiclabel);
-		IASTNode otherlabel = findVisibilityLabelAfterPublic(typespec, publiclabel);
-		rewrite.insertBefore(typespec, otherlabel, newFunc, null);
+			IASTNode label) {
+		IASTNode insertedNode = node.copy(CopyStyle.withLocations);
+		insertedNode.setParent(label);
+		IASTNode otherlabel = findDeclarationAfterLabel(typespec, label);
+		rewrite.insertBefore(typespec, otherlabel, insertedNode, null);
 	}
 
 	private static void insertBeforeAnyLabel(IASTNode function,
@@ -176,7 +176,9 @@ public class TddHelper {
 		rewrite.insertBefore(typespec, firstFunction, function.copy(CopyStyle.withLocations), null);
 	}
 
-	private static IASTNode findVisibilityLabelAfterPublic(ICPPASTCompositeTypeSpecifier typespec, IASTNode label) {
+	
+	//TODO: tcorbat - cannot imagine that this method is correct
+	private static IASTNode findDeclarationAfterLabel(ICPPASTCompositeTypeSpecifier typespec, IASTNode label) {
 		boolean found = false;
 		for (IASTDeclaration dec: typespec.getDeclarations(true)) {
 			if (found) {

@@ -11,6 +11,7 @@ package ch.hsr.ifs.cute.tdd.LinkedMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import static java.lang.Math.max;
 
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.NotSupportedException;
 import org.eclipse.core.runtime.CoreException;
@@ -133,7 +134,7 @@ public class ChangeRecorder {
 	}
 
 	public int getSpecLength() throws BadLocationException {
-		return getSpecEnd() - getSpecBegin();
+		return max(getSpecEnd() - getSpecBegin(), 0);
 	}
 
 	public int getRetLength() {

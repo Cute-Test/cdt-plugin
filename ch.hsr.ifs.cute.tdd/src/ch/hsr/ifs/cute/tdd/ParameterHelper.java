@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -29,18 +30,17 @@ import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTArrayDeclarator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTConstructorInitializer;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTLiteralExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTParameterDeclaration;
@@ -80,10 +80,11 @@ public class ParameterHelper {
 		return addArgumentsToList(arguments, used);
 	}
 
-	public static ArrayList<ICPPASTParameterDeclaration> getParameterFrom(CPPASTDeclarator declarator, HashMap<String, Boolean> used) {
-		CPPASTConstructorInitializer initializer = (CPPASTConstructorInitializer) declarator.getInitializer();
-		if (initializer != null) {
-			return addArgumentsToList(initializer.getArguments(), used);
+	public static ArrayList<ICPPASTParameterDeclaration> getParameterFrom(ICPPASTDeclarator declarator, HashMap<String, Boolean> used) {
+		
+		IASTInitializer initializer = declarator.getInitializer();
+		if (initializer != null && initializer instanceof ICPPASTConstructorInitializer) {
+			return addArgumentsToList(((ICPPASTConstructorInitializer)initializer).getArguments(), used);
 		}
 		return new ArrayList<ICPPASTParameterDeclaration>();
 	}
@@ -93,10 +94,10 @@ public class ParameterHelper {
 		for (IASTInitializerClause arg : arguments) {
 			IASTExpression posId = TddHelper.getChildofType(arg, IASTExpression.class);
 			if (posId == null) {
-			} else if (posId instanceof CPPASTLiteralExpression) {
-				list.add(createParamDeclFrom((CPPASTLiteralExpression) posId, used));
-			} else if (posId instanceof CPPASTIdExpression) {
-				list.add(createParamDeclFrom((CPPASTIdExpression) posId, used));
+			} else if (posId instanceof ICPPASTLiteralExpression) {
+				list.add(createParamDeclFrom((ICPPASTLiteralExpression) posId, used));
+			} else if (posId instanceof IASTIdExpression) {
+				list.add(createParamDeclFrom((IASTIdExpression) posId, used));
 			} else {
 				String nameHint = arg.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "");
 				list.add(createParamDeclFrom(posId.getExpressionType(), nameHint, used));

@@ -31,7 +31,7 @@ public class LinkedModeInformation {
 		groups = new ArrayList<LinkedProposalPositionGroup>();
 	}
 
-	public void setFileChange(boolean fileChanged) {
+	public void setFileChanged(boolean fileChanged) {
 		this.fileChanged = fileChanged;
 	}
 

@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
+import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
@@ -24,6 +25,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IEnumeration;
 import org.eclipse.cdt.core.dom.ast.IType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.Path;
@@ -98,7 +100,7 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 		private void reportUnresolvableConstructorCalls(IASTSimpleDeclaration simpledec, String typename) {
 			for (IASTDeclarator ctorDecl : simpledec.getDeclarators()) {
 				boolean hasPointerOrRefType = TddHelper.hasPointerOrRefType(ctorDecl);
-				if (!hasPointerOrRefType && ctorDecl instanceof IASTImplicitNameOwner) {
+				if (!hasPointerOrRefType && ctorDecl instanceof IASTImplicitNameOwner && hasCtorInitializer(ctorDecl)) {
 					IASTImplicitName[] implicitNames = ((IASTImplicitNameOwner) ctorDecl).getImplicitNames();
 					if (implicitNames.length == 0) {
 						IASTName reportedNode = ctorDecl.getName();
@@ -108,6 +110,11 @@ public class MissingConstructorChecker extends AbstractIndexAstChecker {
 					}
 				}
 			}
+		}
+
+		private boolean hasCtorInitializer(IASTDeclarator ctorDecl) {
+			IASTInitializer initializer = ctorDecl.getInitializer();
+			return initializer == null || initializer instanceof ICPPASTConstructorInitializer;
 		}
 	}
 }

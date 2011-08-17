@@ -90,7 +90,7 @@ public abstract class CRefactoring3 extends CRefactoring2 {
 	}
 
 	public void setLinkedModeInformation(IASTTranslationUnit localunit, ICPPASTCompositeTypeSpecifier owningType, IASTDeclaration declaration) {
-		lmi.setFileChange(FunctionCreationHelper.setFileChanged(localunit, owningType));
+		lmi.setFileChanged(FunctionCreationHelper.setFileChanged(localunit, owningType));
 		if (declaration instanceof IASTFunctionDefinition) {
 			ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
 			lmi.setReturnStatement(FunctionCreationHelper.hasReturnStatement(function));

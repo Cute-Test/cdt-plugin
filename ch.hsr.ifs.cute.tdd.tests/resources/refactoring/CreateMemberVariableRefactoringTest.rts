@@ -26,6 +26,20 @@ struct B
 private:
     B member;
 };
+//!Create Member Variable from Initializer List with Literal
+//@A.cpp
+struct S{
+	S() : i(5){
+	}
+};
+//=
+struct S{
+	S() : i(5){
+	}
+
+private:
+    int i;
+};
 //!TestCreateMemberVariableFromCall
 //@A.cpp
 struct B {

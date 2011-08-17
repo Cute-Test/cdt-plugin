@@ -29,7 +29,9 @@ import ch.hsr.ifs.cute.tdd.linkedMode.TddLinkedModeTest;
 			NestedEditTest.class,
 			ChangeRecorderTest.class,
 			TddLinkedModeTest.class,
-			CreateClassLMTest.class
+			CreateClassLMTest.class,
+			CreateMemberVariableAndPrivateLabelTest.class,
+			CreateMemberVariableTest.class
 //@formatter:on
 })
 public class AllQuickFixTests {
