@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
@@ -33,18 +32,19 @@ import ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator;
 import ch.hsr.ifs.cute.tdd.addArgument.AddArgumentRefactoring;
 
 @SuppressWarnings("restriction")
-public class WrongArgumentChecker extends AbstractIndexAstChecker {
+public class WrongArgumentChecker extends AbstractTDDChecker {
 
 	private static final String COMMA_SPACE = ", "; //$NON-NLS-1$
 	public static final String ERR_ID_InvalidArguments_HSR = "ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR"; //$NON-NLS-1$
 	public static final String ERR_ID_InvalidArguments_FREE_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"; //$NON-NLS-1$
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
+
 	@Override
-	public void processAst(IASTTranslationUnit ast) {
+	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new WrongArgumentProblemVisitor());
 	}
-
+		
 	public class WrongArgumentProblemVisitor extends AbstractResolutionProblemVisitor {
 
 

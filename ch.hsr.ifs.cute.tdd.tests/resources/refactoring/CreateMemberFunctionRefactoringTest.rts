@@ -441,3 +441,18 @@ void test(){
     Type t;
     ASSERT_EQUAL(42, t.function(42));
 }
+//!No Suggestion for Members of Fundamental Types
+//@.config
+nomarkers=true
+//@A.cpp
+void test()
+{
+	int i = 5;
+	i.foo();
+}
+//=
+void test()
+{
+	int i = 5;
+	i.foo();
+}

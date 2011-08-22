@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
@@ -19,13 +18,14 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
 @SuppressWarnings("restriction")
-public class FreeFunctionProblemChecker extends AbstractIndexAstChecker {
+public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_FunctionResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"; //$NON-NLS-1$
 	public static final String ERR_ID_FunctionResolutionProblem_STATIC_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"; //$NON-NLS-1$
-	
+
+
 	@Override
-	public void processAst(IASTTranslationUnit ast) {
+	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new FreeFunctionProblemVisitor());
 	}
 
@@ -58,4 +58,5 @@ public class FreeFunctionProblemChecker extends AbstractIndexAstChecker {
 			reportProblem(ERR_ID_FunctionResolutionProblem_HSR, name.getLastName(), ca.toArray());
 		}
 	}
+
 }

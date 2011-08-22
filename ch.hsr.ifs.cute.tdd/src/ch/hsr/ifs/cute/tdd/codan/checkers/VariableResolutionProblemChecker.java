@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -27,16 +26,16 @@ import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
 @SuppressWarnings("restriction")
-public class VariableResolutionProblemChecker extends AbstractIndexAstChecker {
+public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_VariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"; //$NON-NLS-1$
 	public static final String ERR_ID_MemberVariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
-	public void processAst(IASTTranslationUnit ast) {
+	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new VariableResolutionProblemHandler());
 	}
-
+	
 	class VariableResolutionProblemHandler extends AbstractResolutionProblemVisitor {
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {

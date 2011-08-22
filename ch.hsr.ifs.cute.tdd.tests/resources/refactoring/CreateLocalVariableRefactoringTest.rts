@@ -62,6 +62,18 @@ void func()
     int b;
     b.member();
 }
+//!Local Variable from First Statement in Scope
+//@A.cpp
+void func()
+{
+    num++;
+}
+//=
+void func()
+{
+    int num;
+    num++;
+}
 //!TestCuteMacroVariableCreation_ASSERT
 //@Test.cpp
 #include <string>

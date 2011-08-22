@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -33,15 +32,15 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.OverloadableOperator;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 
 @SuppressWarnings("restriction")
-public class MissingOperatorChecker extends AbstractIndexAstChecker {
+public class MissingOperatorChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_OperatorResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
-	public void processAst(IASTTranslationUnit ast) {
+	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new MissingOperatorVisitor());
 	}
-
+	
 	class MissingOperatorVisitor extends ASTVisitor {
 		{
 			shouldVisitExpressions = true;

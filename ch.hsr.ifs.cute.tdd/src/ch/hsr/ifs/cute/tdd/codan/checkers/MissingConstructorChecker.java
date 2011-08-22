@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
@@ -34,16 +33,14 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-public class MissingConstructorChecker extends AbstractIndexAstChecker {
+public class MissingConstructorChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_MissingConstructorResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
-	public void processAst(final IASTTranslationUnit ast) {
-
-			final ICProject project = CoreModel.getDefault().create(new Path(ast.getContainingFilename())).getCProject();
-			ast.accept(new MissingConstructorVisitor(project, ast));
-
+	protected void runChecker(IASTTranslationUnit ast) {
+		final ICProject project = CoreModel.getDefault().create(new Path(ast.getContainingFilename())).getCProject();
+		ast.accept(new MissingConstructorVisitor(project, ast));
 	}
 
 	private final class MissingConstructorVisitor extends ASTVisitor {

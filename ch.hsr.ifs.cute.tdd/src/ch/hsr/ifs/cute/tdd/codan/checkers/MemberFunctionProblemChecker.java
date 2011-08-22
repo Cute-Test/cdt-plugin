@@ -8,12 +8,15 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
+import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
@@ -21,12 +24,13 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
 @SuppressWarnings("restriction")
-public class MemberFunctionProblemChecker extends AbstractIndexAstChecker {
+public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_MethodResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR"; //$NON-NLS-1$
 
+
 	@Override
-	public void processAst(IASTTranslationUnit ast) {
+	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new MemberFunctionBindingProblemVisitor());
 	}
 
@@ -49,7 +53,7 @@ public class MemberFunctionProblemChecker extends AbstractIndexAstChecker {
 		if (TddHelper.isMethod(name)) {
 			ICPPASTFieldReference fref = ToggleNodeHelper.getAncestorOfType(name, IASTFieldReference.class);
 			CPPASTIdExpression variable = (CPPASTIdExpression) fref.getFieldOwner();
-			if (variable.getName().resolveBinding() instanceof IProblemBinding) {
+			if (!isTypeWithMembers(variable)) {
 				return;
 			}
 			if (problemBinding.getCandidateBindings().length == 0) {
@@ -58,5 +62,15 @@ public class MemberFunctionProblemChecker extends AbstractIndexAstChecker {
 				reportProblem(ERR_ID_MethodResolutionProblem_HSR, name.getLastName(), ca.toArray());
 			}
 		}
+	}
+
+	private boolean isTypeWithMembers(CPPASTIdExpression variable) {
+		IBinding expressionBinding = variable.getName().resolveBinding();
+		if(expressionBinding instanceof ICPPVariable){
+			ICPPVariable varBinding = (ICPPVariable) expressionBinding;
+			IType varType = varBinding.getType();
+			return varType instanceof ICPPClassType;
+		}
+		return false;
 	}
 }

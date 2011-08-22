@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -23,12 +22,12 @@ import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 
 @SuppressWarnings("restriction")
-public class PrivateMethodChecker extends AbstractIndexAstChecker {
+public class PrivateMethodChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_PrivateMethodChecker_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"; //$NON-NLS-1$
 
 	@Override
-	public void processAst(IASTTranslationUnit ast) {
+	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new ASTVisitor() {
 			{
 				shouldVisitNames = true;

@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -17,12 +16,13 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 
-public class MissingNamespaceChecker extends AbstractIndexAstChecker {
+public class MissingNamespaceChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_NamespaceResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR"; //$NON-NLS-1$
 
+	
 	@Override
-	public void processAst(IASTTranslationUnit ast) {
+	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new MissingNamespaceVisitor());
 	}
 

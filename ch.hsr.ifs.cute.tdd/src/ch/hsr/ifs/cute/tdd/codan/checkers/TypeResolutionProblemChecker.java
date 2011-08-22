@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.tdd.codan.checkers;
 
 import java.util.ArrayList;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
@@ -28,12 +27,12 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
 @SuppressWarnings("restriction")
-public class TypeResolutionProblemChecker extends AbstractIndexAstChecker {
+public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_TypeResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
-	public void processAst(IASTTranslationUnit ast) {
+	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new TypeResolutionProblemVisitor());
 	}
 
