@@ -18,7 +18,6 @@ public class Messages extends NLS {
 	public static String TypeResolutionProblemChecker_1;
 	public static String TypeResolutionProblemChecker_2;
 	public static String VariableResolutionProblemChecker_2;
-	public static String VariableResolutionProblemChecker_4;
 	public static String VariableResolutionProblemChecker_6;
 	public static String VariableResolutionProblemChecker_7;
 	public static String WrongArgumentChecker_4;

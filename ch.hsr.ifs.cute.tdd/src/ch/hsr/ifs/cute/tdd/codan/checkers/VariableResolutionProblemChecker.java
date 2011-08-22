@@ -72,7 +72,7 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 					if (ToggleNodeHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null) {
 						return;
 					}
-					CodanArguments args = new CodanArguments(missingName, Messages.VariableResolutionProblemChecker_4, ":memberVariable"); //$NON-NLS-1$
+					CodanArguments args = new CodanArguments(missingName, Messages.VariableResolutionProblemChecker_2, ":memberVariable"); //$NON-NLS-1$
 					reportProblem(TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR, name, args.toArray());
 				} else {
 					String message = Messages.VariableResolutionProblemChecker_6 + missingName + Messages.VariableResolutionProblemChecker_7;

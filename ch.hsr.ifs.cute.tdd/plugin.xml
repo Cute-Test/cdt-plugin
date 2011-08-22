@@ -84,16 +84,22 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.freefunctionproblemchecker"
            name="%checker.name">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"
-           name="%problem.name">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"
+              name="%problem.name">
         </problem>
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"
-           name="%problem.name.0">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"
+              name="%problem.name.0">
         </problem>
      </checker>
+     <category
+           id="ch.hsr.ifs.cute.tdd.category"
+           name="%category.name">
+     </category>
   </extension>
   
    <extension
@@ -103,9 +109,10 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.memberfunctionproblemchecker"
            name="%checker.name.0">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR"
-           name="%problem.name.1">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR"
+              name="%problem.name.1">
         </problem>
      </checker>
   </extension>
@@ -117,14 +124,16 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.wrongargumentchecker"
            name="%checker.name.1">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR"
-           name="%problem.name.2">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR"
+              name="%problem.name.2">
         </problem>
          <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"
-           name="%problem.name.3">
+               category="ch.hsr.ifs.cute.tdd.category"
+               defaultSeverity="Error"
+               id="ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"
+               name="%problem.name.3">
         </problem>
      </checker>
   </extension>
@@ -136,9 +145,10 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.typeresolutionproblemchecker"
            name="%checker.name.2">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"
-           name="%problem.name.4">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"
+              name="%problem.name.4">
         </problem>
      </checker>
   </extension>
@@ -150,14 +160,16 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.variableresolutionproblemchecker"
            name="%checker.name.3">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"
-           name="%problem.name.5">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"
+              name="%problem.name.5">
         </problem>
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR"
-           name="%problem.name.6">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR"
+              name="%problem.name.6">
         </problem>
      </checker>
   </extension>
@@ -169,9 +181,10 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.privatemethodchecker"
            name="%checker.name.4">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"
-           name="%problem.name.7">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"
+              name="%problem.name.7">
         </problem>
      </checker>
   </extension>
@@ -183,9 +196,10 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.missingconstructorchecker"
            name="%checker.name.5">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR"
-           name="%problem.name.8">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR"
+              name="%problem.name.8">
         </problem>
      </checker>
   </extension>
@@ -197,9 +211,10 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.missingoperatorchecker"
            name="%checker.name.6">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"
-           name="%problem.name.9">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"
+              name="%problem.name.9">
         </problem>
      </checker>
   </extension>
@@ -211,9 +226,10 @@
            id="ch.hsr.ifs.cute.tdd.codan.checkers.missingnamespacechecker"
            name="%checker.name.7">
         <problem
-           defaultSeverity="Error"
-           id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR"
-           name="%problem.name.10">
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR"
+              name="%problem.name.10">
         </problem>
      </checker>
   </extension>
