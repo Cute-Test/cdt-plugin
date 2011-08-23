@@ -9,6 +9,7 @@
 package ch.hsr.ifs.cute.tdd.createfunction;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
@@ -37,18 +38,23 @@ public class CreateMemberFunctionRefactoring extends CRefactoring3 {
 		this.strategy = strategy;
 	}
 
-	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) 
-			throws CoreException, OperationCanceledException {
+	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTName selectedNode = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
 		ICPPASTCompositeTypeSpecifier type = TypeHelper.getTargetTypeOfField(localunit, selectedNode, astCache);
 		ICPPASTFunctionDefinition newFunction = strategy.getFunctionDefinition(localunit, selectedNode, type, ca.getName(), getSelection());
-		TddHelper.writeDefinitionTo(collector, type, newFunction);
+
+		if (ca.isStaticCase()) {
+			IASTNode parent = TddHelper.getNestedInsertionPoint(localunit, selectedNode.getParent(), astCache);
+			TddHelper.writeDefinitionTo(collector, parent, newFunction);
+		} else {
+			TddHelper.writeDefinitionTo(collector, type, newFunction);
+		}
 		setLinkedModeInformation(localunit, type, newFunction);
-		setAditionalLinkedModeInformation();
+		setAdditionalLinkedModeInformation();
 	}
 
-	private void setAditionalLinkedModeInformation() {
+	private void setAdditionalLinkedModeInformation() {
 		if (!ca.isCtorCase()) {
 			lmi.sethasDeclSpec(true);
 		}

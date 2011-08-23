@@ -8,11 +8,11 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.createfunction.strategies;
 
+import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.jface.text.TextSelection;
 
 public class StaticFunctionCreationStrategy extends NormalFunctionCreationStrategy {
@@ -21,8 +21,8 @@ public class StaticFunctionCreationStrategy extends NormalFunctionCreationStrate
 			IASTNode selectedName, ICPPASTCompositeTypeSpecifier owningType, String name,
 			TextSelection selection) {
 		ICPPASTFunctionDefinition function = super.getFunctionDefinition(localunit, selectedName, owningType, name, selection);
-		ICPPASTSimpleDeclSpecifier simpledec = (ICPPASTSimpleDeclSpecifier) function.getDeclSpecifier();
-		simpledec.setStorageClass(ICPPASTSimpleDeclSpecifier.sc_static);
+		IASTDeclSpecifier declSpecifier = function.getDeclSpecifier();
+		declSpecifier.setStorageClass(IASTDeclSpecifier.sc_static);
 		return function;
 	}
 

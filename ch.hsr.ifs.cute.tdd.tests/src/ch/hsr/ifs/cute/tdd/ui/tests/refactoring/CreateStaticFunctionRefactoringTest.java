@@ -18,7 +18,7 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
-import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
+import ch.hsr.ifs.cute.tdd.createfunction.CreateMemberFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.StaticFunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
@@ -27,15 +27,13 @@ import com.includator.tests.base.TestSourceFile;
 @SuppressWarnings("restriction")
 public class CreateStaticFunctionRefactoringTest extends TddRefactoringTest {
 
-	public CreateStaticFunctionRefactoringTest(String name,
-			ArrayList<TestSourceFile> files) {
+	public CreateStaticFunctionRefactoringTest(String name, ArrayList<TestSourceFile> files) {
 		super(name, files, TddErrorIdCollection.ERR_ID_FunctionResolutionProblem_STATIC_HSR);
 	}
 
 	@Override
-	protected Refactoring getRefactoring(IMarker marker, IDocument doc)
-			throws CoreException {
-		return new CreateFreeFunctionRefactoring(selection, new CodanArguments(marker), new RefactoringASTCache(), new StaticFunctionCreationStrategy());
+	protected Refactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException {
+		return new CreateMemberFunctionRefactoring(selection, new CodanArguments(marker), new RefactoringASTCache(), new StaticFunctionCreationStrategy());
 	}
 
 }

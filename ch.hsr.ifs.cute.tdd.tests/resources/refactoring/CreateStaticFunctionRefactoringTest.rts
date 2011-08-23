@@ -1,4 +1,4 @@
-//!CreateStaticFunctions
+//!Create Static Member Function
 //@A.cpp
 struct X
 {
@@ -15,4 +15,46 @@ struct X
 };
 void test() {
     X::foo();
+}
+//!Create Static Member Function with Return Type
+//@A.cpp
+struct X
+{
+};
+
+void test() {
+    X x = X::foo();
+}
+//=
+struct X
+{
+    static X foo() const
+    {
+        return X();
+    }
+};
+
+void test() {
+    X x = X::foo();
+}
+//!Create Static Member Function with Return Type and Parameter
+//@A.cpp
+struct X
+{
+};
+
+void test() {
+    X x = X::foo(5);
+}
+//=
+struct X
+{
+    static X foo(const int & i) const
+    {
+        return X();
+    }
+};
+
+void test() {
+    X x = X::foo(5);
 }
