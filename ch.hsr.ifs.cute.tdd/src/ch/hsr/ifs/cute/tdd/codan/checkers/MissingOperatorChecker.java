@@ -163,7 +163,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				return false;
 			}
 			if (operand instanceof IASTIdExpression) {
-				return true;
+				return !(((IASTIdExpression) operand).getName().getBinding() instanceof IProblemBinding);
 			}
 			return false;
 		}

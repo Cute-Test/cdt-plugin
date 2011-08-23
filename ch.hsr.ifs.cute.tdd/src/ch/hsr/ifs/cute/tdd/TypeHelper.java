@@ -36,6 +36,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
@@ -218,6 +219,10 @@ public class TypeHelper {
 
 	//TODO: refactor this: too long
 	public static ICPPASTCompositeTypeSpecifier getTargetTypeOfField(IASTTranslationUnit unit, IASTName selectedNode, RefactoringASTCache astCache) {
+		ICPPASTQualifiedName qName = getQualifiedNamePart(selectedNode);
+		if(qName != null){
+			return handleQualifiedName(qName);
+		}
 		IBinding b = selectedNode.resolveBinding();
 		if (b instanceof CPPVariable) {
 			CPPVariable var = (CPPVariable) b;
@@ -265,6 +270,29 @@ public class TypeHelper {
 		IASTNode result = getTypeDefinitonOfName(unit, typename, astCache);
 		if (result instanceof ICPPASTCompositeTypeSpecifier) {
 			return (ICPPASTCompositeTypeSpecifier) result;
+		}
+		return null;
+	}
+
+	private static ICPPASTCompositeTypeSpecifier handleQualifiedName(ICPPASTQualifiedName qName) {
+		IASTName[] nameParts = qName.getNames();
+		if(nameParts.length >= 2){
+			IASTName containingScope = nameParts[nameParts.length - 2];
+			IBinding scopeBinding = containingScope.resolveBinding();
+			if(scopeBinding instanceof IType){
+				IType bareType = windDownToRealType((IType) scopeBinding, false);
+				if(bareType instanceof CPPClassType){
+					return ((CPPClassType) bareType).getCompositeTypeSpecifier();
+				}
+			}
+		}
+		return null;
+	}
+
+	private static ICPPASTQualifiedName getQualifiedNamePart(IASTName selectedNode) {
+		IASTNode parent = selectedNode.getParent();
+		if(parent instanceof ICPPASTQualifiedName){
+			return (ICPPASTQualifiedName)parent;
 		}
 		return null;
 	}

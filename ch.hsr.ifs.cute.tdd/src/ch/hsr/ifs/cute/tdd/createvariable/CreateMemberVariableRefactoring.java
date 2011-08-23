@@ -14,6 +14,7 @@ import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -25,6 +26,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
@@ -101,8 +103,9 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 
 	private IASTDeclSpecifier getDeclSpec(IASTName varName) {
 		priv = true;
-		if (varName.getParent() instanceof ICPPASTFieldReference) {
-			ICPPASTFieldReference ref = (ICPPASTFieldReference)varName.getParent();
+		IASTNode parent = varName.getParent();
+		if (parent instanceof ICPPASTFieldReference) {
+			ICPPASTFieldReference ref = (ICPPASTFieldReference)parent;
 			if (hasThisAsLValue(ref)) {
 				ICPPASTBinaryExpression ex = ToggleNodeHelper.getAncestorOfType(ref, ICPPASTBinaryExpression.class);
 				if (ex == null) {
@@ -115,7 +118,7 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 				IASTInitializerClause rSide = ((ICPPASTBinaryExpression)ref.getParent()).getInitOperand2();
 				return getDeclSpecOfType(rSide);
 			}
-			if (isThisKeyword((ICPPASTFieldReference)varName.getParent())) {
+			if (isThisKeyword((ICPPASTFieldReference)parent)) {
 				return createVoidDeclSpec();
 			}
 			IASTSimpleDeclaration decl = ToggleNodeHelper.getAncestorOfType(varName, IASTSimpleDeclaration.class);
@@ -123,11 +126,20 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 				priv = false;
 				return decl.getDeclSpecifier().copy();
 			}
-		} else if (varName.getParent() instanceof ICPPASTConstructorChainInitializer) {
-			ICPPASTConstructorChainInitializer chainInitializer = (ICPPASTConstructorChainInitializer) varName.getParent();
+		} else if (parent instanceof ICPPASTConstructorChainInitializer) {
+			ICPPASTConstructorChainInitializer chainInitializer = (ICPPASTConstructorChainInitializer) parent;
 			IASTInitializerClause firstClause = getInitializerClause(chainInitializer);
 			if (firstClause != null) {
 				return getDeclSpecOfType(firstClause);
+			}
+		} else if (parent instanceof ICPPASTQualifiedName){
+			IASTNode parentOfParent = parent.getParent();
+			if (parentOfParent != null && parentOfParent.getParent() instanceof ICPPASTBinaryExpression) { 
+				IASTInitializerClause rSide = ((ICPPASTBinaryExpression)parentOfParent.getParent()).getInitOperand2();
+				priv = false;
+				IASTDeclSpecifier declSpec = getDeclSpecOfType(rSide);
+				declSpec.setStorageClass(IASTDeclSpecifier.sc_static);
+				return declSpec;
 			}
 		}
 		// any other cases? e.g. type->member or (*type).member, etc...

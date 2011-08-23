@@ -282,3 +282,38 @@ class A
     {
     }
 };
+//!Correct Recognition of Static Member Variable
+//@.config
+nomarkers=true
+//@A.cpp
+struct A {
+  static int i;
+};
+
+void test() {
+  A::i = 5;
+}
+//=
+struct A {
+  static int i;
+};
+
+void test() {
+  A::i = 5;
+}
+//!Create Static Member Variable
+//@A.cpp
+struct A {
+};
+
+void test() {
+  A::i = 5;
+}
+//=
+struct A {
+    static int i;
+};
+
+void test() {
+  A::i = 5;
+}

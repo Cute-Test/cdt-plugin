@@ -656,3 +656,14 @@ void test() {
 void test() {
     a++;
 }
+//!Do Not Report If Operand Not Defined in Binary Expression
+//@.config
+nomarkers=true
+//@A.cpp
+void test() {
+	i = 5;
+}
+//=
+void test() {
+	i = 5;
+}

@@ -25,5 +25,4 @@ public class StaticFunctionCreationStrategy extends NormalFunctionCreationStrate
 		declSpecifier.setStorageClass(IASTDeclSpecifier.sc_static);
 		return function;
 	}
-
 }

@@ -18,6 +18,7 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
@@ -39,16 +40,23 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 	class VariableResolutionProblemHandler extends AbstractResolutionProblemVisitor {
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
+			if(name instanceof ICPPASTQualifiedName){		
+				return;
+			}
 			if (TddHelper.isInvalidType(problemBinding)) {
 				return;
 			}
 			if (TddHelper.nameNotFoundProblem(problemBinding)) {
-				IASTNode upmostName = (IASTNode) TddHelper.getLastOfSameAncestor(name, IASTName.class);
+				IASTNode upmostName = TddHelper.getLastOfSameAncestor(name, IASTName.class);
 				IASTNode parent = upmostName.getParent();
 				if (parent instanceof IASTNamedTypeSpecifier) {
 					return;
 				}
 				if (parent instanceof ICPPASTBaseSpecifier) {
+					return;
+				}
+				if(upmostName instanceof ICPPASTQualifiedName){
+					handleStaticMemberVariable(name, (ICPPASTQualifiedName) upmostName);
 					return;
 				}
 				if (parent instanceof CPPASTTemplateId) {
@@ -66,20 +74,27 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 				}
 				String missingName = name.getBinding().getName();
 				if (parent instanceof ICPPASTConstructorChainInitializer) {
-					CodanArguments args = new CodanArguments(missingName, Messages.VariableResolutionProblemChecker_2, ":memberVariable"); //$NON-NLS-1$
-					reportProblem(TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR, name, args.toArray());
+					reportMissingMemberVariable(name, missingName);
 				} else if (parent instanceof IASTFieldReference) {
 					if (ToggleNodeHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null) {
 						return;
 					}
-					CodanArguments args = new CodanArguments(missingName, Messages.VariableResolutionProblemChecker_2, ":memberVariable"); //$NON-NLS-1$
-					reportProblem(TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR, name, args.toArray());
+					reportMissingMemberVariable(name, missingName);
 				} else {
 					String message = Messages.VariableResolutionProblemChecker_6 + missingName + Messages.VariableResolutionProblemChecker_7;
 					CodanArguments ca = new CodanArguments(missingName, message, ":variable"); //$NON-NLS-1$
 					reportProblem(ERR_ID_VariableResolutionProblem_HSR, name, ca.toArray());
 				}
 			}
+		}
+
+		private void reportMissingMemberVariable(IASTName name, String missingName) {
+			CodanArguments args = new CodanArguments(missingName, Messages.VariableResolutionProblemChecker_2, ":memberVariable"); //$NON-NLS-1$
+			reportProblem(TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR, name, args.toArray());
+		}
+
+		private void handleStaticMemberVariable(IASTName name, ICPPASTQualifiedName parent) {
+			reportMissingMemberVariable(name, name.getBinding().getName());
 		}
 	}
 }

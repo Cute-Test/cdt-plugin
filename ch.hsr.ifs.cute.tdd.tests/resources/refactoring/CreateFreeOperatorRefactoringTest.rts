@@ -1,32 +1,34 @@
-//!CreateOutputOperator
+//!Create Output Operator
 //@A.cpp
-#include <iosfwd>
-#include <iostream>
+struct Stream {
+};
 
 struct A {
 };
 
 void test()
 {
+	Stream s;
     A a;
-    std::cout << a << std::endl;
+    s << a;
 }
 //=
-#include <iosfwd>
-#include <iostream>
+struct Stream {
+};
 
 struct A {
 };
 
-A & operator<<(const int & cout, A & a)
+Stream & operator<<(Stream & s, A & a)
 {
-    return A();
+    return Stream();
 }
 
 void test()
 {
+	Stream s;
     A a;
-    std::cout << a << std::endl;
+    s << a;
 }
 //!TestFreeIntOperator
 //@A.cpp

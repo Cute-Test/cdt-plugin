@@ -259,3 +259,20 @@ void func()
     Color c;
     c = RED;
 }
+//!No Suggestion for Static Member Access
+//@.config
+nomarkers=true
+//@A.cpp
+struct A {
+};
+
+void test() {
+  A::i = 5;
+}
+//=
+struct A {
+};
+
+void test() {
+  A::i = 5;
+}
