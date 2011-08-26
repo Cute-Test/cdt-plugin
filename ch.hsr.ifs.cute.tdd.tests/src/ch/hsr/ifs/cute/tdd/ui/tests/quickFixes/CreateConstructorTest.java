@@ -32,7 +32,7 @@ public class CreateConstructorTest extends QuickFixTest {
 	}
 
 	public void testMarkerMessage() {
-		assertExactlytheSame("No such constructor for type A", getMarkerMessage());
+		assertExactlyTheSame("No such constructor for type A", getMarkerMessage());
 	}
 
 	public void testMarkerOffset() {
@@ -44,7 +44,7 @@ public class CreateConstructorTest extends QuickFixTest {
 	}
 
 	public void testQuickFixMessage() {
-		assertExactlytheSame(CREATE_CONSTRUCTOR_A, getQuickFixMessage(CreateConstructorCreationQuickFix.class, CREATE_CONSTRUCTOR_A));
+		assertExactlyTheSame(CREATE_CONSTRUCTOR_A, getQuickFixMessage(CreateConstructorCreationQuickFix.class, CREATE_CONSTRUCTOR_A));
 	}
 
 	//struct A {
@@ -56,7 +56,7 @@ public class CreateConstructorTest extends QuickFixTest {
 	//  A a(3);
 	//}
 	public void testQuickFixApplying() {
-		assertExactlytheSame(getAboveComment(), runQuickFix(CreateConstructorCreationQuickFix.class, CREATE_CONSTRUCTOR_A));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(CreateConstructorCreationQuickFix.class, CREATE_CONSTRUCTOR_A));
 	}
 
 	public void testImageNotNull() {

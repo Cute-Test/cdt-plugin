@@ -33,7 +33,7 @@ public class CreateOperatorTest extends QuickFixTest {
 	}
 
 	public void testMarkerMessage() {
-		assertExactlytheSame("Cannot resolve operator++ in type A", getMarkerMessage());
+		assertExactlyTheSame("Cannot resolve operator++ in type A", getMarkerMessage());
 	}
 
 // TODO: I'd propose to put the marker only on the operator
@@ -46,7 +46,7 @@ public class CreateOperatorTest extends QuickFixTest {
 //	}
 
 	public void testQuickFixMessage() {
-		assertExactlytheSame(CREATE_OPERATOR_IN_TYPE_A, getQuickFixMessage(MemberOperatorCreationQuickFix.class, CREATE_OPERATOR_IN_TYPE_A));
+		assertExactlyTheSame(CREATE_OPERATOR_IN_TYPE_A, getQuickFixMessage(MemberOperatorCreationQuickFix.class, CREATE_OPERATOR_IN_TYPE_A));
 	}
 
 	//struct A {
@@ -59,7 +59,7 @@ public class CreateOperatorTest extends QuickFixTest {
 	//    a++;
 	//}
 	public void testQuickFixApplying() {
-		assertExactlytheSame(getAboveComment(), runQuickFix(MemberOperatorCreationQuickFix.class, CREATE_OPERATOR_IN_TYPE_A));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(MemberOperatorCreationQuickFix.class, CREATE_OPERATOR_IN_TYPE_A));
 	}
 
 	public void testImageNotNull() {

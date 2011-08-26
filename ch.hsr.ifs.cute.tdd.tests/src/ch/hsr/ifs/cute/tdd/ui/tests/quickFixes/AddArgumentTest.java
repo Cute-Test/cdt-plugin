@@ -30,7 +30,7 @@ public class AddArgumentTest extends QuickFixTest {
 	}
 
 	public void testMarkerMessage() {
-		assertExactlytheSame("Invalid Arguments to foo", getMarkerMessage());
+		assertExactlyTheSame("Invalid Arguments to foo", getMarkerMessage());
 	}
 
 	public void testMarkerOffset() {
@@ -43,7 +43,7 @@ public class AddArgumentTest extends QuickFixTest {
 
 	//TODO: non sense
 	public void testQuickFixMessage() {
-		assertExactlytheSame(ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT, getQuickFixMessage(AddArgumentQuickFix.class, ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT));
+		assertExactlyTheSame(ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT, getQuickFixMessage(AddArgumentQuickFix.class, ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT));
 	}
 
 	//void foo(int) {}
@@ -51,7 +51,7 @@ public class AddArgumentTest extends QuickFixTest {
 	//  foo(_);
 	//}
 	public void testQuickFixApplying() {
-		assertExactlytheSame(getAboveComment(), runQuickFix(AddArgumentQuickFix.class,  ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(AddArgumentQuickFix.class,  ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT));
 	}
 
 	public void testImageNotNull() {

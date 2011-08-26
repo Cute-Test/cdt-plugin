@@ -15,6 +15,7 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
@@ -22,7 +23,6 @@ import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTBaseDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
@@ -54,6 +54,7 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 @SuppressWarnings("restriction")
 public class ExtractRefactoring extends CRefactoring3 {
 
+	public static final String EXTRACT_TO_NEW_HEADER_FILE_ID = "ch.hsr.ifs.cute.tdd.extractToNewHeaderFile";
 	private static final String STRING = "\""; //$NON-NLS-1$
 	private static final String LINE_SEPARATOR = "line.separator"; //$NON-NLS-1$
 	private static final String INCLUDE = "#include \""; //$NON-NLS-1$
@@ -70,16 +71,22 @@ public class ExtractRefactoring extends CRefactoring3 {
 			OperationCanceledException {
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTNode selectedNode = getSelectedNode(localunit);
-		if (isFreeFunctionSelected(selectedNode)) {
-			extractFreeFunction(collector, localunit, selectedNode);
-		} else {
+		
+		if(isTypeSelected(selectedNode)){
 			extractType(collector, localunit);
+		} else if (isFreeFunctionSelected(selectedNode, localunit)) {
+			extractFreeFunction(collector, localunit, selectedNode);
 		}
 	}
 
-	private boolean isFreeFunctionSelected(IASTNode node) {
-		IASTNode typeAncestor = ToggleNodeHelper.getAncestorOfType(node, CPPASTBaseDeclSpecifier.class);
-		return (typeAncestor == null);
+	private boolean isTypeSelected(IASTNode selectedNode) {
+		IASTNode typeAncestor = ToggleNodeHelper.getAncestorOfType(selectedNode, ICPPASTCompositeTypeSpecifier.class);
+		return typeAncestor != null;
+	}
+
+	private boolean isFreeFunctionSelected(IASTNode node, IASTTranslationUnit localunit) {
+		IASTNode functionAncestor = ToggleNodeHelper.getAncestorOfType(node, ICPPASTFunctionDefinition.class);
+		return functionAncestor != null;
 	}
 
 	private void extractFreeFunction(ModificationCollector collector, IASTTranslationUnit localunit, IASTNode selectedNode) throws CModelException, CoreException {
@@ -223,11 +230,13 @@ public class ExtractRefactoring extends CRefactoring3 {
 	}
 
 	private IASTNode getSelectedNode(IASTTranslationUnit localunit) {
+		int offset = selectedRegion.getOffset();
+		int length = selectedRegion.getLength();
 		IASTNode selectedNode = localunit.getNodeSelector(null).findNode(
-				getSelection().getOffset(), getSelection().getLength());
+				offset, length);
 		if (selectedNode == null) {
 			selectedNode = localunit.getNodeSelector(null).findEnclosingNode(
-					getSelection().getOffset(), getSelection().getLength());
+					offset, length);
 		}
 		if (selectedNode == null) {
 			throw new OperationCanceledException(Messages.ExtractRefactoring_12);

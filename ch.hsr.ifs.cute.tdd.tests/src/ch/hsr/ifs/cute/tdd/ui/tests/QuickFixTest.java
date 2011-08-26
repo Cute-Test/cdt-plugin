@@ -149,7 +149,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 		return null;
 	}
 
-	public void assertExactlytheSame(String expected, String result) {
+	public void assertExactlyTheSame(String expected, String result) {
 		if (!result.equals(expected)) {
 			throw new ComparisonFailure("Text <" + expected + "> not found in <" + result + ">", expected, result);
 		}

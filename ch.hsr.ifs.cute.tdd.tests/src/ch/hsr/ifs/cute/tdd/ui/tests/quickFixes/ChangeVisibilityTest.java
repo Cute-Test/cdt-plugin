@@ -35,7 +35,7 @@ public class ChangeVisibilityTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlytheSame("member is not visible", getMarkerMessage());
+		assertExactlyTheSame("member is not visible", getMarkerMessage());
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ChangeVisibilityTest extends QuickFixTest {
 
 	@Override
 	public void testQuickFixMessage() {
-		assertExactlytheSame(CHANGE_VISIBILITY_OF_MEMBER, getQuickFixMessage(ChangeVisibilityQuickFix.class, CHANGE_VISIBILITY_OF_MEMBER));
+		assertExactlyTheSame(CHANGE_VISIBILITY_OF_MEMBER, getQuickFixMessage(ChangeVisibilityQuickFix.class, CHANGE_VISIBILITY_OF_MEMBER));
 	}
 
 	//class Type {
@@ -62,7 +62,7 @@ public class ChangeVisibilityTest extends QuickFixTest {
 	//  t.member();
 	//}
 	public void testQuickFixApplying() {
-		assertExactlytheSame(getAboveComment(), runQuickFix(ChangeVisibilityQuickFix.class, CHANGE_VISIBILITY_OF_MEMBER));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(ChangeVisibilityQuickFix.class, CHANGE_VISIBILITY_OF_MEMBER));
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class CreateMemberVariableAndPrivateLabelTest extends QuickFixTest {
 	}
 
 	public void testMarkerMessage() {
-		assertExactlytheSame("Cannot resolve member variable", getMarkerMessage());
+		assertExactlyTheSame("Cannot resolve member variable", getMarkerMessage());
 	}
 
 	public void testMarkerOffset() {
@@ -43,7 +43,7 @@ public class CreateMemberVariableAndPrivateLabelTest extends QuickFixTest {
 	}
 
 	public void testQuickFixMessage() {
-		assertExactlytheSame(CREATE_MEMBER_VARIABLE_I, getQuickFixMessage(CreateMemberVariableQuickFix.class, CREATE_MEMBER_VARIABLE_I));
+		assertExactlyTheSame(CREATE_MEMBER_VARIABLE_I, getQuickFixMessage(CreateMemberVariableQuickFix.class, CREATE_MEMBER_VARIABLE_I));
 	}
 
 	//struct S{
@@ -54,7 +54,7 @@ public class CreateMemberVariableAndPrivateLabelTest extends QuickFixTest {
 	//    int i;
 	//};
 	public void testQuickFixApplying() {
-		assertExactlytheSame(getAboveComment(), runQuickFix(CreateMemberVariableQuickFix.class, CREATE_MEMBER_VARIABLE_I));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(CreateMemberVariableQuickFix.class, CREATE_MEMBER_VARIABLE_I));
 	}
 
 	public void testImageNotNull() {

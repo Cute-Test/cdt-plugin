@@ -33,7 +33,7 @@ public class RemoveArgumentTest extends QuickFixTest{
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlytheSame("Invalid Arguments to foo", getMarkerMessage());
+		assertExactlyTheSame("Invalid Arguments to foo", getMarkerMessage());
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class RemoveArgumentTest extends QuickFixTest{
 
 	@Override
 	public void testQuickFixMessage() {
-		assertExactlytheSame(REMOVE_ARGUMENT_S_DOUBLE_DOUBLE_INT_TO_MATCH_FOO_INT, getQuickFixMessage(AddArgumentQuickFix.class, REMOVE_ARGUMENT_S_DOUBLE_DOUBLE_INT_TO_MATCH_FOO_INT));
+		assertExactlyTheSame(REMOVE_ARGUMENT_S_DOUBLE_DOUBLE_INT_TO_MATCH_FOO_INT, getQuickFixMessage(AddArgumentQuickFix.class, REMOVE_ARGUMENT_S_DOUBLE_DOUBLE_INT_TO_MATCH_FOO_INT));
 	}
 
 	//void foo(int i) {

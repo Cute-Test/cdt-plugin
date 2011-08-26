@@ -271,7 +271,7 @@
                definitionId="ch.hsr.ifs.cute.tdd.extractCommand"
                id="ch.hsr.ifs.cute.tdd.action4"
                label="%action.label"
-               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codeGroup"
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
                style="push">
          </action>
       </actionSet>
@@ -286,16 +286,8 @@
                definitionId="ch.hsr.ifs.cute.tdd.extractCommand"
                id="ch.hsr.ifs.cute.tdd.action1"
                label="%action.label"
-               menubarPath="org.eclipse.cdt.ui.refactoring.menu/reorgGroup">
+               menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>
-         <menu
-               id="ch.hsr.ifs.cute.tdd.refactormenu"
-               label="%menu.label.0"
-               path="org.eclipse.cdt.ui.refactoring.menu">
-            <separator
-                  name="reorgGroup">
-            </separator>
-         </menu>
       </viewerContribution>
    </extension>
 </plugin>

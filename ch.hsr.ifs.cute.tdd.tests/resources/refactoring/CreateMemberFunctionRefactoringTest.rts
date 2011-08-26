@@ -456,3 +456,26 @@ void test()
 	int i = 5;
 	i.foo();
 }
+//!Create Member Function with One Argument and Return Type
+//@A.cpp
+struct A{
+};
+
+int main(int argc, char **argv) {
+	A a;
+	A b = a.create(1);
+}
+
+//=
+struct A{
+    A create(const int & i) const
+    {
+        return A();
+    }
+};
+
+int main(int argc, char **argv) {
+	A a;
+	A b = a.create(1);
+}
+

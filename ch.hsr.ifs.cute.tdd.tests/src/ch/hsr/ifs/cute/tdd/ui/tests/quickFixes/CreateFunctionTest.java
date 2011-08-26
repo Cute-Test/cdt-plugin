@@ -31,7 +31,7 @@ public class CreateFunctionTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlytheSame("Could not resolve function foo", getMarkerMessage());
+		assertExactlyTheSame("Could not resolve function foo", getMarkerMessage());
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class CreateFunctionTest extends QuickFixTest {
 
 	@Override
 	public void testQuickFixMessage() {
-		assertExactlytheSame(CREATE_FREE_FUNCTION_FOO, getQuickFixMessage(NormalFreeFunctionCreationQuickFix.class, CREATE_FREE_FUNCTION_FOO));
+		assertExactlyTheSame(CREATE_FREE_FUNCTION_FOO, getQuickFixMessage(NormalFreeFunctionCreationQuickFix.class, CREATE_FREE_FUNCTION_FOO));
 	}
 
 	//void foo()
@@ -58,7 +58,7 @@ public class CreateFunctionTest extends QuickFixTest {
 	//}
 	@Override
 	public void testQuickFixApplying() {
-		assertExactlytheSame(getAboveComment(), runQuickFix(NormalFreeFunctionCreationQuickFix.class, CREATE_FREE_FUNCTION_FOO));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(NormalFreeFunctionCreationQuickFix.class, CREATE_FREE_FUNCTION_FOO));
 	}
 
 	@Override

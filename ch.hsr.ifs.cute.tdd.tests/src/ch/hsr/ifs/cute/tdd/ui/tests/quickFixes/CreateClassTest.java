@@ -29,7 +29,7 @@ public class CreateClassTest extends QuickFixTest {
 	}
 
 	public void testMarkerMessage() {
-		assertExactlytheSame("Type 'Type' could not be resolved", getMarkerMessage());
+		assertExactlyTheSame("Type 'Type' could not be resolved", getMarkerMessage());
 	}
 
 	public void testMarkerOffset() {
@@ -41,7 +41,7 @@ public class CreateClassTest extends QuickFixTest {
 	}
 
 	public void testQuickFixMessage() {
-		assertExactlytheSame(CREATE_TYPE_TYPE, getQuickFixMessage(CreateTypeQuickFix.class, CREATE_TYPE_TYPE));
+		assertExactlyTheSame(CREATE_TYPE_TYPE, getQuickFixMessage(CreateTypeQuickFix.class, CREATE_TYPE_TYPE));
 	}
 
 	//struct Type
@@ -51,7 +51,7 @@ public class CreateClassTest extends QuickFixTest {
 	//  Type t;
 	//}
 	public void testQuickFixApplying() {
-		assertExactlytheSame(getAboveComment(), runQuickFix(CreateTypeQuickFix.class, CREATE_TYPE_TYPE));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(CreateTypeQuickFix.class, CREATE_TYPE_TYPE));
 	}
 
 	public void testImageNotNull() {

@@ -30,7 +30,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 	}
 
 	public void testMarkerMessage() {
-		assertExactlytheSame("Symbol 'local' could not be resolved", getMarkerMessage());
+		assertExactlyTheSame("Symbol 'local' could not be resolved", getMarkerMessage());
 	}
 
 	public void testMarkerOffset() {
@@ -42,7 +42,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 	}
 
 	public void testQuickFixMessage() {
-		assertExactlytheSame(CREATE_LOCAL_VARIABLE_LOCAL, getQuickFixMessage(CreateLocalVariableQuickFix.class, CREATE_LOCAL_VARIABLE_LOCAL));
+		assertExactlyTheSame(CREATE_LOCAL_VARIABLE_LOCAL, getQuickFixMessage(CreateLocalVariableQuickFix.class, CREATE_LOCAL_VARIABLE_LOCAL));
 	}
 
 	//void testX() {
@@ -50,7 +50,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 	//    int i = local;
 	//}
 	public void testQuickFixApplying() {
-		assertExactlytheSame(getAboveComment(), runQuickFix(CreateLocalVariableQuickFix.class, CREATE_LOCAL_VARIABLE_LOCAL));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(CreateLocalVariableQuickFix.class, CREATE_LOCAL_VARIABLE_LOCAL));
 	}
 
 	public void testImageNotNull() {
