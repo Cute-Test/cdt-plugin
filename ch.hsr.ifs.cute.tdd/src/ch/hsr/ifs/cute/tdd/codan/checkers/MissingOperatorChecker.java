@@ -112,8 +112,14 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		private boolean implicitlyAvailableOperation(OverloadableOperator operator, CPPASTUnaryExpression uexpr) {
 			IASTExpression operand = uexpr.getOperand();
-			if(OverloadableOperator.NOT.compareTo(operator) == 0 && (operand.getExpressionType() instanceof IPointerType)){
-				return true;
+			if(operand.getExpressionType() instanceof IPointerType){
+				switch(operator){
+				case NOT:
+				case STAR:
+				case INCR:
+				case DECR:
+					return true;
+				}
 			}
 			return false;
 		}

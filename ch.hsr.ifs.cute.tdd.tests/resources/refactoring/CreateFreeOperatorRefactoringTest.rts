@@ -552,3 +552,16 @@ void test() {
     type a;
     ++a;
 }
+//!Do Not Report Deref Operator for Pointer Types
+//@.config
+markerCount=0
+//@A.cpp
+void foo(){
+	void *x=0;
+	ASSERT(*x);
+}
+//=
+void foo(){
+	void *x=0;
+	ASSERT(*x);
+}

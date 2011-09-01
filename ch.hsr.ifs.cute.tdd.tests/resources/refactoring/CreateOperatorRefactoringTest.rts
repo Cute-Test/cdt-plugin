@@ -684,3 +684,68 @@ void foo(){
 	void *x=0;
 	ASSERT(!x);
 }
+//!Do Not Report Deref Operator for Pointer Types
+//@.config
+markerCount=0
+//@A.cpp
+void foo(){
+	void *x=0;
+	ASSERT(*x);
+}
+//=
+void foo(){
+	void *x=0;
+	ASSERT(*x);
+}
+//!Do Not Report Prefix Increment Operator for Pointer Types
+//@.config
+markerCount=0
+//@A.cpp
+void foo(){
+	void *x=0;
+	++x;
+}
+//=
+void foo(){
+	void *x=0;
+	++x;
+}
+//!Do Not Report Postfix Increment Operator for Pointer Types
+//@.config
+markerCount=0
+//@A.cpp
+void foo(){
+	void *x=0;
+	x++;
+}
+//=
+void foo(){
+	void *x=0;
+	x++;
+}
+//!Do Not Report Prefix Decrement Operator for Pointer Types
+//@.config
+markerCount=0
+//@A.cpp
+void foo(){
+	void *x=0;
+	--x;
+}
+//=
+void foo(){
+	void *x=0;
+	--x;
+}
+//!Do Not Report Postfix Decrement Operator for Pointer Types
+//@.config
+markerCount=0
+//@A.cpp
+void foo(){
+	void *x=0;
+	x--;
+}
+//=
+void foo(){
+	void *x=0;
+	x--;
+}
