@@ -46,6 +46,12 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 			if (TddHelper.isInvalidType(problemBinding)) {
 				return;
 			}
+			if (!TddHelper.isLastPartOfName(name)){
+				return;
+			}
+			if (TddHelper.hasUnresolvableNameQualifier(name)){
+				return;
+			}
 			if (TddHelper.nameNotFoundProblem(problemBinding)) {
 				IASTNode upmostName = TddHelper.getLastOfSameAncestor(name, IASTName.class);
 				IASTNode parent = upmostName.getParent();

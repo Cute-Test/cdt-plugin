@@ -28,6 +28,7 @@ import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
@@ -340,6 +341,28 @@ public class TddHelper {
 			return type instanceof ICPPReferenceType || type instanceof IPointerType;
 		}
 
+		return false;
+	}
+
+	public static boolean isLastPartOfName(IASTName name) {
+		IASTNode parent = name.getParent();
+		if (parent instanceof ICPPASTQualifiedName) {
+			ICPPASTQualifiedName qName = (ICPPASTQualifiedName) parent;
+			return name == qName.getLastName();
+		}
+		return true;
+	}
+
+	public static boolean hasUnresolvableNameQualifier(IASTName name) {
+		IASTNode parent = name.getParent();
+		if (parent instanceof ICPPASTQualifiedName) {
+			ICPPASTQualifiedName qName = (ICPPASTQualifiedName) parent;
+			for(IASTName part : qName.getNames()){
+				if(part != name && part.resolveBinding() instanceof IProblemBinding){
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 }

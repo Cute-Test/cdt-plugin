@@ -345,3 +345,14 @@ struct C
 void thisIsATest() {
 	C::bar(A(5));
 }
+//!Do not Create Member Variable for Namespace
+//@.config
+markerCount=0
+//@A.cpp
+void thisIsATest() {
+	ns::mem = 1;
+}
+//=
+void thisIsATest() {
+	ns::mem = 1;
+}
