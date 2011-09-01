@@ -28,6 +28,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IFunction;
 import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
@@ -86,10 +87,16 @@ public class TypeHelper {
 		}
 		if (clause instanceof IASTIdExpression) {
 			IASTName xname = ((IASTIdExpression)clause).getName();
-			IBinding var = (IBinding) xname.resolveBinding();
-			if (var instanceof IVariable) {
-				return((IVariable) var).getType();
+			IBinding binding = xname.resolveBinding();
+			if (binding instanceof IVariable) {
+				return((IVariable) binding).getType();
 			} 
+			if (binding instanceof IFunction) {
+				return ((IFunction) binding).getType().getReturnType();
+			}
+			if (binding instanceof ITypedef) {
+				return (ITypedef) binding;
+			}
 		}
 		if (clause instanceof IASTExpression) {
 			return ((IASTExpression) clause).getExpressionType();

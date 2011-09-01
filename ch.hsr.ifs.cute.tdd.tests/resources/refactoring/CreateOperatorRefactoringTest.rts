@@ -77,7 +77,7 @@ void func()
 }
 //!FindsGoodUnaryOperator
 //@.config
-nomarkers=true
+markerCount=0
 //@Test.cpp
 struct B
 {
@@ -106,7 +106,7 @@ void func()
 }
 //!FindsGoodBinaryOperator
 //@.config
-nomarkers=true
+markerCount=0
 //@Test.cpp
 struct B
 {
@@ -137,7 +137,7 @@ void func()
 }
 //!Recognize Enum Assignment As OK
 //@.config
-nomarkers=true
+markerCount=0
 //@Test.cpp
 typedef enum {RED, GREEN, BLUE} Color;
 
@@ -255,6 +255,8 @@ void test(){
     ASSERT_EQUAL(6, a++);
 }
 //!ASSERT_EQUALS_DELTA_Operator_DetectionUnary
+//@.config
+markerCount=2
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
@@ -300,6 +302,8 @@ void test(){
     ASSERT_EQUAL_DELTA(6, a++, 0.0);
 }
 //!ASSERT_EQUALS_DELTA_M_Operator_DetectionUnary
+//@.config
+markerCount=2
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
@@ -565,7 +569,7 @@ void thisIsATest() {
 }
 //!FindFreePrefixOperator
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };
@@ -590,7 +594,7 @@ void test() {
 }
 //!FindFreePostFixOperator
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };
@@ -615,7 +619,7 @@ void test() {
 }
 //!FindUnaryOperatorOnBaseType
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 void test()
 {
@@ -630,7 +634,7 @@ void test()
 }
 //!FindBinaryOperatorOnBaseType
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 void test()
 {
@@ -647,7 +651,7 @@ void test()
 }
 //!DoNotReportIfOperandNotDefined
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 void test() {
     a++;
@@ -658,7 +662,7 @@ void test() {
 }
 //!Do Not Report If Operand Not Defined in Binary Expression
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 void test() {
 	i = 5;
@@ -666,4 +670,17 @@ void test() {
 //=
 void test() {
 	i = 5;
+}
+//!Do Not Report Not Operator for Pointer Types
+//@.config
+markerCount=0
+//@A.cpp
+void foo(){
+	void *x=0;
+	ASSERT(!x);
+}
+//=
+void foo(){
+	void *x=0;
+	ASSERT(!x);
 }

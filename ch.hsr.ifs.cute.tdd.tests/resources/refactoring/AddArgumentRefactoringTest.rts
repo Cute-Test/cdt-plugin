@@ -33,7 +33,7 @@ void testFunc() {
 }
 //!InsertTypeArgument
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct Type {};
 void func(Type t, int i) { }
@@ -202,7 +202,7 @@ void test()
 }
 //!DontOfferAddArgsThatCantBeAppended
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 #include<string>
 void foo(std::string, int);
@@ -217,7 +217,7 @@ void test() {
 }
 //!CheckStringandCharArrays
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 #include <string>
 

@@ -225,7 +225,7 @@ void test()
 }
 //!Find Matching Constructor
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
     A(const int & i, const int & j)
@@ -250,7 +250,7 @@ void test()
 }
 //!Find Constructor from Function Call Expression
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct Rnd {
     int getInt(){
@@ -289,7 +289,7 @@ void test()
 }
 //!No Constructor for Typedef Enum
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 typedef enum {RED, GREEN, BLUE} Color;
 
@@ -304,7 +304,7 @@ void test() {
 }
 //!No Constructor for Composite Type Member
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A{
 };
@@ -319,7 +319,7 @@ struct S{
 };
 //!No Constructor for Reference Initialization
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };
@@ -340,7 +340,7 @@ void test()
 }
 //!No Constructor for Pointer Initialization
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };
@@ -361,7 +361,7 @@ void test()
 }
 //!No Constructor for Typedef Reference Initialization
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };
@@ -386,7 +386,7 @@ void test()
 }
 //!No Constructor for Typdef Pointer Initialization
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };
@@ -489,6 +489,8 @@ void test()
 	} s(1);
 }
 //!Constructor for Multiple Declarators
+//@.config
+markerCount=2
 //@A.cpp
 struct S {
 };
@@ -510,7 +512,7 @@ void test()
 }
 //!No Constructor for Array
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };
@@ -529,7 +531,7 @@ void test()
 }
 //!No Constructor for Defaulted Init-List
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };

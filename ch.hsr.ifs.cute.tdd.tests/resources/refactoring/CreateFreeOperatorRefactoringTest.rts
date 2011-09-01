@@ -30,7 +30,29 @@ void test()
     A a;
     s << a;
 }
-//!TestFreeIntOperator
+//!Free Prefix Increment Operator
+//@A.cpp
+struct A {
+};
+
+void test() {
+    A a;
+    ++a;
+}
+//=
+struct A {
+};
+
+A & operator++(A & a)
+{
+    return A();
+}
+
+void test() {
+    A a;
+    ++a;
+}
+//!Free Postfix Increment Operator
 //@A.cpp
 struct A {
 };
@@ -203,6 +225,8 @@ void test(){
     ASSERT_EQUAL(6, a++);
 }
 //!ASSERT_EQUALS_DELTA_Operator_DetectionUnary
+//@.config
+markerCount=2
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
@@ -251,6 +275,8 @@ void test(){
     ASSERT_EQUAL_DELTA(6, a++, 0.0);
 }
 //!ASSERT_EQUALS_DELTA_M_Operator_DetectionUnary
+//@.config
+markerCount=2
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>

@@ -1,6 +1,6 @@
 //!TestSimpleStructExtraction
 //@.config
-nomarkers=true
+markerCount=0
 typeextraction=true
 newfiles=B.h
 ignorecomments=true
@@ -39,7 +39,7 @@ struct B {
 //!TestNestedStructExtraction
 //@.config
 typeextraction=true
-nomarkers=true
+markerCount=0
 newfiles=B.h
 ignorecomments=true
 //@A.h
@@ -75,7 +75,7 @@ struct B {
 //!TestTemplatedStructExtraction
 //@.config
 typeextraction=true
-nomarkers=true
+markerCount=0
 newfiles=B.h
 ignorecomments=true
 //@A.h
@@ -109,7 +109,7 @@ struct B {
 //!TestNestedTemplatedStructExtraction
 //@.config
 typeextraction=true
-nomarkers=true
+markerCount=0
 newfiles=B.h
 ignorecomments=true
 //@A.h
@@ -138,7 +138,7 @@ struct B {
 //!TestNestedTemplatedStructExtractionSelectionInTemplatedMember
 //@.config
 typeextraction=true
-nomarkers=true
+markerCount=0
 newfiles=B.h
 ignorecomments=true
 //@A.h
@@ -175,7 +175,7 @@ struct B {
 //!TestSimpleFunctionExtraction
 //@.config
 typeextraction=true
-nomarkers=true
+markerCount=0
 newfiles=foo.h
 ignorecomments=true
 //@A.h

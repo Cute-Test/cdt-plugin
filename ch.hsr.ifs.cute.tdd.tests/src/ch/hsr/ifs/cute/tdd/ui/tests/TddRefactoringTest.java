@@ -60,11 +60,19 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	private static final int EMPTY_SELECTION = 0;
 	private String[] problems;
 	private String[] newFiles;
+
+	public static boolean NO_MARKER_DEFAULT = false;
+	public static int MARKER_COUNT_DEFAULT = 1;
+	public static boolean TYPE_EXTRACTION_DEFAULT = false;
+	public static boolean IGNORE_COMMENTS_DEFAULT = false;
+	public static boolean OVERWRITE_DEFAULT = true;
+	public static int CANDIDATE_DEFAULT = 0;
 	
-	private boolean noMarker;
-	private boolean typeExtraction;
-	private boolean ignoreComments;
-	protected boolean overWrite;
+	protected boolean noMarker;
+	protected int markerCount;
+	protected boolean typeExtraction;
+	protected boolean ignoreComments;
+	protected boolean overwrite;
 	protected int candidate;
 
 	public TddRefactoringTest(String name,
@@ -96,12 +104,10 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 				}
 				return;
 			}
-			if (noMarker) {
-				IMarker[] markers = getCodanMarker();
-				assertEquals("This test is expected to yield no markers.", 0, markers.length);
-			} else {
-				IMarker[] markers = getCodanMarker();
-				assertTrue("At leat one marker expected.", markers.length > 0);
+			IMarker[] markers = getCodanMarker();
+			assertEquals("Unexpected marker count.", markerCount , markers.length);
+			
+			if(markers.length > 0){
 				IMarker marker = markers[0];
 				IDocument doc = openDocument(marker);
 				setSelection(new TextSelection(doc, getOffset(marker, doc), EMPTY_SELECTION));
@@ -125,7 +131,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	}
 
 	private IFile getFile(IFile file, String filename) {
-		if (!overWrite) {
+		if (!overwrite) {
 			return file;
 		}
 		String normalfilename = normalizeFileName(filename);
@@ -239,10 +245,6 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 			builder.processResource(cproject.getProject().getFile(activeFileName), NULL_PROGRESS_MONITOR);
 			markers  = cproject.getProject().findMarkers(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, true, 1);
 			builder.forgetLastBuiltState();
-			if (markers.length > 1)
-			{
-				System.err.println("Warning! Multiple Markers detected!");
-			}
 		} catch (CoreException e) {
 			fail(e.getMessage());
 		}
@@ -300,13 +302,14 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 
 	@Override
 	protected void configureTest(Properties properties) {
-		noMarker = Boolean.valueOf(properties.getProperty("nomarkers", "false")).booleanValue();
-		typeExtraction = Boolean.valueOf(properties.getProperty("typeextraction", "false")).booleanValue();
+		noMarker = Boolean.valueOf(properties.getProperty("nomarkers", Boolean.toString(NO_MARKER_DEFAULT)));
+		markerCount = Integer.valueOf(properties.getProperty("markerCount", Integer.toString(MARKER_COUNT_DEFAULT)));
+		typeExtraction = Boolean.valueOf(properties.getProperty("typeextraction", Boolean.toString(TYPE_EXTRACTION_DEFAULT)));
 		//TODO: do not overwrite files not yet tested
-		overWrite = Boolean.valueOf(properties.getProperty("overwrite", "true")).booleanValue();
+		overwrite = Boolean.valueOf(properties.getProperty("overwrite", Boolean.toString(OVERWRITE_DEFAULT)));
 		newFiles = separateNewFiles(properties);
-		ignoreComments = Boolean.valueOf(properties.getProperty("ignorecomments", "false")).booleanValue();
-		candidate = Integer.valueOf(properties.getProperty("candidate", "0")).intValue();
+		ignoreComments = Boolean.valueOf(properties.getProperty("ignorecomments", Boolean.toString(IGNORE_COMMENTS_DEFAULT)));
+		candidate = Integer.valueOf(properties.getProperty("candidate", Integer.toString(CANDIDATE_DEFAULT)));
 	};
 	
 	private String[] separateNewFiles(Properties refactoringProperties) {

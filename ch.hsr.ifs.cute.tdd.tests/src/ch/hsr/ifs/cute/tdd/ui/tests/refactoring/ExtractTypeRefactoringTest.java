@@ -34,7 +34,7 @@ public class ExtractTypeRefactoringTest extends TddRefactoringTest {
 		MockExtractRefactoring refactoring = new MockExtractRefactoring(
 				cproject.findElement(project.getFile(activeFileName)
 						.getFullPath()), selection, cproject, new RefactoringASTCache());
-		refactoring.setOverwriteAnswer(overWrite);
+		refactoring.setOverwriteAnswer(overwrite);
 		return refactoring;
 	}
 }

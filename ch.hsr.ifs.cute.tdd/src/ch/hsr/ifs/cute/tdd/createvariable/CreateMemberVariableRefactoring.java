@@ -27,14 +27,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTLiteralExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTPointer;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
@@ -89,16 +87,9 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 		} else {
 			newDeclarator = new CPPASTDeclarator(variableName.copy());
 		}
-		if (isVoid(declspec)) {
-			newDeclarator.addPointerOperator(new CPPASTPointer());
-		}
 		newDeclaration.addDeclarator(newDeclarator);
 		newDeclaration.setParent(type);
 		return newDeclaration;
-	}
-
-	private boolean isVoid(IASTDeclSpecifier declspec) {
-		return declspec instanceof IASTSimpleDeclSpecifier && ((IASTSimpleDeclSpecifier)declspec).getType() == ICPPASTSimpleDeclSpecifier.t_void;
 	}
 
 	private IASTDeclSpecifier getDeclSpec(IASTName varName) {
@@ -134,13 +125,17 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 			}
 		} else if (parent instanceof ICPPASTQualifiedName){
 			IASTNode parentOfParent = parent.getParent();
+			IASTDeclSpecifier declSpec;
+			priv = false;
 			if (parentOfParent != null && parentOfParent.getParent() instanceof ICPPASTBinaryExpression) { 
-				IASTInitializerClause rSide = ((ICPPASTBinaryExpression)parentOfParent.getParent()).getInitOperand2();
-				priv = false;
-				IASTDeclSpecifier declSpec = getDeclSpecOfType(rSide);
-				declSpec.setStorageClass(IASTDeclSpecifier.sc_static);
-				return declSpec;
+				IASTInitializerClause rSide = ((ICPPASTBinaryExpression)parentOfParent.getParent()).getInitOperand2();			
+				declSpec = getDeclSpecOfType(rSide);
 			}
+			else {
+				declSpec = createVoidDeclSpec();
+			}
+			declSpec.setStorageClass(IASTDeclSpecifier.sc_static);
+			return declSpec;
 		}
 		// any other cases? e.g. type->member or (*type).member, etc...
 		priv = false;

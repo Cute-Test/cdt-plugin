@@ -89,7 +89,7 @@ void test() {
     B b;
     int i = b.member;
 }
-//!CreateMemberFromThis
+//!Create Member From This
 //@A.cpp
 class A {
 	void member() {
@@ -98,7 +98,7 @@ class A {
 };
 //=
 class A {
-	void *membVar;
+	void membVar;
     void member() {
 		this->membVar;
 	}
@@ -284,7 +284,7 @@ class A
 };
 //!Correct Recognition of Static Member Variable
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
   static int i;
@@ -301,7 +301,7 @@ struct A {
 void test() {
   A::i = 5;
 }
-//!Create Static Member Variable
+//!Create Static Member Variable for Assignment
 //@A.cpp
 struct A {
 };
@@ -316,4 +316,32 @@ struct A {
 
 void test() {
   A::i = 5;
+}
+//!Create Static Member Variable for Call
+//@A.cpp
+struct A
+{
+    A(int i){}
+};
+
+struct C
+{
+};
+
+void thisIsATest() {
+	C::bar(A(5));
+}
+//=
+struct A
+{
+    A(int i){}
+};
+
+struct C
+{
+    static void bar;
+};
+
+void thisIsATest() {
+	C::bar(A(5));
 }

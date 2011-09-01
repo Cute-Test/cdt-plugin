@@ -58,5 +58,4 @@ public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 			reportProblem(ERR_ID_FunctionResolutionProblem_HSR, name.getLastName(), ca.toArray());
 		}
 	}
-
 }

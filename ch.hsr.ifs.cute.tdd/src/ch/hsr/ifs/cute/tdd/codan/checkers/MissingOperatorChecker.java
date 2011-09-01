@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IEnumeration;
+import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
@@ -81,6 +82,9 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 					if (!operandDefined(uexpr)) {
 						return PROCESS_CONTINUE;
 					}
+					if (implicitlyAvailableOperation(operator, uexpr)) {
+						return PROCESS_CONTINUE;
+					}
 					String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
 					if (operatorname != null && isAppropriateType(uexpr.getOperand())) {
 						CodanArguments ca = new CodanArguments(operatorname, Messages.MissingOperatorChecker_3 + operatorname + Messages.MissingOperatorChecker_4, ":operator"); //$NON-NLS-1$
@@ -104,6 +108,14 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				}
 			}
 			return PROCESS_CONTINUE;
+		}
+
+		private boolean implicitlyAvailableOperation(OverloadableOperator operator, CPPASTUnaryExpression uexpr) {
+			IASTExpression operand = uexpr.getOperand();
+			if(OverloadableOperator.NOT.compareTo(operator) == 0 && (operand.getExpressionType() instanceof IPointerType)){
+				return true;
+			}
+			return false;
 		}
 
 		private boolean operandDefined(CPPASTUnaryExpression uexpr) {

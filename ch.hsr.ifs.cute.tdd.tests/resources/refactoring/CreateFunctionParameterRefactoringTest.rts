@@ -530,3 +530,45 @@ void test(){
     I i = 5;
 	foo(i);
 }
+//!Create typedef-Returntype Parameter
+//@A.cpp
+typedef int I;
+
+I getI(){
+    return 23;
+}
+
+void test(){
+	foo(getI());
+}
+//=
+typedef int I;
+
+I getI(){
+    return 23;
+}
+
+void foo(const I & getI)
+{
+}
+
+void test(){
+	foo(getI());
+}
+//!Create Constructor Call of typedef-Type
+//@A.cpp
+typedef int I;
+
+void test(){
+	foo(I(23));
+}
+//=
+typedef int I;
+
+void foo(const I & i)
+{
+}
+
+void test(){
+	foo(I(23));
+}

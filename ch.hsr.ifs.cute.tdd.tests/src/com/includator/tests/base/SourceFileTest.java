@@ -37,12 +37,14 @@ public abstract class SourceFileTest extends BaseTestFramework implements ILogLi
 		super(name);
 		fileMap = new TreeMap<String, TestSourceFile>();
 		initActiveFileName(files);
+		TestSourceFile configFile = null;
 		for (TestSourceFile file : files) {
 			fileMap.put(file.getName(), file);
 			if (file.getName().endsWith(CONFIG_FILE_NAME_ENDING)) {
-				initializeConfiguration(file);
+				configFile = file;
 			}
 		}
+		initializeConfiguration(configFile);
 	}
 
 	private void initActiveFileName(Vector<TestSourceFile> files) {
@@ -63,13 +65,15 @@ public abstract class SourceFileTest extends BaseTestFramework implements ILogLi
 
 		Properties properties = new Properties();
 		try {
-			properties.load(new ByteArrayInputStream(configFile.getSource().getBytes()));
+			if(configFile != null){
+				properties.load(new ByteArrayInputStream(configFile.getSource().getBytes()));
+				fileMap.remove(configFile.getName());
+			}
 		} catch (final IOException e) {
 		}
 
 		initCommonFields(properties);
 		configureTest(properties);
-		fileMap.remove(configFile.getName());
 	}
 
 	protected void configureTest(Properties properties) {

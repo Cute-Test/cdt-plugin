@@ -242,7 +242,7 @@ void func()
 }
 //!No Variable for Non-typedef Enum Assignment
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 enum Color{RED, GREEN, BLUE};
 
@@ -261,7 +261,7 @@ void func()
 }
 //!No Suggestion for Static Member Access
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 struct A {
 };

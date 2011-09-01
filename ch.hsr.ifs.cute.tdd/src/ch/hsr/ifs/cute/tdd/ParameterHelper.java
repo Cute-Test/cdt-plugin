@@ -98,13 +98,18 @@ public class ParameterHelper {
 				list.add(createParamDeclFrom((ICPPASTLiteralExpression) posId, used));
 			} else if (posId instanceof IASTIdExpression) {
 				list.add(createParamDeclFrom((IASTIdExpression) posId, used));
+			} else if(posId instanceof IASTFunctionCallExpression){
+				list.add(createParamDeclFrom((IASTFunctionCallExpression) posId, used));
 			} else {
-				String nameHint = arg.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "");
+				String nameHint = createNameHint(arg);
 				list.add(createParamDeclFrom(posId.getExpressionType(), nameHint, used));
 			}
-
 		}
 		return list;
+	}
+
+	private static String createNameHint(IASTInitializerClause arg) {
+		return arg.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "");
 	}
 
 	public static ICPPASTParameterDeclaration createParamDeclFrom(IType type, String nameHint, HashMap<String, Boolean> used ) {
@@ -125,11 +130,31 @@ public class ParameterHelper {
 		IType type = TypeHelper.getTypeOf(idexpr);
 		ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
 
-		String nameHint = new String(idexpr.getName().getSimpleID());
+		String nameHint = createHintName(idexpr);
 		IASTName parameterName = createParameterName(nameHint, used);
 		IASTDeclarator declarator = getParameterDeclarator(parameterName, type, false);
 		return CPPNodeFactory.getDefault().newParameterDeclaration(spec, declarator);
 	}
+
+	private static String createHintName(IASTIdExpression idexpr) {
+		 char[] hintName = idexpr.getName().getSimpleID();
+		if(hintName.length > 0){
+			hintName[0] = Character.toLowerCase(hintName[0]);
+		}
+		return String.valueOf(hintName);
+	}
+	
+	public static ICPPASTParameterDeclaration createParamDeclFrom(IASTFunctionCallExpression idexpr, HashMap<String, Boolean> used) {
+		IASTExpression functionName = idexpr.getFunctionNameExpression();
+		if(functionName instanceof IASTIdExpression){
+			ICPPASTParameterDeclaration paramDecl = createParamDeclFrom((IASTIdExpression) functionName, used);
+			paramDecl.getDeclSpecifier().setConst(true);
+			return paramDecl;
+		}
+		IType expressionType = idexpr.getExpressionType();
+		return createParamDeclFrom(expressionType, createNameHint(idexpr), used);
+	}
+	
 
 	private static ICPPASTDeclSpecifier createDeclSpecifier(IType type) {
 		ICPPASTDeclSpecifier spec = TypeHelper.getDeclarationSpecifierOfType(TypeHelper.windDownToRealType(type, true));

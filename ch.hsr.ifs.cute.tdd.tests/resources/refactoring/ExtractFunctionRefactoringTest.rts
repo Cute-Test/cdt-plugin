@@ -1,6 +1,6 @@
 //!ExtractFreeFunction
 //@.config
-nomarkers=true
+markerCount=0
 typeextraction=true
 newfiles=foo.h
 ignorecomments=true
@@ -22,7 +22,7 @@ void foo() {}
 #endif /* FOO_H_ */
 //!ExtractTemplatedFunction
 //@.config
-nomarkers=true
+markerCount=0
 typeextraction=true
 newfiles=foo.h
 ignorecomments=true
@@ -51,7 +51,7 @@ T foo(T arg) {
 #endif /* FOO_H_ */
 //!ExtractNestedTemplatedFunction
 //@.config
-nomarkers=true
+markerCount=0
 typeextraction=true
 newfiles=foo.h
 ignorecomments=true

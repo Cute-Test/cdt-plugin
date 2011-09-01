@@ -443,7 +443,7 @@ void test(){
 }
 //!No Suggestion for Members of Fundamental Types
 //@.config
-nomarkers=true
+markerCount=0
 //@A.cpp
 void test()
 {

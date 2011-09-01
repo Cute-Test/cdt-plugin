@@ -56,10 +56,6 @@
             problemId="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR">
       </resolution>
       <resolution
-            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.FreeOperatorCreationQuickFix"
-            problemId="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR">
-      </resolution>
-      <resolution
             class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.NormalFreeFunctionCreationQuickFix"
             problemId="ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR">
       </resolution>
