@@ -21,9 +21,11 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
 import org.eclipse.cdt.core.dom.ast.IType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTArrayDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
@@ -76,12 +78,12 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 
 	private IASTDeclaration getMemberVariableDeclaration(IASTName variableName, IASTNode type) {
 		IASTDeclSpecifier declspec = getDeclSpec(variableName);
-		CPPASTSimpleDeclaration newDeclaration = new CPPASTSimpleDeclaration(declspec);
-		CPPASTDeclarator newDeclarator;
+		IASTSimpleDeclaration newDeclaration = new CPPASTSimpleDeclaration(declspec);
+		ICPPASTDeclarator newDeclarator;
 		if (isArray) {
 			assert (initClause instanceof IASTInitializerList);
 			IASTExpression size = new CPPASTLiteralExpression(ICPPASTLiteralExpression.lk_integer_constant, (((IASTInitializerList) initClause).getSize() + "").toCharArray()); //$NON-NLS-1$
-			CPPASTArrayDeclarator array = new CPPASTArrayDeclarator(variableName.copy());
+			ICPPASTArrayDeclarator array = new CPPASTArrayDeclarator(variableName.copy());
 			array.addArrayModifier(new CPPASTArrayModifier(size));
 			newDeclarator = array;
 		} else {

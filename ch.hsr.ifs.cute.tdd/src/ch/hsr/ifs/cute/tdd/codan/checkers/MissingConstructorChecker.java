@@ -14,6 +14,7 @@ import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
@@ -97,7 +98,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 		private void reportUnresolvableConstructorCalls(IASTSimpleDeclaration simpledec, String typename) {
 			for (IASTDeclarator ctorDecl : simpledec.getDeclarators()) {
 				boolean hasPointerOrRefType = TddHelper.hasPointerOrRefType(ctorDecl);
-				if (!hasPointerOrRefType && ctorDecl instanceof IASTImplicitNameOwner && hasCtorInitializer(ctorDecl)) {
+				if (!hasPointerOrRefType && ctorDecl instanceof IASTImplicitNameOwner && !(ctorDecl instanceof IASTFunctionDeclarator) && hasCtorInitializer(ctorDecl)) {
 					IASTImplicitName[] implicitNames = ((IASTImplicitNameOwner) ctorDecl).getImplicitNames();
 					if (implicitNames.length == 0) {
 						IASTName reportedNode = ctorDecl.getName();

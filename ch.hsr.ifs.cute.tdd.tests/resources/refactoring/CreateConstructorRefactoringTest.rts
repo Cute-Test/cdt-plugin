@@ -568,3 +568,29 @@ struct A {
 void test() {
     A<double> a(3);
 }
+//!No Constructor for Function Declaration
+//@.config
+markerCount=0
+//@A.cpp
+struct A {
+};
+
+A createA();
+//=
+struct A {
+};
+
+A createA();
+//!No Constructor for Function Declaration with Parameter
+//@.config
+markerCount=0
+//@A.cpp
+struct A {
+};
+
+A createA(int);
+//=
+struct A {
+};
+
+A createA(int);
