@@ -23,7 +23,6 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
@@ -131,7 +130,7 @@ public class FunctionCreationHelper {
 		return function.getBody().getChildren().length > 0;
 	}
 
-	public static boolean setFileChanged(IASTTranslationUnit localunit, ICPPASTCompositeTypeSpecifier owningType) {
+	public static boolean setFileChanged(IASTTranslationUnit localunit, IASTNode owningType) {
 		if (owningType != null && owningType.getTranslationUnit().equals(localunit)) {
 			return true;
 		}

@@ -8,6 +8,7 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.createvariable;
 
+import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
@@ -20,7 +21,6 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
 import org.eclipse.cdt.core.dom.ast.IType;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
@@ -52,34 +52,34 @@ import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 @SuppressWarnings("restriction")
 public class CreateMemberVariableRefactoring extends CRefactoring3 {
 
-	private boolean priv;
-	private boolean isArray;
+	private boolean isArray = false;
 	private IASTInitializerClause initClause;
 
 	public CreateMemberVariableRefactoring(ISelection selection, CodanArguments ca, RefactoringASTCache astCache) {
 		super(selection, astCache);
 	}
 
-	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) 
-			throws CoreException, OperationCanceledException {
+	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTName selectedNode = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
-		ICPPASTCompositeTypeSpecifier type = TypeHelper.getTargetTypeOfField(localunit, selectedNode, astCache);
-		IASTDeclaration newMember = getMemberVariableDeclaration(selectedNode, type);
-		if (priv) {
-			TddHelper.writePrivateDefinitionTo(collector, type, newMember);
+		IASTNode memberOwner = TypeHelper.getMemberOwner(localunit, selectedNode, astCache);
+		IASTDeclaration newMember = getMemberVariableDeclaration(selectedNode, memberOwner);
+		boolean isPrivate = isPartOf(selectedNode, memberOwner) && memberOwner instanceof ICPPASTCompositeTypeSpecifier;
+		if (isPrivate) {
+			TddHelper.writePrivateDefinitionTo(collector, (ICPPASTCompositeTypeSpecifier) memberOwner, newMember);
 		} else {
-			TddHelper.writeDefinitionTo(collector, type, newMember);
+			TddHelper.writeDefinitionTo(collector, memberOwner, newMember);
 		}
-		setLinkedModeInformation(localunit, type, newMember);
+		setLinkedModeInformation(localunit, memberOwner, newMember);
+
 	}
 
-	private IASTDeclaration getMemberVariableDeclaration(IASTName variableName, ICPPASTCompositeTypeSpecifier type) {
+	private IASTDeclaration getMemberVariableDeclaration(IASTName variableName, IASTNode type) {
 		IASTDeclSpecifier declspec = getDeclSpec(variableName);
 		CPPASTSimpleDeclaration newDeclaration = new CPPASTSimpleDeclaration(declspec);
 		CPPASTDeclarator newDeclarator;
 		if (isArray) {
-			assert(initClause instanceof IASTInitializerList);
+			assert (initClause instanceof IASTInitializerList);
 			IASTExpression size = new CPPASTLiteralExpression(ICPPASTLiteralExpression.lk_integer_constant, (((IASTInitializerList) initClause).getSize() + "").toCharArray()); //$NON-NLS-1$
 			CPPASTArrayDeclarator array = new CPPASTArrayDeclarator(variableName.copy());
 			array.addArrayModifier(new CPPASTArrayModifier(size));
@@ -93,69 +93,74 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 	}
 
 	private IASTDeclSpecifier getDeclSpec(IASTName varName) {
-		priv = true;
 		IASTNode parent = varName.getParent();
 		if (parent instanceof ICPPASTFieldReference) {
-			ICPPASTFieldReference ref = (ICPPASTFieldReference)parent;
-			if (hasThisAsLValue(ref)) {
-				ICPPASTBinaryExpression ex = ToggleNodeHelper.getAncestorOfType(ref, ICPPASTBinaryExpression.class);
-				if (ex == null) {
-					return createVoidDeclSpec();
-				}
-				IASTExpression rSide = ex.getOperand2();
-				return getDeclSpecOfType(rSide);
-			}
-			if (ref.getParent() instanceof ICPPASTBinaryExpression) { 
-				IASTInitializerClause rSide = ((ICPPASTBinaryExpression)ref.getParent()).getInitOperand2();
-				return getDeclSpecOfType(rSide);
-			}
-			if (isThisKeyword((ICPPASTFieldReference)parent)) {
-				return createVoidDeclSpec();
-			}
-			IASTSimpleDeclaration decl = ToggleNodeHelper.getAncestorOfType(varName, IASTSimpleDeclaration.class);
-			if (decl != null) {
-				priv = false;
-				return decl.getDeclSpecifier().copy();
-			}
+			ICPPASTFieldReference ref = (ICPPASTFieldReference) parent;
+			return createDeclSpecForFieldRef(varName, ref);
 		} else if (parent instanceof ICPPASTConstructorChainInitializer) {
 			ICPPASTConstructorChainInitializer chainInitializer = (ICPPASTConstructorChainInitializer) parent;
 			IASTInitializerClause firstClause = getInitializerClause(chainInitializer);
 			if (firstClause != null) {
 				return getDeclSpecOfType(firstClause);
 			}
-		} else if (parent instanceof ICPPASTQualifiedName){
-			IASTNode parentOfParent = parent.getParent();
-			IASTDeclSpecifier declSpec;
-			priv = false;
-			if (parentOfParent != null && parentOfParent.getParent() instanceof ICPPASTBinaryExpression) { 
-				IASTInitializerClause rSide = ((ICPPASTBinaryExpression)parentOfParent.getParent()).getInitOperand2();			
-				declSpec = getDeclSpecOfType(rSide);
-			}
-			else {
-				declSpec = createVoidDeclSpec();
-			}
-			declSpec.setStorageClass(IASTDeclSpecifier.sc_static);
-			return declSpec;
+		} else if (parent instanceof ICPPASTQualifiedName) {
+			return createDeclSpecForQualifiedName(varName);
 		}
 		// any other cases? e.g. type->member or (*type).member, etc...
-		priv = false;
-		return  createVoidDeclSpec();
+		return createVoidDeclSpec();
 	}
 
-	private boolean hasThisAsLValue(ICPPASTFieldReference ref) {
-		IASTExpression owner = ref.getFieldOwner();
-		if (ref.getFieldOwner() instanceof ICPPASTLiteralExpression) {
-			if (((ICPPASTLiteralExpression)owner).getKind() == ICPPASTLiteralExpression.lk_this) {
+	private IASTDeclSpecifier createDeclSpecForQualifiedName(IASTName varName) {
+		IASTDeclSpecifier declSpec;
+		IASTBinaryExpression ascendingBinEx = ToggleNodeHelper.getAncestorOfType(varName, IASTBinaryExpression.class);
+		if (ascendingBinEx != null) {
+			declSpec = createDeclSpecForBinaryExpression(varName, ascendingBinEx);
+		} else {
+			declSpec = createVoidDeclSpec();
+		}
+		declSpec.setStorageClass(IASTDeclSpecifier.sc_static);
+		return declSpec;
+	}
+
+	private IASTDeclSpecifier createDeclSpecForFieldRef(IASTName varName, ICPPASTFieldReference ref) {
+		IASTBinaryExpression ascendingBinEx = ToggleNodeHelper.getAncestorOfType(varName, IASTBinaryExpression.class);
+		if (ascendingBinEx != null) {
+			return createDeclSpecForBinaryExpression(ref, ascendingBinEx);
+		}
+		if (isThisKeyword(ref)) {
+			return createVoidDeclSpec();
+		}
+		IASTSimpleDeclaration decl = ToggleNodeHelper.getAncestorOfType(varName, IASTSimpleDeclaration.class);
+		if (decl != null) {
+			return decl.getDeclSpecifier().copy();
+		}
+		return createVoidDeclSpec();
+	}
+
+	private IASTDeclSpecifier createDeclSpecForBinaryExpression(IASTNode selectedNode, IASTBinaryExpression ascendingBinEx) {
+		if(isPartOf(selectedNode, ascendingBinEx.getOperand1())){
+			IASTInitializerClause rSide = ascendingBinEx.getInitOperand2();
+			return getDeclSpecOfType(rSide);
+		}
+		else {
+			IASTExpression lSide = ascendingBinEx.getOperand1();
+			return getDeclSpecOfType(lSide);
+		}
+	}
+
+	private boolean isPartOf(IASTNode potentialSubpart, IASTNode nodeForSubtree) {
+		IASTNode nodeToCheck = potentialSubpart;
+		while(nodeToCheck != null){
+			if(nodeToCheck == nodeForSubtree){
 				return true;
 			}
+			nodeToCheck = nodeToCheck.getParent();
 		}
 		return false;
 	}
 
 	private boolean isThisKeyword(ICPPASTFieldReference fieldRef) {
-		return fieldRef.getFieldOwner() instanceof ICPPASTLiteralExpression
-				&& ((ICPPASTLiteralExpression) fieldRef.getFieldOwner())
-						.getKind() == ICPPASTLiteralExpression.lk_this;
+		return fieldRef.getFieldOwner() instanceof ICPPASTLiteralExpression && ((ICPPASTLiteralExpression) fieldRef.getFieldOwner()).getKind() == ICPPASTLiteralExpression.lk_this;
 	}
 
 	private IASTInitializerClause getInitializerClause(ICPPASTConstructorChainInitializer chain) {

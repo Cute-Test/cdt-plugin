@@ -56,6 +56,40 @@ void test() {
     B b;
     double d = b.member;
 }
+//!Create Member Variable from Access in Simple Declaration with Unary Operation
+//@A.cpp
+struct B {
+};
+void test() {
+    B b;
+    double d = b.member++;
+}
+//=
+struct B {
+    double member;
+};
+void test() {
+    B b;
+    double d = b.member++;
+}
+//!Create Member Variable from Access in Assignment with Unary Operation
+//@A.cpp
+struct B {
+};
+void test() {
+    B b;
+    double d;
+    d = b.member++;
+}
+//=
+struct B {
+    double member;
+};
+void test() {
+    B b;
+    double d;
+    d = b.member++;
+}
 //!TestCreateMemberVariableFromCallWithType
 //@A.cpp
 struct B {
@@ -175,7 +209,7 @@ class A {
 		this->membVar = number+1;
 	}
 };
-//!CreateIntegerArray
+//!Create Integer Array
 //@A.cpp
 struct B {
 };
@@ -185,14 +219,13 @@ void test() {
 }
 //=
 struct B {
-private:
     int array[3];
 };
 void test() {
     B b;
     b.array = {1, 2, 3};
 }
-//!CreateTypeArray
+//!Create Type Array
 //@A.cpp
 class B {
 };
@@ -202,13 +235,14 @@ void test() {
 }
 //=
 class B {
+public:
     B array[3];
 };
 void test() {
     B b, b1, b2, b3;
     b.array = {b1, b2, b3};
 }
-//!CreateStringArrayNotPossibleAssumeInt
+//!Create String Array Not Possible Assume Int
 //@A.cpp
 class B {
 };
@@ -218,6 +252,7 @@ void test() {
 }
 //=
 class B {
+public:
     int array[3];
 };
 void test() {
@@ -353,6 +388,26 @@ void thisIsATest() {
 	ns::mem = 1;
 }
 //=
+void thisIsATest() {
+	ns::mem = 1;
+}
+//!Create Member Variable in Namespace
+//@.config
+markerCount=1
+//@A.cpp
+namespace ns
+{
+}
+
+void thisIsATest() {
+	ns::mem = 1;
+}
+//=
+namespace ns
+{
+    static int mem;
+}
+
 void thisIsATest() {
 	ns::mem = 1;
 }

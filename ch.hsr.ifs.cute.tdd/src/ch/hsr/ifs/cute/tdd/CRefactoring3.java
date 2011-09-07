@@ -10,8 +10,8 @@ package ch.hsr.ifs.cute.tdd;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICElement;
@@ -89,7 +89,7 @@ public abstract class CRefactoring3 extends CRefactoring2 {
 		return selection;
 	}
 
-	public void setLinkedModeInformation(IASTTranslationUnit localunit, ICPPASTCompositeTypeSpecifier owningType, IASTDeclaration declaration) {
+	public void setLinkedModeInformation(IASTTranslationUnit localunit, IASTNode owningType, IASTDeclaration declaration) {
 		lmi.setFileChanged(FunctionCreationHelper.setFileChanged(localunit, owningType));
 		if (declaration instanceof IASTFunctionDefinition) {
 			ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;

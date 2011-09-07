@@ -15,7 +15,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.QuickFixTest;
 
 public class CreateFunctionTest extends QuickFixTest {
 
-	private static final String CREATE_FREE_FUNCTION_FOO = "Create non-member function foo";
+	private static final String CREATE_FREE_FUNCTION_FOO = "Create function foo";
 
 	//void testX() {
 	//  foo();
