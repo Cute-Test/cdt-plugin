@@ -594,3 +594,14 @@ struct A {
 };
 
 A createA(int);
+//!No Constructor for Typedef of Fundamental Type
+//@.config
+markerCount=0
+//@A.cpp
+typedef unsigned int uint32_t;
+
+uint32_t id;
+//=
+typedef unsigned int uint32_t;
+
+uint32_t id;

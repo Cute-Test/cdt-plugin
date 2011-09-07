@@ -26,6 +26,7 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IEnumeration;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.Path;
@@ -85,6 +86,8 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				IType type = (IType) typeBinding;
 				IType bareType = TypeHelper.windDownToRealType(type, false);
 				if(bareType instanceof IEnumeration){
+					return false;
+				} else if(bareType instanceof ICPPBasicType){
 					return false;
 				}
 				return true;

@@ -565,3 +565,16 @@ void foo(){
 	void *x=0;
 	ASSERT(*x);
 }
+//!Do Not Report Assign Operator for Pointer Types
+//@.config
+markerCount=0
+//@A.cpp
+void foo(){
+	void *x=0;
+	x = 0;
+}
+//=
+void foo(){
+	void *x=0;
+	x = 0;
+}

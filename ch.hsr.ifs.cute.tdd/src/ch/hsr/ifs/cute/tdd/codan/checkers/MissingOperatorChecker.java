@@ -98,6 +98,9 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				if (!operatorFound(inames)) {
 					if (isAppropriateType(binex.getOperand1())) {
 						OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex);
+						if(implicitlyAvailableOperation(operator, binex)){
+							return PROCESS_CONTINUE;
+						}
 						String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
 						String typename = expression.getExpressionType().toString();
@@ -110,7 +113,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			return PROCESS_CONTINUE;
 		}
 
-		private boolean implicitlyAvailableOperation(OverloadableOperator operator, CPPASTUnaryExpression uexpr) {
+		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTUnaryExpression uexpr) {
 			IASTExpression operand = uexpr.getOperand();
 			if(operand.getExpressionType() instanceof IPointerType){
 				switch(operator){
@@ -118,6 +121,19 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				case STAR:
 				case INCR:
 				case DECR:
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTBinaryExpression binExpr) {
+			IASTExpression operand = binExpr.getOperand1();
+			if(operand.getExpressionType() instanceof IPointerType){
+				switch(operator){
+				case ASSIGN:
+				case AND:
+				case OR:
 					return true;
 				}
 			}
