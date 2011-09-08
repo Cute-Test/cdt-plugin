@@ -27,7 +27,7 @@ public class RemoveArgumentTest extends QuickFixTest{
 	
 	@Override
 	protected String getId() {
-		return TddErrorIdCollection.ERR_ID_InvalidArguments_HSR;
+		return TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR;
 	}
 
 

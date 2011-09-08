@@ -12,8 +12,8 @@ import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IArrayType;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IEnumeration;
@@ -21,7 +21,6 @@ import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTIfStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
@@ -49,46 +48,20 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		@Override
 		public int visit(IASTExpression expression) {
+			String typename = expression.getExpressionType().toString();
 			if (expression instanceof ICPPASTUnaryExpression) {
 				CPPASTUnaryExpression uexpr = ((CPPASTUnaryExpression) expression);
 				IASTImplicitName[] inames = uexpr.getImplicitNames();
 				if (!operatorFound(inames)) {
 					OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr);
-					if (isCuteASSERTEQUALS(expression, operator) ||isCuteAssert(expression, operator)) {
-						IASTIdExpression idexpr = getLastIDExpression(expression);
-						if (idexpr == null) {
-							return PROCESS_CONTINUE;
-						}
-						IASTNode parent = idexpr.getParent();
-						if (parent instanceof ICPPASTUnaryExpression) {
-							uexpr = (CPPASTUnaryExpression) parent;
-							inames = uexpr.getImplicitNames();
-							if (operatorFound(inames)) {
-								return PROCESS_SKIP;
-							}
-							operator = OverloadableOperator.fromUnaryExpression(uexpr);
-							expression = uexpr;
-							if (operator == null) {
-								return PROCESS_CONTINUE;
-							}
-						}
-					}
-					if (operator == null) {
-						return PROCESS_CONTINUE;
-					}
-					if (operatorToSkip(operator)) {
+					if (operatorToSkip(operator) || implicitlyAvailableOperation(operator, uexpr)) {
 						return PROCESS_CONTINUE;
 					}
 					if (!operandDefined(uexpr)) {
 						return PROCESS_CONTINUE;
 					}
-					if (implicitlyAvailableOperation(operator, uexpr)) {
-						return PROCESS_CONTINUE;
-					}
-					String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
-					if (operatorname != null && isAppropriateType(uexpr.getOperand())) {
-						CodanArguments ca = new CodanArguments(operatorname, Messages.MissingOperatorChecker_3 + operatorname + Messages.MissingOperatorChecker_4, ":operator"); //$NON-NLS-1$
-						reportProblem(ERR_ID_OperatorResolutionProblem_HSR,	expression, ca.toArray());
+					if (isAppropriateType(uexpr.getOperand())) {
+						reportMissingOperator(typename, expression, operator);
 						return PROCESS_SKIP;
 					}
 				}
@@ -101,11 +74,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 						if(implicitlyAvailableOperation(operator, binex)){
 							return PROCESS_CONTINUE;
 						}
-						String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
-
-						String typename = expression.getExpressionType().toString();
-						CodanArguments ca = new CodanArguments(operatorname, Messages.MissingOperatorChecker_8 + operatorname + Messages.MissingOperatorChecker_9 + typename, ":operator"); //$NON-NLS-1$
-						reportProblem(ERR_ID_OperatorResolutionProblem_HSR, binex, ca.toArray());
+						reportMissingOperator(typename, binex, operator);
 						return PROCESS_SKIP;
 					}
 				}
@@ -113,9 +82,17 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			return PROCESS_CONTINUE;
 		}
 
+		private void reportMissingOperator(String typename, IASTExpression expr, OverloadableOperator operator) {
+			String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			final String message = Messages.MissingOperatorChecker_8 + operatorname + Messages.MissingOperatorChecker_9 + typename;
+			CodanArguments ca = new CodanArguments(operatorname, message, ":operator"); //$NON-NLS-1$
+			reportProblem(ERR_ID_OperatorResolutionProblem_HSR, expr, ca.toArray());
+		}
+
 		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTUnaryExpression uexpr) {
 			IASTExpression operand = uexpr.getOperand();
-			if(operand.getExpressionType() instanceof IPointerType){
+			final IType operandType = operand.getExpressionType();
+			if(operandType instanceof IPointerType || operandType instanceof IArrayType){
 				switch(operator){
 				case NOT:
 				case STAR:
@@ -129,11 +106,18 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		
 		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTBinaryExpression binExpr) {
 			IASTExpression operand = binExpr.getOperand1();
-			if(operand.getExpressionType() instanceof IPointerType){
+			final IType operandType = operand.getExpressionType();
+			if(operandType instanceof IPointerType || operandType instanceof IArrayType){
 				switch(operator){
 				case ASSIGN:
 				case AND:
 				case OR:
+				case PLUS:
+				case MINUS:
+				case EQUAL:
+				case NOTEQUAL:
+				case PLUSASSIGN:
+				case MINUSASSIGN:
 					return true;
 				}
 			}
@@ -152,27 +136,15 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private boolean operatorToSkip(OverloadableOperator operator) {
+			if(operator == null){
+				return true;
+			}
 			switch (operator) {
 			case AMPER:
 				return true;
 			}
 			return false;
 		}
-
-		private boolean isCuteASSERTEQUALS(IASTExpression expression,
-				OverloadableOperator operator) {
-			if (operator == null) {
-				return true;
-			}
-			return false;
-		}
-
-
-		private boolean isCuteAssert(IASTExpression expression,
-				OverloadableOperator operator) {
-			return operator.equals(OverloadableOperator.NOT) && expression.getParent() instanceof ICPPASTIfStatement;
-		}
-
 
 		private boolean operatorFound(IASTImplicitName[] inames) {
 			if (inames.length == 1) {
@@ -200,26 +172,6 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				return !(((IASTIdExpression) operand).getName().getBinding() instanceof IProblemBinding);
 			}
 			return false;
-		}
-
-		private IASTIdExpression getLastIDExpression(IASTNode selectedNode) {
-			calculateLastIDExpression(selectedNode);
-			return possibleresult;
-		}
-
-		//TODO: remove duplicated -> creatememberfunctionrefactoring
-		private IASTIdExpression possibleresult = null;
-
-		private void calculateLastIDExpression(IASTNode selectedNode) {
-			if (selectedNode == null) {
-				return;
-			}
-			for(IASTNode child: selectedNode.getChildren()) {
-				if (child instanceof IASTIdExpression) {
-					possibleresult = (IASTIdExpression) child;
-				}
-				calculateLastIDExpression(child);
-			}
 		}
 	}
 }

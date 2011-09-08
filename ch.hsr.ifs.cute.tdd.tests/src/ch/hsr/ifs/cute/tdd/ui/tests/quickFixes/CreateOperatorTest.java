@@ -15,7 +15,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.QuickFixTest;
 
 public class CreateOperatorTest extends QuickFixTest {
 
-	private static final String CREATE_OPERATOR_IN_TYPE_A = "Create operator++ in type A";
+	private static final String CREATE_OPERATOR_IN_TYPE_A = "Create operator ++";
 
 	//struct A {
 	//};
@@ -33,7 +33,7 @@ public class CreateOperatorTest extends QuickFixTest {
 	}
 
 	public void testMarkerMessage() {
-		assertExactlyTheSame("Cannot resolve operator++ in type A", getMarkerMessage());
+		assertExactlyTheSame("Could not find operator++ for type A", getMarkerMessage());
 	}
 
 // TODO: I'd propose to put the marker only on the operator
@@ -50,8 +50,9 @@ public class CreateOperatorTest extends QuickFixTest {
 	}
 
 	//struct A {
-	//    void operator++(int)
+	//    A operator++(int)
 	//    {
+	//        return A();
 	//    }
 	//};
 	//void testX() {

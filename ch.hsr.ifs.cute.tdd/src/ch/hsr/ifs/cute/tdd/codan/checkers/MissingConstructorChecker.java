@@ -91,9 +91,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 					return false;
 				}
 				return true;
-				
 			}
-			
 			return false;
 		}
 

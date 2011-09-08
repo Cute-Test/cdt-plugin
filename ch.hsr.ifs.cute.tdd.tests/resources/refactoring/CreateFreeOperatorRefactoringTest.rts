@@ -226,7 +226,7 @@ void test(){
 }
 //!ASSERT_EQUALS_DELTA_Operator_DetectionUnary
 //@.config
-markerCount=2
+markerCount=1
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
@@ -276,7 +276,7 @@ void test(){
 }
 //!ASSERT_EQUALS_DELTA_M_Operator_DetectionUnary
 //@.config
-markerCount=2
+markerCount=1
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
