@@ -32,7 +32,6 @@ import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
 import ch.hsr.ifs.cute.tdd.LinkedMode.Position;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
-@SuppressWarnings("restriction")
 public abstract class TddQuickFix extends AbstractCodanCMarkerResolution implements
 IMarkerResolution2 {
 

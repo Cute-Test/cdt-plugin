@@ -13,7 +13,6 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
 
-@SuppressWarnings("restriction")
 class VisibilityLabelFinder extends ASTVisitor {
 	private final NodeContainer container;
 	private final int visibility;

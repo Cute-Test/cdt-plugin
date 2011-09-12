@@ -52,7 +52,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.NotSupportedException;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
-@SuppressWarnings("restriction")
 public class ParameterHelper {
 
 	private static final String STD_STRING = "std::string"; //$NON-NLS-1$

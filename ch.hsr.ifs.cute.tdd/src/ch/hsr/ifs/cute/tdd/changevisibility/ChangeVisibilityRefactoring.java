@@ -32,7 +32,6 @@ import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-@SuppressWarnings("restriction")
 public class ChangeVisibilityRefactoring extends CRefactoring3 {
 
 	private final String nameToSearch;
@@ -51,7 +50,7 @@ public class ChangeVisibilityRefactoring extends CRefactoring3 {
 			OperationCanceledException {
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTNode selectedNode = localunit.getNodeSelector(null).findEnclosingNode(selection.getOffset(), selection.getLength());
-		ICPPASTCompositeTypeSpecifier typeSpec = TypeHelper.getTargetTypeOfField(localunit, (IASTName) selectedNode, astCache);
+		ICPPASTCompositeTypeSpecifier typeSpec = TypeHelper.getTypeOfMember(localunit, (IASTName) selectedNode, astCache);
 		MethodFindVisitor memberfinder = new MethodFindVisitor(nameToSearch);
 		typeSpec.accept(memberfinder);
 		IASTNode function = memberfinder.getFoundNode();

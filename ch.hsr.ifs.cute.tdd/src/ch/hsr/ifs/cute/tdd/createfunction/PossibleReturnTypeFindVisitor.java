@@ -41,7 +41,6 @@ import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
 import org.eclipse.cdt.internal.ui.refactoring.utils.SelectionHelper;
 import org.eclipse.jface.text.TextSelection;
 
-@SuppressWarnings("restriction")
 public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 
 	private final TextSelection selection;

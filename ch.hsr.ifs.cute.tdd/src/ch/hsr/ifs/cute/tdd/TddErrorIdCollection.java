@@ -36,6 +36,7 @@ public class TddErrorIdCollection {
 	public static final String ERR_ID_InvalidArguments_FREE_HSR = WrongArgumentChecker.ERR_ID_InvalidArguments_FREE_HSR;
 	public static final String ERR_ID_InvalidArguments_HSR = WrongArgumentChecker.ERR_ID_InvalidArguments_HSR;
 	public static final String ERR_ID_NamespaceResolutionProblem_HSR = MissingNamespaceChecker.ERR_ID_NamespaceResolutionProblem_HSR;
+	public static final String ERR_ID_NamespaceMemberResolutionProblem_HSR = FreeFunctionProblemChecker.ERR_ID_NamespaceMemberResolutionProblem_HSR;
 	
 	public static boolean isOperator(IMarker marker) {
 		return CodanProblemMarker.getProblemId(marker).equals(ERR_ID_OperatorResolutionProblem_HSR);

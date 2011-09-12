@@ -21,7 +21,6 @@ import ch.hsr.ifs.cute.tdd.createfunction.CreateMemberFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
-@SuppressWarnings("restriction")
 public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 
 	private boolean free;

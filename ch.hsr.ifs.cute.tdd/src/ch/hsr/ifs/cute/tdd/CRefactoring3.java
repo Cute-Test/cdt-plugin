@@ -34,7 +34,6 @@ import org.eclipse.ui.ide.IDE;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
-@SuppressWarnings("restriction")
 public abstract class CRefactoring3 extends CRefactoring2 {
 
 	private final TextSelection selection;

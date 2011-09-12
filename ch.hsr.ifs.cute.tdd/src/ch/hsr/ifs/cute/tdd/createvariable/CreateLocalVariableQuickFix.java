@@ -20,7 +20,6 @@ import ch.hsr.ifs.cute.tdd.TddQuickFix;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
-@SuppressWarnings("restriction")
 public class CreateLocalVariableQuickFix extends TddQuickFix {
 
 	public String getLabel() {

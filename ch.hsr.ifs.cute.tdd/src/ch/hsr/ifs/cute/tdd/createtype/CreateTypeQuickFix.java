@@ -25,7 +25,6 @@ import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
  * Interface between UI and refactoring. Controls the CreateClassRefactoring and
  * sets up linked mode editing after the changes have been performed.
  */
-@SuppressWarnings("restriction")
 public class CreateTypeQuickFix extends TddQuickFix {
 
 	public String getLabel() {

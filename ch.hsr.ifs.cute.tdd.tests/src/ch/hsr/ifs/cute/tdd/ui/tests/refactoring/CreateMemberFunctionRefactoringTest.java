@@ -18,7 +18,7 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.createfunction.CreateMemberFunctionRefactoring;
-import ch.hsr.ifs.cute.tdd.createfunction.strategies.NormalFunctionCreationStrategy;
+import ch.hsr.ifs.cute.tdd.createfunction.strategies.FunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
 import com.includator.tests.base.TestSourceFile;
@@ -28,11 +28,11 @@ public class CreateMemberFunctionRefactoringTest extends TddRefactoringTest {
 
 	public CreateMemberFunctionRefactoringTest(String name,
 			ArrayList<TestSourceFile> files) {
-		super(name, files, TddErrorIdCollection.ERR_ID_MethodResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_VariableResolutionProblem_HSR);
+		super(name, files, TddErrorIdCollection.ERR_ID_MethodResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_VariableResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_NamespaceMemberResolutionProblem_HSR);
 	}
 
 	@Override
 	protected Refactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException {
-		return new CreateMemberFunctionRefactoring(selection, new CodanArguments(marker), new RefactoringASTCache(), new NormalFunctionCreationStrategy());
+		return new CreateMemberFunctionRefactoring(selection, new CodanArguments(marker), new RefactoringASTCache(), new FunctionCreationStrategy());
 	}
 }

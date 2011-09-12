@@ -61,7 +61,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 
 
-@SuppressWarnings("restriction")
 public class TddHelper {
 
 	public static IFile getCppFile(ICProject project) throws CoreException {

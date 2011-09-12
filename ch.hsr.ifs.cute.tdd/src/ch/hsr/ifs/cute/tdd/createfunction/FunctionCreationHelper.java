@@ -38,7 +38,6 @@ import ch.hsr.ifs.cute.tdd.ParameterHelper;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-@SuppressWarnings("restriction")
 public class FunctionCreationHelper {
 
 	public static IASTName getMostCloseSelectedNodeName(IASTTranslationUnit localunit, TextSelection selection) {

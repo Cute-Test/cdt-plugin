@@ -25,7 +25,6 @@ import org.eclipse.ltk.core.refactoring.Change;
  * changes of a refactoring and calculate positions of certain code elements
  * after the change.
  */
-@SuppressWarnings("restriction")
 public class ChangeRecorder {
 
 	private static final String _ = "_"; //$NON-NLS-1$

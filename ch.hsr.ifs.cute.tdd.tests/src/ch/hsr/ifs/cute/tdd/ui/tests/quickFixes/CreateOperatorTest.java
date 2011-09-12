@@ -15,7 +15,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.QuickFixTest;
 
 public class CreateOperatorTest extends QuickFixTest {
 
-	private static final String CREATE_OPERATOR_IN_TYPE_A = "Create operator ++";
+	private static final String CREATE_OPERATOR_IN_TYPE_A = "Create member operator ++";
 
 	//struct A {
 	//};

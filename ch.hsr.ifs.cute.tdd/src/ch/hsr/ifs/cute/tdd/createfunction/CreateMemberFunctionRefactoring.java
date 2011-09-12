@@ -23,10 +23,8 @@ import org.eclipse.jface.viewers.ISelection;
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
-import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
-@SuppressWarnings("restriction")
 public class CreateMemberFunctionRefactoring extends CRefactoring3 {
 
 	public CodanArguments ca;
@@ -39,12 +37,13 @@ public class CreateMemberFunctionRefactoring extends CRefactoring3 {
 	}
 
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+		
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTName selectedNode = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
-		ICPPASTCompositeTypeSpecifier type = TypeHelper.getTargetTypeOfField(localunit, selectedNode, astCache);
-		ICPPASTFunctionDefinition newFunction = strategy.getFunctionDefinition(localunit, selectedNode, type, ca.getName(), getSelection());
+		ICPPASTCompositeTypeSpecifier type = strategy.getDefinitionScopeForName(localunit, selectedNode, astCache);
+		ICPPASTFunctionDefinition newFunction = strategy.getFunctionDefinition(localunit, selectedNode, ca.getName(), getSelection());
 
-		if (ca.isStaticCase()) {
+		if (ca.isStaticCase() || type == null) {
 			IASTNode parent = TddHelper.getNestedInsertionPoint(localunit, selectedNode.getParent(), astCache);
 			TddHelper.writeDefinitionTo(collector, parent, newFunction);
 		} else {

@@ -38,7 +38,6 @@ import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
-@SuppressWarnings("restriction")
 public class CreateTypeRefactoring extends CRefactoring3 {
 
 	private String className;

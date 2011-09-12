@@ -11,11 +11,9 @@ package com.includator.tests.testinfrastructure;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
@@ -90,14 +88,7 @@ public class RTSTest extends Suite {
 	public RTSTest(Class<?> klass) throws Throwable {
 		super(klass, Collections.<Runner> emptyList());
 		final Map<String, ArrayList<TestSourceFile>> parametersList = getParametersList(getTestClass());
-		TreeMap<String, ArrayList<TestSourceFile>> sorted = new TreeMap<String, ArrayList<TestSourceFile>>(new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				return parametersList.get(o1).get(0).getName().compareTo(parametersList.get(o2).get(0).getName());
-			}
-		});
-		sorted.putAll(parametersList);
-		for (Entry<String, ArrayList<TestSourceFile>> testCase : sorted.entrySet()) {
+		for (Entry<String, ArrayList<TestSourceFile>> testCase : parametersList.entrySet()) {
 			runners.add(new RTSTestRunner(getTestClass().getJavaClass(), testCase.getKey(), testCase.getValue()));
 		}
 	}

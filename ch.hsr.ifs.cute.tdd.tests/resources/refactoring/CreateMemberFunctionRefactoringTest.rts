@@ -465,7 +465,6 @@ int main(int argc, char **argv) {
 	A a;
 	A b = a.create(1);
 }
-
 //=
 struct A{
     A create(const int & i) const
@@ -478,4 +477,175 @@ int main(int argc, char **argv) {
 	A a;
 	A b = a.create(1);
 }
+//!Create Member Function in Type in local TU
+//@A.cpp
+struct B
+{
+};
 
+struct T {
+
+	void thisIsATest() {
+		boolean b = myB.bar();
+	}
+
+private:
+	B myB;
+};
+//=
+struct B
+{
+    boolean bar() const
+    {
+        return boolean();
+    }
+};
+
+struct T {
+
+	void thisIsATest() {
+		boolean b = myB.bar();
+	}
+
+private:
+	B myB;
+};
+//@B.h
+struct B
+{
+    void function()
+    {
+    }
+};
+//=
+struct B
+{
+    void function()
+    {
+    }
+};
+//@C.h
+struct B
+{
+    void foo()
+    {
+    }
+};
+//=
+struct B
+{
+    void foo()
+    {
+    }
+};
+//!Create Member Function in Type from Header
+//@A.cpp
+#include "A.h"
+
+struct T {
+
+	void thisIsATest() {
+		boolean b = myB.bar();
+	}
+
+private:
+	B myB;
+};
+//=
+#include "A.h"
+
+struct T {
+
+	void thisIsATest() {
+		boolean b = myB.bar();
+	}
+
+private:
+	B myB;
+};
+//@B.h
+struct B
+{
+    void function()
+    {
+    }
+};
+//=
+struct B
+{
+    void function()
+    {
+    }
+};
+//@A.h
+struct B
+{
+};
+//=
+struct B
+{
+    boolean bar() const
+    {
+        return boolean();
+    }
+};
+//@C.h
+struct B
+{
+    void foo()
+    {
+    }
+};
+//=
+struct B
+{
+    void foo()
+    {
+    }
+};
+//!Create Member Function in Typedefed Typedef Type
+//@A.cpp
+struct K{
+};
+
+typedef K tdK;
+typedef tdK anotherTdK;
+
+int main(int argc, char **argv) {
+	anotherTdK k;
+	k.bar();
+}
+//=
+struct K{
+    void bar()
+    {
+    }
+};
+
+typedef K tdK;
+typedef tdK anotherTdK;
+
+int main(int argc, char **argv) {
+	anotherTdK k;
+	k.bar();
+}
+//!Create Namespace Member Function
+//@A.cpp
+namespace X
+{
+}
+
+void test() {
+    X::foo();
+}
+//=
+namespace X
+{
+    void foo()
+    {
+    }
+}
+
+void test() {
+    X::foo();
+}

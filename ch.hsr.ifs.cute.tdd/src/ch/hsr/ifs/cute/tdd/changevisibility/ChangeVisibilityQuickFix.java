@@ -14,7 +14,6 @@ import org.eclipse.jface.text.ITextSelection;
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.TddQuickFix;
 
-@SuppressWarnings("restriction")
 public class ChangeVisibilityQuickFix extends TddQuickFix {
 
 	public String getLabel() {

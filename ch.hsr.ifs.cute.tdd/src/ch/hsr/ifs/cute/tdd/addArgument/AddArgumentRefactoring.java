@@ -40,7 +40,6 @@ import ch.hsr.ifs.cute.tdd.Activator;
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-@SuppressWarnings("restriction")
 public class AddArgumentRefactoring extends CRefactoring3 {
 
 	private static final String PLACEHOLDER = "_"; //$NON-NLS-1$

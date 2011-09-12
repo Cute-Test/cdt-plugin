@@ -10,6 +10,7 @@ package ch.hsr.ifs.cute.tdd.createfunction.strategies;
 
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
@@ -21,13 +22,14 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTOperatorName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTReferenceOperator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTUnaryExpression;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.jface.text.TextSelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
+import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 
-@SuppressWarnings("restriction")
 public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 
 	private final boolean isFree;
@@ -37,7 +39,7 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 	}
 
 	@Override
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, ICPPASTCompositeTypeSpecifier owningType, String name, TextSelection selection) {
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, TextSelection selection) {
 		ICPPASTFunctionDeclarator decl = new CPPASTFunctionDeclarator(new CPPASTOperatorName(("operator" + name).toCharArray())); //$NON-NLS-1$
 		CPPASTBinaryExpression binex = ToggleNodeHelper.getAncestorOfType(selectedName, IASTBinaryExpression.class);
 		CPPASTUnaryExpression unex = ToggleNodeHelper.getAncestorOfType(selectedName, IASTUnaryExpression.class);
@@ -68,7 +70,11 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 			decl.setConst(false);
 		}
 
-		fdef.setParent(owningType);
 		return fdef;
+	}
+	
+	@Override
+	public ICPPASTCompositeTypeSpecifier getDefinitionScopeForName(IASTTranslationUnit unit, IASTName name, RefactoringASTCache astCache) {
+		return TypeHelper.getTypeDefinitionOfVariable(unit, name, astCache);
 	}
 }

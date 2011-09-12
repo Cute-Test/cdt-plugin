@@ -31,7 +31,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.OverloadableOperator;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 
-@SuppressWarnings("restriction")
 public class MissingOperatorChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_OperatorResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"; //$NON-NLS-1$

@@ -63,8 +63,10 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 					IASTNamedTypeSpecifier namedTypespec = (IASTNamedTypeSpecifier) typespec;
 					IBinding typeBinding = namedTypespec.getName().resolveBinding();
 					if (isConstructableType(typeBinding)) {
+						
 						String typeName = ASTTypeUtil.getType((IType) typeBinding, true);
 						if (!(typeName.contains("&") || typeName.contains("*"))) {
+							typeName = stripTemplateArguments(typeName);
 							reportUnresolvableConstructorCalls(simpleDecl, typeName);
 						}
 					}
@@ -75,6 +77,10 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				}
 			}
 			return PROCESS_CONTINUE;
+		}
+
+		private String stripTemplateArguments(String typeName) {
+			return typeName.replaceAll("<.*", "");
 		}
 
 		private boolean isMemberDeclaration(IASTDeclaration declaration) {

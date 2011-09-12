@@ -26,7 +26,6 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
-@SuppressWarnings("restriction")
 public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_VariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"; //$NON-NLS-1$

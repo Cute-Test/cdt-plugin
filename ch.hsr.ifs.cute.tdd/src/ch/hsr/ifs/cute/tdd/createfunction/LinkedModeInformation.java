@@ -17,7 +17,6 @@ import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
 
 import ch.hsr.ifs.cute.tdd.LinkedMode.Position;
 
-@SuppressWarnings("restriction")
 public class LinkedModeInformation {
 
 	private boolean fileChanged;

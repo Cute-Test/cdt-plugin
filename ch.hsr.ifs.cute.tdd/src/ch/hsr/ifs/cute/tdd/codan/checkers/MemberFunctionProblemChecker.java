@@ -22,8 +22,8 @@ import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
+import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-@SuppressWarnings("restriction")
 public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_MethodResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR"; //$NON-NLS-1$
@@ -69,7 +69,8 @@ public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 		if(expressionBinding instanceof ICPPVariable){
 			ICPPVariable varBinding = (ICPPVariable) expressionBinding;
 			IType varType = varBinding.getType();
-			return varType instanceof ICPPClassType;
+			varType = TypeHelper.windDownToRealType(varType, false);
+			return varType instanceof ICPPClassType;			
 		}
 		return false;
 	}

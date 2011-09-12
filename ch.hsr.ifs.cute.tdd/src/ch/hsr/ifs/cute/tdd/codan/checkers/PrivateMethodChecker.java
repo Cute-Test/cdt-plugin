@@ -21,7 +21,6 @@ import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 
-@SuppressWarnings("restriction")
 public class PrivateMethodChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_PrivateMethodChecker_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"; //$NON-NLS-1$

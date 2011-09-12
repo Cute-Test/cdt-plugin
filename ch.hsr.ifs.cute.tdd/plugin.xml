@@ -71,6 +71,10 @@
             class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.StaticFunctionCreationQuickFix"
             problemId="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR">
       </resolution>
+       <resolution
+             class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.NormalFunctionCreationQuickFix"
+             problemId="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR">
+       </resolution>
    </extension>
    
   <extension
@@ -91,6 +95,12 @@
               id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"
               name="%problem.name.0">
         </problem>
+        <problem
+              category="ch.hsr.ifs.cute.tdd.category"
+              defaultSeverity="Error"
+              id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR"
+              name="%problem.name.1">
+        </problem>
      </checker>
      <category
            id="ch.hsr.ifs.cute.tdd.category"
@@ -98,7 +108,7 @@
      </category>
   </extension>
   
-   <extension
+  <extension
         point="org.eclipse.cdt.codan.core.checkers">
      <checker
            class="ch.hsr.ifs.cute.tdd.codan.checkers.MemberFunctionProblemChecker"

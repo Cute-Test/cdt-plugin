@@ -12,7 +12,6 @@
 package com.includator.tests.base;
 
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +31,6 @@ public class TestSourceFile {
 	private String separator = System.getProperty("line.separator"); //$NON-NLS-1$
 	private int selectionStart = -1;
 	private int selectionEnd = -1;
-	private static int sequence;
 
 	protected static final String selectionStartRegex = "/\\*\\$\\*/"; //$NON-NLS-1$
 	protected static final String selectionEndRegex = "/\\*\\$\\$\\*/"; //$NON-NLS-1$
@@ -41,14 +39,7 @@ public class TestSourceFile {
 
 	public TestSourceFile(String name) {
 		super();
-		this.name = addSequenceNumber(useSystemSeparators(name));
-	}
-
-	private String addSequenceNumber(String name) {
-		String[] parts = name.split("\\.");
-		String prefix = new DecimalFormat("00000").format(sequence++);
-		String newName = prefix + "__" + parts[0];
-		return newName + "." + parts[1];
+		this.name = useSystemSeparators(name);
 	}
 
 	private String useSystemSeparators(String name2) {

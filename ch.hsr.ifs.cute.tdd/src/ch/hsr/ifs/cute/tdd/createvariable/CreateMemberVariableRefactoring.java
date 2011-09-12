@@ -51,7 +51,6 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 
-@SuppressWarnings("restriction")
 public class CreateMemberVariableRefactoring extends CRefactoring3 {
 
 	private boolean isArray = false;

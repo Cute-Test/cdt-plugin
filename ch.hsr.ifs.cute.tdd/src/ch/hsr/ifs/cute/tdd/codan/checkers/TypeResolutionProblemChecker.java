@@ -26,7 +26,6 @@ import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
-@SuppressWarnings("restriction")
 public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_TypeResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"; //$NON-NLS-1$

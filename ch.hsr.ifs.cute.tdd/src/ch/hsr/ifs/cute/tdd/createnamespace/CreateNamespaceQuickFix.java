@@ -15,7 +15,6 @@ import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddQuickFix;
 
-@SuppressWarnings("restriction")
 public class CreateNamespaceQuickFix extends TddQuickFix {
 
 	@Override

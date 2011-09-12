@@ -18,7 +18,7 @@ import org.eclipse.jface.text.IDocument;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
-import ch.hsr.ifs.cute.tdd.createfunction.strategies.NormalFunctionCreationStrategy;
+import ch.hsr.ifs.cute.tdd.createfunction.strategies.FunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
 import com.includator.tests.base.TestSourceFile;
@@ -32,6 +32,6 @@ public class CreateFunctionParameterRefactoringTest extends TddRefactoringTest {
 	}
 
 	protected CreateFreeFunctionRefactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException {
-		return new CreateFreeFunctionRefactoring(selection, new CodanArguments(marker), new RefactoringASTCache(), new NormalFunctionCreationStrategy());
+		return new CreateFreeFunctionRefactoring(selection, new CodanArguments(marker), new RefactoringASTCache(), new FunctionCreationStrategy());
 	}
 }

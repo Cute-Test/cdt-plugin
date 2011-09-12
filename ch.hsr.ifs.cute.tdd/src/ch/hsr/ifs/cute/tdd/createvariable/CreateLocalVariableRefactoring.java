@@ -34,7 +34,6 @@ import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-@SuppressWarnings("restriction")
 public class CreateLocalVariableRefactoring extends CRefactoring3 {
 
 	private String missingName;

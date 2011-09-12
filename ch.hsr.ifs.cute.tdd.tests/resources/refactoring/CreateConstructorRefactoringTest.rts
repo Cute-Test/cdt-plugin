@@ -605,3 +605,27 @@ uint32_t id;
 typedef unsigned int uint32_t;
 
 uint32_t id;
+//!Constructor for Qualified Name
+//@.config
+markerCount=1
+//@A.cpp
+struct A {
+};
+
+struct B {
+  static A a;
+};
+
+A B::a(1);
+//=
+struct A {
+     A(const int & i)
+    {
+    }
+};
+
+struct B {
+  static A a;
+};
+
+A B::a(1);

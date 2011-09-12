@@ -10,9 +10,7 @@ package ch.hsr.ifs.cute.tdd.createfunction;
 
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
@@ -26,10 +24,8 @@ import org.eclipse.jface.viewers.ISelection;
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
-import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
-@SuppressWarnings("restriction")
 public class CreateFreeFunctionRefactoring extends CRefactoring3 {
 	
 	private CodanArguments ca;
@@ -48,14 +44,7 @@ public class CreateFreeFunctionRefactoring extends CRefactoring3 {
 
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTName selectedName = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
-		ICPPASTCompositeTypeSpecifier owningType = TypeHelper.getTargetTypeOfField(localunit, selectedName, astCache);
-		functionToWrite = strategy.getFunctionDefinition(localunit, selectedName, owningType, ca.getName(), getSelection());
-		
-		if (ca.isStaticCase()) {
-			IASTNode parent = TddHelper.getNestedInsertionPoint(localunit, selectedName.getParent(), astCache);
-			TddHelper.writeDefinitionTo(collector, parent, functionToWrite);
-			return;
-		}
+		functionToWrite = strategy.getFunctionDefinition(localunit, selectedName, ca.getName(), getSelection());
 		
 		((ICPPASTFunctionDeclarator) functionToWrite.getDeclarator()).setConst(false);
 		IASTFunctionDefinition outerFunction = TddHelper.getOuterFunctionDeclaration(localunit, getSelection());
@@ -63,6 +52,6 @@ public class CreateFreeFunctionRefactoring extends CRefactoring3 {
 		ASTRewrite rewrite = collector.rewriterForTranslationUnit(localunit);
 		rewrite.insertBefore(outerFunction.getParent(), outerFunction, functionToWrite, null);
 
-		setLinkedModeInformation(localunit, owningType, functionToWrite);
+		setLinkedModeInformation(localunit, outerFunction.getParent(), functionToWrite);
 	}
 }

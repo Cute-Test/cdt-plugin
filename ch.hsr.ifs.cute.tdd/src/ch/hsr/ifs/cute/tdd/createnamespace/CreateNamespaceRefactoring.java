@@ -30,7 +30,6 @@ import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.createtype.CreateTypeRefactoring;
 
-@SuppressWarnings("restriction")
 public class CreateNamespaceRefactoring extends CRefactoring3 {
 
 	public CreateNamespaceRefactoring(ITextSelection textSelection,

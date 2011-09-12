@@ -10,19 +10,20 @@ package ch.hsr.ifs.cute.tdd.codan.checkers;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
-@SuppressWarnings("restriction")
 public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_FunctionResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"; //$NON-NLS-1$
 	public static final String ERR_ID_FunctionResolutionProblem_STATIC_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"; //$NON-NLS-1$
-
+	public static final String ERR_ID_NamespaceMemberResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR"; //$NON-NLS-1$
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -42,20 +43,41 @@ public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 		if (problemBinding.getCandidateBindings().length == 0) {
 			if (name instanceof ICPPASTQualifiedName) {
 				CPPASTQualifiedName qname = (CPPASTQualifiedName) name;
-				for(IASTName partname: qname.getNames()) {
+				boolean isTypeMember = false;
+				for (IASTName partname : qname.getNames()) {
 					if (partname == qname.getLastName()) {
 						String missingName = new String(name.getSimpleID());
-						CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_2 + missingName, ":staticfreefunc"); //$NON-NLS-1$
-						reportProblem(ERR_ID_FunctionResolutionProblem_STATIC_HSR, partname, ca.toArray());
+						if (isTypeMember) {
+							reportMissingStaticMember(partname, missingName);
+						} else {
+							reportMissingNamespaceFunction(partname, missingName);
+						}
 					}
-					if (partname.resolveBinding() instanceof IProblemBinding) {
+					final IBinding partBinding = partname.resolveBinding();
+					isTypeMember = partBinding instanceof ICPPClassType;
+					if (partBinding instanceof IProblemBinding) {
 						return;
 					}
 				}
 			}
 			String missingName = new String(name.getSimpleID());
-			CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_4 + missingName, ":freefunc"); //$NON-NLS-1$
-			reportProblem(ERR_ID_FunctionResolutionProblem_HSR, name.getLastName(), ca.toArray());
+			reportMissingFunction(name, missingName);
 		}
+	}
+
+
+	private void reportMissingNamespaceFunction(IASTName name, String missingName) {				
+		CodanArguments ca = new CodanArguments(missingName, Messages.MemberFunctionProblemChecker_1 + missingName + Messages.MemberFunctionProblemChecker_2, ":memberfunc"); //$NON-NLS-1$
+		reportProblem(ERR_ID_NamespaceMemberResolutionProblem_HSR, name.getLastName(), ca.toArray());
+	}
+	
+	private void reportMissingFunction(IASTName name, String missingName) {
+		CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_4 + missingName, ":freefunc"); //$NON-NLS-1$
+		reportProblem(ERR_ID_FunctionResolutionProblem_HSR, name.getLastName(), ca.toArray());
+	}
+
+	private void reportMissingStaticMember(IASTName partname, String missingName) {
+		CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_2 + missingName, ":staticfreefunc"); //$NON-NLS-1$
+		reportProblem(ERR_ID_FunctionResolutionProblem_STATIC_HSR, partname, ca.toArray());
 	}
 }

@@ -19,20 +19,20 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.jface.text.TextSelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
+import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-@SuppressWarnings("restriction")
 public class ConstructorCreationStrategy implements IFunctionCreationStrategy {
 
 	@Override
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, ICPPASTCompositeTypeSpecifier owningType, String name,
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name,
 			TextSelection selection) {
 
-		IASTName newFuncDeclName = owningType.getName().copy();
-		CPPASTFunctionDeclarator funcdecl = new CPPASTFunctionDeclarator(newFuncDeclName);
+		CPPASTFunctionDeclarator funcdecl = new CPPASTFunctionDeclarator(new CPPASTName(name.toCharArray()));
 
 		CPPASTDeclarator declarator = ToggleNodeHelper.getAncestorOfType(selectedName, CPPASTDeclarator.class);
 		ParameterHelper.addTo(declarator, funcdecl);
@@ -40,8 +40,12 @@ public class ConstructorCreationStrategy implements IFunctionCreationStrategy {
 		CPPASTNamedTypeSpecifier declspec = new CPPASTNamedTypeSpecifier();
 		declspec.setName(new CPPASTName());
 		CPPASTFunctionDefinition fd = new CPPASTFunctionDefinition(declspec, funcdecl, new CPPASTCompoundStatement());
-		fd.setParent(owningType);
 		return fd;
 
+	}
+
+	@Override
+	public ICPPASTCompositeTypeSpecifier getDefinitionScopeForName(IASTTranslationUnit unit, IASTName name, RefactoringASTCache astCache) {
+		return TypeHelper.getTypeDefinitionOfVariable(unit, name, astCache);
 	}
 }

@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.tdd.LinkedMode;
 
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.PositionInformation;
 
-@SuppressWarnings("restriction")
 public class Position extends PositionInformation {
 
 	private final int offset;

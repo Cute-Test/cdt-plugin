@@ -31,7 +31,6 @@ import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator;
 import ch.hsr.ifs.cute.tdd.addArgument.AddArgumentRefactoring;
 
-@SuppressWarnings("restriction")
 public class WrongArgumentChecker extends AbstractTDDChecker {
 
 	private static final String COMMA_SPACE = ", "; //$NON-NLS-1$

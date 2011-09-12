@@ -14,7 +14,7 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
-import ch.hsr.ifs.cute.tdd.createfunction.strategies.NormalFunctionCreationStrategy;
+import ch.hsr.ifs.cute.tdd.createfunction.strategies.FunctionCreationStrategy;
 
 public class NormalFreeFunctionCreationQuickFix extends AbstractFunctionCreationQuickFix {
 
@@ -24,7 +24,7 @@ public class NormalFreeFunctionCreationQuickFix extends AbstractFunctionCreation
 
 	@Override
 	protected IFunctionCreationStrategy getStrategy() {
-		return new NormalFunctionCreationStrategy();
+		return new FunctionCreationStrategy();
 	}
 
 	@Override

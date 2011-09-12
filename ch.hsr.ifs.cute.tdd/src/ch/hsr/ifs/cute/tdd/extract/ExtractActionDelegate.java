@@ -29,7 +29,6 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
-@SuppressWarnings("restriction")
 public class ExtractActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
 
 	private IWorkbenchWindow window;
