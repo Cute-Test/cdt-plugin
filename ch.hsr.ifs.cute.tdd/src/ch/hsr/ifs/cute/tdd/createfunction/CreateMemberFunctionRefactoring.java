@@ -13,6 +13,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
@@ -44,8 +45,15 @@ public class CreateMemberFunctionRefactoring extends CRefactoring3 {
 		ICPPASTFunctionDefinition newFunction = strategy.getFunctionDefinition(localunit, selectedNode, ca.getName(), getSelection());
 
 		if (ca.isStaticCase() || type == null) {
-			IASTNode parent = TddHelper.getNestedInsertionPoint(localunit, selectedNode.getParent(), astCache);
-			TddHelper.writeDefinitionTo(collector, parent, newFunction);
+			
+			final IASTNode parent = selectedNode.getParent();
+			IASTNode insertionPoint;
+			if(parent instanceof ICPPASTQualifiedName){
+				insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, astCache);
+			} else {
+				insertionPoint = localunit;
+			}
+			TddHelper.writeDefinitionTo(collector, insertionPoint, newFunction);			
 		} else {
 			TddHelper.writeDefinitionTo(collector, type, newFunction);
 		}

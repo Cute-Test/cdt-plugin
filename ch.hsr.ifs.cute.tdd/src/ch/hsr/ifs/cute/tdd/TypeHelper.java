@@ -251,7 +251,7 @@ public class TypeHelper {
 				return cType.getCompositeTypeSpecifier();
 			}
 			if (expressionType instanceof IPDOMCPPClassType) {
-				return findTypeDefinitionInIndex(unit, astCache, expressionType);
+				return findTypeDefinitionInIndex(unit, astCache, (IPDOMCPPClassType) expressionType);
 			}
 		} else {
 			IASTSimpleDeclaration declaration = ToggleNodeHelper.getAncestorOfType(selectedNode, IASTSimpleDeclaration.class);
@@ -274,23 +274,13 @@ public class TypeHelper {
 		if (b instanceof CPPVariable) {
 			CPPVariable var = (CPPVariable) b;
 			IType type = var.getType();
-			type = TypeHelper.windDownToRealType(type, false);
-			if(type instanceof ICPPClassSpecialization){
-				type = ((ICPPClassSpecialization) type).getSpecializedBinding();
-			}
-			if(type instanceof CPPClassTemplate){
-				return ((CPPClassTemplate) type).getCompositeTypeSpecifier();
-			}
-			if (type instanceof CPPClassType) {
-				return ((CPPClassType) type).getCompositeTypeSpecifier();
-			}
+			return getDefinitionOfType(unit, astCache, type);
 		}
 		return null;
 	}
 	
 	
-	private static ICPPASTCompositeTypeSpecifier findTypeDefinitionInIndex(IASTTranslationUnit unit, RefactoringASTCache astCache, IBinding expressionType) {
-		IPDOMCPPClassType cType = (IPDOMCPPClassType) expressionType;
+	private static ICPPASTCompositeTypeSpecifier findTypeDefinitionInIndex(IASTTranslationUnit unit, RefactoringASTCache astCache, IPDOMCPPClassType cType) {
 		
 		try {		
 			Set<IIndexFile> includedFiles = getIncludedFiles(unit, cType);
@@ -479,19 +469,24 @@ public class TypeHelper {
 		if (b instanceof ICPPMember) {
 			ICPPMember var = (ICPPMember) b;
 			IType type = var.getClassOwner();
-			type = TypeHelper.windDownToRealType(type, false);
-			if(type instanceof ICPPClassSpecialization){
-				type = ((ICPPClassSpecialization) type).getSpecializedBinding();
-			}
-			if(type instanceof CPPClassTemplate){
-				return ((CPPClassTemplate) type).getCompositeTypeSpecifier();
-			}
-			if (type instanceof CPPClassType) {
-				return ((CPPClassType) type).getCompositeTypeSpecifier();
-			}
-			if (type instanceof IPDOMCPPClassType) {
-				return findTypeDefinitionInIndex(unit, astCache, b.getOwner());
-			}
+			return getDefinitionOfType(unit, astCache, type);
+		}
+		return null;
+	}
+
+	private static ICPPASTCompositeTypeSpecifier getDefinitionOfType(IASTTranslationUnit unit, RefactoringASTCache astCache, IType type) {
+		type = TypeHelper.windDownToRealType(type, false);
+		if(type instanceof ICPPClassSpecialization){
+			type = ((ICPPClassSpecialization) type).getSpecializedBinding();
+		}
+		if(type instanceof CPPClassTemplate){
+			return ((CPPClassTemplate) type).getCompositeTypeSpecifier();
+		}
+		if (type instanceof CPPClassType) {
+			return ((CPPClassType) type).getCompositeTypeSpecifier();
+		}
+		if (type instanceof IPDOMCPPClassType) {
+			return findTypeDefinitionInIndex(unit, astCache, (IPDOMCPPClassType) type);
 		}
 		return null;
 	}

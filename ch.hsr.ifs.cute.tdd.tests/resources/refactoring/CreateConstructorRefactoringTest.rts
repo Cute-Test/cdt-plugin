@@ -629,3 +629,27 @@ struct B {
 };
 
 A B::a(1);
+//!Simple int Parameter in Header File
+//@A.cpp
+#include "A.h"
+
+void test()
+{
+    A a(1);
+}
+//=
+#include "A.h"
+
+void test()
+{
+    A a(1);
+}
+//@A.h
+struct A {
+};
+//=
+struct A {
+     A(const int & i)
+    {
+    }
+};

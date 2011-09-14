@@ -649,3 +649,27 @@ namespace X
 void test() {
     X::foo();
 }
+//!Create Namespace Member Function in Header
+//@A.cpp
+#include "A.h"
+
+void test() {
+    X::foo();
+}
+//=
+#include "A.h"
+
+void test() {
+    X::foo();
+}
+//@A.h
+namespace X
+{
+}
+//=
+namespace X
+{
+    void foo()
+    {
+    }
+}

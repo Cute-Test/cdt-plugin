@@ -28,27 +28,21 @@ import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTBaseDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTConstructorInitializer;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTReturnStatement;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTVisibilityLabel;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
-import org.eclipse.cdt.ui.CUIPlugin;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -56,28 +50,10 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.editors.text.TextEditor;
 
 
 public class TddHelper {
-
-	public static IFile getCppFile(ICProject project) throws CoreException {
-		if (project != null) {
-			for (IResource r : project.getProject().members()) {
-				//FIXME: only cpp files work here, this could be a bug
-				if (r instanceof IFile && r.getName().endsWith("cpp")) { //$NON-NLS-1$
-					return (IFile) r;
-				}
-			}
-			return null;
-		}
-		IWorkbenchWindow window = CUIPlugin.getActiveWorkbenchWindow();
-		TextEditor editor = (TextEditor) window.getActivePage().getActiveEditor();
-		IWorkingCopy wc = CUIPlugin.getDefault().getWorkingCopyManager().getWorkingCopy(editor.getEditorInput());
-		return (IFile) wc.getResource();
-	}
 
 	public static IASTFunctionDefinition getOuterFunctionDeclaration(IASTTranslationUnit localunit, TextSelection selection) {
 		IASTNode declaratorName = localunit.getNodeSelector(null).findEnclosingName(selection.getOffset(), selection.getLength());
@@ -154,7 +130,7 @@ public class TddHelper {
 	}
 
 	private static void insertNamespaceMember(IASTNode partToInsert,
-			CPPASTNamespaceDefinition owningType, ASTRewrite rewrite) {
+			IASTNode owningType, ASTRewrite rewrite) {
 		rewrite.insertBefore(owningType, null, partToInsert, null);
 	}
 
@@ -282,8 +258,11 @@ public class TddHelper {
 			ASTRewrite rewrite = collector.rewriterForTranslationUnit(owningType.getTranslationUnit());
 			if (owningType instanceof ICPPASTCompositeTypeSpecifier) {
 				insertMember(partToInsert, (ICPPASTCompositeTypeSpecifier) owningType, rewrite);
-			} else {
-				insertNamespaceMember(partToInsert, (CPPASTNamespaceDefinition) owningType, rewrite);
+			} else if( owningType instanceof ICPPASTNamespaceDefinition){
+				insertNamespaceMember(partToInsert, (ICPPASTNamespaceDefinition) owningType, rewrite);
+			}
+			else {
+				rewrite.insertBefore(owningType, null, partToInsert, null);
 			}
 		}
 	}
@@ -297,8 +276,8 @@ public class TddHelper {
 
 	public static IASTNode getNestedInsertionPoint(
 			IASTTranslationUnit localunit,
-			IASTNode parent, RefactoringASTCache astCache) {
-		CPPASTQualifiedName qname = (CPPASTQualifiedName) parent;
+			ICPPASTQualifiedName parent, RefactoringASTCache astCache) {
+		ICPPASTQualifiedName qname = (ICPPASTQualifiedName) parent;
 		IASTName lastexisiting = null;
 		for(IASTName n: qname.getNames()) {
 			IBinding b = n.resolveBinding();

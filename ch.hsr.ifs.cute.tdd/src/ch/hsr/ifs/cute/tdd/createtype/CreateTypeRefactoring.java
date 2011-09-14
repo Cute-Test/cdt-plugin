@@ -99,7 +99,7 @@ public class CreateTypeRefactoring extends CRefactoring3 {
 		IASTNode insertionPoint = null;
 		IASTNode parent = namenearselection.getParent();
 		if (parent instanceof ICPPASTQualifiedName) {
-			insertionPoint = TddHelper.getNestedInsertionPoint(localunit, parent, astCache);
+			insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, astCache);
 		} 
 		if (insertionPoint == null) {
 			insertionPoint = getFunctionDefinition(namenearselection);
