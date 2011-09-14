@@ -15,14 +15,17 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
+import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchManager;
@@ -58,7 +61,8 @@ public abstract class LineCoverageParser {
 		if(workingDirectory != null){
 			workingDir = workingDirectory.toFile();
 		}
-		String[] envp = null;
+		
+		String[] envp = getEnvironmentVariables(project);
 	
 		Process p = null;
 		
@@ -103,6 +107,17 @@ public abstract class LineCoverageParser {
 		IConfiguration config = info.getManagedProject().getConfigurations()[0];
 		return config.getParent().getId().contains("cygwin"); //$NON-NLS-1$
 	}
+	
+	private String[] getEnvironmentVariables(IProject project){
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+		final IEnvironmentVariableProvider environmentVariableProvider = ManagedBuildManager.getEnvironmentVariableProvider();
+		IEnvironmentVariable[] variables = environmentVariableProvider.getVariables(info.getDefaultConfiguration(), true);
+		String[] variableStrings = new String[variables.length];
+		for(int i = 0; i < variableStrings.length; ++i) {
+			variableStrings[i] = variables[i].toString();
+		}
+		return variableStrings;
+	}
 
 	private String[] getCygwinGcovCommand(IFile file) {
 		@SuppressWarnings("nls")
@@ -110,10 +125,11 @@ public abstract class LineCoverageParser {
 		return cmdLine;
 	}
 
-	public void parse(IFile cppFile) throws CoreException, IOException {
+	public void parse(IFile cppFile, IProgressMonitor monitor) throws CoreException, IOException {
 		IFile gcovFile = null;
 		deleteMarkers(cppFile);
 		IProject project = cppFile.getProject();
+		project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 		String gcnoFileName = cppFile.getName().replace(cppFile.getFileExtension(),"gcno"); //$NON-NLS-1$
 		IFile gcnoFile= null;
 		try {

@@ -110,7 +110,7 @@ public class LaunchObserver implements ILaunchObserver {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					parser.parse(file);
+					parser.parse(file, monitor);
 				} catch (CoreException e) {
 					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
 				} catch (IOException e) {
