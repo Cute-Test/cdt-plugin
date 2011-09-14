@@ -42,6 +42,7 @@ import org.eclipse.text.edits.TextEdit;
 
 /**
  * @author Emanuel Graf IFS
+ * @author Thomas Corbat IFS
  * @since 4.0
  *
  */

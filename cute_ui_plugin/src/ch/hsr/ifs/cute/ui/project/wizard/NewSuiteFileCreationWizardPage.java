@@ -80,7 +80,6 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	private IStatus fSourceFolderStatus;
 	private IStatus fNewFileStatus;
 	private int fLastFocusedField;
-	private boolean fPageVisible;
 	private ICProject cProject;
 	private RunnerFinder runnerFinder;
 	private ComboDialogField runnerComboField;
@@ -268,17 +267,18 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			return status;
 		}
 		
-		// check if file already exists
-		IResource file = getWorkspaceRoot().findMember(filePath);
-		if (file != null && file.exists()) {
-	    	if (file.getType() == IResource.FILE) {
-	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FileAlreadyExist")); //$NON-NLS-1$
-	    	} else if (file.getType() == IResource.FOLDER) {
-	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FolderAlreadyExists")); //$NON-NLS-1$
-	    	} else {
-	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.ResourceAlreadyExists")); //$NON-NLS-1$
-	    	}
-			return status;
+		// check if header file already exists
+		IPath headerPath = new Path(filePath.toPortableString().concat(".h"));
+		StatusInfo headerStatus = checkIfFileExists(headerPath);
+		if(headerStatus != null){
+			return headerStatus;
+		}
+
+		// check if source file already exists
+		IPath sourcePath = new Path(filePath.toPortableString().concat(".cpp"));
+		StatusInfo sourceStatus = checkIfFileExists(sourcePath);
+		if(sourceStatus != null){
+			return sourceStatus;
 		}
 		
 		// check if folder exists
@@ -299,6 +299,22 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			return status;
 		}
 		return status;
+	}
+
+	private StatusInfo checkIfFileExists(IPath filePath) {
+		StatusInfo status = new StatusInfo();
+		IResource file = getWorkspaceRoot().findMember(filePath);
+		if (file != null && file.exists()) {
+	    	if (file.getType() == IResource.FILE) {
+	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FileAlreadyExist").concat(": ").concat(file.getName())); //$NON-NLS-1$
+	    	} else if (file.getType() == IResource.FOLDER) {
+	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FolderAlreadyExists").concat(": ").concat(file.getName())); //$NON-NLS-1$
+	    	} else {
+	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.ResourceAlreadyExists").concat(": ").concat(file.getName())); //$NON-NLS-1$
+	    	}
+			return status;
+		}
+		return null;
 	}
 
 	private IPath getFileFullPath() {
@@ -372,6 +388,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			(fSourceFolderStatus != lastStatus) ? fSourceFolderStatus : STATUS_OK,
 			(fNewFileStatus != lastStatus) ? fNewFileStatus : STATUS_OK,
 		};
+
 		
 		// the mode severe status will be displayed and the ok button enabled/disabled.
 		updateStatus(status);
@@ -383,9 +400,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	
 	private void updateStatus(IStatus status) {
 		setPageComplete(!status.matches(IStatus.ERROR));
-		if (fPageVisible) {
-			StatusUtil.applyToStatusLine(this, status);
-		}
+		StatusUtil.applyToStatusLine(this, status);
 	}
 	
 	private IStatus getLastFocusedStatus() {

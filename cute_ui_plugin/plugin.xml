@@ -151,16 +151,6 @@
          <enablement>
             	<instanceof value="org.eclipse.cdt.core.model.ICElement" />
             </enablement>
-		 <!--<enablement>
-			<or>
-				<instanceof value="org.eclipse.cdt.core.model.ICElement" />	
-	            <adapt type="org.eclipse.core.resources.IProject">
-	               <test
-	                     property="org.eclipse.core.resources.projectNature"
-	                     value="org.eclipse.cdt.core.cnature"/>
-	            </adapt>
-			</or>
-         </enablement> -->
 	   </commonWizard>
  </extension>
  
