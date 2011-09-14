@@ -155,7 +155,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	            		headers.copySuiteFiles(folder, monitor, suitename, false);
 	            	}
 	            	if(linkToRunnerCheck.isSelected()) {
-	            		addSuiteToRunner(suitename, runnerComboField.getSelectionIndex());
+	            		addSuiteToRunner(suitename, runnerComboField.getSelectionIndex(), monitor);
 	            	}
 	            }
 	        } finally {
@@ -164,14 +164,11 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
         }
 	}
 	
-	private void addSuiteToRunner(String suitename, int selectionIndex) throws CoreException {
+	private void addSuiteToRunner(String suitename, int selectionIndex, IProgressMonitor monitor) throws CoreException {
 		IASTFunctionDefinition testRunner = runners.get(selectionIndex);
 		LinkSuiteToRunnerProcessor processor = new LinkSuiteToRunnerProcessor(testRunner, suitename);
 		Change change = processor.getLinkSuiteToRunnerChange();
-		change.perform(new NullProgressMonitor());
-		
-		
-		
+		change.perform(monitor);
 	}
 
 	private void createFileControls(Composite parent, int nColumns) {

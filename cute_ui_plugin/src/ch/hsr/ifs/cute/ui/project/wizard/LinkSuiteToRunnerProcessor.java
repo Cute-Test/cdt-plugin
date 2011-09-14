@@ -29,6 +29,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.cdt.internal.core.dom.rewrite.util.FileHelper;
 import org.eclipse.cdt.internal.core.resources.ResourceLookup;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
@@ -75,8 +76,9 @@ public class LinkSuiteToRunnerProcessor {
 		IPath implPath = new Path(tu.getContainingFilename());
 		IFile file= ResourceLookup.selectFileForLocation(implPath, null);
 		TextFileChange change = new TextFileChange("include", file); //$NON-NLS-1$
-		int offset = getMaxIncludeOffset(tu) + 1;
-		String text = "#include \"" + suiteName + ".h\"\n";  //$NON-NLS-1$//$NON-NLS-2$
+		String lineDelim = FileHelper.determineLineDelimiter(file);
+		int offset = getMaxIncludeOffset(tu);
+		String text = lineDelim + "#include \"" + suiteName + ".h\"";  //$NON-NLS-1$//$NON-NLS-2$
 		TextEdit edit = new InsertEdit(offset, text);
 		change.setEdit(edit);
 		return change;

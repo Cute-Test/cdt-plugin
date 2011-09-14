@@ -9,7 +9,7 @@
           category="org.eclipse.cdt.ui.newCCWizards"
           finalPerspective="org.eclipse.cdt.ui.CPerspective"
           icon="icons/ovr16/cute_ovr.gif"
-          id="cute_plugin.wizard1"
+          id="cute_plugin.createSuiteWizard"
           name="%wizard.name.Suite">
     <class class="ch.hsr.ifs.cute.ui.project.wizard.NewSuiteFileCreationWizard">
             <parameter name="cfile" value="true"/>
@@ -147,8 +147,11 @@
             associatedExtensionId="org.eclipse.cdt.ui.navigator.content"
             menuGroupId="org.eclipse.cdt.ui"
             type="new"
-            wizardId="cute_plugin.wizard1">
-		 <enablement>
+            wizardId="cute_plugin.createSuiteWizard">
+         <enablement>
+            	<instanceof value="org.eclipse.cdt.core.model.ICElement" />
+            </enablement>
+		 <!--<enablement>
 			<or>
 				<instanceof value="org.eclipse.cdt.core.model.ICElement" />	
 	            <adapt type="org.eclipse.core.resources.IProject">
@@ -157,7 +160,7 @@
 	                     value="org.eclipse.cdt.core.cnature"/>
 	            </adapt>
 			</or>
-         </enablement>
+         </enablement> -->
 	   </commonWizard>
  </extension>
  
