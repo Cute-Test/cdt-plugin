@@ -268,3 +268,39 @@ void foo(int i) {
 void test() {
     foo(3);
 }
+//!Add Integer Argument for Function from Header
+//@A.cpp
+#include "A.h"
+
+void testFunc() {
+	func();
+}
+//=
+#include "A.h"
+
+void testFunc() {
+	func(_);
+}
+//@A.h
+void func(int i) { }
+//=
+void func(int i) { }
+//!Remove Argument for Function from Header
+//@A.cpp
+#include "A.h"
+
+void test() {
+    foo(3);
+}
+//=
+#include "A.h"
+
+void test() {
+    foo();
+}
+//@A.h
+void foo() {
+}
+//=
+void foo() {
+}

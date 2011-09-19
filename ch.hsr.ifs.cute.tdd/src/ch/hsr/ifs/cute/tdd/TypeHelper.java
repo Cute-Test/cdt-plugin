@@ -44,6 +44,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassSpecialization;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMember;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespaceScope;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
@@ -235,7 +236,6 @@ public class TypeHelper {
 		return litexpr.getKind() == ICPPASTLiteralExpression.lk_this;
 	}
 
-	
 	public static ICPPASTCompositeTypeSpecifier getTypeDefinitionOfMember(IASTTranslationUnit unit, IASTName selectedNode, RefactoringASTCache astCache) {
 		ICPPASTQualifiedName qName = getQualifiedNamePart(selectedNode);
 		if (qName != null) {
@@ -255,16 +255,16 @@ public class TypeHelper {
 			}
 		} else {
 			IASTSimpleDeclaration declaration = ToggleNodeHelper.getAncestorOfType(selectedNode, IASTSimpleDeclaration.class);
-			if (declaration != null) {			
+			if (declaration != null) {
 				final IASTDeclSpecifier type = declaration.getDeclSpecifier();
 				if (type instanceof ICPPASTCompositeTypeSpecifier) {
 					return (ICPPASTCompositeTypeSpecifier) type;
-				}	
+				}
 			}
 		}
 		return null;
 	}
-	
+
 	public static ICPPASTCompositeTypeSpecifier getTypeDefinitionOfVariable(IASTTranslationUnit unit, IASTName selectedNode, RefactoringASTCache astCache) {
 		ICPPASTQualifiedName qName = getQualifiedNamePart(selectedNode);
 		if (qName != null) {
@@ -278,50 +278,51 @@ public class TypeHelper {
 		}
 		return null;
 	}
-	
-	
-	private static ICPPASTCompositeTypeSpecifier findTypeDefinitionInIndex(IASTTranslationUnit unit, RefactoringASTCache astCache, IPDOMCPPClassType cType) {
-		
-		try {		
+
+	private static ICPPASTCompositeTypeSpecifier findTypeDefinitionInIndex(IASTTranslationUnit unit, RefactoringASTCache astCache, ICPPClassType cType) {
+
+		try {
 			Set<IIndexFile> includedFiles = getIncludedFiles(unit, cType);
-			
+
 			IIndexName[] definitions = unit.getIndex().findDefinitions(cType);
-			for(IIndexName def : definitions){
+			for (IIndexName def : definitions) {
 				final IIndexFile file = def.getFile();
-				if(includedFiles.contains(file)){
-					
+				if (includedFiles.contains(file)) {
+
 					IPath defPath = new Path(def.getFileLocation().getFileName());
 					ITranslationUnit tu = (ITranslationUnit) CCorePlugin.getDefault().getCoreModel().create(defPath);
 					if (tu != null) {
 						IASTTranslationUnit tuContainingDefinition = astCache.getAST(tu, new NullProgressMonitor());
-						IASTName[] typeDefinitions = tuContainingDefinition.getDefinitionsInAST(cType);
-						IBinding typeBinding = typeDefinitions[0].getBinding();
-						if(typeBinding instanceof CPPClassType){
-							return ((CPPClassType) typeBinding).getCompositeTypeSpecifier();
+						final IIndexBinding adaptedTypeBinding = tuContainingDefinition.getIndex().adaptBinding(cType);
+						IASTName[] typeDefinitions = tuContainingDefinition.getDefinitionsInAST(adaptedTypeBinding);
+						if (typeDefinitions.length > 0) {
+							IBinding typeBinding = typeDefinitions[0].getBinding();
+							if (typeBinding instanceof CPPClassType) {
+								return ((CPPClassType) typeBinding).getCompositeTypeSpecifier();
+							}
 						}
 					}
 				}
 			}
-			} catch (CoreException e) {
+		} catch (CoreException e) {
 		}
 		return null;
 	}
 
-	private static Set<IIndexFile> getIncludedFiles(IASTTranslationUnit unit, IPDOMCPPClassType cType) throws CoreException {
+	private static Set<IIndexFile> getIncludedFiles(IASTTranslationUnit unit, ICPPClassType cType) throws CoreException {
 		IIndexFileLocation ifl = IndexLocationFactory.getIFLExpensive(unit.getFilePath());
 		final int cppLinkageID = cType.getLinkage().getLinkageID();
 		IIndexFile astFile = unit.getIndex().getFile(cppLinkageID, ifl);
-		
+
 		Set<IIndexFile> includedFiles = new HashSet<IIndexFile>();
 
 		IIndexInclude[] includes = unit.getIndex().findIncludes(astFile);
-		for(IIndexInclude include : includes){
+		for (IIndexInclude include : includes) {
 			IIndexFile fileIncludedByInclude = unit.getIndex().getFile(cppLinkageID, include.getIncludesLocation());
 			includedFiles.add(fileIncludedByInclude);
 		}
 		return includedFiles;
 	}
-
 
 	private static ICPPASTCompositeTypeSpecifier handleQualifiedName(ICPPASTQualifiedName qName) {
 		IASTName[] nameParts = qName.getNames();
@@ -450,7 +451,7 @@ public class TypeHelper {
 
 	public static IASTNode getMemberOwner(IASTTranslationUnit localunit, IASTName selectedNode, RefactoringASTCache astCache) {
 		IBinding binding = selectedNode.resolveBinding();
-		
+
 		if (binding != null) {
 			IBinding owner = binding.getOwner();
 
@@ -476,20 +477,19 @@ public class TypeHelper {
 
 	private static ICPPASTCompositeTypeSpecifier getDefinitionOfType(IASTTranslationUnit unit, RefactoringASTCache astCache, IType type) {
 		type = TypeHelper.windDownToRealType(type, false);
-		if(type instanceof ICPPClassSpecialization){
+		if (type instanceof ICPPClassSpecialization) {
 			type = ((ICPPClassSpecialization) type).getSpecializedBinding();
 		}
-		if(type instanceof CPPClassTemplate){
+		if (type instanceof CPPClassTemplate) {
 			return ((CPPClassTemplate) type).getCompositeTypeSpecifier();
 		}
 		if (type instanceof CPPClassType) {
 			return ((CPPClassType) type).getCompositeTypeSpecifier();
 		}
-		if (type instanceof IPDOMCPPClassType) {
-			return findTypeDefinitionInIndex(unit, astCache, (IPDOMCPPClassType) type);
+		if (type instanceof ICPPClassType) {
+			return findTypeDefinitionInIndex(unit, astCache, (ICPPClassType) type);
 		}
 		return null;
 	}
-
 
 }

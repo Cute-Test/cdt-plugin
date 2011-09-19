@@ -411,3 +411,65 @@ namespace ns
 void thisIsATest() {
 	ns::mem = 1;
 }
+//!Create Member Variable in Type from Header
+//@A.cpp
+#include "A.h"
+
+struct T {
+
+	void thisIsATest() {
+		bool b = myB.bar;
+	}
+
+private:
+	B myB;
+};
+//=
+#include "A.h"
+
+struct T {
+
+	void thisIsATest() {
+		bool b = myB.bar;
+	}
+
+private:
+	B myB;
+};
+//@B.h
+struct B
+{
+    void function()
+    {
+    }
+};
+//=
+struct B
+{
+    void function()
+    {
+    }
+};
+//@A.h
+struct B
+{
+};
+//=
+struct B
+{
+    bool bar;
+};
+//@C.h
+struct B
+{
+    void foo()
+    {
+    }
+};
+//=
+struct B
+{
+    void foo()
+    {
+    }
+};

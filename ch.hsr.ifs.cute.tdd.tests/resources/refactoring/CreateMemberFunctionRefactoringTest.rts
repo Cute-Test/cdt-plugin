@@ -486,7 +486,7 @@ struct B
 struct T {
 
 	void thisIsATest() {
-		boolean b = myB.bar();
+		bool b = myB.bar();
 	}
 
 private:
@@ -495,16 +495,16 @@ private:
 //=
 struct B
 {
-    boolean bar() const
+    bool bar() const
     {
-        return boolean();
+        return bool();
     }
 };
 
 struct T {
 
 	void thisIsATest() {
-		boolean b = myB.bar();
+		bool b = myB.bar();
 	}
 
 private:
@@ -545,7 +545,7 @@ struct B
 struct T {
 
 	void thisIsATest() {
-		boolean b = myB.bar();
+		bool b = myB.bar();
 	}
 
 private:
@@ -557,7 +557,7 @@ private:
 struct T {
 
 	void thisIsATest() {
-		boolean b = myB.bar();
+		bool b = myB.bar();
 	}
 
 private:
@@ -584,9 +584,9 @@ struct B
 //=
 struct B
 {
-    boolean bar() const
+    bool bar() const
     {
-        return boolean();
+        return bool();
     }
 };
 //@C.h

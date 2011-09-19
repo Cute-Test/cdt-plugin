@@ -301,3 +301,32 @@ public:
 		this->blah++;
 	}
 };
+//!Change Visibility in External Header File
+//@A.cpp
+#include "A.h"
+
+void func() {
+    A a;
+    a.foo();
+}
+//=
+#include "A.h"
+
+void func() {
+    A a;
+    a.foo();
+}
+//@A.h
+class A {
+	void foo(){}
+public:
+	A(){}
+};
+//=
+class A {
+public:
+    void foo()
+    {
+    }
+	A(){}
+};
