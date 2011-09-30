@@ -28,7 +28,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleTypeTemplatePara
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateDeclaration;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -134,10 +133,10 @@ public class CreateTypeRefactoring extends CRefactoring3 {
 	}
 
 	public static IASTNode getFunctionDefinition(IASTName declaratorName) {
-		IASTNode func = ToggleNodeHelper.getAncestorOfType(declaratorName, ICPPASTFunctionDefinition.class);
+		IASTNode func = TddHelper.getAncestorOfType(declaratorName, ICPPASTFunctionDefinition.class);
 		if (func == null) {
-			func = ToggleNodeHelper.getAncestorOfType(declaratorName, ICPPASTCompositeTypeSpecifier.class);
-			return ToggleNodeHelper.getAncestorOfType(func, IASTSimpleDeclaration.class);
+			func = TddHelper.getAncestorOfType(declaratorName, ICPPASTCompositeTypeSpecifier.class);
+			return TddHelper.getAncestorOfType(func, IASTSimpleDeclaration.class);
 		}
 		IASTNode template = TddHelper.getLastOfSameAncestor(func.getParent(), ICPPASTTemplateDeclaration.class);
 		if (template != null) {

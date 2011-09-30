@@ -1,0 +1,1971 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CUTE - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<link rel='shortcut icon' href='http://cute-test.com/favicon.ico?1293099743' />
+<link href="../../../../../themes/cute/stylesheets/applicationade1.css?1295341309" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/prototype.js?1251746896" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/effects.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/dragdrop.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/controls.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1293099743" type="text/javascript"></script>
+<link href="../../../../../stylesheets/jstoolbara45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+<!--[if IE]>
+    <style type="text/css">
+      * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+      body {behavior: url(/stylesheets/csshover.htc?1293099743);}
+    </style>
+<![endif]-->
+
+<!-- page specific tags -->
+
+<link href="../../../../../stylesheets/scma45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body class="theme-Cute controller-wiki action-annotate">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+      
+<div id="header">
+    <div id="quick-search">
+        <form action="http://cute-test.com/search/index/cute" method="get">
+        <input name="wiki_pages" type="hidden" value="1" />
+        <a href="http://cute-test.com/search/index/cute" accesskey="4">Search</a>:
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+        </form>
+        
+    </div>
+    
+    <h1>CUTE</h1>
+    
+    
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+    
+</div>
+
+<div class="nosidebar" id="main">
+    <div id="sidebar">        
+        
+        
+    </div>
+    
+    <div id="content">
+				
+        <div class="contextual">
+<a href="../edithtml.html" class="icon icon-edit">Edit</a>
+<a href="../historyhtml.html" class="icon icon-history">History</a>
+</div>
+
+<h2>Using the Cute Eclipse Plugin</h2>
+
+<p>
+Version <a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a>
+<em>(Emanuel Graf, 17 Jan 2011 14:59)</em>
+</p>
+
+
+
+<table class="filecontent annotate">
+<tbody>
+
+<tr class="bloc-0">
+    <th class="line-num">1</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>h1. Using the Cute Eclipse Plugin</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">2</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">3</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>The CUTE Eclipse plug-in integrates the CUTE C++ unit testing framework into the &quot;Eclipse CDT C/C++ integrated development environment.&quot;:http://www.eclipse.org/cdt/ This plug-in provides all the important features that Java developers know from the JUnit plug-in:</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">4</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">5</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Wizards to initialize and set up new tests</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">6</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Test navigator with green/red bar</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">7</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Diff-viewer for failing tests</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">8</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>This page shows how to use the CUTE Eclipse plug-in once it is [[CUTE_Installation_and_System_Requirements|installed]].</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">9</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">10</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>h2. Functionality</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">11</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">12</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>h3. Create a Project</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">13</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">14</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Select File &gt; New &gt; C++ Project. In the C++ Project dialog, the CUTE Eclipse plug-in provides three new C++ project wizards in addition to those that come standard with CDT:</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">15</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-1">
+    <th class="line-num">16</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin67d9.html?version=2">2</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>!/attachments/5/newprj.png!</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">17</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">18</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Select the type of CUTE project you want:</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">19</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">20</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>* Cute Project creates a standalone test project</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">21</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>* Cute Library Test Project asks you to specify an existing Eclipse project, and creates a unit test for that project</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">22</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>* Cute Suite Module asks you for a name, and creates a test suite with that name</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">23</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">24</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Specify the Project name and answer the questions. The wizard creates a project with all the CUTE unit test framework source files. It sets up building using the Eclipse internal builder, so you should be able to build and execute the project.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">25</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">26</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>If you did not install Boost in the standard location, you will need to specify it. Right click on the newly created CUTE project, and select Properties. In C/C++ Build, Settings, choose the Tool Settings tab. Specify the Boost include path in GCC C++ Compiler, Directories, and specify the library path and the boost_thread library name, for example, boost_thread-gcc-mt-d-1_33.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">27</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">28</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>All of the wizards create a trivial test in file @src/Test.cpp@ that will get you started. Expand this @Test.cpp@ to create your unit test.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">29</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">30</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>!/attachments/6/newprj2.png!</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">31</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">32</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>h3. Test navigator with green/red bar</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">33</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">34</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>To build the project, select the menu *Project &gt; Build All*. A _Debug_ folder will be created after building.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">35</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">36</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>!/attachments/7/bar1.png!</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">37</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">38</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>Right click on @HelloCute.exe@, *Run As &gt; CUTE Test*</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">39</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">40</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>!/attachments/8/bar2.png!</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">41</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">42</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Modify Test.cpp as shown below</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">43</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">44</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>&lt;pre&gt;&lt;code class=&quot;cpp&quot;&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">45</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;cute.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">46</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;ide_listener.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">47</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;cute_runner.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">48</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &lt;string&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">49</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">50</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>void thisIsATest() {</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">51</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        std::string s,s2,r;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">52</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        s=&quot;Hello&quot;;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">53</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        s2=&quot;World&quot;;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">54</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        r=&quot;Hello World&quot;;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">55</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        ASSERTM(&quot;String not matching&quot;, s.append(&quot; &quot;+s2).compare(r)==0); </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">56</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">57</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>void runSuite(){</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">58</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        cute::suite s;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">59</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        //TODO add your test here</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">60</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        s.push_back(CUTE(thisIsATest));</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">61</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        cute::ide_listener lis;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">62</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        cute::makeRunner(lis)(s, &quot;The Suite&quot;);</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">63</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">64</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">65</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>int main(){</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">66</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>    runSuite();</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">67</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">68</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>&lt;/code&gt;&lt;/pre&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">69</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">70</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">71</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>The following assertion macro can be found in @cute_base.h@</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">72</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">73</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>&lt;pre&gt;&lt;code class=&quot;cpp&quot;&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">74</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>ASSERTM(msg,cond)</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">75</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>ASSERT(cond)</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">76</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>FAIL()</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">77</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>FAILM(msg)</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">78</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>&lt;/code&gt;&lt;/pre&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">79</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">80</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>See [[Writing Unit Tests]] for details. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">81</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">82</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">83</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>h3. Diff-viewer for failing tests</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">84</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">85</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>With @Test.cpp@ as shown below</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">86</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">87</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>&lt;pre&gt;&lt;code class=&quot;cpp&quot;&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">88</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;cute.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">89</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;ide_listener.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">90</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;cute_runner.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">91</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">92</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>void thisIsATest() {</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">93</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        std::string s,s2,expected,actual;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">94</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        s=&quot;Hello&quot;;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">95</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        s2=&quot;World&quot;;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">96</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        expected=&quot;HelloWorld&quot;;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">97</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        ASSERT_EQUAL(expected, s.append(&quot;  \n    \t  &quot;+s2));</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">98</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">99</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>void testDelta(){</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">100</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        double cx=0.1, ax=0.3; </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">101</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        ASSERT_EQUAL_DELTA(cx,ax,0.1);</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">102</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">103</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">104</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>void runSuite(){</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">105</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        cute::suite s;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">106</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        //TODO add your test here</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">107</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        s.push_back(CUTE(thisIsATest));</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">108</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        s.push_back(CUTE(testDelta));</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">109</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        cute::ide_listener lis;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">110</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        cute::makeRunner(lis)(s, &quot;The Suite&quot;);</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">111</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">112</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">113</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>int main(){</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">114</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>    runSuite();</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">115</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">116</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>&lt;/code&gt;&lt;/pre&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">117</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">118</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>!/attachments/9/diffview1.png!</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">119</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">120</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>double clicking at the location of the blue arrow as shown above pops up the result comparison.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">121</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">122</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>!/attachments/10/diffview2.png!</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">123</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">124</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Spaces, tabs, newlines can be turned on.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">125</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">126</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>!/attachments/11/diffview3.png!</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">127</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">128</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>The following assertion macro can be found in @cute_equals.h@</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">129</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">130</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>&lt;pre&gt;&lt;code class=&quot;cpp&quot;&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">131</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>ASSERT_EQUALM(msg,expected,actual)</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">132</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>ASSERT_EQUAL(expected,actual)</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">133</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>ASSERT_EQUAL_DELTAM(msg,expected,actual,delta)</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">134</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>ASSERT_EQUAL_DELTA(expected,actual,delta)</pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">135</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>&lt;/code&gt;&lt;/pre&gt;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">136</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-2">
+    <th class="line-num">137</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugin7fb8.html?version=3">3</a></td>
+    <td class="author">Emanuel Graf</td>
+    <td class="line-code"><pre>See [[Writing Unit Tests]] for details. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">138</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">139</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>New test function</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">140</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">141</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>This template allows the insertion of new test. Place your cursor at the location where the new test function will be.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">142</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">143</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>right click and select &gt; Source &gt; New Test Function</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">144</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">145</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>And at this point you can give the new test function a unique name.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">146</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">147</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">148</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">149</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">150</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Adding existing test function to suite</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">151</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">152</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>This add the existing function into the test suite. Place your cursor anywhere along the desired function (underlined in green.) Right click &gt; Source &gt; Add Test &gt; Add Test function to Suite</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">153</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">154</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">155</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>see ticket #21 </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">156</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">157</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">158</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Adding test functor to suite</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">159</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">160</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Functor in this application is defined as : any class or struct with a public operator () that takes in zero parameters.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">161</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Place your cursor anywhere along the desired function (underlined in green.) Right click &gt; Source &gt; Add Test &gt; Add Test functor to Suite</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">162</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">163</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">164</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>for undefined reference to `vtable for testCase4' compiler error in the above example, means that you need to specific what operator() do. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">165</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">166</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">167</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Adding test member to suite</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">168</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">169</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>A test method in a class or struct can be added. Right click &gt; Source &gt; Add Test &gt; Add Test Member to Suite</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">170</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">171</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>A class or struct method needs to be public, nonstatic, parameterless, non union.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">172</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>An instance method needs to be public, nonstatic, parameterless, non union and void.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">173</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">174</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>***beware there is no duplicate push_back check.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">175</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>CUTE_MEMFUN(testobject,TestClass,memberFunction)</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">176</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>CUTE_SMEMFUN(TestClass,memberFunction)</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">177</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>See TheoryOfOperation for details. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">178</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">179</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">180</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Wizard for creating library test project</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">181</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">182</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Firstly, create a shared or static library project. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">183</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Ensure that the library project is opened, else it wouldn't be shown in the following step. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">184</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Next create a Cute Library Test Project </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">185</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">186</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Press Next </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">187</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">188</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Select the desired library project </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">189</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">190</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">191</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Press Next or Finish to complete the wizard </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">192</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">193</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Under project properties&gt; C/C++ Build &gt; Settings, an one off compiler setting of -I and Linker -l -L will be set. Subsequent changes will be managed by the user. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">194</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">195</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Work in progress (in using C/C++ General&gt;Paths and Symbols&gt;References) #43</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">196</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">197</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">198</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">199</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Wizard for creating suite module project</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">200</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">201</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>A CUTE project with a custom test suite name can be created easily with this wizard. Select the Cute Suite Module project</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">202</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">203</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Next &gt; Specific the suite name</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">204</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">205</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>And the project with the below structure will be created.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">206</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">207</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">208</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Code for HelloSuite.cpp</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">209</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;cute.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">210</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;ide_listener.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">211</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;cute_runner.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">212</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>#include &quot;HelloSuite.h&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">213</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">214</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>void thisIsATest() {</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">215</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        ASSERTM(&quot;start writing tests&quot;, false);  </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">216</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">217</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">218</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>cute::suite make_suite_HelloSuite(){</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">219</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        cute::suite s;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">220</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        s.push_back(CUTE(thisIsATest));</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">221</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>        return s;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">222</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>}</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">223</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">224</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">225</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">226</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Adding a new Suite module</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">227</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">228</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Project Explorer &gt; select project, folder or file (.cpp or .h). right click &gt; New &gt; Suite File </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">229</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">230</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">231</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Custom source path lookup for unmanaged project</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">232</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">233</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>For a typical managed project, the makefile will reside with the executable. This information is use to derive the source codes folder. For an unmanaged project, CUTE plug-in is not able to know where the source codes folder are. Given the below directory structure</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">234</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">235</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">236</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">237</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Where the makefile is with the source files, you can specify where to look for the source codes.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">238</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">239</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">240</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">241</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">242</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Sample Project </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">243</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">244</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">245</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Setting environment variables for Run/Debug Configuration</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">246</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">247</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>To test a library project, we need to set the environment variables such as PATH, LD_LIBRARY_PATH or DYLD_LIBRARY_PATH. Whenever a CUTE library project reference others projects, it’s launch configuration will be appended with the others projects path. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">248</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">249</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Append environment to native environment</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">250</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>If the variable does not exist at the native environment, it will added. If it exist, it will be overwritten by your variable. </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">251</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>for example:</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">252</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>current native environment path	&quot;C:\WINDOWS\system32;C:\WINDOWS;&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">253</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>adding a variable path	%path%;&quot;d:\workspace\sharedLibraryPrj\Debug&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">254</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Append environment selected	</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">255</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>resultant path	&quot;d:\workspace\sharedLibraryPrj\Debug&quot;</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">256</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">257</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>for cygwin dll development, you will need to ensure that cygwin1.dll, and the dll in development can be located within the folders in PATH. The PATH specified is in window form and not &quot;/cygdrive/c/&quot; form.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">258</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">259</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>To see a list of dll loaded by your exe, you can use APIMON in windows 2000 resource kit.</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">260</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>To see a list of runtime environment variables, you can use prenv.c or mirrored file</pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">261</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">262</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre></pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">263</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>Replace native environment with specifie environment </pre></td>
+</tr>
+
+<tr class="bloc-0">
+    <th class="line-num">264</th>
+    <td class="revision"><a href="../../Using_the_Cute_Eclipse_Plugine42d.html?version=1">1</a></td>
+    <td class="author"></td>
+    <td class="line-code"><pre>means only those variables entered into the above table will available. </pre></td>
+</tr>
+
+</tbody>
+</table>
+
+
+
+        
+				<div style="clear:both;"></div>
+    </div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+	
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2010 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22096374-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+</html>

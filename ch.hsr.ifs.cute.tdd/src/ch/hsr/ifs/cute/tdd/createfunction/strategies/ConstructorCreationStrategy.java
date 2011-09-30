@@ -20,10 +20,10 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.jface.text.TextSelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
+import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
 public class ConstructorCreationStrategy implements IFunctionCreationStrategy {
@@ -34,7 +34,7 @@ public class ConstructorCreationStrategy implements IFunctionCreationStrategy {
 
 		CPPASTFunctionDeclarator funcdecl = new CPPASTFunctionDeclarator(new CPPASTName(name.toCharArray()));
 
-		CPPASTDeclarator declarator = ToggleNodeHelper.getAncestorOfType(selectedName, CPPASTDeclarator.class);
+		CPPASTDeclarator declarator = TddHelper.getAncestorOfType(selectedName, CPPASTDeclarator.class);
 		ParameterHelper.addTo(declarator, funcdecl);
 
 		CPPASTNamedTypeSpecifier declspec = new CPPASTNamedTypeSpecifier();

@@ -13,8 +13,8 @@ import org.eclipse.jface.text.BadLocationException;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
-import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.FunctionCreationStrategy;
+import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
 public class NormalFreeFunctionCreationQuickFix extends AbstractFunctionCreationQuickFix {
 

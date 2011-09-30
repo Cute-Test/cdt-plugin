@@ -99,7 +99,7 @@
               category="ch.hsr.ifs.cute.tdd.category"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR"
-              name="%problem.name.1">
+              name="%problem.name.11">
         </problem>
      </checker>
      <category

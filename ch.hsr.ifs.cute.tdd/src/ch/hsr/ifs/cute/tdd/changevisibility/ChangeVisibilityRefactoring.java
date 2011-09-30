@@ -83,7 +83,7 @@ public class ChangeVisibilityRefactoring extends CRefactoring3 {
 			if (binding instanceof ICPPMember) {
 				String bindingname = binding.getName().replaceAll("\\(\\w*\\)", "");  //$NON-NLS-1$//$NON-NLS-2$
 				if (bindingname.equals(nameToSearch)) {
-					ICPPASTCompositeTypeSpecifier typeSpec = ToggleNodeHelper
+					ICPPASTCompositeTypeSpecifier typeSpec = TddHelper
 							.getAncestorOfType(name, ICPPASTCompositeTypeSpecifier.class);
 					if (typeSpec != null)
 					{

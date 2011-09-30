@@ -653,3 +653,16 @@ struct A {
     {
     }
 };
+//!No Constructor Suggestion for Unknown Type
+//@.config
+markerCount=0
+//@A.cpp
+void testInitialValue() {
+	Calculator calc;
+	ASSERT_EQUAL(0, calc.value());
+}
+//=
+void testInitialValue() {
+	Calculator calc;
+	ASSERT_EQUAL(0, calc.value());
+}

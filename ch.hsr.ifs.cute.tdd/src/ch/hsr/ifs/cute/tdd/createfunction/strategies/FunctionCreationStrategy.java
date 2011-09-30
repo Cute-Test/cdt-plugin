@@ -18,10 +18,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.jface.text.TextSelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
+import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 
@@ -34,7 +34,7 @@ public class FunctionCreationStrategy implements
 			IASTNode selectedName, String name,
 			TextSelection selection) {
 		ICPPASTFunctionDeclarator dec = new CPPASTFunctionDeclarator(new CPPASTName(name.toCharArray()));
-		IASTFunctionCallExpression caller = ToggleNodeHelper.getAncestorOfType(selectedName, IASTFunctionCallExpression.class);
+		IASTFunctionCallExpression caller = TddHelper.getAncestorOfType(selectedName, IASTFunctionCallExpression.class);
 		if (caller != null) {
 			ParameterHelper.addTo(caller, dec);
 		}

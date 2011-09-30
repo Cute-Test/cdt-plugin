@@ -17,9 +17,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMember;
 import org.eclipse.cdt.core.parser.util.ArrayUtil;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTBaseDeclSpecifier;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
+import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class PrivateMethodChecker extends AbstractTDDChecker {
 
@@ -37,7 +37,7 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				if (member == null) {
 					return PROCESS_CONTINUE;
 				}
-				CPPASTBaseDeclSpecifier type = ToggleNodeHelper.getAncestorOfType(name, CPPASTBaseDeclSpecifier.class);
+				CPPASTBaseDeclSpecifier type = TddHelper.getAncestorOfType(name, CPPASTBaseDeclSpecifier.class);
 				if (type != null) {
 					return PROCESS_CONTINUE;
 				}

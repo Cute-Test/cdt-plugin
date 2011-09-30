@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CUTE - Theory of Operation and Goals - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<link rel='shortcut icon' href='http://cute-test.com/favicon.ico?1293099743' />
+<link href="../../../themes/cute/stylesheets/applicationade1.css?1295341309" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/prototype.js?1251746896" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/effects.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/dragdrop.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/controls.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1293099743" type="text/javascript"></script>
+<link href="../../../stylesheets/jstoolbara45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+<!--[if IE]>
+    <style type="text/css">
+      * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+      body {behavior: url(/stylesheets/csshover.htc?1293099743);}
+    </style>
+<![endif]-->
+
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scma45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body class="theme-Cute controller-wiki action-index">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+      
+<div id="header">
+    <div id="quick-search">
+        <form action="http://cute-test.com/search/index/cute" method="get">
+        <input name="wiki_pages" type="hidden" value="1" />
+        <a href="http://cute-test.com/search/index/cute" accesskey="4">Search</a>:
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+        </form>
+        
+    </div>
+    
+    <h1>CUTE</h1>
+    
+    
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+    
+</div>
+
+<div class="" id="main">
+    <div id="sidebar">        
+        
+    <h1 id="Cute">Cute<a href="#Cute" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="http://www.ifs.hsr.ch/" class="external">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+
+<a href="http://cute-test.com/projects/cute/wiki">Start page</a><br />
+<a href="Page_index.html">Index by title</a><br />
+<a href="Date_index.html">Index by date</a><br />
+
+
+        
+    </div>
+    
+    <div id="content">
+				
+        <div class="contextual">
+
+
+<span id="watcher"></span>
+
+
+
+
+
+
+<a href="Theory_of_Operation_and_Goals/history.html" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> &#187; </p>
+
+
+    <p>    
+    
+    Version 1/8
+     - 
+    <a href="Theory_of_Operation_and_Goals67d9.html?version=2">Next &#187;</a> - 
+    <a href="Theory_of_Operation_and_Goals.html">Current version</a>
+    <br />
+    <em>Emanuel Graf, 13 Jan 2011 14:25 </em><br />
+    
+    </p>
+    <hr />
+
+
+<div class="wiki">
+  <h1 id="Theory-of-Operation-and-Goals-of-CUTE">Theory of Operation and Goals of CUTE<a href="#Theory-of-Operation-and-Goals-of-CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>CUTE leverages modern C++ libraries and features to make writing C++ unit tests easier. For example, one disadvantage of CppUnit is that you have to write a subclass in order to have your own test case. This is a lot of programmer overhead, especially when you want to start small.</p>
+
+
+	<p>CUTE stands for C++ Unit Testing Easier. This article was first published by Peter Sommerlad in ACCU Overload Journal #75. It is maintained here in the wiki with updates to match the current version of CUTE.</p>
+
+
+	<p>I was inspired by Kevlin Henney's Java testing framework called JUTLAND (Java Unit Testing: Light, Adaptable 'n' Discreet), and the corresponding presentation he gave at JAOO 2005. In addition, I wondered if I could come up with a design that is similarly orthogonal, easily extendable and also much simpler to use than current C++ unit testing approaches.</p>
+
+
+	<p>Here you will learn how to use CUTE in your projects and also some of the more modern C++ coding techniques employed for its implementation. I also ask you to give feedback to help me further simplify and improve CUTE.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+				<div style="clear:both;"></div>
+    </div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+	
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2010 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22096374-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+</html>

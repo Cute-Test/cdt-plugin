@@ -29,7 +29,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -38,6 +37,7 @@ import org.eclipse.jface.viewers.ISelection;
 
 import ch.hsr.ifs.cute.tdd.Activator;
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
 public class AddArgumentRefactoring extends CRefactoring3 {
@@ -78,7 +78,7 @@ public class AddArgumentRefactoring extends CRefactoring3 {
 			ITextSelection selection) {
 		IASTNode selectedNode = unit.getNodeSelector(null).findEnclosingNode(
 				selection.getOffset(), selection.getLength());
-		return ToggleNodeHelper.getAncestorOfType(selectedNode, IASTFunctionCallExpression.class);
+		return TddHelper.getAncestorOfType(selectedNode, IASTFunctionCallExpression.class);
 	}
 
 	private IASTFunctionCallExpression createCorrectFunctionCall(

@@ -8,6 +8,7 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
+import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -47,7 +48,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		@Override
 		public int visit(IASTExpression expression) {
-			String typename = expression.getExpressionType().toString();
+			String typename = ASTTypeUtil.getType(expression.getExpressionType(), true);
 			if (expression instanceof ICPPASTUnaryExpression) {
 				CPPASTUnaryExpression uexpr = ((CPPASTUnaryExpression) expression);
 				IASTImplicitName[] inames = uexpr.getImplicitNames();

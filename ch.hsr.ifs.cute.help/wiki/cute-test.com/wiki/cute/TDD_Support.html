@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CUTE - TDD Support - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<link rel='shortcut icon' href='http://cute-test.com/favicon.ico?1293099743' />
+<link href="../../themes/cute/stylesheets/applicationade1.css?1295341309" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/prototype.js?1251746896" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/effects.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/dragdrop.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/controls.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1293099743" type="text/javascript"></script>
+<link href="../../stylesheets/jstoolbara45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+<!--[if IE]>
+    <style type="text/css">
+      * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+      body {behavior: url(/stylesheets/csshover.htc?1293099743);}
+    </style>
+<![endif]-->
+
+<!-- page specific tags -->
+
+  <link href="../../stylesheets/scma45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body class="theme-Cute controller-wiki action-index">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+      
+<div id="header">
+    <div id="quick-search">
+        <form action="http://cute-test.com/search/index/cute" method="get">
+        <input name="wiki_pages" type="hidden" value="1" />
+        <a href="http://cute-test.com/search/index/cute" accesskey="4">Search</a>:
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+        </form>
+        
+    </div>
+    
+    <h1>CUTE</h1>
+    
+    
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+    
+</div>
+
+<div class="" id="main">
+    <div id="sidebar">        
+        
+    <h1 id="CUTE">CUTE<a href="#CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="http://www.ifs.hsr.ch/" class="external">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+
+<a href="http://cute-test.com/">Start page</a><br />
+<a href="../../projects/cute/wiki/Page_index.html">Index by title</a><br />
+<a href="../../projects/cute/wiki/Date_index.html">Index by date</a><br />
+
+
+        
+    </div>
+    
+    <div id="content">
+				
+        <div class="contextual">
+
+
+<span id="watcher"></span>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<div class="wiki">
+  <h1 id="TDD-Support">TDD Support<a href="#TDD-Support" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>The CUTE plug-in supports the user in creating and running unit tests for C++. Additionally, it provides decent support for Test Driven Development.</p>
+
+
+	<h2 id="Introduction">Introduction<a href="#Introduction" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>When following Test Driven Development the unit tests are written before the implementation. While wrting the test cases much semantic and syntactic information about the tested entities is specified. The CUTE plug-in coding assist supports the developer by generating the stubs as a framework for implementing the functionality.</p>
+
+
+	<h2 id="Features">Features<a href="#Features" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>Creating Class Types</li>
+		<li>Creating Constructors</li>
+		<li>Creating (Member) Variables</li>
+		<li>Creating (Member) Functions</li>
+		<li>Creating (Member) Operators</li>
+		<li>Visibility Manipulation</li>
+		<li>Adapting Parameter Lists</li>
+		<li>Creating Namespaces</li>
+	</ul>
+
+
+	<h2 id="TDD-Tutorial">TDD Tutorial<a href="#TDD-Tutorial" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Let us have a look at the TDD feature. We will introduce its functionality with a step-by-step example. To develop a simple calculator is our objective.</p>
+
+
+	<h3 id="CUTE-Project">CUTE Project<a href="#CUTE-Project" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Create a <em>CUTE Project</em> in CDT.</p>
+
+
+	<p><img src="../../attachments/download/39/create_project.png" alt="" /></p>
+
+
+	<p><strong>Note:</strong> After creating the project there might be several markers indicating problems in <code>Test.cpp</code>. They will vanish as soon as CDT has finished indexing the symbols of that file.</p>
+
+
+	<h3 id="Generating-a-Type">Generating a Type<a href="#Generating-a-Type" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>First we want to create a "Calculator" class. We will stick with the mental model of a pocket calculator, always displaying the current value. A member function named "value" shall return it. The initial value in the calculator is 0. This composes our first unit test:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="no">1</span> <span class="di">void</span> testInitialValue() {
+<span class="no">2</span>     Calculator calc;
+<span class="no">3</span>     ASSERT_EQUAL(<span class="i">0</span>, calc.value());    
+<span class="no">4</span> }
+</span></code></pre>
+
+	<p>As there is already an example test case after creating a new CUTE project, we can recycle this test by renaming it (<strong>Alt+Shift+R</strong> when the caret is at the test function name). Then we replace the code in the body with our test code.</p>
+
+
+	<p><img src="../../attachments/download/40/create_type_calculator.png" alt="" /></p>
+
+
+	<p>An error marker appears at the line containing <code>Calculator</code>. Hovering the mouse cursor over the marker on the left or the identifier <code>Calculator</code> reveals the problem: <em>Type 'Calculator' cannot be resolved</em>, indicating that at the current position the type <code>Calculator</code> is not known.</p>
+
+
+	<p><img src="../../attachments/download/41/type_calculator_could_not_be_resolved.png" alt="" /></p>
+
+
+	<p>Clicking this marker or by pressing <strong>Ctrl+1</strong> a so called resolution appears:</p>
+
+
+	<p><img src="../../attachments/download/42/create_type_calculator_resolution.png" alt="" /></p>
+
+
+	<p>Selecting this resolution creates an empty type definition for <code>Calculator</code>. The kind of type can directly be specified from a list containing <code>struct</code> (which is default), <code>class</code> and <code>enum</code>.</p>
+
+
+	<p><img src="../../attachments/download/43/type_calculator_stub.png" alt="" /></p>
+
+
+	<p>We receive the following code:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="no">1</span> <span class="r">struct</span> Calculator
+<span class="no">2</span> {
+<span class="no">3</span> };
+<span class="no">4</span> 
+<span class="no">5</span> <span class="di">void</span> testInitialValue() {
+<span class="no">6</span>     Calculator calc;
+<span class="no">7</span>     ASSERT_EQUAL(<span class="i">0</span>, calc.value());
+<span class="no">8</span> }
+</span></code></pre>
+
+	<h3 id="Generating-a-Member-Function">Generating a Member Function<a href="#Generating-a-Member-Function" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Generating this empty type stub removed the marker at <code>Calculator</code>. But another marker appeared at the statement <code>calc.value();</code> as the type <code>Calculator</code> does not contain a member function <code>value</code>.</p>
+
+
+	<p>Again, by clicking the marker and selecting the resolution <em>Create member function value</em>, a stub for the corresponding function is generated in the type <code>Calculator</code>.</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="no">1</span> <span class="r">struct</span> Calculator
+<span class="no">2</span> {
+<span class="no">3</span>     <span class="pt">int</span> value() <span class="di">const</span>
+<span class="no">4</span>     {
+<span class="no">5</span>         <span class="r">return</span> <span class="pt">int</span>();
+<span class="no">6</span>     }
+<span class="no">7</span> };
+</span></code></pre>
+
+	<p>Compiling and running the test works now. It even yields a green bar.</p>
+
+
+	<h3 id="Moving-the-Type">Moving the Type<a href="#Moving-the-Type" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>We do not want to have the tested code in the same source files as the test code. Thus we move our implementation of <code>Calculator</code> to its own file.</p>
+
+
+	<p>To achieve this you have to select the type definition and invoke the <em>Extract to new header file</em> refactoring (<strong>Alt+Shift+P</strong>).</p>
+
+
+	<p><img src="../../attachments/download/44/extract_to_new_header_file.png" alt="" /></p>
+
+
+	<p>This extracts the type definition <code>Calculator</code> to its own header file.</p>
+
+
+	<p><img src="../../attachments/download/45/calculator_header_file.png" alt="" /></p>
+
+
+	<p>An include directive is added to <code>Test.cpp</code> to retain accessibility of <code>Calculator</code> in the test.</p>
+
+
+	<h3 id="Toggling-Function-Definition">Toggling Function Definition<a href="#Toggling-Function-Definition" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>In the new header file we can toggle the definition of <code>value</code> out of the type. Use <em>Toggle Function Definition</em> (<strong>Alt+Shift+T</strong>) to separate the definition from the declaration of the selected member function.</p>
+
+
+	<p><img src="../../attachments/download/46/toggle_value_1.png" alt="" /></p>
+
+
+	<p>If desired the <em>Toggle Function Definition</em> refactoring can be invoked again, which moves the definition of <code>value</code> to the source file <code>Calculator.cpp</code>. If that file does not exist it is created.</p>
+
+
+	<p><img src="../../attachments/download/47/toggle_value_2.png" alt="" /></p>
+
+
+	<p>To have a proper separation of test and implementation projects, you need to move the files specifying the <code>Calculator</code> type to their own project. Currently, this is not supported by a refactoring we know. Thus we will skip this and stick with one single project.</p>
+
+
+	<h3 id="Generating-a-Constructor">Generating a Constructor<a href="#Generating-a-Constructor" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Now we extend our "Calculator" type to be constructible with a specific value. To do so we create another test case in <code>Test.cpp</code>:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="no">1</span> <span class="di">void</span> testSpecifiedStartValue(){
+<span class="no">2</span>     <span class="pt">int</span> startValue = <span class="i">23</span>;
+<span class="no">3</span>     Calculator calc(startValue);
+<span class="no">4</span>     ASSERT_EQUAL(startValue, calc.value());
+<span class="no">5</span> }
+</span></code></pre>
+
+	<p>After writing the code above we encounter a further error marker at the declaration of <code>calc</code>.</p>
+
+
+	<p><img src="../../attachments/download/48/no_such_constructor.png" alt="" /></p>
+
+
+	<p>Cleary this constructor is missing, as we have no constructor defined for <code>Calculator</code>. The resolution for the problem accomplishes this for us.</p>
+
+
+	<p><img src="../../attachments/download/49/create_default_constructor.png" alt="" /></p>
+
+
+	<p>If we open the <code>Calculator.h</code> file, we see a new constructor defined in <code>Calculator</code>.</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="no">1</span> <span class="r">struct</span> Calculator
+<span class="no">2</span> {
+<span class="no">3</span>     Calculator(<span class="pt">int</span> &#38; startValue)
+<span class="no">4</span>     {
+<span class="no">5</span>     }
+<span class="no">6</span>     <span class="pt">int</span> value() <span class="di">const</span>;
+<span class="no">7</span> };
+</span></code></pre>
+
+	<h3 id="Adding-a-Member-Variable">Adding a Member Variable<a href="#Adding-a-Member-Variable" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>The new constructor does not do much. We can add a member variable to the initializer list to store the starting value. Of course we do not need to declare it manually. We just add the initialization and receive another marker:</p>
+
+
+	<p><img src="../../attachments/download/50/cannot_resolve_member_variable.png" alt="" /></p>
+
+
+	<p>The following resolution creates the declaration of the member variable in the private section:</p>
+
+
+	<p><img src="../../attachments/download/51/create_member_variable.png" alt="" /></p>
+
+
+	<p>This is the result:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="no"> 1</span> <span class="r">struct</span> Calculator
+<span class="no"> 2</span> {
+<span class="no"> 3</span>      Calculator(<span class="pt">int</span> &#38; startValue) : val(startValue)
+<span class="no"> 4</span>     {
+<span class="no"> 5</span>     }
+<span class="no"> 6</span>     <span class="pt">int</span> value() <span class="di">const</span>;
+<span class="no"> 7</span> <span class="di">private</span>:
+<span class="no"> 8</span>     <span class="pt">int</span> val;
+<span class="no"> 9</span> };
+</span></code></pre>
+
+	<p>If we now change <code>value()</code> to return the <code>val</code> member variable we almost have two green-bar unit tests.</p>
+
+
+	<h3 id="Generating-a-Default-Constructor">Generating a Default Constructor<a href="#Generating-a-Default-Constructor" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>In <code>Test.cpp</code> we see another error marker in the first test function. Through the declaration of the new explicit constructor we have removed the implicit default constructor. Our plug-in recognizes that and suggests to create another constructor:</p>
+
+
+	<p><img src="../../attachments/download/52/create_constructor.png" alt="" /></p>
+
+
+	<p>With this resolution we can add a default constructor with one click. We just need to add the initialization of <code>val</code> by hand.</p>
+
+
+	<h3 id="Adding-a-Test-Case-to-the-Suite">Adding a Test Case to the Suite<a href="#Adding-a-Test-Case-to-the-Suite" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>There is also a warning marker indicating in <code>Test.cpp</code> at <code>testSpecifiedStartValue</code>. We have not yet added this new test case to our test suite. The plug-in can handle this too:</p>
+
+
+	<p><img src="../../attachments/download/54/add_test_to_suite.png" alt="" /></p>
+
+
+	<p>The resolution adds the test function <code>testSpecifiedStartValue</code> to our test suite <code>s</code>:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="no">1</span> <span class="di">void</span> runSuite(){
+<span class="no">2</span>     cute::suite s;
+<span class="no">3</span>     s.push_back(CUTE(testInitialValue));
+<span class="no">4</span>     s.push_back(CUTE(testSpecifiedStartValue));
+<span class="no">5</span>     cute::ide_listener lis;
+<span class="no">6</span>     cute::makeRunner(lis)(s, <span class="s"><span class="dl">&quot;</span><span class="k">The Suite</span><span class="dl">&quot;</span></span>);
+<span class="no">7</span> }
+</span></code></pre>
+
+	<p>Now compiling and running our unit tests results in a green bar for two tests.</p>
+
+
+	<h3 id="Other-Cases">Other Cases<a href="#Other-Cases" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>The steps described are examples of the capabilities of our plug-in's TDD features. It can also recognize for example missing operators, local variables and free functions.</p>
+
+
+	<h2 id="Limitations">Limitations<a href="#Limitations" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>As it is very complex to provide sensible code stubs for C++ just from the context where an entity is used, it takes quite some effort to achieve flawless code generation. Currently, this feature is in beta state and feedback is greatly appreciated.</p>
+
+
+	<p>Information about symbols, which is required for reporting errors and providing resolutions, heavily depends on the CDT index to be built completely.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+				<div style="clear:both;"></div>
+    </div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+	
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2010 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22096374-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+</html>

@@ -23,7 +23,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
@@ -52,7 +51,7 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 			if (!TddHelper.isMethod(name) || problemBinding.getCandidateBindings().length < 1) {
 				return;
 			}
-			IASTFunctionCallExpression call = ToggleNodeHelper.getAncestorOfType(name, IASTFunctionCallExpression.class);
+			IASTFunctionCallExpression call = TddHelper.getAncestorOfType(name, IASTFunctionCallExpression.class);
 			List<IASTInitializerClause> oldArgs = Arrays.asList(call.getArguments());
 			IBinding[] candidates = problemBinding.getCandidateBindings();
 			candidates = removeDuplicates(candidates);
@@ -131,7 +130,7 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 
 	private String getArgumentNames(IASTName name, ICPPFunction candidate) {
 		String result = EMPTY_STRING;
-		IASTFunctionCallExpression call = ToggleNodeHelper.getAncestorOfType(name, IASTFunctionCallExpression.class);
+		IASTFunctionCallExpression call = TddHelper.getAncestorOfType(name, IASTFunctionCallExpression.class);
 		List<IASTInitializerClause> oldArgs = Arrays.asList(call.getArguments());
 		ICPPParameter[] newParams = candidate.getParameters();
 		if (oldArgs.size() > newParams.length) {

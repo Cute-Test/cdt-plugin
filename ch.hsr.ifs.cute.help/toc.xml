@@ -5,16 +5,18 @@
    <topic href="html/overview.html" label="Overview">
    </topic>
 	<topic label="Getting Started"  href="html/gettingStarted.html"> 
-		<topic label="Organize your code" href="html/organizeCode.html"/>
+		<topic label="Organizing Your Code" href="html/organizeCode.html"/>
+  <topic href="wiki/cute-test.com/wiki/cute/Using_the_CUTE_Eclipse_Plugin.html" label="Using the CUTE Eclipse Plug-in">
+  </topic>
+  <topic href="wiki/cute-test.com/wiki/cute/Writing_and_Running_CUTE_Unit_Test_Suites.html" label="Writing and Running CUTE Unit Test Suites">
+  </topic>
   <topic href="html/projectTypes.html" label="Project Types">
   </topic> 
 	</topic>
- <topic href="html/usingCute.html" label="Using Cute">
-    <topic href="html/howThingsWork.html" label="How things work">
+ <topic href="html/usingCute.html" label="Using CUTE">
+    <topic href="wiki/cute-test.com/wiki/cute/Theory_of_Operation_and_Goals.html" label="Theory of Operation and Goals">
     </topic>
-    <topic href="html/tdd.html" label="Using the TDD feature">
+    <topic href="wiki/cute-test.com/wiki/cute/TDD_Support.html" label="Using the TDD Feature">
     </topic>
- </topic>
- <topic href="html/whatsNew.html" label="What&apos;s new in Cute 3.0">
  </topic>
 </toc>

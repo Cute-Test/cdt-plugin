@@ -30,7 +30,6 @@ import org.eclipse.cdt.internal.corext.codemanipulation.StubUtility;
 import org.eclipse.cdt.internal.ui.refactoring.Container;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.cdt.internal.ui.util.EditorUtility;
 import org.eclipse.cdt.internal.ui.wizards.filewizard.NewSourceFileGenerator;
 import org.eclipse.cdt.ui.CodeGeneration;
@@ -59,7 +58,7 @@ public class ExtractRefactoring extends CRefactoring3 {
 	private static final String LINE_SEPARATOR = "line.separator"; //$NON-NLS-1$
 	private static final String INCLUDE = "#include \""; //$NON-NLS-1$
 	private static final String H = ".h"; //$NON-NLS-1$
-	private CPPASTCompositeTypeSpecifier type;
+	private ICPPASTCompositeTypeSpecifier type;
 
 	public ExtractRefactoring(ICElement element, ISelection selection, RefactoringASTCache astCache) {
 		super(element, selection, astCache);
@@ -80,19 +79,27 @@ public class ExtractRefactoring extends CRefactoring3 {
 	}
 
 	private boolean isTypeSelected(IASTNode selectedNode) {
-		IASTNode typeAncestor = ToggleNodeHelper.getAncestorOfType(selectedNode, ICPPASTCompositeTypeSpecifier.class);
-		return typeAncestor != null;
+		return getTypeAtSelection(selectedNode) != null;
+	}
+	
+	private ICPPASTCompositeTypeSpecifier getTypeAtSelection(IASTNode selectedNode){
+		ICPPASTCompositeTypeSpecifier typeAncestor = TddHelper.getAncestorOfType(selectedNode, ICPPASTCompositeTypeSpecifier.class);
+		if(typeAncestor != null){
+			return typeAncestor;
+		}	
+		ICPPASTCompositeTypeSpecifier typeChild = TddHelper.getChildofType(selectedNode, ICPPASTCompositeTypeSpecifier.class);
+		return typeChild;
 	}
 
 	private boolean isFreeFunctionSelected(IASTNode node, IASTTranslationUnit localunit) {
-		IASTNode functionAncestor = ToggleNodeHelper.getAncestorOfType(node, ICPPASTFunctionDefinition.class);
+		IASTNode functionAncestor = TddHelper.getAncestorOfType(node, ICPPASTFunctionDefinition.class);
 		return functionAncestor != null;
 	}
 
 	private void extractFreeFunction(ModificationCollector collector, IASTTranslationUnit localunit, IASTNode selectedNode) throws CModelException, CoreException {
 		IASTNode topNode = TddHelper.getTopAncestorOfType(selectedNode, ICPPASTTemplateDeclaration.class);
 		if (topNode == null) {
-			topNode = ToggleNodeHelper.getAncestorOfType(selectedNode, ICPPASTFunctionDefinition.class);
+			topNode = TddHelper.getAncestorOfType(selectedNode, ICPPASTFunctionDefinition.class);
 		}
 		ICPPASTFunctionDefinition funcNode = TddHelper.getChildofType(topNode, ICPPASTFunctionDefinition.class);
 		IASTName nameNode = funcNode.getDeclarator().getName();
@@ -212,17 +219,16 @@ public class ExtractRefactoring extends CRefactoring3 {
 
 	private IASTNode findTypeSpecifier(IASTTranslationUnit localunit) {
 		IASTNode selectedNode = getSelectedNode(localunit);
-		type = ToggleNodeHelper.getAncestorOfType(selectedNode,
-				CPPASTCompositeTypeSpecifier.class);
-		CPPASTCompositeTypeSpecifier outertype = ToggleNodeHelper.getAncestorOfType(type.getParent(), CPPASTCompositeTypeSpecifier.class);
+		type = getTypeAtSelection(selectedNode);
+		CPPASTCompositeTypeSpecifier outertype = TddHelper.getAncestorOfType(type.getParent(), CPPASTCompositeTypeSpecifier.class);
 		while(outertype != null) {
 			type = outertype;
-			outertype = ToggleNodeHelper.getAncestorOfType(type.getParent(), CPPASTCompositeTypeSpecifier.class);
+			outertype = TddHelper.getAncestorOfType(type.getParent(), CPPASTCompositeTypeSpecifier.class);
 		}
 		if (type == null) {
 			throw new OperationCanceledException(Messages.ExtractRefactoring_11);
 		}
-		IASTNode result = ToggleNodeHelper.getAncestorOfType(type, ICPPASTTemplateDeclaration.class);
+		IASTNode result = TddHelper.getAncestorOfType(type, ICPPASTTemplateDeclaration.class);
 		if (result == null && type.getParent() instanceof IASTSimpleDeclaration) {
 			result = type.getParent();
 		}

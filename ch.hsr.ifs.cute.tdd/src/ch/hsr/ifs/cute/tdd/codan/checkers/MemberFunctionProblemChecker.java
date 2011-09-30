@@ -18,7 +18,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
@@ -51,7 +50,7 @@ public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 
 	private void handleMemberResolutionProblem(IASTName name, IProblemBinding problemBinding) {
 		if (TddHelper.isMethod(name)) {
-			ICPPASTFieldReference fref = ToggleNodeHelper.getAncestorOfType(name, IASTFieldReference.class);
+			IASTFieldReference fref = TddHelper.getAncestorOfType(name, IASTFieldReference.class);
 			CPPASTIdExpression variable = (CPPASTIdExpression) fref.getFieldOwner();
 			if (!isTypeWithMembers(variable)) {
 				return;

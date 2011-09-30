@@ -251,6 +251,7 @@ public class ParameterHelper {
 		} else {
 			paramDecl = new CPPASTDeclarator(parameterName);
 		}
+		
 		return paramDecl;
 	}
 

@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CUTE - Instructions for earlier releases - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<link rel='shortcut icon' href='http://cute-test.com/favicon.ico?1293099743' />
+<link href="../../../themes/cute/stylesheets/applicationade1.css?1295341309" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/prototype.js?1251746896" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/effects.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/dragdrop.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/controls.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1293099743" type="text/javascript"></script>
+<link href="../../../stylesheets/jstoolbara45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+<!--[if IE]>
+    <style type="text/css">
+      * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+      body {behavior: url(/stylesheets/csshover.htc?1293099743);}
+    </style>
+<![endif]-->
+
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scma45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body class="theme-Cute controller-wiki action-index">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+      
+<div id="header">
+    <div id="quick-search">
+        <form action="http://cute-test.com/search/index/cute" method="get">
+        <input name="wiki_pages" type="hidden" value="1" />
+        <a href="http://cute-test.com/search/index/cute" accesskey="4">Search</a>:
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+        </form>
+        
+    </div>
+    
+    <h1>CUTE</h1>
+    
+    
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+    
+</div>
+
+<div class="" id="main">
+    <div id="sidebar">        
+        
+    <h1 id="Cute">Cute<a href="#Cute" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="http://www.ifs.hsr.ch/" class="external">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+
+<a href="http://cute-test.com/projects/cute/wiki">Start page</a><br />
+<a href="Page_index.html">Index by title</a><br />
+<a href="Date_index.html">Index by date</a><br />
+
+
+        
+    </div>
+    
+    <div id="content">
+				
+        <div class="contextual">
+
+
+<span id="watcher"></span>
+
+
+
+
+
+
+<a href="Instructions_for_earlier_releases/history.html" class="icon icon-history">History</a>
+</div>
+
+
+
+
+    <p>    
+    <a href="Instructions_for_earlier_releases67d9.html?version=2">&#171; Previous</a> - 
+    Version 3/7
+    (<a href="http://cute-test.com/wiki/cute/Instructions_for_earlier_releases/diff?version=3">diff</a>) - 
+    <a href="Instructions_for_earlier_releasesad21.html?version=4">Next &#187;</a> - 
+    <a href="Instructions_for_earlier_releases.html">Current version</a>
+    <br />
+    <em>Thomas Corbat, 03 Aug 2011 08:57 </em><br />
+    
+    </p>
+    <hr />
+
+
+<div class="wiki">
+  <h1 id="Instructions-for-earlier-releases">Instructions for earlier releases<a href="#Instructions-for-earlier-releases" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>The CUTE Eclipse plug-in depends on the following software:</p>
+
+
+	<ul>
+	<li><a href="http://www.eclipse.org/downloads/moreinfo/jre.php" class="external">Java5 JRE</a></li>
+		<li><a href="http://www.eclipse.org/" class="external">Eclipse IDE</a></li>
+		<li><a href="http://www.eclipse.org/cdt/" class="external">Eclipse C/C++ Development Tooling plug-in</a></li>
+		<li><a href="http://www.boost.org/" class="external">Boost C++ Libaries</a> or use the Boost Headers provided with the plug-in, with C++0x Boost is no longer needed.</li>
+	</ul>
+
+
+	<p>For compiling you will also need to have a Eclipse compatible C++ compiler installed:</p>
+
+
+	<p><a href="http://www.mingw.org/" class="external">Official MinGW</a> distribution (currently using GCC 4.x.x)<br /><a href="http://nuwen.net/mingw.html" class="external">Nuwen MinGW distribution</a> , includes Boost (currently using GCC 4.x.x)<br />Note that there are many Eclipse compatible compilers availible that are not based on the MinGW distribution.</p>
+
+
+	<h3 id="Install-the-CUTE-Eclipse-plug-in">Install the CUTE Eclipse plug-in<a href="#Install-the-CUTE-Eclipse-plug-in" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>CUTE depends on the CDT feature Codan. In CDT 7.0 Helios Codan is an optional feature that is not installed by default.<br />For p2 to resolve this dependency please add or enable the CDT update site <a class="external" href="http://download.eclipse.org/tools/cdt/releases/helios/">http://download.eclipse.org/tools/cdt/releases/helios/</a></p>
+
+
+	<p><strong>Install CUTE using the Eclipse Marketplace</strong><br />This is the easiest way to get Cute, choose <em>Help > Eclipse Marketplace</em>  in the Eclipse menu and search for Cute. But you will miss out on the optional features of Cute and <br />the Refactoring Previews. But you can install them later using the CUTE update site.</p>
+
+
+<strong>Install CUTE using the CUTE update site.</strong><br /><div style="float:right"><img src="../../../attachments/download/32/helios-installation.png" alt="" /></div>
+	<ol>
+	<li>Choose <em>Help > Install New Software</em> in the Eclipse menu to start the Eclipse software installer</li>
+		<li>Click <em>Add...</em> to add the CUTE repository</li>
+		<li>Specify the CUTE update site, <a class="external" href="http://www.cute-test.com/updatesite">http://www.cute-test.com/updatesite</a>. The site is added to the list of Available Software.</li>
+		<li>Uncheck "Show only the latest versions of available software".</li>
+		<li>Choose at least the Cute Plugin version 4.1.2 and one of the Cute Headers features.</li>
+		<li>Click the Next button. Eclipse will then resolve dependencies and show the install dialog.</li>
+		<li>Read and accept the licences and only click Finish if you want to continue installing Cute and agree with the licences.</li>
+	</ol>
+
+
+	<p>Eclipse will now download and install everything you need to use CUTE in Eclipse (this may take a while..). Eclipse will need to restart after the setup. If you want to modify the CUTE Eclipse plug-in, you will need the source code.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+				<div style="clear:both;"></div>
+    </div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+	
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2010 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22096374-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+</html>

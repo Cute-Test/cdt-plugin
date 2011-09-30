@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CUTE - Writing and Running CUTE Unit Test Suites - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<link rel='shortcut icon' href='http://cute-test.com/favicon.ico?1293099743' />
+<link href="../../../themes/cute/stylesheets/applicationade1.css?1295341309" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/prototype.js?1251746896" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/effects.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/dragdrop.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/controls.js?1254993814" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1293099743" type="text/javascript"></script>
+<link href="../../../stylesheets/jstoolbara45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+<!--[if IE]>
+    <style type="text/css">
+      * html body{ width: expression( document.documentElement.clientWidth < 900 ? '900px' : '100%' ); }
+      body {behavior: url(/stylesheets/csshover.htc?1293099743);}
+    </style>
+<![endif]-->
+
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scma45c.css?1293099743" media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body class="theme-Cute controller-wiki action-index">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+      
+<div id="header">
+    <div id="quick-search">
+        <form action="http://cute-test.com/search/index/cute" method="get">
+        <input name="wiki_pages" type="hidden" value="1" />
+        <a href="http://cute-test.com/search/index/cute" accesskey="4">Search</a>:
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+        </form>
+        
+    </div>
+    
+    <h1>CUTE</h1>
+    
+    
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+    
+</div>
+
+<div class="" id="main">
+    <div id="sidebar">        
+        
+    <h1 id="Cute">Cute<a href="#Cute" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="http://www.ifs.hsr.ch/" class="external">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+
+<a href="http://cute-test.com/projects/cute/wiki">Start page</a><br />
+<a href="Page_index.html">Index by title</a><br />
+<a href="Date_index.html">Index by date</a><br />
+
+
+        
+    </div>
+    
+    <div id="content">
+				
+        <div class="contextual">
+
+
+<span id="watcher"></span>
+
+
+
+
+
+
+<a href="Writing_and_Running_CUTE_Unit_Test_Suites/history.html" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> &#187; </p>
+
+
+    <p>    
+    <a href="Writing_and_Running_CUTE_Unit_Test_Suitese42d.html?version=1">&#171; Previous</a> - 
+    Version 2/5
+    (<a href="http://cute-test.com/wiki/cute/Writing_and_Running_CUTE_Unit_Test_Suites/diff?version=2">diff</a>) - 
+    <a href="Writing_and_Running_CUTE_Unit_Test_Suites7fb8.html?version=3">Next &#187;</a> - 
+    <a href="Writing_and_Running_CUTE_Unit_Test_Suites.html">Current version</a>
+    <br />
+    <em>Emanuel Graf, 18 Jan 2011 09:02 </em><br />
+    
+    </p>
+    <hr />
+
+
+<div class="wiki">
+  <h1 id="Writing-and-Running-CUTE-Unit-Test-Suites">Writing and Running CUTE Unit Test Suites<a href="#Writing-and-Running-CUTE-Unit-Test-Suites" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Here you will learn how to create and run tests for your code using the CUTE C++ unit testing framework. We begin with the initial trivial test <code>src/Test.cpp</code> that is created by the CUTE Eclipse plug-in.</p>
+
+
+	<p>Source File Organization</p>
+
+
+	<p>Before you start writing tests, you need a plan for organizing your source files.</p>
+
+
+	<p>Single File</p>
+
+
+	<p>If your test is short enough to fit in one file, then you can simply add them to the trivial source file src/Test.cpp provided with CUTE:</p>
+
+
+	<p>#include "cute.h" <br />#include "ide_listener.h" <br />#include "cute_runner.h"</p>
+
+
+	<p>// TODO #include the headers for the code you want to test</p>
+
+
+	<p>// TODO Add your test functions</p>
+
+
+	<p>void thisIsATest() {<br />    <acronym title="&quot;start writing tests&quot;, false">ASSERTM</acronym>;      <br />}</p>
+
+
+	<p>void runSuite(){<br />    cute::suite s;</p>
+
+
+	<pre><code>// TODO push your tests onto s</code></pre>
+
+
+	<pre><code>s.push_back(CUTE(thisIsATest));<br />    cute::ide_listener lis;<br />    cute::makeRunner(lis)(s, "The Suite");<br />}</code></pre>
+
+
+	<p>int main(){<br />    runSuite();<br />}<br />Edit this file:</p>
+
+
+	<p>#include the header files for the classes you are testing<br />Replace function thisIsATest() with your test functions<br />Replace thisIsATest in s.push_back(<acronym title="thisIsATest">CUTE</acronym>) with your test functions<br />Partitioning Into Multiple Files</p>
+
+
+	<p>Chances are, you will want to partition your tests into multiple files. Generally, it is best to have one test suite for each source file in the project that you are unit testing. The test suite consists of a header (.h) file and an implementation (.cpp) file. Name them consistently. For example, put class myclass in files myclass.cpp and myclass.h, and put the unit test for myclass in myclassTest.cpp and myclassTest.h.</p>
+
+
+	<p>Writing Tests</p>
+
+
+	<p>Code your Tests Using CUTE Assertions</p>
+
+
+	<p>The test consists of a series of lines that set up some situation to be checked, followed by a CUTE assertion to perform the check.</p>
+
+
+	<p>In your test implementation file (myclassTest.cpp in the above example), include the file that defines the CUTE assertions:</p>
+
+
+	<p>#include "cute.h" <br />cute.h provides a variety of macros you can use to verify conditions. Most assertions have two versions: one version uses the source code of the test itself as the message, and the other allows you to specify your own message msg.</p>
+
+
+	<p><acronym title="msg, cond">ASSERTM</acronym><br /><acronym title="cond">ASSERT</acronym><br />If cond is false, the test fails<br /><acronym title="msg">FAILM</acronym><br /><acronym title="">FAIL</acronym><br />Fail unconditionally. The message "<acronym title="">FAIL</acronym>" is used if no message is specified.<br />ASSERT_EQUALM(msg, expected, actual)<br />ASSERT_EQUAL(expected, actual)<br />If expected and actual are not equal, fail and print the values of expected and actual. Specify an unsigned constant when comparing to unsigned value. For example,<br />ASSERT_EQUAL(5u, vect.size());<br />Take care to specify the expected value followed by the actual value, as shown above. If you reverse them, they appear in the failure message backwards.<br />ASSERT_EQUAL_DELTAM(msg, expected, actual, delta)<br />ASSERT_EQUAL_DELTA(expected, actual, delta)<br />Fail if expected and actual are different by more than delta. Use this assertion for real numbers.<br />CUTE_EXPECT(tt, exc)<br />Fail if test functor tt does not throw exception exc. Push this onto the test suite. For example,<br />cute::suite s;<br />s.push_back(CUTE_EXPECT(functor_that_throws(),std::exception));<br />ASSERT_THROWSM(msg, code, exc)<br />ASSERT_THROWS(code, exc)<br />Fail if code does not throw exception exc.<br />Put these assertions in the test implementation file (myclassTest.cpp in the above example).</p>
+
+
+	<p>Collect the Tests in a Test Suite</p>
+
+
+	<p>A CUTE test suite is a vector of tests. The tests are executed in the order in which they were appended to the suite. If an assertion in some test fails, the failure is reported, and the rest of the test is skipped. Execution continues with the next test in the suite. This means that a suite of many short tests is better than a few long tests:</p>
+
+
+	<p>With shorter tests, less test code is skipped upon a failure<br />Each test can fail at most once, so a suite with more tests will show more failures to help you pinpoint bugs<br />In the trivial source file provided with CUTE src/Test.cpp, include the test header file for your test. For example,</p>
+
+
+	<p>#include "myclassTest.h" <br />When the Test is a Simple Function</p>
+
+
+	<p>If you prefer to write your tests as simple functions, implement the test function, and push it on test suite using the <acronym title="">CUTE</acronym> macro:</p>
+
+
+	<p>s.push_back(<acronym title="mytestfunction">CUTE</acronym>);<br />When the Test is a Functor</p>
+
+
+	<p>If you prefer to make your test into an class or struct, define a functor class in a header file, say myclassTest.h:</p>
+
+
+	<p>// File myclassTest</p>
+
+
+	<p>class myclassTest {<br />public:<br />    mytestclass();<br />    // Must define void operator() with no arguments<br />    void operator() ();</p>
+
+
+	<p>private:<br />    // Whatever methods you need<br />    void test1();<br />    void test2();</p>
+
+
+	<pre><code>// Whatever member variables you need<br />    int memberVar1;<br />    int memberVar2;<br />}<br />Put the implementation of mytestclass in a separate file, like myclassTest.cpp.</code></pre>
+
+
+	<p>Returning to the test suite code (src/Test.cpp), include the test class header file and add the test functor to the test suite:</p>
+
+
+	<p>// Example src/Test.cpp for test functors</p>
+
+
+	<p>#include "cute.h" <br />#include "ide_listener.h" <br />#include "cute_runner.h"</p>
+
+
+	<p>// TODO Include the headers for the code you want to test<br />#include "myclassTest.h" <br />#include "anotherclassTest.h"</p>
+
+
+	<p>void runSuite(){<br />    cute::suite s;</p>
+
+
+	<pre><code>// TODO Push the functors onto the test suite<br />    s.push_back(myclassTest());<br />    s.push_back(anotherclassTest());</code></pre>
+
+
+	<pre><code>cute::ide_listener lis;<br />    cute::makeRunner(lis)(s, "My Tests");<br />}</code></pre>
+
+
+	<p>int main(){<br />    runSuite();<br />}<br />Running the CUTE Test</p>
+
+
+	<p>Compile and execute the test. The tests will be executed in the order in which they were appended to the suite. If an assertion fails, it is reported through the listener, and the test containing the failed assertion is aborted. Execution continues with the next test in the suite.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+				<div style="clear:both;"></div>
+    </div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+	
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2010 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22096374-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+</html>

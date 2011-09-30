@@ -31,7 +31,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTBaseDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.jface.text.TextSelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
@@ -46,7 +45,7 @@ public class FunctionCreationHelper {
 		if (selectedNode instanceof CPPASTName) {
 			return (IASTName)selectedNode;
 		}
-		IASTName nameAround = ToggleNodeHelper.getAncestorOfType(selectedNode, CPPASTName.class);
+		IASTName nameAround = TddHelper.getAncestorOfType(selectedNode, CPPASTName.class);
 		if (nameAround == null) {
 			nameAround = TddHelper.getChildofType(selectedNode, CPPASTName.class);
 			if (nameAround != null && nameAround.resolveBinding() instanceof ICPPNamespace) {
@@ -80,13 +79,13 @@ public class FunctionCreationHelper {
 	}
 
 	public static boolean isConstOperator(IASTNode selectedNode) {
-		IASTBinaryExpression binex = ToggleNodeHelper.getAncestorOfType(selectedNode, IASTBinaryExpression.class);
+		IASTBinaryExpression binex = TddHelper.getAncestorOfType(selectedNode, IASTBinaryExpression.class);
 
 		int optype;
 		if (binex != null) {
 			optype = binex.getOperator();
 		} else {
-			IASTUnaryExpression uexpr = ToggleNodeHelper.getAncestorOfType(selectedNode, IASTUnaryExpression.class);
+			IASTUnaryExpression uexpr = TddHelper.getAncestorOfType(selectedNode, IASTUnaryExpression.class);
 			optype = uexpr.getOperator();
 		}
 		switch (optype) {
@@ -101,7 +100,7 @@ public class FunctionCreationHelper {
 	}
 
 	public static boolean isPostfixOperator(IASTNode selectedNode) {
-		IASTUnaryExpression uexpr = ToggleNodeHelper.getAncestorOfType(selectedNode, IASTUnaryExpression.class);
+		IASTUnaryExpression uexpr = TddHelper.getAncestorOfType(selectedNode, IASTUnaryExpression.class);
 		return uexpr != null && (uexpr.getOperator() == IASTUnaryExpression.op_postFixDecr || uexpr.getOperator() == IASTUnaryExpression.op_postFixIncr);
 	}
 

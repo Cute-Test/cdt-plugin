@@ -9,6 +9,6 @@
 	</parent>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute</artifactId>
-	<version>4.2.4.qualifier</version>
+	<version>4.2.6.qualifier</version>
 	<packaging>eclipse-feature</packaging>
 </project>

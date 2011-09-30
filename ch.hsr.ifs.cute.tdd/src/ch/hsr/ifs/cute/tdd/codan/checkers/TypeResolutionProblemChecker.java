@@ -21,7 +21,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTypeId;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
@@ -51,7 +50,7 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 			String missingName = new String(name.getSimpleID());
 			String strategy;
 			String message = Messages.TypeResolutionProblemChecker_1 + missingName + Messages.TypeResolutionProblemChecker_2;
-			ICPPASTNamedTypeSpecifier nts = ToggleNodeHelper.getAncestorOfType(name, CPPASTNamedTypeSpecifier.class);
+			ICPPASTNamedTypeSpecifier nts = TddHelper.getAncestorOfType(name, CPPASTNamedTypeSpecifier.class);
 			ICPPASTTemplateId templid = null;
 			if (nts != null && nts.getName() instanceof ICPPASTTemplateId) {
 				templid = (ICPPASTTemplateId) nts.getName();
@@ -76,7 +75,7 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 				ca.setTemplateArgs(args);
 			}
 			if (TddHelper.nameNotFoundProblem(problemBinding)) {
-				ICPPASTBaseSpecifier base = ToggleNodeHelper.getAncestorOfType(name, ICPPASTBaseSpecifier.class);
+				ICPPASTBaseSpecifier base = TddHelper.getAncestorOfType(name, ICPPASTBaseSpecifier.class);
 				if (base != null || name.getParent() instanceof IASTNamedTypeSpecifier) {
 					hasbeenreported.add(name);
 					reportProblem(ERR_ID_TypeResolutionProblem_HSR, name, ca.toArray());

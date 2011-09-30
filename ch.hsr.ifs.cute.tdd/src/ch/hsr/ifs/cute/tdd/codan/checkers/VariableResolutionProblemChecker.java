@@ -39,19 +39,22 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 	class VariableResolutionProblemHandler extends AbstractResolutionProblemVisitor {
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
-			if(name instanceof ICPPASTQualifiedName){		
-				return;
-			}
-			if (TddHelper.isInvalidType(problemBinding)) {
-				return;
-			}
-			if (!TddHelper.isLastPartOfName(name)){
-				return;
-			}
-			if (TddHelper.hasUnresolvableNameQualifier(name)){
-				return;
-			}
 			if (TddHelper.nameNotFoundProblem(problemBinding)) {
+				if(name instanceof ICPPASTQualifiedName){		
+					return;
+				}
+				if(isIdentifyingFunctionCallPart(name)){
+					return;
+				}
+				if (TddHelper.isInvalidType(problemBinding)) {
+					return;
+				}
+				if (!TddHelper.isLastPartOfQualifiedName(name)){
+					return;
+				}
+				if (TddHelper.hasUnresolvableNameQualifier(name)){
+					return;
+				}
 				IASTNode upmostName = TddHelper.getLastOfSameAncestor(name, IASTName.class);
 				IASTNode parent = upmostName.getParent();
 				if (parent instanceof IASTNamedTypeSpecifier) {
@@ -91,6 +94,11 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 					reportProblem(ERR_ID_VariableResolutionProblem_HSR, name, ca.toArray());
 				}
 			}
+		}
+
+		private boolean isIdentifyingFunctionCallPart(IASTName name) {
+			
+			return (name.getPropertyInParent() == IASTFieldReference.FIELD_NAME || (name.getParent() instanceof ICPPASTQualifiedName && TddHelper.isLastPartOfQualifiedName(name)))&& TddHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null;
 		}
 
 		private void reportMissingMemberVariable(IASTName name, String missingName) {

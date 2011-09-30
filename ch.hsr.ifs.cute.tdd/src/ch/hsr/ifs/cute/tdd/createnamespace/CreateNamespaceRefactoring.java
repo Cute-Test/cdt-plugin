@@ -20,7 +20,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -43,8 +42,8 @@ public class CreateNamespaceRefactoring extends CRefactoring3 {
 			OperationCanceledException {
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTNode selectedNode = localunit.getNodeSelector(null).findEnclosingName(getSelection().getOffset(), getSelection().getLength());
-		IASTName selectedNodeName = ToggleNodeHelper.getAncestorOfType(selectedNode, CPPASTName.class);
-		ICPPASTQualifiedName qname = ToggleNodeHelper.getAncestorOfType(selectedNode, CPPASTQualifiedName.class);
+		IASTName selectedNodeName = TddHelper.getAncestorOfType(selectedNode, CPPASTName.class);
+		ICPPASTQualifiedName qname = TddHelper.getAncestorOfType(selectedNode, CPPASTQualifiedName.class);
 		if (selectedNode instanceof IASTName && qname != null) {
 			ICPPASTNamespaceDefinition ns = new CPPASTNamespaceDefinition(selectedNodeName.copy());
 			IASTNode insertionPoint = CreateTypeRefactoring.getInsertionPoint(localunit, selectedNodeName, astCache);

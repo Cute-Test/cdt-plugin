@@ -74,7 +74,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable;
 import org.eclipse.cdt.internal.core.pdom.dom.cpp.IPDOMCPPClassType;
 import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -242,7 +241,7 @@ public class TypeHelper {
 			return handleQualifiedName(qName);
 		}
 
-		ICPPASTFieldReference fieldref = ToggleNodeHelper.getAncestorOfType(selectedNode, ICPPASTFieldReference.class);
+		ICPPASTFieldReference fieldref = TddHelper.getAncestorOfType(selectedNode, ICPPASTFieldReference.class);
 		if (fieldref != null && fieldref.getFieldOwner().getExpressionType() instanceof IBinding) {
 			IASTExpression owner = fieldref.getFieldOwner();
 			IBinding expressionType = (IBinding) owner.getExpressionType();
@@ -254,7 +253,7 @@ public class TypeHelper {
 				return findTypeDefinitionInIndex(unit, astCache, (IPDOMCPPClassType) expressionType);
 			}
 		} else {
-			IASTSimpleDeclaration declaration = ToggleNodeHelper.getAncestorOfType(selectedNode, IASTSimpleDeclaration.class);
+			IASTSimpleDeclaration declaration = TddHelper.getAncestorOfType(selectedNode, IASTSimpleDeclaration.class);
 			if (declaration != null) {
 				final IASTDeclSpecifier type = declaration.getDeclSpecifier();
 				if (type instanceof ICPPASTCompositeTypeSpecifier) {

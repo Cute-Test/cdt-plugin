@@ -39,7 +39,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -113,7 +112,7 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 
 	private IASTDeclSpecifier createDeclSpecForQualifiedName(IASTName varName) {
 		IASTDeclSpecifier declSpec;
-		IASTBinaryExpression ascendingBinEx = ToggleNodeHelper.getAncestorOfType(varName, IASTBinaryExpression.class);
+		IASTBinaryExpression ascendingBinEx = TddHelper.getAncestorOfType(varName, IASTBinaryExpression.class);
 		if (ascendingBinEx != null) {
 			declSpec = createDeclSpecForBinaryExpression(varName, ascendingBinEx);
 		} else {
@@ -124,14 +123,14 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 	}
 
 	private IASTDeclSpecifier createDeclSpecForFieldRef(IASTName varName, ICPPASTFieldReference ref) {
-		IASTBinaryExpression ascendingBinEx = ToggleNodeHelper.getAncestorOfType(varName, IASTBinaryExpression.class);
+		IASTBinaryExpression ascendingBinEx = TddHelper.getAncestorOfType(varName, IASTBinaryExpression.class);
 		if (ascendingBinEx != null) {
 			return createDeclSpecForBinaryExpression(ref, ascendingBinEx);
 		}
 		if (isThisKeyword(ref)) {
 			return createVoidDeclSpec();
 		}
-		IASTSimpleDeclaration decl = ToggleNodeHelper.getAncestorOfType(varName, IASTSimpleDeclaration.class);
+		IASTSimpleDeclaration decl = TddHelper.getAncestorOfType(varName, IASTSimpleDeclaration.class);
 		if (decl != null) {
 			return decl.getDeclSpecifier().copy();
 		}

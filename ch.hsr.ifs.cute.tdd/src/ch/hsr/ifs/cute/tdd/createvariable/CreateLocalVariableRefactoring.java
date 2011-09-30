@@ -23,7 +23,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -52,7 +51,7 @@ public class CreateLocalVariableRefactoring extends CRefactoring3 {
 			selectedNode = localunit.getNodeSelector(null).findName(getSelection().getOffset(), getSelection().getLength());
 			assert(false);
 		}
-		IASTIdExpression owner = ToggleNodeHelper.getAncestorOfType(selectedNode, IASTIdExpression.class);
+		IASTIdExpression owner = TddHelper.getAncestorOfType(selectedNode, IASTIdExpression.class);
 		IASTName variableName = new CPPASTName(missingName.toCharArray());
 
 		CPPASTBaseDeclSpecifier spec = CreateLocalVariableRefactoring.calculateType(localunit, getSelection());
@@ -73,15 +72,15 @@ public class CreateLocalVariableRefactoring extends CRefactoring3 {
 
 	private IASTNode getSimpleInsertionPoint(IASTIdExpression owner) {
 		IASTNode result;
-		result = ToggleNodeHelper.getAncestorOfType(owner, IASTExpressionStatement.class);
+		result = TddHelper.getAncestorOfType(owner, IASTExpressionStatement.class);
 		if (result == null) {
-			result = ToggleNodeHelper.getAncestorOfType(owner, CPPASTDeclarationStatement.class);
+			result = TddHelper.getAncestorOfType(owner, CPPASTDeclarationStatement.class);
 		}
 		return result;
 	}
 
 	private IASTNode getInsertionPointFromMacro(IASTIdExpression owner) {
-		return ToggleNodeHelper.getAncestorOfType(owner, CPPASTIfStatement.class);
+		return TddHelper.getAncestorOfType(owner, CPPASTIfStatement.class);
 	}
 
 	public static CPPASTBaseDeclSpecifier calculateType(IASTTranslationUnit localunit, TextSelection selection) {

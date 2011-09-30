@@ -352,7 +352,9 @@ struct A {
 void test() {
   A::i = 5;
 }
-//!Create Static Member Variable for Call
+//!Do not Create Static Member Variable for Call
+//@.config
+markerCount=0
 //@A.cpp
 struct A
 {
@@ -374,7 +376,6 @@ struct A
 
 struct C
 {
-    static void bar;
 };
 
 void thisIsATest() {
@@ -473,3 +474,26 @@ struct B
     {
     }
 };
+//!No Marker for Qualified Function Calls
+//@.config
+markerCount=0
+//@A.cpp
+namespace NS{
+	void foo(int i){
+		
+	}
+}
+
+void bar(){
+	NS::foo("test");
+}
+//=
+namespace NS{
+	void foo(int i){
+		
+	}
+}
+
+void bar(){
+	NS::foo("test");
+}

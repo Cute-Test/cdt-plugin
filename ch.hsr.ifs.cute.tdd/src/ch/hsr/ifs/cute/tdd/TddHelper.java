@@ -27,7 +27,6 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
@@ -41,7 +40,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleTypeConstructorE
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTVisibilityLabel;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
@@ -60,7 +58,7 @@ public class TddHelper {
 		if (declaratorName == null) {
 			declaratorName = localunit.getNodeSelector(null).findEnclosingNodeInExpansion(selection.getOffset(), selection.getLength());
 		}
-		ICPPASTFunctionDefinition result = ToggleNodeHelper.getAncestorOfType(declaratorName, IASTFunctionDefinition.class);
+		IASTFunctionDefinition result = TddHelper.getAncestorOfType(declaratorName, IASTFunctionDefinition.class);
 		return result;
 	}
 
@@ -238,13 +236,13 @@ public class TddHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getChildofType(IASTNode node, Class<?> T) {
+	public static <T> T getChildofType(IASTNode node, Class<? extends T> c) {
 		if (node != null) {
-			if (T.isInstance(node)) {
+			if (c.isInstance(node)) {
 				return (T) node;
 			}
 			for (IASTNode child: node.getChildren()) {
-				T result = getChildofType(child, T);
+				T result = getChildofType(child, c);
 				if (result != null) {
 					return result;
 				}
@@ -322,7 +320,7 @@ public class TddHelper {
 		return false;
 	}
 
-	public static boolean isLastPartOfName(IASTName name) {
+	public static boolean isLastPartOfQualifiedName(IASTName name) {
 		IASTNode parent = name.getParent();
 		if (parent instanceof ICPPASTQualifiedName) {
 			ICPPASTQualifiedName qName = (ICPPASTQualifiedName) parent;
@@ -342,5 +340,15 @@ public class TddHelper {
 			}
 		}
 		return false;
+	}
+	
+	public static <T> T getAncestorOfType(IASTNode node, Class<? extends T> c) {
+		while(node != null) {
+			if (c.isInstance(node)) {
+				return c.cast(node);
+			}
+			node = node.getParent();
+		}
+		return null;
 	}
 }
