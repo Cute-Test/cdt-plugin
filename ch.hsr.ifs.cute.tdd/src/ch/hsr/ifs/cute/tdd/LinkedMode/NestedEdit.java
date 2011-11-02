@@ -29,8 +29,7 @@ public class NestedEdit {
 		source = new InsertEdit(0, EMPTY_String);
 		try {
 			CompositeChange cc = (CompositeChange)change;
-			CompositeChange comp = (CompositeChange) cc.getChildren()[0];
-			TextChange edit = (TextChange) comp.getChildren()[0];
+			TextChange edit = (TextChange) cc.getChildren()[0];
 			source = edit.getEdit().getChildren()[0];
 		} catch (ClassCastException e1) {
 			throw new ChangeNotSupportedException(Messages.NestedEdit_0, e1);

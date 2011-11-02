@@ -53,13 +53,11 @@ public class FakeChange extends CompositeChange {
 	private void init(IDocument contents, String insertedText, TextEdit edit) {
 		this.document = contents;
 		this.insertedText = insertedText;
-		CompositeChange change = new CompositeChange("test");
 		TextChange txt = new DocumentChange("test", document);
 		MultiTextEdit multiTextEdit = new MultiTextEdit();
 		multiTextEdit.addChild(edit);
 		txt.setEdit(multiTextEdit);
-		change.add(txt);
-		add(change);
+		add(txt);
 	}
 
 	public String getInsertedText() {
