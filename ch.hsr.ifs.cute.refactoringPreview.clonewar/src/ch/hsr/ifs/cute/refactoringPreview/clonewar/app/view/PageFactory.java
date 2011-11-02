@@ -48,6 +48,9 @@ public class PageFactory {
      * @return Input pages for the transformation.
      */
     public List<UserInputWizardPage> createPagesFor(Transform transformation) {
+        if(transformation == null){
+            return new ArrayList<UserInputWizardPage>();
+        }
         return registry_.get(transformation.getClass());
     }
 

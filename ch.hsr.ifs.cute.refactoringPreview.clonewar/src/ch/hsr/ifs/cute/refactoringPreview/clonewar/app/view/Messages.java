@@ -10,7 +10,7 @@ public final class Messages {
     /**
      * The title of the error box if the refactoring startup has an error.
      */
-    public static final String STARTUP_ERROR_MSG = "CloneWar initialization error!";
+    public static final String STARTUP_ERROR_MSG = "Template Extraction Problem";
 
     /**
      * The name of the extraction page.

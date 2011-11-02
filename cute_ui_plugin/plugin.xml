@@ -27,7 +27,7 @@
           visible="true">
        <menu
              id="ch.hsr.ifs.cute.menu"
-             label="%menu.label.TestSourceGenereators">
+             label="%menu.label.TestSourceGenerators">
        </menu>
        <action
              class="ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate"

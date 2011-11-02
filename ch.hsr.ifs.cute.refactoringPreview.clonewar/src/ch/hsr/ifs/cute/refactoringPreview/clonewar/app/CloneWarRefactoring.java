@@ -99,7 +99,7 @@ public class CloneWarRefactoring extends CRefactoring {
         RefactoringResolver resolver = new RefactoringResolver(region);
         getUnit().accept(resolver);
         if (!resolver.foundRefactoring()) {
-            status.addError("No type/function selected!");
+            status.addFatalError("No type/function selected!");
             return;
         }
         transformation_ = resolver.getRefactoring();

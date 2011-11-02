@@ -4,8 +4,7 @@
    <extension point="org.eclipse.ui.actionSets">
       <actionSet
             id="ch.hsr.cdt.clonewar.app.actionSet"
-            label="%actionSet.label"
-            visible="false">
+            label="%actionSet.label">
          <menu
                id="org.eclipse.jdt.ui.refactoring.menu"
                label="%menu.label">
@@ -18,8 +17,12 @@
                definitionId="ch.hsr.ifs.cute.refactoringPreview.clonewar.command"
                id="ch.hsr.cdt.clonewar"
                label="%action.label"
-               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
-               toolbarPath="codingGroup">
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
+            <enablement>
+               <objectClass
+                     name="org.eclipse.jface.text.ITextSelection">
+               </objectClass>
+            </enablement>
          </action>
       </actionSet>
    </extension>
@@ -30,6 +33,20 @@
             id="ch.hsr.ifs.cute.refactoringPreview.clonewar.command"
             name="%command.name">
       </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+         <viewerContribution
+            id="ch.hsr.ifs.cute.tdd.cEditorContribution"
+            targetID="#CEditorContext">
+         <action
+               class="ch.hsr.ifs.cute.refactoringPreview.clonewar.app.CloneWarActionDelegate"
+               definitionId="ch.hsr.ifs.cute.refactoringPreview.clonewar.command"
+               id="ch.hsr.ifs.cute.refactoring.clonewar"
+               label="%action.label"
+               menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
+         </action>
+      </viewerContribution>
    </extension>
 
 </plugin>

@@ -7,7 +7,7 @@
     <property name='p2.timestamp' value='1306927226000'/>
   </properties>
   <children size='2'>
-    <child location='http://www.cute-test.com/updatesite/cute'/>
+    <child location='./cute'/>
     <child location='http://download.eclipse.org/tools/cdt/releases/indigo/'/>
   </children>
 </repository>
