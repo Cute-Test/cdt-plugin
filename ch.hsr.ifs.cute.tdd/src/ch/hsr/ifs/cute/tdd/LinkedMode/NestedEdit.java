@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.LinkedMode;
 
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.NotSupportedException;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.TextChange;
@@ -34,9 +33,9 @@ public class NestedEdit {
 			TextChange edit = (TextChange) comp.getChildren()[0];
 			source = edit.getEdit().getChildren()[0];
 		} catch (ClassCastException e1) {
-			throw new NotSupportedException(Messages.NestedEdit_0);
+			throw new ChangeNotSupportedException(Messages.NestedEdit_0, e1);
 		} catch (ArrayIndexOutOfBoundsException e2) {
-			throw new NotSupportedException(Messages.NestedEdit_1);
+			throw new ChangeNotSupportedException(Messages.NestedEdit_1, e2);
 		}
 	}
 

@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.tdd.linkedMode;
 
 import static org.junit.Assert.assertEquals;
 
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.NotSupportedException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
@@ -18,10 +17,11 @@ import org.eclipse.ltk.core.refactoring.NullChange;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeNotSupportedException;
 import ch.hsr.ifs.cute.tdd.LinkedMode.NestedEdit;
 import ch.hsr.ifs.cute.tdd.ui.tests.FakeChange;
 
-@SuppressWarnings("restriction")
+
 public class NestedEditTest {
 
 	private static final int OFFSET = 0;
@@ -41,12 +41,12 @@ public class NestedEditTest {
 		assertEquals(fakeChange.getInsertedText(), nested.getText());
 	}
 
-	@Test(expected=NotSupportedException.class)
+	@Test(expected=ChangeNotSupportedException.class)
 	public void testIllegalChange() {
 		new NestedEdit(new NullChange());
 	}
 
-	@Test(expected=NotSupportedException.class)
+	@Test(expected=ChangeNotSupportedException.class)
 	public void testIllegalChangeChildren() {
 		Change[] children = new Change[]{ new CompositeChange("test", new Change[]{})};
 		new NestedEdit(new CompositeChange("test", children));

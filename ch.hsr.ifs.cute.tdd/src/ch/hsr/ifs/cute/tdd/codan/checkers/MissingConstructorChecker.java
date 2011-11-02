@@ -30,6 +30,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.index.CIndex;
@@ -104,6 +105,9 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				if(bareType instanceof IEnumeration){
 					return false;
 				} else if(bareType instanceof ICPPBasicType){
+					return false;
+				}
+				else if(bareType instanceof ICPPTemplateParameter){
 					return false;
 				}
 				return true;

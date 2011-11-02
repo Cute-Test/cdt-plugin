@@ -66,7 +66,9 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 						args += declspec.getRawSignature() + ","; //$NON-NLS-1$
 					}
 				}
-				args = args.substring(0, args.length()-1);
+				if(!args.isEmpty()){
+					args = args.substring(0, args.length()-1);
+				}
 			} else {
 				strategy = ":type"; //$NON-NLS-1$
 			}

@@ -666,3 +666,24 @@ void testInitialValue() {
 	Calculator calc;
 	ASSERT_EQUAL(0, calc.value());
 }
+//!No Constructor Suggestion for Template Parameter Type
+//@.config
+markerCount=0
+//@A.cpp
+template<typename T>
+struct Templ{
+
+	void doSomething(){
+		T t;
+		t.foo();
+	}
+};
+//=
+template<typename T>
+struct Templ{
+
+	void doSomething(){
+		T t;
+		t.foo();
+	}
+};

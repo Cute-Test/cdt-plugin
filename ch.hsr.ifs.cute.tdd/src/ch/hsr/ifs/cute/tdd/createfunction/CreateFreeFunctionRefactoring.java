@@ -51,7 +51,7 @@ public class CreateFreeFunctionRefactoring extends CRefactoring3 {
 
 		ASTRewrite rewrite = collector.rewriterForTranslationUnit(localunit);
 		rewrite.insertBefore(outerFunction.getParent(), outerFunction, functionToWrite, null);
-
+		
 		setLinkedModeInformation(localunit, outerFunction.getParent(), functionToWrite);
 	}
 }
