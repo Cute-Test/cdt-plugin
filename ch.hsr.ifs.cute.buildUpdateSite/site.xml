@@ -12,13 +12,13 @@
    <feature url="features/ch.hsr.ifs.cute.gcov.feature_1.1.1.qualifier.jar" id="ch.hsr.ifs.cute.gcov.feature" version="1.1.1.qualifier">
       <category name="OptFeatures"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute_4.2.4.qualifier.jar" id="ch.hsr.ifs.cute" version="4.2.4.qualifier">
+   <feature url="features/ch.hsr.ifs.cute_4.2.7.qualifier.jar" id="ch.hsr.ifs.cute" version="4.2.7.qualifier">
       <category name="Cute Plugin"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.refactoringPreview.clonewar.feature_1.0.0.qualifier.jar" id="ch.hsr.ifs.cute.refactoringPreview.clonewar.feature" version="1.0.0.qualifier">
       <category name="refPreview"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.headers.1_7.feature_2.1.0.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_7.feature" version="2.1.0.qualifier">
+   <feature url="features/ch.hsr.ifs.cute.headers.1_7.feature_2.1.0.201108310842.jar" id="ch.hsr.ifs.cute.headers.1_7.feature" version="2.1.0.201108310842">
       <category name="Cute Headers"/>
    </feature>
    <category-def name="Cute Plugin" label="Cute Plugin"/>
