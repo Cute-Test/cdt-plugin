@@ -27,14 +27,15 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.ETTPTypeTr
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.Transform;
 
 /**
- * Entry point for the clonewar refactoring plugin. Based on the selected AST
+ * Entry point for the clonewar refactoring plug-in. Based on the selected AST
  * Node the appropriate transformation is chosen and applied.
  * 
  * @author ythrier(at)hsr.ch
+ * @author Thomas Corbat
  */
 @SuppressWarnings("restriction")
 public class CloneWarRefactoring extends CRefactoring {
-    private Transform transformation_;
+    private Transform transformation;
 
     /**
      * {@inheritDoc}
@@ -63,7 +64,7 @@ public class CloneWarRefactoring extends CRefactoring {
         determineRefactoringType(status);
         if (status.hasError())
             return status;
-        transformation_.preprocess(status);
+        transformation.preprocess(status);
         return status;
     }
 
@@ -74,7 +75,7 @@ public class CloneWarRefactoring extends CRefactoring {
     public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
             throws CoreException, OperationCanceledException {
         RefactoringStatus status = super.checkFinalConditions(pm);
-        transformation_.postprocess(status);
+        transformation.postprocess(status);
         return status;
     }
 
@@ -84,7 +85,7 @@ public class CloneWarRefactoring extends CRefactoring {
      * @return Transformation.
      */
     public Transform getTransformation() {
-        return transformation_;
+        return transformation;
     }
 
     /**
@@ -102,8 +103,8 @@ public class CloneWarRefactoring extends CRefactoring {
             status.addFatalError("No type/function selected!");
             return;
         }
-        transformation_ = resolver.getRefactoring();
-        transformation_.setTranslationUnit(getUnit());
+        transformation = resolver.getRefactoring();
+        transformation.setTranslationUnit(getUnit());
     }
 
     /**
@@ -113,7 +114,7 @@ public class CloneWarRefactoring extends CRefactoring {
     protected void collectModifications(IProgressMonitor pm,
             ModificationCollector collector) throws CoreException,
             OperationCanceledException {
-        transformation_.performChanges(collector);
+        transformation.performChanges(collector);
     }
 
     /**
@@ -123,8 +124,8 @@ public class CloneWarRefactoring extends CRefactoring {
      * @author ythrier(at)hsr.ch
      */
     private class RefactoringResolver extends ASTVisitor {
-        private Region region_;
-        private Transform refactoring_;
+        private Region region;
+        private Transform refactoring;
 
         /**
          * Create the refactoring resolver.
@@ -135,7 +136,7 @@ public class CloneWarRefactoring extends CRefactoring {
         public RefactoringResolver(Region region) {
             this.shouldVisitDeclarations = true;
             this.shouldVisitDeclSpecifiers = true;
-            this.region_ = region;
+            this.region = region;
         }
 
         /**
@@ -146,7 +147,7 @@ public class CloneWarRefactoring extends CRefactoring {
          *         otherwise false.
          */
         public boolean foundRefactoring() {
-            return refactoring_ != null;
+            return refactoring != null;
         }
 
         /**
@@ -156,7 +157,7 @@ public class CloneWarRefactoring extends CRefactoring {
          * @return Refactoring that can be performed.
          */
         public Transform getRefactoring() {
-            return refactoring_;
+            return refactoring;
         }
 
         /**
@@ -166,15 +167,15 @@ public class CloneWarRefactoring extends CRefactoring {
         public int leave(IASTDeclaration declaration) {
             if (isSelectedNode(declaration)) {
                 if (isFunction(declaration)) {
-                    refactoring_ = new ETTPFunctionTransform();
-                    refactoring_.setNode(declaration);
+                    refactoring = new ETTPFunctionTransform();
+                    refactoring.setNode(declaration);
                     return PROCESS_ABORT;
                 }
                 ICPPASTCompositeTypeSpecifier type = findTypeDef(declaration);
                 if ((type != null) && isType(type)) {
-                    refactoring_ = new ETTPTypeTransform();
-                    refactoring_.setNode(type.getParent());
-                    refactoring_
+                    refactoring = new ETTPTypeTransform();
+                    refactoring.setNode(type.getParent());
+                    refactoring
                             .setSingleSelection(((CPPASTSimpleDeclaration) declaration)
                                     .getDeclSpecifier());
                     return PROCESS_ABORT;
@@ -184,7 +185,7 @@ public class CloneWarRefactoring extends CRefactoring {
         }
 
         /**
-         * Find the defintion of a type (struct/class).
+         * Find the definition of a type (struct/class).
          * 
          * @param declaration
          *            Declaration.
@@ -209,11 +210,11 @@ public class CloneWarRefactoring extends CRefactoring {
                 IASTDeclaration decl = findFunctionDef(declSpec);
                 if (decl != null && isFunction(decl)) {
                     status = leave(findFunctionDef(declSpec));
-                    refactoring_.setSingleSelection(declSpec);
+                    refactoring.setSingleSelection(declSpec);
                 }
                 if (isType(declSpec)) {
-                    refactoring_ = new ETTPTypeTransform();
-                    refactoring_.setNode(declSpec.getParent());
+                    refactoring = new ETTPTypeTransform();
+                    refactoring.setNode(declSpec.getParent());
                     status = PROCESS_ABORT;
                 }
                 return status;
@@ -266,7 +267,7 @@ public class CloneWarRefactoring extends CRefactoring {
          * @return True if this node is selected, otherwise false.
          */
         private boolean isSelectedNode(IASTNode node) {
-            return SelectionHelper.isSelectionOnExpression(region_, node);
+            return SelectionHelper.isSelectionOnExpression(region, node);
         }
     }
 }

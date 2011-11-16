@@ -37,13 +37,13 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  */
 @SuppressWarnings("restriction")
 public abstract class Transform {
-    private List<IConfigChangeAction> configChanges_ = new ArrayList<IConfigChangeAction>();
-    private CPPASTNodeFactory nodeFactory_ = new CPPASTNodeFactory();
-    private TransformConfiguration configuration_;
-    private IASTTranslationUnit translationUnit_;
-    private IASTNode originalNode_;
-    private IASTNode copyNode_;
-    private IASTNode singleSelection_;
+    private List<IConfigChangeAction> configChanges = new ArrayList<IConfigChangeAction>();
+    private CPPASTNodeFactory nodeFactory = new CPPASTNodeFactory();
+    private TransformConfiguration configuration;
+    private IASTTranslationUnit translationUnit;
+    private IASTNode originalNode;
+    private IASTNode copyNode;
+    private IASTNode singleSelection;
 
     /**
      * Set the transform configuration.
@@ -52,7 +52,7 @@ public abstract class Transform {
      *            Configuration.
      */
     protected void setTransformConfiguration(TransformConfiguration config) {
-        this.configuration_ = config;
+        this.configuration = config;
     }
 
     /**
@@ -61,7 +61,7 @@ public abstract class Transform {
      * @return Configuration.
      */
     public TransformConfiguration getConfig() {
-        return configuration_;
+        return configuration;
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class Transform {
      *            Translation unit.
      */
     public void setTranslationUnit(IASTTranslationUnit translationUnit) {
-        this.translationUnit_ = translationUnit;
+        this.translationUnit = translationUnit;
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class Transform {
      *            Single selection node.
      */
     public void setSingleSelection(IASTNode singleSelection) {
-        this.singleSelection_ = singleSelection;
+        this.singleSelection = singleSelection;
     }
 
     /**
@@ -90,7 +90,7 @@ public abstract class Transform {
      * @return Single selection node.
      */
     protected IASTNode getSingleSelection() {
-        return singleSelection_;
+        return singleSelection;
     }
 
     /**
@@ -99,7 +99,7 @@ public abstract class Transform {
      * @return Single selection.
      */
     protected boolean hasSingleSelection() {
-        return singleSelection_ != null;
+        return singleSelection != null;
     }
 
     /**
@@ -108,7 +108,7 @@ public abstract class Transform {
      * @return Translation unit.
      */
     protected IASTTranslationUnit getUnit() {
-        return translationUnit_;
+        return translationUnit;
     }
 
     /**
@@ -118,8 +118,8 @@ public abstract class Transform {
      *            Original node.
      */
     public void setNode(IASTNode originalNode) {
-        this.originalNode_ = originalNode;
-        this.copyNode_ = originalNode_.copy();
+        this.originalNode = originalNode;
+        this.copyNode = originalNode.copy();
     }
 
     /**
@@ -128,7 +128,7 @@ public abstract class Transform {
      * @return Original node.
      */
     protected IASTNode getOriginalNode() {
-        return originalNode_;
+        return originalNode;
     }
 
     /**
@@ -137,7 +137,7 @@ public abstract class Transform {
      * @return Copy node.
      */
     protected IASTNode getCopyNode() {
-        return copyNode_;
+        return copyNode;
     }
 
     /**
@@ -164,7 +164,7 @@ public abstract class Transform {
         ASTTypeVisitor typeVisitor = findTypes(status);
         setTransformConfiguration(new TransformConfiguration(
                 typeVisitor.getActionMap()));
-        addConfigChangeActions(configChanges_);
+        addConfigChangeActions(configChanges);
         applyConfigChanges(status);
     }
 
@@ -175,7 +175,7 @@ public abstract class Transform {
      *            Status.
      */
     private void applyConfigChanges(RefactoringStatus status) {
-        for (IConfigChangeAction configChange : configChanges_) {
+        for (IConfigChangeAction configChange : configChanges) {
             configChange.applyChange(getConfig(), status);
         }
     }
@@ -245,7 +245,7 @@ public abstract class Transform {
      */
     private void performReplace(ModificationCollector collector,
             IASTNode oldNode, IASTNode newNode) {
-        ASTRewrite rewriter = createRewriter(collector, translationUnit_);
+        ASTRewrite rewriter = createRewriter(collector, translationUnit);
         rewriter.replace(oldNode, newNode, createEditText());
     }
 
@@ -291,7 +291,7 @@ public abstract class Transform {
      */
     private IASTNode createTemplateDeclaration() {
         IASTDeclaration templateBody = getTemplateBody();
-        return nodeFactory_.createTemplateDeclaration(createTemplateParams(),
+        return nodeFactory.createTemplateDeclaration(createTemplateParams(),
                 templateBody);
     }
 
@@ -365,7 +365,7 @@ public abstract class Transform {
      * @return Node factory.
      */
     protected CPPASTNodeFactory getNodeFactory() {
-        return nodeFactory_;
+        return nodeFactory;
     }
 
     /**

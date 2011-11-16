@@ -4,7 +4,8 @@
    <extension point="org.eclipse.ui.actionSets">
       <actionSet
             id="ch.hsr.cdt.clonewar.app.actionSet"
-            label="%actionSet.label">
+            label="%actionSet.label"
+            visible="true">
          <menu
                id="org.eclipse.jdt.ui.refactoring.menu"
                label="%menu.label">

@@ -8,12 +8,14 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeTemplateParameter;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.cdt.internal.core.dom.parser.ASTNodeSelector;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
+import org.eclipse.cdt.internal.ui.refactoring.utils.NodeHelper;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.TextEditGroup;
 
@@ -25,6 +27,10 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  * Extract typename template parameter from type transformation.
  * 
  * @author ythrier(at)hsr.ch
+ */
+/**
+ * @author tcorbat
+ * 
  */
 @SuppressWarnings("restriction")
 public class ETTPTypeTransform extends Transform {
@@ -87,7 +93,8 @@ public class ETTPTypeTransform extends Transform {
      * {@inheritDoc}
      */
     @Override
-    protected void addConfigChangeActions(List<IConfigChangeAction> configChanges) {
+    protected void addConfigChangeActions(
+            List<IConfigChangeAction> configChanges) {
         addNameChangeAction(configChanges);
         addSingleSelectionChangeAction(configChanges);
         configChanges.add(new TypeOrderingChangeAction());
@@ -165,8 +172,34 @@ public class ETTPTypeTransform extends Transform {
      *            Typedef node.
      */
     private void insertAfterType(ASTRewrite rewriter, IASTNode typedef) {
-        rewriter.insertBefore(getOriginalNode().getParent(), null, typedef,
+        final IASTNode templateSource = getOriginalNode();
+        IASTNode nextNode = getNextSibling(templateSource);
+        rewriter.insertBefore(templateSource.getParent(), nextNode, typedef,
                 createTypedefEditText());
+    }
+
+    /**
+     * Determines the node, which is sibling to node in its parent's children.
+     * 
+     * @param node
+     *            {@link IASTNode} to find the next sibling for.
+     * @return
+     *            The next sibling of node. May be null if node is null, the parent of node is null or node is the last child of its parent.
+     */
+    private IASTNode getNextSibling(final IASTNode node) {
+        if(node == null || node.getParent() == null){
+            return null;
+        }
+        
+        final IASTNode  parent = node.getParent();
+        final IASTNode[] siblings = parent.getChildren();
+        for(int siblingIndex = 1; siblingIndex < siblings.length; siblingIndex++){
+            if(siblings[siblingIndex - 1] == node){
+                return siblings[siblingIndex];
+            }
+        }
+       
+        return null;
     }
 
     /**
