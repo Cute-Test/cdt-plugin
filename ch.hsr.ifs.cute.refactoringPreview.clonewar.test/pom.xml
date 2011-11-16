@@ -23,6 +23,7 @@
     		    	<testSuite>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AllTests</testClass>
         			<useUIHarness>true</useUIHarness>
+					<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
 			</configuration>
     	  	</plugin>
 	    </plugins>
