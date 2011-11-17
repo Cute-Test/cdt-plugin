@@ -10,6 +10,8 @@ import java.util.TreeMap;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTParameterDeclaration;
@@ -40,39 +42,39 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.Tra
  */
 @SuppressWarnings("restriction")
 public class ASTTypeVisitor extends ASTVisitor {
-    private final Map<ASTKeyPair, Class<? extends TransformAction>> registry_ = new HashMap<ASTKeyPair, Class<? extends TransformAction>>();
-    private final Map<TypeInformation, List<TransformAction>> actions_ = new TreeMap<TypeInformation, List<TransformAction>>(
+    private final Map<ASTKeyPair, Class<? extends TransformAction>> registry = new HashMap<ASTKeyPair, Class<? extends TransformAction>>();
+    private final Map<TypeInformation, List<TransformAction>> actions = new TreeMap<TypeInformation, List<TransformAction>>(
             new Comparator<TypeInformation>() {
 
                 @Override
                 public int compare(TypeInformation o1, TypeInformation o2) {
                     return o1.toString().compareTo(o2.toString());
                 }});
-    private final List<TypeInformation> typeInformations_ = new ArrayList<TypeInformation>();
-    private Iterator<TypeInformation> typeInfoIterator_;
-    private boolean secondRun_ = false;
-    private Exception exception_;
+    private final List<TypeInformation> typeInformations = new ArrayList<TypeInformation>();
+    private Iterator<TypeInformation> typeInfoIterator;
+    private boolean secondRun = false;
+    private Exception exception;
 
     /**
      * Create the type visitor and load lookup registry for the actions.
      */
     public ASTTypeVisitor() {
         this.shouldVisitDeclSpecifiers = true;
-        registry_.put(new ASTKeyPair(CPPASTParameterDeclaration.class,
+        registry.put(new ASTKeyPair(CPPASTParameterDeclaration.class,
                 CPPASTSimpleDeclSpecifier.class), ParamTransformAction.class);
-        registry_.put(new ASTKeyPair(CPPASTFunctionDefinition.class,
+        registry.put(new ASTKeyPair(CPPASTFunctionDefinition.class,
                 CPPASTSimpleDeclSpecifier.class), ReturnTransformAction.class);
-        registry_.put(new ASTKeyPair(CPPASTSimpleDeclaration.class,
+        registry.put(new ASTKeyPair(CPPASTSimpleDeclaration.class,
                 CPPASTSimpleDeclSpecifier.class), BodyTransformAction.class);
-        registry_.put(new ASTKeyPair(CPPASTTypeId.class,
+        registry.put(new ASTKeyPair(CPPASTTypeId.class,
                 CPPASTSimpleDeclSpecifier.class), NestedTransformAction.class);
-        registry_.put(new ASTKeyPair(CPPASTParameterDeclaration.class,
+        registry.put(new ASTKeyPair(CPPASTParameterDeclaration.class,
                 CPPASTNamedTypeSpecifier.class), ParamTransformAction.class);
-        registry_.put(new ASTKeyPair(CPPASTFunctionDefinition.class,
+        registry.put(new ASTKeyPair(CPPASTFunctionDefinition.class,
                 CPPASTNamedTypeSpecifier.class), ReturnTransformAction.class);
-        registry_.put(new ASTKeyPair(CPPASTSimpleDeclaration.class,
+        registry.put(new ASTKeyPair(CPPASTSimpleDeclaration.class,
                 CPPASTNamedTypeSpecifier.class), BodyTransformAction.class);
-        registry_.put(new ASTKeyPair(CPPASTTypeId.class,
+        registry.put(new ASTKeyPair(CPPASTTypeId.class,
                 CPPASTNamedTypeSpecifier.class), NestedTransformAction.class);
     }
 
@@ -84,7 +86,7 @@ public class ASTTypeVisitor extends ASTVisitor {
      *         false.
      */
     public boolean hasException() {
-        return exception_ != null;
+        return exception != null;
     }
 
     /**
@@ -93,14 +95,14 @@ public class ASTTypeVisitor extends ASTVisitor {
      * @return Exception.
      */
     public Exception getException() {
-        return exception_;
+        return exception;
     }
 
     /**
      * Change to the second run.
      */
     public void enableSecondRun() {
-        secondRun_ = true;
+        secondRun = true;
     }
 
     /**
@@ -109,11 +111,11 @@ public class ASTTypeVisitor extends ASTVisitor {
      * @return Map of types and actions.
      */
     public Map<TypeInformation, List<TransformAction>> getActionMap() {
-        if (!secondRun_) {
+        if (!secondRun) {
             throw new IllegalStateException(
                     "Reading action map before second run not allowed!");
         }
-        return actions_;
+        return actions;
     }
 
     /**
@@ -121,17 +123,28 @@ public class ASTTypeVisitor extends ASTVisitor {
      */
     @Override
     public int visit(IASTDeclSpecifier declSpec) {
+        if(hasNoType(declSpec)){
+            return PROCESS_CONTINUE;
+        }
         try {
-            if (secondRun_) {
+            if (secondRun) {
                 performSecondRun(declSpec);
             } else {
                 performFirstRun(declSpec);
             }
         } catch (Exception e) {
-            exception_ = e;
+            exception = e;
             return PROCESS_ABORT;
         }
         return PROCESS_CONTINUE;
+    }
+
+    private boolean hasNoType(IASTDeclSpecifier declSpec) {
+        if(declSpec instanceof IASTSimpleDeclSpecifier){
+            IASTSimpleDeclSpecifier sDeclSpec = (IASTSimpleDeclSpecifier) declSpec;
+                return sDeclSpec.getType() == IASTSimpleDeclSpecifier.t_unspecified && !sDeclSpec.isLong() && !sDeclSpec.isLongLong() && !sDeclSpec.isShort() && !sDeclSpec.isSigned() && !sDeclSpec.isUnsigned();
+        }
+        return false;
     }
 
     /**
@@ -141,10 +154,9 @@ public class ASTTypeVisitor extends ASTVisitor {
      *            Declaration specifier.
      */
     private void performFirstRun(IASTDeclSpecifier declSpec) {
-        if (!hasAction(declSpec)) {
-            return;
+        if (hasAction(declSpec)) {
+            typeInformations.add(createTypeInfo(declSpec));
         }
-        typeInformations_.add(createTypeInfo(declSpec));
     }
 
     /**
@@ -159,22 +171,22 @@ public class ASTTypeVisitor extends ASTVisitor {
      */
     private void performSecondRun(IASTDeclSpecifier declSpec)
             throws InstantiationException, IllegalAccessException {
-        if (typeInfoIterator_ == null) {
-            typeInfoIterator_ = typeInformations_.iterator();
-            secondRun_ = true;
+        if (typeInfoIterator == null) {
+            typeInfoIterator = typeInformations.iterator();
+            secondRun = true;
         }
         if (!hasAction(declSpec)) {
             return;
         }
-        if (!typeInfoIterator_.hasNext()) {
+        if (!typeInfoIterator.hasNext()) {
             throw new IllegalArgumentException(
                     "Not traversing the same AST structure!");
         }
-        TypeInformation typeInfo = typeInfoIterator_.next();
-        if (!actions_.containsKey(typeInfo)) {
-            actions_.put(typeInfo, new ArrayList<TransformAction>());
+        TypeInformation typeInfo = typeInfoIterator.next();
+        if (!actions.containsKey(typeInfo)) {
+            actions.put(typeInfo, new ArrayList<TransformAction>());
         }
-        actions_.get(typeInfo).add(createAction(declSpec));
+        actions.get(typeInfo).add(createAction(declSpec));
     }
 
     /**
@@ -190,7 +202,7 @@ public class ASTTypeVisitor extends ASTVisitor {
      */
     private TransformAction createAction(IASTDeclSpecifier declSpec)
             throws InstantiationException, IllegalAccessException {
-        TransformAction action = registry_.get(new ASTKeyPair(declSpec))
+        TransformAction action = registry.get(new ASTKeyPair(declSpec))
                 .newInstance();
         action.setNode(declSpec);
         return action;
@@ -215,6 +227,6 @@ public class ASTTypeVisitor extends ASTVisitor {
      * @return True if an action could be created, otherwise false.
      */
     private boolean hasAction(IASTDeclSpecifier declSpec) {
-        return registry_.containsKey(new ASTKeyPair(declSpec));
+        return registry.containsKey(new ASTKeyPair(declSpec));
     }
 }

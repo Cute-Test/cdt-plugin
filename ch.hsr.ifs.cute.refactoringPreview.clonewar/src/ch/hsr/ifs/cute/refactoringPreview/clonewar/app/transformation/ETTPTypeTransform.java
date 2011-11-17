@@ -1,11 +1,17 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeTemplateParameter;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.parser.ASTNodeSelector;
@@ -27,11 +33,9 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  * Extract typename template parameter from type transformation.
  * 
  * @author ythrier(at)hsr.ch
+ * @author tcorbat(at)hsr.ch
  */
-/**
- * @author tcorbat
- * 
- */
+
 @SuppressWarnings("restriction")
 public class ETTPTypeTransform extends Transform {
     private static final String TYPETEMPLATE_EDITGROUP_MSG = "Changing type to template...";
@@ -212,19 +216,24 @@ public class ETTPTypeTransform extends Transform {
     }
 
     /**
-     * Rename the type using the original and append
+     * Rename the type, including its constructors, using the original and append
      * {@link #TEMPLATE_TYPE_NAME_POSTFIX}.
      */
     private void renameTypeForNewTemplate() {
-        getCompositeTypeSpecifier(getCopyNode()).setName(createNewTypeName());
+        ICPPASTCompositeTypeSpecifier typeSpecifier = getCompositeTypeSpecifier(getCopyNode());
+        final IASTName newTypeName = createNewTypeName();
+        
+        findConstructors(typeSpecifier, newTypeName);
+        
+        typeSpecifier.setName(newTypeName);
     }
-
+    
     /**
      * Create the new AST name for the type.
      * 
      * @return New AST name.
      */
-    private CPPASTName createNewTypeName() {
+    private IASTName createNewTypeName() {
         return new CPPASTName(createNewTemplateTypeName().toCharArray());
     }
 
@@ -253,6 +262,38 @@ public class ETTPTypeTransform extends Transform {
                 .getDeclSpecifier();
     }
 
+    /**
+     * Get all constructor declarators of a given {@link ICPPASTCompositeTypeSpecifier}.
+     * 
+     * @param typeSpecifier
+     *            The {@link ICPPASTCompositeTypeSpecifier} to get the constructors from.
+     * @param newTypeName 
+     * @return    A {@link List} containing the constructors of typeSpecifier as {@link IASTDeclarator}. May not be null.
+     */
+    private void findConstructors(ICPPASTCompositeTypeSpecifier typeSpecifier, IASTName newTypeName) {
+        String typeName = typeSpecifier.getName().toString();
+        
+        if(typeSpecifier != null){
+            for(IASTDeclaration declaration : typeSpecifier.getDeclarations(true)){
+                if (declaration instanceof IASTSimpleDeclaration) {
+                    IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration) declaration;
+                    for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()){
+                        if(declarator.getName().toString().equals(typeName)){
+                            declarator.setName(newTypeName);
+                        }
+                    }
+                }
+                else if (declaration instanceof IASTFunctionDefinition) {
+                    IASTFunctionDefinition functionDeclaration = (IASTFunctionDefinition) declaration;
+                    IASTDeclarator declarator = functionDeclaration.getDeclarator();
+                    if(declarator.getName().toString().equals(typeName)){
+                        declarator.setName(newTypeName);
+                    }
+                }
+            }
+        }
+    }
+    
     /**
      * {@inheritDoc}
      */

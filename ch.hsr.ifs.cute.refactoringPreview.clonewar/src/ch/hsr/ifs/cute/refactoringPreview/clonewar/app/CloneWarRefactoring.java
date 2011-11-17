@@ -4,6 +4,7 @@ import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICElement;
@@ -31,7 +32,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.Transform;
  * Node the appropriate transformation is chosen and applied.
  * 
  * @author ythrier(at)hsr.ch
- * @author Thomas Corbat
+ * @author tcorbat(at)hsr.ch
  */
 @SuppressWarnings("restriction")
 public class CloneWarRefactoring extends CRefactoring {
@@ -95,16 +96,18 @@ public class CloneWarRefactoring extends CRefactoring {
      * @param status
      *            A success refactoring status if an appropriate refactoring was
      *            found, otherwise error.
+     * @return 
      */
     private void determineRefactoringType(RefactoringStatus status) {
-        RefactoringResolver resolver = new RefactoringResolver(region);
-        getUnit().accept(resolver);
-        if (!resolver.foundRefactoring()) {
+        final RefactoringResolver resolver = new RefactoringResolver(region);
+        final IASTTranslationUnit translationUnit = getUnit();
+        translationUnit.accept(resolver);
+        if (resolver.foundRefactoring()) {
+            transformation = resolver.getRefactoring();
+            transformation.setTranslationUnit(translationUnit);            
+        } else {
             status.addFatalError("No type/function selected!");
-            return;
         }
-        transformation = resolver.getRefactoring();
-        transformation.setTranslationUnit(getUnit());
     }
 
     /**
@@ -124,7 +127,7 @@ public class CloneWarRefactoring extends CRefactoring {
      * @author ythrier(at)hsr.ch
      */
     private class RefactoringResolver extends ASTVisitor {
-        private Region region;
+        private final Region region;
         private Transform refactoring;
 
         /**
@@ -212,7 +215,7 @@ public class CloneWarRefactoring extends CRefactoring {
                     status = leave(findFunctionDef(declSpec));
                     refactoring.setSingleSelection(declSpec);
                 }
-                if (isType(declSpec)) {
+                else if (isType(declSpec)) {
                     refactoring = new ETTPTypeTransform();
                     refactoring.setNode(declSpec.getParent());
                     status = PROCESS_ABORT;

@@ -189,9 +189,9 @@ public abstract class Transform {
      */
     private ASTTypeVisitor findTypes(RefactoringStatus status) {
         ASTTypeVisitor typeVisitor = new ASTTypeVisitor();
-        getOriginalNode().accept(typeVisitor);
+        originalNode.accept(typeVisitor);
         typeVisitor.enableSecondRun();
-        getCopyNode().accept(typeVisitor);
+        copyNode.accept(typeVisitor);
         if (typeVisitor.hasException()) {
             status.addFatalError(typeVisitor.getException().getMessage());
         }
