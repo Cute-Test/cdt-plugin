@@ -183,6 +183,13 @@
 		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
 		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.ParamBeforeReturnConfigurationStrategy</TestStrategy>
 	</Test>
+	<Test>
+		<TestConfig>testconfig/function/ETTPMF_Constructor_without_Templatable_Content.rts</TestConfig>
+		<Description>ETTPMF: Constructor without Templatable Content.</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionFatalErrorCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
 	<!-- ETTPT Tests -->
 	<Test>
 		<TestConfig>testconfig/type/ETTPT_Struct_NamedTypeField_ReplaceAll_DefaultOn.rts</TestConfig>
@@ -258,6 +265,13 @@
 		<TestConfig>testconfig/type/ETTPT_Struct_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.rts</TestConfig>
 		<Description>ETTPT: Struct, named type field, single selection, replace all, default on</Description>
 		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_without_Templatable_Content.rts</TestConfig>
+		<Description>ETTPT: Struct without Templatable Content.</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionFatalErrorCheckStrategy</InitialAssert>
 		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
 		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
 	</Test>

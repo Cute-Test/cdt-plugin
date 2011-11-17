@@ -1,6 +1,5 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
@@ -8,20 +7,16 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeTemplateParameter;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.cdt.internal.core.dom.parser.ASTNodeSelector;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.utils.NodeHelper;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.TextEditGroup;
 
@@ -187,22 +182,22 @@ public class ETTPTypeTransform extends Transform {
      * 
      * @param node
      *            {@link IASTNode} to find the next sibling for.
-     * @return
-     *            The next sibling of node. May be null if node is null, the parent of node is null or node is the last child of its parent.
+     * @return The next sibling of node. May be null if node is null, the parent
+     *         of node is null or node is the last child of its parent.
      */
     private IASTNode getNextSibling(final IASTNode node) {
-        if(node == null || node.getParent() == null){
+        if (node == null || node.getParent() == null) {
             return null;
         }
-        
-        final IASTNode  parent = node.getParent();
+
+        final IASTNode parent = node.getParent();
         final IASTNode[] siblings = parent.getChildren();
-        for(int siblingIndex = 1; siblingIndex < siblings.length; siblingIndex++){
-            if(siblings[siblingIndex - 1] == node){
+        for (int siblingIndex = 1; siblingIndex < siblings.length; siblingIndex++) {
+            if (siblings[siblingIndex - 1] == node) {
                 return siblings[siblingIndex];
             }
         }
-       
+
         return null;
     }
 
@@ -216,18 +211,18 @@ public class ETTPTypeTransform extends Transform {
     }
 
     /**
-     * Rename the type, including its constructors, using the original and append
-     * {@link #TEMPLATE_TYPE_NAME_POSTFIX}.
+     * Rename the type, including its constructors, using the original and
+     * append {@link #TEMPLATE_TYPE_NAME_POSTFIX}.
      */
     private void renameTypeForNewTemplate() {
         ICPPASTCompositeTypeSpecifier typeSpecifier = getCompositeTypeSpecifier(getCopyNode());
         final IASTName newTypeName = createNewTypeName();
-        
+
         findConstructors(typeSpecifier, newTypeName);
-        
+
         typeSpecifier.setName(newTypeName);
     }
-    
+
     /**
      * Create the new AST name for the type.
      * 
@@ -263,37 +258,50 @@ public class ETTPTypeTransform extends Transform {
     }
 
     /**
-     * Get all constructor declarators of a given {@link ICPPASTCompositeTypeSpecifier}.
+     * Get all constructor declarators of a given
+     * {@link ICPPASTCompositeTypeSpecifier}.
      * 
      * @param typeSpecifier
-     *            The {@link ICPPASTCompositeTypeSpecifier} to get the constructors from.
-     * @param newTypeName 
-     * @return    A {@link List} containing the constructors of typeSpecifier as {@link IASTDeclarator}. May not be null.
+     *            The {@link ICPPASTCompositeTypeSpecifier} to get the
+     *            constructors from.
+     * @param newTypeName
+     * @return A {@link List} containing the constructors of typeSpecifier as
+     *         {@link IASTDeclarator}. May not be null.
      */
-    private void findConstructors(ICPPASTCompositeTypeSpecifier typeSpecifier, IASTName newTypeName) {
-        String typeName = typeSpecifier.getName().toString();
+    private void findConstructors(ICPPASTCompositeTypeSpecifier typeSpecifier,
+            IASTName newTypeName) {
+        if (typeSpecifier == null) {
+            return;
+        }
         
-        if(typeSpecifier != null){
-            for(IASTDeclaration declaration : typeSpecifier.getDeclarations(true)){
-                if (declaration instanceof IASTSimpleDeclaration) {
-                    IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration) declaration;
-                    for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()){
-                        if(declarator.getName().toString().equals(typeName)){
-                            declarator.setName(newTypeName);
-                        }
-                    }
-                }
-                else if (declaration instanceof IASTFunctionDefinition) {
-                    IASTFunctionDefinition functionDeclaration = (IASTFunctionDefinition) declaration;
-                    IASTDeclarator declarator = functionDeclaration.getDeclarator();
-                    if(declarator.getName().toString().equals(typeName)){
-                        declarator.setName(newTypeName);
-                    }
-                }
+        String typeName = typeSpecifier.getName().toString();
+        for (IASTDeclaration declaration : typeSpecifier.getDeclarations(true)) {
+            replaceConstructorNames(newTypeName, typeName, declaration);
+        }
+
+    }
+
+    private void replaceConstructorNames(IASTName newTypeName, String typeName,
+            IASTDeclaration declaration) {
+        if (declaration instanceof IASTSimpleDeclaration) {
+            IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration) declaration;
+            for (IASTDeclarator declarator : simpleDeclaration.getDeclarators()) {
+                renameMatchingNames(newTypeName, typeName, declarator);
             }
+        } else if (declaration instanceof IASTFunctionDefinition) {
+            IASTFunctionDefinition functionDeclaration = (IASTFunctionDefinition) declaration;
+            IASTDeclarator declarator = functionDeclaration.getDeclarator();
+            renameMatchingNames(newTypeName, typeName, declarator);
         }
     }
-    
+
+    private void renameMatchingNames(IASTName newName, String name,
+            IASTDeclarator declarator) {
+        if (declarator.getName().toString().equals(name)) {
+            declarator.setName(newName);
+        }
+    }
+
     /**
      * {@inheritDoc}
      */

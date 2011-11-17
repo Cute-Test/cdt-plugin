@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
@@ -43,16 +44,9 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.Tra
 @SuppressWarnings("restriction")
 public class ASTTypeVisitor extends ASTVisitor {
     private final Map<ASTKeyPair, Class<? extends TransformAction>> registry = new HashMap<ASTKeyPair, Class<? extends TransformAction>>();
-    private final Map<TypeInformation, List<TransformAction>> actions = new TreeMap<TypeInformation, List<TransformAction>>(
-            new Comparator<TypeInformation>() {
-
-                @Override
-                public int compare(TypeInformation o1, TypeInformation o2) {
-                    return o1.toString().compareTo(o2.toString());
-                }});
+   
     private final List<TypeInformation> typeInformations = new ArrayList<TypeInformation>();
-    private Iterator<TypeInformation> typeInfoIterator;
-    private boolean secondRun = false;
+
     private Exception exception;
 
     /**
@@ -98,53 +92,26 @@ public class ASTTypeVisitor extends ASTVisitor {
         return exception;
     }
 
-    /**
-     * Change to the second run.
-     */
-    public void enableSecondRun() {
-        secondRun = true;
-    }
-
-    /**
-     * Returns the actions and type informations as a map.
-     * 
-     * @return Map of types and actions.
-     */
-    public Map<TypeInformation, List<TransformAction>> getActionMap() {
-        if (!secondRun) {
-            throw new IllegalStateException(
-                    "Reading action map before second run not allowed!");
-        }
-        return actions;
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public int visit(IASTDeclSpecifier declSpec) {
-        if(hasNoType(declSpec)){
+        if(!hasType(declSpec)){
             return PROCESS_CONTINUE;
         }
-        try {
-            if (secondRun) {
-                performSecondRun(declSpec);
-            } else {
-                performFirstRun(declSpec);
-            }
-        } catch (Exception e) {
-            exception = e;
-            return PROCESS_ABORT;
-        }
+  
+        performFirstRun(declSpec);    
         return PROCESS_CONTINUE;
     }
 
-    private boolean hasNoType(IASTDeclSpecifier declSpec) {
+    private boolean hasType(IASTDeclSpecifier declSpec) {
         if(declSpec instanceof IASTSimpleDeclSpecifier){
             IASTSimpleDeclSpecifier sDeclSpec = (IASTSimpleDeclSpecifier) declSpec;
-                return sDeclSpec.getType() == IASTSimpleDeclSpecifier.t_unspecified && !sDeclSpec.isLong() && !sDeclSpec.isLongLong() && !sDeclSpec.isShort() && !sDeclSpec.isSigned() && !sDeclSpec.isUnsigned();
+                return sDeclSpec.getType() != IASTSimpleDeclSpecifier.t_unspecified || sDeclSpec.isLong() || sDeclSpec.isLongLong() || sDeclSpec.isShort() || sDeclSpec.isSigned() || sDeclSpec.isUnsigned();
         }
-        return false;
+        return true;
     }
 
     /**
@@ -159,35 +126,7 @@ public class ASTTypeVisitor extends ASTVisitor {
         }
     }
 
-    /**
-     * Handle the second run visiting.
-     * 
-     * @param declSpec
-     *            Declaration specifier.
-     * @throws IllegalAccessException
-     *             Reflection.
-     * @throws InstantiationException
-     *             Reflection.
-     */
-    private void performSecondRun(IASTDeclSpecifier declSpec)
-            throws InstantiationException, IllegalAccessException {
-        if (typeInfoIterator == null) {
-            typeInfoIterator = typeInformations.iterator();
-            secondRun = true;
-        }
-        if (!hasAction(declSpec)) {
-            return;
-        }
-        if (!typeInfoIterator.hasNext()) {
-            throw new IllegalArgumentException(
-                    "Not traversing the same AST structure!");
-        }
-        TypeInformation typeInfo = typeInfoIterator.next();
-        if (!actions.containsKey(typeInfo)) {
-            actions.put(typeInfo, new ArrayList<TransformAction>());
-        }
-        actions.get(typeInfo).add(createAction(declSpec));
-    }
+
 
     /**
      * Create an action for the declaration node specifier.
@@ -228,5 +167,62 @@ public class ASTTypeVisitor extends ASTVisitor {
      */
     private boolean hasAction(IASTDeclSpecifier declSpec) {
         return registry.containsKey(new ASTKeyPair(declSpec));
+    }
+
+    public Map<TypeInformation, List<TransformAction>> findTypes(IASTNode originalNode, IASTNode copyNode) {
+            originalNode.accept(this);
+            ActionCreationVisitor actionCreator = new ActionCreationVisitor(typeInformations);
+            copyNode.accept(actionCreator);
+            return actionCreator.getActions();
+    }
+    
+    private class ActionCreationVisitor extends ASTVisitor{
+        {
+            shouldVisitDeclSpecifiers = true;
+        }
+        
+        private final Iterator<TypeInformation> typeInfoIterator;
+        private final Map<TypeInformation, List<TransformAction>> actions = new TreeMap<TypeInformation, List<TransformAction>>(
+                new Comparator<TypeInformation>() {
+
+                    @Override
+                    public int compare(TypeInformation o1, TypeInformation o2) {
+                        return o1.toString().compareTo(o2.toString());
+                    }});
+        
+        
+        public ActionCreationVisitor(List<TypeInformation> typeInformations) {
+            typeInfoIterator = typeInformations.iterator();
+        }
+        
+        public Map<TypeInformation, List<TransformAction>> getActions() {
+            return actions;
+        }
+
+        @Override
+        public int visit(IASTDeclSpecifier declSpec) {
+            if(!hasType(declSpec)){
+                return PROCESS_CONTINUE;
+            }
+            try {
+                if (!hasAction(declSpec)) {
+                    return PROCESS_CONTINUE;
+                }
+                if (!typeInfoIterator.hasNext()) {
+                    throw new IllegalArgumentException(
+                            "Not traversing the same AST structure!");
+                }
+                TypeInformation typeInfo = typeInfoIterator.next();
+                if (!actions.containsKey(typeInfo)) {
+                    actions.put(typeInfo, new ArrayList<TransformAction>());
+                }
+                actions.get(typeInfo).add(createAction(declSpec));
+            } catch (Exception e) {
+                exception = e;
+                return PROCESS_ABORT;
+            }
+            return PROCESS_CONTINUE;
+        }
+        
     }
 }

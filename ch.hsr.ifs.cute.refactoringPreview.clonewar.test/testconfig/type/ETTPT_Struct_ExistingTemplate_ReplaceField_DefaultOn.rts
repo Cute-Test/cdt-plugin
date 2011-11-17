@@ -1,4 +1,4 @@
-//!ETTPT: Struct, existing template, existing typedef, replace field, default on.
+//!ETTPT: Struct, existing typedef, replace field, default on.
 //#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
 //@.config
 filename=ETTPT_Struct_ExistingTemplate_ExistingTypedef_ReplaceField_DefaultOn.h
@@ -9,9 +9,6 @@ template<typename T = int> struct /*$*/fooT/*$$*/
     T i;
     int j;
 };
-
-
-typedef fooT<> foo;
 //=
 #include <vector>
 template<typename T = int, typename T1 = int> struct fooT
@@ -20,6 +17,3 @@ template<typename T = int, typename T1 = int> struct fooT
     T1 j;
 };
 
-
-
-typedef fooT<> foo;

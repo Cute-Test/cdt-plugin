@@ -3,6 +3,7 @@ package ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
@@ -161,9 +162,15 @@ public abstract class Transform {
      *            Status collector.
      */
     public void preprocess(RefactoringStatus status) {
-        ASTTypeVisitor typeVisitor = findTypes(status);
+        
+        final Map<TypeInformation, List<TransformAction>> actionMap = findTypes(status);
+        
+        if(actionMap.isEmpty()){
+            status.addFatalError("No type found to be templated!");
+        }
+        
         setTransformConfiguration(new TransformConfiguration(
-                typeVisitor.getActionMap()));
+                actionMap));
         addConfigChangeActions(configChanges);
         applyConfigChanges(status);
     }
@@ -187,18 +194,16 @@ public abstract class Transform {
      *            Status.
      * @return Type visitor to get type map.
      */
-    private ASTTypeVisitor findTypes(RefactoringStatus status) {
+    private Map<TypeInformation, List<TransformAction>> findTypes(RefactoringStatus status) {
         ASTTypeVisitor typeVisitor = new ASTTypeVisitor();
-        originalNode.accept(typeVisitor);
-        typeVisitor.enableSecondRun();
-        copyNode.accept(typeVisitor);
+        Map<TypeInformation, List<TransformAction>> actions = typeVisitor.findTypes(originalNode, copyNode);
         if (typeVisitor.hasException()) {
             status.addFatalError(typeVisitor.getException().getMessage());
         }
-        return typeVisitor;
+        return actions;
     }
 
-    /**
+     /**
      * Preprocessing. Informations/Errors/Warnings are added to the status.
      * 
      * @param status

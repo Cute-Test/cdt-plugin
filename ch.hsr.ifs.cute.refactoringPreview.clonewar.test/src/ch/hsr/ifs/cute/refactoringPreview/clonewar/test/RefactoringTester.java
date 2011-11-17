@@ -12,9 +12,11 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.test;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -87,7 +89,11 @@ public class RefactoringTester extends TestSuite{
 	protected static BufferedReader createReader(String file) throws IOException {
 		Bundle bundle = Activator.getDefault().getBundle();
 		Path path = new Path(file);
-		String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
+		final URL url = FileLocator.find(bundle, path, null);
+		if(url == null){
+			throw new FileNotFoundException(file);
+		}
+		String file2 = FileLocator.toFileURL(url).getFile();
 		return new BufferedReader(new FileReader(file2));
 	}
 	
@@ -182,7 +188,7 @@ public class RefactoringTester extends TestSuite{
 		} catch (ClassNotFoundException e) {
 			throw new Exception("Unknown test class " + className); //$NON-NLS-1$
 		} catch (Exception e) {
-			throw new Exception(e.getClass().getSimpleName() + " diring creation of test " + className, e); //$NON-NLS-1$
+			throw new Exception(e.getClass().getSimpleName() + " while creating test " + className, e); //$NON-NLS-1$
 		}
 	}
 
