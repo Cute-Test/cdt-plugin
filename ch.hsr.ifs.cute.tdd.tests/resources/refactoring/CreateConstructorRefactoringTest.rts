@@ -687,3 +687,26 @@ struct Templ{
 		t.foo();
 	}
 };
+//!Find Implicit Constructor for Typedef Template
+//@.config
+markerCount=0
+//@A.cpp
+template<typename T1 = int> struct ST {
+	T1 i;
+};
+
+typedef ST<> S;
+
+int main(int argc, char **argv) {
+	S s;
+}
+//=
+template<typename T1 = int> struct ST {
+	T1 i;
+};
+
+typedef ST<> S;
+
+int main(int argc, char **argv) {
+	S s;
+}
