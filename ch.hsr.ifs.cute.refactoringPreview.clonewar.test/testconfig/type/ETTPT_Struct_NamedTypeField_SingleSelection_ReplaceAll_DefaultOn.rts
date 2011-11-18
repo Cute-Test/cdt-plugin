@@ -72,3 +72,35 @@ typedef ST<> S;
 int main(int argc, char **argv) {
 	S s;
 }
+//!ETTPT: Struct with Destructor, int type field, single selection, replace all, default on.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPT_Struct_with_Destructor_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.cpp
+//@ETTPT_Struct_with_Destructor_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.cpp
+struct /*$*/S/*$$*/
+{
+    ~S()
+    {
+    }
+    
+	int i;
+};
+
+int main(int argc, char **argv) {
+	S s;
+}
+//=
+template<typename T1 = int> struct ST
+{
+    ~ST()
+    {
+    }
+
+    T1 i;
+};
+
+
+typedef ST<> S;
+int main(int argc, char **argv) {
+	S s;
+}
