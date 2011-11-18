@@ -34,7 +34,7 @@
 		<module>../cute_framework_cute_fragment</module>
 		<module>../cute_plugin</module>
 		<module>../ch.hsr.ifs.cute.tdd</module>
-		<!--<module>../cute_test_plugin</module>-->
+		<!--<module>../cute_test_plugin</module> -->
 		<module>../ch.hsr.ifs.cute.help</module>
 		<module>../cute_ui_plugin</module>
 		<module>../ch.hsr.ifs.cute.ui.test</module>
@@ -60,11 +60,11 @@
 		<module>../ch.hsr.ifs.cute.boost.feature</module>
 		<module>../ch.hsr.ifs.cute.boost</module>
 		<!-- Refactoring Preview -->
-		
+
 		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>
-		<!--  update site -->
+		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.buildUpdateSite</module>
 	</modules>
 	<build>
@@ -90,6 +90,25 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<keystore>${keystore}</keystore>
+					<alias>ifscodesigning</alias>
+					<storepass>${certpass}</storepass>
+					<storetype>pkcs12</storetype>
 				</configuration>
 			</plugin>
 		</plugins>
