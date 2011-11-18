@@ -36,7 +36,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.Transform;
  * @author ythrier(at)hsr.ch
  * @author tcorbat(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class CloneWarRefactoring extends CRefactoring2 {
     private Transform transformation;
 
