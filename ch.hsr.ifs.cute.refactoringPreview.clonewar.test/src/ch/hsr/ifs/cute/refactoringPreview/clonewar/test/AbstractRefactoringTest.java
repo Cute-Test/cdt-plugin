@@ -3,11 +3,12 @@ package ch.hsr.ifs.cute.refactoringPreview.clonewar.test;
 import java.util.Properties;
 import java.util.Vector;
 
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
+import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.ui.tests.refactoring.RefactoringTest;
 import org.eclipse.cdt.ui.tests.refactoring.TestSourceFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -26,10 +27,10 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.TestConfig
  */
 @SuppressWarnings("restriction")
 public class AbstractRefactoringTest extends RefactoringTest {
-	private TestConfigurationStrategy testStrategy_ = new NullTestConfigurationStrategy();
-	private ConditionCheckStrategy initialCheckStrategy_;
-	private ConditionCheckStrategy finalCheckStrategy_;
-	private CRefactoring refactoring_;
+	private TestConfigurationStrategy testStrategy = new NullTestConfigurationStrategy();
+	private ConditionCheckStrategy initialCheckStrategy;
+	private ConditionCheckStrategy finalCheckStrategy;
+	private CloneWarRefactoring refactoring;
 	private Class<?> exception_;
 	
 	/**
@@ -46,7 +47,7 @@ public class AbstractRefactoringTest extends RefactoringTest {
 	 * @param initialCheckStrategy Initial check strategy.
 	 */
 	public void setInitialCheckStrategy(ConditionCheckStrategy initialCheckStrategy) {
-		this.initialCheckStrategy_ = initialCheckStrategy;
+		this.initialCheckStrategy = initialCheckStrategy;
 	}
 
 	/**
@@ -54,7 +55,7 @@ public class AbstractRefactoringTest extends RefactoringTest {
 	 * @param finalCheckStrategy Final check strategy.
 	 */
 	public void setFinalCheckStrategy(ConditionCheckStrategy finalCheckStrategy) {
-		this.finalCheckStrategy_ = finalCheckStrategy;
+		this.finalCheckStrategy = finalCheckStrategy;
 	}
 	
 	/**
@@ -62,7 +63,7 @@ public class AbstractRefactoringTest extends RefactoringTest {
 	 * @param testStrategy Test strategy.
 	 */
 	public void setTestStrategy(TestConfigurationStrategy testStrategy) {
-		this.testStrategy_ = testStrategy;
+		this.testStrategy = testStrategy;
 	}
 	
 	/**
@@ -78,7 +79,7 @@ public class AbstractRefactoringTest extends RefactoringTest {
 	 * @return Refactoring.
 	 */
 	protected CloneWarRefactoring getRefactoring() {
-		return (CloneWarRefactoring) refactoring_;
+		return refactoring;
 	}
 
 	/**
@@ -86,19 +87,19 @@ public class AbstractRefactoringTest extends RefactoringTest {
 	 */
 	@Override
 	protected void runTest() throws Throwable {
-		refactoring_ = createRefactoring();
+		refactoring = createRefactoring();
 		try {
-			refactoring_.lockIndex();
-			if(!initialCheckStrategy_.checkCondition(this, performInitCheck())) {
+			astCache.getIndex().acquireReadLock();
+			if(!initialCheckStrategy.checkCondition(this, performInitCheck())) {
 				compareFiles(fileMap);				
 				return;
 			}
-			testStrategy_.changeConfiguration(getRefactoring());
-			if(!finalCheckStrategy_.checkCondition(this, performFinalCheck())) {
+			testStrategy.changeConfiguration(getRefactoring());
+			if(!finalCheckStrategy.checkCondition(this, performFinalCheck())) {
 				compareFiles(fileMap);
 				return;
 			}
-			Change change = refactoring_.createChange(NULL_PROGRESS_MONITOR);
+			Change change = refactoring.createChange(NULL_PROGRESS_MONITOR);
 			change.perform(NULL_PROGRESS_MONITOR);
 		} catch(Throwable e) {
 			if(exception_==null || !exception_.equals(e.getClass()))
@@ -106,7 +107,7 @@ public class AbstractRefactoringTest extends RefactoringTest {
 			compareFiles(fileMap);
 			return;
 		} finally {
-			refactoring_.unlockIndex();
+			astCache.getIndex().releaseReadLock();
 		}
 		if(exception_!=null)
 			fail();
@@ -121,7 +122,7 @@ public class AbstractRefactoringTest extends RefactoringTest {
 	 * @throws OperationCanceledException See {@link OperationCanceledException}.
 	 */
 	protected RefactoringStatus performFinalCheck() throws OperationCanceledException, CoreException {
-		return refactoring_.checkFinalConditions(NULL_PROGRESS_MONITOR);
+		return refactoring.checkFinalConditions(NULL_PROGRESS_MONITOR);
 	}
 
 	/**
@@ -132,15 +133,16 @@ public class AbstractRefactoringTest extends RefactoringTest {
 	 * @throws OperationCanceledException See {@link OperationCanceledException}.
 	 */
 	protected RefactoringStatus performInitCheck() throws OperationCanceledException, CoreException {
-		return refactoring_.checkInitialConditions(NULL_PROGRESS_MONITOR);
+		return refactoring.checkInitialConditions(NULL_PROGRESS_MONITOR);
 	}
 
 	/**
 	 * Factory method creating the refactoring to test.
 	 * @return Refactoring class.
+	 * @throws CModelException 
 	 */
-	protected CRefactoring createRefactoring() {
-		return new CloneWarRefactoring(project.getFile(fileName), selection, null, null);
+	protected CloneWarRefactoring createRefactoring() throws CModelException {
+		return new CloneWarRefactoring(selection,  cproject.findElement(new Path(fileName)), cproject, astCache);
 	}
 
 	/**

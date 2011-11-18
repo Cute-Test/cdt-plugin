@@ -3,7 +3,7 @@ package ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration;
 import java.util.List;
 
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTypeId;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
 
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.TransformAction;
 
@@ -20,7 +20,7 @@ public class NonNestedOnlyConfigurationStrategy extends AbstractConfigurationStr
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void changeConfiguration(CRefactoring refactoring) {
+	public void changeConfiguration(CRefactoring2 refactoring) {
 		List<TransformAction> actions = getActions(refactoring);
 		for(TransformAction action : actions) {
 			if((action.getNode().getParent() instanceof CPPASTTypeId))
@@ -33,7 +33,7 @@ public class NonNestedOnlyConfigurationStrategy extends AbstractConfigurationStr
 	 * @param refactoring Refactoring.
 	 * @return List of actions.
 	 */
-	private List<TransformAction> getActions(CRefactoring refactoring) {
+	private List<TransformAction> getActions(CRefactoring2 refactoring) {
 		return getConfig(refactoring).getAllActions();
 	}
 }

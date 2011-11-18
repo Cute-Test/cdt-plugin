@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration;
 
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
 
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeInformation;
 
@@ -16,7 +16,7 @@ public class NoDefaultingConfigurationStrategy extends AbstractConfigurationStra
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void changeConfiguration(CRefactoring refactoring) {
+	public void changeConfiguration(CRefactoring2 refactoring) {
 		for(TypeInformation type : getConfig(refactoring).getAllTypes())
 			type.setDefaulting(false);
 	}

@@ -1,7 +1,9 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.app;
 
+
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.IWorkingCopy;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.ui.refactoring.actions.RefactoringAction;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.ITextSelection;
@@ -34,7 +36,7 @@ public class CloneWarAction extends RefactoringAction {
         if (!hasFileResource(wc))
             return;
         CloneWarRefactoringRunner runner = createRunner(shellProvider, wc, s);
-        runner.run();
+        runner.run(new RefactoringASTCache());
     }
 
     /**

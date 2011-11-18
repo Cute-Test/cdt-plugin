@@ -1,5 +1,5 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
 
 /**
  * A test configuration strategy to change the configuration of a test
@@ -11,8 +11,8 @@ public interface TestConfigurationStrategy {
 
 	/**
 	 * Change the configuration of the refactoring to simulate different
-	 * behaviour.
+	 * behavior.
 	 * @param refactoring Refactoring to adjust config.
 	 */
-	public void changeConfiguration(CRefactoring refactoring);
+	public void changeConfiguration(CRefactoring2 refactoring);
 }

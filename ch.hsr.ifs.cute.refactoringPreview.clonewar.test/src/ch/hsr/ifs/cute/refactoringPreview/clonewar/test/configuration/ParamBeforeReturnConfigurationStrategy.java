@@ -2,7 +2,7 @@ package ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration;
 
 import java.util.List;
 
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
 
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeInformation;
 
@@ -19,7 +19,7 @@ public class ParamBeforeReturnConfigurationStrategy extends AbstractConfiguratio
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void changeConfiguration(CRefactoring refactoring) {
+	public void changeConfiguration(CRefactoring2 refactoring) {
 		List<TypeInformation> types = getConfig(refactoring).getAllTypesOrdered();
 		int i=0;
 		for(TypeInformation type : types) {

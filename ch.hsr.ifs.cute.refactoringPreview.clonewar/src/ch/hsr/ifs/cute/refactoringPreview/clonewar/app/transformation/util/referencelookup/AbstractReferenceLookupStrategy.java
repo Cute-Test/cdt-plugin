@@ -38,8 +38,8 @@ import org.eclipse.core.runtime.Path;
 @SuppressWarnings("restriction")
 public abstract class AbstractReferenceLookupStrategy<T> implements
         ReferenceLookupStrategy<T> {
-    private Map<IFile, IASTTranslationUnit> loadedTUnits_ = new HashMap<IFile, IASTTranslationUnit>();
-    private Map<T, IASTTranslationUnit> unitToCallAssociation_ = new HashMap<T, IASTTranslationUnit>();
+    private Map<IFile, IASTTranslationUnit> loadedTUnits = new HashMap<IFile, IASTTranslationUnit>();
+    private Map<T, IASTTranslationUnit> unitToCallAssociation = new HashMap<T, IASTTranslationUnit>();
 
     /**
      * Add a mapping for the reference to the translation unit.
@@ -53,7 +53,7 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
      */
     protected void addUnitToCallMapping(T reference, IIndexName callIndex)
             throws CoreException {
-        unitToCallAssociation_.put(reference, loadTUnit(callIndex));
+        unitToCallAssociation.put(reference, loadTUnit(callIndex));
     }
 
     /**
@@ -148,7 +148,7 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
      *             Core exception.
      */
     private IASTTranslationUnit loadUnitFrom(IFile file) throws CoreException {
-        return TranslationUnitHelper.loadTranslationUnit(file, false);
+        return  TranslationUnitHelper.loadTranslationUnit(file, false);
     }
 
     /**
@@ -163,9 +163,9 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
     private IASTTranslationUnit loadTUnit(IIndexName callIndex)
             throws CoreException {
         IFile file = getFileFor(callIndex);
-        if (!loadedTUnits_.containsKey(file))
-            loadedTUnits_.put(file, loadUnitFrom(file));
-        return loadedTUnits_.get(file);
+        if (!loadedTUnits.containsKey(file))
+            loadedTUnits.put(file, loadUnitFrom(file));
+        return loadedTUnits.get(file);
     }
 
     /**
@@ -205,7 +205,7 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
      */
     @Override
     public IASTTranslationUnit getTranslationUnitOf(T reference) {
-        return unitToCallAssociation_.get(reference);
+        return unitToCallAssociation.get(reference);
     }
 
     /**
@@ -237,11 +237,11 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
         for (ICProject project : getProjects()) {
             IIndex index = getIndexFor(project);
             try {
-                index.acquireReadLock();
+//                index.acquireReadLock();
                 processCandidates(name, index, calls);
-            } catch (InterruptedException e) {
+//            } catch (InterruptedException e) {
             } finally {
-                index.releaseReadLock();
+//                index.releaseReadLock();
             }
         }
         return calls;

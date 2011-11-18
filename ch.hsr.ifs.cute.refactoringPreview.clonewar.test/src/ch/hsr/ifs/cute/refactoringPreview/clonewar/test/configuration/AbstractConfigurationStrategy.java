@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration;
 
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
 
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.CloneWarRefactoring;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.configuration.TransformConfiguration;
@@ -18,7 +18,7 @@ public abstract class AbstractConfigurationStrategy implements	TestConfiguration
 	 * @param refactoring Refactoring.
 	 * @return Refactoring config.
 	 */
-	protected TransformConfiguration getConfig(CRefactoring refactoring) {
+	protected TransformConfiguration getConfig(CRefactoring2 refactoring) {
 		return ((CloneWarRefactoring)refactoring).getTransformation().getConfig();
 	}
 }

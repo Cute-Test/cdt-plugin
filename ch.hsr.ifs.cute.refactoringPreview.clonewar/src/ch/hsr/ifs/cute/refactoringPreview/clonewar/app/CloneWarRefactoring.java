@@ -11,17 +11,19 @@ import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.refactoring.utils.SelectionHelper;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.ETTPFunctionTransform;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.ETTPTypeTransform;
@@ -35,15 +37,15 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.Transform;
  * @author tcorbat(at)hsr.ch
  */
 @SuppressWarnings("restriction")
-public class CloneWarRefactoring extends CRefactoring {
+public class CloneWarRefactoring extends CRefactoring2 {
     private Transform transformation;
 
     /**
      * {@inheritDoc}
      */
-    public CloneWarRefactoring(IFile file, ISelection selection,
-            ICElement element, ICProject proj) {
-        super(file, selection, element, proj);
+    public CloneWarRefactoring(ISelection selection,
+            ICElement element, ICProject proj, RefactoringASTCache astCache) {
+        super(element, selection, proj, astCache);
     }
 
     /**
@@ -70,17 +72,6 @@ public class CloneWarRefactoring extends CRefactoring {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
-            throws CoreException, OperationCanceledException {
-        RefactoringStatus status = super.checkFinalConditions(pm);
-        transformation.postprocess(status);
-        return status;
-    }
-
-    /**
      * Returns the transformation of this refactoring.
      * 
      * @return Transformation.
@@ -99,15 +90,23 @@ public class CloneWarRefactoring extends CRefactoring {
      * @return 
      */
     private void determineRefactoringType(RefactoringStatus status) {
-        final RefactoringResolver resolver = new RefactoringResolver(region);
-        final IASTTranslationUnit translationUnit = getUnit();
-        translationUnit.accept(resolver);
+        final RefactoringResolver resolver = new RefactoringResolver(selectedRegion);
+        IASTTranslationUnit translationUnit;
+        try {
+            translationUnit = astCache.getAST(tu, new NullProgressMonitor());  
+            translationUnit.accept(resolver);
         if (resolver.foundRefactoring()) {
             transformation = resolver.getRefactoring();
             transformation.setTranslationUnit(translationUnit);            
         } else {
             status.addFatalError("No type/function selected!");
         }
+        } catch (OperationCanceledException e) {
+            status.addFatalError("No type/function selected!");
+        } catch (CoreException e) {
+            status.addFatalError("No type/function selected!");
+        };
+
     }
 
     /**
@@ -272,5 +271,15 @@ public class CloneWarRefactoring extends CRefactoring {
         private boolean isSelectedNode(IASTNode node) {
             return SelectionHelper.isSelectionOnExpression(region, node);
         }
+    }
+
+    @Override
+    protected RefactoringStatus checkFinalConditions(
+            IProgressMonitor subProgressMonitor,
+            CheckConditionsContext checkContext) throws CoreException,
+            OperationCanceledException {
+        RefactoringStatus status = new RefactoringStatus();
+        transformation.postprocess(status);
+        return status;
     }
 }

@@ -2,7 +2,6 @@ package ch.hsr.ifs.cute.refactoringPreview.clonewar.test;
 
 import java.util.List;
 
-import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.TestConfiguration;
@@ -27,14 +26,5 @@ public class AllTests {
 			suite.addTest(test);
 
 		return suite;
-	}
-
-	/**
-	 * Creates a {@link JUnit4TestAdapter} for a given test class.
-	 * @param cl Class of the test class.
-	 * @return Test adapter.
-	 */
-	private static JUnit4TestAdapter createAdapter(Class<?> cl) {
-		return new JUnit4TestAdapter(cl);
 	}
 }

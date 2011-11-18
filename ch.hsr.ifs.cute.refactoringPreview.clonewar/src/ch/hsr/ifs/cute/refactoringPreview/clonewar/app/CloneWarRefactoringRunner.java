@@ -1,9 +1,11 @@
 package ch.hsr.ifs.cute.refactoringPreview.clonewar.app;
 
+import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringRunner;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringRunner2;
 import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -22,7 +24,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.view.Messages;
  * @author ythrier(at)hsr.ch
  */
 @SuppressWarnings("restriction")
-public class CloneWarRefactoringRunner extends RefactoringRunner {
+public class CloneWarRefactoringRunner extends RefactoringRunner2 {
 
     /**
      * Create the runner with the given arguments.
@@ -40,26 +42,30 @@ public class CloneWarRefactoringRunner extends RefactoringRunner {
      */
     public CloneWarRefactoringRunner(IFile file, ISelection selection,
             ICElement element, IShellProvider shellProvider, ICProject cProject) {
-        super(file, selection, element, shellProvider, cProject);
+        super(element, selection, shellProvider, cProject);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void run() {
-        CRefactoring cloneWarRefactoring = createRefactoring();
+    public void run(RefactoringASTCache astCache) {
+        CRefactoring2 cloneWarRefactoring = createRefactoring(astCache);
         RefactoringWizard cloneWarWizard = createWizard(cloneWarRefactoring);
         RefactoringWizardOpenOperation openOperation = createOpenOperation(cloneWarWizard);
+        IIndex index = null;
         try {
-            cloneWarRefactoring.lockIndex();
+            index = astCache.getIndex();
+//            index.acquireReadLock();
             openOperation.run(getShell(), Messages.STARTUP_ERROR_MSG);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (CoreException e) {
             CUIPlugin.log(e);
         } finally {
-            cloneWarRefactoring.unlockIndex();
+            if(index != null){
+//                index.releaseReadLock();
+            }
         }
     }
 
@@ -91,7 +97,7 @@ public class CloneWarRefactoringRunner extends RefactoringRunner {
      *            The refactoring.
      * @return Wizard.
      */
-    private RefactoringWizard createWizard(CRefactoring refactoring) {
+    private RefactoringWizard createWizard(CRefactoring2 refactoring) {
         return new CloneWarRefactoringWizard(refactoring);
     }
 
@@ -100,7 +106,7 @@ public class CloneWarRefactoringRunner extends RefactoringRunner {
      * 
      * @return Refactoring.
      */
-    private CRefactoring createRefactoring() {
-        return new CloneWarRefactoring(file, selection, celement, project);
+    private CRefactoring2 createRefactoring(RefactoringASTCache astCache) {
+        return new CloneWarRefactoring(selection, element, project, astCache);
     }
 }
