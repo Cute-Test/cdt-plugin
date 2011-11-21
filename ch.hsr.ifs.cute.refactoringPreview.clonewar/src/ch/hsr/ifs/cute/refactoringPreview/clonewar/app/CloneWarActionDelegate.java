@@ -15,7 +15,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.view.Messages;
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class CloneWarActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
     private IWorkbenchWindow window;
 

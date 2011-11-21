@@ -12,7 +12,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId;
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class NestedNameLookupStrategy implements NameLookupStrategy {
     private static final String UNRESOLVABLE_NAME = "<unresolvable>";
     private static Map<Class<? extends IASTNode>, NameLookupStrategy> nameLookupRegistry_ = new HashMap<Class<? extends IASTNode>, NameLookupStrategy>();

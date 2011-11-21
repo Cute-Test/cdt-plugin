@@ -47,7 +47,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.refer
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class ETTPFunctionTransform extends Transform {
     private static final String FUNCTION_EDITGROUP_MSG = "Changing function to template...";
     private static final String CALLADJUST_EDITGROUP_MSG = "Adjusting call...";

@@ -11,7 +11,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTUnaryExpression;
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class CastNameLookupStrategy implements NameLookupStrategy {
     private static final String CAST_SPECIFIER = "Cast type of: ";
 

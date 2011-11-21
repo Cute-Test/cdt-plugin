@@ -14,7 +14,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.CloneWarRefactoring;
  * @author ythrier(at)hsr.ch
  */
 public class CloneWarRefactoringWizard extends RefactoringWizard {
-    private PageFactory pageFactory_ = new PageFactory();
+    private PageFactory pageFactory = new PageFactory();
 
     /**
      * {@inheritDoc}
@@ -48,7 +48,7 @@ public class CloneWarRefactoringWizard extends RefactoringWizard {
      * @return List of input pages.
      */
     private List<UserInputWizardPage> getInputPages() {
-        return pageFactory_.createPagesFor(getCWRefactoring()
+        return pageFactory.createPagesFor(getCWRefactoring()
                 .getTransformation());
     }
 }

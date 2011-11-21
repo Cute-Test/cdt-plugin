@@ -20,7 +20,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class CPPASTNodeFactory {
     private static int TYPENAME_SPECIFIER = ICPPASTSimpleTypeTemplateParameter.st_typename;
     private CPPNodeFactory cppNodes_ = new CPPNodeFactory();

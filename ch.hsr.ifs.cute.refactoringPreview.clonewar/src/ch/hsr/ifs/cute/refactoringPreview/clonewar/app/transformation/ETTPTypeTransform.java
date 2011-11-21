@@ -33,7 +33,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  * @author tcorbat(at)hsr.ch
  */
 
-@SuppressWarnings("restriction")
+
 public class ETTPTypeTransform extends Transform {
     private static final String TYPETEMPLATE_EDITGROUP_MSG = "Changing type to template...";
     private static final String TYPEDEF_EDITGROUP_MSG = "Add typedef...";

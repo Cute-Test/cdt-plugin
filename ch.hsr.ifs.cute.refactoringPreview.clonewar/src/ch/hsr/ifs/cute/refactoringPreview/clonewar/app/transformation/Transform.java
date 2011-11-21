@@ -36,7 +36,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public abstract class Transform {
     private List<IConfigChangeAction> configChanges = new ArrayList<IConfigChangeAction>();
     private CPPASTNodeFactory nodeFactory = new CPPASTNodeFactory();

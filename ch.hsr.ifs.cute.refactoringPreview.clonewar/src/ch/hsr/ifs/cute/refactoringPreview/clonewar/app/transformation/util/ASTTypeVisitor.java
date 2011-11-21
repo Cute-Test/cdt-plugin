@@ -40,7 +40,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.action.Tra
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class ASTTypeVisitor extends ASTVisitor {
     private final Map<ASTKeyPair, Class<? extends TransformAction>> registry = new HashMap<ASTKeyPair, Class<? extends TransformAction>>();
    

@@ -53,8 +53,8 @@ public class CloneWarAction extends RefactoringAction {
     private CloneWarRefactoringRunner createRunner(
             IShellProvider shellProvider, IWorkingCopy wc,
             ITextSelection selection) {
-        return new CloneWarRefactoringRunner((IFile) wc.getResource(),
-                selection, null, shellProvider, null);
+        
+        return new CloneWarRefactoringRunner(selection, wc.getTranslationUnit(), shellProvider, wc.getCProject());
     }
 
     /**

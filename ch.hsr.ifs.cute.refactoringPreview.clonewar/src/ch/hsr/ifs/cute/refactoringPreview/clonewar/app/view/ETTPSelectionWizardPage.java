@@ -43,7 +43,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.view.util.TypePair;
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
     private static final int CONTROL_PAGE_LAYOUT_COL = 1;
     private static final int MIDDLE_PAGE_LAYOUT_COL = 2;

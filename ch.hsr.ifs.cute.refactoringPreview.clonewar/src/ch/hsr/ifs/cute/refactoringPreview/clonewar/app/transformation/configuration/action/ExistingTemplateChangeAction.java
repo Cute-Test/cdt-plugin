@@ -26,7 +26,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.TypeI
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class ExistingTemplateChangeAction extends TemplateChangeAction {
     private IASTNode templateDeclaration_;
 

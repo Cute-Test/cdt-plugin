@@ -11,7 +11,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class TemplateNameLookupStrategy implements NameLookupStrategy {
     private static final String TEMPLATE_SPECIFIER = "Template type of: ";
 

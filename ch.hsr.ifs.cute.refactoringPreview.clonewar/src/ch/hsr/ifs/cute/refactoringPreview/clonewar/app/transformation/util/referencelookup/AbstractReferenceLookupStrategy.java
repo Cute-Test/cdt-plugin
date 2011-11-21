@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.Path;
  *            The expression type which refers to the call, e.g.
  *            {@link ICPPASTFunctionCallExpression}.
  */
-@SuppressWarnings("restriction")
+
 public abstract class AbstractReferenceLookupStrategy<T> implements
         ReferenceLookupStrategy<T> {
     private Map<IFile, IASTTranslationUnit> loadedTUnits = new HashMap<IFile, IASTTranslationUnit>();
@@ -236,13 +236,7 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
         List<T> calls = new ArrayList<T>();
         for (ICProject project : getProjects()) {
             IIndex index = getIndexFor(project);
-            try {
-//                index.acquireReadLock();
-                processCandidates(name, index, calls);
-//            } catch (InterruptedException e) {
-            } finally {
-//                index.releaseReadLock();
-            }
+            processCandidates(name, index, calls);
         }
         return calls;
     }

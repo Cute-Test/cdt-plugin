@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.CoreException;
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class FunctionSpecializedReferenceLookupStrategy extends
 AbstractReferenceLookupStrategy<ICPPASTFunctionCallExpression> {
 

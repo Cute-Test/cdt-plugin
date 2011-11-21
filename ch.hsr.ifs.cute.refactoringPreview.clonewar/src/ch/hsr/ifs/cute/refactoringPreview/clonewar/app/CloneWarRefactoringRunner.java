@@ -7,7 +7,6 @@ import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringRunner2;
 import org.eclipse.cdt.ui.CUIPlugin;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.IShellProvider;
@@ -23,7 +22,7 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.view.Messages;
  * 
  * @author ythrier(at)hsr.ch
  */
-@SuppressWarnings("restriction")
+
 public class CloneWarRefactoringRunner extends RefactoringRunner2 {
 
     /**
@@ -40,7 +39,7 @@ public class CloneWarRefactoringRunner extends RefactoringRunner2 {
      * @param cProject
      *            Project.
      */
-    public CloneWarRefactoringRunner(IFile file, ISelection selection,
+    public CloneWarRefactoringRunner(ISelection selection,
             ICElement element, IShellProvider shellProvider, ICProject cProject) {
         super(element, selection, shellProvider, cProject);
     }
@@ -56,15 +55,16 @@ public class CloneWarRefactoringRunner extends RefactoringRunner2 {
         IIndex index = null;
         try {
             index = astCache.getIndex();
-//            index.acquireReadLock();
+            index.acquireReadLock();
             openOperation.run(getShell(), Messages.STARTUP_ERROR_MSG);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (CoreException e) {
             CUIPlugin.log(e);
         } finally {
+            astCache.dispose();
             if(index != null){
-//                index.releaseReadLock();
+                index.releaseReadLock();
             }
         }
     }
