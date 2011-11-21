@@ -114,7 +114,7 @@ public class UiPlugin extends AbstractUIPlugin {
 					while((line = br.readLine()) != null	) {
 						Matcher matcher = versPtr.matcher(line);
 						if(matcher.matches()) {
-							cuteVersionstring = "Cute Headers " + matcher.group(1); //$NON-NLS-1$
+							cuteVersionstring = "CUTE Headers " + matcher.group(1); //$NON-NLS-1$
 							project.setPersistentProperty(key, cuteVersionstring);
 							break;
 						}

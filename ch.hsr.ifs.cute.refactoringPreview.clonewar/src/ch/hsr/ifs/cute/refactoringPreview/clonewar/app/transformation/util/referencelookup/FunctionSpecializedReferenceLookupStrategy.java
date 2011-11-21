@@ -9,6 +9,7 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexName;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.viewsupport.IndexUI;
 import org.eclipse.core.runtime.CoreException;
 
@@ -21,6 +22,11 @@ import org.eclipse.core.runtime.CoreException;
 
 public class FunctionSpecializedReferenceLookupStrategy extends
 AbstractReferenceLookupStrategy<ICPPASTFunctionCallExpression> {
+
+    public FunctionSpecializedReferenceLookupStrategy(
+            RefactoringASTCache astCache) {
+        super(astCache);
+    }
 
     /**
      * {@inheritDoc}

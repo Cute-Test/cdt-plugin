@@ -59,7 +59,7 @@ public class CuteHeaders_1_7 implements ICuteHeaders {
 	}
 
 	public String getVersionString() {
-		return "Cute Headers 1.7.0"; //$NON-NLS-1$
+		return "CUTE Headers 1.7.0"; //$NON-NLS-1$
 	}
 
 	private List<URL> getTestFiles() {

@@ -74,7 +74,7 @@ void func()
     int num;
     num++;
 }
-//!TestCuteMacroVariableCreation_ASSERT
+//!TestCUTEMacroVariableCreation_ASSERT
 //@Test.cpp
 #include <string>
 namespace cute{
@@ -116,7 +116,7 @@ void blah(){
     bool k;
     ASSERT(k);
 }
-//!TestCuteMacroVariableCreation_ASSERT_EQUALS
+//!TestCUTEMacroVariableCreation_ASSERT_EQUALS
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue>
@@ -156,7 +156,7 @@ void test(){
     int k;
     ASSERT_EQUAL(42, k.member());
 }
-//!TestCuteMacroVariableCreation_ASSERT_EQUALS_DELTA
+//!TestCUTEMacroVariableCreation_ASSERT_EQUALS_DELTA
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
@@ -192,7 +192,7 @@ void testKreis(){
     int b;
     ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
 }
-//!TestCuteMacroVariableCreation_ASSERT_EQUALS_DELTA_M
+//!TestCUTEMacroVariableCreation_ASSERT_EQUALS_DELTA_M
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>

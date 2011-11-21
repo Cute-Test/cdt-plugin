@@ -7,6 +7,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexName;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -16,6 +17,10 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class FunctionNormalReferenceLookupStrategy extends
         AbstractReferenceLookupStrategy<ICPPASTFunctionCallExpression> {
+
+    public FunctionNormalReferenceLookupStrategy(RefactoringASTCache astCache) {
+        super(astCache);
+    }
 
     /**
      * {@inheritDoc}

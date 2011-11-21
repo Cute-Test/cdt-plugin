@@ -15,7 +15,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.model.CModelException;
+import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.refactoring.utils.ExpressionFinder;
 import org.eclipse.cdt.internal.ui.refactoring.utils.TranslationUnitHelper;
 import org.eclipse.core.resources.IFile;
@@ -23,6 +26,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 /**
@@ -40,6 +44,11 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
         ReferenceLookupStrategy<T> {
     private Map<IFile, IASTTranslationUnit> loadedTUnits = new HashMap<IFile, IASTTranslationUnit>();
     private Map<T, IASTTranslationUnit> unitToCallAssociation = new HashMap<T, IASTTranslationUnit>();
+    protected final RefactoringASTCache astCache;
+
+    protected AbstractReferenceLookupStrategy(RefactoringASTCache astCache) {
+        this.astCache = astCache;
+    }
 
     /**
      * Add a mapping for the reference to the translation unit.
@@ -148,7 +157,9 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
      *             Core exception.
      */
     private IASTTranslationUnit loadUnitFrom(IFile file) throws CoreException {
-        return  TranslationUnitHelper.loadTranslationUnit(file, false);
+        final ITranslationUnit tu = CoreModelUtil.findTranslationUnit(file);
+        return astCache.getAST(tu, new NullProgressMonitor());
+//        return TranslationUnitHelper.loadTranslationUnit(file, false);
     }
 
     /**

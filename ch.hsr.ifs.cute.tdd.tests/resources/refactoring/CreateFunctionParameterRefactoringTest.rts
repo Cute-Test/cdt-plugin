@@ -245,7 +245,7 @@ void func(const int & i)
 void foo() {
     MACRO(func(42));
 }
-//!CuteAssertEqualFunctionParameter
+//!CUTEAssertEqualFunctionParameter
 //@A.cpp
 namespace cute {
 template <typename ExpectedValue, typename ActualValue>

@@ -17,11 +17,11 @@ public class TypeInformation implements Comparable<TypeInformation> {
     private static final IASTDeclSpecifier NULL_DEFAULT_TYPE = null;
     private static final String NULL_TEMPLATE_NAME = "";
     private boolean default_ = false;
-    private int orderId_;
-    private IType type_;
-    private String templateName_;
-    private IASTDeclSpecifier defaultType_;
-    private IASTDeclSpecifier callSpecificDefaultType_;
+    private int orderId;
+    private IType type;
+    private String templateName;
+    private IASTDeclSpecifier defaultType;
+    private IASTDeclSpecifier callSpecificDefaultType;
 
     /**
      * Create the type information.
@@ -35,9 +35,9 @@ public class TypeInformation implements Comparable<TypeInformation> {
      */
     public TypeInformation(IType type, String templateName,
             IASTDeclSpecifier defaultType) {
-        this.type_ = type;
-        this.templateName_ = templateName;
-        this.defaultType_ = defaultType;
+        this.type = type;
+        this.templateName = templateName;
+        this.defaultType = defaultType;
     }
 
     /**
@@ -75,7 +75,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      * @return Order id.
      */
     public int getOrderId() {
-        return orderId_;
+        return orderId;
     }
 
     /**
@@ -85,7 +85,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      *            Order id.
      */
     public void setOrderId(int orderId) {
-        this.orderId_ = orderId;
+        this.orderId = orderId;
     }
 
     /**
@@ -94,7 +94,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      * @return Type.
      */
     public IType getType() {
-        return type_;
+        return type;
     }
 
     /**
@@ -103,7 +103,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      * @return Name.
      */
     public String getTypeName() {
-        return type_.toString();
+        return type.toString();
     }
 
     /**
@@ -112,7 +112,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      * @return Template type name.
      */
     public String getTemplateName() {
-        return templateName_;
+        return templateName;
     }
 
     /**
@@ -122,7 +122,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      *            Template type name.
      */
     public void setTemplateName(String templateName) {
-        this.templateName_ = templateName;
+        this.templateName = templateName;
     }
 
     /**
@@ -132,7 +132,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      * @return Default type or <code>null</code> if there is no default type.
      */
     public IASTDeclSpecifier getDefaultType() {
-        return defaultType_;
+        return defaultType;
     }
 
     /**
@@ -142,7 +142,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      * @return Default type.
      */
     public IASTDeclSpecifier getCallSpecificDefaultType() {
-        return callSpecificDefaultType_;
+        return callSpecificDefaultType;
     }
 
     /**
@@ -154,8 +154,8 @@ public class TypeInformation implements Comparable<TypeInformation> {
      *            Default type.
      */
     public void setDefaultType(IASTDeclSpecifier defaultType) {
-        this.defaultType_ = defaultType;
-        this.callSpecificDefaultType_ = defaultType;
+        this.defaultType = defaultType;
+        this.callSpecificDefaultType = defaultType;
     }
 
     /**
@@ -165,7 +165,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      *            Default type.
      */
     public void setCallSpecificDefaultType(IASTDeclSpecifier defaultType) {
-        this.callSpecificDefaultType_ = defaultType;
+        this.callSpecificDefaultType = defaultType;
     }
 
     /**
@@ -185,7 +185,7 @@ public class TypeInformation implements Comparable<TypeInformation> {
      */
     @Override
     public int hashCode() {
-        return (type_.toString().hashCode() + templateName_.hashCode());
+        return (type.toString().hashCode() + templateName.hashCode());
     }
 
     /**
@@ -219,9 +219,9 @@ public class TypeInformation implements Comparable<TypeInformation> {
      */
     @Override
     public int compareTo(TypeInformation rhs) {
-        if (orderId_ < rhs.orderId_)
+        if (orderId < rhs.orderId)
             return -1;
-        if (orderId_ > rhs.orderId_)
+        if (orderId > rhs.orderId)
             return 1;
         return 0;
     }
@@ -232,12 +232,12 @@ public class TypeInformation implements Comparable<TypeInformation> {
      * @return True if a default type was set, otherwise false.
      */
     public boolean hasDefaultType() {
-        return (defaultType_ != null);
+        return (defaultType != null);
     }
 
     @Override
     public String toString() {
-        return "TypeInformation [type_=" + type_ + "; TemplName = " + templateName_ + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return "TypeInformation [type_=" + type + "; TemplName = " + templateName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
     
 }

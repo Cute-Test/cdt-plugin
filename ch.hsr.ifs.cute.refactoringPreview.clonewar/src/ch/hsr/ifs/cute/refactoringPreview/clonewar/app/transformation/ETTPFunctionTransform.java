@@ -20,6 +20,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeTemplateParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateParameter;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
@@ -30,7 +32,9 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTypeId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
+import org.eclipse.cdt.internal.core.pdom.dom.cpp.IPDOMCPPClassType;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.TextEditGroup;
 
@@ -51,8 +55,13 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.util.refer
 public class ETTPFunctionTransform extends Transform {
     private static final String FUNCTION_EDITGROUP_MSG = "Changing function to template...";
     private static final String CALLADJUST_EDITGROUP_MSG = "Adjusting call...";
-    private ReferenceLookupStrategy<ICPPASTFunctionCallExpression> callReferenceLookup_;
-    private List<ICPPASTFunctionCallExpression> callExpressions_;
+    private ReferenceLookupStrategy<ICPPASTFunctionCallExpression> callReferenceLookup;
+    private List<ICPPASTFunctionCallExpression> callExpressions;
+    private final RefactoringASTCache astCache;
+    
+    public ETTPFunctionTransform(RefactoringASTCache astCache) {
+        this.astCache = astCache;
+    }
 
     /**
      * {@inheritDoc}
@@ -60,12 +69,12 @@ public class ETTPFunctionTransform extends Transform {
     @Override
     public void postprocess(RefactoringStatus status) {
         if (isTemplate()) {
-            callReferenceLookup_ = new FunctionSpecializedReferenceLookupStrategy();
+            callReferenceLookup = new FunctionSpecializedReferenceLookupStrategy(astCache);
         } else {
-            callReferenceLookup_ = new FunctionNormalReferenceLookupStrategy();
+            callReferenceLookup = new FunctionNormalReferenceLookupStrategy(astCache);
         }
         try {
-            callExpressions_ = callReferenceLookup_
+            callExpressions = callReferenceLookup
                     .findAllReferences(getFunctionName());
         } catch (Exception e) {
             status.addError(e.toString());
@@ -90,7 +99,7 @@ public class ETTPFunctionTransform extends Transform {
         if (!shouldAdjustCalls()) {
             return;
         }
-        for (ICPPASTFunctionCallExpression call : callExpressions_) {
+        for (ICPPASTFunctionCallExpression call : callExpressions) {
             processCall(call, collector);
         }
     }
@@ -216,7 +225,7 @@ public class ETTPFunctionTransform extends Transform {
      * @return Translation unit.
      */
     private IASTTranslationUnit getUnitOf(ICPPASTFunctionCallExpression call) {
-        return callReferenceLookup_.getTranslationUnitOf(call);
+        return callReferenceLookup.getTranslationUnitOf(call);
     }
 
     /**
@@ -328,11 +337,16 @@ public class ETTPFunctionTransform extends Transform {
      * @return Declaration specifier.
      */
     private IASTDeclSpecifier createDeclSpecifier(IType paramType) {
-        if (paramType instanceof CPPBasicType) {
+        if (paramType instanceof ICPPBasicType) {
             CPPASTSimpleDeclSpecifier declSpec = new CPPASTSimpleDeclSpecifier();
-            declSpec.setType(((CPPBasicType) paramType).getKind());
+            declSpec.setType(((ICPPBasicType) paramType).getKind());
             return declSpec;
-        } else {
+        } else if(paramType instanceof IBinding){
+            CPPASTNamedTypeSpecifier declSpec = new CPPASTNamedTypeSpecifier();
+            final IBinding typeBinding = (IBinding)paramType;
+            declSpec.setName(new CPPASTName(typeBinding.getNameCharArray()));
+            return declSpec;
+        } else{
             CPPASTNamedTypeSpecifier declSpec = new CPPASTNamedTypeSpecifier();
             declSpec.setName(new CPPASTName(paramType.toString().toCharArray()));
             return declSpec;

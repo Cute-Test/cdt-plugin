@@ -49,10 +49,10 @@ public class CopyCuteFiles extends ProcessRunner {
 		try {
 			path = TemplateEngineHelper.getTemplateResourceURLRelativeToTemplate(template, sourceDir);
 			if (path == null) {
-				throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Copy Cute files failure: template source not found:" + sourceDir)); //$NON-NLS-1$
+				throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Copy CUTE files failure: template source not found:" + sourceDir)); //$NON-NLS-1$
 			}
 		} catch (IOException e1) {
-			throw new ProcessFailureException("Copy Cute files failure: template source not found: " + sourceDir); //$NON-NLS-1$
+			throw new ProcessFailureException("Copy CUTE files failure: template source not found: " + sourceDir); //$NON-NLS-1$
 		}
 
 		File[] filenames = getFiles(path);

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <feature url="features/ch.hsr.ifs.cute.headers.1_5.feature_2.0.1.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_5.feature" version="2.0.1.qualifier">
-      <category name="Cute Headers"/>
+      <category name="CUTE Headers"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.headers.1_6.feature_2.0.1.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_6.feature" version="2.0.1.qualifier">
-      <category name="Cute Headers"/>
+      <category name="CUTE Headers"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.boost.feature_1.42.0.qualifier.jar" id="ch.hsr.ifs.cute.boost.feature" version="1.42.0.qualifier">
       <category name="OptFeatures"/>
@@ -13,17 +13,17 @@
       <category name="OptFeatures"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute_4.3.0.qualifier.jar" id="ch.hsr.ifs.cute" version="4.3.0.qualifier">
-      <category name="Cute Plugin"/>
+      <category name="CUTE Plugin"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.refactoringPreview.clonewar.feature_1.0.1.qualifier.jar" id="ch.hsr.ifs.cute.refactoringPreview.clonewar.feature" version="1.0.1.qualifier">
       <category name="refPreview"/>
    </feature>
    <feature url="features/ch.hsr.ifs.cute.headers.1_7.feature_2.1.0.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_7.feature" version="2.1.0.qualifier">
-      <category name="Cute Headers"/>
+      <category name="CUTE Headers"/>
    </feature>
-   <category-def name="Cute Plugin" label="Cute Plugin"/>
-   <category-def name="Cute Headers" label="Cute Headers"/>
-   <category-def name="OptFeatures" label="Cute Optional Features"/>
+   <category-def name="CUTE Plugin" label="CUTE Plugin"/>
+   <category-def name="CUTE Headers" label="CUTE Headers"/>
+   <category-def name="OptFeatures" label="CUTE Optional Features"/>
    <category-def name="refPreview" label="Refactoring Preview">
       <description>
          Preview of new refactorings

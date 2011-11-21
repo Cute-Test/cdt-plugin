@@ -22,7 +22,7 @@ public class AllCoreTests extends TestSuite{
 	
 
 	public AllCoreTests() {
-		super("Cute Plugin All Core Tests"); //$NON-NLS-1$
+		super("CUTE Plugin All Core Tests"); //$NON-NLS-1$
 		addTest(PatternListenerSuite.suite());
 		addTest(ModelBuilderSuite.suite());
 		addTest(HyperlinkSuite.suite());

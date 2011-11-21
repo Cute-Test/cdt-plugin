@@ -3,7 +3,7 @@
 <schema targetNamespace="ch.hsr.ifs.cute.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="ch.hsr.ifs.cute.ui" id="ch.hsr.ifs.cute.ui.headers" name="Cute Headers"/>
+         <meta.schema plugin="ch.hsr.ifs.cute.ui" id="ch.hsr.ifs.cute.ui.headers" name="CUTE Headers"/>
       </appinfo>
       <documentation>
          

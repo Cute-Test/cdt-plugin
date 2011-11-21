@@ -19,7 +19,7 @@ public class CuteBuildPropertyValue implements IBuildPropertyValue{
 
 	
 	public String getName() {
-		return "Cute Project"; //$NON-NLS-1$
+		return "CUTE Project"; //$NON-NLS-1$
 	}
 	
 }

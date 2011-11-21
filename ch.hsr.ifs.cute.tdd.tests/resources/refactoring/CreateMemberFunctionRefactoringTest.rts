@@ -154,7 +154,7 @@ void test()
     B b;
     b.foo();
 }
-//!TestCuteMacroFunctionCreation_ASSERT
+//!TestCUTEMacroFunctionCreation_ASSERT
 //@Test.cpp
 #include <string>
 namespace cute{
@@ -209,7 +209,7 @@ void blah(){
     B b1;
     ASSERT(b1.member());
 }
-//!TestCuteMacroFunctionCreation_ASSERT_EQUALS
+//!TestCUTEMacroFunctionCreation_ASSERT_EQUALS
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue>
@@ -262,7 +262,7 @@ void test(){
     B b1;
     ASSERT_EQUAL(42, b1.member());
 }
-//!TestCuteMacroFunctionCreation_ASSERT_EQUALS_DELTA
+//!TestCUTEMacroFunctionCreation_ASSERT_EQUALS_DELTA
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
@@ -311,7 +311,7 @@ void testKreis(){
     B b;
     ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
 }
-//!TestCuteMacroFunctionCreation_ASSERT_EQUALS_DELTA_M
+//!TestCUTEMacroFunctionCreation_ASSERT_EQUALS_DELTA_M
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
@@ -408,7 +408,7 @@ void func()
     B b1;
     b1.member(42);
 }
-//!CuteAssertEqualMemberWithParameter
+//!CUTEAssertEqualMemberWithParameter
 //@A.cpp
 namespace cute {
 template <typename ExpectedValue, typename ActualValue>

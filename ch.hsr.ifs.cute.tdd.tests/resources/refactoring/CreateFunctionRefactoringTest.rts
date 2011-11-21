@@ -89,7 +89,7 @@ void func()
 {
 	MACRO(foo());
 }
-//!TestCuteMacroFunctionCreation_ASSERT
+//!TestCUTEMacroFunctionCreation_ASSERT
 //@Test.cpp
 #include <string>
 namespace cute{
@@ -135,7 +135,7 @@ bool function()
 void test(){
     ASSERT(function());
 }
-//!TestCuteMacroFunctionCreation_ASSERT_EQUALS
+//!TestCUTEMacroFunctionCreation_ASSERT_EQUALS
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue>
@@ -179,7 +179,7 @@ int function()
 void test(){
     ASSERT_EQUAL(42, function());
 }
-//!TestCuteMacroFunctionCreation_ASSERT_EQUALS_DELTA
+//!TestCUTEMacroFunctionCreation_ASSERT_EQUALS_DELTA
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
@@ -219,7 +219,7 @@ int function()
 void test(){
     ASSERT_EQUAL_DELTA(42, function(), 0.0);
 }
-//!TestCuteMacroFunctionCreation_ASSERT_EQUALS_DELTA_M
+//!TestCUTEMacroFunctionCreation_ASSERT_EQUALS_DELTA_M
 //@Test.cpp
 namespace cute {
     template <typename ExpectedValue, typename ActualValue, typename DeltaValue>

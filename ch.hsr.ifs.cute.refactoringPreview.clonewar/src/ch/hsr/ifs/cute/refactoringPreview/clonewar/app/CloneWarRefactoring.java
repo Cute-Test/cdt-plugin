@@ -169,7 +169,7 @@ public class CloneWarRefactoring extends CRefactoring2 {
         public int leave(IASTDeclaration declaration) {
             if (isSelectedNode(declaration)) {
                 if (isFunction(declaration)) {
-                    refactoring = new ETTPFunctionTransform();
+                    refactoring = new ETTPFunctionTransform(astCache);
                     refactoring.setNode(declaration);
                     return PROCESS_ABORT;
                 }

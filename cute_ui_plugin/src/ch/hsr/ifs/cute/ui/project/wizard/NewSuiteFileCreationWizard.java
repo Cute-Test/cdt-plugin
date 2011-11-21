@@ -34,7 +34,7 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
         super();
         setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
         setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
-        setWindowTitle("New Cute Suite File"); //$NON-NLS-1$
+        setWindowTitle("New CUTE Suite File"); //$NON-NLS-1$
     }
     
     /*
