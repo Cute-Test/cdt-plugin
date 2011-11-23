@@ -29,3 +29,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.ui.test,
  ch.hsr.ifs.cute.ui.test.checkers,
  ch.hsr.ifs.cute.ui.test.sourceactions
+Import-Package: org.eclipse.cdt.codan.core,
+ org.eclipse.cdt.codan.core.model

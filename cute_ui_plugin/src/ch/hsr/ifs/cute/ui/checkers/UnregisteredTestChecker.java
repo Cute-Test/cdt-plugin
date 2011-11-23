@@ -28,7 +28,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
  *
  */
 public class UnregisteredTestChecker extends AbstractIndexAstChecker {
-
+	
 	public UnregisteredTestChecker() {
 	}
 
