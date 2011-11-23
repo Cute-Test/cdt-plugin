@@ -38,23 +38,23 @@ public class CreateMemberFunctionRefactoring extends CRefactoring3 {
 	}
 
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
-		
+
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTName selectedNode = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
 		ICPPASTCompositeTypeSpecifier type = strategy.getDefinitionScopeForName(localunit, selectedNode, astCache);
 		ICPPASTFunctionDefinition newFunction = strategy.getFunctionDefinition(localunit, selectedNode, ca.getName(), getSelection());
 
-		if (ca.isStaticCase() || type == null) {
-			
+		if (type == null) {
 			final IASTNode parent = selectedNode.getParent();
 			IASTNode insertionPoint;
-			if(parent instanceof ICPPASTQualifiedName){
+			if (parent instanceof ICPPASTQualifiedName) {
 				insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, astCache);
 			} else {
 				insertionPoint = localunit;
 			}
-			TddHelper.writeDefinitionTo(collector, insertionPoint, newFunction);			
-		} else {
+			TddHelper.writeDefinitionTo(collector, insertionPoint, newFunction);
+		}
+		else {
 			TddHelper.writeDefinitionTo(collector, type, newFunction);
 		}
 		setLinkedModeInformation(localunit, type, newFunction);
