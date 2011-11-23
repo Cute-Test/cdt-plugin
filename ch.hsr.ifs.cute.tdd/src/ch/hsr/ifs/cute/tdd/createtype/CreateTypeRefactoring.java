@@ -96,10 +96,15 @@ public class CreateTypeRefactoring extends CRefactoring3 {
 	public static IASTNode getInsertionPoint(IASTTranslationUnit localunit,
 			IASTName namenearselection, RefactoringASTCache astCache) {
 		IASTNode insertionPoint = null;
+		if(namenearselection instanceof ICPPASTQualifiedName){
+			insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) namenearselection, astCache);			
+		}
+		else{
 		IASTNode parent = namenearselection.getParent();
-		if (parent instanceof ICPPASTQualifiedName) {
-			insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, astCache);
-		} 
+			if (parent instanceof ICPPASTQualifiedName) {
+				insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, astCache);
+			} 
+		}
 		if (insertionPoint == null) {
 			insertionPoint = getFunctionDefinition(namenearselection);
 			if (insertionPoint == null) {

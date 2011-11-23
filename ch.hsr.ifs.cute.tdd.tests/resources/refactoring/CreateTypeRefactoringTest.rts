@@ -242,3 +242,23 @@ namespace X
 void test() {
     X::A::foo();
 }
+//!Class in Namespace from Declaration
+//@A.cpp
+namespace X
+{
+}
+
+void test() {
+    X::Inner xi;
+}
+//=
+namespace X
+{
+    struct Inner
+    {
+    };
+}
+
+void test() {
+    X::Inner xi;
+}
