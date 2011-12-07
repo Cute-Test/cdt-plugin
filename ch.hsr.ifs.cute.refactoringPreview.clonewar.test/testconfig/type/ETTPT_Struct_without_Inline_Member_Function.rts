@@ -1,0 +1,32 @@
+//!ETTPT: Struct without Inline Member Function.
+//#ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AbstractRefactoringTest
+//@.config
+filename=ETTPT_Struct_without_Inline_Member_Function.h
+//@ETTPT_Struct_without_Inline_Member_Function.h
+struct /*$*/S/*$$*/
+{
+    S(){}
+    void foo();
+};
+
+void S::foo()
+{
+}
+
+int main(int argc, char **argv) {
+	S s;
+}
+//=
+struct S
+{
+    S(){}
+    void foo();
+};
+
+void S::foo()
+{
+}
+
+int main(int argc, char **argv) {
+	S s;
+}

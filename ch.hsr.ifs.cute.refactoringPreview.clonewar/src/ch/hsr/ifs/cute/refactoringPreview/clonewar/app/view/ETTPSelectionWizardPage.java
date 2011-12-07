@@ -54,13 +54,13 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
     private static final String OPEN_BRACKET = "<";
     private static final String CLOSE_BRACKET = ">";
     private static final int PAGE_LAYOUT_COL = 1;
-    private boolean flipToNextPage_ = true;
-    private Button addButton_;
-    private Button removeButton_;
-    private Button upButton_;
-    private Button downButton_;
-    private Label orderPreview_;
-    private Table selectionTable_;
+    private boolean flipToNextPage = true;
+    private Button addButton;
+    private Button removeButton;
+    private Button upButton;
+    private Button downButton;
+    private Label orderPreview;
+    private Table selectionTable;
 
     /**
      * Create the wizard page.
@@ -78,8 +78,8 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
         addInformationLabel();
         addMiddlePage();
         addOrderPreview();
-        selectionTable_.setSelection(0);
-        setButtonStates(selectionTable_);
+        selectionTable.setSelection(0);
+        setButtonStates(selectionTable);
     }
 
     /**
@@ -116,7 +116,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      *            True to set on, false for off.
      */
     protected void changeNextPageProcessing(boolean on) {
-        flipToNextPage_ = on;
+        flipToNextPage = on;
         setPageComplete(on);
     }
 
@@ -166,9 +166,9 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
         orderingTitle.setFont(createOrderingTitleFont(orderingTitle));
         orderingTitle.setText(Messages.ORDERING_TITLE);
         orderingTitle.setLayoutData(createOrderingLabelLayoutData());
-        orderPreview_ = new Label(getPage(), SWT.NONE);
-        orderPreview_.setLayoutData(createOrderingLabelLayoutData());
-        updateOrderPreview(selectionTable_);
+        orderPreview = new Label(getPage(), SWT.NONE);
+        orderPreview.setLayoutData(createOrderingLabelLayoutData());
+        updateOrderPreview(selectionTable);
     }
 
     /**
@@ -176,7 +176,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      */
     @Override
     public boolean canFlipToNextPage() {
-        return flipToNextPage_;
+        return flipToNextPage;
     }
 
     /**
@@ -197,9 +197,9 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
         if (types.isEmpty())
             return;
         types = types.substring(0, types.length() - 2);
-        orderPreview_.setText("\t" + TEMPLATE_TEXT + OPEN_BRACKET
+        orderPreview.setText("\t" + TEMPLATE_TEXT + OPEN_BRACKET
                 + types.trim() + CLOSE_BRACKET);
-        orderPreview_.setSize(orderPreview_.computeSize(SWT.DEFAULT,
+        orderPreview.setSize(orderPreview.computeSize(SWT.DEFAULT,
                 SWT.DEFAULT));
     }
 
@@ -261,10 +261,10 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
     private void addControlButtons(Composite parent) {
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(createControlButtonsLayout());
-        addButton_ = createButton(composite, Messages.ADD_TEXT);
-        removeButton_ = createButton(composite, Messages.REM_TEXT);
-        upButton_ = createButton(composite, Messages.UP_TEXT);
-        downButton_ = createButton(composite, Messages.DOWN_TEXT);
+        addButton = createButton(composite, Messages.ADD_TEXT);
+        removeButton = createButton(composite, Messages.REM_TEXT);
+        upButton = createButton(composite, Messages.UP_TEXT);
+        downButton = createButton(composite, Messages.DOWN_TEXT);
         addButtonListener();
     }
 
@@ -272,14 +272,14 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      * Register button listeners.
      */
     private void addButtonListener() {
-        addButton_.addSelectionListener(new AddEntrySelectionListener(
-                selectionTable_));
-        removeButton_.addSelectionListener(new RemoveEntrySelectionListener(
-                selectionTable_));
-        upButton_.addSelectionListener(new EntryUpSelectionListener(
-                selectionTable_));
-        downButton_.addSelectionListener(new EntryDownSelectionListener(
-                selectionTable_));
+        addButton.addSelectionListener(new AddEntrySelectionListener(
+                selectionTable));
+        removeButton.addSelectionListener(new RemoveEntrySelectionListener(
+                selectionTable));
+        upButton.addSelectionListener(new EntryUpSelectionListener(
+                selectionTable));
+        downButton.addSelectionListener(new EntryDownSelectionListener(
+                selectionTable));
     }
 
     /**
@@ -328,12 +328,12 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      *            Parent.
      */
     private void addSelectionTable(Composite parent) {
-        selectionTable_ = new Table(parent, getTableFlags());
-        selectionTable_.setLayoutData(createTableLayoutData());
-        selectionTable_.setLinesVisible(true);
-        selectionTable_.addMouseListener(createTableSelectionListener());
-        addColumnHeadings(selectionTable_);
-        addTableValues(selectionTable_);
+        selectionTable = new Table(parent, getTableFlags());
+        selectionTable.setLayoutData(createTableLayoutData());
+        selectionTable.setLinesVisible(true);
+        selectionTable.addMouseListener(createTableSelectionListener());
+        addColumnHeadings(selectionTable);
+        addTableValues(selectionTable);
     }
 
     /**
@@ -342,8 +342,8 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      * @return Listener.
      */
     private CellSelectionListener createTableSelectionListener() {
-        return new CellSelectionListener(createTableEditor(selectionTable_),
-                selectionTable_);
+        return new CellSelectionListener(createTableEditor(selectionTable),
+                selectionTable);
     }
 
     /**
@@ -510,10 +510,10 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      *            Table.
      */
     private void setButtonStates(Table table) {
-        addButton_.setEnabled(!hasAllTypes(table));
-        removeButton_.setEnabled(hasSelection(table));
-        upButton_.setEnabled(hasSelection(table) && !isTableLowerBound(table));
-        downButton_
+        addButton.setEnabled(!hasAllTypes(table));
+        removeButton.setEnabled(hasSelection(table));
+        upButton.setEnabled(hasSelection(table) && !isTableLowerBound(table));
+        downButton
                 .setEnabled(hasSelection(table) && !isTableUpperBound(table));
     }
 
@@ -537,6 +537,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      * Check if there are any defaulting problems.
      */
     protected abstract void checkDefaultingProblem();
+    
 
     /**
      * Create the page layout data.
@@ -568,7 +569,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      * @author ythrier(at)hsr.ch
      */
     private class AddEntrySelectionListener extends SelectionAdapter {
-        private Table table_;
+        private Table table;
 
         /**
          * Create the listener.
@@ -577,7 +578,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          *            The table to modify.
          */
         public AddEntrySelectionListener(Table table) {
-            this.table_ = table;
+            this.table = table;
         }
 
         /**
@@ -587,16 +588,16 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
         public void widgetSelected(SelectionEvent e) {
             ElementListSelectionDialog dialog = createDialog();
             if (dialog.open() != Window.OK) {
-                setButtonStates(table_);
+                setButtonStates(table);
                 return;
             }
             TypePair pair = findTypePair(dialog.getResult()[0]);
             if (pair == null)
                 return;
             pair.getAction().setPerform(true);
-            createTableItem(table_, pair.getTypeInfo(), pair.getAction());
-            changeOrdering(table_);
-            setButtonStates(table_);
+            createTableItem(table, pair.getTypeInfo(), pair.getAction());
+            changeOrdering(table);
+            setButtonStates(table);
         }
 
         /**
@@ -653,8 +654,8 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      * @author ythrier(at)hsr.ch
      */
     private class CellSelectionListener extends MouseAdapter {
-        private TableEditor editor_;
-        private Table table_;
+        private TableEditor editor;
+        private Table table;
 
         /**
          * Create the listener for the table.
@@ -665,8 +666,8 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          *            Table.
          */
         public CellSelectionListener(TableEditor editor, Table table) {
-            this.editor_ = editor;
-            this.table_ = table;
+            this.editor = editor;
+            this.table = table;
         }
 
         /**
@@ -674,7 +675,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          */
         @Override
         public void mouseDown(MouseEvent e) {
-            setButtonStates(table_);
+            setButtonStates(table);
             changeNextPageProcessing(false);
             disposeOldEditor();
             TableItem item = findEventItem(createPoint(e));
@@ -689,13 +690,13 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
                 changeNextPageProcessing(true);
                 return;
             }
-            Text text = new Text(table_, SWT.NONE);
+            Text text = new Text(table, SWT.NONE);
             text.setText(item.getText(getEditableColumn()));
             addAutoCompletionTo(text);
             addListeners(text, item, col);
             text.selectAll();
             text.setFocus();
-            editor_.setEditor(text, item, getEditableColumn());
+            editor.setEditor(text, item, getEditableColumn());
         }
 
         /**
@@ -764,7 +765,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          * @return The event column or -1, if no column was found.
          */
         private int findEventCol(TableItem item, Point point) {
-            for (int i = 0; i < table_.getColumnCount(); ++i)
+            for (int i = 0; i < table.getColumnCount(); ++i)
                 if (item.getBounds(i).contains(point))
                     return i;
             return -1;
@@ -778,7 +779,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          * @return The item or null, if no item was found.
          */
         private TableItem findEventItem(Point point) {
-            return table_.getItem(point);
+            return table.getItem(point);
         }
 
         /**
@@ -796,8 +797,8 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          * Dispose the old editor control if necessary.
          */
         private void disposeOldEditor() {
-            if (editor_.getEditor() != null)
-                editor_.getEditor().dispose();
+            if (editor.getEditor() != null)
+                editor.getEditor().dispose();
         }
     }
 
@@ -810,9 +811,9 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
     private class SaveConfigurationListener implements Listener {
         private static final String FIRST_REPLACE = "?1";
         private static final String SECOND_REPLACE = "?2";
-        private TableItem item_;
-        private int column_;
-        private Text text_;
+        private TableItem item;
+        private int column;
+        private Text text;
 
         /**
          * Create the listener to save the configuration.
@@ -825,9 +826,9 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          *            Textfield with edited configuration value.
          */
         public SaveConfigurationListener(TableItem item, int column, Text text) {
-            this.item_ = item;
-            this.column_ = column;
-            this.text_ = text;
+            this.item = item;
+            this.column = column;
+            this.text = text;
         }
 
         /**
@@ -849,8 +850,8 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          * Dispose components and set new focus.
          */
         private void disposeAndFocus() {
-            text_.dispose();
-            item_.getParent().setFocus();
+            text.dispose();
+            item.getParent().setFocus();
         }
 
         /**
@@ -923,28 +924,28 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          * Save the value entered.
          */
         private void save() {
-            item_.setText(column_, text_.getText());
+            item.setText(column, text.getText());
             adjustConfiguration();
-            updateOrderPreview(item_.getParent());
+            updateOrderPreview(item.getParent());
         }
 
         /**
          * Adjust the configuration with the new template name value.
          */
         private void adjustConfiguration() {
-            TypeInformation typeInfo = getTypePair(item_).getTypeInfo();
-            TransformAction action = getTypePair(item_).getAction();
+            TypeInformation typeInfo = getTypePair(item).getTypeInfo();
+            TransformAction action = getTypePair(item).getAction();
             List<TransformAction> actionList = getConfig().getActionsOf(
                     typeInfo);
             actionList.remove(action);
             if (actionList.isEmpty())
                 getConfig().remove(typeInfo);
             TypeInformation newTypeInfo = copy(typeInfo);
-            newTypeInfo.setTemplateName(item_.getText(getEditableColumn()));
+            newTypeInfo.setTemplateName(item.getText(getEditableColumn()));
             if (!getConfig().getAllTypes().contains(newTypeInfo))
                 getConfig().add(newTypeInfo, new ArrayList<TransformAction>());
             getConfig().getActionsOf(newTypeInfo).add(action);
-            item_.setData(new TypePair(newTypeInfo, action));
+            item.setData(new TypePair(newTypeInfo, action));
             checkConversionProblems(newTypeInfo.getType(),
                     newTypeInfo.getTemplateName(), action.getVariableName());
         }
@@ -1011,7 +1012,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      * @author ythrier(at)hsr.ch
      */
     private class RemoveEntrySelectionListener extends SelectionAdapter {
-        private Table table_;
+        private Table table;
 
         /**
          * Create the listener.
@@ -1020,7 +1021,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          *            Table to modify.
          */
         public RemoveEntrySelectionListener(Table table) {
-            this.table_ = table;
+            this.table = table;
         }
 
         /**
@@ -1028,27 +1029,55 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          */
         @Override
         public void widgetSelected(SelectionEvent e) {
-            if (table_.getSelectionIndex() == -1)
+            if (table.getSelectionIndex() == -1)
                 return;
-            TableItem item = table_.getItem(table_.getSelectionIndex());
+            TableItem item = table.getItem(table.getSelectionIndex());
             if (item == null)
                 return;
             TypePair pair = (TypePair) item.getData();
             pair.getAction().setPerform(false);
-            table_.remove(table_.getSelectionIndex());
-            changeOrdering(table_);
-            setButtonStates(table_);
-            updateOrderPreview(table_);
+            table.remove(table.getSelectionIndex());
+            changeOrdering(table);
+            setButtonStates(table);
+            updateOrderPreview(table);
         }
     }
 
+    
+    private abstract class EntrySelectionListener extends SelectionAdapter {
+        protected Table table;
+        
+        protected EntrySelectionListener(Table table){
+            this.table = table;
+        }
+        
+        @Override
+        public void widgetSelected(SelectionEvent e) {
+            int selectionIndex = table.getSelectionIndex();
+            if(checkSelection(selectionIndex)){
+                return;
+            }
+            TableItem selection = table.getItem(selectionIndex);
+            TableItem replacement = table.getItem(newIndex(selectionIndex));
+            swap(selection, replacement);
+            changeOrdering(table);
+            table.setSelection(newIndex(selectionIndex));
+            setButtonStates(table);
+            checkDefaultingProblem();
+        }
+
+        protected abstract boolean checkSelection(int selectionIndex);
+        
+        protected abstract int newIndex(int selectionIndex);
+        
+    }
+    
     /**
      * Listener to modify the extraction table. Moving the selected entry up.
      * 
      * @author ythrier(at)hsr.ch
      */
-    private class EntryUpSelectionListener extends SelectionAdapter {
-        private Table table_;
+    private class EntryUpSelectionListener extends EntrySelectionListener {
 
         /**
          * Create the listener.
@@ -1057,24 +1086,17 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          *            Table to modify.
          */
         public EntryUpSelectionListener(Table table) {
-            this.table_ = table;
+            super(table);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
-        public void widgetSelected(SelectionEvent e) {
-            int selectionIndex = table_.getSelectionIndex();
-            if (selectionIndex == -1 || selectionIndex == 0)
-                return;
-            TableItem selection = table_.getItem(selectionIndex);
-            TableItem replacement = table_.getItem(selectionIndex - 1);
-            swap(selection, replacement);
-            changeOrdering(table_);
-            table_.setSelection(selectionIndex - 1);
-            setButtonStates(table_);
-            checkDefaultingProblem();
+        protected boolean checkSelection(int selectionIndex){
+            return selectionIndex == -1 || selectionIndex == 0;
+        }
+        
+        @Override
+        protected int newIndex(int selectionIndex){
+            return selectionIndex - 1;
         }
     }
 
@@ -1084,8 +1106,7 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
      * @author ythrier(at)hsr.ch
      * 
      */
-    private class EntryDownSelectionListener extends SelectionAdapter {
-        private Table table_;
+    private class EntryDownSelectionListener extends EntrySelectionListener {
 
         /**
          * Create the listener.
@@ -1094,24 +1115,17 @@ public abstract class ETTPSelectionWizardPage extends AbstractETTPWizardPage {
          *            Table to modify.
          */
         public EntryDownSelectionListener(Table table) {
-            this.table_ = table;
+            super(table);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
-        public void widgetSelected(SelectionEvent e) {
-            int selectionIndex = table_.getSelectionIndex();
-            if (selectionIndex == -1 || selectionIndex == table_.getItemCount())
-                return;
-            TableItem selection = table_.getItem(selectionIndex);
-            TableItem replacement = table_.getItem(selectionIndex + 1);
-            swap(selection, replacement);
-            changeOrdering(table_);
-            table_.setSelection(selectionIndex + 1);
-            setButtonStates(table_);
-            checkDefaultingProblem();
+        protected boolean checkSelection(int selectionIndex){
+            return selectionIndex == -1 || selectionIndex == table.getItemCount();
+        }
+
+        @Override
+        protected int newIndex(int selectionIndex){
+            return selectionIndex + 1;
         }
     }
 }

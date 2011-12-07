@@ -269,6 +269,13 @@
 		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
 	</Test>
 	<Test>
+		<TestConfig>testconfig/type/ETTPT_Struct_without_Inline_Member_Function.rts</TestConfig>
+		<Description>ETTPT: Struct without Inline Member Function.</Description>
+		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionFatalErrorCheckStrategy</InitialAssert>
+		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>
+		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
+	</Test>
+	<Test>
 		<TestConfig>testconfig/type/ETTPT_Struct_without_Templatable_Content.rts</TestConfig>
 		<Description>ETTPT: Struct without Templatable Content.</Description>
 		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionFatalErrorCheckStrategy</InitialAssert>

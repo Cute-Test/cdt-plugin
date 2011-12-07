@@ -42,7 +42,7 @@ public abstract class Transform {
     private CPPASTNodeFactory nodeFactory = new CPPASTNodeFactory();
     private TransformConfiguration configuration;
     private IASTTranslationUnit translationUnit;
-    private IASTNode originalNode;
+    protected IASTNode originalNode;
     private IASTNode copyNode;
     private IASTNode singleSelection;
 

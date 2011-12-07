@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -58,8 +59,21 @@ public class ETTPTypeTransform extends Transform {
     @Override
     public void preprocess(RefactoringStatus status) {
         super.preprocess(status);
-        for (TypeInformation type : getConfig().getAllTypes())
+        for (TypeInformation type : getConfig().getAllTypes()) {
             type.setDefaulting(true);
+        }
+        
+        ICPPASTCompositeTypeSpecifier type = getCompositeTypeSpecifier(originalNode);
+        IASTDeclaration[] declarations = type.getDeclarations(false);
+        for(IASTDeclaration declaration : declarations){
+            if(declaration instanceof IASTSimpleDeclaration){
+                for(IASTDeclarator declarator : ((IASTSimpleDeclaration) declaration).getDeclarators()){
+                    if(declarator instanceof IASTFunctionDeclarator){
+                        status.addFatalError("Member function '" + declarator.getName().toString() + "' is not defined inline, it cannot be adapted correctly." );
+                    }
+                }
+            }
+        }
     }
 
     /**
