@@ -80,8 +80,11 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 					}
 				}
 				else if(typespec instanceof IASTCompositeTypeSpecifier){
-					IASTName typeName = ((IASTCompositeTypeSpecifier) typespec).getName();
-					reportUnresolvableConstructorCalls(simpleDecl, typeName.toString());
+					final IASTCompositeTypeSpecifier typeDefinition = (IASTCompositeTypeSpecifier) typespec;
+					if(typeDefinition.getStorageClass() != IASTCompositeTypeSpecifier.sc_typedef){
+						IASTName typeName = typeDefinition.getName();
+						reportUnresolvableConstructorCalls(simpleDecl, typeName.toString());
+					}
 				}
 			}
 			return PROCESS_CONTINUE;

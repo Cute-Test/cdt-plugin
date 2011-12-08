@@ -710,3 +710,21 @@ typedef ST<> S;
 int main(int argc, char **argv) {
 	S s;
 }
+//!No Constructor for Typedef Type Specifier in Variable Declaration
+//@.config
+markerCount=0
+//@A.cpp
+typedef struct S {
+} myS;
+//=
+typedef struct S {
+} myS;
+//!No Constructor for Typedef Anonymous Type Specifier in Variable Declaration
+//@.config
+markerCount=0
+//@A.cpp
+typedef struct {
+} myVar;
+//=
+typedef struct {
+} myVar;
