@@ -330,3 +330,26 @@ public:
     }
 	A(){}
 };
+//!No Marker for Access in Non-inline Member
+//@.config
+markerCount=0
+//@A.cpp
+class A {
+    int blah;
+public:
+	void member();
+};
+void A::member() {
+    A a;
+    a.blah = 0;
+}
+//=
+class A {
+    int blah;
+public:
+	void member();
+};
+void A::member() {
+    A a;
+    a.blah = 0;
+}

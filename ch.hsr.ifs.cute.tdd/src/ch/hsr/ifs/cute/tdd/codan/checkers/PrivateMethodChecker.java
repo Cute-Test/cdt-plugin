@@ -10,9 +10,12 @@ package ch.hsr.ifs.cute.tdd.codan.checkers;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMember;
 import org.eclipse.cdt.core.parser.util.ArrayUtil;
@@ -46,6 +49,10 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				ICPPMember[] fields = owner.getDeclaredFields();
 				if (ArrayUtil.contains(methods, member) || ArrayUtil.contains(fields, member)) {
 					if (member.getVisibility() == ICPPMember.v_private) {
+						IType typeOfContext = findTypeOfContext(name);
+						if(owner.isSameType(typeOfContext)){
+							return PROCESS_CONTINUE;
+						}
 						String memberName = new String(name.getSimpleID());
 						CodanArguments ca = new CodanArguments(memberName, memberName + Messages.PrivateMethodChecker_1, ":visibility"); //$NON-NLS-1$
 						reportProblem(ERR_ID_PrivateMethodChecker_HSR, name.getLastName(), ca.toArray());
@@ -54,6 +61,23 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 					//}
 				}
 				return PROCESS_CONTINUE;
+			}
+
+			private IType findTypeOfContext(IASTName name) {
+				IASTNode ancestor = name;
+				while(ancestor != null){
+					if(ancestor instanceof ICPPASTFunctionDefinition){
+						final IASTName functionName = ((ICPPASTFunctionDefinition) ancestor).getDeclarator().getName();
+						final IBinding functionBinding = functionName.resolveBinding();
+						final IBinding owner = functionBinding.getOwner();
+						if(owner instanceof IType){
+							return (IType) owner;
+						}
+					}
+					ancestor = ancestor.getParent();
+				}
+					
+				return null;
 			}
 
 			private ICPPMember getMember(IASTName name) {
