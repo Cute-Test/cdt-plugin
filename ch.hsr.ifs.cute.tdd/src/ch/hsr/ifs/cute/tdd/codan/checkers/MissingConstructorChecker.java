@@ -76,7 +76,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 					
 					if (isConstructableType(typeBinding)) {
 						String typeName = ASTTypeUtil.getType((IType) typeBinding, true);
-						if (!(typeName.contains("&") || typeName.contains("*"))) {
+						if (!isReferenceType(typeName)) {
 							typeName = stripTemplateArguments(typeName);
 							reportUnresolvableConstructorCalls(simpleDecl, typeName);
 						}
@@ -89,6 +89,10 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				}
 			}
 			return PROCESS_CONTINUE;
+		}
+
+		private boolean isReferenceType(String typeName) {
+			return typeName.contains("&") || typeName.contains("*");
 		}
 
 		private String stripTemplateArguments(String typeName) {

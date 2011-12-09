@@ -67,9 +67,9 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 				}
 				if (b instanceof ICPPFunction) {
 					ICPPFunction candidate = (ICPPFunction) b;
-					List<ICPPParameter> newParams = Arrays.asList((candidate).getParameters());
+					List<ICPPParameter> newParams = Arrays.asList(candidate.getParameters());
 					List<IASTInitializerClause> newArgs = AddArgumentRefactoring.getNewArguments(oldArgs, newParams);
-					if (newArgs == null) {
+					if (newArgs == null || newArgs.size() == oldArgs.size()) {
 						return;
 					}
 					if (argNr > 0) {
