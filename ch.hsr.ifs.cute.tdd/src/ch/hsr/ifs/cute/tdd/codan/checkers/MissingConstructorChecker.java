@@ -66,8 +66,11 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			if (declaration instanceof IASTSimpleDeclaration && !isMemberDeclaration(declaration)) {
 				IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
 				IASTDeclSpecifier typespec = simpleDecl.getDeclSpecifier();
-				
-				if (typespec instanceof IASTNamedTypeSpecifier && typespec.getStorageClass() != IASTDeclSpecifier.sc_typedef) {
+				final int storageClass = typespec.getStorageClass();
+				if(storageClass == IASTDeclSpecifier.sc_typedef || storageClass == IASTDeclSpecifier.sc_extern){
+					return PROCESS_CONTINUE;
+				}
+				if (typespec instanceof IASTNamedTypeSpecifier) {
 					IASTNamedTypeSpecifier namedTypespec = (IASTNamedTypeSpecifier) typespec;
 					IBinding typeBinding = namedTypespec.getName().resolveBinding();
 					
@@ -81,10 +84,8 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				}
 				else if(typespec instanceof IASTCompositeTypeSpecifier){
 					final IASTCompositeTypeSpecifier typeDefinition = (IASTCompositeTypeSpecifier) typespec;
-					if(typeDefinition.getStorageClass() != IASTCompositeTypeSpecifier.sc_typedef){
-						IASTName typeName = typeDefinition.getName();
-						reportUnresolvableConstructorCalls(simpleDecl, typeName.toString());
-					}
+					final IASTName typeName = typeDefinition.getName();
+					reportUnresolvableConstructorCalls(simpleDecl, typeName.toString());
 				}
 			}
 			return PROCESS_CONTINUE;
