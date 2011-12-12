@@ -673,3 +673,25 @@ namespace X
     {
     }
 }
+//!Create Member Function for Type of Call Expression
+//@A.cpp
+struct S{
+    S f(){return S();}
+};
+
+void foo(){
+    S s;
+    s.f().b();
+}
+//=
+struct S{
+    void b()
+    {
+    }
+    S f(){return S();}
+};
+
+void foo(){
+    S s;
+    s.f().b();
+}

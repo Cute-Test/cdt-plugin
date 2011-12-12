@@ -8,20 +8,16 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
-import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
-import ch.hsr.ifs.cute.tdd.TypeHelper;
 
 public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 
@@ -50,9 +46,9 @@ public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 
 	private void handleMemberResolutionProblem(IASTName name, IProblemBinding problemBinding) {
 		if (TddHelper.isMethod(name)) {
-			IASTFieldReference fref = TddHelper.getAncestorOfType(name, IASTFieldReference.class);
-			CPPASTIdExpression variable = (CPPASTIdExpression) fref.getFieldOwner();
-			if (!isTypeWithMembers(variable)) {
+			IASTFieldReference member = TddHelper.getAncestorOfType(name, IASTFieldReference.class);
+			IASTExpression expression = member.getFieldOwner();
+			if (!isTypeWithMembers(expression)) {
 				return;
 			}
 			if (problemBinding.getCandidateBindings().length == 0) {
@@ -63,14 +59,7 @@ public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 		}
 	}
 
-	private boolean isTypeWithMembers(CPPASTIdExpression variable) {
-		IBinding expressionBinding = variable.getName().resolveBinding();
-		if(expressionBinding instanceof ICPPVariable){
-			ICPPVariable varBinding = (ICPPVariable) expressionBinding;
-			IType varType = varBinding.getType();
-			varType = TypeHelper.windDownToRealType(varType, false);
-			return varType instanceof ICPPClassType;			
-		}
-		return false;
+	private boolean isTypeWithMembers(IASTExpression expression) {
+		return expression.getExpressionType() instanceof ICPPClassType;
 	}
 }
