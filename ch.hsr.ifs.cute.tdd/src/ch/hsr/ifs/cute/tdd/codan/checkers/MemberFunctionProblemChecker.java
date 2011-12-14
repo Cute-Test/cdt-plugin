@@ -48,7 +48,7 @@ public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 		if (TddHelper.isMethod(name)) {
 			IASTFieldReference member = TddHelper.getAncestorOfType(name, IASTFieldReference.class);
 			IASTExpression expression = member.getFieldOwner();
-			if (!isTypeWithMembers(expression)) {
+			if (!isOfTypeWithMembers(expression)) {
 				return;
 			}
 			if (problemBinding.getCandidateBindings().length == 0) {
@@ -59,7 +59,7 @@ public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 		}
 	}
 
-	private boolean isTypeWithMembers(IASTExpression expression) {
+	private boolean isOfTypeWithMembers(IASTExpression expression) {
 		return expression.getExpressionType() instanceof ICPPClassType;
 	}
 }

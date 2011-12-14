@@ -78,12 +78,7 @@ public class ExtractActionDelegate implements IWorkbenchWindowActionDelegate, IE
 		boolean isTextSelection = selection != null
 				&& selection instanceof TextSelection;
 		action.setEnabled(isTextSelection);
-		if (!isTextSelection)
-			return;
-		// get our own selection due to (a possible) bug??
-		this.selection = (TextSelection) CUIPlugin.getActivePage()
-				.getActiveEditor().getEditorSite().getSelectionProvider()
-				.getSelection();
+		this.selection = (TextSelection) selection;
 	}
 
 	@Override
