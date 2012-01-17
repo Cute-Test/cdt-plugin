@@ -32,7 +32,6 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 	 */
 	public boolean test(Object receiver, String property, Object[] args,
 			Object expectedValue) {
-		System.out.println(receiver);
 		if (property.equals("projectNature1")) { //$NON-NLS-1$
 			try {
 				if(receiver instanceof FileEditorInput) {

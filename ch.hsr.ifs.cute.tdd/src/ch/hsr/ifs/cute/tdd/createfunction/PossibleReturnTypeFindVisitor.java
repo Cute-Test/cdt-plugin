@@ -120,7 +120,6 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 							((IVariable) var).getType();
 						}
 					}
-					System.out.println();
 					return handleType(ex.getExpressionType());
 				} else if (ex instanceof ICPPASTUnaryExpression){
 					ICPPASTUnaryExpression unex = (ICPPASTUnaryExpression) ex;

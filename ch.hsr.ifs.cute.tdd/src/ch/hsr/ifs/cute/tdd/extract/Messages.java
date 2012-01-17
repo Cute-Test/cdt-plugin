@@ -9,6 +9,7 @@ public class Messages extends NLS {
 	public static String ExtractRefactoring_12;
 	public static String ExtractRefactoring_8;
 	public static String ExtractRefactoring_9;
+	public static String ExtractRefactoring_NothingExtractableSelected;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

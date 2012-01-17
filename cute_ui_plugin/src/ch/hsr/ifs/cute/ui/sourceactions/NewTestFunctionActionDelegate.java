@@ -138,13 +138,10 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();// TODO exception not managed
-			System.out.println(e.getMessage());
 		} catch (MalformedTreeException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 		} catch (BadLocationException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 		}finally {
 			editor = null;
 		}

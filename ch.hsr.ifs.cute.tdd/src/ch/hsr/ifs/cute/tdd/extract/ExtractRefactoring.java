@@ -65,28 +65,29 @@ public class ExtractRefactoring extends CRefactoring3 {
 	}
 
 	@Override
-	protected void collectModifications(IProgressMonitor pm,
-			ModificationCollector collector) throws CoreException,
-			OperationCanceledException {
+	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
 		IASTNode selectedNode = getSelectedNode(localunit);
-		
-		if(isTypeSelected(selectedNode)){
+
+		if (isTypeSelected(selectedNode)) {
 			extractType(collector, localunit);
 		} else if (isFreeFunctionSelected(selectedNode, localunit)) {
 			extractFreeFunction(collector, localunit, selectedNode);
+		} else {
+			// TODO: Inform the user about the problem
+			// status.addFatalError(Messages.ExtractRefactoring_NothingExtractableSelected);
 		}
 	}
 
 	private boolean isTypeSelected(IASTNode selectedNode) {
 		return getTypeAtSelection(selectedNode) != null;
 	}
-	
-	private ICPPASTCompositeTypeSpecifier getTypeAtSelection(IASTNode selectedNode){
+
+	private ICPPASTCompositeTypeSpecifier getTypeAtSelection(IASTNode selectedNode) {
 		ICPPASTCompositeTypeSpecifier typeAncestor = TddHelper.getAncestorOfType(selectedNode, ICPPASTCompositeTypeSpecifier.class);
-		if(typeAncestor != null){
+		if (typeAncestor != null) {
 			return typeAncestor;
-		}	
+		}
 		ICPPASTCompositeTypeSpecifier typeChild = TddHelper.getChildofType(selectedNode, ICPPASTCompositeTypeSpecifier.class);
 		return typeChild;
 	}
@@ -106,53 +107,45 @@ public class ExtractRefactoring extends CRefactoring3 {
 		String name = new String(nameNode.getSimpleID()) + H;
 
 		ASTRewrite rewrite = collector.rewriterForTranslationUnit(localunit);
-		ASTLiteralNode newInclude = new ASTLiteralNode((INCLUDE + name +
-				STRING + System.getProperty(LINE_SEPARATOR)));
+		ASTLiteralNode newInclude = new ASTLiteralNode((INCLUDE + name + STRING + System.getProperty(LINE_SEPARATOR)));
 		if (createNewFile(topNode, name)) {
-			rewrite.remove(topNode, null);
-			if (!hasIncludeStatement(localunit, name)) {
-				IASTNode firstNodeOfUnit = localunit.getDeclarations()[0];
-				rewrite.insertBefore(localunit, firstNodeOfUnit, newInclude, null);
-			}
+			moveCode(localunit, topNode, name, rewrite, newInclude);
 		}
 	}
 
-	private void extractType(ModificationCollector collector,
-			IASTTranslationUnit localunit) throws CoreException,
-			CModelException {
+	private void moveCode(IASTTranslationUnit localunit, IASTNode topNode, String name, ASTRewrite rewrite, ASTLiteralNode newInclude) {
+		rewrite.remove(topNode, null);
+		if (!hasIncludeStatement(localunit, name)) {
+			IASTNode firstNodeOfUnit = localunit.getDeclarations()[0];
+			rewrite.insertBefore(localunit, firstNodeOfUnit, newInclude, null);
+		}
+	}
+
+	private void extractType(ModificationCollector collector, IASTTranslationUnit localunit) throws CoreException, CModelException {
 
 		IASTNode enclosingTypeSpec = findTypeSpecifier(localunit);
 		CPPASTSimpleDeclaration dec = null;
 		if (enclosingTypeSpec instanceof CPPASTSimpleDeclaration) {
 			dec = (CPPASTSimpleDeclaration) enclosingTypeSpec;
 		} else {
-			dec = (CPPASTSimpleDeclaration) ((ICPPASTTemplateDeclaration) enclosingTypeSpec)
-					.getDeclaration();
+			dec = (CPPASTSimpleDeclaration) ((ICPPASTTemplateDeclaration) enclosingTypeSpec).getDeclaration();
 		}
 
 		ASTRewrite rewrite = collector.rewriterForTranslationUnit(localunit);
-		CPPASTCompositeTypeSpecifier typespec = (CPPASTCompositeTypeSpecifier) dec
-				.getDeclSpecifier();
+		CPPASTCompositeTypeSpecifier typespec = (CPPASTCompositeTypeSpecifier) dec.getDeclSpecifier();
 		String name = new String(typespec.getName().getSimpleID()) + H;
-		ASTLiteralNode newInclude = new ASTLiteralNode((INCLUDE + name
-				+ STRING + System.getProperty(LINE_SEPARATOR)));
+		ASTLiteralNode newInclude = new ASTLiteralNode((INCLUDE + name + STRING + System.getProperty(LINE_SEPARATOR)));
 		if (createNewFile(enclosingTypeSpec, name)) {
-			rewrite.remove(enclosingTypeSpec, null);
-			if (!hasIncludeStatement(localunit, name)) {
-				IASTNode firstNodeOfUnit = localunit.getDeclarations()[0];
-				rewrite.insertBefore(localunit, firstNodeOfUnit, newInclude,
-						null);
-			}
+			moveCode(localunit, enclosingTypeSpec, name, rewrite, newInclude);
 			IPath newFilePath = new Path(getPath(tu.getPath(), name));
-			EditorUtility.openInEditor(CoreModel.getDefault().create(
-					newFilePath));
+			EditorUtility.openInEditor(CoreModel.getDefault().create(newFilePath));
 			EditorUtility.openInEditor(tu.getResource());
 		}
 	}
 
 	private boolean hasIncludeStatement(IASTTranslationUnit localunit, String name) {
 		IASTPreprocessorStatement[] prepstmts = localunit.getAllPreprocessorStatements();
-		for(IASTPreprocessorStatement stmt: prepstmts) {
+		for (IASTPreprocessorStatement stmt : prepstmts) {
 			if (stmt instanceof IASTPreprocessorIncludeStatement) {
 				IASTName includename = ((IASTPreprocessorIncludeStatement) stmt).getName();
 				if (name.equals(new String(includename.getSimpleID()))) {
@@ -163,8 +156,7 @@ public class ExtractRefactoring extends CRefactoring3 {
 		return false;
 	}
 
-	private boolean createNewFile(IASTNode dec, final String filename)
-			throws CoreException, CModelException {
+	private boolean createNewFile(IASTNode dec, final String filename) throws CoreException, CModelException {
 		IPath newFilePath = new Path(getPath(tu.getPath(), filename));
 		if (tu.getPath().equals(newFilePath)) {
 			return false;
@@ -181,10 +173,8 @@ public class ExtractRefactoring extends CRefactoring3 {
 		return false;
 	}
 
-	private void createFile(IASTNode dec, IPath newFilePath)
-			throws CoreException, CModelException {
-		IFile newFile = NewSourceFileGenerator.createHeaderFile(newFilePath , true,
-				new NullProgressMonitor());
+	private void createFile(IASTNode dec, IPath newFilePath) throws CoreException, CModelException {
+		IFile newFile = NewSourceFileGenerator.createHeaderFile(newFilePath, true, new NullProgressMonitor());
 		if (newFile == null) {
 			return;
 		}
@@ -192,9 +182,8 @@ public class ExtractRefactoring extends CRefactoring3 {
 		if (fNewFileTU == null) {
 			return;
 		}
-		String lineDelimiter= StubUtility.getLineDelimiterUsed(fNewFileTU);
-		String content= CodeGeneration.getHeaderFileContent(getTemplate(),
-				fNewFileTU, null, dec.getRawSignature(), lineDelimiter);
+		String lineDelimiter = StubUtility.getLineDelimiterUsed(fNewFileTU);
+		String content = CodeGeneration.getHeaderFileContent(getTemplate(), fNewFileTU, null, dec.getRawSignature(), lineDelimiter);
 		if (content == null) {
 			return;
 		}
@@ -208,8 +197,7 @@ public class ExtractRefactoring extends CRefactoring3 {
 			@Override
 			public void run() {
 				Shell shell = UIPlugin.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell();
-				boolean createnew = MessageDialog.openQuestion(shell, Messages.ExtractRefactoring_8,
-						Messages.ExtractRefactoring_9 + name + Messages.ExtractRefactoring_10);
+				boolean createnew = MessageDialog.openQuestion(shell, Messages.ExtractRefactoring_8, Messages.ExtractRefactoring_9 + name + Messages.ExtractRefactoring_10);
 				answer.setObject(createnew);
 			}
 		};
@@ -221,7 +209,7 @@ public class ExtractRefactoring extends CRefactoring3 {
 		IASTNode selectedNode = getSelectedNode(localunit);
 		type = getTypeAtSelection(selectedNode);
 		CPPASTCompositeTypeSpecifier outertype = TddHelper.getAncestorOfType(type.getParent(), CPPASTCompositeTypeSpecifier.class);
-		while(outertype != null) {
+		while (outertype != null) {
 			type = outertype;
 			outertype = TddHelper.getAncestorOfType(type.getParent(), CPPASTCompositeTypeSpecifier.class);
 		}
@@ -238,11 +226,9 @@ public class ExtractRefactoring extends CRefactoring3 {
 	private IASTNode getSelectedNode(IASTTranslationUnit localunit) {
 		int offset = selectedRegion.getOffset();
 		int length = selectedRegion.getLength();
-		IASTNode selectedNode = localunit.getNodeSelector(null).findNode(
-				offset, length);
+		IASTNode selectedNode = localunit.getNodeSelector(null).findNode(offset, length);
 		if (selectedNode == null) {
-			selectedNode = localunit.getNodeSelector(null).findEnclosingNode(
-					offset, length);
+			selectedNode = localunit.getNodeSelector(null).findEnclosingNode(offset, length);
 		}
 		if (selectedNode == null) {
 			throw new OperationCanceledException(Messages.ExtractRefactoring_12);
@@ -251,8 +237,7 @@ public class ExtractRefactoring extends CRefactoring3 {
 	}
 
 	private Template getTemplate() {
-		return StubUtility.getFileTemplatesForContentTypes(
-				new String[] { CCorePlugin.CONTENT_TYPE_CXXHEADER }, null)[0];
+		return StubUtility.getFileTemplatesForContentTypes(new String[] { CCorePlugin.CONTENT_TYPE_CXXHEADER }, null)[0];
 	}
 
 	private String getPath(IPath oldpath, String newFilename) {

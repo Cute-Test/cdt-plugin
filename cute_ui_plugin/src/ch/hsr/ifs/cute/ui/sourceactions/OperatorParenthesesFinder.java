@@ -51,7 +51,8 @@ public class OperatorParenthesesFinder extends ASTVisitor {
 					declaration=(IASTDeclaration)declaration.getParent().getParent();
 					String name2=ASTHelper.getClassStructName((IASTSimpleDeclaration)declaration);
 					System.out.println(name2);
-				}else System.out.println(name);
+				}
+				else System.out.println(name);
 					
 			}
 			else if(declaration instanceof IASTFunctionDefinition){

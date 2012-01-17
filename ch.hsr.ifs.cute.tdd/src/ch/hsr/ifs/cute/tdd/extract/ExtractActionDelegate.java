@@ -26,7 +26,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class ExtractActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
@@ -78,7 +77,9 @@ public class ExtractActionDelegate implements IWorkbenchWindowActionDelegate, IE
 		boolean isTextSelection = selection != null
 				&& selection instanceof TextSelection;
 		action.setEnabled(isTextSelection);
-		this.selection = (TextSelection) selection;
+		if(isTextSelection){
+			this.selection = (TextSelection) selection;
+		}
 	}
 
 	@Override
