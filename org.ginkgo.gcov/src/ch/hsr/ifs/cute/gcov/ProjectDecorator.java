@@ -47,7 +47,7 @@ public class ProjectDecorator implements ILightweightLabelDecorator{
 		if (element instanceof IProject) {
 			IProject proj = (IProject)element;
 			try {
-				if(proj.exists() && proj.hasNature(GcovNature.NATURE_ID)) {					
+				if(proj.exists() && proj.isOpen() && proj.hasNature(GcovNature.NATURE_ID)) {					
 					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
 					IConfiguration config = info.getDefaultConfiguration();
 					if(config.getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)){
