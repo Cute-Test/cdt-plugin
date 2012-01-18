@@ -37,13 +37,11 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 
-
 /**
  * @author Emanuel Graf
  * @since 4.0
- *
+ * 
  */
-@SuppressWarnings("restriction")
 public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
 	/**
 	 * @since 4.0
@@ -52,7 +50,7 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 	/**
 	 * @since 4.0
 	 */
-	protected LinkedModeUI linkedModeUI; 
+	protected LinkedModeUI linkedModeUI;
 	/**
 	 * @since 4.0
 	 */
@@ -60,32 +58,36 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 	/**
 	 * @since 4.0
 	 */
-	protected final NewTestFunctionAction functionAction;  
-	
-	public NewTestFunctionActionDelegate(){
-		this.funcName="newTestFunction"; //$NON-NLS-1$
-		this.functionAction= new NewTestFunctionAction("newTestFunction"); //$NON-NLS-1$
+	protected final NewTestFunctionAction functionAction;
+
+	public NewTestFunctionActionDelegate() {
+		this.funcName = "newTestFunction"; //$NON-NLS-1$
+		this.functionAction = new NewTestFunctionAction("newTestFunction"); //$NON-NLS-1$
 	}
-	
+
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
 		editor = targetEditor;
 	}
-	public void dispose() {}
-	public void init(IWorkbenchWindow window) {}
-	public void selectionChanged(IAction action, ISelection selection) {}
-	
-	/*ensure texteditor is the active window, save previous changes first*/
-	protected boolean isCorrectEditor(){
-		if(editor == null) {
+
+	public void dispose() {
+	}
+
+	public void init(IWorkbenchWindow window) {
+	}
+
+	public void selectionChanged(IAction action, ISelection selection) {
+	}
+
+	/* ensure texteditor is the active window, save previous changes first */
+	protected boolean isCorrectEditor() {
+		if (editor == null) {
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			 if (page.isEditorAreaVisible()
-			      && page.getActiveEditor() != null
-			      && page.getActiveEditor() instanceof TextEditor) {
-			         editor = page.getActiveEditor();
-			 }
+			if (page.isEditorAreaVisible() && page.getActiveEditor() != null && page.getActiveEditor() instanceof TextEditor) {
+				editor = page.getActiveEditor();
+			}
 		}
 		if (editor != null && editor instanceof TextEditor) {
-			if(editor.isDirty()){
+			if (editor.isDirty()) {
 				editor.doSave(new NullProgressMonitor());
 			}
 			return true;
@@ -95,41 +97,42 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 
 	public void run(IAction action) {
 		try {
-			if(!isCorrectEditor())return;
-			
+			if (!isCorrectEditor())
+				return;
+
 			TextEditor ceditor = (TextEditor) editor;
 			IEditorInput editorInput = ceditor.getEditorInput();
 			IDocumentProvider prov = ceditor.getDocumentProvider();
 			IDocument doc = prov.getDocument(editorInput);
 			ISelection sel = ceditor.getSelectionProvider().getSelection();
 			MultiTextEdit mEdit = functionAction.createEdit(ceditor, editorInput, doc, sel);
-			
+
 			RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
 			processor.performEdits();
-			
-			ISourceViewer viewer = ((CEditor)editor).getViewer();				
+
+			ISourceViewer viewer = ((CEditor) editor).getViewer();
 			LinkedModeModel model = new LinkedModeModel();
-			
+
 			LinkedPositionGroup group = new LinkedPositionGroup();
-			
-			/*linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename*/
+
+			/* linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename */
 			TextEdit[] edits = mEdit.getChildren();
 			int totalEditLength = 0;
 			for (TextEdit textEdit : edits) {
-				String insert = ((InsertEdit)textEdit).getText();
-				if(insert.contains(funcName)) {
+				String insert = ((InsertEdit) textEdit).getText();
+				if (insert.contains(funcName)) {
 					int start = textEdit.getOffset();
 					int indexOfFuncName = insert.indexOf(funcName);
 					group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName + totalEditLength, funcName.length()));
 					totalEditLength += insert.length();
 				}
 			}
-			
-			if(!group.isEmpty()){
+
+			if (!group.isEmpty()) {
 				model.addGroup(group);
 				model.forceInstall();
-			
-				/*after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it*/
+
+				/* after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it */
 				String newLine = TextUtilities.getDefaultLineDelimiter(doc);
 				linkedModeUI = new EditorLinkedModeUI(model, viewer);
 				linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
@@ -142,25 +145,25 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 			e.printStackTrace();
 		} catch (BadLocationException e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			editor = null;
 		}
 	}
-	
-	int getCursorEndPosition(TextEdit[] edits, String newLine) {
-		int result=edits[0].getOffset() + edits[0].getLength();
-		for (TextEdit textEdit : edits) {
-			String insert = ((InsertEdit)textEdit).getText();
-			if(insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
 
-				if(functionAction.insertFileOffset==-1 || //error check
-				   functionAction.pushbackOffset==-1 ||   //error check	
-				   functionAction.insertFileOffset < functionAction.pushbackOffset) //before pushback
+	int getCursorEndPosition(TextEdit[] edits, String newLine) {
+		int result = edits[0].getOffset() + edits[0].getLength();
+		for (TextEdit textEdit : edits) {
+			String insert = ((InsertEdit) textEdit).getText();
+			if (insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
+
+				if (functionAction.insertFileOffset == -1 || //error check
+						functionAction.pushbackOffset == -1 || //error check	
+						functionAction.insertFileOffset < functionAction.pushbackOffset) //before pushback
 				{
-					result=(textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
+					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
 					break;
-				}else{
-					result=(textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim())+functionAction.pushbackLength );
+				} else {
+					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()) + functionAction.pushbackLength);
 					break;
 				}
 			}
@@ -168,12 +171,12 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 		return result;
 	}
 
-	int getExitPositionLength(){
+	int getExitPositionLength() {
 		return NewTestFunctionAction.TEST_STMT.trim().length();
 	}
-	
-	public LinkedModeUI testOnlyGetLinkedMode(){
+
+	public LinkedModeUI testOnlyGetLinkedMode() {
 		return linkedModeUI;
 	}
-	
+
 }

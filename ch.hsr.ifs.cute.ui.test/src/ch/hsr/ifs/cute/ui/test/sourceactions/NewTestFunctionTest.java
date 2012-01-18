@@ -14,62 +14,65 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * @author Thomas Corbat IFS
+ * 
  */
 @SuppressWarnings("restriction")
 public class NewTestFunctionTest extends EditorBaseTest {
-	
+
 	private static final String COMMAND_ID = "ch.hsr.ifs.cute.newTestFunctionCommand"; //$NON-NLS-1$
 
-	public NewTestFunctionTest(){
+	public NewTestFunctionTest() {
 		super("New Test Function"); //$NON-NLS-1$
 	}
-	
-	//
+
 	//void runSuite(){
 	//	cute::suite s;
 	//
 	//}
-	
+	//
+
 	//void newTest(){
 	//	ASSERTM("start writing tests", false);
 	//}
 	//
-	//
 	//void runSuite(){
 	//	cute::suite s;
 	//	s.push_back(CUTE(newTest));
 	//
 	//}
+	//
 	public void testNewTestFunction() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "function.cpp"); //$NON-NLS-1$
-		CEditor cEditor = runCommand(file, 0, 2, COMMAND_ID);
+		final CEditor cEditor = openEditor(file);
+		runCommand(0, 2, COMMAND_ID, cEditor);
 		type("newTest", 0, 0, cEditor); //$NON-NLS-1$
-		cEditor.doSave(new NullProgressMonitor());
+		saveEditor(cEditor);
 		assertFileContent(file, contentsForTest[1].toString());
 	}
-	
-	//
+
 	//void runSuite(){
 	//	cute::suite s;
 	//
 	//}
-	
+	//
+
 	//void newTest(){
 	//	ASSERT(true);
 	//}
 	//
-	//
 	//void runSuite(){
 	//	cute::suite s;
 	//	s.push_back(CUTE(newTest));
 	//
 	//}
+	//
 	public void testNewTestFunctionChangeBody() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "body.cpp"); //$NON-NLS-1$
-		CEditor cEditor = runCommand(file, 0, 2, COMMAND_ID);
+		CEditor cEditor = openEditor(file);
+		runCommand(0, 2, COMMAND_ID, cEditor);
 		type("newTest", 0, 0, cEditor); //$NON-NLS-1$
 		type('\t', 0, 0, cEditor);
 		type("ASSERT(true);", 0, 0, cEditor); //$NON-NLS-1$

@@ -23,42 +23,41 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-//based on @see org.eclipse.cdt.ui/org.eclipse.cdt.internal.ui.wizards.filewizard.NewSourceFileCreationWizard
-@SuppressWarnings("restriction")
+
 public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
-	
+
 	private NewSuiteFileCreationWizardPage page = null;
 	private IStructuredSelection selection;
-	
-    public NewSuiteFileCreationWizard() {
-        super();
-        setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
-        setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
-        setWindowTitle("New CUTE Suite File"); //$NON-NLS-1$
-    }
-    
-    /*
-     * @see Wizard#createPages
-     */
-    @Override
-	public void addPages() {
-        super.addPages();
-        page = new NewSuiteFileCreationWizardPage();
-        addPage(page);
-        page.init(getSelection());
-    }
 
-    /**
+	public NewSuiteFileCreationWizard() {
+		super();
+		setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
+		setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
+		setWindowTitle("New CUTE Suite File"); //$NON-NLS-1$
+	}
+
+	/*
+	 * @see Wizard#createPages
+	 */
+	@Override
+	public void addPages() {
+		super.addPages();
+		page = new NewSuiteFileCreationWizardPage();
+		addPage(page);
+		page.init(getSelection());
+	}
+
+	/**
 	 * @since 4.0
 	 */
-    public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
-		selection= currentSelection;
+	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
+		selection = currentSelection;
 	}
-	
+
 	private IStructuredSelection getSelection() {
 		return selection;
 	}
-	
+
 	/**
 	 * @since 4.0
 	 */
@@ -66,32 +65,32 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 		return ResourcesPlugin.getWorkspace().getRoot(); // look all by default
 	}
 
-    @Override
+	@Override
 	public boolean performFinish() {
-    	IWorkspaceRunnable op= new IWorkspaceRunnable() {
+		IWorkspaceRunnable op = new IWorkspaceRunnable() {
 			public void run(IProgressMonitor monitor) throws CoreException, OperationCanceledException {
-					page.createFile(monitor);
+				page.createFile(monitor);
 			}
 		};
 		try {
 			getContainer().run(true, true, new WorkbenchRunnableAdapter(op, getSchedulingRule()));
 		} catch (InvocationTargetException e) {
 			return false;
-		} catch  (InterruptedException e) {
+		} catch (InterruptedException e) {
 			return false;
 		}
 
-//            //TODO need prefs option for opening editor
-//            boolean openInEditor = true;
-//            
-//			ITranslationUnit headerTU = fPage.getCreatedFileTU();
-//			if (headerTU != null) {
-//				IResource resource= headerTU.getResource();
-//				selectAndReveal(resource);
-//				if (openInEditor) {
-//					openResource((IFile) resource);
-//				}
-//			}
-        return true;
-    }
+		//            //TODO need prefs option for opening editor
+		//            boolean openInEditor = true;
+		//            
+		//			ITranslationUnit headerTU = fPage.getCreatedFileTU();
+		//			if (headerTU != null) {
+		//				IResource resource= headerTU.getResource();
+		//				selectAndReveal(resource);
+		//				if (openInEditor) {
+		//					openResource((IFile) resource);
+		//				}
+		//			}
+		return true;
+	}
 }

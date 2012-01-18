@@ -44,16 +44,15 @@ import org.eclipse.text.edits.TextEdit;
  * @author Emanuel Graf IFS
  * @author Thomas Corbat IFS
  * @since 4.0
- *
+ * 
  */
-@SuppressWarnings("restriction")
 public class LinkSuiteToRunnerProcessor {
 
 	private static final String STRING = "\""; //$NON-NLS-1$
 	private static final char[] CUTE = "cute".toCharArray(); //$NON-NLS-1$
-	private IASTFunctionDefinition testRunner;
-	private String suiteName;
-	private ICPPNodeFactory nodeFactory;
+	private final IASTFunctionDefinition testRunner;
+	private final String suiteName;
+	private final ICPPNodeFactory nodeFactory;
 
 	public LinkSuiteToRunnerProcessor(IASTFunctionDefinition testRunner, String suitename) {
 		this.testRunner = testRunner;
@@ -62,10 +61,10 @@ public class LinkSuiteToRunnerProcessor {
 	}
 
 	public Change getLinkSuiteToRunnerChange() {
-		
+
 		ASTRewrite rw = ASTRewrite.create(testRunner.getTranslationUnit());
 		changeRunnerBody(rw);
-		
+
 		CompositeChange change = (CompositeChange) rw.rewriteAST();
 		Change include = getIncludeChange();
 		change.add(include);
@@ -75,11 +74,11 @@ public class LinkSuiteToRunnerProcessor {
 	private Change getIncludeChange() {
 		IASTTranslationUnit tu = testRunner.getTranslationUnit();
 		IPath implPath = new Path(tu.getContainingFilename());
-		IFile file= ResourceLookup.selectFileForLocation(implPath, null);
+		IFile file = ResourceLookup.selectFileForLocation(implPath, null);
 		TextFileChange change = new TextFileChange("include", file); //$NON-NLS-1$
 		String lineDelim = FileHelper.determineLineDelimiter(file);
 		int offset = getMaxIncludeOffset(tu);
-		String text = lineDelim + "#include \"" + suiteName + ".h\"";  //$NON-NLS-1$//$NON-NLS-2$
+		String text = lineDelim + "#include \"" + suiteName + ".h\""; //$NON-NLS-1$//$NON-NLS-2$
 		TextEdit edit = new InsertEdit(offset, text);
 		change.setEdit(edit);
 		return change;
@@ -90,8 +89,8 @@ public class LinkSuiteToRunnerProcessor {
 		int offset = 0;
 		for (IASTPreprocessorIncludeStatement statement : ppStmt) {
 			IASTFileLocation fileLocation = statement.getFileLocation();
-			int end = fileLocation.getNodeOffset()+ fileLocation.getNodeLength();
-			if(offset < end) {
+			int end = fileLocation.getNodeOffset() + fileLocation.getNodeLength();
+			if (offset < end) {
 				offset = end;
 			}
 		}
@@ -115,7 +114,7 @@ public class LinkSuiteToRunnerProcessor {
 	protected IASTFunctionCallExpression createCallRunnerFuncCall(IASTFunctionCallExpression makeRunnerFuncCallExp) {
 		IASTInitializerClause[] callArgs = new IASTInitializerClause[2];
 		callArgs[0] = nodeFactory.newIdExpression(getSuiteName());
-		callArgs[1] = nodeFactory.newLiteralExpression(ICPPASTLiteralExpression.lk_string_literal, STRING+ suiteName + STRING);
+		callArgs[1] = nodeFactory.newLiteralExpression(ICPPASTLiteralExpression.lk_string_literal, STRING + suiteName + STRING);
 		IASTFunctionCallExpression callRunnerFuncCallExp = nodeFactory.newFunctionCallExpression(makeRunnerFuncCallExp, callArgs);
 		return callRunnerFuncCallExp;
 	}
@@ -143,16 +142,16 @@ public class LinkSuiteToRunnerProcessor {
 		cuteSuite.addName(nodeFactory.newName("suite".toCharArray())); //$NON-NLS-1$
 		IASTDeclSpecifier declSpecifier = nodeFactory.newTypedefNameSpecifier(cuteSuite);
 		IASTSimpleDeclaration declaration = nodeFactory.newSimpleDeclaration(declSpecifier);
-		
+
 		IASTName suiteASTName = getSuiteName();
 		ICPPASTDeclarator declarator = nodeFactory.newDeclarator(suiteASTName);
 		IASTName makeName = nodeFactory.newName(("make_suite_" + this.suiteName).toCharArray()); //$NON-NLS-1$
 		IASTIdExpression idExpr = nodeFactory.newIdExpression(makeName);
-		IASTInitializerClause initClause = nodeFactory.newFunctionCallExpression(idExpr,IASTExpression.EMPTY_EXPRESSION_ARRAY);
+		IASTInitializerClause initClause = nodeFactory.newFunctionCallExpression(idExpr, IASTExpression.EMPTY_EXPRESSION_ARRAY);
 		IASTEqualsInitializer initializer = nodeFactory.newEqualsInitializer(initClause);
 		declarator.setInitializer(initializer);
 		declaration.addDeclarator(declarator);
-		
+
 		IASTDeclarationStatement declStmt = nodeFactory.newDeclarationStatement(declaration);
 		return declStmt;
 	}
@@ -177,7 +176,7 @@ final class ListenerFinder extends ASTVisitor {
 				IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declStmt.getDeclaration();
 				if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
 					ICPPASTNamedTypeSpecifier typeName = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
-					if(typeName.getName().toString().equals("cute::ide_listener")) { //$NON-NLS-1$
+					if (typeName.getName().toString().equals("cute::ide_listener")) { //$NON-NLS-1$
 						listener = simpDecl.getDeclarators()[0].getName();
 					}
 				}

@@ -9,7 +9,6 @@
 package ch.hsr.ifs.cute.ui.sourceactions;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -32,29 +31,34 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
  * @since 4.0
  */
 public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
-	
-	private IEditorPart editor;
-	private AddTestToSuite functionAction;
 
-	public AddTestToSuiteDelegate(){
+	private IEditorPart editor;
+	private final AddTestToSuite functionAction;
+
+	public AddTestToSuiteDelegate() {
 		functionAction = new AddTestToSuite();
 	}
 
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
 		editor = targetEditor;
 	}
-	public void dispose() {}
-	public void init(IWorkbenchWindow window) {}
-	public void selectionChanged(IAction action, ISelection selection) {}
+
+	public void dispose() {
+	}
+
+	public void init(IWorkbenchWindow window) {
+	}
+
+	public void selectionChanged(IAction action, ISelection selection) {
+	}
 
 	public void run(IAction action) {
 
 		try {
 			IEditorPart editor = getEditor();
 
-			saveEditor(editor);
-
-			if(editor == null)return;
+			if (editor == null)
+				return;
 
 			TextEditor ceditor = (TextEditor) editor;
 			IEditorInput editorInput = ceditor.getEditorInput();
@@ -67,7 +71,6 @@ public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbench
 
 			RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
 			processor.performEdits();
-			saveEditor(editor);
 			this.editor = null;
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -79,24 +82,14 @@ public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbench
 
 	}
 
-	private void saveEditor(IEditorPart editor) {
-		if (editor != null && editor instanceof TextEditor) {
-			if(editor.isDirty()){
-				editor.doSave(new NullProgressMonitor());
-			}
-		}
-	}
-
 	private IEditorPart getEditor() {
-		if(editor == null) {
+		if (editor == null) {
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			 if (page.isEditorAreaVisible()
-			      && page.getActiveEditor() != null
-			      && page.getActiveEditor() instanceof TextEditor) {
-			         editor = page.getActiveEditor();
-			 }
+			if (page.isEditorAreaVisible() && page.getActiveEditor() != null && page.getActiveEditor() instanceof TextEditor) {
+				editor = page.getActiveEditor();
+			}
 		}
 		return editor;
 	}
-	
+
 }

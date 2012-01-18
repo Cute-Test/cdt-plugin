@@ -35,13 +35,8 @@ import ch.hsr.ifs.cute.ui.ASTUtil;
  */
 public class AddTestToSuite extends AbstractFunctionAction {
 
-	public AddTestToSuite() {
-		super();
-	}
-
 	@Override
 	public MultiTextEdit createEdit(ITextEditor ceditor, IEditorInput editorInput, IDocument doc, ISelection sel) throws CoreException {
-
 		AddStrategy adder = new NullStrategy(doc);
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
@@ -49,26 +44,24 @@ public class AddTestToSuite extends AbstractFunctionAction {
 				IFile editorFile = ((FileEditorInput) editorInput).getFile();
 				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
 
-				NodeAtCursorFinder n= new NodeAtCursorFinder(selection.getOffset());
+				NodeAtCursorFinder n = new NodeAtCursorFinder(selection.getOffset());
 				astTu.accept(n);
 				IASTFunctionDefinition def = getFunctionDefinition(n.getNode());
 
-
-				if(def == null) {
+				if (def == null) {
 					def = getFunctionDefIfIsFunctor(n.getNode());
 				}
-				if(ASTUtil.isTestFunction(def)) {
-					if(def != null && isMemberFunction(def)) { //In .cpp file
+				if (ASTUtil.isTestFunction(def)) {
+					if (def != null && isMemberFunction(def)) { //In .cpp file
 						SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 						astTu.accept(suitPushBackFinder);
 						IASTName name = def.getDeclarator().getName();
-						if(name instanceof ICPPASTOperatorName &&
-								name.toString().contains("()")) { //$NON-NLS-1$
+						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
 							adder = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), editorFile);
-						}else {
+						} else {
 							adder = new AddMemberFunctionStrategy(doc, editorFile, astTu, name, suitPushBackFinder);
 						}
-					}else if(def != null && isFunction(def)) {
+					} else if (def != null && isFunction(def)) {
 						SuitePushBackFinder finder = new SuitePushBackFinder();
 						astTu.accept(finder);
 						adder = new AddFunctionToSuiteStrategy(doc, editorFile, astTu, def.getDeclarator().getName(), finder);
@@ -80,25 +73,24 @@ public class AddTestToSuite extends AbstractFunctionAction {
 	}
 
 	protected IASTFunctionDefinition getFunctionDefIfIsFunctor(IASTNode n) {
-		if(n instanceof IASTSimpleDeclaration) {
+		if (n instanceof IASTSimpleDeclaration) {
 			IASTSimpleDeclaration sDecl = (IASTSimpleDeclaration) n;
 			if (sDecl.getDeclSpecifier() instanceof IASTCompositeTypeSpecifier) {
-				IASTCompositeTypeSpecifier comDeclSpec = (IASTCompositeTypeSpecifier)sDecl.getDeclSpecifier();
+				IASTCompositeTypeSpecifier comDeclSpec = (IASTCompositeTypeSpecifier) sDecl.getDeclSpecifier();
 				IASTDeclaration[] members = comDeclSpec.getMembers();
 				for (IASTDeclaration iastDeclaration : members) {
 					if (iastDeclaration instanceof IASTFunctionDefinition) {
 						IASTFunctionDefinition funcDef = (IASTFunctionDefinition) iastDeclaration;
 						IASTName funcName = funcDef.getDeclarator().getName();
-						if(funcName instanceof ICPPASTOperatorName &&
-								funcName.toString().contains("()")) { //$NON-NLS-1$
+						if (funcName instanceof ICPPASTOperatorName && funcName.toString().contains("()")) { //$NON-NLS-1$
 							return funcDef;
 						}
-						
+
 					}
 				}
 			}
 		}
-		return n.getParent() != null ? getFunctionDefIfIsFunctor(n.getParent()) : null;
+		return n != null && n.getParent() != null ? getFunctionDefIfIsFunctor(n.getParent()) : null;
 	}
 
 	private boolean isFunction(IASTFunctionDefinition def) {
@@ -110,14 +102,15 @@ public class AddTestToSuite extends AbstractFunctionAction {
 	}
 
 	private IASTFunctionDefinition getFunctionDefinition(IASTNode node) {
-		if(node == null)return null;
+		if (node == null)
+			return null;
 		if (node instanceof IASTFunctionDefinition) {
 			return (IASTFunctionDefinition) node;
-		}else {
+		} else {
 			IASTNode parent = node.getParent();
-			if(parent != null) {
+			if (parent != null) {
 				return getFunctionDefinition(parent);
-			}else {
+			} else {
 				return null;
 			}
 		}

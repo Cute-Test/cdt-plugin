@@ -64,10 +64,8 @@ import org.eclipse.ui.views.contentoutline.ContentOutline;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
-
-@SuppressWarnings("restriction")
 public class NewSuiteFileCreationWizardPage extends WizardPage {
-	
+
 	private static final int SOURCE_FOLDER_ID = 1;
 	private static final int NEW_FILE_ID = 2;
 	private static final int ALL_FIELDS = SOURCE_FOLDER_ID | NEW_FILE_ID;
@@ -75,29 +73,29 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	private final StringDialogField newFileDialogField;
 	private final SelectionButtonDialogField linkToRunnerCheck;
 	private final IStatus STATUS_OK = new StatusInfo();
-	private StringButtonDialogField sourceFolderDialogField;
-	private IWorkspaceRoot workspaceRoot;
+	private final StringButtonDialogField sourceFolderDialogField;
+	private final IWorkspaceRoot workspaceRoot;
 	private IStatus fSourceFolderStatus;
 	private IStatus fNewFileStatus;
 	private int fLastFocusedField;
 	private ICProject cProject;
 	private RunnerFinder runnerFinder;
-	private ComboDialogField runnerComboField;
+	private final ComboDialogField runnerComboField;
 	private List<IASTFunctionDefinition> runners;
-	
-	public NewSuiteFileCreationWizardPage(){
+
+	public NewSuiteFileCreationWizardPage() {
 		super(Messages.getString("NewSuiteFileCreationWizardPage.1")); //$NON-NLS-1$
-		
-		setDescription(Messages.getString("NewSuiteFileCreationWizardPage.2"));  //$NON-NLS-1$
-		
+
+		setDescription(Messages.getString("NewSuiteFileCreationWizardPage.2")); //$NON-NLS-1$
+
 		workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 
 		SourceFolderFieldAdapter sourceFolderAdapter = new SourceFolderFieldAdapter();
 		sourceFolderDialogField = new StringButtonDialogField(sourceFolderAdapter);
 		sourceFolderDialogField.setDialogFieldListener(sourceFolderAdapter);
-		sourceFolderDialogField.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.3"));  //$NON-NLS-1$
+		sourceFolderDialogField.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.3")); //$NON-NLS-1$
 		sourceFolderDialogField.setButtonLabel(Messages.getString("NewSuiteFileCreationWizardPage.4")); //$NON-NLS-1$
-		
+
 		newFileDialogField = new StringDialogField();
 		newFileDialogField.setDialogFieldListener(new IDialogFieldListener() {
 			public void dialogFieldChanged(DialogField field) {
@@ -105,64 +103,63 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			}
 		});
 		newFileDialogField.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.SuiteName")); //$NON-NLS-1$
-		
-		linkToRunnerCheck=new SelectionButtonDialogField(SWT.CHECK);
+
+		linkToRunnerCheck = new SelectionButtonDialogField(SWT.CHECK);
 		linkToRunnerCheck.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.LinkToRunner")); //$NON-NLS-1$
 		//generate list of runners
 		//prompt selection
-		runnerComboField= new ComboDialogField(SWT.READ_ONLY);
+		runnerComboField = new ComboDialogField(SWT.READ_ONLY);
 		runnerComboField.setLabelText(Messages.getString("NewSuiteFileCreationWizardPage.chooseRunMethod")); //$NON-NLS-1$
-		
-		
+
 		fSourceFolderStatus = STATUS_OK;
 		fNewFileStatus = STATUS_OK;
 		fLastFocusedField = 0;
 	}
-	
+
 	/**
 	 * @since 4.0
 	 */
 	public IPath getSourceFolderFullPath() {
 		String text = sourceFolderDialogField.getText();
 		if (text.length() > 0)
-		    return new Path(text).makeAbsolute();
-	    return null;
+			return new Path(text).makeAbsolute();
+		return null;
 	}
-	
-	public void createFile(IProgressMonitor monitor) throws CoreException {
-        IPath filePath = getFileFullPath();
-        if (filePath != null) {
-            if (monitor == null)
-	            monitor = new NullProgressMonitor();
-            try {
-	            IPath folderPath = getSourceFolderFullPath();
-	            if(folderPath!=null){
-	            	IWorkspace workspace = ResourcesPlugin.getWorkspace();
-	            	IWorkspaceRoot root = workspace.getRoot();
 
-	            	String suitename=newFileDialogField.getText();
-	            	
-	            	if(folderPath.segmentCount()==1){
-	            		IProject folder=root.getProject(folderPath.toPortableString());
-	            		ICuteHeaders headers = UiPlugin.getCuteVersionString(folder);
-	            		IFolder pfolder = folder.getFolder("/"); //$NON-NLS-1$
-	            		headers.copySuiteFiles(pfolder, monitor, suitename, true);
-	            	}else{
-	            		IProject project = root.getProject(folderPath.segments()[0]);
-	            		ICuteHeaders headers = UiPlugin.getCuteVersionString(project);
-	            		IFolder folder=root.getFolder(folderPath);	
-	            		headers.copySuiteFiles(folder, monitor, suitename, false);
-	            	}
-	            	if(linkToRunnerCheck.isSelected()) {
-	            		addSuiteToRunner(suitename, runnerComboField.getSelectionIndex(), monitor);
-	            	}
-	            }
-	        } finally {
-	            monitor.done();
-	        }
-        }
+	public void createFile(IProgressMonitor monitor) throws CoreException {
+		IPath filePath = getFileFullPath();
+		if (filePath != null) {
+			if (monitor == null)
+				monitor = new NullProgressMonitor();
+			try {
+				IPath folderPath = getSourceFolderFullPath();
+				if (folderPath != null) {
+					IWorkspace workspace = ResourcesPlugin.getWorkspace();
+					IWorkspaceRoot root = workspace.getRoot();
+
+					String suitename = newFileDialogField.getText();
+
+					if (folderPath.segmentCount() == 1) {
+						IProject folder = root.getProject(folderPath.toPortableString());
+						ICuteHeaders headers = UiPlugin.getCuteVersionString(folder);
+						IFolder pfolder = folder.getFolder("/"); //$NON-NLS-1$
+						headers.copySuiteFiles(pfolder, monitor, suitename, true);
+					} else {
+						IProject project = root.getProject(folderPath.segments()[0]);
+						ICuteHeaders headers = UiPlugin.getCuteVersionString(project);
+						IFolder folder = root.getFolder(folderPath);
+						headers.copySuiteFiles(folder, monitor, suitename, false);
+					}
+					if (linkToRunnerCheck.isSelected()) {
+						addSuiteToRunner(suitename, runnerComboField.getSelectionIndex(), monitor);
+					}
+				}
+			} finally {
+				monitor.done();
+			}
+		}
 	}
-	
+
 	private void addSuiteToRunner(String suitename, int selectionIndex, IProgressMonitor monitor) throws CoreException {
 		IASTFunctionDefinition testRunner = runners.get(selectionIndex);
 		LinkSuiteToRunnerProcessor processor = new LinkSuiteToRunnerProcessor(testRunner, suitename);
@@ -175,7 +172,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		Text textControl = newFileDialogField.getTextControl(null);
 		LayoutUtil.setWidthHint(textControl, convertWidthInCharsToPixels(50));
 		textControl.addFocusListener(new StatusFocusListener(NEW_FILE_ID));
-		createSeparator(parent,nColumns);
+		createSeparator(parent, nColumns);
 		final Button button = (Button) linkToRunnerCheck.doFillIntoGrid(parent, nColumns)[0];
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -184,39 +181,39 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 				boolean selection = button.getSelection();
 				runnerComboField.setEnabled(selection);
 				setErrorMessage(null);
-				if(selection) {
+				if (selection) {
 					String[] runners2 = getRunners();
-					if(runners2.length == 0) {
+					if (runners2.length == 0) {
 						setErrorMessage(Messages.getString("NewSuiteFileCreationWizardPage.noTestRunners")); //$NON-NLS-1$
 						runnerComboField.setEnabled(false);
 					}
 					runnerComboField.setItems(runners2);
-					if(runners2.length == 1) {
+					if (runners2.length == 1) {
 						runnerComboField.selectItem(0);
 					}
 				}
 			}
 		});
 		linkToRunnerCheck.doFillIntoGrid(parent, nColumns);
-		
+
 		runnerComboField.doFillIntoGrid(parent, nColumns);
-		Combo comboControl= runnerComboField.getComboControl(null);
+		Combo comboControl = runnerComboField.getComboControl(null);
 		LayoutUtil.setWidthHint(comboControl, convertWidthInCharsToPixels(50));
 		runnerComboField.setEnabled(false);
 	}
-	
+
 	private String[] getRunners() {
 		try {
-			if(runners == null) {
+			if (runners == null) {
 				getWizard().getContainer().run(true, false, new IRunnableWithProgress() {
-					
+
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
 							runners = runnerFinder.findTestRunners(monitor);
 						} catch (CoreException e) {
 							throw new InvocationTargetException(e);
 						}
-						
+
 					}
 				});
 
@@ -233,59 +230,59 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			e.printStackTrace();
 		}
 		//TODO error Message
-		return new String[]{Messages.getString("NewSuiteFileCreationWizardPage.noRunners")}; //$NON-NLS-1$
+		return new String[] { Messages.getString("NewSuiteFileCreationWizardPage.noRunners") }; //$NON-NLS-1$
 	}
-	
+
 	private void createSeparator(Composite composite, int nColumns) {
-		(new Separator(SWT.SEPARATOR | SWT.HORIZONTAL)).doFillIntoGrid(composite, nColumns, convertHeightInCharsToPixels(1));		
+		(new Separator(SWT.SEPARATOR | SWT.HORIZONTAL)).doFillIntoGrid(composite, nColumns, convertHeightInCharsToPixels(1));
 	}
-	
+
 	private IWorkspaceRoot getWorkspaceRoot() {
 		return workspaceRoot;
 	}
-	
+
 	private IProject getCurrentProject() {
-	    IPath folderPath = getSourceFolderFullPath();
-	    if (folderPath != null) {
-	        return PathUtil.getEnclosingProject(folderPath);
-	    }
-	    return null;
+		IPath folderPath = getSourceFolderFullPath();
+		if (folderPath != null) {
+			return PathUtil.getEnclosingProject(folderPath);
+		}
+		return null;
 	}
 
 	private IStatus fileNameChanged() {
 		StatusInfo status = new StatusInfo();
-		
+
 		IPath filePath = getFileFullPath();
 		if (filePath == null) {
-			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.EnterSuiteName"));  //$NON-NLS-1$
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.EnterSuiteName")); //$NON-NLS-1$
 			return status;
 		}
-		
+
 		IPath sourceFolderPath = getSourceFolderFullPath();
 		if (sourceFolderPath == null || !sourceFolderPath.isPrefixOf(filePath)) {
 			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FileMustBeInsideSourceFolder")); //$NON-NLS-1$
 			return status;
 		}
-		
+
 		// check if header file already exists
 		IPath headerPath = new Path(filePath.toPortableString().concat(".h"));
 		StatusInfo headerStatus = checkIfFileExists(headerPath);
-		if(headerStatus != null){
+		if (headerStatus != null) {
 			return headerStatus;
 		}
 
 		// check if source file already exists
 		IPath sourcePath = new Path(filePath.toPortableString().concat(".cpp"));
 		StatusInfo sourceStatus = checkIfFileExists(sourcePath);
-		if(sourceStatus != null){
+		if (sourceStatus != null) {
 			return sourceStatus;
 		}
-		
+
 		// check if folder exists
 		IPath folderPath = filePath.removeLastSegments(1).makeRelative();
 		IResource folder = getWorkspaceRoot().findMember(folderPath);
 		if (folder == null || !folder.exists() || (folder.getType() != IResource.PROJECT && folder.getType() != IResource.FOLDER)) {
-		    status.setError(Messages.getString("NewSuiteFileCreationWizardPage.Folder") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.DoesNotExist") ); //$NON-NLS-1$ //$NON-NLS-2$
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.Folder") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.DoesNotExist")); //$NON-NLS-1$ //$NON-NLS-2$
 			return status;
 		}
 
@@ -294,7 +291,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.0") + convStatus.getMessage() + "."); //$NON-NLS-1$ //$NON-NLS-2$
 			return status;
 		}
-		if(!newFileDialogField.getText().matches("\\w+")){ //$NON-NLS-1$
+		if (!newFileDialogField.getText().matches("\\w+")) { //$NON-NLS-1$
 			status.setError("Invalid identifier. Only letters, digits and underscore are accepted."); //$NON-NLS-1$
 			return status;
 		}
@@ -305,13 +302,13 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		StatusInfo status = new StatusInfo();
 		IResource file = getWorkspaceRoot().findMember(filePath);
 		if (file != null && file.exists()) {
-	    	if (file.getType() == IResource.FILE) {
-	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FileAlreadyExist").concat(": ").concat(file.getName())); //$NON-NLS-1$
-	    	} else if (file.getType() == IResource.FOLDER) {
-	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FolderAlreadyExists").concat(": ").concat(file.getName())); //$NON-NLS-1$
-	    	} else {
-	    		status.setError(Messages.getString("NewSuiteFileCreationWizardPage.ResourceAlreadyExists").concat(": ").concat(file.getName())); //$NON-NLS-1$
-	    	}
+			if (file.getType() == IResource.FILE) {
+				status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FileAlreadyExist").concat(": ").concat(file.getName())); //$NON-NLS-1$
+			} else if (file.getType() == IResource.FOLDER) {
+				status.setError(Messages.getString("NewSuiteFileCreationWizardPage.FolderAlreadyExists").concat(": ").concat(file.getName())); //$NON-NLS-1$
+			} else {
+				status.setError(Messages.getString("NewSuiteFileCreationWizardPage.ResourceAlreadyExists").concat(": ").concat(file.getName())); //$NON-NLS-1$
+			}
 			return status;
 		}
 		return null;
@@ -319,16 +316,16 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 
 	private IPath getFileFullPath() {
 		String str = newFileDialogField.getText();
-        IPath path = null;
-	    if (str.length() > 0) {
-	        path = new Path(str);
-	        if (!path.isAbsolute()) {
-	            IPath folderPath = getSourceFolderFullPath();
-	        	if (folderPath != null)
-	        	    path = folderPath.append(path);
-	        }
-	    }
-	    return path;
+		IPath path = null;
+		if (str.length() > 0) {
+			path = new Path(str);
+			if (!path.isAbsolute()) {
+				IPath folderPath = getSourceFolderFullPath();
+				if (folderPath != null)
+					path = folderPath.append(path);
+			}
+		}
+		return path;
 	}
 
 	/**
@@ -357,73 +354,69 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		setMessage(null);
 		setControl(composite);
 	}
-	
+
 	private void createSourceFolderControls(Composite parent, int nColumns) {
 		sourceFolderDialogField.doFillIntoGrid(parent, nColumns);
 		Text textControl = sourceFolderDialogField.getTextControl(null);
 		LayoutUtil.setWidthHint(textControl, convertWidthInCharsToPixels(50));
 		textControl.addFocusListener(new StatusFocusListener(SOURCE_FOLDER_ID));
 	}
-	
-	private void handleFieldChanged(int fields) {
-	    if (fields == 0)
-	        return;	// no change
 
-	    if (fieldChanged(fields, SOURCE_FOLDER_ID)) {
+	private void handleFieldChanged(int fields) {
+		if (fields == 0)
+			return; // no change
+
+		if (fieldChanged(fields, SOURCE_FOLDER_ID)) {
 			fSourceFolderStatus = sourceFolderChanged();
-	    }
-	    if (fieldChanged(fields, NEW_FILE_ID)) {
-	    	fNewFileStatus = fileNameChanged();
-	    }
+		}
+		if (fieldChanged(fields, NEW_FILE_ID)) {
+			fNewFileStatus = fileNameChanged();
+		}
 		doStatusUpdate();
 	}
-	
+
 	private void doStatusUpdate() {
-	    // do the last focused field first
-	    IStatus lastStatus = getLastFocusedStatus();
+		// do the last focused field first
+		IStatus lastStatus = getLastFocusedStatus();
 
-	    // status of all used components
-		IStatus[] status = new IStatus[] {
-	        lastStatus,
-			(fSourceFolderStatus != lastStatus) ? fSourceFolderStatus : STATUS_OK,
-			(fNewFileStatus != lastStatus) ? fNewFileStatus : STATUS_OK,
-		};
+		// status of all used components
+		IStatus[] status = new IStatus[] { lastStatus, (fSourceFolderStatus != lastStatus) ? fSourceFolderStatus : STATUS_OK,
+				(fNewFileStatus != lastStatus) ? fNewFileStatus : STATUS_OK, };
 
-		
 		// the mode severe status will be displayed and the ok button enabled/disabled.
 		updateStatus(status);
 	}
-	
+
 	private void updateStatus(IStatus[] status) {
 		updateStatus(StatusUtil.getMostSevere(status));
 	}
-	
+
 	private void updateStatus(IStatus status) {
 		setPageComplete(!status.matches(IStatus.ERROR));
 		StatusUtil.applyToStatusLine(this, status);
 	}
-	
+
 	private IStatus getLastFocusedStatus() {
-	    switch (fLastFocusedField) {
-	    	case SOURCE_FOLDER_ID:
-	    	    return fSourceFolderStatus;
-	    	case NEW_FILE_ID:
-	    	    return fNewFileStatus;
-    	   default:
-               return STATUS_OK;
-	    }
-    }
-	
-	private boolean fieldChanged(int fields, int fieldID) {
-	    return ((fields & fieldID) != 0);
+		switch (fLastFocusedField) {
+		case SOURCE_FOLDER_ID:
+			return fSourceFolderStatus;
+		case NEW_FILE_ID:
+			return fNewFileStatus;
+		default:
+			return STATUS_OK;
+		}
 	}
-	
+
+	private boolean fieldChanged(int fields, int fieldID) {
+		return ((fields & fieldID) != 0);
+	}
+
 	private IStatus sourceFolderChanged() {
 		StatusInfo status = new StatusInfo();
-		
+
 		IPath folderPath = getSourceFolderFullPath();
 		if (folderPath == null) {
-			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.5"));  //$NON-NLS-1$
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.5")); //$NON-NLS-1$
 			return status;
 		}
 
@@ -433,104 +426,104 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			if (resType == IResource.PROJECT || resType == IResource.FOLDER) {
 				IProject proj = res.getProject();
 				if (!proj.isOpen()) {
-					status.setError(folderPath + Messages.getString("NewSuiteFileCreationWizardPage.6"));  //$NON-NLS-1$
+					status.setError(folderPath + Messages.getString("NewSuiteFileCreationWizardPage.6")); //$NON-NLS-1$
 					return status;
 				}
-			    if (!CoreModel.hasCCNature(proj) && !CoreModel.hasCNature(proj)) {
+				if (!CoreModel.hasCCNature(proj) && !CoreModel.hasCNature(proj)) {
 					if (resType == IResource.PROJECT) {
-						status.setError(Messages.getString("NewSuiteFileCreationWizardPage.7"));  //$NON-NLS-1$
+						status.setError(Messages.getString("NewSuiteFileCreationWizardPage.7")); //$NON-NLS-1$
 						return status;
 					}
-					status.setWarning(Messages.getString("NewSuiteFileCreationWizardPage.8"));  //$NON-NLS-1$
+					status.setWarning(Messages.getString("NewSuiteFileCreationWizardPage.8")); //$NON-NLS-1$
 				}
-			    ICElement e = CoreModel.getDefault().create(res.getFullPath());
-			    if (CModelUtil.getSourceFolder(e) == null) {
-					status.setError(Messages.getString("NewSuiteFileCreationWizardPage.9")+ folderPath +Messages.getString("NewSuiteFileCreationWizardPage.10"));  //$NON-NLS-1$ //$NON-NLS-2$
+				ICElement e = CoreModel.getDefault().create(res.getFullPath());
+				if (CModelUtil.getSourceFolder(e) == null) {
+					status.setError(Messages.getString("NewSuiteFileCreationWizardPage.9") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.10")); //$NON-NLS-1$ //$NON-NLS-2$
 					return status;
 				}
 			} else {
-				status.setError(folderPath + Messages.getString("NewSuiteFileCreationWizardPage.11"));  //$NON-NLS-1$
+				status.setError(folderPath + Messages.getString("NewSuiteFileCreationWizardPage.11")); //$NON-NLS-1$
 				return status;
 			}
 		} else {
-			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.12")+ folderPath +Messages.getString("NewSuiteFileCreationWizardPage.13"));  //$NON-NLS-1$ //$NON-NLS-2$
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.12") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.13")); //$NON-NLS-1$ //$NON-NLS-2$
 			return status;
 		}
 
 		return status;
 	}
-	
-    private final class StatusFocusListener implements FocusListener {
-        private int fieldID;
+
+	private final class StatusFocusListener implements FocusListener {
+		private final int fieldID;
 		private boolean isFirstTime;
 
-        public StatusFocusListener(int fieldID) {
-            this.fieldID = fieldID;
-        }
-        
-        public void focusGained(FocusEvent e) {
-            fLastFocusedField = this.fieldID;
-            if (isFirstTime) {
-            	isFirstTime = false;
-            	return;
-            }
-        	doStatusUpdate();
-        }
-        
-        public void focusLost(FocusEvent e) {
-            fLastFocusedField = 0;
-            doStatusUpdate();
-        }
-    }
-    
-    private IPath chooseSourceFolder(IPath initialPath) {
-	    ICElement initElement = getSourceFolderFromPath(initialPath);
-	    if (initElement instanceof ISourceRoot) {
-	        ICProject cProject = initElement.getCProject();
-	        ISourceRoot projRoot = cProject.findSourceRoot(cProject.getProject());
-	        if (projRoot != null && projRoot.equals(initElement))
-	            initElement = cProject;
-	    }
-		
+		public StatusFocusListener(int fieldID) {
+			this.fieldID = fieldID;
+		}
+
+		public void focusGained(FocusEvent e) {
+			fLastFocusedField = this.fieldID;
+			if (isFirstTime) {
+				isFirstTime = false;
+				return;
+			}
+			doStatusUpdate();
+		}
+
+		public void focusLost(FocusEvent e) {
+			fLastFocusedField = 0;
+			doStatusUpdate();
+		}
+	}
+
+	private IPath chooseSourceFolder(IPath initialPath) {
+		ICElement initElement = getSourceFolderFromPath(initialPath);
+		if (initElement instanceof ISourceRoot) {
+			ICProject cProject = initElement.getCProject();
+			ISourceRoot projRoot = cProject.findSourceRoot(cProject.getProject());
+			if (projRoot != null && projRoot.equals(initElement))
+				initElement = cProject;
+		}
+
 		SourceFolderSelectionDialog dialog = new SourceFolderSelectionDialog(getShell());
 		dialog.setInput(CoreModel.create(workspaceRoot));
 		dialog.setInitialSelection(initElement);
-		
+
 		if (dialog.open() == Window.OK) {
 			Object result = dialog.getFirstResult();
 			if (result instanceof ICElement) {
-			    ICElement element = (ICElement)result;
+				ICElement element = (ICElement) result;
 				if (element instanceof ICProject) {
-					ICProject cproject = (ICProject)element;
+					ICProject cproject = (ICProject) element;
 					ISourceRoot folder = cproject.findSourceRoot(cproject.getProject());
 					if (folder != null)
-					    return folder.getResource().getFullPath();
+						return folder.getResource().getFullPath();
 				}
 				return element.getResource().getFullPath();
 			}
 		}
 		return null;
 	}
-    
-    private ICElement getSourceFolderFromPath(IPath path) {
-	    if (path == null)
-	        return null;
-	    while (path.segmentCount() > 0) {
-		    IResource res = workspaceRoot.findMember(path);
+
+	private ICElement getSourceFolderFromPath(IPath path) {
+		if (path == null)
+			return null;
+		while (path.segmentCount() > 0) {
+			IResource res = workspaceRoot.findMember(path);
 			if (res != null && res.exists()) {
 				int resType = res.getType();
 				if (resType == IResource.PROJECT || resType == IResource.FOLDER) {
-				    ICElement elem = CoreModel.getDefault().create(res.getFullPath());
-				    ICContainer sourceFolder = CModelUtil.getSourceFolder(elem);
-				    if (sourceFolder != null)
-				        return sourceFolder;
-				    if (resType == IResource.PROJECT) {
-				        return elem;
-				    }
+					ICElement elem = CoreModel.getDefault().create(res.getFullPath());
+					ICContainer sourceFolder = CModelUtil.getSourceFolder(elem);
+					if (sourceFolder != null)
+						return sourceFolder;
+					if (resType == IResource.PROJECT) {
+						return elem;
+					}
 				}
 			}
 			path = path.removeLastSegments(1);
-	    }
+		}
 		return null;
 	}
 
@@ -541,20 +534,20 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		String str = (folderPath != null) ? folderPath.makeRelative().toString() : ""; //.makeRelative().toString(); //$NON-NLS-1$
 		sourceFolderDialogField.setTextWithoutUpdate(str);
 		if (update) {
-		    sourceFolderDialogField.dialogFieldChanged();
+			sourceFolderDialogField.dialogFieldChanged();
 		}
 	}
-	
+
 	private class SourceFolderFieldAdapter implements IStringButtonAdapter, IDialogFieldListener {
 		public void changeControlPressed(DialogField field) {
-		    IPath oldFolderPath = getSourceFolderFullPath();
+			IPath oldFolderPath = getSourceFolderFullPath();
 			IPath newFolderPath = chooseSourceFolder(oldFolderPath);
 			if (newFolderPath != null) {
 				setSourceFolderFullPath(newFolderPath, false);
 				handleFieldChanged(ALL_FIELDS);
 			}
 		}
-		
+
 		public void dialogFieldChanged(DialogField field) {
 			handleFieldChanged(ALL_FIELDS);
 		}
@@ -567,97 +560,97 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		ICElement celem = getInitialCElement(selection);
 		cProject = celem.getCProject();
 		runnerFinder = new RunnerFinder(cProject);
-    	initFields(celem);
-    	doStatusUpdate();
+		initFields(celem);
+		doStatusUpdate();
 	}
-	
-    private ICElement getInitialCElement(IStructuredSelection selection) {
-    	ICElement celem = null;
-    	if (selection != null && !selection.isEmpty()) {
-    		Object selectedElement = selection.getFirstElement();
-    		if (selectedElement instanceof IAdaptable) {
-    			IAdaptable adaptable = (IAdaptable) selectedElement;			
-    			
-    			celem = (ICElement) adaptable.getAdapter(ICElement.class);
-    			if (celem == null) {
-    				IResource resource = (IResource) adaptable.getAdapter(IResource.class);
-    				if (resource != null && resource.getType() != IResource.ROOT) {
-    					while (celem == null && resource.getType() != IResource.PROJECT) {
-    						celem = (ICElement) resource.getAdapter(ICElement.class);
-    						resource = resource.getParent();
-    					}
-    					if (celem == null) {
-    						celem = CoreModel.getDefault().create(resource); // c project
-    					}
-    				}
-    			}
-    		}
-    	}
-    	if (celem == null) {
-    		IWorkbenchPart part = CUIPlugin.getActivePage().getActivePart();
-    		if (part instanceof ContentOutline) {
-    			part = CUIPlugin.getActivePage().getActiveEditor();
-    		}
-    		
-    		if (part instanceof IViewPartInputProvider) {
-    			Object elem = ((IViewPartInputProvider)part).getViewPartInput();
-    			if (elem instanceof ICElement) {
-    				celem = (ICElement) elem;
-    			}
-    		}
 
-    		if (celem == null && part instanceof CEditor) {
-		    	IEditorInput input = ((IEditorPart)part).getEditorInput();
-		    	if (input != null) {
+	private ICElement getInitialCElement(IStructuredSelection selection) {
+		ICElement celem = null;
+		if (selection != null && !selection.isEmpty()) {
+			Object selectedElement = selection.getFirstElement();
+			if (selectedElement instanceof IAdaptable) {
+				IAdaptable adaptable = (IAdaptable) selectedElement;
+
+				celem = (ICElement) adaptable.getAdapter(ICElement.class);
+				if (celem == null) {
+					IResource resource = (IResource) adaptable.getAdapter(IResource.class);
+					if (resource != null && resource.getType() != IResource.ROOT) {
+						while (celem == null && resource.getType() != IResource.PROJECT) {
+							celem = (ICElement) resource.getAdapter(ICElement.class);
+							resource = resource.getParent();
+						}
+						if (celem == null) {
+							celem = CoreModel.getDefault().create(resource); // c project
+						}
+					}
+				}
+			}
+		}
+		if (celem == null) {
+			IWorkbenchPart part = CUIPlugin.getActivePage().getActivePart();
+			if (part instanceof ContentOutline) {
+				part = CUIPlugin.getActivePage().getActiveEditor();
+			}
+
+			if (part instanceof IViewPartInputProvider) {
+				Object elem = ((IViewPartInputProvider) part).getViewPartInput();
+				if (elem instanceof ICElement) {
+					celem = (ICElement) elem;
+				}
+			}
+
+			if (celem == null && part instanceof CEditor) {
+				IEditorInput input = ((IEditorPart) part).getEditorInput();
+				if (input != null) {
 					final IResource res = (IResource) input.getAdapter(IResource.class);
 					if (res != null && res instanceof IFile) {
-					    celem = CoreModel.getDefault().create((IFile)res);
+						celem = CoreModel.getDefault().create((IFile) res);
 					}
-		    	}
-    		}
-    	}
-    
-    	if (celem == null || celem.getElementType() == ICElement.C_MODEL) {
-    		try {
-    			ICProject[] projects = CoreModel.create(getWorkspaceRoot()).getCProjects();
-    			if (projects.length == 1) {
-    				celem = projects[0];
-    			}
-    		} catch (CModelException e) {
-    			CUIPlugin.log(e);
-    		}
-    	}
-    	return celem;
-    }
+				}
+			}
+		}
 
-    private void initFields(ICElement elem) {
-	    initSourceFolder(elem);
-    	handleFieldChanged(ALL_FIELDS);
-    }
-    
-    private void initSourceFolder(ICElement elem) {
-    	ICContainer folder = null;
-    	if (elem != null) {
-    	    folder = CModelUtil.getSourceFolder(elem);
-    		if (folder == null) {
-    			ICProject cproject = elem.getCProject();
-    			if (cproject != null) {
-    				try {
-    					if (cproject.exists()) {
-    					    ISourceRoot[] roots = cproject.getSourceRoots();
-    					    if (roots != null && roots.length > 0)
-    					        folder = roots[0];
-    					}
-    				} catch (CModelException e) {
-    					CUIPlugin.log(e);
-    				}
-    				if (folder == null) {
-    				    folder = cproject.findSourceRoot(cproject.getResource());
-    				}
-    			}
-    		}
-    	}
-	    setSourceFolderFullPath(folder != null ? folder.getResource().getFullPath() : null, false);
-    }
+		if (celem == null || celem.getElementType() == ICElement.C_MODEL) {
+			try {
+				ICProject[] projects = CoreModel.create(getWorkspaceRoot()).getCProjects();
+				if (projects.length == 1) {
+					celem = projects[0];
+				}
+			} catch (CModelException e) {
+				CUIPlugin.log(e);
+			}
+		}
+		return celem;
+	}
+
+	private void initFields(ICElement elem) {
+		initSourceFolder(elem);
+		handleFieldChanged(ALL_FIELDS);
+	}
+
+	private void initSourceFolder(ICElement elem) {
+		ICContainer folder = null;
+		if (elem != null) {
+			folder = CModelUtil.getSourceFolder(elem);
+			if (folder == null) {
+				ICProject cproject = elem.getCProject();
+				if (cproject != null) {
+					try {
+						if (cproject.exists()) {
+							ISourceRoot[] roots = cproject.getSourceRoots();
+							if (roots != null && roots.length > 0)
+								folder = roots[0];
+						}
+					} catch (CModelException e) {
+						CUIPlugin.log(e);
+					}
+					if (folder == null) {
+						folder = cproject.findSourceRoot(cproject.getResource());
+					}
+				}
+			}
+		}
+		setSourceFolderFullPath(folder != null ? folder.getResource().getFullPath() : null, false);
+	}
 
 }
