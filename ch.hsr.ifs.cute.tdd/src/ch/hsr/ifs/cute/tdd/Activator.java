@@ -10,9 +10,6 @@ package ch.hsr.ifs.cute.tdd;
 
 import java.net.URL;
 
-import org.eclipse.cdt.codan.core.CodanRuntime;
-import org.eclipse.cdt.codan.core.model.IProblem;
-import org.eclipse.cdt.codan.internal.core.model.CodanProblem;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -27,7 +24,7 @@ import org.osgi.framework.BundleListener;
 /**
  * The activator class controls the plug-in life cycle
  */
-@SuppressWarnings("restriction")
+
 public class Activator extends AbstractUIPlugin {
 
 	public class ActivationListener implements BundleListener {
@@ -35,16 +32,6 @@ public class Activator extends AbstractUIPlugin {
 		public void bundleChanged(BundleEvent event) {
 			if (!event.getBundle().getSymbolicName().equals("ch.hsr.ifs.cute.tdd") && event.getType() == BundleEvent.STARTED) { //$NON-NLS-1$
 				return;
-			}
-			activateHSRProblems();
-		}
-
-		private void activateHSRProblems() {
-			IProblem[] problems = CodanRuntime.getInstance().getCheckersRegistry().getWorkspaceProfile().getProblems();
-			for (IProblem problem : problems) {
-				if (!problem.getId().contains("HSR") && problem instanceof CodanProblem) { //$NON-NLS-1$
-					((CodanProblem) problem).setEnabled(false);
-				}
 			}
 		}
 	}
