@@ -10,8 +10,6 @@ public class Messages extends NLS {
 	public static String MemberFunctionProblemChecker_2;
 	public static String MissingConstructorChecker_1;
 	public static String MissingNamespaceChecker_1;
-	public static String MissingOperatorChecker_3;
-	public static String MissingOperatorChecker_4;
 	public static String MissingOperatorChecker_8;
 	public static String MissingOperatorChecker_9;
 	public static String PrivateMethodChecker_1;
