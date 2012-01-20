@@ -55,7 +55,11 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			if (project != null) {
 				((CIndex) ast.getIndex()).getPrimaryFragments();
 				ast.accept(new MissingConstructorVisitor(project, ast));
+			} else {
+				System.out.println("null");
 			}
+		} else {
+			System.out.println("null");
 		}
 	}
 

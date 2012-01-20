@@ -40,7 +40,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new MissingOperatorVisitor());
 	}
-	
+
 	class MissingOperatorVisitor extends ASTVisitor {
 		{
 			shouldVisitExpressions = true;
@@ -54,7 +54,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				IASTImplicitName[] inames = uexpr.getImplicitNames();
 				if (!operatorFound(inames)) {
 					OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr);
-					if (operatorToSkip(operator) || implicitlyAvailableOperation(operator, uexpr)) {
+					if (unaryOperatorToSkip(operator) || implicitlyAvailableOperation(operator, uexpr)) {
 						return PROCESS_CONTINUE;
 					}
 					if (!operandDefined(uexpr)) {
@@ -71,7 +71,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				if (!operatorFound(inames)) {
 					if (isAppropriateType(binex.getOperand1())) {
 						OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex);
-						if(implicitlyAvailableOperation(operator, binex)){
+						if (operator == null || implicitlyAvailableOperation(operator, binex)) {
 							return PROCESS_CONTINUE;
 						}
 						reportMissingOperator(typename, binex, operator);
@@ -92,8 +92,8 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTUnaryExpression uexpr) {
 			IASTExpression operand = uexpr.getOperand();
 			final IType operandType = operand.getExpressionType();
-			if(operandType instanceof IPointerType || operandType instanceof IArrayType){
-				switch(operator){
+			if (operandType instanceof IPointerType || operandType instanceof IArrayType) {
+				switch (operator) {
 				case NOT:
 				case STAR:
 				case INCR:
@@ -103,12 +103,12 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			}
 			return false;
 		}
-		
+
 		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTBinaryExpression binExpr) {
 			IASTExpression operand = binExpr.getOperand1();
 			final IType operandType = operand.getExpressionType();
-			if(operandType instanceof IPointerType || operandType instanceof IArrayType){
-				switch(operator){
+			if (operandType instanceof IPointerType || operandType instanceof IArrayType) {
+				switch (operator) {
 				case ASSIGN:
 				case AND:
 				case OR:
@@ -135,8 +135,8 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			return true;
 		}
 
-		private boolean operatorToSkip(OverloadableOperator operator) {
-			if(operator == null){
+		private boolean unaryOperatorToSkip(OverloadableOperator operator) {
+			if (operator == null) {
 				return true;
 			}
 			switch (operator) {
