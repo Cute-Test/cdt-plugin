@@ -15,6 +15,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
@@ -94,11 +95,15 @@ public class AddTestToSuite extends AbstractFunctionAction {
 	}
 
 	private boolean isFunction(IASTFunctionDefinition def) {
-		return def.getDeclarator().getName().resolveBinding() instanceof ICPPFunction;
+		return bindingOfFunction(def) instanceof ICPPFunction;
 	}
 
 	private boolean isMemberFunction(IASTFunctionDefinition def) {
-		return def.getDeclarator().getName().resolveBinding() instanceof ICPPMethod;
+		return bindingOfFunction(def) instanceof ICPPMethod;
+	}
+
+	private IBinding bindingOfFunction(IASTFunctionDefinition def) {
+		return def.getDeclarator().getName().resolveBinding();
 	}
 
 	private IASTFunctionDefinition getFunctionDefinition(IASTNode node) {

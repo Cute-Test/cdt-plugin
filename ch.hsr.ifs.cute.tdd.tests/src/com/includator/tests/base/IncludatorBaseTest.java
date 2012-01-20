@@ -82,7 +82,6 @@ public abstract class IncludatorBaseTest extends SourceFileTest {
 		}
 	}
 
-
 	@Override
 	protected void tearDown() throws Exception {
 		TestScannerProvider.clear();

@@ -58,7 +58,7 @@ import com.includator.tests.base.TestSourceFile;
 public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 
 	private static final int EMPTY_SELECTION = 0;
-	private String[] problems;
+	private final String[] problems;
 	private String[] newFiles;
 
 	public static boolean NO_MARKER_DEFAULT = false;
@@ -67,7 +67,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	public static boolean IGNORE_COMMENTS_DEFAULT = false;
 	public static boolean OVERWRITE_DEFAULT = true;
 	public static int CANDIDATE_DEFAULT = 0;
-	
+
 	protected boolean noMarker;
 	protected int markerCount;
 	protected boolean typeExtraction;
@@ -75,12 +75,12 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	protected boolean overwrite;
 	protected int candidate;
 
-	public TddRefactoringTest(String name,
-			ArrayList<com.includator.tests.base.TestSourceFile> files, String... problem) {
+	public TddRefactoringTest(String name, ArrayList<com.includator.tests.base.TestSourceFile> files, String... problem) {
 		super(name, files);
 		this.problems = problem;
 	}
 
+	@Override
 	@Test
 	public void runTest() throws Throwable {
 		Refactoring refactoring = null;
@@ -92,7 +92,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 				removeFilesAndEnsure();
 				createAndPerformChange(refactoring);
 				filesDoExist();
-				for(String filename: fileMap.keySet()) {		
+				for (String filename : fileMap.keySet()) {
 					IFile iFile = project.getFile(new Path(filename));
 					iFile = getFile(iFile, filename);
 					String code = getCodeFromIFile(iFile);
@@ -105,9 +105,9 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 				return;
 			}
 			IMarker[] markers = getCodanMarker();
-			assertEquals("Unexpected marker count.", markerCount , markers.length);
-			
-			if(markers.length > 0){
+			assertEquals("Unexpected marker count.", markerCount, markers.length);
+
+			if (markers.length > 0) {
 				IMarker marker = markers[0];
 				IDocument doc = openDocument(marker);
 				setSelection(new TextSelection(doc, getOffset(marker, doc), EMPTY_SELECTION));
@@ -117,13 +117,13 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 			compareFiles(fileMap);
 		} finally {
 			if (refactoring instanceof CRefactoring3) {
-				((CRefactoring3)refactoring).dispose();
+				((CRefactoring3) refactoring).dispose();
 			}
 		}
 	}
 
 	private void enablePassedProblems() {
-		if (problems.length==0) {
+		if (problems.length == 0) {
 			enableAllProblems();
 		} else {
 			enableProblems(problems);
@@ -151,19 +151,17 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	}
 
 	private void setSelectionOnFile() {
-		for (Entry<String, TestSourceFile> entry : fileMap.entrySet())
-		{
-		    TestSourceFile file = entry.getValue();
-		    //Normally we have only one selection
-		    if (file.getSelection() == null)
-		    	continue;
-		    setSelection(file.getSelection());
-		    break;
+		for (Entry<String, TestSourceFile> entry : fileMap.entrySet()) {
+			TestSourceFile file = entry.getValue();
+			//Normally we have only one selection
+			if (file.getSelection() == null)
+				continue;
+			setSelection(file.getSelection());
+			break;
 		}
 	}
 
-	private void createAndPerformChange(Refactoring refactoring)
-			throws CoreException {
+	private void createAndPerformChange(Refactoring refactoring) throws CoreException {
 		assertConditionsOk(refactoring.checkInitialConditions(NULL_PROGRESS_MONITOR));
 		Change changes = refactoring.createChange(NULL_PROGRESS_MONITOR);
 		assertConditionsOk(refactoring.checkFinalConditions(NULL_PROGRESS_MONITOR));
@@ -174,7 +172,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 		String separator = System.getProperty("line.separator");
 		String[] lines = code.split(separator);
 		code = "";
-		for(String line: lines) {
+		for (String line : lines) {
 			Matcher m = Pattern.compile("[/\\*|\\*].*").matcher(line);
 			if (!m.find() || line.startsWith("#")) {
 				code += line + separator;
@@ -208,23 +206,24 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 		CodanRuntime.getInstance().getCheckersRegistry().updateProfile(cproject.getProject(), profile);
 		return;
 	}
-	
+
 	protected ICProject createProject(final boolean cpp) throws CoreException {
 		final ICProject cprojects[] = new ICProject[1];
-			// Create the cproject
-			final String projectName = "CodanProjTest_" + System.currentTimeMillis();
-			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			workspace.run(new IWorkspaceRunnable() {
-				public void run(IProgressMonitor monitor) throws CoreException {
-					// Create the cproject
-					ICProject cproject = cpp ? CProjectHelper.createCCProject(projectName, null, IPDOMManager.ID_NO_INDEXER)
-							: CProjectHelper.createCProject(projectName, null, IPDOMManager.ID_NO_INDEXER);
-					cprojects[0] = cproject;
-				}
-			}, null);
+		// Create the cproject
+		final String projectName = "CodanProjTest_" + System.currentTimeMillis();
+		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		workspace.run(new IWorkspaceRunnable() {
+			@Override
+			public void run(IProgressMonitor monitor) throws CoreException {
+				// Create the cproject
+				ICProject cproject = cpp ? CProjectHelper.createCCProject(projectName, null, IPDOMManager.ID_NO_INDEXER) : CProjectHelper.createCProject(projectName, null,
+						IPDOMManager.ID_NO_INDEXER);
+				cprojects[0] = cproject;
+			}
+		}, null);
 		return cprojects[0];
 	}
-	
+
 	protected void enableAllProblems() {
 		IProblemProfile profile = CodanRuntime.getInstance().getCheckersRegistry().getWorkspaceProfile();
 		IProblem[] problems = profile.getProblems();
@@ -243,7 +242,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 		try {
 			CodanBuilder builder = (CodanBuilder) CodanRuntime.getInstance().getBuilder();
 			builder.processResource(cproject.getProject().getFile(activeFileName), NULL_PROGRESS_MONITOR);
-			markers  = cproject.getProject().findMarkers(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, true, 1);
+			markers = cproject.getProject().findMarkers(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, true, 1);
 			builder.forgetLastBuiltState();
 		} catch (CoreException e) {
 			fail(e.getMessage());
@@ -254,6 +253,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	public void indexFiles() throws CoreException {
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		workspace.run(new IWorkspaceRunnable() {
+			@Override
 			public void run(IProgressMonitor monitor) throws CoreException {
 				cproject.getProject().refreshLocal(1, monitor);
 			}
@@ -293,8 +293,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	private IDocument openDocument(IEditorPart editorPart) {
 		if (editorPart instanceof ITextEditor) {
 			ITextEditor editor = (ITextEditor) editorPart;
-			IDocument doc = editor.getDocumentProvider().getDocument(
-					editor.getEditorInput());
+			IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
 			return doc;
 		}
 		return null;
@@ -311,18 +310,18 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 		ignoreComments = Boolean.valueOf(properties.getProperty("ignorecomments", Boolean.toString(IGNORE_COMMENTS_DEFAULT)));
 		candidate = Integer.valueOf(properties.getProperty("candidate", Integer.toString(CANDIDATE_DEFAULT)));
 	};
-	
+
 	private String[] separateNewFiles(Properties refactoringProperties) {
 		return String.valueOf(refactoringProperties.getProperty("newfiles", "")).replace(" ", "").split(",");
 	}
-	
+
 	private void removeFilesAndEnsure() throws Exception {
 		removeFiles();
 		filesDoNotExist();
 	}
 
 	private void filesDoExist() {
-		for(String fileName: newFiles) {
+		for (String fileName : newFiles) {
 			if (!fileName.equals("")) {
 				IFile file = project.getFile(new Path(fileName));
 				assertTrue(file.exists());
@@ -331,7 +330,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	}
 
 	private void filesDoNotExist() {
-		for(String fileName: newFiles) {
+		for (String fileName : newFiles) {
 			if (!fileName.equals("")) {
 				IFile file = project.getFile(new Path(fileName));
 				assertFalse(file.exists());
@@ -340,7 +339,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	}
 
 	private void removeFiles() throws CoreException {
-		for(String fileName: newFiles) {
+		for (String fileName : newFiles) {
 			if (!fileName.equals("")) {
 				IFile file = project.getFile(new Path(fileName));
 				file.delete(true, NULL_PROGRESS_MONITOR);

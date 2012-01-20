@@ -65,7 +65,7 @@ public abstract class SourceFileTest extends BaseTestFramework implements ILogLi
 
 		Properties properties = new Properties();
 		try {
-			if(configFile != null){
+			if (configFile != null) {
 				properties.load(new ByteArrayInputStream(configFile.getSource().getBytes()));
 				fileMap.remove(configFile.getName());
 			}
