@@ -32,6 +32,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.index.CIndex;
 import org.eclipse.cdt.internal.core.index.IIndexFragmentBinding;
@@ -48,9 +49,14 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
-		final ICProject project = CoreModel.getDefault().create(new Path(ast.getContainingFilename())).getCProject();
-		((CIndex)ast.getIndex()).getPrimaryFragments();
-		ast.accept(new MissingConstructorVisitor(project, ast));
+		final ICElement celement = CoreModel.getDefault().create(new Path(ast.getContainingFilename()));
+		if (celement != null) {
+			final ICProject project = celement.getCProject();
+			if (project != null) {
+				((CIndex) ast.getIndex()).getPrimaryFragments();
+				ast.accept(new MissingConstructorVisitor(project, ast));
+			}
+		}
 	}
 
 	private final class MissingConstructorVisitor extends ASTVisitor {
@@ -67,13 +73,13 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
 				IASTDeclSpecifier typespec = simpleDecl.getDeclSpecifier();
 				final int storageClass = typespec.getStorageClass();
-				if(storageClass == IASTDeclSpecifier.sc_typedef || storageClass == IASTDeclSpecifier.sc_extern){
+				if (storageClass == IASTDeclSpecifier.sc_typedef || storageClass == IASTDeclSpecifier.sc_extern) {
 					return PROCESS_CONTINUE;
 				}
 				if (typespec instanceof IASTNamedTypeSpecifier) {
 					IASTNamedTypeSpecifier namedTypespec = (IASTNamedTypeSpecifier) typespec;
 					IBinding typeBinding = namedTypespec.getName().resolveBinding();
-					
+
 					if (isConstructableType(typeBinding)) {
 						String typeName = ASTTypeUtil.getType((IType) typeBinding, true);
 						if (!isReferenceType(typeName)) {
@@ -81,8 +87,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 							reportUnresolvableConstructorCalls(simpleDecl, typeName);
 						}
 					}
-				}
-				else if(typespec instanceof IASTCompositeTypeSpecifier){
+				} else if (typespec instanceof IASTCompositeTypeSpecifier) {
 					final IASTCompositeTypeSpecifier typeDefinition = (IASTCompositeTypeSpecifier) typespec;
 					final IASTName typeName = typeDefinition.getName();
 					reportUnresolvableConstructorCalls(simpleDecl, typeName.toString());
@@ -104,25 +109,23 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 		}
 
 		private boolean isConstructableType(IBinding typeBinding) {
-			if(typeBinding instanceof IProblemBinding){
+			if (typeBinding instanceof IProblemBinding) {
 				return false;
 			}
-			if(typeBinding instanceof IType){
+			if (typeBinding instanceof IType) {
 				IType type = (IType) typeBinding;
 				IType bareType = TypeHelper.windDownToRealType(type, false);
-				if(bareType instanceof IEnumeration){
+				if (bareType instanceof IEnumeration) {
 					return false;
-				} else if(bareType instanceof ICPPBasicType){
+				} else if (bareType instanceof ICPPBasicType) {
 					return false;
-				}
-				else if(bareType instanceof ICPPTemplateParameter){
+				} else if (bareType instanceof ICPPTemplateParameter) {
 					return false;
 				}
 				return true;
 			}
 			return false;
 		}
-
 
 		private void reportUnresolvableConstructorCalls(IASTSimpleDeclaration simpledec, String typename) {
 			for (IASTDeclarator ctorDecl : simpledec.getDeclarators()) {
@@ -140,15 +143,15 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 		}
 
 		private boolean isConstructorAvailable(IASTImplicitName[] implicitNames) {
-			if( implicitNames.length < 1){
+			if (implicitNames.length < 1) {
 				return false;
 			}
 			//TODO: Only required as long as CDT Bug 359376 has not been solved
 			else {
 				IBinding ctorBinding = implicitNames[0].resolveBinding();
-				if(ctorBinding instanceof IIndexFragmentBinding){
+				if (ctorBinding instanceof IIndexFragmentBinding) {
 					try {
-						if(((IIndexFragmentBinding) ctorBinding).hasDeclaration()){
+						if (((IIndexFragmentBinding) ctorBinding).hasDeclaration()) {
 							return true;
 						}
 					} catch (CoreException e) {
@@ -156,11 +159,11 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 					}
 				}
 				IBinding owner = ctorBinding.getOwner();
-				if(owner instanceof ICPPClassType){
-					for(ICPPConstructor ctor :((ICPPClassType) owner).getConstructors()){
-						if(ctor instanceof IIndexFragmentBinding){
+				if (owner instanceof ICPPClassType) {
+					for (ICPPConstructor ctor : ((ICPPClassType) owner).getConstructors()) {
+						if (ctor instanceof IIndexFragmentBinding) {
 							try {
-								if(((IIndexFragmentBinding) ctor).hasDeclaration()){
+								if (((IIndexFragmentBinding) ctor).hasDeclaration()) {
 									return false;
 								}
 							} catch (CoreException e) {
@@ -172,7 +175,6 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			return true;
 		}
 
-		
 		private boolean hasCtorInitializer(IASTDeclarator ctorDecl) {
 			IASTInitializer initializer = ctorDecl.getInitializer();
 			return initializer == null || initializer instanceof ICPPASTConstructorInitializer;
