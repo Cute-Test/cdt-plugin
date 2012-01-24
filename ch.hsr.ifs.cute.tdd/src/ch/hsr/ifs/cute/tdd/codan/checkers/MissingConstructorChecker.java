@@ -28,15 +28,12 @@ import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownClassType;
 import org.eclipse.cdt.internal.core.index.CIndex;
-import org.eclipse.cdt.internal.core.index.IIndexFragmentBinding;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
@@ -79,7 +76,9 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				if (typespec instanceof IASTNamedTypeSpecifier) {
 					IASTNamedTypeSpecifier namedTypespec = (IASTNamedTypeSpecifier) typespec;
 					IBinding typeBinding = namedTypespec.getName().resolveBinding();
-
+					if (typeBinding instanceof ICPPUnknownClassType) {
+						return PROCESS_CONTINUE;
+					}
 					if (isConstructableType(typeBinding)) {
 						String typeName = ASTTypeUtil.getType((IType) typeBinding, true);
 						if (!isReferenceType(typeName)) {
@@ -131,8 +130,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			for (IASTDeclarator ctorDecl : simpledec.getDeclarators()) {
 				boolean hasPointerOrRefType = TddHelper.hasPointerOrRefType(ctorDecl);
 				if (!hasPointerOrRefType && ctorDecl instanceof IASTImplicitNameOwner && !(ctorDecl instanceof IASTFunctionDeclarator) && hasCtorInitializer(ctorDecl)) {
-					IASTImplicitName[] implicitNames = ((IASTImplicitNameOwner) ctorDecl).getImplicitNames();
-					if (!isConstructorAvailable(implicitNames)) {
+					if (!isConstructorAvailable((IASTImplicitNameOwner) ctorDecl)) {
 						IASTName reportedNode = ctorDecl.getName();
 						String message = Messages.MissingConstructorChecker_1 + typename;
 						CodanArguments ca = new CodanArguments(typename, message, ":ctor"); //$NON-NLS-1$
@@ -142,37 +140,9 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			}
 		}
 
-		private boolean isConstructorAvailable(IASTImplicitName[] implicitNames) {
-			if (implicitNames.length < 1) {
-				return false;
-			}
-			//TODO: Only required as long as CDT Bug 359376 has not been solved
-			else {
-				IBinding ctorBinding = implicitNames[0].resolveBinding();
-				if (ctorBinding instanceof IIndexFragmentBinding) {
-					try {
-						if (((IIndexFragmentBinding) ctorBinding).hasDeclaration()) {
-							return true;
-						}
-					} catch (CoreException e) {
-						return false;
-					}
-				}
-				IBinding owner = ctorBinding.getOwner();
-				if (owner instanceof ICPPClassType) {
-					for (ICPPConstructor ctor : ((ICPPClassType) owner).getConstructors()) {
-						if (ctor instanceof IIndexFragmentBinding) {
-							try {
-								if (((IIndexFragmentBinding) ctor).hasDeclaration()) {
-									return false;
-								}
-							} catch (CoreException e) {
-							}
-						}
-					}
-				}
-			}
-			return true;
+		private boolean isConstructorAvailable(IASTImplicitNameOwner ctorDecl) {
+			IASTImplicitName[] implicitNames = ctorDecl.getImplicitNames();
+			return implicitNames.length > 0;
 		}
 
 		private boolean hasCtorInitializer(IASTDeclarator ctorDecl) {

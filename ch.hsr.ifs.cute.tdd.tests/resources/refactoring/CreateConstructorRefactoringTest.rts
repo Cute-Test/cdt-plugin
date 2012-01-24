@@ -737,3 +737,30 @@ extern S s;
 //=
 struct S;
 extern S s;
+//!No Marker for Existing but by CDT Undiscoverable Template Constructor
+//@.config
+markerCount=0
+//@A.cpp
+template<typename T>
+struct First {
+	First(int i) {}
+};
+
+template<typename F>
+struct Second{
+	void member() {
+		First<typename F::value_type> f(1);
+	}
+};
+//=
+template<typename T>
+struct First {
+	First(int i) {}
+};
+
+template<typename F>
+struct Second{
+	void member() {
+		First<typename F::value_type> f(1);
+	}
+};
