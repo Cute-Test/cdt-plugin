@@ -5,16 +5,9 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
 public abstract class AbstractTDDChecker extends AbstractIndexAstChecker {
 
+	@Override
 	public void processAst(IASTTranslationUnit ast) {
-//		CxxModelsCache cache = getModelCache();
-//		try {
-//			IIndex index = cache.getIndex();
-//			if (index != null && index.getAllFiles().length > 0) {
-				runChecker(ast);
-//			}
-//		} catch (OperationCanceledException e) {
-//		} catch (CoreException e) {
-//		}
+		runChecker(ast);
 	}
 
 	protected abstract void runChecker(IASTTranslationUnit ast);

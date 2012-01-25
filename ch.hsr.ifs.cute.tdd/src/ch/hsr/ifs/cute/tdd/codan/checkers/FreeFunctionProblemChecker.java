@@ -43,34 +43,43 @@ public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 		if (problemBinding.getCandidateBindings().length == 0) {
 			if (name instanceof ICPPASTQualifiedName) {
 				CPPASTQualifiedName qname = (CPPASTQualifiedName) name;
-				boolean isTypeMember = false;
-				for (IASTName partname : qname.getNames()) {
-					if (partname == qname.getLastName()) {
-						String missingName = new String(name.getSimpleID());
-						if (isTypeMember) {
-							reportMissingStaticMember(partname, missingName);
-						} else {
-							reportMissingNamespaceFunction(partname, missingName);
-						}
-					}
-					final IBinding partBinding = partname.resolveBinding();
-					isTypeMember = partBinding instanceof ICPPClassType;
-					if (partBinding instanceof IProblemBinding) {
-						return;
-					}
-				}
+				handleQualifiedName(name, qname);
+			} else {
+				String missingName = new String(name.getSimpleID());
+				reportMissingFunction(name, missingName);
 			}
-			String missingName = new String(name.getSimpleID());
-			reportMissingFunction(name, missingName);
 		}
 	}
 
+	private void handleQualifiedName(IASTName name, CPPASTQualifiedName qname) {
+		boolean isTypeMember = false;
+		for (IASTName partname : qname.getNames()) {
+			if (partname == qname.getLastName()) {
+				reportMissingFunction(name, partname, isTypeMember);
+			} else {
+				final IBinding partBinding = partname.resolveBinding();
+				isTypeMember = partBinding instanceof ICPPClassType;
+				if (partBinding instanceof IProblemBinding) {
+					return;
+				}
+			}
+		}
+	}
 
-	private void reportMissingNamespaceFunction(IASTName name, String missingName) {				
+	private void reportMissingFunction(IASTName name, IASTName partname, boolean isTypeMember) {
+		String missingName = new String(name.getSimpleID());
+		if (isTypeMember) {
+			reportMissingStaticMember(partname, missingName);
+		} else {
+			reportMissingNamespaceFunction(partname, missingName);
+		}
+	}
+
+	private void reportMissingNamespaceFunction(IASTName name, String missingName) {
 		CodanArguments ca = new CodanArguments(missingName, Messages.MemberFunctionProblemChecker_1 + missingName + Messages.MemberFunctionProblemChecker_2, ":memberfunc"); //$NON-NLS-1$
 		reportProblem(ERR_ID_NamespaceMemberResolutionProblem_HSR, name.getLastName(), ca.toArray());
 	}
-	
+
 	private void reportMissingFunction(IASTName name, String missingName) {
 		CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_4 + missingName, ":freefunc"); //$NON-NLS-1$
 		reportProblem(ERR_ID_FunctionResolutionProblem_HSR, name.getLastName(), ca.toArray());

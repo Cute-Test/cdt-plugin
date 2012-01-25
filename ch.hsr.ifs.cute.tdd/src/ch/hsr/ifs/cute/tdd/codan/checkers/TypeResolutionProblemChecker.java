@@ -36,57 +36,77 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 
 	class TypeResolutionProblemVisitor extends AbstractResolutionProblemVisitor {
 
-		ArrayList<IASTNode> hasbeenreported = new ArrayList<IASTNode>();
+		private static final String TEMPLATE_ARGUMENT_SEPARATOR = ",";
+		ArrayList<IASTNode> reportedNames = new ArrayList<IASTNode>();
+
 		@Override
-		protected void reactOnProblemBinding(IProblemBinding problemBinding,
-				IASTName name) {
+		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
 			//do not report B<int> twice
 			if (name.getParent() != null && name.getParent() instanceof ICPPASTTemplateId) {
-				if (hasbeenreported.contains(name.getParent())) {
+				if (reportedNames.contains(name.getParent())) {
 					return;
 				}
 			}
-				
-			String missingName = new String(name.getSimpleID());
-			String strategy;
-			String message = Messages.TypeResolutionProblemChecker_1 + missingName + Messages.TypeResolutionProblemChecker_2;
-			ICPPASTNamedTypeSpecifier nts = TddHelper.getAncestorOfType(name, CPPASTNamedTypeSpecifier.class);
+
+			final String missingName = new String(name.getSimpleID());
+			final ICPPASTNamedTypeSpecifier nts = TddHelper.getAncestorOfType(name, CPPASTNamedTypeSpecifier.class);
+			if (nts != null && nts.isTypename()) {
+				return;
+			}
+			CodanArguments ca = createCodanArguments(name, missingName, nts);
+			if (TddHelper.nameNotFoundProblem(problemBinding)) {
+				ICPPASTBaseSpecifier base = TddHelper.getAncestorOfType(name, ICPPASTBaseSpecifier.class);
+				if (base != null || name.getParent() instanceof IASTNamedTypeSpecifier) {
+					reportType(name, ca);
+				}
+			} else if (TddHelper.isInvalidType(problemBinding)) {
+				reportType(name, ca);
+			}
+		}
+
+		private CodanArguments createCodanArguments(IASTName name, final String missingName, final ICPPASTNamedTypeSpecifier nts) {
+			String strategy = ":type"; //$NON-NLS-1$
+			final String message = Messages.TypeResolutionProblemChecker_1 + missingName + Messages.TypeResolutionProblemChecker_2;
+
+			ICPPASTTemplateId templateId = extractTemplateId(name, nts);
+			if (templateId != null) {
+				strategy = ":templtype"; //$NON-NLS-1$
+				String args = composeArgumentString(templateId);
+				CodanArguments ca = new CodanArguments(missingName, message, strategy, args);
+				return ca;
+			} else {
+				CodanArguments ca = new CodanArguments(missingName, message, strategy);
+				return ca;
+			}
+		}
+
+		private void reportType(IASTName name, CodanArguments ca) {
+			reportedNames.add(name);
+			reportProblem(ERR_ID_TypeResolutionProblem_HSR, name, ca.toArray());
+		}
+
+		private String composeArgumentString(ICPPASTTemplateId templateId) {
+			String args = ""; //$NON-NLS-1$
+			for (IASTNode node : templateId.getTemplateArguments()) {
+				if (node instanceof CPPASTTypeId) {
+					IASTDeclSpecifier declspec = ((CPPASTTypeId) node).getDeclSpecifier();
+					args += declspec.getRawSignature() + TEMPLATE_ARGUMENT_SEPARATOR; //$NON-NLS-1$
+				}
+			}
+			if (!args.isEmpty()) {
+				args = args.substring(0, args.length() - TEMPLATE_ARGUMENT_SEPARATOR.length());
+			}
+			return args;
+		}
+
+		private ICPPASTTemplateId extractTemplateId(IASTName name, final ICPPASTNamedTypeSpecifier nts) {
 			ICPPASTTemplateId templid = null;
 			if (nts != null && nts.getName() instanceof ICPPASTTemplateId) {
 				templid = (ICPPASTTemplateId) nts.getName();
 			} else if (name instanceof ICPPASTTemplateId) {
 				templid = (ICPPASTTemplateId) name;
 			}
-			String args = ""; //$NON-NLS-1$
-			if (templid != null) {
-				strategy = ":templtype"; //$NON-NLS-1$
-				for(IASTNode node: templid.getTemplateArguments()) {
-					if (node instanceof CPPASTTypeId) {
-						IASTDeclSpecifier declspec = ((CPPASTTypeId) node).getDeclSpecifier();
-						args += declspec.getRawSignature() + ","; //$NON-NLS-1$
-					}
-				}
-				if(!args.isEmpty()){
-					args = args.substring(0, args.length()-1);
-				}
-			} else {
-				strategy = ":type"; //$NON-NLS-1$
-			}
-			CodanArguments ca = new CodanArguments(missingName, message, strategy);
-			if (!args.isEmpty()) {
-				ca.setTemplateArgs(args);
-			}
-			if (TddHelper.nameNotFoundProblem(problemBinding)) {
-				ICPPASTBaseSpecifier base = TddHelper.getAncestorOfType(name, ICPPASTBaseSpecifier.class);
-				if (base != null || name.getParent() instanceof IASTNamedTypeSpecifier) {
-					hasbeenreported.add(name);
-					reportProblem(ERR_ID_TypeResolutionProblem_HSR, name, ca.toArray());
-					return;
-				}
-			} else if (TddHelper.isInvalidType(problemBinding)) {
-				hasbeenreported.add(name);
-				reportProblem(ERR_ID_TypeResolutionProblem_HSR, name, ca.toArray());
-			}
+			return templid;
 		}
 	}
 }

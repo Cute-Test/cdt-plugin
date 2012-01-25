@@ -20,30 +20,35 @@ public class MissingNamespaceChecker extends AbstractTDDChecker {
 
 	public static final String ERR_ID_NamespaceResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR"; //$NON-NLS-1$
 
-	
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new MissingNamespaceVisitor());
 	}
 
-	class MissingNamespaceVisitor extends AbstractResolutionProblemVisitor	 {
+	class MissingNamespaceVisitor extends AbstractResolutionProblemVisitor {
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
+			IASTName partnameToReport = findFirstUnresolvableQualifier(name);
+			if (partnameToReport != null) {
+				String nodename = new String(partnameToReport.getSimpleID());
+				CodanArguments ca = new CodanArguments(nodename, Messages.MissingNamespaceChecker_1 + nodename, ":namespace"); //$NON-NLS-1$
+				reportProblem(ERR_ID_NamespaceResolutionProblem_HSR, partnameToReport, ca.toArray());
+			}
+		}
+
+		private IASTName findFirstUnresolvableQualifier(IASTName name) {
 			if (name instanceof ICPPASTQualifiedName) {
 				ICPPASTQualifiedName qname = (ICPPASTQualifiedName) name;
-				for(IASTName partname: qname.getNames()) {
-					if (partname == qname.getLastName()) {
-						return;
-					}
-					IBinding b = partname.resolveBinding();
-					if (b instanceof IProblemBinding) {
-						String nodename = new String(partname.getSimpleID());
-						CodanArguments ca = new CodanArguments(nodename, Messages.MissingNamespaceChecker_1 + nodename, ":namespace"); //$NON-NLS-1$
-						reportProblem(ERR_ID_NamespaceResolutionProblem_HSR, partname, ca.toArray());
-						return;
+				for (IASTName partname : qname.getNames()) {
+					if (partname != qname.getLastName()) {
+						IBinding b = partname.resolveBinding();
+						if (b instanceof IProblemBinding) {
+							return partname;
+						}
 					}
 				}
 			}
+			return null;
 		}
 	}
 }

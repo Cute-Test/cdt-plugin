@@ -75,24 +75,32 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				}
 				if (typespec instanceof IASTNamedTypeSpecifier) {
 					IASTNamedTypeSpecifier namedTypespec = (IASTNamedTypeSpecifier) typespec;
-					IBinding typeBinding = namedTypespec.getName().resolveBinding();
-					if (typeBinding instanceof ICPPUnknownClassType) {
-						return PROCESS_CONTINUE;
-					}
-					if (isConstructableType(typeBinding)) {
-						String typeName = ASTTypeUtil.getType((IType) typeBinding, true);
-						if (!isReferenceType(typeName)) {
-							typeName = stripTemplateArguments(typeName);
-							reportUnresolvableConstructorCalls(simpleDecl, typeName);
-						}
-					}
+					handleNamedTypeSpecifier(simpleDecl, namedTypespec);
 				} else if (typespec instanceof IASTCompositeTypeSpecifier) {
 					final IASTCompositeTypeSpecifier typeDefinition = (IASTCompositeTypeSpecifier) typespec;
-					final IASTName typeName = typeDefinition.getName();
-					reportUnresolvableConstructorCalls(simpleDecl, typeName.toString());
+					handleCompositeTypeSpecifier(simpleDecl, typeDefinition);
 				}
 			}
 			return PROCESS_CONTINUE;
+		}
+
+		private void handleCompositeTypeSpecifier(IASTSimpleDeclaration simpleDecl, final IASTCompositeTypeSpecifier typeDefinition) {
+			final IASTName typeName = typeDefinition.getName();
+			checkAndReportUnresolvableConstructors(simpleDecl, typeName.toString());
+		}
+
+		private void handleNamedTypeSpecifier(IASTSimpleDeclaration simpleDecl, IASTNamedTypeSpecifier namedTypespec) {
+			final IBinding typeBinding = namedTypespec.getName().resolveBinding();
+			if (typeBinding instanceof ICPPUnknownClassType) {
+				return;
+			}
+			if (isConstructibleType(typeBinding)) {
+				String typeName = ASTTypeUtil.getType((IType) typeBinding, true);
+				if (!isReferenceType(typeName)) {
+					typeName = stripTemplateArguments(typeName);
+					checkAndReportUnresolvableConstructors(simpleDecl, typeName);
+				}
+			}
 		}
 
 		private boolean isReferenceType(String typeName) {
@@ -107,37 +115,45 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			return declaration.getParent() instanceof IASTCompositeTypeSpecifier;
 		}
 
-		private boolean isConstructableType(IBinding typeBinding) {
+		private boolean isConstructibleType(IBinding typeBinding) {
 			if (typeBinding instanceof IProblemBinding) {
 				return false;
 			}
 			if (typeBinding instanceof IType) {
 				IType type = (IType) typeBinding;
-				IType bareType = TypeHelper.windDownToRealType(type, false);
-				if (bareType instanceof IEnumeration) {
-					return false;
-				} else if (bareType instanceof ICPPBasicType) {
-					return false;
-				} else if (bareType instanceof ICPPTemplateParameter) {
-					return false;
-				}
-				return true;
+				return isConstructibleType(type);
 			}
 			return false;
 		}
 
-		private void reportUnresolvableConstructorCalls(IASTSimpleDeclaration simpledec, String typename) {
+		private boolean isConstructibleType(IType typeBinding) {
+			IType bareType = TypeHelper.windDownToRealType(typeBinding, false);
+			if (bareType instanceof IEnumeration) {
+				return false;
+			} else if (bareType instanceof ICPPBasicType) {
+				return false;
+			} else if (bareType instanceof ICPPTemplateParameter) {
+				return false;
+			}
+			return true;
+		}
+
+		private void checkAndReportUnresolvableConstructors(IASTSimpleDeclaration simpledec, String typename) {
 			for (IASTDeclarator ctorDecl : simpledec.getDeclarators()) {
 				boolean hasPointerOrRefType = TddHelper.hasPointerOrRefType(ctorDecl);
 				if (!hasPointerOrRefType && ctorDecl instanceof IASTImplicitNameOwner && !(ctorDecl instanceof IASTFunctionDeclarator) && hasCtorInitializer(ctorDecl)) {
 					if (!isConstructorAvailable((IASTImplicitNameOwner) ctorDecl)) {
-						IASTName reportedNode = ctorDecl.getName();
-						String message = Messages.MissingConstructorChecker_1 + typename;
-						CodanArguments ca = new CodanArguments(typename, message, ":ctor"); //$NON-NLS-1$
-						reportProblem(ERR_ID_MissingConstructorResolutionProblem_HSR, reportedNode, ca.toArray());
+						reportMissingConstructor(typename, ctorDecl);
 					}
 				}
 			}
+		}
+
+		private void reportMissingConstructor(String typename, IASTDeclarator ctorDecl) {
+			IASTName reportedNode = ctorDecl.getName();
+			String message = Messages.MissingConstructorChecker_1 + typename;
+			CodanArguments ca = new CodanArguments(typename, message, ":ctor"); //$NON-NLS-1$
+			reportProblem(ERR_ID_MissingConstructorResolutionProblem_HSR, reportedNode, ca.toArray());
 		}
 
 		private boolean isConstructorAvailable(IASTImplicitNameOwner ctorDecl) {

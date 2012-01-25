@@ -51,35 +51,46 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			String typename = ASTTypeUtil.getType(expression.getExpressionType(), true);
 			if (expression instanceof ICPPASTUnaryExpression) {
 				CPPASTUnaryExpression uexpr = ((CPPASTUnaryExpression) expression);
-				IASTImplicitName[] inames = uexpr.getImplicitNames();
-				if (!operatorFound(inames)) {
-					OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr);
-					if (unaryOperatorToSkip(operator) || implicitlyAvailableOperation(operator, uexpr)) {
-						return PROCESS_CONTINUE;
-					}
-					if (!operandDefined(uexpr)) {
-						return PROCESS_CONTINUE;
-					}
-					if (isAppropriateType(uexpr.getOperand())) {
-						reportMissingOperator(typename, expression, operator);
-						return PROCESS_SKIP;
-					}
-				}
+				return handleUnaryOperator(expression, typename, uexpr);
 			} else if (expression instanceof ICPPASTBinaryExpression) {
 				ICPPASTBinaryExpression binex = (ICPPASTBinaryExpression) expression;
-				IASTImplicitName[] inames = binex.getImplicitNames();
-				if (!operatorFound(inames)) {
-					if (isAppropriateType(binex.getOperand1())) {
-						OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex);
-						if (operator == null || implicitlyAvailableOperation(operator, binex)) {
-							return PROCESS_CONTINUE;
-						}
-						reportMissingOperator(typename, binex, operator);
-						return PROCESS_SKIP;
+				return handleBinaryOperator(typename, binex);
+			}
+			return PROCESS_CONTINUE;
+		}
+
+		private int handleBinaryOperator(String typename, ICPPASTBinaryExpression binex) {
+			IASTImplicitName[] inames = binex.getImplicitNames();
+			if (!operatorFound(inames)) {
+				if (isAppropriateType(binex.getOperand1())) {
+					OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex);
+					if (operator == null || implicitlyAvailableOperation(operator, binex)) {
+						return PROCESS_CONTINUE;
 					}
+					reportMissingOperator(typename, binex, operator);
+					return PROCESS_SKIP;
 				}
 			}
 			return PROCESS_CONTINUE;
+		}
+
+		private int handleUnaryOperator(IASTExpression expression, String typename, CPPASTUnaryExpression uexpr) {
+			IASTImplicitName[] inames = uexpr.getImplicitNames();
+			if (!operatorFound(inames)) {
+				OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr);
+				if (shouldSkipUnaryOperator(uexpr, operator)) {
+					return PROCESS_CONTINUE;
+				}
+				if (isAppropriateType(uexpr.getOperand())) {
+					reportMissingOperator(typename, expression, operator);
+					return PROCESS_SKIP;
+				}
+			}
+			return PROCESS_CONTINUE;
+		}
+
+		private boolean shouldSkipUnaryOperator(CPPASTUnaryExpression uexpr, OverloadableOperator operator) {
+			return unaryOperatorToSkip(operator) || implicitlyAvailableOperation(operator, uexpr) || !operandDefined(uexpr);
 		}
 
 		private void reportMissingOperator(String typename, IASTExpression expr, OverloadableOperator operator) {

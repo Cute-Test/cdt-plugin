@@ -55,6 +55,12 @@ public class CodanArguments {
 		setTemplateArgs(EMPTY_STRING);
 	}
 
+	public CodanArguments(String missingName, String message, String strategy, String templateArguments) {
+		this(missingName, message, strategy);
+		setCandidate(0);
+		setCandidates(EMPTY_STRING);
+		setTemplateArgs(templateArguments);
+	}
 
 	public Object[] toArray() {
 		ArrayList<String> result = new ArrayList<String>();

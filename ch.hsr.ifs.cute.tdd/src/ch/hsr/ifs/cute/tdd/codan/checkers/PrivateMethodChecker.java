@@ -34,6 +34,7 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 			{
 				shouldVisitNames = true;
 			}
+
 			@Override
 			public int visit(IASTName name) {
 				ICPPMember member = getMember(name);
@@ -44,39 +45,39 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				if (type != null) {
 					return PROCESS_CONTINUE;
 				}
-				ICPPClassType owner = (ICPPClassType) member.getOwner();
-				ICPPMember[] methods = owner.getAllDeclaredMethods();
-				ICPPMember[] fields = owner.getDeclaredFields();
+				final ICPPClassType owner = (ICPPClassType) member.getOwner();
+				final ICPPMember[] methods = owner.getAllDeclaredMethods();
+				final ICPPMember[] fields = owner.getDeclaredFields();
 				if (ArrayUtil.contains(methods, member) || ArrayUtil.contains(fields, member)) {
 					if (member.getVisibility() == ICPPMember.v_private) {
 						IType typeOfContext = findTypeOfContext(name);
-						if(owner.isSameType(typeOfContext)){
+						if (owner.isSameType(typeOfContext)) {
 							return PROCESS_CONTINUE;
 						}
 						String memberName = new String(name.getSimpleID());
 						CodanArguments ca = new CodanArguments(memberName, memberName + Messages.PrivateMethodChecker_1, ":visibility"); //$NON-NLS-1$
 						reportProblem(ERR_ID_PrivateMethodChecker_HSR, name.getLastName(), ca.toArray());
 					}// else if (member.getVisibility() == ICPPMember.v_protected) {
-					// Not implemented
-					//}
+						// Not implemented
+						//}
 				}
 				return PROCESS_CONTINUE;
 			}
 
 			private IType findTypeOfContext(IASTName name) {
 				IASTNode ancestor = name;
-				while(ancestor != null){
-					if(ancestor instanceof ICPPASTFunctionDefinition){
+				while (ancestor != null) {
+					if (ancestor instanceof ICPPASTFunctionDefinition) {
 						final IASTName functionName = ((ICPPASTFunctionDefinition) ancestor).getDeclarator().getName();
 						final IBinding functionBinding = functionName.resolveBinding();
 						final IBinding owner = functionBinding.getOwner();
-						if(owner instanceof IType){
+						if (owner instanceof IType) {
 							return (IType) owner;
 						}
 					}
 					ancestor = ancestor.getParent();
 				}
-					
+
 				return null;
 			}
 
@@ -88,7 +89,7 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				if (!(binding instanceof ICPPMember)) {
 					return null;
 				}
-				return (ICPPMember)binding;
+				return (ICPPMember) binding;
 			}
 		});
 	}
