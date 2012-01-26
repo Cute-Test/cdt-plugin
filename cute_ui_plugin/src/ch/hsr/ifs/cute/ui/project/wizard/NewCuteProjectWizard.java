@@ -28,7 +28,7 @@ public class NewCuteProjectWizard extends NewCuteProjectCategoryWizard {
 
 	@Override
 	protected CuteWizardHandler getHandler(IWizard wizard) {
-		return new CuteLibWizardHandler(parent, wizard);
+		return new CuteWizardHandler(parent, wizard);
 	}
 
 }
