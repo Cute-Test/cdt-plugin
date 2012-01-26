@@ -764,3 +764,40 @@ struct Second{
 		First<typename F::value_type> f(1);
 	}
 };
+//!No Marker for Equal Initializer
+//@.config
+markerCount=0
+//@A.cpp
+struct Type {
+     Type getMe() const
+    {
+        return *this;
+    }
+
+    Type(const int & i)
+    {
+    }
+
+};
+
+void newTestFunction(){
+    Type t(3);
+    Type u = t.getMe();
+}
+//=
+struct Type {
+     Type getMe() const
+    {
+        return *this;
+    }
+
+    Type(const int & i)
+    {
+    }
+
+};
+
+void newTestFunction(){
+    Type t(3);
+    Type u = t.getMe();
+}
