@@ -16,14 +16,14 @@ import ch.hsr.ifs.cute.core.CuteCorePlugin;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
-public class NewCuteLibProjectWizard extends NewCuteProjectWizard {
+public class NewCuteLibProjectWizard extends NewCuteProjectCategoryWizard {
 
 	@Override
 	protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
 		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.png").createImage(); //$NON-NLS-1$
-		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.libProjectType", null, Messages.getString("NewCuteLibProjectWizard.CuteLibTestProject"), false, handler, proImg); //$NON-NLS-1$ //$NON-NLS-2$
+		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.libProjectType", ID, Messages.getString("NewCuteLibProjectWizard.CuteLibTestProject"), false, handler, proImg); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

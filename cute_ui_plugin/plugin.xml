@@ -181,20 +181,22 @@
          id="cute wizard"
          name="%extension.name.2"
          point="org.eclipse.cdt.ui.CDTWizard">
-      <wizard
-            class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard"
-            name="CUTE">
-      </wizard>
-      <wizard
-            class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteLibProjectWizard"
-            name="CUTE Library Test Project"
-            parent="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizard">
-      </wizard>
-    <wizard
-          class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizard"
-          name="CUTE Suite Module"
-          parent="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard">
-    </wizard>
+       <wizard
+             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectCategoryWizard"
+             name="CUTE Category">
+       </wizard>
+       <wizard
+             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard"
+             name="CUTE Project">
+       </wizard>
+       <wizard
+             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizard"
+             name="CUTE Suite">
+       </wizard>
+       <wizard
+             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteLibProjectWizard"
+             name="CUTE Library Module">
+       </wizard>
    </extension>
     <extension
           point="org.eclipse.ui.popupMenus">
