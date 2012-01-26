@@ -13,6 +13,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 
@@ -29,7 +30,7 @@ public class MissingNamespaceChecker extends AbstractTDDChecker {
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
 			IASTName partnameToReport = findFirstUnresolvableQualifier(name);
-			if (partnameToReport != null) {
+			if (partnameToReport != null && !(partnameToReport instanceof ICPPASTTemplateId)) {
 				String nodename = new String(partnameToReport.getSimpleID());
 				CodanArguments ca = new CodanArguments(nodename, Messages.MissingNamespaceChecker_1 + nodename, ":namespace"); //$NON-NLS-1$
 				reportProblem(ERR_ID_NamespaceResolutionProblem_HSR, partnameToReport, ca.toArray());

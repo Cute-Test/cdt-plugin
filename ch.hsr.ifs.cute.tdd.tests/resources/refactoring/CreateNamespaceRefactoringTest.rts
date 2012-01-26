@@ -48,3 +48,10 @@ void test()
 {
     A::Y::foo();
 }
+//!No Marker for TemplateId
+//@.config
+markerCount=0
+//@A.cpp
+templ<int>::type t;
+//=
+templ<int>::type t;
