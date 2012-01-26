@@ -19,6 +19,7 @@ import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
@@ -35,24 +36,34 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new VariableResolutionProblemHandler());
 	}
-	
+
 	class VariableResolutionProblemHandler extends AbstractResolutionProblemVisitor {
+
+		@Override
+		public int visit(IASTName name) {
+			if (name instanceof ICPPASTTemplateId) {
+				return PROCESS_SKIP;
+			} else {
+				return super.visit(name);
+			}
+		}
+
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
 			if (TddHelper.nameNotFoundProblem(problemBinding)) {
-				if(name instanceof ICPPASTQualifiedName){		
+				if (name instanceof ICPPASTQualifiedName) {
 					return;
 				}
-				if(isIdentifyingFunctionCallPart(name)){
+				if (isIdentifyingFunctionCallPart(name)) {
 					return;
 				}
 				if (TddHelper.isInvalidType(problemBinding)) {
 					return;
 				}
-				if (!TddHelper.isLastPartOfQualifiedName(name)){
+				if (!TddHelper.isLastPartOfQualifiedName(name)) {
 					return;
 				}
-				if (TddHelper.hasUnresolvableNameQualifier(name)){
+				if (TddHelper.hasUnresolvableNameQualifier(name)) {
 					return;
 				}
 				IASTNode upmostName = TddHelper.getLastOfSameAncestor(name, IASTName.class);
@@ -63,14 +74,14 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 				if (parent instanceof ICPPASTBaseSpecifier) {
 					return;
 				}
-				if(upmostName instanceof ICPPASTQualifiedName){
+				if (upmostName instanceof ICPPASTQualifiedName) {
 					handleStaticMemberVariable(name, (ICPPASTQualifiedName) upmostName);
 					return;
 				}
 				if (parent instanceof CPPASTTemplateId) {
 					CPPASTTemplateId templid = (CPPASTTemplateId) name.getParent();
 					IBinding b = templid.getBinding();
-					if (b instanceof IProblemBinding && TddHelper.isInvalidType((IProblemBinding)b)){
+					if (b instanceof IProblemBinding && TddHelper.isInvalidType((IProblemBinding) b)) {
 						return;
 					}
 				}
@@ -97,8 +108,8 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 		}
 
 		private boolean isIdentifyingFunctionCallPart(IASTName name) {
-			
-			return (name.getPropertyInParent() == IASTFieldReference.FIELD_NAME || (name.getParent() instanceof ICPPASTQualifiedName && TddHelper.isLastPartOfQualifiedName(name)))&& TddHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null;
+			return (name.getPropertyInParent() == IASTFieldReference.FIELD_NAME || (name.getParent() instanceof ICPPASTQualifiedName && TddHelper.isLastPartOfQualifiedName(name)))
+					&& TddHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null;
 		}
 
 		private void reportMissingMemberVariable(IASTName name, String missingName) {
@@ -109,5 +120,6 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 		private void handleStaticMemberVariable(IASTName name, ICPPASTQualifiedName parent) {
 			reportMissingMemberVariable(name, name.getBinding().getName());
 		}
+
 	}
 }

@@ -17,7 +17,7 @@ public abstract class AbstractResolutionProblemVisitor extends ASTVisitor {
 	{
 		shouldVisitNames = true;
 	}
-	
+
 	@Override
 	public int visit(IASTName name) {
 		IBinding binding = name.resolveBinding();
@@ -26,6 +26,6 @@ public abstract class AbstractResolutionProblemVisitor extends ASTVisitor {
 		}
 		return PROCESS_CONTINUE;
 	}
-	
+
 	protected abstract void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name);
 }

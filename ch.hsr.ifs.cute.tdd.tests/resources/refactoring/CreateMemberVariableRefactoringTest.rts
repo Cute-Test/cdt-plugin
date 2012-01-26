@@ -497,3 +497,20 @@ namespace NS{
 void bar(){
 	NS::foo("test");
 }
+//!No Marker for TemplateId
+//@.config
+markerCount=0
+//@A.cpp
+struct S {
+};
+
+void foo() {
+	S::templ<int>();
+}
+//=
+struct S {
+};
+
+void foo() {
+	S::templ<int>();
+}
