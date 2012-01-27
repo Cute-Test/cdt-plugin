@@ -8,7 +8,10 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.codan.checkers;
 
+import java.util.Arrays;
+
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -50,8 +53,8 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				final ICPPMember[] fields = owner.getDeclaredFields();
 				if (ArrayUtil.contains(methods, member) || ArrayUtil.contains(fields, member)) {
 					if (member.getVisibility() == ICPPMember.v_private) {
-						IType typeOfContext = findTypeOfContext(name);
-						if (owner.isSameType(typeOfContext)) {
+						IBinding surroundingFunction = findAscendingFunctionBinding(name);
+						if (canAccessPrivateMember(owner, surroundingFunction)) {
 							return PROCESS_CONTINUE;
 						}
 						String memberName = new String(name.getSimpleID());
@@ -64,20 +67,36 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				return PROCESS_CONTINUE;
 			}
 
-			private IType findTypeOfContext(IASTName name) {
+			private boolean canAccessPrivateMember(final ICPPClassType owner, IBinding surroundingFunction) {
+				final IType typeOfContext = findTypeOfContext(surroundingFunction);
+				return owner.isSameType(typeOfContext) || isFriendOf(surroundingFunction, owner);
+			}
+
+			private boolean isFriendOf(IBinding surroundingFunction, ICPPClassType typeOfTarget) {
+				final IBinding[] friends = typeOfTarget.getFriends();
+				return Arrays.asList(friends).contains(surroundingFunction);
+			}
+
+			private IType findTypeOfContext(IBinding surroundingFunction) {
+				if (surroundingFunction != null) {
+					final IBinding owner = surroundingFunction.getOwner();
+					if (owner instanceof IType) {
+						return (IType) owner;
+					}
+				}
+				return null;
+			}
+
+			IBinding findAscendingFunctionBinding(IASTName name) {
 				IASTNode ancestor = name;
 				while (ancestor != null) {
-					if (ancestor instanceof ICPPASTFunctionDefinition) {
-						final IASTName functionName = ((ICPPASTFunctionDefinition) ancestor).getDeclarator().getName();
-						final IBinding functionBinding = functionName.resolveBinding();
-						final IBinding owner = functionBinding.getOwner();
-						if (owner instanceof IType) {
-							return (IType) owner;
-						}
-					}
 					ancestor = ancestor.getParent();
+					if (ancestor instanceof ICPPASTFunctionDefinition) {
+						final IASTName functionName = ((IASTFunctionDefinition) ancestor).getDeclarator().getName();
+						final IBinding functionBinding = functionName.resolveBinding();
+						return functionBinding;
+					}
 				}
-
 				return null;
 			}
 
@@ -85,11 +104,11 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				if (!(name.getParent() instanceof ICPPASTFieldReference)) {
 					return null;
 				}
-				IBinding binding = name.resolveBinding();
-				if (!(binding instanceof ICPPMember)) {
-					return null;
+				final IBinding binding = name.resolveBinding();
+				if (binding instanceof ICPPMember) {
+					return (ICPPMember) binding;
 				}
-				return (ICPPMember) binding;
+				return null;
 			}
 		});
 	}
