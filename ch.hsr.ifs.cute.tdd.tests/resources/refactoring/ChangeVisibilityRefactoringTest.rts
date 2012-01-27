@@ -353,7 +353,7 @@ void A::member() {
     A a;
     a.blah = 0;
 }
-//!No Marker for Member Visible due to Friend Declaration
+//!No Marker for Member Visible due to Friend Function Declaration
 //@.config
 markerCount=0
 //@A.cpp
@@ -377,4 +377,39 @@ private:
 void steal(int amount) {
 	Fortress fort;
 	fort.treasure -= amount;
+}
+//!No Marker for Member Visible due to Friend Class Declaration
+//@.config
+markerCount=0
+//@A.cpp
+class S {
+private:
+	friend class T;
+	int thing;
+};
+
+class T {
+private:
+	void foo();
+};
+
+void T::foo(){
+	S s;
+	s.thing++;
+}
+//=
+class S {
+private:
+	friend class T;
+	int thing;
+};
+
+class T {
+private:
+	void foo();
+};
+
+void T::foo(){
+	S s;
+	s.thing++;
 }

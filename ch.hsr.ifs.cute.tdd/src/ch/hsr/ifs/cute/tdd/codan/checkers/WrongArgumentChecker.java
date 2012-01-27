@@ -37,14 +37,12 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 	public static final String ERR_ID_InvalidArguments_FREE_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"; //$NON-NLS-1$
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
-
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
 		ast.accept(new WrongArgumentProblemVisitor());
 	}
-		
-	public class WrongArgumentProblemVisitor extends AbstractResolutionProblemVisitor {
 
+	public class WrongArgumentProblemVisitor extends AbstractResolutionProblemVisitor {
 
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
@@ -83,7 +81,7 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 			CodanArguments ca = new CodanArguments(missingName, message, ":candidate"); //$NON-NLS-1$
 			ca.setCandidate(argNr);
 			ca.setCandidates(contextString);
-			assert(ca.toArray().length >= AddArgumentQFGenerator.REQUIRED_MARKER_ARGUMENTS);
+			assert (ca.toArray().length >= AddArgumentQFGenerator.REQUIRED_MARKER_ARGUMENTS);
 			reportProblem(ERR_ID, name.getLastName(), ca.toArray());
 		}
 
@@ -99,14 +97,12 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 						same = true;
 						continue;
 					}
-					for(int k=0; arglist1.length == arglist2.length && k < arglist1.length; k++) {
+					for (int k = 0; arglist1.length == arglist2.length && k < arglist1.length; k++) {
 						ICPPParameter param1 = arglist1[k];
 						ICPPParameter param2 = arglist2[k];
-						if (param1.getType().isSameType(param2.getType())) {
-							same=true;
-							continue;
-						} else {
-							same = false;
+						same = param1.getType().isSameType(param2.getType());
+						if (!same) {
+							break;
 						}
 					}
 					if (same) {
