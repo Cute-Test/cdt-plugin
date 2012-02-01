@@ -35,7 +35,6 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 	public RemoveGcovAction() {
 	}
 
-	@Override
 	public void run(IAction action) {
 		if (project != null) {
 			try {
@@ -63,7 +62,6 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 
 	}
 
-	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) selection;
@@ -73,11 +71,9 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 		}
 	}
 
-	@Override
 	public void dispose() {
 	}
 
-	@Override
 	public void init(IWorkbenchWindow window) {
 	}
 

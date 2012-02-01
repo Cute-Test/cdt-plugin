@@ -36,7 +36,6 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate {
 	public AddGcovAction() {
 	}
 
-	@Override
 	public void run(IAction action) {
 		if (project != null) {
 			try {
@@ -49,7 +48,6 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate {
 		}
 	}
 
-	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) selection;
@@ -59,11 +57,9 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate {
 		}
 	}
 
-	@Override
 	public void dispose() {
 	}
 
-	@Override
 	public void init(IWorkbenchWindow window) {
 	}
 

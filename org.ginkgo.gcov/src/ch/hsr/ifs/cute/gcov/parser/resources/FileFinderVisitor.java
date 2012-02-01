@@ -30,7 +30,6 @@ class FileFinderVisitor implements IResourceVisitor {
 		return file;
 	}
 
-	@Override
 	public boolean visit(IResource resource) throws CoreException {
 		if (resource.getName().equals(sourceFileName)) {
 			file = (IFile) resource;

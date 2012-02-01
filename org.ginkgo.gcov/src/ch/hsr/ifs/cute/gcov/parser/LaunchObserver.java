@@ -38,7 +38,6 @@ import ch.hsr.ifs.test.framework.launch.ILaunchObserver;
  */
 public class LaunchObserver implements ILaunchObserver {
 
-	@Override
 	public void notifyBeforeLaunch(IProject project) throws CoreException {
 		cleanGcdaFilesInRefedProjects(project);
 	}
@@ -53,7 +52,6 @@ public class LaunchObserver implements ILaunchObserver {
 	private void cleanGcdaFilesinProject(IProject refProj) throws CoreException {
 		refProj.accept(new IResourceVisitor() {
 
-			@Override
 			public boolean visit(IResource resource) throws CoreException {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
@@ -68,7 +66,6 @@ public class LaunchObserver implements ILaunchObserver {
 
 	}
 
-	@Override
 	public void notifyAfterLaunch(IProject project) throws CoreException {
 		if (project.hasNature(GcovNature.NATURE_ID)) {
 			updateGcov(project);
@@ -130,7 +127,6 @@ public class LaunchObserver implements ILaunchObserver {
 			this.sourceEntries = sourceEntriesList;
 		}
 
-		@Override
 		public boolean visit(IResource resource) throws CoreException {
 			for (ICSourceEntry sourceEntry : sourceEntries) {
 				if (sourceEntry.getLocation().isPrefixOf(resource.getLocation()) && isNotInExclusion(sourceEntry, resource)) {
