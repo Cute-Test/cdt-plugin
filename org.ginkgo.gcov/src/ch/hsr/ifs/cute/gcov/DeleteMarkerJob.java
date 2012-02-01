@@ -19,11 +19,12 @@ import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * @author Thomas Corbat IFS
+ * 
  */
 public class DeleteMarkerJob extends Job {
-	
-	private IFile file;
+
+	private final IFile file;
 
 	public DeleteMarkerJob(IFile file) {
 		super(Messages.DeleteMarkerJob_deleteMarker + file.toString());
@@ -40,11 +41,11 @@ public class DeleteMarkerJob extends Job {
 			IStatus s = e.getStatus();
 			if (s instanceof IResourceStatus) {
 				IResourceStatus resStatus = (IResourceStatus) s;
-				if(resStatus.getCode() == IResourceStatus.RESOURCE_NOT_FOUND) {
+				if (resStatus.getCode() == IResourceStatus.RESOURCE_NOT_FOUND) {
 					return Status.OK_STATUS;
 				}
 			}
-			e.printStackTrace();
+			GcovPlugin.log(e);
 			return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getLocalizedMessage());
 		}
 		return Status.OK_STATUS;

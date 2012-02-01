@@ -21,31 +21,30 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import ch.hsr.ifs.cute.gcov.GcovNature;
+import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
-public class RemoveGcovAction implements IWorkbenchWindowActionDelegate{
-	
+public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
+
 	private IProject project;
 
-	/**
-	 * 
-	 */
 	public RemoveGcovAction() {
 	}
 
+	@Override
 	public void run(IAction action) {
-		if(project != null) {
+		if (project != null) {
 			try {
 				GcovNature.removeCuteNature(project, new NullProgressMonitor());
 				IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 				IConfiguration[] configs = info.getManagedProject().getConfigurations();
-				if(ManagedBuildManager.getSelectedConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)){
+				if (ManagedBuildManager.getSelectedConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
 					for (IConfiguration config : configs) {
-						if(config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) { //$NON-NLS-1$ //$NON-NLS-2$
+						if (config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) { //$NON-NLS-1$ //$NON-NLS-2$
 							ManagedBuildManager.setSelectedConfiguration(project, config);
 							ManagedBuildManager.setDefaultConfiguration(project, config);
 							continue;
@@ -54,27 +53,31 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate{
 				}
 				info.getManagedProject().removeConfiguration(GcovAdditionHandler.GCOV_CONFG_ID);
 				ManagedBuildManager.updateCoreSettings(project);
-				
+
 			} catch (CoreException e) {
-				e.printStackTrace();
-			};
+				GcovPlugin.log(e);
+			}
+			;
 			project = null;
 		}
-		
+
 	}
 
+	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) selection;
 			if (treeSel.getFirstElement() instanceof IProject) {
-				project = (IProject) treeSel.getFirstElement();				
+				project = (IProject) treeSel.getFirstElement();
 			}
 		}
 	}
 
+	@Override
 	public void dispose() {
 	}
 
+	@Override
 	public void init(IWorkbenchWindow window) {
 	}
 

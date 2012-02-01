@@ -18,14 +18,16 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import ch.hsr.ifs.cute.gcov.GcovNature;
+import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * @author Thomas Corbat IFS
+ * 
  */
-public class AddGcovAction implements IWorkbenchWindowActionDelegate{
-	
+public class AddGcovAction implements IWorkbenchWindowActionDelegate {
+
 	private IProject project;
 
 	/**
@@ -34,32 +36,34 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate{
 	public AddGcovAction() {
 	}
 
+	@Override
 	public void run(IAction action) {
-		if(project != null) {
+		if (project != null) {
 			try {
 				GcovNature.addGcovNature(project, new NullProgressMonitor());
 				new GcovAdditionHandler().addGcovConfig(project);
 			} catch (CoreException e) {
-				e.printStackTrace();
+				GcovPlugin.log(e);
 			}
 			project = null;
 		}
 	}
-	
-	
 
+	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) selection;
 			if (treeSel.getFirstElement() instanceof IProject) {
-				project = (IProject) treeSel.getFirstElement();			
+				project = (IProject) treeSel.getFirstElement();
 			}
 		}
 	}
 
+	@Override
 	public void dispose() {
 	}
 
+	@Override
 	public void init(IWorkbenchWindow window) {
 	}
 

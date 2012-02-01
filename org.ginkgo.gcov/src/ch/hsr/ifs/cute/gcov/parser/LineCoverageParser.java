@@ -34,11 +34,16 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
+import ch.hsr.ifs.cute.gcov.parser.resources.GcovFile;
 
+/**
+ * @author Emanuel Graf IFS
+ * @author Thomas Corbat IFS
+ * 
+ */
 public abstract class LineCoverageParser {
 
 	public abstract void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException;
-
 
 	public void deleteMarkers(IFile file) {
 		try {
@@ -52,34 +57,34 @@ public abstract class LineCoverageParser {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void runGcov(IFile file, IPath workingDirectory, IProject project) throws CoreException, IOException {
 		String[] cmdLine;
-		if(runningCygwin(project)){
+		if (runningCygwin(project)) {
 			cmdLine = getCygwinGcovCommand(file);
-		}else{
+		} else {
 			cmdLine = getGcovCommand(file);
 		}
 		File workingDir = null;
-		if(workingDirectory != null){
+		if (workingDirectory != null) {
 			workingDir = workingDirectory.toFile();
 		}
-		
+
 		String[] envp = getEnvironmentVariables(project);
-	
+
 		Process p = null;
-		
+
 		p = DebugPlugin.exec(cmdLine, workingDir, envp);
-	
+
 		IProcess process = null;
-		
+
 		String programName = cmdLine[0];
 		Map processAttributes = new HashMap();
 		processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
-		
+
 		if (p != null) {
-			process = DebugPlugin.newProcess(new Launch(null,ILaunchManager.RUN_MODE,null), p, programName, processAttributes);
+			process = DebugPlugin.newProcess(new Launch(null, ILaunchManager.RUN_MODE, null), p, programName, processAttributes);
 			if (process == null) {
 				p.destroy();
 				GcovPlugin.log("Gcov Process is null"); //$NON-NLS-1$
-			}else{
+			} else {
 				while (!process.isTerminated()) {
 					try {
 						Thread.sleep(50);
@@ -92,13 +97,13 @@ public abstract class LineCoverageParser {
 			} catch (CoreException e) {
 				GcovPlugin.log(e);
 			}
-		}else {
+		} else {
 			GcovPlugin.log("Could not create gcov process"); //$NON-NLS-1$
 		}
 	}
 
 	private String[] getGcovCommand(IFile file) {
-		String[] cmdLine = {"gcov","-f","-b",file.getName()}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String[] cmdLine = { "gcov", "-f", "-b", file.getName() }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return cmdLine;
 	}
 
@@ -107,13 +112,13 @@ public abstract class LineCoverageParser {
 		IConfiguration config = info.getManagedProject().getConfigurations()[0];
 		return config.getParent().getId().contains("cygwin"); //$NON-NLS-1$
 	}
-	
-	private String[] getEnvironmentVariables(IProject project){
+
+	private String[] getEnvironmentVariables(IProject project) {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 		final IEnvironmentVariableProvider environmentVariableProvider = ManagedBuildManager.getEnvironmentVariableProvider();
 		IEnvironmentVariable[] variables = environmentVariableProvider.getVariables(info.getDefaultConfiguration(), true);
 		String[] variableStrings = new String[variables.length];
-		for(int i = 0; i < variableStrings.length; ++i) {
+		for (int i = 0; i < variableStrings.length; ++i) {
 			variableStrings[i] = variables[i].toString();
 		}
 		return variableStrings;
@@ -121,47 +126,37 @@ public abstract class LineCoverageParser {
 
 	private String[] getCygwinGcovCommand(IFile file) {
 		@SuppressWarnings("nls")
-		String[] cmdLine = {"sh","-c","'gcov","-f","-b",file.getName()+"'"};
+		String[] cmdLine = { "sh", "-c", "'gcov", "-f", "-b", file.getName() + "'" };
 		return cmdLine;
 	}
 
-	public void parse(IFile cppFile, IProgressMonitor monitor) throws CoreException, IOException {
+	public void parse(GcovFile cppFile, IProgressMonitor monitor) throws CoreException, IOException {
 		IFile gcovFile = null;
-		deleteMarkers(cppFile);
-		IProject project = cppFile.getProject();
+		final IFile targetFile = cppFile.getFile();
+		deleteMarkers(targetFile);
+		IProject project = targetFile.getProject();
 		project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
-		String gcnoFileName = cppFile.getName().replace(cppFile.getFileExtension(),"gcno"); //$NON-NLS-1$
-		IFile gcnoFile= null;
 		try {
-	
-			gcnoFile = findFile(project, gcnoFileName);
-			if(gcnoFile == null) {
+
+			IFile gcnoFile = cppFile.getGcnoFile();
+			if (gcnoFile == null) {
 				return;
 			}
-			
-			runGcov(cppFile, gcnoFile.getParent().getLocation(), project);
-	
-			String gcovFileName = cppFile.getName().concat(".gcov"); //$NON-NLS-1$
-			gcovFile = findFile(project, gcovFileName);
-			if (gcovFileName == null) {
+
+			runGcov(targetFile, gcnoFile.getParent().getLocation(), project);
+
+			gcovFile = cppFile.getGcovFile();
+			if (gcovFile == null) {
 				return;
 			}
-			
+
 			GcovPlugin.getDefault().getcModel().clearModel();
-			if(gcovFile != null) {
-				parse(cppFile, new InputStreamReader(gcovFile
-						.getContents()));
+			if (gcovFile != null) {
+				parse(targetFile, new InputStreamReader(gcovFile.getContents()));
 			}
 		} catch (NumberFormatException e) {
 			GcovPlugin.log(e);
 		}
-	}
-
-	protected IFile findFile(IProject project, String fileName) throws CoreException {
-		FileFinderVisitor visitor = new FileFinderVisitor(fileName);
-		project.accept(visitor);
-		return visitor.getFile();
-	
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -169,7 +164,7 @@ public abstract class LineCoverageParser {
 		Map attributes = new HashMap();
 		MarkerUtilities.setMessage(attributes, message);
 		MarkerUtilities.setLineNumber(attributes, lineNum);
-		MarkerUtilities.createMarker(cppFile, attributes, type);	
+		MarkerUtilities.createMarker(cppFile, attributes, type);
 	}
 
 	public LineCoverageParser() {

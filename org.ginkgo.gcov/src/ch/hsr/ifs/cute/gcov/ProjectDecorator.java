@@ -23,41 +23,46 @@ import ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
-public class ProjectDecorator implements ILightweightLabelDecorator{
+public class ProjectDecorator implements ILightweightLabelDecorator {
 
 	private static final ImageDescriptor GCOV_ICON = AbstractUIPlugin.imageDescriptorFromPlugin(GcovPlugin.PLUGIN_ID, "icons/ovr16/gcov_ovr.gif"); //$NON-NLS-1$;
 	private static final ImageDescriptor GCOV_DEACT_ICON = AbstractUIPlugin.imageDescriptorFromPlugin(GcovPlugin.PLUGIN_ID, "icons/ovr16/gcov_deact_ovr.gif"); //$NON-NLS-1$;;
 
+	@Override
+	public void addListener(ILabelProviderListener listener) {
+	}
 
-	public void addListener(ILabelProviderListener listener) {}
+	@Override
+	public void dispose() {
+	}
 
-	public void dispose() {}
-
+	@Override
 	public boolean isLabelProperty(Object element, String property) {
 		return false;
 	}
 
-	public void removeListener(ILabelProviderListener listener) {}
+	@Override
+	public void removeListener(ILabelProviderListener listener) {
+	}
 
-		
-
+	@Override
 	public void decorate(Object element, IDecoration decoration) {
 		if (element instanceof IProject) {
-			IProject proj = (IProject)element;
+			IProject proj = (IProject) element;
 			try {
-				if(proj.exists() && proj.isOpen() && proj.hasNature(GcovNature.NATURE_ID)) {					
+				if (proj.exists() && proj.isOpen() && proj.hasNature(GcovNature.NATURE_ID)) {
 					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
 					IConfiguration config = info.getDefaultConfiguration();
-					if(config.getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)){
+					if (config.getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
 						decoration.addOverlay(GCOV_ICON, IDecoration.BOTTOM_RIGHT);
-					}else {
+					} else {
 						decoration.addOverlay(GCOV_DEACT_ICON, IDecoration.BOTTOM_RIGHT);
 					}
 				}
 			} catch (CoreException e) {
-				e.printStackTrace();
+				GcovPlugin.log(e);
 			}
 		}
 	}

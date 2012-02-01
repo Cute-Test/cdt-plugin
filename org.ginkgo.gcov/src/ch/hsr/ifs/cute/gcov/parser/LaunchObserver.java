@@ -29,43 +29,46 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
+import ch.hsr.ifs.cute.gcov.parser.resources.GcovFile;
 import ch.hsr.ifs.test.framework.launch.ILaunchObserver;
 
 /**
  * @author Emanuel Graf IFS
- * 
+ * @author Thomas Corbat IFS
  */
 public class LaunchObserver implements ILaunchObserver {
 
+	@Override
 	public void notifyBeforeLaunch(IProject project) throws CoreException {
 		cleanGcdaFilesInRefedProjects(project);
 	}
-	
+
 	private void cleanGcdaFilesInRefedProjects(IProject project) throws CoreException {
-		for(IProject refProj : project.getReferencedProjects()) {
+		for (IProject refProj : project.getReferencedProjects()) {
 			cleanGcdaFilesinProject(refProj);
 		}
-		
+
 	}
 
 	private void cleanGcdaFilesinProject(IProject refProj) throws CoreException {
 		refProj.accept(new IResourceVisitor() {
-			
+
+			@Override
 			public boolean visit(IResource resource) throws CoreException {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
 					String fileExtension = file.getFileExtension();
-					if(fileExtension != null && fileExtension.equals("gcda")) { //$NON-NLS-1$
+					if (fileExtension != null && fileExtension.equals("gcda")) { //$NON-NLS-1$
 						file.delete(true, new NullProgressMonitor());
 					}
 				}
 				return true;
 			}
 		});
-		
+
 	}
 
-
+	@Override
 	public void notifyAfterLaunch(IProject project) throws CoreException {
 		if (project.hasNature(GcovNature.NATURE_ID)) {
 			updateGcov(project);
@@ -91,7 +94,7 @@ public class LaunchObserver implements ILaunchObserver {
 		try {
 			iProject.accept(new SourceFileVisitor(sourceEntriesList));
 		} catch (CoreException e) {
-			e.printStackTrace();
+			GcovPlugin.log(e);
 		}
 	}
 
@@ -99,11 +102,11 @@ public class LaunchObserver implements ILaunchObserver {
 
 		class ParseJob extends Job {
 
-			private IFile file;
-			private LineCoverageParser parser = new ModelBuilderLineParser();
+			private final GcovFile file;
+			private final LineCoverageParser parser = new ModelBuilderLineParser();
 
-			public ParseJob(IFile file) {
-				super(Messages.LaunchObserver_parse + file.getName());
+			public ParseJob(GcovFile file) {
+				super(Messages.LaunchObserver_parse + file.getFileName());
 				this.file = file;
 			}
 
@@ -121,20 +124,21 @@ public class LaunchObserver implements ILaunchObserver {
 
 		}
 
-		private List<ICSourceEntry> sourceEntries;
+		private final List<ICSourceEntry> sourceEntries;
 
 		public SourceFileVisitor(List<ICSourceEntry> sourceEntriesList) {
 			this.sourceEntries = sourceEntriesList;
 		}
 
+		@Override
 		public boolean visit(IResource resource) throws CoreException {
 			for (ICSourceEntry sourceEntry : sourceEntries) {
-				if (sourceEntry.getLocation().isPrefixOf(resource.getLocation())
-						&& isNotInExclusion(sourceEntry, resource)) {
+				if (sourceEntry.getLocation().isPrefixOf(resource.getLocation()) && isNotInExclusion(sourceEntry, resource)) {
 					if (resource instanceof IFile) {
 						IFile file = (IFile) resource;
-						if (file.getName().endsWith("cpp")) { //$NON-NLS-1$
-							parse(file);
+						final GcovFile gcovFile = GcovFile.create(file);
+						if (gcovFile != null) {
+							parse(gcovFile);
 						}
 					}
 				}
@@ -142,7 +146,7 @@ public class LaunchObserver implements ILaunchObserver {
 			return true;
 		}
 
-		protected void parse(final IFile file) throws CoreException {
+		protected void parse(final GcovFile file) throws CoreException {
 			ParseJob job = new ParseJob(file);
 			job.schedule();
 

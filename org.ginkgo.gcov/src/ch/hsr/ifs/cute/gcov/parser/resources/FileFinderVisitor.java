@@ -6,7 +6,7 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.cute.gcov.parser;
+package ch.hsr.ifs.cute.gcov.parser.resources;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -15,22 +15,22 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * @author Thomas Corbat IFS
+ * 
  */
 class FileFinderVisitor implements IResourceVisitor {
-	private String sourceFileName;
+	private final String sourceFileName;
 	private IFile file;
 
 	FileFinderVisitor(String FileName) {
 		sourceFileName = FileName;
 	}
-	
-	
 
 	public IFile getFile() {
 		return file;
 	}
 
+	@Override
 	public boolean visit(IResource resource) throws CoreException {
 		if (resource.getName().equals(sourceFileName)) {
 			file = (IFile) resource;
