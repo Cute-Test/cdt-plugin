@@ -69,13 +69,12 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 
 			private boolean canAccessPrivateMember(final ICPPClassType owner, IBinding surroundingFunction) {
 				final IType typeOfContext = findTypeOfContext(surroundingFunction);
-
 				return owner.isSameType(typeOfContext) || isFriendOf(surroundingFunction.getOwner(), owner) || isFriendOf(surroundingFunction, owner);
 			}
 
-			private boolean isFriendOf(IBinding surroundingFunction, ICPPClassType typeOfTarget) {
+			private boolean isFriendOf(IBinding possibleFriend, ICPPClassType typeOfTarget) {
 				final IBinding[] friends = typeOfTarget.getFriends();
-				return Arrays.asList(friends).contains(surroundingFunction);
+				return Arrays.asList(friends).contains(possibleFriend);
 			}
 
 			private IType findTypeOfContext(IBinding surroundingFunction) {

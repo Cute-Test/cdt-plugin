@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -43,23 +44,26 @@ import ch.hsr.ifs.cute.ui.ProjectTools;
 import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
-
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class CuteLibWizardHandler extends CuteWizardHandler {
-	
-	
+
 	private final LibReferencePage libRefPage;
+
 	public CuteLibWizardHandler(Composite p, IWizard w) {
-		
-		super( p, w);
-		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(),w.getContainer(), this);
+
+		super(p, w);
+		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(), getWizardContainer(w), this);
 		libRefPage.setPreviousPage(getStartingPage());
 		libRefPage.setWizard(getWizard());
 		MBSCustomPageManager.init();
 		MBSCustomPageManager.addStockPage(libRefPage, libRefPage.getPageID());
+	}
+
+	private IWizardContainer getWizardContainer(IWizard w) {
+		return w == null ? null : w.getContainer();
 	}
 
 	@Override
@@ -72,7 +76,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		}
 	}
 
-	
 	private void createLibSetings(IProject project) throws CoreException {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
@@ -85,15 +88,13 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		ManagedBuildManager.saveBuildInfo(project, true);
 	}
 
+	@Override
 	protected List<ICuteWizardAddition> getAdditions() {
 		return libRefPage.getAdditions();
 	}
 
-	
-
-	private void setProjectReference(IProject project, Vector<IProject> projects)
-			throws CoreException {
-		if(projects.size()>0){
+	private void setProjectReference(IProject project, Vector<IProject> projects) throws CoreException {
+		if (projects.size() > 0) {
 			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
 			ICConfigurationDescription cfgs[] = des.getConfigurations();
 			for (ICConfigurationDescription config : cfgs) {
@@ -106,8 +107,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 			CCorePlugin.getDefault().setProjectDescription(project, des);
 		}
 	}
-	
-
 
 	private void setToolChainIncludePath(IProject project, IProject libProject) throws CoreException {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject);
@@ -116,62 +115,61 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		ICSourceEntry[] sources = config.getSourceEntries();
 		for (ICSourceEntry sourceEntry : sources) {
 			IPath location = sourceEntry.getFullPath();
-			if(location.segmentCount()== 0) {
+			if (location.segmentCount() == 0) {
 				ProjectTools.setIncludePaths(libProject.getFullPath(), project, this);
-			}else {
+			} else {
 				ProjectTools.setIncludePaths(libProject.getFolder(location).getFullPath(), project, this);
 			}
 		}
-		for(IConfiguration configuration : configs) {
-			ICOutputEntry[]  dirs = configuration.getBuildData().getOutputDirectories();
+		for (IConfiguration configuration : configs) {
+			ICOutputEntry[] dirs = configuration.getBuildData().getOutputDirectories();
 			for (ICOutputEntry outputEntry : dirs) {
 				IPath location = outputEntry.getFullPath();
-				if(location.segmentCount()== 0){
-					setLibraryPaths(libProject.getFullPath(), project, configuration);	
-				}else{
+				if (location.segmentCount() == 0) {
+					setLibraryPaths(libProject.getFullPath(), project, configuration);
+				} else {
 					//IPath location1=location.removeFirstSegments(1);
-					setLibraryPaths(libProject.getFolder(location).getFullPath(), project, configuration);	
+					setLibraryPaths(libProject.getFolder(location).getFullPath(), project, configuration);
 				}
 			}
 		}
 		String artifactName = config.getArtifactName();
-		if(artifactName.equalsIgnoreCase("${ProjName}")) { //$NON-NLS-1$
+		if (artifactName.equalsIgnoreCase("${ProjName}")) { //$NON-NLS-1$
 			setLibName(libProject.getName(), project);
-		}else{
+		} else {
 			setLibName(artifactName, project);
 		}
 	}
 
 	@Override
 	public IWizardPage getSpecificPage() {
-		
+
 		return libRefPage;
 	}
 
 	/**
 	 * @since 4.0
 	 */
-	protected void setLibraryPaths(IPath libFolder, IProject project, IConfiguration configuration)
-			throws CoreException {
-				String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
-				IConfiguration targetConfig = findSameConfig(configuration, project);
-				try {
-					IToolChain toolChain = targetConfig.getToolChain();
-					ProjectTools.setOptionInConfig(path, targetConfig, toolChain.getOptions(), toolChain, IOption.LIBRARY_PATHS, this);
-					ITool[] tools = targetConfig.getTools();
-					for(int j=0; j<tools.length; j++) {
-						ProjectTools.setOptionInConfig(path, targetConfig, tools[j].getOptions(), tools[j], IOption.LIBRARY_PATHS, this);
-					}
-				} catch (BuildException be) {
-					throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,be.getMessage(), be));
-				}
+	protected void setLibraryPaths(IPath libFolder, IProject project, IConfiguration configuration) throws CoreException {
+		String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
+		IConfiguration targetConfig = findSameConfig(configuration, project);
+		try {
+			IToolChain toolChain = targetConfig.getToolChain();
+			ProjectTools.setOptionInConfig(path, targetConfig, toolChain.getOptions(), toolChain, IOption.LIBRARY_PATHS, this);
+			ITool[] tools = targetConfig.getTools();
+			for (int j = 0; j < tools.length; j++) {
+				ProjectTools.setOptionInConfig(path, targetConfig, tools[j].getOptions(), tools[j], IOption.LIBRARY_PATHS, this);
 			}
-	
+		} catch (BuildException be) {
+			throw new CoreException(new Status(IStatus.ERROR, CuteCorePlugin.PLUGIN_ID, 42, be.getMessage(), be));
+		}
+	}
+
 	private IConfiguration findSameConfig(IConfiguration configuration, IResource project) {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
 		for (IConfiguration iConfiguration : configs) {
-			if(iConfiguration.getName().equals(configuration.getName())) {
+			if (iConfiguration.getName().equals(configuration.getName())) {
 				return iConfiguration;
 			}
 		}
@@ -182,24 +180,20 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		ProjectTools.setOptionInAllConfigs(project, libName, IOption.LIBRARIES, this);
 	}
 
-	
-	
 	@Override
 	public GetOptionsStrategy getStrategy(int optionType) {
 		switch (optionType) {
 		case IOption.LIBRARY_PATHS:
 			return new LibraryPathsStrategy();
-		
+
 		case IOption.LIBRARIES:
 			return new LibrariesStrategy();
 
 		default:
 			return super.getStrategy(optionType);
 		}
-		
+
 	}
-	
-	
 
 	@Override
 	protected ICuteHeaders getCuteVersion() {
@@ -209,26 +203,28 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	//bugzilla #210116:on CDT spelling error
 	@Override
 	public boolean canFinish() {
-		if(libRefPage ==null)return false;
+		if (libRefPage == null)
+			return false;
 		Vector<IProject> projects = libRefPage.getCheckedProjects();
-		if(projects.size()<1)return false;
+		if (projects.size() < 1)
+			return false;
 		return libRefPage.isCustomPageComplete();
 	}
 
-	private static class LibraryPathsStrategy implements GetOptionsStrategy{
+	private static class LibraryPathsStrategy implements GetOptionsStrategy {
 
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getBasicStringListValue();
 		}
-		
+
 	}
-	
-	private static class LibrariesStrategy implements GetOptionsStrategy{
+
+	private static class LibrariesStrategy implements GetOptionsStrategy {
 
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getLibraries();
 		}
-		
+
 	}
 }
 //to convert IFolder to IPath use (IResource)IFolder.getFullPath()

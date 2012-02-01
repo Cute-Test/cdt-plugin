@@ -28,7 +28,6 @@ public class NewCuteProjectCategoryWizard extends AbstractCWizard {
 	@Override
 	public EntryDescriptor[] createItems(boolean supportedOnly, IWizard wizard) {
 		if (wizard instanceof CCProjectWizard) {
-
 			CuteWizardHandler handler = getHandler(wizard);
 			IToolChain[] tcs = ManagedBuildManager.getExtensionsToolChains(MBSWizardHandler.ARTIFACT, new CuteBuildPropertyValue().getId());
 			for (int j = 0; j < tcs.length; j++) {
