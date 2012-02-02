@@ -46,7 +46,6 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 						if (config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) { //$NON-NLS-1$ //$NON-NLS-2$
 							ManagedBuildManager.setSelectedConfiguration(project, config);
 							ManagedBuildManager.setDefaultConfiguration(project, config);
-							continue;
 						}
 					}
 				}
@@ -56,7 +55,6 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 			} catch (CoreException e) {
 				GcovPlugin.log(e);
 			}
-			;
 			project = null;
 		}
 

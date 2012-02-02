@@ -322,7 +322,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 
 	private void filesDoExist() {
 		for (String fileName : newFiles) {
-			if (!fileName.equals("")) {
+			if (!fileName.isEmpty()) {
 				IFile file = project.getFile(new Path(fileName));
 				assertTrue(file.exists());
 			}
@@ -331,7 +331,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 
 	private void filesDoNotExist() {
 		for (String fileName : newFiles) {
-			if (!fileName.equals("")) {
+			if (!fileName.isEmpty()) {
 				IFile file = project.getFile(new Path(fileName));
 				assertFalse(file.exists());
 			}
@@ -340,7 +340,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 
 	private void removeFiles() throws CoreException {
 		for (String fileName : newFiles) {
-			if (!fileName.equals("")) {
+			if (!fileName.isEmpty()) {
 				IFile file = project.getFile(new Path(fileName));
 				file.delete(true, NULL_PROGRESS_MONITOR);
 			}
