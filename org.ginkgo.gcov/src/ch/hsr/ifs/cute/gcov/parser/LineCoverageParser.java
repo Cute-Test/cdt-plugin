@@ -55,7 +55,7 @@ public abstract class LineCoverageParser {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected void runGcov(IFile file, IPath workingDirectory, IProject project) throws CoreException, IOException {
+	protected void runGcov(IFile file, IPath workingDirectory, IProject project) throws CoreException {
 		String[] cmdLine;
 		if (runningCygwin(project)) {
 			cmdLine = getCygwinGcovCommand(file);
@@ -80,7 +80,8 @@ public abstract class LineCoverageParser {
 		processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
 
 		if (p != null) {
-			process = DebugPlugin.newProcess(new Launch(null, ILaunchManager.RUN_MODE, null), p, programName, processAttributes);
+			final Launch launch = new Launch(null, ILaunchManager.RUN_MODE, null);
+			process = DebugPlugin.newProcess(launch, p, programName, processAttributes);
 			if (process == null) {
 				p.destroy();
 				GcovPlugin.log("Gcov Process is null"); //$NON-NLS-1$
@@ -152,7 +153,12 @@ public abstract class LineCoverageParser {
 
 			GcovPlugin.getDefault().getcModel().clearModel();
 			if (gcovFile != null) {
-				parse(targetFile, new InputStreamReader(gcovFile.getContents()));
+				final InputStreamReader gcovFileInput = new InputStreamReader(gcovFile.getContents());
+				try {
+					parse(targetFile, gcovFileInput);
+				} finally {
+					gcovFileInput.close();
+				}
 			}
 		} catch (NumberFormatException e) {
 			GcovPlugin.log(e);

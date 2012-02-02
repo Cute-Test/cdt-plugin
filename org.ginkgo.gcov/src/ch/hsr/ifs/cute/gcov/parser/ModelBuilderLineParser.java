@@ -26,40 +26,50 @@ import ch.hsr.ifs.cute.gcov.model.Line;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class ModelBuilderLineParser extends LineCoverageParser {
-	
+
 	private static final Pattern LINE_PATTERN = Pattern.compile("(.*)(\\d+|-|#####):(\\s*)(\\d+):(.*)$"); //$NON-NLS-1$
 	private static final Pattern FUNCTION_PATTERN = Pattern.compile("(function )(\\w*)( called )(\\d+)( returned \\d+\\% blocks executed )(\\d+)(\\%)(.*)$"); //$NON-NLS-1$
 	private static final Pattern BRANCH_PATTERN = Pattern.compile("(branch\\s+)(\\d+)(\\s+taken\\s+)(\\d+)(\\%)(.*)$"); //$NON-NLS-1$
-	
+
 	File file;
 	Function currentFunction;
 	Line currentLine;
 
 	@Override
-	public void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException {
+	public void parse(IFile cppFile, Reader gcovFile) throws CoreException {
 		file = GcovPlugin.getDefault().getcModel().addFileToModel(cppFile);
 		BufferedReader in = new BufferedReader(gcovFile);
 		String line;
-		while ((line = in.readLine()) != null) {
-			Matcher functionMatcher = FUNCTION_PATTERN.matcher(line);
-			if(functionMatcher.matches()) {
-				handleFunction(functionMatcher);
-				continue;
-			}
-			Matcher lineMatcher = LINE_PATTERN.matcher(line);
-			if(lineMatcher.matches()) {
-				handleLine(lineMatcher);
-				continue;
-			}
-			Matcher branchMatcher = BRANCH_PATTERN.matcher(line);
-			if(branchMatcher.matches()) {
-				int taken = Integer.parseInt(branchMatcher.group(4));
-				currentLine.addBranch(new Branch(taken));				
-			}
+		try {
+			try {
+				while ((line = in.readLine()) != null) {
+					Matcher functionMatcher = FUNCTION_PATTERN.matcher(line);
+					if (functionMatcher.matches()) {
+						handleFunction(functionMatcher);
+						continue;
+					}
+					Matcher lineMatcher = LINE_PATTERN.matcher(line);
+					if (lineMatcher.matches()) {
+						handleLine(lineMatcher);
+						continue;
+					}
+					Matcher branchMatcher = BRANCH_PATTERN.matcher(line);
+					if (branchMatcher.matches()) {
+						int taken = Integer.parseInt(branchMatcher.group(4));
+						currentLine.addBranch(new Branch(taken));
+					}
 
+				}
+			} catch (NumberFormatException e) {
+				GcovPlugin.log(e);
+			} catch (IOException e) {
+				GcovPlugin.log(e);
+			}
+		} finally {
+			tryClose(in);
 		}
 		for (Function f : file.getFunctions()) {
 			for (Line l : f.getLines()) {
@@ -80,6 +90,15 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 		}
 	}
 
+	private void tryClose(BufferedReader in) {
+		if (in != null) {
+			try {
+				in.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+
 	protected void handleFunction(Matcher functionMatcher) {
 		try {
 			String name = functionMatcher.group(2);
@@ -87,29 +106,31 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 			int execBlocks = Integer.parseInt(functionMatcher.group(6));
 			currentFunction = new Function(name, called, execBlocks);
 			file.addFunction(currentFunction);
-		}catch(NumberFormatException e) {}
+		} catch (NumberFormatException e) {
+		}
 	}
 
 	protected void handleLine(Matcher lineMatcher) {
 		try {
 			String count = lineMatcher.group(2);
 			int lineNumber = Integer.parseInt(lineMatcher.group(4));
-			if(count.equalsIgnoreCase("#####")) { //$NON-NLS-1$
+			if (count.equalsIgnoreCase("#####")) { //$NON-NLS-1$
 				currentLine = new Line(lineNumber, CoverageStatus.Uncovered);
 				currentFunction.addLine(currentLine);
-			}else if(count.equalsIgnoreCase("-")) { //$NON-NLS-1$
+			} else if (count.equalsIgnoreCase("-")) { //$NON-NLS-1$
 
-			}else{
+			} else {
 				int i = Integer.parseInt(count);
-				if(i > 0) {
+				if (i > 0) {
 					currentLine = new Line(lineNumber, CoverageStatus.Covered);
 					currentFunction.addLine(currentLine);
-				}else {
+				} else {
 					currentLine = new Line(lineNumber, CoverageStatus.Uncovered);
 					currentFunction.addLine(currentLine);
 				}
 			}
 
-		}catch (NumberFormatException e) {}
+		} catch (NumberFormatException e) {
+		}
 	}
 }
