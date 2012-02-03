@@ -61,24 +61,20 @@ public abstract class LineCoverageParser {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected void runGcov(IFile file, IPath workingDirectory, IProject project) throws CoreException {
-		File workingDir = null;
-		if (workingDirectory != null) {
-			workingDir = new File(workingDirectory + "/" + file.getProjectRelativePath().removeLastSegments(1));
-		}
+	protected void runGcov(String filePath, File workingDirectory, IProject project) throws CoreException {
 
 		String[] cmdLine;
 		if (runningCygwin(project)) {
-			cmdLine = getCygwinGcovCommand(file);
+			cmdLine = getCygwinGcovCommand(filePath);
 		} else {
-			cmdLine = getGcovCommand(file);
+			cmdLine = getGcovCommand(filePath);
 		}
 
 		String[] envp = getEnvironmentVariables(project);
 
 		Process p = null;
 
-		p = DebugPlugin.exec(cmdLine, workingDir, envp);
+		p = DebugPlugin.exec(cmdLine, workingDirectory, envp);
 
 		IProcess process = null;
 
@@ -101,7 +97,7 @@ public abstract class LineCoverageParser {
 				}
 			}
 			try {
-				file.getProject().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			} catch (CoreException e) {
 				GcovPlugin.log(e);
 			}
@@ -110,8 +106,8 @@ public abstract class LineCoverageParser {
 		}
 	}
 
-	private String[] getGcovCommand(IFile file) {
-		String[] cmdLine = { "gcov", "-f", "-b", file.getName() }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private String[] getGcovCommand(String iPath) {
+		String[] cmdLine = { "gcov", "-f", "-b", iPath }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return cmdLine;
 	}
 
@@ -137,9 +133,9 @@ public abstract class LineCoverageParser {
 		return variableStrings;
 	}
 
-	private String[] getCygwinGcovCommand(IFile file) {
+	private String[] getCygwinGcovCommand(String iPath) {
 		@SuppressWarnings("nls")
-		String[] cmdLine = { "sh", "-c", "'/usr/bin/gcov", "-f", "-b", file.getName() + "'" };
+		String[] cmdLine = { "sh", "-c", "'/usr/bin/gcov", "-f", "-b", iPath + "'" };
 		return cmdLine;
 	}
 
@@ -164,11 +160,21 @@ public abstract class LineCoverageParser {
 			project.accept(exeFinder);
 			final IFile exeFile = exeFinder.getFile();
 
-			runGcov(targetFile, exeFile.getParent().getLocation(), project);
+			File workingDir = null;
+			IPath workingDirectory = exeFile.getParent().getLocation();
+			if (workingDirectory != null) {
+				workingDir = new File(workingDirectory + "/" + targetFile.getProjectRelativePath().removeLastSegments(1));
+			}
+			runGcov(targetFile.getName(), workingDir, project);
 
 			gcovFile = cppFile.getGcovFile();
 			if (gcovFile == null) {
-				return;
+
+				runGcov(targetFile.getProjectRelativePath().toOSString(), new File(workingDirectory.toPortableString()), project);
+				gcovFile = cppFile.getGcovFile();
+				if (gcovFile == null) {
+					return;
+				}
 			}
 
 			GcovPlugin.getDefault().getcModel().clearModel();
