@@ -64,13 +64,12 @@ public abstract class LineCoverageParser {
 	protected void runGcov(IFile file, IPath workingDirectory, IProject project) throws CoreException {
 		File workingDir = null;
 		if (workingDirectory != null) {
-			workingDir = workingDirectory.toFile();
+			workingDir = new File(workingDirectory + "/" + file.getProjectRelativePath().removeLastSegments(1));
 		}
 
 		String[] cmdLine;
 		if (runningCygwin(project)) {
 			cmdLine = getCygwinGcovCommand(file);
-			workingDir = new File(workingDirectory.toOSString() + "/" + file.getProjectRelativePath().removeLastSegments(1));
 		} else {
 			cmdLine = getGcovCommand(file);
 		}
@@ -112,7 +111,7 @@ public abstract class LineCoverageParser {
 	}
 
 	private String[] getGcovCommand(IFile file) {
-		String[] cmdLine = { "gcov", "-f", "-b", file.getProjectRelativePath().toOSString() }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String[] cmdLine = { "gcov", "-f", "-b", file.getName() }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return cmdLine;
 	}
 
