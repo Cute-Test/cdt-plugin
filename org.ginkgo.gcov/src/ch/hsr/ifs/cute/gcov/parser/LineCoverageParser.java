@@ -70,6 +70,7 @@ public abstract class LineCoverageParser {
 		String[] cmdLine;
 		if (runningCygwin(project)) {
 			cmdLine = getCygwinGcovCommand(file);
+			workingDir = new File(workingDirectory.toOSString() + "/" + file.getProjectRelativePath().removeLastSegments(1));
 		} else {
 			cmdLine = getGcovCommand(file);
 		}
@@ -139,7 +140,7 @@ public abstract class LineCoverageParser {
 
 	private String[] getCygwinGcovCommand(IFile file) {
 		@SuppressWarnings("nls")
-		String[] cmdLine = { "sh", "-c", "'/usr/bin/gcov", "-f", "-b", file.getProjectRelativePath().toPortableString() + "'" };
+		String[] cmdLine = { "sh", "-c", "'/usr/bin/gcov", "-f", "-b", file.getName() + "'" };
 		return cmdLine;
 	}
 
