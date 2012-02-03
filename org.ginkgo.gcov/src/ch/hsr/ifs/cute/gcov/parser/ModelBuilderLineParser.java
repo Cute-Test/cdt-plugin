@@ -8,6 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov.parser;
 
+import static ch.hsr.ifs.cute.gcov.util.StreamUtil.tryClose;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -86,15 +88,6 @@ public class ModelBuilderLineParser extends LineCoverageParser {
 				default:
 					break;
 				}
-			}
-		}
-	}
-
-	private void tryClose(BufferedReader in) {
-		if (in != null) {
-			try {
-				in.close();
-			} catch (Exception e) {
 			}
 		}
 	}

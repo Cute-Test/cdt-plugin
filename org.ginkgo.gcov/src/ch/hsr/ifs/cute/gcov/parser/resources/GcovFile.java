@@ -85,4 +85,9 @@ public class GcovFile {
 			return null;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return file.toString();
+	}
 }

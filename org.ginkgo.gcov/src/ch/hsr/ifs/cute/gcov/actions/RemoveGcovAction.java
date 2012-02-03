@@ -8,6 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov.actions;
 
+import static ch.hsr.ifs.cute.gcov.util.ProjectUtil.getConfiguration;
+
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
@@ -26,7 +28,7 @@ import ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler;
 
 /**
  * @author Emanuel Graf IFS
- * 
+ * @author Thomas Corbat IFS
  */
 public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 
@@ -41,7 +43,7 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 				GcovNature.removeCuteNature(project, new NullProgressMonitor());
 				IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 				IConfiguration[] configs = info.getManagedProject().getConfigurations();
-				if (ManagedBuildManager.getSelectedConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
+				if (getConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
 					for (IConfiguration config : configs) {
 						if (config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) { //$NON-NLS-1$ //$NON-NLS-2$
 							ManagedBuildManager.setSelectedConfiguration(project, config);

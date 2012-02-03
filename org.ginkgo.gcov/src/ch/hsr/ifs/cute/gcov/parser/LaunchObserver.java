@@ -15,6 +15,7 @@ import java.util.List;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICSourceEntry;
+import org.eclipse.cdt.core.settings.model.util.CDataUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -43,6 +44,7 @@ public class LaunchObserver implements ILaunchObserver {
 	}
 
 	private void cleanGcdaFilesInRefedProjects(IProject project) throws CoreException {
+		cleanGcdaFilesinProject(project);
 		for (IProject refProj : project.getReferencedProjects()) {
 			cleanGcdaFilesinProject(refProj);
 		}
@@ -80,7 +82,8 @@ public class LaunchObserver implements ILaunchObserver {
 		ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(iProject);
 		ICSourceEntry[] sourceEntries = desc.getActiveConfiguration().getSourceEntries();
 		List<ICSourceEntry> sourceEntriesList = new ArrayList<ICSourceEntry>();
-		for (ICSourceEntry icSourceEntry : sourceEntries) {
+		ICSourceEntry[] resolvedEntries = CDataUtil.resolveEntries(sourceEntries, desc.getActiveConfiguration());
+		for (ICSourceEntry icSourceEntry : resolvedEntries) {
 			IPath location = icSourceEntry.getLocation();
 			if (location != null) {
 				if (location.lastSegment() != null && !location.lastSegment().equals("cute")) { //$NON-NLS-1$

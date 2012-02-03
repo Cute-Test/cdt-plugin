@@ -18,11 +18,11 @@ import org.eclipse.core.runtime.CoreException;
  * @author Thomas Corbat IFS
  * 
  */
-class FileFinderVisitor implements IResourceVisitor {
+public class FileFinderVisitor implements IResourceVisitor {
 	private final String sourceFileName;
 	private IFile file;
 
-	FileFinderVisitor(String FileName) {
+	public FileFinderVisitor(String FileName) {
 		sourceFileName = FileName;
 	}
 
