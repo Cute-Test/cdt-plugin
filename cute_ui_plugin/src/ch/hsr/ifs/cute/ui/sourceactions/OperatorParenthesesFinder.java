@@ -19,49 +19,52 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
 public class OperatorParenthesesFinder extends ASTVisitor {
-	ArrayList<IASTName> al=new ArrayList<IASTName>();
-	
+	ArrayList<IASTName> al = new ArrayList<IASTName>();
+
 	{
-		shouldVisitNames=true;
+		shouldVisitNames = true;
 		//shouldVisitDeclarators=true;
 	}
-	
+
 	@Override
 	public int leave(IASTName name) {
-		if(name.toString().equals("operator ()")){ //$NON-NLS-1$
-			if(name.getParent() instanceof ICPPASTFunctionDeclarator){
-				ICPPASTFunctionDeclarator fdeclarator=(ICPPASTFunctionDeclarator)name.getParent();
-				IASTParameterDeclaration fpara[]=fdeclarator.getParameters();
-				if(!fdeclarator.takesVarArgs() && fpara.length==0)al.add(name);
+		if (name.toString().equals("operator ()")) { //$NON-NLS-1$
+			if (name.getParent() instanceof ICPPASTFunctionDeclarator) {
+				ICPPASTFunctionDeclarator fdeclarator = (ICPPASTFunctionDeclarator) name.getParent();
+				IASTParameterDeclaration fpara[] = fdeclarator.getParameters();
+				if (!fdeclarator.takesVarArgs() && fpara.length == 0)
+					al.add(name);
 			}
 		}
 		return super.leave(name);
 	}
-	public ArrayList<IASTName> getAL(){return al;}
-	
-	public void printParent(){
-		for(Object i:al){
-			IASTName nn=(IASTName)i;
-			
-			IASTDeclaration declaration=(IASTDeclaration)nn.getParent().getParent();
-			
-			if(declaration instanceof IASTSimpleDeclaration){
-				String name=ASTHelper.getClassStructName((IASTSimpleDeclaration)declaration);
-				if(name.equals("")){ //$NON-NLS-1$
-					declaration=(IASTDeclaration)declaration.getParent().getParent();
-					String name2=ASTHelper.getClassStructName((IASTSimpleDeclaration)declaration);
+
+	public ArrayList<IASTName> getAL() {
+		return al;
+	}
+
+	public void printParent() {
+		for (Object i : al) {
+			IASTName nn = (IASTName) i;
+
+			IASTDeclaration declaration = (IASTDeclaration) nn.getParent().getParent();
+
+			if (declaration instanceof IASTSimpleDeclaration) {
+				String name = ASTHelper.getClassStructName((IASTSimpleDeclaration) declaration);
+				if (name.isEmpty()) { //$NON-NLS-1$
+					declaration = (IASTDeclaration) declaration.getParent().getParent();
+					String name2 = ASTHelper.getClassStructName((IASTSimpleDeclaration) declaration);
 					System.out.println(name2);
-				}
-				else System.out.println(name);
-					
-			}
-			else if(declaration instanceof IASTFunctionDefinition){
-				IASTDeclaration declaration1=(IASTDeclaration)declaration.getParent().getParent();	
-				System.out.println(ASTHelper.getClassStructName((IASTSimpleDeclaration)declaration1));
-			}else{
+				} else
+					System.out.println(name);
+
+			} else if (declaration instanceof IASTFunctionDefinition) {
+				IASTDeclaration declaration1 = (IASTDeclaration) declaration.getParent().getParent();
+				System.out.println(ASTHelper.getClassStructName((IASTSimpleDeclaration) declaration1));
+			} else {
 				System.out.println(declaration);
 			}
 		}
-		
+
 	}
 }

@@ -8,12 +8,12 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.test.checkers;
 
+import java.io.IOException;
+
 import org.eclipse.cdt.codan.core.CodanRuntime;
 import org.eclipse.cdt.codan.core.model.ICheckersRegistry;
 import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
-import java.io.IOException;
-
 import org.eclipse.cdt.codan.core.test.CheckerTestCase;
 import org.eclipse.cdt.core.testplugin.util.TestSourceReader;
 
@@ -26,7 +26,7 @@ import ch.hsr.ifs.cute.ui.test.UiTestPlugin;
 public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 
 	private final String ID = "ch.hsr.ifs.cute.unregisteredTestMarker";
-	
+
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
@@ -47,7 +47,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 			}
 		}
 	}
-	
+
 	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	// #define ASSERT(cond) ASSERTM(#cond,cond)
 	//
@@ -59,8 +59,17 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// cute::suite s;
 	// }
 	public void testUnregisteredTestFunction() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkErrorLine(4, ID);
+	}
+
+	private void runProjectForCommentCode() {
+		try {
+			loadcode(getAboveComment());
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+		runOnProject();
 	}
 
 	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
@@ -76,7 +85,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// s.push_back(CUTE(thisIsATest));
 	// }
 	public void testRegisteredTestFunction() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkNoErrors();
 	}
 
@@ -97,7 +106,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// s.push_back(CUTE(thisIsATest));
 	// }
 	public void testRegisteredTestFunction2() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkErrorLine(9, ID);
 	}
 
@@ -114,7 +123,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// cute::suite s;
 	// }
 	public void testUnregisteredFunctor() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkErrorLine(5, ID);
 	}
 
@@ -132,7 +141,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// s.push_back(testFunctor());
 	// }
 	public void testRegisteredFunctor() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkNoErrors();
 	}
 
@@ -159,7 +168,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// s.push_back(CUTE_SMEMFUN(testStruct, testIt));
 	// }
 	public void testRegisteredMemberFunctionInline() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkNoErrors();
 	}
 
@@ -180,7 +189,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// cute::suite s;
 	// }
 	public void testUnregisteredMemberFunctionInline() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkErrorLine(9, ID);
 	}
 
@@ -210,7 +219,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// s.push_back(CUTE_SMEMFUN(testStruct, testIt));
 	// }
 	public void testRegisteredMemberFunction() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkNoErrors();
 	}
 
@@ -234,7 +243,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// cute::suite s;
 	// }
 	public void testUnregisteredMemberFunction() {
-		loadCodeAndRunCpp(getAboveComment());
+		runProjectForCommentCode();
 		checkErrorLine(13, ID);
 	}
 

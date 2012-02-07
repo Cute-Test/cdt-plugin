@@ -23,7 +23,7 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 /**
  * @author egraf
  * @since 4.0
- *
+ * 
  */
 public class CuteVersionComposite extends Composite {
 
@@ -37,36 +37,36 @@ public class CuteVersionComposite extends Composite {
 		super(parent, SWT.NULL);
 		createCuteVersionCompsite(parent);
 	}
-	
+
 	public String getVersionString() {
 		return combo.getText();
 	}
-	
+
 	public String getErrorMessage() {
-		if(combo.getItems().length == 0) {
+		if (combo.getItems().length == 0) {
 			return Messages.getString("CuteVersionComposite.NoCuteInstalled"); //$NON-NLS-1$
 		}
 		return null;
 	}
-	
+
 	public boolean isComplete() {
-		return !combo.getText().equals(""); //$NON-NLS-1$
+		return !combo.getText().isEmpty(); //$NON-NLS-1$
 	}
-	
+
 	private void createCuteVersionCompsite(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
 		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
-		
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		Label label = new Label(composite, SWT.HORIZONTAL);
 		label.setText(Messages.getString("CuteVersionComposite.CuteVersion")); //$NON-NLS-1$
-		
+
 		combo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN);
 		SortedSet<ICuteHeaders> set = UiPlugin.getInstalledCuteHeaders();
-		if(!set.isEmpty()) {
+		if (!set.isEmpty()) {
 			for (ICuteHeaders cuteHeaders : set) {
 				combo.add(cuteHeaders.getVersionString());
 			}
