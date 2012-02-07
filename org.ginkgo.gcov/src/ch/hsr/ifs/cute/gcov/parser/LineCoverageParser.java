@@ -135,7 +135,7 @@ public abstract class LineCoverageParser {
 
 	private String[] getCygwinGcovCommand(String iPath) {
 		@SuppressWarnings("nls")
-		String[] cmdLine = { "sh", "-c", "'/usr/bin/gcov", "-f", "-b", iPath + "'" };
+		String[] cmdLine = { "sh", "-c", "'gcov", "-f", "-b", iPath + "'" };
 		return cmdLine;
 	}
 
