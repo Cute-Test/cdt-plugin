@@ -36,63 +36,84 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
+import ch.hsr.ifs.cute.core.CuteCorePlugin;
+
 /**
  * @author Emanuel Graf IFS
- * 
+ * @author Thomas Corbat IFS
  */
 public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 
 	public void processAst(IASTTranslationUnit ast) {
 		final TestFunctionFinderVisitor testFunctionFinder = new TestFunctionFinderVisitor();
 		ast.accept(testFunctionFinder);
-
-		//		ast.accept(registeredFunctionFinder);
 		markUnregisteredFunctions(testFunctionFinder.getTestFunctions());
 	}
 
 	private void markUnregisteredFunctions(List<IASTDeclaration> testFunctions) {
 		RefactoringASTCache astCache = new RefactoringASTCache();
 		try {
-			ArrayList<ICProject> projects = new ArrayList<ICProject>();
+			final IIndex index = assembleIndex();
+			try {
+				index.acquireReadLock();
+				final RegisteredTestFunctionFinderVisitor registeredFunctionFinder = new RegisteredTestFunctionFinderVisitor(index);
 
-			ICProject cproject = CoreModel.getDefault().create(getProject());
-			projects.add(cproject);
-			IProject[] referencedProjects = getProject().getReferencedProjects();
-			for (IProject refProject : referencedProjects) {
-				projects.add(CoreModel.getDefault().create(refProject));
-			}
-
-			final IIndex index = CCorePlugin.getIndexManager().getIndex(projects.toArray(new ICProject[projects.size()]));
-			//			final IIndex index = astCache.getIndex();
-			final RegisteredTestFunctionFinderVisitor registeredFunctionFinder = new RegisteredTestFunctionFinderVisitor(index);
-
-			for (IASTDeclaration iastDeclaration : testFunctions) {
-				final IBinding toBeRegisteredBinding = getToBeRegisteredBinding(iastDeclaration);
-
-				try {
-					if (toBeRegisteredBinding instanceof ICPPClassType) {
-						final ICPPConstructor[] constructors = ((ICPPClassType) toBeRegisteredBinding).getConstructors();
-						for (ICPPConstructor constructor : constructors) {
-							final IIndexName[] constructorReferences = index.findReferences(constructor);
-							updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, constructorReferences, astCache);
-						}
-					} else {
-						final IIndexName[] references = index.findReferences(toBeRegisteredBinding);
-						updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, references, astCache);
-					}
-					if (!(registeredFunctionFinder.getRegisteredFunctionNames().contains(index.adaptBinding(toBeRegisteredBinding)))) {
-						reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastDeclaration); //$NON-NLS-1$
-					}
-				} catch (CoreException e) {
-					e.printStackTrace();
+				for (IASTDeclaration iastDeclaration : testFunctions) {
+					markFunctionIfUnregistered(astCache, index, registeredFunctionFinder, iastDeclaration);
 				}
-
+			} catch (InterruptedException e) {
+				CuteCorePlugin.log(e);
+			} finally {
+				index.releaseReadLock();
 			}
 		} catch (CoreException e) {
-			e.printStackTrace();
+			CuteCorePlugin.log(e);
 		} finally {
 			astCache.dispose();
 		}
+	}
+
+	private void markFunctionIfUnregistered(RefactoringASTCache astCache, final IIndex index, final RegisteredTestFunctionFinderVisitor registeredFunctionFinder,
+			IASTDeclaration iastDeclaration) {
+		final IBinding toBeRegisteredBinding = getToBeRegisteredBinding(iastDeclaration);
+
+		try {
+			updateRegisteredTests(astCache, index, registeredFunctionFinder, toBeRegisteredBinding);
+
+			if (!(registeredFunctionFinder.getRegisteredFunctionNames().contains(index.adaptBinding(toBeRegisteredBinding)))) {
+				reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastDeclaration); //$NON-NLS-1$
+			}
+		} catch (CoreException e) {
+			CuteCorePlugin.log(e);
+		}
+	}
+
+	private void updateRegisteredTests(RefactoringASTCache astCache, final IIndex index, final RegisteredTestFunctionFinderVisitor registeredFunctionFinder,
+			final IBinding toBeRegisteredBinding) throws CoreException {
+		if (toBeRegisteredBinding instanceof ICPPClassType) {
+			final ICPPConstructor[] constructors = ((ICPPClassType) toBeRegisteredBinding).getConstructors();
+			for (ICPPConstructor constructor : constructors) {
+				final IIndexName[] constructorReferences = index.findReferences(constructor);
+				updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, constructorReferences, astCache);
+			}
+		} else {
+			final IIndexName[] references = index.findReferences(toBeRegisteredBinding);
+			updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, references, astCache);
+		}
+	}
+
+	private IIndex assembleIndex() throws CoreException {
+		ArrayList<ICProject> projects = new ArrayList<ICProject>();
+
+		ICProject cproject = CoreModel.getDefault().create(getProject());
+		projects.add(cproject);
+		IProject[] referencedProjects = getProject().getReferencedProjects();
+		for (IProject refProject : referencedProjects) {
+			projects.add(CoreModel.getDefault().create(refProject));
+		}
+
+		final IIndex index = CCorePlugin.getIndexManager().getIndex(projects.toArray(new ICProject[projects.size()]));
+		return index;
 	}
 
 	private void updateRegisteredTestsOfReferencedTUs(RegisteredTestFunctionFinderVisitor registeredFunctionFinder, IIndexName[] references, RefactoringASTCache astCache)
@@ -104,8 +125,12 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 			final ITranslationUnit tu = (ITranslationUnit) celement.getAdapter(ITranslationUnit.class);
 
 			if (tu != null) {
-
-				final IASTTranslationUnit ast = astCache.getAST(tu, new NullProgressMonitor());
+				IASTTranslationUnit ast;
+				if (getModelCache().getTranslationUnit().getResource().equals(tu.getResource())) {
+					ast = getModelCache().getAST();
+				} else {
+					ast = astCache.getAST(tu, new NullProgressMonitor());
+				}
 				ast.accept(registeredFunctionFinder);
 			}
 		}
@@ -116,9 +141,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 			IASTFunctionDefinition funcDef = (IASTFunctionDefinition) iastDeclaration;
 			if (isFunctor(funcDef)) {
 				IASTNode n = funcDef;
-				while (n != null && !(n instanceof ICPPASTCompositeTypeSpecifier)) {
-					n = n.getParent();
-				}
+				n = findSurroundingTypeSpecifier(n);
 				if (n != null) {
 					ICPPASTCompositeTypeSpecifier compType = (ICPPASTCompositeTypeSpecifier) n;
 					return compType.getName().resolveBinding();
@@ -132,6 +155,13 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 			}
 		}
 		return null;
+	}
+
+	private IASTNode findSurroundingTypeSpecifier(IASTNode n) {
+		while (n != null && !(n instanceof ICPPASTCompositeTypeSpecifier)) {
+			n = n.getParent();
+		}
+		return n;
 	}
 
 	protected boolean isFunctor(IASTFunctionDefinition funcDef) {

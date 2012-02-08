@@ -25,9 +25,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.ITextEditor;
 
 import ch.hsr.ifs.cute.ui.ASTUtil;
 
@@ -37,39 +34,38 @@ import ch.hsr.ifs.cute.ui.ASTUtil;
 public class AddTestToSuite extends AbstractFunctionAction {
 
 	@Override
-	public MultiTextEdit createEdit(ITextEditor ceditor, IEditorInput editorInput, IDocument doc, ISelection sel) throws CoreException {
+	public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
 		AddStrategy adder = new NullStrategy(doc);
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
-			if (editorInput instanceof FileEditorInput) {
-				IFile editorFile = ((FileEditorInput) editorInput).getFile();
-				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
 
-				NodeAtCursorFinder n = new NodeAtCursorFinder(selection.getOffset());
-				astTu.accept(n);
-				IASTFunctionDefinition def = getFunctionDefinition(n.getNode());
+			IASTTranslationUnit astTu = getASTTranslationUnit(file);
 
-				if (def == null) {
-					def = getFunctionDefIfIsFunctor(n.getNode());
-				}
-				if (ASTUtil.isTestFunction(def)) {
-					if (def != null && isMemberFunction(def)) { //In .cpp file
-						SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
-						astTu.accept(suitPushBackFinder);
-						IASTName name = def.getDeclarator().getName();
-						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
-							adder = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), editorFile);
-						} else {
-							adder = new AddMemberFunctionStrategy(doc, editorFile, astTu, name, suitPushBackFinder);
-						}
-					} else if (def != null && isFunction(def)) {
-						SuitePushBackFinder finder = new SuitePushBackFinder();
-						astTu.accept(finder);
-						adder = new AddFunctionToSuiteStrategy(doc, editorFile, astTu, def.getDeclarator().getName(), finder);
+			NodeAtCursorFinder n = new NodeAtCursorFinder(selection.getOffset());
+			astTu.accept(n);
+			IASTFunctionDefinition def = getFunctionDefinition(n.getNode());
+
+			if (def == null) {
+				def = getFunctionDefIfIsFunctor(n.getNode());
+			}
+			if (ASTUtil.isTestFunction(def)) {
+				if (def != null && isMemberFunction(def)) { //In .cpp file
+					SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
+					astTu.accept(suitPushBackFinder);
+					IASTName name = def.getDeclarator().getName();
+					if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
+						adder = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
+					} else {
+						adder = new AddMemberFunctionStrategy(doc, file, astTu, name, suitPushBackFinder);
 					}
+				} else if (def != null && isFunction(def)) {
+					SuitePushBackFinder finder = new SuitePushBackFinder();
+					astTu.accept(finder);
+					adder = new AddFunctionToSuiteStrategy(doc, file, astTu, def.getDeclarator().getName(), finder);
 				}
 			}
 		}
+
 		return adder.getEdit();
 	}
 
@@ -120,5 +116,4 @@ public class AddTestToSuite extends AbstractFunctionAction {
 			}
 		}
 	}
-
 }

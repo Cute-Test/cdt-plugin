@@ -35,9 +35,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * @author Emanuel Graf
@@ -72,7 +69,7 @@ public class NewTestFunctionAction extends AbstractFunctionAction {
 	}
 
 	@Override
-	public MultiTextEdit createEdit(ITextEditor ceditor, IEditorInput editorInput, IDocument doc, ISelection sel) throws CoreException {
+	public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
 
 		insertFileOffset = -1;
 		pushbackOffset = -1;
@@ -84,22 +81,20 @@ public class NewTestFunctionAction extends AbstractFunctionAction {
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
 
-			if (editorInput instanceof FileEditorInput) {
-				IFile editorFile = ((FileEditorInput) editorInput).getFile();
-				IASTTranslationUnit astTu = getASTTranslationUnit(editorFile);
-				insertFileOffset = getInsertOffset(astTu, selection, doc);
+			IASTTranslationUnit astTu = getASTTranslationUnit(file);
+			insertFileOffset = getInsertOffset(astTu, selection, doc);
 
-				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
-				astTu.accept(suitPushBackFinder);
+			SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
+			astTu.accept(suitPushBackFinder);
 
-				mEdit.addChild(createdEdit(getInsertOffset(suitPushBackFinder, astTu), doc, funcName));
+			mEdit.addChild(createdEdit(getInsertOffset(suitPushBackFinder, astTu), doc, funcName));
 
-				if (!checkPushback(astTu, funcName, suitPushBackFinder))
-					mEdit.addChild(createPushBackEdit(editorFile, doc, astTu, funcName, suitPushBackFinder));
-				else {
-					createProblemMarker((FileEditorInput) editorInput, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber); //$NON-NLS-1$
-				}
+			if (!checkPushback(astTu, funcName, suitPushBackFinder))
+				mEdit.addChild(createPushBackEdit(file, doc, astTu, funcName, suitPushBackFinder));
+			else {
+				createProblemMarker(file, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber); //$NON-NLS-1$
 			}
+
 		}
 		return mEdit;
 	}

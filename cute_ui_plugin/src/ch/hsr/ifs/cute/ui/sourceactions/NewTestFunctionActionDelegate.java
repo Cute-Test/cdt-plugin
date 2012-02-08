@@ -29,6 +29,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
@@ -105,39 +106,42 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 			IDocumentProvider prov = ceditor.getDocumentProvider();
 			IDocument doc = prov.getDocument(editorInput);
 			ISelection sel = ceditor.getSelectionProvider().getSelection();
-			MultiTextEdit mEdit = functionAction.createEdit(ceditor, editorInput, doc, sel);
+			IFileEditorInput fei = (IFileEditorInput) editorInput.getAdapter(IFileEditorInput.class);
+			if (fei != null) {
+				MultiTextEdit mEdit = functionAction.createEdit(fei.getFile(), doc, sel);
 
-			RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
-			processor.performEdits();
+				RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
+				processor.performEdits();
 
-			ISourceViewer viewer = ((CEditor) editor).getViewer();
-			LinkedModeModel model = new LinkedModeModel();
+				ISourceViewer viewer = ((CEditor) editor).getViewer();
+				LinkedModeModel model = new LinkedModeModel();
 
-			LinkedPositionGroup group = new LinkedPositionGroup();
+				LinkedPositionGroup group = new LinkedPositionGroup();
 
-			/* linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename */
-			TextEdit[] edits = mEdit.getChildren();
-			int totalEditLength = 0;
-			for (TextEdit textEdit : edits) {
-				String insert = ((InsertEdit) textEdit).getText();
-				if (insert.contains(funcName)) {
-					int start = textEdit.getOffset();
-					int indexOfFuncName = insert.indexOf(funcName);
-					group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName + totalEditLength, funcName.length()));
-					totalEditLength += insert.length();
+				/* linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename */
+				TextEdit[] edits = mEdit.getChildren();
+				int totalEditLength = 0;
+				for (TextEdit textEdit : edits) {
+					String insert = ((InsertEdit) textEdit).getText();
+					if (insert.contains(funcName)) {
+						int start = textEdit.getOffset();
+						int indexOfFuncName = insert.indexOf(funcName);
+						group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName + totalEditLength, funcName.length()));
+						totalEditLength += insert.length();
+					}
 				}
-			}
 
-			if (!group.isEmpty()) {
-				model.addGroup(group);
-				model.forceInstall();
+				if (!group.isEmpty()) {
+					model.addGroup(group);
+					model.forceInstall();
 
-				/* after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it */
-				String newLine = TextUtilities.getDefaultLineDelimiter(doc);
-				linkedModeUI = new EditorLinkedModeUI(model, viewer);
-				linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
-				linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
-				linkedModeUI.enter();
+					/* after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it */
+					String newLine = TextUtilities.getDefaultLineDelimiter(doc);
+					linkedModeUI = new EditorLinkedModeUI(model, viewer);
+					linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
+					linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
+					linkedModeUI.enter();
+				}
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();// TODO exception not managed

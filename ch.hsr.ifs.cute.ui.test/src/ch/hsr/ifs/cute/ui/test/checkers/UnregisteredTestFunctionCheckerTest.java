@@ -63,13 +63,22 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		checkErrorLine(4, ID);
 	}
 
-	private void runProjectForCommentCode() {
-		try {
-			loadcode(getAboveComment());
-		} catch (Exception e) {
-			fail(e.getMessage());
-		}
-		runOnProject();
+	// @file:test.h
+	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	// #define ASSERT(cond) ASSERTM(#cond,cond)
+	//
+	// void thisIsAUnregisteredTest(){
+	// ASSERT(true);
+	// }
+	//
+	// @file:test.cpp
+	// #include"test.h"
+	// void runSuite() {
+	// cute::suite s;
+	// }
+	public void testUnregisteredTestFunctionExternalFile() {
+		runProjectForCommentCode();
+		checkErrorLine(4, ID);
 	}
 
 	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
@@ -245,6 +254,15 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	public void testUnregisteredMemberFunction() {
 		runProjectForCommentCode();
 		checkErrorLine(13, ID);
+	}
+
+	private void runProjectForCommentCode() {
+		try {
+			loadcode(getAboveComment());
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+		runOnProject();
 	}
 
 	@Override

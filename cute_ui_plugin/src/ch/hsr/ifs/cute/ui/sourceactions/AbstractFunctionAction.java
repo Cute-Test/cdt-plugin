@@ -19,16 +19,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.ITextEditor;
 
 public abstract class AbstractFunctionAction {
 
 	/**
 	 * @since 4.0
 	 */
-	public abstract MultiTextEdit createEdit(ITextEditor ceditor, IEditorInput editorInput, IDocument doc, ISelection selection) throws CoreException;
+	public abstract MultiTextEdit createEdit(IFile file, IDocument doc, ISelection selection) throws CoreException;
 
 	// return the CDT representation of the file under modification
 
@@ -42,11 +39,10 @@ public abstract class AbstractFunctionAction {
 		}
 	}
 
-	public void createProblemMarker(FileEditorInput editorInput, String message, int lineNo) {
+	public void createProblemMarker(IFile file, String message, int lineNo) {
 
 		try {
-			IFile editorFile = (editorInput).getFile();
-			IMarker marker = editorFile.createMarker("org.eclipse.cdt.core.problem"); //$NON-NLS-1$
+			IMarker marker = file.createMarker("org.eclipse.cdt.core.problem"); //$NON-NLS-1$
 			marker.setAttribute(IMarker.MESSAGE, "cute:" + message); //$NON-NLS-1$
 			marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 			marker.setAttribute(IMarker.TRANSIENT, true);

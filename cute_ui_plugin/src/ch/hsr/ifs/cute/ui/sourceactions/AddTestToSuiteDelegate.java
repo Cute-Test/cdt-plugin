@@ -20,6 +20,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
@@ -67,11 +68,15 @@ public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbench
 
 			MultiTextEdit mEdit;
 			ISelection sel = ceditor.getSelectionProvider().getSelection();
-			mEdit = functionAction.createEdit(ceditor, editorInput, doc, sel);
+			IFileEditorInput fei = (IFileEditorInput) editorInput.getAdapter(IFileEditorInput.class);
+			if (fei != null) {
+				mEdit = functionAction.createEdit(fei.getFile(), doc, sel);
+				RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
+				processor.performEdits();
+				this.editor = null;
 
-			RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
-			processor.performEdits();
-			this.editor = null;
+			}
+
 		} catch (CoreException e) {
 			e.printStackTrace();
 		} catch (MalformedTreeException e) {
