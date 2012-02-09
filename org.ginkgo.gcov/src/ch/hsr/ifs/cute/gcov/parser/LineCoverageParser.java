@@ -24,8 +24,10 @@ import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
+import org.eclipse.cdt.managedbuilder.macros.BuildMacroException;
 import org.eclipse.cdt.managedbuilder.macros.IBuildMacroProvider;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -148,17 +150,7 @@ public abstract class LineCoverageParser {
 		project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 		try {
 
-			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-
-			final String artifact = info.getBuildArtifactName();
-			final String artifactRealName = ManagedBuildManager.getBuildMacroProvider().resolveValueToMakefileFormat(artifact, "", //$NON-NLS-1$
-					" ", //$NON-NLS-1$
-					IBuildMacroProvider.CONTEXT_CONFIGURATION, info.getDefaultConfiguration());
-			final String artifactExtension = info.getBuildArtifactExtension();
-
-			FileFinderVisitor exeFinder = new FileFinderVisitor(artifactRealName.concat(".").concat(artifactExtension));
-			project.accept(exeFinder);
-			final IFile exeFile = exeFinder.getFile();
+			final IFile exeFile = determineExecutableFile(project);
 
 			File workingDir = null;
 			IPath workingDirectory = exeFile.getParent().getLocation();
@@ -190,6 +182,30 @@ public abstract class LineCoverageParser {
 		} catch (NumberFormatException e) {
 			GcovPlugin.log(e);
 		}
+	}
+
+	private IFile determineExecutableFile(IProject project) throws BuildMacroException, CoreException {
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+
+		final String artifact = info.getBuildArtifactName();
+		final String artifactRealName = ManagedBuildManager.getBuildMacroProvider().resolveValueToMakefileFormat(artifact, "", //$NON-NLS-1$
+				" ", //$NON-NLS-1$
+				IBuildMacroProvider.CONTEXT_CONFIGURATION, info.getDefaultConfiguration());
+		final String artifactExtension = info.getBuildArtifactExtension();
+
+		FileFinderVisitor exeFinder = new FileFinderVisitor(artifactRealName.concat(".").concat(artifactExtension));
+
+		IConfiguration activeConfiguration = info.getSelectedConfiguration();
+		if (activeConfiguration == null) {
+			activeConfiguration = info.getDefaultConfiguration();
+		}
+		IFolder outputDirectory = project.getFolder(activeConfiguration.getName());
+		if (outputDirectory != null && outputDirectory.exists()) {
+			outputDirectory.accept(exeFinder);
+		} else {
+			project.accept(exeFinder);
+		}
+		return exeFinder.getFile();
 	}
 
 	@SuppressWarnings("rawtypes")
