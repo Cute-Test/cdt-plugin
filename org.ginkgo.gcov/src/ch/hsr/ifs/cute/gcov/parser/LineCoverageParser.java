@@ -153,6 +153,10 @@ public abstract class LineCoverageParser {
 			final IFile exeFile = determineExecutableFile(project);
 
 			File workingDir = null;
+			if (exeFile == null) {
+				return;
+			}
+
 			IPath workingDirectory = exeFile.getParent().getLocation();
 			if (workingDirectory != null) {
 				workingDir = new File(workingDirectory + "/" + targetFile.getProjectRelativePath().removeLastSegments(1));
@@ -186,14 +190,14 @@ public abstract class LineCoverageParser {
 
 	private IFile determineExecutableFile(IProject project) throws BuildMacroException, CoreException {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-
 		final String artifact = info.getBuildArtifactName();
+
 		final String artifactRealName = ManagedBuildManager.getBuildMacroProvider().resolveValueToMakefileFormat(artifact, "", //$NON-NLS-1$
 				" ", //$NON-NLS-1$
 				IBuildMacroProvider.CONTEXT_CONFIGURATION, info.getDefaultConfiguration());
-		final String artifactExtension = info.getBuildArtifactExtension();
+		final String artifactExtension = getExtension(info);
 
-		FileFinderVisitor exeFinder = new FileFinderVisitor(artifactRealName.concat(".").concat(artifactExtension));
+		FileFinderVisitor exeFinder = new FileFinderVisitor(artifactRealName.concat(artifactExtension));
 
 		IConfiguration activeConfiguration = info.getSelectedConfiguration();
 		if (activeConfiguration == null) {
@@ -206,6 +210,19 @@ public abstract class LineCoverageParser {
 			project.accept(exeFinder);
 		}
 		return exeFinder.getFile();
+	}
+
+	private String getExtension(IManagedBuildInfo info) throws BuildMacroException {
+		String extension = info.getBuildArtifactExtension();
+		extension = ManagedBuildManager.getBuildMacroProvider().resolveValueToMakefileFormat(extension, "", //$NON-NLS-1$
+				" ", //$NON-NLS-1$
+				IBuildMacroProvider.CONTEXT_CONFIGURATION, info.getDefaultConfiguration());
+
+		if (extension.isEmpty()) {
+			return extension;
+		} else {
+			return ".".concat(extension);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
