@@ -109,10 +109,12 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		projects.add(cproject);
 		IProject[] referencedProjects = getProject().getReferencedProjects();
 		for (IProject refProject : referencedProjects) {
-			projects.add(CoreModel.getDefault().create(refProject));
+			final ICProject refCProject = CoreModel.getDefault().create(refProject);
+			projects.add(refCProject);
 		}
 
-		final IIndex index = CCorePlugin.getIndexManager().getIndex(projects.toArray(new ICProject[projects.size()]));
+		final ICProject[] projectArray = new ICProject[projects.size()];
+		final IIndex index = CCorePlugin.getIndexManager().getIndex(projects.toArray(projectArray));
 		return index;
 	}
 

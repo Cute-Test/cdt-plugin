@@ -49,19 +49,22 @@ public class AddTestToSuite extends AbstractFunctionAction {
 				def = getFunctionDefIfIsFunctor(n.getNode());
 			}
 			if (ASTUtil.isTestFunction(def)) {
-				if (def != null && isMemberFunction(def)) { //In .cpp file
-					SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
-					astTu.accept(suitPushBackFinder);
-					IASTName name = def.getDeclarator().getName();
-					if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
-						adder = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
-					} else {
-						adder = new AddMemberFunctionStrategy(doc, file, astTu, name, suitPushBackFinder);
+				final SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
+				astTu.accept(suiteFinder);
+				final IASTNode suite = suiteFinder.getSuiteNode();
+
+				if (suite != null) {
+					if (isMemberFunction(def)) { //In .cpp file
+						IASTName name = def.getDeclarator().getName();
+						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
+							adder = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
+						} else {
+							adder = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
+						}
+					} else if (isFunction(def)) {
+						adder = new AddFunctionToSuiteStrategy(doc, file, astTu, def.getDeclarator().getName(), suiteFinder);
+
 					}
-				} else if (def != null && isFunction(def)) {
-					SuitePushBackFinder finder = new SuitePushBackFinder();
-					astTu.accept(finder);
-					adder = new AddFunctionToSuiteStrategy(doc, file, astTu, def.getDeclarator().getName(), finder);
 				}
 			}
 		}
@@ -82,7 +85,6 @@ public class AddTestToSuite extends AbstractFunctionAction {
 						if (funcName instanceof ICPPASTOperatorName && funcName.toString().contains("()")) { //$NON-NLS-1$
 							return funcDef;
 						}
-
 					}
 				}
 			}
@@ -109,11 +111,7 @@ public class AddTestToSuite extends AbstractFunctionAction {
 			return (IASTFunctionDefinition) node;
 		} else {
 			IASTNode parent = node.getParent();
-			if (parent != null) {
-				return getFunctionDefinition(parent);
-			} else {
-				return null;
-			}
+			return getFunctionDefinition(parent);
 		}
 	}
 }

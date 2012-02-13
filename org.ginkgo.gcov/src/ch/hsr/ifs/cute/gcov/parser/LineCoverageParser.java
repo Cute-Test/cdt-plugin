@@ -51,6 +51,8 @@ import ch.hsr.ifs.cute.gcov.parser.resources.GcovFile;
  */
 public abstract class LineCoverageParser {
 
+	private static final String EXTENSION_DELIMITER = ".";
+
 	public abstract void parse(IFile cppFile, Reader gcovFile) throws CoreException, IOException;
 
 	public void deleteMarkers(IFile file) {
@@ -91,6 +93,7 @@ public abstract class LineCoverageParser {
 				p.destroy();
 				GcovPlugin.log("Gcov Process is null"); //$NON-NLS-1$
 			} else {
+
 				while (!process.isTerminated()) {
 					try {
 						Thread.sleep(50);
@@ -221,7 +224,7 @@ public abstract class LineCoverageParser {
 		if (extension.isEmpty()) {
 			return extension;
 		} else {
-			return ".".concat(extension);
+			return EXTENSION_DELIMITER.concat(extension);
 		}
 	}
 
@@ -232,9 +235,4 @@ public abstract class LineCoverageParser {
 		MarkerUtilities.setLineNumber(attributes, lineNum);
 		MarkerUtilities.createMarker(cppFile, attributes, type);
 	}
-
-	public LineCoverageParser() {
-		super();
-	}
-
 }
