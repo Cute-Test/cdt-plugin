@@ -14,17 +14,22 @@ import org.eclipse.text.edits.MultiTextEdit;
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
- *
+ * 
  */
-public class NullStrategy extends AddStrategy {
+public class NullStrategy extends AddPushbackStatementStrategy {
 
 	public NullStrategy(IDocument doc) {
-		super(doc);
+		super(doc, null);
 	}
 
 	@Override
 	public MultiTextEdit getEdit() {
 		return new MultiTextEdit();
+	}
+
+	@Override
+	public String createPushBackContent() {
+		return "";
 	}
 
 }

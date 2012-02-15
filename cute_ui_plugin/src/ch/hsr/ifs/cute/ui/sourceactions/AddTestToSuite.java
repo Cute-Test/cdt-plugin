@@ -53,19 +53,23 @@ public class AddTestToSuite extends AbstractFunctionAction {
 				astTu.accept(suiteFinder);
 				final IASTNode suite = suiteFinder.getSuiteNode();
 
-				if (suite != null) {
-					if (isMemberFunction(def)) { //In .cpp file
-						IASTName name = def.getDeclarator().getName();
-						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
-							adder = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
-						} else {
-							adder = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
-						}
-					} else if (isFunction(def)) {
-						adder = new AddFunctionToSuiteStrategy(doc, file, astTu, def.getDeclarator().getName(), suiteFinder);
-
+				AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
+				if (isMemberFunction(def)) { //In .cpp file
+					IASTName name = def.getDeclarator().getName();
+					if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
+						lineStrategy = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
+					} else {
+						lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
 					}
+				} else if (isFunction(def)) {
+					lineStrategy = new AddFunctionToSuiteStrategy(doc, file, astTu, def.getDeclarator().getName(), suiteFinder);
 				}
+				if (suite == null) {
+					adder = new AddSuiteStrategy(lineStrategy);
+				}else{
+					adder = lineStrategy;
+				}
+
 			}
 		}
 

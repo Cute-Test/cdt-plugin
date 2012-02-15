@@ -26,6 +26,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexName;
+import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
@@ -103,29 +104,30 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 	}
 
 	private IIndex assembleIndex() throws CoreException {
-		ArrayList<ICProject> projects = new ArrayList<ICProject>();
-
-		ICProject cproject = CoreModel.getDefault().create(getProject());
-		projects.add(cproject);
-		IProject[] referencedProjects = getProject().getReferencedProjects();
-		for (IProject refProject : referencedProjects) {
-			final ICProject refCProject = CoreModel.getDefault().create(refProject);
-			projects.add(refCProject);
-		}
+		ArrayList<ICProject> projects = assembleProjects();
 
 		final ICProject[] projectArray = new ICProject[projects.size()];
 		final IIndex index = CCorePlugin.getIndexManager().getIndex(projects.toArray(projectArray));
 		return index;
 	}
 
+	private ArrayList<ICProject> assembleProjects() throws CoreException {
+		ArrayList<ICProject> projects = new ArrayList<ICProject>();
+
+		ICProject cproject = CoreModel.getDefault().create(getProject());
+		projects.add(cproject);
+		IProject[] referencedProjects = getProject().getReferencingProjects();
+		for (IProject refProject : referencedProjects) {
+			final ICProject refCProject = CoreModel.getDefault().create(refProject);
+			projects.add(refCProject);
+		}
+		return projects;
+	}
+
 	private void updateRegisteredTestsOfReferencedTUs(RegisteredTestFunctionFinderVisitor registeredFunctionFinder, IIndexName[] references, RefactoringASTCache astCache)
 			throws CoreException {
 		for (IIndexName testReference : references) {
-			final String file = testReference.getFileLocation().getFileName();
-			final Path path = new Path(file);
-			final ICElement celement = CoreModel.getDefault().create(path);
-			final ITranslationUnit tu = (ITranslationUnit) celement.getAdapter(ITranslationUnit.class);
-
+			final ITranslationUnit tu = findTranslationUnit(testReference);
 			if (tu != null) {
 				IASTTranslationUnit ast;
 				if (getModelCache().getTranslationUnit().getResource().equals(tu.getResource())) {
@@ -136,6 +138,28 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 				ast.accept(registeredFunctionFinder);
 			}
 		}
+	}
+
+	private ITranslationUnit findTranslationUnit(IIndexName testReference) throws CoreException, CModelException {
+		final ArrayList<ICProject> projects = assembleProjects();
+		final String file = testReference.getFileLocation().getFileName();
+		final Path path = new Path(file);
+
+		ICElement celement = null;
+		for (ICProject project : projects) {
+			celement = project.findElement(path);
+			if (celement != null) {
+				break;
+			}
+		}
+		if (celement == null) {
+			celement = CoreModel.getDefault().create(path);
+		}
+		if (celement == null) {
+			return null;
+		}
+		final ITranslationUnit tu = (ITranslationUnit) celement.getAdapter(ITranslationUnit.class);
+		return tu;
 	}
 
 	private IBinding getToBeRegisteredBinding(IASTDeclaration iastDeclaration) {

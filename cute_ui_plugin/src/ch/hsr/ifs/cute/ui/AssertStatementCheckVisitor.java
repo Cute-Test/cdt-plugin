@@ -19,18 +19,14 @@ import org.eclipse.cdt.core.dom.ast.IASTMacroExpansionLocation;
 import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
-class AssertStatementCheckVisitor extends ASTVisitor{
-	
+class AssertStatementCheckVisitor extends ASTVisitor {
+
 	@SuppressWarnings("nls")
-	private static Set<String> asserts = new HashSet<String>(Arrays.asList(
-			"ASSERT", "ASSERTM", 
-			"FAIL", "FAILM",
-			"ASSERT_EQUAL", "ASSERT_EQUALM",
-			"ASSERT_EQUAL_DELTAM", "ASSERT_EQUAL_DELTA",
-			"ASSERT_THROWS", "ASSERT_THROWSM"));
-	
+	private static Set<String> asserts = new HashSet<String>(Arrays.asList("ASSERT", "ASSERTM", "FAIL", "FAILM", "ASSERT_EQUAL", "ASSERT_EQUALM", "ASSERT_EQUAL_DELTAM",
+			"ASSERT_EQUAL_DELTA", "ASSERT_THROWS", "ASSERT_THROWSM"));
+
 	boolean hasAssertStmt = false;
-	
+
 	{
 		shouldVisitStatements = true;
 	}
@@ -39,7 +35,7 @@ class AssertStatementCheckVisitor extends ASTVisitor{
 	public int visit(IASTStatement statement) {
 		if (!(statement instanceof IASTCompoundStatement)) {
 			IASTNodeLocation[] locs = statement.getNodeLocations();
-			if(locs.length > 1) {
+			if (locs.length > 1) {
 				ArrayList<IASTMacroExpansionLocation> expLocs = getMacroExpansionLocs(locs);
 				for (IASTMacroExpansionLocation expansionLocation : expLocs) {
 					hasAssertStmt = isAssertExpansion(expansionLocation);
@@ -51,7 +47,7 @@ class AssertStatementCheckVisitor extends ASTVisitor{
 
 	private boolean isAssertExpansion(IASTMacroExpansionLocation expansionLocation) {
 		String name = expansionLocation.getExpansion().getMacroDefinition().getName().toString();
-		if(asserts.contains(name)) {
+		if (asserts.contains(name)) {
 			return true;
 		}
 		return false;
@@ -67,6 +63,5 @@ class AssertStatementCheckVisitor extends ASTVisitor{
 		}
 		return res;
 	}
-	
-	
+
 }

@@ -20,24 +20,17 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
- *
+ * 
  */
-public class AddFunctionToSuiteStrategy extends AddStrategy {
-
-
+public class AddFunctionToSuiteStrategy extends AddPushbackStatementStrategy {
 
 	private final SuitePushBackFinder suitPushBackFinder;
 	private final IASTName name;
-	private final IASTTranslationUnit astTu;
 	private final IFile file;
-	private final IDocument doc;
-
 
 	public AddFunctionToSuiteStrategy(IDocument doc, IFile file, IASTTranslationUnit tu, IASTName iastName, SuitePushBackFinder finder) {
-		super(doc);
-		this.doc = doc;
+		super(doc, tu);
 		this.file = file;
-		this.astTu = tu;
 		this.name = iastName;
 		this.suitPushBackFinder = finder;
 
@@ -50,19 +43,22 @@ public class AddFunctionToSuiteStrategy extends AddStrategy {
 		try {
 			index.acquireReadLock();
 			MultiTextEdit mEdit = new MultiTextEdit();
-			String name = this.name.toString();
-			if(!checkPushback(astTu,name,suitPushBackFinder))
-			{
-				mEdit.addChild(createPushBackEdit(file, doc, astTu,
-						name, suitPushBackFinder));
+			if (!checkPushback(astTu, name.toString(), suitPushBackFinder)) {
+				mEdit.addChild(createPushBackEdit(file, astTu, name, suitPushBackFinder));
 			}
 			return mEdit;
 		} catch (InterruptedException e) {
 			UiPlugin.log(e);
-		}finally {
+		} finally {
 			index.releaseReadLock();
 		}
 		return new MultiTextEdit();
 	}
 
+	@Override
+	public String createPushBackContent() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("CUTE(").append(name).append(")");
+		return builder.toString();
+	}
 }

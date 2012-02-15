@@ -8,30 +8,31 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.sourceactions;
 
+import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
 
 /**
  * @author Emanuel Graf IFS
+ * @author Thomas Corbat
  * @since 4.0
- *
+ * 
  */
-public class AddMemberFunctionStrategy extends AddStrategy{
-	
-	private IFile editorFile;
-	private IASTTranslationUnit astTu;
-	private IASTName name;
-	private SuitePushBackFinder suitPushBackFinder;
-	
-	public AddMemberFunctionStrategy(IDocument doc, IFile editorFile, IASTTranslationUnit astTu, IASTName name,
-			SuitePushBackFinder suitPushBackFinder) {
-		super(doc);
+public class AddMemberFunctionStrategy extends AddPushbackStatementStrategy {
+
+	private static final String SCOPE = "::"; //$NON-NLS-1$
+	private final IFile editorFile;
+	private final IASTTranslationUnit astTu;
+	private final IASTName name;
+	private final SuitePushBackFinder suitPushBackFinder;
+
+	public AddMemberFunctionStrategy(IDocument doc, IFile editorFile, IASTTranslationUnit astTu, IASTName name, SuitePushBackFinder suitPushBackFinder) {
+		super(doc, astTu);
 		this.editorFile = editorFile;
 		this.astTu = astTu;
 		this.name = name;
@@ -39,52 +40,46 @@ public class AddMemberFunctionStrategy extends AddStrategy{
 	}
 
 	public MultiTextEdit addMemberToSuite() {
-		StringBuilder builder;
-		if (name instanceof ICPPASTQualifiedName) {
-			ICPPASTQualifiedName qName = (ICPPASTQualifiedName) name;
-			builder = getString(qName, suitPushBackFinder);
-		}else {
-			builder = getString(name, suitPushBackFinder);
-		}
-		MultiTextEdit edit = new MultiTextEdit();
-		edit.addChild(createPushBackEdit(editorFile, astTu, suitPushBackFinder, builder));
+		final StringBuilder builder = getPushbackStatement(name, suitPushBackFinder.getSuiteDeclName());
+		final MultiTextEdit edit = new MultiTextEdit();
+		edit.addChild(createPushBackEdit(editorFile, astTu, suitPushBackFinder, builder.toString()));
 		return edit;
 	}
 
-	private StringBuilder getString(ICPPASTQualifiedName qName, SuitePushBackFinder suitPushBackFinder) {
-		StringBuilder sb = new StringBuilder(newLine + "\t"); // s.push_back(CUTE_SMEMFUN(TestClass,test2);"); //$NON-NLS-1$
-		sb.append(suitPushBackFinder.getSuiteDeclName().toString());
-		sb.append(".push_back(CUTE_SMEMFUN("); //$NON-NLS-1$
-		IASTName[] names = qName.getNames();
-		if (names.length >= 2) {
-			sb.append(names[names.length -2]);
-			sb.append(", "); //$NON-NLS-1$
-			sb.append(names[names.length-1]);
-			sb.append("));"); //$NON-NLS-1$
-		}
-		return sb;
-	}
-	
-	private StringBuilder getString(IASTName name, SuitePushBackFinder suitPushBackFinder) {
-		StringBuilder sb = new StringBuilder(newLine + "\t"); // s.push_back(CUTE_SMEMFUN(TestClass,test2);"); //$NON-NLS-1$
-		sb.append(suitPushBackFinder.getSuiteDeclName().toString());
-		sb.append(".push_back(CUTE_SMEMFUN("); //$NON-NLS-1$
-		String className  = getClassName(name);
-		sb.append(className);
-		sb.append(", "); //$NON-NLS-1$
-		sb.append(name.toString());
-		sb.append("));"); //$NON-NLS-1$
+	private StringBuilder getPushbackStatement(IASTName testName, IASTName suiteName) {
+		final StringBuilder sb = new StringBuilder(newLine + "\t"); //$NON-NLS-1$
+		sb.append(suiteName.toString());
+		sb.append(".push_back("); //$NON-NLS-1$
+		sb.append(createPushBackContent());
+		sb.append(");"); //$NON-NLS-1$
 		return sb;
 	}
 
-	private String getClassName(IASTName name2) {
-		IASTNode n = null;
-		for(n = name; n != null && !(n instanceof ICPPASTCompositeTypeSpecifier); n = n.getParent()) {}
-		if(n != null) {
-			ICPPASTCompositeTypeSpecifier comType = (ICPPASTCompositeTypeSpecifier)n;
-			return comType.getName().toString();
+	@Override
+	public String createPushBackContent() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("CUTE_SMEMFUN("); //$NON-NLS-1$
+		final IBinding nameBinding = name.resolveBinding();
+		if (nameBinding instanceof ICPPMethod) {
+			final ICPPMethod methodBinding = (ICPPMethod) nameBinding;
+			try {
+				builder.append(assambleQualifier(methodBinding));
+				builder.append(", "); //$NON-NLS-1$
+				builder.append(methodBinding.getName());
+			} catch (DOMException e) {
+			}
 		}
-		return ""; //$NON-NLS-1$
+		builder.append(")"); //$NON-NLS-1$
+		return builder.toString();
+	}
+
+	private String assambleQualifier(final ICPPMethod methodBinding) throws DOMException {
+		final String[] nameParts = methodBinding.getQualifiedName();
+		final StringBuilder builder = new StringBuilder(nameParts[0]);
+		for (int i = 1; i < nameParts.length - 1; i++) {
+			builder.append(SCOPE).append(nameParts[i]);
+		}
+		return builder.toString();
 	}
 
 	@Override
