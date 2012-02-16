@@ -80,4 +80,26 @@ public class NewTestFunctionTest extends EditorBaseTest {
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 
+	//
+
+	//void newTest(){
+	//	ASSERTM("start writing tests", false);
+	//}
+	//
+	//cute::suite make_suite(){
+	//	cute::suite s;
+	//	s.push_back(CUTE(newTest));
+	//	return s;
+	//}
+	public void testNewTestFunctionMissingSuite() throws Exception {
+		StringBuffer[] contentsForTest = getContentsForTest(2);
+		IFile file = createFile(contentsForTest[0].toString(), "function.cpp"); //$NON-NLS-1$
+		final CEditor cEditor = openEditor(file);
+		cEditor.selectAndReveal(0, 2);
+		executeCommand(COMMAND_ID);
+		type("newTest", 0, 0, cEditor); //$NON-NLS-1$
+		saveEditor(cEditor);
+		assertFileContent(file, contentsForTest[1].toString());
+	}
+
 }

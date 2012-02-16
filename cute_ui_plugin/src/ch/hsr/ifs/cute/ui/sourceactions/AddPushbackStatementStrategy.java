@@ -37,10 +37,8 @@ import org.eclipse.text.edits.TextEdit;
 @SuppressWarnings("deprecation")
 public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 
-	protected static final String EMPTY_STRING = ""; //$NON-NLS-1$
-	protected int insertFileOffset = -1; //for NewTestFunctionAction use only, need to reset value in createEdit
-	protected int pushbackOffset = -1; //for NewTestFunctionAction use only, need to reset value in createEdit
-	protected int pushbackLength = -1; //for NewTestFunctionAction use only, need to reset value in createEdit
+	protected static final String EMPTY_STRING = ""; //$NON-NLS-1$	
+	protected int pushbackOffset = -1;
 	protected final String newLine;
 	protected final IASTTranslationUnit astTu;
 
@@ -66,7 +64,6 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 			}
 			pushbackOffset = fileLocation.getNodeOffset() + fileLocation.getNodeLength();
 			final InsertEdit edit = new InsertEdit(pushbackOffset, insertion);
-			pushbackLength = insertion.length();
 
 			return edit;
 		} else {
@@ -101,20 +98,21 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 		return getParentStatement(lastPushBack);
 	}
 
-	public String pushBackString(String suite, String insidePushback) {
+	protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder) {
+		final StringBuilder builder = new StringBuilder();
+		final IASTName suiteName = suitPushBackFinder.getSuiteDeclName();
+		builder.append(newLine).append(pushBackString(String.valueOf(suiteName), createPushBackContent())); //$NON-NLS-1$ //$NON-NLS-2$
+		return createPushBackEdit(editorFile, astTu, suitPushBackFinder, builder.toString());
+	}
+
+	protected String pushBackString(String suite, String insidePushback) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(newLine + "\t"); //$NON-NLS-1$
+		builder.append("\t"); //$NON-NLS-1$
 		builder.append(suite.toString());
 		builder.append(".push_back("); //$NON-NLS-1$
 		builder.append(insidePushback);
 		builder.append(");"); //$NON-NLS-1$
 		return builder.toString();
-	}
-
-	protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, IASTName funcName, SuitePushBackFinder suitPushBackFinder) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(pushBackString(suitPushBackFinder.getSuiteDeclName().toString(), createPushBackContent())); //$NON-NLS-1$ //$NON-NLS-2$
-		return createPushBackEdit(editorFile, astTu, suitPushBackFinder, builder.toString());
 	}
 
 	protected String functionAST(IASTExpression thelist) {

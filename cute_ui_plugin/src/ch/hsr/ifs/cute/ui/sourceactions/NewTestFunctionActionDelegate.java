@@ -113,35 +113,7 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 				RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
 				processor.performEdits();
 
-				ISourceViewer viewer = ((CEditor) editor).getViewer();
-				LinkedModeModel model = new LinkedModeModel();
-
-				LinkedPositionGroup group = new LinkedPositionGroup();
-
-				/* linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename */
-				TextEdit[] edits = mEdit.getChildren();
-				int totalEditLength = 0;
-				for (TextEdit textEdit : edits) {
-					String insert = ((InsertEdit) textEdit).getText();
-					if (insert.contains(funcName)) {
-						int start = textEdit.getOffset();
-						int indexOfFuncName = insert.indexOf(funcName);
-						group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName + totalEditLength, funcName.length()));
-						totalEditLength += insert.length();
-					}
-				}
-
-				if (!group.isEmpty()) {
-					model.addGroup(group);
-					model.forceInstall();
-
-					/* after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it */
-					String newLine = TextUtilities.getDefaultLineDelimiter(doc);
-					linkedModeUI = new EditorLinkedModeUI(model, viewer);
-					linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
-					linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
-					linkedModeUI.enter();
-				}
+				updateLinkedMode(doc, mEdit);
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();// TODO exception not managed
@@ -151,6 +123,38 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 			e.printStackTrace();
 		} finally {
 			editor = null;
+		}
+	}
+
+	private void updateLinkedMode(IDocument doc, MultiTextEdit mEdit) throws BadLocationException {
+		ISourceViewer viewer = ((CEditor) editor).getViewer();
+		LinkedModeModel model = new LinkedModeModel();
+
+		LinkedPositionGroup group = new LinkedPositionGroup();
+
+		/* linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename */
+		TextEdit[] edits = mEdit.getChildren();
+		int totalEditLength = 0;
+		for (TextEdit textEdit : edits) {
+			String insert = ((InsertEdit) textEdit).getText();
+			if (insert.contains(funcName)) {
+				int start = textEdit.getOffset();
+				int indexOfFuncName = insert.indexOf(funcName);
+				group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName + totalEditLength, funcName.length()));
+				totalEditLength += insert.length();
+			}
+		}
+
+		if (!group.isEmpty()) {
+			model.addGroup(group);
+			model.forceInstall();
+
+			/* after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it */
+			String newLine = TextUtilities.getDefaultLineDelimiter(doc);
+			linkedModeUI = new EditorLinkedModeUI(model, viewer);
+			linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
+			linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
+			linkedModeUI.enter();
 		}
 	}
 
@@ -165,11 +169,10 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 						functionAction.insertFileOffset < functionAction.pushbackOffset) //before pushback
 				{
 					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
-					break;
 				} else {
 					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()) + functionAction.pushbackLength);
-					break;
 				}
+				break;
 			}
 		}
 		return result;

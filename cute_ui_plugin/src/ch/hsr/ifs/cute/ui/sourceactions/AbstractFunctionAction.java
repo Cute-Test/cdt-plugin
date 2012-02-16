@@ -27,8 +27,6 @@ public abstract class AbstractFunctionAction {
 	 */
 	public abstract MultiTextEdit createEdit(IFile file, IDocument doc, ISelection selection) throws CoreException;
 
-	// return the CDT representation of the file under modification
-
 	protected IASTTranslationUnit getASTTranslationUnit(IFile editorFile) throws CoreException {
 		final RefactoringASTCache astCache = new RefactoringASTCache();
 		try {

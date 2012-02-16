@@ -8,7 +8,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.sourceactions;
 
-import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.core.resources.IFile;
@@ -25,14 +24,14 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
  */
 public class AddFunctionToSuiteStrategy extends AddPushbackStatementStrategy {
 
-	private final SuitePushBackFinder suitPushBackFinder;
-	private final IASTName name;
-	private final IFile file;
+	protected final SuitePushBackFinder suitPushBackFinder;
+	protected final String testName;
+	protected final IFile file;
 
-	public AddFunctionToSuiteStrategy(IDocument doc, IFile file, IASTTranslationUnit tu, IASTName iastName, SuitePushBackFinder finder) {
+	public AddFunctionToSuiteStrategy(IDocument doc, IFile file, IASTTranslationUnit tu, String testName, SuitePushBackFinder finder) {
 		super(doc, tu);
 		this.file = file;
-		this.name = iastName;
+		this.testName = testName;
 		this.suitPushBackFinder = finder;
 
 	}
@@ -43,8 +42,8 @@ public class AddFunctionToSuiteStrategy extends AddPushbackStatementStrategy {
 		try {
 			index.acquireReadLock();
 			MultiTextEdit mEdit = new MultiTextEdit();
-			if (!checkPushback(astTu, name.toString(), suitPushBackFinder)) {
-				mEdit.addChild(createPushBackEdit(file, astTu, name, suitPushBackFinder));
+			if (!checkPushback(astTu, testName, suitPushBackFinder)) {
+				mEdit.addChild(createPushBackEdit(file, astTu, suitPushBackFinder));
 			}
 			return mEdit;
 		} catch (InterruptedException e) {
@@ -58,7 +57,7 @@ public class AddFunctionToSuiteStrategy extends AddPushbackStatementStrategy {
 	@Override
 	public String createPushBackContent() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("CUTE(").append(name).append(")");
+		builder.append("CUTE(").append(testName).append(")");
 		return builder.toString();
 	}
 }

@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
 
-
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
@@ -62,7 +61,7 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 
 		if (!checkPushback(astTu, fname.toString(), suitPushBackFinder)) {
 			MultiTextEdit mEdit = new MultiTextEdit();
-			mEdit.addChild(createPushBackEdit(editorFile, astTu, fname, suitPushBackFinder));
+			mEdit.addChild(createPushBackEdit(editorFile, astTu, suitPushBackFinder));
 			return mEdit;
 		}
 		return new MultiTextEdit();

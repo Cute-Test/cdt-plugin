@@ -54,15 +54,16 @@ public class AddTestToSuite extends AbstractFunctionAction {
 				final IASTNode suite = suiteFinder.getSuiteNode();
 
 				AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
+				final IASTName name = def.getDeclarator().getName();
 				if (isMemberFunction(def)) { //In .cpp file
-					IASTName name = def.getDeclarator().getName();
 					if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
 						lineStrategy = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
 					} else {
 						lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
 					}
 				} else if (isFunction(def)) {
-					lineStrategy = new AddFunctionToSuiteStrategy(doc, file, astTu, def.getDeclarator().getName(), suiteFinder);
+					final String functionName = name.toString();
+					lineStrategy = new AddFunctionToSuiteStrategy(doc, file, astTu, functionName, suiteFinder);
 				}
 				if (suite == null) {
 					adder = new AddSuiteStrategy(lineStrategy);
