@@ -36,6 +36,7 @@ import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 
+
 /**
  * @author Emanuel Graf
  * 

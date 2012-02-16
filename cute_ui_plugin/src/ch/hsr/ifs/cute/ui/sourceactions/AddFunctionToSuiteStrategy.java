@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2007-2012, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -19,6 +19,7 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
 
 /**
  * @author Emanuel Graf IFS
+ * @author Thomas Corbat IFS
  * @since 4.0
  * 
  */
@@ -36,7 +37,6 @@ public class AddFunctionToSuiteStrategy extends AddPushbackStatementStrategy {
 
 	}
 
-	@Override
 	public MultiTextEdit getEdit() {
 		//TODO do not add the function holding the suite
 		IIndex index = astTu.getIndex();

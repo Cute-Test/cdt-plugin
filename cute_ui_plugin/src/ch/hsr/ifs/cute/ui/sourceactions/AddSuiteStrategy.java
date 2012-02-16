@@ -3,7 +3,7 @@ package ch.hsr.ifs.cute.ui.sourceactions;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
-public class AddSuiteStrategy extends AddStrategy {
+public class AddSuiteStrategy implements IAddStrategy {
 
 	private final AddPushbackStatementStrategy decoratedStrategy;
 	private final String newLine;
@@ -13,7 +13,6 @@ public class AddSuiteStrategy extends AddStrategy {
 		newLine = strategy.newLine;
 	}
 
-	@Override
 	public MultiTextEdit getEdit() {
 		final MultiTextEdit mEdit = new MultiTextEdit();
 		final String pushbackContent = decoratedStrategy.createPushBackContent();

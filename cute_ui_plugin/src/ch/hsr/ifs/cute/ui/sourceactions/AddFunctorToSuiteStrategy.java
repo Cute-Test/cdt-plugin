@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
 
+
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
@@ -49,7 +50,6 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 		fname = nameAtCursor(o.getAL(), node);
 	}
 
-	@Override
 	public MultiTextEdit getEdit() {
 
 		if (fname == null)
@@ -82,16 +82,16 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 	}
 
 	private boolean checkClassForPublicOperatorParentesis(IASTNode node) {
-		IASTNode tmp1 = node;
-		while (!(tmp1.getParent() instanceof ICPPASTCompositeTypeSpecifier) && !(tmp1.getParent() instanceof ICPPASTTranslationUnit)) {
-			tmp1 = tmp1.getParent();
+		IASTNode tmp = node;
+		while (!(tmp.getParent() instanceof ICPPASTCompositeTypeSpecifier) && !(tmp.getParent() instanceof ICPPASTTranslationUnit)) {
+			tmp = tmp.getParent();
 		}
-		if (tmp1.getParent() instanceof ICPPASTCompositeTypeSpecifier)
-			tmp1 = tmp1.getParent().getParent();
+		if (tmp.getParent() instanceof ICPPASTCompositeTypeSpecifier)
+			tmp = tmp.getParent().getParent();
 
 		boolean publicOperatorExist = false;
-		if (tmp1 instanceof IASTSimpleDeclaration) {
-			ArrayList<IASTDeclaration> al = ASTHelper.getPublicMethods((IASTSimpleDeclaration) tmp1);
+		if (tmp instanceof IASTSimpleDeclaration) {
+			ArrayList<IASTDeclaration> al = ASTHelper.getPublicMethods((IASTSimpleDeclaration) tmp);
 			for (IASTDeclaration i : al) {
 				if (ASTHelper.getMethodName(i).equals(Messages.getString("AddTestFunctortoSuiteAction.Operator"))) { //$NON-NLS-1$
 					publicOperatorExist = true;

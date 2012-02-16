@@ -22,7 +22,6 @@ public class NullStrategy extends AddPushbackStatementStrategy {
 		super(doc, null);
 	}
 
-	@Override
 	public MultiTextEdit getEdit() {
 		return new MultiTextEdit();
 	}

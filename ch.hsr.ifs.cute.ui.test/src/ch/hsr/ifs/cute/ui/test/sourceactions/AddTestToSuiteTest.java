@@ -35,7 +35,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	void operator() (){
 	//		ASSERTM("functor", true);
 	//	}
-	//}
+	//};
 	//
 	//cute::suite make_suite_Suite3(){
 	//	cute::suite s;
@@ -48,7 +48,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	void operator() (){
 	//		ASSERTM("functor", true);
 	//	}
-	//}
+	//};
 	//
 	//cute::suite make_suite_Suite3(){
 	//	cute::suite s;
@@ -66,11 +66,47 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//struct testStruct{
+	//	testStruct(){}
+	//	void operator() (){
+	//		ASSERTM("functor", true);
+	//	}
+	//};
+	//
+	//cute::suite make_suite_Suite3(){
+	//	cute::suite s;
+	//	return s;
+	//}
+	//
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//struct testStruct{
+	//	testStruct(){}
+	//	void operator() (){
+	//		ASSERTM("functor", true);
+	//	}
+	//};
+	//
+	//cute::suite make_suite_Suite3(){
+	//	cute::suite s;
+	//	s.push_back(testStruct());
+	//	return s;
+	//}
+	//
+	public void testAddFunctorWithConstructorToSuite() throws Exception {
+		assertEquals(Bundle.ACTIVE, UiPlugin.getDefault().getBundle().getState());
+		StringBuffer[] contentsForTest = getContentsForTest(2);
+		IFile file = createFile(contentsForTest[0].toString(), "functor.cpp"); //$NON-NLS-1$
+		runCommand(file, contentsForTest[0].indexOf("functor"), 3, COMMAND_ID); //$NON-NLS-1$
+		assertFileContent(file, contentsForTest[1].toString());
+	}
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//struct testStruct{
 	//	testStruct(int param){}
 	//	void operator() (){
 	//		ASSERTM("functor", true);
 	//	}
-	//}
+	//};
 	//
 	//cute::suite make_suite_Suite3(){
 	//	cute::suite s;
@@ -84,7 +120,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	void operator() (){
 	//		ASSERTM("functor", true);
 	//	}
-	//}
+	//};
 	//
 	//cute::suite make_suite_Suite3(){
 	//	cute::suite s;
@@ -273,7 +309,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//
 	//public:
 	//	void test();
-	//	};
+	//};
 	//
 
 	//#include "suite.h"
@@ -357,7 +393,6 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 
-	//#include "suite.h"
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//
 	//void testSuccess()
@@ -366,7 +401,6 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	//
 
-	//#include "suite.h"
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//
 	//void testSuccess()
@@ -379,11 +413,72 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	s.push_back(CUTE(testSuccess));
 	//	return s;
 	//}
-	public void testRegisterWithNewSuite() throws Exception {
+	public void testRegisterFunctionWithNewSuite() throws Exception {
 		StringBuffer[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp"); //$NON-NLS-1$
-		runCommand(file, contentsForTest[0].indexOf("testSuccess"), 3, COMMAND_ID); //$NON-NLS-1$
+		runCommand(file, contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID); //$NON-NLS-1$
 		assertFileContent(file, contentsForTest[1].toString());
 	}
 
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//
+	//struct S{
+	//	void operator()()
+	//	{
+	//		ASSERTM("theTest", true);
+	//	}
+	//};
+	//
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//
+	//struct S{
+	//	void operator()()
+	//	{
+	//		ASSERTM("theTest", true);
+	//	}
+	//};
+	//
+	//cute::suite make_suite(){
+	//	cute::suite s;
+	//	s.push_back(S());
+	//	return s;
+	//}
+	public void testRegisterFunctorWithNewSuite() throws Exception {
+		StringBuffer[] contentsForTest = getContentsForTest(2);
+		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp"); //$NON-NLS-1$
+		runCommand(file, contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID); //$NON-NLS-1$
+		assertFileContent(file, contentsForTest[1].toString());
+	}
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//
+	//struct S{
+	//	void testIt()
+	//	{
+	//		ASSERTM("theTest", true);
+	//	}
+	//};
+	//
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//
+	//struct S{
+	//	void testIt()
+	//	{
+	//		ASSERTM("theTest", true);
+	//	}
+	//};
+	//
+	//cute::suite make_suite(){
+	//	cute::suite s;
+	//	s.push_back(CUTE_SMEMFUN(S, testIt));
+	//	return s;
+	//}
+	public void testRegisterMemberFunctionWithNewSuite() throws Exception {
+		StringBuffer[] contentsForTest = getContentsForTest(2);
+		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp"); //$NON-NLS-1$
+		runCommand(file, contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID); //$NON-NLS-1$
+		assertFileContent(file, contentsForTest[1].toString());
+	}
 }

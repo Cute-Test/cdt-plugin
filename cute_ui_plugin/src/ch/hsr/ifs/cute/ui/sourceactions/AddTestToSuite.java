@@ -35,7 +35,7 @@ public class AddTestToSuite extends AbstractFunctionAction {
 
 	@Override
 	public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
-		AddStrategy adder = new NullStrategy(doc);
+		IAddStrategy adder = new NullStrategy(doc);
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
 
@@ -66,7 +66,7 @@ public class AddTestToSuite extends AbstractFunctionAction {
 				}
 				if (suite == null) {
 					adder = new AddSuiteStrategy(lineStrategy);
-				}else{
+				} else {
 					adder = lineStrategy;
 				}
 

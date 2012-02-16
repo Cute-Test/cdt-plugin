@@ -35,7 +35,7 @@ import org.eclipse.text.edits.TextEdit;
  * 
  */
 @SuppressWarnings("deprecation")
-public abstract class AddPushbackStatementStrategy extends AddStrategy {
+public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 
 	protected static final String EMPTY_STRING = ""; //$NON-NLS-1$
 	protected int insertFileOffset = -1; //for NewTestFunctionAction use only, need to reset value in createEdit
@@ -52,12 +52,11 @@ public abstract class AddPushbackStatementStrategy extends AddStrategy {
 	public abstract String createPushBackContent();
 
 	protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder, String insertion) {
-
-		if (suitPushBackFinder.getSuiteDeclName() != null) {
-			IASTName name = suitPushBackFinder.getSuiteDeclName();
-			IBinding binding = name.resolveBinding();
-			IASTName[] refs = astTu.getReferences(binding);
-			IASTStatement lastPushBack = getLastPushBack(refs);
+		final IASTName name = suitPushBackFinder.getSuiteDeclName();
+		if (name != null) {
+			final IBinding binding = name.resolveBinding();
+			final IASTName[] refs = astTu.getReferences(binding);
+			final IASTStatement lastPushBack = getLastPushBack(refs);
 
 			IASTFileLocation fileLocation;
 			if (lastPushBack != null) {

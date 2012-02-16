@@ -82,7 +82,6 @@ public class AddMemberFunctionStrategy extends AddPushbackStatementStrategy {
 		return builder.toString();
 	}
 
-	@Override
 	public MultiTextEdit getEdit() {
 		return addMemberToSuite();
 	}

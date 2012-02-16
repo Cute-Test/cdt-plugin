@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2007-2012, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -21,6 +21,7 @@ import ch.hsr.ifs.cute.ui.test.UiTestPlugin;
 
 /**
  * @author Emanuel Graf IFS
+ * @author Thomas Corbat IFS
  * 
  */
 public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
