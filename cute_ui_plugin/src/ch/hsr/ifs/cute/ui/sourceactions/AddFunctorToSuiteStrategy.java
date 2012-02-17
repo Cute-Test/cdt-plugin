@@ -51,8 +51,9 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 
 	public MultiTextEdit getEdit() {
 
-		if (fname == null)
+		if (fname == null) {
 			return new MultiTextEdit();//FIXME potential bug point
+		}
 
 		constructorNeedParameterFlag = checkForConstructorWithParameters(astTu, node);
 

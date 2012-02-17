@@ -13,9 +13,17 @@ import java.io.IOException;
 import org.eclipse.cdt.codan.core.CodanRuntime;
 import org.eclipse.cdt.codan.core.model.ICheckersRegistry;
 import org.eclipse.cdt.codan.core.model.IProblem;
+import org.eclipse.cdt.codan.core.model.IProblemReporter;
 import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
 import org.eclipse.cdt.codan.core.test.CheckerTestCase;
+import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.cdt.core.index.IIndexManager;
 import org.eclipse.cdt.core.testplugin.util.TestSourceReader;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.cute.ui.test.UiTestPlugin;
 
@@ -233,6 +241,63 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		checkNoErrors();
 	}
 
+	@Override
+	protected void indexFiles() throws CoreException {
+
+		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD, null);
+
+		super.indexFiles();
+	}
+
+	@Override
+	protected void runCodan() {
+		checkIndexer();
+		cleanMarkers();
+		super.runCodan();
+	}
+
+	private void cleanMarkers() {
+		try {
+			IMarker[] existingMarkers = cproject.getProject().findMarkers(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, true, 1);
+			assertEquals(0, existingMarkers.length);
+			cproject.getProject().deleteMarkers(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, true, 1);
+		} catch (CoreException e) {
+			fail(e.getMessage());
+		}
+	}
+
+	private void checkIndexer() {
+		IIndexManager indexManager = CCorePlugin.getIndexManager();
+		if (!indexManager.isIndexerIdle()) {
+			System.err.println(getName() + ": Indexer Running!");
+		}
+		if (indexManager.isIndexerSetupPostponed(cproject)) {
+			System.err.println(getName() + ": Indexer Setup Postponed");
+		}
+
+		if (!indexManager.isProjectIndexed(cproject)) {
+			System.err.println(getName() + ": Project is not Indexed");
+		}
+
+		try {
+			IIndex index = indexManager.getIndex(cproject);
+
+			if (index.getLastWriteAccess() <= 0) {
+				System.err.println(getName() + ": Last write access: " + index.getLastWriteAccess());
+			}
+			if (index.getAllFiles().length <= 0) {
+				System.err.println(getName() + ": No files indexed!");
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		int waitCount = 0;
+		while (!indexManager.isIndexerIdle() && waitCount++ < 60) {
+			indexManager.joinIndexer(1000, null);
+			System.err.println(getName() + ": Indexer Running!");
+		}
+	}
+
 	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	// #define ASSERT(cond) ASSERTM(#cond,cond)
 	// #define CUTE_SMEMFUN(TestClass,MemberFunctionName) \
@@ -242,7 +307,6 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//
 	// struct testStruct{
 	// void testIt();
-	// }
 	// };
 	//
 	// void testStruct::testIt(){
@@ -254,7 +318,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// }
 	public void testUnregisteredMemberFunction() {
 		runProjectForCommentCode();
-		checkErrorLine(13, ID);
+		checkErrorLine(12, ID);
 	}
 
 	private void runProjectForCommentCode() {

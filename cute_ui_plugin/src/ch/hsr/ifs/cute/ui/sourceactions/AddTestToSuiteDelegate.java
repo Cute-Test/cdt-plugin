@@ -28,6 +28,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
+import ch.hsr.ifs.cute.core.CuteCorePlugin;
+
 /**
  * @since 4.0
  */
@@ -45,6 +47,7 @@ public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbench
 	}
 
 	public void dispose() {
+		editor = null;
 	}
 
 	public void init(IWorkbenchWindow window) {
@@ -74,27 +77,23 @@ public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbench
 				RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
 				processor.performEdits();
 				this.editor = null;
-
 			}
-
 		} catch (CoreException e) {
-			e.printStackTrace();
+			CuteCorePlugin.log(e);
 		} catch (MalformedTreeException e) {
-			e.printStackTrace();
+			CuteCorePlugin.log(e);
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			CuteCorePlugin.log(e);
 		}
-
 	}
 
 	private IEditorPart getEditor() {
 		if (editor == null) {
-			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			if (page.isEditorAreaVisible() && page.getActiveEditor() != null && page.getActiveEditor() instanceof TextEditor) {
 				editor = page.getActiveEditor();
 			}
 		}
 		return editor;
 	}
-
 }

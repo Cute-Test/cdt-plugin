@@ -25,7 +25,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 
-
 public class ASTHelper {
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -173,13 +172,13 @@ public class ASTHelper {
 	}
 
 	public static ArrayList<IASTDeclaration> getPublicMethods(IASTSimpleDeclaration cppClass) {
-		ArrayList<IASTDeclaration> result = new ArrayList<IASTDeclaration>();
 
-		IASTDeclSpecifier declspecifier = cppClass.getDeclSpecifier();
+		final ArrayList<IASTDeclaration> result = new ArrayList<IASTDeclaration>();
+		final IASTDeclSpecifier declspecifier = cppClass.getDeclSpecifier();
+
 		if (declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier) {
-			ICPPASTCompositeTypeSpecifier cts = (ICPPASTCompositeTypeSpecifier) declspecifier;
-			String className = cts.getName().toString();
-
+			final ICPPASTCompositeTypeSpecifier cts = (ICPPASTCompositeTypeSpecifier) declspecifier;
+			final String className = cts.getName().toString();
 			boolean ispublicVisibility = false;
 			if (cts.getKey() == ICPPASTCompositeTypeSpecifier.k_struct)
 				ispublicVisibility = true;
@@ -190,7 +189,7 @@ public class ASTHelper {
 				return result;
 			}
 
-			IASTDeclaration members[] = cts.getMembers();
+			final IASTDeclaration members[] = cts.getMembers();
 			for (int i = 0; i < members.length; i++) {
 				if (members[i] instanceof ICPPASTVisibilityLabel) {
 					ispublicVisibility = changeVisibilityMode((ICPPASTVisibilityLabel) members[i]);
@@ -218,7 +217,6 @@ public class ASTHelper {
 					continue;//constructor
 
 				result.add(members[i]);
-
 			}
 		}
 		return result;
