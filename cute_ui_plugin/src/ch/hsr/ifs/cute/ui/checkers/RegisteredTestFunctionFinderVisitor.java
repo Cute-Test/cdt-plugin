@@ -25,6 +25,7 @@ import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.index.IIndex;
 
@@ -76,8 +77,8 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 	}
 
 	private IBinding getRegisteredFunctionBinding(IASTName ref) {
-		IASTFunctionCallExpression funcCall = getFunctionCallParent(ref);
-		IASTInitializerClause[] arguments = funcCall.getArguments();
+		final IASTFunctionCallExpression funcCall = getFunctionCallParent(ref);
+		final IASTInitializerClause[] arguments = funcCall.getArguments();
 		if (isFunctionPushBack(arguments)) {
 			return getFunction(arguments);
 		}
@@ -99,6 +100,8 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 			if (expressionNameBinding instanceof ICPPConstructor) {
 				final ICPPConstructor constructorBinding = (ICPPConstructor) expressionNameBinding;
 				return constructorBinding.getClassOwner();
+			} else if (expressionNameBinding instanceof ICPPClassType) {
+				return expressionNameBinding;
 			}
 		}
 		return null;
@@ -107,9 +110,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 	private boolean isFunctorPushBack(IASTInitializerClause[] arguments) {
 		if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-			if (funcCall.getArguments().length == 0) {
-				return true;
-			}
+			return funcCall.getArguments().length == 0;
 		}
 		return false;
 	}
