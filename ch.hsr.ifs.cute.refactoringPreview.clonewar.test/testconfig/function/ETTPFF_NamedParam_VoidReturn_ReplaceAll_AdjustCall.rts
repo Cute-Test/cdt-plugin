@@ -4,35 +4,28 @@
 filename=ETTPFF_NamedParam_VoidReturn_ReplaceAll_AdjustCall.h
 //@ETTPFF_NamedParam_VoidReturn_ReplaceAll_AdjustCall.h
 #include "Foobar.h"
-void /*$*/max/*$$*/(foobar first, foobar second)
-{
+void /*$*/max/*$$*/(foobar first, foobar second) {
 }
 //=
 #include "Foobar.h"
-template<typename T2, typename T1> T2 max(T1 first, T1 second)
-{
+template<typename T2, typename T1>
+T2 max(T1 first, T1 second) {
 }
 
-
 //@Foobar.h
-struct foobar
-{
-	void doSomething()
-	{
+struct foobar {
+	void doSomething() {
 	}
 };
 //=
-struct foobar
-{
-	void doSomething()
-	{
+struct foobar {
+	void doSomething() {
 	}
 };
 //@ETTPFF_NamedParam_VoidReturn_ReplaceAll_AdjustCall.cpp
 #include "ETTPFF_NamedParam_VoidReturn_ReplaceAll_AdjustCall.h"
 
-int main()
-{
+int main() {
 	foobar f1;
 	foobar f2;
 	max(f1,f2);
@@ -40,8 +33,7 @@ int main()
 //=
 #include "ETTPFF_NamedParam_VoidReturn_ReplaceAll_AdjustCall.h"
 
-int main()
-{
+int main() {
 	foobar f1;
 	foobar f2;
 	max<void>(f1,f2);

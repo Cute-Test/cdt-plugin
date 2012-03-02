@@ -9,9 +9,8 @@ void test() {
 //=
 struct X
 {
-    static void foo()
-    {
-    }
+	static void foo() {
+	}
 };
 void test() {
     X::foo();
@@ -28,10 +27,9 @@ void test() {
 //=
 struct X
 {
-    static X foo() const
-    {
-        return X();
-    }
+	static X foo() const {
+		return X();
+	}
 };
 
 void test() {
@@ -49,10 +47,9 @@ void test() {
 //=
 struct X
 {
-    static X foo(const int & i) const
-    {
-        return X();
-    }
+	static X foo(const int& i) const {
+		return X();
+	}
 };
 
 void test() {
@@ -78,7 +75,6 @@ struct X
 //=
 struct X
 {
-    static void foo()
-    {
-    }
+	static void foo() {
+	}
 };

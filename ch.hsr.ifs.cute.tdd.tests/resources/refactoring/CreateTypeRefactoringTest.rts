@@ -4,9 +4,9 @@ void func() {
     A a1;
 }
 //=
-struct A
-{
+struct A {
 };
+
 void func() {
     A a1;
 }
@@ -14,30 +14,28 @@ void func() {
 //@A.cpp
 namespace N {
 void test() {
- Klass k;
+	Klass k;
 }
 }
 //=
 namespace N {
-    struct Klass
-    {
-    };
+
+struct Klass {
+};
 void test() {
- Klass k;
+	Klass k;
 }
 }
 //!TestCallDefaultContructor
 //@A.cpp
-void test()
-{
+void test() {
     B b();
 }
 //=
-struct B
-{
+struct B {
 };
-void test()
-{
+
+void test() {
     B b();
 }
 //!CreateTypeOutOfATemplatedFunction
@@ -47,9 +45,9 @@ T testy(T t) {
 	Klasse k;
 }
 //=
-struct Klasse
-{
+struct Klasse {
 };
+
 template <typename T>
 T testy(T t) {
 	Klasse k;
@@ -62,8 +60,7 @@ T testy(T t) {
 	Klasse k;
 }
 //=
-struct Klasse
-{
+struct Klasse {
 };
 template <typename U>
 template <typename T>
@@ -79,9 +76,8 @@ struct Test {
 };
 //=
 struct Test {
-    struct Klasse
-    {
-    };
+	struct Klasse {
+	};
     void testy() {
         Klasse k;
     }
@@ -97,9 +93,8 @@ struct Test {
 };
 //=
 struct Test {
-    struct Klasse
-    {
-    };
+	struct Klasse {
+	};
 	template <typename T>
     T testy(T t) {
         Klasse k;
@@ -119,9 +114,8 @@ struct Test {
 //=
 template <typename C>
 struct Test {
-    struct Klasse
-    {
-    };
+	struct Klasse {
+	};
 	template <typename T>
     T testy(T t) {
         Klasse k;
@@ -137,8 +131,7 @@ struct A : B
 void test() {
 }
 //=
-struct B
-{
+struct B {
 };
 struct A : B
 {
@@ -152,9 +145,9 @@ void test() {
     B<int, double> b;
 }
 //=
-template<typename T, typename U> struct B
-{
+template<typename T, typename U> struct B {
 };
+
 void test() {
     B<int, double> b;
 }
@@ -166,20 +159,18 @@ void test() {
     A a;
 }
 //=
-template<typename T> struct B
-{
+template<typename T> struct B {
 };
 struct A : B<int> {
 };
 void test() {
     A a;
 }
-//!CreateInTotalyEmptyFile
+//!CreateInTotallyEmptyFile
 //@A.cpp
 Type t;
 //=
-struct Type
-{
+struct Type {
 };
 Type t;
 //!CreateClassWithNamespaceAccess
@@ -188,9 +179,9 @@ void test() {
     X::foo();
 }
 //=
-struct X
-{
+struct X {
 };
+
 void test() {
     X::foo();
 }
@@ -200,63 +191,54 @@ void test() {
     X::Y::foo();
 }
 //=
-struct X
-{
+struct X {
 };
+
 void test() {
     X::Y::foo();
 }
 //!CreateSecondOfMultipleNamespace
 //@A.cpp
-struct X
-{
+struct X {
 };
 void test() {
     X::Y::foo();
 }
 //=
-struct X
-{
-    struct Y
-    {
-    };
+struct X {
+	struct Y {
+	};
 };
 void test() {
     X::Y::foo();
 }
 //!ClassInNamespace
 //@A.cpp
-namespace X
-{
+namespace X {
 }
 void test() {
     X::A::foo();
 }
 //=
-namespace X
-{
-    struct A
-    {
-    };
+namespace X {
+struct A {
+};
 }
 void test() {
     X::A::foo();
 }
 //!Class in Namespace from Declaration
 //@A.cpp
-namespace X
-{
+namespace X {
 }
 
 void test() {
     X::Inner xi;
 }
 //=
-namespace X
-{
-    struct Inner
-    {
-    };
+namespace X {
+struct Inner {
+};
 }
 
 void test() {

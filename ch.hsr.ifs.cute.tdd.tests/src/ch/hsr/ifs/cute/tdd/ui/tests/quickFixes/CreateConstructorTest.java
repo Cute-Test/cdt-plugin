@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.quickFixes;
 
-
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.createfunction.quickfixes.CreateConstructorCreationQuickFix;
 import ch.hsr.ifs.cute.tdd.ui.tests.QuickFixTest;
@@ -31,34 +30,39 @@ public class CreateConstructorTest extends QuickFixTest {
 		return TddErrorIdCollection.ERR_ID_MissingConstructorResolutionProblem_HSR;
 	}
 
+	@Override
 	public void testMarkerMessage() {
 		assertExactlyTheSame("No such constructor for type A", getMarkerMessage());
 	}
 
+	@Override
 	public void testMarkerOffset() {
 		assertEquals("Marker offset", 33, getMarkerOffset());
 	}
 
+	@Override
 	public void testMarkerLength() {
 		assertEquals("Marker length", 1, getMarkerLength());
 	}
 
+	@Override
 	public void testQuickFixMessage() {
 		assertExactlyTheSame(CREATE_CONSTRUCTOR_A, getQuickFixMessage(CreateConstructorCreationQuickFix.class, CREATE_CONSTRUCTOR_A));
 	}
 
 	//struct A {
-	//     A(const int & i)
-	//    {
-	//    }
+	//	A(const int& i) {
+	//	}
 	//};
 	//void testX() {
 	//  A a(3);
 	//}
+	@Override
 	public void testQuickFixApplying() {
 		assertExactlyTheSame(getAboveComment(), runQuickFix(CreateConstructorCreationQuickFix.class, CREATE_CONSTRUCTOR_A));
 	}
 
+	@Override
 	public void testImageNotNull() {
 		assertNotNull(getQuickFix(CreateConstructorCreationQuickFix.class, CREATE_CONSTRUCTOR_A).getImage());
 	}

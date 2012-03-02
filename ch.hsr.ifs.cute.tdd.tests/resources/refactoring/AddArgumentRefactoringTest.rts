@@ -7,7 +7,7 @@ void testFunc() {
 //=
 void func(int i) { }
 void testFunc() {
-	func(_);
+	func (_);
 }
 //!AddTwoIntegerArguments
 //@A.cpp
@@ -279,7 +279,7 @@ void testFunc() {
 #include "A.h"
 
 void testFunc() {
-	func(_);
+	func (_);
 }
 //@A.h
 void func(int i) { }

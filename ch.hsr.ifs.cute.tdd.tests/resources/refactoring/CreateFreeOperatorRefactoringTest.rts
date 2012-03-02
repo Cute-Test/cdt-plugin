@@ -19,9 +19,8 @@ struct Stream {
 struct A {
 };
 
-Stream & operator<<(Stream & s, A & a)
-{
-    return Stream();
+Stream& operator<<(Stream& s, A& a) {
+	return Stream();
 }
 
 void test()
@@ -43,9 +42,8 @@ void test() {
 struct A {
 };
 
-A & operator++(A & a)
-{
-    return A();
+A& operator++(A& a) {
+	return A();
 }
 
 void test() {
@@ -65,9 +63,8 @@ void test() {
 struct A {
 };
 
-A operator++(A & a, int)
-{
-    return A();
+A operator++(A& a, int) {
+	return A();
 }
 
 void test() {
@@ -87,9 +84,8 @@ void test() {
 struct A {
 };
 
-bool operator==(A & a, const int & i)
-{
-    return bool();
+bool operator==(A& a, const int& i) {
+	return bool();
 }
 
 void test() {
@@ -109,9 +105,8 @@ void test() {
 struct A {
 };
 
-bool operator==(A & a, A & a)
-{
-    return bool();
+bool operator==(A& a, A& a) {
+	return bool();
 }
 
 void test() {
@@ -163,9 +158,8 @@ namespace cute{
 struct A {
 };
 
-A operator++(A & a, int)
-{
-    return A();
+A operator++(A& a, int) {
+	return A();
 }
 
 void test(){
@@ -215,9 +209,8 @@ namespace cute {
 struct A {
 };
 
-int operator++(A & a, int)
-{
-    return int();
+int operator++(A& a, int) {
+	return int();
 }
 
 void test(){
@@ -265,9 +258,8 @@ namespace cute {
 struct A {
 };
 
-int operator++(A & a, int)
-{
-    return int();
+int operator++(A& a, int) {
+	return int();
 }
 
 void test(){
@@ -315,16 +307,15 @@ namespace cute {
 struct A {
 };
 
-int operator++(A & a, int)
-{
-    return int();
+int operator++(A& a, int) {
+	return int();
 }
 
 void test(){
     A a;
     ASSERT_EQUAL_DELTAM("foobar", 6, a++, 0.0);
 }
-//!ASSERTOperatorDectectionBinary
+//!ASSERTOperatorDetectionBinary
 //@Test.cpp
 #include <string>
 namespace cute{
@@ -369,9 +360,8 @@ namespace cute{
 struct A {
 };
 
-bool operator==(A & a, const int & i)
-{
-    return bool();
+bool operator==(A& a, const int& i) {
+	return bool();
 }
 
 void test(){
@@ -421,9 +411,8 @@ namespace cute {
 struct A {
 };
 
-bool operator==(A & a, const int & i)
-{
-    return bool();
+bool operator==(A& a, const int& i) {
+	return bool();
 }
 
 void test(){
@@ -469,9 +458,8 @@ namespace cute {
 struct A {
 };
 
-bool operator==(A & a, const int & i)
-{
-    return bool();
+bool operator==(A& a, const int& i) {
+	return bool();
 }
 
 void test(){
@@ -517,9 +505,8 @@ namespace cute {
 struct A {
 };
 
-bool operator==(A & a, const int & i)
-{
-    return bool();
+bool operator==(A& a, const int& i) {
+	return bool();
 }
 
 void test(){
@@ -543,9 +530,8 @@ struct A {
 
 typedef A type;
 
-type & operator++(type & a)
-{
-    return type();
+type& operator++(type& a) {
+	return type();
 }
 
 void test() {

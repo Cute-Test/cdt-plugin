@@ -29,31 +29,37 @@ public class AddArgumentTest extends QuickFixTest {
 		return TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR;
 	}
 
+	@Override
 	public void testMarkerMessage() {
 		assertExactlyTheSame("Invalid Arguments to foo", getMarkerMessage());
 	}
 
+	@Override
 	public void testMarkerOffset() {
 		assertEquals("Marker offset", 33, getMarkerOffset());
 	}
 
+	@Override
 	public void testMarkerLength() {
 		assertEquals("Marker length", 3, getMarkerLength());
 	}
 
 	//TODO: non sense
+	@Override
 	public void testQuickFixMessage() {
 		assertExactlyTheSame(ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT, getQuickFixMessage(AddArgumentQuickFix.class, ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT));
 	}
 
 	//void foo(int) {}
 	//void test() {
-	//  foo(_);
+	//  foo (_);
 	//}
+	@Override
 	public void testQuickFixApplying() {
-		assertExactlyTheSame(getAboveComment(), runQuickFix(AddArgumentQuickFix.class,  ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT));
+		assertExactlyTheSame(getAboveComment(), runQuickFix(AddArgumentQuickFix.class, ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT));
 	}
 
+	@Override
 	public void testImageNotNull() {
 		assertNotNull(getQuickFix(AddArgumentQuickFix.class, ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT).getImage());
 	}

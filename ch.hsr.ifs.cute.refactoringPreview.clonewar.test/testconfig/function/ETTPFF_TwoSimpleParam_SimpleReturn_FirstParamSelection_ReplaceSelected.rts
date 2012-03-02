@@ -3,13 +3,10 @@
 //@.config
 filename=ETTPFF_TwoSimpleParam_SimpleReturn_FirstParamSelection_ReplaceSelected.h
 //@ETTPFF_TwoSimpleParam_SimpleReturn_FirstParamSelection_ReplaceSelected.h
-void max(/*$*/int/*$$*/ first, int second)
-{
-
+void max(/*$*/int/*$$*/ first, int second) {
 }
 //=
-template<typename T1> void max(T1 first, int second)
-{
+template<typename T1>
+void max(T1 first, int second) {
 }
-
 

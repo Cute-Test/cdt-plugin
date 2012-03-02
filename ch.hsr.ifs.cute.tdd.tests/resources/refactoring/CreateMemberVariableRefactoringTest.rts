@@ -10,7 +10,7 @@ struct B
 	B(int i) : member(i) {}
 
 private:
-    int member;
+	int member;
 };
 //!TestCreateMemberVariableFromInitializerListWithType
 //@A.cpp
@@ -24,7 +24,7 @@ struct B
 	B(B i) : member(i) {}
 
 private:
-    B member;
+	B member;
 };
 //!Create Member Variable from Initializer List with Literal
 //@A.cpp
@@ -38,7 +38,7 @@ struct S{
 	}
 
 private:
-    int i;
+	int i;
 };
 //!TestCreateMemberVariableFromCall
 //@A.cpp
@@ -50,7 +50,7 @@ void test() {
 }
 //=
 struct B {
-    double member;
+	double member;
 };
 void test() {
     B b;
@@ -66,7 +66,7 @@ void test() {
 }
 //=
 struct B {
-    double member;
+	double member;
 };
 void test() {
     B b;
@@ -83,7 +83,7 @@ void test() {
 }
 //=
 struct B {
-    double member;
+	double member;
 };
 void test() {
     B b;
@@ -100,7 +100,7 @@ void test() {
 }
 //=
 struct B {
-    B member;
+	B member;
 };
 void test() {
     B b;
@@ -117,7 +117,7 @@ void test() {
 //=
 class B {
 public:
-    int member;
+	int member;
 };
 void test() {
     B b;
@@ -133,7 +133,8 @@ class A {
 //=
 class A {
 	void membVar;
-    void member() {
+
+	void member() {
 		this->membVar;
 	}
 };
@@ -146,7 +147,7 @@ class A {
 };
 //=
 class A {
-    int membVar;
+	int membVar;
 	void member() {
 		this->membVar = 42;
 	}
@@ -160,7 +161,7 @@ class A {
 };
 //=
 class A {
-    int membVar;
+	int membVar;
 	void member() {
 		(*this).membVar = 42;
 	}
@@ -174,7 +175,7 @@ class A {
 };
 //=
 class A {
-    std::string membVar;
+	std::string membVar;
 	void member() {
 		(*this).membVar = "ImNoCharArray";
 	}
@@ -188,7 +189,7 @@ class A {
 };
 //=
 class A {
-    std::string membVar;
+	std::string membVar;
 	void member() {
 		this->membVar = "ImNoCharArray";
 	}
@@ -203,7 +204,7 @@ class A {
 };
 //=
 class A {
-    double membVar;
+	double membVar;
 	void member() {
 		double number;
 		this->membVar = number+1;
@@ -219,7 +220,7 @@ void test() {
 }
 //=
 struct B {
-    int array[3];
+	int array[3];
 };
 void test() {
     B b;
@@ -236,7 +237,7 @@ void test() {
 //=
 class B {
 public:
-    B array[3];
+	B array[3];
 };
 void test() {
     B b, b1, b2, b3;
@@ -253,7 +254,7 @@ void test() {
 //=
 class B {
 public:
-    int array[3];
+	int array[3];
 };
 void test() {
     B b;
@@ -262,8 +263,7 @@ void test() {
 //!TemplateInitializer
 //@A.cpp
 template <typename T>
-class A
-{
+class A {
 public:
     A(T & t) : memVar(t)
     {
@@ -271,9 +271,8 @@ public:
 };
 //=
 template <typename T>
-class A
-{
-    T memVar;
+class A {
+	T memVar;
 public:
     A(T & t) : memVar(t)
     {
@@ -281,16 +280,14 @@ public:
 };
 //!InitializerListInitializer
 //@A.cpp
-class A
-{
+class A {
 public:
     A() : memVar({1,2,3}) {
     }
 };
 //=
-class A
-{
-    int memVar[3];
+class A {
+	int memVar[3];
 public:
     A() : memVar({1,2,3}) {
     }
@@ -300,8 +297,7 @@ public:
 struct B {
 	B(int, double);
 };
-class A
-{
+class A {
     A(): membVar(B(0, 0.0))
     {
     }
@@ -310,9 +306,8 @@ class A
 struct B {
 	B(int, double);
 };
-class A
-{
-    B membVar;
+class A {
+	B membVar;
     A(): membVar(B(0, 0.0))
     {
     }
@@ -346,7 +341,7 @@ void test() {
 }
 //=
 struct A {
-    static int i;
+	static int i;
 };
 
 void test() {
@@ -406,7 +401,7 @@ void thisIsATest() {
 //=
 namespace ns
 {
-    static int mem;
+static int mem;
 }
 
 void thisIsATest() {
@@ -458,7 +453,7 @@ struct B
 //=
 struct B
 {
-    bool bar;
+	bool bar;
 };
 //@C.h
 struct B

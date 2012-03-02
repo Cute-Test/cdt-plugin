@@ -1,12 +1,11 @@
 //!CallPrivateInStructFromOutside
 //@A.cpp
-struct B
-{
+struct B {
 private:
-    int foo()
-    {
-        return int();
-    }
+	int foo()
+	{
+		return int();
+	}
 };
 
 void test()
@@ -15,12 +14,10 @@ void test()
     int x = b.foo();
 }
 //=
-struct B
-{
-    int foo()
-    {
-        return int();
-    }
+struct B {
+	int foo() {
+		return int();
+	}
 
 private:
 };
@@ -59,8 +56,7 @@ private:
 };
 //!CallDefaultInClassFromOutside
 //@A.cpp
-class B
-{
+class B {
     void foo()
     {
     }
@@ -72,8 +68,7 @@ void test()
     b.foo();
 }
 //=
-class B
-{
+class B {
 public:
     void foo()
     {
@@ -116,9 +111,9 @@ struct B
 {
 public:
 private:
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
 
 void test()
@@ -130,9 +125,8 @@ void test()
 struct B
 {
 public:
-    void foo()
-    {
-    }
+	void foo() {
+	}
 
 private:
 };
@@ -144,25 +138,23 @@ void test()
 }
 //!PreserveCommentsWhenHiding
 //@A.cpp
-struct B{
+struct B {
 private:
-    // comment above function
-    int foo()
-    {
-        // comment inside function
-    }
+	// comment above function
+	int foo() {
+		// comment inside function
+	}
 };
 void test() {
     B b;
     int x = b.foo();
 }
 //=
-struct B{
-    // comment above function
-    int foo()
-    {
-        // comment inside function
-    }
+struct B {
+	// comment above function
+	int foo() {
+		// comment inside function
+	}
 
 private:
 };
@@ -172,8 +164,7 @@ void test() {
 }
 //!PreserveMacrosWhenHiding
 //@A.cpp
-class Klasse
-{
+class Klasse {
     int foo(int i = __LINE__) {
         return __LINE__;
     }
@@ -184,8 +175,7 @@ int main() {
     return 0;
 }
 //=
-class Klasse
-{
+class Klasse {
 public:
     int foo(int i = __LINE__) {
         return __LINE__;
@@ -215,8 +205,7 @@ void test() {
 #ifndef B_H_
 #define B_H_
 
-class B
-{
+class B {
     void member()
     {
     }
@@ -226,8 +215,7 @@ class B
 #ifndef B_H_
 #define B_H_
 
-class B
-{
+class B {
 public:
     void member()
     {
@@ -236,49 +224,41 @@ public:
 #endif /* B_H_ */
 //!PrivateFunctionDeclaration
 //@A.cpp
-class B
-{
+class B {
     int foo();
 };
 
-void test()
-{
+void test() {
     B b;
     int x = b.foo();
 }
 //=
-class B
-{
+class B {
 public:
     int foo();
 };
 
-void test()
-{
+void test() {
     B b;
     int x = b.foo();
 }
 //!PrivateMemberVariable
 //@A.cpp
-class B
-{
+class B {
     int foo;
 };
 
-void test()
-{
+void test() {
     B b;
     int x = b.foo;
 }
 //=
-class B
-{
+class B {
 public:
     int foo;
 };
 
-void test()
-{
+void test() {
     B b;
     int x = b.foo;
 }
@@ -325,9 +305,8 @@ public:
 //=
 class A {
 public:
-    void foo()
-    {
-    }
+	void foo() {
+	}
 	A(){}
 };
 //!No Marker for Access in Non-inline Member

@@ -12,9 +12,8 @@ void func()
 //=
 struct B
 {
-    void member()
-    {
-    }
+	void member() {
+	}
 };
 
 void func()
@@ -22,7 +21,7 @@ void func()
     B b1;
     b1.member();
 }
-//!TestAssigmentMemberFunction
+//!TestAssignmentMemberFunction
 //@A.cpp
 struct B
 {
@@ -36,10 +35,9 @@ void func()
 //=
 struct B
 {
-    int member() const
-    {
-        return int();
-    }
+	int member() const {
+		return int();
+	}
 };
 
 void func()
@@ -65,9 +63,8 @@ void func()
 
 struct B
 {
-    void member()
-    {
-    }
+	void member() {
+	}
 };
 
 void func()
@@ -99,9 +96,8 @@ struct B
 //=
 struct B
 {
-    void member()
-    {
-    }
+	void member() {
+	}
 };
 //!PrivateClassInsertion
 //@A.cpp
@@ -116,9 +112,8 @@ void test()
 //=
 class B {
 public:
-    void foo()
-    {
-    }
+	void foo() {
+	}
 };
 
 void test()
@@ -134,25 +129,22 @@ public:
 private:
 };
 
-void test()
-{
-    B b;
-    b.foo();
+void test() {
+	B b;
+	b.foo();
 }
 //=
 class B {
 protected:
 public:
-    void foo()
-    {
-    }
+	void foo() {
+	}
 private:
 };
 
-void test()
-{
-    B b;
-    b.foo();
+void test() {
+	B b;
+	b.foo();
 }
 //!TestCUTEMacroFunctionCreation_ASSERT
 //@Test.cpp
@@ -199,10 +191,9 @@ namespace cute{
 
 struct B
 {
-    bool member() const
-    {
-        return bool();
-    }
+	bool member() const {
+		return bool();
+	}
 };
 
 void blah(){
@@ -252,10 +243,9 @@ namespace cute {
 
 struct B
 {
-    int member() const
-    {
-        return int();
-    }
+	int member() const {
+		return int();
+	}
 };
 
 void test(){
@@ -301,10 +291,9 @@ namespace cute {
 
 struct B
 {
-    int member() const
-    {
-        return int();
-    }
+	int member() const {
+		return int();
+	}
 };
 
 void testKreis(){
@@ -350,10 +339,9 @@ namespace cute {
 
 struct B
 {
-    int member() const
-    {
-        return int();
-    }
+	int member() const {
+		return int();
+	}
 };
 
 void testKreis(){
@@ -374,9 +362,8 @@ void test()
 //=
 struct B {
 public:
-    void foo()
-    {
-    }
+	void foo() {
+	}
 };
 
 void test()
@@ -398,9 +385,8 @@ void func()
 //=
 struct B
 {
-    void member(const int & i)
-    {
-    }
+	void member(const int& i) {
+	}
 };
 
 void func()
@@ -433,10 +419,10 @@ template <typename ExpectedValue, typename ActualValue>
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
 struct Type {
-    int function(const int & i) const
-    {
-        return int();
-    }};
+	int function(const int& i) const {
+		return int();
+	}
+};
 void test(){
     Type t;
     ASSERT_EQUAL(42, t.function(42));
@@ -458,7 +444,7 @@ void test()
 }
 //!Create Member Function with One Argument and Return Type
 //@A.cpp
-struct A{
+struct A {
 };
 
 int main(int argc, char **argv) {
@@ -466,11 +452,10 @@ int main(int argc, char **argv) {
 	A b = a.create(1);
 }
 //=
-struct A{
-    A create(const int & i) const
-    {
-        return A();
-    }
+struct A {
+	A create(const int& i) const {
+		return A();
+	}
 };
 
 int main(int argc, char **argv) {
@@ -495,10 +480,9 @@ private:
 //=
 struct B
 {
-    bool bar() const
-    {
-        return bool();
-    }
+	bool bar() const {
+		return bool();
+	}
 };
 
 struct T {
@@ -584,10 +568,9 @@ struct B
 //=
 struct B
 {
-    bool bar() const
-    {
-        return bool();
-    }
+	bool bar() const {
+		return bool();
+	}
 };
 //@C.h
 struct B
@@ -617,9 +600,8 @@ int main(int argc, char **argv) {
 }
 //=
 struct K{
-    void bar()
-    {
-    }
+	void bar() {
+	}
 };
 
 typedef K tdK;
@@ -641,9 +623,9 @@ void test() {
 //=
 namespace X
 {
-    void foo()
-    {
-    }
+
+void foo() {
+}
 }
 
 void test() {
@@ -669,29 +651,32 @@ namespace X
 //=
 namespace X
 {
-    void foo()
-    {
-    }
+
+void foo() {
+}
 }
 //!Create Member Function for Type of Call Expression
 //@A.cpp
-struct S{
-    S f(){return S();}
+struct S {
+	S f() {
+		return S();
+	}
 };
 
-void foo(){
-    S s;
-    s.f().b();
+void foo() {
+	S s;
+	s.f().b();
 }
 //=
-struct S{
-    void b()
-    {
-    }
-    S f(){return S();}
+struct S {
+	void b() {
+	}
+	S f() {
+		return S();
+	}
 };
 
-void foo(){
-    S s;
-    s.f().b();
+void foo() {
+	S s;
+	s.f().b();
 }

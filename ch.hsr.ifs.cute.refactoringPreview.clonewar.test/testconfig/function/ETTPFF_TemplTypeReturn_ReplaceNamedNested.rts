@@ -5,15 +5,12 @@ filename=ETTPFF_TemplTypeReturn_ReplaceNamedNested.h
 //@ETTPFF_TemplTypeReturn_ReplaceNamedNested.h
 #include <vector>
 struct foobar;
-std::vector<foobar> /*$*/sort/*$$*/()
-{
-
+std::vector<foobar> /*$*/sort/*$$*/() {
 }
 //=
 #include <vector>
 struct foobar;
-template<typename T1> std::vector<T1> sort()
-{
+template<typename T1>
+std::vector<T1> sort() {
 }
-
 

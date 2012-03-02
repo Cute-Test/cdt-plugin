@@ -3,16 +3,13 @@
 //@.config
 filename=ETTPT_Struct_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.h
 //@ETTPT_Struct_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.h
-struct foo
-{
+struct foo {
 	/*$*/foo/*$$*/ i;
 };
 //=
-template<typename T1 = foo> struct fooT
-{
-    T1 i;
+template<typename T1 = foo> struct fooT {
+	T1 i;
 };
-
 
 typedef fooT<> foo;
 
@@ -21,8 +18,7 @@ typedef fooT<> foo;
 //@.config
 filename=ETTPT_Struct_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.cpp
 //@ETTPT_Struct_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.cpp
-struct Foo
-{
+struct Foo {
 	/*$*/int/*$$*/ i;
 };
 
@@ -30,13 +26,14 @@ int main(int argc, char **argv) {
 	Foo foo;
 }
 //=
-template<typename T1 = int> struct FooT
-{
-    T1 i;
+template<typename T1 = int> struct FooT {
+	T1 i;
 };
 
 
+
 typedef FooT<> Foo;
+
 int main(int argc, char **argv) {
 	Foo foo;
 }
@@ -45,12 +42,10 @@ int main(int argc, char **argv) {
 //@.config
 filename=ETTPT_Struct_with_Constructor_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.cpp
 //@ETTPT_Struct_with_Constructor_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.cpp
-struct /*$*/S/*$$*/
-{
-    S()
-    {
-    }
-    
+struct /*$*/S/*$$*/ {
+	S() {
+	}
+
 	int i;
 };
 
@@ -58,17 +53,17 @@ int main(int argc, char **argv) {
 	S s;
 }
 //=
-template<typename T1 = int> struct ST
-{
-    ST()
-    {
-    }
+template<typename T1 = int> struct ST {
+	ST() {
+	}
 
-    T1 i;
+	T1 i;
 };
 
 
+
 typedef ST<> S;
+
 int main(int argc, char **argv) {
 	S s;
 }
@@ -77,12 +72,10 @@ int main(int argc, char **argv) {
 //@.config
 filename=ETTPT_Struct_with_Destructor_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.cpp
 //@ETTPT_Struct_with_Destructor_NamedTypeField_SingleSelection_ReplaceAll_DefaultOn.cpp
-struct /*$*/S/*$$*/
-{
-    ~S()
-    {
-    }
-    
+struct /*$*/S/*$$*/ {
+	~S() {
+	}
+
 	int i;
 };
 
@@ -90,17 +83,17 @@ int main(int argc, char **argv) {
 	S s;
 }
 //=
-template<typename T1 = int> struct ST
-{
-    ~ST()
-    {
-    }
+template<typename T1 = int> struct ST {
+	~ST() {
+	}
 
-    T1 i;
+	T1 i;
 };
 
 
+
 typedef ST<> S;
+
 int main(int argc, char **argv) {
 	S s;
 }

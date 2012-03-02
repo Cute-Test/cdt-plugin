@@ -4,15 +4,13 @@
 filename=ETTPT_Struct_TemplateTypeField_ReplaceTemplate_DefaultOn.h
 //@ETTPT_Struct_TemplateTypeField_ReplaceTemplate_DefaultOn.h
 #include <vector>
-struct /*$*/foo/*$$*/
-{
-    std::vector<int> i;
+struct /*$*/foo/*$$*/ {
+	std::vector<int> i;
 };
 //=
 #include <vector>
-template<typename T2 = std::vector<int>> struct fooT
-{
-    T2 i;
+template<typename T2 = std::vector<int>> struct fooT {
+	T2 i;
 };
 
 

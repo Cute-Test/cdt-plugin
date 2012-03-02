@@ -3,45 +3,36 @@
 //@.config
 filename=ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.h
 //@ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.h
-struct foobar
-{
+struct foobar {
 };
 
-struct foobar2
-{
+struct foobar2 {
 };
 
-void /*$*/setValue/*$$*/(foobar2 value, foobar f)
-{
-
+void /*$*/setValue/*$$*/(foobar2 value, foobar f) {
 }
 //=
-struct foobar
-{
+struct foobar {
 };
 
-struct foobar2
-{
+struct foobar2 {
 };
 
-template<typename T1, typename T2, typename T3> T3 setValue(T1 value, T2 f)
-{
+template<typename T1, typename T2, typename T3>
+T3 setValue(T1 value, T2 f) {
 }
-
 
 //@ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.cpp
 #include "ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.h"
-int main()
-{
+int main() {
 	foobar f;
 	foobar2 r;
-	setValue(r,f);
+	setValue(r, f);
 }
 //=
 #include "ETTPFF_TwoNamedParam_VoidReturn_ReplaceAll_AdjustCall.h"
-int main()
-{
+int main() {
 	foobar f;
 	foobar2 r;
-	setValue<foobar2,foobar,void>(r,f);
+	setValue<foobar2, foobar, void>(r, f);
 }

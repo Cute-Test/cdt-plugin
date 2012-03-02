@@ -3,19 +3,16 @@
 struct A {
 };
 
-void test()
-{
+void test() {
     A a(1);
 }
 //=
 struct A {
-     A(const int & i)
-    {
-    }
+	A(const int& i) {
+	}
 };
 
-void test()
-{
+void test() {
     A a(1);
 }
 //!SimpleDouble
@@ -23,27 +20,23 @@ void test()
 struct A {
 };
 
-void test()
-{
-    A a(1.0);
+void test() {
+	A a(1.0);
 }
 //=
 struct A {
-     A(const double & d)
-    {
-    }
+	A(const double& d) {
+	}
 };
 
-void test()
-{
-    A a(1.0);
+void test() {
+	A a(1.0);
 }
 //!MultipleArgumentsJustOneParam
 //@A.cpp
 struct A {
-     A(const int & i)
-    {
-    }
+	A(const int& i) {
+	}
 };
 
 void test()
@@ -52,13 +45,11 @@ void test()
 }
 //=
 struct A {
-     A(const int & i, const int & j)
-    {
-    }
+	A(const int& i, const int& j) {
+	}
 
-    A(const int & i)
-    {
-    }
+	A(const int& i) {
+	}
 };
 
 void test()
@@ -68,9 +59,8 @@ void test()
 //!OneArgMultipleParam
 //@A.cpp
 struct A {
-    A(const int & i, const int & j)
-    {
-    }
+	A(const int& i, const int& j) {
+	}
 };
 
 void test()
@@ -79,13 +69,11 @@ void test()
 }
 //=
 struct A {
-    A(const int & i)
-    {
-    }
+	A(const int& i) {
+	}
 
-    A(const int & i, const int & j)
-    {
-    }
+	A(const int& i, const int& j) {
+	}
 };
 
 void test()
@@ -100,8 +88,7 @@ struct Type {
 struct A {
 };
 
-void test()
-{
+void test() {
     Type t;
     A a(t);
 }
@@ -110,22 +97,19 @@ struct Type {
 };
 
 struct A {
-     A(Type & t)
-    {
-    }
+	A(Type& t) {
+	}
 };
 
-void test()
-{
+void test() {
     Type t;
     A a(t);
 }
 //!SameParameterLength
 //@A.cpp
 struct A {
-    A(const std::string & s, const int & i)
-    {
-    }
+	A(const std::string& s, const int& i) {
+	}
 };
 
 void test()
@@ -134,13 +118,11 @@ void test()
 }
 //=
 struct A {
-    A(const int & i, const int & j)
-    {
-    }
+	A(const int& i, const int& j) {
+	}
 
-    A(const std::string & s, const int & i)
-    {
-    }
+	A(const std::string& s, const int& i) {
+	}
 };
 
 void test()
@@ -171,9 +153,8 @@ struct Rnd {
 };
 
 struct A {
-     A(const int & rgetInt)
-    {
-    }
+	A(const int& rgetInt) {
+	}
 };
 
 void test()
@@ -209,9 +190,8 @@ struct Rnd {
 };
 
 struct A {
-     A(const int & getRndgetInt)
-    {
-    }
+	A(const int& getRndgetInt) {
+	}
 };
 
 Rnd getRnd(){
@@ -259,9 +239,8 @@ struct Rnd {
 };
 
 struct A {
-     A(const int & rgetInt)
-    {
-    }
+	A(const int& rgetInt) {
+	}
 };
 
 void test()
@@ -277,9 +256,8 @@ struct Rnd {
 };
 
 struct A {
-     A(const int & rgetInt)
-    {
-    }
+	A(const int& rgetInt) {
+	}
 };
 
 void test()
@@ -412,8 +390,7 @@ void test()
 //!Default Ctor Needed
 //@A.cpp
 struct A {
-    A(const int & i)
-    {
+	A(const int& i) {
     }
 };
 
@@ -424,12 +401,10 @@ void test()
 }
 //=
 struct A {
-    A()
-    {
-    }
+	A() {
+	}
 
-    A(const int & i)
-    {
+	A(const int& i) {
     }
 };
 
@@ -445,22 +420,19 @@ struct A {
 
 typedef A AToo;
 
-void test()
-{
-    AToo a(1);
+void test() {
+	AToo a(1);
 }
 //=
 struct A {
-     A(const int & i)
-    {
-    }
+	A(const int& i) {
+	}
 };
 
 typedef A AToo;
 
-void test()
-{
-    AToo a(1);
+void test() {
+	AToo a(1);
 }
 //!Composite Type Specifier Declaration
 //@A.cpp
@@ -468,9 +440,8 @@ struct S {
 } s(1);
 //=
 struct S {
-     S(const int & i)
-    {
-    }
+	S(const int& i) {
+	}
 } s(1);
 //!Local Composite Type Specifier Declaration
 //@A.cpp
@@ -483,9 +454,8 @@ void test()
 void test()
 {
 	struct S {
-	     S(const int & i)
-	    {
-	    }
+		S(const int& i) {
+		}
 	} s(1);
 }
 //!Constructor for Multiple Declarators
@@ -501,9 +471,8 @@ void test()
 }
 //=	
 struct S {
-     S(const int & i)
-    {
-    }
+	S(const int& i) {
+	}
 };
 
 void test()
@@ -551,7 +520,7 @@ void test()
 //!ConstructorWithTemplate
 //@A.cpp
 template <typename T>
-struct A {      
+struct A {
 };
 
 void test() {
@@ -560,9 +529,8 @@ void test() {
 //=
 template <typename T>
 struct A {
-     A(const int & i)
-    {
-    }
+	A(const int& i) {
+	}
 };
 
 void test() {
@@ -619,9 +587,8 @@ struct B {
 A B::a(1);
 //=
 struct A {
-     A(const int & i)
-    {
-    }
+	A(const int& i) {
+	}
 };
 
 struct B {
@@ -633,25 +600,22 @@ A B::a(1);
 //@A.cpp
 #include "A.h"
 
-void test()
-{
-    A a(1);
+void test() {
+	A a(1);
 }
 //=
 #include "A.h"
 
-void test()
-{
-    A a(1);
+void test() {
+	A a(1);
 }
 //@A.h
 struct A {
 };
 //=
 struct A {
-     A(const int & i)
-    {
-    }
+	A(const int& i) {
+	}
 };
 //!No Constructor Suggestion for Unknown Type
 //@.config

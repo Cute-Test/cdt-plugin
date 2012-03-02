@@ -3,35 +3,29 @@
 //@.config
 filename=ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustMultipleCallDifferentTypes.h
 //@ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustMultipleCallDifferentTypes.h
-struct A
-{
+struct A {
 };
 
-struct B : A
-{
+struct B : A {
 };
 
-template<typename T> void /*$*/foobar/*$$*/(T t)
-{
+template<typename T>
+void /*$*/foobar/*$$*/(T t) {
 }
 //=
-struct A
-{
+struct A {
 };
 
-struct B : A
-{
+struct B : A {
 };
 
-template<typename T, typename T1> T1 foobar(T t)
-{
+template<typename T, typename T1>
+T1 foobar(T t) {
 }
-
 
 //@ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustMultipleCallDifferentTypes.cpp
 #include "ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustMultipleCallDifferentTypes.h"
-int main()
-{
+int main() {
 	A a;
 	B b;
 	foobar(a);
@@ -39,10 +33,9 @@ int main()
 }
 //=
 #include "ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustMultipleCallDifferentTypes.h"
-int main()
-{
+int main() {
 	A a;
 	B b;
-	foobar<A,void>(a);
-	foobar<B,void>(b);
+	foobar<A, void>(a);
+	foobar<B, void>(b);
 }

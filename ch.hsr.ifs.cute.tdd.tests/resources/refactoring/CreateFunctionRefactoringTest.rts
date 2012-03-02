@@ -4,8 +4,7 @@ void func() {
     blah();
 }
 //=
-void blah()
-{
+void blah() {
 }
 
 void func() {
@@ -17,9 +16,8 @@ void func() {
 	int x = foo();
 }
 //=
-int foo()
-{
-    return int();
+int foo() {
+	return int();
 }
 
 void func() {
@@ -37,9 +35,8 @@ void func() {
 struct A
 {
 };
-A foo()
-{
-    return A();
+A foo() {
+	return A();
 }
 
 void func() {
@@ -55,8 +52,7 @@ void func() {
 //=
 #define MACRO(f) f();
 
-void foo()
-{
+void foo() {
 }
 
 void func() {
@@ -64,29 +60,24 @@ void func() {
 }
 //!TestAdvancedMacro
 //@F.cpp
-void bar()
-{
+void bar() {
 }
 
 #define MACRO(f) bar(f())
 
-void func()
-{
+void func() {
 	MACRO(foo());
 }
 //=
-void bar()
-{
+void bar() {
 }
 
 #define MACRO(f) bar(f())
 
-void foo()
-{
+void foo() {
 }
 
-void func()
-{
+void func() {
 	MACRO(foo());
 }
 //!TestCUTEMacroFunctionCreation_ASSERT
@@ -127,9 +118,8 @@ namespace cute{
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
 
-bool function()
-{
-    return bool();
+bool function() {
+	return bool();
 }
 
 void test(){
@@ -171,9 +161,8 @@ namespace cute {
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
 
-int function()
-{
-    return int();
+int function() {
+	return int();
 }
 
 void test(){
@@ -211,9 +200,8 @@ namespace cute {
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
-int function()
-{
-    return int();
+int function() {
+	return int();
 }
 
 void test(){
@@ -251,9 +239,8 @@ namespace cute {
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
-int function()
-{
-    return int();
+int function() {
+	return int();
 }
 
 void test(){
@@ -295,9 +282,8 @@ namespace cute{
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
-double function()
-{
-    return double();
+double function() {
+	return double();
 }
 
 void test(){
@@ -339,9 +325,8 @@ namespace cute{
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
-bool function()
-{
-    return bool();
+bool function() {
+	return bool();
 }
 
 void test(){

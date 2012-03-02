@@ -12,10 +12,9 @@ void func()
 //=
 struct B
 {
-    B & operator++()
-    {
-        return B();
-    }
+	B& operator++() {
+		return B();
+	}
 };
 
 void func()
@@ -37,10 +36,9 @@ void func()
 //=
 struct B
 {
-    B operator++(int)
-    {
-        return B();
-    }
+	B operator++(int) {
+		return B();
+	}
 };
 
 void func()
@@ -63,10 +61,9 @@ void func()
 //=
 struct B
 {
-    bool operator==(B & b1) const
-    {
-        return bool();
-    }
+	bool operator==(B& b1) const {
+		return bool();
+	}
 };
 
 void func()
@@ -152,7 +149,7 @@ void thisIsATest() {
 	Color c;
 	c = RED;
 }
-//!ASSERTOperatorDectectionUnary
+//!ASSERTOperatorDetectionUnary
 //@Test.cpp
 #include <string>
 namespace cute{
@@ -195,10 +192,9 @@ namespace cute{
 #define ASSERT(cond) ASSERTM(#cond,cond)
 
 struct A {
-    A operator++(int)
-    {
-        return A();
-    }
+	A operator++(int) {
+		return A();
+	}
 };
 
 void test(){
@@ -245,10 +241,9 @@ namespace cute {
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
 
 struct A {
-    int operator++(int)
-    {
-        return int();
-    }
+	int operator++(int) {
+		return int();
+	}
 };
 void test(){
     A a;
@@ -292,10 +287,9 @@ namespace cute {
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
 struct A {
-    int operator++(int)
-    {
-        return int();
-    }
+	int operator++(int) {
+		return int();
+	}
 };
 void test(){
     A a;
@@ -339,10 +333,9 @@ namespace cute {
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
 struct A {
-    double operator++(int)
-    {
-        return double();
-    }
+	double operator++(int) {
+		return double();
+	}
 };
 void test(){
     A a;
@@ -386,16 +379,15 @@ namespace cute {
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
 struct A {
-    int operator++(int)
-    {
-        return int();
-    }
+	int operator++(int) {
+		return int();
+	}
 };
 void test(){
     A a;
     ASSERT_EQUAL_DELTAM("foobar", 6, a++, 0.0);
 }
-//!ASSERTOperatorDectectionBinary
+//!ASSERTOperatorDetectionBinary
 //@Test.cpp
 #include <string>
 namespace cute{
@@ -438,10 +430,9 @@ namespace cute{
 #define ASSERT(cond) ASSERTM(#cond,cond)
 
 struct A {
-    bool operator==(const int & i) const
-    {
-        return bool();
-    }
+	bool operator==(const int& i) const {
+		return bool();
+	}
 };
 
 void test(){
@@ -488,10 +479,9 @@ namespace cute {
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
 
 struct A {
-    bool operator==(const int & i) const
-    {
-        return bool();
-    }
+	bool operator==(const int& i) const {
+		return bool();
+	}
 };
 void test(){
     A a;
@@ -533,10 +523,9 @@ namespace cute {
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
 struct A {
-    bool operator==(const int & i) const
-    {
-        return bool();
-    }
+	bool operator==(const int& i) const {
+		return bool();
+	}
 };
 void test(){
     A a;
@@ -578,16 +567,15 @@ namespace cute {
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
 struct A {
-    bool operator==(const int & i) const
-    {
-        return bool();
-    }
+	bool operator==(const int& i) const {
+		return bool();
+	}
 };
 void test(){
     A a;
     ASSERT_EQUAL_DELTAM("foobar", true, a==3, 0.0);
 }
-//!BoostOperatorDetectionPreFix
+//!BoostOperatorDetectionPrefix
 //@A.cpp
 #include "boost/operators.hpp"
 
@@ -604,10 +592,9 @@ void thisIsATest() {
 
 struct A : boost::operators<A>
 {
-    A & operator++()
-    {
-        return A();
-    }
+	A& operator++() {
+		return A();
+	}
 };
 
 void thisIsATest() {

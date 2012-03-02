@@ -4,19 +4,18 @@
 filename=ETTPT_Struct_ExistingTemplate_ExistingTypedef_ReplaceField_DefaultOff.h
 //@ETTPT_Struct_ExistingTemplate_ExistingTypedef_ReplaceField_DefaultOff.h
 #include <vector>
-template<typename T = foo> struct /*$*/fooT/*$$*/
-{
-    T i;
-    int j;
+template<typename T = foo>
+struct /*$*/fooT/*$$*/ {
+	T i;
+	int j;
 };
 
 typedef fooT<> foo;
 //=
 #include <vector>
-template<typename T, typename T1> struct fooT
-{
-    T i;
-    T1 j;
+template<typename T, typename T1> struct fooT {
+	T i;
+	T1 j;
 };
 
 

@@ -3,45 +3,38 @@
 //@.config
 filename=ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.h
 //@ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.h
-template<typename T, typename U> void /*$*/setValue/*$$*/(T value1, U value2)
-{
+template<typename T, typename U>
+void /*$*/setValue/*$$*/(T value1, U value2) {
 
 }
 //=
-template<typename T, typename U, typename T1> T1 setValue(T value1, U value2)
-{
+template<typename T, typename U, typename T1>
+T1 setValue(T value1, U value2) {
 }
-
 
 //@ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.cpp
 #include "ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.h"
-struct foobar
-{
+struct foobar {
 };
 
-struct foobar2
-{
+struct foobar2 {
 };
 
-int main()
-{
+int main() {
 	foobar f;
 	foobar2 ff;
-	setValue<>(f,ff);
+	setValue<>(f, ff);
 }
 //=
 #include "ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_MixedResolving.h"
-struct foobar
-{
+struct foobar {
 };
 
-struct foobar2
-{
+struct foobar2 {
 };
 
-int main()
-{
+int main() {
 	foobar f;
 	foobar2 ff;
-	setValue<foobar,foobar2,void>(f,ff);
+	setValue<foobar, foobar2, void>(f, ff);
 }

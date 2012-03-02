@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.quickFixes;
 
-
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.createfunction.quickfixes.NormalFreeFunctionCreationQuickFix;
 import ch.hsr.ifs.cute.tdd.ui.tests.QuickFixTest;
@@ -49,8 +48,7 @@ public class CreateFunctionTest extends QuickFixTest {
 		assertExactlyTheSame(CREATE_FREE_FUNCTION_FOO, getQuickFixMessage(NormalFreeFunctionCreationQuickFix.class, CREATE_FREE_FUNCTION_FOO));
 	}
 
-	//void foo()
-	//{
+	//void foo() {
 	//}
 	//
 	//void testX() {

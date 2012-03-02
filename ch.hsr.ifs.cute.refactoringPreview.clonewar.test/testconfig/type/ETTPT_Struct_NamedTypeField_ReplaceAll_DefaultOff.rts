@@ -3,16 +3,13 @@
 //@.config
 filename=ETTPT_Struct_NamedTypeField_ReplaceAll_DefaultOff.h
 //@ETTPT_Struct_NamedTypeField_ReplaceAll_DefaultOff.h
-struct /*$*/foo/*$$*/
-{
+struct /*$*/foo/*$$*/ {
 	foo i;
 };
 //=
-template<typename T1> struct fooT
-{
-    T1 i;
+template<typename T1> struct fooT {
+	T1 i;
 };
-
 
 typedef fooT<foo> foo;
 

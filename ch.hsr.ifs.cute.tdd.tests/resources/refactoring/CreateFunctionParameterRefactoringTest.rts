@@ -4,8 +4,7 @@ void func() {
     blah(42);
 }
 //=
-void blah(const int & i)
-{
+void blah(const int& i) {
 }
 
 void func() {
@@ -17,8 +16,7 @@ void func() {
     blah(42.0);
 }
 //=
-void blah(const double & d)
-{
+void blah(const double& d) {
 }
 
 void func() {
@@ -30,8 +28,7 @@ void func() {
     blah("foo");
 }
 //=
-void blah(const std::string & s)
-{
+void blah(const std::string& s) {
 }
 
 void func() {
@@ -43,8 +40,7 @@ void func() {
     blah('c');
 }
 //=
-void blah(const char & c)
-{
+void blah(const char& c) {
 }
 
 void func() {
@@ -56,8 +52,7 @@ void func() {
     blah(true);
 }
 //=
-void blah(const bool & b)
-{
+void blah(const bool& b) {
 }
 
 void func() {
@@ -69,8 +64,7 @@ void func() {
     blah(false);
 }
 //=
-void blah(const bool & b)
-{
+void blah(const bool& b) {
 }
 
 void func() {
@@ -79,19 +73,18 @@ void func() {
 //!SingleParameterThis
 //@A.cpp
 struct Klass {
-    void func() {
-        blah(this);
-    }
+	void func() {
+		blah(this);
+	}
 };
 //=
 struct Klass {
-    void blah(const Klass *const & k)
-    {
-    }
+	void blah(const Klass* const & k) {
+	}
 
-    void func() {
-        blah(this);
-    }
+	void func() {
+		blah(this);
+	}
 };
 //!TwoDifferentParameters
 //@A.cpp
@@ -99,8 +92,7 @@ void func() {
     blah(42, 42.0);
 }
 //=
-void blah(const int & i, const double & d)
-{
+void blah(const int& i, const double& d) {
 }
 
 void func() {
@@ -112,8 +104,7 @@ void func() {
     blah(42, 42);
 }
 //=
-void blah(const int & i, const int & j)
-{
+void blah(const int& i, const int& j) {
 }
 
 void func() {
@@ -125,8 +116,8 @@ void func() {
     blah(42, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0);
 }
 //=
-void blah(const int & i, const double & d, const double & e, const double & f, const double & g, const double & h, const double & j)
-{
+void blah(const int& i, const double& d, const double& e, const double& f,
+		const double& g, const double& h, const double& j) {
 }
 
 void func() {
@@ -139,8 +130,7 @@ void func() {
     blah(id);
 }
 //=
-void blah(int & id)
-{
+void blah(int& id) {
 }
 
 void func() {
@@ -154,8 +144,7 @@ void func() {
     blah(id, id, id);
 }
 //=
-void blah(int & id, int & id1, int & id2)
-{
+void blah(int& id, int& id1, int& id2) {
 }
 
 void func() {
@@ -171,8 +160,7 @@ void func() {
 }
 //=
 struct Type {};
-void blah(Type & myType)
-{
+void blah(Type& myType) {
 }
 
 void func() {
@@ -188,8 +176,7 @@ void func() {
 }
 //=
 struct Type {};
-void blah(Type & myType, Type & myType1)
-{
+void blah(Type& myType, Type& myType1) {
 }
 
 void func() {
@@ -204,8 +191,7 @@ void foo() {
 }
 //=
 void exists(int x) {}
-void func(const int & i)
-{
+void func(const int& i) {
 }
 
 void foo() {
@@ -221,8 +207,7 @@ void foo() {
 //=
 #define MACRO exists
 void exists(int x) {}
-void func(const int & i)
-{
+void func(const int& i) {
 }
 
 void foo() {
@@ -238,8 +223,7 @@ void foo() {
 //=
 #define MACRO(code) exists(code)
 void exists(int x) {}
-void func(const int & i)
-{
+void func(const int& i) {
 }
 
 void foo() {
@@ -267,23 +251,21 @@ template <typename ExpectedValue, typename ActualValue>
 }}
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
-int function(const int & i)
-{
-    return int();
+int function(const int& i) {
+	return int();
 }
 
 void test(){
     ASSERT_EQUAL(42, function(42));
 }
-//!TestNotyetDefinedVariables
+//!TestNotYetDefinedVariables
 //@A.cpp
 void test()
 {
     func(2, 3, 2.3, var);
 }
 //=
-void func(const int & i, const int & j, const double & d, const int & var)
-{
+void func(const int& i, const int& j, const double& d, const int& var) {
 }
 
 void test()
@@ -302,8 +284,7 @@ void test()
 //=
 struct P{};
 
-void func(P *& p)
-{
+void func(P*& p) {
 }
 
 void test()
@@ -323,8 +304,7 @@ void test()
 //=
 struct P{};
 
-void func(const P *& p)
-{
+void func(const P*& p) {
 }
 
 void test()
@@ -344,8 +324,7 @@ void test()
 //=
 struct P{};
 
-void func(P *const & p)
-{
+void func(P* const & p) {
 }
 
 void test()
@@ -365,8 +344,7 @@ void test()
 //=
 struct P{};
 
-void func(const P *const & p)
-{
+void func(const P* const & p) {
 }
 
 void test()
@@ -386,8 +364,7 @@ void test()
 //=
 struct P{};
 
-void func(P *const volatile & p)
-{
+void func(P* const volatile & p) {
 }
 
 void test()
@@ -407,8 +384,7 @@ void test()
 //=
 struct P{};
 
-void func(const volatile P *& p)
-{
+void func(const volatile P*& p) {
 }
 
 void test()
@@ -428,8 +404,7 @@ void test()
 //=
 struct P{};
 
-void func(P **& p)
-{
+void func(P**& p) {
 }
 
 void test()
@@ -448,8 +423,7 @@ void test()
 //=
 struct P{};
 
-void func(P *const & newP)
-{
+void func(P* const & newP) {
 }
 
 void test()
@@ -458,16 +432,15 @@ void test()
 }
 //!Array Parameter
 //@A.cpp
-void test(){
+void test() {
 	int iArr[];
 	foo(iArr);
 }
 //=
-void foo(int iArr[])
-{
+void foo(int iArr[]) {
 }
 
-void test(){
+void test() {
 	int iArr[];
 	foo(iArr);
 }
@@ -488,8 +461,7 @@ namespace std
     struct string{};
 }
 
-void foo(std::string sArr[])
-{
+void foo(std::string sArr[]) {
 }
 
 void test(){
@@ -503,8 +475,7 @@ void test(){
 	foo(str);
 }
 //=
-void foo(const char *& str)
-{
+void foo(const char*& str) {
 }
 
 void test(){
@@ -522,8 +493,7 @@ void test(){
 //=
 typedef int I;
 
-void foo(I & i)
-{
+void foo(I& i) {
 }
 
 void test(){
@@ -548,8 +518,7 @@ I getI(){
     return 23;
 }
 
-void foo(const I & getI)
-{
+void foo(const I& getI) {
 }
 
 void test(){
@@ -565,8 +534,7 @@ void test(){
 //=
 typedef int I;
 
-void foo(const I & i)
-{
+void foo(const I& i) {
 }
 
 void test(){

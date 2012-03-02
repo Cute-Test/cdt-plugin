@@ -3,45 +3,37 @@
 //@.config
 filename=ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.h
 //@ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.h
-struct foobar
-{
+struct foobar {
 };
 
-struct foobar2
-{
+struct foobar2 {
 };
 
-template<typename T> foobar2 /*$*/setValue/*$$*/(T value, foobar f)
-{
-
+template<typename T>
+foobar2 /*$*/setValue/*$$*/(T value, foobar f) {
 }
 //=
-struct foobar
-{
+struct foobar {
 };
 
-struct foobar2
-{
+struct foobar2 {
 };
 
-template<typename T, typename T2, typename T1> T1 setValue(T value, T2 f)
-{
+template<typename T, typename T2, typename T1>
+T1 setValue(T value, T2 f) {
 }
-
 
 //@ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.cpp
 #include "ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.h"
-int main()
-{
+int main() {
 	foobar f;
 	foobar2 r;
-	r = setValue(f,f);
+	r = setValue(f, f);
 }
 //=
 #include "ETTPFF_ExistingTemplate_TwoNamedParam_NamedReturn_ReplaceAll_AdjustCall.h"
-int main()
-{
+int main() {
 	foobar f;
 	foobar2 r;
-	r = setValue<foobar,foobar,foobar2>(f,f);
+	r = setValue < foobar, foobar, foobar2 >(f, f);
 }

@@ -1,16 +1,14 @@
 //!TestSimpleVariableCreation
 //@A.cpp
-void func()
-{
-    int x = 1;
-    y = x;
+void func() {
+	int x = 1;
+	y = x;
 }
 //=
-void func()
-{
-    int x = 1;
-    int y;
-    y = x;
+void func() {
+	int x = 1;
+	int y;
+	y = x;
 }
 //!TestNamedTypeVariableCreation
 //@A.cpp
@@ -18,61 +16,53 @@ struct B
 {
 };
 
-void func()
-{
-    B b1;
-    b2 = b1;
+void func() {
+	B b1;
+	b2 = b1;
 }
 //=
 struct B
 {
 };
 
-void func()
-{
-    B b1;
-    B b2;
-    b2 = b1;
+void func() {
+	B b1;
+	B b2;
+	b2 = b1;
 }
 //!SimpleMacro
 //@A.cpp
 #define MACRO(c) c
 
-void test()
-{
-    MACRO(k);
+void test() {
+	MACRO(k);
 }
 //=
 #define MACRO(c) c
 
-void test()
-{
-    int k;
-    MACRO(k);
+void test() {
+	int k;
+	MACRO(k);
 }
 //!NamedTypeVariable
 //@A.cpp
-void func()
-{
-    b.member();
+void func() {
+	b.member();
 }
 //=
-void func()
-{
-    int b;
-    b.member();
+void func() {
+	int b;
+	b.member();
 }
 //!Local Variable from First Statement in Scope
 //@A.cpp
-void func()
-{
-    num++;
+void func() {
+	num++;
 }
 //=
-void func()
-{
-    int num;
-    num++;
+void func() {
+	int num;
+	num++;
 }
 //!TestCUTEMacroVariableCreation_ASSERT
 //@Test.cpp
@@ -92,8 +82,8 @@ namespace cute{
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
 
-void blah(){
-    ASSERT(k);
+void blah() {
+	ASSERT(k);
 }
 //=
 #include <string>
@@ -112,9 +102,9 @@ namespace cute{
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
 
-void blah(){
-    bool k;
-    ASSERT(k);
+void blah() {
+	bool k;
+	ASSERT(k);
 }
 //!TestCUTEMacroVariableCreation_ASSERT_EQUALS
 //@Test.cpp
@@ -133,8 +123,8 @@ namespace cute {
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
 
-void test(){
-    ASSERT_EQUAL(42, k.member());
+void test() {
+	ASSERT_EQUAL(42, k.member());
 }
 //=
 namespace cute {
@@ -152,9 +142,9 @@ namespace cute {
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
 
-void test(){
-    int k;
-    ASSERT_EQUAL(42, k.member());
+void test() {
+	int k;
+	ASSERT_EQUAL(42, k.member());
 }
 //!TestCUTEMacroVariableCreation_ASSERT_EQUALS_DELTA
 //@Test.cpp
@@ -171,8 +161,8 @@ namespace cute {
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
-void testKreis(){
-    ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
+void testKreis() {
+	ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
 }
 //=
 namespace cute {
@@ -188,9 +178,9 @@ namespace cute {
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
-void testKreis(){
-    int b;
-    ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
+void testKreis() {
+	int b;
+	ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
 }
 //!TestCUTEMacroVariableCreation_ASSERT_EQUALS_DELTA_M
 //@Test.cpp
@@ -207,8 +197,8 @@ namespace cute {
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
-void testKreis(){
-    ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
+void testKreis() {
+	ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
 }
 //=
 namespace cute {
@@ -224,21 +214,19 @@ namespace cute {
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 
-void testKreis(){
-    int b;
-    ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
+void testKreis() {
+	int b;
+	ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
 }
 //!CreateVariableIfFieldref
 //@A.cpp
-void func()
-{
-    x.y();
+void func() {
+	x.y();
 }
 //=
-void func()
-{
-    int x;
-    x.y();
+void func() {
+	int x;
+	x.y();
 }
 //!No Variable for Non-typedef Enum Assignment
 //@.config

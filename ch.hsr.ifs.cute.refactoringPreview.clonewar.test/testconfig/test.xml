@@ -114,7 +114,7 @@
 		<TestStrategy>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.configuration.NullTestConfigurationStrategy</TestStrategy>
 	</Test>
 	<Test>
-		<TestConfig>testconfig/function/ETTPFF_TwoSimpleParam_SimpleReturn_SimleBody_ReplaceAll.rts</TestConfig>
+		<TestConfig>testconfig/function/ETTPFF_TwoSimpleParam_SimpleReturn_SimpleBody_ReplaceAll.rts</TestConfig>
 		<Description>ETTPFF: Two simple param, simple return, simple body, replace all</Description>
 		<InitialAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</InitialAssert>
 		<FinalAssert>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.condition.ConditionOkCheckStrategy</FinalAssert>

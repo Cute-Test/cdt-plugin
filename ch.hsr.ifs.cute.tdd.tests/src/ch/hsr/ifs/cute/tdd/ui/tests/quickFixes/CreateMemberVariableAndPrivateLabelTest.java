@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.quickFixes;
 
-
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.createvariable.CreateMemberVariableQuickFix;
 import ch.hsr.ifs.cute.tdd.ui.tests.QuickFixTest;
@@ -30,18 +29,22 @@ public class CreateMemberVariableAndPrivateLabelTest extends QuickFixTest {
 		return TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR;
 	}
 
+	@Override
 	public void testMarkerMessage() {
 		assertExactlyTheSame("Cannot resolve member variable", getMarkerMessage());
 	}
 
+	@Override
 	public void testMarkerOffset() {
 		assertEquals("Marker offset", 20, getMarkerOffset());
 	}
 
+	@Override
 	public void testMarkerLength() {
 		assertEquals("Marker length", 1, getMarkerLength());
 	}
 
+	@Override
 	public void testQuickFixMessage() {
 		assertExactlyTheSame(CREATE_MEMBER_VARIABLE_I, getQuickFixMessage(CreateMemberVariableQuickFix.class, CREATE_MEMBER_VARIABLE_I));
 	}
@@ -51,12 +54,14 @@ public class CreateMemberVariableAndPrivateLabelTest extends QuickFixTest {
 	//    }
 	//
 	//private:
-	//    int i;
+	//	int i;
 	//};
+	@Override
 	public void testQuickFixApplying() {
 		assertExactlyTheSame(getAboveComment(), runQuickFix(CreateMemberVariableQuickFix.class, CREATE_MEMBER_VARIABLE_I));
 	}
 
+	@Override
 	public void testImageNotNull() {
 		assertNotNull(getQuickFix(CreateMemberVariableQuickFix.class, CREATE_MEMBER_VARIABLE_I).getImage());
 	}

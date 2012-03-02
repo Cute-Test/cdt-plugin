@@ -3,16 +3,13 @@
 //@.config
 filename=ETTPT_Struct_SimpleTypeField_ReplaceAll_DefaultOn.h
 //@ETTPT_Struct_SimpleTypeField_ReplaceAll_DefaultOn.h
-struct /*$*/foo/*$$*/
-{
+struct /*$*/foo/*$$*/ {
 	int i;
 };
 //=
-template<typename T1 = int> struct fooT
-{
-    T1 i;
+template<typename T1 = int> struct fooT {
+	T1 i;
 };
-
 
 typedef fooT<> foo;
 

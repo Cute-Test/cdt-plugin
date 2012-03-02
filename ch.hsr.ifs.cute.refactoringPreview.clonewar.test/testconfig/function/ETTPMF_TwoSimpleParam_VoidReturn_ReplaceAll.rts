@@ -3,18 +3,15 @@
 //@.config
 filename=ETTPMF_TwoSimpleParam_VoidReturn_ReplaceAll.h
 //@ETTPMF_TwoSimpleParam_VoidReturn_ReplaceAll.h
-struct foobar
-{
-	void /*$*/max/*$$*/(int first, int second)
-	{
-    	return first > second ? first : second;
+struct foobar {
+	void /*$*/max/*$$*/(int first, int second) {
+		return first > second ? first : second;
 	}
 };
 //=
-struct foobar
-{
-    template<typename T2, typename T1> T2 max(T1 first, T1 second)
-	{
-    	return first > second ? first : second;
+struct foobar {
+	template<typename T2, typename T1>
+	T2 max(T1 first, T1 second) {
+		return first > second ? first : second;
 	}
 };

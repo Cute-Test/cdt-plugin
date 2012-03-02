@@ -5,16 +5,14 @@ filename=ETTPFF_TemplTypeBody_ReplaceNamedNested.h
 //@ETTPFF_TemplTypeBody_ReplaceNamedNested.h
 #include <vector>
 struct foobar;
-void /*$*/sort/*$$*/(std::vector<foobar> vector)
-{
+void /*$*/sort/*$$*/(std::vector<foobar> vector) {
 	std::vector<foobar> v = vector;
 }
 //=
 #include <vector>
 struct foobar;
-template<typename T1> void sort(std::vector<T1> vector)
-{
-    std::vector<T1> v = vector;
+template<typename T1>
+void sort(std::vector<T1> vector) {
+	std::vector<T1> v = vector;
 }
-
 

@@ -3,44 +3,36 @@
 //@.config
 filename=ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_ResolveBySecondParam.h
 //@ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_ResolveBySecondParam.h
-template<typename T, typename U> void /*$*/setValue/*$$*/(T value1, U value2)
-{
-
+template<typename T, typename U>
+void /*$*/setValue/*$$*/(T value1, U value2) {
 }
 //=
-template<typename T1, typename T, typename U> T1 setValue(T value1, U value2)
-{
+template<typename T1, typename T, typename U>
+T1 setValue(T value1, U value2) {
 }
-
 
 //@ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_ResolveBySecondParam.cpp
 #include "ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_ResolveBySecondParam.h"
-struct foobar
-{
+struct foobar {
 };
 
-struct foobar2
-{
+struct foobar2 {
 };
 
-int main()
-{
+int main() {
 	foobar f;
 	foobar2 ff;
 	setValue(f,ff);
 }
 //=
 #include "ETTPFF_ExistingTemplate_NamedParam_VoidReturn_ReplaceAll_AdjustCall_ResolveBySecondParam.h"
-struct foobar
-{
+struct foobar {
 };
 
-struct foobar2
-{
+struct foobar2 {
 };
 
-int main()
-{
+int main() {
 	foobar f;
 	foobar2 ff;
 	setValue<void>(f,ff);

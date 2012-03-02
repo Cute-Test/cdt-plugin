@@ -4,15 +4,13 @@
 filename=ETTPT_Struct_TemplateTypeField_ReplaceNested_DefaultOn.h
 //@ETTPT_Struct_TemplateTypeField_ReplaceNested_DefaultOn.h
 #include <vector>
-struct /*$*/foo/*$$*/
-{
+struct /*$*/foo/*$$*/ {
 	std::vector<int> i;
 };
 //=
 #include <vector>
-template<typename T1 = int> struct fooT
-{
-    std::vector<T1> i;
+template<typename T1 = int> struct fooT {
+	std::vector<T1> i;
 };
 
 

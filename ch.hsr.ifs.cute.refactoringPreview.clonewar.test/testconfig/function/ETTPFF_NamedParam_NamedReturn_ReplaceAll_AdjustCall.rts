@@ -4,55 +4,43 @@
 filename=ETTPFF_NamedParam_NamedReturn_ReplaceAll_AdjustCall.h
 //@ETTPFF_NamedParam_NamedReturn_ReplaceAll_AdjustCall.h
 #include "Foobar.h"
-AnotherStruct /*$*/max/*$$*/(foobar first, foobar second)
-{
+AnotherStruct /*$*/max/*$$*/(foobar first, foobar second) {
 }
 //=
 #include "Foobar.h"
-template<typename T1, typename T2> T1 max(T2 first, T2 second)
-{
+template<typename T1, typename T2>
+T1 max(T2 first, T2 second) {
 }
 
-
 //@Foobar.h
-struct foobar
-{
-	void doSomething()
-	{
+struct foobar {
+	void doSomething() {
 	}
 };
 
-struct AnotherStruct
-{
-
+struct AnotherStruct {
 };
 //=
-struct foobar
-{
-	void doSomething()
-	{
+struct foobar {
+	void doSomething() {
 	}
 };
 
-struct AnotherStruct
-{
-
+struct AnotherStruct {
 };
 //@ETTPFF_NamedParam_NamedReturn_ReplaceAll_AdjustCall.cpp
 #include "ETTPFF_NamedParam_NamedReturn_ReplaceAll_AdjustCall.h"
 
-int main()
-{
+int main() {
 	foobar f1;
 	foobar f2;
-	max(f1,f2);
+	max(f1, f2);
 }
 //=
 #include "ETTPFF_NamedParam_NamedReturn_ReplaceAll_AdjustCall.h"
 
-int main()
-{
+int main() {
 	foobar f1;
 	foobar f2;
-	max<AnotherStruct>(f1,f2);
+	max < AnotherStruct >(f1, f2);
 }

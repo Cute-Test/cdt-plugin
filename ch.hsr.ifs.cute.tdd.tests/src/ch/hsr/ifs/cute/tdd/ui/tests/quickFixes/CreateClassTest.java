@@ -28,32 +28,38 @@ public class CreateClassTest extends QuickFixTest {
 		return TddErrorIdCollection.ERR_ID_TypeResolutionProblem_HSR;
 	}
 
+	@Override
 	public void testMarkerMessage() {
 		assertExactlyTheSame("Type 'Type' could not be resolved", getMarkerMessage());
 	}
 
+	@Override
 	public void testMarkerOffset() {
 		assertEquals("Marker offset", 17, getMarkerOffset());
 	}
 
+	@Override
 	public void testMarkerLength() {
 		assertEquals("Marker length", 4, getMarkerLength());
 	}
 
+	@Override
 	public void testQuickFixMessage() {
 		assertExactlyTheSame(CREATE_TYPE_TYPE, getQuickFixMessage(CreateTypeQuickFix.class, CREATE_TYPE_TYPE));
 	}
 
-	//struct Type
-	//{
+	//struct Type {
 	//};
+	//
 	//void testX() {
 	//  Type t;
 	//}
+	@Override
 	public void testQuickFixApplying() {
 		assertExactlyTheSame(getAboveComment(), runQuickFix(CreateTypeQuickFix.class, CREATE_TYPE_TYPE));
 	}
 
+	@Override
 	public void testImageNotNull() {
 		assertNotNull(getQuickFix(CreateTypeQuickFix.class, CREATE_TYPE_TYPE).getImage());
 	}

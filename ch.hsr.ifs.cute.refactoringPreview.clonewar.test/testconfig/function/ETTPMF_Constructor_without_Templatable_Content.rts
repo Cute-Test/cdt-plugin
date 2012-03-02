@@ -3,9 +3,8 @@
 //@.config
 filename=ETTPMF_Constructor_without_Templatable_Content.h
 //@ETTPMF_Constructor_without_Templatable_Content.h
-struct S{
-	/*$*/S/*$$*/()
-	{
+struct S {
+	/*$*/S/*$$*/() {
 	}
 };
 
@@ -13,9 +12,8 @@ int main(int argc, char **argv) {
 	S s;
 }
 //=
-struct S{
-	S()
-	{
+struct S {
+	S() {
 	}
 };
 

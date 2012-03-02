@@ -4,14 +4,11 @@
 filename=ETTPFF_TemplTypeReturn_ReplaceSimpleNested.h
 //@ETTPFF_TemplTypeReturn_ReplaceSimpleNested.h
 #include <vector>
-std::vector<int> /*$*/sort/*$$*/()
-{
-
+std::vector<int> /*$*/sort/*$$*/() {
 }
 //=
 #include <vector>
-template<typename T1> std::vector<T1> sort()
-{
+template<typename T1>
+std::vector<T1> sort() {
 }
-
 
