@@ -7,6 +7,8 @@ filename=ETTPT_Struct_TemplateTypeField_ReplaceNested_DefaultOn.h
 struct /*$*/foo/*$$*/ {
 	std::vector<int> i;
 };
+
+int i;
 //=
 #include <vector>
 template<typename T1 = int> struct fooT {
@@ -15,4 +17,4 @@ template<typename T1 = int> struct fooT {
 
 
 typedef fooT<> foo;
-
+int i;
