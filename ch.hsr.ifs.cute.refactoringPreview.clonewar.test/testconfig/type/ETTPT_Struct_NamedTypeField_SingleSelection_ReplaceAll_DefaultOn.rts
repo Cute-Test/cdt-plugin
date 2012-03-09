@@ -31,7 +31,6 @@ template<typename T1 = int> struct FooT {
 };
 
 
-
 typedef FooT<> Foo;
 
 int main(int argc, char **argv) {
@@ -61,7 +60,6 @@ template<typename T1 = int> struct ST {
 };
 
 
-
 typedef ST<> S;
 
 int main(int argc, char **argv) {
@@ -89,7 +87,6 @@ template<typename T1 = int> struct ST {
 
 	T1 i;
 };
-
 
 
 typedef ST<> S;

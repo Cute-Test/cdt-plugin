@@ -13,6 +13,5 @@ template<typename T2 = std::vector<int>> struct fooT {
 	T2 i;
 };
 
-
 typedef fooT<> foo;
 
