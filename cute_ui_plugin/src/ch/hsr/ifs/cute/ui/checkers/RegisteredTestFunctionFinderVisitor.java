@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
-import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
+import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -20,7 +20,6 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
@@ -37,7 +36,7 @@ import org.eclipse.cdt.core.index.IIndex;
 public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 
 	{
-		shouldVisitStatements = true;
+		shouldVisitDeclarations = true;
 	}
 
 	private final List<IBinding> registeredTests;
@@ -53,27 +52,24 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 	}
 
 	@Override
-	public int visit(IASTStatement statement) {
-		if (statement instanceof IASTDeclarationStatement) {
-			IASTDeclarationStatement declStmt = (IASTDeclarationStatement) statement;
-			if (declStmt.getDeclaration() instanceof IASTSimpleDeclaration) {
-				IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declStmt.getDeclaration();
-				if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
-					ICPPASTNamedTypeSpecifier nameDeclSpec = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
-					if (nameDeclSpec.getName().toString().equals("cute::suite")) { //$NON-NLS-1$
-						IASTName suiteName = simpDecl.getDeclarators()[0].getName();
-						IBinding suiteBinding = suiteName.resolveBinding();
-						IASTName[] suiteRefs = suiteName.getTranslationUnit().getReferences(suiteBinding);
-						for (IASTName ref : suiteRefs) {
-							if (isPushBack(ref)) {
-								registeredTests.add(index.adaptBinding(getRegisteredFunctionBinding(ref)));
-							}
+	public int visit(IASTDeclaration declaration) {
+		if (declaration instanceof IASTSimpleDeclaration) {
+			IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declaration;
+			if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
+				ICPPASTNamedTypeSpecifier nameDeclSpec = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
+				if (nameDeclSpec.getName().toString().equals("cute::suite")) { //$NON-NLS-1$
+					IASTName suiteName = simpDecl.getDeclarators()[0].getName();
+					IBinding suiteBinding = suiteName.resolveBinding();
+					IASTName[] suiteRefs = suiteName.getTranslationUnit().getReferences(suiteBinding);
+					for (IASTName ref : suiteRefs) {
+						if (isPushBack(ref)) {
+							registeredTests.add(index.adaptBinding(getRegisteredFunctionBinding(ref)));
 						}
 					}
 				}
 			}
 		}
-		return super.visit(statement);
+		return super.visit(declaration);
 	}
 
 	private IBinding getRegisteredFunctionBinding(IASTName ref) {
@@ -83,9 +79,14 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 			return getFunction(arguments);
 		}
 		if (isSimpleMemberFunctionPushBack(arguments)) {
-			return getSimpleMemberFunction(arguments);
+			return getFunctionAtArgument(arguments, 0);
 		}
-		//TODO handle other Member push_backs
+		if (isMemberFunctionPushBack(arguments)) {
+			return getFunctionAtArgument(arguments, 1);
+		}
+		if (isMemberFunctionWithContextPushBack(arguments)) {
+			return getFunctionAtArgument(arguments, 1);
+		}
 		if (isFunctorPushBack(arguments)) {
 			return getFunctor(arguments);
 		}
@@ -115,11 +116,11 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 		return false;
 	}
 
-	private IBinding getSimpleMemberFunction(IASTInitializerClause[] arguments) {
-		if (isSimpleMemberFunctionPushBack(arguments)) {
+	private IBinding getFunctionAtArgument(IASTInitializerClause[] arguments, int innerArgumentNumber) {
+		if (arguments[0] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-			if (funcCall.getArguments().length == 2 && funcCall.getArguments()[0] instanceof IASTUnaryExpression) {
-				IASTUnaryExpression unExp = (IASTUnaryExpression) funcCall.getArguments()[0];
+			if (funcCall.getArguments().length > innerArgumentNumber && funcCall.getArguments()[innerArgumentNumber] instanceof IASTUnaryExpression) {
+				IASTUnaryExpression unExp = (IASTUnaryExpression) funcCall.getArguments()[innerArgumentNumber];
 				if (unExp.getOperand() instanceof IASTIdExpression) {
 					IASTIdExpression idExp = (IASTIdExpression) unExp.getOperand();
 					return idExp.getName().resolveBinding();
@@ -133,6 +134,22 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 		if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
 			return functionNameIs(funcCall, "cute::makeSimpleMemberFunctionTest"); //$NON-NLS-1$
+		}
+		return false;
+	}
+
+	private boolean isMemberFunctionPushBack(IASTInitializerClause[] arguments) {
+		if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
+			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
+			return functionNameIs(funcCall, "cute::makeMemberFunctionTest"); //$NON-NLS-1$
+		}
+		return false;
+	}
+
+	private boolean isMemberFunctionWithContextPushBack(IASTInitializerClause[] arguments) {
+		if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
+			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
+			return functionNameIs(funcCall, "cute::makeMemberFunctionTestWithContext"); //$NON-NLS-1$
 		}
 		return false;
 	}
