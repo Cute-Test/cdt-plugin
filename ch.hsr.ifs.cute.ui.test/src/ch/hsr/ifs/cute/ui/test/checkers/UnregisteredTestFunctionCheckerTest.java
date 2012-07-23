@@ -111,6 +111,23 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// #define ASSERT(cond) ASSERTM(#cond,cond)
 	// #define CUTE(name) cute::test((&name),(#name))
 	//
+	// cute::suite s;
+	// void thisIsATest(){
+	// ASSERT(true);
+	// }
+	//
+	// void runSuite() {
+	// s.push_back(CUTE(thisIsATest));
+	// }
+	public void testNonLocalSuite() {
+		runProjectForCommentCode();
+		checkNoErrors();
+	}
+
+	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	// #define ASSERT(cond) ASSERTM(#cond,cond)
+	// #define CUTE(name) cute::test((&name),(#name))
+	//
 	// void thisIsATest(){
 	// ASSERT(true);
 	// }
@@ -186,6 +203,62 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// s.push_back(CUTE_SMEMFUN(testStruct, testIt));
 	// }
 	public void testRegisteredMemberFunctionInline() {
+		runProjectForCommentCode();
+		checkNoErrors();
+	}
+
+	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	// #define ASSERT(cond) ASSERTM(#cond,cond)
+	// #define CUTE_MEMFUN(testobject,TestClass,MemberFunctionName) \
+	//	cute::makeMemberFunctionTest(testobject,\
+	//			&TestClass::MemberFunctionName,\
+	//			#MemberFunctionName)
+	//
+	// namespace cute{
+	// template <typename TestClass, typename MemFun>
+	// test makeSimpleMemberFunctionTest(MemFun fun,char const *name);
+	// }
+	//
+	//	struct TestBase
+	//	{
+	//	    std::string suiteName;
+	//	    cute::suite suite;
+	//
+	//	    TestBase(const std::string& suiteName)
+	//	    : suiteName(suiteName)
+	//	    {
+	//	    }
+	//	    virtual void operator() ()
+	//	    {
+	//	        cute::ide_listener lis;
+	//	        cute::makeRunner(lis)(suite, suiteName.c_str());
+	//	    }
+	//
+	//	    virtual ~TestBase()
+	//	    {
+	//	    }
+	//	};
+	//	
+	// struct DerivTest : public TestBase
+	// {
+	//    void test()
+	//    {
+	//        ASSERTM("bad", false);
+	//    }
+	//
+	//    DerivTest() : Base("DerivTest")
+	//    {
+	//        suite.push_back(CUTE_MEMFUN(*this, DerivTest, test));
+	//    }
+	// };
+	//
+	// void runSuite() {
+	//     cute::suite s;
+	//     s.push_back(DerivTest());
+	//     cute::ide_listener lis;
+	//     cute::makeRunner(lis)(s, "The Suite");
+	// }
+	public void testRegisteredMemberFunctionTypeHierarchy() {
 		runProjectForCommentCode();
 		checkNoErrors();
 	}
