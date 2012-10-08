@@ -29,7 +29,6 @@ import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
 import org.eclipse.cdt.internal.corext.codemanipulation.StubUtility;
 import org.eclipse.cdt.internal.ui.refactoring.Container;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.util.EditorUtility;
 import org.eclipse.cdt.internal.ui.wizards.filewizard.NewSourceFileGenerator;
 import org.eclipse.cdt.ui.CodeGeneration;
@@ -60,13 +59,13 @@ public class ExtractRefactoring extends CRefactoring3 {
 	private static final String H = ".h"; //$NON-NLS-1$
 	private ICPPASTCompositeTypeSpecifier type;
 
-	public ExtractRefactoring(ICElement element, ISelection selection, RefactoringASTCache astCache) {
-		super(element, selection, astCache);
+	public ExtractRefactoring(ICElement element, ISelection selection) {
+		super(element, selection);
 	}
 
 	@Override
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
-		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
+		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
 		IASTNode selectedNode = getSelectedNode(localunit);
 
 		if (isTypeSelected(selectedNode)) {

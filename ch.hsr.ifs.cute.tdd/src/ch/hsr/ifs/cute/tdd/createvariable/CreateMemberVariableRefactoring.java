@@ -38,7 +38,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -55,14 +54,15 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 	private boolean isArray = false;
 	private IASTInitializerClause initClause;
 
-	public CreateMemberVariableRefactoring(ISelection selection, CodanArguments ca, RefactoringASTCache astCache) {
-		super(selection, astCache);
+	public CreateMemberVariableRefactoring(ISelection selection, CodanArguments ca) {
+		super(selection);
 	}
 
+	@Override
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
-		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
+		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
 		IASTName selectedNode = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
-		IASTNode memberOwner = TypeHelper.getMemberOwner(localunit, selectedNode, astCache);
+		IASTNode memberOwner = TypeHelper.getMemberOwner(localunit, selectedNode, refactoringContext);
 		IASTDeclaration newMember = getMemberVariableDeclaration(selectedNode, memberOwner);
 		boolean isPrivate = isPartOf(selectedNode, memberOwner) && memberOwner instanceof ICPPASTCompositeTypeSpecifier;
 		if (isPrivate) {
@@ -138,11 +138,10 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 	}
 
 	private IASTDeclSpecifier createDeclSpecForBinaryExpression(IASTNode selectedNode, IASTBinaryExpression ascendingBinEx) {
-		if(isPartOf(selectedNode, ascendingBinEx.getOperand1())){
+		if (isPartOf(selectedNode, ascendingBinEx.getOperand1())) {
 			IASTInitializerClause rSide = ascendingBinEx.getInitOperand2();
 			return getDeclSpecOfType(rSide);
-		}
-		else {
+		} else {
 			IASTExpression lSide = ascendingBinEx.getOperand1();
 			return getDeclSpecOfType(lSide);
 		}
@@ -150,8 +149,8 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 
 	private boolean isPartOf(IASTNode potentialSubpart, IASTNode nodeForSubtree) {
 		IASTNode nodeToCheck = potentialSubpart;
-		while(nodeToCheck != null){
-			if(nodeToCheck == nodeForSubtree){
+		while (nodeToCheck != null) {
+			if (nodeToCheck == nodeForSubtree) {
 				return true;
 			}
 			nodeToCheck = nodeToCheck.getParent();

@@ -20,8 +20,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPMember;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -37,20 +35,17 @@ public class ChangeVisibilityRefactoring extends CRefactoring3 {
 	private final String nameToSearch;
 	private final TextSelection selection;
 
-	public ChangeVisibilityRefactoring(ISelection selection,
-			String name, RefactoringASTCache astCache) {
-		super(selection, astCache);
+	public ChangeVisibilityRefactoring(ISelection selection, String name) {
+		super(selection);
 		this.nameToSearch = name;
 		this.selection = (TextSelection) selection;
 	}
 
 	@Override
-	protected void collectModifications(IProgressMonitor pm,
-			ModificationCollector collector) throws CoreException,
-			OperationCanceledException {
-		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
+	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
 		IASTNode selectedNode = localunit.getNodeSelector(null).findEnclosingNode(selection.getOffset(), selection.getLength());
-		ICPPASTCompositeTypeSpecifier typeSpec = TypeHelper.getTypeOfMember(localunit, (IASTName) selectedNode, astCache);
+		ICPPASTCompositeTypeSpecifier typeSpec = TypeHelper.getTypeOfMember(localunit, (IASTName) selectedNode, refactoringContext);
 		MethodFindVisitor memberfinder = new MethodFindVisitor(nameToSearch);
 		typeSpec.accept(memberfinder);
 		IASTNode function = memberfinder.getFoundNode();
@@ -81,16 +76,13 @@ public class ChangeVisibilityRefactoring extends CRefactoring3 {
 		public int visit(IASTName name) {
 			IBinding binding = name.resolveBinding();
 			if (binding instanceof ICPPMember) {
-				String bindingname = binding.getName().replaceAll("\\(\\w*\\)", "");  //$NON-NLS-1$//$NON-NLS-2$
+				String bindingname = binding.getName().replaceAll("\\(\\w*\\)", ""); //$NON-NLS-1$//$NON-NLS-2$
 				if (bindingname.equals(nameToSearch)) {
-					ICPPASTCompositeTypeSpecifier typeSpec = TddHelper
-							.getAncestorOfType(name, ICPPASTCompositeTypeSpecifier.class);
-					if (typeSpec != null)
-					{
-						IASTNode function = ToggleNodeHelper
-								.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
+					ICPPASTCompositeTypeSpecifier typeSpec = TddHelper.getAncestorOfType(name, ICPPASTCompositeTypeSpecifier.class);
+					if (typeSpec != null) {
+						IASTNode function = TddHelper.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
 						if (function == null) {
-							function = ToggleNodeHelper.getAncestorOfType(name, IASTSimpleDeclaration.class);
+							function = TddHelper.getAncestorOfType(name, IASTSimpleDeclaration.class);
 						}
 						container.add(function);
 						return PROCESS_ABORT;

@@ -28,7 +28,6 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -44,18 +43,17 @@ public class AddArgumentRefactoring extends CRefactoring3 {
 
 	private static final String PLACEHOLDER = "_"; //$NON-NLS-1$
 	private ITextSelection selection;
-	private int candidatenr;
+	private final int candidatenr;
 
-	public AddArgumentRefactoring(ISelection selection, RefactoringASTCache astCache, int candidatenr) {
-		super(selection, astCache);
+	public AddArgumentRefactoring(ISelection selection, int candidatenr) {
+		super(selection);
 		this.selection = (ITextSelection) selection;
 		this.candidatenr = candidatenr;
 	}
 
 	@Override
-	protected void collectModifications(IProgressMonitor pm,
-			ModificationCollector collector) throws CoreException {
-		IASTTranslationUnit unit = astCache.getAST(tu, pm);
+	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException {
+		IASTTranslationUnit unit = refactoringContext.getAST(tu, pm);
 		IASTFunctionCallExpression call = findSelectedCall(unit);
 		ASTRewrite rewrite = collector.rewriterForTranslationUnit(unit);
 		rewrite.replace(call, createCorrectFunctionCall(call, candidatenr), null);
@@ -74,18 +72,14 @@ public class AddArgumentRefactoring extends CRefactoring3 {
 		return call;
 	}
 
-	private IASTFunctionCallExpression findFunctionCall(IASTTranslationUnit unit,
-			ITextSelection selection) {
-		IASTNode selectedNode = unit.getNodeSelector(null).findEnclosingNode(
-				selection.getOffset(), selection.getLength());
+	private IASTFunctionCallExpression findFunctionCall(IASTTranslationUnit unit, ITextSelection selection) {
+		IASTNode selectedNode = unit.getNodeSelector(null).findEnclosingNode(selection.getOffset(), selection.getLength());
 		return TddHelper.getAncestorOfType(selectedNode, IASTFunctionCallExpression.class);
 	}
 
-	private IASTFunctionCallExpression createCorrectFunctionCall(
-			IASTFunctionCallExpression call, int candidatenr) {
+	private IASTFunctionCallExpression createCorrectFunctionCall(IASTFunctionCallExpression call, int candidatenr) {
 		List<ICPPParameter> parameters = getParametersOf(call, candidatenr);
-		List<IASTInitializerClause> newArgs = getNewArguments(
-				Arrays.asList(call.getArguments()), parameters);
+		List<IASTInitializerClause> newArgs = getNewArguments(Arrays.asList(call.getArguments()), parameters);
 		IASTFunctionCallExpression newCall = call.copy(CopyStyle.withLocations);
 		newCall.setArguments(newArgs.toArray(new IASTInitializerClause[] {}));
 		return newCall;
@@ -126,8 +120,7 @@ public class AddArgumentRefactoring extends CRefactoring3 {
 		throw new OperationCanceledException(Messages.AddArgumentRefactoring_4);
 	}
 
-	public static List<IASTInitializerClause> getNewArguments(
-			List<IASTInitializerClause> oldArgs, List<ICPPParameter> parameters) {
+	public static List<IASTInitializerClause> getNewArguments(List<IASTInitializerClause> oldArgs, List<ICPPParameter> parameters) {
 		List<IASTInitializerClause> newArgs = new ArrayList<IASTInitializerClause>();
 		for (int i = 0; i < parameters.size(); i++) {
 			if (i < oldArgs.size() && !TypeHelper.haveSameType(oldArgs.get(i), parameters.get(i))) {

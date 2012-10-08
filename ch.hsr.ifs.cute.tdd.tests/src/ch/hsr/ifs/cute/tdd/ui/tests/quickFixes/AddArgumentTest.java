@@ -52,7 +52,7 @@ public class AddArgumentTest extends QuickFixTest {
 
 	//void foo(int) {}
 	//void test() {
-	//  foo (_);
+	//	foo (_);
 	//}
 	@Override
 	public void testQuickFixApplying() {

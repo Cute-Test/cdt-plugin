@@ -20,7 +20,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTOperatorName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTReferenceOperator;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.jface.text.TextSelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
@@ -44,12 +44,12 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 		if (binex != null) {
 			IASTExpression op = null;
 			if (isFree) {
-				op  = binex.getOperand1();
+				op = binex.getOperand1();
 				FunctionCreationHelper.addParameterToOperator(decl, op);
 			}
 			op = binex.getOperand2();
 			FunctionCreationHelper.addParameterToOperator(decl, op);
-		} else if (unex != null){
+		} else if (unex != null) {
 			if (isFree) {
 				IASTExpression op = unex.getOperand();
 				FunctionCreationHelper.addParameterToOperator(decl, op);
@@ -61,7 +61,7 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 		}
 		if (FunctionCreationHelper.isPostfixOperator(selectedName)) {
 			ParameterHelper.addEmptyIntParameter(decl);
-		} else if (!decl.isConst()){
+		} else if (!decl.isConst()) {
 			decl.addPointerOperator(new CPPASTReferenceOperator(false));
 		}
 		if (isFree) {
@@ -70,9 +70,9 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 
 		return fdef;
 	}
-	
+
 	@Override
-	public ICPPASTCompositeTypeSpecifier getDefinitionScopeForName(IASTTranslationUnit unit, IASTName name, RefactoringASTCache astCache) {
-		return TypeHelper.getTypeDefinitionOfVariable(unit, name, astCache);
+	public ICPPASTCompositeTypeSpecifier getDefinitionScopeForName(IASTTranslationUnit unit, IASTName name, CRefactoringContext context) {
+		return TypeHelper.getTypeDefinitionOfVariable(unit, name, context);
 	}
 }

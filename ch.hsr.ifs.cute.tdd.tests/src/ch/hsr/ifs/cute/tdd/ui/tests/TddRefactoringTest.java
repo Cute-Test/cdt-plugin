@@ -28,6 +28,8 @@ import org.eclipse.cdt.core.dom.IPDOMManager;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.parser.tests.rewrite.TestHelper;
 import org.eclipse.cdt.core.testplugin.CProjectHelper;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IWorkspace;
@@ -83,12 +85,14 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	@Override
 	@Test
 	public void runTest() throws Throwable {
-		Refactoring refactoring = null;
+		CRefactoring refactoring = null;
+		CRefactoringContext context = null;
 		try {
 			enablePassedProblems();
 			if (typeExtraction) {
 				setSelectionOnFile();
 				refactoring = getRefactoring(null, null);
+				context = new CRefactoringContext(refactoring);
 				removeFilesAndEnsure();
 				createAndPerformChange(refactoring);
 				filesDoExist();
@@ -112,6 +116,8 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 				IDocument doc = openDocument(marker);
 				setSelection(new TextSelection(doc, getOffset(marker, doc), EMPTY_SELECTION));
 				refactoring = getRefactoring(marker, doc);
+				context = new CRefactoringContext(refactoring);
+				refactoring.setContext(context);
 				createAndPerformChange(refactoring);
 			}
 			compareFiles(fileMap);
@@ -163,8 +169,8 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 
 	private void createAndPerformChange(Refactoring refactoring) throws CoreException {
 		assertConditionsOk(refactoring.checkInitialConditions(NULL_PROGRESS_MONITOR));
-		Change changes = refactoring.createChange(NULL_PROGRESS_MONITOR);
 		assertConditionsOk(refactoring.checkFinalConditions(NULL_PROGRESS_MONITOR));
+		Change changes = refactoring.createChange(NULL_PROGRESS_MONITOR);
 		changes.perform(NULL_PROGRESS_MONITOR);
 	}
 
@@ -235,7 +241,7 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 		return;
 	}
 
-	protected abstract Refactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException;
+	protected abstract CRefactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException;
 
 	private IMarker[] getCodanMarker() {
 		IMarker[] markers = new IMarker[] {};

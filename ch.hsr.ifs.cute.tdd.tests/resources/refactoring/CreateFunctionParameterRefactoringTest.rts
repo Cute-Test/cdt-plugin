@@ -160,6 +160,7 @@ void func() {
 }
 //=
 struct Type {};
+
 void blah(Type& myType) {
 }
 
@@ -170,12 +171,14 @@ void func() {
 //!TwiceSameClassAsArgument
 //@A.cpp
 struct Type {};
+
 void func() {
     Type myType;
     blah(myType, myType);
 }
 //=
 struct Type {};
+
 void blah(Type& myType, Type& myType1) {
 }
 
@@ -186,11 +189,13 @@ void func() {
 //!NestedFunctionWithParameter
 //@A.cpp
 void exists(int x) {}
+
 void foo() {
     exists(func(42));
 }
 //=
 void exists(int x) {}
+
 void func(const int& i) {
 }
 
@@ -201,12 +206,14 @@ void foo() {
 //@A.cpp
 #define MACRO exists
 void exists(int x) {}
+
 void foo() {
     MACRO(func(42));
 }
 //=
 #define MACRO exists
 void exists(int x) {}
+
 void func(const int& i) {
 }
 
@@ -217,12 +224,14 @@ void foo() {
 //@A.cpp
 #define MACRO(code) exists(code)
 void exists(int x) {}
+
 void foo() {
     MACRO(func(42));
 }
 //=
 #define MACRO(code) exists(code)
 void exists(int x) {}
+
 void func(const int& i) {
 }
 
@@ -251,11 +260,12 @@ template <typename ExpectedValue, typename ActualValue>
 }}
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
+
 int function(const int& i) {
 	return int();
 }
 
-void test(){
+void test() {
     ASSERT_EQUAL(42, function(42));
 }
 //!TestNotYetDefinedVariables
@@ -470,7 +480,7 @@ void test(){
 }
 //!Const Char Pointer from Non-Literal
 //@A.cpp
-void test(){
+void test() {
 	const char * str = "Hello";
 	foo(str);
 }
@@ -478,7 +488,7 @@ void test(){
 void foo(const char*& str) {
 }
 
-void test(){
+void test() {
 	const char * str = "Hello";
 	foo(str);
 }

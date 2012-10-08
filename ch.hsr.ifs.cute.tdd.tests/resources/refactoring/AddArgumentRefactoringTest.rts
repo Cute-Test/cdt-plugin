@@ -83,7 +83,7 @@ int foo() {return 42;}
 void testFunc() {
 	func(foo(), _);
 }
-//!TestFirstCandidate
+//!Test First Candidate
 //@.config
 candidate=0
 //@A.cpp
@@ -102,7 +102,7 @@ struct A {
 void test()
 {
     A a;
-    a.func();
+	a.func();
 }
 //=
 struct A {
@@ -120,7 +120,7 @@ struct A {
 void test()
 {
     A a;
-    a.func(_);
+	a.func(_);
 }
 //!TestSecondCandidate
 //@.config
@@ -159,7 +159,7 @@ struct A {
 void test()
 {
     A a;
-    a.func(_, _);
+	a.func(_, _);
 }
 //!TestThirdCandidate
 //@.config
@@ -198,7 +198,7 @@ struct A {
 void test()
 {
     A a;
-    a.func(_, _, _);
+	a.func(_, _, _);
 }
 //!DontOfferAddArgsThatCantBeAppended
 //@.config
@@ -238,35 +238,35 @@ void foo(std::string s)
 void test() {
     foo("asdfs");
 }
-//!RemoveSingleLastArgument
+//!Remove Single Last Argument
 //@A.cpp
 void foo() {
 }
 
 void test() {
-    foo(3);
+	foo(3);
 }
 //=
 void foo() {
 }
 
 void test() {
-    foo();
+	foo();
 }
-//!RemoveBunchLastArguments
+//!Remove Bunch Last Arguments
 //@A.cpp
 void foo(int i) {
 }
 
 void test() {
-    foo(3, 2.3, "asdf", 2);
+	foo(3, 2.3, "asdf", 2);
 }
 //=
 void foo(int i) {
 }
 
 void test() {
-    foo(3);
+	foo(3);
 }
 //!Add Integer Argument for Function from Header
 //@A.cpp
@@ -290,13 +290,13 @@ void func(int i) { }
 #include "A.h"
 
 void test() {
-    foo(3);
+	foo(3);
 }
 //=
 #include "A.h"
 
 void test() {
-    foo();
+	foo();
 }
 //@A.h
 void foo() {

@@ -27,8 +27,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTUnaryExpression;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPQualifierType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.OverloadableOperator;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 
@@ -173,9 +173,9 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				return false;
 			}
 			IType type = operand.getExpressionType();
-			if (type instanceof CPPQualifierType) {
-				type = ((CPPQualifierType) type).getType();
-			}
+
+			type = SemanticUtil.getNestedType(type, SemanticUtil.TDEF);
+
 			if (type instanceof IBasicType || type instanceof IEnumeration) {
 				return false;
 			}

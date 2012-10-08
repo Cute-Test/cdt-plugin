@@ -22,7 +22,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIfStatement;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -35,21 +34,20 @@ import ch.hsr.ifs.cute.tdd.TypeHelper;
 
 public class CreateLocalVariableRefactoring extends CRefactoring3 {
 
-	private String missingName;
+	private final String missingName;
 
-	public CreateLocalVariableRefactoring(ISelection selection, String missingName, RefactoringASTCache astCache) {
-		super(selection, astCache);
+	public CreateLocalVariableRefactoring(ISelection selection, String missingName) {
+		super(selection);
 		this.missingName = missingName;
 	}
 
-	protected void collectModifications(IProgressMonitor pm,
-			ModificationCollector collector) throws CoreException,
-			OperationCanceledException {
-		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
+	@Override
+	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
 		IASTNode selectedNode = localunit.getNodeSelector(null).findEnclosingName(getSelection().getOffset(), getSelection().getLength());
 		if (selectedNode == null) {
 			selectedNode = localunit.getNodeSelector(null).findName(getSelection().getOffset(), getSelection().getLength());
-			assert(false);
+			assert (false);
 		}
 		IASTIdExpression owner = TddHelper.getAncestorOfType(selectedNode, IASTIdExpression.class);
 		IASTName variableName = new CPPASTName(missingName.toCharArray());

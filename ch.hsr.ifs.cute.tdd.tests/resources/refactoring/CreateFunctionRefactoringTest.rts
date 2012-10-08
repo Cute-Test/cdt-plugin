@@ -28,6 +28,7 @@ void func() {
 struct A
 {
 };
+
 void func() {
 	A a = foo();
 }
@@ -35,6 +36,7 @@ void func() {
 struct A
 {
 };
+
 A foo() {
 	return A();
 }
@@ -282,11 +284,12 @@ namespace cute{
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
+
 double function() {
 	return double();
 }
 
-void test(){
+void test() {
     ASSERT(42.0 == function());
 }
 //!TestBooleanReturnTypeDetectionInMacro
@@ -325,10 +328,11 @@ namespace cute{
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
+
 bool function() {
 	return bool();
 }
 
-void test(){
+void test() {
     ASSERT(function());
 }

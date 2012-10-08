@@ -19,7 +19,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -31,23 +30,20 @@ import ch.hsr.ifs.cute.tdd.createtype.CreateTypeRefactoring;
 
 public class CreateNamespaceRefactoring extends CRefactoring3 {
 
-	public CreateNamespaceRefactoring(ITextSelection textSelection,
-			String name, RefactoringASTCache astCache) {
-		super(textSelection, astCache);
+	public CreateNamespaceRefactoring(ITextSelection textSelection, String name) {
+		super(textSelection);
 	}
 
 	@Override
-	protected void collectModifications(IProgressMonitor pm,
-			ModificationCollector collector) throws CoreException,
-			OperationCanceledException {
-		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
+	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
 		IASTNode selectedNode = localunit.getNodeSelector(null).findEnclosingName(getSelection().getOffset(), getSelection().getLength());
 		IASTName selectedNodeName = TddHelper.getAncestorOfType(selectedNode, CPPASTName.class);
 		ICPPASTQualifiedName qname = TddHelper.getAncestorOfType(selectedNode, CPPASTQualifiedName.class);
 		if (selectedNode instanceof IASTName && qname != null) {
 			ICPPASTNamespaceDefinition ns = new CPPASTNamespaceDefinition(selectedNodeName.copy());
-			IASTNode insertionPoint = CreateTypeRefactoring.getInsertionPoint(localunit, selectedNodeName, astCache);
-		
+			IASTNode insertionPoint = CreateTypeRefactoring.getInsertionPoint(localunit, selectedNodeName, refactoringContext);
+
 			//TODO: Remvoe duplicated crom createclass
 			if (insertionPoint instanceof CPPASTCompositeTypeSpecifier || insertionPoint instanceof CPPASTNamespaceDefinition) {
 				TddHelper.writeDefinitionTo(collector, insertionPoint, ns);
@@ -57,5 +53,5 @@ public class CreateNamespaceRefactoring extends CRefactoring3 {
 			}
 		}
 	}
-	
+
 }

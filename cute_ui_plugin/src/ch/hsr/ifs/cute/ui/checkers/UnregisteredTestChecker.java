@@ -31,7 +31,7 @@ import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
+import org.eclipse.cdt.internal.core.model.ASTCache;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -52,7 +52,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 	}
 
 	private void markUnregisteredFunctions(List<IASTDeclaration> testFunctions) {
-		RefactoringASTCache astCache = new RefactoringASTCache();
+		ASTCache astCache = new ASTCache();
 		try {
 			final IIndex index = assembleIndex();
 			try {
@@ -70,11 +70,11 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		} catch (CoreException e) {
 			CuteCorePlugin.log(e);
 		} finally {
-			astCache.dispose();
+			astCache.disposeAST();
 		}
 	}
 
-	private void markFunctionIfUnregistered(RefactoringASTCache astCache, final IIndex index, final RegisteredTestFunctionFinderVisitor registeredFunctionFinder,
+	private void markFunctionIfUnregistered(ASTCache astCache, final IIndex index, final RegisteredTestFunctionFinderVisitor registeredFunctionFinder,
 			IASTDeclaration iastDeclaration) {
 		final IBinding toBeRegisteredBinding = getToBeRegisteredBinding(iastDeclaration);
 
@@ -89,17 +89,17 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		}
 	}
 
-	private void updateRegisteredTests(RefactoringASTCache astCache, final IIndex index, final RegisteredTestFunctionFinderVisitor registeredFunctionFinder,
+	private void updateRegisteredTests(ASTCache astCache, final IIndex index, final RegisteredTestFunctionFinderVisitor registeredFunctionFinder,
 			final IBinding toBeRegisteredBinding) throws CoreException {
 		if (toBeRegisteredBinding instanceof ICPPClassType) {
 			final ICPPConstructor[] constructors = ((ICPPClassType) toBeRegisteredBinding).getConstructors();
 			for (ICPPConstructor constructor : constructors) {
 				final IIndexName[] constructorReferences = index.findReferences(constructor);
-				updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, constructorReferences, astCache);
+				updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, constructorReferences, astCache, index);
 			}
 		} else {
 			final IIndexName[] references = index.findReferences(toBeRegisteredBinding);
-			updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, references, astCache);
+			updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, references, astCache, index);
 		}
 	}
 
@@ -124,7 +124,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		return projects;
 	}
 
-	private void updateRegisteredTestsOfReferencedTUs(RegisteredTestFunctionFinderVisitor registeredFunctionFinder, IIndexName[] references, RefactoringASTCache astCache)
+	private void updateRegisteredTestsOfReferencedTUs(RegisteredTestFunctionFinderVisitor registeredFunctionFinder, IIndexName[] references, ASTCache astCache, IIndex index)
 			throws CoreException {
 		for (IIndexName testReference : references) {
 			final ITranslationUnit tu = findTranslationUnit(testReference);
@@ -133,7 +133,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 				if (getModelCache().getTranslationUnit().getResource().equals(tu.getResource())) {
 					ast = getModelCache().getAST();
 				} else {
-					ast = astCache.getAST(tu, new NullProgressMonitor());
+					ast = astCache.acquireSharedAST(tu, index, true, new NullProgressMonitor());
 				}
 				ast.accept(registeredFunctionFinder);
 			}

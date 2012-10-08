@@ -26,8 +26,8 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleTypeTemplateParameter;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateDeclaration;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -39,14 +39,13 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class CreateTypeRefactoring extends CRefactoring3 {
 
-	private String className;
+	private final String className;
 	private boolean isTemplateSituation;
-	private ArrayList<ICPPASTSimpleTypeTemplateParameter> listOfArgs;
-	private CodanArguments ca;
+	private final ArrayList<ICPPASTSimpleTypeTemplateParameter> listOfArgs;
+	private final CodanArguments ca;
 
-	public CreateTypeRefactoring(ITextSelection textSelection,
-			CodanArguments ca, RefactoringASTCache astCache) {
-		super(textSelection, astCache);
+	public CreateTypeRefactoring(ITextSelection textSelection, CodanArguments ca) {
+		super(textSelection);
 		this.ca = ca;
 		this.className = ca.getName();
 		this.listOfArgs = createTempalteArgs();
@@ -71,20 +70,19 @@ public class CreateTypeRefactoring extends CRefactoring3 {
 		return result;
 	}
 
-	protected void collectModifications(IProgressMonitor pm,
-			ModificationCollector collector) throws CoreException,
-			OperationCanceledException {
-		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
+	@Override
+	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
 		IASTName namenearselection = localunit.getNodeSelector(null).findEnclosingName(getSelection().getOffset(), getSelection().getLength());
 		if (namenearselection == null) {
 			namenearselection = localunit.getNodeSelector(null).findFirstContainedName(getSelection().getOffset(), getSelection().getLength());
 		}
 		IASTNode newType;
-		
+
 		newType = createTemplatedType(className);
-		
-		IASTNode insertionPoint = getInsertionPoint(localunit, namenearselection, astCache);
-		
+
+		IASTNode insertionPoint = getInsertionPoint(localunit, namenearselection, refactoringContext);
+
 		if (insertionPoint instanceof CPPASTCompositeTypeSpecifier || insertionPoint instanceof ICPPASTNamespaceDefinition) {
 			TddHelper.writeDefinitionTo(collector, insertionPoint, newType);
 		} else {
@@ -93,17 +91,15 @@ public class CreateTypeRefactoring extends CRefactoring3 {
 		}
 	}
 
-	public static IASTNode getInsertionPoint(IASTTranslationUnit localunit,
-			IASTName namenearselection, RefactoringASTCache astCache) {
+	public static IASTNode getInsertionPoint(IASTTranslationUnit localunit, IASTName namenearselection, CRefactoringContext context) {
 		IASTNode insertionPoint = null;
-		if(namenearselection instanceof ICPPASTQualifiedName){
-			insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) namenearselection, astCache);			
-		}
-		else{
-		IASTNode parent = namenearselection.getParent();
+		if (namenearselection instanceof ICPPASTQualifiedName) {
+			insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) namenearselection, context);
+		} else {
+			IASTNode parent = namenearselection.getParent();
 			if (parent instanceof ICPPASTQualifiedName) {
-				insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, astCache);
-			} 
+				insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, context);
+			}
 		}
 		if (insertionPoint == null) {
 			insertionPoint = getFunctionDefinition(namenearselection);
@@ -121,9 +117,9 @@ public class CreateTypeRefactoring extends CRefactoring3 {
 		if (isTemplateSituation) {
 			templdecl = new CPPASTTemplateDeclaration(simpleddec);
 			result = templdecl;
-			for(ICPPASTSimpleTypeTemplateParameter templparam: listOfArgs) {
+			for (ICPPASTSimpleTypeTemplateParameter templparam : listOfArgs) {
 				templdecl.addTemplateParameter(templparam);
-			}	
+			}
 		}
 		return result;
 	}

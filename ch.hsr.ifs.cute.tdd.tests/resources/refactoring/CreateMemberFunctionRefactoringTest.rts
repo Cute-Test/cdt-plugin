@@ -139,6 +139,7 @@ protected:
 public:
 	void foo() {
 	}
+
 private:
 };
 
@@ -626,6 +627,7 @@ namespace X
 
 void foo() {
 }
+
 }
 
 void test() {
@@ -654,6 +656,7 @@ namespace X
 
 void foo() {
 }
+
 }
 //!Create Member Function for Type of Call Expression
 //@A.cpp
@@ -671,6 +674,7 @@ void foo() {
 struct S {
 	void b() {
 	}
+
 	S f() {
 		return S();
 	}

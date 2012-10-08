@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.createfunction.quickfixes;
 
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextSelection;
@@ -29,26 +28,23 @@ public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 	public org.eclipse.swt.graphics.Image getImage() {
 		return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
 	};
-	
+
 	public void setFree(boolean free) {
 		this.free = free;
 	}
-	
+
 	@Override
-	protected CRefactoring3 getRefactoring(RefactoringASTCache astCache, ITextSelection selection) {
+	protected CRefactoring3 getRefactoring(ITextSelection selection) {
 		if (free) {
-			return new CreateFreeFunctionRefactoring(selection, ca, astCache, getStrategy());			
+			return new CreateFreeFunctionRefactoring(selection, ca, getStrategy());
 		}
-		return new CreateMemberFunctionRefactoring(selection, ca, astCache, getStrategy());
+		return new CreateMemberFunctionRefactoring(selection, ca, getStrategy());
 	}
 
-	public void handleReturn(ChangeRecorder rec, LinkedModeInformation lmi)
-			throws BadLocationException {
+	public void handleReturn(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		if (lmi.getReturnStatment()) {
-			lmi.addPosition(rec.getRetBegin(),
-					rec.getRetLength() - "()".length(), rec.getSpecBegin()); //$NON-NLS-1$
-			lmi.addPosition(
-					rec.getRetBegin() + rec.getRetLength() - "(".length(), 0); //$NON-NLS-1$
+			lmi.addPosition(rec.getRetBegin(), rec.getRetLength() - "()".length(), rec.getSpecBegin()); //$NON-NLS-1$
+			lmi.addPosition(rec.getRetBegin() + rec.getRetLength() - "(".length(), 0); //$NON-NLS-1$
 		} else {
 			lmi.addPosition(rec.getBracketPosition(), 0);
 		}
@@ -56,14 +52,13 @@ public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 
 	protected abstract IFunctionCreationStrategy getStrategy();
 
-	public void configureLinkedModeWithDeclSpec(ChangeRecorder rec,
-			LinkedModeInformation lmi) throws BadLocationException {
+	public void configureLinkedModeWithDeclSpec(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		lmi.addPosition(rec.getSpecBegin(), rec.getSpecLength());
 		handleReturn(rec, lmi);
 		lmi.addPositions(rec.getParameterPositions());
 		lmi.addPosition(rec.getEndOfMarkedLine(), 0);
 	}
-	
+
 	public void configureLinkedModeWithConstAndCtor(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		if (lmi.getDeclSpec()) {
 			lmi.addPosition(rec.getSpecBegin(), rec.getSpecLength());

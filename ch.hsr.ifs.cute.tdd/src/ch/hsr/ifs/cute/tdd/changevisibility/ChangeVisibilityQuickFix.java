@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.changevisibility;
 
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
@@ -16,12 +15,13 @@ import ch.hsr.ifs.cute.tdd.TddQuickFix;
 
 public class ChangeVisibilityQuickFix extends TddQuickFix {
 
+	@Override
 	public String getLabel() {
 		return Messages.ChangeVisibilityQuickFix_0 + ca.getName() + Messages.ChangeVisibilityQuickFix_1;
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(RefactoringASTCache astCache, ITextSelection selection) {
-		return new ChangeVisibilityRefactoring(selection, ca.getName(), astCache);
+	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+		return new ChangeVisibilityRefactoring(selection, ca.getName());
 	}
 }

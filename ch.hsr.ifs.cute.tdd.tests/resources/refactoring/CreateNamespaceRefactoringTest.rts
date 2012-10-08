@@ -22,9 +22,11 @@ void test() {
 //=
 namespace X
 {
+
 namespace Y {
 
 }
+
 }
 void test() {
     X::Y::foo();

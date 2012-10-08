@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.tdd.ui.tests.refactoring;
 
 import java.util.ArrayList;
 
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.text.IDocument;
 
@@ -19,15 +18,14 @@ import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.createtype.CreateTypeRefactoring;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
-@SuppressWarnings("restriction")
 public class CreateTypeRefactoringTest extends TddRefactoringTest {
 
-	public CreateTypeRefactoringTest(String name,
-			ArrayList<com.includator.tests.base.TestSourceFile> files) {
+	public CreateTypeRefactoringTest(String name, ArrayList<com.includator.tests.base.TestSourceFile> files) {
 		super(name, files, TddErrorIdCollection.ERR_ID_TypeResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_NamespaceResolutionProblem_HSR);
 	}
 
+	@Override
 	protected CreateTypeRefactoring getRefactoring(IMarker marker, IDocument doc) {
-		return new CreateTypeRefactoring(selection, new CodanArguments(marker), new RefactoringASTCache());
+		return new CreateTypeRefactoring(selection, new CodanArguments(marker));
 	}
 }

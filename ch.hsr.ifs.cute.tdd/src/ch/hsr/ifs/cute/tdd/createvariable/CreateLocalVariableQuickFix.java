@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.createvariable;
 
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextSelection;
@@ -22,24 +21,24 @@ import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
 public class CreateLocalVariableQuickFix extends TddQuickFix {
 
+	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
 		return Messages.CreateLocalVariableQuickFix_0 + ca.getName() + Messages.CreateLocalVariableQuickFix_1;
 	}
-	
+
 	@Override
 	public Image getImage() {
 		return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_LOCAL_VARIABLE);
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(RefactoringASTCache astCache, ITextSelection selection) {
-		return new CreateLocalVariableRefactoring(selection, ca.getName(), astCache);
+	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+		return new CreateLocalVariableRefactoring(selection, ca.getName());
 	}
 
 	@Override
-	protected void configureLinkedMode(ChangeRecorder rec,
-			LinkedModeInformation lmi) throws BadLocationException {
+	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		lmi.addPosition(rec.getSpecBegin(), rec.getSpecLength());
 	}
 }

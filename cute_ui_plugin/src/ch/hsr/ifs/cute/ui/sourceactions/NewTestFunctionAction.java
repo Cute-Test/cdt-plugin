@@ -23,6 +23,7 @@ import org.eclipse.text.edits.TextEdit;
  * 
  */
 public class NewTestFunctionAction extends AbstractFunctionAction {
+
 	//TODO create Strategy or new Superclass
 
 	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);"; //$NON-NLS-1$

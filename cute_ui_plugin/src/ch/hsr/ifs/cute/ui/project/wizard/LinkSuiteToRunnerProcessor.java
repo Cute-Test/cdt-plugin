@@ -29,16 +29,19 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.cdt.internal.core.dom.rewrite.util.FileHelper;
 import org.eclipse.cdt.internal.core.resources.ResourceLookup;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.TextEdit;
+import org.eclipse.ui.texteditor.DocumentProviderRegistry;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 
 /**
  * @author Emanuel Graf IFS
@@ -76,7 +79,11 @@ public class LinkSuiteToRunnerProcessor {
 		IPath implPath = new Path(tu.getContainingFilename());
 		IFile file = ResourceLookup.selectFileForLocation(implPath, null);
 		TextFileChange change = new TextFileChange("include", file); //$NON-NLS-1$
-		String lineDelim = FileHelper.determineLineDelimiter(file);
+
+		final IDocumentProvider docProvider = DocumentProviderRegistry.getDefault().getDocumentProvider(file.getFileExtension());
+		IDocument document = docProvider.getDocument(tu);
+		String lineDelim = TextUtilities.getDefaultLineDelimiter(document);
+
 		int offset = getMaxIncludeOffset(tu);
 		String text = lineDelim + "#include \"" + suiteName + ".h\""; //$NON-NLS-1$//$NON-NLS-2$
 		TextEdit edit = new InsertEdit(offset, text);

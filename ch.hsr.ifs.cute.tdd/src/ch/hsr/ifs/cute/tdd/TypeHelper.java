@@ -8,6 +8,10 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd;
 
+import static org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.ALLCVQ;
+import static org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.REF;
+import static org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.TDEF;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,9 +75,10 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNamespace;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPScope;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVariable;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
 import org.eclipse.cdt.internal.core.pdom.dom.cpp.IPDOMCPPClassType;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -126,14 +131,14 @@ public class TypeHelper {
 	}
 
 	private static ICPPASTDeclSpecifier handleType(ICPPBinding type) {
-		String typename = ASTTypeUtil.getQualifiedName((ICPPBinding) type);
+		String typename = ASTTypeUtil.getQualifiedName(type);
 		CPPASTNamedTypeSpecifier declspec = new CPPASTNamedTypeSpecifier(new CPPASTName(typename.toCharArray()));
 		return declspec;
 	}
 
 	private static ICPPASTDeclSpecifier handleType(IBasicType type) {
 		CPPASTSimpleDeclSpecifier simpleDeclSpec = new CPPASTSimpleDeclSpecifier();
-		simpleDeclSpec.setType(((IBasicType) type).getKind());
+		simpleDeclSpec.setType(type.getKind());
 		return simpleDeclSpec;
 	}
 
@@ -235,7 +240,7 @@ public class TypeHelper {
 		return litexpr.getKind() == ICPPASTLiteralExpression.lk_this;
 	}
 
-	public static ICPPASTCompositeTypeSpecifier getTypeDefinitionOfMember(IASTTranslationUnit unit, IASTName selectedNode, RefactoringASTCache astCache) {
+	public static ICPPASTCompositeTypeSpecifier getTypeDefinitionOfMember(IASTTranslationUnit unit, IASTName selectedNode, CRefactoringContext context) {
 		ICPPASTQualifiedName qName = getQualifiedNamePart(selectedNode);
 		if (qName != null) {
 			return handleQualifiedName(qName);
@@ -244,13 +249,14 @@ public class TypeHelper {
 		ICPPASTFieldReference fieldref = TddHelper.getAncestorOfType(selectedNode, ICPPASTFieldReference.class);
 		if (fieldref != null && fieldref.getFieldOwner().getExpressionType() instanceof IBinding) {
 			IASTExpression owner = fieldref.getFieldOwner();
-			IBinding expressionType = (IBinding) owner.getExpressionType();
-			if (expressionType instanceof CPPClassType) {
-				CPPClassType cType = (CPPClassType) expressionType;
+			IType expressionType = owner.getExpressionType();
+			IType unwrappedType = SemanticUtil.getNestedType(expressionType, ALLCVQ | TDEF | REF);
+			if (unwrappedType instanceof CPPClassType) {
+				CPPClassType cType = (CPPClassType) unwrappedType;
 				return cType.getCompositeTypeSpecifier();
 			}
-			if (expressionType instanceof IPDOMCPPClassType) {
-				return findTypeDefinitionInIndex(unit, astCache, (IPDOMCPPClassType) expressionType);
+			if (unwrappedType instanceof IPDOMCPPClassType) {
+				return findTypeDefinitionInIndex(unit, context, (IPDOMCPPClassType) unwrappedType);
 			}
 		} else {
 			IASTSimpleDeclaration declaration = TddHelper.getAncestorOfType(selectedNode, IASTSimpleDeclaration.class);
@@ -264,7 +270,7 @@ public class TypeHelper {
 		return null;
 	}
 
-	public static ICPPASTCompositeTypeSpecifier getTypeDefinitionOfVariable(IASTTranslationUnit unit, IASTName selectedNode, RefactoringASTCache astCache) {
+	public static ICPPASTCompositeTypeSpecifier getTypeDefinitionOfVariable(IASTTranslationUnit unit, IASTName selectedNode, CRefactoringContext context) {
 		ICPPASTQualifiedName qName = getQualifiedNamePart(selectedNode);
 		if (qName != null) {
 			selectedNode = qName;
@@ -273,12 +279,12 @@ public class TypeHelper {
 		if (b instanceof CPPVariable) {
 			CPPVariable var = (CPPVariable) b;
 			IType type = var.getType();
-			return getDefinitionOfType(unit, astCache, type);
+			return getDefinitionOfType(unit, context, type);
 		}
 		return null;
 	}
 
-	private static ICPPASTCompositeTypeSpecifier findTypeDefinitionInIndex(IASTTranslationUnit unit, RefactoringASTCache astCache, ICPPClassType cType) {
+	private static ICPPASTCompositeTypeSpecifier findTypeDefinitionInIndex(IASTTranslationUnit unit, CRefactoringContext context, ICPPClassType cType) {
 
 		try {
 			Set<IIndexFile> includedFiles = getIncludedFiles(unit, cType);
@@ -291,7 +297,7 @@ public class TypeHelper {
 					IPath defPath = new Path(def.getFileLocation().getFileName());
 					ITranslationUnit tu = (ITranslationUnit) CCorePlugin.getDefault().getCoreModel().create(defPath);
 					if (tu != null) {
-						IASTTranslationUnit tuContainingDefinition = astCache.getAST(tu, new NullProgressMonitor());
+						IASTTranslationUnit tuContainingDefinition = context.getAST(tu, new NullProgressMonitor());
 						final IIndexBinding adaptedTypeBinding = tuContainingDefinition.getIndex().adaptBinding(cType);
 						IASTName[] typeDefinitions = tuContainingDefinition.getDefinitionsInAST(adaptedTypeBinding);
 						if (typeDefinitions.length > 0) {
@@ -346,16 +352,16 @@ public class TypeHelper {
 		return null;
 	}
 
-	public static IASTNode getTypeDefinitonOfName(IASTTranslationUnit localunit, final String typename, RefactoringASTCache astCache) {
+	public static IASTNode getTypeDefinitonOfName(IASTTranslationUnit localunit, final String typename, CRefactoringContext context) {
 		try {
-			return TypeHelper.checkIndexBindingForType(typename, localunit, astCache.getIndex(), astCache);
+			return TypeHelper.checkIndexBindingForType(typename, localunit, context.getIndex(), context);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private static IASTNode checkIndexBindingForType(final String typename, IASTTranslationUnit unit, IIndex index, RefactoringASTCache astCache) throws CoreException {
+	private static IASTNode checkIndexBindingForType(final String typename, IASTTranslationUnit unit, IIndex index, CRefactoringContext context) throws CoreException {
 		IIndexBinding[] allBindings = index.findBindings(typename.toCharArray(), false, new IndexFilter() {
 		}, new NullProgressMonitor());
 		for (IIndexBinding binding : allBindings) {
@@ -368,7 +374,7 @@ public class TypeHelper {
 																													// parameter, and this shouts for
 																													// an else case
 					if (tu != null) {
-						currentTu = astCache.getAST(tu, new NullProgressMonitor());
+						currentTu = context.getAST(tu, new NullProgressMonitor());
 					}
 				}
 				IASTNode typeSpec = searchTypeInUnit(typename, currentTu);
@@ -448,7 +454,7 @@ public class TypeHelper {
 		return null;
 	}
 
-	public static IASTNode getMemberOwner(IASTTranslationUnit localunit, IASTName selectedNode, RefactoringASTCache astCache) {
+	public static IASTNode getMemberOwner(IASTTranslationUnit localunit, IASTName selectedNode, CRefactoringContext context) {
 		IBinding binding = selectedNode.resolveBinding();
 
 		if (binding != null) {
@@ -461,20 +467,20 @@ public class TypeHelper {
 				}
 			}
 		}
-		return getTypeDefinitionOfMember(localunit, selectedNode, astCache);
+		return getTypeDefinitionOfMember(localunit, selectedNode, context);
 	}
 
-	public static ICPPASTCompositeTypeSpecifier getTypeOfMember(IASTTranslationUnit unit, IASTName selectedNode, RefactoringASTCache astCache) {
+	public static ICPPASTCompositeTypeSpecifier getTypeOfMember(IASTTranslationUnit unit, IASTName selectedNode, CRefactoringContext context) {
 		IBinding b = selectedNode.resolveBinding();
 		if (b instanceof ICPPMember) {
 			ICPPMember var = (ICPPMember) b;
 			IType type = var.getClassOwner();
-			return getDefinitionOfType(unit, astCache, type);
+			return getDefinitionOfType(unit, context, type);
 		}
 		return null;
 	}
 
-	private static ICPPASTCompositeTypeSpecifier getDefinitionOfType(IASTTranslationUnit unit, RefactoringASTCache astCache, IType type) {
+	private static ICPPASTCompositeTypeSpecifier getDefinitionOfType(IASTTranslationUnit unit, CRefactoringContext context, IType type) {
 		type = TypeHelper.windDownToRealType(type, false);
 		if (type instanceof ICPPClassSpecialization) {
 			type = ((ICPPClassSpecialization) type).getSpecializedBinding();
@@ -486,7 +492,7 @@ public class TypeHelper {
 			return ((CPPClassType) type).getCompositeTypeSpecifier();
 		}
 		if (type instanceof ICPPClassType) {
-			return findTypeDefinitionInIndex(unit, astCache, (ICPPClassType) type);
+			return findTypeDefinitionInIndex(unit, context, (ICPPClassType) type);
 		}
 		return null;
 	}

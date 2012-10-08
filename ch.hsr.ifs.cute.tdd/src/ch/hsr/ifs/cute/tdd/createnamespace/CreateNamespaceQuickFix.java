@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.createnamespace;
 
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
@@ -24,7 +23,7 @@ public class CreateNamespaceQuickFix extends TddQuickFix {
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(RefactoringASTCache astCache, ITextSelection selection) {
-		return new CreateNamespaceRefactoring(selection, ca.getName(), astCache);
+	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+		return new CreateNamespaceRefactoring(selection, ca.getName());
 	}
 }

@@ -9,7 +9,6 @@
 package ch.hsr.ifs.cute.tdd.createtype;
 
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextSelection;
@@ -22,11 +21,11 @@ import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
 /**
- * Interface between UI and refactoring. Controls the CreateClassRefactoring and
- * sets up linked mode editing after the changes have been performed.
+ * Interface between UI and refactoring. Controls the CreateClassRefactoring and sets up linked mode editing after the changes have been performed.
  */
 public class CreateTypeQuickFix extends TddQuickFix {
 
+	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
 		return Messages.CreateTypeQuickFix_0 + ca.getName() + Messages.CreateTypeQuickFix_1;
@@ -38,8 +37,8 @@ public class CreateTypeQuickFix extends TddQuickFix {
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(RefactoringASTCache astCache, ITextSelection selection) {
-		return new CreateTypeRefactoring(selection, ca, astCache);
+	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+		return new CreateTypeRefactoring(selection, ca);
 	}
 
 	@Override
@@ -51,8 +50,7 @@ public class CreateTypeQuickFix extends TddQuickFix {
 	}
 
 	public static Proposal[] getTypeProposals() {
-		return new Proposal[] {
-				new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0), //$NON-NLS-1$
+		return new Proposal[] { new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0), //$NON-NLS-1$
 				new Proposal("struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0), //$NON-NLS-1$
 				new Proposal("enum", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_ENUMERATION), 0) //$NON-NLS-1$
 		};

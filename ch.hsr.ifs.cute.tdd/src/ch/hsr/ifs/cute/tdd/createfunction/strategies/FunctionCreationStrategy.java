@@ -17,7 +17,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.jface.text.TextSelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
@@ -25,14 +25,10 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 
-
-public class FunctionCreationStrategy implements
-		IFunctionCreationStrategy {
+public class FunctionCreationStrategy implements IFunctionCreationStrategy {
 
 	@Override
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit,
-			IASTNode selectedName, String name,
-			TextSelection selection) {
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, TextSelection selection) {
 		ICPPASTFunctionDeclarator dec = new CPPASTFunctionDeclarator(new CPPASTName(name.toCharArray()));
 		IASTFunctionCallExpression caller = TddHelper.getAncestorOfType(selectedName, IASTFunctionCallExpression.class);
 		if (caller != null) {
@@ -46,7 +42,7 @@ public class FunctionCreationStrategy implements
 	}
 
 	@Override
-	public ICPPASTCompositeTypeSpecifier getDefinitionScopeForName(IASTTranslationUnit unit, IASTName name, RefactoringASTCache astCache) {
-		return TypeHelper.getTypeDefinitionOfMember(unit, name, astCache);
+	public ICPPASTCompositeTypeSpecifier getDefinitionScopeForName(IASTTranslationUnit unit, IASTName name, CRefactoringContext context) {
+		return TypeHelper.getTypeDefinitionOfMember(unit, name, context);
 	}
 }

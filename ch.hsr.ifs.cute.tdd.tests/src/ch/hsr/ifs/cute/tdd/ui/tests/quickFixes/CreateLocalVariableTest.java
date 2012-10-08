@@ -49,7 +49,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 	}
 
 	//void testX() {
-	//  int local;
+	//	int local;
 	//	int i = local;
 	//}
 	@Override

@@ -21,7 +21,6 @@ import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeNotSupportedException;
 import ch.hsr.ifs.cute.tdd.LinkedMode.NestedEdit;
 import ch.hsr.ifs.cute.tdd.ui.tests.FakeChange;
 
-
 public class NestedEditTest {
 
 	private static final int OFFSET = 0;
@@ -41,22 +40,24 @@ public class NestedEditTest {
 		assertEquals(fakeChange.getInsertedText(), nested.getText());
 	}
 
-	@Test(expected=ChangeNotSupportedException.class)
+	@Test(
+			expected = ChangeNotSupportedException.class)
 	public void testIllegalChange() {
 		new NestedEdit(new NullChange());
 	}
 
-	@Test(expected=ChangeNotSupportedException.class)
+	@Test(
+			expected = ChangeNotSupportedException.class)
 	public void testIllegalChangeChildren() {
-		Change[] children = new Change[]{ new CompositeChange("test", new Change[]{})};
+		Change[] children = new Change[] { new CompositeChange("test", new Change[] {}) };
 		new NestedEdit(new CompositeChange("test", children));
 	}
 
 	@Test
-	public void testReplaceEditChild() {
-		String replaceText = "new";
-		NestedEdit edit = new NestedEdit(new FakeChange("", 0, 3, replaceText));
-		assertEquals(replaceText, edit.getText());
+	public void testInsertEditChild() {
+		String insertText = "new";
+		NestedEdit edit = new NestedEdit(new FakeChange("", 0, insertText));
+		assertEquals(insertText, edit.getText());
 	}
 
 	@Test

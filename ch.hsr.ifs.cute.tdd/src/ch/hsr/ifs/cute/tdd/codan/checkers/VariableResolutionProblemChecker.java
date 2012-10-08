@@ -21,7 +21,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
@@ -95,7 +94,7 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 				if (parent instanceof ICPPASTConstructorChainInitializer) {
 					reportMissingMemberVariable(name, missingName);
 				} else if (parent instanceof IASTFieldReference) {
-					if (ToggleNodeHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null) {
+					if (TddHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null) {
 						return;
 					}
 					reportMissingMemberVariable(name, missingName);

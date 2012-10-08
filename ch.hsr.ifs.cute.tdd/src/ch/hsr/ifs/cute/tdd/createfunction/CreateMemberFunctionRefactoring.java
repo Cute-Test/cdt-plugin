@@ -15,7 +15,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -29,32 +28,32 @@ import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 public class CreateMemberFunctionRefactoring extends CRefactoring3 {
 
 	public CodanArguments ca;
-	private IFunctionCreationStrategy strategy;
+	private final IFunctionCreationStrategy strategy;
 
-	public CreateMemberFunctionRefactoring(ISelection selection, CodanArguments ca, RefactoringASTCache astCache, IFunctionCreationStrategy strategy) {
-		super(selection, astCache);
+	public CreateMemberFunctionRefactoring(ISelection selection, CodanArguments ca, IFunctionCreationStrategy strategy) {
+		super(selection);
 		this.ca = ca;
 		this.strategy = strategy;
 	}
 
+	@Override
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 
-		IASTTranslationUnit localunit = astCache.getAST(tu, pm);
+		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
 		IASTName selectedNode = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
-		ICPPASTCompositeTypeSpecifier type = strategy.getDefinitionScopeForName(localunit, selectedNode, astCache);
+		ICPPASTCompositeTypeSpecifier type = strategy.getDefinitionScopeForName(localunit, selectedNode, refactoringContext);
 		ICPPASTFunctionDefinition newFunction = strategy.getFunctionDefinition(localunit, selectedNode, ca.getName(), getSelection());
 
 		if (type == null) {
 			final IASTNode parent = selectedNode.getParent();
 			IASTNode insertionPoint;
 			if (parent instanceof ICPPASTQualifiedName) {
-				insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, astCache);
+				insertionPoint = TddHelper.getNestedInsertionPoint(localunit, (ICPPASTQualifiedName) parent, refactoringContext);
 			} else {
 				insertionPoint = localunit;
 			}
 			TddHelper.writeDefinitionTo(collector, insertionPoint, newFunction);
-		}
-		else {
+		} else {
 			TddHelper.writeDefinitionTo(collector, type, newFunction);
 		}
 		setLinkedModeInformation(localunit, type, newFunction);

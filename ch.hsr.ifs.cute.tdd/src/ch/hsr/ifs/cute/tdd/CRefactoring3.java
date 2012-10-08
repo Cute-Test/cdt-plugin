@@ -16,9 +16,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -34,43 +33,35 @@ import org.eclipse.ui.ide.IDE;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
-public abstract class CRefactoring3 extends CRefactoring2 {
+public abstract class CRefactoring3 extends CRefactoring {
 
 	private final TextSelection selection;
 	protected LinkedModeInformation lmi = new LinkedModeInformation();
-	
-	public CRefactoring3(ICElement element, ISelection selection,
-			RefactoringASTCache astCache) {
-		super(element, selection, null, astCache);
-		if (!IDE.saveAllEditors(new IResource[] {ResourcesPlugin.getWorkspace().getRoot()}, false)) {
+
+	public CRefactoring3(ICElement element, ISelection selection) {
+		super(element, selection, null);
+		if (!IDE.saveAllEditors(new IResource[] { ResourcesPlugin.getWorkspace().getRoot() }, false)) {
 			initStatus.addFatalError(Messages.CRefactoring3_0);
 		}
 		this.selection = (TextSelection) selection;
 	}
 
-	public CRefactoring3(ISelection selection, RefactoringASTCache astCache) {
-		this(getEditor().getInputCElement(), selection, astCache);
+	public CRefactoring3(ISelection selection) {
+		this(getEditor().getInputCElement(), selection);
 	}
-	
+
 	private static CEditor getEditor() {
 		return (CEditor) Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 
 	public void dispose() {
-		astCache.dispose();
+		if (refactoringContext != null) {
+			refactoringContext.dispose();
+		}
 	}
 
 	@Override
-	protected RefactoringStatus checkFinalConditions(
-			IProgressMonitor subProgressMonitor,
-			CheckConditionsContext checkContext) throws CoreException,
-			OperationCanceledException {
-		return initStatus;
-	}
-	
-	@Override
-	public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
+	protected RefactoringStatus checkFinalConditions(IProgressMonitor subProgressMonitor, CheckConditionsContext checkContext) throws CoreException, OperationCanceledException {
 		return initStatus;
 	}
 
@@ -80,9 +71,7 @@ public abstract class CRefactoring3 extends CRefactoring2 {
 	}
 
 	@Override
-	abstract protected void collectModifications(IProgressMonitor pm,
-			ModificationCollector collector) throws CoreException,
-			OperationCanceledException;
+	abstract protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException;
 
 	public TextSelection getSelection() {
 		return selection;
@@ -93,10 +82,10 @@ public abstract class CRefactoring3 extends CRefactoring2 {
 		if (declaration instanceof IASTFunctionDefinition) {
 			ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
 			lmi.setReturnStatement(FunctionCreationHelper.hasReturnStatement(function));
-			lmi.setIsConst(((ICPPASTFunctionDeclarator)function.getDeclarator()).isConst());
+			lmi.setIsConst(((ICPPASTFunctionDeclarator) function.getDeclarator()).isConst());
 		}
 	}
-	
+
 	public LinkedModeInformation getLinkedModeInformation() {
 		return lmi;
 	}

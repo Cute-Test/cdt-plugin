@@ -22,6 +22,7 @@ namespace N {
 
 struct Klass {
 };
+
 void test() {
 	Klass k;
 }
@@ -40,7 +41,7 @@ void test() {
 }
 //!CreateTypeOutOfATemplatedFunction
 //@A.cpp
-template <typename T>
+template<typename T>
 T testy(T t) {
 	Klasse k;
 }
@@ -48,22 +49,23 @@ T testy(T t) {
 struct Klasse {
 };
 
-template <typename T>
+template<typename T>
 T testy(T t) {
 	Klasse k;
 }
 //!CreateTypeOutOfAMultiTemplatedFunction
 //@A.cpp
-template <typename U>
-template <typename T>
+template<typename U>
+template<typename T>
 T testy(T t) {
 	Klasse k;
 }
 //=
 struct Klasse {
 };
-template <typename U>
-template <typename T>
+
+template<typename U>
+template<typename T>
 T testy(T t) {
 	Klasse k;
 }
@@ -78,14 +80,15 @@ struct Test {
 struct Test {
 	struct Klasse {
 	};
-    void testy() {
+
+	void testy() {
         Klasse k;
     }
 };
 //!CreateTypeOutOfATemplatedMemberFunction
 //@A.cpp
 struct Test {
-	template <typename T>
+	template<typename T>
     T testy(T t) {
         Klasse k;
         return T();
@@ -95,7 +98,8 @@ struct Test {
 struct Test {
 	struct Klasse {
 	};
-	template <typename T>
+
+	template<typename T>
     T testy(T t) {
         Klasse k;
         return T();
@@ -105,7 +109,7 @@ struct Test {
 //@A.cpp
 template <typename C>
 struct Test {
-	template <typename T>
+	template<typename T>
     T testy(T t) {
         Klasse k;
         return T();
@@ -116,7 +120,8 @@ template <typename C>
 struct Test {
 	struct Klasse {
 	};
-	template <typename T>
+
+	template<typename T>
     T testy(T t) {
         Klasse k;
         return T();
@@ -124,7 +129,7 @@ struct Test {
 };
 //!CreateTypeFromInheritance
 //@A.cpp
-struct A : B
+struct A: B
 {
 };
 
@@ -133,7 +138,7 @@ void test() {
 //=
 struct B {
 };
-struct A : B
+struct A: B
 {
 };
 
@@ -153,7 +158,7 @@ void test() {
 }
 //!CreateTemplatedGradType
 //@A.cpp
-struct A : B<int> {
+struct A: B<int> {
 };
 void test() {
     A a;
@@ -161,7 +166,7 @@ void test() {
 //=
 template<typename T> struct B {
 };
-struct A : B<int> {
+struct A: B<int> {
 };
 void test() {
     A a;
@@ -221,8 +226,10 @@ void test() {
 }
 //=
 namespace X {
+
 struct A {
 };
+
 }
 void test() {
     X::A::foo();
@@ -237,8 +244,10 @@ void test() {
 }
 //=
 namespace X {
+
 struct Inner {
 };
+
 }
 
 void test() {

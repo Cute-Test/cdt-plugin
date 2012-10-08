@@ -57,9 +57,8 @@ private:
 //!CallDefaultInClassFromOutside
 //@A.cpp
 class B {
-    void foo()
-    {
-    }
+	void foo() {
+	}
 };
 
 void test()
@@ -70,9 +69,8 @@ void test()
 //=
 class B {
 public:
-    void foo()
-    {
-    }
+	void foo() {
+	}
 };
 
 void test()
@@ -177,9 +175,9 @@ int main() {
 //=
 class Klasse {
 public:
-    int foo(int i = __LINE__) {
-        return __LINE__;
-    }
+	int foo(int i = __LINE__) {
+		return __LINE__;
+	}
 };
 int main() {
     Klasse k;
@@ -206,9 +204,8 @@ void test() {
 #define B_H_
 
 class B {
-    void member()
-    {
-    }
+	void member() {
+	}
 };
 #endif /* B_H_ */
 //=
@@ -217,9 +214,8 @@ class B {
 
 class B {
 public:
-    void member()
-    {
-    }
+	void member() {
+	}
 };
 #endif /* B_H_ */
 //!PrivateFunctionDeclaration
@@ -235,7 +231,7 @@ void test() {
 //=
 class B {
 public:
-    int foo();
+	int foo();
 };
 
 void test() {
@@ -255,7 +251,7 @@ void test() {
 //=
 class B {
 public:
-    int foo;
+	int foo;
 };
 
 void test() {
@@ -300,14 +296,18 @@ void func() {
 class A {
 	void foo(){}
 public:
-	A(){}
+
+	A() {
+	}
 };
 //=
 class A {
 public:
 	void foo() {
 	}
-	A(){}
+
+	A() {
+	}
 };
 //!No Marker for Access in Non-inline Member
 //@.config

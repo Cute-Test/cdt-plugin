@@ -22,6 +22,7 @@ import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 
 import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.sourceactions.AbstractFunctionAction;
 import ch.hsr.ifs.cute.ui.sourceactions.AddTestToSuite;
 
 /**
@@ -58,7 +59,8 @@ public class UnregisteredTestResolution extends AbstractCodanCMarkerResolution {
 	}
 
 	private void performChange(IMarker marker, IDocument document, IFile file) throws CoreException, BadLocationException {
-		AddTestToSuite action = new AddTestToSuite();
+
+		AbstractFunctionAction action = new AddTestToSuite();
 		int offset = getOffset(marker, document);
 		TextSelection sel = new TextSelection(offset + 3, 3);
 		MultiTextEdit edit = action.createEdit(file, document, sel);

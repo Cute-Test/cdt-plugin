@@ -33,7 +33,6 @@ import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownClassType;
-import org.eclipse.cdt.internal.core.index.CIndex;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
@@ -50,7 +49,6 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 		if (celement != null) {
 			final ICProject project = celement.getCProject();
 			if (project != null) {
-				((CIndex) ast.getIndex()).getPrimaryFragments();
 				ast.accept(new MissingConstructorVisitor(project, ast));
 			}
 		}

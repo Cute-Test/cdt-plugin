@@ -50,7 +50,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassInstance;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.cdt.internal.ui.refactoring.togglefunction.NotSupportedException;
-import org.eclipse.cdt.internal.ui.refactoring.togglefunction.ToggleNodeHelper;
 
 public class ParameterHelper {
 
@@ -80,10 +79,10 @@ public class ParameterHelper {
 	}
 
 	public static ArrayList<ICPPASTParameterDeclaration> getParameterFrom(ICPPASTDeclarator declarator, HashMap<String, Boolean> used) {
-		
+
 		IASTInitializer initializer = declarator.getInitializer();
 		if (initializer != null && initializer instanceof ICPPASTConstructorInitializer) {
-			return addArgumentsToList(((ICPPASTConstructorInitializer)initializer).getArguments(), used);
+			return addArgumentsToList(((ICPPASTConstructorInitializer) initializer).getArguments(), used);
 		}
 		return new ArrayList<ICPPASTParameterDeclaration>();
 	}
@@ -97,7 +96,7 @@ public class ParameterHelper {
 				list.add(createParamDeclFrom((ICPPASTLiteralExpression) posId, used));
 			} else if (posId instanceof IASTIdExpression) {
 				list.add(createParamDeclFrom((IASTIdExpression) posId, used));
-			} else if(posId instanceof IASTFunctionCallExpression){
+			} else if (posId instanceof IASTFunctionCallExpression) {
 				list.add(createParamDeclFrom((IASTFunctionCallExpression) posId, used));
 			} else {
 				String nameHint = createNameHint(arg);
@@ -111,7 +110,7 @@ public class ParameterHelper {
 		return arg.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "");
 	}
 
-	public static ICPPASTParameterDeclaration createParamDeclFrom(IType type, String nameHint, HashMap<String, Boolean> used ) {
+	public static ICPPASTParameterDeclaration createParamDeclFrom(IType type, String nameHint, HashMap<String, Boolean> used) {
 
 		ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
 
@@ -136,16 +135,16 @@ public class ParameterHelper {
 	}
 
 	private static String createHintName(IASTIdExpression idexpr) {
-		 char[] hintName = idexpr.getName().getSimpleID();
-		if(hintName.length > 0){
+		char[] hintName = idexpr.getName().getSimpleID();
+		if (hintName.length > 0) {
 			hintName[0] = Character.toLowerCase(hintName[0]);
 		}
 		return String.valueOf(hintName);
 	}
-	
+
 	public static ICPPASTParameterDeclaration createParamDeclFrom(IASTFunctionCallExpression idexpr, HashMap<String, Boolean> used) {
 		IASTExpression functionName = idexpr.getFunctionNameExpression();
-		if(functionName instanceof IASTIdExpression){
+		if (functionName instanceof IASTIdExpression) {
 			ICPPASTParameterDeclaration paramDecl = createParamDeclFrom((IASTIdExpression) functionName, used);
 			paramDecl.getDeclSpecifier().setConst(true);
 			return paramDecl;
@@ -153,7 +152,6 @@ public class ParameterHelper {
 		IType expressionType = idexpr.getExpressionType();
 		return createParamDeclFrom(expressionType, createNameHint(idexpr), used);
 	}
-	
 
 	private static ICPPASTDeclSpecifier createDeclSpecifier(IType type) {
 		ICPPASTDeclSpecifier spec = TypeHelper.getDeclarationSpecifierOfType(TypeHelper.windDownToRealType(type, true));
@@ -170,7 +168,7 @@ public class ParameterHelper {
 		boolean skipConstCharArray = false;
 		if (TypeHelper.isThisPointer(litexpr)) {
 			spec = handlethis(litexpr);
-			IASTCompositeTypeSpecifier parentType = ToggleNodeHelper.findClassInAncestors(litexpr);
+			IASTCompositeTypeSpecifier parentType = TddHelper.getAncestorOfType(litexpr, IASTCompositeTypeSpecifier.class);
 			fallBackVarName = new String(parentType.getName().getSimpleID());
 		} else if (TypeHelper.isString(litexpr)) {
 			spec = createAnonymousStringDeclSpecifier();
@@ -183,24 +181,24 @@ public class ParameterHelper {
 			fallBackVarName = getFallBackName(type);
 			spec = TypeHelper.getDeclarationSpecifierOfType(type);
 
-		}		
+		}
 		spec.setConst(true);
-		
+
 		String newName = getParameterCharacter(fallBackVarName, used);
-		used.put(newName, true);	
+		used.put(newName, true);
 		IASTDeclarator declarator = getParameterDeclarator(new CPPASTName(newName.toCharArray()), litexpr.getExpressionType(), skipConstCharArray);
 		makeLastPtrOpConst(declarator);
-		
+
 		return CPPNodeFactory.getDefault().newParameterDeclaration(spec, declarator);
 	}
 
 	private static boolean makeLastPtrOpConst(IASTDeclarator declarator) {
 		IASTPointerOperator[] ptrOperators = declarator.getPointerOperators();
 		if (ptrOperators != null) {
-			for(int i = ptrOperators.length - 1; i >= 0; i--){
+			for (int i = ptrOperators.length - 1; i >= 0; i--) {
 				IASTPointerOperator currentPtrOp = ptrOperators[i];
-				if(currentPtrOp instanceof IASTPointer){
-					((IASTPointer)currentPtrOp).setConst(true);
+				if (currentPtrOp instanceof IASTPointer) {
+					((IASTPointer) currentPtrOp).setConst(true);
 					return true;
 				}
 			}
@@ -215,7 +213,7 @@ public class ParameterHelper {
 	}
 
 	private static ICPPASTDeclSpecifier handlethis(IASTLiteralExpression lit) {
-		IASTCompositeTypeSpecifier parentType = ToggleNodeHelper.findClassInAncestors(lit);
+		IASTCompositeTypeSpecifier parentType = TddHelper.getAncestorOfType(lit, IASTCompositeTypeSpecifier.class);
 		if (parentType == null) {
 			throw new NotSupportedException(Messages.ParameterHelper_1);
 		}
@@ -236,7 +234,7 @@ public class ParameterHelper {
 	private static ICPPASTDeclarator getParameterDeclarator(IASTName parameterName, IType type, boolean skipConstCharArray) {
 		ICPPASTDeclarator paramDecl = assembleDeclarator(parameterName, type, skipConstCharArray);
 
-		if(!(paramDecl instanceof ICPPASTArrayDeclarator)){
+		if (!(paramDecl instanceof ICPPASTArrayDeclarator)) {
 			paramDecl.addPointerOperator(new CPPASTReferenceOperator(false));
 		}
 		return paramDecl;
@@ -251,19 +249,18 @@ public class ParameterHelper {
 		} else {
 			paramDecl = new CPPASTDeclarator(parameterName);
 		}
-		
+
 		return paramDecl;
 	}
 
-
 	private static boolean isConstCharArray(IType type) {
-		if(type instanceof IArrayType){
+		if (type instanceof IArrayType) {
 			IArrayType arrType = (IArrayType) type;
 			IType arrayedType = arrType.getType();
-			if(arrayedType instanceof IQualifierType){
+			if (arrayedType instanceof IQualifierType) {
 				IQualifierType qualifierType = (IQualifierType) arrayedType;
 				IType qualifiedType = qualifierType.getType();
-				if(qualifierType.isConst() && qualifiedType instanceof IBasicType){
+				if (qualifierType.isConst() && qualifiedType instanceof IBasicType) {
 					IBasicType basicType = (IBasicType) qualifiedType;
 					return basicType.getKind() == IBasicType.Kind.eChar;
 				}

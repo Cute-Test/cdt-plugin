@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.addArgument;
 
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.graphics.Image;
@@ -21,35 +20,34 @@ import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
 public class AddArgumentQuickFix extends TddQuickFix {
 
-	private String label;
-	private int candidatenr;
-	private Image image;
-	
+	private final String label;
+	private final int candidatenr;
+	private final Image image;
+
 	public AddArgumentQuickFix(String label, int candidatenr, Image image) {
 		this.label = label;
 		this.candidatenr = candidatenr;
 		this.image = image;
 	}
-		
+
 	@Override
 	public String getLabel() {
 		ca = new CodanArguments(marker);
 		return label;
 	}
-	
+
 	@Override
 	public Image getImage() {
 		return image;
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(RefactoringASTCache astCache, ITextSelection selection) {
-		return new AddArgumentRefactoring(selection, astCache, candidatenr);
+	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+		return new AddArgumentRefactoring(selection, candidatenr);
 	}
 
 	@Override
-	protected void configureLinkedMode(ChangeRecorder rec,
-			LinkedModeInformation lmi) throws BadLocationException {
+	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		lmi.addPositions(rec.getParameterPositions());
 	}
 }

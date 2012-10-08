@@ -8,6 +8,6 @@
   </properties>
   <children size='2'>
     <child location='./cute'/>
-    <child location='http://download.eclipse.org/tools/cdt/releases/indigo/'/>
+    <child location='http://download.eclipse.org/tools/cdt/releases/juno/'/>
   </children>
 </repository>

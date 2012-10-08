@@ -148,6 +148,7 @@ class A {
 //=
 class A {
 	int membVar;
+
 	void member() {
 		this->membVar = 42;
 	}
@@ -162,6 +163,7 @@ class A {
 //=
 class A {
 	int membVar;
+
 	void member() {
 		(*this).membVar = 42;
 	}
@@ -176,6 +178,7 @@ class A {
 //=
 class A {
 	std::string membVar;
+
 	void member() {
 		(*this).membVar = "ImNoCharArray";
 	}
@@ -190,6 +193,7 @@ class A {
 //=
 class A {
 	std::string membVar;
+
 	void member() {
 		this->membVar = "ImNoCharArray";
 	}
@@ -205,6 +209,7 @@ class A {
 //=
 class A {
 	double membVar;
+
 	void member() {
 		double number;
 		this->membVar = number+1;
@@ -273,6 +278,7 @@ public:
 template <typename T>
 class A {
 	T memVar;
+
 public:
     A(T & t) : memVar(t)
     {
@@ -288,6 +294,7 @@ public:
 //=
 class A {
 	int memVar[3];
+
 public:
     A() : memVar({1,2,3}) {
     }
@@ -298,7 +305,8 @@ struct B {
 	B(int, double);
 };
 class A {
-    A(): membVar(B(0, 0.0))
+	A() : 
+		membVar(B(0, 0.0))
     {
     }
 };
@@ -308,7 +316,9 @@ struct B {
 };
 class A {
 	B membVar;
-    A(): membVar(B(0, 0.0))
+
+	A() : 
+		membVar(B(0, 0.0))
     {
     }
 };
@@ -401,7 +411,9 @@ void thisIsATest() {
 //=
 namespace ns
 {
+
 static int mem;
+
 }
 
 void thisIsATest() {

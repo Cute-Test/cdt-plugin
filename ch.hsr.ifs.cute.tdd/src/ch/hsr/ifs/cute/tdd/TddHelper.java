@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd;
 
-
 import org.eclipse.cdt.core.dom.ast.IASTArrayDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
@@ -38,8 +37,8 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTConstructorInitializer
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTReturnStatement;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTVisibilityLabel;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
@@ -49,7 +48,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-
 
 public class TddHelper {
 
@@ -62,8 +60,7 @@ public class TddHelper {
 		return result;
 	}
 
-	public static String extractMissingFunctionName(IMarker marker, IDocument document)
-			throws CoreException {
+	public static String extractMissingFunctionName(IMarker marker, IDocument document) throws CoreException {
 		int start = marker.getAttribute(IMarker.CHAR_START, 0);
 		int end = marker.getAttribute(IMarker.CHAR_END, 0);
 		try {
@@ -74,14 +71,12 @@ public class TddHelper {
 		}
 	}
 
-	public static CPPASTReturnStatement getDefaultReturnValue(
-			CPPASTBaseDeclSpecifier spec) {
+	public static CPPASTReturnStatement getDefaultReturnValue(CPPASTBaseDeclSpecifier spec) {
 		if (!TypeVoid(spec)) {
 			CPPASTReturnStatement returnstmt = new CPPASTReturnStatement();
 			ICPPASTDeclSpecifier returndeclspec = spec.copy(CopyStyle.withLocations);
 			returndeclspec.setStorageClass(ICPPASTDeclSpecifier.sc_unspecified);
-			ICPPASTSimpleTypeConstructorExpression returntype =
-					new CPPASTSimpleTypeConstructorExpression(returndeclspec, new CPPASTConstructorInitializer());
+			ICPPASTSimpleTypeConstructorExpression returntype = new CPPASTSimpleTypeConstructorExpression(returndeclspec, new CPPASTConstructorInitializer());
 			returnstmt.setReturnValue(returntype);
 			return returnstmt;
 		}
@@ -89,12 +84,10 @@ public class TddHelper {
 	}
 
 	private static boolean TypeVoid(CPPASTBaseDeclSpecifier spec) {
-		return (spec instanceof IASTSimpleDeclSpecifier) &&
-				((IASTSimpleDeclSpecifier) spec).getType() == IASTSimpleDeclSpecifier.t_void;
+		return (spec instanceof IASTSimpleDeclSpecifier) && ((IASTSimpleDeclSpecifier) spec).getType() == IASTSimpleDeclSpecifier.t_void;
 	}
 
-	public static void insertMember(IASTNode member,
-			ICPPASTCompositeTypeSpecifier type, ASTRewrite rewrite) {
+	public static void insertMember(IASTNode member, ICPPASTCompositeTypeSpecifier type, ASTRewrite rewrite) {
 		IASTNode publiclabel = findVisibilityLabel(type, ICPPASTVisibilityLabel.v_public);
 		if (type.getKey() == ICPPASTCompositeTypeSpecifier.k_struct) {
 			if (publiclabel == null) {
@@ -110,8 +103,7 @@ public class TddHelper {
 		}
 	}
 
-	private static void insertPrivateMember(IASTDeclaration member,
-			ICPPASTCompositeTypeSpecifier type, ASTRewrite rewrite) {
+	private static void insertPrivateMember(IASTDeclaration member, ICPPASTCompositeTypeSpecifier type, ASTRewrite rewrite) {
 		IASTNode label = findVisibilityLabel(type, ICPPASTVisibilityLabel.v_private);
 		if (type.getKey() == ICPPASTCompositeTypeSpecifier.k_struct) {
 			if (label == null) {
@@ -127,22 +119,18 @@ public class TddHelper {
 		}
 	}
 
-	private static void insertNamespaceMember(IASTNode partToInsert,
-			IASTNode owningType, ASTRewrite rewrite) {
+	private static void insertNamespaceMember(IASTNode partToInsert, IASTNode owningType, ASTRewrite rewrite) {
 		rewrite.insertBefore(owningType, null, partToInsert, null);
 	}
 
-	private static void insertAtVisibilityLabel(IASTNode node,
-			final ICPPASTCompositeTypeSpecifier typespec, ASTRewrite rewrite,
-			IASTNode label) {
+	private static void insertAtVisibilityLabel(IASTNode node, final ICPPASTCompositeTypeSpecifier typespec, ASTRewrite rewrite, IASTNode label) {
 		IASTNode insertedNode = node.copy(CopyStyle.withLocations);
 		insertedNode.setParent(label);
 		IASTNode otherlabel = findDeclarationAfterLabel(typespec, label);
 		rewrite.insertBefore(typespec, otherlabel, insertedNode, null);
 	}
 
-	private static void insertBeforeAnyLabel(IASTNode function,
-			final ICPPASTCompositeTypeSpecifier typespec, ASTRewrite rewrite) {
+	private static void insertBeforeAnyLabel(IASTNode function, final ICPPASTCompositeTypeSpecifier typespec, ASTRewrite rewrite) {
 		IASTNode firstFunction = null;
 		if (typespec.getDeclarations(true).length > 0) {
 			firstFunction = typespec.getDeclarations(true)[0];
@@ -150,11 +138,10 @@ public class TddHelper {
 		rewrite.insertBefore(typespec, firstFunction, function.copy(CopyStyle.withLocations), null);
 	}
 
-	
 	//TODO: tcorbat - cannot imagine that this method is correct
 	private static IASTNode findDeclarationAfterLabel(ICPPASTCompositeTypeSpecifier typespec, IASTNode label) {
 		boolean found = false;
-		for (IASTDeclaration dec: typespec.getDeclarations(true)) {
+		for (IASTDeclaration dec : typespec.getDeclarations(true)) {
 			if (found) {
 				return dec;
 			}
@@ -165,8 +152,7 @@ public class TddHelper {
 		return null;
 	}
 
-	public static ICPPASTVisibilityLabel createAndInsertVisibilityLabel(
-			final ICPPASTCompositeTypeSpecifier typespec, ASTRewrite rewrite, int visibility) {
+	public static ICPPASTVisibilityLabel createAndInsertVisibilityLabel(final ICPPASTCompositeTypeSpecifier typespec, ASTRewrite rewrite, int visibility) {
 		ICPPASTVisibilityLabel label = new CPPASTVisibilityLabel(visibility);
 		label.setParent(typespec);
 		rewrite.insertBefore(typespec, null, label, null);
@@ -207,8 +193,7 @@ public class TddHelper {
 		if (parentNode instanceof IASTIdExpression) {
 			IASTIdExpression expression = (IASTIdExpression) parentNode;
 			IASTNode parentParentNode = expression.getParent();
-			if (parentParentNode instanceof IASTFunctionCallExpression
-					&& expression.getPropertyInParent().getName().equals(IASTFunctionCallExpression.FUNCTION_NAME.getName())) {
+			if (parentParentNode instanceof IASTFunctionCallExpression && expression.getPropertyInParent().getName().equals(IASTFunctionCallExpression.FUNCTION_NAME.getName())) {
 				return true;
 			}
 		}
@@ -241,7 +226,7 @@ public class TddHelper {
 			if (c.isInstance(node)) {
 				return (T) node;
 			}
-			for (IASTNode child: node.getChildren()) {
+			for (IASTNode child : node.getChildren()) {
 				T result = getChildofType(child, c);
 				if (result != null) {
 					return result;
@@ -256,28 +241,23 @@ public class TddHelper {
 			ASTRewrite rewrite = collector.rewriterForTranslationUnit(owningType.getTranslationUnit());
 			if (owningType instanceof ICPPASTCompositeTypeSpecifier) {
 				insertMember(partToInsert, (ICPPASTCompositeTypeSpecifier) owningType, rewrite);
-			} else if( owningType instanceof ICPPASTNamespaceDefinition){
-				insertNamespaceMember(partToInsert, (ICPPASTNamespaceDefinition) owningType, rewrite);
-			}
-			else {
+			} else if (owningType instanceof ICPPASTNamespaceDefinition) {
+				insertNamespaceMember(partToInsert, owningType, rewrite);
+			} else {
 				rewrite.insertBefore(owningType, null, partToInsert, null);
 			}
 		}
 	}
 
-	public static void writePrivateDefinitionTo(
-			ModificationCollector collector,
-			ICPPASTCompositeTypeSpecifier type, IASTDeclaration member) {
+	public static void writePrivateDefinitionTo(ModificationCollector collector, ICPPASTCompositeTypeSpecifier type, IASTDeclaration member) {
 		ASTRewrite rewrite = collector.rewriterForTranslationUnit(type.getTranslationUnit());
 		insertPrivateMember(member, type, rewrite);
 	}
 
-	public static IASTNode getNestedInsertionPoint(
-			IASTTranslationUnit localunit,
-			ICPPASTQualifiedName parent, RefactoringASTCache astCache) {
-		ICPPASTQualifiedName qname = (ICPPASTQualifiedName) parent;
+	public static IASTNode getNestedInsertionPoint(IASTTranslationUnit localunit, ICPPASTQualifiedName parent, CRefactoringContext context) {
+		ICPPASTQualifiedName qname = parent;
 		IASTName lastexisiting = null;
-		for(IASTName n: qname.getNames()) {
+		for (IASTName n : qname.getNames()) {
 			IBinding b = n.resolveBinding();
 			if (!(b instanceof IProblemBinding)) {
 				lastexisiting = n;
@@ -286,18 +266,17 @@ public class TddHelper {
 			}
 		}
 		if (lastexisiting != null) {
-			return TypeHelper.getTypeDefinitonOfName(localunit, new String(lastexisiting.getSimpleID()), astCache);
+			return TypeHelper.getTypeDefinitonOfName(localunit, new String(lastexisiting.getSimpleID()), context);
 		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static  <T> T getTopAncestorOfType(
-			IASTNode node, Class<?> T) {
+	public static <T> T getTopAncestorOfType(IASTNode node, Class<?> T) {
 		T result = null;
 		while (node != null) {
 			if (T.isInstance(node)) {
-				result = (T)node;
+				result = (T) node;
 			}
 			node = node.getParent();
 		}
@@ -305,14 +284,14 @@ public class TddHelper {
 	}
 
 	public static boolean hasPointerOrRefType(IASTDeclarator declarator) {
-		if(declarator == null){
+		if (declarator == null) {
 			return false;
 		}
-		if(declarator instanceof IASTArrayDeclarator) {
+		if (declarator instanceof IASTArrayDeclarator) {
 			return true;
 		}
 		IBinding declBinding = declarator.getName().resolveBinding();
-		if(declBinding instanceof IVariable){
+		if (declBinding instanceof IVariable) {
 			IType type = ((IVariable) declBinding).getType();
 			return type instanceof ICPPReferenceType || type instanceof IPointerType;
 		}
@@ -333,17 +312,17 @@ public class TddHelper {
 		IASTNode parent = name.getParent();
 		if (parent instanceof ICPPASTQualifiedName) {
 			ICPPASTQualifiedName qName = (ICPPASTQualifiedName) parent;
-			for(IASTName part : qName.getNames()){
-				if(part != name && part.resolveBinding() instanceof IProblemBinding){
+			for (IASTName part : qName.getNames()) {
+				if (part != name && part.resolveBinding() instanceof IProblemBinding) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	public static <T> T getAncestorOfType(IASTNode node, Class<? extends T> c) {
-		while(node != null) {
+		while (node != null) {
 			if (c.isInstance(node)) {
 				return c.cast(node);
 			}

@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.tdd.ui.tests.refactoring;
 
 import java.util.ArrayList;
 
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -21,15 +20,14 @@ import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.FunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
-@SuppressWarnings("restriction")
 public class CreateFunctionRefactoringTest extends TddRefactoringTest {
 
-	public CreateFunctionRefactoringTest(String name,
-			ArrayList<com.includator.tests.base.TestSourceFile> files) {
+	public CreateFunctionRefactoringTest(String name, ArrayList<com.includator.tests.base.TestSourceFile> files) {
 		super(name, files, TddErrorIdCollection.ERR_ID_FunctionResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_FunctionResolutionProblem_STATIC_HSR);
 	}
 
+	@Override
 	protected CreateFreeFunctionRefactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException {
-		return new CreateFreeFunctionRefactoring(selection, new CodanArguments(marker), new RefactoringASTCache(), new FunctionCreationStrategy());
+		return new CreateFreeFunctionRefactoring(selection, new CodanArguments(marker), new FunctionCreationStrategy());
 	}
 }

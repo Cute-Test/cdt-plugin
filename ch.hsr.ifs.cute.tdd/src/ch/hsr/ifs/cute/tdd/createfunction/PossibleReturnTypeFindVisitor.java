@@ -51,24 +51,24 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 		shouldVisitExpressions = true;
 	}
 
-	public PossibleReturnTypeFindVisitor(TextSelection selection, NodeContainer c){
+	public PossibleReturnTypeFindVisitor(TextSelection selection, NodeContainer c) {
 		this.selection = selection;
 		this.container = c;
 	}
 
 	@Override
 	public int visit(IASTExpression expression) {
-		if (SelectionHelper.isSelectionOnExpression(SelectionHelper.getRegion(selection), expression)) {
+		if (SelectionHelper.doesNodeOverlapWithRegion(expression, SelectionHelper.getRegion(selection))) {
 			if (expression instanceof ICPPASTUnaryExpression) {
 				ICPPASTUnaryExpression uexpr = (ICPPASTUnaryExpression) expression;
 				IASTExpression operand = uexpr.getOperand();
-				if (operand instanceof ICPPASTLiteralExpression){
+				if (operand instanceof ICPPASTLiteralExpression) {
 					IType type = operand.getExpressionType();
 					return handleType(type);
 				} else if (operand instanceof ICPPASTFunctionCallExpression) {
 					return handleType(new CPPBasicType(Kind.eBoolean, 0));
 				} else if (operand instanceof ICPPASTBinaryExpression) {
-					ICPPASTBinaryExpression binex = (ICPPASTBinaryExpression)operand;
+					ICPPASTBinaryExpression binex = (ICPPASTBinaryExpression) operand;
 					if (binex.getOperand2() instanceof IASTFunctionCallExpression) {
 						operand = binex.getOperand1();
 					}
@@ -80,9 +80,8 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 					return handleType(type);
 				}
 			} else if (expression instanceof ICPPASTBinaryExpression) {
-				ICPPASTBinaryExpression binex = (ICPPASTBinaryExpression)expression;
-				boolean problemNodeInOperand1 = SelectionHelper
-						.isSelectionOnExpression(SelectionHelper.getRegion(selection), binex.getOperand1());
+				ICPPASTBinaryExpression binex = (ICPPASTBinaryExpression) expression;
+				boolean problemNodeInOperand1 = SelectionHelper.doesNodeOverlapWithRegion(binex.getOperand1(), SelectionHelper.getRegion(selection));
 				IASTExpression operand = binex.getOperand1();
 				if (problemNodeInOperand1) {
 					operand = binex.getOperand2();
@@ -95,14 +94,13 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 
 	@Override
 	public int visit(IASTStatement stmt) {
-		if (SelectionHelper.isSelectionOnExpression(SelectionHelper.getRegion(selection), stmt)) {
+		if (SelectionHelper.doesNodeOverlapWithRegion(stmt, SelectionHelper.getRegion(selection))) {
 			if (stmt instanceof IASTDeclarationStatement) {
 				IASTDeclarationStatement declstmt = (IASTDeclarationStatement) stmt;
-				container.add(((CPPASTSimpleDeclaration) declstmt.getDeclaration())
-						.getDeclSpecifier());
+				container.add(((CPPASTSimpleDeclaration) declstmt.getDeclaration()).getDeclSpecifier());
 				return PROCESS_ABORT;
 			}
-			if (stmt instanceof IASTExpressionStatement ) {
+			if (stmt instanceof IASTExpressionStatement) {
 				IASTExpressionStatement expr = (IASTExpressionStatement) stmt;
 				IASTExpression ex = expr.getExpression();
 				if (ex instanceof ICPPASTBinaryExpression) {
@@ -121,7 +119,7 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 						}
 					}
 					return handleType(ex.getExpressionType());
-				} else if (ex instanceof ICPPASTUnaryExpression){
+				} else if (ex instanceof ICPPASTUnaryExpression) {
 					ICPPASTUnaryExpression unex = (ICPPASTUnaryExpression) ex;
 					IType type = unex.getExpressionType();
 					if (unex.getOperand().getExpressionType().equals(ex.getExpressionType())) {
@@ -141,7 +139,8 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 					return handleType(ex.getExpressionType());
 				}
 
-			} if (stmt instanceof ICPPASTIfStatement) {
+			}
+			if (stmt instanceof ICPPASTIfStatement) {
 				handleType(new CPPBasicType(IBasicType.Kind.eBoolean, 0));
 			}
 		}

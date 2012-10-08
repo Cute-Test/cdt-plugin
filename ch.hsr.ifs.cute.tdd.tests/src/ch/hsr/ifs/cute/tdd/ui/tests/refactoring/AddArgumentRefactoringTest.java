@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.tdd.ui.tests.refactoring;
 
 import java.util.ArrayList;
 
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -21,14 +20,14 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
 import com.includator.tests.base.TestSourceFile;
 
-@SuppressWarnings("restriction")
 public class AddArgumentRefactoringTest extends TddRefactoringTest {
 
-	public AddArgumentRefactoringTest(String name,	ArrayList<TestSourceFile> files) {
+	public AddArgumentRefactoringTest(String name, ArrayList<TestSourceFile> files) {
 		super(name, files, TddErrorIdCollection.ERR_ID_InvalidArguments_HSR, TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR);
 	}
-	
+
+	@Override
 	protected AddArgumentRefactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException {
-		return new AddArgumentRefactoring(selection, new RefactoringASTCache(), candidate);
+		return new AddArgumentRefactoring(selection, candidate);
 	}
 }

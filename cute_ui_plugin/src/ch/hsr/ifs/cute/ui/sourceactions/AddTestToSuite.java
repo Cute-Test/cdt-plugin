@@ -26,6 +26,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.text.edits.MultiTextEdit;
 
+import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.ui.ASTUtil;
 
 /**
@@ -33,44 +34,63 @@ import ch.hsr.ifs.cute.ui.ASTUtil;
  */
 public class AddTestToSuite extends AbstractFunctionAction {
 
+	//	public AddTestToSuite(ICElement element, ISelection selection, ICProject project) {
+	//		super(element, selection, project);
+	//		// TODO Auto-generated constructor stub
+	//	}
+	//
+	//	public AddTestToSuite() {
+	//		this(null, null, null);
+	//	}
+
 	@Override
 	public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
 		IAddStrategy adder = new NullStrategy(doc);
+		IASTTranslationUnit astTu = null;
+		initContext();
 		if (sel != null && sel instanceof TextSelection) {
 			TextSelection selection = (TextSelection) sel;
 
-			IASTTranslationUnit astTu = getASTTranslationUnit(file);
+			try {
+				astTu = acquireAST(file);
 
-			NodeAtCursorFinder n = new NodeAtCursorFinder(selection.getOffset());
-			astTu.accept(n);
-			IASTFunctionDefinition def = getFunctionDefinition(n.getNode());
+				NodeAtCursorFinder n = new NodeAtCursorFinder(selection.getOffset());
+				astTu.accept(n);
+				IASTFunctionDefinition def = getFunctionDefinition(n.getNode());
 
-			if (def == null) {
-				def = getFunctionDefIfIsFunctor(n.getNode());
-			}
-			if (ASTUtil.isTestFunction(def)) {
-				final SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
-				astTu.accept(suiteFinder);
-				final IASTNode suite = suiteFinder.getSuiteNode();
+				if (def == null) {
+					def = getFunctionDefIfIsFunctor(n.getNode());
+				}
+				if (ASTUtil.isTestFunction(def)) {
+					final SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
+					astTu.accept(suiteFinder);
+					final IASTNode suite = suiteFinder.getSuiteNode();
 
-				AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
-				final IASTName name = def.getDeclarator().getName();
-				if (isMemberFunction(def)) { //In .cpp file
-					if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
-						lineStrategy = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
-					} else {
-						lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
+					AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
+					final IASTName name = def.getDeclarator().getName();
+					if (isMemberFunction(def)) { //In .cpp file
+						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
+							lineStrategy = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
+						} else {
+							lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
+						}
+					} else if (isFunction(def)) {
+						final String functionName = name.toString();
+						lineStrategy = new AddFunctionToSuiteStrategy(doc, file, astTu, functionName, suiteFinder);
 					}
-				} else if (isFunction(def)) {
-					final String functionName = name.toString();
-					lineStrategy = new AddFunctionToSuiteStrategy(doc, file, astTu, functionName, suiteFinder);
-				}
-				if (suite == null) {
-					adder = new AddSuiteStrategy(lineStrategy);
-				} else {
-					adder = lineStrategy;
-				}
+					if (suite == null) {
+						adder = new AddSuiteStrategy(lineStrategy);
+					} else {
+						adder = lineStrategy;
+					}
 
+				}
+				releaseAST(astTu);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				CuteCorePlugin.log(e);
+			} finally {
+				disposeContext();
 			}
 		}
 

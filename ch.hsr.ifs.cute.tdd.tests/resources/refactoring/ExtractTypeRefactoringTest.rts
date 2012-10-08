@@ -16,8 +16,6 @@ void test()
 }
 //=
 #include "B.h"
-
-
 void test()
 {
 }
@@ -53,8 +51,6 @@ void test()
 }
 //=
 #include "B.h"
-
-
 void test()
 {
 }
@@ -88,8 +84,6 @@ void test()
 }
 //=
 #include "B.h"
-
-
 void test()
 {
 }
@@ -188,8 +182,6 @@ void test()
 }
 //=
 #include "foo.h"
-
-
 
 void test()
 {

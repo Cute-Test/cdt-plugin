@@ -36,7 +36,7 @@ import ch.hsr.ifs.cute.core.CuteCorePlugin;
 public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
 
 	private IEditorPart editor;
-	private final AddTestToSuite functionAction;
+	private final AbstractFunctionAction functionAction;
 
 	public AddTestToSuiteDelegate() {
 		functionAction = new AddTestToSuite();

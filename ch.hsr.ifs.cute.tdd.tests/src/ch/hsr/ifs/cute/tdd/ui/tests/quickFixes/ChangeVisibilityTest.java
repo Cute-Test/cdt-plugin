@@ -8,7 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.quickFixes;
 
-
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.changevisibility.ChangeVisibilityQuickFix;
 import ch.hsr.ifs.cute.tdd.ui.tests.QuickFixTest;
@@ -55,12 +54,14 @@ public class ChangeVisibilityTest extends QuickFixTest {
 
 	//class Type {
 	//public:
-	//  void member(){}
+	//	void member() {
+	//	}
 	//};
 	//void test() {
 	//  Type t;
 	//  t.member();
 	//}
+	@Override
 	public void testQuickFixApplying() {
 		assertExactlyTheSame(getAboveComment(), runQuickFix(ChangeVisibilityQuickFix.class, CHANGE_VISIBILITY_OF_MEMBER));
 	}

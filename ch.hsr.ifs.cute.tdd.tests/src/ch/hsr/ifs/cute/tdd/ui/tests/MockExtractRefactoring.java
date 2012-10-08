@@ -10,21 +10,18 @@ package ch.hsr.ifs.cute.tdd.ui.tests;
 
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.jface.viewers.ISelection;
 
 import ch.hsr.ifs.cute.tdd.extract.ExtractRefactoring;
 
-@SuppressWarnings("restriction")
 public class MockExtractRefactoring extends ExtractRefactoring {
 
 	private boolean shouldoverwrite;
 
-	public MockExtractRefactoring(ICElement icElement, ISelection selection,
-			ICProject proj, RefactoringASTCache astCache) {
-		super(icElement, selection, astCache);
+	public MockExtractRefactoring(ICElement icElement, ISelection selection, ICProject proj) {
+		super(icElement, selection);
 	}
-	
+
 	public void setOverwriteAnswer(boolean overwrite) {
 		this.shouldoverwrite = overwrite;
 	}
@@ -32,5 +29,5 @@ public class MockExtractRefactoring extends ExtractRefactoring {
 	@Override
 	protected boolean shouldOverwriteOnUserRequest(String name) {
 		return shouldoverwrite;
-	}	
+	}
 }

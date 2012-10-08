@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalModel;
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.cdt.internal.ui.viewsupport.LinkedProposalModelPresenter;
 import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.resources.IMarker;
@@ -32,8 +32,7 @@ import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
 import ch.hsr.ifs.cute.tdd.LinkedMode.Position;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
-public abstract class TddQuickFix extends AbstractCodanCMarkerResolution implements
-IMarkerResolution2 {
+public abstract class TddQuickFix extends AbstractCodanCMarkerResolution implements IMarkerResolution2 {
 
 	protected IMarker marker;
 	protected ICProject project;
@@ -46,6 +45,7 @@ IMarkerResolution2 {
 		return super.isApplicable(marker);
 	}
 
+	@Override
 	public abstract String getLabel();
 
 	@Override
@@ -91,19 +91,21 @@ IMarkerResolution2 {
 
 	@Override
 	public void apply(IMarker marker, IDocument document) {
-		RefactoringASTCache astCache = new RefactoringASTCache();
 		int markerOffset = marker.getAttribute(IMarker.CHAR_START, 0);
-		int markerLength = marker.getAttribute(IMarker.CHAR_END, 0)-markerOffset;
+		int markerLength = marker.getAttribute(IMarker.CHAR_END, 0) - markerOffset;
 		Change change = null;
 		LinkedModeInformation lmi = null;
+		CRefactoring3 refactoring = getRefactoring(new TextSelection(markerOffset, markerLength));
+
+		CRefactoringContext context = new CRefactoringContext(refactoring);
 		try {
-			CRefactoring3 refactoring = getRefactoring(astCache, new TextSelection(markerOffset, markerLength));
+			refactoring.checkFinalConditions(new NullProgressMonitor());
 			lmi = refactoring.getLinkedModeInformation();
 			change = refactoring.createChange(new NullProgressMonitor());
 		} catch (CoreException e) {
 			CUIPlugin.log(e);
 		} finally {
-			astCache.dispose();
+			context.dispose();
 		}
 		ChangeRecorder rec = new ChangeRecorder(markerOffset, document, change, ca.getName());
 		startLinkedMode(lmi, rec);
@@ -128,6 +130,8 @@ IMarkerResolution2 {
 		}
 	}
 
-	protected abstract CRefactoring3 getRefactoring(RefactoringASTCache astCache, ITextSelection selection);
-	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {};
+	protected abstract CRefactoring3 getRefactoring(ITextSelection selection);
+
+	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
+	};
 }

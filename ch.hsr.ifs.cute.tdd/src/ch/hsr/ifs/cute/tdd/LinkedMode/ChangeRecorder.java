@@ -22,8 +22,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ltk.core.refactoring.Change;
 
 /**
- * Using basic position information of a refactoring, this class can observe
- * changes of a refactoring and calculate positions of certain code elements
+ * Using basic position information of a refactoring, this class can observe changes of a refactoring and calculate positions of certain code elements
  * after the change.
  */
 public class ChangeRecorder {
@@ -38,8 +37,7 @@ public class ChangeRecorder {
 	private final String markerText;
 	private boolean success;
 
-	public ChangeRecorder(int markerOffset, IDocument documentWithMarker,
-			Change toBePerformed, String markerText) {
+	public ChangeRecorder(int markerOffset, IDocument documentWithMarker, Change toBePerformed, String markerText) {
 		this.markerOffset = markerOffset;
 		this.document = documentWithMarker;
 		this.change = toBePerformed;
@@ -74,7 +72,7 @@ public class ChangeRecorder {
 		for (int i = getDeclaratorOffset(); i >= 0; i--) {
 			// Don't include reference symbol because the text needs to be the same as in the return statement
 			boolean isReference = false;
-			if (i > 0 && document.getChar(i-1) == '&') {
+			if (i > 0 && document.getChar(i - 1) == '&') {
 				isReference = true;
 			}
 			if (Character.isWhitespace(document.getChar(i)) && !isReference) {
@@ -111,7 +109,7 @@ public class ChangeRecorder {
 	public int getBracketPosition() throws BadLocationException {
 		int begin = edit.getOffset();
 		while (begin < document.getLength() && document.getChar(begin) != '{') {
-			begin ++;
+			begin++;
 		}
 		return begin + 1;
 	}
@@ -121,7 +119,7 @@ public class ChangeRecorder {
 			if (document.getChar(i) == ';') {
 				return i + 1;
 			}
-			if (document.getChar(i) == '\n'){
+			if (document.getChar(i) == '\n') {
 				return i;
 			}
 		}
