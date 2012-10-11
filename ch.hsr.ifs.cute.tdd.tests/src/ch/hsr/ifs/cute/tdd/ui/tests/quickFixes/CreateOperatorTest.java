@@ -23,7 +23,7 @@ public class CreateOperatorTest extends QuickFixTest {
 	//    a++;
 	//}
 	@Override
-	protected void getCode() {
+	public void getCode() {
 	}
 
 	@Override

@@ -100,7 +100,7 @@ public class EditorBaseTest extends BaseUITestCase {
 	}
 
 	@Override
-	public StringBuffer[] getContentsForTest(int sections) throws IOException {
+	public StringBuilder[] getContentsForTest(int sections) throws IOException {
 		return TestSourceReader.getContentsForTest(UiTestPlugin.getDefault().getBundle(), "src", getClass(), getName(), sections); //$NON-NLS-1$
 	}
 

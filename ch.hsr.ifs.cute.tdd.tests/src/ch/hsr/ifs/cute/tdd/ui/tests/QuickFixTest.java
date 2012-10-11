@@ -174,7 +174,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	}
 
 	protected abstract String getId();
-	protected abstract void getCode();
+	public abstract void getCode();
 	public abstract void testMarkerMessage();
 	public abstract void testMarkerOffset();
 	public abstract void testMarkerLength();

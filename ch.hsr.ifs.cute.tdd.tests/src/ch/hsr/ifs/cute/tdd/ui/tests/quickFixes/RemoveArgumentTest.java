@@ -22,7 +22,7 @@ public class RemoveArgumentTest extends QuickFixTest{
 	//	foo(3, 2.3, 2.3, 2);
 	//}
 	@Override
-	protected void getCode() {
+	public void getCode() {
 	}
 	
 	@Override

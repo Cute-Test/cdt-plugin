@@ -7,17 +7,22 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho-version>0.11.0</tycho-version>
-		<eclipse-version>indigo</eclipse-version>
+		<eclipse-version>juno</eclipse-version>
 	</properties>
 	<repositories>
 		<repository>
-			<id>indigo</id>
-			<url>http://download.eclipse.org/releases/indigo</url>
+			<id>juno-release</id>
+			<url>http://download.eclipse.org/releases/${eclipse-version}/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
-			<id>cdt milestone</id>
-			<url>jar:file:/home/hudson/cdt-master-8.0.0-I201106081058.zip!/</url>
+			<id>juno-release2</id>
+			<url>http://download.eclipse.org/eclipse/updates/4.2</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>ifs cdttesting</id>
+			<url>http://dev.ifs.hsr.ch/updatesites/cdttesting/juno</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
@@ -59,11 +64,11 @@
 		<!-- BOOST -->
 		<module>../ch.hsr.ifs.cute.boost.feature</module>
 		<module>../ch.hsr.ifs.cute.boost</module>
-		<!-- Refactoring Preview -->
+		<!-- Refactoring Preview 
 
 		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module>
 		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
-		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>
+		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>-->
 		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.buildUpdateSite</module>
 	</modules>

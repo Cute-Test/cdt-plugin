@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.cute.ui.test.UiTestPlugin;
 
@@ -366,7 +367,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		}
 		int waitCount = 0;
 		while (!indexManager.isIndexerIdle() && waitCount++ < 60) {
-			indexManager.joinIndexer(1000, null);
+			indexManager.joinIndexer(1000, new NullProgressMonitor());
 			System.err.println(getName() + ": Indexer Running!");
 		}
 	}
@@ -409,7 +410,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	}
 
 	@Override
-	protected StringBuffer[] getContents(int sections) {
+	protected StringBuilder[] getContents(int sections) {
 		try {
 			UiTestPlugin plugin = UiTestPlugin.getDefault();
 			return TestSourceReader.getContentsForTest(plugin.getBundle(), "src", getClass(), getName(), sections); //$NON-NLS-1$
@@ -418,5 +419,4 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 			return null;
 		}
 	}
-
 }

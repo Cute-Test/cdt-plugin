@@ -21,7 +21,7 @@ public class CreateMemberVariableAndPrivateLabelTest extends QuickFixTest {
 	//    }
 	//};
 	@Override
-	protected void getCode() {
+	public void getCode() {
 	}
 
 	@Override

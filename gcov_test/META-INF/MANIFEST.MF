@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: ch.hsr.ifs.cute.gcov.test
+Bundle-Version: 1.0.3.qualifier
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources;bundle-version="3.7.0",
+ org.junit,
+ ch.hsr.ifs.cute.gcov;bundle-version="0.2.2"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: ch.hsr.ifs.cute.gcov.test,
+ ch.hsr.ifs.cute.gcov.test.job,
+ ch.hsr.ifs.cute.gcov.test.mock,
+ ch.hsr.ifs.cute.gcov.test.parser

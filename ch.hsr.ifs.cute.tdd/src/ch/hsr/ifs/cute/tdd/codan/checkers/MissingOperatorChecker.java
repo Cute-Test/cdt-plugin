@@ -63,7 +63,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			IASTImplicitName[] inames = binex.getImplicitNames();
 			if (!operatorFound(inames)) {
 				if (isAppropriateType(binex.getOperand1())) {
-					OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex);
+					OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex.getOperator());
 					if (operator == null || implicitlyAvailableOperation(operator, binex)) {
 						return PROCESS_CONTINUE;
 					}
@@ -77,7 +77,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		private int handleUnaryOperator(IASTExpression expression, String typename, CPPASTUnaryExpression uexpr) {
 			IASTImplicitName[] inames = uexpr.getImplicitNames();
 			if (!operatorFound(inames)) {
-				OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr);
+				OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr.getOperator());
 				if (shouldSkipUnaryOperator(uexpr, operator)) {
 					return PROCESS_CONTINUE;
 				}

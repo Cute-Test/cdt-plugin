@@ -22,7 +22,7 @@ public class CreateConstructorTest extends QuickFixTest {
 	//  A a(3);
 	//}
 	@Override
-	protected void getCode() {
+	public void getCode() {
 	}
 
 	@Override

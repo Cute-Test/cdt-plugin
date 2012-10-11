@@ -20,7 +20,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 	//  int i = local;
 	//}
 	@Override
-	protected void getCode() {
+	public void getCode() {
 	}
 
 	@Override

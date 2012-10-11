@@ -20,7 +20,7 @@ public class CreateClassTest extends QuickFixTest {
 	//  Type t;
 	//}
 	@Override
-	protected void getCode() {
+	public void getCode() {
 	}
 
 	@Override

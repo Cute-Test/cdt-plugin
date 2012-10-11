@@ -24,7 +24,7 @@ public class ChangeVisibilityTest extends QuickFixTest {
 	//  t.member();
 	//}
 	@Override
-	protected void getCode() {
+	public void getCode() {
 	}
 
 	@Override

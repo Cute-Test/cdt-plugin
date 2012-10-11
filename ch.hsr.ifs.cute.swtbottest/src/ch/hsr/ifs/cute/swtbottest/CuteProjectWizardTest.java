@@ -14,7 +14,6 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICSourceEntry;
-import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -52,7 +51,7 @@ public class CuteProjectWizardTest {
 
 	@SuppressWarnings("nls")
 	@Test
-	public void cuteProjectWizardHeaderIndex0() throws CoreException, BuildException {
+	public void cuteProjectWizardHeaderIndex0() throws CoreException {
 		String projectName = executeProjectWizard(0, false, false);
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IProject proj = workspace.getRoot().getProject(projectName);

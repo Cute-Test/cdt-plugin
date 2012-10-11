@@ -180,7 +180,7 @@ public class CodanTestCase extends BaseTestCase {
 		return getContents(1)[0].toString();
 	}
 
-	protected StringBuffer[] getContents(int sections) {
+	protected StringBuilder[] getContents(int sections) {
 		try {
 			return TestSourceReader.getContentsForTest(Activator.getDefault().getBundle(),
 					"src", getClass(), getName(), sections);

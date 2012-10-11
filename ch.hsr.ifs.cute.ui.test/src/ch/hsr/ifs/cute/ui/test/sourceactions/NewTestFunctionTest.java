@@ -43,7 +43,7 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//}
 	//
 	public void testNewTestFunction() throws Exception {
-		StringBuffer[] contentsForTest = getContentsForTest(2);
+		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "function.cpp"); //$NON-NLS-1$
 		final CEditor cEditor = openEditor(file);
 		runCommand(0, 2, COMMAND_ID, cEditor);
@@ -69,7 +69,7 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//}
 	//
 	public void testNewTestFunctionChangeBody() throws Exception {
-		StringBuffer[] contentsForTest = getContentsForTest(2);
+		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "body.cpp"); //$NON-NLS-1$
 		CEditor cEditor = openEditor(file);
 		runCommand(0, 2, COMMAND_ID, cEditor);
@@ -92,7 +92,7 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//	return s;
 	//}
 	public void testNewTestFunctionMissingSuite() throws Exception {
-		StringBuffer[] contentsForTest = getContentsForTest(2);
+		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "function.cpp"); //$NON-NLS-1$
 		final CEditor cEditor = openEditor(file);
 		cEditor.selectAndReveal(0, 2);

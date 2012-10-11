@@ -22,7 +22,7 @@ public class CreateMemberVariableTest extends QuickFixTest {
 	//private:
 	//};
 	@Override
-	protected void getCode() {
+	public void getCode() {
 	}
 
 	@Override

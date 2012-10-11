@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="ch.hsr.ifs.cute.gcov.test" version="2">
+    <resource path="src/ch/hsr/ifs/cute/gcov/test/mock/MockFile.java" type="ch.hsr.ifs.cute.gcov.test.mock.MockFile">
+        <filter id="574619656">
+            <message_arguments>
+                <message_argument value="IFile"/>
+                <message_argument value="MockFile"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/ch/hsr/ifs/cute/gcov/test/mock/MockMarker.java" type="ch.hsr.ifs.cute.gcov.test.mock.MockMarker">
+        <filter id="574619656">
+            <message_arguments>
+                <message_argument value="IMarker"/>
+                <message_argument value="MockMarker"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/ch/hsr/ifs/cute/gcov/test/mock/MockWorkspace.java" type="ch.hsr.ifs.cute.gcov.test.mock.MockWorkspace">
+        <filter id="574619656">
+            <message_arguments>
+                <message_argument value="IWorkspace"/>
+                <message_argument value="MockWorkspace"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

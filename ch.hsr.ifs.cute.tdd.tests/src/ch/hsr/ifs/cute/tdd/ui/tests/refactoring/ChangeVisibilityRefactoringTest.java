@@ -22,6 +22,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
 import com.includator.tests.base.TestSourceFile;
 
+@SuppressWarnings("restriction")
 public class ChangeVisibilityRefactoringTest extends TddRefactoringTest {
 
 	public ChangeVisibilityRefactoringTest(String name, ArrayList<TestSourceFile> files) {
