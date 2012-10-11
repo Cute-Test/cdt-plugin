@@ -33,7 +33,7 @@
 	</repositories>
 	<modules>
 		<!-- CUTE Plugin -->
-		<module>../cute_feature</module>
+		<module>../ch.hsr.ifs.cute.feature</module>
 		<module>../cute_test_feature</module>
 		<module>../cute_framework</module>
 		<module>../cute_framework_cute_fragment</module>
