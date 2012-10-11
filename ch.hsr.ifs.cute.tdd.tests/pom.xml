@@ -1,3 +1,4 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
@@ -24,7 +25,7 @@
 					<useUIHarness>true</useUIHarness>
 					<testSuite>ch.hsr.ifs.cute.tdd.tests</testSuite>
 					<testClass>ch.hsr.ifs.cute.tdd.ui.tests.AllTests</testClass>
-					<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
+					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -22,7 +22,7 @@
     		    	<testSuite>ch.hsr.ifs.cute.headers.1_7.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.headers.v17.test.Headers1_7Suite</testClass>
         			<useUIHarness>false</useUIHarness>
-        			<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
+        			<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 			</configuration>
     	  	</plugin>
 	    </plugins>

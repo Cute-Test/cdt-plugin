@@ -22,7 +22,7 @@
 					<argLine>-Xmx2048m</argLine>
 					<testSuite>ch.hsr.ifs.cute.swtbottest</testSuite>
 					<testClass>ch.hsr.ifs.cute.swtbottest.AllTests</testClass>
-					<reportsDirectory>../cute_test_feature/surefire-reports</reportsDirectory>
+					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
 					<product>org.eclipse.epp.package.cpp.product</product>
