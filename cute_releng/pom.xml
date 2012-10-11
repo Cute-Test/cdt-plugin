@@ -34,8 +34,8 @@
 	<modules>
 		<!-- CUTE Plugin -->
 		<module>../ch.hsr.ifs.cute.feature</module>
-		<module>../cute_test_feature</module>
-		<module>../cute_framework</module>
+		<module>../ch.hsr.ifs.cute.test.feature</module>
+		<module>../ch.hsr.ifs.test.framework</module>
 		<module>../cute_framework_cute_fragment</module>
 		<module>../cute_plugin</module>
 		<module>../ch.hsr.ifs.cute.tdd</module>
