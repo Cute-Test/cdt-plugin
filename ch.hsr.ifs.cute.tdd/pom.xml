@@ -4,7 +4,7 @@
 		<groupId>ch.hsr.ifs</groupId>
 		<artifactId>ch.hsr.ifs.cute.parent</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../cute_releng</relativePath>
+		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>

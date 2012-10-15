@@ -16,7 +16,7 @@
 <unit id="org.eclipse.swtbot.feature.group" version="2.0.4.20110304_0338-e5aff47-dev-e36"/>
 <repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
-<location path="${workspace_loc}/cute_releng" type="Directory"/>
+<location path="${workspace_loc}/ch.hsr.ifs.cute.releng" type="Directory"/>
 <location id="org.eclipse.sdk" path="${eclipse_home}" type="Feature"/>
 <location id="org.eclipse.platform" path="${eclipse_home}" type="Feature"/>
 <location id="org.eclipse.pde" path="${eclipse_home}" type="Feature"/>
