@@ -8,8 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.refactoring;
 
-import java.util.ArrayList;
-
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.core.resources.IMarker;
@@ -22,13 +20,11 @@ import ch.hsr.ifs.cute.tdd.createfunction.CreateMemberFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.OperatorCreationStrategy;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
-import com.includator.tests.base.TestSourceFile;
-
 @SuppressWarnings("restriction")
 public class CreateOperatorRefactoringTest extends TddRefactoringTest {
 
-	public CreateOperatorRefactoringTest(String name, ArrayList<TestSourceFile> files) {
-		super(name, files, TddErrorIdCollection.ERR_ID_OperatorResolutionProblem_HSR);
+	public CreateOperatorRefactoringTest() {
+		super(TddErrorIdCollection.ERR_ID_OperatorResolutionProblem_HSR);
 		CPPASTNameBase.sAllowNameComputation = true;
 	}
 

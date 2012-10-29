@@ -8,8 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.refactoring;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -18,12 +16,10 @@ import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.addArgument.AddArgumentRefactoring;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
-import com.includator.tests.base.TestSourceFile;
-
 public class AddArgumentRefactoringTest extends TddRefactoringTest {
 
-	public AddArgumentRefactoringTest(String name, ArrayList<TestSourceFile> files) {
-		super(name, files, TddErrorIdCollection.ERR_ID_InvalidArguments_HSR, TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR);
+	public AddArgumentRefactoringTest() {
+		super(TddErrorIdCollection.ERR_ID_InvalidArguments_HSR, TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR);
 	}
 
 	@Override

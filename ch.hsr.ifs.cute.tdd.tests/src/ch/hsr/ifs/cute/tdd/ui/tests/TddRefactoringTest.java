@@ -8,9 +8,11 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,27 +25,19 @@ import org.eclipse.cdt.codan.core.param.IProblemPreference;
 import org.eclipse.cdt.codan.core.param.RootProblemPreference;
 import org.eclipse.cdt.codan.internal.core.CodanBuilder;
 import org.eclipse.cdt.codan.internal.core.model.CodanProblem;
-import org.eclipse.cdt.core.CCorePlugin;
-import org.eclipse.cdt.core.dom.IPDOMManager;
-import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.parser.tests.rewrite.TestHelper;
-import org.eclipse.cdt.core.testplugin.CProjectHelper;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.Refactoring;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -51,15 +45,15 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.junit.Test;
 
+import ch.hsr.ifs.cdttesting.JUnit4RtsTest;
+import ch.hsr.ifs.cdttesting.TestSourceFile;
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
 
-import com.includator.tests.base.JUnit4IncludatorTest;
-import com.includator.tests.base.TestSourceFile;
-
 @SuppressWarnings("restriction")
-public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
+public abstract class TddRefactoringTest extends JUnit4RtsTest {
 
 	private static final int EMPTY_SELECTION = 0;
+	public static final String NL = System.getProperty("line.separator");
 	private final String[] problems;
 	private String[] newFiles;
 
@@ -76,9 +70,9 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 	protected boolean ignoreComments;
 	protected boolean overwrite;
 	protected int candidate;
+	protected TextSelection selection;
 
-	public TddRefactoringTest(String name, ArrayList<com.includator.tests.base.TestSourceFile> files, String... problem) {
-		super(name, files);
+	public TddRefactoringTest(String... problem) {
 		this.problems = problem;
 	}
 
@@ -213,23 +207,6 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 		return;
 	}
 
-	protected ICProject createProject(final boolean cpp) throws CoreException {
-		final ICProject cprojects[] = new ICProject[1];
-		// Create the cproject
-		final String projectName = "CodanProjTest_" + System.currentTimeMillis();
-		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		workspace.run(new IWorkspaceRunnable() {
-			@Override
-			public void run(IProgressMonitor monitor) throws CoreException {
-				// Create the cproject
-				ICProject cproject = cpp ? CProjectHelper.createCCProject(projectName, null, IPDOMManager.ID_NO_INDEXER) : CProjectHelper.createCProject(projectName, null,
-						IPDOMManager.ID_NO_INDEXER);
-				cprojects[0] = cproject;
-			}
-		}, null);
-		return cprojects[0];
-	}
-
 	protected void enableAllProblems() {
 		IProblemProfile profile = CodanRuntime.getInstance().getCheckersRegistry().getWorkspaceProfile();
 		IProblem[] problems = profile.getProblems();
@@ -254,22 +231,6 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 			fail(e.getMessage());
 		}
 		return markers;
-	}
-
-	public void indexFiles() throws CoreException {
-		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		workspace.run(new IWorkspaceRunnable() {
-			@Override
-			public void run(IProgressMonitor monitor) throws CoreException {
-				cproject.getProject().refreshLocal(1, monitor);
-			}
-		}, null);
-		// Index the cproject
-		CCorePlugin.getIndexManager().setIndexerId(cproject, IPDOMManager.ID_FAST_INDEXER);
-		CCorePlugin.getIndexManager().reindex(cproject);
-		// wait until the indexer is done
-		assertTrue(CCorePlugin.getIndexManager().joinIndexer(1000 * 60, // 1 min
-				new NullProgressMonitor()));
 	}
 
 	private int getOffset(IMarker marker, IDocument doc) {
@@ -351,5 +312,36 @@ public abstract class TddRefactoringTest extends JUnit4IncludatorTest {
 				file.delete(true, NULL_PROGRESS_MONITOR);
 			}
 		}
+	}
+	
+	protected String getCodeFromIFile(IFile file) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(file.getContents()));
+		StringBuilder code = new StringBuilder();
+		String line;
+		while((line = br.readLine()) != null) {
+			code.append(line);
+			code.append(NL);
+		}
+		br.close();
+		return code.toString();
+	}
+
+	private void setSelection(TextSelection selection) {
+		this.selection = selection;
+	}
+
+	protected void compareFiles(TreeMap<String, TestSourceFile> testResourceFiles) throws Exception {
+		for (String fileName : testResourceFiles.keySet()) {
+			String expectedSource = testResourceFiles.get(fileName).getExpectedSource();
+			IFile iFile = project.getFile(new Path(fileName));
+			String code = getCodeFromIFile(iFile);
+			assertEquals(TestHelper.unifyNewLines(expectedSource), TestHelper.unifyNewLines(code));
+		}
+	}
+
+	protected void assertConditionsOk(RefactoringStatus conditions) {
+		assertTrue(
+				conditions.isOK() ? "OK" : "Error or Warning in Conditions: " + conditions.getEntries()[0].getMessage(), //$NON-NLS-1$ //$NON-NLS-2$
+				conditions.isOK());
 	}
 }

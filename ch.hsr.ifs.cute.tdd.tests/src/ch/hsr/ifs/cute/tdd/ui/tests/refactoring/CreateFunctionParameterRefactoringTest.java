@@ -8,8 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.refactoring;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -20,12 +18,10 @@ import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.FunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
-import com.includator.tests.base.TestSourceFile;
-
 public class CreateFunctionParameterRefactoringTest extends TddRefactoringTest {
 
-	public CreateFunctionParameterRefactoringTest(String name, ArrayList<TestSourceFile> files) {
-		super(name, files, TddErrorIdCollection.ERR_ID_FunctionResolutionProblem_HSR);
+	public CreateFunctionParameterRefactoringTest() {
+		super(TddErrorIdCollection.ERR_ID_FunctionResolutionProblem_HSR);
 	}
 
 	@Override

@@ -8,8 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.refactoring;
 
-import java.util.ArrayList;
-
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -20,12 +18,11 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.createvariable.CreateLocalVariableRefactoring;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
-import com.includator.tests.base.TestSourceFile;
-
+@SuppressWarnings("restriction")
 public class CreateLocalVariableRefactoringTest extends TddRefactoringTest {
 
-	public CreateLocalVariableRefactoringTest(String name, ArrayList<TestSourceFile> files) {
-		super(name, files, TddErrorIdCollection.ERR_ID_VariableResolutionProblem_HSR);
+	public CreateLocalVariableRefactoringTest() {
+		super(TddErrorIdCollection.ERR_ID_VariableResolutionProblem_HSR);
 	}
 
 	@Override

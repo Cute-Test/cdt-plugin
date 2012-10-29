@@ -79,15 +79,20 @@ public abstract class ConsoleTest extends TestCase {
 	
 	protected abstract void addTestEventHandler(ConsolePatternListener lis) ;
 
-	protected String firstConsoleLine() throws CoreException {
+	protected String firstConsoleLine() throws CoreException, IOException {
 		Bundle bundle = CoreTestPlugin.getDefault().getBundle();
 		Path path = new Path(fullFilePath());
+		BufferedReader br = null;
 		try {
 			String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
-			BufferedReader br = new BufferedReader(new FileReader(file2));
+			br = new BufferedReader(new FileReader(file2));
 			return br.readLine();
 		}catch (IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR, CoreTestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
+		} finally {
+			if (br != null) {
+				br.close();
+			}
 		}
 	}
 

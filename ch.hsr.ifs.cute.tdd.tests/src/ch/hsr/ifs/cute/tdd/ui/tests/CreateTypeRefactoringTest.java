@@ -8,8 +8,6 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.text.IDocument;
 
@@ -19,8 +17,8 @@ import ch.hsr.ifs.cute.tdd.createtype.CreateTypeRefactoring;
 
 public class CreateTypeRefactoringTest extends TddRefactoringTest {
 
-	public CreateTypeRefactoringTest(String name, ArrayList<com.includator.tests.base.TestSourceFile> files) {
-		super(name, files, TddErrorIdCollection.ERR_ID_TypeResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_NamespaceResolutionProblem_HSR);
+	public CreateTypeRefactoringTest() {
+		super(TddErrorIdCollection.ERR_ID_TypeResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_NamespaceResolutionProblem_HSR);
 	}
 
 	@Override

@@ -8,6 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.core.test.modelbuilder;
 
+import java.io.IOException;
 import java.util.Vector;
 
 import junit.framework.Test;
@@ -33,7 +34,7 @@ import ch.hsr.ifs.test.framework.model.TestSuite;
 public class ModelBuilderTest extends ConsoleTest {
 	
 	private static final String SEPARATOR = ", "; //$NON-NLS-1$
-	private String inputFile;
+	private final String inputFile;
 
 	public ModelBuilderTest(String inputFile) {
 		super();
@@ -52,7 +53,7 @@ public class ModelBuilderTest extends ConsoleTest {
 		lis.addHandler(new ModellBuilder(new Path(""))); //$NON-NLS-1$
 	}
 	
-	protected String getExpected() throws CoreException {
+	protected String getExpected() throws CoreException, IOException {
 		return firstConsoleLine();
 	}
 
