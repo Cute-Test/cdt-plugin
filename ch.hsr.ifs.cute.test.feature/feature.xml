@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="ch.hsr.ifs.cute.test"
+      id="ch.hsr.ifs.cute.test.feature"
       label="%featureName"
       version="3.0.2.qualifier"
       provider-name="%providerName">
@@ -32,7 +32,7 @@
       <import plugin="org.eclipse.cdt.ui.tests" version="5.0.1"/>
       <import plugin="org.eclipse.ui.ide" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.core.filesystem" version="1.2.0" match="compatible"/>
-      <import plugin="ch.hsr.ifs.test.framework" version="3.0.0" match="compatible"/>
+      <import plugin="ch.hsr.ifs.testframework" version="3.0.0" match="compatible"/>
       <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="compatible"/>
       <import plugin="org.junit" version="3.8.2"/>
       <import plugin="org.eclipse.cdt.codan.core.test" version="1.0.0" match="greaterOrEqual"/>
@@ -47,7 +47,7 @@
       <import plugin="org.eclipse.text" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.debug.ui" version="3.6.0" match="greaterOrEqual"/>
-      <import plugin="ch.hsr.ifs.test.framework" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.testframework" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.gcov" version="0.2.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.5.0" match="greaterOrEqual"/>
@@ -62,7 +62,7 @@
    </requires>
 
    <plugin
-         id="ch.hsr.ifs.cute.core.test"
+         id="ch.hsr.ifs.testframework.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -97,7 +97,7 @@
          unpack="false"/>
 
    <plugin
-         id="ch.hsr.ifs.test.framework"
+         id="ch.hsr.ifs.testframework"
          download-size="0"
          install-size="0"
          version="0.0.0"

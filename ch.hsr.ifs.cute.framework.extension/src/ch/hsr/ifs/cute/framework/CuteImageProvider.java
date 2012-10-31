@@ -14,8 +14,8 @@ import java.util.TreeMap;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import ch.hsr.ifs.test.framework.ImageProvider;
-import ch.hsr.ifs.test.framework.TestFrameworkPlugin;
+import ch.hsr.ifs.testframework.ImageProvider;
+import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 
 /**
  * @author egraf

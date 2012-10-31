@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="ch.hsr.ifs.cute"
+      id="ch.hsr.ifs.cute.feature"
       label="%featureName"
       version="4.5.0.qualifier"
       provider-name="%providerName"
@@ -37,7 +37,7 @@
       <import plugin="org.eclipse.jface.text" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.ui" version="5.2.0" match="compatible"/>
       <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0"/>
-      <import plugin="ch.hsr.ifs.test.framework" version="3.0.0" match="compatible"/>
+      <import plugin="ch.hsr.ifs.testframework" version="3.0.0" match="compatible"/>
       <import plugin="org.eclipse.core.expressions" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.ltk.core.refactoring" version="3.5.100" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.3.0" match="compatible"/>
@@ -72,7 +72,7 @@
          unpack="false"/>
 
    <plugin
-         id="ch.hsr.ifs.test.framework"
+         id="ch.hsr.ifs.testframework"
          download-size="0"
          install-size="0"
          version="0.0.0"

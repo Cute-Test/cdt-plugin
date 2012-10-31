@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>ch.hsr.ifs</groupId>
-		<artifactId>ch.hsr.ifs.cute.parent</artifactId>
+		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
 	</parent>
@@ -14,8 +14,8 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.sonatype.tycho</groupId>
-				<artifactId>maven-osgi-compiler-plugin</artifactId>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
 					<source>1.5</source>

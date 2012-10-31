@@ -31,7 +31,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.gcov.parser.resources.GcovFile;
-import ch.hsr.ifs.test.framework.launch.ILaunchObserver;
+import ch.hsr.ifs.testframework.launch.ILaunchObserver;
 
 /**
  * @author Emanuel Graf IFS

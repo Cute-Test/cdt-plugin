@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>ch.hsr.ifs</groupId>
-		<artifactId>ch.hsr.ifs.cute.parent</artifactId>
+		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
 	</parent>

@@ -11,7 +11,7 @@ package ch.hsr.ifs.cute.framework;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import ch.hsr.ifs.test.framework.Messages;
+import ch.hsr.ifs.testframework.Messages;
 
 /**
  * @since 3.1

@@ -18,13 +18,13 @@ import java.util.regex.Pattern;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.test.framework.event.ConsoleEventParser;
-import ch.hsr.ifs.test.framework.event.SuiteBeginEvent;
-import ch.hsr.ifs.test.framework.event.SuiteEndEvent;
-import ch.hsr.ifs.test.framework.event.TestErrorEvent;
-import ch.hsr.ifs.test.framework.event.TestFailureEvent;
-import ch.hsr.ifs.test.framework.event.TestStartEvent;
-import ch.hsr.ifs.test.framework.event.TestSuccessEvent;
+import ch.hsr.ifs.testframework.event.ConsoleEventParser;
+import ch.hsr.ifs.testframework.event.SuiteBeginEvent;
+import ch.hsr.ifs.testframework.event.SuiteEndEvent;
+import ch.hsr.ifs.testframework.event.TestErrorEvent;
+import ch.hsr.ifs.testframework.event.TestFailureEvent;
+import ch.hsr.ifs.testframework.event.TestStartEvent;
+import ch.hsr.ifs.testframework.event.TestSuccessEvent;
 
 public class CuteConsoleEventParser extends ConsoleEventParser {
 

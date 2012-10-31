@@ -18,23 +18,12 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 
 public class Activator extends AbstractUIPlugin {
-
-	public class ActivationListener implements BundleListener {
-		@Override
-		public void bundleChanged(BundleEvent event) {
-			if (!event.getBundle().getSymbolicName().equals("ch.hsr.ifs.cute.tdd") && event.getType() == BundleEvent.STARTED) { //$NON-NLS-1$
-				return;
-			}
-		}
-	}
 
 	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.tdd"; //$NON-NLS-1$
 
@@ -46,7 +35,6 @@ public class Activator extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		context.addBundleListener(new ActivationListener());
 		plugin = this;
 	}
 

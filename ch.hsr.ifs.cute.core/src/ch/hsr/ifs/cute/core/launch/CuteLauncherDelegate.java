@@ -12,8 +12,8 @@ package ch.hsr.ifs.cute.core.launch;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
-import ch.hsr.ifs.test.framework.event.ConsoleEventParser;
-import ch.hsr.ifs.test.framework.launch.TestLauncherDelegate;
+import ch.hsr.ifs.testframework.event.ConsoleEventParser;
+import ch.hsr.ifs.testframework.launch.TestLauncherDelegate;
 /**
  * @author egraf
  *
