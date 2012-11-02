@@ -27,7 +27,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import ch.hsr.ifs.testframework.model.CuteModel;
+import ch.hsr.ifs.testframework.model.Model;
 import ch.hsr.ifs.testframework.ui.FallbackImageProvider;
 import ch.hsr.ifs.testframework.ui.FallbackMessages;
 
@@ -44,7 +44,7 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 	
 	private static final IPath ICONS_PATH= new Path("$nl$/icons"); //$NON-NLS-1$
 	
-	private final CuteModel model = new CuteModel();
+	private final Model model = new Model();
 		
 	/**
 	 * The constructor
@@ -162,7 +162,7 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 		getDefault().getLog().log(status);
 	}
 	
-	public static CuteModel getModel() {
+	public static Model getModel() {
 		return getDefault().model;
 	}
 

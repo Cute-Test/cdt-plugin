@@ -42,8 +42,6 @@ public abstract class AbstractFunctionAction extends CRefactoring {
 		this(null, null, null);
 	}
 
-	private final ASTCache astCache = new ASTCache();
-
 	/**
 	 * @since 4.0
 	 */

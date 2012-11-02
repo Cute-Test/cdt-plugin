@@ -1,4 +1,4 @@
-Session{Testcase(xUnitTest, error, null, -1, Result(Unexpected test case end. This can be caused by CUTE like output in the test case. Faking a greenbar?))}
+Session{Testcase(xUnitTest, error, null, -1, Result(Unexpected test case end. This can be caused by ambiguous output in the test case. Faking a greenbar?))}
 #starting xUnitTest
 #success xUnitTest OK
 #failure xUnitTest ../src/Test.cpp:7 start writing tests

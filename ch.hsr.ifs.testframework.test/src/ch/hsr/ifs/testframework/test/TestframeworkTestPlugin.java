@@ -15,12 +15,12 @@ import org.osgi.framework.BundleContext;
  * @author Emanuel Graf IFS
  *
  */
-public class CoreTestPlugin extends Plugin {
+public class TestframeworkTestPlugin extends Plugin {
 
 	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.core.test"; //$NON-NLS-1$
-	private static CoreTestPlugin plugin;
+	private static TestframeworkTestPlugin plugin;
 
-	public CoreTestPlugin() {
+	public TestframeworkTestPlugin() {
 		plugin = this;
 	}
 
@@ -39,7 +39,7 @@ public class CoreTestPlugin extends Plugin {
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
 		super.stop(bundleContext);
-		CoreTestPlugin.plugin = null;
+		TestframeworkTestPlugin.plugin = null;
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class CoreTestPlugin extends Plugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static CoreTestPlugin getDefault() {
+	public static TestframeworkTestPlugin getDefault() {
 		return plugin;
 	}
 }

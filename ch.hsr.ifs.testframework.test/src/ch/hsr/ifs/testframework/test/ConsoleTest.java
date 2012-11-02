@@ -80,7 +80,7 @@ public abstract class ConsoleTest extends TestCase {
 	protected abstract void addTestEventHandler(ConsolePatternListener lis) ;
 
 	protected String firstConsoleLine() throws CoreException, IOException {
-		Bundle bundle = CoreTestPlugin.getDefault().getBundle();
+		Bundle bundle = TestframeworkTestPlugin.getDefault().getBundle();
 		Path path = new Path(fullFilePath());
 		BufferedReader br = null;
 		try {
@@ -88,7 +88,7 @@ public abstract class ConsoleTest extends TestCase {
 			br = new BufferedReader(new FileReader(file2));
 			return br.readLine();
 		}catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, CoreTestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
+			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
 		} finally {
 			if (br != null) {
 				br.close();

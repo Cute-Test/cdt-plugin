@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 import ch.hsr.ifs.testframework.TestFrameworkPlugin;
-import ch.hsr.ifs.testframework.model.CuteModel;
+import ch.hsr.ifs.testframework.model.Model;
 
 /**
  * @since 3.0
@@ -53,7 +53,7 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	private Text fCustomSrcLocationText;
 	private Button fCustomSrcLocationButton;
 	
-	protected CuteModel cm=TestFrameworkPlugin.getModel();
+	protected Model cm=TestFrameworkPlugin.getModel();
 	
 	public void createControl(Composite parent) {
 	    Font font = parent.getFont();

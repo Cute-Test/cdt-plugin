@@ -25,8 +25,8 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 	
 	private TestStatus status;
 	
-	private Vector<TestElement> cases = new Vector<TestElement>();
-	private Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();
+	private final Vector<TestElement> cases = new Vector<TestElement>();
+	private final Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();
 	
 	
 
@@ -37,10 +37,12 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 		this.status = status;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public TestStatus getStatus() {
 		return status;
 	}
@@ -55,6 +57,8 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 			break;
 		case error:
 			++error;
+			break;
+		default:
 			break;
 		}
 		notifyListeners(new NotifyEvent(NotifyEvent.EventType.testFinished, tCase));

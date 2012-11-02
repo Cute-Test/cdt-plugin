@@ -21,8 +21,8 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class MockMarker implements IMarker {
 	
-	private String type;
-	private IResource res;
+	private final String type;
+	private final IResource res;
 	private Map<String, Object> attributes = new HashMap<String, Object>();;
 
 	public MockMarker(String type, IResource resource) {
@@ -75,7 +75,7 @@ public class MockMarker implements IMarker {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map getAttributes() throws CoreException {
 		return attributes;
 	}

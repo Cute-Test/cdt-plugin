@@ -62,6 +62,7 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 
 	protected abstract ConsoleEventParser getConsoleEventParser();
 
+	@Override
 	protected abstract String getPluginID();
 
 	@Override
@@ -94,7 +95,7 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 			command.add( exePath.toOSString() );
 			command.addAll( Arrays.asList( arguments ) );
 			String[] commandArray = command.toArray( new String[command.size()] );
-			boolean usePty = config.getAttribute( "ch.hsr.ifs.cutelauncher.useTerminal", true); //$NON-NLS-1$
+			boolean usePty = config.getAttribute("ch.hsr.ifs.testframework.launcher.useTerminal", true); //$NON-NLS-1$
 			monitor.worked( 2 );
 			Process process = exec( commandArray, this.getEnvironment( config ), wd, usePty );
 			monitor.worked( 6 );

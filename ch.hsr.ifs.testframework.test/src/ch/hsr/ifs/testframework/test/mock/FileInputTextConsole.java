@@ -25,7 +25,7 @@ import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.osgi.framework.Bundle;
 
-import ch.hsr.ifs.testframework.test.CoreTestPlugin;
+import ch.hsr.ifs.testframework.test.TestframeworkTestPlugin;
 
 /**
  * @author Emanuel Graf
@@ -41,7 +41,7 @@ public class FileInputTextConsole extends TextConsole {
 	}
 
 	private String getFileText(String inputFile) throws CoreException{
-		Bundle bundle = CoreTestPlugin.getDefault().getBundle();
+		Bundle bundle = TestframeworkTestPlugin.getDefault().getBundle();
 		Path path = new Path(inputFile);
 		try {
 			String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
@@ -56,7 +56,7 @@ public class FileInputTextConsole extends TextConsole {
 			
 			return buffer.toString();
 		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, CoreTestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
+			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
 		}
 	}
 	

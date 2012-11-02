@@ -314,6 +314,7 @@ public class TypeHelper {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	private static Set<IIndexFile> getIncludedFiles(IASTTranslationUnit unit, ICPPClassType cType) throws CoreException {
 		IIndexFileLocation ifl = IndexLocationFactory.getIFLExpensive(unit.getFilePath());
 		final int cppLinkageID = cType.getLinkage().getLinkageID();

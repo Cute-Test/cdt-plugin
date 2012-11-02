@@ -40,6 +40,7 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
  * @author Emanuel Graf IFS
  * 
  */
+@SuppressWarnings("restriction")
 public class MockFile implements IFile {
 
 	private final IPath path;
@@ -211,7 +212,6 @@ public class MockFile implements IFile {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings("restriction")
 	public void deleteMarkers(String type, boolean includeSubtypes, int depth) throws CoreException {
 		if (!exists()) {
 			String message = "File does not exist"; //$NON-NLS-1$
@@ -263,7 +263,7 @@ public class MockFile implements IFile {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map getPersistentProperties() throws CoreException {
 		throw new NotYetImplementedException();
 	}
@@ -292,7 +292,7 @@ public class MockFile implements IFile {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map getSessionProperties() throws CoreException {
 		throw new NotYetImplementedException();
 	}

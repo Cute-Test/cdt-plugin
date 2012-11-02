@@ -22,11 +22,11 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
  * @author Emanuel Graf
  *
  */
-public class CutePrefPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class TestframeworkPrefPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	
 	private Messages msg = TestFrameworkPlugin.getMessages();
 
-	public CutePrefPage() {
+	public TestframeworkPrefPage() {
 		super(GRID);
 		setPreferenceStore(TestFrameworkPlugin.getDefault().getPreferenceStore());
 		setDescription(msg.getString("CutePrefPage.CuteRefPage")); //$NON-NLS-1$

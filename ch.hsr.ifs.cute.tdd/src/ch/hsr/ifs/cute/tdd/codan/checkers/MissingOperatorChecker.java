@@ -110,6 +110,8 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				case INCR:
 				case DECR:
 					return true;
+				default:
+					break;
 				}
 			}
 			return false;
@@ -130,6 +132,8 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				case PLUSASSIGN:
 				case MINUSASSIGN:
 					return true;
+				default:
+					break;
 				}
 			}
 			return false;
@@ -153,6 +157,8 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			switch (operator) {
 			case AMPER:
 				return true;
+			default:
+				break;
 			}
 			return false;
 		}

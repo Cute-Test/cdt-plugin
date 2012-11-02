@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="ch.hsr.ifs.cute.core" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="ch.hsr.ifs.testframework" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="ch.hsr.ifs.cute.core" id="launchObserver" name="Launch Observer"/>
+         <meta.schema plugin="ch.hsr.ifs.testframework" id="launchObserver" name="Launch Observer"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
       </documentation>
    </annotation>
 
-<element name="extension">
+   <element name="extension">
       <annotation>
          <appInfo>
             <meta.element />
@@ -55,7 +55,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":ch.hsr.ifs.cute.core.launch.ILaunchObserver"/>
+                  <meta.attribute kind="java" basedOn=":ch.hsr.ifs.testframework.ILaunchObserver"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -70,6 +70,4 @@
          [Enter information about supplied implementation of this extension point.]
       </documentation>
    </annotation>
-
-
 </schema>

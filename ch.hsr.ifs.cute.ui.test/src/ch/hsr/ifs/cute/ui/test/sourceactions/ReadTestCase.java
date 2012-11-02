@@ -72,6 +72,8 @@ public class ReadTestCase{//TODO checking for null values
 				}
 				m=state.TEST;
 				break;
+				default:
+					break;
 			}
 		}
 		}catch(IOException ioe){ioe.printStackTrace();}

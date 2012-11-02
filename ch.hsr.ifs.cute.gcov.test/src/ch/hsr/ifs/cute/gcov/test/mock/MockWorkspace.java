@@ -124,7 +124,7 @@ public class MockWorkspace implements IWorkspace {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map getDanglingReferences() {
 		throw new NotYetImplementedException();
 	}

@@ -14,7 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.debug.core.ILaunch;
 
 
-public class CuteModel {
+public class Model {
 	
 	private Vector<ISessionListener> sessionListeners = new Vector<ISessionListener>();
 	

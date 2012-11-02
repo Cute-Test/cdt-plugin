@@ -23,7 +23,7 @@ import ch.hsr.ifs.testframework.event.TestEventHandler;
  */
 public class ModellBuilder extends TestEventHandler {
 
-	private final CuteModel model = TestFrameworkPlugin.getModel();
+	private final Model model = TestFrameworkPlugin.getModel();
 	private final IPath rtPath;
 	private TestCase lastTestCase;
 	private TestCase currentTestCase;

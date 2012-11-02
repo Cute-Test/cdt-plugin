@@ -19,7 +19,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
-            class="ch.hsr.ifs.testframework.preference.CutePrefPage"
+            class="ch.hsr.ifs.testframework.preference.TestframeworkPrefPage"
             id="ch.hsr.ifs.cutelauncher.prefPage"
             name="%pref.page.name">
       </page>

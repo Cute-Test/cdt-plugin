@@ -18,10 +18,10 @@ import ch.hsr.ifs.testframework.test.patternlistener.PatternListenerSuite;
  * @author Emanuel Graf IFS
  *
  */
-public class AllCoreTests extends TestSuite{
+public class AllTestframeworkTests extends TestSuite{
 	
 
-	public AllCoreTests() {
+	public AllTestframeworkTests() {
 		super("Testframework All Core Tests"); //$NON-NLS-1$
 		addTest(PatternListenerSuite.suite());
 		addTest(ModelBuilderSuite.suite());
@@ -29,7 +29,7 @@ public class AllCoreTests extends TestSuite{
 	}
 
 	public static Test suite() {
-		return new AllCoreTests();
+		return new AllTestframeworkTests();
 	}
 
 }

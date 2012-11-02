@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="ch.hsr.ifs.cute.framework" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="ch.hsr.ifs.testframework" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="ch.hsr.ifs.cute.framework" id="ch.hsr.ifs.cute.famework.msg" name="CUTE Messages"/>
+         <meta.schema plugin="ch.hsr.ifs.testframework" id="ch.hsr.ifs.testfamework.msg" name="IFS Testframework Messages"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -55,7 +55,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":ch.hsr.ifs.cute.framework.Messages"/>
+                  <meta.attribute kind="java" basedOn=":ch.hsr.ifs.testframework.Messages"/>
                </appinfo>
             </annotation>
          </attribute>
