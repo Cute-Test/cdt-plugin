@@ -31,6 +31,7 @@ import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper;
 import org.eclipse.cdt.internal.core.model.ASTCache;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -79,7 +80,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		final IBinding toBeRegisteredBinding = getToBeRegisteredBinding(iastDeclaration);
 
 		try {
-			updateRegisteredTests(astCache, index, registeredFunctionFinder, toBeRegisteredBinding);
+			updateRegisteredTests(astCache, index, registeredFunctionFinder, toBeRegisteredBinding, iastDeclaration);
 
 			if (!(registeredFunctionFinder.getRegisteredFunctionNames().contains(index.adaptBinding(toBeRegisteredBinding)))) {
 				reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastDeclaration); //$NON-NLS-1$
@@ -90,9 +91,9 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 	}
 
 	private void updateRegisteredTests(ASTCache astCache, final IIndex index, final RegisteredTestFunctionFinderVisitor registeredFunctionFinder,
-			final IBinding toBeRegisteredBinding) throws CoreException {
+			final IBinding toBeRegisteredBinding, IASTDeclaration point) throws CoreException {
 		if (toBeRegisteredBinding instanceof ICPPClassType) {
-			final ICPPConstructor[] constructors = ((ICPPClassType) toBeRegisteredBinding).getConstructors();
+			final ICPPConstructor[] constructors = ClassTypeHelper.getConstructors((ICPPClassType) toBeRegisteredBinding, point);
 			for (ICPPConstructor constructor : constructors) {
 				final IIndexName[] constructorReferences = index.findReferences(constructor);
 				updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, constructorReferences, astCache, index);

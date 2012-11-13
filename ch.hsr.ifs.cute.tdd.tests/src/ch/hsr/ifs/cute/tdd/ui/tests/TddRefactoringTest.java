@@ -87,9 +87,7 @@ public abstract class TddRefactoringTest extends JUnit4RtsTest {
 				setSelectionOnFile();
 				refactoring = getRefactoring(null, null);
 				context = new CRefactoringContext(refactoring);
-				removeFilesAndEnsure();
 				createAndPerformChange(refactoring);
-				filesDoExist();
 				for (String filename : fileMap.keySet()) {
 					IFile iFile = project.getFile(new Path(filename));
 					iFile = getFile(iFile, filename);
@@ -282,38 +280,6 @@ public abstract class TddRefactoringTest extends JUnit4RtsTest {
 		return String.valueOf(refactoringProperties.getProperty("newfiles", "")).replace(" ", "").split(",");
 	}
 
-	private void removeFilesAndEnsure() throws Exception {
-		removeFiles();
-		filesDoNotExist();
-	}
-
-	private void filesDoExist() {
-		for (String fileName : newFiles) {
-			if (!fileName.isEmpty()) {
-				IFile file = project.getFile(new Path(fileName));
-				assertTrue(file.exists());
-			}
-		}
-	}
-
-	private void filesDoNotExist() {
-		for (String fileName : newFiles) {
-			if (!fileName.isEmpty()) {
-				IFile file = project.getFile(new Path(fileName));
-				assertFalse(file.exists());
-			}
-		}
-	}
-
-	private void removeFiles() throws CoreException {
-		for (String fileName : newFiles) {
-			if (!fileName.isEmpty()) {
-				IFile file = project.getFile(new Path(fileName));
-				file.delete(true, NULL_PROGRESS_MONITOR);
-			}
-		}
-	}
-	
 	protected String getCodeFromIFile(IFile file) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(file.getContents()));
 		StringBuilder code = new StringBuilder();

@@ -23,6 +23,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMember;
 import org.eclipse.cdt.core.parser.util.ArrayUtil;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTBaseDeclSpecifier;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
@@ -49,8 +50,8 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 					return PROCESS_CONTINUE;
 				}
 				final ICPPClassType owner = (ICPPClassType) member.getOwner();
-				final ICPPMember[] methods = owner.getAllDeclaredMethods();
-				final ICPPMember[] fields = owner.getDeclaredFields();
+				final ICPPMember[] methods = ClassTypeHelper.getAllDeclaredMethods(owner, name);
+				final ICPPMember[] fields = ClassTypeHelper.getDeclaredFields(owner, name);
 				if (ArrayUtil.contains(methods, member) || ArrayUtil.contains(fields, member)) {
 					if (member.getVisibility() == ICPPMember.v_private) {
 						IBinding surroundingFunction = findAscendingFunctionBinding(name);
