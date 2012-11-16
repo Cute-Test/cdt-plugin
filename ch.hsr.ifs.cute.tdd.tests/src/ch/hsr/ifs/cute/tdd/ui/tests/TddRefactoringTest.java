@@ -45,12 +45,12 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.junit.Test;
 
-import ch.hsr.ifs.cdttesting.JUnit4RtsTest;
-import ch.hsr.ifs.cdttesting.TestSourceFile;
+import ch.hsr.ifs.cdttesting.rts.junit4.CDTProjectJUnit4RtsTest;
+import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
 import ch.hsr.ifs.cute.tdd.CRefactoring3;
 
 @SuppressWarnings("restriction")
-public abstract class TddRefactoringTest extends JUnit4RtsTest {
+public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 
 	private static final int EMPTY_SELECTION = 0;
 	public static final String NL = System.getProperty("line.separator");
