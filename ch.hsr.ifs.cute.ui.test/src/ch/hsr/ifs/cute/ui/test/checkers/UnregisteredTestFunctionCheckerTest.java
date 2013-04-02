@@ -289,7 +289,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// #define ASSERT(cond) ASSERTM(#cond,cond)
 	// #define CUTE_SMEMFUN(TestClass,MemberFunctionName) \
 	// cute::makeSimpleMemberFunctionTest<TestClass>(\
-	// &TestClass::MemberFunctionName,\
+	// &TestClass::Me<mberFunctionName,\
 	// #MemberFunctionName)
 	//
 	// namespace cute{
@@ -316,7 +316,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	}
 
 	@Override
-	protected void indexFiles() throws CoreException {
+	protected void indexFiles() throws CoreException, InterruptedException {
 
 		ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD, null);
 
