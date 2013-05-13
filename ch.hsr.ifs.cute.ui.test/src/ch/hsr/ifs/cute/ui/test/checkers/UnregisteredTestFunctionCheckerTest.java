@@ -289,7 +289,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// #define ASSERT(cond) ASSERTM(#cond,cond)
 	// #define CUTE_SMEMFUN(TestClass,MemberFunctionName) \
 	// cute::makeSimpleMemberFunctionTest<TestClass>(\
-	// &TestClass::Me<mberFunctionName,\
+	// &TestClass::MemberFunctionName,\
 	// #MemberFunctionName)
 	//
 	// namespace cute{
@@ -299,7 +299,6 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	//
 	// struct testStruct{
 	// void testIt();
-	// }
 	// };
 	//
 	// void testStruct::testIt(){
