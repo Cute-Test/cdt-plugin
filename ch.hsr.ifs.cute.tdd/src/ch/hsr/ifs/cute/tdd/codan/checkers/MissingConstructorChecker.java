@@ -32,6 +32,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
@@ -88,6 +89,9 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 
 		private void handleNamedTypeSpecifier(IASTSimpleDeclaration simpleDecl, IASTNamedTypeSpecifier namedTypespec) {
 			final IBinding typeBinding = namedTypespec.getName().resolveBinding();
+			if (typeBinding instanceof ICPPDeferredClassInstance) { // Workaround fix, as constructors of templates cannot be resolved correctly
+				return;
+			}
 			// if (typeBinding instanceof ICPPUnknownClassType) {
 			// return;
 			// }
