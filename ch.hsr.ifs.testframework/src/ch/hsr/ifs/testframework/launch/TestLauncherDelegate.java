@@ -46,6 +46,7 @@ import org.eclipse.ui.progress.UIJob;
 
 import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 import ch.hsr.ifs.testframework.event.ConsoleEventParser;
+import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.model.ModellBuilder;
 import ch.hsr.ifs.testframework.ui.ConsoleLinkHandler;
 import ch.hsr.ifs.testframework.ui.ShowResultView;
@@ -127,7 +128,7 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 	 * @since 3.0
 	 */
 	protected void registerPatternMatchListener(ILaunch launch, IPath exePath, TextConsole textCons) {
-		ConsoleLinkHandler handler = new ConsoleLinkHandler(exePath, textCons);
+		TestEventHandler handler = new ConsoleLinkHandler(exePath, textCons);
 		ModellBuilder modelHandler = new ModellBuilder(exePath, launch);
 		ConsolePatternListener listener = new ConsolePatternListener(getConsoleEventParser());
 		listener.addHandler(handler);

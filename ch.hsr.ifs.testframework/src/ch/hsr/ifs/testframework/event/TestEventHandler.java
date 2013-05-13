@@ -12,9 +12,13 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.event;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IRegion;
 
 public abstract class TestEventHandler {
+
+	private static final String CYGDRIVE = "/cygdrive/";
 
 	public void handle(TestEvent testEvent) {
 		if (testEvent instanceof TestStartEvent) {
@@ -60,4 +64,18 @@ public abstract class TestEventHandler {
 	public abstract void handleSessionStart();
 	
 	public abstract void handleSessionEnd();
+
+	protected IPath getWorkspaceFile(String fileName, IPath rtPath) {
+		IPath filePath = new Path(fileName);
+		String adaptedName = fileName;
+		if (adaptedName.startsWith(CYGDRIVE)) {
+			adaptedName = adaptedName.replace(CYGDRIVE, "");
+			char driveLetter = adaptedName.charAt(0);
+			adaptedName = driveLetter + ":" + adaptedName.substring(1);
+			filePath = Path.fromOSString(adaptedName);					
+		} else if (!filePath.isAbsolute()) {
+			filePath=rtPath.append(adaptedName);
+		}
+		return filePath;
+	}
 }

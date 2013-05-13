@@ -25,7 +25,7 @@ import ch.hsr.ifs.testframework.event.TestEventHandler;
 public class ConsoleLinkHandler extends TestEventHandler{
 	
 	private TextConsole console; 
-	private IPath rtPath;
+	public IPath rtPath;
 	private ILinkFactory linkFactory;
 
 	public ConsoleLinkHandler(IPath exePath, TextConsole console) {
@@ -66,7 +66,7 @@ public class ConsoleLinkHandler extends TestEventHandler{
 
 	@Override
 	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-		IPath filePath=rtPath.append(fileName);
+		IPath filePath=getWorkspaceFile(fileName, rtPath);
 		try {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
 			int lineNumber = Integer.parseInt(lineNo);

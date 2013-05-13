@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import org.eclipse.core.runtime.Path;
 
+import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
 import ch.hsr.ifs.testframework.test.ConsoleTest;
 import ch.hsr.ifs.testframework.test.mock.FileInputTextConsole;
@@ -26,7 +27,7 @@ import ch.hsr.ifs.testframework.ui.ConsoleLinkHandler;
  */
 public class HyperlinkTest extends ConsoleTest {
 
-	private ConsoleLinkHandler consoleLinkHandler;
+	private TestEventHandler consoleLinkHandler;
 	private int expectedLinkOffset;
 	private int expectedLinkLength;
 

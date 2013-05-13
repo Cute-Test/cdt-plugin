@@ -81,12 +81,14 @@ public class ModellBuilder extends TestEventHandler {
 	@Override
 	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason){
 		if(currentTestCase != null) {
-			IPath filePath=rtPath.append(fileName);
+
+			IPath filePath = getWorkspaceFile(fileName, rtPath);		
+			
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
 			int lineNumber = Integer.parseInt(lineNo);
 			model.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase);
 			endTestCase();
-		}else {
+		} else {
 			unexpectedTestCaseEnd();
 		}
 
