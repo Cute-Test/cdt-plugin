@@ -49,6 +49,7 @@ namespace {
 		IncarnateContextTest(int &c):counter(c){
 			counter=10;
 		}
+		IncarnateContextTest(IncarnateContextTest &other):counter(other.counter){}
 		void operator()(){
 			++counter;
 			ASSERT_EQUAL(11,counter);

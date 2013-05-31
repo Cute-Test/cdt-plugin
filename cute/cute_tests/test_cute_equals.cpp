@@ -38,7 +38,9 @@ void test_equals_OK() {
 	ASSERT_EQUAL('\042',fourtytwoC);
 	ASSERT_EQUAL(042,fourtytwoC);
 	char const * f42s = "42";
-	ASSERT_EQUAL("42",f42s);
+	ASSERT_EQUAL("42",f42s); // requires do_equal overload for char const * if there is no constant folding
+	char * f42snc="42";
+	ASSERT_EQUAL("42",f42snc);
 	ASSERT_EQUAL("42",std::string(f42s));
 	ASSERT_EQUAL(std::string("42"),f42s);
 	ASSERT_EQUAL(std::string("42"),std::string(f42s));
@@ -97,10 +99,10 @@ void test_equql_bool_bool(){
 	ASSERT_EQUAL(true,true);
 }
 void test_equal_bool_int(){
-	ASSERT_EQUAL(true,1);
+	ASSERT_EQUAL(true,1); // TODO: warning on MSVC on unsafe comparison of int and bool
 }
 void test_equal_int_bool(){
-	ASSERT_EQUAL(0,false);
+	ASSERT_EQUAL(0,false); // TODO: warning on MSVC on unsafe comparison of int and bool
 }
 enum dummy { zero,one};
 void test_equal_enum_int(){
@@ -136,44 +138,42 @@ void test_diff_values(){
 }
 void test_backslashQuoteTabNewline(){
 	std::string in("Hallo");
-	ASSERT(in == cute::equals_impl::backslashQuoteTabNewline(in));
+	ASSERT(in == cute::cute_to_string::backslashQuoteTabNewline(in));
 	std::string shouldQuote("Hi\nPeter\\tab\t ");
 	std::string shouldQuoteQuoted("Hi\\nPeter\\\\tab\\t ");
-	ASSERT(shouldQuoteQuoted == cute::equals_impl::backslashQuoteTabNewline(shouldQuote));
+	ASSERT(shouldQuoteQuoted == cute::cute_to_string::backslashQuoteTabNewline(shouldQuote));
 }
-void test_equalsTwoNaNFails()
-{
-    ASSERT_THROWS(ASSERT_EQUAL(std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN()),cute::test_failure);
-}
-
-void test_doubleEqualsWithANaNFails(){
-	ASSERT_THROWS(ASSERT_EQUAL_DELTA(0.0,std::numeric_limits<double>::quiet_NaN(),1.0),cute::test_failure);
-}
-
 
 #include <map>
 void test_output_for_std_map_empty(){
+#ifndef _MSC_VER
 	std::map<std::string,std::string> m;
 	std::ostringstream out;
-	cute::equals_impl::to_stream(out,m);
+	cute::cute_to_string::to_stream(out,m);
 	typedef std::map<std::string,int> aMap;
 	std::string exp="std::map<std::string, std::string, std::less<std::string>, std::allocator<std::pair<std::string const, std::string> > >{}";
 	ASSERT_EQUAL(exp,out.str());
+#endif
 }
-void test_output_for_std_map(){
+
+
+void test_output_for_std_map() {
+#ifndef _MSC_VER
 	std::map<std::string,std::string> m;
 	m["one"]="two";
 	m["three"]="four";
 	m["five"]="six";
 	std::ostringstream out;
-	cute::equals_impl::to_stream(out,m);
+	cute::cute_to_string::to_stream(out,m);
 	std::string exp="std::map<std::string, std::string, std::less<std::string>, std::allocator<std::pair<std::string const, std::string> > >{"
 "\n[five -> six],\n[one -> two],\n[three -> four]}";
-	ASSERT_EQUAL(exp,out.str());
+
+	ASSERT_EQUAL(exp,(out.str()));
+#endif
 }
 void test_output_for_std_pair(){
 	std::ostringstream out;
-	cute::equals_impl::to_stream(out,std::pair<std::string,int>("answer",42));
+	cute::cute_to_string::to_stream(out,std::pair<std::string,int>("answer",42));
 	typedef std::pair<int,char> aPair;
 	ASSERT_EQUAL("[answer -> 42]",out.str());
 
@@ -184,23 +184,23 @@ void test_output_for_vector_pair(){
 	Vec v;
 	v.push_back(std::make_pair(42,4));
 	std::ostringstream os;
-	cute::equals_impl::to_stream(os,v);
-	ASSERT_EQUAL("std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >{\n[42 -> 4]}",os.str());
+	cute::cute_to_string::to_stream(os,v);
+	ASSERT_EQUAL("std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >{\n[42 -> 4]}",(os.str()));
 }
 #include <set>
 void test_output_for_vector_set_int_empty(){
 	std::vector<std::set<int> > v;
 	std::ostringstream os;
-	cute::equals_impl::to_stream(os,v);
+	cute::cute_to_string::to_stream(os,v);
 	std::string exp="std::vector<std::set<int, std::less<int>, std::allocator<int> >, std::allocator<std::set<int, std::less<int>, std::allocator<int> > > >{}";
-	ASSERT_EQUAL(exp,os.str());
+	ASSERT_EQUAL(exp,(os.str()));
 }
 struct No_output_operator{};
 
 void test_non_outputable(){
 	No_output_operator x;
 	std::ostringstream os;
-	cute::equals_impl::to_stream(os,x);
+	cute::cute_to_string::to_stream(os,x);
 	std::string exp="no operator<<(ostream&, ";
 	exp += cute::demangle(typeid(No_output_operator).name());
 	exp+=')';
@@ -214,17 +214,17 @@ void test_non_outputable(){
 void test_has_end_member_for_vector(){
 	std::vector<int> v;
 	v.push_back(42); v.push_back(1);
-	ASSERT(cute::equals_impl::to_string_detail::has_begin_end_const_member<std::vector<int> const >::value);
-	ASSERT(cute::equals_impl::to_string_detail::has_begin_end_const_member<std::vector<int>  >::value);
-	ASSERT(cute::equals_impl::to_string_detail::has_begin_end_const_member<std::vector<std::vector<int> >  >::value);
+	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<int> const >::value);
+	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<int>  >::value);
+	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<std::vector<int> >  >::value);
 }
 void test_has_begin_end_member_for_string(){
-	ASSERT(cute::equals_impl::to_string_detail::has_begin_end_const_member<std::string>::value);
+	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::string>::value);
 }
 
 
 void test_not_has_end_member_for_int(){
-	ASSERT(not cute::equals_impl::to_string_detail::has_begin_end_const_member<int>::value);
+	ASSERT(! cute::cute_to_string::to_string_detail::has_begin_end_const_member<int>::value);
 }
 
 void test_equalsTwoNaNFails()

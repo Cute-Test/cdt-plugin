@@ -34,6 +34,7 @@
 #include "test_cute_test.h"
 #include "test_cute_testmember.h"
 #include "test_cute.h"
+#include "test_cute_stream_out.h"
 
 using namespace cute;
 // some brain dead test cases to find out my bug using function
@@ -71,6 +72,7 @@ struct to_incarnate{
 	to_incarnate(std::ostream &os):out(os){
 		out << "born" << std::endl;
 	}
+	to_incarnate(to_incarnate &other):out(other.out){} // copy ctor would be deleted and is required by std::function ctor
 	~to_incarnate() {
 		out << "killed" << std::endl;
 	}
@@ -90,6 +92,7 @@ void test_shouldFailThrowsFailure(){
 int main(){
 	using namespace std;
 	suite s;
+	s += test_cute_stream_out();
 	s += test_cute_equals();
 	// the following test produces one of the 2 expected errors, since it throws
 	s += CUTE(simpleTestFunction);
@@ -111,7 +114,8 @@ int main(){
 	s += CUTE_INCARNATE_WITH_CONTEXT(to_incarnate,boost_or_tr1::ref(std::cout));
 	s += CUTE_CONTEXT_MEMFUN(boost_or_tr1::ref(std::cerr),to_incarnate,operator());
 
-	runner<counting_listener<ide_listener> > run;
+	//runner<counting_listener<ide_listener> > run;
+	runner<counting_listener<eclipse_listener> > run;
 	run(s);
 
 	cerr << flush;
