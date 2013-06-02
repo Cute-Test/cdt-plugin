@@ -24,6 +24,7 @@
 #include "cute_suite.h"
 #include "cute_listener.h"
 #include <algorithm>
+#include <iterator>
 #include <set>
 namespace cute {
 	namespace runner_aux {

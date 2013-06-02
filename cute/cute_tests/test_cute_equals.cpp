@@ -39,11 +39,11 @@ void test_equals_OK() {
 	ASSERT_EQUAL(042,fourtytwoC);
 	char const * f42s = "42";
 	ASSERT_EQUAL("42",f42s); // requires do_equal overload for char const * if there is no constant folding
-	char * f42snc="42";
-	ASSERT_EQUAL("42",f42snc);
 	ASSERT_EQUAL("42",std::string(f42s));
 	ASSERT_EQUAL(std::string("42"),f42s);
 	ASSERT_EQUAL(std::string("42"),std::string(f42s));
+	char * f42snc="42";
+	ASSERT_EQUAL("42",f42snc);
 }
 
 void test_assertEqualsDelta() {

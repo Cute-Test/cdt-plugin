@@ -20,7 +20,7 @@
 								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.461540552" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat" value="org.eclipse.cdt.msvc.cl.option.debugFormat.complete" valueType="enumerated"/>
 								<inputType id="org.eclipse.cdt.msvc.cl.inputType.c.1639612763" superClass="org.eclipse.cdt.msvc.cl.inputType.c"/>
 							</tool>
-							<tool command="cl /c" id="org.eclipse.cdt.msvc.cl.exe.debug.586097721" name="C++ Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.exe.debug">
+							<tool command="&quot;C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\cl.exe&quot; /c" id="org.eclipse.cdt.msvc.cl.exe.debug.586097721" name="C++ Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.exe.debug">
 								<option id="org.eclipse.cdt.msvc.cl.option.optimization.1017182260" name="Optimization" superClass="org.eclipse.cdt.msvc.cl.option.optimization" value="org.eclipse.cdt.msvc.cl.option.optimization.default" valueType="enumerated"/>
 								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.916841971" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat" value="org.eclipse.cdt.msvc.cl.option.debugFormat.complete" valueType="enumerated"/>
 								<inputType id="org.eclipse.cdt.msvc.cl.inputType.1257201879" superClass="org.eclipse.cdt.msvc.cl.inputType"/>

@@ -20,47 +20,29 @@
 
 #ifndef CUTE_EQUALS_H_
 #define CUTE_EQUALS_H_
-#if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#define USE_STD0X 1
-#endif
-
 #include "cute_base.h"
 #include "cute_determine_version.h"
 #include "cute_demangle.h"
+#include "cute_determine_traits.h"
 #include <cmath>
 #include <limits>
 #include <algorithm>
-#if defined(USE_STD0X)
-#include <type_traits>
-#elif defined(USE_TR1)
-#include <tr1/type_traits>
-#else
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/type_traits/make_signed.hpp>
-#endif
+
 #include "cute_stream_out.h"
 
 namespace cute {
-#if defined(USE_STD0X)
-	namespace impl_place_for_traits = std;
-#elif defined(USE_TR1)
-	namespace impl_place_for_traits = std::tr1;
-#else
-	namespace impl_place_for_traits = boost;
-#endif
 	// you could provide your own overload for diff_values for your app-specific types
 	// be sure to use tabs as given below, then the CUTE eclipse plug-in will parse correctly
 	template <typename ExpectedValue, typename ActualValue>
 	std::string diff_values(ExpectedValue const &expected
 						,ActualValue const & actual){
 		// construct a simple message...to be parsed by IDE support
-		std::ostringstream os;
-		os << " expected:\t" << cute_to_string::backslashQuoteTabNewline(cute_to_string::to_string(expected))
-		   <<"\tbut was:\t"<<cute_to_string::backslashQuoteTabNewline(cute_to_string::to_string(actual))<<"\t";
-		return os.str();
+		std::string res;
+		res += " expected:\t" + cute_to_string::backslashQuoteTabNewline(cute_to_string::to_string(expected))
+		   +"\tbut was:\t"+cute_to_string::backslashQuoteTabNewline(cute_to_string::to_string(actual))+"\t";
+		return res;
 	}
-	namespace cute_to_string {
+	namespace cute_do_equals {
 		// provide some template meta programming tricks to select "correct" comparison for floating point and integer types
 		template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
 		bool do_equals_floating_with_delta(ExpectedValue const &expected
@@ -137,19 +119,18 @@ namespace cute {
 				      , const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
 			return expected==actual;
 		}
-#ifdef _MSVC
 		// overload for char const *, my test case failed because VC++ doesn't use string constant folding like g++/clang
+		// a feature where we should do string comparison
 		inline bool do_equals(char const *const &expected
 				      ,char const *const &actual
 				      , const impl_place_for_traits::false_type&,const impl_place_for_traits::false_type&){
 			return std::string(expected) == actual;
 		}
-#endif
 		template <typename IntegralType>
 		size_t nof_bits(IntegralType const &){
 			return std::numeric_limits<IntegralType>::digits;
 		}
-#if defined(USE_TR1)
+#if defined(USE_STD0X)||defined(USE_TR1)
 		template <typename ExpectedValue, typename ActualValue>
 		bool do_equals_integral(ExpectedValue const &expected
 				,ActualValue const &actual
@@ -196,7 +177,7 @@ namespace cute {
 		bool do_equals(ExpectedValue const &expected
 					,ActualValue const &actual
 					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
-#if defined(USE_TR1)
+#if defined(USE_STD0X) || defined(USE_TR1)
 			return do_equals_integral(expected,actual,
 					impl_place_for_traits::is_signed<ExpectedValue>()
 					,impl_place_for_traits::is_signed<ActualValue>());
@@ -222,7 +203,7 @@ namespace cute {
 		// unfortunately there is no is_integral_but_not_bool_or_enum
 		typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
 		typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-		if (cute_to_string::do_equals(expected,actual,exp_integral(),act_integral()))
+		if (cute_do_equals::do_equals(expected,actual,exp_integral(),act_integral()))
 			return;
 		throw test_failure(cute_to_string::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
 	}
@@ -234,7 +215,7 @@ namespace cute {
 				,char const *msg
 				,char const *file
 				,int line) {
-		if (cute_to_string::do_equals_floating_with_delta(expected,actual,delta)) return;
+		if (cute_do_equals::do_equals_floating_with_delta(expected,actual,delta)) return;
 		throw test_failure(cute_to_string::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
 	}
 

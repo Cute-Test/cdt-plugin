@@ -1,15 +1,29 @@
+/*********************************************************************************
+ * This file is part of CUTE.
+ *
+ * CUTE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CUTE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2007-2013 Peter Sommerlad
+ *
+ *********************************************************************************/
+
 #ifndef CUTE_STREAM_OUT_H_
 #define CUTE_STREAM_OUT_H_
 #include <string>
-
-#ifndef DONT_USE_IOSTREAM
-#include <ostream>
-#include <sstream>
+#include <algorithm>
 namespace cute {
 namespace cute_to_string {
-		template <typename T>
-		std::ostream &to_stream(std::ostream &os,T const &t); // recursion needs forward
-
 		static inline std::string backslashQuoteTabNewline(std::string const &input){
 			std::string result;
 			result.reserve(input.size());
@@ -23,8 +37,24 @@ namespace cute_to_string {
 				}
 			}
 			return result;
-
 		}
+		// common overloads of interface that work without an ostream
+		static inline std::string to_string(char const *const &s){
+			return s;
+		}
+		static inline std::string to_string(std::string const &s){
+			return s;
+		}
+
+}
+}
+#ifndef DONT_USE_IOSTREAM
+#include <ostream>
+#include <sstream>
+namespace cute {
+namespace cute_to_string {
+		template <typename T>
+		std::ostream &to_stream(std::ostream &os,T const &t); // recursion needs forward
 
 		// the following code was stolen and adapted from Boost Exception library.
 		// it avoids compile errors, if a type used with ASSERT_EQUALS doesn't provide an output shift operator
@@ -44,6 +74,7 @@ namespace cute_to_string {
 				static T const * g();
 				enum e { value = (sizeof(char) != sizeof(f()<<g())) }; // assumes sizeof(char)!=sizeof(ostream&)
 			};
+#ifndef _MSC_VER
 			template <class CONT>
 			struct has_begin_end_const_member {
 				template <typename T, T, T> struct type_check;
@@ -53,6 +84,35 @@ namespace cute_to_string {
 				enum e { value = (sizeof(char) != sizeof(test<CONT>(0)))
 				};
 			};
+#else
+		namespace has_begin_const_member_detail {
+		// parts of this code provided by Mikael Kilpeläinen
+		template<int N> struct Int { char x[N]; typedef char type; };
+		template<> struct Int<0> { };
+		template<> struct Int<1> { };
+		typedef char subst_failure;
+		template<typename C1 >
+		Int<2> ty(int, typename C1::const_iterator (C1::*)() const,typename C1::const_iterator (C1::*)() const);
+		// check if the following is really needed:
+//			template<typename C1 >
+//			Int<2> ty(long, typename C1::iterator (C1::*p)());
+		template<typename C1>
+		char ty( int, ... );
+		template<typename T, int S >
+		struct helper {
+		   enum { value = sizeof( ty<T>( 0, &T::begin, &T::end ) ) };
+		};
+		template<typename C>
+		Int<2> f( typename Int<helper<C, sizeof( ty<C>( 0, &C::begin, &C::end ) )>::value>::type*);
+		template<typename C>
+		char f(...);
+		}
+		template <class CONT>
+		struct has_begin_end_const_member
+		{
+		   enum e { value = (sizeof(has_begin_const_member_detail::subst_failure) != sizeof(has_begin_const_member_detail::f<CONT>(0))) };
+		};
+#endif
 		}
 		template <class T, class CharT=char, class Traits=std::char_traits<CharT> >
 		struct is_output_streamable {
@@ -154,19 +214,85 @@ namespace cute_to_string {
 	}
 }
 #else
+#include "cute_determine_traits.h"
+#include <limits>
+// traits
 namespace cute{
 namespace cute_to_string {
+		template <typename T>
+		void adjust_long(T const &,std::string &to_adjust){ // assumes T is an integral type
+			if (sizeof(T) <= sizeof(int)) return; // don't mark int sized integrals with L
+			if (sizeof(T)>=sizeof(long)) to_adjust+='L';
+			if (sizeof(T)> sizeof(long)) to_adjust+='L'; // if there is support for (unsigned) long long
+		}
+		template <typename T>
+		std::string to_string_embedded_int_signed(T const &t, impl_place_for_traits::true_type ){
+			std::string convert; // t is an integral value
+			T x=t;
+			bool negative=t<0;
+			bool minint=false;
+			if (x == std::numeric_limits<T>::min()){ // can not easily convert it, assuming 2s complement
+				minint=true;
+				x +=1;
+			}
+			if (x < 0) x = -x;
+			if (x == 0) convert += '0';
+			while (x > 0) {
+				convert += "0123456789"[x%10];
+				x /= 10;
+			}
+			if (minint) ++ convert[0]; // adjust last digit
+			if (negative) convert += '-';
+			reverse(convert.begin(),convert.end());
+			cute::cute_to_string::adjust_long(t,convert);
+			return convert;
+		}
+		template <typename T>
+		std::string hexit(T const &t){ // must be an unsigned type
+			std::string hexed;
+			if (t == 0) hexed+='0';
+			for (T x=t;x>0;x /= 16){
+				hexed += "0123456789ABCDEF"[x%16];
+			}
+			reverse(hexed.begin(),hexed.end());
+			return hexed;
+		}
+		template <typename T>
+		std::string to_string_embedded_int_signed(T const &t, impl_place_for_traits::false_type ){
+			// manual hex conversion to avoid ostream dependency for unsigned values
+			std::string hexed="0x"+cute::cute_to_string::hexit(t);
+			cute::cute_to_string::adjust_long(t,hexed);
+			return hexed;
+		}
+		template <typename T>
+		std::string to_string_embedded_int(T const &t, impl_place_for_traits::true_type ){
+			return to_string_embedded_int_signed(t,impl_place_for_traits::is_signed<T>());
+		}
+		template <typename T>
+		std::string to_string_embedded_int(T const &t, impl_place_for_traits::false_type ){
+			return "no to_string";
+		}
+		// convenience for pointers.... useful?
+		template <typename T>
+		std::string to_string(T * const&t) {
+			std::string result;
+			if (sizeof(T *) <= sizeof(unsigned long))
+				result = cute::cute_to_string::hexit(reinterpret_cast<unsigned long>(t));
+			else
+#if defined(USE_STD0X) /* should allow for all compilers supporting ULL*/
+			result = "p"+cute::cute_to_string::hexit(reinterpret_cast<unsigned long long>(t));
+#else
+			return "no to_string";
+#endif
+			result.insert(0u,sizeof(T*)*2-result.size(),'0');
+			result.insert(0,1,'p');
+			return result;
+		}
+
 		// this is the interface:
 		template <typename T>
 		std::string to_string(T const &t) {
-			return "no ostream output";
-		}
-		// can provide overloads for simple and common types on embedded systems
-		std::string to_string(char const *const &s){
-			return s;
-		}
-		std::string to_string(std::string const &s){
-			return s;
+			return to_string_embedded_int(t, impl_place_for_traits::is_integral<T>());
 		}
 	}
 }

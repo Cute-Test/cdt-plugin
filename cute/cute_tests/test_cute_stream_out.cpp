@@ -1,5 +1,5 @@
-#include "test_cute_stream_out.h"
 #include "cute_stream_out.h"
+#include "test_cute_stream_out.h"
 #include "cute.h"
 #include "cute_suite.h"
 #include <set>
@@ -57,23 +57,6 @@ void test_map_to_string(){
 }
 
 
-#undef CUTE_STREAM_OUT_H_
-#define DONT_USE_IOSTREAM 1
-#define cute_to_string cute_to_string_embedded
-#include "cute_stream_out.h"
-#undef cute_to_string
-#undef DONT_USE_IOSTREAM
-void test_embedded_to_string(){
-	ASSERT_EQUAL("no ostream output",cute::cute_to_string_embedded::to_string(42));
-}
-
-void test_embedded_string_to_string(){
-	ASSERT_EQUAL("Hello World\n",cute::cute_to_string_embedded::to_string(std::string("Hello World\n")));
-}
-
-void test_embedded_charptr_to_string(){
-	ASSERT_EQUAL("Hello World\n",cute::cute_to_string_embedded::to_string("Hello World\n"));
-}
 
 
 
@@ -90,9 +73,6 @@ cute::suite test_cute_stream_out(){
 	s.push_back(CUTE(test_vector_pair_to_string));
 	s.push_back(CUTE(test_set_to_string));
 	s.push_back(CUTE(test_map_to_string));
-	s.push_back(CUTE(test_embedded_to_string));
-	s.push_back(CUTE(test_embedded_string_to_string));
-	s.push_back(CUTE(test_embedded_charptr_to_string));
 	return s;
 
 }

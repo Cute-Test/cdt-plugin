@@ -24,6 +24,7 @@
 				};
 			};
 #else
+#if 0
 			// code provided by Jonathan Wakely, doesn't work with visual C++ 2012
 			template <class CONT>
 			struct has_begin_end_const_member
@@ -47,7 +48,42 @@
 
 			   enum e { value = (sizeof(subst_failure) != sizeof(test<CONT>(0))) };
 			};
+
+#else
+			template<int N> struct Int { char x[N]; typedef char type; };
+			template<> struct Int<0> { };
+			template<> struct Int<1> { };
+
+			typedef char subst_failure;
+
+
+			template<typename C1 >
+			Int<2> ty(int, typename C1::const_iterator (C1::*)() const,typename C1::const_iterator (C1::*)() const);
+//			template<typename C1 >
+//			Int<2> ty(long, typename C1::iterator (C1::*p)());
+			template<typename C1>
+			char ty( int, ... );
+
+
+			template<typename T, int S >
+			struct helper {
+			   enum { value = sizeof( ty<T>( 0, &T::begin, &T::end ) ) };
+			};
+
+			template<typename C>
+			Int<2> f( typename Int<helper<C, sizeof( ty<C>( 0, &C::begin, &C::end ) )>::value>::type*);
+			template<typename C>
+			char f(...);
+
+			template <class CONT>
+			struct has_begin_end_const_member
+			{
+			   enum e { value = (sizeof(subst_failure) != sizeof(f<CONT>(0))) };
+			};
+
 #endif
+#endif
+
 struct cont{
 				typedef long const_iterator;
 				const_iterator begin()const {
@@ -58,6 +94,10 @@ struct cont{
 				}
 			};
 struct subcont: cont{};
+struct onlybegin {
+	typedef short const_iterator;
+	const_iterator begin() const { return 2;}
+};
 template<class T> struct has_const_begin
 {
     typedef char (&Yes)[2];
@@ -78,17 +118,18 @@ using namespace std;
 int main() {
 	cout << "has const begin subcont: "<<has_const_begin<subcont>::value<<endl;
 	cout << "has const begin cont: "<<has_const_begin<cont>::value<<endl;
+	cout << "has const begin onlybegin: "<<has_const_begin<onlybegin>::value<<endl;
 	cout << "has const begin map: "<<has_const_begin<map<string,string> >::value<<endl;
 	cout << "has const begin vector: "<<has_const_begin<vector<string> >::value<<endl;
 
 
-	cout << sizeof(has_begin_end_const_member<subcont>::test<subcont>(nullptr))<<endl;
-	cout << sizeof(has_begin_end_const_member<cont>::test<cont>(nullptr))<<endl;
-	cout << "cont"<<has_begin_end_const_member<cont>::value << endl; // prints !!!Hello World!!!
-	cout << "subcont"<<has_begin_end_const_member<subcont>::value << endl; // prints !!!Hello World!!!
-	cout << "map"<<has_begin_end_const_member<map<string,string>>::value << endl; // prints !!!Hello World!!!
-	cout << "vector"<<has_begin_end_const_member<vector<int>>::value << endl; // prints !!!Hello World!!!
-	cout << "set"<<has_begin_end_const_member<set<int>>::value << endl; // prints !!!Hello World!!!
-	cout << "list"<<has_begin_end_const_member<list<int>>::value << endl; // prints !!!Hello World!!!
+	cout << "cont"<<has_begin_end_const_member<cont>::value << endl;
+	cout << "subcont"<<has_begin_end_const_member<subcont>::value << endl;
+	cout << "onlybegin"<<has_begin_end_const_member<onlybegin>::value << endl;
+	cout << "map"<<has_begin_end_const_member<map<string,string>>::value << endl;
+	cout << "vector"<<has_begin_end_const_member<vector<int>>::value << endl;
+	cout << "set"<<has_begin_end_const_member<set<int>>::value << endl;
+	cout << "list"<<has_begin_end_const_member<list<int>>::value << endl;
+	cout << _MSC_VER +0 << endl;
 	return 0;
 }

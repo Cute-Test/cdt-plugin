@@ -35,6 +35,7 @@
 #include "test_cute_testmember.h"
 #include "test_cute.h"
 #include "test_cute_stream_out.h"
+#include "test_cute_to_string_embedded.h"
 
 using namespace cute;
 // some brain dead test cases to find out my bug using function
@@ -92,6 +93,7 @@ void test_shouldFailThrowsFailure(){
 int main(){
 	using namespace std;
 	suite s;
+	s += make_suite_test_cute_to_string_embedded();
 	s += test_cute_stream_out();
 	s += test_cute_equals();
 	// the following test produces one of the 2 expected errors, since it throws
@@ -117,9 +119,9 @@ int main(){
 	//runner<counting_listener<ide_listener> > run;
 	runner<counting_listener<eclipse_listener> > run;
 	run(s);
-
+	cout << flush;
 	cerr << flush;
-	cerr << run.numberOfTests << " Tests - expect 57" << endl;
+	cerr << run.numberOfTests << " Tests - expect 75" << endl;
 	cerr << run.failedTests << " failed - expect 0 failures" << endl;
 	cerr << run.errors << " errors - expect 2 errors" << endl;
 	return run.failedTests;
