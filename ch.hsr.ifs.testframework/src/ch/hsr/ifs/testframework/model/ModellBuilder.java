@@ -8,9 +8,18 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.eclipse.cdt.core.resources.EFSFileStorage;
+import org.eclipse.cdt.utils.EFSExtensionManager;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.jface.text.IRegion;
 
@@ -85,6 +94,16 @@ public class ModellBuilder extends TestEventHandler {
 			IPath filePath = getWorkspaceFile(fileName, rtPath);		
 			
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
+			if(file == null){
+				try {
+					IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new URI("file:" + filePath.toPortableString()), IResource.FILE);
+					if(files.length > 0)
+					{
+						file = files[0];
+					}
+				} catch (URISyntaxException e) {
+				}
+			}
 			int lineNumber = Integer.parseInt(lineNo);
 			model.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase);
 			endTestCase();
