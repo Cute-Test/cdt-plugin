@@ -83,6 +83,9 @@
 							</tool>
 							<tool command="&quot;C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link&quot;" id="org.eclipse.cdt.msvc.link.exe.debug.1225030140" name="Linker (link)" superClass="org.eclipse.cdt.msvc.link.exe.debug">
 								<option id="org.eclipse.cdt.msvc.link.option.debug.1912834015" name="Generate Debug Info (/debug)" superClass="org.eclipse.cdt.msvc.link.option.debug" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.msvc.link.option.libpath.932792805" superClass="org.eclipse.cdt.msvc.link.option.libpath" valueType="stringList">
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\lib&quot;"/>
+								</option>
 								<inputType id="org.eclipse.cdt.msvc.link.inputType.1690489577" superClass="org.eclipse.cdt.msvc.link.inputType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.msvc.lib.839897882" name="Library Manager (lib)" superClass="org.eclipse.cdt.msvc.lib"/>

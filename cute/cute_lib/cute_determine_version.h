@@ -30,7 +30,7 @@
 #define USE_STD0X 1
 #endif
 #endif
-#if _cplusplus > 201100 && ! defined (USE_STD0X)
+#if __cplusplus >= 201103L  && ! defined (USE_STD0X)
 #define USE_STD0X 1
 #endif
 #endif /*CUTE_DETERMINE_VERSION_H_*/

@@ -20,6 +20,7 @@
 
 #ifndef CUTE_EQUALS_H_
 #define CUTE_EQUALS_H_
+#include "cute_to_string.h"
 #include "cute_base.h"
 #include "cute_determine_version.h"
 #include "cute_demangle.h"
@@ -28,7 +29,6 @@
 #include <limits>
 #include <algorithm>
 
-#include "cute_stream_out.h"
 
 namespace cute {
 	// you could provide your own overload for diff_values for your app-specific types
@@ -104,13 +104,13 @@ namespace cute {
 		bool do_equals(bool const &expected
 					,IntType const &actual
 					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
-			return expected==actual;
+			return expected== !(!actual); // warning from VS
 		}
 		template <typename IntType>
 		bool do_equals(IntType const &expected
 					,bool const &actual
 					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
-			return expected==actual;
+			return !(!expected)==actual; // warning from VS
 		}
 		// do not forget the inline on a non-template overload!
 		// this overload is needed to actually avoid ambiguity for comparing bool==bool as a best match

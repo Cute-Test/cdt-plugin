@@ -22,6 +22,7 @@
 #include "cute_runner.h"
 #include "cute_counting_listener.h"
 #include "ide_listener.h"
+#include "xml_listener.h"
 #include <iostream>
 
 #include "test_cute_equals.h"
@@ -34,8 +35,11 @@
 #include "test_cute_test.h"
 #include "test_cute_testmember.h"
 #include "test_cute.h"
-#include "test_cute_stream_out.h"
+#include "test_cute_to_string.h"
 #include "test_cute_to_string_embedded.h"
+#include "test_xml_listener.h"
+#include "test_xml_file_opener.h"
+#include "test_cute_filter_runner.h"
 
 using namespace cute;
 // some brain dead test cases to find out my bug using function
@@ -90,11 +94,14 @@ void test_SimpleTestFunctionThrows(){
 void test_shouldFailThrowsFailure(){
 	ASSERT_THROWS(shouldFailButNotThrowStdException(),cute::test_failure);
 }
-int main(){
+int main(int argc, char const *argv[]){
 	using namespace std;
 	suite s;
+	s += make_suite_test_cute_filter_runner();
+	s += make_suite_test_xml_listener();
+	s += make_suite_test_xml_file_opener();
 	s += make_suite_test_cute_to_string_embedded();
-	s += test_cute_stream_out();
+	s += test_cute_to_string();
 	s += test_cute_equals();
 	// the following test produces one of the 2 expected errors, since it throws
 	s += CUTE(simpleTestFunction);
@@ -115,14 +122,13 @@ int main(){
 	s += CUTE_INCARNATE(to_incarnate_without);
 	s += CUTE_INCARNATE_WITH_CONTEXT(to_incarnate,boost_or_tr1::ref(std::cout));
 	s += CUTE_CONTEXT_MEMFUN(boost_or_tr1::ref(std::cerr),to_incarnate,operator());
-
-	//runner<counting_listener<ide_listener> > run;
-	runner<counting_listener<eclipse_listener> > run;
-	run(s);
+	cute::xml_file_opener xmlfile(argc,argv);
+	cute::xml_listener<cute::counting_listener<cute::ide_listener<> > > l(xmlfile.out);
+	cute::makeRunner(l,argc,argv)(s,"all_cute_tests");
 	cout << flush;
 	cerr << flush;
-	cerr << run.numberOfTests << " Tests - expect 75" << endl;
-	cerr << run.failedTests << " failed - expect 0 failures" << endl;
-	cerr << run.errors << " errors - expect 2 errors" << endl;
-	return run.failedTests;
+	cerr << l.numberOfTests << " Tests - expect " << s.size() << endl;
+	cerr << l.failedTests << " failed - expect 0 failures" << endl;
+	cerr << l.errors << " errors - expect 2 errors" << endl;
+	return l.failedTests;
 }

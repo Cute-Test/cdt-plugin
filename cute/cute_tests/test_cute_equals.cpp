@@ -42,7 +42,7 @@ void test_equals_OK() {
 	ASSERT_EQUAL("42",std::string(f42s));
 	ASSERT_EQUAL(std::string("42"),f42s);
 	ASSERT_EQUAL(std::string("42"),std::string(f42s));
-	char * f42snc="42";
+	char  f42snc[]="42";
 	ASSERT_EQUAL("42",f42snc);
 }
 
@@ -150,7 +150,6 @@ void test_output_for_std_map_empty(){
 	std::map<std::string,std::string> m;
 	std::ostringstream out;
 	cute::cute_to_string::to_stream(out,m);
-	typedef std::map<std::string,int> aMap;
 	std::string exp="std::map<std::string, std::string, std::less<std::string>, std::allocator<std::pair<std::string const, std::string> > >{}";
 	ASSERT_EQUAL(exp,out.str());
 #endif
@@ -174,7 +173,6 @@ void test_output_for_std_map() {
 void test_output_for_std_pair(){
 	std::ostringstream out;
 	cute::cute_to_string::to_stream(out,std::pair<std::string,int>("answer",42));
-	typedef std::pair<int,char> aPair;
 	ASSERT_EQUAL("[answer -> 42]",out.str());
 
 }
@@ -214,17 +212,32 @@ void test_non_outputable(){
 void test_has_end_member_for_vector(){
 	std::vector<int> v;
 	v.push_back(42); v.push_back(1);
+#ifdef USE_STD0X
+	static_assert(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<int> const >::value,"");
+	static_assert(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<int>  >::value,"");
+	static_assert(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<std::vector<int> >  >::value,"");
+#else
 	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<int> const >::value);
 	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<int>  >::value);
 	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<std::vector<int> >  >::value);
+
+	#endif
 }
 void test_has_begin_end_member_for_string(){
+#ifdef USE_STD0X
+	static_assert(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::string>::value,"");
+#else
 	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::string>::value);
+#endif
 }
 
 
 void test_not_has_end_member_for_int(){
+#ifdef USE_STD0X
+	static_assert(! cute::cute_to_string::to_string_detail::has_begin_end_const_member<int>::value,"");
+#else
 	ASSERT(! cute::cute_to_string::to_string_detail::has_begin_end_const_member<int>::value);
+#endif
 }
 
 void test_equalsTwoNaNFails()

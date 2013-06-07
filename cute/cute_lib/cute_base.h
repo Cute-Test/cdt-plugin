@@ -21,6 +21,7 @@
 #ifndef CUTE_BASE_H_
 #define CUTE_BASE_H_
 #include <string>
+#include "cute_to_string.h"
 namespace cute{
 	struct test_failure {
 		std::string reason;
@@ -33,7 +34,7 @@ namespace cute{
 		char const * what() const { return reason.c_str(); }
 	};
 }
-#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure(cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
 #define FAIL() ASSERTM("FAIL()",false)
 #define FAILM(msg) ASSERTM(msg,false)

@@ -63,7 +63,8 @@ void test_error_string(){ throw std::string("error");}
 
 }
 void test_cute_runner(){
-	cute::runner<mock_listener> run;
+	mock_listener l;
+	cute::runner<mock_listener> run(l);
 	suite s;
 	s += CUTE(test_success);
 	ASSERT(run(s,"single success test suite"));
@@ -73,21 +74,21 @@ void test_cute_runner(){
 	s += CUTE(test_error_exception);
 	bool result=run(s,"test_cute_runner_suite");
 	ASSERT(!result);
-	ASSERT_EQUAL(2,run.begincount);
-	ASSERT_EQUAL(2,run.endcount);
-	ASSERT_EQUAL(2,run.successcount);
-	ASSERT_EQUAL(1,run.failurecount);
-	ASSERT_EQUAL(3,run.errorcount);
-	ASSERT_EQUAL(2u,run.infomessages.size());
-	ASSERT_EQUAL("single success test suite",run.infomessages[0]);
-	ASSERT_EQUAL("test_cute_runner_suite",run.infomessages[1]);
-	ASSERT_EQUAL(3u,run.errormessages.size());
-	ASSERT_EQUAL("error",run.errormessages[0]);
-	ASSERT_EQUAL("error",run.errormessages[1]);
-	std::string errormsg2=run.errormessages[2];
+	ASSERT_EQUAL(2,l.begincount);
+	ASSERT_EQUAL(2,l.endcount);
+	ASSERT_EQUAL(2,l.successcount);
+	ASSERT_EQUAL(1,l.failurecount);
+	ASSERT_EQUAL(3,l.errorcount);
+	ASSERT_EQUAL(2u,l.infomessages.size());
+	ASSERT_EQUAL("single success test suite",l.infomessages[0]);
+	ASSERT_EQUAL("test_cute_runner_suite",l.infomessages[1]);
+	ASSERT_EQUAL(3u,l.errormessages.size());
+	ASSERT_EQUAL("error",l.errormessages[0]);
+	ASSERT_EQUAL("error",l.errormessages[1]);
+	std::string errormsg2=l.errormessages[2];
 	std::string errmsgexpected="exception";
 	ASSERT_EQUAL(errmsgexpected,errormsg2.substr(errormsg2.size()-errmsgexpected.size()));
-	ASSERT_EQUAL(2u,run.successmessages.size());
-	ASSERT_EQUAL("OK",run.successmessages[0]);
+	ASSERT_EQUAL(2u,l.successmessages.size());
+	ASSERT_EQUAL("OK",l.successmessages[0]);
 
 }

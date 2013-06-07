@@ -23,7 +23,9 @@
 #include "cute_test.h"
 #include "cute_suite.h"
 #include "cute_listener.h"
+#include "cute_determine_traits.h"
 #include <algorithm>
+#include <functional>
 #include <iterator>
 #include <set>
 namespace cute {
@@ -53,21 +55,31 @@ namespace cute {
 	private:
 		std::string const prefix;
 	};
-
-	struct ArgvTestFilter:std::unary_function<const test& ,bool>
+	namespace detail_find_if_not{
+#ifndef USE_STD0X
+	template <class IN_Iter, class Predicate>
+	inline
+	IN_Iter
+	find_if_not(IN_Iter beg, IN_Iter end, Predicate pred)
+	{
+	    for (; beg != end; ++beg)
+	        if (! pred(*beg))
+	            break;
+	    return beg;
+	}
+#else
+	using std::find_if_not;
+#endif
+	}
+	struct ArgvTestFilter//:std::unary_function<const test ,bool>
 	{
 	    ArgvTestFilter(int argc, const char *const *const argv)
 	    :argc(argc), argv(argv)
 	    {
 	        if(needsFiltering()){
 	        	args.reserve(argc-1);
-	            std::copy(argv + 1, argv + argc,back_inserter(args));
+	            std::remove_copy_if(argv + 1, argv + argc,back_inserter(args),std::logical_not<char const *>());
 	        }
-	    }
-
-	    bool operator ()(const test & t) const
-	    {
-	        return !shouldRun(t.name());
 	    }
 
 	    bool shouldRun(const std::string & name) const
@@ -90,7 +102,7 @@ namespace cute {
 
 	    bool needsFiltering() const
 	    {
-	        return argc > 1 && argv;
+	        return argc > 1 && argv ;
 	    }
 
 	private:
@@ -101,26 +113,24 @@ namespace cute {
 	};
 	} // namespace runner_aux
 	template <typename Listener=null_listener>
-	struct runner : Listener{
-
+	struct runner{
+		Listener &listener;
 		runner_aux::ArgvTestFilter filter;
-		runner():Listener(),filter(0,0){}
-		runner(Listener &s, int argc = 0, const char *const *argv = 0):Listener(s),filter(argc,argv){}
+		runner(Listener &l, int argc = 0, const char *const *argv = 0):listener(l),filter(argc,argv){}
 		bool operator()(const test & t)
 	    {
 	        return runit(t);
 	    }
 
-	    bool operator ()(suite s, const char *info = "") // copy intentional for filtering support
-	    { // copy elision should happen with good compiler, because this will be inlined
+	    bool operator ()(suite const &s, const char *info = "") // copy intentional for filtering support
+	    {
 	        bool result = true;
 	        if(filter.shouldRunSuite(info)){ // side effect on filter
-	            filterSuite(s); // to make size correct in output, otherwise superfluous, but do not want to change Listener API
-	            Listener::begin(s, info);
+	            listener.begin(s, info);
 	            for(suite::const_iterator it = s.begin();it != s.end();++it){
-	                result = this->runit(*it) && result;
+	                if (filter.shouldRun(it->name())) result = this->runit(*it) && result;
 	            }
-	            Listener::end(s, info);
+	            listener.end(s, info);
 	        }
 
 	        return result;
@@ -128,7 +138,7 @@ namespace cute {
 	private:
 	    void filterSuite(suite & s)
 	    {
-	    	if (filter.needsFiltering() && s.end()!=find_if(s.begin(),s.end(),std::not1(filter))){
+	    	if (filter.needsFiltering() && s.end()!=runner_aux::detail_find_if_not::find_if_not(s.begin(),s.end(),filter)){
 	    		s.erase(std::remove_if(s.begin(),s.end(),filter),s.end());
 	    	}
 	    }
@@ -136,20 +146,20 @@ namespace cute {
 	    bool runit(const test & t)
 	    {
 	        try {
-	            Listener::start(t);
+	            listener.start(t);
 	            t();
-	            Listener::success(t, "OK");
+	            listener.success(t, "OK");
 	            return true;
 	        } catch(const cute::test_failure & e){
-	            Listener::failure(t, e);
+	            listener.failure(t, e);
 	        } catch(const std::exception & exc){
-	            Listener::error(t, demangle(exc.what()).c_str());
+	            listener.error(t, demangle(exc.what()).c_str());
 	        } catch(std::string & s){
-	            Listener::error(t, s.c_str());
+	            listener.error(t, s.c_str());
 	        } catch(const char *&cs) {
-				Listener::error(t,cs);
+				listener.error(t,cs);
 			} catch(...) {
-				Listener::error(t,"unknown exception thrown");
+				listener.error(t,"unknown exception thrown");
 			}
 			return false;
 		}

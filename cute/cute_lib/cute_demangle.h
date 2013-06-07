@@ -84,12 +84,26 @@ inline void removeMSKeyword(std::string &name,std::string const &kw){
 			name.erase(pos,kw.size());
 
 }
+inline void patchresultforstring(std::string& result) {
+	static const std::string stringid=(typeid(std::string).name());
+	std::string::size_type pos=std::string::npos;
+	while(std::string::npos != (pos=result.find(stringid))){
+		if (!result.compare(pos+stringid.size(),2," >",2)) result.erase(pos+stringid.size(),1); // makes templates look nice
+		result.replace(pos,stringid.size(),"std::string");
+	}
+}
 
 inline void patchMSMangling(std::string &name){
+	patchresultforstring(name);
 	removeMSKeyword(name,"class ");
 	removeMSKeyword(name,"struct ");
 	for (std::string::iterator i=name.begin(); i != name.end(); ++i){
 		if (*i==','){  i = name.insert(i+1,' ');}
+	}
+	std::string::size_type pos=0;
+	while(std::string::npos !=(pos=name.find(" ,",pos))){
+		name.erase(pos,1);
+		++pos;
 	}
 }
 }

@@ -61,8 +61,8 @@ void test_assert_throws_is_safe_against_throwing_test_failure(){
 	try {
 		ASSERT_THROWS(ASSERT(true),cute::test_failure);
 		throw true;
-	} catch (cute::test_failure&) {
-	} catch (bool &b){
+	} catch (cute::test_failure const&) {
+	} catch (bool const &){
 		FAILM("ASSERT_THROWS falsely catched test_failure");
 	}
 

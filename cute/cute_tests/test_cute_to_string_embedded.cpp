@@ -1,15 +1,14 @@
 #include "cute.h"
 #include "test_cute_to_string_embedded.h"
 
-#undef CUTE_STREAM_OUT_H_
+#undef CUTE_TO_STRING_H_
 #define DONT_USE_IOSTREAM 1
 #define cute_to_string cute_to_string_embedded
-#include "cute_stream_out.h"
+#include "cute_to_string.h"
 #undef cute_to_string
 #undef DONT_USE_IOSTREAM // also works without...
 
 using cute::cute_to_string_embedded::to_string;
-
 void test_embedded_to_string(){
 	ASSERT_EQUAL("no to_string",to_string(42.0));
 }
