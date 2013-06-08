@@ -146,18 +146,15 @@ void test_backslashQuoteTabNewline(){
 
 #include <map>
 void test_output_for_std_map_empty(){
-#ifndef _MSC_VER
 	std::map<std::string,std::string> m;
 	std::ostringstream out;
 	cute::cute_to_string::to_stream(out,m);
 	std::string exp="std::map<std::string, std::string, std::less<std::string>, std::allocator<std::pair<std::string const, std::string> > >{}";
 	ASSERT_EQUAL(exp,out.str());
-#endif
 }
 
 
 void test_output_for_std_map() {
-#ifndef _MSC_VER
 	std::map<std::string,std::string> m;
 	m["one"]="two";
 	m["three"]="four";
@@ -168,7 +165,6 @@ void test_output_for_std_map() {
 "\n[five -> six],\n[one -> two],\n[three -> four]}";
 
 	ASSERT_EQUAL(exp,(out.str()));
-#endif
 }
 void test_output_for_std_pair(){
 	std::ostringstream out;

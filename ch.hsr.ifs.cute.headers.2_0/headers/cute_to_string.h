@@ -45,8 +45,7 @@ namespace cute_to_string {
 		static inline std::string to_string(std::string const &s){
 			return s;
 		}
-
-}
+	}
 }
 #ifndef DONT_USE_IOSTREAM
 #include <ostream>
@@ -296,6 +295,4 @@ namespace cute_to_string {
 	}
 }
 #endif
-
-
 #endif /* CUTE_TO_STRING_H_ */

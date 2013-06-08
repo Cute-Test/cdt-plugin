@@ -50,7 +50,7 @@ namespace cute {
 			Listener::success(t,msg);
 		}
 		void failure(test const &t,test_failure const &e){
-			out <<  "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << maskBlanks(e.reason) << '\n';
+			out <<  "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n';
 			Listener::failure(t,e);
 #ifdef _MSV_VER
 			std::ostringstream os;

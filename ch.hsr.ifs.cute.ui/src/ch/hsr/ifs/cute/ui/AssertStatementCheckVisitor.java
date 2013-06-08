@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2007-2013, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -23,7 +23,10 @@ class AssertStatementCheckVisitor extends ASTVisitor {
 
 	@SuppressWarnings("nls")
 	private static Set<String> asserts = new HashSet<String>(Arrays.asList("ASSERT", "ASSERTM", "FAIL", "FAILM", "ASSERT_EQUAL", "ASSERT_EQUALM", "ASSERT_EQUAL_DELTAM",
-			"ASSERT_EQUAL_DELTA", "ASSERT_THROWS", "ASSERT_THROWSM"));
+			"ASSERT_EQUAL_DELTA", "ASSERT_THROWS", "ASSERT_THROWSM",
+			"ASSERT_LESS","ASSERT_LESSM","ASSERT_LESS_EQUAL","ASSERT_LESS_EQUALM",
+			"ASSERT_GREATER","ASSERT_GREATERM","ASSERT_GREATER_EQUAL","ASSERT_GREATER_EQUALM",
+			"ASSERT_NOT_EQUAL_TO","ASSERT_NOT_EQUAL_TOM"));
 
 	boolean hasAssertStmt = false;
 

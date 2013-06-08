@@ -40,6 +40,7 @@
 #include "test_xml_listener.h"
 #include "test_xml_file_opener.h"
 #include "test_cute_filter_runner.h"
+#include "test_cute_relops.h"
 
 using namespace cute;
 // some brain dead test cases to find out my bug using function
@@ -97,6 +98,7 @@ void test_shouldFailThrowsFailure(){
 int main(int argc, char const *argv[]){
 	using namespace std;
 	suite s;
+	s += make_suite_test_cute_relops();
 	s += make_suite_test_cute_filter_runner();
 	s += make_suite_test_xml_listener();
 	s += make_suite_test_xml_file_opener();

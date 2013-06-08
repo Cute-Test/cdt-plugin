@@ -21,6 +21,7 @@
 #ifndef CUTE_EQUALS_H_
 #define CUTE_EQUALS_H_
 #include "cute_to_string.h"
+#include "cute_diff_values.h"
 #include "cute_base.h"
 #include "cute_determine_version.h"
 #include "cute_demangle.h"
@@ -31,17 +32,6 @@
 
 
 namespace cute {
-	// you could provide your own overload for diff_values for your app-specific types
-	// be sure to use tabs as given below, then the CUTE eclipse plug-in will parse correctly
-	template <typename ExpectedValue, typename ActualValue>
-	std::string diff_values(ExpectedValue const &expected
-						,ActualValue const & actual){
-		// construct a simple message...to be parsed by IDE support
-		std::string res;
-		res += " expected:\t" + cute_to_string::backslashQuoteTabNewline(cute_to_string::to_string(expected))
-		   +"\tbut was:\t"+cute_to_string::backslashQuoteTabNewline(cute_to_string::to_string(actual))+"\t";
-		return res;
-	}
 	namespace cute_do_equals {
 		// provide some template meta programming tricks to select "correct" comparison for floating point and integer types
 		template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
