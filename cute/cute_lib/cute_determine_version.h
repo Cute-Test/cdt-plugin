@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007-2011 Peter Sommerlad
+ * Copyright 2007-2013 Peter Sommerlad
  *
  *********************************************************************************/
 
 #ifndef CUTE_DETERMINE_VERSION_H_
 #define CUTE_DETERMINE_VERSION_H_
 
-#if defined(__GXX_EXPERIMENTAL_CXX0X__) && ! defined(USE_TR1)
-#define USE_STD0X 1
+#if defined(__GNUG__) && defined(__GXX_EXPERIMENTAL_CXX0X__) && ! defined(USE_TR1)
+#define USE_STD11 1
 #endif
 
 #ifdef _MSC_VER
 #if (_MSC_VER >= 1400)
-#define USE_STD0X 1
+#define USE_STD11 1
 #endif
 #endif
-#if __cplusplus >= 201103L  && ! defined (USE_STD0X)
-#define USE_STD0X 1
+#if __cplusplus >= 201103L  && ! defined (USE_STD11)
+#define USE_STD11 1
 #endif
 #endif /*CUTE_DETERMINE_VERSION_H_*/

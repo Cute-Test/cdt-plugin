@@ -187,7 +187,7 @@ namespace cute {
 	template <typename ExpectedValue, typename ActualValue>
 	void assert_equal(ExpectedValue const &expected
 				,ActualValue const &actual
-				,char const *msg
+				,std::string const &msg
 				,char const *file
 				,int line) {
 		// unfortunately there is no is_integral_but_not_bool_or_enum
@@ -195,24 +195,26 @@ namespace cute {
 		typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
 		if (cute_do_equals::do_equals(expected,actual,exp_integral(),act_integral()))
 			return;
-		throw test_failure(cute_to_string::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
+		throw test_failure(msg + diff_values(expected,actual),file,line);
 	}
 
 	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
 	void assert_equal_delta(ExpectedValue const &expected
 				,ActualValue const &actual
 				,DeltaValue const &delta
-				,char const *msg
+				,std::string const &msg
 				,char const *file
 				,int line) {
 		if (cute_do_equals::do_equals_floating_with_delta(expected,actual,delta)) return;
-		throw test_failure(cute_to_string::backslashQuoteTabNewline(msg) + diff_values(expected,actual),file,line);
+		throw test_failure(msg + diff_values(expected,actual),file,line);
 	}
 
 }
 
-#define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
+#define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),\
+		CUTE_FUNCNAME_PREFIX+cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
-#define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
+#define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),\
+		CUTE_FUNCNAME_PREFIX+cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 #endif /*CUTE_EQUALS_H_*/

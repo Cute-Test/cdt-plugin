@@ -56,7 +56,7 @@ namespace cute {
 		std::string const prefix;
 	};
 	namespace detail_find_if_not{
-#ifndef USE_STD0X
+#ifndef USE_STD11
 	template <class IN_Iter, class Predicate>
 	inline
 	IN_Iter

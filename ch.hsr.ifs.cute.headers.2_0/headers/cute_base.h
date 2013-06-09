@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007-2009 Peter Sommerlad
+ * Copyright 2007-2013 Peter Sommerlad
  *
  *********************************************************************************/
 
@@ -22,6 +22,7 @@
 #define CUTE_BASE_H_
 #include <string>
 #include "cute_to_string.h"
+#include "cute_determine_version.h"
 namespace cute{
 	struct test_failure {
 		std::string reason;
@@ -34,7 +35,16 @@ namespace cute{
 		char const * what() const { return reason.c_str(); }
 	};
 }
-#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure(cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__)
+#if defined(USE_STD0X) && !defined(_MSC_VER)
+#define CUTE_FUNCNAME_PREFIX std::string(__func__)+": "
+#else
+#if defined( _MSC_VER ) || defined(__GNUG__)
+#define CUTE_FUNCNAME_PREFIX std::string(__FUNCTION__)+": "
+#else // could provide #defines for other compiler-specific extensions... need to experiment, i.e., MS uses __FUNCTION__
+#define CUTE_FUNCNAME_PREFIX ""
+#endif
+#endif
+#define ASSERTM(msg,cond) do { if (!(cond)) throw cute::test_failure(CUTE_FUNCNAME_PREFIX+cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__);} while(false)
 #define ASSERT(cond) ASSERTM(#cond,cond)
 #define FAIL() ASSERTM("FAIL()",false)
 #define FAILM(msg) ASSERTM(msg,false)

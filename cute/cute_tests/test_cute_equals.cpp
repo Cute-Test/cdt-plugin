@@ -208,7 +208,7 @@ void test_non_outputable(){
 void test_has_end_member_for_vector(){
 	std::vector<int> v;
 	v.push_back(42); v.push_back(1);
-#ifdef USE_STD0X
+#ifdef USE_STD11
 	static_assert(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<int> const >::value,"");
 	static_assert(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<int>  >::value,"");
 	static_assert(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::vector<std::vector<int> >  >::value,"");
@@ -220,7 +220,7 @@ void test_has_end_member_for_vector(){
 	#endif
 }
 void test_has_begin_end_member_for_string(){
-#ifdef USE_STD0X
+#ifdef USE_STD11
 	static_assert(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::string>::value,"");
 #else
 	ASSERT(cute::cute_to_string::to_string_detail::has_begin_end_const_member<std::string>::value);
@@ -229,7 +229,7 @@ void test_has_begin_end_member_for_string(){
 
 
 void test_not_has_end_member_for_int(){
-#ifdef USE_STD0X
+#ifdef USE_STD11
 	static_assert(! cute::cute_to_string::to_string_detail::has_begin_end_const_member<int>::value,"");
 #else
 	ASSERT(! cute::cute_to_string::to_string_detail::has_begin_end_const_member<int>::value);

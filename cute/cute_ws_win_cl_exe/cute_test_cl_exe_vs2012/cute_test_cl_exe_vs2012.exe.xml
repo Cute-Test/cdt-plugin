@@ -1,5 +1,17 @@
 <testsuites>
-	<testsuite name="all_cute_tests" tests="86">
+	<testsuite name="all_cute_tests" tests="98">
+		<testcase classname="all_cute_tests" name="test_cute_assert_less_success"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_less_fail"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_greater_success"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_greater_fail"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_less_equal_success"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_less_equal_fail"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_greater_equal_fail"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_greater_equal_success"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_not_euqal_to_success"/>
+		<testcase classname="all_cute_tests" name="test_cute_assert_not_equal_to_fail"/>
+		<testcase classname="all_cute_tests" name="thisIsAtest_cute_filter_runnerTest"/>
+		<testcase classname="all_cute_tests" name="test_cute_filter_runner_ArgvFilter"/>
 		<testcase classname="all_cute_tests" name="test_emptyrun"/>
 		<testcase classname="all_cute_tests" name="test_single_success"/>
 		<testcase classname="all_cute_tests" name="test_single_failure"/>

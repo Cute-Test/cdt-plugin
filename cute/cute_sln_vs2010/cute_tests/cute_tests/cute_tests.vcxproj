@@ -80,15 +80,18 @@
     <ClCompile Include="..\..\..\cute_tests\test_cute.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_equals.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_expect.cpp" />
+    <ClCompile Include="..\..\..\cute_tests\test_cute_filter_runner.cpp" />
+    <ClCompile Include="..\..\..\cute_tests\test_cute_relops.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_runner.cpp" />
-    <ClCompile Include="..\..\..\cute_tests\test_cute_stream_out.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_suite.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_suite_test.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_test.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_testmember.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_test_incarnate.cpp" />
+    <ClCompile Include="..\..\..\cute_tests\test_cute_to_string.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_cute_to_string_embedded.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_repeated_test.cpp" />
+    <ClCompile Include="..\..\..\cute_tests\test_xml_file_opener.cpp" />
     <ClCompile Include="..\..\..\cute_tests\test_xml_listener.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -99,8 +102,10 @@
     <ClInclude Include="..\..\..\cute_lib\cute_determine_library.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_determine_traits.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_determine_version.h" />
+    <ClInclude Include="..\..\..\cute_lib\cute_diff_values.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_equals.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_listener.h" />
+    <ClInclude Include="..\..\..\cute_lib\cute_relops.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_repeated_test.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_runner.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_stream_out.h" />
@@ -110,7 +115,9 @@
     <ClInclude Include="..\..\..\cute_lib\cute_testmember.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_test_incarnate.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_throws.h" />
+    <ClInclude Include="..\..\..\cute_lib\cute_to_string.h" />
     <ClInclude Include="..\..\..\cute_lib\cute_version.h" />
+    <ClInclude Include="..\..\..\cute_lib\cute_xml_file.h" />
     <ClInclude Include="..\..\..\cute_lib\eclipse_listener.h" />
     <ClInclude Include="..\..\..\cute_lib\ide_listener.h" />
     <ClInclude Include="..\..\..\cute_lib\ostream_listener.h" />
@@ -119,16 +126,23 @@
     <ClInclude Include="..\..\..\cute_tests\test_cute.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_equals.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_expect.h" />
+    <ClInclude Include="..\..\..\cute_tests\test_cute_filter_runner.h" />
+    <ClInclude Include="..\..\..\cute_tests\test_cute_relops.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_runner.h" />
-    <ClInclude Include="..\..\..\cute_tests\test_cute_stream_out.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_suite.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_suite_test.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_test.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_testmember.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_test_incarnate.h" />
+    <ClInclude Include="..\..\..\cute_tests\test_cute_to_string.h" />
     <ClInclude Include="..\..\..\cute_tests\test_cute_to_string_embedded.h" />
     <ClInclude Include="..\..\..\cute_tests\test_repeated_test.h" />
+    <ClInclude Include="..\..\..\cute_tests\test_xml_file_opener.h" />
     <ClInclude Include="..\..\..\cute_tests\test_xml_listener.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\cute_lib\gpl.txt" />
+    <None Include="..\..\..\cute_lib\lgpl.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,11 +22,19 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 class AssertStatementCheckVisitor extends ASTVisitor {
 
 	@SuppressWarnings("nls")
-	private static Set<String> asserts = new HashSet<String>(Arrays.asList("ASSERT", "ASSERTM", "FAIL", "FAILM", "ASSERT_EQUAL", "ASSERT_EQUALM", "ASSERT_EQUAL_DELTAM",
-			"ASSERT_EQUAL_DELTA", "ASSERT_THROWS", "ASSERT_THROWSM",
+	private static Set<String> asserts = new HashSet<String>(Arrays.asList(
+			"ASSERT", "ASSERTM", "FAIL", "FAILM", 
+			"ASSERT_DDT","ASSERT_DDTM",
+			"ASSERT_EQUAL", "ASSERT_EQUALM", "ASSERT_EQUAL_DELTAM","ASSERT_EQUAL_DELTA",
+			"ASSERT_EQUAL_DDT", "ASSERT_EQUAL_DDTM", "ASSERT_EQUAL_DELTA_DDTM","ASSERT_EQUAL_DELTA_DDT",
+			"ASSERT_THROWS", "ASSERT_THROWSM",
 			"ASSERT_LESS","ASSERT_LESSM","ASSERT_LESS_EQUAL","ASSERT_LESS_EQUALM",
 			"ASSERT_GREATER","ASSERT_GREATERM","ASSERT_GREATER_EQUAL","ASSERT_GREATER_EQUALM",
-			"ASSERT_NOT_EQUAL_TO","ASSERT_NOT_EQUAL_TOM"));
+			"ASSERT_NOT_EQUAL_TO","ASSERT_NOT_EQUAL_TOM",
+			"ASSERT_LESS_DDT","ASSERT_LESS_DDTM","ASSERT_LESS_EQUAL_DDT","ASSERT_LESS_EQUAL_DDTM",
+			"ASSERT_GREATER_DDT","ASSERT_GREATER_DDTM","ASSERT_GREATER_EQUAL_DDT","ASSERT_GREATER_EQUAL_DDTM",
+			"ASSERT_NOT_EQUAL_TO_DDT","ASSERT_NOT_EQUAL_TO_DDTM"
+			));
 
 	boolean hasAssertStmt = false;
 
@@ -50,10 +58,7 @@ class AssertStatementCheckVisitor extends ASTVisitor {
 
 	private boolean isAssertExpansion(IASTMacroExpansionLocation expansionLocation) {
 		String name = expansionLocation.getExpansion().getMacroDefinition().getName().toString();
-		if (asserts.contains(name)) {
-			return true;
-		}
-		return false;
+		return asserts.contains(name);
 	}
 
 	private ArrayList<IASTMacroExpansionLocation> getMacroExpansionLocs(IASTNodeLocation[] locs) {

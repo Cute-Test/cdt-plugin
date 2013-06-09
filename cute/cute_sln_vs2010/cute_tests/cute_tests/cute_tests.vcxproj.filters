@@ -30,9 +30,6 @@
     <ClCompile Include="..\..\..\cute_tests\test_cute_runner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\cute_tests\test_cute_stream_out.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\cute_tests\test_cute_suite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,6 +54,18 @@
     <ClCompile Include="..\..\..\cute_tests\test_xml_listener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\cute_tests\test_cute_filter_runner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cute_tests\test_cute_relops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cute_tests\test_cute_to_string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cute_tests\test_xml_file_opener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\cute_tests\test_cute.h">
@@ -69,9 +78,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\cute_tests\test_cute_runner.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cute_tests\test_cute_stream_out.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\cute_tests\test_cute_suite.h">
@@ -170,5 +176,37 @@
     <ClInclude Include="..\..\..\cute_tests\test_xml_listener.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\cute_lib\cute_diff_values.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cute_lib\cute_relops.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cute_lib\cute_to_string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cute_lib\cute_xml_file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cute_tests\test_cute_filter_runner.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cute_tests\test_cute_relops.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cute_tests\test_cute_to_string.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cute_tests\test_xml_file_opener.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\cute_lib\gpl.txt">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\cute_lib\lgpl.txt">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

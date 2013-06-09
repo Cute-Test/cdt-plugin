@@ -3,7 +3,6 @@
 	<name>cute_tests_mac_clang_libcpp</name>
 	<comment></comment>
 	<projects>
-		<project>cute</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
