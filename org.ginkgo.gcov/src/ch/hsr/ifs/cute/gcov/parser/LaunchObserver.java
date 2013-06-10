@@ -16,7 +16,11 @@ import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.core.settings.model.util.CDataUtil;
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
@@ -39,11 +43,15 @@ import ch.hsr.ifs.testframework.launch.ILaunchObserver;
  */
 public class LaunchObserver implements ILaunchObserver {
 
+	public static final String GCNO_EXTENSION = "gcno";
+	public static final String GCOV_EXTENSION = "gcov";
+
 	public void notifyBeforeLaunch(IProject project) throws CoreException {
 		cleanGcdaFilesInRefedProjects(project);
 	}
 
-	private void cleanGcdaFilesInRefedProjects(IProject project) throws CoreException {
+	private void cleanGcdaFilesInRefedProjects(IProject project)
+			throws CoreException {
 		cleanGcdaFilesinProject(project);
 		for (IProject refProj : project.getReferencedProjects()) {
 			cleanGcdaFilesinProject(refProj);
@@ -68,35 +76,103 @@ public class LaunchObserver implements ILaunchObserver {
 
 	}
 
-	public void notifyAfterLaunch(IProject project) throws CoreException {
+	public void notifyAfterLaunch(IProject project, IProgressMonitor monitor) throws CoreException {
 		if (project.hasNature(GcovNature.NATURE_ID)) {
-			updateGcov(project);
+			updateGcov(project, monitor);
 			for (IProject refProj : project.getReferencedProjects()) {
-				updateGcov(refProj);
+				updateGcov(refProj, monitor);
 			}
 		}
 
 	}
 
-	private void updateGcov(IProject iProject) {
-		ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(iProject);
-		ICSourceEntry[] sourceEntries = desc.getActiveConfiguration().getSourceEntries();
-		List<ICSourceEntry> sourceEntriesList = new ArrayList<ICSourceEntry>();
-		ICSourceEntry[] resolvedEntries = CDataUtil.resolveEntries(sourceEntries, desc.getActiveConfiguration());
-		for (ICSourceEntry icSourceEntry : resolvedEntries) {
-			IPath location = icSourceEntry.getLocation();
-			if (location != null) {
-				if (location.lastSegment() != null && !location.lastSegment().equals("cute")) { //$NON-NLS-1$
-					sourceEntriesList.add(icSourceEntry);
+	private void updateGcov(IProject iProject, IProgressMonitor monitor) {
+		try {
+			iProject.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+			IManagedBuildInfo buildInfo = ManagedBuildManager.getBuildInfo(iProject);
+
+			IConfiguration activeConfig = buildInfo.getDefaultConfiguration();
+			IPath buildLocation = activeConfig.getEditableBuilder().getBuildLocation();
+			IPath projectRelativeBuildPath = buildLocation.makeRelativeTo(iProject.getLocation());
+			IFolder buildDirectory = iProject.getFolder(projectRelativeBuildPath);
+
+			if (!buildDirectory.exists()) {
+				GcovPlugin.log("Build directory is not part of the project: " + buildDirectory);
+				return;
+			}
+			
+			FileFinder gcnoFinder = new FileFinder(GCNO_EXTENSION);
+			buildDirectory.accept(gcnoFinder);
+			List<IFile> gcnoFiles = gcnoFinder.getFiles();
+			GcovRunner gcovRunner = new GcovRunner(iProject);
+			for(IFile gcnoFile : gcnoFiles)
+			{
+				gcovRunner.runGcov(gcnoFile);
+			}
+			
+			iProject.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+			FileFinder gcovFinder = new FileFinder(GCOV_EXTENSION);
+			buildDirectory.accept(gcovFinder);
+			List<IFile> gcovFiles = gcovFinder.getFiles();
+			for(IFile gcovFile : gcovFiles) {
+				gcovRunner.parse(gcovFile, buildDirectory, monitor);
+			}
+			 
+		} catch (CoreException ce) {
+			GcovPlugin.log(ce);
+		}
+
+		// ICSourceEntry[] sourceEntries =
+		// desc.getActiveConfiguration().getSourceEntries();
+		// List<ICSourceEntry> sourceEntriesList = new
+		// ArrayList<ICSourceEntry>();
+		// ICSourceEntry[] resolvedEntries =
+		// CDataUtil.resolveEntries(sourceEntries,
+		// desc.getActiveConfiguration());
+		// for (ICSourceEntry icSourceEntry : resolvedEntries) {
+		// IPath location = icSourceEntry.getLocation();
+		// if (location != null) {
+		//				if (location.lastSegment() != null && !location.lastSegment().equals("cute")) { //$NON-NLS-1$
+		// sourceEntriesList.add(icSourceEntry);
+		// }
+		// }
+		// }
+		// try {
+		// iProject.accept(new SourceFileVisitor(sourceEntriesList));
+		// } catch (CoreException e) {
+		// GcovPlugin.log(e);
+		// }
+	}
+
+	private final class FileFinder implements IResourceVisitor {
+		private final List<IFile> files = new ArrayList<IFile>();
+		private final String extension;
+
+		public FileFinder(String extension) {
+			if(extension == null){
+				throw new IllegalArgumentException("Arugment 'extension' must not be null.");
+			}
+			this.extension = extension;
+		}
+
+		public boolean visit(IResource resource) throws CoreException {
+			if(resource instanceof IFile)
+			{
+				IFile file = (IFile)resource;
+				if(extension.equals(file.getFileExtension()))
+				{
+					files.add(file);
 				}
 			}
+			return true;
 		}
-		try {
-			iProject.accept(new SourceFileVisitor(sourceEntriesList));
-		} catch (CoreException e) {
-			GcovPlugin.log(e);
+
+		public List<IFile> getFiles() {
+			return files;
 		}
 	}
+	
+
 
 	private class SourceFileVisitor implements IResourceVisitor {
 
@@ -115,9 +191,11 @@ public class LaunchObserver implements ILaunchObserver {
 				try {
 					parser.parse(file, monitor);
 				} catch (CoreException e) {
-					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
+					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e
+							.getCause().getMessage());
 				} catch (IOException e) {
-					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
+					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e
+							.getCause().getMessage());
 				}
 				return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK"); //$NON-NLS-1$
 			}
@@ -132,7 +210,9 @@ public class LaunchObserver implements ILaunchObserver {
 
 		public boolean visit(IResource resource) throws CoreException {
 			for (ICSourceEntry sourceEntry : sourceEntries) {
-				if (sourceEntry.getLocation().isPrefixOf(resource.getLocation()) && isNotInExclusion(sourceEntry, resource)) {
+				if (sourceEntry.getLocation()
+						.isPrefixOf(resource.getLocation())
+						&& isNotInExclusion(sourceEntry, resource)) {
 					if (resource instanceof IFile) {
 						IFile file = (IFile) resource;
 						final GcovFile gcovFile = GcovFile.create(file);
@@ -151,9 +231,11 @@ public class LaunchObserver implements ILaunchObserver {
 
 		}
 
-		private boolean isNotInExclusion(ICSourceEntry sourceEntry, IResource resource) {
+		private boolean isNotInExclusion(ICSourceEntry sourceEntry,
+				IResource resource) {
 			for (IPath exPath : sourceEntry.getExclusionPatterns()) {
-				if (sourceEntry.getLocation().append(exPath).isPrefixOf(resource.getLocation())) {
+				if (sourceEntry.getLocation().append(exPath)
+						.isPrefixOf(resource.getLocation())) {
 					return false;
 				}
 			}

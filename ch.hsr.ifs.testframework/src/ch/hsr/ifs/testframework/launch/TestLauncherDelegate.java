@@ -117,7 +117,7 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 				registerPatternMatchListener(launch, exePath, textCons);
 			}
 	
-			notifyAfterLaunch(project);
+			notifyAfterLaunch(project, monitor);
 		}
 		finally {
 			monitor.done();
@@ -137,11 +137,12 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 	}
 
 	/**
+	 * @param monitor 
 	 * @since 3.0
 	 */
-	protected void notifyAfterLaunch(IProject project) throws CoreException {
+	protected void notifyAfterLaunch(IProject project, IProgressMonitor monitor) throws CoreException {
 		for (ILaunchObserver observer : getObservers()) {
-			observer.notifyAfterLaunch(project);
+			observer.notifyAfterLaunch(project, monitor);
 		}
 	}
 
