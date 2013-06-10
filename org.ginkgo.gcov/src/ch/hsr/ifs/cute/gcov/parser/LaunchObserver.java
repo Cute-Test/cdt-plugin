@@ -19,6 +19,7 @@ import org.eclipse.cdt.core.settings.model.util.CDataUtil;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -94,7 +95,12 @@ public class LaunchObserver implements ILaunchObserver {
 			IConfiguration activeConfig = buildInfo.getDefaultConfiguration();
 			IPath buildLocation = activeConfig.getEditableBuilder().getBuildLocation();
 			IPath projectRelativeBuildPath = buildLocation.makeRelativeTo(iProject.getLocation());
-			IFolder buildDirectory = iProject.getFolder(projectRelativeBuildPath);
+			IContainer buildDirectory;
+			if(projectRelativeBuildPath.segmentCount() == 0){
+				buildDirectory = iProject;
+			} else{
+				buildDirectory = iProject.getFolder(projectRelativeBuildPath);
+			}
 
 			if (!buildDirectory.exists()) {
 				GcovPlugin.log("Build directory is not part of the project: " + buildDirectory);

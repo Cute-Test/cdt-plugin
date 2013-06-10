@@ -19,6 +19,7 @@ import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -130,7 +131,7 @@ public class GcovRunner {
 		return variableStrings;
 	}
 	
-	public void parse(IFile gcovFile, IFolder buildDirectory, IProgressMonitor monitor) throws CoreException {
+	public void parse(IFile gcovFile, IContainer buildDirectory, IProgressMonitor monitor) throws CoreException {
 //		deleteMarkers(targetFile);
 		IProject project = gcovFile.getProject();
 
@@ -167,7 +168,7 @@ public class GcovRunner {
 	Function currentFunction;
 	Line currentLine;
 
-	public void parse(Reader gcovFile, IFolder baseFolder, IProject project) throws CoreException {
+	public void parse(Reader gcovFile, IContainer baseFolder, IProject project) throws CoreException {
 		IFile cppFile = null;
 		ch.hsr.ifs.cute.gcov.model.File file = null; //GcovPlugin.getDefault().getcModel().addFileToModel(cppFile);
 		BufferedReader in = new BufferedReader(gcovFile);
