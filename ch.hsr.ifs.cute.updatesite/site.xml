@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="CUTE Update Site Juno" url="www.cute-test.com/updatesite/juno">
-      This is the update site for the Juno release of CUTE.
+   <description name="CUTE 2.0 Update Site Juno" url="www.cute-test.com/updatesite/juno">
+      This is the update site for the Juno release of CUTE 2.0.
    </description>
    <feature url="features/ch.hsr.ifs.cute.boost.feature_1.42.0.201306112042.jar" id="ch.hsr.ifs.cute.boost.feature" version="1.42.0.201306112042">
       <category name="OptFeatures"/>
