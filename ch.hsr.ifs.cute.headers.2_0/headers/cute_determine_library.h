@@ -24,7 +24,7 @@
 #include <tr1/functional>
 // bind already given by <functional> in cute_test.h from cute_suite.h
 namespace boost_or_tr1 = std::tr1;
-#elif defined(USE_STD0X)
+#elif defined(USE_STD11)
 #include <functional>
 namespace boost_or_tr1 = std;
 #else

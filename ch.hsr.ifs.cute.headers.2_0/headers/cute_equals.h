@@ -120,7 +120,7 @@ namespace cute {
 		size_t nof_bits(IntegralType const &){
 			return std::numeric_limits<IntegralType>::digits;
 		}
-#if defined(USE_STD0X)||defined(USE_TR1)
+#if defined(USE_STD11)||defined(USE_TR1)
 		template <typename ExpectedValue, typename ActualValue>
 		bool do_equals_integral(ExpectedValue const &expected
 				,ActualValue const &actual
@@ -167,7 +167,7 @@ namespace cute {
 		bool do_equals(ExpectedValue const &expected
 					,ActualValue const &actual
 					,const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
-#if defined(USE_STD0X) || defined(USE_TR1)
+#if defined(USE_STD11) || defined(USE_TR1)
 			return do_equals_integral(expected,actual,
 					impl_place_for_traits::is_signed<ExpectedValue>()
 					,impl_place_for_traits::is_signed<ActualValue>());

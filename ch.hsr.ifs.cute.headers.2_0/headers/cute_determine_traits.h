@@ -21,7 +21,7 @@
 #ifndef CUTE_DETERMINE_TRAITS_H_
 #define CUTE_DETERMINE_TRAITS_H_
 #include "cute_determine_version.h"
-#if defined(USE_STD0X)
+#if defined(USE_STD11)
 #include <type_traits>
 #elif defined(USE_TR1)
 #include <tr1/type_traits>
@@ -30,7 +30,7 @@
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/make_signed.hpp>
 #endif
-#if defined(USE_STD0X)
+#if defined(USE_STD11)
 	namespace impl_place_for_traits = std;
 #elif defined(USE_TR1)
 	namespace impl_place_for_traits = std::tr1;

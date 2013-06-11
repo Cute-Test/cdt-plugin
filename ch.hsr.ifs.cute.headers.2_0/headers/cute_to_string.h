@@ -277,7 +277,7 @@ namespace cute_to_string {
 			if (sizeof(T *) <= sizeof(unsigned long))
 				result = cute::cute_to_string::hexit(reinterpret_cast<unsigned long>(t));
 			else
-#if defined(USE_STD0X) /* should allow for all compilers supporting ULL*/
+#if defined(USE_STD11) /* should allow for all compilers supporting ULL*/
 			result = "p"+cute::cute_to_string::hexit(reinterpret_cast<unsigned long long>(t));
 #else
 			return "no to_string";

@@ -56,7 +56,7 @@ namespace cute {
 		std::string const prefix;
 	};
 	namespace detail_find_if_not{
-#ifndef USE_STD0X
+#ifndef USE_STD11
 	template <class IN_Iter, class Predicate>
 	inline
 	IN_Iter
@@ -115,15 +115,18 @@ namespace cute {
 	template <typename Listener=null_listener>
 	struct runner{
 		Listener &listener;
-		runner_aux::ArgvTestFilter filter;
-		runner(Listener &l, int argc = 0, const char *const *argv = 0):listener(l),filter(argc,argv){}
-		bool operator()(const test & t)
+		int const argc;
+		char const * const *const argv;
+		runner(Listener &l, int argc = 0, const char *const *argv = 0):listener(l),argc(argc),argv(argv){}
+		bool operator()(const test & t) const
 	    {
 	        return runit(t);
 	    }
 
-	    bool operator ()(suite const &s, const char *info = "") // copy intentional for filtering support
+	    bool operator ()(suite const &s, const char *info = "") const
 	    {
+	    	runner_aux::ArgvTestFilter filter(argc,argv);
+
 	        bool result = true;
 	        if(filter.shouldRunSuite(info)){ // side effect on filter
 	            listener.begin(s, info);
@@ -136,14 +139,8 @@ namespace cute {
 	        return result;
 	    }
 	private:
-	    void filterSuite(suite & s)
-	    {
-	    	if (filter.needsFiltering() && s.end()!=runner_aux::detail_find_if_not::find_if_not(s.begin(),s.end(),filter)){
-	    		s.erase(std::remove_if(s.begin(),s.end(),filter),s.end());
-	    	}
-	    }
 
-	    bool runit(const test & t)
+	    bool runit(const test & t) const
 	    {
 	        try {
 	            listener.start(t);

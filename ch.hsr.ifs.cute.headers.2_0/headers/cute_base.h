@@ -35,7 +35,7 @@ namespace cute{
 		char const * what() const { return reason.c_str(); }
 	};
 }
-#if defined(USE_STD0X) && !defined(_MSC_VER)
+#if defined(USE_STD11) && !defined(_MSC_VER)
 #define CUTE_FUNCNAME_PREFIX std::string(__func__)+": "
 #else
 #if defined( _MSC_VER ) || defined(__GNUG__)
