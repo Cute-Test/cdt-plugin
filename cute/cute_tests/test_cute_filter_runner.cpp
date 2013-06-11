@@ -2,7 +2,8 @@
 #include "cute.h"
 #include "cute_counting_listener.h"
 #include "test_cute_filter_runner.h"
-
+#include <iterator>
+#include <algorithm>
 void test(){
 }
 
@@ -30,23 +31,29 @@ void thisIsAtest_cute_filter_runnerTest() {
 
 void test_cute_filter_runner_ArgvFilter(){
 	char const *argv[]={
-			"dummy","testsuite1","testsuite2#test1",0,"testsuite2#test3",0,0
+			"dummy","testsuite1","testsuite2#test1","testsuite2#test3",0
 	};
-	cute::runner_aux::ArgvTestFilter filter(sizeof(argv)/sizeof(*argv)-1,argv);
-	ASSERT(filter.shouldRun("any"));
-	ASSERT(filter.shouldRunSuite("testsuite1"));
-	ASSERT(filter.shouldRun("test"));
-	ASSERT(filter.shouldRun("test1"));
-	ASSERT(filter.shouldRun("test2"));
-	ASSERT(filter.shouldRun("test3"));
-	ASSERT(filter.shouldRun("test4"));
-	ASSERT(!filter.shouldRunSuite("dummy"));
-	ASSERT(filter.shouldRunSuite("testsuite2"));
-	ASSERT(!filter.shouldRun("test"));
-	ASSERT(filter.shouldRun("test1"));
-	ASSERT(!filter.shouldRun("test2"));
-	ASSERT(filter.shouldRun("test3"));
-	ASSERT(!filter.shouldRun("test4"));
+	std::vector<std::string> args;
+	std::copy(argv+1, argv+sizeof(argv)/sizeof(*argv)-1,std::back_inserter(args));
+	cute::runner_aux::ArgvTestFilter filter1("",args);
+	ASSERT(filter1.shouldRun("any"));
+	cute::runner_aux::ArgvTestFilter filter2("testsuite1",args);
+	ASSERT(filter2.shouldrunsuite);
+	ASSERT(filter2.shouldRun("test"));
+	ASSERT(filter2.shouldRun("test1"));
+	ASSERT(filter2.shouldRun("test2"));
+	ASSERT(filter2.shouldRun("test3"));
+	ASSERT(filter2.shouldRun("test4"));
+	cute::runner_aux::ArgvTestFilter filter3("dummy",args);
+
+	ASSERT(!filter3.shouldrunsuite);
+	cute::runner_aux::ArgvTestFilter filter4("testsuite2",args);
+	ASSERT(filter4.shouldrunsuite);
+	ASSERT(!filter4.shouldRun("test"));
+	ASSERT(filter4.shouldRun("test1"));
+	ASSERT(!filter4.shouldRun("test2"));
+	ASSERT(filter4.shouldRun("test3"));
+	ASSERT(!filter4.shouldRun("test4"));
 
 }
 
