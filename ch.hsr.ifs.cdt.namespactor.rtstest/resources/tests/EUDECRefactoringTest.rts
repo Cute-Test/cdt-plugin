@@ -21,7 +21,8 @@ namespace A{
 	 void f(){}
 }
 int main() {
-	using A::f;f();
+	using A::f;
+	f();
 }
 //!EUDEC_OnlyReplaceExactNameOccurencies
 //@A1.cpp
@@ -41,7 +42,8 @@ namespace A{
 }
 int main() {
 	using A::f;
-	f();f();
+	f();
+	f();
 	A::a();
 }
 //!EUDEC_NameOverloadings
@@ -65,7 +67,8 @@ namespace A{
 int main() {
 	using A::f;
 	f();
-	f(1);f(1.1);
+	f(1);
+	f(1.1);
 }
 //!EUDEC_SameNameInNestedNamespace1
 //@A1.cpp
@@ -87,7 +90,8 @@ namespace A{
 	 }
 }
 int main() {
-	using A::f;f();
+	using A::f;
+	f();
 	A::AA::f();
 }
 //!EUDEC_SameNameInNestedNamespace2
@@ -111,7 +115,8 @@ namespace A{
 }
 int main() {
 	A::f();
-	using A::AA::f;f();
+	using A::AA::f;
+	f();
 }
 //!EUDEC_Variables1
 //@A1.cpp
@@ -133,7 +138,8 @@ namespace A{
 	}
 }
 int main() {
-	using A::i;i = 0;
+	using A::i;
+	i = 0;
 	A::AA::i = 0;
 }
 //!EUDEC_Variables2
@@ -157,7 +163,8 @@ namespace A{
 }
 int main() {
 	A::i = 0;
-	using A::AA::i;i = 0;
+	using A::AA::i;
+	i = 0;
 }
 //!EUDEC_Types1
 //@A1.cpp
@@ -180,7 +187,8 @@ namespace A{
 	};
 }
 int main() {
-	using A::S1;S1 s1;
+	using A::S1;
+	S1 s1;
 	A::S2 s2;
 	A::S2::S1 s21;
 }
@@ -207,7 +215,8 @@ namespace A{
 int main() {
 	A::S1 s1;
 	using A::S2;
-	S2 s2;S2::S1 s21;
+	S2 s2;
+	S2::S1 s21;
 }
 //!EUDEC_Types3
 //@A1.cpp
@@ -232,7 +241,8 @@ namespace A{
 int main() {
 	A::S1 s1;
 	using A::S2;
-	S2 s2;S2::S1 s21;
+	S2 s2;
+	S2::S1 s21;
 }
 //!EUDEC_Templates1
 //@A1.cpp
@@ -277,7 +287,7 @@ namespace A{
 		int i;
 	};
 }
-int main() {
+int main(){
 	using A::S2;
 	S2 s2;
 	A::S1<S2> s12;
@@ -393,7 +403,8 @@ int main() {
 	S1<A::S2> s12_;
 	S1<S1<A::S2> > sNested;
 	A::f(5);
-	A::f("hello");S1<int> s1;
+	A::f("hello");
+	S1<int> s1;
 	s1.set(100);
 	std::cout << s1.arr[0] << std::endl;
 }
@@ -452,7 +463,8 @@ int main() {
 	S1<A::B::S2> s12_;
 	S1<S1<A::B::S2> > sNested;
 	A::B::f(5);
-	A::B::f("hello");S1<int> s1;
+	A::B::f("hello");
+	S1<int> s1;
 	s1.set(100);
 	std::cout << s1.arr[0] << std::endl;
 }
@@ -503,8 +515,9 @@ namespace A{
 		int i;
 	};
 }
-int main() {
-	using A::S1;S1<int>::S1nested s1nested;
+int main(){
+	using A::S1;
+	S1<int>::S1nested s1nested;
 	s1nested.f(1);
 }
 //!EUDEC_InheritedTypeSpecialCase
@@ -529,10 +542,11 @@ namespace A{
         };
     };
 }
-struct X : A::Y::YY {
+struct X : A::Y::YY{
 	using A::Y::YY::YYY;
 
-	void bla(YYY){}
+	void bla(YYY) {
+	}
 };
 //!EUDEC_TemplatesWithMultipleInheritance
 //@A1.cpp
@@ -590,8 +604,9 @@ namespace B{
 namespace C{
 	template <typename T>
 	struct S3 : public A::S1<T>, public B::S1<T>{
-		void f() {
-		using A::S1<T>::s1;s1("hello");
+		void f(){
+		using A::S1<T>::s1;
+		s1("hello");
 		}
 	};
 	template <typename T>
@@ -634,11 +649,12 @@ namespace A{
 	struct SA1{};
 	struct SA2{};
 }
-namespace B {
+namespace B{
 
 using A::SA1;
+
 void f1(SA1 sa1);
-void f2(A::SA2 sa2);
+	void f2(A::SA2 sa2);
 void f3(SA1 sa1_2);
 }
 //!EUDEC_WithoutNS_in_Name
@@ -655,5 +671,6 @@ struct S1{
 };
 struct S2 : S1 {
 	using S1::S1_nested;
+
 	void f(S1_nested);
 };
