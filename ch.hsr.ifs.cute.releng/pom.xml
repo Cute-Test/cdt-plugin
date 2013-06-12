@@ -8,7 +8,20 @@
 	<properties>
 		<tycho-version>0.15.0</tycho-version>
 		<eclipse-version>juno</eclipse-version>
+    	 <os-jvm-flags/> <!-- for the default case , mac requires special -->
 	</properties>
+	<profiles>
+    <profile>
+      <id>macosx-jvm-flags</id>
+      <activation>
+        <os><family>mac</family></os>
+      </activation>
+      <properties>
+        <os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
+      </properties>
+    </profile>
+  </profiles>
+	
 	<repositories>
 		<repository>
 			<id>juno-release</id>

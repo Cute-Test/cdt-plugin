@@ -1,5 +1,7 @@
 /*/bin
 *.class
+/*/target/
+/*/surefire-reports/
 cute/cute_ws_linux/cute_tests_linux_gcc_std11/cute_tests_linux_gcc_std11.xml
 
 cute/cute_ws_linux/cute_tests_linux_gcc_std11/cute_tests_linux_gcc_std11.xml
@@ -20,3 +22,5 @@ cute/mac_osx_1084/
 cute/mac_start_empty/
 cute/new_cute_ws_mac/
 ch.hsr.ifs.cute.swtbottest/screenshots/
+
+ch.hsr.ifs.cute.boost.feature/target/ch.hsr.ifs.cute.boost.feature-1.42.0.qualifier.jar

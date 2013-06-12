@@ -19,7 +19,7 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<argLine>-Xmx2048m</argLine>
+					<argLine>-Xmx2048m ${os-jvm-flags}</argLine>
 					<testSuite>ch.hsr.ifs.cute.swtbottest</testSuite>
 					<testClass>ch.hsr.ifs.cute.swtbottest.AllTests</testClass>
 					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
