@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="ch.hsr.ifs.cdt.namespactor.namespacerefactoring"
+            label="C/C++ Coding"
+            visible="true">
+         <menu id="org.eclipse.jdt.ui.refactoring.menu" label="Refac&amp;tor">
+         	<separator name="codingGroup"></separator>
+         </menu> 
+         <!--           
+         <action
+               class="ch.hsr.ifs.cdt.namespactor.iudir.ui.IUDIRRefactoringActionDelegate"
+               id="ch.hsr.ifs.cdt.namespactor.iudir"
+               label="Inline Namespace Using Directive..."
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
+         </action>
+         <action
+               class="ch.hsr.ifs.cdt.namespactor.iudec.ui.IUDECRefactoringActionDelegate"
+               id="ch.hsr.ifs.cdt.namespactor.iudec"
+               label="Inline Using Declaration..."
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
+         </action>-->
+		 <action
+               class="ch.hsr.ifs.cdt.namespactor.ui.qun.QUNRefactoringActionDelegate"
+               id="ch.hsr.ifs.cdt.namespactor.qun"
+               label="Qualify Unqualified Name..."
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
+         </action>         
+         <action
+               class="ch.hsr.ifs.cdt.namespactor.ui.iu.IURefactoringActionDelegate"
+               id="ch.hsr.ifs.cdt.namespactor.iu"
+               label="Inline Using ..."
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
+         </action>         
+         <action
+               class="ch.hsr.ifs.cdt.namespactor.ui.eudir.EUDIRRefactoringActionDelegate"
+               id="ch.hsr.ifs.cdt.namespactor.extract"
+               label="Extract Using Directive..."
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
+         </action>
+         <action
+               class="ch.hsr.ifs.cdt.namespactor.ui.eudec.EUDECRefactoringActionDelegate"
+               id="ch.hsr.ifs.cdt.namespactor.extract"
+               label="Extract Namespace Using Declaration..."
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>
