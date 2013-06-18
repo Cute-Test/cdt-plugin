@@ -70,7 +70,9 @@ public class IncludeDependencyAnalyser {
 
 		IIndexInclude[] includes = index.findIncludes(file, IIndex.DEPTH_INFINITE);
 		for(IIndexInclude include : includes){
-			String includedFileName = URIUtil.toFile(include.getIncludesLocation().getURI()).getAbsolutePath();
+			IIndexFileLocation includesLocation = include.getIncludesLocation();
+			if (includesLocation == null) continue;
+			String includedFileName = URIUtil.toFile(includesLocation.getURI()).getAbsolutePath();
 
 			if(originFileName.equals(includedFileName)){
 				fileDependencies.put(filePairId, true);

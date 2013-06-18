@@ -71,7 +71,7 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 	private static final int KEYWORD_OPERATOR_LENGTH     = 9;
 	private IncludeDependencyAnalyser includeDepAnalyser = null;
 	private Map<IASTName, List<IIndexName>> namespacesPerUsing  = null;
-	private Map<IUDIRNamespaceInlineContext, List<IASTName>> targetsPerNamespace = null;
+	private Map<NamespaceInlineContext, List<IASTName>> targetsPerNamespace = null;
 	
 	public IUDIRRefactoring(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);
@@ -105,7 +105,7 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 			ctx.enclosingCompound = NSNodeHelper.findCompoundStatementInAncestors(selectedUsingDirective);
 			includeDepAnalyser = new IncludeDependencyAnalyser(getIndex());
 			namespacesPerUsing      = new HashMap<IASTName, List<IIndexName>>();
-			targetsPerNamespace     = new HashMap<IUDIRNamespaceInlineContext, List<IASTName>>();
+			targetsPerNamespace     = new HashMap<NamespaceInlineContext, List<IASTName>>();
 			
 			findNamespaceDefinitionsRecursively(ctx.selectedName);
 			findTargetsInScope(ctx.enclosingCompound);
@@ -118,7 +118,7 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 
 	private void processTargets() throws CoreException {
 
-		for(Entry<IUDIRNamespaceInlineContext, List<IASTName>> entry : targetsPerNamespace.entrySet()){
+		for(Entry<NamespaceInlineContext, List<IASTName>> entry : targetsPerNamespace.entrySet()){
 		
 			for(IASTName name : entry.getValue()){
 
@@ -221,7 +221,7 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 
 			private void addNameToTargets(IASTName name, IIndexName nsDefName, IASTName usingName) {
 				List<IASTName> names = null;
-				for(IUDIRNamespaceInlineContext ctx : targetsPerNamespace.keySet()){
+				for(NamespaceInlineContext ctx : targetsPerNamespace.keySet()){
 					if(ctx.namespaceDefName.equals(nsDefName)){
 						names = targetsPerNamespace.get(ctx);
 					}
@@ -229,7 +229,7 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 				
 				if(names == null){
 					names = new ArrayList<IASTName>();
-					IUDIRNamespaceInlineContext ictx = new IUDIRNamespaceInlineContext();
+					NamespaceInlineContext ictx = new NamespaceInlineContext();
 					ictx.namespaceDefName = nsDefName;
 					ictx.usingName = usingName;
 					targetsPerNamespace.put(ictx, names);

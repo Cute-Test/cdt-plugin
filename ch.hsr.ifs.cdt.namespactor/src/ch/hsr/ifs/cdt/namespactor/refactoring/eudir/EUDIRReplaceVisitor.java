@@ -55,7 +55,7 @@ public class EUDIRReplaceVisitor extends EUReplaceVisitor {
 	
 	@Override
 	protected boolean isReplaceCandidate(IASTName foundName, IASTName name, IASTName[] names) {
-		return foundName != null && ! CxxAstUtils.isInMacro(foundName);
+		return foundName != null ;
 	}
 	
 	@Override

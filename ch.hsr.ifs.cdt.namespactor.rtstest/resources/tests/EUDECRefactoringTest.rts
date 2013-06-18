@@ -8,6 +8,26 @@ int main() {}
 expectedNrOfFatalErrors=1
 //@A1.cpp
 using /*$*/A/*$$*/::f;
+//!EUDEC_ReplacementWithinMacroShouldNotBeTouched
+//@A1.cpp
+#define macro(X) A::f(x)
+namespace A{
+	 void f(int){}
+}
+int main() {
+	/*$*/A/*$$*/::f(0);
+	macro(42);
+}
+//=
+#define macro(X) A::f(x)
+namespace A{
+	 void f(int){}
+}
+int main() {
+	using A::f;
+	f(0);
+	macro(42);
+}
 //!EUDEC_SingleNSSelectionOnCall
 //@A1.cpp
 namespace A{

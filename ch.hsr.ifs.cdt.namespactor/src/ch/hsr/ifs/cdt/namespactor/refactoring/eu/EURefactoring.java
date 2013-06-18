@@ -94,7 +94,7 @@ public abstract class EURefactoring extends RefactoringBase {
 	protected abstract EUReplaceVisitor getReplaceVisitor();
 
 	@Override
-	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+	public void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		ASTRewriteStore store = new ASTRewriteStore(collector);
 
 		addReplaceChanges(store);

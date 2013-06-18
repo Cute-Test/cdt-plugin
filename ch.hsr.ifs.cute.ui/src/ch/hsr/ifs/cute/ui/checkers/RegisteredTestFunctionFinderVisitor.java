@@ -57,7 +57,12 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 			IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declaration;
 			if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
 				ICPPASTNamedTypeSpecifier nameDeclSpec = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
-				if (nameDeclSpec.getName().toString().equals("cute::suite")) { //$NON-NLS-1$
+				String typename = nameDeclSpec.getName().toString();
+				if (typename.equals("cute::suite")||typename.equals("suite")) { //$NON-NLS-1$ // last part is "suite"
+//					IASTName[] suitedef = simpDecl.getTranslationUnit().getDefinitionsInAST(nameDeclSpec.getName().resolveBinding());
+//					ICPPASTNamespaceDefinition ns = TddHelper.getAncestorOfType(suitedef[0], ICPPASTNamespaceDefinition.class);
+//					if (ns != null && ns.getName().toString().equals("cute")) {
+//					// suitedef[0] is in namespace "cute"
 					IASTName suiteName = simpDecl.getDeclarators()[0].getName();
 					IBinding suiteBinding = suiteName.resolveBinding();
 					IASTName[] suiteRefs = suiteName.getTranslationUnit().getReferences(suiteBinding);
@@ -66,6 +71,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 							registeredTests.add(index.adaptBinding(getRegisteredFunctionBinding(ref)));
 						}
 					}
+//					}
 				}
 			}
 		}

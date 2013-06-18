@@ -14,6 +14,7 @@ package ch.hsr.ifs.cdt.namespactor.refactoring.iu;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
+import org.eclipse.cdt.core.index.IIndexName;
 
 /**
  * @author kunz@ideadapt.net
@@ -21,5 +22,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 public class NamespaceInlineContext {
 	public IASTName usingName = null;
 	public ICPPASTNamespaceDefinition namespaceDefNode = null;
-	public IBinding namespaceDefBinding;
+	public IBinding namespaceDefBinding = null;
+	public IIndexName namespaceDefName = null;
 }

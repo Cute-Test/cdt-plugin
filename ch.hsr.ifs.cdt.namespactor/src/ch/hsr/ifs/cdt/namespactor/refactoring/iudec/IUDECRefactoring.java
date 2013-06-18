@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.cdt.codan.core.cxx.CxxAstUtils;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -39,7 +40,6 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.cdt.namespactor.NamespactorActivator;
 import ch.hsr.ifs.cdt.namespactor.astutil.ASTNodeFactory;
 import ch.hsr.ifs.cdt.namespactor.astutil.NSNameHelper;
 import ch.hsr.ifs.cdt.namespactor.astutil.NSNodeHelper;
@@ -135,7 +135,8 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 	}
 
 	private boolean isValidChildReference(IASTName refNode) throws OperationCanceledException, CoreException {
-		
+		if (refNode != null && CxxAstUtils.isInMacro(refNode)) return false;
+
 		IASTCompoundStatement enclosingCompoundStatement = NSNodeHelper.findCompoundStatementInAncestors(ctx.selectedUsing);
 		if(enclosingCompoundStatement != null){
 			if(!NSNodeHelper.isNodeEnclosedBy(enclosingCompoundStatement, refNode)){
@@ -149,7 +150,7 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 		}
 		
 		IIndexName[] refNodeDecls = getIndex().findDeclarations(refBinding);
-		if(refNodeDecls.length != 1){
+		if(refNodeDecls.length < 1){ // was != 1, I get length 2 for a using declaration because Index is too global....?
 			return false;
 		}
 		
@@ -241,14 +242,14 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 			}
 		}
 	}
-	
-	@Override
-	public void addReplacement(IASTName nodeToReplace, IASTName newNameNode) {
-		if(nodeToReplace != null){
-			nodesToReplace.put(nodeToReplace, newNameNode);
-			NamespactorActivator.log(toStringDebug(nodeToReplace));
-		}
-	}
+	// PS, identisch zu Oberklasse. unnötig?
+//	@Override
+//	protected void addReplacement(IASTName nodeToReplace, IASTName newNameNode) {
+//		if(nodeToReplace != null){
+//			nodesToReplace.put(nodeToReplace, newNameNode);
+//			NamespactorActivator.log(toStringDebug(nodeToReplace));
+//		}
+//	}
 
 	@Override
 	protected TemplateIdFactory getTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext ctx) {

@@ -106,7 +106,7 @@ public abstract class RefactoringBase extends CRefactoring {
 	}
 	
 	@Override
-	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+	public void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		collectModifications(new ASTRewriteStore(collector));
 	}
 

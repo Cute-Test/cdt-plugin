@@ -11,6 +11,7 @@
 ******************************************************************************/
 package ch.hsr.ifs.cdt.namespactor.refactoring.eu;
 
+import org.eclipse.cdt.codan.core.cxx.CxxAstUtils;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -78,7 +79,8 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 			ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
 			IASTName[] names = getNamesOf(name);
 			IASTName foundName = searchNamesFor(context.startingNamespaceName, names);
-			if(isReplaceCandidate(foundName, name, names)){
+			if (foundName != null && CxxAstUtils.isInMacro(foundName)) return null;
+			if(isReplaceCandidate(foundName, name, names) ){
 				boolean start = false;
 				for (IASTName iastName : names) {
 					if(isTemplateReplaceCandidate(foundName, iastName)){
@@ -97,7 +99,7 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 				}
 				return replaceName;
 			}else{
-				//Bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=381032
+				//Bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=381032 // PS: fixed by Thomas in 2013, still required?
 				if(context.selectedQualifiedName.isFullyQualified()){
 					buildFullyQualifiedReplaceName(replaceName, names);
 					return replaceName;		
