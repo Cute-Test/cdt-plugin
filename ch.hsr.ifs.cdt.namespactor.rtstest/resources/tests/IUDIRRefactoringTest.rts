@@ -214,7 +214,6 @@ namespace A{
 	};
 	void a();
 }
-
 //@B.cpp
 #include "B.h"
 void SA1::a() {
@@ -228,7 +227,8 @@ int main(){
 }
 //=
 #include "B.h"
-void A::SA1::a(){}
+void A::SA1::a() {
+}
 void A::a(){}
 int main(){
 	A::SA1 s;
@@ -381,11 +381,11 @@ namespace C{
     };
 }
 //=
-namespace C {
+namespace C{
     struct SC{};
 }
 
-namespace C{
+namespace C {
     class CC{
         void c(SC);
     };
@@ -849,7 +849,7 @@ namespace A{
 	void f(){}
 }
 
-int main(){
+int main() {
 	A::f();
 	A::f1();
 }
@@ -891,7 +891,7 @@ namespace A{
 	 void f1(){}
 }
 
-void fn1(){
+void fn1() {
 	A::f1();
 }
 //@A1.cpp
@@ -910,7 +910,7 @@ namespace A{
 	void f(){}
 }
 using namespace A;
-int main() {
+int main(){
 	A::f();
 	A::f1();
 }

@@ -11,6 +11,7 @@
 ******************************************************************************/
 package ch.hsr.ifs.cdt.namespactor.refactoring.eudir;
 
+import org.eclipse.cdt.codan.core.cxx.CxxAstUtils;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
@@ -54,7 +55,7 @@ public class EUDIRReplaceVisitor extends EUReplaceVisitor {
 	
 	@Override
 	protected boolean isReplaceCandidate(IASTName foundName, IASTName name, IASTName[] names) {
-		return foundName != null;
+		return foundName != null && ! CxxAstUtils.isInMacro(foundName);
 	}
 	
 	@Override

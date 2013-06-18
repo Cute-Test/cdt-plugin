@@ -107,7 +107,8 @@ public class QUNRefactoring extends InlineRefactoringBase {
 		childrenBindings.add(selectedNameBinding);
 
 		IIndexName[] declNames = getIndex().findDeclarations(selectedNameBinding);
-		ICPPASTNamespaceDefinition nsDefNode = NSNodeHelper.findAncestorOf(getNodeOf(declNames[0], npm), ICPPASTNamespaceDefinition.class);
+		ICPPASTNamespaceDefinition nsDefNode = NSNodeHelper.findAncestorOf(getNodeOf(declNames[0], npm), ICPPASTNamespaceDefinition.class);// AOB
+																																			// Exc....
 		ICPPASTQualifiedName newQName        = ASTNodeFactory.getDefault().newQualifiedNameNode(CPPVisitor.getQualifiedName(selectedNameBinding));
 		
 		ctx.enclosingNSContext = new NamespaceInlineContext();
