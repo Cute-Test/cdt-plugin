@@ -213,11 +213,11 @@ public abstract class JUnit4RtsRefactoringTest extends CDTProjectJUnit4RtsTest i
 			String expectedSource = fileMap.get(fileName).getExpectedSource();
 			IFile file = project.getFile(new Path(fileName));
 			String refactoredCode = getCodeFromIFile(file);
-			
+			/*
 		    System.out.println("-- After refactoring");
 			System.out.print(refactoredCode);
 			System.out.println("--");
-
+*/
 			assertEquals(expectedSource, refactoredCode);
 		}
 	}

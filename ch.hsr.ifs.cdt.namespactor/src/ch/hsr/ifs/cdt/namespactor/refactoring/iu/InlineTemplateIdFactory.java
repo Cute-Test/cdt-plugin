@@ -30,7 +30,7 @@ import ch.hsr.ifs.cdt.namespactor.refactoring.TemplateIdFactory;
  * */
 public class InlineTemplateIdFactory extends TemplateIdFactory{
 
-	private NamespaceInlineContext enclosingNSContext;
+	private final NamespaceInlineContext enclosingNSContext;
 	private Set<ICPPASTTemplateId> templateIdsToIgnore = null;
 
 	public InlineTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context){
@@ -52,7 +52,7 @@ public class InlineTemplateIdFactory extends TemplateIdFactory{
 		ICPPASTNamedTypeSpecifier newDeclSpec = factory.newNamedTypeSpecifier(null);
 		IASTName specName = ((ICPPASTNamedTypeSpecifier)vDeclSpecifier).getName();
 
-		// qualify the name of the specifier if it has nothing todo with a template id
+		// qualify the name of the specifier if it has nothing to do with a template id
 		if(!isOrContainsTemplateId(specName)){
 			IASTName qnameNode = specName;
 			if(!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.namespaceDefNode.getName())){

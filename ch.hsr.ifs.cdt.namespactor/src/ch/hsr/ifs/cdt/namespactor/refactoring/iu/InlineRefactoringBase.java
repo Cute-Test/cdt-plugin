@@ -78,7 +78,8 @@ public abstract class InlineRefactoringBase extends RefactoringBase {
 	 * @return 	true for names inside template specializations (e.g. SC in SC<ClassX> or SC in C<SC<char> >)
 	 * */
 	protected boolean isPartOfTemplateVariableDeclaration(IASTName childRefNode) {
-		return childRefNode.getParent() instanceof ICPPASTTemplateId && NSNodeHelper.findAncestorOf(childRefNode, ICPPASTUsingDeclaration.class) == null;
+		return childRefNode.getParent() instanceof ICPPASTTemplateId 
+				&& NSNodeHelper.findAncestorOf(childRefNode, ICPPASTUsingDeclaration.class) == null;
 	}
 	
 	@Override

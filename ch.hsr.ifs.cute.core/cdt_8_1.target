@@ -9,7 +9,7 @@
 <repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="3.0.0.201303271511"/>
+<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="3.0.0.201306191513"/>
 <repository location="http://dev.ifs.hsr.ch/updatesites/cdttesting/juno"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">

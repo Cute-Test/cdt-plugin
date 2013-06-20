@@ -90,16 +90,12 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 		}else{
 			ctx.selectedUsing = selectedUDEC;
 			ctx.selectedName  = selectedUDEC.getName();
-			try {
-				includeDepAnalyser = new IncludeDependencyAnalyser(getIndex());
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
+			includeDepAnalyser = new IncludeDependencyAnalyser(getIndex());
 
 			IBinding decl    = ctx.selectedName.getLastName().resolveBinding();
 			IBinding declDel = ((ICPPUsingDeclaration)decl).getDelegates()[0];
 			
-			if(declDel instanceof ICPPUnknownBinding){
+			if(declDel instanceof ICPPUnknownBinding){ // ist wohl anders
 				initStatus.addWarning(String.format(Labels.IUDEC_TemplateArgument));
 			}
 			
@@ -223,7 +219,7 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 			newNameNode = ASTNodeFactory.getDefault().newQualifiedName();
 			newNameNode.addName(ctx.selectedName.copy());
 		}
-
+// hier fehlt die template ID check und Angabe?
 		addQualifiersAfterRefNode(refNode, nodeToReplace, newNameNode);
 		
 		return newNameNode;

@@ -3,10 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>ch.hsr.ifs.cdt.namespactor.parent</artifactId>
-    <groupId>ch.hsr.ifs.cdt.namespactor</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-	<relativePath>../</relativePath>
+    <artifactId>ch.hsr.ifs.cute.releng</artifactId>
+    <groupId>ch.hsr.ifs</groupId>
+    <relativePath>../ch.hsr.ifs.cute.releng</relativePath>
+    <version>1.0.0</version>
   </parent>
   <groupId>ch.hsr.ifs.cdt.namespactor</groupId>
   <artifactId>ch.hsr.ifs.cdt.namespactor.checkers</artifactId>

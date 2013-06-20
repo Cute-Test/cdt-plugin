@@ -21,6 +21,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: ch.hsr.ifs.cdt.namespactor.astutil,
  ch.hsr.ifs.cdt.namespactor.refactoring,
+ ch.hsr.ifs.cdt.namespactor.refactoring.iu,
  ch.hsr.ifs.cdt.namespactor.refactoring.eudec,
  ch.hsr.ifs.cdt.namespactor.refactoring.eudir,
  ch.hsr.ifs.cdt.namespactor.refactoring.iudec,

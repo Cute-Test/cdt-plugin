@@ -1,9 +1,9 @@
 package ch.hsr.ifs.cdt.namespactor.rtstest;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
 
 /**
  * The activator class controls the plug-in life cycle
@@ -17,11 +17,13 @@ public class TestActivator extends AbstractUIPlugin {
 	public TestActivator() {
 	}
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -32,10 +34,10 @@ public class TestActivator extends AbstractUIPlugin {
 	}
 	
 	public static void log(IStatus status) {
-		getDefault().getLog().log(status);
+		//getDefault().getLog().log(status);
 	}
 	
 	public static void log(String message) {
-		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
+		//log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
 	}
 }

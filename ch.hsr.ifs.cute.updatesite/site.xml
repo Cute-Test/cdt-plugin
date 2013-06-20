@@ -18,6 +18,9 @@
    <feature url="features/ch.hsr.ifs.cute.headers.2_0.feature_2.1.0.qualifier.jar" id="ch.hsr.ifs.cute.headers.2_0.feature" version="2.1.0.qualifier">
       <category name="CUTE Headers"/>
    </feature>
+   <feature url="features/ch.hsr.ifs.cdt.namespactor.feature_0.0.1.qualifier.jar" id="ch.hsr.ifs.cdt.namespactor.feature" version="0.0.1.qualifier">
+      <category name="OptFeatures"/>
+   </feature>
    <category-def name="CUTE Plugin" label="CUTE Plugin"/>
    <category-def name="CUTE Headers" label="CUTE Headers"/>
    <category-def name="OptFeatures" label="CUTE Optional Features"/>

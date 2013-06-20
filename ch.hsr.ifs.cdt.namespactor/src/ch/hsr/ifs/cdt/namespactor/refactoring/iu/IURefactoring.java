@@ -22,13 +22,14 @@ import ch.hsr.ifs.cdt.namespactor.refactoring.TemplateIdFactory;
 import ch.hsr.ifs.cdt.namespactor.refactoring.iudec.IUDECRefactoring;
 import ch.hsr.ifs.cdt.namespactor.refactoring.iudir.IUDIRRefactoring;
 import ch.hsr.ifs.cdt.namespactor.refactoring.rewrite.ASTRewriteStore;
+import ch.hsr.ifs.cdt.namespactor.resources.Labels;
 
 @SuppressWarnings("restriction")
 public class IURefactoring extends InlineRefactoringBase {
 	private InlineRefactoringBase delegate=null;
 	private ICElement element=null;
-	private ISelection selection;
-	private ICProject project;
+	private final ISelection selection;
+	private final ICProject project;
 	public IURefactoring(ICElement element, ISelection selection,
 			ICProject project) {
 		super(element, selection, project);
@@ -55,7 +56,8 @@ public class IURefactoring extends InlineRefactoringBase {
 		}else if(NSSelectionHelper.getSelectedUsingDeclaration(region, ast) != null){
 			delegate = new IUDECRefactoring(element, selection, project);
 		}else{
-//			MessageDialog.openError(shellProvider.getShell(), "Inline Refactoring Startup Error", Labels.IU_NoUsingSelected);
+			initStatus.addFatalError(Labels.IUDIR_NoUDIRSelected);
+			return initStatus;
 		}
 		delegate.setContext(this.refactoringContext);
 		

@@ -20,12 +20,16 @@ import ch.hsr.ifs.cdt.namespactor.rtstest.tests.EUDECRefactoringTest;
 import ch.hsr.ifs.cdt.namespactor.rtstest.tests.EUDIRRefactoringTest;
 import ch.hsr.ifs.cdt.namespactor.rtstest.tests.IUDECRefactoringTest;
 import ch.hsr.ifs.cdt.namespactor.rtstest.tests.IUDIRRefactoringTest;
+import ch.hsr.ifs.cdt.namespactor.rtstest.tests.IURefactoringTestIUDEC;
+import ch.hsr.ifs.cdt.namespactor.rtstest.tests.IURefactoringTestIUDIR;
 import ch.hsr.ifs.cdt.namespactor.rtstest.tests.QUNRefactoringTest;
 
 
 @RunWith(Suite.class)
 @SuiteClasses({
 			//@formatter:off
+	IURefactoringTestIUDEC.class,
+	IURefactoringTestIUDIR.class,
 	IUDIRRefactoringTest.class,
 	IUDECRefactoringTest.class,
 	QUNRefactoringTest.class,

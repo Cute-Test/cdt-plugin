@@ -7,8 +7,8 @@ int f(){}
 //@.config
 expectedNrOfFatalErrors=1
 //@A1.cpp
-namespace A{}
-using namespace /*$*/A/*$$*/;
+/*$*/namespace/*$$*/ A{}
+using namespace A;
 //!IUDEC_FnSingleFile
 //@A1.cpp
 namespace A{
@@ -116,7 +116,7 @@ namespace B2{
 	};
 }
 int main(){
-	B2::SB b2;
+	::B2::SB b2;
 	b2.f(3.14);
 
 	B1::SB b1;
