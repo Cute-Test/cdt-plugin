@@ -66,7 +66,7 @@ public abstract class TemplateIdFactory extends ASTVisitor{
 		if(name instanceof ICPPASTTemplateId){
 
 			ICPPASTTemplateId vTemplId    = (ICPPASTTemplateId)name;
-			ICPPASTQualifiedName nameNode = modifyTemplateId(vTemplId);
+			ICPPASTQualifiedName nameNode = modifyTemplateId(vTemplId); // problem....
 			ICPPASTTemplateId newTemplId  = factory.newTemplateId(vTemplId.getTemplateName().copy());
 			
 			nameNode.addName(newTemplId);
@@ -108,7 +108,7 @@ public abstract class TemplateIdFactory extends ASTVisitor{
 	protected IASTDeclSpecifier createSimpleDeclSpec(IASTDeclSpecifier vDeclSpecifier) {
 
 		ICPPASTSimpleDeclSpecifier newDeclSpec = factory.newSimpleDeclSpecifier();
-		((ICPPASTSimpleDeclSpecifier) newDeclSpec).setType(((ICPPASTSimpleDeclSpecifier)vDeclSpecifier).getType());
+		newDeclSpec.setType(((ICPPASTSimpleDeclSpecifier)vDeclSpecifier).getType());
 		return newDeclSpec;
 	}
 

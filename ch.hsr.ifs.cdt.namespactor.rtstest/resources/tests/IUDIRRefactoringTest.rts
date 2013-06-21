@@ -325,8 +325,8 @@ namespace A{
     void a(){}
 }
 int main(){
-    /* behind to remove */ // behind to remove
-    A::a();
+	// behind to remove
+	A::a();
 }
 //!IUDIR_CompositeTypesAndParameters
 //@A1.cpp
@@ -829,7 +829,6 @@ namespace Collections{
 	};
 }
 void iudir(){
-	 // IUDIR
 	Collections::List::Element e1(23);
 }
 //!IUDIR_IgnoreUnIncludedFiles_SelectionInParent
@@ -921,4 +920,26 @@ namespace A{
 using namespace A;
 void fn2(){
 	f2();
+}
+//!IUDIR_FunctionTemplate
+//@A1.cpp
+namespace AA{
+	template <class T>
+	T getMax(T a, T b){return a;}
+}
+int main(){
+	using namespace /*$*/AA/*$$*/;
+	getMax(1, 2); 
+	getMax<int>(1, 2);
+	return 0;
+}
+//=
+namespace AA{
+	template <class T>
+	T getMax(T a, T b){return a;}
+}
+int main(){
+	AA::getMax(1, 2); 
+	AA::getMax<int>(1, 2);
+	return 0;
 }

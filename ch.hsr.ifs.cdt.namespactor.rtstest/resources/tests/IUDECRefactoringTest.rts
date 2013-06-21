@@ -231,7 +231,7 @@ T getMax(T a, T b){return a;}
 
 int main(){
 	using namespace AA;
-	getMax(1, 2); // does not work in test mode, works only in eclipse
+	AA::getMax(1, 2); // does not work in test mode, works only in eclipse
 	AA::getMax<int>(1, 2);
 	return 0;
 }

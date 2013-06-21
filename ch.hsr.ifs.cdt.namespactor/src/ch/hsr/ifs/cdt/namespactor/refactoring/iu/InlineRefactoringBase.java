@@ -37,6 +37,7 @@ public abstract class InlineRefactoringBase extends RefactoringBase {
 	protected Map<IASTName, IASTName> nodesToReplace = new HashMap<IASTName, IASTName>();
 	protected InlineRefactoringContext ctx = new InlineRefactoringContext();
 	protected NullProgressMonitor npm = new NullProgressMonitor();
+	protected IncludeDependencyAnalyser includeDepAnalyser = null;
 
 	public InlineRefactoringBase(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);

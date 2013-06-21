@@ -15,7 +15,6 @@ import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.internal.ui.refactoring.utils.NodeHelper;
 
 /**
@@ -52,7 +51,7 @@ public class NSNodeHelper extends NodeHelper {
 		return compoundFound;
 	}
 	
-	public static boolean isNodeEnclosedByNamespace(IASTNode descenantNode, ICPPASTNamespaceDefinition nsDef){
+	public static boolean isNodeEnclosedByNamespace(IASTNode descenantNode, IASTNode nsDef){
 		IASTNode currNode = descenantNode.getParent();
 		
 		while(currNode != null){

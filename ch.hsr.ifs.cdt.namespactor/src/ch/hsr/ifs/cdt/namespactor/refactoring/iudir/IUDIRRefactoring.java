@@ -69,7 +69,6 @@ import ch.hsr.ifs.cdt.namespactor.resources.Labels;
 public class IUDIRRefactoring extends InlineRefactoringBase {
 
 	private static final int KEYWORD_OPERATOR_LENGTH     = 9;
-	private IncludeDependencyAnalyser includeDepAnalyser = null;
 	private Map<IASTName, List<IIndexName>> namespacesPerUsing  = null;
 	private Map<NamespaceInlineContext, List<IASTName>> targetsPerNamespace = null;
 	

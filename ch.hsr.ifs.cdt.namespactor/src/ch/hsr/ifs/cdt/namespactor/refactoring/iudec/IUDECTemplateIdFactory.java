@@ -9,7 +9,7 @@
 * Contributors:
 * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
 ******************************************************************************/
-package ch.hsr.ifs.cdt.namespactor.refactoring.iudir;
+package ch.hsr.ifs.cdt.namespactor.refactoring.iudec;
 
 import java.util.Set;
 
@@ -28,15 +28,14 @@ import ch.hsr.ifs.cdt.namespactor.refactoring.iu.InlineRefactoringContext;
 import ch.hsr.ifs.cdt.namespactor.refactoring.iu.NamespaceInlineContext;
 
 /**
- * @author kunz@ideadapt.net
+ * @author peter.sommerlad@hsr.ch
  * */
-@SuppressWarnings("restriction")
-public class IUDIRTemplateIdFactory extends TemplateIdFactory{
+public class IUDECTemplateIdFactory extends TemplateIdFactory{
 
 	private final NamespaceInlineContext enclosingNSContext;
 	private Set<ICPPASTTemplateId> templateIdsToIgnore = null;
 
-	public IUDIRTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context){
+	public IUDECTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context){
 		super(templateId);
 		this.enclosingNSContext  = context.enclosingNSContext;
 		this.templateIdsToIgnore = context.templateIdsToIgnore;
@@ -58,7 +57,7 @@ public class IUDIRTemplateIdFactory extends TemplateIdFactory{
 		// qualify the name of the specifier if it has nothing to do with a template id
 		if(!isOrContainsTemplateId(specName)){
 			IASTName qnameNode = specName;
-			if(!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.usingName.getLastName())){
+			if(!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.namespaceDefNode.getName())){
 				qnameNode = NSNameHelper.prefixNameWith(enclosingNSContext.usingName, specName);
 			}
 			newDeclSpec.setName(qnameNode.copy());
@@ -66,6 +65,7 @@ public class IUDIRTemplateIdFactory extends TemplateIdFactory{
 		return newDeclSpec;
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
 	protected ICPPASTQualifiedName modifyTemplateId(ICPPASTTemplateId vTemplId) {
 		ICPPASTQualifiedName qnameNode;
@@ -80,17 +80,38 @@ public class IUDIRTemplateIdFactory extends TemplateIdFactory{
 		return qnameNode;
 	}
 
+
 	private boolean requiresQualification(ICPPASTTemplateId templId){
 		IBinding templateNameBinding = templId.getTemplateName().resolveBinding();
 		IBinding owner = templateNameBinding.getOwner();
 		if(owner instanceof ICPPNamespace){
 			IIndex index = templId.getTranslationUnit().getIndex();
-			boolean isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(enclosingNSContext.namespaceDefBinding); //since this should works with nested using directives
+			boolean isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(index.adaptBinding(enclosingNSContext.namespaceDefBinding)); //enclosingContext muss abgefüllt sein
 			boolean isNotQualified = !(templId.getParent() instanceof ICPPASTQualifiedName);
 
 			return isChildOfEnclosingNamespace && isNotQualified;
 		}
 
 		return false;
-	}		
+/*		IBinding templateNameBinding = templId.getTemplateName().resolveBinding();
+		String qname = "";
+
+		if(templateNameBinding.getOwner() instanceof ICPPNamespace){
+			try {
+				qname = NSNameHelper.buildQualifiedName(((ICPPNamespace) templateNameBinding.getOwner()).getQualifiedName());
+
+				boolean isChildOfEnclosingNamespace = qname.equals(enclosingNSContext.namespaceDefNode.getName().resolveBinding().toString());// boom....
+				boolean isNotQualified = !(templId.getParent() instanceof ICPPASTQualifiedName);
+
+				return isChildOfEnclosingNamespace && isNotQualified;
+
+			} catch (DOMException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	*/	
+		}	
+
 }
