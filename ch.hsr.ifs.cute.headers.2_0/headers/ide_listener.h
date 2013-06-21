@@ -34,15 +34,15 @@ namespace cute {
 	{
 		ide_listener(std::ostream &os=std::cout):out(os) {}
 		void begin(suite const &t,char const *info){
-			out << "\n#beginning " << info << " " << t.size() << '\n';
+			out << "\n#beginning " << maskBlanks(info) << " " << t.size() << '\n';
 			Listener::begin(t,info);
 		}
 		void end(suite const &t, char const *info){
-			out << "\n#ending " << info << std::endl;
+			out << "\n#ending " << maskBlanks(info) << std::endl;
 			Listener::end(t,info);
 		}
 		void start(test const &t){
-			out << "\n#starting " << t.name()<<'\n';
+			out << "\n#starting " << maskBlanks(t.name())<<'\n';
 			Listener::start(t);
 		}
 		void success(test const &t, char const *msg){
@@ -67,17 +67,17 @@ namespace cute {
 			OutputDebugString(os.str().c_str());
 #endif
 		}
+		static std::string maskBlanks(std::string in) {
+			std::transform(in.begin(),in.end(),in.begin(),blankToUnderscore());
+			return in;
+		}
 	protected:
 		struct blankToUnderscore{
-            char operator()(char in){
+            char operator()(char in)const{
 			if (in == ' ') return '_';
 			return in;
 		}
         };
-		std::string maskBlanks(std::string in) {
-			std::transform(in.begin(),in.end(),in.begin(),blankToUnderscore());
-			return in;
-		}
 		std::ostream &out;
 	};
 }
