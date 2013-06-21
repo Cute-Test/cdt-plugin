@@ -51,7 +51,7 @@ public class NSNodeHelper extends NodeHelper {
 		return compoundFound;
 	}
 	
-	public static boolean isNodeEnclosedByNamespace(IASTNode descenantNode, IASTNode nsDef){
+	public static boolean isNodeEnclosedByScopeDefinedBy(IASTNode descenantNode, IASTNode nsDef){
 		IASTNode currNode = descenantNode.getParent();
 		
 		while(currNode != null){

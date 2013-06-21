@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+* Copyright (c) 2012-2013 Institute for Software, HSR Hochschule fuer Technik 
 * Rapperswil, University of applied sciences and others.
 * All rights reserved. This program and the accompanying materials
 * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
 *
 * Contributors:
 * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+*   Peter Sommerlad - adapted for hybrid AST-based approach for IUDECRefactoring
 ******************************************************************************/
 package ch.hsr.ifs.cdt.namespactor.refactoring.iu;
 
