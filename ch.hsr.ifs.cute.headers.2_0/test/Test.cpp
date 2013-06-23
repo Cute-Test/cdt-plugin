@@ -13,7 +13,7 @@ void runAllTests(int argc, char const *argv[]){
 	s.push_back(CUTE(thisIsATest));
 	cute::xml_file_opener xmlfile(argc,argv);
 	cute::xml_listener<cute::ide_listener<> >  lis(xmlfile.out);
-	cute::makeRunner(lis,argc,argv)(s, "AllTests");
+	cute::makeRunner(lis)(s, "AllTests");
 }
 
 int main(int argc, char const *argv[]){
