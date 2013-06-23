@@ -35,7 +35,7 @@
 		<link>
 			<name>headers_lnk</name>
 			<type>2</type>
-			<location>/Users/sop/cute/Cute/cute/cute_lib</location>
+			<locationURI>PARENT-1-WORKSPACE_LOC/Cute/cute/cute_lib</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

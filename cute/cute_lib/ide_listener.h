@@ -35,11 +35,11 @@ namespace cute {
 		ide_listener(std::ostream &os=std::cout):out(os) {}
 		void begin(suite const &t,char const *info){
 			out << "\n#beginning " << maskBlanks(info) << " " << t.size() << '\n';
-			Listener::begin(t,maskBlanks(info));
+			Listener::begin(t,info);
 		}
 		void end(suite const &t, char const *info){
 			out << "\n#ending " << maskBlanks(info) << std::endl;
-			Listener::end(t,maskBlanks(info));
+			Listener::end(t,info);
 		}
 		void start(test const &t){
 			out << "\n#starting " << maskBlanks(t.name())<<'\n';
