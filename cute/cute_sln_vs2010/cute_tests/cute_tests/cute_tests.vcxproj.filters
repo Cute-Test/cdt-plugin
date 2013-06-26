@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\..\cute_tests\test_xml_file_opener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\cute_tests\test_cute_data_driven.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\cute_tests\test_cute.h">
@@ -198,6 +201,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\cute_tests\test_xml_file_opener.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cute_tests\test_cute_data_driven.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

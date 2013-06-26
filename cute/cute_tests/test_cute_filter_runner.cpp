@@ -9,7 +9,7 @@ void test(){
 
 void thisIsAtest_cute_filter_runnerTest() {
 	char const *argv[]={
-			"dummy","testsuite1","testsuite2#test1",0,"testsuite2#test3",0,0
+			"dummy","test suite1","testsuite2#test1",0,"testsuite2#test3",0,0
 	};
 	cute::suite s;
 	s += CUTE(test);
@@ -20,7 +20,7 @@ void thisIsAtest_cute_filter_runnerTest() {
 
 	cute::counting_listener<> l;
 	cute::runner<cute::counting_listener<> > run=cute::makeRunner(l,sizeof(argv)/sizeof(*argv)-1,argv);
-	run(s,"testsuite1");
+	run(s,"test suite1");
 	run(s,"testsuite2");
 	ASSERT_EQUAL(2,l.numberOfSuites);
 	ASSERT_EQUAL(s.size()+2,l.numberOfTests);

@@ -19,6 +19,7 @@
  *********************************************************************************/
 
 #include "test_cute_suite.h"
+#include "cute_determine_version.h"
 #include "cute_suite.h"
 #include "cute_equals.h"
 
@@ -33,4 +34,31 @@ void test_cute_suite(){
 	ASSERT_EQUAL(2u,s.size());
 	s += s;
 	ASSERT_EQUAL(4u,s.size());
+}
+#if  defined(USE_STD11)
+namespace {
+#if !defined (_MSC_VER)
+cute::suite thesuite={
+		{"first",[]{ ASSERTM("a test",true);}},
+		{"second",[]{ ASSERTM("another test",true);}}
+};
+#endif
+}
+#include "cute_runner.h"
+#include "cute_counting_listener.h"
+#endif
+
+void test_lambda_suite(){
+
+#if defined(USE_STD11)
+#if defined(_MSC_VER)
+	// only local lambdas are possible
+cute::test thesuite("LambdaTest",[]{ASSERTM("lambda test",true);});
+#endif
+	cute::counting_listener<> lis;
+	cute::suite s;
+	s += thesuite;
+	cute::makeRunner(lis)(s,"lambda suite");
+	ASSERT(lis.numberOfTests>=1);
+#endif
 }

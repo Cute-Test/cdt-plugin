@@ -212,9 +212,9 @@ namespace cute {
 }
 
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),\
-		cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__)
+		CUTE_FUNCNAME_PREFIX+cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),\
-		cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__)
+		CUTE_FUNCNAME_PREFIX+cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
 #endif /*CUTE_EQUALS_H_*/

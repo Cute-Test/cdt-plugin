@@ -118,6 +118,7 @@ int main(int argc, char const *argv[]){
 	s += CUTE(test_cute_runner);
 	s += CUTE_SUITE_TEST(test_cute_suite_test());
 	s += CUTE(test_cute_suite);
+	s += CUTE(test_lambda_suite);
 	s += CUTE_SUITE_TEST(test_cute_test_incarnate());
 	s += CUTE_SUITE_TEST(test_cute_test());
 	s += CUTE_SUITE_TEST(test_cute_testmember());
@@ -128,7 +129,7 @@ int main(int argc, char const *argv[]){
 	s += CUTE_CONTEXT_MEMFUN(boost_or_tr1::ref(std::cerr),to_incarnate,operator());
 	cute::xml_file_opener xmlfile(argc,argv);
 	cute::xml_listener<cute::counting_listener<cute::ide_listener<> > > l(xmlfile.out);
-	cute::makeRunner(l,argc,argv)(s,"all_cute_tests");
+	cute::makeRunner(l,argc,argv)(s,"all cute tests");
 	cout << flush;
 	cerr << flush;
 	cerr << l.numberOfTests << " Tests - expect " << s.size() << endl;
