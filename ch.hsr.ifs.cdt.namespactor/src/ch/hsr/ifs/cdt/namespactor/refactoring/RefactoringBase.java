@@ -57,16 +57,14 @@ public abstract class RefactoringBase extends CRefactoring {
 			if(tu == null){
 				try {
 					tu = getTUOf(project.findElement(new Path(fileName)));
-				} catch (CModelException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				} catch (CModelException e) { /* will fail for external files, i.e. system headers */ }
 				if (tu == null){
 					try {
 						tu = CoreModelUtil.findTranslationUnitForLocation(new Path(fileName), project);
 					} catch (CModelException e) {
-						// TODO Auto-generated catch block
+						// not much we can do to achieve a tu.
 						e.printStackTrace();
+						return null; // avoid crash within getAST()
 					}
 				}
 			}

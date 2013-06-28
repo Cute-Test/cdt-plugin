@@ -135,6 +135,7 @@ int main(){
 //@.config
 expectedNrOfFatalErrors=1
 //@A1.cpp
+/*empty text selextion in test is on 0,0 */
 using namespace A;
 //!IUDIR_InvalidSelection
 //@.config
