@@ -14,6 +14,7 @@ package ch.hsr.ifs.cdt.namespactor.astutil;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.internal.ui.refactoring.utils.NodeHelper;
 
@@ -59,6 +60,16 @@ public class NSNodeHelper extends NodeHelper {
 				return true;
 			}
 			currNode = currNode.getParent();
+		}
+		return false;
+	}
+	public static boolean isBindingDefinedWithin(IBinding descendant, IBinding potentialowner){
+		IBinding search=descendant;
+		
+		while (search != null){
+			if (search.equals(potentialowner))
+				return true;
+			search = search.getOwner();
 		}
 		return false;
 	}

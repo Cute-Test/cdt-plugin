@@ -14,12 +14,13 @@ package ch.hsr.ifs.cdt.namespactor.ui.qun;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 @SuppressWarnings("restriction")
-public class QUNRefactoringActionDelegate implements IWorkbenchWindowActionDelegate{
+public class QUNRefactoringActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate{
     private IWorkbenchWindow window;
     private static final String ACTION_ID = "ch.hsr.ifs.cdt.namespactor.inline";
 
@@ -53,5 +54,13 @@ public class QUNRefactoringActionDelegate implements IWorkbenchWindowActionDeleg
     private boolean isEditorCallSource() {
         return (window.getActivePage().getActivePart() instanceof CEditor);
     }
+
+	@Override
+	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+		if (targetEditor != null) {
+			this.window = targetEditor.getSite().getWorkbenchWindow();
+		}
+		
+	}
 
 }

@@ -14,6 +14,7 @@ package ch.hsr.ifs.cdt.namespactor.ui.eudec;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
@@ -22,7 +23,7 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
  * @author Jules Weder
  * */
 @SuppressWarnings("restriction")
-public class EUDECRefactoringActionDelegate implements IWorkbenchWindowActionDelegate{
+public class EUDECRefactoringActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate{
     private IWorkbenchWindow window;
     private static final String ACTION_ID = "ch.hsr.ifs.cdt.namespactor.extract";
 
@@ -56,5 +57,13 @@ public class EUDECRefactoringActionDelegate implements IWorkbenchWindowActionDel
     private boolean isEditorCallSource() {
         return (window.getActivePage().getActivePart() instanceof CEditor);
     }
+
+	@Override
+	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+		if (targetEditor != null) {
+			this.window = targetEditor.getSite().getWorkbenchWindow();
+		}
+		
+	}
 
 }

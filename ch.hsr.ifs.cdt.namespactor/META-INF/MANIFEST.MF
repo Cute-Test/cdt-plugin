@@ -29,3 +29,4 @@ Export-Package: ch.hsr.ifs.cdt.namespactor.astutil,
  ch.hsr.ifs.cdt.namespactor.refactoring.qun,
  ch.hsr.ifs.cdt.namespactor.ui.iu,
  ch.hsr.ifs.cdt.namespactor.ui.qun
+Bundle-Vendor: IFS

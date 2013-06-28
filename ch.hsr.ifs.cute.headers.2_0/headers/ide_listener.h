@@ -67,17 +67,17 @@ namespace cute {
 			OutputDebugString(os.str().c_str());
 #endif
 		}
+		static std::string maskBlanks(std::string in) {
+			std::transform(in.begin(),in.end(),in.begin(),blankToUnderscore());
+			return in;
+		}
 	protected:
 		struct blankToUnderscore{
-            char operator()(char in){
+            char operator()(char in) const {
 			if (in == ' ') return '_';
 			return in;
 		}
         };
-		std::string maskBlanks(std::string in) {
-			std::transform(in.begin(),in.end(),in.begin(),blankToUnderscore());
-			return in;
-		}
 		std::ostream &out;
 	};
 }

@@ -18,10 +18,12 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.ITypedef;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
@@ -58,7 +60,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 			if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
 				ICPPASTNamedTypeSpecifier nameDeclSpec = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
 				String typename = nameDeclSpec.getName().toString();
-				if (typename.equals("cute::suite")||typename.equals("suite")) { //$NON-NLS-1$ // last part is "suite"
+				if (isCuteSuite(nameDeclSpec)) { //$NON-NLS-1$ // last part is "suite"
 //					IASTName[] suitedef = simpDecl.getTranslationUnit().getDefinitionsInAST(nameDeclSpec.getName().resolveBinding());
 //					ICPPASTNamespaceDefinition ns = TddHelper.getAncestorOfType(suitedef[0], ICPPASTNamespaceDefinition.class);
 //					if (ns != null && ns.getName().toString().equals("cute")) {
@@ -209,5 +211,28 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 		}
 		return (IASTFunctionCallExpression) n;
 	}
+
+	public static boolean isCuteSuite(IASTNamedTypeSpecifier typeSpec) {
+		IASTName typeName = typeSpec.getName();
+
+		if ("cute::suite".equals(typeName.toString()))
+			return true;
+
+		IBinding typeBinding = typeName.resolveBinding();
+		if (typeBinding instanceof ITypedef){
+			ITypedef typeDef = (ITypedef) typeBinding;
+			return "suite".equals(typeDef.getName())
+				&& "cute".equals(typeDef.getOwner().getName());
+		} else if (typeBinding instanceof ICPPClassType){
+				ICPPClassType type=(ICPPClassType)typeBinding;
+				return "suite".equals(type.getName())
+						&& "cute".equals(type.getOwner().getName());
+	
+		}
+		else
+			return false;
+
+	}
+
 
 }

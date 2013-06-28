@@ -39,9 +39,17 @@ namespace cute{
 #define CUTE_FUNCNAME_PREFIX std::string(__func__)+": "
 #else
 #if defined( _MSC_VER ) || defined(__GNUG__)
+//#if defined(USE_STD11)
+//#define CUTE_FUNCNAME_PREFIX
+// workaround doesn't work namespace { char const __FUNCTION__ []="lambda";}
+// MSC can not use lambdas outside of function bodies for tests.
+//#endif
+// use -D CUTE_FUNCNAME_PREFIX if you want to use non-local lambdas with test macros
+#if !defined(CUTE_FUNCNAME_PREFIX)
 #define CUTE_FUNCNAME_PREFIX std::string(__FUNCTION__)+": "
+#endif
 #else // could provide #defines for other compiler-specific extensions... need to experiment, i.e., MS uses __FUNCTION__
-#define CUTE_FUNCNAME_PREFIX ""
+#define CUTE_FUNCNAME_PREFIX std::string("")
 #endif
 #endif
 #define ASSERTM(msg,cond) do { if (!(cond)) throw cute::test_failure(CUTE_FUNCNAME_PREFIX+cute::cute_to_string::backslashQuoteTabNewline(msg),__FILE__,__LINE__);} while(false)

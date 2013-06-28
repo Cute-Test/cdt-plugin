@@ -18,6 +18,8 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
+import ch.hsr.ifs.cute.ui.checkers.RegisteredTestFunctionFinderVisitor;
+
 public class SuitePushBackFinder extends ASTVisitor {
 	private IASTName suiteDeclName = null;
 	private IASTNode suiteLocation=null;
@@ -38,8 +40,7 @@ public class SuitePushBackFinder extends ASTVisitor {
 				IASTDeclSpecifier declSpec = sDecl.getDeclSpecifier();
 				if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
 					ICPPASTNamedTypeSpecifier nDeclSpec = (ICPPASTNamedTypeSpecifier) declSpec;
-					String typename = nDeclSpec.getName().toString();
-					if(typename.equals("cute::suite")||typename.equals("suite")) { //$NON-NLS-1$ // PS: Hack, should check if suite is in namespace cute!
+					if(RegisteredTestFunctionFinderVisitor.isCuteSuite(nDeclSpec)) { //$NON-NLS-1$ // PS: Hack, should check if suite is in namespace cute!
 						suiteDeclName = sDecl.getDeclarators()[0].getName();
 						suiteLocation=nDeclSpec;
 					}

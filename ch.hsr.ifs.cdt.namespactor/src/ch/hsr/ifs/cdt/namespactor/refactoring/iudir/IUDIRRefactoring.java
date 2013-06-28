@@ -123,7 +123,8 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 
 				ctx.enclosingNSContext = new NamespaceInlineContext();
 				ctx.enclosingNSContext.usingName = entry.getKey().usingName;
-				ctx.enclosingNSContext.namespaceDefBinding = ((PDOMName)entry.getKey().namespaceDefName).getBinding();
+				ctx.enclosingNSContext.namespaceDefName = entry.getKey().namespaceDefName ;
+				ctx.enclosingNSContext.namespaceDefBinding =((PDOMName)ctx.enclosingNSContext.namespaceDefName).getBinding();
 				processReplaceOf(name);
 			}
 		}

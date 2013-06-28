@@ -12,17 +12,24 @@
 package ch.hsr.ifs.cdt.namespactor.ui.eudir;
 
 import org.eclipse.cdt.internal.ui.editor.CEditor;
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.eclipse.ui.handlers.HandlerUtil;
+
 
 /**
  * @author Jules Weder
  * */
 @SuppressWarnings("restriction")
-public class EUDIRRefactoringActionDelegate implements IWorkbenchWindowActionDelegate{
+public class EUDIRRefactoringActionDelegate extends AbstractHandler implements IWorkbenchWindowActionDelegate, IEditorActionDelegate{
     private IWorkbenchWindow window;
     private static final String ACTION_ID = "ch.hsr.ifs.cdt.namespactor.extract";
 
@@ -56,5 +63,24 @@ public class EUDIRRefactoringActionDelegate implements IWorkbenchWindowActionDel
     private boolean isEditorCallSource() {
         return (window.getActivePage().getActivePart() instanceof CEditor);
     }
+
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		// TODO Auto-generated method stub
+		IWorkbenchPart part = HandlerUtil.getActivePartChecked(event);
+		if (! (part instanceof CEditor)) return null;
+        EUDIRRefactoringAction extractAction = new EUDIRRefactoringAction(ACTION_ID);
+        extractAction.setEditor((IEditorPart) part);
+        extractAction.run();
+		return null;
+	}
+
+	@Override
+	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+		if (targetEditor != null) {
+			this.window = targetEditor.getSite().getWorkbenchWindow();
+		}
+		
+	}
 
 }

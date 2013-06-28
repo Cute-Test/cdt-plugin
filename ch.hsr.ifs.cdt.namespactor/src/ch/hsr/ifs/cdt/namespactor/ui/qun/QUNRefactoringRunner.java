@@ -13,13 +13,12 @@ package ch.hsr.ifs.cdt.namespactor.ui.qun;
 
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.cdt.internal.ui.refactoring.RefactoringRunner;
-import org.eclipse.cdt.ui.CUIPlugin;
+import org.eclipse.cdt.internal.ui.refactoring.RefactoringSaveHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.IShellProvider;
-import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
-import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 
 import ch.hsr.ifs.cdt.namespactor.refactoring.NSRefactoringWizard;
 import ch.hsr.ifs.cdt.namespactor.refactoring.qun.QUNRefactoring;
@@ -33,15 +32,9 @@ public class QUNRefactoringRunner extends RefactoringRunner {
 
 	@Override
 	public void run() {
-        try {
-			Refactoring refactoring = new QUNRefactoring(element, selection, project);
-			RefactoringWizard wizard = new NSRefactoringWizard(refactoring);
-            RefactoringWizardOpenOperation openOperation = new RefactoringWizardOpenOperation( wizard);
-            openOperation.run(shellProvider.getShell(), "StartupError");
-        } catch (InterruptedException e) {
-            CUIPlugin.log(e);
-        }
-
+        CRefactoring refactoring = new QUNRefactoring(element, selection, project);
+		RefactoringWizard wizard = new NSRefactoringWizard(refactoring);
+		run(wizard, refactoring, RefactoringSaveHelper.SAVE_REFACTORING);
 	}
 
 }

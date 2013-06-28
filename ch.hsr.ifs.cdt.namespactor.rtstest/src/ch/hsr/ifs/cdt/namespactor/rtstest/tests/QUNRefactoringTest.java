@@ -25,5 +25,9 @@ public class QUNRefactoringTest extends JUnit4RtsRefactoringTest {
 		
 		return new QUNRefactoring(getCElementOfTestFile(), selection, cproject);
 	}
-
+@Override
+public void setUp() throws Exception {
+	addIncludeDirPath("include");
+	super.setUp();
+}
 }

@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+* Copyright (c) 2013 Institute for Software, HSR Hochschule fuer Technik 
 * Rapperswil, University of applied sciences and others.
 * All rights reserved. This program and the accompanying materials
 * are made available under the terms of the Eclipse Public License v1.0
@@ -7,9 +7,10 @@
 * http://www.eclipse.org/legal/epl-v10.html 
 *
 * Contributors:
+*   Peter Sommerlad - adaption and fixes for open cases/rewrites
 * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
 ******************************************************************************/
-package ch.hsr.ifs.cdt.namespactor.refactoring.iu;
+package ch.hsr.ifs.cdt.namespactor.refactoring.qun;
 
 import java.util.Set;
 
@@ -24,16 +25,16 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
 
 import ch.hsr.ifs.cdt.namespactor.astutil.NSNameHelper;
 import ch.hsr.ifs.cdt.namespactor.refactoring.TemplateIdFactory;
+import ch.hsr.ifs.cdt.namespactor.refactoring.iu.InlineRefactoringContext;
+import ch.hsr.ifs.cdt.namespactor.refactoring.iu.NamespaceInlineContext;
 
-/**
- * @author kunz@ideadapt.net
- * */
-public class InlineTemplateIdFactory extends TemplateIdFactory{
+
+public class QUNTemplateIdFactory extends TemplateIdFactory{
 
 	private final NamespaceInlineContext enclosingNSContext;
 	private Set<ICPPASTTemplateId> templateIdsToIgnore = null;
 
-	public InlineTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context){
+	public QUNTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context){
 		super(templateId);
 		this.enclosingNSContext  = context.enclosingNSContext;
 		this.templateIdsToIgnore = context.templateIdsToIgnore;
@@ -55,7 +56,7 @@ public class InlineTemplateIdFactory extends TemplateIdFactory{
 		// qualify the name of the specifier if it has nothing to do with a template id
 		if(!isOrContainsTemplateId(specName)){
 			IASTName qnameNode = specName;
-			if(!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.namespaceDefNode.getName())){
+			if(!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.namespaceDefName)){
 				qnameNode = NSNameHelper.prefixNameWith(enclosingNSContext.usingName, specName);
 			}
 			newDeclSpec.setName(qnameNode.copy());
@@ -87,7 +88,7 @@ public class InlineTemplateIdFactory extends TemplateIdFactory{
 			try {
 				qname = NSNameHelper.buildQualifiedName(((ICPPNamespace) templateNameBinding.getOwner()).getQualifiedName());
 
-				boolean isChildOfEnclosingNamespace = qname.equals(enclosingNSContext.namespaceDefNode.getName().resolveBinding().toString());
+				boolean isChildOfEnclosingNamespace = qname.equals(enclosingNSContext.namespaceDefBinding.toString());
 				boolean isNotQualified = !(templId.getParent() instanceof ICPPASTQualifiedName);
 
 				return isChildOfEnclosingNamespace && isNotQualified;

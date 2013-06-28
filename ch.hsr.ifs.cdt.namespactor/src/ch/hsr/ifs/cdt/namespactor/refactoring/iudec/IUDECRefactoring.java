@@ -172,9 +172,6 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 		IBinding selectedNameBinding = ctx.selectedName.getLastName().resolveBinding();
 		ICPPUsingDeclaration selectedDeclaration = (ICPPUsingDeclaration) selectedNameBinding;
 		
-		List<IBinding> childrenBindings = new ArrayList<IBinding>();
-		childrenBindings.add(selectedNameBinding);
-
 		IIndexName[] declNames = getIndex().findDeclarations(selectedNameBinding);
 		IASTName declNode      = null;
 		ICPPASTNamespaceDefinition nsDefNode=null;
@@ -288,15 +285,27 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 						return false;
 					}
 				}
-				if (ctx.enclosingNSContext != null && (ctx.enclosingNSContext.namespaceDefNode != null &&
+ 				if (ctx.enclosingNSContext != null && ((ctx.enclosingNSContext.namespaceDefNode != null &&
 						NSNodeHelper.isNodeEnclosedByScopeDefinedBy(name, ctx.enclosingNSContext.namespaceDefNode))||
 						(ctx.enclosingNSContext.classDefNode!=null &&
-						NSNodeHelper.isNodeEnclosedByScopeDefinedBy(name, ctx.enclosingNSContext.classDefNode)))
+						NSNodeHelper.isNodeEnclosedByScopeDefinedBy(name, ctx.enclosingNSContext.classDefNode))))
 					return false;
-
 				IBinding refBinding = name.resolveBinding();
 				IIndexBinding adaptedRefBinding = indexer.adaptBinding(refBinding);
-				if (targetDeclarationBinding.equals(adaptedRefBinding)) return true;
+				
+/*				IBinding namespaceDefBinding = ctx.enclosingNSContext.namespaceDefBinding;
+				try {
+					namespaceDefBinding = indexer.adaptBinding(namespaceDefBinding);
+				} catch (OperationCanceledException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if (ctx.enclosingNSContext != null && ((namespaceDefBinding != null &&
+					NSNodeHelper.isNodeEnclosedBy(name, ctx.enclosingNSContext.namespaceDefNode))||
+					(ctx.enclosingNSContext.classDefNode!=null &&
+						NSNodeHelper.isNodeEnclosedByScopeDefinedBy(name, ctx.enclosingNSContext.classDefNode))))
+					return false;
+*/				if (targetDeclarationBinding.equals(adaptedRefBinding)) return true;
 				if(refBinding instanceof ICPPSpecialization){
 					refBinding = ((ICPPSpecialization)refBinding).getSpecializedBinding();
 					adaptedRefBinding = indexer.adaptBinding(refBinding);

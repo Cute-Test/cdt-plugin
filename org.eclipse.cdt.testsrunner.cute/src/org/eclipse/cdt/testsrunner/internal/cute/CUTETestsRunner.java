@@ -8,7 +8,6 @@ package org.eclipse.cdt.testsrunner.internal.cute;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.eclipse.cdt.testsrunner.launcher.ITestsRunnerProvider;
 import org.eclipse.cdt.testsrunner.model.ITestModelUpdater;
@@ -19,27 +18,16 @@ public class CUTETestsRunner implements ITestsRunnerProvider {
 
 	private static final String CUTE_TEST_PATH_DELIMITER = "#"; //$NON-NLS-1$
 
-	public String[] configureLaunchParameters(String[] commandLine, String[][] testPaths) {
-		ArrayList<String> command = new ArrayList<String>(Arrays.asList(commandLine));
-		
-		if (testPaths != null) {
-			for(String[] testPath : testPaths)  {
-				StringBuilder sb = assembleTestPath(testPath);
-				command.add(sb.toString());
-			}
-		}
-		
-		return command.toArray(new String[command.size()]);
-	}
-
 	private StringBuilder assembleTestPath(String[] testPath) {
 		StringBuilder path = new StringBuilder();
+		path.append('"');
 		for (int i = 0; i < testPath.length; i++) {
 			if (i > 0) {
 				path.append(CUTE_TEST_PATH_DELIMITER);
 			}
 			path.append(testPath[i]);
 		}
+		path.append('"');
 		return path;
 	}
 	

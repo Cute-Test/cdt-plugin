@@ -11,12 +11,11 @@
 ******************************************************************************/
 package ch.hsr.ifs.cdt.namespactor.refactoring.qun;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
@@ -41,7 +40,6 @@ import ch.hsr.ifs.cdt.namespactor.refactoring.NodeDefinitionNotInWorkspaceExcept
 import ch.hsr.ifs.cdt.namespactor.refactoring.TemplateIdFactory;
 import ch.hsr.ifs.cdt.namespactor.refactoring.iu.InlineRefactoringBase;
 import ch.hsr.ifs.cdt.namespactor.refactoring.iu.InlineRefactoringContext;
-import ch.hsr.ifs.cdt.namespactor.refactoring.iu.InlineTemplateIdFactory;
 import ch.hsr.ifs.cdt.namespactor.refactoring.iu.NamespaceInlineContext;
 import ch.hsr.ifs.cdt.namespactor.resources.Labels;
 
@@ -77,7 +75,6 @@ public class QUNRefactoring extends InlineRefactoringBase {
 		}else{
 			
 			IBinding selectedNameBinding = selectedName.resolveBinding();
-			try {
 				if(isPartOfTemplateVariableDeclaration(selectedName)){
 					initContext(selectedName);
 					processTemplateVariableDeclaration(selectedName, ctx);
@@ -87,25 +84,49 @@ public class QUNRefactoring extends InlineRefactoringBase {
 					selectedNameBinding = ((ICPPSpecialization) selectedNameBinding).getSpecializedBinding();
 				}
 
-				addReplacement(selectedName, new ASTNodeFactory().newQualifiedNameNode(CPPVisitor.getQualifiedName(selectedNameBinding)));
-			} catch (NodeDefinitionNotInWorkspaceException e) {
-				initStatus.addFatalError(Labels.IU_SysNode);
-				e.printStackTrace();
-			}
+				addReplacement(selectedName, ASTNodeFactory.getDefault().newQualifiedNameNode(CPPVisitor.getQualifiedName(selectedNameBinding)));
+			
 		}
 
 		sm.done();
 		return initStatus;
 	}
 
-	private void initContext(IASTName selectedName) throws CoreException, NodeDefinitionNotInWorkspaceException {
+	private void initContext(IASTName selectedName) throws CoreException {
 		ctx.selectedName        = selectedName;
+		ctx.enclosingCompound = NSNodeHelper.findCompoundStatementInAncestors(selectedName);
 		ctx.templateIdsToIgnore = new HashSet<ICPPASTTemplateId>();
 		IBinding selectedNameBinding = ctx.selectedName.resolveBinding();
-		
-		List<IBinding> childrenBindings = new ArrayList<IBinding>();
-		childrenBindings.add(selectedNameBinding);
+		IBinding owner = selectedNameBinding.getOwner();
+		IIndexName[] declNames = getIndex().findDeclarations(selectedNameBinding);
+		IASTName declNode      = null;
+		ICPPASTNamespaceDefinition nsDefNode=null;
+		ICPPASTCompositeTypeSpecifier classDefNode=null; // sorry, no common baseclass, getName() is required for nsDefNode
+		if (declNames.length>0){
+			try {
+				declNode=getNodeOf(declNames[0], npm);
+			} catch (NodeDefinitionNotInWorkspaceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			nsDefNode= NSNodeHelper.findAncestorOf(declNode, ICPPASTNamespaceDefinition.class);
+			classDefNode= NSNodeHelper.findAncestorOf(declNode, ICPPASTCompositeTypeSpecifier.class);
+		}
+		ICPPASTQualifiedName newQName        = ASTNodeFactory.getDefault().newQualifiedNameNode(CPPVisitor.getQualifiedName(selectedNameBinding));
 
+		  
+		ctx.enclosingNSContext = new NamespaceInlineContext();
+		ctx.enclosingNSContext.namespaceDefNode  = nsDefNode;
+		ctx.enclosingNSContext.classDefNode  = classDefNode;
+		ctx.enclosingNSContext.usingName = NSNameHelper.copyQualifers(newQName);
+		ctx.enclosingNSContext.namespaceDefBinding = owner;
+		ctx.enclosingNSContext.namespaceDefName = getIndex().findDefinitions(owner)[0];
+/*		IBinding decl    = ctx.selectedName.getLastName().resolveBinding();
+		IBinding targetDeclarationBinding = ((ICPPUsingDeclaration)decl).getDelegates()[0]; // OK?
+		targetDeclarationBinding= getIndex().adaptBinding(targetDeclarationBinding);
+
+		
+		
 		IIndexName[] declNames = getIndex().findDeclarations(selectedNameBinding);
 		ICPPASTNamespaceDefinition nsDefNode = NSNodeHelper.findAncestorOf(getNodeOf(declNames[0], npm), ICPPASTNamespaceDefinition.class);// AOB
 																																			// Exc....
@@ -114,10 +135,34 @@ public class QUNRefactoring extends InlineRefactoringBase {
 		ctx.enclosingNSContext = new NamespaceInlineContext();
 		ctx.enclosingNSContext.namespaceDefNode  = nsDefNode;
 		ctx.enclosingNSContext.usingName         = NSNameHelper.copyQualifers(newQName);
-	}
+*/	}
 	
 	@Override
 	protected TemplateIdFactory getTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext ctx) {
-		return new InlineTemplateIdFactory(templateId, ctx);
+		return new QUNTemplateIdFactory(templateId, ctx);
 	}	
+	@Override
+	protected void processTemplateVariableDeclaration(IASTName childRefNode, InlineRefactoringContext ctx) {
+		IASTName nodeToReplace = null;
+		ICPPASTTemplateId vTemplId = (ICPPASTTemplateId) childRefNode.getParent();
+		
+		if(ctx.templateIdsToIgnore.contains(vTemplId)){
+			return;
+		}
+		
+		ICPPASTTemplateId outerMostTemplateId = NSNodeHelper.findOuterMost(ICPPASTTemplateId.class, vTemplId);
+		if(outerMostTemplateId == null){
+			outerMostTemplateId = vTemplId;
+		}
+		
+		nodeToReplace = outerMostTemplateId;
+		if(outerMostTemplateId.getParent() instanceof ICPPASTQualifiedName){
+			nodeToReplace = (IASTName) outerMostTemplateId.getParent();
+		}
+		
+		IASTName newTemplId = getTemplateIdFactory(outerMostTemplateId, ctx).buildTemplate();
+
+		addReplacement(nodeToReplace, newTemplId);
+	}
+
 }

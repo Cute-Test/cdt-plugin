@@ -21,7 +21,11 @@
 #ifndef CUTE_DETERMINE_VERSION_H_
 #define CUTE_DETERMINE_VERSION_H_
 
-#if defined(__GNUG__) && defined(__GXX_EXPERIMENTAL_CXX0X__) && ! defined(USE_TR1)
+#if __cplusplus >= 201103L  && ! defined (USE_STD11)
+#define USE_STD11 1
+#endif
+
+#if defined(__GNUG__) && defined(__GXX_EXPERIMENTAL_CXX0X__) && ! defined(USE_TR1) && ! defined(USE_STD11)
 #define USE_STD11 1
 #endif
 
@@ -29,8 +33,5 @@
 #if (_MSC_VER >= 1400)
 #define USE_STD11 1
 #endif
-#endif
-#if __cplusplus >= 201103L  && ! defined (USE_STD11)
-#define USE_STD11 1
 #endif
 #endif /*CUTE_DETERMINE_VERSION_H_*/

@@ -17,6 +17,8 @@ import org.eclipse.cdt.core.dom.IName;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.model.CModelException;
+import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ISourceReference;
@@ -24,9 +26,7 @@ import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.corext.util.CModelUtil;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
@@ -54,14 +54,31 @@ public abstract class RefactoringBase extends CRefactoring {
 		String fileName     = ref.getFileLocation().getFileName();
 		ITranslationUnit tu = tuCache.get(fileName);
 
-		try {
 			if(tu == null){
-				tu = getTUOf(project.findElement(new Path(fileName)));
+				try {
+					tu = getTUOf(project.findElement(new Path(fileName)));
+				} catch (CModelException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (tu == null){
+					try {
+						tu = CoreModelUtil.findTranslationUnitForLocation(new Path(fileName), project);
+					} catch (CModelException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
-			return getAST(tu, pm);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+			try {
+				return getAST(tu, pm);
+			} catch (OperationCanceledException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		return null;
 	}
 
@@ -93,13 +110,15 @@ public abstract class RefactoringBase extends CRefactoring {
 	
 	protected IASTName getNodeOf(IName name, IProgressMonitor pm) throws CoreException, NodeDefinitionNotInWorkspaceException {
 		
-		IPath refPath = Path.fromOSString(name.getFileLocation().getFileName());
+		/*IPath refPath = Path.fromOSString(name.getFileLocation().getFileName());
 		boolean isInWorkspace = PathUtil.isPrefix(PathUtil.getWorkspaceRoot().getLocation(), refPath);
 		if(!isInWorkspace){
 			throw new NodeDefinitionNotInWorkspaceException();
-		}
+		}*/
 		
-		IASTNode childRefNode = getASTOf(name, pm).getNodeSelector(name.getFileLocation().getFileName())
+		IASTTranslationUnit astOf = getASTOf(name, pm);
+		if (astOf==null) throw new NodeDefinitionNotInWorkspaceException();
+		IASTNode childRefNode = astOf.getNodeSelector(name.getFileLocation().getFileName())
 				                                  .findNode(name.getFileLocation().getNodeOffset(), name.getFileLocation().getNodeLength());
 		NSAssert.isInstanceOf(IASTName.class, childRefNode);
 		return (IASTName) childRefNode;
