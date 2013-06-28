@@ -189,4 +189,31 @@ public class NSNameHelper extends NameHelper {
 	public static boolean isSameNameInTemplateId(ICPPASTTemplateId name, ICPPASTTemplateId iastName) {
 		return name.getRawSignature().equals(iastName.getRawSignature());
 	}
+
+	public static String[] getQualifiedName(IBinding binding) {
+		String[] ns = null;
+	    for (IBinding owner= binding.getOwner(); owner != null; owner= owner.getOwner()) {
+			if (owner instanceof ICPPEnumeration && !((ICPPEnumeration) owner).isScoped()) {
+				continue;
+			}
+			String n= owner.getName();
+			if (n == null)
+				break;
+		    if (owner instanceof ICPPFunction)
+		        break;
+		    if (owner instanceof ICPPNamespace && ( n.length() == 0|| ((ICPPNamespace)owner).isInline()) ) {
+		    	// ignore anonymous and inline namespaces
+		    	continue;
+		    }
+	
+		    ns = ArrayUtil.append(String.class, ns, n);
+		}
+	    ns = ArrayUtil.trim(String.class, ns);
+	    String[] result = new String[ns.length + 1];
+	    for (int i = ns.length - 1; i >= 0; i--) {
+	        result[ns.length - i - 1] = ns[i];
+	    }
+	    result[ns.length]= binding.getName();
+	    return result;
+	}
 }

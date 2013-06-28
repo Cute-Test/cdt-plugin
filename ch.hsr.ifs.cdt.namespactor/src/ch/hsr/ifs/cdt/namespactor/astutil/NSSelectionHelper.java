@@ -118,7 +118,6 @@ public class NSSelectionHelper extends SelectionHelper {
 
 	public static ICPPASTUsingDeclaration getSelectedUsingDeclaration(final Region textSelection, IASTTranslationUnit tu) {
 	
-//		if(textSelection.getLength() > 0){
 			
 			final Container<ICPPASTUsingDeclaration> container = new Container<ICPPASTUsingDeclaration>();
 			
@@ -137,15 +136,11 @@ public class NSSelectionHelper extends SelectionHelper {
 			});
 	
 			return container.getObject();
-//		}
-	
-//		return null;
 	}
 
 	public static ICPPASTUsingDirective getSelectedUsingDirective(final Region textSelection, IASTTranslationUnit tu) {
 	
-	//	if(textSelection.getLength() > 0){
-			
+		
 			final Container<ICPPASTUsingDirective> container = new Container<ICPPASTUsingDirective>();
 			
 			tu.accept(new ASTVisitor() {
@@ -163,14 +158,11 @@ public class NSSelectionHelper extends SelectionHelper {
 			});
 	
 			return container.getObject();
-		//}
-	
-//		return null;
 	}
 
 	public static IASTName getSelectedName(final Region textSelection, IASTTranslationUnit tu) {
 		
-		if(textSelection.getLength() > 0){
+//		if(textSelection.getLength() > 0){
 			
 			final Container<IASTName> container = new Container<IASTName>();
 			
@@ -180,17 +172,25 @@ public class NSSelectionHelper extends SelectionHelper {
 				}
 	
 				@Override
-				public int visit(IASTName name) {
-					if (isSelectionOnExpression(textSelection, name)) {
+				public int leave(IASTName name) {
+					if (container.getObject() == null && isSelectionOnExpression(textSelection, name)) {
 						container.setObject(name);
 					}
+					return super.leave(name);
+				}
+
+				@Override
+				public int visit(IASTName name) {
+//					if (isSelectionOnExpression(textSelection, name)) {
+//						container.setObject(name);
+//					}
 					return super.visit(name);
 				}
 			});
 	
 			return container.getObject();
-		}
-		return null;
+//		}
+	//	return null;
 	}
 
 	public static boolean isSelectionCandidate(IASTName name) {

@@ -75,23 +75,22 @@ public class QUNRefactoring extends InlineRefactoringBase {
 		}else{
 			
 			IBinding selectedNameBinding = selectedName.resolveBinding();
-				if(isPartOfTemplateVariableDeclaration(selectedName)){
+/*				if(isPartOfTemplateVariableDeclaration(selectedName)){
 					initContext(selectedName);
 					processTemplateVariableDeclaration(selectedName, ctx);
 
-				} else if(selectedNameBinding instanceof ICPPSpecialization){
+				} else*/ if(selectedNameBinding instanceof ICPPSpecialization){
 
 					selectedNameBinding = ((ICPPSpecialization) selectedNameBinding).getSpecializedBinding();
 				}
-
-				addReplacement(selectedName, ASTNodeFactory.getDefault().newQualifiedNameNode(CPPVisitor.getQualifiedName(selectedNameBinding)));
+//selectedNameBinding.
+				addReplacement(selectedName, ASTNodeFactory.getDefault().newQualifiedNameNode(NSNameHelper.getQualifiedName(selectedNameBinding)));
 			
 		}
 
 		sm.done();
 		return initStatus;
 	}
-
 	private void initContext(IASTName selectedName) throws CoreException {
 		ctx.selectedName        = selectedName;
 		ctx.enclosingCompound = NSNodeHelper.findCompoundStatementInAncestors(selectedName);

@@ -253,7 +253,7 @@ using namespace A::B::C;
 using namespace A::B;
 
 int main(){
-	A::B::C::CC<A::B::C::CC<C2::SC2<A::B::C::CC<char> > > > ttt1;
+	A::B::C::CC<CC<C2::SC2<CC<char> > > > ttt1;
 	return 0;
 }
 //@A1.h
@@ -434,7 +434,7 @@ struct vector{};
 } 
 int main(){
 	using namespace std;
-	std::vector<std::vector<std::vector<int> > > v;
+	vector<std::vector<vector<int> > > v;
 }
 //!QUN_VectorExternal
 //@VectorIncluded.cpp
@@ -447,5 +447,5 @@ vector</*$*/vector/*$$*/<int> > v;
 #include <vector.hpp>
 int main(){
 using namespace std;
-vector<std::vector<int> > v;
+	vector<std::vector<int> > v;
 }

@@ -224,7 +224,7 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 		if(refNode.getParent() instanceof ICPPASTQualifiedName){
 			boolean addNames = false;
 			for(IASTName n : ((ICPPASTQualifiedName)nodeToReplace).getNames()){
-				if(addNames){
+				if(addNames && isNonInlineNamespace(n)){
 					newNameNode.addName(n.copy());
 				}
 				if(n.equals(refNode)){
@@ -232,6 +232,11 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 				}
 			}
 		}
+	}
+
+	private boolean isNonInlineNamespace(IASTName n) {
+		
+		return true;
 	}
 
 	@Override
