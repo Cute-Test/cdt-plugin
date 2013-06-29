@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.cdt.core.dom.IName;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -177,7 +178,7 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 						for (IIndexName nsDefName : usingNamespaces.getValue()) {
 
 							IIndexBinding pdomCandidateOwnerBinding = indexer.adaptBinding(candidateBindingOwner);
-							IIndexBinding pdomNsDefBinding = indexer.adaptBinding(((PDOMName) nsDefName).getBinding());// Problem: inline namespace must be handled as well
+							IIndexBinding pdomNsDefBinding = indexer.adaptBinding(((PDOMName) nsDefName).getBinding());
 							boolean currentNameIsATarget = pdomCandidateOwnerBinding.equals(pdomNsDefBinding) && isInlineRequiredFor(name, nsDefName);
 
 							if (currentNameIsATarget) {
@@ -328,6 +329,11 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 			if (!NSNodeHelper.isNodeEnclosedBy(ctx.enclosingCompound, name)) {
 				return false;
 			}
+		} else {
+			// on TU level, should check if node is after node of using directive
+			if (!isAfterUsingDirective(name)) {
+				return false;
+			}
 		}
 
 		// only replace node if its not part of a qualified name with the previous qualifier being the namespace to be inlined
@@ -337,6 +343,28 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 		}
 
 		return true;
+	}
+
+	private boolean isAfterUsingDirective(IASTName name) {
+		IASTDeclaration[] topLevelDecls = ctx.selectedUsing.getTranslationUnit().getDeclarations();
+		IASTNode usingdirparent = findTopLevelDeclaration(ctx.selectedUsing);
+		IASTNode nameParent = findTopLevelDeclaration(name);
+		for (int i = 0; i < topLevelDecls.length; ++i) {
+			if (usingdirparent.equals(topLevelDecls[i])) {
+				return true;
+			}
+			if (nameParent.equals(topLevelDecls[i])) {
+				return false;
+			}
+		}
+		return true; // be conservative....
+	}
+
+	public IASTNode findTopLevelDeclaration(IASTNode usingdirparent) {
+		while (usingdirparent != null && usingdirparent.getParent() != null && !(usingdirparent.getParent() instanceof IASTTranslationUnit)) {
+			usingdirparent = usingdirparent.getParent();
+		}
+		return usingdirparent;
 	}
 
 	private void processReplaceOf(IASTName childRefNode) {

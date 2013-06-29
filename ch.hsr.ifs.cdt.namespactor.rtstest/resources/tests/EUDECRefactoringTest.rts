@@ -10,7 +10,7 @@ expectedNrOfFatalErrors=1
 using /*$*/A/*$$*/::f;
 //!EUDEC_ReplacementWithinMacroShouldNotBeTouched
 //@A1.cpp
-#define macro(X) A::f(x)
+#define macro(X) A::f(X)
 namespace A{
 	 void f(int){}
 }
@@ -19,7 +19,7 @@ int main() {
 	macro(42);
 }
 //=
-#define macro(X) A::f(x)
+#define macro(X) A::f(X)
 namespace A{
 	 void f(int){}
 }
@@ -30,7 +30,7 @@ int main() {
 }
 //!EUDEC_ReplacementWithinMacroShouldNotBeTouched_type
 //@A1.cpp
-#define macro(X) A::f(x)
+#define macro(X) A::f(X)
 namespace A{
 	 struct f{f(int){}};
 }
@@ -39,7 +39,7 @@ int main() {
 	macro(42);
 }
 //=
-#define macro(X) A::f(x)
+#define macro(X) A::f(X)
 namespace A{
 	 struct f{f(int){}};
 }
@@ -50,7 +50,7 @@ int main() {
 }
 //!EUDEC_MacroWithinCall_type
 //@A1.cpp
-#define macro(X) A::f(x)
+#define macro(X) A::f(X)
 namespace A{
 	struct f{f(int){}};
 	void doit(f){}
@@ -60,7 +60,7 @@ int main() {
 	doit(macro(42));
 }
 //=
-#define macro(X) A::f(x)
+#define macro(X) A::f(X)
 namespace A{
 	struct f{f(int){}};
 	void doit(f){}
