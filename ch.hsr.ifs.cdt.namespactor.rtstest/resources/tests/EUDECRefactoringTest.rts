@@ -28,6 +28,48 @@ int main() {
 	f(0);
 	macro(42);
 }
+//!EUDEC_ReplacementWithinMacroShouldNotBeTouched_type
+//@A1.cpp
+#define macro(X) A::f(x)
+namespace A{
+	 struct f{f(int){}};
+}
+int main() {
+	/*$*/A/*$$*/::f(0);
+	macro(42);
+}
+//=
+#define macro(X) A::f(x)
+namespace A{
+	 struct f{f(int){}};
+}
+int main() {
+	using A::f;
+	f(0);
+	macro(42);
+}
+//!EUDEC_MacroWithinCall_type
+//@A1.cpp
+#define macro(X) A::f(x)
+namespace A{
+	struct f{f(int){}};
+	void doit(f){}
+}
+int main() {
+	/*$*/A/*$$*/::f(0);
+	doit(macro(42));
+}
+//=
+#define macro(X) A::f(x)
+namespace A{
+	struct f{f(int){}};
+	void doit(f){}
+}
+int main() {
+	using A::f;
+	f(0);
+	doit(macro(42));
+}
 //!EUDEC_SingleNSSelectionOnCall
 //@A1.cpp
 namespace A{

@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cdt.namespactor.refactoring;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
@@ -28,50 +28,50 @@ import ch.hsr.ifs.cdt.namespactor.astutil.NSNodeHelper;
  * @author kunz@ideadapt.net, Jules Weder
  * */
 @SuppressWarnings("restriction")
-public abstract class TemplateIdFactory extends ASTVisitor{
+public abstract class TemplateIdFactory extends ASTVisitor {
 
 	protected IASTNode currNode;
 	protected ASTNodeFactory factory = ASTNodeFactory.getDefault();
 	protected ICPPASTTemplateId templateId;
-	
-	public TemplateIdFactory(ICPPASTTemplateId templateId){
-		this.templateId    = templateId;
-		shouldVisitNames   = true;
+
+	public TemplateIdFactory(ICPPASTTemplateId templateId) {
+		this.templateId = templateId;
+		shouldVisitNames = true;
 		shouldVisitTypeIds = true;
 	}
-	
+
 	public static boolean isOrContainsTemplateId(IASTName name) {
-		if(name instanceof ICPPASTTemplateId){
+		if (name instanceof ICPPASTTemplateId) {
 			return true;
 		}
-		if(name instanceof ICPPASTQualifiedName){
-			for(IASTName n : ((ICPPASTQualifiedName) name).getNames()){
-				if(n instanceof ICPPASTTemplateId){
+		if (name instanceof ICPPASTQualifiedName) {
+			for (IASTName n : ((ICPPASTQualifiedName) name).getNames()) {
+				if (n instanceof ICPPASTTemplateId) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	public IASTName buildTemplate() {
-	
+
 		templateId.accept(this);
-	
+
 		return this.getTemplateId();
 	}
-	
+
 	@Override
 	public int visit(IASTName name) {
-		if(name instanceof ICPPASTTemplateId){
+		if (name instanceof ICPPASTTemplateId) {
 
-			ICPPASTTemplateId vTemplId    = (ICPPASTTemplateId)name;
+			ICPPASTTemplateId vTemplId = (ICPPASTTemplateId) name;
 			ICPPASTQualifiedName nameNode = modifyTemplateId(vTemplId); // problem....
-			ICPPASTTemplateId newTemplId  = factory.newTemplateId(vTemplId.getTemplateName().copy());
-			
+			ICPPASTTemplateId newTemplId = factory.newTemplateId(vTemplId.getTemplateName().copy()); // problem...
+
 			nameNode.addName(newTemplId);
 
-			if(currNode instanceof ICPPASTNamedTypeSpecifier){
+			if (currNode instanceof ICPPASTNamedTypeSpecifier) {
 				((ICPPASTNamedTypeSpecifier) currNode).setName(nameNode);
 			}
 
@@ -83,21 +83,21 @@ public abstract class TemplateIdFactory extends ASTVisitor{
 
 	@Override
 	public int visit(IASTTypeId typeId) {
-		if(currNode instanceof ICPPASTTemplateId){
+		if (currNode instanceof ICPPASTTemplateId) {
 
 			IASTDeclSpecifier vDeclSpecifier = typeId.getDeclSpecifier();
 			IASTDeclSpecifier newDeclSpec = null;
 
-			if(vDeclSpecifier instanceof ICPPASTNamedTypeSpecifier){
+			if (vDeclSpecifier instanceof ICPPASTNamedTypeSpecifier) {
 
 				newDeclSpec = createNamedDeclSpec(vDeclSpecifier);
 
-			}else if(vDeclSpecifier instanceof ICPPASTSimpleDeclSpecifier){
+			} else if (vDeclSpecifier instanceof ICPPASTSimpleDeclSpecifier) {
 
 				newDeclSpec = createSimpleDeclSpec(vDeclSpecifier);
 			}
 
-			if(newDeclSpec != null){
+			if (newDeclSpec != null) {
 				((ICPPASTTemplateId) currNode).addTemplateArgument(factory.newTypeId(newDeclSpec, null));
 				currNode = newDeclSpec;
 			}
@@ -108,7 +108,7 @@ public abstract class TemplateIdFactory extends ASTVisitor{
 	protected IASTDeclSpecifier createSimpleDeclSpec(IASTDeclSpecifier vDeclSpecifier) {
 
 		ICPPASTSimpleDeclSpecifier newDeclSpec = factory.newSimpleDeclSpecifier();
-		newDeclSpec.setType(((ICPPASTSimpleDeclSpecifier)vDeclSpecifier).getType());
+		newDeclSpec.setType(((ICPPASTSimpleDeclSpecifier) vDeclSpecifier).getType());
 		return newDeclSpec;
 	}
 

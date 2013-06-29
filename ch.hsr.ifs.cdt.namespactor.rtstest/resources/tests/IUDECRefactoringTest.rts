@@ -301,3 +301,20 @@ namespace AA{
 		}
 	};
 }
+//!IUDEC_OnlyDependentNodesShouldBeChanged
+//@AA.cpp
+#include "vector.hpp"
+int main(){
+using namespace std;
+vector<vector<int> > v;
+}
+using std::/*$*/ve/*$$*/ctor;
+vector<double> vv;
+//=
+#include "vector.hpp"
+int main(){
+using namespace std;
+vector<vector<int> > v;
+}
+
+std::vector<double> vv;

@@ -24,7 +24,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPSpecialization;
 import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -111,7 +110,7 @@ public class QUNRefactoring extends InlineRefactoringBase {
 			nsDefNode= NSNodeHelper.findAncestorOf(declNode, ICPPASTNamespaceDefinition.class);
 			classDefNode= NSNodeHelper.findAncestorOf(declNode, ICPPASTCompositeTypeSpecifier.class);
 		}
-		ICPPASTQualifiedName newQName        = ASTNodeFactory.getDefault().newQualifiedNameNode(CPPVisitor.getQualifiedName(selectedNameBinding));
+		ICPPASTQualifiedName newQName        = ASTNodeFactory.getDefault().newQualifiedNameNode(NSNameHelper.getQualifiedName(selectedNameBinding));
 
 		  
 		ctx.enclosingNSContext = new NamespaceInlineContext();

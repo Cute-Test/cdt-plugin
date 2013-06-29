@@ -28,6 +28,26 @@ int main() {
 	a(0);
 	macro(42);
 }
+//!EUDIR_namespace_in_macro_expansion_type
+//@A1.cpp
+#define macro(X) A::a(X)
+namespace A {
+	struct a{ a(int){}};
+}
+int main() {
+	A::/*$*/a/*$$*/(0);
+	macro(42);
+}
+//=
+#define macro(X) A::a(X)
+namespace A {
+	struct a{ a(int){}};
+}
+int main() {
+	using namespace A;
+	a(0);
+	macro(42);
+}
 //!EUDIR_SingleNamespace_SelectionCall
 //@A1.cpp
 namespace A {

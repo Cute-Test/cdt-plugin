@@ -944,3 +944,18 @@ int main(){
 	AA::getMax<int>(1, 2);
 	return 0;
 }
+//!IUDIR_ExternalInlineNamespace
+//@A1.cpp
+#include <vector.hpp>
+using namespace /*$*/std/*$$*/;
+int main() {
+   vector<int> v;
+}
+vector<vector<double>> vv;
+//=
+#include <vector.hpp>
+
+int main() {
+	std::vector<int> v;
+}
+std::vector<std::vector<double> > vv;

@@ -27,5 +27,10 @@ public class EUDECRefactoringTest extends JUnit4RtsRefactoringTest {
 		
 		return new EUDECRefactoring(getCElementOfTestFile(), selection, cproject);
 	}
+	@Override
+	public void setUp() throws Exception {
+		addIncludeDirPath("include");
+		super.setUp();
+	}
 
 }

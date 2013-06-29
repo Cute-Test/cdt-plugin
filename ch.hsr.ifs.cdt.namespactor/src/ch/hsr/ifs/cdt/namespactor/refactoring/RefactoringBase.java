@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cdt.namespactor.refactoring;
 
 import java.util.HashMap;
@@ -44,40 +44,47 @@ import ch.hsr.ifs.cdt.namespactor.refactoring.rewrite.ASTRewriteStore;
 @SuppressWarnings("restriction")
 public abstract class RefactoringBase extends CRefactoring {
 
-	HashMap<String, ITranslationUnit> tuCache  = new HashMap<String, ITranslationUnit>();
-	
+	HashMap<String, ITranslationUnit> tuCache = new HashMap<String, ITranslationUnit>();
+
 	public RefactoringBase(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);
 	}
 
 	protected IASTTranslationUnit getASTOf(IName ref, IProgressMonitor pm) {
-		String fileName     = ref.getFileLocation().getFileName();
+		String fileName = ref.getFileLocation().getFileName();
+		ITranslationUnit tu = getTuForFilename(fileName);
+		if (tu == null)
+			return null;
+		try {
+			return getAST(tu, pm);
+		} catch (OperationCanceledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ITranslationUnit getTuForFilename(String fileName) {
 		ITranslationUnit tu = tuCache.get(fileName);
 
-			if(tu == null){
+		if (tu == null) {
+			try {
+				tu = getTUOf(project.findElement(new Path(fileName)));
+			} catch (CModelException e) { // will fail for external files, i.e. system headers
+			}
+			if (tu == null) {
 				try {
-					tu = getTUOf(project.findElement(new Path(fileName)));
-				} catch (CModelException e) { /* will fail for external files, i.e. system headers */ }
-				if (tu == null){
-					try {
-						tu = CoreModelUtil.findTranslationUnitForLocation(new Path(fileName), project);
-					} catch (CModelException e) {
-						// not much we can do to achieve a tu.
-						e.printStackTrace();
-						return null; // avoid crash within getAST()
-					}
+					tu = CoreModelUtil.findTranslationUnitForLocation(new Path(fileName), project);
+				} catch (CModelException e) {
+					// not much we can do to achieve a tu.
+					e.printStackTrace();
 				}
 			}
-			try {
-				return getAST(tu, pm);
-			} catch (OperationCanceledException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		return null;
+		}
+		return tu;
 	}
 
 	public static ITranslationUnit getTUOf(ICElement element) {
@@ -88,40 +95,38 @@ public abstract class RefactoringBase extends CRefactoring {
 	}
 
 	protected String toStringDebug(IASTNode node) {
-		return String.format(
-				"--%nline: %s, class: %s#%s %nraw:%n%s %nparent: %s %n%n", 
-				node.getFileLocation().getStartingLineNumber(), 
-				node.getClass().getName(), 
-				node.hashCode(),
-				node.getRawSignature(), 
-				node.getParent().toString());
+		return String.format("--%nline: %s, class: %s#%s %nraw:%n%s %nparent: %s %n%n", node.getFileLocation().getStartingLineNumber(), node.getClass().getName(), node.hashCode(),
+				node.getRawSignature(), node.getParent().toString());
 	}
 
 	@Override
 	protected RefactoringDescriptor getRefactoringDescriptor() {
 		return null;
 	}
-	
-	protected void collectModifications(ASTRewriteStore store){
+
+	protected void collectModifications(ASTRewriteStore store) {
 		store.performChanges();
 	}
-	
+
 	protected IASTName getNodeOf(IName name, IProgressMonitor pm) throws CoreException, NodeDefinitionNotInWorkspaceException {
-		
-		/*IPath refPath = Path.fromOSString(name.getFileLocation().getFileName());
-		boolean isInWorkspace = PathUtil.isPrefix(PathUtil.getWorkspaceRoot().getLocation(), refPath);
-		if(!isInWorkspace){
-			throw new NodeDefinitionNotInWorkspaceException();
-		}*/
-		
+
+		/*
+		 * IPath refPath =
+		 * Path.fromOSString(name.getFileLocation().getFileName()); boolean
+		 * isInWorkspace =
+		 * PathUtil.isPrefix(PathUtil.getWorkspaceRoot().getLocation(),
+		 * refPath); if(!isInWorkspace){ throw new
+		 * NodeDefinitionNotInWorkspaceException(); }
+		 */
+
 		IASTTranslationUnit astOf = getASTOf(name, pm);
-		if (astOf==null) throw new NodeDefinitionNotInWorkspaceException();
-		IASTNode childRefNode = astOf.getNodeSelector(name.getFileLocation().getFileName())
-				                                  .findNode(name.getFileLocation().getNodeOffset(), name.getFileLocation().getNodeLength());
+		if (astOf == null)
+			throw new NodeDefinitionNotInWorkspaceException();
+		IASTNode childRefNode = astOf.getNodeSelector(name.getFileLocation().getFileName()).findNode(name.getFileLocation().getNodeOffset(), name.getFileLocation().getNodeLength());
 		NSAssert.isInstanceOf(IASTName.class, childRefNode);
 		return (IASTName) childRefNode;
 	}
-	
+
 	@Override
 	public void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		collectModifications(new ASTRewriteStore(collector));

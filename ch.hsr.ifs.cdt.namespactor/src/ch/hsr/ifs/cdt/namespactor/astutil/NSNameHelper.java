@@ -68,13 +68,13 @@ public class NSNameHelper extends NameHelper {
 		        break;
 		    if (owner instanceof ICPPClassType)
 		    	continue;
-		    if (owner instanceof ICPPNamespace && n.length() == 0) {
+		    if (isNamespaceToIgnore(owner, n)) {
 		    	continue;
 		    }
 		
-		    ns = (String[]) ArrayUtil.append(String.class, ns, n);
+		    ns = ArrayUtil.append(String.class, ns, n);
 		}
-	    ns = (String[]) ArrayUtil.trim(String.class, ns);
+	    ns = ArrayUtil.trim(String.class, ns);
         return reverseArray(ns);
 	}
 
@@ -97,15 +97,19 @@ public class NSNameHelper extends NameHelper {
 				break;
 		    if (owner instanceof ICPPFunction) 
 		        break;
-		    if (owner instanceof ICPPNamespace && n.length() == 0) {
+		    if (isNamespaceToIgnore(owner, n)) {
 		    	continue;
 		    }
 		
-		    ns = (String[]) ArrayUtil.append(String.class, ns, n);
+		    ns = ArrayUtil.append(String.class, ns, n);
 		}
-	    ns = (String[]) ArrayUtil.trim(String.class, ns);
+	    ns = ArrayUtil.trim(String.class, ns);
         String[] result = reverseArray(ns);
 	    return result;
+	}
+
+	private static boolean isNamespaceToIgnore(IBinding owner, String n) {
+		return owner instanceof ICPPNamespace && (n.length() == 0||((ICPPNamespace)owner).isInline() && n.startsWith("__"));
 	}
 
 	/**
@@ -190,7 +194,7 @@ public class NSNameHelper extends NameHelper {
 		return name.getRawSignature().equals(iastName.getRawSignature());
 	}
 
-	public static String[] getQualifiedName(IBinding binding) {
+	public static String[] getQualifiedName(IBinding binding) { // stolen from CPPVisitor and modified
 		String[] ns = null;
 	    for (IBinding owner= binding.getOwner(); owner != null; owner= owner.getOwner()) {
 			if (owner instanceof ICPPEnumeration && !((ICPPEnumeration) owner).isScoped()) {
@@ -201,8 +205,8 @@ public class NSNameHelper extends NameHelper {
 				break;
 		    if (owner instanceof ICPPFunction)
 		        break;
-		    if (owner instanceof ICPPNamespace && ( n.length() == 0|| ((ICPPNamespace)owner).isInline()) ) {
-		    	// ignore anonymous and inline namespaces
+		    if (isNamespaceToIgnore(owner, n) ) {
+		    	// ignore anonymous and inline namespaces internal to the implementation, such as __1 from libstdc++
 		    	continue;
 		    }
 	
