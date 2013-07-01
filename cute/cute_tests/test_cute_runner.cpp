@@ -23,38 +23,11 @@
 #include "cute_suite.h"
 #include "cute_base.h"
 #include "cute_equals.h"
-using namespace cute;
-namespace {
-struct mock_listener {
-	unsigned int begincount;
-	unsigned int endcount;
-	unsigned int startcount;
-	unsigned int successcount;
-	unsigned int failurecount;
-	unsigned int errorcount;
-	std::vector<std::string> infomessages;
-	std::vector<std::string>  errormessages;
-	std::vector<std::string>  successmessages;
-	mock_listener()
-	:begincount(0),endcount(0),startcount(0)
-	,successcount(0),failurecount(0),errorcount(0){}
-	void begin(suite const &s,char const *info){
-		++begincount;
-		infomessages.push_back(info);
-	}
-	void end(suite const &s,char const *info){++endcount;}
-	void start(test const &t){++startcount;}
-	void success(test const &t, char const *ok){
-		++successcount;
-		successmessages.push_back(ok);
-	}
-	void failure(test const &t,test_failure const &e){++failurecount;}
-	void error(test const &t,char const *what){
-		++errorcount;
-		errormessages.push_back(what);
-	}
-};
 
+#include "mock_listener.h"
+using namespace cute;
+using namespace cute_test;
+namespace {
 void test_success(){}
 void test_failing(){ ASSERT(false);}
 void test_error_cstr(){ throw "error";}
@@ -63,11 +36,12 @@ void test_error_string(){ throw std::string("error");}
 
 }
 void test_cute_runner(){
-	mock_listener l;
+	cute_test::mock_listener l;
 	cute::runner<mock_listener> run(l);
 	suite s;
 	s += CUTE(test_success);
 	ASSERT(run(s,"single success test suite"));
+	ASSERT_EQUAL(1,l.suitetestcount);
 	s += CUTE(test_failing);
 	s += CUTE(test_error_cstr);
 	s += CUTE(test_error_string);
@@ -79,6 +53,7 @@ void test_cute_runner(){
 	ASSERT_EQUAL(2,l.successcount);
 	ASSERT_EQUAL(1,l.failurecount);
 	ASSERT_EQUAL(3,l.errorcount);
+	ASSERT_EQUAL(6,l.suitetestcount);
 	ASSERT_EQUAL(2u,l.infomessages.size());
 	ASSERT_EQUAL("single success test suite",l.infomessages[0]);
 	ASSERT_EQUAL("test_cute_runner_suite",l.infomessages[1]);

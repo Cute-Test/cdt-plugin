@@ -33,9 +33,9 @@ namespace cute {
 	struct ide_listener: public Listener
 	{
 		ide_listener(std::ostream &os=std::cout):out(os) {}
-		void begin(suite const &t,char const *info){
-			out << "\n#beginning " << info << " " << t.size() << '\n';
-			Listener::begin(t,info);
+		void begin(suite const &t,char const *info, size_t n_of_tests){
+			out << "\n#beginning " << info << " " << n_of_tests << '\n';
+			Listener::begin(t,info,n_of_tests);
 		}
 		void end(suite const &t, char const *info){
 			out << "\n#ending " << info << std::endl;

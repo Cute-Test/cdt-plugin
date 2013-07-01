@@ -50,10 +50,10 @@ namespace cute {
 			out << "</testsuites>\n"<< std::flush;
 		}
 
-		void begin(suite const &t,char const *info){
+		void begin(suite const &t,char const *info, size_t n_of_tests){
 			current_suite=mask_xml_chars(info);
-			out << "\t<testsuite name=\"" << current_suite << "\" tests=\"" << t.size() << "\">\n";
-			Listener::begin(t,info);
+			out << "\t<testsuite name=\"" << current_suite << "\" tests=\"" << n_of_tests << "\">\n";
+			Listener::begin(t,info, n_of_tests);
 		}
 		void end(suite const &t, char const *info){
 			out << "\t</testsuite>\n";
