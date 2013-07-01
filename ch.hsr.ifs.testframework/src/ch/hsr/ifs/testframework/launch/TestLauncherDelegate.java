@@ -68,39 +68,39 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		if(monitor == null) {
+		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
 		runLocalApplication(configuration, launch, monitor);
 	}
 
 	private void runLocalApplication(ILaunchConfiguration config, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		
-		monitor.beginTask( LaunchMessages.LocalCDILaunchDelegate_0, 10 );
-		if ( monitor.isCanceled() ) {
+
+		monitor.beginTask(LaunchMessages.LocalCDILaunchDelegate_0, 10);
+		if (monitor.isCanceled()) {
 			return;
 		}
-		monitor.worked( 1 );
+		monitor.worked(1);
 		try {
-			IPath exePath=CDebugUtils.verifyProgramPath( config );
+			IPath exePath = CDebugUtils.verifyProgramPath(config);
 			ICProject cProject = CDebugUtils.verifyCProject(config);
 			IProject project = cProject.getProject();
 			notifyBeforeLaunch(project);
-			File wd = getWorkingDirectory( config );
-			if ( wd == null ) {
-				wd = new File( System.getProperty( "user.home", "." ) ); //$NON-NLS-1$ //$NON-NLS-2$
+			File wd = getWorkingDirectory(config);
+			if (wd == null) {
+				wd = new File(System.getProperty("user.home", ".")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			
-			String arguments[] = getProgramArgumentsArray( config );
-			ArrayList<String> command = new ArrayList<String>( 1 + arguments.length );
-			command.add( exePath.toOSString() );
-			command.addAll( Arrays.asList( arguments ) );
-			String[] commandArray = command.toArray( new String[command.size()] );
+
+			String arguments[] = getProgramArgumentsArray(config);
+			ArrayList<String> command = new ArrayList<String>(1 + arguments.length);
+			command.add(exePath.toOSString());
+			command.addAll(Arrays.asList(arguments));
+			String[] commandArray = command.toArray(new String[command.size()]);
 			boolean usePty = config.getAttribute("ch.hsr.ifs.testframework.launcher.useTerminal", true); //$NON-NLS-1$
-			monitor.worked( 2 );
-			Process process = exec( commandArray, this.getEnvironment( config ), wd, usePty );
-			monitor.worked( 6 );
-			DebugPlugin.newProcess( launch, process, renderProcessLabel( commandArray[0] ) );
+			monitor.worked(2);
+			Process process = exec(commandArray, this.getEnvironment(config), wd, usePty);
+			monitor.worked(6);
+			DebugPlugin.newProcess(launch, process, renderProcessLabel(commandArray[0]));
 			IProcess proc = launch.getProcesses()[0];
 			IConsole console = DebugUITools.getConsole(proc);
 			if (console instanceof TextConsole) {
@@ -111,17 +111,16 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 				} catch (InterruptedException e) {
 				}
 				TextConsole textCons = (TextConsole) console;
-	
-				exePath=sourcelookupPath(config,exePath);
-				
+
+				exePath = sourcelookupPath(config, exePath);
+
 				registerPatternMatchListener(launch, exePath, textCons);
 			}
-	
+
 			notifyAfterLaunch(project);
-		}
-		finally {
+		} finally {
 			monitor.done();
-		}		
+		}
 	}
 
 	/**
@@ -156,13 +155,13 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 
 	private List<ILaunchObserver> getObservers() {
 		List<ILaunchObserver> additions = new ArrayList<ILaunchObserver>();
-		try{
+		try {
 			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "launchObserver"); //$NON-NLS-1$
 			if (extension != null) {
 				IExtension[] extensions = extension.getExtensions();
 				for (IExtension extension2 : extensions) {
 					IConfigurationElement[] configElements = extension2.getConfigurationElements();
-					String className =configElements[0].getAttribute("class"); //$NON-NLS-1$
+					String className = configElements[0].getAttribute("class"); //$NON-NLS-1$
 					Class<?> obj = Platform.getBundle(extension2.getContributor().getName()).loadClass(className);
 					additions.add((ILaunchObserver) obj.newInstance());
 				}
@@ -177,57 +176,57 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected String[] getEnvironment(ILaunchConfiguration config) throws CoreException {
-		Map map = config.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map)null);
-		if(map==null)return super.getEnvironment( config );
-		
+		Map map = config.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map) null);
+		if (map == null)
+			return super.getEnvironment(config);
+
 		String[] array = DebugPlugin.getDefault().getLaunchManager().getEnvironment(config);
 		if (array == null) {
 			return new String[0];
 		}
 		return array;
-		
+
 	}
 
 	public IPath sourcelookupPath(ILaunchConfiguration config, IPath exePath) {
-		try{
-		if(config!=null && config.getAttribute(CustomisedLaunchConfigTab.USE_CUSTOM_SRC_PATH, false)){
-			String rootpath=org.eclipse.core.runtime.Platform.getLocation().toOSString();
-			String customSrcPath=config.getAttribute(CustomisedLaunchConfigTab.CUSTOM_SRC_PATH,""); //$NON-NLS-1$
-			String fileSeparator=System.getProperty("file.separator"); //$NON-NLS-1$
-			return new org.eclipse.core.runtime.Path(rootpath+customSrcPath+fileSeparator);
-		}else{
-			return exePath.removeLastSegments(1);
-		}}catch(CoreException ce){TestFrameworkPlugin.getDefault().getLog().log(ce.getStatus());}
+		try {
+			if (config != null && config.getAttribute(CustomisedLaunchConfigTab.USE_CUSTOM_SRC_PATH, false)) {
+				String rootpath = org.eclipse.core.runtime.Platform.getLocation().toOSString();
+				String customSrcPath = config.getAttribute(CustomisedLaunchConfigTab.CUSTOM_SRC_PATH, ""); //$NON-NLS-1$
+				String fileSeparator = System.getProperty("file.separator"); //$NON-NLS-1$
+				return new org.eclipse.core.runtime.Path(rootpath + customSrcPath + fileSeparator);
+			} else {
+				return exePath.removeLastSegments(1);
+			}
+		} catch (CoreException ce) {
+			TestFrameworkPlugin.getDefault().getLog().log(ce.getStatus());
+		}
 		return exePath;//on error, log and make no changes
 	}
 
 	protected Process exec(String[] cmdLine, String[] environ, File workingDirectory, boolean usePty) throws CoreException {
 		Process p = null;
 		try {
-			if ( workingDirectory == null ) {
-				p = ProcessFactory.getFactory().exec( cmdLine, environ );
-			}
-			else {
-				if ( usePty && PTY.isSupported() ) {
-					p = ProcessFactory.getFactory().exec( cmdLine, environ, workingDirectory, new PTY() );
-				}
-				else {
-					p = ProcessFactory.getFactory().exec( cmdLine, environ, workingDirectory );
+			if (workingDirectory == null) {
+				p = ProcessFactory.getFactory().exec(cmdLine, environ);
+			} else {
+				if (usePty && PTY.isSupported()) {
+					p = ProcessFactory.getFactory().exec(cmdLine, environ, workingDirectory, new PTY());
+				} else {
+					p = ProcessFactory.getFactory().exec(cmdLine, environ, workingDirectory);
 				}
 			}
-		}
-		catch( IOException e ) {
+		} catch (IOException e) {
 			abort("IOException in exec()", e, 99); //$NON-NLS-1$
-		}
-		catch( NoSuchMethodError e ) {
+		} catch (NoSuchMethodError e) {
 			// attempting launches on 1.2.* - no ability to set working
 			// directory
-			IStatus status = new Status( IStatus.ERROR, LaunchUIPlugin.getUniqueIdentifier(), 98, "Eclipse runtime does not support working directory.", e ); //$NON-NLS-1$
-			IStatusHandler handler = DebugPlugin.getDefault().getStatusHandler( status );
-			if ( handler != null ) {
-				Object result = handler.handleStatus( status, this );
-				if ( result instanceof Boolean && ((Boolean)result).booleanValue() ) {
-					p = exec( cmdLine, environ, null, usePty );
+			IStatus status = new Status(IStatus.ERROR, LaunchUIPlugin.getUniqueIdentifier(), 98, "Eclipse runtime does not support working directory.", e); //$NON-NLS-1$
+			IStatusHandler handler = DebugPlugin.getDefault().getStatusHandler(status);
+			if (handler != null) {
+				Object result = handler.handleStatus(status, this);
+				if (result instanceof Boolean && ((Boolean) result).booleanValue()) {
+					p = exec(cmdLine, environ, null, usePty);
 				}
 			}
 		}

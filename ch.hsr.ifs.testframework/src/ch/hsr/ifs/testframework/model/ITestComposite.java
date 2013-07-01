@@ -12,7 +12,7 @@ import java.util.Vector;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public interface ITestComposite {
 
@@ -25,15 +25,17 @@ public interface ITestComposite {
 	public abstract int getTotalTests();
 
 	public abstract int getRun();
-	
+
 	public abstract Vector<? extends TestElement> getElements();
-	
+
 	public void addTestElement(TestElement element);
-	
+
 	public boolean hasErrorOrFailure();
-	
+
 	public void addListener(ITestCompositeListener listener);
-	
+
 	public void removeListener(ITestCompositeListener listener);
+
+	public String getRerunName();
 
 }
