@@ -226,7 +226,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	private void createSashForm() {
 		sashForm = new SashForm(this, SWT.HORIZONTAL);
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
-		treeViewer = new TreeViewer(sashForm, SWT.FLAT);
+		treeViewer = new TreeViewer(sashForm, SWT.MULTI | SWT.FLAT);
 		treeViewer.setContentProvider(new CuteTestTreeContentProvieder());
 		treeViewer.setLabelProvider(new CuteTestLabelProvider());
 		treeViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);

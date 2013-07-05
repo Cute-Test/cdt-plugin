@@ -8,6 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.ui;
 
+import java.util.List;
+
 import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -318,20 +320,21 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 
 	}
 
-	public void rerunSelectedTestRun(String rerunname) {
+	public void rerunSelectedTestRun(List<String> rerunnames) {
 		if (session != null && session.getLaunch().getLaunchConfiguration() != null) {
 			ILaunchConfiguration configuration = session.getLaunch().getLaunchConfiguration();
 			try {
 				ILaunchConfigurationWorkingCopy copy = configuration.copy("");
-				StringBuilder args = new StringBuilder();//(LaunchUtils.getProgramArguments(copy));
+				StringBuilder args = new StringBuilder();
 				System.err.println(args.toString());
-				args.append(' ').append('"').append(rerunname).append('"');
+				for (String rerunname : rerunnames) {
+					args.append(' ').append('"').append(rerunname).append('"');
+				}
 				copy.setAttribute(ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args.toString());
 				System.err.println(args.toString());
 				configuration = copy;
 
 			} catch (CoreException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			DebugUITools.launch(configuration, session.getLaunch().getLaunchMode());

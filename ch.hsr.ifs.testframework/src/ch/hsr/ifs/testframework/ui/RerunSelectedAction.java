@@ -1,5 +1,7 @@
 package ch.hsr.ifs.testframework.ui;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -29,17 +31,17 @@ public class RerunSelectedAction extends Action {
 	@Override
 	public void run() {
 		ISelection selection = treeViewer.getSelection();
-		String rerunname = "";
+		ArrayList<String> rerunnames = new ArrayList<String>();
 		if (selection != null && selection instanceof ITreeSelection) {
 			TreePath[] paths = ((ITreeSelection) selection).getPaths();
-			if (paths.length > 0) {
-				Object leaf = paths[0].getLastSegment();
+			for (TreePath path : paths) {
+				Object leaf = path.getLastSegment();
 				if (leaf != null && leaf instanceof TestElement)
-					rerunname = ((TestElement) leaf).getRerunName();
+					rerunnames.add(((TestElement) leaf).getRerunName());
 			}
 		}
-		System.err.println("RerunSelectedAction: " + rerunname);
-		this.testRunnerViewPart.rerunSelectedTestRun(rerunname);
+		System.err.println("RerunSelectedAction: " + rerunnames);
+		this.testRunnerViewPart.rerunSelectedTestRun(rerunnames);
 
 	}
 }
