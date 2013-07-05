@@ -10,6 +10,14 @@
             name="%launchConfigurationType.name.0"/>
    </extension>
    <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="ch.hsr.ifs.cute.core.launch.CuteLauncherDelegate"
+            id="ch.hsr.ifs.cutelauncher.launchConfig.1"
+            modes="debug"
+            name="%launchConfigurationType.name.0"/>
+   </extension>
+   <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             icon="icons/obj16/cute_app.png"
@@ -25,11 +33,26 @@
             type="ch.hsr.ifs.cutelauncher.launchConfig"/>
    </extension>
    <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            icon="icons/obj16/cute_app.png"
+            configTypeID="ch.hsr.ifs.cutelauncher.launchConfig.1"
+            id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
+      </launchConfigurationTypeImage>
+  </extension>
+  <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="ch.hsr.ifs.cute.core.CuteRunLaunchConfigTabGroup"
+            id="ch.hsr.ifs.cutelauncher.launchConfigurationTabGroup"
+            type="ch.hsr.ifs.cutelauncher.launchConfig.1"/>
+   </extension>
+   <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             label="%shortcut.label.0"
             icon="icons/obj16/cute_app.png"
-            modes="run"
+            modes="run,debug"
             class="ch.hsr.ifs.cute.core.launch.CuteLaunchShortcut"
             id="ch.hsr.ifs.cutelauncher.cuteShortcut">
          <contextualLaunch>
@@ -73,6 +96,9 @@
            </enablement>
            <contextLabel
          	  mode="run"
+         	  label="%contextLabel.label.0"/>
+           <contextLabel
+         	  mode="debug"
          	  label="%contextLabel.label.0"/>
   		 </contextualLaunch>
       </shortcut>
