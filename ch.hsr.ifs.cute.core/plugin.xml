@@ -8,20 +8,23 @@
             id="ch.hsr.ifs.cutelauncher.launchConfig"
             modes="run"
             name="%launchConfigurationType.name.0"/>
-   </extension>
-   <extension
-         point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="ch.hsr.ifs.cute.core.launch.CuteLauncherDelegate"
-            id="ch.hsr.ifs.cutelauncher.launchConfig.1"
+            delegate="ch.hsr.ifs.cute.core.launch.CuteDebugLauncherDelegate"
+            id="ch.hsr.ifs.cutelauncher.launchConfig.debug"
             modes="debug"
-            name="%launchConfigurationType.name.0"/>
+            name="%launchDebugConfigurationType.name">
+      </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             icon="icons/obj16/cute_app.png"
             configTypeID="ch.hsr.ifs.cutelauncher.launchConfig"
+            id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="ch.hsr.ifs.cutelauncher.launchConfig.debug"
+            icon="icons/obj16/cute_app.png"
             id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
       </launchConfigurationTypeImage>
   </extension>
@@ -31,21 +34,23 @@
             class="ch.hsr.ifs.cute.core.CuteRunLaunchConfigTabGroup"
             id="ch.hsr.ifs.cutelauncher.launchConfigurationTabGroup"
             type="ch.hsr.ifs.cutelauncher.launchConfig"/>
+      <launchConfigurationTabGroup
+            class="ch.hsr.ifs.cute.core.EmptyDebugLaunchConfigurationTabGroup"
+            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
+            type="ch.hsr.ifs.cutelauncher.launchConfig.debug">
+      </launchConfigurationTabGroup>
    </extension>
    <extension
-         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-      <launchConfigurationTypeImage
-            icon="icons/obj16/cute_app.png"
-            configTypeID="ch.hsr.ifs.cutelauncher.launchConfig.1"
-            id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
-      </launchConfigurationTypeImage>
-  </extension>
-  <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-      <launchConfigurationTabGroup
-            class="ch.hsr.ifs.cute.core.CuteRunLaunchConfigTabGroup"
-            id="ch.hsr.ifs.cutelauncher.launchConfigurationTabGroup"
-            type="ch.hsr.ifs.cutelauncher.launchConfig.1"/>
+         point="org.eclipse.debug.core.launchDelegates">
+      <launchDelegate
+            delegate="ch.hsr.ifs.cute.core.launch.CuteDebugLauncherDelegate"
+            id="ch.hsr.ifs.cute.core.launchDelegate.debug"
+            modes="debug"
+            name="CUTE GDB dsf launcher"
+            sourceLocatorId="org.eclipse.cdt.debug.core.sourceLocator"
+            sourcePathComputerId="org.eclipse.cdt.debug.core.sourcePathComputer"
+            type="ch.hsr.ifs.cutelauncher.launchConfig.debug">
+      </launchDelegate>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
@@ -102,6 +107,94 @@
          	  label="%contextLabel.label.0"/>
   		 </contextualLaunch>
       </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <tab
+            class="org.eclipse.cdt.dsf.gdb.internal.ui.launching.CMainTab"
+            group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
+            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.mainTab"
+            name="%MainLaunchTab.name">
+         <associatedDelegate
+               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
+         </associatedDelegate>
+      </tab>
+      <tab
+            class="org.eclipse.cdt.dsf.gdb.internal.ui.launching.CArgumentsTab"
+            group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
+            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.argumentsTab"
+            name="%ArgumentsLaunchTab.name">
+          <associatedDelegate
+               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
+         </associatedDelegate>
+          <placement
+                after="org.eclipse.cdt.dsf.gdb.launch.mainTab">
+          </placement>
+      </tab>
+      <tab
+            class="org.eclipse.debug.ui.EnvironmentTab"
+            group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
+            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.environmentTab"
+            name="%EnvironmentLaunchTab.name">
+          <associatedDelegate
+               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
+         </associatedDelegate>
+          <placement
+                after="org.eclipse.cdt.dsf.gdb.launch.argumentsTab">
+          </placement>
+      </tab>
+      <tab
+            class="org.eclipse.cdt.launch.ui.ApplicationCDebuggerTab"
+            group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
+            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.debuggerTab"
+            name="%DebuggerLaunchTab.name">
+          <associatedDelegate
+               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
+         </associatedDelegate>
+         <placement
+               after="org.eclipse.debug.ui.environmentTab">
+         </placement>
+      </tab>
+      <tab
+            class="org.eclipse.debug.ui.sourcelookup.SourceLookupTab"
+            group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
+            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.sourceLookupTab"
+            name="%SourceLookupLaunchTab.name">
+          <associatedDelegate
+               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
+         </associatedDelegate>
+         <placement
+               after="org.eclipse.cdt.dsf.gdb.launch.debuggerTab">
+         </placement>
+      </tab>
+      <tab
+            class="org.eclipse.debug.ui.CommonTab"
+            group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
+            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.commonTab"
+            name="%CommonLaunchTab.name">
+          <associatedDelegate
+               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
+         </associatedDelegate>
+         <placement
+               after="org.eclipse.debug.ui.sourceLookupTab">
+         </placement>
+      </tab>
+      <tab
+            class="ch.hsr.ifs.testframework.launch.CustomisedLaunchConfigTab"
+            group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
+            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.CustomizedLaunchConfigTab"
+            name="%CustomisedLaunchConfigTab.LookupPath">
+         <placement
+               after="org.eclipse.debug.ui.CommonTab">
+         </placement>
+      </tab>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.processFactories">
+      <processFactory
+            class="ch.hsr.ifs.cute.core.launch.TestingProcessFactory"
+            id="ch.hsr.ifs.cute.core.DebugProcessFactory">
+      </processFactory>
    </extension>
 	   
    </plugin>

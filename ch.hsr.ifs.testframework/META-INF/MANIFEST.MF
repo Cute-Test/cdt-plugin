@@ -29,4 +29,5 @@ Export-Package: ch.hsr.ifs.testframework,
  ch.hsr.ifs.testframework.preference,
  ch.hsr.ifs.testframework.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Import-Package: org.eclipse.cdt.launch
+Import-Package: org.eclipse.cdt.dsf.gdb.launching,
+ org.eclipse.cdt.launch
