@@ -1,0 +1,6 @@
+--i"/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include"
+--i"/usr/include/c++/4.2.1"
+--i"/usr/include/c++/4.2.1/backward"
+--i"/usr/local/include"
+--i"/Applications/Xcode.app/Contents/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include"
+--i"/usr/include"

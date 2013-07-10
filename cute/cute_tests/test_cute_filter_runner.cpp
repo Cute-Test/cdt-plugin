@@ -3,7 +3,6 @@
 #include "cute.h"
 #include "cute_counting_listener.h"
 #include <iterator>
-#include <algorithm>
 
 void test() {
 }

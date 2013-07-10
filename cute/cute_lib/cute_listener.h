@@ -21,7 +21,6 @@
 #ifndef CUTE_LISTENER_H_
 #define CUTE_LISTENER_H_
 #include "cute_base.h"
-#include "cute_test.h"
 #include "cute_suite.h"
 namespace cute {
 	struct null_listener{ // defines Contract of runner parameter

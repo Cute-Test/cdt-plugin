@@ -116,7 +116,6 @@ void test_equals_double(){
 	ASSERT_EQUAL(10e14,1+10e14);
 }
 void test_equals_double_with_numberic_limits(){
-	double eps=std::numeric_limits<double>::epsilon();
 	ASSERT_EQUAL(1.0,1.0+10*eps);
     ASSERT_THROWS(ASSERT_EQUAL(1.0,1.0+11*eps),cute::test_failure);
 }
@@ -127,7 +126,7 @@ void test_equals_strings_fails(){
 	try {
 		ASSERT_EQUAL("error",std::string("eror"));
 		throw "should have failed";
-	}catch(cute::test_failure &e){
+	}catch(cute::test_failure const &e){
 		ASSERT_EQUAL_DELTA(__LINE__,e.lineno,5);
 		ASSERT_EQUAL(__FILE__,e.filename);
 	}
@@ -274,13 +273,14 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_output_for_vector_set_int_empty));
 	s.push_back(CUTE(test_non_outputable));
 	s.push_back(CUTE(test_doubleEqualsWithANaNFails));
-	s += CUTE(test_backslashQuoteTabNewline);
-	s += CUTE(test_equals_OK);
-	s += CUTE(test_equals_int_fails);
-	s += CUTE(test_assertEqualsDelta);
-	s += CUTE(test_equals_double);
-	s += CUTE(test_equals_double_fails);
-	s += CUTE(test_equals_strings_fails);
-	s += CUTE(test_diff_values);
+	s.push_back(CUTE(test_backslashQuoteTabNewline));
+	s.push_back(CUTE(test_equals_OK));
+	s.push_back(CUTE(test_equals_int_fails));
+	s.push_back(CUTE(test_assertEqualsDelta));
+	s.push_back(CUTE(test_equals_double));
+	s.push_back(CUTE(test_equals_double_fails));
+	s.push_back(CUTE(test_equals_strings_fails));
+	s.push_back(CUTE(test_diff_values));
+	s.push_back(CUTE(test_equalsTwoNaNFails));
 	return s;
 }

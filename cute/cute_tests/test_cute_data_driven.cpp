@@ -3,7 +3,6 @@
 #include "ide_listener.h"
 #include "cute_runner.h"
 #include "test_cute_data_driven.h"
-#include <algorithm>
 
 struct test_data {
 	bool check;

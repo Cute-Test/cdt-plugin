@@ -19,11 +19,8 @@
  *********************************************************************************/
 #ifndef CUTE_RELOPS_H_
 #define CUTE_RELOPS_H_
-
-#include "cute_to_string.h"
-#include "cute_diff_values.h"
 #include "cute_base.h"
-#include "cute_determine_version.h"
+#include "cute_diff_values.h"
 #include <functional>
 namespace cute {
 

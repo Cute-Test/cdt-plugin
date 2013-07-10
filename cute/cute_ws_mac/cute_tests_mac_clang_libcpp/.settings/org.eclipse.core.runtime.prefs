@@ -1,0 +1,3 @@
+content-types/enabled=true
+content-types/org.eclipse.cdt.core.cxxHeader/file-names=__*,__.*,__tree,ctgmath,__[a-z]*,scoped_allocator,condition_variable,__split_buffer,__bit_reference,__locale,__mutex_base,__config,__functional_03,__functional_base,__functional_base_03,__hash_table,__sso_allocator,__tuple,__tuple_03,__undef_min_max,__std_stream
+eclipse.preferences.version=1

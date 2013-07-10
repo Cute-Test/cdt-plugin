@@ -1,7 +1,6 @@
 #include "cute_to_string.h"
 #include "test_cute_to_string.h"
 #include "cute.h"
-#include "cute_suite.h"
 #include <set>
 #include <map>
 using cute::cute_to_string::to_string;

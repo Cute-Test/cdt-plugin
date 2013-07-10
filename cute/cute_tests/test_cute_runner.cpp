@@ -19,9 +19,6 @@
  *********************************************************************************/
 
 #include "cute_runner.h"
-#include "cute_listener.h"
-#include "cute_suite.h"
-#include "cute_base.h"
 #include "cute_equals.h"
 
 #include "mock_listener.h"

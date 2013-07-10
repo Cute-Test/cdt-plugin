@@ -41,7 +41,7 @@ namespace {
 		try {
 			ASSERT(0);
 			throw "should have failed";
-		} catch (cute::test_failure &e){
+		} catch (cute::test_failure const &e){
 			ASSERT_EQUAL(__FILE__,e.filename);
 			std::string what=e.what();
 			std::string msg("0");

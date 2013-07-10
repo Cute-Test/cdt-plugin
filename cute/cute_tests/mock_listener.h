@@ -25,19 +25,19 @@ struct mock_listener {
 	:begincount(0),endcount(0),startcount(0)
 	,successcount(0),failurecount(0),errorcount(0)
 	,suitetestcount(0){}
-	void begin(suite const &s,char const *info,size_t n){
+	void begin(suite const &,char const *info,size_t n){
 		++begincount;
 		suitetestcount += n;
 		infomessages.push_back(info);
 	}
-	void end(suite const &s,char const *info){++endcount;}
-	void start(test const &t){++startcount;}
-	void success(test const &t, char const *ok){
+	void end(suite const &,char const *){++endcount;}
+	void start(test const &){++startcount;}
+	void success(test const &, char const *ok){
 		++successcount;
 		successmessages.push_back(ok);
 	}
-	void failure(test const &t,test_failure const &e){++failurecount;}
-	void error(test const &t,char const *what){
+	void failure(test const &,test_failure const &){++failurecount;}
+	void error(test const &,char const *what){
 		++errorcount;
 		errormessages.push_back(what);
 	}

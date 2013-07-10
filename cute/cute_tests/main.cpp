@@ -50,11 +50,11 @@ static int simpleTestfunctionCalled=0;
 void simpleTestFunction(){
 	++simpleTestfunctionCalled;
 	std::cerr << "simpleTestFunction run no:"<< simpleTestfunctionCalled << std::endl;
-	ASSERT(true);
+	ASSERT(false);
 	throw std::exception();
 }
 struct SimpleTestFunctionCalledTest {
-	void operator()(){
+	void operator()() const{
 		ASSERT_EQUALM("look at cute::test ctor overload",1,simpleTestfunctionCalled);
 	}
 };
@@ -69,7 +69,7 @@ void test2(){
 }
 // demonstrates how to write test functors
 struct test3{
-	void operator()(){
+	void operator()() const{
 		throw std::exception();
 	}
 };
