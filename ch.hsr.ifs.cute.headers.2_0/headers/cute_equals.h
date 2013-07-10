@@ -20,11 +20,8 @@
 
 #ifndef CUTE_EQUALS_H_
 #define CUTE_EQUALS_H_
-#include "cute_to_string.h"
-#include "cute_diff_values.h"
 #include "cute_base.h"
-#include "cute_determine_version.h"
-#include "cute_demangle.h"
+#include "cute_diff_values.h"
 #include "cute_determine_traits.h"
 #include <cmath>
 #include <limits>
@@ -172,7 +169,7 @@ namespace cute {
 					impl_place_for_traits::is_signed<ExpectedValue>()
 					,impl_place_for_traits::is_signed<ActualValue>());
 #else
-//TODO: replace the following code with a dispatcher on signed/unsigned
+//TODO: replace the following code with a dispatcher on signed/unsigned
 			typedef typename impl_place_for_traits::make_signed<ExpectedValue>::type ex_s;
 			typedef typename impl_place_for_traits::make_signed<ActualValue>::type ac_s;
 				// need to sign extend with the longer type, should work...
