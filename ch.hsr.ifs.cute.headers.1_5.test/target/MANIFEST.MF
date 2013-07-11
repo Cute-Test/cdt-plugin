@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.resources;bu
+ ndle-version="3.6.0",org.junit;bundle-version="4.8.1",ch.hsr.ifs.cute
+ .ui;bundle-version="4.0.1",ch.hsr.ifs.cute.headers.1_5;bundle-version
+ ="2.0.0",ch.hsr.ifs.cute.headers.base.test;bundle-version="1.0.0"
+Bundle-Vendor: %Bundle-Vendor
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.0.1.201307111451
+Bundle-Name: %Bundle-Name
+Bundle-Activator: ch.hsr.ifs.cute.headers.v15.test.CuteHeader15TestPlu
+ gin
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: ch.hsr.ifs.cute.headers.1_5.test
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

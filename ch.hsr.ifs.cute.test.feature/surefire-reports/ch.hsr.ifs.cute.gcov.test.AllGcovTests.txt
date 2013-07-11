@@ -1,0 +1,5 @@
+-------------------------------------------------------------------------------
+Test set: ch.hsr.ifs.cute.gcov.test.AllGcovTests
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.204 sec
+testUncoveredEmptyFunction(ch.hsr.ifs.cute.gcov.test.parser.ModelBuilderLineParserTest)  Time elapsed: 0.033 sectestCoveredEmptyFunction(ch.hsr.ifs.cute.gcov.test.parser.ModelBuilderLineParserTest)  Time elapsed: 0.001 sectestPartiallyCoveredFunction(ch.hsr.ifs.cute.gcov.test.parser.ModelBuilderLineParserTest)  Time elapsed: 0.001 sectestParseFile(ch.hsr.ifs.cute.gcov.test.parser.ModelBuilderLineParserTest)  Time elapsed: 0 sectestDeleteJob(ch.hsr.ifs.cute.gcov.test.job.DeleteMarkersTest)  Time elapsed: 0.003 sectestDeleteJobResourceDoesNotExist(ch.hsr.ifs.cute.gcov.test.job.DeleteMarkersTest)  Time elapsed: 0.001 sec

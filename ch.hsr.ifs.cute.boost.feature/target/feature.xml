@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ch.hsr.ifs.cute.boost.feature"
+      label="%featureName"
+      version="1.42.0.201307111451">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://www.cute-test.com/updatesite/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.resources" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.ui" version="4.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="ch.hsr.ifs.cute.boost"
+         download-size="460"
+         install-size="3021"
+         version="1.42.0.201307111451"
+         unpack="false"/>
+
+</feature>

@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='ch.hsr.ifs.cdt.namespactor' version='0.0.1.201307111451'>
+    <update id='ch.hsr.ifs.cdt.namespactor' range='[0.0.0,0.0.1.201307111451)' severity='0'/>
+    <properties size='5'>
+      <property name='org.eclipse.equinox.p2.name' value='namespactor'/>
+      <property name='org.eclipse.equinox.p2.provider' value='IFS'/>
+      <property name='maven-groupId' value='ch.hsr.ifs.cdt.namespactor'/>
+      <property name='maven-artifactId' value='ch.hsr.ifs.cdt.namespactor'/>
+      <property name='maven-version' value='0.0.1-SNAPSHOT'/>
+    </properties>
+    <provides size='13'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='ch.hsr.ifs.cdt.namespactor' version='0.0.1.201307111451'/>
+      <provided namespace='osgi.bundle' name='ch.hsr.ifs.cdt.namespactor' version='0.0.1.201307111451'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.astutil' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.refactoring' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.refactoring.iu' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.refactoring.eudec' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.refactoring.eudir' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.refactoring.iudec' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.refactoring.iudir' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.refactoring.qun' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.ui.iu' version='0.0.0'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cdt.namespactor.ui.qun' version='0.0.0'/>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='13'>
+      <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='3.7.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.cdt.ui' range='5.3.2'/>
+      <required namespace='osgi.bundle' name='org.eclipse.cdt.core' range='5.3.1'/>
+      <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='3.7.100'/>
+      <required namespace='osgi.bundle' name='org.eclipse.ltk.core.refactoring' range='3.5.201'/>
+      <required namespace='osgi.bundle' name='org.eclipse.ltk.ui.refactoring' range='3.6.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='3.7.2'/>
+      <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='3.7.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.text' range='3.5.101'/>
+      <required namespace='osgi.bundle' name='org.eclipse.cdt.codan.core.cxx' range='1.1.0'/>
+      <required namespace='osgi.bundle' name='ch.hsr.ifs.cute.tdd' range='1.1.0'/>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cdt.namespactor' version='0.0.1.201307111451'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: ch.hsr.ifs.cdt.namespactor;singleton:=true&#xA;Bundle-Version: 0.0.1.201307111451&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

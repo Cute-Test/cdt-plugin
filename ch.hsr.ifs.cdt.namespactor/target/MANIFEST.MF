@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Export-Package: ch.hsr.ifs.cdt.namespactor.astutil,ch.hsr.ifs.cdt.name
+ spactor.refactoring,ch.hsr.ifs.cdt.namespactor.refactoring.iu,ch.hsr.
+ ifs.cdt.namespactor.refactoring.eudec,ch.hsr.ifs.cdt.namespactor.refa
+ ctoring.eudir,ch.hsr.ifs.cdt.namespactor.refactoring.iudec,ch.hsr.ifs
+ .cdt.namespactor.refactoring.iudir,ch.hsr.ifs.cdt.namespactor.refacto
+ ring.qun,ch.hsr.ifs.cdt.namespactor.ui.iu,ch.hsr.ifs.cdt.namespactor.
+ ui.qun
+Require-Bundle: org.eclipse.ui,org.eclipse.ui.ide;bundle-version="3.7.
+ 0",org.eclipse.cdt.ui;bundle-version="5.3.2",org.eclipse.cdt.core;bun
+ dle-version="5.3.1",org.eclipse.core.runtime,org.eclipse.core.resourc
+ es;bundle-version="3.7.100",org.eclipse.ltk.core.refactoring;bundle-v
+ ersion="3.5.201",org.eclipse.ltk.ui.refactoring;bundle-version="3.6.0
+ ",org.eclipse.jface.text;bundle-version="3.7.2",org.eclipse.ui.editor
+ s;bundle-version="3.7.0",org.eclipse.text;bundle-version="3.5.101",or
+ g.eclipse.cdt.codan.core.cxx;bundle-version="1.1.0",ch.hsr.ifs.cute.t
+ dd;bundle-version="1.1.0"
+Bundle-Vendor: IFS
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 0.0.1.201307111451
+Bundle-Name: namespactor
+Bundle-Activator: ch.hsr.ifs.cdt.namespactor.NamespactorActivator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: ch.hsr.ifs.cdt.namespactor;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

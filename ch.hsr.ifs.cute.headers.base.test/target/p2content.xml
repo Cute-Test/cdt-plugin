@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='ch.hsr.ifs.cute.headers.base.test' version='1.0.1.201307111451' singleton='false'>
+    <update id='ch.hsr.ifs.cute.headers.base.test' range='[0.0.0,1.0.1.201307111451)' severity='0'/>
+    <properties size='7'>
+      <property name='df_LT.Bundle-Vendor' value='IFS'/>
+      <property name='df_LT.Bundle-Name' value='CUTE Header Base Test'/>
+      <property name='org.eclipse.equinox.p2.name' value='%Bundle-Name'/>
+      <property name='org.eclipse.equinox.p2.provider' value='%Bundle-Vendor'/>
+      <property name='maven-groupId' value='ch.hsr.ifs'/>
+      <property name='maven-artifactId' value='ch.hsr.ifs.cute.headers.base.test'/>
+      <property name='maven-version' value='1.0.1.qualifier'/>
+    </properties>
+    <provides size='5'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='ch.hsr.ifs.cute.headers.base.test' version='1.0.1.201307111451'/>
+      <provided namespace='osgi.bundle' name='ch.hsr.ifs.cute.headers.base.test' version='1.0.1.201307111451'/>
+      <provided namespace='java.package' name='ch.hsr.ifs.cute.headers.base.test' version='0.0.0'/>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+    </provides>
+    <requires size='3'>
+      <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='3.6.0'/>
+      <required namespace='osgi.bundle' name='org.junit' range='4.8.1'/>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='ch.hsr.ifs.cute.headers.base.test' version='1.0.1.201307111451'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: ch.hsr.ifs.cute.headers.base.test&#xA;Bundle-Version: 1.0.1.201307111451&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

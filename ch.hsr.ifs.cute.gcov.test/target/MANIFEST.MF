@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Export-Package: ch.hsr.ifs.cute.gcov.test,ch.hsr.ifs.cute.gcov.test.jo
+ b,ch.hsr.ifs.cute.gcov.test.mock,ch.hsr.ifs.cute.gcov.test.parser
+Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.resources;bu
+ ndle-version="3.7.0",org.junit,ch.hsr.ifs.cute.gcov;bundle-version="0
+ .2.2"
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.0.3.201307111451
+Bundle-Name: %Bundle-Name
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: ch.hsr.ifs.cute.gcov.test
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="CUTE 2.0 Update Site Juno" url="www.cute-test.com/updatesite/juno">
+      This is the update site for the Juno release of CUTE 2.0.
+   </description>
+   <feature url="features/ch.hsr.ifs.cute.boost.feature_1.42.0.201307111451.jar" id="ch.hsr.ifs.cute.boost.feature" version="1.42.0.201307111451">
+      <category name="OptFeatures"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.gcov.feature_1.1.1.201307111451.jar" id="ch.hsr.ifs.cute.gcov.feature" version="1.1.1.201307111451">
+      <category name="OptFeatures"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.1_7.feature_2.1.0.201307111451.jar" id="ch.hsr.ifs.cute.headers.1_7.feature" version="2.1.0.201307111451">
+      <category name="CUTE Headers"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.feature_4.5.0.201307111451.jar" id="ch.hsr.ifs.cute.feature" version="4.5.0.201307111451">
+      <category name="CUTE Plugin"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cute.headers.2_0.feature_2.1.0.201307111451.jar" id="ch.hsr.ifs.cute.headers.2_0.feature" version="2.1.0.201307111451">
+      <category name="CUTE Headers"/>
+   </feature>
+   <feature url="features/ch.hsr.ifs.cdt.namespactor.feature_0.0.1.201307111451.jar" id="ch.hsr.ifs.cdt.namespactor.feature" version="0.0.1.201307111451">
+      <category name="OptFeatures"/>
+   </feature>
+   <category-def name="CUTE Plugin" label="CUTE Plugin"/>
+   <category-def name="CUTE Headers" label="CUTE Headers"/>
+   <category-def name="OptFeatures" label="CUTE Optional Features"/>
+</site>

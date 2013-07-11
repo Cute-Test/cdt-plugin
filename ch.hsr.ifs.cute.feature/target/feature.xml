@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ch.hsr.ifs.cute.feature"
+      label="%featureName"
+      version="4.5.0.201307111451"
+      provider-name="%providerName"
+      plugin="ch.hsr.ifs.cute.ui"
+      image="eclipse_update_120.jpg">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://www.cute-test.com/updatesite/"/>
+      <discovery label="CDT update site" url="http://download.eclipse.org/tools/cdt/releases/helios/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.ide" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.jface" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.console" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.ui" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.debug.core" version="7.0.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.launch" version="7.0.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.core" version="5.1.0" match="compatible"/>
+      <import plugin="org.eclipse.jface.text" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.ui" version="5.2.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0"/>
+      <import plugin="ch.hsr.ifs.testframework" version="3.0.0" match="compatible"/>
+      <import plugin="org.eclipse.core.expressions" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.ltk.core.refactoring" version="3.5.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.views" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt.codan.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.core" version="3.1.0" match="compatible"/>
+      <import plugin="org.eclipse.compare" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.intro"/>
+      <import plugin="org.eclipse.ui.intro.universal"/>
+      <import plugin="org.eclipse.help"/>
+      <import feature="org.eclipse.cdt" version="8.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.ui" version="7.0.0"/>
+      <import plugin="org.eclipse.cdt.codan.core" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.ui.cxx" version="2.0.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="ch.hsr.ifs.cute.core"
+         download-size="51"
+         install-size="94"
+         version="3.1.0.201307111451"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.ui"
+         download-size="180"
+         install-size="375"
+         version="4.0.2.201307111451"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.testframework"
+         download-size="151"
+         install-size="280"
+         version="3.0.2.201307111451"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.cuteExtensions"
+         download-size="7"
+         install-size="9"
+         version="3.1.0.201307111451"
+         fragment="true"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.help"
+         download-size="1865"
+         install-size="4864"
+         version="1.0.1.201307111451"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.tdd"
+         download-size="259"
+         install-size="624"
+         version="1.1.0.201307111451"
+         unpack="false"/>
+
+</feature>

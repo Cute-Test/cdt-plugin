@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='org.eclipse.update.feature' id='ch.hsr.ifs.cute.feature' version='4.5.0.201307111451'>
+    <properties size='6'>
+      <property name='artifact.size' value='16845'/>
+      <property name='download.size' value='16845'/>
+      <property name='maven-groupId' value='ch.hsr.ifs'/>
+      <property name='maven-artifactId' value='ch.hsr.ifs.cute.feature'/>
+      <property name='maven-version' value='4.5.0.qualifier'/>
+      <property name='download.contentType' value='application/zip'/>
+    </properties>
+  </artifact>
+</artifacts>
