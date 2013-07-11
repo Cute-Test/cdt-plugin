@@ -21,6 +21,7 @@ cute/cute_ws_win_cl_exe/cute_test_mingw_with_boost/cute_test_mingw_with_boost.ex
 cute/mac_osx_1084/
 cute/mac_start_empty/
 cute/new_cute_ws_mac/
+cute/cute_ws_*/
 ch.hsr.ifs.cute.swtbottest/screenshots/
 
 ch.hsr.ifs.cute.boost.feature/target/ch.hsr.ifs.cute.boost.feature-1.42.0.qualifier.jar
@@ -30,6 +31,7 @@ testFileEditor.zip
 org.rubypeople.rdt.showoffset_1.0.0.jar
 
 ch.hsr.ifs.cdttesting/
+org.eclipse.cdt.testsrunner.cute/
 
 cute/cute_sln_vs2010/cute_tests/cute_tests/cute_tests.exe.xml
 

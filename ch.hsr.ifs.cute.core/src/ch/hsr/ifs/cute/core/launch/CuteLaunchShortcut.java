@@ -56,35 +56,38 @@ import org.eclipse.ui.dialogs.TwoPaneElementSelector;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 
-@SuppressWarnings({"restriction", "deprecation"})
+@SuppressWarnings({ "restriction", "deprecation" })
 public class CuteLaunchShortcut implements ILaunchShortcut {
 
 	public void launch(IEditorPart editor, String mode) {
-		searchAndLaunch(new Object[] { editor.getEditorInput()}, mode);
+		searchAndLaunch(new Object[] { editor.getEditorInput() }, mode);
 	}
+
 	//project explorer exe
 	public void launch(ISelection selection, String mode) {
 		if (selection instanceof IStructuredSelection) {
 			searchAndLaunch(((IStructuredSelection) selection).toArray(), mode);
 		}
 	}
+
 	//internal to CuteLaunchShortcut
 	public void launch(IBinary bin, String mode) {
-        ILaunchConfiguration config = findLaunchConfiguration(bin, mode);
-        if (config != null) {
-            DebugUITools.launch(config, mode);
-        }
-    }
+		ILaunchConfiguration config = findLaunchConfiguration(bin, mode);
+		if (config != null) {
+			DebugUITools.launch(config, mode);
+		}
+	}
 
 	/**
-	 * Locate a configuration to relaunch for the given type.  If one cannot be found, create one.
+	 * Locate a configuration to relaunch for the given type. If one cannot be
+	 * found, create one.
 	 * 
 	 * @return a re-useable config or <code>null</code> if none
 	 */
 	protected ILaunchConfiguration findLaunchConfiguration(IBinary bin, String mode) {
 		ILaunchConfiguration configuration = null;
-		ILaunchConfigurationType configType = getCuteLaunchConfigType();
-		
+		ILaunchConfigurationType configType = getCuteLaunchConfigType(mode);
+
 		List<ILaunchConfiguration> candidateConfigs = Collections.emptyList();
 		try {
 			ILaunchConfiguration[] configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations(configType);
@@ -104,7 +107,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			ICDebugConfiguration defaultConfig = CDebugCorePlugin.getDefault().getDefaultDebugConfiguration();
 			String os = Platform.getOS();
 			ICDebugConfiguration debugConfig = null;
-			if ( defaultConfig != null ) {
+			if (defaultConfig != null) {
 				String platform = defaultConfig.getPlatform();
 				if (defaultConfig.supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
 					if (platform.equals("*") || platform.equals(os)) { //$NON-NLS-1$
@@ -113,7 +116,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 					}
 				}
 			}
-			if ( debugConfig == null ) {
+			if (debugConfig == null) {
 				// Prompt the user if more then 1 debugger.
 				ICDebugConfiguration[] debugConfigs = CDebugCorePlugin.getDefault().getActiveDebugConfigurations();
 				List<ICDebugConfiguration> debugList = new ArrayList<ICDebugConfiguration>(debugConfigs.length);
@@ -134,7 +137,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				}
 			}
 			if (debugConfig != null) {
-				configuration = createConfiguration(bin, debugConfig);
+				configuration = createConfiguration(bin, debugConfig, mode);
 			}
 		} else if (candidateCount == 1) {
 			configuration = candidateConfigs.get(0);
@@ -147,12 +150,11 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return configuration;
 	}
 
-	private List<ILaunchConfiguration> createCandidateConfigList(IBinary bin,
-			ILaunchConfiguration[] configs) throws CoreException {
-		
+	private List<ILaunchConfiguration> createCandidateConfigList(IBinary bin, ILaunchConfiguration[] configs) throws CoreException {
+
 		List<ILaunchConfiguration> candidateConfigs;
 		candidateConfigs = new ArrayList<ILaunchConfiguration>(configs.length);
-		
+
 		for (int i = 0; i < configs.length; i++) {
 			ILaunchConfiguration config = configs[i];
 			IPath programPath = AbstractCLaunchDelegate.getProgramPath(config);
@@ -169,43 +171,50 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 	/**
 	 * Method createConfiguration.
+	 * 
 	 * @param bin
+	 * @param mode
+	 *            run or debug
 	 * @return ILaunchConfiguration
 	 */
-	private ILaunchConfiguration createConfiguration(IBinary bin, ICDebugConfiguration debugConfig) {
+	private ILaunchConfiguration createConfiguration(IBinary bin, ICDebugConfiguration debugConfig, String mode) {
 		ILaunchConfiguration config = null;
 		try {
 			String projectName = bin.getResource().getProjectRelativePath().toString();
-			ILaunchConfigurationType configType = getCuteLaunchConfigType();
-			ILaunchConfigurationWorkingCopy wc =
-				configType.newInstance(null, getLaunchManager().generateUniqueLaunchConfigurationNameFrom(bin.getElementName()));
+			ILaunchConfigurationType configType = getCuteLaunchConfigType(mode);
+			ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, getLaunchManager().generateUniqueLaunchConfigurationNameFrom(bin.getElementName()));
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_PROGRAM_NAME, projectName);
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_PROJECT_NAME, bin.getCProject().getElementName());
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, (String) null);
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_STOP_AT_MAIN, true);
-			wc.setAttribute(
-				ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_START_MODE,
-				ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN);
+			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_START_MODE, ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN);
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_ID, debugConfig.getID());
-			wc.setMappedResources(new IResource[] {bin.getCProject().getProject()});
-			
-			ICProject project=bin.getCProject();
+			wc.setMappedResources(new IResource[] { bin.getCProject().getProject() });
 
-			LaunchEnvironmentVariables.apply(wc,project);
-						
+			ICProject project = bin.getCProject();
+
+			LaunchEnvironmentVariables.apply(wc, project);
+
 			config = wc.doSave();
 		} catch (CoreException ce) {
 			CuteCorePlugin.log(ce);
 		}
 		return config;
 	}
-	
+
 	/**
 	 * Method getCLaunchConfigType.
+	 * 
+	 * @param mode
 	 * @return ILaunchConfigurationType
 	 */
-	protected ILaunchConfigurationType getCuteLaunchConfigType() {
-		return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig"); //$NON-NLS-1$
+	protected ILaunchConfigurationType getCuteLaunchConfigType(String mode) {
+
+		if (org.eclipse.debug.core.ILaunchManager.RUN_MODE.equals(mode)) // this should use the corresponding constant from Debug somewhere
+			return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig"); //$NON-NLS-1$
+		else if (org.eclipse.debug.core.ILaunchManager.DEBUG_MODE.equals(mode))
+			return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig.debug"); //$NON-NLS-1$
+		return null;
 	}
 
 	protected ILaunchManager getLaunchManager() {
@@ -221,6 +230,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 	/**
 	 * Method chooseDebugConfig.
+	 * 
 	 * @param debugConfigs
 	 * @param mode
 	 * @return ICDebugConfiguration
@@ -229,8 +239,8 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		ILabelProvider provider = new LabelProvider() {
 			/**
 			 * The <code>LabelProvider</code> implementation of this
-			 * <code>ILabelProvider</code> method returns the element's <code>toString</code>
-			 * string. Subclasses may override.
+			 * <code>ILabelProvider</code> method returns the element's
+			 * <code>toString</code> string. Subclasses may override.
 			 */
 			@Override
 			public String getText(Object element) {
@@ -255,24 +265,23 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		return null;
 	}
 
-	protected String getDebugConfigDialogTitleString(ICDebugConfiguration [] configList, String mode) {
-		return "Launch Debug Configuration Selection";  //$NON-NLS-1$
+	protected String getDebugConfigDialogTitleString(ICDebugConfiguration[] configList, String mode) {
+		return "Launch Debug Configuration Selection"; //$NON-NLS-1$
 	}
-	
-	protected String getDebugConfigDialogMessageString(ICDebugConfiguration [] configList, String mode) {
+
+	protected String getDebugConfigDialogMessageString(ICDebugConfiguration[] configList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return "Choose a debug configuration to debug";  //$NON-NLS-1$
+			return "Choose a debug configuration to debug"; //$NON-NLS-1$
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return "Choose a configuration to run";  //$NON-NLS-1$
+			return "Choose a configuration to run"; //$NON-NLS-1$
 		}
 		return "Invalid launch mode."; //$NON-NLS-1$
 	}
 
-
 	/**
-	 * Show a selection dialog that allows the user to choose one of the specified
-	 * launch configurations.  Return the chosen config, or <code>null</code> if the
-	 * user cancelled the dialog.
+	 * Show a selection dialog that allows the user to choose one of the
+	 * specified launch configurations. Return the chosen config, or
+	 * <code>null</code> if the user cancelled the dialog.
 	 */
 	@SuppressWarnings("rawtypes")
 	protected ILaunchConfiguration chooseConfiguration(List configList, String mode) {
@@ -292,21 +301,21 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 	@SuppressWarnings({ "rawtypes" })
 	protected String getLaunchSelectionDialogTitleString(List configList, String mode) {
-		return "Launch Configuration Selection";  //$NON-NLS-1$
+		return "Launch Configuration Selection"; //$NON-NLS-1$
 	}
-	
-	@SuppressWarnings({ "rawtypes"})
+
+	@SuppressWarnings({ "rawtypes" })
 	protected String getLaunchSelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return "Choose a debug configuration to debug";  //$NON-NLS-1$
+			return "Choose a debug configuration to debug"; //$NON-NLS-1$
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return "Choose a configuration to run";  //$NON-NLS-1$
+			return "Choose a configuration to run"; //$NON-NLS-1$
 		}
 		return "Invalid launch mode."; //$NON-NLS-1$
 	}
 
 	/**
-	 * Prompts the user to select a  binary
+	 * Prompts the user to select a binary
 	 * 
 	 * @return the selected binary or <code>null</code> if none.
 	 */
@@ -316,7 +325,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			@Override
 			public String getText(Object element) {
 				if (element instanceof IBinary) {
-					IBinary bin = (IBinary)element;
+					IBinary bin = (IBinary) element;
 					StringBuffer name = new StringBuffer();
 					name.append(bin.getPath().lastSegment());
 					return name.toString();
@@ -329,7 +338,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			@Override
 			public String getText(Object element) {
 				if (element instanceof IBinary) {
-					IBinary bin = (IBinary)element;
+					IBinary bin = (IBinary) element;
 					StringBuffer name = new StringBuffer();
 					name.append(bin.getCPU() + (bin.isLittleEndian() ? "le" : "be")); //$NON-NLS-1$ //$NON-NLS-2$
 					name.append(" - "); //$NON-NLS-1$
@@ -339,7 +348,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				return super.getText(element);
 			}
 		};
-		
+
 		TwoPaneElementSelector dialog = new TwoPaneElementSelector(getShell(), programLabelProvider, qualifierLabelProvider);
 		dialog.setElements(binList.toArray());
 		dialog.setTitle(getBinarySelectionDialogTitleString(binList, mode));
@@ -353,24 +362,25 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 		return null;
 	}
-	
-	@SuppressWarnings({ "rawtypes"})
+
+	@SuppressWarnings({ "rawtypes" })
 	protected String getBinarySelectionDialogTitleString(List binList, String mode) {
-		return "C Local Application";  //$NON-NLS-1$
+		return "C Local Application"; //$NON-NLS-1$
 	}
-	
+
 	@SuppressWarnings({ "rawtypes" })
 	protected String getBinarySelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return "Choose a local application to debug";  //$NON-NLS-1$
+			return "Choose a local application to debug"; //$NON-NLS-1$
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return "Choose a local application to run";  //$NON-NLS-1$
+			return "Choose a local application to run"; //$NON-NLS-1$
 		}
 		return "Invalid launch mode."; //$NON-NLS-1$
 	}
 
 	/**
 	 * Method searchAndLaunch.
+	 * 
 	 * @param objects
 	 * @param mode
 	 */
@@ -378,12 +388,12 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		if (elements != null && elements.length > 0) {
 			IBinary bin = null;
 			if (elements.length == 1 && elements[0] instanceof IBinary) {
-				bin = (IBinary)elements[0];
+				bin = (IBinary) elements[0];
 			} else {
 				final List<IBinary> results = new ArrayList<IBinary>();
 				ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-				IRunnableWithProgress runnable =new RunnableWithProgressToScanForExecutableImpl(elements,results);
-				
+				IRunnableWithProgress runnable = new RunnableWithProgressToScanForExecutableImpl(elements, results);
+
 				try {
 					dialog.run(true, true, runnable);
 				} catch (InterruptedException e) {
@@ -392,7 +402,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 					MessageDialog.openError(getShell(), "Application Launcher", e.getMessage()); //$NON-NLS-1$
 					return;
 				}
-				
+
 				int count = results.size();
 				if (count == 0) {
 					MessageDialog.openError(getShell(), "Application Launcher", "Launch failed. Binary not found."); //$NON-NLS-1$ //$NON-NLS-2$
@@ -402,7 +412,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 					bin = results.get(0);
 				}
 			}
-			
+
 			if (bin != null) {
 				launch(bin, mode);
 			}
@@ -413,14 +423,15 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 }
 
-class RunnableWithProgressToScanForExecutableImpl implements IRunnableWithProgress{
+class RunnableWithProgressToScanForExecutableImpl implements IRunnableWithProgress {
 	final List<IBinary> results;
 	final Object[] elements;
-	
-	public RunnableWithProgressToScanForExecutableImpl(Object[] elements, List<IBinary> results){
-		this.elements=elements;
-		this.results=results;
+
+	public RunnableWithProgressToScanForExecutableImpl(Object[] elements, List<IBinary> results) {
+		this.elements = elements;
+		this.results = results;
 	}
+
 	public void run(IProgressMonitor pm) throws InterruptedException {
 		int nElements = elements.length;
 		pm.beginTask("Looking for executables", nElements); //$NON-NLS-1$
@@ -433,8 +444,9 @@ class RunnableWithProgressToScanForExecutableImpl implements IRunnableWithProgre
 						ICProject cproject = CoreModel.getDefault().create(r.getProject());
 						if (cproject != null) {
 							try {
-								getExecutable(cproject,results);
-							} catch (CModelException e) {}
+								getExecutable(cproject, results);
+							} catch (CModelException e) {
+							}
 						}
 					}
 				}
@@ -447,15 +459,15 @@ class RunnableWithProgressToScanForExecutableImpl implements IRunnableWithProgre
 			pm.done();
 		}
 	}
-	
-	private void getExecutable(ICProject cproject, List<IBinary> results) throws CModelException{
+
+	private void getExecutable(ICProject cproject, List<IBinary> results) throws CModelException {
 		IBinary[] bins = cproject.getBinaryContainer().getBinaries();
 
 		for (int j = 0; j < bins.length; j++) {
 			if (bins[j].isExecutable()) {
 				results.add(bins[j]);
 			}
-		}						
+		}
 	}
-	
+
 }

@@ -52,35 +52,35 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 	private Button fCustomSrcRadioButton;
 	private Text fCustomSrcLocationText;
 	private Button fCustomSrcLocationButton;
-	
-	protected Model cm=TestFrameworkPlugin.getModel();
-	
+
+	protected Model cm = TestFrameworkPlugin.getModel();
+
 	public void createControl(Composite parent) {
-	    Font font = parent.getFont();
-	    Composite comp = new Composite(parent, SWT.NONE);
-	    createVerticalSpacer(comp, 1);
-	    
-	    GridLayout layout = new GridLayout(1, true);
+		Font font = parent.getFont();
+		Composite comp = new Composite(parent, SWT.NONE);
+		createVerticalSpacer(comp, 1);
+
+		GridLayout layout = new GridLayout(1, true);
 		layout.numColumns = 2;
 		layout.marginHeight = 0;
 		layout.marginWidth = 5;
 		comp.setLayout(layout);
-	    comp.setFont(font);
-	    GridData gd;
-	    	    
-	    Group group = SWTFactory.createGroup(comp, LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceFolderSelection"), 3, 2, GridData.FILL_HORIZONTAL); //$NON-NLS-1$
+		comp.setFont(font);
+		GridData gd;
+
+		Group group = SWTFactory.createGroup(comp, LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceFolderSelection"), 3, 2, GridData.FILL_HORIZONTAL); //$NON-NLS-1$
 		Composite n_comp = SWTFactory.createComposite(group, parent.getFont(), 3, 3, GridData.FILL_BOTH, 0, 0);
-		descriptionLabel=new Label(n_comp,SWT.NONE);
-	    descriptionLabel.setText(LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceDescText")); //$NON-NLS-1$
-	    gd = new GridData();
+		descriptionLabel = new Label(n_comp, SWT.NONE);
+		descriptionLabel.setText(LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.SourceDescText")); //$NON-NLS-1$
+		gd = new GridData();
 		gd.horizontalSpan = 3;
 		descriptionLabel.setLayoutData(gd);
-	    
+
 		fLocalRadioButton = createRadioButton(n_comp, LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.Default")); //$NON-NLS-1$
 		gd = new GridData();
 		gd.horizontalSpan = 3;
 		fLocalRadioButton.setLayoutData(gd);
-		
+
 		fCustomSrcRadioButton = createRadioButton(n_comp, LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.CustomPath")); //$NON-NLS-1$
 		fCustomSrcRadioButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -90,23 +90,26 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 		});
 		fCustomSrcLocationText = SWTFactory.createSingleText(n_comp, 1);
 		fCustomSrcLocationText.addModifyListener(fBasicModifyListener);
-		fCustomSrcLocationButton = createPushButton(n_comp, EMPTY_STRING, null);	 
+		fCustomSrcLocationButton = createPushButton(n_comp, EMPTY_STRING, null);
 		fCustomSrcLocationButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent evt) {
 				handleSharedLocationButtonSelected();
 			}
-		});	
-	    setControl(comp);
+		});
+		setControl(comp);
 	}
+
 	/**
-	 * Modify listener that simply updates the owning launch configuration dialog.
+	 * Modify listener that simply updates the owning launch configuration
+	 * dialog.
 	 */
 	private final ModifyListener fBasicModifyListener = new ModifyListener() {
 		public void modifyText(ModifyEvent evt) {
 			updateLaunchConfigurationDialog();
 		}
 	};
+
 	/**
 	 * handles the shared radio button being selected
 	 */
@@ -114,16 +117,23 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 		setSharedEnabled(isShared());
 		updateLaunchConfigurationDialog();
 	}
+
 	/**
-	 * Sets the widgets for specifying that a launch configuration is to be shared to the enable value
-	 * @param enable the enabled value for 
+	 * Sets the widgets for specifying that a launch configuration is to be
+	 * shared to the enable value
+	 * 
+	 * @param enable
+	 *            the enabled value for
 	 */
 	private void setSharedEnabled(boolean enable) {
 		fCustomSrcLocationText.setEnabled(enable);
 		fCustomSrcLocationButton.setEnabled(enable);
 	}
+
 	/**
-	 * if the shared radio button is selected, indicating that the launch configuration is to be shared
+	 * if the shared radio button is selected, indicating that the launch
+	 * configuration is to be shared
+	 * 
 	 * @return true if the radio button is selected, false otherwise
 	 */
 	private boolean isShared() {
@@ -132,45 +142,48 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 
 	//////////////////////////////
 	/// based on CommonTab
-//	@see org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup
-//	@see org.eclipse.cdt.launch.internal.ui.LocalRunLaunchConfigurationTabGroup
-//	@see org.eclipse.debug.ui.CommonTab
-//	see extension org.eclipse.debug.ui.launchConfigurationTabGroups
+	//	@see org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup
+	//	@see org.eclipse.cdt.launch.internal.ui.LocalRunLaunchConfigurationTabGroup
+	//	@see org.eclipse.debug.ui.CommonTab
+	//	see extension org.eclipse.debug.ui.launchConfigurationTabGroups
 	/**
 	 * Handles the shared location button being selected
 	 */
-	private void handleSharedLocationButtonSelected() { 
+	private void handleSharedLocationButtonSelected() {
 		String currentContainerString = fCustomSrcLocationText.getText();
 		IContainer currentContainer = getContainer(currentContainerString);
-		SharedLocationSelectionDialog dialog = new SharedLocationSelectionDialog(getShell(),
-				   currentContainer,
-				   false,
-				   EMPTY_STRING);
+		SharedLocationSelectionDialog dialog = new SharedLocationSelectionDialog(getShell(), currentContainer, false, EMPTY_STRING);
 		dialog.showClosedProjects(false);
 		dialog.open();
-		Object[] results = dialog.getResult();	
+		Object[] results = dialog.getResult();
 		if ((results != null) && (results.length > 0) && (results[0] instanceof IPath)) {
-			IPath path = (IPath)results[0];
+			IPath path = (IPath) results[0];
 			String containerName = path.toOSString();
 			fCustomSrcLocationText.setText(containerName);
-		}		
+		}
 	}
+
 	/**
 	 * gets the container form the specified path
-	 * @param path the path to get the container from
-	 * @return the container for the specified path or null if one cannot be determined
+	 * 
+	 * @param path
+	 *            the path to get the container from
+	 * @return the container for the specified path or null if one cannot be
+	 *         determined
 	 */
 	private IContainer getContainer(String path) {
 		Path containerPath = new Path(path);
 		return (IContainer) ResourcesPlugin.getWorkspace().getRoot().findMember(containerPath);
 	}
+
 	/**
 	 * Provides a persistable dialog for selecting the shared project location
+	 * 
 	 * @since 3.2
 	 */
 	class SharedLocationSelectionDialog extends ContainerSelectionDialog {
 		private final String SETTINGS_ID = IDebugUIConstants.PLUGIN_ID + ".SHARED_LAUNCH_CONFIGURATON_DIALOG"; //$NON-NLS-1$
-		
+
 		public SharedLocationSelectionDialog(Shell parentShell, IContainer initialRoot, boolean allowNewContainerName, String message) {
 			super(parentShell, initialRoot, allowNewContainerName, message);
 		}
@@ -181,38 +194,44 @@ public class CustomisedLaunchConfigTab extends CLaunchConfigurationTab {
 			IDialogSettings section = settings.getSection(SETTINGS_ID);
 			if (section == null) {
 				section = settings.addNewSection(SETTINGS_ID);
-			} 
+			}
 			return section;
 		}
 	}
+
 	//////////////////////////////
 	public String getName() {
 		return LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.LookupPath"); //$NON-NLS-1$
 	}
 
 	public void initializeFrom(ILaunchConfiguration configuration) {
-		try{
-		boolean flag=configuration.getAttribute(USE_CUSTOM_SRC_PATH, false);
-		if(flag){
-			fCustomSrcRadioButton.setSelection(true);
-			setSharedEnabled(true);
-			fCustomSrcLocationText.setText(configuration.getAttribute(CUSTOM_SRC_PATH,EMPTY_STRING));
-		}else{
-			fLocalRadioButton.setSelection(true);
-			setSharedEnabled(false);
+		try {
+			boolean flag = configuration.getAttribute(USE_CUSTOM_SRC_PATH, false);
+			if (flag) {
+				fCustomSrcRadioButton.setSelection(true);
+				setSharedEnabled(true);
+				fCustomSrcLocationText.setText(configuration.getAttribute(CUSTOM_SRC_PATH, EMPTY_STRING));
+			} else {
+				fLocalRadioButton.setSelection(true);
+				setSharedEnabled(false);
+			}
+		} catch (CoreException ce) {
+			TestFrameworkPlugin.getDefault().getLog().log(ce.getStatus());
 		}
-		}catch(CoreException ce){TestFrameworkPlugin.getDefault().getLog().log(ce.getStatus());}
 	}
+
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(USE_CUSTOM_SRC_PATH,isShared());
-		configuration.setAttribute(CUSTOM_SRC_PATH,fCustomSrcLocationText.getText());
+		configuration.setAttribute(USE_CUSTOM_SRC_PATH, isShared());
+		configuration.setAttribute(CUSTOM_SRC_PATH, fCustomSrcLocationText.getText());
 	}
+
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(USE_CUSTOM_SRC_PATH,false);
+		configuration.setAttribute(USE_CUSTOM_SRC_PATH, false);
 	}
+
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
-		if(isShared() && fCustomSrcLocationText.getText().equals(EMPTY_STRING)){
+		if (isShared() && fCustomSrcLocationText.getText().equals(EMPTY_STRING)) {
 			setErrorMessage(LaunchConfigurationsMessages.getString("CustomisedLaunchConfigTab.NoSourcePathSelected")); //$NON-NLS-1$
 			return false;
 		}

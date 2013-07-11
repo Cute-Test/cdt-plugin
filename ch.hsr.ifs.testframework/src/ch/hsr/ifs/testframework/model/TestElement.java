@@ -11,24 +11,24 @@ package ch.hsr.ifs.testframework.model;
 import java.util.Vector;
 
 public abstract class TestElement {
-	
+
 	protected Vector<ITestElementListener> listeners = new Vector<ITestElementListener>();
 	private ITestComposite parent;
-	
+
 	public abstract String getName();
 
 	public abstract TestStatus getStatus();
-	
+
 	public void addTestElementListener(ITestElementListener lis) {
-		if(!listeners.contains(lis)) {
+		if (!listeners.contains(lis)) {
 			listeners.add(lis);
 		}
 	}
-	
+
 	public void removeTestElementListener(ITestElementListener lis) {
 		listeners.remove(lis);
 	}
-	
+
 	protected void notifyListeners(NotifyEvent event) {
 		for (ITestElementListener lis : listeners) {
 			lis.modelCanged(this, event);
@@ -41,6 +41,16 @@ public abstract class TestElement {
 
 	public void setParent(ITestComposite parent) {
 		this.parent = parent;
+	}
+
+	public String getRerunName() {
+		StringBuilder result = new StringBuilder();
+		if (getParent() != null && getParent().getRerunName().length() > 0) {
+			result.append(getParent().getRerunName());
+			result.append('#');
+		}
+		result.append(getName());
+		return result.toString();
 	}
 
 }

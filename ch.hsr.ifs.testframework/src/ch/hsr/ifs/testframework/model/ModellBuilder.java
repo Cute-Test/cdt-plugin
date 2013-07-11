@@ -11,15 +11,10 @@ package ch.hsr.ifs.testframework.model;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.eclipse.cdt.core.resources.EFSFileStorage;
-import org.eclipse.cdt.utils.EFSExtensionManager;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.jface.text.IRegion;
 

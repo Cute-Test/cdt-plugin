@@ -12,20 +12,20 @@ import org.eclipse.core.resources.IFile;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class TestCase extends TestElement {
-	
+
 	private TestStatus status;
-	
-	private String name;
-	
+
+	private final String name;
+
 	private IFile file;
-	
+
 	private int lineNumber = -1;
-	
+
 	private TestResult result;
-	
+
 	public TestCase(String name) {
 		super();
 		this.name = name;
@@ -49,11 +49,11 @@ public class TestCase extends TestElement {
 	public int getLineNumber() {
 		return lineNumber;
 	}
-	
+
 	public String getMessage() {
-		if(result == null) {
+		if (result == null) {
 			return ""; //$NON-NLS-1$
-		}else {
+		} else {
 			return result.getMsg();
 		}
 	}
@@ -62,7 +62,7 @@ public class TestCase extends TestElement {
 	public String toString() {
 		return getName();
 	}
-	
+
 	public void endTest(IFile file, int lineNumber, TestResult result, TestStatus status) {
 		this.file = file;
 		this.lineNumber = lineNumber;
@@ -70,7 +70,7 @@ public class TestCase extends TestElement {
 		this.status = status;
 		notifyListeners(new NotifyEvent(NotifyEvent.EventType.testFinished, this));
 	}
-	
+
 	public TestResult getResult() {
 		return result;
 	}

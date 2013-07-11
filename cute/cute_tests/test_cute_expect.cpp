@@ -61,14 +61,17 @@ void test_assert_throws_is_safe_against_throwing_test_failure(){
 	try {
 		ASSERT_THROWS(ASSERT(true),cute::test_failure);
 		throw true;
-	} catch (cute::test_failure&) {
-	} catch (bool &b){
+	} catch (cute::test_failure const&) {
+	} catch (bool const &){
 		FAILM("ASSERT_THROWS falsely catched test_failure");
 	}
 
 }
 void test_throwing_with_demangle_failure_therefore_suite_should_be_inserted_instead_of_wrapped() {
 	throw std::logic_error("NOT A VALID TYPE NAME");
+}
+void test_assert_throws_with_demangling_error(){
+	ASSERT_THROWS(test_throwing_with_demangle_failure_therefore_suite_should_be_inserted_instead_of_wrapped(),std::logic_error);
 }
 }
 cute::suite test_cute_expect() {
@@ -80,7 +83,8 @@ cute::suite test_cute_expect() {
 	s += CUTE(test_throws_with_code);
 	s += CUTE(test_throws_with_message);
 	s += CUTE(test_assert_throws_is_safe_against_throwing_test_failure);
-	s.push_back(CUTE(test_throwing_with_demangle_failure_therefore_suite_should_be_inserted_instead_of_wrapped));
+	//s.push_back(CUTE(test_throwing_with_demangle_failure_therefore_suite_should_be_inserted_instead_of_wrapped));
+	s.push_back(CUTE(test_assert_throws_with_demangling_error));
 	return s;
 }
 

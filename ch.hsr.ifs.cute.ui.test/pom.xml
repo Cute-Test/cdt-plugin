@@ -23,6 +23,7 @@
 					<testClass>ch.hsr.ifs.cute.ui.test.AllUiTests</testClass>
         			<useUIHarness>true</useUIHarness>
         			<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
+		          <argLine>${os-jvm-flags}</argLine>
 			</configuration>
     	  	</plugin>
 	    </plugins>

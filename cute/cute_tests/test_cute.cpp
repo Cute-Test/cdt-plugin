@@ -27,10 +27,11 @@ namespace {
 		try {
 			FAIL();
 			throw "should have failed";
-		} catch (cute::test_failure &e){
+		} catch (cute::test_failure const &e){
 			ASSERT_EQUAL(__FILE__,e.filename);
 			std::string what=e.what();
 			std::string fail("FAIL()");
+			fail = CUTE_FUNCNAME_PREFIX+fail;
 			ASSERT_EQUAL(fail,e.reason);
 			ASSERT_EQUAL(fail,what.substr(what.size()-fail.size()));
 			ASSERT_EQUAL_DELTA(__LINE__,e.lineno,10);
@@ -40,10 +41,11 @@ namespace {
 		try {
 			ASSERT(0);
 			throw "should have failed";
-		} catch (cute::test_failure &e){
+		} catch (cute::test_failure const &e){
 			ASSERT_EQUAL(__FILE__,e.filename);
 			std::string what=e.what();
 			std::string msg("0");
+			msg = CUTE_FUNCNAME_PREFIX+msg;
 			ASSERT_EQUAL(msg,e.reason);
 			ASSERT_EQUAL(msg,what.substr(what.size()-msg.size()));
 			ASSERT_EQUAL_DELTA(__LINE__,e.lineno,10);
@@ -60,9 +62,9 @@ namespace {
 
 cute::suite test_cute(){
 	cute::suite s;
-	s += CUTE(test_what);
-	s += CUTE(test_fail_macro);
-	s += CUTE(test_t_assert_macro);
+	s.push_back(CUTE(test_what));
+	s.push_back(CUTE(test_fail_macro));
+	s.push_back(CUTE(test_t_assert_macro));
 	return s;
 
 }

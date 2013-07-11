@@ -8,6 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov;
 
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
@@ -60,6 +61,24 @@ public class ProjectDecorator implements ILightweightLabelDecorator {
 				GcovPlugin.log(e);
 			}
 		}
+		if (element instanceof ICProject) {
+			ICProject cproj = (ICProject) element;
+			IProject proj = cproj.getProject();
+			try {
+				if (proj.exists() && proj.isOpen() && proj.hasNature(GcovNature.NATURE_ID)) {
+					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
+					IConfiguration config = info.getDefaultConfiguration();
+					if (config.getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
+						decoration.addOverlay(GCOV_ICON, IDecoration.BOTTOM_RIGHT);
+					} else {
+						decoration.addOverlay(GCOV_DEACT_ICON, IDecoration.BOTTOM_RIGHT);
+					}
+				}
+			} catch (CoreException e) {
+				GcovPlugin.log(e);
+			}
+		}
+
 	}
 
 }

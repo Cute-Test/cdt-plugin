@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+environment/project/org.eclipse.cdt.msvc.exe.debug.293650486/INCLUDE/delimiter=;
+environment/project/org.eclipse.cdt.msvc.exe.debug.293650486/INCLUDE/operation=replace
+environment/project/org.eclipse.cdt.msvc.exe.debug.293650486/INCLUDE/value=C\:\\Program Files (x86)\\Microsoft Visual C++ Compiler Nov 2012 CTP\\include;C\:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\VC\\INCLUDE;C\:\\Program Files (x86)\\Windows Kits\\8.0\\include\\shared;C\:\\Program Files (x86)\\Windows Kits\\8.0\\include\\um;C\:\\Program Files (x86)\\Windows Kits\\8.0\\include\\winrt;
+environment/project/org.eclipse.cdt.msvc.exe.debug.293650486/LIB/delimiter=;
+environment/project/org.eclipse.cdt.msvc.exe.debug.293650486/LIB/operation=replace
+environment/project/org.eclipse.cdt.msvc.exe.debug.293650486/LIB/value=C\:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\VC\\Lib;C\:\\Program Files (x86)\\Windows Kits\\8.0\\Lib;C\:\\Program Files (x86)\\Windows Kits\\8.0\\Lib\\win8\\um\\x86;
+environment/project/org.eclipse.cdt.msvc.exe.debug.293650486/append=true
+environment/project/org.eclipse.cdt.msvc.exe.debug.293650486/appendContributed=false

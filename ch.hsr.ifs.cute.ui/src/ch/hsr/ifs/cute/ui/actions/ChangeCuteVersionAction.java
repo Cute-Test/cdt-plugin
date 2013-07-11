@@ -8,6 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.actions;
 
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -23,10 +24,10 @@ import ch.hsr.ifs.cute.ui.dialogs.ChangeCuteVersionWizard;
 /**
  * @author egraf
  * @since 4.0
- *
+ * 
  */
 public class ChangeCuteVersionAction implements IWorkbenchWindowActionDelegate {
-	
+
 	IProject project;
 
 	/* (non-Javadoc)
@@ -61,7 +62,10 @@ public class ChangeCuteVersionAction implements IWorkbenchWindowActionDelegate {
 			TreeSelection treeSel = (TreeSelection) selection;
 			if (treeSel.getFirstElement() instanceof IProject) {
 				project = (IProject) treeSel.getFirstElement();
-				
+			}
+			if (treeSel.getFirstElement() instanceof ICProject) {
+				ICProject cproject = (ICProject) treeSel.getFirstElement();
+				project = cproject.getProject();
 			}
 		}
 	}

@@ -17,9 +17,9 @@
  * Copyright 2006 Peter Sommerlad
  *
  *********************************************************************************/
+#include "cute_test.h"
 
 #include "test_cute_test.h"
-#include "cute_test.h"
 #include "cute_equals.h"
 
 namespace for_cute_equals_test {
@@ -43,7 +43,7 @@ void test_functor(){
 }
 cute::suite test_cute_test(){
 	cute::suite s;
-	s += CUTE(test_cute_macro);
-	s += CUTE(test_functor);
+	s.push_back( CUTE(test_cute_macro));
+	s.push_back(CUTE(test_functor));
 	return s;
 }
