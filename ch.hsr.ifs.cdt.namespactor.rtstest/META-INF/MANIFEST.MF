@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text;bundle-version="3.7.0",
  ch.hsr.ifs.cdt.namespactor;bundle-version="0.0.1",
  ch.hsr.ifs.cdttesting;bundle-version="1.0.1",
- org.junit;bundle-version="4.11.0"
+ org.junit;bundle-version="4.10.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cdt.namespactor.rtstest,
