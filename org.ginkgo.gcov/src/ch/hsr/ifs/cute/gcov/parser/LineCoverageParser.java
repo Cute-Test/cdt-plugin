@@ -159,8 +159,11 @@ public abstract class LineCoverageParser {
 			if (exeFile == null) {
 				return;
 			}
-
-			IPath workingDirectory = exeFile.getParent().getLocation();
+			
+			IManagedBuildInfo buildInfo = ManagedBuildManager.getBuildInfo(project);
+			IConfiguration activeConfig = buildInfo.getDefaultConfiguration();
+			IPath workingDirectory = activeConfig.getEditableBuilder().getBuildLocation();
+//			IPath workingDirectory = exeFile.getParent().getLocation();
 			if (workingDirectory != null) {
 				workingDir = new File(workingDirectory + "/" + targetFile.getProjectRelativePath().removeLastSegments(1));
 			}

@@ -25,7 +25,7 @@ public class FallbackImageProvider extends ImageProvider {
 	protected Map<Integer, String> pathMap = new TreeMap<Integer, String>();
 
 	public FallbackImageProvider() {
-		pathMap.put(APP_LOGO, "obj16/empty_app.gif"); //$NON-NLS-1$
+		pathMap.put(APP_LOGO, "obj16/cute_app.gif"); //$NON-NLS-1$
 	}
 	
 	@Override
