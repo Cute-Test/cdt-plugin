@@ -104,11 +104,8 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 				}
 			}
 		} catch (ClassNotFoundException e) {
-			TestFrameworkPlugin.log(e);
 		} catch (InstantiationException e) {
-			TestFrameworkPlugin.log(e);
 		} catch (IllegalAccessException e) {
-			TestFrameworkPlugin.log(e);
 		}
 		return new FallbackImageProvider();
 	}

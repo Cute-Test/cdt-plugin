@@ -10,7 +10,6 @@ package ch.hsr.ifs.testframework.launch;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author Emanuel Graf IFS
@@ -21,6 +20,6 @@ public interface ILaunchObserver {
 	
 	public void notifyBeforeLaunch(IProject project) throws CoreException;
 	
-	public void notifyAfterLaunch(IProject project, IProgressMonitor monitor) throws CoreException;
+	public void notifyAfterLaunch(IProject project) throws CoreException;
 
 }
