@@ -7,7 +7,6 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho-version>0.15.0</tycho-version>
-		<eclipse-version>juno</eclipse-version>
     	 <os-jvm-flags/> <!-- for the default case , mac requires special -->
 	</properties>
 	<profiles>
@@ -20,22 +19,36 @@
         <os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
       </properties>
     </profile>
+    <profile>
+      <id>juno</id>
+      <properties>
+		<eclipse-version>juno</eclipse-version>
+       <eclipse-version-number>4.2</eclipse-version-number>
+      </properties>
+    </profile>
+    <profile>
+      <id>kepler</id>
+      <properties>
+		<eclipse-version>kepler</eclipse-version>
+       <eclipse-version-number>4.3</eclipse-version-number>
+      </properties>
+    </profile>
   </profiles>
 	
 	<repositories>
 		<repository>
-			<id>juno-release</id>
+			<id>release</id>
 			<url>http://download.eclipse.org/releases/${eclipse-version}/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
-			<id>juno-release2</id>
-			<url>http://download.eclipse.org/eclipse/updates/4.2</url>
+			<id>release-update</id>
+			<url>http://download.eclipse.org/eclipse/updates/${eclipse-version-number}</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
 			<id>ifs cdttesting</id>
-			<url>http://dev.ifs.hsr.ch/updatesites/cdttesting/juno</url>
+			<url>http://dev.ifs.hsr.ch/updatesites/cdttesting/${eclipse-version}</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
