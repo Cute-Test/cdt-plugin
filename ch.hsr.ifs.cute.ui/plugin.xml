@@ -201,7 +201,7 @@
     <extension
           point="org.eclipse.ui.popupMenus">
        <objectContribution
-             id="cute_ui_plugin.objectContribution1"
+             id="ch.hsr.ifs.cute.ui.objectContribution1"
              objectClass="org.eclipse.core.resources.IProject">
          <visibility>
               <objectState
@@ -209,7 +209,34 @@
                  value="ch.hsr.ifs.cute.ui.cutenature"/>
          </visibility>
          <menu
-               id="ch.hsr.ifs.cute.ui"
+               id="ch.hsr.ifs.cute.ui.cuteMenu"
+               label="bla%menu.label.0"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="update"/>
+         </menu>
+          <action
+                class="ch.hsr.ifs.cute.ui.actions.ChangeCuteVersionAction"
+                definitionId="ch.hsr.ifs.cute.ui.changeCuteVersion"
+                id="ch.hsr.ifs.cute.ui.changeCuteVersion"
+                label="%action.label.0"
+                menubarPath="ch.hsr.ifs.cute.ui/update"
+                style="push">
+          </action>
+       </objectContribution>
+    </extension>
+    <extension
+          point="org.eclipse.ui.popupMenus">
+              <objectContribution
+             id="ch.hsr.ifs.cute.ui.objectContribution2"
+             objectClass="org.eclipse.cdt.core.model.ICProject">
+         <visibility>
+              <objectState
+                 name="projectNature"
+                 value="ch.hsr.ifs.cute.ui.cutenature"/>
+         </visibility>
+        <menu
+               id="ch.hsr.ifs.cute.ui.cuteMenu.CProject"
                label="%menu.label.0"
                path="buildGroup">
             <groupMarker name="rebuild"/>
@@ -218,9 +245,9 @@
           <action
                 class="ch.hsr.ifs.cute.ui.actions.ChangeCuteVersionAction"
                 definitionId="ch.hsr.ifs.cute.ui.changeCuteVersion"
-                id="i"
+                id="ch.hsr.ifs.cute.ui.changeCuteVersion.CProject"
                 label="%action.label.0"
-                menubarPath="ch.hsr.ifs.cute.ui/update"
+                menubarPath="ch.hsr.ifs.cute.ui.cuteMenu.CProject/update"
                 style="push">
           </action>
        </objectContribution>

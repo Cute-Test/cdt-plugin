@@ -243,6 +243,64 @@
        </objectContribution>
     </extension>
    <extension
+          point="org.eclipse.ui.popupMenus">
+       <objectContribution
+             id="ch.hsr.ifs.cute.gcov.addContribution"
+             objectClass="org.eclipse.cdt.core.model.ICProject">
+         <visibility>
+         <and>
+              <objectState
+                 name="projectNature"
+                 value="ch.hsr.ifs.cute.ui.cutenature"/>
+         <not>
+         	<objectState
+                 name="projectNature"
+                 value="ch.hsr.ifs.cute.gcov.GcovNature"/>
+         </not>
+         </and>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.cute.ui.cuteMenu.CProject"
+               label="%menu.label.0"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="gcov"/>
+         </menu>
+          <action
+                class="ch.hsr.ifs.cute.gcov.actions.AddGcovAction"
+                definitionId="ch.hsr.ifs.cute.gcov.addGcov"
+                id="ch.hsr.ifs.cute.gcov.addGcov"
+                label="%action.label.0"
+                menubarPath="ch.hsr.ifs.cute.ui.cuteMenu.CProject/gcov"
+                style="push">
+          </action>
+       </objectContribution>
+       <objectContribution
+             id="ch.hsr.ifs.cute.gcov.removeContribution"
+             objectClass="org.eclipse.cdt.core.model.ICProject">
+         <visibility>
+              <objectState
+                 name="projectNature"
+                 value="ch.hsr.ifs.cute.gcov.GcovNature"/>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.cute.ui.cuteMenu.CProject"
+               label="%menu.label.0"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="gcov"/>
+         </menu>
+          <action
+                class="ch.hsr.ifs.cute.gcov.actions.RemoveGcovAction"
+                definitionId="ch.hsr.ifs.cute.gcov.removeGcov"
+                id="ch.hsr.ifs.cute.gcov.removeGcov"
+                label="%action.label.1"
+                menubarPath="ch.hsr.ifs.cute.ui.cuteMenu.CProject/gcov"
+                style="push">
+          </action>
+       </objectContribution>
+    </extension>
+       <extension
          point="ch.hsr.ifs.testframework.launchObserver">
       <launchObserver
             class="ch.hsr.ifs.cute.gcov.parser.LaunchObserver">

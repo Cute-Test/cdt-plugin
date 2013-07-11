@@ -40,8 +40,6 @@ public class RerunSelectedAction extends Action {
 					rerunnames.add(((TestElement) leaf).getRerunName());
 			}
 		}
-		System.err.println("RerunSelectedAction: " + rerunnames);
 		this.testRunnerViewPart.rerunSelectedTestRun(rerunnames);
-
 	}
 }

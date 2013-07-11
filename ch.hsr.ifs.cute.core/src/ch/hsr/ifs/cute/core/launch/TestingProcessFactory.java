@@ -14,7 +14,7 @@ import org.eclipse.debug.core.model.RuntimeProcess;
  * Custom testing process factory allows to handle the output stream of the
  * testing process and prevent it from output to Console.
  * 
- * need to adapt this class for CUTE!!!! stolen from cdt.testsrunner
+ * adapted for CUTE!!!! stolen from cdt.testsrunner
  */
 public class TestingProcessFactory implements IProcessFactory {
 
@@ -26,15 +26,13 @@ public class TestingProcessFactory implements IProcessFactory {
 			Object processTypeCreationAttrValue = attributes.get(org.eclipse.cdt.dsf.gdb.IGdbDebugConstants.PROCESS_TYPE_CREATION_ATTR);
 			if (IGdbDebugConstants.GDB_PROCESS_CREATION_VALUE.equals(processTypeCreationAttrValue)) {
 				return new GDBProcess(launch, process, label, attributes);
-			} else
-
+			}
 			if (IGdbDebugConstants.INFERIOR_PROCESS_CREATION_VALUE.equals(processTypeCreationAttrValue)) {
 				proc = new InferiorRuntimeProcess(launch, process, label, attributes);
 			}
-
 			// Probably, it is CDI creating a new inferior process
 		} else {
-			proc = new RuntimeProcess(launch, process, label, attributes);
+			proc = new RuntimeProcess(launch, process, label, attributes); // for cute this might be an error
 		}
 
 		return proc;

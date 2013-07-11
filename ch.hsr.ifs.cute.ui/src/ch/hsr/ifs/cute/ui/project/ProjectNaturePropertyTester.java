@@ -9,6 +9,7 @@
 package ch.hsr.ifs.cute.ui.project;
 
 import org.eclipse.cdt.core.model.IBinary;
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -17,7 +18,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class ProjectNaturePropertyTester extends PropertyTester {
 
@@ -30,37 +31,38 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.expressions.IPropertyTester#test(java.lang.Object, java.lang.String, java.lang.Object[], java.lang.Object)
 	 */
-	public boolean test(Object receiver, String property, Object[] args,
-			Object expectedValue) {
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		if (property.equals("projectNature1")) { //$NON-NLS-1$
 			try {
-				if(receiver instanceof FileEditorInput) {
-					FileEditorInput fei = (FileEditorInput)receiver;
+				if (receiver instanceof FileEditorInput) {
+					FileEditorInput fei = (FileEditorInput) receiver;
 					receiver = fei.getFile(); //The IResource part will take care of the rest.
 				}
-				if(receiver instanceof IResource){
+				if (receiver instanceof IResource) {
 					IResource res = (IResource) receiver;
 					IProject proj = res.getProject();
-					boolean result=proj != null;
-					boolean result1=proj.isAccessible();
-					boolean result2= proj.hasNature(toString(expectedValue));
-					return result && result1 && result2;
+					return isCuteProject(expectedValue, proj);
 				}
-				if(receiver instanceof IBinary){
-					IBinary bin=(IBinary)receiver;
+				if (receiver instanceof IBinary) {
+					IBinary bin = (IBinary) receiver;
 					IProject proj = bin.getCProject().getProject();
-					boolean result= proj!= null;
-					boolean result1= proj!=null ? proj.isAccessible(): false;
-					boolean result2= proj!=null ? proj.hasNature(toString(expectedValue)):false;
-					return result && result1 && result2;
+					return isCuteProject(expectedValue, proj);
 				}
-				
+				if (receiver instanceof ICProject) {
+					ICProject res = (ICProject) receiver;
+					IProject proj = res.getProject();
+					return isCuteProject(expectedValue, proj);
+				}
+
 			} catch (CoreException e) {
 				return false;
 			}
 		}
-		
 		return false;
+	}
+
+	public boolean isCuteProject(Object expectedValue, IProject proj) throws CoreException {
+		return proj != null && proj.isAccessible() && proj.hasNature(toString(expectedValue));
 	}
 
 	/**
@@ -74,7 +76,7 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 	 */
 	protected String toString(Object expectedValue) {
 		return expectedValue == null ? "" : expectedValue.toString(); //$NON-NLS-1$
-	}	
-		
+	}
+
 }
 //@see org.eclipse.core.internal.propertytester.ResourcePropertyTester

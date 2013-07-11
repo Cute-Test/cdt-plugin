@@ -12,7 +12,9 @@
             delegate="ch.hsr.ifs.cute.core.launch.CuteDebugLauncherDelegate"
             id="ch.hsr.ifs.cutelauncher.launchConfig.debug"
             modes="debug"
-            name="%launchDebugConfigurationType.name">
+            name="%launchDebugConfigurationType.name"
+            sourceLocatorId="org.eclipse.cdt.debug.core.sourceLocator"
+            sourcePathComputerId="org.eclipse.cdt.debug.core.sourcePathComputer">
       </launchConfigurationType>
    </extension>
    <extension
@@ -40,19 +42,19 @@
             type="ch.hsr.ifs.cutelauncher.launchConfig.debug">
       </launchConfigurationTabGroup>
    </extension>
-   <extension
+<!--   <extension
          point="org.eclipse.debug.core.launchDelegates">
       <launchDelegate
             delegate="ch.hsr.ifs.cute.core.launch.CuteDebugLauncherDelegate"
             id="ch.hsr.ifs.cute.core.launchDelegate.debug"
             modes="debug"
-            name="CUTE GDB dsf launcher"
+            name="%launchDebugConfigurationType.name"
             sourceLocatorId="org.eclipse.cdt.debug.core.sourceLocator"
             sourcePathComputerId="org.eclipse.cdt.debug.core.sourcePathComputer"
             type="ch.hsr.ifs.cutelauncher.launchConfig.debug">
       </launchDelegate>
    </extension>
-   <extension
+-->   <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             label="%shortcut.label.0"
@@ -60,7 +62,39 @@
             modes="run,debug"
             class="ch.hsr.ifs.cute.core.launch.CuteLaunchShortcut"
             id="ch.hsr.ifs.cutelauncher.cuteShortcut">
-         <contextualLaunch>
+          <contextualLaunch>
+           <enablement>
+             <with variable="selection">
+               <count value="1"/>
+               <iterate>
+               <and>
+                     <test
+                           forcePluginActivation="true"
+                           property="ch.hsr.ifs.projectNature1"
+                           value="ch.hsr.ifs.cute.ui.cutenature">
+                     </test>
+                   <or>
+                     <instanceof value="org.eclipse.cdt.core.model.IBinary"/>
+                     <instanceof value="org.eclipse.cdt.core.model.ICProject"/>
+                     <test
+                           forcePluginActivation="true"
+                           property="org.eclipse.cdt.launch.isExecutable"/>
+                     <test
+                           forcePluginActivation="true"
+                           property="org.eclipse.cdt.launch.isCProject"/>
+                     <and>
+                       <instanceof value="org.eclipse.ui.IFileEditorInput"/>
+                       <adapt type="org.eclipse.core.resources.IResource">
+                         <adapt type="org.eclipse.cdt.core.model.ICElement"/>
+                       </adapt>
+                     </and>
+                   </or>
+                   </and>
+               </iterate>
+             </with>
+           </enablement>
+ <!--          </contextualLaunch>
+       <contextualLaunch>
            <enablement>
              <with variable="selection">
                <count value="1"/>
@@ -99,6 +133,7 @@
                </iterate>
              </with>
            </enablement>
+           -->
            <contextLabel
          	  mode="run"
          	  label="%contextLabel.label.0"/>

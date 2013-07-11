@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.core.launch;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.cdt.core.model.ICProject;
@@ -16,7 +14,6 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchDelegate;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate2;
@@ -44,9 +41,6 @@ import ch.hsr.ifs.testframework.ui.ShowResultView;
  */
 public class CuteDebugLauncherDelegate extends AbstractCLaunchDelegate2 {//LaunchConfigurationDelegate {
 
-	/** Stores the changes made to the launch configuration. */
-	private final Map<String, String> changesToLaunchConfiguration = new HashMap<String, String>();
-
 	@Override
 	public ILaunch getLaunch(ILaunchConfiguration config, String mode) throws CoreException {
 		return getPreferredDelegate(config, mode).getLaunch(config, mode);
@@ -67,27 +61,19 @@ public class CuteDebugLauncherDelegate extends AbstractCLaunchDelegate2 {//Launc
 		return getPreferredDelegate(config, mode).preLaunchCheck(config, mode, monitor);
 	}
 
-	// TODO: needs to be adjusted for CUTE!!!!
 	@Override
 	public void launch(ILaunchConfiguration config, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 
-		if (/*mode.equals(ILaunchManager.RUN_MODE) ||*/mode.equals(ILaunchManager.DEBUG_MODE)) {
-
-			// NOTE: The modified working copy of launch configuration cannot be passed directly 
-			// to the preferred delegate because in this case the LaunchHistory will not work
-			// properly (and the rerun last launched configuration action will fail). So we
-			// just modify the existing configuration and revert all the changes back after
-			// the launch is done.
+		if (ILaunchManager.DEBUG_MODE.equals(mode)) {
 
 			try {
-				// Changes launch configuration a bit and redirect it to the preferred C/C++ Application Launch delegate 
-				updatedLaunchConfiguration(config);
 				// First verify we are dealing with a proper project.
 				ICProject project = verifyCProject(config);
 
 				// Now verify we know the program to debug.
 				IPath exePath = LaunchUtils.verifyProgramPath(config, project);
 				exePath = sourcelookupPath(config, exePath); // strips exe file from path....
+
 				ILaunchConfigurationDelegate2 delegate = getPreferredDelegate(config, mode);
 
 				delegate.launch(config, mode, launch, monitor);
@@ -95,9 +81,7 @@ public class CuteDebugLauncherDelegate extends AbstractCLaunchDelegate2 {//Launc
 				registerCuteConsoleListeners(launch, exePath);
 
 			} finally {
-				revertChangedToLaunchConfiguration(config);
 			}
-			//			activateTestingView();
 		}
 	}
 
@@ -151,88 +135,6 @@ public class CuteDebugLauncherDelegate extends AbstractCLaunchDelegate2 {//Launc
 	}
 
 	/**
-	 * Revert the changes to launch configuration previously made with
-	 * <code>updatedLaunchConfigurationAttribute()</code>.
-	 * 
-	 * @param config
-	 *            launch configuration to revert
-	 */
-	private void revertChangedToLaunchConfiguration(ILaunchConfiguration config) throws CoreException {
-		ILaunchConfigurationWorkingCopy configWC = config.getWorkingCopy();
-		for (Map.Entry<String, String> changeEntry : changesToLaunchConfiguration.entrySet()) {
-			configWC.setAttribute(changeEntry.getKey(), changeEntry.getValue());
-		}
-		configWC.doSave();
-		changesToLaunchConfiguration.clear();
-	}
-
-	/**
-	 * Saves the current value of the specified attribute (to be reverted later)
-	 * and update its value in launch configuration.
-	 * 
-	 * @param config
-	 *            launch configuration which attribute should be updated
-	 * @param attributeName
-	 *            attribute name
-	 * @param value
-	 *            new value of the specified attribute
-	 */
-	private void updatedLaunchConfigurationAttribute(ILaunchConfigurationWorkingCopy config, String attributeName, String value) throws CoreException {
-		changesToLaunchConfiguration.put(attributeName, config.getAttribute(attributeName, "")); //$NON-NLS-1$
-		config.setAttribute(attributeName, value);
-	}
-
-	/**
-	 * Makes the necessary changes to the launch configuration before passing it
-	 * to the underlying delegate. Currently, updates the program arguments with
-	 * the value that was obtained from Tests Runner provider plug-in.
-	 * 
-	 * @param config
-	 *            launch configuration
-	 */
-	private void updatedLaunchConfiguration(ILaunchConfiguration config) throws CoreException {
-		changesToLaunchConfiguration.clear();
-		ILaunchConfigurationWorkingCopy configWC = config.getWorkingCopy();
-		setProgramArguments(configWC);
-		configWC.doSave();
-	}
-
-	/**
-	 * Updates the program arguments with the value that was obtained from Tests
-	 * Runner provider plug-in.
-	 * 
-	 * @param config
-	 *            launch configuration
-	 */
-	private void setProgramArguments(ILaunchConfigurationWorkingCopy config) throws CoreException {
-		// this is not needed for cute, because we set the run configuration from the action for runselected.
-
-		//		List<?> packedTestsFilter = config.getAttribute(ITestsLaunchConfigurationConstants.ATTR_TESTS_FILTER, Collections.EMPTY_LIST);
-		//		String[][] testsFilter = TestPathUtils.unpackTestPaths(packedTestsFilter.toArray(new String[packedTestsFilter.size()]));
-
-		// Configure test module run parameters with a Tests Runner 
-		//String[] params = null;
-
-		//		try {
-		//			params = getTestsRunner(config).getAdditionalLaunchParameters(testsFilter);
-		//
-		//		} catch (TestingException e) {
-		//			throw new CoreException(new Status(IStatus.ERROR, TestsRunnerPlugin.getUniqueIdentifier(), e.getLocalizedMessage(), null));
-		//		}
-
-		// Rewrite ATTR_PROGRAM_ARGUMENTS attribute of launch configuration
-		//		if (params != null && params.length >= 1) {
-		//			StringBuilder sb = new StringBuilder();
-		//			sb.append(config.getAttribute(ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "")); //$NON-NLS-1$
-		//			for (String param : params) {
-		//				sb.append(' ');
-		//				sb.append(param);
-		//			}
-		//			updatedLaunchConfigurationAttribute(config, ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, sb.toString());
-		//		}
-	}
-
-	/**
 	 * Resolves the preferred launch delegate for the specified configuration to
 	 * launch C/C++ Local Application in the specified mode. The preferred
 	 * launch delegate ID is taken from <code>getPreferredDelegateId()</code>.
@@ -258,19 +160,13 @@ public class CuteDebugLauncherDelegate extends AbstractCLaunchDelegate2 {//Launc
 		return null;
 	}
 
-	/**
-	 * Returns the launch delegate id which should be used to redirect the
-	 * launch.
-	 * 
-	 * @return launch delegate ID
-	 */
+	// we only support DSF.gdb for now.
 	public String getPreferredDelegateId() {
 		return "org.eclipse.cdt.dsf.gdb.launch.localCLaunch"; //$NON-NLS-1$
 	}
 
 	@Override
 	protected String getPluginID() {
-		// TODO Auto-generated method stub
 		return ch.hsr.ifs.cute.core.CuteCorePlugin.PLUGIN_ID;
 	}
 

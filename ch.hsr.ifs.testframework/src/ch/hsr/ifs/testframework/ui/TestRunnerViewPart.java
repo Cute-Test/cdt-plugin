@@ -331,7 +331,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 					args.append(' ').append('"').append(rerunname).append('"');
 				}
 				copy.setAttribute(ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args.toString());
-				System.err.println(args.toString());
 				configuration = copy;
 
 			} catch (CoreException e) {

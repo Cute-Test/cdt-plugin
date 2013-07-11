@@ -10,6 +10,7 @@ package ch.hsr.ifs.cute.gcov.actions;
 
 import static ch.hsr.ifs.cute.gcov.util.ProjectUtil.getConfiguration;
 
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
@@ -67,6 +68,10 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 			TreeSelection treeSel = (TreeSelection) selection;
 			if (treeSel.getFirstElement() instanceof IProject) {
 				project = (IProject) treeSel.getFirstElement();
+			}
+			if (treeSel.getFirstElement() instanceof ICProject) {
+				ICProject cproj = (ICProject) treeSel.getFirstElement();
+				project = cproj.getProject();
 			}
 		}
 	}
