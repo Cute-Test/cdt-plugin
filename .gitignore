@@ -46,3 +46,5 @@ cute/cute_ws_mac/cute_tests_mac_gcc_apple_421/cute_tests_mac_gcc_apple_421.xml
 cute/cute_ws_win_cl_exe/cute_test_cl_exe_vs2010_boost/cute_test_cl_exe_vs2010_boost.exe.xml
 
 org.eclipse.cdt.testsrunner.cute.zip
+
+ch.hsr.ifs.cute.framework.extension/library.jar

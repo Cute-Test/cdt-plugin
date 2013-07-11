@@ -21,6 +21,9 @@
     </profile>
     <profile>
       <id>juno</id>
+     <activation>
+       <activeByDefault>true</activeByDefault>
+     </activation>    
       <properties>
 		<eclipse-version>juno</eclipse-version>
        <eclipse-version-number>4.2</eclipse-version-number>
