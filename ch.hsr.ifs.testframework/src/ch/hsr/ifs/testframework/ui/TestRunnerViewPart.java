@@ -18,9 +18,11 @@ import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -92,8 +94,10 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		createTopPanel();
 		createTestViewer();
 		configureToolbar();
+		ImageDescriptor imageDescriptor = TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO);
+		Image image = imageDescriptor.createImage();
+		setTitleImage(image);
 		setPartName(msg.getString("TestRunnerViewPart.Name")); //$NON-NLS-1$
-		setTitleImage(TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage());
 	}
 	
 	private void addResizeListener(Composite parent) {

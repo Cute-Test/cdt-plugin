@@ -100,7 +100,6 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 					IConfigurationElement[] configElements = extension2.getConfigurationElements();
 					String className =configElements[0].getAttribute("class"); //$NON-NLS-1$
 					Class<?> obj = getDefault().getBundle().loadClass(className);
-					TestFrameworkPlugin.log(new Status(Status.INFO, TestFrameworkPlugin.PLUGIN_ID, "Using Image Provider: " + className));
 					return (ImageProvider) obj.newInstance();
 				}
 			}
