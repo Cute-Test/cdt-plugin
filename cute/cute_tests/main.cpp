@@ -50,7 +50,7 @@ static int simpleTestfunctionCalled=0;
 void simpleTestFunction(){
 	++simpleTestfunctionCalled;
 	std::cerr << "simpleTestFunction run no:"<< simpleTestfunctionCalled << std::endl;
-	ASSERT(false);
+	ASSERT(true);
 	throw std::exception();
 }
 struct SimpleTestFunctionCalledTest {
