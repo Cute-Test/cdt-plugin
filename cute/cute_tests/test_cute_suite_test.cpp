@@ -18,9 +18,9 @@
  *
  *********************************************************************************/
 
+#include "cute_suite_test.h"
 #include "test_cute_suite_test.h"
 
-#include "cute_suite_test.h"
 #include "cute_base.h"
 #include "cute_equals.h"
 
@@ -43,10 +43,10 @@ void test_suite_OK(){
 void test_suite_fails(){
 	cute::suite suite_that_fails;
 	counter =0;
-	suite_that_fails += CUTE(testOK); // 1
-	suite_that_fails += CUTE(testOK); // 2
-	suite_that_fails += CUTE(testFails); // 1
-	suite_that_fails += CUTE(testFails); // 0 -> should not be reached
+	suite_that_fails.push_back(CUTE(testOK)); // 1
+	suite_that_fails.push_back( CUTE(testOK)); // 2
+	suite_that_fails.push_back(CUTE(testFails)); // 1
+	suite_that_fails.push_back( CUTE(testFails)); // 0 -> should not be reached
 	cute::test t = CUTE_SUITE_TEST(suite_that_fails);
 	try {
 		t();
@@ -58,7 +58,7 @@ void test_suite_fails(){
 }
 cute::suite test_cute_suite_test(){
 	cute::suite s;
-	s += CUTE(test_suite_OK);
-	s += CUTE(test_suite_fails);
+	s.push_back(CUTE(test_suite_OK));
+	s.push_back(CUTE(test_suite_fails));
 	return s;
 }

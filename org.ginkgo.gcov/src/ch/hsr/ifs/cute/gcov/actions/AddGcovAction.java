@@ -8,6 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov.actions;
 
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -53,6 +54,10 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate {
 			TreeSelection treeSel = (TreeSelection) selection;
 			if (treeSel.getFirstElement() instanceof IProject) {
 				project = (IProject) treeSel.getFirstElement();
+			}
+			if (treeSel.getFirstElement() instanceof ICProject) {
+				ICProject cproj = (ICProject) treeSel.getFirstElement();
+				project = cproj.getProject();
 			}
 		}
 	}

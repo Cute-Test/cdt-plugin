@@ -23,11 +23,14 @@
 #include "cute_test.h"
 #include "cute_suite.h"
 #include "cute_listener.h"
+#include "cute_determine_traits.h"
 #include <algorithm>
+#include <functional>
+#include <iterator>
 #include <set>
 namespace cute {
 	namespace runner_aux {
-	struct prefixMatcher// : std::unary_function<std::string const &,bool>
+	struct prefixMatcher
 	{
 		prefixMatcher(std::string const &prefix):prefix(prefix){}
 		bool operator()(std::string const &s) const {
@@ -37,7 +40,7 @@ namespace cute {
 	private:
 		std::string const prefix;
 	};
-	struct prefixCutter //: std::unary_function<std::string, std::string>
+	struct prefixCutter
 	{
 		prefixCutter(std::string const &prefix):prefix(prefix){}
 		std::string operator()(std::string s) const {
@@ -52,32 +55,12 @@ namespace cute {
 	private:
 		std::string const prefix;
 	};
-
-	struct ArgvTestFilter:std::unary_function<const test& ,bool>
+	class ArgvTestFilter
 	{
-	    ArgvTestFilter(int argc, const char *const *const argv)
-	    :argc(argc), argv(argv)
+	    std::set<std::string> match;
+	    bool shouldRunSuite(std::string const &info, std::vector<std::string> const &args)
 	    {
-	        if(needsFiltering()){
-	        	args.reserve(argc-1);
-	            std::copy(argv + 1, argv + argc,back_inserter(args));
-	        }
-	    }
-
-	    bool operator ()(const test & t) const
-	    {
-	        return !shouldRun(t.name());
-	    }
-
-	    bool shouldRun(const std::string & name) const
-	    {
-	        return match.empty() || match.count(name);
-	    }
-
-	    bool shouldRunSuite(std::string info)
-	    {
-	        match.clear();
-	        if(!needsFiltering() || !info.size())
+	        if(!args.size() || !info.size())
 	            return true;
 	        if(args.end() != find_if(args.begin(), args.end(), prefixMatcher(info))){
 	           std::transform(args.begin(), args.end(), std::inserter(match,match.begin()),prefixCutter(info));
@@ -86,69 +69,71 @@ namespace cute {
 	        }
 	        return false;
 	    }
-
-	    bool needsFiltering() const
+	public:
+	    bool const shouldrunsuite;
+		ArgvTestFilter(std::string const &info, std::vector<std::string> const &args)
+		:shouldrunsuite(shouldRunSuite(info,args)){}
+	    bool shouldRun(const std::string & name) const
 	    {
-	        return argc > 1 && argv;
+	        return match.empty() || match.count(name);
 	    }
-
-	private:
-	    std::set<std::string> match;
-	    std::vector<std::string> args;
-	    const int argc;
-	    const char * const * const argv;
 	};
 	} // namespace runner_aux
 	template <typename Listener=null_listener>
-	struct runner : Listener{
-
-		runner_aux::ArgvTestFilter filter;
-		runner():Listener(),filter(0,0){}
-		runner(Listener &s, int argc = 0, const char *const *argv = 0):Listener(s),filter(argc,argv){}
-		bool operator()(const test & t)
+	struct runner{
+		Listener &listener;
+	    std::vector<std::string> args;
+		runner(Listener &l, int argc = 0, const char *const *argv = 0):listener(l){
+	        if(needsFiltering(argc,argv)){
+	        	args.reserve(argc-1);
+	            std::remove_copy_if(argv + 1, argv + argc,back_inserter(args),std::logical_not<char const *>());
+	        }
+		}
+		bool operator()(const test & t) const
 	    {
 	        return runit(t);
 	    }
 
-	    bool operator ()(suite s, const char *info = "") // copy intentional for filtering support
-	    { // copy elision should happen with good compiler, because this will be inlined
+	    bool operator ()(suite const &s, const char *info = "") const
+	    {
+	    	runner_aux::ArgvTestFilter filter(info,args);
+
 	        bool result = true;
-	        if(filter.shouldRunSuite(info)){ // side effect on filter
-	            filterSuite(s); // to make size correct in output, otherwise superfluous, but do not want to change Listener API
-	            Listener::begin(s, info);
+	        if(filter.shouldrunsuite){
+	            listener.begin(s, info,
+	            		count_if(s.begin(),s.end(),boost_or_tr1::bind(&runner_aux::ArgvTestFilter::shouldRun,filter,boost_or_tr1::bind(&test::name,_1))));
 	            for(suite::const_iterator it = s.begin();it != s.end();++it){
-	                result = this->runit(*it) && result;
+	                if (filter.shouldRun(it->name())) result = this->runit(*it) && result;
 	            }
-	            Listener::end(s, info);
+	            listener.end(s, info);
 	        }
 
 	        return result;
 	    }
 	private:
-	    void filterSuite(suite & s)
+	    bool needsFiltering(int argc, const char *const *argv) const
 	    {
-	    	if (filter.needsFiltering() && s.end()!=find_if(s.begin(),s.end(),std::not1(filter))){
-	    		s.erase(std::remove_if(s.begin(),s.end(),filter),s.end());
-	    	}
+	        return argc > 1 && argv ;
 	    }
 
-	    bool runit(const test & t)
+
+	    bool runit(const test & t) const
 	    {
 	        try {
-	            Listener::start(t);
+	            listener.start(t);
 	            t();
-	            Listener::success(t, "OK");
+	            listener.success(t, "OK");
 	            return true;
 	        } catch(const cute::test_failure & e){
-	            Listener::failure(t, e);
+	            listener.failure(t, e);
 	        } catch(const std::exception & exc){
-	            Listener::error(t, demangle(exc.what()).c_str());
+	            listener.error(t, demangle(exc.what()).c_str());
 	        } catch(std::string & s){
-	            Listener::error(t, s.c_str());
+	            listener.error(t, s.c_str());
 	        } catch(const char *&cs) {
-				Listener::error(t,cs);
+				listener.error(t,cs);
 			} catch(...) {
-				Listener::error(t,"unknown exception thrown");
+				listener.error(t,"unknown exception thrown");
 			}
 			return false;
 		}

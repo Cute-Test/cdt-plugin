@@ -66,6 +66,36 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	// }
 	//
 	// void runSuite() {
+	// using cute::suite;
+	// suite s;
+	// }
+	public void testUnregisteredTestFunctionWithUsingDeclaration() {
+		runProjectForCommentCode();
+		checkErrorLine(4, ID);
+	}
+	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	// #define ASSERT(cond) ASSERTM(#cond,cond)
+	//
+	// void thisIsAUnregisteredTest(){
+	// ASSERT(true);
+	// }
+	//
+	// void runSuite() {
+	// using namespace cute;
+	// suite s;
+	// }
+	public void testUnregisteredTestFunctionWithUsingNamespace() {
+		runProjectForCommentCode();
+		checkErrorLine(4, ID);
+	}
+	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	// #define ASSERT(cond) ASSERTM(#cond,cond)
+	//
+	// void thisIsAUnregisteredTest(){
+	// ASSERT(true);
+	// }
+	//
+	// void runSuite() {
 	// cute::suite s;
 	// }
 	public void testUnregisteredTestFunction() {
@@ -107,6 +137,45 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 		runProjectForCommentCode();
 		checkNoErrors();
 	}
+	
+	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	// #define ASSERT(cond) ASSERTM(#cond,cond)
+	// #define CUTE(name) cute::test((&name),(#name))
+	// namespace std { struct vector{void push_back(...){}}; }
+	// namespace cute { typedef std::vector suite; }
+	//
+	// void thisIsATest(){
+	// ASSERT(true);
+	// }
+	//
+	// void runSuite() {
+	// using cute::suite;
+	// suite s;
+	// s.push_back(CUTE(thisIsATest));
+	// }
+	public void testRegisteredTestFunctionWithUsingDeclaration() {
+		runProjectForCommentCode();
+		checkNoErrors();
+	}
+
+	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	// #define ASSERT(cond) ASSERTM(#cond,cond)
+	// #define CUTE(name) cute::test((&name),(#name))
+	// namespace cute { struct suite{};}
+	// void thisIsATest(){
+	// ASSERT(true);
+	// }
+	//
+	// void runSuite() {
+	// using namespace cute;
+	// suite s;
+	// s.push_back(CUTE(thisIsATest));
+	// }
+	public void testRegisteredTestFunctionWithUsingNamespace() {
+		runProjectForCommentCode();
+		checkNoErrors();
+	}
+
 
 	// #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	// #define ASSERT(cond) ASSERTM(#cond,cond)

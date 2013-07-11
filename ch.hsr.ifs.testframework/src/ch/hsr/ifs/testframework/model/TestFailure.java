@@ -21,7 +21,7 @@ public class TestFailure extends TestResult {
 	
 	protected String expected;
 	protected String was;
-	
+	protected String middle;
 
 	public TestFailure(String msg) {
 		super();
@@ -30,6 +30,7 @@ public class TestFailure extends TestResult {
 		if(matcher.find()) {
 			this.msg = unquoteMsg(matcher.group(2));
 			expected = unquote(matcher.group(4));
+			middle = unquote(matcher.group(6));
 			was = unquote(matcher.group(8));
 		}else {
 			this.msg = msg;
@@ -44,7 +45,9 @@ public class TestFailure extends TestResult {
 		if(expected != null && was != null) {
 			strBuild.append(' ');
 			strBuild.append(expected);
-			strBuild.append(" but was: "); //$NON-NLS-1$
+			strBuild.append(' ');
+			strBuild.append(middle);
+			strBuild.append(' ');
 			strBuild.append(was);
 		}
 		return strBuild.toString();

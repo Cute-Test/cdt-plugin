@@ -8,16 +8,24 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.ui;
 
+import java.util.List;
+
+import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -36,15 +44,17 @@ import ch.hsr.ifs.testframework.model.ISessionListener;
 import ch.hsr.ifs.testframework.model.TestSession;
 
 public class TestRunnerViewPart extends ViewPart implements ISessionListener {
-	
-	private enum Orientation{horizontal, vertical}; 
+
+	private enum Orientation {
+		horizontal, vertical
+	};
 
 	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"; //$NON-NLS-1$
 
 	private Composite top = null;
 
 	private Composite TopPanel = null;
-	
+
 	protected boolean autoScroll = true;
 
 	private CounterPanel counterPanel = null;
@@ -52,26 +62,28 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	private CuteProgressBar cuteProgressBar = null;
 
 	private TestViewer testViewer = null;
-	
+
 	private Composite parent;
-	
+
 	private Orientation currentOrientation = Orientation.horizontal;
 
 	private ScrollLockAction scrollLockAction;
 	private FailuresOnlyFilterAction failureOnlyAction;
 	private Action showNextFailureAction;
 	private Action showPreviousFailureAction;
-	private RerunLastTestAction rerunLastTestAction;
+	private IAction rerunLastTestAction;
 
 	private TestSession session;
 
 	private StopAction stopAction;
-	private static Messages msg = TestFrameworkPlugin.getMessages();
-	
+
+	private RerunSelectedAction rerunSelectedAction;
+
+	static Messages msg = TestFrameworkPlugin.getMessages();
 
 	public TestRunnerViewPart() {
 		super();
-		TestFrameworkPlugin.getModel().addListener(this);		
+		TestFrameworkPlugin.getModel().addListener(this);
 	}
 
 	@Override
@@ -89,48 +101,51 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		top = new Composite(parent, SWT.NONE);
 		top.setLayout(gridLayout);
 		top.setLayoutData(gdata);
+		setPartName(msg.getString("TestRunnerViewPart.Name")); //$NON-NLS-1$
 		createTopPanel();
 		createTestViewer();
 		configureToolbar();
-		setPartName(msg.getString("TestRunnerViewPart.Name")); //$NON-NLS-1$
-		setTitleImage(TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage());
+		ImageDescriptor imageDescriptor = TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO);
+		Image image = imageDescriptor.createImage();
+		setTitleImage(image);
+		getSite().setSelectionProvider(testViewer.getTreeViewer());
 	}
-	
+
 	private void addResizeListener(Composite parent) {
 		parent.addControlListener(new ControlListener() {
 			public void controlMoved(ControlEvent e) {
 			}
+
 			public void controlResized(ControlEvent e) {
 				computeOrientation();
 			}
 		});
 	}
-	
+
 	public boolean isCreated() {
 		return counterPanel != null;
 	}
-	
+
 	private void configureToolbar() {
-		IActionBars actionBars= getViewSite().getActionBars();
-		IToolBarManager toolBar= actionBars.getToolBarManager();
-		
-		scrollLockAction= new ScrollLockAction(this);
+		IActionBars actionBars = getViewSite().getActionBars();
+		IToolBarManager toolBar = actionBars.getToolBarManager();
+
+		scrollLockAction = new ScrollLockAction(this);
 		scrollLockAction.setChecked(!autoScroll);
-		
+
 		failureOnlyAction = new FailuresOnlyFilterAction();
 		failureOnlyAction.setChecked(false);
-		
+
 		showNextFailureAction = new ShowNextFailureAction(this);
 		showNextFailureAction.setEnabled(false);
 		showPreviousFailureAction = new ShowPreviousFailureAction(this);
 		showPreviousFailureAction.setEnabled(false);
-		
-		rerunLastTestAction = new RerunLastTestAction();
-		rerunLastTestAction.setEnabled(false);
-		
+
+		rerunLastTestAction = getRerunLastTestAction();
+
 		stopAction = new StopAction();
 		stopAction.setEnabled(false);
-		
+
 		toolBar.add(showNextFailureAction);
 		toolBar.add(showPreviousFailureAction);
 		toolBar.add(failureOnlyAction);
@@ -141,8 +156,8 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	}
 
 	/**
-	 * This method initializes TopPSanel	
-	 *
+	 * This method initializes TopPSanel
+	 * 
 	 */
 	private void createTopPanel() {
 		GridLayout gridLayout1 = new GridLayout();
@@ -159,8 +174,8 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	}
 
 	/**
-	 * This method initializes counterPanel	
-	 *
+	 * This method initializes counterPanel
+	 * 
 	 */
 	private void createCounterPanel() {
 		GridData gridData1 = new org.eclipse.swt.layout.GridData();
@@ -171,8 +186,8 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	}
 
 	/**
-	 * This method initializes cuteProgressBar	
-	 *
+	 * This method initializes cuteProgressBar
+	 * 
 	 */
 	private void createCuteProgressBar() {
 		GridData gridData2 = new GridData();
@@ -183,11 +198,9 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		cuteProgressBar.setLayoutData(gridData2);
 	}
 
-
-
 	/**
-	 * This method initializes testViewer	
-	 *
+	 * This method initializes testViewer
+	 * 
 	 */
 	private void createTestViewer() {
 		GridData gridData3 = new org.eclipse.swt.layout.GridData();
@@ -198,30 +211,30 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		testViewer = new TestViewer(top, SWT.NONE, this);
 		testViewer.setLayoutData(gridData3);
 	}
-	
+
 	private void computeOrientation() {
-			Point size= parent.getSize();
-			if (size.x != 0 && size.y != 0) {
-				if (size.x > size.y) 
-					setOrientation(Orientation.horizontal);
-				else 
-					setOrientation(Orientation.vertical);
-			}
+		Point size = parent.getSize();
+		if (size.x != 0 && size.y != 0) {
+			if (size.x > size.y)
+				setOrientation(Orientation.horizontal);
+			else
+				setOrientation(Orientation.vertical);
+		}
 	}
 
 	private void setOrientation(Orientation orientation) {
 		testViewer.setOrientation(orientation == Orientation.horizontal);
 		currentOrientation = orientation;
-		GridLayout layout= (GridLayout) TopPanel.getLayout();
-		setCounterColumns(layout); 
+		GridLayout layout = (GridLayout) TopPanel.getLayout();
+		setCounterColumns(layout);
 		parent.layout();
 	}
 
 	private void setCounterColumns(GridLayout layout) {
 		if (currentOrientation == Orientation.horizontal)
-			layout.numColumns= 2; 
+			layout.numColumns = 2;
 		else
-			layout.numColumns= 1;
+			layout.numColumns = 1;
 	}
 
 	@Override
@@ -235,7 +248,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	public void setAutoScroll(boolean autoScroll) {
 		this.autoScroll = autoScroll;
 	}
-	
+
 	private final class SessionFinishedUIJob extends UIJob {
 		private SessionFinishedUIJob(String name) {
 			super(name);
@@ -245,14 +258,14 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		public IStatus runInUIThread(IProgressMonitor monitor) {
 			rerunLastTestAction.setEnabled(true);
 			stopAction.setEnabled(false);
-			if(TestRunnerViewPart.this.session.hasErrorOrFailure()) {
+			if (TestRunnerViewPart.this.session.hasErrorOrFailure()) {
 				showNextFailureAction.setEnabled(true);
 				showPreviousFailureAction.setEnabled(true);
-				if(isAutoScroll()) {
+				if (isAutoScroll()) {
 					testViewer.selectFirstFailure();
 				}
 			}
-			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("TestRunnerViewPart.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestRunnerViewPart.OK"), null); //$NON-NLS-1$
 		}
 	}
 
@@ -263,28 +276,13 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/failures.gif")); //$NON-NLS-1$
 		}
 
+		@Override
 		public void run() {
 			setShowFailuresOnly(isChecked());
 		}
 	}
-	
-	private class RerunLastTestAction extends Action{
-		public RerunLastTestAction() {
-			setText(msg.getString("TestRunnerViewPart.RerunTest"));  //$NON-NLS-1$
-			setToolTipText(msg.getString("TestRunnerViewPart.RerunTest")); //$NON-NLS-1$
-			setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/relaunch.gif")); //$NON-NLS-1$
-			setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
-			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
-			setEnabled(false);
-		}
-		
-		public void run(){
-			rerunTestRun();
-		}
 
-	}
-	
-	private class StopAction extends Action{
+	private class StopAction extends Action {
 		public StopAction() {
 			setText(msg.getString("TestRunnerViewPart.StopCuteTestRun")); //$NON-NLS-1$
 			setToolTipText(msg.getString("TestRunnerViewPart.StopCuteTestRun")); //$NON-NLS-1$
@@ -293,41 +291,63 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
 		}
 
+		@Override
 		public void run() {
 			stopTest();
-//			setEnabled(false);
+			//			setEnabled(false);
 		}
 	}
 
 	public void setShowFailuresOnly(boolean b) {
-		testViewer.setFailuresOnly(b);		
+		testViewer.setFailuresOnly(b);
 	}
 
 	public void stopTest() {
-		if(session != null) {
+		if (session != null) {
 			try {
-				for(IProcess process : session.getLaunch().getProcesses()) {
+				for (IProcess process : session.getLaunch().getProcesses()) {
 					process.terminate();
 				}
-//				new SessionFinishedUIJob("Process Stopped").schedule();
-			}catch(DebugException de) {
-				
+				//				new SessionFinishedUIJob("Process Stopped").schedule();
+			} catch (DebugException de) {
+
 			}
 		}
 	}
 
 	public void rerunTestRun() {
 		if (session != null && session.getLaunch().getLaunchConfiguration() != null) {
-			ILaunchConfiguration configuration= session.getLaunch().getLaunchConfiguration();
+			ILaunchConfiguration configuration = session.getLaunch().getLaunchConfiguration();
 			DebugUITools.launch(configuration, session.getLaunch().getLaunchMode());
 		}
-		
+
+	}
+
+	public void rerunSelectedTestRun(List<String> rerunnames) {
+		if (session != null && session.getLaunch().getLaunchConfiguration() != null) {
+			ILaunchConfiguration configuration = session.getLaunch().getLaunchConfiguration();
+			try {
+				ILaunchConfigurationWorkingCopy copy = configuration.copy("");
+				StringBuilder args = new StringBuilder();
+				System.err.println(args.toString());
+				for (String rerunname : rerunnames) {
+					args.append(' ').append('"').append(rerunname).append('"');
+				}
+				copy.setAttribute(ICDTLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args.toString());
+				configuration = copy;
+
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			DebugUITools.launch(configuration, session.getLaunch().getLaunchMode());
+		}
+
 	}
 
 	public void selectNextFailure() {
-		testViewer.selectNextFailure();		
+		testViewer.selectNextFailure();
 	}
-	
+
 	public void selectPrevFailure() {
 		testViewer.selectPrevFailure();
 	}
@@ -345,4 +365,19 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		stopAction.setEnabled(true);
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="148,36,771,201"
+	public IAction getRerunLastTestAction() {
+		if (rerunLastTestAction == null) {
+			rerunLastTestAction = new RerunLastTestAction(this);
+			rerunLastTestAction.setEnabled(false);
+		}
+		return rerunLastTestAction;
+	}
+
+	public RerunSelectedAction getRerunSelectedAction(TreeViewer treeViewer) {
+		if (rerunSelectedAction == null) {
+			rerunSelectedAction = new RerunSelectedAction(this, treeViewer);
+		}
+		return rerunSelectedAction;
+	}
+
+} //  @jve:decl-index=0:visual-constraint="148,36,771,201"

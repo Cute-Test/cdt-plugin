@@ -12,11 +12,11 @@ import java.util.Vector;
 
 import org.eclipse.debug.core.ILaunch;
 
-public class TestSession implements ITestComposite{
-	private Vector<TestElement> rootElements = new Vector<TestElement>();
-	private Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();;
-	
-	private ILaunch launch;
+public class TestSession implements ITestComposite {
+	private final Vector<TestElement> rootElements = new Vector<TestElement>();
+	private final Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();;
+
+	private final ILaunch launch;
 
 	public TestSession(ILaunch launch) {
 		super();
@@ -49,9 +49,9 @@ public class TestSession implements ITestComposite{
 			if (tElement instanceof ITestComposite) {
 				ITestComposite testComp = (ITestComposite) tElement;
 				tot += testComp.getError();
-			}else if (tElement instanceof TestCase) {
+			} else if (tElement instanceof TestCase) {
 				TestCase tCase = (TestCase) tElement;
-				if(tCase.getStatus() == TestStatus.error) {
+				if (tCase.getStatus() == TestStatus.error) {
 					++tot;
 				}
 			}
@@ -65,9 +65,9 @@ public class TestSession implements ITestComposite{
 			if (tElement instanceof ITestComposite) {
 				ITestComposite testComp = (ITestComposite) tElement;
 				tot += testComp.getFailure();
-			}else if (tElement instanceof TestCase) {
+			} else if (tElement instanceof TestCase) {
 				TestCase tCase = (TestCase) tElement;
-				if(tCase.getStatus() == TestStatus.failure) {
+				if (tCase.getStatus() == TestStatus.failure) {
 					++tot;
 				}
 			}
@@ -81,9 +81,9 @@ public class TestSession implements ITestComposite{
 			if (tElement instanceof ITestComposite) {
 				ITestComposite testComp = (ITestComposite) tElement;
 				tot += testComp.getRun();
-			}else if (tElement instanceof TestCase) {
+			} else if (tElement instanceof TestCase) {
 				TestCase tCase = (TestCase) tElement;
-				if(tCase.getStatus() == TestStatus.error ||tCase.getStatus() == TestStatus.failure || tCase.getStatus() == TestStatus.success) {
+				if (tCase.getStatus() == TestStatus.error || tCase.getStatus() == TestStatus.failure || tCase.getStatus() == TestStatus.success) {
 					++tot;
 				}
 			}
@@ -97,9 +97,9 @@ public class TestSession implements ITestComposite{
 			if (tElement instanceof ITestComposite) {
 				ITestComposite testComp = (ITestComposite) tElement;
 				tot += testComp.getSuccess();
-			}else if (tElement instanceof TestCase) {
+			} else if (tElement instanceof TestCase) {
 				TestCase tCase = (TestCase) tElement;
-				if(tCase.getStatus() == TestStatus.success) {
+				if (tCase.getStatus() == TestStatus.success) {
 					++tot;
 				}
 			}
@@ -113,7 +113,7 @@ public class TestSession implements ITestComposite{
 			if (tElement instanceof ITestComposite) {
 				ITestComposite testComp = (ITestComposite) tElement;
 				tot += testComp.getTotalTests();
-			}else if (tElement instanceof TestCase) {
+			} else if (tElement instanceof TestCase) {
 				++tot;
 			}
 		}
@@ -125,7 +125,7 @@ public class TestSession implements ITestComposite{
 	}
 
 	public void addListener(ITestCompositeListener listener) {
-		if(!listeners.contains(listener)) {
+		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
@@ -133,5 +133,9 @@ public class TestSession implements ITestComposite{
 	public void removeListener(ITestCompositeListener listener) {
 		listeners.remove(listener);
 	}
-	
+
+	public String getRerunName() {
+		return ""; // empty means all tests
+	}
+
 }

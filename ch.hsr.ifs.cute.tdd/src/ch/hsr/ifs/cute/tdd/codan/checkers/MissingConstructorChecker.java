@@ -159,7 +159,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 
 		private boolean isConstructorAvailable(IASTImplicitNameOwner ctorDecl) {
 			IASTImplicitName[] implicitNames = ctorDecl.getImplicitNames();
-			return implicitNames.length > 0;
+			return implicitNames.length > 0 && !(implicitNames[0].getBinding() instanceof IProblemBinding);
 		}
 
 		private boolean hasCtorInitializer(IASTDeclarator ctorDecl) {
