@@ -100,9 +100,8 @@ namespace cute {
 
 	        bool result = true;
 	        if(filter.shouldrunsuite){
-	        	using boost_or_tr1::bind;
 	            listener.begin(s, info,
-	            		count_if(s.begin(),s.end(),bind(&runner_aux::ArgvTestFilter::shouldRun,filter,bind(&test::name,_1))));
+	            		count_if(s.begin(),s.end(),boost_or_tr1::bind(&runner_aux::ArgvTestFilter::shouldRun,filter,boost_or_tr1::bind(&test::name,_1))));
 	            for(suite::const_iterator it = s.begin();it != s.end();++it){
 	                if (filter.shouldRun(it->name())) result = this->runit(*it) && result;
 	            }
