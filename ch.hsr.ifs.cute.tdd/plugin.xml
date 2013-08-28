@@ -85,20 +85,29 @@
            name="%checker.name">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.freeFunction.messagePattern"
               name="%problem.name">
         </problem>
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.staticFunction.messagePattern"
               name="%problem.name.0">
         </problem>
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.namespaceMemberFunction.messagePattern"
               name="%problem.name.11">
         </problem>
      </checker>
@@ -116,8 +125,11 @@
            name="%checker.name.0">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.memberFunction.messagePattern"
               name="%problem.name.1">
         </problem>
      </checker>
@@ -131,14 +143,20 @@
            name="%checker.name.1">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.invalidMemberFunctionArguments.messagePattern"
               name="%problem.name.2">
         </problem>
          <problem
                category="ch.hsr.ifs.cute.tdd.category"
+               defaultEnabled="true"
                defaultSeverity="Error"
                id="ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"
+               markerType="org.eclipse.cdt.codan.core.codanProblem"
+               messagePattern="%checker.invalidFunctionArguments.messagePattern"
                name="%problem.name.3">
         </problem>
      </checker>
@@ -152,8 +170,11 @@
            name="%checker.name.2">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.unknownType.messagePattern"
               name="%problem.name.4">
         </problem>
      </checker>
@@ -167,14 +188,20 @@
            name="%checker.name.3">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.localVariable.messagePattern"
               name="%problem.name.5">
         </problem>
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.memberVariable.messagePattern"
               name="%problem.name.6">
         </problem>
      </checker>
@@ -188,8 +215,11 @@
            name="%checker.name.4">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.memberFunctionVisibility.messagePattern"
               name="%problem.name.7">
         </problem>
      </checker>
@@ -203,8 +233,11 @@
            name="%checker.name.5">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.missingConstructor.messagePattern"
               name="%problem.name.8">
         </problem>
      </checker>
@@ -218,8 +251,11 @@
            name="%checker.name.6">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.missingOperator.messagePattern"
               name="%problem.name.9">
         </problem>
      </checker>
@@ -233,8 +269,11 @@
            name="%checker.name.7">
         <problem
               category="ch.hsr.ifs.cute.tdd.category"
+              defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR"
+              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              messagePattern="%checker.missingNamespace.messagePattern"
               name="%problem.name.10">
         </problem>
      </checker>

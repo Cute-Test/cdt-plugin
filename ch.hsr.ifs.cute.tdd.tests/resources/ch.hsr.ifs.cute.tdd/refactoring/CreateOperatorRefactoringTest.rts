@@ -783,3 +783,16 @@ void foo(){
 	void *x=0;
 	x--;
 }
+//!Do Not Report Operators in Template Context
+//@.config
+markerCount=0
+//@A.cpp
+template<typename _A_>
+struct B {
+	int i = _A_::value_t::value * 2;
+};
+//=
+template<typename _A_>
+struct B {
+	int i = _A_::value_t::value * 2;
+};

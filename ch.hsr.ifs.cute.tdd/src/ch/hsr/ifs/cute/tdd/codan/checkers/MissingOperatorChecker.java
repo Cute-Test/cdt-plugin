@@ -27,6 +27,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTUnaryExpression;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.OverloadableOperator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
 
@@ -182,7 +183,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 			type = SemanticUtil.getNestedType(type, SemanticUtil.TDEF);
 
-			if (type instanceof IBasicType || type instanceof IEnumeration) {
+			if (type instanceof IBasicType || type instanceof IEnumeration || type instanceof ICPPUnknownType) {
 				return false;
 			}
 			if (operand instanceof IASTIdExpression) {
