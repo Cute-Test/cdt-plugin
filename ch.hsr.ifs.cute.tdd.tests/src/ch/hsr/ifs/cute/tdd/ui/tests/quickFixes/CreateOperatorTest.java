@@ -33,7 +33,7 @@ public class CreateOperatorTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlyTheSame("Could not find operator++ for type A", getMarkerMessage());
+		assertExactlyTheSame("Operator '++' cannot be resolved for type 'A'.", getMarkerMessage());
 	}
 
 	// TODO: I'd propose to put the marker only on the operator

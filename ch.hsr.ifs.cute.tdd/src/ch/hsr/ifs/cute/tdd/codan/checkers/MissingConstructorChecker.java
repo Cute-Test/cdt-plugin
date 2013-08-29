@@ -152,8 +152,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 
 		private void reportMissingConstructor(String typename, IASTDeclarator ctorDecl) {
 			IASTName reportedNode = ctorDecl.getName();
-			String message = Messages.MissingConstructorChecker_1 + typename;
-			CodanArguments ca = new CodanArguments(typename, message, ":ctor"); //$NON-NLS-1$
+			CodanArguments ca = new CodanArguments(typename, typename, ":ctor"); //$NON-NLS-1$
 			reportProblem(ERR_ID_MissingConstructorResolutionProblem_HSR, reportedNode, ca.toArray());
 		}
 

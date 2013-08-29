@@ -86,17 +86,17 @@ public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 	}
 
 	private void reportMissingNamespaceFunction(IASTName name, String missingName) {
-		CodanArguments ca = new CodanArguments(missingName, Messages.MemberFunctionProblemChecker_1 + missingName + Messages.MemberFunctionProblemChecker_2, ":memberfunc"); //$NON-NLS-1$
+		CodanArguments ca = new CodanArguments(missingName, missingName, ":memberfunc"); //$NON-NLS-1$
 		reportProblem(ERR_ID_NamespaceMemberResolutionProblem_HSR, name.getLastName(), ca.toArray());
 	}
 
 	private void reportMissingFunction(IASTName name, String missingName) {
-		CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_4 + missingName, ":freefunc"); //$NON-NLS-1$
+		CodanArguments ca = new CodanArguments(missingName, missingName, ":freefunc"); //$NON-NLS-1$
 		reportProblem(ERR_ID_FunctionResolutionProblem_HSR, name.getLastName(), ca.toArray());
 	}
 
 	private void reportMissingStaticMember(IASTName partname, String missingName) {
-		CodanArguments ca = new CodanArguments(missingName, Messages.FreeFunctionProblemChecker_2 + missingName, ":staticfreefunc"); //$NON-NLS-1$
+		CodanArguments ca = new CodanArguments(missingName, missingName, ":staticfreefunc"); //$NON-NLS-1$
 		reportProblem(ERR_ID_FunctionResolutionProblem_STATIC_HSR, partname, ca.toArray());
 	}
 }

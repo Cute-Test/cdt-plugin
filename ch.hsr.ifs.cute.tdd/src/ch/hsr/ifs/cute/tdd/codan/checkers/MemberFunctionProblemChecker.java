@@ -67,7 +67,7 @@ public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 			}
 			if (problemBinding.getCandidateBindings().length == 0) {
 				String missingName = new String(name.getSimpleID());
-				CodanArguments ca = new CodanArguments(missingName, Messages.MemberFunctionProblemChecker_1 + missingName + Messages.MemberFunctionProblemChecker_2, ":memberfunc"); //$NON-NLS-1$
+				CodanArguments ca = new CodanArguments(missingName, missingName, ":memberfunc"); //$NON-NLS-1$
 				reportProblem(ERR_ID_MethodResolutionProblem_HSR, name.getLastName(), ca.toArray());
 			}
 		}

@@ -59,7 +59,7 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 							return PROCESS_CONTINUE;
 						}
 						String memberName = new String(name.getSimpleID());
-						CodanArguments ca = new CodanArguments(memberName, memberName + Messages.PrivateMethodChecker_1, ":visibility"); //$NON-NLS-1$
+						CodanArguments ca = new CodanArguments(memberName, memberName, ":visibility"); //$NON-NLS-1$
 						reportProblem(ERR_ID_PrivateMethodChecker_HSR, name.getLastName(), ca.toArray());
 					}// else if (member.getVisibility() == ICPPMember.v_protected) {
 						// Not implemented

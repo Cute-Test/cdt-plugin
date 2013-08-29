@@ -32,7 +32,7 @@ public class MissingNamespaceChecker extends AbstractTDDChecker {
 			IASTName partnameToReport = findFirstUnresolvableQualifier(name);
 			if (partnameToReport != null && !(partnameToReport instanceof ICPPASTTemplateId)) {
 				String nodename = new String(partnameToReport.getSimpleID());
-				CodanArguments ca = new CodanArguments(nodename, Messages.MissingNamespaceChecker_1 + nodename, ":namespace"); //$NON-NLS-1$
+				CodanArguments ca = new CodanArguments(nodename, nodename, ":namespace"); //$NON-NLS-1$
 				reportProblem(ERR_ID_NamespaceResolutionProblem_HSR, partnameToReport, ca.toArray());
 			}
 		}

@@ -96,8 +96,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		private void reportMissingOperator(String typename, IASTExpression expr, OverloadableOperator operator) {
 			String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			final String message = Messages.MissingOperatorChecker_8 + operatorname + Messages.MissingOperatorChecker_9 + typename;
-			CodanArguments ca = new CodanArguments(operatorname, message, ":operator"); //$NON-NLS-1$
+			CodanArguments ca = new CodanArguments(operatorname, typename, ":operator"); //$NON-NLS-1$
 			reportProblem(ERR_ID_OperatorResolutionProblem_HSR, expr, ca.toArray());
 		}
 

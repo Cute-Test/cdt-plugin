@@ -30,7 +30,7 @@ public class CreateClassTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlyTheSame("Type 'Type' could not be resolved", getMarkerMessage());
+		assertExactlyTheSame("Type 'Type' cannot be resolved.", getMarkerMessage());
 	}
 
 	@Override

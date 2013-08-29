@@ -30,7 +30,7 @@ public class CreateFunctionTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlyTheSame("Could not resolve function foo", getMarkerMessage());
+		assertExactlyTheSame("Function 'foo' cannot be resolved.", getMarkerMessage());
 	}
 
 	@Override

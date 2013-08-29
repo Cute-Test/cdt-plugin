@@ -31,7 +31,7 @@ public class CreateMemberVariableAndPrivateLabelTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlyTheSame("Cannot resolve member variable", getMarkerMessage());
+		assertExactlyTheSame("Member variable 'i' cannot be resolved.", getMarkerMessage());
 	}
 
 	@Override

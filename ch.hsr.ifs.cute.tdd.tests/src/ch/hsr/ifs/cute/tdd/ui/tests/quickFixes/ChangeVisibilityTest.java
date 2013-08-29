@@ -34,7 +34,7 @@ public class ChangeVisibilityTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlyTheSame("member is not visible", getMarkerMessage());
+		assertExactlyTheSame("Member function 'member' is not visible.", getMarkerMessage());
 	}
 
 	@Override

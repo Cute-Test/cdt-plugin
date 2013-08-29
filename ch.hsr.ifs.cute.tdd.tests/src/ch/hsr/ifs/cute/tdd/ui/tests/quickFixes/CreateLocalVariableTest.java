@@ -30,7 +30,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlyTheSame("Symbol 'local' could not be resolved", getMarkerMessage());
+		assertExactlyTheSame("Local variable 'local' cannot be resolved.", getMarkerMessage());
 	}
 
 	@Override

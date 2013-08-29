@@ -31,7 +31,7 @@ public class AddArgumentTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlyTheSame("Invalid Arguments to foo", getMarkerMessage());
+		assertExactlyTheSame("Invalid arguments for function 'foo'.", getMarkerMessage());
 	}
 
 	@Override

@@ -66,16 +66,14 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 
 		private CodanArguments createCodanArguments(IASTName name, final String missingName, final ICPPASTNamedTypeSpecifier nts) {
 			String strategy = ":type"; //$NON-NLS-1$
-			final String message = Messages.TypeResolutionProblemChecker_1 + missingName + Messages.TypeResolutionProblemChecker_2;
-
 			ICPPASTTemplateId templateId = extractTemplateId(name, nts);
 			if (templateId != null) {
 				strategy = ":templtype"; //$NON-NLS-1$
 				String args = composeArgumentString(templateId);
-				CodanArguments ca = new CodanArguments(missingName, message, strategy, args);
+				CodanArguments ca = new CodanArguments(missingName, missingName, strategy, args);
 				return ca;
 			} else {
-				CodanArguments ca = new CodanArguments(missingName, message, strategy);
+				CodanArguments ca = new CodanArguments(missingName, missingName, strategy);
 				return ca;
 			}
 		}

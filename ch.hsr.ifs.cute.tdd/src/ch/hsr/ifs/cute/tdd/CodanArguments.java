@@ -70,7 +70,7 @@ public class CodanArguments {
 		result.add(getCandidateNr() + EMPTY_STRING);
 		result.add(getCandidates());
 		result.add(getTemplateArgs());
-		String[] s = new String[5];
+		String[] s = new String[6];
 		return result.toArray(s);
 	}
 

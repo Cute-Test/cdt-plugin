@@ -77,7 +77,7 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 				}
 			}
 			String missingName = new String(name.getLastName().getSimpleID());
-			String message = Messages.WrongArgumentChecker_4 + missingName;
+			String message = missingName;
 			CodanArguments ca = new CodanArguments(missingName, message, ":candidate"); //$NON-NLS-1$
 			ca.setCandidate(argNr);
 			ca.setCandidates(contextString);

@@ -99,8 +99,7 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 					}
 					reportMissingMemberVariable(name, missingName);
 				} else {
-					String message = Messages.VariableResolutionProblemChecker_6 + missingName + Messages.VariableResolutionProblemChecker_7;
-					CodanArguments ca = new CodanArguments(missingName, message, ":variable"); //$NON-NLS-1$
+					CodanArguments ca = new CodanArguments(missingName, missingName, ":variable"); //$NON-NLS-1$
 					reportProblem(ERR_ID_VariableResolutionProblem_HSR, name, ca.toArray());
 				}
 			}
@@ -112,7 +111,7 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 		}
 
 		private void reportMissingMemberVariable(IASTName name, String missingName) {
-			CodanArguments args = new CodanArguments(missingName, Messages.VariableResolutionProblemChecker_2, ":memberVariable"); //$NON-NLS-1$
+			CodanArguments args = new CodanArguments(missingName, missingName, ":memberVariable"); //$NON-NLS-1$
 			reportProblem(TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR, name, args.toArray());
 		}
 

@@ -32,7 +32,7 @@ public class CreateConstructorTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerMessage() {
-		assertExactlyTheSame("No such constructor for type A", getMarkerMessage());
+		assertExactlyTheSame("No such constructor for type 'A'.", getMarkerMessage());
 	}
 
 	@Override
