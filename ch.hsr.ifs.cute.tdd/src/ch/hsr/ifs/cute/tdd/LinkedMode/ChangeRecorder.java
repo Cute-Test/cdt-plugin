@@ -95,7 +95,34 @@ public class ChangeRecorder {
 				break;
 			}
 		}
+		if (document.get(offset, "template".length()).equals("template")) {
+			offset = skipTemplate(offset);
+		}
 		return offset;
+	}
+	
+	private int skipTemplate(int offset) throws BadLocationException {
+		int newOffset = offset + "template".length();
+		char afterTemplate = document.getChar(newOffset++);
+		if (afterTemplate == '<') {
+			int opening = 1;
+			while(opening > 0 && newOffset < document.getLength()) {
+				char current = document.getChar(newOffset++);
+				switch (current) {
+				case '<':
+					opening++;
+					break;
+				case '>':
+					opening--;
+				default:
+					break;
+				}
+			}
+			while(Character.isWhitespace(document.getChar(newOffset)) && newOffset < document.getLength()) {
+				newOffset++;
+			}
+		}
+		return newOffset;
 	}
 
 	private int getDeclaratorOffset() {

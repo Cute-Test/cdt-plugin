@@ -169,4 +169,13 @@ public class ChangeRecorderTest {
 		change = new FakeChange(OLDTEXT_FUNC, 9, "int foo(" + params + ") const {return int();}");
 		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change , NAME);
 	}
+	
+	@Test
+	public void templateProposalPosition() throws BadLocationException {
+		Document beforeDocument = new Document("");
+		String insertText = "template<typename T> struct foo{};";
+		change = new FakeChange(beforeDocument, 0, insertText);
+		recorder = new ChangeRecorder(0, beforeDocument, change, "foo");
+		assertEquals(21, recorder.getSpecBegin());
+	}
 }
