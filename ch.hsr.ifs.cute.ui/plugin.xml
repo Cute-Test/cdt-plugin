@@ -91,10 +91,10 @@
           id="ch.hsr.ifs.cute.addTestCommand"
           name="%command.name.AddTest">
     </command>
-    <command
+<!--    <command
           id="ch.hsr.ifs.cute.ui.changeCuteVersion"
           name="%command.name.0">
-    </command>
+    </command>-->
     <command
           id="ch.hsr.ifs.cute.ui.changeCuteVersionAction"
           name="%command.name.1">
@@ -225,7 +225,7 @@
           </action>
        </objectContribution>
     </extension>
-    <extension
+<!--    <extension
           point="org.eclipse.ui.popupMenus">
               <objectContribution
              id="ch.hsr.ifs.cute.ui.objectContribution2"
@@ -251,7 +251,7 @@
                 style="push">
           </action>
        </objectContribution>
-    </extension>
+    </extension>-->
     <extension
          point="org.eclipse.cdt.codan.core.checkers"
          id="org.eclipse.cdt.codan.core.internal.checkers">
