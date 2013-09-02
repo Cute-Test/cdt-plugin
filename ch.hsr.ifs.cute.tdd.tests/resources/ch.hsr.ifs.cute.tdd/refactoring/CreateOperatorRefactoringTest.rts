@@ -796,3 +796,16 @@ template<typename _A_>
 struct B {
 	int i = _A_::value_t::value * 2;
 };
+//!Do Not Report Operator of Const Primitive Types
+//@.config
+markerCount=0
+//@A.cpp
+typedef int u8;
+void foo(const u8 a, u8 b) {
+	u8 v = a + b;
+}
+//=
+typedef int u8;
+void foo(const u8 a, u8 b) {
+	u8 v = a + b;
+}

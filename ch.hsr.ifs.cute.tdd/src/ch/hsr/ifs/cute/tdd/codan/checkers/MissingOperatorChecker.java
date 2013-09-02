@@ -180,7 +180,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			}
 			IType type = operand.getExpressionType();
 
-			type = SemanticUtil.getNestedType(type, SemanticUtil.TDEF);
+			type = SemanticUtil.getNestedType(type, SemanticUtil.TDEF | SemanticUtil.ALLCVQ);
 
 			if (type instanceof IBasicType || type instanceof IEnumeration || type instanceof ICPPUnknownType) {
 				return false;
