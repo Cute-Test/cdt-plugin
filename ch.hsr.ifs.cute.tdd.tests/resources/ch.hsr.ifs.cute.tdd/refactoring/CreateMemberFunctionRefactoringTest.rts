@@ -684,3 +684,20 @@ void foo() {
 	S s;
 	s.f().b();
 }
+//!Create Member Function for Template
+//@A.cpp
+template<typename T> struct meintemplate {
+};
+int main(int argc, char const *argv[]) {
+	meintemplate<int> foo;
+	foo.clear();
+}
+//=
+template<typename T> struct meintemplate {
+	void clear() {
+	}
+};
+int main(int argc, char const *argv[]) {
+	meintemplate<int> foo;
+	foo.clear();
+}
