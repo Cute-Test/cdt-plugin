@@ -198,7 +198,7 @@
              name="CUTE Library Module">
        </wizard>
    </extension>
-    <extension
+<!--    <extension
           point="org.eclipse.ui.popupMenus">
        <objectContribution
              id="ch.hsr.ifs.cute.ui.objectContribution1"
@@ -224,7 +224,7 @@
                 style="push">
           </action>
        </objectContribution>
-    </extension>
+    </extension>-->
 <!--    <extension
           point="org.eclipse.ui.popupMenus">
               <objectContribution
