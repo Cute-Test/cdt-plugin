@@ -11,6 +11,7 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.AbstractCWizard;
+import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
 import org.eclipse.cdt.ui.wizards.CCProjectWizard;
 import org.eclipse.cdt.ui.wizards.EntryDescriptor;
 import org.eclipse.jface.wizard.IWizard;
@@ -28,9 +29,9 @@ public class NewCuteProjectCategoryWizard extends AbstractCWizard {
 	public EntryDescriptor[] createItems(boolean supportedOnly, IWizard wizard) {
 		if (wizard instanceof CCProjectWizard) {
 			CuteWizardHandler handler = getHandler(wizard);
-			IToolChain[] tcs = ManagedBuildManager.getExtensionToolChains();
+			IToolChain[] tcs = ManagedBuildManager.getExtensionsToolChains(MBSWizardHandler.ARTIFACT, new CuteBuildPropertyValue().getId(), false);
 			for (int j = 0; j < tcs.length; j++) {
-				if (!supportedOnly || isValid(tcs[j], true, wizard)) {
+				if (isValid(tcs[j], supportedOnly, wizard)) {
 					handler.addTc(tcs[j]);
 				}
 			}
