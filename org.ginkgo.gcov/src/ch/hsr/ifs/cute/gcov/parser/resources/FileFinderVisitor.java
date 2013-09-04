@@ -31,7 +31,7 @@ public class FileFinderVisitor implements IResourceVisitor {
 	}
 
 	public boolean visit(IResource resource) throws CoreException {
-		if (resource.getName().endsWith(sourceFileName)) {
+		if (resource.getName().endsWith(sourceFileName) && resource instanceof IFile) {
 			file = (IFile) resource;
 			return false;
 		} else {
