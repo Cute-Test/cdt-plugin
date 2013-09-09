@@ -38,11 +38,11 @@ namespace cute{
 		void start(test const &t){
 		}
 		void success(test const &t, char const *msg){
-			std::cerr <<  t.name() <<" " << msg<< std::endl;
+			std::cerr << t.name() << " " << msg << std::endl;
 		}
 		void failure(test const &t,test_failure const &e){
 			std::ostringstream out;
-			out << e.filename << "(" << e.lineno << ") : testcase failed: " <<e.reason << " in " << t.name()<< std::endl;
+			out << std::dec << e.filename << "(" << e.lineno << ") : testcase failed: " << e.reason << " in " << t.name() << std::endl;
 			OutputDebugString(out.str().c_str());
 			std::cerr << out.str() << std::flush;
 		}
