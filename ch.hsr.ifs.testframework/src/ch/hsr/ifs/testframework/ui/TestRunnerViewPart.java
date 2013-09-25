@@ -83,7 +83,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	static Messages msg = TestFrameworkPlugin.getMessages();
 
 	public TestRunnerViewPart() {
-		super();
 		TestFrameworkPlugin.getModel().addListener(this);
 	}
 

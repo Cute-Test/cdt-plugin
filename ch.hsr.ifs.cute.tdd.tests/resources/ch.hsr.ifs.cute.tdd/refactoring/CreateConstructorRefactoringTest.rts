@@ -765,3 +765,22 @@ void newTestFunction(){
     Type t(3);
     Type u = t.getMe();
 }
+//!No Marker for templateArgumentClassMember variable
+//@.config
+markerCount=0
+//@A.cpp
+template<typename _Handler_>
+struct TestWrapper: public _Handler_ {
+	static void testHandler() {
+		typename _Handler_ _buf2;
+		typename _Handler_::Buffer _buf1;
+	}
+};
+//=
+template<typename _Handler_>
+struct TestWrapper: public _Handler_ {
+	static void testHandler() {
+		typename _Handler_ _buf2;
+		typename _Handler_::Buffer _buf1;
+	}
+};

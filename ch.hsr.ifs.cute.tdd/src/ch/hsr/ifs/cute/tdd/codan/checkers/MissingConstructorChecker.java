@@ -33,6 +33,7 @@ import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownMemberClass;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
@@ -135,6 +136,8 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 				return false;
 			} else if (bareType instanceof ICPPTemplateParameter) {
 				return false;
+			} else if (bareType instanceof ICPPUnknownMemberClass) {
+				return false;
 			}
 			return true;
 		}
@@ -142,8 +145,9 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 		private void checkAndReportUnresolvableConstructors(IASTSimpleDeclaration simpledec, String typename) {
 			for (IASTDeclarator ctorDecl : simpledec.getDeclarators()) {
 				boolean hasPointerOrRefType = TddHelper.hasPointerOrRefType(ctorDecl);
-				if (!hasPointerOrRefType && ctorDecl instanceof IASTImplicitNameOwner && !(ctorDecl instanceof IASTFunctionDeclarator) && hasCtorInitializer(ctorDecl)) {
-					if (!isConstructorAvailable((IASTImplicitNameOwner) ctorDecl)) {
+				boolean isFunctionDeclarator = ctorDecl instanceof IASTFunctionDeclarator;
+				if (!hasPointerOrRefType && !isFunctionDeclarator && hasCtorInitializer(ctorDecl)) {
+					if (!isConstructorAvailable(ctorDecl)) {
 						reportMissingConstructor(typename, ctorDecl);
 					}
 				}
@@ -156,13 +160,19 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			reportProblem(ERR_ID_MissingConstructorResolutionProblem_HSR, reportedNode, ca.toArray());
 		}
 
-		private boolean isConstructorAvailable(IASTImplicitNameOwner ctorDecl) {
-			IASTImplicitName[] implicitNames = ctorDecl.getImplicitNames();
+		private boolean isConstructorAvailable(IASTDeclarator ctorDecl) {
+			if (!(ctorDecl instanceof IASTImplicitNameOwner)) {
+				return false;
+			}
+			IASTImplicitNameOwner implNameOwner = (IASTImplicitNameOwner) ctorDecl;
+			IASTImplicitName[] implicitNames = implNameOwner.getImplicitNames();
 			return implicitNames.length > 0 && !(implicitNames[0].getBinding() instanceof IProblemBinding);
 		}
 
 		private boolean hasCtorInitializer(IASTDeclarator ctorDecl) {
 			IASTInitializer initializer = ctorDecl.getInitializer();
+			// FIXME: now really? method hasXY return true if the thing is null? either the method name is crap or there is a bug for sure here
+			// (lfelber)
 			return initializer == null || initializer instanceof ICPPASTConstructorInitializer;
 		}
 	}
