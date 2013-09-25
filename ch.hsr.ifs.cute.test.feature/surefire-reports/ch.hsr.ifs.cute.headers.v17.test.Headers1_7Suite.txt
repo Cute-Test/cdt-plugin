@@ -1,5 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ch.hsr.ifs.cute.headers.v17.test.Headers1_7Suite
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.382 sec
-testCopySuiteFiles(ch.hsr.ifs.cute.headers.v17.test.CopyHeadersTest)  Time elapsed: 0.336 sec
