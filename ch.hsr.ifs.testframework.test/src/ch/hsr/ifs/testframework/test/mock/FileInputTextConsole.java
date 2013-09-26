@@ -29,37 +29,45 @@ import ch.hsr.ifs.testframework.test.TestframeworkTestPlugin;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class FileInputTextConsole extends TextConsole {
-	
-	private String inputFile;
-	
+
+	private final String inputFile;
+
 	public FileInputTextConsole(String inputFile) {
 		super(inputFile, "FileInputTextConsole", null, true); //$NON-NLS-1$
 		this.inputFile = inputFile;
 	}
 
-	private String getFileText(String inputFile) throws CoreException{
+	private String getFileText(String inputFile) throws CoreException {
 		Bundle bundle = TestframeworkTestPlugin.getDefault().getBundle();
 		Path path = new Path(inputFile);
+		BufferedReader br = null;
 		try {
 			String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
-			BufferedReader br = new BufferedReader(new FileReader(file2));
+			br = new BufferedReader(new FileReader(file2));
 			StringBuffer buffer = new StringBuffer();
 			String line;
-			while((line = br.readLine()) != null) {
+			while ((line = br.readLine()) != null) {
 				buffer.append(line);
 				buffer.append('\n');
 			}
-			br.close();
-			
+
 			return buffer.toString();
 		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
+			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0, e.getMessage(), e));
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
-	
+
 	public void startTest() {
 		IDocument doc = getDocument();
 		try {
@@ -71,14 +79,16 @@ public class FileInputTextConsole extends TextConsole {
 		}
 	}
 
+	@Override
 	public IPageBookViewPage createPage(IConsoleView view) {
 		return null;
 	}
-	
-	protected  IConsoleDocumentPartitioner getPartitioner() {
+
+	@Override
+	protected IConsoleDocumentPartitioner getPartitioner() {
 		return null;
 	}
-	
+
 	public void end() {
 		dispose();
 	}

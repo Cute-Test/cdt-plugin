@@ -30,13 +30,13 @@ import ch.hsr.ifs.testframework.test.mock.FileInputTextConsole;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public abstract class ConsoleTest extends TestCase {
 
 	private ConsoleEventParser consoleEventParser;
 	protected String filePathRoot;
-	
+
 	protected FileInputTextConsole tc;
 	protected ConsolePatternListener cpl;
 
@@ -45,18 +45,17 @@ public abstract class ConsoleTest extends TestCase {
 		useCUTE();
 		prepareTest();
 	}
-	
+
 	@Override
 	protected void tearDown() throws Exception {
 		tc.removePatternMatchListener(cpl);
 		tc.end();
 	}
-	
+
 	private void useCUTE() {
 		consoleEventParser = new CuteConsoleEventParser();
 		filePathRoot = "testDefs/cute/"; //$NON-NLS-1$
 	}
-
 
 	private void prepareTest() {
 		tc = getConsole();
@@ -65,19 +64,20 @@ public abstract class ConsoleTest extends TestCase {
 		tc.addPatternMatchListener(cpl);
 		tc.startTest();
 		try {
-		Job.getJobManager().join(tc, new NullProgressMonitor());
-		} catch (InterruptedException e){
-			/* org.eclipse.core.internal.jobs.JobManager.join doesn't catch from sleep*/
+			Job.getJobManager().join(tc, new NullProgressMonitor());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			/* org.eclipse.core.internal.jobs.JobManager.join doesn't catch from sleep */
 		}
 	}
 
 	protected FileInputTextConsole getConsole() {
 		return new FileInputTextConsole(fullFilePath());
 	}
-	
+
 	protected abstract String getInputFilePath();
-	
-	protected abstract void addTestEventHandler(ConsolePatternListener lis) ;
+
+	protected abstract void addTestEventHandler(ConsolePatternListener lis);
 
 	protected String firstConsoleLine() throws CoreException, IOException {
 		Bundle bundle = TestframeworkTestPlugin.getDefault().getBundle();
@@ -87,8 +87,8 @@ public abstract class ConsoleTest extends TestCase {
 			String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
 			br = new BufferedReader(new FileReader(file2));
 			return br.readLine();
-		}catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0,e.getMessage(), e));
+		} catch (IOException e) {
+			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0, e.getMessage(), e));
 		} finally {
 			if (br != null) {
 				br.close();
