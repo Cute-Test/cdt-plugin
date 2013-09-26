@@ -7,37 +7,39 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho-version>0.15.0</tycho-version>
-    	 <os-jvm-flags/> <!-- for the default case , mac requires special -->
+		<os-jvm-flags /> <!-- for the default case , mac requires special -->
 	</properties>
 	<profiles>
-    <profile>
-      <id>macosx-jvm-flags</id>
-      <activation>
-        <os><family>mac</family></os>
-      </activation>
-      <properties>
-        <os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
-      </properties>
-    </profile>
-    <profile>
-      <id>juno</id>
-     <activation>
-       <activeByDefault>true</activeByDefault>
-     </activation>    
-      <properties>
-		<eclipse-version>juno</eclipse-version>
-       <eclipse-version-number>4.2</eclipse-version-number>
-      </properties>
-    </profile>
-    <profile>
-      <id>kepler</id>
-      <properties>
-		<eclipse-version>kepler</eclipse-version>
-       <eclipse-version-number>4.3</eclipse-version-number>
-      </properties>
-    </profile>
-  </profiles>
-	
+		<profile>
+			<id>macosx-jvm-flags</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
+			</properties>
+		</profile>
+		<profile>
+			<id>juno</id>
+			<properties>
+				<eclipse-version>juno</eclipse-version>
+				<eclipse-version-number>4.2</eclipse-version-number>
+			</properties>
+		</profile>
+		<profile>
+			<id>kepler</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<eclipse-version>kepler</eclipse-version>
+				<eclipse-version-number>4.3</eclipse-version-number>
+			</properties>
+		</profile>
+	</profiles>
+
 	<repositories>
 		<repository>
 			<id>release</id>
@@ -99,12 +101,10 @@
 		<!-- Refactoring Preview -->
 		<module>../ch.hsr.ifs.cdt.namespactor</module>
 		<module>../ch.hsr.ifs.cdt.namespactor.checkers</module>
-		<module>../ch.hsr.ifs.cdt.namespactor.feature</module>  		
+		<module>../ch.hsr.ifs.cdt.namespactor.feature</module>
 		<module>../ch.hsr.ifs.cdt.namespactor.rtstest</module>
-		<!-- Refactoring Preview old:
-		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module>
-		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
-		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>-->
+		<!-- Refactoring Preview old: <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module> 
+			<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module> <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module> -->
 		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.updatesite</module>
 	</modules>

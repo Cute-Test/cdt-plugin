@@ -13,7 +13,7 @@
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.sdk.ide" version="4.3.0.I20130605-2000"/>
 <repository location="http://download.eclipse.org/eclipse/updates/4.3"/>
-</location>
+</location> 
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="3.0.0.201306191513"/>
 <repository location="http://dev.ifs.hsr.ch/updatesites/cdttesting/kepler"/>
