@@ -50,3 +50,7 @@ cute/cute_ws_win_cl_exe/cute_test_cl_exe_vs2010_boost/cute_test_cl_exe_vs2010_bo
 org.eclipse.cdt.testsrunner.cute.zip
 
 ch.hsr.ifs.cute.framework.extension/library.jar
+ch.hsr.ifs.cute.updatesite/artifacts.jar
+ch.hsr.ifs.cute.updatesite/content.jar
+ch.hsr.ifs.cute.updatesite/features/
+ch.hsr.ifs.cute.updatesite/plugins/

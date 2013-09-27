@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.headers.1_6.feature"
       label="%featureName"
-      version="2.0.1.qualifier"
+      version="4.6.0.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -24,16 +24,16 @@
    <requires>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
-      <import feature="ch.hsr.ifs.cute.feature" version="2.1.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.ui" version="2.2.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources" version="3.4.1" match="compatible"/>
+      <import feature="ch.hsr.ifs.cute.feature" version="2.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.4.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="ch.hsr.ifs.cute.headers.1_6"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="4.6.0.qualifier"
          unpack="false"/>
 
 </feature>
