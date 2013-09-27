@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Checkers
-Bundle-SymbolicName: ch.hsr.ifs.cdt.namespactor.checkers;singleton:=true
+Bundle-SymbolicName: ch.hsr.ifs.cute.namespactor.checkers;singleton:=true
 Bundle-Version: 4.6.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cdt.namespactor.plugin.NamespactorCheckersActivator
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.cdt.codan.ui.cxx;bundle-version="2.0.0",
  org.eclipse.jface.text;bundle-version="3.7.2",
  org.eclipse.cdt.ui;bundle-version="5.3.2",
- ch.hsr.ifs.cdt.namespactor;bundle-version="0.0.1",
+ ch.hsr.ifs.cute.namespactor;bundle-version="0.0.1",
  org.eclipse.ui.editors;bundle-version="3.7.0",
  org.eclipse.cdt.codan.checkers.ui;bundle-version="1.0.0",
  org.eclipse.ltk.core.refactoring;bundle-version="3.5.201"

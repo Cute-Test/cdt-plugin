@@ -93,9 +93,6 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			if (typeBinding instanceof ICPPDeferredClassInstance) { // Workaround fix, as constructors of templates cannot be resolved correctly
 				return;
 			}
-			// if (typeBinding instanceof ICPPUnknownClassType) {
-			// return;
-			// }
 			if (isConstructibleType(typeBinding)) {
 				String typeName = ASTTypeUtil.getType((IType) typeBinding, true);
 				if (!isReferenceType(typeName)) {
