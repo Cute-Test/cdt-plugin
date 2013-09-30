@@ -68,16 +68,16 @@ void func() {
 //@Test.cpp
 #include <string>
 namespace cute{
-    struct test_failure {
-        std::string reason;
-        std::string filename;
-        int lineno;
+	struct test_failure {
+		std::string reason;
+		std::string filename;
+		int lineno;
 
-        test_failure(std::string const &r,char const *f, int line)
-        :reason(r),filename(f),lineno(line)
-        {   }
-        char const * what() const { return reason.c_str(); }
-    };
+		test_failure(std::string const &r,char const *f, int line)
+		:reason(r),filename(f),lineno(line)
+		{   }
+		char const * what() const { return reason.c_str(); }
+	};
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -88,16 +88,16 @@ void blah() {
 //=
 #include <string>
 namespace cute{
-    struct test_failure {
-        std::string reason;
-        std::string filename;
-        int lineno;
+	struct test_failure {
+		std::string reason;
+		std::string filename;
+		int lineno;
 
-        test_failure(std::string const &r,char const *f, int line)
-        :reason(r),filename(f),lineno(line)
-        {   }
-        char const * what() const { return reason.c_str(); }
-    };
+		test_failure(std::string const &r,char const *f, int line)
+		:reason(r),filename(f),lineno(line)
+		{   }
+		char const * what() const { return reason.c_str(); }
+	};
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -109,16 +109,16 @@ void blah() {
 //!TestCUTEMacroVariableCreation_ASSERT_EQUALS
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue>
-        void assert_equal(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-            // unfortunately there is no is_integral_but_not_bool_or_enum
-            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
-            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-    }
+	template <typename ExpectedValue, typename ActualValue>
+		void assert_equal(ExpectedValue const &expected
+					,ActualValue const &actual
+					,char const *msg
+					,char const *file
+					,int line) {
+			// unfortunately there is no is_integral_but_not_bool_or_enum
+			typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+			typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+	}
 }
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
@@ -128,16 +128,16 @@ void test() {
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue>
-        void assert_equal(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-            // unfortunately there is no is_integral_but_not_bool_or_enum
-            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
-            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-    }
+	template <typename ExpectedValue, typename ActualValue>
+		void assert_equal(ExpectedValue const &expected
+					,ActualValue const &actual
+					,char const *msg
+					,char const *file
+					,int line) {
+			// unfortunately there is no is_integral_but_not_bool_or_enum
+			typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+			typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+	}
 }
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
@@ -149,14 +149,14 @@ void test() {
 //!TestCUTEMacroVariableCreation_ASSERT_EQUALS_DELTA
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -166,14 +166,14 @@ void testKreis() {
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -185,14 +185,14 @@ void testKreis() {
 //!TestCUTEMacroVariableCreation_ASSERT_EQUALS_DELTA_M
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -202,14 +202,14 @@ void testKreis() {
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -236,16 +236,16 @@ enum Color{RED, GREEN, BLUE};
 
 void func()
 {
-    Color c;
-    c = RED;
+	Color c;
+	c = RED;
 }
 //=
 enum Color{RED, GREEN, BLUE};
 
 void func()
 {
-    Color c;
-    c = RED;
+	Color c;
+	c = RED;
 }
 //!No Suggestion for Static Member Access
 //@.config

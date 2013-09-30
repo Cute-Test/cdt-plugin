@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="cdt" sequenceNumber="50">
+<?pde version="3.8"?><target name="cdt" sequenceNumber="57">
 <locations>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.9.0.v20130610-0406"/>
-<repository location="http://download.eclipse.org/releases/kepler"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.ide" version="4.3.0.I20130605-2000"/>
-<unit id="org.eclipse.platform.sdk" version="4.3.0.I20130605-2000"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.3"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.sdk.ide" version="4.3.0.I20130605-2000"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.3"/>
-</location> 
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="3.0.0.201306191513"/>
 <repository location="http://dev.ifs.hsr.ch/updatesites/cdttesting/kepler"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.cdt.sdk.feature.group" version="8.2.0.201306112328"/>
-<unit id="org.eclipse.cdt.testsrunner.feature.feature.group" version="7.2.0.201306112328"/>
+<unit id="org.eclipse.cdt.sdk.feature.group" version="8.2.1.201309180223"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.9.1.v20130902-0605"/>
 <repository location="http://download.eclipse.org/releases/kepler"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.sdk.ide" version="4.3.1.M20130911-1000"/>
+<unit id="org.eclipse.platform.sdk" version="4.3.1.M20130911-1000"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.3"/>
 </location>
 </locations>
 </target>

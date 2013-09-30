@@ -88,38 +88,38 @@ void testFunc() {
 candidate=0
 //@A.cpp
 struct A {
-    void func(int i)
-    {
-    }
-    void func(int i, int j)
-    {
-    }
-    void func(int i, int j, int k)
-    {
-    }
+	void func(int i)
+	{
+	}
+	void func(int i, int j)
+	{
+	}
+	void func(int i, int j, int k)
+	{
+	}
 };
 
 void test()
 {
-    A a;
+	A a;
 	a.func();
 }
 //=
 struct A {
-    void func(int i)
-    {
-    }
-    void func(int i, int j)
-    {
-    }
-    void func(int i, int j, int k)
-    {
-    }
+	void func(int i)
+	{
+	}
+	void func(int i, int j)
+	{
+	}
+	void func(int i, int j, int k)
+	{
+	}
 };
 
 void test()
 {
-    A a;
+	A a;
 	a.func(_);
 }
 //!TestSecondCandidate
@@ -127,38 +127,38 @@ void test()
 candidate=1
 //@A.cpp
 struct A {
-    void func(int i)
-    {
-    }
-    void func(int i, int j)
-    {
-    }
-    void func(int i, int j, int k)
-    {
-    }
+	void func(int i)
+	{
+	}
+	void func(int i, int j)
+	{
+	}
+	void func(int i, int j, int k)
+	{
+	}
 };
 
 void test()
 {
-    A a;
-    a.func();
+	A a;
+	a.func();
 }
 //=
 struct A {
-    void func(int i)
-    {
-    }
-    void func(int i, int j)
-    {
-    }
-    void func(int i, int j, int k)
-    {
-    }
+	void func(int i)
+	{
+	}
+	void func(int i, int j)
+	{
+	}
+	void func(int i, int j, int k)
+	{
+	}
 };
 
 void test()
 {
-    A a;
+	A a;
 	a.func(_, _);
 }
 //!TestThirdCandidate
@@ -166,38 +166,38 @@ void test()
 candidate=2
 //@A.cpp
 struct A {
-    void func(int i)
-    {
-    }
-    void func(int i, int j)
-    {
-    }
-    void func(int i, int j, int k)
-    {
-    }
+	void func(int i)
+	{
+	}
+	void func(int i, int j)
+	{
+	}
+	void func(int i, int j, int k)
+	{
+	}
 };
 
 void test()
 {
-    A a;
-    a.func();
+	A a;
+	a.func();
 }
 //=
 struct A {
-    void func(int i)
-    {
-    }
-    void func(int i, int j)
-    {
-    }
-    void func(int i, int j, int k)
-    {
-    }
+	void func(int i)
+	{
+	}
+	void func(int i, int j)
+	{
+	}
+	void func(int i, int j, int k)
+	{
+	}
 };
 
 void test()
 {
-    A a;
+	A a;
 	a.func(_, _, _);
 }
 //!DontOfferAddArgsThatCantBeAppended
@@ -226,7 +226,7 @@ void foo(std::string s)
 }
 
 void test() {
-    foo("asdfs");
+	foo("asdfs");
 }
 //=
 #include <string>
@@ -236,7 +236,7 @@ void foo(std::string s)
 }
 
 void test() {
-    foo("asdfs");
+	foo("asdfs");
 }
 //!Remove Single Last Argument
 //@A.cpp
@@ -312,26 +312,26 @@ struct TemplArg {
 };
 template<typename T>
 struct Base {
-    void foo(void) {
-    }
+	void foo(void) {
+	}
 };
 struct S : Base<TemplArg> {
 	void foo();
 };
 void S::foo() {
-    Base<TemplArg>::foo();
+	Base<TemplArg>::foo();
 }
 //=
 struct TemplArg {
 };
 template<typename T>
 struct Base {
-    void foo(void) {
-    }
+	void foo(void) {
+	}
 };
 struct S : Base<TemplArg> {
 	void foo();
 };
 void S::foo() {
-    Base<TemplArg>::foo();
+	Base<TemplArg>::foo();
 }

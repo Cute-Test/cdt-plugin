@@ -4,7 +4,7 @@ struct A {
 };
 
 void test() {
-    A a(1);
+	A a(1);
 }
 //=
 struct A {
@@ -13,7 +13,7 @@ struct A {
 };
 
 void test() {
-    A a(1);
+	A a(1);
 }
 //!SimpleDouble
 //@A.cpp
@@ -41,7 +41,7 @@ struct A {
 
 void test()
 {
-    A a(2, 2);
+	A a(2, 2);
 }
 //=
 struct A {
@@ -54,7 +54,7 @@ struct A {
 
 void test()
 {
-    A a(2, 2);
+	A a(2, 2);
 }
 //!OneArgMultipleParam
 //@A.cpp
@@ -65,7 +65,7 @@ struct A {
 
 void test()
 {
-    A a(2);
+	A a(2);
 }
 //=
 struct A {
@@ -78,7 +78,7 @@ struct A {
 
 void test()
 {
-    A a(2);
+	A a(2);
 }
 //!TypeArgument
 //@A.cpp
@@ -89,8 +89,8 @@ struct A {
 };
 
 void test() {
-    Type t;
-    A a(t);
+	Type t;
+	A a(t);
 }
 //=
 struct Type {
@@ -102,8 +102,8 @@ struct A {
 };
 
 void test() {
-    Type t;
-    A a(t);
+	Type t;
+	A a(t);
 }
 //!SameParameterLength
 //@A.cpp
@@ -114,7 +114,7 @@ struct A {
 
 void test()
 {
-    A a(1, 1);
+	A a(1, 1);
 }
 //=
 struct A {
@@ -127,14 +127,14 @@ struct A {
 
 void test()
 {
-    A a(1, 1);
+	A a(1, 1);
 }
 //!Create Constructor from Function Call Expression
 //@A.cpp
 struct Rnd {
-    int getInt(){
-        return 4; //Random number determined by rolling a die
-    }
+	int getInt(){
+		return 4; //Random number determined by rolling a die
+	}
 };
 
 struct A {
@@ -142,14 +142,14 @@ struct A {
 
 void test()
 {
-    Rnd r;
-    A a(r.getInt());
+	Rnd r;
+	A a(r.getInt());
 }
 //=
 struct Rnd {
-    int getInt(){
-        return 4; //Random number determined by rolling a die
-    }
+	int getInt(){
+		return 4; //Random number determined by rolling a die
+	}
 };
 
 struct A {
@@ -159,15 +159,15 @@ struct A {
 
 void test()
 {
-    Rnd r;
-    A a(r.getInt());
+	Rnd r;
+	A a(r.getInt());
 }
 //!Create Constructor from Chained Function Call Expression
 //@A.cpp
 struct Rnd {
-    int getInt(){
-        return 4; //Random number determined by rolling a die
-    }
+	int getInt(){
+		return 4; //Random number determined by rolling a die
+	}
 };
 
 struct A {
@@ -179,14 +179,14 @@ Rnd getRnd(){
 
 void test()
 {
-    Rnd r;
-    A a(getRnd().getInt());
+	Rnd r;
+	A a(getRnd().getInt());
 }
 //=
 struct Rnd {
-    int getInt(){
-        return 4; //Random number determined by rolling a die
-    }
+	int getInt(){
+		return 4; //Random number determined by rolling a die
+	}
 };
 
 struct A {
@@ -200,42 +200,42 @@ Rnd getRnd(){
 
 void test()
 {
-    Rnd r;
-    A a(getRnd().getInt());
+	Rnd r;
+	A a(getRnd().getInt());
 }
 //!Find Matching Constructor
 //@.config
 markerCount=0
 //@A.cpp
 struct A {
-    A(const int & i, const int & j)
-    {
-    }
+	A(const int & i, const int & j)
+	{
+	}
 };
 
 void test()
 {
-    A a(1, 1);
+	A a(1, 1);
 }
 //=
 struct A {
-    A(const int & i, const int & j)
-    {
-    }
+	A(const int & i, const int & j)
+	{
+	}
 };
 
 void test()
 {
-    A a(1, 1);
+	A a(1, 1);
 }
 //!Find Constructor from Function Call Expression
 //@.config
 markerCount=0
 //@A.cpp
 struct Rnd {
-    int getInt(){
-        return 4; //Random number determined by rolling a die
-    }
+	int getInt(){
+		return 4; //Random number determined by rolling a die
+	}
 };
 
 struct A {
@@ -245,14 +245,14 @@ struct A {
 
 void test()
 {
-    Rnd r;
-    A a(r.getInt());
+	Rnd r;
+	A a(r.getInt());
 }
 //=
 struct Rnd {
-    int getInt(){
-        return 4; //Random number determined by rolling a die
-    }
+	int getInt(){
+		return 4; //Random number determined by rolling a die
+	}
 };
 
 struct A {
@@ -262,8 +262,8 @@ struct A {
 
 void test()
 {
-    Rnd r;
-    A a(r.getInt());
+	Rnd r;
+	A a(r.getInt());
 }
 //!No Constructor for Typedef Enum
 //@.config
@@ -305,7 +305,7 @@ struct A {
 void test()
 {
 	A a1;
-    A & a2(a1);
+	A & a2(a1);
 }
 //=
 struct A {
@@ -314,7 +314,7 @@ struct A {
 void test()
 {
 	A a1;
-    A & a2(a1);
+	A & a2(a1);
 }
 //!No Constructor for Pointer Initialization
 //@.config
@@ -326,7 +326,7 @@ struct A {
 void test()
 {
 	A a1;
-    A * a2(&a1);
+	A * a2(&a1);
 }
 //=
 struct A {
@@ -335,7 +335,7 @@ struct A {
 void test()
 {
 	A a1;
-    A * a2(&a1);
+	A * a2(&a1);
 }
 //!No Constructor for Typedef Reference Initialization
 //@.config
@@ -349,7 +349,7 @@ typedef A & AToo;
 void test()
 {
 	A a1;
-    AToo a2(a1);
+	AToo a2(a1);
 }
 //=
 struct A {
@@ -360,7 +360,7 @@ typedef A & AToo;
 void test()
 {
 	A a1;
-    AToo a2(a1);
+	AToo a2(a1);
 }
 //!No Constructor for Typdef Pointer Initialization
 //@.config
@@ -374,7 +374,7 @@ typedef A * AToo;
 void test()
 {
 	A a1;
-    AToo a2(&a1);
+	AToo a2(&a1);
 }
 //=
 struct A {
@@ -385,19 +385,19 @@ typedef A * AToo;
 void test()
 {
 	A a1;
-    AToo a2(&a1);
+	AToo a2(&a1);
 }
 //!Default Ctor Needed
 //@A.cpp
 struct A {
 	A(const int& i) {
-    }
+	}
 };
 
 void test()
 {
-    A a(1);
-    A b;
+	A a(1);
+	A b;
 }
 //=
 struct A {
@@ -405,13 +405,13 @@ struct A {
 	}
 
 	A(const int& i) {
-    }
+	}
 };
 
 void test()
 {
-    A a(1);
-    A b;
+	A a(1);
+	A b;
 }
 //!Typedef Ctor Required
 //@A.cpp
@@ -467,7 +467,7 @@ struct S {
 
 void test()
 {
-    S s1(1), s2(5);
+	S s1(1), s2(5);
 }
 //=	
 struct S {
@@ -477,7 +477,7 @@ struct S {
 
 void test()
 {
-    S s1(1), s2(5);
+	S s1(1), s2(5);
 }
 //!No Constructor for Array
 //@.config
@@ -524,7 +524,7 @@ struct A {
 };
 
 void test() {
-    A<double> a(3);
+	A<double> a(3);
 }
 //=
 template <typename T>
@@ -534,7 +534,7 @@ struct A {
 };
 
 void test() {
-    A<double> a(3);
+	A<double> a(3);
 }
 //!No Constructor for Function Declaration
 //@.config
@@ -733,37 +733,37 @@ struct Second{
 markerCount=0
 //@A.cpp
 struct Type {
-     Type getMe() const
-    {
-        return *this;
-    }
+	 Type getMe() const
+	{
+		return *this;
+	}
 
-    Type(const int & i)
-    {
-    }
+	Type(const int & i)
+	{
+	}
 
 };
 
 void newTestFunction(){
-    Type t(3);
-    Type u = t.getMe();
+	Type t(3);
+	Type u = t.getMe();
 }
 //=
 struct Type {
-     Type getMe() const
-    {
-        return *this;
-    }
+	 Type getMe() const
+	{
+		return *this;
+	}
 
-    Type(const int & i)
-    {
-    }
+	Type(const int & i)
+	{
+	}
 
 };
 
 void newTestFunction(){
-    Type t(3);
-    Type u = t.getMe();
+	Type t(3);
+	Type u = t.getMe();
 }
 //!No Marker for templateArgumentClassMember variable
 //@.config

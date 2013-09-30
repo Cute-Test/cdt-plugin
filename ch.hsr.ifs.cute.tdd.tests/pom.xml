@@ -24,7 +24,7 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<testSuite>ch.hsr.ifs.cute.tdd.tests</testSuite>
-					<testClass>ch.hsr.ifs.cute.tdd.ui.tests.AllTests</testClass>
+					<testClass>ch.hsr.ifs.cute.tdd.ui.tests.AllTddTests</testClass>
 					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 		          <argLine>${os-jvm-flags}</argLine>
 				</configuration>

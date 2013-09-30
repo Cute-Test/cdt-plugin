@@ -6,8 +6,8 @@ struct B
 
 void func()
 {
-    B b;
-    ++b;
+	B b;
+	++b;
 }
 //=
 struct B
@@ -19,8 +19,8 @@ struct B
 
 void func()
 {
-    B b;
-    ++b;
+	B b;
+	++b;
 }
 //!PostfixOperator
 //@A.cpp
@@ -30,8 +30,8 @@ struct B
 
 void func()
 {
-    B b;
-    b++;
+	B b;
+	b++;
 }
 //=
 struct B
@@ -43,8 +43,8 @@ struct B
 
 void func()
 {
-    B b;
-    b++;
+	B b;
+	b++;
 }
 //!BinaryOperatorTest
 //@Test.cpp
@@ -54,9 +54,9 @@ struct B
 
 void func()
 {
-    B b;
-    B b1;
-    b==b1;
+	B b;
+	B b1;
+	b==b1;
 }
 //=
 struct B
@@ -68,9 +68,9 @@ struct B
 
 void func()
 {
-    B b;
-    B b1;
-    b==b1;
+	B b;
+	B b1;
+	b==b1;
 }
 //!FindsGoodUnaryOperator
 //@.config
@@ -78,28 +78,28 @@ markerCount=0
 //@Test.cpp
 struct B
 {
-    void operator++()
-    {
-    }
+	void operator++()
+	{
+	}
 };
 
 void func()
 {
-    B b;
-    ++b;
+	B b;
+	++b;
 }
 //=
 struct B
 {
-    void operator++()
-    {
-    }
+	void operator++()
+	{
+	}
 };
 
 void func()
 {
-    B b;
-    ++b;
+	B b;
+	++b;
 }
 //!FindsGoodBinaryOperator
 //@.config
@@ -107,30 +107,30 @@ markerCount=0
 //@Test.cpp
 struct B
 {
-    bool operator==(int) const
-    {
-        return int();
-    }
+	bool operator==(int) const
+	{
+		return int();
+	}
 };
 
 void func()
 {
-    B b;
-    b==3;
+	B b;
+	b==3;
 }
 //=
 struct B
 {
-    bool operator==(int) const
-    {
-        return int();
-    }
+	bool operator==(int) const
+	{
+		return int();
+	}
 };
 
 void func()
 {
-    B b;
-    b==3;
+	B b;
+	b==3;
 }
 //!Recognize Enum Assignment As OK
 //@.config
@@ -153,16 +153,16 @@ void thisIsATest() {
 //@Test.cpp
 #include <string>
 namespace cute{
-    struct test_failure {
-        std::string reason;
-        std::string filename;
-        int lineno;
+	struct test_failure {
+		std::string reason;
+		std::string filename;
+		int lineno;
 
-        test_failure(std::string const &r,char const *f, int line)
-        :reason(r),filename(f),lineno(line)
-        {   }
-        char const * what() const { return reason.c_str(); }
-    };
+		test_failure(std::string const &r,char const *f, int line)
+		:reason(r),filename(f),lineno(line)
+		{   }
+		char const * what() const { return reason.c_str(); }
+	};
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -171,22 +171,22 @@ struct A {
 };
 
 void test(){
-    A a;   
-    ASSERT(a++);
+	A a;   
+	ASSERT(a++);
 }
 //=
 #include <string>
 namespace cute{
-    struct test_failure {
-        std::string reason;
-        std::string filename;
-        int lineno;
+	struct test_failure {
+		std::string reason;
+		std::string filename;
+		int lineno;
 
-        test_failure(std::string const &r,char const *f, int line)
-        :reason(r),filename(f),lineno(line)
-        {   }
-        char const * what() const { return reason.c_str(); }
-    };
+		test_failure(std::string const &r,char const *f, int line)
+		:reason(r),filename(f),lineno(line)
+		{   }
+		char const * what() const { return reason.c_str(); }
+	};
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -198,22 +198,22 @@ struct A {
 };
 
 void test(){
-    A a;   
-    ASSERT(a++);
+	A a;   
+	ASSERT(a++);
 }
 //!ASSERT_EQUALSOperatorDetectionUnary
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue>
-        void assert_equal(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-            // unfortunately there is no is_integral_but_not_bool_or_enum
-            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
-            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-    }
+	template <typename ExpectedValue, typename ActualValue>
+		void assert_equal(ExpectedValue const &expected
+					,ActualValue const &actual
+					,char const *msg
+					,char const *file
+					,int line) {
+			// unfortunately there is no is_integral_but_not_bool_or_enum
+			typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+			typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+	}
 }
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
@@ -221,21 +221,21 @@ namespace cute {
 struct A {
 };
 void test(){
-    A a;
-    ASSERT_EQUAL(6, a++);
+	A a;
+	ASSERT_EQUAL(6, a++);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue>
-        void assert_equal(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-            // unfortunately there is no is_integral_but_not_bool_or_enum
-            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
-            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-    }
+	template <typename ExpectedValue, typename ActualValue>
+		void assert_equal(ExpectedValue const &expected
+					,ActualValue const &actual
+					,char const *msg
+					,char const *file
+					,int line) {
+			// unfortunately there is no is_integral_but_not_bool_or_enum
+			typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+			typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+	}
 }
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
@@ -246,22 +246,22 @@ struct A {
 	}
 };
 void test(){
-    A a;
-    ASSERT_EQUAL(6, a++);
+	A a;
+	ASSERT_EQUAL(6, a++);
 }
 //!ASSERT_EQUALS_DELTA_Operator_DetectionUnary
 //@.config
 markerCount=1
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -269,19 +269,19 @@ namespace cute {
 struct A {
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTA(6, a++, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTA(6, a++, 0.0);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -292,22 +292,22 @@ struct A {
 	}
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTA(6, a++, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTA(6, a++, 0.0);
 }
 //!ASSERT_EQUALS_DELTA Operator Unary with Double Result
 //@.config
 markerCount=1
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -315,19 +315,19 @@ namespace cute {
 struct A {
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTA(6.0, a++, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTA(6.0, a++, 0.0);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -338,22 +338,22 @@ struct A {
 	}
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTA(6.0, a++, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTA(6.0, a++, 0.0);
 }
 //!ASSERT_EQUALS_DELTA_M_Operator_DetectionUnary
 //@.config
 markerCount=1
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -361,19 +361,19 @@ namespace cute {
 struct A {
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTAM("foobar", 6, a++, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTAM("foobar", 6, a++, 0.0);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -384,23 +384,23 @@ struct A {
 	}
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTAM("foobar", 6, a++, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTAM("foobar", 6, a++, 0.0);
 }
 //!ASSERTOperatorDetectionBinary
 //@Test.cpp
 #include <string>
 namespace cute{
-    struct test_failure {
-        std::string reason;
-        std::string filename;
-        int lineno;
+	struct test_failure {
+		std::string reason;
+		std::string filename;
+		int lineno;
 
-        test_failure(std::string const &r,char const *f, int line)
-        :reason(r),filename(f),lineno(line)
-        {   }
-        char const * what() const { return reason.c_str(); }
-    };
+		test_failure(std::string const &r,char const *f, int line)
+		:reason(r),filename(f),lineno(line)
+		{   }
+		char const * what() const { return reason.c_str(); }
+	};
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -409,22 +409,22 @@ struct A {
 };
 
 void test(){
-    A a;   
-    ASSERT(a==3);
+	A a;   
+	ASSERT(a==3);
 }
 //=
 #include <string>
 namespace cute{
-    struct test_failure {
-        std::string reason;
-        std::string filename;
-        int lineno;
+	struct test_failure {
+		std::string reason;
+		std::string filename;
+		int lineno;
 
-        test_failure(std::string const &r,char const *f, int line)
-        :reason(r),filename(f),lineno(line)
-        {   }
-        char const * what() const { return reason.c_str(); }
-    };
+		test_failure(std::string const &r,char const *f, int line)
+		:reason(r),filename(f),lineno(line)
+		{   }
+		char const * what() const { return reason.c_str(); }
+	};
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -436,22 +436,22 @@ struct A {
 };
 
 void test(){
-    A a;   
-    ASSERT(a==3);
+	A a;   
+	ASSERT(a==3);
 }
 //!ASSERT_EQUALSOperatorDetectionBinary
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue>
-        void assert_equal(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-            // unfortunately there is no is_integral_but_not_bool_or_enum
-            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
-            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-    }
+	template <typename ExpectedValue, typename ActualValue>
+		void assert_equal(ExpectedValue const &expected
+					,ActualValue const &actual
+					,char const *msg
+					,char const *file
+					,int line) {
+			// unfortunately there is no is_integral_but_not_bool_or_enum
+			typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+			typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+	}
 }
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
@@ -459,21 +459,21 @@ namespace cute {
 struct A {
 };
 void test(){
-    A a;
-    ASSERT_EQUAL(true, a==3);
+	A a;
+	ASSERT_EQUAL(true, a==3);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue>
-        void assert_equal(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-            // unfortunately there is no is_integral_but_not_bool_or_enum
-            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
-            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-    }
+	template <typename ExpectedValue, typename ActualValue>
+		void assert_equal(ExpectedValue const &expected
+					,ActualValue const &actual
+					,char const *msg
+					,char const *file
+					,int line) {
+			// unfortunately there is no is_integral_but_not_bool_or_enum
+			typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+			typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+	}
 }
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
@@ -484,20 +484,20 @@ struct A {
 	}
 };
 void test(){
-    A a;
-    ASSERT_EQUAL(true, a==3);
+	A a;
+	ASSERT_EQUAL(true, a==3);
 }
 //!ASSERT_EQUALS_DELTA_Operator_DetectionBinary
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -505,19 +505,19 @@ namespace cute {
 struct A {
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTA(true, a==3, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTA(true, a==3, 0.0);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -528,20 +528,20 @@ struct A {
 	}
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTA(true, a==3, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTA(true, a==3, 0.0);
 }
 //!ASSERT_EQUALS_DELTA_M_Operator_DetectionBinary
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -549,19 +549,19 @@ namespace cute {
 struct A {
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTAM("foobar", true, a==3, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTAM("foobar", true, a==3, 0.0);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -572,8 +572,8 @@ struct A {
 	}
 };
 void test(){
-    A a;
-    ASSERT_EQUAL_DELTAM("foobar", true, a==3, 0.0);
+	A a;
+	ASSERT_EQUAL_DELTAM("foobar", true, a==3, 0.0);
 }
 //!BoostOperatorDetectionPrefix
 //@A.cpp
@@ -584,8 +584,8 @@ struct A : boost::operators<A>
 };
 
 void thisIsATest() {
-    A a;
-    ++a;
+	A a;
+	++a;
 }
 //=
 #include "boost/operators.hpp"
@@ -598,8 +598,8 @@ struct A : boost::operators<A>
 };
 
 void thisIsATest() {
-    A a;
-    ++a;
+	A a;
+	++a;
 }
 //!FindFreePrefixOperator
 //@.config
@@ -612,8 +612,8 @@ void operator++(A & a)
 {}
 
 void test() {
-    A a;
-    ++a;
+	A a;
+	++a;
 }
 //=
 struct A {
@@ -623,8 +623,8 @@ void operator++(A & a)
 {}
 
 void test() {
-    A a;
-    ++a;
+	A a;
+	++a;
 }
 //!FindFreePostFixOperator
 //@.config
@@ -637,8 +637,8 @@ void operator++(A & a, int)
 {}
 
 void test() {
-    A a;
-    a++;
+	A a;
+	a++;
 }
 //=
 struct A {
@@ -648,8 +648,8 @@ void operator++(A & a, int)
 {}
 
 void test() {
-    A a;
-    a++;
+	A a;
+	a++;
 }
 //!FindUnaryOperatorOnBaseType
 //@.config
@@ -657,14 +657,14 @@ markerCount=0
 //@A.cpp
 void test()
 {
-    int a = 3;
-    a++;
+	int a = 3;
+	a++;
 }
 //=
 void test()
 {
-    int a = 3;
-    a++;
+	int a = 3;
+	a++;
 }
 //!FindBinaryOperatorOnBaseType
 //@.config
@@ -672,27 +672,27 @@ markerCount=0
 //@A.cpp
 void test()
 {
-    int a = 3;
-    a==3;
-    a*a;
+	int a = 3;
+	a==3;
+	a*a;
 }
 //=
 void test()
 {
-    int a = 3;
-    a==3;
-    a*a;
+	int a = 3;
+	a==3;
+	a*a;
 }
 //!DoNotReportIfOperandNotDefined
 //@.config
 markerCount=0
 //@A.cpp
 void test() {
-    a++;
+	a++;
 }
 //=
 void test() {
-    a++;
+	a++;
 }
 //!Do Not Report If Operand Not Defined in Binary Expression
 //@.config

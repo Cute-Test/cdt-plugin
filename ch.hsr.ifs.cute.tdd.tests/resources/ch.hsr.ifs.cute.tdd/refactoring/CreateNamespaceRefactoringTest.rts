@@ -1,7 +1,7 @@
 //!SingleNamespaceCreation
 //@A.cpp
 void test() {
-    X::foo();
+	X::foo();
 }
 //=
 namespace X {
@@ -9,7 +9,7 @@ namespace X {
 }
 
 void test() {
-    X::foo();
+	X::foo();
 }
 //!NestedNamespaceCreation
 //@A.cpp
@@ -17,7 +17,7 @@ namespace X
 {
 }
 void test() {
-    X::Y::foo();
+	X::Y::foo();
 }
 //=
 namespace X
@@ -29,7 +29,7 @@ namespace Y {
 
 }
 void test() {
-    X::Y::foo();
+	X::Y::foo();
 }
 //!NamespaceCreationInClass
 //@A.cpp
@@ -38,7 +38,7 @@ struct A
 };
 void test()
 {
-    A::Y::foo();
+	A::Y::foo();
 }
 //=
 struct A
@@ -49,7 +49,7 @@ struct A
 };
 void test()
 {
-    A::Y::foo();
+	A::Y::foo();
 }
 //!No Marker for TemplateId
 //@.config

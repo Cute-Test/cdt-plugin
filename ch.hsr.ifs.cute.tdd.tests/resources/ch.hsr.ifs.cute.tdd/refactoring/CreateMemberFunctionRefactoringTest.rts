@@ -6,8 +6,8 @@ struct B
 
 void func()
 {
-    B b1;
-    b1.member();
+	B b1;
+	b1.member();
 }
 //=
 struct B
@@ -18,8 +18,8 @@ struct B
 
 void func()
 {
-    B b1;
-    b1.member();
+	B b1;
+	b1.member();
 }
 //!TestAssignmentMemberFunction
 //@A.cpp
@@ -29,8 +29,8 @@ struct B
 
 void func()
 {
-    B b1;
-    int x = b1.member();
+	B b1;
+	int x = b1.member();
 }
 //=
 struct B
@@ -42,8 +42,8 @@ struct B
 
 void func()
 {
-    B b1;
-    int x = b1.member();
+	B b1;
+	int x = b1.member();
 }
 //!TestSimpleMacro
 //@A.cpp
@@ -55,8 +55,8 @@ struct B
 
 void func()
 {
-    B b1;
-    MACRO(b1.member());
+	B b1;
+	MACRO(b1.member());
 }
 //=
 #define MACRO(c) c()
@@ -69,8 +69,8 @@ struct B
 
 void func()
 {
-    B b1;
-    MACRO(b1.member());
+	B b1;
+	MACRO(b1.member());
 }
 //!TestOtherFileMember
 //@A.cpp
@@ -78,16 +78,16 @@ void func()
 
 void func()
 {
-    B b1;
-    b1.member();
+	B b1;
+	b1.member();
 }
 //=
 #include "B.h"
 
 void func()
 {
-    B b1;
-    b1.member();
+	B b1;
+	b1.member();
 }
 //@B.h
 struct B
@@ -106,8 +106,8 @@ class B {
 
 void test()
 {
-    B b;
-    b.foo();
+	B b;
+	b.foo();
 }
 //=
 class B {
@@ -118,8 +118,8 @@ public:
 
 void test()
 {
-    B b;
-    b.foo();
+	B b;
+	b.foo();
 }
 //!AdvancedPrivateClass
 //@A.cpp
@@ -151,16 +151,16 @@ void test() {
 //@Test.cpp
 #include <string>
 namespace cute{
-    struct test_failure {
-        std::string reason;
-        std::string filename;
-        int lineno;
+	struct test_failure {
+		std::string reason;
+		std::string filename;
+		int lineno;
 
-        test_failure(std::string const &r,char const *f, int line)
-        :reason(r),filename(f),lineno(line)
-        {   }
-        char const * what() const { return 0; }
-    };
+		test_failure(std::string const &r,char const *f, int line)
+		:reason(r),filename(f),lineno(line)
+		{   }
+		char const * what() const { return 0; }
+	};
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -170,22 +170,22 @@ struct B
 };
 
 void blah(){
-    B b1;
-    ASSERT(b1.member());
+	B b1;
+	ASSERT(b1.member());
 }
 //=
 #include <string>
 namespace cute{
-    struct test_failure {
-        std::string reason;
-        std::string filename;
-        int lineno;
+	struct test_failure {
+		std::string reason;
+		std::string filename;
+		int lineno;
 
-        test_failure(std::string const &r,char const *f, int line)
-        :reason(r),filename(f),lineno(line)
-        {   }
-        char const * what() const { return 0; }
-    };
+		test_failure(std::string const &r,char const *f, int line)
+		:reason(r),filename(f),lineno(line)
+		{   }
+		char const * what() const { return 0; }
+	};
 }
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -198,22 +198,22 @@ struct B
 };
 
 void blah(){
-    B b1;
-    ASSERT(b1.member());
+	B b1;
+	ASSERT(b1.member());
 }
 //!TestCUTEMacroFunctionCreation_ASSERT_EQUALS
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue>
-        void assert_equal(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-            // unfortunately there is no is_integral_but_not_bool_or_enum
-            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
-            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-    }
+	template <typename ExpectedValue, typename ActualValue>
+		void assert_equal(ExpectedValue const &expected
+					,ActualValue const &actual
+					,char const *msg
+					,char const *file
+					,int line) {
+			// unfortunately there is no is_integral_but_not_bool_or_enum
+			typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+			typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+	}
 }
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
@@ -223,21 +223,21 @@ struct B
 };
 
 void test(){
-    B b1;
-    ASSERT_EQUAL(42, b1.member());
+	B b1;
+	ASSERT_EQUAL(42, b1.member());
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue>
-        void assert_equal(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-            // unfortunately there is no is_integral_but_not_bool_or_enum
-            typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
-            typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
-    }
+	template <typename ExpectedValue, typename ActualValue>
+		void assert_equal(ExpectedValue const &expected
+					,ActualValue const &actual
+					,char const *msg
+					,char const *file
+					,int line) {
+			// unfortunately there is no is_integral_but_not_bool_or_enum
+			typedef typename impl_place_for_traits::is_integral<ExpectedValue> exp_integral;
+			typedef typename impl_place_for_traits::is_integral<ActualValue> act_integral;
+	}
 }
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
@@ -250,20 +250,20 @@ struct B
 };
 
 void test(){
-    B b1;
-    ASSERT_EQUAL(42, b1.member());
+	B b1;
+	ASSERT_EQUAL(42, b1.member());
 }
 //!TestCUTEMacroFunctionCreation_ASSERT_EQUALS_DELTA
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -273,19 +273,19 @@ struct B
 };
 
 void testKreis(){
-    B b;
-    ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
+	B b;
+	ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -298,20 +298,20 @@ struct B
 };
 
 void testKreis(){
-    B b;
-    ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
+	B b;
+	ASSERT_EQUAL_DELTA(42, b.member(), 0.0);
 }
 //!TestCUTEMacroFunctionCreation_ASSERT_EQUALS_DELTA_M
 //@Test.cpp
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -321,19 +321,19 @@ struct B
 };
 
 void testKreis(){
-    B b;
-    ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
+	B b;
+	ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
 }
 //=
 namespace cute {
-    template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
-        void assert_equal_delta(ExpectedValue const &expected
-                    ,ActualValue const &actual
-                    ,DeltaValue const &delta
-                    ,char const *msg
-                    ,char const *file
-                    ,int line) {
-        }
+	template <typename ExpectedValue, typename ActualValue, typename DeltaValue>
+		void assert_equal_delta(ExpectedValue const &expected
+					,ActualValue const &actual
+					,DeltaValue const &delta
+					,char const *msg
+					,char const *file
+					,int line) {
+		}
 }
 #define ASSERT_EQUAL_DELTAM(msg,expected,actual,delta) cute::assert_equal_delta((expected),(actual),(delta),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL_DELTA(expected,actual,delta) ASSERT_EQUAL_DELTAM(#expected " == " #actual " with error " #delta  ,(expected),(actual),(delta))
@@ -346,8 +346,8 @@ struct B
 };
 
 void testKreis(){
-    B b;
-    ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
+	B b;
+	ASSERT_EQUAL_DELTAM("foobar", 42, b.member(), 0.0);
 }
 //!StructPublicPartIfExiplicit
 //@A.cpp
@@ -357,8 +357,8 @@ public:
 
 void test()
 {
-    B b;
-    b.foo();
+	B b;
+	b.foo();
 }
 //=
 struct B {
@@ -369,8 +369,8 @@ public:
 
 void test()
 {
-    B b;
-    b.foo();
+	B b;
+	b.foo();
 }
 //!MemberWithParameter
 //@A.cpp
@@ -380,8 +380,8 @@ struct B
 
 void func()
 {
-    B b1;
-    b1.member(42);
+	B b1;
+	b1.member(42);
 }
 //=
 struct B
@@ -392,8 +392,8 @@ struct B
 
 void func()
 {
-    B b1;
-    b1.member(42);
+	B b1;
+	b1.member(42);
 }
 //!CUTEAssertEqualMemberWithParameter
 //@A.cpp
@@ -407,8 +407,8 @@ template <typename ExpectedValue, typename ActualValue>
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
 struct Type {};
 void test(){
-    Type t;
-    ASSERT_EQUAL(42, t.function(42));
+	Type t;
+	ASSERT_EQUAL(42, t.function(42));
 }
 //=
 namespace cute {
@@ -425,8 +425,8 @@ struct Type {
 	}
 };
 void test(){
-    Type t;
-    ASSERT_EQUAL(42, t.function(42));
+	Type t;
+	ASSERT_EQUAL(42, t.function(42));
 }
 //!No Suggestion for Members of Fundamental Types
 //@.config
@@ -498,30 +498,30 @@ private:
 //@B.h
 struct B
 {
-    void function()
-    {
-    }
+	void function()
+	{
+	}
 };
 //=
 struct B
 {
-    void function()
-    {
-    }
+	void function()
+	{
+	}
 };
 //@C.h
 struct B
 {
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
 //=
 struct B
 {
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
 //!Create Member Function in Type from Header
 //@A.cpp
@@ -551,16 +551,16 @@ private:
 //@B.h
 struct B
 {
-    void function()
-    {
-    }
+	void function()
+	{
+	}
 };
 //=
 struct B
 {
-    void function()
-    {
-    }
+	void function()
+	{
+	}
 };
 //@A.h
 struct B
@@ -576,16 +576,16 @@ struct B
 //@C.h
 struct B
 {
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
 //=
 struct B
 {
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
 //!Create Member Function in Typedefed Typedef Type
 //@A.cpp
@@ -619,7 +619,7 @@ namespace X
 }
 
 void test() {
-    X::foo();
+	X::foo();
 }
 //=
 namespace X
@@ -631,20 +631,20 @@ void foo() {
 }
 
 void test() {
-    X::foo();
+	X::foo();
 }
 //!Create Namespace Member Function in Header
 //@A.cpp
 #include "A.h"
 
 void test() {
-    X::foo();
+	X::foo();
 }
 //=
 #include "A.h"
 
 void test() {
-    X::foo();
+	X::foo();
 }
 //@A.h
 namespace X

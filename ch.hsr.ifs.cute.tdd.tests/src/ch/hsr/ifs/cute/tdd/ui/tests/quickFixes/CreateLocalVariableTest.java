@@ -17,7 +17,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 	private static final String CREATE_LOCAL_VARIABLE_LOCAL = "Create local variable local";
 
 	//void testX() {
-	//  int i = local;
+	//	int i = local;
 	//}
 	@Override
 	public void getCode() {
@@ -35,7 +35,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 
 	@Override
 	public void testMarkerOffset() {
-		assertEquals("Marker offset", 25, getMarkerOffset());
+		assertEquals("Marker offset", 24, getMarkerOffset());
 	}
 
 	@Override

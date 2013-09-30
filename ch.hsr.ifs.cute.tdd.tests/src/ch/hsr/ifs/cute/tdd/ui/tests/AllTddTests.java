@@ -22,5 +22,5 @@ import ch.hsr.ifs.cute.tdd.ui.tests.refactoring.AllRefactoringTests;
 	AllQuickFixTests.class
 	//@formatter:on
 })
-public class AllTests {
+public class AllTddTests {
 }

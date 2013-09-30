@@ -1,14 +1,14 @@
 //!TestDetectMarker
 //@A.cpp
 void func() {
-    A a1;
+	A a1;
 }
 //=
 struct A {
 };
 
 void func() {
-    A a1;
+	A a1;
 }
 //!TestBug232
 //@A.cpp
@@ -30,14 +30,14 @@ void test() {
 //!TestCallDefaultContructor
 //@A.cpp
 void test() {
-    B b();
+	B b();
 }
 //=
 struct B {
 };
 
 void test() {
-    B b();
+	B b();
 }
 //!CreateTypeOutOfATemplatedFunction
 //@A.cpp
@@ -72,9 +72,9 @@ T testy(T t) {
 //!CreateTypeOutOfAMemberFunction
 //@A.cpp
 struct Test {
-    void testy() {
-        Klasse k;
-    }
+	void testy() {
+		Klasse k;
+	}
 };
 //=
 struct Test {
@@ -82,17 +82,17 @@ struct Test {
 	};
 
 	void testy() {
-        Klasse k;
-    }
+		Klasse k;
+	}
 };
 //!CreateTypeOutOfATemplatedMemberFunction
 //@A.cpp
 struct Test {
 	template<typename T>
-    T testy(T t) {
-        Klasse k;
-        return T();
-    }
+	T testy(T t) {
+		Klasse k;
+		return T();
+	}
 };
 //=
 struct Test {
@@ -100,20 +100,20 @@ struct Test {
 	};
 
 	template<typename T>
-    T testy(T t) {
-        Klasse k;
-        return T();
-    }
+	T testy(T t) {
+		Klasse k;
+		return T();
+	}
 };
 //!CreateTypeOutOfATemplatedMemberFunctionInsideATemplatedClass
 //@A.cpp
 template <typename C>
 struct Test {
 	template<typename T>
-    T testy(T t) {
-        Klasse k;
-        return T();
-    }
+	T testy(T t) {
+		Klasse k;
+		return T();
+	}
 };
 //=
 template <typename C>
@@ -122,10 +122,10 @@ struct Test {
 	};
 
 	template<typename T>
-    T testy(T t) {
-        Klasse k;
-        return T();
-    }
+	T testy(T t) {
+		Klasse k;
+		return T();
+	}
 };
 //!CreateTypeFromInheritance
 //@A.cpp
@@ -147,21 +147,21 @@ void test() {
 //!CreateTemplatedType
 //@A.cpp
 void test() {
-    B<int, double> b;
+	B<int, double> b;
 }
 //=
 template<typename T, typename U> struct B {
 };
 
 void test() {
-    B<int, double> b;
+	B<int, double> b;
 }
 //!CreateTemplatedGradType
 //@A.cpp
 struct A: B<int> {
 };
 void test() {
-    A a;
+	A a;
 }
 //=
 template<typename T> struct B {
@@ -169,7 +169,7 @@ template<typename T> struct B {
 struct A: B<int> {
 };
 void test() {
-    A a;
+	A a;
 }
 //!CreateInTotallyEmptyFile
 //@A.cpp
@@ -181,33 +181,33 @@ Type t;
 //!CreateClassWithNamespaceAccess
 //@A.cpp
 void test() {
-    X::foo();
+	X::foo();
 }
 //=
 struct X {
 };
 
 void test() {
-    X::foo();
+	X::foo();
 }
 //!CreateFirstOfMultipleNamespace
 //@A.cpp
 void test() {
-    X::Y::foo();
+	X::Y::foo();
 }
 //=
 struct X {
 };
 
 void test() {
-    X::Y::foo();
+	X::Y::foo();
 }
 //!CreateSecondOfMultipleNamespace
 //@A.cpp
 struct X {
 };
 void test() {
-    X::Y::foo();
+	X::Y::foo();
 }
 //=
 struct X {
@@ -215,14 +215,14 @@ struct X {
 	};
 };
 void test() {
-    X::Y::foo();
+	X::Y::foo();
 }
 //!ClassInNamespace
 //@A.cpp
 namespace X {
 }
 void test() {
-    X::A::foo();
+	X::A::foo();
 }
 //=
 namespace X {
@@ -232,7 +232,7 @@ struct A {
 
 }
 void test() {
-    X::A::foo();
+	X::A::foo();
 }
 //!Class in Namespace from Declaration
 //@A.cpp
@@ -240,7 +240,7 @@ namespace X {
 }
 
 void test() {
-    X::Inner xi;
+	X::Inner xi;
 }
 //=
 namespace X {
@@ -251,5 +251,5 @@ struct Inner {
 }
 
 void test() {
-    X::Inner xi;
+	X::Inner xi;
 }

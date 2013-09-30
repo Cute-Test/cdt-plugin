@@ -19,6 +19,7 @@ void /*$*/foo/*$$*/() {}
 
 void foo() {}
 
+
 #endif /* FOO_H_ */
 //!ExtractTemplatedFunction
 //@.config
@@ -48,6 +49,7 @@ T foo(T arg) {
 	return T();
 }
 
+
 #endif /* FOO_H_ */
 //!ExtractNestedTemplatedFunction
 //@.config
@@ -76,5 +78,6 @@ template<typename T, typename U>
 U foo(T arg) {
 	return U();
 }
+
 
 #endif /* FOO_H_ */

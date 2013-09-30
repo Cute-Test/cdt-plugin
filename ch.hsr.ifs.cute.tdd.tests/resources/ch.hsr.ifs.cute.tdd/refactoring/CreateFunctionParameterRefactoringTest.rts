@@ -1,74 +1,74 @@
 //!SingleParameterInt
 //@A.cpp
 void func() {
-    blah(42);
+	blah(42);
 }
 //=
 void blah(const int& i) {
 }
 
 void func() {
-    blah(42);
+	blah(42);
 }
 //!SingleParameterDouble
 //@A.cpp
 void func() {
-    blah(42.0);
+	blah(42.0);
 }
 //=
 void blah(const double& d) {
 }
 
 void func() {
-    blah(42.0);
+	blah(42.0);
 }
 //!SingleParameterString
 //@A.cpp
 void func() {
-    blah("foo");
+	blah("foo");
 }
 //=
 void blah(const std::string& s) {
 }
 
 void func() {
-    blah("foo");
+	blah("foo");
 }
 //!SingleParameterChar
 //@A.cpp
 void func() {
-    blah('c');
+	blah('c');
 }
 //=
 void blah(const char& c) {
 }
 
 void func() {
-    blah('c');
+	blah('c');
 }
 //!SingleParameterTrue
 //@A.cpp
 void func() {
-    blah(true);
+	blah(true);
 }
 //=
 void blah(const bool& b) {
 }
 
 void func() {
-    blah(true);
+	blah(true);
 }
 //!SingleParameterFalse
 //@A.cpp
 void func() {
-    blah(false);
+	blah(false);
 }
 //=
 void blah(const bool& b) {
 }
 
 void func() {
-    blah(false);
+	blah(false);
 }
 //!SingleParameterThis
 //@A.cpp
@@ -89,31 +89,31 @@ struct Klass {
 //!TwoDifferentParameters
 //@A.cpp
 void func() {
-    blah(42, 42.0);
+	blah(42, 42.0);
 }
 //=
 void blah(const int& i, const double& d) {
 }
 
 void func() {
-    blah(42, 42.0);
+	blah(42, 42.0);
 }
 //!TwoSameParameters
 //@A.cpp
 void func() {
-    blah(42, 42);
+	blah(42, 42);
 }
 //=
 void blah(const int& i, const int& j) {
 }
 
 void func() {
-    blah(42, 42);
+	blah(42, 42);
 }
 //!ParametersWithSameName
 //@A.cpp
 void func() {
-    blah(42, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0);
+	blah(42, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0);
 }
 //=
 void blah(const int& i, const double& d, const double& e, const double& f,
@@ -121,42 +121,42 @@ void blah(const int& i, const double& d, const double& e, const double& f,
 }
 
 void func() {
-    blah(42, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0);
+	blah(42, 42.0, 42.0, 42.0, 42.0, 42.0, 42.0);
 }
 //!SymbolAsArgument
 //@A.cpp
 void func() {
-    int id = 0;
-    blah(id);
+	int id = 0;
+	blah(id);
 }
 //=
 void blah(int& id) {
 }
 
 void func() {
-    int id = 0;
-    blah(id);
+	int id = 0;
+	blah(id);
 }
 //!SameSymbolMultipleTimes
 //@A.cpp
 void func() {
-    int id = 0;
-    blah(id, id, id);
+	int id = 0;
+	blah(id, id, id);
 }
 //=
 void blah(int& id, int& id1, int& id2) {
 }
 
 void func() {
-    int id = 0;
-    blah(id, id, id);
+	int id = 0;
+	blah(id, id, id);
 }
 //!ClassAsArgument
 //@A.cpp
 struct Type {};
 void func() {
-    Type myType;
-    blah(myType);
+	Type myType;
+	blah(myType);
 }
 //=
 struct Type {};
@@ -165,16 +165,16 @@ void blah(Type& myType) {
 }
 
 void func() {
-    Type myType;
-    blah(myType);
+	Type myType;
+	blah(myType);
 }
 //!TwiceSameClassAsArgument
 //@A.cpp
 struct Type {};
 
 void func() {
-    Type myType;
-    blah(myType, myType);
+	Type myType;
+	blah(myType, myType);
 }
 //=
 struct Type {};
@@ -183,15 +183,15 @@ void blah(Type& myType, Type& myType1) {
 }
 
 void func() {
-    Type myType;
-    blah(myType, myType);
+	Type myType;
+	blah(myType, myType);
 }
 //!NestedFunctionWithParameter
 //@A.cpp
 void exists(int x) {}
 
 void foo() {
-    exists(func(42));
+	exists(func(42));
 }
 //=
 void exists(int x) {}
@@ -200,7 +200,7 @@ void func(const int& i) {
 }
 
 void foo() {
-    exists(func(42));
+	exists(func(42));
 }
 //!ReplaceFunctionNameMacro
 //@A.cpp
@@ -208,7 +208,7 @@ void foo() {
 void exists(int x) {}
 
 void foo() {
-    MACRO(func(42));
+	MACRO(func(42));
 }
 //=
 #define MACRO exists
@@ -218,7 +218,7 @@ void func(const int& i) {
 }
 
 void foo() {
-    MACRO(func(42));
+	MACRO(func(42));
 }
 //!ReplaceFunctionMacro
 //@A.cpp
@@ -226,7 +226,7 @@ void foo() {
 void exists(int x) {}
 
 void foo() {
-    MACRO(func(42));
+	MACRO(func(42));
 }
 //=
 #define MACRO(code) exists(code)
@@ -236,7 +236,7 @@ void func(const int& i) {
 }
 
 void foo() {
-    MACRO(func(42));
+	MACRO(func(42));
 }
 //!CUTEAssertEqualFunctionParameter
 //@A.cpp
@@ -248,8 +248,8 @@ template <typename ExpectedValue, typename ActualValue>
 }}
 #define ASSERT_EQUALM(msg,expected,actual) cute::assert_equal((expected),(actual),msg,__FILE__,__LINE__)
 #define ASSERT_EQUAL(expected,actual) ASSERT_EQUALM(#expected " == " #actual, (expected),(actual))
-void test(){
-    ASSERT_EQUAL(42, function(42));
+void test() {
+	ASSERT_EQUAL(42, function(42));
 }
 //=
 namespace cute {
@@ -266,13 +266,13 @@ int function(const int& i) {
 }
 
 void test() {
-    ASSERT_EQUAL(42, function(42));
+	ASSERT_EQUAL(42, function(42));
 }
 //!TestNotYetDefinedVariables
 //@A.cpp
 void test()
 {
-    func(2, 3, 2.3, var);
+	func(2, 3, 2.3, var);
 }
 //=
 void func(const int& i, const int& j, const double& d, const int& var) {
@@ -280,7 +280,7 @@ void func(const int& i, const int& j, const double& d, const int& var) {
 
 void test()
 {
-    func(2, 3, 2.3, var);
+	func(2, 3, 2.3, var);
 }
 //!Pointer Parameter
 //@A.cpp
@@ -288,8 +288,8 @@ struct P{};
 
 void test()
 {
-    P * p;
-    func(p);
+	P * p;
+	func(p);
 }
 //=
 struct P{};
@@ -299,8 +299,8 @@ void func(P*& p) {
 
 void test()
 {
-    P * p;
-    func(p);
+	P * p;
+	func(p);
 }
 //!Pointer to Const Parameter
 //@A.cpp
@@ -308,8 +308,8 @@ struct P{};
 
 void test()
 {
-    P const * p;
-    func(p);
+	P const * p;
+	func(p);
 }
 //=
 struct P{};
@@ -319,8 +319,8 @@ void func(const P*& p) {
 
 void test()
 {
-    P const * p;
-    func(p);
+	P const * p;
+	func(p);
 }
 //!Const Pointer Parameter
 //@A.cpp
@@ -328,8 +328,8 @@ struct P{};
 
 void test()
 {
-    P * const p;
-    func(p);
+	P * const p;
+	func(p);
 }
 //=
 struct P{};
@@ -339,8 +339,8 @@ void func(P* const & p) {
 
 void test()
 {
-    P * const p;
-    func(p);
+	P * const p;
+	func(p);
 }
 //!Const Pointer to Const Parameter
 //@A.cpp
@@ -348,8 +348,8 @@ struct P{};
 
 void test()
 {
-    P const * const p;
-    func(p);
+	P const * const p;
+	func(p);
 }
 //=
 struct P{};
@@ -359,8 +359,8 @@ void func(const P* const & p) {
 
 void test()
 {
-    P const * const p;
-    func(p);
+	P const * const p;
+	func(p);
 }
 //!Const Volatile Pointer Parameter
 //@A.cpp
@@ -368,8 +368,8 @@ struct P{};
 
 void test()
 {
-    P * const volatile p;
-    func(p);
+	P * const volatile p;
+	func(p);
 }
 //=
 struct P{};
@@ -379,8 +379,8 @@ void func(P* const volatile & p) {
 
 void test()
 {
-    P * const volatile p;
-    func(p);
+	P * const volatile p;
+	func(p);
 }
 //!Pointer to Const Volatile Parameter
 //@A.cpp
@@ -388,8 +388,8 @@ struct P{};
 
 void test()
 {
-    P const volatile * p;
-    func(p);
+	P const volatile * p;
+	func(p);
 }
 //=
 struct P{};
@@ -399,8 +399,8 @@ void func(const volatile P*& p) {
 
 void test()
 {
-    P const volatile * p;
-    func(p);
+	P const volatile * p;
+	func(p);
 }
 //!Pointer Pointer Parameter
 //@A.cpp
@@ -408,8 +408,8 @@ struct P{};
 
 void test()
 {
-    P ** p;
-    func(p);
+	P ** p;
+	func(p);
 }
 //=
 struct P{};
@@ -419,8 +419,8 @@ void func(P**& p) {
 
 void test()
 {
-    P ** p;
-    func(p);
+	P ** p;
+	func(p);
 }
 //!Pointer Parameter from Expression
 //@A.cpp
@@ -428,7 +428,7 @@ struct P{};
 
 void test()
 {
-    func(new P());
+	func(new P());
 }
 //=
 struct P{};
@@ -438,7 +438,7 @@ void func(P* const & newP) {
 
 void test()
 {
-    func(new P());
+	func(new P());
 }
 //!Array Parameter
 //@A.cpp
@@ -458,7 +458,7 @@ void test() {
 //@A.cpp
 namespace std
 {
-    struct string{};
+	struct string{};
 }
 
 void test(){
@@ -468,7 +468,7 @@ void test(){
 //=
 namespace std
 {
-    struct string{};
+	struct string{};
 }
 
 void foo(std::string sArr[]) {
@@ -497,7 +497,7 @@ void test() {
 typedef int I;
 
 void test(){
-    I i = 5;
+	I i = 5;
 	foo(i);
 }
 //=
@@ -507,7 +507,7 @@ void foo(I& i) {
 }
 
 void test(){
-    I i = 5;
+	I i = 5;
 	foo(i);
 }
 //!Create typedef-Returntype Parameter
@@ -515,7 +515,7 @@ void test(){
 typedef int I;
 
 I getI(){
-    return 23;
+	return 23;
 }
 
 void test(){
@@ -525,7 +525,7 @@ void test(){
 typedef int I;
 
 I getI(){
-    return 23;
+	return 23;
 }
 
 void foo(const I& getI) {

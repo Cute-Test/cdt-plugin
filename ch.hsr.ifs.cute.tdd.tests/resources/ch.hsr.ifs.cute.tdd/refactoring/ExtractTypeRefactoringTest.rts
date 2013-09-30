@@ -6,9 +6,9 @@ newfiles=B.h
 ignorecomments=true
 //@A.h
 struct /*$*/B/*$$*/ {
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
 
 void test()
@@ -28,10 +28,11 @@ void test()
 
 
 struct B {
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
+
 
 #endif /* B_H_ */
 //!TestNestedStructExtraction
@@ -42,8 +43,8 @@ newfiles=B.h
 ignorecomments=true
 //@A.h
 struct B {
-    struct /*$*/C/*$$*/ {
-    };
+	struct /*$*/C/*$$*/ {
+	};
 };
 
 void test()
@@ -63,9 +64,10 @@ void test()
 
 
 struct B {
-    struct C {
-    };
+	struct C {
+	};
 };
+
 
 #endif /* B_H_ */
 //!TestTemplatedStructExtraction
@@ -99,6 +101,7 @@ template <typename T>
 struct B {
 };
 
+
 #endif /* B_H_ */
 //!TestNestedTemplatedStructExtraction
 //@.config
@@ -127,6 +130,7 @@ struct B {
 	T t;
 	U u;
 };
+
 
 #endif /* B_H_ */
 //!TestNestedTemplatedStructExtractionSelectionInTemplatedMember
@@ -165,6 +169,7 @@ struct B {
 	}
 };
 
+
 #endif /* B_H_ */
 //!TestSimpleFunctionExtraction
 //@.config
@@ -197,5 +202,6 @@ void test()
 void foo()
 {
 }
+
 
 #endif /* FOO_H_ */

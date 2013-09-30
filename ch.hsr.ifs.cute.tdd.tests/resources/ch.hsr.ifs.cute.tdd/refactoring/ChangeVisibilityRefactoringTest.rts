@@ -10,8 +10,8 @@ private:
 
 void test()
 {
-    B b;
-    int x = b.foo();
+	B b;
+	int x = b.foo();
 }
 //=
 struct B {
@@ -24,8 +24,8 @@ private:
 
 void test()
 {
-    B b;
-    int x = b.foo();
+	B b;
+	int x = b.foo();
 }
 //!CallPrivateInStructFromInside
 //@.config
@@ -33,26 +33,26 @@ markerCount=0
 //@A.cpp
 struct B
 {
-    void foo()
-    {
-        bar();
-    }
+	void foo()
+	{
+		bar();
+	}
 private:
-    void bar()
-    {
-    }
+	void bar()
+	{
+	}
 };
 //=
 struct B
 {
-    void foo()
-    {
-        bar();
-    }
+	void foo()
+	{
+		bar();
+	}
 private:
-    void bar()
-    {
-    }
+	void bar()
+	{
+	}
 };
 //!CallDefaultInClassFromOutside
 //@A.cpp
@@ -63,8 +63,8 @@ class B {
 
 void test()
 {
-    B b;
-    b.foo();
+	B b;
+	b.foo();
 }
 //=
 class B {
@@ -75,8 +75,8 @@ public:
 
 void test()
 {
-    B b;
-    b.foo();
+	B b;
+	b.foo();
 }
 //!CallDefaultInClassFromInside
 //@.config
@@ -84,24 +84,24 @@ markerCount=0
 //@A.cpp
 class B 
 {
-    void foo()
-    {
-        bar();
-    }
-    void bar()
-    {
-    }
+	void foo()
+	{
+		bar();
+	}
+	void bar()
+	{
+	}
 };
 //=
 class B 
 {
-    void foo()
-    {
-        bar();
-    }
-    void bar()
-    {
-    }
+	void foo()
+	{
+		bar();
+	}
+	void bar()
+	{
+	}
 };
 //!InsertAtRightPositionStruct
 //@A.cpp
@@ -116,8 +116,8 @@ private:
 
 void test()
 {
-    B b;
-    b.foo();
+	B b;
+	b.foo();
 }
 //=
 struct B
@@ -131,8 +131,8 @@ private:
 
 void test()
 {
-    B b;
-    b.foo();
+	B b;
+	b.foo();
 }
 //!PreserveCommentsWhenHiding
 //@A.cpp
@@ -144,8 +144,8 @@ private:
 	}
 };
 void test() {
-    B b;
-    int x = b.foo();
+	B b;
+	int x = b.foo();
 }
 //=
 struct B {
@@ -157,20 +157,20 @@ struct B {
 private:
 };
 void test() {
-    B b;
-    int x = b.foo();
+	B b;
+	int x = b.foo();
 }
 //!PreserveMacrosWhenHiding
 //@A.cpp
 class Klasse {
-    int foo(int i = __LINE__) {
-        return __LINE__;
-    }
+	int foo(int i = __LINE__) {
+		return __LINE__;
+	}
 };
 int main() {
-    Klasse k;
-    int x = k.foo(42);
-    return 0;
+	Klasse k;
+	int x = k.foo(42);
+	return 0;
 }
 //=
 class Klasse {
@@ -180,24 +180,24 @@ public:
 	}
 };
 int main() {
-    Klasse k;
-    int x = k.foo(42);
-    return 0;
+	Klasse k;
+	int x = k.foo(42);
+	return 0;
 }
 //!TestChangeInOtherFiles
 //@A.cpp
 #include "B.h"
 
 void test() {
-    B b;
-    b.member();
+	B b;
+	b.member();
 }
 //=
 #include "B.h"
 
 void test() {
-    B b;
-    b.member();
+	B b;
+	b.member();
 }
 //@B.h
 #ifndef B_H_
@@ -221,12 +221,12 @@ public:
 //!PrivateFunctionDeclaration
 //@A.cpp
 class B {
-    int foo();
+	int foo();
 };
 
 void test() {
-    B b;
-    int x = b.foo();
+	B b;
+	int x = b.foo();
 }
 //=
 class B {
@@ -235,18 +235,18 @@ public:
 };
 
 void test() {
-    B b;
-    int x = b.foo();
+	B b;
+	int x = b.foo();
 }
 //!PrivateMemberVariable
 //@A.cpp
 class B {
-    int foo;
+	int foo;
 };
 
 void test() {
-    B b;
-    int x = b.foo;
+	B b;
+	int x = b.foo;
 }
 //=
 class B {
@@ -255,15 +255,15 @@ public:
 };
 
 void test() {
-    B b;
-    int x = b.foo;
+	B b;
+	int x = b.foo;
 }
 //!NoMarkerForInternalCalls
 //@.config
 markerCount=0
 //@A.cpp
 class A {
-    int blah;
+	int blah;
 public:
 	void member() {
 		this->blah++;
@@ -271,7 +271,7 @@ public:
 };
 //=
 class A {
-    int blah;
+	int blah;
 public:
 	void member() {
 		this->blah++;
@@ -282,15 +282,15 @@ public:
 #include "A.h"
 
 void func() {
-    A a;
-    a.foo();
+	A a;
+	a.foo();
 }
 //=
 #include "A.h"
 
 void func() {
-    A a;
-    a.foo();
+	A a;
+	a.foo();
 }
 //@A.h
 class A {
@@ -314,23 +314,23 @@ public:
 markerCount=0
 //@A.cpp
 class A {
-    int blah;
+	int blah;
 public:
 	void member();
 };
 void A::member() {
-    A a;
-    a.blah = 0;
+	A a;
+	a.blah = 0;
 }
 //=
 class A {
-    int blah;
+	int blah;
 public:
 	void member();
 };
 void A::member() {
-    A a;
-    a.blah = 0;
+	A a;
+	a.blah = 0;
 }
 //!No Marker for Member Visible due to Friend Function Declaration
 //@.config

@@ -45,74 +45,74 @@ private:
 struct B {
 };
 void test() {
-    B b;
-    double d = b.member;
+	B b;
+	double d = b.member;
 }
 //=
 struct B {
 	double member;
 };
 void test() {
-    B b;
-    double d = b.member;
+	B b;
+	double d = b.member;
 }
 //!Create Member Variable from Access in Simple Declaration with Unary Operation
 //@A.cpp
 struct B {
 };
 void test() {
-    B b;
-    double d = b.member++;
+	B b;
+	double d = b.member++;
 }
 //=
 struct B {
 	double member;
 };
 void test() {
-    B b;
-    double d = b.member++;
+	B b;
+	double d = b.member++;
 }
 //!Create Member Variable from Access in Assignment with Unary Operation
 //@A.cpp
 struct B {
 };
 void test() {
-    B b;
-    double d;
-    d = b.member++;
+	B b;
+	double d;
+	d = b.member++;
 }
 //=
 struct B {
 	double member;
 };
 void test() {
-    B b;
-    double d;
-    d = b.member++;
+	B b;
+	double d;
+	d = b.member++;
 }
 //!TestCreateMemberVariableFromCallWithType
 //@A.cpp
 struct B {
 };
 void test() {
-    B b;
-    B b2 = b.member;
+	B b;
+	B b2 = b.member;
 }
 //=
 struct B {
 	B member;
 };
 void test() {
-    B b;
-    B b2 = b.member;
+	B b;
+	B b2 = b.member;
 }
 //!CreatePublicMemberForClass
 //@A.cpp
 class B {
 };
 void test() {
-    B b;
-    int i = b.member;
+	B b;
+	int i = b.member;
 }
 //=
 class B {
@@ -120,8 +120,8 @@ public:
 	int member;
 };
 void test() {
-    B b;
-    int i = b.member;
+	B b;
+	int i = b.member;
 }
 //!Create Member From This
 //@A.cpp
@@ -220,24 +220,24 @@ class A {
 struct B {
 };
 void test() {
-    B b;
-    b.array = {1, 2, 3};
+	B b;
+	b.array = {1, 2, 3};
 }
 //=
 struct B {
 	int array[3];
 };
 void test() {
-    B b;
-    b.array = {1, 2, 3};
+	B b;
+	b.array = {1, 2, 3};
 }
 //!Create Type Array
 //@A.cpp
 class B {
 };
 void test() {
-    B b, b1, b2, b3;
-    b.array = {b1, b2, b3};
+	B b, b1, b2, b3;
+	b.array = {b1, b2, b3};
 }
 //=
 class B {
@@ -245,16 +245,16 @@ public:
 	B array[3];
 };
 void test() {
-    B b, b1, b2, b3;
-    b.array = {b1, b2, b3};
+	B b, b1, b2, b3;
+	b.array = {b1, b2, b3};
 }
 //!Create String Array Not Possible Assume Int
 //@A.cpp
 class B {
 };
 void test() {
-    B b;
-    b.array = {"string1", "string2", "string3"};
+	B b;
+	b.array = {"string1", "string2", "string3"};
 }
 //=
 class B {
@@ -262,17 +262,17 @@ public:
 	int array[3];
 };
 void test() {
-    B b;
-    b.array = {"string1", "string2", "string3"};
+	B b;
+	b.array = {"string1", "string2", "string3"};
 }
 //!TemplateInitializer
 //@A.cpp
 template <typename T>
 class A {
 public:
-    A(T & t) : memVar(t)
-    {
-    }
+	A(T & t) : memVar(t)
+	{
+	}
 };
 //=
 template <typename T>
@@ -280,24 +280,24 @@ class A {
 	T memVar;
 
 public:
-    A(T & t) : memVar(t)
-    {
-    }
+	A(T & t) : memVar(t)
+	{
+	}
 };
 //!InitializerListInitializer
 //@A.cpp
 class A {
 public:
-    A() : memVar({1,2,3}) {
-    }
+	A() : memVar({1,2,3}) {
+	}
 };
 //=
 class A {
 	int memVar[3];
 
 public:
-    A() : memVar({1,2,3}) {
-    }
+	A() : memVar({1,2,3}) {
+	}
 };
 //!ConstructorCallInInitializerClause
 //@A.cpp
@@ -307,8 +307,8 @@ struct B {
 class A {
 	A() : 
 		membVar(B(0, 0.0))
-    {
-    }
+	{
+	}
 };
 //=
 struct B {
@@ -319,8 +319,8 @@ class A {
 
 	A() : 
 		membVar(B(0, 0.0))
-    {
-    }
+	{
+	}
 };
 //!Correct Recognition of Static Member Variable
 //@.config
@@ -363,7 +363,7 @@ markerCount=0
 //@A.cpp
 struct A
 {
-    A(int i){}
+	A(int i){}
 };
 
 struct C
@@ -376,7 +376,7 @@ void thisIsATest() {
 //=
 struct A
 {
-    A(int i){}
+	A(int i){}
 };
 
 struct C
@@ -447,16 +447,16 @@ private:
 //@B.h
 struct B
 {
-    void function()
-    {
-    }
+	void function()
+	{
+	}
 };
 //=
 struct B
 {
-    void function()
-    {
-    }
+	void function()
+	{
+	}
 };
 //@A.h
 struct B
@@ -470,16 +470,16 @@ struct B
 //@C.h
 struct B
 {
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
 //=
 struct B
 {
-    void foo()
-    {
-    }
+	void foo()
+	{
+	}
 };
 //!No Marker for Qualified Function Calls
 //@.config
