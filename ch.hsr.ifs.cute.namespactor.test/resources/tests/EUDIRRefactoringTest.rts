@@ -609,7 +609,7 @@ namespace std{
 	struct string{};
 }
 #include <string>
-class Test{
+class Test {
 public:
 	Test(std::/*$*/string/*$$*/ &str) : data(str){}
 private:
@@ -636,7 +636,7 @@ namespace std{
 	struct string{};
 }
 #include <string>
-struct Test{
+struct Test {
 public:
 	Test(std::/*$*/string/*$$*/ &str) : data(str){}
 private:
@@ -1475,7 +1475,7 @@ namespace A{
 namespace A{
 	struct SA1{};
 }
-struct S1{
+struct S1 {
 	void f1(/*$*/A/*$$*/::SA1);
 };
 //=
@@ -1517,7 +1517,7 @@ namespace A{
 	struct SA1{};
 	void a(){};
 }
-struct S1{
+struct S1 {
 	void f1(A::SA1);
 	void f2(/*$*/A/*$$*/::SA1){
 		A::a();
@@ -1542,7 +1542,7 @@ namespace A{
 	struct SA1{};
 	void a(){};
 }
-struct S{
+struct S {
 	struct S1{
 		void f1(/*$*/A/*$$*/::SA1);
 		void f2(A::SA1){
@@ -1638,7 +1638,7 @@ namespace A{
 	int i;
 }
 int main() {
-	if (true){
+	if (true) {
 		return A::i;
 	}
 	if (false)
