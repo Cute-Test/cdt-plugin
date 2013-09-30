@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: MyJunit4RtsTests
 Bundle-SymbolicName: ch.hsr.ifs.cute.namespactor.test;singleton:=true
 Bundle-Version: 4.6.0.qualifier
-Bundle-Activator: ch.hsr.ifs.cdt.namespactor.rtstest.TestActivator
+Bundle-Activator: ch.hsr.ifs.cute.namespactor.test.TestActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.ui;bundle-version="5.3.0",
  org.eclipse.cdt.core;bundle-version="5.3.0",
@@ -17,5 +17,5 @@ Require-Bundle: org.eclipse.ui,
  org.junit;bundle-version="4.10.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cdt.namespactor.rtstest,
- ch.hsr.ifs.cdt.namespactor.rtstest.tests
+Export-Package: ch.hsr.ifs.cute.namespactor.test,
+ ch.hsr.ifs.cute.namespactor.test.tests

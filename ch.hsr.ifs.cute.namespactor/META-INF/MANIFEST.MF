@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: namespactor
 Bundle-SymbolicName: ch.hsr.ifs.cute.namespactor;singleton:=true
 Bundle-Version: 4.6.0.qualifier
-Bundle-Activator: ch.hsr.ifs.cdt.namespactor.NamespactorActivator
+Bundle-Activator: ch.hsr.ifs.cute.namespactor.NamespactorActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide;bundle-version="3.7.0",
  org.eclipse.cdt.ui;bundle-version="5.3.2",
@@ -19,14 +19,14 @@ Require-Bundle: org.eclipse.ui,
  ch.hsr.ifs.cute.tdd;bundle-version="1.1.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: ch.hsr.ifs.cdt.namespactor.astutil,
- ch.hsr.ifs.cdt.namespactor.refactoring,
- ch.hsr.ifs.cdt.namespactor.refactoring.iu,
- ch.hsr.ifs.cdt.namespactor.refactoring.eudec,
- ch.hsr.ifs.cdt.namespactor.refactoring.eudir,
- ch.hsr.ifs.cdt.namespactor.refactoring.iudec,
- ch.hsr.ifs.cdt.namespactor.refactoring.iudir,
- ch.hsr.ifs.cdt.namespactor.refactoring.qun,
- ch.hsr.ifs.cdt.namespactor.ui.iu,
- ch.hsr.ifs.cdt.namespactor.ui.qun
+Export-Package: ch.hsr.ifs.cute.namespactor.astutil,
+ ch.hsr.ifs.cute.namespactor.refactoring,
+ ch.hsr.ifs.cute.namespactor.refactoring.eudec,
+ ch.hsr.ifs.cute.namespactor.refactoring.eudir,
+ ch.hsr.ifs.cute.namespactor.refactoring.iu,
+ ch.hsr.ifs.cute.namespactor.refactoring.iudec,
+ ch.hsr.ifs.cute.namespactor.refactoring.iudir,
+ ch.hsr.ifs.cute.namespactor.refactoring.qun,
+ ch.hsr.ifs.cute.namespactor.ui.iu,
+ ch.hsr.ifs.cute.namespactor.ui.qun
 Bundle-Vendor: IFS

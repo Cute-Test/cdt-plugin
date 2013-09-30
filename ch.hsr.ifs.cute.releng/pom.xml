@@ -99,10 +99,10 @@
 		<module>../ch.hsr.ifs.cute.boost.feature</module>
 		<module>../ch.hsr.ifs.cute.boost</module>
 		<!-- Refactoring Preview -->
-		<module>../ch.hsr.ifs.cdt.namespactor</module>
-		<module>../ch.hsr.ifs.cdt.namespactor.checkers</module>
-		<module>../ch.hsr.ifs.cdt.namespactor.feature</module>
-		<module>../ch.hsr.ifs.cdt.namespactor.rtstest</module>
+		<module>../ch.hsr.ifs.cute.namespactor</module>
+		<module>../ch.hsr.ifs.cute.namespactor.checkers</module>
+		<module>../ch.hsr.ifs.cute.namespactor.feature</module>
+		<module>../ch.hsr.ifs.cute.namespactor.test</module>
 		<!-- Refactoring Preview old: <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module> 
 			<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module> <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module> -->
 		<!-- update site -->

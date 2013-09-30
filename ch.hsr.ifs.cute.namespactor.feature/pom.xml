@@ -8,8 +8,8 @@
     <relativePath>../ch.hsr.ifs.cute.releng</relativePath>
     <version>4.6.0-SNAPSHOT</version>
   </parent>
-  <groupId>ch.hsr.ifs.cdt.namespactor</groupId>
-  <artifactId>ch.hsr.ifs.cdt.namespactor.feature</artifactId>
+  <groupId>ch.hsr.ifs.cute.namespactor</groupId>
+  <artifactId>ch.hsr.ifs.cute.namespactor.feature</artifactId>
   <version>4.6.0-SNAPSHOT</version>
   <packaging>eclipse-feature</packaging>
 </project>

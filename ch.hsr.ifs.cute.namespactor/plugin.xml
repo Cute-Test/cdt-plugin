@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
-            id="ch.hsr.ifs.cdt.namespactor.namespacerefactoring"
+            id="ch.hsr.ifs.cute.namespactor.namespacerefactoring"
             label="C/C++ Coding"
             visible="true">
          <menu id="org.eclipse.jdt.ui.refactoring.menu" label="Refac&amp;tor">
@@ -12,39 +12,39 @@
          </menu> 
          <!--           
          <action
-               class="ch.hsr.ifs.cdt.namespactor.iudir.ui.IUDIRRefactoringActionDelegate"
-               id="ch.hsr.ifs.cdt.namespactor.iudir"
+               class="ch.hsr.ifs.cute.namespactor.iudir.ui.IUDIRRefactoringActionDelegate"
+               id="ch.hsr.ifs.cute.namespactor.iudir"
                label="Inline Namespace Using Directive..."
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>
          <action
-               class="ch.hsr.ifs.cdt.namespactor.iudec.ui.IUDECRefactoringActionDelegate"
-               id="ch.hsr.ifs.cdt.namespactor.iudec"
+               class="ch.hsr.ifs.cute.namespactor.iudec.ui.IUDECRefactoringActionDelegate"
+               id="ch.hsr.ifs.cute.namespactor.iudec"
                label="Inline Using Declaration..."
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>-->
 		 <action
-               class="ch.hsr.ifs.cdt.namespactor.ui.qun.QUNRefactoringActionDelegate"
-               id="ch.hsr.ifs.cdt.namespactor.qun"
+               class="ch.hsr.ifs.cute.namespactor.ui.qun.QUNRefactoringActionDelegate"
+               id="ch.hsr.ifs.cute.namespactor.qun"
                label="Qualify Unqualified Name..."
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>         
          <action
-               class="ch.hsr.ifs.cdt.namespactor.ui.iu.IURefactoringActionDelegate"
-               id="ch.hsr.ifs.cdt.namespactor.iu"
+               class="ch.hsr.ifs.cute.namespactor.ui.iu.IURefactoringActionDelegate"
+               id="ch.hsr.ifs.cute.namespactor.iu"
                label="Inline Using ..."
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>         
          <action
-               class="ch.hsr.ifs.cdt.namespactor.ui.eudir.EUDIRRefactoringActionDelegate"
-               id="ch.hsr.ifs.cdt.namespactor.extract"
+               class="ch.hsr.ifs.cute.namespactor.ui.eudir.EUDIRRefactoringActionDelegate"
+               id="ch.hsr.ifs.cute.namespactor.extract"
                label="Extract Using Namespace Directive..."
                tooltip="Extract 'using namespace'"
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>
          <action
-               class="ch.hsr.ifs.cdt.namespactor.ui.eudec.EUDECRefactoringActionDelegate"
-               id="ch.hsr.ifs.cdt.namespactor.eudec"
+               class="ch.hsr.ifs.cute.namespactor.ui.eudec.EUDECRefactoringActionDelegate"
+               id="ch.hsr.ifs.cute.namespactor.eudec"
                label="Extract Namespace Using Declaration..."
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>
@@ -55,28 +55,28 @@
       <command
             categoryId="org.eclipse.cdt.ui.category.refactoring"
             description="ExtractUsingDeclarationRefactoring"
-            id="ch.hsr.ifs.cdt.namespactor.ui.eudec.Refactoring"
+            id="ch.hsr.ifs.cute.namespactor.ui.eudec.Refactoring"
             name="EUDECRefactoring"
             >
       </command>
       <command
             categoryId="org.eclipse.cdt.ui.category.refactoring"
             description="Extract Using Directive "
-            id="ch.hsr.ifs.cdt.namespactor.ui.eudir.Refactoring"
+            id="ch.hsr.ifs.cute.namespactor.ui.eudir.Refactoring"
             name="EUDIRRefactoring">
       </command>
       <command
             categoryId="org.eclipse.cdt.ui.category.refactoring"
             description="Qualify Unqualified Name "
-            id="ch.hsr.ifs.cdt.namespactor.ui.qun.Refactoring"
+            id="ch.hsr.ifs.cute.namespactor.ui.qun.Refactoring"
             name="QUNRefactoring">
       </command>
    </extension>
    <!-- we need to use actionset mechanism for Refactoring menus of CDT, because CDT uses actionSet, you only can get into #CEditorContext root popup menu
    <extension point="org.eclipse.ui.handlers">
   <handler
-   commandId="ch.hsr.ifs.cdt.namespactor.ui.eudec.Refactoring"
-   class="ch.hsr.ifs.cdt.namespactor.ui.eudec.EUDECRefactoringActionDelegate">
+   commandId="ch.hsr.ifs.cute.namespactor.ui.eudec.Refactoring"
+   class="ch.hsr.ifs.cute.namespactor.ui.eudec.EUDECRefactoringActionDelegate">
    </handler>
 
    </extension>
@@ -85,7 +85,7 @@
          point="org.eclipse.ui.menus">
          <menuContribution  locationURI="menu:org.eclipse.cdt.ui.refactoring.menu/reorgGroup?after=additions">
          <command
-            commandId="ch.hsr.ifs.cdt.namespactor.ui.eudec.Refactoring"
+            commandId="ch.hsr.ifs.cute.namespactor.ui.eudec.Refactoring"
             label="Extract Using Declaration"
             tooltip="Extract a using declaration for this element"
             >
@@ -96,7 +96,7 @@
                allPopups="true"
                locationURI="menu:#CEditorContext/org.eclipse.cdt.ui.refactoring.menu?before=additions"> <!- - doesn't work, because action set of CDT for Refactoring is handled after menu: locationURI?- ->
           <command
-                  commandId="ch.hsr.ifs.cdt.namespactor.EUDIR"
+                  commandId="ch.hsr.ifs.cute.namespactor.EUDIR"
                   id="EUDIR"
                   label="Extract using namespace"
                   style="push"
@@ -106,7 +106,7 @@
           <menuContribution
                locationURI="popup:org.eclipse.ui.popup.any?before=additions"> <!- - addresses all popups but works - ->
           <command
-                  commandId="ch.hsr.ifs.cdt.namespactor.EUDIR"
+                  commandId="ch.hsr.ifs.cute.namespactor.EUDIR"
                   id="EUDIR"
                   label="Extract using namespace"
                   style="push"
@@ -118,32 +118,32 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <viewerContribution
-            id="ch.hsr.ifs.cdt.namespactor.namespacerefactorings"
+            id="ch.hsr.ifs.cute.namespactor.namespacerefactorings"
             targetID="#CEditorContext">
          <action
-               class="ch.hsr.ifs.cdt.namespactor.ui.eudec.EUDECRefactoringActionDelegate"
-               definitionId="ch.hsr.ifs.cdt.namespactor.ui.eudec.Refactoring"
-               id="ch.hsr.ifs.cdt.namespactor.ui.eudec.1"
+               class="ch.hsr.ifs.cute.namespactor.ui.eudec.EUDECRefactoringActionDelegate"
+               definitionId="ch.hsr.ifs.cute.namespactor.ui.eudec.Refactoring"
+               id="ch.hsr.ifs.cute.namespactor.ui.eudec.1"
                label="Extract Using Declaration"
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>
          <action
-               class="ch.hsr.ifs.cdt.namespactor.ui.eudir.EUDIRRefactoringActionDelegate"
-               definitionId="ch.hsr.ifs.cdt.namespactor.ui.eudir.Refactoring"
-               id="ch.hsr.ifs.cdt.namespactor.ui.eudir.1"
+               class="ch.hsr.ifs.cute.namespactor.ui.eudir.EUDIRRefactoringActionDelegate"
+               definitionId="ch.hsr.ifs.cute.namespactor.ui.eudir.Refactoring"
+               id="ch.hsr.ifs.cute.namespactor.ui.eudir.1"
                label="Extract 'using namespace'"
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>
 		 <action
-         class="ch.hsr.ifs.cdt.namespactor.ui.qun.QUNRefactoringActionDelegate"
-         definitionId="ch.hsr.ifs.cdt.namespactor.ui.qun.Refactoring"
-         id="ch.hsr.ifs.cdt.namespactor.qun.1"
+         class="ch.hsr.ifs.cute.namespactor.ui.qun.QUNRefactoringActionDelegate"
+         definitionId="ch.hsr.ifs.cute.namespactor.ui.qun.Refactoring"
+         id="ch.hsr.ifs.cute.namespactor.qun.1"
          label="Qualify Unqualified Name..."
          menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>         
          <action
-               class="ch.hsr.ifs.cdt.namespactor.ui.iu.IURefactoringActionDelegate"
-               id="ch.hsr.ifs.cdt.namespactor.iu.1"
+               class="ch.hsr.ifs.cute.namespactor.ui.iu.IURefactoringActionDelegate"
+               id="ch.hsr.ifs.cute.namespactor.iu.1"
                label="Inline Using ..."
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>         

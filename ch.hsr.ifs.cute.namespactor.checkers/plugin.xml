@@ -4,14 +4,14 @@
    <extension
          point="org.eclipse.cdt.codan.core.checkers">
       <checker
-            class="ch.hsr.ifs.cdt.namespactor.checkers.UsingChecker"
-            id="ch.hsr.ifs.cdt.namespactor.checkers.UsingPosition">
+            class="ch.hsr.ifs.cute.namespactor.checkers.UsingChecker"
+            id="ch.hsr.ifs.cute.namespactor.checkers.UsingPosition">
          <problem
                category="org.eclipse.cdt.codan.core.categories.ProgrammingProblems"
                defaultEnabled="true"
                defaultSeverity="Warning"
                description="Using directive in header file"
-               id="ch.hsr.ifs.cdt.namespactor.UDIRInHeader"
+               id="ch.hsr.ifs.cute.namespactor.UDIRInHeader"
                messagePattern="Using directives in header files may have unintended side effects."
                name="Using directive in header file">
          </problem>
@@ -20,7 +20,7 @@
                defaultEnabled="true"
                defaultSeverity="Warning"
                description="Using declaration in header file"
-               id="ch.hsr.ifs.cdt.namespactor.UDECInHeader"
+               id="ch.hsr.ifs.cute.namespactor.UDECInHeader"
                messagePattern="Using declarations in header files may have unintended side effects."
                name="Using declaration in header file">
          </problem>
@@ -29,7 +29,7 @@
                defaultEnabled="true"
                defaultSeverity="Warning"
                description="Using directive before include statement"
-               id="ch.hsr.ifs.cdt.namespactor.UDIRBeforeInclude"
+               id="ch.hsr.ifs.cute.namespactor.UDIRBeforeInclude"
                messagePattern="Using directives before an #include may have unintended side effects."
                name="Using directive before include statement">
          </problem>
@@ -38,7 +38,7 @@
                defaultEnabled="true"
                defaultSeverity="Warning"
                description="Using declarations before include statements"
-               id="ch.hsr.ifs.cdt.namespactor.UDECBeforeInclude"
+               id="ch.hsr.ifs.cute.namespactor.UDECBeforeInclude"
                messagePattern="Using declarations before an #include may have unintended side effects."
                name="Using declarations before include statement">
          </problem>
@@ -47,7 +47,7 @@
                defaultEnabled="true"
                defaultSeverity="Warning"
                description="Detects unqualified names in using directives"
-               id="ch.hsr.ifs.cdt.namespactor.UDIRUnqualified"
+               id="ch.hsr.ifs.cute.namespactor.UDIRUnqualified"
                messagePattern="Qualified names in using directives can lead to more readable code."
                name="Detects unqualified names in using directives">
          </problem>         
@@ -56,34 +56,34 @@
 	<extension
 	      point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
 	   <resolution
-	             class="ch.hsr.ifs.cdt.namespactor.quickfix.InlineUsingQuickFix"
-	             problemId="ch.hsr.ifs.cdt.namespactor.UDIRInHeader">
+	             class="ch.hsr.ifs.cute.namespactor.quickfix.InlineUsingQuickFix"
+	             problemId="ch.hsr.ifs.cute.namespactor.UDIRInHeader">
 	   </resolution>  
 	   <resolution
-	             class="ch.hsr.ifs.cdt.namespactor.quickfix.InlineUsingQuickFix"
-	             problemId="ch.hsr.ifs.cdt.namespactor.UDECInHeader">
+	             class="ch.hsr.ifs.cute.namespactor.quickfix.InlineUsingQuickFix"
+	             problemId="ch.hsr.ifs.cute.namespactor.UDECInHeader">
 	   </resolution> 
 	   <resolution
-	             class="ch.hsr.ifs.cdt.namespactor.quickfix.InlineUsingQuickFix"
-	             problemId="ch.hsr.ifs.cdt.namespactor.UDIRBeforeInclude">
+	             class="ch.hsr.ifs.cute.namespactor.quickfix.InlineUsingQuickFix"
+	             problemId="ch.hsr.ifs.cute.namespactor.UDIRBeforeInclude">
 	   </resolution>
 	   <resolution
-	             class="ch.hsr.ifs.cdt.namespactor.quickfix.InlineUsingQuickFix"
-	             problemId="ch.hsr.ifs.cdt.namespactor.UDECBeforeInclude">
+	             class="ch.hsr.ifs.cute.namespactor.quickfix.InlineUsingQuickFix"
+	             problemId="ch.hsr.ifs.cute.namespactor.UDECBeforeInclude">
 	   </resolution>
 
 	   <resolution
-	             class="ch.hsr.ifs.cdt.namespactor.quickfix.MoveAfterIncludesQuickFix"
-	             problemId="ch.hsr.ifs.cdt.namespactor.UDIRBeforeInclude">
+	             class="ch.hsr.ifs.cute.namespactor.quickfix.MoveAfterIncludesQuickFix"
+	             problemId="ch.hsr.ifs.cute.namespactor.UDIRBeforeInclude">
 	   </resolution> 
 	   <resolution
-	             class="ch.hsr.ifs.cdt.namespactor.quickfix.MoveAfterIncludesQuickFix"
-	             problemId="ch.hsr.ifs.cdt.namespactor.UDECBeforeInclude">
+	             class="ch.hsr.ifs.cute.namespactor.quickfix.MoveAfterIncludesQuickFix"
+	             problemId="ch.hsr.ifs.cute.namespactor.UDECBeforeInclude">
 	   </resolution>
 	   
 	   <resolution
-	             class="ch.hsr.ifs.cdt.namespactor.quickfix.QualifyUDIRQuickFix"
-	             problemId="ch.hsr.ifs.cdt.namespactor.UDIRUnqualified">
+	             class="ch.hsr.ifs.cute.namespactor.quickfix.QualifyUDIRQuickFix"
+	             problemId="ch.hsr.ifs.cute.namespactor.UDIRUnqualified">
 	   </resolution>	   	   	    
 	</extension>
 </plugin>

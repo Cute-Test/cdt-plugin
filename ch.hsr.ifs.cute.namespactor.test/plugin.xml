@@ -2,6 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension point="ch.hsr.ifs.cdttesting.testingPlugin">
-         <testResouresLocation sourceLocation="/resources/" activatorClass="ch.hsr.ifs.cdt.namespactor.rtstest.TestActivator"/>
+         <testResouresLocation sourceLocation="/resources/" activatorClass="ch.hsr.ifs.cute.namespactor.test.TestActivator"/>
    </extension>
 </plugin>
