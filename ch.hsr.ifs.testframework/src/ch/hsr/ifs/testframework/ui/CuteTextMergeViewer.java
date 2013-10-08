@@ -13,9 +13,9 @@ import java.util.List;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.contentmergeviewer.TextMergeViewer;
+import org.eclipse.compare.internal.MergeSourceViewer;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.PaintManager;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.WhitespaceCharacterPainter;
@@ -27,6 +27,7 @@ import ch.hsr.ifs.testframework.preference.PreferenceConstants;
 /**
  * @author Emanuel Graf
  */
+@SuppressWarnings("restriction")
 public class CuteTextMergeViewer extends TextMergeViewer {
 
 	private WhitespaceCharacterPainter leftWhitespaceCharacterPainter;
@@ -64,7 +65,6 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 	}
 	
 	private TextViewer getSourceViewer(ViewerLocation loc) throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		Class<?> class1 = ((TextMergeViewer)this).getClass().getSuperclass();
 		String fieldName = ""; //$NON-NLS-1$
 		switch (loc) {
 		case LEFT:
@@ -77,12 +77,18 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 			fieldName = "fAncestor"; //$NON-NLS-1$
 			break;
 		}
-		
-		Field field = class1.getDeclaredField(fieldName);
-		field.setAccessible(true);
-		TextViewer viewer = (TextViewer) field.get(this);
-		return viewer;
-
+		try {
+			Field field = getClass().getSuperclass().getDeclaredField(fieldName);
+			field.setAccessible(true);
+			Object instanceField = field.get(this);
+			if (instanceField instanceof MergeSourceViewer) {
+				MergeSourceViewer viewer = (MergeSourceViewer) instanceField;
+				return viewer.getSourceViewer();
+			}
+		} catch (NoSuchFieldException e) {
+			//return null (bellow) if field not found.
+		}
+		return null;
 	}
 	
 	
@@ -94,9 +100,9 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 			TextViewer left = getSourceViewer(ViewerLocation.LEFT);
 			TextViewer right = getSourceViewer(ViewerLocation.RIGHT);
 			
-			leftWhitespaceCharacterPainter = new WhitespaceCharacterPainter((ITextViewer) left);
+			leftWhitespaceCharacterPainter = new WhitespaceCharacterPainter(left);
 			left.addPainter(leftWhitespaceCharacterPainter);
-			rightWhitespaceCharacterPainter = new WhitespaceCharacterPainter((ITextViewer) right);
+			rightWhitespaceCharacterPainter = new WhitespaceCharacterPainter(right);
 			right.addPainter(rightWhitespaceCharacterPainter);
 		} catch (Exception e) {
 			logException(e);

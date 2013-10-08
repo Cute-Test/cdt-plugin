@@ -20,7 +20,7 @@ import ch.hsr.ifs.testframework.preference.PreferenceConstants;
  */
 public class ShowWhiteSpaceAction extends Action {
 
-	private CuteTextMergeViewer viewer;
+	private final CuteTextMergeViewer viewer;
 	private static Messages msg = TestFrameworkPlugin.getMessages();
 	
 	public ShowWhiteSpaceAction(CuteTextMergeViewer compareViewer) {
@@ -33,7 +33,7 @@ public class ShowWhiteSpaceAction extends Action {
 
 	@Override
 	public void run() {
-		boolean show = ! TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES);
+		boolean show = !TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES);
 		TestFrameworkPlugin.getDefault().getPreferenceStore().setValue(PreferenceConstants.SHOW_WHITESPACES, show);
 		viewer.showWhitespaces(show);
 	}
