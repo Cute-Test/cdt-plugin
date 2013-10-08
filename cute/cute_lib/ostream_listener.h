@@ -47,7 +47,7 @@ namespace cute {
 			Listener::success(t,msg);
 		}
 		void failure(test const &t,test_failure const &e){
-			out << e.filename << ":" << e.lineno << ": testcase failed: " <<e.reason << " in " << t.name()<< std::endl;
+			out << std::dec << e.filename << ":" << e.lineno << ": testcase failed: " <<e.reason << " in " << t.name()<< std::endl;
 			Listener::failure(t,e);
 		}
 		void error(test const &t, char const *what){
