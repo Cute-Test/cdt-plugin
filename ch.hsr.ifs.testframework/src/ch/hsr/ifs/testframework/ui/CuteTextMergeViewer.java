@@ -33,38 +33,30 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 	private WhitespaceCharacterPainter leftWhitespaceCharacterPainter;
 	private WhitespaceCharacterPainter rightWhitespaceCharacterPainter;
 
-
-
-	public CuteTextMergeViewer(Composite parent, int style,
-			CompareConfiguration configuration) {
+	public CuteTextMergeViewer(Composite parent, int style, CompareConfiguration configuration) {
 		super(parent, style, configuration);
 	}
-	
-	
 
 	@Override
 	protected void createControls(Composite composite) {
 		super.createControls(composite);
 	}
 
-
 	@Override
 	protected void configureTextViewer(TextViewer textViewer) {
 		super.configureTextViewer(textViewer);
 		WhitespaceCharacterPainter whitespaceCharPainter = null;
-		if(TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES)) {
-			whitespaceCharPainter= new WhitespaceCharacterPainter(textViewer);
+		if (TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES)) {
+			whitespaceCharPainter = new WhitespaceCharacterPainter(textViewer);
 			textViewer.addPainter(whitespaceCharPainter);
 		}
 	}
-	
-	private enum ViewerLocation{
-		LEFT,
-		CENTER,
-		RIGHT
+
+	private enum ViewerLocation {
+		LEFT, CENTER, RIGHT
 	}
-	
-	private TextViewer getSourceViewer(ViewerLocation loc) throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+	private TextViewer getSourceViewer(ViewerLocation loc) {
 		String fieldName = ""; //$NON-NLS-1$
 		switch (loc) {
 		case LEFT:
@@ -85,70 +77,57 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 				MergeSourceViewer viewer = (MergeSourceViewer) instanceField;
 				return viewer.getSourceViewer();
 			}
-		} catch (NoSuchFieldException e) {
+		} catch (Exception e) {
+			logException(e);
 			//return null (bellow) if field not found.
 		}
 		return null;
 	}
-	
-	
+
 	/**
 	 * Installs the painter on the editor.
 	 */
 	private void installPainter() {
-		try {
-			TextViewer left = getSourceViewer(ViewerLocation.LEFT);
-			TextViewer right = getSourceViewer(ViewerLocation.RIGHT);
-			
-			leftWhitespaceCharacterPainter = new WhitespaceCharacterPainter(left);
-			left.addPainter(leftWhitespaceCharacterPainter);
-			rightWhitespaceCharacterPainter = new WhitespaceCharacterPainter(right);
-			right.addPainter(rightWhitespaceCharacterPainter);
-		} catch (Exception e) {
-			logException(e);
+		leftWhitespaceCharacterPainter = installPainter(ViewerLocation.LEFT);
+		rightWhitespaceCharacterPainter = installPainter(ViewerLocation.RIGHT);
+	}
+
+	private WhitespaceCharacterPainter installPainter(ViewerLocation location) {
+		TextViewer viewer = getSourceViewer(location);
+		if (viewer != null) {
+			WhitespaceCharacterPainter painter = new WhitespaceCharacterPainter(viewer);
+			viewer.addPainter(painter);
+			return painter;
 		}
+		return null;
 	}
 
 	/**
 	 * Remove the painter from the current editor.
 	 */
 	private void uninstallPainter() {
-		try {
-			TextViewer left = getSourceViewer(ViewerLocation.LEFT);
-			TextViewer right = getSourceViewer(ViewerLocation.RIGHT);
-			
-			
-			if(leftWhitespaceCharacterPainter == null) {
-				leftWhitespaceCharacterPainter = getWhitespaceCharacterPainter(left);
-			}
-			if(rightWhitespaceCharacterPainter == null) {
-				rightWhitespaceCharacterPainter = getWhitespaceCharacterPainter(right);
-			}
-			
-			left.removePainter(leftWhitespaceCharacterPainter);
-			right.removePainter(rightWhitespaceCharacterPainter);
-			left.invalidateTextPresentation();
-			right.invalidateTextPresentation();
-			left.refresh();
-			right.refresh();
-			
-		} catch (Exception e) {
-			logException(e);
-		}
-		
+		uninstallPainter(ViewerLocation.LEFT, leftWhitespaceCharacterPainter);
+		uninstallPainter(ViewerLocation.RIGHT, rightWhitespaceCharacterPainter);
 	}
 
-
+	private void uninstallPainter(ViewerLocation location, WhitespaceCharacterPainter painter) {
+		TextViewer viewer = getSourceViewer(location);
+		if (viewer != null) {
+			if (painter == null) {
+				painter = getWhitespaceCharacterPainter(viewer);
+			}
+			viewer.removePainter(painter);
+		}
+	}
 
 	@SuppressWarnings("rawtypes")
-	private WhitespaceCharacterPainter getWhitespaceCharacterPainter(
-			Object viewer) {
+	private WhitespaceCharacterPainter getWhitespaceCharacterPainter(Object viewer) {
 		try {
 			Class<?> viewerClass = Class.forName("org.eclipse.jface.text.TextViewer"); //$NON-NLS-1$
 			Field painterMgField = viewerClass.getDeclaredField("fPaintManager"); //$NON-NLS-1$
 			painterMgField.setAccessible(true);
-			PaintManager pm = (PaintManager)painterMgField.get(viewer);
-			
+			PaintManager pm = (PaintManager) painterMgField.get(viewer);
+
 			Class<? extends PaintManager> classPm = pm.getClass();
 			Field painterListField = classPm.getDeclaredField("fPainters"); //$NON-NLS-1$
 			painterListField.setAccessible(true);
@@ -159,27 +138,22 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 					return whitePainter;
 				}
 			}
-			
-			
+
 		} catch (Exception e) {
 			logException(e);
 		}
 		return null;
 	}
 
-
-
 	private void logException(Exception e) {
-		TestFrameworkPlugin.log(new Status(IStatus.ERROR, TestFrameworkPlugin.PLUGIN_ID,e.getMessage(), e));
-		
+		TestFrameworkPlugin.log(new Status(IStatus.ERROR, TestFrameworkPlugin.PLUGIN_ID, e.getMessage(), e));
+
 	}
 
-
-
 	public void showWhitespaces(boolean show) {
-		if(show) {
+		if (show) {
 			installPainter();
-		}else {
+		} else {
 			uninstallPainter();
 		}
 		invalidateTextPresentation();
