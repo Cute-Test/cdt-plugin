@@ -11,7 +11,6 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.cdt.managedbuilder.ui.wizards.CDTConfigWizardPage;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -37,20 +36,21 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
 public class CuteVersionWizardPage extends MBSCustomPage {
 
 	protected Composite composite;
-	private final CDTConfigWizardPage configPage;
-
-	private final IWizardPage startingWizardPage;
+	private final IWizardPage nextPage;
+	private final IWizardPage previousPage;
 	private CuteVersionComposite cuteVersionComp;
-	private ImageDescriptor imageDesc;
+	private final ImageDescriptor imageDesc;
 	private ArrayList<ICuteWizardAddition> additions;
 
-	public CuteVersionWizardPage(CDTConfigWizardPage configWizardPage,
-			IWizardPage staringWizardPage) {
-		pageID = "ch.hsr.ifs.cutelauncher.ui.CuteVersionPage"; //$NON-NLS-1$
-		this.configPage = configWizardPage;
-		this.startingWizardPage = staringWizardPage;
+	public CuteVersionWizardPage(IWizardPage nextPage, IWizardPage previousPage, String pageId) {
+		super(pageId);
+		this.nextPage = nextPage;
+		this.previousPage = previousPage;
 		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
-		
+	}
+
+	public CuteVersionWizardPage(IWizardPage nextPage, IWizardPage previousPage) {
+		this(nextPage, previousPage, "ch.hsr.ifs.cutelauncher.ui.CuteVersionPage");
 	}
 
 	@Override
@@ -67,16 +67,22 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		addCuteHeaderVersionSelectionDropdown();
+		addWizardPageAdditions();
+	}
+
+	private void addCuteHeaderVersionSelectionDropdown() {
 		cuteVersionComp = new CuteVersionComposite(composite);
+	}
+
+	private void addWizardPageAdditions() {
 		for (ICuteWizardAddition addition : getAdditions()) {
 			addition.createComposite(composite);
 		}
-		
 	}
 
 	public void dispose() {
 		composite.dispose();
-
 	}
 
 	public Control getControl() {
@@ -120,17 +126,16 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 
 	public void setVisible(boolean visible) {
 		composite.setVisible(visible);
-
 	}
 
 	@Override
 	public IWizardPage getNextPage() {
-		return configPage;
+		return nextPage;
 	}
 
 	@Override
 	public IWizardPage getPreviousPage() {
-		return startingWizardPage;
+		return previousPage;
 	}
 
 	public String getCuteVersionString() {
@@ -142,16 +147,17 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	}
 
 	public List<ICuteWizardAddition> getAdditions() {
-		if(additions == null) {
+		if (additions == null) {
 			additions = new ArrayList<ICuteWizardAddition>();
-			try{
+			try {
 				IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(UiPlugin.PLUGIN_ID, "wizardAddition"); //$NON-NLS-1$
 				if (extension != null) {
 					IExtension[] extensions = extension.getExtensions();
 					for (IExtension extension2 : extensions) {
 						IConfigurationElement[] configElements = extension2.getConfigurationElements();
-						String className =configElements[0].getAttribute("compositeProvider"); //$NON-NLS-1$
-						Object newInstance = ((Class<?>) Platform.getBundle(extension2.getContributor().getName()).loadClass(className)).newInstance();
+						String className = configElements[0].getAttribute("compositeProvider"); //$NON-NLS-1$
+						Object newInstance = ((Class<?>) Platform.getBundle(extension2.getContributor().getName()).loadClass(className))
+								.newInstance();
 						additions.add((ICuteWizardAddition) newInstance);
 					}
 				}
@@ -162,5 +168,4 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 		}
 		return additions;
 	}
-
 }

@@ -55,7 +55,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	public CuteLibWizardHandler(Composite p, IWizard w) {
 
 		super(p, w);
-		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(), getWizardContainer(w), this);
+		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(), getWizardContainer(w));
 		libRefPage.setPreviousPage(getStartingPage());
 		libRefPage.setWizard(getWizard());
 		MBSCustomPageManager.init();

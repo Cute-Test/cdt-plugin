@@ -41,7 +41,7 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrategyProvider {
 
@@ -54,7 +54,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 	public CuteWizardHandler(Composite p, IWizard w) {
 		super(new CuteBuildPropertyValue(), p, w);
-		cuteVersionWizardPage = new CuteVersionWizardPage( getConfigPage(), getStartingPage());
+		cuteVersionWizardPage = new CuteVersionWizardPage(getConfigPage(), getStartingPage());
 		cuteVersionWizardPage.setWizard(w);
 
 		MBSCustomPageManager.init();
@@ -93,9 +93,6 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 	}
 
-	/**
-	 * @since 4.0
-	 */
 	protected void createCuteProjectSettings(IProject newProject, IProgressMonitor monitor) {
 		try {
 			createCuteProject(newProject, monitor);
@@ -104,10 +101,6 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		}
 	}
 
-
-	/**
-	 * @since 4.0
-	 */
 	protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
 		QualifiedName key = new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME);
@@ -115,7 +108,6 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		createCuteProjectFolders(project);
 		callAdditionalHandlers(project, pm);
 		ManagedBuildManager.saveBuildInfo(project, true);
-
 	}
 
 	private void callAdditionalHandlers(IProject project, IProgressMonitor pm) throws CoreException {
@@ -126,65 +118,40 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 			mon.worked(1);
 		}
 		mon.done();
-
 	}
 
-	/**
-	 * @since 4.0
-	 */
 	protected List<ICuteWizardAddition> getAdditions() {
 		return cuteVersionWizardPage.getAdditions();
 	}
 
-
-	protected void createCuteProjectFolders(IProject project)
-			throws CoreException {
-		IFolder srcFolder = ProjectTools.createFolder(project, "src", true); //$NON-NLS-1$
+	private void createCuteProjectFolders(IProject project) throws CoreException {
 		ICuteHeaders cuteVersion = getCuteVersion();
 
+		IFolder srcFolder = ProjectTools.createFolder(project, "src", true);
+		copyExampleTestFiles(srcFolder, cuteVersion);
 
-		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", true); //$NON-NLS-1$
-
-
-		copyFiles(srcFolder, cuteVersion, cuteFolder);
-
+		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", true);
+		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
 		ProjectTools.setIncludePaths(cuteFolder.getFullPath(), project, this);
-		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-				getTestMainFile(project), true);
+
+		IFile srcFile = project.getFile("src/Test.cpp");
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), srcFile, true);
 	}
 
-	/**
-	 * @since 4.0
-	 */
 	protected ICuteHeaders getCuteVersion() {
 		return UiPlugin.getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
 	}
 
-	/**
-	 * @since 4.0
-	 */
-	public void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
-			IFolder cuteFolder) throws CoreException {
+	protected void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
 		cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
-		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
 	}
 
-	protected IFile getTestMainFile(IProject project) {
-		return project.getFile("src/Test.cpp"); //$NON-NLS-1$
-	}
-
-	/**
-	 * @since 4.0
-	 */
 	public GetOptionsStrategy getStrategy(int optionType) {
 		switch (optionType) {
 		case IOption.INCLUDE_PATH:
 			return new IncludePathStrategy();
-
 		default:
-			throw new IllegalArgumentException("Illegal Argument: "+optionType); //$NON-NLS-1$
+			throw new IllegalArgumentException("Illegal Argument: " + optionType);
 		}
 	}
-
-
 }

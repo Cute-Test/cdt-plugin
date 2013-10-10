@@ -57,7 +57,7 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	private void addTestFiles(ICuteHeaders cuteHeader ) {
 		try{
 
-			cswh.copyFiles(srcFolder,cuteHeader, cuteFolder);
+			cswh.copyExampleTestFiles(srcFolder, cuteHeader);
 			//for indirect reference, check dependencies
 
 			IFile file=srcFolder.getFile("Test.cpp");
