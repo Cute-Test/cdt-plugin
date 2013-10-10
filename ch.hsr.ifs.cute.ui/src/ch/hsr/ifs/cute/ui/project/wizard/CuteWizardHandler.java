@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizard;
@@ -107,8 +106,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 	protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
-		QualifiedName key = new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME);
-		project.setPersistentProperty(key, getCuteVersion().getVersionString());
+		project.setPersistentProperty(UiPlugin.CUTE_VERSION_PROPERTY_NAME, getCuteVersion().getVersionString());
 		createCuteProjectFolders(project);
 		callAdditionalHandlers(project, pm);
 		ManagedBuildManager.saveBuildInfo(project, true);

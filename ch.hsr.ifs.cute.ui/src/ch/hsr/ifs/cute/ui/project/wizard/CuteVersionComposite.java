@@ -29,13 +29,13 @@ public class CuteVersionComposite extends Composite {
 
 	private Combo combo;
 
-	/**
-	 * @param parent
-	 * @param style
-	 */
-	public CuteVersionComposite(Composite parent) {
+	public CuteVersionComposite(Composite parent, String currentCuteHeadersVersionName) {
 		super(parent, SWT.NULL);
-		createCuteVersionCompsite(parent);
+		createCuteVersionCompsite(parent, currentCuteHeadersVersionName);
+	}
+
+	public CuteVersionComposite(Composite parent) {
+		this(parent, null);
 	}
 
 	public String getVersionString() {
@@ -53,7 +53,7 @@ public class CuteVersionComposite extends Composite {
 		return !combo.getText().isEmpty(); //$NON-NLS-1$
 	}
 
-	private void createCuteVersionCompsite(Composite parent) {
+	private void createCuteVersionCompsite(Composite parent, String currentCuteHeadersVersionName) {
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
@@ -63,15 +63,23 @@ public class CuteVersionComposite extends Composite {
 		Label label = new Label(this, SWT.HORIZONTAL);
 		label.setText(Messages.getString("CuteVersionComposite.CuteVersion")); //$NON-NLS-1$
 
+		int indexToSelect = 0;
+		int i = 0;
 		combo = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN);
 		SortedSet<ICuteHeaders> set = UiPlugin.getInstalledCuteHeaders();
 		if (!set.isEmpty()) {
 			for (ICuteHeaders cuteHeaders : set) {
-				combo.add(cuteHeaders.getVersionString());
+				String versionString = cuteHeaders.getVersionString();
+				combo.add(versionString);
+				if (versionString.equals(currentCuteHeadersVersionName)) {
+					indexToSelect = i;
+				}
+				i++;
 			}
 			combo.setText(combo.getItem(0));
 		}
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		combo.select(indexToSelect);
 		combo.setLayoutData(data);
 	}
 

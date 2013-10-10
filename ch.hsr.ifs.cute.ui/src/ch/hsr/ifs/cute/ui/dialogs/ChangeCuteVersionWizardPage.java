@@ -28,24 +28,23 @@ public class ChangeCuteVersionWizardPage extends WizardPage {
 	
 	private Composite composite;
 	private CuteVersionComposite cuteVersionComp;
-	private ImageDescriptor imageDesc;
+	private final ImageDescriptor imageDesc;
+	private final String currentCuteHeadersVersionName;
 
-	protected ChangeCuteVersionWizardPage() {
-		super("changeCuteVersionPage"); //$NON-NLS-1$
-		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
+	protected ChangeCuteVersionWizardPage(String currentCuteHeadersVersionName) {
+		super("changeCuteVersionPage");
+		this.currentCuteHeadersVersionName = currentCuteHeadersVersionName;
+		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	public void createControl(Composite parent) {
 		composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		setTitle(Messages.getString("ChangeCuteVersionWizardPage.changeCuteVersion")); //$NON-NLS-1$
+		setTitle(Messages.getString("ChangeCuteVersionWizardPage.changeCuteVersion"));
 
-		cuteVersionComp = new CuteVersionComposite(composite);
+		cuteVersionComp = new CuteVersionComposite(composite, currentCuteHeadersVersionName);
 		setControl(composite);
 	}
 
@@ -57,7 +56,4 @@ public class ChangeCuteVersionWizardPage extends WizardPage {
 	public String getVersionString() {
 		return cuteVersionComp.getVersionString();
 	}
-	
-	
-
 }

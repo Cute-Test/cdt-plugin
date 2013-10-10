@@ -55,7 +55,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	/**
 	 * @since 4.0
 	 */
-	public static final String CUTE_VERSION_PROPERTY_NAME = "cuteVersion"; //$NON-NLS-1$
+	public static final QualifiedName CUTE_VERSION_PROPERTY_NAME = new QualifiedName(PLUGIN_ID, "cuteVersion"); //$NON-NLS-1$
 	
 	/**
 	 * The constructor
@@ -67,6 +67,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
@@ -76,6 +77,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -98,8 +100,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	 * @since 4.0
 	 */
 	public static ICuteHeaders getCuteVersionString(IProject project) throws CoreException {
-		QualifiedName key = new QualifiedName(PLUGIN_ID, CUTE_VERSION_PROPERTY_NAME);
-		String versionString = project.getPersistentProperty(key);
+		String versionString = project.getPersistentProperty(CUTE_VERSION_PROPERTY_NAME);
 		if(versionString != null) {
 			return getCuteVersion(versionString);
 		}else { //find out version by parsing the version header
@@ -115,7 +116,7 @@ public class UiPlugin extends AbstractUIPlugin {
 						Matcher matcher = versPtr.matcher(line);
 						if(matcher.matches()) {
 							cuteVersionstring = "CUTE Headers " + matcher.group(1); //$NON-NLS-1$
-							project.setPersistentProperty(key, cuteVersionstring);
+							project.setPersistentProperty(CUTE_VERSION_PROPERTY_NAME, cuteVersionstring);
 							break;
 						}
 					}
