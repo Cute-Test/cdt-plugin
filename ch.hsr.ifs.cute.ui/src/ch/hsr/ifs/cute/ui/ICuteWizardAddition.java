@@ -9,6 +9,7 @@
 package ch.hsr.ifs.cute.ui;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 /**
  * @author Emanuel Graf IFS
@@ -17,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
  */
 public interface ICuteWizardAddition {
 	
-	public void createComposite(Composite comp);
+	public Control createComposite(Composite parent);
 	
 	public ICuteWizardAdditionHandler getHandler();
 

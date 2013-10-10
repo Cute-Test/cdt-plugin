@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class NewCuteSuiteWizardCustomPage extends CuteVersionWizardPage {
 
-	String errmsg = null;
-	private Text suitenameText = null;
+	String errmsg;
+	private Text suitenameText;
 
 	public NewCuteSuiteWizardCustomPage(IWizardPage nextPage, IWizardPage previousPage) {
 		super(nextPage, previousPage, "ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage");
@@ -57,19 +57,12 @@ public class NewCuteSuiteWizardCustomPage extends CuteVersionWizardPage {
 	}
 
 	private void addSuiteNamePart() {
-		GridData gdLabe = new GridData();
-		gdLabe.horizontalSpan = 1;
-		gdLabe.verticalIndent = 20;
 		Label suitenameLabel = new Label(composite, SWT.NONE);
 		suitenameLabel.setText(Messages.getString("NewCuteSuiteWizardCustomPage.TestSuiteName"));
-		suitenameLabel.setLayoutData(gdLabe);
 
-		GridData gdText = new GridData();
-		gdText.horizontalSpan = 2;
-		gdText.horizontalAlignment = SWT.FILL;
-		gdText.verticalIndent = 20;
-		suitenameText = createSingleText(composite, 2);
-		suitenameText.setLayoutData(gdText);
+		suitenameText = new Text(composite, SWT.SINGLE | SWT.BORDER);
+		suitenameText.setFont(composite.getFont());
+		suitenameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		suitenameText.setText(Messages.getString("NewCuteSuiteWizardCustomPage.DefaultSuiteName"));
 		addSuiteNameListener();
 	}
@@ -86,15 +79,6 @@ public class NewCuteSuiteWizardCustomPage extends CuteVersionWizardPage {
 				iwc.updateWindowTitle();
 			}
 		});
-	}
-
-	private Text createSingleText(Composite parent, int hspan) {
-		Text t = new Text(parent, SWT.SINGLE | SWT.BORDER);
-		t.setFont(parent.getFont());
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = hspan;
-		t.setLayoutData(gd);
-		return t;
 	}
 
 	public String getSuiteName() {

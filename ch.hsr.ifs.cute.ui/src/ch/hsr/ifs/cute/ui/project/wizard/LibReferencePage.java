@@ -58,7 +58,7 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 
 	@Override
 	public String getName() {
-		return Messages.getString("LibReferencePage.ReferenceToLib"); //$NON-NLS-1$
+		return Messages.getString("LibReferencePage.ReferenceToLib");
 	}
 
 	@Override
@@ -73,6 +73,7 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 		GridData data = new GridData(GridData.FILL_BOTH);
 		data.grabExcessHorizontalSpace = true;
 		data.verticalIndent = 20;
+		data.horizontalSpan = GRID_WIDTH;
 		listViewer.getTable().setLayoutData(data);
 
 		listViewer.setLabelProvider(WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider());
@@ -104,7 +105,7 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 
 	@Override
 	public String getDescription() {
-		return Messages.getString("LibReferencePage.ChooseLib"); //$NON-NLS-1$
+		return Messages.getString("LibReferencePage.ChooseLib");
 	}
 
 	boolean errorMessageFlag = false;
@@ -116,7 +117,7 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 
 	@Override
 	public String getTitle() {
-		return Messages.getString("LibReferencePage.LibProjectTest"); //$NON-NLS-1$
+		return Messages.getString("LibReferencePage.LibProjectTest");
 	}
 
 	public Vector<IProject> getCheckedProjects() {

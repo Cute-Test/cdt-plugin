@@ -35,6 +35,7 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
  */
 public class CuteVersionWizardPage extends MBSCustomPage {
 
+	protected static final int GRID_WIDTH = 2;
 	protected Composite composite;
 	private final IWizardPage nextPage;
 	private final IWizardPage previousPage;
@@ -63,9 +64,9 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	}
 
 	public void createControl(Composite parent) {
-		composite = new Composite(parent, SWT.NULL);
-		composite.setLayout(new GridLayout());
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite = new Composite(parent, SWT.FILL);
+		composite.setLayout(new GridLayout(GRID_WIDTH, false));
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		addCuteHeaderVersionSelectionDropdown();
 		addWizardPageAdditions();
@@ -73,11 +74,17 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 
 	private void addCuteHeaderVersionSelectionDropdown() {
 		cuteVersionComp = new CuteVersionComposite(composite);
+		GridData gridData = new GridData();
+		gridData.horizontalSpan = GRID_WIDTH;
+		cuteVersionComp.setLayoutData(gridData);
 	}
 
 	private void addWizardPageAdditions() {
 		for (ICuteWizardAddition addition : getAdditions()) {
-			addition.createComposite(composite);
+			Control newChild = addition.createComposite(composite);
+			GridData gridData = new GridData();
+			gridData.horizontalSpan = GRID_WIDTH;
+			newChild.setLayoutData(gridData);
 		}
 	}
 

@@ -54,17 +54,16 @@ public class CuteVersionComposite extends Composite {
 	}
 
 	private void createCuteVersionCompsite(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
-		composite.setLayout(layout);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		setLayout(layout);
+		setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Label label = new Label(composite, SWT.HORIZONTAL);
+		Label label = new Label(this, SWT.HORIZONTAL);
 		label.setText(Messages.getString("CuteVersionComposite.CuteVersion")); //$NON-NLS-1$
 
-		combo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN);
+		combo = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN);
 		SortedSet<ICuteHeaders> set = UiPlugin.getInstalledCuteHeaders();
 		if (!set.isEmpty()) {
 			for (ICuteHeaders cuteHeaders : set) {
