@@ -18,12 +18,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class NewCuteSuiteWizardCustomPage extends CuteVersionWizardPage {
+public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 
 	String errmsg;
 	private Text suitenameText;
 
-	public NewCuteSuiteWizardCustomPage(IWizardPage nextPage, IWizardPage previousPage) {
+	public NewCuteSuiteProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage) {
 		super(nextPage, previousPage, "ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage");
 	}
 

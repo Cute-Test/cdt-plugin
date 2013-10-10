@@ -186,7 +186,7 @@
              name="CUTE Project">
        </wizard>
        <wizard
-             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteWizard"
+             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteProjectWizard"
              name="CUTE Suite">
        </wizard>
        <wizard

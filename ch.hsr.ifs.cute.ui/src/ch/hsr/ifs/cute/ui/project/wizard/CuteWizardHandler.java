@@ -45,7 +45,7 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
  */
 public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrategyProvider {
 
-	private final CuteVersionWizardPage cuteVersionWizardPage;
+	private final NewCuteProjectWizardPage cuteVersionWizardPage;
 
 	protected CuteWizardHandler(Composite p, IWizard w) {
 		super(new CuteBuildPropertyValue(), p, w);
@@ -61,8 +61,8 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		return cuteVersionWizardPage;
 	}
 
-	protected CuteVersionWizardPage initPage() {
-		return new CuteVersionWizardPage(getConfigPage(), getStartingPage());
+	protected NewCuteProjectWizardPage initPage() {
+		return new NewCuteProjectWizardPage(getConfigPage(), getStartingPage());
 	}
 
 	@Override

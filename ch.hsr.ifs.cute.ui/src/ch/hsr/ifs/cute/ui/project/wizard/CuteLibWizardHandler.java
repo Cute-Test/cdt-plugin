@@ -46,7 +46,7 @@ import ch.hsr.ifs.cute.ui.ProjectTools;
  */
 public class CuteLibWizardHandler extends CuteWizardHandler {
 
-	private LibReferencePage libRefPage;
+	private NewCuteLibTestProjectWizardPage libRefPage;
 
 	public CuteLibWizardHandler(Composite p, IWizard w) {
 		super(p, w);
@@ -57,8 +57,8 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	}
 
 	@Override
-	protected CuteVersionWizardPage initPage() {
-		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(), getWizardContainer(getWizard()));
+	protected NewCuteProjectWizardPage initPage() {
+		libRefPage = new NewCuteLibTestProjectWizardPage(getConfigPage(), getStartingPage(), getWizardContainer(getWizard()));
 		return libRefPage;
 	}
 

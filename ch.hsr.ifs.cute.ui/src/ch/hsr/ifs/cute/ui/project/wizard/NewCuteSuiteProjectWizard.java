@@ -14,23 +14,15 @@ import org.eclipse.swt.graphics.Image;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 
-public class NewCuteSuiteWizard extends NewCuteProjectCategoryWizard {
-	/*
-	 * left hand side tree
-	 * 
-	 * @see ch.hsr.ifs.cutelauncher.ui.NewCuteProjectWizard#getEntryDescriptor(ch.hsr.ifs.cutelauncher.ui.CuteWizardHandler)
-	 */
+public class NewCuteSuiteProjectWizard extends NewCuteProjectCategoryWizard {
+
 	@Override
 	protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
-		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.png").createImage(); //$NON-NLS-1$
-		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.SuiteProjectType", ID, Messages.getString("NewCuteSuiteWizard.CuteSuiteModule"), false, handler, proImg); //$NON-NLS-1$ //$NON-NLS-2$
+		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.png").createImage();
+		String name = Messages.getString("NewCuteSuiteWizard.CuteSuiteProject");
+		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.SuiteProjectType", ID, name, false, handler, proImg);
 	}
 
-	/*
-	 * The actual execution of the wizard
-	 * 
-	 * @see ch.hsr.ifs.cutelauncher.ui.NewCuteProjectWizard#getHandler(org.eclipse.jface.wizard.IWizard)
-	 */
 	@Override
 	protected CuteWizardHandler getHandler(IWizard wizard) {
 		return new CuteSuiteWizardHandler(parent, wizard);

@@ -34,7 +34,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  * @author Emanuel Graf
  * 
  */
-public class LibReferencePage extends CuteVersionWizardPage implements ICheckStateListener {
+public class NewCuteLibTestProjectWizardPage extends NewCuteProjectWizardPage implements ICheckStateListener {
 
 	private CheckboxTableViewer listViewer;
 	private Vector<IProject> libProjects;
@@ -43,7 +43,7 @@ public class LibReferencePage extends CuteVersionWizardPage implements ICheckSta
 	/**
 	 * @since 4.0
 	 */
-	public LibReferencePage(IWizardPage nextPage, IWizardPage previousPage, IWizardContainer wc) {
+	public NewCuteLibTestProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage, IWizardContainer wc) {
 		super(nextPage, previousPage, "ch.hsr.ifs.cutelauncher.ui.LibRefPage");
 		wizardDialog = wc;
 	}

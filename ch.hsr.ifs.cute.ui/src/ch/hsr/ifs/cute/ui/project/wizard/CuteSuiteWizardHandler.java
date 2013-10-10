@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
-	private NewCuteSuiteWizardCustomPage suitewizPage;
+	private NewCuteSuiteProjectWizardPage suitewizPage;
 	String suitename;
 
 	public CuteSuiteWizardHandler(String suitename) {
@@ -36,8 +36,8 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 
 	@Override
-	protected CuteVersionWizardPage initPage() {
-		suitewizPage = new NewCuteSuiteWizardCustomPage(getConfigPage(), getStartingPage());
+	protected NewCuteProjectWizardPage initPage() {
+		suitewizPage = new NewCuteSuiteProjectWizardPage(getConfigPage(), getStartingPage());
 		return suitewizPage;
 	}
 

@@ -33,7 +33,7 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
  * @since 4.0
  * 
  */
-public class CuteVersionWizardPage extends MBSCustomPage {
+public class NewCuteProjectWizardPage extends MBSCustomPage {
 
 	protected static final int GRID_WIDTH = 2;
 	protected Composite composite;
@@ -43,14 +43,14 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	private final ImageDescriptor imageDesc;
 	private ArrayList<ICuteWizardAddition> additions;
 
-	public CuteVersionWizardPage(IWizardPage nextPage, IWizardPage previousPage, String pageId) {
+	public NewCuteProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage, String pageId) {
 		super(pageId);
 		this.nextPage = nextPage;
 		this.previousPage = previousPage;
-		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png"); //$NON-NLS-1$
+		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png");
 	}
 
-	public CuteVersionWizardPage(IWizardPage nextPage, IWizardPage previousPage) {
+	public NewCuteProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage) {
 		this(nextPage, previousPage, "ch.hsr.ifs.cutelauncher.ui.CuteVersionPage");
 	}
 
@@ -60,7 +60,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	}
 
 	public String getName() {
-		return Messages.getString("LibReferencePage.ReferenceToLib"); //$NON-NLS-1$
+		return Messages.getString("LibReferencePage.ReferenceToLib");
 	}
 
 	public void createControl(Composite parent) {
@@ -97,7 +97,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	}
 
 	public String getDescription() {
-		return Messages.getString("CuteVersionWizardPage.ChooseCuteVersion"); //$NON-NLS-1$
+		return Messages.getString("CuteVersionWizardPage.CuteProjectPageDescription");
 	}
 
 	public String getErrorMessage() {
@@ -113,7 +113,7 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 	}
 
 	public String getTitle() {
-		return Messages.getString("CuteVersionWizardPage.CuteVersion"); //$NON-NLS-1$
+		return Messages.getString("CuteVersionWizardPage.CuteVersion");
 	}
 
 	public void performHelp() {
@@ -157,12 +157,12 @@ public class CuteVersionWizardPage extends MBSCustomPage {
 		if (additions == null) {
 			additions = new ArrayList<ICuteWizardAddition>();
 			try {
-				IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(UiPlugin.PLUGIN_ID, "wizardAddition"); //$NON-NLS-1$
+				IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(UiPlugin.PLUGIN_ID, "wizardAddition");
 				if (extension != null) {
 					IExtension[] extensions = extension.getExtensions();
 					for (IExtension extension2 : extensions) {
 						IConfigurationElement[] configElements = extension2.getConfigurationElements();
-						String className = configElements[0].getAttribute("compositeProvider"); //$NON-NLS-1$
+						String className = configElements[0].getAttribute("compositeProvider");
 						Object newInstance = ((Class<?>) Platform.getBundle(extension2.getContributor().getName()).loadClass(className))
 								.newInstance();
 						additions.add((ICuteWizardAddition) newInstance);
