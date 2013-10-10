@@ -30,9 +30,9 @@ public class NewCuteProjectCategoryWizard extends AbstractCWizard {
 		if (wizard instanceof CCProjectWizard) {
 			CuteWizardHandler handler = getHandler(wizard);
 			IToolChain[] tcs = ManagedBuildManager.getExtensionsToolChains(MBSWizardHandler.ARTIFACT, new CuteBuildPropertyValue().getId(), false);
-			for (int j = 0; j < tcs.length; j++) {
-				if (isValid(tcs[j], supportedOnly, wizard)) {
-					handler.addTc(tcs[j]);
+			for (IToolChain curToolChain : tcs) {
+				if (isValid(curToolChain, supportedOnly, wizard)) {
+					handler.addTc(curToolChain);
 				}
 			}
 			EntryDescriptor data = getEntryDescriptor(handler);

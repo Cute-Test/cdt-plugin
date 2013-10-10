@@ -47,18 +47,22 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 	private final CuteVersionWizardPage cuteVersionWizardPage;
 
+	protected CuteWizardHandler(Composite p, IWizard w) {
+		super(new CuteBuildPropertyValue(), p, w);
+		cuteVersionWizardPage = initPage();
+		cuteVersionWizardPage.setWizard(w);
+
+		MBSCustomPageManager.init();
+		MBSCustomPageManager.addStockPage(cuteVersionWizardPage, cuteVersionWizardPage.getPageID());
+	}
+
 	@Override
 	public IWizardPage getSpecificPage() {
 		return cuteVersionWizardPage;
 	}
 
-	public CuteWizardHandler(Composite p, IWizard w) {
-		super(new CuteBuildPropertyValue(), p, w);
-		cuteVersionWizardPage = new CuteVersionWizardPage(getConfigPage(), getStartingPage());
-		cuteVersionWizardPage.setWizard(w);
-
-		MBSCustomPageManager.init();
-		MBSCustomPageManager.addStockPage(cuteVersionWizardPage, cuteVersionWizardPage.getPageID());
+	protected CuteVersionWizardPage initPage() {
+		return new CuteVersionWizardPage(getConfigPage(), getStartingPage());
 	}
 
 	@Override
@@ -138,7 +142,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), srcFile, true);
 	}
 
-	protected ICuteHeaders getCuteVersion() {
+	private ICuteHeaders getCuteVersion() {
 		return UiPlugin.getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
 	}
 
