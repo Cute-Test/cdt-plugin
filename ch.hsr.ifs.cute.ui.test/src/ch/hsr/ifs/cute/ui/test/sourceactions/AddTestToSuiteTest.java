@@ -13,7 +13,7 @@ import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.core.resources.IFile;
 import org.osgi.framework.Bundle;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 
 /**
  * @author Emanuel Graf IFS
@@ -57,7 +57,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	//
 	public void testAddFunctorToSuite() throws Exception {
-		assertEquals(Bundle.ACTIVE, UiPlugin.getDefault().getBundle().getState());
+		assertEquals(Bundle.ACTIVE, CuteUIPlugin.getDefault().getBundle().getState());
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "functor.cpp"); //$NON-NLS-1$
 		runCommand(file, contentsForTest[0].indexOf("functor"), 3, COMMAND_ID); //$NON-NLS-1$
@@ -93,7 +93,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	//
 	public void testAddFunctorWithConstructorToSuite() throws Exception {
-		assertEquals(Bundle.ACTIVE, UiPlugin.getDefault().getBundle().getState());
+		assertEquals(Bundle.ACTIVE, CuteUIPlugin.getDefault().getBundle().getState());
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "functor.cpp"); //$NON-NLS-1$
 		runCommand(file, contentsForTest[0].indexOf("functor"), 3, COMMAND_ID); //$NON-NLS-1$
@@ -129,7 +129,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	//
 	public void testAddFunctorWithNonDefaultConstructorToSuite() throws Exception {
-		assertEquals(Bundle.ACTIVE, UiPlugin.getDefault().getBundle().getState());
+		assertEquals(Bundle.ACTIVE, CuteUIPlugin.getDefault().getBundle().getState());
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "functor.cpp"); //$NON-NLS-1$
 		runCommand(file, contentsForTest[0].indexOf("functor"), 3, COMMAND_ID); //$NON-NLS-1$

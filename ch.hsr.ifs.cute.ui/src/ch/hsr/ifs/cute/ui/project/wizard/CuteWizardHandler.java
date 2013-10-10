@@ -34,7 +34,7 @@ import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.IIncludeStrategyProvider;
 import ch.hsr.ifs.cute.ui.IncludePathStrategy;
 import ch.hsr.ifs.cute.ui.ProjectTools;
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -89,9 +89,9 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		try {
 			getWizard().getContainer().run(false, true, op);
 		} catch (InvocationTargetException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		} catch (InterruptedException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		}
 
 	}
@@ -100,13 +100,13 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		try {
 			createCuteProject(newProject, monitor);
 		} catch (CoreException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		}
 	}
 
 	protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
-		project.setPersistentProperty(UiPlugin.CUTE_VERSION_PROPERTY_NAME, getCuteVersion().getVersionString());
+		project.setPersistentProperty(CuteUIPlugin.CUTE_VERSION_PROPERTY_NAME, getCuteVersion().getVersionString());
 		createCuteProjectFolders(project);
 		callAdditionalHandlers(project, pm);
 		ManagedBuildManager.saveBuildInfo(project, true);
@@ -141,7 +141,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	}
 
 	private ICuteHeaders getCuteVersion() {
-		return UiPlugin.getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
+		return CuteUIPlugin.getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
 	}
 
 	protected void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {

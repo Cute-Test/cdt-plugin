@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
@@ -66,7 +66,7 @@ public class CuteVersionComposite extends Composite {
 		int indexToSelect = 0;
 		int i = 0;
 		combo = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN);
-		SortedSet<ICuteHeaders> set = UiPlugin.getInstalledCuteHeaders();
+		SortedSet<ICuteHeaders> set = CuteUIPlugin.getInstalledCuteHeaders();
 		if (!set.isEmpty()) {
 			for (ICuteHeaders cuteHeaders : set) {
 				String versionString = cuteHeaders.getVersionString();

@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
@@ -39,7 +39,7 @@ public class ChangeCuteVersionWizard extends Wizard {
 	public ChangeCuteVersionWizard(IProject project) {
 		this.project = project;
 		try {
-			activeHeadersVersionName = project.getPersistentProperty(UiPlugin.CUTE_VERSION_PROPERTY_NAME);
+			activeHeadersVersionName = project.getPersistentProperty(CuteUIPlugin.CUTE_VERSION_PROPERTY_NAME);
 		} catch (CoreException e) {
 			//activeHeadersVersionName remains null
 		}
@@ -81,7 +81,7 @@ public class ChangeCuteVersionWizard extends Wizard {
 						mon.worked(1);
 					}
 					cuteVersion.copyHeaderFiles(cuteFolder, mon.newChild(files.length));
-					project.setPersistentProperty(UiPlugin.CUTE_VERSION_PROPERTY_NAME, cuteVersion.getVersionString());
+					project.setPersistentProperty(CuteUIPlugin.CUTE_VERSION_PROPERTY_NAME, cuteVersion.getVersionString());
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
@@ -90,7 +90,7 @@ public class ChangeCuteVersionWizard extends Wizard {
 	}
 
 	protected ICuteHeaders getCuteVersion(String cuteVersionString) {
-		SortedSet<ICuteHeaders> headers = UiPlugin.getInstalledCuteHeaders();
+		SortedSet<ICuteHeaders> headers = CuteUIPlugin.getInstalledCuteHeaders();
 		for (ICuteHeaders cuteHeaders : headers) {
 			if (cuteVersionString.equals(cuteHeaders.getVersionString()))
 				return cuteHeaders;

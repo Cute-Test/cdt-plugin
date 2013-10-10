@@ -18,7 +18,7 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 
 /**
  * @author Emanuel Graf
@@ -26,7 +26,7 @@ import ch.hsr.ifs.cute.ui.UiPlugin;
  */
 public class CuteNature implements IProjectNature {
 	
-	public static final String CUTE_NATURE_ID = UiPlugin.PLUGIN_ID + ".cutenature"; //$NON-NLS-1$
+	public static final String CUTE_NATURE_ID = CuteUIPlugin.PLUGIN_ID + ".cutenature"; //$NON-NLS-1$
 	
 	private IProject project;
 

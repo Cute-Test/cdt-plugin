@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 
 /**
  * @author Emanuel Graf
@@ -47,7 +47,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage {
 		super(pageId);
 		this.nextPage = nextPage;
 		this.previousPage = previousPage;
-		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png");
+		imageDesc = CuteUIPlugin.getImageDescriptor("cute_logo.png");
 	}
 
 	public NewCuteProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage) {
@@ -157,7 +157,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage {
 		if (additions == null) {
 			additions = new ArrayList<ICuteWizardAddition>();
 			try {
-				IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(UiPlugin.PLUGIN_ID, "wizardAddition");
+				IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteUIPlugin.PLUGIN_ID, "wizardAddition");
 				if (extension != null) {
 					IExtension[] extensions = extension.getExtensions();
 					for (IExtension extension2 : extensions) {

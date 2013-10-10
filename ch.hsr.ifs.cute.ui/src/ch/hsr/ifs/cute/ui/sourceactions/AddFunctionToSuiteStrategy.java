@@ -14,7 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 
 /**
  * @author Emanuel Graf IFS
@@ -47,7 +47,7 @@ public class AddFunctionToSuiteStrategy extends AddPushbackStatementStrategy {
 			}
 			return mEdit;
 		} catch (InterruptedException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		} finally {
 			index.releaseReadLock();
 		}

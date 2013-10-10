@@ -16,7 +16,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteVersionComposite;
 
 /**
@@ -34,7 +34,7 @@ public class ChangeCuteVersionWizardPage extends WizardPage {
 	protected ChangeCuteVersionWizardPage(String currentCuteHeadersVersionName) {
 		super("changeCuteVersionPage");
 		this.currentCuteHeadersVersionName = currentCuteHeadersVersionName;
-		imageDesc = UiPlugin.getImageDescriptor("cute_logo.png");
+		imageDesc = CuteUIPlugin.getImageDescriptor("cute_logo.png");
 	}
 
 	public void createControl(Composite parent) {

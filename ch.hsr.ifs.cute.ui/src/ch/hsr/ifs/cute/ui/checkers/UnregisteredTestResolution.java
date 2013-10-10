@@ -21,7 +21,7 @@ import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.sourceactions.AbstractFunctionAction;
 import ch.hsr.ifs.cute.ui.sourceactions.AddTestToSuite;
 
@@ -50,11 +50,11 @@ public class UnregisteredTestResolution extends AbstractCodanCMarkerResolution {
 				}
 			}
 		} catch (CoreException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		} catch (MalformedTreeException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		} catch (BadLocationException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		}
 	}
 

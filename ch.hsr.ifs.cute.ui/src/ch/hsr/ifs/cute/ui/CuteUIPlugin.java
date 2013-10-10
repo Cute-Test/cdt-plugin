@@ -42,13 +42,13 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class UiPlugin extends AbstractUIPlugin {
+public class CuteUIPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.ui"; //$NON-NLS-1$
 
 	// The shared instance
-	private static UiPlugin plugin;
+	private static CuteUIPlugin plugin;
 	
 	private static final IPath ICONS_PATH= new Path("$nl$/icons"); //$NON-NLS-1$
 
@@ -60,7 +60,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	/**
 	 * The constructor
 	 */
-	public UiPlugin() {
+	public CuteUIPlugin() {
 	}
 
 	/*
@@ -136,7 +136,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static UiPlugin getDefault() {
+	public static CuteUIPlugin getDefault() {
 		return plugin;
 	}
 	
@@ -155,7 +155,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	public static SortedSet<ICuteHeaders> getInstalledCuteHeaders(){
 		SortedSet<ICuteHeaders> headers = new TreeSet<ICuteHeaders>(new CuteHeaderComparator());
 		try{
-			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(UiPlugin.PLUGIN_ID, "Headers"); //$NON-NLS-1$
+			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteUIPlugin.PLUGIN_ID, "Headers"); //$NON-NLS-1$
 			if (extension != null) {
 				IExtension[] extensions = extension.getExtensions();
 				for (IExtension extension2 : extensions) {
