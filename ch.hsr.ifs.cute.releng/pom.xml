@@ -79,7 +79,7 @@
 		<!--<module>../ch.hsr.ifs.cute.swtbottest</module> -->
 		<!-- CUTE Headers -->
 		<module>../ch.hsr.ifs.cute.headers.base.test</module>
-		<module>../ch.hsr.ifs.cute.headers.1_5.feature</module>
+		<!--  <module>../ch.hsr.ifs.cute.headers.1_5.feature</module>
 		<module>../ch.hsr.ifs.cute.headers.1_5</module>
 		<module>../ch.hsr.ifs.cute.headers.1_5.test</module>
 		<module>../ch.hsr.ifs.cute.headers.1_6.feature</module>
@@ -90,7 +90,7 @@
 		<module>../ch.hsr.ifs.cute.headers.1_7.test</module>
 		<module>../ch.hsr.ifs.cute.headers.2_0.feature</module>
 		<module>../ch.hsr.ifs.cute.headers.2_0</module>
-		<module>../ch.hsr.ifs.cute.headers.2_0.test</module>
+		<module>../ch.hsr.ifs.cute.headers.2_0.test</module> -->
 		<!-- GCOV -->
 		<module>../ch.hsr.ifs.cute.gcov.feature</module>
 		<module>../ch.hsr.ifs.cute.gcov</module>

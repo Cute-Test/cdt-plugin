@@ -20,7 +20,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.cute.headers.CuteHeaders_1_7;
+import ch.hsr.ifs.cute.headers.headers1_7.CuteHeaders_1_7;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
 

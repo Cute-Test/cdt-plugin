@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface ICuteHeaders {
 	
-	double getVersionNumber();
+	String getVersionNumber();
 	String getVersionString();
 
 	void copyHeaderFiles(IContainer container, IProgressMonitor monitor) throws CoreException;

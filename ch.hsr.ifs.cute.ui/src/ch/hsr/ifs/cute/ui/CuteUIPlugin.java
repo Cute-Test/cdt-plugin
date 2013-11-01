@@ -118,23 +118,27 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 	public static synchronized SortedSet<ICuteHeaders> getInstalledCuteHeaders() {
 		if (installedHeaders == null) {
 			installedHeaders = new TreeSet<ICuteHeaders>(new CuteHeaderComparator());
-			try {
-				IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteUIPlugin.PLUGIN_ID, "Headers");
-				if (extension != null) {
-					IExtension[] extensions = extension.getExtensions();
-					for (IExtension extension2 : extensions) {
-						IConfigurationElement[] configElements = extension2.getConfigurationElements();
-						String className = configElements[0].getAttribute("class");
-						Class<?> obj = Platform.getBundle(extension2.getContributor().getName()).loadClass(className);
-						installedHeaders.add((ICuteHeaders) obj.newInstance());
-					}
+			IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CuteUIPlugin.PLUGIN_ID, "Headers");
+			if (extensionPoint != null) {
+				IExtension[] extensions = extensionPoint.getExtensions();
+				for (IExtension extension : extensions) {
+					addHeaderInstance(extension);
 				}
-			} catch (ClassNotFoundException e) {
-			} catch (InstantiationException e) {
-			} catch (IllegalAccessException e) {
 			}
 		}
 		return new TreeSet<ICuteHeaders>(installedHeaders);
+	}
+
+	private static void addHeaderInstance(IExtension extension) {
+		try {
+			IConfigurationElement[] configElements = extension.getConfigurationElements();
+			String className = configElements[0].getAttribute("class");
+			Class<?> obj = Platform.getBundle(extension.getContributor().getName()).loadClass(className);
+			installedHeaders.add((ICuteHeaders) obj.newInstance());
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
+		}
 	}
 
 	public static void log(IStatus status) {
