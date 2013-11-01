@@ -39,165 +39,114 @@ import org.osgi.framework.BundleContext;
 import ch.hsr.ifs.cute.ui.project.headers.CuteHeaderComparator;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
-/**
- * The activator class controls the plug-in life cycle
- */
 public class CuteUIPlugin extends AbstractUIPlugin {
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.ui"; //$NON-NLS-1$
-
-	// The shared instance
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.ui";
 	private static CuteUIPlugin plugin;
-	
-	private static final IPath ICONS_PATH= new Path("$nl$/icons"); //$NON-NLS-1$
+	private static final IPath ICONS_PATH = new Path("$nl$/icons");
+	public static final QualifiedName CUTE_VERSION_PROPERTY_NAME = new QualifiedName(PLUGIN_ID, "cuteVersion");
+	public static SortedSet<ICuteHeaders> installedHeaders;
 
-	/**
-	 * @since 4.0
-	 */
-	public static final QualifiedName CUTE_VERSION_PROPERTY_NAME = new QualifiedName(PLUGIN_ID, "cuteVersion"); //$NON-NLS-1$
-	
-	/**
-	 * The constructor
-	 */
 	public CuteUIPlugin() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
 	}
 
-	/**
-	 * @since 4.0
-	 */
 	public static ICuteHeaders getCuteVersion(String cuteVersionString) {
 		SortedSet<ICuteHeaders> headers = getInstalledCuteHeaders();
 		for (ICuteHeaders cuteHeaders : headers) {
-			if(cuteVersionString.equals(cuteHeaders.getVersionString()))
+			if (cuteVersionString.equals(cuteHeaders.getVersionString()))
 				return cuteHeaders;
 		}
-		
 		return null;
 	}
 
-	/**
-	 * @since 4.0
-	 */
-	public static ICuteHeaders getCuteVersionString(IProject project) throws CoreException {
+	public static ICuteHeaders getCuteVersion(IProject project) throws CoreException {
 		String versionString = project.getPersistentProperty(CUTE_VERSION_PROPERTY_NAME);
-		if(versionString != null) {
+		if (versionString != null) {
 			return getCuteVersion(versionString);
-		}else { //find out version by parsing the version header
-			IResource res = project.findMember("cute/cute_version.h"); //$NON-NLS-1$
+		} else { // find out version by parsing the version header
+			IResource res = project.findMember("cute/cute_version.h");
 			if (res instanceof IFile) {
-				String cuteVersionstring = ""; //$NON-NLS-1$
+				String cuteVersionstring = "";
 				IFile file = (IFile) res;
 				BufferedReader br = new BufferedReader(new InputStreamReader(file.getContents()));
 				String line;
 				try {
-					Pattern versPtr = Pattern.compile("#define CUTE_LIB_VERSION \\\"(\\d\\.\\d\\.\\d)\\\"$"); //$NON-NLS-1$
-					while((line = br.readLine()) != null	) {
+					Pattern versPtr = Pattern.compile("#define CUTE_LIB_VERSION \\\"(\\d\\.\\d\\.\\d)\\\"$");
+					while ((line = br.readLine()) != null) {
 						Matcher matcher = versPtr.matcher(line);
-						if(matcher.matches()) {
-							cuteVersionstring = "CUTE Headers " + matcher.group(1); //$NON-NLS-1$
+						if (matcher.matches()) {
+							cuteVersionstring = "CUTE Headers " + matcher.group(1);
 							project.setPersistentProperty(CUTE_VERSION_PROPERTY_NAME, cuteVersionstring);
 							break;
 						}
 					}
 					return getCuteVersion(cuteVersionstring);
 				} catch (IOException e) {
-				}finally {try {
-					br.close();
-				} catch (IOException e) {}}
+				} finally {
+					try {
+						br.close();
+					} catch (IOException e) {
+					}
+				}
 			}
-			//fallback
+			// fallback
 			return getInstalledCuteHeaders().first();
 		}
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static CuteUIPlugin getDefault() {
 		return plugin;
 	}
-	
-	
-	/**
-	 * @since 4.0
-	 */
+
 	public static ImageDescriptor getImageDescriptor(String relativePath) {
-		IPath path= ICONS_PATH.append(relativePath);
+		IPath path = ICONS_PATH.append(relativePath);
 		return createImageDescriptor(getDefault().getBundle(), path);
 	}
-	
-	/**
-	 * @since 4.0
-	 */
-	public static SortedSet<ICuteHeaders> getInstalledCuteHeaders(){
-		SortedSet<ICuteHeaders> headers = new TreeSet<ICuteHeaders>(new CuteHeaderComparator());
-		try{
-			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteUIPlugin.PLUGIN_ID, "Headers"); //$NON-NLS-1$
-			if (extension != null) {
-				IExtension[] extensions = extension.getExtensions();
-				for (IExtension extension2 : extensions) {
-					IConfigurationElement[] configElements = extension2.getConfigurationElements();
-					String className =configElements[0].getAttribute("class"); //$NON-NLS-1$
-					Class<?> obj = Platform.getBundle(extension2.getContributor().getName()).loadClass(className);
-					headers.add((ICuteHeaders) obj.newInstance());
+
+	public static synchronized SortedSet<ICuteHeaders> getInstalledCuteHeaders() {
+		if (installedHeaders == null) {
+			installedHeaders = new TreeSet<ICuteHeaders>(new CuteHeaderComparator());
+			try {
+				IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(CuteUIPlugin.PLUGIN_ID, "Headers");
+				if (extension != null) {
+					IExtension[] extensions = extension.getExtensions();
+					for (IExtension extension2 : extensions) {
+						IConfigurationElement[] configElements = extension2.getConfigurationElements();
+						String className = configElements[0].getAttribute("class");
+						Class<?> obj = Platform.getBundle(extension2.getContributor().getName()).loadClass(className);
+						installedHeaders.add((ICuteHeaders) obj.newInstance());
+					}
 				}
+			} catch (ClassNotFoundException e) {
+			} catch (InstantiationException e) {
+			} catch (IllegalAccessException e) {
 			}
-		} catch (ClassNotFoundException e) {
-		} catch (InstantiationException e) {
-		} catch (IllegalAccessException e) {
 		}
-		return headers;
+		return new TreeSet<ICuteHeaders>(installedHeaders);
 	}
 
-	/**
-	 * Logs the specified status with this plug-in's log.
-	 * 
-	 * @param status
-	 *            status to log
-	 * @since 4.0
-	 */
 	public static void log(IStatus status) {
 		getDefault().getLog().log(status);
 	}
-	
 
-	/**
-	 * Logs an internal error with the specified throwable
-	 * 
-	 * @param e
-	 *            the exception to be logged
-	 * @since 4.0
-	 */
 	public static void log(Throwable e) {
-		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, "Internal Error", e)); //$NON-NLS-1$
+		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, "Internal Error", e));
 	}
 
-
 	private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {
-		URL url= FileLocator.find(bundle, path, null);
+		URL url = FileLocator.find(bundle, path, null);
 		return ImageDescriptor.createFromURL(url);
 	}
 

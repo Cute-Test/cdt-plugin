@@ -141,11 +141,11 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 
 					if (folderPath.segmentCount() == 1) {
 						IProject project = root.getProject(folderPath.toPortableString());
-						ICuteHeaders headers = CuteUIPlugin.getCuteVersionString(project);
+						ICuteHeaders headers = CuteUIPlugin.getCuteVersion(project);
 						headers.copySuiteFiles(project, monitor, suitename, true);
 					} else {
 						IProject project = root.getProject(folderPath.segments()[0]);
-						ICuteHeaders headers = CuteUIPlugin.getCuteVersionString(project);
+						ICuteHeaders headers = CuteUIPlugin.getCuteVersion(project);
 						IFolder folder = root.getFolder(folderPath);
 						headers.copySuiteFiles(folder, monitor, suitename, false);
 					}

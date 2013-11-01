@@ -44,13 +44,13 @@ public class CuteVersionComposite extends Composite {
 
 	public String getErrorMessage() {
 		if (combo.getItems().length == 0) {
-			return Messages.getString("CuteVersionComposite.NoCuteInstalled"); //$NON-NLS-1$
+			return Messages.getString("CuteVersionComposite.NoCuteInstalled");
 		}
 		return null;
 	}
 
 	public boolean isComplete() {
-		return !combo.getText().isEmpty(); //$NON-NLS-1$
+		return !combo.getText().isEmpty();
 	}
 
 	private void createCuteVersionCompsite(Composite parent, String currentCuteHeadersVersionName) {
@@ -61,7 +61,7 @@ public class CuteVersionComposite extends Composite {
 		setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Label label = new Label(this, SWT.HORIZONTAL);
-		label.setText(Messages.getString("CuteVersionComposite.CuteVersion")); //$NON-NLS-1$
+		label.setText(Messages.getString("CuteVersionComposite.CuteVersion"));
 
 		int indexToSelect = 0;
 		int i = 0;

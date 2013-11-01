@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 
-	String errmsg;
+	private String errmsg;
 	private Text suitenameText;
 
 	public NewCuteSuiteProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage) {
@@ -29,11 +29,7 @@ public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 
 	@Override
 	protected boolean isCustomPageComplete() {
-		if (suitenameText == null)
-			return false;
-		if (suitenameText.getText().isEmpty()) {
-			//since IWizard#canFinish() cannot be overwritten from this class, thus unable to disable the finish button, 
-			//we will need to use a default name for empty textfield as a work around
+		if (suitenameText == null || suitenameText.getText().isEmpty()) {
 			errmsg = Messages.getString("NewCuteSuiteWizardCustomPage.EnterSuiteName");
 			return false;
 		}
@@ -63,7 +59,6 @@ public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 		suitenameText = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		suitenameText.setFont(composite.getFont());
 		suitenameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		suitenameText.setText(Messages.getString("NewCuteSuiteWizardCustomPage.DefaultSuiteName"));
 		addSuiteNameListener();
 	}
 
@@ -71,8 +66,8 @@ public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 		suitenameText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				IWizardContainer iwc = getWizard().getContainer();
-				//have to call one by one as 
-				//org.eclipse.jface.wizard.Wizard.Dialog.update() is protected 
+				// have to call one by one as
+				// org.eclipse.jface.wizard.Wizard.Dialog.update() is protected
 				iwc.updateButtons();
 				iwc.updateMessage();
 				iwc.updateTitleBar();
@@ -82,10 +77,7 @@ public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 	}
 
 	public String getSuiteName() {
-		if (suitenameText == null || suitenameText.getText().isEmpty() || !suitenameText.getText().matches("\\w+")) {
-			return Messages.getString("NewCuteSuiteWizardCustomPage.suite");
-		}
-		return suitenameText.getText();
+		return isCustomPageComplete() ? suitenameText.getText() : Messages.getString("NewCuteSuiteWizardCustomPage.suite");
 	}
 
 	@Override

@@ -25,8 +25,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
+import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 
 /**
  * @author Emanuel Graf
@@ -56,7 +56,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage {
 
 	@Override
 	protected boolean isCustomPageComplete() {
-		return cuteVersionComp != null ? cuteVersionComp.isComplete() : false;
+		return cuteVersionComp != null ? cuteVersionComp.isComplete() : !CuteUIPlugin.getInstalledCuteHeaders().isEmpty();
 	}
 
 	public String getName() {
@@ -146,7 +146,11 @@ public class NewCuteProjectWizardPage extends MBSCustomPage {
 	}
 
 	public String getCuteVersionString() {
-		return cuteVersionComp.getVersionString();
+		if (cuteVersionComp != null) {
+			return cuteVersionComp.getVersionString();
+		} else {
+			return CuteUIPlugin.getInstalledCuteHeaders().first().getVersionString();
+		}
 	}
 
 	public void setImageDescriptor(ImageDescriptor image) {

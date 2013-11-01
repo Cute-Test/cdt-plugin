@@ -92,7 +92,7 @@
           name="%command.name.AddTest">
     </command>
     <command
-          id="ch.hsr.ifs.cute.ui.changeCuteVersionAction"
+          id="ch.hsr.ifs.cute.ui.changeCuteVersionCommand"
           name="%command.name.1">
     </command>
  </extension>
@@ -213,8 +213,8 @@
          </menu>
           <action
                 class="ch.hsr.ifs.cute.ui.actions.ChangeCuteVersionAction"
-                definitionId="ch.hsr.ifs.cute.ui.changeCuteVersion"
-                id="ch.hsr.ifs.cute.ui.changeCuteVersion"
+                definitionId="ch.hsr.ifs.cute.ui.changeCuteVersionCommand"
+                id="ch.hsr.ifs.cute.ui.changeCuteVersionAction"
                 label="%action.label.0"
                 menubarPath="ch.hsr.ifs.cute.ui/update"
                 style="push">
