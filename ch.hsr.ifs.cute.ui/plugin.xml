@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="Headers" name="%extension-point.name.0" schema="schema/ch.hsr.ifs.cute.ui.headers.exsd"/>
-   <extension-point id="wizardAddition" name="%extension-point.name" schema="schema/ch.hsr.ifs.cute.ui.wizardAddition.exsd"/>
-<extension
-       point="org.eclipse.ui.newWizards">
-    <wizard
-          category="org.eclipse.cdt.ui.newCCWizards"
-          finalPerspective="org.eclipse.cdt.ui.CPerspective"
-          icon="icons/ovr16/cute_ovr.gif"
-          id="cute_plugin.createSuiteWizard"
-          name="%wizard.name.Suite">
-    <class class="ch.hsr.ifs.cute.ui.project.wizard.NewSuiteFileCreationWizard">
-            <parameter name="cfile" value="true"/>
-         </class>
-         <description>
-            %wizard.description.AddingSuite
-         </description>
-    </wizard>
- </extension>
+	<extension-point id="Headers" name="%extension-point.name.0" schema="schema/ch.hsr.ifs.cute.ui.headers.exsd"/>
+	<extension-point id="wizardAddition" name="%extension-point.name" schema="schema/ch.hsr.ifs.cute.ui.wizardAddition.exsd"/>
+	<extension point="org.eclipse.ui.newWizards">
+		<wizard
+		category="org.eclipse.cdt.ui.newCWizards"
+		finalPerspective="org.eclipse.cdt.ui.CPerspective"
+		icon="icons/ovr16/cute_ovr.gif"
+		id="cute_plugin.createSuiteWizard"
+		name="%wizard.name.Suite">
+			<class class="ch.hsr.ifs.cute.ui.project.wizard.NewSuiteFileCreationWizard">
+				<parameter name="cfile" value="true"/>
+			</class>
+			<description>%wizard.description.AddingSuite</description>
+		</wizard>
+	</extension>
  <extension
        point="org.eclipse.ui.actionSets">
     <actionSet
@@ -34,7 +31,6 @@
              definitionId="ch.hsr.ifs.cute.newTestFunctionCommand"
              id="ch.hsr.ifs.cute.newTestFunctionAction"
              label="%action.label.NewTestFunction">
-          
        </action>
        <action
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestToSuiteDelegate"
