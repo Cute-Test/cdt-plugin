@@ -14,28 +14,27 @@ import java.util.Comparator;
 /**
  * @author egraf
  * @since 4.0
- *
+ * 
  */
 public class CuteHeaderComparator implements Comparator<ICuteHeaders> {
-	
+
 	public int compare(ICuteHeaders first, ICuteHeaders second) {
 		int[] firstVersion = getVersionInts(first);
 		int[] secondVersion = getVersionInts(second);
 		if (firstVersion[0] != secondVersion[0]) {
-			return firstVersion[0] - secondVersion[0];
+			return secondVersion[0] - firstVersion[0];
 		} else if (firstVersion[1] != secondVersion[1]) {
-			return firstVersion[1] - secondVersion[1];
+			return secondVersion[1] - firstVersion[1];
 		} else {
-			return firstVersion[2] - secondVersion[2];
+			return secondVersion[2] - firstVersion[2];
 		}
 	}
 
 	private int[] getVersionInts(ICuteHeaders headers) {
-		String[] parts = headers.getVersionNumber().split(".");
+		String[] parts = headers.getVersionNumber().split("\\.");
 		int major = Integer.parseInt(parts[0]);
-		int minor = Integer.parseInt(parts[1]);
-		int revision = Integer.parseInt(parts[2]);
+		int minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
+		int revision = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
 		return new int[] { major, minor, revision };
 	}
-
 }

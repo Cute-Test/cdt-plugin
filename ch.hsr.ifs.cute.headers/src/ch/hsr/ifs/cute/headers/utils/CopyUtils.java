@@ -33,23 +33,12 @@ public class CopyUtils {
 		copyFilesToFolder(container, monitor, getTestFiles(versionNumber));
 	}
 
-	public static void copySuiteFiles(IContainer container, IProgressMonitor monitor, String suitename, boolean copyTestCPP, String versionNumber)
-			throws CoreException {
-		SubMonitor mon;
-		if (copyTestCPP) {
-			mon = SubMonitor.convert(monitor, 3);
-			mon.subTask(Messages.CuteHeaders_copyTestCPP);
-			copySuiteFile(container, monitor, "Test.cpp", "Test.cpp", suitename, versionNumber);
-			mon.worked(1);
-		} else {
-			mon = SubMonitor.convert(monitor, 2);
-		}
-		mon.subTask(Messages.CuteHeaders_copySuite);
-		copySuiteFile(container, monitor, "$suitename$.cpp", suitename + ".cpp", suitename, versionNumber);
-		mon.worked(1);
-		copySuiteFile(container, monitor, "$suitename$.h", suitename + ".h", suitename, versionNumber);
-		mon.worked(1);
-		mon.done();
+	private static List<URL> getHeaderFiles(String versionNumber) {
+		return getFileListe("headers", "*.*", versionNumber);
+	}
+
+	private static List<URL> getTestFiles(String versionNumber) {
+		return getFileListe("newCuteProject", "*.*", versionNumber);
 	}
 
 	private static void copyFilesToFolder(IContainer container, IProgressMonitor monitor, List<URL> urls) throws CoreException {
@@ -83,14 +72,31 @@ public class CopyUtils {
 		return "cuteHeaders/" + versionNumber + "/" + subPath;
 	}
 
-	private static void copySuiteFile(IFile targetFile, IProgressMonitor monitor, String templateFilename, String suitename, String versionNumber)
-			throws CoreException {
-		Enumeration<URL> en = CuteHeadersPlugin.getDefault().getBundle().findEntries(getFolderPath("newCuteSuite", versionNumber), templateFilename, false);
+	public static void copySuiteFiles(IContainer container, IProgressMonitor mon, String suitename, boolean copyTestCPP, String version) throws CoreException {
+		SubMonitor subMonitor;
+		if (copyTestCPP) {
+			subMonitor = SubMonitor.convert(mon, 3);
+			subMonitor.subTask(Messages.CuteHeaders_copyTestCPP);
+			copySuiteFile(container, mon, "Test.cpp", "Test.cpp", suitename, version);
+			subMonitor.worked(1);
+		} else {
+			subMonitor = SubMonitor.convert(mon, 2);
+		}
+		subMonitor.subTask(Messages.CuteHeaders_copySuite);
+		copySuiteFile(container, mon, "$suitename$.cpp", suitename + ".cpp", suitename, version);
+		subMonitor.worked(1);
+		copySuiteFile(container, mon, "$suitename$.h", suitename + ".h", suitename, version);
+		subMonitor.worked(1);
+		subMonitor.done();
+	}
+
+	private static void copySuiteFile(IFile targetFile, IProgressMonitor mon, String templateFilename, String suitename, String version) throws CoreException {
+		Enumeration<URL> en = CuteHeadersPlugin.getDefault().getBundle().findEntries(getFolderPath("newCuteSuite", version), templateFilename, false);
 		if (en.hasMoreElements()) {
 			URL url = en.nextElement();
 			try {
 				ByteArrayInputStream str = implantActualSuiteName(url, suitename);
-				targetFile.create(str, IResource.FORCE, new SubProgressMonitor(monitor, 1));
+				targetFile.create(str, IResource.FORCE, new SubProgressMonitor(mon, 1));
 			} catch (IOException e) {
 				throw new CoreException(new Status(IStatus.ERROR, CuteHeadersPlugin.PLUGIN_ID, 42, e.getMessage(), e));
 			}
@@ -116,13 +122,5 @@ public class CopyUtils {
 		}
 		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());
-	}
-
-	private static List<URL> getHeaderFiles(String versionNumber) {
-		return getFileListe("headers", "*.*", versionNumber);
-	}
-
-	private static List<URL> getTestFiles(String versionNumber) {
-		return getFileListe("newCuteProject", "*.*", versionNumber);
 	}
 }

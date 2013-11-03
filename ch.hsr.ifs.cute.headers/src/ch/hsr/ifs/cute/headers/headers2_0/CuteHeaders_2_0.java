@@ -24,7 +24,7 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 public class CuteHeaders_2_0 implements ICuteHeaders {
 
 	public String getVersionNumber() {
-		return "2.0.0";
+		return "2.0";
 	}
 
 	public String getVersionString() {
