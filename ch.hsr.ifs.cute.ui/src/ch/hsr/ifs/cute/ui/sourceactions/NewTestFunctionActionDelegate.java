@@ -44,26 +44,14 @@ import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
  * 
  */
 public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
-	/**
-	 * @since 4.0
-	 */
 	protected IEditorPart editor;
-	/**
-	 * @since 4.0
-	 */
 	protected LinkedModeUI linkedModeUI;
-	/**
-	 * @since 4.0
-	 */
-	protected final String funcName;//used for linking during 1st edit
-	/**
-	 * @since 4.0
-	 */
+	protected final String funcName;// used for linking during 1st edit
 	protected final NewTestFunctionAction functionAction;
 
 	public NewTestFunctionActionDelegate() {
-		this.funcName = "newTestFunction"; //$NON-NLS-1$
-		this.functionAction = new NewTestFunctionAction("newTestFunction"); //$NON-NLS-1$
+		this.funcName = "newTestFunction";
+		this.functionAction = new NewTestFunctionAction("newTestFunction");
 	}
 
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
@@ -79,7 +67,6 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
-	/* ensure texteditor is the active window, save previous changes first */
 	protected boolean isCorrectEditor() {
 		if (editor == null) {
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -164,9 +151,9 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 			String insert = ((InsertEdit) textEdit).getText();
 			if (insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
 
-				if (functionAction.insertFileOffset == -1 || //error check
-						functionAction.pushbackOffset == -1 || //error check	
-						functionAction.insertFileOffset < functionAction.pushbackOffset) //before pushback
+				if (functionAction.insertFileOffset == -1 || // error check
+						functionAction.pushbackOffset == -1 || // error check
+						functionAction.insertFileOffset < functionAction.pushbackOffset) // before pushback
 				{
 					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
 				} else {

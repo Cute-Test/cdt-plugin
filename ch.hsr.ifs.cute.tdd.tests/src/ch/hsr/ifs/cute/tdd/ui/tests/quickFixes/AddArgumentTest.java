@@ -44,7 +44,7 @@ public class AddArgumentTest extends QuickFixTest {
 		assertEquals("Marker length", 3, getMarkerLength());
 	}
 
-	//TODO: non sense
+	// TODO: non sense
 	@Override
 	public void testQuickFixMessage() {
 		assertExactlyTheSame(ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT, getQuickFixMessage(AddArgumentQuickFix.class, ADD_ARGUMENT_S_INT_TO_MATCH_FOO_INT));

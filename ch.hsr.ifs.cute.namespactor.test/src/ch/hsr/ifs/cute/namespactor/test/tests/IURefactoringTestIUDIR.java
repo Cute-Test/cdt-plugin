@@ -19,13 +19,11 @@ import ch.hsr.ifs.cute.namespactor.refactoring.iu.IURefactoring;
 import ch.hsr.ifs.cute.namespactor.test.testinfrastructure.JUnit4RtsRefactoringTest;
 
 @SuppressWarnings("restriction")
-// e.g.
 @RunFor(rtsFile = "/resources//tests/IUDIRRefactoringTest.rts")
 public class IURefactoringTestIUDIR extends JUnit4RtsRefactoringTest {
 
 	@Override
 	protected CRefactoring getRefactoring() throws CModelException {
-
 		return new IURefactoring(getCElementOfTestFile(), selection, cproject);
 	}
 

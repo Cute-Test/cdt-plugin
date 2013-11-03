@@ -20,21 +20,18 @@ import ch.hsr.ifs.testframework.event.TestEventHandler;
 
 /**
  * @author Emanuel Graf (IFS)
- *
+ * 
  */
-public class ConsoleLinkHandler extends TestEventHandler{
-	
-	private TextConsole console; 
+public class ConsoleLinkHandler extends TestEventHandler {
+
+	private final TextConsole console;
 	public IPath rtPath;
-	private ILinkFactory linkFactory;
+	private final ILinkFactory linkFactory;
 
 	public ConsoleLinkHandler(IPath exePath, TextConsole console) {
 		this(exePath, console, new ConsoleLinkFactory());
 	}
 
-	/**
-	 * @since 3.0
-	 */
 	public ConsoleLinkHandler(IPath rtPath, TextConsole console, ILinkFactory linkFactory) {
 		super();
 		this.console = console;
@@ -42,22 +39,17 @@ public class ConsoleLinkHandler extends TestEventHandler{
 		this.linkFactory = linkFactory;
 	}
 
-
-
-
 	@Override
 	public void handleBeginning(IRegion reg, String suitename, String suitesize) {
 	}
-
 
 	@Override
 	public void handleEnding(IRegion reg, String suitename) {
 	}
 
-
 	@Override
 	public void handleError(IRegion reg, String testName, String msg) {
-		
+
 	}
 
 	@Override
@@ -66,7 +58,7 @@ public class ConsoleLinkHandler extends TestEventHandler{
 
 	@Override
 	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-		IPath filePath=getWorkspaceFile(fileName, rtPath);
+		IPath filePath = getWorkspaceFile(fileName, rtPath);
 		try {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
 			int lineNumber = Integer.parseInt(lineNo);
@@ -81,11 +73,9 @@ public class ConsoleLinkHandler extends TestEventHandler{
 	public void handleTestStart(IRegion reg, String suitename) {
 	}
 
-
 	@Override
 	public void handleSessionEnd() {
 	}
-
 
 	@Override
 	public void handleSessionStart() {

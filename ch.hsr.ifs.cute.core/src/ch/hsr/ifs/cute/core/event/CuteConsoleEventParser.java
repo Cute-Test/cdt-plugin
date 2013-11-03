@@ -28,42 +28,35 @@ import ch.hsr.ifs.testframework.event.TestSuccessEvent;
 
 public class CuteConsoleEventParser extends ConsoleEventParser {
 
-	private static final String LINE_QUALIFIER = "#"; //$NON-NLS-1$
+	private static final String LINE_QUALIFIER = "#";
 	private static final int LINEPREFIXLENGTH = LINE_QUALIFIER.length();
-	private static final String BEGINNING = "beginning"; //$NON-NLS-1$
-	private static final String ENDING = "ending"; //$NON-NLS-1$
-	private static final String STARTTEST = "starting"; //$NON-NLS-1$
-	private static final String SUCCESS = "success"; //$NON-NLS-1$
-	private static final String FAILURE = "failure"; //$NON-NLS-1$
-	private static final String ERROR = "error"; //$NON-NLS-1$
+	private static final String BEGINNING = "beginning";
+	private static final String ENDING = "ending";
+	private static final String STARTTEST = "starting";
+	private static final String SUCCESS = "success";
+	private static final String FAILURE = "failure";
+	private static final String ERROR = "error";
 
-	private static Pattern SUITEBEGINNINGLINE = Pattern.compile(LINE_QUALIFIER
-			+ BEGINNING + " (.*) (\\d+)$"); //$NON-NLS-1$
-	private static Pattern SUITEENDINGLINE = Pattern.compile(LINE_QUALIFIER
-			+ ENDING + " (.*)$"); //$NON-NLS-1$
-	private static Pattern TESTSTARTLINE = Pattern.compile(LINE_QUALIFIER
-			+ STARTTEST + " (.*)$"); //$NON-NLS-1$
-	private static Pattern TESTFAILURELINE = Pattern.compile(LINE_QUALIFIER
-			+ FAILURE + " (.*) (.*):(\\d+) (.*)$"); //$NON-NLS-1$
-	private static Pattern TESTSUCESSLINE = Pattern.compile(LINE_QUALIFIER
-			+ SUCCESS + " (.*) (.*)$"); //$NON-NLS-1$
-	private static Pattern TESTERRORLINE = Pattern.compile(LINE_QUALIFIER
-			+ ERROR + " (.*?) (.*)$"); //$NON-NLS-1$
+	private static Pattern SUITEBEGINNINGLINE = Pattern.compile(LINE_QUALIFIER + BEGINNING + " (.*) (\\d+)$");
+	private static Pattern SUITEENDINGLINE = Pattern.compile(LINE_QUALIFIER + ENDING + " (.*)$");
+	private static Pattern TESTSTARTLINE = Pattern.compile(LINE_QUALIFIER + STARTTEST + " (.*)$");
+	private static Pattern TESTFAILURELINE = Pattern.compile(LINE_QUALIFIER + FAILURE + " (.*) (.*):(\\d+) (.*)$");
+	private static Pattern TESTSUCESSLINE = Pattern.compile(LINE_QUALIFIER + SUCCESS + " (.*) (.*)$");
+	private static Pattern TESTERRORLINE = Pattern.compile(LINE_QUALIFIER + ERROR + " (.*?) (.*)$");
 
+	@Override
 	public String getLineQualifier() {
 		return escapeForRegex(LINE_QUALIFIER);
 	}
 
+	@Override
 	public final String getComprehensiveLinePattern() {
-		return escapeForRegex(LINE_QUALIFIER
-				+ "(" //$NON-NLS-1$
-				+ regExUnion(new String[] { LINE_QUALIFIER, BEGINNING, ENDING,
-						SUCCESS, STARTTEST, FAILURE, ERROR, }))
-				+ ")(.*)(\\n)"; //$NON-NLS-1$
+		return escapeForRegex(LINE_QUALIFIER + "(" + regExUnion(new String[] { LINE_QUALIFIER, BEGINNING, ENDING, SUCCESS, STARTTEST, FAILURE, ERROR, }))
+				+ ")(.*)(\\n)";
 	}
 
-	protected void extractTestEventsFor(IRegion reg, String line)
-			throws CoreException {
+	@Override
+	protected void extractTestEventsFor(IRegion reg, String line) throws CoreException {
 		if (testStarting(line))
 			testStart(reg, line);
 		else if (testSucceeded(line))
@@ -102,8 +95,7 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
 
 	private void testFailure(IRegion reg, String line) throws CoreException {
 		Matcher m = matcherFor(TESTFAILURELINE, line);
-		testEvents.add(new TestFailureEvent(reg, m.group(1), m.group(2), m
-				.group(3), m.group(4)));
+		testEvents.add(new TestFailureEvent(reg, m.group(1), m.group(2), m.group(3), m.group(4)));
 	}
 
 	private boolean suiteStarting(String line) {

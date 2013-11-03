@@ -10,10 +10,10 @@ package ch.hsr.ifs.testframework.model;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public interface ITestElementListener {
-	
+
 	public void modelCanged(TestElement source, NotifyEvent event);
 
 }

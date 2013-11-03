@@ -16,7 +16,7 @@ import ch.hsr.ifs.cute.ui.test.sourceactions.SourceActionsTest;
 public class AllUiTests extends TestSuite {
 
 	public AllUiTests() {
-		super("CUTE Plugin All UI Tests"); //$NON-NLS-1$
+		super("CUTE Plugin All UI Tests");
 		addTest(CuteSuiteWizardHandlerTest.suite());
 		addTest(SourceActionsTest.suite());
 		addTest(new TestSuite(UnregisteredTestFunctionCheckerTest.class));

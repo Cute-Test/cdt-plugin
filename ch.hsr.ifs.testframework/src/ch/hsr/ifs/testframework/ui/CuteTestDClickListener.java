@@ -51,11 +51,11 @@ import ch.hsr.ifs.testframework.model.TestStatus;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class CuteTestDClickListener implements IDoubleClickListener {
-	
-	private static final String REGEX = "::"; //$NON-NLS-1$
+
+	private static final String REGEX = "::";
 	private TestSession session = null;
 
 	public CuteTestDClickListener(TestSession session) {
@@ -63,13 +63,12 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 		this.session = session;
 	}
 
-
 	public void doubleClick(DoubleClickEvent event) {
 		if (event.getSelection() instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) event.getSelection();
 			if (treeSel.getFirstElement() instanceof TestCase) {
 				TestCase tCase = (TestCase) treeSel.getFirstElement();
-				if(tCase.getStatus() == TestStatus.failure) {
+				if (tCase.getStatus() == TestStatus.failure) {
 					openEditor(tCase.getFile(), tCase.getLineNumber(), false);
 				} else {
 					openEditorForNonFailingTestCase(tCase.getName());
@@ -78,18 +77,16 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 		}
 
 	}
-	
+
 	public void setSession(TestSession session) {
 		this.session = session;
 	}
-
-
 
 	private void openEditorForNonFailingTestCase(String testCaseName) {
 		try {
 			ICProject[] projects = CoreModel.getDefault().getCModel().getCProjects();
 			for (int i = 0; i < projects.length; ++i) {
-				if(!projects[i].getElementName().equals(session.getLaunch().getLaunchConfiguration().getName()))
+				if (!projects[i].getElementName().equals(session.getLaunch().getLaunchConfiguration().getName()))
 					continue;
 				IIndex index = CCorePlugin.getIndexManager().getIndex(projects[i]);
 				IIndexBinding[] bindings;
@@ -104,43 +101,39 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 		}
 	}
 
-
 	private void checkBindingsOpenEditor(IIndex index, IIndexBinding[] bindings) throws CoreException {
 		for (int bi = 0; bindings != null && bi < bindings.length; ++bi) {
 			IIndexBinding binding = bindings[bi];
 			if (binding == null)
 				continue;
-			
+
 			IIndexName[] definition = index.findDefinitions(index.adaptBinding(binding));
 			if (definition == null || definition.length == 0)
 				continue;
 			IASTFileLocation loc = definition[0].getFileLocation();
 			IPath filePath = new Path(loc.getFileName());
-			IFile file = ResourcesPlugin.getWorkspace().getRoot()
-			.getFileForLocation(filePath);
-			if (file==null)continue;
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
+			if (file == null)
+				continue;
 			openEditor(file, loc.getNodeOffset(), true);
 			return;
 		}
 	}
 
-
 	/**
 	 * @since 3.0
 	 */
-	private IIndexBinding[] getBindings(String testCaseName, IIndex index)
-			throws CoreException {
+	private IIndexBinding[] getBindings(String testCaseName, IIndex index) throws CoreException {
 		IIndexBinding[] bindings;
 		boolean fullyQualified = isQualifiedName(testCaseName);
-		if(fullyQualified) {
+		if (fullyQualified) {
 			char[][] namesChar = getNamesArray(testCaseName);
 			bindings = index.findBindings(namesChar, IndexFilter.ALL, new NullProgressMonitor());
-		}else {
+		} else {
 			bindings = index.findBindings(testCaseName.toCharArray(), false, IndexFilter.ALL, new NullProgressMonitor());
 		}
 		return bindings;
 	}
-
 
 	/**
 	 * @since 3.0
@@ -148,7 +141,7 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 	private char[][] getNamesArray(String testCaseName) {
 		String[] names = removeEmptyNames(testCaseName.split(REGEX));
 		char[][] namesChar = new char[names.length][];
-		for(int j = 0; j < names.length; ++j) {
+		for (int j = 0; j < names.length; ++j) {
 			namesChar[j] = names[j].toCharArray();
 		}
 		return namesChar;
@@ -156,34 +149,31 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 
 	private String[] removeEmptyNames(String[] split) {
 		for (int i = 0; i < split.length; i++) {
-			if(split[i].length() == 0)split[i] = null;
+			if (split[i].length() == 0)
+				split[i] = null;
 		}
 		return ArrayUtil.removeNulls(split);
 	}
-
 
 	private boolean isQualifiedName(String testCaseName) {
 		return testCaseName.contains(REGEX);
 	}
 
-
 	private void openEditor(IFile file, int lineNumberOrOffset, boolean isOffset) {
 		IWorkbenchPage page = getActivePage();
 		if (page != null) {
 			try {
-				IEditorPart editorPart = page.openEditor(new FileEditorInput(file), getEditorId(file) , false);
+				IEditorPart editorPart = page.openEditor(new FileEditorInput(file), getEditorId(file), false);
 				if (lineNumberOrOffset > 0 && editorPart instanceof ITextEditor) { // TODO definition might start on ofset 0, if not linenumber
-					ITextEditor textEditor = (ITextEditor)editorPart;
+					ITextEditor textEditor = (ITextEditor) editorPart;
 					IEditorInput input = editorPart.getEditorInput();
 					IDocumentProvider provider = textEditor.getDocumentProvider();
 					provider.connect(input);
 					IDocument document = provider.getDocument(input);
 
-					IRegion region= isOffset?
-							document.getLineInformationOfOffset(lineNumberOrOffset)
-							:document.getLineInformation(lineNumberOrOffset - 1);
-							textEditor.selectAndReveal(region.getOffset(), region.getLength());
-							provider.disconnect(input);
+					IRegion region = isOffset ? document.getLineInformationOfOffset(lineNumberOrOffset) : document.getLineInformation(lineNumberOrOffset - 1);
+					textEditor.selectAndReveal(region.getOffset(), region.getLength());
+					provider.disconnect(input);
 				}
 			} catch (PartInitException e) {
 				TestFrameworkPlugin.log(e);
@@ -197,7 +187,7 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 			}
 		}
 	}
-	
+
 	private IWorkbenchPage getActivePage() {
 		IWorkbenchWindow window = TestFrameworkPlugin.getActiveWorkbenchWindow();
 		if (window != null) {
@@ -205,27 +195,27 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 		}
 		return null;
 	}
-	
+
 	private String getEditorId(IFile file) {
-			IWorkbench workbench= TestFrameworkPlugin.getDefault().getWorkbench();
-			// If there is a registered editor for the file use it.
-			IEditorDescriptor desc = workbench.getEditorRegistry().getDefaultEditor(file.getName(), getFileContentType(file));
-			if (desc == null) {
-				//default editor
-				desc= workbench.getEditorRegistry().findEditor(IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID);
-			}
+		IWorkbench workbench = TestFrameworkPlugin.getDefault().getWorkbench();
+		// If there is a registered editor for the file use it.
+		IEditorDescriptor desc = workbench.getEditorRegistry().getDefaultEditor(file.getName(), getFileContentType(file));
+		if (desc == null) {
+			// default editor
+			desc = workbench.getEditorRegistry().findEditor(IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID);
+		}
 		return desc.getId();
 	}
 
-    private IContentType getFileContentType(IFile file) {
-        try {
-            IContentDescription description= file.getContentDescription();
-            if (description != null) {
-                return description.getContentType();
-            }
-        } catch (CoreException e) {
-        }
-        return null;
-    }
+	private IContentType getFileContentType(IFile file) {
+		try {
+			IContentDescription description = file.getContentDescription();
+			if (description != null) {
+				return description.getContentType();
+			}
+		} catch (CoreException e) {
+		}
+		return null;
+	}
 
 }

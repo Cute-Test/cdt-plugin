@@ -44,31 +44,32 @@ import ch.hsr.ifs.testframework.model.TestSession;
 /**
  * A progress bar with a red/green indication for success or failure.
  */
-public class CuteProgressBar extends Canvas implements ITestElementListener, ISessionListener, ITestCompositeListener{
+public class CuteProgressBar extends Canvas implements ITestElementListener, ISessionListener, ITestCompositeListener {
 	private static final int DEFAULT_WIDTH = 160;
 	private static final int DEFAULT_HEIGHT = 18;
 
-	private int fCurrentTickCount= 0;
-	private int fMaxTickCount= 0;	
-	private int fColorBarWidth= 0;
-	private Color fOKColor;
-	private Color fFailureColor;
-	private Color fStoppedColor;
+	private int fCurrentTickCount = 0;
+	private int fMaxTickCount = 0;
+	private int fColorBarWidth = 0;
+	private final Color fOKColor;
+	private final Color fFailureColor;
+	private final Color fStoppedColor;
 	private boolean fError;
-	private boolean fStopped= false;
-	private Messages msg = TestFrameworkPlugin.getMessages();
-	
+	private boolean fStopped = false;
+	private final Messages msg = TestFrameworkPlugin.getMessages();
+
 	private TestSession session;
-	
+
 	public CuteProgressBar(Composite parent) {
 		super(parent, SWT.NONE);
 		TestFrameworkPlugin.getModel().addListener(this);
 		addControlListener(new ControlAdapter() {
+			@Override
 			public void controlResized(ControlEvent e) {
-				fColorBarWidth= scale(fCurrentTickCount);
+				fColorBarWidth = scale(fCurrentTickCount);
 				redraw();
 			}
-		});	
+		});
 		addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
 				paint(e);
@@ -82,32 +83,32 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 				TestFrameworkPlugin.getModel().removeListener(CuteProgressBar.this);
 			}
 		});
-		Display display= parent.getDisplay();
-		fFailureColor= new Color(display, 159, 63, 63);
-		fOKColor= new Color(display, 95, 191, 95);
-		fStoppedColor= new Color(display, 120, 120, 120);
+		Display display = parent.getDisplay();
+		fFailureColor = new Color(display, 159, 63, 63);
+		fOKColor = new Color(display, 95, 191, 95);
+		fStoppedColor = new Color(display, 120, 120, 120);
 	}
 
 	public void setMaximum(int max) {
-		fMaxTickCount= max;
+		fMaxTickCount = max;
 	}
-		
+
 	private void reset() {
-		fError= false;
-		fStopped= false;
-		fCurrentTickCount= session.getRun();
-		fMaxTickCount= session.getTotalTests();
-		fColorBarWidth= 0;
+		fError = false;
+		fStopped = false;
+		fCurrentTickCount = session.getRun();
+		fMaxTickCount = session.getTotalTests();
+		fColorBarWidth = 0;
 		redraw();
 	}
-	
+
 	private void paintStep(int startX, int endX) {
-		GC gc = new GC(this);	
+		GC gc = new GC(this);
 		setStatusColor(gc);
-		Rectangle rect= getClientArea();
-		startX= Math.max(1, startX);
-		gc.fillRectangle(startX, 1, endX-startX, rect.height-2);
-		gc.dispose();		
+		Rectangle rect = getClientArea();
+		startX = Math.max(1, startX);
+		gc.fillRectangle(startX, 1, endX - startX, rect.height - 2);
+		gc.dispose();
 	}
 
 	private void setStatusColor(GC gc) {
@@ -120,104 +121,105 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	}
 
 	public void stopped() {
-		fStopped= true;
+		fStopped = true;
 		redraw();
 	}
-	
+
 	private int scale(int value) {
 		if (fMaxTickCount > 0) {
-			Rectangle r= getClientArea();
+			Rectangle r = getClientArea();
 			if (r.width != 0)
-				return Math.max(0, value*(r.width-2)/fMaxTickCount);
+				return Math.max(0, value * (r.width - 2) / fMaxTickCount);
 		}
-		return value; 
+		return value;
 	}
-	
+
 	private void drawBevelRect(GC gc, Rectangle rect, Color topleft, Color bottomright) {
 		int x = rect.x;
 		int y = rect.y;
-		int w = rect.width-1;
-		int h = rect.height-1;
-		
+		int w = rect.width - 1;
+		int h = rect.height - 1;
+
 		gc.setForeground(topleft);
-		gc.drawLine(x, y, x+w-1, y);
-		gc.drawLine(x, y, x, y+h-1);
-		
+		gc.drawLine(x, y, x + w - 1, y);
+		gc.drawLine(x, y, x, y + h - 1);
+
 		gc.setForeground(bottomright);
-		gc.drawLine(x+w, y, x+w, y+h);
-		gc.drawLine(x, y+h, x+w, y+h);
+		gc.drawLine(x + w, y, x + w, y + h);
+		gc.drawLine(x, y + h, x + w, y + h);
 	}
-	
+
 	private void paint(PaintEvent event) {
 		GC gc = event.gc;
-		Display disp= getDisplay();
-			
-		Rectangle rect= getClientArea();
+		Display disp = getDisplay();
+
+		Rectangle rect = getClientArea();
 		gc.fillRectangle(rect);
-		drawBevelRect(gc, rect,
-			disp.getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW),
-			disp.getSystemColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
-		
+		drawBevelRect(gc, rect, disp.getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW), disp.getSystemColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
+
 		setStatusColor(gc);
-		fColorBarWidth= Math.min(rect.width-2, fColorBarWidth);
-		gc.fillRectangle(1, 1, fColorBarWidth, rect.height-2);
-	}	
-	
+		fColorBarWidth = Math.min(rect.width - 2, fColorBarWidth);
+		gc.fillRectangle(1, 1, fColorBarWidth, rect.height - 2);
+	}
+
+	@Override
 	public Point computeSize(int wHint, int hHint, boolean changed) {
 		checkWidget();
-		Point size= new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		if (wHint != SWT.DEFAULT) size.x= wHint;
-		if (hHint != SWT.DEFAULT) size.y= hHint;
+		Point size = new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		if (wHint != SWT.DEFAULT)
+			size.x = wHint;
+		if (hHint != SWT.DEFAULT)
+			size.y = hHint;
 		return size;
 	}
-	
+
 	private void update(int run, int failures) {
 		fCurrentTickCount = run;
-		int x= fColorBarWidth;
+		int x = fColorBarWidth;
 
-		fColorBarWidth= scale(fCurrentTickCount);
+		fColorBarWidth = scale(fCurrentTickCount);
 
 		if (!fError && failures > 0) {
-			fError= true;
-			x= 1;
+			fError = true;
+			x = 1;
 		}
 		if (fCurrentTickCount == fMaxTickCount)
-			fColorBarWidth= getClientArea().width-1;
+			fColorBarWidth = getClientArea().width - 1;
 		paintStep(x, fColorBarWidth);
 	}
-	
+
 	private void update(int run, int failures, int total) {
 		fCurrentTickCount = run;
-		fMaxTickCount= total;
+		fMaxTickCount = total;
 
-		fColorBarWidth= scale(fCurrentTickCount);
+		fColorBarWidth = scale(fCurrentTickCount);
 
 		if (!fError && failures > 0) {
-			fError= true;
+			fError = true;
 		}
 		if (fCurrentTickCount == fMaxTickCount)
-			fColorBarWidth= getClientArea().width-1;
+			fColorBarWidth = getClientArea().width - 1;
 		redraw();
 	}
 
 	public void refresh(boolean hasErrors) {
-		fError= hasErrors;
+		fError = hasErrors;
 		redraw();
 	}
 
 	public void modelCanged(TestElement source, NotifyEvent event) {
-		if(event.getType() == NotifyEvent.EventType.testFinished || event.getType() == NotifyEvent.EventType.suiteFinished) {
-			UIJob job = new UIJob(msg.getString("CuteProgressBar.UpdateProgressbar")) { //$NON-NLS-1$
+		if (event.getType() == NotifyEvent.EventType.testFinished || event.getType() == NotifyEvent.EventType.suiteFinished) {
+			UIJob job = new UIJob(msg.getString("CuteProgressBar.UpdateProgressbar")) {
 
 				@Override
 				public boolean belongsTo(Object family) {
 					return TestFrameworkPlugin.PLUGIN_ID.equals(family);
 				}
-				
+
 				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
 					update(session.getRun(), session.getError() + session.getFailure());
-					return new Status(IStatus.OK,TestFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
+					return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, "", null);
 				}
 
 			};
@@ -228,22 +230,22 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 	public void sessionStarted(TestSession session) {
 		this.session = session;
 		session.addListener(this);
-		UIJob job = new UIJob(msg.getString("CuteProgressBar.ResetProgressbar")) { //$NON-NLS-1$
+		UIJob job = new UIJob(msg.getString("CuteProgressBar.ResetProgressbar")) {
 
 			@Override
 			public boolean belongsTo(Object family) {
 				return TestFrameworkPlugin.PLUGIN_ID.equals(family);
 			}
-			
+
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				reset();
-				return new Status(IStatus.OK,TestFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
+				return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, "", null);
 			}
-			
+
 		};
 		job.schedule();
-		
+
 	}
 
 	public void sessionFinished(TestSession session) {
@@ -252,21 +254,21 @@ public class CuteProgressBar extends Canvas implements ITestElementListener, ISe
 
 	public void newTestElement(ITestComposite source, TestElement newElement) {
 		newElement.addTestElementListener(this);
-		UIJob job = new UIJob(msg.getString("CuteProgressBar.UpdateProgressbar")) { //$NON-NLS-1$
+		UIJob job = new UIJob(msg.getString("CuteProgressBar.UpdateProgressbar")) {
 
 			@Override
 			public boolean belongsTo(Object family) {
 				return TestFrameworkPlugin.PLUGIN_ID.equals(family);
 			}
-			
+
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				update(session.getRun(), session.getError() + session.getFailure(), session.getTotalTests());
-				return new Status(IStatus.OK,TestFrameworkPlugin.PLUGIN_ID,IStatus.OK,"", null); //$NON-NLS-1$
+				return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, "", null);
 			}
 
 		};
 		job.schedule();
 	}
-	
+
 }

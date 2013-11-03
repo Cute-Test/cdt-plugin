@@ -13,32 +13,30 @@ import org.eclipse.jface.text.IRegion;
 import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
 
-
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 
 	boolean sessionStarted = false;
 	boolean sessionEnded = false;
-	
-	
-	final class SessionStartEndHandler extends TestEventHandler{
+
+	final class SessionStartEndHandler extends TestEventHandler {
 
 		@Override
 		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
-//			 Do nothing
+			// Do nothing
 		}
 
 		@Override
 		protected void handleEnding(IRegion reg, String suitename) {
-//			 Do nothing
+			// Do nothing
 		}
 
 		@Override
 		protected void handleError(IRegion reg, String testName, String msg) {
-//			 Do nothing
+			// Do nothing
 		}
 
 		@Override
@@ -49,7 +47,7 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 		@Override
 		public void handleSessionEnd() {
 			sessionEnded = true;
-			
+
 		}
 
 		@Override
@@ -60,22 +58,22 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 
 		@Override
 		protected void handleSuccess(IRegion reg, String name, String msg) {
-//			 Do nothing
+			// Do nothing
 		}
 
 		@Override
 		protected void handleTestStart(IRegion reg, String testname) {
-//			 Do nothing
+			// Do nothing
 		}
-		
+
 	}
 
 	public void testSessionStart() {
-		assertTrue("No session Start", sessionStarted); //$NON-NLS-1$
+		assertTrue("No session Start", sessionStarted);
 	}
-	
+
 	public void testSessionEnd() {
-		assertTrue("No session End", sessionEnded); //$NON-NLS-1$
+		assertTrue("No session End", sessionEnded);
 	}
 
 	@Override
@@ -85,7 +83,7 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "sessionTest.txt"; //$NON-NLS-1$
+		return "sessionTest.txt";
 	}
-	
+
 }

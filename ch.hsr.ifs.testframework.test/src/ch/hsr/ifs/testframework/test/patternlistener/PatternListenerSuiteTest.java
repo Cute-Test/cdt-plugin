@@ -18,14 +18,14 @@ import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class PatternListenerSuiteTest extends PatternListenerBase {
 	List<Integer> suiteSize = new ArrayList<Integer>();
 	List<String> suiteNameStart = new ArrayList<String>();
 	List<String> suiteNameEnded = new ArrayList<String>();
 
-	private final class ListenerTestHandler extends TestEventHandler{
+	private final class ListenerTestHandler extends TestEventHandler {
 
 		@Override
 		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
@@ -40,55 +40,54 @@ public class PatternListenerSuiteTest extends PatternListenerBase {
 
 		@Override
 		protected void handleError(IRegion reg, String testName, String msg) {
-//			 do nothing	
+			// do nothing
 		}
 
 		@Override
 		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-//			 do nothing	
+			// do nothing
 		}
 
 		@Override
 		public void handleSessionEnd() {
-//			 do nothing	
+			// do nothing
 		}
 
 		@Override
 		public void handleSessionStart() {
-//			 do nothing	
+			// do nothing
 		}
 
 		@Override
 		protected void handleSuccess(IRegion reg, String name, String msg) {
-//			 do nothing	
+			// do nothing
 		}
 
 		@Override
 		protected void handleTestStart(IRegion reg, String testname) {
-			// do nothing			
+			// do nothing
 		}
-		
+
 	}
-	
+
 	public void testFirstStarted() {
-		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0)); //$NON-NLS-1$ //$NON-NLS-2$
-		assertEquals("Suite Size", new Integer(42), suiteSize.get(0)); //$NON-NLS-1$
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0));
+		assertEquals("Suite Size", new Integer(42), suiteSize.get(0));
 	}
-	
+
 	public void testFirstEnded() {
-		assertEquals("Suite Name Test", "TestSuite1", suiteNameEnded.get(0)); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameEnded.get(0));
 	}
-	
+
 	public void testLastStarted() {
-		assertEquals("Suite Name Test", "TestSuite2", suiteNameStart.get(1)); //$NON-NLS-1$ //$NON-NLS-2$
-		assertEquals("Suite Size", new Integer(1), suiteSize.get(1)); //$NON-NLS-1$
+		assertEquals("Suite Name Test", "TestSuite2", suiteNameStart.get(1));
+		assertEquals("Suite Size", new Integer(1), suiteSize.get(1));
 	}
-	
+
 	public void testLastEnded() {
-		assertEquals("Suite Name Test", "TestSuite2", suiteNameEnded.get(1)); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals("Suite Name Test", "TestSuite2", suiteNameEnded.get(1));
 	}
-	
-	
+
 	@Override
 	protected void addTestEventHandler(ConsolePatternListener lis) {
 		lis.addHandler(new ListenerTestHandler());
@@ -96,7 +95,7 @@ public class PatternListenerSuiteTest extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "suiteTest.txt"; //$NON-NLS-1$
+		return "suiteTest.txt";
 	}
 
 }

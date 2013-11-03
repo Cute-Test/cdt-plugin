@@ -7,12 +7,10 @@ import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 
 public class EmptyDebugLaunchConfigurationTabGroup extends AbstractLaunchConfigurationTabGroup {
-	public static final String TESTING_PROCESS_FACTORY_ID = "ch.hsr.ifs.cute.core.DebugProcessFactory";//"org.eclipse.cdt.testsrunner.TestingProcessFactory";
+	public static final String TESTING_PROCESS_FACTORY_ID = "ch.hsr.ifs.cute.core.DebugProcessFactory";
 
 	/**
-	 * Represents an empty tab group. Actual tabs are added via the
-	 * <code>org.eclipse.debug.ui.launchConfigurationTabs</code> extension
-	 * point.
+	 * Represents an empty tab group. Actual tabs are added via the <code>org.eclipse.debug.ui.launchConfigurationTabs</code> extension point.
 	 */
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		setTabs(new ILaunchConfigurationTab[0]);

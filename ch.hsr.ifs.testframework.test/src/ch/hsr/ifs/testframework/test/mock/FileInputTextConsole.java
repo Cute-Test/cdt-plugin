@@ -36,7 +36,7 @@ public class FileInputTextConsole extends TextConsole {
 	private final String inputFile;
 
 	public FileInputTextConsole(String inputFile) {
-		super(inputFile, "FileInputTextConsole", null, true); //$NON-NLS-1$
+		super(inputFile, "FileInputTextConsole", null, true);
 		this.inputFile = inputFile;
 	}
 

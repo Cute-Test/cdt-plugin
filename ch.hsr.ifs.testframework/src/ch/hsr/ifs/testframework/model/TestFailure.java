@@ -13,12 +13,12 @@ import java.util.regex.Pattern;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class TestFailure extends TestResult {
-	
-	private static final String REG_EXP = "((.*)(\t)(.*)(\t)(.*)(\t)(.*)(\t))"; //$NON-NLS-1$
-	
+
+	private static final String REG_EXP = "((.*)(\t)(.*)(\t)(.*)(\t)(.*)(\t))";
+
 	protected String expected;
 	protected String was;
 	protected String middle;
@@ -27,22 +27,21 @@ public class TestFailure extends TestResult {
 		super();
 		Pattern pattern = Pattern.compile(REG_EXP);
 		Matcher matcher = pattern.matcher(msg);
-		if(matcher.find()) {
+		if (matcher.find()) {
 			this.msg = unquoteMsg(matcher.group(2));
 			expected = unquote(matcher.group(4));
 			middle = unquote(matcher.group(6));
 			was = unquote(matcher.group(8));
-		}else {
+		} else {
 			this.msg = msg;
 		}
 	}
-
 
 	@Override
 	public String getMsg() {
 		StringBuilder strBuild = new StringBuilder();
 		strBuild.append(msg);
-		if(expected != null && was != null) {
+		if (expected != null && was != null) {
 			strBuild.append(' ');
 			strBuild.append(expected);
 			strBuild.append(' ');
@@ -52,25 +51,25 @@ public class TestFailure extends TestResult {
 		}
 		return strBuild.toString();
 	}
-	
+
 	public String getExpected() {
 		return expected;
 	}
-	
+
 	public String getWas() {
 		return was;
 	}
-	
+
 	private String unquoteMsg(String text) {
-		String ret = text.replaceAll("\\\\{2}+", "\\\\");  //$NON-NLS-1$//$NON-NLS-2$
+		String ret = text.replaceAll("\\\\{2}+", "\\\\");
 		return ret;
 	}
-	
+
 	private String unquote(String text) {
-		String ret = text.replaceAll("\\\\t", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
-		ret = ret.replaceAll("\\\\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		ret = ret.replaceAll("\\\\r", "\r"); //$NON-NLS-1$ //$NON-NLS-2$
-		ret = ret.replaceAll("\\{2}+", "\\"); //$NON-NLS-1$ //$NON-NLS-2$
+		String ret = text.replaceAll("\\\\t", "\t");
+		ret = ret.replaceAll("\\\\n", "\n");
+		ret = ret.replaceAll("\\\\r", "\r");
+		ret = ret.replaceAll("\\{2}+", "\\");
 		return ret;
 	}
 

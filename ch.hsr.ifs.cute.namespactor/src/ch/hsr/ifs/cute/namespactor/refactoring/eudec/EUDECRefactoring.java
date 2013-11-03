@@ -11,8 +11,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.eudec;
 
-
-
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -56,7 +54,7 @@ public class EUDECRefactoring extends EURefactoring {
 	@Override
 	protected IASTNode prepareInsertStatement() {
 		ICPPASTUsingDeclaration newUsingDeclaration = ASTNodeFactory.getDefault().newUsingDeclaration(context.qualifiedUsingName);
-		if(!(scopeNode instanceof ICPPASTCompositeTypeSpecifier || scopeNode instanceof ICPPASTNamespaceDefinition)){
+		if (!(scopeNode instanceof ICPPASTCompositeTypeSpecifier || scopeNode instanceof ICPPASTNamespaceDefinition)) {
 			return ASTNodeFactory.getDefault().newDeclarationStatement(newUsingDeclaration);
 		}
 		return newUsingDeclaration;
@@ -68,22 +66,22 @@ public class EUDECRefactoring extends EURefactoring {
 		String[] names = null;
 		IBinding lastNameToAddBinding;
 		boolean inCompositeDeclaration = NSNodeHelper.isInOrIsCompositeDeclaration(lastNameOfqName);
-		if(inCompositeDeclaration){
-			if(CopyTemplateIdFactory.isOrContainsTemplateId(qualifiedName)){
+		if (inCompositeDeclaration) {
+			if (CopyTemplateIdFactory.isOrContainsTemplateId(qualifiedName)) {
 				return buildNameWithTemplate(qualifiedName);
 			}
 			names = NSNameHelper.getQualifiedUDECNameInTypeDecl(lastNameOfqName.resolveBinding());
 			lastNameToAddBinding = lastNameOfqName.resolveBinding();
-		}else{
+		} else {
 			names = NSNameHelper.getQualifiedUsingName(lastNameOfqName.resolveBinding());
 			lastNameToAddBinding = NSNameHelper.findOutermostClassTypeOfName(lastNameOfqName.resolveBinding());
 		}
 
 		names = addLastName(lastNameOfqName, names, lastNameToAddBinding);
 
-		if(names.length > 0){
+		if (names.length > 0) {
 			ICPPASTQualifiedName qname = ASTNodeFactory.getDefault().newQualifiedNameNode(names);
-			//Bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=381032
+			// Bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=381032
 			qname.setFullyQualified(context.selectedQualifiedName.isFullyQualified());
 			return qname;
 		}
@@ -93,17 +91,17 @@ public class EUDECRefactoring extends EURefactoring {
 	@Override
 	protected void findStartingNames(EURefactoringContext context) {
 		IBinding outermostTypeBinding;
-		if(NSNodeHelper.isInOrIsCompositeDeclaration(context.selectedQualifiedName)){
+		if (NSNodeHelper.isInOrIsCompositeDeclaration(context.selectedQualifiedName)) {
 			outermostTypeBinding = context.selectedQualifiedName.getLastName().resolveBinding();
-		}else{
+		} else {
 			outermostTypeBinding = NSNameHelper.findOutermostClassTypeOfName(context.selectedQualifiedName.getLastName().resolveBinding());
 		}
 
 		IASTName[] names = context.selectedQualifiedName.getNames();
-		if(outermostTypeBinding != null){
+		if (outermostTypeBinding != null) {
 			IASTName precedingName = null;
 			for (IASTName iastName : names) {
-				if(iastName.resolveBinding().equals(outermostTypeBinding)){
+				if (iastName.resolveBinding().equals(outermostTypeBinding)) {
 					context.startingTypeName = iastName;
 					context.startingNamespaceName = precedingName;
 					return;
@@ -113,9 +111,9 @@ public class EUDECRefactoring extends EURefactoring {
 		}
 
 		IBinding binding;
-		for (int i = names.length -1; i >= 0; i--) {
+		for (int i = names.length - 1; i >= 0; i--) {
 			binding = names[i].resolveBinding();
-			if(binding instanceof ICPPNamespace){
+			if (binding instanceof ICPPNamespace) {
 				context.startingNamespaceName = names[i];
 				return;
 			}
@@ -124,10 +122,10 @@ public class EUDECRefactoring extends EURefactoring {
 
 	private static String[] addLastName(IASTName lastNameOfqName, String[] names, IBinding lastNameToAddBinding) {
 		String lastNameToAdd = null;
-		if(lastNameToAddBinding != null){
+		if (lastNameToAddBinding != null) {
 			lastNameToAdd = lastNameToAddBinding.getName();
 		}
-		if(lastNameToAdd == null){
+		if (lastNameToAdd == null) {
 			lastNameToAdd = lastNameOfqName.resolveBinding().getName();
 		}
 		names = ArrayUtil.append(names, lastNameToAdd);
@@ -138,9 +136,9 @@ public class EUDECRefactoring extends EURefactoring {
 	private static ICPPASTQualifiedName buildNameWithTemplate(ICPPASTQualifiedName qualifiedName) {
 		ICPPASTQualifiedName qname = ASTNodeFactory.getDefault().newQualifiedName();
 		for (IASTName name : qualifiedName.getNames()) {
-			if(name instanceof ICPPASTTemplateId){
-				qname.addName(new CopyTemplateIdFactory((ICPPASTTemplateId)name).buildTemplate());
-			}else{
+			if (name instanceof ICPPASTTemplateId) {
+				qname.addName(new CopyTemplateIdFactory((ICPPASTTemplateId) name).buildTemplate());
+			} else {
 				qname.addName(name.copy());
 			}
 		}
@@ -150,25 +148,25 @@ public class EUDECRefactoring extends EURefactoring {
 	@Override
 	public IASTNode findTypeScope() {
 		IASTNode scopeNode = null;
-		if(context.selectedLastName.resolveBinding() instanceof ICPPClassType){
-			if(context.selectedQualifiedName.getNames().length >= 2){
-				IASTName typeName = context.selectedQualifiedName.getNames()[context.selectedQualifiedName.getNames().length -2];
+		if (context.selectedLastName.resolveBinding() instanceof ICPPClassType) {
+			if (context.selectedQualifiedName.getNames().length >= 2) {
+				IASTName typeName = context.selectedQualifiedName.getNames()[context.selectedQualifiedName.getNames().length - 2];
 				scopeNode = NSNodeHelper.findAncestorOf(context.selectedQualifiedName, ICPPASTCompositeTypeSpecifier.class);
-				if(scopeNode != null){
-					ICPPASTBaseSpecifier[] baseSpecifiers = ((ICPPASTCompositeTypeSpecifier)scopeNode).getBaseSpecifiers();
+				if (scopeNode != null) {
+					ICPPASTBaseSpecifier[] baseSpecifiers = ((ICPPASTCompositeTypeSpecifier) scopeNode).getBaseSpecifiers();
 					boolean foundBaseType = false;
 					for (ICPPASTBaseSpecifier baseSpec : baseSpecifiers) {
-						if(baseSpec.getName().resolveBinding().equals(typeName.resolveBinding())){
+						if (baseSpec.getName().resolveBinding().equals(typeName.resolveBinding())) {
 							foundBaseType = true;
 							break;
 						}
 					}
-					if(!foundBaseType){
+					if (!foundBaseType) {
 						scopeNode = null;
 						initStatus.addFatalError(Labels.No_ExtractInTypeWithoutCorrectInheritance);
 					}
 				}
-			}else{
+			} else {
 				initStatus.addFatalError(Labels.No_QName_Selected);
 			}
 		}

@@ -13,16 +13,15 @@ import org.eclipse.ui.console.IHyperlink;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
-public class HyperlinkMock implements IHyperlink{
+public class HyperlinkMock implements IHyperlink {
 
-	private int offset;
-	private IFile file;
-	private String editorId;
-	private int fileLength;
-	private int lineNmber;
-
+	private final int offset;
+	private final IFile file;
+	private final String editorId;
+	private final int fileLength;
+	private final int lineNmber;
 
 	public HyperlinkMock(IFile file, int lineNumber, String editorId, int fileLength, int fileOffset) {
 		super();
@@ -53,15 +52,16 @@ public class HyperlinkMock implements IHyperlink{
 		return lineNmber;
 	}
 
+	@Override
 	public void linkEntered() {
 	}
 
+	@Override
 	public void linkExited() {
 	}
 
+	@Override
 	public void linkActivated() {
 	}
-	
-	
 
 }

@@ -46,17 +46,17 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.UIPlugin;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
 @SuppressWarnings("restriction")
-public class ExtractRefactoring extends CRefactoring3 {
+public class ExtractRefactoring extends TddCRefactoring {
 
 	public static final String EXTRACT_TO_NEW_HEADER_FILE_ID = "ch.hsr.ifs.cute.tdd.extractToNewHeaderFile";
-	private static final String STRING = "\""; //$NON-NLS-1$
-	private static final String LINE_SEPARATOR = "line.separator"; //$NON-NLS-1$
-	private static final String INCLUDE = "#include \""; //$NON-NLS-1$
-	private static final String H = ".h"; //$NON-NLS-1$
+	private static final String STRING = "\"";
+	private static final String LINE_SEPARATOR = "line.separator";
+	private static final String INCLUDE = "#include \"";
+	private static final String H = ".h";
 	private ICPPASTCompositeTypeSpecifier type;
 
 	public ExtractRefactoring(ICElement element, ISelection selection) {
@@ -96,7 +96,8 @@ public class ExtractRefactoring extends CRefactoring3 {
 		return functionAncestor != null;
 	}
 
-	private void extractFreeFunction(ModificationCollector collector, IASTTranslationUnit localunit, IASTNode selectedNode) throws CModelException, CoreException {
+	private void extractFreeFunction(ModificationCollector collector, IASTTranslationUnit localunit, IASTNode selectedNode) throws CModelException,
+			CoreException {
 		IASTNode topNode = TddHelper.getTopAncestorOfType(selectedNode, ICPPASTTemplateDeclaration.class);
 		if (topNode == null) {
 			topNode = TddHelper.getAncestorOfType(selectedNode, ICPPASTFunctionDefinition.class);
@@ -196,7 +197,8 @@ public class ExtractRefactoring extends CRefactoring3 {
 			@Override
 			public void run() {
 				Shell shell = UIPlugin.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell();
-				boolean createnew = MessageDialog.openQuestion(shell, Messages.ExtractRefactoring_8, Messages.ExtractRefactoring_9 + name + Messages.ExtractRefactoring_10);
+				boolean createnew = MessageDialog.openQuestion(shell, Messages.ExtractRefactoring_8, Messages.ExtractRefactoring_9 + name
+						+ Messages.ExtractRefactoring_10);
 				answer.setObject(createnew);
 			}
 		};
@@ -241,7 +243,7 @@ public class ExtractRefactoring extends CRefactoring3 {
 
 	private String getPath(IPath oldpath, String newFilename) {
 		String oldpathstring = oldpath.toString();
-		String newFilenamePath = oldpathstring.replaceAll("\\w*.\\w*$", "") + newFilename; //$NON-NLS-1$ //$NON-NLS-2$
+		String newFilenamePath = oldpathstring.replaceAll("\\w*.\\w*$", "") + newFilename;
 		return newFilenamePath;
 	}
 }

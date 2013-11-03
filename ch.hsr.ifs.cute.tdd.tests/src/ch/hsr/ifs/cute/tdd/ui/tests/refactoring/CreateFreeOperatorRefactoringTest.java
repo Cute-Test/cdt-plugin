@@ -30,8 +30,8 @@ public class CreateFreeOperatorRefactoringTest extends TddRefactoringTest {
 		CodanArguments ca = new CodanArguments(marker);
 		int markerOffset = marker.getAttribute(IMarker.CHAR_START, 0);
 		ca.setStrategy(":freeoperator");
-		return new CreateFreeFunctionRefactoring(new TextSelection(doc, markerOffset, marker.getAttribute(IMarker.CHAR_END, 0) - markerOffset), ca, new OperatorCreationStrategy(
-				true));
+		TextSelection newSelection = new TextSelection(doc, markerOffset, marker.getAttribute(IMarker.CHAR_END, 0) - markerOffset);
+		return new CreateFreeFunctionRefactoring(newSelection, ca, new OperatorCreationStrategy(true));
 	}
 
 }

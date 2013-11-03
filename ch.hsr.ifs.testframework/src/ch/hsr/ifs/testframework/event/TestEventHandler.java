@@ -29,8 +29,7 @@ public abstract class TestEventHandler {
 			handleSuccess(event.reg, event.testName, event.msg);
 		} else if (testEvent instanceof TestFailureEvent) {
 			TestFailureEvent event = (TestFailureEvent) testEvent;
-			handleFailure(event.reg, event.testName, event.fileName,
-					event.lineNo, event.reason);
+			handleFailure(event.reg, event.testName, event.fileName, event.lineNo, event.reason);
 		} else if (testEvent instanceof TestErrorEvent) {
 			TestErrorEvent event = (TestErrorEvent) testEvent;
 			handleError(event.reg, event.testName, event.msg);
@@ -47,22 +46,20 @@ public abstract class TestEventHandler {
 		}
 	}
 
-	protected abstract void handleBeginning(IRegion reg, String suitename,
-			String suitesize);
-	
+	protected abstract void handleBeginning(IRegion reg, String suitename, String suitesize);
+
 	protected abstract void handleTestStart(IRegion reg, String testName);
-	
+
 	protected abstract void handleError(IRegion reg, String testName, String msg);
-	
+
 	protected abstract void handleSuccess(IRegion reg, String name, String msg);
-	
+
 	protected abstract void handleEnding(IRegion reg, String suitename);
-	
-	protected abstract void handleFailure(IRegion reg, String testName,
-			String fileName, String lineNo, String reason);
-	
+
+	protected abstract void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason);
+
 	public abstract void handleSessionStart();
-	
+
 	public abstract void handleSessionEnd();
 
 	protected IPath getWorkspaceFile(String fileName, IPath rtPath) {
@@ -72,9 +69,9 @@ public abstract class TestEventHandler {
 			adaptedName = adaptedName.replace(CYGDRIVE, "");
 			char driveLetter = adaptedName.charAt(0);
 			adaptedName = driveLetter + ":" + adaptedName.substring(1);
-			filePath = Path.fromOSString(adaptedName);					
+			filePath = Path.fromOSString(adaptedName);
 		} else if (!filePath.isAbsolute()) {
-			filePath=rtPath.append(adaptedName);
+			filePath = rtPath.append(adaptedName);
 		}
 		return filePath;
 	}

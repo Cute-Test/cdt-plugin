@@ -85,7 +85,7 @@ public class IUDIRTemplateIdFactory extends TemplateIdFactory {
 		IBinding owner = templateNameBinding.getOwner(); // Logik für inline namespace ergänzen
 		if (owner instanceof ICPPNamespace) {
 			IIndex index = templId.getTranslationUnit().getIndex();
-			boolean isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(index.adaptBinding(enclosingNSContext.namespaceDefBinding)); //since this should works with nested using directives
+			boolean isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(index.adaptBinding(enclosingNSContext.namespaceDefBinding)); // since this should works with nested using directives
 			while (!isChildOfEnclosingNamespace && (owner != null && owner instanceof ICPPNamespace) && ((ICPPNamespace) owner).isInline()) {
 				owner = owner.getOwner();
 				isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(index.adaptBinding(enclosingNSContext.namespaceDefBinding));

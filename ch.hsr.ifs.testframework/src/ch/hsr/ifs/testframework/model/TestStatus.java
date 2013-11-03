@@ -9,10 +9,7 @@
 package ch.hsr.ifs.testframework.model;
 
 public enum TestStatus {
-	
-	running,
-	success,
-	failure,
-	error
+
+	running, success, failure, error
 
 }

@@ -12,13 +12,13 @@ import org.eclipse.ui.console.IHyperlink;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class HyperlinkLocation {
 
-	private IHyperlink link;
-	private int offset;
-	private int length;
+	private final IHyperlink link;
+	private final int offset;
+	private final int length;
 
 	public HyperlinkLocation(IHyperlink hyperlink, int offset, int length) {
 		this.link = hyperlink;

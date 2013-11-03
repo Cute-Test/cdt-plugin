@@ -6,7 +6,7 @@ import org.eclipse.text.edits.MultiTextEdit;
 public class AddSuiteStrategy implements IAddStrategy {
 
 	private final AddPushbackStatementStrategy decoratedStrategy;
-	private final String newLine;
+	private final String nl;
 	private final int insertOffset;
 
 	public AddSuiteStrategy(AddPushbackStatementStrategy strategy) {
@@ -15,7 +15,7 @@ public class AddSuiteStrategy implements IAddStrategy {
 
 	public AddSuiteStrategy(AddPushbackStatementStrategy strategy, int insertOffset) {
 		decoratedStrategy = strategy;
-		newLine = strategy.newLine;
+		nl = strategy.newLine;
 		this.insertOffset = insertOffset;
 	}
 
@@ -24,8 +24,8 @@ public class AddSuiteStrategy implements IAddStrategy {
 		final String pushbackContent = decoratedStrategy.createPushBackContent();
 		final int insertionPoint = insertOffset >= 0 ? insertOffset : decoratedStrategy.astTu.getFileLocation().getNodeLength();
 
-		InsertEdit edit = new InsertEdit(insertionPoint, "cute::suite make_suite(){" + newLine + "\tcute::suite s;" + newLine + "\ts.push_back(" + pushbackContent + ");" + newLine
-				+ "\treturn s;" + newLine + "}");
+		String code = "cute::suite make_suite(){" + nl + "\tcute::suite s;" + nl + "\ts.push_back(" + pushbackContent + ");" + nl + "\treturn s;" + nl + "}";
+		InsertEdit edit = new InsertEdit(insertionPoint, code);
 		mEdit.addChild(edit);
 		return mEdit;
 	}

@@ -84,7 +84,7 @@ public class TddLinkedModeTest {
 	@Test
 	public void testAddOneProposal() {
 		lmi.addPosition(0, 3);
-		lmi.addProposal(0, new Proposal[]{new Proposal("class", null, 0)});
+		lmi.addProposal(0, new Proposal[] { new Proposal("class", null, 0) });
 		assertEquals(1, lmi.getGroups().get(0).getProposals().length);
 	}
 
@@ -95,13 +95,13 @@ public class TddLinkedModeTest {
 		assertEquals(1, lmi.getGroups().size());
 	}
 
-	@Test(expected=RuntimeException.class)
+	@Test(expected = RuntimeException.class)
 	public void testInsertionOfSiblingWithOtherLength() {
 		lmi.addPosition(0, 3);
 		lmi.addPosition(3, 4, 0);
 	}
 
-	@Test(expected=RuntimeException.class)
+	@Test(expected = RuntimeException.class)
 	public void testAddPositionToNonexistentSibling() {
 		lmi.addPosition(3, 3, 0);
 	}

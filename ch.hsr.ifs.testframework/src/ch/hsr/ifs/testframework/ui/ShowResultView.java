@@ -19,50 +19,50 @@ import org.eclipse.ui.progress.UIJob;
 import ch.hsr.ifs.testframework.Messages;
 import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 
-public class ShowResultView extends UIJob{
-	
+public class ShowResultView extends UIJob {
+
 	private static Messages msg = TestFrameworkPlugin.getMessages();
 
 	public ShowResultView() {
-		super(msg.getString("ShowResultView.ShowResultView")); //$NON-NLS-1$
+		super(msg.getString("ShowResultView.ShowResultView"));
 	}
-	
+
 	private TestRunnerViewPart showTestRunnerViewPartInActivePage(TestRunnerViewPart testRunner) {
-		IWorkbenchPart activePart= null;
-		IWorkbenchPage page= null;
+		IWorkbenchPart activePart = null;
+		IWorkbenchPage page = null;
 		try {
 			if (testRunner != null && testRunner.isCreated())
 				return testRunner;
-			page= TestFrameworkPlugin.getActivePage();
+			page = TestFrameworkPlugin.getActivePage();
 			if (page == null)
 				return null;
-			activePart= page.getActivePart();
+			activePart = page.getActivePart();
 
 			return (TestRunnerViewPart) page.showView(TestRunnerViewPart.ID);
 		} catch (PartInitException pie) {
 			TestFrameworkPlugin.log(pie);
 			return null;
-		} finally{
-			//restore focus stolen by the creation of the result view
+		} finally {
+			// restore focus stolen by the creation of the result view
 			if (page != null && activePart != null)
 				page.activate(activePart);
 		}
 	}
 
 	private TestRunnerViewPart findTestRunnerViewPartInActivePage() {
-		IWorkbenchPage page= TestFrameworkPlugin.getActivePage();
+		IWorkbenchPage page = TestFrameworkPlugin.getActivePage();
 		if (page == null)
 			return null;
 		return (TestRunnerViewPart) page.findView(TestRunnerViewPart.ID);
 	}
-	
+
 	@Override
 	public IStatus runInUIThread(IProgressMonitor monitor) {
 		if (showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage()) == null) {
-			return new Status(IStatus.WARNING, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("ShowResultView.CouldNotShowResultView"),null); //$NON-NLS-1$
-		}else {
-			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK,msg.getString("ShowResultView.OK"),null); //$NON-NLS-1$
+			return new Status(IStatus.WARNING, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("ShowResultView.CouldNotShowResultView"), null);
+		} else {
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("ShowResultView.OK"), null);
 		}
 	}
-	
+
 }

@@ -20,18 +20,19 @@ import ch.hsr.ifs.cute.gcov.model.File;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class ResourceChangeListner implements IResourceChangeListener {
 
 	public void resourceChanged(IResourceChangeEvent event) {
 		IResourceDelta delta = event.getDelta();
-		IResourceDelta[] deltas = new IResourceDelta[] {delta};
+		IResourceDelta[] deltas = new IResourceDelta[] { delta };
 		processDeltas(deltas);
 	}
 
 	protected void processDeltas(IResourceDelta[] deltas) {
-		if(deltas.length == 0) return;
+		if (deltas.length == 0)
+			return;
 		for (IResourceDelta iResourceDelta : deltas) {
 			try {
 				IPath path = iResourceDelta.getFullPath();
@@ -39,17 +40,15 @@ public class ResourceChangeListner implements IResourceChangeListener {
 				CoverageModel CovModel = GcovPlugin.getDefault().getcModel();
 				File mF = CovModel.getModelForFile(file);
 				int flags = iResourceDelta.getFlags();
-				if((flags & IResourceDelta.CONTENT) != 0 || (flags& IResourceDelta.REPLACED) != 0) {
-					if(mF != null) {
+				if ((flags & IResourceDelta.CONTENT) != 0 || (flags & IResourceDelta.REPLACED) != 0) {
+					if (mF != null) {
 						CovModel.removeFileFromModel(file);
 					}
-					new DeleteMarkerJob(file).schedule();						
+					new DeleteMarkerJob(file).schedule();
 				}
-			}catch(Exception e) {}
+			} catch (Exception e) {
+			}
 			processDeltas(iResourceDelta.getAffectedChildren());
 		}
 	}
-
-
-
 }

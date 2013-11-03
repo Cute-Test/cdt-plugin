@@ -279,13 +279,14 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		IPath folderPath = filePath.removeLastSegments(1).makeRelative();
 		IResource folder = getWorkspaceRoot().findMember(folderPath);
 		if (folder == null || !folder.exists() || (folder.getType() != IResource.PROJECT && folder.getType() != IResource.FOLDER)) {
-			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.Folder") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.DoesNotExist")); //$NON-NLS-2$
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.Folder") + folderPath
+					+ Messages.getString("NewSuiteFileCreationWizardPage.DoesNotExist"));
 			return status;
 		}
 
 		IStatus convStatus = CConventions.validateSourceFileName(getCurrentProject(), filePath.lastSegment());
 		if (convStatus.getSeverity() == IStatus.ERROR) {
-			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.0") + convStatus.getMessage() + "."); //$NON-NLS-2$
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.0") + convStatus.getMessage() + ".");
 			return status;
 		}
 		if (!newFileDialogField.getText().matches("\\w+")) {
@@ -424,7 +425,8 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 				}
 				ICElement e = CoreModel.getDefault().create(res.getFullPath());
 				if (CModelUtil.getSourceFolder(e) == null) {
-					status.setError(Messages.getString("NewSuiteFileCreationWizardPage.9") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.10")); //$NON-NLS-2$
+					status.setError(Messages.getString("NewSuiteFileCreationWizardPage.9") + folderPath
+							+ Messages.getString("NewSuiteFileCreationWizardPage.10"));
 					return status;
 				}
 			} else {
@@ -432,7 +434,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 				return status;
 			}
 		} else {
-			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.12") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.13")); //$NON-NLS-2$
+			status.setError(Messages.getString("NewSuiteFileCreationWizardPage.12") + folderPath + Messages.getString("NewSuiteFileCreationWizardPage.13"));
 			return status;
 		}
 

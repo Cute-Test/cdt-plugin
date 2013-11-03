@@ -21,30 +21,28 @@ import ch.hsr.ifs.cute.namespactor.refactoring.eu.EUTemplateIdFactory;
 /**
  * @author Jules Weder
  * */
-public class EUDECTemplateIdFactory extends EUTemplateIdFactory{
+public class EUDECTemplateIdFactory extends EUTemplateIdFactory {
 
-	public EUDECTemplateIdFactory(ICPPASTTemplateId templateId, EURefactoringContext context){
+	public EUDECTemplateIdFactory(ICPPASTTemplateId templateId, EURefactoringContext context) {
 		super(templateId, context);
 	}
 
 	@Override
 	protected void precedeWithQualifiers(ICPPASTQualifiedName replaceName, IASTName[] names, IASTName templateName) {
 		IASTName type = selectedType;
-		if(selectedType instanceof ICPPASTTemplateId){
-			type = ((ICPPASTTemplateId)selectedType).getTemplateName();
+		if (selectedType instanceof ICPPASTTemplateId) {
+			type = ((ICPPASTTemplateId) selectedType).getTemplateName();
 		}
-		if(!type.resolveBinding().equals(templateName.resolveBinding())){
+		if (!type.resolveBinding().equals(templateName.resolveBinding())) {
 			for (IASTName iastName : names) {
-				if(iastName instanceof ICPPASTTemplateId){
-					iastName = ((ICPPASTTemplateId)iastName).getTemplateName();
+				if (iastName instanceof ICPPASTTemplateId) {
+					iastName = ((ICPPASTTemplateId) iastName).getTemplateName();
 				}
-				if(iastName.resolveBinding().equals(templateName.resolveBinding())){
+				if (iastName.resolveBinding().equals(templateName.resolveBinding())) {
 					break;
 				}
 				replaceName.addName(iastName.copy());
 			}
 		}
-
 	}
-
 }

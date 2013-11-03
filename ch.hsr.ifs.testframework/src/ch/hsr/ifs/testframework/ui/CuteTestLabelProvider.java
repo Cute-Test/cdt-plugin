@@ -18,28 +18,29 @@ import ch.hsr.ifs.testframework.model.TestSuite;
 
 /**
  * @author egraf
- *
+ * 
  */
-public class CuteTestLabelProvider  extends LabelProvider {
-	
-	private Image suiteRun = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiterun.gif").createImage(); //$NON-NLS-1$
-	private Image suiteOk = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiteok.gif").createImage(); //$NON-NLS-1$
-	private Image suiteFail = TestFrameworkPlugin.getImageDescriptor("obj16/tsuitefail.gif").createImage(); //$NON-NLS-1$
-	private Image suiteError = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiteerror.gif").createImage(); //$NON-NLS-1$
-	
-	private Image testRun = TestFrameworkPlugin.getImageDescriptor("obj16/testrun.gif").createImage(); //$NON-NLS-1$
-	private Image testOk = TestFrameworkPlugin.getImageDescriptor("obj16/testok.gif").createImage(); //$NON-NLS-1$
-	private Image testFail = TestFrameworkPlugin.getImageDescriptor("obj16/testfail.gif").createImage(); //$NON-NLS-1$
-	private Image testError = TestFrameworkPlugin.getImageDescriptor("obj16/testerr.gif").createImage(); //$NON-NLS-1$
+public class CuteTestLabelProvider extends LabelProvider {
 
+	private final Image suiteRun = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiterun.gif").createImage();
+	private final Image suiteOk = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiteok.gif").createImage();
+	private final Image suiteFail = TestFrameworkPlugin.getImageDescriptor("obj16/tsuitefail.gif").createImage();
+	private final Image suiteError = TestFrameworkPlugin.getImageDescriptor("obj16/tsuiteerror.gif").createImage();
+
+	private final Image testRun = TestFrameworkPlugin.getImageDescriptor("obj16/testrun.gif").createImage();
+	private final Image testOk = TestFrameworkPlugin.getImageDescriptor("obj16/testok.gif").createImage();
+	private final Image testFail = TestFrameworkPlugin.getImageDescriptor("obj16/testfail.gif").createImage();
+	private final Image testError = TestFrameworkPlugin.getImageDescriptor("obj16/testerr.gif").createImage();
+
+	@Override
 	public Image getImage(Object element) {
 		if (element instanceof TestSuite) {
 			TestElement suite = (TestElement) element;
 			return getSuiteImage(suite);
-		}else if (element instanceof TestCase) {
+		} else if (element instanceof TestCase) {
 			TestCase tCase = (TestCase) element;
 			return getTestCaseImage(tCase);
-		}else {
+		} else {
 			throw new IllegalArgumentException(String.valueOf(element));
 		}
 	}
@@ -80,12 +81,13 @@ public class CuteTestLabelProvider  extends LabelProvider {
 		}
 	}
 
+	@Override
 	public String getText(Object element) {
 		return element.toString();
 	}
 
+	@Override
 	public void dispose() {
 		// TODO Images disposen
-
 	}
 }

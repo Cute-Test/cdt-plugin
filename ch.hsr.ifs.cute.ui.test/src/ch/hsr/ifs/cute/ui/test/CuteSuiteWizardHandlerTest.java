@@ -26,19 +26,21 @@ import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
 
 public class CuteSuiteWizardHandlerTest extends TestCase {
 
-	public CuteSuiteWizardHandlerTest(String m){
+	public CuteSuiteWizardHandlerTest(String m) {
 		super(m);
 	}
-	CuteSuiteWizardHandler cswh=null;
+
+	CuteSuiteWizardHandler cswh = null;
 	private IFolder srcFolder;
 	private IFolder cuteFolder;
 	private IProject project;
+
 	@SuppressWarnings("nls")
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		cswh=new CuteSuiteWizardHandler("theSuiteName"); //$NON-NLS-1$
-		IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
+		cswh = new CuteSuiteWizardHandler("theSuiteName");
+		IWorkspaceRoot iwsr = ResourcesPlugin.getWorkspace().getRoot();
 		project = iwsr.getProject("CSWHT");
 		project.create(new NullProgressMonitor());
 		project.open(new NullProgressMonitor());
@@ -54,25 +56,26 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 	}
 
 	@SuppressWarnings("nls")
-	private void addTestFiles(ICuteHeaders cuteHeader ) {
-		try{
+	private void addTestFiles(ICuteHeaders cuteHeader) {
+		try {
 
 			cswh.copyExampleTestFiles(srcFolder, cuteHeader);
-			//for indirect reference, check dependencies
+			// for indirect reference, check dependencies
 
-			IFile file=srcFolder.getFile("Test.cpp");
-			if(file.exists()){
+			IFile file = srcFolder.getFile("Test.cpp");
+			if (file.exists()) {
 				file.delete(true, false, new NullProgressMonitor());
 				assertFalse(file.exists());
 			}
-			IFile file1=srcFolder.getFile("suite.cpp");
-			IFile file2=srcFolder.getFile("suite.h");
+			IFile file1 = srcFolder.getFile("suite.cpp");
+			IFile file2 = srcFolder.getFile("suite.h");
 
 			assertTrue(file1.exists());
 			assertTrue(file2.exists());
-			//clean up
 
-		}catch(CoreException ce){fail(ce.getMessage());}
+		} catch (CoreException ce) {
+			fail(ce.getMessage());
+		}
 	}
 
 	@Override
@@ -84,9 +87,9 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		srcFolder = null;
 	}
 
-	public static Test suite(){
-		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler"); //$NON-NLS-1$
-		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles")); //$NON-NLS-1$
+	public static Test suite() {
+		TestSuite ts = new TestSuite("ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler");
+		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles"));
 		return ts;
 	}
 }

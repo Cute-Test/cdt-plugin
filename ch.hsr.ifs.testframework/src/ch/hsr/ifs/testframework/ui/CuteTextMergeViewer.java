@@ -57,16 +57,16 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 	}
 
 	private TextViewer getSourceViewer(ViewerLocation loc) {
-		String fieldName = ""; //$NON-NLS-1$
+		String fieldName = "";
 		switch (loc) {
 		case LEFT:
-			fieldName = "fLeft"; //$NON-NLS-1$
+			fieldName = "fLeft";
 			break;
 		case RIGHT:
-			fieldName = "fRight"; //$NON-NLS-1$
+			fieldName = "fRight";
 			break;
 		case CENTER:
-			fieldName = "fAncestor"; //$NON-NLS-1$
+			fieldName = "fAncestor";
 			break;
 		}
 		try {
@@ -77,9 +77,12 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 				MergeSourceViewer viewer = (MergeSourceViewer) instanceField;
 				return viewer.getSourceViewer();
 			}
-		} catch (Exception e) {
+		} catch (NoSuchFieldException e) {
 			logException(e);
-			//return null (bellow) if field not found.
+		} catch (SecurityException e) {
+			logException(e);
+		} catch (IllegalAccessException e) {
+			logException(e);
 		}
 		return null;
 	}
@@ -102,9 +105,6 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 		return null;
 	}
 
-	/**
-	 * Remove the painter from the current editor.
-	 */
 	private void uninstallPainter() {
 		uninstallPainter(ViewerLocation.LEFT, leftWhitespaceCharacterPainter);
 		uninstallPainter(ViewerLocation.RIGHT, rightWhitespaceCharacterPainter);
@@ -120,18 +120,17 @@ public class CuteTextMergeViewer extends TextMergeViewer {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private WhitespaceCharacterPainter getWhitespaceCharacterPainter(Object viewer) {
 		try {
-			Class<?> viewerClass = Class.forName("org.eclipse.jface.text.TextViewer"); //$NON-NLS-1$
-			Field painterMgField = viewerClass.getDeclaredField("fPaintManager"); //$NON-NLS-1$
+			Class<?> viewerClass = Class.forName("org.eclipse.jface.text.TextViewer");
+			Field painterMgField = viewerClass.getDeclaredField("fPaintManager");
 			painterMgField.setAccessible(true);
 			PaintManager pm = (PaintManager) painterMgField.get(viewer);
 
 			Class<? extends PaintManager> classPm = pm.getClass();
-			Field painterListField = classPm.getDeclaredField("fPainters"); //$NON-NLS-1$
+			Field painterListField = classPm.getDeclaredField("fPainters");
 			painterListField.setAccessible(true);
-			List painters = (List) painterListField.get(pm);
+			List<?> painters = (List<?>) painterListField.get(pm);
 			for (Object object : painters) {
 				if (object instanceof WhitespaceCharacterPainter) {
 					WhitespaceCharacterPainter whitePainter = (WhitespaceCharacterPainter) object;

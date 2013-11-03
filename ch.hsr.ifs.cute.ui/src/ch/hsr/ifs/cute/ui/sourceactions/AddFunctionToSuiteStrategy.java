@@ -37,7 +37,7 @@ public class AddFunctionToSuiteStrategy extends AddPushbackStatementStrategy {
 	}
 
 	public MultiTextEdit getEdit() {
-		//TODO do not add the function holding the suite
+		// TODO do not add the function holding the suite
 		IIndex index = astTu.getIndex();
 		try {
 			index.acquireReadLock();

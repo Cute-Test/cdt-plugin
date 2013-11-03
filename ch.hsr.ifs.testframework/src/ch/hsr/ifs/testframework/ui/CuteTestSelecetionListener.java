@@ -16,20 +16,16 @@ import ch.hsr.ifs.testframework.model.TestElement;
 
 /**
  * @author egraf
- *
+ * 
  */
 public class CuteTestSelecetionListener implements ISelectionChangedListener {
-	
-	private TestViewer viewer;
-	
-	
+
+	private final TestViewer viewer;
 
 	public CuteTestSelecetionListener(TestViewer viewer) {
 		super();
 		this.viewer = viewer;
 	}
-
-
 
 	public void selectionChanged(SelectionChangedEvent event) {
 		if (event.getSelection() instanceof TreeSelection) {

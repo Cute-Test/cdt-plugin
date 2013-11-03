@@ -13,14 +13,11 @@ import java.util.Vector;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.debug.core.ILaunch;
 
-
 public class Model {
-	
-	private Vector<ISessionListener> sessionListeners = new Vector<ISessionListener>();
-	
+
+	private final Vector<ISessionListener> sessionListeners = new Vector<ISessionListener>();
 
 	private ITestComposite currentParent;
-
 
 	private TestSession session;
 
@@ -29,18 +26,18 @@ public class Model {
 		currentParent = session;
 		notifyListenerSessionStart(session);
 	}
-	
+
 	public void startSuite(TestSuite suite) {
 		currentParent.addTestElement(suite);
 		currentParent = suite;
 	}
-	
+
 	public void addTest(TestCase test) {
-		if(currentParent != null) {
+		if (currentParent != null) {
 			currentParent.addTestElement(test);
 		}
 	}
-	
+
 	public void endCurrentTestCase(IFile file, int lineNumber, String msg, TestStatus status, TestCase tCase) {
 		TestResult result;
 		switch (status) {
@@ -60,12 +57,9 @@ public class Model {
 			suite.end(null);
 			currentParent = suite.getParent();
 		}
-		
+
 	}
-	
-	/**
-	 * @since 3.0
-	 */
+
 	public void endSession(TestCase currentTestCase) {
 		if (currentParent instanceof TestSuite) {
 			TestSuite suite = (TestSuite) currentParent;
@@ -73,29 +67,29 @@ public class Model {
 		}
 		notifyListenerSessionEnd(session);
 	}
-	
+
 	public void addListener(ISessionListener lis) {
-		if(!sessionListeners.contains(lis)) {
+		if (!sessionListeners.contains(lis)) {
 			sessionListeners.add(lis);
 		}
 	}
-	
+
 	public void removeListener(ISessionListener lis) {
 		sessionListeners.remove(lis);
 	}
-	
+
 	private void notifyListenerSessionStart(TestSession session) {
 		for (ISessionListener lis : sessionListeners) {
 			lis.sessionStarted(session);
 		}
 	}
-	
+
 	private void notifyListenerSessionEnd(TestSession session) {
 		for (ISessionListener lis : sessionListeners) {
 			lis.sessionFinished(session);
 		}
 	}
-	
+
 	public TestSession getSession() {
 		return session;
 	}

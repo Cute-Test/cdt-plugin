@@ -16,8 +16,7 @@ import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.OperatorCreationStrategy;
 
-public class FreeOperatorCreationQuickFix extends
-		AbstractFunctionCreationQuickFix {
+public class FreeOperatorCreationQuickFix extends AbstractFunctionCreationQuickFix {
 
 	public FreeOperatorCreationQuickFix() {
 		setFree(true);
@@ -35,8 +34,7 @@ public class FreeOperatorCreationQuickFix extends
 	}
 
 	@Override
-	protected void configureLinkedMode(ChangeRecorder rec,
-			LinkedModeInformation lmi) throws BadLocationException {
+	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		configureLinkedModeWithDeclSpec(rec, lmi);
 	}
 }

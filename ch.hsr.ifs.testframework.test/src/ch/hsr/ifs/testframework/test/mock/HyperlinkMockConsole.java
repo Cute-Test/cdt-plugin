@@ -15,11 +15,11 @@ import org.eclipse.ui.console.IHyperlink;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class HyperlinkMockConsole extends FileInputTextConsole {
-	
-	private Vector<HyperlinkLocation> links = new Vector<HyperlinkLocation>();
+
+	private final Vector<HyperlinkLocation> links = new Vector<HyperlinkLocation>();
 
 	public HyperlinkMockConsole(String inputFile) {
 		super(inputFile);
@@ -34,7 +34,5 @@ public class HyperlinkMockConsole extends FileInputTextConsole {
 	public Vector<HyperlinkLocation> getLinks() {
 		return links;
 	}
-	
-	
 
 }

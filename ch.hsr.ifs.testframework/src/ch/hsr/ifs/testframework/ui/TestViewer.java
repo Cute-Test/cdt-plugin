@@ -20,7 +20,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -72,7 +71,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			if (reveal && viewPart.isAutoScroll()) {
 				treeViewer.reveal(element);
 			}
-			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestViewer.OK"), null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestViewer.OK"), null);
 		}
 	}
 
@@ -92,7 +91,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			if (viewPart.isAutoScroll()) {
 				treeViewer.reveal(element);
 			}
-			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestViewer.OK"), null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestViewer.OK"), null);
 		}
 	}
 
@@ -121,7 +120,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 				testResultViewer.setText(tCase.getMessage());
 				redraw();
 			} else if (test instanceof TestSuite) {
-				testResultViewer.setText(""); //$NON-NLS-1$
+				testResultViewer.setText("");
 				redraw();
 			}
 		}
@@ -199,7 +198,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 
 	public void reset(TestSession session) {
-		testResultViewer.setText(""); //$NON-NLS-1$
+		testResultViewer.setText("");
 		treeViewer.setInput(session);
 	}
 
@@ -216,13 +215,8 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		gridLayout.marginHeight = 0;
 		createSashForm();
 		this.setLayout(gridLayout);
-		//		setSize(new Point(300, 200));
 	}
 
-	/**
-	 * This method initializes sashForm
-	 * 
-	 */
 	private void createSashForm() {
 		sashForm = new SashForm(this, SWT.HORIZONTAL);
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -240,21 +234,12 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 
 	private void handleMenuAboutToShow(IMenuManager manager) {
-		IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
-		//		boolean isRelaunchEnabledForSelection = !selection.isEmpty() && 
-		//				(testingSession.getTestsRunnerProviderInfo().isAllowedMultipleTestFilter() || (selection.size() == 1));
 		rerunAction.setEnabled(true);
-		//rerunAction.setTestingSession(testingSession);
 
 	}
 
 	private void initContextMenu() {
-		//		expandAllAction = new TestsHierarchyExpandAllAction(treeViewer);
-		//		collapseAllAction = new TestsHierarchyCollapseAllAction(treeViewer);
-		//		copyAction = new CopySelectedTestsAction(treeViewer, clipboard);
-		//		redebugAction = new RedebugSelectedAction(testingSession, treeViewer);
-
-		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
 				handleMenuAboutToShow(manager);
@@ -265,15 +250,11 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		Menu menu = menuMgr.createContextMenu(treeViewer.getTree());
 		treeViewer.getTree().setMenu(menu);
 
-		//menuMgr.add(copyAction);
 		menuMgr.add(new Separator());
 		rerunAction = viewPart.getRerunSelectedAction(treeViewer);
 		menuMgr.add(rerunAction);
-		//menuMgr.add(redebugAction);
 		menuMgr.add(viewPart.getRerunLastTestAction());
 		menuMgr.add(new Separator());
-		//menuMgr.add(expandAllAction);
-		//menuMgr.add(collapseAllAction);
 
 	}
 
@@ -281,10 +262,10 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		UIJob job = null;
 		switch (event.getType()) {
 		case suiteFinished:
-			job = new UpdateTestElement(msg.getString("TestViewer.ShowNewTest"), event.getElement(), false); //$NON-NLS-1$
+			job = new UpdateTestElement(msg.getString("TestViewer.ShowNewTest"), event.getElement(), false);
 			break;
 		case testFinished:
-			job = new UpdateTestElement(msg.getString("TestViewer.UpdateTest"), event.getElement(), true); //$NON-NLS-1$
+			job = new UpdateTestElement(msg.getString("TestViewer.UpdateTest"), event.getElement(), true);
 			break;
 		}
 
@@ -297,7 +278,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 		this.session = session;
 		session.addListener(this);
 		cuteTestDClickListener.setSession(session);
-		UIJob job = new UIJob(msg.getString("TestViewer.ResetTestViewer")) { //$NON-NLS-1$
+		UIJob job = new UIJob(msg.getString("TestViewer.ResetTestViewer")) {
 
 			@Override
 			public boolean belongsTo(Object family) {
@@ -307,7 +288,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				reset(TestViewer.this.session);
-				return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestViewer.OK"), null); //$NON-NLS-1$
+				return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestViewer.OK"), null);
 			}
 
 		};
@@ -465,7 +446,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			if (firstElement instanceof TestCase) {
 				TestCase tCase = (TestCase) firstElement;
 				treeViewer.setSelection(new StructuredSelection(findPrevFailure(tCase)), true);
-			} else { //show first Failure
+			} else { // show first Failure
 				treeViewer.setSelection(new StructuredSelection(findFirstFailure()), true);
 			}
 		}
@@ -487,7 +468,7 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 			composite.addListener(this);
 		}
 		elemets.add(newElement);
-		UIJob job = new ShowNewTest(msg.getString("TestViewer.ShowNewTest"), newElement.getParent(), newElement); //$NON-NLS-1$
+		UIJob job = new ShowNewTest(msg.getString("TestViewer.ShowNewTest"), newElement.getParent(), newElement);
 		job.schedule();
 	}
 

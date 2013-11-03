@@ -33,12 +33,12 @@ import org.eclipse.ui.ide.IDE;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 
-public abstract class CRefactoring3 extends CRefactoring {
+public abstract class TddCRefactoring extends CRefactoring {
 
 	private final TextSelection selection;
 	protected LinkedModeInformation lmi = new LinkedModeInformation();
 
-	public CRefactoring3(ICElement element, ISelection selection) {
+	public TddCRefactoring(ICElement element, ISelection selection) {
 		super(element, selection, null);
 		if (!IDE.saveAllEditors(new IResource[] { ResourcesPlugin.getWorkspace().getRoot() }, false)) {
 			initStatus.addFatalError(Messages.CRefactoring3_0);
@@ -46,7 +46,7 @@ public abstract class CRefactoring3 extends CRefactoring {
 		this.selection = (TextSelection) selection;
 	}
 
-	public CRefactoring3(ISelection selection) {
+	public TddCRefactoring(ISelection selection) {
 		this(getEditor().getInputCElement(), selection);
 	}
 
@@ -61,7 +61,7 @@ public abstract class CRefactoring3 extends CRefactoring {
 	}
 
 	@Override
-	protected RefactoringStatus checkFinalConditions(IProgressMonitor subProgressMonitor, CheckConditionsContext checkContext) throws CoreException, OperationCanceledException {
+	protected RefactoringStatus checkFinalConditions(IProgressMonitor mon, CheckConditionsContext context) throws CoreException, OperationCanceledException {
 		return initStatus;
 	}
 

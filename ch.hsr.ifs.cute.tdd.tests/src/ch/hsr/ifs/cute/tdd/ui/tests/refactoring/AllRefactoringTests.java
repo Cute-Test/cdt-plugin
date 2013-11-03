@@ -15,22 +15,22 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 //@formatter:off
-			AddArgumentRefactoringTest.class,
-			ChangeVisibilityRefactoringTest.class,
-			CreateTypeRefactoringTest.class,
-			CreateConstructorRefactoringTest.class,
-			CreateFreeOperatorRefactoringTest.class,
-			CreateFunctionParameterRefactoringTest.class,
-			CreateFunctionRefactoringTest.class,
-			CreateLocalVariableRefactoringTest.class,
-			CreateMemberFunctionRefactoringTest.class,
-			CreateMemberVariableRefactoringTest.class,
-			CreateNamespaceRefactoringTest.class,
-			CreateOperatorRefactoringTest.class,
-			CreateStaticFunctionRefactoringTest.class,
-			ExtractFunctionRefactoringTest.class,
-			ExtractTypeRefactoringTest.class
-			//@formatter:on
+		AddArgumentRefactoringTest.class,
+		ChangeVisibilityRefactoringTest.class,
+		CreateTypeRefactoringTest.class,
+		CreateConstructorRefactoringTest.class,
+		CreateFreeOperatorRefactoringTest.class,
+		CreateFunctionParameterRefactoringTest.class,
+		CreateFunctionRefactoringTest.class,
+		CreateLocalVariableRefactoringTest.class,
+		CreateMemberFunctionRefactoringTest.class,
+		CreateMemberVariableRefactoringTest.class,
+		CreateNamespaceRefactoringTest.class,
+		CreateOperatorRefactoringTest.class,
+		CreateStaticFunctionRefactoringTest.class,
+		ExtractFunctionRefactoringTest.class,
+		ExtractTypeRefactoringTest.class
+//@formatter:on
 })
 public class AllRefactoringTests {
 }

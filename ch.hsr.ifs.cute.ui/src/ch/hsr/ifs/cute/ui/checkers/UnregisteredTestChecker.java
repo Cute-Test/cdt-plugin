@@ -83,7 +83,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 			updateRegisteredTests(astCache, index, registeredFunctionFinder, toBeRegisteredBinding, iastDeclaration);
 
 			if (!(registeredFunctionFinder.getRegisteredFunctionNames().contains(index.adaptBinding(toBeRegisteredBinding)))) {
-				reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastDeclaration); //$NON-NLS-1$
+				reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastDeclaration);
 			}
 		} catch (CoreException e) {
 			CuteCorePlugin.log(e);
@@ -125,8 +125,8 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		return projects;
 	}
 
-	private void updateRegisteredTestsOfReferencedTUs(RegisteredTestFunctionFinderVisitor registeredFunctionFinder, IIndexName[] references, ASTCache astCache, IIndex index)
-			throws CoreException {
+	private void updateRegisteredTestsOfReferencedTUs(RegisteredTestFunctionFinderVisitor registeredFunctionFinder, IIndexName[] references, ASTCache astCache,
+			IIndex index) throws CoreException {
 		for (IIndexName testReference : references) {
 			final ITranslationUnit tu = findTranslationUnit(testReference);
 			if (tu != null) {

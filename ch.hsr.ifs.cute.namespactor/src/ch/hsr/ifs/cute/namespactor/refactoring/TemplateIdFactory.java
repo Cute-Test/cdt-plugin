@@ -55,9 +55,7 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 	}
 
 	public IASTName buildTemplate() {
-
 		templateId.accept(this);
-
 		return this.getTemplateId();
 	}
 
@@ -74,7 +72,6 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 			if (currNode instanceof ICPPASTNamedTypeSpecifier) {
 				((ICPPASTNamedTypeSpecifier) currNode).setName(nameNode);
 			}
-
 			currNode = newTemplId;
 		}
 
@@ -89,11 +86,8 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 			IASTDeclSpecifier newDeclSpec = null;
 
 			if (vDeclSpecifier instanceof ICPPASTNamedTypeSpecifier) {
-
 				newDeclSpec = createNamedDeclSpec(vDeclSpecifier);
-
 			} else if (vDeclSpecifier instanceof ICPPASTSimpleDeclSpecifier) {
-
 				newDeclSpec = createSimpleDeclSpec(vDeclSpecifier);
 			}
 

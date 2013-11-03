@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.ui.eudir;
 
 import org.eclipse.cdt.core.model.ICElement;
@@ -29,21 +29,19 @@ public class EUDIRRefactoringAction extends RefactoringAction {
 
 	@Override
 	public void run(IShellProvider shellProvider, IWorkingCopy wc, ITextSelection selection) {
-        if (!hasFileResource(wc)){
-            return;
-        }
-        EUDIRRefactoringRunner runner = new EUDIRRefactoringRunner(wc, selection, shellProvider, wc.getCProject());
-        runner.run();
-
+		if (!hasFileResource(wc)) {
+			return;
+		}
+		EUDIRRefactoringRunner runner = new EUDIRRefactoringRunner(wc, selection, shellProvider, wc.getCProject());
+		runner.run();
 	}
 
 	@Override
 	public void run(IShellProvider shellProvider, ICElement elem) {
-		
 	}
-	
-    private boolean hasFileResource(IWorkingCopy wc) {
-        return (wc.getResource() instanceof IFile);
-    }
+
+	private boolean hasFileResource(IWorkingCopy wc) {
+		return (wc.getResource() instanceof IFile);
+	}
 
 }

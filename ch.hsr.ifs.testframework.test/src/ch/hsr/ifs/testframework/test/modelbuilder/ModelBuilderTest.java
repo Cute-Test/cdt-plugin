@@ -29,20 +29,20 @@ import ch.hsr.ifs.testframework.test.ConsoleTest;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class ModelBuilderTest extends ConsoleTest {
-	
-	private static final String SEPARATOR = ", "; //$NON-NLS-1$
+
+	private static final String SEPARATOR = ", ";
 	private final String inputFile;
 
 	public ModelBuilderTest(String inputFile) {
 		super();
 		this.inputFile = inputFile;
 	}
-	
+
 	public static Test suite(String inputFile) {
-		String testName = inputFile.split("\\.")[0]; //$NON-NLS-1$
+		String testName = inputFile.split("\\.")[0];
 		junit.framework.TestSuite suite = new junit.framework.TestSuite(testName);
 		suite.addTest(new ModelBuilderTest(inputFile));
 		return suite;
@@ -50,9 +50,9 @@ public class ModelBuilderTest extends ConsoleTest {
 
 	@Override
 	protected void addTestEventHandler(ConsolePatternListener lis) {
-		lis.addHandler(new ModellBuilder(new Path(""))); //$NON-NLS-1$
+		lis.addHandler(new ModellBuilder(new Path("")));
 	}
-	
+
 	protected String getExpected() throws CoreException, IOException {
 		return firstConsoleLine();
 	}
@@ -70,7 +70,7 @@ public class ModelBuilderTest extends ConsoleTest {
 
 	private String getSessionString(TestSession session) {
 		StringBuffer sb = new StringBuffer();
-		sb.append("Session{"); //$NON-NLS-1$
+		sb.append("Session{");
 		Vector<TestElement> rootElements = session.getRootElements();
 		writeElements(sb, rootElements);
 		sb.append('}');
@@ -78,7 +78,7 @@ public class ModelBuilderTest extends ConsoleTest {
 	}
 
 	private void writeTestCase(TestCase tcase, StringBuffer sb) {
-		sb.append("Testcase("); //$NON-NLS-1$
+		sb.append("Testcase(");
 		sb.append(tcase.getName());
 		sb.append(SEPARATOR);
 		sb.append(tcase.getStatus().toString());
@@ -92,7 +92,7 @@ public class ModelBuilderTest extends ConsoleTest {
 	}
 
 	private void writeTestResult(TestResult result, StringBuffer sb) {
-		sb.append("Result("); //$NON-NLS-1$
+		sb.append("Result(");
 		sb.append(result.getMsg());
 		if (result instanceof TestFailure) {
 			TestFailure failure = (TestFailure) result;
@@ -102,11 +102,11 @@ public class ModelBuilderTest extends ConsoleTest {
 			sb.append(failure.getWas());
 		}
 		sb.append(')');
-		
+
 	}
 
 	private void writeSuite(TestSuite suite, StringBuffer sb) {
-		sb.append("Suite("); //$NON-NLS-1$
+		sb.append("Suite(");
 		sb.append(suite.getName());
 		sb.append(SEPARATOR);
 		sb.append(suite.getStatus().toString());
@@ -120,11 +120,11 @@ public class ModelBuilderTest extends ConsoleTest {
 		sb.append(suite.getFailure());
 		sb.append(SEPARATOR);
 		sb.append(suite.getError());
-		sb.append("){"); //$NON-NLS-1$
+		sb.append("){");
 		Vector<TestElement> elements = suite.getElements();
 		writeElements(sb, elements);
 		sb.append('}');
-		
+
 	}
 
 	private void writeElements(StringBuffer sb, Vector<TestElement> elements) {
@@ -132,7 +132,7 @@ public class ModelBuilderTest extends ConsoleTest {
 			if (element instanceof TestSuite) {
 				TestSuite suite1 = (TestSuite) element;
 				writeSuite(suite1, sb);
-			}else if (element instanceof TestCase) {
+			} else if (element instanceof TestCase) {
 				TestCase tcase = (TestCase) element;
 				writeTestCase(tcase, sb);
 			}
@@ -141,7 +141,7 @@ public class ModelBuilderTest extends ConsoleTest {
 
 	@Override
 	public String getInputFilePath() {
-		return "modelBuilderTests/" + inputFile; //$NON-NLS-1$
+		return "modelBuilderTests/" + inputFile;
 	}
 
 }

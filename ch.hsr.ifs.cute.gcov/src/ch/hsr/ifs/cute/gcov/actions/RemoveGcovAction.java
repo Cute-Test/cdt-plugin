@@ -78,8 +78,7 @@ public class RemoveGcovAction implements IWorkbenchWindowActionDelegate {
 	private void notifyUserGcovRemoved() {
 		IWorkbenchWindow activeWindow = getActiveWorkbenchWindow();
 		if (activeWindow != null) {
-			MessageDialog.openInformation(activeWindow.getShell(), "Success",
-					"Gcov Coverage Analysis successfull removed from project.");
+			MessageDialog.openInformation(activeWindow.getShell(), "Success", "Gcov Coverage Analysis successfull removed from project.");
 		}
 	}
 

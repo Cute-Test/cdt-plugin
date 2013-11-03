@@ -13,27 +13,24 @@ import junit.framework.TestSuite;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class ModelBuilderSuite {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite(
-				"Test for ch.hsr.ifs.cutelauncher.test.modelBuilderTests"); //$NON-NLS-1$
-		//$JUnit-BEGIN$
-		suite.addTest(ModelBuilderTest.suite("sessionTest.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("suiteTest.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("suiteTest2.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("suiteTest3.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("suiteTest4.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("suiteTest5.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("suiteTest6.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("failedTest.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("failedEqualsTest.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("errorTest.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("successTest.txt")); //$NON-NLS-1$
-		suite.addTest(ModelBuilderTest.suite("outputInTest.txt")); //$NON-NLS-1$
-		//$JUnit-END$
+		TestSuite suite = new TestSuite("Test for ch.hsr.ifs.cutelauncher.test.modelBuilderTests");
+		suite.addTest(ModelBuilderTest.suite("sessionTest.txt"));
+		suite.addTest(ModelBuilderTest.suite("suiteTest.txt"));
+		suite.addTest(ModelBuilderTest.suite("suiteTest2.txt"));
+		suite.addTest(ModelBuilderTest.suite("suiteTest3.txt"));
+		suite.addTest(ModelBuilderTest.suite("suiteTest4.txt"));
+		suite.addTest(ModelBuilderTest.suite("suiteTest5.txt"));
+		suite.addTest(ModelBuilderTest.suite("suiteTest6.txt"));
+		suite.addTest(ModelBuilderTest.suite("failedTest.txt"));
+		suite.addTest(ModelBuilderTest.suite("failedEqualsTest.txt"));
+		suite.addTest(ModelBuilderTest.suite("errorTest.txt"));
+		suite.addTest(ModelBuilderTest.suite("successTest.txt"));
+		suite.addTest(ModelBuilderTest.suite("outputInTest.txt"));
 		return suite;
 	}
 

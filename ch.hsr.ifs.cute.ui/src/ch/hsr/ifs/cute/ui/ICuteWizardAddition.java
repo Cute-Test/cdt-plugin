@@ -14,12 +14,12 @@ import org.eclipse.swt.widgets.Control;
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
- *
+ * 
  */
 public interface ICuteWizardAddition {
-	
+
 	public Control createComposite(Composite parent);
-	
+
 	public ICuteWizardAdditionHandler getHandler();
 
 }

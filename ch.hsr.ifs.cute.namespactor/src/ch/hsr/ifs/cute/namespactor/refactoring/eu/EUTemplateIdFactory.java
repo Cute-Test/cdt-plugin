@@ -42,54 +42,54 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 		boolean start = false;
 		for (IASTName iastName : names) {
 			IBinding binding = iastName.resolveBinding();
-			if(start){
-				if(iastName instanceof ICPPASTTemplateId){
+			if (start) {
+				if (iastName instanceof ICPPASTTemplateId) {
 					break;
 				}
-				if(binding instanceof ICPPNamespace ||  binding instanceof ICPPClassType){
+				if (binding instanceof ICPPNamespace || binding instanceof ICPPClassType) {
 					replaceName.addName(iastName.copy());
 				}
 			}
-			if(binding.equals(selectedName.resolveBinding())){
+			if (binding.equals(selectedName.resolveBinding())) {
 				start = true;
 			}
 		}
 	}
 
 	protected void precedeWithQualifiers(ICPPASTQualifiedName replaceName, IASTName[] names, IASTName templateName) {
-	
+
 	}
 
 	@Override
 	protected ICPPASTNamedTypeSpecifier createNamedDeclSpec(IASTDeclSpecifier vDeclSpecifier) {
 		ICPPASTNamedTypeSpecifier newDeclSpec = factory.newNamedTypeSpecifier(null);
-		IASTName specName = ((ICPPASTNamedTypeSpecifier)vDeclSpecifier).getName();
+		IASTName specName = ((ICPPASTNamedTypeSpecifier) vDeclSpecifier).getName();
 		ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
-	
-		if(specName instanceof ICPPASTQualifiedName){
-			IASTName[] names = ((ICPPASTQualifiedName)specName).getNames();
+
+		if (specName instanceof ICPPASTQualifiedName) {
+			IASTName[] names = ((ICPPASTQualifiedName) specName).getNames();
 			precedeWithQualifiers(replaceName, names, specName.getLastName());
-			buildReplaceName(replaceName, names);	
+			buildReplaceName(replaceName, names);
 			newDeclSpec.setName(replaceName);
-		}else{
-			newDeclSpec.setName(specName.copy());			
+		} else {
+			newDeclSpec.setName(specName.copy());
 		}
-	
+
 		return newDeclSpec;
 	}
 
 	@Override
 	protected ICPPASTQualifiedName modifyTemplateId(ICPPASTTemplateId vTemplId) {
 		ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
-	
+
 		IASTName[] names = null;
-		if(vTemplId.getParent() instanceof ICPPASTQualifiedName){
-			names = ((ICPPASTQualifiedName)vTemplId.getParent()).getNames();
-		}else{
-			names = new IASTName[]{((IASTName)vTemplId.getParent()).getLastName()};
+		if (vTemplId.getParent() instanceof ICPPASTQualifiedName) {
+			names = ((ICPPASTQualifiedName) vTemplId.getParent()).getNames();
+		} else {
+			names = new IASTName[] { ((IASTName) vTemplId.getParent()).getLastName() };
 		}
 		precedeWithQualifiers(replaceName, names, vTemplId.getTemplateName());
-		buildReplaceName(replaceName, names);	
+		buildReplaceName(replaceName, names);
 		return replaceName;
 	}
 

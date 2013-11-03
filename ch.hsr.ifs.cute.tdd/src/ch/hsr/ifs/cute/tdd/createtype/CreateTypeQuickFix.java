@@ -14,8 +14,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.graphics.Image;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddQuickFix;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
@@ -37,7 +37,7 @@ public class CreateTypeQuickFix extends TddQuickFix {
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+	protected TddCRefactoring getRefactoring(ITextSelection selection) {
 		return new CreateTypeRefactoring(selection, ca);
 	}
 
@@ -50,9 +50,8 @@ public class CreateTypeQuickFix extends TddQuickFix {
 	}
 
 	public static Proposal[] getTypeProposals() {
-		return new Proposal[] { new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0), //$NON-NLS-1$
-				new Proposal("struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0), //$NON-NLS-1$
-				new Proposal("enum", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_ENUMERATION), 0) //$NON-NLS-1$
-		};
+		return new Proposal[] { new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0),
+				new Proposal("struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0),
+				new Proposal("enum", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_ENUMERATION), 0) };
 	}
 }

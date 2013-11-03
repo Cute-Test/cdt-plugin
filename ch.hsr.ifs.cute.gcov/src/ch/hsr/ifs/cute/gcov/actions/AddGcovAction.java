@@ -34,9 +34,6 @@ public class AddGcovAction implements IWorkbenchWindowActionDelegate {
 	private IProject project;
 	private IWorkbenchWindow window;
 
-	/**
-	 * 
-	 */
 	public AddGcovAction() {
 	}
 

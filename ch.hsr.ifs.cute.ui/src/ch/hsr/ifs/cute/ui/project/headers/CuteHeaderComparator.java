@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.ui.project.headers;
 
 import java.util.Comparator;
 
-
 /**
  * @author egraf
  * @since 4.0

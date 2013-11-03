@@ -58,7 +58,7 @@ public class LaunchObserver implements ILaunchObserver {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
 					String fileExtension = file.getFileExtension();
-					if (fileExtension != null && fileExtension.equals("gcda")) { //$NON-NLS-1$
+					if (fileExtension != null && fileExtension.equals("gcda")) {
 						file.delete(true, new NullProgressMonitor());
 					}
 				}
@@ -86,7 +86,7 @@ public class LaunchObserver implements ILaunchObserver {
 		for (ICSourceEntry icSourceEntry : resolvedEntries) {
 			IPath location = icSourceEntry.getLocation();
 			if (location != null) {
-				if (location.lastSegment() != null && !location.lastSegment().equals("cute")) { //$NON-NLS-1$
+				if (location.lastSegment() != null && !location.lastSegment().equals("cute")) {
 					sourceEntriesList.add(icSourceEntry);
 				}
 			}
@@ -99,30 +99,6 @@ public class LaunchObserver implements ILaunchObserver {
 	}
 
 	private class SourceFileVisitor implements IResourceVisitor {
-
-		class ParseJob extends Job {
-
-			private final GcovFile file;
-			private final LineCoverageParser parser = new ModelBuilderLineParser();
-
-			public ParseJob(GcovFile file) {
-				super(Messages.LaunchObserver_parse + file.getFileName());
-				this.file = file;
-			}
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					parser.parse(file, monitor);
-				} catch (CoreException e) {
-					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
-				} catch (IOException e) {
-					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
-				}
-				return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK"); //$NON-NLS-1$
-			}
-
-		}
 
 		private final List<ICSourceEntry> sourceEntries;
 
@@ -158,6 +134,30 @@ public class LaunchObserver implements ILaunchObserver {
 				}
 			}
 			return true;
+		}
+
+		class ParseJob extends Job {
+
+			private final GcovFile file;
+			private final LineCoverageParser parser = new ModelBuilderLineParser();
+
+			public ParseJob(GcovFile file) {
+				super(Messages.LaunchObserver_parse + file.getFileName());
+				this.file = file;
+			}
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					parser.parse(file, monitor);
+				} catch (CoreException e) {
+					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
+				} catch (IOException e) {
+					return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getCause().getMessage());
+				}
+				return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK");
+			}
+
 		}
 	}
 

@@ -43,11 +43,11 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 @SuppressWarnings("deprecation")
 public class MockWorkspace implements IWorkspace {
-	
+
 	List<IWorkspaceRunnable> actions = new ArrayList<IWorkspaceRunnable>();
 
 	public void addResourceChangeListener(IResourceChangeListener listener) {
@@ -82,13 +82,11 @@ public class MockWorkspace implements IWorkspace {
 		throw new NotYetImplementedException();
 	}
 
-	public IStatus copy(IResource[] resources, IPath destination, boolean force, IProgressMonitor monitor)
-			throws CoreException {
+	public IStatus copy(IResource[] resources, IPath destination, boolean force, IProgressMonitor monitor) throws CoreException {
 		throw new NotYetImplementedException();
 	}
 
-	public IStatus copy(IResource[] resources, IPath destination, int updateFlags, IProgressMonitor monitor)
-			throws CoreException {
+	public IStatus copy(IResource[] resources, IPath destination, int updateFlags, IProgressMonitor monitor) throws CoreException {
 		throw new NotYetImplementedException();
 	}
 
@@ -161,13 +159,11 @@ public class MockWorkspace implements IWorkspace {
 		throw new NotYetImplementedException();
 	}
 
-	public IStatus move(IResource[] resources, IPath destination, boolean force, IProgressMonitor monitor)
-			throws CoreException {
+	public IStatus move(IResource[] resources, IPath destination, boolean force, IProgressMonitor monitor) throws CoreException {
 		throw new NotYetImplementedException();
 	}
 
-	public IStatus move(IResource[] resources, IPath destination, int updateFlags, IProgressMonitor monitor)
-			throws CoreException {
+	public IStatus move(IResource[] resources, IPath destination, int updateFlags, IProgressMonitor monitor) throws CoreException {
 		throw new NotYetImplementedException();
 	}
 
@@ -187,8 +183,7 @@ public class MockWorkspace implements IWorkspace {
 		throw new NotYetImplementedException();
 	}
 
-	public void run(IWorkspaceRunnable action, ISchedulingRule rule, int flags, IProgressMonitor monitor)
-			throws CoreException {
+	public void run(IWorkspaceRunnable action, ISchedulingRule rule, int flags, IProgressMonitor monitor) throws CoreException {
 		actions.add(action);
 		action.run(new NullProgressMonitor());
 	}
@@ -258,9 +253,8 @@ public class MockWorkspace implements IWorkspace {
 		throw new NotYetImplementedException();
 	}
 
-	public void build(IBuildConfiguration[] buildConfigs, int kind, boolean buildReferences, IProgressMonitor monitor)
-			throws CoreException {
-		throw new NotYetImplementedException();		
+	public void build(IBuildConfiguration[] buildConfigs, int kind, boolean buildReferences, IProgressMonitor monitor) throws CoreException {
+		throw new NotYetImplementedException();
 	}
 
 	public IBuildConfiguration newBuildConfig(String projectName, String configName) {

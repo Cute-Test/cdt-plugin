@@ -16,15 +16,10 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 
 import ch.hsr.ifs.cute.ui.ASTUtil;
 
-class TestFunctionFinderVisitor extends ASTVisitor{
-	/**
-	 * 
-	 */
+class TestFunctionFinderVisitor extends ASTVisitor {
+
 	private final List<IASTDeclaration> testFunctions;
 
-	/**
-	 * @param testFunctions
-	 */
 	TestFunctionFinderVisitor() {
 		testFunctions = new ArrayList<IASTDeclaration>();
 	}
@@ -32,17 +27,17 @@ class TestFunctionFinderVisitor extends ASTVisitor{
 	{
 		shouldVisitDeclarations = true;
 	}
-	
-	public List<IASTDeclaration> getTestFunctions(){
+
+	public List<IASTDeclaration> getTestFunctions() {
 		return testFunctions;
 	}
 
 	@Override
 	public int visit(IASTDeclaration declaration) {
-		if(ASTUtil.isTestFunction(declaration)) {
+		if (ASTUtil.isTestFunction(declaration)) {
 			testFunctions.add(declaration);
 		}
 		return super.visit(declaration);
-	}	
+	}
 
 }

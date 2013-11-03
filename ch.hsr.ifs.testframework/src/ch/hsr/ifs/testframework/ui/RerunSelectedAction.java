@@ -20,11 +20,11 @@ public class RerunSelectedAction extends Action {
 		this.testRunnerViewPart = testRunnerViewPart;
 		this.treeViewer = treeViewer;
 		Messages msg = TestRunnerViewPart.msg;
-		setText(msg.getString("TestRunnerViewPart.RerunSelectedTest")); //$NON-NLS-1$
-		setToolTipText(msg.getString("TestRunnerViewPart.RerunSelectedTest")); //$NON-NLS-1$
-		setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/relaunch.gif")); //$NON-NLS-1$
-		setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
-		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif")); //$NON-NLS-1$
+		setText(msg.getString("TestRunnerViewPart.RerunSelectedTest"));
+		setToolTipText(msg.getString("TestRunnerViewPart.RerunSelectedTest"));
+		setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/relaunch.gif"));
+		setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif"));
+		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/relaunch.gif"));
 		setEnabled(false);
 	}
 

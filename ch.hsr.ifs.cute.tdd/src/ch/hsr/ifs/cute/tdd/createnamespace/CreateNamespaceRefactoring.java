@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.createtype.CreateTypeRefactoring;
 
-public class CreateNamespaceRefactoring extends CRefactoring3 {
+public class CreateNamespaceRefactoring extends TddCRefactoring {
 
 	public CreateNamespaceRefactoring(ITextSelection textSelection, String name) {
 		super(textSelection);
@@ -44,7 +44,7 @@ public class CreateNamespaceRefactoring extends CRefactoring3 {
 			ICPPASTNamespaceDefinition ns = new CPPASTNamespaceDefinition(selectedNodeName.copy());
 			IASTNode insertionPoint = CreateTypeRefactoring.getInsertionPoint(localunit, selectedNodeName, refactoringContext);
 
-			//TODO: Remvoe duplicated crom createclass
+			// TODO: Remvoe duplicated crom createclass
 			if (insertionPoint instanceof CPPASTCompositeTypeSpecifier || insertionPoint instanceof CPPASTNamespaceDefinition) {
 				TddHelper.writeDefinitionTo(collector, insertionPoint, ns);
 			} else {

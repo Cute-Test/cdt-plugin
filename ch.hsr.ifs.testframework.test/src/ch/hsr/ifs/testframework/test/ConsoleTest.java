@@ -54,7 +54,7 @@ public abstract class ConsoleTest extends TestCase {
 
 	private void useCUTE() {
 		consoleEventParser = new CuteConsoleEventParser();
-		filePathRoot = "testDefs/cute/"; //$NON-NLS-1$
+		filePathRoot = "testDefs/cute/";
 	}
 
 	private void prepareTest() {

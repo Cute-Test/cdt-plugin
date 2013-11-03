@@ -28,8 +28,8 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_VariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"; //$NON-NLS-1$
-	public static final String ERR_ID_MemberVariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR"; //$NON-NLS-1$
+	public static final String ERR_ID_VariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR";
+	public static final String ERR_ID_MemberVariableResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -99,19 +99,19 @@ public class VariableResolutionProblemChecker extends AbstractTDDChecker {
 					}
 					reportMissingMemberVariable(name, missingName);
 				} else {
-					CodanArguments ca = new CodanArguments(missingName, missingName, ":variable"); //$NON-NLS-1$
+					CodanArguments ca = new CodanArguments(missingName, missingName, ":variable");
 					reportProblem(ERR_ID_VariableResolutionProblem_HSR, name, ca.toArray());
 				}
 			}
 		}
 
 		private boolean isIdentifyingFunctionCallPart(IASTName name) {
-			return (name.getPropertyInParent() == IASTFieldReference.FIELD_NAME || (name.getParent() instanceof ICPPASTQualifiedName && TddHelper.isLastPartOfQualifiedName(name)))
-					&& TddHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null;
+			return (name.getPropertyInParent() == IASTFieldReference.FIELD_NAME || (name.getParent() instanceof ICPPASTQualifiedName && TddHelper
+					.isLastPartOfQualifiedName(name))) && TddHelper.getAncestorOfType(name, IASTFunctionCallExpression.class) != null;
 		}
 
 		private void reportMissingMemberVariable(IASTName name, String missingName) {
-			CodanArguments args = new CodanArguments(missingName, missingName, ":memberVariable"); //$NON-NLS-1$
+			CodanArguments args = new CodanArguments(missingName, missingName, ":memberVariable");
 			reportProblem(TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR, name, args.toArray());
 		}
 

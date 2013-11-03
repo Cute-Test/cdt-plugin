@@ -51,8 +51,8 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
  */
 public class LinkSuiteToRunnerProcessor {
 
-	private static final String STRING = "\""; //$NON-NLS-1$
-	private static final char[] CUTE = "cute".toCharArray(); //$NON-NLS-1$
+	private static final String STRING = "\"";
+	private static final char[] CUTE = "cute".toCharArray();
 	private final IASTFunctionDefinition testRunner;
 	private final String suiteName;
 	private final ICPPNodeFactory nodeFactory;
@@ -78,14 +78,14 @@ public class LinkSuiteToRunnerProcessor {
 		IASTTranslationUnit tu = testRunner.getTranslationUnit();
 		IPath implPath = new Path(tu.getContainingFilename());
 		IFile file = ResourceLookup.selectFileForLocation(implPath, null);
-		TextFileChange change = new TextFileChange("include", file); //$NON-NLS-1$
+		TextFileChange change = new TextFileChange("include", file);
 
 		final IDocumentProvider docProvider = DocumentProviderRegistry.getDefault().getDocumentProvider(file.getFileExtension());
 		IDocument document = docProvider.getDocument(tu);
 		String lineDelim = TextUtilities.getDefaultLineDelimiter(document);
 
 		int offset = getMaxIncludeOffset(tu);
-		String text = lineDelim + "#include \"" + suiteName + ".h\""; //$NON-NLS-1$//$NON-NLS-2$
+		String text = lineDelim + "#include \"" + suiteName + ".h\"";//$NON-NLS-2$
 		TextEdit edit = new InsertEdit(offset, text);
 		change.setEdit(edit);
 		return change;
@@ -130,7 +130,7 @@ public class LinkSuiteToRunnerProcessor {
 		IASTInitializerClause[] makeArgs = new IASTInitializerClause[1];
 		ICPPASTQualifiedName cuteMakeRunner = nodeFactory.newQualifiedName();
 		cuteMakeRunner.addName(nodeFactory.newName(CUTE));
-		cuteMakeRunner.addName(nodeFactory.newName("makeRunner".toCharArray())); //$NON-NLS-1$
+		cuteMakeRunner.addName(nodeFactory.newName("makeRunner".toCharArray()));
 		IASTIdExpression makeRunnerID = nodeFactory.newIdExpression(cuteMakeRunner);
 		makeArgs[0] = nodeFactory.newIdExpression(getListenerName());
 		IASTFunctionCallExpression makeRunnerFuncCallExp = nodeFactory.newFunctionCallExpression(makeRunnerID, makeArgs);
@@ -146,13 +146,13 @@ public class LinkSuiteToRunnerProcessor {
 	private IASTStatement createMakeSuiteStmt() {
 		ICPPASTQualifiedName cuteSuite = nodeFactory.newQualifiedName();
 		cuteSuite.addName(nodeFactory.newName(CUTE));
-		cuteSuite.addName(nodeFactory.newName("suite".toCharArray())); //$NON-NLS-1$
+		cuteSuite.addName(nodeFactory.newName("suite".toCharArray()));
 		IASTDeclSpecifier declSpecifier = nodeFactory.newTypedefNameSpecifier(cuteSuite);
 		IASTSimpleDeclaration declaration = nodeFactory.newSimpleDeclaration(declSpecifier);
 
 		IASTName suiteASTName = getSuiteName();
 		ICPPASTDeclarator declarator = nodeFactory.newDeclarator(suiteASTName);
-		IASTName makeName = nodeFactory.newName(("make_suite_" + this.suiteName).toCharArray()); //$NON-NLS-1$
+		IASTName makeName = nodeFactory.newName(("make_suite_" + this.suiteName).toCharArray());
 		IASTIdExpression idExpr = nodeFactory.newIdExpression(makeName);
 		IASTInitializerClause initClause = nodeFactory.newFunctionCallExpression(idExpr, IASTExpression.EMPTY_EXPRESSION_ARRAY);
 		IASTEqualsInitializer initializer = nodeFactory.newEqualsInitializer(initClause);
@@ -183,7 +183,7 @@ final class ListenerFinder extends ASTVisitor {
 				IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declStmt.getDeclaration();
 				if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
 					ICPPASTNamedTypeSpecifier typeName = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
-					if (typeName.getName().toString().equals("cute::ide_listener")) { //$NON-NLS-1$
+					if (typeName.getName().toString().equals("cute::ide_listener")) {
 						listener = simpDecl.getDeclarators()[0].getName();
 					}
 				}

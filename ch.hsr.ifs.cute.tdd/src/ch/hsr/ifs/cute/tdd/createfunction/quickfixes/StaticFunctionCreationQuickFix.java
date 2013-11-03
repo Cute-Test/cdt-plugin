@@ -12,8 +12,7 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.StaticFunctionCreationStrategy;
 
-public class StaticFunctionCreationQuickFix extends
-		AbstractFunctionCreationQuickFix {
+public class StaticFunctionCreationQuickFix extends AbstractFunctionCreationQuickFix {
 
 	@Override
 	protected IFunctionCreationStrategy getStrategy() {

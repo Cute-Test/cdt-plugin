@@ -33,8 +33,8 @@ public class HyperlinkTest extends ConsoleTest {
 
 	@Override
 	protected void addTestEventHandler(ConsolePatternListener lis) {
-		consoleLinkHandler = new ConsoleLinkHandler(new Path(""), tc, new MockLinkFactory()); //$NON-NLS-1$
-		lis.addHandler(consoleLinkHandler); 
+		consoleLinkHandler = new ConsoleLinkHandler(new Path(""), tc, new MockLinkFactory());
+		lis.addHandler(consoleLinkHandler);
 	}
 
 	@Override
@@ -57,14 +57,14 @@ public class HyperlinkTest extends ConsoleTest {
 	}
 
 	private void grabExpectedLinkDimensions() throws Exception {
-		String[] linkDimensions = firstConsoleLine().split(","); //$NON-NLS-1$
+		String[] linkDimensions = firstConsoleLine().split(",");
 		expectedLinkOffset = Integer.parseInt(linkDimensions[0]);
 		expectedLinkLength = Integer.parseInt(linkDimensions[1]);
 	}
 
 	@Override
 	protected String getInputFilePath() {
-		return "hyperlinkTests/linkTest.txt"; //$NON-NLS-1$
+		return "hyperlinkTests/linkTest.txt";
 	}
 
 }

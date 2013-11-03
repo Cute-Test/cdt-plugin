@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.iu;
 
 import java.util.ArrayList;
@@ -36,45 +36,43 @@ public class IncludeDependencyAnalyser {
 
 	private final Map<Integer, Boolean> fileDependencies = new HashMap<Integer, Boolean>();
 	private IIndex index = null;
-	
-	public IncludeDependencyAnalyser(IIndex index){
+
+	public IncludeDependencyAnalyser(IIndex index) {
 		this.index = index;
 	}
-	
-	/**
-	 * @return true if @file includes @originFileName or is included by @originFileName in any depth
-	 * */
+
 	public boolean areFilesIncludeDependent(IIndexFile file, String originFileName) throws CoreException {
 		String namesFileName = URIUtil.toFile(file.getLocation().getURI()).getAbsolutePath();
 
-		if(namesFileName.equals(originFileName)){
+		if (namesFileName.equals(originFileName)) {
 			return true;
 		}
 
-		Integer filePairId  = (namesFileName + originFileName).hashCode();
+		Integer filePairId = (namesFileName + originFileName).hashCode();
 		Boolean dependencyCachedValue = fileDependencies.get(filePairId);
 
-		if(dependencyCachedValue != null){
+		if (dependencyCachedValue != null) {
 			return dependencyCachedValue;
 		}
 
 		IIndexInclude[] includedBy = index.findIncludedBy(file, IIndex.DEPTH_INFINITE);
-		for(IIndexInclude include : includedBy){
+		for (IIndexInclude include : includedBy) {
 			String includedByFileName = URIUtil.toFile(include.getIncludedByLocation().getURI()).getAbsolutePath();
 
-			if(originFileName.equals(includedByFileName)){
+			if (originFileName.equals(includedByFileName)) {
 				fileDependencies.put(filePairId, true);
 				return true;
 			}
 		}
 
 		IIndexInclude[] includes = index.findIncludes(file, IIndex.DEPTH_INFINITE);
-		for(IIndexInclude include : includes){
+		for (IIndexInclude include : includes) {
 			IIndexFileLocation includesLocation = include.getIncludesLocation();
-			if (includesLocation == null) continue;
+			if (includesLocation == null)
+				continue;
 			String includedFileName = URIUtil.toFile(includesLocation.getURI()).getAbsolutePath();
 
-			if(originFileName.equals(includedFileName)){
+			if (originFileName.equals(includedFileName)) {
 				fileDependencies.put(filePairId, true);
 				return true;
 			}
@@ -85,39 +83,39 @@ public class IncludeDependencyAnalyser {
 	}
 
 	public List<IPath> getIncludeDependentPathsOf(ITranslationUnit tu) {
-		
+
 		List<IPath> dependentFiles = new ArrayList<IPath>();
-		
+
 		try {
 			IIndexFileLocation ifl = IndexLocationFactory.getIFL(tu);
 			IIndexFile[] files = index.getFiles(ILinkage.CPP_LINKAGE_ID, ifl);
 			if (files.length <= 0)
 				return dependentFiles;
 			IIndexFile iFile = files[0];
-			
+
 			// h file is only in the indexer if its included by another file (h or cpp)
 			// cpp file always in indexer
-			if(iFile == null){
+			if (iFile == null) {
 				return dependentFiles;
 			}
 			IPath wsRootPath = CoreModel.getDefault().getCModel().getWorkspace().getRoot().getLocation();
-			
+
 			IIndexInclude[] includedBy = index.findIncludedBy(iFile, IIndex.DEPTH_INFINITE);
-			for(IIndexInclude include : includedBy){
-				if(include.isResolved() == true){
+			for (IIndexInclude include : includedBy) {
+				if (include.isResolved() == true) {
 					IPath includePath = UNCPathConverter.toPath(include.getIncludesLocation().getURI());
-					if(wsRootPath.isPrefixOf(includePath)){
+					if (wsRootPath.isPrefixOf(includePath)) {
 						dependentFiles.add(UNCPathConverter.toPath(include.getIncludedByLocation().getURI()));
 					}
 				}
 			}
-			
-			IIndexInclude[] includes = index.findIncludes(iFile, IIndex.DEPTH_INFINITE);
-			for(IIndexInclude include : includes){
 
-				if(include.isResolved() == true){
+			IIndexInclude[] includes = index.findIncludes(iFile, IIndex.DEPTH_INFINITE);
+			for (IIndexInclude include : includes) {
+
+				if (include.isResolved() == true) {
 					IPath includePath = UNCPathConverter.toPath(include.getIncludesLocation().getURI());
-					if(wsRootPath.isPrefixOf(includePath)){
+					if (wsRootPath.isPrefixOf(includePath)) {
 						dependentFiles.add(UNCPathConverter.toPath(include.getIncludesLocation().getURI()));
 					}
 				}
@@ -125,7 +123,7 @@ public class IncludeDependencyAnalyser {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
+
 		return dependentFiles;
 	}
 }

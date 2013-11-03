@@ -18,16 +18,16 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 
 /**
  * @author egraf
- *
+ * 
  */
 public class FallbackImageProvider extends ImageProvider {
 
 	protected Map<Integer, String> pathMap = new TreeMap<Integer, String>();
 
 	public FallbackImageProvider() {
-		pathMap.put(APP_LOGO, "obj16/empty_app.gif"); //$NON-NLS-1$
+		pathMap.put(APP_LOGO, "obj16/empty_app.gif");
 	}
-	
+
 	@Override
 	public ImageDescriptor getImage(int key) {
 		return TestFrameworkPlugin.getImageDescriptor(getPath(key));

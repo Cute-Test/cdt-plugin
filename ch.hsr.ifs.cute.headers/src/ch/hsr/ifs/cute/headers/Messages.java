@@ -10,11 +10,8 @@ package ch.hsr.ifs.cute.headers;
 
 import org.eclipse.osgi.util.NLS;
 
-/**
- * @since 2.0
- */
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.headers.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.headers.messages";
 	public static String CuteHeaders_copy;
 	public static String CuteHeaders_copySuite;
 	public static String CuteHeaders_copyTestCPP;

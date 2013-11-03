@@ -167,8 +167,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage {
 					for (IExtension extension2 : extensions) {
 						IConfigurationElement[] configElements = extension2.getConfigurationElements();
 						String className = configElements[0].getAttribute("compositeProvider");
-						Object newInstance = ((Class<?>) Platform.getBundle(extension2.getContributor().getName()).loadClass(className))
-								.newInstance();
+						Object newInstance = ((Class<?>) Platform.getBundle(extension2.getContributor().getName()).loadClass(className)).newInstance();
 						additions.add((ICuteWizardAddition) newInstance);
 					}
 				}

@@ -52,7 +52,7 @@ public class TestCase extends TestElement {
 
 	public String getMessage() {
 		if (result == null) {
-			return ""; //$NON-NLS-1$
+			return "";
 		} else {
 			return result.getMsg();
 		}

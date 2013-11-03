@@ -12,23 +12,21 @@ import java.util.Vector;
 
 /**
  * @author egraf
- *
+ * 
  */
 public class TestSuite extends TestElement implements ITestComposite, ITestElementListener {
-	
-	private String name = ""; //$NON-NLS-1$
-	
-	private int totalTests = 0; 
+
+	private String name = "";
+
+	private int totalTests = 0;
 	private int success = 0;
 	private int failure = 0;
 	private int error = 0;
-	
+
 	private TestStatus status;
-	
+
 	private final Vector<TestElement> cases = new Vector<TestElement>();
 	private final Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();
-	
-	
 
 	public TestSuite(String name, int totalTests, TestStatus status) {
 		super();
@@ -46,9 +44,9 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 	public TestStatus getStatus() {
 		return status;
 	}
-		
+
 	protected void endTest(TestElement tCase) {
-		switch(tCase.getStatus()) {
+		switch (tCase.getStatus()) {
 		case success:
 			++success;
 			break;
@@ -63,28 +61,28 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 		}
 		notifyListeners(new NotifyEvent(NotifyEvent.EventType.testFinished, tCase));
 	}
-	
+
 	private void setEndStatus() {
-		if(cases.size() == 0) {
+		if (cases.size() == 0) {
 			status = TestStatus.success;
-		}else {
+		} else {
 			for (TestElement tCase : cases) {
 				switch (status) {
 				case running:
 					status = tCase.getStatus();
 					break;
 				case success:
-					if(tCase.getStatus() != TestStatus.success) {
+					if (tCase.getStatus() != TestStatus.success) {
 						status = tCase.getStatus();
 					}
 					break;
 				case failure:
-					if(tCase.getStatus() == TestStatus.error) {
+					if (tCase.getStatus() == TestStatus.error) {
 						status = tCase.getStatus();
 					}
 					break;
 				default:
-					//nothing
+					// nothing
 				}
 			}
 		}
@@ -105,7 +103,7 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 	public int getTotalTests() {
 		return totalTests;
 	}
-	
+
 	public boolean hasErrorOrFailure() {
 		return failure + error > 0;
 	}
@@ -113,17 +111,15 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 	public int getRun() {
 		return success + failure + error;
 	}
+
 	@Override
 	public String toString() {
 		return getName();
 	}
 
-	/**
-	 * @since 3.0
-	 */
 	public void end(TestCase currentTestCase) {
-		if(testsPerformed() != getTotalTests() && currentTestCase != null) {
-			currentTestCase.endTest(null, 0, new TestResult("Test ended unexpectedly"), TestStatus.error); //$NON-NLS-1$
+		if (testsPerformed() != getTotalTests() && currentTestCase != null) {
+			currentTestCase.endTest(null, 0, new TestResult("Test ended unexpectedly"), TestStatus.error);
 		}
 		setEndStatus();
 		notifyListeners(new NotifyEvent(NotifyEvent.EventType.suiteFinished, this));
@@ -147,14 +143,14 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 	}
 
 	public void modelCanged(TestElement source, NotifyEvent event) {
-		if(event.getType() == NotifyEvent.EventType.testFinished) {
+		if (event.getType() == NotifyEvent.EventType.testFinished) {
 			endTest(source);
 		}
-		
+
 	}
 
 	public void addListener(ITestCompositeListener listener) {
-		if(!listeners.contains(listener)) {
+		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}

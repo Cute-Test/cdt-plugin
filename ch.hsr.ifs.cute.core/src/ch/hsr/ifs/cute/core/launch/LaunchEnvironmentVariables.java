@@ -19,7 +19,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
 public class LaunchEnvironmentVariables {
-	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	private static final String EMPTY_STRING = "";
 
 	public static void apply(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
@@ -33,15 +33,15 @@ public class LaunchEnvironmentVariables {
 	
 	private static void setMacDYLD_LIBRARY_PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setPathEnvironmentVariable(wc,project,"DYLD_LIBRARY_PATH"); //$NON-NLS-1$
+		setPathEnvironmentVariable(wc,project,"DYLD_LIBRARY_PATH");
 	}
 	private static void setLinuxLD_LIBRARY_PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setPathEnvironmentVariable(wc,project,"LD_LIBRARY_PATH"); //$NON-NLS-1$
+		setPathEnvironmentVariable(wc,project,"LD_LIBRARY_PATH");
 	}
 	private static void setWin32PATH(ILaunchConfigurationWorkingCopy wc,
 			ICProject project) throws CoreException{
-		setPathEnvironmentVariable(wc,project,"PATH"); //$NON-NLS-1$
+		setPathEnvironmentVariable(wc,project,"PATH");
 	}
 	
 	//caveat:not for generic environment variable
@@ -49,7 +49,7 @@ public class LaunchEnvironmentVariables {
 	private static void setPathEnvironmentVariable(ILaunchConfigurationWorkingCopy wc,
 			ICProject project,String environmentVariableName) throws CoreException {
 		String path=getBuildEnvironmentVariable(environmentVariableName,project);
-		String pathSeparator=System.getProperty("path.separator");//assumption that it is only 1 char wide //$NON-NLS-1$
+		String pathSeparator=System.getProperty("path.separator");//assumption that it is only 1 char wide
 		if(!path.equals(EMPTY_STRING))
 			if( !(path.charAt(path.length()-1)+EMPTY_STRING).equals(pathSeparator))
 				path+=pathSeparator;
@@ -105,7 +105,7 @@ public class LaunchEnvironmentVariables {
 					}else{
 						parameter=libProject[x].getFolder(location).getFullPath();	
 					}
-					result+= "${workspace_loc:" + parameter.toPortableString() + "}"+pathSeparator; //$NON-NLS-1$ //$NON-NLS-2$
+					result+= "${workspace_loc:" + parameter.toPortableString() + "}"+pathSeparator;
 				}
 			}
 		}

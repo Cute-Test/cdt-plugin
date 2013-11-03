@@ -19,68 +19,75 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 
+/**
+ * @author felu
+ * 
+ */
 public class FunctionFinder extends ASTVisitor {
-	private ArrayList<IASTDeclaration> al=new ArrayList<IASTDeclaration>();
-	private ArrayList<IASTSimpleDeclaration> alSimpleDeclarationOnly=null;
-	private ArrayList<IASTSimpleDeclaration> alClassStructOnly=null;
-	private ArrayList<IASTSimpleDeclaration> alVariables=null;
+	private final ArrayList<IASTDeclaration> al = new ArrayList<IASTDeclaration>();
+	private ArrayList<IASTSimpleDeclaration> alSimpleDeclarationOnly = null;
+	private ArrayList<IASTSimpleDeclaration> alClassStructOnly = null;
+	private ArrayList<IASTSimpleDeclaration> alVariables = null;
 
-	
 	{
-		shouldVisitDeclarations=true;//Visbility, SimpleDeclaration,TemplateDeclaration, Function Defn
+		shouldVisitDeclarations = true;
 	}
-	
+
 	@Override
 	public int leave(IASTDeclaration declaration) {
 		al.add(declaration);
-		return super.leave(declaration);		
+		return super.leave(declaration);
 	}
-	
-	public ArrayList<IASTSimpleDeclaration> getSimpleDeclaration(){
-		if(alSimpleDeclarationOnly == null){
-			alSimpleDeclarationOnly=new ArrayList<IASTSimpleDeclaration>();
-			for(IASTDeclaration i:al){
-				if(i instanceof IASTSimpleDeclaration)alSimpleDeclarationOnly.add((IASTSimpleDeclaration)i);
+
+	public ArrayList<IASTSimpleDeclaration> getSimpleDeclaration() {
+		if (alSimpleDeclarationOnly == null) {
+			alSimpleDeclarationOnly = new ArrayList<IASTSimpleDeclaration>();
+			for (IASTDeclaration i : al) {
+				if (i instanceof IASTSimpleDeclaration)
+					alSimpleDeclarationOnly.add((IASTSimpleDeclaration) i);
 			}
 		}
 		return alSimpleDeclarationOnly;
 	}
-	
+
 	/**
 	 * @since 4.0
 	 */
-	public ArrayList<IASTFunctionDefinition> getMemberFuntions(){
+	public ArrayList<IASTFunctionDefinition> getMemberFuntions() {
 		ArrayList<IASTFunctionDefinition> defs = new ArrayList<IASTFunctionDefinition>();
 		for (IASTDeclaration decl : al) {
 			if (decl instanceof IASTFunctionDefinition) {
 				IASTFunctionDefinition funcDef = (IASTFunctionDefinition) decl;
 				IBinding funcBind = funcDef.getDeclarator().getName().resolveBinding();
-				if(funcBind instanceof ICPPMethod) {
+				if (funcBind instanceof ICPPMethod) {
 					defs.add(funcDef);
 				}
 			}
 		}
 		return defs;
 	}
-	
-	//template class are also returned
-	public ArrayList<IASTSimpleDeclaration> getClassStruct(){
-		if(alClassStructOnly == null){
-			alClassStructOnly=new ArrayList<IASTSimpleDeclaration>();
-			alVariables=new ArrayList<IASTSimpleDeclaration>();
-			ArrayList<IASTSimpleDeclaration> altmp=getSimpleDeclaration();
-			
-			for(IASTSimpleDeclaration i:altmp){
-				IASTDeclSpecifier declspecifier=i.getDeclSpecifier();
-				if(declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier){
+
+	/**
+	 * template class are also returned
+	 */
+	public ArrayList<IASTSimpleDeclaration> getClassStruct() {
+		if (alClassStructOnly == null) {
+			alClassStructOnly = new ArrayList<IASTSimpleDeclaration>();
+			alVariables = new ArrayList<IASTSimpleDeclaration>();
+			ArrayList<IASTSimpleDeclaration> altmp = getSimpleDeclaration();
+
+			for (IASTSimpleDeclaration i : altmp) {
+				IASTDeclSpecifier declspecifier = i.getDeclSpecifier();
+				if (declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier) {
 					alClassStructOnly.add(i);
-				}else
+				} else
 					alVariables.add(i);
 			}
 		}
 		return alClassStructOnly;
 	}
-	public ArrayList<IASTSimpleDeclaration> getVariables(){
+
+	public ArrayList<IASTSimpleDeclaration> getVariables() {
 		getClassStruct();
 		return alVariables;
 	}

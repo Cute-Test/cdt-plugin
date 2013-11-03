@@ -16,7 +16,7 @@ import ch.hsr.ifs.testframework.model.TestElement;
 
 /**
  * @author egraf
- *
+ * 
  */
 public class CuteTestTreeContentProvieder implements ITreeContentProvider {
 

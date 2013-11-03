@@ -20,7 +20,7 @@ import ch.hsr.ifs.cute.ui.ICuteWizardAdditionHandler;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class BoostWizardAddition implements ICuteWizardAddition {
 

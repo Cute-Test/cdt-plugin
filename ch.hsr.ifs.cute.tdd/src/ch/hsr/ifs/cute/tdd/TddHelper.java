@@ -138,7 +138,7 @@ public class TddHelper {
 		rewrite.insertBefore(typespec, firstFunction, function.copy(CopyStyle.withLocations), null);
 	}
 
-	//TODO: tcorbat - cannot imagine that this method is correct
+	// TODO: tcorbat - cannot imagine that this method is correct
 	private static IASTNode findDeclarationAfterLabel(ICPPASTCompositeTypeSpecifier typespec, IASTNode label) {
 		boolean found = false;
 		for (IASTDeclaration dec : typespec.getDeclarations(true)) {
@@ -193,7 +193,8 @@ public class TddHelper {
 		if (parentNode instanceof IASTIdExpression) {
 			IASTIdExpression expression = (IASTIdExpression) parentNode;
 			IASTNode parentParentNode = expression.getParent();
-			if (parentParentNode instanceof IASTFunctionCallExpression && expression.getPropertyInParent().getName().equals(IASTFunctionCallExpression.FUNCTION_NAME.getName())) {
+			if (parentParentNode instanceof IASTFunctionCallExpression
+					&& expression.getPropertyInParent().getName().equals(IASTFunctionCallExpression.FUNCTION_NAME.getName())) {
 				return true;
 			}
 		}

@@ -17,9 +17,7 @@ import org.eclipse.jface.text.TextSelection;
 public class StaticFunctionCreationStrategy extends FunctionCreationStrategy {
 
 	@Override
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit,
-			IASTNode selectedName, String name,
-			TextSelection selection) {
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, TextSelection selection) {
 		ICPPASTFunctionDefinition function = super.getFunctionDefinition(localunit, selectedName, name, selection);
 		IASTDeclSpecifier declSpecifier = function.getDeclSpecifier();
 		declSpecifier.setStorageClass(IASTDeclSpecifier.sc_static);

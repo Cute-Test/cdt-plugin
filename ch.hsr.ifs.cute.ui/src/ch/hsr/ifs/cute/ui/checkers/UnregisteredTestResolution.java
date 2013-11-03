@@ -59,7 +59,6 @@ public class UnregisteredTestResolution extends AbstractCodanCMarkerResolution {
 	}
 
 	private void performChange(IMarker marker, IDocument document, IFile file) throws CoreException, BadLocationException {
-
 		AbstractFunctionAction action = new AddTestToSuite();
 		int offset = getOffset(marker, document);
 		TextSelection sel = new TextSelection(offset + 3, 3);

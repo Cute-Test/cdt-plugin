@@ -16,6 +16,7 @@ import org.eclipse.jface.text.IRegion;
 public class TestStartEvent implements TestEvent {
 	public IRegion reg;
 	public String testName;
+
 	public TestStartEvent(IRegion reg, String testName) {
 		this.reg = reg;
 		this.testName = testName;

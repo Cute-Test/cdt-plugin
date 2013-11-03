@@ -31,14 +31,12 @@ import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class CopyCuteFiles extends ProcessRunner {
 
 	@Override
-	public void process(TemplateCore template, ProcessArgument[] args,
-			String processId, IProgressMonitor monitor)
-	throws ProcessFailureException {
+	public void process(TemplateCore template, ProcessArgument[] args, String processId, IProgressMonitor monitor) throws ProcessFailureException {
 
 		String projectName = args[0].getSimpleValue();
 		IProject projectHandle = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
@@ -49,39 +47,39 @@ public class CopyCuteFiles extends ProcessRunner {
 		try {
 			path = TemplateEngineHelper.getTemplateResourceURLRelativeToTemplate(template, sourceDir);
 			if (path == null) {
-				throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Copy CUTE files failure: template source not found:" + sourceDir)); //$NON-NLS-1$
+				throw new ProcessFailureException(
+						getProcessMessage(processId, IStatus.ERROR, "Copy CUTE files failure: template source not found:" + sourceDir));
 			}
 		} catch (IOException e1) {
-			throw new ProcessFailureException("Copy CUTE files failure: template source not found: " + sourceDir); //$NON-NLS-1$
+			throw new ProcessFailureException("Copy CUTE files failure: template source not found: " + sourceDir);
 		}
 
 		File[] filenames = getFiles(path);
 
 		for (File file : filenames) {
-			
+
 			InputStream contents = null;
 			try {
 				contents = new FileInputStream(file);
 				copyFile(projectHandle, targetDir, file, contents);
 				projectHandle.refreshLocal(IResource.DEPTH_INFINITE, null);
 			} catch (IOException e) {
-				throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Could not open File: " + file.getAbsolutePath())); //$NON-NLS-1$
+				throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Could not open File: " + file.getAbsolutePath()));
 			} catch (CoreException e) {
-				throw new ProcessFailureException("Could not write File: " + e.getMessage(), e); //$NON-NLS-1$
+				throw new ProcessFailureException("Could not write File: " + e.getMessage(), e);
 			}
 		}
-		
+
 	}
 
-	private void copyFile(IProject projectHandle, String targetDir, File file,
-			InputStream contents) throws CoreException {
-		IFile iFile = projectHandle.getFile(targetDir + "/" + file.getName()); //$NON-NLS-1$
+	private void copyFile(IProject projectHandle, String targetDir, File file, InputStream contents) throws CoreException {
+		IFile iFile = projectHandle.getFile(targetDir + "/" + file.getName());
 		if (!iFile.getParent().exists()) {
 			ProcessHelper.mkdirs(projectHandle, projectHandle.getFolder(iFile.getParent().getProjectRelativePath()));
 		}
 
 		if (iFile.exists()) {
-				iFile.setContents(contents, true, true, null);
+			iFile.setContents(contents, true, true, null);
 		} else {
 			iFile.create(contents, true, null);
 			iFile.refreshLocal(IResource.DEPTH_ONE, null);
@@ -90,15 +88,15 @@ public class CopyCuteFiles extends ProcessRunner {
 
 	private File[] getFiles(URL path) throws ProcessFailureException {
 		File file = new File(path.getFile());
-		if(file.isDirectory()) {
+		if (file.isDirectory()) {
 			return file.listFiles(new FilenameFilter() {
 
 				public boolean accept(File dir, String name) {
-					return name.endsWith(".h"); //$NON-NLS-1$
-				}});
-		}else {
-			throw new ProcessFailureException("Source is not a Direcotry"); //$NON-NLS-1$
+					return name.endsWith(".h");
+				}
+			});
+		} else {
+			throw new ProcessFailureException("Source is not a Direcotry");
 		}
 	}
-
 }

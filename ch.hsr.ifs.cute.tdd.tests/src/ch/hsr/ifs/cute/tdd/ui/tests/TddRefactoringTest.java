@@ -47,7 +47,7 @@ import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.rts.junit4.CDTProjectJUnit4RtsTest;
 import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 
 @SuppressWarnings("restriction")
 public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
@@ -114,8 +114,8 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 			}
 			compareFiles(fileMap);
 		} finally {
-			if (refactoring instanceof CRefactoring3) {
-				((CRefactoring3) refactoring).dispose();
+			if (refactoring instanceof TddCRefactoring) {
+				((TddCRefactoring) refactoring).dispose();
 			}
 		}
 	}
@@ -151,7 +151,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 	private void setSelectionOnFile() {
 		for (Entry<String, TestSourceFile> entry : fileMap.entrySet()) {
 			TestSourceFile file = entry.getValue();
-			//Normally we have only one selection
+			// Normally we have only one selection
 			if (file.getSelection() == null)
 				continue;
 			setSelection(file.getSelection());
@@ -269,7 +269,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 		noMarker = Boolean.valueOf(properties.getProperty("nomarkers", Boolean.toString(NO_MARKER_DEFAULT)));
 		markerCount = Integer.valueOf(properties.getProperty("markerCount", Integer.toString(MARKER_COUNT_DEFAULT)));
 		typeExtraction = Boolean.valueOf(properties.getProperty("typeextraction", Boolean.toString(TYPE_EXTRACTION_DEFAULT)));
-		//TODO: do not overwrite files not yet tested
+		// TODO: do not overwrite files not yet tested
 		overwrite = Boolean.valueOf(properties.getProperty("overwrite", Boolean.toString(OVERWRITE_DEFAULT)));
 		newFiles = separateNewFiles(properties);
 		ignoreComments = Boolean.valueOf(properties.getProperty("ignorecomments", Boolean.toString(IGNORE_COMMENTS_DEFAULT)));
@@ -284,7 +284,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 		BufferedReader br = new BufferedReader(new InputStreamReader(file.getContents()));
 		StringBuilder code = new StringBuilder();
 		String line;
-		while((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null) {
 			code.append(line);
 			code.append(NL);
 		}
@@ -306,8 +306,6 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 	}
 
 	protected void assertConditionsOk(RefactoringStatus conditions) {
-		assertTrue(
-				conditions.isOK() ? "OK" : "Error or Warning in Conditions: " + conditions.getEntries()[0].getMessage(), //$NON-NLS-1$ //$NON-NLS-2$
-				conditions.isOK());
+		assertTrue(conditions.isOK() ? "OK" : "Error or Warning in Conditions: " + conditions.getEntries()[0].getMessage(), conditions.isOK());
 	}
 }

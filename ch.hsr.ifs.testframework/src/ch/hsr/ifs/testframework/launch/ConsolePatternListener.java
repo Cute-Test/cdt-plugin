@@ -32,8 +32,8 @@ import ch.hsr.ifs.testframework.event.TestEventHandler;
  */
 public class ConsolePatternListener implements IPatternMatchListener {
 	private TextConsole console;
-	private ConsoleEventParser eventParser;
-	private Vector<TestEventHandler> handlers;
+	private final ConsoleEventParser eventParser;
+	private final Vector<TestEventHandler> handlers;
 
 	public ConsolePatternListener(ConsoleEventParser consoleEventParser) {
 		eventParser = consoleEventParser;
@@ -77,13 +77,12 @@ public class ConsolePatternListener implements IPatternMatchListener {
 	public void matchFound(PatternMatchEvent event) {
 		try {
 			IDocument doc = console.getDocument();
-			IRegion reg = doc.getLineInformation(doc.getLineOfOffset(event
-					.getOffset()));
+			IRegion reg = doc.getLineInformation(doc.getLineOfOffset(event.getOffset()));
 			String line = doc.get(reg.getOffset(), reg.getLength());
 
 			processTestEventsFrom(reg, line);
 		} catch (BadLocationException e) {
-			throw new RuntimeException(e);			
+			throw new RuntimeException(e);
 		}
 	}
 

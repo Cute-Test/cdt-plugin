@@ -13,16 +13,13 @@ import junit.framework.TestSuite;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class HyperlinkSuite {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite(
-				"Hyperlink Suite"); //$NON-NLS-1$
-		//$JUnit-BEGIN$
+		TestSuite suite = new TestSuite("Hyperlink Suite");
 		suite.addTestSuite(HyperlinkTest.class);
-		//$JUnit-END$
 		return suite;
 	}
 

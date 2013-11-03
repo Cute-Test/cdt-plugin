@@ -58,10 +58,8 @@ public abstract class RefactoringBase extends CRefactoring {
 		try {
 			return getAST(tu, pm);
 		} catch (OperationCanceledException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -95,8 +93,8 @@ public abstract class RefactoringBase extends CRefactoring {
 	}
 
 	protected String toStringDebug(IASTNode node) {
-		return String.format("--%nline: %s, class: %s#%s %nraw:%n%s %nparent: %s %n%n", node.getFileLocation().getStartingLineNumber(), node.getClass().getName(), node.hashCode(),
-				node.getRawSignature(), node.getParent().toString());
+		return String.format("--%nline: %s, class: %s#%s %nraw:%n%s %nparent: %s %n%n", node.getFileLocation().getStartingLineNumber(), node.getClass()
+				.getName(), node.hashCode(), node.getRawSignature(), node.getParent().toString());
 	}
 
 	@Override
@@ -110,19 +108,11 @@ public abstract class RefactoringBase extends CRefactoring {
 
 	protected IASTName getNodeOf(IName name, IProgressMonitor pm) throws CoreException, NodeDefinitionNotInWorkspaceException {
 
-		/*
-		 * IPath refPath =
-		 * Path.fromOSString(name.getFileLocation().getFileName()); boolean
-		 * isInWorkspace =
-		 * PathUtil.isPrefix(PathUtil.getWorkspaceRoot().getLocation(),
-		 * refPath); if(!isInWorkspace){ throw new
-		 * NodeDefinitionNotInWorkspaceException(); }
-		 */
-
 		IASTTranslationUnit astOf = getASTOf(name, pm);
 		if (astOf == null)
 			throw new NodeDefinitionNotInWorkspaceException();
-		IASTNode childRefNode = astOf.getNodeSelector(name.getFileLocation().getFileName()).findNode(name.getFileLocation().getNodeOffset(), name.getFileLocation().getNodeLength());
+		IASTNode childRefNode = astOf.getNodeSelector(name.getFileLocation().getFileName()).findNode(name.getFileLocation().getNodeOffset(),
+				name.getFileLocation().getNodeLength());
 		NSAssert.isInstanceOf(IASTName.class, childRefNode);
 		return (IASTName) childRefNode;
 	}
@@ -133,7 +123,8 @@ public abstract class RefactoringBase extends CRefactoring {
 	}
 
 	@Override
-	protected RefactoringStatus checkFinalConditions(IProgressMonitor subProgressMonitor, CheckConditionsContext checkContext) throws CoreException, OperationCanceledException {
+	protected RefactoringStatus checkFinalConditions(IProgressMonitor subProgressMonitor, CheckConditionsContext checkContext) throws CoreException,
+			OperationCanceledException {
 		return new RefactoringStatus();
 	}
 }

@@ -222,8 +222,7 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 		return new IUDECTemplateIdFactory(templateId, ctx);
 	}
 
-	private void findTargetsInScope(IASTNode enclosingCompound, final IBinding targetDeclarationBinding)
-			throws OperationCanceledException, CoreException {
+	private void findTargetsInScope(IASTNode enclosingCompound, final IBinding targetDeclarationBinding) throws OperationCanceledException, CoreException {
 
 		final IIndex indexer = this.getIndex();
 		final IASTName theName = ctx.selectedName;
@@ -262,8 +261,7 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 			}
 
 			private boolean isCandidate(IASTName name) {
-				if (name != null && name.getTranslationUnit() != null && name.getFileLocation() != null
-						&& CxxAstUtils.isInMacro(name))
+				if (name != null && name.getTranslationUnit() != null && name.getFileLocation() != null && CxxAstUtils.isInMacro(name))
 					return false;
 				if (name instanceof ICPPASTQualifiedName) {
 					return false;
@@ -290,7 +288,7 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 				if (refBinding instanceof ICPPSpecialization) {
 					refBinding = ((ICPPSpecialization) refBinding).getSpecializedBinding();
 					adaptedRefBinding = indexer.adaptBinding(refBinding);
-				}// check on original using declaration dependency is missing. 
+				}// check on original using declaration dependency is missing.
 				return targetDeclarationBinding.equals(adaptedRefBinding);
 			}
 
@@ -308,8 +306,7 @@ public class IUDECRefactoring extends InlineRefactoringBase {
 		IASTNode enclosingCompound;
 		List<IPath> paths = includeDepAnalyser.getIncludeDependentPathsOf(tu);
 		for (IPath filePath : paths) {
-			IFile[] files = ResourcesPlugin.getWorkspace().getRoot()
-					.findFilesForLocationURI(new File(filePath.toOSString()).toURI());
+			IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new File(filePath.toOSString()).toURI());
 			if (files.length < 1)
 				continue;
 			ITranslationUnit tu = CoreModelUtil.findTranslationUnit(files[0]);

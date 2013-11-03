@@ -30,8 +30,7 @@ public class CreateConstructorCreationQuickFix extends AbstractFunctionCreationQ
 	}
 
 	@Override
-	protected void configureLinkedMode(ChangeRecorder rec,
-			LinkedModeInformation lmi) throws BadLocationException {
+	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		configureLinkedModeWithConstAndCtor(rec, lmi);
 	}
 }

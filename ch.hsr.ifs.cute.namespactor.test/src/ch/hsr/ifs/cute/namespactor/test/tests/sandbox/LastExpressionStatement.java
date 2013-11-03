@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.test.tests.sandbox;
 
 /*******************************************************************************
@@ -38,21 +38,20 @@ import org.eclipse.cdt.internal.core.dom.rewrite.ASTModificationStore;
 @SuppressWarnings("restriction")
 public class LastExpressionStatement extends ChangeGeneratorTest {
 
-	public LastExpressionStatement(){
-		super("Last Replace After Insert Has No Line Break"); //$NON-NLS-1$
+	public LastExpressionStatement() {
+		super("Last Replace After Insert Has No Line Break");
 	}
 
 	@Override
 	protected void setUp() throws Exception {
-		source         = "void f()\r\n{\r\n\tint i = 0;\r\n\tf();\r\n}\r\n"; //$NON-NLS-1$
-		expectedSource = "void f()\r\n{\r\n\tint i = 0;\r\n\tusing namespace std;\r\n}\r\n"; //$NON-NLS-1$
+		source = "void f()\r\n{\r\n\tint i = 0;\r\n\tf();\r\n}\r\n";
+		expectedSource = "void f()\r\n{\r\n\tint i = 0;\r\n\tusing namespace std;\r\n}\r\n";
 		super.setUp();
 	}
 
-	public static Test suite() {		
+	public static Test suite() {
 		return new LastExpressionStatement();
 	}
-
 
 	@Override
 	protected ASTVisitor createModificator(final ASTModificationStore modStore) {
@@ -60,18 +59,18 @@ public class LastExpressionStatement extends ChangeGeneratorTest {
 			{
 				shouldVisitStatements = true;
 			}
-			
+
 			@Override
 			public int visit(IASTStatement statement) {
 				if (statement instanceof IASTExpressionStatement) {
 					IASTExpressionStatement exprStatement = (IASTExpressionStatement) statement;
 
 					ASTModification modification1 = new ASTModification(ASTModification.ModificationKind.REPLACE, exprStatement, null, null);
-					ASTModification modification2 = new ASTModification(ASTModification.ModificationKind.INSERT_BEFORE, exprStatement, new CPPASTDeclarationStatement(new CPPASTUsingDirective(new CPPASTName("std".toCharArray()))), null);
+					CPPASTDeclarationStatement declStatement = new CPPASTDeclarationStatement(new CPPASTUsingDirective(new CPPASTName("std".toCharArray())));
+					ASTModification modification2 = new ASTModification(ASTModification.ModificationKind.INSERT_BEFORE, exprStatement, declStatement, null);
 					modStore.storeModification(null, modification1);
 					modStore.storeModification(null, modification2);
 				}
-
 				return PROCESS_CONTINUE;
 			}
 		};

@@ -17,10 +17,10 @@ import ch.hsr.ifs.cute.tdd.ui.tests.refactoring.AllRefactoringTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	//@formatter:off
+//@formatter:off
 	AllRefactoringTests.class,
 	AllQuickFixTests.class
-	//@formatter:on
+//@formatter:on
 })
 public class AllTddTests {
 }

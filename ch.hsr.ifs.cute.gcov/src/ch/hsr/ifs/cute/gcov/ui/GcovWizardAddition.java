@@ -21,15 +21,15 @@ import ch.hsr.ifs.cute.ui.project.wizard.Messages;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class GcovWizardAddition implements ICuteWizardAddition {
-	
+
 	boolean enableGcov = false;
 
 	public Control createComposite(Composite parent) {
 		final Button check = new Button(parent, SWT.CHECK);
-		check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov")); //$NON-NLS-1$
+		check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov"));
 		check.addSelectionListener(new SelectionAdapter() {
 
 			@Override

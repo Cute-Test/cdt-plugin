@@ -41,29 +41,19 @@ public class SelectionButtonDialogField extends DialogField {
 	}
 
 	/**
-	 * Attaches a field to the selection state of the selection button. The attached field will be disabled if the selection button is not selected.
-	 */
-	public void attachDialogField(DialogField dialogField) {
-		attachDialogFields(new DialogField[] { dialogField });
-	}
-
-	/**
 	 * Attaches fields to the selection state of the selection button. The attached fields will be disabled if the selection button is not selected.
 	 */
-	public void attachDialogFields(DialogField[] dialogFields) {
+	public void attachDialogFields(DialogField... dialogFields) {
 		fAttachedDialogFields = dialogFields;
-		for (int i = 0; i < dialogFields.length; i++) {
-			dialogFields[i].setEnabled(fIsSelected);
+		for (DialogField curField : dialogFields) {
+			curField.setEnabled(fIsSelected);
 		}
 	}
 
-	/**
-	 * Returns <code>true</code> is teh gived field is attached to the selection button.
-	 */
 	public boolean isAttached(DialogField editor) {
 		if (fAttachedDialogFields != null) {
-			for (int i = 0; i < fAttachedDialogFields.length; i++) {
-				if (fAttachedDialogFields[i] == editor) {
+			for (DialogField curField : fAttachedDialogFields) {
+				if (curField.equals(editor)) {
 					return true;
 				}
 			}
@@ -73,9 +63,6 @@ public class SelectionButtonDialogField extends DialogField {
 
 	// ------- layout helpers
 
-	/*
-	 * @see DialogField#doFillIntoGrid
-	 */
 	@Override
 	public Control[] doFillIntoGrid(Composite parent, int nColumns) {
 		assertEnoughColumns(nColumns);
@@ -93,15 +80,12 @@ public class SelectionButtonDialogField extends DialogField {
 		return new Control[] { button };
 	}
 
-	/*
-	 * @see DialogField#getNumberOfControls
-	 */
 	@Override
 	public int getNumberOfControls() {
 		return 1;
 	}
 
-	// ------- ui creation			
+	// ------- ui creation
 
 	/**
 	 * Returns the selection button widget. When called the first time, the widget will be created.
@@ -155,18 +139,12 @@ public class SelectionButtonDialogField extends DialogField {
 		}
 	}
 
-	// ------ model access	
+	// ------ model access
 
-	/**
-	 * Returns the selection state of the button.
-	 */
 	public boolean isSelected() {
 		return fIsSelected;
 	}
 
-	/**
-	 * Sets the selection state of the button.
-	 */
 	public void setSelection(boolean selected) {
 		changeValue(selected);
 		if (isOkToUse(fButton)) {
@@ -176,9 +154,6 @@ public class SelectionButtonDialogField extends DialogField {
 
 	// ------ enable / disable management
 
-	/*
-	 * @see DialogField#updateEnableState
-	 */
 	@Override
 	protected void updateEnableState() {
 		super.updateEnableState();

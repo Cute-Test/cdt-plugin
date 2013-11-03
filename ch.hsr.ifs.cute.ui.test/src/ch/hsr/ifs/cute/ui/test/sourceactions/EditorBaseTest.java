@@ -71,7 +71,7 @@ public class EditorBaseTest extends BaseUITestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		cProject = CProjectHelper.createCCProject("cuteTest", "bin", IPDOMManager.ID_FAST_INDEXER); //$NON-NLS-1$//$NON-NLS-2$
+		cProject = CProjectHelper.createCCProject("cuteTest", "bin", IPDOMManager.ID_FAST_INDEXER);//$NON-NLS-2$
 		CCorePlugin.getIndexManager().joinIndexer(INDEXER_WAIT_TIME, npm());
 		index = CCorePlugin.getIndexManager().getIndex(cProject);
 	}
@@ -101,7 +101,7 @@ public class EditorBaseTest extends BaseUITestCase {
 
 	@Override
 	public StringBuilder[] getContentsForTest(int sections) throws IOException {
-		return TestSourceReader.getContentsForTest(UiTestPlugin.getDefault().getBundle(), "src", getClass(), getName(), sections); //$NON-NLS-1$
+		return TestSourceReader.getContentsForTest(UiTestPlugin.getDefault().getBundle(), "src", getClass(), getName(), sections);
 	}
 
 	protected void type(String text, int keyCode, int stateMask, CEditor editor) {
@@ -135,7 +135,7 @@ public class EditorBaseTest extends BaseUITestCase {
 		event.character = character;
 		event.keyCode = keyCode;
 		event.stateMask = stateMask;
-		accessor.invoke("handleKeyDown", new Object[] { event }); //$NON-NLS-1$
+		accessor.invoke("handleKeyDown", new Object[] { event });
 	}
 
 	protected String getCodeFromIFile(IFile file) throws Exception {
@@ -166,8 +166,8 @@ public class EditorBaseTest extends BaseUITestCase {
 		runCommand(selectionStart, selechtionLength, command, editor);
 	}
 
-	protected void runCommand(int selectionStart, int selechtionLength, String command, CEditor editor) throws ExecutionException, NotDefinedException, NotEnabledException,
-			NotHandledException {
+	protected void runCommand(int selectionStart, int selechtionLength, String command, CEditor editor) throws ExecutionException, NotDefinedException,
+			NotEnabledException, NotHandledException {
 		editor.selectAndReveal(selectionStart, selechtionLength);
 		executeCommand(command);
 		saveEditor(editor);

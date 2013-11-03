@@ -19,18 +19,13 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-/**
- * The activator class controls the plug-in life cycle
- */
-
 public class Activator extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.tdd"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.tdd";
 
-	private static final IPath ICONS_PATH = new Path("$nl$/icons"); //$NON-NLS-1$
+	private static final IPath ICONS_PATH = new Path("$nl$/icons");
 
 	private static Activator plugin;
-
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -51,16 +46,17 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public static ImageDescriptor getImageDescriptor(String relativePath) {
-		IPath path= ICONS_PATH.append(relativePath);
+		IPath path = ICONS_PATH.append(relativePath);
 		return createImageDescriptor(getDefault().getBundle(), path);
 	}
 
 	private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {
-		URL url= FileLocator.find(bundle, path, null);
+		URL url = FileLocator.find(bundle, path, null);
 		return ImageDescriptor.createFromURL(url);
 	}
 
 	public ITextSelection getEditorSelection() {
-		return (ITextSelection) getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorSite().getSelectionProvider().getSelection();
+		return (ITextSelection) getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorSite().getSelectionProvider()
+				.getSelection();
 	}
 }

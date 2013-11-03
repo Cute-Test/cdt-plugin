@@ -17,14 +17,14 @@ abstract public class RefactoringMarkerResolution extends AbstractCodanCMarkerRe
 	public void apply(IMarker marker, IDocument document) {
 
 		int nodeOffset = marker.getAttribute(IMarker.CHAR_START, -1);
-		int length     = marker.getAttribute(IMarker.CHAR_END, -1) - nodeOffset;
-		
+		int length = marker.getAttribute(IMarker.CHAR_END, -1) - nodeOffset;
+
 		IWorkbenchWindow window = CUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
-		boolean isEditor        = window.getActivePage().getActivePart() instanceof CEditor;
-		CEditor fEditor = (isEditor) ? (CEditor)window.getActivePage().getActivePart() : null;
-		
+		boolean isEditor = window.getActivePage().getActivePart() instanceof CEditor;
+		CEditor fEditor = (isEditor) ? (CEditor) window.getActivePage().getActivePart() : null;
+
 		IWorkingCopy wc = CUIPlugin.getDefault().getWorkingCopyManager().getWorkingCopy(fEditor.getEditorInput());
-		
+
 		RefactoringAction action = getRefactoringAction();
 		action.run(fEditor.getSite(), wc, new TextSelection(nodeOffset, length));
 	}

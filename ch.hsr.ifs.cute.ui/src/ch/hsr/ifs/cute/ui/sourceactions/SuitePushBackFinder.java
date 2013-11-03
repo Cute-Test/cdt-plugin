@@ -40,7 +40,7 @@ public class SuitePushBackFinder extends ASTVisitor {
 				IASTDeclSpecifier declSpec = sDecl.getDeclSpecifier();
 				if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
 					ICPPASTNamedTypeSpecifier nDeclSpec = (ICPPASTNamedTypeSpecifier) declSpec;
-					if(RegisteredTestFunctionFinderVisitor.isCuteSuite(nDeclSpec)) { //$NON-NLS-1$ // PS: Hack, should check if suite is in namespace cute!
+					if(RegisteredTestFunctionFinderVisitor.isCuteSuite(nDeclSpec)) { // PS: Hack, should check if suite is in namespace cute!
 						suiteDeclName = sDecl.getDeclarators()[0].getName();
 						suiteLocation=nDeclSpec;
 					}
@@ -54,7 +54,6 @@ public class SuitePushBackFinder extends ASTVisitor {
 	public IASTName getSuiteDeclName() {
 		return suiteDeclName;
 	}
-	//return the ICPPASTNamedTypeSpecifier that cute::suite was found
 	public IASTNode getSuiteNode(){
 		return suiteLocation;
 	}

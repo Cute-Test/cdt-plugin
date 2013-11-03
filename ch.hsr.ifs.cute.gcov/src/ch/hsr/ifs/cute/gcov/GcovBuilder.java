@@ -21,22 +21,17 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class GcovBuilder extends IncrementalProjectBuilder {
-	
-	public static final String BUILDER_ID = GcovPlugin.PLUGIN_ID + ".gcovBuilder"; //$NON-NLS-1$
 
-	/**
-	 * 
-	 */
+	public static final String BUILDER_ID = GcovPlugin.PLUGIN_ID + ".gcovBuilder";
+
 	public GcovBuilder() {
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
-		
+	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException {
 		return null;
 	}
 
@@ -44,12 +39,12 @@ public class GcovBuilder extends IncrementalProjectBuilder {
 	protected void clean(IProgressMonitor monitor) throws CoreException {
 		IProject project = getProject();
 		project.accept(new IResourceVisitor() {
-			
+
 			public boolean visit(IResource resource) throws CoreException {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
 					String fileExt = file.getFileExtension();
-					if(fileExt != null && (fileExt.equals("gcno")|| fileExt.equals("gcda")||fileExt.equals("gcov"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					if (fileExt != null && (fileExt.equals("gcno") || fileExt.equals("gcda") || fileExt.equals("gcov"))) {
 						file.delete(true, new NullProgressMonitor());
 					}
 				}
@@ -57,6 +52,4 @@ public class GcovBuilder extends IncrementalProjectBuilder {
 			}
 		});
 	}
-	
-
 }

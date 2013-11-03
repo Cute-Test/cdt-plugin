@@ -22,21 +22,15 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public class ProjectNaturePropertyTester extends PropertyTester {
 
-	/**
-	 * 
-	 */
 	public ProjectNaturePropertyTester() {
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.expressions.IPropertyTester#test(java.lang.Object, java.lang.String, java.lang.Object[], java.lang.Object)
-	 */
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (property.equals("projectNature1")) { //$NON-NLS-1$
+		if (property.equals("projectNature1")) {
 			try {
 				if (receiver instanceof FileEditorInput) {
 					FileEditorInput fei = (FileEditorInput) receiver;
-					receiver = fei.getFile(); //The IResource part will take care of the rest.
+					receiver = fei.getFile(); // The IResource part will take care of the rest.
 				}
 				if (receiver instanceof IResource) {
 					IResource res = (IResource) receiver;
@@ -65,18 +59,8 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 		return proj != null && proj.isAccessible() && proj.hasNature(toString(expectedValue));
 	}
 
-	/**
-	 * Converts the given expected value to a <code>String</code>.
-	 * 
-	 * @param expectedValue
-	 *            the expected value (may be <code>null</code>).
-	 * @return the empty string if the expected value is <code>null</code>,
-	 *         otherwise the <code>toString()</code> representation of the
-	 *         expected value
-	 */
 	protected String toString(Object expectedValue) {
-		return expectedValue == null ? "" : expectedValue.toString(); //$NON-NLS-1$
+		return expectedValue == null ? "" : expectedValue.toString();
 	}
 
 }
-//@see org.eclipse.core.internal.propertytester.ResourcePropertyTester

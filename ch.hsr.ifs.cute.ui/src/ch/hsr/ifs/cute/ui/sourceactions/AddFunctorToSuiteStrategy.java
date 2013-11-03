@@ -52,7 +52,7 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 	public MultiTextEdit getEdit() {
 
 		if (fname == null) {
-			return new MultiTextEdit();//FIXME potential bug point
+			return new MultiTextEdit();// FIXME potential bug point
 		}
 
 		constructorNeedParameterFlag = checkForConstructorWithParameters(astTu, node);
@@ -72,7 +72,6 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 		FunctionFinder ff = new FunctionFinder();
 		astTu.accept(ff);
 		for (Object i : ff.getClassStruct()) {
-			//stream.println(ff.getSimpleDeclarationNodeName((IASTSimpleDeclaration)(i))+"");
 			if (((IASTNode) i).contains(node)) {
 				ArrayList<IASTDeclaration> constructors = ASTHelper.getConstructors((IASTSimpleDeclaration) i);
 				return ASTHelper.haveParameters(constructors);
@@ -93,7 +92,7 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 		if (tmp instanceof IASTSimpleDeclaration) {
 			ArrayList<IASTDeclaration> al = ASTHelper.getPublicMethods((IASTSimpleDeclaration) tmp);
 			for (IASTDeclaration i : al) {
-				if (ASTHelper.getMethodName(i).equals(Messages.getString("AddTestFunctortoSuiteAction.Operator"))) { //$NON-NLS-1$
+				if (ASTHelper.getMethodName(i).equals(Messages.getString("AddTestFunctortoSuiteAction.Operator"))) {
 					publicOperatorExist = true;
 					break;
 				}
@@ -112,7 +111,6 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 		return false;
 	}
 
-	//handle case of virtual operator not declared
 	private boolean isVirtualOperatorDeclared(ArrayList<IASTName> operatorParenthesesNode, IASTNode node, boolean operatorMatchFlag) {
 		if (node instanceof IASTSimpleDeclaration || node instanceof IASTFunctionDefinition) {
 			if (node.getParent() instanceof ICPPASTCompositeTypeSpecifier) {
@@ -144,9 +142,9 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 	protected IASTName nameAtCursor(ArrayList<IASTName> operatorParenthesesNode, IASTNode node) {
 		if (node instanceof IASTDeclaration) {
 			if (node instanceof ICPPASTVisibilityLabel) {
-				//public: private: protected: for class
+				// public: private: protected: for class
 				node = node.getParent().getParent();
-				//FIXME operator() is private,protected in a class/struct??
+				// FIXME operator() is private,protected in a class/struct??
 			}
 
 			try {
@@ -167,7 +165,7 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 				return null;
 			}
 
-			//check class, struct at cursor for operator()
+			// check class, struct at cursor for operator()
 			boolean operatorMatchFlag = false;
 			for (IASTName i : operatorParenthesesNode) {
 				if (node.contains(i)) {
@@ -182,9 +180,9 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 				return null;
 			}
 
-			//TODO check also operator() doesnt have parameters, or at least default binded
-			//TODO check for function not virtual and has a method body
-			if (node instanceof IASTSimpleDeclaration) {//simple class case
+			// TODO check also operator() doesnt have parameters, or at least default binded
+			// TODO check for function not virtual and has a method body
+			if (node instanceof IASTSimpleDeclaration) {// simple class case
 				/*
 				 * class TFunctor{ private: public:**but cannot handle the methods }
 				 */
@@ -196,15 +194,15 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 			}
 		}
 
-		//FIXME wouldnt be detected as preprocess statement NodeAtCursorFinder returns null
+		// FIXME wouldnt be detected as preprocess statement NodeAtCursorFinder returns null
 		/*
 		 * if(node instanceof IASTPreprocessorStatement){ stream.println("preprocessor statement selected, unable to add as functor."); return ""; }
 		 */
 
 		IASTNode parentNode = getWantedTypeParent(node);
 		if (parentNode instanceof IASTFunctionDefinition || parentNode instanceof IASTSimpleDeclaration) {
-			//handle the simple class case, cursor at methods
-			//if(!(parentNode.getParent() instanceof ICPPASTTranslationUnit))	
+			// handle the simple class case, cursor at methods
+			// if(!(parentNode.getParent() instanceof ICPPASTTranslationUnit))
 			return ((ICPPASTCompositeTypeSpecifier) (parentNode.getParent())).getName();
 		}
 		return null;

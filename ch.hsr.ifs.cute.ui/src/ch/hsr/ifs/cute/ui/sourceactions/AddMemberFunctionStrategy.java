@@ -25,7 +25,7 @@ import org.eclipse.text.edits.MultiTextEdit;
  */
 public class AddMemberFunctionStrategy extends AddPushbackStatementStrategy {
 
-	private static final String SCOPE = "::"; //$NON-NLS-1$
+	private static final String SCOPE = "::";
 	private final IFile editorFile;
 	private final IASTTranslationUnit astTu;
 	private final IASTName name;
@@ -47,29 +47,29 @@ public class AddMemberFunctionStrategy extends AddPushbackStatementStrategy {
 	}
 
 	private StringBuilder getPushbackStatement(IASTName testName, IASTName suiteName) {
-		final StringBuilder sb = new StringBuilder(newLine + "\t"); //$NON-NLS-1$
+		final StringBuilder sb = new StringBuilder(newLine + "\t");
 		sb.append(suiteName.toString());
-		sb.append(".push_back("); //$NON-NLS-1$
+		sb.append(".push_back(");
 		sb.append(createPushBackContent());
-		sb.append(");"); //$NON-NLS-1$
+		sb.append(");");
 		return sb;
 	}
 
 	@Override
 	public String createPushBackContent() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("CUTE_SMEMFUN("); //$NON-NLS-1$
+		builder.append("CUTE_SMEMFUN(");
 		final IBinding nameBinding = name.resolveBinding();
 		if (nameBinding instanceof ICPPMethod) {
 			final ICPPMethod methodBinding = (ICPPMethod) nameBinding;
 			try {
 				builder.append(assambleQualifier(methodBinding));
-				builder.append(", "); //$NON-NLS-1$
+				builder.append(", ");
 				builder.append(methodBinding.getName());
 			} catch (DOMException e) {
 			}
 		}
-		builder.append(")"); //$NON-NLS-1$
+		builder.append(")");
 		return builder.toString();
 	}
 

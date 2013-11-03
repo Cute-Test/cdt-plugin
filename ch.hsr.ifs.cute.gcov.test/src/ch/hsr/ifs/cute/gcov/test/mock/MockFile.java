@@ -214,7 +214,7 @@ public class MockFile implements IFile {
 
 	public void deleteMarkers(String type, boolean includeSubtypes, int depth) throws CoreException {
 		if (!exists()) {
-			String message = "File does not exist"; //$NON-NLS-1$
+			String message = "File does not exist";
 			throw new ResourceException(IResourceStatus.RESOURCE_NOT_FOUND, getFullPath(), message, null);
 		}
 	}
@@ -263,8 +263,7 @@ public class MockFile implements IFile {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map getPersistentProperties() throws CoreException {
+	public Map<QualifiedName, String> getPersistentProperties() throws CoreException {
 		throw new NotYetImplementedException();
 	}
 
@@ -292,8 +291,7 @@ public class MockFile implements IFile {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map getSessionProperties() throws CoreException {
+	public Map<QualifiedName, Object> getSessionProperties() throws CoreException {
 		throw new NotYetImplementedException();
 	}
 
@@ -433,8 +431,7 @@ public class MockFile implements IFile {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings("rawtypes")
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		throw new NotYetImplementedException();
 	}
 

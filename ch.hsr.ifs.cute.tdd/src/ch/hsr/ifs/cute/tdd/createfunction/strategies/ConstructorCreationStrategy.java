@@ -30,17 +30,13 @@ public class ConstructorCreationStrategy implements IFunctionCreationStrategy {
 
 	@Override
 	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, TextSelection selection) {
-
 		CPPASTFunctionDeclarator funcdecl = new CPPASTFunctionDeclarator(new CPPASTName(name.toCharArray()));
-
 		CPPASTDeclarator declarator = TddHelper.getAncestorOfType(selectedName, CPPASTDeclarator.class);
 		ParameterHelper.addTo(declarator, funcdecl);
-
 		CPPASTNamedTypeSpecifier declspec = new CPPASTNamedTypeSpecifier();
 		declspec.setName(new CPPASTName());
 		CPPASTFunctionDefinition fd = new CPPASTFunctionDefinition(declspec, funcdecl, new CPPASTCompoundStatement());
 		return fd;
-
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import org.eclipse.jface.text.IRegion;
 public class SuiteEndEvent implements TestEvent {
 	public IRegion reg;
 	public String suitename;
+
 	public SuiteEndEvent(IRegion reg, String suitename) {
 		this.reg = reg;
 		this.suitename = suitename;

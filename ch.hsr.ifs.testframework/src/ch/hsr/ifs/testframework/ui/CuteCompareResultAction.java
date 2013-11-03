@@ -17,15 +17,13 @@ import ch.hsr.ifs.testframework.model.TestCase;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class CuteCompareResultAction extends Action {
-	
-	private TestCase test;
+
+	private final TestCase test;
 	private CuteCompareResultDialog dialog;
-	private Shell shell;
-	
-	
+	private final Shell shell;
 
 	public CuteCompareResultAction(TestCase test, Shell shell) {
 		super();
@@ -33,25 +31,22 @@ public class CuteCompareResultAction extends Action {
 		this.shell = shell;
 	}
 
-
-
 	@Override
 	public void run() {
 		if (dialog != null) {
 			dialog.setCompareViewerInput(test);
-				
+
 		} else {
-			dialog= new CuteCompareResultDialog(shell, test);
+			dialog = new CuteCompareResultDialog(shell, test);
 			dialog.create();
 			dialog.getShell().addDisposeListener(new DisposeListener() {
 				public void widgetDisposed(DisposeEvent e) {
-					dialog= null;
+					dialog = null;
 				}
 			});
 			dialog.setBlockOnOpen(false);
 			dialog.open();
 		}
 	}
-	
 
 }

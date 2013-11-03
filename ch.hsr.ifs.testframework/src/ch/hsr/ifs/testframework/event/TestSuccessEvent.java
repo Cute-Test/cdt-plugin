@@ -17,6 +17,7 @@ public class TestSuccessEvent implements TestEvent {
 	public IRegion reg;
 	public String testName;
 	public String msg;
+
 	public TestSuccessEvent(IRegion reg, String testName, String msg) {
 		this.msg = msg;
 		this.testName = testName;

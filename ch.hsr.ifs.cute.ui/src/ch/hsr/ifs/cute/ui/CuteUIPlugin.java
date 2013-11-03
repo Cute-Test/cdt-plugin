@@ -101,7 +101,6 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 					}
 				}
 			}
-			// fallback
 			return getInstalledCuteHeaders().first();
 		}
 	}

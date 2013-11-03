@@ -14,27 +14,27 @@ import java.util.List;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class Line {
-	
+
 	private Function function;
-	private int nr;
+	private final int nr;
 	private CoverageStatus status;
-	private List<Branch>branches;
-	
+	private List<Branch> branches;
+
 	public Line(int nr, CoverageStatus status) {
 		super();
 		this.nr = nr;
 		this.status = status;
 	}
-	
+
 	public void addBranch(Branch b) {
-		if(branches == null){
+		if (branches == null) {
 			branches = new ArrayList<Branch>();
 		}
 		branches.add(b);
-		if(status == CoverageStatus.Covered && b.getStatus() == CoverageStatus.Uncovered) {
+		if (status == CoverageStatus.Covered && b.getStatus() == CoverageStatus.Uncovered) {
 			status = CoverageStatus.PartiallyCovered;
 		}
 	}
@@ -56,7 +56,7 @@ public class Line {
 	}
 
 	public List<Branch> getBranches() {
-		if(branches == null) {
+		if (branches == null) {
 			return Collections.emptyList();
 		}
 		return branches;
@@ -64,11 +64,7 @@ public class Line {
 
 	@Override
 	public String toString() {
-		return nr + " " + status; //$NON-NLS-1$
+		return nr + " " + status;
 	}
-	
-	
-	
-	
 
 }

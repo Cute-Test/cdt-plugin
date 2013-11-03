@@ -20,10 +20,10 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 @SuppressWarnings("restriction")
 public class NewTestFunctionTest extends EditorBaseTest {
 
-	private static final String COMMAND_ID = "ch.hsr.ifs.cute.newTestFunctionCommand"; //$NON-NLS-1$
+	private static final String COMMAND_ID = "ch.hsr.ifs.cute.newTestFunctionCommand";
 
 	public NewTestFunctionTest() {
-		super("New Test Function"); //$NON-NLS-1$
+		super("New Test Function");
 	}
 
 	//void runSuite(){
@@ -44,10 +44,10 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//
 	public void testNewTestFunction() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
-		IFile file = createFile(contentsForTest[0].toString(), "function.cpp"); //$NON-NLS-1$
+		IFile file = createFile(contentsForTest[0].toString(), "function.cpp");
 		final CEditor cEditor = openEditor(file);
 		runCommand(0, 2, COMMAND_ID, cEditor);
-		type("newTest", 0, 0, cEditor); //$NON-NLS-1$
+		type("newTest", 0, 0, cEditor);
 		saveEditor(cEditor);
 		assertFileContent(file, contentsForTest[1].toString());
 	}
@@ -70,12 +70,12 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//
 	public void testNewTestFunctionChangeBody() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
-		IFile file = createFile(contentsForTest[0].toString(), "body.cpp"); //$NON-NLS-1$
+		IFile file = createFile(contentsForTest[0].toString(), "body.cpp");
 		CEditor cEditor = openEditor(file);
 		runCommand(0, 2, COMMAND_ID, cEditor);
-		type("newTest", 0, 0, cEditor); //$NON-NLS-1$
+		type("newTest", 0, 0, cEditor);
 		type('\t', 0, 0, cEditor);
-		type("ASSERT(true);", 0, 0, cEditor); //$NON-NLS-1$
+		type("ASSERT(true);", 0, 0, cEditor);
 		cEditor.doSave(new NullProgressMonitor());
 		assertFileContent(file, contentsForTest[1].toString());
 	}
@@ -93,11 +93,11 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//}
 	public void testNewTestFunctionMissingSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
-		IFile file = createFile(contentsForTest[0].toString(), "function.cpp"); //$NON-NLS-1$
+		IFile file = createFile(contentsForTest[0].toString(), "function.cpp");
 		final CEditor cEditor = openEditor(file);
 		cEditor.selectAndReveal(0, 2);
 		executeCommand(COMMAND_ID);
-		type("newTest", 0, 0, cEditor); //$NON-NLS-1$
+		type("newTest", 0, 0, cEditor);
 		saveEditor(cEditor);
 		assertFileContent(file, contentsForTest[1].toString());
 	}

@@ -34,7 +34,7 @@ public class ChangeRecorderTest {
 		OLDTEXT_FUNC = new Document("void testFoo(){int x = foo();}");
 		NEWTEXT_FUNC = new Document(INSTEXT_FUNC + OLDTEXT_FUNC.get());
 		change = new FakeChange(OLDTEXT_FUNC, 0, INSTEXT_FUNC);
-		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change , NAME);
+		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change, NAME);
 	}
 
 	@Test
@@ -42,10 +42,10 @@ public class ChangeRecorderTest {
 		assertEquals(NEWTEXT_FUNC.get(), recorder.getDocument().get());
 	}
 
-	@Test(expected=RuntimeException.class)
+	@Test(expected = RuntimeException.class)
 	public void testExecuteFailingChange() {
 		change.setFailing();
-		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change , NAME);
+		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change, NAME);
 	}
 
 	@Test
@@ -77,15 +77,15 @@ public class ChangeRecorderTest {
 	public void testMarkerLineEndWhenSemicolonWasMissing() throws BadLocationException {
 		OLDTEXT_FUNC = new Document("void testFoo(){int x = foo()\n}");
 		change = new FakeChange(OLDTEXT_FUNC, 0, "int foo(){return int(3);}");
-		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change , NAME);
+		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change, NAME);
 		assertEquals(53, recorder.getEndOfMarkedLine());
 	}
 
-	@Test(expected=RuntimeException.class)
+	@Test(expected = RuntimeException.class)
 	public void testMarkerLineEndWhenEverythingIsMissing() throws BadLocationException {
 		OLDTEXT_FUNC = new Document("void testFoo(){int x = foo()}");
 		change = new FakeChange(OLDTEXT_FUNC, 0, "int foo(){return int(3);}");
-		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change , NAME);
+		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change, NAME);
 		recorder.getEndOfMarkedLine();
 	}
 
@@ -103,37 +103,37 @@ public class ChangeRecorderTest {
 	public void testReturnValueLength() {
 		assertEquals(6, recorder.getRetLength());
 	}
-	
+
 	@Test
 	public void testSingleParameterNameOffset() throws BadLocationException {
 		setupFunctionWithParameters("42", "int const & i");
 		assertEquals(20, recorder.getParameterPositions().get(0).getOffset());
 	}
-	
+
 	@Test
 	public void testSingleParameterNameLength() throws BadLocationException {
 		setupFunctionWithParameters("42", "int const & i");
 		assertEquals(1, recorder.getParameterPositions().get(0).getLength());
 	}
-	
+
 	@Test
 	public void testSingleParameterSpecOffset() throws BadLocationException {
 		setupFunctionWithParameters("42", "int const & i");
 		assertEquals(8, recorder.getParameterPositions().get(1).getOffset());
 	}
-	
+
 	@Test
 	public void testSingleParameterSpecLength() throws BadLocationException {
 		setupFunctionWithParameters("42", "int const & i");
 		assertEquals(11, recorder.getParameterPositions().get(1).getLength());
 	}
-	
+
 	@Test
 	public void testSecondParameterNameOffset() throws BadLocationException {
 		setupFunctionWithParameters("42, 42", "int const & i, int const & j");
 		assertEquals(35, recorder.getParameterPositions().get(1).getOffset());
 	}
-	
+
 	@Test
 	public void testSecondParameterNameLength() throws BadLocationException {
 		setupFunctionWithParameters("42, 42", "int const & i, int const & j");
@@ -161,15 +161,15 @@ public class ChangeRecorderTest {
 	private void setupFunctionWithParameters(String args, String params) {
 		OLDTEXT_FUNC = new Document("void testFoo(){int x = foo(" + args + ")}");
 		change = new FakeChange(OLDTEXT_FUNC, 0, "int foo(" + params + "){return int();}");
-		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change , NAME);
+		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change, NAME);
 	}
 
 	private void setupMethod(String args, String params) {
 		OLDTEXT_FUNC = new Document("struct A{};void testFoo(){A a;int x = a.foo(" + args + ")}");
 		change = new FakeChange(OLDTEXT_FUNC, 9, "int foo(" + params + ") const {return int();}");
-		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change , NAME);
+		recorder = new ChangeRecorder(MARKER_OFFSET_FUNC, OLDTEXT_FUNC, change, NAME);
 	}
-	
+
 	@Test
 	public void templateProposalPosition() throws BadLocationException {
 		Document beforeDocument = new Document("");

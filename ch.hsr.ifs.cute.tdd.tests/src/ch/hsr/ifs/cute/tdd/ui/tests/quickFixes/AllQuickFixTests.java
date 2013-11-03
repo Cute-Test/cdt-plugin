@@ -20,20 +20,20 @@ import ch.hsr.ifs.cute.tdd.linkedMode.TddLinkedModeTest;
 @RunWith(Suite.class)
 @SuiteClasses({
 //@formatter:off
-			AddArgumentTest.class,
-			ChangeVisibilityTest.class,
-			CreateClassTest.class,
-			CreateConstructorTest.class,
-			CreateFunctionTest.class,
-			CreateLocalVariableTest.class,
-			CreateMemberVariableAndPrivateLabelTest.class,
-			CreateMemberVariableTest.class,
-			CreateOperatorTest.class,
-			RemoveArgumentTest.class,
-			NestedEditTest.class,
-			ChangeRecorderTest.class,
-			TddLinkedModeTest.class,
-			CreateClassLMTest.class
+		AddArgumentTest.class,
+		ChangeVisibilityTest.class,
+		CreateClassTest.class,
+		CreateConstructorTest.class,
+		CreateFunctionTest.class,
+		CreateLocalVariableTest.class,
+		CreateMemberVariableAndPrivateLabelTest.class,
+		CreateMemberVariableTest.class,
+		CreateOperatorTest.class,
+		RemoveArgumentTest.class,
+		NestedEditTest.class,
+		ChangeRecorderTest.class,
+		TddLinkedModeTest.class,
+		CreateClassLMTest.class
 //@formatter:on
 })
 public class AllQuickFixTests {

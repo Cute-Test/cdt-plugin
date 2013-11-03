@@ -22,7 +22,6 @@ public class IUDIRRefactoringTest extends JUnit4RtsRefactoringTest {
 
 	@Override
 	protected CRefactoring getRefactoring() throws CModelException {
-
 		return new IUDIRRefactoring(getCElementOfTestFile(), selection, cproject);
 	}
 

@@ -109,7 +109,7 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 						binex = (ICPPASTBinaryExpression) binex.getOperand1();
 					}
 					binex.getExpressionType();
-					//give a typedef a change to insert it's name
+					// give a typedef a change to insert it's name
 					if (binex.getOperand1() instanceof CPPASTIdExpression) {
 						CPPASTIdExpression idex = (CPPASTIdExpression) binex.getOperand1();
 						IASTName xname = idex.getName();
@@ -123,7 +123,7 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 					ICPPASTUnaryExpression unex = (ICPPASTUnaryExpression) ex;
 					IType type = unex.getExpressionType();
 					if (unex.getOperand().getExpressionType().equals(ex.getExpressionType())) {
-						//give a typedef a change to insert it's name
+						// give a typedef a change to insert it's name
 						if (unex.getOperand() instanceof CPPASTIdExpression) {
 							CPPASTIdExpression idex = (CPPASTIdExpression) unex.getOperand();
 							IASTName xname = idex.getName();

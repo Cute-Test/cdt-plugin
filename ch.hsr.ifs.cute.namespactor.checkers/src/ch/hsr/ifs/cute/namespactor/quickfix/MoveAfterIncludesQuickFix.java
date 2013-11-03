@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.quickfix;
 
 import org.eclipse.cdt.codan.ui.AbstractAstRewriteQuickFix;
@@ -29,7 +29,7 @@ import ch.hsr.ifs.cute.namespactor.plugin.NamespactorCheckersActivator;
 /**
  * @author kunz@ideadapt.net
  * */
-public class MoveAfterIncludesQuickFix extends AbstractAstRewriteQuickFix  {
+public class MoveAfterIncludesQuickFix extends AbstractAstRewriteQuickFix {
 
 	@Override
 	public String getLabel() {
@@ -46,7 +46,7 @@ public class MoveAfterIncludesQuickFix extends AbstractAstRewriteQuickFix  {
 			NamespactorCheckersActivator.log(e);
 			return;
 		}
-		
+
 		applyMove(marker, createMoveChange(marker, ast));
 	}
 
@@ -67,18 +67,18 @@ public class MoveAfterIncludesQuickFix extends AbstractAstRewriteQuickFix  {
 	private Change createMoveChange(IMarker marker, IASTTranslationUnit ast) {
 
 		int nodeOffset = marker.getAttribute(IMarker.CHAR_START, -1);
-		int length     = marker.getAttribute(IMarker.CHAR_END, -1) - nodeOffset;
+		int length = marker.getAttribute(IMarker.CHAR_END, -1) - nodeOffset;
 		IASTNode markedNode = ast.getNodeSelector(null).findNode(nodeOffset, length);
-		ASTRewrite r   = ASTRewrite.create(ast);
+		ASTRewrite r = ASTRewrite.create(ast);
 
 		IASTPreprocessorIncludeStatement[] includes = ast.getIncludeDirectives();
-		if(includes.length > 0){
-			IASTNode lastInclude = includes[includes.length -1];
+		if (includes.length > 0) {
+			IASTNode lastInclude = includes[includes.length - 1];
 			r.remove(markedNode, null);
 			r.insertBefore(lastInclude.getParent(), NSNodeHelper.getASTSiblingOf(lastInclude, ast), markedNode.copy(), null);
 		}
-		
+
 		return r.rewriteAST();
 	}
-	
+
 }

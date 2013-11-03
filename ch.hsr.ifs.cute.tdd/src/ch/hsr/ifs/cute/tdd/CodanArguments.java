@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IMarker;
 @SuppressWarnings("restriction")
 public class CodanArguments {
 
-	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	private static final String EMPTY_STRING = "";
 	private String name;
 	private String message;
 	private String strategy;
@@ -29,7 +29,7 @@ public class CodanArguments {
 			return;
 		}
 		try {
-			setMessage(CodanProblemMarker.getMessage(marker)); //argument 0
+			setMessage(CodanProblemMarker.getMessage(marker));
 			setName(CodanProblemMarker.getProblemArgument(marker, 1));
 			setStrategy(CodanProblemMarker.getProblemArgument(marker, 2));
 			try {
@@ -123,25 +123,25 @@ public class CodanArguments {
 	}
 
 	public boolean isFreeOperator() {
-		if (getStrategy().equals(":freeoperator")) { //$NON-NLS-1$
+		if (getStrategy().equals(":freeoperator")) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean isOperatorCase() {
-		return getStrategy().endsWith("operator"); //$NON-NLS-1$
+		return getStrategy().endsWith("operator");
 	}
 
 	public boolean isStaticCase() {
-		return getStrategy().equals(":staticfreefunc"); //$NON-NLS-1$
+		return getStrategy().equals(":staticfreefunc");
 	}
 
 	public boolean isCtorCase() {
-		return getStrategy().equals(":ctor"); //$NON-NLS-1$
+		return getStrategy().equals(":ctor");
 	}
 
 	public boolean isMemberVariableCase() {
-		return getStrategy().equals(":memberVariable"); //$NON-NLS-1$
+		return getStrategy().equals(":memberVariable");
 	}
 }

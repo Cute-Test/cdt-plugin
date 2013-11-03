@@ -35,14 +35,11 @@ public class StringDialogField extends DialogField {
 	
 	public StringDialogField() {
 		super();
-		fText= ""; //$NON-NLS-1$
+		fText= "";
 	}
 			
 	// ------- layout helpers
 		
-	/*
-	 * @see DialogField#doFillIntoGrid
-	 */
 	@Override
 	public Control[] doFillIntoGrid(Composite parent, int nColumns) {
 		assertEnoughColumns(nColumns);
@@ -55,9 +52,6 @@ public class StringDialogField extends DialogField {
 		return new Control[] { label, text };
 	} 
 
-	/*
-	 * @see DialogField#getNumberOfControls
-	 */
 	@Override
 	public int getNumberOfControls() {
 		return 2;	
@@ -73,9 +67,6 @@ public class StringDialogField extends DialogField {
 	
 	// ------- focus methods
 	
-	/*
-	 * @see DialogField#setFocus
-	 */
 	@Override
 	public boolean setFocus() {
 		if (isOkToUse(fTextControl)) {
@@ -87,11 +78,6 @@ public class StringDialogField extends DialogField {
 		
 	// ------- ui creation			
 
-	/**
-	 * Creates or returns the created text control.
-	 * @param parent The parent composite or <code>null</code> when the widget has
-	 * already been created.
-	 */		
 	public Text getTextControl(Composite parent) {
 		if (fTextControl == null) {
 			assertCompositeNotNull(parent);
@@ -121,9 +107,6 @@ public class StringDialogField extends DialogField {
 	
 	// ------ enable / disable management
 	
-	/*
-	 * @see DialogField#updateEnableState
-	 */		
 	@Override
 	protected void updateEnableState() {
 		super.updateEnableState();		
@@ -134,16 +117,10 @@ public class StringDialogField extends DialogField {
 		
 	// ------ text access 
 	
-	/**
-	 * Gets the text. Can not be <code>null</code>
-	 */	
 	public String getText() {
 		return fText;
 	}
 	
-	/**
-	 * Sets the text. Triggers a dialog-changed event.
-	 */
 	public void setText(String text) {
 		fText= text;
 		if (isOkToUse(fTextControl)) {
@@ -153,9 +130,6 @@ public class StringDialogField extends DialogField {
 		}	
 	}
 
-	/**
-	 * Sets the text without triggering a dialog-changed event.
-	 */
 	public void setTextWithoutUpdate(String text) {
 		fText= text;
 		if (isOkToUse(fTextControl)) {

@@ -10,12 +10,12 @@ package ch.hsr.ifs.testframework.model;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public interface ISessionListener {
-	
+
 	public void sessionStarted(TestSession session);
-	
+
 	public void sessionFinished(TestSession session);
 
 }

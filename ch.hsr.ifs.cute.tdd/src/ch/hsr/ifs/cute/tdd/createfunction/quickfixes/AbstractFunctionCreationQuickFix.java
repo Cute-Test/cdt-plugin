@@ -12,7 +12,7 @@ import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddQuickFix;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
 import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
@@ -34,7 +34,7 @@ public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+	protected TddCRefactoring getRefactoring(ITextSelection selection) {
 		if (free) {
 			return new CreateFreeFunctionRefactoring(selection, ca, getStrategy());
 		}
@@ -43,8 +43,8 @@ public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 
 	public void handleReturn(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		if (lmi.getReturnStatment()) {
-			lmi.addPosition(rec.getRetBegin(), rec.getRetLength() - "()".length(), rec.getSpecBegin()); //$NON-NLS-1$
-			lmi.addPosition(rec.getRetBegin() + rec.getRetLength() - "(".length(), 0); //$NON-NLS-1$
+			lmi.addPosition(rec.getRetBegin(), rec.getRetLength() - "()".length(), rec.getSpecBegin());
+			lmi.addPosition(rec.getRetBegin() + rec.getRetLength() - "(".length(), 0);
 		} else {
 			lmi.addPosition(rec.getBracketPosition(), 0);
 		}
@@ -66,7 +66,7 @@ public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 		lmi.addPositions(rec.getParameterPositions());
 		handleReturn(rec, lmi);
 		if (lmi.getConst()) {
-			lmi.addPosition(rec.getConstOffset(), "const".length()); //$NON-NLS-1$
+			lmi.addPosition(rec.getConstOffset(), "const".length());
 		}
 	}
 }

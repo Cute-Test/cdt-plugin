@@ -16,7 +16,7 @@ import junit.framework.TestSuite;
  * @author Thomas Corbat IFS
  */
 public class AllHeadersTestSuite extends TestSuite {
-	
+
 	public AllHeadersTestSuite() {
 		super("All Header Tests");
 		addTestSuite(CopyHeaders2_0Test.class);

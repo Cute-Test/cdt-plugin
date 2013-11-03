@@ -135,6 +135,7 @@ public class TestSession implements ITestComposite {
 	}
 
 	public String getRerunName() {
+		// errr? what? primitive obsession? (lfelber)
 		return ""; // empty means all tests
 	}
 

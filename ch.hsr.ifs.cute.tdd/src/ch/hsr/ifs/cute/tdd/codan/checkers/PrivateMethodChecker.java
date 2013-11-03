@@ -30,7 +30,7 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class PrivateMethodChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_PrivateMethodChecker_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"; //$NON-NLS-1$
+	public static final String ERR_ID_PrivateMethodChecker_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -59,11 +59,9 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 							return PROCESS_CONTINUE;
 						}
 						String memberName = new String(name.getSimpleID());
-						CodanArguments ca = new CodanArguments(memberName, memberName, ":visibility"); //$NON-NLS-1$
+						CodanArguments ca = new CodanArguments(memberName, memberName, ":visibility");
 						reportProblem(ERR_ID_PrivateMethodChecker_HSR, name.getLastName(), ca.toArray());
-					}// else if (member.getVisibility() == ICPPMember.v_protected) {
-						// Not implemented
-						//}
+					}
 				}
 				return PROCESS_CONTINUE;
 			}

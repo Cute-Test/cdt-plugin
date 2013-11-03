@@ -12,12 +12,12 @@ import ch.hsr.ifs.testframework.test.ConsoleTest;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public abstract class PatternListenerBase extends ConsoleTest {
 	@Override
 	protected String getInputFilePath() {
-		return "patternListenerTests/" + getInputFileName(); //$NON-NLS-1$
+		return "patternListenerTests/" + getInputFileName();
 	}
 
 	protected abstract String getInputFileName();

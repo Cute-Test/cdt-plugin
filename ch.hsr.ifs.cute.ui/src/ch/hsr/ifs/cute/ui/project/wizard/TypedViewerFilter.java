@@ -14,33 +14,23 @@ import org.eclipse.jface.viewers.ViewerFilter;
 
 /**
  * Viewer filter used in selection dialogs.
+ * 
  * @since 4.0
  */
 public class TypedViewerFilter extends ViewerFilter {
 
-	private Class<?>[] fAcceptedTypes;
-	private Object[] fRejectedElements;
+	private final Class<?>[] fAcceptedTypes;
+	private final Object[] fRejectedElements;
 
-	/**
-	 * Creates a filter that only allows elements of gives types.
-	 * @param acceptedTypes The types of accepted elements
-	 */
 	public TypedViewerFilter(Class<?>[] acceptedTypes) {
 		this(acceptedTypes, null);
 	}
 
-	/**
-	 * Creates a filter that only allows elements of gives types, but not from a
-	 * list of rejected elements.
-	 * @param acceptedTypes Accepted elements must be of this types
-	 * @param rejectedElements Element equals to the rejected elements are
-	 * filtered out
-	 */	
 	public TypedViewerFilter(Class<?>[] acceptedTypes, Object[] rejectedElements) {
 		Assert.isNotNull(acceptedTypes);
-		fAcceptedTypes= acceptedTypes;
-		fRejectedElements= rejectedElements;
-	}	
+		fAcceptedTypes = acceptedTypes;
+		fRejectedElements = rejectedElements;
+	}
 
 	/**
 	 * @see ViewerFilter#select
@@ -48,13 +38,13 @@ public class TypedViewerFilter extends ViewerFilter {
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		if (fRejectedElements != null) {
-			for (int i= 0; i < fRejectedElements.length; i++) {
+			for (int i = 0; i < fRejectedElements.length; i++) {
 				if (element.equals(fRejectedElements[i])) {
 					return false;
 				}
 			}
 		}
-		for (int i= 0; i < fAcceptedTypes.length; i++) {
+		for (int i = 0; i < fAcceptedTypes.length; i++) {
 			if (fAcceptedTypes[i].isInstance(element)) {
 				return true;
 			}

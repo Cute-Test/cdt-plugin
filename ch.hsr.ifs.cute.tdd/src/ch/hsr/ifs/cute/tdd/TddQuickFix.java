@@ -83,7 +83,7 @@ public abstract class TddQuickFix extends AbstractCodanCMarkerResolution impleme
 			return getDocument().get(begin, end - begin);
 		} catch (BadLocationException e) {
 			CUIPlugin.log(e);
-			return ""; //$NON-NLS-1$
+			return "";
 		} catch (NullPointerException e) { // only for tests
 			return getProblemArgument(marker, 2);
 		}
@@ -95,7 +95,7 @@ public abstract class TddQuickFix extends AbstractCodanCMarkerResolution impleme
 		int markerLength = marker.getAttribute(IMarker.CHAR_END, 0) - markerOffset;
 		Change change = null;
 		LinkedModeInformation lmi = null;
-		CRefactoring3 refactoring = getRefactoring(new TextSelection(markerOffset, markerLength));
+		TddCRefactoring refactoring = getRefactoring(new TextSelection(markerOffset, markerLength));
 
 		CRefactoringContext context = new CRefactoringContext(refactoring);
 		try {
@@ -130,7 +130,7 @@ public abstract class TddQuickFix extends AbstractCodanCMarkerResolution impleme
 		}
 	}
 
-	protected abstract CRefactoring3 getRefactoring(ITextSelection selection);
+	protected abstract TddCRefactoring getRefactoring(ITextSelection selection);
 
 	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 	};

@@ -106,8 +106,7 @@ public class CopyUtils {
 	}
 
 	private static void copySuiteFile(IContainer container, IProgressMonitor monitor, String templateFilename, String targetFilename, String suitename,
-			String versionNumber)
-			throws CoreException {
+			String versionNumber) throws CoreException {
 		IFile targetFile = container.getFile(new Path(targetFilename));
 		copySuiteFile(targetFile, monitor, templateFilename, suitename, versionNumber);
 	}

@@ -34,7 +34,7 @@ import org.eclipse.text.edits.TextEdit;
  */
 public class AddNewTestStrategy extends AddFunctionToSuiteStrategy {
 
-	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);"; //$NON-NLS-1$
+	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
 
 	protected int insertFileOffset = -1;
 	protected int pushbackLength = -1;
@@ -64,7 +64,7 @@ public class AddNewTestStrategy extends AddFunctionToSuiteStrategy {
 			if (!checkPushback(astTu, testName.toString(), suitPushBackFinder))
 				mEdit.addChild(createPushBackEdit(file, astTu, suitPushBackFinder));
 			else {
-				createProblemMarker(file, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber); //$NON-NLS-1$
+				createProblemMarker(file, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber);
 			}
 
 		}
@@ -77,16 +77,15 @@ public class AddNewTestStrategy extends AddFunctionToSuiteStrategy {
 		return super.createPushBackEdit(editorFile, astTu, suitPushBackFinder, insertion);
 	}
 
-	//adding the new test function
 	protected TextEdit createInsertTestFunctionEdit(int insertTestFuncFileOffset, IDocument doc, String funcName) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("void "); //$NON-NLS-1$
+		builder.append("void ");
 		builder.append(funcName);
-		builder.append("(){"); //$NON-NLS-1$
+		builder.append("(){");
 		builder.append(newLine);
 		builder.append(TEST_STMT);
 		builder.append(newLine);
-		builder.append("}"); //$NON-NLS-1$
+		builder.append("}");
 		builder.append(newLine);
 		builder.append(newLine);
 		TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
@@ -116,7 +115,7 @@ public class AddNewTestStrategy extends AddFunctionToSuiteStrategy {
 		return (IASTFunctionDefinition) node;
 	}
 
-	//shift the insertion point out syntactical block, relative to user(selection point/current cursor)location
+	// shift the insertion point out syntactical block, relative to user(selection point/current cursor)location
 	protected int getInsertOffset(IASTTranslationUnit astTu, TextSelection selection, IDocument doc) {
 		int selOffset = selection.getOffset();
 		IASTDeclaration[] decls = astTu.getDeclarations();
@@ -128,7 +127,7 @@ public class AddNewTestStrategy extends AddFunctionToSuiteStrategy {
 			}
 		}
 
-		//Shift out of preprocessor statements
+		// Shift out of preprocessor statements
 		// >#include "cute.h<"
 		IASTPreprocessorStatement[] listPreprocessor = astTu.getAllPreprocessorStatements();
 		for (int x = 0; x < listPreprocessor.length; x++) {
@@ -143,23 +142,23 @@ public class AddNewTestStrategy extends AddFunctionToSuiteStrategy {
 			int selectedLineNo = selection.getStartLine();
 			IRegion iregion = doc.getLineInformation(selectedLineNo);
 			String text = doc.get(iregion.getOffset(), iregion.getLength());
-			if (text.startsWith("#include")) { //$NON-NLS-1$
+			if (text.startsWith("#include")) {
 				return iregion.getOffset();
 			}
 
 		} catch (org.eclipse.jface.text.BadLocationException be) {
 		}
 
-		//just use the user selection if no match, it could possibly mean that the cursor at the 
-		//very end of the source file
+		// just use the user selection if no match, it could possibly mean that the cursor at the
+		// very end of the source file
 		return selOffset;
 	}
 
 	public void createProblemMarker(IFile file, String message, int lineNo) {
 
 		try {
-			IMarker marker = file.createMarker("org.eclipse.cdt.core.problem"); //$NON-NLS-1$
-			marker.setAttribute(IMarker.MESSAGE, "cute:" + message); //$NON-NLS-1$
+			IMarker marker = file.createMarker("org.eclipse.cdt.core.problem");
+			marker.setAttribute(IMarker.MESSAGE, "cute:" + message);
 			marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 			marker.setAttribute(IMarker.TRANSIENT, true);
 			if (lineNo != 0) {

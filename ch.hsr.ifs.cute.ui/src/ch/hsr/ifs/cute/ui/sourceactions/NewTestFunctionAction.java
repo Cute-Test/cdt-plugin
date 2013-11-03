@@ -24,28 +24,16 @@ import org.eclipse.text.edits.TextEdit;
  */
 public class NewTestFunctionAction extends AbstractFunctionAction {
 
-	//TODO create Strategy or new Superclass
+	// TODO create Strategy or new Superclass
 
-	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);"; //$NON-NLS-1$
+	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
 	int problemMarkerErrorLineNumber = 0;
-	/**
-	 * @since 4.0
-	 */
 	protected int insertFileOffset;
-	/**
-	 * @since 4.0
-	 */
 	protected int pushbackOffset;
-	/**
-	 * @since 4.0
-	 */
 	protected int pushbackLength;
 
 	private final String funcName;
 
-	/**
-	 * @since 4.0
-	 */
 	public NewTestFunctionAction(String funcName) {
 		this.funcName = funcName;
 	}

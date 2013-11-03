@@ -22,14 +22,13 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ltk.core.refactoring.Change;
 
 /**
- * Using basic position information of a refactoring, this class can observe changes of a refactoring and calculate positions of certain code elements
- * after the change.
+ * Using basic position information of a refactoring, this class can observe changes of a refactoring and calculate positions of certain code elements after the change.
  */
 public class ChangeRecorder {
 
-	private static final String _ = "_"; //$NON-NLS-1$
-	private static final String RETURN = "return "; //$NON-NLS-1$
-	private static final String SEPARATOR = ", "; //$NON-NLS-1$
+	private static final String _ = "_";
+	private static final String RETURN = "return ";
+	private static final String SEPARATOR = ", ";
 	private int markerOffset;
 	private final IDocument document;
 	private final Change change;
@@ -100,13 +99,13 @@ public class ChangeRecorder {
 		}
 		return offset;
 	}
-	
+
 	private int skipTemplate(int offset) throws BadLocationException {
 		int newOffset = offset + "template".length();
 		char afterTemplate = document.getChar(newOffset++);
 		if (afterTemplate == '<') {
 			int opening = 1;
-			while(opening > 0 && newOffset < document.getLength()) {
+			while (opening > 0 && newOffset < document.getLength()) {
 				char current = document.getChar(newOffset++);
 				switch (current) {
 				case '<':
@@ -118,7 +117,7 @@ public class ChangeRecorder {
 					break;
 				}
 			}
-			while(Character.isWhitespace(document.getChar(newOffset)) && newOffset < document.getLength()) {
+			while (Character.isWhitespace(document.getChar(newOffset)) && newOffset < document.getLength()) {
 				newOffset++;
 			}
 		}
@@ -127,8 +126,8 @@ public class ChangeRecorder {
 
 	private int getDeclaratorOffset() {
 		int offset = edit.absoluteIndexOf(markerText);
-		if (markerText.matches(".*[()-+|=<>]+.*")) { //$NON-NLS-1$
-			offset = edit.absoluteIndexOf("operator"); //$NON-NLS-1$
+		if (markerText.matches(".*[()-+|=<>]+.*")) {
+			offset = edit.absoluteIndexOf("operator");
 		}
 		return offset;
 	}

@@ -29,8 +29,7 @@ public abstract class ConsoleEventParser {
 
 	public abstract String getLineQualifier();
 
-	protected abstract void extractTestEventsFor(IRegion reg, String line)
-			throws CoreException;
+	protected abstract void extractTestEventsFor(IRegion reg, String line) throws CoreException;
 
 	public List<TestEvent> eventsFrom(IRegion reg, String line) {
 		freshTestEventCollection();
@@ -48,21 +47,15 @@ public abstract class ConsoleEventParser {
 	protected void freshTestEventCollection() {
 		testEvents = new ArrayList<TestEvent>();
 	}
-	
-	protected void throwLineParsingException(IRegion reg, String line,
-			Exception e) {
-		throw new RuntimeException("Failure parsing console event {<line=" //$NON-NLS-1$
-				+ line + ">, <Reg=" + reg //$NON-NLS-1$
-				+ ">} into TestEvent.  Check log for more information.", e); //$NON-NLS-1$
+
+	protected void throwLineParsingException(IRegion reg, String line, Exception e) {
+		throw new RuntimeException("Failure parsing console event {<line=" + line + ">, <Reg=" + reg + ">} into TestEvent.  Check log for more information.", e);
 	}
 
-	protected Matcher matcherFor(Pattern pattern, String line)
-			throws CoreException {
+	protected Matcher matcherFor(Pattern pattern, String line) throws CoreException {
 		Matcher m = pattern.matcher(line);
 		if (!m.matches()) {
-			throw new CoreException(new Status(Status.ERROR,
-					TestFrameworkPlugin.PLUGIN_ID, 1, "Pattern don't match", //$NON-NLS-1$
-					null));
+			throw new CoreException(new Status(Status.ERROR, TestFrameworkPlugin.PLUGIN_ID, 1, "Pattern don't match", null));
 		}
 		return m;
 	}
@@ -71,13 +64,13 @@ public abstract class ConsoleEventParser {
 		StringBuffer buffer = new StringBuffer();
 		for (int i = 0; i < fragments.length; i++) {
 			if (i > 0)
-				buffer.append("|"); //$NON-NLS-1$
+				buffer.append("|");
 			buffer.append(fragments[i]);
 		}
 		return buffer.toString();
 	}
 
 	protected static String escapeForRegex(String string) {
-		return string.replace("]", "\\]").replace("[", "\\[");   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
+		return string.replace("]", "\\]").replace("[", "\\[");
 	}
 }

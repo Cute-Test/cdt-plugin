@@ -14,12 +14,12 @@ import org.eclipse.debug.ui.console.FileLink;
 /**
  * @author Emanuel Graf IFS
  * @since 3.0
- *
+ * 
  */
 public class ConsoleLinkFactory implements ILinkFactory {
 
 	public FileLink createLink(IFile file, int lineNumber, String editorId, int fileLength, int fileOffset) {
-		return new FileLink(file, editorId,fileOffset,fileLength,lineNumber);
+		return new FileLink(file, editorId, fileOffset, fileLength, lineNumber);
 	}
 
 }

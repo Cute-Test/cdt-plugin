@@ -110,7 +110,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			if (defaultConfig != null) {
 				String platform = defaultConfig.getPlatform();
 				if (defaultConfig.supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
-					if (platform.equals("*") || platform.equals(os)) { //$NON-NLS-1$
+					if (platform.equals("*") || platform.equals(os)) {
 						if (defaultConfig.supportsCPU(programCPU))
 							debugConfig = defaultConfig;
 					}
@@ -123,7 +123,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				for (int i = 0; i < debugConfigs.length; i++) {
 					String platform = debugConfigs[i].getPlatform();
 					if (debugConfigs[i].supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
-						if (platform.equals("*") || platform.equals(os)) { //$NON-NLS-1$
+						if (platform.equals("*") || platform.equals(os)) {
 							if (debugConfigs[i].supportsCPU(programCPU))
 								debugList.add(debugConfigs[i]);
 						}
@@ -211,9 +211,9 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	protected ILaunchConfigurationType getCuteLaunchConfigType(String mode) {
 
 		if (org.eclipse.debug.core.ILaunchManager.RUN_MODE.equals(mode)) // this should use the corresponding constant from Debug somewhere
-			return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig"); //$NON-NLS-1$
+			return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig");
 		else if (org.eclipse.debug.core.ILaunchManager.DEBUG_MODE.equals(mode))
-			return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig.debug"); //$NON-NLS-1$
+			return getLaunchManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig.debug");
 		return null;
 	}
 
@@ -245,7 +245,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			@Override
 			public String getText(Object element) {
 				if (element == null) {
-					return ""; //$NON-NLS-1$
+					return "";
 				} else if (element instanceof ICDebugConfiguration) {
 					return ((ICDebugConfiguration) element).getName();
 				}
@@ -266,16 +266,16 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	}
 
 	protected String getDebugConfigDialogTitleString(ICDebugConfiguration[] configList, String mode) {
-		return "Launch Debug Configuration Selection"; //$NON-NLS-1$
+		return "Launch Debug Configuration Selection";
 	}
 
 	protected String getDebugConfigDialogMessageString(ICDebugConfiguration[] configList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return "Choose a debug configuration to debug"; //$NON-NLS-1$
+			return "Choose a debug configuration to debug";
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return "Choose a configuration to run"; //$NON-NLS-1$
+			return "Choose a configuration to run";
 		}
-		return "Invalid launch mode."; //$NON-NLS-1$
+		return "Invalid launch mode.";
 	}
 
 	/**
@@ -301,17 +301,17 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 	@SuppressWarnings({ "rawtypes" })
 	protected String getLaunchSelectionDialogTitleString(List configList, String mode) {
-		return "Launch Configuration Selection"; //$NON-NLS-1$
+		return "Launch Configuration Selection";
 	}
 
 	@SuppressWarnings({ "rawtypes" })
 	protected String getLaunchSelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return "Choose a debug configuration to debug"; //$NON-NLS-1$
+			return "Choose a debug configuration to debug";
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return "Choose a configuration to run"; //$NON-NLS-1$
+			return "Choose a configuration to run";
 		}
-		return "Invalid launch mode."; //$NON-NLS-1$
+		return "Invalid launch mode.";
 	}
 
 	/**
@@ -340,8 +340,8 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				if (element instanceof IBinary) {
 					IBinary bin = (IBinary) element;
 					StringBuffer name = new StringBuffer();
-					name.append(bin.getCPU() + (bin.isLittleEndian() ? "le" : "be")); //$NON-NLS-1$ //$NON-NLS-2$
-					name.append(" - "); //$NON-NLS-1$
+					name.append(bin.getCPU() + (bin.isLittleEndian() ? "le" : "be"));
+					name.append(" - ");
 					name.append(bin.getPath().toString());
 					return name.toString();
 				}
@@ -353,8 +353,8 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		dialog.setElements(binList.toArray());
 		dialog.setTitle(getBinarySelectionDialogTitleString(binList, mode));
 		dialog.setMessage(getBinarySelectionDialogMessageString(binList, mode));
-		dialog.setUpperListLabel("Binaries:"); //$NON-NLS-1$
-		dialog.setLowerListLabel("Qualifier:"); //$NON-NLS-1$
+		dialog.setUpperListLabel("Binaries:");
+		dialog.setLowerListLabel("Qualifier:");
 		dialog.setMultipleSelection(false);
 		if (dialog.open() == Window.OK) {
 			return (IBinary) dialog.getFirstResult();
@@ -365,17 +365,17 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 
 	@SuppressWarnings({ "rawtypes" })
 	protected String getBinarySelectionDialogTitleString(List binList, String mode) {
-		return "C Local Application"; //$NON-NLS-1$
+		return "C Local Application";
 	}
 
 	@SuppressWarnings({ "rawtypes" })
 	protected String getBinarySelectionDialogMessageString(List binList, String mode) {
 		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return "Choose a local application to debug"; //$NON-NLS-1$
+			return "Choose a local application to debug";
 		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return "Choose a local application to run"; //$NON-NLS-1$
+			return "Choose a local application to run";
 		}
-		return "Invalid launch mode."; //$NON-NLS-1$
+		return "Invalid launch mode.";
 	}
 
 	/**
@@ -399,13 +399,13 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				} catch (InterruptedException e) {
 					return;
 				} catch (InvocationTargetException e) {
-					MessageDialog.openError(getShell(), "Application Launcher", e.getMessage()); //$NON-NLS-1$
+					MessageDialog.openError(getShell(), "Application Launcher", e.getMessage());
 					return;
 				}
 
 				int count = results.size();
 				if (count == 0) {
-					MessageDialog.openError(getShell(), "Application Launcher", "Launch failed. Binary not found."); //$NON-NLS-1$ //$NON-NLS-2$
+					MessageDialog.openError(getShell(), "Application Launcher", "Launch failed. Binary not found.");
 				} else if (count > 1) {
 					bin = chooseBinary(results, mode);
 				} else {
@@ -417,7 +417,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 				launch(bin, mode);
 			}
 		} else {
-			MessageDialog.openError(getShell(), "Application Launcher", "Launch failed no project selected"); //$NON-NLS-1$ //$NON-NLS-2$
+			MessageDialog.openError(getShell(), "Application Launcher", "Launch failed no project selected");
 		}
 	}
 
@@ -434,7 +434,7 @@ class RunnableWithProgressToScanForExecutableImpl implements IRunnableWithProgre
 
 	public void run(IProgressMonitor pm) throws InterruptedException {
 		int nElements = elements.length;
-		pm.beginTask("Looking for executables", nElements); //$NON-NLS-1$
+		pm.beginTask("Looking for executables", nElements);
 		try {
 			IProgressMonitor sub = new SubProgressMonitor(pm, 1);
 			for (int i = 0; i < nElements; i++) {

@@ -15,11 +15,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author egraf
  * @since 4.0
- *
+ * 
  */
 public interface ICuteHeaders {
-	
+
 	String getVersionNumber();
+
 	String getVersionString();
 
 	void copyHeaderFiles(IContainer container, IProgressMonitor monitor) throws CoreException;

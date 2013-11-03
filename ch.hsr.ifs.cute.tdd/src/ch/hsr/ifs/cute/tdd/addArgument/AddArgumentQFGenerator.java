@@ -23,24 +23,23 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 
 /**
- * Generates one or more "Add argument" quick fixes for a codan marker.
- * WrongArgumentChecker generates the markers that can be processed here.
+ * Generates one or more "Add argument" quick fixes for a codan marker. WrongArgumentChecker generates the markers that can be processed here.
  */
 @SuppressWarnings("restriction")
 public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 
-	private static IMarkerResolution[] MARKER_RESOLUTION_TYPE = new IMarkerResolution[]{};
+	private static IMarkerResolution[] MARKER_RESOLUTION_TYPE = new IMarkerResolution[] {};
 	public static final String MSG_QUICK_FIX_ACTION_ADD = Messages.AddArgumentQFGenerator_0;
 	public static final String MSG_QUICK_FIX_ACTION_REMOVE = Messages.AddArgumentQFGenerator_1;
 	public static final String MSG_QUICK_FIX_ARGUMENT = Messages.AddArgumentQFGenerator_2;
-	public static final String ASSIGN_SEPARATOR = "=="; //$NON-NLS-1$
-	public static final String CANDIDATE_SEPARATOR = ":candidate "; //$NON-NLS-1$
-	public static final String PARAMETERS = "targetParameters" + ASSIGN_SEPARATOR; //$NON-NLS-1$
-	public static final String ADD_ARGUMENTS = "addArguments" + ASSIGN_SEPARATOR; //$NON-NLS-1$
-	public static final String REMOVE_ARGUMENTS = "removeArguments" + ASSIGN_SEPARATOR; //$NON-NLS-1$
-	public static final String SEPARATOR = "°"; //$NON-NLS-1$
+	public static final String ASSIGN_SEPARATOR = "==";
+	public static final String CANDIDATE_SEPARATOR = ":candidate ";
+	public static final String PARAMETERS = "targetParameters" + ASSIGN_SEPARATOR;
+	public static final String ADD_ARGUMENTS = "addArguments" + ASSIGN_SEPARATOR;
+	public static final String REMOVE_ARGUMENTS = "removeArguments" + ASSIGN_SEPARATOR;
+	public static final String SEPARATOR = "°";
 	public static final int REQUIRED_MARKER_ARGUMENTS = 4;
-	private static final String IMG_OBJS_CORRECTION_REMOVE_PATH = "obj16/remove_correction.gif"; //$NON-NLS-1$
+	private static final String IMG_OBJS_CORRECTION_REMOVE_PATH = "obj16/remove_correction.gif";
 
 	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {
@@ -61,12 +60,11 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 
 	private boolean isResolutionPossible(IMarker marker) {
 		String pid = getProblemID(marker);
-		if (pid != null && !((pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_HSR))
-				|| pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR))) {
+		if (pid != null
+				&& !((pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_HSR)) || pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR))) {
 			return false;
 		}
-		return getProblemArguments(marker).length >= REQUIRED_MARKER_ARGUMENTS
-				&& new CodanArguments(marker).getCandidateNr() >= 0;
+		return getProblemArguments(marker).length >= REQUIRED_MARKER_ARGUMENTS && new CodanArguments(marker).getCandidateNr() >= 0;
 	}
 
 	private AddArgumentQuickFix getQuickFix(String function, String candidate, int candidateNr) {
@@ -86,25 +84,25 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 	private String getMessage(String function, String candidate) {
 		String[] args = candidate.split(SEPARATOR);
 		if (args.length < 2 || !(args[0].startsWith(ADD_ARGUMENTS) || (args[0].startsWith(REMOVE_ARGUMENTS))) || !args[1].startsWith(PARAMETERS)) {
-			return ""; //$NON-NLS-1$
+			return "";
 		}
 		String action = null;
 		if (args[0].startsWith(ADD_ARGUMENTS)) {
 			action = MSG_QUICK_FIX_ARGUMENT.replace(Messages.AddArgumentQFGenerator_10, MSG_QUICK_FIX_ACTION_ADD);
 		} else if (args[0].startsWith(REMOVE_ARGUMENTS)) {
-			action = MSG_QUICK_FIX_ARGUMENT.replace("&0", MSG_QUICK_FIX_ACTION_REMOVE); //$NON-NLS-1$
+			action = MSG_QUICK_FIX_ARGUMENT.replace("&0", MSG_QUICK_FIX_ACTION_REMOVE);
 		}
-		String toBeAddedArguments =	""; //$NON-NLS-1$
+		String toBeAddedArguments = "";
 		String[] toBeAddedArgumentsline = args[0].split(ASSIGN_SEPARATOR);
 		if (toBeAddedArgumentsline.length > 1) {
 			toBeAddedArguments = toBeAddedArgumentsline[1];
 		}
 		String[] targetParameterline = args[1].split(ASSIGN_SEPARATOR);
-		String targetParameter = ""; //$NON-NLS-1$
+		String targetParameter = "";
 		if (targetParameterline.length > 1) {
 			targetParameter = targetParameterline[1];
 		}
-		return action.replace("&1", toBeAddedArguments).replace("&2", function + "(" + targetParameter + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return action.replace("&1", toBeAddedArguments).replace("&2", function + "(" + targetParameter + ")");
 	}
 
 	private String[] getCandidates(CodanArguments ca) {
@@ -118,7 +116,7 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 	public String getProblemID(IMarker marker) {
 		String problemId = CodanProblemMarker.getProblemId(marker);
 		if (problemId == null) {
-			return ""; //$NON-NLS-1$
+			return "";
 		}
 		return problemId;
 	}

@@ -270,9 +270,6 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 			if (files.length < 1)
 				continue;
 			ITranslationUnit tu = CoreModelUtil.findTranslationUnit(files[0]);
-			// enclosingCompound =
-			// getAST(CoreModel.getDefault().createTranslationUnitFrom(project,
-			// filePath), npm);
 			enclosingCompound = getAST(tu, npm);
 			enclosingCompound.accept(v);
 		}
@@ -281,13 +278,6 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 	private void findNamespaceDefinitionsRecursively(IASTName selectedName) throws OperationCanceledException, CoreException {
 
 		IBinding nsBinding = selectedName.resolveBinding();
-		//		if (nsBinding instanceof ICPPNamespaceScope){
-		//			ICPPNamespaceScope[] inlineNs = ((ICPPNamespaceScope)nsBinding).getInlineNamespaces(); // müssen auch durchsucht werden.
-		//			// jetzt eigentlich ICPPNamespace casten und getMemberBindings() durchforsten oder beim durchsuchen der namespaces suchen in CDT, hier muss es einen helper geben, der namen zur inline-namespace definition auflöst (ev. beim parsen)
-		//			if (inlineNs[0] instanceof ICPPNamespace){
-		//				IBinding[] inlinedBindings = ((ICPPNamespace) inlineNs[0]).getMemberBindings();
-		//			}
-		//		}
 		IIndexName[] nsDefBindings = getIndex().findDefinitions(nsBinding);
 		List<IIndexName> nsDefs = namespacesPerUsing.get(selectedName);
 		if (nsDefs == null) {
@@ -296,15 +286,7 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 		}
 
 		for (IIndexName nsDefName : nsDefBindings) {
-
 			nsDefs.add(nsDefName);
-
-			// TODO CDT bug 382497, always an empty array is returned, #269
-			//			PDOMBinding nsNameBinding = ((PDOMName) nsDefName).getBinding();
-			//			ICPPUsingDirective[] udirs = ((ICPPNamespaceScope) ((ICPPNamespace)nsNameBinding).getNamespaceScope()).getUsingDirectives();
-			//			for(ICPPUsingDirective udir : udirs){
-			//				findNamespaceDefinitionsRecursive(udir.getName());
-			//			}
 		}
 	}
 
@@ -414,8 +396,7 @@ public class IUDIRRefactoring extends InlineRefactoringBase {
 	}
 
 	/**
-	 * @return true for names inside template method definitions (e.g.
-	 *         template<class T> T SC<T>::get(){})
+	 * @return true for names inside template method definitions (e.g. template<class T> T SC<T>::get(){})
 	 * */
 	private boolean isPartOfTemplateMethodDefinition(IASTName childRefNode) {
 		return childRefNode instanceof ICPPASTTemplateId && childRefNode.getParent() instanceof ICPPASTQualifiedName;

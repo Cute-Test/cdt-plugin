@@ -15,12 +15,12 @@ import org.eclipse.core.resources.IFile;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class File {
-	
-	private IFile file;
-	private List<Function> functions = new ArrayList<Function>();
+
+	private final IFile file;
+	private final List<Function> functions = new ArrayList<Function>();
 
 	public File(IFile file) {
 		super();
@@ -30,16 +30,16 @@ public class File {
 	public IFile getFile() {
 		return file;
 	}
-	
-	public String getFileName(){
+
+	public String getFileName() {
 		return file.getName();
 	}
-	
+
 	public void addFunction(Function f) {
 		functions.add(f);
 		f.setFile(this);
 	}
-	
+
 	public List<Function> getFunctions() {
 		return functions;
 	}
@@ -68,7 +68,4 @@ public class File {
 			return false;
 		return true;
 	}
-	
-	
-
 }

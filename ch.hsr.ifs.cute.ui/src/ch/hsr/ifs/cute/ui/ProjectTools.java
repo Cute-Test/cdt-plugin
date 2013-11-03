@@ -38,22 +38,20 @@ import org.eclipse.core.runtime.Status;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 
-
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
- *
+ * 
  */
 public class ProjectTools {
 
-	public static  IFolder createFolder(IProject project, String relPath, boolean addToInclude)
-			throws CoreException {
-		IFolder folder= project.getProject().getFolder(relPath);
+	public static IFolder createFolder(IProject project, String relPath, boolean addToInclude) throws CoreException {
+		IFolder folder = project.getProject().getFolder(relPath);
 		if (!folder.exists()) {
 			ProjectTools.createFolder(folder, true, true, new NullProgressMonitor());
 		}
-				
-		if(addToInclude && CCorePlugin.getDefault().isNewStyleProject(project.getProject())){
+
+		if (addToInclude && CCorePlugin.getDefault().isNewStyleProject(project.getProject())) {
 			ICSourceEntry newEntry = new CSourceEntry(folder, null, 0);
 			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
 			ProjectTools.addEntryToAllCfgs(des, newEntry, false);
@@ -64,17 +62,17 @@ public class ProjectTools {
 
 	public static void createFolder(IFolder folder, boolean force, boolean local, IProgressMonitor monitor) throws CoreException {
 		if (!folder.exists()) {
-			IContainer parent= folder.getParent();
+			IContainer parent = folder.getParent();
 			if (parent instanceof IFolder) {
-				createFolder((IFolder)parent, force, local, null);
+				createFolder((IFolder) parent, force, local, null);
 			}
 			folder.create(force, local, monitor);
 		}
 	}
 
-	public static void addEntryToAllCfgs(ICProjectDescription des, ICSourceEntry entry, boolean removeProj) throws WriteAccessException, CoreException{
+	public static void addEntryToAllCfgs(ICProjectDescription des, ICSourceEntry entry, boolean removeProj) throws WriteAccessException, CoreException {
 		ICConfigurationDescription cfgs[] = des.getConfigurations();
-		for(int i = 0; i < cfgs.length; i++){
+		for (int i = 0; i < cfgs.length; i++) {
 			ICConfigurationDescription cfg = cfgs[i];
 			ICSourceEntry[] entries = cfg.getSourceEntries();
 			entries = addEntry(entries, entry, removeProj);
@@ -82,20 +80,20 @@ public class ProjectTools {
 		}
 	}
 
-	public static ICSourceEntry[] addEntry(ICSourceEntry[] entries, ICSourceEntry entry, boolean removeProj){
+	public static ICSourceEntry[] addEntry(ICSourceEntry[] entries, ICSourceEntry entry, boolean removeProj) {
 		Set<ICSourceEntry> set = new HashSet<ICSourceEntry>();
-		for(int i = 0; i < entries.length; i++){
-			if(removeProj && new Path(entries[i].getValue()).segmentCount() == 1)
+		for (int i = 0; i < entries.length; i++) {
+			if (removeProj && new Path(entries[i].getValue()).segmentCount() == 1)
 				continue;
-			
+
 			set.add(entries[i]);
 		}
 		set.add(entry);
 		return set.toArray(new ICSourceEntry[set.size()]);
 	}
 
-	public static void setOptionInConfig(String value, IConfiguration config,
-			IOption[] options, IHoldsOptions optionHolder, int optionType, IIncludeStrategyProvider inStratProv) throws BuildException {
+	public static void setOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
+			IIncludeStrategyProvider inStratProv) throws BuildException {
 		for (int i = 0; i < options.length; i++) {
 			IOption option = options[i];
 			if (option.getValueType() == optionType) {
@@ -108,27 +106,26 @@ public class ProjectTools {
 		}
 	}
 
-	public static void setOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv)
-			throws CoreException {
+	public static void setOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv) throws CoreException {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
-		try{
-			for(IConfiguration conf : configs){
+		try {
+			for (IConfiguration conf : configs) {
 				IToolChain toolChain = conf.getToolChain();
 				setOptionInConfig(value, conf, toolChain.getOptions(), toolChain, optionType, inclStratProv);
-	
+
 				ITool[] tools = conf.getTools();
-				for(int j=0; j<tools.length; j++) {
+				for (int j = 0; j < tools.length; j++) {
 					setOptionInConfig(value, conf, tools[j].getOptions(), tools[j], optionType, inclStratProv);
 				}
 			}
-		}catch (BuildException be){
-			throw new CoreException(new Status(IStatus.ERROR,CuteCorePlugin.PLUGIN_ID,42,be.getMessage(), be));
+		} catch (BuildException be) {
+			throw new CoreException(new Status(IStatus.ERROR, CuteCorePlugin.PLUGIN_ID, 42, be.getMessage(), be));
 		}
 	}
 
 	public static void setIncludePaths(IPath cuteFolder, IProject project, IIncludeStrategyProvider inclStratProv) throws CoreException {
-		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
+		String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
 		setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH, inclStratProv);
 	}
 

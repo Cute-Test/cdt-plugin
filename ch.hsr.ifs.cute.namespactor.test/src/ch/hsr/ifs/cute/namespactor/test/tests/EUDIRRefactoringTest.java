@@ -22,7 +22,6 @@ public class EUDIRRefactoringTest extends JUnit4RtsRefactoringTest {
 
 	@Override
 	protected CRefactoring getRefactoring() throws CModelException {
-
 		return new EUDIRRefactoring(getCElementOfTestFile(), selection, cproject);
 	}
 

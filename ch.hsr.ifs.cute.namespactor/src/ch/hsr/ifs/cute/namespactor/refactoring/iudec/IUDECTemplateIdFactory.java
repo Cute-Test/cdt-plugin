@@ -86,8 +86,7 @@ public class IUDECTemplateIdFactory extends TemplateIdFactory {
 		IBinding owner = templateNameBinding.getOwner();
 		if (owner instanceof ICPPNamespace) {
 			IIndex index = templId.getTranslationUnit().getIndex();
-			boolean isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(
-					index.adaptBinding(enclosingNSContext.namespaceDefBinding)); //enclosingContext muss abgefÃ¼llt sein
+			boolean isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(index.adaptBinding(enclosingNSContext.namespaceDefBinding)); // enclosingContext muss abgefüllt sein
 			boolean isNotQualified = !(templId.getParent() instanceof ICPPASTQualifiedName);
 
 			return isChildOfEnclosingNamespace && isNotQualified;

@@ -95,7 +95,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 			for (ICConfigurationDescription config : cfgs) {
 				Map<String, String> refMap = config.getReferenceInfo();
 				for (IProject refProject : projects) {
-					refMap.put(refProject.getName(), ""); //$NON-NLS-1$
+					refMap.put(refProject.getName(), "");
 				}
 				config.setReferenceInfo(refMap);
 			}
@@ -123,13 +123,12 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 				if (location.segmentCount() == 0) {
 					setLibraryPaths(libProject.getFullPath(), project, configuration);
 				} else {
-					//IPath location1=location.removeFirstSegments(1);
 					setLibraryPaths(libProject.getFolder(location).getFullPath(), project, configuration);
 				}
 			}
 		}
 		String artifactName = config.getArtifactName();
-		if (artifactName.equalsIgnoreCase("${ProjName}")) { //$NON-NLS-1$
+		if (artifactName.equalsIgnoreCase("${ProjName}")) {
 			setLibName(libProject.getName(), project);
 		} else {
 			setLibName(artifactName, project);
@@ -137,7 +136,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	}
 
 	protected void setLibraryPaths(IPath libFolder, IProject project, IConfiguration configuration) throws CoreException {
-		String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
+		String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\"";
 		IConfiguration targetConfig = findSameConfig(configuration, project);
 		try {
 			IToolChain toolChain = targetConfig.getToolChain();
@@ -178,7 +177,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		}
 	}
 
-	//bugzilla #210116:on CDT spelling error
 	@Override
 	public boolean canFinish() {
 		Vector<IProject> projects = libRefPage.getCheckedProjects();

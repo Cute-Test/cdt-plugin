@@ -76,7 +76,7 @@ public class ChangeCuteVersionWizard extends Wizard {
 					IResource[] files = cuteFolder.members();
 					SubMonitor mon = SubMonitor.convert(monitor, files.length * 2);
 					for (IResource resource : files) {
-						mon.subTask(MessageFormat.format(Messages.getString("ChangeCuteVersionWizard.Remove"), resource.getName())); //$NON-NLS-1$
+						mon.subTask(MessageFormat.format(Messages.getString("ChangeCuteVersionWizard.Remove"), resource.getName()));
 						resource.delete(true, new NullProgressMonitor());
 						mon.worked(1);
 					}

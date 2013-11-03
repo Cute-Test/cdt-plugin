@@ -26,7 +26,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 
 public class ASTHelper {
-	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	private static final String EMPTY_STRING = "";
 
 	public static String getClassStructName(IASTSimpleDeclaration simpleDeclaration) {
 		IASTDeclSpecifier declspecifier = simpleDeclaration.getDeclSpecifier();
@@ -97,7 +97,7 @@ public class ASTHelper {
 				for (int j = 0; j < sdd.length; j++) {
 					if (!(sdd[j] instanceof ICPPASTFunctionDeclarator))
 						continue;
-					//insert test case
+					// insert test case
 					ICPPASTFunctionDeclarator fd = (ICPPASTFunctionDeclarator) sdd[j];
 					IASTParameterDeclaration fpara[] = fd.getParameters();
 					if (fd.takesVarArgs() || fpara != null && fpara.length > 0)
@@ -140,7 +140,7 @@ public class ASTHelper {
 					result = true;
 			} else if (i instanceof IASTSimpleDeclaration) {
 				IASTSimpleDeclaration sd = (IASTSimpleDeclaration) i;
-				//CPPASTNamedTypeSpecifier returned via getDeclSpecifier?  
+				// CPPASTNamedTypeSpecifier returned via getDeclSpecifier?
 				IASTSimpleDeclSpecifier specifier = (IASTSimpleDeclSpecifier) sd.getDeclSpecifier();
 				if (specifier.getType() == IASTSimpleDeclSpecifier.t_void)
 					result = true;
@@ -185,7 +185,7 @@ public class ASTHelper {
 			else if (cts.getKey() == ICPPASTCompositeTypeSpecifier.k_class)
 				ispublicVisibility = false;
 			else {
-				//TODO consider error handing
+				// TODO consider error handing
 				return result;
 			}
 
@@ -214,7 +214,7 @@ public class ASTHelper {
 				if (methodName.isEmpty())
 					continue;
 				if (className.equals(methodName))
-					continue;//constructor
+					continue;// constructor
 
 				result.add(members[i]);
 			}
@@ -277,7 +277,7 @@ public class ASTHelper {
 		return result;
 	}
 
-	//remove the primitives variables
+	// remove the primitives variables
 	public static ArrayList<IASTSimpleDeclaration> getClassStructVariables(ArrayList<IASTSimpleDeclaration> variablesList) {
 		ArrayList<IASTSimpleDeclaration> result = new ArrayList<IASTSimpleDeclaration>();
 
@@ -324,13 +324,15 @@ public class ASTHelper {
 	}
 
 	public static boolean isOperator(IASTSimpleDeclaration variable) {
-		if (getVariableName(variable).equals(Messages.getString("ASTHelper.Operator")))return true; //$NON-NLS-1$
+		if (getVariableName(variable).equals(Messages.getString("ASTHelper.Operator")))
+			return true;
 		return false;
 	}
 
 	public static boolean isOperator(IASTFunctionDefinition variable) {
 		IASTFunctionDeclarator declarator = variable.getDeclarator();
-		if (declarator.getName().toString().equals(Messages.getString("ASTHelper.Operator")))return true; //$NON-NLS-1$
+		if (declarator.getName().toString().equals(Messages.getString("ASTHelper.Operator")))
+			return true;
 		return false;
 	}
 

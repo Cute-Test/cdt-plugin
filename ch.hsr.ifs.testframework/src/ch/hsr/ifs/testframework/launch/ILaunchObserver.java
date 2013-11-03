@@ -14,12 +14,12 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * @author Emanuel Graf IFS
  * @since 3.0
- *
+ * 
  */
 public interface ILaunchObserver {
-	
+
 	public void notifyBeforeLaunch(IProject project) throws CoreException;
-	
+
 	public void notifyAfterLaunch(IProject project) throws CoreException;
 
 }

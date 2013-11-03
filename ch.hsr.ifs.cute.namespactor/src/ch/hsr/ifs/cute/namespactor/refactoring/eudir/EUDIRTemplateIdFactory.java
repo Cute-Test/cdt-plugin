@@ -19,9 +19,9 @@ import ch.hsr.ifs.cute.namespactor.refactoring.eu.EUTemplateIdFactory;
 /**
  * @author Jules Weder
  * */
-public class EUDIRTemplateIdFactory extends EUTemplateIdFactory{
+public class EUDIRTemplateIdFactory extends EUTemplateIdFactory {
 
-	public EUDIRTemplateIdFactory(ICPPASTTemplateId templateId, EURefactoringContext context){
-		super(templateId,context);
+	public EUDIRTemplateIdFactory(ICPPASTTemplateId templateId, EURefactoringContext context) {
+		super(templateId, context);
 	}
 }

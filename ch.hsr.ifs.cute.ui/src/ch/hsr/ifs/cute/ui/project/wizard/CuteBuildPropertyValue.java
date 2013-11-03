@@ -11,15 +11,14 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 import org.eclipse.cdt.managedbuilder.buildproperties.IBuildPropertyValue;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 
-public class CuteBuildPropertyValue implements IBuildPropertyValue{
+public class CuteBuildPropertyValue implements IBuildPropertyValue {
 
 	public String getId() {
 		return ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_EXE;
 	}
 
-	
 	public String getName() {
-		return "CUTE Project"; //$NON-NLS-1$
+		return "CUTE Project";
 	}
-	
+
 }

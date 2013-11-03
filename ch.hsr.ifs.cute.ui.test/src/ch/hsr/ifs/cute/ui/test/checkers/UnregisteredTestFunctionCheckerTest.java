@@ -481,7 +481,7 @@ public class UnregisteredTestFunctionCheckerTest extends CheckerTestCase {
 	protected StringBuilder[] getContents(int sections) {
 		try {
 			UiTestPlugin plugin = UiTestPlugin.getDefault();
-			return TestSourceReader.getContentsForTest(plugin.getBundle(), "src", getClass(), getName(), sections); //$NON-NLS-1$
+			return TestSourceReader.getContentsForTest(plugin.getBundle(), "src", getClass(), getName(), sections);
 		} catch (IOException e) {
 			fail(e.getMessage());
 			return null;

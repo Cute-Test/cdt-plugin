@@ -16,13 +16,13 @@ import ch.hsr.ifs.testframework.preference.PreferenceConstants;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class ShowWhiteSpaceAction extends Action {
 
 	private final CuteTextMergeViewer viewer;
 	private static Messages msg = TestFrameworkPlugin.getMessages();
-	
+
 	public ShowWhiteSpaceAction(CuteTextMergeViewer compareViewer) {
 		super(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"), AS_CHECK_BOX);
 		viewer = compareViewer;

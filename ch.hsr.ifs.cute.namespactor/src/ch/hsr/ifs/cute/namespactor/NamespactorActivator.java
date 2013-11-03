@@ -12,15 +12,13 @@
 package ch.hsr.ifs.cute.namespactor;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-/**
- * The activator class controls the plug-in life cycle
- */
 public class NamespactorActivator extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.namespactor"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.namespactor";
 
 	private static NamespactorActivator plugin;
 	
@@ -40,11 +38,11 @@ public class NamespactorActivator extends AbstractUIPlugin {
 	}
 	
 	public static void log(IStatus status) {
-		//getDefault().getLog().log(status);
+		getDefault().getLog().log(status);
 	}
 	
 	public static void log(String message) {
-		//log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
+		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
 	}
 
 	public static NamespactorActivator getDefault() {

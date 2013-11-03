@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
  * @since 4.0
  */
 public class Messages {
-	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.ui.dialogs.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.ui.dialogs.messages";
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
 			.getBundle(BUNDLE_NAME);
