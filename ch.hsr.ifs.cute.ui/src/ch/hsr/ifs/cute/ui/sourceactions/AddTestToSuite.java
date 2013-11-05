@@ -78,7 +78,6 @@ public class AddTestToSuite extends AbstractFunctionAction {
 				}
 				releaseAST(astTu);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 				CuteCorePlugin.log(e);
 			} finally {
 				disposeContext();

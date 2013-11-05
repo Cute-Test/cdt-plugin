@@ -361,16 +361,16 @@ public class TypeHelper {
 		return null;
 	}
 
-	public static IASTNode getTypeDefinitonOfName(IASTTranslationUnit localunit, final String typename, CRefactoringContext context) {
+	public static IASTNode getTypeDefinitonOfName(IASTTranslationUnit localunit, String typename, CRefactoringContext context) {
 		try {
 			return TypeHelper.checkIndexBindingForType(typename, localunit, context.getIndex(), context);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while finding", e);
 		}
 		return null;
 	}
 
-	private static IASTNode checkIndexBindingForType(final String typename, IASTTranslationUnit unit, IIndex index, CRefactoringContext context)
+	private static IASTNode checkIndexBindingForType(String typename, IASTTranslationUnit unit, IIndex index, CRefactoringContext context)
 			throws CoreException {
 		IIndexBinding[] allBindings = index.findBindings(typename.toCharArray(), false, new IndexFilter() {
 		}, new NullProgressMonitor());

@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.cute.tdd.ui.tests.Activator;
+import ch.hsr.ifs.cute.tdd.ui.tests.TDDTestPlugin;
 
 public class CodanTestCase extends BaseTestCase {
 	ArrayList<File> tempFiles = new ArrayList<File>();
@@ -153,7 +153,7 @@ public class CodanTestCase extends BaseTestCase {
 
 	protected StringBuilder[] getContents(int sections) {
 		try {
-			return TestSourceReader.getContentsForTest(Activator.getDefault().getBundle(), "src", getClass(), getName(), sections);
+			return TestSourceReader.getContentsForTest(TDDTestPlugin.getDefault().getBundle(), "src", getClass(), getName(), sections);
 		} catch (IOException e) {
 			fail(e.getMessage());
 			return null;

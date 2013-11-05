@@ -144,8 +144,16 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 		getDefault().getLog().log(status);
 	}
 
+	public static void log(String msg) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, msg));
+	}
+
+	public static void log(String msg, Throwable e) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, msg, e));
+	}
+
 	public static void log(Throwable e) {
-		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, "Internal Error", e));
+		log("Internal Error", e);
 	}
 
 	private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {

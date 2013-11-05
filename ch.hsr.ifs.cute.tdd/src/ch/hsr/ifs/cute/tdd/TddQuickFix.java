@@ -63,7 +63,7 @@ public abstract class TddQuickFix extends AbstractCodanCMarkerResolution impleme
 	}
 
 	public CEditor getEditor() {
-		IEditorPart texteditor = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart texteditor = TDDPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		return (CEditor) texteditor;
 	}
 

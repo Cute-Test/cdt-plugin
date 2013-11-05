@@ -19,8 +19,8 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.cute.namespactor.astutil.NSSelectionHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
-import ch.hsr.ifs.cute.namespactor.refactoring.iudec.IUDECRefactoring;
-import ch.hsr.ifs.cute.namespactor.refactoring.iudir.IUDIRRefactoring;
+import ch.hsr.ifs.cute.namespactor.refactoring.iudec.IUDecRefactoring;
+import ch.hsr.ifs.cute.namespactor.refactoring.iudir.IUDirRefactoring;
 import ch.hsr.ifs.cute.namespactor.refactoring.rewrite.ASTRewriteStore;
 import ch.hsr.ifs.cute.namespactor.resources.Labels;
 
@@ -49,9 +49,9 @@ public class IURefactoring extends InlineRefactoringBase {
 
 		IASTTranslationUnit ast = this.refactoringContext.getAST(this.tu, pm);// warnings...
 		if (NSSelectionHelper.getSelectedUsingDirective(region, ast) != null) {
-			delegate = new IUDIRRefactoring(element, selection, project);
+			delegate = new IUDirRefactoring(element, selection, project);
 		} else if (NSSelectionHelper.getSelectedUsingDeclaration(region, ast) != null) {
-			delegate = new IUDECRefactoring(element, selection, project);
+			delegate = new IUDecRefactoring(element, selection, project);
 		} else {
 			initStatus.addFatalError(Labels.IUDIR_NoUDIRSelected);
 			return initStatus;

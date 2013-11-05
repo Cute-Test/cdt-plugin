@@ -47,6 +47,7 @@ import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.rts.junit4.CDTProjectJUnit4RtsTest;
 import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
+import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 
 @SuppressWarnings("restriction")
@@ -250,7 +251,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 		try {
 			return IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) marker.getResource());
 		} catch (PartInitException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while opening editor of " + marker.getResource().getName(), e);
 			return null;
 		}
 	}

@@ -16,6 +16,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.ui.console.IHyperlink;
 import org.eclipse.ui.console.TextConsole;
 
+import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 import ch.hsr.ifs.testframework.event.TestEventHandler;
 
 /**
@@ -65,7 +66,7 @@ public class ConsoleLinkHandler extends TestEventHandler {
 			IHyperlink link = linkFactory.createLink(file, lineNumber, null, -1, -1);
 			console.addHyperlink(link, reg.getOffset(), reg.getLength());
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			TestFrameworkPlugin.log(e);
 		}
 	}
 

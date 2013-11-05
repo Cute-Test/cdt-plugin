@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: CUTE TDD Test Plugin
 Bundle-SymbolicName: ch.hsr.ifs.cute.tdd.tests;singleton:=true
 Bundle-Version: 4.6.0.qualifier
-Bundle-Activator: ch.hsr.ifs.cute.tdd.ui.tests.Activator
+Bundle-Activator: ch.hsr.ifs.cute.tdd.ui.tests.TDDTestPlugin
 Require-Bundle: org.eclipse.core.runtime,
  org.junit;bundle-version="4.8.1",
  org.eclipse.cdt.ui.tests;bundle-version="5.3.0",

@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 
+import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -61,15 +62,16 @@ public class ChangeCuteVersionWizard extends Wizard {
 			}
 			replaceHeaders(cuteVersion);
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while performing version change", e);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while performing version change", e);
 		}
 		return true;
 	}
 
 	private void replaceHeaders(final ICuteHeaders cuteVersion) throws InvocationTargetException, InterruptedException {
 		this.getContainer().run(true, false, new IRunnableWithProgress() {
+
 			public void run(IProgressMonitor monitor) {
 				IFolder cuteFolder = project.getFolder("cute");
 				try {
@@ -83,9 +85,10 @@ public class ChangeCuteVersionWizard extends Wizard {
 					cuteVersion.copyHeaderFiles(cuteFolder, mon.newChild(files.length));
 					project.setPersistentProperty(CuteUIPlugin.CUTE_VERSION_PROPERTY_NAME, cuteVersion.getVersionString());
 				} catch (CoreException e) {
-					e.printStackTrace();
+					TDDPlugin.log("Exception while replacing headers", e);
 				}
 			}
+
 		});
 	}
 

@@ -300,7 +300,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 			try {
 				ILaunchConfigurationWorkingCopy copy = configuration.copy("");
 				StringBuilder args = new StringBuilder();
-				System.err.println(args.toString());
 				for (String rerunname : rerunnames) {
 					args.append(' ').append('"').append(rerunname).append('"');
 				}
@@ -308,7 +307,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 				configuration = copy;
 
 			} catch (CoreException e) {
-				e.printStackTrace();
+				TestFrameworkPlugin.log(e);
 			}
 			DebugUITools.launch(configuration, session.getLaunch().getLaunchMode());
 		}

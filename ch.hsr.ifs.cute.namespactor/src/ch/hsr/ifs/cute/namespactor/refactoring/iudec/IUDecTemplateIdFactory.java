@@ -7,14 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *
  * Contributors:
- *   Peter Sommerlad - adaption and fixes for open cases/rewrites
  * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ * peter.sommerlad@hsr.ch - adaption of hybrid approach
  ******************************************************************************/
-package ch.hsr.ifs.cute.namespactor.refactoring.qun;
+package ch.hsr.ifs.cute.namespactor.refactoring.iudec;
 
 import java.util.Set;
 
-import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -22,19 +21,22 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
+import org.eclipse.cdt.core.index.IIndex;
 
-import ch.hsr.ifs.cute.namespactor.NamespactorPlugin;
 import ch.hsr.ifs.cute.namespactor.astutil.NSNameHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
 import ch.hsr.ifs.cute.namespactor.refactoring.iu.InlineRefactoringContext;
 import ch.hsr.ifs.cute.namespactor.refactoring.iu.NamespaceInlineContext;
 
-public class QUNTemplateIdFactory extends TemplateIdFactory {
+/**
+ * @author peter.sommerlad@hsr.ch
+ * */
+public class IUDecTemplateIdFactory extends TemplateIdFactory {
 
 	private final NamespaceInlineContext enclosingNSContext;
 	private Set<ICPPASTTemplateId> templateIdsToIgnore = null;
 
-	public QUNTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context) {
+	public IUDecTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context) {
 		super(templateId);
 		this.enclosingNSContext = context.enclosingNSContext;
 		this.templateIdsToIgnore = context.templateIdsToIgnore;
@@ -56,7 +58,7 @@ public class QUNTemplateIdFactory extends TemplateIdFactory {
 		// qualify the name of the specifier if it has nothing to do with a template id
 		if (!isOrContainsTemplateId(specName)) {
 			IASTName qnameNode = specName;
-			if (!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.namespaceDefName)) {
+			if (!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.namespaceDefNode.getName())) {
 				qnameNode = NSNameHelper.prefixNameWith(enclosingNSContext.usingName, specName);
 			}
 			newDeclSpec.setName(qnameNode.copy());
@@ -81,22 +83,16 @@ public class QUNTemplateIdFactory extends TemplateIdFactory {
 
 	private boolean requiresQualification(ICPPASTTemplateId templId) {
 		IBinding templateNameBinding = templId.getTemplateName().resolveBinding();
-		String qname = "";
+		IBinding owner = templateNameBinding.getOwner();
+		if (owner instanceof ICPPNamespace) {
+			IIndex index = templId.getTranslationUnit().getIndex();
+			boolean isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(index.adaptBinding(enclosingNSContext.namespaceDefBinding)); // enclosingContext muss abgef�llt sein
+			boolean isNotQualified = !(templId.getParent() instanceof ICPPASTQualifiedName);
 
-		if (templateNameBinding.getOwner() instanceof ICPPNamespace) {
-			try {
-				qname = NSNameHelper.buildQualifiedName(((ICPPNamespace) templateNameBinding.getOwner()).getQualifiedName());
-
-				boolean isChildOfEnclosingNamespace = qname.equals(enclosingNSContext.namespaceDefBinding.toString());
-				boolean isNotQualified = !(templId.getParent() instanceof ICPPASTQualifiedName);
-
-				return isChildOfEnclosingNamespace && isNotQualified;
-
-			} catch (DOMException e) {
-				NamespactorPlugin.log("Exception in requiresQualification().", e);
-			}
+			return isChildOfEnclosingNamespace && isNotQualified;
 		}
 
 		return false;
 	}
+
 }

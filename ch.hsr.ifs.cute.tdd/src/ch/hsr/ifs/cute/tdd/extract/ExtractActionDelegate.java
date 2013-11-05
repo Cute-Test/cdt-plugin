@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
+import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class ExtractActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
@@ -51,7 +52,7 @@ public class ExtractActionDelegate implements IWorkbenchWindowActionDelegate, IE
 		} catch (OperationCanceledException e) {
 			TddHelper.showErrorOnStatusLine(e.getMessage());
 		} catch (CoreException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while running extract action", e);
 		} finally {
 			if (context != null) {
 				context.dispose();

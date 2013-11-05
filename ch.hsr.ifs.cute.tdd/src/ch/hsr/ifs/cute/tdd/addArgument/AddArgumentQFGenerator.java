@@ -18,7 +18,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator;
 
-import ch.hsr.ifs.cute.tdd.Activator;
+import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 
@@ -74,7 +74,7 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 			if (message.startsWith(MSG_QUICK_FIX_ACTION_ADD)) {
 				image = CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CORRECTION_ADD);
 			} else {
-				image = Activator.getImageDescriptor(IMG_OBJS_CORRECTION_REMOVE_PATH).createImage();
+				image = TDDPlugin.getImageDescriptor(IMG_OBJS_CORRECTION_REMOVE_PATH).createImage();
 			}
 			return new AddArgumentQuickFix(message, candidateNr, image);
 		}

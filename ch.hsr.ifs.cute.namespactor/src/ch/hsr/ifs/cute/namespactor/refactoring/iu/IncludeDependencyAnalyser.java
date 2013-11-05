@@ -29,6 +29,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.URIUtil;
 
+import ch.hsr.ifs.cute.namespactor.NamespactorPlugin;
+
 /**
  * @author kunz@ideadapt.net
  * */
@@ -121,7 +123,7 @@ public class IncludeDependencyAnalyser {
 				}
 			}
 		} catch (CoreException e) {
-			e.printStackTrace();
+			NamespactorPlugin.log("Exception while getting include dependent paths of " + tu.getElementName(), e);
 		}
 
 		return dependentFiles;

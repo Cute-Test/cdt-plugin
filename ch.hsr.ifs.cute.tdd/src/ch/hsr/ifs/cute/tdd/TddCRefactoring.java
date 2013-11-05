@@ -51,7 +51,7 @@ public abstract class TddCRefactoring extends CRefactoring {
 	}
 
 	private static CEditor getEditor() {
-		return (CEditor) Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		return (CEditor) TDDPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 
 	public void dispose() {

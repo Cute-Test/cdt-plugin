@@ -36,6 +36,7 @@ import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.swt.widgets.Composite;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.ProjectTools;
@@ -72,7 +73,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 			createCuteProject(newProject, pm);
 			createLibSetings(newProject);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while creating cute project settings for project " + newProject.getName(), e);
 		}
 	}
 

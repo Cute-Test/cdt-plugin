@@ -26,6 +26,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
 
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
+
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
@@ -155,9 +157,9 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 				}
 
 			} catch (NullPointerException npe) {
-				npe.printStackTrace();
+				CuteUIPlugin.log("Exception while finding name at cursor", npe);
 			} catch (ClassCastException cce) {
-				cce.printStackTrace();
+				CuteUIPlugin.log("Exception while finding name at cursor", cce);
 			}
 
 			boolean flag = isTemplateClass(node);

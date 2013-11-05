@@ -38,6 +38,8 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
+
 /**
  * @author Emanuel Graf
  * @since 4.0
@@ -103,11 +105,11 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 				updateLinkedMode(doc, mEdit);
 			}
 		} catch (CoreException e) {
-			e.printStackTrace();// TODO exception not managed
+			CuteUIPlugin.log("Exception while running new test function action", e);
 		} catch (MalformedTreeException e) {
-			e.printStackTrace();
+			CuteUIPlugin.log("Exception while running new test function action", e);
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			CuteUIPlugin.log("Exception while running new test function action", e);
 		} finally {
 			editor = null;
 		}

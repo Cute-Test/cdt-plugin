@@ -15,24 +15,24 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import ch.hsr.ifs.cute.namespactor.test.tests.EUDECRefactoringTest;
-import ch.hsr.ifs.cute.namespactor.test.tests.EUDIRRefactoringTest;
-import ch.hsr.ifs.cute.namespactor.test.tests.IUDECRefactoringTest;
-import ch.hsr.ifs.cute.namespactor.test.tests.IUDIRRefactoringTest;
-import ch.hsr.ifs.cute.namespactor.test.tests.IURefactoringTestIUDEC;
-import ch.hsr.ifs.cute.namespactor.test.tests.IURefactoringTestIUDIR;
+import ch.hsr.ifs.cute.namespactor.test.tests.EUDecRefactoringTest;
+import ch.hsr.ifs.cute.namespactor.test.tests.EUDirRefactoringTest;
+import ch.hsr.ifs.cute.namespactor.test.tests.IUDecRefactoringTest;
+import ch.hsr.ifs.cute.namespactor.test.tests.IUDirRefactoringTest;
+import ch.hsr.ifs.cute.namespactor.test.tests.IURefactoringTestIUDec;
+import ch.hsr.ifs.cute.namespactor.test.tests.IURefactoringTestIUDir;
 import ch.hsr.ifs.cute.namespactor.test.tests.QUNRefactoringTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
 //@formatter:off
-	IURefactoringTestIUDEC.class,
-	IURefactoringTestIUDIR.class,
-	IUDIRRefactoringTest.class,
-	IUDECRefactoringTest.class,
+	IURefactoringTestIUDec.class,
+	IURefactoringTestIUDir.class,
+	IUDirRefactoringTest.class,
+	IUDecRefactoringTest.class,
 	QUNRefactoringTest.class,
-	EUDIRRefactoringTest.class,
-	EUDECRefactoringTest.class
+	EUDirRefactoringTest.class,
+	EUDecRefactoringTest.class
 //@formatter:on
 })
 public class AllNamespectorTests {

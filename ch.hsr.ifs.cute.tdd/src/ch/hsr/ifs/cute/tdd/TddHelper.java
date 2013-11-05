@@ -66,7 +66,7 @@ public class TddHelper {
 		try {
 			return document.get(start, end - start);
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while extracting missing function name", e);
 			return null;
 		}
 	}

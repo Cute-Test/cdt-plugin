@@ -4,7 +4,7 @@
    <extension
          point="ch.hsr.ifs.cdttesting.testingPlugin">
       <testResouresLocation
-            activatorClass="ch.hsr.ifs.cute.tdd.ui.tests.Activator"
+            activatorClass="ch.hsr.ifs.cute.tdd.ui.tests.TDDTestPlugin"
             sourceLocation="/resources/ch.hsr.ifs.cute.tdd/">
       </testResouresLocation>
    </extension>

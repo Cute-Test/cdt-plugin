@@ -71,7 +71,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	}
 
 	private Bundle getBundle() {
-		return Activator.getDefault().getBundle();
+		return TDDTestPlugin.getDefault().getBundle();
 	}
 
 	public String runQuickFix(Class<? extends TddQuickFix> klass, String qfmessage) {
@@ -164,8 +164,9 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 				if (tddqf.getLabel().equals(qfmessage)) {
 					return (TddQuickFix) resolution;
 				} else {
-					System.err.println("Type of resolution matches, but message does not! Quickfix: " + tddqf.getLabel() + " message: " + qfmessage
-							+ " Possible Typo?");
+					String msg = "Type of resolution matches, but message does not! Quickfix: " + tddqf.getLabel() + " message: " + qfmessage
+							+ " Possible Typo?";
+					TDDTestPlugin.log(msg);
 				}
 			}
 		}

@@ -36,6 +36,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 
 import ch.hsr.ifs.cute.namespactor.NSAssert;
+import ch.hsr.ifs.cute.namespactor.NamespactorPlugin;
 import ch.hsr.ifs.cute.namespactor.refactoring.rewrite.ASTRewriteStore;
 
 /**
@@ -58,9 +59,9 @@ public abstract class RefactoringBase extends CRefactoring {
 		try {
 			return getAST(tu, pm);
 		} catch (OperationCanceledException e) {
-			e.printStackTrace();
+			NamespactorPlugin.log("Exception in getASTOf().", e);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			NamespactorPlugin.log("Exception in getASTOf().", e);
 		}
 		return null;
 	}
@@ -77,8 +78,7 @@ public abstract class RefactoringBase extends CRefactoring {
 				try {
 					tu = CoreModelUtil.findTranslationUnitForLocation(new Path(fileName), project);
 				} catch (CModelException e) {
-					// not much we can do to achieve a tu.
-					e.printStackTrace();
+					NamespactorPlugin.log("Exception in getTuForFilename().", e);
 				}
 			}
 		}
