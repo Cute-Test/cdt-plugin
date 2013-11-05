@@ -65,7 +65,6 @@
 	<modules>
 		<!-- CUTE Plugin -->
 		<module>../ch.hsr.ifs.cute.feature</module>
-		<module>../ch.hsr.ifs.cute.test.feature</module>
 		<module>../ch.hsr.ifs.testframework</module>
 		<module>../ch.hsr.ifs.cute.framework.extension</module>
 		<module>../ch.hsr.ifs.cute.core</module>

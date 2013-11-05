@@ -21,9 +21,6 @@ public class AllHeadersTestSuite extends TestSuite {
 		super("All Header Tests");
 		addTestSuite(CopyHeaders2_0Test.class);
 		addTestSuite(CopyHeaders1_7Test.class);
-		addTestSuite(CopyHeaders1_6Test.class);
-		addTestSuite(CopyHeaders1_5Test.class);
-		addTestSuite(CopyHeaders1_0Test.class);
 	}
 
 	public static Test suite() {

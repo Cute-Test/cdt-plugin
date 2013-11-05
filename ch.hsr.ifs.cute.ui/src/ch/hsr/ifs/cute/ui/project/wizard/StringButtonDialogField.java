@@ -105,7 +105,6 @@ public class StringButtonDialogField extends StringDialogField {
 
 	// ------ enable / disable management
 
-	 */
 	public void enableButton(boolean enable) {
 		if (isOkToUse(fBrowseButton)) {
 			fBrowseButton.setEnabled(isEnabled() && enable);
