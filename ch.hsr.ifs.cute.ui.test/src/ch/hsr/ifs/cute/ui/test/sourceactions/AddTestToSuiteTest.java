@@ -481,4 +481,37 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 		runCommand(file, contentsForTest[0].indexOf("theTest"), 3, COMMAND_ID);
 		assertFileContent(file, contentsForTest[1].toString());
 	}
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//struct S {
+	//  void aTest() {
+	//      ASSERTM("theTest", true);
+	//  }
+	//};
+	//
+	//void runAllTests(int argc, char const *argv[]){
+	//  cute::suite s;
+	//  cute::ide_listener<> lis;
+	//  cute::makeRunner(lis,argc,argv)(s, "AllTests");
+	//}
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//struct S {
+	//  void aTest() {
+	//      ASSERTM("theTest", true);
+	//  }
+	//};
+	//
+	//void runAllTests(int argc, char const *argv[]){
+	//  cute::suite s;
+	//	s.push_back(CUTE_SMEMFUN(S, aTest));
+	//  cute::ide_listener<> lis;
+	//  cute::makeRunner(lis,argc,argv)(s, "AllTests");
+	//}
+	public void testSelectionAtBeginOfTestFunction() throws Exception {
+		StringBuilder[] contentsForTest = getContentsForTest(2);
+		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp");
+		runCommand(file, contentsForTest[0].indexOf("void aTest() {"), 0, COMMAND_ID);
+		assertFileContent(file, contentsForTest[1].toString());
+	}
 }

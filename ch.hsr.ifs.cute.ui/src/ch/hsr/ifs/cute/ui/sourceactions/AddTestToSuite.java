@@ -45,23 +45,23 @@ public class AddTestToSuite extends AbstractFunctionAction {
 			try {
 				astTu = acquireAST(file);
 
-				NodeAtCursorFinder n = new NodeAtCursorFinder(selection.getOffset());
+				NodeAtCaretFinder n = new NodeAtCaretFinder(selection.getOffset());
 				astTu.accept(n);
-				IASTFunctionDefinition def = getFunctionDefinition(n.getNode());
+				IASTFunctionDefinition def = getFunctionDefinition(n.getMatchingNode());
 
 				if (def == null) {
-					def = getFunctionDefIfIsFunctor(n.getNode());
+					def = getFunctionDefIfIsFunctor(n.getMatchingNode());
 				}
 				if (ASTUtil.isTestFunction(def)) {
-					final SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
+					SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
 					astTu.accept(suiteFinder);
-					final IASTNode suite = suiteFinder.getSuiteNode();
+					IASTNode suite = suiteFinder.getSuiteNode();
 
 					AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
-					final IASTName name = def.getDeclarator().getName();
+					IASTName name = def.getDeclarator().getName();
 					if (isMemberFunction(def)) { // In .cpp file
 						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) {
-							lineStrategy = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
+							lineStrategy = new AddFunctorToSuiteStrategy(doc, astTu, n.getMatchingNode(), file);
 						} else {
 							lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
 						}
