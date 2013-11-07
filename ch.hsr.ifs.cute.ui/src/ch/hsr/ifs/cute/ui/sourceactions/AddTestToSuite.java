@@ -49,9 +49,6 @@ public class AddTestToSuite extends AbstractFunctionAction {
 				astTu.accept(n);
 				IASTFunctionDefinition def = getFunctionDefinition(n.getMatchingNode());
 
-				if (def == null) {
-					def = getFunctionDefIfIsFunctor(n.getMatchingNode());
-				}
 				if (ASTUtil.isTestFunction(def)) {
 					SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
 					astTu.accept(suiteFinder);

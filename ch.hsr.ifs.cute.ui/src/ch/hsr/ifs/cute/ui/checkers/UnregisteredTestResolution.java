@@ -60,15 +60,20 @@ public class UnregisteredTestResolution extends AbstractCodanCMarkerResolution {
 	}
 
 	private void performChange(IMarker marker, IDocument document, IFile file) throws CoreException, BadLocationException {
-		//the following text offset magic will not be necessary anymore once markers are added to actual nodes and not to the full line. (see ticket #
-		IRegion lineInfo = document.getLineInformationOfOffset(getOffset(marker, document));
-		String line = document.get(lineInfo.getOffset(), lineInfo.getLength()) + "x"; //do this so when calling trim() below, no whitespace gets trimmed at the end (if any)
-		int offset = lineInfo.getOffset() + (line.length() - line.trim().length());
-		TextSelection sel = new TextSelection(offset, 0);
+		TextSelection sel = getNonWhitespaceOffset(marker, document);
 
 		AbstractFunctionAction action = new AddTestToSuite();
 		MultiTextEdit edit = action.createEdit(file, document, sel);
 		RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(document, edit, TextEdit.CREATE_UNDO);
 		processor.performEdits();
+	}
+
+	private TextSelection getNonWhitespaceOffset(IMarker marker, IDocument document) throws BadLocationException {
+		//the following text offset magic will not be necessary anymore once markers are added to actual nodes and not to the full line. (see ticket #
+		IRegion lineInfo = document.getLineInformationOfOffset(getOffset(marker, document));
+		String line = document.get(lineInfo.getOffset(), lineInfo.getLength()) + "x"; //do this so when calling trim() below, no whitespace gets trimmed at the end (if any)
+		int offset = lineInfo.getOffset() + (line.length() - line.trim().length());
+		TextSelection sel = new TextSelection(offset, 0);
+		return sel;
 	}
 }
