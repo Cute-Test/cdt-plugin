@@ -32,8 +32,6 @@ import org.eclipse.text.edits.MultiTextEdit;
 
 public abstract class AbstractFunctionAction extends CRefactoring {
 
-	private CRefactoringContext cRefactoringContext;
-
 	public AbstractFunctionAction(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);
 	}
@@ -49,16 +47,16 @@ public abstract class AbstractFunctionAction extends CRefactoring {
 
 	protected IASTTranslationUnit acquireAST(IFile editorFile) throws CoreException, InterruptedException {
 		ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
-		IASTTranslationUnit ast = refactoringContext.getAST(tu, new NullProgressMonitor());// astCache.acquireSharedAST(tu, index, true, new NullProgressMonitor());
+		IASTTranslationUnit ast = refactoringContext.getAST(tu, new NullProgressMonitor());
 		return ast;
 	}
 
 	protected void initContext() {
-		cRefactoringContext = new CRefactoringContext(this);
+		new CRefactoringContext(this);
 	}
 
 	protected void disposeContext() {
-		cRefactoringContext.dispose();
+		refactoringContext.dispose();
 	}
 
 	protected IASTTranslationUnit getASTTranslationUnit(IFile editorFile) throws CoreException {
