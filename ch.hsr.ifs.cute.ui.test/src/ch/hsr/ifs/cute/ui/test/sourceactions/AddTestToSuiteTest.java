@@ -514,4 +514,46 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 		runCommand(file, contentsForTest[0].indexOf("void aTest() {"), 0, COMMAND_ID);
 		assertFileContent(file, contentsForTest[1].toString());
 	}
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//#define ASSERT(cond) ASSERTM(#cond,cond)
+	//
+	//struct WithConstructor {
+	//    WithConstructor(int x) { }
+	//
+	//    void test10() {
+	//        ASSERT(false);
+	//    }
+	//};
+	//
+	//void runAllTests(int argc, char const *argv[]){
+	//    cute::suite s;
+	//    cute::ide_listener<> lis;
+	//    cute::makeRunner(lis,argc,argv)(s, "AllTests");
+	//}
+
+	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+	//#define ASSERT(cond) ASSERTM(#cond,cond)
+	//
+	//struct WithConstructor {
+	//    WithConstructor(int x) { }
+	//
+	//    void test10() {
+	//        ASSERT(false);
+	//    }
+	//};
+	//
+	//void runAllTests(int argc, char const *argv[]){
+	//    cute::suite s;
+	//	WithConstructor instance(pArAmEtRs_ReQuIrEd);
+	//	s.push_back(CUTE_MEMFUN(instance, WithConstructor, test10));
+	//    cute::ide_listener<> lis;
+	//    cute::makeRunner(lis,argc,argv)(s, "AllTests");
+	//}
+	public void testRegisterMemberFunctionWithConstrArg() throws Exception {
+		StringBuilder[] contentsForTest = getContentsForTest(2);
+		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp");
+		runCommand(file, contentsForTest[0].indexOf("void test10() {"), 0, COMMAND_ID);
+		assertFileContent(file, contentsForTest[1].toString());
+	}
 }

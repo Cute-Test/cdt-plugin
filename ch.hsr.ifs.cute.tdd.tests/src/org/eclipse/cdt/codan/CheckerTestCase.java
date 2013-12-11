@@ -14,14 +14,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.cdt.codan.core.CodanRuntime;
-import org.eclipse.cdt.codan.core.model.CheckerLaunchMode;
 import org.eclipse.cdt.codan.core.model.IProblem;
-import org.eclipse.cdt.codan.core.model.IProblemProfile;
 import org.eclipse.cdt.codan.core.model.IProblemReporter;
 import org.eclipse.cdt.codan.core.param.IProblemPreference;
 import org.eclipse.cdt.codan.core.param.MapProblemPreference;
-import org.eclipse.cdt.codan.core.param.RootProblemPreference;
-import org.eclipse.cdt.codan.internal.core.model.CodanProblem;
 import org.eclipse.cdt.codan.internal.core.model.CodanProblemMarker;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -155,21 +151,5 @@ public class CheckerTestCase extends CodanTestCase {
 		} catch (CoreException e) {
 			fail(e.getMessage());
 		}
-	}
-
-	public void enableAllProblems() {
-		IProblemProfile profile = CodanRuntime.getInstance().getCheckersRegistry().getWorkspaceProfile();
-		IProblem[] problems = profile.getProblems();
-		for (int i = 0; i < problems.length; i++) {
-			IProblem p = problems[i];
-			IProblemPreference preference = p.getPreference();
-			if (preference instanceof RootProblemPreference) {
-				RootProblemPreference rootProblemPreference = (RootProblemPreference) preference;
-				rootProblemPreference.getLaunchModePreference().enableInLaunchModes(CheckerLaunchMode.RUN_ON_FULL_BUILD);
-			}
-			((CodanProblem) p).setEnabled(true);
-		}
-		CodanRuntime.getInstance().getCheckersRegistry().updateProfile(cproject.getProject(), profile);
-		return;
 	}
 }

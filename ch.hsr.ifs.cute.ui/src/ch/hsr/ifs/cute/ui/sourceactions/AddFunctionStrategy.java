@@ -22,17 +22,15 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
  * @since 4.0
  * 
  */
-public class AddFunctionToSuiteStrategy extends AddPushbackStatementStrategy {
+public class AddFunctionStrategy extends AddPushbackStatementStrategy {
 
-	protected final SuitePushBackFinder suitPushBackFinder;
 	protected final String testName;
 	protected final IFile file;
 
-	public AddFunctionToSuiteStrategy(IDocument doc, IFile file, IASTTranslationUnit tu, String testName, SuitePushBackFinder finder) {
-		super(doc, tu);
+	public AddFunctionStrategy(IDocument doc, IFile file, IASTTranslationUnit tu, String testName, SuitePushBackFinder finder) {
+		super(doc, tu, finder);
 		this.file = file;
 		this.testName = testName;
-		this.suitPushBackFinder = finder;
 
 	}
 

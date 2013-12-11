@@ -35,13 +35,16 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		System.setProperty("line.separator", "\n");
-		enableAllProblems();
 		loadcode(getCommentOfMethod("getCode"), true);
 		indexFiles();
 		runCodan();
 		ensureMarkersReady();
 	}
 
+	/**
+	 * jaaa genau ;-) nice try! haha sehr elegant! FIXME: refactor to use cdttesting (when codan-base-test ready) (lfelber) TODO: create ticket on
+	 * cute-test.com
+	 */
 	public void ensureMarkersReady() throws CoreException {
 		for (int i = 0; i < 10; i++) {
 			if (markers == null || markers.length == 0) {

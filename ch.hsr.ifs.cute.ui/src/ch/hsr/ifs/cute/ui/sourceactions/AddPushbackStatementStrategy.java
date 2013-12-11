@@ -41,8 +41,10 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 	protected int pushbackOffset = -1;
 	protected final String newLine;
 	protected final IASTTranslationUnit astTu;
+	protected final SuitePushBackFinder suitPushBackFinder;
 
-	public AddPushbackStatementStrategy(IDocument doc, IASTTranslationUnit astTu) {
+	public AddPushbackStatementStrategy(IDocument doc, IASTTranslationUnit astTu, SuitePushBackFinder finder) {
+		this.suitPushBackFinder = finder;
 		newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		this.astTu = astTu;
 	}
@@ -98,10 +100,10 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 	}
 
 	protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder) {
-		final StringBuilder builder = new StringBuilder();
 		final IASTName suiteName = suitPushBackFinder.getSuiteDeclName();
-		builder.append(newLine).append(pushBackString(String.valueOf(suiteName), createPushBackContent()));
-		return createPushBackEdit(editorFile, astTu, suitPushBackFinder, builder.toString());
+		String pushBackString = pushBackString(String.valueOf(suiteName), createPushBackContent());
+		String insertion = newLine + pushBackString;
+		return createPushBackEdit(editorFile, astTu, suitPushBackFinder, insertion);
 	}
 
 	protected String pushBackString(String suite, String insidePushback) {

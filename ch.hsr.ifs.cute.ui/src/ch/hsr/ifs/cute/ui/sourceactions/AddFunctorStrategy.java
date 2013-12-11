@@ -33,19 +33,14 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
  * @since 4.0
  * 
  */
-public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
+public class AddFunctorStrategy extends AddMemberFunctionBaseStrategy {
 
-	private final IASTTranslationUnit astTu;
-	private boolean constructorNeedParameterFlag = false;
 	private final IASTNode node;
-	private final IFile editorFile;
 	private final IASTName fname;
 
-	public AddFunctorToSuiteStrategy(IDocument doc, IASTTranslationUnit astTu, IASTNode node, IFile editorFile) {
-		super(doc, astTu);
-		this.astTu = astTu;
+	public AddFunctorStrategy(IDocument doc, IASTTranslationUnit astTu, IASTNode node, IFile editorFile, SuitePushBackFinder suitPushBackFinder) {
+		super(doc, astTu, editorFile, suitPushBackFinder);
 		this.node = node;
-		this.editorFile = editorFile;
 		OperatorParenthesesFinder o = new OperatorParenthesesFinder();
 		astTu.accept(o);
 		fname = nameAtCursor(o.getAL(), node);
@@ -57,8 +52,6 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 			return new MultiTextEdit();// FIXME potential bug point
 		}
 
-		constructorNeedParameterFlag = checkForConstructorWithParameters(astTu, node);
-
 		SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 		astTu.accept(suitPushBackFinder);
 
@@ -68,18 +61,6 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 			return mEdit;
 		}
 		return new MultiTextEdit();
-	}
-
-	private boolean checkForConstructorWithParameters(IASTTranslationUnit astTu, IASTNode node) {
-		FunctionFinder ff = new FunctionFinder();
-		astTu.accept(ff);
-		for (Object i : ff.getClassStruct()) {
-			if (((IASTNode) i).contains(node)) {
-				ArrayList<IASTDeclaration> constructors = ASTHelper.getConstructors((IASTSimpleDeclaration) i);
-				return ASTHelper.haveParameters(constructors);
-			}
-		}
-		return false;
 	}
 
 	private boolean checkClassForPublicOperatorParentesis(IASTNode node) {
@@ -214,8 +195,9 @@ public class AddFunctorToSuiteStrategy extends AddPushbackStatementStrategy {
 	public String createPushBackContent() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(fname).append("(");
-		if (constructorNeedParameterFlag) {
-			builder.append("pArAmEtRs_ReQuIrEd");
+
+		if (checkForConstructorWithParameters(astTu, node)) {
+			builder.append(PARAMETERS_REQUIRED);
 		}
 		builder.append(")");
 		return builder.toString();

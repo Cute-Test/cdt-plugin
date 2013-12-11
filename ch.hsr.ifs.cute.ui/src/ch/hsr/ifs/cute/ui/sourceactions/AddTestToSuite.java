@@ -58,13 +58,13 @@ public class AddTestToSuite extends AbstractFunctionAction {
 					IASTName name = def.getDeclarator().getName();
 					if (isMemberFunction(def)) { // In .cpp file
 						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) {
-							lineStrategy = new AddFunctorToSuiteStrategy(doc, astTu, n.getMatchingNode(), file);
+							lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file, suiteFinder);
 						} else {
 							lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
 						}
 					} else if (isFunction(def)) {
-						final String functionName = name.toString();
-						lineStrategy = new AddFunctionToSuiteStrategy(doc, file, astTu, functionName, suiteFinder);
+						String functionName = name.toString();
+						lineStrategy = new AddFunctionStrategy(doc, file, astTu, functionName, suiteFinder);
 					}
 					if (suite == null) {
 						adder = new AddSuiteStrategy(lineStrategy);
@@ -73,7 +73,6 @@ public class AddTestToSuite extends AbstractFunctionAction {
 					}
 
 				}
-				releaseAST(astTu);
 			} catch (InterruptedException e) {
 				CuteCorePlugin.log(e);
 			} finally {

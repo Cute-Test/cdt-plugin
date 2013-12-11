@@ -53,9 +53,6 @@ public abstract class AbstractFunctionAction extends CRefactoring {
 		return ast;
 	}
 
-	protected void releaseAST(IASTTranslationUnit ast) {
-	}
-
 	protected void initContext() {
 		cRefactoringContext = new CRefactoringContext(this);
 	}

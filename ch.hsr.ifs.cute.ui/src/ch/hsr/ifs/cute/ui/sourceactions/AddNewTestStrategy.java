@@ -32,7 +32,7 @@ import org.eclipse.text.edits.TextEdit;
  * @since 4.0
  * 
  */
-public class AddNewTestStrategy extends AddFunctionToSuiteStrategy {
+public class AddNewTestStrategy extends AddFunctionStrategy {
 
 	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
 
