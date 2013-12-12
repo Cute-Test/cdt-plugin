@@ -8,19 +8,15 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.test.sourceactions;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-public class SourceActionsTest {
-
-	public static Test suite() {
-		TestSuite ts = new TestSuite("ch.hsr.ifs.cutelauncher.ui.sourceactions");
-
-		ts.addTest(TestBugFixes.suite());
-		ts.addTestSuite(AddTestToSuiteTest.class);
-		ts.addTestSuite(NewTestFunctionTest.class);
-
-		return ts;
-	}
-
-}
+@RunWith(Suite.class)
+//@formatter:off
+@Suite.SuiteClasses({ 
+	TestBugFixes.class,
+	AddTestToSuiteTest.class,
+	NewTestFunctionTest.class,
+	})
+//@formatter:off
+public class SourceActionsTests { }

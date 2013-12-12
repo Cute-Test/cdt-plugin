@@ -11,6 +11,7 @@ package ch.hsr.ifs.cute.ui.test.sourceactions;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Test;
 
 /**
  * @author Emanuel Graf IFS
@@ -21,10 +22,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 public class NewTestFunctionTest extends EditorBaseTest {
 
 	private static final String COMMAND_ID = "ch.hsr.ifs.cute.newTestFunctionCommand";
-
-	public NewTestFunctionTest() {
-		super("New Test Function");
-	}
 
 	//void runSuite(){
 	//	cute::suite s;
@@ -42,6 +39,7 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//
 	//}
 	//
+	@Test
 	public void testNewTestFunction() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "function.cpp");
@@ -68,6 +66,7 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//
 	//}
 	//
+	@Test
 	public void testNewTestFunctionChangeBody() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "body.cpp");
@@ -91,6 +90,7 @@ public class NewTestFunctionTest extends EditorBaseTest {
 	//	s.push_back(CUTE(newTest));
 	//	return s;
 	//}
+	@Test
 	public void testNewTestFunctionMissingSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "function.cpp");

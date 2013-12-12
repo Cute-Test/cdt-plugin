@@ -8,9 +8,12 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.test.sourceactions;
 
+import static org.junit.Assert.assertEquals;
+
 import org.eclipse.cdt.internal.core.model.ext.SourceRange;
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.core.resources.IFile;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
@@ -25,10 +28,6 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 public class AddTestToSuiteTest extends EditorBaseTest {
 
 	private static final String COMMAND_ID = "ch.hsr.ifs.cute.addTestCommand";
-
-	public AddTestToSuiteTest() {
-		super("Add Test to Suite");
-	}
 
 	//#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 	//struct testStruct{
@@ -56,6 +55,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	//
+	@Test
 	public void testAddFunctorToSuite() throws Exception {
 		assertEquals(Bundle.ACTIVE, CuteUIPlugin.getDefault().getBundle().getState());
 		StringBuilder[] contentsForTest = getContentsForTest(2);
@@ -92,6 +92,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	//
+	@Test
 	public void testAddFunctorWithConstructorToSuite() throws Exception {
 		assertEquals(Bundle.ACTIVE, CuteUIPlugin.getDefault().getBundle().getState());
 		StringBuilder[] contentsForTest = getContentsForTest(2);
@@ -128,6 +129,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	//
+	@Test
 	public void testAddFunctorWithNonDefaultConstructorToSuite() throws Exception {
 		assertEquals(Bundle.ACTIVE, CuteUIPlugin.getDefault().getBundle().getState());
 		StringBuilder[] contentsForTest = getContentsForTest(2);
@@ -158,6 +160,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	//
+	@Test
 	public void testAddFunctionToSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
@@ -188,6 +191,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	//
+	@Test
 	public void testAddFunctionToSuiteInDirtyEditorChangeBeforeInsertion() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
@@ -230,6 +234,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	//
+	@Test
 	public void testAddFunctionToSuiteInDirtyEditorChangeBetweenInsertionAndSelection() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
@@ -266,6 +271,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//}
 	////I add a comment at the end
 	//
+	@Test
 	public void testAddFunctionToSuiteInDirtyEditorChangeAfterInsertion() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
@@ -298,6 +304,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	return s;
 	//}
 	//
+	@Test
 	public void testAddMemberFunctionInSameFileToSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "funtion.cpp");
@@ -340,6 +347,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	ASSERTM("theTest", true);
 	//}
 	//
+	@Test
 	public void testAddMemberFunctionToSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(3);
 		createFile(contentsForTest[0].toString(), "suite.h");
@@ -386,6 +394,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	cute::makeRunner(lis)(s, "The Suite");
 	//}
 	//
+	@Test
 	public void testAddQualifiedMemberFunctionToSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp");
@@ -413,6 +422,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	s.push_back(CUTE(testSuccess));
 	//	return s;
 	//}
+	@Test
 	public void testRegisterFunctionWithNewSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp");
@@ -444,6 +454,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	s.push_back(S());
 	//	return s;
 	//}
+	@Test
 	public void testRegisterFunctorWithNewSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp");
@@ -475,6 +486,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//	s.push_back(CUTE_SMEMFUN(S, testIt));
 	//	return s;
 	//}
+	@Test
 	public void testRegisterMemberFunctionWithNewSuite() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp");
@@ -508,6 +520,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//  cute::ide_listener<> lis;
 	//  cute::makeRunner(lis,argc,argv)(s, "AllTests");
 	//}
+	@Test
 	public void testSelectionAtBeginOfTestFunction() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp");
@@ -550,6 +563,7 @@ public class AddTestToSuiteTest extends EditorBaseTest {
 	//    cute::ide_listener<> lis;
 	//    cute::makeRunner(lis,argc,argv)(s, "AllTests");
 	//}
+	@Test
 	public void testRegisterMemberFunctionWithConstrArg() throws Exception {
 		StringBuilder[] contentsForTest = getContentsForTest(2);
 		IFile file = createFile(contentsForTest[0].toString(), "suite.cpp");

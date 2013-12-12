@@ -8,22 +8,18 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
 import ch.hsr.ifs.cute.ui.test.checkers.UnregisteredTestFunctionCheckerTest;
-import ch.hsr.ifs.cute.ui.test.sourceactions.SourceActionsTest;
+import ch.hsr.ifs.cute.ui.test.sourceactions.SourceActionsTests;
 
-public class AllUiTests extends TestSuite {
-
-	public AllUiTests() {
-		super("CUTE Plugin All UI Tests");
-		addTest(CuteSuiteWizardHandlerTest.suite());
-		addTest(SourceActionsTest.suite());
-		addTest(new TestSuite(UnregisteredTestFunctionCheckerTest.class));
-	}
-
-	public static Test suite() throws Exception {
-		return new AllUiTests();
-	}
-
-}
+@RunWith(Suite.class)
+//@formatter:off
+@Suite.SuiteClasses({ 
+	CuteSuiteWizardHandlerTest.class,
+	SourceActionsTests.class,
+	UnregisteredTestFunctionCheckerTest.class,
+	})
+//@formatter:off
+public class AllUiTests { }
