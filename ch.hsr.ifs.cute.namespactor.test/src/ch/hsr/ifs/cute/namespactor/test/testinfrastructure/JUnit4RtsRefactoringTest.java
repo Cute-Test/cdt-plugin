@@ -30,11 +30,11 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatusEntry;
 import org.junit.After;
 import org.junit.Test;
 
-import ch.hsr.ifs.cdttesting.rts.junit4.CDTProjectJUnit4RtsTest;
+import ch.hsr.ifs.cdttesting.cdttest.CDTTestingTest;
 import ch.hsr.ifs.cute.namespactor.test.TestActivator;
 
 @SuppressWarnings("restriction")
-public abstract class JUnit4RtsRefactoringTest extends CDTProjectJUnit4RtsTest implements ILogListener {
+public abstract class JUnit4RtsRefactoringTest extends CDTTestingTest implements ILogListener {
 
 	protected int expectedNrOfWarnings = 0;
 	protected int expectedNrOfErrors = 0;

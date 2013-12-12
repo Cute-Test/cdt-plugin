@@ -55,15 +55,9 @@ public class EditorBaseTest extends BaseUITestCase {
 	protected ICProject cProject;
 	protected IIndex index;
 
-	/**
-	 * 
-	 */
 	public EditorBaseTest() {
 	}
 
-	/**
-	 * @param name
-	 */
 	public EditorBaseTest(String name) {
 		super(name);
 	}
@@ -73,14 +67,11 @@ public class EditorBaseTest extends BaseUITestCase {
 		super.setUp();
 		cProject = CProjectHelper.createCCProject("cuteTest", "bin", IPDOMManager.ID_FAST_INDEXER);//$NON-NLS-2$
 		CCorePlugin.getIndexManager().joinIndexer(INDEXER_WAIT_TIME, npm());
-		index = CCorePlugin.getIndexManager().getIndex(cProject);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
-
 		closeAllEditors();
-		index = null;
 		if (cProject != null) {
 			CProjectHelper.delete(cProject);
 			cProject = null;
@@ -157,7 +148,7 @@ public class EditorBaseTest extends BaseUITestCase {
 
 	protected IFile createFile(String fileContent, String fileName) throws Exception {
 		IFile file = createFile(getProject(), fileName, fileContent);
-		waitForIndexer(index, file, INDEXER_WAIT_TIME);
+		waitForIndexer(cProject);
 		return file;
 	}
 
