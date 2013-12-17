@@ -8,50 +8,29 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.test.sourceactions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.cdt.internal.ui.editor.CEditor;
+import org.eclipse.cdt.ui.ICEditor;
 import org.eclipse.cdt.ui.testplugin.EditorTestHelper;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.link.ILinkedModeListener;
 import org.eclipse.jface.text.link.LinkedModeUI;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.junit.After;
 import org.junit.Test;
 
+import ch.hsr.ifs.cdttesting.cdttest.CDTTestingTest;
 import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate;
-import ch.hsr.ifs.cute.ui.test.fakebasetests.BaseTestFramework;
 
-@SuppressWarnings("restriction")
-public class TestBugFixes extends BaseTestFramework {
-
-	private static final String TEST_DEFS = "testDefs/cute/sourceActions/bugfix.cpp";
-	protected static CEditor ceditor;
+public class TestBugFixes extends CDTTestingTest {
 
 	@Test
 	public void testNewTestFunctionhighlight() throws Exception {
-		ReadTestCase rtc = new ReadTestCase(TEST_DEFS, false);
+		IEditorPart editor = EditorTestHelper.openInEditor(getActiveIFile(), true);
+		assertTrue(editor instanceof ICEditor);
 
-		Integer[] cursorpos = { 212, 261 };
-		rtc.removeCaretFromTest();
-		String testSrcCode = rtc.test.get(0);
-
-		IFile inputFile = importFile("A.cpp", testSrcCode);
-		IEditorPart editor = EditorTestHelper.openInEditor(inputFile, true);
-		assertNotNull(editor);
-		assertTrue(editor instanceof CEditor);
-		ceditor = (CEditor) editor;
-		ISelectionProvider selectionProvider = ceditor.getSelectionProvider();
-
-		selectionProvider.setSelection(new TextSelection(cursorpos[0], 0));
+		ISelectionProvider selectionProvider = ((ICEditor) editor).getSelectionProvider();
+		selectionProvider.setSelection(new TextSelection(212, 0));
 
 		NewTestFunctionActionDelegate ntfad = new NewTestFunctionActionDelegate();
 		ntfad.run(null);
@@ -59,12 +38,23 @@ public class TestBugFixes extends BaseTestFramework {
 		ntfad.testOnlyGetLinkedMode();
 
 		// set cursor location to be at the newly created newTest^Function
-		selectionProvider.setSelection(new TextSelection(cursorpos[1], 0));
+		selectionProvider.setSelection(new TextSelection(261, 0));
 		ntfad.run(null);
 
 		LinkedModeUI linked2ndCopy = ntfad.testOnlyGetLinkedMode();
 		linked2ndCopy.getSelectedRegion();
 
+		callLeave(linked2ndCopy);
+
+		String results = getCurrentSource();
+
+		TextSelection selection = (TextSelection) selectionProvider.getSelection();
+		String actual = results.substring(selection.getOffset(), selection.getOffset() + selection.getLength());
+
+		assertEquals("ASSERTM(\"start writing tests\", false);", actual);
+	}
+
+	private void callLeave(LinkedModeUI linked2ndCopy) throws IllegalAccessException, InvocationTargetException {
 		// default access, so need reflection
 		boolean flag = true;
 		final java.lang.reflect.Method[] methods = LinkedModeUI.class.getDeclaredMethods();
@@ -77,32 +67,5 @@ public class TestBugFixes extends BaseTestFramework {
 			}
 		}
 		assertFalse(flag);
-
-		String results = getText(editor);
-
-		ISelection see = selectionProvider.getSelection();
-		TextSelection selection = (TextSelection) see;
-
-		results = getText(editor);
-		results = results.substring(selection.getOffset(), selection.getOffset() + selection.getLength());
-
-		String expected = "ASSERTM(\"start writing tests\", false);";
-		assertEquals(expected, results);
-
 	}
-
-	private String getText(IEditorPart editor) {
-		Object ele = (editor).getEditorInput();
-		IDocumentProvider idp = ceditor.getDocumentProvider();
-		IDocument fDocument = idp.getDocument(ele);
-		return fDocument.get();
-	}
-
-	@Override
-	@After
-	public void tearDown() throws Exception {
-		EditorTestHelper.closeEditor(ceditor);
-		super.tearDown();
-	}
-
 }
