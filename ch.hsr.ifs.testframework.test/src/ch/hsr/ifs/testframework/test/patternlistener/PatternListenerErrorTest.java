@@ -10,8 +10,8 @@ package ch.hsr.ifs.testframework.test.patternlistener;
 
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
  * @author Emanuel Graf
@@ -25,17 +25,7 @@ public class PatternListenerErrorTest extends PatternListenerBase {
 	private String testNameEnd;
 	private String msg;
 
-	final class ErrorHandler extends TestEventHandler {
-
-		@Override
-		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
-			// Do nothing
-		}
-
-		@Override
-		protected void handleEnding(IRegion reg, String suitename) {
-			// Do nothing
-		}
+	final class ErrorHandler extends DummyTestEventHandler {
 
 		@Override
 		protected void handleError(IRegion reg, String testName, String msg) {
@@ -44,30 +34,9 @@ public class PatternListenerErrorTest extends PatternListenerBase {
 		}
 
 		@Override
-		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-			// Do nothing
-		}
-
-		@Override
-		public void handleSessionEnd() {
-			// Do nothing
-		}
-
-		@Override
-		public void handleSessionStart() {
-			// Do nothing
-		}
-
-		@Override
-		protected void handleSuccess(IRegion reg, String name, String msg) {
-			// Do nothing
-		}
-
-		@Override
 		protected void handleTestStart(IRegion reg, String testname) {
 			testNameStart = testname;
 		}
-
 	}
 
 	public void testTestStart() {

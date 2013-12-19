@@ -24,12 +24,12 @@ import ch.hsr.ifs.cute.namespactor.test.tests.QUNRefactoringTest;
 @RunWith(Suite.class)
 @SuiteClasses({
 //@formatter:off
-	IUDirRefactoringTest.class, //23 err if IURefactoringTestIUDir active (at pos 1)
-	IUDecRefactoringTest.class, //9  err if IURefactoringTestIUDec acitve (at pos 0)
+	IUDirRefactoringTest.class,
+	IUDecRefactoringTest.class,
 	QUNRefactoringTest.class,
 	EUDirRefactoringTest.class, 
 	EUDecRefactoringTest.class,
-	TestSuiteSandbox.class,
+	TestSuiteSandbox.class, 
 //@formatter:on
 })
 public class AllNamespectorTests {

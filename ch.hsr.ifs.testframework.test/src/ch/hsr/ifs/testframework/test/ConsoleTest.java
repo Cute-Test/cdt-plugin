@@ -16,10 +16,9 @@ import junit.framework.TestCase;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.Bundle;
 
@@ -57,18 +56,13 @@ public abstract class ConsoleTest extends TestCase {
 		filePathRoot = "testDefs/cute/";
 	}
 
-	private void prepareTest() {
+	private void prepareTest() throws OperationCanceledException, InterruptedException {
 		tc = getConsole();
 		cpl = new ConsolePatternListener(consoleEventParser);
 		addTestEventHandler(cpl);
 		tc.addPatternMatchListener(cpl);
 		tc.startTest();
-		try {
-			Job.getJobManager().join(tc, new NullProgressMonitor());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			/* org.eclipse.core.internal.jobs.JobManager.join doesn't catch from sleep */
-		}
+		Job.getJobManager().join(tc, new NullProgressMonitor());
 	}
 
 	protected FileInputTextConsole getConsole() {
@@ -87,8 +81,6 @@ public abstract class ConsoleTest extends TestCase {
 			String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
 			br = new BufferedReader(new FileReader(file2));
 			return br.readLine();
-		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0, e.getMessage(), e));
 		} finally {
 			if (br != null) {
 				br.close();

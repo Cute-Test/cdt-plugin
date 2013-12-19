@@ -13,8 +13,8 @@ import java.util.List;
 
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
  * @author Mike Bria
@@ -29,7 +29,7 @@ public class PatternListenerStoryTest extends PatternListenerBase {
 	List<String> suiteNameStart = new ArrayList<String>();
 	List<String> suiteNameEnded = new ArrayList<String>();
 
-	private final class ListenerTestHandler extends TestEventHandler {
+	private final class ListenerTestHandler extends DummyTestEventHandler {
 
 		@Override
 		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
@@ -41,37 +41,6 @@ public class PatternListenerStoryTest extends PatternListenerBase {
 		protected void handleEnding(IRegion reg, String suitename) {
 			suiteNameEnded.add(suitename);
 		}
-
-		@Override
-		protected void handleError(IRegion reg, String testName, String msg) {
-			// do nothing
-		}
-
-		@Override
-		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-			// do nothing
-		}
-
-		@Override
-		public void handleSessionEnd() {
-			// do nothing
-		}
-
-		@Override
-		public void handleSessionStart() {
-			// do nothing
-		}
-
-		@Override
-		protected void handleSuccess(IRegion reg, String name, String msg) {
-			// do nothing
-		}
-
-		@Override
-		protected void handleTestStart(IRegion reg, String testname) {
-			// do nothing
-		}
-
 	}
 
 	public void testTODO() throws Exception {

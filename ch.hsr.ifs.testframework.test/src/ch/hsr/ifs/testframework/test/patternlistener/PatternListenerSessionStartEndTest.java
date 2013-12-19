@@ -8,10 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.patternlistener;
 
-import org.eclipse.jface.text.IRegion;
-
-import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
  * @author Emanuel Graf
@@ -22,27 +20,7 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 	boolean sessionStarted = false;
 	boolean sessionEnded = false;
 
-	final class SessionStartEndHandler extends TestEventHandler {
-
-		@Override
-		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
-			// Do nothing
-		}
-
-		@Override
-		protected void handleEnding(IRegion reg, String suitename) {
-			// Do nothing
-		}
-
-		@Override
-		protected void handleError(IRegion reg, String testName, String msg) {
-			// Do nothing
-		}
-
-		@Override
-		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-			// Do nothing
-		}
+	final class SessionStartEndHandler extends DummyTestEventHandler {
 
 		@Override
 		public void handleSessionEnd() {
@@ -55,17 +33,6 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 			sessionStarted = true;
 			tc.removePatternMatchListener(cpl);
 		}
-
-		@Override
-		protected void handleSuccess(IRegion reg, String name, String msg) {
-			// Do nothing
-		}
-
-		@Override
-		protected void handleTestStart(IRegion reg, String testname) {
-			// Do nothing
-		}
-
 	}
 
 	public void testSessionStart() {
