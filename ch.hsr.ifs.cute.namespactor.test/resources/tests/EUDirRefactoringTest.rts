@@ -588,6 +588,7 @@ using namespace A;
 
 void f(S1 s1) {
 }
+
 //!EUDIR_ParameterInGlobalFunctionDefinition_DifferentSelection
 //@A1.cpp
 namespace A{
@@ -603,6 +604,7 @@ using namespace A;
 
 void f(S1 s1) {
 }
+
 //!EUDIR_CompositeTypeSpecifierClass
 //@A1.cpp
 namespace std{
@@ -676,6 +678,7 @@ using namespace A;
 
 void f(S1::S2 s2) {
 }
+
 //!EUDIR_WrongSelectionOfType
 //@.config
 expectedNrOfFatalErrors=1
@@ -698,6 +701,7 @@ namespace A{
 using namespace A;
 
 void f(S1);
+
 //!EUDIR_NamesMixedQualifiedAndUnQualified
 //@A1.cpp
 namespace A{
@@ -785,6 +789,7 @@ EUDIRTest::~EUDIRTest() {
 }
 void EUDIRTest::f() {
 }
+
 //@A1.h
 #ifndef EUDIRTEST_H_
 #define EUDIRTEST_H_

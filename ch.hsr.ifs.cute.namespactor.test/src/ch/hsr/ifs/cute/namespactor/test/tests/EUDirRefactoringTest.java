@@ -15,10 +15,10 @@ import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 
 import ch.hsr.ifs.cute.namespactor.refactoring.eudir.EUDirRefactoring;
-import ch.hsr.ifs.cute.namespactor.test.testinfrastructure.JUnit4RtsRefactoringTest;
+import ch.hsr.ifs.cute.namespactor.test.NamespactorTest;
 
 @SuppressWarnings("restriction")
-public class EUDirRefactoringTest extends JUnit4RtsRefactoringTest {
+public class EUDirRefactoringTest extends NamespactorTest {
 
 	@Override
 	protected CRefactoring getRefactoring() throws CModelException {

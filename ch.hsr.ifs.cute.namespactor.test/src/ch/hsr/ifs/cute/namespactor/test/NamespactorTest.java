@@ -9,21 +9,16 @@
  * Contributors:
  * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
  ******************************************************************************/
-package ch.hsr.ifs.cute.namespactor.test.testinfrastructure;
+package ch.hsr.ifs.cute.namespactor.test;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Properties;
 
 import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.ILogListener;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.RefactoringStatusEntry;
@@ -31,19 +26,15 @@ import org.junit.After;
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingTest;
-import ch.hsr.ifs.cute.namespactor.test.TestActivator;
 
 @SuppressWarnings("restriction")
-public abstract class JUnit4RtsRefactoringTest extends CDTTestingTest implements ILogListener {
+public abstract class NamespactorTest extends CDTTestingTest {
 
 	protected int expectedNrOfWarnings = 0;
 	protected int expectedNrOfErrors = 0;
 	protected int expectedNrOfFatalErrors = 0;
 	protected int skipTest = 0;
 	protected CRefactoring refactoring;
-
-	IStatus loggedStatus;
-	String loggingPlugin;
 	private CRefactoringContext cRefactoringContext;
 
 	@Override
@@ -65,10 +56,6 @@ public abstract class JUnit4RtsRefactoringTest extends CDTTestingTest implements
 			return;
 		}
 
-		TestActivator.log(String.format("-- Before Refactoring - TestSourceFile: %s%n", getName()));
-		TestActivator.log(fileMap.get(activeFileName).getSource());
-		TestActivator.log(String.format("--%n"));
-
 		refactoring = getRefactoring();
 		cRefactoringContext = new CRefactoringContext(refactoring);
 
@@ -79,23 +66,11 @@ public abstract class JUnit4RtsRefactoringTest extends CDTTestingTest implements
 
 		checkFinalConditions();
 
-		Change change = refactoring.createChange(NULL_PROGRESS_MONITOR);
+		Change change = refactoring.createChange(new NullProgressMonitor());
 
-		change.perform(NULL_PROGRESS_MONITOR);
+		change.perform(new NullProgressMonitor());
 
 		compareInitialWidthExpectedSource();
-	}
-
-	protected String getCodeFromIFile(IFile file) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(file.getContents()));
-		StringBuilder code = new StringBuilder();
-		String line;
-		while ((line = br.readLine()) != null) {
-			code.append(line);
-			code.append(System.getProperty("line.separator"));
-		}
-		br.close();
-		return code.toString();
 	}
 
 	protected ICElement getCElementOfTestFile() throws CModelException {
@@ -163,7 +138,7 @@ public abstract class JUnit4RtsRefactoringTest extends CDTTestingTest implements
 	}
 
 	protected boolean checkInitialConditions() throws CoreException {
-		RefactoringStatus initialConditions = refactoring.checkInitialConditions(NULL_PROGRESS_MONITOR);
+		RefactoringStatus initialConditions = refactoring.checkInitialConditions(new NullProgressMonitor());
 
 		if (expectedNrOfErrors > 0) {
 			assertConditionsError(initialConditions, expectedNrOfErrors);
@@ -179,7 +154,7 @@ public abstract class JUnit4RtsRefactoringTest extends CDTTestingTest implements
 	}
 
 	protected void checkFinalConditions() throws CoreException {
-		RefactoringStatus finalConditions = refactoring.checkFinalConditions(NULL_PROGRESS_MONITOR);
+		RefactoringStatus finalConditions = refactoring.checkFinalConditions(new NullProgressMonitor());
 
 		if (expectedNrOfWarnings > 0) {
 			assertConditionsWarning(finalConditions, expectedNrOfWarnings);
@@ -189,12 +164,8 @@ public abstract class JUnit4RtsRefactoringTest extends CDTTestingTest implements
 	}
 
 	protected void compareInitialWidthExpectedSource() throws Exception {
-
 		for (String fileName : fileMap.keySet()) {
-			String expectedSource = fileMap.get(fileName).getExpectedSource();
-			IFile file = project.getFile(new Path(fileName));
-			String refactoredCode = getCodeFromIFile(file);
-			assertEquals(expectedSource, refactoredCode);
+			assertEquals(getExpectedSource(fileName), getCurrentSource(fileName));
 		}
 	}
 
@@ -204,12 +175,6 @@ public abstract class JUnit4RtsRefactoringTest extends CDTTestingTest implements
 		expectedNrOfWarnings = new Integer(properties.getProperty("expectedNrOfWarnings", "0")).intValue();
 		expectedNrOfErrors = new Integer(properties.getProperty("expectedNrOfErrors", "0")).intValue();
 		expectedNrOfFatalErrors = new Integer(properties.getProperty("expectedNrOfFatalErrors", "0")).intValue();
-	}
-
-	@Override
-	public void logging(IStatus status, String plugin) {
-		loggedStatus = status;
-		loggingPlugin = plugin;
 	}
 
 	protected abstract CRefactoring getRefactoring() throws CModelException;

@@ -189,6 +189,7 @@ using namespace /*$*/A/*$$*/;
 namespace A{
 	void a(){}
 }
+
 //@B.cpp
 #include "B.h"
 int main(){
@@ -215,6 +216,7 @@ namespace A{
 	};
 	void a();
 }
+
 //@B.cpp
 #include "B.h"
 void SA1::a() {
@@ -959,6 +961,7 @@ int main() {
 	std::vector<int> v;
 }
 std::vector<std::vector<double> > vv;
+
 //!IUDIR_ExternalInlineNamespace_directiveInMiddle
 //@A1.cpp
 #include <vector.hpp>
@@ -976,3 +979,4 @@ int main() {
 }
 
 std::vector<std::vector<double> > vv;
+

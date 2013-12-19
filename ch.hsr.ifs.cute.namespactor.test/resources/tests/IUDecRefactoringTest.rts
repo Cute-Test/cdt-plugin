@@ -139,6 +139,7 @@ namespace A{
 }
 
 A::S::S1 x;
+
 //!IUDEC_Templates
 //@A1.cpp
 #include "templates.h"
@@ -179,6 +180,7 @@ int main() {
 }
 void f(C::CC<char> p) {
 }
+
 //@templates.h
 #ifndef A1_H_
 #define A1_H_
@@ -318,3 +320,4 @@ vector<vector<int> > v;
 }
 
 std::vector<double> vv;
+

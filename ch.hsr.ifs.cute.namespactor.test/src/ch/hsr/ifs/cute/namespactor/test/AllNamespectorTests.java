@@ -19,20 +19,17 @@ import ch.hsr.ifs.cute.namespactor.test.tests.EUDecRefactoringTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.EUDirRefactoringTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.IUDecRefactoringTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.IUDirRefactoringTest;
-import ch.hsr.ifs.cute.namespactor.test.tests.IURefactoringTestIUDec;
-import ch.hsr.ifs.cute.namespactor.test.tests.IURefactoringTestIUDir;
 import ch.hsr.ifs.cute.namespactor.test.tests.QUNRefactoringTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
 //@formatter:off
-	IURefactoringTestIUDec.class,
-	IURefactoringTestIUDir.class,
-	IUDirRefactoringTest.class,
-	IUDecRefactoringTest.class,
+	IUDirRefactoringTest.class, //23 err if IURefactoringTestIUDir active (at pos 1)
+	IUDecRefactoringTest.class, //9  err if IURefactoringTestIUDec acitve (at pos 0)
 	QUNRefactoringTest.class,
-	EUDirRefactoringTest.class,
-	EUDecRefactoringTest.class
+	EUDirRefactoringTest.class, 
+	EUDecRefactoringTest.class,
+	TestSuiteSandbox.class,
 //@formatter:on
 })
 public class AllNamespectorTests {

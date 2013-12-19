@@ -31,6 +31,7 @@ import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -161,10 +162,10 @@ public abstract class TddRefactoringTest extends CDTTestingTest {
 	}
 
 	private void createAndPerformChange(Refactoring refactoring) throws CoreException {
-		assertConditionsOk(refactoring.checkInitialConditions(NULL_PROGRESS_MONITOR));
-		assertConditionsOk(refactoring.checkFinalConditions(NULL_PROGRESS_MONITOR));
-		Change changes = refactoring.createChange(NULL_PROGRESS_MONITOR);
-		changes.perform(NULL_PROGRESS_MONITOR);
+		assertConditionsOk(refactoring.checkInitialConditions(new NullProgressMonitor()));
+		assertConditionsOk(refactoring.checkFinalConditions(new NullProgressMonitor()));
+		Change changes = refactoring.createChange(new NullProgressMonitor());
+		changes.perform(new NullProgressMonitor());
 	}
 
 	private String removeCommentsFromCode(String code) {
@@ -223,7 +224,7 @@ public abstract class TddRefactoringTest extends CDTTestingTest {
 		IMarker[] markers = new IMarker[] {};
 		try {
 			CodanBuilder builder = (CodanBuilder) CodanRuntime.getInstance().getBuilder();
-			builder.processResource(cproject.getProject().getFile(activeFileName), NULL_PROGRESS_MONITOR);
+			builder.processResource(cproject.getProject().getFile(activeFileName), new NullProgressMonitor());
 			markers = cproject.getProject().findMarkers(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, true, 1);
 			builder.forgetLastBuiltState();
 		} catch (CoreException e) {
