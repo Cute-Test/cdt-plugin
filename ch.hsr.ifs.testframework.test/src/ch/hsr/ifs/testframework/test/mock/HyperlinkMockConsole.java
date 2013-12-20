@@ -8,7 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.mock;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.ui.console.IHyperlink;
@@ -19,7 +20,7 @@ import org.eclipse.ui.console.IHyperlink;
  */
 public class HyperlinkMockConsole extends FileInputTextConsole {
 
-	private final Vector<HyperlinkLocation> links = new Vector<HyperlinkLocation>();
+	private final List<HyperlinkLocation> links = new ArrayList<HyperlinkLocation>();
 
 	public HyperlinkMockConsole(String inputFile) {
 		super(inputFile);
@@ -31,7 +32,7 @@ public class HyperlinkMockConsole extends FileInputTextConsole {
 		links.add(new HyperlinkLocation(hyperlink, offset, length));
 	}
 
-	public Vector<HyperlinkLocation> getLinks() {
+	public List<HyperlinkLocation> getLinks() {
 		return links;
 	}
 

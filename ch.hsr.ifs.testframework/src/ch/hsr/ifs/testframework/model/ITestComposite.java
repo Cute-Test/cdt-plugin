@@ -8,7 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * @author Emanuel Graf
@@ -26,7 +26,7 @@ public interface ITestComposite {
 
 	public abstract int getRun();
 
-	public abstract Vector<? extends TestElement> getElements();
+	public abstract List<? extends TestElement> getElements();
 
 	public void addTestElement(TestElement element);
 

@@ -8,7 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.cdt.managedbuilder.buildproperties.IBuildProperty;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
@@ -37,12 +38,9 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 public class NewCuteLibTestProjectWizardPage extends NewCuteProjectWizardPage implements ICheckStateListener {
 
 	private CheckboxTableViewer listViewer;
-	private Vector<IProject> libProjects;
+	private List<IProject> libProjects;
 	private final IWizardContainer wizardDialog;
 
-	/**
-	 * @since 4.0
-	 */
 	public NewCuteLibTestProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage, IWizardContainer wc) {
 		super(nextPage, previousPage, "ch.hsr.ifs.cutelauncher.ui.LibRefPage");
 		wizardDialog = wc;
@@ -94,8 +92,8 @@ public class NewCuteLibTestProjectWizardPage extends NewCuteProjectWizardPage im
 
 			@SuppressWarnings({ "rawtypes" })
 			public Object[] getElements(Object inputElement) {
-				if (inputElement instanceof Vector) {
-					Vector vec = (Vector) inputElement;
+				if (inputElement instanceof List) {
+					List vec = (List) inputElement;
 					return vec.toArray();
 				}
 				return null;
@@ -120,8 +118,8 @@ public class NewCuteLibTestProjectWizardPage extends NewCuteProjectWizardPage im
 		return Messages.getString("LibReferencePage.LibProjectTest");
 	}
 
-	public Vector<IProject> getCheckedProjects() {
-		Vector<IProject> checkedProjects = new Vector<IProject>();
+	public List<IProject> getCheckedProjects() {
+		List<IProject> checkedProjects = new ArrayList<IProject>();
 		if (listViewer == null) {
 			return checkedProjects;
 		}
@@ -135,15 +133,15 @@ public class NewCuteLibTestProjectWizardPage extends NewCuteProjectWizardPage im
 	}
 
 	public void checkStateChanged(CheckStateChangedEvent event) {
-		Vector<IProject> list = getCheckedProjects();
+		List<IProject> list = getCheckedProjects();
 		errorMessageFlag = list.isEmpty();
 
 		wizardDialog.updateMessage();
 		wizardDialog.updateButtons();
 	}
 
-	private Vector<IProject> getLibProjects() {
-		Vector<IProject> libProjects = new Vector<IProject>();
+	private List<IProject> getLibProjects() {
+		List<IProject> libProjects = new ArrayList<IProject>();
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (IProject project : projects) {
 			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);

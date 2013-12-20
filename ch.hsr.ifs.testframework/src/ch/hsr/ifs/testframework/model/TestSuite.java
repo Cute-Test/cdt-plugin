@@ -8,7 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author egraf
@@ -25,8 +26,8 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 
 	private TestStatus status;
 
-	private final Vector<TestElement> cases = new Vector<TestElement>();
-	private final Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();
+	private final ArrayList<TestElement> cases = new ArrayList<TestElement>();
+	private final ArrayList<ITestCompositeListener> listeners = new ArrayList<ITestCompositeListener>();
 
 	public TestSuite(String name, int totalTests, TestStatus status) {
 		super();
@@ -138,7 +139,7 @@ public class TestSuite extends TestElement implements ITestComposite, ITestEleme
 		}
 	}
 
-	public Vector<TestElement> getElements() {
+	public List<TestElement> getElements() {
 		return cases;
 	}
 

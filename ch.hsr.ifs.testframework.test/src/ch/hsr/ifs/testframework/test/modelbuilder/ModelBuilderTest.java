@@ -9,7 +9,7 @@
 package ch.hsr.ifs.testframework.test.modelbuilder;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
 
 import junit.framework.Test;
 
@@ -72,7 +72,7 @@ public class ModelBuilderTest extends ConsoleTest {
 	private String getSessionString(TestSession session) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Session{");
-		Vector<TestElement> rootElements = session.getRootElements();
+		List<TestElement> rootElements = session.getRootElements();
 		writeElements(sb, rootElements);
 		sb.append('}');
 		return sb.toString();
@@ -122,13 +122,13 @@ public class ModelBuilderTest extends ConsoleTest {
 		sb.append(SEPARATOR);
 		sb.append(suite.getError());
 		sb.append("){");
-		Vector<TestElement> elements = suite.getElements();
+		List<TestElement> elements = suite.getElements();
 		writeElements(sb, elements);
 		sb.append('}');
 
 	}
 
-	private void writeElements(StringBuffer sb, Vector<TestElement> elements) {
+	private void writeElements(StringBuffer sb, List<TestElement> elements) {
 		for (TestElement element : elements) {
 			if (element instanceof TestSuite) {
 				TestSuite suite1 = (TestSuite) element;

@@ -8,8 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
@@ -78,7 +78,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 	}
 
 	private void createLibSetings(IProject project) throws CoreException {
-		Vector<IProject> projects = libRefPage.getCheckedProjects();
+		List<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
 			for (ICuteWizardAddition addition : getAdditions()) {
 				addition.getHandler().configureLibProject(libProject);
@@ -89,7 +89,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		ManagedBuildManager.saveBuildInfo(project, true);
 	}
 
-	private void setProjectReference(IProject project, Vector<IProject> projects) throws CoreException {
+	private void setProjectReference(IProject project, List<IProject> projects) throws CoreException {
 		if (!projects.isEmpty()) {
 			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project, true);
 			ICConfigurationDescription cfgs[] = des.getConfigurations();
@@ -180,8 +180,7 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 
 	@Override
 	public boolean canFinish() {
-		Vector<IProject> projects = libRefPage.getCheckedProjects();
-		if (projects.isEmpty()) {
+		if (libRefPage.getCheckedProjects().isEmpty()) {
 			return false;
 		}
 		return libRefPage.isCustomPageComplete();

@@ -8,7 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.hyperlink;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.eclipse.core.runtime.Path;
 
@@ -46,15 +46,14 @@ public class HyperlinkTest extends ConsoleTest {
 		emulateTestRun();
 		if (tc instanceof HyperlinkMockConsole) {
 			HyperlinkMockConsole linkConsole = (HyperlinkMockConsole) tc;
-			Vector<HyperlinkLocation> links = linkConsole.getLinks();
+			List<HyperlinkLocation> links = linkConsole.getLinks();
 			assertEquals(1, links.size());
 
 			grabExpectedLinkDimensions();
-			HyperlinkLocation link = links.firstElement();
+			HyperlinkLocation link = links.get(0);
 			assertEquals(expectedLinkOffset, link.getOffset());
 			assertEquals(expectedLinkLength, link.getLength());
 		}
-
 	}
 
 	private void grabExpectedLinkDimensions() throws Exception {

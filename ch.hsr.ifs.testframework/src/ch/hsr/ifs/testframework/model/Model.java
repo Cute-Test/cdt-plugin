@@ -8,14 +8,15 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.debug.core.ILaunch;
 
 public class Model {
 
-	private final Vector<ISessionListener> sessionListeners = new Vector<ISessionListener>();
+	private final List<ISessionListener> sessionListeners = new ArrayList<ISessionListener>();
 
 	private ITestComposite currentParent;
 
