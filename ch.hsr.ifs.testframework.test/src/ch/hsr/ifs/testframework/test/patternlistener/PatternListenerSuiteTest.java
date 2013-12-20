@@ -8,12 +8,14 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.patternlistener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.text.IRegion;
 
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.PatternListenerBase;
 import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
@@ -39,21 +41,36 @@ public class PatternListenerSuiteTest extends PatternListenerBase {
 		}
 	}
 
-	public void testFirstStarted() {
-		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0));
-		assertEquals("Suite Size", new Integer(42), suiteSize.get(0));
+	public void testListenerEvents() throws IOException, InterruptedException {
+		emulateTestRun();
+		assertListSize(2);
+		assertFirstStarted(42);
+		assertFirstEnded();
+		assertLastStarted(1);
+		assertLastEnded();
 	}
 
-	public void testFirstEnded() {
+	private void assertListSize(int expectedListsSize) {
+		assertEquals(expectedListsSize, suiteSize.size());
+		assertEquals(expectedListsSize, suiteNameStart.size());
+		assertEquals(expectedListsSize, suiteNameEnded.size());
+	}
+
+	private void assertFirstStarted(int expectedSuiteSize) {
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0));
+		assertEquals("Suite Size", new Integer(expectedSuiteSize), suiteSize.get(0));
+	}
+
+	private void assertFirstEnded() {
 		assertEquals("Suite Name Test", "TestSuite1", suiteNameEnded.get(0));
 	}
 
-	public void testLastStarted() {
+	private void assertLastStarted(int expectedSuiteSize) {
 		assertEquals("Suite Name Test", "TestSuite2", suiteNameStart.get(1));
-		assertEquals("Suite Size", new Integer(1), suiteSize.get(1));
+		assertEquals("Suite Size", new Integer(expectedSuiteSize), suiteSize.get(1));
 	}
 
-	public void testLastEnded() {
+	private void assertLastEnded() {
 		assertEquals("Suite Name Test", "TestSuite2", suiteNameEnded.get(1));
 	}
 
@@ -66,5 +83,4 @@ public class PatternListenerSuiteTest extends PatternListenerBase {
 	protected String getInputFileName() {
 		return "suiteTest.txt";
 	}
-
 }

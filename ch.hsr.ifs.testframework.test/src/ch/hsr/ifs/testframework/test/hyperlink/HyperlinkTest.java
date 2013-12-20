@@ -43,6 +43,7 @@ public class HyperlinkTest extends ConsoleTest {
 	}
 
 	public void testLinks() throws Exception {
+		emulateTestRun();
 		if (tc instanceof HyperlinkMockConsole) {
 			HyperlinkMockConsole linkConsole = (HyperlinkMockConsole) tc;
 			Vector<HyperlinkLocation> links = linkConsole.getLinks();

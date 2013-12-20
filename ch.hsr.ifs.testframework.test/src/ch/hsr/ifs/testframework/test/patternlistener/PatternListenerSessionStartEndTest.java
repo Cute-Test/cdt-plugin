@@ -8,7 +8,10 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.patternlistener;
 
+import java.io.IOException;
+
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.PatternListenerBase;
 import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
@@ -35,11 +38,9 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 		}
 	}
 
-	public void testSessionStart() {
+	public void testListenerEvents() throws IOException, InterruptedException {
+		emulateTestRun();
 		assertTrue("No session Start", sessionStarted);
-	}
-
-	public void testSessionEnd() {
 		assertTrue("No session End", sessionEnded);
 	}
 
@@ -52,5 +53,4 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 	protected String getInputFileName() {
 		return "sessionTest.txt";
 	}
-
 }

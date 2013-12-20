@@ -8,9 +8,12 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.patternlistener;
 
+import java.io.IOException;
+
 import org.eclipse.jface.text.IRegion;
 
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.PatternListenerBase;
 import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
@@ -23,14 +26,14 @@ public class PatternListenerErrorTest extends PatternListenerBase {
 
 	private String testNameStart;
 	private String testNameEnd;
-	private String msg;
+	private String errorMsg;
 
 	final class ErrorHandler extends DummyTestEventHandler {
 
 		@Override
 		protected void handleError(IRegion reg, String testName, String msg) {
 			testNameEnd = testName;
-			PatternListenerErrorTest.this.msg = msg;
+			errorMsg = msg;
 		}
 
 		@Override
@@ -39,13 +42,11 @@ public class PatternListenerErrorTest extends PatternListenerBase {
 		}
 	}
 
-	public void testTestStart() {
+	public void testListenerEvents() throws IOException, InterruptedException {
+		emulateTestRun();
 		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
-	}
-
-	public void testTestEnd() {
 		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
-		assertEquals("Message", MSG_EXP, msg);
+		assertEquals("Message", MSG_EXP, errorMsg);
 	}
 
 	@Override
@@ -57,5 +58,4 @@ public class PatternListenerErrorTest extends PatternListenerBase {
 	protected String getInputFileName() {
 		return "errorTest.txt";
 	}
-
 }

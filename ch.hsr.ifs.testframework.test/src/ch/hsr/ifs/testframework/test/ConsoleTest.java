@@ -17,7 +17,6 @@ import junit.framework.TestCase;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.Bundle;
@@ -56,12 +55,16 @@ public abstract class ConsoleTest extends TestCase {
 		filePathRoot = "testDefs/cute/";
 	}
 
-	private void prepareTest() throws OperationCanceledException, InterruptedException {
+	private void prepareTest() {
 		tc = getConsole();
 		cpl = new ConsolePatternListener(consoleEventParser);
 		addTestEventHandler(cpl);
 		tc.addPatternMatchListener(cpl);
+	}
+
+	protected void emulateTestRun() throws IOException, InterruptedException {
 		tc.startTest();
+		//joins all console pattern-match-jobs belonging to the "tc" console
 		Job.getJobManager().join(tc, new NullProgressMonitor());
 	}
 

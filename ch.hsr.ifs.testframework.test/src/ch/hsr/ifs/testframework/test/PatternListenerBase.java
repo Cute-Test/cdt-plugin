@@ -6,9 +6,8 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.testframework.test.patternlistener;
+package ch.hsr.ifs.testframework.test;
 
-import ch.hsr.ifs.testframework.test.ConsoleTest;
 
 /**
  * @author Emanuel Graf IFS

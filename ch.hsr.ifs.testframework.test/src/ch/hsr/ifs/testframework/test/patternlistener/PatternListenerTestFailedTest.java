@@ -8,9 +8,12 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.patternlistener;
 
+import java.io.IOException;
+
 import org.eclipse.jface.text.IRegion;
 
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.PatternListenerBase;
 import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
@@ -46,11 +49,9 @@ public class PatternListenerTestFailedTest extends PatternListenerBase {
 		}
 	}
 
-	public void testTestStart() {
+	public void testListenerEvents() throws IOException, InterruptedException {
+		emulateTestRun();
 		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
-	}
-
-	public void testTestEnd() {
 		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
 		assertEquals("Message", MSG_EXP, msg);
 		assertEquals("Filename", TEST_FILE_NAME_EXP, testFileName);
@@ -66,5 +67,4 @@ public class PatternListenerTestFailedTest extends PatternListenerBase {
 	protected String getInputFileName() {
 		return "failedTest.txt";
 	}
-
 }
