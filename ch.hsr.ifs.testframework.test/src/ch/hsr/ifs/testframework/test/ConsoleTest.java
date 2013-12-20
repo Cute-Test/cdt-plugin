@@ -11,6 +11,7 @@ package ch.hsr.ifs.testframework.test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import junit.framework.TestCase;
 
@@ -66,19 +67,16 @@ public abstract class ConsoleTest extends TestCase {
 	}
 
 	protected void emulateTestRun() throws IOException, InterruptedException {
-		//for debugging purpse (to fix server side random test failure)
-		//adding a new matcher listener here which is used to detect if mathers might not have been started in following join on jobs.
-		final boolean[] b = new boolean[] { false };
+		final Semaphore semaphore = new Semaphore(0);
 		tc.addPatternMatchListener(new IPatternMatchListener() {
 
 			@Override
 			public void matchFound(PatternMatchEvent event) {
-				b[0] = true;
+				semaphore.release();
 			}
 
 			@Override
 			public void disconnect() {
-
 			}
 
 			@Override
@@ -101,13 +99,8 @@ public abstract class ConsoleTest extends TestCase {
 			}
 		});
 		tc.startTest();
+		semaphore.acquire(); //wait until MatchJob is actually running (meaning that cute test-result-patern-match-listener has at least startet working).
 		//joins all console pattern-match-jobs belonging to the "tc" console
-		Job.getJobManager().join(tc, new NullProgressMonitor());
-		int count = 0;
-		while (!b[0] && ++count < 100) {
-			System.err.println("waiting for matcher job!");
-			Thread.sleep(100);
-		}
 		Job.getJobManager().join(tc, new NullProgressMonitor());
 	}
 
