@@ -19,6 +19,9 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.console.IPatternMatchListener;
+import org.eclipse.ui.console.PatternMatchEvent;
+import org.eclipse.ui.console.TextConsole;
 import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
@@ -63,8 +66,48 @@ public abstract class ConsoleTest extends TestCase {
 	}
 
 	protected void emulateTestRun() throws IOException, InterruptedException {
+		//for debugging purpse (to fix server side random test failure)
+		//adding a new matcher listener here which is used to detect if mathers might not have been started in following join on jobs.
+		final boolean[] b = new boolean[] { false };
+		tc.addPatternMatchListener(new IPatternMatchListener() {
+
+			@Override
+			public void matchFound(PatternMatchEvent event) {
+				b[0] = true;
+			}
+
+			@Override
+			public void disconnect() {
+
+			}
+
+			@Override
+			public void connect(TextConsole console) {
+			}
+
+			@Override
+			public String getPattern() {
+				return ".+";
+			}
+
+			@Override
+			public String getLineQualifier() {
+				return null;
+			}
+
+			@Override
+			public int getCompilerFlags() {
+				return 0;
+			}
+		});
 		tc.startTest();
 		//joins all console pattern-match-jobs belonging to the "tc" console
+		Job.getJobManager().join(tc, new NullProgressMonitor());
+		int count = 0;
+		while (!b[0] && ++count < 100) {
+			System.err.println("waiting for matcher job!");
+			Thread.sleep(100);
+		}
 		Job.getJobManager().join(tc, new NullProgressMonitor());
 	}
 
