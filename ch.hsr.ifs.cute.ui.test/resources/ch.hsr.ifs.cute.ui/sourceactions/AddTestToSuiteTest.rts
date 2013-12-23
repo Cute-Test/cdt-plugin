@@ -300,6 +300,7 @@ void testSuccess()
 {
 	ASSERTM("theTest", true);
 }
+
 cute::suite make_suite(){
 	cute::suite s;
 	s.push_back(CUTE(testSuccess));
@@ -325,6 +326,7 @@ struct S{
 		ASSERTM("theTest", true);
 	}
 };
+
 cute::suite make_suite(){
 	cute::suite s;
 	s.push_back(S());
@@ -350,6 +352,7 @@ struct S{
 		ASSERTM("theTest", true);
 	}
 };
+
 cute::suite make_suite(){
 	cute::suite s;
 	s.push_back(CUTE_SMEMFUN(S, testIt));
@@ -419,4 +422,30 @@ void runAllTests(int argc, char const *argv[]){
 	s.push_back(CUTE_MEMFUN(instance, WithConstructor, test10));
     cute::ide_listener<> lis;
     cute::makeRunner(lis,argc,argv)(s, "AllTests");
+}
+//!testNoNewlineAtEndOfFile
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+
+struct S{
+    void operator()()
+    {
+        ASSERTM(/*$*/"theTest"/*$$*/, true);
+    }
+};//no newline here at end of line (also do not save editor after removing newline)
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+
+struct S{
+    void operator()()
+    {
+        ASSERTM("theTest", true);
+    }
+};//no newline here at end of line (also do not save editor after removing newline)
+cute::suite make_suite(){
+	cute::suite s;
+	s.push_back(S());
+	return s;
 }

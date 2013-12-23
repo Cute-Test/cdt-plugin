@@ -25,6 +25,9 @@ public class AddSuiteStrategy implements IAddStrategy {
 		final int insertionPoint = insertOffset >= 0 ? insertOffset : decoratedStrategy.astTu.getFileLocation().getNodeLength();
 
 		String code = "cute::suite make_suite(){" + nl + "\tcute::suite s;" + nl + "\ts.push_back(" + pushbackContent + ");" + nl + "\treturn s;" + nl + "}";
+		if (insertOffset < 0) {
+			code = nl + code;
+		}
 		InsertEdit edit = new InsertEdit(insertionPoint, code);
 		mEdit.addChild(edit);
 		return mEdit;
