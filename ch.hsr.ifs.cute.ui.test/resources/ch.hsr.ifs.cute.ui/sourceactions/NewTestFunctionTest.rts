@@ -44,3 +44,23 @@ cute::suite make_suite(){
 	s.push_back(CUTE(myTestName2));
 	return s;
 }
+//!testNewTestFunctionEndOfFile
+//@.config
+insertText=myTestName
+sendTab=true
+insertText2=ASSERT(true);
+//@main.cpp
+void runSuite(){
+	cute::suite s;
+}
+/*$*//*$$*/
+//=
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTestName));
+}
+void myTestName(){
+	ASSERT(true);
+}
+
+

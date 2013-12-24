@@ -19,7 +19,6 @@ import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.RefactoringStatusEntry;
 import org.junit.After;
@@ -65,11 +64,7 @@ public abstract class NamespactorTest extends CDTTestingTest {
 		}
 
 		checkFinalConditions();
-
-		Change change = refactoring.createChange(new NullProgressMonitor());
-
-		change.perform(new NullProgressMonitor());
-
+		refactoring.createChange(new NullProgressMonitor()).perform(new NullProgressMonitor());
 		compareInitialWidthExpectedSource();
 	}
 

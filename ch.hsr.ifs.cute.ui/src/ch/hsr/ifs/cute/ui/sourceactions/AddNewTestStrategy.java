@@ -155,7 +155,6 @@ public class AddNewTestStrategy extends AddFunctionStrategy {
 	}
 
 	public void createProblemMarker(IFile file, String message, int lineNo) {
-
 		try {
 			IMarker marker = file.createMarker("org.eclipse.cdt.core.problem");
 			marker.setAttribute(IMarker.MESSAGE, "cute:" + message);

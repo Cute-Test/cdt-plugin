@@ -28,9 +28,6 @@ public class NewTestFunctionAction extends AbstractFunctionAction {
 
 	protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
 	int problemMarkerErrorLineNumber = 0;
-	protected int insertFileOffset;
-	protected int pushbackOffset;
-	protected int pushbackLength;
 
 	private final String funcName;
 

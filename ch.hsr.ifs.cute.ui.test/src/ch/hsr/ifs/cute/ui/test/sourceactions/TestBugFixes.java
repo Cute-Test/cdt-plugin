@@ -35,8 +35,6 @@ public class TestBugFixes extends CDTTestingTest {
 		NewTestFunctionActionDelegate ntfad = new NewTestFunctionActionDelegate();
 		ntfad.run(null);
 
-		ntfad.testOnlyGetLinkedMode();
-
 		// set cursor location to be at the newly created newTest^Function
 		selectionProvider.setSelection(new TextSelection(261, 0));
 		ntfad.run(null);

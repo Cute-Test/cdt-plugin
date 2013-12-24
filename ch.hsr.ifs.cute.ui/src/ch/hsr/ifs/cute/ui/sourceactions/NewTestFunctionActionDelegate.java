@@ -149,19 +149,14 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {
 		int result = edits[0].getOffset() + edits[0].getLength();
+		int leadingEditsLengthSum = 0;
 		for (TextEdit textEdit : edits) {
 			String insert = ((InsertEdit) textEdit).getText();
 			if (insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
-
-				if (functionAction.insertFileOffset == -1 || // error check
-						functionAction.pushbackOffset == -1 || // error check
-						functionAction.insertFileOffset < functionAction.pushbackOffset) // before pushback
-				{
-					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
-				} else {
-					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()) + functionAction.pushbackLength);
-				}
+				result = (leadingEditsLengthSum + textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
 				break;
+			} else {
+				leadingEditsLengthSum += ((InsertEdit) textEdit).getLength();
 			}
 		}
 		return result;
