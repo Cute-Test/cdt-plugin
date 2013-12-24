@@ -42,8 +42,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	}
 
 	/**
-	 * jaaa genau ;-) nice try! haha sehr elegant! FIXME: refactor to use cdttesting (when codan-base-test ready) (lfelber) TODO: create ticket on
-	 * cute-test.com
+	 * jaaa genau ;-) nice try! haha sehr elegant! FIXME: refactor to use cdttesting (lfelber)
 	 */
 	public void ensureMarkersReady() throws CoreException {
 		for (int i = 0; i < 10; i++) {

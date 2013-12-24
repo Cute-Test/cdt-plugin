@@ -2,9 +2,9 @@ package ch.hsr.ifs.cute.ui.sourceactions;
 
 import java.util.ArrayList;
 
+import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
@@ -20,14 +20,11 @@ public abstract class AddMemberFunctionBaseStrategy extends AddPushbackStatement
 	}
 
 	protected boolean checkForConstructorWithParameters(IASTTranslationUnit astTu, IASTNode methodNode) {
-		FunctionFinder functionFinder = new FunctionFinder();
-		astTu.accept(functionFinder);
-		for (IASTNode classStructNode : functionFinder.getClassStruct()) {
-			if (classStructNode.contains(methodNode)) {
-				ArrayList<IASTDeclaration> constructors = ASTHelper.getConstructors((IASTSimpleDeclaration) classStructNode);
-				return ASTHelper.haveParameters(constructors);
-			}
+		IASTCompositeTypeSpecifier typeNode = ASTHelper.findParentOfType(IASTCompositeTypeSpecifier.class, methodNode);
+		if (typeNode == null) {
+			return false;
 		}
-		return false;
+		ArrayList<IASTDeclaration> constructors = ASTHelper.getConstructors(typeNode);
+		return ASTHelper.haveParameters(constructors);
 	}
 }

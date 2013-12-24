@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
@@ -53,30 +54,26 @@ public class ASTHelper {
 		return EMPTY_STRING;
 	}
 
-	public static ArrayList<IASTDeclaration> getConstructors(IASTSimpleDeclaration simpleDeclaration) {
+	public static ArrayList<IASTDeclaration> getConstructors(IASTCompositeTypeSpecifier typeNode) {
 		ArrayList<IASTDeclaration> result = new ArrayList<IASTDeclaration>();
 
-		IASTDeclSpecifier declspecifier = simpleDeclaration.getDeclSpecifier();
-		if (declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier) {
-			ICPPASTCompositeTypeSpecifier cts = (ICPPASTCompositeTypeSpecifier) declspecifier;
-			String className = cts.getName().toString();
-			IASTDeclaration members[] = cts.getMembers();
-			for (int i = 0; i < members.length; i++) {
-				if (members[i] instanceof IASTFunctionDefinition) {
-					IASTFunctionDefinition fd = (IASTFunctionDefinition) members[i];
-					IASTFunctionDeclarator fdd = fd.getDeclarator();
-					String fname = fdd.getName().toString();
-					if (fname.equals(className))
-						result.add(fd);
-				} else if (members[i] instanceof IASTSimpleDeclaration) {
-					IASTSimpleDeclaration sd = (IASTSimpleDeclaration) members[i];
-					IASTDeclarator sdd[] = sd.getDeclarators();
-					if (sdd.length == 0)
-						continue;
-					String sname = sdd[0].getName().toString();
-					if (sname.equals(className))
-						result.add(sd);
-				}
+		String className = typeNode.getName().toString();
+		IASTDeclaration members[] = typeNode.getMembers();
+		for (int i = 0; i < members.length; i++) {
+			if (members[i] instanceof IASTFunctionDefinition) {
+				IASTFunctionDefinition fd = (IASTFunctionDefinition) members[i];
+				IASTFunctionDeclarator fdd = fd.getDeclarator();
+				String fname = fdd.getName().toString();
+				if (fname.equals(className))
+					result.add(fd);
+			} else if (members[i] instanceof IASTSimpleDeclaration) {
+				IASTSimpleDeclaration sd = (IASTSimpleDeclaration) members[i];
+				IASTDeclarator sdd[] = sd.getDeclarators();
+				if (sdd.length == 0)
+					continue;
+				String sname = sdd[0].getName().toString();
+				if (sname.equals(className))
+					result.add(sd);
 			}
 		}
 		return result;
@@ -352,5 +349,19 @@ public class ASTHelper {
 			}
 		}
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends IASTNode> T findParentOfType(Class<T> klass, IASTNode node) {
+		while (node != null) {
+			if (klass.isInstance(node)) {
+				return (T) node; // here an unchecked warning is generated
+									// because the code 'node instanceof T' is
+									// not valid as condition in the
+									// previous line.
+			}
+			node = node.getParent();
+		}
+		return null;
 	}
 }
