@@ -134,6 +134,8 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 			String className = configElements[0].getAttribute("class");
 			Class<?> obj = Platform.getBundle(extension.getContributor().getName()).loadClass(className);
 			installedHeaders.add((ICuteHeaders) obj.newInstance());
+		} catch (AbstractMethodError e) {
+			// igonoring outdated (incompatible) old header plugins (which might still be installed when updating to current cute version
 		} catch (ClassNotFoundException e) {
 		} catch (InstantiationException e) {
 		} catch (IllegalAccessException e) {
