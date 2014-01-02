@@ -50,11 +50,10 @@ public class BoostHandler implements ICuteWizardAdditionHandler, IIncludeStrateg
 		SubMonitor mon = SubMonitor.convert(pm, 2);
 		if (addition.copyBoost) {
 			mon.beginTask(Messages.BoostHandler_beginTaskFolders, 2);
-			IFolder boostSrcFolder = ProjectTools.createFolder(project, "boost", true);
+			IFolder boostSrcFolder = ProjectTools.createFolder(project, "boost", false);
 			IFolder boostFolder = ProjectTools.createFolder(project, "boost/boost", false);
 			List<URL> urls = getBoostFiles("boost");
 			copyFilesToFolder(boostFolder, new NullProgressMonitor(), urls);
-
 			ProjectTools.setIncludePaths(boostSrcFolder.getFullPath(), project, this);
 		}
 		mon.done();

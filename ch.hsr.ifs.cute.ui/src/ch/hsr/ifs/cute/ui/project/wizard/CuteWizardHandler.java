@@ -29,12 +29,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.IIncludeStrategyProvider;
 import ch.hsr.ifs.cute.ui.IncludePathStrategy;
 import ch.hsr.ifs.cute.ui.ProjectTools;
-import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -129,10 +129,10 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	private void createCuteProjectFolders(IProject project) throws CoreException {
 		ICuteHeaders cuteVersion = getCuteVersion();
 
-		IFolder srcFolder = ProjectTools.createFolder(project, "src", true);
+		IFolder srcFolder = ProjectTools.createFolder(project, "src", false);
 		copyExampleTestFiles(srcFolder, cuteVersion);
 
-		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", true);
+		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", false);
 		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
 		ProjectTools.setIncludePaths(cuteFolder.getFullPath(), project, this);
 
