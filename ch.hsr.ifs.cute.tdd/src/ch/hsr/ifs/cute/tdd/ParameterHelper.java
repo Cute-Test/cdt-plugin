@@ -53,7 +53,7 @@ import org.eclipse.cdt.internal.ui.refactoring.togglefunction.NotSupportedExcept
 
 public class ParameterHelper {
 
-	private static final String STD_STRING = "std::string"; //$NON-NLS-1$
+	private static final String STD_STRING = "std::string";
 
 	public static void addTo(IASTFunctionCallExpression caller, ICPPASTFunctionDeclarator decl) {
 		HashMap<String, Boolean> used = new HashMap<String, Boolean>();
@@ -302,9 +302,9 @@ public class ParameterHelper {
 	}
 
 	private static String getParameterCharacter(String fallBackVarName, HashMap<String, Boolean> used) {
-		String newName = new String(fallBackVarName.charAt(0) + "").toLowerCase(); //$NON-NLS-1$
+		String newName = new String(fallBackVarName.charAt(0) + "").toLowerCase();
 		while (used.get(newName) != null) {
-			newName = (char) (newName.charAt(0) + 1) + ""; //$NON-NLS-1$
+			newName = (char) (newName.charAt(0) + 1) + "";
 		}
 		return newName;
 	}

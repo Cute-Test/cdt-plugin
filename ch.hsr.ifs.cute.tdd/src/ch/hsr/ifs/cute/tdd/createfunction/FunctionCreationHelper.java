@@ -40,28 +40,26 @@ import ch.hsr.ifs.cute.tdd.TypeHelper;
 public class FunctionCreationHelper {
 
 	public static IASTName getMostCloseSelectedNodeName(IASTTranslationUnit localunit, TextSelection selection) {
-		IASTNode selectedNode = localunit.getNodeSelector(null).
-			findEnclosingNodeInExpansion(selection.getOffset(), selection.getLength());
+		IASTNode selectedNode = localunit.getNodeSelector(null).findEnclosingNodeInExpansion(selection.getOffset(), selection.getLength());
 		if (selectedNode instanceof CPPASTName) {
-			return (IASTName)selectedNode;
+			return (IASTName) selectedNode;
 		}
 		IASTName nameAround = TddHelper.getAncestorOfType(selectedNode, CPPASTName.class);
 		if (nameAround == null) {
 			nameAround = TddHelper.getChildofType(selectedNode, CPPASTName.class);
 			if (nameAround != null && nameAround.resolveBinding() instanceof ICPPNamespace) {
-				IASTIdExpression idex = new LastIDExpressionFinder().getLastIDExpression(selectedNode); 
+				IASTIdExpression idex = new LastIDExpressionFinder().getLastIDExpression(selectedNode);
 				nameAround = idex.getName();
-			} 
+			}
 		}
 		return nameAround;
 	}
 
-	public static void addParameterToOperator(ICPPASTFunctionDeclarator decl,
-			IASTExpression op) {
+	public static void addParameterToOperator(ICPPASTFunctionDeclarator decl, IASTExpression op) {
 		HashMap<String, Boolean> used = new HashMap<String, Boolean>();
 		if (op instanceof IASTIdExpression) {
 			IASTIdExpression op_expr = (IASTIdExpression) op;
-			decl.addParameterDeclaration(ParameterHelper.createParamDeclFrom(op_expr, used));	
+			decl.addParameterDeclaration(ParameterHelper.createParamDeclFrom(op_expr, used));
 		} else if (op instanceof IASTLiteralExpression) {
 			IASTLiteralExpression litexpr = (IASTLiteralExpression) op;
 			decl.addParameterDeclaration(ParameterHelper.createParamDeclFrom(litexpr, used));

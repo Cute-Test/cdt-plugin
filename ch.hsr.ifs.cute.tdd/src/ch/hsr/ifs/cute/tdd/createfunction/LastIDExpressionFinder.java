@@ -12,16 +12,16 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 public class LastIDExpressionFinder {
-	
+
 	private IASTIdExpression possibleresult;
-	
+
 	public IASTIdExpression getLastIDExpression(IASTNode selectedNode) {
 		findLastIDExpression(selectedNode);
 		return possibleresult;
 	}
 
 	private void findLastIDExpression(IASTNode selectedNode) {
-		for(IASTNode child: selectedNode.getChildren()) {
+		for (IASTNode child : selectedNode.getChildren()) {
 			if (child instanceof IASTIdExpression) {
 				possibleresult = (IASTIdExpression) child;
 			}

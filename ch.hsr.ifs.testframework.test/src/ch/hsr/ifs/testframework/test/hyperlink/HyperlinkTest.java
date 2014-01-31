@@ -8,7 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.hyperlink;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.eclipse.core.runtime.Path;
 
@@ -33,8 +33,8 @@ public class HyperlinkTest extends ConsoleTest {
 
 	@Override
 	protected void addTestEventHandler(ConsolePatternListener lis) {
-		consoleLinkHandler = new ConsoleLinkHandler(new Path(""), tc, new MockLinkFactory()); //$NON-NLS-1$
-		lis.addHandler(consoleLinkHandler); 
+		consoleLinkHandler = new ConsoleLinkHandler(new Path(""), tc, new MockLinkFactory());
+		lis.addHandler(consoleLinkHandler);
 	}
 
 	@Override
@@ -43,28 +43,28 @@ public class HyperlinkTest extends ConsoleTest {
 	}
 
 	public void testLinks() throws Exception {
+		emulateTestRun();
 		if (tc instanceof HyperlinkMockConsole) {
 			HyperlinkMockConsole linkConsole = (HyperlinkMockConsole) tc;
-			Vector<HyperlinkLocation> links = linkConsole.getLinks();
+			List<HyperlinkLocation> links = linkConsole.getLinks();
 			assertEquals(1, links.size());
 
 			grabExpectedLinkDimensions();
-			HyperlinkLocation link = links.firstElement();
+			HyperlinkLocation link = links.get(0);
 			assertEquals(expectedLinkOffset, link.getOffset());
 			assertEquals(expectedLinkLength, link.getLength());
 		}
-
 	}
 
 	private void grabExpectedLinkDimensions() throws Exception {
-		String[] linkDimensions = firstConsoleLine().split(","); //$NON-NLS-1$
+		String[] linkDimensions = firstConsoleLine().split(",");
 		expectedLinkOffset = Integer.parseInt(linkDimensions[0]);
 		expectedLinkLength = Integer.parseInt(linkDimensions[1]);
 	}
 
 	@Override
 	protected String getInputFilePath() {
-		return "hyperlinkTests/linkTest.txt"; //$NON-NLS-1$
+		return "hyperlinkTests/linkTest.txt";
 	}
 
 }

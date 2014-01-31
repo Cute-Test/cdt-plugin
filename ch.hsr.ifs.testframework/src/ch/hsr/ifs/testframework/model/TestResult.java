@@ -8,17 +8,16 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
-
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class TestResult {
-	
+
 	protected String msg;
-	
+
 	protected TestResult() {
-		msg = ""; //$NON-NLS-1$
+		msg = "";
 	}
 
 	public TestResult(String msg) {
@@ -29,8 +28,5 @@ public class TestResult {
 	public String getMsg() {
 		return msg;
 	}
-	
-	
-	
-	
+
 }

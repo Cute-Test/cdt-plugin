@@ -34,15 +34,6 @@ import ch.hsr.ifs.cute.ui.ASTUtil;
  */
 public class AddTestToSuite extends AbstractFunctionAction {
 
-	//	public AddTestToSuite(ICElement element, ISelection selection, ICProject project) {
-	//		super(element, selection, project);
-	//		// TODO Auto-generated constructor stub
-	//	}
-	//
-	//	public AddTestToSuite() {
-	//		this(null, null, null);
-	//	}
-
 	@Override
 	public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
 		IAddStrategy adder = new NullStrategy(doc);
@@ -54,29 +45,26 @@ public class AddTestToSuite extends AbstractFunctionAction {
 			try {
 				astTu = acquireAST(file);
 
-				NodeAtCursorFinder n = new NodeAtCursorFinder(selection.getOffset());
+				NodeAtCaretFinder n = new NodeAtCaretFinder(selection.getOffset());
 				astTu.accept(n);
-				IASTFunctionDefinition def = getFunctionDefinition(n.getNode());
+				IASTFunctionDefinition def = getFunctionDefinition(n.getMatchingNode());
 
-				if (def == null) {
-					def = getFunctionDefIfIsFunctor(n.getNode());
-				}
 				if (ASTUtil.isTestFunction(def)) {
-					final SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
+					SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
 					astTu.accept(suiteFinder);
-					final IASTNode suite = suiteFinder.getSuiteNode();
+					IASTNode suite = suiteFinder.getSuiteNode();
 
 					AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
-					final IASTName name = def.getDeclarator().getName();
-					if (isMemberFunction(def)) { //In .cpp file
-						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) { //$NON-NLS-1$
-							lineStrategy = new AddFunctorToSuiteStrategy(doc, astTu, n.getNode(), file);
+					IASTName name = def.getDeclarator().getName();
+					if (isMemberFunction(def)) { // In .cpp file
+						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) {
+							lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file, suiteFinder);
 						} else {
 							lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
 						}
 					} else if (isFunction(def)) {
-						final String functionName = name.toString();
-						lineStrategy = new AddFunctionToSuiteStrategy(doc, file, astTu, functionName, suiteFinder);
+						String functionName = name.toString();
+						lineStrategy = new AddFunctionStrategy(doc, file, astTu, functionName, suiteFinder);
 					}
 					if (suite == null) {
 						adder = new AddSuiteStrategy(lineStrategy);
@@ -85,9 +73,7 @@ public class AddTestToSuite extends AbstractFunctionAction {
 					}
 
 				}
-				releaseAST(astTu);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 				CuteCorePlugin.log(e);
 			} finally {
 				disposeContext();
@@ -107,7 +93,7 @@ public class AddTestToSuite extends AbstractFunctionAction {
 					if (iastDeclaration instanceof IASTFunctionDefinition) {
 						IASTFunctionDefinition funcDef = (IASTFunctionDefinition) iastDeclaration;
 						IASTName funcName = funcDef.getDeclarator().getName();
-						if (funcName instanceof ICPPASTOperatorName && funcName.toString().contains("()")) { //$NON-NLS-1$
+						if (funcName instanceof ICPPASTOperatorName && funcName.toString().contains("()")) {
 							return funcDef;
 						}
 					}

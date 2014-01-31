@@ -8,6 +8,7 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.ui.tests.refactoring;
 
+import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -21,7 +22,8 @@ public class ExtractTypeRefactoringTest extends TddRefactoringTest {
 
 	@Override
 	protected CRefactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException {
-		MockExtractRefactoring refactoring = new MockExtractRefactoring(cproject.findElement(project.getFile(activeFileName).getFullPath()), selection, cproject);
+		ICElement elem = cproject.findElement(project.getFile(activeFileName).getFullPath());
+		MockExtractRefactoring refactoring = new MockExtractRefactoring(elem, selection, cproject);
 		refactoring.setOverwriteAnswer(overwrite);
 		return refactoring;
 	}

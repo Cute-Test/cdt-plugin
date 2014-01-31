@@ -89,7 +89,7 @@ public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbench
 
 	private IEditorPart getEditor() {
 		if (editor == null) {
-			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			if (page.isEditorAreaVisible() && page.getActiveEditor() != null && page.getActiveEditor() instanceof TextEditor) {
 				editor = page.getActiveEditor();
 			}

@@ -20,21 +20,21 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class TestframeworkPrefPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-	
-	private Messages msg = TestFrameworkPlugin.getMessages();
+
+	private final Messages msg = TestFrameworkPlugin.getMessages();
 
 	public TestframeworkPrefPage() {
 		super(GRID);
 		setPreferenceStore(TestFrameworkPlugin.getDefault().getPreferenceStore());
-		setDescription(msg.getString("CutePrefPage.CuteRefPage")); //$NON-NLS-1$
+		setDescription(msg.getString("CutePrefPage.CuteRefPage"));
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new BooleanFieldEditor(PreferenceConstants.SHOW_WHITESPACES, msg.getString("CutePrefPage.ShowWhiteSpaces"), getFieldEditorParent())); //$NON-NLS-1$
+		addField(new BooleanFieldEditor(PreferenceConstants.SHOW_WHITESPACES, msg.getString("CutePrefPage.ShowWhiteSpaces"), getFieldEditorParent()));
 
 	}
 
@@ -45,7 +45,5 @@ public class TestframeworkPrefPage extends FieldEditorPreferencePage implements 
 	public Image getImage() {
 		return TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage();
 	}
-	
-	
 
 }

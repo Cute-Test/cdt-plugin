@@ -19,8 +19,8 @@ public class TestFailureEvent implements TestEvent {
 	public String fileName;
 	public String lineNo;
 	public String reason;
-	public TestFailureEvent(IRegion reg, String testName, String fileName,
-			String lineNo, String reason) {
+
+	public TestFailureEvent(IRegion reg, String testName, String fileName, String lineNo, String reason) {
 		this.fileName = fileName;
 		this.lineNo = lineNo;
 		this.reason = reason;

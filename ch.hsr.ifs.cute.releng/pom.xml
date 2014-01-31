@@ -6,7 +6,7 @@
 	<version>4.6.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
-		<tycho-version>0.15.0</tycho-version>
+		<tycho-version>0.19.0</tycho-version>
 		<os-jvm-flags /> <!-- for the default case , mac requires special -->
 	</properties>
 	<profiles>
@@ -65,12 +65,10 @@
 	<modules>
 		<!-- CUTE Plugin -->
 		<module>../ch.hsr.ifs.cute.feature</module>
-		<module>../ch.hsr.ifs.cute.test.feature</module>
 		<module>../ch.hsr.ifs.testframework</module>
 		<module>../ch.hsr.ifs.cute.framework.extension</module>
 		<module>../ch.hsr.ifs.cute.core</module>
 		<module>../ch.hsr.ifs.cute.tdd</module>
-		<!--<module>../cute_test_plugin</module> -->
 		<module>../ch.hsr.ifs.cute.help</module>
 		<module>../ch.hsr.ifs.cute.ui</module>
 		<module>../ch.hsr.ifs.cute.ui.test</module>
@@ -78,19 +76,8 @@
 		<module>../ch.hsr.ifs.cute.tdd.tests</module>
 		<!--<module>../ch.hsr.ifs.cute.swtbottest</module> -->
 		<!-- CUTE Headers -->
-		<module>../ch.hsr.ifs.cute.headers.base.test</module>
-		<module>../ch.hsr.ifs.cute.headers.1_5.feature</module>
-		<module>../ch.hsr.ifs.cute.headers.1_5</module>
-		<module>../ch.hsr.ifs.cute.headers.1_5.test</module>
-		<module>../ch.hsr.ifs.cute.headers.1_6.feature</module>
-		<module>../ch.hsr.ifs.cute.headers.1_6</module>
-		<module>../ch.hsr.ifs.cute.headers.1_6.test</module>
-		<module>../ch.hsr.ifs.cute.headers.1_7.feature</module>
-		<module>../ch.hsr.ifs.cute.headers.1_7</module>
-		<module>../ch.hsr.ifs.cute.headers.1_7.test</module>
-		<module>../ch.hsr.ifs.cute.headers.2_0.feature</module>
-		<module>../ch.hsr.ifs.cute.headers.2_0</module>
-		<module>../ch.hsr.ifs.cute.headers.2_0.test</module>
+		<module>../ch.hsr.ifs.cute.headers</module>
+		<module>../ch.hsr.ifs.cute.headers.test</module>
 		<!-- GCOV -->
 		<module>../ch.hsr.ifs.cute.gcov.feature</module>
 		<module>../ch.hsr.ifs.cute.gcov</module>
@@ -103,8 +90,10 @@
 		<module>../ch.hsr.ifs.cute.namespactor.checkers</module>
 		<module>../ch.hsr.ifs.cute.namespactor.feature</module>
 		<module>../ch.hsr.ifs.cute.namespactor.test</module>
-		<!-- Refactoring Preview old: <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module> 
-			<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module> <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module> -->
+		<!--
+			<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module> 
+			<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
+			<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module> -->
 		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.updatesite</module>
 	</modules>

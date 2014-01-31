@@ -13,16 +13,16 @@ import java.util.List;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class Function {
-	
-	private String name;
-	private int called;
-	private int execBlocks;
-	private List<Line>lines = new ArrayList<Line>();
+
+	private final String name;
+	private final int called;
+	private final int execBlocks;
+	private final List<Line> lines = new ArrayList<Line>();
 	private File file;
-	
+
 	public Function(String name, int called, int execBlocks) {
 		super();
 		this.name = name;
@@ -53,7 +53,7 @@ public class Function {
 	public List<Line> getLines() {
 		return lines;
 	}
-	
+
 	public void addLine(Line l) {
 		lines.add(l);
 		l.setFunction(this);
@@ -63,6 +63,4 @@ public class Function {
 	public String toString() {
 		return name;
 	}
-
-	
 }

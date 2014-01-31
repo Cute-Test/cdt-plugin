@@ -22,8 +22,9 @@ public class NewCuteProjectWizard extends NewCuteProjectCategoryWizard {
 
 	@Override
 	protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
-		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.png").createImage(); //$NON-NLS-1$
-		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.projectType", ID, Messages.getString("NewCuteProjectWizard.CuteProject"), false, handler, proImg); //$NON-NLS-1$ //$NON-NLS-2$
+		Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.png").createImage();
+		String name = Messages.getString("NewCuteProjectWizard.CuteProject");
+		return new EntryDescriptor("ch.hsr.ifs.cutelauncher.projectType", ID, name, false, handler, proImg);
 	}
 
 	@Override

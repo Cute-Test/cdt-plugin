@@ -9,12 +9,6 @@
    <feature url="ch.hsr.ifs.cute.gcov.feature_4.6.0.qualifier.jar" id="ch.hsr.ifs.cute.gcov.feature" version="4.6.0.qualifier">
       <category name="OptFeatures"/>
    </feature>
-   <feature url="ch.hsr.ifs.cute.headers.1_7.feature_4.6.0.qualifier.jar" id="ch.hsr.ifs.cute.headers.1_7.feature" version="4.6.0.qualifier">
-      <category name="CUTE Headers"/>
-   </feature>
-   <feature url="ch.hsr.ifs.cute.headers.2_0.feature_4.6.0.qualifier.jar" id="ch.hsr.ifs.cute.headers.2_0.feature" version="4.6.0.qualifier">
-      <category name="CUTE Headers"/>
-   </feature>
    <feature url="ch.hsr.ifs.cute.namespactor.feature_4.6.0.qualifier.jar" id="ch.hsr.ifs.cute.namespactor.feature" version="4.6.0.qualifier">
       <category name="OptFeatures"/>
    </feature>
@@ -22,6 +16,5 @@
       <category name="CUTE Plugin"/>
    </feature>
    <category-def name="CUTE Plugin" label="CUTE Plugin"/>
-   <category-def name="CUTE Headers" label="CUTE Headers"/>
    <category-def name="OptFeatures" label="CUTE Optional Features"/>
 </site>

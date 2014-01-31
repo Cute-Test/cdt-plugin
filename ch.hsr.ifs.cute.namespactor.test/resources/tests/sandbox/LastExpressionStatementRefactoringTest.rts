@@ -17,5 +17,6 @@ namespace A {
 
 int main() {
 	using namespace A;
-	f1();f2();
+	f1();
+	f2();
 }

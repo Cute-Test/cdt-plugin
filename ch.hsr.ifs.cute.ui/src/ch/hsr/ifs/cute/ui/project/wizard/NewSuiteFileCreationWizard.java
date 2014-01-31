@@ -33,12 +33,9 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 		super();
 		setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
 		setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
-		setWindowTitle("New CUTE Suite File"); //$NON-NLS-1$
+		setWindowTitle("New CUTE Suite File");
 	}
 
-	/*
-	 * @see Wizard#createPages
-	 */
 	@Override
 	public void addPages() {
 		super.addPages();
@@ -47,9 +44,6 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 		page.init(getSelection());
 	}
 
-	/**
-	 * @since 4.0
-	 */
 	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
 		selection = currentSelection;
 	}
@@ -58,9 +52,6 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 		return selection;
 	}
 
-	/**
-	 * @since 4.0
-	 */
 	protected ISchedulingRule getSchedulingRule() {
 		return ResourcesPlugin.getWorkspace().getRoot(); // look all by default
 	}
@@ -79,18 +70,6 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 		} catch (InterruptedException e) {
 			return false;
 		}
-
-		//            //TODO need prefs option for opening editor
-		//            boolean openInEditor = true;
-		//            
-		//			ITranslationUnit headerTU = fPage.getCreatedFileTU();
-		//			if (headerTU != null) {
-		//				IResource resource= headerTU.getResource();
-		//				selectAndReveal(resource);
-		//				if (openInEditor) {
-		//					openResource((IFile) resource);
-		//				}
-		//			}
 		return true;
 	}
 }

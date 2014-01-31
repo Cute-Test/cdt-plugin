@@ -8,13 +8,14 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.debug.core.ILaunch;
 
 public class TestSession implements ITestComposite {
-	private final Vector<TestElement> rootElements = new Vector<TestElement>();
-	private final Vector<ITestCompositeListener> listeners = new Vector<ITestCompositeListener>();;
+	private final List<TestElement> rootElements = new ArrayList<TestElement>();
+	private final List<ITestCompositeListener> listeners = new ArrayList<ITestCompositeListener>();;
 
 	private final ILaunch launch;
 
@@ -23,7 +24,7 @@ public class TestSession implements ITestComposite {
 		this.launch = launch;
 	}
 
-	public Vector<TestElement> getRootElements() {
+	public List<TestElement> getRootElements() {
 		return rootElements;
 	}
 
@@ -39,7 +40,7 @@ public class TestSession implements ITestComposite {
 		}
 	}
 
-	public Vector<TestElement> getElements() {
+	public List<TestElement> getElements() {
 		return rootElements;
 	}
 
@@ -135,6 +136,7 @@ public class TestSession implements ITestComposite {
 	}
 
 	public String getRerunName() {
+		// errr? what? primitive obsession? (lfelber)
 		return ""; // empty means all tests
 	}
 

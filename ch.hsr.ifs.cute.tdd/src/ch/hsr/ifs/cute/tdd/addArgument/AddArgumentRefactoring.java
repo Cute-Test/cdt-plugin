@@ -34,14 +34,14 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.tdd.Activator;
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TDDPlugin;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-public class AddArgumentRefactoring extends CRefactoring3 {
+public class AddArgumentRefactoring extends TddCRefactoring {
 
-	private static final String PLACEHOLDER = "_"; //$NON-NLS-1$
+	private static final String PLACEHOLDER = "_";
 	private ITextSelection selection;
 	private final int candidatenr;
 
@@ -63,7 +63,7 @@ public class AddArgumentRefactoring extends CRefactoring3 {
 		IASTFunctionCallExpression call = findFunctionCall(unit, selection);
 		if (call == null) {
 			// Needed if the user types fast and their marker's position is outdated
-			selection = Activator.getDefault().getEditorSelection();
+			selection = TDDPlugin.getDefault().getEditorSelection();
 			call = findFunctionCall(unit, selection);
 			if (call == null) {
 				throw new OperationCanceledException(Messages.AddArgumentRefactoring_1);

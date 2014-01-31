@@ -12,12 +12,11 @@ import org.eclipse.ui.IStartup;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class GcovStartup implements IStartup {
 
 	public void earlyStartup() {
-		//Do nothing
+		// Do nothing
 	}
-
 }

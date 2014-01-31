@@ -10,13 +10,10 @@
  *******************************************************************************/
 package org.eclipse.cdt.codan;
 
-import java.io.IOException;
-
 import org.eclipse.cdt.codan.core.PreferenceConstants;
 import org.eclipse.cdt.codan.core.test.TestUtils;
 import org.eclipse.cdt.codan.internal.ui.CodanUIActivator;
 import org.eclipse.cdt.codan.ui.AbstractCodanCMarkerResolution;
-import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -26,13 +23,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-
-/**
- * TODO: add description
- */
 @SuppressWarnings("restriction")
 public abstract class QuickFixTestCase extends org.eclipse.cdt.codan.CheckerTestCase {
 	AbstractCodanCMarkerResolution quickFix;
@@ -43,14 +35,6 @@ public abstract class QuickFixTestCase extends org.eclipse.cdt.codan.CheckerTest
 		return true;
 	}
 
-	/**
-	 * Dispatch ui events for at least msec - milliseconds
-	 *
-	 * @param msec -
-	 *        milliseconds delay
-	 * @param display -
-	 *        display that dispatches events
-	 */
 	public void dispatch(int msec) {
 		long cur = System.currentTimeMillis();
 		long pass = 0;
@@ -63,12 +47,11 @@ public abstract class QuickFixTestCase extends org.eclipse.cdt.codan.CheckerTest
 
 	public static void closeWelcome() {
 		try {
-			IWorkbenchWindow window = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow();
+			IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			IWorkbenchPage activePage = window.getActivePage();
 			IWorkbenchPart activePart = activePage.getActivePart();
 			if (activePart.getTitle().equals("Welcome")) {
-				//activePage.close();
+				// activePage.close();
 				activePart.dispose();
 			}
 		} catch (Exception e) {
@@ -82,16 +65,14 @@ public abstract class QuickFixTestCase extends org.eclipse.cdt.codan.CheckerTest
 		quickFix = createQuickFix();
 		display = PlatformUI.getWorkbench().getDisplay();
 		closeWelcome();
-		IPreferenceStore store = CodanUIActivator.getDefault()
-				.getPreferenceStore(cproject.getProject());
+		IPreferenceStore store = CodanUIActivator.getDefault().getPreferenceStore(cproject.getProject());
 		// turn off editor reconsiler
 		store.setValue(PreferenceConstants.P_RUN_IN_EDITOR, false);
 	}
 
 	@Override
 	public void tearDown() throws CoreException {
-		IWorkbenchPage[] pages = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getPages();
+		IWorkbenchPage[] pages = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPages();
 		for (IWorkbenchPage page : pages) {
 			page.closeAllEditors(false);
 			dispatch(200);
@@ -99,27 +80,12 @@ public abstract class QuickFixTestCase extends org.eclipse.cdt.codan.CheckerTest
 		super.tearDown();
 	}
 
-	/**
-	 * @return
-	 */
 	protected abstract AbstractCodanCMarkerResolution createQuickFix();
 
-	/**
-	 * @param code
-	 * @param string
-	 * @return
-	 */
 	protected ISelection textSelection(String code, String string) {
 		return new TextSelection(code.indexOf(string), string.length());
 	}
 
-	/**
-	 * @return
-	 * @throws CModelException
-	 * @throws PartInitException
-	 * @throws IOException
-	 * @throws CoreException
-	 */
 	public String runQuickFixOneFile() {
 		// need to load before running codan because otherwise marker is lost when doing quick fix 8[]
 		try {
@@ -135,9 +101,6 @@ public abstract class QuickFixTestCase extends org.eclipse.cdt.codan.CheckerTest
 		}
 	}
 
-	/**
-	 *
-	 */
 	public void doRunQuickFix() {
 		for (int i = 0; i < markers.length; i++) {
 			IMarker marker = markers[i];
@@ -147,12 +110,7 @@ public abstract class QuickFixTestCase extends org.eclipse.cdt.codan.CheckerTest
 		PlatformUI.getWorkbench().saveAllEditors(false);
 	}
 
-	/**
-	 * @param result
-	 * @param expected
-	 */
 	public void assertContainedIn(String expected, String result) {
-		assertTrue(
-				"Text <" + expected + "> not found in <" + result + ">", result.contains(expected)); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		assertTrue("Text <" + expected + "> not found in <" + result + ">", result.contains(expected));//$NON-NLS-2$
 	}
 }

@@ -8,11 +8,12 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class TestElement {
 
-	protected Vector<ITestElementListener> listeners = new Vector<ITestElementListener>();
+	protected List<ITestElementListener> listeners = new ArrayList<ITestElementListener>();
 	private ITestComposite parent;
 
 	public abstract String getName();

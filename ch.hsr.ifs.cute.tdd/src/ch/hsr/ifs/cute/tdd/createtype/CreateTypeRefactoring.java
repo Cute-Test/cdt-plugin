@@ -33,11 +33,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 
-public class CreateTypeRefactoring extends CRefactoring3 {
+public class CreateTypeRefactoring extends TddCRefactoring {
 
 	private final String className;
 	private boolean isTemplateSituation;
@@ -56,10 +56,10 @@ public class CreateTypeRefactoring extends CRefactoring3 {
 		ArrayList<ICPPASTSimpleTypeTemplateParameter> result = new ArrayList<ICPPASTSimpleTypeTemplateParameter>();
 		String args = ca.getTemplateArgs();
 		if (!(args.isEmpty())) {
-			int templateCount = args.split(",").length; //$NON-NLS-1$
+			int templateCount = args.split(",").length;
 			for (int i = 0; i < templateCount; i++, startChar++) {
 				isTemplateSituation = true;
-				String newName = startChar + ""; //$NON-NLS-1$
+				String newName = startChar + "";
 				CPPASTSimpleTypeTemplateParameter templparam = new CPPASTSimpleTypeTemplateParameter();
 				templparam.setDefaultType(null);
 				templparam.setName(new CPPASTName(newName.toCharArray()));

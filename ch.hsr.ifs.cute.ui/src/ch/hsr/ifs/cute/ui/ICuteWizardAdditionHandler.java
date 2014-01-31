@@ -15,12 +15,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
- *
+ * 
  */
 public interface ICuteWizardAdditionHandler {
-	
+
 	public void configureProject(IProject project, IProgressMonitor pm) throws CoreException;
-	
+
 	public void configureLibProject(IProject project) throws CoreException;
 
 }

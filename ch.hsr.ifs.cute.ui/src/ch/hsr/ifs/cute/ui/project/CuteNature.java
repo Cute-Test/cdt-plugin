@@ -18,16 +18,16 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class CuteNature implements IProjectNature {
-	
-	public static final String CUTE_NATURE_ID = UiPlugin.PLUGIN_ID + ".cutenature"; //$NON-NLS-1$
-	
+
+	public static final String CUTE_NATURE_ID = CuteUIPlugin.PLUGIN_ID + ".cutenature";
+
 	private IProject project;
 
 	public static void addCuteNature(IProject project, IProgressMonitor mon) throws CoreException {
@@ -38,18 +38,6 @@ public class CuteNature implements IProjectNature {
 		removeNature(project, CUTE_NATURE_ID, mon);
 	}
 
-	/**
-	 * Utility method for adding a nature to a project.
-	 * 
-	 * @param proj
-	 *            the project to add the nature
-	 * @param natureId
-	 *            the id of the nature to assign to the project
-	 * @param monitor
-	 *            a progress monitor to indicate the duration of the operation,
-	 *            or <code>null</code> if progress reporting is not required.
-	 *  
-	 */
 	public static void addNature(IProject project, String natureId, IProgressMonitor monitor) throws CoreException {
 		IProjectDescription description = project.getDescription();
 		String[] prevNatures = description.getNatureIds();
@@ -64,17 +52,6 @@ public class CuteNature implements IProjectNature {
 		project.setDescription(description, monitor);
 	}
 
-	/**
-	 * Utility method for removing a project nature from a project.
-	 * 
-	 * @param project
-	 *            the project to remove the nature from
-	 * @param natureId
-	 *            the nature id to remove
-	 * @param monitor
-	 *            a progress monitor to indicate the duration of the operation,
-	 *            or <code>null</code> if progress reporting is not required.
-	 */
 	public static void removeNature(IProject project, String natureId, IProgressMonitor monitor) throws CoreException {
 		IProjectDescription description = project.getDescription();
 		String[] prevNatures = description.getNatureIds();
@@ -84,28 +61,16 @@ public class CuteNature implements IProjectNature {
 		project.setDescription(description, monitor);
 	}
 
-	/**
-	 * @see IProjectNature#configure
-	 */
 	public void configure() throws CoreException {
 	}
 
-	/**
-	 * @see IProjectNature#deconfigure
-	 */
 	public void deconfigure() throws CoreException {
 	}
 
-	/**
-	 * @see IProjectNature#getProject
-	 */
 	public IProject getProject() {
 		return project;
 	}
 
-	/**
-	 * @see IProjectNature#setProject
-	 */
 	public void setProject(IProject project) {
 		this.project = project;
 	}

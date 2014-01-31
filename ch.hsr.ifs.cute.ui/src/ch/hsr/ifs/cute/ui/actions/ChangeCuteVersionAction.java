@@ -30,21 +30,12 @@ public class ChangeCuteVersionAction implements IWorkbenchWindowActionDelegate {
 
 	IProject project;
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#dispose()
-	 */
 	public void dispose() {
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#init(org.eclipse.ui.IWorkbenchWindow)
-	 */
 	public void init(IWorkbenchWindow window) {
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-	 */
 	public void run(IAction action) {
 		Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 		ChangeCuteVersionWizard wizard = new ChangeCuteVersionWizard(project);
@@ -54,9 +45,6 @@ public class ChangeCuteVersionAction implements IWorkbenchWindowActionDelegate {
 		dialog.open();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-	 */
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) selection;

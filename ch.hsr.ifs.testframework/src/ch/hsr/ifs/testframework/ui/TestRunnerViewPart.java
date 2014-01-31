@@ -50,34 +50,23 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		horizontal, vertical
 	};
 
-	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"; //$NON-NLS-1$
+	public static final String ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart";
 
 	private Composite top = null;
-
 	private Composite TopPanel = null;
-
 	protected boolean autoScroll = true;
-
 	private CounterPanel counterPanel = null;
-
 	private CuteProgressBar cuteProgressBar = null;
-
 	private TestViewer testViewer = null;
-
 	private Composite parent;
-
 	private Orientation currentOrientation = Orientation.horizontal;
-
 	private ScrollLockAction scrollLockAction;
 	private FailuresOnlyFilterAction failureOnlyAction;
 	private Action showNextFailureAction;
 	private Action showPreviousFailureAction;
 	private IAction rerunLastTestAction;
-
 	private TestSession session;
-
 	private StopAction stopAction;
-
 	private RerunSelectedAction rerunSelectedAction;
 
 	static Messages msg = TestFrameworkPlugin.getMessages();
@@ -101,7 +90,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		top = new Composite(parent, SWT.NONE);
 		top.setLayout(gridLayout);
 		top.setLayoutData(gdata);
-		setPartName(msg.getString("TestRunnerViewPart.Name")); //$NON-NLS-1$
+		setPartName(msg.getString("TestRunnerViewPart.Name"));
 		createTopPanel();
 		createTestViewer();
 		configureToolbar();
@@ -155,10 +144,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		toolBar.add(stopAction);
 	}
 
-	/**
-	 * This method initializes TopPSanel
-	 * 
-	 */
 	private void createTopPanel() {
 		GridLayout gridLayout1 = new GridLayout();
 		gridLayout1.numColumns = 2;
@@ -173,10 +158,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		createCuteProgressBar();
 	}
 
-	/**
-	 * This method initializes counterPanel
-	 * 
-	 */
 	private void createCounterPanel() {
 		GridData gridData1 = new org.eclipse.swt.layout.GridData();
 		gridData1.grabExcessHorizontalSpace = true;
@@ -185,10 +166,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		counterPanel.setLayoutData(gridData1);
 	}
 
-	/**
-	 * This method initializes cuteProgressBar
-	 * 
-	 */
 	private void createCuteProgressBar() {
 		GridData gridData2 = new GridData();
 		gridData2.grabExcessHorizontalSpace = true;
@@ -198,10 +175,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		cuteProgressBar.setLayoutData(gridData2);
 	}
 
-	/**
-	 * This method initializes testViewer
-	 * 
-	 */
 	private void createTestViewer() {
 		GridData gridData3 = new org.eclipse.swt.layout.GridData();
 		gridData3.grabExcessHorizontalSpace = true;
@@ -265,15 +238,15 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 					testViewer.selectFirstFailure();
 				}
 			}
-			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestRunnerViewPart.OK"), null); //$NON-NLS-1$
+			return new Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg.getString("TestRunnerViewPart.OK"), null);
 		}
 	}
 
 	private class FailuresOnlyFilterAction extends Action {
 		public FailuresOnlyFilterAction() {
-			super(msg.getString("TestRunnerViewPart.ShowFailuresOnly"), AS_CHECK_BOX); //$NON-NLS-1$
-			setToolTipText(msg.getString("TestRunnerViewPart.ShowFailuresOnly")); //$NON-NLS-1$
-			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/failures.gif")); //$NON-NLS-1$
+			super(msg.getString("TestRunnerViewPart.ShowFailuresOnly"), AS_CHECK_BOX);
+			setToolTipText(msg.getString("TestRunnerViewPart.ShowFailuresOnly"));
+			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/failures.gif"));
 		}
 
 		@Override
@@ -284,17 +257,16 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 
 	private class StopAction extends Action {
 		public StopAction() {
-			setText(msg.getString("TestRunnerViewPart.StopCuteTestRun")); //$NON-NLS-1$
-			setToolTipText(msg.getString("TestRunnerViewPart.StopCuteTestRun")); //$NON-NLS-1$
-			setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/stop.gif")); //$NON-NLS-1$
-			setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
-			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/stop.gif")); //$NON-NLS-1$
+			setText(msg.getString("TestRunnerViewPart.StopCuteTestRun"));
+			setToolTipText(msg.getString("TestRunnerViewPart.StopCuteTestRun"));
+			setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/stop.gif"));
+			setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/stop.gif"));
+			setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/stop.gif"));
 		}
 
 		@Override
 		public void run() {
 			stopTest();
-			//			setEnabled(false);
 		}
 	}
 
@@ -308,7 +280,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 				for (IProcess process : session.getLaunch().getProcesses()) {
 					process.terminate();
 				}
-				//				new SessionFinishedUIJob("Process Stopped").schedule();
 			} catch (DebugException de) {
 
 			}
@@ -329,7 +300,6 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 			try {
 				ILaunchConfigurationWorkingCopy copy = configuration.copy("");
 				StringBuilder args = new StringBuilder();
-				System.err.println(args.toString());
 				for (String rerunname : rerunnames) {
 					args.append(' ').append('"').append(rerunname).append('"');
 				}
@@ -337,7 +307,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 				configuration = copy;
 
 			} catch (CoreException e) {
-				e.printStackTrace();
+				TestFrameworkPlugin.log(e);
 			}
 			DebugUITools.launch(configuration, session.getLaunch().getLaunchMode());
 		}
@@ -353,7 +323,7 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 	}
 
 	public void sessionFinished(TestSession session) {
-		SessionFinishedUIJob sessionFinishedUIJob = new SessionFinishedUIJob(msg.getString("TestRunnerViewPart.SessionOver")); //$NON-NLS-1$
+		SessionFinishedUIJob sessionFinishedUIJob = new SessionFinishedUIJob(msg.getString("TestRunnerViewPart.SessionOver"));
 		sessionFinishedUIJob.schedule();
 	}
 
@@ -380,4 +350,4 @@ public class TestRunnerViewPart extends ViewPart implements ISessionListener {
 		return rerunSelectedAction;
 	}
 
-} //  @jve:decl-index=0:visual-constraint="148,36,771,201"
+}

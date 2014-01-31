@@ -26,11 +26,11 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-public class ChangeVisibilityRefactoring extends CRefactoring3 {
+public class ChangeVisibilityRefactoring extends TddCRefactoring {
 
 	private final String nameToSearch;
 	private final TextSelection selection;
@@ -76,7 +76,7 @@ public class ChangeVisibilityRefactoring extends CRefactoring3 {
 		public int visit(IASTName name) {
 			IBinding binding = name.resolveBinding();
 			if (binding instanceof ICPPMember) {
-				String bindingname = binding.getName().replaceAll("\\(\\w*\\)", ""); //$NON-NLS-1$//$NON-NLS-2$
+				String bindingname = binding.getName().replaceAll("\\(\\w*\\)", "");
 				if (bindingname.equals(nameToSearch)) {
 					ICPPASTCompositeTypeSpecifier typeSpec = TddHelper.getAncestorOfType(name, ICPPASTCompositeTypeSpecifier.class);
 					if (typeSpec != null) {

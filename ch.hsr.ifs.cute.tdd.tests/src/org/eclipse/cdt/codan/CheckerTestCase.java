@@ -14,14 +14,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.cdt.codan.core.CodanRuntime;
-import org.eclipse.cdt.codan.core.model.CheckerLaunchMode;
 import org.eclipse.cdt.codan.core.model.IProblem;
-import org.eclipse.cdt.codan.core.model.IProblemProfile;
 import org.eclipse.cdt.codan.core.model.IProblemReporter;
 import org.eclipse.cdt.codan.core.param.IProblemPreference;
 import org.eclipse.cdt.codan.core.param.MapProblemPreference;
-import org.eclipse.cdt.codan.core.param.RootProblemPreference;
-import org.eclipse.cdt.codan.internal.core.model.CodanProblem;
 import org.eclipse.cdt.codan.internal.core.model.CodanProblemMarker;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -29,7 +25,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * @author Alena
- *
+ * 
  */
 @SuppressWarnings("restriction")
 public class CheckerTestCase extends CodanTestCase {
@@ -54,14 +50,9 @@ public class CheckerTestCase extends CodanTestCase {
 		return checkErrorLine(file, expectedLine, null);
 	}
 
-	/**
-	 * @param expectedLine
-	 *        - line
-	 * @return
-	 */
 	public IMarker checkErrorLine(File file, int expectedLine, String problemId) {
 		assertTrue(markers != null);
-		assertTrue("No problems found but should", markers.length > 0); //$NON-NLS-1$
+		assertTrue("No problems found but should", markers.length > 0);
 		boolean found = false;
 		Integer line = null;
 		String mfile = null;
@@ -70,9 +61,7 @@ public class CheckerTestCase extends CodanTestCase {
 			m = markers[j];
 			line = getLine(m);
 			mfile = m.getResource().getName();
-			if (line.equals(expectedLine)
-					&& (problemId == null || problemId
-							.equals(CodanProblemMarker.getProblemId(m)))) {
+			if (line.equals(expectedLine) && (problemId == null || problemId.equals(CodanProblemMarker.getProblemId(m)))) {
 				found = true;
 				if (file != null && !file.getName().equals(mfile))
 					found = false;
@@ -88,11 +77,6 @@ public class CheckerTestCase extends CodanTestCase {
 		return m;
 	}
 
-	/**
-	 * @param line
-	 * @param m
-	 * @return
-	 */
 	public Integer getLine(IMarker m) {
 		Integer line = null;
 		try {
@@ -114,15 +98,10 @@ public class CheckerTestCase extends CodanTestCase {
 			// all good
 		} else {
 			IMarker m = markers[0];
-			fail("Found " + markers.length + " errors but should not. First "
-					+ CodanProblemMarker.getProblemId(m) + " at line "
-					+ getLine(m));
+			fail("Found " + markers.length + " errors but should not. First " + CodanProblemMarker.getProblemId(m) + " at line " + getLine(m));
 		}
 	}
 
-	/**
-	 *
-	 */
 	public void runOnProject() {
 		try {
 			indexFiles();
@@ -142,75 +121,35 @@ public class CheckerTestCase extends CodanTestCase {
 		runCodan();
 	}
 
-	/**
-	 *
-	 */
 	protected void runCodan() {
-		CodanRuntime
-				.getInstance()
-				.getBuilder()
-				.processResource(cproject.getProject(),
-						new NullProgressMonitor());
+		CodanRuntime.getInstance().getBuilder().processResource(cproject.getProject(), new NullProgressMonitor());
 		try {
-			markers = cproject.getProject()
-					.findMarkers(
-							IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE,
-							true, 1);
+			markers = cproject.getProject().findMarkers(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, true, 1);
 		} catch (CoreException e) {
 			fail(e.getMessage());
 		}
 	}
 
-	/**
-	 * @param problemId
-	 * @param paramId
-	 * @return
-	 */
 	protected IProblemPreference getPreference(String problemId, String paramId) {
-		IProblem problem = CodanRuntime.getInstance().getCheckersRegistry()
-				.getResourceProfile(cproject.getResource())
-				.findProblem(problemId);
-		IProblemPreference pref = ((MapProblemPreference) problem
-				.getPreference()).getChildDescriptor(paramId);
+		IProblem problem = CodanRuntime.getInstance().getCheckersRegistry().getResourceProfile(cproject.getResource()).findProblem(problemId);
+		IProblemPreference pref = ((MapProblemPreference) problem.getPreference()).getChildDescriptor(paramId);
 		return pref;
 	}
 
-	protected IProblemPreference setPreferenceValue(String problemId,
-			String paramId, Object value) {
+	protected IProblemPreference setPreferenceValue(String problemId, String paramId, Object value) {
 		IProblemPreference param = getPreference(problemId, paramId);
 		param.setValue(value);
 		return param;
 	}
 
-	/**
-	 * @param string
-	 * @param m
-	 */
 	public void assertMessageMatch(String pattern, IMarker m) {
 		try {
 			String attribute = (String) m.getAttribute(IMarker.MESSAGE);
 			if (attribute.matches(pattern)) {
-				fail("Expected " + attribute + " to match with /" + pattern //$NON-NLS-1$ //$NON-NLS-2$
-						+ "/"); //$NON-NLS-1$
+				fail("Expected " + attribute + " to match with /" + pattern + "/");
 			}
 		} catch (CoreException e) {
 			fail(e.getMessage());
 		}
-	}
-
-	public void enableAllProblems() {
-		IProblemProfile profile = CodanRuntime.getInstance().getCheckersRegistry().getWorkspaceProfile();
-		IProblem[] problems = profile.getProblems();
-		for (int i = 0; i < problems.length; i++) {
-			IProblem p = problems[i];
-			IProblemPreference preference = p.getPreference();
-			if (preference instanceof RootProblemPreference) {
-				RootProblemPreference rootProblemPreference = (RootProblemPreference) preference;
-				rootProblemPreference.getLaunchModePreference().enableInLaunchModes(CheckerLaunchMode.RUN_ON_FULL_BUILD);
-			}
-			((CodanProblem) p).setEnabled(true);
-		}
-		CodanRuntime.getInstance().getCheckersRegistry().updateProfile(cproject.getProject(), profile);
-		return;
 	}
 }

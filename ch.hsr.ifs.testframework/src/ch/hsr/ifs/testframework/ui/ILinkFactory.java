@@ -17,9 +17,6 @@ import org.eclipse.ui.console.IHyperlink;
  */
 public interface ILinkFactory {
 
-	/**
-	 * @since 3.0
-	 */
 	public abstract IHyperlink createLink(IFile file, int lineNumber, String editorId, int fileLength, int fileOffset);
 
 }

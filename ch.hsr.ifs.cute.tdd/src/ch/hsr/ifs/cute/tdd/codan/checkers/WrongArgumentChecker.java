@@ -32,10 +32,10 @@ import ch.hsr.ifs.cute.tdd.addArgument.AddArgumentRefactoring;
 
 public class WrongArgumentChecker extends AbstractTDDChecker {
 
-	private static final String COMMA_SPACE = ", "; //$NON-NLS-1$
-	public static final String ERR_ID_InvalidArguments_HSR = "ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR"; //$NON-NLS-1$
-	public static final String ERR_ID_InvalidArguments_FREE_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"; //$NON-NLS-1$
-	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	private static final String COMMA_SPACE = ", ";
+	public static final String ERR_ID_InvalidArguments_HSR = "ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR";
+	public static final String ERR_ID_InvalidArguments_FREE_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR";
+	private static final String EMPTY_STRING = "";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -71,14 +71,14 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 						return;
 					}
 					if (argNr > 0) {
-						contextString += ":candidate "; //$NON-NLS-1$
+						contextString += ":candidate ";
 					}
 					contextString += getContextString(name, newArgs, candidate);
 				}
 			}
 			String missingName = new String(name.getLastName().getSimpleID());
 			String message = missingName;
-			CodanArguments ca = new CodanArguments(missingName, message, ":candidate"); //$NON-NLS-1$
+			CodanArguments ca = new CodanArguments(missingName, message, ":candidate");
 			ca.setCandidate(argNr);
 			ca.setCandidates(contextString);
 			assert (ca.toArray().length >= AddArgumentQFGenerator.REQUIRED_MARKER_ARGUMENTS);

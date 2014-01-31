@@ -13,40 +13,29 @@ import org.osgi.framework.BundleContext;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class TestframeworkTestPlugin extends Plugin {
 
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.core.test"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.core.test";
 	private static TestframeworkTestPlugin plugin;
 
 	public TestframeworkTestPlugin() {
 		plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
+	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		plugin = this;
 		super.start(bundleContext);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
+	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 		super.stop(bundleContext);
 		TestframeworkTestPlugin.plugin = null;
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static TestframeworkTestPlugin getDefault() {
 		return plugin;
 	}

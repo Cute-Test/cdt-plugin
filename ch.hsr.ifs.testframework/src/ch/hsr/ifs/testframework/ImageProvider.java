@@ -8,16 +8,16 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework;
 
-
 import org.eclipse.jface.resource.ImageDescriptor;
 
 /**
  * @author egraf
- *
+ * 
  */
 public abstract class ImageProvider {
-	
+
 	public static final int APP_LOGO = 0;
+
 	abstract public ImageDescriptor getImage(int key);
 
 }

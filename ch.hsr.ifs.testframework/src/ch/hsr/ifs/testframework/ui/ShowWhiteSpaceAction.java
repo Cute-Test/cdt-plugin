@@ -16,26 +16,25 @@ import ch.hsr.ifs.testframework.preference.PreferenceConstants;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class ShowWhiteSpaceAction extends Action {
 
-	private CuteTextMergeViewer viewer;
+	private final CuteTextMergeViewer viewer;
 	private static Messages msg = TestFrameworkPlugin.getMessages();
-	
+
 	public ShowWhiteSpaceAction(CuteTextMergeViewer compareViewer) {
-		super(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"), AS_CHECK_BOX);  //$NON-NLS-1$
+		super(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"), AS_CHECK_BOX);
 		viewer = compareViewer;
-		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/show_whitespace_chars.gif")); //$NON-NLS-1$
-		setToolTipText(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar")); //$NON-NLS-1$
+		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/show_whitespace_chars.gif"));
+		setToolTipText(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"));
 		setChecked(TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES));
 	}
 
 	@Override
 	public void run() {
-		boolean show = ! TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES);
+		boolean show = !TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES);
 		TestFrameworkPlugin.getDefault().getPreferenceStore().setValue(PreferenceConstants.SHOW_WHITESPACES, show);
 		viewer.showWhitespaces(show);
 	}
-
 }

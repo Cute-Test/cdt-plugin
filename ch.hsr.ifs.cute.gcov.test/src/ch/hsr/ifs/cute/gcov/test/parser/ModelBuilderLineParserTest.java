@@ -33,33 +33,24 @@ import ch.hsr.ifs.cute.gcov.test.mock.MockFile;
  */
 public class ModelBuilderLineParserTest extends TestCase {
 
-	private static final String TEST_FILE_NAME = "testFile.cpp"; //$NON-NLS-1$
-	private static final String PROJECT_NAME = "project"; //$NON-NLS-1$
+	private static final String TEST_FILE_NAME = "testFile.cpp";
+	private static final String PROJECT_NAME = "project";
 	private ModelBuilderLineParser parser;
 	private MockFile testFile;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Override
 	protected void setUp() throws Exception {
 		parser = new ModelBuilderLineParser();
-		testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME)); //$NON-NLS-1$
+		testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME));
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Override
 	protected void tearDown() throws Exception {
 		GcovPlugin.getDefault().getcModel().clearModel();
 	}
 
-	/**
-	 * Test method for {@link ch.hsr.ifs.cute.gcov.parser.ModelBuilderLineParser#parse(org.eclipse.core.resources.IFile, java.io.Reader)}.
-	 */
 	public void testParseFile() {
-		Reader reader = createReader(""); //$NON-NLS-1$
+		Reader reader = createReader("");
 		CoverageModel model = runParser(reader);
 		File modelFile = model.getModelForFile(testFile);
 		assertNotNull(modelFile);
@@ -67,19 +58,19 @@ public class ModelBuilderLineParserTest extends TestCase {
 	}
 
 	public void testUncoveredEmptyFunction() {
-		Reader reader = createReader("function _Z11emptyMethodv called 0 returned 0% blocks executed 0%\n    #####:   12:/*EOF*/\n    #####:   13:/*EOF*/\n        -:   14:/*EOF*/"); //$NON-NLS-1$
+		Reader reader = createReader("function _Z11emptyMethodv called 0 returned 0% blocks executed 0%\n    #####:   12:/*EOF*/\n    #####:   13:/*EOF*/\n        -:   14:/*EOF*/");
 		String markerType = GcovPlugin.UNCOVER_MARKER_TYPE;
 		emptyMethod(reader, markerType, CoverageStatus.Uncovered, 12, 2);
 	}
 
 	public void testCoveredEmptyFunction() {
-		Reader reader = createReader("function _Z11emptyMethodv called 0 returned 100% blocks executed 100%\n    1:   12:/*EOF*/\n    1:   13:/*EOF*/\n        -:   14:/*EOF*/"); //$NON-NLS-1$
+		Reader reader = createReader("function _Z11emptyMethodv called 0 returned 100% blocks executed 100%\n    1:   12:/*EOF*/\n    1:   13:/*EOF*/\n        -:   14:/*EOF*/");
 		String markerType = GcovPlugin.COVER_MARKER_TYPE;
 		emptyMethod(reader, markerType, CoverageStatus.Covered, 12, 2);
 	}
 
 	public void testPartiallyCoveredFunction() {
-		Reader reader = createReader("function _ZN5Hallo6foobarEi called 3 returned 100% blocks executed 75%\n        3:   20:/*EOF*/\nbranch  0 taken 0% (fallthrough)\nbranch  1 taken 100%"); //$NON-NLS-1$
+		Reader reader = createReader("function _ZN5Hallo6foobarEi called 3 returned 100% blocks executed 75%\n        3:   20:/*EOF*/\nbranch  0 taken 0% (fallthrough)\nbranch  1 taken 100%");
 		String markerType = GcovPlugin.PARTIALLY_MARKER_TYPE;
 		emptyMethod(reader, markerType, CoverageStatus.PartiallyCovered, 20, 1);
 	}
@@ -102,7 +93,7 @@ public class ModelBuilderLineParserTest extends TestCase {
 				assertEquals(lineNr, marker.getAttribute(IMarker.LINE_NUMBER, -1));
 				++lineNr;
 			} catch (CoreException e) {
-				fail("Exception: " + e.getLocalizedMessage()); //$NON-NLS-1$
+				fail("Exception: " + e.getLocalizedMessage());
 			}
 		}
 	}
@@ -111,7 +102,7 @@ public class ModelBuilderLineParserTest extends TestCase {
 		try {
 			parser.parse(testFile, reader);
 		} catch (CoreException e) {
-			fail("Exception: " + e.getLocalizedMessage()); //$NON-NLS-1$
+			fail("Exception: " + e.getLocalizedMessage());
 		}
 		CoverageModel model = GcovPlugin.getDefault().getcModel();
 		return model;

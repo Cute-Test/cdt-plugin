@@ -28,11 +28,11 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 
-public class CreateLocalVariableRefactoring extends CRefactoring3 {
+public class CreateLocalVariableRefactoring extends TddCRefactoring {
 
 	private final String missingName;
 

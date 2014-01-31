@@ -13,6 +13,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.ICuteWizardAdditionHandler;
@@ -20,27 +21,26 @@ import ch.hsr.ifs.cute.ui.project.wizard.Messages;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class GcovWizardAddition implements ICuteWizardAddition {
-	
+
 	boolean enableGcov = false;
 
-	public void createComposite(Composite comp) {
-		final Button check = new Button(comp, SWT.CHECK);
-		check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov")); //$NON-NLS-1$
+	public Control createComposite(Composite parent) {
+		final Button check = new Button(parent, SWT.CHECK);
+		check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov"));
 		check.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				enableGcov = check.getSelection();
 			}
-
 		});
+		return check;
 	}
 
 	public ICuteWizardAdditionHandler getHandler() {
 		return new GcovAdditionHandler(this);
 	}
-
 }

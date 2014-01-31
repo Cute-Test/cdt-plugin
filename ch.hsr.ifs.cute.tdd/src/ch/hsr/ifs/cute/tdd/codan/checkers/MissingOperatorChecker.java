@@ -35,7 +35,7 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 
 public class MissingOperatorChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_OperatorResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"; //$NON-NLS-1$
+	public static final String ERR_ID_OperatorResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -95,8 +95,8 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private void reportMissingOperator(String typename, IASTExpression expr, OverloadableOperator operator) {
-			String operatorname = new String(operator.toCharArray()).replaceAll("operator ", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			CodanArguments ca = new CodanArguments(operatorname, typename, ":operator"); //$NON-NLS-1$
+			String operatorname = new String(operator.toCharArray()).replaceAll("operator ", "");
+			CodanArguments ca = new CodanArguments(operatorname, typename, ":operator");
 			reportProblem(ERR_ID_OperatorResolutionProblem_HSR, expr, ca.toArray());
 		}
 

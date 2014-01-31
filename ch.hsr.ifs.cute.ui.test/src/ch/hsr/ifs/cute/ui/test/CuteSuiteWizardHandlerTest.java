@@ -8,9 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -19,26 +18,25 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import ch.hsr.ifs.cute.headers.CuteHeaders_1_7;
+import ch.hsr.ifs.cute.headers.headers1_7.CuteHeaders_1_7;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
 
-public class CuteSuiteWizardHandlerTest extends TestCase {
+public class CuteSuiteWizardHandlerTest {
 
-	public CuteSuiteWizardHandlerTest(String m){
-		super(m);
-	}
-	CuteSuiteWizardHandler cswh=null;
+	CuteSuiteWizardHandler cswh = null;
 	private IFolder srcFolder;
 	private IFolder cuteFolder;
 	private IProject project;
-	@SuppressWarnings("nls")
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		cswh=new CuteSuiteWizardHandler("theSuiteName"); //$NON-NLS-1$
-		IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
+
+	@Before
+	public void setUp() throws Exception {
+		cswh = new CuteSuiteWizardHandler("theSuiteName");
+		IWorkspaceRoot iwsr = ResourcesPlugin.getWorkspace().getRoot();
 		project = iwsr.getProject("CSWHT");
 		project.create(new NullProgressMonitor());
 		project.open(new NullProgressMonitor());
@@ -48,45 +46,33 @@ public class CuteSuiteWizardHandlerTest extends TestCase {
 		cuteFolder.create(true, true, new NullProgressMonitor());
 	}
 
-	public final void testAddTestFiles() {
+	@Test
+	public void testAddTestFiles() throws CoreException {
 		CuteHeaders_1_7 h = new CuteHeaders_1_7();
 		addTestFiles(h);
+		assertCuteHeaderFilesExist();
 	}
 
-	@SuppressWarnings("nls")
-	private void addTestFiles(ICuteHeaders cuteHeader ) {
-		try{
+	private void addTestFiles(ICuteHeaders cuteHeader) throws CoreException {
+		cswh.copyExampleTestFiles(srcFolder, cuteHeader);
 
-			cswh.copyFiles(srcFolder,cuteHeader, cuteFolder);
-			//for indirect reference, check dependencies
-
-			IFile file=srcFolder.getFile("Test.cpp");
-			if(file.exists()){
-				file.delete(true, false, new NullProgressMonitor());
-				assertFalse(file.exists());
-			}
-			IFile file1=srcFolder.getFile("suite.cpp");
-			IFile file2=srcFolder.getFile("suite.h");
-
-			assertTrue(file1.exists());
-			assertTrue(file2.exists());
-			//clean up
-
-		}catch(CoreException ce){fail(ce.getMessage());}
+		IFile file = srcFolder.getFile("Test.cpp");
+		if (file.exists()) {
+			file.delete(true, false, new NullProgressMonitor());
+			assertFalse(file.exists());
+		}
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	private void assertCuteHeaderFilesExist() {
+		IFile file1 = srcFolder.getFile("suite.cpp");
+		IFile file2 = srcFolder.getFile("suite.h");
+
+		assertTrue(file1.exists());
+		assertTrue(file2.exists());
+	}
+
+	@After
+	public void tearDown() throws Exception {
 		project.delete(true, new NullProgressMonitor());
-		project = null;
-		cuteFolder = null;
-		srcFolder = null;
-	}
-
-	public static Test suite(){
-		TestSuite ts=new TestSuite("ch.hsr.ifs.cutelauncher.ui.CuteSuiteWizardHandler"); //$NON-NLS-1$
-		ts.addTest(new CuteSuiteWizardHandlerTest("testAddTestFiles")); //$NON-NLS-1$
-		return ts;
 	}
 }

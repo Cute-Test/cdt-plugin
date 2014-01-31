@@ -21,21 +21,21 @@ import ch.hsr.ifs.cute.gcov.test.mock.MockFile;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class DeleteMarkersTest extends TestCase {
-	
-	private static final String TEST_FILE_NAME = "testFile.cpp"; //$NON-NLS-1$
-	private static final String PROJECT_NAME = "project"; //$NON-NLS-1$
+
+	private static final String TEST_FILE_NAME = "testFile.cpp";
+	private static final String PROJECT_NAME = "project";
 
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		GcovPlugin.getDefault().getcModel().clearModel();
 	}
-	
+
 	public void testDeleteJob() {
-		IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME)); //$NON-NLS-1$
+		IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME));
 		try {
 			testFile.createMarker(GcovPlugin.PARTIALLY_MARKER_TYPE);
 		} catch (CoreException e1) {
@@ -49,11 +49,11 @@ public class DeleteMarkersTest extends TestCase {
 			fail(e.getMessage());
 		}
 		IStatus result = job.getResult();
-		assertEquals(result.getMessage(),IStatus.OK,result.getCode());
+		assertEquals(result.getMessage(), IStatus.OK, result.getCode());
 	}
-	
+
 	public void testDeleteJobResourceDoesNotExist() {
-		IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), false); //$NON-NLS-1$
+		IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), false);
 		try {
 			testFile.createMarker(GcovPlugin.PARTIALLY_MARKER_TYPE);
 		} catch (CoreException e1) {
@@ -67,7 +67,7 @@ public class DeleteMarkersTest extends TestCase {
 			fail(e.getMessage());
 		}
 		IStatus result = job.getResult();
-		assertEquals(result.getMessage(),IStatus.OK,result.getSeverity());
+		assertEquals(result.getMessage(), IStatus.OK, result.getSeverity());
 	}
 
 }

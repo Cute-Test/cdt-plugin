@@ -100,11 +100,11 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 				}
 				return replaceName;
 			} else {
-				//Bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=381032 // PS: fixed by Thomas in 2013, still required?
-				//				if (context.selectedQualifiedName.isFullyQualified()) {
-				//					buildFullyQualifiedReplaceName(replaceName, names);
-				//					return replaceName;
-				//				}
+				// Bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=381032 // PS: fixed by Thomas in 2013, still required?
+				// if (context.selectedQualifiedName.isFullyQualified()) {
+				// buildFullyQualifiedReplaceName(replaceName, names);
+				// return replaceName;
+				// }
 			}
 		}
 		return null;

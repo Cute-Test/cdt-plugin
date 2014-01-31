@@ -19,23 +19,23 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.cute.namespactor.astutil.NSSelectionHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
-import ch.hsr.ifs.cute.namespactor.refactoring.iudec.IUDECRefactoring;
-import ch.hsr.ifs.cute.namespactor.refactoring.iudir.IUDIRRefactoring;
+import ch.hsr.ifs.cute.namespactor.refactoring.iudec.IUDecRefactoring;
+import ch.hsr.ifs.cute.namespactor.refactoring.iudir.IUDirRefactoring;
 import ch.hsr.ifs.cute.namespactor.refactoring.rewrite.ASTRewriteStore;
 import ch.hsr.ifs.cute.namespactor.resources.Labels;
 
 @SuppressWarnings("restriction")
 public class IURefactoring extends InlineRefactoringBase {
-	private InlineRefactoringBase delegate=null;
-	private ICElement element=null;
+	private InlineRefactoringBase delegate = null;
+	private ICElement element = null;
 	private final ISelection selection;
 	private final ICProject project;
-	public IURefactoring(ICElement element, ISelection selection,
-			ICProject project) {
+
+	public IURefactoring(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);
-		this.element=element;
-		this.selection=selection;
-		this.project=project;
+		this.element = element;
+		this.selection = selection;
+		this.project = project;
 	}
 
 	@Override
@@ -44,29 +44,25 @@ public class IURefactoring extends InlineRefactoringBase {
 	}
 
 	@Override
-	public RefactoringStatus checkInitialConditions(IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
-		// determine delegate based on selection
+	public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		Region region = getSelectedRegion();
 
-		IASTTranslationUnit ast = this.refactoringContext.getAST(this.tu,pm);// warnings...
-		if(NSSelectionHelper.getSelectedUsingDirective(region, ast) != null){
-			delegate = new IUDIRRefactoring(element, selection, project);
-			
-		}else if(NSSelectionHelper.getSelectedUsingDeclaration(region, ast) != null){
-			delegate = new IUDECRefactoring(element, selection, project);
-		}else{
+		IASTTranslationUnit ast = this.refactoringContext.getAST(this.tu, pm);// warnings...
+		if (NSSelectionHelper.getSelectedUsingDirective(region, ast) != null) {
+			delegate = new IUDirRefactoring(element, selection, project);
+		} else if (NSSelectionHelper.getSelectedUsingDeclaration(region, ast) != null) {
+			delegate = new IUDecRefactoring(element, selection, project);
+		} else {
 			initStatus.addFatalError(Labels.IUDIR_NoUDIRSelected);
 			return initStatus;
 		}
 		delegate.setContext(this.refactoringContext);
-		
+
 		return delegate.checkInitialConditions(pm);
 	}
 
 	@Override
-	protected TemplateIdFactory getTemplateIdFactory(
-			ICPPASTTemplateId templateId, InlineRefactoringContext ctx) {
+	protected TemplateIdFactory getTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext ctx) {
 		return delegate.getTemplateIdFactory(templateId, ctx);
 	}
 
@@ -84,6 +80,5 @@ public class IURefactoring extends InlineRefactoringBase {
 		}
 		return region;
 	}
-
 
 }

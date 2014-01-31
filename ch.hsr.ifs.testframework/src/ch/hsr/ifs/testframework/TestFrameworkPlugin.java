@@ -36,19 +36,14 @@ import ch.hsr.ifs.testframework.ui.FallbackMessages;
  */
 public class TestFrameworkPlugin extends AbstractUIPlugin {
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.testframework"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "ch.hsr.ifs.testframework";
 
-	// The shared instance
 	private static TestFrameworkPlugin plugin;
 	
-	private static final IPath ICONS_PATH= new Path("$nl$/icons"); //$NON-NLS-1$
+	private static final IPath ICONS_PATH= new Path("$nl$/icons");
 	
 	private final Model model = new Model();
 		
-	/**
-	 * The constructor
-	 */
 	public TestFrameworkPlugin() {
 		plugin = this;
 	}
@@ -64,18 +59,10 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static TestFrameworkPlugin getDefault() {
 		return plugin;
 	}
 	
-	/**
-	 * Convenience method which returns the unique identifier of this plugin.
-	 */
 	public static String getUniqueIdentifier() {
 		if (getDefault() == null) {
 			// If the default instance is not yet initialized,
@@ -93,12 +80,12 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 	
 	public static ImageProvider getImageProvider() {
 		try{
-			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "ImageProvider"); //$NON-NLS-1$
+			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "ImageProvider");
 			if (extension != null) {
 				IExtension[] extensions = extension.getExtensions();
 				for (IExtension extension2 : extensions) {
 					IConfigurationElement[] configElements = extension2.getConfigurationElements();
-					String className =configElements[0].getAttribute("class"); //$NON-NLS-1$
+					String className =configElements[0].getAttribute("class");
 					Class<?> obj = getDefault().getBundle().loadClass(className);
 					return (ImageProvider) obj.newInstance();
 				}
@@ -131,12 +118,12 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 	 */
 	public static Messages getMessages(){
 		try{
-			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "Messages"); //$NON-NLS-1$
+			IExtensionPoint extension = Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "Messages");
 			if (extension != null) {
 				IExtension[] extensions = extension.getExtensions();
 				for (IExtension extension2 : extensions) {
 					IConfigurationElement[] configElements = extension2.getConfigurationElements();
-					String className =configElements[0].getAttribute("class"); //$NON-NLS-1$
+					String className =configElements[0].getAttribute("class");
 					Class<?> obj = getDefault().getBundle().loadClass(className);
 					return (Messages) obj.newInstance();
 				}
@@ -154,7 +141,7 @@ public class TestFrameworkPlugin extends AbstractUIPlugin {
 	}
 	
 	public static void log(Throwable e) {
-		log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Error", e)); //$NON-NLS-1$
+		log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Error", e));
 	}
 
 	//PDE runtime:Error Log view

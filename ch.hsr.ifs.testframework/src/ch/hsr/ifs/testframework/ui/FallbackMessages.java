@@ -13,17 +13,15 @@ import java.util.ResourceBundle;
 
 import ch.hsr.ifs.testframework.Messages;
 
-
 /**
  * @author egraf
- *
+ * 
  */
 public class FallbackMessages implements Messages {
-	
-	private static final String BUNDLE_NAME = "ch.hsr.ifs.testframework.ui.messages"; //$NON-NLS-1$
 
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
-			.getBundle(BUNDLE_NAME);
+	private static final String BUNDLE_NAME = "ch.hsr.ifs.testframework.ui.messages";
+
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
 	public String getString(String key) {
 		try {

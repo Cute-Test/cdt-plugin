@@ -39,54 +39,58 @@ import ch.hsr.ifs.testframework.model.TestResult;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class CuteCompareResultDialog extends TrayDialog {
-	
-	private Messages msg = TestFrameworkPlugin.getMessages();
-	
+
+	private final Messages msg = TestFrameworkPlugin.getMessages();
+
 	private static class CompareElement implements ITypedElement, IEncodedStreamContentAccessor {
-	    private String fContent;
-	    
-	    public CompareElement(String content) {
-	    	if(content == null) {
-	    		fContent = "no Data"; //$NON-NLS-1$
-	    	}else {
-	    		fContent= content;
-	    	}
-	    }
-	    public String getName() {
-	        return "<no name>"; //$NON-NLS-1$
-	    }
-	    public Image getImage() {
-	        return null;
-	    }
-	    public String getType() {
-	        return "txt"; //$NON-NLS-1$
-	    }
-	    public InputStream getContents() {
-		    try {
-		        return new ByteArrayInputStream(fContent.getBytes("UTF-8")); //$NON-NLS-1$
-		    } catch (UnsupportedEncodingException e) {
-		        return new ByteArrayInputStream(fContent.getBytes());
-		    }
-	    }
-        public String getCharset() throws CoreException {
-            return "UTF-8"; //$NON-NLS-1$
-        }
+		private String fContent;
+
+		public CompareElement(String content) {
+			if (content == null) {
+				fContent = "no Data";
+			} else {
+				fContent = content;
+			}
+		}
+
+		public String getName() {
+			return "<no name>";
+		}
+
+		public Image getImage() {
+			return null;
+		}
+
+		public String getType() {
+			return "txt";
+		}
+
+		public InputStream getContents() {
+			try {
+				return new ByteArrayInputStream(fContent.getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				return new ByteArrayInputStream(fContent.getBytes());
+			}
+		}
+
+		public String getCharset() throws CoreException {
+			return "UTF-8";
+		}
 
 	}
-	
-	
+
 	private CuteTextMergeViewer compareViewer;
-    TestCase test;
+	TestCase test;
 
 	public CuteCompareResultDialog(Shell shell, TestCase test) {
 		super(shell);
 		this.test = test;
 		setHelpAvailable(false);
 		setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX);
-		
+
 	}
 
 	@Override
@@ -94,52 +98,53 @@ public class CuteCompareResultDialog extends TrayDialog {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		ViewForm pane = new ViewForm(composite, SWT.BORDER | SWT.FLAT);
 		Control control = createCompareViewer(pane);
-		GridData data= new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL);
-		data.widthHint= convertWidthInCharsToPixels(120);
-		data.heightHint= convertHeightInCharsToPixels(13);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL);
+		data.widthHint = convertWidthInCharsToPixels(120);
+		data.heightHint = convertHeightInCharsToPixels(13);
 		pane.setLayoutData(data);
-		ToolBar tb = new ToolBar(pane, SWT.BORDER|SWT.FLAT);
+		ToolBar tb = new ToolBar(pane, SWT.BORDER | SWT.FLAT);
 		ToolBarManager tbm = new ToolBarManager(tb);
 		ShowWhiteSpaceAction action = new ShowWhiteSpaceAction(compareViewer);
 		tbm.add(action);
-		tbm.update(true);;
+		tbm.update(true);
+		;
 		pane.setTopRight(tb);
-		
+
 		pane.setContent(control);
-		GridData gd= new GridData(GridData.FILL_BOTH);
+		GridData gd = new GridData(GridData.FILL_BOTH);
 		control.setLayoutData(gd);
 		return composite;
 	}
-	
+
 	private Control createCompareViewer(ViewForm pane) {
-		final CompareConfiguration compareConfiguration= new CompareConfiguration();
-	    compareConfiguration.setLeftLabel(msg.getString("CuteCompareResultDialog.Expected"));  //$NON-NLS-1$
-	    compareConfiguration.setLeftEditable(false);
-	    compareConfiguration.setRightLabel(msg.getString("CuteCompareResultDialog.Actual"));	  //$NON-NLS-1$
-	    compareConfiguration.setRightEditable(false);
-	    compareConfiguration.setProperty(CompareConfiguration.IGNORE_WHITESPACE, Boolean.FALSE);
+		final CompareConfiguration compareConfiguration = new CompareConfiguration();
+		compareConfiguration.setLeftLabel(msg.getString("CuteCompareResultDialog.Expected"));
+		compareConfiguration.setLeftEditable(false);
+		compareConfiguration.setRightLabel(msg.getString("CuteCompareResultDialog.Actual"));
+		compareConfiguration.setRightEditable(false);
+		compareConfiguration.setProperty(CompareConfiguration.IGNORE_WHITESPACE, Boolean.FALSE);
 
-	    compareViewer = new CuteTextMergeViewer(pane, SWT.NONE, compareConfiguration);
-	    setCompareViewerInput(test);
+		compareViewer = new CuteTextMergeViewer(pane, SWT.NONE, compareConfiguration);
+		setCompareViewerInput(test);
 
-	    Control control= compareViewer.getControl();
-	    control.addDisposeListener(new DisposeListener() {
-	        public void widgetDisposed(DisposeEvent e) {
-                compareConfiguration.dispose();
-	        }
-	    });
-	    return control;
-		
+		Control control = compareViewer.getControl();
+		control.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				compareConfiguration.dispose();
+			}
+		});
+		return control;
+
 	}
-	
 
+	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, msg.getString("CuteCompareResultDialog.Ok"), true);  //$NON-NLS-1$
+		createButton(parent, IDialogConstants.OK_ID, msg.getString("CuteCompareResultDialog.Ok"), true);
 	}
-	
+
 	public void setCompareViewerInput(TestCase test) {
 		this.test = test;
-		if (! compareViewer.getControl().isDisposed()) {
+		if (!compareViewer.getControl().isDisposed()) {
 			TestResult result = test.getResult();
 			if (result instanceof TestFailure) {
 				TestFailure failure = (TestFailure) result;
@@ -147,18 +152,18 @@ public class CuteCompareResultDialog extends TrayDialog {
 				CompareElement was = new CompareElement(failure.getWas());
 				compareViewer.setInput(new DiffNode(expected, was));
 			}
-			
+
 		}
 	}
-	
-    protected void configureShell(Shell newShell) {
+
+	@Override
+	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText(msg.getString("CuteCompareResultDialog.ResultComparison")); //$NON-NLS-1$
+		newShell.setText(msg.getString("CuteCompareResultDialog.ResultComparison"));
 	}
 
 	public void refresh() {
-		compareViewer.refresh();		
+		compareViewer.refresh();
 	}
 
-	
 }

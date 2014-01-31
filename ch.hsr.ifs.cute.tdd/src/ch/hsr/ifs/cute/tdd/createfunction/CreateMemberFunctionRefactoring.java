@@ -20,12 +20,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
-public class CreateMemberFunctionRefactoring extends CRefactoring3 {
+public class CreateMemberFunctionRefactoring extends TddCRefactoring {
 
 	public CodanArguments ca;
 	private final IFunctionCreationStrategy strategy;

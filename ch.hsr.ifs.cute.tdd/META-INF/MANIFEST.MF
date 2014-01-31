@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: ch.hsr.ifs.cute.tdd;singleton:=true
 Bundle-Version: 4.6.0.qualifier
-Bundle-Activator: ch.hsr.ifs.cute.tdd.Activator
+Bundle-Activator: ch.hsr.ifs.cute.tdd.TDDPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui;bundle-version="3.6.2",
  org.eclipse.core.runtime;bundle-version="3.6.0",

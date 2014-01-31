@@ -9,40 +9,40 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
  * @author ythrier(at)hsr.ch
  */
 public class ASTRemoveChange implements IASTChange {
-    private final IASTNode node;
+	private final IASTNode node;
 
-    /**
-     * Create the remove change.
-     * 
-     * @param node
-     *            Node to remove.
-     */
-    public ASTRemoveChange(IASTNode node) {
-        this.node = node;
-    }
+	/**
+	 * Create the remove change.
+	 * 
+	 * @param node
+	 *            Node to remove.
+	 */
+	public ASTRemoveChange(IASTNode node) {
+		this.node = node;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ASTRewrite apply(ASTRewrite rewrite) {
-        rewrite.remove(node, null);
-        return null;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ASTRewrite apply(ASTRewrite rewrite) {
+		rewrite.remove(node, null);
+		return null;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public IASTNode getRewriteRoot() {
-        return node.getParent();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IASTNode getRewriteRoot() {
+		return node.getParent();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public IASTNode getChangeRoot() {
-        return null;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IASTNode getChangeRoot() {
+		return null;
+	}
 }

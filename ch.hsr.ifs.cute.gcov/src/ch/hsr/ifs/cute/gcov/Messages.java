@@ -12,13 +12,12 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.gcov.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.gcov.messages";
 	public static String DeleteMarkerJob_deleteMarker;
 	static {
-		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
 

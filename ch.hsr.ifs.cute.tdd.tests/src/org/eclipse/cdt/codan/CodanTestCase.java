@@ -36,11 +36,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.cute.tdd.ui.tests.Activator;
+import ch.hsr.ifs.cute.tdd.ui.tests.TDDTestPlugin;
 
-/**
- * TODO: add description
- */
 public class CodanTestCase extends BaseTestCase {
 	ArrayList<File> tempFiles = new ArrayList<File>();
 	protected File tmpDir;
@@ -49,25 +46,14 @@ public class CodanTestCase extends BaseTestCase {
 	protected ICElement currentCElem;
 	protected IFile currentIFile;
 
-	/**
-	 * 
-	 */
 	public CodanTestCase() {
 		super();
 	}
 
-	/**
-	 * @param name
-	 */
 	public CodanTestCase(String name) {
 		super(name);
 	}
 
-	/**
-	 * Override for c++ (i.e. at least one c++ test)
-	 * 
-	 * @return is c++ tests
-	 */
 	public boolean isCpp() {
 		return false;
 	}
@@ -84,28 +70,20 @@ public class CodanTestCase extends BaseTestCase {
 	public void tearDown() throws CoreException {
 		if (cproject != null) {
 			try {
-				cproject.getProject().delete(
-						IResource.FORCE
-								| IResource.ALWAYS_DELETE_PROJECT_CONTENT,
-						new NullProgressMonitor());
+				cproject.getProject().delete(IResource.FORCE | IResource.ALWAYS_DELETE_PROJECT_CONTENT, new NullProgressMonitor());
 			} catch (CoreException e) {
 				throw e;
 			}
 		}
 	}
 
-	/**
-	 * @throws CoreException
-	 */
 	private void removeLeftOverProjects() throws CoreException {
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IProject[] projects = workspace.getRoot().getProjects();
 		for (int i = 0; i < projects.length; i++) {
 			IProject p = projects[i];
 			if (p.getName().startsWith("Codan")) {
-				p.delete(IResource.FORCE
-						| IResource.ALWAYS_DELETE_PROJECT_CONTENT,
-						new NullProgressMonitor());
+				p.delete(IResource.FORCE | IResource.ALWAYS_DELETE_PROJECT_CONTENT, new NullProgressMonitor());
 			}
 		}
 	}
@@ -115,16 +93,14 @@ public class CodanTestCase extends BaseTestCase {
 		ModelJoiner mj = new ModelJoiner();
 		try {
 			// Create the cproject
-			final String projectName = "CodanProjTest_"
-					+ System.currentTimeMillis();
+			final String projectName = "CodanProjTest_" + System.currentTimeMillis();
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			workspace.run(new IWorkspaceRunnable() {
+				@Override
 				public void run(IProgressMonitor monitor) throws CoreException {
 					// Create the cproject
-					ICProject cproject = cpp ? CProjectHelper.createCCProject(
-							projectName, null, IPDOMManager.ID_NO_INDEXER)
-							: CProjectHelper.createCProject(projectName, null,
-									IPDOMManager.ID_NO_INDEXER);
+					ICProject cproject = cpp ? CProjectHelper.createCCProject(projectName, null, IPDOMManager.ID_NO_INDEXER) : CProjectHelper.createCProject(
+							projectName, null, IPDOMManager.ID_NO_INDEXER);
 					cprojects[0] = cproject;
 				}
 			}, null);
@@ -138,13 +114,13 @@ public class CodanTestCase extends BaseTestCase {
 	protected void indexFiles() throws CoreException {
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		workspace.run(new IWorkspaceRunnable() {
+			@Override
 			public void run(IProgressMonitor monitor) throws CoreException {
 				cproject.getProject().refreshLocal(1, monitor);
 			}
 		}, null);
 		// Index the cproject
-		CCorePlugin.getIndexManager().setIndexerId(cproject,
-				IPDOMManager.ID_FAST_INDEXER);
+		CCorePlugin.getIndexManager().setIndexerId(cproject, IPDOMManager.ID_FAST_INDEXER);
 		CCorePlugin.getIndexManager().reindex(cproject);
 		// wait until the indexer is done
 		assertTrue(CCorePlugin.getIndexManager().joinIndexer(1000 * 60, // 1 min
@@ -152,11 +128,6 @@ public class CodanTestCase extends BaseTestCase {
 		return;
 	}
 
-	/**
-	 * @param pos
-	 * @return
-	 * @throws IOException
-	 */
 	protected int pos2line(int pos) throws IOException {
 		FileInputStream st = new FileInputStream(currentFile);
 		try {
@@ -182,8 +153,7 @@ public class CodanTestCase extends BaseTestCase {
 
 	protected StringBuilder[] getContents(int sections) {
 		try {
-			return TestSourceReader.getContentsForTest(Activator.getDefault().getBundle(),
-					"src", getClass(), getName(), sections);
+			return TestSourceReader.getContentsForTest(TDDTestPlugin.getDefault().getBundle(), "src", getClass(), getName(), sections);
 		} catch (IOException e) {
 			fail(e.getMessage());
 			return null;
@@ -191,22 +161,21 @@ public class CodanTestCase extends BaseTestCase {
 	}
 
 	public File loadcode(String code, boolean cpp) {
-		String fileKey = "@file:"; //$NON-NLS-1$
+		String fileKey = "@file:";
 		int indf = code.indexOf(fileKey);
 		if (indf >= 0) {
 			int sep = code.indexOf('\n');
 			if (sep != -1) {
 				String line = code.substring(0, sep);
 				code = code.substring(sep + 1);
-				String fileName = line.substring(indf + fileKey.length())
-						.trim();
+				String fileName = line.substring(indf + fileKey.length()).trim();
 				return loadcode(code, new File(tmpDir, fileName));
 			}
 		}
-		String ext = cpp ? ".cpp" : ".c"; //$NON-NLS-1$ //$NON-NLS-2$
+		String ext = cpp ? ".cpp" : ".c";
 		File testFile = null;
 		try {
-			testFile = File.createTempFile("test", ext, tmpDir); //$NON-NLS-1$
+			testFile = File.createTempFile("test", ext, tmpDir);
 		} catch (IOException e1) {
 			fail(e1.getMessage());
 			return null;
@@ -222,8 +191,7 @@ public class CodanTestCase extends BaseTestCase {
 	private File loadcode(String code, File testFile) {
 		try {
 			tempFiles.add(testFile);
-			TestUtils.saveFile(
-					new ByteArrayInputStream(code.trim().getBytes()), testFile);
+			TestUtils.saveFile(new ByteArrayInputStream(code.trim().getBytes()), testFile);
 			currentFile = testFile;
 			try {
 				cproject.getProject().refreshLocal(1, null);
@@ -231,15 +199,14 @@ public class CodanTestCase extends BaseTestCase {
 				// hmm
 				fail(e.getMessage());
 			}
-			currentCElem = cproject
-					.findElement(new Path(currentFile.toString()));
+			currentCElem = cproject.findElement(new Path(currentFile.toString()));
 			currentIFile = (IFile) currentCElem.getResource();
 			return testFile;
 		} catch (IOException e) {
-			fail("Cannot save test: " + testFile + ": " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			fail("Cannot save test: " + testFile + ": " + e.getMessage());
 			return null;
 		} catch (CModelException e) {
-			fail("Cannot find file: " + testFile + ": " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			fail("Cannot find file: " + testFile + ": " + e.getMessage());
 			return null;
 		}
 	}

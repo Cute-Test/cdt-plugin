@@ -15,12 +15,12 @@ import ch.hsr.ifs.cute.gcov.test.parser.ModelBuilderLineParserTest;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class AllGcovTests extends TestSuite {
-	
+
 	public AllGcovTests() {
-		super("All Gcov Tests"); //$NON-NLS-1$
+		super("All Gcov Tests");
 		addTestSuite(ModelBuilderLineParserTest.class);
 		addTestSuite(DeleteMarkersTest.class);
 	}
@@ -28,6 +28,5 @@ public class AllGcovTests extends TestSuite {
 	public static Test suite() {
 		return new AllGcovTests();
 	}
-
 
 }

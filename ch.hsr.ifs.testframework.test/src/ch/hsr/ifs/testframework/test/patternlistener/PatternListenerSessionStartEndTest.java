@@ -8,48 +8,27 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.patternlistener;
 
-import org.eclipse.jface.text.IRegion;
+import java.io.IOException;
 
-import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
-
+import ch.hsr.ifs.testframework.test.PatternListenerBase;
+import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 
 	boolean sessionStarted = false;
 	boolean sessionEnded = false;
-	
-	
-	final class SessionStartEndHandler extends TestEventHandler{
 
-		@Override
-		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
-//			 Do nothing
-		}
-
-		@Override
-		protected void handleEnding(IRegion reg, String suitename) {
-//			 Do nothing
-		}
-
-		@Override
-		protected void handleError(IRegion reg, String testName, String msg) {
-//			 Do nothing
-		}
-
-		@Override
-		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-			// Do nothing
-		}
+	final class SessionStartEndHandler extends DummyTestEventHandler {
 
 		@Override
 		public void handleSessionEnd() {
 			sessionEnded = true;
-			
+
 		}
 
 		@Override
@@ -57,25 +36,12 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 			sessionStarted = true;
 			tc.removePatternMatchListener(cpl);
 		}
-
-		@Override
-		protected void handleSuccess(IRegion reg, String name, String msg) {
-//			 Do nothing
-		}
-
-		@Override
-		protected void handleTestStart(IRegion reg, String testname) {
-//			 Do nothing
-		}
-		
 	}
 
-	public void testSessionStart() {
-		assertTrue("No session Start", sessionStarted); //$NON-NLS-1$
-	}
-	
-	public void testSessionEnd() {
-		assertTrue("No session End", sessionEnded); //$NON-NLS-1$
+	public void testListenerEvents() throws IOException, InterruptedException {
+		emulateTestRun();
+		assertTrue("No session Start", sessionStarted);
+		assertTrue("No session End", sessionEnded);
 	}
 
 	@Override
@@ -85,7 +51,6 @@ public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "sessionTest.txt"; //$NON-NLS-1$
+		return "sessionTest.txt";
 	}
-	
 }

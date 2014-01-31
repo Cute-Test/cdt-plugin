@@ -11,16 +11,18 @@ package ch.hsr.ifs.testframework.test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import junit.framework.TestCase;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.console.IPatternMatchListener;
+import org.eclipse.ui.console.PatternMatchEvent;
+import org.eclipse.ui.console.TextConsole;
 import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
@@ -54,7 +56,7 @@ public abstract class ConsoleTest extends TestCase {
 
 	private void useCUTE() {
 		consoleEventParser = new CuteConsoleEventParser();
-		filePathRoot = "testDefs/cute/"; //$NON-NLS-1$
+		filePathRoot = "testDefs/cute/";
 	}
 
 	private void prepareTest() {
@@ -62,13 +64,44 @@ public abstract class ConsoleTest extends TestCase {
 		cpl = new ConsolePatternListener(consoleEventParser);
 		addTestEventHandler(cpl);
 		tc.addPatternMatchListener(cpl);
+	}
+
+	protected void emulateTestRun() throws IOException, InterruptedException {
+		final Semaphore semaphore = new Semaphore(0);
+		tc.addPatternMatchListener(new IPatternMatchListener() {
+
+			@Override
+			public void matchFound(PatternMatchEvent event) {
+				semaphore.release();
+			}
+
+			@Override
+			public void disconnect() {
+			}
+
+			@Override
+			public void connect(TextConsole console) {
+			}
+
+			@Override
+			public String getPattern() {
+				return ".+";
+			}
+
+			@Override
+			public String getLineQualifier() {
+				return null;
+			}
+
+			@Override
+			public int getCompilerFlags() {
+				return 0;
+			}
+		});
 		tc.startTest();
-		try {
-			Job.getJobManager().join(tc, new NullProgressMonitor());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			/* org.eclipse.core.internal.jobs.JobManager.join doesn't catch from sleep */
-		}
+		semaphore.acquire(); //wait until MatchJob is actually running (meaning that cute test-result-patern-match-listener has at least startet working).
+		//joins all console pattern-match-jobs belonging to the "tc" console
+		Job.getJobManager().join(tc, new NullProgressMonitor());
 	}
 
 	protected FileInputTextConsole getConsole() {
@@ -87,8 +120,6 @@ public abstract class ConsoleTest extends TestCase {
 			String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
 			br = new BufferedReader(new FileReader(file2));
 			return br.readLine();
-		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0, e.getMessage(), e));
 		} finally {
 			if (br != null) {
 				br.close();

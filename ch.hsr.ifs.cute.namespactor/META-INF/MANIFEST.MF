@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: namespactor
 Bundle-SymbolicName: ch.hsr.ifs.cute.namespactor;singleton:=true
 Bundle-Version: 4.6.0.qualifier
-Bundle-Activator: ch.hsr.ifs.cute.namespactor.NamespactorActivator
+Bundle-Activator: ch.hsr.ifs.cute.namespactor.NamespactorPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide;bundle-version="3.7.0",
  org.eclipse.cdt.ui;bundle-version="5.3.2",

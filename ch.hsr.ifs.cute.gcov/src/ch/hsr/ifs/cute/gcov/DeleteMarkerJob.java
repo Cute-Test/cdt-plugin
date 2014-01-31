@@ -50,5 +50,4 @@ public class DeleteMarkerJob extends Job {
 		}
 		return Status.OK_STATUS;
 	}
-
 }

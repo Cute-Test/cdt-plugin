@@ -38,7 +38,7 @@ public class OperatorCreationStrategy implements IFunctionCreationStrategy {
 
 	@Override
 	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, TextSelection selection) {
-		ICPPASTFunctionDeclarator decl = new CPPASTFunctionDeclarator(new CPPASTOperatorName(("operator" + name).toCharArray())); //$NON-NLS-1$
+		ICPPASTFunctionDeclarator decl = new CPPASTFunctionDeclarator(new CPPASTOperatorName(("operator" + name).toCharArray()));
 		IASTBinaryExpression binex = TddHelper.getAncestorOfType(selectedName, IASTBinaryExpression.class);
 		IASTUnaryExpression unex = TddHelper.getAncestorOfType(selectedName, IASTUnaryExpression.class);
 		if (binex != null) {

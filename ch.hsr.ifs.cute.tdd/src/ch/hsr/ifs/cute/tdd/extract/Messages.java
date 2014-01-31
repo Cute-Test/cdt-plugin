@@ -3,7 +3,7 @@ package ch.hsr.ifs.cute.tdd.extract;
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.tdd.extract.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.tdd.extract.messages";
 	public static String ExtractRefactoring_10;
 	public static String ExtractRefactoring_11;
 	public static String ExtractRefactoring_12;

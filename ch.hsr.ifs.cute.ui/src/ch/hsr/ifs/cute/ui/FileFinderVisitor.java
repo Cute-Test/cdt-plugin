@@ -14,13 +14,12 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 
 class FileFinderVisitor implements IResourceVisitor {
-	private String sourceFileName;
+	private final String sourceFileName;
 	private IFile file;
 
 	FileFinderVisitor(String FileName) {
 		sourceFileName = FileName;
 	}
-	
 
 	public IFile getFile() {
 		return file;

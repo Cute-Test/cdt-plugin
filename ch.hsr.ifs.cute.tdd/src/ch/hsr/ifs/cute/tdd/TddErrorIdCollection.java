@@ -23,7 +23,7 @@ import ch.hsr.ifs.cute.tdd.codan.checkers.WrongArgumentChecker;
 
 @SuppressWarnings("restriction")
 public class TddErrorIdCollection {
-	
+
 	public static final String ERR_ID_PrivateMethodChecker_HSR = PrivateMethodChecker.ERR_ID_PrivateMethodChecker_HSR;
 	public static final String ERR_ID_TypeResolutionProblem_HSR = TypeResolutionProblemChecker.ERR_ID_TypeResolutionProblem_HSR;
 	public static final String ERR_ID_FunctionResolutionProblem_HSR = FreeFunctionProblemChecker.ERR_ID_FunctionResolutionProblem_HSR;
@@ -37,7 +37,7 @@ public class TddErrorIdCollection {
 	public static final String ERR_ID_InvalidArguments_HSR = WrongArgumentChecker.ERR_ID_InvalidArguments_HSR;
 	public static final String ERR_ID_NamespaceResolutionProblem_HSR = MissingNamespaceChecker.ERR_ID_NamespaceResolutionProblem_HSR;
 	public static final String ERR_ID_NamespaceMemberResolutionProblem_HSR = FreeFunctionProblemChecker.ERR_ID_NamespaceMemberResolutionProblem_HSR;
-	
+
 	public static boolean isOperator(IMarker marker) {
 		return CodanProblemMarker.getProblemId(marker).equals(ERR_ID_OperatorResolutionProblem_HSR);
 	}

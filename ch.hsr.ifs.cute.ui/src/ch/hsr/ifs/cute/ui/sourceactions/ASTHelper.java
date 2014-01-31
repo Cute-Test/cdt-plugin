@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
@@ -26,7 +27,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 
 public class ASTHelper {
-	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	private static final String EMPTY_STRING = "";
 
 	public static String getClassStructName(IASTSimpleDeclaration simpleDeclaration) {
 		IASTDeclSpecifier declspecifier = simpleDeclaration.getDeclSpecifier();
@@ -53,30 +54,26 @@ public class ASTHelper {
 		return EMPTY_STRING;
 	}
 
-	public static ArrayList<IASTDeclaration> getConstructors(IASTSimpleDeclaration simpleDeclaration) {
+	public static ArrayList<IASTDeclaration> getConstructors(IASTCompositeTypeSpecifier typeNode) {
 		ArrayList<IASTDeclaration> result = new ArrayList<IASTDeclaration>();
 
-		IASTDeclSpecifier declspecifier = simpleDeclaration.getDeclSpecifier();
-		if (declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier) {
-			ICPPASTCompositeTypeSpecifier cts = (ICPPASTCompositeTypeSpecifier) declspecifier;
-			String className = cts.getName().toString();
-			IASTDeclaration members[] = cts.getMembers();
-			for (int i = 0; i < members.length; i++) {
-				if (members[i] instanceof IASTFunctionDefinition) {
-					IASTFunctionDefinition fd = (IASTFunctionDefinition) members[i];
-					IASTFunctionDeclarator fdd = fd.getDeclarator();
-					String fname = fdd.getName().toString();
-					if (fname.equals(className))
-						result.add(fd);
-				} else if (members[i] instanceof IASTSimpleDeclaration) {
-					IASTSimpleDeclaration sd = (IASTSimpleDeclaration) members[i];
-					IASTDeclarator sdd[] = sd.getDeclarators();
-					if (sdd.length == 0)
-						continue;
-					String sname = sdd[0].getName().toString();
-					if (sname.equals(className))
-						result.add(sd);
-				}
+		String className = typeNode.getName().toString();
+		IASTDeclaration members[] = typeNode.getMembers();
+		for (int i = 0; i < members.length; i++) {
+			if (members[i] instanceof IASTFunctionDefinition) {
+				IASTFunctionDefinition fd = (IASTFunctionDefinition) members[i];
+				IASTFunctionDeclarator fdd = fd.getDeclarator();
+				String fname = fdd.getName().toString();
+				if (fname.equals(className))
+					result.add(fd);
+			} else if (members[i] instanceof IASTSimpleDeclaration) {
+				IASTSimpleDeclaration sd = (IASTSimpleDeclaration) members[i];
+				IASTDeclarator sdd[] = sd.getDeclarators();
+				if (sdd.length == 0)
+					continue;
+				String sname = sdd[0].getName().toString();
+				if (sname.equals(className))
+					result.add(sd);
 			}
 		}
 		return result;
@@ -97,7 +94,7 @@ public class ASTHelper {
 				for (int j = 0; j < sdd.length; j++) {
 					if (!(sdd[j] instanceof ICPPASTFunctionDeclarator))
 						continue;
-					//insert test case
+					// insert test case
 					ICPPASTFunctionDeclarator fd = (ICPPASTFunctionDeclarator) sdd[j];
 					IASTParameterDeclaration fpara[] = fd.getParameters();
 					if (fd.takesVarArgs() || fpara != null && fpara.length > 0)
@@ -140,7 +137,7 @@ public class ASTHelper {
 					result = true;
 			} else if (i instanceof IASTSimpleDeclaration) {
 				IASTSimpleDeclaration sd = (IASTSimpleDeclaration) i;
-				//CPPASTNamedTypeSpecifier returned via getDeclSpecifier?  
+				// CPPASTNamedTypeSpecifier returned via getDeclSpecifier?
 				IASTSimpleDeclSpecifier specifier = (IASTSimpleDeclSpecifier) sd.getDeclSpecifier();
 				if (specifier.getType() == IASTSimpleDeclSpecifier.t_void)
 					result = true;
@@ -185,7 +182,7 @@ public class ASTHelper {
 			else if (cts.getKey() == ICPPASTCompositeTypeSpecifier.k_class)
 				ispublicVisibility = false;
 			else {
-				//TODO consider error handing
+				// TODO consider error handing
 				return result;
 			}
 
@@ -214,7 +211,7 @@ public class ASTHelper {
 				if (methodName.isEmpty())
 					continue;
 				if (className.equals(methodName))
-					continue;//constructor
+					continue;// constructor
 
 				result.add(members[i]);
 			}
@@ -277,7 +274,7 @@ public class ASTHelper {
 		return result;
 	}
 
-	//remove the primitives variables
+	// remove the primitives variables
 	public static ArrayList<IASTSimpleDeclaration> getClassStructVariables(ArrayList<IASTSimpleDeclaration> variablesList) {
 		ArrayList<IASTSimpleDeclaration> result = new ArrayList<IASTSimpleDeclaration>();
 
@@ -324,13 +321,15 @@ public class ASTHelper {
 	}
 
 	public static boolean isOperator(IASTSimpleDeclaration variable) {
-		if (getVariableName(variable).equals(Messages.getString("ASTHelper.Operator")))return true; //$NON-NLS-1$
+		if (getVariableName(variable).equals(Messages.getString("ASTHelper.Operator")))
+			return true;
 		return false;
 	}
 
 	public static boolean isOperator(IASTFunctionDefinition variable) {
 		IASTFunctionDeclarator declarator = variable.getDeclarator();
-		if (declarator.getName().toString().equals(Messages.getString("ASTHelper.Operator")))return true; //$NON-NLS-1$
+		if (declarator.getName().toString().equals(Messages.getString("ASTHelper.Operator")))
+			return true;
 		return false;
 	}
 
@@ -350,5 +349,19 @@ public class ASTHelper {
 			}
 		}
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends IASTNode> T findParentOfType(Class<T> klass, IASTNode node) {
+		while (node != null) {
+			if (klass.isInstance(node)) {
+				return (T) node; // here an unchecked warning is generated
+									// because the code 'node instanceof T' is
+									// not valid as condition in the
+									// previous line.
+			}
+			node = node.getParent();
+		}
+		return null;
 	}
 }

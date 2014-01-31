@@ -16,20 +16,20 @@ import org.eclipse.cdt.core.dom.ast.IASTStandardFunctionDeclarator;
 /**
  * @author Emanuel Graf IFS
  * @since 4.0
- *
+ * 
  */
 public class ASTUtil {
-	
+
 	public static boolean isTestFunction(IASTDeclaration declaration) {
 		if (declaration instanceof IASTFunctionDefinition) {
 			IASTFunctionDefinition funcDef = (IASTFunctionDefinition) declaration;
-			if(hasNoParameters(funcDef)) {
-				if(containsAssert(funcDef)) {
+			if (hasNoParameters(funcDef)) {
+				if (containsAssert(funcDef)) {
 					return true;
 				}
 			}
 		}
-		return false;				
+		return false;
 	}
 
 	public static boolean containsAssert(IASTFunctionDefinition funcDef) {
@@ -42,7 +42,7 @@ public class ASTUtil {
 		IASTFunctionDeclarator declarator = funcDef.getDeclarator();
 		if (declarator instanceof IASTStandardFunctionDeclarator) {
 			IASTStandardFunctionDeclarator stdFuncDecl = (IASTStandardFunctionDeclarator) declarator;
-			if(stdFuncDecl.getParameters() == null || stdFuncDecl.getParameters().length == 0) {
+			if (stdFuncDecl.getParameters() == null || stdFuncDecl.getParameters().length == 0) {
 				return true;
 			}
 		}

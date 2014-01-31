@@ -11,4 +11,5 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.event;
 
-public class NonEvent implements TestEvent{}
+public class NonEvent implements TestEvent {
+}

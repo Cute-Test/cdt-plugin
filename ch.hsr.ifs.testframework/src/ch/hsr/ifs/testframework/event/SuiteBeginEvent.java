@@ -17,6 +17,7 @@ public class SuiteBeginEvent implements TestEvent {
 	public IRegion reg;
 	public String suiteName;
 	public String suiteSize;
+
 	public SuiteBeginEvent(IRegion reg, String suiteName, String suiteSize) {
 		this.reg = reg;
 		this.suiteName = suiteName;

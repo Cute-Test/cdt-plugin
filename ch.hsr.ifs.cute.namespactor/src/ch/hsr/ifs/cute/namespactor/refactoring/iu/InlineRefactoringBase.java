@@ -23,7 +23,6 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.namespactor.NamespactorActivator;
 import ch.hsr.ifs.cute.namespactor.astutil.NSNodeHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.RefactoringBase;
 import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
@@ -64,20 +63,17 @@ public abstract class InlineRefactoringBase extends RefactoringBase {
 		}
 
 		IASTName newTemplId = getTemplateIdFactory(outerMostTemplateId, ctx).buildTemplate();
-
 		addReplacement(nodeToReplace, newTemplId);
 	}
 
 	protected void addReplacement(IASTName nodeToReplace, IASTName newNameNode) {
 		if (nodeToReplace != null) {
 			nodesToReplace.put(nodeToReplace, newNameNode);
-			NamespactorActivator.log(toStringDebug(nodeToReplace));
 		}
 	}
 
 	/**
-	 * @return true for names inside template specializations (e.g. SC in
-	 *         SC<ClassX> or SC in C<SC<char> >)
+	 * @return true for names inside template specializations (e.g. SC in SC<ClassX> or SC in C<SC<char> >)
 	 * */
 	protected boolean isPartOfTemplateVariableDeclaration(IASTName childRefNode) {
 		return childRefNode.getParent() instanceof ICPPASTTemplateId && NSNodeHelper.findAncestorOf(childRefNode, ICPPASTUsingDeclaration.class) == null;
@@ -85,12 +81,9 @@ public abstract class InlineRefactoringBase extends RefactoringBase {
 
 	@Override
 	protected void collectModifications(ASTRewriteStore store) {
-
 		for (IASTName nodeToReplace : nodesToReplace.keySet()) {
-
 			store.addReplaceChange(nodeToReplace, nodesToReplace.get(nodeToReplace));
 		}
-
 		super.collectModifications(store);
 	}
 }

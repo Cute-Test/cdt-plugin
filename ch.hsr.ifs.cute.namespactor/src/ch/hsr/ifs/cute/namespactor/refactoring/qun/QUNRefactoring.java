@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.qun;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -40,7 +40,7 @@ import ch.hsr.ifs.cute.namespactor.resources.Labels;
  * */
 @SuppressWarnings("restriction")
 public class QUNRefactoring extends InlineRefactoringBase {
-	
+
 	public QUNRefactoring(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);
 	}
@@ -58,49 +58,50 @@ public class QUNRefactoring extends InlineRefactoringBase {
 
 		IASTName selectedName = NSSelectionHelper.getSelectedName(selectedRegion, getAST(tu, pm));
 
-		if(selectedName == null){
+		if (selectedName == null) {
 			initStatus.addFatalError(Labels.QUN_NoNameSelected);
-		}else if(selectedName.getParent() instanceof ICPPASTDeclarator){
+		} else if (selectedName.getParent() instanceof ICPPASTDeclarator) {
 			initStatus.addFatalError(Labels.QUN_DeclaratorNameSelected);
-		}else if(selectedName.getParent() instanceof ICPPASTQualifiedName || selectedName instanceof ICPPASTQualifiedName){
+		} else if (selectedName.getParent() instanceof ICPPASTQualifiedName || selectedName instanceof ICPPASTQualifiedName) {
 			initStatus.addFatalError(Labels.QUN_SelectedNameAlreadyQualified);
-		}else{
-			
+		} else {
+
 			IBinding selectedNameBinding = selectedName.resolveBinding();
 			if (selectedNameBinding instanceof ICPPSpecialization) {
-					selectedNameBinding = ((ICPPSpecialization) selectedNameBinding).getSpecializedBinding();
-				}
-				addReplacement(selectedName, ASTNodeFactory.getDefault().newQualifiedNameNode(NSNameHelper.getQualifiedName(selectedNameBinding)));
-			
+				selectedNameBinding = ((ICPPSpecialization) selectedNameBinding).getSpecializedBinding();
+			}
+			addReplacement(selectedName, ASTNodeFactory.getDefault().newQualifiedNameNode(NSNameHelper.getQualifiedName(selectedNameBinding)));
+
 		}
 
 		sm.done();
 		return initStatus;
 	}
-	
+
 	@Override
 	protected TemplateIdFactory getTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext ctx) {
 		return new QUNTemplateIdFactory(templateId, ctx);
-	}	
+	}
+
 	@Override
 	protected void processTemplateVariableDeclaration(IASTName childRefNode, InlineRefactoringContext ctx) {
 		IASTName nodeToReplace = null;
 		ICPPASTTemplateId vTemplId = (ICPPASTTemplateId) childRefNode.getParent();
-		
-		if(ctx.templateIdsToIgnore.contains(vTemplId)){
+
+		if (ctx.templateIdsToIgnore.contains(vTemplId)) {
 			return;
 		}
-		
+
 		ICPPASTTemplateId outerMostTemplateId = NSNodeHelper.findOuterMost(ICPPASTTemplateId.class, vTemplId);
-		if(outerMostTemplateId == null){
+		if (outerMostTemplateId == null) {
 			outerMostTemplateId = vTemplId;
 		}
-		
+
 		nodeToReplace = outerMostTemplateId;
-		if(outerMostTemplateId.getParent() instanceof ICPPASTQualifiedName){
+		if (outerMostTemplateId.getParent() instanceof ICPPASTQualifiedName) {
 			nodeToReplace = (IASTName) outerMostTemplateId.getParent();
 		}
-		
+
 		IASTName newTemplId = getTemplateIdFactory(outerMostTemplateId, ctx).buildTemplate();
 
 		addReplacement(nodeToReplace, newTemplId);

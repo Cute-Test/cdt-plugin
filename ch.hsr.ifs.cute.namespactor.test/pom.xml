@@ -20,7 +20,6 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<testFailureIgnore>true</testFailureIgnore>
 					<testSuite>ch.hsr.ifs.cute.namespactor.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.namespactor.test.AllNamespectorTests</testClass>
 					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>

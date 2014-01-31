@@ -32,8 +32,6 @@ import org.eclipse.text.edits.MultiTextEdit;
 
 public abstract class AbstractFunctionAction extends CRefactoring {
 
-	private CRefactoringContext cRefactoringContext;
-
 	public AbstractFunctionAction(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);
 	}
@@ -49,23 +47,16 @@ public abstract class AbstractFunctionAction extends CRefactoring {
 
 	protected IASTTranslationUnit acquireAST(IFile editorFile) throws CoreException, InterruptedException {
 		ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
-		//		IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());
-		//		index.acquireReadLock();
-		IASTTranslationUnit ast = refactoringContext.getAST(tu, new NullProgressMonitor());// astCache.acquireSharedAST(tu, index, true, new NullProgressMonitor());
+		IASTTranslationUnit ast = refactoringContext.getAST(tu, new NullProgressMonitor());
 		return ast;
 	}
 
-	protected void releaseAST(IASTTranslationUnit ast) {
-		//		astCache.releaseSharedAST(ast);
-		//		ast.getIndex().releaseReadLock();
-	}
-
 	protected void initContext() {
-		cRefactoringContext = new CRefactoringContext(this);
+		new CRefactoringContext(this);
 	}
 
 	protected void disposeContext() {
-		cRefactoringContext.dispose();
+		refactoringContext.dispose();
 	}
 
 	protected IASTTranslationUnit getASTTranslationUnit(IFile editorFile) throws CoreException {
@@ -86,8 +77,8 @@ public abstract class AbstractFunctionAction extends CRefactoring {
 	public void createProblemMarker(IFile file, String message, int lineNo) {
 
 		try {
-			IMarker marker = file.createMarker("org.eclipse.cdt.core.problem"); //$NON-NLS-1$
-			marker.setAttribute(IMarker.MESSAGE, "cute:" + message); //$NON-NLS-1$
+			IMarker marker = file.createMarker("org.eclipse.cdt.core.problem");
+			marker.setAttribute(IMarker.MESSAGE, "cute:" + message);
 			marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 			marker.setAttribute(IMarker.TRANSIENT, true);
 			if (lineNo != 0) {
@@ -101,16 +92,12 @@ public abstract class AbstractFunctionAction extends CRefactoring {
 
 	@Override
 	protected RefactoringDescriptor getRefactoringDescriptor() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
-		// TODO Auto-generated method stub
 
 	}
 
 }
-// http://www.ibm.com/developerworks/library/os-ecl-cdt3/index.html?S_TACT=105AGX44&S_CMP=EDU
-// Building a CDT-based editor

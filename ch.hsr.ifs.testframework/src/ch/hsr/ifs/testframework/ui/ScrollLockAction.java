@@ -15,28 +15,26 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class ScrollLockAction extends Action {
-	
-	private TestRunnerViewPart view;
+
+	private final TestRunnerViewPart view;
 	private static Messages msg = TestFrameworkPlugin.getMessages();
-	
+
 	public ScrollLockAction(TestRunnerViewPart view) {
-		super(msg.getString("ScrollLockAction.ScrollLock")); //$NON-NLS-1$
+		super(msg.getString("ScrollLockAction.ScrollLock"));
 		this.view = view;
-		setToolTipText(msg.getString("ScrollLockAction.ScrollLock"));  //$NON-NLS-1$
-		setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/lock.gif")); //$NON-NLS-1$
-		setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$
-		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/lock.gif")); //$NON-NLS-1$
-		setChecked(false);		
+		setToolTipText(msg.getString("ScrollLockAction.ScrollLock"));
+		setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/lock.gif"));
+		setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/lock.gif"));
+		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/lock.gif"));
+		setChecked(false);
 	}
 
 	@Override
 	public void run() {
 		view.setAutoScroll(!isChecked());
 	}
-	
-	
 
 }

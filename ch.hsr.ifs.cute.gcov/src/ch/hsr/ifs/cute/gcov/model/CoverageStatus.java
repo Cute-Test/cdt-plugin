@@ -10,10 +10,8 @@ package ch.hsr.ifs.cute.gcov.model;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public enum CoverageStatus {
-	Covered,
-	PartiallyCovered,
-	Uncovered
+	Covered, PartiallyCovered, Uncovered
 }

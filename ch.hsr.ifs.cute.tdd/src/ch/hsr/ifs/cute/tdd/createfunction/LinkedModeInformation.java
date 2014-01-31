@@ -25,7 +25,7 @@ public class LinkedModeInformation {
 	private boolean hasDeclSpec;
 	private List<LinkedProposalPositionGroup> groups;
 	private int exit = -1;
-	
+
 	public LinkedModeInformation() {
 		groups = new ArrayList<LinkedProposalPositionGroup>();
 	}
@@ -45,25 +45,25 @@ public class LinkedModeInformation {
 	public void sethasDeclSpec(boolean hasdeclspec) {
 		this.hasDeclSpec = hasdeclspec;
 	}
-	
+
 	public boolean isSameFileChange() {
 		return fileChanged;
 	}
-	
+
 	public boolean getReturnStatment() {
 		return hasReturnStatment;
 	}
-	
+
 	public boolean getConst() {
 		return const1;
 	}
-	
+
 	public boolean getDeclSpec() {
 		return hasDeclSpec;
 	}
 
 	public void addPosition(int offset, int length) {
-		LinkedProposalPositionGroup group = new LinkedProposalPositionGroup("group" + offset); //$NON-NLS-1$
+		LinkedProposalPositionGroup group = new LinkedProposalPositionGroup("group" + offset);
 		group.addPosition(new Position(offset, length));
 		getGroups().add(group);
 	}
@@ -112,7 +112,7 @@ public class LinkedModeInformation {
 	public void setExit(int offset) {
 		this.exit = offset;
 	}
-	
+
 	public void setGroups(List<LinkedProposalPositionGroup> groups) {
 		this.groups = groups;
 	}

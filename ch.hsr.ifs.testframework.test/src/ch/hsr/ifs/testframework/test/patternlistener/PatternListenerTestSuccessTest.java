@@ -8,55 +8,28 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.patternlistener;
 
+import java.io.IOException;
+
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.PatternListenerBase;
+import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class PatternListenerTestSuccessTest extends PatternListenerBase {
-	
-	private static final String TEST_NAME_EXP = "xUnitTest"; //$NON-NLS-1$
-	private static final String MSG_EXP = "OK"; //$NON-NLS-1$
-	
+
+	private static final String TEST_NAME_EXP = "xUnitTest";
+	private static final String MSG_EXP = "OK";
+
 	private String testNameStart;
 	private String testNameEnd;
 	private String msgEnd;
-	
-	final class TestSuccessHandler extends TestEventHandler{
 
-		@Override
-		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
-//			 Do nothing
-		}
-
-		@Override
-		protected void handleEnding(IRegion reg, String suitename) {
-//			 Do nothing
-		}
-
-		@Override
-		protected void handleError(IRegion reg, String testName, String msg) {
-//			 Do nothing
-		}
-
-		@Override
-		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-			// Do nothing
-		}
-
-		@Override
-		public void handleSessionEnd() {
-//			 Do nothing
-		}
-
-		@Override
-		public void handleSessionStart() {
-//			 Do nothing
-		}
+	final class TestSuccessHandler extends DummyTestEventHandler {
 
 		@Override
 		protected void handleSuccess(IRegion reg, String name, String msg) {
@@ -68,26 +41,23 @@ public class PatternListenerTestSuccessTest extends PatternListenerBase {
 		protected void handleTestStart(IRegion reg, String testname) {
 			testNameStart = testname;
 		}
-		
+
+	}
+
+	public void testListenerEvents() throws IOException, InterruptedException {
+		emulateTestRun();
+		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
+		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
+		assertEquals("Message", MSG_EXP, msgEnd);
 	}
 
 	@Override
 	protected void addTestEventHandler(ConsolePatternListener lis) {
 		lis.addHandler(new TestSuccessHandler());
 	}
-	
-	public void testTestStart() {
-		assertEquals("Teststart name", TEST_NAME_EXP, testNameStart); //$NON-NLS-1$
-	}
-	
-	public void testTestEnd() {
-		assertEquals("Testend name", TEST_NAME_EXP, testNameEnd); //$NON-NLS-1$
-		assertEquals("Message", MSG_EXP, msgEnd); //$NON-NLS-1$
-	}
-	
+
 	@Override
 	protected String getInputFileName() {
-		return "successTest.txt"; //$NON-NLS-1$
+		return "successTest.txt";
 	}
-
 }

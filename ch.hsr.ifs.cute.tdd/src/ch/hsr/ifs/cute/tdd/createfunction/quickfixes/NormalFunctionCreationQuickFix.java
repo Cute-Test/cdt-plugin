@@ -16,13 +16,12 @@ import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.FunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
-public class NormalFunctionCreationQuickFix extends
-		AbstractFunctionCreationQuickFix {
+public class NormalFunctionCreationQuickFix extends AbstractFunctionCreationQuickFix {
 
 	public NormalFunctionCreationQuickFix() {
 		setFree(false);
 	}
-	
+
 	@Override
 	protected IFunctionCreationStrategy getStrategy() {
 		return new FunctionCreationStrategy();
@@ -33,10 +32,9 @@ public class NormalFunctionCreationQuickFix extends
 		ca = new CodanArguments(marker);
 		return Messages.NormalFunctionCreationQuickFix_0 + ca.getName();
 	}
-	
+
 	@Override
-	protected void configureLinkedMode(ChangeRecorder rec,
-			LinkedModeInformation lmi) throws BadLocationException {
+	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		configureLinkedModeWithConstAndCtor(rec, lmi);
 	}
 }

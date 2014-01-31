@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizard;
@@ -30,35 +29,39 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.IIncludeStrategyProvider;
 import ch.hsr.ifs.cute.ui.IncludePathStrategy;
 import ch.hsr.ifs.cute.ui.ProjectTools;
-import ch.hsr.ifs.cute.ui.UiPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrategyProvider {
 
-	private final CuteVersionWizardPage cuteVersionWizardPage;
+	private final NewCuteProjectWizardPage cuteVersionWizardPage;
+
+	protected CuteWizardHandler(Composite p, IWizard w) {
+		super(new CuteBuildPropertyValue(), p, w);
+		cuteVersionWizardPage = initPage();
+		cuteVersionWizardPage.setWizard(w);
+
+		MBSCustomPageManager.init();
+		MBSCustomPageManager.addStockPage(cuteVersionWizardPage, cuteVersionWizardPage.getPageID());
+	}
 
 	@Override
 	public IWizardPage getSpecificPage() {
 		return cuteVersionWizardPage;
 	}
 
-	public CuteWizardHandler(Composite p, IWizard w) {
-		super(new CuteBuildPropertyValue(), p, w);
-		cuteVersionWizardPage = new CuteVersionWizardPage( getConfigPage(), getStartingPage());
-		cuteVersionWizardPage.setWizard(w);
-
-		MBSCustomPageManager.init();
-		MBSCustomPageManager.addStockPage(cuteVersionWizardPage, cuteVersionWizardPage.getPageID());
+	protected NewCuteProjectWizardPage initPage() {
+		return new NewCuteProjectWizardPage(getConfigPage(), getStartingPage());
 	}
 
 	@Override
@@ -86,36 +89,27 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		try {
 			getWizard().getContainer().run(false, true, op);
 		} catch (InvocationTargetException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		} catch (InterruptedException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		}
 
 	}
 
-	/**
-	 * @since 4.0
-	 */
 	protected void createCuteProjectSettings(IProject newProject, IProgressMonitor monitor) {
 		try {
 			createCuteProject(newProject, monitor);
 		} catch (CoreException e) {
-			UiPlugin.log(e);
+			CuteUIPlugin.log(e);
 		}
 	}
 
-
-	/**
-	 * @since 4.0
-	 */
 	protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
-		QualifiedName key = new QualifiedName(UiPlugin.PLUGIN_ID, UiPlugin.CUTE_VERSION_PROPERTY_NAME);
-		project.setPersistentProperty(key, getCuteVersion().getVersionString());
+		project.setPersistentProperty(CuteUIPlugin.CUTE_VERSION_PROPERTY_NAME, getCuteVersion().getVersionString());
 		createCuteProjectFolders(project);
 		callAdditionalHandlers(project, pm);
 		ManagedBuildManager.saveBuildInfo(project, true);
-
 	}
 
 	private void callAdditionalHandlers(IProject project, IProgressMonitor pm) throws CoreException {
@@ -126,65 +120,40 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 			mon.worked(1);
 		}
 		mon.done();
-
 	}
 
-	/**
-	 * @since 4.0
-	 */
 	protected List<ICuteWizardAddition> getAdditions() {
 		return cuteVersionWizardPage.getAdditions();
 	}
 
-
-	protected void createCuteProjectFolders(IProject project)
-			throws CoreException {
-		IFolder srcFolder = ProjectTools.createFolder(project, "src", true); //$NON-NLS-1$
+	private void createCuteProjectFolders(IProject project) throws CoreException {
 		ICuteHeaders cuteVersion = getCuteVersion();
 
+		IFolder srcFolder = ProjectTools.createFolder(project, "src", false);
+		copyExampleTestFiles(srcFolder, cuteVersion);
 
-		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", true); //$NON-NLS-1$
-
-
-		copyFiles(srcFolder, cuteVersion, cuteFolder);
-
-		ProjectTools.setIncludePaths(cuteFolder.getFullPath(), project, this);
-		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-				getTestMainFile(project), true);
-	}
-
-	/**
-	 * @since 4.0
-	 */
-	protected ICuteHeaders getCuteVersion() {
-		return UiPlugin.getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
-	}
-
-	/**
-	 * @since 4.0
-	 */
-	public void copyFiles(IFolder srcFolder, ICuteHeaders cuteVersion,
-			IFolder cuteFolder) throws CoreException {
-		cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
+		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", false);
 		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
+		ProjectTools.setIncludePaths(cuteFolder.getFullPath(), project, this);
+
+		IFile srcFile = project.getFile("src/Test.cpp");
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), srcFile, true);
 	}
 
-	protected IFile getTestMainFile(IProject project) {
-		return project.getFile("src/Test.cpp"); //$NON-NLS-1$
+	private ICuteHeaders getCuteVersion() {
+		return CuteUIPlugin.getCuteVersion(cuteVersionWizardPage.getCuteVersionString());
 	}
 
-	/**
-	 * @since 4.0
-	 */
+	protected void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
+		cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
+	}
+
 	public GetOptionsStrategy getStrategy(int optionType) {
 		switch (optionType) {
 		case IOption.INCLUDE_PATH:
 			return new IncludePathStrategy();
-
 		default:
-			throw new IllegalArgumentException("Illegal Argument: "+optionType); //$NON-NLS-1$
+			throw new IllegalArgumentException("Illegal Argument: " + optionType);
 		}
 	}
-
-
 }

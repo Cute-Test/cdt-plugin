@@ -12,7 +12,6 @@ import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.ui.wizards.AbstractCWizard;
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSWizardHandler;
-import org.eclipse.cdt.ui.wizards.CCProjectWizard;
 import org.eclipse.cdt.ui.wizards.EntryDescriptor;
 import org.eclipse.jface.wizard.IWizard;
 
@@ -27,19 +26,16 @@ public class NewCuteProjectCategoryWizard extends AbstractCWizard {
 
 	@Override
 	public EntryDescriptor[] createItems(boolean supportedOnly, IWizard wizard) {
-		if (wizard instanceof CCProjectWizard) {
-			CuteWizardHandler handler = getHandler(wizard);
-			IToolChain[] tcs = ManagedBuildManager.getExtensionsToolChains(MBSWizardHandler.ARTIFACT, new CuteBuildPropertyValue().getId(), false);
-			for (int j = 0; j < tcs.length; j++) {
-				if (isValid(tcs[j], supportedOnly, wizard)) {
-					handler.addTc(tcs[j]);
-				}
+		CuteWizardHandler handler = getHandler(wizard);
+		IToolChain[] tcs = ManagedBuildManager.getExtensionsToolChains(MBSWizardHandler.ARTIFACT, new CuteBuildPropertyValue().getId(), false);
+		for (IToolChain curToolChain : tcs) {
+			if (isValid(curToolChain, supportedOnly, wizard)) {
+				handler.addTc(curToolChain);
 			}
-			EntryDescriptor data = getEntryDescriptor(handler);
-			data.setDefaultForCategory(true);
-			return new EntryDescriptor[] { data };
 		}
-		return new EntryDescriptor[0];
+		EntryDescriptor data = getEntryDescriptor(handler);
+		data.setDefaultForCategory(true);
+		return new EntryDescriptor[] { data };
 	}
 
 	protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {

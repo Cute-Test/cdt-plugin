@@ -15,19 +15,19 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class ShowPreviousFailureAction extends Action {
-	
-	private TestRunnerViewPart trViewPart;
+
+	private final TestRunnerViewPart trViewPart;
 	private static Messages msg = TestFrameworkPlugin.getMessages();
 
 	public ShowPreviousFailureAction(TestRunnerViewPart trViewPart) {
-		super(msg.getString("ShowPreviousFailureAction.ShowPrevFailedTest")); //$NON-NLS-1$
-		setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/select_prev.gif")); //$NON-NLS-1$
-		setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif")); //$NON-NLS-1$
-		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif")); //$NON-NLS-1$
-		setToolTipText(msg.getString("ShowPreviousFailureAction.ShowPrevFailedTest"));  //$NON-NLS-1$
+		super(msg.getString("ShowPreviousFailureAction.ShowPrevFailedTest"));
+		setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/select_prev.gif"));
+		setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif"));
+		setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif"));
+		setToolTipText(msg.getString("ShowPreviousFailureAction.ShowPrevFailedTest"));
 		this.trViewPart = trViewPart;
 	}
 
@@ -35,7 +35,5 @@ public class ShowPreviousFailureAction extends Action {
 	public void run() {
 		trViewPart.selectPrevFailure();
 	}
-	
-	
 
 }

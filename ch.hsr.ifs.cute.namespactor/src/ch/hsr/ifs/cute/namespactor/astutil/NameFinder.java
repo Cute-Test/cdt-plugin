@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.astutil;
 
 import java.util.List;
@@ -26,28 +26,24 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
  * */
 public class NameFinder extends ASTVisitor {
 	private List<IBinding> nameBindings = null;
-	
-	private NameFinder(List<IBinding> nameBindings){
-		shouldVisitNames  = true;
+
+	private NameFinder(List<IBinding> nameBindings) {
+		shouldVisitNames = true;
 		this.nameBindings = nameBindings;
 	}
 
 	@Override
-	public int visit(IASTName name) {	
+	public int visit(IASTName name) {
 		nameBindings.add(name.resolveBinding());
 		shouldVisitNames = false;
 		return PROCESS_SKIP;
 	}
-	
-	/**
-	 * @param decl the declaration to extract the name of
-	 * @param nameBindings collecting parameter object, the found name will be added to the list
-	 */
+
 	public static void findNameBindingOf(IASTDeclaration decl, List<IBinding> nameBindings) {
 		IASTNode root = decl;
-		if(decl instanceof ICPPASTFunctionDefinition){
+		if (decl instanceof ICPPASTFunctionDefinition) {
 			root = ((ICPPASTFunctionDefinition) decl).getDeclarator();
-		}else if(decl instanceof ICPPASTTemplateDeclaration){
+		} else if (decl instanceof ICPPASTTemplateDeclaration) {
 			root = ((ICPPASTTemplateDeclaration) decl).getDeclaration();
 		}
 		root.accept(new NameFinder(nameBindings));

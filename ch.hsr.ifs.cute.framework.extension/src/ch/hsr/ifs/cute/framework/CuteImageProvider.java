@@ -8,7 +8,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.framework;
 
-
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,14 +19,14 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 /**
  * @author egraf
  * @since 3.1
- *
+ * 
  */
 public class CuteImageProvider extends ImageProvider {
-	
+
 	protected Map<Integer, String> pathMap = new TreeMap<Integer, String>();
 
 	public CuteImageProvider() {
-		pathMap.put(APP_LOGO, "obj16/cute_app.png"); //$NON-NLS-1$
+		pathMap.put(APP_LOGO, "obj16/cute_app.png");
 	}
 
 	@Override
@@ -38,5 +37,4 @@ public class CuteImageProvider extends ImageProvider {
 	protected String getPath(int key) {
 		return pathMap.get(key);
 	}
-
 }

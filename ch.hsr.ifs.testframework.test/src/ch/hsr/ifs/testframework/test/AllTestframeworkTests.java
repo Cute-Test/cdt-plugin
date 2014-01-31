@@ -16,13 +16,12 @@ import ch.hsr.ifs.testframework.test.patternlistener.PatternListenerSuite;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
-public class AllTestframeworkTests extends TestSuite{
-	
+public class AllTestframeworkTests extends TestSuite {
 
 	public AllTestframeworkTests() {
-		super("Testframework All Core Tests"); //$NON-NLS-1$
+		super("Testframework All Core Tests");
 		addTest(PatternListenerSuite.suite());
 		addTest(ModelBuilderSuite.suite());
 		addTest(HyperlinkSuite.suite());
@@ -33,4 +32,3 @@ public class AllTestframeworkTests extends TestSuite{
 	}
 
 }
-

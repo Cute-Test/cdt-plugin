@@ -80,7 +80,7 @@ public class RunnerFinder {
 		public int visit(IASTName name) {
 			if (name instanceof ICPPASTQualifiedName) {
 				ICPPASTQualifiedName qName = (ICPPASTQualifiedName) name;
-				if (qName.toString().equals("cute::makeRunner")) { //$NON-NLS-1$
+				if (qName.toString().equals("cute::makeRunner")) {
 					res = true;
 					return ASTVisitor.PROCESS_ABORT;
 				}
@@ -107,9 +107,9 @@ public class RunnerFinder {
 
 	public List<IASTFunctionDefinition> findTestRunners(IProgressMonitor monitor) throws CoreException {
 		SubMonitor mon = SubMonitor.convert(monitor, 2);
-		mon.beginTask(Messages.getString("RunnerFinder.findMain"), 1); //$NON-NLS-1$
+		mon.beginTask(Messages.getString("RunnerFinder.findMain"), 1);
 		IASTFunctionDefinition mainFunc = findMain();
-		mon.beginTask(Messages.getString("RunnerFinder.findRunners"), 1); //$NON-NLS-1$
+		mon.beginTask(Messages.getString("RunnerFinder.findRunners"), 1);
 		List<IASTFunctionDefinition> testRunnersFunctions = getTestRunnersFunctions(mainFunc);
 		mon.done();
 		return testRunnersFunctions;
@@ -197,7 +197,7 @@ public class RunnerFinder {
 		IIndex index = getIndex();
 		try {
 			index.acquireReadLock();
-			IIndexBinding[] bind = index.findBindings("main".toCharArray(), IndexFilter.ALL, new NullProgressMonitor()); //$NON-NLS-1$
+			IIndexBinding[] bind = index.findBindings("main".toCharArray(), IndexFilter.ALL, new NullProgressMonitor());
 			if (bind.length > 0) {
 
 				IIndexName[] main = index.findDefinitions(bind[0]);

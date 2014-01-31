@@ -22,9 +22,9 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_FunctionResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"; //$NON-NLS-1$
-	public static final String ERR_ID_FunctionResolutionProblem_STATIC_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"; //$NON-NLS-1$
-	public static final String ERR_ID_NamespaceMemberResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR"; //$NON-NLS-1$
+	public static final String ERR_ID_FunctionResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR";
+	public static final String ERR_ID_FunctionResolutionProblem_STATIC_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR";
+	public static final String ERR_ID_NamespaceMemberResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -86,17 +86,17 @@ public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 	}
 
 	private void reportMissingNamespaceFunction(IASTName name, String missingName) {
-		CodanArguments ca = new CodanArguments(missingName, missingName, ":memberfunc"); //$NON-NLS-1$
+		CodanArguments ca = new CodanArguments(missingName, missingName, ":memberfunc");
 		reportProblem(ERR_ID_NamespaceMemberResolutionProblem_HSR, name.getLastName(), ca.toArray());
 	}
 
 	private void reportMissingFunction(IASTName name, String missingName) {
-		CodanArguments ca = new CodanArguments(missingName, missingName, ":freefunc"); //$NON-NLS-1$
+		CodanArguments ca = new CodanArguments(missingName, missingName, ":freefunc");
 		reportProblem(ERR_ID_FunctionResolutionProblem_HSR, name.getLastName(), ca.toArray());
 	}
 
 	private void reportMissingStaticMember(IASTName partname, String missingName) {
-		CodanArguments ca = new CodanArguments(missingName, missingName, ":staticfreefunc"); //$NON-NLS-1$
+		CodanArguments ca = new CodanArguments(missingName, missingName, ":staticfreefunc");
 		reportProblem(ERR_ID_FunctionResolutionProblem_STATIC_HSR, partname, ca.toArray());
 	}
 }

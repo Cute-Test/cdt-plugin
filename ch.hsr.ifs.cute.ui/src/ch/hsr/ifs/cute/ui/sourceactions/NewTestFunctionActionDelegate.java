@@ -38,32 +38,22 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
+
 /**
  * @author Emanuel Graf
  * @since 4.0
  * 
  */
 public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
-	/**
-	 * @since 4.0
-	 */
 	protected IEditorPart editor;
-	/**
-	 * @since 4.0
-	 */
 	protected LinkedModeUI linkedModeUI;
-	/**
-	 * @since 4.0
-	 */
-	protected final String funcName;//used for linking during 1st edit
-	/**
-	 * @since 4.0
-	 */
+	protected final String funcName;// used for linking during 1st edit
 	protected final NewTestFunctionAction functionAction;
 
 	public NewTestFunctionActionDelegate() {
-		this.funcName = "newTestFunction"; //$NON-NLS-1$
-		this.functionAction = new NewTestFunctionAction("newTestFunction"); //$NON-NLS-1$
+		this.funcName = "newTestFunction";
+		this.functionAction = new NewTestFunctionAction("newTestFunction");
 	}
 
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
@@ -79,7 +69,6 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
-	/* ensure texteditor is the active window, save previous changes first */
 	protected boolean isCorrectEditor() {
 		if (editor == null) {
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -116,11 +105,11 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 				updateLinkedMode(doc, mEdit);
 			}
 		} catch (CoreException e) {
-			e.printStackTrace();// TODO exception not managed
+			CuteUIPlugin.log("Exception while running new test function action", e);
 		} catch (MalformedTreeException e) {
-			e.printStackTrace();
+			CuteUIPlugin.log("Exception while running new test function action", e);
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			CuteUIPlugin.log("Exception while running new test function action", e);
 		} finally {
 			editor = null;
 		}
@@ -160,19 +149,14 @@ public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWo
 
 	int getCursorEndPosition(TextEdit[] edits, String newLine) {
 		int result = edits[0].getOffset() + edits[0].getLength();
+		int leadingEditsLengthSum = 0;
 		for (TextEdit textEdit : edits) {
 			String insert = ((InsertEdit) textEdit).getText();
 			if (insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
-
-				if (functionAction.insertFileOffset == -1 || //error check
-						functionAction.pushbackOffset == -1 || //error check	
-						functionAction.insertFileOffset < functionAction.pushbackOffset) //before pushback
-				{
-					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
-				} else {
-					result = (textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()) + functionAction.pushbackLength);
-				}
+				result = (leadingEditsLengthSum + textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
 				break;
+			} else {
+				leadingEditsLengthSum += ((InsertEdit) textEdit).getLength();
 			}
 		}
 		return result;

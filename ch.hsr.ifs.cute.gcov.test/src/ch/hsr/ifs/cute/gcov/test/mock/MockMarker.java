@@ -23,7 +23,7 @@ public class MockMarker implements IMarker {
 	
 	private final String type;
 	private final IResource res;
-	private Map<String, Object> attributes = new HashMap<String, Object>();;
+	private Map<String, Object> attributes = new HashMap<String, Object>();
 
 	public MockMarker(String type, IResource resource) {
 		super();
@@ -75,8 +75,7 @@ public class MockMarker implements IMarker {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map getAttributes() throws CoreException {
+	public Map<String, Object> getAttributes() throws CoreException {
 		return attributes;
 	}
 
@@ -120,9 +119,9 @@ public class MockMarker implements IMarker {
 		throw new NotYetImplementedException();
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void setAttributes(Map attributes) throws CoreException {
-		this.attributes = attributes;
+	@SuppressWarnings("unchecked")
+	public void setAttributes(Map<String, ? extends Object> attributes) throws CoreException {
+		this.attributes = (Map<String, Object>) attributes;
 	}
 
 	@SuppressWarnings("rawtypes")

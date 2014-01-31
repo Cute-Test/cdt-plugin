@@ -37,12 +37,14 @@ import org.eclipse.text.edits.TextEdit;
 @SuppressWarnings("deprecation")
 public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 
-	protected static final String EMPTY_STRING = ""; //$NON-NLS-1$	
+	protected static final String EMPTY_STRING = "";
 	protected int pushbackOffset = -1;
 	protected final String newLine;
 	protected final IASTTranslationUnit astTu;
+	protected final SuitePushBackFinder suitPushBackFinder;
 
-	public AddPushbackStatementStrategy(IDocument doc, IASTTranslationUnit astTu) {
+	public AddPushbackStatementStrategy(IDocument doc, IASTTranslationUnit astTu, SuitePushBackFinder finder) {
+		this.suitPushBackFinder = finder;
 		newLine = TextUtilities.getDefaultLineDelimiter(doc);
 		this.astTu = astTu;
 	}
@@ -59,7 +61,7 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 			IASTFileLocation fileLocation;
 			if (lastPushBack != null) {
 				fileLocation = lastPushBack.getFileLocation();
-			} else {//case where no push_back was found, use cute::suite location 
+			} else {// case where no push_back was found, use cute::suite location
 				fileLocation = suitPushBackFinder.getSuiteNode().getParent().getFileLocation();
 			}
 			pushbackOffset = fileLocation.getNodeOffset() + fileLocation.getNodeLength();
@@ -67,8 +69,7 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 
 			return edit;
 		} else {
-			//TODO case of no cute::suite found
-
+			// TODO case of no cute::suite found
 			return null;
 		}
 	}
@@ -90,7 +91,7 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 		for (IASTName name : refs) {
 			if (name.getParent().getParent() instanceof ICPPASTFieldReference) {
 				IASTFieldReference fRef = (ICPPASTFieldReference) name.getParent().getParent();
-				if (fRef.getFieldName().toString().equals("push_back")) { //$NON-NLS-1$
+				if (fRef.getFieldName().toString().equals("push_back")) {
 					lastPushBack = name;
 				}
 			}
@@ -99,30 +100,30 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 	}
 
 	protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder) {
-		final StringBuilder builder = new StringBuilder();
 		final IASTName suiteName = suitPushBackFinder.getSuiteDeclName();
-		builder.append(newLine).append(pushBackString(String.valueOf(suiteName), createPushBackContent())); //$NON-NLS-1$ //$NON-NLS-2$
-		return createPushBackEdit(editorFile, astTu, suitPushBackFinder, builder.toString());
+		String pushBackString = pushBackString(String.valueOf(suiteName), createPushBackContent());
+		String insertion = newLine + pushBackString;
+		return createPushBackEdit(editorFile, astTu, suitPushBackFinder, insertion);
 	}
 
 	protected String pushBackString(String suite, String insidePushback) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("\t"); //$NON-NLS-1$
+		builder.append("\t");
 		builder.append(suite.toString());
-		builder.append(".push_back("); //$NON-NLS-1$
+		builder.append(".push_back(");
 		builder.append(insidePushback);
-		builder.append(");"); //$NON-NLS-1$
+		builder.append(");");
 		return builder.toString();
 	}
 
 	protected String functionAST(IASTExpression thelist) {
 		String theName = EMPTY_STRING;
-		if (thelist instanceof IASTExpressionList) {//normal run only
+		if (thelist instanceof IASTExpressionList) {// normal run only
 			IASTExpression innerlist[] = ((IASTExpressionList) thelist).getExpressions();
 			IASTUnaryExpression unaryex = (IASTUnaryExpression) innerlist[1];
 			IASTLiteralExpression literalex = (IASTLiteralExpression) unaryex.getOperand();
 			theName = literalex.toString();
-		} else {//both normal run and unit test
+		} else {// both normal run and unit test
 			theName = ((IASTIdExpression) thelist).getName().toString();
 		}
 		return theName;
@@ -155,7 +156,7 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 			for (IASTName name1 : refs) {
 				try {
 					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
-					if (fRef.getFieldName().toString().equals("push_back")) { //$NON-NLS-1$
+					if (fRef.getFieldName().toString().equals("push_back")) {
 						IASTFunctionCallExpression callex = (IASTFunctionCallExpression) name1.getParent().getParent().getParent();
 						IASTFunctionCallExpression innercallex = (IASTFunctionCallExpression) callex.getParameterExpression();
 						IASTExpression thelist = innercallex.getParameterExpression();
@@ -173,8 +174,8 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 				} catch (ClassCastException e) {
 				}
 			}
-		} else {//TODO need to create suite
-				//@see getLastPushBack() for adding the very 1st push back
+		} else {// TODO need to create suite
+				// @see getLastPushBack() for adding the very 1st push back
 		}
 
 		return false;

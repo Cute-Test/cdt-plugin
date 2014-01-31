@@ -27,7 +27,7 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_TypeResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"; //$NON-NLS-1$
+	public static final String ERR_ID_TypeResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -41,7 +41,7 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 
 		@Override
 		protected void reactOnProblemBinding(IProblemBinding problemBinding, IASTName name) {
-			//do not report B<int> twice
+			// do not report B<int> twice
 			if (name.getParent() != null && name.getParent() instanceof ICPPASTTemplateId) {
 				if (reportedNames.contains(name.getParent())) {
 					return;
@@ -65,10 +65,10 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 		}
 
 		private CodanArguments createCodanArguments(IASTName name, final String missingName, final ICPPASTNamedTypeSpecifier nts) {
-			String strategy = ":type"; //$NON-NLS-1$
+			String strategy = ":type";
 			ICPPASTTemplateId templateId = extractTemplateId(name, nts);
 			if (templateId != null) {
-				strategy = ":templtype"; //$NON-NLS-1$
+				strategy = ":templtype";
 				String args = composeArgumentString(templateId);
 				CodanArguments ca = new CodanArguments(missingName, missingName, strategy, args);
 				return ca;
@@ -84,11 +84,11 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 		}
 
 		private String composeArgumentString(ICPPASTTemplateId templateId) {
-			String args = ""; //$NON-NLS-1$
+			String args = "";
 			for (IASTNode node : templateId.getTemplateArguments()) {
 				if (node instanceof CPPASTTypeId) {
 					IASTDeclSpecifier declspec = ((CPPASTTypeId) node).getDeclSpecifier();
-					args += declspec.getRawSignature() + TEMPLATE_ARGUMENT_SEPARATOR; //$NON-NLS-1$
+					args += declspec.getRawSignature() + TEMPLATE_ARGUMENT_SEPARATOR;
 				}
 			}
 			if (!args.isEmpty()) {

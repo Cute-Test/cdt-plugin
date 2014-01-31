@@ -12,13 +12,12 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.gcov.parser.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.gcov.parser.messages";
 	public static String LaunchObserver_parse;
 	static {
-		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
 

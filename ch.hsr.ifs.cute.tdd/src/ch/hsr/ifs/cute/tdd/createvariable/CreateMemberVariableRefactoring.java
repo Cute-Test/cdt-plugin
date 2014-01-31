@@ -26,6 +26,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
@@ -43,13 +44,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 
-public class CreateMemberVariableRefactoring extends CRefactoring3 {
+public class CreateMemberVariableRefactoring extends TddCRefactoring {
 
 	private boolean isArray = false;
 	private IASTInitializerClause initClause;
@@ -80,7 +81,7 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 		ICPPASTDeclarator newDeclarator;
 		if (isArray) {
 			assert (initClause instanceof IASTInitializerList);
-			IASTExpression size = new CPPASTLiteralExpression(ICPPASTLiteralExpression.lk_integer_constant, (((IASTInitializerList) initClause).getSize() + "").toCharArray()); //$NON-NLS-1$
+			IASTExpression size = new CPPASTLiteralExpression(ICPPASTLiteralExpression.lk_integer_constant, (((IASTInitializerList) initClause).getSize() + "").toCharArray());
 			ICPPASTArrayDeclarator array = new CPPASTArrayDeclarator(variableName.copy());
 			array.addArrayModifier(new CPPASTArrayModifier(size));
 			newDeclarator = array;
@@ -159,7 +160,8 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 	}
 
 	private boolean isThisKeyword(ICPPASTFieldReference fieldRef) {
-		return fieldRef.getFieldOwner() instanceof ICPPASTLiteralExpression && ((ICPPASTLiteralExpression) fieldRef.getFieldOwner()).getKind() == ICPPASTLiteralExpression.lk_this;
+		ICPPASTExpression owner = fieldRef.getFieldOwner();
+		return owner instanceof ICPPASTLiteralExpression && ((ICPPASTLiteralExpression) owner).getKind() == ICPPASTLiteralExpression.lk_this;
 	}
 
 	private IASTInitializerClause getInitializerClause(ICPPASTConstructorChainInitializer chain) {
@@ -189,7 +191,7 @@ public class CreateMemberVariableRefactoring extends CRefactoring3 {
 	}
 
 	private CPPASTNamedTypeSpecifier createStringDeclSpec() {
-		return new CPPASTNamedTypeSpecifier(new CPPASTName("std::string".toCharArray())); //$NON-NLS-1$
+		return new CPPASTNamedTypeSpecifier(new CPPASTName("std::string".toCharArray()));
 	}
 
 	public static IASTDeclSpecifier createVoidDeclSpec() {

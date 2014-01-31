@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.ILaunch;
@@ -23,7 +24,7 @@ import ch.hsr.ifs.testframework.event.TestEventHandler;
 
 /**
  * @author egraf
- *
+ * 
  */
 public class ModellBuilder extends TestEventHandler {
 
@@ -38,25 +39,28 @@ public class ModellBuilder extends TestEventHandler {
 		this.rtPath = exePath;
 		this.launch = launch;
 	}
+
 	public ModellBuilder(IPath path) {
 		this(path, null);
 	}
 
 	@Override
 	public void handleError(IRegion reg, String testName, String msg) {
-		if(currentTestCase != null) {
+		if (currentTestCase != null) {
 			model.endCurrentTestCase(null, -1, msg, TestStatus.error, currentTestCase);
 			endTestCase();
-		}else {
+		} else {
 			unexpectedTestCaseEnd();
 		}
 	}
+
 	private void unexpectedTestCaseEnd() {
-		if(lastTestCase != null) {
+		if (lastTestCase != null) {
 			model.endCurrentTestCase(null, -1, Messages.ModellBuilder_0, TestStatus.error, lastTestCase);
 		}
 
 	}
+
 	private void endTestCase() {
 		lastTestCase = currentTestCase;
 		currentTestCase = null;
@@ -64,10 +68,10 @@ public class ModellBuilder extends TestEventHandler {
 
 	@Override
 	public void handleSuccess(IRegion reg, String name, String msg) {
-		if(currentTestCase != null) {
+		if (currentTestCase != null) {
 			model.endCurrentTestCase(null, -1, msg, TestStatus.success, currentTestCase);
 			endTestCase();
-		}else {
+		} else {
 			unexpectedTestCaseEnd();
 		}
 	}
@@ -83,17 +87,17 @@ public class ModellBuilder extends TestEventHandler {
 	}
 
 	@Override
-	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason){
-		if(currentTestCase != null) {
+	public void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
+		if (currentTestCase != null) {
 
-			IPath filePath = getWorkspaceFile(fileName, rtPath);		
-			
-			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
-			if(file == null){
+			IPath filePath = getWorkspaceFile(fileName, rtPath);
+
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			IFile file = root.getFileForLocation(filePath);
+			if (file == null) {
 				try {
-					IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new URI("file:" + filePath.toPortableString()), IResource.FILE);
-					if(files.length > 0)
-					{
+					IFile[] files = root.findFilesForLocationURI(new URI("file:" + filePath.toPortableString()), IResource.FILE);
+					if (files.length > 0) {
 						file = files[0];
 					}
 				} catch (URISyntaxException e) {

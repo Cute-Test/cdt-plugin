@@ -11,7 +11,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.eu;
 
-
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -49,17 +48,26 @@ public abstract class EURefactoring extends RefactoringBase {
 	protected IASTTranslationUnit astTU;
 	protected EURefactoringContext context = new EURefactoringContext();
 
-	public EURefactoring(ICElement element, ISelection selection,ICProject project) {
+	protected abstract IASTNode prepareInsertStatement();
+
+	protected abstract void findStartingNames(EURefactoringContext context);
+
+	protected abstract ICPPASTQualifiedName buildUsingNameFrom(ICPPASTQualifiedName lastName);
+
+	protected abstract EUReplaceVisitor getReplaceVisitor();
+
+	protected abstract IASTNode findTypeScope();
+
+	public EURefactoring(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);
 	}
 
 	protected static ICPPASTQualifiedName getSelectedQualifiedName(final Region textSelection, IASTTranslationUnit tu) {
 
-		if(textSelection.getLength() > 0){
+		if (textSelection.getLength() > 0) {
 			final Container<ICPPASTQualifiedName> container = new Container<ICPPASTQualifiedName>();
 
 			tu.getDeclarations();
-
 			tu.accept(new ASTVisitor() {
 				{
 					shouldVisitNames = true;
@@ -68,10 +76,10 @@ public abstract class EURefactoring extends RefactoringBase {
 				@Override
 				public int visit(IASTName name) {
 					if (name instanceof ICPPASTQualifiedName && NSSelectionHelper.isSelectionOnExpression(textSelection, name)) {
-						ICPPASTQualifiedName selection = NSSelectionHelper.getInnerMostSelectedNameInExpression(textSelection, (ICPPASTQualifiedName)name);
-						if(selection != null && !NSSelectionHelper.isSelectionCandidate(name)){
-								return super.visit(name);
-						}else{
+						ICPPASTQualifiedName selection = NSSelectionHelper.getInnerMostSelectedNameInExpression(textSelection, (ICPPASTQualifiedName) name);
+						if (selection != null && !NSSelectionHelper.isSelectionCandidate(name)) {
+							return super.visit(name);
+						} else {
 							container.setObject(selection);
 						}
 					}
@@ -85,40 +93,25 @@ public abstract class EURefactoring extends RefactoringBase {
 		return null;
 	}
 
-	protected abstract IASTNode prepareInsertStatement();
-
-	protected abstract void findStartingNames(EURefactoringContext context);
-
-	protected abstract ICPPASTQualifiedName buildUsingNameFrom(ICPPASTQualifiedName lastName);
-
-	protected abstract EUReplaceVisitor getReplaceVisitor();
-
 	@Override
 	public void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		ASTRewriteStore store = new ASTRewriteStore(collector);
-
 		addReplaceChanges(store);
-
 		addInsertChange(store);
-
 		addRemoveChanges(store);
-
 		store.performChanges();
-
 	}
 
 	private void addRemoveChanges(ASTRewriteStore store) {
 		for (IASTNode node : context.nodesToRemove) {
-			store.addRemoveChange(node);		
+			store.addRemoveChange(node);
 		}
 	}
 
 	private void addInsertChange(ASTRewriteStore store) {
-		if(context.firstNameToReplace != null){
+		if (context.firstNameToReplace != null) {
 			IASTNode insertionPoint = findInsertionPoint(context.firstNameToReplace);
-
 			IASTNode statement = prepareInsertStatement();
-
 			store.addInsertChange(scopeNode, statement, insertionPoint);
 		}
 	}
@@ -137,7 +130,6 @@ public abstract class EURefactoring extends RefactoringBase {
 	@Override
 	public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		SubMonitor sm = SubMonitor.convert(pm, 10);
-
 		super.checkInitialConditions(sm.newChild(6));
 
 		if (initStatus.hasFatalError()) {
@@ -148,7 +140,7 @@ public abstract class EURefactoring extends RefactoringBase {
 		astTU = getAST(tu, pm);
 		context.selectedQualifiedName = getSelectedQualifiedName(selectedRegion, astTU);
 
-		if(context.selectedQualifiedName == null){
+		if (context.selectedQualifiedName == null) {
 			initStatus.addFatalError(Labels.No_QName_Selected);
 			sm.done();
 			return initStatus;
@@ -157,7 +149,7 @@ public abstract class EURefactoring extends RefactoringBase {
 		context.selectedLastName = context.selectedQualifiedName.getLastName();
 		context.qualifiedUsingName = buildUsingNameFrom(context.selectedQualifiedName);
 
-		if(context.qualifiedUsingName == null){
+		if (context.qualifiedUsingName == null) {
 			initStatus.addFatalError(Labels.No_Using_Name_Built);
 			sm.done();
 			return initStatus;
@@ -165,14 +157,14 @@ public abstract class EURefactoring extends RefactoringBase {
 
 		findStartingNames(context);
 
-		if(context.startingNamespaceName == null && !context.selectedQualifiedName.isFullyQualified()){
+		if (context.startingNamespaceName == null && !context.selectedQualifiedName.isFullyQualified()) {
 			initStatus.addFatalError(Labels.No_QName_Selected);
 			sm.done();
 			return initStatus;
 		}
 
 		scopeNode = findScope();
-		if(initStatus.hasFatalError()){
+		if (initStatus.hasFatalError()) {
 			return initStatus;
 		}
 
@@ -181,8 +173,6 @@ public abstract class EURefactoring extends RefactoringBase {
 		sm.done();
 		return initStatus;
 	}
-	
-	protected abstract IASTNode findTypeScope();
 
 	protected void acceptReplaceVisitor() {
 		scopeNode.accept(getReplaceVisitor());
@@ -191,8 +181,8 @@ public abstract class EURefactoring extends RefactoringBase {
 	protected IASTNode findInsertionPoint(IASTNode insertNode) {
 
 		IASTNode insertionPoint = insertNode;
-		
-		while(!insertionPoint.getParent().equals(scopeNode)){
+
+		while (!insertionPoint.getParent().equals(scopeNode)) {
 			insertionPoint = insertionPoint.getParent();
 		}
 
@@ -201,7 +191,7 @@ public abstract class EURefactoring extends RefactoringBase {
 
 	protected IASTNode findNamespaceScope() {
 		IASTNode scopeNode = null;
-		if(context.selectedLastName.resolveBinding() instanceof ICPPClassType){
+		if (context.selectedLastName.resolveBinding() instanceof ICPPClassType) {
 			scopeNode = NSNodeHelper.findAncestorOf(context.selectedQualifiedName, ICPPASTNamespaceDefinition.class);
 		}
 		return scopeNode;
@@ -209,19 +199,19 @@ public abstract class EURefactoring extends RefactoringBase {
 
 	protected IASTNode findScope() {
 		IASTNode scope = findCompoundScope();
-		if(scope == null){
+		if (scope == null) {
 			scope = findTypeScope();
 		}
-	
-		if(initStatus.hasFatalError()){
+
+		if (initStatus.hasFatalError()) {
 			return null;
 		}
-	
-		if(scope == null){
+
+		if (scope == null) {
 			scope = findNamespaceScope();
 		}
-	
-		if(scope == null){
+
+		if (scope == null) {
 			scope = astTU;
 		}
 		return scope;

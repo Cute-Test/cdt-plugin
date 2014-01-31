@@ -1,0 +1,451 @@
+//!testAddFunctorToSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct testStruct{
+	void operator() (){
+		ASSERTM(/*$*/"functor"/*$$*/, true);
+	}
+};
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	return s;
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct testStruct{
+	void operator() (){
+		ASSERTM("functor", true);
+	}
+};
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(testStruct());
+	return s;
+}
+//!testAddFunctorWithConstructorToSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct testStruct{
+	testStruct(){}
+	void operator() (){
+		ASSERTM(/*$*/"functor"/*$$*/, true);
+	}
+};
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	return s;
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct testStruct{
+	testStruct(){}
+	void operator() (){
+		ASSERTM("functor", true);
+	}
+};
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(testStruct());
+	return s;
+}
+//!testAddFunctorWithNonDefaultConstructorToSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct testStruct{
+	testStruct(int param){}
+	void operator() (){
+		ASSERTM(/*$*/"functor"/*$$*/, true);
+	}
+};
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	return s;
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct testStruct{
+	testStruct(int param){}
+	void operator() (){
+		ASSERTM("functor", true);
+	}
+};
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(testStruct(pArAmEtRs_ReQuIrEd));
+	return s;
+}
+//!testAddFunctionToSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+void theTestFunction(){
+	ASSERTM(/*$*/"theTest"/*$$*/, true);
+}
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	return s;
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+void theTestFunction(){
+	ASSERTM("theTest", true);
+}
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(CUTE(theTestFunction));
+	return s;
+}
+//!testAddFunctionToSuiteInDirtyEditorChangeBeforeInsertion
+//@.config
+insertText=//I add a comment at the beginning\n
+insertPosition=0
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+void theTestFunction(){
+	ASSERTM(/*$*/"theTest"/*$$*/, true);
+}
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	return s;
+}
+//=
+//I add a comment at the beginning
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+void theTestFunction(){
+	ASSERTM("theTest", true);
+}
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(CUTE(theTestFunction));
+	return s;
+}
+//!testAddFunctionToSuiteInDirtyEditorChangeBetweenInsertionAndSelection
+//@.config
+insertText=//I add another comment in between\n
+insertPosition=142
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+void theTestFunction(){
+	ASSERTM(/*$*/"theTest"/*$$*/, true);
+}
+
+void testOne(){
+	ASSERT(true);
+}
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(CUTE(testOne));
+	return s;
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+void theTestFunction(){
+	ASSERTM("theTest", true);
+}
+//I add another comment in between
+
+void testOne(){
+	ASSERT(true);
+}
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(CUTE(testOne));
+	s.push_back(CUTE(theTestFunction));
+	return s;
+}
+//!testAddFunctionToSuiteInDirtyEditorChangeAfterInsertion
+//@.config
+insertText=\n//I add a comment at the end
+insertPosition=204
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+void theTestFunction(){
+	ASSERTM(/*$*/"theTest"/*$$*/, true);
+}
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	return s;
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+void theTestFunction(){
+	ASSERTM("theTest", true);
+}
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(CUTE(theTestFunction));
+	return s;
+}
+//I add a comment at the end
+//!testAddMemberFunctionInSameFileToSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct AllTests{
+	void testit() { ASSERTM(/*$*/"theTest"/*$$*/,true); }
+};
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	return s;
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct AllTests{
+	void testit() { ASSERTM("theTest",true); }
+};
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(CUTE_SMEMFUN(AllTests, testit));
+	return s;
+}
+//!testAddMemberFunctionToSuite
+//@suite.cpp
+#include "suite.h"
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	return s;
+}
+
+void Suite3::test()
+{
+	ASSERTM(/*$*/"theTest"/*$$*/, true);
+}
+//=
+#include "suite.h"
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+cute::suite make_suite_Suite3(){
+	cute::suite s;
+	s.push_back(CUTE_SMEMFUN(Suite3, test));
+	return s;
+}
+
+void Suite3::test()
+{
+	ASSERTM("theTest", true);
+}
+//@suite.h
+class Suite3{
+
+public:
+	void test();
+};
+//!testAddQualifiedMemberFunctionToSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+namespace NS {
+struct TestClass {
+	void thisIsATest();
+};
+}
+
+void NS::TestClass::thisIsATest() {
+	ASSERTM(/*$*/"start writing tests"/*$$*/, false);
+}
+
+void runSuite() {
+	cute::suite s;
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+namespace NS {
+struct TestClass {
+	void thisIsATest();
+};
+}
+
+void NS::TestClass::thisIsATest() {
+	ASSERTM("start writing tests", false);
+}
+
+void runSuite() {
+	cute::suite s;
+	s.push_back(CUTE_SMEMFUN(NS::TestClass, thisIsATest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//!testRegisterFunctionWithNewSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+void testSuccess()
+{
+	ASSERTM(/*$*/"theTest"/*$$*/, true);
+}
+
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+void testSuccess()
+{
+	ASSERTM("theTest", true);
+}
+
+cute::suite make_suite(){
+	cute::suite s;
+	s.push_back(CUTE(testSuccess));
+	return s;
+}
+//!testRegisterFunctorWithNewSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+struct S{
+	void operator()()
+	{
+		ASSERTM(/*$*/"theTest"/*$$*/, true);
+	}
+};
+
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+struct S{
+	void operator()()
+	{
+		ASSERTM("theTest", true);
+	}
+};
+
+cute::suite make_suite(){
+	cute::suite s;
+	s.push_back(S());
+	return s;
+}
+//!testRegisterMemberFunctionWithNewSuite
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+struct S{
+	void testIt()
+	{
+		ASSERTM(/*$*/"theTest"/*$$*/, true);
+	}
+};
+
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+
+struct S{
+	void testIt()
+	{
+		ASSERTM("theTest", true);
+	}
+};
+
+cute::suite make_suite(){
+	cute::suite s;
+	s.push_back(CUTE_SMEMFUN(S, testIt));
+	return s;
+}
+//!testSelectionAtBeginOfTestFunction
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct S {
+  void aTest() {
+      ASSERTM(/*$*/"theTest"/*$$*/, true);
+  }
+};
+
+void runAllTests(int argc, char const *argv[]){
+  cute::suite s;
+  cute::ide_listener<> lis;
+  cute::makeRunner(lis,argc,argv)(s, "AllTests");
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+struct S {
+  void aTest() {
+      ASSERTM("theTest", true);
+  }
+};
+
+void runAllTests(int argc, char const *argv[]){
+  cute::suite s;
+	s.push_back(CUTE_SMEMFUN(S, aTest));
+  cute::ide_listener<> lis;
+  cute::makeRunner(lis,argc,argv)(s, "AllTests");
+}
+//!testRegisterMemberFunctionWithConstrArg
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+
+struct WithConstructor {
+    WithConstructor(int x) { }
+
+    void test10() {
+        ASSERT(/*$*/false/*$$*/);
+    }
+};
+
+void runAllTests(int argc, char const *argv[]){
+    cute::suite s;
+    cute::ide_listener<> lis;
+    cute::makeRunner(lis,argc,argv)(s, "AllTests");
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+
+struct WithConstructor {
+    WithConstructor(int x) { }
+
+    void test10() {
+        ASSERT(false);
+    }
+};
+
+void runAllTests(int argc, char const *argv[]){
+    cute::suite s;
+	WithConstructor instance(pArAmEtRs_ReQuIrEd);
+	s.push_back(CUTE_MEMFUN(instance, WithConstructor, test10));
+    cute::ide_listener<> lis;
+    cute::makeRunner(lis,argc,argv)(s, "AllTests");
+}
+//!testNoNewlineAtEndOfFile
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+
+struct S{
+    void operator()()
+    {
+        ASSERTM(/*$*/"theTest"/*$$*/, true);
+    }
+};//no newline here at end of line (also do not save editor after removing newline)
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+
+struct S{
+    void operator()()
+    {
+        ASSERTM("theTest", true);
+    }
+};//no newline here at end of line (also do not save editor after removing newline)
+cute::suite make_suite(){
+	cute::suite s;
+	s.push_back(S());
+	return s;
+}

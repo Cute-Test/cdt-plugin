@@ -10,7 +10,7 @@ package ch.hsr.ifs.cute.tdd.changevisibility;
 
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddQuickFix;
 
 public class ChangeVisibilityQuickFix extends TddQuickFix {
@@ -21,7 +21,7 @@ public class ChangeVisibilityQuickFix extends TddQuickFix {
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+	protected TddCRefactoring getRefactoring(ITextSelection selection) {
 		return new ChangeVisibilityRefactoring(selection, ca.getName());
 	}
 }

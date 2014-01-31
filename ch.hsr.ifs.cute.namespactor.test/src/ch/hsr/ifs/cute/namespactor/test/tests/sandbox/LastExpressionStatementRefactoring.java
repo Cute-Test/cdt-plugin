@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.test.tests.sandbox;
 
 import java.util.ArrayList;
@@ -43,17 +43,17 @@ import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 public class LastExpressionStatementRefactoring extends CRefactoring {
 
 	List<ICPPASTQualifiedName> qnames = new ArrayList<ICPPASTQualifiedName>();
-	
+
 	public LastExpressionStatementRefactoring(ICElement element, ISelection selection, ICProject project) {
 		super(element, selection, project);
 	}
 
 	@Override
 	public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		
+
 		qnames = getQNames(this.selectedRegion, getAST(tu, pm));
 		Assert.isTrue(qnames.size() == 2);
-		
+
 		return super.checkInitialConditions(pm);
 	}
 
@@ -65,17 +65,17 @@ public class LastExpressionStatementRefactoring extends CRefactoring {
 	@Override
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		// insert using directive before first(qnames)
-		IASTNode insertionPoint    = qnames.get(0).getParent().getParent().getParent();
-		IASTNode enclosingCompound = ((ICPPASTFunctionDefinition)insertionPoint.getParent().getParent()).getBody();
-		ASTRewrite rUDIR                 = collector.rewriterForTranslationUnit(getAST(tu, pm));
+		IASTNode insertionPoint = qnames.get(0).getParent().getParent().getParent();
+		IASTNode enclosingCompound = ((ICPPASTFunctionDefinition) insertionPoint.getParent().getParent()).getBody();
+		ASTRewrite rUDIR = collector.rewriterForTranslationUnit(getAST(tu, pm));
 		IASTDeclarationStatement newUDIR = new CPPASTDeclarationStatement(new CPPASTUsingDirective(new CPPASTName("A".toCharArray())));
-		
+
 		rUDIR.insertBefore(enclosingCompound, insertionPoint, newUDIR, null);
-		
+
 		// replace.each(qnames, q).by(unqualified(q))
-		for(ICPPASTQualifiedName qname : qnames){
+		for (ICPPASTQualifiedName qname : qnames) {
 			ASTRewrite rUQName = collector.rewriterForTranslationUnit(getAST(tu, pm));
-			IASTName newName   = new CPPASTName(qname.getLastName().toCharArray());
+			IASTName newName = new CPPASTName(qname.getLastName().toCharArray());
 			rUQName.replace(qname, newName, null);
 		}
 	}
@@ -84,11 +84,11 @@ public class LastExpressionStatementRefactoring extends CRefactoring {
 	protected RefactoringDescriptor getRefactoringDescriptor() {
 		return null;
 	}
-	
+
 	private static List<ICPPASTQualifiedName> getQNames(final Region textSelection, IASTTranslationUnit tu) {
 		final List<ICPPASTQualifiedName> qnames = new ArrayList<ICPPASTQualifiedName>();
-		
-		if(textSelection.getLength() > 0){
+
+		if (textSelection.getLength() > 0) {
 
 			tu.accept(new ASTVisitor() {
 				{
@@ -97,7 +97,7 @@ public class LastExpressionStatementRefactoring extends CRefactoring {
 
 				@Override
 				public int visit(IASTName name) {
-					if(name instanceof ICPPASTQualifiedName){
+					if (name instanceof ICPPASTQualifiedName) {
 						qnames.add((ICPPASTQualifiedName) name);
 					}
 					return super.visit(name);
@@ -106,5 +106,5 @@ public class LastExpressionStatementRefactoring extends CRefactoring {
 		}
 
 		return qnames;
-	}	
+	}
 }

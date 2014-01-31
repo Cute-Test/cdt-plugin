@@ -14,9 +14,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.console.IConsoleDocumentPartitioner;
@@ -36,11 +34,11 @@ public class FileInputTextConsole extends TextConsole {
 	private final String inputFile;
 
 	public FileInputTextConsole(String inputFile) {
-		super(inputFile, "FileInputTextConsole", null, true); //$NON-NLS-1$
+		super(inputFile, "FileInputTextConsole", null, true);
 		this.inputFile = inputFile;
 	}
 
-	private String getFileText(String inputFile) throws CoreException {
+	private String getFileText(String inputFile) throws CoreException, IOException {
 		Bundle bundle = TestframeworkTestPlugin.getDefault().getBundle();
 		Path path = new Path(inputFile);
 		BufferedReader br = null;
@@ -55,8 +53,6 @@ public class FileInputTextConsole extends TextConsole {
 			}
 
 			return buffer.toString();
-		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, TestframeworkTestPlugin.PLUGIN_ID, 0, e.getMessage(), e));
 		} finally {
 			if (br != null) {
 				try {
@@ -68,7 +64,7 @@ public class FileInputTextConsole extends TextConsole {
 		}
 	}
 
-	public void startTest() {
+	public void startTest() throws IOException {
 		IDocument doc = getDocument();
 		try {
 			doc.replace(0, doc.getLength(), getFileText(inputFile));

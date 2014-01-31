@@ -36,31 +36,22 @@ public class StringButtonDialogField extends StringDialogField {
 	public StringButtonDialogField(IStringButtonAdapter adapter) {
 		super();
 		fStringButtonAdapter = adapter;
-		fBrowseButtonLabel = "!Browse...!"; //$NON-NLS-1$
+		fBrowseButtonLabel = "!Browse...!";
 		fButtonEnabled = true;
 	}
 
-	/**
-	 * Sets the label of the button.
-	 */
 	public void setButtonLabel(String label) {
 		fBrowseButtonLabel = label;
 	}
 
 	// ------ adapter communication
 
-	/**
-	 * Programmatical pressing of the button
-	 */
 	public void changeControlPressed() {
 		fStringButtonAdapter.changeControlPressed(this);
 	}
 
 	// ------- layout helpers
 
-	/*
-	 * @see DialogField#doFillIntoGrid
-	 */
 	@Override
 	public Control[] doFillIntoGrid(Composite parent, int nColumns) {
 		assertEnoughColumns(nColumns);
@@ -75,9 +66,6 @@ public class StringButtonDialogField extends StringDialogField {
 		return new Control[] { label, text, button };
 	}
 
-	/*
-	 * @see DialogField#getNumberOfControls
-	 */
 	@Override
 	public int getNumberOfControls() {
 		return 3;
@@ -94,12 +82,6 @@ public class StringButtonDialogField extends StringDialogField {
 
 	// ------- ui creation	
 
-	/**
-	 * Creates or returns the created buttom widget.
-	 * 
-	 * @param parent
-	 *            The parent composite or <code>null</code> if the widget has already been created.
-	 */
 	public Button getChangeControl(Composite parent) {
 		if (fBrowseButton == null) {
 			assertCompositeNotNull(parent);
@@ -123,9 +105,6 @@ public class StringButtonDialogField extends StringDialogField {
 
 	// ------ enable / disable management
 
-	/**
-	 * Sets the enable state of the button.
-	 */
 	public void enableButton(boolean enable) {
 		if (isOkToUse(fBrowseButton)) {
 			fBrowseButton.setEnabled(isEnabled() && enable);

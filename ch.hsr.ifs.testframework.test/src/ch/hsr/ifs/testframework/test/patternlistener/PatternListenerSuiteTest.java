@@ -8,24 +8,26 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.test.patternlistener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.text.IRegion;
 
-import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
+import ch.hsr.ifs.testframework.test.PatternListenerBase;
+import ch.hsr.ifs.testframework.test.mock.DummyTestEventHandler;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class PatternListenerSuiteTest extends PatternListenerBase {
 	List<Integer> suiteSize = new ArrayList<Integer>();
 	List<String> suiteNameStart = new ArrayList<String>();
 	List<String> suiteNameEnded = new ArrayList<String>();
 
-	private final class ListenerTestHandler extends TestEventHandler{
+	private final class ListenerTestHandler extends DummyTestEventHandler {
 
 		@Override
 		protected void handleBeginning(IRegion reg, String suitename, String suitesize) {
@@ -37,58 +39,41 @@ public class PatternListenerSuiteTest extends PatternListenerBase {
 		protected void handleEnding(IRegion reg, String suitename) {
 			suiteNameEnded.add(suitename);
 		}
-
-		@Override
-		protected void handleError(IRegion reg, String testName, String msg) {
-//			 do nothing	
-		}
-
-		@Override
-		protected void handleFailure(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-//			 do nothing	
-		}
-
-		@Override
-		public void handleSessionEnd() {
-//			 do nothing	
-		}
-
-		@Override
-		public void handleSessionStart() {
-//			 do nothing	
-		}
-
-		@Override
-		protected void handleSuccess(IRegion reg, String name, String msg) {
-//			 do nothing	
-		}
-
-		@Override
-		protected void handleTestStart(IRegion reg, String testname) {
-			// do nothing			
-		}
-		
 	}
-	
-	public void testFirstStarted() {
-		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0)); //$NON-NLS-1$ //$NON-NLS-2$
-		assertEquals("Suite Size", new Integer(42), suiteSize.get(0)); //$NON-NLS-1$
+
+	public void testListenerEvents() throws IOException, InterruptedException {
+		emulateTestRun();
+		assertListSize(2);
+		assertFirstStarted(42);
+		assertFirstEnded();
+		assertLastStarted(1);
+		assertLastEnded();
 	}
-	
-	public void testFirstEnded() {
-		assertEquals("Suite Name Test", "TestSuite1", suiteNameEnded.get(0)); //$NON-NLS-1$ //$NON-NLS-2$
+
+	private void assertListSize(int expectedListsSize) {
+		assertEquals(expectedListsSize, suiteSize.size());
+		assertEquals(expectedListsSize, suiteNameStart.size());
+		assertEquals(expectedListsSize, suiteNameEnded.size());
 	}
-	
-	public void testLastStarted() {
-		assertEquals("Suite Name Test", "TestSuite2", suiteNameStart.get(1)); //$NON-NLS-1$ //$NON-NLS-2$
-		assertEquals("Suite Size", new Integer(1), suiteSize.get(1)); //$NON-NLS-1$
+
+	private void assertFirstStarted(int expectedSuiteSize) {
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameStart.get(0));
+		assertEquals("Suite Size", new Integer(expectedSuiteSize), suiteSize.get(0));
 	}
-	
-	public void testLastEnded() {
-		assertEquals("Suite Name Test", "TestSuite2", suiteNameEnded.get(1)); //$NON-NLS-1$ //$NON-NLS-2$
+
+	private void assertFirstEnded() {
+		assertEquals("Suite Name Test", "TestSuite1", suiteNameEnded.get(0));
 	}
-	
-	
+
+	private void assertLastStarted(int expectedSuiteSize) {
+		assertEquals("Suite Name Test", "TestSuite2", suiteNameStart.get(1));
+		assertEquals("Suite Size", new Integer(expectedSuiteSize), suiteSize.get(1));
+	}
+
+	private void assertLastEnded() {
+		assertEquals("Suite Name Test", "TestSuite2", suiteNameEnded.get(1));
+	}
+
 	@Override
 	protected void addTestEventHandler(ConsolePatternListener lis) {
 		lis.addHandler(new ListenerTestHandler());
@@ -96,7 +81,6 @@ public class PatternListenerSuiteTest extends PatternListenerBase {
 
 	@Override
 	protected String getInputFileName() {
-		return "suiteTest.txt"; //$NON-NLS-1$
+		return "suiteTest.txt";
 	}
-
 }

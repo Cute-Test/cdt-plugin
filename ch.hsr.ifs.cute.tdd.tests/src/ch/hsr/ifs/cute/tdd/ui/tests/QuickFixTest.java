@@ -35,13 +35,15 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		System.setProperty("line.separator", "\n");
-		enableAllProblems();
 		loadcode(getCommentOfMethod("getCode"), true);
 		indexFiles();
 		runCodan();
 		ensureMarkersReady();
 	}
 
+	/**
+	 * jaaa genau ;-) nice try! haha sehr elegant! FIXME: refactor to use cdttesting (lfelber)
+	 */
 	public void ensureMarkersReady() throws CoreException {
 		for (int i = 0; i < 10; i++) {
 			if (markers == null || markers.length == 0) {
@@ -63,7 +65,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 
 	public String getCommentOfMethod(String name) {
 		try {
-			return TestSourceReader.getContentsForTest(getBundle(),	"src", getClass(), name, 1)[0].toString();
+			return TestSourceReader.getContentsForTest(getBundle(), "src", getClass(), name, 1)[0].toString();
 		} catch (IOException e) {
 			fail("Could not load comment of test " + name);
 			return "";
@@ -71,7 +73,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	}
 
 	private Bundle getBundle() {
-		return Activator.getDefault().getBundle();
+		return TDDTestPlugin.getDefault().getBundle();
 	}
 
 	public String runQuickFix(Class<? extends TddQuickFix> klass, String qfmessage) {
@@ -97,7 +99,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	}
 
 	public IMarker getFirstMarker() {
-		for (IMarker m: markers) {
+		for (IMarker m : markers) {
 			if (hasRightType(m)) {
 				return m;
 			}
@@ -107,8 +109,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	}
 
 	private boolean hasRightType(IMarker m) {
-		return getType(m).equals("org.eclipse.cdt.codan.core.codanProblem") &&
-				CodanProblemMarker.getProblemId(m).equals(getId());
+		return getType(m).equals("org.eclipse.cdt.codan.core.codanProblem") && CodanProblemMarker.getProblemId(m).equals(getId());
 	}
 
 	private String getType(IMarker m) {
@@ -158,14 +159,16 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	public TddQuickFix getQuickFix(IMarker marker, Class<? extends TddQuickFix> klass, String qfmessage) {
 		IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
 		assertTrue(resolutions.length > 0);
-		for(IMarkerResolution resolution: resolutions) {
+		for (IMarkerResolution resolution : resolutions) {
 			if (klass == resolution.getClass()) {
-				TddQuickFix tddqf = (TddQuickFix)resolution;
+				TddQuickFix tddqf = (TddQuickFix) resolution;
 				tddqf.isApplicable(marker);
 				if (tddqf.getLabel().equals(qfmessage)) {
 					return (TddQuickFix) resolution;
 				} else {
-					System.err.println("Type of resolution matches, but message does not! Quickfix: " + tddqf.getLabel() + " message: " + qfmessage+ " Possible Typo?");
+					String msg = "Type of resolution matches, but message does not! Quickfix: " + tddqf.getLabel() + " message: " + qfmessage
+							+ " Possible Typo?";
+					TDDTestPlugin.log(msg);
 				}
 			}
 		}
@@ -174,11 +177,18 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	}
 
 	protected abstract String getId();
+
 	public abstract void getCode();
+
 	public abstract void testMarkerMessage();
+
 	public abstract void testMarkerOffset();
+
 	public abstract void testMarkerLength();
+
 	public abstract void testQuickFixMessage();
+
 	public abstract void testQuickFixApplying();
+
 	public abstract void testImageNotNull();
 }

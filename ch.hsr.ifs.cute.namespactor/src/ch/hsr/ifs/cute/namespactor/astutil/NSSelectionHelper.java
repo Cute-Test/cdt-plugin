@@ -1,14 +1,14 @@
 /******************************************************************************
-* Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
-* Rapperswil, University of applied sciences and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html 
-*
-* Contributors:
-* 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
-******************************************************************************/
+ * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Rapperswil, University of applied sciences and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html 
+ *
+ * Contributors:
+ * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.astutil;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
@@ -40,15 +40,13 @@ import org.eclipse.jface.text.Region;
 @SuppressWarnings("restriction")
 public class NSSelectionHelper extends SelectionHelper {
 
-	
 	/**
-	 * Gets the innermost equivalent <code>ICPPASTQualifiedName</code> of expression by the textSelection.
-	 * This method is an extended version of <code>SelectionHelper.isSelectionOnExpression(Region textSelection, IASTNode expression)</code>
-	 * and also uses it.
+	 * Gets the innermost equivalent <code>ICPPASTQualifiedName</code> of expression by the textSelection. This method is an extended version of
+	 * <code>SelectionHelper.isSelectionOnExpression(Region textSelection, IASTNode expression)</code> and also uses it.
 	 * 
-	 * Example for a template:  selection is on {@code A::B::S2}, expression is {@code A::B::S1<A::B::S2>}
-	 *  {@code SelectionHelper.isSelectionOnExpression} returns {@code true} because {@code A::B::S2} is inside the qualified name {@code A::B::S1<A::B::S2>}.
-	 *  {@code NSSelectionHelper.getInnerMostSelectedNameInExpression} returns the exact match of the selection: {@code A::B::S2}
+	 * Example for a template: selection is on {@code A::B::S2}, expression is {@code A::B::S1<A::B::S2>} {@code SelectionHelper.isSelectionOnExpression} returns {@code true} because {@code A::B::S2}
+	 * is inside the qualified name {@code A::B::S1<A::B::S2>}. {@code NSSelectionHelper.getInnerMostSelectedNameInExpression} returns the exact match of the selection: {@code A::B::S2}
+	 * 
 	 * @param textSelection
 	 * @param expression
 	 * @return exact qualified name inside a qualifiedName with templateId
@@ -56,7 +54,7 @@ public class NSSelectionHelper extends SelectionHelper {
 	public static ICPPASTQualifiedName getInnerMostSelectedNameInExpression(final Region textSelection, ICPPASTQualifiedName expression) {
 		final Container<ICPPASTQualifiedName> container = new Container<ICPPASTQualifiedName>();
 		container.setObject(expression);
-		expression.accept(new ASTVisitor(){
+		expression.accept(new ASTVisitor() {
 			{
 				shouldVisitNames = true;
 			}
@@ -70,7 +68,7 @@ public class NSSelectionHelper extends SelectionHelper {
 			}
 		});
 		return container.getObject();
-		
+
 	}
 
 	protected static Region getNodeSpan(IASTNode region) {
@@ -117,90 +115,77 @@ public class NSSelectionHelper extends SelectionHelper {
 	}
 
 	public static ICPPASTUsingDeclaration getSelectedUsingDeclaration(final Region textSelection, IASTTranslationUnit tu) {
-	
-			
-			final Container<ICPPASTUsingDeclaration> container = new Container<ICPPASTUsingDeclaration>();
-			
-			tu.accept(new ASTVisitor() {
-				{
-					shouldVisitDeclarations = true;
+
+		final Container<ICPPASTUsingDeclaration> container = new Container<ICPPASTUsingDeclaration>();
+
+		tu.accept(new ASTVisitor() {
+			{
+				shouldVisitDeclarations = true;
+			}
+
+			@Override
+			public int visit(IASTDeclaration declaration) {
+				if (declaration instanceof ICPPASTUsingDeclaration && isSelectionOnExpression(textSelection, declaration)) {
+					container.setObject((ICPPASTUsingDeclaration) declaration);
 				}
-	
-				@Override
-				public int visit(IASTDeclaration declaration) {
-					if (declaration instanceof ICPPASTUsingDeclaration && isSelectionOnExpression(textSelection, declaration)) {
-						container.setObject((ICPPASTUsingDeclaration) declaration);
-					}
-					return super.visit(declaration);
-				}
-			});
-	
-			return container.getObject();
+				return super.visit(declaration);
+			}
+		});
+
+		return container.getObject();
 	}
 
 	public static ICPPASTUsingDirective getSelectedUsingDirective(final Region textSelection, IASTTranslationUnit tu) {
-	
-		
-			final Container<ICPPASTUsingDirective> container = new Container<ICPPASTUsingDirective>();
-			
-			tu.accept(new ASTVisitor() {
-				{
-					shouldVisitDeclarations = true;
+
+		final Container<ICPPASTUsingDirective> container = new Container<ICPPASTUsingDirective>();
+
+		tu.accept(new ASTVisitor() {
+			{
+				shouldVisitDeclarations = true;
+			}
+
+			@Override
+			public int visit(IASTDeclaration declaration) {
+				if (declaration instanceof ICPPASTUsingDirective && isSelectionOnExpression(textSelection, declaration)) {
+					container.setObject((ICPPASTUsingDirective) declaration);
 				}
-	
-				@Override
-				public int visit(IASTDeclaration declaration) {
-					if (declaration instanceof ICPPASTUsingDirective && isSelectionOnExpression(textSelection, declaration)) {
-						container.setObject((ICPPASTUsingDirective) declaration);
-					}
-					return super.visit(declaration);
-				}
-			});
-	
-			return container.getObject();
+				return super.visit(declaration);
+			}
+		});
+
+		return container.getObject();
 	}
 
 	public static IASTName getSelectedName(final Region textSelection, IASTTranslationUnit tu) {
-		
-//		if(textSelection.getLength() > 0){
-			
-			final Container<IASTName> container = new Container<IASTName>();
-			
-			tu.accept(new ASTVisitor() {
-				{
-					shouldVisitNames = true;
-				}
-	
-				@Override
-				public int leave(IASTName name) {
-					if (container.getObject() == null && isSelectionOnExpression(textSelection, name)) {
-						container.setObject(name);
-					}
-					return super.leave(name);
-				}
 
-				@Override
-				public int visit(IASTName name) {
-//					if (isSelectionOnExpression(textSelection, name)) {
-//						container.setObject(name);
-//					}
-					return super.visit(name);
+		final Container<IASTName> container = new Container<IASTName>();
+
+		tu.accept(new ASTVisitor() {
+			{
+				shouldVisitNames = true;
+			}
+
+			@Override
+			public int leave(IASTName name) {
+				if (container.getObject() == null && isSelectionOnExpression(textSelection, name)) {
+					container.setObject(name);
 				}
-			});
-	
-			return container.getObject();
-//		}
-	//	return null;
+				return super.leave(name);
+			}
+
+			@Override
+			public int visit(IASTName name) {
+				return super.visit(name);
+			}
+		});
+
+		return container.getObject();
 	}
 
 	public static boolean isSelectionCandidate(IASTName name) {
-		return NSNodeHelper.hasAncestor(name, ICPPASTFunctionCallExpression.class)
-				|| NSNodeHelper.hasAncestor(name, IASTIdExpression.class)
-				|| NSNodeHelper.hasAncestor(name, ICPPASTParameterDeclaration.class)
-				|| NSNodeHelper.hasAncestor(name, ICPPASTBaseSpecifier.class)
-				|| NSNodeHelper.hasAncestor(name, ICPPASTNamedTypeSpecifier.class)
-				|| NSNodeHelper.hasAncestor(name, ICPPASTCompositeTypeSpecifier.class)
-				|| NSNodeHelper.hasAncestor(name, ICPPASTElaboratedTypeSpecifier.class)
-				|| name.getParent().getParent() instanceof ICPPASTFunctionDefinition;
+		return NSNodeHelper.hasAncestor(name, ICPPASTFunctionCallExpression.class) || NSNodeHelper.hasAncestor(name, IASTIdExpression.class)
+				|| NSNodeHelper.hasAncestor(name, ICPPASTParameterDeclaration.class) || NSNodeHelper.hasAncestor(name, ICPPASTBaseSpecifier.class)
+				|| NSNodeHelper.hasAncestor(name, ICPPASTNamedTypeSpecifier.class) || NSNodeHelper.hasAncestor(name, ICPPASTCompositeTypeSpecifier.class)
+				|| NSNodeHelper.hasAncestor(name, ICPPASTElaboratedTypeSpecifier.class) || name.getParent().getParent() instanceof ICPPASTFunctionDefinition;
 	}
 }

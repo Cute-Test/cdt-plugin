@@ -12,10 +12,9 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 
 /**
  * @author Emanuel Graf
- *
+ * 
  */
 public class PreferenceConstants {
-	
-	public static final String SHOW_WHITESPACES = TestFrameworkPlugin.PLUGIN_ID + "SHOW_WHITESPACES";  //$NON-NLS-1$
 
+	public static final String SHOW_WHITESPACES = TestFrameworkPlugin.PLUGIN_ID + "SHOW_WHITESPACES";
 }

@@ -10,16 +10,14 @@ package ch.hsr.ifs.cute.gcov.test.mock;
 
 /**
  * @author Emanuel Graf IFS
- *
+ * 
  */
 public class NotYetImplementedException extends RuntimeException {
 
 	private static final long serialVersionUID = -7113922490648074507L;
 
 	public NotYetImplementedException() {
-		super("Method not yet implemented"); //$NON-NLS-1$
+		super("Method not yet implemented");
 	}
-	
-	
 
 }

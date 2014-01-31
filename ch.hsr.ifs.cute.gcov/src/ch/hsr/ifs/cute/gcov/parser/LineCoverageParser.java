@@ -64,7 +64,6 @@ public abstract class LineCoverageParser {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void runGcov(String filePath, File workingDirectory, IProject project) throws CoreException {
 
 		String[] cmdLine;
@@ -75,23 +74,17 @@ public abstract class LineCoverageParser {
 		}
 
 		String[] envp = getEnvironmentVariables(project);
-
-		Process p = null;
-
-		p = DebugPlugin.exec(cmdLine, workingDirectory, envp);
-
-		IProcess process = null;
-
+		Process p = DebugPlugin.exec(cmdLine, workingDirectory, envp);
 		String programName = cmdLine[0];
-		Map processAttributes = new HashMap();
+		Map<String, String> processAttributes = new HashMap<String, String>();
 		processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
 
 		if (p != null) {
 			final Launch launch = new Launch(null, ILaunchManager.RUN_MODE, null);
-			process = DebugPlugin.newProcess(launch, p, programName, processAttributes);
+			IProcess process = DebugPlugin.newProcess(launch, p, programName, processAttributes);
 			if (process == null) {
 				p.destroy();
-				GcovPlugin.log("Gcov Process is null"); //$NON-NLS-1$
+				GcovPlugin.log("Gcov Process is null");
 			} else {
 
 				while (!process.isTerminated()) {
@@ -107,12 +100,12 @@ public abstract class LineCoverageParser {
 				GcovPlugin.log(e);
 			}
 		} else {
-			GcovPlugin.log("Could not create gcov process"); //$NON-NLS-1$
+			GcovPlugin.log("Could not create gcov process");
 		}
 	}
 
 	private String[] getGcovCommand(String iPath) {
-		String[] cmdLine = { "gcov", "-f", "-b", iPath }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String[] cmdLine = { "gcov", "-f", "-b", iPath };
 		return cmdLine;
 	}
 
@@ -121,7 +114,7 @@ public abstract class LineCoverageParser {
 		if (config != null) {
 			final IToolChain toolChain = config.getToolChain();
 			if (toolChain != null) {
-				return toolChain.getName().startsWith("Cygwin"); //$NON-NLS-1$
+				return toolChain.getName().startsWith("Cygwin");
 			}
 		}
 		return false;
@@ -139,7 +132,6 @@ public abstract class LineCoverageParser {
 	}
 
 	private String[] getCygwinGcovCommand(String iPath) {
-		@SuppressWarnings("nls")
 		String[] cmdLine = { "sh", "-c", "'gcov", "-f", "-b", iPath + "'" };
 		return cmdLine;
 	}
@@ -178,7 +170,7 @@ public abstract class LineCoverageParser {
 
 			GcovPlugin.getDefault().getcModel().clearModel();
 			if (gcovFile != null) {
-				final InputStreamReader gcovFileInput = new InputStreamReader(gcovFile.getContents());
+				InputStreamReader gcovFileInput = new InputStreamReader(gcovFile.getContents());
 				try {
 					parse(targetFile, gcovFileInput);
 				} finally {
@@ -193,18 +185,18 @@ public abstract class LineCoverageParser {
 
 	private IFile determineExecutableFile(IProject project) throws BuildMacroException, CoreException {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-		final String artifact = info.getBuildArtifactName();
+		String artifact = info.getBuildArtifactName();
 
-		final String artifactRealName = ManagedBuildManager.getBuildMacroProvider().resolveValueToMakefileFormat(artifact, "", //$NON-NLS-1$
-				" ", //$NON-NLS-1$
-				IBuildMacroProvider.CONTEXT_CONFIGURATION, info.getDefaultConfiguration());
-		final String artifactExtension = getExtension(info);
+		IBuildMacroProvider macroProvider = ManagedBuildManager.getBuildMacroProvider();
+		IConfiguration config = info.getDefaultConfiguration();
+		String artifactRealName = macroProvider.resolveValueToMakefileFormat(artifact, "", " ", IBuildMacroProvider.CONTEXT_CONFIGURATION, config);
+		String artifactExtension = getExtension(info);
 
 		FileFinderVisitor exeFinder = new FileFinderVisitor(artifactRealName.concat(artifactExtension));
 
 		IConfiguration activeConfiguration = info.getSelectedConfiguration();
 		if (activeConfiguration == null) {
-			activeConfiguration = info.getDefaultConfiguration();
+			activeConfiguration = config;
 		}
 		IFolder outputDirectory = project.getFolder(activeConfiguration.getName());
 		if (outputDirectory != null && outputDirectory.exists()) {
@@ -217,9 +209,9 @@ public abstract class LineCoverageParser {
 
 	private String getExtension(IManagedBuildInfo info) throws BuildMacroException {
 		String extension = info.getBuildArtifactExtension();
-		extension = ManagedBuildManager.getBuildMacroProvider().resolveValueToMakefileFormat(extension, "", //$NON-NLS-1$
-				" ", //$NON-NLS-1$
-				IBuildMacroProvider.CONTEXT_CONFIGURATION, info.getDefaultConfiguration());
+		IConfiguration config = info.getDefaultConfiguration();
+		IBuildMacroProvider macroProvider = ManagedBuildManager.getBuildMacroProvider();
+		extension = macroProvider.resolveValueToMakefileFormat(extension, "", " ", IBuildMacroProvider.CONTEXT_CONFIGURATION, config);
 
 		if (extension.isEmpty()) {
 			return extension;
@@ -228,9 +220,8 @@ public abstract class LineCoverageParser {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	protected void createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
-		Map attributes = new HashMap();
+		Map<String, String> attributes = new HashMap<String, String>();
 		MarkerUtilities.setMessage(attributes, message);
 		MarkerUtilities.setLineNumber(attributes, lineNum);
 		MarkerUtilities.createMarker(cppFile, attributes, type);

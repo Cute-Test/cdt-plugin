@@ -40,14 +40,12 @@ public class NestedEditTest {
 		assertEquals(fakeChange.getInsertedText(), nested.getText());
 	}
 
-	@Test(
-			expected = ChangeNotSupportedException.class)
+	@Test(expected = ChangeNotSupportedException.class)
 	public void testIllegalChange() {
 		new NestedEdit(new NullChange());
 	}
 
-	@Test(
-			expected = ChangeNotSupportedException.class)
+	@Test(expected = ChangeNotSupportedException.class)
 	public void testIllegalChangeChildren() {
 		Change[] children = new Change[] { new CompositeChange("test", new Change[] {}) };
 		new NestedEdit(new CompositeChange("test", children));

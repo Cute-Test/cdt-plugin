@@ -1,6 +1,7 @@
 package ch.hsr.ifs.cute.namespactor.test;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -10,7 +11,7 @@ import org.osgi.framework.BundleContext;
  */
 public class TestActivator extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "ch.hsr.ifs.namespactor.testPlugin"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "ch.hsr.ifs.namespactor.testPlugin";
 
 	private static TestActivator plugin;
 	
@@ -34,10 +35,10 @@ public class TestActivator extends AbstractUIPlugin {
 	}
 	
 	public static void log(IStatus status) {
-		//getDefault().getLog().log(status);
+		getDefault().getLog().log(status);
 	}
 	
 	public static void log(String message) {
-		//log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
+		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
 	}
 }

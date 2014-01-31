@@ -31,6 +31,7 @@ import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -45,12 +46,13 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.junit.Test;
 
-import ch.hsr.ifs.cdttesting.rts.junit4.CDTProjectJUnit4RtsTest;
+import ch.hsr.ifs.cdttesting.cdttest.CDTTestingTest;
 import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TDDPlugin;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 
 @SuppressWarnings("restriction")
-public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
+public abstract class TddRefactoringTest extends CDTTestingTest {
 
 	private static final int EMPTY_SELECTION = 0;
 	public static final String NL = System.getProperty("line.separator");
@@ -114,8 +116,8 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 			}
 			compareFiles(fileMap);
 		} finally {
-			if (refactoring instanceof CRefactoring3) {
-				((CRefactoring3) refactoring).dispose();
+			if (refactoring instanceof TddCRefactoring) {
+				((TddCRefactoring) refactoring).dispose();
 			}
 		}
 	}
@@ -151,7 +153,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 	private void setSelectionOnFile() {
 		for (Entry<String, TestSourceFile> entry : fileMap.entrySet()) {
 			TestSourceFile file = entry.getValue();
-			//Normally we have only one selection
+			// Normally we have only one selection
 			if (file.getSelection() == null)
 				continue;
 			setSelection(file.getSelection());
@@ -160,10 +162,10 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 	}
 
 	private void createAndPerformChange(Refactoring refactoring) throws CoreException {
-		assertConditionsOk(refactoring.checkInitialConditions(NULL_PROGRESS_MONITOR));
-		assertConditionsOk(refactoring.checkFinalConditions(NULL_PROGRESS_MONITOR));
-		Change changes = refactoring.createChange(NULL_PROGRESS_MONITOR);
-		changes.perform(NULL_PROGRESS_MONITOR);
+		assertConditionsOk(refactoring.checkInitialConditions(new NullProgressMonitor()));
+		assertConditionsOk(refactoring.checkFinalConditions(new NullProgressMonitor()));
+		Change changes = refactoring.createChange(new NullProgressMonitor());
+		changes.perform(new NullProgressMonitor());
 	}
 
 	private String removeCommentsFromCode(String code) {
@@ -222,7 +224,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 		IMarker[] markers = new IMarker[] {};
 		try {
 			CodanBuilder builder = (CodanBuilder) CodanRuntime.getInstance().getBuilder();
-			builder.processResource(cproject.getProject().getFile(activeFileName), NULL_PROGRESS_MONITOR);
+			builder.processResource(cproject.getProject().getFile(activeFileName), new NullProgressMonitor());
 			markers = cproject.getProject().findMarkers(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, true, 1);
 			builder.forgetLastBuiltState();
 		} catch (CoreException e) {
@@ -250,7 +252,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 		try {
 			return IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) marker.getResource());
 		} catch (PartInitException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while opening editor of " + marker.getResource().getName(), e);
 			return null;
 		}
 	}
@@ -269,7 +271,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 		noMarker = Boolean.valueOf(properties.getProperty("nomarkers", Boolean.toString(NO_MARKER_DEFAULT)));
 		markerCount = Integer.valueOf(properties.getProperty("markerCount", Integer.toString(MARKER_COUNT_DEFAULT)));
 		typeExtraction = Boolean.valueOf(properties.getProperty("typeextraction", Boolean.toString(TYPE_EXTRACTION_DEFAULT)));
-		//TODO: do not overwrite files not yet tested
+		// TODO: do not overwrite files not yet tested
 		overwrite = Boolean.valueOf(properties.getProperty("overwrite", Boolean.toString(OVERWRITE_DEFAULT)));
 		newFiles = separateNewFiles(properties);
 		ignoreComments = Boolean.valueOf(properties.getProperty("ignorecomments", Boolean.toString(IGNORE_COMMENTS_DEFAULT)));
@@ -284,7 +286,7 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 		BufferedReader br = new BufferedReader(new InputStreamReader(file.getContents()));
 		StringBuilder code = new StringBuilder();
 		String line;
-		while((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null) {
 			code.append(line);
 			code.append(NL);
 		}
@@ -306,8 +308,6 @@ public abstract class TddRefactoringTest extends CDTProjectJUnit4RtsTest {
 	}
 
 	protected void assertConditionsOk(RefactoringStatus conditions) {
-		assertTrue(
-				conditions.isOK() ? "OK" : "Error or Warning in Conditions: " + conditions.getEntries()[0].getMessage(), //$NON-NLS-1$ //$NON-NLS-2$
-				conditions.isOK());
+		assertTrue(conditions.isOK() ? "OK" : "Error or Warning in Conditions: " + conditions.getEntries()[0].getMessage(), conditions.isOK());
 	}
 }

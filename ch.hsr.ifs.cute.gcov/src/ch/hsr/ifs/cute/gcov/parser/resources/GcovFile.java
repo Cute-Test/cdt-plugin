@@ -22,9 +22,9 @@ public class GcovFile {
 
 	private final IFile file;
 	private final String suffix;
-	private static final String SUFFIX_DELIMITER = "."; //$NON-NLS-1$
-	private static final String GCOV_SUFFIX = SUFFIX_DELIMITER + "gcov"; //$NON-NLS-1$
-	private static final String GCNO_SUFFIX = SUFFIX_DELIMITER + "gcno"; //$NON-NLS-1$
+	private static final String SUFFIX_DELIMITER = ".";
+	private static final String GCOV_SUFFIX = SUFFIX_DELIMITER + "gcov";
+	private static final String GCNO_SUFFIX = SUFFIX_DELIMITER + "gcno";
 	private static final HashSet<String> knownSuffixes = new HashSet<String>();
 
 	static {

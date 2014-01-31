@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.ui.project.wizard;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
@@ -34,15 +33,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardContainer;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.ProjectTools;
-import ch.hsr.ifs.cute.ui.UiPlugin;
-import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author Emanuel Graf
@@ -50,16 +47,20 @@ import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
  */
 public class CuteLibWizardHandler extends CuteWizardHandler {
 
-	private final LibReferencePage libRefPage;
+	private NewCuteLibTestProjectWizardPage libRefPage;
 
 	public CuteLibWizardHandler(Composite p, IWizard w) {
-
 		super(p, w);
-		libRefPage = new LibReferencePage(getConfigPage(), getStartingPage(), getWizardContainer(w), this);
 		libRefPage.setPreviousPage(getStartingPage());
 		libRefPage.setWizard(getWizard());
 		MBSCustomPageManager.init();
 		MBSCustomPageManager.addStockPage(libRefPage, libRefPage.getPageID());
+	}
+
+	@Override
+	protected NewCuteProjectWizardPage initPage() {
+		libRefPage = new NewCuteLibTestProjectWizardPage(getConfigPage(), getStartingPage(), getWizardContainer(getWizard()));
+		return libRefPage;
 	}
 
 	private IWizardContainer getWizardContainer(IWizard w) {
@@ -72,12 +73,12 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 			createCuteProject(newProject, pm);
 			createLibSetings(newProject);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			TDDPlugin.log("Exception while creating cute project settings for project " + newProject.getName(), e);
 		}
 	}
 
 	private void createLibSetings(IProject project) throws CoreException {
-		Vector<IProject> projects = libRefPage.getCheckedProjects();
+		List<IProject> projects = libRefPage.getCheckedProjects();
 		for (IProject libProject : projects) {
 			for (ICuteWizardAddition addition : getAdditions()) {
 				addition.getHandler().configureLibProject(libProject);
@@ -88,19 +89,14 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		ManagedBuildManager.saveBuildInfo(project, true);
 	}
 
-	@Override
-	protected List<ICuteWizardAddition> getAdditions() {
-		return libRefPage.getAdditions();
-	}
-
-	private void setProjectReference(IProject project, Vector<IProject> projects) throws CoreException {
-		if (projects.size() > 0) {
-			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
+	private void setProjectReference(IProject project, List<IProject> projects) throws CoreException {
+		if (!projects.isEmpty()) {
+			ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project, true);
 			ICConfigurationDescription cfgs[] = des.getConfigurations();
 			for (ICConfigurationDescription config : cfgs) {
 				Map<String, String> refMap = config.getReferenceInfo();
 				for (IProject refProject : projects) {
-					refMap.put(refProject.getName(), ""); //$NON-NLS-1$
+					refMap.put(refProject.getName(), "");
 				}
 				config.setReferenceInfo(refMap);
 			}
@@ -128,30 +124,20 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 				if (location.segmentCount() == 0) {
 					setLibraryPaths(libProject.getFullPath(), project, configuration);
 				} else {
-					//IPath location1=location.removeFirstSegments(1);
 					setLibraryPaths(libProject.getFolder(location).getFullPath(), project, configuration);
 				}
 			}
 		}
 		String artifactName = config.getArtifactName();
-		if (artifactName.equalsIgnoreCase("${ProjName}")) { //$NON-NLS-1$
+		if (artifactName.equalsIgnoreCase("${ProjName}")) {
 			setLibName(libProject.getName(), project);
 		} else {
 			setLibName(artifactName, project);
 		}
 	}
 
-	@Override
-	public IWizardPage getSpecificPage() {
-
-		return libRefPage;
-	}
-
-	/**
-	 * @since 4.0
-	 */
 	protected void setLibraryPaths(IPath libFolder, IProject project, IConfiguration configuration) throws CoreException {
-		String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\""; //$NON-NLS-1$ //$NON-NLS-2$
+		String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\"";
 		IConfiguration targetConfig = findSameConfig(configuration, project);
 		try {
 			IToolChain toolChain = targetConfig.getToolChain();
@@ -185,29 +171,18 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		switch (optionType) {
 		case IOption.LIBRARY_PATHS:
 			return new LibraryPathsStrategy();
-
 		case IOption.LIBRARIES:
 			return new LibrariesStrategy();
-
 		default:
 			return super.getStrategy(optionType);
 		}
-
 	}
 
-	@Override
-	protected ICuteHeaders getCuteVersion() {
-		return UiPlugin.getCuteVersion(libRefPage.getCuteVersionString());
-	}
-
-	//bugzilla #210116:on CDT spelling error
 	@Override
 	public boolean canFinish() {
-		if (libRefPage == null)
+		if (libRefPage.getCheckedProjects().isEmpty()) {
 			return false;
-		Vector<IProject> projects = libRefPage.getCheckedProjects();
-		if (projects.size() < 1)
-			return false;
+		}
 		return libRefPage.isCustomPageComplete();
 	}
 
@@ -216,7 +191,6 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getBasicStringListValue();
 		}
-
 	}
 
 	private static class LibrariesStrategy implements GetOptionsStrategy {
@@ -224,7 +198,5 @@ public class CuteLibWizardHandler extends CuteWizardHandler {
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getLibraries();
 		}
-
 	}
 }
-//to convert IFolder to IPath use (IResource)IFolder.getFullPath()

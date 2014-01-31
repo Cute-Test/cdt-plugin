@@ -10,7 +10,7 @@ package ch.hsr.ifs.cute.tdd.createnamespace;
 
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.cute.tdd.CRefactoring3;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddQuickFix;
 
@@ -23,7 +23,7 @@ public class CreateNamespaceQuickFix extends TddQuickFix {
 	}
 
 	@Override
-	protected CRefactoring3 getRefactoring(ITextSelection selection) {
+	protected TddCRefactoring getRefactoring(ITextSelection selection) {
 		return new CreateNamespaceRefactoring(selection, ca.getName());
 	}
 }
