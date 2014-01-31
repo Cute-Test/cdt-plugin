@@ -72,7 +72,7 @@ public class LaunchEnvironmentVariables {
 		if (info != null) {
 			IConfiguration ic=info.getDefaultConfiguration();
 			IEnvironmentVariableProvider evp=ManagedBuildManager.getEnvironmentVariableProvider();
-			IEnvironmentVariable ev=evp.getVariable(key, ic, false);
+			IEnvironmentVariable ev=evp.getVariable(key, ic, true);
 			if(ev!=null)
 				result=ev.getValue();	
 		}
