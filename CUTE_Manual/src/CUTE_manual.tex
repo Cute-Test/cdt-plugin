@@ -1,0 +1,727 @@
+%%This is a very basic article template.
+%%There is just one section and two subsections.
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{listings}
+
+\newcommand{\vcenteredinclude}[1]{\begingroup
+\setbox0=\hbox{\includegraphics{#1}}%
+\parbox{\wd0}{\box0}\endgroup}
+
+% Title Page
+\title{CUTE Plug-in - User Manual}
+\author{Thomas Corbat}
+
+\begin{document}
+\begin{titlepage}
+\topmargin 0in
+% \maketitle
+\thispagestyle{empty}
+\begin{center}
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=\textwidth]{figures/logo.png}
+\end{figure}
+\vspace{2cm}
+\sffamily
+{\Huge \bfseries CUTE Plug-in}\\
+\vspace{0.5cm}
+\textcolor{OliveGreen}{\Large \bfseries Greenbar for C++}\\
+\vspace{1.5cm}
+{\Huge \bfseries User Manual}\\
+\vspace{3cm}
+
+{\Large \bfseries HSR -- University of Applied Sciences Rapperswil\\} 
+\vspace{0,5cm}
+{\Large \bfseries Institute for Software\\}
+\vspace{2,5cm}
+\today
+\end{center}
+\end{titlepage}
+
+
+
+
+
+\section{Overview}
+CUTE is a header only unit testing framework for C++. For being most efficient
+using such a framework, it is mandatory to have tight integration into the IDE
+at hand. The CUTE plug-in provides this integration for the C++ Development
+Tooling (CDT), a C++ IDE for Eclipse. The plug-in provides the following
+features:
+\begin{description}
+  \item[CUTE Executable Project] A C++ test project configured with the CUTE
+  headers and boilerplate source code for a simple test case. It can directly be
+  compiled to a test executable, similar to a hello world test.
+  \item[CUTE Test Suite] Test suites can be used for neat structuring of unit
+  tests. Suites can either be added to an existing CUTE project or separated
+  into their own new project.
+  \item[CUTE Library Project] A C++ test project targeting at testing a library
+  project. Such projects can be automatically connect to other existing library
+  projects, configured with the required dependencies.
+  \item[Result Visualization] After execution of the CUTE test application the
+  results of the unit tests are visualized with a green or red bar. For each
+  failing test a diff view can be displayed to see the expected and actual
+  result.
+  \item[Rerunning Specific Tests] Tests can be executed selectively from the
+  CUTE unit test results view. This avoids executing the complete set of unit
+  tests when only a small subset is of interest.
+  \item[Test Generation and Registration] The CUTE plug-in provides
+  support in writing test code by generating and registering test functions. It
+  also recognizes if a test is not registered and supports the programmer in
+  adding tests to suites.
+  \item[Test Driven Development Support] When writing tests before the actual
+  functionality which is to be tested, much source code can be generated for
+  types, functions, variables, etc. out of the test context. The CUTE plug-in
+  recognizes undeclared identifiers, wrong parameter numbers and missing
+  operators and provides one-click generation of scaffolding code.
+\end{description}
+
+In addition to the basic functionality, there are additional plug-ins for the
+CUTE plug-in, augmenting its capabilities with mock object support, test code
+coverage visualization, integration of boost headers and useful automated
+refactorings. The available extensions are described in
+section~\ref{sec:dep_plugins}.
+
+
+\section{Installation}
+Installing the CUTE plug-in is performed using the CUTE update site
+\footnote{\href{http://www.cute-test.com/updatesite}{http://www.cute-test.com/updatesite}}. 
+This is NOT a download page!
+
+\subsection{Installation Steps}
+To install the CUTE plug-in perform the following steps:
+
+\begin{enumerate}
+  \item In your Eclipse CDT choose \texttt{Help > Install New Software} in the
+  menu to start the Eclipse software installer.
+
+  \centerline{\includegraphics[width=.5\linewidth]{figures/help_menu.png}}
+
+  \item Click \texttt{Add...} to add the CUTE repository
+ 
+  \item Type (or copy) \texttt{http://www.cute-test.com/updatesite} into the
+  \texttt{Work with:} text field and confirm with enter.
+
+  \includegraphics[width=\linewidth]{figures/add_repository_window.png}
+
+  \item Select the CUTE Plug-in feature:
+
+  \includegraphics[width=\linewidth]{figures/install_window.png}
+
+  \item Click the button \texttt{Next}. Eclipse will then resolve dependencies
+  and show the install dialog.
+
+  \item Read and accept the licence agreements and click \texttt{Finish} if you
+  want to continue installing CUTE and agree with the licences.
+\end{enumerate}
+
+After the installation of the CUTE plug-in you need to restart the Eclipse IDE.
+
+\subsection{Requirements}\label{subsec:requirements}
+For installing the CUTE plug-in the Eclipse CDT (C++ Development Tooling) Kepler
+release is required for satisfying all required dependencies. The latest version
+of Eclipse CDT can be downloaded from the Eclipse download site
+\footnote{\href{http://www.eclipse.org}{http://www.eclipse.org}}. The latest
+version the CUTE plug-in has been tested with is CDT 8.2.1, the service release 1 for Kepler.
+
+\subsubsection{Header Dependencies}
+The latest CUTE headers (version 2.0) require to be compiled with a C++11
+compliant compiler, like GCC 4.8
+\footnote{\href{http://gcc.gnu.org/}{http://gcc.gnu.org/}}.
+When using CUTE headers with earlier versions of C++ there is a dependency to
+Boost headers \footnote{\href{http://www.boost.org/}{http://www.boost.org/}}. For
+providing a convenient integration of Boost into CUTE projects, there is a
+separate plug-in. Please refer to section~\ref{subsec:boost} for more
+information.
+
+\subsection{Earlier Releases}
+For Eclipse CDT versions before Kepler the CUTE plug-in versions are still
+available through the corresponding update sites:
+\begin{itemize}
+  \item Helios -
+  \href{http://www.cute-test.com/updatesite/helios}{http://www.cute-test.com/updatesite/helios}
+  \item Indigo -  
+  \href{http://www.cute-test.com/updatesite/indigo}{http://www.cute-test.com/updatesite/indigo}
+  \item Juno -  
+  \href{http://www.cute-test.com/updatesite/juno}{http://www.cute-test.com/updatesite/juno}
+\end{itemize}
+These versions of the CUTE plug-in are not updated anymore. Thus, they might
+lack some functionality which is available in the latest version of the plug-in.
+
+
+\section{First Steps}
+This section gives a step-by-step introduction to the projects available in the
+CUTE plug-in. 
+
+
+\subsection{Executable Project}
+\begin{enumerate}
+  \item Create a new CUTE project:
+
+  \includegraphics[width=\linewidth]{figures/file_menu.png}
+
+  \item 
+  \begin{itemize}
+    \item In the \texttt{C++ Project} dialog select \texttt{Test Project} in the
+    \texttt{CUTE} category.
+    \item Choose the toolchain you would like to use for compiling your test.
+    \item Enter the name of your test project.
+  	\item Click \texttt{Next >}.
+  \end{itemize}
+  
+  \includegraphics[width=\linewidth]{figures/c++_project.png}
+  
+  \item In the CUTE version dialog you can select the CUTE header version you
+  intend to use. Using the latest version is recommended.
+
+  \includegraphics[width=\linewidth]{figures/cute_version.png}
+  
+  Optional: There might be additional configuration options, depending on
+  additional plug-ins you might have installed. You can enable the integration
+  of Boost headers or coverage visualization generated from Gcov data. Refer to
+  the corresponding plug-in descriptions in section~\ref{sec:dep_plugins} for
+  detailed information.
+
+  \item Click \texttt{Finish} for creating the new project.
+
+\end{enumerate}
+
+\subsubsection{Project Contents}
+
+A new C++ project is created and visible in the project explorer. A CUTE project
+is distinguishable by the small CUTE symbol
+(\vcenteredinclude{figures/cute_project_symbol.png}) at the top left
+corner beside the \texttt{C} project indicator. This project already contains
+the required files for writing and compiling CUTE tests:
+\begin{itemize}
+  \item \texttt{src} directory containing a \texttt{Test.cpp} file
+  \item \texttt{cute} directory containing the CUTE headers selected in the CUTE
+  version dialog.
+  \item The project is configured to use the \texttt{cute} directory as
+  additional include directory. Thus it is not required to write additional
+  parts of the CUTE header paths into include directives.
+\end{itemize}
+
+\centerline{\includegraphics{figures/new_project_contents.png}}
+
+
+\subsubsection{Generated Test Source}
+
+The contents of the \texttt{Test.cpp} file consists of the required
+\texttt{main} function which creates a test suite. There is also a minimal
+failing test case, which is registered in the test suite.
+
+\begin{lstlisting}[language=C++, frame=single, basicstyle=\footnotesize]
+#include "cute.h"
+#include "ide_listener.h"
+#include "xml_listener.h"
+#include "cute_runner.h"
+
+void thisIsATest() {
+  ASSERTM("start writing tests", false);	
+}
+
+void runAllTests(int argc, char const *argv[]){
+  cute::suite s;
+  //TODO add your test here
+  s.push_back(CUTE(thisIsATest));
+  cute::xml_file_opener xmlfile(argc,argv);
+  cute::xml_listener<cute::ide_listener<> > lis(xmlfile.out);
+  cute::makeRunner(lis,argc,argv)(s, "AllTests");
+}
+
+int main(int argc, char const *argv[]){
+  runAllTests(argc,argv);
+  return 0;
+}
+\end{lstlisting}
+
+This code should be compilable and executable as is, depending on your
+environment. Your compiler should be capable of compiling C++11 or you need to
+have the headers of Boost available in your include path. See
+section~\ref{subsec:requirements} for more details.
+
+\subsubsection{Compiling \& Running Tests}
+\begin{description}
+  \item[Compiling] the test project is straightforward like compiling any other project
+with CDT. Just press the build button
+(\vcenteredinclude{figures/hammer_icon.png}) for building your project. The
+project should be compiled with no errors. This creates an executable in the
+\texttt{Debug} or \texttt{Release} directory, depending on the selected build
+configuration.
+\item[Running] the compiled tests is invoked by pressing the \texttt{Run}
+button (\vcenteredinclude{figures/run_button.png}). A dialog will appear, asking
+for a run configuration to be created for you executable project. Select
+\texttt{CUTE Test} and press \texttt{OK}. The tests will be executed.
+\end{description}
+
+\centerline{\includegraphics{figures/run_as_dialog.png}}
+
+\subsubsection{Test Result}
+\paragraph{Console Output}
+After executing the tests the result will appear in
+the Eclipse console.
+Running the generated test will result in the following console output:
+
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/console_output.png}}}
+
+The indicated failure in the output contains a link to the location of the
+assert that has failed. It is clickable and Eclipse will jump to the
+corresponding location in the source code for easy access to the failed test.
+
+\paragraph{Test Result View}
+When having large test output the console is not the convenient
+way for checking test results. The CUTE plug-in provides an additional test
+result view to visualize the results properly.
+
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/test_results_view.png}}}
+
+The Test Result view is a dedicated window provided by the CUTE plug-in for easy
+access to the test results. It summarizes the output of the unit tests as
+follows:
+\begin{itemize}
+  \item Green or red bar to indicate whether an error or failure occured.
+  \item Number of executed tests
+  \item Number of errors - Tests failed due to an unexpected problem, like an
+  uncaught exception.
+  \item Number of failures - Test failed at an assert as the result to be
+  checked was not as expected.
+\end{itemize}
+The test suites and test cases are displayed hierarchically in a tree. Each node
+has a marker indicating the test result: \texttt{Success}, \texttt{Failure} or
+\texttt{Error}.
+Unsuccessful tests can be selected. If available the message provided by the
+assert is displayed on the right hand side. If no message is given the expected
+value and the effective result are both displayed for comparison. This provides
+a useful insight on why the test failed.
+
+\paragraph{XML Output}
+As it is not feasible to use the test result view on a build server and parsing
+the console output can be tedious, there is an additional possibility to access
+the result of CUTE tests. With the current \texttt{Test.cpp} template an XML
+test result file is automatically generated. This file is located in the project
+root by default and named like the test executable plus \texttt{.xml}, e.g.
+\texttt{TestResult.exe.xml}. This test result XML file can be used by a build
+server to evaluate test results. 
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/hudson_test_results.png}}}
+
+\subsubsection{Executing Specific Tests}
+It is not required to always run all CUTE tests. If only a specific test or a
+specific subset of tests shall be executed, it is possible to select the tests
+which need to be executed in the \texttt{Test Results} view, right-click them
+and select \texttt{Rerun Selected} from the context menu.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/rerun_selected.png}}}
+
+
+
+\subsection{Library Project}
+If you want to add a test suite for an existing library project, CUTE provides
+assistance in setting up the test project. Similar to creating a normal CUTE
+project you can create a library test project as follows:
+\begin{enumerate}
+  \item Create a new CUTE project:
+
+  \includegraphics[width=\linewidth]{figures/file_menu.png}
+
+  \item 
+  \begin{itemize}
+    \item In the \texttt{C++ Project} dialog select \texttt{CUTE Library
+    Test Project} in the \texttt{CUTE} category.
+    \item Choose the toolchain you would like to use for compiling your test.
+    \item Enter the name of your test project.
+  	\item Click \texttt{Next >}.
+  \end{itemize}
+  
+  \includegraphics[width=\linewidth]{figures/new_library_project_test.png}
+  
+  \item In the CUTE version dialog you can select the CUTE header version you
+  intend to use. Using the latest version is recommended. Here you can also
+  select the library project to be tested. This selection is mandatory.
+
+  \includegraphics[width=\linewidth]{figures/library_project_test.png}
+  
+  Optional: There might be additional configuration options, depending on
+  additional plug-ins you might have installed. You can enable the integration
+  of Boost headers or cover visualization generated from Gcov data. Refer to the
+  corresponding plug-in descriptions in section~\ref{sec:dep_plugins} for
+  detailed information.
+
+  \item Click \texttt{Finish} for creating the new library test project.
+
+\end{enumerate}
+
+The created library test project is automatically configured to have a
+dependency to the selected library project. The following configuration options
+are affected:
+\begin{itemize}
+  \item Include path is extended by the library's project path.
+  \item The library project is added as a library for the test project,
+  including extended library path and the corresponding library name.
+  \item A project dependency is added from the test project to the library
+  project.
+\end{itemize}
+
+These settings could be added to a normal CUTE project manually as well. They
+are located in the project properties of the test project: \texttt{Properties > C++
+General > Paths and Symbols}
+
+\subsection{Test Suite}
+The third project kind, \texttt{CUTE Test Suite}, creates a CUTE project
+including a separated named test suite. It is created like the a common CUTE test project,
+but it allows to explicitly name the suite during creation.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics{figures/test_suite_structure.png}}}
+
+The suite is properly separated into header and source files, named according to
+the suite name.
+
+\subsection{New Test Suite}
+It is possible to add a new suite to an existing CUTE project.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/new_test_suite.png}}}
+
+The newly created suite can be added to an existing test runner at creation.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/new_cute_suite_file.png}}}
+
+
+\subsection{New Test Function}
+The CUTE plug-in supports the user by creating boilerplate code for a new test
+function, including the registration of the newly created test. This function is
+accessed through the context menu or by pressing \texttt{Ctrl + Alt + F}.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/new_test_function.png}}}
+
+
+A new test function is created:
+
+\noindent\begin{minipage}{\linewidth}
+
+\begin{lstlisting}[language=C++, frame=single, basicstyle=\footnotesize]
+void newTestFunction() {
+  ASSERTM("start writing tests", false);
+}
+\end{lstlisting}
+\end{minipage}
+
+The created test function is also registered in the test suite. Through linked
+edit mode the test name can be changed directly in all occurring places.
+
+\begin{lstlisting}[language=C++, frame=single, basicstyle=\footnotesize]
+void runAllTests(int argc, char const *argv[]){
+  cute::suite s;
+  s.push_back(CUTE(thisIsATest));
+  s.push_back(CUTE(newTestFunction)); //Newly created test
+  cute::xml_file_opener xmlfile(argc,argv);
+  cute::xml_listener<cute::ide_listener<> > lis(xmlfile.out);
+  cute::makeRunner(lis,argc,argv)(s, "AllTests");
+}
+\end{lstlisting}
+
+\section{TDD Features}
+When developing with a test driven approach, the test case is written before the
+productive code. From the test code some information can be extracted about the
+program elements to be tested. As those elements might not already exist, it is
+possible to generate them partially from the locations in the test where they
+occur.
+
+As an example let us consider the following test case:
+
+\begin{lstlisting}[language=C++, frame=single, basicstyle=\footnotesize]
+void testFunctionFive() {
+  int result = five();
+  ASSERT_EQUAL(5, result);
+}
+\end{lstlisting}
+
+Obviously, there should be a function with the name \texttt{five}, which has the
+return type \texttt{int}. The CUTE plug-in recognizes this and marks the code of
+the missing function with a CodAn maker, a small red bug icon.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics{figures/missing_function.png}}}
+
+The plug-in suggests a resolution for this bug. This allows to generate the
+scaffolding code required to make the test at least compile. Of course, program
+logic still has to be added manually.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics{figures/create_function_five.png}}}
+
+This so called quickfix is able to deduce the return type of the function and
+creates a corresponding function definition in the same file. This definition
+can then easily be moved to the desired location.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics{figures/generated_function_five.png}}}
+
+Such issues can be recognized outside test code as well and therefore, can be
+very useful in efficient development. The CUTE plug-in provides markers and
+quickfixes for the following cases:
+\begin{itemize}
+  \item Constructors
+  \item Member and non-member functions
+  \item Invalid (member) function arguments
+  \item Local and member variables
+  \item Function visibilities
+  \item Namespaces
+  \item Operators
+  \item Static functions
+  \item Types
+\end{itemize}
+
+Semantic checks for creating the markers can be configured in the preferences of
+CDT: \texttt{Window > Preferences > C/C++ > Code Analysis}
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics{figures/codan_configuration.png}}}
+
+\subsection{Unregistered Tests}
+The CUTE plug-in recognizes if a test function or a test functor is not
+registered in any test suite. It marks the affected test function with a CodAn
+warning marker. A test function is recognized as such if it has an empty
+parameter list and an \texttt{ASSERT} macro call inside.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics{figures/unregistered_test_function.png}}}
+
+For this kind of CodAn marker a resolution is provided, which registers the test
+in the test suite.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics{figures/register_test_function.png}}}
+
+
+
+\begin{lstlisting}[language=C++, frame=single, basicstyle=\footnotesize]
+void runAllTests(int argc, char const *argv[]){
+  cute::suite s;
+  s.push_back(CUTE(thisIsATest));
+  s.push_back(CUTE(testFunctionFive)); //Newly registered test
+  cute::xml_file_opener xmlfile(argc,argv);
+  cute::xml_listener<cute::ide_listener<> > lis(xmlfile.out);
+  cute::makeRunner(lis,argc,argv)(s, "AllTests");
+}
+\end{lstlisting}
+
+\section{CUTE Headers}
+The CUTE - C++ Unit Testing Easier test framework is a header only unit test
+framework for C++. It can be used independently of the plug-in for Eclipse CDT.
+All source code of the framework is available and delivered along with the
+plug-in. Each project created with the plug-in consists of its own set of header
+files. If the headers should be stored in one common place on the file system,
+the project setups have to be adapted accordingly. This does not affect the
+functionality of the plug-in though.
+
+\subsection{Functionality}
+We will not delve into the internals of the CUTE framework deeply here. Details
+can be found in the source code or described in the corresponding online
+resources
+\footnote{\href{http://www.cute-test.com/projects/cute/wiki/Theory\_of\_Operation\_and\_Goals}{http://www.cute-test.com/projects/cute/wiki/Theory\_of\_Operation\_and\_Goals}}.
+
+CUTE provides the following assert macros:
+\begin{description}
+  \item[ASSERT] Takes a condition which must evaluate to true.
+  \item[ASSERT\_EQUAL] Takes two arguments which must be equality comparable and
+  expects this comparison to be true.
+  \item[ASSERT\_EQUAL\_DELTA] Takes three arguments: Expected, actual and delta
+  values. This assert is used for assertion of floating point values.
+  \item[ASSERT\_GREATER] Takes two arguments which must be comparable and
+  expects the first to be greater than the second. left~\textgreater~right shall
+  be true.
+  \item[ASSERT\_LESS] Takes two arguments which must be comparable and
+  expects the first to be less than the second. left~\textless~right shall be
+  true.
+  \item[ASSERT\_LESS\_EQUAL] Takes two arguments which must be comparable and
+  expects the first to be less or equal than the second.
+  left~\textless=~right shall be true.
+  \item[ASSERT\_NOT\_EQUAL] Takes two arguments which must be
+  equality comparable and expects this comparison to be false.
+  \item[ASSERT\_THROWS] Takes two arguments: A piece of code (usually a function
+  call) and the type the code is expected to throw.
+  \item[FAIL] Takes a condition which must evaluate to false.
+\end{description}
+
+Every assert macro is also available with an \texttt{M} suffix, which stands for
+message. The corresponding assert takes an additional first argument, which is
+the message to be emitted if the assert fails. Since version \texttt{2.0} the
+CUTE headers also support data driven tests.
+
+\subsection{Dependencies}
+The templates of the CUTE headers rely on specific headers of the boost library:
+\begin{itemize}
+  \item bind.hpp
+  \item function.hpp
+  \item type\_traits
+\end{itemize}
+
+Those headers have to be available for compiling CUTE unit tests. If they do not
+exist in the build system there is an additional plug-in available, which
+provides the required headers and adds them to a newly created CUTE project. See
+section~\ref{subsec:boost} for more information.
+
+The dependency to Boost is obsolete when compiling C++11 code, as CUTE, since
+header version 2.0, provides full functionality using C++11 features. Recent
+compilers should be able to compile C++11 code, which we strongly recommend to
+use.
+
+Furthermore, it is possible to disable \texttt{iostream} dependency for embedded
+devices. In order to do this you need to set the \texttt{DONT\_USE\_IOSTREAM}
+symbol to \texttt{1}.
+
+\section{Additional Plug-ins}\label{sec:dep_plugins}
+Beside the CUTE plug-in, several other plug-ins are available for CUTE. Some
+depend on the core functionality of the CUTE plug-in and others can be used
+independently. 
+
+\subsection{Boost}\label{subsec:boost}
+CUTE headers, when compiled with former C++ standards (before C++11), rely on
+specific Boost headers. If in the target environment Boost is not available CUTE
+cannot be used. To have a convenient integration of Boost, an additional Boost
+plug-in for the CUTE plug-in is available. This plug-in contains Boost headers
+which are copied on demand into new CUTE projects. The plug-in also configures
+the project to use the directory of the copied Boost headers as include path.
+
+\paragraph{Include Boost Headers Option}
+When the Boost plug-in is available the second page of the \texttt{New CUTE
+Project} wizard is augmented with the option to include the headers in the created
+project.
+
+\vspace{0.5cm}
+\centerline{\includegraphics{figures/copy_boost_headers.png}}
+
+\paragraph{Installation}
+The Boost plug-in is available at the update site of the CUTE plug-in itself 
+\footnote{\href{http://www.cute-test.com/updatesite}{http://www.cute-test.com/updatesite}}.
+It is selectable in the \texttt{CUTE Optional Features} group.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/optional_features.png}}}
+
+This plug-in contains additional licencing information, because of the
+distribution of the Boost headers. Before the plug-in can be installed, the
+corresponding license agreement has to be accepted.
+
+\subsection{Gcov}
+C++ compilers of the GNU Compiler Collection have the capability to compile the
+program to emit coverage information when executed. With the CUTE Gcov plug-in
+this information can be visualized in Eclipse. For making this information
+available, the tests have to be compiled with specific compiler options set.
+
+\paragraph{Enable Gcov}
+When the Gcov plug-in is available the second page of the \texttt{New CUTE
+Project} wizard is augmented with the option to display coverage information
+after test execution. The Gcov plug-in automatically adds the required flags for
+compilation to the miscellaneous compiler options in CDT: \texttt{-fprofile-arcs
+-ftest-coverage}
+
+\vspace{0.5cm}
+\centerline{\includegraphics{figures/enable_gcov.png}}
+
+It is possible to add and remove display of coverage information after the
+project has been created through the context menu of the project. The menu entry
+\texttt{CUTE} in the context menu is only available for CUTE projects.
+
+\vspace{0.5cm}
+\centerline{\includegraphics[width=\linewidth]{figures/add_coverage_analysis.png}}
+
+\paragraph{Installation}
+The Gcov plug-in is available at the update site of the CUTE plug-in itself 
+\footnote{\href{http://www.cute-test.com/updatesite}{http://www.cute-test.com/updatesite}}.
+It is selectable in the \texttt{CUTE Optional Features} group.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/optional_features.png}}}
+
+The plug-in is an extension to the CUTE plug-in and requires it to be
+installed, subsequently, it cannot be used standalone.
+
+\paragraph{Visualization}
+If enabled, after running the CUTE tests, the Gcov information is retrieved from
+the created Gcov files. 
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics{figures/gcov_information.png}}}
+
+\begin{description}
+  \item[Executed] Code that has been executed completely is highlighted in
+  green.
+  \item[Partially] Code that has been executed partially is highlighted in
+  yellow.
+  \item[Omitted] Code that as not been executed at all is hightlighted in red.
+\end{description}
+
+\subsection{Mockator}
+Mock objects and seams are very important when creating unit tests for program
+code. The Mockator
+\footnote{\href{http://www.mockator.com}{http://www.mockator.com}} plug-in provides exceptional support for refactoring towards seams and creating
+test doubles. The following seams are supported:
+\begin{description}
+  \item[Object Seam] Based on inheritance to inject a subclass with an
+  alternative implementation. Mockator helps in extracting an interface and in creating the missing test double including all used member functions.
+  \item[Compile Seam] Inject dependencies at compile-time through template
+  parameters. Extract a template parameter and Mockator creates the missing test double including all used member functions.
+  \item[Preprocessor Seam] With the help of the preprocessor, Mockator redefines
+  function names to use an alternative implementation.
+  \item[Link Seam] : Mockator supports three kinds of link seams:
+	\begin{itemize}
+	  \item Shadowing functions through linking order (override functions in
+	  libraries with new definitions in object files) 
+	  \item Wrapping functions with GNU's linker option -wrap (GNU Linux only)
+	  \item Run-time function interception with the preload functionality of the
+	    dynamic linker for shared libraries (works only with GNU Linux and MacOS X)
+	\end{itemize}
+  \item[]
+\end{description}
+
+\paragraph{Installation}
+The Mockator plug-in is independent of the CUTE plug-in and
+can be obtained separately. It is available at an external update site
+\footnote{\href{http://www.mockator.com/update}{http://www.mockator.com/update}}.
+For detailed information please refer to its separate documentation.
+
+
+\subsection{Namespactor}
+Namespactor is an additional plug-in available. It provides
+namespace-related automated refactorings for C++. If the plug-in is installed
+the following additional automated refactorings are available in the
+\texttt{Refactor} menu in CDT.
+
+\begin{description}
+  \item[Extract Using Namespace Directive\ldots] Introduces a using directive
+  and removes the then obsolete qualifiers from declarators. This refactoring
+  should not be used in header files.
+  \item[Extract Namespace Using Declaration\ldots] Instead of extracting all
+  qualifiers from one namespace, this functionality allows to extract a single
+  qualified name into a using declaration. Which leaves a shorter name at the
+  place of usage.
+  \item[Inline Using\ldots] Changes the identifiers in the code to
+  include their namespace or class prefix, by eliminating using namespace directives or using declaration.
+  \item[Quality Unqualified Name\ldots] Qualifies an existing unqualified
+  identifier from a namespace or a class with its name qualified.
+\end{description}
+
+
+\paragraph{Installation}
+The Namespactor plug-in is independent of the CUTE plug-in and can be obtained
+separately. It is available at the CUTE update site
+\footnote{\href{http://www.cute-test.com/updatesite}{http://www.cute-test.com/updatesite}}
+in the \texttt{CUTE Optional Features} group.
+
+\vspace{0.5cm}
+\centerline{\frame{\includegraphics[width=\linewidth]{figures/optional_features.png}}}
+
+\end{document}
