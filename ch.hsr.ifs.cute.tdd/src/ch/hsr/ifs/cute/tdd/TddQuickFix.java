@@ -46,9 +46,6 @@ public abstract class TddQuickFix extends AbstractCodanCMarkerResolution impleme
 	}
 
 	@Override
-	public abstract String getLabel();
-
-	@Override
 	public String getDescription() {
 		return null;
 	}

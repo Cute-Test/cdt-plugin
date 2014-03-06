@@ -12,7 +12,10 @@ import static org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUti
 import static org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.REF;
 import static org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.TDEF;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.cdt.core.CCorePlugin;
@@ -28,13 +31,16 @@ import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
+import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IArrayType;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IFunction;
+import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
@@ -68,6 +74,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTLiteralExpression;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTPointer;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
@@ -127,7 +134,9 @@ public class TypeHelper {
 			return handleType((ICPPBinding) type);
 		} else if (type instanceof IBasicType) {
 			return handleType((IBasicType) type);
-		} else { // not defined variables
+		} else if (type instanceof IQualifierType) {
+			return handleType((IQualifierType) type);
+		} else { // undefined variables
 			return defaultType();
 		}
 	}
@@ -142,6 +151,13 @@ public class TypeHelper {
 		CPPASTSimpleDeclSpecifier simpleDeclSpec = new CPPASTSimpleDeclSpecifier();
 		simpleDeclSpec.setType(type.getKind());
 		return simpleDeclSpec;
+	}
+
+	private static ICPPASTDeclSpecifier handleType(IQualifierType qualifiedType) {
+		ICPPASTDeclSpecifier specifier = getDeclarationSpecifierOfType(qualifiedType.getType());
+		specifier.setConst(qualifiedType.isConst());
+		specifier.setVolatile(qualifiedType.isVolatile());
+		return specifier;
 	}
 
 	private static ICPPASTDeclSpecifier defaultType() {
@@ -213,14 +229,50 @@ public class TypeHelper {
 	}
 
 	public static IType windDownToRealType(IType type, boolean stopAtTypeDef) {
+		return windDownToRealType(type, stopAtTypeDef, false);
+	}
+
+	public static IType windDownToRealType(IType type, boolean stopAtTypeDef, boolean stopAtConst) {
 		if (type instanceof ITypeContainer) {
 			if (stopAtTypeDef && type instanceof ITypedef) {
 				return type;
 			}
+			if (stopAtConst && type instanceof IQualifierType) {
+				IQualifierType qualifierType = (IQualifierType) type;
+				if (qualifierType.isConst()) {
+					return type;
+				}
+			}
 			type = ((ITypeContainer) type).getType();
-			return windDownToRealType(type, stopAtTypeDef);
+			return windDownToRealType(type, stopAtTypeDef, stopAtConst);
 		}
 		return type;
+	}
+
+	public static List<IASTPointerOperator> windDownAndCollectPointerOperators(IType type) {
+		return windDownAndCollectPointerOperators(type, new ArrayList<IASTPointerOperator>());
+	}
+
+	private static List<IASTPointerOperator> windDownAndCollectPointerOperators(IType type, ArrayList<IASTPointerOperator> pointerOperatorCollector) {
+		if (type instanceof ITypeContainer) {
+			if (type instanceof ITypedef) {
+				return pointerOperatorCollector;
+			}
+			if (type instanceof IPointerType) {
+				IPointerType pointerType = (IPointerType) type;
+				CPPASTPointer newPointerOperator = new CPPASTPointer();
+				newPointerOperator.setConst(pointerType.isConst());
+				newPointerOperator.setVolatile(pointerType.isVolatile());
+				newPointerOperator.setRestrict(pointerType.isRestrict());
+				pointerOperatorCollector.add(newPointerOperator);
+			}
+			if (type instanceof IArrayType) {
+				pointerOperatorCollector.add(new CPPASTPointer());
+			}
+			return windDownAndCollectPointerOperators(((ITypeContainer) type).getType(), pointerOperatorCollector);
+		}
+		Collections.reverse(pointerOperatorCollector);
+		return pointerOperatorCollector;
 	}
 
 	public static boolean isString(IType type) {
@@ -370,8 +422,7 @@ public class TypeHelper {
 		return null;
 	}
 
-	private static IASTNode checkIndexBindingForType(String typename, IASTTranslationUnit unit, IIndex index, CRefactoringContext context)
-			throws CoreException {
+	private static IASTNode checkIndexBindingForType(String typename, IASTTranslationUnit unit, IIndex index, CRefactoringContext context) throws CoreException {
 		IIndexBinding[] allBindings = index.findBindings(typename.toCharArray(), false, new IndexFilter() {
 		}, new NullProgressMonitor());
 		for (IIndexBinding binding : allBindings) {
@@ -505,5 +556,4 @@ public class TypeHelper {
 		}
 		return null;
 	}
-
 }

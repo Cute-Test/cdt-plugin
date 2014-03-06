@@ -259,11 +259,30 @@ void test() {
 //=
 class B {
 public:
-	int array[3];
+	const char* array[3];
 };
 void test() {
 	B b;
 	b.array = {"string1", "string2", "string3"};
+}
+//!Create Pointer Member
+//@A.cpp
+class B {
+};
+void test() {
+	B b;
+	int* const * const ** n;
+	b.next = n;
+}
+//=
+class B {
+public:
+	int* const * const ** next;
+};
+void test() {
+	B b;
+	int* const * const ** n;
+	b.next = n;
 }
 //!TemplateInitializer
 //@A.cpp

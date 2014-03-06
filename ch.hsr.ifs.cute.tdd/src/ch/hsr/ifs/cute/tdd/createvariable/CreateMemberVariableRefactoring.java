@@ -8,6 +8,8 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.createvariable;
 
+import java.util.List;
+
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
@@ -16,6 +18,7 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -44,8 +47,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
@@ -72,25 +75,59 @@ public class CreateMemberVariableRefactoring extends TddCRefactoring {
 			TddHelper.writeDefinitionTo(collector, memberOwner, newMember);
 		}
 		setLinkedModeInformation(localunit, memberOwner, newMember);
-
 	}
 
-	private IASTDeclaration getMemberVariableDeclaration(IASTName variableName, IASTNode type) {
+	private IASTDeclaration getMemberVariableDeclaration(IASTName variableName, IASTNode parent) {
 		IASTDeclSpecifier declspec = getDeclSpec(variableName);
 		IASTSimpleDeclaration newDeclaration = new CPPASTSimpleDeclaration(declspec);
 		ICPPASTDeclarator newDeclarator;
 		if (isArray) {
 			assert (initClause instanceof IASTInitializerList);
-			IASTExpression size = new CPPASTLiteralExpression(ICPPASTLiteralExpression.lk_integer_constant, (((IASTInitializerList) initClause).getSize() + "").toCharArray());
+			char[] size = Integer.toString(((IASTInitializerList) initClause).getSize()).toCharArray();
+			IASTExpression sizeExpression = new CPPASTLiteralExpression(ICPPASTLiteralExpression.lk_integer_constant, size);
 			ICPPASTArrayDeclarator array = new CPPASTArrayDeclarator(variableName.copy());
-			array.addArrayModifier(new CPPASTArrayModifier(size));
+			array.addArrayModifier(new CPPASTArrayModifier(sizeExpression));
 			newDeclarator = array;
 		} else {
 			newDeclarator = new CPPASTDeclarator(variableName.copy());
 		}
+		addPointerOperators(newDeclarator, variableName);
 		newDeclaration.addDeclarator(newDeclarator);
-		newDeclaration.setParent(type);
+		newDeclaration.setParent(parent);
 		return newDeclaration;
+	}
+
+	private void addPointerOperators(ICPPASTDeclarator declarator, IASTName variableName) {
+		IASTNode parent = variableName.getParent();
+		if (parent instanceof ICPPASTFieldReference) {
+			IASTBinaryExpression binExpr = TddHelper.getAncestorOfType(variableName, IASTBinaryExpression.class);
+			if (binExpr == null) {
+				return;
+			}
+			IASTExpression expr;
+			IType type;
+			boolean isString = false;
+			IASTInitializerClause initializerClause = binExpr.getInitOperand2();
+			IASTNode node = initializerClause;
+			if (initializerClause != null) {
+				isString = TypeHelper.isString(initializerClause);
+				type = TypeHelper.getTypeOf(initializerClause);
+			} else {
+				expr = binExpr.getOperand2();
+				node = expr;
+				type = expr.getExpressionType();
+			}
+			if (isPartOf(variableName, node)) {
+				type = binExpr.getOperand1().getExpressionType();
+			}
+			List<IASTPointerOperator> pointerOperators = TypeHelper.windDownAndCollectPointerOperators(type);
+			if (isString && !pointerOperators.isEmpty()) {
+				pointerOperators.remove(pointerOperators.size() - 1);
+			}
+			for (IASTPointerOperator ptrOper : pointerOperators) {
+				declarator.addPointerOperator(ptrOper);
+			}
+		}
 	}
 
 	private IASTDeclSpecifier getDeclSpec(IASTName varName) {
@@ -128,12 +165,11 @@ public class CreateMemberVariableRefactoring extends TddCRefactoring {
 		if (ascendingBinEx != null) {
 			return createDeclSpecForBinaryExpression(ref, ascendingBinEx);
 		}
-		if (isThisKeyword(ref)) {
-			return createVoidDeclSpec();
-		}
-		IASTSimpleDeclaration decl = TddHelper.getAncestorOfType(varName, IASTSimpleDeclaration.class);
-		if (decl != null) {
-			return decl.getDeclSpecifier().copy();
+		if (!isThisKeyword(ref)) {
+			IASTSimpleDeclaration decl = TddHelper.getAncestorOfType(varName, IASTSimpleDeclaration.class);
+			if (decl != null) {
+				return decl.getDeclSpecifier().copy();
+			}
 		}
 		return createVoidDeclSpec();
 	}
@@ -186,7 +222,7 @@ public class CreateMemberVariableRefactoring extends TddCRefactoring {
 			initClause = clause;
 		}
 		IType type = TypeHelper.getTypeOf(clause);
-		type = TypeHelper.windDownToRealType(type, true);
+		type = TypeHelper.windDownToRealType(type, true, isArray);
 		return TypeHelper.getDeclarationSpecifierOfType(type);
 	}
 
