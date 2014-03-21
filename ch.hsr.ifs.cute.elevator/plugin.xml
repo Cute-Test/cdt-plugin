@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+		point="org.eclipse.cdt.codan.core.checkers">
+		 <checker
+		       class="ch.hsr.ifs.cute.elevator.checker.InitializerChecker"
+		       id="ch.hsr.ifs.elevator.initializationError"
+		       name="Elevator Warning Checker">
+		    <problem               
+		    	category="org.eclipse.cdt.codan.core.categories.CodeStyle"
+			   defaultEnabled="true"
+			   defaultSeverity="Warning"
+			   description="Elevator Initialization Warning"
+			   id="ch.hsr.ifs.elevator.initializationError"
+			   name="Un- or ill-initialized variable"
+			   messagePattern="Un- or ill-initialized variable found">
+		    </problem>
+		 </checker>
+  	</extension> 
+  	<extension
+         point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
+      <resolution
+            class="ch.hsr.ifs.cute.elevator.quickfix.InitializerQuickFix"
+            problemId="ch.hsr.ifs.elevator.initializationError">
+      </resolution>
+   </extension>
+   <extension
+        point="org.eclipse.ui.actionSets">
+     <actionSet
+           description="Elevate Project"
+           id="ch.hsr.ifs.elevator.plugin.refactoring.ElevateProjectRefactoring"
+           label="My Refactoring Actions"
+           visible="true">
+        <menu
+              label="Refactor"
+              path="edit"
+              id="org.eclipse.jdt.ui.refactoring.menu">
+           <separator name="undoRedoGroup"/>
+           <separator name="reorgGroup"/>
+           <separator name="codingGroup"/>
+           <separator name="reorgGroup2"/>
+           <separator name="typeGroup"/>
+           <separator name="typeGroup2"/>
+           <separator name="codingGroup2"/>
+           <separator name="myGroup"/>
+           <separator name="typeGroup3"/>
+           <separator name="scriptGroup"/>
+       </menu>
+
+        <action
+              class="ch.hsr.ifs.cute.elevator.refactoring.ElevateProjectAction"
+              enablesFor="*"
+              id="ch.hsr.ifs.elevator.plugin.refactoring.ElevateProjectAction"
+              label="Elevate Project"  
+              menubarPath="org.eclipse.jdt.ui.refactoring.menu/myGroup"
+              style="push">
+        </action>        
+   </actionSet>
+  </extension>
+</plugin>

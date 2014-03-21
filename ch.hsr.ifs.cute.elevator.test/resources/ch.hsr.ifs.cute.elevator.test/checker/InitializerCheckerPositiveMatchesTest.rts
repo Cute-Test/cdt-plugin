@@ -1,0 +1,95 @@
+//!ShouldMarkUninitializedInt
+//@main.cpp
+int x;
+
+//!ShouldMarkUninitializedDouble
+//@main.cpp
+double x;
+
+//!ShouldMarkUninitializedType
+//@.config
+expectedMarkerLines=2
+//@main.cpp
+class T;
+T x;
+
+//!ShouldMarkUninitializedPointer
+//@main.cpp
+int *x;
+
+//!ShouldMarkUninitializedVarInFunctionBody
+//@.config
+expectedMarkerLines=2
+//@main.cpp
+void foo() {
+   int x;
+}
+
+//!ShouldMarkEqualsInitializedVar
+//@main.cpp
+int i = 1;
+
+//!ShouldMarkEqualsInitializedWithTypeConversionInConstructor
+//@.config
+expectedMarkerLines=2
+//@main.cpp
+struct T{ T(double x){}};
+T x = 1.1;
+
+//!ShouldMarkInitializedWithImplicitCopyConstructor
+//@.config
+expectedMarkerLines=2
+//@main.cpp
+struct T{ T(int x){}};
+T x = T(1);
+
+//!ShouldMarkDirectInitializedWithConversionInConstructor
+//@.config
+expectedMarkerLines=2
+//@main.cpp
+struct T{ T(double x){}};
+T x(1.1);
+
+//!ShouldMarkMultipleUninitialized
+//@.config
+expectedMarkerLines=2,3
+//@main.cpp
+int 
+x, 
+y;
+
+//!ShouldMarkConstructorInitialized
+//@main.cpp
+int x(1);
+
+//!ShouldMarkReferenceInitialization
+//@.config
+expectedMarkerLines=2
+//@main.cpp
+int z {1};
+int &x = z;
+ 
+//!ShouldMarkUninitializedInMultipleDeclarationList
+//@.config
+expectedMarkerLines=3
+//@main.cpp
+int 
+x{1}, 
+y;
+ 
+//!ShouldMarkSTLClassConstructorForElevatioin
+//@.config
+expectedMarkerLines=2
+//@main.cpp
+namespace std { template<class T1, class T2> class pair {}; }
+std::pair<int,int> p1(3,4);
+
+
+//!ShouldMarkConstructorInitializerListForElevation
+//@.config
+expectedMarkerLines=3,4
+//@main.cpp
+class C { int a; int b; };
+C::C() :
+a(1), 
+b(2) {}

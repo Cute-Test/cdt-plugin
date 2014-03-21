@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
-  <modelVersion>4.0.0</modelVersion>
-  <version>4.6.0-SNAPSHOT</version>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <parent>
-    <relativePath>../ch.hsr.ifs.cute.releng</relativePath>
-    <groupId>ch.hsr.ifs</groupId>
-    <artifactId>ch.hsr.ifs.cute.releng</artifactId>
-    <version>4.6.0-SNAPSHOT</version>
-  </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<version>4.6.0-SNAPSHOT</version>
 
-  <artifactId>ch.hsr.ifs.cute.macronator.test</artifactId>
-  <packaging>eclipse-test-plugin</packaging>
-  <groupId>ch.hsr.ifs</groupId>
-  
-  <build>
+	<parent>
+		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
+		<groupId>ch.hsr.ifs</groupId>
+		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
+		<version>4.6.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ch.hsr.ifs.cute.macronator.test</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
+	<groupId>ch.hsr.ifs</groupId>
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -23,16 +26,16 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<product>org.eclipse.sdk.ide</product>
-					<application>org.eclipse.ui.ide.workbench</application>	
-					<excludes>	      
-						<exclude>**/bugs/*.java</exclude>  
-	          		</excludes>			
-		          <argLine>${os-jvm-flags}</argLine>
+					<application>org.eclipse.ui.ide.workbench</application>
+					<excludes>
+						<exclude>**/bugs/*.java</exclude>
+					</excludes>
+					<argLine>${os-jvm-flags}</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-  
+
 </project> 
 
 

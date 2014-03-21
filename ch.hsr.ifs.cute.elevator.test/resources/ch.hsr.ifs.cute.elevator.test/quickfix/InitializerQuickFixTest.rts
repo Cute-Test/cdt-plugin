@@ -1,0 +1,115 @@
+//!ShouldElevateUninitializedDouble
+//@main.cpp
+double x;
+
+//=
+double x { };
+
+//!ShouldElevateUnitializedInt
+//@main.cpp
+int x;
+
+//=
+int x { };
+
+//!ShouldElevateUnitializedPointer
+//@main.cpp
+int *x;
+
+//=
+int *x { };
+
+//!ShouldElevateUnitializedIntInFunction
+//@main.cpp
+void foo() {
+	int x;
+}
+
+//=
+void foo() {
+	int x { };
+}
+
+//!ShouldElevateUninitializedClass
+//@main.cpp
+class T{};
+T x;
+
+//=
+class T{};
+T x { };
+
+//!ShouldElevateUninitializedIntList
+//@main.cpp
+int x,y,z;
+
+//=
+int x { }, y { }, z { };
+
+//!ShouldElevateReferenceInitialization
+//@main.cpp
+int z {1}; 
+int &x = z;
+
+//=
+int z {1}; 
+
+int &x { z };
+
+//!ShouldElevateCopyInitializedInt
+//@main.cpp
+int x = 1;
+
+//=
+int x { 1 };
+
+//!ShouldElevateConstructorInitializedInt
+//@main.cpp
+int x(1);
+
+//=
+int x { 1 };
+
+//!ShouldElevateConstructorWithMultipleArguments
+//@main.cpp
+class MyClass{MyClass(int x,int y,int z){}};
+MyClass x(1,2,3);
+
+//=
+class MyClass{MyClass(int x,int y,int z){}};
+MyClass x { 1, 2, 3 };
+
+//!ShouldElevateMixedInitialisationList
+//@main.cpp
+int x{1},y(2),z = 3;
+
+//=
+int x { 1 }, y { 2 }, z { 3 };
+
+//!ShouldElevateMixedListContainingFunctions
+//@main.cpp
+int x(),y;
+
+//=
+int x(), y { };
+
+//!ShouldElevateSTLClasses
+//@main.cpp
+namespace std { template<class T1, class T2> class pair {}; }
+std::pair<int,int> p1(3,4);
+
+//=
+namespace std { template<class T1, class T2> class pair {}; }
+std::pair<int, int> p1 { 3, 4 };
+
+//!ShouldElevateConstructorInitList
+//@main.cpp
+class C;
+C::C(): a(1), b(2){}
+
+//=
+class C;
+C::C() :
+		a { 1 }, b { 2 } {
+}
+
