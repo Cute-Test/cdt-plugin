@@ -24,6 +24,7 @@
 					<testClass>ch.hsr.ifs.cute.namespactor.test.AllNamespectorTests</testClass>
 					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 					<useUIHarness>true</useUIHarness>
+					<argLine>${os-jvm-flags}</argLine>
 				</configuration>
 			</plugin>
 		</plugins>

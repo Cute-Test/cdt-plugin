@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.cdt.codan.core.checkers">
+      <checker
+            class="ch.hsr.ifs.cute.macronator.checker.ObjectLikeMacroChecker"
+            id="ch.hsr.ifs.macronator.plugin.ObsoleteObjectLikeMacroChecker"
+            name ="Object-like Macro Checker">
+         <problem
+               category="org.eclipse.cdt.codan.core.categories.CodeStyle"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="Macro definition can be replaced with &apos;constexpr&apos; expression"
+               id="ch.hsr.ifs.macronator.plugin.ObsoleteObjectLikeMacro"
+               markerType="org.eclipse.cdt.codan.core.codanProblem"
+               messagePattern="Macro definition can be replaced with &apos;constexpr&apos; expression"
+               name="Obsolete object-like macro">
+         </problem>
+      </checker>
+      <checker
+            class="ch.hsr.ifs.cute.macronator.checker.FunctionLikeMacroChecker"
+            id="ch.hsr.ifs.macronator.plugin.ObsoleteFunctionLikeMacroChecker"
+            name="Function-like Macro Checker">
+         <problem
+               category="org.eclipse.cdt.codan.core.categories.CodeStyle"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="Macro definition can be replaced with inline function"
+               id="ch.hsr.ifs.macronator.plugin.ObsoleteFunctionLikeMacro"
+               markerType="org.eclipse.cdt.codan.core.codanProblem"
+               messagePattern="Macro definition can be replaced with inline function"
+               name="Obsolete function-like macro">
+         </problem>
+      </checker>
+      <checker
+            class="ch.hsr.ifs.cute.macronator.checker.UnusedMacroChecker"
+            id="ch.hsr.ifs.macronator.plugin.checker.UnusedMacroChecker"
+            name="Unused Macro Checker">
+         <problem
+               category="org.eclipse.cdt.codan.core.categories.CodeStyle"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="Macro is never used"
+               id="ch.hsr.ifs.macronator.plugin.UnusedMacro"
+               markerType="org.eclipse.cdt.codan.core.codanProblem"
+               messagePattern="Macro is never used"
+               name="Unused Macro">
+         </problem>
+      </checker>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
+      <resolution
+            class="ch.hsr.ifs.cute.macronator.quickfix.ObjectLikeQuickFix"
+            problemId="ch.hsr.ifs.macronator.plugin.ObsoleteObjectLikeMacro">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.macronator.quickfix.FunctionLikeQuickFix"
+            problemId="ch.hsr.ifs.macronator.plugin.ObsoleteFunctionLikeMacro">
+      </resolution>
+      <resolution
+            class="ch.hsr.ifs.cute.macronator.quickfix.UnusedMacroQuickfix"
+            problemId="ch.hsr.ifs.macronator.plugin.UnusedMacro">
+      </resolution>
+   </extension>
+    <extension
+         point="org.eclipse.cdt.ui.quickAssistProcessors">
+      <quickAssistProcessor
+            class="ch.hsr.ifs.cute.macronator.quickassist.LocalExpansionQuickAssist"
+            id="ch.hsr.ifs.macronator.plugin.assist.LocalExpansion"
+            name="ch.hsr.ifs.macronator.plugin.assist.LocalExpansionQuickAssist">
+      </quickAssistProcessor>
+      <quickAssistProcessor
+            class="ch.hsr.ifs.cute.macronator.quickassist.GlobalExpansionQuickAssist"
+            id="ch.hsr.ifs.macronator.plugin.assist.GlobalExpansion"
+            name="ch.hsr.ifs.macronator.plugin.assist.GlobalExpansionQuickAssist">
+      </quickAssistProcessor>
+      <quickAssistProcessor
+            class="ch.hsr.ifs.cute.macronator.quickassist.SuppressMacroQuickAssist"
+            id="ch.hsr.ifs.macronator.plugin.assist.SuppressMacro"
+            name="ch.hsr.ifs.macronator.plugin.assist.SuppressMacroQuickAssist">
+      </quickAssistProcessor>
+   </extension>
+   <extension
+        point="org.eclipse.ui.actionSets">
+     <actionSet
+           description="Expand Macro"
+           id="ch.hsr.ifs.macronator.plugin.ExpandMacroRefactoring"
+           label="My Refactoring Actions"
+           visible="true">
+        <menu
+              label="Refactor"
+              path="edit"
+              id="org.eclipse.jdt.ui.refactoring.menu">
+           <separator name="undoRedoGroup"/>
+           <separator name="reorgGroup"/>
+           <separator name="codingGroup"/>
+           <separator name="reorgGroup2"/>
+           <separator name="typeGroup"/>
+           <separator name="typeGroup2"/>
+           <separator name="codingGroup2"/>
+           <separator name="myGroup"/>
+           <separator name="typeGroup3"/>
+           <separator name="scriptGroup"/>
+       </menu>
+
+        <action
+              class="ch.hsr.ifs.cute.macronator.refactoring.ExpandMacroAction"
+              enablesFor="*"
+              id="ch.hsr.ifs.macronator.plugin.expand.ExpandMacroAction"
+              label="Expand Macro"  
+              menubarPath="org.eclipse.jdt.ui.refactoring.menu/macroGroup"
+              style="push">
+        </action>        
+   </actionSet>
+  </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="ch.hsr.ifs.cute.macronator.Settings"
+            id="ch.hsr.ifs.macronator.plugin.Settings"
+            name="Macronator"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+   </extension>
+</plugin>
