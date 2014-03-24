@@ -8,6 +8,10 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 
+/**
+ * ASTVisitor that collects all ConstructorChainInitializers.
+ *
+ */
 public class InitializerCollector extends ASTVisitor {
 
     private final List<ICPPASTConstructorChainInitializer> initializers;
@@ -36,5 +40,4 @@ public class InitializerCollector extends ASTVisitor {
     public List<ICPPASTConstructorChainInitializer> getInitializers() {
         return initializers;
     }
-    
 }

@@ -24,6 +24,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateArgument;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassType;
@@ -40,14 +41,13 @@ public class DelaratorAnalyzer {
     }
     
     public boolean isElevationCandidate() {
-        return !(isTemplateTypeSpecifier() 
-        || isClassMember() 
-        || hasInitializerListConstructor()
-        || requiresTypeConversion()
-        || isParameterDeclaration()
-        || isAlreadyElevated()    
-        || isPartOfCastExpression(declarator)
-        || (declarator.getInitializer() == null && isReference()));
+        return !isTemplateTypeSpecifier() 
+        && !isAlreadyElevated()    
+        && !isClassMember() 
+        && !requiresTypeConversion()
+        && !isParameterDeclaration()
+        && !isPartOfCastExpression(declarator)
+        && !(declarator.getInitializer() == null && isReference());
     }
     
     private boolean isConstructorInitializer() {
@@ -83,51 +83,24 @@ public class DelaratorAnalyzer {
     }
     
     private boolean isReference() {
-        if (declarator.getPointerOperators().length > 0 ) {
-            if(declarator.getPointerOperators()[0] != null ) {
-                if(declarator.getPointerOperators()[0] instanceof ICPPASTReferenceOperator) {
-                    return true;
-                }
-            }
-        }               
-        return false;
-    }
-    
-    private boolean hasInitializerListConstructor() {
-        ICPPConstructor[] constructors = getTargetTypeConstructors();
-        if (constructors == null)
-            return false;
-        for (ICPPConstructor constructor : constructors) {
-            for (ICPPParameter param : constructor.getParameters()) {
-                if (param.getType().toString().contains("initializer_list")) {
-                    return true;
-                }
-            }
-        }
-        return false;
+            return (declarator.getPointerOperators().length > 0)  && (declarator.getPointerOperators()[0] instanceof ICPPASTReferenceOperator);                   
     }
     
     /**
      * Gets the constructors of the target type of a declaration.
      */
-    private ICPPConstructor[] getTargetTypeConstructors() {
-        ICPPConstructor[] constructors = null;
-        IType targetType = getTargetType();
-        if (targetType == null)
-            return constructors;
+    private ICPPConstructor[] getTypeConstructors() {
+        IType variableType = getVariableType();
         /*
          * While we should be using a test for ICPPClassType and not
          * CPPClassType, this results in an exception on getConstructors().
          */
-        if (targetType instanceof CPPClassType) {
-            constructors = ((ICPPClassType) targetType).getConstructors();
-        }
-        return constructors;
+        return (variableType instanceof CPPClassType) ? ((ICPPClassType) variableType).getConstructors() : new ICPPConstructor[0];
     }
     
-    private IType getTargetType() {
+    private IType getVariableType() {
         IBinding x = declarator.getName().resolveBinding();
-        return (x instanceof ICPPVariable) ? ((ICPPVariable) x).getType() : null;
+        return ((ICPPVariable) x).getType();
     }
     
     private List<IType> getSourceTypes() {
@@ -159,7 +132,7 @@ public class DelaratorAnalyzer {
      */
     private List<List<IType>> getConvertibleTargetTypes() {
         List<List<IType>> convertibleTypes = new ArrayList<List<IType>>();
-        IType targetType = getTargetType();
+        IType targetType = getVariableType();
         if (targetType == null) {
             return convertibleTypes;
         }
@@ -171,17 +144,18 @@ public class DelaratorAnalyzer {
         }
 
         if (absoluteTargetType instanceof ICPPClassType) {
-            ICPPConstructor[] constructors = getTargetTypeConstructors();
-            if (constructors == null) {
+            ICPPConstructor[] constructors = getTypeConstructors();
+            if (constructors.length == 0) {
                 // FIXME this should be moved to getTargetTypeConstructors after
                 // adjusting the return value to transport types instead of
                 // constructors
                 if (absoluteTargetType instanceof ICPPTemplateInstance) {
-                    @SuppressWarnings("deprecation")
-                    IType[] types = ((ICPPTemplateInstance) absoluteTargetType).getArguments();
                     ArrayList<IType> typeList = new ArrayList<IType>();
-                    for (IType type : types) {
-                        typeList.add(type);
+                    
+                    for (ICPPTemplateArgument argument : ((ICPPTemplateInstance) absoluteTargetType).getTemplateArguments()) {
+                        if (argument.getTypeValue() != null) {
+                            typeList.add(argument.getTypeValue());
+                        }
                     }
                     convertibleTypes.add(typeList);
                 }
@@ -229,12 +203,11 @@ public class DelaratorAnalyzer {
     }
     
     private boolean hasEqualType(List<IType> sourceTypes, List<IType> constructorTypes) {
-       
         for (int i = 0; i < constructorTypes.size(); i++) {
             IType targetType = constructorTypes.get(i);
             IType sourceType = sourceTypes.get(i);
             if (targetType instanceof IBasicType && sourceType instanceof IBasicType) {
-                if (!hasNonNarrowingTypeConversion(((IBasicType) targetType), (IBasicType) sourceType)) {
+                if (hasNarrowingTypeConversion(((IBasicType) targetType), (IBasicType) sourceType)) {
                     return false;
                 }
             } else if (!targetType.equals(sourceType)) {
@@ -245,7 +218,7 @@ public class DelaratorAnalyzer {
     }
     
     /**
-     * Narrowing type conversion: conversion with precisiion loss, e.g. int x = 3.2.
+     * Narrowing type conversion: conversion with precision loss, e.g. int x = 3.2;
      * In contrast to copy initialization initializer list do not support narrowing conversions.
      * int x = 3.2;  // valid
      * int x { 3.2 }; // invalid
@@ -253,8 +226,8 @@ public class DelaratorAnalyzer {
      * @param source Source Type
      * @return true if source type gets narrowed down.
      */
-    private boolean hasNonNarrowingTypeConversion(IBasicType target, IBasicType source) {
-        return isEqualType(target, source) || isFloatToDoubleConversion(target, source);
+    private boolean hasNarrowingTypeConversion(IBasicType target, IBasicType source) {
+        return !(isEqualType(target, source) || isFloatToDoubleConversion(target, source));
     }
 
     private boolean isEqualType(IBasicType target, IBasicType source) {

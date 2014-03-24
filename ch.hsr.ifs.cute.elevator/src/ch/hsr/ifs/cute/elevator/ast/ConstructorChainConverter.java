@@ -10,9 +10,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
  * Converts a constructor chain initializer into a C++11 initializer list.
  */
 public class ConstructorChainConverter {
-    
+
     private final ICPPASTConstructorChainInitializer chainInitializer;
-    
+
     public ConstructorChainConverter(ICPPASTConstructorChainInitializer chainInitializer) {
         this.chainInitializer = chainInitializer;
     }

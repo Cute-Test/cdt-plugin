@@ -93,7 +93,7 @@ int x(),y;
 //=
 int x(), y { };
 
-//!ShouldElevateSTLClasses
+//!ShouldElevateTemplateClasses
 //@main.cpp
 namespace std { template<class T1, class T2> class pair {}; }
 std::pair<int,int> p1(3,4);
