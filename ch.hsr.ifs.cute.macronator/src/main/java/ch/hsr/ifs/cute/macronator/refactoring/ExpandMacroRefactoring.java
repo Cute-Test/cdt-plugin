@@ -3,7 +3,6 @@ package ch.hsr.ifs.cute.macronator.refactoring;
 import java.net.URI;
 import java.util.HashMap;
 
-import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroExpansion;
@@ -37,6 +36,7 @@ import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 
 import ch.hsr.ifs.cute.macronator.common.LocalExpansion;
+import ch.hsr.ifs.cute.macronator.quickassist.SelectionResolver;
 
 @SuppressWarnings("restriction")
 public class ExpandMacroRefactoring extends CRefactoring {
@@ -58,7 +58,7 @@ public class ExpandMacroRefactoring extends CRefactoring {
     }
 
     private boolean isMacroDefinitionSelected() {
-        IASTName selectedName = getSelectedASTName();
+        IASTName selectedName = new SelectionResolver(getAST(), selectedRegion).getSelectedName();
         return selectedName != null && selectedName.getBinding() instanceof IMacroBinding && selectedName.isDefinition();
     }
 
@@ -74,7 +74,7 @@ public class ExpandMacroRefactoring extends CRefactoring {
 
     @Override
     public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
-        IASTName macroName = getSelectedASTName();
+        IASTName macroName = new SelectionResolver(getAST(), selectedRegion).getSelectedName();
         IASTNode macroNode = macroName.getParent();
         IIndexBinding binding = getIndex().findBinding(macroName);
         IIndexName[] references = getIndex().findReferences(binding);
@@ -92,16 +92,6 @@ public class ExpandMacroRefactoring extends CRefactoring {
             result.add(change);
         }
         return result;
-    }
-
-    private IASTName getSelectedASTName() {
-        IASTFileLocation location = getSelectedASTNode().getFileLocation();
-        return getAST().getNodeSelector(null).findFirstContainedName(location.getNodeOffset(), location.getNodeLength());
-    }
-
-    private IASTNode getSelectedASTNode() {
-        return getAST().getNodeSelector(null).findEnclosingNode(selectedRegion.getOffset(), selectedRegion.getLength());
-
     }
 
     private IASTTranslationUnit getAST() {

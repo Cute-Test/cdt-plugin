@@ -1,6 +1,5 @@
 package ch.hsr.ifs.cute.macronator.quickassist;
 
-import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.internal.ui.editor.ASTProvider;
 import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.cdt.ui.text.ICCompletionProposal;
@@ -20,7 +19,7 @@ import ch.hsr.ifs.cute.macronator.refactoring.ExpandMacroAction;
 /**
  * Displays a quickassist to start the global macro expansion refactoring.
  */
-public class GlobalExpansionQuickAssist implements IQuickAssistProcessor, RunnableCallback {
+public class GlobalExpansionQuickAssist implements IQuickAssistProcessor {
 
     public static final String ID = "ch.hsr.ifs.macronator.plugin.assist.GlobalExpansion";
 
@@ -31,7 +30,8 @@ public class GlobalExpansionQuickAssist implements IQuickAssistProcessor, Runnab
 
     @Override
     public ICCompletionProposal[] getAssists(final IInvocationContext context, IProblemLocation[] locations) throws CoreException {
-        IStatus status = ASTProvider.getASTProvider().runOnAST(context.getTranslationUnit(), ASTProvider.WAIT_ACTIVE_ONLY, new NullProgressMonitor(), new CompletionProposoalAstRunnable(this, context.getSelectionOffset(), context.getSelectionLength()));
+        SelectionASTRunnable runnable = new SelectionASTRunnable(context.getSelectionOffset(), context.getSelectionLength());
+        IStatus status = ASTProvider.getASTProvider().runOnAST(context.getTranslationUnit(), ASTProvider.WAIT_ACTIVE_ONLY, new NullProgressMonitor(), runnable);
         if (!status.isOK()) {
             return new ICCompletionProposal[0];
         }
@@ -76,12 +76,6 @@ public class GlobalExpansionQuickAssist implements IQuickAssistProcessor, Runnab
             public String getIdString() {
                 return ID;
             }
-
-        } };
-    }
-
-    @Override
-    public void setSelectedName(IASTName macro) {
-
+        }};
     }
 }

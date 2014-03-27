@@ -3,7 +3,3 @@
 #define MINLINE static __forceinline
 #define MALWAYS_INLINE MINLINE
 
-//!ShouldNotSuggestTransformationForMacrosWithNonConstexprExpansion
-//@main.cpp
-extern const char *xdg_mime_type_unknown;
-#define XDG_MIME_TYPE_UNKNOWN xdg_mime_type_unknown

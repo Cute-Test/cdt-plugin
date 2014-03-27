@@ -118,7 +118,7 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            class="ch.hsr.ifs.cute.macronator.Settings"
+            class="ch.hsr.ifs.cute.macronator.SettingsPage"
             id="ch.hsr.ifs.macronator.plugin.Settings"
             name="Macronator"
             objectClass="org.eclipse.core.resources.IProject">
