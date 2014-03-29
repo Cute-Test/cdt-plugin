@@ -440,16 +440,215 @@ is ignored if the executable is a setuid or setgid binary.
 
 
 # Using Test Doubles
-
+Once we have achieved to apply seams, our code is not relying
+on fixed dependencies anymore, but instead asks for collaborators
+trough dependency injection. Not only our design has improved much,
+but we are now also able to write unit tests for our code. Sometimes
+it is impractical or impossible to exercise our code with
+real objects (e.g., if it supplies non-deterministic results or
+contains states that are slow or difficult to create). If this is the
+case, mock objects might help in testing objects in isolation. Mockator
+supports unit testing with fake and mock objects, which is discussed in the
+following sections.
 
 ## Creating Mock Objects
+Consider the following code which makes use of a compile seam through the
+template parameter ``T``:
+
+```cpp
+#include "cute.h"
+#include "ide_listener.h"
+#include "cute_runner.h"
+
+template<typename T>
+struct Painter {
+    void drawRightAngle(int sideLength) {
+        turtle.forward(sideLength);
+        turtle.right(90);
+        turtle.forward(sideLength);
+    }
+private:
+    T turtle;
+};
+```
+
+To test this code, we use Cute and inject a test double into the system under
+test (SUT) ``Painter``, as can be seen in figure \ref{test_double}.
+
+![Inject a test double into the SUT ``Painter``. Note the marker for the quickfix Mockator provides to create a test double class.\label{test_double}](screenshots/test_double.png)
+
+If we apply the quickfix, Mockator creates a test double class and provides a
+new quickfix (see figure \ref{missing_memfuns}).
+
+![Quickfix marker to create the missing member functions, either by using stub functions or by recording function calls.\label{missing_memfuns}](screenshots/missing_memfuns.png)
+
+We now have three possibilities:
+
+1. Add missing member functions to class ``FakeTurtle``.
+2. Record calls by choosing function arguments.
+3. Record calls by choosing function order.
+
+While the first option is only used for fake objects, the latter two provide
+support for mock objects through recording all calls a SUT makes on the injected
+test double. The following listing shows the code that is generated for fake
+objects:
+
+```cpp
+void testCanDrawRightAngle() {
+    struct FakeTurtle {
+        void forward(const int& sideLength) const {
+        }
+        void right(const int& i) const {
+        }
+    };
+    Painter<FakeTurtle> painter;
+    painter.drawRightAngle(42);
+}
+```
+
+If we are interested in the calls and arguments used the SUT yields on the
+injected test double, we use the quickfix for recording function calls. Mockator
+then creates the code as it is shown next:
+
+```cpp
+void testCanDrawRightAngle() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls {1};
+    struct FakeTurtle {
+        const size_t mock_id;
+
+        FakeTurtle()
+        :mock_id {reserveNextCallId(allCalls)}
+        {
+            allCalls[mock_id].push_back(call {"FakeTurtle()"});
+        }
+
+        void forward(const int& sideLength) const
+        {
+            allCalls[mock_id].push_back(call {"forward(const int&) const", sideLength});
+        }
+
+        void right(const int& i) const
+        {
+            allCalls[mock_id].push_back(call {"right(const int&) const", i});
+        }
+    };
+    Painter<FakeTurtle> painter;
+    painter.drawRightAngle(42);
+    calls expectedFakeTurtle = { {"FakeTurtle()"}, {"forward(const int&) const", int{}},
+                                 {"right(const int&) const", int{}}};
+    ASSERT_EQUAL(expectedFakeTurtle, allCalls[1]);
+}
+```
+
+Note that the two quickfixes for mock objects allow us to use Eclipse's linked
+mode feature to either choose the functions we expect to be called or their
+arguments.
+
 ## Move Test Double to Namespace
+The test doubles created by Mockator are very flexible because the user can
+alter the code as necessary and does not need to use macros to specify their
+behaviour, but instead can apply the full power of C++. However, this comes at
+the price of more code that is placed in the unit test functions compared to
+other mocking libraries where this is hidden behind macros. Because of that, we
+provide a source action to move a test double out of the function to a
+namespace. Note that this is done automatically whenever compile seams
+are used together with C++98 because local classes cannot be used as template
+arguments in this version of the standard.
+
+To move a test double to a namespace, select its class name and execute the
+source action "Move test double to namespace" (Ctrl+Alt+M). Mockator then moves
+the test double code to a newly created namespace, as it is shown in the
+following listing:
+
+```cpp
+namespace s {
+    namespace testCanDrawRightAngle_Ns {
+        struct FakeTurtle {
+            void forward(const int& sideLength) const {
+            }
+            void right(const int& i) const {
+            }
+        };
+    }
+}
+
+void testCanDrawRightAngle() {
+    using namespace s::testCanDrawRightAngle_Ns;
+    Painter<FakeTurtle> painter;
+    painter.drawRightAngle(42);
+}
+
+void runSuite() {
+    cute::suite s;
+    s.push_back(CUTE(testCanDrawRightAngle));
+    cute::ide_listener lis;
+    cute::makeRunner(lis)(s, "The Suite");
+}
+```
+
 ## Converting Fake to Mock Objects
+Sometimes we might start with a fake object to inject into the SUT but
+then encounter that we actually also need to verify the collaboration
+between them. For this case, we provide a source action to convert an
+existing fake to a mock object. This includes the registration
+of the calls as well as the complete infrastructure that is necessary
+to use our mock object library. The source action is called "Source->Convert
+to Mock Object" (Ctrl+Alt+C).
+
 ## Toggle Mock Support
+Because we think it might be useful to enable or disable the recording
+of function calls for a member function in mock objects, we have
+implemented a source action to do so. This is not only a matter of
+removing the recording in the member function, but also to adapt the
+call expectations accordingly. The source action is called "Source->Toggle
+Function Mock Support" (Ctrl+Alt+T) and is executed on a member function of
+a mock object.
+
 ## Registration Consistency
-## Mock Functions
-## Using Regular Expressions
+The user might sometimes manually adapt the registrations in the
+member functions of the mock object or the expectations which could
+lead to the situation where the expectations and the actual
+registrations are not consistent anymore. Because this could lead to
+tedious debugging sessions, we provide a CodAn checker with a quick fix
+to correct these inconsistencies (see figure \ref{inconsistent_expectations}).
+
+![Eclipse marker to show expecations that are inconsistent with their call registrations and its quickfix.\label{inconsistent_expectations}](screenshots/inconsistent_expectations.png)
+
+## Mocking Functions
+So far we have only mocked classes when we applied object and compile
+seams. Sometimes it would be tedious to apply one of these two seams
+where we just want to mock a function to see if the SUT calls it
+correctly. This is also true if we cannot change the code at all. For
+these cases, we have implemented mocking of functions by leveraging
+the shadow function link seam. We used this kind of link seam because
+it is the easiest one that fulfils our requirements and because we
+do not intend to call the original function. Instead, we just record
+the call to have it available for assertion in our mock object
+implementation.
+
+Consider that we have a SUT that is a static library project with the
+following code that calls ``freeAllResources`` which we want to get rid off
+during our unit tests:
+
+```cpp
+#include "SUT.h"
+#include "helpers.h"
+
+void SUT::terminateSystem() {
+    // do this
+    freeAllResources(42);
+    // do that
+}
+```
+
+To accomplish this, select ``freeAllResources`` and execute the source action
+"Source->Mock Function" (Ctrl+Alt+Z). Afterwards, a new dialog pops up where
+we can specify the new CUTE suite file for this new unit test (see figure
+\ref{mock_function}). Mockator then creates the necessary code to test that
+the SUT is correctly calling our function with the expected function arguments.
+
+![New CUTE suite file dialog where the code is created for testing that a SUT calls a function as we expect it to do.\label{mock_function}](screenshots/mock_function.png)
 
 
 # References
-
