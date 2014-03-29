@@ -2,7 +2,7 @@
 % Michael Rüegg
 % 18.03.2014
 
-## Introduction
+# Introduction
 Breaking dependencies is an important task in refactoring legacy
 code and putting this code under tests. Feathers' seams (@legacycode) help us
 here because they enable us to inject dependencies from
@@ -22,7 +22,7 @@ powerful way. Mockator leverages the new language facilities C++11
 offers while still being compatible with C++98/03.
 
 
-## Seams
+# Seams
 High coupling, hard-wired and cyclic dependencies lead to systems that
 are hard to change, test and deploy in isolation. Unfortunately, legacy
 code often has these attributes. Feathers' seam model helps
@@ -32,10 +32,10 @@ kinds of seam types. In C++ we have object, compile, preprocessor
 and link seams which are discussed by using Mockator in the following sections.
 
 
-### Object Seams
+## Object Seams
 Object seams are probably the most common seam type. To start with an example,
 consider the following code where the class ``GameFourWins`` has a hard coded
-dependency to ``Die``:
+dependency to ``Die`` (@dieexample):
 
 ```cpp
 // Die.h
@@ -112,7 +112,7 @@ we need. This is a seam because we now have an enabling point: The instance
 of ``Die`` that is passed to the constructor of ``GameFourWins``.
 
 
-### Compile Seams
+## Compile Seams
 Although object seams are the classic way of injecting dependencies, we think
 there is often a better solution to achieve the same goals. C++ has a tool
 for this job providing static polymorphism: template parameters. With template
@@ -156,7 +156,7 @@ typedef GameFourWinsT<> GameFourWins;
 The enabling point of this seam is the place where the template class 
 ``GameFourWinsT`` is instantiated.
 
-### Preprocessor Seams
+## Preprocessor Seams
 C and C++ offer another possibility to alter the behaviour of code without
 touching it in that place using the preprocessor. Although we are able to
 change the behaviour of existing code as shown with object and compile seams
@@ -211,7 +211,6 @@ bool isLeapYear() {
 #include "leapyear.h"
 
 void testLeapYear() {
-    //1350770400 2012 is a leap year; date -d "Oct 21 2012" +%s
     ASSERT(isLeapYear());
 }
 
@@ -229,20 +228,20 @@ int main(){
 ```
 
 To do this, select the function call for ``time`` and execute the source action
-``trace function call`` via the context menu "Source->Trace Function Call". Now
-you can toggle the activation of this feature within the resolution of an
-Eclipse quickfix marker (see figure \ref{trace_function_call}).
+"Source->Trace Function Call" (Ctrl+Alt+R). Now one can toggle the activation
+of this feature within the resolution of an Eclipse quickfix marker
+(see figure \ref{trace_function_call}).
 
-![Toggle activation of the traced function call.\label{trace_function_call}](screenshots/trace_function_call.png)
+![Enabling/disabling of the traced function call is possible thourgh an Eclipse quickfix marker.\label{trace_function_call}](screenshots/trace_function_call.png)
 
 The enabling point for this seam are the options of our compiler to choose
 between the real and our tracing implementation. We use the option 
-``-include`` of the GNU compiler here to include the header file ``malloc.h``
-into every translation unit. With ``#undef`` we are still able to call the
-original implementation of ``malloc``.
+``-include`` of the GNU compiler here to include the header file
+``mockator_time.h`` into every translation unit. With ``#undef`` we are still
+able to call the original implementation of ``time``.
 
 
-### Link Seams
+## Link Seams
 Beside the separate preprocessing step that occurs before compilation, we also
 have a post-compilation step called linking in C and C++ that is used to 
 combine the results the compiler has emitted. The linker gives us another
@@ -255,7 +254,7 @@ with new definitions in object files)
 linker for shared libraries (GNU Linux and Mac OS X only)
 
 
-#### Shadow Functions
+### Shadow Functions
 In this type of link seam we make use of the linking order. The linker
 incorporates any undefined symbols from libraries which have not been defined
 in the given object files. If we pass the object files first before the
@@ -265,32 +264,71 @@ placed the library before the object files. In this case, the linker would take
 the symbol from the library and yield a duplicate definition error when
 considering the object file. Mockator helps in shadowing functions and
 generates code and the necessary CDT build options to support this kind of 
-link seam:
+link seam.
+
+Consider the following code which is part of a static library project in CDT:
 
 ```cpp
-// shadow_roll.cpp
-#include "Die.h" 
+#include "Die.h"
+#include <cstdlib>
+
 int Die::roll() const {
-  return 4;
+    return rand() % 6 + 1;
 }
-// test.cpp
-void testGameFourWins () {
-  // ...
-}
-
-
-$ ar -r libGame.a Die.o GameFourWins.o
-$ g++ -Ldir/to/GameLib -o Test test.o shadow_roll.o -lGame
 ```
 
-The order given to the linker is exactly as we need it to prefer the symbol in the object file since the library comes at the end of the list. This list is the enabling point of this kind of link seam. If we leave shadow_roll.o out, the original version of roll is called as defined in the static library libGame.a. This type of link seam has one big disadvantage: it is not possible to call the original function anymore. This would be valuable if we just want to wrap the call for logging or analysis purposes or do something additional with the result of the function call.
+The unit test for this static library project is located in a CUTE library
+project. If we select the function call to ``rand`` and choose the source action
+"Source->Shadow function" (Ctrl+Alt+A), Mockator creates the following code
+which is located in a new source folder ``shadows`` as can be seen in figure 
+\ref{shadow_function}.
 
 
-#### Wrap Functions
-The GNU linker ld provides a lesser-known feature which helps us to call the original function. This feature is available as a command line option called wrap. The man page of ld describes its functionality as follows: "Use a wrapper function for symbol. Any undefined reference to symbol will be resolved to __wrap_symbol. Any undefined reference to __real_symbol will be resolved to symbol."
+```cpp
+#include <cstdlib>
 
-As an example, we compile GameFourWins.cpp. If we study the symbols of the object file, we see that the call to Die::roll — mangled as _ZNK3Die4rollEv according to Itanium's Application Binary Interface (ABI) that is used by GCC v4.x — is undefined (nm yields U for undefined symbols).
+int rand(void) {
+    return int{};
+}
+```
 
+In this translation unit, we can specify our implementation which shadows the
+function in the translation unit of the static library.
+
+![The folder ``shadows`` contains all the shadowed function implementations in the CUTE test project.\label{shadow_function}](screenshots/shadow_function.png)
+
+This works by altering the Eclipse build settings to use our object file
+first before the static library when calling the GNU linker:
+
+```
+$ ar -r libGame.a Die.o
+$ g++ -L/path/to/GameLib -o Test cute_test.o rand.o -lGame
+```
+
+The order given to the linker is exactly as we need it to prefer the symbol
+in the object file since the library comes at the end of the list. 
+This list is the enabling point of this kind of link seam. If we leave
+``rand.o`` out, the original version of ``rand`` is called as defined in the
+static library ``libGame.a``. This type of link seam has one big disadvantage:
+it is not possible to call the original function anymore. This would be
+valuable if we just want to wrap the call for logging or analysis purposes
+or do something additional with the result of the function call.
+
+
+### Wrap Functions
+The GNU linker ld provides a lesser-known feature which helps us to call the
+original function. This feature is available as a command line option called
+``-wrap``. The man page of ld describes its functionality as follows: 
+
+> Use a wrapper function for symbol. Any undefined reference to symbol will
+> be resolved to \_\_wrap_symbol. Any undefined reference to \_\_real_symbol will
+> be resolved to symbol."
+
+As an example, we compile ``GameFourWins.cpp``. If we study the symbols of the
+object file, we see that the call to ``Die::roll`` -  mangled as
+``_ZNK3Die4rollEv`` according to Itanium's Application Binary Interface (ABI)
+that is used by GCC v4.x — is undefined (``nm`` yields ``U`` for
+undefined symbols):
 
 ```cpp
 $ gcc -c GameFourWins.cpp -o GameFourWins.o
@@ -298,58 +336,120 @@ $ nm GameFourWins.o | grep roll
 U _ZNK3Die4rollEv
 ```
 
-This satisfies the condition of an undefined reference to a symbol. Thus we can apply a wrapper function here. Note that this would not be true if the definition of the function Die::roll would be in the same translation unit as its calling origin. If we now define a function according to the specified naming schema __wrap_symbol and use the linker flag -wrap, our function gets called instead of the original one. Mockator helps in applying this seam type by creating the following code and the corresponding build options in Eclipse CDT:
+This satisfies the condition of an undefined reference to a symbol. Thus we can
+apply a wrapper function here. Note that this would not be true if the
+definition of the function ``Die::roll`` would be in the same translation unit
+as its calling origin. If we now define a function according to the specified
+naming schema ``__wrap_symbol`` and use the linker flag ``-wrap``, our function
+gets called instead of the original one.
 
-```cpp
-extern "C" {
-  extern int __real__ZNK3Die4rollEv();
-  int __wrap__ZNK3Die4rollEv() {
-    // your intercepting functionality here
-    return __real__ZNK3Die4rollEv();
-  }
-}
+Mockator helps in applying this seam type by creating the necessary code and
+the corresponding build options in Eclipse CDT. To use it, selection the
+to be wrapped function call and click the source action "Source->Wrap Function"
+(Ctrl+Alt+W). Mockator then creates the code as shown in figure 
+\ref{shadow_function}. Mockator also provides an Eclipse marker beside the
+wrapped function block which allows us to enable/disable and delete the wrapped
+function.
 
+![The wrapped function code block including the Eclipse marker to enable/disable and delete the wrapped function ``Die::roll``.\label{wrap_function}](screenshots/wrap_function.png)
 
+The linker call used for this link seam looks as follows:
+
+```
 $ g++ -Xlinker -wrap=_ZNK3Die4rollEv -o Test test.o GameFourWins.o Die.o
 ```
 
-To prevent the compiler from mangling the mangled name again, we need to define it in a C code block. Note that we also have to declare the function __real_symbol which we delegate to in order to satisfy the compiler. The linker will resolve this symbol to the original implementation of Die::roll.
+To prevent the compiler from mangling the mangled name again, we need to define
+it in a C code block. Note that we also have to declare the function
+``__real_symbol`` which we delegate to in order to satisfy the compiler. The
+linker will resolve this symbol to the original implementation of ``Die::roll``.
 
-Alas, this feature is only available with the GNU tool chain on Linux. GCC for Mac OS X does not offer the linker flag -wrap. A further constraint is that it does not work with inline functions but this is the case with all link seams presented here. Additionally, when the function to be wrapped is part of a shared library, we cannot use this option.
+Alas, this feature is only available with the GNU tool chain on Linux. GCC for
+Mac OS X does not offer the linker flag ``-wrap``. A further constraint is
+that it does not work with inline functions but this is the case with all link
+seams presented here. Additionally, when the function to be wrapped is part of
+a shared library, we cannot use this option.
 
-#### Intercept Functions
-If we have to intercept functions from shared libraries, we can use this kind of link seam. It is based on the fact that it is possible to alter the run-time linking behaviour of the loader ld.so in a way that it considers libraries that would otherwise not be loaded. This can be accomplished by the environment variable LD_PRELOAD that the loader ld.so interprets.
 
-With this we can instruct the loader to prefer our function instead of the ones provided by libraries normally resolved through the environment variable LD_LIBRARY_PATH or the system library directories. As an example, consider the following code and the CDT build options which is generated by Mockator to intercept function calls to Die::roll:
+### Intercept Functions
+If we have to intercept functions from shared libraries, we can use this kind
+of link seam. It is based on the fact that it is possible to alter the run-time
+linking behaviour of the loader ld.so in a way that it considers libraries that
+would otherwise not be loaded. This can be accomplished by the environment
+variable ``LD_PRELOAD`` that the loader ld.so interprets.
+
+With this, we can instruct the loader to prefer our function instead of the
+ones provided by libraries normally resolved through the environment variable
+``LD_LIBRARY_PATH`` or the system library directories. As an example, consider
+the following code which is part of a shared library project in Eclipse CDT:
+
+```cpp
+#include "Die.h"
+#include <cstdlib>
+
+int Die::roll() const {
+    return rand() % 6 + 1;
+}
+```
+
+To intercept the call to the function ``rand``, we can use Mockators source action
+"Source->Wrap Function" (Ctrl+Alt+W). Mockator then creates the following code
+in a newly created shared library project:
 
 ```cpp
 #include <dlfcn.h>
 int rand(void) {
   typedef int (*funPtr)(void);
-  static funPtr origFun = 0;
+  static funPtr origFun = nullptr;
   if (!origFun) {
     void* tmpPtr = dlsym(RTLD_NEXT, "rand");
     origFun = reinterpret_cast<funPtr>(tmpPtr);
   }
-  int notNeededHere = origFun();
-  return 3;
+  return origFun();
 }
+```
 
+Mockator changes the build settings of our project by appending this library to
+``LD_PRELOAD`` as shown in the following listing. This way, our definition of
+``rand`` is called instead of the original one:
 
+```
 $ LD_PRELOAD=path/to/libRand.so executable
 ```
 
-The advantage of this solution compared to the first two link seams is that it does not require re-linking. It is solely based on altering the behaviour of ld.so. A disadvantage is that this mechanism is unreliable with member functions, because the member function pointer is not expected to have the same size as a void pointer.
+With ``dlsym`` we can look up our original function by a given name. It takes
+a handle of a dynamic library we normally get by calling ``dlopen`` and yields
+a void pointer for the symbol as its result. Because we try to achieve a
+generic solution and do not want to specify a specific library here,
+we can use a pseudo-handle that is offered by the loader called
+``RTLD_NEXT``. With this, the loader will find the next occurrence
+of a symbol in the search order *after* the library the call
+resides. 
 
-## Using Test Doubles
-### Creating Mock Objects
-### Move Test Double to Namespace
-### Converting Fake to Mock Objects
-### Toggle Mock Support
-### Registration Consistency
-### Mock Functions
-### Using Regular Expressions
+The advantage of this solution compared to the first two link seams
+is that it does not require relinking. It is solely
+based on altering the behaviour of ld.so. A disadvantage is
+that this mechanism is unreliable with member functions,
+because member function pointers are not expected to have the same
+size as a void pointer. There is no reliable, portable and
+standards compliant way to handle this issue.
+
+It is also not possible to intercept ``dlsym`` itself. A further constraint is
+given due to security concerns: the man page of ld states that ``LD_PRELOAD``
+is ignored if the executable is a setuid or setgid binary. 
 
 
-## References
+# Using Test Doubles
+
+
+## Creating Mock Objects
+## Move Test Double to Namespace
+## Converting Fake to Mock Objects
+## Toggle Mock Support
+## Registration Consistency
+## Mock Functions
+## Using Regular Expressions
+
+
+# References
 

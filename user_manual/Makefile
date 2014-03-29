@@ -1,10 +1,11 @@
 PANDOC = pandoc
 
 %.pdf: %.md Makefile
-	$(PANDOC) -s -S --latex-engine xelatex \
-	-N -V geometry:margin=1in \
-	-V mainfont='Source Sans Pro' \
-	-V fontsize='11pt' \
+	$(PANDOC) --smart --standalone --latex-engine xelatex \
+	--toc --number-sections \
+	--variable geometry:margin=1in \
+	--variable mainfont='Source Sans Pro' \
+	--variable fontsize='11pt' \
 	--biblio bibliography.bib \
 	-o $@ $<
  
