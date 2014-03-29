@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<introContent>
+  	<extensionContent id="ch.hsr.ifs.mockator.help" style="css/mockator.css" 
+  	                  alt-style="css/mockator.properties"
+  	                  name="C++ Seams and Mock Object Support" path="overview/@">
+  	    <group id="content-group" style-id="content-group">
+    	<link style-id="content-link" label="Mockator - C++ Seams and Mock Object Support" 
+       		      url="http://org.eclipse.ui.intro/showHelpTopic?id=/ch.hsr.ifs.mockator.help/html/overview.html"  
+       		      id="mockator">
+          		<text>Learn more about Mockator.</text></link>
+       	</group>
+  	</extensionContent>
+</introContent>

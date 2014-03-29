@@ -1,0 +1,16 @@
+//!TestDoubleAlreadyProvidedInNestedNsTest
+//@main.cpp
+template <typename T>
+struct SUT{
+};
+
+namespace s {
+  namespace testSUT_Ns {
+    struct Fake {
+    };
+  }
+}
+void testSUT() {
+  using namespace s::testSUT_Ns;
+  SUT<Fake> sut;
+}

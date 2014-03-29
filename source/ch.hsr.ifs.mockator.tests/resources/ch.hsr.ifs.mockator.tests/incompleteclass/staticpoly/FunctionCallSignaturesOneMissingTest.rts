@@ -1,0 +1,18 @@
+//!FunctionCallSignaturesOneMissingTest
+//@main.cpp
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    fake.foo(42);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(bool const& b) {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

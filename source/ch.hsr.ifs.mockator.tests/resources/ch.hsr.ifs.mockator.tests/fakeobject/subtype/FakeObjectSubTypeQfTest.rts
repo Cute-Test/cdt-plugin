@@ -1,0 +1,61 @@
+//!FakeObjectSubTypeQfTest
+//@main.cpp
+struct Base {
+   virtual ~Base() {}
+   virtual void base() =0;
+   virtual Base& operator ++() =0;
+};
+struct IDependency : Base {
+   IDependency(char c, double d);
+   IDependency(int i);
+   virtual void foo() =0;
+};
+struct SUT {
+   void bar(IDependency &d) {
+     d.foo();
+   }
+};
+
+void testSUT() {
+   struct /*$*/Fake/*$$*/ : IDependency {
+   } fake;
+   SUT sut;
+   sut.bar(fake);
+}
+//=
+struct Base {
+   virtual ~Base() {}
+   virtual void base() =0;
+   virtual Base& operator ++() =0;
+};
+struct IDependency : Base {
+   IDependency(char c, double d);
+   IDependency(int i);
+   virtual void foo() =0;
+};
+struct SUT {
+   void bar(IDependency &d) {
+     d.foo();
+   }
+};
+
+void testSUT() {
+   struct Fake : IDependency {
+       Fake()
+       :IDependency(int())
+       {
+       }
+       void base()
+       {
+       }
+       void foo()
+       {
+       }
+       Base& operator ++()
+       {
+         return *this;
+       }
+   } fake;
+   SUT sut;
+   sut.bar(fake);
+}

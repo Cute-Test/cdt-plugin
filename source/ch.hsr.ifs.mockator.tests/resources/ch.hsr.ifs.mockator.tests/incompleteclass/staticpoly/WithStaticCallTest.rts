@@ -1,0 +1,12 @@
+//!WithStaticCallTest
+//@main.cpp
+template <typename T>
+void sut() {
+  T::foo();
+}
+    
+void testSUT(){
+    struct Fake {
+  };
+  sut<Fake>();
+}

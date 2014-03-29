@@ -1,0 +1,55 @@
+//!MockObjectCpp11StaticPolyQfTest
+//@.config
+filename=main.cpp
+//@main.cpp
+template<typename T>
+struct SUT {
+   void bar() {
+     T mock;
+     mock.foo();
+     mock++;
+   }
+};
+
+void testSUT() {
+   struct /*$*/Mock/*$$*/ {
+   };
+   SUT<Mock> sut;
+   sut.bar();
+}
+//=
+#include "mockator.h"
+#include <cassert>
+template<typename T>
+struct SUT {
+   void bar() {
+     T mock;
+     mock.foo();
+     mock++;
+   }
+};
+
+void testSUT() {
+   INIT_MOCKATOR();
+     static std::vector<calls> allCalls { 1 };
+     struct Mock {
+       const size_t mock_id;
+
+       Mock() : mock_id{ reserveNextCallId(allCalls) } {
+         allCalls[mock_id].push_back(call { "Mock()" });
+       }
+
+       void foo() const {
+         allCalls[mock_id].push_back(call { "foo() const" });
+       }
+
+       Mock operator ++(int) {
+         allCalls[mock_id].push_back(call { "operator ++(int)" });
+         return Mock { };
+       }
+     };
+     SUT<Mock> sut;
+     sut.bar();
+     calls expectedMock = { { "Mock()" }, { "foo() const" }, {"operator ++(int)" } };
+     assert(expectedMock == allCalls[1]);
+}

@@ -1,0 +1,25 @@
+//!MultipleSutinDifferentNamespacesTest
+//@main.cpp
+namespace A {
+  template <typename T>
+  struct SUT{
+    void bar() {
+      T::foo();
+    }
+  };
+}
+
+namespace B {
+  template <typename T>
+  struct SUT{
+    void bar(){
+    }
+  };
+}
+
+void testSUT(){
+  struct Fake{
+  };
+  B::SUT<Fake> sut;
+  sut.bar();
+}

@@ -1,0 +1,50 @@
+package ch.hsr.ifs.mockator.tests.base.util;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import ch.hsr.ifs.mockator.plugin.base.util.IOUtil;
+import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
+
+public class PathProposalUtilTest {
+  private IProject project;
+
+  @Before
+  public void setUp() throws CoreException {
+    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+    project = root.getProject("Test");
+    project.create(new NullProgressMonitor());
+    project.open(new NullProgressMonitor());
+  }
+
+  @After
+  public void tearDown() throws CoreException {
+    project.delete(true, true, new NullProgressMonitor());
+  }
+
+  @Test
+  public void fileAlreadyExistsYieldsAlternative() throws CoreException {
+    IFile file = project.getFile("test.cpp");
+    file.create(IOUtil.stringToStream("test"), true, new NullProgressMonitor());
+    PathProposalUtil util = new PathProposalUtil(project.getFullPath());
+    IPath uniquePath = util.getUniquePathForNewFile("test", ".cpp");
+    Assert.assertEquals(new Path("/Test/test1.cpp"), uniquePath);
+  }
+
+  @Test
+  public void fileNotExistsYieldsOriginal() {
+    PathProposalUtil util = new PathProposalUtil(project.getFullPath());
+    IPath uniquePath = util.getUniquePathForNewFile("test", ".cpp");
+    Assert.assertEquals(new Path("/Test/test.cpp"), uniquePath);
+  }
+}

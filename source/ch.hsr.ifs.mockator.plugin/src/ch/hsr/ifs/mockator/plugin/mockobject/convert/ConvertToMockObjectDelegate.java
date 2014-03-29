@@ -1,0 +1,69 @@
+package ch.hsr.ifs.mockator.plugin.mockobject.convert;
+
+import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
+
+import java.util.Collection;
+
+import org.eclipse.core.runtime.CoreException;
+
+import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
+import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
+import ch.hsr.ifs.mockator.plugin.mockobject.linkedmode.MockObjectLinkedEditModeFactory;
+import ch.hsr.ifs.mockator.plugin.project.nature.MockatorLibHandler;
+import ch.hsr.ifs.mockator.plugin.project.properties.AssertionOrder;
+import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
+import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
+import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeStarter;
+import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorDelegate;
+import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoringRunner;
+import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
+
+public class ConvertToMockObjectDelegate extends MockatorDelegate {
+
+  @Override
+  protected void execute() {
+    copyMockatorLibIfNecessary();
+    performRefactoring();
+  }
+
+  private void copyMockatorLibIfNecessary() {
+    try {
+      new MockatorLibHandler(cProject.getProject()).addLibToProject();
+    } catch (CoreException e) {
+      throw new MockatorException(e);
+    }
+  }
+
+  private void performRefactoring() {
+    final ConvertToMockObjectRefactoring refactoring = getRefactoring();
+    new MockatorRefactoringRunner(refactoring).runInNewJob(new F1V<ChangeEdit>() {
+      @Override
+      public void apply(ChangeEdit edit) {
+        startLinkedMode(edit, refactoring.getNewMockObject().getPublicMemFuns(),
+            refactoring.getNewMockObject());
+      }
+    });
+  }
+
+  private ConvertToMockObjectRefactoring getRefactoring() {
+    return new ConvertToMockObjectRefactoring(getCppStd(), cElement, selection, cProject,
+        getLinkedEditStrategy());
+  }
+
+  private void startLinkedMode(ChangeEdit edit, Collection<ExistingTestDoubleMemFun> memFuns,
+      MockObject mockObject) {
+    MockObjectLinkedEditModeFactory factory =
+        new MockObjectLinkedEditModeFactory(edit, memFuns, getCppStd(), getAssertionOrder(),
+            maybe(mockObject.getNameForExpectationVector()));
+    new LinkedModeStarter().apply(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
+  }
+
+  private AssertionOrder getAssertionOrder() {
+    return AssertionOrder.fromProjectSettings(cProject.getProject());
+  }
+
+  private LinkedEditModeStrategy getLinkedEditStrategy() {
+    return getAssertionOrder().getLinkedEditModeStrategy(cProject.getProject());
+  }
+}

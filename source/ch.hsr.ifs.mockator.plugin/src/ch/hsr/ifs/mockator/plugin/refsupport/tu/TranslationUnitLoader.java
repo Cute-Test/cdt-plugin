@@ -1,0 +1,84 @@
+package ch.hsr.ifs.mockator.plugin.refsupport.tu;
+
+import static org.eclipse.cdt.core.model.ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT;
+import static org.eclipse.cdt.core.model.ITranslationUnit.AST_SKIP_INDEXED_HEADERS;
+
+import java.net.URI;
+
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.cdt.core.index.IIndexName;
+import org.eclipse.cdt.core.model.CModelException;
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.CoreModelUtil;
+import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+
+import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
+@SuppressWarnings("restriction")
+public class TranslationUnitLoader {
+  private static final int AST_FLAGS = AST_CONFIGURE_USING_SOURCE_CONTEXT
+      | AST_SKIP_INDEXED_HEADERS;
+  private final ICProject cProject;
+  private final IProgressMonitor pm;
+  private CRefactoringContext context;
+  private IIndex index;
+
+  public TranslationUnitLoader(ICProject cProject, CRefactoringContext context, IProgressMonitor pm) {
+    this.cProject = cProject;
+    this.context = context;
+    this.pm = pm;
+  }
+
+  public TranslationUnitLoader(ICProject cProject, IIndex index, IProgressMonitor pm) {
+    this.cProject = cProject;
+    this.index = index;
+    this.pm = pm;
+  }
+
+  public IASTTranslationUnit loadAst(IFile file) throws CoreException {
+    return loadAst(file.getLocationURI());
+  }
+
+  public IASTTranslationUnit loadAst(IIndexName iName) throws CoreException {
+    return loadAst(getURI(iName));
+  }
+
+  private static URI getURI(IIndexName iName) throws CoreException {
+    return iName.getFile().getLocation().getURI();
+  }
+
+  private IASTTranslationUnit loadAst(URI uri) throws CoreException, CModelException {
+    // findTranslationUnitForLocation is also able to deliver translation
+    // units for external header files like time.h
+    ITranslationUnit tu = CoreModelUtil.findTranslationUnitForLocation(uri, cProject);
+
+    if (tu == null) {
+      tu = CoreModel.getDefault().createTranslationUnitFrom(cProject, uri);
+    }
+
+    Assert.notNull(tu, "Was not able to determine translation unit for " + uri.getPath());
+    return loadAst(tu);
+  }
+
+  private IASTTranslationUnit loadAst(ITranslationUnit tu) throws CoreException {
+    if (context != null)
+      return context.getAST(tu, pm);
+
+    return loadAstFromTu(tu);
+  }
+
+  private IASTTranslationUnit loadAstFromTu(ITranslationUnit tu) {
+    try {
+      return tu.getAST(index, AST_FLAGS);
+    } catch (CoreException e) {
+      throw new MockatorException(e);
+    }
+  }
+}

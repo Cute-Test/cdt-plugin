@@ -1,0 +1,17 @@
+//!NoConstructorMissingTest
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T fake(3);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    Fake(int const& i) {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

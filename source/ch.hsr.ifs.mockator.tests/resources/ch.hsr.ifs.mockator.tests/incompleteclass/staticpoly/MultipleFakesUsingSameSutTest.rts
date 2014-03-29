@@ -1,0 +1,30 @@
+//!MultipleFakesUsingSameSutTest
+//@main.cpp
+template <typename T>
+struct Bar{
+  T foo;
+
+  void bar1() {
+    foo.f();
+  }
+   
+  void bar2() {
+    foo.g();
+  }
+};
+
+void test1(){
+  struct Fake1{
+    void f() const {
+    }
+  };
+  Bar<Fake1> bar;
+  bar.bar1();
+}
+
+void test2(){
+  struct Fake2{
+  };
+  Bar<Fake2> bar;
+  bar.bar2();
+}

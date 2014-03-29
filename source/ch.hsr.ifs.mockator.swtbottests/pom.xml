@@ -1,0 +1,55 @@
+<!-- See https://docs.sonatype.org/display/TYCHO/How+to+run+SWTBot+tests+with+Tycho -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>ch.hsr.ifs.mockator</artifactId>
+		<groupId>ch.hsr.ifs.mockator</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ch.hsr.ifs.mockator</groupId>
+	<artifactId>ch.hsr.ifs.mockator.swtbottests</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>eclipse-test-plugin</packaging>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+					<useUIThread>false</useUIThread>
+					<argLine>-Xms40m -Xmx512m</argLine>
+					<testSuite>ch.hsr.ifs.mockator.swtbottests</testSuite>
+					<testClass>ch.hsr.ifs.mockator.plugin.AllSWTBotTests</testClass>
+					<reportsDirectory>../mockator_swtbot/surefire-reports</reportsDirectory>
+					<product>org.eclipse.sdk.ide</product>
+					<application>org.eclipse.ui.ide.workbench</application>
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.sdk.ide</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+					</dependencies>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>screenshots</directory>
+							<includes>
+								<include>**/*.jpeg</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

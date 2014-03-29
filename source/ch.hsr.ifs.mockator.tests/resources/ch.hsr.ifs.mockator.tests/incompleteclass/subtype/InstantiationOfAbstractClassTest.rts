@@ -1,0 +1,10 @@
+//!InstantiationOfAbstractClassTest
+//@main.cpp
+struct IDependency {
+   virtual void foo() = 0;
+};
+struct Foo : IDependency {
+};
+void testSUT() {
+   Foo foo;
+}

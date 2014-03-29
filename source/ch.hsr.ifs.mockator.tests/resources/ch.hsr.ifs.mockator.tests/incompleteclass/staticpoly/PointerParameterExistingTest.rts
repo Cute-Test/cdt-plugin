@@ -1,0 +1,24 @@
+//!PointerParameterExistingTest
+//@main.cpp
+namespace {
+  struct A {
+  };
+}
+
+template <typename T>
+struct SUT{
+  void bar() {
+    A *a = new A;
+    int *i = T::foo(a);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    static int* foo(A const* a) {
+      return int();
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

@@ -1,0 +1,19 @@
+//!ParametersNotConsideredConst
+//@main.cpp
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    const int i = 3;
+    fake.foo(i);    
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(int i) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

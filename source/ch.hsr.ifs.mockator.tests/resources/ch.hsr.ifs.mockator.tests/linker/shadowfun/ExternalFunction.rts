@@ -1,0 +1,10 @@
+//!ExternalFunction
+//@A.cpp
+#include "foo.h"
+
+int foo(char c) {
+  return 42;
+}
+
+//@foo.h
+int foo(char);

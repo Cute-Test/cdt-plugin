@@ -1,0 +1,187 @@
+package ch.hsr.ifs.mockator.tests;
+
+import java.util.Properties;
+
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.model.ICElement;
+import org.eclipse.cdt.core.model.ISourceReference;
+import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.corext.util.CModelUtil;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.junit.Test;
+
+import ch.hsr.ifs.cdttesting.cdttest.CDTTestingRefactoringTest;
+import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
+import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
+import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
+import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
+
+@SuppressWarnings("restriction")
+public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest {
+  private static int DEFAULT_MARKER_COUNT = 1;
+  protected int markerCount;
+  protected boolean needsManagedCProject;
+  protected boolean newFileCreation;
+  protected boolean withCuteNature;
+  protected boolean fatalError;
+  private String[] newFiles;
+
+  @Override
+  public void setUp() throws Exception {
+    addMockatorIncludePaths();
+    super.setUp();
+    setFormatterOptions();
+    setMockatorProjectOptions();
+
+    if (needsManagedCProject) {
+      activateManagedBuild();
+    }
+
+    if (withCuteNature) {
+      addCuteNature();
+    }
+  }
+
+  private void addCuteNature() throws CoreException {
+    new NatureHandler(project)
+        .addNature("ch.hsr.ifs.cute.ui.cutenature", new NullProgressMonitor());
+  }
+
+  private void addMockatorIncludePaths() {
+    for (String includePath : new String[] {"mockator", "cute", "stl"}) {
+      addIncludeDirPath(includePath);
+    }
+  }
+
+  protected IASTTranslationUnit getAst(CRefactoringContext context) {
+    try {
+      return context.getAST(getTu(getActiveCElement()), new NullProgressMonitor());
+    } catch (CoreException e) {
+    }
+    fail("Not able to get AST for translation unit");
+    return null;
+  }
+
+  protected ITranslationUnit getTu(ICElement cElement) {
+    ISourceReference sourceRef = (ISourceReference) cElement;
+    return CModelUtil.toWorkingCopy(sourceRef.getTranslationUnit());
+  }
+
+  private void setMockatorProjectOptions() {
+    MarkMissingMemFuns.storeInProjectSettings(project, MarkMissingMemFuns.AllMemFuns);
+  }
+
+  private void setFormatterOptions() {
+    new FormatterOptionsLoader(cproject).setFormatterOptions();
+  }
+
+  @Override
+  protected void compareFiles() throws Exception {
+    for (TestSourceFile testFile : fileMap.values()) {
+      String expectedSource = testFile.getExpectedSource();
+      String actualSource = getCurrentSource(testFile.getName());
+      new AssertThat(actualSource).isEqualByIgnoringWhitespace(expectedSource);
+    }
+  }
+
+  @Override
+  protected String makeProjectAbsolutePath(String relativePath) {
+    IPath projectPath = project.getLocation();
+    return projectPath.append(relativePath).toOSString();
+  }
+
+  private void activateManagedBuild() throws CoreException {
+    CdtManagedProjectActivator configurator = new CdtManagedProjectActivator(cproject.getProject());
+    configurator.activateManagedBuild();
+  }
+
+  @Override
+  @Test
+  public void runTest() throws Throwable {
+    closeWelcomeScreen();
+    if (newFileCreation && !fatalError) {
+      ensureNewFilesDoNotExist();
+    }
+    openActiveFileInEditor();
+    if (fatalError) {
+      runRefactoringAndAssertFailure();
+    } else {
+      runRefactoringAndAssertSuccess();
+    }
+    if (newFileCreation) {
+      filesDoExist();
+    }
+  }
+
+  @Override
+  protected void configureTest(Properties refProps) {
+    markerCount =
+        Integer
+            .valueOf(refProps.getProperty("markerCount", Integer.toString(DEFAULT_MARKER_COUNT)));
+    expectedFinalWarnings = Integer.parseInt(refProps.getProperty("expectedFinalWarnings", "0"));
+    fatalError = Boolean.valueOf(refProps.getProperty("fatalError", "false")).booleanValue();
+    newFileCreation =
+        Boolean.valueOf(refProps.getProperty("newFileCreation", "false")).booleanValue();
+    newFiles = getNewFiles(refProps);
+    needsManagedCProject =
+        Boolean.valueOf(refProps.getProperty("needsManagedCProject", "false")).booleanValue();
+    withCuteNature =
+        Boolean.valueOf(refProps.getProperty("withCuteNature", "false")).booleanValue();
+  }
+
+  @SuppressWarnings("nls")
+  private static String[] getNewFiles(Properties refactoringProperties) {
+    return String.valueOf(refactoringProperties.getProperty("newFiles", "")).replaceAll(" ", "")
+        .split(",");
+  }
+
+  private void ensureNewFilesDoNotExist() throws Exception {
+    removeFiles();
+    filesDoNotExist();
+  }
+
+  private void removeFiles() {
+    executeOnNewFiles(new F1V<String>() {
+      @Override
+      public void apply(String filePath) {
+        try {
+          getFile(filePath).delete(true, new NullProgressMonitor());
+        } catch (CoreException e) {
+        }
+      }
+    });
+  }
+
+  private void filesDoExist() {
+    executeOnNewFiles(new F1V<String>() {
+      @Override
+      public void apply(String filePath) {
+        assertTrue(getFile(filePath).exists());
+      }
+    });
+  }
+
+  private void filesDoNotExist() {
+    executeOnNewFiles(new F1V<String>() {
+      @Override
+      public void apply(String filePath) {
+        assertFalse(getFile(filePath).exists());
+      }
+    });
+  }
+
+  private void executeOnNewFiles(F1V<String> f) {
+    for (String file : newFiles) {
+      f.apply(file);
+    }
+  }
+
+  private IFile getFile(String filePath) {
+    return project.getFile(new Path(filePath));
+  }
+}

@@ -1,0 +1,93 @@
+//!FakeObjectCpp03QfTest
+//@main.cpp
+namespace a {
+   struct A {
+   };
+}
+template<typename T>
+struct SUT {
+   void bar1() {
+     const a::A aa;
+     T fake;
+     fake.foo(aa);
+   }
+
+   void bar2() {
+     T fake;
+     fake.foo1("gaga");
+     fake.foo2("gaga");
+     ++fake;
+   }
+};
+
+namespace suite {
+   namespace testSUT {
+     struct /*$*/Fake/*$$*/ {
+     };
+   }
+}
+ 
+void testSUT1() {
+   using namespace suite::testSUT;
+   SUT<Fake> sut;
+   sut.bar1();
+}
+
+void testSUT2() {
+   using namespace suite::testSUT;
+   SUT<Fake> sut;
+   sut.bar2();
+}
+//=
+namespace a {
+   struct A {
+   };
+}
+template<typename T>
+struct SUT {
+  void bar1() {
+     const a::A aa;
+     T fake;
+     fake.foo(aa);
+  }
+
+  void bar2() {
+     T fake;
+     fake.foo1("gaga");
+     fake.foo2("gaga");
+     ++fake;
+  }
+};
+
+namespace suite {
+   namespace testSUT {
+     struct Fake {
+         void foo(const a::A & aa) const
+         {
+         }
+
+         void foo1(const std::string & s) const
+         {
+         }
+
+         void foo2(const std::string & s) const
+         {
+         }
+         Fake& operator++() {
+           return *this;
+         }
+     };
+   }
+}
+
+void testSUT1() {
+   using namespace suite::testSUT;
+   SUT<Fake> sut;
+   sut.bar1();
+}
+
+void testSUT2() {
+   using namespace suite::testSUT;
+   SUT<Fake> sut;
+   sut.bar2();
+}

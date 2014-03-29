@@ -1,0 +1,20 @@
+//!EqualsOperatorProvidedTest
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T t1;
+    T t2;
+    t1 == t2;
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    bool operator==(const Fake & f) const {
+      return true;
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

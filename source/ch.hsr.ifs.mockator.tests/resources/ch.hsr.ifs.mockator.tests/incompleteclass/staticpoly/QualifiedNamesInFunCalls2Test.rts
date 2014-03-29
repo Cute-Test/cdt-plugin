@@ -1,0 +1,27 @@
+//!QualifiedNamesInFunCalls2Test
+//@main.cpp
+namespace a {
+  struct A {
+  };
+}
+namespace b {
+  struct A {
+  };
+}
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    const a::A aa;
+    fake.foo(aa);	
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(a::A const& aa) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

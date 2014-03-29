@@ -1,0 +1,80 @@
+package ch.hsr.ifs.mockator.plugin.mockobject.linkedmode;
+
+import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
+import static ch.hsr.ifs.mockator.plugin.base.tuples.Tuple._1;
+import static ch.hsr.ifs.mockator.plugin.base.tuples.Tuple._2;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Matcher;
+
+import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
+
+import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
+import ch.hsr.ifs.mockator.plugin.base.tuples.Pair;
+import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
+import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
+import ch.hsr.ifs.mockator.plugin.project.properties.AssertionOrder;
+import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
+import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
+
+@SuppressWarnings("restriction")
+class FunSignaturesLinkedEditMode extends MockObjectLinkedModeSupport {
+
+  public FunSignaturesLinkedEditMode(ChangeEdit edit,
+      Collection<? extends TestDoubleMemFun> memFuns, CppStandard cppStd,
+      AssertionOrder assertOrder, Maybe<String> expectationsVectorName) {
+    super(edit, memFuns, cppStd, assertOrder, expectationsVectorName);
+  }
+
+  @Override
+  protected void addFunSignatureProposals(Collection<OffsetAndLength> initializerPositions) {
+    Proposal[] proposals = getMemFunSignatureProposals();
+
+    for (OffsetAndLength pos : initializerPositions) {
+      linkedMode.addProposal(_1(pos), proposals);
+    }
+  }
+
+  private Proposal[] getMemFunSignatureProposals() {
+    List<Proposal> proposals = list();
+
+    for (TestDoubleMemFun memFun : memFuns) {
+      proposals.add(createNewProposal(getFunSignature(memFun)));
+    }
+
+    return proposals.toArray(new Proposal[proposals.size()]);
+  }
+
+  private static String getFunSignature(TestDoubleMemFun memFun) {
+    return StringUtil.quote(memFun.getFunctionSignature());
+  }
+
+  @Override
+  protected void collectPositionsWithNewVector(List<OffsetAndLength> offsetsAndLengths,
+      Pair<Integer, String> expectationInfo) {
+    Integer posOfCallSpecs = _1(expectationInfo);
+    String callSpecText = _2(expectationInfo);
+    collectVectorInsidePositions(offsetsAndLengths, callSpecText, posOfCallSpecs);
+  }
+
+  @Override
+  protected void collectVectorInsidePositions(List<OffsetAndLength> offsetsAndLengths,
+      String callSpecText, int posOfCallSpecs) {
+    for (int optEditOffset : getChangeEditOffset()) {
+      Matcher m = getMatcher(callSpecText);
+
+      while (m.find()) {
+        int beginOfCallSpec = m.start(1);
+        int endOfCallSpec = m.end(1);
+        int expectationOffset = optEditOffset + posOfCallSpecs + beginOfCallSpec;
+        int expectationLength = endOfCallSpec - beginOfCallSpec;
+        offsetsAndLengths.add(new OffsetAndLength(expectationOffset, expectationLength));
+      }
+    }
+  }
+
+  private Matcher getMatcher(String callSequenceVectorLine) {
+    return cppStd.getInitializerPattern().matcher(callSequenceVectorLine);
+  }
+}

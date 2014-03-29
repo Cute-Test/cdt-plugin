@@ -1,0 +1,17 @@
+//!TypedefForFakeInSutTest
+//@main.cpp
+template <typename T>
+struct SUT{
+  typedef T Fake_type;
+  void bar() {
+    Fake_type t;
+    t.foo();
+  }
+};
+
+void testSUT(){
+  struct Fake{
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

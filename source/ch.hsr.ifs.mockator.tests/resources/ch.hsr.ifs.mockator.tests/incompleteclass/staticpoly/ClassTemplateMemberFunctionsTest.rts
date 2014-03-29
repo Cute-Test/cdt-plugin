@@ -1,0 +1,28 @@
+//!ClassTemplateMemberFunctionsTest
+//@main.cpp
+class A {
+};
+
+struct SUT{
+  template <typename T>
+  void bar1(T const& t) {
+    t.foo1();
+  }
+
+  template <typename T>
+  void bar2(T const& t) {
+    t.foo2();
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo1() const {
+    }
+  };
+  SUT sut;
+  Fake fake;
+  sut.bar1(fake);
+  A a;
+  sut.bar2(a);
+}

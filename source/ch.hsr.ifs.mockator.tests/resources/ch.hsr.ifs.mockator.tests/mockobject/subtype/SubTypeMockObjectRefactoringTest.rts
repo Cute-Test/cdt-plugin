@@ -1,0 +1,289 @@
+//!Basic mock object support for C++03
+//@.config
+cppStandard=C++03
+linkedEditStrategy=ChooseArguments
+filename=A.cpp
+
+//@IDependency.h
+struct IDependency {
+  virtual ~IDependency();
+  virtual void bar(double) =0;
+  virtual void foo(int i) =0;
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+  SUT(IDependency& d) : d(d) {}
+  void bar() {
+    d.bar(3.1415);
+    d.foo(42);
+  }
+private:
+  IDependency& d;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ : IDependency {
+  } mock;
+  SUT sut(mock);
+  sut.bar();
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls(1);
+    struct Mock : IDependency
+    {
+        const size_t mock_id;
+        Mock()
+        :mock_id( reserveNextCallId(allCalls) )
+        {
+        }
+
+        void bar(double d)
+        {
+            allCalls[mock_id].push_back(call("bar(double)", d));
+        }
+
+        void foo(int i)
+        {
+            allCalls[mock_id].push_back(call("foo(int)", i));
+        }
+    } mock;
+    SUT sut(mock);
+    sut.bar();
+    calls expectedMock;
+    expectedMock += call("bar(double)", double()), call("foo(int)", int());
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Basic mock object support for C++11 
+//@.config
+cppStandard=C++11
+filename=A.cpp
+
+//@IDependency.h
+struct IDependency {
+  virtual ~IDependency();
+  virtual char bar(int&) =0;
+  virtual void foo(double const& d) =0;
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+  SUT(IDependency& d) : d(d) {}
+  void bar() {
+    d.foo(3.1415);
+    d.bar(42);
+  }
+private:
+  IDependency& d;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ : IDependency {
+  } mock;
+  SUT sut(mock);
+  sut.bar();
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock : IDependency
+    {
+        const size_t mock_id;    
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+        }
+        char bar(int & i)
+        {
+            allCalls[mock_id].push_back(call{"bar(int&)", i});
+            return char{};
+        }
+        void foo(const double & d)
+        {
+            allCalls[mock_id].push_back(call{"foo(const double&)", d});
+        }
+    } mock;
+    SUT sut(mock);
+    sut.bar();
+    calls expectedMock = {{"bar(int&)"}, {"foo(const double &)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Call of base class ctor if necessary for C++03
+//@.config
+cppStandard=C++03
+filename=A.cpp
+
+//@Base.h
+struct Base {
+  Base(int i);
+  virtual ~Base();
+  virtual void bar(double) =0;
+};
+
+//@IDependency.h
+#include "Base.h"
+struct A {
+};
+struct IDependency : Base {
+  IDependency(char c, double d);
+  IDependency(A& a);
+  virtual ~IDependency();
+  virtual void foo(int i) =0;
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+  SUT(IDependency& d) : d(d) {}
+  void bar() {
+    d.bar(3.1415);
+    d.foo(42);
+  }
+private:
+  IDependency& d;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ : IDependency {
+  private:
+      void secret() {
+      }
+  } mock;
+  SUT sut(mock);
+  sut.bar();
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls(1);
+    struct Mock : IDependency
+    {
+        const size_t mock_id;    
+        Mock()
+        :IDependency(A()), mock_id( reserveNextCallId(allCalls) )
+        {
+        }
+
+        void bar(double d)
+        {
+            allCalls[mock_id].push_back(call("bar(double)", d));
+        }
+
+        void foo(int i)
+        {
+            allCalls[mock_id].push_back(call("foo(int)", i));
+        }
+    private:
+        void secret() {
+        }
+    } mock;
+    SUT sut(mock);
+    sut.bar();
+    calls expectedMock;
+    expectedMock += call("bar(double)"), call("foo(int)");
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Call of base class ctor if necessary for C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+
+//@Base.h
+struct Base {
+  Base(int i);
+  virtual ~Base();
+  virtual void bar(double) =0;
+};
+
+//@IDependency.h
+#include "Base.h"
+struct A {
+};
+struct IDependency : Base {
+  IDependency(char c, double d);
+  IDependency(A& a);
+  virtual ~IDependency();
+  virtual void foo(int i) =0;
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+  SUT(IDependency& d) : d(d) {}
+  void bar() {
+    d.foo(3.1415);
+    d.foo(42);
+  }
+private:
+  IDependency& d;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ : IDependency {
+  } mock;
+  SUT sut(mock);
+  sut.bar();
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock : IDependency
+    {
+        const size_t mock_id;
+        Mock()
+        :IDependency(A{}), mock_id{ reserveNextCallId(allCalls) }
+        {
+        }
+
+        void bar(double d)
+        {
+            allCalls[mock_id].push_back(call{"bar(double)", d});
+        }
+
+        void foo(int i)
+        {
+            allCalls[mock_id].push_back(call{"foo(int)", i});
+        }
+    } mock;
+    SUT sut(mock);
+    sut.bar();
+    calls expectedMock = {{"bar(double)"}, {"foo(int)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}

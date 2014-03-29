@@ -1,0 +1,16 @@
+//!WithMultipleInheritanceHierarchiesTest
+//@main.cpp
+struct Base {
+  virtual ~Base();
+  virtual void foo() =0;
+  virtual void bar() =0;
+};
+struct IDependency : Base {
+};
+void test(){
+  struct Fake : IDependency {
+    void foo() {
+    }
+  };
+  Fake fake;
+}

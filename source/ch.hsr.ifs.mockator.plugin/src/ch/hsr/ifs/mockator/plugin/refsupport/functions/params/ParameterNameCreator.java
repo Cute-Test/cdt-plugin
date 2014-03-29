@@ -1,0 +1,109 @@
+package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
+
+import java.util.Map;
+
+import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
+import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IBasicType;
+import org.eclipse.cdt.core.dom.ast.IQualifierType;
+import org.eclipse.cdt.core.dom.ast.IType;
+import org.eclipse.cdt.core.dom.ast.ITypedef;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+
+import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+
+// Inspired by TDD
+@SuppressWarnings("restriction")
+public class ParameterNameCreator {
+  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+  private final Map<String, Boolean> nameHistory;
+
+  public ParameterNameCreator(Map<String, Boolean> nameHistory) {
+    this.nameHistory = nameHistory;
+  }
+
+  public IASTName getParamName(IASTInitializerClause clause) {
+    return createName(replaceNonAlphanumericCharacters(clause));
+  }
+
+  public IASTName getParamName(IType type) {
+    return createName(getParameterCharacter(getFallBackName(type)));
+  }
+
+  public IASTName getParamName(String type) {
+    return createName(getParameterCharacter(type));
+  }
+
+  public IASTName getParamName(IASTCompositeTypeSpecifier klass) {
+    return createName(getParameterCharacter(String.valueOf(klass.getName().getSimpleID())));
+  }
+
+  public IASTName createParameterName(IASTIdExpression idExpr) {
+    return createName(String.valueOf(idExpr.getName().getSimpleID()));
+  }
+
+  private static String getFallBackName(IType type) {
+    type = AstUtil.unwindPointerOrRefType(type);
+
+    if (type instanceof IQualifierType) {
+      type = ((IQualifierType) type).getType();
+    }
+
+    if (type instanceof ITypedef)
+      return ASTTypeUtil.getQualifiedName((ICPPBinding) type).substring(0, 1);
+    if (type instanceof ICPPTemplateInstance || type instanceof ICPPClassType)
+      return ASTTypeUtil.getType(type).toLowerCase();
+    else if (type instanceof IBasicType)
+      return ((IBasicType) type).getKind().toString().substring(1).toLowerCase();
+
+    return " ";
+  }
+
+  private String getParameterCharacter(String fallBackVarName) {
+    String newName = Character.toString(fallBackVarName.charAt(0)).toLowerCase();
+
+    while (nameHistory.get(newName) != null) {
+      newName = (char) (newName.charAt(0) + 1) + "";
+    }
+
+    return newName;
+  }
+
+  private IASTName createName(String name) {
+    char[] result = name.toCharArray();
+
+    if (result.length > 0) {
+      result[0] = Character.toLowerCase(result[0]);
+    }
+
+    return makeUniqueName(String.valueOf(result));
+  }
+
+  private IASTName makeUniqueName(String name) {
+    String newName = name;
+
+    if (nameHistory.get(newName) != null) {
+      newName = newName + "1";
+    }
+
+    StringBuilder sb = new StringBuilder(newName);
+
+    while (nameHistory.get(newName) != null) {
+      sb.append((newName.charAt(newName.length() - 1) + 1));
+    }
+
+    newName = sb.toString();
+    nameHistory.put(newName, true);
+    return nodeFactory.newName(newName.toCharArray());
+  }
+
+  private static String replaceNonAlphanumericCharacters(IASTInitializerClause clause) {
+    return clause.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "");
+  }
+}

@@ -1,0 +1,16 @@
+//!MemFunPtrDependencyInjectionShouldBeMarked
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+};
+
+struct SUT{
+  void injectDependency(char c, IDependency* d) {}
+private:
+  IDependency* d;
+};
+
+void testSUT() {
+  SUT sut;
+  sut.injectDependency('g', foo);
+}

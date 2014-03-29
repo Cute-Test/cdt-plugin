@@ -1,0 +1,19 @@
+//!PrefixOperatorProvidedTest
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T t;
+    ++t;
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    Fake& operator++() {
+      return Fake();
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

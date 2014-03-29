@@ -1,0 +1,12 @@
+//!SutAsNonTemplateFunctionTest
+//@main.cpp
+void sut(Fake const& t) {
+  t.foo();
+}
+    
+void testSUT(){
+    struct Fake {
+  };
+  Fake fake;
+  sut(fake);
+}

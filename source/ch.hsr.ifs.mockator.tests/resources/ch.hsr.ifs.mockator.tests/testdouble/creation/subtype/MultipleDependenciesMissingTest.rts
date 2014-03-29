@@ -1,0 +1,21 @@
+//!MultipleDependenciesMissingTest
+//@main.cpp
+struct IDependency1 {
+  virtual ~IDependency1();
+};
+struct IDependency2 {
+  virtual ~IDependency2();
+};
+
+struct SUT{
+  SUT(IDependency1& d1) {}
+  void setDependency(IDependency2& d2) {}
+private:
+  IDependency1& d1;
+  IDependency2& d2;
+};
+
+void testSUT() {
+  SUT sut(dep1);
+  sut.setDependency(dep2);
+}

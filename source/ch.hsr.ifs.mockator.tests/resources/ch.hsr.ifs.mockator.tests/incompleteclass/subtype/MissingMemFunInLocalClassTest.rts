@@ -1,0 +1,16 @@
+//!NonLocalClassWithMissingMemFunsTest
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+  virtual void foo() =0;
+};
+
+namespace testSUTNs {
+  struct Fake : IDependency {
+  };
+}
+
+void test(){
+  using namespace testSUTNs;
+  Fake fake;
+}

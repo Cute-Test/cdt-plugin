@@ -1,0 +1,14 @@
+//!CallInCtorBugTest
+//@main.cpp
+template <typename T>
+struct SUT {
+  SUT(int i) {
+    T::foo();
+    }
+};
+    
+void testSUT(){
+    struct Fake {
+  };
+  SUT<Fake> sut(3);
+}

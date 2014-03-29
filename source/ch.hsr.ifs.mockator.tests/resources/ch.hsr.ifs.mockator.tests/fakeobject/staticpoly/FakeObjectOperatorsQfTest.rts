@@ -1,0 +1,114 @@
+//!FakeObjectOperatorsQfTest
+//@main.cpp
+template<typename T>
+struct SUT {
+   bool bar() {
+     T fake1;
+     T fake2;
+     T fake3 = -fake2;
+     fake1 = fake2;
+     ++fake1;
+     ++fake1;
+     fake1++;
+     --fake1;
+     fake1--;
+     int res = fake2(42);
+     bool b = fake1 == fake2;
+     fake1 += fake2;
+     fake1 /= fake2;
+     if (!fake1 && !fake2) {
+       int i = 3 + fake1[3];
+     }
+     T* fake4 = &fake3;
+     return !(fake1 < fake2);
+   }
+};
+
+namespace suite {
+   namespace testSUT {
+     struct Fake {
+     };
+   }
+}
+
+void testSUT() {
+   using namespace suite::testSUT;
+   SUT<Fake> sut;
+   sut.bar();
+}
+//=
+template<typename T>
+struct SUT {
+   bool bar() {
+     T fake1;
+     T fake2;
+     T fake3 = -fake2;
+     fake1 = fake2;
+     ++fake1;
+     ++fake1;
+     fake1++;
+     --fake1;
+     fake1--;
+     int res = fake2(42);
+     bool b = fake1 == fake2;
+     fake1 += fake2;
+     fake1 /= fake2;
+     if (!fake1 && !fake2) {
+       int i = 3 + fake1[3];
+     }
+     T* fake4 = &fake3;
+     return !(fake1 < fake2);
+   }
+};
+
+namespace suite {
+   namespace testSUT {
+     struct Fake {
+       Fake operator -() const {
+         return Fake();
+       }
+       Fake& operator ++() {
+         return *this;
+       }
+       Fake operator ++(int) {
+         return Fake();
+       }
+       Fake& operator --() {
+           return *this;
+       }
+       Fake operator --(int) {
+         return Fake();
+       }
+       int operator ()(const int& i) {
+         return int();
+       }
+       bool operator ==(const Fake& f) const {
+         return bool();
+       }
+       Fake& operator +=(const Fake& f) {
+         return *this;
+       }
+       Fake& operator /=(const Fake& f) {
+         return *this;
+       }
+       bool operator !() const {
+         return bool();
+       }
+       int operator [](const int& i) {
+         return int();
+       }
+       Fake* operator &() {
+         return 0;
+       }
+       bool operator <(const Fake& f) const {
+         return bool();
+       }
+     };
+   }
+}
+
+void testSUT() {
+   using namespace suite::testSUT;
+   SUT<Fake> sut;
+   sut.bar();
+}

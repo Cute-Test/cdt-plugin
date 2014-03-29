@@ -1,0 +1,17 @@
+//!SUTProject
+//@A.cpp
+#include "SUTFromOtherProject.h"
+
+//@SUTFromOtherProject.h
+template<typename T>
+struct SUT {
+  void bar() {
+    T t;
+    t.gugus(42);
+  }
+};
+
+template<typename T>
+void sut(T t) {
+  t.foo(3.1415);
+}

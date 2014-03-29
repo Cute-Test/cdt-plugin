@@ -1,0 +1,555 @@
+//!Fatal error when trying to move a non-local test double
+//@.config
+fatalError=true
+cppStandard=C++11
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> allCalls{1};
+        struct /*$*/Mock/*$$*/
+        {
+            Mock(const int & i)
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+                allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+            }
+            const size_t mock_id;
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock_Ns;
+    INIT_MOCKATOR();
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Fatal error when trying to move something else than a test double
+//@.config
+fatalError=true
+
+//@A.cpp
+void testSUT() {
+    int /*$*/mock/*$$*/;
+}
+
+//!Fake object to separate namespace with Cute suite
+//@.config
+filename=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  int bar() {
+    Fake fake;
+    return fake.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "cute.h"
+
+namespace testSuite
+{
+    namespace testSUT_Ns
+    {
+    }
+}
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+    int foo(int const& i) const {
+      return int{};
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+void runSuite() {
+    using cute::suite;
+	suite testSuite;
+	testSuite.push_back(CUTE(testSUT));
+}
+
+//=
+#include "SUT.h"
+#include "cute.h"
+
+namespace testSuite
+{
+    namespace testSUT_Ns
+    {
+        struct Fake
+        {
+            int foo(const int & i) const
+            {
+                return int{};
+            }
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSuite::testSUT_Ns;
+    SUT<Fake> sut;
+    sut.bar();
+}
+
+void runSuite() {
+    using cute::suite;
+	suite testSuite;
+	testSuite.push_back(CUTE(testSUT));
+}
+
+//!Fake object to separate namespace without Cute suite
+//@.config
+filename=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  int bar() {
+    T fake;
+    return fake.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+    int foo(int const& i) const {
+      return int{};
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+namespace testSUT_Ns
+{
+    struct Fake
+    {
+        int foo(const int & i) const
+        {
+            return int{};
+        }
+    };
+}
+
+void testSUT() {
+  using namespace testSUT_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Mock object to separate namespace with Cute suite
+//@.config
+filename=A.cpp
+cppStandard=C++11
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  int bar() {
+    T mock(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSuite
+{
+    namespace testSUT_Ns
+    {
+    }
+}
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct /*$*/Mock/*$$*/
+    {
+        Mock(const int & i)
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+        }
+        const size_t mock_id;
+
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+void runSuite() {
+	cute::suite testSuite;
+	testSuite.push_back(CUTE(testSUT));
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSuite
+{
+    namespace testSUT_Ns
+    {
+        namespace Mock_Ns
+        {
+            INIT_MOCKATOR();
+            std::vector<calls> allCalls{1};
+            struct Mock
+            {
+                Mock(const int & i)
+                :mock_id{ reserveNextCallId(allCalls) }
+                {
+                    allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+                }
+                const size_t mock_id;
+            };
+        }
+    }
+}
+
+void testSUT() {
+    using namespace testSuite::testSUT_Ns::Mock_Ns;
+    INIT_MOCKATOR();
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+void runSuite() {
+	cute::suite testSuite;
+	testSuite.push_back(CUTE(testSUT));
+}
+
+//!Mock object to namespace already containing a mock object
+//@.config
+cppStandard=C++11
+filename=A.cpp
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  int bar() {
+    T mock(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> allCalls{1};
+        struct Mock
+        {
+            Mock(const int & i)
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+                allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+            }
+            const size_t mock_id;
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock_Ns;
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct /*$*/Mock2/*$$*/
+    {
+        Mock2(const int & i)
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock2(const int&)", i});
+        }
+        const size_t mock_id;
+    };
+    SUT<Mock2> sut;
+    sut.bar();
+    calls expectedMock2 = {{"Mock2(const int&)"}};
+    ASSERT_EQUAL(expectedMock2, testSUT_Ns::Mock_Ns::allCalls[1]);
+}
+
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> allCalls{1};
+        struct Mock
+        {
+            Mock(const int & i)
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+                allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+            }
+            const size_t mock_id;
+        };
+    }
+    namespace Mock2_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> allCalls{1};
+        struct Mock2
+        {
+            Mock2(const int & i)
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+                allCalls[mock_id].push_back(call{"Mock2(const int&)", i});
+            }
+            const size_t mock_id;
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock2_Ns;
+    using namespace testSUT_Ns::Mock_Ns;
+    INIT_MOCKATOR();
+    SUT<Mock2> sut;
+    sut.bar();
+    calls expectedMock2 = {{"Mock2(const int&)"}};
+    ASSERT_EQUAL(expectedMock2, testSUT_Ns::Mock_Ns::allCalls[1]);
+}
+
+//!Mock object to separate namespace with subtype polymorphism
+//@.config
+cppStandard=C++11
+filename=A.cpp
+
+//@A.cpp
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> myCalls{1};
+    struct /*$*/Mock/*$$*/ : IDependency
+    {
+        const size_t mock_id;
+        Mock()
+        :IDependency(char{}), mock_id{ reserveNextCallId(myCalls) }
+        {
+        }
+        int foo(const int & i) const
+        {
+            myCalls[mock_id].push_back(call{"foo(const int&) const", i});
+            return int{};
+        }
+    } mock;
+    calls expected = {{"foo(const int&) const"}};
+    ASSERT_EQUAL(expected, myCalls[1]);
+}
+
+//=
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> myCalls{1};
+        struct Mock : IDependency
+        {
+            const size_t mock_id;
+            Mock()
+            :IDependency(char{}), mock_id{ reserveNextCallId(myCalls) }
+            {
+            }
+            int foo(const int & i) const
+            {
+                myCalls[mock_id].push_back(call{"foo(const int&) const", i});
+                return int{};
+            }
+        } mock;
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock_Ns;
+    INIT_MOCKATOR();
+    calls expected = {{"foo(const int&) const"}};
+    ASSERT_EQUAL(expected, myCalls[1]);
+}
+
+//!Mock object to separate namespace without Cute suite
+//@.config
+cppStandard=C++11
+filename=A.cpp
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  int bar() {
+    T mock(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct /*$*/Mock/*$$*/
+    {
+        Mock(const int & i)
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+        }
+        const size_t mock_id;
+
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> allCalls{1};
+        struct Mock
+        {
+            Mock(const int & i)
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+                allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+            }
+            const size_t mock_id;
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock_Ns;
+    INIT_MOCKATOR();
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Mock object with only static funs bug
+//@.config
+cppStandard=C++11
+filename=A.cpp
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T::foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSuite
+{
+    namespace testSUT_Ns
+    {
+    }
+}
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct /*$*/Mock/*$$*/
+    {
+        static void foo(const int& i) const
+        {
+            allCalls[0].push_back(call{"foo(const int&) const", i});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"foo(const int&) const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[0]);
+}
+
+void runSuite() {
+	cute::suite testSuite;
+	testSuite.push_back(CUTE(testSUT));
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSuite
+{
+    namespace testSUT_Ns
+    {
+        namespace Mock_Ns
+        {
+            INIT_MOCKATOR();
+            std::vector<calls> allCalls{1};
+            struct Mock
+            {
+                static void foo(const int& i) const
+                {
+                    allCalls[0].push_back(call{"foo(const int&) const", i});
+                }
+            };
+        }
+    }
+}
+
+void testSUT() {
+    using namespace testSuite::testSUT_Ns::Mock_Ns;
+    INIT_MOCKATOR();
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"foo(const int&) const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[0]);
+}
+
+void runSuite() {
+	cute::suite testSuite;
+	testSuite.push_back(CUTE(testSUT));
+}

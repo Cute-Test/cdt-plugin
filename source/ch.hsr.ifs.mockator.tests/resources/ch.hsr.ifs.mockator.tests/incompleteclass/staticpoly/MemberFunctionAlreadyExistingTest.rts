@@ -1,0 +1,15 @@
+//!MemberFunctionAlreadyExistingTest
+//@main.cpp
+template <typename T>
+void sut(T const& t) {
+  return t.foo();
+}
+    
+void testSUT(){
+    struct Fake {
+    void foo() const {
+    }
+  };
+  Fake fake;
+  sut<Fake>(fake);
+}

@@ -1,0 +1,25 @@
+//!MultipleReferencesWithSameNameBugTest
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T::foo();
+  }
+};
+
+namespace A {
+  void test() {
+      struct Fake {
+      };
+      SUT<Fake> sut;
+  }
+}
+
+namespace B {
+  void test() {
+    struct Fake {
+    };
+      SUT<Fake> sut;
+      sut.bar();
+  }
+}

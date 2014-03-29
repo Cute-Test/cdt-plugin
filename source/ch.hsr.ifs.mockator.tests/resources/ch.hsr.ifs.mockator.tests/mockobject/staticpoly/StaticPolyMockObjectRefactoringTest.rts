@@ -1,0 +1,1236 @@
+//!Mock Infrastructure Already Provided For C++03
+//@.config
+cppStandard=C++03
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  T t;
+  int* bar() {
+    t.foo("mockator");
+    return t.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+  namespace mock_Ns {
+      struct /*$*/Mock/*$$*/ {
+      };
+  }
+}
+
+void testSUT() {
+  using namespace testSUT_Ns::mock_Ns;
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+  namespace mock_Ns {
+      INIT_MOCKATOR();
+      std::vector<calls> allCalls(1);
+      struct Mock
+      {
+          const size_t mock_id;      
+          Mock() : mock_id ( reserveNextCallId(allCalls) )
+          {
+              allCalls[mock_id].push_back(call("Mock()"));
+          }
+          void foo(const std::string & s) const
+          {
+              allCalls[mock_id].push_back(call("foo(const std::string&) const", s));
+          }
+          int *foo(const int & i) const
+          {
+              allCalls[mock_id].push_back(call("foo(const int&) const", i));
+              return 0;
+          }
+      };
+  }
+}
+void testSUT() {
+  using namespace testSUT_Ns::mock_Ns;
+  SUT<Mock> sut;
+  sut.bar();
+    calls expectedMock;
+    expectedMock += call("Mock()"), call("foo(const std::string&) const"), call("foo(const int&) const");
+    ASSERT_EQUAL(expectedMock, testSUT_Ns::mock_Ns::allCalls[1]);
+}
+
+//!Already provided Mockator include directive for C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+  	T mock(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ {
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    
+    {
+        const size_t mock_id;
+        Mock(const int & i)
+        : mock_id { reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Complex Mock Object for C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  T t;
+  void bar1() {
+    int i = t.foo1(3);
+    bar2();
+  }
+
+  void bar2() {
+    t.foo2('f', 3.1415);
+  }
+
+  void bar3() {
+    int *i = nullptr;
+    t.foo3(i);
+    bar4();
+  }
+
+  void bar4() {
+    t.foo4("f");
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ {
+  };
+  SUT<Mock> sut;
+  sut.bar1();
+  sut.bar3();
+}
+
+//=
+#include "SUT.h"
+
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {
+        const size_t mock_id;    
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+        int foo1(const int & i) const
+        {
+            allCalls[mock_id].push_back(call{"foo1(const int&) const", i});
+            return int{};
+        }
+        void foo2(const char & c, const double & d) const
+        {
+            allCalls[mock_id].push_back(call{"foo2(const char&, const double&) const", c, d});
+        }
+        void foo3(const int *& i) const
+        {
+            allCalls[mock_id].push_back(call{"foo3(const int*&) const", i});
+        }
+        void foo4(const std::string & s) const
+        {
+            allCalls[mock_id].push_back(call{"foo4(const std::string&) const", s});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar1();
+    sut.bar3();
+    calls expectedMock = {{"Mock()"}, {"foo1(const int&) const"}, {"foo2(const char&, const double&) const"}, {"foo3(const int*&) const"}, {"foo4(const std::string&) const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Ctor Support Bug for C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T mock(3);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ {
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {
+        const size_t mock_id;
+        Mock(const int & i)
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock(const int&)", i});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Basic Mock Object infrastructure for C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+namespace A {
+  class B {
+  };
+}
+
+template <typename T>
+struct SUT {
+  int* bar() {
+    T mock;
+    A::B b;
+    return mock.foo(42, b);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testAnotherThing() {
+}
+
+void testSUT() {
+  int i = 42;
+  struct /*$*/Mock/*$$*/ {
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+#include "mockator.h"
+
+void testAnotherThing() {
+}
+
+void testSUT() {
+    INIT_MOCKATOR();
+    int i = 42;
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {
+        const size_t mock_id;
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+
+        int *foo(const int & i, const A::B & b) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const int&, const A::B&) const", i, b});
+            return nullptr;
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock()"}, {"foo(const int&, const A::B&) const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Without Cute support and by choosing arguments for C++11
+//@.config
+cppStandard=C++11
+withCuteNature=False
+linkedEditStrategy=ChooseArguments
+filename=A.cpp
+
+//@SUT.h
+namespace A {
+  class B {
+  };
+}
+
+template <typename T>
+struct SUT {
+  int* bar() {
+    T mock;
+    A::B b;
+    unsigned int i = 42;
+    return mock.foo(i, b);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testAnotherThing() {
+}
+
+void testSUT() {
+  int stayAtThisPosition = 42;
+  struct /*$*/Mock/*$$*/ {
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+#include "mockator.h"
+
+#include <cassert>
+
+void testAnotherThing() {
+}
+
+void testSUT() {
+    INIT_MOCKATOR();
+    int stayAtThisPosition = 42;
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {
+        const size_t mock_id;    
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+
+        int *foo(const unsigned int & i, const A::B & b) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const unsigned int&, const A::B&) const", i, b});
+            return nullptr;
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock()"}, {"foo(const unsigned int&, const A::B&) const", int{}, A::B{}}};
+    assert(expectedMock == allCalls[1]);
+}
+
+//!Mock object partially implemented for C++11
+//#ch.hsr.ifs.mockator.plugin.mockobject.MockObjectRefactoringTest
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  T t;
+  void bar() {
+    t.foo(42);
+    t.foo("mockator");
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ {
+      void foo(int const& i) const {
+      }
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {
+        const size_t mock_id;    
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+
+        void foo(const std::string & s) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const std::string&) const", s});
+        }
+
+        void foo(int const& i) const
+        {
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock()"}, {"foo(const std::string&) const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Local class with C++11
+//#ch.hsr.ifs.mockator.plugin.mockobject.MockObjectRefactoringTest
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T mock;
+    mock.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  class /*$*/Mock/*$$*/ {
+  private:
+      void secretImpl() {
+      }
+  protected:
+      void toOverride() {
+      }
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    class Mock
+    {
+    private:
+        void secretImpl()
+        {
+        }
+    protected:
+        void toOverride() {
+        }
+    public:
+        const size_t mock_id;
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+        void foo() const
+        {
+            allCalls[mock_id].push_back(call{"foo() const"});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock()"}, {"foo() const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!STL container bug for C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+#include "stl_fake.h"
+
+template <typename T>
+struct SUT {
+  void bar() {
+    T mock;
+    std::map<std::string, int> m;
+    mock.foo(m);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ {
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {
+        const size_t mock_id;    
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+
+        void foo(const std::map<std::string,int> & m) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const std::map<std::string,int>&) const", m});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock()"}, {"foo(const std::map<std::string,int>&) const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!With multiple referencing test functions for C++03
+//@.config
+cppStandard=C++03
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T mock;
+    mock.bar(42)
+    mock.foo(3.1415);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+namespace testSUT {
+  namespace fake_Ns {
+      struct /*$*/Fake/*$$*/
+      {
+    };
+  }
+}
+
+void testSUT1() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+void testSUT2() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT {
+  namespace fake_Ns {
+      INIT_MOCKATOR();
+      std::vector<calls> allCalls(1);
+      struct Fake
+      {
+          const size_t mock_id;
+          Fake()
+          :mock_id( reserveNextCallId(allCalls) )
+          {
+              allCalls[mock_id].push_back(call("Fake()"));
+          }
+
+          void bar(const int& i) const
+          {
+              allCalls[mock_id].push_back(call("bar(const int&) const", i));
+          }
+
+          void foo(const double& d) const
+          {
+              allCalls[mock_id].push_back(call("foo(const double&) const", d));
+          }
+    };
+  }
+}
+
+void testSUT1() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+  calls expectedFake;
+  expectedFake += call("Fake()"), call("bar(const int&) const"), call("foo(const double&) const");
+  ASSERT_EQUAL(expectedFake, testSUT::fake_Ns::allCalls[1]);
+}
+
+void testSUT2() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+  calls expectedFake;
+  expectedFake += call("Fake()"), call("bar(const int&) const"), call("foo(const double&) const");
+  ASSERT_EQUAL(expectedFake, testSUT::fake_Ns::allCalls[1]);
+}
+
+//!With missing operators and by choosing arguments
+//@.config
+cppStandard=C++11
+linkedEditStrategy=ChooseArguments
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template<typename T>
+struct SUT {
+	bool bar() {
+		T t1;
+		t1(42);
+		T t2;
+		return (t1 < t2 || !t1);
+	}
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+	INIT_MOCKATOR();
+	static std::vector<calls> allCalls { 1 };
+	struct Fake {
+		const size_t mock_id;
+
+		Fake() :
+				mock_id { reserveNextCallId(allCalls) } {
+			allCalls[mock_id].push_back(call { "Fake()" });
+		}
+
+		void operator ()(const int& i) {
+			allCalls[mock_id].push_back(call { "operator ()(const int&)", i });
+		}
+
+        bool operator <(const Fake& f) const {
+            allCalls[mock_id].push_back(call { "operator <(const Fake&) const",
+                    f });
+            return bool { };
+        }
+
+		bool operator !() const {
+			allCalls[mock_id].push_back(call { "operator !() const" });
+			return bool { };
+		}
+	};
+	SUT<Fake> sut;
+	sut.bar();
+	calls expectedFake = { { "Fake()" }, { "operator ()(const int&)", int { } },
+            { "operator <(const Fake&) const", Fake { } }, {
+                    "operator !() const" } };
+	ASSERT_EQUAL(expectedFake, allCalls[1]);
+}
+
+
+//!Static function call support with C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T::foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  class /*$*/Mock/*$$*/ {
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    class Mock
+    {
+    public:
+        static void foo()
+        {
+            allCalls[0].push_back(call{"foo()"});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"foo()"}};
+    ASSERT_EQUAL(expectedMock, allCalls[0]);
+}
+
+//!Mock Infrastructure Already Provided For C++11
+//@.config
+cppStandard=C++11
+linkedEditStrategy=ChooseArguments
+filename=A.cpp
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  T t;
+  void bar() {
+    t.foo("mockator");
+    t.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+  using namespace mockator;
+  static std::vector<calls> allCalls{1};
+  struct /*$*/Mock/*$$*/ {
+      Mock()
+      :mock_id{ reserveNextCallId(allCalls) }
+      {
+          allCalls[mock_id].push_back(call{"Mock()"});
+      }
+      void foo(const int & i) const
+      {
+          allCalls[mock_id].push_back(call{"foo(const int&) const", i});
+      }
+      const size_t mock_id;
+  };
+  SUT<Mock> sut;
+  sut.bar();
+  calls expectedMock = {{"Mock()"}, {"foo(const int&) const", 42}};
+  ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    using namespace mockator;
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {    
+        void foo(const std::string & s) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const std::string&) const", s});
+        }
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+        void foo(const int & i) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const int&) const", i});
+        }
+        const size_t mock_id;
+  };
+  SUT<Mock> sut;
+  sut.bar();
+  calls expectedMock = {{"Mock()"}, {"foo(const int&) const", 42}, {"foo(const std::string&) const", std::string{}}};
+  ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!With already existing mock object for C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+      T t;
+      t.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> someName{1};
+        struct Mock
+        {
+            const size_t mock_id;
+            Mock()
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+            }
+
+            void foo(const int& i) const
+            {
+                someName[mock_id].push_back(call{"foo(const int&) const", i});
+            }
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock_Ns;
+    struct /*$*/NewMock/*$$*/
+    {
+    };
+    SUT<NewMock> sut1;
+    sut1.bar();
+    SUT<Mock> sut2;
+    sut2.bar();
+    calls expected = {{"foo(const int&) const)", 42}};
+    ASSERT_EQUAL(expected, testSUT_Ns::Mock_Ns::someName[1]);
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> someName{1};
+        struct Mock
+        {
+            const size_t mock_id;
+            Mock()
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+            }
+
+            void foo(const int& i) const
+            {
+                someName[mock_id].push_back(call{"foo(const int&) const", i});
+            }
+        };
+    }
+}
+
+void testSUT() {
+    INIT_MOCKATOR();
+    using namespace testSUT_Ns::Mock_Ns;
+    static std::vector<calls> allCalls{1};
+    struct NewMock
+    {
+        const size_t mock_id;    
+        NewMock()
+        : mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"NewMock()"});
+        }
+        void foo(const int& i) const
+        {
+        	allCalls[mock_id].push_back(call{"foo(const int&) const", i});
+        }
+    };
+    SUT<NewMock> sut1;
+    sut1.bar();
+    SUT<Mock> sut2;
+    sut2.bar();
+    calls expected = {{"foo(const int&) const)", 42}};
+    ASSERT_EQUAL(expected, testSUT_Ns::Mock_Ns::someName[1]);
+    calls expectedNewMock = {{"NewMock()"}, {"foo(const int&) const"}};
+    ASSERT_EQUAL(expectedNewMock, allCalls[1]);
+}
+
+//!With two mock objects one incomplete
+//@.config
+cppStandard=C++11
+linkedEditStrategy=ChooseArguments
+filename=A.cpp
+
+//@SUT.h
+template <typename T, typename U>
+struct SUT {
+  void bar() {
+      T t;
+      t.foo(42);
+      U u;
+      u.bar(3.1415);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Mock1_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> someName1{1};
+        struct Mock1
+        {
+            const size_t mock_id;
+            Mock1()
+            :mock_id{ reserveNextCallId(someName1) }
+            {
+ 				someName1[mock_id].push_back(call{"Mock1()"});                
+            }
+
+            void foo(const int& i) const
+            {
+                someName1[mock_id].push_back(call{"foo(const int&) const", i});
+            }
+        };
+    }
+    namespace Mock2_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> someName2{1};
+        struct /*$*/Mock2/*$$*/
+        {
+            const size_t mock_id;
+            Mock2()
+            :mock_id{ reserveNextCallId(someName2) }
+            {
+                someName2[mock_id].push_back(call{"Mock2()"});
+            }
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock1_Ns;
+    using namespace testSUT_Ns::Mock2_Ns;
+    SUT<Mock1, Mock2> sut;
+    sut.bar();
+    calls expected1 = {{"Mock1()"}, {"foo(const int&) const)", 42}};
+    ASSERT_EQUAL(expected1, testSUT_Ns::Mock1_Ns::someName1[1]);
+    calls expected2 = {{"Mock2()"}};
+    ASSERT_EQUAL(expected2, testSUT_Ns::Mock2_Ns::someName2[1]);
+}
+
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+
+namespace testSUT_Ns
+{
+    namespace Mock1_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> someName1{1};
+        struct Mock1
+        {
+            const size_t mock_id;
+            Mock1()
+            :mock_id{ reserveNextCallId(someName1) }
+            {
+ 				someName1[mock_id].push_back(call{"Mock1()"});                
+            }
+
+            void foo(const int& i) const
+            {
+                someName1[mock_id].push_back(call{"foo(const int&) const", i});
+            }
+        };
+    }
+    namespace Mock2_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> someName2{1};
+        struct Mock2
+        {
+            void bar(const double& d) const
+            {
+                someName2[mock_id].push_back(call{"bar(const double&) const", d});
+            }
+            
+            const size_t mock_id;
+            Mock2()
+            :mock_id{ reserveNextCallId(someName2) }
+            {
+                someName2[mock_id].push_back(call{"Mock2()"});
+            }
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock1_Ns;
+    using namespace testSUT_Ns::Mock2_Ns;
+    SUT<Mock1, Mock2> sut;
+    sut.bar();
+    calls expected1 = {{"Mock1()"}, {"foo(const int&) const)", 42}};
+    ASSERT_EQUAL(expected1, testSUT_Ns::Mock1_Ns::someName1[1]);
+    calls expected2 = {{"Mock2()"}, {"bar(const double&) const", double{}}};
+    ASSERT_EQUAL(expected2, testSUT_Ns::Mock2_Ns::someName2[1]);
+}
+
+
+//!Create ctor after solely static with C++11
+//@.config
+cppStandard=C++11
+filename=A.cpp
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T::foo();
+    T t;
+    t.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> myCalls{1};
+    class /*$*/Mock/*$$*/
+    {
+    public:
+        static void foo()
+        {
+            myCalls[0].push_back(call{"foo()"});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"foo()"}};
+    ASSERT_EQUAL(expectedMock, myCalls[0]);
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> myCalls{1};
+    class Mock
+    {
+    public:
+        const size_t mock_id;
+        Mock() :mock_id{ reserveNextCallId(myCalls) }
+        {
+ 		    myCalls[mock_id].push_back(call{"Mock()"});                
+        }
+
+        void foo(const int& i) const
+        {
+            myCalls[mock_id].push_back(call{"foo(const int&) const", i});
+        }
+
+        static void foo()
+        {
+            myCalls[0].push_back(call{"foo()"});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"foo()" }, { "Mock()" },
+            { "foo(const int&) const"}};
+    ASSERT_EQUAL(expectedMock, myCalls[0]);
+}
+
+//!With two local mock objects for C++11
+//#ch.hsr.ifs.mockator.plugin.mockobject.MockObjectRefactoringTest
+//@.config
+cppStandard=C++11
+filename=A.cpp
+withCuteNature=true
+
+//@SUT.h
+template <typename T, typename U>
+struct SUT {
+  void bar() {
+	T t;
+    t.foo(42);
+	U u;
+    u.foo("mockator");
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock1
+    {
+        const size_t mock_id;    
+        Mock1()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock1()"});
+        }
+
+        void foo(const std::string & s) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const std::string&) const", s});
+        }
+    };
+    struct /*$*/Mock2/*$$*/ {
+    };
+    SUT<Mock2, Mock1> sut;
+    sut.bar();
+    calls expectedMock1 = {{"Mock1()"}, {"foo(const std::string&) const"}};
+    ASSERT_EQUAL(expectedMock1, allCalls[1]);
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock1
+    {
+        const size_t mock_id;    
+        Mock1()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock1()"});
+        }
+
+        void foo(const std::string & s) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const std::string&) const", s});
+        }
+    };
+    static std::vector<calls> allCallsMock2{1};
+    struct Mock2 {
+        const size_t mock_id;    
+        Mock2()
+        :mock_id{ reserveNextCallId(allCallsMock2) }
+        {
+            allCallsMock2[mock_id].push_back(call{"Mock2()"});
+        }
+
+        void foo(const int & i) const
+        {
+            allCallsMock2[mock_id].push_back(call{"foo(const int&) const", i});
+        }
+    };
+    SUT<Mock2, Mock1> sut;
+    sut.bar();
+    calls expectedMock1 = {{"Mock1()"}, {"foo(const std::string&) const"}};
+    ASSERT_EQUAL(expectedMock1, allCalls[1]);
+    calls expectedMock2 = {{"Mock2()"}, {"foo(const int&) const"}};
+    ASSERT_EQUAL(expectedMock2, allCallsMock2[1]);
+}

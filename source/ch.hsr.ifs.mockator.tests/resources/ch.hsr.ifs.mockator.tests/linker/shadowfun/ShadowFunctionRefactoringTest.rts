@@ -1,0 +1,177 @@
+//!Inline functions not supported
+//@.config
+fatalError=true
+
+//@A.cpp
+inline void /*$*/foo/*$$*/;
+
+//!Template functions not supported 1
+//@.config
+fatalError=true
+
+//@A.cpp
+template<typename T>
+void foo(T t);
+
+void bar() {
+  /*$*/foo/*$$*/(3);
+}
+
+//!Template functions not supported 2
+//@.config
+fatalError=true
+
+//@A.cpp
+template<typename T>
+void /*$*/foo/*$$*/(T t);
+
+//!Shadow free function
+//@.config
+newFiles=shadows/foo.cpp
+filename=A.cpp
+newFileCreation=true
+needsManagedCProject=true
+
+//@foo.h
+class A {
+};
+int foo(A const& a, int * ip, char c) {
+}
+//=
+class A {
+};
+__attribute__((weak)) int foo(const A& a, int* ip, char c) {
+}
+ 
+//@A.cpp
+#include "foo.h"
+#include "gogo.h"
+
+int bar() {
+  A a;
+  int i = 3;
+  int *ip = &i;
+  return /*$*/foo/*$$*/(a, ip, 'd');
+}
+
+//@shadows/foo.cpp
+//=
+#include "../foo.h"
+int foo(const A & a, int *ip, char c)
+{
+    return int();
+}
+
+//!Shadow member function
+//@.config
+newFiles=shadows/foo.cpp
+newFileCreation=true
+filename=A.cpp
+needsManagedCProject=true
+
+//@Foo.h
+class Bar;
+
+class Foo {
+  int foo(Bar const& boo) const;
+};
+//=
+class Bar;
+
+class Foo {
+    __attribute__((weak)) int foo(const Bar& boo) const;
+};
+
+//@Foo.cpp
+#include "Foo.h"
+#include <string>
+#include <map>
+
+int Foo::foo(Bar const& boo) const
+{
+  return 42;
+}
+
+//@A.cpp
+#include "Foo.h"
+
+int bar() {
+  Foo f;
+  Bar b;
+  return f./*$*/foo/*$$*/(b);
+}
+
+//@shadows/foo.cpp
+//=
+#include "../Foo.h"
+int Foo::foo(const Bar & boo) const
+{
+    return int();
+}
+
+//!Shadow member function contained in namespace
+//@.config
+newFiles=shadows/foo.cpp
+newFileCreation=true
+filename=A.cpp
+needsManagedCProject=true
+
+//@A.h
+namespace Ns {
+class A {
+  void foo(int) const;
+};
+}
+//=
+namespace Ns {
+class A {
+  __attribute__((weak)) 
+  void foo(int) const;
+};
+}
+
+//@A.cpp
+#include "A.h"
+
+void bar() {
+  Ns::A a;
+  a./*$*/foo/*$$*/(42);
+}
+
+//@shadows/foo.cpp
+//=
+#include "../A.h"
+
+void Ns::A::foo(int i) const
+{
+}
+
+//!Shadow free function in macro
+//@.config
+newFiles=shadows/foo.cpp
+newFileCreation=true
+filename=A.cpp
+needsManagedCProject=true
+
+//@foo.h
+bool foo(char c) {
+}
+//=
+__attribute__((weak)) 
+bool foo(char c) {
+}
+ 
+//@A.cpp
+#include "foo.h"
+
+void test() {
+  ASSERT(/*$*/foo('c')/*$$*/);
+}
+
+//@shadows/foo.cpp
+//=
+#include "../foo.h"
+bool foo(char c)
+{
+    return bool();
+}

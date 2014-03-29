@@ -1,0 +1,22 @@
+//!OldVsNewConstSyleTest
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T::foo(3);
+    float f = 3.1415;
+    T::foo(&f);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    static void foo(const int& i) {
+    }
+
+    static void foo(const float* i) {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

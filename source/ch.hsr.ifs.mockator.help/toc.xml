@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Mockator User Guide">
+   <topic label="Overview" href="html/overview.html" />
+   <topic href="html/seams.html" label="Refactoring Towards Seams">
+   </topic>
+   <topic href="html/mockobjects.html" label="Mock Objects">
+   </topic>
+   <topic label="What&apos;s new in Mockator" href="html/whatsnew.html" />
+</toc>

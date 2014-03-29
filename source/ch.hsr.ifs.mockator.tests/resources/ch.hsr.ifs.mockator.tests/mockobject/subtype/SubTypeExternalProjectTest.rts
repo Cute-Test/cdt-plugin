@@ -1,0 +1,46 @@
+//!Basic mock object subtype poly support with SUT in referencing project 
+//@.config
+cppStandard=C++03
+linkedEditStrategy=ChooseArguments
+filename=A.cpp
+
+//@A.cpp
+#include "SUTFromOtherProject.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ : IDependency {
+  } mock;
+  SUT sut(mock);
+  sut.bar();
+}
+//=
+#include "SUTFromOtherProject.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls(1);
+    struct Mock : IDependency
+    {
+        const size_t mock_id;
+        Mock()
+        :mock_id( reserveNextCallId(allCalls) )
+        {
+        }
+
+        void bar(int i)
+        {
+            allCalls[mock_id].push_back(call("bar(int)", i));
+        }
+        
+        void foo(double d)
+        {
+            allCalls[mock_id].push_back(call("foo(double)", d));
+        }
+    } mock;
+    SUT sut(mock);
+    sut.bar();
+    calls expectedMock;
+    expectedMock += call("bar(int)", int()), call("foo(double)", double());
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}

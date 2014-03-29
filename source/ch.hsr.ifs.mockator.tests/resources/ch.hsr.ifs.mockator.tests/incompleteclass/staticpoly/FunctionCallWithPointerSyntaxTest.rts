@@ -1,0 +1,17 @@
+//!FunctionCallWithPointerSyntaxTest
+//@main.cpp
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    T* t = new T;
+    t->foo();
+  }
+};
+
+void testSUT(){
+  struct Fake{
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

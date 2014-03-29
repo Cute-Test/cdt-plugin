@@ -1,0 +1,29 @@
+//!Into ctor by pointer with SUT as free function
+//@IDependency.h
+struct IDependency {
+    virtual ~IDependency();
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+void sut(int i, float f, double d, IDependency const* dep, char c) {
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void test() {
+    sut(42, 2.78f, 3.1415, foo, 'c');
+}
+
+//=
+#include "SUT.h"
+#include "IDependency.h"
+
+void test() {
+    struct Foo : IDependency
+    {
+    } foo;
+    sut(42, 2.78f, 3.1415, &foo, 'c');
+}

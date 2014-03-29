@@ -1,0 +1,17 @@
+//!With external project replacing occurrences
+//@.config
+tuOfChosenClass=Foo.h
+
+//@A.cpp
+#include "Foo.h"
+
+struct FooUse {
+  void bar(/*$*/Foo/*$$*/ * f);
+};
+
+//=
+#include "Foo.h"
+
+struct FooUse {
+  void bar(FooInterface * f);
+};

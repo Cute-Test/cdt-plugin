@@ -1,0 +1,11 @@
+//!LocalTestDoubleAlreadyProvidedTest
+//@main.cpp
+template <typename T>
+struct SUT{
+};
+
+void testSUT() {
+  struct Fake {
+  };
+  SUT<Fake> sut;
+}

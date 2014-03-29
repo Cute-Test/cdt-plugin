@@ -1,0 +1,41 @@
+//!FunctionCallSignaturesNoneMissingTest
+//@main.cpp
+namespace std {
+  template<typename _CharT>
+  class basic_string;
+  typedef basic_string<char> string;
+}
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    fake.foo("string");
+    fake.foo(42);
+    fake.foo(3.14159265);
+    fake.foo('c');
+    fake.foo(true);
+    fake.foo(false);    
+    fake.foo(a::A());   
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(std::string const& s) const {
+    }
+
+    void foo(int const& i) const {
+    }
+
+    void foo(double const& d) const {
+    }
+
+    void foo(char const& c) const {
+    }
+
+    void foo(bool const& b) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

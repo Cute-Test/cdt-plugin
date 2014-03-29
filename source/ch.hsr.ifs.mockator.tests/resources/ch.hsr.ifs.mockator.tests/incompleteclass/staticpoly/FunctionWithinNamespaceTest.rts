@@ -1,0 +1,15 @@
+//!FunctionWithinNamespaceTest
+//@main.cpp
+namespace A {
+  template <typename T>
+  void sut(T const& t) {
+    t.foo();
+  }
+}
+    
+void testSUT(){
+    struct Fake {
+  };
+  Fake fake;
+  A::sut(fake);
+}

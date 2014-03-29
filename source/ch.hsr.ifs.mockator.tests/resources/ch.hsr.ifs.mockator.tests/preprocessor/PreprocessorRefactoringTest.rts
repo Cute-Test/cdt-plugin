@@ -1,0 +1,184 @@
+//!Function definition in same translation unit as calling origin
+//@.config
+fatalError=true
+filename=A.cpp
+
+//@A.cpp
+int rand() {
+  return 42;
+}
+
+int bar() {
+	return /*$*/rand/*$$*/();
+}
+
+//!Member functions cannot be traced
+//@.config
+fatalError=true
+
+//@A.cpp
+struct A {
+  void foo();
+};
+
+int bar() {
+    A a;
+	return  a./*$*/foo/*$$*/();
+}
+
+//!Template functions cannot be traced
+//@.config
+fatalError=true
+
+//@maxi.h
+template <typename T>
+T maxi(T x1, T x2) {
+    return x1 > x2 ? x1 : x2;
+}
+
+//@A.cpp
+#include "maxi.h"
+
+int bar() {
+	return /*$*/maxi/*$$*/(12, 6);
+}
+
+//!Function without parameters
+//@.config
+newFileCreation=true
+newFiles=trace/mockator_rand.h,trace/mockator_rand.cpp
+filename=A.cpp
+
+//@rand.h
+extern int rand(void);
+
+//@bar.h
+int bar();
+
+//@A.cpp
+#include "bar.h"
+#include "rand.h"
+
+int bar() {
+	return /*$*/rand/*$$*/();
+}
+
+//@trace/mockator_rand.h
+//=
+#ifndef MOCKATOR_RAND_H_
+#define MOCKATOR_RAND_H_
+
+#include "../rand.h"
+
+int mockator_rand(const char *fileName, int lineNumber);
+
+#define rand() mockator_rand(__FILE__, __LINE__)
+
+#endif
+
+//@trace/mockator_rand.cpp
+//=
+#include "mockator_rand.h"
+
+#undef rand
+
+int mockator_rand(const char *fileName, int lineNumber)
+{
+    return rand();
+}
+
+//!Function with parameters
+//@.config
+newFileCreation=true
+newFiles=trace/mockator_foo.h,trace/mockator_foo.cpp
+filename=A.cpp
+
+//@foo.h
+void foo(unsigned int) {
+}
+
+//=
+#undef foo
+void foo(unsigned int) {
+}
+
+//@bar.h
+void bar();
+
+//@A.cpp
+#include "bar.h"
+#include "foo.h"
+
+void bar() {
+	/*$*/foo/*$$*/(0);
+}
+
+//@trace/mockator_foo.h
+//=
+#ifndef MOCKATOR_FOO_H_
+#define MOCKATOR_FOO_H_
+#include "../foo.h"
+
+void mockator_foo(unsigned int i, const char *fileName, int lineNumber);
+
+#define foo(i) mockator_foo((i), __FILE__, __LINE__)
+
+#endif
+
+//@trace/mockator_foo.cpp
+//=
+#include "mockator_foo.h"
+
+#undef foo
+
+void mockator_foo(unsigned int i, const char *fileName, int lineNumber)
+{
+    foo(i);
+}
+
+
+//!Free function contained in namespace
+//@.config
+newFileCreation=true
+filename=A.cpp
+newFiles=trace/mockator_foo.h,trace/mockator_foo.cpp
+
+//@foo.h
+namespace Ns {
+  void foo(int);
+}
+
+//@bar.h
+void bar();
+
+//@A.cpp
+#include "bar.h"
+#include "foo.h"
+
+void bar() {
+	Ns::/*$*/foo/*$$*/(0);
+}
+
+//@trace/mockator_foo.h
+//=
+#ifndef MOCKATOR_FOO_H_
+#define MOCKATOR_FOO_H_
+#include "../foo.h"
+
+namespace Ns {
+  void mockator_foo(int i, const char *fileName, int lineNumber);
+}
+
+#define foo(i) mockator_foo((i), __FILE__, __LINE__)
+
+#endif
+
+//@trace/mockator_foo.cpp
+//=
+#include "mockator_foo.h"
+
+#undef foo
+
+void Ns::mockator_foo(int i, const char *fileName, int lineNumber) {
+  foo(i);
+}

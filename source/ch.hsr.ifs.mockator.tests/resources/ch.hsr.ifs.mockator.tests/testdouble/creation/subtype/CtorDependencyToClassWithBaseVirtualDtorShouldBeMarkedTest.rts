@@ -1,0 +1,21 @@
+//!CtorDependencyToClassWithBaseVirtualDtorShouldBeMarkedTest
+//@.config
+cppStandard=C++11
+
+//@A.cpp
+struct Base {
+  virtual ~Base();
+};
+struct IDependency : Base {
+  ~IDependency();
+};
+
+struct SUT{
+  SUT(IDependency& d) : d(d) {}
+private:
+  IDependency& d;
+};
+
+void testSUT() {
+  SUT sut(dependency);
+}

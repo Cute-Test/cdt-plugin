@@ -1,0 +1,20 @@
+//!WithOverloadingTest
+//@main.cpp
+template <typename T>
+void sut(T const& t) {
+}
+
+template <typename T>
+void sut(T const& t1, T const& t2) {
+  t1.foo();
+}
+
+void sut(int i) {
+}
+
+void testSUT(){
+  struct Fake{
+  };
+  Fake f;
+  sut(f, f);
+}

@@ -1,0 +1,15 @@
+//!OnlyWhenUsedWithStaticCall3Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  static void bar1() {
+  }
+  static void bar2() {
+  }
+};
+
+void testSUT(){
+  struct Fake{
+  };
+  SUT<Fake>::bar2();
+}

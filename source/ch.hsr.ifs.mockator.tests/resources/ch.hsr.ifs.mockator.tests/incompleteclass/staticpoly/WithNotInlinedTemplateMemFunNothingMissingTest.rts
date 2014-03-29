@@ -1,0 +1,26 @@
+//!WithNotInlinedTemplateMemFunNothingMissingTest
+//@main.cpp
+template <typename T>
+struct SUT {
+  void bar();
+  T t;
+};
+
+template <typename T>
+void SUT<T>::bar()
+{
+  T::foo1();
+  t.foo2();
+}
+
+void testSUT(){
+  struct Fake{
+    static void foo1() {
+    }
+
+    void foo2() const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

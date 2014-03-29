@@ -1,0 +1,19 @@
+//!WithNotInlinedTemplateMemberFunctionTest
+//@main.cpp
+template <typename T>
+struct SUT {
+  void bar();
+};
+
+template <typename T>
+void SUT<T>::bar()
+{
+  T::foo();
+}
+
+void testSUT(){
+  struct Fake{
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

@@ -1,0 +1,651 @@
+//!Mangling of basic types
+//@.config
+filename=A.cpp
+//@foo.h
+int foo(int, unsigned int, char, unsigned char, signed char, short, unsigned short, float, double, wchar_t);
+
+//@A.cpp
+#include "foo.h"
+
+int roll() {
+	return /*$*/foo/*$$*/(0, 1, 'a', 'b', 'c', 2, 3, 4.1f, 4.2, L'a') % 6 + 1;
+}
+//=
+#include "foo.h"
+
+#ifdef WRAP__Z3fooijchastfdw
+extern "C" {
+extern int __real__Z3fooijchastfdw(int i, unsigned int j, char c, unsigned char d, signed char e, short  k, unsigned short  l, float f, double g, wchar_t w);
+int __wrap__Z3fooijchastfdw(int i, unsigned int j, char c, unsigned char d, signed char e, short  k, unsigned short  l, float f, double g, wchar_t w)
+{
+    return __real__Z3fooijchastfdw(i, j, c, d, e, k, l, f, g, w);
+}
+}
+#endif
+
+int roll() {
+	return foo(0, 1, 'a', 'b', 'c', 2, 3, 4.1f, 4.2, L'a') % 6 + 1;
+}
+
+//!Special handling of void functions
+//@.config
+filename=A.cpp
+//@A.cpp
+void foo();
+
+void bar() {
+	/*$*/foo()/*$$*/;
+}
+//=
+void foo();
+
+#ifdef WRAP__Z3foov
+extern "C" {
+extern void __real__Z3foov();
+void __wrap__Z3foov()
+{
+    __real__Z3foov();
+}
+}
+#endif
+
+void bar() {
+	foo();
+}
+
+//!Mangling of ctor
+//@.config
+filename=A.cpp
+//@Rational.h
+struct Rational {
+  explicit Rational(long z, long n=1);
+};
+
+//@A.cpp
+#include "Rational.h"
+
+Rational::/*$*/Rational/*$$*/(long z, long n) {
+}
+//=
+#include "Rational.h"
+
+#ifdef WRAP__ZN8RationalC1Ell
+extern "C" {
+extern void __real__ZN8RationalC1Ell(long  z, long  n = 1);
+void __wrap__ZN8RationalC1Ell(long  z, long  n = 1)
+{
+    __real__ZN8RationalC1Ell(z, n);
+}
+}
+#endif
+
+Rational::Rational(long z, long n) {
+}
+
+//!Mangling of dtor
+//@.config
+filename=A.cpp
+//@Rational.h
+struct Rational {
+  ~Rational();
+};
+
+//@A.cpp
+#include "Rational.h"
+
+Rational::/*$*/~Rational/*$$*/() {
+}
+//=
+#include "Rational.h"
+
+#ifdef WRAP__ZN8RationalD1Ev
+extern "C" {
+extern void __real__ZN8RationalD1Ev();
+void __wrap__ZN8RationalD1Ev()
+{
+    __real__ZN8RationalD1Ev();
+}
+}
+#endif
+
+Rational::~Rational() {
+}
+
+//!Mangling of operator+
+//@.config
+filename=A.cpp
+//@Rational.h
+struct Rational {
+  explicit Rational(long z, long n = 1);
+};
+
+Rational operator+(Rational, Rational const& r2);
+
+//@A.cpp
+#include "Rational.h"
+
+Rational /*$*/operator+/*$$*/(Rational r, Rational const& r2) {
+}
+//=
+#include "Rational.h"
+
+#ifdef WRAP__Zpl8RationalRKS_
+extern "C" {
+extern Rational __real__Zpl8RationalRKS_(Rational r, const Rational & r2);
+Rational __wrap__Zpl8RationalRKS_(Rational r, const Rational & r2)
+{
+    return __real__Zpl8RationalRKS_(r, r2);
+}
+}
+#endif
+
+Rational operator+(Rational r, Rational const& r2) {
+}
+
+//!Mangling of operator-
+//@.config
+filename=A.cpp
+//@Rational.h
+struct Rational {
+  explicit Rational(long z, long n = 1);
+};
+
+Rational operator-(Rational r1, Rational const& r2);
+
+//@A.cpp
+#include "Rational.h"
+
+int calc() {
+  Rational r1(3, 2);
+  Rational r2(1, 2);
+  return r1 /*$*/-/*$$*/ r2;
+}
+//=
+#include "Rational.h"
+
+#ifdef WRAP__Zmi8RationalRKS_
+extern "C" {
+extern Rational __real__Zmi8RationalRKS_(Rational r1, const Rational & r2);
+Rational __wrap__Zmi8RationalRKS_(Rational r1, const Rational & r2)
+{
+    return __real__Zmi8RationalRKS_(r1, r2);
+}
+}
+#endif
+
+int calc() {
+  Rational r1(3, 2);
+  Rational r2(1, 2);
+  return r1 - r2;
+}
+
+//!Mangling of operator*=
+//@.config
+filename=A.cpp
+//@Rational.h
+struct Rational {
+  explicit Rational(long z, long n = 1);
+  Rational& operator*=(Rational const & r);
+};
+
+//@A.cpp
+#include "Rational.h"
+
+void calc() {
+  Rational r1(3, 2);
+  Rational r2(1, 2);
+  r1 /*$*/*=/*$$*/ r2;
+}
+//=
+#include "Rational.h"
+
+#ifdef WRAP__ZN8RationalmLERKS_
+extern "C" {
+extern Rational & __real__ZN8RationalmLERKS_(const Rational & r);
+Rational & __wrap__ZN8RationalmLERKS_(const Rational & r)
+{
+    return __real__ZN8RationalmLERKS_(r);
+}
+}
+#endif
+
+void calc() {
+  Rational r1(3, 2);
+  Rational r2(1, 2);
+  r1 *= r2;
+}
+
+//!Mangling of qualfied names with member functions
+//@.config
+filename=A.cpp
+//@A.cpp
+class A {
+public:
+  void /*$*/foo/*$$*/() const;
+};
+//=
+#ifdef WRAP__ZNK1A3fooEv
+extern "C" {
+
+extern void __real__ZNK1A3fooEv();
+void __wrap__ZNK1A3fooEv()
+{
+    __real__ZNK1A3fooEv();
+}
+}
+#endif
+
+class A {
+public:
+  void foo() const;
+};
+
+//!Mangling of qualfied names with namespaces
+//@.config
+filename=A.cpp
+//@A.cpp
+namespace Ns0 {
+  struct X {};
+}
+namespace Ns1 {
+namespace Ns2 {
+  void foo(Ns0::X x);
+}
+}
+void bar() {
+  Ns0::X x;
+  Ns1::Ns2::/*$*/foo/*$$*/(x);
+}
+//=
+namespace Ns0 {
+  struct X {};
+}
+namespace Ns1 {
+namespace Ns2 {
+  void foo(Ns0::X x);
+}
+}
+
+#ifdef WRAP__ZN3Ns13Ns23fooEN3Ns01XE
+extern "C" {
+extern void __real__ZN3Ns13Ns23fooEN3Ns01XE(Ns0::X x);
+void __wrap__ZN3Ns13Ns23fooEN3Ns01XE(Ns0::X x)
+{
+    __real__ZN3Ns13Ns23fooEN3Ns01XE(x);
+}
+}
+#endif
+
+void bar() {
+  Ns0::X x;
+  Ns1::Ns2::foo(x);
+}
+
+//!Mangling with substitutions for std::string
+//@.config
+filename=A.cpp
+//@Test.h
+#include "stl_fake.h"
+void foo(std::string const& str);
+
+//@A.cpp
+#include "Test.h"
+
+void /*$*/foo/*$$*/(std::string const& str) {
+}
+//=
+#include "Test.h"
+
+#ifdef WRAP__Z3fooRKSs
+extern "C" {
+extern void __real__Z3fooRKSs(const std::string & str);
+void __wrap__Z3fooRKSs(const std::string & str)
+{
+    __real__Z3fooRKSs(str);
+}
+}
+#endif
+
+void foo(std::string const& str) {
+}
+
+//!Mangling with substitutions for std::vector
+//@.config
+filename=A.cpp
+//@Test.h
+#include "stl_fake.h"
+
+void foo(std::vector<std::string> const& v);
+
+//@A.cpp
+#include "Test.h"
+
+void /*$*/foo/*$$*/(std::vector<std::string> const& v) {
+}
+//=
+#include "Test.h"
+
+#ifdef WRAP__Z3fooRKSt6vectorISsSaISsEE
+extern "C" {
+extern void __real__Z3fooRKSt6vectorISsSaISsEE(const std::vector<std::string> & v);
+void __wrap__Z3fooRKSt6vectorISsSaISsEE(const std::vector<std::string> & v)
+{
+    __real__Z3fooRKSt6vectorISsSaISsEE(v);
+}
+}
+#endif
+
+void foo(std::vector<std::string> const& v) {
+}
+
+//!Mangling with substitutions for std::ostream
+//@.config
+filename=A.cpp
+//@Test.h
+#include "stl_fake.h"
+void foo(std::ostream const& os);
+
+//@A.cpp
+#include "Test.h"
+
+void /*$*/foo/*$$*/(std::ostream const& os) {
+}
+//=
+#include "Test.h"
+
+#ifdef WRAP__Z3fooRKSo
+extern "C" {
+
+extern void __real__Z3fooRKSo(const std::ostream & os);
+void __wrap__Z3fooRKSo(const std::ostream & os)
+{
+    __real__Z3fooRKSo(os);
+}
+}
+#endif
+
+void foo(std::ostream const& os) {
+}
+
+//!Mangling with compressions for unqualified types
+//@.config
+filename=A.cpp
+//@Test.h
+struct A {};
+struct B {};
+void foo(A a1, A a2, A a3, B b1, B const& b2, B* b3, B b4);
+
+//@A.cpp
+#include "Test.h"
+void /*$*/foo/*$$*/(A a1, A a2, A a3, B b1, B const& b2, B* b3, B b4) {
+}
+//=
+#include "Test.h"
+
+#ifdef WRAP__Z3foo1AS_S_1BRKS0_PS0_S0_
+extern "C" {
+  extern void __real__Z3foo1AS_S_1BRKS0_PS0_S0_(A a1, A a2, A a3, B b1, const B& b2, B* b3, B b4);
+
+  void __wrap__Z3foo1AS_S_1BRKS0_PS0_S0_(A a1, A a2, A a3, B b1, const B& b2, B* b3, B b4) {
+    __real__Z3foo1AS_S_1BRKS0_PS0_S0_(a1, a2, a3, b1, b2, b3, b4);
+  }
+}
+#endif
+
+void foo(A a1, A a2, A a3, B b1, B const& b2, B* b3, B b4) {
+}
+
+//!Mangling with compressions for qualified types
+//@.config
+filename=A.cpp
+//@foo.h
+namespace Ns {
+struct A {};
+struct B {};
+}
+void foo(Ns::A const a1&, Ns::B& b, Ns::A * a2, Ns::A a3);
+
+//@A.cpp
+#include "foo.h"
+void /*$*/foo/*$$*/(Ns::A const& a1, Ns::B& b, Ns::A * a2, Ns::A a3) {
+}
+//=
+#include "foo.h"
+
+#ifdef WRAP__Z3fooRKN2Ns1AERNS_1BEPS0_S0_
+extern "C" {
+  extern void __real__Z3fooRKN2Ns1AERNS_1BEPS0_S0_(const Ns::A& a1, Ns::B& b, Ns::A* a2, Ns::A a3);
+
+  void __wrap__Z3fooRKN2Ns1AERNS_1BEPS0_S0_(const Ns::A& a1, Ns::B& b, Ns::A* a2, Ns::A a3) {
+    __real__Z3fooRKN2Ns1AERNS_1BEPS0_S0_(a1, b, a2, a3);
+  }
+}
+#endif
+
+void foo(Ns::A const& a1, Ns::B& b, Ns::A * a2, Ns::A a3) {
+}
+
+//!Mangling of type encodings
+//@.config
+filename=A.cpp
+//@foo.h
+void foo(const int& ci, int* pi, volatile int* vi);
+
+//@A.cpp
+#include "foo.h"
+
+void /*$*/foo/*$$*/(const int& ci, int* pi, volatile int* vi) {
+}
+//=
+#include "foo.h"
+
+#ifdef WRAP__Z3fooRKiPiPVi
+extern "C" {
+extern void __real__Z3fooRKiPiPVi(const int & ci, int *pi, volatile int *vi);
+void __wrap__Z3fooRKiPiPVi(const int & ci, int *pi, volatile int *vi)
+{
+    __real__Z3fooRKiPiPVi(ci, pi, vi);
+}
+}
+#endif
+
+void foo(const int& ci, int* pi, volatile int* vi) {
+}
+
+//!Wrap C function with no parameters
+//@.config
+filename=A.cpp
+//@A.cpp
+extern "C" int rand(void) throw();
+
+int roll() {
+	return /*$*/rand()/*$$*/ % 6 + 1;
+}
+//=
+extern "C" int rand(void) throw();
+
+#ifdef WRAP_rand
+extern "C" {
+extern int __real_rand(void);
+int __wrap_rand(void)
+{
+    return __real_rand();
+}
+}
+#endif
+
+int roll() {
+	return rand() % 6 + 1;
+}
+
+//!Wrap C function with parameters
+//@.config
+filename=A.cpp
+//@A.cpp
+struct _IO_FILE;
+typedef struct _IO_FILE FILE;
+extern "C" FILE* fopen(const char* path, const char* mode);
+
+void handleFile() {
+    FILE* f = /*$*/fopen/*$$*/("mockator.txt", "r");
+}
+//=
+struct _IO_FILE;
+typedef struct _IO_FILE FILE;
+extern "C" FILE* fopen(const char* path, const char* mode);
+
+#ifdef WRAP_fopen
+extern "C" {
+extern FILE *__real_fopen(const char *path, const char *mode);
+FILE *__wrap_fopen(const char *path, const char *mode)
+{
+    return __real_fopen(path, mode);
+}
+}
+#endif
+
+void handleFile() {
+    FILE* f = fopen("mockator.txt", "r");
+}
+
+//!Wrap void C function
+//@.config
+filename=A.cpp
+//@A.cpp
+extern "C" void abort (void);
+
+void leave() {
+	/*$*/abort/*$$*/();
+}
+//=
+extern "C" void abort (void);
+
+#ifdef WRAP_abort
+extern "C" {
+extern void __real_abort(void);
+void __wrap_abort(void)
+{
+    __real_abort();
+}
+}
+#endif
+
+void leave() {
+	abort();
+}
+
+//!Mangling of operator<<
+//@.config
+filename=A.cpp
+//@Rational.h
+#include "stl_fake.h"
+
+struct Rational {
+  explicit Rational(long z, long n = 1);
+};
+
+std::ostream & operator<<(std::ostream& os, Rational const& r);
+
+//@A.cpp
+#include "Rational.h"
+
+void calc() {
+  Rational r(3, 2);
+  std::ostringstream os;
+  os /*$*/<</*$$*/ r;
+}
+
+//=
+#include "Rational.h"
+
+#ifdef WRAP__ZlsRSoRK8Rational
+extern "C" {
+extern std::ostream & __real__ZlsRSoRK8Rational(std::ostream& os, const Rational & r);
+std::ostream & __wrap__ZlsRSoRK8Rational(std::ostream& os, const Rational & r)
+{
+    return __real__ZlsRSoRK8Rational(os, r);
+}
+}
+#endif
+
+void calc() {
+  Rational r(3, 2);
+  std::ostringstream os;
+  os << r;
+}
+
+//!Mangling of operator new
+//@.config
+filename=A.cpp
+//@A.cpp
+#include "stl_fake.h"
+
+struct Bird {
+  void* operator new(std::size_t sz);
+};
+
+void createBird() {
+  /*$*/new/*$$*/ Bird;
+}
+//=
+#include "stl_fake.h"
+
+struct Bird {
+  void* operator new(std::size_t sz);
+};
+
+#ifdef WRAP__ZN4BirdnwEm
+
+extern "C" {
+	extern void* __real__ZN4BirdnwEm(std::size_t sz);
+
+	void* __wrap__ZN4BirdnwEm(std::size_t sz)
+	{
+		return __real__ZN4BirdnwEm(sz);
+	}
+}
+
+#endif
+
+void createBird() {
+  new Bird;
+}
+
+//!Mangling of operator delete
+//@.config
+filename=A.cpp
+//@A.cpp
+#include "stl_fake.h"
+
+struct Bird {
+  void operator delete(void* p);
+};
+
+void useBird() {
+  Bird* b = new Bird;
+  /*$*/delete/*$$*/ b;
+}
+//=
+#include "stl_fake.h"
+
+struct Bird {
+  void operator delete(void* p);
+};
+
+#ifdef WRAP__ZN4BirddlEPv
+
+extern "C" {
+    extern void __real__ZN4BirddlEPv(void* p);
+
+    void __wrap__ZN4BirddlEPv(void* p)
+    {
+        __real__ZN4BirddlEPv(p);
+    }
+}
+
+#endif
+
+void useBird() {
+  Bird* b = new Bird;
+  delete b;
+}

@@ -1,0 +1,19 @@
+//!DeleteWrappedFunctionQfTest
+//@main.cpp
+#ifdef WRAP__Z3foov
+ extern "C" {
+   extern int __real__Z3foov();
+   int __wrap__Z3foov() {
+        return __real__Z3foov();
+     }
+ }
+#endif
+int foo();
+int bar() {
+  return foo();
+}
+//=
+int foo();
+int bar() {
+  return foo();
+}

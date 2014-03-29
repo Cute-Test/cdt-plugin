@@ -1,0 +1,1486 @@
+//!No class in selection
+//@.config
+fatalError=true
+
+//@A.cpp
+int /*$*/i/*$$*/;
+
+struct Foo {
+  void bar() {
+  }
+};
+
+//!Selected function is shadowed in subclass warning
+//@.config
+expectedFinalWarnings=1
+warning=Foo::bar is shadowed by Bar::bar
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+struct /*$*/Foo/*$$*/ {
+  void bar(int i, double d) {
+  }
+};
+
+struct Bar : Foo {
+  void bar(int i, double d) {
+  }
+};
+//=
+#include "FooInterface.h"
+struct Foo: FooInterface{
+  void bar(int i, double d) {
+  }
+};
+
+struct Bar : Foo {
+  void bar(int i, double d) {
+  }
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    
+    virtual void bar(int i, double d) =0;
+};
+#endif
+
+//!For class type
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+class /*$*/Foo/*$$*/ {
+  void shouldNotConsiderPrivateMemFuns() {
+  }
+protected:
+  void shouldNotConsiderProtectedMemFuns() {
+  }
+public:
+  int i;
+  void bar() {
+  }
+  friend int compute();
+};
+//=
+#include "FooInterface.h"
+
+class Foo : public FooInterface {
+  void shouldNotConsiderPrivateMemFuns() {
+  }
+protected:
+  void shouldNotConsiderProtectedMemFuns() {
+  }
+public:
+  int i;
+  void bar() {
+  }
+  friend int compute();
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!For struct type
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+struct /*$*/Foo/*$$*/ {
+  Foo & operator=(const Foo &rhs) {
+  }
+  void foo() {
+  }
+  int bar() const {
+    return 42;
+  }
+  static void ignoreStaticMemFuns1() {
+  }
+  static void ignoreStaticMemFuns2();
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface {
+  Foo & operator=(const Foo &rhs) {
+  }
+  void foo() {
+  }
+  int bar() const {
+    return 42;
+  }
+  static void ignoreStaticMemFuns1() {
+  }
+  static void ignoreStaticMemFuns2();
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    
+    virtual FooInterface & operator =(const FooInterface & rhs) =0;
+    virtual void foo() =0;
+    virtual int bar() const =0;
+};
+#endif
+
+//!Class parameter selected
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+struct Foo {
+  void bar() {
+  }
+};
+
+void doIt(/*$*/Foo/*$$*/& f) {
+}
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface {
+  void bar() {
+  }
+};
+
+void doIt(FooInterface& f) {
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Consider only some of the possible member functions
+//@.config
+newFileCreation=true
+newFiles=IFoo.h
+takeMemFuns=bar,foo
+nameOfNewInterface=IFoo
+filename=Foo.h
+
+//@Foo.h
+struct /*$*/Foo/*$$*/ {
+  void bar() {
+  }
+  void foo() {
+  }
+  void schiri() {
+  }
+};
+//=
+#include "IFoo.h"
+struct Foo: IFoo {
+	void bar() {
+	}
+
+	void foo() {
+	}
+
+	void schiri() {
+	}
+};
+
+//@Test.cpp
+#include "Foo.h"
+
+void test() {
+  Foo *foo = new Foo;
+}
+//=
+#include "Foo.h"
+
+void test() {
+    IFoo *foo = new Foo;
+}
+
+//@IFoo.h
+//=
+#ifndef IFOO_H_
+#define IFOO_H_
+struct IFoo
+{
+    virtual ~IFoo()
+    {
+    }
+
+    virtual void bar() =0;
+    virtual void foo() =0;
+};
+#endif
+
+//!Do not replace occurrences
+//@.config
+filename=Foo.h
+newFileCreation=true
+newFiles=Fooable.h
+takeMemFuns=bar
+replaceOccurrences=false
+nameOfNewInterface=Fooable
+
+//@Foo.h
+struct /*$*/Foo/*$$*/ {
+  void bar() {
+  }
+  void foo() {
+  }
+};
+//=
+#include "Fooable.h"
+
+struct Foo : Fooable{
+  void bar() {
+  }
+  void foo() {
+  }
+};
+
+//@Test.cpp
+#include "Foo.h"
+
+void test() {
+  Foo *foo = new Foo;
+}
+//=
+#include "Foo.h"
+
+void test() {
+  Foo *foo = new Foo;
+}
+
+//@Fooable.h
+//=
+#ifndef FOOABLE_H_
+#define FOOABLE_H_
+struct Fooable
+{
+    virtual ~Fooable()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Covariant return types
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+filename=Foo.h
+
+//@Foo.h
+struct /*$*/Foo/*$$*/ {
+    virtual Foo* clone() const {
+        return new Foo(*this);
+    }
+};
+//=
+#include "FooInterface.h"
+struct Foo : FooInterface{
+    virtual Foo* clone() const {
+        return new Foo(*this);
+    }
+};
+
+//@FooTest.cpp
+#include "Foo.h"
+
+void test() {
+	Foo* foo = new Foo;
+	Foo* clone = foo->clone();
+}
+//=
+#include "Foo.h"
+
+void test() {
+	FooInterface * foo = new Foo;
+	FooInterface * clone = foo->clone();
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    virtual FooInterface *clone() const =0;
+};
+#endif
+
+//!Everything in one file bug
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+filename=A.cpp
+
+//@A.cpp
+#include <cstdlib>
+#include <string>
+#include <vector>
+typedef std::string toMove;
+class A;
+struct Foo {
+  void bar() {
+  }
+};
+
+struct SUT {
+  SUT(Foo& foo) : foo(foo) {
+    foo.bar();
+  }
+private:
+  /*$*/Foo/*$$*/& foo;
+};
+//=
+#include <cstdlib>
+#include <string>
+#include <vector>
+#include "FooInterface.h"
+struct Foo : FooInterface {
+  void bar() {
+  }
+};
+struct SUT {
+  SUT(FooInterface & foo)
+    :foo(foo)
+    {
+        foo.bar();
+    }
+private:
+    FooInterface & foo;
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+#include <cstdlib>
+#include <string>
+#include <vector>
+class A;
+typedef std::string toMove;
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Inheritance with templates
+//@.config
+newFileCreation=true
+newFiles=Foo_CRTPInterface.h
+nameOfNewInterface=Foo_CRTPInterface
+
+//@A.cpp
+template <typename Derived> class /*$*/Foo_CRTP/*$$*/ {
+public:
+    Foo_CRTP *clone() const {
+        return new Derived(static_cast<Derived const&>(*this));
+    }
+};
+//=
+#include "Foo_CRTPInterface.h"
+template <typename Derived> class Foo_CRTP : public Foo_CRTPInterface
+{
+public:
+    Foo_CRTP *clone() const
+    {
+        return new Derived(static_cast<const Derived&>(*this));
+    }
+};
+
+//@Foo_CRTPInterface.h
+//=
+#ifndef FOO_CRTPINTERFACE_H_
+#define FOO_CRTPINTERFACE_H_
+struct Foo_CRTPInterface
+{
+    virtual ~Foo_CRTPInterface()
+    {
+    }
+    virtual Foo_CRTPInterface *clone() const =0;
+};
+#endif
+
+//!Copy exception specification from concrete type
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+struct /*$*/Foo/*$$*/ {
+    void foo() throw (int) {
+    }
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+    void foo() throw (int) {
+    }
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    virtual void foo() =0 throw (int);
+};
+#endif
+
+//!Move includes, typedefs and forward declarations to interface
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+#include "Schiri.h"
+#include <map>
+#include <string>
+
+class A;
+class B;
+typedef std::map<std::string, std::string> mappings;
+
+struct /*$*/Foo/*$$*/ {
+    void foo(mappings const& m) const {
+    }
+private:
+    A *a;
+};
+//=
+#include "Schiri.h"
+#include <map>
+#include <string>
+#include "FooInterface.h"
+struct Foo : FooInterface
+{
+    void foo(const mappings & m) const {
+    }
+private:
+    A *a;
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+#include "Schiri.h"
+#include <map>
+#include <string>
+
+class A;
+class B;
+typedef std::map<std::string,std::string> mappings;
+
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    virtual void foo(const mappings & m) const =0;
+};
+#endif
+
+//!Multiple inheritance with class
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+class /*$*/Foo/*$$*/ : Bar {
+public:
+  void bar() {
+  }
+};
+//=
+#include "FooInterface.h"
+
+class Foo : Bar, public FooInterface {
+public:
+  void bar() {
+  }
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!With multiple inheritance and struct
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+filename=A.cpp
+tuOfChosenClass=A.h
+
+//@A.h
+struct Bar {
+};
+struct Foo : Bar {
+  void bar();
+};
+//=
+#include "FooInterface.h"
+struct Bar {
+};
+struct Foo : Bar, FooInterface {
+  void bar();
+};
+
+//@A.cpp
+#include "A.h"
+void /*$*/Foo/*$$*/::bar() {
+}
+//=
+#include "A.h"
+void Foo::bar() {
+}
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Only take used member functions of pointer member variable
+//@.config
+filename=SUT.h
+tuOfChosenClass=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@ToIgnore.h
+#include "Foo.h"
+
+struct ToIgnore {
+	void bar() {
+	  foo->gaga();
+	}
+	Foo *foo;
+};
+//=
+#include "Foo.h"
+
+struct ToIgnore {
+	void bar() {
+	  foo->gaga();
+	}
+	FooInterface *foo;
+};
+
+//@Foo.h
+struct Foo {
+    void used1(int i) const;
+    inline void used2() {}
+    void used3() const;
+    void usedOverloaded(char c);
+    void usedOverloaded(double d);
+    inline void notUsed() {}
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+    void used1(int i) const;
+    inline void used2() {}
+    void used3() const;
+    void usedOverloaded(char c);
+    void usedOverloaded(double d);
+    inline void notUsed() {}
+};
+
+//@Foo.cpp
+#include "Foo.h"
+void Foo::used1(int i) const {
+}
+void Foo::usedOverloaded(char c) {
+}
+void Foo::usedOverloaded(double d) {
+}
+void Foo::used3() const {
+}
+
+//@SUT.h
+#include "Foo.h"
+
+struct A {
+  void ignore() {}
+};
+
+struct SUT {
+    SUT(Foo *foo);
+    void bar1();
+    void bar2();
+    void bar3()
+    {
+        foo->used2();
+    }
+private:
+    void bar4();
+    /*$*/Foo/*$$*/ *foo;
+    A *a;
+};
+//=
+#include "Foo.h"
+
+struct A {
+  void ignore() {}
+};
+
+struct SUT {
+    SUT(FooInterface *foo);
+    void bar1();
+    void bar2();
+    void bar3()
+    {
+        foo->used2();
+    }
+private:
+    void bar4();
+    FooInterface *foo;
+    A *a;
+};
+
+//@SUT.cpp
+#include "SUT.h"
+
+SUT::SUT(Foo *foo) : foo(foo) {
+	foo->usedOverloaded(3.1415);
+}
+    
+void SUT::bar1() {
+    foo->used1(42);
+    a->ignore();
+}
+    
+void SUT::bar2() {
+    foo->usedOverloaded('s');
+}
+
+void SUT::bar4() {
+    foo->used3();
+}
+//=
+#include "SUT.h"
+
+SUT::SUT(FooInterface *foo) : foo(foo) {
+	foo->usedOverloaded(3.1415);
+}
+    
+void SUT::bar1() {
+    foo->used1(42);
+    a->ignore();
+}
+    
+void SUT::bar2() {
+    foo->usedOverloaded('s');
+}
+
+void SUT::bar4() {
+    foo->used3();
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    virtual void used1(int i) const =0;
+    virtual void used2() =0;
+    virtual void used3() const =0;
+    virtual void usedOverloaded(char c) =0;
+    virtual void usedOverloaded(double d) =0;
+};
+#endif
+
+//!Only take used member functions of const reference member variable
+//@.config
+filename=SUT.h
+tuOfChosenClass=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.h
+struct Foo {
+    void constTest() {
+    }
+    void constTest() const {
+    } 
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+    void constTest() {
+    }
+    void constTest() const {
+    } 
+};
+
+//@SUT.h
+#include "Foo.h"
+
+struct SUT {
+    SUT(Foo const& foo) : fooConstRef(foo) {}
+    void bar();
+private:
+    Foo const& /*$*/fooConstRef/*$$*/;
+};
+//=
+#include "Foo.h"
+
+struct SUT {
+    SUT(const FooInterface& foo) :
+            fooConstRef(foo) {
+    }
+    void bar();
+private:
+    const FooInterface & fooConstRef;
+};
+
+//@SUT.cpp
+#include "SUT.h"
+
+void SUT::bar() {
+    Foo foo;
+    foo.constTest();
+    fooConstRef.constTest();
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    virtual void constTest() const =0;
+};
+#endif
+
+//!Replace simple declarations
+//@.config
+filename=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.h
+#include <string>
+#include <vector>
+
+class A;
+class B;
+
+struct /*$*/Foo/*$$*/ {
+  void bar() {
+  }
+};
+//=
+#include <string>
+#include <vector>
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+  void bar() {
+  }
+};
+
+//@FooTest.cpp
+#include "Foo.h"
+
+class A {
+  Foo *fooPtr;
+  Foo &fooRef;
+  Foo foo[3];
+  Foo* fooPtrs[3];
+};
+
+void test() {
+  Foo notReplacable;
+  Foo *foo = new Foo;
+}
+//=
+#include "Foo.h"
+
+class A {
+  FooInterface *fooPtr;
+  FooInterface & fooRef;
+  Foo foo[3];
+  FooInterface * fooPtrs[3];
+};
+
+void test() {
+  Foo notReplacable;
+  FooInterface *foo = new Foo;
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+#include <string>
+#include <vector>
+
+class A;
+class B;
+
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Replace parameter declarations
+//@.config
+filename=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.h
+struct /*$*/Foo/*$$*/ {
+  void bar() {
+  }
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+  void bar() {
+  }
+};
+
+//@FooTest.cpp
+#include "Foo.h"
+
+void test(Foo const& f1, Foo * f2) {
+}
+//=
+#include "Foo.h"
+
+void test(const FooInterface & f1, FooInterface * f2) {
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Replace declarations in namespaces
+//@.config
+filename=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.h
+namespace Ns {
+  struct /*$*/Foo/*$$*/ {
+    void bar() {
+    }
+  };
+}
+//=
+#include "FooInterface.h"
+
+namespace Ns {
+  struct Foo : FooInterface{
+    void bar() {
+    }
+  };
+}
+
+//@FooTest.cpp
+#include "Foo.h"
+
+class Bar {
+  Ns::Foo *foo;
+};
+//=
+#include "Foo.h"
+
+class Bar {
+  Ns::FooInterface *foo;
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+namespace Ns
+{
+    struct FooInterface
+    {
+        virtual ~FooInterface()
+        {
+        }
+
+        virtual void bar() =0;
+    };
+}
+#endif
+
+//!Replace forward declarations
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+struct /*$*/Foo/*$$*/ {
+  void bar() {
+  }
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+  void bar() {
+  }
+};
+
+//@Bar.h
+class Foo;
+
+class Bar {
+  Foo * foo;
+}
+//=
+class FooInterface;
+
+class Bar {
+  FooInterface * foo;
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Replace return types
+//@.config
+filename=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.h
+struct /*$*/Foo/*$$*/ {
+  Foo* newInstance() {
+  }
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+  Foo* newInstance() {
+  }
+};
+
+//@A.cpp
+#include "Foo.h"
+
+struct A {
+  Foo * foo() {
+  }
+  Foo * foo2();
+};
+
+Foo * A::foo2() {
+}
+
+void test() {
+  A* a = new A;
+  Foo* f = a->foo(); 
+}
+//=
+#include "Foo.h"
+
+struct A {
+  FooInterface * foo() {
+  }
+  FooInterface * foo2();
+};
+
+FooInterface * A::foo2() {
+}
+
+void test() {
+  A* a = new A;
+  FooInterface * f = a->foo(); 
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual FooInterface *newInstance() =0;
+};
+#endif
+
+//!Replace interface class in template ids
+//@.config
+filename=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.h
+struct /*$*/Foo/*$$*/ {
+  void bar() {
+  }
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+  void bar() {
+  }
+};
+
+//@FooTest.cpp
+#include "Foo.h"
+
+class A;
+
+template<typename T>
+struct Stack {
+};
+
+void test(Stack<Foo*, int> foos) {
+  Stack<A, Foo*, 3> s;
+  Stack<Foo> ss;
+  Stack<A*> ignore;
+}
+//=
+#include "Foo.h"
+
+class A;
+
+template<typename T>
+struct Stack {
+};
+
+void test(Stack<FooInterface*, int> foos) {
+  Stack<A, FooInterface*, 3> s;
+  Stack<Foo> ss;
+  Stack<A*> ignore;
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Separate declaration and definition
+//@.config
+filename=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.h
+struct /*$*/Foo/*$$*/ {
+  void bar() {
+  }
+};
+
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+  void bar() {
+  }
+};
+
+//@FooUse.h
+#include "Foo.h"
+
+struct FooUse {
+  void bar(Foo * f);
+};
+
+//=
+#include "Foo.h"
+
+struct FooUse {
+  void bar(FooInterface * f);
+};
+
+//@FooUse.cpp
+#include "FooUse.h"
+
+void FooUse::bar(Foo * f) {
+}
+//=
+#include "FooUse.h"
+
+void FooUse::bar(FooInterface * f) {
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Use own type for pointer and reference types
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+struct A {
+};
+
+struct /*$*/Foo/*$$*/ {
+    Foo *clone(Foo* foo1, Foo foo2, A a) const {
+        return new Foo;
+    }
+    A& doIt(A* a) {
+    } 
+};
+//=
+#include "FooInterface.h"
+struct A {
+};
+struct Foo : FooInterface{
+    Foo *clone(Foo* foo1, Foo foo2, A a) const {
+        return new Foo;
+    }
+    A& doIt(A* a) {
+    } 
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    virtual FooInterface *clone(FooInterface *foo1, Foo foo2, A a) const =0;
+    virtual A & doIt(A *a) =0;
+};
+#endif
+
+//!Class contained in namespaces
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+namespace Ns1 {
+  namespace Ns2 {
+    struct /*$*/Foo/*$$*/ {
+      void bar() {
+      }
+    };
+  }
+}
+//=
+#include "FooInterface.h"
+namespace Ns1 {
+  namespace Ns2 {
+struct Foo: FooInterface {
+    void bar() {
+    }
+};
+  }
+}
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+namespace Ns1 {
+
+namespace Ns2 {
+
+struct FooInterface {
+    virtual ~FooInterface() {
+    }
+
+    virtual void bar() = 0;
+};
+
+}
+
+}
+
+#endif
+
+//!With existing ctor and dtor to ignore
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+struct /*$*/Foo/*$$*/ {
+  Foo(int i) {
+  }
+  Foo(Foo const& f) {
+  }
+  ~Foo() {
+  }
+  void bar() {
+  }
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface
+{
+  Foo(int i) {
+  }
+  Foo(const Foo & f) {
+  }
+  ~Foo() {
+  }
+  void bar() {
+  }
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() =0;
+};
+#endif
+
+//!Interface file already existing leads to new generated name
+//@.config
+filename=A.cpp
+newFileCreation=true
+newFiles=FooInterface1.h
+
+//@FooInterface.h
+//just to have a file with the same name
+
+//@A.cpp
+struct /*$*/Foo/*$$*/ {
+  void foo() {
+  }
+};
+//=
+#include "FooInterface1.h"
+
+struct Foo : FooInterface {
+  void foo() {
+  }
+};
+
+//@FooInterface1.h
+//=
+#ifndef FOOINTERFACE1_H_
+#define FOOINTERFACE1_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    
+    virtual void foo() =0;
+};
+#endif
+
+//!Only take used member functions with forward declaration
+//@.config
+filename=SUT.h
+tuOfChosenClass=Foo.h
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.h
+struct Foo {
+    void used();
+    void notUsed();
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+    void used();
+    void notUsed();
+};
+
+//@Foo.cpp
+#include "Foo.h"
+void Foo::used() {
+}
+void Foo::notUsed() {
+}
+
+//@SUT.h
+class Foo;
+
+struct SUT {
+    SUT(Foo *foo);
+    void bar();
+private:
+    /*$*/Foo/*$$*/ *foo;
+};
+//=
+class FooInterface;
+
+struct SUT {
+    SUT(FooInterface *foo);
+    void bar();
+private:
+    FooInterface *foo;
+};
+
+//@SUT.cpp
+#include "SUT.h"
+#include "Foo.h"
+
+SUT::SUT(Foo *foo) : foo(foo) {
+}
+    
+void SUT::bar() {
+    foo->used();
+}
+//=
+#include "SUT.h"
+#include "Foo.h"
+
+SUT::SUT(FooInterface *foo) : foo(foo) {
+}
+    
+void SUT::bar() {
+    foo->used();
+}
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+    virtual void used() =0;
+};
+#endif

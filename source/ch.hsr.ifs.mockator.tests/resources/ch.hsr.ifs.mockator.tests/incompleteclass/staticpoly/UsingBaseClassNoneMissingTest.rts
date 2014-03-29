@@ -1,0 +1,21 @@
+//!UsingBaseClassNoneMissingTest
+//@main.cpp
+template <typename T>
+struct Base {
+   void foo() {
+   }
+};
+  
+template <typename T>
+struct Derived : Base<T> {
+   void bar() {
+     Base<T>::foo();
+   }
+};
+  
+void testSUT() {
+   struct Fake {
+   };
+   Derived<Fake> f;
+   f.bar();
+}

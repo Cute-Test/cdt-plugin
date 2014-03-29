@@ -1,0 +1,22 @@
+//!CreateTestDoubleCpp03QfTest
+//@main.cpp
+template<typename T>
+struct SUT {};
+
+void test() {
+  SUT<Fake> sut;
+}
+//=
+template<typename T>
+struct SUT {};
+
+namespace test_Ns
+{
+struct Fake
+{
+};
+}
+void test() {
+  using namespace test_Ns;
+  SUT<Fake> sut;
+}

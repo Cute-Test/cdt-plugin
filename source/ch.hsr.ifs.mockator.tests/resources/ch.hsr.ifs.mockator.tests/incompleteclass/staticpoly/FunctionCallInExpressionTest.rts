@@ -1,0 +1,13 @@
+//!FunctionCallInExpressionTest
+//@main.cpp
+template <typename T>
+int sut(T const& t) {
+  return t.foo();
+}
+    
+void testSUT(){
+    struct Fake {
+  };
+  Fake fake;
+  int i = sut(fake);
+}

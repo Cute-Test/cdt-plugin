@@ -1,0 +1,26 @@
+//!MultipleFakeObjectsOnlyOneIncompleteTest
+//@main.cpp
+template <typename S, typename T, typename U>
+struct Bar{
+  S foo1;
+  T foo2;
+  U foo3;
+
+  void doIt() {
+    foo2.f();
+  }
+};
+
+void testBar(){
+  struct Fake1{
+  };
+
+  struct Fake2{
+  };
+
+  struct Fake3{
+  };	
+
+  Bar<Fake1, Fake2, Fake3> bar;
+  bar.doIt();
+}

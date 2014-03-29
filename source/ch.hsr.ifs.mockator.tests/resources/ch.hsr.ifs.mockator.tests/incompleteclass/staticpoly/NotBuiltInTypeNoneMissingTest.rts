@@ -1,0 +1,22 @@
+//!NotBuiltInTypeNoneMissingTest
+//@main.cpp
+class A{
+};
+
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    A a;
+    fake.foo(a);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(A const& aa) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

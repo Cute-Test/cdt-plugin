@@ -1,0 +1,11 @@
+Debug/
+.metadata/
+target/
+bin/
+junit-workspace/
+.settings/
+*.o
+*~
+runtime-EclipseApplication/
+source/test_results_*.xml
+.swp
