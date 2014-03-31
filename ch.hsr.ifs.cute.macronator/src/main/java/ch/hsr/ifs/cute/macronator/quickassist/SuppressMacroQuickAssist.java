@@ -12,7 +12,6 @@ import java.util.Map;
 import org.eclipse.cdt.codan.core.CodanRuntime;
 import org.eclipse.cdt.codan.core.cxx.Activator;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IMacroBinding;
 import org.eclipse.cdt.internal.ui.editor.ASTProvider;
 import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.cdt.ui.text.ICCompletionProposal;
@@ -37,6 +36,7 @@ import ch.hsr.ifs.cute.macronator.common.SuppressedMacros;
  * displayed.
  * 
  */
+@SuppressWarnings("restriction")
 public class SuppressMacroQuickAssist implements IQuickAssistProcessor {
 
     public static String ID = "ch.hsr.ifs.macronator.plugin.assist.SuppressMacro";
@@ -61,13 +61,8 @@ public class SuppressMacroQuickAssist implements IQuickAssistProcessor {
         }
         final SelectionASTRunnable runnable = new SelectionASTRunnable(context.getSelectionOffset(), context.getSelectionLength());
         IStatus status = ASTProvider.getASTProvider().runOnAST(context.getTranslationUnit(), ASTProvider.WAIT_ACTIVE_ONLY, new NullProgressMonitor(), runnable);
-        return (status.isOK() && isMacroDefinition(runnable.getResult())) ? new ICCompletionProposal[] { new SuppressMacroProposal(runnable.getResult(), new SuppressedMacros(path)) } : new ICCompletionProposal[0];
+        return (status.isOK()) ? new ICCompletionProposal[] { new SuppressMacroProposal(runnable.getResult(), new SuppressedMacros(path)) } : new ICCompletionProposal[0];
     }    
-
-    
-    private boolean isMacroDefinition(IASTName macro) {
-        return macro != null && macro.getBinding() instanceof IMacroBinding && macro.isDefinition();
-    }
 
     private class SuppressMacroProposal implements ICCompletionProposal {
 

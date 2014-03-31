@@ -2,6 +2,7 @@ package ch.hsr.ifs.cute.macronator.quickassist;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IMacroBinding;
 import org.eclipse.cdt.core.model.ILanguage;
 import org.eclipse.cdt.internal.core.model.ASTCache.ASTRunnable;
 import org.eclipse.core.runtime.CoreException;
@@ -23,10 +24,14 @@ public class SelectionASTRunnable implements ASTRunnable {
     @Override
     public IStatus runOnAST(ILanguage lang, IASTTranslationUnit ast) throws CoreException {
         selectedName = new SelectionResolver(ast, selectionOffset, selectionLength).getSelectedName();
-        return selectedName != null ? Status.OK_STATUS : Status.CANCEL_STATUS;
+        return isMacroDefinition() ? Status.OK_STATUS : Status.CANCEL_STATUS;
     }
     
     public IASTName getResult() {
         return selectedName; 
+    }
+    
+    private boolean isMacroDefinition() {
+        return selectedName != null && selectedName.getBinding() instanceof IMacroBinding && selectedName.isDefinition();
     }
 }

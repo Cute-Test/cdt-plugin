@@ -19,6 +19,7 @@ import ch.hsr.ifs.cute.macronator.refactoring.ExpandMacroAction;
 /**
  * Displays a quickassist to start the global macro expansion refactoring.
  */
+@SuppressWarnings("restriction")
 public class GlobalExpansionQuickAssist implements IQuickAssistProcessor {
 
     public static final String ID = "ch.hsr.ifs.macronator.plugin.assist.GlobalExpansion";
@@ -32,50 +33,52 @@ public class GlobalExpansionQuickAssist implements IQuickAssistProcessor {
     public ICCompletionProposal[] getAssists(final IInvocationContext context, IProblemLocation[] locations) throws CoreException {
         SelectionASTRunnable runnable = new SelectionASTRunnable(context.getSelectionOffset(), context.getSelectionLength());
         IStatus status = ASTProvider.getASTProvider().runOnAST(context.getTranslationUnit(), ASTProvider.WAIT_ACTIVE_ONLY, new NullProgressMonitor(), runnable);
-        if (!status.isOK()) {
-            return new ICCompletionProposal[0];
+        if (status.isOK()) {
+        
+	        return new ICCompletionProposal[] { new ICCompletionProposal() {
+	
+	            @Override
+	            public void apply(IDocument document) {
+	                new ExpandMacroAction().run(null);
+	            }
+	
+	            @Override
+	            public Point getSelection(IDocument document) {
+	                return null;
+	            }
+	
+	            @Override
+	            public String getAdditionalProposalInfo() {
+	                return null;
+	            }
+	
+	            @Override
+	            public String getDisplayString() {
+	                return "Expand globally / remove definition";
+	            }
+	
+	            @Override
+	            public Image getImage() {
+	                return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_MACRO);
+	            }
+	
+	            @Override
+	            public IContextInformation getContextInformation() {
+	                return null;
+	            }
+	
+	            @Override
+	            public int getRelevance() {
+	                return 0;
+	            }
+	
+	            @Override
+	            public String getIdString() {
+	                return ID;
+	            }
+	        }};
+        } else {
+    	return new ICCompletionProposal[0];
         }
-        return new ICCompletionProposal[] { new ICCompletionProposal() {
-
-            @Override
-            public void apply(IDocument document) {
-                new ExpandMacroAction().run(null);
-            }
-
-            @Override
-            public Point getSelection(IDocument document) {
-                return null;
-            }
-
-            @Override
-            public String getAdditionalProposalInfo() {
-                return null;
-            }
-
-            @Override
-            public String getDisplayString() {
-                return "Expand globally / remove definition";
-            }
-
-            @Override
-            public Image getImage() {
-                return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_MACRO);
-            }
-
-            @Override
-            public IContextInformation getContextInformation() {
-                return null;
-            }
-
-            @Override
-            public int getRelevance() {
-                return 0;
-            }
-
-            @Override
-            public String getIdString() {
-                return ID;
-            }
-        }};
     }
 }
