@@ -9,7 +9,7 @@ here because they enable us to inject dependencies from
 outside. Although seams are a valuable technique, it is hard and
 cumbersome to apply them without automated refactorings and tool
 chain configuration support. We provide sophisticated support for
-seams with Mockator a plug-in for the Eclipse C/C++ development
+seams with Mockator, a plug-in for the Eclipse C/C++ development
 tooling project. Mockator creates the boilerplate code and the necessary
 infrastructure for the four seam types object, compile, preprocessor
 and link seam.
@@ -21,6 +21,14 @@ library and an Eclipse plug-in to create mock objects in a simple yet
 powerful way. Mockator leverages the new language facilities C++11
 offers while still being compatible with C++98/03.
 
+# Installation
+Use the Eclipse update site ``http://mockator.com/update`` to install Mockator.
+Eclipse Kepler with CDT is required. You also might want to install Cute 
+(``http://www.cute-test.com/updatesite``) to make use of some of the mock
+object features Mockator provides (note that Mockator is also able to use
+``<cassert>``'s assert functions instead). Mockator only supports the
+GNU Compiler Collection at this point of time. The plug-in and the mock object
+library both support C++98/03 and C++11.
 
 # Seams
 High coupling, hard-wired and cyclic dependencies lead to systems that
@@ -107,9 +115,9 @@ private:
 };
 ```
 
-This way we can now inject a different kind of ``Die`` depending on the context
-we need. This is a seam because we now have an enabling point: The instance
-of ``Die`` that is passed to the constructor of ``GameFourWins``.
+This way we can now inject a different kind of die depending on the context we
+need. This is a seam because we now have an enabling point: The instance of
+``IDie`` that is passed to the constructor of ``GameFourWins``.
 
 
 ## Compile Seams
@@ -117,7 +125,7 @@ Although object seams are the classic way of injecting dependencies, we think
 there is often a better solution to achieve the same goals. C++ has a tool
 for this job providing static polymorphism: template parameters. With template
 parameters, we can inject dependencies at compile-time. We therefore call this
-seam compile seam.
+seam type *compile seam*.
 
 The use of static polymorphism with template parameters has several advantages
 over object seams with subtype polymorphism. It does not incur the run-time
@@ -135,7 +143,7 @@ The essential step for this seam type is the application of a the refactoring
 
 ![Extract template refactoring for applying compile seams.\label{extract_template}](screenshots/extract_template.png)
 
-The result of this refactoring can be seen here:
+The resulting code of this refactoring can be seen here:
 
 ```cpp
 template <typename Dice=Die>
@@ -154,25 +162,28 @@ typedef GameFourWinsT<> GameFourWins;
 ```
 
 The enabling point of this seam is the place where the template class 
-``GameFourWinsT`` is instantiated.
+``GameFourWinsT`` is instantiated, where the default parameter of the template
+class ``GameFourWinsT`` is used.
 
 ## Preprocessor Seams
 C and C++ offer another possibility to alter the behaviour of code without
 touching it in that place using the preprocessor. Although we are able to
 change the behaviour of existing code as shown with object and compile seams
 before, we think preprocessor seams are especially useful for debugging
-purposes like tracing function calls. An example of this is shown next where
-we trace calls to C's ``time`` function with the help of Mockator:
+purposes like tracing function calls. An example where this might be useful
+is shown next where we trace calls to C's ``time`` function  for calculating
+leap years with the help of Mockator (we are fully aware that one would better
+adapt the code to pass the time for the calculation to make it testable):
 
 ```cpp
 /* leapyear.h */
 
-#ifndef TODAYSTIME_H_
-#define TODAYSTIME_H_
+#ifndef LEAPYEAR_H_
+#define LEAPYEAR_H_
 
 bool isLeapYear();
 
-#endif /* TODAY_H_ */
+#endif /* LEAPYEAR_H_ */
 ```
 
 ```cpp
@@ -232,13 +243,14 @@ To do this, select the function call for ``time`` and execute the source action
 of this feature within the resolution of an Eclipse quickfix marker
 (see figure \ref{trace_function_call}).
 
-![Enabling/disabling of the traced function call is possible thourgh an Eclipse quickfix marker.\label{trace_function_call}](screenshots/trace_function_call.png)
+![Enabling/disabling of the traced function call is possible thourgh an Eclipse quickfix marker. Note that we yield the time of a leap year here to make our unit test pass.\label{trace_function_call}](screenshots/trace_function_call.png)
 
 The enabling point for this seam are the options of our compiler to choose
 between the real and our tracing implementation. We use the option 
 ``-include`` of the GNU compiler here to include the header file
-``mockator_time.h`` into every translation unit. With ``#undef`` we are still
-able to call the original implementation of ``time``.
+``mockator_time.h`` into every translation unit which redefines ``time`` to
+our own implementation. With ``#undef`` we would still be able to call the
+original implementation of ``time``.
 
 
 ## Link Seams
@@ -266,7 +278,8 @@ considering the object file. Mockator helps in shadowing functions and
 generates code and the necessary CDT build options to support this kind of 
 link seam.
 
-Consider the following code which is part of a static library project in CDT:
+Consider the following code which is part of a static library project in
+Eclipse CDT:
 
 ```cpp
 #include "Die.h"
@@ -344,14 +357,14 @@ naming schema ``__wrap_symbol`` and use the linker flag ``-wrap``, our function
 gets called instead of the original one.
 
 Mockator helps in applying this seam type by creating the necessary code and
-the corresponding build options in Eclipse CDT. To use it, selection the
-to be wrapped function call and click the source action "Source->Wrap Function"
+the corresponding build options in Eclipse CDT. To use it, select the
+to be wrapped function call and apply the source action "Source->Wrap Function"
 (Ctrl+Alt+W). Mockator then creates the code as shown in figure 
 \ref{shadow_function}. Mockator also provides an Eclipse marker beside the
 wrapped function block which allows us to enable/disable and delete the wrapped
 function.
 
-![The wrapped function code block including the Eclipse marker to enable/disable and delete the wrapped function ``Die::roll``.\label{wrap_function}](screenshots/wrap_function.png)
+![The wrapped function code block including the Eclipse marker to enable/disable and delete the wrapped function ``Die::roll``. Note that we replaced the generated call to the original function with a fixed value to make our unit test pass.\label{wrap_function}](screenshots/wrap_function.png)
 
 The linker call used for this link seam looks as follows:
 
@@ -410,7 +423,8 @@ int rand(void) {
 ```
 
 Mockator changes the build settings of our project by appending this library to
-``LD_PRELOAD`` as shown in the following listing. This way, our definition of
+``LD_PRELOAD``, adapting ``LD_LIBRARY_PATH`` and adding ``dl`` to the list of
+libraries as shown in the following listing. This way, our definition of
 ``rand`` is called instead of the original one:
 
 ```
@@ -517,26 +531,22 @@ void testCanDrawRightAngle() {
     struct FakeTurtle {
         const size_t mock_id;
 
-        FakeTurtle()
-        :mock_id {reserveNextCallId(allCalls)}
-        {
+        FakeTurtle() : mock_id {reserveNextCallId(allCalls)} {
             allCalls[mock_id].push_back(call {"FakeTurtle()"});
         }
 
-        void forward(const int& sideLength) const
-        {
+        void forward(const int& sideLength) const {
             allCalls[mock_id].push_back(call {"forward(const int&) const", sideLength});
         }
 
-        void right(const int& i) const
-        {
+        void right(const int& i) const {
             allCalls[mock_id].push_back(call {"right(const int&) const", i});
         }
     };
     Painter<FakeTurtle> painter;
     painter.drawRightAngle(42);
     calls expectedFakeTurtle = { {"FakeTurtle()"}, {"forward(const int&) const", int{}},
-                                 {"right(const int&) const", int{}}};
+                                 {"right(const int&) const", int{}} };
     ASSERT_EQUAL(expectedFakeTurtle, allCalls[1]);
 }
 ```
@@ -557,12 +567,12 @@ are used together with C++98 because local classes cannot be used as template
 arguments in this version of the standard.
 
 To move a test double to a namespace, select its class name and execute the
-source action "Move test double to namespace" (Ctrl+Alt+M). Mockator then moves
+source action "Source->Move test double to namespace" (Ctrl+Alt+M). Mockator then moves
 the test double code to a newly created namespace, as it is shown in the
 following listing:
 
 ```cpp
-namespace s {
+namespace cuteSuite {
     namespace testCanDrawRightAngle_Ns {
         struct FakeTurtle {
             void forward(const int& sideLength) const {
@@ -574,16 +584,16 @@ namespace s {
 }
 
 void testCanDrawRightAngle() {
-    using namespace s::testCanDrawRightAngle_Ns;
+    using namespace cuteSuite::testCanDrawRightAngle_Ns;
     Painter<FakeTurtle> painter;
     painter.drawRightAngle(42);
 }
 
 void runSuite() {
-    cute::suite s;
-    s.push_back(CUTE(testCanDrawRightAngle));
+    cute::suite cuteSuite;
+    cuteSuite.push_back(CUTE(testCanDrawRightAngle));
     cute::ide_listener lis;
-    cute::makeRunner(lis)(s, "The Suite");
+    cute::makeRunner(lis)(cuteSuite, "The Suite");
 }
 ```
 
@@ -594,7 +604,7 @@ between them. For this case, we provide a source action to convert an
 existing fake to a mock object. This includes the registration
 of the calls as well as the complete infrastructure that is necessary
 to use our mock object library. The source action is called "Source->Convert
-to Mock Object" (Ctrl+Alt+C).
+to Mock Object" (Ctrl+Alt+C) and is applied on the fake object class name.
 
 ## Toggle Mock Support
 Because we think it might be useful to enable or disable the recording
@@ -619,8 +629,7 @@ to correct these inconsistencies (see figure \ref{inconsistent_expectations}).
 So far we have only mocked classes when we applied object and compile
 seams. Sometimes it would be tedious to apply one of these two seams
 where we just want to mock a function to see if the SUT calls it
-correctly. This is also true if we cannot change the code at all. For
-these cases, we have implemented mocking of functions by leveraging
+correctly. For this, we have implemented mocking of functions by leveraging
 the shadow function link seam. We used this kind of link seam because
 it is the easiest one that fulfils our requirements and because we
 do not intend to call the original function. Instead, we just record
