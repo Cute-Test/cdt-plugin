@@ -30,8 +30,8 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleTypeTemplatePara
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTypeId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.TextEditGroup;
 
@@ -54,10 +54,10 @@ public class ETTPFunctionTransform extends Transform {
     private static final String CALLADJUST_EDITGROUP_MSG = "Adjusting call...";
     private ReferenceLookupStrategy<ICPPASTFunctionCallExpression> callReferenceLookup;
     private List<ICPPASTFunctionCallExpression> callExpressions;
-    private final RefactoringASTCache astCache;
-
-    public ETTPFunctionTransform(RefactoringASTCache astCache) {
-        this.astCache = astCache;
+    private final CRefactoringContext context;
+    
+    public ETTPFunctionTransform(CRefactoringContext context) {
+        this.context = context;
     }
 
     /**
@@ -66,9 +66,9 @@ public class ETTPFunctionTransform extends Transform {
     @Override
     public void postprocess(RefactoringStatus status) {
         if (isTemplate()) {
-            callReferenceLookup = new FunctionSpecializedReferenceLookupStrategy(astCache);
+            callReferenceLookup = new FunctionSpecializedReferenceLookupStrategy(context);
         } else {
-            callReferenceLookup = new FunctionNormalReferenceLookupStrategy(astCache);
+            callReferenceLookup = new FunctionNormalReferenceLookupStrategy(context);
         }
         try {
             callExpressions = callReferenceLookup

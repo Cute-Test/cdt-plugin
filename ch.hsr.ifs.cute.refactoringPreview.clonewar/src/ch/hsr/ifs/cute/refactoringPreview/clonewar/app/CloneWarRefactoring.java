@@ -11,9 +11,8 @@ import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring2;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
 import org.eclipse.cdt.internal.ui.refactoring.utils.SelectionHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,15 +36,14 @@ import ch.hsr.ifs.cute.refactoringPreview.clonewar.app.transformation.Transform;
  * @author tcorbat(at)hsr.ch
  */
 
-public class CloneWarRefactoring extends CRefactoring2 {
+public class CloneWarRefactoring extends CRefactoring {
     private Transform transformation;
 
     /**
      * {@inheritDoc}
      */
-    public CloneWarRefactoring(ISelection selection,
-            ICElement element, ICProject proj, RefactoringASTCache astCache) {
-        super(element, selection, proj, astCache);
+    public CloneWarRefactoring(ISelection selection, ICElement element, ICProject proj) {
+        super(element, selection, proj);
     }
 
     /**
@@ -53,7 +51,6 @@ public class CloneWarRefactoring extends CRefactoring2 {
      */
     @Override
     protected RefactoringDescriptor getRefactoringDescriptor() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -93,7 +90,7 @@ public class CloneWarRefactoring extends CRefactoring2 {
         final RefactoringResolver resolver = new RefactoringResolver(selectedRegion);
         IASTTranslationUnit translationUnit;
         try {
-            translationUnit = astCache.getAST(tu, new NullProgressMonitor());
+            translationUnit = getAST(tu, new NullProgressMonitor());  
             translationUnit.accept(resolver);
         if (resolver.foundRefactoring()) {
             transformation = resolver.getRefactoring();
@@ -169,7 +166,7 @@ public class CloneWarRefactoring extends CRefactoring2 {
         public int leave(IASTDeclaration declaration) {
             if (isSelectedNode(declaration)) {
                 if (isFunction(declaration)) {
-                    refactoring = new ETTPFunctionTransform(astCache);
+                    refactoring = new ETTPFunctionTransform(refactoringContext);
                     refactoring.setNode(declaration);
                     return PROCESS_ABORT;
                 }
@@ -197,8 +194,9 @@ public class CloneWarRefactoring extends CRefactoring2 {
                 IASTDeclaration declaration) {
             IASTNode node = declaration;
             while ((node != null)
-                    && !(node instanceof ICPPASTCompositeTypeSpecifier))
+                    && !(node instanceof ICPPASTCompositeTypeSpecifier)) {
                 node = node.getParent();
+            }
             return (CPPASTCompositeTypeSpecifier) node;
         }
 
@@ -245,8 +243,9 @@ public class CloneWarRefactoring extends CRefactoring2 {
         private IASTDeclaration findFunctionDef(IASTDeclSpecifier declSpec) {
             IASTNode node = declSpec;
             while ((node != null)
-                    && !(node instanceof ICPPASTFunctionDefinition))
+                    && !(node instanceof ICPPASTFunctionDefinition)) {
                 node = node.getParent();
+            }
             return (IASTDeclaration) node;
         }
 
@@ -269,7 +268,7 @@ public class CloneWarRefactoring extends CRefactoring2 {
          * @return True if this node is selected, otherwise false.
          */
         private boolean isSelectedNode(IASTNode node) {
-            return SelectionHelper.isSelectionOnExpression(region, node);
+        	return SelectionHelper.doesNodeOverlapWithRegion(node, region);
         }
     }
 

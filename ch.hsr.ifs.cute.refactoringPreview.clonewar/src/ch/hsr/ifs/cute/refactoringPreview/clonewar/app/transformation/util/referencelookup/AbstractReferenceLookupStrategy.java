@@ -18,7 +18,7 @@ import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.internal.ui.refactoring.RefactoringASTCache;
+import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.cdt.internal.ui.refactoring.utils.ExpressionFinder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -43,10 +43,10 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
         ReferenceLookupStrategy<T> {
     private Map<IFile, IASTTranslationUnit> loadedTUnits = new HashMap<IFile, IASTTranslationUnit>();
     private Map<T, IASTTranslationUnit> unitToCallAssociation = new HashMap<T, IASTTranslationUnit>();
-    protected final RefactoringASTCache astCache;
+    protected final CRefactoringContext context;
 
-    protected AbstractReferenceLookupStrategy(RefactoringASTCache astCache) {
-        this.astCache = astCache;
+    protected AbstractReferenceLookupStrategy(CRefactoringContext astCache) {
+        this.context = astCache;
     }
 
     /**
@@ -157,7 +157,7 @@ public abstract class AbstractReferenceLookupStrategy<T> implements
      */
     private IASTTranslationUnit loadUnitFrom(IFile file) throws CoreException {
         final ITranslationUnit tu = CoreModelUtil.findTranslationUnit(file);
-        return astCache.getAST(tu, new NullProgressMonitor());
+        return context.getAST(tu, new NullProgressMonitor());
 //        return TranslationUnitHelper.loadTranslationUnit(file, false);
     }
 
