@@ -454,7 +454,7 @@ void test() {
 	int iArr[];
 	foo(iArr);
 }
-//!String Array Parameter (Local Definition of std::string)
+//!String Array Parameter
 //@A.cpp
 namespace std
 {
