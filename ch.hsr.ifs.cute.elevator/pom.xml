@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
   <modelVersion>4.0.0</modelVersion>
-  <version>4.6.0-SNAPSHOT</version>
-
   <parent>
-	<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
-	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.releng</artifactId>
+	<groupId>ch.hsr.ifs</groupId>
+	<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
 	<version>4.6.0-SNAPSHOT</version>
   </parent>
 
+  <groupId>ch.hsr.ifs.cute.elevator</groupId>
   <artifactId>ch.hsr.ifs.cute.elevator</artifactId>
+  <version>4.6.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
-  <groupId>ch.hsr.ifs</groupId>
 </project> 

@@ -21,9 +21,10 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<configuration>
+					<testSuite>ch.hsr.ifs.cute.elevator.test</testSuite>
+					<testClass>ch.hsr.ifs.cute.elevator.test.AllElevatorTests</testClass>
+					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 					<useUIHarness>true</useUIHarness>
-					<product>org.eclipse.sdk.ide</product>
-					<application>org.eclipse.ui.ide.workbench</application>
 					<argLine>${os-jvm-flags}</argLine>
 				</configuration>
 			</plugin>

@@ -24,12 +24,10 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
+					<testSuite>ch.hsr.ifs.cute.macronator.test</testSuite>
+					<testClass>ch.hsr.ifs.cute.macronator.test.AllMacronatorTests</testClass>
+					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 					<useUIHarness>true</useUIHarness>
-					<product>org.eclipse.sdk.ide</product>
-					<application>org.eclipse.ui.ide.workbench</application>
-					<excludes>
-						<exclude>**/bugs/*.java</exclude>
-					</excludes>
 					<argLine>${os-jvm-flags}</argLine>
 				</configuration>
 			</plugin>
@@ -37,11 +35,3 @@
 	</build>
 
 </project> 
-
-
-
-
-
-
-
-
