@@ -22,4 +22,6 @@ public interface ILaunchObserver {
 
 	public void notifyAfterLaunch(IProject project) throws CoreException;
 
+	public void notifyTermination(IProject project) throws CoreException;
+
 }

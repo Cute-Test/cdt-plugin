@@ -35,7 +35,7 @@ public class DeleteMarkersTest extends TestCase {
 	}
 
 	public void testDeleteJob() {
-		IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME));
+		IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), "");
 		try {
 			testFile.createMarker(GcovPlugin.PARTIALLY_MARKER_TYPE);
 		} catch (CoreException e1) {
@@ -53,7 +53,7 @@ public class DeleteMarkersTest extends TestCase {
 	}
 
 	public void testDeleteJobResourceDoesNotExist() {
-		IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), false);
+		IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), false, "");
 		try {
 			testFile.createMarker(GcovPlugin.PARTIALLY_MARKER_TYPE);
 		} catch (CoreException e1) {

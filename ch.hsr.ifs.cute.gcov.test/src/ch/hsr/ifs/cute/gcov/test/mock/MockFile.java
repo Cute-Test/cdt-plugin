@@ -8,8 +8,10 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov.test.mock;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,15 +49,17 @@ public class MockFile implements IFile {
 	private final MockWorkspace mockWorkspace;
 	private final List<IMarker> markers = new ArrayList<IMarker>();
 	private final boolean exists;
+	private final String contents;
 
-	public MockFile(IPath path, boolean exists) {
+	public MockFile(IPath path, boolean exists, String contents) {
 		this.path = path;
 		mockWorkspace = new MockWorkspace();
 		this.exists = exists;
+		this.contents = contents;
 	}
 
-	public MockFile(IPath path) {
-		this(path, true);
+	public MockFile(IPath path, String contents) {
+		this(path, true, contents);
 	}
 
 	public void appendContents(InputStream source, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException {
@@ -103,7 +107,12 @@ public class MockFile implements IFile {
 	}
 
 	public InputStream getContents() throws CoreException {
-		throw new NotYetImplementedException();
+		try {
+			InputStream is =  new ByteArrayInputStream(contents.getBytes("UTF-8"));
+			return is;
+		} catch (UnsupportedEncodingException e) {
+		} 
+		return null;
 	}
 
 	public InputStream getContents(boolean force) throws CoreException {

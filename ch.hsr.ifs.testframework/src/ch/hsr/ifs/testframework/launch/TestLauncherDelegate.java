@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.debug.core.CDebugUtils;
@@ -56,10 +58,7 @@ import ch.hsr.ifs.testframework.ui.ShowResultView;
  */
 @SuppressWarnings("restriction")
 public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
-
-	public TestLauncherDelegate() {
-		super();
-	}
+	protected ExecutorService terminationRunner = Executors.newSingleThreadExecutor();
 
 	protected abstract ConsoleEventParser getConsoleEventParser();
 
@@ -75,7 +74,6 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 	}
 
 	private void runLocalApplication(ILaunchConfiguration config, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-
 		monitor.beginTask(LaunchMessages.LocalCDILaunchDelegate_0, 10);
 		if (monitor.isCanceled()) {
 			return;
@@ -84,7 +82,7 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 		try {
 			IPath exePath = CDebugUtils.verifyProgramPath(config);
 			ICProject cProject = CDebugUtils.verifyCProject(config);
-			IProject project = cProject.getProject();
+			final IProject project = cProject.getProject();
 			notifyBeforeLaunch(project);
 			File wd = getWorkingDirectory(config);
 			if (wd == null) {
@@ -98,7 +96,7 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 			String[] commandArray = command.toArray(new String[command.size()]);
 			boolean usePty = config.getAttribute("ch.hsr.ifs.testframework.launcher.useTerminal", true);
 			monitor.worked(2);
-			Process process = exec(commandArray, this.getEnvironment(config), wd, usePty);
+			final Process process = exec(commandArray, this.getEnvironment(config), wd, usePty);
 			monitor.worked(6);
 			DebugPlugin.newProcess(launch, process, renderProcessLabel(commandArray[0]));
 			IProcess proc = launch.getProcesses()[0];
@@ -116,8 +114,21 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 
 				registerPatternMatchListener(launch, exePath, textCons);
 			}
-
 			notifyAfterLaunch(project);
+			terminationRunner.execute(new Runnable() {
+				public void run() {
+					try {
+						process.waitFor();
+					} catch (InterruptedException e) {
+						TestFrameworkPlugin.log(e);
+					}
+					try {
+						notifyTermination(project);
+					} catch (CoreException e) {
+						TestFrameworkPlugin.log(e);
+					}
+				}
+			});
 		} finally {
 			monitor.done();
 		}
@@ -141,6 +152,12 @@ public abstract class TestLauncherDelegate extends AbstractCLaunchDelegate {
 	protected void notifyBeforeLaunch(IProject project) throws CoreException {
 		for (ILaunchObserver observer : getObservers()) {
 			observer.notifyBeforeLaunch(project);
+		}
+	}
+
+	protected void notifyTermination(IProject project) throws CoreException {
+		for (ILaunchObserver observer : getObservers()) {
+			observer.notifyTermination(project);
 		}
 	}
 

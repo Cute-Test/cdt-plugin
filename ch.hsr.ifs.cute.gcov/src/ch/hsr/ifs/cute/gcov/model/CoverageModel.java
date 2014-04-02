@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2007-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -8,6 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov.model;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +17,7 @@ import org.eclipse.core.resources.IFile;
 
 /**
  * @author Emanuel Graf IFS
- * 
+ * @author Thomas Corbat IFS
  */
 public class CoverageModel {
 
@@ -47,5 +48,9 @@ public class CoverageModel {
 
 	public void clearModel() {
 		fileMap.clear();
+	}
+
+	public Collection<File> getMarkedFiles() {
+		return fileMap.values();
 	}
 }
