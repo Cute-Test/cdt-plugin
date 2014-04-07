@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IQualifierType;
@@ -29,6 +32,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassType;
 
+
 /**
  * Checks if a specified declaration can be elevated to C++11 initializer.
  *
@@ -46,6 +50,7 @@ public class DelaratorAnalyzer {
         && !isClassMember() 
         && !requiresTypeConversion()
         && !isParameterDeclaration()
+        && !hasAutoType()
         && !isPartOfCastExpression(declarator)
         && !(declarator.getInitializer() == null && isReference());
     }
@@ -70,6 +75,12 @@ public class DelaratorAnalyzer {
         return declarator.getRawSignature().isEmpty();
     }
     
+    private boolean hasAutoType() {
+        IASTSimpleDeclaration declaration = (IASTSimpleDeclaration) declarator.getParent();
+        IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
+        return (declSpecifier instanceof IASTSimpleDeclSpecifier && ((IASTSimpleDeclSpecifier)declSpecifier).getType() == IASTSimpleDeclSpecifier.t_auto);
+    }
+    
     private boolean isPartOfCastExpression(IASTNode node) {
         if (node == null) {
             return false;
@@ -78,7 +89,7 @@ public class DelaratorAnalyzer {
     }
     
     private boolean isClassMember() {
-        // Parent is the IASTSimpleDeclaration, grandparent is potentially class
+        // Parent is the IASTSimpleDeclaration, grandparent is potentially a class
         return (declarator.getParent().getParent() instanceof ICPPASTCompositeTypeSpecifier);
     }
     

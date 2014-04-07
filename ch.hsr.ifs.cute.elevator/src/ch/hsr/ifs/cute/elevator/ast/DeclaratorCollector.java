@@ -41,10 +41,7 @@ public class DeclaratorCollector extends ASTVisitor {
     public List<IASTDeclarator> getDeclarators() {
         return declarators;
     }
-
-    
-   
-    
+  
     private boolean containsBoostAssign(IASTDeclarator element) {
         if (!isEqualsInitializer(element.getInitializer())) {
             return false;

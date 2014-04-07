@@ -60,7 +60,6 @@ struct A { A(std::initializer_list<int> l) {}
           void someFoo(std::initializer_list<int> l){}};
 A a(0);
 
-
 //!ShouldIgnoreBoostAssign
 //@main.cpp
 namespace boost {
@@ -120,4 +119,35 @@ C::C() :a{1}, b{2} {}
 //@main.cpp
 int function(int n) {
     return *(int*)(&n);
+}
+
+//!ShouldIgnoreDeclarationWithTypeAuto
+//@main.cpp
+int main() {
+	auto a;
+}
+
+//!ShouldIgnoreDeclarationWithTypeAutoAndEqualsInitializer
+//@main.cpp
+int main() {
+	auto a = 5;
+}
+
+//!ShouldIgnoreDeclarationWithTypeAuto
+//@main.cpp
+int main() {
+	auto a;
+}
+
+//!ShouldIgnoreDeclarationWithTypeAutoAndCopyConstructor
+//@main.cpp
+int main() {
+	auto a(5);
+}
+
+//!ShouldIgnoreConstexprDeclarationWithTypeAuto
+//@main.cpp
+constexpr auto a = 5;
+int main() {
+	return 0;
 }
