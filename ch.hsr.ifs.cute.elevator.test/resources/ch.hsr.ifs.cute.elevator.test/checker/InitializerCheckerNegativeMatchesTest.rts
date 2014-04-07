@@ -47,11 +47,15 @@ int &x;
 //@main.cpp
 struct Person { int age; };
 
-
 //!ShouldIgnoreTeplateArguments
 //@main.cpp
 namespace std { template<class T1, class T2> class pair {}; }
 std::pair<int,int> p1 { 3, 4 };
+
+//!ShouldIgnoreTeplateArgumentPointers
+//@main.cpp
+namespace std { template<class T1, class T2> class pair {}; }
+std::pair<int*,int*> p1 { 3, 4 };
 
 //!ShouldIgnoreInitializerListConstructor
 //@main.cpp
@@ -151,3 +155,5 @@ constexpr auto a = 5;
 int main() {
 	return 0;
 }
+
+//!ShouldIgnore

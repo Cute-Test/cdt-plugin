@@ -22,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
@@ -76,7 +77,7 @@ public class DelaratorAnalyzer {
     }
 
     private boolean isTemplateTypeSpecifier() {
-        return declarator.getRawSignature().isEmpty();
+        return declarator.getParent().getParent() instanceof ICPPASTTemplateId;
     }
     
     private boolean hasAutoType() {
