@@ -70,12 +70,19 @@ public class DelaratorAnalyzer {
     private boolean isParameterDeclaration() {
         return declarator.getParent() instanceof ICPPASTParameterDeclaration;
     }
+    
+    private boolean isSimpleDeclaration() {
+        return declarator.getParent() instanceof IASTSimpleDeclaration;
+    }
 
     private boolean isTemplateTypeSpecifier() {
         return declarator.getRawSignature().isEmpty();
     }
     
     private boolean hasAutoType() {
+        if (!isSimpleDeclaration()) {
+            return false;
+        }
         IASTSimpleDeclaration declaration = (IASTSimpleDeclaration) declarator.getParent();
         IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
         return (declSpecifier instanceof IASTSimpleDeclSpecifier && ((IASTSimpleDeclSpecifier)declSpecifier).getType() == IASTSimpleDeclSpecifier.t_auto);
