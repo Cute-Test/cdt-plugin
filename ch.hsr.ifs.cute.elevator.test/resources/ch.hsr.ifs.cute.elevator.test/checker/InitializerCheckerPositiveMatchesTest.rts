@@ -93,3 +93,13 @@ class C { int a; int b; };
 C::C() :
 a(1), 
 b(2) {}
+
+//!ShouldMarkNewOperatorInstantiations
+//@.config
+expectedMarkerLines=4
+//@main.cpp
+class Worker {};
+
+int main() {
+	new Worker;
+}

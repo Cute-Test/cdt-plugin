@@ -156,4 +156,11 @@ int main() {
 	return 0;
 }
 
-//!ShouldIgnore
+//!ShouldIgnoreElevatedClasses
+//@main.cpp
+class C {};
+
+int main() {
+	new C { };
+}
+

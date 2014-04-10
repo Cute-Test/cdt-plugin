@@ -20,6 +20,7 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCastExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
@@ -47,13 +48,21 @@ public class DelaratorAnalyzer {
     
     public boolean isElevationCandidate() {
         return !isTemplateTypeSpecifier() 
-        && !isAlreadyElevated()    
+        && !isAlreadyElevated()  
         && !isClassMember() 
         && !requiresTypeConversion()
         && !isParameterDeclaration()
         && !hasAutoType()
         && !isPartOfCastExpression(declarator)
         && !(declarator.getInitializer() == null && isReference());
+    }
+    
+    private boolean isNewExpression(IASTNode node) {
+        return new NodeProperties(declarator).hasAncestor(ICPPASTNewExpression.class);
+    }
+    
+    private boolean isPartOfCastExpression(IASTNode node) {
+        return new NodeProperties(declarator).hasAncestor(ICPPASTCastExpression.class);
     }
     
     private boolean isConstructorInitializer() {
@@ -65,15 +74,19 @@ public class DelaratorAnalyzer {
     }
      
     private boolean isAlreadyElevated() {
-        return declarator.getInitializer() instanceof IASTInitializerList;
+       return hasInitializerListInitializer() || isElevatedNewExpression();
+    }
+
+    private boolean hasInitializerListInitializer() {
+        return declarator.getInitializer() != null && declarator.getInitializer() instanceof IASTInitializerList;
+    }
+    
+    private boolean isElevatedNewExpression() {   
+        return isNewExpression(declarator) && ((ICPPASTNewExpression) declarator.getParent().getParent()).getInitializer() instanceof IASTInitializerList;
     }
 
     private boolean isParameterDeclaration() {
         return declarator.getParent() instanceof ICPPASTParameterDeclaration;
-    }
-    
-    private boolean isSimpleDeclaration() {
-        return declarator.getParent() instanceof IASTSimpleDeclaration;
     }
 
     private boolean isTemplateTypeSpecifier() {
@@ -81,19 +94,13 @@ public class DelaratorAnalyzer {
     }
     
     private boolean hasAutoType() {
-        if (!isSimpleDeclaration()) {
+        NodeProperties properties = new NodeProperties(declarator);
+        if (!properties.hasAncestor(IASTSimpleDeclaration.class)) {
             return false;
         }
-        IASTSimpleDeclaration declaration = (IASTSimpleDeclaration) declarator.getParent();
+        IASTSimpleDeclaration declaration = (IASTSimpleDeclaration) properties.getAncestor(IASTSimpleDeclaration.class);
         IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
         return (declSpecifier instanceof IASTSimpleDeclSpecifier && ((IASTSimpleDeclSpecifier)declSpecifier).getType() == IASTSimpleDeclSpecifier.t_auto);
-    }
-    
-    private boolean isPartOfCastExpression(IASTNode node) {
-        if (node == null) {
-            return false;
-        }
-        return (node instanceof ICPPASTCastExpression) ? true : isPartOfCastExpression(node.getParent());
     }
     
     private boolean isClassMember() {

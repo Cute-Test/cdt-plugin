@@ -38,12 +38,11 @@ public class InitializerQuickFix extends AbstractAstRewriteQuickFix {
             if (isDeclarator(targetStatement)) {
                 IASTDeclarator newDeclarator = new DeclaratorConverter((IASTDeclarator) targetStatement).convert();
                 performChange(targetStatement, newDeclarator);
-                marker.delete();
             } else if (isConstructorChainInitializer(targetStatement)) {
                 ICPPASTConstructorChainInitializer newInitializer = new ConstructorChainConverter((ICPPASTConstructorChainInitializer) targetStatement).convert();
                 performChange(targetStatement, newInitializer);
-                marker.delete();
             }
+            marker.delete();
         } catch (CoreException e) {
             Activator.log(e);
         }
@@ -54,7 +53,7 @@ public class InitializerQuickFix extends AbstractAstRewriteQuickFix {
      * 
      */
     private IASTNode getEnclosingNodeOfInterest(IASTNode node) {
-        return isDeclarator(node) || isConstructorChainInitializer(node) ? node : getEnclosingNodeOfInterest(node.getParent());
+        return (node.getParent() == null) || isDeclarator(node) || isConstructorChainInitializer(node) ? node : getEnclosingNodeOfInterest(node.getParent());
     }
 
     private boolean isConstructorChainInitializer(IASTNode node) {
