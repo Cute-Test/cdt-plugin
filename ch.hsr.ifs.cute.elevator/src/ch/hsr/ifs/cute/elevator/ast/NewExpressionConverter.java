@@ -18,8 +18,10 @@ public class NewExpressionConverter {
         IASTInitializer initializer = expression.getInitializer();
         IASTInitializerList initList = expression.getTranslationUnit().getASTNodeFactory().newInitializerList();
         ICPPASTNewExpression convertedExpression = expression.copy();
-        for (IASTInitializerClause clause : ((ICPPASTConstructorInitializer) initializer).getArguments()) {
-            initList.addClause(clause.copy());
+        if (initializer != null && initializer instanceof ICPPASTConstructorInitializer) {
+            for (IASTInitializerClause clause : ((ICPPASTConstructorInitializer) initializer).getArguments()) {
+                initList.addClause(clause.copy());
+            }
         }
         convertedExpression.setInitializer(initList);
         return convertedExpression;

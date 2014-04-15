@@ -145,24 +145,18 @@ int main(int argc, char const *argv[]) {
 	new C { 5 };
 }
 
-//!@ShouldElevateClassWithNewOperatorAndAssignmentToPointer
+//!@ShouldElevateClassWithNewOperatorAndDefaultConstructor
 //@main.cpp
-struct C {
-	C(int a) : a { a } {}
-	int a;
-};
+struct C {};
 
 int main(int argc, char const *argv[]) {
-    new C(5);
+	new C;
 }
 
 //=
-struct C {
-	C(int a) : a { a } {}
-	int a;
-};
+struct C {};
 
 int main(int argc, char const *argv[]) {
-	new C { 5 };
+	new C { };
 }
 

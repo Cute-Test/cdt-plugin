@@ -30,7 +30,7 @@ public class DeclaratorCollector extends ASTVisitor {
     @Override
     public int visit(IASTDeclarator declarator) {
         if (isFunctionDeclarator(declarator)) {
-            return PROCESS_CONTINUE;
+            return PROCESS_SKIP;
         }
         if (new DelaratorAnalyzer(declarator).isElevationCandidate() && !containsBoostAssign(declarator)) {
             declarators.add(declarator);
