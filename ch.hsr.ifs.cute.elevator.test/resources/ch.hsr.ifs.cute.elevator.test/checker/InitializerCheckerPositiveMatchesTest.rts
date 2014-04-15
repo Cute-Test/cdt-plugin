@@ -103,3 +103,16 @@ class Worker {};
 int main() {
 	new Worker;
 }
+
+//!@ShouldMarkNewOperatorInstantiationsWithCopyConstructor
+//@.config
+expectedMarkerLines=7
+//@main.cpp
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
+
+int main(int argc, char const *argv[]) {
+	new C(5);
+}

@@ -35,7 +35,7 @@ public class DeclaratorCollector extends ASTVisitor {
         if (new DelaratorAnalyzer(declarator).isElevationCandidate() && !containsBoostAssign(declarator)) {
             declarators.add(declarator);
         }
-        return PROCESS_SKIP;
+        return PROCESS_CONTINUE;
     }
     
     public List<IASTDeclarator> getDeclarators() {

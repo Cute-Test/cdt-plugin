@@ -6,6 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ITranslationUnit;
@@ -16,6 +17,8 @@ import org.eclipse.ltk.core.refactoring.Change;
 
 import ch.hsr.ifs.cute.elevator.ast.ConstructorChainConverter;
 import ch.hsr.ifs.cute.elevator.ast.DeclaratorConverter;
+import ch.hsr.ifs.cute.elevator.ast.NewExpressionConverter;
+import ch.hsr.ifs.cute.elevator.ast.NodeProperties;
 
 /**
  * quick fix
@@ -34,34 +37,26 @@ public class InitializerQuickFix extends AbstractAstRewriteQuickFix {
             int astFlags = ITranslationUnit.AST_SKIP_INDEXED_HEADERS | ITranslationUnit.AST_PARSE_INACTIVE_CODE;
             ast = getTranslationUnitViaEditor(marker).getAST(index, astFlags);
             IASTNode astNode = getAstNameFromMarker(marker);
-            IASTNode targetStatement = getEnclosingNodeOfInterest(astNode);
-            if (isDeclarator(targetStatement)) {
-                IASTDeclarator newDeclarator = new DeclaratorConverter((IASTDeclarator) targetStatement).convert();
-                performChange(targetStatement, newDeclarator);
-            } else if (isConstructorChainInitializer(targetStatement)) {
-                ICPPASTConstructorChainInitializer newInitializer = new ConstructorChainConverter((ICPPASTConstructorChainInitializer) targetStatement).convert();
-                performChange(targetStatement, newInitializer);
+            NodeProperties astNodeProperties = new NodeProperties(astNode);
+            
+            if (astNodeProperties.hasAncestor(ICPPASTNewExpression.class)) {               
+                ICPPASTNewExpression expression = astNodeProperties.getAncestor(ICPPASTNewExpression.class);                
+                ICPPASTNewExpression convertedExpression = new NewExpressionConverter(expression).convert();             
+                performChange(expression, convertedExpression);
+            } else if (astNodeProperties.hasAncestor(IASTDeclarator.class)) {
+                IASTDeclarator declarator = astNodeProperties.getAncestor(IASTDeclarator.class);
+                IASTDeclarator convertedDeclarator = new DeclaratorConverter(declarator).convert();
+                performChange(declarator, convertedDeclarator);
+                
+            } else if (astNodeProperties.hasAncestor(ICPPASTConstructorChainInitializer.class)) {
+                ICPPASTConstructorChainInitializer initializer = astNodeProperties.getAncestor(ICPPASTConstructorChainInitializer.class);
+                ICPPASTConstructorChainInitializer convertedInitializer = new ConstructorChainConverter(initializer).convert();
+                performChange(initializer, convertedInitializer);
             }
             marker.delete();
         } catch (CoreException e) {
             Activator.log(e);
         }
-    }
-    
-    /**
-     * recursively traverses up the AST node hierarchy until a node of interest (declarator or member initializer) is found.
-     * 
-     */
-    private IASTNode getEnclosingNodeOfInterest(IASTNode node) {
-        return (node.getParent() == null) || isDeclarator(node) || isConstructorChainInitializer(node) ? node : getEnclosingNodeOfInterest(node.getParent());
-    }
-
-    private boolean isConstructorChainInitializer(IASTNode node) {
-        return node != null && node instanceof ICPPASTConstructorChainInitializer;
-    }
-
-    private boolean isDeclarator(IASTNode node) {
-        return node != null && node instanceof IASTDeclarator;
     }
 
     private void performChange(IASTNode target, IASTNode replacement) throws CoreException {

@@ -5,14 +5,14 @@
 		point="org.eclipse.cdt.codan.core.checkers">
 		 <checker
 		       class="ch.hsr.ifs.cute.elevator.checker.InitializerChecker"
-		       id="ch.hsr.ifs.elevator.initializationError"
+		       id="ch.hsr.ifs.elevator.uniformInitialization"
 		       name="Elevator Warning Checker">
 		    <problem               
 		    	category="org.eclipse.cdt.codan.core.categories.CodeStyle"
 			   defaultEnabled="true"
 			   defaultSeverity="Warning"
 			   description="Elevator Initialization Warning"
-			   id="ch.hsr.ifs.elevator.initializationError"
+			   id="ch.hsr.ifs.elevator.uniformInitialization"
 			   name="Un- or ill-initialized variable"
 			   messagePattern="Un- or ill-initialized variable found">
 		    </problem>
@@ -22,7 +22,7 @@
          point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
       <resolution
             class="ch.hsr.ifs.cute.elevator.quickfix.InitializerQuickFix"
-            problemId="ch.hsr.ifs.elevator.initializationError">
+            problemId="ch.hsr.ifs.elevator.uniformInitialization">
       </resolution>
    </extension>
    <extension
