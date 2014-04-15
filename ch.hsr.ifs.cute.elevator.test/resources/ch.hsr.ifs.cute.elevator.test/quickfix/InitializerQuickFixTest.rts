@@ -104,12 +104,23 @@ std::pair<int, int> p1 { 3, 4 };
 
 //!ShouldElevateConstructorInitList
 //@main.cpp
-class C;
-C::C(): a(1), b(2){}
-
+class C {
+private:
+	int a;
+	int b;
+	
+public:
+	C::C(): a(1), b(2){}
+};
 //=
-class C;
-C::C() :
-		a { 1 }, b { 2 } {
-}
+class C {
+private:
+	int a;
+	int b;
+	
+public:
+	C::C() :
+			a { 1 }, b { 2 } {
+	}
+};
 

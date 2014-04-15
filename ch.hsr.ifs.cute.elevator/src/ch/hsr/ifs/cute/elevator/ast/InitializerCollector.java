@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 
 /**
  * ASTVisitor that collects all ConstructorChainInitializers.
@@ -23,18 +26,27 @@ public class InitializerCollector extends ASTVisitor {
 
     @Override
     public int visit(IASTInitializer initializer) {
-        if (isConstructorChainInitializer(initializer) && !isElevated(initializer)) {
-            initializers.add((ICPPASTConstructorChainInitializer) initializer);
+        if (initializer instanceof ICPPASTConstructorChainInitializer) {
+            ICPPASTConstructorChainInitializer ctorInitializer = (ICPPASTConstructorChainInitializer) initializer;
+            collectIfElevationCandidate(ctorInitializer);
         }
         return PROCESS_SKIP;
     }
 
-    private boolean isConstructorChainInitializer(IASTInitializer initializer) {
-        return initializer instanceof ICPPASTConstructorChainInitializer;
+    private void collectIfElevationCandidate(ICPPASTConstructorChainInitializer ctorInitializer) {
+        if (!isElevated(ctorInitializer) && !isReference(ctorInitializer)) {
+            initializers.add((ICPPASTConstructorChainInitializer) ctorInitializer);
+        }
+    }
+    
+    private boolean isReference(ICPPASTConstructorChainInitializer initializer) {
+        IASTName identifier = initializer.getMemberInitializerId();
+        IVariable binding = (IVariable)identifier.resolveBinding();
+        return binding.getType() instanceof ICPPReferenceType;
     }
 
-    private boolean isElevated(IASTInitializer initializer) {
-        return ((ICPPASTConstructorChainInitializer) initializer).getInitializer() instanceof ICPPASTInitializerList;
+    private boolean isElevated(ICPPASTConstructorChainInitializer initializer) {
+        return initializer.getInitializer() instanceof ICPPASTInitializerList;
     }
 
     public List<ICPPASTConstructorChainInitializer> getInitializers() {

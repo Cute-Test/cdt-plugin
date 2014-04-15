@@ -111,36 +111,15 @@ public class DelaratorAnalyzer {
     private boolean isReference() {
             return (declarator.getPointerOperators().length > 0)  && (declarator.getPointerOperators()[0] instanceof ICPPASTReferenceOperator);                   
     }
-    
-    /**
-     * Gets the constructors of the target type of a declaration.
-     */
-    private ICPPConstructor[] getTypeConstructors() {
-        IType variableType = getVariableType();
-        /*
-         * While we should be using a test for ICPPClassType and not
-         * CPPClassType, this results in an exception on getConstructors().
-         */
-        return (variableType instanceof CPPClassType) ? ((ICPPClassType) variableType).getConstructors() : new ICPPConstructor[0];
-    }
-    
+     
     private IType getVariableType() {
         IBinding x = declarator.getName().resolveBinding();
         return ((ICPPVariable) x).getType();
     }
     
-    private List<IType> getSourceTypes() {
-        if (isEqualsInitializer()) {
-            return getEqualsInitializerSourceTypes();
-        } 
-        if (isConstructorInitializer()) {
-            return getConstructorInitializerSourceTypes();
-        }
-        return Collections.emptyList();
-    }
     
     /**
-     * get the absolute type w/o reference and const types.
+     * extracts the real type from references and qualifiers.
      */
     private IType getAbsoluteType(IType type) {
         if (type instanceof ICPPReferenceType) {
@@ -158,11 +137,7 @@ public class DelaratorAnalyzer {
      */
     private List<List<IType>> getConvertibleTargetTypes() {
         List<List<IType>> convertibleTypes = new ArrayList<List<IType>>();
-        IType targetType = getVariableType();
-        if (targetType == null) {
-            return convertibleTypes;
-        }
-        final IType absoluteTargetType = getAbsoluteType(targetType);
+        final IType absoluteTargetType = getAbsoluteType(getVariableType());
         if (absoluteTargetType instanceof ICPPBasicType) {
             ArrayList<IType> typeList = new ArrayList<IType>();
             typeList.add(absoluteTargetType);
@@ -199,24 +174,16 @@ public class DelaratorAnalyzer {
         return convertibleTypes;
     }
     
-    private List<IType> getConstructorInitializerSourceTypes() {
-        ArrayList<IType> sourceTypes = new ArrayList<IType>();   
-        for (IASTInitializerClause clause : ((ICPPASTConstructorInitializer) declarator.getInitializer()).getArguments()) {
-            if (clause instanceof IASTExpression) {
-                sourceTypes.add(((IASTExpression) clause).getExpressionType());
-            }
-        }
-        return sourceTypes;
-    }
-
-    private List<IType> getEqualsInitializerSourceTypes() {
-        List<IType> sourceTypes = new ArrayList<IType>();   
-        IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer) declarator.getInitializer();
-        IASTInitializerClause clause = equalsInitializer.getInitializerClause();
-        if (clause instanceof IASTExpression) {
-            sourceTypes.add(((IASTExpression) clause).getExpressionType());
-        }
-        return sourceTypes;
+    /**
+     * Gets the constructors of the target type of a declaration.
+     */
+    private ICPPConstructor[] getTypeConstructors() {
+        IType variableType = getVariableType();
+        /*
+         * While we should be using a test for ICPPClassType and not
+         * CPPClassType, this results in an exception on getConstructors().
+         */
+        return variableType instanceof CPPClassType ? ((ICPPClassType) variableType).getConstructors() : new ICPPConstructor[0];
     }
     
     private boolean isTypeCompatible(List<List<IType>> convertibleTypes, List<IType> sourceTypes) {
@@ -269,9 +236,37 @@ public class DelaratorAnalyzer {
             return false;
         }
         List<IType> sourceTypes = getSourceTypes();
-        if (sourceTypes.isEmpty()) {
-            return true;
-        }
-        return !isTypeCompatible(getConvertibleTargetTypes(), sourceTypes);
+        return sourceTypes.isEmpty() || !isTypeCompatible(getConvertibleTargetTypes(), sourceTypes);
     }   
+    
+
+    private List<IType> getSourceTypes() {
+        if (isEqualsInitializer()) {
+            return getEqualsInitializerSourceTypes();
+        } 
+        if (isConstructorInitializer()) {
+            return getConstructorInitializerSourceTypes();
+        }
+        return Collections.emptyList();
+    }
+    
+    private List<IType> getConstructorInitializerSourceTypes() {
+        ArrayList<IType> sourceTypes = new ArrayList<IType>();   
+        for (IASTInitializerClause clause : ((ICPPASTConstructorInitializer) declarator.getInitializer()).getArguments()) {
+            if (clause instanceof IASTExpression) {
+                sourceTypes.add(((IASTExpression) clause).getExpressionType());
+            }
+        }
+        return sourceTypes;
+    }
+
+    private List<IType> getEqualsInitializerSourceTypes() {
+        List<IType> sourceTypes = new ArrayList<IType>();   
+        IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer) declarator.getInitializer();
+        IASTInitializerClause clause = equalsInitializer.getInitializerClause();
+        if (clause instanceof IASTExpression) {
+            sourceTypes.add(((IASTExpression) clause).getExpressionType());
+        }
+        return sourceTypes;
+    }
 }

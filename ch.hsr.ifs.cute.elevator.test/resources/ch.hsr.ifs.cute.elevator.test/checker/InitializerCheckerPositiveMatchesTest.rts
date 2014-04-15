@@ -74,7 +74,7 @@ int &x = z;
 expectedMarkerLines=3
 //@main.cpp
 int 
-x{1}, 
+x{1},
 y;
  
 //!ShouldMarkTemplateClassConstructorForElevation

@@ -164,3 +164,16 @@ int main() {
 	new C { };
 }
 
+//!ShouldIgnoreReferenceInitializationInConstructorInitList
+//@main.cpp
+
+struct S {};
+
+struct T
+{
+    T(S& s) : s(s) {}
+
+    S& s;
+};
+
+
