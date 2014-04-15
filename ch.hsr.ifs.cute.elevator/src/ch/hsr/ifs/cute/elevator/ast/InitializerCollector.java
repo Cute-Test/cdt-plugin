@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
@@ -33,16 +34,16 @@ public class InitializerCollector extends ASTVisitor {
         return PROCESS_SKIP;
     }
 
-    private void collectIfElevationCandidate(ICPPASTConstructorChainInitializer ctorInitializer) {
-        if (!isElevated(ctorInitializer) && !isReference(ctorInitializer)) {
-            initializers.add((ICPPASTConstructorChainInitializer) ctorInitializer);
+    private void collectIfElevationCandidate(ICPPASTConstructorChainInitializer initializer) {
+        if (!(isElevated(initializer) || isReference(initializer))) {
+            initializers.add(initializer);
         }
     }
     
     private boolean isReference(ICPPASTConstructorChainInitializer initializer) {
         IASTName identifier = initializer.getMemberInitializerId();
-        IVariable binding = (IVariable)identifier.resolveBinding();
-        return binding.getType() instanceof ICPPReferenceType;
+        IBinding binding = identifier.resolveBinding();
+        return binding instanceof IVariable && ((IVariable)binding).getType() instanceof ICPPReferenceType;
     }
 
     private boolean isElevated(ICPPASTConstructorChainInitializer initializer) {

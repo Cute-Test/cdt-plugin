@@ -82,7 +82,7 @@ public class DelaratorAnalyzer {
     }
     
     private boolean isElevatedNewExpression() {   
-        return isNewExpression(declarator) && ((ICPPASTNewExpression) declarator.getParent().getParent()).getInitializer() instanceof IASTInitializerList;
+        return isNewExpression(declarator) && new NodeProperties(declarator).getAncestor(ICPPASTNewExpression.class).getInitializer() instanceof IASTInitializerList;
     }
 
     private boolean isParameterDeclaration() {
