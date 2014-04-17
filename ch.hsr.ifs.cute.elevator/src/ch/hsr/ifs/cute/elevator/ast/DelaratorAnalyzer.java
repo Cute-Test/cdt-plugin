@@ -41,9 +41,11 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassType;
  */
 public class DelaratorAnalyzer {
     private final IASTDeclarator declarator;
+    private final NodeProperties declaratorProperties;
 
     public DelaratorAnalyzer(IASTDeclarator declarator) {
         this.declarator = declarator;
+        this.declaratorProperties = new NodeProperties(declarator);
     }
     
     public boolean isElevationCandidate() {
@@ -54,15 +56,20 @@ public class DelaratorAnalyzer {
         && !isParameterDeclaration()
         && !hasAutoType()
         && !isPartOfCastExpression(declarator)
+        && !isPartOfTypedef()
         && !(declarator.getInitializer() == null && isReference());
     }
     
+    private boolean isPartOfTypedef() {
+        return declaratorProperties.hasAncestor(IASTSimpleDeclaration.class) && declaratorProperties.getAncestor(IASTSimpleDeclaration.class).getDeclSpecifier().getStorageClass() == IASTDeclSpecifier.sc_typedef;
+    }
+   
     private boolean isNewExpression(IASTNode node) {
-        return new NodeProperties(declarator).hasAncestor(ICPPASTNewExpression.class);
+        return declaratorProperties.hasAncestor(ICPPASTNewExpression.class);
     }
     
     private boolean isPartOfCastExpression(IASTNode node) {
-        return new NodeProperties(declarator).hasAncestor(ICPPASTCastExpression.class);
+        return declaratorProperties.hasAncestor(ICPPASTCastExpression.class);
     }
     
     private boolean isConstructorInitializer() {
@@ -82,7 +89,7 @@ public class DelaratorAnalyzer {
     }
     
     private boolean isElevatedNewExpression() {   
-        return isNewExpression(declarator) && new NodeProperties(declarator).getAncestor(ICPPASTNewExpression.class).getInitializer() instanceof IASTInitializerList;
+        return isNewExpression(declarator) && declaratorProperties.getAncestor(ICPPASTNewExpression.class).getInitializer() instanceof IASTInitializerList;
     }
 
     private boolean isParameterDeclaration() {

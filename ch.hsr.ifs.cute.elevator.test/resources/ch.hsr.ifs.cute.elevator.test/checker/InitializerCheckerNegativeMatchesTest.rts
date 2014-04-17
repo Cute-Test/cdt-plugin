@@ -183,4 +183,14 @@ struct T
     S& s;
 };
 
+//!ShouldignoreTypedefs
+//@main.cpp
 
+typedef int km_per_hour;
+int main() { }
+
+//!ShouldIgnoreTypedefsWithTypeCasts
+//@main.cpp
+
+typedef int (*funcptr)(double); 
+int main() { }
