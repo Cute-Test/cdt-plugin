@@ -20,6 +20,7 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCastExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
@@ -49,7 +50,8 @@ public class DelaratorAnalyzer {
     }
     
     public boolean isElevationCandidate() {
-        return !isTemplateTypeSpecifier() 
+        return isConstructorCallWithEqualsInitializer() ||
+                !isTemplateTypeSpecifier() 
         && !isAlreadyElevated()  
         && !isClassMember() 
         && !requiresTypeConversion()
@@ -59,6 +61,17 @@ public class DelaratorAnalyzer {
         && !isPartOfTypedef()
         && !(declarator.getInitializer() == null && isReference());
     }
+    
+    private boolean isConstructorCallWithEqualsInitializer() {
+        if (isEqualsInitializer()) {
+            IASTInitializerClause clause = ((IASTEqualsInitializer)declarator.getInitializer()).getInitializerClause();
+            if (clause instanceof ICPPASTFunctionCallExpression) {
+                return ((ICPPASTFunctionCallExpression)(clause)).getImplicitNames()[0].resolveBinding() instanceof ICPPConstructor;
+            }
+        }
+        return false;
+    }
+    
     
     private boolean isPartOfTypedef() {
         return declaratorProperties.hasAncestor(IASTSimpleDeclaration.class) && declaratorProperties.getAncestor(IASTSimpleDeclaration.class).getDeclSpecifier().getStorageClass() == IASTDeclSpecifier.sc_typedef;

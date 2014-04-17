@@ -38,6 +38,10 @@ public class DeclaratorCollector extends ASTVisitor {
         return PROCESS_CONTINUE;
     }
     
+    private boolean containsFunctionCall(IASTInitializer iastInitializer) {
+        return isEqualsInitializer(iastInitializer) && ((IASTEqualsInitializer)iastInitializer).getInitializerClause() instanceof IASTFunctionCallExpression;
+    }
+
     public List<IASTDeclarator> getDeclarators() {
         return declarators;
     }

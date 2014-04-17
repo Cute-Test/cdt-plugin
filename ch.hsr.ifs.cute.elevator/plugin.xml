@@ -4,7 +4,7 @@
 	<extension
 		point="org.eclipse.cdt.codan.core.checkers">
 		 <checker
-		       class="ch.hsr.ifs.cute.elevator.checker.InitializerChecker"
+		       class="ch.hsr.ifs.cute.elevator.checker.InitializationChecker"
 		       id="ch.hsr.ifs.elevator.uniformInitialization"
 		       name="Elevator Warning Checker">
 		    <problem               
