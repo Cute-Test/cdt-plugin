@@ -124,7 +124,7 @@ public:
 	}
 };
 
-//!@ShouldElevateClassWithNewOperatorAndCopyConstructor
+//!@ShouldElevateInitializationWithNewOperatorAndCopyConstructor
 //@main.cpp
 struct C {
 	C(int a) : a { a } {}
@@ -145,7 +145,7 @@ int main(int argc, char const *argv[]) {
 	new C { 5 };
 }
 
-//!@ShouldElevateClassWithNewOperatorAndDefaultConstructor
+//!@ShouldElevateInitializationWithNewOperatorAndDefaultConstructor
 //@main.cpp
 struct C {};
 
@@ -160,17 +160,84 @@ int main(int argc, char const *argv[]) {
 	new C { };
 }
 
-//!@ShouldTransformDefaultInitialization
+//!@ShouldElevateInitializationWithNewOperatorAndAssignment
 //@main.cpp
-struct C{};
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
 
 int main(int argc, char const *argv[]) {
-	C c = C();
+	C * c = new C(5);
 }
 //=
-struct C{};
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
 
 int main(int argc, char const *argv[]) {
-	C c { };
+	C * c = new C { 5 };
+}
+
+//!@ShouldElevateInitializationWithNewOperatorAndConstructor
+//@main.cpp
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
+
+int main(int argc, char const *argv[]) {
+	new C(5);
+}
+
+//=
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
+
+int main(int argc, char const *argv[]) {
+	new C { 5 };
+}
+
+//!@ShouldTransformCopyInitializationUsingDefaultConstructor
+//@main.cpp
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
+
+int main(int argc, char const *argv[]) {
+	C c = C(1);
+}
+//=
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
+
+int main(int argc, char const *argv[]) {
+	C c { 1 };
+}
+
+//!@ShouldTransformCopyInitializationUsingUniformInitialization
+//@main.cpp
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
+
+int main(int argc, char const *argv[]) {
+	C c = C { 5 };
+}
+//=
+struct C {
+	C(int a) : a { a } {}
+	int a;
+};
+
+int main(int argc, char const *argv[]) {
+	C c { 5 };
 }
 

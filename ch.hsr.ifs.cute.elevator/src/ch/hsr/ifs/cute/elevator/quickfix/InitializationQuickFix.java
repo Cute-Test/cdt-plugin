@@ -23,7 +23,7 @@ import ch.hsr.ifs.cute.elevator.ast.NodeProperties;
 /**
  * quick fix
  */
-public class InitializerQuickFix extends AbstractAstRewriteQuickFix {
+public class InitializationQuickFix extends AbstractAstRewriteQuickFix {
 
     private IASTTranslationUnit ast;
 

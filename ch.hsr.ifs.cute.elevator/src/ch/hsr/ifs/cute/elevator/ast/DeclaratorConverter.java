@@ -5,9 +5,11 @@ import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 
 /**
  * Converts a declarator to a C++11 initializer list.
@@ -23,28 +25,33 @@ public class DeclaratorConverter {
     }
 
     public IASTDeclarator convert() {
-        IASTDeclarator newDeclarator = declarator.copy();
+        IASTDeclarator convertedDeclarator = declarator.copy();
         IASTInitializerList initList = declarator.getTranslationUnit().getASTNodeFactory().newInitializerList();
-        IASTInitializer initializer = newDeclarator.getInitializer();
+        IASTInitializer convertedInitializer = convertedDeclarator.getInitializer();
       
-        if (initializer instanceof IASTEqualsInitializer) {
-            IASTEqualsInitializer eqInitializer = (IASTEqualsInitializer) initializer;
+        if (convertedInitializer instanceof IASTEqualsInitializer) {
+            IASTEqualsInitializer eqInitializer = (IASTEqualsInitializer) convertedInitializer;
             if (eqInitializer.getInitializerClause() instanceof ICPPASTFunctionCallExpression) {
                 for (IASTInitializerClause clause :  ((ICPPASTFunctionCallExpression) eqInitializer.getInitializerClause()).getArguments()) {
                     initList.addClause(clause);
                 }
+            } else if (eqInitializer.getInitializerClause() instanceof ICPPASTSimpleTypeConstructorExpression){
+                IASTInitializer initializerList = ((ICPPASTSimpleTypeConstructorExpression) eqInitializer.getInitializerClause()).getInitializer();
+                if (initializerList instanceof IASTInitializerList) {
+                    initList = (IASTInitializerList) initializerList.copy(CopyStyle.withoutLocations);
+                }
             } else {
-                initList.addClause(((IASTEqualsInitializer) initializer).getInitializerClause());
+                initList.addClause(((IASTEqualsInitializer) convertedInitializer).getInitializerClause());
             }
-        } else if (initializer instanceof ICPPASTConstructorInitializer) {
-            for (IASTInitializerClause clause : ((ICPPASTConstructorInitializer) initializer).getArguments()) {
+        } else if (convertedInitializer instanceof ICPPASTConstructorInitializer) {
+            for (IASTInitializerClause clause : ((ICPPASTConstructorInitializer) convertedInitializer).getArguments()) {
                 initList.addClause(clause);
             }
-        } else if (initializer instanceof ICPPASTInitializerList) {
-            initList = (ICPPASTInitializerList) initializer;
+        } else if (convertedInitializer instanceof ICPPASTInitializerList) {
+            initList = (ICPPASTInitializerList) convertedInitializer;
         }
-        newDeclarator.setInitializer(initList);
-        return newDeclarator;
+        convertedDeclarator.setInitializer(initList);
+        return convertedDeclarator;
     }
 
 }

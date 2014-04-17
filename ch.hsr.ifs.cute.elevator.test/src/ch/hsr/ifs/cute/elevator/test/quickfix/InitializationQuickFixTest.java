@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanQuickfixTest;
 import ch.hsr.ifs.cute.elevator.checker.InitializationChecker;
-import ch.hsr.ifs.cute.elevator.quickfix.InitializerQuickFix;
+import ch.hsr.ifs.cute.elevator.quickfix.InitializationQuickFix;
 
 
 public class InitializationQuickFixTest extends CDTTestingCodanQuickfixTest {
@@ -19,7 +19,7 @@ public class InitializationQuickFixTest extends CDTTestingCodanQuickfixTest {
     public void runTest() throws Throwable {
         openActiveFileInEditor();
         for (IMarker marker : findMarkers()) {
-            runQuickFix(marker, new InitializerQuickFix());
+            runQuickFix(marker, new InitializationQuickFix());
         }
         assertEquals(getExpectedSource(), getCurrentSource());
     }

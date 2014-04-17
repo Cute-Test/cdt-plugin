@@ -21,7 +21,7 @@
   	<extension
          point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
       <resolution
-            class="ch.hsr.ifs.cute.elevator.quickfix.InitializerQuickFix"
+            class="ch.hsr.ifs.cute.elevator.quickfix.InitializationQuickFix"
             problemId="ch.hsr.ifs.elevator.uniformInitialization">
       </resolution>
    </extension>
