@@ -124,7 +124,7 @@ public:
 	}
 };
 
-//!@ShouldElevateInitializationWithNewOperatorAndCopyConstructor
+//!ShouldElevateInitializationWithNewOperatorAndCopyConstructor
 //@main.cpp
 struct C {
 	C(int a) : a { a } {}
@@ -145,7 +145,7 @@ int main(int argc, char const *argv[]) {
 	new C { 5 };
 }
 
-//!@ShouldElevateInitializationWithNewOperatorAndDefaultConstructor
+//!ShouldElevateInitializationWithNewOperatorAndDefaultConstructor
 //@main.cpp
 struct C {};
 
@@ -160,7 +160,7 @@ int main(int argc, char const *argv[]) {
 	new C { };
 }
 
-//!@ShouldElevateInitializationWithNewOperatorAndAssignment
+//!ShouldElevateInitializationWithNewOperatorAndAssignment
 //@main.cpp
 struct C {
 	C(int a) : a { a } {}
@@ -180,7 +180,7 @@ int main(int argc, char const *argv[]) {
 	C * c = new C { 5 };
 }
 
-//!@ShouldElevateInitializationWithNewOperatorAndConstructor
+//!ShouldElevateInitializationWithNewOperatorAndConstructor
 //@main.cpp
 struct C {
 	C(int a) : a { a } {}
@@ -201,7 +201,7 @@ int main(int argc, char const *argv[]) {
 	new C { 5 };
 }
 
-//!@ShouldTransformCopyInitializationUsingDefaultConstructor
+//!ShouldTransformCopyInitializationUsingDefaultConstructor
 //@main.cpp
 struct C {
 	C(int a) : a { a } {}
@@ -221,7 +221,7 @@ int main(int argc, char const *argv[]) {
 	C c { 1 };
 }
 
-//!@ShouldTransformCopyInitializationUsingUniformInitialization
+//!ShouldTransformCopyInitializationUsingUniformInitialization
 //@main.cpp
 struct C {
 	C(int a) : a { a } {}
