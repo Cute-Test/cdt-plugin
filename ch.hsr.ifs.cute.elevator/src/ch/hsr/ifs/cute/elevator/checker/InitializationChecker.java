@@ -34,14 +34,10 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
         DeclaratorCollector declaratorCollector = new DeclaratorCollector();
         ast.accept(declaratorCollector);
         for (IASTDeclarator declarator : declaratorCollector.getDeclarators()) {
-            reportProblem(PROBLEM_ID, getEnclosingDeclaration(declarator));
+            reportProblem(PROBLEM_ID, declarator);
         }
     }
 
-    private IASTNode getEnclosingDeclaration(IASTNode node) {
-        return node != null && node instanceof IASTDeclarator ? node : getEnclosingDeclaration(node.getParent());
-    }
-    
     @Override
     public void reportProblem(String id, IASTNode astNode, Object... args) {
         NodeProperties nodeProperties = new NodeProperties(astNode);       
