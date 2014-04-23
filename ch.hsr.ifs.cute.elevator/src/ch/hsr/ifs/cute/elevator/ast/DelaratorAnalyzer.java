@@ -11,7 +11,6 @@ import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
@@ -51,16 +50,17 @@ public class DelaratorAnalyzer {
     }
     
     public boolean isElevationCandidate() {
-        return !isTemplateTypeSpecifier() 
-        && !isAlreadyElevated()  
-        && !isClassMember() 
-        && !requiresTypeConversion()
-        && !isParameterDeclaration()
-        && !hasAutoType()
-        && !isPartOfCastExpression(declarator)
-        && !isPartOfTypedef()
-        && !isPartOfEqualsInitializationWithoutConstructorCall()
-        && !(declarator.getInitializer() == null && isReference());
+        return
+            !isAlreadyElevated()  &&
+            !isClassMember() &&
+            !isTemplateTypeSpecifier() &&
+            !requiresTypeConversion() &&
+            !isParameterDeclaration() &&
+            !hasAutoType() &&
+            !isPartOfCastExpression() &&
+            !isPartOfTypedef() &&
+            !isPartOfEqualsInitializationWithoutConstructorCall() &&
+            !(declarator.getInitializer() == null && isReference());
     }
     
     private boolean isPartOfEqualsInitializationWithoutConstructorCall() {
@@ -74,16 +74,15 @@ public class DelaratorAnalyzer {
         return false;
     }
     
-    
     private boolean isPartOfTypedef() {
         return declaratorProperties.hasAncestor(IASTSimpleDeclaration.class) && declaratorProperties.getAncestor(IASTSimpleDeclaration.class).getDeclSpecifier().getStorageClass() == IASTDeclSpecifier.sc_typedef;
     }
    
-    private boolean isNewExpression(IASTNode node) {
+    private boolean isNewExpression() {
         return declaratorProperties.hasAncestor(ICPPASTNewExpression.class);
     }
     
-    private boolean isPartOfCastExpression(IASTNode node) {
+    private boolean isPartOfCastExpression() {
         return declaratorProperties.hasAncestor(ICPPASTCastExpression.class);
     }
     
@@ -104,7 +103,7 @@ public class DelaratorAnalyzer {
     }
     
     private boolean isElevatedNewExpression() {   
-        return isNewExpression(declarator) && declaratorProperties.getAncestor(ICPPASTNewExpression.class).getInitializer() instanceof IASTInitializerList;
+        return isNewExpression() && declaratorProperties.getAncestor(ICPPASTNewExpression.class).getInitializer() instanceof IASTInitializerList;
     }
 
     private boolean isParameterDeclaration() {
@@ -137,8 +136,7 @@ public class DelaratorAnalyzer {
     private IType getVariableType() {
         IBinding x = declarator.getName().resolveBinding();
         return ((ICPPVariable) x).getType();
-    }
-    
+    } 
     
     /**
      * extracts the real type from references and qualifiers.
@@ -232,9 +230,9 @@ public class DelaratorAnalyzer {
         return true;
     }
     
-    /**
+    /*
      * Narrowing type conversion: conversion with precision loss, e.g. int x = 3.2;
-     * In contrast to copy initialization initializer list do not support narrowing conversions.
+     * In contrast to copy initialization, initializer lists do not support narrowing conversions.
      * int x = 3.2;  // valid
      * int x { 3.2 }; // invalid
      * @param target Target Type
