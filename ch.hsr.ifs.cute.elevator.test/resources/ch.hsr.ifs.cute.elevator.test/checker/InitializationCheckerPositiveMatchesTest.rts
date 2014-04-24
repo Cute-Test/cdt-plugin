@@ -128,4 +128,11 @@ int main(int argc, char const *argv[]) {
 	new C(5);
 }
 
+//!ShouldmarkUninitializedRunVariableInForLoops
+//@.config
+expectedMarkerLines=2
+//@main.cpp
+int main(int argc, char **argv) {
+	for (int i; i < 10; ++i) { }
+}
 

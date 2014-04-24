@@ -230,8 +230,6 @@ struct MeanCase {
 MeanCase mean_case(1, true);
 
 //!ShouldIgnoreDefaultInitializationiIfInitializerListConstructorExists
-//@.config
-expectedMarkerLines=9
 //@main.cpp
 #include <initializer_list>
 
@@ -242,3 +240,11 @@ struct MeanCase {
 };
 
 MeanCase mean_case;
+
+//!ShouldIgnoreRunVariableInitializationsInForLoops
+//@.config
+expectedMarkerLines=9
+//@main.cpp
+int main(int argc, char **argv) {
+	for (int i = 0; i < 10; ++i) { }
+}

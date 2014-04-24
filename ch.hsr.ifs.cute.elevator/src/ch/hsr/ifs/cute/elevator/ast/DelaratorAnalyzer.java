@@ -23,6 +23,7 @@ import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCastExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTForStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
@@ -65,10 +66,19 @@ public class DelaratorAnalyzer {
             !isPartOfCastExpression() &&
             !hasConstructorWithInitializerListArgument() && 
             !isPartOfTypedef() &&
+            !isInitializedAsRunVarInForLoop() &&
             !isPartOfEqualsInitializationWithoutConstructorCall() &&
-            !(declarator.getInitializer() == null && isReference());
+            !(!hasInitializer() && isReference());
+    }
+
+    private boolean hasInitializer() {
+        return declarator.getInitializer() != null;
     }
     
+    private boolean isInitializedAsRunVarInForLoop() {
+        return hasInitializer() && declaratorProperties.hasAncestor(ICPPASTForStatement.class) && declaratorProperties.getDistanceToAncestor(ICPPASTForStatement.class) == 3;
+    }
+
     private boolean isPartOfEqualsInitializationWithoutConstructorCall() {
         if (isEqualsInitializer()) {
             IASTInitializerClause clause = ((IASTEqualsInitializer)declarator.getInitializer()).getInitializerClause();
