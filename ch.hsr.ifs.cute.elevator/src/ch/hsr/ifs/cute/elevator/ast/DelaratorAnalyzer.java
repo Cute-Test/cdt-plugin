@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
+import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
@@ -17,6 +19,7 @@ import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
+import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCastExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
@@ -32,8 +35,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateArgument;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassType;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPConstructor;
+
+import ch.hsr.ifs.cute.elevator.Activator;
 
 
 /**
@@ -58,6 +63,7 @@ public class DelaratorAnalyzer {
             !isParameterDeclaration() &&
             !hasAutoType() &&
             !isPartOfCastExpression() &&
+            !hasConstructorWithInitializerListArgument() && 
             !isPartOfTypedef() &&
             !isPartOfEqualsInitializationWithoutConstructorCall() &&
             !(declarator.getInitializer() == null && isReference());
@@ -74,6 +80,39 @@ public class DelaratorAnalyzer {
         return false;
     }
     
+    private boolean hasConstructorWithInitializerListArgument() {
+        if (declarator instanceof IASTImplicitNameOwner) {
+            IASTImplicitName[] implicitNames = ((IASTImplicitNameOwner) declarator).getImplicitNames();  
+            for (IASTImplicitName name : implicitNames) {
+                if (name.getBinding() instanceof CPPConstructor) {       
+                    ICPPConstructor[] constructors = ((CPPConstructor)name.getBinding()).getClassOwner().getConstructors();
+                    for (ICPPConstructor constructor : constructors) {
+                        if (cotainsInitializerList(constructor)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+
+    private boolean cotainsInitializerList(ICPPConstructor constructor) {
+        for (ICPPParameter parameter : constructor.getParameters()) {
+            if (parameter.getType() instanceof ICPPClassType) {
+                ICPPClassType type = (ICPPClassType) parameter.getType();
+                try {
+                    return type.getScope().toString().equals("std") && type.getName().startsWith("initializer_list");
+                } catch (DOMException e) {
+                    Activator.log(e);
+                }
+            }
+        }
+        return false;
+        
+    }
+
     private boolean isPartOfTypedef() {
         return declaratorProperties.hasAncestor(IASTSimpleDeclaration.class) && declaratorProperties.getAncestor(IASTSimpleDeclaration.class).getDeclSpecifier().getStorageClass() == IASTDeclSpecifier.sc_typedef;
     }
@@ -133,9 +172,9 @@ public class DelaratorAnalyzer {
             return (declarator.getPointerOperators().length > 0)  && (declarator.getPointerOperators()[0] instanceof ICPPASTReferenceOperator);                   
     }
      
-    private IType getVariableType() {
+    private IType getType() {
         IBinding x = declarator.getName().resolveBinding();
-        return ((ICPPVariable) x).getType();
+        return ((IVariable) x).getType();
     } 
     
     /**
@@ -157,7 +196,7 @@ public class DelaratorAnalyzer {
      */
     private List<List<IType>> getConvertibleTargetTypes() {
         List<List<IType>> convertibleTypes = new ArrayList<List<IType>>();
-        final IType absoluteTargetType = getAbsoluteType(getVariableType());
+        final IType absoluteTargetType = getAbsoluteType(getType());
         if (absoluteTargetType instanceof ICPPBasicType) {
             ArrayList<IType> typeList = new ArrayList<IType>();
             typeList.add(absoluteTargetType);
@@ -198,12 +237,12 @@ public class DelaratorAnalyzer {
      * Gets the constructors of the target type of a declaration.
      */
     private ICPPConstructor[] getTypeConstructors() {
-        IType variableType = getVariableType();
+        IType type = getType();
         /*
          * While we should be using a test for ICPPClassType and not
          * CPPClassType, this results in an exception on getConstructors().
          */
-        return variableType instanceof CPPClassType ? ((ICPPClassType) variableType).getConstructors() : new ICPPConstructor[0];
+        return type instanceof CPPClassType ? ((ICPPClassType) type).getConstructors() : new ICPPConstructor[0];
     }
     
     private boolean isTypeCompatible(List<List<IType>> convertibleTypes, List<IType> sourceTypes) {

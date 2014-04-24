@@ -204,3 +204,41 @@ S create() {
 }
 
 S s1 = create();
+
+//!ShouldIgnoreInitializationiIfTypeCompatibleInitializerListConstructorExists
+//@main.cpp
+#include <initializer_list>
+
+struct MeanCase {
+    MeanCase(std::initializer_list<int> initializerList) {}
+    MeanCase(int i, int b) {}
+    MeanCase(int i = 0) {}
+};
+
+MeanCase mean_case (1, 2);
+
+//!ShouldIgnoreInitializationiIfTypeINCompatibleInitializerListConstructorExists
+//@main.cpp
+#include <initializer_list>
+
+struct MeanCase {
+    MeanCase(int i, bool b) {}
+    MeanCase(int i = 0) {}
+    MeanCase(std::initializer_list<int> initializerList) {}
+};
+
+MeanCase mean_case(1, true);
+
+//!ShouldIgnoreDefaultInitializationiIfInitializerListConstructorExists
+//@.config
+expectedMarkerLines=9
+//@main.cpp
+#include <initializer_list>
+
+struct MeanCase {
+    MeanCase(int i, bool b) {}
+    MeanCase(int i = 0) {}
+    MeanCase(std::initializer_list<int> initializerList) {}
+};
+
+MeanCase mean_case;

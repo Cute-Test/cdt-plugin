@@ -2,6 +2,7 @@ package ch.hsr.ifs.cute.elevator.test.checker;
 
 import java.util.Properties;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
@@ -14,6 +15,12 @@ public class InitializationCheckerPositiveMatchesTest extends CDTTestingCodanChe
 	@Override
 	protected String getProblemId() {
 		return InitializationChecker.PROBLEM_ID;
+	}
+	
+	@Before
+	public void setUp() throws Exception {
+	    addIncludeDirPath("include");
+	    super.setUp();
 	}
 
 	@Override

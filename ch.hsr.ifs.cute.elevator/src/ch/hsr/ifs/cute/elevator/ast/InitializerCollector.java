@@ -27,23 +27,25 @@ public class InitializerCollector extends ASTVisitor {
 
     @Override
     public int visit(IASTInitializer initializer) {
-        if (initializer instanceof ICPPASTConstructorChainInitializer) {
+         if (initializer instanceof ICPPASTConstructorChainInitializer) {
             ICPPASTConstructorChainInitializer ctorInitializer = (ICPPASTConstructorChainInitializer) initializer;
             collectIfElevationCandidate(ctorInitializer);
         }
         return PROCESS_SKIP;
     }
 
+   
+
     private void collectIfElevationCandidate(ICPPASTConstructorChainInitializer initializer) {
         if (!(isElevated(initializer) || isReference(initializer))) {
             initializers.add(initializer);
         }
     }
-    
+
     private boolean isReference(ICPPASTConstructorChainInitializer initializer) {
         IASTName identifier = initializer.getMemberInitializerId();
         IBinding binding = identifier.resolveBinding();
-        return binding instanceof IVariable && ((IVariable)binding).getType() instanceof ICPPReferenceType;
+        return binding instanceof IVariable && ((IVariable) binding).getType() instanceof ICPPReferenceType;
     }
 
     private boolean isElevated(ICPPASTConstructorChainInitializer initializer) {

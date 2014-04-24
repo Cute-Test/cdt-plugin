@@ -115,7 +115,7 @@ int main() {
 	new Worker;
 }
 
-//!@ShouldMarkNewOperatorInstantiationsWithCopyConstructor
+//!ShouldMarkNewOperatorInstantiationsWithCopyConstructor
 //@.config
 expectedMarkerLines=7
 //@main.cpp
@@ -127,3 +127,5 @@ struct C {
 int main(int argc, char const *argv[]) {
 	new C(5);
 }
+
+

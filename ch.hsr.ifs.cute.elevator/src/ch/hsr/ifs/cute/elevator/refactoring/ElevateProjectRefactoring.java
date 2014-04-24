@@ -64,7 +64,6 @@ public class ElevateProjectRefactoring extends CRefactoring {
         for (IASTDeclarator declarator : declaratorCollector.getDeclarators()) {
             IASTDeclarator newNode = new DeclaratorConverter(declarator).convert();
             collectChange(collector, declarator, newNode);
-        
         }
     }
 

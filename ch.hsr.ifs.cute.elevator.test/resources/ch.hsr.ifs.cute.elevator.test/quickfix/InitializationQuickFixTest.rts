@@ -95,11 +95,19 @@ int x(), y { };
 
 //!ShouldElevateTemplateClasses
 //@main.cpp
-namespace std { template<class T1, class T2> class pair {}; }
+namespace std {
+template<class T1, class T2> class pair {
+	pair(int a, int b) {}
+};
+}
 std::pair<int,int> p1(3,4);
 
 //=
-namespace std { template<class T1, class T2> class pair {}; }
+namespace std {
+template<class T1, class T2> class pair {
+	pair(int a, int b) {}
+};
+}
 std::pair<int, int> p1 { 3, 4 };
 
 //!ShouldElevateConstructorInitList
