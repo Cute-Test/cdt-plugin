@@ -29,6 +29,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
@@ -44,7 +45,6 @@ import ch.hsr.ifs.cute.elevator.Activator;
 
 /**
  * Checks if a specified declaration can be elevated to C++11 initializer.
- *
  */
 public class DelaratorAnalyzer {
     private final IASTDeclarator declarator;
@@ -67,8 +67,17 @@ public class DelaratorAnalyzer {
             !hasConstructorWithInitializerListArgument() && 
             !isPartOfTypedef() &&
             !isInitializedAsRunVarInForLoop() &&
+            !isTemplateArgument() &&
             !isPartOfEqualsInitializationWithoutConstructorCall() &&
-            !(!hasInitializer() && isReference());
+            !isUninitializedReference();
+    }
+
+    private boolean isTemplateArgument() {
+        return declaratorProperties.hasAncestor(ICPPASTTemplateParameter.class);
+    }
+
+    private boolean isUninitializedReference() {
+        return !hasInitializer() && isReference();
     }
 
     private boolean hasInitializer() {
@@ -107,7 +116,6 @@ public class DelaratorAnalyzer {
         return false;
     }
     
-
     private boolean cotainsInitializerList(ICPPConstructor constructor) {
         for (ICPPParameter parameter : constructor.getParameters()) {
             if (parameter.getType() instanceof ICPPClassType) {
@@ -120,7 +128,6 @@ public class DelaratorAnalyzer {
             }
         }
         return false;
-        
     }
 
     private boolean isPartOfTypedef() {
@@ -160,7 +167,7 @@ public class DelaratorAnalyzer {
     }
 
     private boolean isTemplateTypeSpecifier() {
-        return declarator.getParent().getParent() instanceof ICPPASTTemplateId;
+        return declaratorProperties.hasAncestor(ICPPASTTemplateId.class);
     }
     
     private boolean hasAutoType() {
@@ -179,7 +186,7 @@ public class DelaratorAnalyzer {
     }
     
     private boolean isReference() {
-            return (declarator.getPointerOperators().length > 0)  && (declarator.getPointerOperators()[0] instanceof ICPPASTReferenceOperator);                   
+            return (declarator.getPointerOperators().length > 0) && (declarator.getPointerOperators()[0] instanceof ICPPASTReferenceOperator);                   
     }
      
     private IType getType() {

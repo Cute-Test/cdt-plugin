@@ -242,9 +242,15 @@ struct MeanCase {
 MeanCase mean_case;
 
 //!ShouldIgnoreRunVariableInitializationsInForLoops
-//@.config
-expectedMarkerLines=9
 //@main.cpp
 int main(int argc, char **argv) {
 	for (int i = 0; i < 10; ++i) { }
 }
+
+//!ShouldIgnoreTemplateDefaultArguments
+//@main.cpp
+template <typename T = char>
+class C {
+private:
+	T field;
+};

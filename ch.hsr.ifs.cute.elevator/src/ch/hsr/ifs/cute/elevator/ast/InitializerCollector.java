@@ -34,8 +34,6 @@ public class InitializerCollector extends ASTVisitor {
         return PROCESS_SKIP;
     }
 
-   
-
     private void collectIfElevationCandidate(ICPPASTConstructorChainInitializer initializer) {
         if (!(isElevated(initializer) || isReference(initializer))) {
             initializers.add(initializer);

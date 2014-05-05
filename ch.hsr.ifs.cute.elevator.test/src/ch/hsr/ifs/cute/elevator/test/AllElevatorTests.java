@@ -20,8 +20,6 @@ import ch.hsr.ifs.cute.elevator.test.checker.InitializationCheckerPositiveMatche
 import ch.hsr.ifs.cute.elevator.test.quickfix.InitializationQuickFixTest;
 import ch.hsr.ifs.cute.elevator.test.refactoring.ElevateProjectRefactoringTest;
 
-
-
 @RunWith(Suite.class)
 @SuiteClasses({
 //@formatter:off
