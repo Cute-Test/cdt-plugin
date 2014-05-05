@@ -17,21 +17,21 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
     public static String PROBLEM_ID = "ch.hsr.ifs.elevator.uniformInitialization";
 
     @Override
-    public void processAst(IASTTranslationUnit ast) {
+    public void processAst(final IASTTranslationUnit ast) {
         collectAndReportDeclarators(ast);
         collectAndReportInitializers(ast);
     }
 
-    private void collectAndReportInitializers(IASTTranslationUnit ast) {
-        InitializerCollector initializerCollector = new InitializerCollector();
+    private void collectAndReportInitializers(final IASTTranslationUnit ast) {
+        final InitializerCollector initializerCollector = new InitializerCollector();
         ast.accept(initializerCollector);
         for (ICPPASTConstructorChainInitializer initializer : initializerCollector.getInitializers()) {
             reportProblem(PROBLEM_ID, initializer);
         }
     }
 
-    private void collectAndReportDeclarators(IASTTranslationUnit ast) {
-        DeclaratorCollector declaratorCollector = new DeclaratorCollector();
+    private void collectAndReportDeclarators(final IASTTranslationUnit ast) {
+        final DeclaratorCollector declaratorCollector = new DeclaratorCollector();
         ast.accept(declaratorCollector);
         for (IASTDeclarator declarator : declaratorCollector.getDeclarators()) {
             reportProblem(PROBLEM_ID, declarator);
@@ -39,11 +39,11 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
     }
 
     @Override
-    public void reportProblem(String id, IASTNode astNode, Object... args) {
-        NodeProperties nodeProperties = new NodeProperties(astNode);       
+    public void reportProblem(final String id, IASTNode astNode, final Object... args) {
+        final NodeProperties nodeProperties = new NodeProperties(astNode);
         if (nodeProperties.hasAncestor(ICPPASTNewExpression.class)) {
             astNode = nodeProperties.getAncestor(ICPPASTNewExpression.class);
-        } 
+        }
         super.reportProblem(id, astNode, args);
     }
 }

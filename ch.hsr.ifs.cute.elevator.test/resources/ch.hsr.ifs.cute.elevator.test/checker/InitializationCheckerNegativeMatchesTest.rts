@@ -254,3 +254,9 @@ class C {
 private:
 	T field;
 };
+
+//!ShouldIgnoreTypeIds
+//@main.cpp
+int main(int argc, char **argv) {
+	sizeof(int);
+}

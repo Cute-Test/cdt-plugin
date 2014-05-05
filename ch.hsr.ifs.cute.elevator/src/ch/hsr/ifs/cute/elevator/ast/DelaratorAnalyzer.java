@@ -15,6 +15,7 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTTypeId;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IQualifierType;
@@ -29,7 +30,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
@@ -67,13 +67,13 @@ public class DelaratorAnalyzer {
             !hasConstructorWithInitializerListArgument() && 
             !isPartOfTypedef() &&
             !isInitializedAsRunVarInForLoop() &&
-            !isTemplateArgument() &&
+            !isTypeId() &&
             !isPartOfEqualsInitializationWithoutConstructorCall() &&
             !isUninitializedReference();
     }
 
-    private boolean isTemplateArgument() {
-        return declaratorProperties.hasAncestor(ICPPASTTemplateParameter.class);
+    private boolean isTypeId() {
+        return declaratorProperties.hasAncestor(IASTTypeId.class) && !isNewExpression();
     }
 
     private boolean isUninitializedReference() {

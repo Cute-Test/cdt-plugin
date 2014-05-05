@@ -21,11 +21,15 @@ import ch.hsr.ifs.cute.elevator.ast.NewExpressionConverter;
 import ch.hsr.ifs.cute.elevator.ast.NodeProperties;
 
 /**
- * quick fix
+ * Elevates declarations, new-expressions, and constructor chains to the new Uniform Initializer syntax.
  */
 public class InitializationQuickFix extends AbstractAstRewriteQuickFix {
 
+    private static final int AST_STYLE = ITranslationUnit.AST_SKIP_INDEXED_HEADERS | ITranslationUnit.AST_PARSE_INACTIVE_CODE;
+
     private IASTTranslationUnit ast;
+    private NodeProperties astNodeProperties;
+    private IMarker marker;
 
     public String getLabel() {
         return "Replace with uniform variable initialization";
@@ -34,29 +38,37 @@ public class InitializationQuickFix extends AbstractAstRewriteQuickFix {
     @Override
     public void modifyAST(final IIndex index, final IMarker marker) {
         try {
-            int astFlags = ITranslationUnit.AST_SKIP_INDEXED_HEADERS | ITranslationUnit.AST_PARSE_INACTIVE_CODE;
-            ast = getTranslationUnitViaEditor(marker).getAST(index, astFlags);
-            IASTNode astNode = getAstNameFromMarker(marker);
-            NodeProperties astNodeProperties = new NodeProperties(astNode);
-            
-            if (astNodeProperties.hasAncestor(ICPPASTNewExpression.class)) {               
-                ICPPASTNewExpression expression = astNodeProperties.getAncestor(ICPPASTNewExpression.class);                
-                ICPPASTNewExpression convertedExpression = new NewExpressionConverter(expression).convert();             
-                performChange(expression, convertedExpression);
+            this.marker = marker;
+            this.ast = getTranslationUnitViaWorkspace(marker).getAST(index, AST_STYLE);
+            this.astNodeProperties = new NodeProperties(getAstNameFromMarker(marker));
+            if (astNodeProperties.hasAncestor(ICPPASTNewExpression.class)) {
+                transformNewExpression();
             } else if (astNodeProperties.hasAncestor(IASTDeclarator.class)) {
-                IASTDeclarator declarator = astNodeProperties.getAncestor(IASTDeclarator.class);
-                IASTDeclarator convertedDeclarator = new DeclaratorConverter(declarator).convert();
-                performChange(declarator, convertedDeclarator);
-                
+                transformDeclarator();
             } else if (astNodeProperties.hasAncestor(ICPPASTConstructorChainInitializer.class)) {
-                ICPPASTConstructorChainInitializer initializer = astNodeProperties.getAncestor(ICPPASTConstructorChainInitializer.class);
-                ICPPASTConstructorChainInitializer convertedInitializer = new ConstructorChainConverter(initializer).convert();
-                performChange(initializer, convertedInitializer);
+                transformConstructorchainInitializer();
             }
-            marker.delete();
         } catch (CoreException e) {
             Activator.log(e);
         }
+    }
+
+    private void transformConstructorchainInitializer() throws CoreException {
+        ICPPASTConstructorChainInitializer initializer = astNodeProperties.getAncestor(ICPPASTConstructorChainInitializer.class);
+        ICPPASTConstructorChainInitializer convertedInitializer = new ConstructorChainConverter(initializer).convert();
+        performChange(initializer, convertedInitializer);
+    }
+
+    private void transformDeclarator() throws CoreException {
+        IASTDeclarator declarator = astNodeProperties.getAncestor(IASTDeclarator.class);
+        IASTDeclarator convertedDeclarator = new DeclaratorConverter(declarator).convert();
+        performChange(declarator, convertedDeclarator);
+    }
+
+    private void transformNewExpression() throws CoreException {
+        ICPPASTNewExpression expression = astNodeProperties.getAncestor(ICPPASTNewExpression.class);
+        ICPPASTNewExpression convertedExpression = new NewExpressionConverter(expression).convert();
+        performChange(expression, convertedExpression);
     }
 
     private void performChange(IASTNode target, IASTNode replacement) throws CoreException {
@@ -64,11 +76,12 @@ public class InitializationQuickFix extends AbstractAstRewriteQuickFix {
         rewrite.replace(target, replacement, null);
         Change change = rewrite.rewriteAST();
         change.perform(new NullProgressMonitor());
+        marker.delete();
     }
-    
+
     private IASTNode getAstNameFromMarker(IMarker marker) {
         int markerOffset = marker.getAttribute(IMarker.CHAR_START, -1);
-        int markerLength = marker.getAttribute(IMarker.CHAR_END, -1) - markerOffset;   
+        int markerLength = marker.getAttribute(IMarker.CHAR_END, -1) - markerOffset;
         return ast.getNodeSelector(null).findEnclosingNode(markerOffset, markerLength);
     }
 }
