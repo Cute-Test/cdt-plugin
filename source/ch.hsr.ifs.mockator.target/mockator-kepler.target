@@ -10,13 +10,13 @@
 <repository location="http://download.eclipse.org/tools/cdt/releases/kepler/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="4.3.2.M20140221-1700"/>
-<unit id="org.eclipse.sdk.ide" version="4.3.2.M20140221-1700"/>
+<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.9.2.v20140203-1126"/>
 <repository location="http://download.eclipse.org/releases/kepler"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="ch.hsr.ifs.cute.feature.feature.group" version="4.6.0.201403271102"/>
+<unit id="ch.hsr.ifs.cute.feature.feature.group" version="4.6.0.201405050921"/>
 <repository location="http://cute-test.com/updatesite/development"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
