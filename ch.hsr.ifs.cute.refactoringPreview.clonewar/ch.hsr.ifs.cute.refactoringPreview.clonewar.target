@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="ch.hsr.ifs.cute.refactoringPreview.clonewar" sequenceNumber="71">
+<?pde version="3.8"?><target name="ch.hsr.ifs.cute.refactoringPreview.clonewar" sequenceNumber="91">
 <locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.cdt.sdk.feature.group" version="8.3.0.201402142303"/>
+<repository location="http://download.eclipse.org/releases/kepler"/>
+</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
 <unit id="org.eclipse.platform.ide" version="3.8.1.M20120914-1540"/>
 <unit id="org.eclipse.platform.sdk" version="3.8.1.M20120914-1540"/>
@@ -8,17 +12,8 @@
 <repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
-<repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="org.eclipse.cdt.sdk.feature.group" version="8.0.2.201202111925"/>
-<unit id="org.eclipse.cdt.feature.group" version="8.0.2.201202111925"/>
-<repository location="http://download.eclipse.org/tools/cdt/releases/indigo"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
-<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="1.0.2.201207250947"/>
-<repository location="http://dev.ifs.hsr.ch/updatesites/cdttesting/indigo"/>
+<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="3.2.2.201403241259"/>
+<repository location="http://dev.ifs.hsr.ch/updatesites/cdttesting/kepler"/>
 </location>
 </locations>
 </target>
