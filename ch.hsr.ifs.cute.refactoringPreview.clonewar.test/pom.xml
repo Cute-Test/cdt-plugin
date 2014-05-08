@@ -21,7 +21,7 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<testSuite>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</testSuite>
-					<testClass>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.AllCloneWarTests</testClass>
+					<testClass>ch.hsr.ifs.cute.refactoringPreview.clonewar.test.CloneWarAllTests</testClass>
 					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 					<useUIHarness>true</useUIHarness>
 					<argLine>${os-jvm-flags}</argLine>
