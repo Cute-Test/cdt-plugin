@@ -99,7 +99,7 @@ public class ETTPTypeTransform extends Transform {
         if (!getConfig().hasPerformableAction(type))
             return;
         ICPPASTSimpleTypeTemplateParameter templParam = createTemplateParam(type);
-        if (type.shouldDefault())
+        if (type.shouldDefault() && type.getCallSpecificDefaultType() != null)
             templParam.setDefaultType(createTypeId(type));
         templParams.add(templParam);
     }

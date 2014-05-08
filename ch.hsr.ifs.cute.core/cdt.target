@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="cdt" sequenceNumber="66">
+<?pde version="3.8"?><target name="cdt" sequenceNumber="67">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.cdt.sdk.feature.group" version="8.3.0.201402142303"/>
@@ -12,8 +12,9 @@
 <repository location="http://download.eclipse.org/eclipse/updates/4.3"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="3.2.2.201403241259"/>
-<repository location="http://dev.ifs.hsr.ch/updatesites/cdttesting/kepler"/>
+<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="3.2.2.201405080653"/>
+<unit id="ch.hsr.ifs.cdttesting.tools.feature.feature.group" version="3.2.2.201405080653"/>
+<repository location="http://cevelop.com/cdt-test-plugins/development"/>
 </location>
 </locations>
 </target>

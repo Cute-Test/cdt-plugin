@@ -3,14 +3,6 @@
 	<name>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</name>
 	<comment></comment>
 	<projects>
-		<project>org.eclipse.cdt.core</project>
-		<project>org.eclipse.cdt.core.linux</project>
-		<project>org.eclipse.cdt.core.linux.x86</project>
-		<project>org.eclipse.cdt.core.tests</project>
-		<project>org.eclipse.cdt.refactoring</project>
-		<project>org.eclipse.cdt.refactoring.tests</project>
-		<project>org.eclipse.cdt.ui</project>
-		<project>org.eclipse.cdt.ui.tests</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -28,14 +20,8 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>org.maven.ide.eclipse.maven2Builder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.maven.ide.eclipse.maven2Nature</nature>
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
