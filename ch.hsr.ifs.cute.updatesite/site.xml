@@ -21,6 +21,9 @@
    <feature url="features/ch.hsr.ifs.cute.elevator.feature_4.7.0.qualifier.jar" id="ch.hsr.ifs.cute.elevator.feature" version="4.7.0.qualifier">
       <category name="OptFeatures"/>
    </feature>
+   <feature url="features/ch.hsr.ifs.cute.refactoringPreview.clonewar.feature_4.7.0.qualifier.jar" id="ch.hsr.ifs.cute.refactoringPreview.clonewar.feature" version="4.7.0.qualifier">
+      <category name="OptFeatures"/>
+   </feature>
    <category-def name="CUTE Plugin" label="CUTE Plugin"/>
    <category-def name="OptFeatures" label="CUTE Optional Features"/>
 </site>
