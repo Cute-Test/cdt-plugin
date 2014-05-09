@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.feature"
       label="%featureName"
-      version="4.6.0.qualifier"
+      version="4.7.0.qualifier"
       provider-name="%providerName"
       plugin="ch.hsr.ifs.cute.ui"
       image="eclipse_update_120.jpg">
@@ -71,48 +71,48 @@
          id="ch.hsr.ifs.testframework"
          download-size="0"
          install-size="0"
-         version="4.6.0.qualifier"
+         version="4.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.core"
          download-size="0"
          install-size="0"
-         version="4.6.0.qualifier"
+         version="4.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.ui"
          download-size="0"
          install-size="0"
-         version="4.6.0.qualifier"
+         version="4.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.cuteExtensions"
          download-size="0"
          install-size="0"
-         version="4.6.0.qualifier"
+         version="4.7.0.qualifier"
          fragment="true"/>
 
    <plugin
          id="ch.hsr.ifs.cute.help"
          download-size="0"
          install-size="0"
-         version="4.6.0.qualifier"/>
+         version="4.7.0.qualifier"/>
 
    <plugin
          id="ch.hsr.ifs.cute.tdd"
          download-size="0"
          install-size="0"
-         version="4.6.0.qualifier"
+         version="4.7.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.headers"
          download-size="0"
          install-size="0"
-         version="4.6.0.qualifier"
+         version="4.7.0.qualifier"
          unpack="false"/>
 
 </feature>
