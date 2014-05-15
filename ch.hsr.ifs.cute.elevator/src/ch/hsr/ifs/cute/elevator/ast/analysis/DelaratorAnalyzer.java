@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.elevator.ast;
+package ch.hsr.ifs.cute.elevator.ast.analysis;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
+import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
@@ -27,6 +28,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTForStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTPackExpansionExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
@@ -69,13 +71,36 @@ public class DelaratorAnalyzer {
             !isInitializedAsRunVarInForLoop() &&
             !isTypeId() &&
             !isPartOfEqualsInitializationWithoutConstructorCall() &&
-            !isUninitializedReference();
+            !isUninitializedReference() &&
+            !containsPackExpansion();
+    }
+
+    /**
+     * Checks if the initializer contains a PackExpansionExpression.
+     * 
+     * Initializers with PackExpansionExpressions have to be filtered out because ASTWriter
+     * does not yet support them. As soon as this is fixed, they can be included again.
+     * @return
+     */
+    private boolean containsPackExpansion() {
+        IASTInitializer initializer = declarator.getInitializer();
+        if (isNewExpression()) {
+            initializer = declaratorProperties.getAncestor(ICPPASTNewExpression.class).getInitializer();
+        }
+        if (initializer instanceof ICPPASTConstructorInitializer) {
+           for (IASTInitializerClause clause :  ((ICPPASTConstructorInitializer) initializer).getArguments()) {
+               if (clause instanceof ICPPASTPackExpansionExpression) {
+                  return true;
+              }
+           }
+        }  
+        return false;
     }
 
     private boolean isTypeId() {
         return declaratorProperties.hasAncestor(IASTTypeId.class) && !isNewExpression();
     }
-
+    
     private boolean isUninitializedReference() {
         return !hasInitializer() && isReference();
     }
@@ -89,7 +114,7 @@ public class DelaratorAnalyzer {
     }
 
     private boolean isPartOfEqualsInitializationWithoutConstructorCall() {
-        if (isEqualsInitializer()) {
+        if (hasInitializerType(IASTEqualsInitializer.class)) {
             IASTInitializerClause clause = ((IASTEqualsInitializer)declarator.getInitializer()).getInitializerClause();
             if (clause instanceof ICPPASTFunctionCallExpression) {
                 IASTImplicitName[] implicitNames = ((ICPPASTFunctionCallExpression)(clause)).getImplicitNames();
@@ -142,20 +167,12 @@ public class DelaratorAnalyzer {
         return declaratorProperties.hasAncestor(ICPPASTCastExpression.class);
     }
     
-    private boolean isConstructorInitializer() {
-        return declarator.getInitializer() instanceof ICPPASTConstructorInitializer;
-    }
-
-    private boolean isEqualsInitializer() {
-        return declarator.getInitializer() instanceof IASTEqualsInitializer;
+    private boolean hasInitializerType(Class<? extends IASTInitializer> initializerClass) {
+        return declarator.getInitializer() != null && initializerClass.isInstance(declarator.getInitializer());
     }
      
     private boolean isAlreadyElevated() {
-       return hasInitializerListInitializer() || isElevatedNewExpression();
-    }
-
-    private boolean hasInitializerListInitializer() {
-        return declarator.getInitializer() != null && declarator.getInitializer() instanceof IASTInitializerList;
+       return hasInitializerType(IASTInitializerList.class) || isElevatedNewExpression();
     }
     
     private boolean isElevatedNewExpression() {   
@@ -308,7 +325,7 @@ public class DelaratorAnalyzer {
     }
     
     private boolean requiresTypeConversion() {
-        if (!isEqualsInitializer() && !isConstructorInitializer()) {
+        if (!hasInitializerType(IASTEqualsInitializer.class) && !hasInitializerType(ICPPASTConstructorInitializer.class)) {
             return false;
         }
         List<IType> sourceTypes = getSourceTypes();
@@ -317,10 +334,10 @@ public class DelaratorAnalyzer {
     
 
     private List<IType> getSourceTypes() {
-        if (isEqualsInitializer()) {
+        if (hasInitializerType(IASTEqualsInitializer.class)) {
             return getEqualsInitializerSourceTypes();
         } 
-        if (isConstructorInitializer()) {
+        if (hasInitializerType(ICPPASTConstructorInitializer.class)) {
             return getConstructorInitializerSourceTypes();
         }
         return Collections.emptyList();

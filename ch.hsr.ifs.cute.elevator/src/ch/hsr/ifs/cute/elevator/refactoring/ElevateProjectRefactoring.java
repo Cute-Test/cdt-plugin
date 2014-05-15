@@ -23,10 +23,10 @@ import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.TextEditGroup;
 
-import ch.hsr.ifs.cute.elevator.ast.ConstructorChainConverter;
-import ch.hsr.ifs.cute.elevator.ast.DeclaratorCollector;
-import ch.hsr.ifs.cute.elevator.ast.DeclaratorConverter;
-import ch.hsr.ifs.cute.elevator.ast.InitializerCollector;
+import ch.hsr.ifs.cute.elevator.ast.analysis.DeclaratorCollector;
+import ch.hsr.ifs.cute.elevator.ast.analysis.InitializerCollector;
+import ch.hsr.ifs.cute.elevator.ast.transformation.ConstructorChainConverter;
+import ch.hsr.ifs.cute.elevator.ast.transformation.DeclaratorConverter;
 
 @SuppressWarnings("restriction")
 public class ElevateProjectRefactoring extends CRefactoring {

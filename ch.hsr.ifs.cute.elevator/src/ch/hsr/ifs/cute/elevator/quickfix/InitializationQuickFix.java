@@ -15,10 +15,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ltk.core.refactoring.Change;
 
-import ch.hsr.ifs.cute.elevator.ast.ConstructorChainConverter;
-import ch.hsr.ifs.cute.elevator.ast.DeclaratorConverter;
-import ch.hsr.ifs.cute.elevator.ast.NewExpressionConverter;
-import ch.hsr.ifs.cute.elevator.ast.NodeProperties;
+import ch.hsr.ifs.cute.elevator.ast.analysis.NodeProperties;
+import ch.hsr.ifs.cute.elevator.ast.transformation.ConstructorChainConverter;
+import ch.hsr.ifs.cute.elevator.ast.transformation.DeclaratorConverter;
+import ch.hsr.ifs.cute.elevator.ast.transformation.NewExpressionConverter;
 
 /**
  * Elevates declarations, new-expressions, and constructor chains to the new Uniform Initializer syntax.

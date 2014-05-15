@@ -8,9 +8,9 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 
-import ch.hsr.ifs.cute.elevator.ast.DeclaratorCollector;
-import ch.hsr.ifs.cute.elevator.ast.InitializerCollector;
-import ch.hsr.ifs.cute.elevator.ast.NodeProperties;
+import ch.hsr.ifs.cute.elevator.ast.analysis.DeclaratorCollector;
+import ch.hsr.ifs.cute.elevator.ast.analysis.InitializerCollector;
+import ch.hsr.ifs.cute.elevator.ast.analysis.NodeProperties;
 
 public class InitializationChecker extends AbstractIndexAstChecker implements IChecker {
 

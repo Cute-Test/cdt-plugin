@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.elevator.ast;
+package ch.hsr.ifs.cute.elevator.ast.transformation;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;

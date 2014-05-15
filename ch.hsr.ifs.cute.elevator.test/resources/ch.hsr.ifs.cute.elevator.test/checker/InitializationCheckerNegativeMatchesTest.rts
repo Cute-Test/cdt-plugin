@@ -260,3 +260,10 @@ private:
 int main(int argc, char **argv) {
 	sizeof(int);
 }
+
+//!ShouldIgnorePackExpansionsUntilASTWriterSupportsThem
+//@main.cpp
+template<class T, class ARGS>
+void function(T, ARGS && args...) {
+	new T (args...);
+}

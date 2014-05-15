@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.elevator.ast;
+package ch.hsr.ifs.cute.elevator.ast.analysis;
 
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
