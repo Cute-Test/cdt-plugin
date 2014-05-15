@@ -1,16 +1,20 @@
 package ch.hsr.ifs.cute.elevator.ast.analysis;
 
+import static ch.hsr.ifs.cute.elevator.ast.analysis.conditions.Condition.not;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
-import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
+
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.Condition;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.ContainsPackExpansion;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.HasInitializerListConstructor;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.HasNarrowingTypeConversion;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsElevated;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsReference;
 
 /**
  * ASTVisitor that collects all ConstructorChainInitializers.
@@ -19,35 +23,32 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 public class InitializerCollector extends ASTVisitor {
 
     private final List<ICPPASTConstructorChainInitializer> initializers;
+    private final Condition isElevationCandidate =        
+                not(
+                    new IsElevated()
+                    .or(new HasNarrowingTypeConversion())
+                    .or(new IsReference())
+                    .or(new ContainsPackExpansion())
+                    .or(new HasInitializerListConstructor())
+                );
 
     public InitializerCollector() {
-        initializers = new ArrayList<ICPPASTConstructorChainInitializer>();
+        initializers = new ArrayList<>();
         shouldVisitInitializers = true;
     }
 
     @Override
-    public int visit(IASTInitializer initializer) {
-         if (initializer instanceof ICPPASTConstructorChainInitializer) {
-            ICPPASTConstructorChainInitializer ctorInitializer = (ICPPASTConstructorChainInitializer) initializer;
-            collectIfElevationCandidate(ctorInitializer);
+    public int visit(final IASTInitializer initializer) {
+        if (initializer instanceof ICPPASTConstructorChainInitializer) {
+            collectIfElevationCandidate((ICPPASTConstructorChainInitializer) initializer);
         }
         return PROCESS_SKIP;
     }
 
     private void collectIfElevationCandidate(ICPPASTConstructorChainInitializer initializer) {
-        if (!(isElevated(initializer) || isReference(initializer))) {
+        if (isElevationCandidate.satifies(initializer)) {
             initializers.add(initializer);
         }
-    }
-
-    private boolean isReference(ICPPASTConstructorChainInitializer initializer) {
-        IASTName identifier = initializer.getMemberInitializerId();
-        IBinding binding = identifier.resolveBinding();
-        return binding instanceof IVariable && ((IVariable) binding).getType() instanceof ICPPReferenceType;
-    }
-
-    private boolean isElevated(ICPPASTConstructorChainInitializer initializer) {
-        return initializer.getInitializer() instanceof ICPPASTInitializerList;
     }
 
     public List<ICPPASTConstructorChainInitializer> getInitializers() {

@@ -3,9 +3,9 @@ package ch.hsr.ifs.cute.elevator.checker;
 import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.codan.core.model.IChecker;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 
 import ch.hsr.ifs.cute.elevator.ast.analysis.DeclaratorCollector;
@@ -25,7 +25,7 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
     private void collectAndReportInitializers(final IASTTranslationUnit ast) {
         final InitializerCollector initializerCollector = new InitializerCollector();
         ast.accept(initializerCollector);
-        for (ICPPASTConstructorChainInitializer initializer : initializerCollector.getInitializers()) {
+        for (IASTInitializer initializer : initializerCollector.getInitializers()) {
             reportProblem(PROBLEM_ID, initializer);
         }
     }

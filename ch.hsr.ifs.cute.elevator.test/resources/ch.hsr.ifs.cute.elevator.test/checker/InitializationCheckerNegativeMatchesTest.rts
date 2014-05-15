@@ -267,3 +267,36 @@ template<class T, class ARGS>
 void function(T, ARGS && args...) {
 	new T (args...);
 }
+
+//!ShouldIgnoreConstructorChainInitializersWithNarrowingTypeConversion
+//@main.cpp
+class C {
+private:
+	int i;
+
+public:
+	C(float x) :
+			i ( x ) {
+	};
+
+};
+
+//!ShouldIgnoreDefaultInitializationsInConstructorChainsIfInitializedTypeHasInitializerListConstructor
+//@main.cpp
+#include <initializer_list>
+
+struct MeanCase {
+    MeanCase(int i, bool b) {}
+    MeanCase(int i = 0) {}
+    MeanCase(std::initializer_list<int> initializerList) {}
+};
+
+class C {
+private:
+	MeanCase mc;
+
+public:
+	C(int x) :
+		mc (x) {
+	};
+};
