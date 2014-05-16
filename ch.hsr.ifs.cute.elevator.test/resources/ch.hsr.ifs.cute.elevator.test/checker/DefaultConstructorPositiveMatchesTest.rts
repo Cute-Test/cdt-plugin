@@ -1,0 +1,11 @@
+//!ShouldMarkDefaultConstructorCall
+//@.config
+expectedMarkerLines=6
+//@main.cpp
+struct Class {
+    Class() {}
+};
+
+int main(int argc, char **argv) {
+	Class mc;
+}

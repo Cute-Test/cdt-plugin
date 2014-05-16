@@ -11,7 +11,6 @@ import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 @SuppressWarnings("restriction")
 public class ElevateProjectRunner extends RefactoringRunner {
 
-
     public ElevateProjectRunner(ICElement element, ISelection selection, IShellProvider shellProvider, ICProject cProject) {
         super(element, selection, shellProvider, cProject);
     }
@@ -28,7 +27,5 @@ public class ElevateProjectRunner extends RefactoringRunner {
         
         wizard.setDefaultPageTitle("Elevate Project");
         run(wizard, refactoring, RefactoringSaveHelper.SAVE_REFACTORING);
-        
     }
-
 }

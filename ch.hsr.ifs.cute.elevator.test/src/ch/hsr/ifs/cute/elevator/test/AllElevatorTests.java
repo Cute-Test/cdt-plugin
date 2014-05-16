@@ -15,6 +15,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import ch.hsr.ifs.cute.elevator.test.checker.DefaultConstructorNegativeMatchesTest;
+import ch.hsr.ifs.cute.elevator.test.checker.DefaultConstructorPositiveMatchesTest;
 import ch.hsr.ifs.cute.elevator.test.checker.InitializationCheckerNegativeMatchesTest;
 import ch.hsr.ifs.cute.elevator.test.checker.InitializationCheckerPositiveMatchesTest;
 import ch.hsr.ifs.cute.elevator.test.quickfix.InitializationQuickFixTest;
@@ -27,6 +29,8 @@ import ch.hsr.ifs.cute.elevator.test.refactoring.ElevateProjectRefactoringTest;
 	InitializationCheckerPositiveMatchesTest.class,
 	InitializationQuickFixTest.class, 
 	ElevateProjectRefactoringTest.class,
+	DefaultConstructorNegativeMatchesTest.class,
+	DefaultConstructorPositiveMatchesTest.class
 //@formatter:on
 })
 public class AllElevatorTests {

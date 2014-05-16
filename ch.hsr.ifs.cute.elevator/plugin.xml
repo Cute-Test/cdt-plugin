@@ -1,30 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-	<extension
-		point="org.eclipse.cdt.codan.core.checkers">
-		 <checker
-		       class="ch.hsr.ifs.cute.elevator.checker.InitializationChecker"
-		       id="ch.hsr.ifs.elevator.uniformInitialization"
-		       name="Elevator Warning Checker">
+	<extension	point="org.eclipse.cdt.codan.core.checkers">
+	
+		<checker
+	 		class="ch.hsr.ifs.cute.elevator.checker.InitializationChecker"
+	 		id="ch.hsr.ifs.elevator.uniformInitialization"
+	 		name="C++ Enhancements Checker">
+	 		
 		    <problem               
-		    	category="org.eclipse.cdt.codan.core.categories.CodeStyle"
-			   defaultEnabled="true"
-			   defaultSeverity="Warning"
-			   description="Elevator Initialization Warning"
-			   id="ch.hsr.ifs.elevator.uniformInitialization"
-			   name="Un- or ill-initialized variable"
-			   messagePattern="Un- or ill-initialized variable found">
+			   	defaultEnabled="true"
+			   	defaultSeverity="Warning"
+			   	description="Elevator Initialization Warning"
+			   	id="ch.hsr.ifs.elevator.uniformInitialization"
+			   	name="Un- or ill-initialized variable"
+			   	markerType="org.eclipse.cdt.codan.core.codanProblem"
+			   	category="ch.hsr.ifs.elevator.enhancements"
+			   	messagePattern="Un- or ill-initialized variable found">
 		    </problem>
-		 </checker>
+		    
+		    <problem               
+				defaultEnabled="true"
+			   	defaultSeverity="Warning"
+			   	description="Elevator Initialization Warning"
+			   	id="ch.hsr.ifs.elevator.defaultConstructor"
+			   	name="default constructor called"
+			   	markerType="org.eclipse.cdt.codan.core.codanProblem"
+			   	category="ch.hsr.ifs.elevator.enhancements"
+			   	messagePattern="default constructor called">
+		    </problem>
+		</checker>	
+		<category id="ch.hsr.ifs.elevator.enhancements" name="C++11 code enhancements" />    	
   	</extension> 
-  	<extension
-         point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
-      <resolution
+
+  	
+  	<extension point="org.eclipse.cdt.codan.ui.codanMarkerResolution">  
+  		<resolution
             class="ch.hsr.ifs.cute.elevator.quickfix.InitializationQuickFix"
             problemId="ch.hsr.ifs.elevator.uniformInitialization">
-      </resolution>
-   </extension>
+    	</resolution>      	
+    	
+    	<resolution
+            class="ch.hsr.ifs.cute.elevator.quickfix.InitializationQuickFix"
+            problemId="ch.hsr.ifs.elevator.defaultConstructor">
+    	</resolution>    
+    	  	
+	</extension>
+      
    <extension
         point="org.eclipse.ui.actionSets">
      <actionSet

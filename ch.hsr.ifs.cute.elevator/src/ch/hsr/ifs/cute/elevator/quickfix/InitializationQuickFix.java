@@ -34,7 +34,7 @@ public class InitializationQuickFix extends AbstractAstRewriteQuickFix {
     public String getLabel() {
         return "Replace with uniform variable initialization";
     }
-
+    
     @Override
     public void modifyAST(final IIndex index, final IMarker marker) {
         try {

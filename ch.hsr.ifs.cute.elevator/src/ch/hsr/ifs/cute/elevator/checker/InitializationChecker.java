@@ -11,11 +11,15 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import ch.hsr.ifs.cute.elevator.ast.analysis.DeclaratorCollector;
 import ch.hsr.ifs.cute.elevator.ast.analysis.InitializerCollector;
 import ch.hsr.ifs.cute.elevator.ast.analysis.NodeProperties;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.Condition;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.HasDefaultConstructor;
 
 public class InitializationChecker extends AbstractIndexAstChecker implements IChecker {
 
-    public static String PROBLEM_ID = "ch.hsr.ifs.elevator.uniformInitialization";
-
+    public static final String PROBLEM_ID = "ch.hsr.ifs.elevator.uniformInitialization";
+    public static final String DEFAULT_CTOR = "ch.hsr.ifs.elevator.defaultConstructor";
+    private final Condition hasDefaultConstructor = new HasDefaultConstructor();
+    
     @Override
     public void processAst(final IASTTranslationUnit ast) {
         collectAndReportDeclarators(ast);
@@ -26,7 +30,7 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
         final InitializerCollector initializerCollector = new InitializerCollector();
         ast.accept(initializerCollector);
         for (IASTInitializer initializer : initializerCollector.getInitializers()) {
-            reportProblem(PROBLEM_ID, initializer);
+            reportProblem(initializer);
         }
     }
 
@@ -34,16 +38,17 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
         final DeclaratorCollector declaratorCollector = new DeclaratorCollector();
         ast.accept(declaratorCollector);
         for (IASTDeclarator declarator : declaratorCollector.getDeclarators()) {
-            reportProblem(PROBLEM_ID, declarator);
+            reportProblem(declarator);
         }
     }
 
-    @Override
-    public void reportProblem(final String id, IASTNode astNode, final Object... args) {
+    public void reportProblem(final IASTNode astNode, final Object... args) {
         final NodeProperties nodeProperties = new NodeProperties(astNode);
+        final String id = hasDefaultConstructor.satifies(astNode) ? DEFAULT_CTOR : PROBLEM_ID;
         if (nodeProperties.hasAncestor(ICPPASTNewExpression.class)) {
-            astNode = nodeProperties.getAncestor(ICPPASTNewExpression.class);
+            super.reportProblem(id, nodeProperties.getAncestor(ICPPASTNewExpression.class), args);
+        } else {
+            super.reportProblem(id, astNode, args);
         }
-        super.reportProblem(id, astNode, args);
     }
 }
