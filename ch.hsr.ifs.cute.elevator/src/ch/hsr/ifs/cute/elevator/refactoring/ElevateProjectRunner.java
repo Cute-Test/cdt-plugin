@@ -22,9 +22,7 @@ public class ElevateProjectRunner extends RefactoringRunner {
         RefactoringWizard wizard = new RefactoringWizard(refactoring, RefactoringWizard.WIZARD_BASED_USER_INTERFACE | RefactoringWizard.WIZARD_BASED_USER_INTERFACE) {
             
             @Override
-            protected void addUserInputPages() {
-                // TODO Auto-generated method stub
-                
+            protected void addUserInputPages() {    
             }
         };
         

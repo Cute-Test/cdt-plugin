@@ -6,6 +6,11 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 
+/**
+ * Checks if the tested {@link IASTDeclarator} or {@link ICPPASTConstructorChainInitializer} are already 
+ * initialized using a {@link IASTInitializerList}.
+ *
+ */
 public class IsElevated extends Condition {
 
     @Override

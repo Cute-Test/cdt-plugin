@@ -19,6 +19,10 @@ import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsInstanceOf;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsUninitializedReference;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.OtherDelaratorElevationConditions;
 
+/**
+ * Collects all {@link IASTDeclarator}s that can be elevated.
+ *
+ */
 public class DeclaratorCollector extends ASTVisitor {
     
     final private List<IASTDeclarator> declarators;

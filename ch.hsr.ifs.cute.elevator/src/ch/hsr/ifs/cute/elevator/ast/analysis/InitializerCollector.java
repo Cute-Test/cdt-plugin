@@ -17,7 +17,7 @@ import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsElevated;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsReference;
 
 /**
- * ASTVisitor that collects all ConstructorChainInitializers.
+ * Collects all ConstructorChainInitializers that can be elevated.
  * 
  */
 public class InitializerCollector extends ASTVisitor {

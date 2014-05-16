@@ -23,7 +23,7 @@ import ch.hsr.ifs.cute.elevator.ast.analysis.NodeProperties;
 
 
 /**
- * Contains various small conditions checks to determine whether a 
+ * Asserts various small conditions in order to determine whether a 
  * {@link IASTDeclarator} is eligible for elevation.
  */
 public class OtherDelaratorElevationConditions extends Condition {

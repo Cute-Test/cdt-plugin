@@ -14,8 +14,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPConstructor;
 import ch.hsr.ifs.cute.elevator.Activator;
 
 /**
- * Checks if the supplied node has a constructor with
- * {@link IASTInitializerList} argument.
+ * Checks if type of the supplied node has a constructor with {@link IASTInitializerList} argument.
  */
 public class HasInitializerListConstructor extends Condition {
 
