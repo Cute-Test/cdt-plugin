@@ -10,7 +10,7 @@ public class InitializationCheckerNegativeMatchesTest extends CDTTestingCodanChe
 
 	@Override
 	protected String getProblemId() {
-		return InitializationChecker.PROBLEM_ID;
+		return InitializationChecker.UNINITIALIZED_VAR;
 	}
 
     @Before

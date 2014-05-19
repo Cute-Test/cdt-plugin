@@ -16,8 +16,8 @@ import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.HasDefaultConstructor;
 
 public class InitializationChecker extends AbstractIndexAstChecker implements IChecker {
 
-    public static final String PROBLEM_ID = "ch.hsr.ifs.elevator.uniformInitialization";
-    public static final String DEFAULT_CTOR = "ch.hsr.ifs.elevator.defaultConstructor";
+    public static final String UNINITIALIZED_VAR = "ch.hsr.ifs.elevator.uninitialized";
+    public static final String DEFAULT_CTOR = "ch.hsr.ifs.elevator.defaultctor";
     private final Condition hasDefaultConstructor = new HasDefaultConstructor();
     
     @Override
@@ -44,7 +44,7 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
 
     public void reportProblem(final IASTNode astNode, final Object... args) {
         final NodeProperties nodeProperties = new NodeProperties(astNode);
-        final String id = hasDefaultConstructor.satifies(astNode) ? DEFAULT_CTOR : PROBLEM_ID;
+        final String id = hasDefaultConstructor.satifies(astNode) ? DEFAULT_CTOR : UNINITIALIZED_VAR;
         if (nodeProperties.hasAncestor(ICPPASTNewExpression.class)) {
             super.reportProblem(id, nodeProperties.getAncestor(ICPPASTNewExpression.class), args);
         } else {

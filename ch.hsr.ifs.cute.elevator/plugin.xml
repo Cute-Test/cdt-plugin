@@ -12,8 +12,8 @@
 			   	defaultEnabled="true"
 			   	defaultSeverity="Warning"
 			   	description="Elevator Initialization Warning"
-			   	id="ch.hsr.ifs.elevator.uniformInitialization"
-			   	name="Un- or ill-initialized variable"
+			   	id="ch.hsr.ifs.elevator.uninitialized"
+			   	name="Un- or ill-initialized variables"
 			   	markerType="org.eclipse.cdt.codan.core.codanProblem"
 			   	category="ch.hsr.ifs.elevator.enhancements"
 			   	messagePattern="Un- or ill-initialized variable found">
@@ -23,30 +23,30 @@
 				defaultEnabled="true"
 			   	defaultSeverity="Warning"
 			   	description="Elevator Initialization Warning"
-			   	id="ch.hsr.ifs.elevator.defaultConstructor"
-			   	name="default constructor called"
+			   	id="ch.hsr.ifs.elevator.defaultctor"
+			   	name="Replaceable default constructor calls"
 			   	markerType="org.eclipse.cdt.codan.core.codanProblem"
 			   	category="ch.hsr.ifs.elevator.enhancements"
-			   	messagePattern="default constructor called">
+			   	messagePattern="replaceable default constructor call">
 		    </problem>
+		    
 		</checker>	
+		
 		<category id="ch.hsr.ifs.elevator.enhancements" name="C++11 code enhancements" />    	
+		
   	</extension> 
-
-  	
+	
   	<extension point="org.eclipse.cdt.codan.ui.codanMarkerResolution">  
   		<resolution
             class="ch.hsr.ifs.cute.elevator.quickfix.InitializationQuickFix"
-            problemId="ch.hsr.ifs.elevator.uniformInitialization">
+            problemId="ch.hsr.ifs.elevator.uninitialized">
     	</resolution>      	
     	
     	<resolution
             class="ch.hsr.ifs.cute.elevator.quickfix.InitializationQuickFix"
-            problemId="ch.hsr.ifs.elevator.defaultConstructor">
-    	</resolution>    
-    	  	
+            problemId="ch.hsr.ifs.elevator.defaultctor">
+    	</resolution>    	
 	</extension>
-      
    <extension
         point="org.eclipse.ui.actionSets">
      <actionSet
@@ -77,7 +77,7 @@
               label="Elevate Project"  
               menubarPath="org.eclipse.jdt.ui.refactoring.menu/myGroup"
               style="push">
-        </action>        
+        </action>     
    </actionSet>
   </extension>
 </plugin>

@@ -11,7 +11,7 @@ public class InitializationQuickFixTest extends CDTTestingCodanQuickfixTest {
 
     @Override
     protected String getProblemId() {
-        return InitializationChecker.PROBLEM_ID;
+        return InitializationChecker.UNINITIALIZED_VAR;
     }
        
     @Override
