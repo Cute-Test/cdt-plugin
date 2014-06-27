@@ -62,7 +62,7 @@ public class SuppressMacroQuickAssist implements IQuickAssistProcessor {
         final SelectionASTRunnable runnable = new SelectionASTRunnable(context.getSelectionOffset(), context.getSelectionLength());
         IStatus status = ASTProvider.getASTProvider().runOnAST(context.getTranslationUnit(), ASTProvider.WAIT_ACTIVE_ONLY, new NullProgressMonitor(), runnable);
         return (status.isOK()) ? new ICCompletionProposal[] { new SuppressMacroProposal(runnable.getResult(), new SuppressedMacros(path)) } : new ICCompletionProposal[0];
-    }    
+    }
 
     private class SuppressMacroProposal implements ICCompletionProposal {
 
