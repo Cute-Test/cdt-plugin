@@ -15,6 +15,6 @@ public class FunctionLikeCheckerNegativeMatchesTest extends CDTTestingCodanCheck
 	@Override
 	@Test
 	public void runTest() throws Throwable {
-		assertTrue(findMarkers().length == 0);
+		assertEquals(0, findMarkers().length);
 	}
 }
