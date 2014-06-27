@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: ch.hsr.ifs.cute.ui.test;singleton:=true
-Bundle-Version: 4.7.0.qualifier
+Bundle-Version: 4.8.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.ui.test.UiTestPlugin
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.core.runtime,
@@ -28,8 +28,7 @@ Require-Bundle: org.eclipse.core.runtime,
  ch.hsr.ifs.cdttesting
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cute.ui.test,
- ch.hsr.ifs.cute.ui.test.checkers,
- ch.hsr.ifs.cute.ui.test.sourceactions
+Export-Package: ch.hsr.ifs.cute.ui.test,ch.hsr.ifs.cute.ui.test.checke
+ rs,ch.hsr.ifs.cute.ui.test.sourceactions
 Import-Package: org.eclipse.cdt.codan.core,
  org.eclipse.cdt.codan.core.model

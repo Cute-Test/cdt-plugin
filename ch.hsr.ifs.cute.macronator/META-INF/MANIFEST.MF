@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: ch.hsr.ifs.cute.macronator;singleton:=true
-Bundle-Version: 4.7.0.qualifier
+Bundle-Version: 4.8.0.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.codan.checkers;bundle-version="3.2.0",
  org.eclipse.cdt.codan.checkers.ui;bundle-version="3.2.0",
@@ -25,11 +25,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.core.refactoring;bundle-version="3.6.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cute.macronator,
- ch.hsr.ifs.cute.macronator.checker,
- ch.hsr.ifs.cute.macronator.common,
- ch.hsr.ifs.cute.macronator.quickfix,
- ch.hsr.ifs.cute.macronator.refactoring,
- ch.hsr.ifs.cute.macronator.transform
+Export-Package: ch.hsr.ifs.cute.macronator,ch.hsr.ifs.cute.macronator.
+ checker,ch.hsr.ifs.cute.macronator.common,ch.hsr.ifs.cute.macronator.
+ quickfix,ch.hsr.ifs.cute.macronator.refactoring,ch.hsr.ifs.cute.macro
+ nator.transform
 Bundle-Activator: ch.hsr.ifs.cute.macronator.MacronatorPlugin
 Bundle-Vendor: %Bundle-Vendor

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cute.headers;singleton:=true
-Bundle-Version: 4.7.0.qualifier
+Bundle-Version: 4.8.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.headers.CuteHeadersPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,
@@ -11,6 +11,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources;bundle-version="3.4.1"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cute.headers.headers1_7,
- ch.hsr.ifs.cute.headers.headers2_0
+Export-Package: ch.hsr.ifs.cute.headers.headers1_7,ch.hsr.ifs.cute.hea
+ ders.headers2_0
 Bundle-Localization: plugin
