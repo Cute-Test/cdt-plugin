@@ -10,19 +10,17 @@ import ch.hsr.ifs.cute.macronator.transform.ConstexprTransformation;
 
 public class ObjectLikeMacroChecker extends AbstractIndexAstChecker {
 
-    public static final String PROBLEM_ID = "ch.hsr.ifs.macronator.plugin.ObsoleteObjectLikeMacro";
+	public static final String PROBLEM_ID = "ch.hsr.ifs.macronator.plugin.ObsoleteObjectLikeMacro";
 
-    @Override
-    public void processAst(IASTTranslationUnit translationUnit) {
-        for (IASTPreprocessorMacroDefinition macro : translationUnit.getMacroDefinitions()) {
-            MacroClassifier classifier = new MacroClassifier(macro);
-            MacroProperties properties = new MacroProperties(macro);
-            if (
-                    classifier.isObjectLike() && 
-                    classifier.areDependenciesValid() && new ConstexprTransformation(macro).isValid() && 
-                    !properties.suggestionsSuppressed()) {
-                reportProblem(PROBLEM_ID, macro);
-            }
-        }
-    }
+	@Override
+	public void processAst(IASTTranslationUnit translationUnit) {
+		for (IASTPreprocessorMacroDefinition macro : translationUnit.getMacroDefinitions()) {
+			MacroClassifier classifier = new MacroClassifier(macro);
+			MacroProperties properties = new MacroProperties(macro);
+			if (classifier.isObjectLike() && classifier.areDependenciesValid()
+					&& new ConstexprTransformation(macro).isValid() && !properties.suggestionsSuppressed()) {
+				reportProblem(PROBLEM_ID, macro);
+			}
+		}
+	}
 }
