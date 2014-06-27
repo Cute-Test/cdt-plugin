@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2007-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -32,7 +32,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.WorkspaceLock;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -45,7 +44,7 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
  * @author Emanuel Graf IFS
  * 
  */
-@SuppressWarnings("deprecation")
+
 public class MockWorkspace implements IWorkspace {
 
 	List<IWorkspaceRunnable> actions = new ArrayList<IWorkspaceRunnable>();
@@ -197,10 +196,6 @@ public class MockWorkspace implements IWorkspace {
 	}
 
 	public void setDescription(IWorkspaceDescription description) throws CoreException {
-		throw new NotYetImplementedException();
-	}
-
-	public void setWorkspaceLock(WorkspaceLock lock) {
 		throw new NotYetImplementedException();
 	}
 
