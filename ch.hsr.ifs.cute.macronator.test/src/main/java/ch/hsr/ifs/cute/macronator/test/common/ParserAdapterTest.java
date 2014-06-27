@@ -2,15 +2,12 @@ package ch.hsr.ifs.cute.macronator.test.common;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.junit.Test;
-
 import ch.hsr.ifs.cute.macronator.common.ParserAdapter;
 
-
 public class ParserAdapterTest {
-	
+
 	private ParserAdapter parserAdapter;
 
 	@Test
@@ -19,30 +16,30 @@ public class ParserAdapterTest {
 		parse(validCppCode);
 		assertNoErrors();
 	}
-	
+
 	@Test
 	public void testShouldReportErrorsIfCodeIsInvalid() throws Exception {
 		String invalidCppCode = "constexpr auto PI 31";
 		parse(invalidCppCode);
-		assertErrorsOccured();		
+		assertErrorsOccured();
 	}
-	
+
 	@Test
 	public void testShouldReportErrorsIfInputInputIsAType() throws Exception {
 		String invalidCppCode = "(char*)";
 		parse(invalidCppCode);
-		assertErrorsOccured();		
+		assertErrorsOccured();
 	}
-		
+
 	private IASTTranslationUnit parse(String code) {
 		parserAdapter = new ParserAdapter(code);
-		return parserAdapter.parse();		
+		return parserAdapter.parse();
 	}
-	
+
 	private void assertNoErrors() {
 		assertFalse(parserAdapter.encounteredErrors());
 	}
-	
+
 	private void assertErrorsOccured() {
 		assertTrue(parserAdapter.encounteredErrors());
 	}

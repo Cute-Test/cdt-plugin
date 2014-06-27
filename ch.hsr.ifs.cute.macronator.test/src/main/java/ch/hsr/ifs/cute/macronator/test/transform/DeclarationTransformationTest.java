@@ -14,13 +14,13 @@ public class DeclarationTransformationTest {
 	@Test
 	public void testShouldBeValidIfMacroExpandsToDeclaration() {
 		IASTPreprocessorFunctionStyleMacroDefinition declarationMacro = createFunctionStyleMacroDefinition("#define DEF(X, Y) X Y;");
-		assertTrue(new DeclarationTransformation(declarationMacro).isValid());			
+		assertTrue(new DeclarationTransformation(declarationMacro).isValid());
 	}
 	
 	@Test
 	public void testShouldBeInvalidIfMacroExpansionIsMissingSemicolon() {
 		IASTPreprocessorFunctionStyleMacroDefinition declarationMacro = createFunctionStyleMacroDefinition("#define DEF(X, Y) X Y");
-		assertFalse(new DeclarationTransformation(declarationMacro).isValid());			
+		assertFalse(new DeclarationTransformation(declarationMacro).isValid());
 	}
 	
 	@Test

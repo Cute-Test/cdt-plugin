@@ -21,7 +21,7 @@
 #endif
 	
 //!ShouldNotSuggestRefactoringIfNotAllVariablesAreVisible
-//@main.cpp	
+//@main.cpp
 #define FUNCTION(A) (A * NOT_IN_SCOPE)
 	
 //!ShouldNotSuggestRefactoringIfParameterizedExpressionContainsCppFunctions

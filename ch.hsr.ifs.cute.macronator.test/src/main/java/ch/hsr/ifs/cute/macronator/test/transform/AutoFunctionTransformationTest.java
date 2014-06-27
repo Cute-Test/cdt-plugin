@@ -15,7 +15,7 @@ public class AutoFunctionTransformationTest {
 	public void testShouldProduceCorrectTransformationForParameterizedExpressionWithOneParameter() {
 		String macro = "#define SQUARE(X) (X) * (X)";
 		String macroTranslation = "template<typename T1> inline constexpr auto SQUARE(T1&& X) -> decltype((X) * (X)){return ((X) * (X));}";
-		assertTransformationEquals(macroTranslation, new AutoFunctionTransformation(createFunctionStyleMacroDefinition(macro)));		
+		assertTransformationEquals(macroTranslation, new AutoFunctionTransformation(createFunctionStyleMacroDefinition(macro)));
 	}
 	
 	@Test

@@ -15,13 +15,13 @@ public class VoidFunctionTransformationTest {
 	public void testShouldProduceCorrectVoidFunctionCodeForParameterizedExpressionWithOneParameter() {
 		String macro = "#define MACRO(A) (X)";
 		String macroTransformation = "template<typename T1> inline void MACRO(T1&& A) {(X);}";
-		assertTransformationEquals(macroTransformation, new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));		
+		assertTransformationEquals(macroTransformation, new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));
 	}
 	
 	@Test
 	public void testTransformationShouldBeValidIfTransformationIsPossible() {
 		String macro = "#define MACRO(A) (X)";
-		assertTrue(new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)).isValid());				
+		assertTrue(new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)).isValid());
 	}
 	
 	@Test
@@ -33,28 +33,28 @@ public class VoidFunctionTransformationTest {
 	@Test
 	public void testTransformationIsValidShouldBeFalseIfReplacementTextSyntaxIsIncorrect() {
 		String macro = "#define MACRO(A) if (";
-		assertFalse(new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)).isValid());				
+		assertFalse(new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)).isValid());
 	}
 	
 	@Test
 	public void testShouldProduceCorrectVoidFunctionCodeForParameterizedExpressionWithTwoParameters() {
 		String macro = "#define MACRO(A, B) (X)";
 		String macroTransformation = "template<typename T1, typename T2> inline void MACRO(T1&& A, T2&& B) {(X);}";
-		assertTransformationEquals(macroTransformation, new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));		
+		assertTransformationEquals(macroTransformation, new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));
 	}
 	
 	@Test
 	public void testShouldProduceCorrectVoidFunctionForParameterizedExpressionWithThreeParameters() {
 		String macro = "#define MACRO(A, B, C) (X)";
 		String macroTransformation = "template<typename T1, typename T2, typename T3> inline void MACRO(T1&& A, T2&& B, T3&& C) {(X);}";
-		assertTransformationEquals(macroTransformation, new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));		
+		assertTransformationEquals(macroTransformation, new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));
 	}
 	
 	@Test
 	public void testShouldProduceCorrectVoidFunctionForDoWhileStatement() {
 		String macro = "#define MACRO(X) do { X; } while (0)";
 		String macroTransformation = "template<typename T1> inline void MACRO(T1&& X) {do { X; } while (0);}";
-		assertTransformationEquals(macroTransformation, new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));		
+		assertTransformationEquals(macroTransformation, new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));
 	}
 	
 	@Test

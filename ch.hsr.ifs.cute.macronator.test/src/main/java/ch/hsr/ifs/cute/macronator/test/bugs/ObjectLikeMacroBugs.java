@@ -15,6 +15,6 @@ public class ObjectLikeMacroBugs extends CDTTestingCodanCheckerTest {
 	@Override
 	@Test
 	public void runTest() throws Throwable {
-		assertTrue(findMarkers().length == 0);
+		assertEquals(0, findMarkers().length);
 	}
 }

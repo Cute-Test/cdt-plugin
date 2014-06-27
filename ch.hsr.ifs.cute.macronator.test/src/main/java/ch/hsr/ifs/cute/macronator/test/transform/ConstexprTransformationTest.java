@@ -13,7 +13,7 @@ public class ConstexprTransformationTest {
 	@Test
 	public void testShouldTranslateSimpleObjectMacrosLikeCorrectly() throws Exception {
 		IASTPreprocessorMacroDefinition macro = createMacroDefinition("#define PI 3.1415");
-		assertTransformationEquals("constexpr auto PI = 3.1415;", new ConstexprTransformation(macro));		
+		assertTransformationEquals("constexpr auto PI = 3.1415;", new ConstexprTransformation(macro));
 	}
 	
 	@Test
@@ -31,6 +31,6 @@ public class ConstexprTransformationTest {
 	@Test
 	public void testShouldTranslateArithmeticExpressionCorrectly() throws Exception {
 		IASTPreprocessorMacroDefinition macro = createMacroDefinition("#define CALCULATION 1 + (1 - 1)");
-		assertTransformationEquals("constexpr auto CALCULATION = 1 + (1 - 1);",new ConstexprTransformation(macro));		
-	}		
+		assertTransformationEquals("constexpr auto CALCULATION = 1 + (1 - 1);",new ConstexprTransformation(macro));
+	}
 }
