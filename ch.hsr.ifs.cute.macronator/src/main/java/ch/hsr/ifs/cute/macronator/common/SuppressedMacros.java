@@ -1,88 +1,66 @@
 package ch.hsr.ifs.cute.macronator.common;
 
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.cdt.codan.core.cxx.Activator;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
+
+import ch.hsr.ifs.cute.macronator.MacronatorPlugin;
 
 public class SuppressedMacros {
 
-	private Path file;
-	private Set<String> suppressedMacros;
+    private Set<String> suppressedMacros;
+    private final Preferences projectPreferences;
 
-	public SuppressedMacros(Path file) {
-		this.file = file;
-		this.suppressedMacros = new HashSet<String>();
-	}
+    public SuppressedMacros(IProject project) {
+        this.projectPreferences = getProjectNode(project);
+        this.suppressedMacros = new HashSet<String>();
+    }
 
-	public void add(String macroName) {
-		if (macroName.length() > 0) {
-			suppressedMacros.add(macroName);
-		}
-		persistSuppressedMacros();
+    public void add(String macroName) {
+        if (macroName.length() > 0) {
+            suppressedMacros.add(macroName);
+        }
+        persistSuppressedMacros();
+    }
 
-	}
+    public void remove(String macroName) {
+        suppressedMacros.remove(macroName);
+        persistSuppressedMacros();
+    }
 
-	public void remove(String macroName) {
-		suppressedMacros.remove(macroName);
-		persistSuppressedMacros();
-	}
+    public boolean isSuppressed(String macroName) {
+        readSuppressedMacros();
+        return suppressedMacros.contains(macroName);
+    }
 
-	public boolean isSuppressed(String macroName) {
-		readSuppressedMacros();
-		return suppressedMacros.contains(macroName);
-	}
+    private void readSuppressedMacros() {
+        String suppressedMacroProperty = projectPreferences.get(MacronatorPlugin.SUPPRESSED_MACROS_PREF_KEY, "");
+        String[] split = suppressedMacroProperty.split(";");
+        suppressedMacros = new HashSet<String>(Arrays.asList(split));
+    }
 
-	private void readSuppressedMacros() {
-		BufferedReader reader = null;
-		try {
-			if (!Files.exists(file)) {
-				file = Files.createFile(file);
-			}
-			reader = Files.newBufferedReader(file, StandardCharsets.UTF_8);
-			String line = null;
-			suppressedMacros = new HashSet<String>();
-			while ((line = reader.readLine()) != null) {
-				suppressedMacros.add(line);
-			}
-		} catch (IOException e) {
-			Activator.log("Error reading suppressed macros", e);
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+    private Preferences getProjectNode(IProject project) {
+        IScopeContext projectScope = new ProjectScope(project);
+        Preferences projectNode = projectScope.getNode(MacronatorPlugin.PLUGIN_ID);
+        return projectNode;
+    }
 
-	private void persistSuppressedMacros() {
-		BufferedWriter writer = null;
-		try {
-			writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8, CREATE, TRUNCATE_EXISTING);
-			for (String macro : suppressedMacros) {
-				writer.write(macro + "\n");
-			}
-			writer.flush();
-		} catch (IOException e) {
-			Activator.log("Error persisting suppressed macros", e);
-		} finally {
-			try {
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    private void persistSuppressedMacros() {
+        StringBuilder suppressedMacroProperty = new StringBuilder();
+        for (String macro : suppressedMacros) {
+            suppressedMacroProperty.append(macro + ";");
+        }
+        projectPreferences.put(MacronatorPlugin.SUPPRESSED_MACROS_PREF_KEY, suppressedMacroProperty.toString());
+        try {
+            projectPreferences.flush();
+        } catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.macronator.common;
 
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,8 +62,7 @@ public class MacroProperties {
 
     public boolean suggestionsSuppressed() {
         IProject project = macroDefinition.getTranslationUnit().getOriginatingTranslationUnit().getCProject().getProject();
-        Path path = FileSystems.getDefault().getPath(project.getLocation().toString(), getSuppressedMacroFilePath(project));
-        SuppressedMacros suppressedMacros = new SuppressedMacros(path);
+        SuppressedMacros suppressedMacros = new SuppressedMacros(project);
         return suppressedMacros.isSuppressed(macroDefinition.getName().toString());
     }
 
@@ -78,15 +75,5 @@ public class MacroProperties {
             MacronatorPlugin.log(e, "could not obtain macro references");
         }
         return new IIndexName[0];
-    }
-
-    private String getSuppressedMacroFilePath(IProject project) {
-        try {
-            String filePath = project.getPersistentProperty(MacronatorPlugin.SUPPRESSED_MACROS);
-            return (filePath == null) ? MacronatorPlugin.getDefaultPreferenceValue(MacronatorPlugin.SUPPRESSED_MACROS) : filePath;
-        } catch (CoreException e) {
-            MacronatorPlugin.log(e, "error loading suppressed macros");
-            return MacronatorPlugin.getDefaultPreferenceValue(MacronatorPlugin.SUPPRESSED_MACROS);
-        }
     }
 }

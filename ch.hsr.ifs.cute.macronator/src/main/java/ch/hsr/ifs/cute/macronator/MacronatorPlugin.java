@@ -1,7 +1,6 @@
 package ch.hsr.ifs.cute.macronator;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -10,7 +9,7 @@ public class MacronatorPlugin extends AbstractUIPlugin {
 
     // The plug-in ID
     public static final String PLUGIN_ID = "ch.hsr.ifs.macronator.plugin"; //$NON-NLS-1$
-    public static final QualifiedName SUPPRESSED_MACROS = new QualifiedName(PLUGIN_ID, "suppressed_macros");
+    public static final String SUPPRESSED_MACROS_PREF_KEY = "suppressed_macros";
 
     // The shared instance
     private static MacronatorPlugin plugin;
@@ -91,9 +90,4 @@ public class MacronatorPlugin extends AbstractUIPlugin {
     public static void log(String message) {
         log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
     }
-
-    public static String getDefaultPreferenceValue(QualifiedName name) {
-        return (name.equals(SUPPRESSED_MACROS)) ? ".suppressed" : "";
-    }
-
 }
