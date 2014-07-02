@@ -22,8 +22,9 @@ public abstract class MacroTransformation {
 
     private void transform() {
         try {
-            ParserAdapter parser = new ParserAdapter(generateTransformationCode());
-            IASTTranslationUnit translationUnit = parser.parse();
+            final String transformedCode = generateTransformationCode();
+            final ParserAdapter parser = new ParserAdapter(transformedCode);
+            final IASTTranslationUnit translationUnit = parser.parse();
             transformationValid = !parser.encounteredErrors();
             transformationCode = (transformationValid) ? new ASTWriter().write(translationUnit) : "";
         } catch (ProblemRuntimeException e) {

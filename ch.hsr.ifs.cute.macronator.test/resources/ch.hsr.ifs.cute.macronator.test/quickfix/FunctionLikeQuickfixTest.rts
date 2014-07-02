@@ -92,3 +92,25 @@ inline constexpr auto CERES_ALIGN_OF(T1&& T) -> decltype(alignof ((T)))
     return (alignof ((T)));
 }
 
+//!ShouldTransformFunctionLikeMacroWithZeroParametersAndReturnValue
+//@main.cpp
+#define MACRO() (5) * (5)
+
+//=
+inline constexpr auto MACRO() -> decltype((5) * (5))
+{
+    return ((5) * (5));
+}
+
+//!ShouldTransformFunctionLikeMacroWithZeroParametersAndNoReturnValue
+//@main.cpp
+#define MACRO() do { (5) * (5); } while (0);
+
+//=
+inline void MACRO()
+{
+    do{
+        (5) * (5);
+    } while (0);
+}
+

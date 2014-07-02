@@ -6,6 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition
 public abstract class ParameterizedExpressionTransformation extends MacroTransformation {
 
     private final IASTPreprocessorFunctionStyleMacroDefinition macro;
+    private final String PARAMETER_PATTERN = "T%s&& %s";
 
     public ParameterizedExpressionTransformation(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
         super(macro);
@@ -13,21 +14,29 @@ public abstract class ParameterizedExpressionTransformation extends MacroTransfo
     }
 
     protected String generateFunctionParameters(IASTFunctionStyleMacroParameter[] parameters) {
-        String functionParameters = "(";
-        for (int i = 0; i < parameters.length - 1; i++) {
-            functionParameters += "T" + (i + 1) + "&& " + parameters[i].getParameter() + ",";
+        final StringBuilder fParameters = new StringBuilder("(");
+
+        if (parameters.length > 0) {
+            fParameters.append(String.format(PARAMETER_PATTERN, 1, parameters[0].getParameter()));
+            for (int i = 1; i < parameters.length; i++) {
+                fParameters.append(',').append(String.format(PARAMETER_PATTERN, (i + 1), parameters[i].getParameter()));
+            }
         }
-        functionParameters += "T" + parameters.length + "&& " + parameters[parameters.length - 1].getParameter() + ")";
-        return functionParameters;
+        return fParameters.append(")").toString();
     }
 
     protected String generateTypenames(IASTFunctionStyleMacroParameter[] parameters) {
-        String typenames = "<";
-        for (int i = 0; i < parameters.length - 1; i++) {
-            typenames += "typename T" + (i + 1) + ",";
+        if (parameters.length > 0) {
+            StringBuilder typenames = new StringBuilder("template <");
+            typenames.append("typename T1");
+            for (int i = 1; i < parameters.length; i++) {
+                typenames.append(", typename T" + (i + 1));
+            }
+            return typenames.append(">").toString();
+        } else {
+            return "";
         }
-        typenames += "typename T" + parameters.length + ">";
-        return typenames;
+
     }
 
     protected IASTPreprocessorFunctionStyleMacroDefinition getFunctionStyleMacroDefinition() {

@@ -13,8 +13,7 @@ public class ConstexprTransformation extends MacroTransformation {
     @Override
     protected String generateTransformationCode() {
         try {
-            IToken token = macro.getSyntax().getNext().getNext(); // skip
-                                                                  // '#define'
+            IToken token = macro.getSyntax().getNext().getNext(); // skip '#define'
             StringBuilder replacementText = new StringBuilder(String.format("constexpr auto %s =", token.getImage()));
             token = token.getNext();
             while (token != null) {

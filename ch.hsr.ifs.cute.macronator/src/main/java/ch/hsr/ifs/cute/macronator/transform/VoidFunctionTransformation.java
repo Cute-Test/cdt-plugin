@@ -10,16 +10,16 @@ public class VoidFunctionTransformation extends ParameterizedExpressionTransform
 
     @Override
     protected String generateTransformationCode() {
-        String transformation = "template ";
-        transformation += generateTypenames(getFunctionStyleMacroDefinition().getParameters());
-        transformation += " inline void ";
-        transformation += getMacroDefinition().getName().toString();
-        transformation += generateFunctionParameters(getFunctionStyleMacroDefinition().getParameters());
-        transformation += "{";
-        transformation += getMacroDefinition().getExpansion();
+        final StringBuilder transformation = new StringBuilder();
+        transformation.append(generateTypenames(getFunctionStyleMacroDefinition().getParameters()));
+        transformation.append(" inline void ");
+        transformation.append(getMacroDefinition().getName().toString());
+        transformation.append(generateFunctionParameters(getFunctionStyleMacroDefinition().getParameters()));
+        transformation.append("{");
+        transformation.append(getMacroDefinition().getExpansion());
         if (!getMacroDefinition().getExpansion().endsWith(";") && !getMacroDefinition().getExpansion().endsWith("}")) {
-            transformation += ";";
+            transformation.append(";");
         }
-        return transformation += "}";
+        return transformation.append("}").toString();
     }
 }

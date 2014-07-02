@@ -10,15 +10,13 @@ public class AutoFunctionTransformation extends ParameterizedExpressionTransform
 
     @Override
     protected String generateTransformationCode() {
-        String transformation = "";
-        transformation += "template ";
-        transformation += generateTypenames(getFunctionStyleMacroDefinition().getParameters());
-        transformation += "constexpr inline auto ";
-        transformation += getMacroDefinition().getName().toString();
-        transformation += generateFunctionParameters(getFunctionStyleMacroDefinition().getParameters());
-        transformation += " -> decltype(" + getMacroDefinition().getExpansion() + "){";
-        transformation += "return (" + getMacroDefinition().getExpansion() + ");";
-        transformation += "}";
-        return transformation;
+        final StringBuilder transformation = new StringBuilder();
+        transformation.append(generateTypenames(getFunctionStyleMacroDefinition().getParameters()));
+        transformation.append("constexpr inline auto ");
+        transformation.append(getMacroDefinition().getName().toString());
+        transformation.append(generateFunctionParameters(getFunctionStyleMacroDefinition().getParameters()));
+        transformation.append(" -> decltype(" + getMacroDefinition().getExpansion() + "){");
+        transformation.append("return (" + getMacroDefinition().getExpansion() + "); }");
+        return transformation.toString();
     }
 }
