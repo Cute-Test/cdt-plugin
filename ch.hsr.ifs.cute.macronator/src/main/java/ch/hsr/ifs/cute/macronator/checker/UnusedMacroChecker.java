@@ -1,6 +1,7 @@
 package ch.hsr.ifs.cute.macronator.checker;
 
 import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
+import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
@@ -18,6 +19,12 @@ public class UnusedMacroChecker extends AbstractIndexAstChecker {
 				reportProblem(PROBLEM_ID, macro);
 			}
 		}
+	}
+	
+	@Override
+	public void initPreferences(IProblemWorkingCopy problem) {
+	    getTopLevelPreference(problem);
+	    getLaunchModePreference(problem).enableInLaunchModes(); // disable by default
 	}
 
 	private boolean isNeverUsed(IASTPreprocessorMacroDefinition macro) {
