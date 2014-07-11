@@ -14,7 +14,7 @@
 			   	description="Elevator Initialization Warning"
 			   	id="ch.hsr.ifs.elevator.uninitialized"
 			   	name="Un- or ill-initialized variables"
-			   	markerType="org.eclipse.cdt.codan.core.codanProblem"
+			   	markerType="ch.hsr.ifs.cute.elevator.elevationProblemMarker"
 			   	category="ch.hsr.ifs.elevator.enhancements"
 			   	messagePattern="Un- or ill-initialized variable found">
 		    </problem>
@@ -25,7 +25,7 @@
 			   	description="Elevator Initialization Warning"
 			   	id="ch.hsr.ifs.elevator.defaultctor"
 			   	name="Replaceable default constructor calls"
-			   	markerType="org.eclipse.cdt.codan.core.codanProblem"
+			   	markerType=" ch.hsr.ifs.cute.elevator.elevationProblemMarker"
 			   	category="ch.hsr.ifs.elevator.enhancements"
 			   	messagePattern="replaceable default constructor call">
 		    </problem>
@@ -80,4 +80,66 @@
         </action>     
    </actionSet>
   </extension>
+  <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
+       <specification
+             annotationType="ch.hsr.ifs.cute.elevator.elevateAnnotation"
+             colorPreferenceKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.colorPreference"
+             colorPreferenceValue="255,255,0"
+             contributesToHeader="true"
+             highlightPreferenceKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.highlightPreference"
+             highlightPreferenceValue="false"
+             icon="icons/icon-green-star.png"
+             includeOnPreferencePage="true"
+             isGoToNextNavigationTarget="true"
+             isGoToNextNavigationTargetKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.isGotoNextNavigationTarget"
+             isGoToPreviousNavigationTarget="true"
+             isGoToPreviousNavigationTargetKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.isGotoPreviousNavigationTarget"
+             label="Unregistered CUTE Test"
+             overviewRulerPreferenceKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.overviewRulerPreference"
+             overviewRulerPreferenceValue="true"
+             presentationLayer="0"
+             quickFixIcon="icons/icon-green-star.png"
+             showInNextPrevDropdownToolbarAction="true"
+             showInNextPrevDropdownToolbarActionKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.showInNextPrevDropdownToolbarAction"
+             textPreferenceKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.textPreference"
+             textPreferenceValue="true"
+             textStylePreferenceKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.textStylePreference"
+             textStylePreferenceValue="SQUIGGLES"
+             verticalRulerPreferenceKey="ch.hsr.ifs.cute.elevator.keys.unregisteredTest.verticalRulerPreference"
+             verticalRulerPreferenceValue="true">
+       </specification>
+    </extension>
+    <extension
+          point="org.eclipse.ui.editors.annotationTypes">
+       <type
+             markerSeverity="1"
+             markerType="ch.hsr.ifs.cute.elevator.elevationProblemMarker"
+             name="ch.hsr.ifs.cute.elevator.elevateAnnotation"
+             super="org.eclipse.ui.workbench.texteditor.info">
+       </type>
+    </extension>
+    <extension
+          point="org.eclipse.ui.ide.markerResolution">
+       <markerResolutionGenerator
+             class="org.eclipse.cdt.codan.internal.ui.CodanProblemMarkerResolutionGenerator"
+             markerType="ch.hsr.ifs.cute.elevator.elevationProblemMarker">
+       </markerResolutionGenerator>
+    </extension>
+    <extension
+          id="ch.hsr.ifs.cute.elevator.elevationProblemMarker"
+          name="Elevation Suggestion"
+          point="org.eclipse.core.resources.markers">
+       <super
+             type="org.eclipse.core.resources.problemmarker">
+       </super>
+       <super
+             type="org.eclipse.core.resources.textmarker">
+       </super>
+       <super
+             type="org.eclipse.cdt.codan.core.codanProblem">
+       </super>
+       <persistent
+             value="false">
+       </persistent>
+    </extension>
 </plugin>
