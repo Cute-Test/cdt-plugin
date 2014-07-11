@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-    <extension point="org.eclipse.ui.ide.markerResolution">
-      <markerResolutionGenerator
-            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
-            markerType="org.eclipse.cdt.codan.core.codanProblem">
-      </markerResolutionGenerator>
-      
-      <markerResolutionGenerator
-            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
-            markerType="org.eclipse.cdt.codan.core.codanSemanticProblem">
-      </markerResolutionGenerator>
-      
-      <markerResolutionGenerator
-            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
-            markerType="org.eclipse.cdt.core.problem">
-      </markerResolutionGenerator>
-   </extension>
+    <extension
+       id="ch.hsr.ifs.cute.tdd.tddProblemMarker"
+       name="TDD Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.cdt.codan.core.codanProblem">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
+ </extension>
 
    <extension point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
       <resolution
@@ -74,7 +69,7 @@
        <resolution
              class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.NormalFunctionCreationQuickFix"
              problemId="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR">
-       </resolution>
+       </resolution>-->
    </extension>
    
   <extension
@@ -88,7 +83,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.freeFunction.messagePattern"
               name="%problem.name">
         </problem>
@@ -97,7 +92,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.staticFunction.messagePattern"
               name="%problem.name.0">
         </problem>
@@ -106,7 +101,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.namespaceMemberFunction.messagePattern"
               name="%problem.name.11">
         </problem>
@@ -128,7 +123,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.memberFunction.messagePattern"
               name="%problem.name.1">
         </problem>
@@ -146,7 +141,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.invalidMemberFunctionArguments.messagePattern"
               name="%problem.name.2">
         </problem>
@@ -155,7 +150,7 @@
                defaultEnabled="true"
                defaultSeverity="Error"
                id="ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR"
-               markerType="org.eclipse.cdt.codan.core.codanProblem"
+               markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
                messagePattern="%checker.invalidFunctionArguments.messagePattern"
                name="%problem.name.3">
         </problem>
@@ -173,7 +168,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.unknownType.messagePattern"
               name="%problem.name.4">
         </problem>
@@ -191,7 +186,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.VariableResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.localVariable.messagePattern"
               name="%problem.name.5">
         </problem>
@@ -200,7 +195,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.MemberVariableResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.memberVariable.messagePattern"
               name="%problem.name.6">
         </problem>
@@ -218,7 +213,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.PrivateMethodChecker_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.memberFunctionVisibility.messagePattern"
               name="%problem.name.7">
         </problem>
@@ -236,7 +231,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.missingConstructor.messagePattern"
               name="%problem.name.8">
         </problem>
@@ -254,7 +249,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.MissingOperatorResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.missingOperator.messagePattern"
               name="%problem.name.9">
         </problem>
@@ -272,7 +267,7 @@
               defaultEnabled="true"
               defaultSeverity="Error"
               id="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR"
-              markerType="org.eclipse.cdt.codan.core.codanProblem"
+              markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
               messagePattern="%checker.missingNamespace.messagePattern"
               name="%problem.name.10">
         </problem>
@@ -334,5 +329,65 @@
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>
       </viewerContribution>
+   </extension>
+           <extension
+          point="org.eclipse.ui.editors.markerAnnotationSpecification">
+       <specification
+             annotationType="ch.hsr.ifs.cute.tdd.tddAnnotation"
+             colorPreferenceKey="ch.hsr.ifs.cute.tdd.keys.colorPreference"
+             colorPreferenceValue="255,0,0"
+             contributesToHeader="true"
+             highlightPreferenceKey="ch.hsr.ifs.cute.tdd.keys.highlightPreference"
+             highlightPreferenceValue="false"
+             icon="icons/icon-red-triangle-down.png"
+             includeOnPreferencePage="true"
+             isGoToNextNavigationTarget="true"
+             isGoToNextNavigationTargetKey="ch.hsr.ifs.cute.tdd.keys.isGotoNextNavigationTarget"
+             isGoToPreviousNavigationTarget="true"
+             isGoToPreviousNavigationTargetKey="ch.hsr.ifs.cute.tdd.keys.isGotoPreviousNavigationTarget"
+             label="TDD Problem"
+             overviewRulerPreferenceKey="ch.hsr.ifs.cute.tdd.keys.overviewRulerPreference"
+             overviewRulerPreferenceValue="true"
+             presentationLayer="42"
+             quickFixIcon="icons/icon-red-triangle-down.png"
+             showInNextPrevDropdownToolbarAction="true"
+             showInNextPrevDropdownToolbarActionKey="ch.hsr.ifs.cute.tdd.keys.showInNextPrevDropdownToolbarAction"
+             symbolicIcon="error"
+             textPreferenceKey="ch.hsr.ifs.cute.tdd.keys.textPreference"
+             textPreferenceValue="true"
+             textStylePreferenceKey="ch.hsr.ifs.cute.tdd.keys.textStylePreference"
+             textStylePreferenceValue="SQUIGGLES"
+             verticalRulerPreferenceKey="ch.hsr.ifs.cute.tdd.keys.verticalRulerPreference"
+             verticalRulerPreferenceValue="true">
+       </specification>
+    </extension>
+    <extension
+          point="org.eclipse.ui.editors.annotationTypes">
+       <type
+             markerSeverity="2"
+             markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker"
+             name="ch.hsr.ifs.cute.tdd.tddAnnotation"
+             super="org.eclipse.ui.workbench.texteditor.error">
+       </type>
+    </extension>
+    <extension point="org.eclipse.ui.ide.markerResolution">
+       <markerResolutionGenerator
+             class="org.eclipse.cdt.codan.internal.ui.CodanProblemMarkerResolutionGenerator"
+             markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker">
+       </markerResolutionGenerator>
+      <markerResolutionGenerator
+            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
+            markerType="org.eclipse.cdt.codan.core.codanProblem">
+      </markerResolutionGenerator>
+      
+      <markerResolutionGenerator
+            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
+            markerType="org.eclipse.cdt.codan.core.codanSemanticProblem">
+      </markerResolutionGenerator>
+      
+      <markerResolutionGenerator
+            class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
+            markerType="org.eclipse.cdt.core.problem">
+      </markerResolutionGenerator>
    </extension>
 </plugin>
