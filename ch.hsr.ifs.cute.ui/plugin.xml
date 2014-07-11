@@ -120,7 +120,7 @@
  </extension>
 
  <extension
-       id="cuteProblem"
+       id="ch.hsr.ifs.cute.ui.cuteProblem"
        name="%extension.name.0"
        point="org.eclipse.core.resources.markers">
     <super
@@ -128,6 +128,9 @@
     </super>
     <super
           type="org.eclipse.core.resources.textmarker">
+    </super>
+    <super
+          type="org.eclipse.cdt.codan.core.codanProblem">
     </super>
     <persistent
           value="false">
@@ -231,7 +234,7 @@
             id="ch.hsr.ifs.cute.unregisteredTestMarker"
             messagePattern="%problem.messagePattern"
             name="%problem.name"
-            markerType="org.eclipse.cdt.codan.core.codanProblem">
+            markerType="ch.hsr.ifs.cute.ui.cuteProblem">
       </problem>
       </checker>
        <category
@@ -245,5 +248,51 @@
              class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestResolution"
              problemId="ch.hsr.ifs.cute.unregisteredTestMarker">
        </resolution>
+    </extension>
+        <extension
+          point="org.eclipse.ui.editors.markerAnnotationSpecification">
+       <specification
+             annotationType="ch.hsr.ifs.cute.ui.unregisteredTestAnnotation"
+             colorPreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.colorPreference"
+             colorPreferenceValue="255,255,0"
+             contributesToHeader="true"
+             highlightPreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.highlightPreference"
+             highlightPreferenceValue="false"
+             icon="icons/icon-yellow-diamond.png"
+             includeOnPreferencePage="true"
+             isGoToNextNavigationTarget="true"
+             isGoToNextNavigationTargetKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.isGotoNextNavigationTarget"
+             isGoToPreviousNavigationTarget="true"
+             isGoToPreviousNavigationTargetKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.isGotoPreviousNavigationTarget"
+             label="Unregistered CUTE Test"
+             overviewRulerPreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.overviewRulerPreference"
+             overviewRulerPreferenceValue="true"
+             presentationLayer="0"
+             quickFixIcon="icons/icon-yellow-diamond.png"
+             showInNextPrevDropdownToolbarAction="true"
+             showInNextPrevDropdownToolbarActionKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.showInNextPrevDropdownToolbarAction"
+             textPreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.textPreference"
+             textPreferenceValue="true"
+             textStylePreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.textStylePreference"
+             textStylePreferenceValue="SQUIGGLES"
+             verticalRulerPreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.verticalRulerPreference"
+             verticalRulerPreferenceValue="true">
+       </specification>
+    </extension>
+    <extension
+          point="org.eclipse.ui.editors.annotationTypes">
+       <type
+             markerSeverity="1"
+             markerType="ch.hsr.ifs.cute.ui.cuteProblem"
+             name="ch.hsr.ifs.cute.ui.unregisteredTestAnnotation"
+             super="org.eclipse.ui.workbench.texteditor.warning">
+       </type>
+    </extension>
+    <extension
+          point="org.eclipse.ui.ide.markerResolution">
+       <markerResolutionGenerator
+             class="org.eclipse.cdt.codan.internal.ui.CodanProblemMarkerResolutionGenerator"
+             markerType="ch.hsr.ifs.cute.ui.cuteProblem">
+       </markerResolutionGenerator>
     </extension>
 </plugin>
