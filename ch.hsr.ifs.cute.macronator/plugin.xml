@@ -13,7 +13,7 @@
                defaultSeverity="Warning"
                description="Macro definition can be replaced with &apos;constexpr&apos; expression"
                id="ch.hsr.ifs.macronator.plugin.ObsoleteObjectLikeMacro"
-               markerType="org.eclipse.cdt.codan.core.codanProblem"
+               markerType="ch.hsr.ifs.cute.macronator.replaceMacroMarker"
                messagePattern="Macro definition can be replaced with &apos;constexpr&apos; expression"
                name="Obsolete object-like macro">
          </problem>
@@ -28,7 +28,7 @@
                defaultSeverity="Warning"
                description="Macro definition can be replaced with inline function"
                id="ch.hsr.ifs.macronator.plugin.ObsoleteFunctionLikeMacro"
-               markerType="org.eclipse.cdt.codan.core.codanProblem"
+               markerType="ch.hsr.ifs.cute.macronator.replaceMacroMarker"
                messagePattern="Macro definition can be replaced with inline function"
                name="Obsolete function-like macro">
          </problem>
@@ -43,7 +43,7 @@
                defaultSeverity="Warning"
                description="Macro is never used"
                id="ch.hsr.ifs.macronator.plugin.UnusedMacro"
-               markerType="org.eclipse.cdt.codan.core.codanProblem"
+               markerType="ch.hsr.ifs.cute.macronator.replaceMacroMarker"
                messagePattern="Macro is never used"
                name="Unused Macro">
          </problem>
@@ -119,5 +119,61 @@
    <extension id="preferences" point="org.eclipse.core.runtime.preferences" name="preferences">
 		<scope name="project" class="org.eclipse.core.internal.resources.ProjectPreferences"/>
 	</extension>
-	
+   <extension
+         id="ch.hsr.ifs.cute.macronator.replaceMacroMarker"
+         name="Replace Macro Suggestion"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.cdt.codan.core.codanProblem">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            class="org.eclipse.cdt.codan.internal.ui.CodanProblemMarkerResolutionGenerator"
+            markerType="ch.hsr.ifs.cute.macronator.replaceMacroMarker">
+      </markerResolutionGenerator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerSeverity="1"
+            markerType="ch.hsr.ifs.cute.macronator.replaceMacroMarker"
+            name="ch.hsr.ifs.cute.macronator.replaceMacroAnnotation"
+            super="org.eclipse.ui.workbench.texteditor.info">
+      </type>
+   </extension>
+   <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
+       <specification
+             annotationType="ch.hsr.ifs.cute.macronator.replaceMacroAnnotation"
+             colorPreferenceKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.colorPreference"
+             colorPreferenceValue="255,255,0"
+             contributesToHeader="true"
+             highlightPreferenceKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.highlightPreference"
+             highlightPreferenceValue="false"
+             icon="icons/icon-green-star.png"
+             includeOnPreferencePage="true"
+             isGoToNextNavigationTarget="true"
+             isGoToNextNavigationTargetKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.isGotoNextNavigationTarget"
+             isGoToPreviousNavigationTarget="true"
+             isGoToPreviousNavigationTargetKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.isGotoPreviousNavigationTarget"
+             label="Unregistered CUTE Test"
+             overviewRulerPreferenceKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.overviewRulerPreference"
+             overviewRulerPreferenceValue="true"
+             presentationLayer="0"
+             quickFixIcon="icons/icon-green-star.png"
+             showInNextPrevDropdownToolbarAction="true"
+             showInNextPrevDropdownToolbarActionKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.showInNextPrevDropdownToolbarAction"
+             symbolicIcon="info"
+             textPreferenceKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.textPreference"
+             textPreferenceValue="true"
+             textStylePreferenceKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.textStylePreference"
+             textStylePreferenceValue="NONE"
+             verticalRulerPreferenceKey="ch.hsr.ifs.cute.macronator.keys.replaceMacroAnnotation.verticalRulerPreference"
+             verticalRulerPreferenceValue="true">
+       </specification>
+    </extension>
 </plugin>
