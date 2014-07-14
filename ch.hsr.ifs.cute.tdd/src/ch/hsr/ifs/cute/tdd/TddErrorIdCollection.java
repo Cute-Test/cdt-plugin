@@ -24,25 +24,25 @@ import ch.hsr.ifs.cute.tdd.codan.checkers.WrongArgumentChecker;
 @SuppressWarnings("restriction")
 public class TddErrorIdCollection {
 
-	public static final String ERR_ID_PrivateMethodChecker_HSR = PrivateMethodChecker.ERR_ID_PrivateMethodChecker_HSR;
-	public static final String ERR_ID_TypeResolutionProblem_HSR = TypeResolutionProblemChecker.ERR_ID_TypeResolutionProblem_HSR;
-	public static final String ERR_ID_FunctionResolutionProblem_HSR = FreeFunctionProblemChecker.ERR_ID_FunctionResolutionProblem_HSR;
-	public static final String ERR_ID_FunctionResolutionProblem_STATIC_HSR = FreeFunctionProblemChecker.ERR_ID_FunctionResolutionProblem_STATIC_HSR;
-	public static final String ERR_ID_MethodResolutionProblem_HSR = MemberFunctionProblemChecker.ERR_ID_MethodResolutionProblem_HSR;
-	public static final String ERR_ID_MissingConstructorResolutionProblem_HSR = MissingConstructorChecker.ERR_ID_MissingConstructorResolutionProblem_HSR;
-	public static final String ERR_ID_VariableResolutionProblem_HSR = VariableResolutionProblemChecker.ERR_ID_VariableResolutionProblem_HSR;
-	public static final String ERR_ID_MemberVariableResolutionProblem_HSR = VariableResolutionProblemChecker.ERR_ID_MemberVariableResolutionProblem_HSR;
-	public static final String ERR_ID_OperatorResolutionProblem_HSR = MissingOperatorChecker.ERR_ID_OperatorResolutionProblem_HSR;
-	public static final String ERR_ID_InvalidArguments_FREE_HSR = WrongArgumentChecker.ERR_ID_InvalidArguments_FREE_HSR;
-	public static final String ERR_ID_InvalidArguments_HSR = WrongArgumentChecker.ERR_ID_InvalidArguments_HSR;
-	public static final String ERR_ID_NamespaceResolutionProblem_HSR = MissingNamespaceChecker.ERR_ID_NamespaceResolutionProblem_HSR;
-	public static final String ERR_ID_NamespaceMemberResolutionProblem_HSR = FreeFunctionProblemChecker.ERR_ID_NamespaceMemberResolutionProblem_HSR;
+	public static final String ERR_ID_PrivateMethodChecker = PrivateMethodChecker.ERR_ID_PrivateMethodChecker;
+	public static final String ERR_ID_TypeResolutionProblem = TypeResolutionProblemChecker.ERR_ID_TypeResolutionProblem;
+	public static final String ERR_ID_FunctionResolutionProblem = FreeFunctionProblemChecker.ERR_ID_FunctionResolutionProblem;
+	public static final String ERR_ID_FunctionResolutionProblem_STATIC = FreeFunctionProblemChecker.ERR_ID_FunctionResolutionProblem_STATIC;
+	public static final String ERR_ID_MethodResolutionProblem = MemberFunctionProblemChecker.ERR_ID_MethodResolutionProblem;
+	public static final String ERR_ID_MissingConstructorResolutionProblem = MissingConstructorChecker.ERR_ID_MissingConstructorResolutionProblem;
+	public static final String ERR_ID_VariableResolutionProblem = VariableResolutionProblemChecker.ERR_ID_VariableResolutionProblem;
+	public static final String ERR_ID_MemberVariableResolutionProblem = VariableResolutionProblemChecker.ERR_ID_MemberVariableResolutionProblem;
+	public static final String ERR_ID_OperatorResolutionProblem = MissingOperatorChecker.ERR_ID_OperatorResolutionProblem;
+	public static final String ERR_ID_InvalidArguments_FREE = WrongArgumentChecker.ERR_ID_InvalidArguments_FREE;
+	public static final String ERR_ID_InvalidArguments = WrongArgumentChecker.ERR_ID_InvalidArguments;
+	public static final String ERR_ID_NamespaceResolutionProblem = MissingNamespaceChecker.ERR_ID_NamespaceResolutionProblem;
+	public static final String ERR_ID_NamespaceMemberResolutionProblem = FreeFunctionProblemChecker.ERR_ID_NamespaceMemberResolutionProblem;
 
 	public static boolean isOperator(IMarker marker) {
-		return CodanProblemMarker.getProblemId(marker).equals(ERR_ID_OperatorResolutionProblem_HSR);
+		return CodanProblemMarker.getProblemId(marker).equals(ERR_ID_OperatorResolutionProblem);
 	}
 
 	public static boolean isStatic(IMarker marker) {
-		return CodanProblemMarker.getProblemId(marker).equals(ERR_ID_FunctionResolutionProblem_STATIC_HSR);
+		return CodanProblemMarker.getProblemId(marker).equals(ERR_ID_FunctionResolutionProblem_STATIC);
 	}
 }

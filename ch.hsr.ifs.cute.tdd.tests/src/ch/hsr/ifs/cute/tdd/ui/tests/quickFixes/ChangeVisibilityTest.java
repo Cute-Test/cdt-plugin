@@ -29,7 +29,7 @@ public class ChangeVisibilityTest extends QuickFixTest {
 
 	@Override
 	protected String getId() {
-		return TddErrorIdCollection.ERR_ID_PrivateMethodChecker_HSR;
+		return TddErrorIdCollection.ERR_ID_PrivateMethodChecker;
 	}
 
 	@Override

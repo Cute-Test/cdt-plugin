@@ -24,7 +24,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class CreateOperatorRefactoringTest extends TddRefactoringTest {
 
 	public CreateOperatorRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_OperatorResolutionProblem_HSR);
+		super(TddErrorIdCollection.ERR_ID_OperatorResolutionProblem);
 		CPPASTNameBase.sAllowNameComputation = true;
 	}
 

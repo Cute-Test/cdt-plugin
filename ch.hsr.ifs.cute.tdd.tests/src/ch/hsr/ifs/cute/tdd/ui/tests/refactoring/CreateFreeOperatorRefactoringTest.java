@@ -22,7 +22,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class CreateFreeOperatorRefactoringTest extends TddRefactoringTest {
 
 	public CreateFreeOperatorRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_OperatorResolutionProblem_HSR);
+		super(TddErrorIdCollection.ERR_ID_OperatorResolutionProblem);
 	}
 
 	@Override

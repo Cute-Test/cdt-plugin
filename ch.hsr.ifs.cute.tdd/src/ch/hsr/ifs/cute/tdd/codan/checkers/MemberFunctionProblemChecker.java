@@ -28,7 +28,7 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_MethodResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem_HSR";
+	public static final String ERR_ID_MethodResolutionProblem = "ch.hsr.ifs.cute.tdd.codan.checkers.MethodResolutionProblem";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -68,7 +68,7 @@ public class MemberFunctionProblemChecker extends AbstractTDDChecker {
 			if (problemBinding.getCandidateBindings().length == 0) {
 				String missingName = new String(name.getSimpleID());
 				CodanArguments ca = new CodanArguments(missingName, missingName, ":memberfunc");
-				reportProblem(ERR_ID_MethodResolutionProblem_HSR, name.getLastName(), ca.toArray());
+				reportProblem(ERR_ID_MethodResolutionProblem, name.getLastName(), ca.toArray());
 			}
 		}
 	}

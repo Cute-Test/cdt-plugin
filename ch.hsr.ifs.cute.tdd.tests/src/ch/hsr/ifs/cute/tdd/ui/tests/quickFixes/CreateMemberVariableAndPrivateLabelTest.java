@@ -26,7 +26,7 @@ public class CreateMemberVariableAndPrivateLabelTest extends QuickFixTest {
 
 	@Override
 	protected String getId() {
-		return TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem_HSR;
+		return TddErrorIdCollection.ERR_ID_MemberVariableResolutionProblem;
 	}
 
 	@Override

@@ -42,7 +42,7 @@ import ch.hsr.ifs.cute.tdd.TypeHelper;
 
 public class MissingConstructorChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_MissingConstructorResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem_HSR";
+	public static final String ERR_ID_MissingConstructorResolutionProblem = "ch.hsr.ifs.cute.tdd.codan.checkers.MissingConstructorResolutionProblem";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -154,7 +154,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 		private void reportMissingConstructor(String typename, IASTDeclarator ctorDecl) {
 			IASTName reportedNode = ctorDecl.getName();
 			CodanArguments ca = new CodanArguments(typename, typename, ":ctor");
-			reportProblem(ERR_ID_MissingConstructorResolutionProblem_HSR, reportedNode, ca.toArray());
+			reportProblem(ERR_ID_MissingConstructorResolutionProblem, reportedNode, ca.toArray());
 		}
 
 		private boolean isConstructorAvailable(IASTDeclarator ctorDecl) {

@@ -27,7 +27,7 @@ import ch.hsr.ifs.cute.tdd.TddHelper;
 
 public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_TypeResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem_HSR";
+	public static final String ERR_ID_TypeResolutionProblem = "ch.hsr.ifs.cute.tdd.codan.checkers.TypeResolutionProblem";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -80,7 +80,7 @@ public class TypeResolutionProblemChecker extends AbstractTDDChecker {
 
 		private void reportType(IASTName name, CodanArguments ca) {
 			reportedNames.add(name);
-			reportProblem(ERR_ID_TypeResolutionProblem_HSR, name, ca.toArray());
+			reportProblem(ERR_ID_TypeResolutionProblem, name, ca.toArray());
 		}
 
 		private String composeArgumentString(ICPPASTTemplateId templateId) {

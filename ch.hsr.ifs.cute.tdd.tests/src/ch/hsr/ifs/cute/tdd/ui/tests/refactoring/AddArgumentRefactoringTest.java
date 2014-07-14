@@ -19,7 +19,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class AddArgumentRefactoringTest extends TddRefactoringTest {
 
 	public AddArgumentRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_InvalidArguments_HSR, TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR);
+		super(TddErrorIdCollection.ERR_ID_InvalidArguments, TddErrorIdCollection.ERR_ID_InvalidArguments_FREE);
 	}
 
 	@Override

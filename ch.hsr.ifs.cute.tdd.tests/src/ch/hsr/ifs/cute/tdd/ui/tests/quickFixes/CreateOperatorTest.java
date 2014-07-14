@@ -28,7 +28,7 @@ public class CreateOperatorTest extends QuickFixTest {
 
 	@Override
 	protected String getId() {
-		return TddErrorIdCollection.ERR_ID_OperatorResolutionProblem_HSR;
+		return TddErrorIdCollection.ERR_ID_OperatorResolutionProblem;
 	}
 
 	@Override

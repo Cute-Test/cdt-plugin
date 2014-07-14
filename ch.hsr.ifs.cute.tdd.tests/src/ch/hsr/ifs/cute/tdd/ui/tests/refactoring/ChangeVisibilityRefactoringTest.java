@@ -22,7 +22,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class ChangeVisibilityRefactoringTest extends TddRefactoringTest {
 
 	public ChangeVisibilityRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_PrivateMethodChecker_HSR);
+		super(TddErrorIdCollection.ERR_ID_PrivateMethodChecker);
 	}
 
 	@Override

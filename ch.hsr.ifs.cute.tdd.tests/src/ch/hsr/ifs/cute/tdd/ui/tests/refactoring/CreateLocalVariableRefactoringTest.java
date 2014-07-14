@@ -22,7 +22,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class CreateLocalVariableRefactoringTest extends TddRefactoringTest {
 
 	public CreateLocalVariableRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_VariableResolutionProblem_HSR);
+		super(TddErrorIdCollection.ERR_ID_VariableResolutionProblem);
 	}
 
 	@Override

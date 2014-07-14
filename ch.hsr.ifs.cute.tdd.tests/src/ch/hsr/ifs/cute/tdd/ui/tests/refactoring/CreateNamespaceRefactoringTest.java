@@ -22,7 +22,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class CreateNamespaceRefactoringTest extends TddRefactoringTest {
 
 	public CreateNamespaceRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_NamespaceResolutionProblem_HSR);
+		super(TddErrorIdCollection.ERR_ID_NamespaceResolutionProblem);
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class CreateLocalVariableTest extends QuickFixTest {
 
 	@Override
 	protected String getId() {
-		return TddErrorIdCollection.ERR_ID_VariableResolutionProblem_HSR;
+		return TddErrorIdCollection.ERR_ID_VariableResolutionProblem;
 	}
 
 	@Override

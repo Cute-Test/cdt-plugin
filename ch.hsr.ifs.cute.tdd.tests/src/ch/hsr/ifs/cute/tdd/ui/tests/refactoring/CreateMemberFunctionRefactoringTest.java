@@ -23,8 +23,8 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class CreateMemberFunctionRefactoringTest extends TddRefactoringTest {
 
 	public CreateMemberFunctionRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_MethodResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_VariableResolutionProblem_HSR,
-				TddErrorIdCollection.ERR_ID_NamespaceMemberResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_FunctionResolutionProblem_HSR);
+		super(TddErrorIdCollection.ERR_ID_MethodResolutionProblem, TddErrorIdCollection.ERR_ID_VariableResolutionProblem,
+				TddErrorIdCollection.ERR_ID_NamespaceMemberResolutionProblem, TddErrorIdCollection.ERR_ID_FunctionResolutionProblem);
 	}
 
 	@Override

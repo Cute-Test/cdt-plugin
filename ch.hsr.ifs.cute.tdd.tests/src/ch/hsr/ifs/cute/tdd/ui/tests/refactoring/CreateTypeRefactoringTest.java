@@ -19,7 +19,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class CreateTypeRefactoringTest extends TddRefactoringTest {
 
 	public CreateTypeRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_TypeResolutionProblem_HSR, TddErrorIdCollection.ERR_ID_NamespaceResolutionProblem_HSR);
+		super(TddErrorIdCollection.ERR_ID_TypeResolutionProblem, TddErrorIdCollection.ERR_ID_NamespaceResolutionProblem);
 	}
 
 	@Override

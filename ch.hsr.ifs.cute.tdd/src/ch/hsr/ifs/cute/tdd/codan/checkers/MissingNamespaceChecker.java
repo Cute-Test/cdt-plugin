@@ -19,7 +19,7 @@ import ch.hsr.ifs.cute.tdd.CodanArguments;
 
 public class MissingNamespaceChecker extends AbstractTDDChecker {
 
-	public static final String ERR_ID_NamespaceResolutionProblem_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem_HSR";
+	public static final String ERR_ID_NamespaceResolutionProblem = "ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem";
 
 	@Override
 	protected void runChecker(IASTTranslationUnit ast) {
@@ -33,7 +33,7 @@ public class MissingNamespaceChecker extends AbstractTDDChecker {
 			if (partnameToReport != null && !(partnameToReport instanceof ICPPASTTemplateId)) {
 				String nodename = new String(partnameToReport.getSimpleID());
 				CodanArguments ca = new CodanArguments(nodename, nodename, ":namespace");
-				reportProblem(ERR_ID_NamespaceResolutionProblem_HSR, partnameToReport, ca.toArray());
+				reportProblem(ERR_ID_NamespaceResolutionProblem, partnameToReport, ca.toArray());
 			}
 		}
 

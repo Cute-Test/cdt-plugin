@@ -61,7 +61,7 @@ public class AddArgumentQFGenerator implements IMarkerResolutionGenerator {
 	private boolean isResolutionPossible(IMarker marker) {
 		String pid = getProblemID(marker);
 		if (pid != null
-				&& !((pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_HSR)) || pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_FREE_HSR))) {
+				&& !((pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments)) || pid.equals(TddErrorIdCollection.ERR_ID_InvalidArguments_FREE))) {
 			return false;
 		}
 		return getProblemArguments(marker).length >= REQUIRED_MARKER_ARGUMENTS && new CodanArguments(marker).getCandidateNr() >= 0;

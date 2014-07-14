@@ -27,7 +27,7 @@ public class CreateConstructorTest extends QuickFixTest {
 
 	@Override
 	protected String getId() {
-		return TddErrorIdCollection.ERR_ID_MissingConstructorResolutionProblem_HSR;
+		return TddErrorIdCollection.ERR_ID_MissingConstructorResolutionProblem;
 	}
 
 	@Override

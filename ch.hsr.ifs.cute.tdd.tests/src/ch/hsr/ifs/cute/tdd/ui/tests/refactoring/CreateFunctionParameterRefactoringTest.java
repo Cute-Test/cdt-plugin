@@ -21,7 +21,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class CreateFunctionParameterRefactoringTest extends TddRefactoringTest {
 
 	public CreateFunctionParameterRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_FunctionResolutionProblem_HSR);
+		super(TddErrorIdCollection.ERR_ID_FunctionResolutionProblem);
 	}
 
 	@Override

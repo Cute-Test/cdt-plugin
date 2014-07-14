@@ -23,7 +23,7 @@ import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 public class CreateConstructorRefactoringTest extends TddRefactoringTest {
 
 	public CreateConstructorRefactoringTest() {
-		super(TddErrorIdCollection.ERR_ID_MissingConstructorResolutionProblem_HSR);
+		super(TddErrorIdCollection.ERR_ID_MissingConstructorResolutionProblem);
 	}
 
 	@Override

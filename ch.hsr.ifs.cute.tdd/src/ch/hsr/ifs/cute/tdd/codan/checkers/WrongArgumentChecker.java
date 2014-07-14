@@ -33,8 +33,8 @@ import ch.hsr.ifs.cute.tdd.addArgument.AddArgumentRefactoring;
 public class WrongArgumentChecker extends AbstractTDDChecker {
 
 	private static final String COMMA_SPACE = ", ";
-	public static final String ERR_ID_InvalidArguments_HSR = "ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments_HSR";
-	public static final String ERR_ID_InvalidArguments_FREE_HSR = "ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE_HSR";
+	public static final String ERR_ID_InvalidArguments = "ch.hsr.eclipse.cdt.codan.checkers.InvalidArguments";
+	public static final String ERR_ID_InvalidArguments_FREE = "ch.hsr.ifs.cute.tdd.codan.checkers.InvalidArguments_FREE";
 	private static final String EMPTY_STRING = "";
 
 	@Override
@@ -59,9 +59,9 @@ public class WrongArgumentChecker extends AbstractTDDChecker {
 			for (argNr = 0; argNr < candidates.length; argNr++) {
 				IBinding b = candidates[argNr];
 				if (b instanceof ICPPMethod) {
-					ERR_ID = ERR_ID_InvalidArguments_HSR;
+					ERR_ID = ERR_ID_InvalidArguments;
 				} else {
-					ERR_ID = ERR_ID_InvalidArguments_FREE_HSR;
+					ERR_ID = ERR_ID_InvalidArguments_FREE;
 				}
 				if (b instanceof ICPPFunction) {
 					ICPPFunction candidate = (ICPPFunction) b;

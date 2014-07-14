@@ -25,7 +25,7 @@ public class CreateFunctionTest extends QuickFixTest {
 
 	@Override
 	protected String getId() {
-		return TddErrorIdCollection.ERR_ID_FunctionResolutionProblem_HSR;
+		return TddErrorIdCollection.ERR_ID_FunctionResolutionProblem;
 	}
 
 	@Override
