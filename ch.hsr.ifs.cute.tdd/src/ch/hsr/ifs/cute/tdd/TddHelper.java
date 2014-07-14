@@ -26,6 +26,7 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
@@ -257,17 +258,17 @@ public class TddHelper {
 
 	public static IASTNode getNestedInsertionPoint(IASTTranslationUnit localunit, ICPPASTQualifiedName parent, CRefactoringContext context) {
 		ICPPASTQualifiedName qname = parent;
-		IASTName lastexisiting = null;
-		for (IASTName n : qname.getNames()) {
+		ICPPASTNameSpecifier lastExisting = null;
+		for (ICPPASTNameSpecifier n : qname.getAllSegments()) {
 			IBinding b = n.resolveBinding();
 			if (!(b instanceof IProblemBinding)) {
-				lastexisiting = n;
+				lastExisting = n;
 			} else {
 				break;
 			}
 		}
-		if (lastexisiting != null) {
-			return TypeHelper.getTypeDefinitonOfName(localunit, new String(lastexisiting.getSimpleID()), context);
+		if (lastExisting != null) {
+			return TypeHelper.getTypeDefinitonOfName(localunit, new String(lastExisting.resolveBinding().getName()), context);
 		}
 		return null;
 	}
@@ -313,7 +314,7 @@ public class TddHelper {
 		IASTNode parent = name.getParent();
 		if (parent instanceof ICPPASTQualifiedName) {
 			ICPPASTQualifiedName qName = (ICPPASTQualifiedName) parent;
-			for (IASTName part : qName.getNames()) {
+			for (ICPPASTNameSpecifier part : qName.getAllSegments()) {
 				if (part != name && part.resolveBinding() instanceof IProblemBinding) {
 					return true;
 				}

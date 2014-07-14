@@ -78,3 +78,22 @@ struct X
 	static void foo() {
 	}
 };
+//!Create Static Member Function with Decltype
+//@A.cpp
+struct X
+{
+};
+void test() {
+	X x{};
+	decltype(x)::foo();
+}
+//=
+struct X
+{
+	static void foo() {
+	}
+};
+void test() {
+	X x{};
+	decltype(x)::foo();
+}

@@ -38,7 +38,6 @@ public class CreateMemberFunctionRefactoring extends TddCRefactoring {
 
 	@Override
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
-
 		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
 		IASTName selectedNode = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
 		ICPPASTCompositeTypeSpecifier type = strategy.getDefinitionScopeForName(localunit, selectedNode, refactoringContext);

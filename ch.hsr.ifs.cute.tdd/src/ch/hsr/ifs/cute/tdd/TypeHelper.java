@@ -49,6 +49,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
@@ -391,9 +392,9 @@ public class TypeHelper {
 	}
 
 	private static ICPPASTCompositeTypeSpecifier handleQualifiedName(ICPPASTQualifiedName qName) {
-		IASTName[] nameParts = qName.getNames();
+		ICPPASTNameSpecifier[] nameParts = qName.getAllSegments();
 		if (nameParts.length >= 2) {
-			IASTName containingScope = nameParts[nameParts.length - 2];
+			ICPPASTNameSpecifier containingScope = nameParts[nameParts.length - 2];
 			IBinding scopeBinding = containingScope.resolveBinding();
 			if (scopeBinding instanceof IType) {
 				IType bareType = windDownToRealType((IType) scopeBinding, false);

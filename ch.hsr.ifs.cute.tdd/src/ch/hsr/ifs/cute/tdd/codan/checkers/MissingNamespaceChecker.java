@@ -12,6 +12,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 
@@ -40,11 +41,11 @@ public class MissingNamespaceChecker extends AbstractTDDChecker {
 		private IASTName findFirstUnresolvableQualifier(IASTName name) {
 			if (name instanceof ICPPASTQualifiedName) {
 				ICPPASTQualifiedName qname = (ICPPASTQualifiedName) name;
-				for (IASTName partname : qname.getNames()) {
-					if (partname != qname.getLastName()) {
+				for (ICPPASTNameSpecifier partname : qname.getQualifier()) {
+					if (partname instanceof IASTName) {
 						IBinding b = partname.resolveBinding();
 						if (b instanceof IProblemBinding) {
-							return partname;
+							return (IASTName) partname;
 						}
 					}
 				}

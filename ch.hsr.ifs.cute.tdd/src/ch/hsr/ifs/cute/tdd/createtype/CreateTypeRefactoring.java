@@ -48,10 +48,10 @@ public class CreateTypeRefactoring extends TddCRefactoring {
 		super(textSelection);
 		this.ca = ca;
 		this.className = ca.getName();
-		this.listOfArgs = createTempalteArgs();
+		this.listOfArgs = createTemplateArgs();
 	}
 
-	private ArrayList<ICPPASTSimpleTypeTemplateParameter> createTempalteArgs() {
+	private ArrayList<ICPPASTSimpleTypeTemplateParameter> createTemplateArgs() {
 		char startChar = 'T';
 		ArrayList<ICPPASTSimpleTypeTemplateParameter> result = new ArrayList<ICPPASTSimpleTypeTemplateParameter>();
 		String args = ca.getTemplateArgs();

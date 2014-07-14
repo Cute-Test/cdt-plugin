@@ -253,3 +253,26 @@ struct Inner {
 void test() {
 	X::Inner xi;
 }
+
+//!Test Create Class in Decltype
+//@.config
+markerCount=1
+//@main.h
+struct Outer {
+
+};
+
+void foo() {
+	Outer o{};
+	decltype(o)::Inner i{};
+}
+//=
+struct Outer {
+	struct Inner {
+	};
+};
+
+void foo() {
+	Outer o{};
+	decltype(o)::Inner i{};
+}

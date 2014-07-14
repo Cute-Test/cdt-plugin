@@ -12,6 +12,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
@@ -63,15 +64,15 @@ public class FreeFunctionProblemChecker extends AbstractTDDChecker {
 
 	private void handleQualifiedName(IASTName name, CPPASTQualifiedName qname) {
 		boolean isTypeMember = false;
-		for (IASTName partname : qname.getNames()) {
-			if (partname == qname.getLastName() && !(partname instanceof ICPPASTTemplateId)) {
-				reportMissingFunction(name, partname, isTypeMember);
-			} else {
-				final IBinding partBinding = partname.resolveBinding();
-				isTypeMember = partBinding instanceof ICPPClassType;
-				if (partBinding instanceof IProblemBinding) {
-					return;
-				}
+		IASTName lastName = qname.getLastName();
+		if (!(lastName instanceof ICPPASTTemplateId)) {
+			reportMissingFunction(name, lastName, isTypeMember);
+		}
+		for (ICPPASTNameSpecifier partname : qname.getQualifier()) {
+			final IBinding partBinding = partname.resolveBinding();
+			isTypeMember = partBinding instanceof ICPPClassType;
+			if (partBinding instanceof IProblemBinding) {
+				return;
 			}
 		}
 	}
