@@ -69,7 +69,7 @@
        <resolution
              class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.NormalFunctionCreationQuickFix"
              problemId="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceMemberResolutionProblem_HSR">
-       </resolution>-->
+       </resolution>
    </extension>
    
   <extension
@@ -371,23 +371,25 @@
        </type>
     </extension>
     <extension point="org.eclipse.ui.ide.markerResolution">
-       <markerResolutionGenerator
-             class="org.eclipse.cdt.codan.internal.ui.CodanProblemMarkerResolutionGenerator"
-             markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker">
-       </markerResolutionGenerator>
       <markerResolutionGenerator
             class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
             markerType="org.eclipse.cdt.codan.core.codanProblem">
       </markerResolutionGenerator>
-      
       <markerResolutionGenerator
             class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
             markerType="org.eclipse.cdt.codan.core.codanSemanticProblem">
       </markerResolutionGenerator>
-      
       <markerResolutionGenerator
             class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
             markerType="org.eclipse.cdt.core.problem">
       </markerResolutionGenerator>
+       <markerResolutionGenerator
+             class="ch.hsr.ifs.cute.tdd.addArgument.AddArgumentQFGenerator"
+             markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker">
+       </markerResolutionGenerator>
+       <markerResolutionGenerator
+             class="org.eclipse.cdt.codan.internal.ui.CodanProblemMarkerResolutionGenerator"
+             markerType="ch.hsr.ifs.cute.tdd.tddProblemMarker">
+       </markerResolutionGenerator>
    </extension>
 </plugin>

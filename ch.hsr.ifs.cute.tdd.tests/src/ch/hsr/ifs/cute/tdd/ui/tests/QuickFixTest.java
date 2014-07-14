@@ -30,6 +30,8 @@ import ch.hsr.ifs.cute.tdd.TddQuickFix;
 @SuppressWarnings("restriction")
 public abstract class QuickFixTest extends QuickFixTestCase {
 
+	private static final String TDD_MARKER_TYPE = "ch.hsr.ifs.cute.tdd.tddProblemMarker";
+
 	@Override
 	@Before
 	public void setUp() throws Exception {
@@ -109,7 +111,7 @@ public abstract class QuickFixTest extends QuickFixTestCase {
 	}
 
 	private boolean hasRightType(IMarker m) {
-		return getType(m).equals("org.eclipse.cdt.codan.core.codanProblem") && CodanProblemMarker.getProblemId(m).equals(getId());
+		return getType(m).equals(TDD_MARKER_TYPE) && CodanProblemMarker.getProblemId(m).equals(getId());
 	}
 
 	private String getType(IMarker m) {
