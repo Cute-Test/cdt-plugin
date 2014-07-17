@@ -68,14 +68,19 @@ public class ChangeRecorder {
 	}
 
 	public int getSpecEnd() throws BadLocationException {
+		boolean tokenDelimiterFound = false;
 		for (int i = getDeclaratorOffset(); i >= 0; i--) {
 			// Don't include reference symbol because the text needs to be the same as in the return statement
-			boolean isReference = false;
-			if (i > 0 && document.getChar(i - 1) == '&') {
-				isReference = true;
+			if (document.getChar(i) == '&') {
+				tokenDelimiterFound = true;
+				continue;
 			}
-			if (Character.isWhitespace(document.getChar(i)) && !isReference) {
-				return i;
+			if (Character.isWhitespace(document.getChar(i))) {
+				tokenDelimiterFound = true;
+				continue;
+			}
+			if (tokenDelimiterFound){
+				return i + 1;
 			}
 		}
 		throw new NotSupportedException(Messages.ChangeRecorder_2);
