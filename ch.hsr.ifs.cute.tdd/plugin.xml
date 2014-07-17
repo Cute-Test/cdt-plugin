@@ -63,7 +63,7 @@
             problemId="ch.hsr.ifs.cute.tdd.codan.checkers.NamespaceResolutionProblem">
       </resolution>
        <resolution
-            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.StaticFunctionCreationQuickFix"
+            class="ch.hsr.ifs.cute.tdd.createfunction.quickfixes.StaticMemberFunctionCreationQuickFix"
             problemId="ch.hsr.ifs.cute.tdd.codan.checkers.FunctionResolutionProblem_STATIC">
       </resolution>
        <resolution

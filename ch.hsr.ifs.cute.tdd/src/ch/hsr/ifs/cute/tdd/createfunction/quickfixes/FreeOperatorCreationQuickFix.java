@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  *  
  * Permission to use, copy, and/or distribute this software for any
@@ -8,23 +8,31 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.createfunction.quickfixes;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
+import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
+import ch.hsr.ifs.cute.tdd.createfunction.strategies.FreeOperatorCreationStrategy;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
-import ch.hsr.ifs.cute.tdd.createfunction.strategies.OperatorCreationStrategy;
 
 public class FreeOperatorCreationQuickFix extends AbstractFunctionCreationQuickFix {
 
+	@Override
+	protected TddCRefactoring getRefactoring(ITextSelection selection) {
+		return new CreateFreeFunctionRefactoring(selection, ca, getStrategy());
+	}
+
 	public FreeOperatorCreationQuickFix() {
-		setFree(true);
 	}
 
 	@Override
 	protected IFunctionCreationStrategy getStrategy() {
-		return new OperatorCreationStrategy(true);
+		return new FreeOperatorCreationStrategy();
 	}
 
 	@Override
@@ -36,5 +44,13 @@ public class FreeOperatorCreationQuickFix extends AbstractFunctionCreationQuickF
 	@Override
 	protected void configureLinkedMode(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		configureLinkedModeWithDeclSpec(rec, lmi);
+	}
+
+	@Override
+	public boolean isApplicable(IMarker marker) {
+		if (super.isApplicable(marker)) {
+			return ca.isFreeOperator();
+		}
+		return false;
 	}
 }

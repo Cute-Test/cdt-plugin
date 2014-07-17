@@ -9,14 +9,22 @@
 package ch.hsr.ifs.cute.tdd.createfunction.quickfixes;
 
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
+import ch.hsr.ifs.cute.tdd.createfunction.CreateMemberFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.ConstructorCreationStrategy;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
 public class CreateConstructorCreationQuickFix extends AbstractFunctionCreationQuickFix {
+
+	@Override
+	protected TddCRefactoring getRefactoring(ITextSelection selection) {
+		return new CreateMemberFunctionRefactoring(selection, ca, getStrategy());
+	}
 
 	@Override
 	protected IFunctionCreationStrategy getStrategy() {

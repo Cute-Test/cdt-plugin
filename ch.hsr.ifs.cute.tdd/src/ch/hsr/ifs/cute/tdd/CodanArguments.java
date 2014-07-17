@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -123,14 +123,11 @@ public class CodanArguments {
 	}
 
 	public boolean isFreeOperator() {
-		if (getStrategy().equals(":freeoperator")) {
-			return true;
-		}
-		return false;
+		return getStrategy().equals(":freeoperator") || getStrategy().equals(":anyoperator");
 	}
 
-	public boolean isOperatorCase() {
-		return getStrategy().endsWith("operator");
+	public boolean isMemberOperator() {
+		return getStrategy().equals(":memberoperator") || getStrategy().equals(":anyoperator");
 	}
 
 	public boolean isStaticCase() {

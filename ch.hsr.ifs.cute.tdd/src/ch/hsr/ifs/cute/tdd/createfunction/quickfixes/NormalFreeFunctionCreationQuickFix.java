@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -9,19 +9,23 @@
 package ch.hsr.ifs.cute.tdd.createfunction.quickfixes;
 
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
+import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.FunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
 public class NormalFreeFunctionCreationQuickFix extends AbstractFunctionCreationQuickFix {
 
-	public NormalFreeFunctionCreationQuickFix() {
-		setFree(true);
+	@Override
+	protected TddCRefactoring getRefactoring(ITextSelection selection) {
+		return new CreateFreeFunctionRefactoring(selection, ca, getStrategy());
 	}
-
+	
 	@Override
 	protected IFunctionCreationStrategy getStrategy() {
 		return new FunctionCreationStrategy();

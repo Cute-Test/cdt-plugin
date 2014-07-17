@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  *  
  * Permission to use, copy, and/or distribute this software for any
@@ -27,7 +27,7 @@ import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
 public class CreateMemberFunctionRefactoring extends TddCRefactoring {
 
-	public CodanArguments ca;
+	protected CodanArguments ca;
 	private final IFunctionCreationStrategy strategy;
 
 	public CreateMemberFunctionRefactoring(ISelection selection, CodanArguments ca, IFunctionCreationStrategy strategy) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  *  
  * Permission to use, copy, and/or distribute this software for any
@@ -16,7 +16,7 @@ import org.eclipse.jface.text.TextSelection;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
 import ch.hsr.ifs.cute.tdd.TddErrorIdCollection;
 import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
-import ch.hsr.ifs.cute.tdd.createfunction.strategies.OperatorCreationStrategy;
+import ch.hsr.ifs.cute.tdd.createfunction.strategies.FreeOperatorCreationStrategy;
 import ch.hsr.ifs.cute.tdd.ui.tests.TddRefactoringTest;
 
 public class CreateFreeOperatorRefactoringTest extends TddRefactoringTest {
@@ -29,9 +29,8 @@ public class CreateFreeOperatorRefactoringTest extends TddRefactoringTest {
 	protected CreateFreeFunctionRefactoring getRefactoring(IMarker marker, IDocument doc) throws CoreException {
 		CodanArguments ca = new CodanArguments(marker);
 		int markerOffset = marker.getAttribute(IMarker.CHAR_START, 0);
-		ca.setStrategy(":freeoperator");
+		assertTrue(ca.isFreeOperator());
 		TextSelection newSelection = new TextSelection(doc, markerOffset, marker.getAttribute(IMarker.CHAR_END, 0) - markerOffset);
-		return new CreateFreeFunctionRefactoring(newSelection, ca, new OperatorCreationStrategy(true));
+		return new CreateFreeFunctionRefactoring(newSelection, ca, new FreeOperatorCreationStrategy());
 	}
-
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  *  
  * Permission to use, copy, and/or distribute this software for any
@@ -36,14 +36,13 @@ public class CreateOperatorTest extends QuickFixTest {
 		assertExactlyTheSame("Operator '++' cannot be resolved for type 'A'.", getMarkerMessage());
 	}
 
-	// TODO: I'd propose to put the marker only on the operator
-	//	public void testMarkerOffset() {
-	//		assertEquals("Marker offset", 39, getMarkerOffset());
-	//	}
-	//
-	//	public void testMarkerLength() {
-	//		assertEquals("Marker length", 2, getMarkerLength());
-	//	}
+	public void testMarkerOffset() {
+		assertEquals("Marker offset", 42, getMarkerOffset());
+	}
+
+	public void testMarkerLength() {
+		assertEquals("Marker length", 3, getMarkerLength());
+	}
 
 	@Override
 	public void testQuickFixMessage() {
@@ -67,16 +66,5 @@ public class CreateOperatorTest extends QuickFixTest {
 	@Override
 	public void testImageNotNull() {
 		assertNotNull(getQuickFix(MemberOperatorCreationQuickFix.class, CREATE_OPERATOR_IN_TYPE_A).getImage());
-	}
-
-	@Override
-	public void testMarkerOffset() {
-		//not tested here
-
-	}
-
-	@Override
-	public void testMarkerLength() {
-		//not tested here
 	}
 }

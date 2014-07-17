@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  *  
  * Permission to use, copy, and/or distribute this software for any
@@ -10,36 +10,18 @@ package ch.hsr.ifs.cute.tdd.createfunction.quickfixes;
 
 import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddQuickFix;
 import ch.hsr.ifs.cute.tdd.LinkedMode.ChangeRecorder;
-import ch.hsr.ifs.cute.tdd.createfunction.CreateFreeFunctionRefactoring;
-import ch.hsr.ifs.cute.tdd.createfunction.CreateMemberFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.LinkedModeInformation;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
 public abstract class AbstractFunctionCreationQuickFix extends TddQuickFix {
 
-	private boolean free;
-
 	@Override
 	public org.eclipse.swt.graphics.Image getImage() {
 		return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
 	};
-
-	public void setFree(boolean free) {
-		this.free = free;
-	}
-
-	@Override
-	protected TddCRefactoring getRefactoring(ITextSelection selection) {
-		if (free) {
-			return new CreateFreeFunctionRefactoring(selection, ca, getStrategy());
-		}
-		return new CreateMemberFunctionRefactoring(selection, ca, getStrategy());
-	}
 
 	public void handleReturn(ChangeRecorder rec, LinkedModeInformation lmi) throws BadLocationException {
 		if (lmi.getReturnStatment()) {

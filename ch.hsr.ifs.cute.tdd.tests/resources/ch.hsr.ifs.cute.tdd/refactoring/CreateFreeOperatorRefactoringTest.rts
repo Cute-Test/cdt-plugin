@@ -564,3 +564,42 @@ void foo(){
 	void *x=0;
 	x = 0;
 }
+//!Operator for Primitive Type on Lefthand Side
+//@A.cpp
+struct S {
+} s;
+void foo() {
+	5 + s;
+}
+//=
+struct S {
+} s;
+
+int& operator+(const int& i, S& s) {
+	return int();
+}
+
+void foo() {
+	5 + s;
+}
+//!Do Not Report Operator Depending on Template Argument
+//@.config
+markerCount=0
+//@A.cpp
+template<typename T>
+struct Templ {
+	void foo() {
+		T t;
+		t + 5;
+		5 + t;
+	}
+}
+//=
+template<typename T>
+struct Templ {
+	void foo() {
+		T t;
+		t + 5;
+		5 + t;
+	}
+}

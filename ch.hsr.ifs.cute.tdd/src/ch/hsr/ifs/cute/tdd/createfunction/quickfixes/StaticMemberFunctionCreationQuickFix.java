@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  *  
  * Permission to use, copy, and/or distribute this software for any
@@ -8,12 +8,20 @@
  *******************************************************************************/
 package ch.hsr.ifs.cute.tdd.createfunction.quickfixes;
 
+import org.eclipse.jface.text.ITextSelection;
+
 import ch.hsr.ifs.cute.tdd.CodanArguments;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
+import ch.hsr.ifs.cute.tdd.createfunction.CreateMemberFunctionRefactoring;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.StaticFunctionCreationStrategy;
 
-public class StaticFunctionCreationQuickFix extends AbstractFunctionCreationQuickFix {
+public class StaticMemberFunctionCreationQuickFix extends AbstractFunctionCreationQuickFix {
 
+	@Override
+	protected TddCRefactoring getRefactoring(ITextSelection selection) {
+		return new CreateMemberFunctionRefactoring(selection, ca, getStrategy());
+	}
 	@Override
 	protected IFunctionCreationStrategy getStrategy() {
 		return new StaticFunctionCreationStrategy();
