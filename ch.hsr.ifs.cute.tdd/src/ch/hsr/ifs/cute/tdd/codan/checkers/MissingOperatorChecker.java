@@ -216,7 +216,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		private boolean hasPrimitiveType(IASTExpression operand) {
 			IType type = operand.getExpressionType();
-			type = SemanticUtil.getNestedType(type, SemanticUtil.TDEF | SemanticUtil.ALLCVQ);
+			type = SemanticUtil.getUltimateType(type, true); //, SemanticUtil.TDEF | SemanticUtil.ALLCVQ);
 			return type instanceof IBasicType || type instanceof IEnumeration;
 		}
 

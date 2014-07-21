@@ -809,3 +809,16 @@ typedef int u8;
 void foo(const u8 a, u8 b) {
 	u8 v = a + b;
 }
+//!Do Not Report Operator for Primitive Types
+//@.config
+markerCount=0
+//@A.cpp
+bool needsFiltering(int argc, const char *const *argv) const
+{
+    return argc > 1 && argv ;
+}
+//=
+bool needsFiltering(int argc, const char *const *argv) const
+{
+    return argc > 1 && argv ;
+}
