@@ -39,11 +39,11 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
 import org.eclipse.cdt.internal.ui.refactoring.utils.SelectionHelper;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ISelection;
 
 public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 
-	private final TextSelection selection;
+	private final ISelection selection;
 	private final NodeContainer container;
 
 	{
@@ -51,7 +51,7 @@ public class PossibleReturnTypeFindVisitor extends ASTVisitor {
 		shouldVisitExpressions = true;
 	}
 
-	public PossibleReturnTypeFindVisitor(TextSelection selection, NodeContainer c) {
+	public PossibleReturnTypeFindVisitor(ISelection selection, NodeContainer c) {
 		this.selection = selection;
 		this.container = c;
 	}

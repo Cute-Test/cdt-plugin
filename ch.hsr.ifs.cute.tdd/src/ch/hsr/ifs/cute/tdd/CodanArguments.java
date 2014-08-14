@@ -23,9 +23,11 @@ public class CodanArguments {
 	private int candNr = 0;
 	private String candidates;
 	private String templateargs;
+	private int nodeOffset = -1;
+	private int nodeLength = -1;
 
 	public CodanArguments(IMarker marker) {
-		if (marker != null && CodanProblemMarker.getProblemArguments(marker).length != 6) {
+		if (marker != null && CodanProblemMarker.getProblemArguments(marker).length != 8) {
 			return;
 		}
 		try {
@@ -42,6 +44,8 @@ public class CodanArguments {
 				setCandidate(-1);
 			}
 			setTemplateArgs(CodanProblemMarker.getProblemArgument(marker, 5));
+			setNodeOffset(Integer.parseInt(CodanProblemMarker.getProblemArgument(marker, 6)));
+			setNodeLength(Integer.parseInt(CodanProblemMarker.getProblemArgument(marker, 7)));
 		} catch (ArrayIndexOutOfBoundsException e) {
 		}
 	}
@@ -67,10 +71,12 @@ public class CodanArguments {
 		result.add(getMessage());
 		result.add(getName());
 		result.add(getStrategy());
-		result.add(getCandidateNr() + EMPTY_STRING);
+		result.add(Integer.toString(getCandidateNr()));
 		result.add(getCandidates());
 		result.add(getTemplateArgs());
-		String[] s = new String[6];
+		result.add(Integer.toString(getNodeOffset()));
+		result.add(Integer.toString(getNodeLength()));
+		String[] s = new String[8];
 		return result.toArray(s);
 	}
 
@@ -140,5 +146,21 @@ public class CodanArguments {
 
 	public boolean isMemberVariableCase() {
 		return getStrategy().equals(":memberVariable");
+	}
+
+	public int getNodeOffset() {
+		return nodeOffset;
+	}
+
+	public void setNodeOffset(int nodeOffset) {
+		this.nodeOffset = nodeOffset;
+	}
+
+	public int getNodeLength() {
+		return nodeLength;
+	}
+
+	public void setNodeLength(int nodeLength) {
+		this.nodeLength = nodeLength;
 	}
 }

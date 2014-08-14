@@ -822,3 +822,88 @@ bool needsFiltering(int argc, const char *const *argv) const
 {
     return argc > 1 && argv ;
 }
+//!Create Member Operator from Assert
+//@A.cpp
+struct otherType{};
+#define ASSERT_EQUAL(first, second) second; otherType ot;
+
+struct arithmetischeReihe {
+	arithmetischeReihe(int delta, int start, int position) {
+	}
+};
+
+void testArithmentischeReiheCtor() {
+	arithmetischeReihe ar { 1, 0, 0 };
+	ASSERT_EQUAL(0,*ar); // quick fix
+}
+//=
+struct otherType{};
+#define ASSERT_EQUAL(first, second) second; otherType ot;
+
+struct arithmetischeReihe {
+	otherType& operator*() {
+		return otherType();
+	}
+
+	arithmetischeReihe(int delta, int start, int position) {
+	}
+};
+
+void testArithmentischeReiheCtor() {
+	arithmetischeReihe ar { 1, 0, 0 };
+	ASSERT_EQUAL(0,*ar); // quick fix
+}
+//!Create Member Operator from Function Call in Macro
+//@A.cpp
+#define MACRO(x, y) x; foo(y)
+
+template<typename T>
+void foo(T const & t) {
+}
+
+struct S {
+};
+
+void bar() {
+	S s;
+	int i;
+	MACRO(*s, i);
+}
+//=
+#define MACRO(x, y) x; foo(y)
+
+template<typename T>
+void foo(T const & t) {
+}
+
+struct S {
+	void operator*() {
+	}
+};
+
+void bar() {
+	S s;
+	int i;
+	MACRO(*s, i);
+}
+//!Create Member Operator in Other File
+//@A.cpp
+#include "A.h"
+void foo() {
+	A a;
+	*a;
+}
+//=
+#include "A.h"
+void foo() {
+	A a;
+	*a;
+}
+//@A.h
+struct A {
+};
+//=
+struct A {
+	void operator*() {
+	}
+};

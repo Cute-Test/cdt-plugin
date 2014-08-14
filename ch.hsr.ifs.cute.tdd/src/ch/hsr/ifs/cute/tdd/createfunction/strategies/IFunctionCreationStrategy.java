@@ -14,11 +14,11 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ISelection;
 
 public interface IFunctionCreationStrategy {
 
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, TextSelection selection);
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, ISelection selection);
 
 	public ICPPASTCompositeTypeSpecifier getDefinitionScopeForName(IASTTranslationUnit unit, IASTName selectedNode, CRefactoringContext astCache);
 }

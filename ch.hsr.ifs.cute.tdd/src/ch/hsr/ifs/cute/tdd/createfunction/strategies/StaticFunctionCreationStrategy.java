@@ -12,12 +12,12 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ISelection;
 
 public class StaticFunctionCreationStrategy extends FunctionCreationStrategy {
 
 	@Override
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, TextSelection selection) {
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, ISelection selection) {
 		ICPPASTFunctionDefinition function = super.getFunctionDefinition(localunit, selectedName, name, selection);
 		IASTDeclSpecifier declSpecifier = function.getDeclSpecifier();
 		declSpecifier.setStorageClass(IASTDeclSpecifier.sc_static);

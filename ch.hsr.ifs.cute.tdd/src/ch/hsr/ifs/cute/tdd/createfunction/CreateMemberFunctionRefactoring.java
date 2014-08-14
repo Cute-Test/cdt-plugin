@@ -20,8 +20,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.CodanArguments;
+import ch.hsr.ifs.cute.tdd.TddCRefactoring;
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.strategies.IFunctionCreationStrategy;
 
@@ -39,8 +39,18 @@ public class CreateMemberFunctionRefactoring extends TddCRefactoring {
 	@Override
 	protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 		IASTTranslationUnit localunit = refactoringContext.getAST(tu, pm);
+		int offset = ca.getNodeOffset();
+		int length = ca.getNodeLength();
+		ICPPASTCompositeTypeSpecifier type = null;
 		IASTName selectedNode = FunctionCreationHelper.getMostCloseSelectedNodeName(localunit, getSelection());
-		ICPPASTCompositeTypeSpecifier type = strategy.getDefinitionScopeForName(localunit, selectedNode, refactoringContext);
+		if (offset == -1 || length == -1) {
+			type = strategy.getDefinitionScopeForName(localunit, selectedNode, refactoringContext);
+		} else {
+			IASTNode node = localunit.getNodeSelector(null).findEnclosingNodeInExpansion(offset, length);
+			if (node instanceof ICPPASTCompositeTypeSpecifier) {
+				type = (ICPPASTCompositeTypeSpecifier) node;
+			}
+		}
 		ICPPASTFunctionDefinition newFunction = strategy.getFunctionDefinition(localunit, selectedNode, ca.getName(), getSelection());
 
 		if (type == null) {

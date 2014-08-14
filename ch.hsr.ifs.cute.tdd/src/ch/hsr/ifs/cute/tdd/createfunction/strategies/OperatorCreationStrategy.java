@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTReferenceOperator;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ISelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
 import ch.hsr.ifs.cute.tdd.TypeHelper;
@@ -29,14 +29,14 @@ public abstract class OperatorCreationStrategy implements IFunctionCreationStrat
 	}
 
 	protected ICPPASTFunctionDefinition createFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName,
-			TextSelection selection, ICPPASTFunctionDeclarator decl) {
+			ISelection selection, ICPPASTFunctionDeclarator decl) {
 		ICPPASTFunctionDefinition fdef = FunctionCreationHelper.createNewFunction(localunit, selection, decl);
 		if (!FunctionCreationHelper.isVoid(fdef) && FunctionCreationHelper.isConstOperator(selectedName)) {
 			decl.setConst(true);
 		}
 		if (FunctionCreationHelper.isPostfixOperator(selectedName)) {
 			ParameterHelper.addEmptyIntParameter(decl);
-		} else if (!decl.isConst()) {
+		} else if (!decl.isConst() && !FunctionCreationHelper.isVoid(fdef)) {
 			decl.addPointerOperator(new CPPASTReferenceOperator(false));
 		}
 		return fdef;

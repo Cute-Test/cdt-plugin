@@ -20,8 +20,11 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTStandardFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
@@ -32,6 +35,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTBaseDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ISelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
 import ch.hsr.ifs.cute.tdd.TddHelper;
@@ -47,7 +51,8 @@ public class FunctionCreationHelper {
 		IASTName nameAround = TddHelper.getAncestorOfType(selectedNode, CPPASTName.class);
 		if (nameAround == null) {
 			nameAround = TddHelper.getChildofType(selectedNode, CPPASTName.class);
-			if (nameAround != null && nameAround.resolveBinding() instanceof ICPPNamespace) {
+			IBinding nameBinding = nameAround.resolveBinding();
+			if (nameAround != null && (nameBinding instanceof ICPPNamespace || nameBinding instanceof IType)) {
 				IASTIdExpression idex = new LastIDExpressionFinder().getLastIDExpression(selectedNode);
 				nameAround = idex.getName();
 			}
@@ -55,7 +60,7 @@ public class FunctionCreationHelper {
 		return nameAround;
 	}
 
-	public static void addParameterToOperator(ICPPASTFunctionDeclarator decl, IASTExpression op) {
+	public static void addParameterToOperator(IASTStandardFunctionDeclarator decl, IASTExpression op) {
 		HashMap<String, Boolean> used = new HashMap<String, Boolean>();
 		if (op instanceof IASTIdExpression) {
 			IASTIdExpression op_expr = (IASTIdExpression) op;
@@ -69,9 +74,7 @@ public class FunctionCreationHelper {
 	public static boolean isVoid(ICPPASTFunctionDefinition fdef) {
 		IASTDeclSpecifier simpledecspec = fdef.getDeclSpecifier();
 		if (simpledecspec instanceof ICPPASTSimpleDeclSpecifier) {
-			if ((((ICPPASTSimpleDeclSpecifier) simpledecspec).getType() == IASTSimpleDeclSpecifier.t_void)) {
-				return true;
-			}
+			return ((ICPPASTSimpleDeclSpecifier) simpledecspec).getType() == IASTSimpleDeclSpecifier.t_void;
 		}
 		return false;
 	}
@@ -102,8 +105,8 @@ public class FunctionCreationHelper {
 		return uexpr != null && (uexpr.getOperator() == IASTUnaryExpression.op_postFixDecr || uexpr.getOperator() == IASTUnaryExpression.op_postFixIncr);
 	}
 
-	public static ICPPASTFunctionDefinition createNewFunction(IASTTranslationUnit localunit, TextSelection selection, ICPPASTFunctionDeclarator dec) {
-		CPPASTBaseDeclSpecifier spec = FunctionCreationHelper.calculateReturnType(localunit, selection);
+	public static ICPPASTFunctionDefinition createNewFunction(IASTNode targetNode, ISelection selection, ICPPASTFunctionDeclarator dec) {
+		CPPASTBaseDeclSpecifier spec = FunctionCreationHelper.calculateReturnType(targetNode, selection);
 		IASTCompoundStatement body = CPPNodeFactory.getDefault().newCompoundStatement();
 		ICPPASTFunctionDefinition newFunctionDefinition = CPPNodeFactory.getDefault().newFunctionDefinition(spec, dec, body);
 		IASTReturnStatement returnstmt = TddHelper.getDefaultReturnValue(spec);
@@ -114,8 +117,8 @@ public class FunctionCreationHelper {
 		return newFunctionDefinition;
 	}
 
-	public static CPPASTBaseDeclSpecifier calculateReturnType(IASTTranslationUnit localunit, TextSelection selection) {
-		CPPASTBaseDeclSpecifier type = TypeHelper.findTypeInAst(localunit, selection);
+	public static CPPASTBaseDeclSpecifier calculateReturnType(IASTNode targetNode, ISelection selection) {
+		CPPASTBaseDeclSpecifier type = TypeHelper.findTypeInAst(targetNode, selection);
 		if (type == null) {
 			return TypeHelper.getDefaultReturnType();
 		}

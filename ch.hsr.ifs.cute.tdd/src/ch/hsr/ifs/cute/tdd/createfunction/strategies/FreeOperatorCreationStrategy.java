@@ -17,7 +17,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTOperatorName;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ISelection;
 
 import ch.hsr.ifs.cute.tdd.TddHelper;
 import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
@@ -25,7 +25,7 @@ import ch.hsr.ifs.cute.tdd.createfunction.FunctionCreationHelper;
 public class FreeOperatorCreationStrategy extends OperatorCreationStrategy {
 	@Override
 	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName,
-			String name, TextSelection selection) {
+			String name, ISelection selection) {
 		ICPPASTFunctionDeclarator decl = new CPPASTFunctionDeclarator(new CPPASTOperatorName(
 				("operator" + name).toCharArray()));
 		IASTBinaryExpression binex = TddHelper.getAncestorOfType(selectedName, IASTBinaryExpression.class);

@@ -20,7 +20,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ISelection;
 
 import ch.hsr.ifs.cute.tdd.ParameterHelper;
 import ch.hsr.ifs.cute.tdd.TddHelper;
@@ -29,7 +29,7 @@ import ch.hsr.ifs.cute.tdd.TypeHelper;
 public class ConstructorCreationStrategy implements IFunctionCreationStrategy {
 
 	@Override
-	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, TextSelection selection) {
+	public ICPPASTFunctionDefinition getFunctionDefinition(IASTTranslationUnit localunit, IASTNode selectedName, String name, ISelection selection) {
 		CPPASTFunctionDeclarator funcdecl = new CPPASTFunctionDeclarator(new CPPASTName(name.toCharArray()));
 		CPPASTDeclarator declarator = TddHelper.getAncestorOfType(selectedName, CPPASTDeclarator.class);
 		ParameterHelper.addTo(declarator, funcdecl);

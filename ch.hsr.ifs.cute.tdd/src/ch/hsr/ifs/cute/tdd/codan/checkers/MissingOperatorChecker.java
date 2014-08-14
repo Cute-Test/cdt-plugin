@@ -12,6 +12,7 @@ import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -28,6 +29,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTUnaryExpression;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.OverloadableOperator;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
@@ -50,12 +52,13 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		@Override
 		public int visit(IASTExpression expression) {
-			String typename = ASTTypeUtil.getType(expression.getExpressionType(), true);
 			if (expression instanceof ICPPASTUnaryExpression) {
 				CPPASTUnaryExpression uexpr = ((CPPASTUnaryExpression) expression);
+				String typename = ASTTypeUtil.getType(uexpr.getOperand().getExpressionType(), true);
 				return handleUnaryOperator(expression, typename, uexpr);
 			} else if (expression instanceof ICPPASTBinaryExpression) {
 				ICPPASTBinaryExpression binex = (ICPPASTBinaryExpression) expression;
+				String typename = ASTTypeUtil.getType(binex.getOperand1().getExpressionType(), true);
 				return handleBinaryOperator(typename, binex);
 			}
 			return PROCESS_CONTINUE;
@@ -70,7 +73,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 						return PROCESS_CONTINUE;
 					}
 					String strategy = getStrategy(binex);
-					reportMissingOperator(typename, binex, operator, strategy);
+					reportMissingOperator(typename, binex, operator, strategy, binex.getOperand1().getExpressionType());
 					return PROCESS_SKIP;
 				}
 			}
@@ -97,7 +100,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 				}
 				if (isAppropriateType(uexpr.getOperand())) {
 					String strategy = getStrategy(uexpr);
-					reportMissingOperator(typename, expression, operator, strategy);
+					reportMissingOperator(typename, expression, operator, strategy, uexpr.getOperand().getExpressionType());
 					return PROCESS_SKIP;
 				}
 			}
@@ -115,10 +118,22 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private void reportMissingOperator(String typename, IASTExpression expr, OverloadableOperator operator,
-				String strategy) {
+				String strategy, IType type) {
 			String operatorname = new String(operator.toCharArray()).replaceAll("operator ", "");
 			CodanArguments ca = new CodanArguments(operatorname, typename, strategy);
+			setNodeLocation(type, ca);
 			reportProblem(ERR_ID_OperatorResolutionProblem, expr, ca.toArray());
+		}
+
+		private void setNodeLocation(IType type, CodanArguments ca) {
+			if(type instanceof CPPClassType){
+				IASTFileLocation fileLocation = ((CPPClassType) type).getCompositeTypeSpecifier().getFileLocation();
+				int offset = fileLocation.getNodeOffset();
+				int length = fileLocation.getNodeLength();
+				
+				ca.setNodeOffset(offset);
+				ca.setNodeLength(length);
+			}
 		}
 
 		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTUnaryExpression uexpr) {

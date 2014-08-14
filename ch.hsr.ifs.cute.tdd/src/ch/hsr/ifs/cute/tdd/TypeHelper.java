@@ -92,7 +92,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.ISelection;
 
 import ch.hsr.ifs.cute.tdd.createfunction.PossibleReturnTypeFindVisitor;
 
@@ -499,17 +499,17 @@ public class TypeHelper {
 		return spec;
 	}
 
-	public static CPPASTBaseDeclSpecifier findTypeInAst(IASTTranslationUnit localunit, TextSelection selection) {
+	public static CPPASTBaseDeclSpecifier findTypeInAst(IASTNode startNode, ISelection selection) {
 		final NodeContainer c = new NodeContainer();
 		PossibleReturnTypeFindVisitor finder = new PossibleReturnTypeFindVisitor(selection, c);
-		localunit.accept(finder);
+		startNode.accept(finder);
 
 		if (finder.hasFound()) {
 			IASTNode node = finder.getType();
 			if (node != null && node instanceof CPPASTSimpleDeclSpecifier) {
-				return (CPPASTSimpleDeclSpecifier) node.copy(CopyStyle.withLocations);
+				return (CPPASTSimpleDeclSpecifier) node.copy(CopyStyle.withoutLocations);
 			} else if (node instanceof CPPASTNamedTypeSpecifier) {
-				return (CPPASTNamedTypeSpecifier) node.copy(CopyStyle.withLocations);
+				return (CPPASTNamedTypeSpecifier) node.copy(CopyStyle.withoutLocations);
 			}
 		}
 		return null;
