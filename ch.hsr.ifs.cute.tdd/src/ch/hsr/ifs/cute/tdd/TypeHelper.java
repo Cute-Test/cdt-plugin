@@ -59,7 +59,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMember;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespaceScope;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
 import org.eclipse.cdt.core.index.IIndexFile;
@@ -79,6 +78,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTPointer;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassSpecialization;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassTemplate;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNamespace;
@@ -313,11 +313,23 @@ public class TypeHelper {
 			if (unwrappedType instanceof IPDOMCPPClassType) {
 				return findTypeDefinitionInIndex(unit, context, (IPDOMCPPClassType) unwrappedType);
 			}
-			if (unwrappedType instanceof ICPPTemplateInstance) {
-				IBinding specialized = ((ICPPTemplateInstance) unwrappedType).getSpecializedBinding();
-				if (specialized instanceof CPPClassTemplate) {
-					return ((CPPClassTemplate) specialized).getCompositeTypeSpecifier();
+			if (unwrappedType instanceof CPPClassSpecialization) {
+				ICPPASTCompositeTypeSpecifier specializedSpecifier = ((CPPClassSpecialization)unwrappedType).getCompositeTypeSpecifier();
+				if (specializedSpecifier != null) {
+					return specializedSpecifier;
 				}
+				ICPPClassType specializedBinding = ((CPPClassSpecialization) unwrappedType).getSpecializedBinding();
+				if (specializedBinding instanceof CPPClassTemplate) {
+					return ((CPPClassTemplate) specializedBinding).getCompositeTypeSpecifier();
+				}
+
+//				IBinding specialized = ((ICPPTemplateInstance) unwrappedType).getSpecializedBinding();
+//				ICPPTemplateDefinition definition = ((ICPPTemplateInstance) unwrappedType).getTemplateDefinition();
+//				
+//				if (definition instanceof CPPClassTemplate) {
+//
+//					return ((CPPClassTemplate) definition).getCompositeTypeSpecifier();
+//				}
 			}
 		} else {
 			IASTSimpleDeclaration declaration = TddHelper.getAncestorOfType(selectedNode, IASTSimpleDeclaration.class);

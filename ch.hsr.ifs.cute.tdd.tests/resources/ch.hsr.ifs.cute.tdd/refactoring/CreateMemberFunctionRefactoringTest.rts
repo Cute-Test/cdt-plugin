@@ -701,3 +701,32 @@ int main(int argc, char const *argv[]) {
 	meintemplate<int> foo;
 	foo.clear();
 }
+//!Create Member Function in Specialized Class Template
+//@A.cpp
+template<typename T>
+struct Tpl {
+};
+
+template<>
+struct Tpl<int> {
+};
+
+void foo() {
+	Tpl<int> t;
+	t.foo();
+}
+//=
+template<typename T>
+struct Tpl {
+};
+
+template<>
+struct Tpl<int> {
+	void foo() {
+	}
+};
+
+void foo() {
+	Tpl<int> t;
+	t.foo();
+}
