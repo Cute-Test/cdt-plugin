@@ -1,0 +1,59 @@
+//!StrlenReplacement
+//@main.cpp
+int main() {
+	char *str = "Hello World";
+	std::cout << strlen(str) << std::endl;
+}
+//=
+
+#include <string>
+int main() {
+	std::string str = "Hello World";
+	std::cout << str.size() << std::endl;
+}
+
+
+//!WcslenReplacement
+//@main.cpp
+int main() {
+	wchar_t w_str[] = L"Hello";
+	std::cout << wcslen(w_str) << std::endl;
+}
+//=
+
+#include <string>
+int main() {
+	std::wstring w_str = L"Hello";
+	std::cout << w_str.size() << std::endl;
+}
+
+
+//!LengthCalculationReplacement1
+//@main.cpp
+int main() {
+	char str[] = "Hello, world";
+	int len = sizeof(str) / sizeof(*str) - 1;
+}
+//=
+
+#include <string>
+int main() {
+	std::string str = "Hello, world";
+	int len = str.size();
+}
+
+
+//!LengthCalculationReplacement2
+//@main.cpp
+int main() {
+	char str[] = "Hello, world";
+	int len = sizeof str / sizeof *str - 1;
+}
+//=
+
+#include <string>
+int main() {
+	std::string str = "Hello, world";
+	int len = str.size();
+}
+

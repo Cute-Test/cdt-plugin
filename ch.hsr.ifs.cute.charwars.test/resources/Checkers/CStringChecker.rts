@@ -1,0 +1,59 @@
+//!CharPointerString
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	const char *str = "Hello, World!";
+}
+
+
+//!CharArrayString
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	char str[] = "Hello, World!";
+}
+
+
+//!MultipleDeclarators
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	const char a = 'a', *b = "Hello, World!";
+}
+
+
+//!IgnoresPointerToSingleChar
+//@main.cpp
+int main() {
+	char c = 'c';
+	char *ptr = &c;
+}
+
+
+//!IgnoresCharArray
+//@main.cpp
+int main() {
+	char arr[] = {'a', 'b', 'c'};
+}
+
+
+//!WCHARString
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	wchar_t w_str[] = L"Hello";
+}
+
+
+//!StrdupInitializer
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	char *str = strdup("mystr");
+}
+

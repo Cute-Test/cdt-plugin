@@ -11,6 +11,32 @@
 	<artifactId>ch.hsr.ifs.cute.gcov.test</artifactId>
 	<version>4.9.0-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
+	
+	<profiles>
+	  <profile>
+        <id>OSX</id>
+        <activation>
+          <os>
+    	    <family>mac</family>
+          </os>
+        </activation>
+        <properties>
+          <swtbot.args>-Xmx1024m -XstartOnFirstThread</swtbot.args>
+        </properties>
+    </profile>
+    <profile>
+      <id>NotOSX</id>
+      <activation>
+        <os>
+    		<family>!mac</family>
+        </os>
+      </activation>
+      <properties>
+        <swtbot.args>-Xmx1024m</swtbot.args>
+      </properties>
+    </profile>
+  </profiles>
+	
 	<build>
     	<sourceDirectory>src</sourceDirectory>
     	<plugins>
@@ -21,7 +47,13 @@
     		    <configuration>
     		    	<testSuite>ch.hsr.ifs.cute.gcov.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.gcov.test.AllGcovTests</testClass>
-        			<useUIHarness>false</useUIHarness>
+        			<!--<useUIHarness>false</useUIHarness>-->
+        			
+					<useUIHarness>true</useUIHarness>
+          			<useUIThread>false</useUIThread> 
+          			<appArgLine>-nl en</appArgLine>
+          			<argLine>${swtbot.args}</argLine>
+          			
         			<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 				</configuration>
     	  	</plugin>

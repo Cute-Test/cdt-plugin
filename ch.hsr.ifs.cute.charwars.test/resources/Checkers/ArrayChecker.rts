@@ -1,0 +1,42 @@
+//!CharArrayWithInitializer
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	char arr[] = {'a', 'b', 'c'};
+}
+
+
+//!IntArrayWithInitializer
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	int arr[] = {1,2,3};
+}
+
+
+//!CharArrayWithoutInitializer
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	char arr[12];
+}
+
+
+//!IntArrayWithoutInitializer
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	int arr[12];
+}
+
+
+//!IgnoresString
+//@main.cpp
+int main() {
+	char arr[] = "Hello";
+}
+

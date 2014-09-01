@@ -1,0 +1,36 @@
+//!PointerParameterOneFile
+//@main.cpp
+class Hello {
+public:
+	inline void sayHello() {
+		std::cout << "Hello" << std::endl;
+	}
+};
+
+void func(Hello *h) {
+	h->sayHello();
+}
+
+int main() {
+	Hello *h = new Hello();
+	func(h);
+	return 0;
+}
+//=
+class Hello {
+public:
+	inline void sayHello() {
+		std::cout << "Hello" << std::endl;
+	}
+};
+
+void func(Hello& h) {
+	h.sayHello();
+}
+
+int main() {
+	Hello *h = new Hello();
+	func(*h);
+	return 0;
+}
+

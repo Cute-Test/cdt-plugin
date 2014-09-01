@@ -1,0 +1,72 @@
+//!MemcmpFirstArg
+//@main.cpp
+#include <cstring>
+int main() {
+	char *a = "String1";
+	char *b = "String2";
+	int n = memcmp(a, b, 6);
+}
+//=
+#include <cstring>
+#include <string>
+int main() {
+	std::string a = "String1";
+	char *b = "String2";
+	int n = a.compare(0, 6, b, 0, 6);
+}
+
+
+//!MemcmpFirstArgWithString
+//@main.cpp
+#include <cstring>
+#include <string>
+int main() {
+	char *a = "String1";
+	std::string b = "String2";
+	int n = memcmp(a, b.c_str(), 6);
+}
+//=
+#include <cstring>
+#include <string>
+int main() {
+	std::string a = "String1";
+	std::string b = "String2";
+	int n = a.compare(0, 6, b, 0, 6);
+}
+
+
+//!MemcmpFirstArgWithOffset
+//@main.cpp
+#include <cstring>
+int main() {
+	char *a = "TestString1";
+	char *b = "String2";
+	int n = memcmp(a + 4, b, 6);
+}
+//=
+#include <cstring>
+#include <string>
+int main() {
+	std::string a = "TestString1";
+	char *b = "String2";
+	int n = a.compare(4, 6, b, 0, 6);
+}
+
+
+//!MemcmpSecondArg
+//@main.cpp
+#include <cstring>
+int main() {
+	char *b = "String2";
+	char *a = "String1";
+	int n = memcmp(a, b, 6);
+}
+//=
+#include <cstring>
+#include <string>
+int main() {
+	std::string b = "String2";
+	char *a = "String1";
+	int n = memcmp(a, b.c_str(), 6);
+}
+

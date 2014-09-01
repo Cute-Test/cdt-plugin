@@ -19,6 +19,8 @@
 			</activation>
 			<properties>
 				<os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
+				<eclipse-version>luna</eclipse-version>
+				<eclipse-version-number>4.4</eclipse-version-number>
 			</properties>
 		</profile>
 		<profile>
@@ -108,6 +110,10 @@
 		<module>../ch.hsr.ifs.cute.elevator</module>
 		<module>../ch.hsr.ifs.cute.elevator.feature</module>
 		<module>../ch.hsr.ifs.cute.elevator.test</module>
+		<!-- CharWars -->
+		<module>../ch.hsr.ifs.cute.charwars</module>
+		<module>../ch.hsr.ifs.cute.charwars.feature</module>
+		<module>../ch.hsr.ifs.cute.charwars.test</module>
 		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.updatesite</module>
 	</modules>

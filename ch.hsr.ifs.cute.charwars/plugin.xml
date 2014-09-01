@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="org.eclipse.cdt.codan.core.checkers" id="org.eclipse.cdt.codan.core.categories">
+		<category id="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems" name="Char Wars Problems"/>
+	</extension>
+	
+	<extension point="org.eclipse.cdt.codan.core.checkers">
+		<checker
+			class="ch.hsr.ifs.cute.charwars.checkers.CStringChecker"
+			id="ch.hsr.ifs.cute.charwars.checkers.CStringChecker"
+			name="C-String checker">
+			
+			<problem
+				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
+				defaultEnabled="true"
+				defaultSeverity="Warning"
+				description="Finds C-String variables."
+				id="ch.hsr.ifs.cute.charwars.problems.CStringProblem"
+				messagePattern="Found C-String: {0}"
+				name="Use std::string instead of C-Strings."
+				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+			</problem>
+		</checker>
+		
+		<checker
+			class="ch.hsr.ifs.cute.charwars.checkers.CStringCleanupChecker"
+			id="ch.hsr.ifs.cute.charwars.checkers.CStringCleanupChecker"
+			name="C-String cleanup checker">
+			
+			<problem
+				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
+				defaultEnabled="true"
+				defaultSeverity="Warning"
+				description="Finds calls to &lt;cstring&gt; functions."
+				id="ch.hsr.ifs.cute.charwars.problems.CStringCleanupProblem"
+				messagePattern="Found C-String function: {0}"
+				name="Use std::string member functions instead of &lt;cstring&gt; functions."
+				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+			</problem>
+		</checker>
+		
+		<checker
+			class="ch.hsr.ifs.cute.charwars.checkers.cstr.CStrChecker"
+			id="ch.hsr.ifs.cute.charwars.checkers.CStrChecker"
+			name="c_str() checker">
+			
+			<problem
+				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
+				defaultEnabled="true"
+				defaultSeverity="Warning"
+				description="Finds c_str() function calls that is passed to a function that could also take a std::string."
+				id="ch.hsr.ifs.cute.charwars.problems.CStrProblem"
+				messagePattern="Found potentially unnecessary c_str() call."
+				name="Use different overload that can take std::string directly."
+				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+			</problem>
+		</checker>
+		
+		<checker
+			class="ch.hsr.ifs.cute.charwars.checkers.ArrayChecker"
+			id="ch.hsr.ifs.cute.charwars.checkers.ArrayChecker"
+			name="Array checker">
+			
+			<problem
+				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
+				defaultEnabled="true"
+				defaultSeverity="Warning"
+				description="Finds C-Array variables."
+				id="ch.hsr.ifs.cute.charwars.problems.ArrayProblem"
+				messagePattern="Found C-Array: {0}"
+				name="Use std::array instead of C-Array."
+				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+			</problem>
+		</checker>
+		
+		<checker
+			class="ch.hsr.ifs.cute.charwars.checkers.PointerParameterChecker"
+			id="ch.hsr.ifs.cute.charwars.checkers.PointerParameterChecker"
+			name="Pointer parameter checker">
+			
+			<problem
+				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
+				defaultEnabled="true"
+				defaultSeverity="Warning"
+				description="Finds pointer parameters."
+				id="ch.hsr.ifs.cute.charwars.problems.PointerParameterProblem"
+				messagePattern="Found pointer parameter: {0}"
+				name="Use reference parameters instead of pointer parameters."
+				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+			</problem>
+		</checker>
+		
+		<checker
+			class="ch.hsr.ifs.cute.charwars.checkers.CStringParameterChecker"
+			id="ch.hsr.ifs.cute.charwars.checkers.CStringParameterChecker"
+			name="C-String parameter checker">
+			
+			<problem
+				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
+				defaultEnabled="true"
+				defaultSeverity="Warning"
+				description="Finds C-String parameters."
+				id="ch.hsr.ifs.cute.charwars.problems.CStringParameterProblem"
+				messagePattern="Found C-String parameter: {0}"
+				name="Use std::string parameter instead of C-String parameter."
+				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+			</problem>
+		</checker>
+	</extension>
+	
+	<extension point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
+		<resolution 
+			class="ch.hsr.ifs.cute.charwars.quickfixes.cstring.general.CStringQuickFix"
+			problemId="ch.hsr.ifs.cute.charwars.problems.CStringProblem">
+		</resolution>
+		<resolution 
+			class="ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup.CStringCleanupQuickFix"
+			problemId="ch.hsr.ifs.cute.charwars.problems.CStringCleanupProblem">
+		</resolution>
+		<resolution 
+			class="ch.hsr.ifs.cute.charwars.quickfixes.cstr.CStrQuickFix"
+			problemId="ch.hsr.ifs.cute.charwars.problems.CStrProblem">
+		</resolution>
+		<resolution 
+			class="ch.hsr.ifs.cute.charwars.quickfixes.array.ArrayQuickFix"
+			problemId="ch.hsr.ifs.cute.charwars.problems.ArrayProblem">
+		</resolution>
+		<resolution 
+			class="ch.hsr.ifs.cute.charwars.quickfixes.pointerparameter.PointerParameterQuickFix"
+			problemId="ch.hsr.ifs.cute.charwars.problems.PointerParameterProblem">
+		</resolution>
+		<resolution 
+			class="ch.hsr.ifs.cute.charwars.quickfixes.cstring.parameter.CStringParameterQuickFix"
+			problemId="ch.hsr.ifs.cute.charwars.problems.CStringParameterProblem">
+		</resolution>
+   </extension>
+   
+   <extension point="org.eclipse.ui.ide.markerResolution">
+   		<markerResolutionGenerator
+   			class="org.eclipse.cdt.codan.internal.ui.CodanProblemMarkerResolutionGenerator"
+   			markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+   		</markerResolutionGenerator>
+   </extension>
+   
+   <extension name="CharWars Marker" point="org.eclipse.core.resources.markers" id="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+   		<super type="org.eclipse.cdt.codan.core.codanProblem"/>         
+   		<persistent value="true"/>
+   </extension>
+   
+   <extension point="org.eclipse.ui.editors.annotationTypes">
+     <type
+        super="org.eclipse.ui.workbench.texteditor.warning"
+        markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker"
+        name="ch.hsr.ifs.cute.charwars.CharWarsAnnotation"
+        markerSeverity="1"/>
+  </extension>
+
+  <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
+  	<specification
+  		annotationType="ch.hsr.ifs.cute.charwars.CharWarsAnnotation"
+  		colorPreferenceKey="ch.hsr.ifs.cute.charwars.keys.color"
+  		colorPreferenceValue="0,170,79" 
+  		contributesToHeader="false"
+  		includeOnPreferencePage="true"
+  		label="CharWars Marker"
+  		presentationLayer="0"
+  		overviewRulerPreferenceKey="ch.hsr.ifs.cute.charwars.keys.overviewruler"
+  		overviewRulerPreferenceValue="true"
+  		highlightPreferenceKey="ch.hsr.ifs.cute.charwars.keys.highlight"
+  		highlightPreferenceValue="true"
+  		textPreferenceKey="ch.hsr.ifs.cute.charwars.keys.text"
+  		textPreferenceValue="true"
+  		textStylePreferenceValue="PROBLEM_UNDERLINE"
+  		textStylePreferenceKey="ch.hsr.ifs.cute.charwars.keys.textstyle"
+  		verticalRulerPreferenceKey="ch.hsr.ifs.cute.charwars.keys.verticalruler"
+  		verticalRulerPreferenceValue="true"
+		showInNextPrevDropdownToolbarActionKey="ch.hsr.ifs.cute.charwars.keys.ShowInNextPrevDropdownToolbarAction"
+		showInNextPrevDropdownToolbarAction="true"
+		isGoToNextNavigationTargetKey="ch.hsr.ifs.cute.charwars.keys.GoToNextNavigationTarget"
+		isGoToNextNavigationTarget="true"
+		isGoToPreviousNavigationTargetKey="ch.hsr.ifs.cute.charwars.keys.GoToPreviousNavigationTarget"
+		isGoToPreviousNavigationTarget="true"
+  		icon="icons/icon-green-star.png"
+  		quickFixIcon="icons/icon-green-star.png"
+		symbolicIcon="warning">
+	</specification>
+  </extension>
+</plugin>
