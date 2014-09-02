@@ -41,20 +41,24 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTWhileStatement;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
+import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
+import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
-import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 
 import ch.hsr.ifs.cute.charwars.asttools.FindIdExpressionsVisitor;
-import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.IndexFinderInstruction;
-import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.CString;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
@@ -539,8 +543,39 @@ public class ASTAnalyzer {
 		return hasCStringType(parameterDeclSpecifier) && isArrayOrPointer(parameterDeclarator) && !parameterDeclSpecifier.isConst();
 	}
 	
+	public static boolean isCStringType(IType type) {
+		if(type instanceof IPointerType) {
+			IPointerType pointer = (IPointerType)type;
+			IType pointee = pointer.getType();
+			if(pointee instanceof IBasicType) {
+				IBasicType basicType = (IBasicType)pointee;
+				return basicType.getKind() == Kind.eChar ||
+					   basicType.getKind() == Kind.eWChar;
+			}
+		}
+		return false;
+	}
+	
 	public static boolean isStdStringParameterDeclaration(IASTParameterDeclaration parameter) {
 		return hasStdStringType(parameter) || hasStdStringConstReferenceType(parameter);
+	}
+	
+	public static boolean isStdStringType(IType type) {
+		if(type instanceof ICPPReferenceType) {
+			ICPPReferenceType referenceType = (ICPPReferenceType)type;
+			if(referenceType.getType() instanceof IQualifierType) {
+				IQualifierType qualifierType = (IQualifierType)referenceType.getType();
+				if(qualifierType.isConst() && qualifierType.getType() instanceof ICPPClassType) {
+					ICPPClassType classType = (ICPPClassType)qualifierType.getType();
+					return classType.getName().equals(StdString.STRING);
+				}
+			}
+		}
+		else if(type instanceof ICPPClassType) {
+			ICPPClassType classType = (ICPPClassType)type;
+			return classType.getName().equals(StdString.STRING);
+		}
+		return false;
 	}
 
 	public static boolean isAssignedToCharPointer(IASTNode functionCall, boolean isConst) {
@@ -960,26 +995,47 @@ public class ASTAnalyzer {
 		return node;
 	}
 	
-	public static ICPPASTParameterDeclaration getParameterDeclaration(IASTNode idExpression) {
+	public static IType getParameterType(IASTNode idExpression) {
 		idExpression = idExpression.getOriginalNode();
 		IASTNode parent = idExpression.getParent();
-		if(parent instanceof IASTFunctionCallExpression) {
-			IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)parent;
+		if(parent instanceof ICPPASTFunctionCallExpression) {
+			IType parameterType = null;
+			ICPPASTFunctionCallExpression functionCall = (ICPPASTFunctionCallExpression)parent;
 			final int argIndex = Arrays.asList(functionCall.getArguments()).indexOf(idExpression);
+			
 			IASTName functionName = ((IASTIdExpression)functionCall.getFunctionNameExpression()).getName();
-			final ICPPASTParameterDeclaration parameterDeclaration[] = new ICPPASTParameterDeclaration[1];
+			IBinding functionNameBinding = functionName.resolveBinding();
 			
-			IndexFinder.findDefinitions(functionName, new ASTRewriteCache(idExpression.getTranslationUnit().getIndex()), new ResultHandler() {
-				@Override
-				public IndexFinderInstruction handleResult(IASTName definitionName, ASTRewrite rewrite) {
-					ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)definitionName.getParent();
-					ICPPASTParameterDeclaration[] parameters = functionDeclarator.getParameters();
-					parameterDeclaration[0] = parameters[argIndex];
-					return IndexFinderInstruction.ABORT_SEARCH;
+			if(functionNameBinding instanceof ICPPClassType) {
+				IBinding binding = functionCall.getImplicitNames()[0].resolveBinding();
+				if(binding instanceof ICPPConstructor) {
+					ICPPConstructor constructor = (ICPPConstructor)binding;
+					ICPPParameter parameter = constructor.getParameters()[argIndex];
+					parameterType = parameter.getType();
 				}
-			});
+			}
+			else if(functionNameBinding instanceof ICPPFunction) {
+				ICPPFunction functionBinding = (ICPPFunction)functionNameBinding;
+				ICPPParameter parameter = functionBinding.getParameters()[argIndex];
+				parameterType = parameter.getType();
+			}
 			
-			return parameterDeclaration[0]; 
+			
+
+//			IASTName functionName = ((IASTIdExpression)functionCall.getFunctionNameExpression()).getName();
+			//final ICPPASTParameterDeclaration parameterDeclaration[] = new ICPPASTParameterDeclaration[1];
+//			
+//			IndexFinder.findDefinitions(functionName, new ASTRewriteCache(idExpression.getTranslationUnit().getIndex()), new ResultHandler() {
+//				@Override
+//				public IndexFinderInstruction handleResult(IASTName definitionName, ASTRewrite rewrite) {
+//					ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)definitionName.getParent();
+//					ICPPASTParameterDeclaration[] parameters = functionDeclarator.getParameters();
+//					parameterDeclaration[0] = parameters[argIndex];
+//					return IndexFinderInstruction.ABORT_SEARCH;
+//				}
+//			});
+			
+			return parameterType;
 		}
 		return null;
 	}

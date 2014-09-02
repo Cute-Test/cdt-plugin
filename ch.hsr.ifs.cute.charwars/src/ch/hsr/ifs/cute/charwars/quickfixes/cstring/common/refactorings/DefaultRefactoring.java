@@ -1,7 +1,7 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
+import org.eclipse.cdt.core.dom.ast.IType;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
@@ -12,9 +12,9 @@ public class DefaultRefactoring extends Refactoring {
 	@Override
 	public Transformer createTransformer(IASTIdExpression idExpression, Context context) {
 		Transformer transformer = null;
-		ICPPASTParameterDeclaration parameterDeclaration = ASTAnalyzer.getParameterDeclaration(idExpression);
+		IType parameterType = ASTAnalyzer.getParameterType(idExpression);
 		
-		if(parameterDeclaration != null && ASTAnalyzer.isCStringParameterDeclaration(parameterDeclaration)) {
+		if(parameterType != null && ASTAnalyzer.isCStringType(parameterType)) {
 			transformer = new CStringConversionTransformer(context, idExpression, false); 
 		}
 		else {

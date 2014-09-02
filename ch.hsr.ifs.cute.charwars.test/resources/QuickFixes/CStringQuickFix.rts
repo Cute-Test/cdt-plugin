@@ -425,6 +425,62 @@ int main() {
 }
 
 
+//!StdStringConstructorArgument
+//@main.cpp
+#include "string.h"
+
+class User {
+public:
+	User(const std::string& name) {}
+}
+
+int main() {
+	const char *str = "John";
+	User(str);
+}
+//=
+#include <string>
+#include "string.h"
+
+class User {
+public:
+	User(const std::string& name) {}
+}
+
+int main() {
+	std::string str = "John";
+	User(str);
+}
+
+
+//!CStringConstructorArgument
+//@main.cpp
+#include "string.h"
+
+class User {
+public:
+	User(const char *name) {}
+}
+
+int main() {
+	const char *str = "John";
+	User(str);
+}
+//=
+#include <string>
+#include "string.h"
+
+class User {
+public:
+	User(const char *name) {}
+}
+
+int main() {
+	std::string str = "John";
+	User(str.c_str());
+}
+
+
 //!ConstPointer1
 //@main.cpp
 int main(){

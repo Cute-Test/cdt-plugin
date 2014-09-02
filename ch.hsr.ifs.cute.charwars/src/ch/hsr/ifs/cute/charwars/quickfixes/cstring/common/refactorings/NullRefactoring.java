@@ -2,7 +2,7 @@ package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
+import org.eclipse.cdt.core.dom.ast.IType;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
@@ -32,8 +32,8 @@ public class NullRefactoring extends Refactoring {
 	}
 	
 	private boolean isStdStringParameterDeclaration(IASTIdExpression idExpression, Context context) {
-		ICPPASTParameterDeclaration parameterDeclaration = ASTAnalyzer.getParameterDeclaration(idExpression);
-		if(parameterDeclaration == null) return false;
-		else return ASTAnalyzer.isStdStringParameterDeclaration(parameterDeclaration);
+		IType parameterType = ASTAnalyzer.getParameterType(idExpression);
+		if(parameterType == null) return false;
+		else return ASTAnalyzer.isStdStringType(parameterType);
 	}
 }
