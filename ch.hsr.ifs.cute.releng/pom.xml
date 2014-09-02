@@ -51,6 +51,11 @@
 
 	<repositories>
 		<repository>
+			<id>cdt85-rc2</id>
+			<url>http://download.eclipse.org/tools/cdt/builds/luna/milestones/sr1-rc2</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
 			<id>release</id>
 			<url>http://download.eclipse.org/releases/${eclipse-version}/</url>
 			<layout>p2</layout>
