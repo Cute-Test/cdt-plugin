@@ -24,7 +24,7 @@ public class ArrayChecker extends BaseChecker {
 				IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration)decl;
 				for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()) {
 					if(ASTAnalyzer.isArray(declarator)) {
-						reportProblemForNode(ProblemIDs.ARRAY_PROBLEM, declarator, declarator.getName().toString());
+						reportProblemForDeclarator(ProblemIDs.ARRAY_PROBLEM, declarator);
 					}
 				}
 			}

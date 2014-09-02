@@ -5,12 +5,19 @@ import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.codan.core.model.IProblemLocation;
 import org.eclipse.cdt.codan.core.model.IProblemLocationFactory;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
 public abstract class BaseChecker extends AbstractIndexAstChecker {
 	protected ASTVisitor astVisitor = null;
+	
+	protected void reportProblemForDeclarator(String problemID, IASTDeclarator declarator) {
+		IASTName name = declarator.getName();
+		reportProblemForNode(problemID, name, name.toString());
+	}
 	
 	protected void reportProblemForNode(String problemID, IASTNode node, String messagePatternArg) {
 		IASTNodeLocation[] nodeLocations = node.getNodeLocations();

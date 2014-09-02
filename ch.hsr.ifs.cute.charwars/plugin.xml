@@ -171,7 +171,7 @@
   		highlightPreferenceValue="true"
   		textPreferenceKey="ch.hsr.ifs.cute.charwars.keys.text"
   		textPreferenceValue="true"
-  		textStylePreferenceValue="PROBLEM_UNDERLINE"
+  		textStylePreferenceValue="SQUIGGLES"
   		textStylePreferenceKey="ch.hsr.ifs.cute.charwars.keys.textstyle"
   		verticalRulerPreferenceKey="ch.hsr.ifs.cute.charwars.keys.verticalruler"
   		verticalRulerPreferenceValue="true"

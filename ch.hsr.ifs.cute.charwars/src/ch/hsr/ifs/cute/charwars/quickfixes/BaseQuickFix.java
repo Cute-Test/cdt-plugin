@@ -3,6 +3,7 @@ package ch.hsr.ifs.cute.charwars.quickfixes;
 import java.util.HashSet;
 
 import org.eclipse.cdt.codan.ui.AbstractAstRewriteQuickFix;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.index.IIndex;
@@ -39,6 +40,9 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 			ASTRewriteCache rewriteCache = new ASTRewriteCache(index);
 			IASTTranslationUnit astTranslationUnit = rewriteCache.getASTTranslationUnit(getTranslationUnitViaEditor(marker));
 			IASTNode markedNode = getMarkedNode(astTranslationUnit, marker);
+			if(markedNode instanceof IASTName) {
+				markedNode = markedNode.getParent();
+			}
 			handleMarkedNode(markedNode, rewriteCache);
 			performChange(rewriteCache.getChange(), marker);
 			ASTModifier.includeHeaders(headers, astTranslationUnit, getDocument());

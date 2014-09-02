@@ -32,7 +32,7 @@ public class CStringParameterChecker extends BaseChecker {
 			IASTDeclarator declarator = parameterDeclaration.getDeclarator();
 			if(ASTAnalyzer.isFunctionDefinitionParameterDeclaration(parameterDeclaration) && ASTAnalyzer.isConstCStringParameterDeclaration(parameterDeclaration)) {
 				if(!isStdStringOverloadAvailable((IASTFunctionDefinition)parameterDeclaration.getParent().getParent(), parameterDeclaration)) {
-					reportProblemForNode(ProblemIDs.C_STRING_PARAMETER_PROBLEM, declarator, declarator.getName().toString());
+					reportProblemForDeclarator(ProblemIDs.C_STRING_PARAMETER_PROBLEM, declarator);
 				}
 			}
 			return PROCESS_CONTINUE;

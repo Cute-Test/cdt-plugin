@@ -25,7 +25,7 @@ public class PointerParameterChecker extends BaseChecker {
 				&& ASTAnalyzer.isFunctionDefinitionParameterDeclaration(parameterDeclaration) 
 				&& !ASTAnalyzer.isCStringParameterDeclaration(parameterDeclaration)
 				&& !ASTAnalyzer.isConstCStringParameterDeclaration(parameterDeclaration)) {
-				reportProblemForNode(ProblemIDs.POINTER_PARAMETER_PROBLEM, declarator, declarator.getName().toString());
+				reportProblemForDeclarator(ProblemIDs.POINTER_PARAMETER_PROBLEM, declarator);
 			}
 			return PROCESS_CONTINUE;
 		}

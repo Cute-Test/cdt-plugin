@@ -24,7 +24,7 @@ public class CStringChecker extends BaseChecker {
 				IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration) decl;
 				for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()) {
 					if(ASTAnalyzer.isCString(declarator)) {
-						reportProblemForNode(ProblemIDs.C_STRING_PROBLEM, declarator, declarator.getName().toString());
+						reportProblemForDeclarator(ProblemIDs.C_STRING_PROBLEM, declarator);
 					}
 				}
 			}
