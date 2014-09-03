@@ -43,3 +43,23 @@ MyClass x { 1, 2, 3 };
 
 int a { }, b { }, c { };
 
+//! Should asf
+//@main.cpp
+struct null_listener {};
+
+template<typename Listener = null_listener>
+struct counting_listener: Listener {
+	counting_listener() : Listener(), numberOfTests(0) {
+	}
+	int numberOfTests;
+};
+//=
+struct null_listener {};
+
+template<typename Listener = null_listener>
+struct counting_listener: Listener {
+	counting_listener() :
+			Listener(), numberOfTests { 0 } {
+	}
+	int numberOfTests;
+};

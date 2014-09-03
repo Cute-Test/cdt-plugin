@@ -73,7 +73,7 @@ public class HasNarrowingTypeConversion extends Condition {
     }
 
     private IType getType(IBinding binding) {
-        return ((IVariable) binding).getType();
+        return ((binding instanceof IType) ? (IType) binding : ((IVariable) binding).getType());
     }
 
     private boolean hasNarrowingTypeConversion(IBasicType target, IBasicType source) {

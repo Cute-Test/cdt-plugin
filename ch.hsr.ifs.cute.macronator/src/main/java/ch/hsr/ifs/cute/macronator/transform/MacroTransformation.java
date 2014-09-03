@@ -5,7 +5,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.internal.core.dom.rewrite.astwriter.ASTWriter;
 import org.eclipse.cdt.internal.core.dom.rewrite.astwriter.ProblemRuntimeException;
 
-import ch.hsr.ifs.cute.macronator.common.ParserAdapter;
+import ch.hsr.ifs.cute.macronator.common.Parser;
 
 @SuppressWarnings("restriction")
 public abstract class MacroTransformation {
@@ -23,7 +23,7 @@ public abstract class MacroTransformation {
     private void transform() {
         try {
             final String transformedCode = generateTransformationCode();
-            final ParserAdapter parser = new ParserAdapter(transformedCode);
+            final Parser parser = new Parser(transformedCode);
             final IASTTranslationUnit translationUnit = parser.parse();
             transformationValid = !parser.encounteredErrors();
             transformationCode = (transformationValid) ? new ASTWriter().write(translationUnit) : "";
