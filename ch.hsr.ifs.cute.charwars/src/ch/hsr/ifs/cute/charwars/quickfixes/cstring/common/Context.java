@@ -35,7 +35,7 @@ public class Context {
 		IASTCompoundStatement compoundStatement = (IASTCompoundStatement)topLevelStatement.getParent();
 		List<IASTStatement> statements = Arrays.asList(compoundStatement.getStatements());
 		int indexOfTopLevelStatement = statements.indexOf(topLevelStatement);
-		int indexOfFirstAffectedStatement = statements.indexOf(firstAffectedStatement);
+		int indexOfFirstAffectedStatement = statements.indexOf(firstAffectedStatement.getOriginalNode());
 		return indexOfTopLevelStatement >= indexOfFirstAffectedStatement;
 	}
 	

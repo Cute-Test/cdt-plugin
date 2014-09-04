@@ -1,5 +1,6 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers;
 
+import org.eclipse.cdt.core.dom.ast.IASTArraySubscriptExpression;
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -32,10 +33,23 @@ public class ExpressionTransformer extends Transformer {
 		case SIZE:
 			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.SIZE);
 		case EMPTY:
-			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.EMPTY);
+			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
+				IASTIdExpression subscript = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+				IASTArraySubscriptExpression arraySubscription = ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
+				return ExtendedNodeFactory.newLogicalNotExpression(arraySubscription);
+			}
+			else {
+				return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.EMPTY);
+			}
 		case NOT_EMPTY:
-			IASTExpression emptyCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.EMPTY);
-			return ExtendedNodeFactory.newLogicalNotExpression(emptyCall);
+			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
+				IASTIdExpression subscript = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+				return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
+			}
+			else {
+				IASTExpression emptyCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.EMPTY);
+				return ExtendedNodeFactory.newLogicalNotExpression(emptyCall);
+			}
 		case DEREFERENCED:
 			IASTExpression subscript;
 			if(context.isPotentiallyModifiedCharPointer(idExpression)) {

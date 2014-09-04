@@ -26,17 +26,20 @@ public class ExpressionRefactoring extends Refactoring {
 		else if(ASTAnalyzer.isCheckedForEmptiness(idExpression, true)) {
 			//!*str -> str.empty()
 			//*str == 0 -> str.empty()
+			//if modified: !*str -> !str[str_pos]
 			transformer = new ExpressionTransformer(context, idExpression, ASTAnalyzer.getEnclosingBoolean(idExpression), Transformation.EMPTY);
 		}
 		else if(ASTAnalyzer.isCheckedForEmptiness(idExpression, false)) {
 			//if(*str) -> if(!str.empty())
 			//*str != 0 -> !str.empty()
+			//if modified: *str -> str[str_pos]
 			transformer = new ExpressionTransformer(context, idExpression, ASTAnalyzer.getEnclosingBoolean(idExpression), Transformation.NOT_EMPTY);
 		}
 		else if(ASTAnalyzer.isDereferencedToChar(idExpression)) {
 			//*str -> str[0]
 			//*(str) -> str[0]
 			//*(str+n) -> str[n]
+			//if modified: *str -> str[str_pos]
 			IASTNode nodeToReplace = idExpression.getParent();
 			while(!ASTAnalyzer.isDereferenceExpression(nodeToReplace)) {
 				nodeToReplace = nodeToReplace.getParent();

@@ -639,22 +639,52 @@ int main(){
 #include "string.h"
 
 int main() {
-	const char *str = "not empty";
+	const char *str = "hello";
 	bool empty1 = 0 == *str;
 	bool empty2 = *str == 0;
 	bool not_empty1 = 0 != *str;
 	bool not_empty2 = *str != 0;
+	
+	while (*str) {
+		std::cout << *str << std::endl;
+		str++;
+	}
+	
+	for(int i = 0; i < 10; ++i) {
+		if (!*str) {
+			std::cout << "no more characters" << std::endl;
+		}
+		else {
+			std::cout << "character " << i << std::endl;
+			str++;
+		}
+	}
 }
 //=
 #include <string>
 #include "string.h"
 
 int main() {
-	std::string str = "not empty";
+	std::string str = "hello";
 	bool empty1 = str.empty();
 	bool empty2 = str.empty();
 	bool not_empty1 = !str.empty();
 	bool not_empty2 = !str.empty();
+	std::string::size_type str_pos = 0;
+	while (str[str_pos]) {
+		std::cout << str[str_pos] << std::endl;
+		str_pos++;
+	}
+	
+	for(int i = 0; i < 10; ++i) {
+		if (!str[str_pos]) {
+			std::cout << "no more characters" << std::endl;
+		}
+		else {
+			std::cout << "character " << i << std::endl;
+			str_pos++;
+		}
+	}
 }
 
 
