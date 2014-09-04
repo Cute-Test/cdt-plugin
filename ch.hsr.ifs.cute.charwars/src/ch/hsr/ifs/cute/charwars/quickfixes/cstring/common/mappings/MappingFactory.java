@@ -16,15 +16,20 @@ public class MappingFactory {
 	public static Mapping[] createFunctionRefactoringMappings() {
 		Mapping mappings[] = new Mapping[]{
 			//strlen(str) -> str.size()
+			//todo: if modified: strlen(str) -> (str.size() - str_pos)
 			new Mapping(FunctionDescription.STRLEN, FunctionDescription.SIZE, false, new ArgumentMapping()),
 			
 			//wcslen(wstr) -> wstr.size()
+			//todo: if modified: wcslen(wstr) -> (wstr.size() - wstr_pos)
 			new Mapping(FunctionDescription.WCSLEN, FunctionDescription.SIZE, false, new ArgumentMapping()),
 			
 			//memcmp(a+off, b, n) -> a.compare(off, n, b, 0, n)
+			//todo: if modified: memcmp(a, b, n) -> a.compare(a_pos, n, b, 0, n)
 			new Mapping(FunctionDescription.MEMCMP, FunctionDescription.COMPARE, true, new ArgumentMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2)),
 
 			//memcpy(a+off, b, n) -> a.replace(off, n, b, 0, n)
+			//memcpy(a, b, n) -> a.replace(a_pos, n, b, 0, n)
+			//memcpy(a+off, b, n) -> a.replace(a_pos+off, n, b, 0, n)
 			new Mapping(FunctionDescription.MEMCPY, FunctionDescription.REPLACE, true, new ArgumentMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2)),
 		
 			//memmove(a+off, b, n) -> a.replace(off, n, b, 0, n)
@@ -34,9 +39,12 @@ public class MappingFactory {
 			new Mapping(FunctionDescription.STRCMP, FunctionDescription.COMPARE, false, new ArgumentMapping(Arg.ARG_1)),
 			
 			//strcmp(a+off, b) -> a.compare(off, std::string::npos, b)
+			//todo: if modified: strcmp(a,b) -> a.compare(a+off, std::string::npos, b)
 			new Mapping(FunctionDescription.STRCMP, FunctionDescription.COMPARE, true, new ArgumentMapping(Arg.OFF_0, Arg.NPOS, Arg.ARG_1)),
 			
 			//strncmp(a+off, b, n) -> a.compare(off, n, b, 0, n)
+			//strncmp(a, b, n) -> a.compare(a_pos, n, b, 0, n)
+			//strncmp(a+off, b, n) -> a.compare(a_pos+off, n, b, 0, n)
 			new Mapping(FunctionDescription.STRNCMP, FunctionDescription.COMPARE, true, new ArgumentMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2)),
 			
 			//strcpy(a+off, b) -> a.replace(off, std::string::npos, b)

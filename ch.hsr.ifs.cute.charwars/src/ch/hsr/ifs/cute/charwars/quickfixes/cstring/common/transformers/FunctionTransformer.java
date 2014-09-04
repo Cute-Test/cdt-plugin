@@ -29,7 +29,7 @@ public class FunctionTransformer extends Transformer {
 		boolean isMemberFunction = mapping.getOutFunction().isMemberFunction();
 		
 		IASTFunctionCallExpression inFunctionCall = (IASTFunctionCallExpression)nodeToReplace;
-		IASTNode adaptedArguments[] = mapping.getArgumentMapping().getOutArguments(inFunctionCall.getArguments(), idExpression);
+		IASTNode adaptedArguments[] = mapping.getArgumentMapping().getOutArguments(inFunctionCall.getArguments(), idExpression, context);
 		
 		if(isMemberFunction) {
 			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, outFunctionName, adaptedArguments);	

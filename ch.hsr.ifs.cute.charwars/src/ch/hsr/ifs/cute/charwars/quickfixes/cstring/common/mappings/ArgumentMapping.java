@@ -12,6 +12,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 
 public class ArgumentMapping {
 	private Arg[] args;
@@ -31,7 +32,7 @@ public class ArgumentMapping {
 		this.args = args;
 	}
 	
-	public IASTNode[] getOutArguments(IASTInitializerClause inArguments[], IASTIdExpression idExpression) {
+	public IASTNode[] getOutArguments(IASTInitializerClause inArguments[], IASTIdExpression idExpression, Context context) {
 		List<IASTNode> outArguments = new ArrayList<IASTNode>();
 		
 		for(Arg arg : args) {
@@ -46,7 +47,7 @@ public class ArgumentMapping {
 				outArguments.add(ASTAnalyzer.extractStdStringArg(inArguments[2]));
 				break;
 			case OFF_0:
-				outArguments.add(getOffset(idExpression));
+				outArguments.add(getOffset(idExpression, context));
 				break;
 			case ZERO:
 				outArguments.add(ExtendedNodeFactory.newIntegerLiteral(0));
@@ -73,11 +74,21 @@ public class ArgumentMapping {
 		return outArguments.toArray(new IASTNode[]{});
 	}
 	
-	private IASTNode getOffset(IASTIdExpression idExpression) {
+	private IASTNode getOffset(IASTIdExpression idExpression, Context context) {
 		IASTNode offset = ASTModifier.transformToPointerOffset(idExpression);
+		
 		if(offset == null) {
-			offset = ExtendedNodeFactory.newIntegerLiteral(0);
+			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
+				offset = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+			}
+			else {
+				offset = ExtendedNodeFactory.newIntegerLiteral(0);
+			}
 		}
+		else if(context.isPotentiallyModifiedCharPointer(idExpression)) {
+			offset = ExtendedNodeFactory.newPlusExpression(ExtendedNodeFactory.newIdExpression(context.getPosVariableName()), (IASTExpression)offset);
+		}
+		
 		return offset;
 	}
 }

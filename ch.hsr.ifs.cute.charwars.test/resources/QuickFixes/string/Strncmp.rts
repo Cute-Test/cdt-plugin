@@ -71,3 +71,49 @@ int main() {
 	int n = strncmp(a, b.c_str(), 6);
 }
 
+
+//!StrncmpModifiedPointer
+//@main.cpp
+#include <cstring>
+int main() {
+	const char *str = "http://www.google.com";
+	while (strncmp(str, "www", 3) != 0) {
+		str++;
+	}
+	std::cout << str << std::endl;
+}
+//=
+#include <cstring>
+#include <string>
+int main() {
+	std::string str = "http://www.google.com";
+	std::string::size_type str_pos = 0;
+	while (str.compare(str_pos, 3, "www", 0, 3) != 0) {
+		str_pos++;
+	}
+	std::cout << (str.c_str() + str_pos) << std::endl;
+}
+
+
+//!StrncmpModifiedPointerAndOffset
+//@main.cpp
+#include <cstring>
+int main() {
+	const char *str = "http://www.google.com";
+	while (strncmp(str + 7, "www", 3) != 0) {
+		str++;
+	}
+	std::cout << str << std::endl;
+}
+//=
+#include <cstring>
+#include <string>
+int main() {
+	std::string str = "http://www.google.com";
+	std::string::size_type str_pos = 0;
+	while (str.compare(str_pos + 7, 3, "www", 0, 3) != 0) {
+		str_pos++;
+	}
+	std::cout << (str.c_str() + str_pos) << std::endl;
+}
+

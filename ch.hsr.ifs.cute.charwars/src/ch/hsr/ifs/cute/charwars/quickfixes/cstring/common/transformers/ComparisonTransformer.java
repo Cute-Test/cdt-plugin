@@ -65,6 +65,6 @@ public class ComparisonTransformer extends Transformer  {
 	private IASTNode[] getOutArguments() {
 		String inFunctionName = mapping.getInFunction().getName();
 		IASTFunctionCallExpression inFunctionCall = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName); 
-		return mapping.getArgumentMapping().getOutArguments(inFunctionCall.getArguments(), idExpression);
+		return mapping.getArgumentMapping().getOutArguments(inFunctionCall.getArguments(), idExpression, context);
 	}
 }
