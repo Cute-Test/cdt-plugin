@@ -436,7 +436,13 @@ public:
 
 int main() {
 	const char *str = "John";
-	User(str);
+	User a = User(str);
+	User b{str};
+	User c(str);
+	User *d = new User(str);
+	delete d;
+	User *e = new User{str};
+	delete e;
 }
 //=
 #include <string>
@@ -449,7 +455,13 @@ public:
 
 int main() {
 	std::string str = "John";
-	User(str);
+	User a = User(str);
+	User b{str};
+	User c(str);
+	User *d = new User(str);
+	delete d;
+	User *e = new User{str};
+	delete e;
 }
 
 
@@ -464,7 +476,13 @@ public:
 
 int main() {
 	const char *str = "John";
-	User(str);
+	User a = User(str);
+	User b { str };
+	User c(str);
+	User* d = new User(str);
+	delete d;
+	User* e = new User { str };
+	delete e;
 }
 //=
 #include <string>
@@ -477,7 +495,13 @@ public:
 
 int main() {
 	std::string str = "John";
-	User(str.c_str());
+	User a = User(str.c_str());
+	User b { str.c_str() };
+	User c(str.c_str());
+	User* d = new User(str.c_str());
+	delete d;
+	User* e = new User { str.c_str() };
+	delete e;
 }
 
 
