@@ -793,6 +793,10 @@ std::string getCommand(const char* serverObject) {
 	if (!*serverObject) {
 		return "";
 	}
+	
+	while (*serverObject == '/') {
+		++serverObject;
+	}
 	return serverObject;
 }
 //=
@@ -808,7 +812,11 @@ std::string getCommand(const std::string& serverObject) {
 	if (serverObject.empty()) {
 		return "";
 	}
-	return serverObject.c_str();
+	std::string::size_type serverObject_pos = 0;
+	while (serverObject[serverObject_pos] == '/') {
+		++serverObject_pos;
+	}
+	return (serverObject.c_str() + serverObject_pos);
 }
 
 std::string getCommand(const char* serverObject) {

@@ -24,6 +24,7 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIfStatement;
+import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
@@ -1012,20 +1013,26 @@ public class ASTAnalyzer {
 			IBinding functionNameBinding = functionName.resolveBinding();
 			
 			if(functionNameBinding instanceof ICPPClassType) {
-				IBinding binding = functionCall.getImplicitNames()[0].resolveBinding();
-				if(binding instanceof ICPPConstructor) {
-					functionBinding = (ICPPFunction)binding;
+				IASTImplicitName implicitNames[] = functionCall.getImplicitNames();
+				if(implicitNames.length > 0) {
+					IBinding binding = implicitNames[0].resolveBinding();
+					if(binding instanceof ICPPConstructor) {
+						functionBinding = (ICPPFunction)binding;
+					}	
 				}
 			}
 			else if(functionNameBinding instanceof ICPPFunction) {
-				functionBinding = (ICPPFunction) functionNameBinding;
+				functionBinding = (ICPPFunction)functionNameBinding;
 			}
 		}
 		else if(parent instanceof ICPPASTConstructorInitializer) {
 			ICPPASTConstructorInitializer constructorInitializer = (ICPPASTConstructorInitializer)parent;
 			argIndex = Arrays.asList(constructorInitializer.getArguments()).indexOf(idExpression);
 			IASTImplicitNameOwner declarator = (IASTImplicitNameOwner)parent.getParent();
-			functionBinding = (ICPPConstructor)declarator.getImplicitNames()[0].resolveBinding();
+			IASTImplicitName implicitNames[] = declarator.getImplicitNames();
+			if(implicitNames.length > 0) {
+				functionBinding = (ICPPConstructor)implicitNames[0].resolveBinding();
+			}
 		}
 		else if(parent instanceof ICPPASTInitializerList) {
 			ICPPASTInitializerList initializerList = (ICPPASTInitializerList)parent;
@@ -1034,7 +1041,10 @@ public class ASTAnalyzer {
 			IASTImplicitNameOwner declarator = null;
 			if(parent.getParent() instanceof IASTDeclarator || parent.getParent() instanceof ICPPASTNewExpression) {
 				declarator = (IASTImplicitNameOwner)parent.getParent();
-				functionBinding = (ICPPConstructor)declarator.getImplicitNames()[0].resolveBinding();
+				IASTImplicitName implicitNames[] = declarator.getImplicitNames();
+				if(implicitNames.length > 0) {
+					functionBinding = (ICPPConstructor)implicitNames[0].resolveBinding();
+				}
 			}
 		}
 		
