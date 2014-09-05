@@ -59,6 +59,25 @@ int main() {
 }
 
 
+//!StrcmpModifiedPointer
+//@main.cpp
+#include <cstring>
+int main() {
+	const char *str = "hello";
+	str++;
+	int i = strcmp(str, "ello");
+}
+//=
+#include <cstring>
+#include <string>
+int main() {
+	std::string str = "hello";
+	std::string::size_type str_pos = 0;
+	str_pos++;
+	int i = str.compare(str_pos, std::string::npos, "ello");
+}
+
+
 //!StrcmpFirstArgStringEqualityCheck1
 //@main.cpp
 #include <cstring>

@@ -29,7 +29,7 @@ public class FunctionRefactoring extends Refactoring {
 				transformer = new FunctionTransformer(context, idExpression, nodeToReplace, mapping);
 			}
 		}
-		else {
+		else if(!context.isPotentiallyModifiedCharPointer(idExpression)) {
 			if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunctionName) ||
 			   ASTAnalyzer.isFunctionCallArgument(idExpression, 0, Constants.STD_PREFIX + inFunctionName)) {
 				transformer = new FunctionTransformer(context, idExpression, idExpression.getParent(), mapping);

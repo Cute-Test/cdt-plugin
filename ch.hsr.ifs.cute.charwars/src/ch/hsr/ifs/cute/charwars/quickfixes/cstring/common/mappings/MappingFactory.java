@@ -39,7 +39,8 @@ public class MappingFactory {
 			new Mapping(FunctionDescription.STRCMP, FunctionDescription.COMPARE, false, new ArgumentMapping(Arg.ARG_1)),
 			
 			//strcmp(a+off, b) -> a.compare(off, std::string::npos, b)
-			//todo: if modified: strcmp(a,b) -> a.compare(a+off, std::string::npos, b)
+			//strcmp(a, b) -> a.compare(a_pos, std::string::npos, b)
+			//strcmp(a+off, b) -> a.compare(a_pos+off, std::string::npos, b)
 			new Mapping(FunctionDescription.STRCMP, FunctionDescription.COMPARE, true, new ArgumentMapping(Arg.OFF_0, Arg.NPOS, Arg.ARG_1)),
 			
 			//strncmp(a+off, b, n) -> a.compare(off, n, b, 0, n)
