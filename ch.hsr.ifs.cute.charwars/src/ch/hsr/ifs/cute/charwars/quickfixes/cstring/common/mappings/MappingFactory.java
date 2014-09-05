@@ -16,8 +16,11 @@ public class MappingFactory {
 	public static Mapping[] createFunctionRefactoringMappings() {
 		Mapping mappings[] = new Mapping[]{
 			//strlen(str) -> str.size()
-			//todo: if modified: strlen(str) -> (str.size() - str_pos)
 			new Mapping(FunctionDescription.STRLEN, FunctionDescription.SIZE, false, new ArgumentMapping()),
+			
+			//strlen(str+off) -> (str.size() - off)
+			//strlen(str) -> (str.size() - str_pos)
+			new Mapping(FunctionDescription.STRLEN, FunctionDescription.SIZE, true, new ArgumentMapping()),
 			
 			//wcslen(wstr) -> wstr.size()
 			//todo: if modified: wcslen(wstr) -> (wstr.size() - wstr_pos)

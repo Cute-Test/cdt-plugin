@@ -67,6 +67,7 @@ import ch.hsr.ifs.cute.charwars.asttools.FindIdExpressionsVisitor;
 import ch.hsr.ifs.cute.charwars.constants.CString;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 
 public class ASTAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
@@ -1105,5 +1106,23 @@ public class ASTAnalyzer {
 		boolean isPlusAssigned = ASTAnalyzer.isPlusAssignment(idExpression.getParent()) && ((IASTBinaryExpression)idExpression.getParent()).getOperand1() == idExpression;
 		boolean isIncremented = ASTAnalyzer.isUnaryExpression(idExpression.getParent(), IASTUnaryExpression.op_prefixIncr) || ASTAnalyzer.isUnaryExpression(idExpression.getParent(), IASTUnaryExpression.op_postFixIncr);
 		return isLValue || isPlusAssigned || isIncremented;
+	}
+	
+	public static IASTNode getOffset(IASTIdExpression idExpression, Context context) {
+		IASTNode offset = ASTModifier.transformToPointerOffset(idExpression);
+		
+		if(offset == null) {
+			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
+				offset = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+			}
+			else {
+				offset = ExtendedNodeFactory.newIntegerLiteral(0);
+			}
+		}
+		else if(context.isPotentiallyModifiedCharPointer(idExpression)) {
+			offset = ExtendedNodeFactory.newPlusExpression(ExtendedNodeFactory.newIdExpression(context.getPosVariableName()), (IASTExpression)offset);
+		}
+		
+		return offset;
 	}
 }

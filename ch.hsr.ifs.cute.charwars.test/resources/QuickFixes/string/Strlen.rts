@@ -1,4 +1,4 @@
-//!StrlenReplacement
+//!StrlenReplacement1
 //@main.cpp
 int main() {
 	char *str = "Hello World";
@@ -10,6 +10,39 @@ int main() {
 int main() {
 	std::string str = "Hello World";
 	std::cout << str.size() << std::endl;
+}
+
+
+//!StrlenReplacement2
+//@main.cpp
+int main() {
+	char *str = "Hello World";
+	str++;
+	std::cout << strlen(str) << std::endl;
+}
+//=
+
+#include <string>
+int main() {
+	std::string str = "Hello World";
+	std::string::size_type str_pos = 0;
+	str_pos++;
+	std::cout << (str.size() - str_pos) << std::endl;
+}
+
+
+//!StrlenReplacement3
+//@main.cpp
+int main() {
+	char *str = "Hello World";
+	std::cout << strlen(str+6) << std::endl;
+}
+//=
+
+#include <string>
+int main() {
+	std::string str = "Hello World";
+	std::cout << (str.size() - 6) << std::endl;
 }
 
 

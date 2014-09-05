@@ -9,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
@@ -47,7 +46,7 @@ public class ArgumentMapping {
 				outArguments.add(ASTAnalyzer.extractStdStringArg(inArguments[2]));
 				break;
 			case OFF_0:
-				outArguments.add(getOffset(idExpression, context));
+				outArguments.add(ASTAnalyzer.getOffset(idExpression, context));
 				break;
 			case ZERO:
 				outArguments.add(ExtendedNodeFactory.newIntegerLiteral(0));
@@ -72,23 +71,5 @@ public class ArgumentMapping {
 		}
 		
 		return outArguments.toArray(new IASTNode[]{});
-	}
-	
-	private IASTNode getOffset(IASTIdExpression idExpression, Context context) {
-		IASTNode offset = ASTModifier.transformToPointerOffset(idExpression);
-		
-		if(offset == null) {
-			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				offset = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
-			}
-			else {
-				offset = ExtendedNodeFactory.newIntegerLiteral(0);
-			}
-		}
-		else if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-			offset = ExtendedNodeFactory.newPlusExpression(ExtendedNodeFactory.newIdExpression(context.getPosVariableName()), (IASTExpression)offset);
-		}
-		
-		return offset;
 	}
 }

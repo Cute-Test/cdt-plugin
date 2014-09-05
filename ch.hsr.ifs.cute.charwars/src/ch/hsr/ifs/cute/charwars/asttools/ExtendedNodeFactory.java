@@ -76,6 +76,10 @@ public class ExtendedNodeFactory {
 		return factory.newBinaryExpression(IASTBinaryExpression.op_plus, lhs, rhs);
 	}
 	
+	public static IASTBinaryExpression newMinusExpression(IASTExpression lhs, IASTExpression rhs) {
+		return factory.newBinaryExpression(IASTBinaryExpression.op_minus, lhs, rhs);
+	}
+	
 	public static IASTUnaryExpression newLogicalNotExpression(IASTExpression operand) {
 		return factory.newUnaryExpression(IASTUnaryExpression.op_not, operand);
 	}
