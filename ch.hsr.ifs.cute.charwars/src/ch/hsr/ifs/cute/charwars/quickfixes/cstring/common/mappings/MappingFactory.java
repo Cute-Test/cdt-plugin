@@ -24,7 +24,8 @@ public class MappingFactory {
 			new Mapping(FunctionDescription.WCSLEN, FunctionDescription.SIZE, false, new ArgumentMapping()),
 			
 			//memcmp(a+off, b, n) -> a.compare(off, n, b, 0, n)
-			//todo: if modified: memcmp(a, b, n) -> a.compare(a_pos, n, b, 0, n)
+			//memcmp(a, b, n) -> a.compare(a_pos, n, b, 0, n)
+			//memcmp(a+off, b, n) -> a.compare(a_pos+off, n, b, 0, n)
 			new Mapping(FunctionDescription.MEMCMP, FunctionDescription.COMPARE, true, new ArgumentMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2)),
 
 			//memcpy(a+off, b, n) -> a.replace(off, n, b, 0, n)
