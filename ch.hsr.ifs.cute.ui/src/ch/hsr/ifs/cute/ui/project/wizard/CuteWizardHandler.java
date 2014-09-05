@@ -19,8 +19,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizard;
@@ -134,10 +136,15 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", false);
 		cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
-		ProjectTools.setIncludePaths(cuteFolder.getFullPath(), project, this);
+
+		ProjectTools.setIncludePaths(replaceProjectLocation(cuteFolder), project, this);
 
 		IFile srcFile = project.getFile("src/Test.cpp");
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), srcFile, true);
+	}
+
+	private IPath replaceProjectLocation(IFolder cuteFolder) {
+		return new Path("/${ProjName}").append(cuteFolder.getProjectRelativePath());
 	}
 
 	private ICuteHeaders getCuteVersion() {

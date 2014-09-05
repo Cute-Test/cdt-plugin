@@ -72,30 +72,28 @@ public class ProjectTools {
 
 	public static void addEntryToAllCfgs(ICProjectDescription des, ICSourceEntry entry, boolean removeProj) throws WriteAccessException, CoreException {
 		ICConfigurationDescription cfgs[] = des.getConfigurations();
-		for (int i = 0; i < cfgs.length; i++) {
-			ICConfigurationDescription cfg = cfgs[i];
+		for (ICConfigurationDescription cfg : cfgs) {
 			ICSourceEntry[] entries = cfg.getSourceEntries();
 			entries = addEntry(entries, entry, removeProj);
 			cfg.setSourceEntries(entries);
 		}
 	}
 
-	public static ICSourceEntry[] addEntry(ICSourceEntry[] entries, ICSourceEntry entry, boolean removeProj) {
+	public static ICSourceEntry[] addEntry(ICSourceEntry[] entries, ICSourceEntry newEntry, boolean removeProj) {
 		Set<ICSourceEntry> set = new HashSet<ICSourceEntry>();
-		for (int i = 0; i < entries.length; i++) {
-			if (removeProj && new Path(entries[i].getValue()).segmentCount() == 1)
+		for (ICSourceEntry entry : entries) {
+			if (removeProj && new Path(entry.getValue()).segmentCount() == 1)
 				continue;
 
-			set.add(entries[i]);
+			set.add(entry);
 		}
-		set.add(entry);
+		set.add(newEntry);
 		return set.toArray(new ICSourceEntry[set.size()]);
 	}
 
 	public static void setOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
 			IIncludeStrategyProvider inStratProv) throws BuildException {
-		for (int i = 0; i < options.length; i++) {
-			IOption option = options[i];
+		for (IOption option : options) {
 			if (option.getValueType() == optionType) {
 				String[] includePaths = inStratProv.getStrategy(optionType).getValues(option);
 				String[] newPaths = new String[includePaths.length + 1];
@@ -115,8 +113,8 @@ public class ProjectTools {
 				setOptionInConfig(value, conf, toolChain.getOptions(), toolChain, optionType, inclStratProv);
 
 				ITool[] tools = conf.getTools();
-				for (int j = 0; j < tools.length; j++) {
-					setOptionInConfig(value, conf, tools[j].getOptions(), tools[j], optionType, inclStratProv);
+				for (ITool tool : tools) {
+					setOptionInConfig(value, conf, tool.getOptions(), tool, optionType, inclStratProv);
 				}
 			}
 		} catch (BuildException be) {
