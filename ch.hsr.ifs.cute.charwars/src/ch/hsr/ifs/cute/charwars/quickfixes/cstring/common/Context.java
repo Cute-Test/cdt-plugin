@@ -8,6 +8,7 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 
 public class Context {
 	private boolean modifiesCharPointer;
@@ -45,5 +46,9 @@ public class Context {
 	
 	public String getPosVariableName() {
 		return this.posVariableName;
+	}
+	
+	public IASTIdExpression createPosVariableIdExpression() {
+		return ExtendedNodeFactory.newIdExpression(getPosVariableName());
 	}
 }

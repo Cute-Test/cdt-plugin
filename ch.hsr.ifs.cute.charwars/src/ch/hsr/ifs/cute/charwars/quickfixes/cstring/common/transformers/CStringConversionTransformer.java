@@ -23,7 +23,7 @@ public class CStringConversionTransformer extends Transformer {
 		if(convertToConst) {
 			IASTFunctionCallExpression c_strCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.C_STR);
 			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				IASTBinaryExpression plusExpression = ExtendedNodeFactory.newPlusExpression(c_strCall, ExtendedNodeFactory.newIdExpression(context.getPosVariableName()));
+				IASTBinaryExpression plusExpression = ExtendedNodeFactory.newPlusExpression(c_strCall, context.createPosVariableIdExpression());
 				return ExtendedNodeFactory.newBracketedExpression(plusExpression);
 			}
 			else {

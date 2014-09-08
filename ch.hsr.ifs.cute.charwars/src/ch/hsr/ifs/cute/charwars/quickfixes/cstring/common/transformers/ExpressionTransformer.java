@@ -4,7 +4,6 @@ import org.eclipse.cdt.core.dom.ast.IASTArraySubscriptExpression;
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
-import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
@@ -36,7 +35,7 @@ public class ExpressionTransformer extends Transformer {
 			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.SIZE);
 		case EMPTY:
 			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				IASTIdExpression subscript = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+				IASTIdExpression subscript = context.createPosVariableIdExpression();
 				IASTArraySubscriptExpression arraySubscription = ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
 				return ExtendedNodeFactory.newLogicalNotExpression(arraySubscription);
 			}
@@ -45,7 +44,7 @@ public class ExpressionTransformer extends Transformer {
 			}
 		case NOT_EMPTY:
 			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				IASTIdExpression subscript = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+				IASTIdExpression subscript = context.createPosVariableIdExpression();
 				return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
 			}
 			else {
@@ -55,7 +54,7 @@ public class ExpressionTransformer extends Transformer {
 		case DEREFERENCED:
 			IASTExpression subscript;
 			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				subscript = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+				subscript = context.createPosVariableIdExpression();
 			}
 			else {
 				subscript = ExtendedNodeFactory.newIntegerLiteral(0);
@@ -75,12 +74,12 @@ public class ExpressionTransformer extends Transformer {
 			
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
 		case MODIFIED:
-			return ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+			return context.createPosVariableIdExpression();
 			
 		case ARRAY_SUBSCRIPTION:
 			IASTArraySubscriptExpression oldArraySubscriptExpression = (IASTArraySubscriptExpression)idExpression.getParent();
 			IASTExpression oldArraySubscript = (IASTExpression)oldArraySubscriptExpression.getArgument();
-			IASTExpression newArraySubscript = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+			IASTExpression newArraySubscript = context.createPosVariableIdExpression();
 			
 			if(!ASTAnalyzer.isIntegerLiteral(oldArraySubscript, 0)) {
 				newArraySubscript = ExtendedNodeFactory.newPlusExpression(newArraySubscript, oldArraySubscript);

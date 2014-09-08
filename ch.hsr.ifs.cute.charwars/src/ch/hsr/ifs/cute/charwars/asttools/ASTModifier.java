@@ -60,26 +60,25 @@ public class ASTModifier {
 	}
 	
 	private static int getPositionForIncludeStatements(IASTTranslationUnit ast) {
-		int position = 0;
-		
 		IASTPreprocessorIncludeStatement[] includeStatements = ast.getTranslationUnit().getIncludeDirectives();
-		for(IASTPreprocessorIncludeStatement includeStatement : includeStatements) {
+		for(int i = includeStatements.length - 1; i >= 0; --i) {
+			IASTPreprocessorIncludeStatement includeStatement = includeStatements[i];
 			if(includeStatement.isSystemInclude() && includeStatement.isPartOfTranslationUnitFile()) {
 				IASTNodeLocation nodeLocation = includeStatement.getNodeLocations()[0];
-				position = nodeLocation.getNodeOffset() + nodeLocation.getNodeLength();
+				return nodeLocation.getNodeOffset() + nodeLocation.getNodeLength();
 			}
 		}
 		
-		if(position == 0) {
-			for(IASTPreprocessorStatement preprocessorStatement : ast.getAllPreprocessorStatements()) {
-				if(preprocessorStatement instanceof IASTPreprocessorObjectStyleMacroDefinition) {
-					IASTNodeLocation nodeLocation = preprocessorStatement.getNodeLocations()[0];
-					position = nodeLocation.getNodeOffset() + nodeLocation.getNodeLength();
-				}
+		IASTPreprocessorStatement[] preprocessorStatements = ast.getAllPreprocessorStatements();
+		for(int i = preprocessorStatements.length - 1; i >= 0; --i) {
+			IASTPreprocessorStatement preprocessorStatement = preprocessorStatements[i];
+			if(preprocessorStatement instanceof IASTPreprocessorObjectStyleMacroDefinition) {
+				IASTNodeLocation nodeLocation = preprocessorStatement.getNodeLocations()[0];
+				return nodeLocation.getNodeOffset() + nodeLocation.getNodeLength();
 			}
 		}
 		
-		return position;
+		return 0;
 	}
 	
 	@SuppressFBWarnings(value="RV_RETURN_VALUE_IGNORED_INFERRED")

@@ -1106,9 +1106,9 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean modifiesCharPointer(IASTIdExpression idExpression) {
-		boolean isLValue = ASTAnalyzer.isLValueInAssignment(idExpression) && ((IASTBinaryExpression)idExpression.getParent()).getOperand2() instanceof IASTBinaryExpression;
-		boolean isPlusAssigned = ASTAnalyzer.isPlusAssignment(idExpression.getParent()) && ((IASTBinaryExpression)idExpression.getParent()).getOperand1() == idExpression;
-		boolean isIncremented = ASTAnalyzer.isUnaryExpression(idExpression.getParent(), IASTUnaryExpression.op_prefixIncr) || ASTAnalyzer.isUnaryExpression(idExpression.getParent(), IASTUnaryExpression.op_postFixIncr);
+		boolean isLValue = isLValueInAssignment(idExpression) && ((IASTBinaryExpression)idExpression.getParent()).getOperand2() instanceof IASTBinaryExpression;
+		boolean isPlusAssigned = isPlusAssignment(idExpression.getParent()) && ((IASTBinaryExpression)idExpression.getParent()).getOperand1() == idExpression;
+		boolean isIncremented = isUnaryExpression(idExpression.getParent(), IASTUnaryExpression.op_prefixIncr) || isUnaryExpression(idExpression.getParent(), IASTUnaryExpression.op_postFixIncr);
 		return isLValue || isPlusAssigned || isIncremented;
 	}
 	
@@ -1117,14 +1117,14 @@ public class ASTAnalyzer {
 		
 		if(offset == null) {
 			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				offset = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+				offset = context.createPosVariableIdExpression();
 			}
 			else {
 				offset = ExtendedNodeFactory.newIntegerLiteral(0);
 			}
 		}
 		else if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-			offset = ExtendedNodeFactory.newPlusExpression(ExtendedNodeFactory.newIdExpression(context.getPosVariableName()), (IASTExpression)offset);
+			offset = ExtendedNodeFactory.newPlusExpression(context.createPosVariableIdExpression(), (IASTExpression)offset);
 		}
 		
 		return offset;
