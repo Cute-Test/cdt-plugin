@@ -90,6 +90,10 @@ public class MappingFactory {
 			//strpbrk(a,b) != NULL -> a.find_first_of(b) != std::string::npos
 			new Mapping(FunctionDescription.STRPBRK, FunctionDescription.FIND_FIRST_OF, false, new ArgumentMapping(Arg.ARG_1)),
 			
+			//strpbrk(a+n,b) == NULL -> a.find_first_of(b, n) == std::string::npos
+			//strpbrk(a+n,b) != NULL -> a.find_first_of(b, n) != std::string::npos
+			new Mapping(FunctionDescription.STRPBRK, FunctionDescription.FIND_FIRST_OF, true, new ArgumentMapping(Arg.ARG_1, Arg.OFF_0)),
+			
 			//strrchr(a,b) == NULL -> a.rfind(b) == std::string::npos
 			//strrchr(a,b) != NULL -> a.rfind(b) != std::string::npos
 			new Mapping(FunctionDescription.STRRCHR, FunctionDescription.RFIND, false, new ArgumentMapping(Arg.ARG_1)),
@@ -97,14 +101,26 @@ public class MappingFactory {
 			//strstr(a,b) == NULL -> a.find(b) == std::string::npos
 			//strstr(a,b) != NULL -> a.find(b) != std::string::npos
 			new Mapping(FunctionDescription.STRSTR, FunctionDescription.FIND, false, new ArgumentMapping(Arg.ARG_1)),
+			
+			//strstr(a+n,b) == NULL -> a.find(b, n) == std::string::npos
+			//strstr(a+n,b) != NULL -> a.find(b, n) != std::string::npos
+			new Mapping(FunctionDescription.STRSTR, FunctionDescription.FIND, true, new ArgumentMapping(Arg.ARG_1, Arg.OFF_0)),
 				
 			//strcspn(a, b) == strlen(a) -> a.find_first_of(b) == std::string::npos
 			//strcspn(a, b) != strlen(a) -> a.find_first_of(b) != std::string::npos
 			new Mapping(FunctionDescription.STRCSPN, FunctionDescription.FIND_FIRST_OF, false, new ArgumentMapping(Arg.ARG_1)),
+			
+			//strcspn(a+n, b) == strlen(a) -> a.find_first_of(b, n) == std::string::npos
+			//strcspn(a+n, b) != strlen(a) -> a.find_first_of(b, n) != std::string::npos
+			new Mapping(FunctionDescription.STRCSPN, FunctionDescription.FIND_FIRST_OF, true, new ArgumentMapping(Arg.ARG_1, Arg.OFF_0)),
 				
 			//strspn(a, b) == strlen(a) -> a.find_first_not_of(b) == std::string::npos
 			//strspn(a, b) != strlen(a) -> a.find_first_not_of(b) != std::string::npos
 			new Mapping(FunctionDescription.STRSPN, FunctionDescription.FIND_FIRST_NOT_OF, false, new ArgumentMapping(Arg.ARG_1)),
+			
+			//strspn(a+n, b) == strlen(a) -> a.find_first_not_of(b, n) == std::string::npos
+			//strspn(a+n, b) != strlen(a) -> a.find_first_not_of(b, n) != std::string::npos
+			new Mapping(FunctionDescription.STRSPN, FunctionDescription.FIND_FIRST_NOT_OF, true, new ArgumentMapping(Arg.ARG_1, Arg.OFF_0)),
 			
 			//memchr(str, ch, count) == NULL -> std::find(str.begin(), str.end(), ch) == str.end()
 			//memchr(str, ch, count) != NULL -> std::find(str.begin(), str.end(), ch) != str.end()

@@ -523,3 +523,61 @@ int main() {
 	found = strchr(str.c_str(), 's');
 }
 
+
+//!StrchrChecksWithOffset
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const char *mail = "admin@web.com";
+	if(strchr(mail+5, '@') == NULL) {
+		std::cout << mail;
+	}
+	if(strchr(mail+5, '@') != NULL) {
+		std::cout << mail;
+	}
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::string mail = "admin@web.com";
+	if (mail.find('@', 5) == std::string::npos) {
+		std::cout << mail;
+	}
+	if (mail.find('@', 5) != std::string::npos) {
+		std::cout << mail;
+	}
+}
+
+
+//!StrchrChecksWithModifiedPointer
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const char *mail = "admin@web.com";
+	while(strchr(mail, '@') != NULL) {
+		mail++;
+	}
+	std::cout << mail << std::endl;
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::string mail = "admin@web.com";
+	std::string::size_type mail_pos = 0;
+	while (mail.find('@', mail_pos) != std::string::npos) {
+		mail_pos++;
+	}
+	std::cout << (mail.c_str() + mail_pos) << std::endl;
+}
+
+

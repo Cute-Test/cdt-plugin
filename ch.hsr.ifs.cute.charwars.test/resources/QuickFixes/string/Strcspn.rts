@@ -131,3 +131,55 @@ int main() {
 	bool x = strcspn(str.c_str(), digits) != 5;
 }
 
+
+//!StrcspnChecksWithOffset
+//@main.cpp
+#include <cstring>
+#include <iostream>
+
+int main() {
+	const char *str = "http://www.google.com";
+	const char *digits = "/:";
+	if(strcspn(str+7, digits) == strlen(str)) {
+		std::cout << str << std::endl;
+	}
+}
+//=
+#include <cstring>
+#include <iostream>
+#include <string>
+
+int main() {
+	std::string str = "http://www.google.com";
+	const char *digits = "/:";
+	if (str.find_first_of(digits, 7) == std::string::npos) {
+		std::cout << str << std::endl;
+	}
+}
+
+
+//!StrcspnChecksWithModifiedPointer
+//@main.cpp
+#include <cstring>
+#include <iostream>
+
+int main() {
+	const char *str = "http://www.google.com";
+	const char *digits = "/:";
+	while(strcspn(str, digits) != strlen(str)) {
+		str++;
+	}
+}
+//=
+#include <cstring>
+#include <iostream>
+#include <string>
+
+int main() {
+	std::string str = "http://www.google.com";
+	const char *digits = "/:";
+	std::string::size_type str_pos = 0;
+	while (str.find_first_of(digits, str_pos) != std::string::npos) {
+		str_pos++;
+	}
+}
