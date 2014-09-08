@@ -52,6 +52,11 @@ public class ExpressionRefactoring extends Refactoring {
 			//str += n -> str_pos += n
 			transformer = new ExpressionTransformer(context, idExpression, idExpression, Transformation.MODIFIED);
 		}
+		else if(ASTAnalyzer.isArraySubscriptExpression(idExpression) && context.isPotentiallyModifiedCharPointer(idExpression)) {
+			//str[0] -> str[str_pos]
+			//str[1] -> str[str_pos + 1]
+			transformer = new ExpressionTransformer(context, idExpression, idExpression.getParent(), Transformation.ARRAY_SUBSCRIPTION);
+		}
 
 		return transformer;
 	}

@@ -796,3 +796,26 @@ int main() {
 		std::cout << (serverObject.c_str() + serverObject_pos) << std::endl;
 	}
 }
+
+
+//!CharPointerModification2
+//@main.cpp
+#include "iostream.h"
+
+int main() {
+	const char *str = "Hello";
+	str++;
+	std::cout << str[0] << std::endl;
+	std::cout << str[1] << std::endl;
+}
+//=
+#include <string>
+#include "iostream.h"
+
+int main() {
+	std::string str = "Hello";
+	std::string::size_type str_pos = 0;
+	str_pos++;
+	std::cout << str[str_pos] << std::endl;
+	std::cout << str[str_pos + 1] << std::endl;
+}

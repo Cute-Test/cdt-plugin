@@ -519,6 +519,10 @@ public class ASTAnalyzer {
 		return rawSignature.contains(Constants.ASSERT + "(") || rawSignature.contains(Constants.ASSERT.toUpperCase() + "(");
 	}
 	
+	public static boolean isReturned(IASTNode node) {
+		return node.getParent() instanceof IASTReturnStatement;
+	}
+	
 	public static boolean isNodeComparedToNullpointer(IASTNode node, boolean notNegatedComparison) {
 		if(node instanceof IASTBinaryExpression) {
 			IASTBinaryExpression binaryExpression = (IASTBinaryExpression)node;
@@ -995,7 +999,7 @@ public class ASTAnalyzer {
 	}
 	
 	public static IASTNode getEnclosingBoolean(IASTNode node) {
-		while(node != null && !isCondition(node) && !isAssignedToBoolean(node) && !isAssert(node)) {
+		while(node != null && !isCondition(node) && !isAssignedToBoolean(node) && !isAssert(node) && !isReturned(node)) {
 			node = node.getParent();
 		}
 		return node;

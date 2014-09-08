@@ -4,6 +4,7 @@ import org.eclipse.cdt.core.dom.ast.IASTArraySubscriptExpression;
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
@@ -17,7 +18,8 @@ public class ExpressionTransformer extends Transformer {
 		EMPTY,
 		NOT_EMPTY,
 		DEREFERENCED,
-		MODIFIED
+		MODIFIED,
+		ARRAY_SUBSCRIPTION
 	}
 	
 	private Transformation transformation;
@@ -74,6 +76,16 @@ public class ExpressionTransformer extends Transformer {
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
 		case MODIFIED:
 			return ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+			
+		case ARRAY_SUBSCRIPTION:
+			IASTArraySubscriptExpression oldArraySubscriptExpression = (IASTArraySubscriptExpression)idExpression.getParent();
+			IASTExpression oldArraySubscript = (IASTExpression)oldArraySubscriptExpression.getArgument();
+			IASTExpression newArraySubscript = ExtendedNodeFactory.newIdExpression(context.getPosVariableName());
+			
+			if(!ASTAnalyzer.isIntegerLiteral(oldArraySubscript, 0)) {
+				newArraySubscript = ExtendedNodeFactory.newPlusExpression(newArraySubscript, oldArraySubscript);
+			}
+			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, newArraySubscript);
 		default:
 			return null;
 		}
