@@ -202,6 +202,14 @@ int main(){
 	do {
 		std::cout << mail;
 	} while(strstr(mail, "@") != NULL);
+	char* ptr = strstr(mail, "@") != NULL ? strstr(mail, "@") : mail;
+	bool y = strstr(mail, "@") != NULL;
+	y = strstr(mail, "@") != NULL;
+	bool z1 = strstr(mail, "@") != NULL || true;
+	bool z2 = strstr(mail, "@") != NULL && true;
+	do {
+		std::cout << mail;
+	} while(strstr(mail, "@") != NULL);
 }
 //=
 #include <cstring>
@@ -222,6 +230,16 @@ int main(){
 	for (; mail.find("@") != std::string::npos;) {
 		std::cout << mail;
 	}
+	do {
+		std::cout << mail;
+	} while (mail.find("@") != std::string::npos);
+	char* ptr =
+			mail.find("@") != std::string::npos ?
+					strstr(mail.c_str(), "@") : mail.c_str();
+	bool y = mail.find("@") != std::string::npos;
+	y = mail.find("@") != std::string::npos;
+	bool z1 = mail.find("@") != std::string::npos || true;
+	bool z2 = mail.find("@") != std::string::npos && true;
 	do {
 		std::cout << mail;
 	} while (mail.find("@") != std::string::npos);
@@ -424,6 +442,14 @@ int main(){
 	do {
 		std::cout << mail;
 	} while(strstr(mail, "@") == NULL);
+	char* ptr = strstr(mail, "@") == NULL ? strstr(mail, "@") : mail;
+	bool y = strstr(mail, "@") == NULL;
+	y = strstr(mail, "@") == NULL;
+	bool z1 = strstr(mail, "@") == NULL || true;
+	bool z2 = strstr(mail, "@") == NULL && true;
+	do {
+		std::cout << mail;
+	} while(strstr(mail, "@") == NULL);
 }
 //=
 #include <cstring>
@@ -444,6 +470,16 @@ int main(){
 	for (; mail.find("@") == std::string::npos;) {
 		std::cout << mail;
 	}
+	do {
+		std::cout << mail;
+	} while (mail.find("@") == std::string::npos);
+	char* ptr =
+			mail.find("@") == std::string::npos ?
+					strstr(mail.c_str(), "@") : mail.c_str();
+	bool y = mail.find("@") == std::string::npos;
+	y = mail.find("@") == std::string::npos;
+	bool z1 = mail.find("@") == std::string::npos || true;
+	bool z2 = mail.find("@") == std::string::npos && true;
 	do {
 		std::cout << mail;
 	} while (mail.find("@") == std::string::npos);

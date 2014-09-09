@@ -115,6 +115,9 @@ public class BlockRefactoring  {
 		ASTChangeDescription changeDescription = new ASTChangeDescription();
 		refactorStringOccurrences(stringOccurrences, changeDescription, context);
 		
+		//workaround: copy statement again in order to remove original node locations
+		newStatement = newStatement.copy();
+		
 		if(changeDescription.shouldRemoveStatement()) {
 			rewrite.remove(oldStatement, null);
 		}
