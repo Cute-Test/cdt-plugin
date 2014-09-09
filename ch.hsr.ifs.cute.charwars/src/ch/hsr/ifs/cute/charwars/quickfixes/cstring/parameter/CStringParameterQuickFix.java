@@ -7,6 +7,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
+import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 
 public class CStringParameterQuickFix extends BaseQuickFix {
@@ -30,5 +31,6 @@ public class CStringParameterQuickFix extends BaseQuickFix {
 		rewriteStrategy.addStdStringOverload();
 		rewriteStrategy.adaptCStringOverload();
 		rewriteStrategy.addNewDeclarations(rewriteCache);
+		headers.add(StdString.HEADER_NAME);
 	}
 }

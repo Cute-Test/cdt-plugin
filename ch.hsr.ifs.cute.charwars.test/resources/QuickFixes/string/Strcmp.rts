@@ -750,3 +750,24 @@ int main()  {
 	std::cout << a.compare(b);
 }
 
+
+//!StrcmpWithModifiedPointer
+//@main.cpp
+#include <cstring>
+#include <iostream>
+int main() {
+	const char *str = "test";
+	str++;
+	std::cout << (strcmp(str, "est") == 0) << std::endl;
+}
+//=
+#include <cstring>
+#include <iostream>
+#include <string>
+int main() {
+	std::string str = "test";
+	std::string::size_type str_pos = 0;
+	str_pos++;
+	std::cout << (str.compare(str_pos, std::string::npos, "est") == 0)
+			<< std::endl;
+}

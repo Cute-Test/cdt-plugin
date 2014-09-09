@@ -999,7 +999,7 @@ public class ASTAnalyzer {
 	}
 	
 	public static IASTNode getEnclosingBoolean(IASTNode node) {
-		while(node != null && !isCondition(node) && !isAssignedToBoolean(node) && !isAssert(node) && !isReturned(node)) {
+		while(node != null && !isCondition(node) && !isAssignedToBoolean(node) && !isAssert(node) && !isReturned(node) && !isBracketExpression(node.getParent())) {
 			node = node.getParent();
 		}
 		return node;

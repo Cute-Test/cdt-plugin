@@ -27,7 +27,7 @@ public class OperatorRefactoring extends Refactoring {
 		boolean isStringEqualityCheck = inFunctionName.equals(CString.STRCMP) && outFunctionName.equals(StdString.OP_EQUALS) && ASTAnalyzer.isPartOfStringEqualityCheck(idExpression); 
 		boolean isStringInequalityCheck = inFunctionName.equals(CString.STRCMP) && outFunctionName.equals(StdString.OP_NOT_EQUALS) && ASTAnalyzer.isPartOfStringInequalityCheck(idExpression);
 		
-		if(isOther || isStringEqualityCheck || isStringInequalityCheck) {
+		if(!context.isPotentiallyModifiedCharPointer(idExpression) && (isOther || isStringEqualityCheck || isStringInequalityCheck)) {
 			transformer = new OperatorTransformer(context, idExpression, mapping);
 		}
 
