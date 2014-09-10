@@ -21,6 +21,17 @@
 				name="Use std::string instead of C-Strings."
 				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
 			</problem>
+			
+			<problem
+				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
+				defaultEnabled="true"
+				defaultSeverity="Warning"
+				description="Finds C-String aliases."
+				id="ch.hsr.ifs.cute.charwars.problems.CStringAliasProblem"
+				messagePattern="Found C-String alias: {0}"
+				name="Use std::string::size_type instead of C-String alias."
+				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+			</problem>
 		</checker>
 		
 		<checker
@@ -113,6 +124,10 @@
 		<resolution 
 			class="ch.hsr.ifs.cute.charwars.quickfixes.cstring.general.CStringQuickFix"
 			problemId="ch.hsr.ifs.cute.charwars.problems.CStringProblem">
+		</resolution>
+		<resolution 
+			class="ch.hsr.ifs.cute.charwars.quickfixes.cstring.general.CStringQuickFix"
+			problemId="ch.hsr.ifs.cute.charwars.problems.CStringAliasProblem">
 		</resolution>
 		<resolution 
 			class="ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup.CStringCleanupQuickFix"

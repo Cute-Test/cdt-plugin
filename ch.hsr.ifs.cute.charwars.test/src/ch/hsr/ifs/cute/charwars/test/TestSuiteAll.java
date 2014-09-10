@@ -6,6 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import ch.hsr.ifs.cute.charwars.checkers.ArrayCheckerTest;
 import ch.hsr.ifs.cute.charwars.checkers.CStrCheckerTest;
+import ch.hsr.ifs.cute.charwars.checkers.CStringAliasCheckerTest;
 import ch.hsr.ifs.cute.charwars.checkers.CStringCheckerTest;
 import ch.hsr.ifs.cute.charwars.checkers.CStringCleanupCheckerTest;
 import ch.hsr.ifs.cute.charwars.checkers.CStringParameterCheckerTest;
@@ -41,6 +42,7 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.parameter.CStringParameterQui
 //@formatter:off
 	ArrayCheckerTest.class,
 	CStringCheckerTest.class,
+	CStringAliasCheckerTest.class,
 	CStringCleanupCheckerTest.class,
 	CStrCheckerTest.class,
 	PointerParameterCheckerTest.class,

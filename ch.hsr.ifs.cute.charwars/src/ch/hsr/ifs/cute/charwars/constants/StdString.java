@@ -6,6 +6,7 @@ public final class StdString {
 	public final static String STD = "std";
 	public final static String HEADER_NAME = "string";
 	public final static String STRING = "string";
+	public final static String BASIC_STRING = "basic_string";
 	
 	public final static String STD_STRING = "std::string";
 	public final static String STD_WSTRING = "std::wstring";

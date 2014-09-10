@@ -48,6 +48,7 @@ import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
 import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
+import org.eclipse.cdt.core.dom.ast.ITypedef;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
@@ -57,6 +58,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassSpecialization;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
@@ -74,6 +76,28 @@ public class ASTAnalyzer {
 		IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
 		IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
 		return hasCStringType(declSpecifier) && isArrayOrPointer(declarator) && (hasStringLiteralAssignment(declarator) || hasStrdupAssignment(declarator));
+	}
+	
+	public static boolean isCStringAlias(IASTDeclarator declarator) {
+		IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
+		IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
+		return hasCStringType(declSpecifier) && isArrayOrPointer(declarator) && hasCStringAssignment(declarator);
+	}
+	
+	public static boolean hasCStringAssignment(IASTDeclarator declarator) {
+		IASTInitializer initializer = declarator.getInitializer();
+		if(initializer instanceof IASTEqualsInitializer) {
+			IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
+			IASTInitializerClause initializerClause = equalsInitializer.getInitializerClause();
+			boolean isConversionToCharPointer = isConversionToCharPointer(initializerClause, true);
+			if(isConversionToCharPointer) {
+				IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)initializerClause;
+				IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
+				IASTExpression fieldOwner = fieldReference.getFieldOwner();
+				return isStdStringType(((IASTExpression)fieldOwner).getExpressionType());
+			}
+		}
+		return false;
 	}
 	
 	public static boolean hasCStringType(IASTDeclSpecifier declSpecifier) {
@@ -576,14 +600,22 @@ public class ASTAnalyzer {
 			if(referenceType.getType() instanceof IQualifierType) {
 				IQualifierType qualifierType = (IQualifierType)referenceType.getType();
 				if(qualifierType.isConst() && qualifierType.getType() instanceof ICPPClassType) {
-					ICPPClassType classType = (ICPPClassType)qualifierType.getType();
-					return classType.getName().equals(StdString.STRING);
+					return isStdStringType(qualifierType.getType());
 				}
 			}
 		}
+		else if(type instanceof ITypedef) {
+			ITypedef typedef = (ITypedef)type;
+			return isStdStringType(typedef.getType());
+		}
+		else if(type instanceof ICPPClassSpecialization) {
+			ICPPClassSpecialization classSpecialization = (ICPPClassSpecialization)type;
+			return isStdStringType(classSpecialization.getSpecializedBinding());
+		}
 		else if(type instanceof ICPPClassType) {
 			ICPPClassType classType = (ICPPClassType)type;
-			return classType.getName().equals(StdString.STRING);
+			String className = classType.getName();
+			return className.equals(StdString.STRING) || className.equals(StdString.BASIC_STRING);
 		}
 		return false;
 	}

@@ -56,4 +56,3 @@ markerPositions=2
 int main() {
 	char *str = strdup("mystr");
 }
-

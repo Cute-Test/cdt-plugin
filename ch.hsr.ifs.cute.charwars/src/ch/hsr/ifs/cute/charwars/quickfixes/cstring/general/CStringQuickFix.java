@@ -22,6 +22,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
+import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
@@ -30,7 +31,14 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
 public class CStringQuickFix extends BaseQuickFix {
 	@Override
 	public String getLabel() {
-		return QuickFixLabels.C_STRING;
+		String problemId = getProblemId(currentMarker);
+		if(problemId.equals(ProblemIDs.C_STRING_PROBLEM)) {
+			return QuickFixLabels.C_STRING;
+		}
+		else if(problemId.equals(ProblemIDs.C_STRING_ALIAS_PROBLEM)) {
+			return QuickFixLabels.C_STRING_ALIAS;
+		}
+		return "Unknown problem.";
 	}
 	
 	@Override
