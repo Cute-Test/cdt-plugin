@@ -5,6 +5,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
+import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -23,8 +24,8 @@ public abstract class Transformer {
 		this.idExpression = idExpression;
 		this.nodeToReplace = nodeToReplace;
 		
-		if(this.idExpression != null) {
-			this.stringName = idExpression.getName();
+		if(context != null) {
+			this.stringName = ExtendedNodeFactory.newName(context.getStringVarName());
 		}
 	}
 	

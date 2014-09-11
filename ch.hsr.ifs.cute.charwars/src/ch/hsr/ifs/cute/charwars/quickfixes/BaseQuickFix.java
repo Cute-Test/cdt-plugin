@@ -30,13 +30,14 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 	
 	@Override
 	public boolean isApplicable(IMarker marker) {
-		this.currentMarker = marker;
+		currentMarker = marker;
 		return super.isApplicable(marker);
 	}
 	
 	@Override
 	public void modifyAST(IIndex index, IMarker marker) {
 		try {
+			currentMarker = marker;
 			ASTRewriteCache rewriteCache = new ASTRewriteCache(index);
 			IASTTranslationUnit astTranslationUnit = rewriteCache.getASTTranslationUnit(getTranslationUnitViaEditor(marker));
 			IASTNode markedNode = getMarkedNode(astTranslationUnit, marker);

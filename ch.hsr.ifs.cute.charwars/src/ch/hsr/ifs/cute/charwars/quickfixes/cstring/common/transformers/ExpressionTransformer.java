@@ -34,18 +34,18 @@ public class ExpressionTransformer extends Transformer {
 		case SIZE:
 			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.SIZE);
 		case EMPTY:
-			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				IASTIdExpression subscript = context.createPosVariableIdExpression();
-				IASTArraySubscriptExpression arraySubscription = ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
+			if(context.isOffset(idExpression)) {
+				IASTIdExpression subscript = context.createOffsetVarIdExpression();
+				IASTArraySubscriptExpression arraySubscription = ExtendedNodeFactory.newArraySubscriptExpression(ExtendedNodeFactory.newIdExpression(stringName.toString()), subscript);
 				return ExtendedNodeFactory.newLogicalNotExpression(arraySubscription);
 			}
 			else {
 				return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.EMPTY);
 			}
 		case NOT_EMPTY:
-			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				IASTIdExpression subscript = context.createPosVariableIdExpression();
-				return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
+			if(context.isOffset(idExpression)) {
+				IASTIdExpression subscript = context.createOffsetVarIdExpression();
+				return ExtendedNodeFactory.newArraySubscriptExpression(ExtendedNodeFactory.newIdExpression(stringName.toString()), subscript);
 			}
 			else {
 				IASTExpression emptyCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.EMPTY);
@@ -53,8 +53,8 @@ public class ExpressionTransformer extends Transformer {
 			}
 		case DEREFERENCED:
 			IASTExpression subscript;
-			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				subscript = context.createPosVariableIdExpression();
+			if(context.isOffset(idExpression)) {
+				subscript = context.createOffsetVarIdExpression();
 			}
 			else {
 				subscript = ExtendedNodeFactory.newIntegerLiteral(0);
@@ -64,7 +64,7 @@ public class ExpressionTransformer extends Transformer {
 				IASTBinaryExpression addition = (IASTBinaryExpression)idExpression.getParent();
 				IASTExpression otherOperand = (addition.getOperand1() == idExpression) ? addition.getOperand2() : addition.getOperand1();
 				
-				if(context.isPotentiallyModifiedCharPointer(idExpression)) {
+				if(context.isOffset(idExpression)) {
 					subscript = ExtendedNodeFactory.newPlusExpression(subscript, otherOperand);
 				}
 				else {
@@ -74,12 +74,12 @@ public class ExpressionTransformer extends Transformer {
 			
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
 		case MODIFIED:
-			return context.createPosVariableIdExpression();
+			return context.createOffsetVarIdExpression();
 			
 		case ARRAY_SUBSCRIPTION:
 			IASTArraySubscriptExpression oldArraySubscriptExpression = (IASTArraySubscriptExpression)idExpression.getParent();
 			IASTExpression oldArraySubscript = (IASTExpression)oldArraySubscriptExpression.getArgument();
-			IASTExpression newArraySubscript = context.createPosVariableIdExpression();
+			IASTExpression newArraySubscript = context.createOffsetVarIdExpression();
 			
 			if(!ASTAnalyzer.isIntegerLiteral(oldArraySubscript, 0)) {
 				newArraySubscript = ExtendedNodeFactory.newPlusExpression(newArraySubscript, oldArraySubscript);

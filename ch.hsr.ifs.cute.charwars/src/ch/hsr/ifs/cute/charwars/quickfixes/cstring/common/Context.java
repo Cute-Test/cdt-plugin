@@ -11,44 +11,55 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 
 public class Context {
-	private boolean modifiesCharPointer;
+	public enum ContextState {
+		CString,
+		CStringModified,
+		CStringAlias
+	}
+	
+	private ContextState contextState;
+	private String stringVarName;
+	private String offsetVarName;
 	private IASTStatement firstAffectedStatement;
-	private String posVariableName;
 	
-	public Context() {
-		this.modifiesCharPointer = false;
-		this.firstAffectedStatement = null;
-		this.posVariableName = null;
-	}
-	
-	public Context(IASTStatement firstAffectedStatement, String posVariableName) {
-		this.modifiesCharPointer = true;
+	public Context(ContextState contextState, String stringVarName, String offsetVarName, IASTStatement firstAffectedStatement) {
+		this.contextState = contextState;
+		this.stringVarName = stringVarName;
+		this.offsetVarName = offsetVarName;
 		this.firstAffectedStatement = firstAffectedStatement;
-		this.posVariableName = posVariableName;
 	}
 	
-	public boolean isPotentiallyModifiedCharPointer(IASTIdExpression idExpression) {
-		if(!this.modifiesCharPointer) {
+	public boolean isOffset(IASTIdExpression idExpression) {
+		switch(contextState) {
+		case CString:
+			return false;
+		case CStringModified:
+			IASTStatement topLevelStatement = ASTAnalyzer.getTopLevelParentStatement(idExpression.getOriginalNode());
+			IASTCompoundStatement compoundStatement = (IASTCompoundStatement)topLevelStatement.getParent();
+			List<IASTStatement> statements = Arrays.asList(compoundStatement.getStatements());
+			int indexOfTopLevelStatement = statements.indexOf(topLevelStatement);
+			int indexOfFirstAffectedStatement = statements.indexOf(firstAffectedStatement.getOriginalNode());
+			return indexOfTopLevelStatement >= indexOfFirstAffectedStatement;
+		case CStringAlias:
+			return true;
+		default:
 			return false;
 		}
-		
-		IASTStatement topLevelStatement = ASTAnalyzer.getTopLevelParentStatement(idExpression.getOriginalNode());
-		IASTCompoundStatement compoundStatement = (IASTCompoundStatement)topLevelStatement.getParent();
-		List<IASTStatement> statements = Arrays.asList(compoundStatement.getStatements());
-		int indexOfTopLevelStatement = statements.indexOf(topLevelStatement);
-		int indexOfFirstAffectedStatement = statements.indexOf(firstAffectedStatement.getOriginalNode());
-		return indexOfTopLevelStatement >= indexOfFirstAffectedStatement;
+	}
+
+	public ContextState getContextState() {
+		return contextState;
 	}
 	
-	public IASTStatement getFirstAffectedStatement() {
-		return this.firstAffectedStatement;
+	public String getStringVarName() {
+		return stringVarName;
 	}
 	
-	public String getPosVariableName() {
-		return this.posVariableName;
+	public String getOffsetVarName() {
+		return offsetVarName;
 	}
 	
-	public IASTIdExpression createPosVariableIdExpression() {
-		return ExtendedNodeFactory.newIdExpression(getPosVariableName());
+	public IASTIdExpression createOffsetVarIdExpression() {
+		return ExtendedNodeFactory.newIdExpression(offsetVarName);
 	}
 }

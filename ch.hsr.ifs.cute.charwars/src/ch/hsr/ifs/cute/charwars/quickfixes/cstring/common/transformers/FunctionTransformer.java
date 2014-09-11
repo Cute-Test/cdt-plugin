@@ -38,7 +38,7 @@ public class FunctionTransformer extends Transformer {
 			IASTFunctionCallExpression memberFunctionCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, outFunctionName, adaptedArguments);	
 			
 			//special case for strlen() / wcslen()
-			if(outFunctionName.equals(StdString.SIZE) && (idExpression.getParent() != nodeToReplace || context.isPotentiallyModifiedCharPointer(idExpression))) {
+			if(outFunctionName.equals(StdString.SIZE) && (idExpression.getParent() != nodeToReplace || context.isOffset(idExpression))) {
 				IASTNode offset = ASTAnalyzer.getOffset(idExpression, context);
 				return ExtendedNodeFactory.newBracketedExpression(ExtendedNodeFactory.newMinusExpression(memberFunctionCall, (IASTExpression)offset));
 			}

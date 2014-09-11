@@ -22,10 +22,10 @@ public class NullRefactoring extends Refactoring {
 			ASTAnalyzer.isCallToMemberFunction(parent, StdString.REPLACE) ||
 			ASTAnalyzer.isCallToMemberFunction(parent, StdString.FIND_FIRST_NOT_OF) ||
 			ASTAnalyzer.isCallToMemberFunction(parent, StdString.FIND) ||
-			ASTAnalyzer.isArraySubscriptExpression(idExpression) && !context.isPotentiallyModifiedCharPointer(idExpression) || 
+			ASTAnalyzer.isArraySubscriptExpression(idExpression) && !context.isOffset(idExpression) || 
 			ASTAnalyzer.isLValueInAssignment(idExpression) ||
-			(ASTAnalyzer.isLeftShiftExpressionToStdCout(parent) && !context.isPotentiallyModifiedCharPointer(idExpression)) ||
-			(isStdStringParameterDeclaration(idExpression, context) && !context.isPotentiallyModifiedCharPointer(idExpression))) {
+			(ASTAnalyzer.isLeftShiftExpressionToStdCout(parent) && !context.isOffset(idExpression)) ||
+			(isStdStringParameterDeclaration(idExpression, context) && !context.isOffset(idExpression))) {
 			transformer = new NullTransformer();
 		}
 		return transformer;

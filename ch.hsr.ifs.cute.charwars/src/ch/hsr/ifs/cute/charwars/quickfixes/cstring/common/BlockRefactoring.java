@@ -22,6 +22,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Mapping;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.MappingFactory;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.CStringConversionRefactoring;
@@ -38,16 +39,20 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.Transform
 public class BlockRefactoring  {
 	private ASTRewrite rewrite;
 	private List<Refactoring> refactorings;
-	private IASTName stringName;
+	private String stringName;
+	private IASTName variableToRefactor;
 	private IASTNode block;
 	private IASTDeclarationStatement declarationStatement;
+	private boolean isAlias;
 	private HashSet<String> headersToInclude;
 	
-	public BlockRefactoring(ASTRewrite rewrite, IASTName stringName, IASTNode block, IASTDeclarationStatement declarationStatement) {
+	public BlockRefactoring(ASTRewrite rewrite, String stringName, IASTName variableToRefactor, IASTNode block, IASTDeclarationStatement declarationStatement, boolean isAlias) {
 		this.rewrite = rewrite;
 		this.stringName = stringName;
+		this.variableToRefactor = variableToRefactor;
 		this.block = block;
 		this.declarationStatement = declarationStatement;
+		this.isAlias = isAlias;
 		this.headersToInclude = new HashSet<String>();
 		
 		this.refactorings = new ArrayList<Refactoring>();
@@ -76,21 +81,24 @@ public class BlockRefactoring  {
 	}
 	
 	private Context prepareContext(IASTStatement[] allStatements) {
+		if(isAlias) {
+			return new Context(ContextState.CStringAlias, stringName, variableToRefactor.toString(), null);
+		}
+		
 		for(IASTStatement statement : allStatements) {
 			if(modifiesCharPointer(statement)) {
 				//find insertion point
 				IASTStatement firstAffectedStatement = ASTAnalyzer.getTopLevelParentStatement(statement);
 				if(firstAffectedStatement == null) break;
 
-				String posVariableName = this.stringName.toString() + "_pos";
+				String offsetVarName = this.variableToRefactor.toString() + "_pos";
 				IASTLiteralExpression zeroLiteral = ExtendedNodeFactory.newIntegerLiteral(0);
-				IASTDeclarationStatement posVariableDeclaration = ExtendedNodeFactory.newDeclarationStatement(StdString.SIZE_TYPE, posVariableName, zeroLiteral);
-				ASTModifier.insertBefore(firstAffectedStatement.getParent(), firstAffectedStatement, posVariableDeclaration, rewrite);
-				
-				return new Context(firstAffectedStatement, posVariableName);
+				IASTDeclarationStatement offsetVarDeclaration = ExtendedNodeFactory.newDeclarationStatement(StdString.SIZE_TYPE, offsetVarName, zeroLiteral);
+				ASTModifier.insertBefore(firstAffectedStatement.getParent(), firstAffectedStatement, offsetVarDeclaration, rewrite);
+				return new Context(ContextState.CStringModified, variableToRefactor.toString(), offsetVarName, firstAffectedStatement);
 			}
 		}
-		return new Context();
+		return new Context(ContextState.CString, variableToRefactor.toString(), null, null);
 	}
 	
 	private boolean modifiesCharPointer(IASTStatement statement) {
@@ -154,7 +162,7 @@ public class BlockRefactoring  {
 			IASTIdExpression originalIdExpression = (IASTIdExpression)copiedIdExpression.getOriginalNode();
 			IBinding originalBinding = originalIdExpression.getName().resolveBinding();
 			
-			if(originalBinding.equals(stringName.resolveBinding())) {
+			if(originalBinding.equals(variableToRefactor.resolveBinding())) {
 				stringOccurrences.add(copiedIdExpression);
 			}
 		}
@@ -193,11 +201,8 @@ public class BlockRefactoring  {
 	}
 	
 	private int getDepth(IASTNode node) {
-		IASTNode parent = node;
 		int depth = 0;
-		
-		while(parent != null && !(parent instanceof IASTStatement)) {
-			parent = parent.getParent();
+		for(IASTNode parent = node; parent != null && !(parent instanceof IASTStatement); parent = parent.getParent()) {
 			++depth;
 		}
 		return depth;

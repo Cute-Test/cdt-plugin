@@ -1148,15 +1148,15 @@ public class ASTAnalyzer {
 		IASTNode offset = ASTModifier.transformToPointerOffset(idExpression);
 		
 		if(offset == null) {
-			if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-				offset = context.createPosVariableIdExpression();
+			if(context.isOffset(idExpression)) {
+				offset = context.createOffsetVarIdExpression();
 			}
 			else {
 				offset = ExtendedNodeFactory.newIntegerLiteral(0);
 			}
 		}
-		else if(context.isPotentiallyModifiedCharPointer(idExpression)) {
-			offset = ExtendedNodeFactory.newPlusExpression(context.createPosVariableIdExpression(), (IASTExpression)offset);
+		else if(context.isOffset(idExpression)) {
+			offset = ExtendedNodeFactory.newPlusExpression(context.createOffsetVarIdExpression(), (IASTExpression)offset);
 		}
 		
 		return offset;

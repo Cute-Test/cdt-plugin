@@ -5,8 +5,11 @@ import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
+import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -64,8 +67,22 @@ public class CStringQuickFix extends BaseQuickFix {
 		
 		ASTModifier.remove(beforeNode, rewrite);
 		
-		IASTName oldName = oldDeclarator.getName();
-		BlockRefactoring blockRefactoring = new BlockRefactoring(rewrite, oldName, block, oldDeclarationStatement);
+		IASTName variableToRefactor = oldDeclarator.getName();
+		String stringName;
+		boolean isAlias = (getProblemId(currentMarker).equals(ProblemIDs.C_STRING_ALIAS_PROBLEM));
+		
+		if(isAlias) {
+			IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)oldDeclarator.getInitializer();
+			IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)equalsInitializer.getInitializerClause();
+			IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
+			IASTIdExpression idExpression = (IASTIdExpression)fieldReference.getFieldOwner();
+			stringName = idExpression.getName().toString();
+		}
+		else {
+			stringName = variableToRefactor.toString();
+		}
+		
+		BlockRefactoring blockRefactoring = new BlockRefactoring(rewrite, stringName, variableToRefactor, block, oldDeclarationStatement, isAlias);
 		blockRefactoring.refactorAllStatements();
 		
 		headers.addAll(blockRefactoring.getHeadersToInclude());
@@ -84,25 +101,31 @@ public class CStringQuickFix extends BaseQuickFix {
 	}
 	
 	private IASTDeclarationStatement newRefactoredDeclarationStatementFromDeclarator(IASTDeclarator declarator) {
-		IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
-		
-		IASTSimpleDeclSpecifier simpleDeclSpecifier = (IASTSimpleDeclSpecifier)declaration.getDeclSpecifier();
-		IASTDeclSpecifier newDeclSpecifier = newRefactoredDeclSpecifier(simpleDeclSpecifier, declarator);
-		IASTSimpleDeclaration newDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newDeclSpecifier);
-		IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
-		
-		IASTInitializer initializer;
-		if(ASTAnalyzer.hasStrdupAssignment(declarator)) {
-			IASTFunctionCallExpression strdupCall = (IASTFunctionCallExpression)ASTAnalyzer.getInitializerClause(declarator);
-			initializer = ExtendedNodeFactory.newEqualsInitializer(strdupCall.getArguments()[0].copy());
+		if(getProblemId(currentMarker).equals(ProblemIDs.C_STRING_PROBLEM)) {
+			IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
+			
+			IASTSimpleDeclSpecifier simpleDeclSpecifier = (IASTSimpleDeclSpecifier)declaration.getDeclSpecifier();
+			IASTDeclSpecifier newDeclSpecifier = newRefactoredDeclSpecifier(simpleDeclSpecifier, declarator);
+			IASTSimpleDeclaration newDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newDeclSpecifier);
+			IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
+			
+			IASTInitializer initializer;
+			if(ASTAnalyzer.hasStrdupAssignment(declarator)) {
+				IASTFunctionCallExpression strdupCall = (IASTFunctionCallExpression)ASTAnalyzer.getInitializerClause(declarator);
+				initializer = ExtendedNodeFactory.newEqualsInitializer(strdupCall.getArguments()[0].copy());
+			}
+			else {
+				initializer = declarator.getInitializer().copy();
+			}
+			
+			newDeclarator.setInitializer(initializer);
+			newDeclaration.addDeclarator(newDeclarator);
+			return ExtendedNodeFactory.newDeclarationStatement(newDeclaration);
 		}
 		else {
-			initializer = declarator.getInitializer().copy();
+			String name = declarator.getName().toString();
+			return ExtendedNodeFactory.newDeclarationStatement(StdString.SIZE_TYPE, name, ExtendedNodeFactory.newIntegerLiteral(0));
 		}
-		
-		newDeclarator.setInitializer(initializer);
-		newDeclaration.addDeclarator(newDeclarator);
-		return ExtendedNodeFactory.newDeclarationStatement(newDeclaration);
 	}
 	
 	private IASTDeclSpecifier newRefactoredDeclSpecifier(IASTSimpleDeclSpecifier oldDeclSpecifier, IASTDeclarator oldDeclarator) {

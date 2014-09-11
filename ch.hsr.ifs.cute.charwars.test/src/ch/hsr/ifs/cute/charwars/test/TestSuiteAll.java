@@ -15,6 +15,7 @@ import ch.hsr.ifs.cute.charwars.quickfixes.ArrayQuickFixTest;
 import ch.hsr.ifs.cute.charwars.quickfixes.CStrQuickFixTest;
 import ch.hsr.ifs.cute.charwars.quickfixes.PointerParameterQuickFixTest;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup.CStringCleanupQuickFixTest;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.general.CStringAliasQuickFixTest;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.general.CStringQuickFixTest;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.general.refactorings.ConvertingFunctionTest;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.general.refactorings.MemchrTest;
@@ -49,6 +50,7 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.parameter.CStringParameterQui
 	CStringParameterCheckerTest.class,
 	ArrayQuickFixTest.class,
 	CStringQuickFixTest.class,
+	CStringAliasQuickFixTest.class,
 	CStringCleanupQuickFixTest.class,
 	CStrQuickFixTest.class,
 	PointerParameterQuickFixTest.class,

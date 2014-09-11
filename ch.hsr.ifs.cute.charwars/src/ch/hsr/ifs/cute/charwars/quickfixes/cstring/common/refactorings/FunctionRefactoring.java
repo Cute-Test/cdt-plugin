@@ -20,22 +20,33 @@ public class FunctionRefactoring extends Refactoring {
 	@Override
 	public Transformer createTransformer(IASTIdExpression idExpression, Context context) {
 		Transformer transformer = null;
-		String inFunctionName = mapping.getInFunction().getName();
 		
 		if(mapping.isOffsetAllowed()) {
-			if(ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, inFunctionName) || 
-			   ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, Constants.STD_PREFIX + inFunctionName)) {
-				IASTNode nodeToReplace = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName);
-				transformer = new FunctionTransformer(context, idExpression, nodeToReplace, mapping);
-			}
+			transformer = createOffsetTransformer(idExpression, context);
 		}
-		else if(!context.isPotentiallyModifiedCharPointer(idExpression)) {
-			if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunctionName) ||
-			   ASTAnalyzer.isFunctionCallArgument(idExpression, 0, Constants.STD_PREFIX + inFunctionName)) {
-				transformer = new FunctionTransformer(context, idExpression, idExpression.getParent(), mapping);
-			}
+		else if(!context.isOffset(idExpression)) {
+			transformer = createNormalTransformer(idExpression, context);
 		}
 
 		return transformer;
+	}
+	
+	private Transformer createOffsetTransformer(IASTIdExpression idExpression, Context context) {
+		String inFunctionName = mapping.getInFunction().getName();
+		if(ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, inFunctionName) || 
+		   ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, Constants.STD_PREFIX + inFunctionName)) {
+			IASTNode nodeToReplace = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName);
+			return new FunctionTransformer(context, idExpression, nodeToReplace, mapping);
+		}
+		return null;
+	}
+	
+	private Transformer createNormalTransformer(IASTIdExpression idExpression, Context context) {
+		String inFunctionName = mapping.getInFunction().getName();
+		if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunctionName) ||
+		   ASTAnalyzer.isFunctionCallArgument(idExpression, 0, Constants.STD_PREFIX + inFunctionName)) {
+			return new FunctionTransformer(context, idExpression, idExpression.getParent(), mapping);
+		}
+		return null;
 	}
 }

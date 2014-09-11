@@ -97,7 +97,7 @@ public abstract class RewriteStrategy {
 		//ASTModifier.insertBefore(stdStringOverloadBody, stdStringOverloadBody., ExtendedNodeFactory.factory.newExpressionStatement(null), subrewrite);
 		
 		//adapt variable occurrences
-		BlockRefactoring blockRefactoring = new BlockRefactoring(subrewrite, strName, stdStringOverloadBody, null);
+		BlockRefactoring blockRefactoring = new BlockRefactoring(subrewrite, strName.toString(), strName, stdStringOverloadBody, null, false);
 		blockRefactoring.refactorAllStatements();
 		return subrewrite;
 	}

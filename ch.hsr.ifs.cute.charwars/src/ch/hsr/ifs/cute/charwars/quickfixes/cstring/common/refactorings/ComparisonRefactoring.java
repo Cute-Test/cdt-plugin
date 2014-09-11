@@ -28,7 +28,7 @@ public class ComparisonRefactoring extends Refactoring {
 				transformer = createComparisonTransformer(idExpression, functionCall, context);
 			}
 		}
-		else if(!context.isPotentiallyModifiedCharPointer(idExpression)) {
+		else if(!context.isOffset(idExpression)) {
 			if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunctionName)) {
 				transformer = createComparisonTransformer(idExpression, idExpression.getParent(), context);
 			}
