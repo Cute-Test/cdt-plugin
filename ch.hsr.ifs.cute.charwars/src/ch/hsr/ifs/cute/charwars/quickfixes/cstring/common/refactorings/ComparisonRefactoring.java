@@ -6,7 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Mapping;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.FunctionDescription.Sentinel;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Function.Sentinel;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.ComparisonTransformer;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.Transformer;
 
@@ -22,7 +22,11 @@ public class ComparisonRefactoring extends Refactoring {
 		Transformer transformer = null;
 		String inFunctionName = mapping.getInFunction().getName();
 		
-		if(mapping.isOffsetAllowed()) {
+		if(!mapping.isApplicableForContextState(context.getContextState())) {
+			return null;
+		}
+		
+		if(mapping.canHandleOffsets() && (ASTAnalyzer.isOffset(idExpression, context) || ASTAnalyzer.hasOffset(idExpression, context, mapping))) {
 			if(ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, inFunctionName)) {
 				IASTNode functionCall = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName);
 				transformer = createComparisonTransformer(idExpression, functionCall, context);

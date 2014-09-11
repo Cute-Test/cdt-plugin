@@ -33,5 +33,4 @@ public class OperatorRefactoring extends Refactoring {
 
 		return transformer;
 	}
-
 }

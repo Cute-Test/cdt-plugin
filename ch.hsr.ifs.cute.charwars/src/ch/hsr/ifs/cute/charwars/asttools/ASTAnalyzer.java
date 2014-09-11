@@ -70,6 +70,7 @@ import ch.hsr.ifs.cute.charwars.constants.CString;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Mapping;
 
 public class ASTAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
@@ -1160,5 +1161,17 @@ public class ASTAnalyzer {
 		}
 		
 		return offset;
+	}
+	
+	public static boolean isOffset(IASTIdExpression idExpression, Context context) {
+		return context.isOffset(idExpression);
+	}
+	
+	public static boolean hasOffset(IASTIdExpression idExpression, Context context, Mapping mapping) {
+		String inFunctionName = mapping.getInFunction().getName();
+		if(ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, inFunctionName)) {
+			return ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName) != idExpression.getParent();
+		}
+		return false;
 	}
 }

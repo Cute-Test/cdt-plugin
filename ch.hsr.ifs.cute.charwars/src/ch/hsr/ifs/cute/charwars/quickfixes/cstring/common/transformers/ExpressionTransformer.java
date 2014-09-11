@@ -18,7 +18,8 @@ public class ExpressionTransformer extends Transformer {
 		NOT_EMPTY,
 		DEREFERENCED,
 		MODIFIED,
-		ARRAY_SUBSCRIPTION
+		ARRAY_SUBSCRIPTION,
+		INDEX_CALCULATION
 	}
 	
 	private Transformation transformation;
@@ -85,6 +86,8 @@ public class ExpressionTransformer extends Transformer {
 				newArraySubscript = ExtendedNodeFactory.newPlusExpression(newArraySubscript, oldArraySubscript);
 			}
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, newArraySubscript);
+		case INDEX_CALCULATION:
+			return context.createOffsetVarIdExpression();
 		default:
 			return null;
 		}

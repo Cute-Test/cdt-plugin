@@ -58,8 +58,8 @@ public class BlockRefactoring  {
 		this.refactorings = new ArrayList<Refactoring>();
 		this.refactorings.add(new ExpressionRefactoring());
 		for(Mapping m : MappingFactory.createOperatorRefactoringMappings()) this.refactorings.add(new OperatorRefactoring(m));
-		for(Mapping m : MappingFactory.createFunctionRefactoringMappings()) this.refactorings.add(new FunctionRefactoring(m));
 		for(Mapping m : MappingFactory.createComparisonRefactoringMappings()) this.refactorings.add(new ComparisonRefactoring(m));
+		for(Mapping m : MappingFactory.createFunctionRefactoringMappings()) this.refactorings.add(new FunctionRefactoring(m));
 		for(Mapping m : MappingFactory.createCStringConversionRefactoringMappings()) this.refactorings.add(new CStringConversionRefactoring(m));
 		for(Mapping m : MappingFactory.createRemoveStatementRefactoringMappings()) this.refactorings.add(new RemoveStatementRefactoring(m));
 		this.refactorings.add(new NullRefactoring());
@@ -194,6 +194,7 @@ public class BlockRefactoring  {
 		for(Refactoring refactoring : refactorings) {
 			Transformer transformer = refactoring.createTransformer(stringOccurrence, context);
 			if(transformer != null) {
+				System.out.println("Applying transformer " + transformer.getClass() + " from refactoring " + refactoring.getClass());
 				transformer.transform(changeDescription);
 				break;
 			}

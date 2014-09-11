@@ -5,6 +5,8 @@ int main() {
 	std::string str = "Testtexte";
 	const char* ptr = str.c_str();
 	while(strchr(ptr, 'e') != NULL) {
+		ptr = strchr(ptr, 'e');
+		std::cout << (ptr - str.c_str()) << std::endl;
 		ptr++;
 	}
 }
@@ -15,6 +17,8 @@ int main() {
 	std::string str = "Testtexte";
 	std::string::size_type ptr = 0;
 	while (str.find('e', ptr) != std::string::npos) {
+		ptr = str.find('e', ptr);
+		std::cout << ptr << std::endl;
 		ptr++;
 	}
 }

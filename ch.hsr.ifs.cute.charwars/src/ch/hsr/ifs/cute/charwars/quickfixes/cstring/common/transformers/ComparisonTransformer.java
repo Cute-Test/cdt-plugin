@@ -10,7 +10,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Mapping;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.FunctionDescription.Sentinel;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Function.Sentinel;
 
 public class ComparisonTransformer extends Transformer  {
 	private Mapping mapping;

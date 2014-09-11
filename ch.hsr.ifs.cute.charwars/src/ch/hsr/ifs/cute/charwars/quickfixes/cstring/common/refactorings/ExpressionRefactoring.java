@@ -1,10 +1,12 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.ExpressionTransformer;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.Transformer;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.ExpressionTransformer.Transformation;
@@ -57,7 +59,26 @@ public class ExpressionRefactoring extends Refactoring {
 			//str[1] -> str[str_pos + 1]
 			transformer = new ExpressionTransformer(context, idExpression, idExpression.getParent(), Transformation.ARRAY_SUBSCRIPTION);
 		}
+		else if(context.getContextState() == ContextState.CStringAlias && isIndexCalculation(idExpression, context)) {
+			//ptr - str -> ptr
+			IASTNode nodeToReplace = idExpression.getParent();
+			if(ASTAnalyzer.isBracketExpression(nodeToReplace.getParent())) {
+				nodeToReplace = nodeToReplace.getParent();
+			}
+			transformer = new ExpressionTransformer(context, idExpression, nodeToReplace, Transformation.INDEX_CALCULATION);
+		}
 
 		return transformer;
+	}
+	
+	private boolean isIndexCalculation(IASTIdExpression idExpression, Context context) {
+		IASTNode parent = idExpression.getParent();
+		if(ASTAnalyzer.isSubtractionExpression(parent)) {
+			IASTBinaryExpression subtraction = (IASTBinaryExpression)parent;
+			if(idExpression == subtraction.getOperand1() && ASTAnalyzer.isConversionToCharPointer(subtraction.getOperand2(), true)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

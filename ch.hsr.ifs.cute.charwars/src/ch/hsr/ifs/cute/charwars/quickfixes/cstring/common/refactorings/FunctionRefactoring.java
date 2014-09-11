@@ -21,7 +21,11 @@ public class FunctionRefactoring extends Refactoring {
 	public Transformer createTransformer(IASTIdExpression idExpression, Context context) {
 		Transformer transformer = null;
 		
-		if(mapping.isOffsetAllowed()) {
+		if(!mapping.isApplicableForContextState(context.getContextState())) {
+			return null;
+		}
+		
+		if(mapping.canHandleOffsets() && (ASTAnalyzer.isOffset(idExpression, context) || ASTAnalyzer.hasOffset(idExpression, context, mapping))) {
 			transformer = createOffsetTransformer(idExpression, context);
 		}
 		else if(!context.isOffset(idExpression)) {
