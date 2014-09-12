@@ -1,25 +1,66 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import java.util.HashSet;
+
+import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IType;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.CStringConversionTransformer;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.Transformer;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
 
 public class DefaultRefactoring extends Refactoring {
+	private static final String CONVERT_TO_CONST = "CONVERT_TO_CONST";
+	
+	public DefaultRefactoring(ContextState... contextStates) {
+		this.contextStates = new HashSet<ContextState>();
+		for(ContextState contextState : contextStates) {
+			this.contextStates.add(contextState);
+		}
+	}
+	
 	@Override
-	public Transformer createTransformer(IASTIdExpression idExpression, Context context) {
-		Transformer transformer = null;
+	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
 		IType parameterType = ASTAnalyzer.getParameterType(idExpression);
 		
 		if(parameterType != null && ASTAnalyzer.isCStringType(parameterType)) {
-			transformer = new CStringConversionTransformer(context, idExpression, false); 
+			isApplicable = true;
+			config.put(NODE_TO_REPLACE, idExpression);
+			config.put(CONVERT_TO_CONST, false);
 		}
 		else {
-			transformer = new CStringConversionTransformer(context, idExpression, true);
+			isApplicable = true;
+			config.put(NODE_TO_REPLACE, idExpression);
+			config.put(CONVERT_TO_CONST, true);
 		}
-		return transformer;
+	}
+
+	@Override
+	protected IASTNode getReplacementNode(IASTIdExpression idExpression, Context context) {
+		IASTName stringName = ExtendedNodeFactory.newName(context.getStringVarName());
+		boolean convertToConst = (boolean)config.get(CONVERT_TO_CONST);
+		
+		if(convertToConst) {
+			IASTFunctionCallExpression c_strCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.C_STR);
+			if(context.isOffset(idExpression)) {
+				IASTBinaryExpression plusExpression = ExtendedNodeFactory.newPlusExpression(c_strCall, context.createOffsetVarIdExpression());
+				return ExtendedNodeFactory.newBracketedExpression(plusExpression);
+			}
+			else {
+				return c_strCall;
+			}	
+		}
+		else {
+			IASTFunctionCallExpression beginCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.BEGIN);			
+			IASTUnaryExpression dereferenceOperatorExpression = ExtendedNodeFactory.newDereferenceOperatorExpression(beginCall);
+			return ExtendedNodeFactory.newAdressOperatorExpression(dereferenceOperatorExpression); 
+		}
 	}
 }

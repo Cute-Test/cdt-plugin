@@ -1,6 +1,7 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -23,28 +24,18 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Mapping;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.MappingFactory;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.CStringConversionRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.ComparisonRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.DefaultRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.ExpressionRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.FunctionRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.NullRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.OperatorRefactoring;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Refactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.RemoveStatementRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.Transformer;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.RefactoringFactory;
 
 public class BlockRefactoring  {
 	private ASTRewrite rewrite;
-	private List<Refactoring> refactorings;
 	private String stringName;
 	private IASTName variableToRefactor;
 	private IASTNode block;
 	private IASTDeclarationStatement declarationStatement;
 	private boolean isAlias;
 	private HashSet<String> headersToInclude;
+	private List<Refactoring> refactorings;
 	
 	public BlockRefactoring(ASTRewrite rewrite, String stringName, IASTName variableToRefactor, IASTNode block, IASTDeclarationStatement declarationStatement, boolean isAlias) {
 		this.rewrite = rewrite;
@@ -54,16 +45,7 @@ public class BlockRefactoring  {
 		this.declarationStatement = declarationStatement;
 		this.isAlias = isAlias;
 		this.headersToInclude = new HashSet<String>();
-		
-		this.refactorings = new ArrayList<Refactoring>();
-		this.refactorings.add(new ExpressionRefactoring());
-		for(Mapping m : MappingFactory.createOperatorRefactoringMappings()) this.refactorings.add(new OperatorRefactoring(m));
-		for(Mapping m : MappingFactory.createComparisonRefactoringMappings()) this.refactorings.add(new ComparisonRefactoring(m));
-		for(Mapping m : MappingFactory.createFunctionRefactoringMappings()) this.refactorings.add(new FunctionRefactoring(m));
-		for(Mapping m : MappingFactory.createCStringConversionRefactoringMappings()) this.refactorings.add(new CStringConversionRefactoring(m));
-		for(Mapping m : MappingFactory.createRemoveStatementRefactoringMappings()) this.refactorings.add(new RemoveStatementRefactoring(m));
-		this.refactorings.add(new NullRefactoring());
-		this.refactorings.add(new DefaultRefactoring());
+		this.refactorings = Arrays.asList(RefactoringFactory.createRefactorings());
 	}
 	
 	public void refactorAllStatements() {
@@ -191,12 +173,10 @@ public class BlockRefactoring  {
 	} 
 	
 	private void refactorStringOccurrence(IASTIdExpression stringOccurrence, ASTChangeDescription changeDescription, Context context) {
-		for(Refactoring refactoring : refactorings) {
-			Transformer transformer = refactoring.createTransformer(stringOccurrence, context);
-			if(transformer != null) {
-				System.out.println("Applying transformer " + transformer.getClass() + " from refactoring " + refactoring.getClass());
-				transformer.transform(changeDescription);
-				break;
+		for(Refactoring refactoring : this.refactorings) {
+			boolean wasApplied = refactoring.tryToApply(stringOccurrence, context, changeDescription);
+			if(wasApplied) {
+				return;
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings;
+package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 
-public class ArgumentMapping {
+public class ArgMapping {
 	private Arg[] args;
 	
 	public enum Arg {
@@ -27,7 +27,7 @@ public class ArgumentMapping {
 		END
 	}
 	
-	public ArgumentMapping(Arg... args) {
+	public ArgMapping(Arg... args) {
 		this.args = args;
 	}
 	

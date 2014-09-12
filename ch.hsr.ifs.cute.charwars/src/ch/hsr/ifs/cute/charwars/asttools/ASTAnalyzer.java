@@ -70,7 +70,6 @@ import ch.hsr.ifs.cute.charwars.constants.CString;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Mapping;
 
 public class ASTAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
@@ -737,14 +736,14 @@ public class ASTAnalyzer {
 		if(isConversionToCharPointer(node, true)) {			//str.c_str()
 			IASTFunctionCallExpression c_strCall = (IASTFunctionCallExpression)node;
 			IASTFieldReference fieldReference = (IASTFieldReference)c_strCall.getFunctionNameExpression();
-			result = (IASTIdExpression)fieldReference.getFieldOwner();
+			result = fieldReference.getFieldOwner();
 		}
 		else if(isConversionToCharPointer(node, false)) {	//&str.begin()
 			IASTUnaryExpression addressOperatorExpression = (IASTUnaryExpression)node;
 			IASTUnaryExpression dereferenceExpression = (IASTUnaryExpression)addressOperatorExpression.getOperand();
 			IASTFunctionCallExpression beginCall = (IASTFunctionCallExpression)dereferenceExpression.getOperand();
 			IASTFieldReference fieldReference = (IASTFieldReference)beginCall.getFunctionNameExpression();
-			result = (IASTIdExpression)fieldReference.getFieldOwner(); 
+			result = fieldReference.getFieldOwner(); 
 		}
 
 		return result;
@@ -907,7 +906,7 @@ public class ASTAnalyzer {
 		return isNullComparison && hasElseClause;
 	}
 	
-	public static IASTNode findGuardClause(IASTName name, IASTStatement[] statements) {
+	public static IASTStatement findGuardClause(IASTName name, IASTStatement[] statements) {
 		for(IASTStatement statement : statements) {
 			if(isNullComparison(statement, name, true)) {
 				IASTIfStatement ifStatement = (IASTIfStatement)statement;
@@ -1167,10 +1166,9 @@ public class ASTAnalyzer {
 		return context.isOffset(idExpression);
 	}
 	
-	public static boolean hasOffset(IASTIdExpression idExpression, Context context, Mapping mapping) {
-		String inFunctionName = mapping.getInFunction().getName();
-		if(ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, inFunctionName)) {
-			return ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName) != idExpression.getParent();
+	public static boolean hasOffset(IASTIdExpression idExpression, String inFunctionName) {
+		if(isPartOfFunctionCallArgument(idExpression, 0, inFunctionName)) {
+			return getEnclosingFunctionCall(idExpression, inFunctionName) != idExpression.getParent();
 		}
 		return false;
 	}

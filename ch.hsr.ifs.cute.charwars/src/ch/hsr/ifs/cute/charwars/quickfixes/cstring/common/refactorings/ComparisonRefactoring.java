@@ -1,67 +1,126 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import java.util.HashSet;
+
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Mapping;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.mappings.Function.Sentinel;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.ComparisonTransformer;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.transformers.Transformer;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function.Sentinel;
 
 public class ComparisonRefactoring extends Refactoring {
-	private Mapping mapping;
+	private static final String IS_EQUAL = "IS_EQUAL";
+	private Function inFunction;
+	private Function outFunction;
+	private ArgMapping argMapping;
 	
-	public ComparisonRefactoring(Mapping mapping) {
-		this.mapping = mapping;
+	public ComparisonRefactoring(Function inFunction, Function outFunction, ArgMapping argMapping, ContextState... contextStates) {
+		this.inFunction = inFunction;
+		this.outFunction = outFunction;
+		this.argMapping = argMapping;
+		this.contextStates = new HashSet<ContextState>();
+		for(ContextState contextState : contextStates) {
+			this.contextStates.add(contextState);
+		}
 	}
 	
 	@Override
-	public Transformer createTransformer(IASTIdExpression idExpression, Context context) {
-		Transformer transformer = null;
-		String inFunctionName = mapping.getInFunction().getName();
+	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
+		String inFunctionName = inFunction.getName();
 		
-		if(!mapping.isApplicableForContextState(context.getContextState())) {
-			return null;
-		}
-		
-		if(mapping.canHandleOffsets() && (ASTAnalyzer.isOffset(idExpression, context) || ASTAnalyzer.hasOffset(idExpression, context, mapping))) {
+		if(canHandleOffsets() && (ASTAnalyzer.isOffset(idExpression, context) || ASTAnalyzer.hasOffset(idExpression, inFunctionName))) {
 			if(ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, inFunctionName)) {
 				IASTNode functionCall = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName);
-				transformer = createComparisonTransformer(idExpression, functionCall, context);
+				prepare(idExpression, functionCall, context);
 			}
 		}
 		else if(!context.isOffset(idExpression)) {
 			if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunctionName)) {
-				transformer = createComparisonTransformer(idExpression, idExpression.getParent(), context);
+				prepare(idExpression, idExpression.getParent(), context);
 			}
 		}
-		
-		return transformer;
 	}
 	
-	private Transformer createComparisonTransformer(IASTIdExpression idExpression, IASTNode node, Context context) {
-		Transformer transformer = null;
-		Sentinel inFunctionSentinel = mapping.getInFunction().getSentinel();
+	private void prepare(IASTIdExpression idExpression, IASTNode node, Context context) {
+		Sentinel inFunctionSentinel = inFunction.getSentinel();
 		
 		if(inFunctionSentinel == Sentinel.NULL) {
 			if(ASTAnalyzer.isCheckedIfEqualToNull(node)) {
-				transformer = new ComparisonTransformer(context, idExpression, mapping, true);
+				isApplicable = true;
+				config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(IS_EQUAL, true);
 			}
 			else if(ASTAnalyzer.isCheckedIfNotEqualToNull(node)) {
-				transformer = new ComparisonTransformer(context, idExpression, mapping, false);
+				isApplicable = true;
+				config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(IS_EQUAL, false);
 			}
 		}
 		else if(inFunctionSentinel == Sentinel.STRLEN) {
 			if(ASTAnalyzer.isNodeComparedToStrlen(node, true)) {
-				transformer = new ComparisonTransformer(context, idExpression, mapping, true);
+				isApplicable = true;
+				config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(IS_EQUAL, true);
 			}
 			else if(ASTAnalyzer.isNodeComparedToStrlen(node, false)) {
-				transformer = new ComparisonTransformer(context, idExpression, mapping, false);
+				isApplicable = true;
+				config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(IS_EQUAL, false);
 			}
 		}
+	}
+
+	@Override
+	protected IASTNode getReplacementNode(IASTIdExpression idExpression, Context context) {
+		IASTFunctionCallExpression outFunctionCall = createOutFunctionCall(idExpression, context);
+		IASTExpression sentinel = createSentinel(idExpression, context);
+		return ExtendedNodeFactory.newEqualityComparison(outFunctionCall, sentinel, (boolean)config.get(IS_EQUAL));
+	}
+	
+	private IASTFunctionCallExpression createOutFunctionCall(IASTIdExpression idExpression, Context context) { 
+		String outFunctionName = outFunction.getName();
+		IASTNode outArguments[] = getOutArguments(idExpression, context);
+		IASTName stringName = ExtendedNodeFactory.newName(context.getStringVarName());
 		
-		return transformer;
+		if(outFunction.isMemberFunction()) {
+			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, outFunctionName, outArguments);
+		}
+		else {
+			return ExtendedNodeFactory.newFunctionCallExpression(outFunctionName, outArguments);
+		}
+	}
+	
+	private IASTExpression createSentinel(IASTIdExpression idExpression, Context context) {
+		Sentinel outFunctionSentinel = outFunction.getSentinel();
+		IASTExpression sentinel = null;
+		
+		if(outFunctionSentinel == Sentinel.NPOS) {
+			sentinel = ExtendedNodeFactory.newNposExpression();
+		}
+		else if(outFunctionSentinel == Sentinel.END) {
+			IASTNode outArguments[] = getOutArguments(idExpression, context);
+			return (IASTExpression)outArguments[1];
+		}
+		
+		return sentinel;
+	}
+	
+	private IASTNode[] getOutArguments(IASTIdExpression idExpression, Context context) {
+		String inFunctionName = inFunction.getName();
+		IASTFunctionCallExpression inFunctionCall = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName); 
+		return argMapping.getOutArguments(inFunctionCall.getArguments(), idExpression, context);
+	}
+	
+	@Override
+	protected void updateChangeDescription(ASTChangeDescription changeDescription) {
+		changeDescription.setStatementHasChanged(true);
+		changeDescription.addHeaderToInclude(outFunction.getHeader());
 	}
 }
