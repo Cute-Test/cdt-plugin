@@ -1,4 +1,4 @@
-//!CStringAlias
+//!CStringAlias1
 //@main.cpp
 #include "string.h"
 int main() {
@@ -18,6 +18,57 @@ int main() {
 	std::string::size_type ptr = 0;
 	while (str.find('e', ptr) != std::string::npos) {
 		ptr = str.find('e', ptr);
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+//!CStringAlias2
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Testtexte";
+	const char* ptr = str.c_str();
+	while(strstr(ptr, "tt") != NULL) {
+		ptr = strstr(ptr, "tt");
+		std::cout << (ptr - str.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "Testtexte";
+	std::string::size_type ptr = 0;
+	while (str.find("tt", ptr) != std::string::npos) {
+		ptr = str.find("tt", ptr);
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+
+//!CStringAlias3
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Testattexte";
+	const char* ptr = str.c_str();
+	while(strpbrk(ptr, "aeiou") != NULL) {
+		ptr = strpbrk(ptr, "aeiou");
+		std::cout << (ptr - str.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "Testattexte";
+	std::string::size_type ptr = 0;
+	while (str.find_first_of("aeiou", ptr) != std::string::npos) {
+		ptr = str.find_first_of("aeiou", ptr);
 		std::cout << ptr << std::endl;
 		ptr++;
 	}
