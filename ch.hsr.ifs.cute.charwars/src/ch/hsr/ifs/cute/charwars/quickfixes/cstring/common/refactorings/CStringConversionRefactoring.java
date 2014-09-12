@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
-import java.util.HashSet;
-
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -21,16 +19,12 @@ public class CStringConversionRefactoring extends Refactoring {
 	
 	public CStringConversionRefactoring(Function inFunction, ContextState... contextStates) {
 		this.inFunction = inFunction;
-		this.contextStates = new HashSet<ContextState>();
-		for(ContextState contextState : contextStates) {
-			this.contextStates.add(contextState);
-		}
+		setContextStates(contextStates);
 	}
-	
 	
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
-		if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunction.getName())) {
+		if(ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
 			IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)idExpression.getParent(); 
 			if(ASTAnalyzer.isAssignedToCharPointer(functionCall, false)) {
 				isApplicable = true;

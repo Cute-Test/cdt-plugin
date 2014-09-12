@@ -1,6 +1,7 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,5 +60,12 @@ public abstract class Refactoring {
 	
 	protected boolean canHandleOffsets() {
 		return contextStates.contains(ContextState.CStringModified) || contextStates.contains(ContextState.CStringAlias);
+	}
+	
+	protected void setContextStates(ContextState... contextStates) {
+		this.contextStates = new HashSet<ContextState>();
+		for(ContextState contextState : contextStates) {
+			this.contextStates.add(contextState);
+		}
 	}
 }

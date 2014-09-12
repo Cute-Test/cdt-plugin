@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
-import java.util.HashSet;
-
 import org.eclipse.cdt.core.dom.ast.IASTArraySubscriptExpression;
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
@@ -29,10 +27,7 @@ public class ExpressionRefactoring extends Refactoring {
 	private static final String TRANSFORMATION = "TRANSFORMATION";
 	
 	public ExpressionRefactoring(ContextState... contextStates) {
-		this.contextStates = new HashSet<ContextState>();
-		for(ContextState contextState : contextStates) {
-			this.contextStates.add(contextState);
-		}
+		setContextStates(contextStates);
 	}
 	
 	@Override

@@ -12,7 +12,7 @@ int main(){
 
 int main(){
 	std::string s = "0.01";
-	double n = std::stod(s);
+	double n = stod(s);
 }
 
 
@@ -30,7 +30,7 @@ int main(){
 using std;
 int main(){
 	std::string s = "0.01";
-	double n = std::stod(s);
+	double n = stod(s);
 }
 
 
@@ -48,7 +48,7 @@ int main(){
 
 int main(){
 	std::string s = "0.01";
-	int n = std::stoi(s);
+	int n = stoi(s);
 }
 
 
@@ -66,7 +66,7 @@ int main(){
 
 int main(){
 	std::string s = "0.01";
-	long n = std::stol(s);
+	long n = stol(s);
 }
 
 
@@ -84,6 +84,6 @@ int main(){
 
 int main(){
 	std::string s = "0.01";
-	int n = std::stoll(s);
+	int n = stoll(s);
 }
 

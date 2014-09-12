@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
-import java.util.HashSet;
-
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
@@ -14,15 +12,12 @@ public class RemoveStatementRefactoring extends Refactoring {
 	
 	public RemoveStatementRefactoring(Function inFunction, ContextState... contextStates) {
 		this.inFunction = inFunction;
-		this.contextStates = new HashSet<ContextState>();
-		for(ContextState contextState : contextStates) {
-			this.contextStates.add(contextState);
-		}
+		setContextStates(contextStates);
 	}
 	
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
-		if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunction.getName())) {
+		if(ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
 			isApplicable = true;
 		}
 	}

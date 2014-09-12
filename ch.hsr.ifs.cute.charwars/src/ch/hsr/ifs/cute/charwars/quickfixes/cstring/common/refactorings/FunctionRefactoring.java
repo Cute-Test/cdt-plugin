@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
-import java.util.HashSet;
-
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
@@ -11,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
@@ -26,26 +23,20 @@ public class FunctionRefactoring extends Refactoring {
 		this.inFunction = inFunction;
 		this.outFunction = outFunction;
 		this.argMapping = argMapping;
-		this.contextStates = new HashSet<ContextState>();
-		for(ContextState contextState : contextStates) {
-			this.contextStates.add(contextState);
-		}
+		setContextStates(contextStates);
 	}
 
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
-		String inFunctionName = inFunction.getName();
-		if(canHandleOffsets() && (ASTAnalyzer.isOffset(idExpression, context) || ASTAnalyzer.hasOffset(idExpression, inFunctionName))) {
-			if(ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, inFunctionName) || 
-			   ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, Constants.STD_PREFIX + inFunctionName)) {
-				IASTNode nodeToReplace = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName);
+		if(canHandleOffsets() && (ASTAnalyzer.isOffset(idExpression, context) || ASTAnalyzer.hasOffset(idExpression, inFunction))) {
+			if(ASTAnalyzer.isPartOfFunctionCallArg(idExpression, 0, inFunction)) {
+				IASTNode nodeToReplace = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunction);
 				isApplicable = true;
 				config.put(NODE_TO_REPLACE, nodeToReplace);
 			}
 		}
 		else if(!context.isOffset(idExpression)) {
-			if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunctionName) ||
-			   ASTAnalyzer.isFunctionCallArgument(idExpression, 0, Constants.STD_PREFIX + inFunctionName)) {
+			if(ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
 				isApplicable = true;
 				config.put(NODE_TO_REPLACE, idExpression.getParent());
 			}

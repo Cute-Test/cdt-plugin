@@ -37,19 +37,20 @@ import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
 
 public class CStringCleanupQuickFix extends BaseQuickFix {
-	public static final Map<String, String> functionMap;
+	public static final Map<Function, Function> functionMap;
 	
 	static {
-		functionMap = new HashMap<String, String>();
-		functionMap.put(CString.STRSTR, StdString.FIND);
-		functionMap.put(CString.STRCHR, StdString.FIND);
-		functionMap.put(CString.STRRCHR, StdString.RFIND);
-		functionMap.put(CString.STRPBRK, StdString.FIND_FIRST_OF);
-		functionMap.put(CString.STRCSPN, StdString.FIND_FIRST_OF);
-		functionMap.put(CString.STRSPN, StdString.FIND_FIRST_NOT_OF);
-		functionMap.put(CString.MEMCHR, Constants.STD_PREFIX + Algorithm.FIND);
+		functionMap = new HashMap<Function, Function>();
+		functionMap.put(Function.STRSTR, Function.FIND);
+		functionMap.put(Function.STRCHR, Function.FIND);
+		functionMap.put(Function.STRRCHR, Function.RFIND);
+		functionMap.put(Function.STRPBRK, Function.FIND_FIRST_OF);
+		functionMap.put(Function.STRCSPN, Function.FIND_FIRST_OF);
+		functionMap.put(Function.STRSPN, Function.FIND_FIRST_NOT_OF);
+		functionMap.put(Function.MEMCHR, Function.STD_FIND);
 	}
 	
 	@Override
@@ -70,7 +71,14 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		functionName = functionName.replaceFirst("^" + Constants.STD_PREFIX, "");
 		IASTIdExpression firstArg = (IASTIdExpression)ASTAnalyzer.extractStdStringArg(functionCall.getArguments()[0]);
 		IASTNode secondArg = ASTAnalyzer.extractStdStringArg(functionCall.getArguments()[1]);
-		String searchFunctionName = functionMap.get(functionName);
+		
+		String searchFunctionName = null;
+		for(Function f : functionMap.keySet()) {
+			if(f.getName().equals(functionName)) {
+				searchFunctionName = functionMap.get(f).getName();
+				break;
+			}
+		}
 		IASTFunctionCallExpression searchCall = ExtendedNodeFactory.newMemberFunctionCallExpression(firstArg.getName(), searchFunctionName, secondArg.copy());
 		IASTStatement oldStatement = ASTAnalyzer.getStatement(functionCall);
 		boolean hasPtrReturnType = !(functionName.equals(CString.STRCSPN) || functionName.equals(CString.STRSPN));
@@ -103,7 +111,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		
 		if(functionCall.getArguments()[2] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression thirdArg = (ICPPASTFunctionCallExpression) functionCall.getArguments()[2];
-			if(ASTAnalyzer.isCallToMemberFunction(thirdArg, StdString.SIZE)) {
+			if(ASTAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
 				if(thirdArg.getChildren()[0] instanceof ICPPASTExpression) {
 					IASTIdExpression thirdArgIdExpression = (IASTIdExpression) thirdArg.getChildren()[0].getChildren()[0];
 					if(thirdArgIdExpression.getChildren()[0].toString().equals(str.getName().toString())) {

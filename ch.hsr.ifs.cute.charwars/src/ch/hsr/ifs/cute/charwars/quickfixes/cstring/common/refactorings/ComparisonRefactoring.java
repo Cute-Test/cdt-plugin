@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
-import java.util.HashSet;
-
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -25,24 +23,19 @@ public class ComparisonRefactoring extends Refactoring {
 		this.inFunction = inFunction;
 		this.outFunction = outFunction;
 		this.argMapping = argMapping;
-		this.contextStates = new HashSet<ContextState>();
-		for(ContextState contextState : contextStates) {
-			this.contextStates.add(contextState);
-		}
+		setContextStates(contextStates);
 	}
 	
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
-		String inFunctionName = inFunction.getName();
-		
-		if(canHandleOffsets() && (ASTAnalyzer.isOffset(idExpression, context) || ASTAnalyzer.hasOffset(idExpression, inFunctionName))) {
-			if(ASTAnalyzer.isPartOfFunctionCallArgument(idExpression, 0, inFunctionName)) {
-				IASTNode functionCall = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName);
+		if(canHandleOffsets() && (ASTAnalyzer.isOffset(idExpression, context) || ASTAnalyzer.hasOffset(idExpression, inFunction))) {
+			if(ASTAnalyzer.isPartOfFunctionCallArg(idExpression, 0, inFunction)) {
+				IASTNode functionCall = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunction);
 				prepare(idExpression, functionCall, context);
 			}
 		}
 		else if(!context.isOffset(idExpression)) {
-			if(ASTAnalyzer.isFunctionCallArgument(idExpression, 0, inFunctionName)) {
+			if(ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
 				prepare(idExpression, idExpression.getParent(), context);
 			}
 		}
@@ -113,8 +106,7 @@ public class ComparisonRefactoring extends Refactoring {
 	}
 	
 	private IASTNode[] getOutArguments(IASTIdExpression idExpression, Context context) {
-		String inFunctionName = inFunction.getName();
-		IASTFunctionCallExpression inFunctionCall = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunctionName); 
+		IASTFunctionCallExpression inFunctionCall = ASTAnalyzer.getEnclosingFunctionCall(idExpression, inFunction); 
 		return argMapping.getOutArguments(inFunctionCall.getArguments(), idExpression, context);
 	}
 	

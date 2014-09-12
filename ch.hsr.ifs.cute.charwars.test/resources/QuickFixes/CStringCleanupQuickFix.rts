@@ -480,7 +480,7 @@ int main() {
 
 int main() {
 	std::string str = "a string";
-	auto found_pos = std::find(str.begin(), str.end(), ' ');
+	auto found_pos = find(str.begin(), str.end(), ' ');
 	char *found = (char *) (found_pos != str.end() ? &*found_pos : nullptr);
 	std::cout << found << std::endl;
 }
@@ -499,7 +499,7 @@ int main() {
 
 int main() {
 	std::string str = "a string";
-	auto found_pos = std::find(str.begin(), str.begin() + 2, ' ');
+	auto found_pos = find(str.begin(), str.begin() + 2, ' ');
 	char *found = 
 		(char *) (found_pos != str.begin() + 2 ? &*found_pos : nullptr);
 	std::cout << found << std::endl;
@@ -520,7 +520,7 @@ int main() {
 int main() {
 	std::string str = "a string";
 	char *found;
-	auto found_pos = std::find(str.begin(), str.end(), ' ');
+	auto found_pos = find(str.begin(), str.end(), ' ');
 	found = (char *) (found_pos != str.end() ? &*found_pos : nullptr);
 	std::cout << found << std::endl;
 }
@@ -548,7 +548,7 @@ struct X {
 int main() {
 	std::string str = "a string";
 	X x;
-	auto ptr_pos = std::find(str.begin(), str.end(), ' ');
+	auto ptr_pos = find(str.begin(), str.end(), ' ');
 	x.ptr = (char *) (ptr_pos != str.end() ? &*ptr_pos : nullptr);
 	std::cout << x.ptr << std::endl;
 }
@@ -575,7 +575,7 @@ int main() {
 
 	if(true)
 		{
-		auto found_pos = std::find(str.begin(), str.end(), 'a');
+		auto found_pos = find(str.begin(), str.end(), 'a');
 		found = (char*) ((found_pos != str.end() ? &*found_pos : nullptr));
 	}
 	std::cout << found << std::endl;
@@ -601,7 +601,7 @@ int main() {
 	
 	if(true) {
 		std::string str = "a string";
-		auto found_pos = std::find(str.begin(), str.end(), ' ');
+		auto found_pos = find(str.begin(), str.end(), ' ');
 		char *found = (char *) (found_pos != str.end() ? &*found_pos : nullptr);
 		std::cout << found << std::endl;
 	}
@@ -630,7 +630,7 @@ int main() {
 	if(true) {
 		found_pos = 2;
 		std::string str = "a string";
-		auto found_pos2 = std::find(str.begin(), str.end(), ' ');
+		auto found_pos2 = find(str.begin(), str.end(), ' ');
 		char *found = 
 			(char *) (found_pos2 != str.end() ? &*found_pos2 : nullptr);
 		std::cout << found << std::endl;
@@ -653,7 +653,7 @@ int main() {
 int main() {
 	int found_pos = 0;
 	std::string str = "a string";
-	auto found_pos2 = std::find(str.begin(), str.begin() + 4, ' ');
+	auto found_pos2 = find(str.begin(), str.begin() + 4, ' ');
 	char *found = (char *) 
 		(
 			found_pos2 != str.begin() + 4 ? &*found_pos2 : nullptr);
@@ -676,7 +676,7 @@ int main() {
 
 void f(int found_pos) {
 	std::string str = "a string";
-	auto found_pos2 = std::find(str.begin(), str.end(), ' ');
+	auto found_pos2 = find(str.begin(), str.end(), ' ');
 	char *found = (char *) (found_pos2 != str.end() ? &*found_pos2 : nullptr);
 	std::cout << found << std::endl;
 }
@@ -697,7 +697,7 @@ int main() {
 
 int main() {
 	std::string str = "a string";
-	auto found_pos = std::find(str.begin(), str.begin() + 2, ' ');
+	auto found_pos = find(str.begin(), str.begin() + 2, ' ');
 	char *found = 
 		(char *) (found_pos != str.begin() + 2 ? &*found_pos : nullptr);
 	std::cout << found << std::endl;

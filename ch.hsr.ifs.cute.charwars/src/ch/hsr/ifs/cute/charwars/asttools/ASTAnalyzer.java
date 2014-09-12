@@ -66,10 +66,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 
 import ch.hsr.ifs.cute.charwars.asttools.FindIdExpressionsVisitor;
-import ch.hsr.ifs.cute.charwars.constants.CString;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
 
 public class ASTAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
@@ -168,7 +168,7 @@ public class ASTAnalyzer {
 	public static boolean hasStrdupAssignment(IASTDeclarator declarator) {
 		IASTInitializerClause initializerClause = getInitializerClause(declarator);
 		if(initializerClause != null) {
-			return isCallToFunction(initializerClause, Constants.STRDUP);
+			return isCallToFunction(initializerClause, Function.STRDUP);
 		}
 		return false;
 	}
@@ -300,22 +300,27 @@ public class ASTAnalyzer {
 		return false;
 	}
 	
-	public static boolean isCallToFunction(IASTNode node, String fName) {
+	public static boolean isCallToFunction(IASTNode node, Function function) {
 		if(node instanceof IASTFunctionCallExpression) {
-			if(!(node.getChildren()[0] instanceof IASTFieldReference)) {
-				IASTName functionName = (IASTName)node.getChildren()[0].getChildren()[0];
-				return functionName.toString().equals(fName);	
+			IASTFunctionCallExpression functionCallExpression = (IASTFunctionCallExpression)node;
+			IASTExpression functionNameExpression = functionCallExpression.getFunctionNameExpression();
+			if(functionNameExpression instanceof IASTIdExpression) {
+				IASTIdExpression idExpression = (IASTIdExpression)functionNameExpression;
+				String functionName = idExpression.getName().toString();
+				return functionName.equals(function.getName()) || functionName.equals(function.getQualifiedName());
 			}
 		}
 		return false;
 	}
 	
-	public static boolean isCallToMemberFunction(IASTNode node, String memberFunction) {
+	public static boolean isCallToMemberFunction(IASTNode node, Function memberFunction) {
 		if(node instanceof IASTFunctionCallExpression) {
-			if(node.getChildren()[0] instanceof IASTFieldReference) {
-				IASTFieldReference fieldReference = (IASTFieldReference)node.getChildren()[0];
+			IASTFunctionCallExpression functionCallExpression = (IASTFunctionCallExpression)node;
+			IASTExpression functionNameExpression = functionCallExpression.getFunctionNameExpression();
+			if(functionNameExpression instanceof IASTFieldReference) {
+				IASTFieldReference fieldReference = (IASTFieldReference)functionNameExpression;
 				String fieldName = fieldReference.getFieldName().toString();
-				return fieldName.equals(memberFunction);
+				return fieldName.equals(memberFunction.getName()) || fieldName.equals(memberFunction.getQualifiedName());
 			}
 		}
 		return false;
@@ -386,15 +391,15 @@ public class ASTAnalyzer {
 		return false;
 	}
 	
-	public static boolean isPartOfFunctionCallArgument(IASTNode node, int argIndex, String functionName) {
+	public static boolean isPartOfFunctionCallArg(IASTNode node, int argIndex, Function function) {
 		IASTNode lastNode = node;
 		IASTNode currentNode = lastNode.getParent();
-		while(!isCallToFunction(currentNode, functionName) && (isSubtractionExpression(currentNode) || isAdditionExpression(currentNode))) {
+		while(!isCallToFunction(currentNode, function) && (isSubtractionExpression(currentNode) || isAdditionExpression(currentNode))) {
 			lastNode = currentNode;
 			currentNode = lastNode.getParent();
 		}
 		
-		if(isCallToFunction(currentNode, functionName)) {
+		if(isCallToFunction(currentNode, function)) {
 			IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)currentNode;
 			return functionCall.getArguments()[argIndex] == lastNode;
 		}
@@ -402,8 +407,8 @@ public class ASTAnalyzer {
 		return false;
 	}
 	
-	public static boolean isFunctionCallArgument(IASTNode arg, int argIndex, String functionName) {
-		if(isCallToFunction(arg.getParent(), functionName)) {
+	public static boolean isFunctionCallArg(IASTNode arg, int argIndex, Function function) {
+		if(isCallToFunction(arg.getParent(), function)) {
 			IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)arg.getParent();
 			return functionCall.getArguments()[argIndex] == arg;
 		}
@@ -412,7 +417,7 @@ public class ASTAnalyzer {
 	
 	public static boolean isPartOfStringEqualityCheck(IASTIdExpression node) {
 		IASTNode parent = node.getParent();
-		if(isCallToFunction(parent, CString.STRCMP)) {
+		if(isCallToFunction(parent, Function.STRCMP)) {
 			IASTExpression strcmpCall = (IASTExpression)parent;
 			if(isLogicalNotExpression(strcmpCall.getParent())) {
 				return true;
@@ -426,7 +431,7 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean isPartOfStringInequalityCheck(IASTIdExpression node) {
-		if(isCallToFunction(node.getParent(), CString.STRCMP)) {
+		if(isCallToFunction(node.getParent(), Function.STRCMP)) {
 			IASTExpression strcmpCall = (IASTExpression)node.getParent();
 			if(isInequalityCheck(strcmpCall.getParent())) {
 				IASTBinaryExpression inequalityCheck = (IASTBinaryExpression)strcmpCall.getParent();
@@ -447,9 +452,9 @@ public class ASTAnalyzer {
 		return result == null ? null : (IASTStatement)result;
 	}
 	
-	public static IASTFunctionCallExpression getEnclosingFunctionCall(IASTNode startNode, String functionName) {
+	public static IASTFunctionCallExpression getEnclosingFunctionCall(IASTNode startNode, Function function) {
 		IASTNode currentNode = startNode;
-		while(!isCallToFunction(currentNode, functionName)) {
+		while(!isCallToFunction(currentNode, function)) {
 			currentNode = currentNode.getParent();
 		}
 		return (IASTFunctionCallExpression)currentNode;
@@ -649,14 +654,14 @@ public class ASTAnalyzer {
 
 	public static boolean isConversionToCharPointer(IASTNode node, boolean isConst) {
 		if(isConst) {
-			return isCallToMemberFunction(node, StdString.C_STR);
+			return isCallToMemberFunction(node, Function.C_STR);
 		}
 		else {
 			if(isAddressOperatorExpression(node)) {
 				IASTUnaryExpression addressOperatorExpression = (IASTUnaryExpression)node;
 				if(isDereferenceExpression(addressOperatorExpression.getOperand())) {
 					IASTUnaryExpression dereferenceExpression = (IASTUnaryExpression)addressOperatorExpression.getOperand();
-					if(isCallToMemberFunction(dereferenceExpression.getOperand(), StdString.BEGIN)) {
+					if(isCallToMemberFunction(dereferenceExpression.getOperand(), Function.BEGIN)) {
 						return true;
 					}
 				}
@@ -702,10 +707,10 @@ public class ASTAnalyzer {
 				return false;
 			
 			if(equalityComparison) {
-				return comparedForEquality && (isCallToFunction(strlenOperand, CString.STRLEN) || isCallToMemberFunction(strlenOperand, StdString.SIZE));
+				return comparedForEquality && (isCallToFunction(strlenOperand, Function.STRLEN) || isCallToMemberFunction(strlenOperand, Function.SIZE));
 			}
 			else {
-				return comparedForInequality && (isCallToFunction(strlenOperand, CString.STRLEN) || isCallToMemberFunction(strlenOperand, StdString.SIZE));
+				return comparedForInequality && (isCallToFunction(strlenOperand, Function.STRLEN) || isCallToMemberFunction(strlenOperand, Function.SIZE));
 			}
 		}
 		return false;
@@ -1166,9 +1171,9 @@ public class ASTAnalyzer {
 		return context.isOffset(idExpression);
 	}
 	
-	public static boolean hasOffset(IASTIdExpression idExpression, String inFunctionName) {
-		if(isPartOfFunctionCallArgument(idExpression, 0, inFunctionName)) {
-			return getEnclosingFunctionCall(idExpression, inFunctionName) != idExpression.getParent();
+	public static boolean hasOffset(IASTIdExpression idExpression, Function function) {
+		if(isPartOfFunctionCallArg(idExpression, 0, function)) {
+			return getEnclosingFunctionCall(idExpression, function) != idExpression.getParent();
 		}
 		return false;
 	}

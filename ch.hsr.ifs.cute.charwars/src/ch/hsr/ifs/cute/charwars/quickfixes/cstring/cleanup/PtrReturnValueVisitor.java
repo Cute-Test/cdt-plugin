@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.constants.StdString;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
 
 public class PtrReturnValueVisitor extends ASTVisitor {
 	private IASTName name;
@@ -68,7 +68,7 @@ public class PtrReturnValueVisitor extends ASTVisitor {
 		IASTNode parent = idExpression.getParent();
 		if(ASTAnalyzer.isSubtractionExpression(parent)) {
 			IASTBinaryExpression subtraction = (IASTBinaryExpression)parent;
-			if(subtraction.getOperand1() == idExpression && ASTAnalyzer.isCallToMemberFunction(subtraction.getOperand2(), StdString.C_STR)) {
+			if(subtraction.getOperand1() == idExpression && ASTAnalyzer.isCallToMemberFunction(subtraction.getOperand2(), Function.C_STR)) {
 				return true;
 			}
 		}

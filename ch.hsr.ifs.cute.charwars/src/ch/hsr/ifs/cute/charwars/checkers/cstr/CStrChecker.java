@@ -20,6 +20,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.checkers.BaseChecker;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
 
 public class CStrChecker extends BaseChecker {
 	public CStrChecker() {
@@ -35,7 +36,7 @@ public class CStrChecker extends BaseChecker {
 		
 		@Override
 		public int visit(IASTExpression expression) {
-			if(ASTAnalyzer.isCallToMemberFunction(expression, StdString.C_STR)) {
+			if(ASTAnalyzer.isCallToMemberFunction(expression, Function.C_STR)) {
 				IASTFunctionCallExpression cStrCall = (IASTFunctionCallExpression)expression;
 				IASTNode parent = cStrCall.getParent();
 				IASTName name = null;

@@ -59,7 +59,7 @@ public class ArgMapping {
 				break;
 			case END:
 				IASTExpression arg2 = (IASTExpression)inArguments[2];
-				if(ASTAnalyzer.isCallToMemberFunction(arg2, StdString.SIZE)) {
+				if(ASTAnalyzer.isCallToMemberFunction(arg2, Function.SIZE)) {
 					outArguments.add(ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.END));
 				}
 				else {
