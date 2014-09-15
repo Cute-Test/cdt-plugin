@@ -6,6 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
@@ -74,7 +75,9 @@ public class ExpressionRefactoring extends Refactoring {
 		}
 		else if(ASTAnalyzer.modifiesCharPointer(idExpression)) {
 			//++str -> ++str_pos
+			//*++str -> str[++str_pos]
 			//str++ -> str_pos++
+			//*str++ -> str[str_pos++]
 			//str += n -> str_pos += n
 			isApplicable = true;
 			config.put(NODE_TO_REPLACE, idExpression);
@@ -157,8 +160,17 @@ public class ExpressionRefactoring extends Refactoring {
 			
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
 		case MODIFIED:
+			IASTNode parent = idExpression.getParent();
+			if(ASTAnalyzer.isUnaryExpression(parent, IASTUnaryExpression.op_postFixIncr) || ASTAnalyzer.isUnaryExpression(parent, IASTUnaryExpression.op_prefixIncr)) {
+				if(ASTAnalyzer.isDereferenceExpression(parent.getParent())) {
+					config.put(NODE_TO_REPLACE, parent.getParent());
+					int operator = ((IASTUnaryExpression)parent).getOperator();
+					IASTExpression arrExpr = ExtendedNodeFactory.newIdExpression(context.getStringVarName());
+					IASTExpression subscriptExpr = ExtendedNodeFactory.factory.newUnaryExpression(operator, context.createOffsetVarIdExpression());
+					return ExtendedNodeFactory.newArraySubscriptExpression(arrExpr, subscriptExpr);
+				}
+			}
 			return context.createOffsetVarIdExpression();
-			
 		case ARRAY_SUBSCRIPTION:
 			IASTArraySubscriptExpression oldArraySubscriptExpression = (IASTArraySubscriptExpression)idExpression.getParent();
 			IASTExpression oldArraySubscript = (IASTExpression)oldArraySubscriptExpression.getArgument();

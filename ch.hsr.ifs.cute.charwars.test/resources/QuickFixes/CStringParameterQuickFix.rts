@@ -902,3 +902,59 @@ int main() {
 	std::cout << MatchDnsName("mail.google.com", dns_name) << std::endl;
 	std::cout << MatchDnsName("www.google.com", dns_name) << std::endl;
 }
+
+
+//!WebkitFindMonthExample1
+//@main.cpp
+static int findMonth(const char* monthStr) {
+	assert(monthStr);
+    char needle[4];
+    for (int i = 0; i < 3; ++i) {
+        if (!*monthStr)
+            return -1;
+        needle[i] = static_cast<char>(tolower(*monthStr++));
+    }
+    needle[3] = '\0';
+	const char* haystack = "janfebmaraprmayjunjulaugsepoctnovdec";
+	const char* str = strstr(haystack, needle);
+	if (str) {
+		int position = static_cast<int>(str - haystack);
+		if (position % 3 == 0)
+			return position / 3;
+	}
+	return -1;
+}
+
+int main() {
+	std::cout << findMonth("feb") << std::endl;
+}
+//=
+#include <string>
+static int findMonth(const std::string& monthStr) {
+	char needle[4];
+	std::string::size_type monthStr_pos = 0;
+	for (int i = 0; i < 3; ++i) {
+		if (!monthStr[monthStr_pos])
+			return -1;
+		needle[i] = static_cast<char>(tolower(monthStr[monthStr_pos++]));
+	}
+	needle[3] = '\0';
+	const char* haystack = "janfebmaraprmayjunjulaugsepoctnovdec";
+	const char* str = strstr(haystack, needle);
+	if (str) {
+		int position = static_cast<int>(str - haystack);
+		if (position % 3 == 0)
+			return position / 3;
+	}
+	return -1;
+}
+
+static int findMonth(const char* monthStr) {
+
+	assert(monthStr);
+	return findMonth(std::string(monthStr));
+}
+
+int main() {
+	std::cout << findMonth("feb") << std::endl;
+}

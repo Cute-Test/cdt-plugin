@@ -24,15 +24,17 @@ public class RefactoringFactory {
 			//strchr(a,b) == NULL -> a.find(b) == std::string::npos
 			new ComparisonRefactoring(Function.STRCHR, Function.FIND, new ArgMapping(Arg.ARG_1), ContextState.CString),
 						
-			//strchr(a+n,b) == NULL -> a.find(b, n) == std::string::npos
-			//alias: strchr(a, b) == NULL -> str.find(b, a) == std::string::npos
+			//explicit offset: strchr(str+off,b) == NULL -> str.find(b, off) == std::string::npos
+			//implicit offset: strchr(str, b) == NULL -> str.find(b, str_pos) == std::string::npos
+			//alias: strchr(alias, b) == NULL -> str.find(b, alias) == std::string::npos
 			new ComparisonRefactoring(Function.STRCHR, Function.FIND, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 						
 			//strpbrk(a,b) == NULL -> a.find_first_of(b) == std::string::npos
 			new ComparisonRefactoring(Function.STRPBRK, Function.FIND_FIRST_OF, new ArgMapping(Arg.ARG_1), ContextState.CString),
 						
-			//strpbrk(a+n,b) == NULL -> a.find_first_of(b, n) == std::string::npos
-			//alias: strpbrk(a, b) == NULL -> str.find_first_of(b, a) == std::string::npos
+			//explicit offset: strpbrk(str+off,b) == NULL -> str.find_first_of(b, off) == std::string::npos
+			//implicit offset: strprbk(str, b) == NULL -> str.find_first_of(b, str_pos) == std::string::npos
+			//alias: strpbrk(alias, b) == NULL -> str.find_first_of(b, alias) == std::string::npos
 			new ComparisonRefactoring(Function.STRPBRK, Function.FIND_FIRST_OF, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 						
 			//strrchr(a,b) == NULL -> a.rfind(b) == std::string::npos
@@ -41,8 +43,9 @@ public class RefactoringFactory {
 			//strstr(a,b) == NULL -> a.find(b) == std::string::npos
 			new ComparisonRefactoring(Function.STRSTR, Function.FIND, new ArgMapping(Arg.ARG_1), ContextState.CString),
 						
-			//strstr(a+n,b) == NULL -> a.find(b, n) == std::string::npos
-			//alias: strstr(a, b) == NULL -> str.find(b, a) == std::string::npos
+			//explicit offset: strstr(str+off,b) == NULL -> str.find(b, off) == std::string::npos
+			//implicit offset: strstr(str, b) == NULL -> str.find(b, str_pos) == std::string::npos
+			//alias: strstr(alias, b) == NULL -> str.find(b, alias) == std::string::npos
 			new ComparisonRefactoring(Function.STRSTR, Function.FIND, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 							
 			//strcspn(a, b) == strlen(a) -> a.find_first_of(b) == std::string::npos
@@ -74,14 +77,13 @@ public class RefactoringFactory {
 			//wcslen(wstr) -> (wstr.size() - wstr_pos)
 			new FunctionRefactoring(Function.WCSLEN, Function.SIZE, new ArgMapping(), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 				
-			//memcmp(a+off, b, n) -> a.compare(off, n, b, 0, n)
-			//memcmp(a, b, n) -> a.compare(a_pos, n, b, 0, n)
-			//memcmp(a+off, b, n) -> a.compare(a_pos+off, n, b, 0, n)
-			new FunctionRefactoring(Function.MEMCMP, Function.COMPARE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified),
+			//explicit offset: memcmp(str+off, b, n) -> str.compare(off, n, b, 0, n)
+			//implicit offset: memcmp(str, b, n) -> str.compare(str_pos, n, b, 0, n)
+			//alias: memcmp(alias, b, n) -> str.compare(alias, n, b, 0, n)
+			new FunctionRefactoring(Function.MEMCMP, Function.COMPARE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 
-			//memcpy(a+off, b, n) -> a.replace(off, n, b, 0, n)
-			//memcpy(a, b, n) -> a.replace(a_pos, n, b, 0, n)
-			//memcpy(a+off, b, n) -> a.replace(a_pos+off, n, b, 0, n)
+			//explicit offset: memcpy(str+off, b, n) -> str.replace(off, n, b, 0, n)
+			//implicit offset: memcpy(str, b, n) -> str.replace(str_pos, n, b, 0, n)
 			new FunctionRefactoring(Function.MEMCPY, Function.REPLACE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified),
 			
 			//memmove(a+off, b, n) -> a.replace(off, n, b, 0, n)
@@ -90,17 +92,17 @@ public class RefactoringFactory {
 			//strcmp(a,b) -> a.compare(b)
 			new FunctionRefactoring(Function.STRCMP, Function.COMPARE, new ArgMapping(Arg.ARG_1), ContextState.CString),
 				
-			//strcmp(a+off, b) -> a.compare(off, std::string::npos, b)
-			//strcmp(a, b) -> a.compare(a_pos, std::string::npos, b)
-			//strcmp(a+off, b) -> a.compare(a_pos+off, std::string::npos, b)
-			new FunctionRefactoring(Function.STRCMP, Function.COMPARE, new ArgMapping(Arg.OFF_0, Arg.NPOS, Arg.ARG_1), ContextState.CString, ContextState.CStringModified),
+			//explicit offset: strcmp(str+off, b) -> str.compare(off, std::string::npos, b)
+			//implicit offset: strcmp(str, b) -> str.compare(str_pos, std::string::npos, b)
+			//alias: strcmp(alias, b) -> str.compare(alias, std::string::npos, b)
+			new FunctionRefactoring(Function.STRCMP, Function.COMPARE, new ArgMapping(Arg.OFF_0, Arg.NPOS, Arg.ARG_1), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
+
+			//explicit offset: strncmp(str+off, b, n) -> str.compare(off, n, b, 0, n)
+			//implicit offset: strncmp(str, b, n) -> str.compare(str_pos, n, b, 0, n)
+			//alias: strncmp(alias, b, n) -> str.compare(alias, n, b, 0, n)
+			new FunctionRefactoring(Function.STRNCMP, Function.COMPARE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 				
-			//strncmp(a+off, b, n) -> a.compare(off, n, b, 0, n)
-			//strncmp(a, b, n) -> a.compare(a_pos, n, b, 0, n)
-			//strncmp(a+off, b, n) -> a.compare(a_pos+off, n, b, 0, n)
-			new FunctionRefactoring(Function.STRNCMP, Function.COMPARE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified),
-				
-			//strcpy(a+off, b) -> a.replace(off, std::string::npos, b)
+			//explicit offset: strcpy(str+off, b) -> str.replace(off, std::string::npos, b)
 			new FunctionRefactoring(Function.STRCPY, Function.REPLACE, new ArgMapping(Arg.OFF_0, Arg.NPOS, Arg.ARG_1), ContextState.CString, ContextState.CStringModified),
 			
 			//strncat(a, b, n) -> a.append(b, 0, n)
@@ -109,13 +111,13 @@ public class RefactoringFactory {
 			//strncpy(a+off, b, n) -> a.replace(off, n, b, 0, n)
 			new FunctionRefactoring(Function.STRNCPY, Function.REPLACE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified),
 			
-			//alias: strchr(a, b) -> str.find(b, a) 
+			//alias: strchr(alias, b) -> str.find(b, alias) 
 			new FunctionRefactoring(Function.STRCHR, Function.FIND, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CStringAlias),
 			
-			//alias: strstr(a, b) -> str.find(b, a) 
+			//alias: strstr(alias, b) -> str.find(b, alias) 
 			new FunctionRefactoring(Function.STRSTR, Function.FIND, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CStringAlias),
 			
-			//alias: strpbrk(a, b) -> str.find(b, a)
+			//alias: strpbrk(alias, b) -> str.find(b, alias)
 			new FunctionRefactoring(Function.STRPBRK, Function.FIND_FIRST_OF, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CStringAlias),
 				
 			//atof(a) -> stod(a)

@@ -95,3 +95,63 @@ int main() {
 	ptr++;
 	std::cout << (str.size() - ptr) << std::endl;
 }
+
+
+//!CStringAlias5
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Hello";
+	const char* ptr = str.c_str();
+	ptr++;
+	std::cout << strcmp(ptr, "ello");
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "Hello";
+	std::string::size_type ptr = 0;
+	ptr++;
+	std::cout << str.compare(ptr, std::string::npos, "ello");
+}
+
+
+//!CStringAlias6
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Hello";
+	const char* ptr = str.c_str();
+	ptr++;
+	std::cout << strncmp(ptr, "ell", 3) << std::endl;
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "Hello";
+	std::string::size_type ptr = 0;
+	ptr++;
+	std::cout << str.compare(ptr, 3, "ell", 0, 3) << std::endl;
+}
+
+
+//!CStringAlias7
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Hello";
+	const char* ptr = str.c_str();
+	ptr++;
+	std::cout << memcmp(ptr, "ell", 3) << std::endl;
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "Hello";
+	std::string::size_type ptr = 0;
+	ptr++;
+	std::cout << str.compare(ptr, 3, "ell", 0, 3) << std::endl;
+}
