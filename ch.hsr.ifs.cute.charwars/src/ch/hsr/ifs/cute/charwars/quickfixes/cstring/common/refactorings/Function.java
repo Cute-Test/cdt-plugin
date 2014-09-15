@@ -15,8 +15,10 @@ public class Function {
 	public final static Function STRLEN = createFunction(CString.STRLEN, Sentinel.NO_SENTINEL, CString.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function WCSLEN = createFunction(CWchar.WCSLEN, Sentinel.NO_SENTINEL, CWchar.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRCMP = createFunction(CString.STRCMP, Sentinel.NO_SENTINEL, CString.HEADER_NAME, Constants.STD_PREFIX);
+	public final static Function WCSCMP = createFunction(CWchar.WCSCMP, Sentinel.NO_SENTINEL, CWchar.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRNCMP = createFunction(CString.STRNCMP, Sentinel.NO_SENTINEL, CString.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRCHR = createFunction(CString.STRCHR, Sentinel.NULL, CString.HEADER_NAME, Constants.STD_PREFIX);
+	public final static Function WCSCHR = createFunction(CWchar.WCSCHR, Sentinel.NULL, CWchar.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRRCHR = createFunction(CString.STRRCHR, Sentinel.NULL, CString.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRSPN = createFunction(CString.STRSPN, Sentinel.STRLEN, CString.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRCSPN = createFunction(CString.STRCSPN, Sentinel.STRLEN, CString.HEADER_NAME, Constants.STD_PREFIX);

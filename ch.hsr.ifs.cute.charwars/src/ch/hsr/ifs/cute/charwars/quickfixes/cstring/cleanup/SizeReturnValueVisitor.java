@@ -10,6 +10,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
 
 public class SizeReturnValueVisitor extends ASTVisitor {
 	private IASTName name;
@@ -37,7 +38,7 @@ public class SizeReturnValueVisitor extends ASTVisitor {
 			ASTAnalyzer.isNodeComparedToStrlen(idExpression, false)) {
 			IASTBinaryExpression comparison = (IASTBinaryExpression)idExpression.getParent();
 			IASTExpression strlenCall = (idExpression == comparison.getOperand1()) ? comparison.getOperand2() : comparison.getOperand1();
-			ASTModifier.replace(strlenCall, ExtendedNodeFactory.newNposExpression(), rewrite);
+			ASTModifier.replace(strlenCall, ExtendedNodeFactory.newNposExpression(StringType.STRING), rewrite);
 		}
 	}
 }

@@ -34,6 +34,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.cute.charwars.constants.StdString;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
 
 public class ExtendedNodeFactory {
 	public final static ICPPNodeFactory factory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
@@ -89,11 +90,11 @@ public class ExtendedNodeFactory {
 		return factory.newBinaryExpression(op, lhs, rhs);
 	}
 	
-	public static IASTExpression newNposExpression() {
-		ICPPASTQualifiedName std_string_npos = factory.newQualifiedName((ICPPASTName)newName(StdString.STD));
-		std_string_npos.addName(newName(StdString.STRING));
-		std_string_npos.addName(newName(StdString.NPOS));
-		return factory.newIdExpression(std_string_npos);
+	public static IASTExpression newNposExpression(StringType stringType) {
+		ICPPASTQualifiedName npos = factory.newQualifiedName((ICPPASTName)newName(StdString.STD));
+		npos.addName(newName(stringType.getClassName()));
+		npos.addName(newName(StdString.NPOS));
+		return factory.newIdExpression(npos);
 	}
 	
 	public static IASTUnaryExpression newDereferenceOperatorExpression(IASTExpression expression) {

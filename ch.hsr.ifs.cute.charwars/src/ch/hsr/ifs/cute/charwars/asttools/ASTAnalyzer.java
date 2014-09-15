@@ -417,7 +417,7 @@ public class ASTAnalyzer {
 	
 	public static boolean isPartOfStringEqualityCheck(IASTIdExpression node) {
 		IASTNode parent = node.getParent();
-		if(isCallToFunction(parent, Function.STRCMP)) {
+		if(isCallToFunction(parent, Function.STRCMP) || isCallToFunction(parent, Function.WCSCMP)) {
 			IASTExpression strcmpCall = (IASTExpression)parent;
 			if(isLogicalNotExpression(strcmpCall.getParent())) {
 				return true;
@@ -431,8 +431,9 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean isPartOfStringInequalityCheck(IASTIdExpression node) {
-		if(isCallToFunction(node.getParent(), Function.STRCMP)) {
-			IASTExpression strcmpCall = (IASTExpression)node.getParent();
+		IASTNode parent = node.getParent();
+		if(isCallToFunction(parent, Function.STRCMP) || isCallToFunction(parent, Function.WCSCMP)) {
+			IASTExpression strcmpCall = (IASTExpression)parent;
 			if(isInequalityCheck(strcmpCall.getParent())) {
 				IASTBinaryExpression inequalityCheck = (IASTBinaryExpression)strcmpCall.getParent();
 				return isIntegerLiteral(inequalityCheck.getOperand1(), 0) || isIntegerLiteral(inequalityCheck.getOperand2(), 0);

@@ -37,6 +37,7 @@ import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
 
 public class CStringCleanupQuickFix extends BaseQuickFix {
@@ -197,7 +198,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		ASTModifier.insertBefore(oldStatement.getParent(), oldStatement, oldStatementCopy, rewrite);
 		
 		IASTIdExpression resultVarIdExpression = ExtendedNodeFactory.newIdExpression(resultVarName);
-		IASTBinaryExpression condition = ExtendedNodeFactory.newEqualityComparison(resultVarIdExpression, ExtendedNodeFactory.newNposExpression(), true);
+		IASTBinaryExpression condition = ExtendedNodeFactory.newEqualityComparison(resultVarIdExpression, ExtendedNodeFactory.newNposExpression(StringType.STRING), true);
 		IASTBinaryExpression assignment = ExtendedNodeFactory.newAssignment(ExtendedNodeFactory.newIdExpression(resultVarName), ExtendedNodeFactory.newMemberFunctionCallExpression(str.getName(), StdString.SIZE));
 		IASTStatement assignmentStatement = ExtendedNodeFactory.newExpressionStatement(assignment);
 		IASTCompoundStatement ifBody = ExtendedNodeFactory.newCompoundStatement(assignmentStatement);
@@ -297,7 +298,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 	
 	private IASTConditionalExpression newConditionalExpression(String posVarName, IASTIdExpression strNode) {
 		IASTIdExpression posVar = ExtendedNodeFactory.newIdExpression(posVarName);
-		IASTExpression condition = ExtendedNodeFactory.newEqualityComparison(posVar, ExtendedNodeFactory.newNposExpression(), false);
+		IASTExpression condition = ExtendedNodeFactory.newEqualityComparison(posVar, ExtendedNodeFactory.newNposExpression(StringType.STRING), false);
 		IASTExpression positive = ExtendedNodeFactory.newAdressOperatorExpression(ExtendedNodeFactory.newArraySubscriptExpression(strNode.copy(), posVar));
 		IASTExpression negative = ExtendedNodeFactory.newIdExpression(Constants.NULLPTR);
 		return ExtendedNodeFactory.newConditionalExpression(condition, positive, negative);

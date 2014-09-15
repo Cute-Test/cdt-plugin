@@ -52,7 +52,7 @@ public class ArgMapping {
 				outArguments.add(ExtendedNodeFactory.newIntegerLiteral(0));
 				break;
 			case NPOS:
-				outArguments.add(ExtendedNodeFactory.newNposExpression());
+				outArguments.add(ExtendedNodeFactory.newNposExpression(context.getStringType()));
 				break;
 			case BEGIN:
 				outArguments.add(ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.BEGIN));

@@ -3,9 +3,11 @@
 #include <cstring>
 #include <iostream>
 int main()  {
-	char a[] = "Apple";
-	char b[] = "Banana";
+	const char* a = "Apple";
+	const char* b = "Banana";
+	std::string c = "Orange";
 	std::cout << strcmp(a,b);
+	std::cout << strcmp(a,c.c_str());
 }
 //=
 #include <cstring>
@@ -13,28 +15,34 @@ int main()  {
 #include <string>
 int main()  {
 	std::string a = "Apple";
-	char b[] = "Banana";
+	const char* b = "Banana";
+	std::string c = "Orange";
 	std::cout << a.compare(b);
+	std::cout << a.compare(c);
 }
 
 
-//!StrcmpFirstArgWithString
+//!WcscmpFirstArg
 //@main.cpp
 #include <cstring>
 #include <iostream>
 int main()  {
-	char a[] = "Apple";
-	std::string b = "Banana";
-	std::cout << strcmp(a,b.c_str());
+	const wchar_t* a = L"Apple";
+	const wchar_t* b = L"Banana";
+	std::wstring c = L"Orange";
+	std::cout << wcscmp(a,b);
+	std::cout << wcscmp(a,c.c_str());
 }
 //=
 #include <cstring>
 #include <iostream>
 #include <string>
 int main()  {
-	std::string a = "Apple";
-	std::string b = "Banana";
+	std::wstring a = L"Apple";
+	const wchar_t* b = L"Banana";
+	std::wstring c = L"Orange";
 	std::cout << a.compare(b);
+	std::cout << a.compare(c);
 }
 
 
@@ -42,7 +50,7 @@ int main()  {
 //@main.cpp
 #include <cstring>
 int main() {
-	char filename[] = "myfile.doc";
+	const char *filename = "myfile.doc";
 	if (strcmp(filename + strlen(filename) - 3, "doc") == 0) {
 		std::cout << "this is a word document" << std::endl;
 	}
@@ -59,6 +67,28 @@ int main() {
 }
 
 
+//!WcscmpFirstArgWithOffset
+//@main.cpp
+#include <cstring>
+int main() {
+	const wchar_t* filename = L"myfile.doc";
+	if (wcscmp(filename + wcslen(filename) - 3, L"doc") == 0) {
+		std::cout << "this is a word document" << std::endl;
+	}
+}
+//=
+#include <cstring>
+#include <string>
+
+int main() {
+	std::wstring filename = L"myfile.doc";
+	if (filename.compare(filename.size() - 3, std::wstring::npos, L"doc")
+			== 0) {
+		std::cout << "this is a word document" << std::endl;
+	}
+}
+
+
 //!StrcmpModifiedPointer
 //@main.cpp
 #include <cstring>
@@ -66,6 +96,7 @@ int main() {
 	const char *str = "hello";
 	str++;
 	int i = strcmp(str, "ello");
+	int j = strcmp(str+2, "lo");
 }
 //=
 #include <cstring>
@@ -75,25 +106,26 @@ int main() {
 	std::string::size_type str_pos = 0;
 	str_pos++;
 	int i = str.compare(str_pos, std::string::npos, "ello");
+	int j = str.compare(str_pos + 2, std::string::npos, "lo");
 }
 
 
-//!StrcmpModifiedPointerWithOffset
+//!WcscmpModifiedPointer
 //@main.cpp
 #include <cstring>
 int main() {
-	const char *str = "hello";
-	str++;
-	int i = strcmp(str + 2, "lo");
+	const wchar_t* wstr = L"hello";
+	wstr++;
+	int i = wcscmp(wstr, L"ello");
 }
 //=
 #include <cstring>
 #include <string>
 int main() {
-	std::string str = "hello";
-	std::string::size_type str_pos = 0;
-	str_pos++;
-	int i = str.compare(str_pos + 2, std::string::npos, "lo");
+	std::wstring wstr = L"hello";
+	std::wstring::size_type wstr_pos = 0;
+	wstr_pos++;
+	int i = wstr.compare(wstr_pos, std::wstring::npos, L"ello");
 }
 
 
@@ -149,6 +181,58 @@ int main()  {
 }
 
 
+//!WcscmpFirstArgStringEqualityCheck1
+//@main.cpp
+#include <cstring>
+int main()  {
+	const wchar_t *wstr1 = L"Hello";
+	const wchar_t *wstr2 = L"Hello";
+	
+	if(!wcscmp(wstr1, wstr2)) {
+		std::cout << "equal";
+	}
+	while(!wcscmp(wstr1, wstr2)) {
+		std::cout << "equal";
+	}
+	for(; !wcscmp(wstr1, wstr2);) {
+		std::cout << "equal";
+	}
+	bool equal1 = !wcscmp(wstr1, wstr2) ? true : false;
+	bool equal2 = !wcscmp(wstr1, wstr2);
+	equal2 = !wcscmp(wstr1, wstr2);
+	bool equal3 = !wcscmp(wstr1, wstr2) || true;
+	bool equal4 = !wcscmp(wstr1, wstr2) && true;
+	do {
+		std::cout << "equal";
+	} while(!wcscmp(wstr1, wstr2));
+}
+//=
+#include <cstring>
+#include <string>
+int main()  {
+	std::wstring wstr1 = L"Hello";
+	const wchar_t *wstr2 = L"Hello";
+	
+	if (wstr1 == wstr2) {
+		std::cout << "equal";
+	}
+	while (wstr1 == wstr2) {
+		std::cout << "equal";
+	}
+	for (; wstr1 == wstr2;) {
+		std::cout << "equal";
+	}
+	bool equal1 = wstr1 == wstr2 ? true : false;
+	bool equal2 = wstr1 == wstr2;
+	equal2 = wstr1 == wstr2;
+	bool equal3 = wstr1 == wstr2 || true;
+	bool equal4 = wstr1 == wstr2 && true;
+	do {
+		std::cout << "equal";
+	} while (wstr1 == wstr2);
+}
+
+
 //!StrcmpSecondArgStringEqualityCheck1
 //@main.cpp
 #include <cstring>
@@ -195,6 +279,55 @@ int main()  {
 	do {
 		std::cout << str << " = Hello" << std::endl;
 	} while (str == "Hello");
+}
+
+
+//!WcscmpSecondArgStringEqualityCheck1
+//@main.cpp
+#include <cstring>
+int main()  {
+	const wchar_t *wstr = L"Hello";
+	
+	if(!wcscmp(L"Hello", wstr)) {
+		std::cout << "equal";
+	}
+	while(!wcscmp(L"Hello", wstr)) {
+		std::cout << "equal";
+	}
+	for(; !wcscmp(L"Hello", wstr);) {
+		std::cout << "equal";
+	}
+	bool equal1 = !wcscmp(L"Hello", wstr) ? true : false;
+	bool equal2 = !wcscmp(L"Hello", wstr);
+	equal2 = !wcscmp(L"Hello", wstr);
+	bool equal3 = !wcscmp(L"Hello", wstr) || true;
+	bool equal4 = !wcscmp(L"Hello", wstr) && true;
+	do {
+		std::cout << "equal";
+	} while(!wcscmp(L"Hello", wstr));
+}
+//=
+#include <cstring>
+#include <string>
+int main()  {
+	std::wstring wstr = L"Hello";
+	if (wstr == L"Hello") {
+		std::cout << "equal";
+	}
+	while (wstr == L"Hello") {
+		std::cout << "equal";
+	}
+	for (; wstr == L"Hello";) {
+		std::cout << "equal";
+	}
+	bool equal1 = wstr == L"Hello" ? true : false;
+	bool equal2 = wstr == L"Hello";
+	equal2 = wstr == L"Hello";
+	bool equal3 = wstr == L"Hello" || true;
+	bool equal4 = wstr == L"Hello" && true;
+	do {
+		std::cout << "equal";
+	} while (wstr == L"Hello");
 }
 
 
@@ -247,6 +380,58 @@ int main()  {
 	do {
 		std::cout << str1 << " = " << str2 << std::endl;
 	} while (str1 == str2);
+}
+
+
+//!WcscmpFirstArgStringEqualityCheck2
+//@main.cpp
+#include <cstring>
+int main()  {
+	const wchar_t *wstr1 = L"Hello";
+	const wchar_t *wstr2 = L"Hello";
+	
+	if(wcscmp(wstr1, wstr2) == 0) {
+		std::cout << "equal";
+	}
+	while(wcscmp(wstr1, wstr2) == 0) {
+		std::cout << "equal";
+	}
+	for(; wcscmp(wstr1, wstr2) == 0;) {
+		std::cout << "equal";
+	}
+	bool equal1 = wcscmp(wstr1, wstr2) == 0 ? true : false;
+	bool equal2 = wcscmp(wstr1, wstr2) == 0;
+	equal2 = wcscmp(wstr1, wstr2) == 0;
+	bool equal3 = wcscmp(wstr1, wstr2) == 0 || true;
+	bool equal4 = wcscmp(wstr1, wstr2) == 0 && true;
+	do {
+		std::cout << "equal";
+	} while(wcscmp(wstr1, wstr2) == 0);
+}
+//=
+#include <cstring>
+#include <string>
+int main()  {
+	std::wstring wstr1 = L"Hello";
+	const wchar_t *wstr2 = L"Hello";
+	
+	if (wstr1 == wstr2) {
+		std::cout << "equal";
+	}
+	while (wstr1 == wstr2) {
+		std::cout << "equal";
+	}
+	for (; wstr1 == wstr2;) {
+		std::cout << "equal";
+	}
+	bool equal1 = wstr1 == wstr2 ? true : false;
+	bool equal2 = wstr1 == wstr2;
+	equal2 = wstr1 == wstr2;
+	bool equal3 = wstr1 == wstr2 || true;
+	bool equal4 = wstr1 == wstr2 && true;
+	do {
+		std::cout << "equal";
+	} while (wstr1 == wstr2);
 }
 
 
@@ -453,6 +638,62 @@ int main()  {
 	do {
 		std::cout << str1 << " != " << str2 << std::endl;
 	} while (str1 != str2);
+}
+
+
+//!WcscmpFirstArgStringInequalityCheck1
+//@main.cpp
+#include <cstring>
+int main()  {
+	const wchar_t *wstr1 = L"Hello";
+	const wchar_t *wstr2 = L"Hallo";
+	
+	if(wcscmp(wstr1, wstr2)) {
+		std::cout << "not equal" << std::endl;
+	}
+	while(wcscmp(wstr1, wstr2)) {
+		std::cout << "not equal" << std::endl;
+	}
+	for(; wcscmp(wstr1, wstr2);) {
+		std::cout << "not equal" << std::endl;
+	}
+	int result = wcscmp(wstr1, wstr2);
+	result = wcscmp(wstr1, wstr2);
+	bool not_equal1 = wcscmp(wstr1, wstr2) ? true : false;
+	bool not_equal2 = wcscmp(wstr1, wstr2);
+	not_equal2 = wcscmp(wstr1, wstr2);
+	bool not_equal3 = wcscmp(wstr1, wstr2) || true;
+	bool not_equal4 = wcscmp(wstr1, wstr2) && true;
+	do {
+		std::cout << "not equal" << std::endl;
+	} while(wcscmp(wstr1, wstr2));
+}
+//=
+#include <cstring>
+#include <string>
+int main()  {
+	std::wstring wstr1 = L"Hello";
+	const wchar_t *wstr2 = L"Hallo";
+	
+	if (wstr1 != wstr2) {
+		std::cout << "not equal" << std::endl;
+	}
+	while (wstr1 != wstr2) {
+		std::cout << "not equal" << std::endl;
+	}
+	for (; wstr1 != wstr2;) {
+		std::cout << "not equal" << std::endl;
+	}
+	int result = wstr1.compare(wstr2);
+	result = wstr1.compare(wstr2);
+	bool not_equal1 = wstr1 != wstr2 ? true : false;
+	bool not_equal2 = wstr1 != wstr2;
+	not_equal2 = wstr1 != wstr2;
+	bool not_equal3 = wstr1 != wstr2 || true;
+	bool not_equal4 = wstr1 != wstr2 && true;
+	do {
+		std::cout << "not equal" << std::endl;
+	} while (wstr1 != wstr2);
 }
 
 
@@ -717,7 +958,7 @@ int main()  {
 #include <iostream>
 int main()  {
 	std::string a = "Apple";
-	char b[] = "Banana";
+	const char *b = "Banana";
 	std::cout << strcmp(a.c_str(),b);
 }
 //=
@@ -737,7 +978,7 @@ int main()  {
 #include <iostream>
 int main()  {
 	std::string a = "Apple";
-	char b[] = "Banana";
+	const char *b = "Banana";
 	std::cout << a.compare(b);
 }
 //=

@@ -66,6 +66,74 @@ int main(){
 }
 
 
+//!WcschrChecksIfNotNull1
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t *wstr = L"abcd";
+	if(wcschr(wstr+5, L'c')) {
+		std::cout << "contains";
+	}
+	if(wcschr(wstr, L'c')) {
+		std::cout << "contains";
+	}
+	while(wcschr(wstr, L'c')) {
+		std::cout << "contains";
+	}
+	for(; wcschr(wstr, L'c');) {
+		std::cout << "contains";
+	}
+	const wchar_t* ptr = wcschr(wstr, L'c') ? wcschr(wstr, L'c') : wstr;
+	const wchar_t* x = wcschr(wstr, L'c');
+	x = wcschr(wstr, L'c');
+	bool y = wcschr(wstr, L'c');
+	y = wcschr(wstr, L'c');
+	bool z1 = wcschr(wstr, L'c') || true;
+	bool z2 = wcschr(wstr, L'c') && true;
+	do {
+		std::cout << "contains";
+	} while(wcschr(wstr, L'c'));
+	
+	int index = wcschr(wstr, L'c') - wstr;
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring wstr = L"abcd";
+	if (wstr.find(L'c', 5) != std::wstring::npos) {
+		std::cout << "contains";
+	}
+	if (wstr.find(L'c') != std::wstring::npos) {
+		std::cout << "contains";
+	}
+	while (wstr.find(L'c') != std::wstring::npos) {
+		std::cout << "contains";
+	}
+	for (; wstr.find(L'c') != std::wstring::npos;) {
+		std::cout << "contains";
+	}
+	const wchar_t* ptr =
+			wstr.find(L'c') != std::wstring::npos ?
+					wcschr(wstr.c_str(), L'c') : wstr.c_str();
+	const wchar_t* x = wcschr(wstr.c_str(), L'c');
+	x = wcschr(wstr.c_str(), L'c');
+	bool y = wstr.find(L'c') != std::wstring::npos;
+	y = wstr.find(L'c') != std::wstring::npos;
+	bool z1 = wstr.find(L'c') != std::wstring::npos || true;
+	bool z2 = wstr.find(L'c') != std::wstring::npos && true;
+	do {
+		std::cout << "contains";
+	} while (wstr.find(L'c') != std::wstring::npos);
+	
+	int index = wcschr(wstr.c_str(), L'c') - wstr.c_str();
+}
+
+
 //!StrchrChecksIfNotNull2
 //@main.cpp
 #include <cstring>
@@ -285,6 +353,60 @@ int main(){
 	do {
 		std::cout << mail;
 	} while (mail.find('@') == std::string::npos);
+}
+
+
+//!WcschrChecksIfNull1
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t* mail = L"admin@web.com";
+	if(!wcschr(mail, L'@')) {
+		std::cout << "not contained";
+	}
+	while(!wcschr(mail, L'@')) {
+		std::cout << "not contained";
+	}
+	for(; !wcschr(mail, L'@');) {
+		std::cout << "not contained";
+	}
+	const wchar_t* ptr = !wcschr(mail, L'@') ? wcschr(mail, L'@') : mail;
+	bool y = !wcschr(mail, L'@');
+	y = !wcschr(mail, L'@');
+	bool z1 = !wcschr(mail, L'@') || true;
+	bool z2 = !wcschr(mail, L'@') && true;
+	do {
+		std::cout << "not contained";
+	} while(!wcschr(mail, L'@'));
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring mail = L"admin@web.com";
+	if (mail.find(L'@') == std::wstring::npos) {
+		std::cout << "not contained";
+	}
+	while (mail.find(L'@') == std::wstring::npos) {
+		std::cout << "not contained";
+	}
+	for (; mail.find(L'@') == std::wstring::npos;) {
+		std::cout << "not contained";
+	}
+	const wchar_t* ptr =
+			mail.find(L'@') == std::wstring::npos ?
+					wcschr(mail.c_str(), L'@') : mail.c_str();
+	bool y = mail.find(L'@') == std::wstring::npos;
+	y = mail.find(L'@') == std::wstring::npos;
+	bool z1 = mail.find(L'@') == std::wstring::npos || true;
+	bool z2 = mail.find(L'@') == std::wstring::npos && true;
+	do {
+		std::cout << "not contained";
+	} while (mail.find(L'@') == std::wstring::npos);
 }
 
 
@@ -575,6 +697,33 @@ int main(){
 	std::string mail = "admin@web.com";
 	std::string::size_type mail_pos = 0;
 	while (mail.find('@', mail_pos) != std::string::npos) {
+		mail_pos++;
+	}
+	std::cout << (mail.c_str() + mail_pos) << std::endl;
+}
+
+
+//!WschrChecksWithModifiedPointer
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t *mail = L"admin@web.com";
+	while(wcschr(mail, L'@') != NULL) {
+		mail++;
+	}
+	std::cout << mail << std::endl;
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring mail = L"admin@web.com";
+	std::wstring::size_type mail_pos = 0;
+	while (mail.find(L'@', mail_pos) != std::wstring::npos) {
 		mail_pos++;
 	}
 	std::cout << (mail.c_str() + mail_pos) << std::endl;

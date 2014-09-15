@@ -25,13 +25,13 @@ public class OperatorRefactoring extends Refactoring {
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
 		String outFunctionName = outFunction.getName();
-		boolean isStrcmp = (inFunction == Function.STRCMP);
-		boolean isOther = !isStrcmp && ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
-		boolean isStringEqualityCheck = isStrcmp && outFunctionName.equals(StdString.OP_EQUALS) && ASTAnalyzer.isPartOfStringEqualityCheck(idExpression); 
-		boolean isStringInequalityCheck = isStrcmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && ASTAnalyzer.isPartOfStringInequalityCheck(idExpression);
+		boolean isStrcmpOrWcscmp = (inFunction == Function.STRCMP) || (inFunction == Function.WCSCMP);
+		boolean isOther = !isStrcmpOrWcscmp && ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
+		boolean isStringEqualityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_EQUALS) && ASTAnalyzer.isPartOfStringEqualityCheck(idExpression); 
+		boolean isStringInequalityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && ASTAnalyzer.isPartOfStringInequalityCheck(idExpression);
 		
 		if(!context.isOffset(idExpression) && (isOther || isStringEqualityCheck || isStringInequalityCheck)) {
-			IASTNode nodeToReplace = isStrcmp ? ASTAnalyzer.getEnclosingBoolean(idExpression) : idExpression.getParent();
+			IASTNode nodeToReplace = isStrcmpOrWcscmp ? ASTAnalyzer.getEnclosingBoolean(idExpression) : idExpression.getParent();
 			isApplicable = true;
 			config.put(NODE_TO_REPLACE, nodeToReplace);
 		}

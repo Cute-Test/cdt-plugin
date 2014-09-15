@@ -95,7 +95,7 @@ public class ComparisonRefactoring extends Refactoring {
 		IASTExpression sentinel = null;
 		
 		if(outFunctionSentinel == Sentinel.NPOS) {
-			sentinel = ExtendedNodeFactory.newNposExpression();
+			sentinel = ExtendedNodeFactory.newNposExpression(context.getStringType());
 		}
 		else if(outFunctionSentinel == Sentinel.END) {
 			IASTNode outArguments[] = getOutArguments(idExpression, context);

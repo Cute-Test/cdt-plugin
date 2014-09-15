@@ -6,10 +6,11 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 
 public class StringType {
-	public final static StringType STRING = new StringType(StdString.STRING_SIZE_TYPE);
-	public final static StringType WSTRING = new StringType(StdString.WSTRING_SIZE_TYPE);
+	public final static StringType STRING = new StringType(StdString.STRING, StdString.STRING_SIZE_TYPE);
+	public final static StringType WSTRING = new StringType(StdString.WSTRING, StdString.WSTRING_SIZE_TYPE);
 	
 	private String sizeType;
+	private String className;
 	
 	public static StringType createFromDeclSpecifier(IASTDeclSpecifier declSpecifier) {
 		if(declSpecifier instanceof IASTSimpleDeclSpecifier) {
@@ -21,8 +22,13 @@ public class StringType {
 		return STRING;
 	}
 	
-	private StringType(String sizeType) {
+	private StringType(String className, String sizeType) {
+		this.className = className;
 		this.sizeType = sizeType;
+	}
+	
+	public String getClassName() {
+		return className;
 	}
 	
 	public String getSizeType() {

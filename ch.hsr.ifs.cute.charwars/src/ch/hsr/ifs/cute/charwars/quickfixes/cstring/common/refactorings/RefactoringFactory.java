@@ -9,26 +9,40 @@ public class RefactoringFactory {
 			//various -> see ExpressionRefactoring class
 			new ExpressionRefactoring(ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 
-			//strcpy(a, b) -> a = b
+			//strcpy(str, b) -> str = b
 			new OperatorRefactoring(Function.STRCPY, Function.OP_ASSIGNMENT, ContextState.CString),
 			
-			//strcat(a, b) -> a +=b
+			//strcat(str, b) -> str +=b
 			new OperatorRefactoring(Function.STRCAT, Function.OP_PLUS_ASSIGNMENT, ContextState.CString),
 			
-			//strcmp(a, b) == 0 -> a == b
+			//strcmp(str, b) == 0 -> str == b
 			new OperatorRefactoring(Function.STRCMP, Function.OP_EQUALS, ContextState.CString),
 			
-			//strcmp(a, b) != 0 -> a != b
+			//wcscmp(wstr, b) == 0 -> wstr == b
+			new OperatorRefactoring(Function.WCSCMP, Function.OP_EQUALS, ContextState.CString),
+			
+			//strcmp(str, b) != 0 -> str != b
 			new OperatorRefactoring(Function.STRCMP, Function.OP_NOT_EQUALS, ContextState.CString),
+			
+			//wcscmp(wstr, b) != 0 -> wstr != b
+			new OperatorRefactoring(Function.WCSCMP, Function.OP_NOT_EQUALS, ContextState.CString),
 
-			//strchr(a,b) == NULL -> a.find(b) == std::string::npos
+			//strchr(str,b) == NULL -> str.find(b) == std::string::npos
 			new ComparisonRefactoring(Function.STRCHR, Function.FIND, new ArgMapping(Arg.ARG_1), ContextState.CString),
+			
+			//wcschr(wstr,b) == NULL -> wstr.find(b) == std::wstring::npos
+			new ComparisonRefactoring(Function.WCSCHR, Function.FIND, new ArgMapping(Arg.ARG_1), ContextState.CString),
 						
 			//explicit offset: strchr(str+off,b) == NULL -> str.find(b, off) == std::string::npos
 			//implicit offset: strchr(str, b) == NULL -> str.find(b, str_pos) == std::string::npos
 			//alias: strchr(alias, b) == NULL -> str.find(b, alias) == std::string::npos
 			new ComparisonRefactoring(Function.STRCHR, Function.FIND, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 						
+			//explicit offset: wcschr(wstr+off,b) == NULL -> wstr.find(b, off) == std::wstring::npos
+			//implicit offset: wcschr(wstr, b) == NULL -> wstr.find(b, wstr_pos) == std::wstring::npos
+			//alias: wcschr(alias, b) == NULL -> wstr.find(b, alias) == std::wstring::npos
+			new ComparisonRefactoring(Function.WCSCHR, Function.FIND, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
+			
 			//strpbrk(a,b) == NULL -> a.find_first_of(b) == std::string::npos
 			new ComparisonRefactoring(Function.STRPBRK, Function.FIND_FIRST_OF, new ArgMapping(Arg.ARG_1), ContextState.CString),
 						
@@ -89,13 +103,21 @@ public class RefactoringFactory {
 			//memmove(a+off, b, n) -> a.replace(off, n, b, 0, n)
 			new FunctionRefactoring(Function.MEMMOVE, Function.REPLACE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified),
 				
-			//strcmp(a,b) -> a.compare(b)
+			//strcmp(str,b) -> str.compare(b)
 			new FunctionRefactoring(Function.STRCMP, Function.COMPARE, new ArgMapping(Arg.ARG_1), ContextState.CString),
+			
+			//wcscmp(wstr,b) -> wstr.compare(b)
+			new FunctionRefactoring(Function.WCSCMP, Function.COMPARE, new ArgMapping(Arg.ARG_1), ContextState.CString),
 				
 			//explicit offset: strcmp(str+off, b) -> str.compare(off, std::string::npos, b)
 			//implicit offset: strcmp(str, b) -> str.compare(str_pos, std::string::npos, b)
 			//alias: strcmp(alias, b) -> str.compare(alias, std::string::npos, b)
 			new FunctionRefactoring(Function.STRCMP, Function.COMPARE, new ArgMapping(Arg.OFF_0, Arg.NPOS, Arg.ARG_1), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
+			
+			//explicit offset: wcscmp(wstr+off, b) -> wstr.compare(off, std::string::npos, b)
+			//implicit offset: wcscmp(wstr, b) -> wstr.compare(wstr_pos, std::string::npos, b)
+			//alias: wcscmp(alias, b) -> wstr.compare(alias, std::string::npos, b)
+			new FunctionRefactoring(Function.WCSCMP, Function.COMPARE, new ArgMapping(Arg.OFF_0, Arg.NPOS, Arg.ARG_1), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 
 			//explicit offset: strncmp(str+off, b, n) -> str.compare(off, n, b, 0, n)
 			//implicit offset: strncmp(str, b, n) -> str.compare(str_pos, n, b, 0, n)

@@ -7,4 +7,6 @@ public class CWchar {
 	
 	//functions
 	public final static String WCSLEN = "wcslen";
+	public final static String WCSCMP = "wcscmp";
+	public final static String WCSCHR = "wcschr";
 }
