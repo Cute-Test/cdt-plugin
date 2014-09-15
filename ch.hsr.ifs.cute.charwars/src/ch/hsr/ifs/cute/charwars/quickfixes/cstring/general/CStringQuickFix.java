@@ -30,6 +30,7 @@ import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
 
 public class CStringQuickFix extends BaseQuickFix {
 	@Override
@@ -82,7 +83,8 @@ public class CStringQuickFix extends BaseQuickFix {
 			stringName = variableToRefactor.toString();
 		}
 		
-		BlockRefactoring blockRefactoring = new BlockRefactoring(rewrite, stringName, variableToRefactor, block, oldDeclarationStatement, isAlias);
+		StringType stringType = StringType.createFromDeclSpecifier(oldDeclaration.getDeclSpecifier());
+		BlockRefactoring blockRefactoring = new BlockRefactoring(rewrite, stringName, variableToRefactor, block, oldDeclarationStatement, isAlias, stringType);
 		blockRefactoring.refactorAllStatements();
 		
 		headers.addAll(blockRefactoring.getHeadersToInclude());
@@ -124,7 +126,7 @@ public class CStringQuickFix extends BaseQuickFix {
 		}
 		else {
 			String name = declarator.getName().toString();
-			return ExtendedNodeFactory.newDeclarationStatement(StdString.SIZE_TYPE, name, ExtendedNodeFactory.newIntegerLiteral(0));
+			return ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, name, ExtendedNodeFactory.newIntegerLiteral(0));
 		}
 	}
 	

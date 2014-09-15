@@ -73,3 +73,25 @@ int main() {
 		ptr++;
 	}
 }
+
+
+//!CStringAlias4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "hello world";
+	const char* ptr = str.c_str();
+	std::cout << strlen(ptr) << std::endl;
+	ptr++;
+	std::cout << strlen(ptr) << std::endl;
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "hello world";
+	std::string::size_type ptr = 0;
+	std::cout << (str.size() - ptr) << std::endl;
+	ptr++;
+	std::cout << (str.size() - ptr) << std::endl;
+}

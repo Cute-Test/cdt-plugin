@@ -149,7 +149,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 
 	private void performNormalRefactoringPtrReturnType(IASTStatement oldStatement, IASTFunctionCallExpression functionCall, IASTFunctionCallExpression searchCall, ASTRewrite rewrite, IASTIdExpression str) {
 		String posVarName = getPosVarName(functionCall);
-		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.SIZE_TYPE, posVarName, searchCall);
+		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, posVarName, searchCall);
 		IASTConditionalExpression conditionalExpression = newConditionalExpression(posVarName, str);
 		
 		if(oldStatement.getParent() instanceof IASTIfStatement) {
@@ -167,7 +167,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 
 	private void performOptimizedRefactoringPtrReturnType(IASTStatement oldStatement, IASTFunctionCallExpression functionCall, IASTFunctionCallExpression searchCall, ASTRewrite rewrite, IASTIdExpression str) {
 		String posVarName = getPosVarName(functionCall);
-		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.SIZE_TYPE, posVarName, searchCall);
+		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, posVarName, searchCall);
 		IASTNode block = ASTAnalyzer.getEnclosingBlock(oldStatement);
 		IASTName name = ((IASTDeclarator)functionCall.getParent().getParent()).getName();
 		PtrReturnValueVisitor visitor = new PtrReturnValueVisitor(name, rewrite, posVarName, str.copy());
@@ -180,7 +180,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 
 	private void performOptimizedRefactoringSizeReturnType(IASTStatement oldStatement, IASTFunctionCallExpression functionCall, IASTFunctionCallExpression searchCall, ASTRewrite rewrite) {
 		String resultVarName = getResultVarName(functionCall);
-		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.SIZE_TYPE, resultVarName, searchCall);
+		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, resultVarName, searchCall);
 		ASTModifier.replace(oldStatement, posVarDS, rewrite);
 		
 		IASTNode block = ASTAnalyzer.getEnclosingBlock(oldStatement);

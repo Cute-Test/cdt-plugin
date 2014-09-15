@@ -27,6 +27,7 @@ import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.IndexFinderInstruction;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public abstract class RewriteStrategy {
@@ -97,7 +98,8 @@ public abstract class RewriteStrategy {
 		//ASTModifier.insertBefore(stdStringOverloadBody, stdStringOverloadBody., ExtendedNodeFactory.factory.newExpressionStatement(null), subrewrite);
 		
 		//adapt variable occurrences
-		BlockRefactoring blockRefactoring = new BlockRefactoring(subrewrite, strName.toString(), strName, stdStringOverloadBody, null, false);
+		StringType stringType = StringType.createFromDeclSpecifier(strParameter.getDeclSpecifier());
+		BlockRefactoring blockRefactoring = new BlockRefactoring(subrewrite, strName.toString(), strName, stdStringOverloadBody, null, false, stringType);
 		blockRefactoring.refactorAllStatements();
 		return subrewrite;
 	}

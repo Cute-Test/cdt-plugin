@@ -6,6 +6,7 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.ArgMappin
 public class RefactoringFactory {
 	public static Refactoring[] createRefactorings() {
 		return new Refactoring[] {
+			//various -> see ExpressionRefactoring class
 			new ExpressionRefactoring(ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 
 			//strcpy(a, b) -> a = b
@@ -64,11 +65,14 @@ public class RefactoringFactory {
 				
 			//strlen(str+off) -> (str.size() - off)
 			//strlen(str) -> (str.size() - str_pos)
-			new FunctionRefactoring(Function.STRLEN, Function.SIZE, new ArgMapping(), ContextState.CString, ContextState.CStringModified),
+			new FunctionRefactoring(Function.STRLEN, Function.SIZE, new ArgMapping(), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 				
 			//wcslen(wstr) -> wstr.size()
-			//todo: if modified: wcslen(wstr) -> (wstr.size() - wstr_pos)
 			new FunctionRefactoring(Function.WCSLEN, Function.SIZE, new ArgMapping(), ContextState.CString),
+			
+			//wcslen(wstr+off) -> (wstr.size() - off)
+			//wcslen(wstr) -> (wstr.size() - wstr_pos)
+			new FunctionRefactoring(Function.WCSLEN, Function.SIZE, new ArgMapping(), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 				
 			//memcmp(a+off, b, n) -> a.compare(off, n, b, 0, n)
 			//memcmp(a, b, n) -> a.compare(a_pos, n, b, 0, n)
@@ -145,8 +149,10 @@ public class RefactoringFactory {
 			//free(str) -> <gets removed>
 			new RemoveStatementRefactoring(Function.FREE, ContextState.CString),
 			
+			//various -> see NullRefactoring class
 			new NullRefactoring(ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 			
+			//various -> see DefaultRefactoring class
 			new DefaultRefactoring(ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias)
 		};	
 	}

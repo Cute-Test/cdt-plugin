@@ -1,7 +1,7 @@
 //!StrlenReplacement1
 //@main.cpp
 int main() {
-	char *str = "Hello World";
+	const char *str = "Hello World";
 	std::cout << strlen(str) << std::endl;
 }
 //=
@@ -16,7 +16,7 @@ int main() {
 //!StrlenReplacement2
 //@main.cpp
 int main() {
-	char *str = "Hello World";
+	const char *str = "Hello World";
 	str++;
 	std::cout << strlen(str) << std::endl;
 }
@@ -34,7 +34,7 @@ int main() {
 //!StrlenReplacement3
 //@main.cpp
 int main() {
-	char *str = "Hello World";
+	const char *str = "Hello World";
 	std::cout << strlen(str+6) << std::endl;
 }
 //=
@@ -46,18 +46,49 @@ int main() {
 }
 
 
-//!WcslenReplacement
+//!WcslenReplacement1
 //@main.cpp
 int main() {
-	wchar_t w_str[] = L"Hello";
-	std::cout << wcslen(w_str) << std::endl;
+	wchar_t wstr[] = L"Hello World";
+	std::cout << wcslen(wstr) << std::endl;
+}
+//=
+#include <string>
+int main() {
+	std::wstring wstr = L"Hello World";
+	std::cout << wstr.size() << std::endl;
+}
+
+
+//!WcslenReplacement2
+//@main.cpp
+int main() {
+	const wchar_t *wstr = L"Hello World";
+	wstr++;
+	std::cout << wcslen(wstr) << std::endl;
+}
+//=
+#include <string>
+int main() {
+	std::wstring wstr = L"Hello World";
+	std::wstring::size_type wstr_pos = 0;
+	wstr_pos++;
+	std::cout << (wstr.size() - wstr_pos) << std::endl;
+}
+
+
+//!WcslenReplacement3
+//@main.cpp
+int main() {
+	const wchar_t *wstr = L"Hello World";
+	std::cout << wcslen(wstr+6) << std::endl;
 }
 //=
 
 #include <string>
 int main() {
-	std::wstring w_str = L"Hello";
-	std::cout << w_str.size() << std::endl;
+	std::wstring wstr = L"Hello World";
+	std::cout << (wstr.size() - 6) << std::endl;
 }
 
 

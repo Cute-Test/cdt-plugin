@@ -21,12 +21,14 @@ public class Context {
 	private String stringVarName;
 	private String offsetVarName;
 	private IASTStatement firstAffectedStatement;
+	private StringType stringType;
 	
-	public Context(ContextState contextState, String stringVarName, String offsetVarName, IASTStatement firstAffectedStatement) {
+	public Context(ContextState contextState, String stringVarName, String offsetVarName, IASTStatement firstAffectedStatement, StringType stringType) {
 		this.contextState = contextState;
 		this.stringVarName = stringVarName;
 		this.offsetVarName = offsetVarName;
 		this.firstAffectedStatement = firstAffectedStatement;
+		this.stringType = stringType;
 	}
 	
 	public boolean isOffset(IASTIdExpression idExpression) {
@@ -61,5 +63,9 @@ public class Context {
 	
 	public IASTIdExpression createOffsetVarIdExpression() {
 		return ExtendedNodeFactory.newIdExpression(offsetVarName);
+	}
+	
+	public StringType getStringType() {
+		return stringType;
 	}
 }

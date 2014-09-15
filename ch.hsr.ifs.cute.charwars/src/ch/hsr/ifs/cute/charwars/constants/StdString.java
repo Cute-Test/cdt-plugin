@@ -41,7 +41,8 @@ public final class StdString {
 	public final static String STOD = "stod";
 	
 	//types
-	public final static String SIZE_TYPE = "std::string::size_type";
+	public final static String STRING_SIZE_TYPE = "std::string::size_type";
+	public final static String WSTRING_SIZE_TYPE = "std::wstring::size_type";
 	
 	//constants
 	public final static String NPOS = "npos";
