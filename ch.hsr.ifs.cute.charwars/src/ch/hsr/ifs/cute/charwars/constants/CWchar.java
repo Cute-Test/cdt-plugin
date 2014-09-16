@@ -9,4 +9,6 @@ public class CWchar {
 	public final static String WCSLEN = "wcslen";
 	public final static String WCSCMP = "wcscmp";
 	public final static String WCSCHR = "wcschr";
+	public final static String WCSSTR = "wcsstr";
+	public final static String WCSPBRK = "wcspbrk";
 }

@@ -23,7 +23,9 @@ public class Function {
 	public final static Function STRSPN = createFunction(CString.STRSPN, Sentinel.STRLEN, CString.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRCSPN = createFunction(CString.STRCSPN, Sentinel.STRLEN, CString.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRPBRK = createFunction(CString.STRPBRK, Sentinel.NULL, CString.HEADER_NAME, Constants.STD_PREFIX);
+	public final static Function WCSPBRK = createFunction(CWchar.WCSPBRK, Sentinel.NULL, CWchar.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function STRSTR = createFunction(CString.STRSTR, Sentinel.NULL, CString.HEADER_NAME, Constants.STD_PREFIX);
+	public final static Function WCSSTR = createFunction(CWchar.WCSSTR, Sentinel.NULL, CWchar.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function MEMCHR = createFunction(CString.MEMCHR, Sentinel.NULL, CString.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function MEMCMP = createFunction(CString.MEMCMP, Sentinel.NO_SENTINEL, CString.HEADER_NAME, Constants.STD_PREFIX);
 	public final static Function MEMCPY = createFunction(CString.MEMCPY, Sentinel.NO_SENTINEL, CString.HEADER_NAME, Constants.STD_PREFIX);

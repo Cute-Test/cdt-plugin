@@ -2,6 +2,8 @@ package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -87,7 +89,7 @@ public class BlockRefactoring  {
 	
 	private boolean modifiesCharPointer(IASTStatement statement) {
 		List<IASTIdExpression> occurrences = new ArrayList<IASTIdExpression>(); 
-		findStringOccurrencesInSubtree(statement, occurrences);
+		collectStringOccurrencesInSubtree(statement, occurrences);
 		
 		for(IASTIdExpression occurrence : occurrences) {
 			if(ASTAnalyzer.modifiesCharPointer(occurrence)) {
@@ -102,7 +104,8 @@ public class BlockRefactoring  {
 		IASTStatement newStatement = statement.copy(CopyStyle.withLocations);
 		
 		List<IASTIdExpression> stringOccurrences = new ArrayList<IASTIdExpression>();
-		findStringOccurrencesInSubtree(newStatement, stringOccurrences);
+		collectStringOccurrencesInSubtree(newStatement, stringOccurrences);
+		sortStringOccurrences(stringOccurrences);
 		
 		ASTChangeDescription changeDescription = new ASTChangeDescription();
 		refactorStringOccurrences(stringOccurrences, changeDescription, context);
@@ -140,7 +143,7 @@ public class BlockRefactoring  {
 		}
 	}
 	
-	private void findStringOccurrencesInSubtree(IASTNode subtree, List<IASTIdExpression> stringOccurrences) {
+	private void collectStringOccurrencesInSubtree(IASTNode subtree, List<IASTIdExpression> stringOccurrences) {
 		if(subtree instanceof IASTIdExpression) {
 			IASTIdExpression copiedIdExpression = (IASTIdExpression)subtree;
 			IASTIdExpression originalIdExpression = (IASTIdExpression)copiedIdExpression.getOriginalNode();
@@ -153,23 +156,24 @@ public class BlockRefactoring  {
 		else  {
 			for(IASTNode child : subtree.getChildren()) {
 				if(!(child instanceof IASTStatement)) {
-					findStringOccurrencesInSubtree(child, stringOccurrences);
+					collectStringOccurrencesInSubtree(child, stringOccurrences);
 				}
 			}
 		}
 	}
 	
-	private void refactorStringOccurrences(List<IASTIdExpression> stringOccurrences, ASTChangeDescription changeDescription, Context context) {
-		List<IASTIdExpression> occurrences = new ArrayList<IASTIdExpression>(stringOccurrences);
-		while(!occurrences.isEmpty()) {
-			IASTIdExpression deepestNode = occurrences.get(0);
-			for(IASTIdExpression occurrence : occurrences) {
-				if(getDepth(occurrence) > getDepth(deepestNode)) {
-					deepestNode = occurrence;
-				}
+	private void sortStringOccurrences(List<IASTIdExpression> stringOccurrences) {
+		Collections.sort(stringOccurrences, new Comparator<IASTIdExpression>() {
+			@Override
+			public int compare(IASTIdExpression o1, IASTIdExpression o2) {
+				return getDepth(o2) - getDepth(o1);
 			}
-			occurrences.remove(deepestNode);
-			refactorStringOccurrence(deepestNode, changeDescription, context);
+		});
+	}
+	
+	private void refactorStringOccurrences(List<IASTIdExpression> stringOccurrences, ASTChangeDescription changeDescription, Context context) {
+		for(IASTIdExpression occurrence : stringOccurrences) {
+			refactorStringOccurrence(occurrence, changeDescription, context);
 		}
 		headersToInclude.addAll(changeDescription.getHeadersToInclude());
 	} 

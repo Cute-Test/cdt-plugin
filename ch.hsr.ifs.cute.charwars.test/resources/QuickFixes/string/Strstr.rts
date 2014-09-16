@@ -60,6 +60,68 @@ int main(){
 }
 
 
+//!WcsstrChecksIfNotNull1
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t* mail = L"admin@web.com";
+	if(wcsstr(mail, L"@")) {
+		std::cout << "found it";
+	}
+	while(wcsstr(mail, L"@")) {
+		std::cout << "found it";
+	}
+	for(; wcsstr(mail, L"@");) {
+		std::cout << "found it";
+	}
+	const wchar_t* ptr = wcsstr(mail, L"@") ? wcsstr(mail, L"@") : mail;
+	const wchar_t* x = wcsstr(mail, L"@");
+	x = wcsstr(mail, L"@");
+	bool y = wcsstr(mail, L"@");
+	y = wcsstr(mail, L"@");
+	bool z1 = wcsstr(mail, L"@") || true;
+	bool z2 = wcsstr(mail, L"@") && true;
+	do {
+		std::cout << "found it";
+	} while(wcsstr(mail, L"@"));
+	
+	int index = wcsstr(mail, L"@") - mail;
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring mail = L"admin@web.com";
+	if (mail.find(L"@") != std::wstring::npos) {
+		std::cout << "found it";
+	}
+	while (mail.find(L"@") != std::wstring::npos) {
+		std::cout << "found it";
+	}
+	for (; mail.find(L"@") != std::wstring::npos;) {
+		std::cout << "found it";
+	}
+	const wchar_t* ptr =
+			mail.find(L"@") != std::wstring::npos ?
+					wcsstr(mail.c_str(), L"@") : mail.c_str();
+	const wchar_t* x = wcsstr(mail.c_str(), L"@");
+	x = wcsstr(mail.c_str(), L"@");
+	bool y = mail.find(L"@") != std::wstring::npos;
+	y = mail.find(L"@") != std::wstring::npos;
+	bool z1 = mail.find(L"@") != std::wstring::npos || true;
+	bool z2 = mail.find(L"@") != std::wstring::npos && true;
+	do {
+		std::cout << "found it";
+	} while (mail.find(L"@") != std::wstring::npos);
+	
+	int index = wcsstr(mail.c_str(), L"@") - mail.c_str();
+}
+
+
 //!StrstrChecksIfNotNull2
 //@main.cpp
 #include <cstring>
@@ -297,6 +359,60 @@ int main(){
 	do {
 		std::cout << mail;
 	} while (mail.find("@") == std::string::npos);
+}
+
+
+//!WcsstrChecksIfNull1
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t* mail = L"admin@web.com";
+	if(!wcsstr(mail, L"@")) {
+		std::cout << "not found";
+	}
+	while(!wcsstr(mail, L"@")) {
+		std::cout << "not found";
+	}
+	for(; !wcsstr(mail, L"@");) {
+		std::cout << "not found";
+	}
+	const wchar_t* ptr = !wcsstr(mail, L"@") ? wcsstr(mail, L"@") : mail;
+	bool y = !wcsstr(mail, L"@");
+	y = !wcsstr(mail, L"@");
+	bool z1 = !wcsstr(mail, L"@") || true;
+	bool z2 = !wcsstr(mail, L"@") && true;
+	do {
+		std::cout << "not found";
+	} while(!wcsstr(mail, L"@"));
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring mail = L"admin@web.com";
+	if (mail.find(L"@") == std::wstring::npos) {
+		std::cout << "not found";
+	}
+	while (mail.find(L"@") == std::wstring::npos) {
+		std::cout << "not found";
+	}
+	for (; mail.find(L"@") == std::wstring::npos;) {
+		std::cout << "not found";
+	}
+	const wchar_t* ptr =
+			mail.find(L"@") == std::wstring::npos ?
+					wcsstr(mail.c_str(), L"@") : mail.c_str();
+	bool y = mail.find(L"@") == std::wstring::npos;
+	y = mail.find(L"@") == std::wstring::npos;
+	bool z1 = mail.find(L"@") == std::wstring::npos || true;
+	bool z2 = mail.find(L"@") == std::wstring::npos && true;
+	do {
+		std::cout << "not found";
+	} while (mail.find(L"@") == std::wstring::npos);
 }
 
 
@@ -664,6 +780,36 @@ int main(){
 }
 
 
+//!WcsstrChecksWithOffset
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t* mail = L"admin@web.com";
+	if(wcsstr(mail+5, L"web.com") == NULL) {
+		std::cout << "not found";
+	}
+	if(wcsstr(mail+5, L"web.com") != NULL) {
+		std::cout << "found";
+	}
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring mail = L"admin@web.com";
+	if (mail.find(L"web.com", 5) == std::wstring::npos) {
+		std::cout << "not found";
+	}
+	if (mail.find(L"web.com", 5) != std::wstring::npos) {
+		std::cout << "found";
+	}
+}
+
+
 //!StrstrChecksWithModifiedPointer
 //@main.cpp
 #include <cstring>
@@ -688,5 +834,30 @@ int main(){
 		mail_pos++;
 	}
 	std::cout << (mail.c_str() + mail_pos) << std::endl;
+}
+
+
+//!WcsstrChecksWithModifiedPointer
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t* mail = L"admin@web.com";
+	while(wcsstr(mail, L"@web") != NULL) {
+		mail++;
+	}
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring mail = L"admin@web.com";
+	std::wstring::size_type mail_pos = 0;
+	while (mail.find(L"@web", mail_pos) != std::wstring::npos) {
+		mail_pos++;
+	}
 }
 

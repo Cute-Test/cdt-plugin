@@ -60,6 +60,68 @@ int main(){
 }
 
 
+//!WcspbrkChecksIfNotNull1
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t* mail = L"admin@web.com";
+	if(wcspbrk(mail, L"@")) {
+		std::cout << "found";
+	}
+	while(wcspbrk(mail, L"@")) {
+		std::cout << "found";
+	}
+	for(; wcspbrk(mail, L"@");) {
+		std::cout << "found";
+	}
+	const wchar_t* ptr = wcspbrk(mail, L"@") ? wcspbrk(mail, L"@") : mail;
+	const wchar_t* x = wcspbrk(mail, L"@");
+	x = wcspbrk(mail, L"@");
+	bool y = wcspbrk(mail, L"@");
+	y = wcspbrk(mail, L"@");
+	bool z1 = wcspbrk(mail, L"@") || true;
+	bool z2 = wcspbrk(mail, L"@") && true;
+	do {
+		std::cout << "found";
+	} while(wcspbrk(mail, L"@"));
+	
+	int index = wcspbrk(mail, L"@") - mail;
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring mail = L"admin@web.com";
+	if (mail.find_first_of(L"@") != std::wstring::npos) {
+		std::cout << "found";
+	}
+	while (mail.find_first_of(L"@") != std::wstring::npos) {
+		std::cout << "found";
+	}
+	for (; mail.find_first_of(L"@") != std::wstring::npos;) {
+		std::cout << "found";
+	}
+	const wchar_t* ptr =
+			mail.find_first_of(L"@") != std::wstring::npos ?
+					wcspbrk(mail.c_str(), L"@") : mail.c_str();
+	const wchar_t* x = wcspbrk(mail.c_str(), L"@");
+	x = wcspbrk(mail.c_str(), L"@");
+	bool y = mail.find_first_of(L"@") != std::wstring::npos;
+	y = mail.find_first_of(L"@") != std::wstring::npos;
+	bool z1 = mail.find_first_of(L"@") != std::wstring::npos || true;
+	bool z2 = mail.find_first_of(L"@") != std::wstring::npos && true;
+	do {
+		std::cout << "found";
+	} while (mail.find_first_of(L"@") != std::wstring::npos);
+	
+	int index = wcspbrk(mail.c_str(), L"@") - mail.c_str();
+}
+
+
 //!StrpbrkChecksIfNotNull2
 //@main.cpp
 #include <cstring>
@@ -279,6 +341,60 @@ int main(){
 	do {
 		std::cout << mail;
 	} while (mail.find_first_of("@") == std::string::npos);
+}
+
+
+//!WcspbrkChecksIfNull1
+//@main.cpp
+#include <cstring>
+#include "iostream.h"
+
+int main(){
+	const wchar_t* mail = L"admin@web.com";
+	if(!wcspbrk(mail, L"@")) {
+		std::cout << "Not found";
+	}
+	while(!wcspbrk(mail, L"@")) {
+		std::cout << "Not found";
+	}
+	for(; !wcspbrk(mail, L"@");) {
+		std::cout << "Not found";
+	}
+	const wchar_t* ptr = !wcspbrk(mail, L"@") ? wcspbrk(mail, L"@") : mail;
+	bool y = !wcspbrk(mail, L"@");
+	y = !wcspbrk(mail, L"@");
+	bool z1 = !wcspbrk(mail, L"@") || true;
+	bool z2 = !wcspbrk(mail, L"@") && true;
+	do {
+		std::cout << "Not found";
+	} while(!wcspbrk(mail, L"@"));
+}
+//=
+#include <cstring>
+#include <string>
+#include "iostream.h"
+
+int main(){
+	std::wstring mail = L"admin@web.com";
+	if (mail.find_first_of(L"@") == std::wstring::npos) {
+		std::cout << "Not found";
+	}
+	while (mail.find_first_of(L"@") == std::wstring::npos) {
+		std::cout << "Not found";
+	}
+	for (; mail.find_first_of(L"@") == std::wstring::npos;) {
+		std::cout << "Not found";
+	}
+	const wchar_t* ptr =
+			mail.find_first_of(L"@") == std::wstring::npos ?
+					wcspbrk(mail.c_str(), L"@") : mail.c_str();
+	bool y = mail.find_first_of(L"@") == std::wstring::npos;
+	y = mail.find_first_of(L"@") == std::wstring::npos;
+	bool z1 = mail.find_first_of(L"@") == std::wstring::npos || true;
+	bool z2 = mail.find_first_of(L"@") == std::wstring::npos && true;
+	do {
+		std::cout << "Not found";
+	} while (mail.find_first_of(L"@") == std::wstring::npos);
 }
 
 
