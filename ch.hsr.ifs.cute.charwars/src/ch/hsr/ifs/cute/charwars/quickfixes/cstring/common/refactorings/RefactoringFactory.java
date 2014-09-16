@@ -78,16 +78,16 @@ public class RefactoringFactory {
 			//alias: wcsstr(alias, b) == NULL -> wstr.find(b, alias) == std::wstring::npos
 			new ComparisonRefactoring(Function.WCSSTR, Function.FIND, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CString, ContextState.CStringModified, ContextState.CStringAlias),
 			
-			//strcspn(a, b) == strlen(a) -> a.find_first_of(b) == std::string::npos
+			//strcspn(str, b) == strlen(str) -> str.find_first_of(b) == std::string::npos
 			new ComparisonRefactoring(Function.STRCSPN, Function.FIND_FIRST_OF, new ArgMapping(Arg.ARG_1), ContextState.CString),
 						
-			//strcspn(a+n, b) == strlen(a) -> a.find_first_of(b, n) == std::string::npos
+			//strcspn(str+n, b) == strlen(str) -> str.find_first_of(b, n) == std::string::npos
 			new ComparisonRefactoring(Function.STRCSPN, Function.FIND_FIRST_OF, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CString, ContextState.CStringModified),
 							
-			//strspn(a, b) == strlen(a) -> a.find_first_not_of(b) == std::string::npos
+			//strspn(str, b) == strlen(str) -> str.find_first_not_of(b) == std::string::npos
 			new ComparisonRefactoring(Function.STRSPN, Function.FIND_FIRST_NOT_OF, new ArgMapping(Arg.ARG_1), ContextState.CString),
 						
-			//strspn(a+n, b) == strlen(a) -> a.find_first_not_of(b, n) == std::string::npos
+			//strspn(str+n, b) == strlen(str) -> str.find_first_not_of(b, n) == std::string::npos
 			new ComparisonRefactoring(Function.STRSPN, Function.FIND_FIRST_NOT_OF, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CString, ContextState.CStringModified),
 						
 			//memchr(str, ch, count) == NULL -> std::find(str.begin(), str.end(), ch) == str.end()
@@ -116,7 +116,7 @@ public class RefactoringFactory {
 			//implicit offset: memcpy(str, b, n) -> str.replace(str_pos, n, b, 0, n)
 			new FunctionRefactoring(Function.MEMCPY, Function.REPLACE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified),
 			
-			//memmove(a+off, b, n) -> a.replace(off, n, b, 0, n)
+			//memmove(str+off, b, n) -> str.replace(off, n, b, 0, n)
 			new FunctionRefactoring(Function.MEMMOVE, Function.REPLACE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified),
 				
 			//strcmp(str,b) -> str.compare(b)
@@ -143,10 +143,10 @@ public class RefactoringFactory {
 			//explicit offset: strcpy(str+off, b) -> str.replace(off, std::string::npos, b)
 			new FunctionRefactoring(Function.STRCPY, Function.REPLACE, new ArgMapping(Arg.OFF_0, Arg.NPOS, Arg.ARG_1), ContextState.CString, ContextState.CStringModified),
 			
-			//strncat(a, b, n) -> a.append(b, 0, n)
+			//strncat(str, b, n) -> str.append(b, 0, n)
 			new FunctionRefactoring(Function.STRNCAT, Function.APPEND, new ArgMapping(Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString),
 			
-			//strncpy(a+off, b, n) -> a.replace(off, n, b, 0, n)
+			//strncpy(str+off, b, n) -> str.replace(off, n, b, 0, n)
 			new FunctionRefactoring(Function.STRNCPY, Function.REPLACE, new ArgMapping(Arg.OFF_0, Arg.ARG_2, Arg.ARG_1, Arg.ZERO, Arg.ARG_2), ContextState.CString, ContextState.CStringModified),
 			
 			//alias: strchr(alias, b) -> str.find(b, alias) 
@@ -158,33 +158,17 @@ public class RefactoringFactory {
 			//alias: strpbrk(alias, b) -> str.find(b, alias)
 			new FunctionRefactoring(Function.STRPBRK, Function.FIND_FIRST_OF, new ArgMapping(Arg.ARG_1, Arg.OFF_0), ContextState.CStringAlias),
 				
-			//atof(a) -> stod(a)
+			//atof(str) -> stod(str)
 			new FunctionRefactoring(Function.ATOF, Function.STOD, new ArgMapping(Arg.ARG_0), ContextState.CString),
 				
-			//atoi(a) -> stoi(a)
+			//atoi(str) -> stoi(str)
 			new FunctionRefactoring(Function.ATOI, Function.STOI, new ArgMapping(Arg.ARG_0), ContextState.CString),
 			
-			//atol(a) -> stol(a)
+			//atol(str) -> stol(str)
 			new FunctionRefactoring(Function.ATOL, Function.STOL, new ArgMapping(Arg.ARG_0), ContextState.CString),
 			
-			//atoll(a) -> stoll(a)
+			//atoll(str) -> stoll(str)
 			new FunctionRefactoring(Function.ATOLL, Function.STOLL, new ArgMapping(Arg.ARG_0), ContextState.CString),
-			
-			//char *found = strstr(str, "searchstr") -> char *found = strstr(&*str.begin(), "searchstr")
-			//const char *found = strstr(str, "searchstr") -> const char *found = strstr(str.c_str(), "searchstr")
-			new CStringConversionRefactoring(Function.STRSTR, ContextState.CString),
-			
-			//char *found = strrchr(str, '@') -> char *found = strrchr(&*str.begin(), '@')
-			//const char *found = strrchr(str, '@') -> const char *found = strrchr(str.c_str(), '@')
-			new CStringConversionRefactoring(Function.STRRCHR, ContextState.CString),
-			
-			//char *pos = strpbrk(str, "searchstr") -> char *found = strpbrk(&*str.begin(), "searchstr")
-			//const char *pos = strpbrk(str, "searchstr") -> const char *found = strpbrk(str.c_str(), "searchstr")
-			new CStringConversionRefactoring(Function.STRPBRK, ContextState.CString),
-			
-			//char *found = strchr(str, '@') -> char *found = strchr(&*str.begin(), '@')
-			//const char *found = strchr(str, '@') -> const char *found = strchr(str.c_str(), '@')
-			new CStringConversionRefactoring(Function.STRCHR, ContextState.CString),
 			
 			//free(str) -> <gets removed>
 			new RemoveStatementRefactoring(Function.FREE, ContextState.CString),

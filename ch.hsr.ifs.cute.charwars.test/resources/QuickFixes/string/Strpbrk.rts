@@ -4,7 +4,7 @@
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(strpbrk(mail, "@")) {
 		std::cout << mail;
 	}
@@ -14,8 +14,8 @@ int main(){
 	for(; strpbrk(mail, "@");) {
 		std::cout << mail;
 	}
-	char* ptr = strpbrk(mail, "@") ? strpbrk(mail, "@") : mail;
-	char* x = strpbrk(mail, "@");
+	const char* ptr = strpbrk(mail, "@") ? strpbrk(mail, "@") : mail;
+	const char* x = strpbrk(mail, "@");
 	x = strpbrk(mail, "@");
 	bool y = strpbrk(mail, "@");
 	y = strpbrk(mail, "@");
@@ -43,11 +43,11 @@ int main(){
 	for (; mail.find_first_of("@") != std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find_first_of("@") != std::string::npos ?
 					strpbrk(mail.c_str(), "@") : mail.c_str();
-	char* x = strpbrk(&*mail.begin(), "@");
-	x = strpbrk(&*mail.begin(), "@");
+	const char* x = strpbrk(mail.c_str(), "@");
+	x = strpbrk(mail.c_str(), "@");
 	bool y = mail.find_first_of("@") != std::string::npos;
 	y = mail.find_first_of("@") != std::string::npos;
 	bool z1 = mail.find_first_of("@") != std::string::npos || true;
@@ -128,7 +128,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(nullptr != strpbrk(mail, "@")) {
 		std::cout << mail;
 	}
@@ -141,7 +141,7 @@ int main(){
 	for(; strpbrk(mail, "@") != nullptr;) {
 		std::cout << mail;
 	}
-	char* ptr = strpbrk(mail, "@") != nullptr ? strpbrk(mail, "@") : mail;
+	const char* ptr = strpbrk(mail, "@") != nullptr ? strpbrk(mail, "@") : mail;
 	bool y = strpbrk(mail, "@") != nullptr;
 	y = strpbrk(mail, "@") != nullptr;
 	bool z1 = strpbrk(mail, "@") != nullptr || true;
@@ -169,7 +169,7 @@ int main(){
 	for (; mail.find_first_of("@") != std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find_first_of("@") != std::string::npos ?
 					strpbrk(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find_first_of("@") != std::string::npos;
@@ -188,7 +188,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(0 != strpbrk(mail, "@")) {
 		std::cout << mail;
 	}
@@ -201,7 +201,7 @@ int main(){
 	for(; strpbrk(mail, "@") != 0;) {
 		std::cout << mail;
 	}
-	char* ptr = strpbrk(mail, "@") != 0 ? strpbrk(mail, "@") : mail;
+	const char* ptr = strpbrk(mail, "@") != 0 ? strpbrk(mail, "@") : mail;
 	bool y = strpbrk(mail, "@") != 0;
 	y = strpbrk(mail, "@") != 0;
 	bool z1 = strpbrk(mail, "@") != 0 || true;
@@ -229,7 +229,7 @@ int main(){
 	for (; mail.find_first_of("@") != std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find_first_of("@") != std::string::npos ?
 					strpbrk(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find_first_of("@") != std::string::npos;
@@ -248,7 +248,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(NULL != strpbrk(mail, "@")) {
 		std::cout << mail;
 	}
@@ -296,7 +296,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(!strpbrk(mail, "@")) {
 		std::cout << mail;
 	}
@@ -306,7 +306,7 @@ int main(){
 	for(; !strpbrk(mail, "@");) {
 		std::cout << mail;
 	}
-	char* ptr = !strpbrk(mail, "@") ? strpbrk(mail, "@") : mail;
+	const char* ptr = !strpbrk(mail, "@") ? strpbrk(mail, "@") : mail;
 	bool y = !strpbrk(mail, "@");
 	y = !strpbrk(mail, "@");
 	bool z1 = !strpbrk(mail, "@") || true;
@@ -331,7 +331,7 @@ int main(){
 	for (; mail.find_first_of("@") == std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find_first_of("@") == std::string::npos ?
 					strpbrk(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find_first_of("@") == std::string::npos;
@@ -404,7 +404,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(nullptr == strpbrk(mail, "@")) {
 		std::cout << mail;
 	}
@@ -417,7 +417,7 @@ int main(){
 	for(; strpbrk(mail, "@") == nullptr;) {
 		std::cout << mail;
 	}
-	char* ptr = strpbrk(mail, "@") == nullptr ? strpbrk(mail, "@") : mail;
+	const char* ptr = strpbrk(mail, "@") == nullptr ? strpbrk(mail, "@") : mail;
 	bool y = strpbrk(mail, "@") == nullptr;
 	y = strpbrk(mail, "@") == nullptr;
 	bool z1 = strpbrk(mail, "@") == nullptr || true;
@@ -445,7 +445,7 @@ int main(){
 	for (; mail.find_first_of("@") == std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find_first_of("@") == std::string::npos ?
 					strpbrk(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find_first_of("@") == std::string::npos;
@@ -464,7 +464,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(0 == strpbrk(mail, "@")) {
 		std::cout << mail;
 	}
@@ -477,7 +477,7 @@ int main(){
 	for(; strpbrk(mail, "@") == 0;) {
 		std::cout << mail;
 	}
-	char* ptr = strpbrk(mail, "@") == 0 ? strpbrk(mail, "@") : mail;
+	const char* ptr = strpbrk(mail, "@") == 0 ? strpbrk(mail, "@") : mail;
 	bool y = strpbrk(mail, "@") == 0;
 	y = strpbrk(mail, "@") == 0;
 	bool z1 = strpbrk(mail, "@") == 0 || true;
@@ -505,7 +505,7 @@ int main(){
 	for (; mail.find_first_of("@") == std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find_first_of("@") == std::string::npos ?
 					strpbrk(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find_first_of("@") == std::string::npos;
@@ -524,7 +524,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(NULL == strpbrk(mail, "@")) {
 		std::cout << mail;
 	}
@@ -573,7 +573,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin-web.com";
+	const char* mail = "admin-web.com";
 	std::string at = "@";
 	if (nullptr == strpbrk(mail, at.c_str())) {
 		std::cout << "invalid";
@@ -599,8 +599,8 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char at[] = "@";
-	char mail[] = "admin-web.com";
+	const char* at = "@";
+	const char* mail = "admin-web.com";
 	if(nullptr == strpbrk(mail, at)){
 		std::cout << "invalid";
 	}
@@ -612,7 +612,7 @@ int main(){
 
 int main(){
 	std::string at = "@";
-	char mail[] = "admin-web.com";
+	const char* mail = "admin-web.com";
 	if (nullptr == strpbrk(mail, at.c_str())) {
 		std::cout << "invalid";
 	}
@@ -627,7 +627,7 @@ int main(){
 
 int main(){
 	std::string mail = "admin-web.com";
-	char at[] = "@";
+	const char* at = "@";
 	if (mail.find_first_of(at) == std::string::npos) {
 		std::cout << "invalid";
 	}
@@ -643,73 +643,5 @@ int main(){
 	if (mail.find_first_of(at) == std::string::npos) {
 		std::cout << "invalid";
 	}
-}
-
-
-//!strpbrkAssignedToCharPointer1
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	char* found = strpbrk(str, "string");
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	char* found = strpbrk(&*str.begin(), "string");
-}
-
-
-//!strpbrkAssignedToCharPointer2
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	char* found;
-	found = strpbrk(str, "string");
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	char* found;
-	found = strpbrk(&*str.begin(), "string");
-}
-
-
-//!strpbrkAssignedToConstCharPointer1
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	const char* found = strpbrk(str, "string");
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	const char* found = strpbrk(str.c_str(), "string");
-}
-
-
-//!strpbrkAssignedToConstCharPointer2
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	const char* found;
-	found = strpbrk(str, "string");
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	const char* found;
-	found = strpbrk(str.c_str(), "string");
 }
 

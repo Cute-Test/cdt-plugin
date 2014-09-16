@@ -1,10 +1,10 @@
 //!StrchrChecksIfNotNull1
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(strchr(mail+5, '@')) {
 		std::cout << mail;
 	}
@@ -17,8 +17,8 @@ int main(){
 	for(; strchr(mail, '@');) {
 		std::cout << mail;
 	}
-	char* ptr = strchr(mail, '@') ? strchr(mail, '@') : mail;
-	char* x = strchr(mail, '@');
+	const char* ptr = strchr(mail, '@') ? strchr(mail, '@') : mail;
+	const char* x = strchr(mail, '@');
 	x = strchr(mail, '@');
 	bool y = strchr(mail, '@');
 	y = strchr(mail, '@');
@@ -31,8 +31,8 @@ int main(){
 	int index = strchr(mail, '@') - mail;
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -49,11 +49,11 @@ int main(){
 	for (; mail.find('@') != std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find('@') != std::string::npos ?
 					strchr(mail.c_str(), '@') : mail.c_str();
-	char* x = strchr(&*mail.begin(), '@');
-	x = strchr(&*mail.begin(), '@');
+	const char* x = strchr(mail.c_str(), '@');
+	x = strchr(mail.c_str(), '@');
 	bool y = mail.find('@') != std::string::npos;
 	y = mail.find('@') != std::string::npos;
 	bool z1 = mail.find('@') != std::string::npos || true;
@@ -68,7 +68,7 @@ int main(){
 
 //!WcschrChecksIfNotNull1
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -99,8 +99,8 @@ int main(){
 	int index = wcschr(wstr, L'c') - wstr;
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -136,11 +136,11 @@ int main(){
 
 //!StrchrChecksIfNotNull2
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(nullptr != strchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -163,8 +163,8 @@ int main(){
 	} while(strchr(mail, '@') != nullptr);
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -196,11 +196,11 @@ int main(){
 
 //!StrchrChecksIfNotNull3
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(0 != strchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -223,8 +223,8 @@ int main(){
 	} while(strchr(mail, '@') != 0);
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -256,11 +256,11 @@ int main(){
 
 //!StrchrChecksIfNotNull4
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(NULL != strchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -278,8 +278,8 @@ int main(){
 	} while(strchr(mail, '@') != NULL);
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -304,11 +304,11 @@ int main(){
 
 //!StrchrChecksIfNull1
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(!strchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -328,8 +328,8 @@ int main(){
 	} while(!strchr(mail, '@'));
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -358,7 +358,7 @@ int main(){
 
 //!WcschrChecksIfNull1
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -382,8 +382,8 @@ int main(){
 	} while(!wcschr(mail, L'@'));
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -412,11 +412,11 @@ int main(){
 
 //!StrchrChecksIfNull2
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(nullptr == strchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -439,8 +439,8 @@ int main(){
 	} while(strchr(mail, '@') == nullptr);
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -472,11 +472,11 @@ int main(){
 
 //!StrchrChecksIfNull3
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(0 == strchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -499,8 +499,8 @@ int main(){
 	} while(strchr(mail, '@') == 0);
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -532,11 +532,11 @@ int main(){
 
 //!StrchrChecksIfNull4
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(NULL == strchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -554,8 +554,8 @@ int main(){
 	} while(strchr(mail, '@') == NULL);
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -578,77 +578,9 @@ int main(){
 }
 
 
-//!StrchrAssignedToCharPointer1
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	char* found = strchr(str, 's');
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	char* found = strchr(&*str.begin(), 's');
-}
-
-
-//!StrchrAssignedToCharPointer2
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	char* found;
-	found = strchr(str, 's');
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	char* found;
-	found = strchr(&*str.begin(), 's');
-}
-
-
-//!StrchrAssignedToConstCharPointer1
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	const char* found = strchr(str, 's');
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	const char* found = strchr(str.c_str(), 's');
-}
-
-
-//!StrchrAssignedToConstCharPointer2
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	const char* found;
-	found = strchr(str, 's');
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	const char* found;
-	found = strchr(str.c_str(), 's');
-}
-
-
 //!StrchrChecksWithOffset
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -661,8 +593,8 @@ int main(){
 	}
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -678,7 +610,7 @@ int main(){
 
 //!StrchrChecksWithModifiedPointer
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -689,8 +621,8 @@ int main(){
 	std::cout << mail << std::endl;
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -705,7 +637,7 @@ int main(){
 
 //!WschrChecksWithModifiedPointer
 //@main.cpp
-#include <cstring>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){
@@ -716,8 +648,8 @@ int main(){
 	std::cout << mail << std::endl;
 }
 //=
-#include <cstring>
 #include <string>
+#include "cstring.h"
 #include "iostream.h"
 
 int main(){

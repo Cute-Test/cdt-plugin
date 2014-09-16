@@ -4,7 +4,7 @@
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(strstr(mail, "@")) {
 		std::cout << mail;
 	}
@@ -14,8 +14,8 @@ int main(){
 	for(; strstr(mail, "@");) {
 		std::cout << mail;
 	}
-	char* ptr = strstr(mail, "@") ? strstr(mail, "@") : mail;
-	char* x = strstr(mail, "@");
+	const char* ptr = strstr(mail, "@") ? strstr(mail, "@") : mail;
+	const char* x = strstr(mail, "@");
 	x = strstr(mail, "@");
 	bool y = strstr(mail, "@");
 	y = strstr(mail, "@");
@@ -43,11 +43,11 @@ int main(){
 	for (; mail.find("@") != std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find("@") != std::string::npos ?
 					strstr(mail.c_str(), "@") : mail.c_str();
-	char* x = strstr(&*mail.begin(), "@");
-	x = strstr(&*mail.begin(), "@");
+	const char* x = strstr(mail.c_str(), "@");
+	x = strstr(mail.c_str(), "@");
 	bool y = mail.find("@") != std::string::npos;
 	y = mail.find("@") != std::string::npos;
 	bool z1 = mail.find("@") != std::string::npos || true;
@@ -128,7 +128,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(nullptr != strstr(mail, "@")) {
 		std::cout << mail;
 	}
@@ -141,7 +141,7 @@ int main(){
 	for(; strstr(mail, "@") != nullptr;) {
 		std::cout << mail;
 	}
-	char* ptr = strstr(mail, "@") != nullptr ? strstr(mail, "@") : mail;
+	const char* ptr = strstr(mail, "@") != nullptr ? strstr(mail, "@") : mail;
 	bool y = strstr(mail, "@") != nullptr;
 	y = strstr(mail, "@") != nullptr;
 	bool z1 = strstr(mail, "@") != nullptr || true;
@@ -169,7 +169,7 @@ int main(){
 	for (; mail.find("@") != std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find("@") != std::string::npos ?
 					strstr(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find("@") != std::string::npos;
@@ -188,7 +188,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(0 != strstr(mail, "@")) {
 		std::cout << mail;
 	}
@@ -201,7 +201,7 @@ int main(){
 	for(; strstr(mail, "@") != 0;) {
 		std::cout << mail;
 	}
-	char* ptr = strstr(mail, "@") != 0 ? strstr(mail, "@") : mail;
+	const char* ptr = strstr(mail, "@") != 0 ? strstr(mail, "@") : mail;
 	bool y = strstr(mail, "@") != 0;
 	y = strstr(mail, "@") != 0;
 	bool z1 = strstr(mail, "@") != 0 || true;
@@ -229,7 +229,7 @@ int main(){
 	for (; mail.find("@") != std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find("@") != std::string::npos ?
 					strstr(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find("@") != std::string::npos;
@@ -248,7 +248,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(NULL != strstr(mail, "@")) {
 		std::cout << mail;
 	}
@@ -264,7 +264,7 @@ int main(){
 	do {
 		std::cout << mail;
 	} while(strstr(mail, "@") != NULL);
-	char* ptr = strstr(mail, "@") != NULL ? strstr(mail, "@") : mail;
+	const char* ptr = strstr(mail, "@") != NULL ? strstr(mail, "@") : mail;
 	bool y = strstr(mail, "@") != NULL;
 	y = strstr(mail, "@") != NULL;
 	bool z1 = strstr(mail, "@") != NULL || true;
@@ -295,7 +295,7 @@ int main(){
 	do {
 		std::cout << mail;
 	} while (mail.find("@") != std::string::npos);
-	char* ptr =
+	const char* ptr =
 			mail.find("@") != std::string::npos ?
 					strstr(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find("@") != std::string::npos;
@@ -314,7 +314,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(!strstr(mail, "@")) {
 		std::cout << mail;
 	}
@@ -324,7 +324,7 @@ int main(){
 	for(; !strstr(mail, "@");) {
 		std::cout << mail;
 	}
-	char* ptr = !strstr(mail, "@") ? strstr(mail, "@") : mail;
+	const char* ptr = !strstr(mail, "@") ? strstr(mail, "@") : mail;
 	bool y = !strstr(mail, "@");
 	y = !strstr(mail, "@");
 	bool z1 = !strstr(mail, "@") || true;
@@ -349,7 +349,7 @@ int main(){
 	for (; mail.find("@") == std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find("@") == std::string::npos ?
 					strstr(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find("@") == std::string::npos;
@@ -422,7 +422,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(nullptr == strstr(mail, "@")) {
 		std::cout << mail;
 	}
@@ -435,7 +435,7 @@ int main(){
 	for(; strstr(mail, "@") == nullptr;) {
 		std::cout << mail;
 	}
-	char* ptr = strstr(mail, "@") == nullptr ? strstr(mail, "@") : mail;
+	const char* ptr = strstr(mail, "@") == nullptr ? strstr(mail, "@") : mail;
 	bool y = strstr(mail, "@") == nullptr;
 	y = strstr(mail, "@") == nullptr;
 	bool z1 = strstr(mail, "@") == nullptr || true;
@@ -463,7 +463,7 @@ int main(){
 	for (; mail.find("@") == std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find("@") == std::string::npos ?
 					strstr(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find("@") == std::string::npos;
@@ -482,7 +482,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(0 == strstr(mail, "@")) {
 		std::cout << mail;
 	}
@@ -495,7 +495,7 @@ int main(){
 	for(; strstr(mail, "@") == 0;) {
 		std::cout << mail;
 	}
-	char* ptr = strstr(mail, "@") == 0 ? strstr(mail, "@") : mail;
+	const char* ptr = strstr(mail, "@") == 0 ? strstr(mail, "@") : mail;
 	bool y = strstr(mail, "@") == 0;
 	y = strstr(mail, "@") == 0;
 	bool z1 = strstr(mail, "@") == 0 || true;
@@ -523,7 +523,7 @@ int main(){
 	for (; mail.find("@") == std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.find("@") == std::string::npos ?
 					strstr(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find("@") == std::string::npos;
@@ -542,7 +542,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(NULL == strstr(mail, "@")) {
 		std::cout << mail;
 	}
@@ -558,7 +558,7 @@ int main(){
 	do {
 		std::cout << mail;
 	} while(strstr(mail, "@") == NULL);
-	char* ptr = strstr(mail, "@") == NULL ? strstr(mail, "@") : mail;
+	const char* ptr = strstr(mail, "@") == NULL ? strstr(mail, "@") : mail;
 	bool y = strstr(mail, "@") == NULL;
 	y = strstr(mail, "@") == NULL;
 	bool z1 = strstr(mail, "@") == NULL || true;
@@ -589,7 +589,7 @@ int main(){
 	do {
 		std::cout << mail;
 	} while (mail.find("@") == std::string::npos);
-	char* ptr =
+	const char* ptr =
 			mail.find("@") == std::string::npos ?
 					strstr(mail.c_str(), "@") : mail.c_str();
 	bool y = mail.find("@") == std::string::npos;
@@ -609,7 +609,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin-web.com";
+	const char* mail = "admin-web.com";
 	std::string at = "@";
 	if (nullptr == strstr(mail, at.c_str())) {
 		std::cout << "invalid";
@@ -635,8 +635,8 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char at[] = "@";
-	char mail[] = "admin-web.com";
+	const char* at = "@";
+	const char* mail = "admin-web.com";
 	if(nullptr == strstr(mail, at)){
 		std::cout << "invalid";
 	}
@@ -648,7 +648,7 @@ int main(){
 
 int main(){
 	std::string at = "@";
-	char mail[] = "admin-web.com";
+	const char* mail = "admin-web.com";
 	if (nullptr == strstr(mail, at.c_str())) {
 		std::cout << "invalid";
 	}
@@ -663,7 +663,7 @@ int main(){
 
 int main(){
 	std::string mail = "admin-web.com";
-	char at[] = "@";
+	const char* at = "@";
 	if (mail.find(at) == std::string::npos) {
 		std::cout << "invalid";
 	}
@@ -679,74 +679,6 @@ int main(){
 	if (mail.find(at) == std::string::npos) {
 		std::cout << "invalid";
 	}
-}
-
-
-//!StrstrAssignedToCharPointer1
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	char* found = strstr(str, "string");
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	char* found = strstr(&*str.begin(), "string");
-}
-
-
-//!StrstrAssignedToCharPointer2
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	char* found;
-	found = strstr(str, "string");
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	char* found;
-	found = strstr(&*str.begin(), "string");
-}
-
-
-//!StrstrAssignedToConstCharPointer1
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	const char* found = strstr(str, "string");
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	const char* found = strstr(str.c_str(), "string");
-}
-
-
-//!StrstrAssignedToConstCharPointer2
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	const char* found;
-	found = strstr(str, "string");
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	const char* found;
-	found = strstr(str.c_str(), "string");
 }
 
 

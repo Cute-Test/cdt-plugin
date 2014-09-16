@@ -327,16 +327,18 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean isLValueInAssignment(IASTIdExpression idExpression) {
-		if(isAssignment(idExpression.getParent())) {
-			IASTBinaryExpression assignment = (IASTBinaryExpression)idExpression.getParent();
+		IASTNode parent = idExpression.getParent();
+		if(isAssignment(parent)) {
+			IASTBinaryExpression assignment = (IASTBinaryExpression)parent;
 			return assignment.getOperand1() == idExpression;
 		}
 		return false;
 	}
 	
 	public static boolean isArraySubscriptExpression(IASTIdExpression idExpression) {
-		if(idExpression.getParent() instanceof IASTArraySubscriptExpression) {
-			IASTArraySubscriptExpression asExpression = (IASTArraySubscriptExpression)idExpression.getParent();
+		IASTNode parent = idExpression.getParent();
+		if(parent instanceof IASTArraySubscriptExpression) {
+			IASTArraySubscriptExpression asExpression = (IASTArraySubscriptExpression)parent;
 			return asExpression.getArrayExpression() == idExpression;
 		}
 		return false;
@@ -408,8 +410,9 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean isFunctionCallArg(IASTNode arg, int argIndex, Function function) {
-		if(isCallToFunction(arg.getParent(), function)) {
-			IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)arg.getParent();
+		IASTNode parent = arg.getParent();
+		if(isCallToFunction(parent, function)) {
+			IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)parent;
 			return functionCall.getArguments()[argIndex] == arg;
 		}
 		return false;
@@ -687,8 +690,9 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean isNodeComparedToStrlen(IASTNode node, boolean equalityComparison) {
-		if(node.getParent() instanceof IASTBinaryExpression) {
-			IASTBinaryExpression comparison = (IASTBinaryExpression)node.getParent();
+		IASTNode parent = node.getParent();
+		if(parent instanceof IASTBinaryExpression) {
+			IASTBinaryExpression comparison = (IASTBinaryExpression)parent;
 			int operator = comparison.getOperator();
 			boolean comparedForEquality = (operator == IASTBinaryExpression.op_equals);
 			boolean comparedForInequality;
@@ -979,6 +983,7 @@ public class ASTAnalyzer {
 	}
 	
 	public static IASTDeclarationStatement getVariableDeclaration(IASTName name, IASTStatement[] statements) {
+		IBinding nameBinding = name.resolveBinding();
 		for(IASTStatement statement : statements) {
 			if(statement instanceof IASTDeclarationStatement) {
 				IASTDeclarationStatement declarationStatement = (IASTDeclarationStatement)statement;
@@ -986,7 +991,7 @@ public class ASTAnalyzer {
 				if(declaration instanceof IASTSimpleDeclaration) {
 					IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration)declaration;
 					for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()) {
-						if(declarator.getName().resolveBinding().equals(name.resolveBinding())) {
+						if(declarator.getName().resolveBinding().equals(nameBinding)) {
 							return declarationStatement;
 						}
 					}
@@ -1144,9 +1149,10 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean modifiesCharPointer(IASTIdExpression idExpression) {
-		boolean isLValue = isLValueInAssignment(idExpression) && ((IASTBinaryExpression)idExpression.getParent()).getOperand2() instanceof IASTBinaryExpression;
-		boolean isPlusAssigned = isPlusAssignment(idExpression.getParent()) && ((IASTBinaryExpression)idExpression.getParent()).getOperand1() == idExpression;
-		boolean isIncremented = isUnaryExpression(idExpression.getParent(), IASTUnaryExpression.op_prefixIncr) || isUnaryExpression(idExpression.getParent(), IASTUnaryExpression.op_postFixIncr);
+		IASTNode parent = idExpression.getParent();
+		boolean isLValue = isLValueInAssignment(idExpression) && ((IASTBinaryExpression)parent).getOperand2() instanceof IASTBinaryExpression;
+		boolean isPlusAssigned = isPlusAssignment(parent) && ((IASTBinaryExpression)parent).getOperand1() == idExpression;
+		boolean isIncremented = isUnaryExpression(parent, IASTUnaryExpression.op_prefixIncr) || isUnaryExpression(parent, IASTUnaryExpression.op_postFixIncr);
 		return isLValue || isPlusAssigned || isIncremented;
 	}
 	

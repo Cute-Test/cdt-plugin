@@ -14,8 +14,8 @@ int main(){
 	for(; strrchr(mail, '@');) {
 		std::cout << mail;
 	}
-	char* ptr = strrchr(mail, '@') ? strrchr(mail, '@') : mail;
-	char* x = strrchr(mail, '@');
+	const char* ptr = strrchr(mail, '@') ? strrchr(mail, '@') : mail;
+	const char* x = strrchr(mail, '@');
 	x = strrchr(mail, '@');
 	bool y = strrchr(mail, '@');
 	y = strrchr(mail, '@');
@@ -43,11 +43,11 @@ int main(){
 	for (; mail.rfind('@') != std::string::npos;) {
 		std::cout << mail;
 	}
-	char* ptr =
+	const char* ptr =
 			mail.rfind('@') != std::string::npos ?
 					strrchr(mail.c_str(), '@') : mail.c_str();
-	char* x = strrchr(&*mail.begin(), '@');
-	x = strrchr(&*mail.begin(), '@');
+	const char* x = strrchr(mail.c_str(), '@');
+	x = strrchr(mail.c_str(), '@');
 	bool y = mail.rfind('@') != std::string::npos;
 	y = mail.rfind('@') != std::string::npos;
 	bool z1 = mail.rfind('@') != std::string::npos || true;
@@ -66,7 +66,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(nullptr != strrchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -126,7 +126,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(0 != strrchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -186,7 +186,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(NULL != strrchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -234,7 +234,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(!strrchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -288,7 +288,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(nullptr == strrchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -348,7 +348,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(0 == strrchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -408,7 +408,7 @@ int main(){
 #include "iostream.h"
 
 int main(){
-	char mail[] = "admin@web.com";
+	const char* mail = "admin@web.com";
 	if(NULL == strrchr(mail, '@')) {
 		std::cout << mail;
 	}
@@ -448,72 +448,3 @@ int main(){
 		std::cout << mail;
 	} while (mail.rfind('@') == std::string::npos);
 }
-
-
-//!StrrchrAssignedToCharPointer1
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	char* found = strrchr(str, 's');
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	char* found = strrchr(&*str.begin(), 's');
-}
-
-
-//!StrrchrAssignedToCharPointer2
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	char* found;
-	found = strrchr(str, 's');
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	char* found;
-	found = strrchr(&*str.begin(), 's');
-}
-
-
-//!StrrchrAssignedToConstCharPointer1
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	const char* found = strrchr(str, 's');
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	const char* found = strrchr(str.c_str(), 's');
-}
-
-
-//!StrrchrAssignedToConstCharPointer2
-//@main.cpp
-#include <cstring>
-int main() {
-	char str[] = "a string";
-	const char* found;
-	found = strrchr(str, 's');
-}
-//=
-#include <cstring>
-#include <string>
-int main() {
-	std::string str = "a string";
-	const char* found;
-	found = strrchr(str.c_str(), 's');
-}
-
