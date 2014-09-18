@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.codan.core.cxx;bundle-version="1.1.0",
  ch.hsr.ifs.cute.tdd;bundle-version="1.1.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: ch.hsr.ifs.cute.namespactor.astutil,ch.hsr.ifs.cute.na
  mespactor.refactoring,ch.hsr.ifs.cute.namespactor.refactoring.eudec,c
  h.hsr.ifs.cute.namespactor.refactoring.eudir,ch.hsr.ifs.cute.namespac

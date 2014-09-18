@@ -17,6 +17,6 @@ Export-Package: ch.hsr.ifs.cute.gcov,ch.hsr.ifs.cute.gcov.model;uses:=
  "org.eclipse.core.resources",ch.hsr.ifs.cute.gcov.parser;uses:="org.e
  clipse.core.resources,org.eclipse.core.runtime,ch.hsr.ifs.cute.gcov.m
  odel"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
