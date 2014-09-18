@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Elevenator
+Bundle-SymbolicName: ch.hsr.ifs.cute.elevenator;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: ch.hsr.ifs.cute.elevenator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.cdt.managedbuilder.ui;bundle-version="8.2.1",
+ org.eclipse.cdt.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.core.resources,
+ org.eclipse.cdt.core,
+ org.eclipse.cdt.managedbuilder.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
