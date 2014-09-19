@@ -75,13 +75,13 @@ public class ASTAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
 		IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
 		IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
-		return hasCStringType(declSpecifier) && isArrayOrPointer(declarator) && (hasStringLiteralAssignment(declarator) || hasStrdupAssignment(declarator));
+		return hasCStringType(declSpecifier) && isArrayXorPointer(declarator) && (hasStringLiteralAssignment(declarator) || hasStrdupAssignment(declarator));
 	}
 	
 	public static boolean isCStringAlias(IASTDeclarator declarator) {
 		IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
 		IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
-		return hasCStringType(declSpecifier) && isArrayOrPointer(declarator) && hasCStringAssignment(declarator);
+		return hasCStringType(declSpecifier) && isArrayXorPointer(declarator) && hasCStringAssignment(declarator);
 	}
 	
 	public static boolean hasCStringAssignment(IASTDeclarator declarator) {
@@ -150,13 +150,21 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean isArray(IASTDeclarator declarator) {
-		return declarator instanceof IASTArrayDeclarator && !isCString(declarator);
+		return declarator instanceof IASTArrayDeclarator;
 	}
 	
-	private static boolean isArrayOrPointer(IASTDeclarator declarator) {
-		boolean isArray = declarator instanceof IASTArrayDeclarator;
-		boolean isPointer = declarator.getPointerOperators().length == 1;
-		return isArray ^ isPointer;
+	private static boolean isArrayXorPointer(IASTDeclarator declarator) {
+		return isArray(declarator) ^ isPointer(declarator);
+	}
+	
+	public static boolean isPointer(IASTDeclarator declarator) {
+		int numberOfPointers = 0;
+		for(IASTPointerOperator po : declarator.getPointerOperators()) {
+			if(po instanceof IASTPointer) {
+				numberOfPointers++;
+			}
+		}
+		return numberOfPointers == 1;
 	}
 	
 	private static boolean hasStringLiteralAssignment(IASTDeclarator declarator) {
@@ -182,15 +190,6 @@ public class ASTAnalyzer {
 			return equalsInitializer.getInitializerClause();
 		}
 		return null;
-	}
-	
-	public static boolean isPointer(IASTDeclarator declarator) {
-		for(IASTPointerOperator po : declarator.getPointerOperators()) {
-			if(po instanceof IASTPointer) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	public static boolean isStringLiteral(IASTNode node) {
@@ -579,13 +578,13 @@ public class ASTAnalyzer {
 	public static boolean isConstCStringParameterDeclaration(IASTParameterDeclaration parameter) {
 		IASTDeclarator parameterDeclarator = parameter.getDeclarator();
 		IASTDeclSpecifier parameterDeclSpecifier = parameter.getDeclSpecifier();
-		return hasCStringType(parameterDeclSpecifier) && isArrayOrPointer(parameterDeclarator) && parameterDeclSpecifier.isConst();
+		return hasCStringType(parameterDeclSpecifier) && isArrayXorPointer(parameterDeclarator) && parameterDeclSpecifier.isConst();
 	}
 	
 	public static boolean isCStringParameterDeclaration(IASTParameterDeclaration parameter) {
 		IASTDeclarator parameterDeclarator = parameter.getDeclarator();
 		IASTDeclSpecifier parameterDeclSpecifier = parameter.getDeclSpecifier();		
-		return hasCStringType(parameterDeclSpecifier) && isArrayOrPointer(parameterDeclarator) && !parameterDeclSpecifier.isConst();
+		return hasCStringType(parameterDeclSpecifier) && isArrayXorPointer(parameterDeclarator) && !parameterDeclSpecifier.isConst();
 	}
 	
 	public static boolean isCStringType(IType type) {
@@ -652,7 +651,7 @@ public class ASTAnalyzer {
 			if(possibleDeclarator instanceof IASTDeclarator) {
 				IASTDeclarator declarator = (IASTDeclarator)possibleDeclarator;
 				IASTDeclSpecifier declSpecifier = ((IASTSimpleDeclaration)declarator.getParent()).getDeclSpecifier();
-				return hasCStringType(declSpecifier) && isArrayOrPointer(declarator) && (declSpecifier.isConst() == isConst);
+				return hasCStringType(declSpecifier) && isArrayXorPointer(declarator) && (declSpecifier.isConst() == isConst);
 			}
 		}
 		return false;

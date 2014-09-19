@@ -21,7 +21,7 @@ public class PointerParameterChecker extends BaseChecker {
 		public int visit(IASTParameterDeclaration parameterDeclaration) {
 			IASTDeclarator declarator = parameterDeclaration.getDeclarator();
 			
-			if(ASTAnalyzer.isPointer(declarator) 
+			if(ASTAnalyzer.isPointer(declarator) && !ASTAnalyzer.isArray(declarator)
 				&& ASTAnalyzer.isFunctionDefinitionParameterDeclaration(parameterDeclaration) 
 				&& !ASTAnalyzer.isCStringParameterDeclaration(parameterDeclaration)
 				&& !ASTAnalyzer.isConstCStringParameterDeclaration(parameterDeclaration)) {

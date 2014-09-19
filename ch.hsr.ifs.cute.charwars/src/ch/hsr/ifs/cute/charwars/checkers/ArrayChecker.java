@@ -23,7 +23,7 @@ public class ArrayChecker extends BaseChecker {
 			if(decl instanceof IASTSimpleDeclaration) {
 				IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration)decl;
 				for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()) {
-					if(ASTAnalyzer.isArray(declarator)) {
+					if(ASTAnalyzer.isArray(declarator) && !ASTAnalyzer.isCString(declarator)) {
 						reportProblemForDeclarator(ProblemIDs.ARRAY_PROBLEM, declarator);
 					}
 				}

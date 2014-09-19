@@ -25,3 +25,15 @@ void func2(char *str);
 int main() {}
 void func1(const char *str) {}
 void func2(char *str) {}
+
+
+//!PointerParameterIgnoresPointerToCStringParameer
+//@main.cpp
+int main(int argc, const char **argv) {
+}
+
+
+//!PointerParameterIgnoresArrayOfCStringsParameer
+//@main.cpp
+int main(int argc, const char *argv[]) {
+}
