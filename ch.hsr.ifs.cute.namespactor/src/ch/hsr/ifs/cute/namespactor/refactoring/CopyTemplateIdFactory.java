@@ -42,6 +42,8 @@ public class CopyTemplateIdFactory extends TemplateIdFactory {
 	@SuppressWarnings("restriction")
 	@Override
 	protected ICPPASTQualifiedName modifyTemplateId(ICPPASTTemplateId vTemplId) {
-		return factory.newQualifiedName();
+		ICPPASTQualifiedName newQualifiedName = factory.newQualifiedName();
+//		newQualifiedName.addName(factory.newName("dummy".toCharArray()));
+		return newQualifiedName;
 	}
 }

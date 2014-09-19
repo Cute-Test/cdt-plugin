@@ -457,6 +457,48 @@ namespace A{
 }
 
 #endif /* A1_H_ */
+//!IUDIR_Templates_1
+//@A1.cpp
+#include "A1.h"
+using namespace A;
+using namespace B;
+using namespace /*$*/B::C/*$$*/;
+
+int main() {
+	CC<A::B::C::CC<float> > tt3;
+}
+//=
+#include "A1.h"
+using namespace A;
+using namespace B;
+
+int main() {
+	B::C::CC<A::B::C::CC<float> > tt3;
+}
+//@A1.h
+#ifndef A1_H_
+#define A1_H_
+
+namespace A{
+	namespace B{
+		namespace C2{
+			template<class X>
+			struct SC2{};
+		}
+		namespace C{
+			template<class T>
+			class CC{
+			public:
+				void set(T);
+				T get();
+				void doit(C2::SC2<T> &);
+			};
+			struct CC2{};
+		}
+	}
+}
+
+#endif /* A1_H_ */
 //!IUDIR_Templates_MethodDefinitions_TODO
 //@.config
 skipTest=1
@@ -979,4 +1021,54 @@ int main() {
 }
 
 std::vector<std::vector<double> > vv;
+
+//!IUDIR_ArrayTemplate
+//@A1.cpp
+#include <array.hpp>
+using namespace /*$*/std/*$$*/;
+int main() {
+	array<int, 4> v;
+}
+array<array<double, 4>, 2> vv;
+//=
+#include <array.hpp>
+
+int main() {
+	std::array<int, 4> v;
+}
+std::array<std::array<double, 4>, 2> vv;
+
+//!IUDIR_ExternalInlineNamespace_ArrayTemplate
+//@A1.cpp
+#include <array.hpp>
+int main() {
+	using std::array;
+	array<int, 42> v;
+}
+using namespace /*$*/std/*$$*/;
+array<array<double, 4>, 2> vv;
+//=
+#include <array.hpp>
+int main() {
+	using std::array;
+	array<int, 42> v;
+}
+
+std::array<std::array<double, 4>, 2> vv;
+
+//!IUDIR_VectorOfString
+//@A1.cpp
+#include <vector.hpp>
+using namespace /*$*/std/*$$*/;
+int main() {
+   vector<string> v;
+}
+vector<vector<string>> vv;
+//=
+#include <vector.hpp>
+
+int main() {
+	std::vector<std::string> v;
+}
+std::vector<std::vector<std::string> > vv;
 

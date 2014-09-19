@@ -13,6 +13,7 @@ package ch.hsr.ifs.cute.namespactor.refactoring.eudec;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
@@ -68,7 +69,7 @@ public class EUDecRefactoring extends EURefactoring {
 		boolean inCompositeDeclaration = NSNodeHelper.isInOrIsCompositeDeclaration(lastNameOfqName);
 		if (inCompositeDeclaration) {
 			if (CopyTemplateIdFactory.isOrContainsTemplateId(qualifiedName)) {
-				return buildNameWithTemplate(qualifiedName);
+				return qualifiedName.copy(CopyStyle.withLocations);//buildNameWithTemplate(qualifiedName);
 			}
 			names = NSNameHelper.getQualifiedUDECNameInTypeDecl(lastNameOfqName.resolveBinding());
 			lastNameToAddBinding = lastNameOfqName.resolveBinding();
@@ -136,11 +137,7 @@ public class EUDecRefactoring extends EURefactoring {
 	private static ICPPASTQualifiedName buildNameWithTemplate(ICPPASTQualifiedName qualifiedName) {
 		ICPPASTQualifiedName qname = ASTNodeFactory.getDefault().newQualifiedName();
 		for (IASTName name : qualifiedName.getNames()) {
-			if (name instanceof ICPPASTTemplateId) {
-				qname.addName(new CopyTemplateIdFactory((ICPPASTTemplateId) name).buildTemplate());
-			} else {
-				qname.addName(name.copy());
-			}
+				qname.addName(name.copy(CopyStyle.withLocations));//new CopyTemplateIdFactory((ICPPASTTemplateId) name).buildTemplate());
 		}
 		return qname;
 	}

@@ -13,9 +13,11 @@ package ch.hsr.ifs.cute.namespactor.refactoring;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTypeId;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
@@ -38,6 +40,7 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 		this.templateId = templateId;
 		shouldVisitNames = true;
 		shouldVisitTypeIds = true;
+		shouldVisitExpressions = true;
 	}
 
 	public static boolean isOrContainsTemplateId(IASTName name) {
@@ -55,10 +58,51 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 	}
 
 	public IASTName buildTemplate() {
-		templateId.accept(this);
-		return this.getTemplateId();
+//		templateId.accept(this);
+//		return this.getTemplateId();
+		IASTName newTemplateId=null;
+		if (templateId.getParent() instanceof ICPPASTQualifiedName){
+			newTemplateId =((ICPPASTQualifiedName)templateId.getParent()).copy(CopyStyle.withLocations);
+		} else {
+			newTemplateId = templateId.copy(CopyStyle.withLocations);
+		}
+		newTemplateId.accept(new ASTVisitor() {
+			{
+				shouldVisitNames=true;
+				shouldVisitTypeIds=true;
+			}
+			public int visit(IASTName name){
+				if (name instanceof ICPPASTTemplateId){
+					ICPPASTQualifiedName newqname = modifyTemplateId((ICPPASTTemplateId)name);
+					((ICPPASTTemplateId) name).setTemplateName(newqname);
+				}
+				return super.visit(name);
+			}
+
+			public int visit(IASTTypeId typeId) {
+				IASTDeclSpecifier vDeclSpecifier = typeId.getDeclSpecifier();
+				IASTDeclSpecifier newDeclSpec = null;
+
+				if (vDeclSpecifier instanceof ICPPASTNamedTypeSpecifier) {
+					newDeclSpec = createNamedDeclSpec(vDeclSpecifier);
+				} else if (vDeclSpecifier instanceof ICPPASTSimpleDeclSpecifier) {
+					newDeclSpec = createSimpleDeclSpec(vDeclSpecifier);
+				}
+				if (newDeclSpec!=null) typeId.setDeclSpecifier(newDeclSpec);
+				return super.visit(typeId);
+			}
+
+		});
+		return newTemplateId;//this.getTemplateId();
 	}
 
+	@Override
+	public int visit(IASTExpression expression) {
+		// TODO Auto-generated method stub
+		IASTExpression newex=expression.copy();
+		
+		return super.visit(expression);
+	}
 	@Override
 	public int visit(IASTName name) {
 		if (name instanceof ICPPASTTemplateId) {
@@ -93,11 +137,12 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 
 			if (newDeclSpec != null) {
 				((ICPPASTTemplateId) currNode).addTemplateArgument(factory.newTypeId(newDeclSpec, null));
-				currNode = newDeclSpec;
+				currNode = newDeclSpec; // loses parent template id. must be a stack.
 			}
 		}
 		return super.visit(typeId);
 	}
+	//TODO: must also cover expressions in template arguments. (psommerl)
 
 	protected IASTDeclSpecifier createSimpleDeclSpec(IASTDeclSpecifier vDeclSpecifier) {
 

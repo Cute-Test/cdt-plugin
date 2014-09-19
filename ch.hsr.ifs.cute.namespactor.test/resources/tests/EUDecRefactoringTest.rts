@@ -470,6 +470,48 @@ int main() {
 	s1.set(100);
 	std::cout << s1.arr[0] << std::endl;
 }
+//!EUDEC_Templates3a
+//@A1.cpp
+#include <iostream>
+namespace A{
+	template<typename T> void f(T t){
+		std::cout << t << std::endl;
+	}
+	template<typename T> struct S1{
+		T arr[1];
+		void set(T t){
+			arr[0] = t;
+		}
+	};
+	struct S2{
+		int i;
+	};
+}
+int main() {
+	/*$*/A/*$$*/::S1<A::S2> s12;
+	A::S1<A::S1<A::S2> > sNested;
+}
+//=
+#include <iostream>
+namespace A{
+	template<typename T> void f(T t){
+		std::cout << t << std::endl;
+	}
+	template<typename T> struct S1{
+		T arr[1];
+		void set(T t){
+			arr[0] = t;
+		}
+	};
+	struct S2{
+		int i;
+	};
+}
+int main() {
+	using A::S1;
+	S1<A::S2> s12;
+	S1<S1<A::S2> > sNested;
+}
 //!EUDEC_Templates4NestedNS
 //@A1.cpp
 #include <iostream>

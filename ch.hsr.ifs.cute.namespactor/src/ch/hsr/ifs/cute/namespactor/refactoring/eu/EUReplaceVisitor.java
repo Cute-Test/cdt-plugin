@@ -74,7 +74,7 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 		}
 	}
 
-	protected IASTName buildReplacementName(IASTName name) {
+	protected IASTName buildReplacementName(IASTName name) { // TODO: debug and fix with new template mechanism
 		if (isExtractCandidate(name)) {
 			ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
 			IASTName[] names = getNamesOf(name);

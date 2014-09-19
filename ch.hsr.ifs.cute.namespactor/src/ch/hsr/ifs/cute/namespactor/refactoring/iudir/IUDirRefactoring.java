@@ -101,7 +101,7 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 		} else {
 			ctx.selectedUsing = selectedUsingDirective;
 			ctx.selectedName = selectedUsingDirective.getQualifiedName();
-			ctx.templateIdsToIgnore = new HashSet<ICPPASTTemplateId>();
+//			ctx.templateIdsToIgnore = new HashSet<ICPPASTTemplateId>();
 			ctx.enclosingCompound = NSNodeHelper.findCompoundStatementInAncestors(selectedUsingDirective);
 			includeDepAnalyser = new IncludeDependencyAnalyser(getIndex());
 			namespacesPerUsing = new HashMap<IASTName, List<IIndexName>>();
@@ -183,7 +183,7 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 
 							if (currentNameIsATarget) {
 								addNameToTargets(name, nsDefName, usingNamespaces.getKey());
-								break;
+								break;//return super.visit(name);//break;
 							}
 						}
 					}
@@ -196,7 +196,10 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 
 			private boolean isCandidate(IASTName name) {
 				// only visit real IASTNames
-				if (name instanceof ICPPASTQualifiedName) {
+				if (name instanceof ICPPASTTemplateId){
+					return false;
+				}
+				if (name instanceof ICPPASTQualifiedName ) {
 					return false;
 				}
 

@@ -12,9 +12,11 @@
 package ch.hsr.ifs.cute.namespactor.refactoring.eudir;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDirective;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EURefactoringContext;
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EUReplaceVisitor;
@@ -61,7 +63,11 @@ public class EUDirReplaceVisitor extends EUReplaceVisitor {
 	protected ICPPASTQualifiedName buildReplacementTemplate(IASTName iastName) {
 		ICPPASTQualifiedName replaceName;
 		EUTemplateIdFactory templateBuilder = new EUDirTemplateIdFactory((ICPPASTTemplateId) iastName, context);
-		replaceName = (ICPPASTQualifiedName) templateBuilder.buildTemplate();
+		IASTName buildTemplate = templateBuilder.buildTemplate();
+		if (buildTemplate instanceof ICPPASTQualifiedName) {
+			return (ICPPASTQualifiedName) buildTemplate;
+		}
+		replaceName = CPPNodeFactory.getDefault().newQualifiedName((ICPPASTName)buildTemplate); // hack Thomas
 		return replaceName;
 	}
 

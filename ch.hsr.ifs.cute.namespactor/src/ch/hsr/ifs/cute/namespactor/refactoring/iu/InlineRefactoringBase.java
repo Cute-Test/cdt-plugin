@@ -48,9 +48,9 @@ public abstract class InlineRefactoringBase extends RefactoringBase {
 		IASTName nodeToReplace = null;
 		ICPPASTTemplateId vTemplId = (ICPPASTTemplateId) childRefNode.getParent();
 
-		if (ctx.templateIdsToIgnore.contains(vTemplId)) {
-			return;
-		}
+//		if (ctx.templateIdsToIgnore.contains(vTemplId)) {
+//			return;
+//		}
 
 		ICPPASTTemplateId outerMostTemplateId = NSNodeHelper.findOuterMost(ICPPASTTemplateId.class, vTemplId);
 		if (outerMostTemplateId == null) {

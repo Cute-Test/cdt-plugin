@@ -26,6 +26,6 @@ public class InlineRefactoringContext {
 	public IASTName selectedName;
 	public IASTDeclaration selectedUsing;
 	public NamespaceInlineContext enclosingNSContext;
-	public Set<ICPPASTTemplateId> templateIdsToIgnore;
+//	public Set<ICPPASTTemplateId> templateIdsToIgnore;
 	public IASTNode enclosingCompound;
 }

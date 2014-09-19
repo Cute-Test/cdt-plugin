@@ -37,7 +37,7 @@ public class QUNTemplateIdFactory extends TemplateIdFactory {
 	public QUNTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context) {
 		super(templateId);
 		this.enclosingNSContext = context.enclosingNSContext;
-		this.templateIdsToIgnore = context.templateIdsToIgnore;
+//		this.templateIdsToIgnore = context.templateIdsToIgnore;
 	}
 
 	@Override

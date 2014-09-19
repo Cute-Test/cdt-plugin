@@ -6,5 +6,6 @@ inline namespace __1 {
 	template <typename T>
 	struct vector {
 	};
+	struct string{};
 }}
 #endif /* VETOR_HPP_ */

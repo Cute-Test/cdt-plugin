@@ -34,26 +34,26 @@ import ch.hsr.ifs.cute.namespactor.refactoring.iu.NamespaceInlineContext;
 public class IUDecTemplateIdFactory extends TemplateIdFactory {
 
 	private final NamespaceInlineContext enclosingNSContext;
-	private Set<ICPPASTTemplateId> templateIdsToIgnore = null;
+//	private Set<ICPPASTTemplateId> templateIdsToIgnore = null;
 
 	public IUDecTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context) {
 		super(templateId);
 		this.enclosingNSContext = context.enclosingNSContext;
-		this.templateIdsToIgnore = context.templateIdsToIgnore;
+//		this.templateIdsToIgnore = context.templateIdsToIgnore;
 	}
 
 	@Override
 	public int visit(IASTName name) {
 		if (name instanceof ICPPASTTemplateId) {
-			templateIdsToIgnore.add((ICPPASTTemplateId) name);
+//			templateIdsToIgnore.add((ICPPASTTemplateId) name);
 		}
 		return super.visit(name);
 	}
 
 	@Override
 	protected ICPPASTNamedTypeSpecifier createNamedDeclSpec(IASTDeclSpecifier vDeclSpecifier) {
-		ICPPASTNamedTypeSpecifier newDeclSpec = factory.newNamedTypeSpecifier(null);
-		IASTName specName = ((ICPPASTNamedTypeSpecifier) vDeclSpecifier).getName();
+		ICPPASTNamedTypeSpecifier newDeclSpec = (ICPPASTNamedTypeSpecifier)vDeclSpecifier;
+		IASTName specName = newDeclSpec.getName();
 
 		// qualify the name of the specifier if it has nothing to do with a template id
 		if (!isOrContainsTemplateId(specName)) {
@@ -61,7 +61,7 @@ public class IUDecTemplateIdFactory extends TemplateIdFactory {
 			if (!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.namespaceDefNode.getName())) {
 				qnameNode = NSNameHelper.prefixNameWith(enclosingNSContext.usingName, specName);
 			}
-			newDeclSpec.setName(qnameNode.copy());
+			newDeclSpec.setName(qnameNode);
 		}
 		return newDeclSpec;
 	}
@@ -73,15 +73,17 @@ public class IUDecTemplateIdFactory extends TemplateIdFactory {
 		if (requiresQualification(vTemplId)) {
 			qnameNode = NSNameHelper.prefixNameWith(enclosingNSContext.usingName, vTemplId.getTemplateName());
 			qnameNode = NSNameHelper.copyQualifers(qnameNode);
-		} else if (vTemplId.getParent() instanceof ICPPASTQualifiedName) {
-			qnameNode = NSNameHelper.copyQualifers((ICPPASTQualifiedName) vTemplId.getParent());
+//		} else if (vTemplId.getOriginalNode().getParent() instanceof ICPPASTQualifiedName) {
+//			qnameNode = NSNameHelper.copyQualifers((ICPPASTQualifiedName) vTemplId.getOriginalNode().getParent());
 		} else {
 			qnameNode = factory.newQualifiedName();
 		}
+		qnameNode.addName(vTemplId.getTemplateName());
 		return qnameNode;
 	}
 
 	private boolean requiresQualification(ICPPASTTemplateId templId) {
+		templId=(ICPPASTTemplateId) templId.getOriginalNode();
 		IBinding templateNameBinding = templId.getTemplateName().resolveBinding();
 		IBinding owner = templateNameBinding.getOwner();
 		if (owner instanceof ICPPNamespace) {

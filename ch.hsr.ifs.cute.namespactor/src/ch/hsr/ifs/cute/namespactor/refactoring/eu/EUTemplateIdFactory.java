@@ -11,11 +11,16 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.eu;
 
+import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTTypeId;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
@@ -38,16 +43,59 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 		this.selectedType = context.startingTypeName;
 	}
 
+	public ICPPASTQualifiedName buildTemplate() {
+//		templateId.accept(this);
+//		return this.getTemplateId();
+		IASTName newTemplateId=templateId.copy(CopyStyle.withLocations);
+
+	//	newTemplateId = templateId.copy(CopyStyle.withLocations);
+		newTemplateId.accept(new ASTVisitor() {
+			{
+				shouldVisitNames=true;
+				shouldVisitTypeIds=true;
+			}
+			public int visit(IASTName name){
+				if (name instanceof ICPPASTTemplateId){
+					ICPPASTQualifiedName newqname = modifyTemplateId((ICPPASTTemplateId)name);
+					((ICPPASTTemplateId) name).setTemplateName(newqname);
+				}
+				return super.visit(name);
+			}
+
+			public int visit(IASTTypeId typeId) {
+				IASTDeclSpecifier vDeclSpecifier = typeId.getDeclSpecifier();
+				IASTDeclSpecifier newDeclSpec = null;
+
+				if (vDeclSpecifier instanceof ICPPASTNamedTypeSpecifier) {
+					newDeclSpec = createNamedDeclSpec(vDeclSpecifier);
+				} else if (vDeclSpecifier instanceof ICPPASTSimpleDeclSpecifier) {
+					newDeclSpec = createSimpleDeclSpec(vDeclSpecifier);
+				}
+				if (newDeclSpec!=null) typeId.setDeclSpecifier(newDeclSpec);
+				return super.visit(typeId);
+			}
+
+		});
+		if (!(newTemplateId instanceof ICPPASTQualifiedName)){
+			ICPPASTQualifiedName wrapper=ASTNodeFactory.getDefault().newQualifiedName();
+			wrapper.addName(newTemplateId);
+			newTemplateId=wrapper;
+		}
+		return (ICPPASTQualifiedName) newTemplateId;//this.getTemplateId();
+	}
+
+	
 	protected void buildReplaceName(ICPPASTQualifiedName replaceName, IASTName[] names) {
 		boolean start = false;
 		for (IASTName iastName : names) {
-			IBinding binding = iastName.resolveBinding();
+			IBinding binding = ((IASTName)iastName.getOriginalNode()).resolveBinding();
 			if (start) {
-				if (iastName instanceof ICPPASTTemplateId) {
-					break;
-				}
+				//if (iastName instanceof ICPPASTTemplateId) {
+					//replaceName.setLastName(((ICPPASTName)((ICPPASTTemplateId)iastName).getTemplateName()).copy(CopyStyle.withLocations));
+					//break;
+				//}
 				if (binding instanceof ICPPNamespace || binding instanceof ICPPClassType) {
-					replaceName.addName(iastName.copy());
+					replaceName.addName(iastName.copy(CopyStyle.withLocations));
 				}
 			}
 			if (binding.equals(selectedName.resolveBinding())) {
@@ -62,8 +110,8 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 
 	@Override
 	protected ICPPASTNamedTypeSpecifier createNamedDeclSpec(IASTDeclSpecifier vDeclSpecifier) {
-		ICPPASTNamedTypeSpecifier newDeclSpec = factory.newNamedTypeSpecifier(null);
-		IASTName specName = ((ICPPASTNamedTypeSpecifier) vDeclSpecifier).getName();
+		ICPPASTNamedTypeSpecifier newDeclSpec = (ICPPASTNamedTypeSpecifier)vDeclSpecifier;
+		IASTName specName = newDeclSpec.getName();
 		ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
 
 		if (specName instanceof ICPPASTQualifiedName) {
@@ -72,7 +120,7 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 			buildReplaceName(replaceName, names);
 			newDeclSpec.setName(replaceName);
 		} else {
-			newDeclSpec.setName(specName.copy());
+			newDeclSpec.setName(specName);
 		}
 
 		return newDeclSpec;
@@ -83,13 +131,14 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 		ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
 
 		IASTName[] names = null;
-		if (vTemplId.getParent() instanceof ICPPASTQualifiedName) {
-			names = ((ICPPASTQualifiedName) vTemplId.getParent()).getNames();
+		if (vTemplId.getOriginalNode().getParent() instanceof ICPPASTQualifiedName) {
+			names = ((ICPPASTQualifiedName) vTemplId.getOriginalNode().getParent()).getNames();
 		} else {
-			names = new IASTName[] { ((IASTName) vTemplId.getParent()).getLastName() };
+			names = new IASTName[] { ((IASTName) vTemplId.getOriginalNode().getParent()).getLastName() };
 		}
 		precedeWithQualifiers(replaceName, names, vTemplId.getTemplateName());
 		buildReplaceName(replaceName, names);
+		replaceName.setLastName((ICPPASTName) vTemplId.getTemplateName());
 		return replaceName;
 	}
 

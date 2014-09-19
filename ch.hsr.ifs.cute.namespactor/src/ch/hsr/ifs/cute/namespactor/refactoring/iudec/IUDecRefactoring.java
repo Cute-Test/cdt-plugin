@@ -99,7 +99,7 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 			ctx.selectedUsing = selectedUDEC;
 			ctx.selectedName = selectedUDEC.getName();
 			ctx.enclosingCompound = NSNodeHelper.findCompoundStatementInAncestors(selectedUDEC);
-			ctx.templateIdsToIgnore = new HashSet<ICPPASTTemplateId>();
+//			ctx.templateIdsToIgnore = new HashSet<ICPPASTTemplateId>();
 
 			includeDepAnalyser = new IncludeDependencyAnalyser(getIndex());
 			targets = new ArrayList<IASTName>();
@@ -147,7 +147,7 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 	}
 
 	private void initContext(IProgressMonitor pm, IASTName refNode) throws CoreException, NodeDefinitionNotInWorkspaceException {
-		ctx.templateIdsToIgnore = new HashSet<ICPPASTTemplateId>();
+//		ctx.templateIdsToIgnore = new HashSet<ICPPASTTemplateId>();
 		IBinding selectedNameBinding = ctx.selectedName.getLastName().resolveBinding();
 		ICPPUsingDeclaration selectedDeclaration = (ICPPUsingDeclaration) selectedNameBinding;
 

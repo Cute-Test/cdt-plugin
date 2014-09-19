@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="cdt" sequenceNumber="71">
+<?pde version="3.8"?><target name="cdt" sequenceNumber="72">
 <locations>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="ch.hsr.ifs.cdttesting.tools.feature.feature.group" version="4.0.0.201406261412"/>
-<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="4.0.0.201406261412"/>
-<repository location="http://cevelop.com/cdt-test-plugins/development"/>
-</location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.sdk.ide" version="4.4.0.I20140606-1215"/>
 <unit id="org.eclipse.platform.sdk" version="4.4.0.I20140606-1215"/>
@@ -19,6 +14,11 @@
 <unit id="org.eclipse.cdt.sdk.feature.group" version="8.5.0.201408291926"/>
 <unit id="org.eclipse.cdt.feature.group" version="8.5.0.201408291926"/>
 <repository location="http://download.eclipse.org/tools/cdt/builds/luna/milestones/sr1-rc2"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="ch.hsr.ifs.cdttesting.tools.feature.feature.group" version="4.0.0.201409171446"/>
+<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="4.0.0.201409171446"/>
+<repository location="http://cevelop.com/cdt-test-plugins/development"/>
 </location>
 </locations>
 </target>
