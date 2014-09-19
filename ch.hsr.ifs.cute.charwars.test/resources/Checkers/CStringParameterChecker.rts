@@ -59,3 +59,15 @@ void func(const std::string &str, const double x) {
 
 void func(const char *str, const double x) {
 }
+
+
+//!IgnoresPointerToCStringParameer
+//@main.cpp
+int main(int argc, const char **argv) {
+}
+
+
+//!IgnoresArrayOfCStringsParameer
+//@main.cpp
+int main(int argc, const char *argv[]) {
+}

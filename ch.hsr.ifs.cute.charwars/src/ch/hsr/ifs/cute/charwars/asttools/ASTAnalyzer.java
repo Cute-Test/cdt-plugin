@@ -154,7 +154,9 @@ public class ASTAnalyzer {
 	}
 	
 	private static boolean isArrayOrPointer(IASTDeclarator declarator) {
-		return declarator instanceof IASTArrayDeclarator || declarator.getPointerOperators().length > 0; 
+		boolean isArray = declarator instanceof IASTArrayDeclarator;
+		boolean isPointer = declarator.getPointerOperators().length == 1;
+		return isArray ^ isPointer;
 	}
 	
 	private static boolean hasStringLiteralAssignment(IASTDeclarator declarator) {
