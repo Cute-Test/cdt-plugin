@@ -302,27 +302,30 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean isCallToFunction(IASTNode node, Function function) {
-		if(node instanceof IASTFunctionCallExpression) {
-			IASTFunctionCallExpression functionCallExpression = (IASTFunctionCallExpression)node;
-			IASTExpression functionNameExpression = functionCallExpression.getFunctionNameExpression();
-			if(functionNameExpression instanceof IASTIdExpression) {
-				IASTIdExpression idExpression = (IASTIdExpression)functionNameExpression;
-				String functionName = idExpression.getName().toString();
-				return functionName.equals(function.getName()) || functionName.equals(function.getQualifiedName());
-			}
-		}
-		return false;
+		return isCallTo(node, function, false);
 	}
 	
 	public static boolean isCallToMemberFunction(IASTNode node, Function memberFunction) {
+		return isCallTo(node, memberFunction, true);
+	}
+	
+	private static boolean isCallTo(IASTNode node, Function function, boolean isMemberFunction) {
 		if(node instanceof IASTFunctionCallExpression) {
 			IASTFunctionCallExpression functionCallExpression = (IASTFunctionCallExpression)node;
 			IASTExpression functionNameExpression = functionCallExpression.getFunctionNameExpression();
-			if(functionNameExpression instanceof IASTFieldReference) {
-				IASTFieldReference fieldReference = (IASTFieldReference)functionNameExpression;
-				String fieldName = fieldReference.getFieldName().toString();
-				return fieldName.equals(memberFunction.getName()) || fieldName.equals(memberFunction.getQualifiedName());
+			String expectedName = function.getName();
+			String expectedQualifiedName = function.getQualifiedName();
+			String actualName = null;
+			
+			if(!isMemberFunction && functionNameExpression instanceof IASTIdExpression) {
+				IASTIdExpression idExpression = (IASTIdExpression)functionNameExpression;
+				actualName = idExpression.getName().toString();
 			}
+			else if(isMemberFunction && functionNameExpression instanceof IASTFieldReference) {
+				IASTFieldReference fieldReference = (IASTFieldReference)functionNameExpression;
+				actualName = fieldReference.getFieldName().toString();
+			}
+			return expectedName.equals(actualName) || expectedQualifiedName.equals(actualName);
 		}
 		return false;
 	}
