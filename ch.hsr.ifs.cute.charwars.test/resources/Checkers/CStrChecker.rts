@@ -404,13 +404,20 @@ int main() {
 
 //!CStrRefactoringStdStringOverloadedConstructors
 //@.config
-markerPositions=5
+markerPositions=5,6,7,9,10,11,12
 //@main.cpp
 #include "string.h"
-
+void func(const std::string& str) {}
 int main() {
 	std::string x = "hello";
-	std::string y = x.c_str();
+	std::string y1 = x.c_str();
+	std::string y2{x.c_str()};
+	std::string y3 = {x.c_str()};
+	//func(std::string{x.c_str()});
+	std::string *y4 = new std::string{x.c_str()};
+	std::string y5(x.c_str());
+	func(std::string(x.c_str()));
+	std::string *y6 = new std::string(x.c_str());
 }
 
 

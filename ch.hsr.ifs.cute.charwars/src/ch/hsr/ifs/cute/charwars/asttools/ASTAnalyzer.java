@@ -612,7 +612,7 @@ public class ASTAnalyzer {
 			ICPPReferenceType referenceType = (ICPPReferenceType)type;
 			if(referenceType.getType() instanceof IQualifierType) {
 				IQualifierType qualifierType = (IQualifierType)referenceType.getType();
-				if(qualifierType.isConst() && qualifierType.getType() instanceof ICPPClassType) {
+				if(qualifierType.isConst()) {
 					return isStdStringType(qualifierType.getType());
 				}
 			}
@@ -1052,53 +1052,95 @@ public class ASTAnalyzer {
 		return node;
 	}
 	
+	public static IASTName getFunctionName(IASTNode node) {
+		IASTName functionName = null;
+		if(node instanceof ICPPASTFunctionCallExpression) {
+			ICPPASTFunctionCallExpression functionCall = (ICPPASTFunctionCallExpression)node;
+			IASTExpression functionNameExpression = functionCall.getFunctionNameExpression();
+			if(functionNameExpression instanceof IASTIdExpression) {
+				functionName = ((IASTIdExpression)functionNameExpression).getName();
+			}
+			else if(functionNameExpression instanceof IASTFieldReference) {
+				functionName = ((IASTFieldReference)functionNameExpression).getFieldName();
+			}
+			
+			if(functionName != null) {
+				IBinding functionNameBinding = functionName.resolveBinding();
+				if(functionNameBinding instanceof ICPPClassType) {
+					functionName = getConstructorName(functionCall);
+				}
+			}
+		}
+		else if(node instanceof ICPPASTConstructorInitializer) {
+			IASTImplicitNameOwner declarator = (IASTImplicitNameOwner)node.getParent();
+			functionName = getConstructorName(declarator);
+		}
+		else if(node instanceof ICPPASTInitializerList || node instanceof IASTEqualsInitializer) {
+			IASTNode parent = node.getParent();
+			
+			if(parent instanceof IASTEqualsInitializer) {
+				parent = parent.getParent();
+			}
+			
+			if((parent instanceof ICPPASTDeclarator || parent instanceof ICPPASTNewExpression) && parent instanceof IASTImplicitNameOwner) {
+				IASTImplicitNameOwner declarator = (IASTImplicitNameOwner)parent;
+				functionName = getConstructorName(declarator);
+			}
+		}
+		return functionName;
+	}
+	
+	private static IASTImplicitName getConstructorName(IASTImplicitNameOwner owner) {
+		for(IASTImplicitName implicitName : owner.getImplicitNames()) {
+			if(implicitName.resolveBinding() instanceof ICPPConstructor) {
+				return implicitName;
+			}
+		}
+		return null;
+	}
+	
+	public static ICPPFunction getFunctionBinding(IASTNode node) {
+		IASTName functionName = getFunctionName(node);		
+		if(functionName != null) {
+			IBinding binding = functionName.resolveBinding();
+			if(binding instanceof ICPPFunction) {
+				return (ICPPFunction) binding;
+			}
+		}
+		return null;
+	}
+	
+	public static int getArgIndex(IASTNode node, IASTNode idExpression) {
+		IASTInitializerClause[] arguments = null;
+		
+		if(node instanceof ICPPASTFunctionCallExpression) {
+			ICPPASTFunctionCallExpression functionCall = (ICPPASTFunctionCallExpression)node;
+			arguments = functionCall.getArguments();
+		}
+		else if(node instanceof ICPPASTConstructorInitializer) {
+			ICPPASTConstructorInitializer constructorInitializer = (ICPPASTConstructorInitializer)node;
+			arguments = constructorInitializer.getArguments();
+		}
+		else if(node instanceof ICPPASTInitializerList) {
+			ICPPASTInitializerList initializerList = (ICPPASTInitializerList)node;
+			arguments = initializerList.getClauses();
+		}
+		
+		if(arguments != null) {
+			return Arrays.asList(arguments).indexOf(idExpression);
+		}
+		else if(node instanceof IASTEqualsInitializer) {
+			return 0;
+		}
+
+		return -1;
+	}
+	
 	public static IType getParameterType(IASTNode idExpression) {
 		idExpression = idExpression.getOriginalNode();
 		IASTNode parent = idExpression.getParent();
-		int argIndex = -1;
-		ICPPFunction functionBinding = null;
-		
-		if(parent instanceof ICPPASTFunctionCallExpression) {
-			ICPPASTFunctionCallExpression functionCall = (ICPPASTFunctionCallExpression)parent;
-			argIndex = Arrays.asList(functionCall.getArguments()).indexOf(idExpression);
-			IASTName functionName = ((IASTIdExpression)functionCall.getFunctionNameExpression()).getName();
-			IBinding functionNameBinding = functionName.resolveBinding();
-			
-			if(functionNameBinding instanceof ICPPClassType) {
-				IASTImplicitName implicitNames[] = functionCall.getImplicitNames();
-				if(implicitNames.length > 0) {
-					IBinding binding = implicitNames[0].resolveBinding();
-					if(binding instanceof ICPPConstructor) {
-						functionBinding = (ICPPFunction)binding;
-					}	
-				}
-			}
-			else if(functionNameBinding instanceof ICPPFunction) {
-				functionBinding = (ICPPFunction)functionNameBinding;
-			}
-		}
-		else if(parent instanceof ICPPASTConstructorInitializer) {
-			ICPPASTConstructorInitializer constructorInitializer = (ICPPASTConstructorInitializer)parent;
-			argIndex = Arrays.asList(constructorInitializer.getArguments()).indexOf(idExpression);
-			IASTImplicitNameOwner declarator = (IASTImplicitNameOwner)parent.getParent();
-			IASTImplicitName implicitNames[] = declarator.getImplicitNames();
-			if(implicitNames.length > 0) {
-				functionBinding = (ICPPConstructor)implicitNames[0].resolveBinding();
-			}
-		}
-		else if(parent instanceof ICPPASTInitializerList) {
-			ICPPASTInitializerList initializerList = (ICPPASTInitializerList)parent;
-			argIndex = Arrays.asList(initializerList.getClauses()).indexOf(idExpression);
-			
-			IASTImplicitNameOwner declarator = null;
-			if(parent.getParent() instanceof IASTDeclarator || parent.getParent() instanceof ICPPASTNewExpression) {
-				declarator = (IASTImplicitNameOwner)parent.getParent();
-				IASTImplicitName implicitNames[] = declarator.getImplicitNames();
-				if(implicitNames.length > 0) {
-					functionBinding = (ICPPConstructor)implicitNames[0].resolveBinding();
-				}
-			}
-		}
+		int argIndex = getArgIndex(parent, idExpression);
+		ICPPFunction functionBinding = getFunctionBinding(parent);
 		
 		if(functionBinding != null && argIndex != -1) {
 			ICPPParameter parameter = functionBinding.getParameters()[argIndex];
