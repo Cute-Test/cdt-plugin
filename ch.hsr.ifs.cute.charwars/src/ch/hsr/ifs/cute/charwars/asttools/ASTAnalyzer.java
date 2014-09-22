@@ -57,6 +57,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassSpecialization;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
@@ -73,15 +74,13 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
 
 public class ASTAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
-		IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
-		IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
-		return hasCStringType(declSpecifier) && isArrayXorPointer(declarator) && (hasStringLiteralAssignment(declarator) || hasStrdupAssignment(declarator));
+		boolean hasCStringType = hasCStringType(declarator, true) || hasCStringType(declarator, false); 
+		return hasCStringType && (hasStringLiteralAssignment(declarator) || hasStrdupAssignment(declarator));
 	}
 	
 	public static boolean isCStringAlias(IASTDeclarator declarator) {
-		IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
-		IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
-		return hasCStringType(declSpecifier) && isArrayXorPointer(declarator) && hasCStringAssignment(declarator);
+		boolean hasCStringType = hasCStringType(declarator, true) || hasCStringType(declarator, false); 
+		return hasCStringType && hasCStringAssignment(declarator);
 	}
 	
 	public static boolean hasCStringAssignment(IASTDeclarator declarator) {
@@ -100,14 +99,25 @@ public class ASTAnalyzer {
 		return false;
 	}
 	
-	public static boolean hasCStringType(IASTDeclSpecifier declSpecifier) {
+	private static boolean hasCStringType(IASTDeclarator declarator, boolean isConst) {
+		IASTNode parent = declarator.getParent();
+		IASTDeclSpecifier declSpecifier = null;
+		
+		if(parent instanceof IASTSimpleDeclaration) {
+			declSpecifier = ((IASTSimpleDeclaration)parent).getDeclSpecifier(); 
+		}
+		else if(parent instanceof ICPPASTParameterDeclaration) {
+			declSpecifier = ((ICPPASTParameterDeclaration)parent).getDeclSpecifier();
+		}
+		
 		if(declSpecifier instanceof IASTSimpleDeclSpecifier) {
 			IASTSimpleDeclSpecifier simpleDeclSpecifier = (IASTSimpleDeclSpecifier)declSpecifier;
 			int type = simpleDeclSpecifier.getType();
-			return type == IASTSimpleDeclSpecifier.t_char || 
-				   type == IASTSimpleDeclSpecifier.t_wchar_t ||
-				   type == IASTSimpleDeclSpecifier.t_char16_t ||
-				   type == IASTSimpleDeclSpecifier.t_char32_t;
+			boolean isValidType = type == IASTSimpleDeclSpecifier.t_char || 
+								  type == IASTSimpleDeclSpecifier.t_wchar_t ||
+								  type == IASTSimpleDeclSpecifier.t_char16_t ||
+								  type == IASTSimpleDeclSpecifier.t_char32_t;
+			return isValidType && isArrayXorPointer(declarator) && isConst == simpleDeclSpecifier.isConst();
 		}
 		return false;
 	}
@@ -422,31 +432,29 @@ public class ASTAnalyzer {
 		return false;
 	}
 	
-	public static boolean isPartOfStringEqualityCheck(IASTIdExpression node) {
+	public static boolean isPartOfStringCheck(IASTIdExpression node, boolean isEqualityCheck) {
 		IASTNode parent = node.getParent();
 		if(isCallToFunction(parent, Function.STRCMP) || isCallToFunction(parent, Function.WCSCMP)) {
 			IASTExpression strcmpCall = (IASTExpression)parent;
-			if(isLogicalNotExpression(strcmpCall.getParent())) {
-				return true;
+			IASTNode strcmpParent = strcmpCall.getParent();
+			
+			if(isEqualityCheck) {
+				if(isLogicalNotExpression(strcmpParent)) {
+					return true;
+				}
+				else if(isEqualityCheck(strcmpParent)) {
+					IASTBinaryExpression equalityCheck = (IASTBinaryExpression)strcmpParent;
+					return isIntegerLiteral(equalityCheck.getOperand1(), 0) || isIntegerLiteral(equalityCheck.getOperand2(), 0);
+				}
 			}
-			else if(isEqualityCheck(strcmpCall.getParent())) {
-				IASTBinaryExpression equalityCheck = (IASTBinaryExpression)strcmpCall.getParent();
-				return isIntegerLiteral(equalityCheck.getOperand1(), 0) || isIntegerLiteral(equalityCheck.getOperand2(), 0);
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isPartOfStringInequalityCheck(IASTIdExpression node) {
-		IASTNode parent = node.getParent();
-		if(isCallToFunction(parent, Function.STRCMP) || isCallToFunction(parent, Function.WCSCMP)) {
-			IASTExpression strcmpCall = (IASTExpression)parent;
-			if(isInequalityCheck(strcmpCall.getParent())) {
-				IASTBinaryExpression inequalityCheck = (IASTBinaryExpression)strcmpCall.getParent();
-				return isIntegerLiteral(inequalityCheck.getOperand1(), 0) || isIntegerLiteral(inequalityCheck.getOperand2(), 0);
-			}
-			else if(isCondition(strcmpCall) || isAssignedToBoolean(strcmpCall) || isAssert(strcmpCall)) {
-				return true;
+			else {
+				if(isInequalityCheck(strcmpParent)) {
+					IASTBinaryExpression inequalityCheck = (IASTBinaryExpression)strcmpParent;
+					return isIntegerLiteral(inequalityCheck.getOperand1(), 0) || isIntegerLiteral(inequalityCheck.getOperand2(), 0);
+				}
+				else if(isCondition(strcmpCall) || isAssignedToBoolean(strcmpCall) || isAssert(strcmpCall)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -578,29 +586,12 @@ public class ASTAnalyzer {
 		return false;
 	}
 
-	public static boolean isConstCStringParameterDeclaration(IASTParameterDeclaration parameter) {
-		IASTDeclarator parameterDeclarator = parameter.getDeclarator();
-		IASTDeclSpecifier parameterDeclSpecifier = parameter.getDeclSpecifier();
-		return hasCStringType(parameterDeclSpecifier) && isArrayXorPointer(parameterDeclarator) && parameterDeclSpecifier.isConst();
+	public static boolean isConstCStringParameter(IASTDeclarator declarator) {
+		return hasCStringType(declarator, true);
 	}
 	
-	public static boolean isCStringParameterDeclaration(IASTParameterDeclaration parameter) {
-		IASTDeclarator parameterDeclarator = parameter.getDeclarator();
-		IASTDeclSpecifier parameterDeclSpecifier = parameter.getDeclSpecifier();		
-		return hasCStringType(parameterDeclSpecifier) && isArrayXorPointer(parameterDeclarator) && !parameterDeclSpecifier.isConst();
-	}
-	
-	public static boolean isCStringType(IType type) {
-		if(type instanceof IPointerType) {
-			IPointerType pointer = (IPointerType)type;
-			IType pointee = pointer.getType();
-			if(pointee instanceof IBasicType) {
-				IBasicType basicType = (IBasicType)pointee;
-				return basicType.getKind() == Kind.eChar ||
-					   basicType.getKind() == Kind.eWChar;
-			}
-		}
-		return false;
+	public static boolean isCStringParameter(IASTDeclarator declarator) {
+		return hasCStringType(declarator, false);
 	}
 	
 	public static boolean isStdStringParameterDeclaration(IASTParameterDeclaration parameter) {
@@ -632,6 +623,31 @@ public class ASTAnalyzer {
 		}
 		return false;
 	}
+	
+	public static boolean isCStringType(IType type, boolean isConst) {
+		if(type instanceof IPointerType) {
+			IPointerType pointer = (IPointerType)type;
+			IType pointee = pointer.getType();
+			
+			IBasicType basicType = null;
+			if(pointee instanceof IQualifierType) {
+				IQualifierType qualifierType = (IQualifierType) pointee;
+				IType qualifiedType = qualifierType.getType();
+				if(qualifiedType instanceof IBasicType && isConst == qualifierType.isConst()) {
+					basicType = (IBasicType)qualifiedType;
+				}
+			}
+			else if(pointee instanceof IBasicType && !isConst) {
+				basicType = (IBasicType)pointee;
+			}
+			
+			if(basicType != null) {
+				return basicType.getKind() == Kind.eChar ||
+					   basicType.getKind() == Kind.eWChar;
+			}
+		}
+		return false;
+	}
 
 	public static boolean isAssignedToCharPointer(IASTNode functionCall, boolean isConst) {
 		IASTNode parent = functionCall.getParent();
@@ -640,21 +656,13 @@ public class ASTAnalyzer {
 			IASTBinaryExpression assignment = (IASTBinaryExpression)parent;
 			IASTExpression originalOperand1 = (IASTExpression)assignment.getOperand1().getOriginalNode();
 			IType expressionType = originalOperand1.getExpressionType();
-			if(expressionType instanceof IPointerType) {
-				IPointerType pointerType = (IPointerType)expressionType;
-				IType type = pointerType.getType();
-				if(type instanceof IBasicType) {
-					IBasicType basicType = (IBasicType)type;
-					return (basicType.getKind() == Kind.eChar) && (isConst == pointerType.isConst());
-				}
-			}	
+			return isCStringType(expressionType, isConst);
 		}
 		else if(parent instanceof IASTEqualsInitializer) {
 			IASTNode possibleDeclarator = parent.getParent();
 			if(possibleDeclarator instanceof IASTDeclarator) {
 				IASTDeclarator declarator = (IASTDeclarator)possibleDeclarator;
-				IASTDeclSpecifier declSpecifier = ((IASTSimpleDeclaration)declarator.getParent()).getDeclSpecifier();
-				return hasCStringType(declSpecifier) && isArrayXorPointer(declarator) && (declSpecifier.isConst() == isConst);
+				return hasCStringType(declarator, isConst);
 			}
 		}
 		return false;

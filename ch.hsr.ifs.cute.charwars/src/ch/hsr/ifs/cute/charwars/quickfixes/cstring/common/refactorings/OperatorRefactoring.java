@@ -27,8 +27,8 @@ public class OperatorRefactoring extends Refactoring {
 		String outFunctionName = outFunction.getName();
 		boolean isStrcmpOrWcscmp = (inFunction == Function.STRCMP) || (inFunction == Function.WCSCMP);
 		boolean isOther = !isStrcmpOrWcscmp && ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
-		boolean isStringEqualityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_EQUALS) && ASTAnalyzer.isPartOfStringEqualityCheck(idExpression); 
-		boolean isStringInequalityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && ASTAnalyzer.isPartOfStringInequalityCheck(idExpression);
+		boolean isStringEqualityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_EQUALS) && ASTAnalyzer.isPartOfStringCheck(idExpression, true); 
+		boolean isStringInequalityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && ASTAnalyzer.isPartOfStringCheck(idExpression, false);
 		
 		if(!context.isOffset(idExpression) && (isOther || isStringEqualityCheck || isStringInequalityCheck)) {
 			IASTNode nodeToReplace = isStrcmpOrWcscmp ? ASTAnalyzer.getEnclosingBoolean(idExpression) : idExpression.getParent();

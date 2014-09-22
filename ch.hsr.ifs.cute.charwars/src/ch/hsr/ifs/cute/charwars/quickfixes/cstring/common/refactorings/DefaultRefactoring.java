@@ -25,14 +25,13 @@ public class DefaultRefactoring extends Refactoring {
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
 		IType parameterType = ASTAnalyzer.getParameterType(idExpression);
 		
-		if(parameterType != null && ASTAnalyzer.isCStringType(parameterType)) {
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, idExpression);
+		isApplicable = true;
+		config.put(NODE_TO_REPLACE, idExpression);
+		
+		if(parameterType != null && ASTAnalyzer.isCStringType(parameterType, false)) {
 			config.put(CONVERT_TO_CONST, false);
 		}
 		else {
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, idExpression);
 			config.put(CONVERT_TO_CONST, true);
 		}
 	}

@@ -23,8 +23,8 @@ public class PointerParameterChecker extends BaseChecker {
 			
 			if(ASTAnalyzer.isPointer(declarator) && !ASTAnalyzer.isArray(declarator)
 				&& ASTAnalyzer.isFunctionDefinitionParameterDeclaration(parameterDeclaration) 
-				&& !ASTAnalyzer.isCStringParameterDeclaration(parameterDeclaration)
-				&& !ASTAnalyzer.isConstCStringParameterDeclaration(parameterDeclaration)) {
+				&& !ASTAnalyzer.isCStringParameter(declarator)
+				&& !ASTAnalyzer.isConstCStringParameter(declarator)) {
 				reportProblemForDeclarator(ProblemIDs.POINTER_PARAMETER_PROBLEM, declarator);
 			}
 			return PROCESS_CONTINUE;
