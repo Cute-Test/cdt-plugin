@@ -13,6 +13,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 
 public class PtrReturnValueVisitor extends ASTVisitor {
 	private IASTName name;
@@ -47,7 +48,7 @@ public class PtrReturnValueVisitor extends ASTVisitor {
 		if(ASTAnalyzer.isCheckedIfNotEqualToNull(idExpression)) {
 			IASTBinaryExpression comparison = ExtendedNodeFactory.newEqualityComparison(newIdExpression, npos, false);
 			IASTNode node = idExpression;
-			if(ASTAnalyzer.isInequalityCheck(parent)) {
+			if(BEAnalyzer.isInequalityCheck(parent)) {
 				node = parent;
 			}
 			ASTModifier.replace(node, comparison, rewrite);
@@ -67,7 +68,7 @@ public class PtrReturnValueVisitor extends ASTVisitor {
 	
 	private boolean isIndexCalculation(IASTIdExpression idExpression) {
 		IASTNode parent = idExpression.getParent();
-		if(ASTAnalyzer.isSubtractionExpression(parent)) {
+		if(BEAnalyzer.isSubtraction(parent)) {
 			IASTBinaryExpression subtraction = (IASTBinaryExpression)parent;
 			if(subtraction.getOperand1() == idExpression && ASTAnalyzer.isCallToMemberFunction(subtraction.getOperand2(), Function.C_STR)) {
 				return true;

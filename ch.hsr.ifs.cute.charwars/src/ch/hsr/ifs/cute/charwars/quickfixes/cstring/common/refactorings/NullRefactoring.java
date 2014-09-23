@@ -10,6 +10,7 @@ import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 
 public class NullRefactoring extends Refactoring {
 	public NullRefactoring(ContextState... contextStates) {
@@ -21,7 +22,7 @@ public class NullRefactoring extends Refactoring {
 		IASTNode parent = idExpression.getParent();
 		boolean isNotOffset = !context.isOffset(idExpression);
 		
-		if(ASTAnalyzer.isPlusAssignment(parent) ||
+		if(BEAnalyzer.isPlusAssignment(parent) ||
 			ASTAnalyzer.isCallToMemberFunction(parent, Function.COMPARE) ||
 			ASTAnalyzer.isCallToMemberFunction(parent, Function.FIND_FIRST_OF) ||
 			ASTAnalyzer.isCallToMemberFunction(parent, Function.APPEND) ||

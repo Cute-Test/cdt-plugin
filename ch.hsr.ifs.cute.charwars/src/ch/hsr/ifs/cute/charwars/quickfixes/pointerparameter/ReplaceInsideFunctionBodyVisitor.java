@@ -9,9 +9,9 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 
 public class ReplaceInsideFunctionBodyVisitor extends ASTVisitor  {
 	private ASTRewrite rewrite;
@@ -29,7 +29,7 @@ public class ReplaceInsideFunctionBodyVisitor extends ASTVisitor  {
 			IASTIdExpression idExpression = (IASTIdExpression)expression;
 			if(idExpression.getName().resolveBinding().equals(varName.resolveBinding())) {
 				IASTNode parent = idExpression.getParent();
-				if(ASTAnalyzer.isDereferenceExpression(parent)) {
+				if(UEAnalyzer.isDereferenceExpression(parent)) {
 					IASTIdExpression newIdExpression = ExtendedNodeFactory.newIdExpression(varName.toString());
 					ASTModifier.replace(parent, newIdExpression, rewrite);
 				}

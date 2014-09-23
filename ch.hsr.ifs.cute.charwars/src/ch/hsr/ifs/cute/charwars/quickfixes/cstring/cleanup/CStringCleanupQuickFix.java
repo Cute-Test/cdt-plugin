@@ -37,6 +37,7 @@ import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 
@@ -253,10 +254,10 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 			IASTDeclarator declarator = (IASTDeclarator)parent.getParent().getParent();
 			resultVarName = declarator.getName().toString();
 		}
-		else if(ASTAnalyzer.isAssignment(parent) || 
-				(parent instanceof IASTCastExpression && ASTAnalyzer.isAssignment(parent.getParent())) ||
+		else if(BEAnalyzer.isAssignment(parent) || 
+				(parent instanceof IASTCastExpression && BEAnalyzer.isAssignment(parent.getParent())) ||
 				(parent instanceof IASTUnaryExpression && parent.getParent() instanceof IASTCastExpression && 
-						ASTAnalyzer.isAssignment(parent.getParent().getParent()))) {
+						BEAnalyzer.isAssignment(parent.getParent().getParent()))) {
 			IASTBinaryExpression assignment;
 			if(parent.getParent() instanceof IASTCastExpression) {
 				assignment = (IASTBinaryExpression)parent.getParent().getParent(); 
