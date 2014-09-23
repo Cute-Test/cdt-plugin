@@ -14,13 +14,9 @@ import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
-import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.IArrayType;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
-import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IEnumeration;
-import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemType;
 import org.eclipse.cdt.core.dom.ast.IType;
@@ -65,17 +61,12 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private int handleBinaryOperator(String typename, ICPPASTBinaryExpression binex) {
-			IASTImplicitName[] inames = binex.getImplicitNames();
-			if (!operatorFound(inames)) {
-				if (hasTypeOperand(binex) && hasKnownTypes(binex)) {
-					OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex.getOperator());
-					if (operator == null || implicitlyAvailableOperation(operator, binex)) {
-						return PROCESS_CONTINUE;
-					}
-					String strategy = getStrategy(binex);
-					reportMissingOperator(typename, binex, operator, strategy, binex.getOperand1().getExpressionType());
-					return PROCESS_SKIP;
-				}
+			ICPPFunction overload = binex.getOverload();
+			if (overload == null && hasTypeOperand(binex) && hasKnownTypes(binex)) {
+				OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex.getOperator());
+				String strategy = getStrategy(binex);
+				reportMissingOperator(typename, binex, operator, strategy, binex.getOperand1().getExpressionType());
+				return PROCESS_SKIP;
 			}
 			return PROCESS_CONTINUE;
 		}
@@ -92,17 +83,11 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private int handleUnaryOperator(IASTExpression expression, String typename, ICPPASTUnaryExpression uexpr) {
-			IASTImplicitName[] inames = uexpr.getImplicitNames();
-			if (!operatorFound(inames)) {
+			if (uexpr.getOverload() == null && operandDefined(uexpr) && hasNonPrimitiveType(uexpr.getOperand())) {
 				OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr.getOperator());
-				if (shouldSkipUnaryOperator(uexpr, operator)) {
-					return PROCESS_CONTINUE;
-				}
-				if (isAppropriateType(uexpr.getOperand())) {
-					String strategy = getStrategy(uexpr);
-					reportMissingOperator(typename, expression, operator, strategy, uexpr.getOperand().getExpressionType());
-					return PROCESS_SKIP;
-				}
+				String strategy = getStrategy(uexpr);
+				reportMissingOperator(typename, expression, operator, strategy, uexpr.getOperand().getExpressionType());
+				return PROCESS_SKIP;
 			}
 			return PROCESS_CONTINUE;
 		}
@@ -112,13 +97,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			return mustBeAMemberFunction(operator) ? ":memberoperator" : ":anyoperator";
 		}
 
-		private boolean shouldSkipUnaryOperator(ICPPASTUnaryExpression uexpr, OverloadableOperator operator) {
-			return unaryOperatorToSkip(operator) || implicitlyAvailableOperation(operator, uexpr)
-					|| !operandDefined(uexpr);
-		}
-
-		private void reportMissingOperator(String typename, IASTExpression expr, OverloadableOperator operator,
-				String strategy, IType type) {
+		private void reportMissingOperator(String typename, IASTExpression expr, OverloadableOperator operator, String strategy, IType type) {
 			String operatorname = new String(operator.toCharArray()).replaceAll("operator ", "");
 			CodanArguments ca = new CodanArguments(operatorname, typename, strategy);
 			setNodeLocation(type, ca);
@@ -126,53 +105,14 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private void setNodeLocation(IType type, CodanArguments ca) {
-			if(type instanceof CPPClassType){
+			if (type instanceof CPPClassType) {
 				IASTFileLocation fileLocation = ((CPPClassType) type).getCompositeTypeSpecifier().getFileLocation();
 				int offset = fileLocation.getNodeOffset();
 				int length = fileLocation.getNodeLength();
-				
+
 				ca.setNodeOffset(offset);
 				ca.setNodeLength(length);
 			}
-		}
-
-		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTUnaryExpression uexpr) {
-			IASTExpression operand = uexpr.getOperand();
-			final IType operandType = operand.getExpressionType();
-			if (operandType instanceof IPointerType || operandType instanceof IArrayType) {
-				switch (operator) {
-				case NOT:
-				case STAR:
-				case INCR:
-				case DECR:
-					return true;
-				default:
-					break;
-				}
-			}
-			return false;
-		}
-
-		private boolean implicitlyAvailableOperation(OverloadableOperator operator, ICPPASTBinaryExpression binExpr) {
-			IASTExpression operand = binExpr.getOperand1();
-			final IType operandType = operand.getExpressionType();
-			if (operandType instanceof IPointerType || operandType instanceof IArrayType) {
-				switch (operator) {
-				case ASSIGN:
-				case AND:
-				case OR:
-				case PLUS:
-				case MINUS:
-				case EQUAL:
-				case NOTEQUAL:
-				case PLUSASSIGN:
-				case MINUSASSIGN:
-					return true;
-				default:
-					break;
-				}
-			}
-			return false;
 		}
 
 		private boolean mustBeAMemberFunction(OverloadableOperator operator) {
@@ -191,21 +131,6 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			IASTExpression operand = uexpr.getOperand();
 			if (operand instanceof IASTIdExpression) {
 				return !(((IASTIdExpression) operand).getName().resolveBinding() instanceof IProblemBinding);
-			}
-			return false;
-		}
-
-		private boolean unaryOperatorToSkip(OverloadableOperator operator) {
-			return operator == null || operator == OverloadableOperator.AMPER;
-		}
-
-		private boolean operatorFound(IASTImplicitName[] inames) {
-			if (inames.length == 1) {
-				IASTImplicitName iname = inames[0];
-				IBinding b = iname.resolveBinding();
-				if (b instanceof ICPPFunction) {
-					return true;
-				}
 			}
 			return false;
 		}
@@ -231,7 +156,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		private boolean hasPrimitiveType(IASTExpression operand) {
 			IType type = operand.getExpressionType();
-			type = SemanticUtil.getUltimateType(type, true); //, SemanticUtil.TDEF | SemanticUtil.ALLCVQ);
+			type = SemanticUtil.getUltimateType(type, true);
 			return type instanceof IBasicType || type instanceof IEnumeration;
 		}
 

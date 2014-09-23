@@ -907,3 +907,28 @@ struct A {
 	void operator*() {
 	}
 };
+//!Do not Report Operator for Boolean-convertible Type
+//@.config
+markerCount=0
+//@A.cpp
+struct A {
+	operator bool() {
+		return true;
+	}
+}
+bool foo() {
+	bool b{true};
+	A a{};
+	return a && b;
+}
+//=
+struct A {
+	operator bool() {
+		return true;
+	}
+}
+bool foo() {
+	bool b{true};
+	A a{};
+	return a && b;
+}
