@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup.CStringCleanupQuickFix;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStringCleanupChecker extends BaseChecker {
 	public CStringCleanupChecker() {

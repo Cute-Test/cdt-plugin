@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.checkers.BaseChecker;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStrChecker extends BaseChecker {
 	public CStrChecker() {

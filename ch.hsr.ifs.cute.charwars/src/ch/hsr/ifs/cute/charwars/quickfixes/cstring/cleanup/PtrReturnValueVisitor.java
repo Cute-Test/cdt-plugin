@@ -11,8 +11,8 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
+import ch.hsr.ifs.cute.charwars.constants.Function;
+import ch.hsr.ifs.cute.charwars.constants.StringType;
 
 public class PtrReturnValueVisitor extends ASTVisitor {
 	private IASTName name;

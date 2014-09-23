@@ -166,7 +166,7 @@ public class ExpressionRefactoring extends Refactoring {
 					config.put(NODE_TO_REPLACE, parent.getParent());
 					int operator = ((IASTUnaryExpression)parent).getOperator();
 					IASTExpression arrExpr = ExtendedNodeFactory.newIdExpression(context.getStringVarName());
-					IASTExpression subscriptExpr = ExtendedNodeFactory.factory.newUnaryExpression(operator, context.createOffsetVarIdExpression());
+					IASTExpression subscriptExpr = ExtendedNodeFactory.newUnaryExpression(operator, context.createOffsetVarIdExpression());
 					return ExtendedNodeFactory.newArraySubscriptExpression(arrExpr, subscriptExpr);
 				}
 			}

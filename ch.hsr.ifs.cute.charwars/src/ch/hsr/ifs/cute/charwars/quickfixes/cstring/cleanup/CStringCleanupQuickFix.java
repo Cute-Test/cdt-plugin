@@ -37,8 +37,8 @@ import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
+import ch.hsr.ifs.cute.charwars.constants.StringType;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStringCleanupQuickFix extends BaseQuickFix {
 	public static final Map<Function, Function> functionMap;

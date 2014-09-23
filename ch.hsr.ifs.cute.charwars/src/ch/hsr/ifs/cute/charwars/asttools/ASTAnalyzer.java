@@ -30,7 +30,6 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTPointer;
@@ -54,7 +53,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
@@ -64,7 +62,7 @@ import ch.hsr.ifs.cute.charwars.asttools.FindIdExpressionsVisitor;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class ASTAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
@@ -121,34 +119,6 @@ public class ASTAnalyzer {
 			IASTSimpleDeclSpecifier simpleDeclSpecifier = (IASTSimpleDeclSpecifier)declSpecifier;
 			int type = simpleDeclSpecifier.getType();
 			return type == IASTSimpleDeclSpecifier.t_void;
-		}
-		return false;
-	}
-	
-	public static boolean hasStdStringType(IASTParameterDeclaration declaration) {
-		IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
-		IASTDeclarator declarator = declaration.getDeclarator();
-		if(declSpecifier instanceof IASTNamedTypeSpecifier) {
-			IASTNamedTypeSpecifier namedTypeSpecifier = (IASTNamedTypeSpecifier)declSpecifier;
-			String typeName = namedTypeSpecifier.getName().toString();
-			boolean isStringType = typeName.equals(StdString.STRING) || typeName.equals(StdString.STD_STRING);
-			return isStringType && declarator.getPointerOperators().length == 0;
-		}
-		return false;
-	}
-	
-	public static boolean hasStdStringConstReferenceType(IASTParameterDeclaration declaration) {
-		IASTDeclSpecifier declSpecifier = declaration.getDeclSpecifier();
-		IASTDeclarator declarator = declaration.getDeclarator();
-		if(declSpecifier instanceof IASTNamedTypeSpecifier) {
-			IASTPointerOperator[] pointerOperators = declarator.getPointerOperators();
-			if(pointerOperators.length == 1) {
-				IASTNamedTypeSpecifier namedTypeSpecifier = (IASTNamedTypeSpecifier)declSpecifier;
-				String typeName = namedTypeSpecifier.getName().toString();
-				boolean isConstStringType = (typeName.equals(StdString.STRING) || typeName.equals(StdString.STD_STRING)) && namedTypeSpecifier.isConst();
-				boolean isReference = pointerOperators[0] instanceof ICPPASTReferenceOperator;
-				return isConstStringType && isReference;
-			}
 		}
 		return false;
 	}
@@ -470,15 +440,6 @@ public class ASTAnalyzer {
 		return (IASTFunctionCallExpression)currentNode;
 	}
 	
-	public static boolean isIfStatementCondition(IASTNode node) {
-		return node.getParent() instanceof IASTIfStatement;
-	}
-	
-	public static boolean isNegatedIfStatementCondition(IASTNode node) {
-		IASTNode parent = node.getParent();
-		return isLogicalNotExpression(parent) && isIfStatementCondition(parent);
-	}
-	
 	public static boolean isCheckedIfEqualToNull(IASTNode node) {
 		IASTNode parent = node.getParent();
 		if(isEqualityCheck(parent)) {
@@ -559,15 +520,6 @@ public class ASTAnalyzer {
 		return node.getParent() instanceof IASTReturnStatement;
 	}
 	
-	public static boolean isNodeComparedToNullpointer(IASTNode node, boolean notNegatedComparison) {
-		if(node instanceof IASTBinaryExpression) {
-			IASTBinaryExpression binaryExpression = (IASTBinaryExpression)node;
-			int operator = notNegatedComparison ? IASTBinaryExpression.op_equals : IASTBinaryExpression.op_notequals; 
-			return binaryExpression.getOperator() == operator && (isNullExpression(binaryExpression.getOperand1()) || isNullExpression(binaryExpression.getOperand2()));
-		}
-		return false;
-	}
-	
 	private static boolean isNullExpression(IASTNode node) {
 		if(node instanceof IASTLiteralExpression) {
 			IASTLiteralExpression literalExpression = (IASTLiteralExpression)node;
@@ -583,29 +535,6 @@ public class ASTAnalyzer {
 	
 	public static boolean isCStringParameter(IASTDeclarator declarator) {
 		return hasCStringType(declarator, false);
-	}
-	
-	public static boolean isStdStringParameterDeclaration(IASTParameterDeclaration parameter) {
-		return hasStdStringType(parameter) || hasStdStringConstReferenceType(parameter);
-	}
-	
-	public static boolean isAssignedToCharPointer(IASTNode functionCall, boolean isConst) {
-		IASTNode parent = functionCall.getParent();
-		
-		if(isAssignment(parent)) {
-			IASTBinaryExpression assignment = (IASTBinaryExpression)parent;
-			IASTExpression originalOperand1 = (IASTExpression)assignment.getOperand1().getOriginalNode();
-			IType expressionType = originalOperand1.getExpressionType();
-			return TypeAnalyzer.isCStringType(expressionType, isConst);
-		}
-		else if(parent instanceof IASTEqualsInitializer) {
-			IASTNode possibleDeclarator = parent.getParent();
-			if(possibleDeclarator instanceof IASTDeclarator) {
-				IASTDeclarator declarator = (IASTDeclarator)possibleDeclarator;
-				return hasCStringType(declarator, isConst);
-			}
-		}
-		return false;
 	}
 
 	public static boolean isConversionToCharPointer(IASTNode node, boolean isConst) {
@@ -732,50 +661,6 @@ public class ASTAnalyzer {
 	public static IASTNode getMarkedNode(IASTTranslationUnit ast, int offset, int length) {
 		return ast.getNodeSelector(null).findNode(offset, length);
 	}
-	
-	public static boolean equalDeclSpecifiers(IASTDeclSpecifier declSpecifier1, IASTDeclSpecifier declSpecifier2) {
-		boolean equalAttributes = declSpecifier1.getStorageClass() == declSpecifier2.getStorageClass() &&
-				declSpecifier1.isConst() == declSpecifier2.isConst() &&
-				declSpecifier1.isInline() == declSpecifier2.isInline() &&
-				declSpecifier1.isRestrict() == declSpecifier2.isRestrict() &&
-				declSpecifier1.isVolatile() == declSpecifier2.isVolatile();
-		
-		if(declSpecifier1 instanceof IASTNamedTypeSpecifier && declSpecifier2 instanceof IASTNamedTypeSpecifier) {
-			IASTNamedTypeSpecifier namedTypeSpecifier1 = (IASTNamedTypeSpecifier)declSpecifier1;
-			IASTNamedTypeSpecifier namedTypeSpecifier2 = (IASTNamedTypeSpecifier)declSpecifier2;
-			boolean equalTypes = namedTypeSpecifier1.getName().toString().equals(namedTypeSpecifier2.getName().toString());
-			return equalAttributes && equalTypes;
-		}
-		else if(declSpecifier1 instanceof IASTSimpleDeclSpecifier && declSpecifier2 instanceof IASTSimpleDeclSpecifier) {
-			IASTSimpleDeclSpecifier simpleDeclSpecifier1 = (IASTSimpleDeclSpecifier)declSpecifier1;
-			IASTSimpleDeclSpecifier simpleDeclSpecifier2 = (IASTSimpleDeclSpecifier)declSpecifier2;
-			boolean equalAdditionalAttributes = simpleDeclSpecifier1.isComplex() == simpleDeclSpecifier2.isComplex() &&
-									simpleDeclSpecifier1.isImaginary() == simpleDeclSpecifier2.isImaginary() &&
-									simpleDeclSpecifier1.isLong() == simpleDeclSpecifier2.isLong() &&
-									simpleDeclSpecifier1.isLongLong() == simpleDeclSpecifier2.isLongLong() &&
-									simpleDeclSpecifier1.isShort() == simpleDeclSpecifier2.isShort() &&
-									simpleDeclSpecifier1.isSigned() == simpleDeclSpecifier2.isSigned() &&
-									simpleDeclSpecifier1.isUnsigned() == simpleDeclSpecifier2.isUnsigned();		
-			boolean equalTypes = simpleDeclSpecifier1.getType() == simpleDeclSpecifier2.getType();
-			return equalAttributes && equalAdditionalAttributes && equalTypes;
-		}
-		return false;
-	}
-	
-	public static boolean equalDeclarators(ICPPASTDeclarator declarator1, ICPPASTDeclarator declarator2) {
-		IASTPointerOperator[] pointerOperators1 = declarator1.getPointerOperators();
-		IASTPointerOperator[] pointerOperators2 = declarator2.getPointerOperators();
-		if(pointerOperators1.length != pointerOperators2.length) {
-			return false;
-		}
-		
-		for(int i = 0; i < pointerOperators1.length; ++i) {
-			if(!pointerOperators1[i].getRawSignature().equals(pointerOperators2[i].getRawSignature())) {
-				return false;
-			}
-		}
-		return true;
-	}
 
 	public static boolean isCheckedForEmptiness(IASTNode node, boolean empty) {
 		if(isDereferenceExpression(node.getParent())) {
@@ -796,7 +681,7 @@ public class ASTAnalyzer {
 		return false;
 	}
 	
-	public static IASTIdExpression findFirstIdExpression(IASTName name, IASTNode node) {
+	private static IASTIdExpression findFirstIdExpression(IASTName name, IASTNode node) {
 		if(node instanceof IASTIdExpression) {
 			IASTIdExpression idExpression = (IASTIdExpression)node;
 			if(idExpression.getName().resolveBinding().equals(name.resolveBinding())) {
@@ -811,14 +696,6 @@ public class ASTAnalyzer {
 			}
 		}
 		return null;
-	}
-	
-	public static boolean isEmptyReturnStatement(IASTNode node) {
-		if(node instanceof IASTReturnStatement) {
-			IASTReturnStatement returnStatement = (IASTReturnStatement)node;
-			return returnStatement.getReturnValue() == null;
-		}
-		return false;
 	}
 	
 	private static boolean isNullComparison(IASTStatement statement, IASTName name, boolean equalCheck) {

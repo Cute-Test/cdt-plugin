@@ -26,8 +26,8 @@ import ch.hsr.ifs.cute.charwars.asttools.IndexFinder;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.IndexFinderInstruction;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
+import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public abstract class RewriteStrategy {

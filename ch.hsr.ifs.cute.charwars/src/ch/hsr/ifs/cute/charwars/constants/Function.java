@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
+package ch.hsr.ifs.cute.charwars.constants;
 
 import ch.hsr.ifs.cute.charwars.constants.Algorithm;
 import ch.hsr.ifs.cute.charwars.constants.CStdLib;

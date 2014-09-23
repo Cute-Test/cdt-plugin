@@ -9,6 +9,7 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.constants.StringType;
 
 public class Context {
 	public enum ContextState {

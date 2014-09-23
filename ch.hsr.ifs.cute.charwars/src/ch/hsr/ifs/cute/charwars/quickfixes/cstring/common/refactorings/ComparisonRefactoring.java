@@ -8,10 +8,11 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.constants.Function;
+import ch.hsr.ifs.cute.charwars.constants.Function.Sentinel;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function.Sentinel;
 
 public class ComparisonRefactoring extends Refactoring {
 	private static final String IS_EQUAL = "IS_EQUAL";

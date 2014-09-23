@@ -110,9 +110,7 @@ public class ArrayQuickFix extends BaseQuickFix {
 		
 		IASTInitializerClause initializerClause = ASTAnalyzer.getInitializerClause(declarator);
 		if(initializerClause != null) {
-			ICPPASTInitializerList newInitializer = ExtendedNodeFactory.factory.newInitializerList();
-			newInitializer.addClause(initializerClause.copy());
-			newDeclarator.setInitializer(ExtendedNodeFactory.factory.newEqualsInitializer(newInitializer));
+			newDeclarator.setInitializer(ExtendedNodeFactory.newEqualsInitializerWithList(initializerClause.copy()));
 		}
 
 		newSimpleDeclaration.addDeclarator(newDeclarator);

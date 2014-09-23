@@ -1,5 +1,6 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.ArgMapping.Arg;
 
