@@ -42,13 +42,9 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTWhileStatement;
-import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
-import org.eclipse.cdt.core.dom.ast.IQualifierType;
 import org.eclipse.cdt.core.dom.ast.IType;
-import org.eclipse.cdt.core.dom.ast.ITypedef;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
@@ -59,12 +55,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassSpecialization;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 
 import ch.hsr.ifs.cute.charwars.asttools.FindIdExpressionsVisitor;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
@@ -93,7 +87,7 @@ public class ASTAnalyzer {
 				IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)initializerClause;
 				IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
 				IASTExpression fieldOwner = fieldReference.getFieldOwner();
-				return isStdStringType(((IASTExpression)fieldOwner).getExpressionType());
+				return TypeAnalyzer.isStdStringType(((IASTExpression)fieldOwner).getExpressionType());
 			}
 		}
 		return false;
@@ -542,11 +536,8 @@ public class ASTAnalyzer {
 		
 		if(isAssignment(parent)) { 
 			IASTBinaryExpression assignment = (IASTBinaryExpression)parent;
-			if(assignment.getOperand1().getExpressionType() instanceof IBasicType) {
-				IASTExpression operand1 = (IASTExpression)assignment.getOperand1();
-				IBasicType basicType = (IBasicType)operand1.getExpressionType();
-				return basicType.getKind() == Kind.eBoolean;
-			}
+			IType expressionType = assignment.getOperand1().getExpressionType();
+			return TypeAnalyzer.getBasicKind(expressionType) == Kind.eBoolean;
 		}
 		else if(parent instanceof IASTEqualsInitializer && parent.getParent() instanceof IASTDeclarator) { 
 			IASTDeclarator declarator = (IASTDeclarator)parent.getParent();
@@ -598,57 +589,6 @@ public class ASTAnalyzer {
 		return hasStdStringType(parameter) || hasStdStringConstReferenceType(parameter);
 	}
 	
-	public static boolean isStdStringType(IType type) {
-		if(type instanceof ICPPReferenceType) {
-			ICPPReferenceType referenceType = (ICPPReferenceType)type;
-			if(referenceType.getType() instanceof IQualifierType) {
-				IQualifierType qualifierType = (IQualifierType)referenceType.getType();
-				if(qualifierType.isConst()) {
-					return isStdStringType(qualifierType.getType());
-				}
-			}
-		}
-		else if(type instanceof ITypedef) {
-			ITypedef typedef = (ITypedef)type;
-			return isStdStringType(typedef.getType());
-		}
-		else if(type instanceof ICPPClassSpecialization) {
-			ICPPClassSpecialization classSpecialization = (ICPPClassSpecialization)type;
-			return isStdStringType(classSpecialization.getSpecializedBinding());
-		}
-		else if(type instanceof ICPPClassType) {
-			ICPPClassType classType = (ICPPClassType)type;
-			String className = classType.getName();
-			return className.equals(StdString.STRING) || className.equals(StdString.BASIC_STRING);
-		}
-		return false;
-	}
-	
-	public static boolean isCStringType(IType type, boolean isConst) {
-		if(type instanceof IPointerType) {
-			IPointerType pointer = (IPointerType)type;
-			IType pointee = pointer.getType();
-			
-			IBasicType basicType = null;
-			if(pointee instanceof IQualifierType) {
-				IQualifierType qualifierType = (IQualifierType) pointee;
-				IType qualifiedType = qualifierType.getType();
-				if(qualifiedType instanceof IBasicType && isConst == qualifierType.isConst()) {
-					basicType = (IBasicType)qualifiedType;
-				}
-			}
-			else if(pointee instanceof IBasicType && !isConst) {
-				basicType = (IBasicType)pointee;
-			}
-			
-			if(basicType != null) {
-				return basicType.getKind() == Kind.eChar ||
-					   basicType.getKind() == Kind.eWChar;
-			}
-		}
-		return false;
-	}
-
 	public static boolean isAssignedToCharPointer(IASTNode functionCall, boolean isConst) {
 		IASTNode parent = functionCall.getParent();
 		
@@ -656,7 +596,7 @@ public class ASTAnalyzer {
 			IASTBinaryExpression assignment = (IASTBinaryExpression)parent;
 			IASTExpression originalOperand1 = (IASTExpression)assignment.getOperand1().getOriginalNode();
 			IType expressionType = originalOperand1.getExpressionType();
-			return isCStringType(expressionType, isConst);
+			return TypeAnalyzer.isCStringType(expressionType, isConst);
 		}
 		else if(parent instanceof IASTEqualsInitializer) {
 			IASTNode possibleDeclarator = parent.getParent();

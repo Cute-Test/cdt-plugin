@@ -10,6 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IType;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.asttools.TypeAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
@@ -28,7 +29,7 @@ public class DefaultRefactoring extends Refactoring {
 		isApplicable = true;
 		config.put(NODE_TO_REPLACE, idExpression);
 		
-		if(parameterType != null && ASTAnalyzer.isCStringType(parameterType, false)) {
+		if(parameterType != null && TypeAnalyzer.isCStringType(parameterType, false)) {
 			config.put(CONVERT_TO_CONST, false);
 		}
 		else {

@@ -1,12 +1,9 @@
 package ch.hsr.ifs.cute.charwars.asttools;
 
-import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMember;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
-
-import ch.hsr.ifs.cute.charwars.constants.StdString;
 
 public class FunctionBindingAnalyzer {
 	public static boolean isValidOverload(ICPPFunction originalOverload, ICPPFunction possibleOverload, int strArgIndex) {
@@ -48,7 +45,7 @@ public class FunctionBindingAnalyzer {
 			ICPPParameter f2Parameter = parameters2[i];
 			
 			if(i == strArgIndex) {
-				if(!isStdStringParameter(f2Parameter)) {
+				if(!TypeAnalyzer.isStdStringType(f2Parameter.getType())) {
 					return false;
 				}
 			}
@@ -59,26 +56,13 @@ public class FunctionBindingAnalyzer {
 		return true;
 	}
 	
-	private static boolean isStdStringParameter(ICPPParameter parameter) {
-		IType type = parameter.getType();
-		String typeStr = ASTTypeUtil.getType(type);
-		boolean isStdString = typeStr.contains(StdString.STRING) && !typeStr.contains("&") && !typeStr.contains("*");
-		boolean isConstStdStringReference = typeStr.contains(StdString.STRING) && typeStr.contains("&") && typeStr.contains("const");
-		return isStdString || isConstStdStringReference;
-	}
-	
 	private static boolean matchingReturnTypes(ICPPFunction originalOverload, ICPPFunction possibleOverload) {
-		return matchingTypes(originalOverload.getType().getReturnType(), possibleOverload.getType().getReturnType());
+		IType originalOverloadReturnType = originalOverload.getType().getReturnType();
+		IType possibleOverloadReturnType = possibleOverload.getType().getReturnType();
+		return TypeAnalyzer.matchingTypes(originalOverloadReturnType, possibleOverloadReturnType);
 	}
 	
 	private static boolean parameterTypesMatch(ICPPParameter originalOverloadParameter, ICPPParameter possibleOverloadParameter) {
-		return matchingTypes(originalOverloadParameter.getType(), possibleOverloadParameter.getType());
-	}
-	
-	private static boolean matchingTypes(IType type1, IType type2) {
-		final String pattern = "<.*>";
-		String type1Str = ASTTypeUtil.getType(type1).replaceAll(pattern, "");
-		String type2Str = ASTTypeUtil.getType(type2).replaceAll(pattern, "");
-		return type1Str.equals(type2Str);
+		return TypeAnalyzer.matchingTypes(originalOverloadParameter.getType(), possibleOverloadParameter.getType());
 	}
 }

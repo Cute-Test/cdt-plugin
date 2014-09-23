@@ -5,6 +5,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IType;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.TypeAnalyzer;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
@@ -38,7 +39,7 @@ public class NullRefactoring extends Refactoring {
 	private boolean isStdStringParameterDeclaration(IASTIdExpression idExpression, Context context) {
 		IType parameterType = ASTAnalyzer.getParameterType(idExpression);
 		if(parameterType == null) return false;
-		else return ASTAnalyzer.isStdStringType(parameterType);
+		else return TypeAnalyzer.isStdStringType(parameterType);
 	}
 
 	@Override
