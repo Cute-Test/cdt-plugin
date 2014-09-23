@@ -38,6 +38,7 @@ import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 
@@ -113,7 +114,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		
 		if(functionCall.getArguments()[2] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression thirdArg = (ICPPASTFunctionCallExpression) functionCall.getArguments()[2];
-			if(ASTAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
+			if(FunctionAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
 				if(thirdArg.getChildren()[0] instanceof ICPPASTExpression) {
 					IASTIdExpression thirdArgIdExpression = (IASTIdExpression) thirdArg.getChildren()[0].getChildren()[0];
 					if(thirdArgIdExpression.getChildren()[0].toString().equals(str.getName().toString())) {

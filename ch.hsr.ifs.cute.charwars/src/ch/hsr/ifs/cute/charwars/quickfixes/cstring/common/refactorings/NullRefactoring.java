@@ -5,12 +5,14 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IType;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.TypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
 
 public class NullRefactoring extends Refactoring {
 	public NullRefactoring(ContextState... contextStates) {
@@ -23,12 +25,12 @@ public class NullRefactoring extends Refactoring {
 		boolean isNotOffset = !context.isOffset(idExpression);
 		
 		if(BEAnalyzer.isPlusAssignment(parent) ||
-			ASTAnalyzer.isCallToMemberFunction(parent, Function.COMPARE) ||
-			ASTAnalyzer.isCallToMemberFunction(parent, Function.FIND_FIRST_OF) ||
-			ASTAnalyzer.isCallToMemberFunction(parent, Function.APPEND) ||
-			ASTAnalyzer.isCallToMemberFunction(parent, Function.REPLACE) ||
-			ASTAnalyzer.isCallToMemberFunction(parent, Function.FIND_FIRST_NOT_OF) ||
-			ASTAnalyzer.isCallToMemberFunction(parent, Function.FIND) ||
+			FunctionAnalyzer.isCallToMemberFunction(parent, Function.COMPARE) ||
+			FunctionAnalyzer.isCallToMemberFunction(parent, Function.FIND_FIRST_OF) ||
+			FunctionAnalyzer.isCallToMemberFunction(parent, Function.APPEND) ||
+			FunctionAnalyzer.isCallToMemberFunction(parent, Function.REPLACE) ||
+			FunctionAnalyzer.isCallToMemberFunction(parent, Function.FIND_FIRST_NOT_OF) ||
+			FunctionAnalyzer.isCallToMemberFunction(parent, Function.FIND) ||
 			(ASTAnalyzer.isArraySubscriptExpression(idExpression) && isNotOffset) || 
 			ASTAnalyzer.isLValueInAssignment(idExpression) ||
 			(ASTAnalyzer.isLeftShiftExpressionToStdCout(parent) && isNotOffset) ||
@@ -39,7 +41,7 @@ public class NullRefactoring extends Refactoring {
 	}
 
 	private boolean isStdStringParameterDeclaration(IASTIdExpression idExpression, Context context) {
-		IType parameterType = ASTAnalyzer.getParameterType(idExpression);
+		IType parameterType = FunctionBindingAnalyzer.getParameterType(idExpression);
 		if(parameterType == null) return false;
 		else return TypeAnalyzer.isStdStringType(parameterType);
 	}

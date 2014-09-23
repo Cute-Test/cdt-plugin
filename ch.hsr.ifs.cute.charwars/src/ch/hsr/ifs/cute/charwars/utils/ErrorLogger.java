@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.loggers;
+package ch.hsr.ifs.cute.charwars.utils;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;

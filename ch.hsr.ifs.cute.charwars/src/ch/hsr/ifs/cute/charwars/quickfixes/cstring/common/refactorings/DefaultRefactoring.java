@@ -8,12 +8,12 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IType;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.asttools.TypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
 
 public class DefaultRefactoring extends Refactoring {
 	private static final String CONVERT_TO_CONST = "CONVERT_TO_CONST";
@@ -24,7 +24,7 @@ public class DefaultRefactoring extends Refactoring {
 	
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
-		IType parameterType = ASTAnalyzer.getParameterType(idExpression);
+		IType parameterType = FunctionBindingAnalyzer.getParameterType(idExpression);
 		
 		isApplicable = true;
 		config.put(NODE_TO_REPLACE, idExpression);

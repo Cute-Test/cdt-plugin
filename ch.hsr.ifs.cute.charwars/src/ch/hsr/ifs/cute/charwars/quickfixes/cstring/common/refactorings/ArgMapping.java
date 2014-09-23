@@ -13,6 +13,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class ArgMapping {
 	private Arg[] args;
@@ -47,7 +48,7 @@ public class ArgMapping {
 				outArguments.add(ASTAnalyzer.extractStdStringArg(inArguments[2]));
 				break;
 			case OFF_0:
-				outArguments.add(ASTAnalyzer.getOffset(idExpression, context));
+				outArguments.add(context.getOffset(idExpression));
 				break;
 			case ZERO:
 				outArguments.add(ExtendedNodeFactory.newIntegerLiteral(0));
@@ -60,7 +61,7 @@ public class ArgMapping {
 				break;
 			case END:
 				IASTExpression arg2 = (IASTExpression)inArguments[2];
-				if(ASTAnalyzer.isCallToMemberFunction(arg2, Function.SIZE)) {
+				if(FunctionAnalyzer.isCallToMemberFunction(arg2, Function.SIZE)) {
 					outArguments.add(ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.END));
 				}
 				else {

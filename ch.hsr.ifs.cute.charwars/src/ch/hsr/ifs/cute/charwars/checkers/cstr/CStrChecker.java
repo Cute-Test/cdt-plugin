@@ -11,9 +11,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.checkers.BaseChecker;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
-import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStrChecker extends BaseChecker {
 	public CStrChecker() {
@@ -29,7 +29,7 @@ public class CStrChecker extends BaseChecker {
 		
 		@Override
 		public int visit(IASTExpression expression) {
-			if(ASTAnalyzer.isCallToMemberFunction(expression, Function.C_STR)) {
+			if(ASTAnalyzer.isConversionToCharPointer(expression, true)) {
 				IASTFunctionCallExpression cStrCall = (IASTFunctionCallExpression)expression;
 				IASTNode parent = cStrCall.getParent();
 				IASTName name = null;
@@ -44,8 +44,8 @@ public class CStrChecker extends BaseChecker {
 					strArgIndex = binaryExpression.getOperand1() == cStrCall ? 0 : 1;
 				}
 				else {
-					name = ASTAnalyzer.getFunctionName(parent);
-					strArgIndex = ASTAnalyzer.getArgIndex(parent, cStrCall);
+					name = FunctionBindingAnalyzer.getFunctionName(parent);
+					strArgIndex = FunctionBindingAnalyzer.getArgIndex(parent, cStrCall);
 				}
 				
 				if(name != null) {

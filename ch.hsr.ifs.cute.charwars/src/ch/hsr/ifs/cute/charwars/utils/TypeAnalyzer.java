@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.asttools;
+package ch.hsr.ifs.cute.charwars.utils;
 
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
@@ -20,12 +20,12 @@ public class TypeAnalyzer {
 	
 	public static boolean isConstStdStringReference(IType type) {
 		String className = getClassName(getConstQualifiedType(getReferencedType(type)));
-		return StdString.STRING.equals(className) || StdString.BASIC_STRING.equals(className);
+		return isValidClassName(className);
 	}
 	
 	public static boolean isStdString(IType type) {
 		String className = getClassName(type);
-		return StdString.STRING.equals(className) || StdString.BASIC_STRING.equals(className);
+		return isValidClassName(className);
 	}
 	
 	public static boolean isCStringType(IType type, boolean isConst) {
@@ -89,6 +89,10 @@ public class TypeAnalyzer {
 			return classType.getName();
 		}
 		return null;
+	}
+	
+	private static boolean isValidClassName(String className) {
+		return StdString.STRING.equals(className) || StdString.BASIC_STRING.equals(className);
 	}
 	
 	private static IType normalize(IType type) {

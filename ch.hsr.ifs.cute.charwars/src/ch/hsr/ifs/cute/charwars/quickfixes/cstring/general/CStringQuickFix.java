@@ -23,6 +23,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
+import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
@@ -112,8 +113,8 @@ public class CStringQuickFix extends BaseQuickFix {
 			IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
 			
 			IASTInitializer initializer;
-			if(ASTAnalyzer.hasStrdupAssignment(declarator)) {
-				IASTFunctionCallExpression strdupCall = (IASTFunctionCallExpression)ASTAnalyzer.getInitializerClause(declarator);
+			if(DeclaratorAnalyzer.hasStrdupAssignment(declarator)) {
+				IASTFunctionCallExpression strdupCall = (IASTFunctionCallExpression)DeclaratorAnalyzer.getInitializerClause(declarator);
 				initializer = ExtendedNodeFactory.newEqualsInitializer(strdupCall.getArguments()[0].copy());
 			}
 			else {
@@ -131,7 +132,7 @@ public class CStringQuickFix extends BaseQuickFix {
 	}
 	
 	private IASTDeclSpecifier newRefactoredDeclSpecifier(IASTSimpleDeclSpecifier oldDeclSpecifier, IASTDeclarator oldDeclarator) {
-		IASTDeclSpecifier newDeclSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(ASTAnalyzer.getStringReplacementType(oldDeclSpecifier));
+		IASTDeclSpecifier newDeclSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(DeclaratorAnalyzer.getStringReplacementType(oldDeclSpecifier));
 		newDeclSpecifier.setStorageClass(oldDeclSpecifier.getStorageClass());
 		if(oldDeclarator.getPointerOperators().length > 0) {
 			IASTPointer pointer = (IASTPointer) oldDeclarator.getPointerOperators()[0];

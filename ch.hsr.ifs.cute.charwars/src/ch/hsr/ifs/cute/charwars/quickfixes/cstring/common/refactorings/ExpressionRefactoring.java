@@ -14,6 +14,7 @@ import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 
 public class ExpressionRefactoring extends Refactoring {
@@ -178,7 +179,7 @@ public class ExpressionRefactoring extends Refactoring {
 			IASTExpression oldArraySubscript = (IASTExpression)oldArraySubscriptExpression.getArgument();
 			IASTExpression newArraySubscript = context.createOffsetVarIdExpression();
 			
-			if(!ASTAnalyzer.isIntegerLiteral(oldArraySubscript, 0)) {
+			if(!LiteralAnalyzer.isZero(oldArraySubscript)) {
 				newArraySubscript = ExtendedNodeFactory.newPlusExpression(newArraySubscript, oldArraySubscript);
 			}
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, newArraySubscript);

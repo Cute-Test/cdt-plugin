@@ -17,8 +17,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
-import ch.hsr.ifs.cute.charwars.loggers.ErrorLogger;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.ErrorLogger;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @SuppressWarnings("restriction")

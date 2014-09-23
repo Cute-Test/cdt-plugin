@@ -19,7 +19,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.dialogs.ErrorRefactoring;
 import ch.hsr.ifs.cute.charwars.dialogs.ErrorRefactoringWizard;
-import ch.hsr.ifs.cute.charwars.loggers.ErrorLogger;
+import ch.hsr.ifs.cute.charwars.utils.ErrorLogger;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {

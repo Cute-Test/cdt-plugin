@@ -12,6 +12,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup.CStringCleanupQuickFix;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStringCleanupChecker extends BaseChecker {
@@ -27,7 +28,7 @@ public class CStringCleanupChecker extends BaseChecker {
 		@Override
 		public int visit(IASTExpression expression) {
 			for(Function function : CStringCleanupQuickFix.functionMap.keySet()) {
-				if(ASTAnalyzer.isCallToFunction(expression, function)) {
+				if(FunctionAnalyzer.isCallToFunction(expression, function)) {
 					IASTNode parent = expression.getParent();
 					while(parent instanceof IASTCastExpression) {
 						parent = parent.getParent();
