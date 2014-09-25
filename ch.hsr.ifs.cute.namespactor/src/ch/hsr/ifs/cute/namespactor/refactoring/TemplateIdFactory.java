@@ -32,7 +32,6 @@ import ch.hsr.ifs.cute.namespactor.astutil.NSNodeHelper;
 @SuppressWarnings("restriction")
 public abstract class TemplateIdFactory extends ASTVisitor {
 
-	protected IASTNode currNode;
 	protected ASTNodeFactory factory = ASTNodeFactory.getDefault();
 	protected ICPPASTTemplateId templateId;
 
@@ -96,53 +95,6 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 		return newTemplateId;//this.getTemplateId();
 	}
 
-	@Override
-	public int visit(IASTExpression expression) {
-		// TODO Auto-generated method stub
-		IASTExpression newex=expression.copy();
-		
-		return super.visit(expression);
-	}
-	@Override
-	public int visit(IASTName name) {
-		if (name instanceof ICPPASTTemplateId) {
-
-			ICPPASTTemplateId vTemplId = (ICPPASTTemplateId) name;
-			ICPPASTQualifiedName nameNode = modifyTemplateId(vTemplId); // problem....
-			ICPPASTTemplateId newTemplId = factory.newTemplateId(vTemplId.getTemplateName().copy()); // problem...
-
-			nameNode.addName(newTemplId);
-
-			if (currNode instanceof ICPPASTNamedTypeSpecifier) {
-				((ICPPASTNamedTypeSpecifier) currNode).setName(nameNode);
-			}
-			currNode = newTemplId;
-		}
-
-		return super.visit(name);
-	}
-
-	@Override
-	public int visit(IASTTypeId typeId) {
-		if (currNode instanceof ICPPASTTemplateId) {
-
-			IASTDeclSpecifier vDeclSpecifier = typeId.getDeclSpecifier();
-			IASTDeclSpecifier newDeclSpec = null;
-
-			if (vDeclSpecifier instanceof ICPPASTNamedTypeSpecifier) {
-				newDeclSpec = createNamedDeclSpec(vDeclSpecifier);
-			} else if (vDeclSpecifier instanceof ICPPASTSimpleDeclSpecifier) {
-				newDeclSpec = createSimpleDeclSpec(vDeclSpecifier);
-			}
-
-			if (newDeclSpec != null) {
-				((ICPPASTTemplateId) currNode).addTemplateArgument(factory.newTypeId(newDeclSpec, null));
-				currNode = newDeclSpec; // loses parent template id. must be a stack.
-			}
-		}
-		return super.visit(typeId);
-	}
-	//TODO: must also cover expressions in template arguments. (psommerl)
 
 	protected IASTDeclSpecifier createSimpleDeclSpec(IASTDeclSpecifier vDeclSpecifier) {
 
@@ -155,7 +107,4 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 
 	protected abstract ICPPASTQualifiedName modifyTemplateId(ICPPASTTemplateId vTemplId);
 
-	protected IASTName getTemplateId() {
-		return (IASTName) NSNodeHelper.getRoot(currNode);
-	}
 }

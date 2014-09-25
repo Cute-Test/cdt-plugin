@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
@@ -56,7 +57,9 @@ public class IUDirTemplateIdFactory extends TemplateIdFactory {
 		IASTName specName = newDeclSpec.getName();
 
 		// qualify the name of the specifier if it has nothing to do with a template id
-		if (!isOrContainsTemplateId(specName)) {
+		IASTName originalNode = (IASTName) specName.getOriginalNode();
+		IBinding owner = originalNode.resolveBinding().getOwner();
+		if (!isOrContainsTemplateId(specName) && requiresQualification(originalNode, owner)){//(!isOrContainsTemplateId(specName)) {
 			IASTName qnameNode = specName;
 			if (!NSNameHelper.isNodeQualifiedWithName(specName.getLastName(), enclosingNSContext.usingName.getLastName())) {
 				qnameNode = NSNameHelper.prefixNameWith(enclosingNSContext.usingName, specName);
@@ -69,8 +72,12 @@ public class IUDirTemplateIdFactory extends TemplateIdFactory {
 	@Override
 	protected ICPPASTQualifiedName modifyTemplateId(ICPPASTTemplateId vTemplId) {
 		ICPPASTQualifiedName qnameNode;
-		if (requiresQualification(vTemplId)) {
-			qnameNode = NSNameHelper.prefixNameWith(enclosingNSContext.usingName, vTemplId.getTemplateName());
+		ICPPASTTemplateId originalTemplId = (ICPPASTTemplateId) vTemplId.getOriginalNode();
+		IASTName templateName = originalTemplId.getTemplateName();
+		IBinding owner = templateName.resolveBinding().getOwner(); 
+
+		if (requiresQualification(originalTemplId,owner)) {
+			qnameNode = NSNameHelper.prefixNameWith(enclosingNSContext.usingName, templateName);
 			qnameNode = NSNameHelper.copyQualifers(qnameNode);
 		//} else if (vTemplId.getOriginalNode().getParent() instanceof ICPPASTQualifiedName) {
 			//qnameNode = NSNameHelper.copyQualifers((ICPPASTQualifiedName) vTemplId.getOriginalNode().getParent());
@@ -82,20 +89,23 @@ public class IUDirTemplateIdFactory extends TemplateIdFactory {
 		return qnameNode;
 	}
 
-	private boolean requiresQualification(ICPPASTTemplateId templId) {
-		templId=(ICPPASTTemplateId) templId.getOriginalNode();
-		IBinding templateNameBinding = templId.getTemplateName().resolveBinding();
-		IBinding owner = templateNameBinding.getOwner(); // Logik für inline namespace ergänzen
+	private boolean requiresQualification(IASTName name, IBinding owner) {
 		if (owner instanceof ICPPNamespace) {
-			IIndex index = templId.getTranslationUnit().getIndex();
+			IIndex index = name.getTranslationUnit().getIndex();
 			boolean isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(index.adaptBinding(enclosingNSContext.namespaceDefBinding)); // since this should works with nested using directives
 			while (!isChildOfEnclosingNamespace && (owner != null && owner instanceof ICPPNamespace) && ((ICPPNamespace) owner).isInline()) {
 				owner = owner.getOwner();
 				isChildOfEnclosingNamespace = index.adaptBinding(owner).equals(index.adaptBinding(enclosingNSContext.namespaceDefBinding));
 			}
-			boolean isNotQualified = !(templId.getParent() instanceof ICPPASTQualifiedName);
-
-			return isChildOfEnclosingNamespace && isNotQualified;
+			if (isChildOfEnclosingNamespace){
+				IASTNode parent = name.getParent();
+				if (parent instanceof ICPPASTQualifiedName){
+					// doesn't work with template member function definitions
+					return ((ICPPASTQualifiedName) parent).getQualifier()[0]==name;
+				}
+				return true;
+				
+			}
 		}
 
 		return false;

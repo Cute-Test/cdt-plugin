@@ -61,7 +61,7 @@ namespace A{
 }
 //!IUDIR_RecursiveMultipleFiles_TODO
 //@.config
-skipTest=1
+skipTest=0
 //@A.cpp
 #include "B.cpp"
 namespace A{
@@ -72,10 +72,10 @@ namespace A{
 }
 
 int main(){
-	using namespace /*$*/A/*$$*/; // udir A
-	SA sa(); // qualified with A
-	SB sb(); // qualified with A
-	SB2 sb2();  // qualified with B
+	using namespace /*$*/A/*$$*/;
+	SA sa { }; // qualified with A
+	SB sb { }; // qualified with A
+	SB2 sb2 { };  // qualified with A
 	return 0;
 }
 //=
@@ -88,10 +88,9 @@ namespace A{
 }
 
 int main(){
-	 // udir A
-	A::SA sa(); // qualified with A
-	A::SB sb(); // qualified with A
-	B::SB2 sb2();  // qualified with B
+	A::SA sa { }; // qualified with A
+	A::SB sb { }; // qualified with A
+	A::SB2 sb2 { };  // qualified with A
 	return 0;
 }
 //@B.cpp
@@ -499,18 +498,21 @@ namespace A{
 }
 
 #endif /* A1_H_ */
-//!IUDIR_Templates_MethodDefinitions_TODO
+//!IUDIR_Templates_MemberFunction_Definitions_Extern
 //@.config
-skipTest=1
+skipTest=0
 //@A1.cpp
 #include "A1.h"
 using namespace A;
 using namespace B;
 using namespace /*$*/B::C/*$$*/;
 
-template<class T> void CC<T>::set(T o){}
-template<class T> T CC<T>::get(){}
-template<class T> void CC<T>::doit(C2::SC2<T> &o){}
+template<class T> void CC<T>::set(T o) {
+}
+template<class T> T CC<T>::get() {
+}
+template<class T> void CC<T>::doit(C2::SC2<T> &o) {
+}
 
 int main(){
 	return 0;
@@ -520,10 +522,12 @@ int main(){
 using namespace A;
 using namespace B;
 
-
-template<class T> void B::C::CC<T>::set(T o){}
-template<class T> T B::C::CC<T>::get(){}
-template<class T> void B::C::CC<T>::doit(C2::SC2<T> &o){}
+template<class T> void B::C::CC<T>::set(T o) {
+}
+template<class T> T B::C::CC<T>::get() {
+}
+template<class T> void B::C::CC<T>::doit(C2::SC2<T> &o) {
+}
 
 int main(){
 	return 0;
@@ -657,10 +661,11 @@ class CC: A::AA {
 #endif /* A1_H_ */
 //!IUDIR_TransitiveUDIR_TODO
 //@.config
-skipTest=1
+skipTest=0
 //@A1.cpp
+namespace B{}
 namespace A{
-	using namespace B;
+	//using namespace B;
 	void a(){}
 }
 namespace B{
@@ -671,14 +676,15 @@ namespace B{
 }
 int main(){
 	using namespace /*$*/B/*$$*/;
-    a();
-    A::a();
-    b();
+	a();
+	A::a();
+	b();
     return 0;
 }
 //=
+namespace B{}
 namespace A{
-	using namespace B;
+	//using namespace B;
 	void a(){}
 }
 namespace B{
@@ -688,11 +694,9 @@ namespace B{
     }
 }
 int main(){
-	
-    
+	B::a();
 	A::a();
-    A::a();
-    	B::b();
+	B::b();
     return 0;
 }
 //!IUDIR_Typedefs
@@ -825,8 +829,8 @@ int main(){
 }
 //!IUDIR_OperatorOverloadingImplicitCall_TODO
 //@.config
-skipTest=1
-expectedNrOfWarnings=1
+skipTest=0
+expectedNrOfWarnings=0
 //@A1.cpp
 namespace A{
 	class string{
@@ -846,6 +850,26 @@ int main(){
 	string s("s...");
 	ostream cout;
 	operator <<(cout, s);
+	cout << s;
+}
+//=
+namespace A{
+	class string{
+	public:
+		string(char*){ }
+	};
+	class ostream{};
+}
+
+namespace OP{
+	A::ostream& operator<<(A::ostream&, const A::string&){}
+}
+
+int main(){
+	using namespace A;
+	string s("s...");
+	ostream cout;
+	OP::operator <<(cout, s);
 	cout << s;
 }
 //!IUDIR_QualifyNestedStructName

@@ -14,24 +14,27 @@ package ch.hsr.ifs.cute.namespactor.refactoring.iudir;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.cdt.core.dom.IName;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDirective;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespaceScope;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPUsingDirective;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
 import org.eclipse.cdt.core.index.IIndexName;
@@ -40,7 +43,10 @@ import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTOperatorName;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTranslationUnit;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPFunction;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNamespaceScope;
+import org.eclipse.cdt.internal.core.index.IIndexScope;
 import org.eclipse.cdt.internal.core.pdom.dom.PDOMName;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -179,8 +185,45 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 
 							IIndexBinding pdomCandidateOwnerBinding = indexer.adaptBinding(candidateBindingOwner);
 							IIndexBinding pdomNsDefBinding = indexer.adaptBinding(((PDOMName) nsDefName).getBinding());
+							ICPPUsingDirective[] usingdirectivesInNamespacetoConsider = ((ICPPNamespaceScope)((CPPASTTranslationUnit)name.getTranslationUnit()).mapToASTScope((IIndexScope)((ICPPNamespace)pdomNsDefBinding).getNamespaceScope())).getUsingDirectives();
 							boolean currentNameIsATarget = pdomCandidateOwnerBinding.equals(pdomNsDefBinding) && isInlineRequiredFor(name, nsDefName);
-
+							if (!currentNameIsATarget){
+								outerloop:for(ICPPUsingDirective ns:usingdirectivesInNamespacetoConsider){
+									try {
+										ICPPNamespaceScope nominatedScope = ns.getNominatedScope();
+										if (nominatedScope instanceof IBinding) {
+											IIndexBinding potentialNsCandidateBinding = indexer.adaptBinding((IBinding) nominatedScope);
+											currentNameIsATarget=potentialNsCandidateBinding.equals(pdomCandidateOwnerBinding);
+											if (currentNameIsATarget){
+												break;
+											}
+										}
+										if (nominatedScope instanceof CPPNamespaceScope){
+											if (nominatedScope.equals(((ICPPNamespace)candidateBindingOwner).getNamespaceScope())) {
+												// check if already qualified with nominatedScope
+												if (name.getParent() instanceof ICPPASTQualifiedName){
+													ICPPASTQualifiedName parent = (ICPPASTQualifiedName) name.getParent();
+													ICPPASTNameSpecifier[] quali = parent.getQualifier();
+													for (ICPPASTNameSpecifier nm:quali){
+															IBinding namespacebinding = nm.resolveBinding();
+															if (namespacebinding instanceof ICPPNamespace && ((ICPPNamespace)namespacebinding).getNamespaceScope().equals(nominatedScope)) {
+																continue outerloop;
+														}
+													}
+													if (quali.length>0 && quali[0].equals(nominatedScope.getScopeName())){
+														break;
+													}
+												}
+												currentNameIsATarget=true;
+												break;
+											}
+										}
+									} catch (DOMException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+							} 
 							if (currentNameIsATarget) {
 								addNameToTargets(name, nsDefName, usingNamespaces.getKey());
 								break;//return super.visit(name);//break;

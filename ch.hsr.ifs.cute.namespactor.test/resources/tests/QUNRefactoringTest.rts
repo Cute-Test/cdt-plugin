@@ -61,13 +61,14 @@ int main(){
 }
 //!QUN_Parameter
 //@.config
-skipTest=1
+skipTest=0
 //@A1.cpp
 namespace A{
 	struct S{};
 }
 using namespace A;
-void a(/*$*/S/*$$*/ s1){}
+void a(/*$*/S/*$$*/ s1){
+}
 //=
 namespace A{
 	struct S{};
@@ -444,7 +445,7 @@ int main(){
 }
 //!QUN_VectorExternal
 //@.config
-skipTest=1
+skipTest=0
 //@VectorIncluded.cpp
 #include <vector.hpp>
 int main(){

@@ -19,7 +19,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
@@ -31,7 +30,7 @@ import org.eclipse.jface.viewers.ISelection;
 import ch.hsr.ifs.cute.namespactor.astutil.ASTNodeFactory;
 import ch.hsr.ifs.cute.namespactor.astutil.NSNameHelper;
 import ch.hsr.ifs.cute.namespactor.astutil.NSNodeHelper;
-import ch.hsr.ifs.cute.namespactor.refactoring.CopyTemplateIdFactory;
+import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EURefactoring;
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EURefactoringContext;
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EUReplaceVisitor;
@@ -68,7 +67,7 @@ public class EUDecRefactoring extends EURefactoring {
 		IBinding lastNameToAddBinding;
 		boolean inCompositeDeclaration = NSNodeHelper.isInOrIsCompositeDeclaration(lastNameOfqName);
 		if (inCompositeDeclaration) {
-			if (CopyTemplateIdFactory.isOrContainsTemplateId(qualifiedName)) {
+			if (TemplateIdFactory.isOrContainsTemplateId(qualifiedName)) {
 				return qualifiedName.copy(CopyStyle.withLocations);//buildNameWithTemplate(qualifiedName);
 			}
 			names = NSNameHelper.getQualifiedUDECNameInTypeDecl(lastNameOfqName.resolveBinding());
