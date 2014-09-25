@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 
 public class RewriteStrategyFactory {
 	public static RewriteStrategy createRewriteStrategy(ICPPASTParameterDeclaration strParameter, ASTRewrite rewrite) {
@@ -86,7 +87,7 @@ public class RewriteStrategyFactory {
 	private static boolean assignsToVariable(IASTStatement statement, IASTName variableName) {
 		if(statement instanceof IASTExpressionStatement) {
 			IASTExpression expression = ((IASTExpressionStatement)statement).getExpression();
-			if(ASTAnalyzer.isAssignment(expression)) {
+			if(BEAnalyzer.isAssignment(expression)) {
 				IASTExpression variable = ((IASTBinaryExpression)expression).getOperand1();
 				if(variable instanceof IASTIdExpression) {
 					IASTName name = ((IASTIdExpression)variable).getName();

@@ -11,7 +11,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 public class GuardClauseRewriteStrategy extends RewriteStrategy {
 	@Override
 	protected IASTCompoundStatement getStdStringOverloadBody() {
-		IASTCompoundStatement stdStringOverloadBody = ExtendedNodeFactory.factory.newCompoundStatement();
+		IASTCompoundStatement stdStringOverloadBody = ExtendedNodeFactory.newCompoundStatement();
 		IASTStatement[] nullCheckedStatements = ASTAnalyzer.getNullCheckedStatements(strName, statements);
 		for(IASTStatement statement : nullCheckedStatements) {
 			stdStringOverloadBody.addStatement(statement.copy(CopyStyle.withLocations));

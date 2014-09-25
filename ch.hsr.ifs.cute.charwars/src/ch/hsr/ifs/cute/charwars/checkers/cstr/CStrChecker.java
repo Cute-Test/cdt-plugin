@@ -1,25 +1,19 @@
 package ch.hsr.ifs.cute.charwars.checkers.cstr;
 
-import java.util.Arrays;
-
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
-import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
-import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
-import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.checkers.BaseChecker;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
 
 public class CStrChecker extends BaseChecker {
 	public CStrChecker() {
@@ -35,18 +29,13 @@ public class CStrChecker extends BaseChecker {
 		
 		@Override
 		public int visit(IASTExpression expression) {
-			if(ASTAnalyzer.isCallToMemberFunction(expression, Function.C_STR)) {
+			if(ASTAnalyzer.isConversionToCharPointer(expression, true)) {
 				IASTFunctionCallExpression cStrCall = (IASTFunctionCallExpression)expression;
 				IASTNode parent = cStrCall.getParent();
 				IASTName name = null;
 				int strArgIndex = -1;
 				
-				if(parent instanceof IASTFunctionCallExpression) {
-					IASTFunctionCallExpression functionCallExpression = (IASTFunctionCallExpression)parent;
-					name = getFunctionName(functionCallExpression);
-					strArgIndex = Arrays.asList(functionCallExpression.getArguments()).indexOf(cStrCall);
-				}
-				else if(parent instanceof ICPPASTBinaryExpression) {
+				if(parent instanceof ICPPASTBinaryExpression) {
 					ICPPASTBinaryExpression binaryExpression = (ICPPASTBinaryExpression)parent;
 					if(binaryExpression.getImplicitNames().length == 0) {
 						return PROCESS_CONTINUE;
@@ -54,13 +43,9 @@ public class CStrChecker extends BaseChecker {
 					name = binaryExpression.getImplicitNames()[0];
 					strArgIndex = binaryExpression.getOperand1() == cStrCall ? 0 : 1;
 				}
-				else if(parent.getParent() instanceof ICPPASTDeclarator && parent.getParent() instanceof IASTImplicitNameOwner) {
-					IASTImplicitNameOwner implicitNameOwner = (IASTImplicitNameOwner)parent.getParent();
-					if(implicitNameOwner.getImplicitNames().length == 0) {
-						return PROCESS_CONTINUE;
-					}
-					name = implicitNameOwner.getImplicitNames()[0];
-					strArgIndex = 0;
+				else {
+					name = FunctionBindingAnalyzer.getFunctionName(parent);
+					strArgIndex = FunctionBindingAnalyzer.getArgIndex(parent, cStrCall);
 				}
 				
 				if(name != null) {
@@ -99,20 +84,6 @@ public class CStrChecker extends BaseChecker {
 			
 			buffer.append(")");
 			return buffer.toString();
-		}
-		
-		private IASTName getFunctionName(IASTFunctionCallExpression functionCall) {
-			IASTName functionName = null;
-			IASTExpression functionNameExpression = functionCall.getFunctionNameExpression();
-			
-			if(functionNameExpression instanceof IASTIdExpression) {
-				functionName = ((IASTIdExpression)functionNameExpression).getName();
-			}
-			else if(functionNameExpression instanceof IASTFieldReference) {
-				functionName = ((IASTFieldReference)functionNameExpression).getFieldName();
-			}
-			
-			return functionName;
 		}
 	}
 }

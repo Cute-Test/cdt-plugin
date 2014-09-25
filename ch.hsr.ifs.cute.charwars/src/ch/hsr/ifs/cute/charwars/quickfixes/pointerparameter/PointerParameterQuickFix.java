@@ -19,7 +19,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
@@ -29,6 +28,7 @@ import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 
 public class PointerParameterQuickFix extends BaseQuickFix {
 	@Override
@@ -91,7 +91,7 @@ public class PointerParameterQuickFix extends BaseQuickFix {
 	
 	private void handleFunctionCall(IASTFunctionCallExpression fcExpression, int paramIndex, ASTRewrite rewrite) {
 		IASTNode arg = fcExpression.getArguments()[paramIndex];
-		if(ASTAnalyzer.isAddressOperatorExpression(arg)) {
+		if(UEAnalyzer.isAddressOperatorExpression(arg)) {
 			IASTUnaryExpression unaryExpression = (IASTUnaryExpression)arg;
 			IASTNode newArg = unaryExpression.getOperand().copy();
 			ASTModifier.replace(unaryExpression, newArg, rewrite);

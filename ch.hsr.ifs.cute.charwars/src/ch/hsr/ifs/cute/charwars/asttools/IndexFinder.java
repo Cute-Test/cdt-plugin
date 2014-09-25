@@ -12,7 +12,7 @@ import org.eclipse.cdt.core.index.IndexFilter;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.cute.charwars.loggers.ErrorLogger;
+import ch.hsr.ifs.cute.charwars.utils.ErrorLogger;
 
 public class IndexFinder {
 	public static void findDefinitions(IASTName name, ASTRewriteCache rewriteCache, ResultHandler resultHandler) {

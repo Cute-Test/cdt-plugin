@@ -17,7 +17,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
-import ch.hsr.ifs.cute.charwars.loggers.ErrorLogger;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.ErrorLogger;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @SuppressWarnings("restriction")
@@ -98,7 +99,7 @@ public class ASTModifier {
 	public static IASTNode transformToPointerOffset(IASTIdExpression idExpression) {
 		IASTNode lastNode = idExpression;
 		IASTNode currentNode = idExpression.getParent();
-		while(ASTAnalyzer.isSubtractionExpression(currentNode) || ASTAnalyzer.isAdditionExpression(currentNode)) {
+		while(BEAnalyzer.isSubtraction(currentNode) || BEAnalyzer.isAddition(currentNode)) {
 			lastNode = currentNode;
 			currentNode = currentNode.getParent();
 		}
@@ -109,7 +110,7 @@ public class ASTModifier {
 		
 		IASTBinaryExpression binaryExpression = (IASTBinaryExpression)idExpression.getParent();
 		IASTExpression remainingOperand;
-		if(ASTAnalyzer.isSubtractionExpression(binaryExpression) && idExpression == binaryExpression.getOperand1()) {
+		if(BEAnalyzer.isSubtraction(binaryExpression) && idExpression == binaryExpression.getOperand1()) {
 			remainingOperand = ExtendedNodeFactory.newNegatedExpression(binaryExpression.getOperand2());
 		}
 		else  {

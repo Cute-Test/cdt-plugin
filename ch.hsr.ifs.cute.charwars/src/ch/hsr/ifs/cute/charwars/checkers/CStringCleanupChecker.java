@@ -11,7 +11,9 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup.CStringCleanupQuickFix;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStringCleanupChecker extends BaseChecker {
 	public CStringCleanupChecker() {
@@ -26,13 +28,13 @@ public class CStringCleanupChecker extends BaseChecker {
 		@Override
 		public int visit(IASTExpression expression) {
 			for(Function function : CStringCleanupQuickFix.functionMap.keySet()) {
-				if(ASTAnalyzer.isCallToFunction(expression, function)) {
+				if(FunctionAnalyzer.isCallToFunction(expression, function)) {
 					IASTNode parent = expression.getParent();
 					while(parent instanceof IASTCastExpression) {
 						parent = parent.getParent();
 					}
 					
-					if(ASTAnalyzer.isAssignment(parent) || parent instanceof IASTEqualsInitializer) {
+					if(BEAnalyzer.isAssignment(parent) || parent instanceof IASTEqualsInitializer) {
 						IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)expression;
 						IASTInitializerClause[] args = functionCall.getArguments();
 						if(args.length > 0 && (ASTAnalyzer.isConversionToCharPointer(args[0], false) || ASTAnalyzer.isConversionToCharPointer(args[0], true))) {

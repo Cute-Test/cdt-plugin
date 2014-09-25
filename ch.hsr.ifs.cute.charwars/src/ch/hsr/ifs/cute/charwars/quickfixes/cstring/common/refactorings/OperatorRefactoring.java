@@ -8,9 +8,11 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class OperatorRefactoring extends Refactoring {
 	private Function inFunction;
@@ -26,9 +28,9 @@ public class OperatorRefactoring extends Refactoring {
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
 		String outFunctionName = outFunction.getName();
 		boolean isStrcmpOrWcscmp = (inFunction == Function.STRCMP) || (inFunction == Function.WCSCMP);
-		boolean isOther = !isStrcmpOrWcscmp && ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
-		boolean isStringEqualityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_EQUALS) && ASTAnalyzer.isPartOfStringEqualityCheck(idExpression); 
-		boolean isStringInequalityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && ASTAnalyzer.isPartOfStringInequalityCheck(idExpression);
+		boolean isOther = !isStrcmpOrWcscmp && FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
+		boolean isStringEqualityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_EQUALS) && ASTAnalyzer.isPartOfStringCheck(idExpression, true); 
+		boolean isStringInequalityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && ASTAnalyzer.isPartOfStringCheck(idExpression, false);
 		
 		if(!context.isOffset(idExpression) && (isOther || isStringEqualityCheck || isStringInequalityCheck)) {
 			IASTNode nodeToReplace = isStrcmpOrWcscmp ? ASTAnalyzer.getEnclosingBoolean(idExpression) : idExpression.getParent();

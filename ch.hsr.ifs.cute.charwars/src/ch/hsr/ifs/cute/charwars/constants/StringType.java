@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common;
+package ch.hsr.ifs.cute.charwars.constants;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;

@@ -17,11 +17,13 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
+import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdArray;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
 
 public class ArrayQuickFix extends BaseQuickFix {	
 	@Override
@@ -76,7 +78,7 @@ public class ArrayQuickFix extends BaseQuickFix {
 	
 	private String getFirstArrayCount(IASTArrayModifier modifier, IASTDeclarator declarator) {
 		IASTExpression constantExpression = modifier.getConstantExpression();
-		if(ASTAnalyzer.isIntegerLiteral(constantExpression)) {
+		if(LiteralAnalyzer.isInteger(constantExpression)) {
 			return constantExpression.getRawSignature();
 		}
 		else {
@@ -108,11 +110,9 @@ public class ArrayQuickFix extends BaseQuickFix {
 		IASTSimpleDeclaration newSimpleDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newNamedTypeSpecifier);
 		IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
 		
-		IASTInitializerClause initializerClause = ASTAnalyzer.getInitializerClause(declarator);
+		IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(declarator);
 		if(initializerClause != null) {
-			ICPPASTInitializerList newInitializer = ExtendedNodeFactory.factory.newInitializerList();
-			newInitializer.addClause(initializerClause.copy());
-			newDeclarator.setInitializer(ExtendedNodeFactory.factory.newEqualsInitializer(newInitializer));
+			newDeclarator.setInitializer(ExtendedNodeFactory.newEqualsInitializerWithList(initializerClause.copy()));
 		}
 
 		newSimpleDeclaration.addDeclarator(newDeclarator);

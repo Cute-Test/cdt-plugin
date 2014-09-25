@@ -5,6 +5,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
 
 public class PointerParameterChecker extends BaseChecker {
@@ -21,10 +22,10 @@ public class PointerParameterChecker extends BaseChecker {
 		public int visit(IASTParameterDeclaration parameterDeclaration) {
 			IASTDeclarator declarator = parameterDeclaration.getDeclarator();
 			
-			if(ASTAnalyzer.isPointer(declarator) 
+			if(DeclaratorAnalyzer.isPointer(declarator) && !DeclaratorAnalyzer.isArray(declarator)
 				&& ASTAnalyzer.isFunctionDefinitionParameterDeclaration(parameterDeclaration) 
-				&& !ASTAnalyzer.isCStringParameterDeclaration(parameterDeclaration)
-				&& !ASTAnalyzer.isConstCStringParameterDeclaration(parameterDeclaration)) {
+				&& !DeclaratorAnalyzer.hasCStringType(declarator, false)
+				&& !DeclaratorAnalyzer.hasCStringType(declarator, true)) {
 				reportProblemForDeclarator(ProblemIDs.POINTER_PARAMETER_PROBLEM, declarator);
 			}
 			return PROCESS_CONTINUE;

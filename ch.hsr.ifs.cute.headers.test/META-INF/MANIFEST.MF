@@ -10,5 +10,5 @@ Require-Bundle: org.eclipse.core.runtime,
  ch.hsr.ifs.cute.ui;bundle-version="4.0.1",
  ch.hsr.ifs.cute.headers;bundle-version="4.7.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: %Bundle-Vendor

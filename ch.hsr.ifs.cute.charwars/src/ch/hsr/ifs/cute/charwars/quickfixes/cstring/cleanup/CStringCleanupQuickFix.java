@@ -37,8 +37,10 @@ import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Function;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.constants.StringType;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStringCleanupQuickFix extends BaseQuickFix {
 	public static final Map<Function, Function> functionMap;
@@ -112,7 +114,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		
 		if(functionCall.getArguments()[2] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression thirdArg = (ICPPASTFunctionCallExpression) functionCall.getArguments()[2];
-			if(ASTAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
+			if(FunctionAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
 				if(thirdArg.getChildren()[0] instanceof ICPPASTExpression) {
 					IASTIdExpression thirdArgIdExpression = (IASTIdExpression) thirdArg.getChildren()[0].getChildren()[0];
 					if(thirdArgIdExpression.getChildren()[0].toString().equals(str.getName().toString())) {
@@ -253,10 +255,10 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 			IASTDeclarator declarator = (IASTDeclarator)parent.getParent().getParent();
 			resultVarName = declarator.getName().toString();
 		}
-		else if(ASTAnalyzer.isAssignment(parent) || 
-				(parent instanceof IASTCastExpression && ASTAnalyzer.isAssignment(parent.getParent())) ||
+		else if(BEAnalyzer.isAssignment(parent) || 
+				(parent instanceof IASTCastExpression && BEAnalyzer.isAssignment(parent.getParent())) ||
 				(parent instanceof IASTUnaryExpression && parent.getParent() instanceof IASTCastExpression && 
-						ASTAnalyzer.isAssignment(parent.getParent().getParent()))) {
+						BEAnalyzer.isAssignment(parent.getParent().getParent()))) {
 			IASTBinaryExpression assignment;
 			if(parent.getParent() instanceof IASTCastExpression) {
 				assignment = (IASTBinaryExpression)parent.getParent().getParent(); 

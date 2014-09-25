@@ -12,6 +12,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdArray;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 
 public class ReplaceIdExpressionsVisitor extends ASTVisitor {
 	private ASTRewrite rewrite;
@@ -35,7 +36,7 @@ public class ReplaceIdExpressionsVisitor extends ASTVisitor {
 					IASTNode currentNode = idExpression;
 					while(currentNode != null) {
 						currentNode = currentNode.getParent();
-						if(ASTAnalyzer.isDivisionExpression(currentNode))
+						if(BEAnalyzer.isDivision(currentNode))
 							break;
 					}
 					IASTFunctionCallExpression sizeCall = ExtendedNodeFactory.newMemberFunctionCallExpression(arrayName, StdArray.SIZE);

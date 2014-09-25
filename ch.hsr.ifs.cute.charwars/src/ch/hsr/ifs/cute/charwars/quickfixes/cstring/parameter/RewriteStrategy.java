@@ -18,16 +18,16 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
+import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.IndexFinderInstruction;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
+import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public abstract class RewriteStrategy {
@@ -118,7 +118,7 @@ public abstract class RewriteStrategy {
 		IASTFunctionCallExpression stdStringOverloadFunctionCall = getStdStringFunctionCallExpression();
 		
 		IASTStatement statement;
-		if(ASTAnalyzer.hasVoidType(functionDeclSpecifier)) {
+		if(DeclaratorAnalyzer.hasVoidType(functionDeclSpecifier)) {
 			statement = ExtendedNodeFactory.newExpressionStatement(stdStringOverloadFunctionCall);		
 		}
 		else {

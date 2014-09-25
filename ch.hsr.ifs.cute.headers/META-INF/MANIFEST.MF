@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  ch.hsr.ifs.cute.ui;bundle-version="2.2.1",
  org.eclipse.core.resources;bundle-version="3.4.1"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.headers.headers1_7,ch.hsr.ifs.cute.hea
  ders.headers2_0

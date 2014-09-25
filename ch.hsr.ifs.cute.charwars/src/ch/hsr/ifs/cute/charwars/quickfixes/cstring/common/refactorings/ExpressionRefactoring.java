@@ -13,6 +13,9 @@ import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 
 public class ExpressionRefactoring extends Refactoring {
 	private enum Transformation {
@@ -37,7 +40,7 @@ public class ExpressionRefactoring extends Refactoring {
 			//sizeof(str) / sizeof(*str) - 1 -> str.size()
 			//sizeof str / sizeof *str -1 -> str.size()
 			IASTNode nodeToReplace = idExpression.getParent();
-			while(!ASTAnalyzer.isSubtractionExpression(nodeToReplace)) {
+			while(!BEAnalyzer.isSubtraction(nodeToReplace)) {
 				nodeToReplace = nodeToReplace.getParent();
 			}
 			isApplicable = true;
@@ -66,7 +69,7 @@ public class ExpressionRefactoring extends Refactoring {
 			//*(str+n) -> str[n]
 			//if modified: *str -> str[str_pos]
 			IASTNode nodeToReplace = idExpression.getParent();
-			while(!ASTAnalyzer.isDereferenceExpression(nodeToReplace)) {
+			while(!UEAnalyzer.isDereferenceExpression(nodeToReplace)) {
 				nodeToReplace = nodeToReplace.getParent();
 			}
 			isApplicable = true;
@@ -93,7 +96,7 @@ public class ExpressionRefactoring extends Refactoring {
 		else if(context.getContextState() == ContextState.CStringAlias && isIndexCalculation(idExpression, context)) {
 			//ptr - str -> ptr
 			IASTNode nodeToReplace = idExpression.getParent();
-			if(ASTAnalyzer.isBracketExpression(nodeToReplace.getParent())) {
+			if(UEAnalyzer.isBracketExpression(nodeToReplace.getParent())) {
 				nodeToReplace = nodeToReplace.getParent();
 			}
 			isApplicable = true;
@@ -104,7 +107,7 @@ public class ExpressionRefactoring extends Refactoring {
 	
 	private boolean isIndexCalculation(IASTIdExpression idExpression, Context context) {
 		IASTNode parent = idExpression.getParent();
-		if(ASTAnalyzer.isSubtractionExpression(parent)) {
+		if(BEAnalyzer.isSubtraction(parent)) {
 			IASTBinaryExpression subtraction = (IASTBinaryExpression)parent;
 			if(idExpression == subtraction.getOperand1() && ASTAnalyzer.isConversionToCharPointer(subtraction.getOperand2(), true)) {
 				return true;
@@ -146,7 +149,7 @@ public class ExpressionRefactoring extends Refactoring {
 				subscript = ExtendedNodeFactory.newIntegerLiteral(0);
 			}
 			
-			if(ASTAnalyzer.isAdditionExpression(idExpression.getParent())) {
+			if(BEAnalyzer.isAddition(idExpression.getParent())) {
 				IASTBinaryExpression addition = (IASTBinaryExpression)idExpression.getParent();
 				IASTExpression otherOperand = (addition.getOperand1() == idExpression) ? addition.getOperand2() : addition.getOperand1();
 				
@@ -161,12 +164,12 @@ public class ExpressionRefactoring extends Refactoring {
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
 		case MODIFIED:
 			IASTNode parent = idExpression.getParent();
-			if(ASTAnalyzer.isUnaryExpression(parent, IASTUnaryExpression.op_postFixIncr) || ASTAnalyzer.isUnaryExpression(parent, IASTUnaryExpression.op_prefixIncr)) {
-				if(ASTAnalyzer.isDereferenceExpression(parent.getParent())) {
+			if(UEAnalyzer.isIncrementation(parent)) {
+				if(UEAnalyzer.isDereferenceExpression(parent.getParent())) {
 					config.put(NODE_TO_REPLACE, parent.getParent());
 					int operator = ((IASTUnaryExpression)parent).getOperator();
 					IASTExpression arrExpr = ExtendedNodeFactory.newIdExpression(context.getStringVarName());
-					IASTExpression subscriptExpr = ExtendedNodeFactory.factory.newUnaryExpression(operator, context.createOffsetVarIdExpression());
+					IASTExpression subscriptExpr = ExtendedNodeFactory.newUnaryExpression(operator, context.createOffsetVarIdExpression());
 					return ExtendedNodeFactory.newArraySubscriptExpression(arrExpr, subscriptExpr);
 				}
 			}
@@ -176,7 +179,7 @@ public class ExpressionRefactoring extends Refactoring {
 			IASTExpression oldArraySubscript = (IASTExpression)oldArraySubscriptExpression.getArgument();
 			IASTExpression newArraySubscript = context.createOffsetVarIdExpression();
 			
-			if(!ASTAnalyzer.isIntegerLiteral(oldArraySubscript, 0)) {
+			if(!LiteralAnalyzer.isZero(oldArraySubscript)) {
 				newArraySubscript = ExtendedNodeFactory.newPlusExpression(newArraySubscript, oldArraySubscript);
 			}
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, newArraySubscript);

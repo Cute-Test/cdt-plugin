@@ -2,10 +2,11 @@ package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class RemoveStatementRefactoring extends Refactoring {
 	private Function inFunction;
@@ -17,7 +18,7 @@ public class RemoveStatementRefactoring extends Refactoring {
 	
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
-		if(ASTAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
+		if(FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
 			isApplicable = true;
 		}
 	}

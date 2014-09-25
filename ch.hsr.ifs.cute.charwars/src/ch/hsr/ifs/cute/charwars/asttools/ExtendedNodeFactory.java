@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
@@ -27,6 +28,7 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
@@ -34,10 +36,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.cute.charwars.constants.StdString;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.StringType;
+import ch.hsr.ifs.cute.charwars.constants.StringType;
 
 public class ExtendedNodeFactory {
-	public final static ICPPNodeFactory factory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+	private final static ICPPNodeFactory factory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 	
 	public static IASTFunctionCallExpression newFunctionCallExpression(String functionName, IASTNode... args) {
 		IASTIdExpression function = newIdExpression(functionName);
@@ -61,33 +63,29 @@ public class ExtendedNodeFactory {
 		return factory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, String.valueOf(number));
 	}
 	
-	public static IASTLiteralExpression newStringLiteral(String str) {
-		return factory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, str);
-	}
-	
 	public static IASTBinaryExpression newAssignment(IASTExpression lhs, IASTExpression rhs) {
-		return factory.newBinaryExpression(IASTBinaryExpression.op_assign, lhs, rhs);
+		return newBinaryExpression(IASTBinaryExpression.op_assign, lhs, rhs);
 	}
 	
 	public static IASTBinaryExpression newPlusAssignment(IASTExpression lhs, IASTExpression rhs) {
-		return factory.newBinaryExpression(IASTBinaryExpression.op_plusAssign, lhs, rhs);
+		return newBinaryExpression(IASTBinaryExpression.op_plusAssign, lhs, rhs);
 	}
 	
 	public static IASTBinaryExpression newPlusExpression(IASTExpression lhs, IASTExpression rhs) {
-		return factory.newBinaryExpression(IASTBinaryExpression.op_plus, lhs, rhs);
+		return newBinaryExpression(IASTBinaryExpression.op_plus, lhs, rhs);
 	}
 	
 	public static IASTBinaryExpression newMinusExpression(IASTExpression lhs, IASTExpression rhs) {
-		return factory.newBinaryExpression(IASTBinaryExpression.op_minus, lhs, rhs);
+		return newBinaryExpression(IASTBinaryExpression.op_minus, lhs, rhs);
 	}
 	
 	public static IASTUnaryExpression newLogicalNotExpression(IASTExpression operand) {
-		return factory.newUnaryExpression(IASTUnaryExpression.op_not, operand);
+		return newUnaryExpression(IASTUnaryExpression.op_not, operand);
 	}
 	
 	public static IASTBinaryExpression newEqualityComparison(IASTExpression lhs, IASTExpression rhs, boolean isEqual) {
 		int op = isEqual ? IASTBinaryExpression.op_equals : IASTBinaryExpression.op_notequals;
-		return factory.newBinaryExpression(op, lhs, rhs);
+		return newBinaryExpression(op, lhs, rhs);
 	}
 	
 	public static IASTExpression newNposExpression(StringType stringType) {
@@ -98,19 +96,35 @@ public class ExtendedNodeFactory {
 	}
 	
 	public static IASTUnaryExpression newDereferenceOperatorExpression(IASTExpression expression) {
-		return factory.newUnaryExpression(IASTUnaryExpression.op_star, expression);
+		return newUnaryExpression(IASTUnaryExpression.op_star, expression);
 	}
 	
 	public static IASTUnaryExpression newAdressOperatorExpression(IASTExpression expression) {
-		return factory.newUnaryExpression(IASTUnaryExpression.op_amper, expression);
+		return newUnaryExpression(IASTUnaryExpression.op_amper, expression);
 	}
 	
 	public static IASTUnaryExpression newNegatedExpression(IASTExpression expression) {
-		return factory.newUnaryExpression(IASTUnaryExpression.op_minus, expression);
+		return newUnaryExpression(IASTUnaryExpression.op_minus, expression);
 	}
 	
-	public static IASTInitializer newEqualsInitializer(IASTInitializerClause expression) {
-		return factory.newEqualsInitializer(expression);
+	public static IASTUnaryExpression newUnaryExpression(int operator, IASTExpression operand) {
+		return factory.newUnaryExpression(operator, operand);
+	}
+	
+	public static IASTBinaryExpression newBinaryExpression(int op, IASTExpression lhs, IASTExpression rhs) {
+		return factory.newBinaryExpression(op, lhs, rhs);
+	}
+	
+	public static IASTEqualsInitializer newEqualsInitializer(IASTInitializerClause clause) {
+		return factory.newEqualsInitializer(clause);
+	}
+	
+	public static IASTEqualsInitializer newEqualsInitializerWithList(IASTInitializerClause... clauses) {
+		ICPPASTInitializerList initializerList = factory.newInitializerList();
+		for(IASTInitializerClause clause : clauses) {
+			initializerList.addClause(clause);
+		}
+		return factory.newEqualsInitializer(initializerList);
 	}
 	
 	public static IASTDeclarationStatement newDeclarationStatement(String type, String varName, IASTInitializerClause initializerClause) {
@@ -164,7 +178,7 @@ public class ExtendedNodeFactory {
 	}
 	
 	public static IASTUnaryExpression newBracketedExpression(IASTExpression operand) {
-		return factory.newUnaryExpression(IASTUnaryExpression.op_bracketedPrimary, operand);
+		return newUnaryExpression(IASTUnaryExpression.op_bracketedPrimary, operand);
 	}
 	
 	public static IASTFieldReference newFieldReference(IASTName name, IASTExpression owner) {
@@ -199,5 +213,9 @@ public class ExtendedNodeFactory {
 	
 	public static IASTReturnStatement newReturnStatement(IASTExpression returnValue) {
 		return factory.newReturnStatement(returnValue);
+	}
+	
+	public static IASTCompoundStatement newCompoundStatement() {
+		return factory.newCompoundStatement();
 	}
 }
