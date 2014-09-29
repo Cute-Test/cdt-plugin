@@ -6,13 +6,11 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.Function.Sentinel;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class ComparisonRefactoring extends Refactoring {
@@ -47,26 +45,26 @@ public class ComparisonRefactoring extends Refactoring {
 		Sentinel inFunctionSentinel = inFunction.getSentinel();
 		
 		if(inFunctionSentinel == Sentinel.NULL) {
-			if(ASTAnalyzer.isCheckedIfEqualToNull(node)) {
+			if(CheckAnalyzer.isNodeComparedToNull(node, true)) {
 				isApplicable = true;
-				config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
 				config.put(IS_EQUAL, true);
 			}
-			else if(ASTAnalyzer.isCheckedIfNotEqualToNull(node)) {
+			else if(CheckAnalyzer.isNodeComparedToNull(node, false)) {
 				isApplicable = true;
-				config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
 				config.put(IS_EQUAL, false);
 			}
 		}
 		else if(inFunctionSentinel == Sentinel.STRLEN) {
-			if(ASTAnalyzer.isNodeComparedToStrlen(node, true)) {
+			if(CheckAnalyzer.isNodeComparedToStrlen(node, true)) {
 				isApplicable = true;
-				config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
 				config.put(IS_EQUAL, true);
 			}
-			else if(ASTAnalyzer.isNodeComparedToStrlen(node, false)) {
+			else if(CheckAnalyzer.isNodeComparedToStrlen(node, false)) {
 				isApplicable = true;
-				config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
 				config.put(IS_EQUAL, false);
 			}
 		}

@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 
 public class RewriteStrategyFactory {
@@ -47,16 +48,16 @@ public class RewriteStrategyFactory {
 	}
 	
 	private static boolean hasGuardClause(IASTStatement[] bodyStatements, IASTName strName) {
-		return ASTAnalyzer.findGuardClause(strName, bodyStatements) != null;
+		return CheckAnalyzer.findGuardClause(strName, bodyStatements) != null;
 	}
 	
 	private static boolean hasNullCheck(IASTStatement[] bodyStatements, IASTName strName) {
-		return ASTAnalyzer.findNullCheck(strName, bodyStatements) != null;
+		return CheckAnalyzer.findNullCheck(strName, bodyStatements) != null;
 	}
 	
 	private static boolean hasResultVariable(IASTStatement[] bodyStatements, IASTName strName) {
 		//check if null check exists
-		IASTIfStatement nullCheck = ASTAnalyzer.findNullCheck(strName, bodyStatements);
+		IASTIfStatement nullCheck = CheckAnalyzer.findNullCheck(strName, bodyStatements);
 		if(nullCheck == null) return false;
 		
 		//check if result variable exists
@@ -64,7 +65,7 @@ public class RewriteStrategyFactory {
 		if(resultVariableName == null) return false;
 		
 		//check if clause assigns to result variable
-		IASTStatement[] nullCheckedStatements = ASTAnalyzer.getNullCheckedStatements(strName, bodyStatements);
+		IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, bodyStatements);
 		if(nullCheckedStatements.length == 0) return false;
 		IASTStatement lastClauseStatement = nullCheckedStatements[nullCheckedStatements.length-1];
 		

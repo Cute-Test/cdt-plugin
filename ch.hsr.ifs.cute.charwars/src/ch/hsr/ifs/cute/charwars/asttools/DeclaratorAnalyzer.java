@@ -7,6 +7,7 @@ import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -50,35 +51,29 @@ public class DeclaratorAnalyzer {
 	}
 	
 	public static boolean hasCStringType(IASTDeclarator declarator, boolean isConst) {
-		IASTNode parent = declarator.getParent();
-		IASTDeclSpecifier declSpecifier = null;
+		IASTSimpleDeclSpecifier ds = getDeclSpecifier(declarator);
+		if(ds == null) return false;
 		
-		if(parent instanceof IASTSimpleDeclaration) {
-			declSpecifier = ((IASTSimpleDeclaration)parent).getDeclSpecifier(); 
-		}
-		else if(parent instanceof ICPPASTParameterDeclaration) {
-			declSpecifier = ((ICPPASTParameterDeclaration)parent).getDeclSpecifier();
-		}
-		
-		if(declSpecifier instanceof IASTSimpleDeclSpecifier) {
-			IASTSimpleDeclSpecifier simpleDeclSpecifier = (IASTSimpleDeclSpecifier)declSpecifier;
-			int type = simpleDeclSpecifier.getType();
-			boolean isValidType = type == IASTSimpleDeclSpecifier.t_char || 
-								  type == IASTSimpleDeclSpecifier.t_wchar_t ||
-								  type == IASTSimpleDeclSpecifier.t_char16_t ||
-								  type == IASTSimpleDeclSpecifier.t_char32_t;
-			return isValidType && isArrayXorPointer(declarator) && isConst == simpleDeclSpecifier.isConst();
-		}
-		return false;
+		int type = ds.getType();
+		boolean isValidType = type == IASTSimpleDeclSpecifier.t_char || 
+							  type == IASTSimpleDeclSpecifier.t_wchar_t ||
+							  type == IASTSimpleDeclSpecifier.t_char16_t ||
+							  type == IASTSimpleDeclSpecifier.t_char32_t;
+		return isValidType && isArrayXorPointer(declarator) && isConst == ds.isConst();
 	}
 	
-	public static boolean hasVoidType(IASTDeclSpecifier declSpecifier) {
-		if(declSpecifier instanceof IASTSimpleDeclSpecifier) {
-			IASTSimpleDeclSpecifier simpleDeclSpecifier = (IASTSimpleDeclSpecifier)declSpecifier;
-			int type = simpleDeclSpecifier.getType();
-			return type == IASTSimpleDeclSpecifier.t_void;
-		}
-		return false;
+	public static boolean hasVoidType(IASTDeclarator declarator) {
+		return hasType(declarator, IASTSimpleDeclSpecifier.t_void);
+	}
+	
+	public static boolean hasBoolType(IASTDeclarator declarator) {
+		return hasType(declarator, IASTSimpleDeclSpecifier.t_bool);
+	}
+	
+	private static boolean hasType(IASTDeclarator declarator, int type) {
+		IASTSimpleDeclSpecifier ds = getDeclSpecifier(declarator);
+		if(ds == null) return false;
+		return ds.getType() == type;
 	}
 	
 	public static boolean isArray(IASTDeclarator declarator) {
@@ -124,8 +119,11 @@ public class DeclaratorAnalyzer {
 		return null;
 	}
 	
-	public static String getStringReplacementType(IASTSimpleDeclSpecifier simpleDeclSpecifier) {
-		switch(simpleDeclSpecifier.getType()) {
+	public static String getStringReplacementType(IASTDeclarator declarator) {
+		IASTSimpleDeclSpecifier ds = getDeclSpecifier(declarator);
+		if(ds == null) return null;
+		
+		switch(ds.getType()) {
 			case IASTSimpleDeclSpecifier.t_wchar_t:
 				return StdString.STD_WSTRING;
 			case IASTSimpleDeclSpecifier.t_char16_t:
@@ -135,5 +133,28 @@ public class DeclaratorAnalyzer {
 			default:
 				return StdString.STD_STRING;
 		}
+	}
+	
+	public static IASTSimpleDeclSpecifier getDeclSpecifier(IASTDeclarator declarator) {
+		IASTDeclSpecifier declSpecifier = null;
+		IASTNode parent = declarator.getParent();
+		
+		if(parent instanceof IASTSimpleDeclaration) {
+			IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration)parent;
+			declSpecifier = simpleDeclaration.getDeclSpecifier();
+		}
+		else if(parent instanceof ICPPASTParameterDeclaration) {
+			ICPPASTParameterDeclaration paramDeclaration = (ICPPASTParameterDeclaration)parent;
+			declSpecifier = paramDeclaration.getDeclSpecifier();
+		}
+		else if(parent instanceof IASTFunctionDefinition) {
+			IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition)parent;
+			declSpecifier = functionDefinition.getDeclSpecifier();
+		}
+		
+		if(declSpecifier instanceof IASTSimpleDeclSpecifier) {
+			return (IASTSimpleDeclSpecifier)declSpecifier;
+		}
+		return null;
 	}
 }

@@ -11,8 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
 
 public class DefaultRefactoring extends Refactoring {

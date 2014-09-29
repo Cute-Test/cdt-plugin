@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common;
+package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
 import java.util.Arrays;
 import java.util.List;

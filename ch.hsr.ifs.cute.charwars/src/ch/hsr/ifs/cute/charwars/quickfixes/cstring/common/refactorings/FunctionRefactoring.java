@@ -10,9 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class FunctionRefactoring extends Refactoring {

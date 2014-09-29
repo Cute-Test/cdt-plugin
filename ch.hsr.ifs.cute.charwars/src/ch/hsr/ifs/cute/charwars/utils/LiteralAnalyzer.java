@@ -3,6 +3,8 @@ package ch.hsr.ifs.cute.charwars.utils;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
+import ch.hsr.ifs.cute.charwars.constants.Constants;
+
 public class LiteralAnalyzer {
 	public static boolean isString(IASTNode node) {
 		return getKind(node) == IASTLiteralExpression.lk_string_literal;
@@ -19,6 +21,11 @@ public class LiteralAnalyzer {
 	
 	public static boolean isZero(IASTNode node) {
 		return isInteger(node, 0);
+	}
+	
+	public static boolean isNullExpression(IASTNode node) {
+		String literalValue = getValue(node);
+		return Constants.NULL_VALUES.contains(literalValue);
 	}
 	
 	private static int getKind(IASTNode node) {

@@ -20,11 +20,21 @@ public class BEAnalyzer {
 		return isBinaryExpression(node, IASTBinaryExpression.op_shiftLeft);
 	}
 	
-	public static boolean isEqualityCheck(IASTNode node) {
+	
+	public static boolean isComparison(IASTNode node, boolean equalityComparison) {
+		if(equalityComparison) {
+			return isEqualityCheck(node);
+		}
+		else {
+			return isInequalityCheck(node);
+		}
+	}
+	
+	private static boolean isEqualityCheck(IASTNode node) {
 		return isBinaryExpression(node, IASTBinaryExpression.op_equals);
 	}
 	
-	public static boolean isInequalityCheck(IASTNode node) {
+	private static boolean isInequalityCheck(IASTNode node) {
 		return isBinaryExpression(node, IASTBinaryExpression.op_notequals);
 	}
 	

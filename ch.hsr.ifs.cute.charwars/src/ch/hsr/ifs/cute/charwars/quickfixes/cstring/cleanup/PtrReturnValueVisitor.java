@@ -10,6 +10,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
@@ -44,15 +45,15 @@ public class PtrReturnValueVisitor extends ASTVisitor {
 		IASTExpression npos = ExtendedNodeFactory.newNposExpression(StringType.STRING);
 		IASTNode parent = idExpression.getParent();
 		
-		if(ASTAnalyzer.isCheckedIfNotEqualToNull(idExpression)) {
+		if(CheckAnalyzer.isNodeComparedToNull(idExpression, false)) {
 			IASTBinaryExpression comparison = ExtendedNodeFactory.newEqualityComparison(newIdExpression, npos, false);
 			IASTNode node = idExpression;
-			if(BEAnalyzer.isInequalityCheck(parent)) {
+			if(BEAnalyzer.isComparison(parent, false)) {
 				node = parent;
 			}
 			ASTModifier.replace(node, comparison, rewrite);
 		}
-		else if(ASTAnalyzer.isCheckedIfEqualToNull(idExpression)) {
+		else if(CheckAnalyzer.isNodeComparedToNull(idExpression, true)) {
 			IASTBinaryExpression comparison = ExtendedNodeFactory.newEqualityComparison(newIdExpression, npos, true);
 			ASTModifier.replace(parent, comparison, rewrite);
 		}

@@ -114,11 +114,11 @@ public abstract class RewriteStrategy {
 	}
 	
 	protected IASTStatement getStdStringFunctionCallStatement() {
-		IASTDeclSpecifier functionDeclSpecifier = functionDefinition.getDeclSpecifier();
+		IASTDeclarator functionDeclarator = functionDefinition.getDeclarator();
 		IASTFunctionCallExpression stdStringOverloadFunctionCall = getStdStringFunctionCallExpression();
 		
 		IASTStatement statement;
-		if(DeclaratorAnalyzer.hasVoidType(functionDeclSpecifier)) {
+		if(DeclaratorAnalyzer.hasVoidType(functionDeclarator)) {
 			statement = ExtendedNodeFactory.newExpressionStatement(stdStringOverloadFunctionCall);		
 		}
 		else {

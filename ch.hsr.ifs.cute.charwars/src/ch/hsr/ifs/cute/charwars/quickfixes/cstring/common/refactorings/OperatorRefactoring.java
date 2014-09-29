@@ -7,11 +7,11 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class OperatorRefactoring extends Refactoring {
@@ -29,11 +29,11 @@ public class OperatorRefactoring extends Refactoring {
 		String outFunctionName = outFunction.getName();
 		boolean isStrcmpOrWcscmp = (inFunction == Function.STRCMP) || (inFunction == Function.WCSCMP);
 		boolean isOther = !isStrcmpOrWcscmp && FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
-		boolean isStringEqualityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_EQUALS) && ASTAnalyzer.isPartOfStringCheck(idExpression, true); 
-		boolean isStringInequalityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && ASTAnalyzer.isPartOfStringCheck(idExpression, false);
+		boolean isStringEqualityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_EQUALS) && CheckAnalyzer.isPartOfStringCheck(idExpression, true); 
+		boolean isStringInequalityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && CheckAnalyzer.isPartOfStringCheck(idExpression, false);
 		
 		if(!context.isOffset(idExpression) && (isOther || isStringEqualityCheck || isStringInequalityCheck)) {
-			IASTNode nodeToReplace = isStrcmpOrWcscmp ? ASTAnalyzer.getEnclosingBoolean(idExpression) : idExpression.getParent();
+			IASTNode nodeToReplace = isStrcmpOrWcscmp ? CheckAnalyzer.getEnclosingBoolean(idExpression) : idExpression.getParent();
 			isApplicable = true;
 			config.put(NODE_TO_REPLACE, nodeToReplace);
 		}

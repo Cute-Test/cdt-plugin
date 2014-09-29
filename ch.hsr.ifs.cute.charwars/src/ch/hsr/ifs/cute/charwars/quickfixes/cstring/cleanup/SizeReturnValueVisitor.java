@@ -7,8 +7,8 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 
@@ -34,8 +34,8 @@ public class SizeReturnValueVisitor extends ASTVisitor {
 	}
 		
 	private void handleSizeReturnType(IASTIdExpression idExpression) {
-		if(ASTAnalyzer.isNodeComparedToStrlen(idExpression, true) ||
-			ASTAnalyzer.isNodeComparedToStrlen(idExpression, false)) {
+		if(CheckAnalyzer.isNodeComparedToStrlen(idExpression, true) ||
+		   CheckAnalyzer.isNodeComparedToStrlen(idExpression, false)) {
 			IASTBinaryExpression comparison = (IASTBinaryExpression)idExpression.getParent();
 			IASTExpression strlenCall = (idExpression == comparison.getOperand1()) ? comparison.getOperand2() : comparison.getOperand1();
 			ASTModifier.replace(strlenCall, ExtendedNodeFactory.newNposExpression(StringType.STRING), rewrite);

@@ -9,10 +9,10 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
@@ -47,20 +47,20 @@ public class ExpressionRefactoring extends Refactoring {
 			config.put(NODE_TO_REPLACE, nodeToReplace);
 			config.put(TRANSFORMATION, Transformation.SIZE);
 		}
-		else if(ASTAnalyzer.isCheckedForEmptiness(idExpression, true)) {
+		else if(CheckAnalyzer.isCheckedForEmptiness(idExpression, true)) {
 			//!*str -> str.empty()
 			//*str == 0 -> str.empty()
 			//if modified: !*str -> !str[str_pos]
 			isApplicable = true;
-			config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+			config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
 			config.put(TRANSFORMATION, Transformation.EMPTY);
 		}
-		else if(ASTAnalyzer.isCheckedForEmptiness(idExpression, false)) {
+		else if(CheckAnalyzer.isCheckedForEmptiness(idExpression, false)) {
 			//if(*str) -> if(!str.empty())
 			//*str != 0 -> !str.empty()
 			//if modified: *str -> str[str_pos]
 			isApplicable = true;
-			config.put(NODE_TO_REPLACE, ASTAnalyzer.getEnclosingBoolean(idExpression));
+			config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
 			config.put(TRANSFORMATION, Transformation.NOT_EMPTY);
 		}
 		else if(ASTAnalyzer.isDereferencedToChar(idExpression)) {

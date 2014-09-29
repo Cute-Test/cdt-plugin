@@ -10,7 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTIfStatement;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 
 public class OptimizationCheckerVisitor extends ASTVisitor {
 	private IASTName name;
@@ -42,10 +42,10 @@ public class OptimizationCheckerVisitor extends ASTVisitor {
 		IASTNode parent = idExpression.getParent().getParent();
 		
 		if(ptrReturnType) {
-			if(ASTAnalyzer.isCheckedIfNotEqualToNull(idExpression)) {
+			if(CheckAnalyzer.isNodeComparedToNull(idExpression, false)) {
 				inequalityChecks.add(parent);
 			}
-			else if(ASTAnalyzer.isCheckedIfEqualToNull(idExpression)) {
+			else if(CheckAnalyzer.isNodeComparedToNull(idExpression, true)) {
 				//ignore
 			}
 			else {
@@ -53,10 +53,10 @@ public class OptimizationCheckerVisitor extends ASTVisitor {
 			}
 		}
 		else {
-			if(ASTAnalyzer.isNodeComparedToStrlen(idExpression, false) && parent instanceof IASTIfStatement) {
+			if(CheckAnalyzer.isNodeComparedToStrlen(idExpression, false) && parent instanceof IASTIfStatement) {
 				inequalityChecks.add(parent);
 			}
-			else if(ASTAnalyzer.isNodeComparedToStrlen(idExpression, true) && parent instanceof IASTIfStatement) {
+			else if(CheckAnalyzer.isNodeComparedToStrlen(idExpression, true) && parent instanceof IASTIfStatement) {
 				//ignore
 			}
 			else {

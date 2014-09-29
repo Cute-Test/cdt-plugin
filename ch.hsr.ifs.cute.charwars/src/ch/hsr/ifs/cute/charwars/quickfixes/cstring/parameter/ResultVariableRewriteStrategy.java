@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 
 public class ResultVariableRewriteStrategy extends RewriteStrategy {
@@ -21,7 +22,7 @@ public class ResultVariableRewriteStrategy extends RewriteStrategy {
 		IASTDeclarationStatement resultVariableDeclaration = ASTAnalyzer.getVariableDeclaration(resultVariableName, statements);
 		stdStringOverloadBody.addStatement(resultVariableDeclaration.copy(CopyStyle.withLocations));
 		
-		IASTStatement[] nullCheckedStatements = ASTAnalyzer.getNullCheckedStatements(strName, statements);
+		IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, statements);
 		for(IASTStatement statement : nullCheckedStatements) {
 			stdStringOverloadBody.addStatement(statement.copy(CopyStyle.withLocations));
 		}
@@ -34,7 +35,7 @@ public class ResultVariableRewriteStrategy extends RewriteStrategy {
 	@Override
 	public void adaptCStringOverload() {
 		IASTName resultVariableName = ASTAnalyzer.getResultVariableName(statements);
-		IASTStatement nullCheckClause = ASTAnalyzer.getNullCheckClause(strName, statements);
+		IASTStatement nullCheckClause = CheckAnalyzer.getNullCheckClause(strName, statements);
 		IASTIdExpression resultVariable = ExtendedNodeFactory.newIdExpression(resultVariableName.toString());
 		IASTExpression assignment = ExtendedNodeFactory.newAssignment(resultVariable, getStdStringFunctionCallExpression());
 		IASTExpressionStatement expressionStatement = ExtendedNodeFactory.newExpressionStatement(assignment);

@@ -105,10 +105,8 @@ public class CStringQuickFix extends BaseQuickFix {
 	
 	private IASTDeclarationStatement newRefactoredDeclarationStatementFromDeclarator(IASTDeclarator declarator) {
 		if(getProblemId(currentMarker).equals(ProblemIDs.C_STRING_PROBLEM)) {
-			IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
-			
-			IASTSimpleDeclSpecifier simpleDeclSpecifier = (IASTSimpleDeclSpecifier)declaration.getDeclSpecifier();
-			IASTDeclSpecifier newDeclSpecifier = newRefactoredDeclSpecifier(simpleDeclSpecifier, declarator);
+			IASTSimpleDeclSpecifier ds = DeclaratorAnalyzer.getDeclSpecifier(declarator);
+			IASTDeclSpecifier newDeclSpecifier = newRefactoredDeclSpecifier(ds, declarator);
 			IASTSimpleDeclaration newDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newDeclSpecifier);
 			IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
 			
@@ -132,7 +130,7 @@ public class CStringQuickFix extends BaseQuickFix {
 	}
 	
 	private IASTDeclSpecifier newRefactoredDeclSpecifier(IASTSimpleDeclSpecifier oldDeclSpecifier, IASTDeclarator oldDeclarator) {
-		IASTDeclSpecifier newDeclSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(DeclaratorAnalyzer.getStringReplacementType(oldDeclSpecifier));
+		IASTDeclSpecifier newDeclSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(DeclaratorAnalyzer.getStringReplacementType(oldDeclarator));
 		newDeclSpecifier.setStorageClass(oldDeclSpecifier.getStorageClass());
 		if(oldDeclarator.getPointerOperators().length > 0) {
 			IASTPointer pointer = (IASTPointer) oldDeclarator.getPointerOperators()[0];

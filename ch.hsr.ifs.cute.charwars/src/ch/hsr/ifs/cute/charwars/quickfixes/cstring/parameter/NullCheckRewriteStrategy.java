@@ -4,8 +4,8 @@ import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
+import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 
 public class NullCheckRewriteStrategy extends RewriteStrategy {
@@ -13,7 +13,7 @@ public class NullCheckRewriteStrategy extends RewriteStrategy {
 	protected IASTCompoundStatement getStdStringOverloadBody() {
 		IASTCompoundStatement stdStringOverloadBody = ExtendedNodeFactory.newCompoundStatement();
 		
-		IASTStatement[] nullCheckedStatements = ASTAnalyzer.getNullCheckedStatements(strName, statements);
+		IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, statements);
 		for(IASTStatement statement : nullCheckedStatements) {
 			stdStringOverloadBody.addStatement(statement.copy(CopyStyle.withLocations));
 		}
@@ -23,7 +23,7 @@ public class NullCheckRewriteStrategy extends RewriteStrategy {
 	
 	@Override
 	public void adaptCStringOverload() {
-		IASTStatement nullCheckClause = ASTAnalyzer.getNullCheckClause(strName, statements);
+		IASTStatement nullCheckClause = CheckAnalyzer.getNullCheckClause(strName, statements);
 		IASTCompoundStatement newClause = ExtendedNodeFactory.newCompoundStatement(getStdStringFunctionCallStatement());
 		ASTModifier.replace(nullCheckClause, newClause, rewrite);
 	}

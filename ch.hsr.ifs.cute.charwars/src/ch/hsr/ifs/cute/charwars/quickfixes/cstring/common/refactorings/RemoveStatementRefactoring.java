@@ -3,9 +3,7 @@ package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 
 import ch.hsr.ifs.cute.charwars.constants.Function;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class RemoveStatementRefactoring extends Refactoring {

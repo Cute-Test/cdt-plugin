@@ -9,9 +9,7 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.ASTChangeDescription;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 
 public abstract class Refactoring {
 	protected Map<String, Object> config = new HashMap<String, Object>();

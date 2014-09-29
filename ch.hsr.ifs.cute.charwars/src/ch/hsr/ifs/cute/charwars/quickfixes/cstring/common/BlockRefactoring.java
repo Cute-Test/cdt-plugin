@@ -25,9 +25,11 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.ASTChangeDescription;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Refactoring;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.RefactoringFactory;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 
 public class BlockRefactoring  {
 	private ASTRewrite rewrite;
