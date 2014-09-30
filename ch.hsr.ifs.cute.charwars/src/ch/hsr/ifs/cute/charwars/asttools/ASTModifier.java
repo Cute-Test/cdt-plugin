@@ -2,7 +2,6 @@ package ch.hsr.ifs.cute.charwars.asttools;
 
 import java.util.HashSet;
 
-import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -108,16 +107,16 @@ public class ASTModifier {
 		if(lastNode == idExpression)
 			return null;
 		
-		IASTBinaryExpression binaryExpression = (IASTBinaryExpression)idExpression.getParent();
+		IASTNode parent = idExpression.getParent();
 		IASTExpression remainingOperand;
-		if(BEAnalyzer.isSubtraction(binaryExpression) && idExpression == binaryExpression.getOperand1()) {
-			remainingOperand = ExtendedNodeFactory.newNegatedExpression(binaryExpression.getOperand2());
+		if(BEAnalyzer.isSubtraction(parent) && BEAnalyzer.isOp1(idExpression)) {
+			remainingOperand = ExtendedNodeFactory.newNegatedExpression(BEAnalyzer.getOperand2(parent));
 		}
 		else  {
-			remainingOperand = (binaryExpression.getOperand1() == idExpression) ? binaryExpression.getOperand2() : binaryExpression.getOperand1();
+			remainingOperand = BEAnalyzer.getOtherOperand(idExpression);
 		}
 		
-		ASTModifier.replaceNode(binaryExpression, remainingOperand);
-		return (binaryExpression == lastNode) ? remainingOperand : lastNode;
+		ASTModifier.replaceNode(parent, remainingOperand);
+		return (parent == lastNode) ? remainingOperand : lastNode;
 	}
 }

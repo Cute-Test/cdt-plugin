@@ -57,23 +57,12 @@ public class PtrReturnValueVisitor extends ASTVisitor {
 			IASTBinaryExpression comparison = ExtendedNodeFactory.newEqualityComparison(newIdExpression, npos, true);
 			ASTModifier.replace(parent, comparison, rewrite);
 		}
-		else if(isIndexCalculation(idExpression)) {
+		else if(ASTAnalyzer.isIndexCalculation(idExpression)) {
 			ASTModifier.replace(parent, newIdExpression, rewrite);
 		}
 		else {
 			IASTExpression ptrConversion = ExtendedNodeFactory.newAdressOperatorExpression(ExtendedNodeFactory.newArraySubscriptExpression(strNode, newIdExpression));
 			ASTModifier.replace(idExpression, ptrConversion, rewrite);
 		}
-	}
-	
-	private boolean isIndexCalculation(IASTIdExpression idExpression) {
-		IASTNode parent = idExpression.getParent();
-		if(BEAnalyzer.isSubtraction(parent)) {
-			IASTBinaryExpression subtraction = (IASTBinaryExpression)parent;
-			IASTNode op1 = subtraction.getOperand1();
-			IASTNode op2 = subtraction.getOperand2();
-			return (op1 == idExpression) && ASTAnalyzer.isConversionToCharPointer(op2, true);
-		}
-		return false;
 	}
 }

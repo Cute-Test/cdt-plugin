@@ -4,6 +4,7 @@ import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
@@ -14,6 +15,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.checkers.BaseChecker;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 
 public class CStrChecker extends BaseChecker {
 	public CStrChecker() {
@@ -37,11 +39,12 @@ public class CStrChecker extends BaseChecker {
 				
 				if(parent instanceof ICPPASTBinaryExpression) {
 					ICPPASTBinaryExpression binaryExpression = (ICPPASTBinaryExpression)parent;
-					if(binaryExpression.getImplicitNames().length == 0) {
+					IASTImplicitName implicitNames[] = binaryExpression.getImplicitNames();
+					if(implicitNames.length == 0) {
 						return PROCESS_CONTINUE;
 					}
-					name = binaryExpression.getImplicitNames()[0];
-					strArgIndex = binaryExpression.getOperand1() == cStrCall ? 0 : 1;
+					name = implicitNames[0];
+					strArgIndex = BEAnalyzer.isOp1(cStrCall) ? 0 : 1;
 				}
 				else {
 					name = FunctionBindingAnalyzer.getFunctionName(parent);

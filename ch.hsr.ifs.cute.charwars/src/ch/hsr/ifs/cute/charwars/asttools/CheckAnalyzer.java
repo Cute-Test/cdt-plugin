@@ -215,8 +215,7 @@ public class CheckAnalyzer {
 		IASTNode parent = node.getParent();
 		
 		if(BEAnalyzer.isComparison(parent, equalityComparison)) {
-			IASTBinaryExpression be = (IASTBinaryExpression)parent;
-			IASTNode otherOperand = (be.getOperand1() == node) ? be.getOperand2() : be.getOperand1();
+			IASTNode otherOperand = BEAnalyzer.getOtherOperand(node);
 			
 			if(zeroOnly) {
 				return LiteralAnalyzer.isZero(otherOperand);
@@ -243,15 +242,13 @@ public class CheckAnalyzer {
 			boolean not_equals = (operator == IASTBinaryExpression.op_notequals);
 			
 			
-			IASTExpression operand;
+			IASTExpression operand = BEAnalyzer.getOtherOperand(node);
 			
-			if(node == comparison.getOperand1()) {
+			if(BEAnalyzer.isOp1(node)) {
 				not_equals = not_equals || (operator == IASTBinaryExpression.op_lessThan);
-				operand = comparison.getOperand2();
 			}
 			else {
 				not_equals = not_equals || (operator == IASTBinaryExpression.op_greaterThan);
-				operand = comparison.getOperand1();
 			}
 			
 			//check if operator is valid
@@ -306,9 +303,8 @@ public class CheckAnalyzer {
 	private static boolean isAssignedToBoolean(IASTNode node) {
 		IASTNode parent = node.getParent().getOriginalNode();
 		
-		if(BEAnalyzer.isAssignment(parent)) { 
-			IASTBinaryExpression assignment = (IASTBinaryExpression)parent;
-			IType expressionType = assignment.getOperand1().getExpressionType();
+		if(BEAnalyzer.isAssignment(parent)) {
+			IType expressionType = BEAnalyzer.getOperand1(parent).getExpressionType();
 			return TypeAnalyzer.getBasicKind(expressionType) == Kind.eBoolean;
 		}
 		else if(parent instanceof IASTEqualsInitializer && parent.getParent() instanceof IASTDeclarator) {

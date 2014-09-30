@@ -2,7 +2,6 @@ package ch.hsr.ifs.cute.charwars.quickfixes.cstring.parameter;
 
 import java.util.Arrays;
 
-import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
@@ -77,9 +76,7 @@ public class RewriteStrategyFactory {
 		if(resultVariableDeclaration != null) {
 			int resultVariableIndex = Arrays.asList(bodyStatements).indexOf(resultVariableDeclaration);
 			int nullCheckIndex = Arrays.asList(bodyStatements).indexOf(nullCheck);
-			if(nullCheckIndex > resultVariableIndex) {
-				return true;
-			}
+			return nullCheckIndex > resultVariableIndex;
 		}
 		
 		return false;
@@ -89,7 +86,7 @@ public class RewriteStrategyFactory {
 		if(statement instanceof IASTExpressionStatement) {
 			IASTExpression expression = ((IASTExpressionStatement)statement).getExpression();
 			if(BEAnalyzer.isAssignment(expression)) {
-				IASTExpression variable = ((IASTBinaryExpression)expression).getOperand1();
+				IASTExpression variable = BEAnalyzer.getOperand1(expression);
 				if(variable instanceof IASTIdExpression) {
 					IASTName name = ((IASTIdExpression)variable).getName();
 					return name.resolveBinding().equals(variableName.resolveBinding());

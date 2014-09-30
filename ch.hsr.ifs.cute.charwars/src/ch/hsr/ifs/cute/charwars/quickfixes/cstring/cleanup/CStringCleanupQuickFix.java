@@ -116,7 +116,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 			ICPPASTFunctionCallExpression thirdArg = (ICPPASTFunctionCallExpression) functionCall.getArguments()[2];
 			if(FunctionAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
 				if(thirdArg.getChildren()[0] instanceof ICPPASTExpression) {
-					IASTIdExpression thirdArgIdExpression = (IASTIdExpression) thirdArg.getChildren()[0].getChildren()[0];
+					IASTIdExpression thirdArgIdExpression = (IASTIdExpression)thirdArg.getChildren()[0].getChildren()[0];
 					if(thirdArgIdExpression.getChildren()[0].toString().equals(str.getName().toString())) {
 						last = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.END);
 					}
@@ -221,15 +221,16 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 			}
 		}
 		else if(statement instanceof IASTExpressionStatement) {
-			IASTBinaryExpression assignment = (IASTBinaryExpression)((IASTExpressionStatement)statement).getExpression();
-			if(assignment.getOperand2() instanceof IASTFunctionCallExpression)
-				return (IASTFunctionCallExpression)assignment.getOperand2();
-			if(assignment.getOperand2() instanceof IASTCastExpression) {
-				if(assignment.getOperand2().getChildren()[1] instanceof IASTFunctionCallExpression)
-					return (IASTFunctionCallExpression) assignment.getOperand2().getChildren()[1];
-				if(assignment.getOperand2().getChildren()[1] instanceof IASTUnaryExpression && 
-						assignment.getOperand2().getChildren()[1].getChildren()[0] instanceof IASTFunctionCallExpression)
-					return (IASTFunctionCallExpression) assignment.getInitOperand2().getChildren()[1].getChildren()[0];
+			IASTExpressionStatement exprStatement = (IASTExpressionStatement)statement;
+			IASTExpression op2 = BEAnalyzer.getOperand2(exprStatement.getExpression());
+			if(op2 instanceof IASTFunctionCallExpression)
+				return (IASTFunctionCallExpression)op2;
+			if(op2 instanceof IASTCastExpression) {
+				IASTNode child1 = op2.getChildren()[1];
+				if(child1 instanceof IASTFunctionCallExpression)
+					return (IASTFunctionCallExpression)child1;
+				if(child1 instanceof IASTUnaryExpression && child1.getChildren()[0] instanceof IASTFunctionCallExpression)
+					return (IASTFunctionCallExpression)child1.getChildren()[0];
 			}
 		}
 		return null;

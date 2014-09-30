@@ -1,7 +1,6 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
 import org.eclipse.cdt.core.dom.ast.IASTArraySubscriptExpression;
-import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -93,7 +92,7 @@ public class ExpressionRefactoring extends Refactoring {
 			config.put(NODE_TO_REPLACE, idExpression.getParent());
 			config.put(TRANSFORMATION, Transformation.ARRAY_SUBSCRIPTION);
 		}
-		else if(context.getContextState() == ContextState.CStringAlias && isIndexCalculation(idExpression, context)) {
+		else if(context.getContextState() == ContextState.CStringAlias && ASTAnalyzer.isIndexCalculation(idExpression)) {
 			//ptr - str -> ptr
 			IASTNode nodeToReplace = idExpression.getParent();
 			if(UEAnalyzer.isBracketExpression(nodeToReplace.getParent())) {
@@ -103,17 +102,6 @@ public class ExpressionRefactoring extends Refactoring {
 			config.put(NODE_TO_REPLACE, nodeToReplace);
 			config.put(TRANSFORMATION, Transformation.INDEX_CALCULATION);
 		}
-	}
-	
-	private boolean isIndexCalculation(IASTIdExpression idExpression, Context context) {
-		IASTNode parent = idExpression.getParent();
-		if(BEAnalyzer.isSubtraction(parent)) {
-			IASTBinaryExpression subtraction = (IASTBinaryExpression)parent;
-			if(idExpression == subtraction.getOperand1() && ASTAnalyzer.isConversionToCharPointer(subtraction.getOperand2(), true)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -150,8 +138,7 @@ public class ExpressionRefactoring extends Refactoring {
 			}
 			
 			if(BEAnalyzer.isAddition(idExpression.getParent())) {
-				IASTBinaryExpression addition = (IASTBinaryExpression)idExpression.getParent();
-				IASTExpression otherOperand = (addition.getOperand1() == idExpression) ? addition.getOperand2() : addition.getOperand1();
+				IASTExpression otherOperand = BEAnalyzer.getOtherOperand(idExpression);
 				
 				if(context.isOffset(idExpression)) {
 					subscript = ExtendedNodeFactory.newPlusExpression(subscript, otherOperand);

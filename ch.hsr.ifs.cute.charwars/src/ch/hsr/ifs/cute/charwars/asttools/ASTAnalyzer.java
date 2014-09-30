@@ -19,7 +19,6 @@ import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
@@ -40,11 +39,7 @@ public class ASTAnalyzer {
 	
 	public static boolean isLValueInAssignment(IASTIdExpression idExpression) {
 		IASTNode parent = idExpression.getParent();
-		if(BEAnalyzer.isAssignment(parent)) {
-			IASTBinaryExpression assignment = (IASTBinaryExpression)parent;
-			return assignment.getOperand1() == idExpression;
-		}
-		return false;
+		return BEAnalyzer.isAssignment(parent) && BEAnalyzer.isOp1(idExpression);
 	}
 	
 	public static boolean isArraySubscriptExpression(IASTIdExpression idExpression) {
@@ -57,17 +52,12 @@ public class ASTAnalyzer {
 	}
 	
 	public static boolean isArrayLengthCalculation(IASTIdExpression idExpression) {
-		if(UEAnalyzer.isDereferenceExpression(idExpression.getParent()))
-			return false;
-		
-		IASTNode currentNode = idExpression;
-		while(currentNode != null) {
-			currentNode = currentNode.getParent();
-			if(BEAnalyzer.isDivision(currentNode))
-				break;
-		}
-		
-		return isSizeOfDivision(currentNode);
+		for(IASTNode cn = idExpression; cn != null && !UEAnalyzer.isDereferenceExpression(cn); cn = cn.getParent()) {
+			if(BEAnalyzer.isDivision(cn)) {
+				return isSizeOfDivision(cn); 
+			}
+		};
+		return false;
 	}
 	
 	public static boolean isStringLengthCalculation(IASTIdExpression idExpression) {
@@ -84,17 +74,15 @@ public class ASTAnalyzer {
 		if(currentNode == null)
 			return false;
 		
-		IASTBinaryExpression be = (IASTBinaryExpression)currentNode;
-		IASTNode minuend = be.getOperand1();
-		IASTNode subtrahend = be.getOperand2();
+		IASTNode minuend = BEAnalyzer.getOperand1(currentNode);
+		IASTNode subtrahend = BEAnalyzer.getOperand2(currentNode);
 		return isSizeOfDivision(minuend) && LiteralAnalyzer.isInteger(subtrahend, 1);
 	}
 	
 	private static boolean isSizeOfDivision(IASTNode node) {
 		if(BEAnalyzer.isDivision(node)) {
-			IASTBinaryExpression division = (IASTBinaryExpression)node;
-			IASTNode dividend = division.getOperand1();
-			IASTNode divisor = division.getOperand2();
+			IASTNode dividend = BEAnalyzer.getOperand1(node);
+			IASTNode divisor = BEAnalyzer.getOperand2(node);
 			return UEAnalyzer.isSizeofExpression(dividend) && UEAnalyzer.isSizeofExpression(divisor);
 		}
 		return false;
@@ -105,7 +93,7 @@ public class ASTAnalyzer {
 		while(result != null && !(result instanceof IASTStatement)) {
 			result = result.getParent();
 		}
-		return result == null ? null : (IASTStatement)result;
+		return (IASTStatement)result;
 	}
 
 	public static boolean isConversionToCharPointer(IASTNode node, boolean isConst) {
@@ -114,15 +102,12 @@ public class ASTAnalyzer {
 		}
 		else {
 			if(UEAnalyzer.isAddressOperatorExpression(node)) {
-				IASTUnaryExpression addressOperatorExpression = (IASTUnaryExpression)node;
-				IASTNode operand = addressOperatorExpression.getOperand();
+				IASTNode operand = UEAnalyzer.getOperand(node);
 				if(UEAnalyzer.isDereferenceExpression(operand)) {
-					IASTUnaryExpression dereferenceExpression = (IASTUnaryExpression)operand;
-					IASTNode dereferencedNode = dereferenceExpression.getOperand();
+					IASTNode dereferencedNode = UEAnalyzer.getOperand(operand);
 					return FunctionAnalyzer.isCallToMemberFunction(dereferencedNode, Function.BEGIN);
 				}
 			}
-
 		}
 		return false;
 	}
@@ -169,9 +154,7 @@ public class ASTAnalyzer {
 			result = fieldReference.getFieldOwner();
 		}
 		else if(isConversionToCharPointer(node, false)) {	//&str.begin()
-			IASTUnaryExpression addressOperatorExpression = (IASTUnaryExpression)node;
-			IASTUnaryExpression dereferenceExpression = (IASTUnaryExpression)addressOperatorExpression.getOperand();
-			IASTFunctionCallExpression beginCall = (IASTFunctionCallExpression)dereferenceExpression.getOperand();
+			IASTFunctionCallExpression beginCall = (IASTFunctionCallExpression)UEAnalyzer.getOperand(UEAnalyzer.getOperand(node));
 			IASTFieldReference fieldReference = (IASTFieldReference)beginCall.getFunctionNameExpression();
 			result = fieldReference.getFieldOwner(); 
 		}
@@ -181,8 +164,7 @@ public class ASTAnalyzer {
 	
 	public static boolean isLeftShiftExpressionToStdCout(IASTNode node) {
 		if(BEAnalyzer.isLeftShiftExpression(node) && node instanceof ICPPASTBinaryExpression) {
-			ICPPASTBinaryExpression leftShiftExpression = (ICPPASTBinaryExpression)node;
-			IASTExpression leftOperand = leftShiftExpression.getOperand1();
+			IASTExpression leftOperand = BEAnalyzer.getOperand1(node);
 			return isStdCout(leftOperand) ? true : isLeftShiftExpressionToStdCout(leftOperand);
 		}
 		return false;
@@ -236,42 +218,37 @@ public class ASTAnalyzer {
 		return null;
 	}
 		
-	public static boolean isDereferencedToChar(IASTIdExpression idExpression) {
-		IASTNode parent = idExpression.getParent();
-		
-		if(UEAnalyzer.isDereferenceExpression(parent)) {
-			return true;
+	public static boolean isDereferencedToChar(IASTNode node) {
+		IASTNode parent = node.getParent();
+		if(UEAnalyzer.isBracketExpression(parent) || BEAnalyzer.isAddition(parent)) {
+			return isDereferencedToChar(parent);
 		}
-		else if(UEAnalyzer.isBracketExpression(parent) && UEAnalyzer.isDereferenceExpression(parent.getParent())) {
-			return true;
-		}
-		else if(BEAnalyzer.isAddition(parent) && UEAnalyzer.isBracketExpression(parent.getParent()) && UEAnalyzer.isDereferenceExpression(parent.getParent().getParent())) {
-			return true;
-		}
-		
-		return false;
+		return UEAnalyzer.isDereferenceExpression(parent);
 	}
 	
 	public static IASTStatement getTopLevelParentStatement(IASTNode node) {
-		IASTNode current = node;
-		IASTNode parent = node.getParent();
-		
-		while(parent != null && parent.getParent() != null && !(parent.getParent() instanceof IASTFunctionDefinition)) {
-			current = current.getParent();
-			parent = parent.getParent();
+		IASTStatement lastStatement = null;
+		for(IASTNode cn = node; cn != null && !(cn instanceof IASTFunctionDefinition); cn = cn.getParent()) {
+			if(cn instanceof IASTStatement && !(cn instanceof IASTCompoundStatement)) { 
+				lastStatement = (IASTStatement)cn;
+			}
 		}
-		
-		if(parent instanceof IASTCompoundStatement && current instanceof IASTStatement) {
-			return (IASTStatement)current;
-		}
-		return null;
+		return lastStatement;
 	}
 	
 	public static boolean modifiesCharPointer(IASTIdExpression idExpression) {
 		IASTNode parent = idExpression.getParent();
-		boolean isLValue = isLValueInAssignment(idExpression) && ((IASTBinaryExpression)parent).getOperand2() instanceof IASTBinaryExpression;
-		boolean isPlusAssigned = BEAnalyzer.isPlusAssignment(parent) && ((IASTBinaryExpression)parent).getOperand1() == idExpression;
+		boolean isLValue = isLValueInAssignment(idExpression) && BEAnalyzer.getOperand2(parent) instanceof IASTBinaryExpression;
+		boolean isPlusAssigned = BEAnalyzer.isPlusAssignment(parent) && BEAnalyzer.isOp1(idExpression);
 		boolean isIncremented = UEAnalyzer.isIncrementation(parent);
 		return isLValue || isPlusAssigned || isIncremented;
+	}
+	
+	public static boolean isIndexCalculation(IASTIdExpression idExpression) {
+		IASTNode parent = idExpression.getParent();
+		if(BEAnalyzer.isSubtraction(parent)) {
+			return BEAnalyzer.isOp1(idExpression) && ASTAnalyzer.isConversionToCharPointer(BEAnalyzer.getOtherOperand(idExpression), true);
+		}
+		return false;
 	}
 }

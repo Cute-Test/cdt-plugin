@@ -1,9 +1,30 @@
 package ch.hsr.ifs.cute.charwars.utils;
 
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 public class BEAnalyzer {
+	public static IASTExpression getOperand1(IASTNode node) {
+		IASTBinaryExpression be = (IASTBinaryExpression)node;
+		return be.getOperand1();
+	}
+	
+	public static IASTExpression getOperand2(IASTNode node) {
+		IASTBinaryExpression be = (IASTBinaryExpression)node;
+		return be.getOperand2();
+	}
+	
+	public static IASTExpression getOtherOperand(IASTNode operand) {
+		IASTBinaryExpression be = (IASTBinaryExpression)operand.getParent();
+		return isOp1(operand) ? be.getOperand2() : be.getOperand1();
+	}
+	
+	public static boolean isOp1(IASTNode operand) {
+		IASTBinaryExpression be = (IASTBinaryExpression)operand.getParent();
+		return be.getOperand1() == operand;
+	}
+	
 	public static boolean isSubtraction(IASTNode node) {
 		return isBinaryExpression(node, IASTBinaryExpression.op_minus);
 	}
@@ -19,7 +40,6 @@ public class BEAnalyzer {
 	public static boolean isLeftShiftExpression(IASTNode node) {
 		return isBinaryExpression(node, IASTBinaryExpression.op_shiftLeft);
 	}
-	
 	
 	public static boolean isComparison(IASTNode node, boolean equalityComparison) {
 		if(equalityComparison) {

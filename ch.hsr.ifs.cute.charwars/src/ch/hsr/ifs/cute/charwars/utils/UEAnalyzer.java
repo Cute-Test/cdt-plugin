@@ -1,9 +1,15 @@
 package ch.hsr.ifs.cute.charwars.utils;
 
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 
 public class UEAnalyzer {
+	public static IASTExpression getOperand(IASTNode node) {
+		IASTUnaryExpression ue = (IASTUnaryExpression)node;
+		return ue.getOperand();
+	}
+	
 	public static boolean isDereferenceExpression(IASTNode node) {
 		return isUnaryExpression(node, IASTUnaryExpression.op_star);
 	}

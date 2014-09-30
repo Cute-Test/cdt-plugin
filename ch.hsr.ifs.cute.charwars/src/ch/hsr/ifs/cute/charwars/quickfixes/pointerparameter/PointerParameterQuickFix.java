@@ -92,9 +92,8 @@ public class PointerParameterQuickFix extends BaseQuickFix {
 	private void handleFunctionCall(IASTFunctionCallExpression fcExpression, int paramIndex, ASTRewrite rewrite) {
 		IASTNode arg = fcExpression.getArguments()[paramIndex];
 		if(UEAnalyzer.isAddressOperatorExpression(arg)) {
-			IASTUnaryExpression unaryExpression = (IASTUnaryExpression)arg;
-			IASTNode newArg = unaryExpression.getOperand().copy();
-			ASTModifier.replace(unaryExpression, newArg, rewrite);
+			IASTNode newArg = UEAnalyzer.getOperand(arg).copy();
+			ASTModifier.replace(arg, newArg, rewrite);
 		}
 		else if(arg instanceof IASTIdExpression) {
 			IASTIdExpression idExpression = (IASTIdExpression)arg;

@@ -1,7 +1,6 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
-import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -11,6 +10,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
+import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 
 public class SizeReturnValueVisitor extends ASTVisitor {
 	private IASTName name;
@@ -36,8 +36,7 @@ public class SizeReturnValueVisitor extends ASTVisitor {
 	private void handleSizeReturnType(IASTIdExpression idExpression) {
 		if(CheckAnalyzer.isNodeComparedToStrlen(idExpression, true) ||
 		   CheckAnalyzer.isNodeComparedToStrlen(idExpression, false)) {
-			IASTBinaryExpression comparison = (IASTBinaryExpression)idExpression.getParent();
-			IASTExpression strlenCall = (idExpression == comparison.getOperand1()) ? comparison.getOperand2() : comparison.getOperand1();
+			IASTExpression strlenCall = BEAnalyzer.getOtherOperand(idExpression);
 			ASTModifier.replace(strlenCall, ExtendedNodeFactory.newNposExpression(StringType.STRING), rewrite);
 		}
 	}
