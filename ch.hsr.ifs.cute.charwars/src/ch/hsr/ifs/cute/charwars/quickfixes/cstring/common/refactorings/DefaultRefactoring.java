@@ -25,15 +25,10 @@ public class DefaultRefactoring extends Refactoring {
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
 		IType parameterType = FunctionBindingAnalyzer.getParameterType(idExpression);
 		
+		boolean isConst = !TypeAnalyzer.isCStringType(parameterType, false); 
 		isApplicable = true;
 		config.put(NODE_TO_REPLACE, idExpression);
-		
-		if(parameterType != null && TypeAnalyzer.isCStringType(parameterType, false)) {
-			config.put(CONVERT_TO_CONST, false);
-		}
-		else {
-			config.put(CONVERT_TO_CONST, true);
-		}
+		config.put(CONVERT_TO_CONST, isConst);
 	}
 
 	@Override

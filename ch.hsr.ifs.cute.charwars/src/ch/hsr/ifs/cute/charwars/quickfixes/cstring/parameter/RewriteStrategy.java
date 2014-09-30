@@ -1,7 +1,6 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.parameter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
@@ -28,6 +27,7 @@ import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
 import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public abstract class RewriteStrategy {
@@ -61,9 +61,9 @@ public abstract class RewriteStrategy {
 	public abstract void adaptCStringOverload();
 	
 	public void addNewDeclarations(ASTRewriteCache rewriteCache) {
+		final int strParameterIndex = FunctionAnalyzer.getParameterIndex(strParameter);
 		ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)strParameter.getParent();
-		final int strParameterIndex = Arrays.asList(functionDeclarator.getParameters()).indexOf(strParameter);
-		
+
 		IndexFinder.findDeclarations(functionDeclarator.getName(), rewriteCache, new ResultHandler() {
 			@Override
 			public IndexFinderInstruction handleResult(IASTName declarationFunctionName, ASTRewrite rewrite) {

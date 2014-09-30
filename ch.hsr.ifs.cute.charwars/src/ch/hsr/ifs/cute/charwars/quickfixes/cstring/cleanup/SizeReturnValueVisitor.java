@@ -6,6 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
+import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
@@ -26,7 +27,7 @@ public class SizeReturnValueVisitor extends ASTVisitor {
 	public int leave(IASTExpression expression) {
 		if(expression instanceof IASTIdExpression) {
 			IASTIdExpression idExpression = (IASTIdExpression)expression;
-			if(idExpression.getName().resolveBinding().equals(name.resolveBinding())) {
+			if(ASTAnalyzer.isSameName(idExpression.getName(), name)) {
 				handleSizeReturnType(idExpression);
 			}
 		}

@@ -1,14 +1,24 @@
 package ch.hsr.ifs.cute.charwars.utils;
 
+import java.util.Arrays;
+
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
 import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class FunctionAnalyzer {
+	public static int getParameterIndex(IASTParameterDeclaration parameterDeclaration) {
+		ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)parameterDeclaration.getParent();
+		IASTParameterDeclaration parameters[] = functionDeclarator.getParameters();
+		return Arrays.asList(parameters).indexOf(parameterDeclaration);
+	}
+	
 	public static boolean hasOffset(IASTIdExpression idExpression, Function function) {
 		if(isPartOfFunctionCallArg(idExpression, 0, function)) {
 			return getEnclosingFunctionCall(idExpression, function) != idExpression.getParent();
@@ -23,13 +33,7 @@ public class FunctionAnalyzer {
 			lastNode = currentNode;
 			currentNode = lastNode.getParent();
 		}
-		
-		if(isCallToFunction(currentNode, function)) {
-			IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)currentNode;
-			return functionCall.getArguments()[argIndex] == lastNode;
-		}
-		
-		return false;
+		return isFunctionCallArg(lastNode, argIndex, function);
 	}
 	
 	public static boolean isFunctionCallArg(IASTNode arg, int argIndex, Function function) {

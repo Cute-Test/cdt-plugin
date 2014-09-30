@@ -10,6 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTIfStatement;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
+import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 
 public class OptimizationCheckerVisitor extends ASTVisitor {
@@ -31,7 +32,7 @@ public class OptimizationCheckerVisitor extends ASTVisitor {
 	public int leave(IASTExpression expression) {
 		if(expression instanceof IASTIdExpression) {
 			IASTIdExpression idExpression = (IASTIdExpression)expression;
-			if(idExpression.getName().resolveBinding().equals(name.resolveBinding())) {
+			if(ASTAnalyzer.isSameName(idExpression.getName(), name)) {
 				handleIdExpression(idExpression);
 			}
 		}

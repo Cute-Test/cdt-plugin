@@ -28,7 +28,7 @@ public class ReplaceIdExpressionsVisitor extends ASTVisitor {
 	public int leave(IASTExpression expression) {
 		if(expression instanceof IASTIdExpression) {
 			IASTIdExpression idExpression = (IASTIdExpression) expression;
-			if(idExpression.getName().resolveBinding().equals(arrayName.resolveBinding())) {
+			if(ASTAnalyzer.isSameName(idExpression.getName(), arrayName)) {
 				if(ASTAnalyzer.isArraySubscriptExpression(idExpression)) {
 					// keep Array Subscript Expressions
 				} 

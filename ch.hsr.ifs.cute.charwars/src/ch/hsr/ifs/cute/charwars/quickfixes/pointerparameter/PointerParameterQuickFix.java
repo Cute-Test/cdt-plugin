@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.pointerparameter;
 
-import java.util.Arrays;
-
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
@@ -28,6 +26,7 @@ import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 
 public class PointerParameterQuickFix extends BaseQuickFix {
@@ -45,7 +44,7 @@ public class PointerParameterQuickFix extends BaseQuickFix {
 	protected void handleMarkedNode(IASTNode markedNode, ASTRewriteCache rewriteCache) {
 		IASTDeclarator paramDeclarator = (IASTDeclarator)markedNode;
 		ICPPASTParameterDeclaration parameterDeclaration = (ICPPASTParameterDeclaration)paramDeclarator.getParent();
-		final int paramIndex = findParamIndex(parameterDeclaration);
+		final int paramIndex = FunctionAnalyzer.getParameterIndex(parameterDeclaration);
 		IASTFunctionDeclarator functionDeclarator = (IASTFunctionDeclarator)parameterDeclaration.getParent();
 		
 		IndexFinder.findAllOccurrences(functionDeclarator.getName(), rewriteCache, new ResultHandler() {
@@ -114,10 +113,5 @@ public class PointerParameterQuickFix extends BaseQuickFix {
 				return;
 			}
 		}
-	}
-	
-	private int findParamIndex(ICPPASTParameterDeclaration parameterDeclaration) {
-		ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)parameterDeclaration.getParent();
-		return Arrays.asList(functionDeclarator.getParameters()).indexOf(parameterDeclaration);
 	}
 }

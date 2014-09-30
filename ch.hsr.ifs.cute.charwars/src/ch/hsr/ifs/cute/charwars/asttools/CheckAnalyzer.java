@@ -157,7 +157,7 @@ public class CheckAnalyzer {
 	private static IASTIdExpression findFirstIdExpression(IASTName name, IASTNode node) {
 		if(node instanceof IASTIdExpression) {
 			IASTIdExpression idExpression = (IASTIdExpression)node;
-			if(idExpression.getName().resolveBinding().equals(name.resolveBinding())) {
+			if(ASTAnalyzer.isSameName(idExpression.getName(), name)) {
 				return idExpression;
 			}
 		}

@@ -15,7 +15,6 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
-import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
@@ -134,9 +133,7 @@ public class BlockRefactoring  {
 		if(subtree instanceof IASTIdExpression) {
 			IASTIdExpression copiedIdExpression = (IASTIdExpression)subtree;
 			IASTIdExpression originalIdExpression = (IASTIdExpression)copiedIdExpression.getOriginalNode();
-			IBinding originalBinding = originalIdExpression.getName().resolveBinding();
-			
-			if(originalBinding.equals(variableToRefactor.resolveBinding())) {
+			if(ASTAnalyzer.isSameName(originalIdExpression.getName(), variableToRefactor)) {
 				stringOccurrences.add(copiedIdExpression);
 			}
 		}

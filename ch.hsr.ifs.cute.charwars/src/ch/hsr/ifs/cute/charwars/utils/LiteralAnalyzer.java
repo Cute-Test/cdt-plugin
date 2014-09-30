@@ -11,8 +11,8 @@ public class LiteralAnalyzer {
 	}
 	
 	public static boolean isInteger(IASTNode node, int value) {
-		return getKind(node) == IASTLiteralExpression.lk_integer_constant 
-				&& getValue(node).equals(String.valueOf(value));
+		return getKind(node) == IASTLiteralExpression.lk_integer_constant && 
+			   getValue(node).equals(String.valueOf(value));
 	}
 	
 	public static boolean isInteger(IASTNode node) {

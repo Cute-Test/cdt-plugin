@@ -33,7 +33,7 @@ public class PtrReturnValueVisitor extends ASTVisitor {
 	public int leave(IASTExpression expression) {
 		if(expression instanceof IASTIdExpression) {
 			IASTIdExpression idExpression = (IASTIdExpression)expression;
-			if(idExpression.getName().resolveBinding().equals(name.resolveBinding())) {
+			if(ASTAnalyzer.isSameName(idExpression.getName(), name)) {
 				handlePtrReturnType(idExpression);
 			}
 		}

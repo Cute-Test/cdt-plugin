@@ -19,7 +19,6 @@ import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
@@ -202,7 +201,6 @@ public class ASTAnalyzer {
 	}
 	
 	public static IASTDeclarationStatement getVariableDeclaration(IASTName name, IASTStatement[] statements) {
-		IBinding nameBinding = name.resolveBinding();
 		for(IASTStatement statement : statements) {
 			if(statement instanceof IASTDeclarationStatement) {
 				IASTDeclarationStatement declarationStatement = (IASTDeclarationStatement)statement;
@@ -210,7 +208,7 @@ public class ASTAnalyzer {
 				if(declaration instanceof IASTSimpleDeclaration) {
 					IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration)declaration;
 					for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()) {
-						if(declarator.getName().resolveBinding().equals(nameBinding)) {
+						if(isSameName(declarator.getName(), name)) {
 							return declarationStatement;
 						}
 					}
@@ -252,5 +250,9 @@ public class ASTAnalyzer {
 			return BEAnalyzer.isOp1(idExpression) && isConversionToCharPointer(BEAnalyzer.getOtherOperand(idExpression), true);
 		}
 		return false;
+	}
+	
+	public static boolean isSameName(IASTName name1, IASTName name2) {
+		return name1.resolveBinding().equals(name2.resolveBinding());
 	}
 }

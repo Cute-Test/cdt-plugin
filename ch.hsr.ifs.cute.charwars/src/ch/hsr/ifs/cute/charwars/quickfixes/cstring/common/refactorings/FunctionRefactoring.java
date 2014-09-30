@@ -9,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
-import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
@@ -55,7 +54,7 @@ public class FunctionRefactoring extends Refactoring {
 			IASTFunctionCallExpression memberFunctionCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, outFunctionName, adaptedArguments);	
 			
 			//special case for strlen() / wcslen()
-			if(outFunctionName.equals(StdString.SIZE) && (idExpression.getParent() != nodeToReplace || context.isOffset(idExpression))) {
+			if(outFunction == Function.SIZE && (idExpression.getParent() != nodeToReplace || context.isOffset(idExpression))) {
 				IASTNode offset = context.getOffset(idExpression);
 				IASTBinaryExpression minusExpression = ExtendedNodeFactory.newMinusExpression(memberFunctionCall, (IASTExpression)offset);
 				return ExtendedNodeFactory.newBracketedExpression(minusExpression);

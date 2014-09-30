@@ -31,7 +31,6 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Algorithm;
-import ch.hsr.ifs.cute.charwars.constants.CString;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
@@ -76,18 +75,20 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		IASTNode secondArg = ASTAnalyzer.extractStdStringArg(functionCall.getArguments()[1]);
 		
 		String searchFunctionName = null;
+		Function function = null;
 		for(Function f : functionMap.keySet()) {
 			if(f.getName().equals(functionName)) {
 				searchFunctionName = functionMap.get(f).getName();
+				function = f;
 				break;
 			}
 		}
 		IASTFunctionCallExpression searchCall = ExtendedNodeFactory.newMemberFunctionCallExpression(firstArg.getName(), searchFunctionName, secondArg.copy());
 		IASTStatement oldStatement = ASTAnalyzer.getStatement(functionCall);
-		boolean hasPtrReturnType = !(functionName.equals(CString.STRCSPN) || functionName.equals(CString.STRSPN));
+		boolean hasPtrReturnType = !(function == Function.STRCSPN || function == Function.STRSPN);
 		
 		if(hasPtrReturnType) {
-			if(functionName.equals(CString.MEMCHR)) {
+			if(function == Function.MEMCHR) {
 				performMemchrRefactoring(oldStatement, functionCall, rewrite, firstArg, searchFunctionName, secondArg);
 			}
 			else if(optimizedRefactoringPossible(oldStatement, hasPtrReturnType)) {
@@ -238,48 +239,29 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 	
 	
 	private String getResultVarName(IASTFunctionCallExpression functionCall) {
-		String resultVarName = null;
-		IASTNode parent = functionCall.getParent();
+		IASTNode cn = functionCall;
+		while(cn != null && !(cn instanceof IASTDeclarator) && !BEAnalyzer.isAssignment(cn)) {
+			cn = cn.getParent();
+		}
 		
-		if(parent instanceof IASTEqualsInitializer) {
-			IASTDeclarator declarator = (IASTDeclarator)parent.getParent();
+		String resultVarName = null;
+		if(cn instanceof IASTDeclarator) {
+			IASTDeclarator declarator = (IASTDeclarator)cn;
 			resultVarName = declarator.getName().toString();
 		}
-		else if(parent instanceof IASTUnaryExpression && 
-				parent.getParent() instanceof IASTCastExpression &&
-				parent.getParent().getParent() instanceof IASTEqualsInitializer) {
-			IASTDeclarator declarator = (IASTDeclarator)parent.getParent().getParent().getParent();
-			resultVarName = declarator.getName().toString();
-		} 
-		else if(parent instanceof IASTCastExpression &&
-				parent.getParent() instanceof IASTEqualsInitializer) {
-			IASTDeclarator declarator = (IASTDeclarator)parent.getParent().getParent();
-			resultVarName = declarator.getName().toString();
-		}
-		else if(BEAnalyzer.isAssignment(parent) || 
-				(parent instanceof IASTCastExpression && BEAnalyzer.isAssignment(parent.getParent())) ||
-				(parent instanceof IASTUnaryExpression && parent.getParent() instanceof IASTCastExpression && 
-						BEAnalyzer.isAssignment(parent.getParent().getParent()))) {
-			IASTBinaryExpression assignment;
-			if(parent.getParent() instanceof IASTCastExpression) {
-				assignment = (IASTBinaryExpression)parent.getParent().getParent(); 
-			} 
-			else if(parent instanceof IASTCastExpression) {
-				assignment = (IASTBinaryExpression)parent.getParent();
-			} 
-			else {
-				assignment = (IASTBinaryExpression)parent;
+		else if(BEAnalyzer.isAssignment(cn)) {
+			IASTExpression lvalue = BEAnalyzer.getOperand1(cn);
+			if(lvalue instanceof IASTArraySubscriptExpression) {
+				IASTArraySubscriptExpression arraySubscriptExpression = (IASTArraySubscriptExpression)lvalue;
+				lvalue = arraySubscriptExpression.getArrayExpression();
 			}
 			
-			IASTExpression lvalue = assignment.getOperand1();
 			if(lvalue instanceof IASTIdExpression) {
-				resultVarName = ((IASTIdExpression)lvalue).getName().toString();
-			}
-			else if(lvalue instanceof IASTFieldReference) {
-				resultVarName = ((IASTFieldReference)lvalue).getFieldName().toString();
-			}
-			else if(lvalue instanceof IASTArraySubscriptExpression) {
-				resultVarName = ((IASTIdExpression)((IASTArraySubscriptExpression)lvalue).getArrayExpression()).getName().toString();
+				IASTIdExpression idExpression = (IASTIdExpression)lvalue;
+				resultVarName = idExpression.getName().toString();
+			} else if(lvalue instanceof IASTFieldReference) {
+				IASTFieldReference fieldReference = (IASTFieldReference)lvalue;
+				resultVarName = fieldReference.getFieldName().toString();
 			}
 		}
 		return resultVarName;
