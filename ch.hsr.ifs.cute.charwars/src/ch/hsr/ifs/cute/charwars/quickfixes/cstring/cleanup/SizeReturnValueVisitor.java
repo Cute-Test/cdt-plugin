@@ -34,8 +34,7 @@ public class SizeReturnValueVisitor extends ASTVisitor {
 	}
 		
 	private void handleSizeReturnType(IASTIdExpression idExpression) {
-		if(CheckAnalyzer.isNodeComparedToStrlen(idExpression, true) ||
-		   CheckAnalyzer.isNodeComparedToStrlen(idExpression, false)) {
+		if(CheckAnalyzer.isNodeComparedToStrlen(idExpression)) {
 			IASTExpression strlenCall = BEAnalyzer.getOtherOperand(idExpression);
 			ASTModifier.replace(strlenCall, ExtendedNodeFactory.newNposExpression(StringType.STRING), rewrite);
 		}

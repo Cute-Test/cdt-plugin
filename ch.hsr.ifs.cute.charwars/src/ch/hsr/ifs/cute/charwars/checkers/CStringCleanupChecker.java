@@ -37,7 +37,7 @@ public class CStringCleanupChecker extends BaseChecker {
 					if(BEAnalyzer.isAssignment(parent) || parent instanceof IASTEqualsInitializer) {
 						IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)expression;
 						IASTInitializerClause[] args = functionCall.getArguments();
-						if(args.length > 0 && (ASTAnalyzer.isConversionToCharPointer(args[0], false) || ASTAnalyzer.isConversionToCharPointer(args[0], true))) {
+						if(args.length > 0 && ASTAnalyzer.isConversionToCharPointer(args[0])) {
 							reportProblemForNode(ProblemIDs.C_STRING_CLEANUP_PROBLEM, functionCall, function.getName());
 							break;
 						}

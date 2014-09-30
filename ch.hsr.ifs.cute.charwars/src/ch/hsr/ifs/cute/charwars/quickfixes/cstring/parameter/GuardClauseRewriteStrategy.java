@@ -16,7 +16,6 @@ public class GuardClauseRewriteStrategy extends RewriteStrategy {
 		for(IASTStatement statement : nullCheckedStatements) {
 			stdStringOverloadBody.addStatement(statement.copy(CopyStyle.withLocations));
 		}
-
 		return stdStringOverloadBody;
 	}
 	

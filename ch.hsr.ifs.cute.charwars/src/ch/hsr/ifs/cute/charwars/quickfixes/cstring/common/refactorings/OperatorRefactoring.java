@@ -12,6 +12,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class OperatorRefactoring extends Refactoring {
@@ -33,7 +34,7 @@ public class OperatorRefactoring extends Refactoring {
 		boolean isStringInequalityCheck = isStrcmpOrWcscmp && outFunctionName.equals(StdString.OP_NOT_EQUALS) && CheckAnalyzer.isPartOfStringCheck(idExpression, false);
 		
 		if(!context.isOffset(idExpression) && (isOther || isStringEqualityCheck || isStringInequalityCheck)) {
-			IASTNode nodeToReplace = isStrcmpOrWcscmp ? CheckAnalyzer.getEnclosingBoolean(idExpression) : idExpression.getParent();
+			IASTNode nodeToReplace = isStrcmpOrWcscmp ? BoolAnalyzer.getEnclosingBoolean(idExpression) : idExpression.getParent();
 			isApplicable = true;
 			config.put(NODE_TO_REPLACE, nodeToReplace);
 		}

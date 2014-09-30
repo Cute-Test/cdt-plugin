@@ -32,6 +32,7 @@ import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
+import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
 
 public class CStringQuickFix extends BaseQuickFix {
 	@Override
@@ -105,7 +106,7 @@ public class CStringQuickFix extends BaseQuickFix {
 	
 	private IASTDeclarationStatement newRefactoredDeclarationStatementFromDeclarator(IASTDeclarator declarator) {
 		if(getProblemId(currentMarker).equals(ProblemIDs.C_STRING_PROBLEM)) {
-			IASTSimpleDeclSpecifier ds = DeclaratorAnalyzer.getDeclSpecifier(declarator);
+			IASTSimpleDeclSpecifier ds = DeclaratorTypeAnalyzer.getDeclSpecifier(declarator);
 			IASTDeclSpecifier newDeclSpecifier = newRefactoredDeclSpecifier(ds, declarator);
 			IASTSimpleDeclaration newDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newDeclSpecifier);
 			IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());

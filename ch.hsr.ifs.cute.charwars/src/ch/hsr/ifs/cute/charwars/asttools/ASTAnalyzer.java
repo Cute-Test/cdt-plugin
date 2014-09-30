@@ -65,10 +65,8 @@ public class ASTAnalyzer {
 			return false;
 		
 		IASTNode currentNode = idExpression;
-		while(currentNode != null) {
+		while(currentNode != null && !BEAnalyzer.isSubtraction(currentNode)) {
 			currentNode = currentNode.getParent();
-			if(BEAnalyzer.isSubtraction(currentNode))
-				break;
 		}
 		
 		if(currentNode == null)
@@ -94,6 +92,10 @@ public class ASTAnalyzer {
 			result = result.getParent();
 		}
 		return (IASTStatement)result;
+	}
+	
+	public static boolean isConversionToCharPointer(IASTNode node) {
+		return isConversionToCharPointer(node, true) || isConversionToCharPointer(node, false);
 	}
 
 	public static boolean isConversionToCharPointer(IASTNode node, boolean isConst) {
@@ -165,7 +167,7 @@ public class ASTAnalyzer {
 	public static boolean isLeftShiftExpressionToStdCout(IASTNode node) {
 		if(BEAnalyzer.isLeftShiftExpression(node) && node instanceof ICPPASTBinaryExpression) {
 			IASTExpression leftOperand = BEAnalyzer.getOperand1(node);
-			return isStdCout(leftOperand) ? true : isLeftShiftExpressionToStdCout(leftOperand);
+			return isStdCout(leftOperand) || isLeftShiftExpressionToStdCout(leftOperand);
 		}
 		return false;
 	}
@@ -247,7 +249,7 @@ public class ASTAnalyzer {
 	public static boolean isIndexCalculation(IASTIdExpression idExpression) {
 		IASTNode parent = idExpression.getParent();
 		if(BEAnalyzer.isSubtraction(parent)) {
-			return BEAnalyzer.isOp1(idExpression) && ASTAnalyzer.isConversionToCharPointer(BEAnalyzer.getOtherOperand(idExpression), true);
+			return BEAnalyzer.isOp1(idExpression) && isConversionToCharPointer(BEAnalyzer.getOtherOperand(idExpression), true);
 		}
 		return false;
 	}

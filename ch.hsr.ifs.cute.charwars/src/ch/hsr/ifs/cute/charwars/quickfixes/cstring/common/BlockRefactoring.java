@@ -8,16 +8,13 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
-import org.eclipse.cdt.core.dom.ast.IASTDoStatement;
-import org.eclipse.cdt.core.dom.ast.IASTForStatement;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
-import org.eclipse.cdt.core.dom.ast.IASTIfStatement;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
-import org.eclipse.cdt.core.dom.ast.IASTWhileStatement;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
@@ -30,6 +27,7 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Refactoring;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.RefactoringFactory;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 
 public class BlockRefactoring  {
 	private ASTRewrite rewrite;
@@ -120,25 +118,11 @@ public class BlockRefactoring  {
 			rewrite.remove(oldStatement, null);
 		}
 		else if(changeDescription.statementHasChanged()) {
-			if(oldStatement instanceof IASTIfStatement) {
-				IASTIfStatement oldIfStatement = (IASTIfStatement)oldStatement;
-				IASTIfStatement newIfStatement = (IASTIfStatement)newStatement;
-				ASTModifier.replace(oldIfStatement.getConditionExpression(), newIfStatement.getConditionExpression(), rewrite);
-			}
-			else if(oldStatement instanceof IASTWhileStatement) {
-				IASTWhileStatement oldWhileStatement = (IASTWhileStatement)oldStatement;
-				IASTWhileStatement newWhileStatement = (IASTWhileStatement)newStatement;
-				ASTModifier.replace(oldWhileStatement.getCondition(), newWhileStatement.getCondition(), rewrite);
-			}
-			else if(oldStatement instanceof IASTForStatement) {
-				IASTForStatement oldForStatement = (IASTForStatement)oldStatement;
-				IASTForStatement newForStatement = (IASTForStatement)newStatement;
-				ASTModifier.replace(oldForStatement.getConditionExpression(), newForStatement.getConditionExpression(), rewrite);
-			}
-			else if(oldStatement instanceof IASTDoStatement) {
-				IASTDoStatement oldDoStatement = (IASTDoStatement)oldStatement;
-				IASTDoStatement newDoStatement = (IASTDoStatement)newStatement;
-				ASTModifier.replace(oldDoStatement.getCondition(), newDoStatement.getCondition(), rewrite);
+			IASTExpression oldCondition = BoolAnalyzer.getCondition(oldStatement);
+			IASTExpression newCondition = BoolAnalyzer.getCondition(newStatement);
+			
+			if(oldCondition != null) {
+				ASTModifier.replace(oldCondition, newCondition, rewrite);
 			}
 			else {
 				ASTModifier.replace(oldStatement, newStatement, rewrite);

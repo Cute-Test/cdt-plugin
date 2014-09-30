@@ -13,6 +13,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 
@@ -51,7 +52,7 @@ public class ExpressionRefactoring extends Refactoring {
 			//*str == 0 -> str.empty()
 			//if modified: !*str -> !str[str_pos]
 			isApplicable = true;
-			config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
+			config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
 			config.put(TRANSFORMATION, Transformation.EMPTY);
 		}
 		else if(CheckAnalyzer.isCheckedForEmptiness(idExpression, false)) {
@@ -59,7 +60,7 @@ public class ExpressionRefactoring extends Refactoring {
 			//*str != 0 -> !str.empty()
 			//if modified: *str -> str[str_pos]
 			isApplicable = true;
-			config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
+			config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
 			config.put(TRANSFORMATION, Transformation.NOT_EMPTY);
 		}
 		else if(ASTAnalyzer.isDereferencedToChar(idExpression)) {

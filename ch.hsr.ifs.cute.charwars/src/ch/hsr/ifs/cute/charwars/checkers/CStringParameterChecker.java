@@ -13,10 +13,10 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
+import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
 
 public class CStringParameterChecker extends BaseChecker {
 	public CStringParameterChecker() {
@@ -31,7 +31,7 @@ public class CStringParameterChecker extends BaseChecker {
 		@Override
 		public int visit(IASTParameterDeclaration parameterDeclaration) {
 			IASTDeclarator declarator = parameterDeclaration.getDeclarator();
-			if(ASTAnalyzer.isFunctionDefinitionParameterDeclaration(parameterDeclaration) && DeclaratorAnalyzer.hasCStringType(declarator, true)) {
+			if(ASTAnalyzer.isFunctionDefinitionParameterDeclaration(parameterDeclaration) && DeclaratorTypeAnalyzer.hasCStringType(declarator, true)) {
 				if(!isStdStringOverloadAvailable((IASTFunctionDefinition)parameterDeclaration.getParent().getParent(), parameterDeclaration)) {
 					reportProblemForDeclarator(ProblemIDs.C_STRING_PARAMETER_PROBLEM, declarator);
 				}

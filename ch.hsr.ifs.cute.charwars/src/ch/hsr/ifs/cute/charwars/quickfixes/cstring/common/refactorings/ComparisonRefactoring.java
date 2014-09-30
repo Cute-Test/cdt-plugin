@@ -11,6 +11,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.Function.Sentinel;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class ComparisonRefactoring extends Refactoring {
@@ -47,24 +48,24 @@ public class ComparisonRefactoring extends Refactoring {
 		if(inFunctionSentinel == Sentinel.NULL) {
 			if(CheckAnalyzer.isNodeComparedToNull(node, true)) {
 				isApplicable = true;
-				config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
 				config.put(IS_EQUAL, true);
 			}
 			else if(CheckAnalyzer.isNodeComparedToNull(node, false)) {
 				isApplicable = true;
-				config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
 				config.put(IS_EQUAL, false);
 			}
 		}
 		else if(inFunctionSentinel == Sentinel.STRLEN) {
 			if(CheckAnalyzer.isNodeComparedToStrlen(node, true)) {
 				isApplicable = true;
-				config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
 				config.put(IS_EQUAL, true);
 			}
 			else if(CheckAnalyzer.isNodeComparedToStrlen(node, false)) {
 				isApplicable = true;
-				config.put(NODE_TO_REPLACE, CheckAnalyzer.getEnclosingBoolean(idExpression));
+				config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
 				config.put(IS_EQUAL, false);
 			}
 		}

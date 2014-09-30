@@ -6,29 +6,19 @@ import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
-import org.eclipse.cdt.core.dom.ast.IASTConditionalExpression;
-import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
-import org.eclipse.cdt.core.dom.ast.IASTDoStatement;
-import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
-import org.eclipse.cdt.core.dom.ast.IASTForStatement;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIfStatement;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
-import org.eclipse.cdt.core.dom.ast.IASTWhileStatement;
-import org.eclipse.cdt.core.dom.ast.IType;
-import org.eclipse.cdt.core.dom.ast.IBasicType.Kind;
-
-import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 
 public class CheckAnalyzer {
@@ -77,7 +67,8 @@ public class CheckAnalyzer {
 				IASTStatement lastStatement = thenClause;
 				if(thenClause instanceof IASTCompoundStatement) {
 					IASTCompoundStatement compoundThenClause = (IASTCompoundStatement)thenClause;
-					lastStatement = compoundThenClause.getStatements()[compoundThenClause.getStatements().length - 1];
+					IASTStatement thenClauseStatements[] = compoundThenClause.getStatements();
+					lastStatement = thenClauseStatements[thenClauseStatements.length - 1];
 				}
 				
 				if(lastStatement instanceof IASTReturnStatement && ifStatement.getElseClause() == null) {
@@ -137,19 +128,12 @@ public class CheckAnalyzer {
 				return true;
 			}
 			
-			boolean isNodeComparedToNull = isNodeComparedToNull(idExpression, equalCheck);
-			IASTNode checkParent = check.getParent();
-			boolean checkIsCondition = check == ifCondition;
-			boolean checkParentIsCondition = checkParent == ifCondition;
-			boolean checkIsPartOfLogicalOrCondition = BEAnalyzer.isLogicalOr(checkParent) && checkParentIsCondition;
-			boolean checkIsPartOfLogicalAndCondition = BEAnalyzer.isLogicalAnd(checkParent) && checkParentIsCondition;
+			if(!isNodeComparedToNull(idExpression, equalCheck)) return false;
+			if(check == ifCondition) return true;
 			
-			if(equalCheck) {
-				return isNodeComparedToNull && (checkIsCondition || checkIsPartOfLogicalOrCondition);
-			}
-			else {
-				return isNodeComparedToNull && (checkIsCondition || checkIsPartOfLogicalAndCondition);
-			}
+			IASTNode checkParent = check.getParent();
+			if(checkParent != ifCondition) return false;
+			return equalCheck ? BEAnalyzer.isLogicalOr(checkParent) : BEAnalyzer.isLogicalAnd(checkParent);
 		}
 		return false;
 	}
@@ -163,8 +147,8 @@ public class CheckAnalyzer {
 			if(idExpression == null) return false;
 			
 			if(isNodeComparedToNull(idExpression, false)) {
-				IASTNode booleanExpression = getEnclosingBoolean(idExpression);
-				return isAssert(booleanExpression);
+				IASTNode booleanExpression = BoolAnalyzer.getEnclosingBoolean(idExpression);
+				return BoolAnalyzer.isAsserted(booleanExpression);
 			}
 		}
 		return false;
@@ -215,111 +199,39 @@ public class CheckAnalyzer {
 		IASTNode parent = node.getParent();
 		
 		if(BEAnalyzer.isComparison(parent, equalityComparison)) {
-			IASTNode otherOperand = BEAnalyzer.getOtherOperand(node);
-			
-			if(zeroOnly) {
-				return LiteralAnalyzer.isZero(otherOperand);
-			}
-			else {
-				return LiteralAnalyzer.isNullExpression(otherOperand);
-			}
+			IASTNode oo = BEAnalyzer.getOtherOperand(node);
+			return zeroOnly ? LiteralAnalyzer.isZero(oo) : LiteralAnalyzer.isNullExpression(oo); 
 		}
 		
 		if(equalityComparison) {
 			return UEAnalyzer.isLogicalNot(parent);
 		}
 		else {
-			return isCondition(node) || isAssignedToBoolean(node) || isAssert(node);
+			return !UEAnalyzer.isLogicalNot(parent) && BoolAnalyzer.isImplicitBool(node);
 		}
+	}
+	
+	public static boolean isNodeComparedToStrlen(IASTNode node) {
+		return isNodeComparedToStrlen(node, true) || isNodeComparedToStrlen(node, false);
 	}
 	
 	public static boolean isNodeComparedToStrlen(IASTNode node, boolean equalityComparison) {
 		IASTNode parent = node.getParent();
 		if(parent instanceof IASTBinaryExpression) {
 			IASTBinaryExpression comparison = (IASTBinaryExpression)parent;
-			int operator = comparison.getOperator();
-			boolean equals = (operator == IASTBinaryExpression.op_equals);
-			boolean not_equals = (operator == IASTBinaryExpression.op_notequals);
-			
-			
 			IASTExpression operand = BEAnalyzer.getOtherOperand(node);
-			
-			if(BEAnalyzer.isOp1(node)) {
-				not_equals = not_equals || (operator == IASTBinaryExpression.op_lessThan);
-			}
-			else {
-				not_equals = not_equals || (operator == IASTBinaryExpression.op_greaterThan);
-			}
-			
-			//check if operator is valid
-			if(!equals && !not_equals)
-				return false;
-			
 			boolean isStrlenOperand = FunctionAnalyzer.isCallToFunction(operand, Function.STRLEN) || FunctionAnalyzer.isCallToMemberFunction(operand, Function.SIZE);
+			if(!isStrlenOperand) return false;
+			
+			int operator = comparison.getOperator();
 			if(equalityComparison) {
-				return equals && isStrlenOperand;
+				return operator == IASTBinaryExpression.op_equals;
 			}
 			else {
-				return not_equals && isStrlenOperand;
+				if(operator == IASTBinaryExpression.op_notequals) return true;
+				return BEAnalyzer.isOp1(node) ? operator == IASTBinaryExpression.op_lessThan : operator == IASTBinaryExpression.op_greaterThan;
 			}
 		}
 		return false;
-	}
-	
-	public static IASTNode getEnclosingBoolean(IASTNode node) {
-		while(node != null && !isCondition(node) && !isAssignedToBoolean(node) && !isAssert(node) && !isReturned(node) && !UEAnalyzer.isBracketExpression(node.getParent())) {
-			node = node.getParent();
-		}
-		return node;
-	}
-	
-	private static boolean isCondition(IASTNode node) {
-		IASTNode parent = node.getParent();
-		
-		if(parent instanceof IASTIfStatement) {
-			IASTIfStatement ifStatement = (IASTIfStatement)parent;
-			return ifStatement.getConditionExpression() == node;
-		}
-		else if(parent instanceof IASTWhileStatement) {
-			IASTWhileStatement whileStatement = (IASTWhileStatement)parent;
-			return whileStatement.getCondition() == node;
-		}
-		else if(parent instanceof IASTForStatement) {
-			IASTForStatement forStatement = (IASTForStatement)parent;
-			return forStatement.getConditionExpression() == node;
-		}
-		else if(parent instanceof IASTConditionalExpression) {
-			IASTConditionalExpression conditionalExpression = (IASTConditionalExpression)parent;
-			return conditionalExpression.getLogicalConditionExpression() == node;
-		}
-		else if(parent instanceof IASTDoStatement) {
-			IASTDoStatement doStatement = (IASTDoStatement)parent;
-			return doStatement.getCondition() == node;
-		}
-		
-		return BEAnalyzer.isLogicalAnd(parent) || BEAnalyzer.isLogicalOr(parent);
-	}
-	
-	private static boolean isAssignedToBoolean(IASTNode node) {
-		IASTNode parent = node.getParent().getOriginalNode();
-		
-		if(BEAnalyzer.isAssignment(parent)) {
-			IType expressionType = BEAnalyzer.getOperand1(parent).getExpressionType();
-			return TypeAnalyzer.getBasicKind(expressionType) == Kind.eBoolean;
-		}
-		else if(parent instanceof IASTEqualsInitializer && parent.getParent() instanceof IASTDeclarator) {
-			IASTDeclarator declarator = (IASTDeclarator)parent.getParent();
-			return DeclaratorAnalyzer.hasBoolType(declarator);
-		}
-		return false;
-	}
-	
-	private static boolean isAssert(IASTNode node) {
-		String rawSignature = node.getParent().getRawSignature();
-		return rawSignature.contains(Constants.ASSERT + "(") || rawSignature.contains(Constants.ASSERT.toUpperCase() + "(");
-	}
-	
-	private static boolean isReturned(IASTNode node) {
-		return node.getParent() instanceof IASTReturnStatement;
 	}
 }
