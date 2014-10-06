@@ -61,10 +61,6 @@ public class Context {
 		return stringVarName;
 	}
 	
-	public String getOffsetVarName() {
-		return offsetVarName;
-	}
-	
 	public IASTIdExpression createOffsetVarIdExpression() {
 		return ExtendedNodeFactory.newIdExpression(offsetVarName);
 	}

@@ -26,27 +26,27 @@ public class OperatorRefactoring extends Refactoring {
 	
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
-		if(!context.isOffset(idExpression)) {
-			boolean isStrcmpOrWcscmp = (inFunction == Function.STRCMP) || (inFunction == Function.WCSCMP);
+		if(context.isOffset(idExpression)) {
+			return;
+		}
+		
+		boolean isStrcmpOrWcscmp = (inFunction == Function.STRCMP) || (inFunction == Function.WCSCMP);
+		if(isStrcmpOrWcscmp) {
+			boolean isStringEqualityCheck = outFunction == Function.OP_EQUALS && CheckAnalyzer.isPartOfStringCheck(idExpression, true); 
+			boolean isStringInequalityCheck = outFunction == Function.OP_NOT_EQUALS && CheckAnalyzer.isPartOfStringCheck(idExpression, false);
+				
+			if(isStringEqualityCheck || isStringInequalityCheck) {
+				isApplicable = true;
+				config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
+			}
+		}
+		else {
+			boolean isOther = FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
 			
-			if(isStrcmpOrWcscmp) {
-				boolean isStringEqualityCheck = outFunction == Function.OP_EQUALS && CheckAnalyzer.isPartOfStringCheck(idExpression, true); 
-				boolean isStringInequalityCheck = outFunction == Function.OP_NOT_EQUALS && CheckAnalyzer.isPartOfStringCheck(idExpression, false);
-				
-				if(isStringEqualityCheck || isStringInequalityCheck) {
-					isApplicable = true;
-					config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
-				}
+			if(isOther) {
+				isApplicable = true;
+				config.put(NODE_TO_REPLACE, idExpression.getParent());
 			}
-			else {
-				boolean isOther = FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
-				
-				if(isOther) {
-					isApplicable = true;
-					config.put(NODE_TO_REPLACE, idExpression.getParent());
-				}
-			}
-
 		}
 	}
 

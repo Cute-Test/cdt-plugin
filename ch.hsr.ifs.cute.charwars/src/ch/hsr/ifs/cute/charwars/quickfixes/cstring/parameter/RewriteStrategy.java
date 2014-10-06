@@ -26,6 +26,7 @@ import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoringConfiguration;
 import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -98,8 +99,14 @@ public abstract class RewriteStrategy {
 		//ASTModifier.insertBefore(stdStringOverloadBody, stdStringOverloadBody., ExtendedNodeFactory.factory.newExpressionStatement(null), subrewrite);
 		
 		//adapt variable occurrences
-		StringType stringType = StringType.createFromDeclSpecifier(strParameter.getDeclSpecifier());
-		BlockRefactoring blockRefactoring = new BlockRefactoring(subrewrite, strName.toString(), strName, stdStringOverloadBody, null, false, stringType);
+		BlockRefactoringConfiguration config = new BlockRefactoringConfiguration();
+		config.setBlock(stdStringOverloadBody);
+		config.setASTRewrite(subrewrite);
+		config.setStringType(StringType.createFromDeclSpecifier(strParameter.getDeclSpecifier()));
+		config.setStrName(strName);
+		config.setVarName(strName);
+		
+		BlockRefactoring blockRefactoring = new BlockRefactoring(config);
 		blockRefactoring.refactorAllStatements();
 		return subrewrite;
 	}

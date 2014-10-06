@@ -186,6 +186,10 @@ public class CheckAnalyzer {
 		}
 		return false;
 	}
+
+	public static boolean isNodeComparedToNull(IASTNode node) {
+		return isNodeComparedToNull(node, true) || isNodeComparedToNull(node, false);
+	}
 	
 	public static boolean isNodeComparedToNull(IASTNode node, boolean equalityComparison) {
 		return isNodeComparedTo(node, equalityComparison, false);

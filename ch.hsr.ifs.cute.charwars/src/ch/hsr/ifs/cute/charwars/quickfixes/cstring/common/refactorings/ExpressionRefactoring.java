@@ -25,7 +25,8 @@ public class ExpressionRefactoring extends Refactoring {
 		DEREFERENCED,
 		MODIFIED,
 		ARRAY_SUBSCRIPTION,
-		INDEX_CALCULATION
+		INDEX_CALCULATION,
+		ALIAS_COMPARISON
 	}
 	
 	private static final String TRANSFORMATION = "TRANSFORMATION";
@@ -103,6 +104,11 @@ public class ExpressionRefactoring extends Refactoring {
 			config.put(NODE_TO_REPLACE, nodeToReplace);
 			config.put(TRANSFORMATION, Transformation.INDEX_CALCULATION);
 		}
+		else if(context.getContextState() == ContextState.CStringAlias && (CheckAnalyzer.isNodeComparedToNull(idExpression) || CheckAnalyzer.isNodeComparedToStrlen(idExpression))) {
+			isApplicable = true;
+			config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
+			config.put(TRANSFORMATION, Transformation.ALIAS_COMPARISON);
+		}
 	}
 
 	@Override
@@ -173,6 +179,17 @@ public class ExpressionRefactoring extends Refactoring {
 			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, newArraySubscript);
 		case INDEX_CALCULATION:
 			return context.createOffsetVarIdExpression();
+		case ALIAS_COMPARISON:
+			IASTExpression lhs = context.createOffsetVarIdExpression();
+			IASTExpression rhs = ExtendedNodeFactory.newNposExpression(context.getStringType());
+			boolean isEqual;
+			if(CheckAnalyzer.isNodeComparedToNull(idExpression)) {
+				isEqual = CheckAnalyzer.isNodeComparedToNull(idExpression, true);
+			}
+			else {
+				isEqual = CheckAnalyzer.isNodeComparedToStrlen(idExpression, true);
+			}
+			return ExtendedNodeFactory.newEqualityComparison(lhs, rhs, isEqual);
 		default:
 			return null;
 		}

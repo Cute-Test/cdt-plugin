@@ -11,7 +11,6 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
-import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
@@ -29,45 +28,37 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.C
 import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 
 public class BlockRefactoring  {
-	private ASTRewrite rewrite;
-	private String stringName;
-	private IASTName variableToRefactor;
-	private IASTNode block;
-	private IASTDeclarationStatement declarationStatement;
-	private boolean isAlias;
+	private BlockRefactoringConfiguration config;
 	private HashSet<String> headersToInclude;
 	private List<Refactoring> refactorings;
-	private StringType stringType;
 	
-	public BlockRefactoring(ASTRewrite rewrite, String stringName, IASTName variableToRefactor, IASTNode block, IASTDeclarationStatement declarationStatement, boolean isAlias, StringType stringType) {
-		this.rewrite = rewrite;
-		this.stringName = stringName;
-		this.variableToRefactor = variableToRefactor;
-		this.block = block;
-		this.declarationStatement = declarationStatement;
-		this.isAlias = isAlias;
-		this.stringType = stringType;
+	public BlockRefactoring(BlockRefactoringConfiguration config) {
+		this.config = config;
 		this.headersToInclude = new HashSet<String>();
 		this.refactorings = Arrays.asList(RefactoringFactory.createRefactorings());
 	}
 	
 	public void refactorAllStatements() {
 		StatementsVisitor visitor = new StatementsVisitor();
-		block.accept(visitor);
+		config.getBlock().accept(visitor);
 		IASTStatement allStatements[] = visitor.getStatements();
 		
 		Context context = prepareContext(allStatements);
 		
 		for(IASTStatement statement : allStatements) {
-			if(statement != declarationStatement) {
-				refactorStatement(statement, context);
+			if(!config.shouldSkipStatement(statement)) {
+				refactorStatement(statement, context);	
 			}
 		}
 	}
 	
 	private Context prepareContext(IASTStatement[] allStatements) {
-		if(isAlias) {
-			return new Context(ContextState.CStringAlias, stringName, variableToRefactor.toString(), null, stringType);
+		StringType stringType = config.getStringType();
+		String strNameString = config.getStrName().toString();
+		String varNameString = config.getVarName().toString();
+		
+		if(config.isAlias()) {
+			return new Context(ContextState.CStringAlias, strNameString, config.getNewVarNameString(), null, stringType);
 		}
 		
 		for(IASTStatement statement : allStatements) {
@@ -76,15 +67,15 @@ public class BlockRefactoring  {
 				IASTStatement firstAffectedStatement = ASTAnalyzer.getTopLevelParentStatement(statement);
 				if(firstAffectedStatement == null) break;
 
-				String offsetVarName = this.variableToRefactor.toString() + "_pos";
+				config.setNewVarNameString(varNameString + "_pos");
 				IASTLiteralExpression zeroLiteral = ExtendedNodeFactory.newIntegerLiteral(0);
 				
-				IASTDeclarationStatement offsetVarDeclaration = ExtendedNodeFactory.newDeclarationStatement(stringType.getSizeType(), offsetVarName, zeroLiteral);
-				ASTModifier.insertBefore(firstAffectedStatement.getParent(), firstAffectedStatement, offsetVarDeclaration, rewrite);
-				return new Context(ContextState.CStringModified, variableToRefactor.toString(), offsetVarName, firstAffectedStatement, stringType);
+				IASTDeclarationStatement offsetVarDeclaration = ExtendedNodeFactory.newDeclarationStatement(stringType.getSizeType(), config.getNewVarNameString(), zeroLiteral);
+				ASTModifier.insertBefore(firstAffectedStatement.getParent(), firstAffectedStatement, offsetVarDeclaration, config.getASTRewrite());
+				return new Context(ContextState.CStringModified, varNameString, config.getNewVarNameString(), firstAffectedStatement, stringType);
 			}
 		}
-		return new Context(ContextState.CString, variableToRefactor.toString(), null, null, stringType);
+		return new Context(ContextState.CString, varNameString, null, null, stringType);
 	}
 	
 	private boolean modifiesCharPointer(IASTStatement statement) {
@@ -113,6 +104,7 @@ public class BlockRefactoring  {
 		//workaround: copy statement again in order to remove original node locations
 		newStatement = newStatement.copy();
 		
+		ASTRewrite rewrite = config.getASTRewrite();
 		if(changeDescription.shouldRemoveStatement()) {
 			rewrite.remove(oldStatement, null);
 		}
@@ -133,7 +125,7 @@ public class BlockRefactoring  {
 		if(subtree instanceof IASTIdExpression) {
 			IASTIdExpression copiedIdExpression = (IASTIdExpression)subtree;
 			IASTIdExpression originalIdExpression = (IASTIdExpression)copiedIdExpression.getOriginalNode();
-			if(ASTAnalyzer.isSameName(originalIdExpression.getName(), variableToRefactor)) {
+			if(ASTAnalyzer.isSameName(originalIdExpression.getName(), config.getVarName())) {
 				stringOccurrences.add(copiedIdExpression);
 			}
 		}

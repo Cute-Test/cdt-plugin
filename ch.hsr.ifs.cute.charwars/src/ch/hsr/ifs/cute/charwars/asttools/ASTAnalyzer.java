@@ -120,11 +120,7 @@ public class ASTAnalyzer {
 				block instanceof IASTCompositeTypeSpecifier)) {
 			block = block.getParent();
 		}
-		
-		if(block == null)
-			block = node.getTranslationUnit();
-		
-		return block;
+		return block == null ? node.getTranslationUnit() : block;
 	}
 	
 	public static boolean isNameAvailable(String name, IASTNode nodeInBlock) {

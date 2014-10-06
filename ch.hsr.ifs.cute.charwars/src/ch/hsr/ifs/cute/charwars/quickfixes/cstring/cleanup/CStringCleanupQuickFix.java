@@ -23,7 +23,6 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTExpression;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
@@ -36,6 +35,8 @@ import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoringConfiguration;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
@@ -100,7 +101,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		}
 		else {
 			if(optimizedRefactoringPossible(oldStatement, hasPtrReturnType)) {
-				performOptimizedRefactoringSizeReturnType(oldStatement, functionCall, searchCall, rewrite);
+				performOptimizedRefactoringSizeReturnType(oldStatement, functionCall, searchCall, rewrite, firstArg);
 			}
 			else {
 				performNormalRefactoringSizeReturnType(oldStatement, functionCall, searchCall, rewrite, firstArg);
@@ -111,22 +112,21 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 	private void performMemchrRefactoring(IASTStatement oldStatement, IASTFunctionCallExpression functionCall, ASTRewrite rewrite, IASTIdExpression str, String searchFunctionName, IASTNode secondArg) {
 		String posVarName = getPosVarName(functionCall);
 		IASTName stringName = str.getName();
+		IASTNode thirdArg = functionCall.getArguments()[2];
 		IASTExpression last = null;
 		
-		if(functionCall.getArguments()[2] instanceof ICPPASTFunctionCallExpression) {
-			ICPPASTFunctionCallExpression thirdArg = (ICPPASTFunctionCallExpression) functionCall.getArguments()[2];
-			if(FunctionAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
-				if(thirdArg.getChildren()[0] instanceof ICPPASTExpression) {
-					IASTIdExpression thirdArgIdExpression = (IASTIdExpression)thirdArg.getChildren()[0].getChildren()[0];
-					if(thirdArgIdExpression.getChildren()[0].toString().equals(str.getName().toString())) {
-						last = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.END);
-					}
+		if(FunctionAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
+			if(thirdArg.getChildren()[0] instanceof ICPPASTExpression) {
+				IASTIdExpression thirdArgIdExpression = (IASTIdExpression)thirdArg.getChildren()[0].getChildren()[0];
+				if(ASTAnalyzer.isSameName(thirdArgIdExpression.getName(), str.getName())) {
+					last = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.END);
 				}
 			}
 		}
+		
 		if(last == null) {
 			IASTExpression lhs = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.BEGIN);
-			last = ExtendedNodeFactory.newPlusExpression(lhs.copy(), (IASTExpression) functionCall.getArguments()[2].copy());
+			last = ExtendedNodeFactory.newPlusExpression(lhs.copy(), (IASTExpression)thirdArg.copy());
 		}
 		IASTExpression first = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.BEGIN);
 		IASTFunctionCallExpression searchCall = ExtendedNodeFactory.newFunctionCallExpression(searchFunctionName, first, last, secondArg.copy());
@@ -173,23 +173,33 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		String posVarName = getPosVarName(functionCall);
 		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, posVarName, searchCall);
 		IASTNode block = ASTAnalyzer.getEnclosingBlock(oldStatement);
-		IASTName name = ((IASTDeclarator)functionCall.getParent().getParent()).getName();
-		PtrReturnValueVisitor visitor = new PtrReturnValueVisitor(name, rewrite, posVarName, str.copy());
-		block.accept(visitor);	
+		IASTName varName = ((IASTDeclarator)functionCall.getParent().getParent()).getName();
+		
+		BlockRefactoringConfiguration config = new BlockRefactoringConfiguration();
+		config.setBlock(block);
+		config.setASTRewrite(rewrite);
+		config.setStringType(StringType.STRING);
+		config.setStrName(str.getName());
+		config.setVarName(varName);
+		config.setNewVarNameString(posVarName);
+		
+		BlockRefactoring blockRefactoring = new BlockRefactoring(config);
+		blockRefactoring.refactorAllStatements();
 		
 		ASTModifier.insertBefore(oldStatement.getParent(), oldStatement, posVarDS, rewrite);
 		ASTModifier.remove(oldStatement, rewrite);
 		
 	}
 
-	private void performOptimizedRefactoringSizeReturnType(IASTStatement oldStatement, IASTFunctionCallExpression functionCall, IASTFunctionCallExpression searchCall, ASTRewrite rewrite) {
+	private void performOptimizedRefactoringSizeReturnType(IASTStatement oldStatement, IASTFunctionCallExpression functionCall, IASTFunctionCallExpression searchCall, ASTRewrite rewrite, IASTIdExpression str) {
 		String resultVarName = getResultVarName(functionCall);
 		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, resultVarName, searchCall);
 		ASTModifier.replace(oldStatement, posVarDS, rewrite);
 		
 		IASTNode block = ASTAnalyzer.getEnclosingBlock(oldStatement);
-		IASTName name = ((IASTDeclarator)functionCall.getParent().getParent()).getName();
-		SizeReturnValueVisitor visitor = new SizeReturnValueVisitor(name, rewrite);
+		IASTName varName = ((IASTDeclarator)functionCall.getParent().getParent()).getName();
+		
+		SizeReturnValueVisitor visitor = new SizeReturnValueVisitor(varName, rewrite);
 		block.accept(visitor);
 	}
 	

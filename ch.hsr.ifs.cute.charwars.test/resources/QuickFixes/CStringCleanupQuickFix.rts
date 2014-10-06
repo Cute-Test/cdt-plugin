@@ -209,10 +209,10 @@ int main() {
 	std::string::size_type found_pos = str.find("str");
 	if (found_pos != std::string::npos) {
 		int index = found_pos;
-		std::cout << &str[found_pos] << std::endl;
+		std::cout << (str.c_str() + found_pos) << std::endl;
 	}
 	if (found_pos != std::string::npos) {
-		std::cout << &str[found_pos] << std::endl;
+		std::cout << (str.c_str() + found_pos) << std::endl;
 	}
 }
 
@@ -233,7 +233,32 @@ int main() {
 	std::string search = "str";
 	std::string::size_type found_pos = str.find(search);
 	if (found_pos != std::string::npos) {
-		std::cout << &str[found_pos] << std::endl;
+		std::cout << (str.c_str() + found_pos) << std::endl;
+	}
+}
+
+
+//!StrstrCleanup12
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string url = "http://www.domain.com/script?x=y";
+	const char* com_tld = strstr(url.c_str(), ".com");
+	if (com_tld) {
+		if (strchr(com_tld, '/')) {
+			std::cout << "test";
+		}
+	}
+}
+//=
+#include "string.h"
+int main() {
+	std::string url = "http://www.domain.com/script?x=y";
+	std::string::size_type com_tld_pos = url.find(".com");
+	if (com_tld_pos != std::string::npos) {
+		if (url.find('/', com_tld_pos) != std::string::npos) {
+			std::cout << "test";
+		}
 	}
 }
 
@@ -838,4 +863,3 @@ int findMonth(std::string monthStr) {
     }
     return -1;
 }
-

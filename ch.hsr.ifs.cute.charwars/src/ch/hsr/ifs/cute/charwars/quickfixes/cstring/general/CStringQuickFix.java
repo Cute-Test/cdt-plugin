@@ -6,6 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
@@ -32,6 +33,7 @@ import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoringConfiguration;
 import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
 
 public class CStringQuickFix extends BaseQuickFix {
@@ -70,8 +72,8 @@ public class CStringQuickFix extends BaseQuickFix {
 		
 		ASTModifier.remove(beforeNode, rewrite);
 		
-		IASTName variableToRefactor = oldDeclarator.getName();
-		String stringName;
+		IASTName varName = oldDeclarator.getName();
+		IASTName strName;
 		boolean isAlias = (getProblemId(currentMarker).equals(ProblemIDs.C_STRING_ALIAS_PROBLEM));
 		
 		if(isAlias) {
@@ -79,14 +81,21 @@ public class CStringQuickFix extends BaseQuickFix {
 			IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)equalsInitializer.getInitializerClause();
 			IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
 			IASTIdExpression idExpression = (IASTIdExpression)fieldReference.getFieldOwner();
-			stringName = idExpression.getName().toString();
+			strName = idExpression.getName();
 		}
 		else {
-			stringName = variableToRefactor.toString();
+			strName = varName;
 		}
 		
-		StringType stringType = StringType.createFromDeclSpecifier(oldDeclaration.getDeclSpecifier());
-		BlockRefactoring blockRefactoring = new BlockRefactoring(rewrite, stringName, variableToRefactor, block, oldDeclarationStatement, isAlias, stringType);
+		BlockRefactoringConfiguration config = new BlockRefactoringConfiguration();
+		config.setBlock(block);
+		config.skipStatement(oldDeclarationStatement);
+		config.setASTRewrite(rewrite);
+		config.setStringType(StringType.createFromDeclSpecifier(oldDeclaration.getDeclSpecifier()));
+		config.setStrName(strName);
+		config.setVarName(varName);
+		
+		BlockRefactoring blockRefactoring = new BlockRefactoring(config);
 		blockRefactoring.refactorAllStatements();
 		
 		headers.addAll(blockRefactoring.getHeadersToInclude());
@@ -96,9 +105,13 @@ public class CStringQuickFix extends BaseQuickFix {
 	private int getStringBufferSizeFromDeclarator(IASTDeclarator declarator) {
 		int stringBufferSize = -1;
 		for(IASTNode child : declarator.getChildren()) {
-			if(child instanceof IASTArrayModifier && ((IASTArrayModifier) child).getConstantExpression() != null) {
-				stringBufferSize = Integer.parseInt(((IASTArrayModifier) child).getConstantExpression().getRawSignature());
-				break;
+			if(child instanceof IASTArrayModifier) {
+				IASTArrayModifier arrayModifier = (IASTArrayModifier)child;
+				IASTExpression constantExpr = arrayModifier.getConstantExpression();
+				if(constantExpr != null) {
+					stringBufferSize = Integer.parseInt(constantExpr.getRawSignature());
+					break;
+				}
 			}
 		}
 		return stringBufferSize;

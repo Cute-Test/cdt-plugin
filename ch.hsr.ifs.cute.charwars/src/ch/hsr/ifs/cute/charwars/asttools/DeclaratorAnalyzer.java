@@ -45,18 +45,12 @@ public class DeclaratorAnalyzer {
 	
 	private static boolean hasStringLiteralAssignment(IASTDeclarator declarator) {
 		IASTInitializerClause initializerClause = getInitializerClause(declarator);
-		if(initializerClause != null) {
-			return LiteralAnalyzer.isString(initializerClause);
-		}
-		return false;
+		return LiteralAnalyzer.isString(initializerClause);
 	}
 	
 	public static boolean hasStrdupAssignment(IASTDeclarator declarator) {
 		IASTInitializerClause initializerClause = getInitializerClause(declarator);
-		if(initializerClause != null) {
-			return FunctionAnalyzer.isCallToFunction(initializerClause, Function.STRDUP);
-		}
-		return false;
+		return FunctionAnalyzer.isCallToFunction(initializerClause, Function.STRDUP);
 	}
 	
 	public static IASTInitializerClause getInitializerClause(IASTDeclarator declarator) {
