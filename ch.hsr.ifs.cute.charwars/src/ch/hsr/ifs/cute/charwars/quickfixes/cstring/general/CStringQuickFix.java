@@ -5,7 +5,6 @@ import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
-import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
@@ -64,7 +63,7 @@ public class CStringQuickFix extends BaseQuickFix {
 		IASTSimpleDeclaration oldDeclaration = (IASTSimpleDeclaration)oldDeclarator.getParent();
 		IASTDeclarationStatement oldDeclarationStatement = isNotNested ? null : (IASTDeclarationStatement)oldDeclaration.getParent();
 		IASTNode beforeNode = isNotNested ? oldDeclaration : oldDeclarationStatement;
-		ASTRewrite rewrite = rewriteCache.getASTRewrite(markedNode.getTranslationUnit().getOriginatingTranslationUnit());
+		ASTRewrite rewrite = getRewrite(rewriteCache, markedNode);
 		
 		for(IASTDeclarator declarator : oldDeclaration.getDeclarators()) {
 			insertNewDeclarationStatementFromDeclarator(declarator, beforeNode, declarator.equals(oldDeclarator), block, rewrite);
@@ -77,8 +76,7 @@ public class CStringQuickFix extends BaseQuickFix {
 		boolean isAlias = (getProblemId(currentMarker).equals(ProblemIDs.C_STRING_ALIAS_PROBLEM));
 		
 		if(isAlias) {
-			IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)oldDeclarator.getInitializer();
-			IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)equalsInitializer.getInitializerClause();
+			IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)DeclaratorAnalyzer.getInitializerClause(oldDeclarator);
 			IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
 			IASTIdExpression idExpression = (IASTIdExpression)fieldReference.getFieldOwner();
 			strName = idExpression.getName();

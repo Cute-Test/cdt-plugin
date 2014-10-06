@@ -26,7 +26,7 @@ public class CStringParameterQuickFix extends BaseQuickFix {
 	@Override
 	protected void handleMarkedNode(IASTNode markedNode, ASTRewriteCache rewriteCache) {
 		ICPPASTParameterDeclaration parameterDeclaration = (ICPPASTParameterDeclaration)markedNode.getParent();
-		ASTRewrite rewrite = rewriteCache.getASTRewrite(markedNode.getTranslationUnit().getOriginatingTranslationUnit());
+		ASTRewrite rewrite = getRewrite(rewriteCache, markedNode);
 		rewriteStrategy = RewriteStrategyFactory.createRewriteStrategy(parameterDeclaration, rewrite);
 		rewriteStrategy.addStdStringOverload();
 		rewriteStrategy.adaptCStringOverload();

@@ -173,18 +173,13 @@ public class CheckAnalyzer {
 	
 	public static boolean isCheckedForEmptiness(IASTNode node, boolean empty) {
 		IASTNode parent = node.getParent();
-		if(UEAnalyzer.isDereferenceExpression(parent)) {
-			return isNodeComparedToZero(parent, empty);
-		}
-		return false;
+		return UEAnalyzer.isDereferenceExpression(parent) && isNodeComparedToZero(parent, empty);
 	}
 	
 	public static boolean isPartOfStringCheck(IASTIdExpression node, boolean equalityComparison) {
 		IASTNode parent = node.getParent();
-		if(FunctionAnalyzer.isCallToFunction(parent, Function.STRCMP) || FunctionAnalyzer.isCallToFunction(parent, Function.WCSCMP)) {		
-			return isNodeComparedToZero(parent, equalityComparison);
-		}
-		return false;
+		boolean isStrcmpOrWcsmp = FunctionAnalyzer.isCallToFunction(parent, Function.STRCMP) || FunctionAnalyzer.isCallToFunction(parent, Function.WCSCMP);		
+		return isStrcmpOrWcsmp && isNodeComparedToZero(parent, equalityComparison);
 	}
 
 	public static boolean isNodeComparedToNull(IASTNode node) {

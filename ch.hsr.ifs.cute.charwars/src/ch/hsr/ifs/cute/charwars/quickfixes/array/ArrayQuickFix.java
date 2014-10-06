@@ -44,7 +44,7 @@ public class ArrayQuickFix extends BaseQuickFix {
 		IASTSimpleDeclaration oldDeclaration = (IASTSimpleDeclaration)oldDeclarator.getParent();
 		IASTDeclarationStatement oldDeclarationStatement = isGlobal ? null : (IASTDeclarationStatement)oldDeclaration.getParent();
 		IASTNode beforeNode = isGlobal ? oldDeclaration : oldDeclarationStatement;
-		ASTRewrite rewrite = rewriteCache.getASTRewrite(markedNode.getTranslationUnit().getOriginatingTranslationUnit());
+		ASTRewrite rewrite = getRewrite(rewriteCache, markedNode);
 
 		for(IASTDeclarator declarator : oldDeclaration.getDeclarators()) {
 			insertNewDeclarationStatementFromDeclarator(declarator, beforeNode, declarator.equals(oldDeclarator), block, rewrite);

@@ -6,6 +6,7 @@ import org.eclipse.cdt.codan.ui.AbstractAstRewriteQuickFix;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -80,5 +81,9 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 		catch(CoreException e) {
 			ErrorLogger.log(ErrorMessages.UNABLE_TO_DELETE_MARKER, e);
 		}
+	}
+	
+	protected ASTRewrite getRewrite(ASTRewriteCache rewriteCache, IASTNode node) {
+		return rewriteCache.getASTRewrite(node.getTranslationUnit().getOriginatingTranslationUnit());
 	}
 }
