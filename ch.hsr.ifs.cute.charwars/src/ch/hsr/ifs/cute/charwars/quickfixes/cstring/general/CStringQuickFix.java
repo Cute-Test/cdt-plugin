@@ -24,7 +24,6 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
@@ -34,6 +33,7 @@ import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoringConfiguration;
 import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 
 public class CStringQuickFix extends BaseQuickFix {
 	@Override

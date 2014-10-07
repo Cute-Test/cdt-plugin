@@ -85,7 +85,7 @@ public class TypeAnalyzer {
 	private static String getClassName(IType type) {
 		IType normalized = normalize(type);
 		if(normalized instanceof ICPPClassType) {
-			ICPPClassType classType = (ICPPClassType)type;
+			ICPPClassType classType = (ICPPClassType)normalized;
 			return classType.getName();
 		}
 		return null;

@@ -8,10 +8,10 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class OperatorRefactoring extends Refactoring {
@@ -36,17 +36,11 @@ public class OperatorRefactoring extends Refactoring {
 			boolean isStringInequalityCheck = outFunction == Function.OP_NOT_EQUALS && CheckAnalyzer.isPartOfStringCheck(idExpression, false);
 				
 			if(isStringEqualityCheck || isStringInequalityCheck) {
-				isApplicable = true;
-				config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
+				makeApplicable(BoolAnalyzer.getEnclosingBoolean(idExpression));
 			}
 		}
-		else {
-			boolean isOther = FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction);
-			
-			if(isOther) {
-				isApplicable = true;
-				config.put(NODE_TO_REPLACE, idExpression.getParent());
-			}
+		else if(FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
+			makeApplicable(idExpression.getParent());
 		}
 	}
 

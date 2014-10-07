@@ -7,9 +7,9 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 
 public class FunctionRefactoring extends Refactoring {
@@ -29,14 +29,12 @@ public class FunctionRefactoring extends Refactoring {
 		if(canHandleOffsets() && (context.isOffset(idExpression) || FunctionAnalyzer.hasOffset(idExpression, inFunction))) {
 			if(FunctionAnalyzer.isPartOfFunctionCallArg(idExpression, 0, inFunction)) {
 				IASTNode nodeToReplace = FunctionAnalyzer.getEnclosingFunctionCall(idExpression, inFunction);
-				isApplicable = true;
-				config.put(NODE_TO_REPLACE, nodeToReplace);
+				makeApplicable(nodeToReplace);
 			}
 		}
 		else if(!context.isOffset(idExpression)) {
 			if(FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
-				isApplicable = true;
-				config.put(NODE_TO_REPLACE, idExpression.getParent());
+				makeApplicable(idExpression.getParent());
 			}
 		}
 	}

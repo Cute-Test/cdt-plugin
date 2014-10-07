@@ -6,7 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 
 public class NullCheckRewriteStrategy extends RewriteStrategy {
 	@Override

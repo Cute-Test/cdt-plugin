@@ -9,11 +9,11 @@ import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 
@@ -35,6 +35,11 @@ public class ExpressionRefactoring extends Refactoring {
 		setContextStates(contextStates);
 	}
 	
+	private void makeApplicable(IASTNode nodeToReplace, Transformation transformation) {
+		super.makeApplicable(nodeToReplace);
+		config.put(TRANSFORMATION, transformation);
+	}
+	
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
 		if(ASTAnalyzer.isStringLengthCalculation(idExpression)) {
@@ -44,25 +49,19 @@ public class ExpressionRefactoring extends Refactoring {
 			while(!BEAnalyzer.isSubtraction(nodeToReplace)) {
 				nodeToReplace = nodeToReplace.getParent();
 			}
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, nodeToReplace);
-			config.put(TRANSFORMATION, Transformation.SIZE);
+			makeApplicable(nodeToReplace, Transformation.SIZE);
 		}
 		else if(CheckAnalyzer.isCheckedForEmptiness(idExpression, true)) {
 			//!*str -> str.empty()
 			//*str == 0 -> str.empty()
 			//if modified: !*str -> !str[str_pos]
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
-			config.put(TRANSFORMATION, Transformation.EMPTY);
+			makeApplicable(BoolAnalyzer.getEnclosingBoolean(idExpression), Transformation.EMPTY);
 		}
 		else if(CheckAnalyzer.isCheckedForEmptiness(idExpression, false)) {
 			//if(*str) -> if(!str.empty())
 			//*str != 0 -> !str.empty()
 			//if modified: *str -> str[str_pos]
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
-			config.put(TRANSFORMATION, Transformation.NOT_EMPTY);
+			makeApplicable(BoolAnalyzer.getEnclosingBoolean(idExpression), Transformation.NOT_EMPTY);
 		}
 		else if(ASTAnalyzer.isDereferencedToChar(idExpression)) {
 			//*str -> str[0]
@@ -73,9 +72,7 @@ public class ExpressionRefactoring extends Refactoring {
 			while(!UEAnalyzer.isDereferenceExpression(nodeToReplace)) {
 				nodeToReplace = nodeToReplace.getParent();
 			}
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, nodeToReplace);
-			config.put(TRANSFORMATION, Transformation.DEREFERENCED);
+			makeApplicable(nodeToReplace, Transformation.DEREFERENCED);
 		}
 		else if(ASTAnalyzer.modifiesCharPointer(idExpression)) {
 			//++str -> ++str_pos
@@ -83,16 +80,12 @@ public class ExpressionRefactoring extends Refactoring {
 			//str++ -> str_pos++
 			//*str++ -> str[str_pos++]
 			//str += n -> str_pos += n
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, idExpression);
-			config.put(TRANSFORMATION, Transformation.MODIFIED);
+			makeApplicable(idExpression, Transformation.MODIFIED);
 		}
 		else if(ASTAnalyzer.isArraySubscriptExpression(idExpression) && context.isOffset(idExpression)) {
 			//str[0] -> str[str_pos]
 			//str[1] -> str[str_pos + 1]
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, idExpression.getParent());
-			config.put(TRANSFORMATION, Transformation.ARRAY_SUBSCRIPTION);
+			makeApplicable(idExpression.getParent(), Transformation.ARRAY_SUBSCRIPTION);
 		}
 		else if(context.getContextState() == ContextState.CStringAlias && ASTAnalyzer.isIndexCalculation(idExpression)) {
 			//ptr - str -> ptr
@@ -100,14 +93,10 @@ public class ExpressionRefactoring extends Refactoring {
 			if(UEAnalyzer.isBracketExpression(nodeToReplace.getParent())) {
 				nodeToReplace = nodeToReplace.getParent();
 			}
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, nodeToReplace);
-			config.put(TRANSFORMATION, Transformation.INDEX_CALCULATION);
+			makeApplicable(nodeToReplace, Transformation.INDEX_CALCULATION);
 		}
-		else if(context.getContextState() == ContextState.CStringAlias && (CheckAnalyzer.isNodeComparedToNull(idExpression) || CheckAnalyzer.isNodeComparedToStrlen(idExpression))) {
-			isApplicable = true;
-			config.put(NODE_TO_REPLACE, BoolAnalyzer.getEnclosingBoolean(idExpression));
-			config.put(TRANSFORMATION, Transformation.ALIAS_COMPARISON);
+		else if(context.getContextState() == ContextState.CStringAlias && !ASTAnalyzer.isLValueInAssignment(idExpression) && (CheckAnalyzer.isNodeComparedToNull(idExpression) || CheckAnalyzer.isNodeComparedToStrlen(idExpression))) {
+			makeApplicable(BoolAnalyzer.getEnclosingBoolean(idExpression), Transformation.ALIAS_COMPARISON);
 		}
 	}
 

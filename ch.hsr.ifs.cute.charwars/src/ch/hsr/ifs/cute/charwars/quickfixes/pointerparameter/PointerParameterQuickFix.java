@@ -19,13 +19,13 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.IndexFinderInstruction;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
 

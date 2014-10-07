@@ -155,3 +155,27 @@ int main() {
 	ptr++;
 	std::cout << str.compare(ptr, 3, "ell", 0, 3) << std::endl;
 }
+
+
+//!CStringAlias8
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Garagenanlage";
+	const char* ptr = str.c_str();
+	while ((ptr = strchr(ptr, 'a')) != NULL) {
+		std::cout << (ptr - str.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "Garagenanlage";
+	std::string::size_type ptr = 0;
+	while ((ptr = str.find('a', ptr)) != std::string::npos) {
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}

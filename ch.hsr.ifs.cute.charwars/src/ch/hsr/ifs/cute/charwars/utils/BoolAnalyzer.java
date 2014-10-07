@@ -41,7 +41,7 @@ public class BoolAnalyzer {
 	}
 	
 	public static IASTNode getEnclosingBoolean(IASTNode node) {
-		while(!isImplicitBool(node)) {
+		while(node != null && !isImplicitBool(node)) {
 			node = node.getParent();
 		}
 		return node;
@@ -53,10 +53,6 @@ public class BoolAnalyzer {
 		}
 		
 		IASTNode parent = node.getParent();
-		if(UEAnalyzer.isBracketExpression(parent)) {
-			return isImplicitBool(parent.getParent());
-		}
-		
 		boolean isCondition = isCondition(node);
 		boolean isLogicalOperand = BEAnalyzer.isLogicalAnd(parent) || BEAnalyzer.isLogicalOr(parent);
 		boolean isAssignedToBool = isAssignedToBool(node);
@@ -72,7 +68,11 @@ public class BoolAnalyzer {
 	}
 	
 	public static boolean isAssignedToBool(IASTNode node) {
-		IASTNode parent = node.getParent().getOriginalNode();
+		IASTNode parent = node.getParent();
+		if(parent == null) {
+			return false;
+		}
+		parent = parent.getOriginalNode();
 		
 		if(BEAnalyzer.isAssignment(parent)) {
 			IType expressionType = BEAnalyzer.getOperand1(parent).getExpressionType();
@@ -86,8 +86,12 @@ public class BoolAnalyzer {
 	}
 	
 	public static boolean isAsserted(IASTNode node) {
-		String rs = node.getParent().getRawSignature();
-		return rs.contains(Constants.ASSERT + "(") || rs.contains(Constants.ASSERT.toUpperCase() + "(");
+		IASTNode parent = node.getParent();
+		if(parent != null) {
+			String rs = parent.getRawSignature();
+			return rs.contains(Constants.ASSERT + "(") || rs.contains(Constants.ASSERT.toUpperCase() + "(");
+		}
+		return false;
 	}
 	
 	private static boolean isReturned(IASTNode node) {

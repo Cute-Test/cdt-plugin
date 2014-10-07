@@ -14,12 +14,12 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Algorithm;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStringCleanupQuickFix extends BaseQuickFix {

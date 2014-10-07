@@ -34,7 +34,7 @@ public class NullRefactoring extends Refactoring {
 			(ASTAnalyzer.isLeftShiftExpressionToStdCout(parent) && isNotOffset) ||
 			(isStdStringParameterDeclaration(idExpression, context) && isNotOffset)) {
 			
-			isApplicable = true;
+			makeApplicable(null);
 		}
 	}
 

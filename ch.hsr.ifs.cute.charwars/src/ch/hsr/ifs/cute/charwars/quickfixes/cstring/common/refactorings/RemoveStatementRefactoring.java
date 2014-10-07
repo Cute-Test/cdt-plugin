@@ -17,7 +17,7 @@ public class RemoveStatementRefactoring extends Refactoring {
 	@Override
 	protected void prepareConfiguration(IASTIdExpression idExpression, Context context) {
 		if(FunctionAnalyzer.isFunctionCallArg(idExpression, 0, inFunction)) {
-			isApplicable = true;
+			makeApplicable(null);
 		}
 	}
 

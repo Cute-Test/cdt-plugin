@@ -18,11 +18,11 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdArray;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
 
 public class ArrayQuickFix extends BaseQuickFix {	

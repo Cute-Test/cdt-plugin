@@ -12,7 +12,7 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
-import ch.hsr.ifs.cute.charwars.asttools.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 
 public class ResultVariableRewriteStrategy extends RewriteStrategy {
 	@Override

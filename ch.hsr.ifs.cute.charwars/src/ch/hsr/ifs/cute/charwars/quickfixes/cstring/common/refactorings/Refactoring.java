@@ -36,6 +36,11 @@ public abstract class Refactoring {
 	
 	protected abstract void prepareConfiguration(IASTIdExpression idExpression, Context context);
 	
+	protected void makeApplicable(IASTNode nodeToReplace) {
+		isApplicable = true;
+		config.put(NODE_TO_REPLACE, nodeToReplace);
+	}
+	
 	protected boolean isApplicable(ContextState contextState) {
 		return isApplicable && contextStates.contains(contextState);
 	}

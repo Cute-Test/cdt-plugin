@@ -41,13 +41,12 @@ public class BEAnalyzer {
 		return isBinaryExpression(node, IASTBinaryExpression.op_shiftLeft);
 	}
 	
+	public static boolean isComparison(IASTNode node) {
+		return isEqualityCheck(node) || isInequalityCheck(node);
+	}
+	
 	public static boolean isComparison(IASTNode node, boolean equalityComparison) {
-		if(equalityComparison) {
-			return isEqualityCheck(node);
-		}
-		else {
-			return isInequalityCheck(node);
-		}
+		return equalityComparison ? isEqualityCheck(node) : isInequalityCheck(node);
 	}
 	
 	private static boolean isEqualityCheck(IASTNode node) {

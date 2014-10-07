@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.asttools;
+package ch.hsr.ifs.cute.charwars.utils;
 
 import java.util.ArrayList;
 
