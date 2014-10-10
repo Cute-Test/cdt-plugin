@@ -102,26 +102,26 @@ public class ExpressionRefactoring extends Refactoring {
 
 	@Override
 	protected IASTNode getReplacementNode(IASTIdExpression idExpression, Context context) {
-		IASTName stringName = ExtendedNodeFactory.newName(context.getStringVarName());
+		IASTName stringVarName = context.createStringVarName();
 		switch((Transformation)config.get(TRANSFORMATION)) {
 		case SIZE:
-			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.SIZE);
+			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringVarName, StdString.SIZE);
 		case EMPTY:
 			if(context.isOffset(idExpression)) {
 				IASTIdExpression subscript = context.createOffsetVarIdExpression();
-				IASTArraySubscriptExpression arraySubscription = ExtendedNodeFactory.newArraySubscriptExpression(ExtendedNodeFactory.newIdExpression(stringName.toString()), subscript);
+				IASTArraySubscriptExpression arraySubscription = ExtendedNodeFactory.newArraySubscriptExpression(context.createStringVarIdExpression(), subscript);
 				return ExtendedNodeFactory.newLogicalNotExpression(arraySubscription);
 			}
 			else {
-				return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.EMPTY);
+				return ExtendedNodeFactory.newMemberFunctionCallExpression(stringVarName, StdString.EMPTY);
 			}
 		case NOT_EMPTY:
 			if(context.isOffset(idExpression)) {
 				IASTIdExpression subscript = context.createOffsetVarIdExpression();
-				return ExtendedNodeFactory.newArraySubscriptExpression(ExtendedNodeFactory.newIdExpression(stringName.toString()), subscript);
+				return ExtendedNodeFactory.newArraySubscriptExpression(context.createStringVarIdExpression(), subscript);
 			}
 			else {
-				IASTExpression emptyCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.EMPTY);
+				IASTExpression emptyCall = ExtendedNodeFactory.newMemberFunctionCallExpression(stringVarName, StdString.EMPTY);
 				return ExtendedNodeFactory.newLogicalNotExpression(emptyCall);
 			}
 		case DEREFERENCED:
@@ -143,17 +143,15 @@ public class ExpressionRefactoring extends Refactoring {
 					subscript = otherOperand;
 				}
 			}
-			
-			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, subscript);
+			return ExtendedNodeFactory.newArraySubscriptExpression(context.createStringVarIdExpression(), subscript);
 		case MODIFIED:
 			IASTNode parent = idExpression.getParent();
 			if(UEAnalyzer.isIncrementation(parent)) {
 				if(UEAnalyzer.isDereferenceExpression(parent.getParent())) {
 					config.put(NODE_TO_REPLACE, parent.getParent());
 					int operator = ((IASTUnaryExpression)parent).getOperator();
-					IASTExpression arrExpr = ExtendedNodeFactory.newIdExpression(context.getStringVarName());
 					IASTExpression subscriptExpr = ExtendedNodeFactory.newUnaryExpression(operator, context.createOffsetVarIdExpression());
-					return ExtendedNodeFactory.newArraySubscriptExpression(arrExpr, subscriptExpr);
+					return ExtendedNodeFactory.newArraySubscriptExpression(context.createStringVarIdExpression(), subscriptExpr);
 				}
 			}
 			return context.createOffsetVarIdExpression();
@@ -165,7 +163,7 @@ public class ExpressionRefactoring extends Refactoring {
 			if(!LiteralAnalyzer.isZero(oldArraySubscript)) {
 				newArraySubscript = ExtendedNodeFactory.newPlusExpression(newArraySubscript, oldArraySubscript);
 			}
-			return ExtendedNodeFactory.newArraySubscriptExpression(idExpression, newArraySubscript);
+			return ExtendedNodeFactory.newArraySubscriptExpression(context.createStringVarIdExpression(), newArraySubscript);
 		case INDEX_CALCULATION:
 			return context.createOffsetVarIdExpression();
 		case ALIAS_COMPARISON:

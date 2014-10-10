@@ -195,15 +195,9 @@ public class CheckAnalyzer {
 	}
 	
 	private static boolean isNodeComparedTo(IASTNode node, boolean equalityComparison, boolean zeroOnly) {
-		IASTNode lastNode = node;
 		IASTNode parent = node.getParent();
-		while(parent != null && (BEAnalyzer.isAssignment(parent) || UEAnalyzer.isBracketExpression(parent))) {
-			lastNode = parent;
-			parent = parent.getParent();
-		}
-		
 		if(BEAnalyzer.isComparison(parent, equalityComparison)) {
-			IASTNode oo = BEAnalyzer.getOtherOperand(lastNode);
+			IASTNode oo = BEAnalyzer.getOtherOperand(node);
 			return zeroOnly ? LiteralAnalyzer.isZero(oo) : LiteralAnalyzer.isNullExpression(oo); 
 		}
 		

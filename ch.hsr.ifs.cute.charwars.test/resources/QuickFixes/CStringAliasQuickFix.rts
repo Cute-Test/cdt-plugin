@@ -179,3 +179,52 @@ int main() {
 		ptr++;
 	}
 }
+
+
+//!CStringAlias9
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Garagenanlage";
+	const char* ptr = str.c_str();
+	while (ptr = strchr(ptr, 'a')) {
+		std::cout << (ptr - str.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "Garagenanlage";
+	std::string::size_type ptr = 0;
+	while ((ptr = str.find('a', ptr)) != std::string::npos) {
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+
+//!CStringAlias10
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Garagenanlage";
+	const char* ptr = str.c_str();
+	while ((ptr = strchr(ptr, 'a'))) {
+		std::cout << (ptr - str.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = "Garagenanlage";
+	std::string::size_type ptr = 0;
+	while ((ptr = str.find('a', ptr)) != std::string::npos) {
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+

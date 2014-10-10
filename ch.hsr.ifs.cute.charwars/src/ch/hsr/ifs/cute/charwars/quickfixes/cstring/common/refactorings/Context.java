@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
@@ -57,8 +58,12 @@ public class Context {
 		return contextState;
 	}
 	
-	public String getStringVarName() {
-		return stringVarName;
+	public IASTName createStringVarName() {
+		return ExtendedNodeFactory.newName(stringVarName);
+	}
+	
+	public IASTIdExpression createStringVarIdExpression() {
+		return ExtendedNodeFactory.newIdExpression(stringVarName);
 	}
 	
 	public IASTIdExpression createOffsetVarIdExpression() {

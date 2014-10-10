@@ -41,7 +41,7 @@ public class FunctionRefactoring extends Refactoring {
 
 	@Override
 	protected IASTNode getReplacementNode(IASTIdExpression idExpression, Context context) {
-		IASTName stringName = ExtendedNodeFactory.newName(context.getStringVarName());
+		IASTName stringName = context.createStringVarName();
 		String outFunctionName = outFunction.getName();
 		boolean isMemberFunction = outFunction.isMemberFunction();
 		IASTNode nodeToReplace = (IASTNode)config.get(NODE_TO_REPLACE);

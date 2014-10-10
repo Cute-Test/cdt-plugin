@@ -3,7 +3,6 @@ package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
-import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
@@ -53,19 +52,26 @@ public class ComparisonRefactoring extends Refactoring {
 		Sentinel inFunctionSentinel = inFunction.getSentinel();
 		IASTNode nodeToReplace = BoolAnalyzer.getEnclosingBoolean(idExpression);
 		
+		IASTNode comparedNode = node;
+		IASTNode parent = node.getParent();
+		while(parent != null && !BoolAnalyzer.isAssignedToBool(node) && (BEAnalyzer.isAssignment(parent) || UEAnalyzer.isBracketExpression(parent))) {
+			comparedNode = parent;
+			parent = parent.getParent();
+		}
+		
 		if(inFunctionSentinel == Sentinel.NULL) {
-			if(CheckAnalyzer.isNodeComparedToNull(node, true)) {
+			if(CheckAnalyzer.isNodeComparedToNull(comparedNode, true)) {
 				makeApplicable(nodeToReplace, true);
 			}
-			else if(CheckAnalyzer.isNodeComparedToNull(node, false)) {
+			else if(CheckAnalyzer.isNodeComparedToNull(comparedNode, false)) {
 				makeApplicable(nodeToReplace, false);
 			}
 		}
 		else if(inFunctionSentinel == Sentinel.STRLEN) {
-			if(CheckAnalyzer.isNodeComparedToStrlen(node, true)) {
+			if(CheckAnalyzer.isNodeComparedToStrlen(comparedNode, true)) {
 				makeApplicable(nodeToReplace, true);
 			}
-			else if(CheckAnalyzer.isNodeComparedToStrlen(node, false)) {
+			else if(CheckAnalyzer.isNodeComparedToStrlen(comparedNode, false)) {
 				makeApplicable(nodeToReplace, false);
 			}
 		}
@@ -86,22 +92,32 @@ public class ComparisonRefactoring extends Refactoring {
 			IASTNode op1 = BEAnalyzer.getOperand1(nodeToReplace);
 			IASTNode op2 = BEAnalyzer.getOperand2(nodeToReplace);
 			if(!FunctionAnalyzer.isCallToFunction(op1, inFunction) && !FunctionAnalyzer.isCallToFunction(op2, inFunction)) {
-				IASTNode assignment = UEAnalyzer.isBracketExpression(op1) ? UEAnalyzer.getOperand(op1) : UEAnalyzer.getOperand(op2); 
-				IASTNode lvalue = BEAnalyzer.getOperand1(assignment);
-				IASTExpression newAssignment = ExtendedNodeFactory.newAssignment((IASTExpression)lvalue.copy(), functionCall);
-				return ExtendedNodeFactory.newBracketedExpression(newAssignment);
+				IASTNode oldAssignment = UEAnalyzer.isBracketExpression(op1) ? UEAnalyzer.getOperand(op1) : UEAnalyzer.getOperand(op2);
+				return createNewAssignment(oldAssignment, functionCall);
 			}
 		}
+		else if(BEAnalyzer.isAssignment(nodeToReplace)) {
+			return createNewAssignment(nodeToReplace, functionCall);
+		}
+		else if(UEAnalyzer.isBracketExpression(nodeToReplace)) {
+			IASTNode oldAssignment = UEAnalyzer.getOperand(nodeToReplace);
+			return createNewAssignment(oldAssignment, functionCall);
+		}
 		return functionCall;
+	}
+	
+	private IASTExpression createNewAssignment(IASTNode oldAssignment, IASTExpression functionCall) {
+		IASTExpression lvalue = BEAnalyzer.getOperand1(oldAssignment);
+		IASTExpression newAssignment = ExtendedNodeFactory.newAssignment(lvalue.copy(),functionCall);
+		return ExtendedNodeFactory.newBracketedExpression(newAssignment);
 	}
 	
 	private IASTFunctionCallExpression createOutFunctionCall(IASTIdExpression idExpression, Context context) {
 		String outFunctionName = outFunction.getName();
 		IASTNode outArguments[] = getOutArguments(idExpression, context);
-		IASTName stringName = ExtendedNodeFactory.newName(context.getStringVarName());
 		
 		if(outFunction.isMemberFunction()) {
-			return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, outFunctionName, outArguments);
+			return ExtendedNodeFactory.newMemberFunctionCallExpression(context.createStringVarName(), outFunctionName, outArguments);
 		}
 		else {
 			return ExtendedNodeFactory.newFunctionCallExpression(outFunctionName, outArguments);

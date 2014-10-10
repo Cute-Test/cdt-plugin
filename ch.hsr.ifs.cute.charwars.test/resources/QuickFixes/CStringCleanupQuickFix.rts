@@ -263,6 +263,29 @@ int main() {
 }
 
 
+//!StrstrCleanup13
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "this is a test";
+	const char* p = strstr(str.c_str(), "test");
+	if(p) {
+		std::cout << *(p + 1) << std::endl;
+		std::cout << p[1] << std::endl;
+	}
+}
+//=
+#include "string.h"
+int main() {
+	std::string str = "this is a test";
+	std::string::size_type p_pos = str.find("test");
+	if (p_pos != std::string::npos) {
+		std::cout << str[p_pos + 1] << std::endl;
+		std::cout << str[p_pos + 1] << std::endl;
+	}
+}
+
+
 //!StrchrCleanup1
 //@main.cpp
 int main() {

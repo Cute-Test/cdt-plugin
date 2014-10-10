@@ -35,7 +35,7 @@ public class DefaultRefactoring extends Refactoring {
 
 	@Override
 	protected IASTNode getReplacementNode(IASTIdExpression idExpression, Context context) {
-		IASTName stringName = ExtendedNodeFactory.newName(context.getStringVarName());
+		IASTName stringName = context.createStringVarName();
 		boolean convertToConst = (boolean)config.get(CONVERT_TO_CONST);
 		
 		if(convertToConst) {
