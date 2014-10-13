@@ -33,8 +33,8 @@ import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoringConfiguration;
-import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.DeclaratorTypeAnalyzer;
 
 public class CStringQuickFix extends BaseQuickFix {
 	@Override

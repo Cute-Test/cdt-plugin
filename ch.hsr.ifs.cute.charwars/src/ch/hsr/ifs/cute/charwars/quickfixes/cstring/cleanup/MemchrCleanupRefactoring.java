@@ -16,28 +16,27 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
-import ch.hsr.ifs.cute.charwars.constants.Algorithm;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
 
 public class MemchrCleanupRefactoring extends CleanupRefactoring {
-	public MemchrCleanupRefactoring(IASTFunctionCallExpression functionCall, IASTFunctionCallExpression searchCall, ASTRewrite rewrite) {
-		super(functionCall, searchCall, rewrite);
+	public MemchrCleanupRefactoring(IASTFunctionCallExpression functionCall, Function inFunction, Function outFunction, ASTRewrite rewrite) {
+		super(functionCall, inFunction, outFunction, rewrite);
 	}
 	
 	@Override
-	public void performNormal() {
+	protected boolean optimizedRefactoringPossible() {
+		return false;
+	}
+	
+	@Override
+	protected void performNormal() {
 		String posVarName = getPosVarName(functionCall);
-		
-		IASTExpression first = newStartIterator();
-		IASTExpression last = newEndIterator();
-		IASTFunctionCallExpression searchCall = ExtendedNodeFactory.newFunctionCallExpression(Algorithm.FIND, first, last, functionCall.getArguments()[1].copy());
-		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(Constants.AUTO, posVarName, searchCall);
-		
-		IASTExpression conditionalExpression = newMemchrConditionalExpression(posVarName, str, last);
+		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(Constants.AUTO, posVarName, newOutFunctionCall());
+		IASTExpression conditionalExpression = newMemchrConditionalExpression(posVarName);
 		if(functionCall.getParent() instanceof IASTCastExpression) {
 			conditionalExpression = ExtendedNodeFactory.newBracketedExpression(conditionalExpression);
 		}
@@ -56,8 +55,14 @@ public class MemchrCleanupRefactoring extends CleanupRefactoring {
 	}
 
 	@Override
-	public void performOptimized() { 
+	protected void performOptimized() { 
 		//not available for MemchrCleanupRefactoring 
+	}
+	
+	private IASTFunctionCallExpression newOutFunctionCall() {
+		IASTExpression first = newStartIterator();
+		IASTExpression last = newEndIterator();
+		return ExtendedNodeFactory.newFunctionCallExpression(outFunction.getName(), first, last, secondArg.copy());
 	}
 	
 	private IASTExpression newStartIterator() {
@@ -86,9 +91,9 @@ public class MemchrCleanupRefactoring extends CleanupRefactoring {
 		return last;
 	} 
 	
-	private IASTConditionalExpression newMemchrConditionalExpression(String posVarName, IASTIdExpression strNode, IASTExpression last) {
+	private IASTConditionalExpression newMemchrConditionalExpression(String posVarName) {
 		IASTIdExpression posVar = ExtendedNodeFactory.newIdExpression(posVarName);
-		IASTExpression condition = ExtendedNodeFactory.newEqualityComparison(posVar, last, false);
+		IASTExpression condition = ExtendedNodeFactory.newEqualityComparison(posVar, newEndIterator(), false);
 		IASTExpression positive = ExtendedNodeFactory.newAdressOperatorExpression(ExtendedNodeFactory.newDereferenceOperatorExpression(posVar));
 		IASTExpression negative = ExtendedNodeFactory.newIdExpression(Constants.NULLPTR);
 		return ExtendedNodeFactory.newConditionalExpression(condition, positive, negative);

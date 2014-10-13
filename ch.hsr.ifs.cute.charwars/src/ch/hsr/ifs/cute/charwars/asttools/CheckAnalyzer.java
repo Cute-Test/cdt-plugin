@@ -14,12 +14,13 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
+
 import ch.hsr.ifs.cute.charwars.constants.Function;
-import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BoolAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.LiteralAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.UEAnalyzer;
 
 public class CheckAnalyzer {
 	public static IASTStatement[] getNullCheckedStatements(IASTName name, IASTStatement[] statements) {

@@ -27,12 +27,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 import ch.hsr.ifs.cute.charwars.constants.Constants;
-import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.LiteralAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.UEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.visitors.IdExpressionsCollector;
 import ch.hsr.ifs.cute.charwars.utils.visitors.NameOccurrenceChecker;
 import ch.hsr.ifs.cute.charwars.constants.Function;

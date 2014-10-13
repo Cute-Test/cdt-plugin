@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.utils;
+package ch.hsr.ifs.cute.charwars.utils.analyzers;
 
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;

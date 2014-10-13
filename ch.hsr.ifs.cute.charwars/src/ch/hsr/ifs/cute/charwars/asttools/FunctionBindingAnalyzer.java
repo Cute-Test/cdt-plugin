@@ -24,7 +24,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMember;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 
-import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
 
 public class FunctionBindingAnalyzer {
 	public static boolean isValidOverload(ICPPFunction originalOverload, ICPPFunction possibleOverload, int strArgIndex) {

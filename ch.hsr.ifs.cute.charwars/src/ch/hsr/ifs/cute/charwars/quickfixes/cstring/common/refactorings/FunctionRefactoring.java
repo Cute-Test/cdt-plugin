@@ -10,7 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
 
 public class FunctionRefactoring extends Refactoring {
 	private Function inFunction;

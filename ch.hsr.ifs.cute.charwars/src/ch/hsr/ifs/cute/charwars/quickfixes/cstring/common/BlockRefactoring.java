@@ -24,8 +24,8 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Refactoring;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.RefactoringFactory;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
-import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BoolAnalyzer;
 
 public class BlockRefactoring  {
 	private BlockRefactoringConfiguration config;

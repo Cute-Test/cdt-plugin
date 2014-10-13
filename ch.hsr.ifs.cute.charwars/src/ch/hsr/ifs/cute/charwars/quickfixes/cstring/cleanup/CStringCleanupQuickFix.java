@@ -3,24 +3,16 @@ package ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
-import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
-import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
-import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-
-import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.constants.Algorithm;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
-import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStringCleanupQuickFix extends BaseQuickFix {
@@ -49,41 +41,28 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 	
 	@Override
 	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
-		IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)markedNode;
-		IASTInitializerClause args[] = functionCall.getArguments();
-		
-		IASTIdExpression firstArg = (IASTIdExpression)ASTAnalyzer.extractStdStringArg(args[0]);
-		IASTNode secondArg = ASTAnalyzer.extractStdStringArg(args[1]);
-		
-		Function function = getFunction(functionCall);
-		String searchFunctionName = functionMap.get(function).getName();
-		IASTFunctionCallExpression searchCall = ExtendedNodeFactory.newMemberFunctionCallExpression(firstArg.getName(), searchFunctionName, secondArg.copy());
-		IASTStatement oldStatement = ASTAnalyzer.getStatement(functionCall);
-		boolean hasPtrReturnType = !(function == Function.STRCSPN || function == Function.STRSPN);
+		IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)markedNode;		
+		Function inFunction = getInFunction(functionCall);
+		Function outFunction = getOutFunction(inFunction);
 		
 		CleanupRefactoring refactoring = null;
-		if(function == Function.MEMCHR) {
-			refactoring = new MemchrCleanupRefactoring(functionCall, searchCall, rewrite);
+		if(inFunction == Function.MEMCHR) {
+			refactoring = new MemchrCleanupRefactoring(functionCall, inFunction, outFunction, rewrite);
 		}
-		else if(hasPtrReturnType) {
-			refactoring = new PtrCleanupRefactoring(functionCall, searchCall, rewrite);
+		else if(inFunction == Function.STRCSPN || inFunction == Function.STRSPN) {
+			refactoring = new SizeCleanupRefactoring(functionCall, inFunction, outFunction, rewrite);
 		}
 		else {
-			refactoring = new SizeCleanupRefactoring(functionCall, searchCall, rewrite);
+			refactoring = new PtrCleanupRefactoring(functionCall, inFunction, outFunction, rewrite);
 		}
 		
-		if(optimizedRefactoringPossible(oldStatement, hasPtrReturnType, function)) {
-			refactoring.performOptimized();
-		}
-		else {
-			refactoring.performNormal();
-			if(function == Function.MEMCHR) {
-				headers.add(Algorithm.HEADER_NAME);
-			}
+		refactoring.perform();
+		if(inFunction == Function.MEMCHR) {
+			headers.add(Algorithm.HEADER_NAME);
 		}
 	}
 	
-	private Function getFunction(IASTFunctionCallExpression functionCall) {
+	private Function getInFunction(IASTFunctionCallExpression functionCall) {
 		IASTIdExpression functionNameExpr = (IASTIdExpression)functionCall.getFunctionNameExpression();
 		String functionName = functionNameExpr.getName().toString().replaceFirst("^" + Constants.STD_PREFIX, "");
 		
@@ -95,13 +74,7 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		return null;
 	}
 	
-	private boolean optimizedRefactoringPossible(IASTStatement statement, boolean ptrReturnType, Function function) {
-		if(!(statement instanceof IASTDeclarationStatement) || function == Function.MEMCHR) 
-			return false;
-		IASTName varName = ((IASTSimpleDeclaration)((IASTDeclarationStatement)statement).getDeclaration()).getDeclarators()[0].getName();
-		IASTNode block = ASTAnalyzer.getEnclosingBlock(statement);
-		OptimizationCheckerVisitor visitor = new OptimizationCheckerVisitor(varName, ptrReturnType);
-		block.accept(visitor);
-		return visitor.isOptimizationPossible();
+	private Function getOutFunction(Function inFunction) {
+		return functionMap.get(inFunction);
 	}
 }

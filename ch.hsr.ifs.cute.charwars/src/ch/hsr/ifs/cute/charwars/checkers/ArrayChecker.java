@@ -7,7 +7,7 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 
 import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
-import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.DeclaratorTypeAnalyzer;
 
 public class ArrayChecker extends BaseChecker {
 	public ArrayChecker() {

@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
@@ -23,14 +24,14 @@ import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoringConfig
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 
 public class PtrCleanupRefactoring extends CleanupRefactoring {
-	public PtrCleanupRefactoring(IASTFunctionCallExpression functionCall, IASTFunctionCallExpression searchCall, ASTRewrite rewrite) {
-		super(functionCall, searchCall, rewrite);
+	public PtrCleanupRefactoring(IASTFunctionCallExpression functionCall, Function inFunction, Function outFunction, ASTRewrite rewrite) {
+		super(functionCall, inFunction, outFunction, rewrite);
 	}
 		
 	@Override
-	public void performOptimized() {
+	protected void performOptimized() {
 		String posVarName = getPosVarName(functionCall);
-		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, posVarName, searchCall);
+		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, posVarName, newOutFunctionCall());
 		IASTNode block = ASTAnalyzer.getEnclosingBlock(oldStatement);
 		IASTName varName = ((IASTDeclarator)functionCall.getParent().getParent()).getName();
 		
@@ -50,10 +51,10 @@ public class PtrCleanupRefactoring extends CleanupRefactoring {
 	}
 	
 	@Override
-	public void performNormal() {
+	protected void performNormal() {
 		String posVarName = getPosVarName(functionCall);
-		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, posVarName, searchCall);
-		IASTConditionalExpression conditionalExpression = newConditionalExpression(posVarName, str);
+		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, posVarName, newOutFunctionCall());
+		IASTConditionalExpression conditionalExpression = newConditionalExpression(posVarName);
 		
 		if(oldStatement.getParent() instanceof IASTIfStatement) {
 			IASTStatement oldStatementCopy = oldStatement.copy();
@@ -68,11 +69,16 @@ public class PtrCleanupRefactoring extends CleanupRefactoring {
 		}
 	}
 	
-	private IASTConditionalExpression newConditionalExpression(String posVarName, IASTIdExpression strNode) {
+	private IASTConditionalExpression newConditionalExpression(String posVarName) {
 		IASTIdExpression posVar = ExtendedNodeFactory.newIdExpression(posVarName);
 		IASTExpression condition = ExtendedNodeFactory.newEqualityComparison(posVar, ExtendedNodeFactory.newNposExpression(StringType.STRING), false);
-		IASTExpression positive = ExtendedNodeFactory.newAdressOperatorExpression(ExtendedNodeFactory.newArraySubscriptExpression(strNode.copy(), posVar));
+		IASTExpression positive = ExtendedNodeFactory.newAdressOperatorExpression(ExtendedNodeFactory.newArraySubscriptExpression(str.copy(), posVar));
 		IASTExpression negative = ExtendedNodeFactory.newIdExpression(Constants.NULLPTR);
 		return ExtendedNodeFactory.newConditionalExpression(condition, positive, negative);
+	}
+	
+	private IASTFunctionCallExpression newOutFunctionCall() {
+		String outFunctionName = outFunction.getName();
+		return ExtendedNodeFactory.newMemberFunctionCallExpression(str.getName(), outFunctionName, secondArg.copy());
 	}
 }

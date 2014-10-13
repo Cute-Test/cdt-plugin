@@ -13,8 +13,8 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
-import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.DeclaratorTypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
 
 public class CStringParameterChecker extends BaseChecker {
 	public CStringParameterChecker() {

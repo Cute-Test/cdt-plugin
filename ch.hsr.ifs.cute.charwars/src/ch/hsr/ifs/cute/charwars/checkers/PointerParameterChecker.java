@@ -6,7 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
-import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.DeclaratorTypeAnalyzer;
 
 public class PointerParameterChecker extends BaseChecker {
 	public PointerParameterChecker() {

@@ -12,7 +12,7 @@ import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
 
 public class DefaultRefactoring extends Refactoring {
 	private static final String CONVERT_TO_CONST = "CONVERT_TO_CONST";

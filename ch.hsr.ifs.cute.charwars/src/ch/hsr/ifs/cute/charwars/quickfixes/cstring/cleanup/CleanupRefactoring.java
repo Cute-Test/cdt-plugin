@@ -10,6 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
@@ -18,25 +19,54 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.DeclaratorAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.constants.Function;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 
 public abstract class CleanupRefactoring {
 	protected IASTStatement oldStatement;
 	protected IASTFunctionCallExpression functionCall;
-	protected IASTFunctionCallExpression searchCall;
+	protected Function inFunction;
+	protected Function outFunction;
 	protected ASTRewrite rewrite;
 	protected IASTIdExpression str;
+	protected IASTNode secondArg;
 	
-	public CleanupRefactoring(IASTFunctionCallExpression functionCall, IASTFunctionCallExpression searchCall, ASTRewrite rewrite) {
+	public CleanupRefactoring(IASTFunctionCallExpression functionCall, Function inFunction, Function outFunction, ASTRewrite rewrite) {
 		this.oldStatement = ASTAnalyzer.getStatement(functionCall);
 		this.functionCall = functionCall;
-		this.searchCall = searchCall;
+		this.inFunction = inFunction;
+		this.outFunction = outFunction;
 		this.rewrite = rewrite;
 		this.str = (IASTIdExpression)ASTAnalyzer.extractStdStringArg(functionCall.getArguments()[0]);
+		this.secondArg = ASTAnalyzer.extractStdStringArg(functionCall.getArguments()[1]);
 	}
 	
-	public abstract void performNormal();
-	public abstract void performOptimized();
+	public void perform() {
+		if(optimizedRefactoringPossible()) {
+			performOptimized();
+		}
+		else {
+			performNormal();
+		}	
+	}
+	
+	protected boolean optimizedRefactoringPossible() {
+		IASTStatement oldStatement = ASTAnalyzer.getStatement(functionCall);
+		if(!(oldStatement instanceof IASTDeclarationStatement)) {
+			return false;
+		}
+		IASTDeclarationStatement declarationStatement = (IASTDeclarationStatement)oldStatement;
+		IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration)declarationStatement.getDeclaration();
+		IASTName varName = simpleDeclaration.getDeclarators()[0].getName();
+		boolean hasPtrReturnType = !(inFunction == Function.STRCSPN || inFunction == Function.STRSPN);
+		IASTNode block = ASTAnalyzer.getEnclosingBlock(declarationStatement);
+		OptimizationCheckerVisitor visitor = new OptimizationCheckerVisitor(varName, hasPtrReturnType);
+		block.accept(visitor);
+		return visitor.isOptimizationPossible();
+	}
+	
+	protected abstract void performNormal();
+	protected abstract void performOptimized();
 	
 	protected String getResultVarName(IASTFunctionCallExpression functionCall) {
 		IASTNode cn = functionCall;

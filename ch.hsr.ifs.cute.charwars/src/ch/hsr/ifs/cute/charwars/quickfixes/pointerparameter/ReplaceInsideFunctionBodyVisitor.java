@@ -12,7 +12,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.UEAnalyzer;
 
 public class ReplaceInsideFunctionBodyVisitor extends ASTVisitor  {
 	private ASTRewrite rewrite;

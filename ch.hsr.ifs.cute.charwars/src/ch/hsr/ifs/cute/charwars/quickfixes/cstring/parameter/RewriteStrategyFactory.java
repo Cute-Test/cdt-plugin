@@ -17,7 +17,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 
 public class RewriteStrategyFactory {
 	public static RewriteStrategy createRewriteStrategy(ICPPASTParameterDeclaration strParameter, ASTRewrite rewrite) {

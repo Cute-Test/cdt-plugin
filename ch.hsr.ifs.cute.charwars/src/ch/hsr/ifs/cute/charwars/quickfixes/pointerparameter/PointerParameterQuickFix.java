@@ -26,8 +26,8 @@ import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.UEAnalyzer;
 
 public class PointerParameterQuickFix extends BaseQuickFix {
 	@Override

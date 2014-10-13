@@ -23,7 +23,7 @@ import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.constants.StdArray;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.LiteralAnalyzer;
 
 public class ArrayQuickFix extends BaseQuickFix {	
 	@Override

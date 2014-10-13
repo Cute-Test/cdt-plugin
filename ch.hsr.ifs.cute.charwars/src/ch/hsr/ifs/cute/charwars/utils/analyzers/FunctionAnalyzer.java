@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.utils;
+package ch.hsr.ifs.cute.charwars.utils.analyzers;
 
 import java.util.Arrays;
 

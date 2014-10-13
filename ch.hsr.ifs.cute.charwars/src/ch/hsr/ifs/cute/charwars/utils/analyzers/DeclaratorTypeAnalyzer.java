@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.utils;
+package ch.hsr.ifs.cute.charwars.utils.analyzers;
 
 import org.eclipse.cdt.core.dom.ast.IASTArrayDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;

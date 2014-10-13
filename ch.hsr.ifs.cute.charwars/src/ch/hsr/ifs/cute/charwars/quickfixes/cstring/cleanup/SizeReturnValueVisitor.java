@@ -10,8 +10,8 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
-import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 
 public class SizeReturnValueVisitor extends ASTVisitor {
 	private IASTName name;

@@ -10,9 +10,9 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
-import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BoolAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
 
 public class OperatorRefactoring extends Refactoring {
 	private Function inFunction;

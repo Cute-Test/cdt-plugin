@@ -8,9 +8,9 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
-import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
 
 public class NullRefactoring extends Refactoring {
 	public NullRefactoring(ContextState... contextStates) {

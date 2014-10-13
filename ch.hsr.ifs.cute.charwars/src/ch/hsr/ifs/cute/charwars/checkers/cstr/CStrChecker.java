@@ -15,7 +15,7 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.checkers.BaseChecker;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
-import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 
 public class CStrChecker extends BaseChecker {
 	public CStrChecker() {

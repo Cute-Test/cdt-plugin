@@ -11,11 +11,11 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
-import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.BoolAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
-import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.BoolAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.LiteralAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.UEAnalyzer;
 
 public class ExpressionRefactoring extends Refactoring {
 	private enum Transformation {

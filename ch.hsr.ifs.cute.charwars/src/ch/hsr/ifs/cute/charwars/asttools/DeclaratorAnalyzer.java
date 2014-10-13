@@ -11,10 +11,10 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
-import ch.hsr.ifs.cute.charwars.utils.DeclaratorTypeAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
-import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.DeclaratorTypeAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.LiteralAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
 
 public class DeclaratorAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
