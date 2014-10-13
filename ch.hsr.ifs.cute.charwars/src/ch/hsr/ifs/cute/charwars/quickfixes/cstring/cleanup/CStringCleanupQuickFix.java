@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
@@ -47,12 +48,12 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 	}
 	
 	@Override
-	protected void handleMarkedNode(IASTNode markedNode, ASTRewriteCache rewriteCache) {
+	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
 		IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)markedNode;
-		ASTRewrite rewrite = getRewrite(rewriteCache, functionCall);
+		IASTInitializerClause args[] = functionCall.getArguments();
 		
-		IASTIdExpression firstArg = (IASTIdExpression)ASTAnalyzer.extractStdStringArg(functionCall.getArguments()[0]);
-		IASTNode secondArg = ASTAnalyzer.extractStdStringArg(functionCall.getArguments()[1]);
+		IASTIdExpression firstArg = (IASTIdExpression)ASTAnalyzer.extractStdStringArg(args[0]);
+		IASTNode secondArg = ASTAnalyzer.extractStdStringArg(args[1]);
 		
 		Function function = getFunction(functionCall);
 		String searchFunctionName = functionMap.get(function).getName();

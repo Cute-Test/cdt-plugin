@@ -45,7 +45,8 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 			if(markedNode instanceof IASTName) {
 				markedNode = markedNode.getParent();
 			}
-			handleMarkedNode(markedNode, rewriteCache);
+			
+			handleMarkedNode(markedNode, getRewrite(rewriteCache, markedNode), rewriteCache);
 			performChange(rewriteCache.getChange(), marker);
 			ASTModifier.includeHeaders(headers, astTranslationUnit, getDocument());
 		} 
@@ -70,7 +71,7 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 		return ASTAnalyzer.getMarkedNode(astTranslationUnit, start, end - start);
 	}
 	
-	protected abstract void handleMarkedNode(IASTNode markedNode, ASTRewriteCache rewriteCache);
+	protected abstract void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache);
 	protected abstract String getErrorMessage();
 	
 	private void performChange(Change change, IMarker marker) {
@@ -83,7 +84,7 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 		}
 	}
 	
-	protected ASTRewrite getRewrite(ASTRewriteCache rewriteCache, IASTNode node) {
+	private ASTRewrite getRewrite(ASTRewriteCache rewriteCache, IASTNode node) {
 		return rewriteCache.getASTRewrite(node.getTranslationUnit().getOriginatingTranslationUnit());
 	}
 }

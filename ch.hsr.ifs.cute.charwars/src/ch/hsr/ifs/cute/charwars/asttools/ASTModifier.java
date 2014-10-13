@@ -117,7 +117,7 @@ public class ASTModifier {
 			remainingOperand = BEAnalyzer.getOtherOperand(idExpression);
 		}
 		
-		ASTModifier.replaceNode(parent, remainingOperand);
+		replaceNode(parent, remainingOperand);
 		return (parent == lastNode) ? remainingOperand : lastNode;
 	}
 }

@@ -37,14 +37,13 @@ public class ArrayQuickFix extends BaseQuickFix {
 	}
 	
 	@Override
-	protected void handleMarkedNode(IASTNode markedNode, ASTRewriteCache rewriteCache) {
+	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
 		IASTDeclarator oldDeclarator = (IASTDeclarator)markedNode;
 		IASTNode block =  ASTAnalyzer.getEnclosingBlock(oldDeclarator);
 		boolean isGlobal = (block == oldDeclarator.getTranslationUnit());
 		IASTSimpleDeclaration oldDeclaration = (IASTSimpleDeclaration)oldDeclarator.getParent();
 		IASTDeclarationStatement oldDeclarationStatement = isGlobal ? null : (IASTDeclarationStatement)oldDeclaration.getParent();
 		IASTNode beforeNode = isGlobal ? oldDeclaration : oldDeclarationStatement;
-		ASTRewrite rewrite = getRewrite(rewriteCache, markedNode);
 
 		for(IASTDeclarator declarator : oldDeclaration.getDeclarators()) {
 			insertNewDeclarationStatementFromDeclarator(declarator, beforeNode, declarator.equals(oldDeclarator), block, rewrite);

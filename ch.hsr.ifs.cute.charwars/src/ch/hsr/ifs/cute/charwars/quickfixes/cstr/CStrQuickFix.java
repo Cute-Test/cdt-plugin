@@ -24,10 +24,9 @@ public class CStrQuickFix extends BaseQuickFix {
 	}
 	
 	@Override
-	protected void handleMarkedNode(IASTNode markedNode, ASTRewriteCache rewriteCache) {
+	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
 		IASTFunctionCallExpression cStrCall = (IASTFunctionCallExpression)markedNode;
 		IASTNode stdString = ASTAnalyzer.extractStdStringArg(cStrCall);
-		ASTRewrite rewrite = getRewrite(rewriteCache, markedNode);
 		ASTModifier.replace(cStrCall, stdString, rewrite);
 	}
 }

@@ -41,7 +41,7 @@ public class PointerParameterQuickFix extends BaseQuickFix {
 	}
 	
 	@Override
-	protected void handleMarkedNode(IASTNode markedNode, ASTRewriteCache rewriteCache) {
+	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
 		IASTDeclarator paramDeclarator = (IASTDeclarator)markedNode;
 		ICPPASTParameterDeclaration parameterDeclaration = (ICPPASTParameterDeclaration)paramDeclarator.getParent();
 		final int paramIndex = FunctionAnalyzer.getParameterIndex(parameterDeclaration);

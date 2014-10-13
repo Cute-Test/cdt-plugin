@@ -15,6 +15,7 @@ import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTPointer;
+import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
@@ -54,7 +55,7 @@ public class CStringQuickFix extends BaseQuickFix {
 	}
 	
 	@Override
-	protected void handleMarkedNode(IASTNode markedNode, ASTRewriteCache rewriteCache) {
+	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
 		IASTDeclarator oldDeclarator = (IASTDeclarator)markedNode;
 		IASTNode block =  ASTAnalyzer.getEnclosingBlock(oldDeclarator);
 		boolean isNotNested = (block == oldDeclarator.getTranslationUnit() || 
@@ -63,7 +64,6 @@ public class CStringQuickFix extends BaseQuickFix {
 		IASTSimpleDeclaration oldDeclaration = (IASTSimpleDeclaration)oldDeclarator.getParent();
 		IASTDeclarationStatement oldDeclarationStatement = isNotNested ? null : (IASTDeclarationStatement)oldDeclaration.getParent();
 		IASTNode beforeNode = isNotNested ? oldDeclaration : oldDeclarationStatement;
-		ASTRewrite rewrite = getRewrite(rewriteCache, markedNode);
 		
 		for(IASTDeclarator declarator : oldDeclaration.getDeclarators()) {
 			insertNewDeclarationStatementFromDeclarator(declarator, beforeNode, declarator.equals(oldDeclarator), block, rewrite);
@@ -144,8 +144,9 @@ public class CStringQuickFix extends BaseQuickFix {
 	private IASTDeclSpecifier newRefactoredDeclSpecifier(IASTSimpleDeclSpecifier oldDeclSpecifier, IASTDeclarator oldDeclarator) {
 		IASTDeclSpecifier newDeclSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(DeclaratorAnalyzer.getStringReplacementType(oldDeclarator));
 		newDeclSpecifier.setStorageClass(oldDeclSpecifier.getStorageClass());
-		if(oldDeclarator.getPointerOperators().length > 0) {
-			IASTPointer pointer = (IASTPointer) oldDeclarator.getPointerOperators()[0];
+		IASTPointerOperator pointerOperators[] = oldDeclarator.getPointerOperators();
+		if(pointerOperators.length > 0) {
+			IASTPointer pointer = (IASTPointer)pointerOperators[0];
 			newDeclSpecifier.setConst(pointer.isConst() && oldDeclSpecifier.isConst());
 		}
 		newDeclSpecifier.setVolatile(oldDeclSpecifier.isVolatile());

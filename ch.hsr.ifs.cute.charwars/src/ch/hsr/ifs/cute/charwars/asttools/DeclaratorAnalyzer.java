@@ -23,21 +23,19 @@ public class DeclaratorAnalyzer {
 	}
 	
 	public static boolean isCStringAlias(IASTDeclarator declarator) {
-		boolean hasCStringType = DeclaratorTypeAnalyzer.hasCStringType(declarator); 
+		boolean hasCStringType = DeclaratorTypeAnalyzer.hasCStringType(declarator);
 		return hasCStringType && hasCStringAssignment(declarator);
 	}
 	
-	public static boolean hasCStringAssignment(IASTDeclarator declarator) {
-		IASTInitializer initializer = declarator.getInitializer();
-		if(initializer instanceof IASTEqualsInitializer) {
-			IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
-			IASTInitializerClause initializerClause = equalsInitializer.getInitializerClause();
+	private static boolean hasCStringAssignment(IASTDeclarator declarator) {
+		IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		if(initializerClause != null) {
 			boolean isConversionToCharPointer = ASTAnalyzer.isConversionToCharPointer(initializerClause, true);
 			if(isConversionToCharPointer) {
 				IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)initializerClause;
 				IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
 				IASTExpression fieldOwner = fieldReference.getFieldOwner();
-				return TypeAnalyzer.isStdStringType(((IASTExpression)fieldOwner).getExpressionType());
+				return TypeAnalyzer.isStdStringType(fieldOwner.getExpressionType());
 			}
 		}
 		return false;
@@ -55,7 +53,7 @@ public class DeclaratorAnalyzer {
 	
 	public static IASTInitializerClause getInitializerClause(IASTDeclarator declarator) {
 		IASTInitializer initializer = declarator.getInitializer();
-		if(initializer != null && initializer instanceof IASTEqualsInitializer) {
+		if(initializer instanceof IASTEqualsInitializer) {
 			IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
 			return equalsInitializer.getInitializerClause();
 		}

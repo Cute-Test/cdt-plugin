@@ -1,27 +1,27 @@
-package ch.hsr.ifs.cute.charwars.asttools;
+package ch.hsr.ifs.cute.charwars.utils.visitors;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 
-public class FindIdExpressionsVisitor extends ASTVisitor {
+public class NameOccurrenceChecker extends ASTVisitor {
 	private String name;
-	private boolean foundIdExpression;
+	private boolean nameOccurred;
 	
-	public FindIdExpressionsVisitor(String name) {
+	public NameOccurrenceChecker(String name) {
 		this.shouldVisitExpressions = true;
 		this.shouldVisitDeclarators = true;
 		this.name = name;
-		this.foundIdExpression = false;
+		this.nameOccurred = false;
 	}
 
 	@Override
-	public int leave(IASTExpression expression) {
+	public int visit(IASTExpression expression) {
 		if(expression instanceof IASTIdExpression) {
 			IASTIdExpression idExpression = (IASTIdExpression)expression;
 			if(idExpression.getName().toString().equals(name)) {
-				foundIdExpression = true;
+				nameOccurred = true;
 				return PROCESS_ABORT;
 			}
 		}
@@ -29,15 +29,15 @@ public class FindIdExpressionsVisitor extends ASTVisitor {
 	}
 	
 	@Override
-	public int leave(IASTDeclarator declarator) {
+	public int visit(IASTDeclarator declarator) {
 		if(declarator.getName().toString().equals(name)) {
-			foundIdExpression = true;
+			nameOccurred = true;
 			return PROCESS_ABORT;
 		}
 		return PROCESS_CONTINUE;
 	}
 	
-	public boolean hasFoundIdExpression() {
-		return foundIdExpression;
+	public boolean hasNameOccurred() {
+		return nameOccurred;
 	}
 }

@@ -23,12 +23,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
-import ch.hsr.ifs.cute.charwars.asttools.FindIdExpressionsVisitor;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.visitors.NameOccurrenceChecker;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class ASTAnalyzer {
@@ -137,9 +137,9 @@ public class ASTAnalyzer {
 			}
 		}
 		
-		FindIdExpressionsVisitor visitor = new FindIdExpressionsVisitor(name);
+		NameOccurrenceChecker visitor = new NameOccurrenceChecker(name);
 		block.accept(visitor);
-		return !visitor.hasFoundIdExpression();
+		return !visitor.hasNameOccurred();
 	}
 	
 	public static IASTNode extractStdStringArg(IASTNode node) {
