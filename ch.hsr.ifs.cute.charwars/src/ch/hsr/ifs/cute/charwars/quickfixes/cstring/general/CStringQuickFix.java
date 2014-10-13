@@ -7,10 +7,10 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
-import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
+import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -76,9 +76,8 @@ public class CStringQuickFix extends BaseQuickFix {
 		boolean isAlias = (getProblemId(currentMarker).equals(ProblemIDs.C_STRING_ALIAS_PROBLEM));
 		
 		if(isAlias) {
-			IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)DeclaratorAnalyzer.getInitializerClause(oldDeclarator);
-			IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
-			IASTIdExpression idExpression = (IASTIdExpression)fieldReference.getFieldOwner();
+			IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(oldDeclarator);
+			IASTIdExpression idExpression = ASTAnalyzer.getStdStringIdExpression((IASTExpression)initializerClause);
 			strName = idExpression.getName();
 		}
 		else {
@@ -137,7 +136,10 @@ public class CStringQuickFix extends BaseQuickFix {
 		}
 		else {
 			String name = declarator.getName().toString();
-			return ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, name, ExtendedNodeFactory.newIntegerLiteral(0));
+			IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(declarator);
+			IASTExpression existingOffset = ASTAnalyzer.extractPointerOffset((IASTExpression)initializerClause);
+			IASTExpression offset = (existingOffset != null) ? existingOffset : ExtendedNodeFactory.newIntegerLiteral(0);
+			return ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, name, offset);
 		}
 	}
 	

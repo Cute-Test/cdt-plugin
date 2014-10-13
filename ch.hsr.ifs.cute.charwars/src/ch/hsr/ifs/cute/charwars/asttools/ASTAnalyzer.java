@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cute.charwars.asttools;
 
+import java.util.List;
+
 import org.eclipse.cdt.core.dom.ast.IASTArraySubscriptExpression;
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
@@ -14,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
@@ -25,9 +28,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.utils.BEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.LiteralAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.TypeAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.UEAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.visitors.IdExpressionsCollector;
 import ch.hsr.ifs.cute.charwars.utils.visitors.NameOccurrenceChecker;
 import ch.hsr.ifs.cute.charwars.constants.Function;
 
@@ -250,5 +256,64 @@ public class ASTAnalyzer {
 	
 	public static boolean isSameName(IASTName name1, IASTName name2) {
 		return name1.resolveBinding().equals(name2.resolveBinding());
+	}
+	
+	public static boolean isOffsettedCString(IASTExpression expr) {
+		IASTIdExpression idExpression = getStdStringIdExpression(expr);
+		if(idExpression == null) return false;
+		
+		IASTNode cstrCall = idExpression.getParent().getParent();
+		boolean isCstrCall = isConversionToCharPointer(cstrCall, true);
+		
+		IASTNode currentNode = cstrCall;
+		while(currentNode != expr) {
+			currentNode = currentNode.getParent();
+			if(!BEAnalyzer.isAddition(currentNode) && !BEAnalyzer.isSubtraction(currentNode) && !UEAnalyzer.isBracketExpression(currentNode)) {
+				return false;
+			}
+		}
+		return isCstrCall;
+	}
+	
+	public static IASTIdExpression getStdStringIdExpression(IASTExpression expr) {
+		IdExpressionsCollector collector = new IdExpressionsCollector();
+		expr.accept(collector);
+		List<IASTIdExpression> idExpressions = collector.getIdExpressions();
+		if(idExpressions.size() == 1) {
+			IASTIdExpression idExpression = idExpressions.get(0);
+			IASTIdExpression originalIdExpression = (IASTIdExpression)idExpression.getOriginalNode();
+			boolean isStdStringType = TypeAnalyzer.isStdStringType(originalIdExpression.getExpressionType());
+			if(isStdStringType) return idExpression;
+		}
+		return null;
+	}
+	
+	public static IASTExpression extractPointerOffset(IASTExpression expr) {
+		IASTExpression offset = expr.copy(CopyStyle.withLocations);
+		IASTIdExpression idExpression = getStdStringIdExpression(offset);
+		if(idExpression == null || idExpression == offset) {
+			return null;
+		}
+		
+		IASTNode cstrCall = idExpression.getParent().getParent();
+		IASTNode parent = cstrCall.getParent();
+		IASTExpression remainingOperand;
+		if(BEAnalyzer.isSubtraction(parent) && BEAnalyzer.isOp1(cstrCall)) {
+			remainingOperand = ExtendedNodeFactory.newNegatedExpression(BEAnalyzer.getOperand2(parent));
+		}
+		else if(parent instanceof IASTBinaryExpression)  {
+			remainingOperand = BEAnalyzer.getOtherOperand(cstrCall);
+		}
+		else {
+			return null;
+		}
+		
+		if(parent == offset) {
+			return remainingOperand;
+		}
+		else {
+			ASTModifier.replaceNode(parent, remainingOperand);
+			return offset;
+		}
 	}
 }

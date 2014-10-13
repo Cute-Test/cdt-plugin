@@ -67,12 +67,13 @@ public class BlockRefactoring  {
 				IASTStatement firstAffectedStatement = ASTAnalyzer.getTopLevelParentStatement(statement);
 				if(firstAffectedStatement == null) break;
 
-				config.setNewVarNameString(varNameString + "_pos");
+				String newVarNameString = varNameString + "_pos";
+				config.setNewVarNameString(newVarNameString);
 				IASTLiteralExpression zeroLiteral = ExtendedNodeFactory.newIntegerLiteral(0);
 				
-				IASTDeclarationStatement offsetVarDeclaration = ExtendedNodeFactory.newDeclarationStatement(stringType.getSizeType(), config.getNewVarNameString(), zeroLiteral);
+				IASTDeclarationStatement offsetVarDeclaration = ExtendedNodeFactory.newDeclarationStatement(stringType.getSizeType(), newVarNameString, zeroLiteral);
 				ASTModifier.insertBefore(firstAffectedStatement.getParent(), firstAffectedStatement, offsetVarDeclaration, config.getASTRewrite());
-				return new Context(ContextState.CStringModified, varNameString, config.getNewVarNameString(), firstAffectedStatement, stringType);
+				return new Context(ContextState.CStringModified, varNameString, newVarNameString, firstAffectedStatement, stringType);
 			}
 		}
 		return new Context(ContextState.CString, varNameString, null, null, stringType);

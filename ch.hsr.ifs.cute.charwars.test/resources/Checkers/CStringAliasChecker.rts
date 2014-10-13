@@ -1,4 +1,4 @@
-//!CStringAlias
+//!CStringAliasChecker1
 //@.config
 markerPositions=4
 //@main.cpp
@@ -6,9 +6,24 @@ markerPositions=4
 int main() {
 	std::string str = "Testtexte";
 	const char* ptr = str.c_str();
-	
-	while((ptr = strchr(ptr, 'e')) != NULL) {
-		std::cout << (ptr - str.c_str()) << std::endl;
-		ptr++;
-	}
+}
+
+//!CStringAliasChecker2
+//@.config
+markerPositions=4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Testtexte";
+	const char* ptr = str.c_str() + 5;
+}
+
+//!CStringAliasChecker3
+//@.config
+markerPositions=4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Testtexte";
+	const char* ptr = 5 + str.c_str();
 }

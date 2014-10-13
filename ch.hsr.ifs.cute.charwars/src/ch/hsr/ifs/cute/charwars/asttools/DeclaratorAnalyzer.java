@@ -24,7 +24,7 @@ public class DeclaratorAnalyzer {
 	
 	public static boolean isCStringAlias(IASTDeclarator declarator) {
 		boolean hasCStringType = DeclaratorTypeAnalyzer.hasCStringType(declarator);
-		return hasCStringType && hasCStringAssignment(declarator);
+		return hasCStringType && (hasCStringAssignment(declarator) || hasOffsettedCStringAssignment(declarator));
 	}
 	
 	private static boolean hasCStringAssignment(IASTDeclarator declarator) {
@@ -37,6 +37,15 @@ public class DeclaratorAnalyzer {
 				IASTExpression fieldOwner = fieldReference.getFieldOwner();
 				return TypeAnalyzer.isStdStringType(fieldOwner.getExpressionType());
 			}
+		}
+		return false;
+	}
+	
+	private static boolean hasOffsettedCStringAssignment(IASTDeclarator declarator) {
+		IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		if(initializerClause instanceof IASTExpression) {
+			IASTExpression expr = (IASTExpression)initializerClause;
+			return ASTAnalyzer.isOffsettedCString(expr);
 		}
 		return false;
 	}

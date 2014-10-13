@@ -1,4 +1,4 @@
-//!CStringAlias1
+//!CStringAliasQuickfix1
 //@main.cpp
 #include "string.h"
 int main() {
@@ -23,7 +23,7 @@ int main() {
 	}
 }
 
-//!CStringAlias2
+//!CStringAliasQuickfix2
 //@main.cpp
 #include "string.h"
 int main() {
@@ -49,7 +49,7 @@ int main() {
 }
 
 
-//!CStringAlias3
+//!CStringAliasQuickfix3
 //@main.cpp
 #include "string.h"
 int main() {
@@ -75,7 +75,7 @@ int main() {
 }
 
 
-//!CStringAlias4
+//!CStringAliasQuickfix4
 //@main.cpp
 #include "string.h"
 int main() {
@@ -97,7 +97,7 @@ int main() {
 }
 
 
-//!CStringAlias5
+//!CStringAliasQuickfix5
 //@main.cpp
 #include "string.h"
 int main() {
@@ -117,7 +117,7 @@ int main() {
 }
 
 
-//!CStringAlias6
+//!CStringAliasQuickfix6
 //@main.cpp
 #include "string.h"
 int main() {
@@ -137,7 +137,7 @@ int main() {
 }
 
 
-//!CStringAlias7
+//!CStringAliasQuickfix7
 //@main.cpp
 #include "string.h"
 int main() {
@@ -157,7 +157,7 @@ int main() {
 }
 
 
-//!CStringAlias8
+//!CStringAliasQuickfix8
 //@main.cpp
 #include "string.h"
 int main() {
@@ -181,7 +181,7 @@ int main() {
 }
 
 
-//!CStringAlias9
+//!CStringAliasQuickfix9
 //@main.cpp
 #include "string.h"
 int main() {
@@ -205,7 +205,7 @@ int main() {
 }
 
 
-//!CStringAlias10
+//!CStringAliasQuickfix10
 //@main.cpp
 #include "string.h"
 int main() {
@@ -223,6 +223,54 @@ int main() {
 	std::string str = "Garagenanlage";
 	std::string::size_type ptr = 0;
 	while ((ptr = str.find('a', ptr)) != std::string::npos) {
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+
+//!CStringAliasQuickfix11
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string url = "http://www.google.ch";
+	const char* ptr = url.c_str() + 7;
+	while ((ptr = strpbrk(ptr, "aeiou"))) {
+		std::cout << (ptr - url.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string url = "http://www.google.ch";
+	std::string::size_type ptr = 7;
+	while ((ptr = url.find_first_of("aeiou", ptr)) != std::string::npos) {
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+
+//!CStringAliasQuickfix12
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string url = "http://www.google.ch";
+	const char* ptr = 7 + url.c_str();
+	while ((ptr = strpbrk(ptr, "aeiou"))) {
+		std::cout << (ptr - url.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string url = "http://www.google.ch";
+	std::string::size_type ptr = 7;
+	while ((ptr = url.find_first_of("aeiou", ptr)) != std::string::npos) {
 		std::cout << ptr << std::endl;
 		ptr++;
 	}
