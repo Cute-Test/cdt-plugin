@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import java.util.EnumSet;
+
 import org.eclipse.cdt.core.dom.ast.IASTArraySubscriptExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -10,7 +12,7 @@ import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.Kind;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BoolAnalyzer;
@@ -31,8 +33,8 @@ public class ExpressionRefactoring extends Refactoring {
 	
 	private static final String TRANSFORMATION = "TRANSFORMATION";
 	
-	public ExpressionRefactoring(ContextState... contextStates) {
-		setContextStates(contextStates);
+	public ExpressionRefactoring(EnumSet<Kind> contextKinds) {
+		setContextKinds(contextKinds);
 	}
 	
 	private void makeApplicable(IASTNode nodeToReplace, Transformation transformation) {
@@ -87,7 +89,7 @@ public class ExpressionRefactoring extends Refactoring {
 			//str[1] -> str[str_pos + 1]
 			makeApplicable(idExpression.getParent(), Transformation.ARRAY_SUBSCRIPTION);
 		}
-		else if(context.getContextState() == ContextState.CStringAlias && ASTAnalyzer.isIndexCalculation(idExpression)) {
+		else if(context.getKind() == Kind.Alias && ASTAnalyzer.isIndexCalculation(idExpression)) {
 			//ptr - str -> ptr
 			IASTNode nodeToReplace = idExpression.getParent();
 			if(UEAnalyzer.isBracketExpression(nodeToReplace.getParent())) {
@@ -95,7 +97,7 @@ public class ExpressionRefactoring extends Refactoring {
 			}
 			makeApplicable(nodeToReplace, Transformation.INDEX_CALCULATION);
 		}
-		else if(context.getContextState() == ContextState.CStringAlias && !ASTAnalyzer.isLValueInAssignment(idExpression) && (CheckAnalyzer.isNodeComparedToNull(idExpression) || CheckAnalyzer.isNodeComparedToStrlen(idExpression))) {
+		else if(context.getKind() == Kind.Alias && !ASTAnalyzer.isLValueInAssignment(idExpression) && (CheckAnalyzer.isNodeComparedToNull(idExpression) || CheckAnalyzer.isNodeComparedToStrlen(idExpression))) {
 			makeApplicable(BoolAnalyzer.getEnclosingBoolean(idExpression), Transformation.ALIAS_COMPARISON);
 		}
 	}

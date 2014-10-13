@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import java.util.EnumSet;
+
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -9,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.Function;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.Kind;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BoolAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
@@ -18,10 +20,10 @@ public class OperatorRefactoring extends Refactoring {
 	private Function inFunction;
 	private Function outFunction;
 	
-	public OperatorRefactoring(Function inFunction, Function outFunction, ContextState... contextStates) {
+	public OperatorRefactoring(Function inFunction, Function outFunction, EnumSet<Kind> contextKinds) {
 		this.inFunction = inFunction;
 		this.outFunction = outFunction;
-		setContextStates(contextStates);
+		setContextKinds(contextKinds);
 	}
 	
 	@Override

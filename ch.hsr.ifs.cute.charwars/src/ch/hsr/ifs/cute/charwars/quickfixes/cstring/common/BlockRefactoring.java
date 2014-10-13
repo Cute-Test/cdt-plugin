@@ -21,9 +21,9 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.Kind;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Refactoring;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.RefactoringFactory;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BoolAnalyzer;
 
@@ -58,7 +58,7 @@ public class BlockRefactoring  {
 		String varNameString = config.getVarName().toString();
 		
 		if(config.isAlias()) {
-			return new Context(ContextState.CStringAlias, strNameString, config.getNewVarNameString(), null, stringType);
+			return new Context(Kind.Alias, strNameString, config.getNewVarNameString(), null, stringType);
 		}
 		
 		for(IASTStatement statement : allStatements) {
@@ -73,10 +73,10 @@ public class BlockRefactoring  {
 				
 				IASTDeclarationStatement offsetVarDeclaration = ExtendedNodeFactory.newDeclarationStatement(stringType.getSizeType(), newVarNameString, zeroLiteral);
 				ASTModifier.insertBefore(firstAffectedStatement.getParent(), firstAffectedStatement, offsetVarDeclaration, config.getASTRewrite());
-				return new Context(ContextState.CStringModified, varNameString, newVarNameString, firstAffectedStatement, stringType);
+				return new Context(Kind.Modified, varNameString, newVarNameString, firstAffectedStatement, stringType);
 			}
 		}
-		return new Context(ContextState.CString, varNameString, null, null, stringType);
+		return new Context(Kind.Normal, varNameString, null, null, stringType);
 	}
 	
 	private boolean modifiesCharPointer(IASTStatement statement) {

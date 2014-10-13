@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import java.util.EnumSet;
+
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -10,15 +12,15 @@ import org.eclipse.cdt.core.dom.ast.IType;
 
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.Kind;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
 
 public class DefaultRefactoring extends Refactoring {
 	private static final String CONVERT_TO_CONST = "CONVERT_TO_CONST";
 	
-	public DefaultRefactoring(ContextState... contextStates) {
-		setContextStates(contextStates);
+	public DefaultRefactoring(EnumSet<Kind> contextKinds) {
+		setContextKinds(contextKinds);
 	}
 	
 	private void makeApplicable(IASTNode nodeToReplace, boolean convertToConst) {

@@ -1,27 +1,26 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.Kind;
 
 public abstract class Refactoring {
 	protected Map<String, Object> config = new HashMap<String, Object>();
 	protected boolean isApplicable;
 	protected static final String NODE_TO_REPLACE = "NODE_TO_REPLACE";
-	protected Set<ContextState> contextStates;
+	protected EnumSet<Kind> contextKinds;
 	
 	public boolean tryToApply(IASTIdExpression idExpression, Context context, ASTChangeDescription changeDescription) {
 		clearConfiguration();
 		prepareConfiguration(idExpression, context);
 		
-		if(isApplicable(context.getContextState())) {
+		if(isApplicable(context.getKind())) {
 			apply(idExpression, context);
 			updateChangeDescription(changeDescription);
 			return true;
@@ -41,8 +40,8 @@ public abstract class Refactoring {
 		config.put(NODE_TO_REPLACE, nodeToReplace);
 	}
 	
-	protected boolean isApplicable(ContextState contextState) {
-		return isApplicable && contextStates.contains(contextState);
+	protected boolean isApplicable(Kind kind) {
+		return isApplicable && contextKinds.contains(kind);
 	}
 	
 	protected void apply(IASTIdExpression idExpression, Context context) {
@@ -62,13 +61,10 @@ public abstract class Refactoring {
 	}
 	
 	protected boolean canHandleOffsets() {
-		return contextStates.contains(ContextState.CStringModified) || contextStates.contains(ContextState.CStringAlias);
+		return contextKinds.contains(Kind.Modified) || contextKinds.contains(Kind.Alias);
 	}
 	
-	protected void setContextStates(ContextState... contextStates) {
-		this.contextStates = new HashSet<ContextState>();
-		for(ContextState contextState : contextStates) {
-			this.contextStates.add(contextState);
-		}
+	protected void setContextKinds(EnumSet<Kind> kinds) {
+		contextKinds = kinds;
 	}
 }

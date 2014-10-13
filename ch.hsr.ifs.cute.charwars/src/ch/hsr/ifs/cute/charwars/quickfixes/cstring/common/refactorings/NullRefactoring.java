@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import java.util.EnumSet;
+
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IType;
@@ -7,14 +9,14 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.Function;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.Kind;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
 
 public class NullRefactoring extends Refactoring {
-	public NullRefactoring(ContextState... contextStates) {
-		setContextStates(contextStates);
+	public NullRefactoring(EnumSet<Kind> contextKinds) {
+		setContextKinds(contextKinds);
 	}
 	
 	@Override

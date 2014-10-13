@@ -16,20 +16,20 @@ import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 
 public class Context {
-	public enum ContextState {
-		CString,
-		CStringModified,
-		CStringAlias
+	public enum Kind {
+		Normal,
+		Modified,
+		Alias
 	}
 	
-	private ContextState contextState;
+	private Kind kind;
 	private String stringVarName;
 	private String offsetVarName;
 	private IASTStatement firstAffectedStatement;
 	private StringType stringType;
 	
-	public Context(ContextState contextState, String stringVarName, String offsetVarName, IASTStatement firstAffectedStatement, StringType stringType) {
-		this.contextState = contextState;
+	public Context(Kind kind, String stringVarName, String offsetVarName, IASTStatement firstAffectedStatement, StringType stringType) {
+		this.kind = kind;
 		this.stringVarName = stringVarName;
 		this.offsetVarName = offsetVarName;
 		this.firstAffectedStatement = firstAffectedStatement;
@@ -37,25 +37,25 @@ public class Context {
 	}
 	
 	public boolean isOffset(IASTIdExpression idExpression) {
-		switch(contextState) {
-		case CString:
+		switch(kind) {
+		case Normal:
 			return false;
-		case CStringModified:
+		case Modified:
 			IASTStatement topLevelStatement = ASTAnalyzer.getTopLevelParentStatement(idExpression.getOriginalNode());
 			IASTCompoundStatement compoundStatement = (IASTCompoundStatement)topLevelStatement.getParent();
 			List<IASTStatement> statements = Arrays.asList(compoundStatement.getStatements());
 			int indexOfTopLevelStatement = statements.indexOf(topLevelStatement);
 			int indexOfFirstAffectedStatement = statements.indexOf(firstAffectedStatement.getOriginalNode());
 			return indexOfTopLevelStatement >= indexOfFirstAffectedStatement;
-		case CStringAlias:
+		case Alias:
 			return true;
 		default:
 			return false;
 		}
 	}
 
-	public ContextState getContextState() {
-		return contextState;
+	public Kind getKind() {
+		return kind;
 	}
 	
 	public IASTName createStringVarName() {

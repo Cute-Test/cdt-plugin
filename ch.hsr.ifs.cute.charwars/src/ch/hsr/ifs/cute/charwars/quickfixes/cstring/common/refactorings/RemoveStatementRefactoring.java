@@ -1,17 +1,19 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings;
 
+import java.util.EnumSet;
+
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 
 import ch.hsr.ifs.cute.charwars.constants.Function;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.ContextState;
+import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.Kind;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
 
 public class RemoveStatementRefactoring extends Refactoring {
 	private Function inFunction;
 	
-	public RemoveStatementRefactoring(Function inFunction, ContextState... contextStates) {
+	public RemoveStatementRefactoring(Function inFunction, EnumSet<Kind> contextKinds) {
 		this.inFunction = inFunction;
-		setContextStates(contextStates);
+		setContextKinds(contextKinds);
 	}
 	
 	@Override
