@@ -56,3 +56,13 @@ markerPositions=2
 int main() {
 	char *str = strdup("mystr");
 }
+
+
+//!IgnoresCFiles
+//@main.c
+#include <stdio.h>
+void printTest() {
+	const char *str = "test";
+	char str[] = "test";
+	printf("%s", str);
+}

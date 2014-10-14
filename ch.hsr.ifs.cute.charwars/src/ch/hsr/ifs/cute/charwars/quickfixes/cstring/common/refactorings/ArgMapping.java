@@ -32,45 +32,44 @@ public class ArgMapping {
 		this.args = args;
 	}
 	
-	public IASTNode[] getOutArguments(IASTInitializerClause inArguments[], IASTIdExpression idExpression, Context context) {
-		List<IASTNode> outArguments = new ArrayList<IASTNode>();
+	public IASTNode[] getOutArguments(IASTInitializerClause inArgs[], IASTIdExpression idExpression, Context context) {
+		List<IASTNode> outArgs = new ArrayList<IASTNode>();
 		
 		for(Arg arg : args) {
-			switch(arg) {
-			case ARG_0:
-				outArguments.add(ASTAnalyzer.extractStdStringArg(inArguments[0]));
-				break;
-			case ARG_1:
-				outArguments.add(ASTAnalyzer.extractStdStringArg(inArguments[1]));
-				break;
-			case ARG_2:
-				outArguments.add(ASTAnalyzer.extractStdStringArg(inArguments[2]));
-				break;
-			case OFF_0:
-				outArguments.add(context.getOffset(idExpression));
-				break;
-			case ZERO:
-				outArguments.add(ExtendedNodeFactory.newIntegerLiteral(0));
-				break;
-			case NPOS:
-				outArguments.add(ExtendedNodeFactory.newNposExpression(context.getStringType()));
-				break;
-			case BEGIN:
-				outArguments.add(ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.BEGIN));
-				break;
-			case END:
-				IASTExpression arg2 = (IASTExpression)inArguments[2];
-				if(FunctionAnalyzer.isCallToMemberFunction(arg2, Function.SIZE)) {
-					outArguments.add(ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.END));
-				}
-				else {
-					IASTExpression beginCall = ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.BEGIN);
-					outArguments.add(ExtendedNodeFactory.newPlusExpression(beginCall, arg2));
-				}
-				break;
-			}	
+			IASTNode outArg = getOutArgument(arg, inArgs, idExpression, context);
+			outArgs.add(outArg);
 		}
 		
-		return outArguments.toArray(new IASTNode[]{});
+		return outArgs.toArray(new IASTNode[]{});
+	}
+	
+	private IASTNode getOutArgument(Arg arg, IASTInitializerClause inArgs[], IASTIdExpression idExpression, Context context) {
+		switch(arg) {
+		case ARG_0:
+			return ASTAnalyzer.extractStdStringArg(inArgs[0]);
+		case ARG_1:
+			return ASTAnalyzer.extractStdStringArg(inArgs[1]);
+		case ARG_2:
+			return ASTAnalyzer.extractStdStringArg(inArgs[2]);
+		case OFF_0:
+			return context.getOffset(idExpression);
+		case ZERO:
+			return ExtendedNodeFactory.newIntegerLiteral(0);
+		case NPOS:
+			return ExtendedNodeFactory.newNposExpression(context.getStringType());
+		case BEGIN:
+			return ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.BEGIN);
+		case END:
+			IASTExpression arg2 = (IASTExpression)inArgs[2];
+			if(FunctionAnalyzer.isCallToMemberFunction(arg2, Function.SIZE)) {
+				return ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.END);
+			}
+			else {
+				IASTExpression beginCall = ExtendedNodeFactory.newMemberFunctionCallExpression(idExpression.getName(), StdString.BEGIN);
+				return ExtendedNodeFactory.newPlusExpression(beginCall, arg2);
+			}
+		default:
+			return null;
+		}	
 	}
 }

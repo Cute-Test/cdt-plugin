@@ -12,7 +12,7 @@ public class CStringChecker extends BaseChecker {
 	public CStringChecker() {
 		this.astVisitor = new CStringVisitor();
 	}
-
+	
 	private class CStringVisitor extends ASTVisitor {
 		public CStringVisitor() {
 			shouldVisitDeclarations = true;

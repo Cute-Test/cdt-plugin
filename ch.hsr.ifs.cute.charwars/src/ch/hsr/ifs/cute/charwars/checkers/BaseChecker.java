@@ -10,6 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTranslationUnit;
 
 public abstract class BaseChecker extends AbstractIndexAstChecker {
 	protected ASTVisitor astVisitor = null;
@@ -31,9 +32,11 @@ public abstract class BaseChecker extends AbstractIndexAstChecker {
 		IProblemLocation problemLocation = problemLocationFactory.createProblemLocation(getFile(), start, end, line);
 		reportProblem(problemID, problemLocation, messagePatternArg);
 	}
-	
+		
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
-		ast.accept(this.astVisitor);
+		if(ast instanceof ICPPASTTranslationUnit) {
+			ast.accept(this.astVisitor);
+		}
 	}
 }
