@@ -2,6 +2,7 @@ package ch.hsr.ifs.cute.charwars.quickfixes.pointerparameter;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
@@ -94,10 +95,10 @@ public class PointerParameterQuickFix extends BaseQuickFix {
 			IASTNode newArg = UEAnalyzer.getOperand(arg).copy();
 			ASTModifier.replace(arg, newArg, rewrite);
 		}
-		else if(arg instanceof IASTIdExpression) {
-			IASTIdExpression idExpression = (IASTIdExpression)arg;
-			IASTUnaryExpression newArg = ExtendedNodeFactory.newDereferenceOperatorExpression(idExpression.copy());
-			ASTModifier.replace(idExpression, newArg, rewrite);
+		else if(arg instanceof IASTExpression) {
+			IASTExpression expr = (IASTExpression)arg;
+			IASTUnaryExpression newArg = ExtendedNodeFactory.newDereferenceOperatorExpression(expr.copy());
+			ASTModifier.replace(expr, newArg, rewrite);
 		}
 	}
 	
