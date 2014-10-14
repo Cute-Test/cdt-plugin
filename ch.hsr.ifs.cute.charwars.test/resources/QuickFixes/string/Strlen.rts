@@ -96,14 +96,16 @@ int main() {
 //@main.cpp
 int main() {
 	char str[] = "Hello, world";
-	int len = sizeof(str) / sizeof(*str) - 1;
+	int len1 = sizeof(str) / sizeof(*str) - 1;
+	int len2 = sizeof(str) / sizeof(char) - 1;
 }
 //=
 
 #include <string>
 int main() {
 	std::string str = "Hello, world";
-	int len = str.size();
+	int len1 = str.size();
+	int len2 = str.size();
 }
 
 
@@ -111,13 +113,15 @@ int main() {
 //@main.cpp
 int main() {
 	char str[] = "Hello, world";
-	int len = sizeof str / sizeof *str - 1;
+	int len1 = sizeof str / sizeof *str - 1;
+	int len2 = sizeof str / sizeof(char) - 1;
 }
 //=
 
 #include <string>
 int main() {
 	std::string str = "Hello, world";
-	int len = str.size();
+	int len1 = str.size();
+	int len2 = str.size();
 }
 

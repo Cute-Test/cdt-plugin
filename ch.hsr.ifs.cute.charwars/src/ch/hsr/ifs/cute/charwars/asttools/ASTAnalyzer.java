@@ -22,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IASTTypeIdExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
@@ -86,7 +87,15 @@ public class ASTAnalyzer {
 		if(BEAnalyzer.isDivision(node)) {
 			IASTNode dividend = BEAnalyzer.getOperand1(node);
 			IASTNode divisor = BEAnalyzer.getOperand2(node);
-			return UEAnalyzer.isSizeofExpression(dividend) && UEAnalyzer.isSizeofExpression(divisor);
+			return UEAnalyzer.isSizeofExpression(dividend) && (UEAnalyzer.isSizeofExpression(divisor) || isSizeOfTypeIdExpression(divisor));
+		}
+		return false;
+	}
+	
+	private static boolean isSizeOfTypeIdExpression(IASTNode node) {
+		if(node instanceof IASTTypeIdExpression) {
+			IASTTypeIdExpression typeIdExpression = (IASTTypeIdExpression)node;
+			return typeIdExpression.getOperator() == IASTTypeIdExpression.op_sizeof;
 		}
 		return false;
 	}
