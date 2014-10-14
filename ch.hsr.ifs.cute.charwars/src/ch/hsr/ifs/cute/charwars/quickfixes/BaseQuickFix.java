@@ -55,6 +55,7 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 			ErrorRefactoring refactoring = new ErrorRefactoring(getErrorMessage());
 			ErrorRefactoringWizard refactoringWizard = new ErrorRefactoringWizard(refactoring, 0);
 			RefactoringWizardOpenOperation op = new RefactoringWizardOpenOperation(refactoringWizard);
+			ErrorLogger.log(e.getMessage(), e);
 			
 			try {
 				op.run(null, ErrorMessages.ALERT_BOX_TITLE);
