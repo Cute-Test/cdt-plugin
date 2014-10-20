@@ -61,7 +61,7 @@ public abstract class Refactoring {
 	}
 	
 	protected boolean canHandleOffsets() {
-		return contextKinds.contains(Kind.Modified) || contextKinds.contains(Kind.Alias);
+		return contextKinds.contains(Kind.Modified_String) || contextKinds.contains(Kind.Modified_Alias);
 	}
 	
 	protected void setContextKinds(EnumSet<Kind> kinds) {

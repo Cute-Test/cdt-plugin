@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.quickfixes.cstring.common;
+package ch.hsr.ifs.cute.charwars.utils.visitors;
 
 import java.util.ArrayList;
 import java.util.List;

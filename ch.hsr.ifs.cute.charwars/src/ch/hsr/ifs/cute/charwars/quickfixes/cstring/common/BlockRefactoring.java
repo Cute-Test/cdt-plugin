@@ -21,11 +21,11 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.ASTChangeDescription;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context;
-import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Context.Kind;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.Refactoring;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.refactorings.RefactoringFactory;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BoolAnalyzer;
+import ch.hsr.ifs.cute.charwars.utils.visitors.StatementsVisitor;
 
 public class BlockRefactoring  {
 	private BlockRefactoringConfiguration config;
@@ -55,28 +55,35 @@ public class BlockRefactoring  {
 	private Context prepareContext(IASTStatement[] allStatements) {
 		StringType stringType = config.getStringType();
 		String strNameString = config.getStrName().toString();
-		String varNameString = config.getVarName().toString();
+		IASTStatement firstAffectedStatement = findFirstAffectedStatement(allStatements);
+		boolean isModified = firstAffectedStatement != null;
 		
 		if(config.isAlias()) {
-			return new Context(Kind.Alias, strNameString, config.getNewVarNameString(), null, stringType);
+			return Context.newModifiedAliasContext(stringType, strNameString, config.getNewVarNameString());
 		}
-		
-		for(IASTStatement statement : allStatements) {
-			if(modifiesCharPointer(statement)) {
-				//find insertion point
-				IASTStatement firstAffectedStatement = ASTAnalyzer.getTopLevelParentStatement(statement);
-				if(firstAffectedStatement == null) break;
-
-				String newVarNameString = varNameString + "_pos";
+		else {
+			if(isModified) {
+				String newVarNameString = strNameString + "_pos";
 				config.setNewVarNameString(newVarNameString);
 				IASTLiteralExpression zeroLiteral = ExtendedNodeFactory.newIntegerLiteral(0);
 				
 				IASTDeclarationStatement offsetVarDeclaration = ExtendedNodeFactory.newDeclarationStatement(stringType.getSizeType(), newVarNameString, zeroLiteral);
 				ASTModifier.insertBefore(firstAffectedStatement.getParent(), firstAffectedStatement, offsetVarDeclaration, config.getASTRewrite());
-				return new Context(Kind.Modified, varNameString, newVarNameString, firstAffectedStatement, stringType);
+				return Context.newModifiedStringContext(stringType, strNameString, newVarNameString, firstAffectedStatement);
+			}
+			else {
+				return Context.newUnmodifiedStringContext(stringType, strNameString);
 			}
 		}
-		return new Context(Kind.Normal, varNameString, null, null, stringType);
+	}
+	
+	private IASTStatement findFirstAffectedStatement(IASTStatement[] allStatements) {
+		for(IASTStatement statement : allStatements) {
+			if(modifiesCharPointer(statement)) {
+				return ASTAnalyzer.getTopLevelParentStatement(statement);
+			}
+		}
+		return null;
 	}
 	
 	private boolean modifiesCharPointer(IASTStatement statement) {

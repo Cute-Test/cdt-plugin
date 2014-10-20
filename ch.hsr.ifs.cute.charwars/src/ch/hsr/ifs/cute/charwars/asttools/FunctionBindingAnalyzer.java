@@ -56,8 +56,9 @@ public class FunctionBindingAnalyzer {
 	private static boolean matchingParameters(ICPPFunction originalOverload, ICPPFunction possibleOverload, int strArgIndex) {
 		ICPPParameter[] parameters1 = originalOverload.getParameters();
 		ICPPParameter[] parameters2 = possibleOverload.getParameters();
-		
-		if(parameters1.length != parameters2.length) {
+		System.out.println(parameters1.length);
+		System.out.println(strArgIndex);
+		if(parameters1.length != parameters2.length || strArgIndex >= parameters1.length) {
 			return false;
 		}
 		

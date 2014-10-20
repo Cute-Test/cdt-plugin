@@ -21,7 +21,7 @@ public class OverloadChecker {
 		IIndex index = name.getTranslationUnit().getIndex();
 		ICPPFunction originalOverload = getFunctionBindingFromName(name, index);
 		
-		if(isOperatorOverloadMemberFunction(originalOverload) && strArgIndex == 1) {
+		if(isOperatorOverloadMemberFunction(name, originalOverload) && strArgIndex == 1) {
 			strArgIndex--;
 		}
 		
@@ -43,8 +43,8 @@ public class OverloadChecker {
 		return validOverloads.toArray(new ICPPFunction[]{});
 	}
 		
-	private boolean isOperatorOverloadMemberFunction(ICPPFunction function) {
-		return function instanceof IASTImplicitName && function instanceof ICPPMethod;
+	private boolean isOperatorOverloadMemberFunction(IASTName name, ICPPFunction function) {
+		return name instanceof IASTImplicitName && function instanceof ICPPMethod;
 	}
 	
 	private ICPPFunction getFunctionBindingFromName(IASTName name, IIndex index) {

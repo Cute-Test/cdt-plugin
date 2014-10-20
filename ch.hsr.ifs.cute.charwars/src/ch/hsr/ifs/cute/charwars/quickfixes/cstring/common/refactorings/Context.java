@@ -17,9 +17,9 @@ import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 
 public class Context {
 	public enum Kind {
-		Normal,
-		Modified,
-		Alias
+		Unmodified_String,
+		Modified_String,
+		Modified_Alias
 	}
 	
 	private Kind kind;
@@ -28,7 +28,19 @@ public class Context {
 	private IASTStatement firstAffectedStatement;
 	private StringType stringType;
 	
-	public Context(Kind kind, String stringVarName, String offsetVarName, IASTStatement firstAffectedStatement, StringType stringType) {
+	public static Context newUnmodifiedStringContext(StringType stringType, String stringVarName) {
+		return new Context(Kind.Unmodified_String, stringType, stringVarName, null, null);
+	}
+
+	public static Context newModifiedStringContext(StringType stringType, String stringVarName, String offsetVarName, IASTStatement firstAffectedStatement) {
+		return new Context(Kind.Modified_String, stringType, stringVarName, offsetVarName, firstAffectedStatement);
+	}
+	
+	public static Context newModifiedAliasContext(StringType stringType, String stringVarName, String offsetVarName) {
+		return new Context(Kind.Modified_Alias, stringType, stringVarName, offsetVarName, null);
+	}
+	
+	public Context(Kind kind, StringType stringType, String stringVarName, String offsetVarName, IASTStatement firstAffectedStatement) {
 		this.kind = kind;
 		this.stringVarName = stringVarName;
 		this.offsetVarName = offsetVarName;
@@ -38,16 +50,16 @@ public class Context {
 	
 	public boolean isOffset(IASTIdExpression idExpression) {
 		switch(kind) {
-		case Normal:
+		case Unmodified_String:
 			return false;
-		case Modified:
+		case Modified_String:
 			IASTStatement topLevelStatement = ASTAnalyzer.getTopLevelParentStatement(idExpression.getOriginalNode());
 			IASTCompoundStatement compoundStatement = (IASTCompoundStatement)topLevelStatement.getParent();
 			List<IASTStatement> statements = Arrays.asList(compoundStatement.getStatements());
 			int indexOfTopLevelStatement = statements.indexOf(topLevelStatement);
 			int indexOfFirstAffectedStatement = statements.indexOf(firstAffectedStatement.getOriginalNode());
 			return indexOfTopLevelStatement >= indexOfFirstAffectedStatement;
-		case Alias:
+		case Modified_Alias:
 			return true;
 		default:
 			return false;

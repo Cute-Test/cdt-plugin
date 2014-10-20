@@ -441,3 +441,16 @@ int main() {
 	func(s.c_str(), 1.2);
 	func(s.c_str(), 'a');
 }
+
+
+//!CStrIgnoreVarArgParameter
+//@main.cpp
+#include "string.h"
+void myfunc(const char *str, ...) {
+	std::cout << str << std::endl;
+}
+
+int main() {
+	std::string stdstr = "world";
+	myfunc("hello", stdstr.c_str());
+}

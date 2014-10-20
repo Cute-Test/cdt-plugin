@@ -89,7 +89,7 @@ public class ExpressionRefactoring extends Refactoring {
 			//str[1] -> str[str_pos + 1]
 			makeApplicable(idExpression.getParent(), Transformation.ARRAY_SUBSCRIPTION);
 		}
-		else if(context.getKind() == Kind.Alias && ASTAnalyzer.isIndexCalculation(idExpression)) {
+		else if(context.getKind() == Kind.Modified_Alias && ASTAnalyzer.isIndexCalculation(idExpression)) {
 			//ptr - str -> ptr
 			IASTNode nodeToReplace = idExpression.getParent();
 			if(UEAnalyzer.isBracketExpression(nodeToReplace.getParent())) {
@@ -97,7 +97,7 @@ public class ExpressionRefactoring extends Refactoring {
 			}
 			makeApplicable(nodeToReplace, Transformation.INDEX_CALCULATION);
 		}
-		else if(context.getKind() == Kind.Alias && !ASTAnalyzer.isLValueInAssignment(idExpression) && (CheckAnalyzer.isNodeComparedToNull(idExpression) || CheckAnalyzer.isNodeComparedToStrlen(idExpression))) {
+		else if(context.getKind() == Kind.Modified_Alias && !ASTAnalyzer.isLValueInAssignment(idExpression) && (CheckAnalyzer.isNodeComparedToNull(idExpression) || CheckAnalyzer.isNodeComparedToStrlen(idExpression))) {
 			makeApplicable(BoolAnalyzer.getEnclosingBoolean(idExpression), Transformation.ALIAS_COMPARISON);
 		}
 	}

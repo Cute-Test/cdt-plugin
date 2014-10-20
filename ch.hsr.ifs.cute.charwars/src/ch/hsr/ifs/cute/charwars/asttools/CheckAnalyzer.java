@@ -179,7 +179,8 @@ public class CheckAnalyzer {
 	
 	public static boolean isPartOfStringCheck(IASTIdExpression node, boolean equalityComparison) {
 		IASTNode parent = node.getParent();
-		boolean isStrcmpOrWcsmp = FunctionAnalyzer.isCallToFunction(parent, Function.STRCMP) || FunctionAnalyzer.isCallToFunction(parent, Function.WCSCMP);		
+		boolean isStrcmpOrWcsmp = FunctionAnalyzer.isCallToFunction(parent, Function.STRCMP) || 
+								  FunctionAnalyzer.isCallToFunction(parent, Function.WCSCMP);		
 		return isStrcmpOrWcsmp && isNodeComparedToZero(parent, equalityComparison);
 	}
 
@@ -219,7 +220,8 @@ public class CheckAnalyzer {
 		if(parent instanceof IASTBinaryExpression) {
 			IASTBinaryExpression comparison = (IASTBinaryExpression)parent;
 			IASTExpression operand = BEAnalyzer.getOtherOperand(node);
-			boolean isStrlenOperand = FunctionAnalyzer.isCallToFunction(operand, Function.STRLEN) || FunctionAnalyzer.isCallToMemberFunction(operand, Function.SIZE);
+			boolean isStrlenOperand = FunctionAnalyzer.isCallToFunction(operand, Function.STRLEN) || 
+									  FunctionAnalyzer.isCallToMemberFunction(operand, Function.SIZE);
 			if(!isStrlenOperand) return false;
 			
 			int operator = comparison.getOperator();
@@ -228,7 +230,7 @@ public class CheckAnalyzer {
 			}
 			else {
 				if(operator == IASTBinaryExpression.op_notequals) return true;
-				return BEAnalyzer.isOp1(node) ? operator == IASTBinaryExpression.op_lessThan : operator == IASTBinaryExpression.op_greaterThan;
+				return operator == (BEAnalyzer.isOp1(node) ? IASTBinaryExpression.op_lessThan : IASTBinaryExpression.op_greaterThan);
 			}
 		}
 		return false;
