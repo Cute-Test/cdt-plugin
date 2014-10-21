@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.charwars.checkers.cstr;
+package ch.hsr.ifs.cute.charwars.checkers;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,9 +7,9 @@
 	
 	<extension point="org.eclipse.cdt.codan.core.checkers">
 		<checker
-			class="ch.hsr.ifs.cute.charwars.checkers.CStringChecker"
-			id="ch.hsr.ifs.cute.charwars.checkers.CStringChecker"
-			name="C-String checker">
+			class="ch.hsr.ifs.cute.charwars.checkers.CharWarsChecker"
+			id="ch.hsr.ifs.cute.charwars.checkers.CharWarsChecker"
+			name="CharWars Checker">
 			
 			<problem
 				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
@@ -32,12 +32,6 @@
 				name="Use std::string::size_type instead of C-String alias."
 				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
 			</problem>
-		</checker>
-		
-		<checker
-			class="ch.hsr.ifs.cute.charwars.checkers.CStringCleanupChecker"
-			id="ch.hsr.ifs.cute.charwars.checkers.CStringCleanupChecker"
-			name="C-String cleanup checker">
 			
 			<problem
 				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
@@ -49,29 +43,6 @@
 				name="Use std::string member functions instead of &lt;cstring&gt; functions."
 				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
 			</problem>
-		</checker>
-		
-		<checker
-			class="ch.hsr.ifs.cute.charwars.checkers.cstr.CStrChecker"
-			id="ch.hsr.ifs.cute.charwars.checkers.CStrChecker"
-			name="c_str() checker">
-			
-			<problem
-				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
-				defaultEnabled="true"
-				defaultSeverity="Warning"
-				description="Finds c_str() function calls that is passed to a function that could also take a std::string."
-				id="ch.hsr.ifs.cute.charwars.problems.CStrProblem"
-				messagePattern="Found potentially unnecessary c_str() call."
-				name="Use different overload that can take std::string directly."
-				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
-			</problem>
-		</checker>
-		
-		<checker
-			class="ch.hsr.ifs.cute.charwars.checkers.ArrayChecker"
-			id="ch.hsr.ifs.cute.charwars.checkers.ArrayChecker"
-			name="Array checker">
 			
 			<problem
 				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
@@ -83,12 +54,17 @@
 				name="Use std::array instead of C-Array."
 				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
 			</problem>
-		</checker>
-		
-		<checker
-			class="ch.hsr.ifs.cute.charwars.checkers.PointerParameterChecker"
-			id="ch.hsr.ifs.cute.charwars.checkers.PointerParameterChecker"
-			name="Pointer parameter checker">
+			
+			<problem
+				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
+				defaultEnabled="true"
+				defaultSeverity="Warning"
+				description="Finds C-String parameters."
+				id="ch.hsr.ifs.cute.charwars.problems.CStringParameterProblem"
+				messagePattern="Found C-String parameter: {0}"
+				name="Use std::string parameter instead of C-String parameter."
+				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
+			</problem>
 			
 			<problem
 				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
@@ -100,21 +76,15 @@
 				name="Use reference parameters instead of pointer parameters."
 				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
 			</problem>
-		</checker>
-		
-		<checker
-			class="ch.hsr.ifs.cute.charwars.checkers.CStringParameterChecker"
-			id="ch.hsr.ifs.cute.charwars.checkers.CStringParameterChecker"
-			name="C-String parameter checker">
 			
 			<problem
 				category="ch.hsr.ifs.cute.charwars.categories.CharWarsProblems"
 				defaultEnabled="true"
 				defaultSeverity="Warning"
-				description="Finds C-String parameters."
-				id="ch.hsr.ifs.cute.charwars.problems.CStringParameterProblem"
-				messagePattern="Found C-String parameter: {0}"
-				name="Use std::string parameter instead of C-String parameter."
+				description="Finds c_str() function calls that is passed to a function that could also take a std::string."
+				id="ch.hsr.ifs.cute.charwars.problems.CStrProblem"
+				messagePattern="Found potentially unnecessary c_str() call."
+				name="Use different overload that can take std::string directly."
 				markerType="ch.hsr.ifs.cute.charwars.CharWarsMarker">
 			</problem>
 		</checker>
