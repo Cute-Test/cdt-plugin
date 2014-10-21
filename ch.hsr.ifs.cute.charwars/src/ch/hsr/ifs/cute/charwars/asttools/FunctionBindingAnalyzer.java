@@ -177,9 +177,10 @@ public class FunctionBindingAnalyzer {
 		ICPPFunction functionBinding = getFunctionBinding(parent);
 		
 		if(functionBinding != null && argIndex != -1) {
-			ICPPParameter parameter = functionBinding.getParameters()[argIndex];
-			IType parameterType = parameter.getType();
-			return parameterType;
+			ICPPParameter[] parameters = functionBinding.getParameters();
+			if(argIndex < parameters.length) {
+				return parameters[argIndex].getType();
+			}
 		}
 		return null;
 	}

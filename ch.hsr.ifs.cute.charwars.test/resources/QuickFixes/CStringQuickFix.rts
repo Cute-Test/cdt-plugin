@@ -823,3 +823,23 @@ int main() {
 	std::cout << str[str_pos] << std::endl;
 	std::cout << str[str_pos + 1] << std::endl;
 }
+
+
+//!CharPointerVarArgParameter
+//@main.cpp
+void myprintf(const char *ptr, ...) {
+}
+
+int main() {
+	const char *str = "world";
+	myprintf("Hello, %s!", str);
+}
+//=
+#include <string>
+void myprintf(const char *ptr, ...) {
+}
+
+int main() {
+	std::string str = "world";
+	myprintf("Hello, %s!", str.c_str());
+}
