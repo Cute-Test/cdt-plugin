@@ -66,3 +66,22 @@ void printTest() {
 	char str[] = "test";
 	printf("%s", str);
 }
+
+
+//!IgnoresCharPointerInMacro
+//@mymacros.h
+#ifndef MYMACROS_H_
+#define MYMACROS_H_
+
+#define PRINT()  {					\
+	const char *str = "Hello";		\
+    std::cout << str << std::endl; 	\
+}
+
+#endif
+//@main.cpp
+#include "mymacros.h"
+
+int main() {
+	PRINT()
+}

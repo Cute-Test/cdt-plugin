@@ -23,10 +23,12 @@ public class CharWarsChecker extends AbstractIndexAstChecker {
 	}
 	
 	private void reportProblem(ProblemReport report) {
-		String problemID = report.getProblemID();
-		IProblemLocation problemLocation = report.getProblemLocation();
-		Object[] args = report.getArgs();
-		reportProblem(problemID, problemLocation, args);
+		if(!report.isPartOfMacro()) {
+			String problemID = report.getProblemID();
+			IProblemLocation problemLocation = report.getProblemLocation();
+			Object[] args = report.getArgs();
+			reportProblem(problemID, problemLocation, args);
+		}
 	}
 		
 	private boolean isCppFile(IASTTranslationUnit ast) {
