@@ -932,3 +932,49 @@ bool foo() {
 	A a{};
 	return a && b;
 }
+//![WRONG] Do not Report Operator for Mixed-convertible Type
+//@.config
+markerCount=0
+//@A.cpp
+struct A {
+	operator bool() {
+		return true;
+	}
+	operator int() {
+		return 42;
+	}
+};
+bool foo() {
+	bool b{true};
+	A a{};
+//	return a && b; - uncomment this to enable the test
+}
+//=
+struct A {
+	operator bool() {
+		return true;
+	}
+	operator int() {
+		return 42;
+	}
+};
+bool foo() {
+	bool b{true};
+	A a{};
+//	return a && b; - uncomment this to enable the test
+}
+//!Do not Report Operator for Address of Function
+//@.config
+markerCount=0
+//@A.cpp
+void testFunction() {}
+
+void other() {
+	auto functionPointer = &testFunction;
+}
+//=
+void testFunction() {}
+
+void other() {
+	auto functionPointer = &testFunction;
+}

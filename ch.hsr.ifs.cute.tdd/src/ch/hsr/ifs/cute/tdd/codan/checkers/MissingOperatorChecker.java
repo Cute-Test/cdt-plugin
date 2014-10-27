@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IEnumeration;
+import org.eclipse.cdt.core.dom.ast.IFunctionType;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemType;
 import org.eclipse.cdt.core.dom.ast.IType;
@@ -157,7 +158,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		private boolean hasPrimitiveType(IASTExpression operand) {
 			IType type = operand.getExpressionType();
 			type = SemanticUtil.getUltimateType(type, true);
-			return type instanceof IBasicType || type instanceof IEnumeration;
+			return type instanceof IBasicType || type instanceof IEnumeration || type instanceof IFunctionType;
 		}
 
 		private boolean hasTypeOperand(IASTBinaryExpression expression) {
