@@ -1033,3 +1033,33 @@ struct S {
 		t1 + t2;
 	}
 };
+//!Do not Report any Addressof Operator
+//@.config
+markerCount=0
+//@A.cpp
+struct S {};
+void foo() {
+	S s{};
+	S* s = &s;
+}
+//=
+struct S {};
+void foo() {
+	S s{};
+	S* s = &s;
+}
+//!Do not Report * Operator for Pointers
+//@.config
+markerCount=0
+//@A.cpp
+struct S {};
+void foo() {
+	S* s;
+	*s;
+}
+//=
+struct S {};
+void foo() {
+	S* s;
+	*s;
+}

@@ -15,9 +15,11 @@ import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IEnumeration;
 import org.eclipse.cdt.core.dom.ast.IFunctionType;
+import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemType;
 import org.eclipse.cdt.core.dom.ast.IType;
@@ -84,7 +86,11 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private int handleUnaryOperator(IASTExpression expression, String typename, ICPPASTUnaryExpression uexpr) {
-			if (uexpr.getOverload() == null && operandDefined(uexpr) && hasNonPrimitiveType(uexpr.getOperand()) && hasKnownType(uexpr.getOperand())) {
+			if (	uexpr.getOverload() == null 
+					&& operandDefined(uexpr) 
+					&& hasNonPrimitiveType(uexpr.getOperand()) 
+					&& hasKnownType(uexpr.getOperand())
+					&& !isAddressOfOperator(uexpr)) {
 				OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr.getOperator());
 				String strategy = getStrategy(uexpr);
 				reportMissingOperator(typename, expression, operator, strategy, uexpr.getOperand().getExpressionType());
@@ -157,6 +163,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		private boolean hasPrimitiveType(IASTExpression operand) {
 			IType type = operand.getExpressionType();
+			if (type instanceof IPointerType) return true;
 			type = SemanticUtil.getUltimateType(type, true);
 			return type instanceof IBasicType || type instanceof IEnumeration || type instanceof IFunctionType;
 		}
@@ -173,6 +180,10 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			IType type = operand.getExpressionType();
 			type = SemanticUtil.getNestedType(type, SemanticUtil.TDEF | SemanticUtil.ALLCVQ);
 			return !(type instanceof ICPPUnknownType || type instanceof IProblemType);
+		}
+
+		private boolean isAddressOfOperator(ICPPASTUnaryExpression uexpr) {
+			return uexpr.getOperator() == IASTUnaryExpression.op_amper;
 		}
 	}
 }
