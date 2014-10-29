@@ -978,3 +978,58 @@ void testFunction() {}
 void other() {
 	auto functionPointer = &testFunction;
 }
+//!Do not Report Unary Operator Depending on Template Type Parameter
+//@.config
+markerCount=0
+//@A.cpp
+template<typename T>
+struct S {
+	void foo() {
+		T t{};
+		&t;
+	}
+};
+//=
+template<typename T>
+struct S {
+	void foo() {
+		T t{};
+		&t;
+	}
+};
+//!Do not Report Unary Operator Depending on Template Value Parameter
+//@.config
+markerCount=0
+//@A.cpp
+template<typename T, T value>
+struct S {
+	void foo() {
+		&value;
+	}
+};
+//=
+template<typename T, T value>
+struct S {
+	void foo() {
+		&value;
+	}
+};
+//!Do not Report Binary Operator Depending on Template Type Parameter
+//@.config
+markerCount=0
+//@A.cpp
+template<typename T>
+struct S {
+	void foo() {
+		T t1{}, t2{};
+		t1 + t2;
+	}
+};
+//=
+template<typename T>
+struct S {
+	void foo() {
+		T t1{}, t2{};
+		t1 + t2;
+	}
+};

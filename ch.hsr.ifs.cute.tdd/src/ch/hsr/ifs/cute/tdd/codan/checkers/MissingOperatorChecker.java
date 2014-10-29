@@ -84,7 +84,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private int handleUnaryOperator(IASTExpression expression, String typename, ICPPASTUnaryExpression uexpr) {
-			if (uexpr.getOverload() == null && operandDefined(uexpr) && hasNonPrimitiveType(uexpr.getOperand())) {
+			if (uexpr.getOverload() == null && operandDefined(uexpr) && hasNonPrimitiveType(uexpr.getOperand()) && hasKnownType(uexpr.getOperand())) {
 				OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr.getOperator());
 				String strategy = getStrategy(uexpr);
 				reportMissingOperator(typename, expression, operator, strategy, uexpr.getOperand().getExpressionType());
