@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Main
 Bundle-SymbolicName: ch.hsr.ifs.cute.charwars;singleton:=true
-Bundle-Version: 4.9.0.qualifier
+Bundle-Version: 4.10.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.charwars.CharWarsPlugin
 Bundle-Vendor: hsr
 Require-Bundle: org.eclipse.ui,
@@ -20,15 +20,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.ui.refactoring
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cute.charwars.checkers,
- ch.hsr.ifs.cute.charwars.constants,
- ch.hsr.ifs.cute.charwars.quickfixes,
- ch.hsr.ifs.cute.charwars.quickfixes.array,
- ch.hsr.ifs.cute.charwars.quickfixes.cstr,
- ch.hsr.ifs.cute.charwars.quickfixes.cstring.cleanup,
- ch.hsr.ifs.cute.charwars.quickfixes.cstring.general,
- ch.hsr.ifs.cute.charwars.quickfixes.cstring.parameter,
- ch.hsr.ifs.cute.charwars.quickfixes.pointerparameter
+Export-Package: ch.hsr.ifs.cute.charwars.checkers,ch.hsr.ifs.cute.char
+ wars.constants,ch.hsr.ifs.cute.charwars.quickfixes,ch.hsr.ifs.cute.ch
+ arwars.quickfixes.array,ch.hsr.ifs.cute.charwars.quickfixes.cstr,ch.h
+ sr.ifs.cute.charwars.quickfixes.cstring.cleanup,ch.hsr.ifs.cute.charw
+ ars.quickfixes.cstring.general,ch.hsr.ifs.cute.charwars.quickfixes.cs
+ tring.parameter,ch.hsr.ifs.cute.charwars.quickfixes.pointerparameter
 Bundle-ClassPath: lib/annotations.jar,
  lib/jsr305.jar,
  .
