@@ -7,11 +7,11 @@
 		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
 		<groupId>ch.hsr.ifs</groupId>
 		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
-		<version>4.10.0-SNAPSHOT</version>
+		<version>4.9.0-SNAPSHOT</version>
 	</parent>
 	<groupId>ch.hsr.ifs.cute.refactoringPreview.clonewar</groupId>
 	<artifactId>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</artifactId>
-	<version>4.10.0-SNAPSHOT</version>
+	<version>4.9.0-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	<build>
 		<plugins>
