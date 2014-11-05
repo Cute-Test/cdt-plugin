@@ -99,7 +99,7 @@ public abstract class ConsoleTest extends TestCase {
 			}
 		});
 		tc.startTest();
-		semaphore.acquire(); //wait until MatchJob is actually running (meaning that cute test-result-patern-match-listener has at least startet working).
+		semaphore.acquire(); //wait until MatchJob is actually running (meaning that cute test-result-pattern-match-listener has at least started working).
 		//joins all console pattern-match-jobs belonging to the "tc" console
 		Job.getJobManager().join(tc, new NullProgressMonitor());
 	}

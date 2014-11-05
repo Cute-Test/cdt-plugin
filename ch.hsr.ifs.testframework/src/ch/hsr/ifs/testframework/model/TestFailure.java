@@ -61,7 +61,7 @@ public class TestFailure extends TestResult {
 	}
 
 	private String unquoteMsg(String text) {
-		String ret = text.replaceAll("\\\\{2}+", "\\\\");
+		String ret = text.replaceAll("\\\\\\\\", "\\\\");
 		return ret;
 	}
 
@@ -69,7 +69,7 @@ public class TestFailure extends TestResult {
 		String ret = text.replaceAll("\\\\t", "\t");
 		ret = ret.replaceAll("\\\\n", "\n");
 		ret = ret.replaceAll("\\\\r", "\r");
-		ret = ret.replaceAll("\\{2}+", "\\");
+		ret = ret.replaceAll("\\\\\\\\", "\\\\");
 		return ret;
 	}
 

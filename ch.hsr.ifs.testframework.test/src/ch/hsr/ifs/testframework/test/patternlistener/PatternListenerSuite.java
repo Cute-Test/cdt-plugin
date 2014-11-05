@@ -25,6 +25,7 @@ public class PatternListenerSuite {
 		suite.addTestSuite(PatternListenerTestFailedTest.class);
 		suite.addTestSuite(PatternListenerTestEqualsFailed.class);
 		suite.addTestSuite(PatternListenerErrorTest.class);
+		suite.addTestSuite(TestFailureBackslashEscaped.class);
 		return suite;
 	}
 }
