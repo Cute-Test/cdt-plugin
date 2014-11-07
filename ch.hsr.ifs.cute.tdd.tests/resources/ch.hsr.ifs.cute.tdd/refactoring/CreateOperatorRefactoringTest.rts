@@ -1063,3 +1063,16 @@ void foo() {
 	S* s;
 	*s;
 }
+//!Do not Report Binary Operator for Template Parameter Depending Array
+//@.config
+markerCount=0
+//@A.cpp
+template <typename T, unsigned N>
+void print_pair(T const (&t)[N]){
+	t+N;
+}
+//=
+template <typename T, unsigned N>
+void print_pair(T const (&t)[N]){
+	t+N;
+}
