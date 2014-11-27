@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -84,15 +85,16 @@ public class CuteTestDClickListener implements IDoubleClickListener {
 
 	private void openEditorForNonFailingTestCase(String testCaseName) {
 		try {
+			ILaunchConfiguration launchConfiguration = session.getLaunch().getLaunchConfiguration();
+			String launchConfigName = launchConfiguration.getAttribute("org.eclipse.cdt.launch.PROJECT_ATTR", launchConfiguration.getName());
 			ICProject[] projects = CoreModel.getDefault().getCModel().getCProjects();
-			for (int i = 0; i < projects.length; ++i) {
-				if (!projects[i].getElementName().equals(session.getLaunch().getLaunchConfiguration().getName()))
+			for (ICProject project : projects) {
+				String projectName = project.getElementName();
+				if (!projectName.equals(launchConfigName))
 					continue;
-				IIndex index = CCorePlugin.getIndexManager().getIndex(projects[i]);
-				IIndexBinding[] bindings;
-				bindings = getBindings(testCaseName, index);
+				IIndex index = CCorePlugin.getIndexManager().getIndex(project);
+				IIndexBinding[] bindings = getBindings(testCaseName, index);
 				checkBindingsOpenEditor(index, bindings);
-
 			}
 		} catch (CModelException e) {
 			TestFrameworkPlugin.log(e);
