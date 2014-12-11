@@ -25,7 +25,7 @@
 			   	description="Elevator Initialization Warning"
 			   	id="ch.hsr.ifs.elevator.defaultctor"
 			   	name="Replaceable default constructor calls"
-			   	markerType=" ch.hsr.ifs.cute.elevator.elevationProblemMarker"
+			   	markerType="ch.hsr.ifs.cute.elevator.elevationProblemMarker"
 			   	category="ch.hsr.ifs.elevator.enhancements"
 			   	messagePattern="replaceable default constructor call">
 		    </problem>
@@ -103,7 +103,7 @@
              showInNextPrevDropdownToolbarActionKey="ch.hsr.ifs.cute.elevator.keys.elevationSuggestion.showInNextPrevDropdownToolbarAction"
              symbolicIcon="info"
              textPreferenceKey="ch.hsr.ifs.cute.elevator.keys.elevationSuggestion.textPreference"
-             textPreferenceValue="true"
+             textPreferenceValue="false"
              textStylePreferenceKey="ch.hsr.ifs.cute.elevator.keys.elevationSuggestion.textStylePreference"
              textStylePreferenceValue="SQUIGGLES"
              verticalRulerPreferenceKey="ch.hsr.ifs.cute.elevator.keys.elevationSuggestion.verticalRulerPreference"
