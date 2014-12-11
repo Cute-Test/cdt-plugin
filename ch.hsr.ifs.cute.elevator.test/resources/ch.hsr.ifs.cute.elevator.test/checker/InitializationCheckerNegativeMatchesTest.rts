@@ -300,3 +300,12 @@ public:
 		mc (x) {
 	};
 };
+
+//!ShouldIgnoreRangeDeclarationsWithExplicitTypeInRangeBasedFor
+//@main.cpp
+int main(int argc, char **argv) {
+	int array[] { 1, 2, 3, 4, 5 };
+	for (int element : array) {
+		// do stuff
+	}
+}

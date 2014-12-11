@@ -17,7 +17,7 @@ import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsElevated;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsElevatedNewExpression;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsInstanceOf;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsUninitializedReference;
-import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.OtherDelaratorElevationConditions;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.OtherDeclaratorElevationConditions;
 
 /**
  * Collects all {@link IASTDeclarator}s that can be elevated.
@@ -37,7 +37,7 @@ public class DeclaratorCollector extends ASTVisitor {
             .or(hasInitializerListConstructor)
             .or(containsPackExpansion)
             .or(new IsUninitializedReference())
-            ).and(new OtherDelaratorElevationConditions());
+            ).and(new OtherDeclaratorElevationConditions());
     
     public DeclaratorCollector() {
         declarators = new ArrayList<IASTDeclarator>();

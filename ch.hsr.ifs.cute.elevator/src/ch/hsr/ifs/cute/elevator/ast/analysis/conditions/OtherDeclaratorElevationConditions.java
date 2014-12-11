@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTForStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTRangeBasedForStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
@@ -45,6 +46,7 @@ public class OtherDeclaratorElevationConditions extends Condition {
             !isPartOfCastExpression() &&
             !isPartOfTypedef() &&
             !isInitializedAsRunVarInForLoop() &&
+            !isRangeDeclarationInRangeBasedFor() && 
             !isTypeId() &&
             !isPartOfEqualsInitializationWithoutConstructorCall();
     }
@@ -56,6 +58,11 @@ public class OtherDeclaratorElevationConditions extends Condition {
     private boolean hasInitializer() {
         return declarator.getInitializer() != null;
     }
+    
+    private boolean isRangeDeclarationInRangeBasedFor() {
+        return properties.hasAncestor(ICPPASTRangeBasedForStatement.class) && properties.getDistanceToAncestor(ICPPASTRangeBasedForStatement.class) == 2;
+    }
+    
     
     private boolean isInitializedAsRunVarInForLoop() {
         return hasInitializer() && properties.hasAncestor(ICPPASTForStatement.class) && properties.getDistanceToAncestor(ICPPASTForStatement.class) == 3;
