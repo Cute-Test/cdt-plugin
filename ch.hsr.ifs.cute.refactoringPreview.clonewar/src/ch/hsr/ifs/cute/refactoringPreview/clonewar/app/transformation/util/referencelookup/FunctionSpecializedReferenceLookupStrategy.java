@@ -60,7 +60,7 @@ AbstractReferenceLookupStrategy<ICPPASTFunctionCallExpression> {
         if (binding == null) {
             return Collections.emptyList();
         }
-        return IndexUI.findSpecializations(context.getIndex(), binding);
+        return IndexUI.findSpecializations(context.getIndex(), binding, name);
     }
 
     /**
