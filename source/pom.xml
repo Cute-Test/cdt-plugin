@@ -17,6 +17,21 @@
 	</properties>
 	<repositories>
 		<repository>
+			<id>ecplise-cdt-luna</id>
+			<url>http://download.eclipse.org/releases/luna</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>CUTE</id>
+			<url>http://www.cute-test.com/updatesite</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>Cevelop</id>
+			<url>http://www.cevelop.com/cdt-test-plugins/development</url>
+			<layout>p2</layout>
+		</repository>
+	<!--	<repository>
             <id>eclipse-cdt-kepler</id>
             <url>http://download.eclipse.org/tools/cdt/releases/kepler</url>
 			<layout>p2</layout>
@@ -40,15 +55,15 @@
             <id>cdttesting-ifs</id>
             <url>http://dev.ifs.hsr.ch/updatesites/cdttesting/kepler</url>
             <layout>p2</layout>
-        </repository>
+        </repository>-->
 	</repositories>
 	<modules>
+        <module>ch.hsr.ifs.mockator.target</module>
 		<module>ch.hsr.ifs.mockator.feature</module>
 		<module>ch.hsr.ifs.mockator.plugin</module>
 		<module>ch.hsr.ifs.mockator.help</module>
 		<module>ch.hsr.ifs.mockator.tests</module>
 		<module>ch.hsr.ifs.mockator.updatesite</module>
-        <!--module>ch.hsr.ifs.mockator.target</module-->
 		<!--module>ch.hsr.ifs.mockator.swtbottests</module-->
 	</modules>
 	<build>
