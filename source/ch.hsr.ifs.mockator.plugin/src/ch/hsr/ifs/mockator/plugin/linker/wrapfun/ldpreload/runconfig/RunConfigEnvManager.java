@@ -18,6 +18,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 import ch.hsr.ifs.mockator.plugin.base.functional.F1;
 import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 
@@ -77,7 +78,7 @@ public class RunConfigEnvManager {
   private static Map<String, String> getEnvVars(ILaunchConfigurationWorkingCopy wc)
       throws CoreException {
     return checkedCast(
-        wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, orderPreservingMap()),
+        wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, CollectionHelper.<String, String>orderPreservingMap()),
         String.class);
   }
 

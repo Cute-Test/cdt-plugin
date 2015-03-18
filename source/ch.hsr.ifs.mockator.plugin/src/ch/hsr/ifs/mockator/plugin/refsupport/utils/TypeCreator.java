@@ -79,8 +79,7 @@ public abstract class TypeCreator extends ASTQueries {
     }
 
     CPPFunctionType type =
-        new CPPFunctionType(returnType, pTypes, fnDtor.isConst(), fnDtor.isVolatile(),
-            fnDtor.takesVarArgs());
+        new CPPFunctionType(returnType, pTypes, fnDtor.isConst(), fnDtor.isVolatile(), false, false, fnDtor.takesVarArgs());
     final IASTDeclarator nested = fnDtor.getNestedDeclarator();
     if (nested != null)
       return createType(type, nested);

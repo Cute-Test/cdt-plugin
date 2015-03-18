@@ -10,7 +10,9 @@ import java.util.Map;
 
 import org.eclipse.cdt.core.dom.ILinkage;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
@@ -42,21 +44,21 @@ class FunctionCalleeReferenceResolver {
     this.cProject = cProject;
   }
 
-  public Collection<IASTName> findCallers(IBinding binding) {
+  public Collection<IASTName> findCallers(IBinding binding, IASTNode point) {
     Assert.notNull(binding, "Binding must not be null");
     try {
       List<IASTName> callers = new ArrayList<IASTName>();
-      findCallersRecursively(binding, callers);
+      findCallersRecursively(binding, callers, point);
       return callers;
     } catch (CoreException e) {
       throw new MockatorException(e);
     }
   }
 
-  private void findCallersRecursively(IBinding binding, List<IASTName> callers)
+  private void findCallersRecursively(IBinding binding, List<IASTName> callers, IASTNode point)
       throws CoreException {
     CalledByResult result = new CalledByResult();
-    findCalledBy(binding, result);
+    findCalledBy(binding, result, point);
     List<ICElement> elements = result.getElements();
     if (elements.isEmpty())
       return;
@@ -65,7 +67,7 @@ class FunctionCalleeReferenceResolver {
     for (IASTName optName : findDeclaration(calleeBinding)) {
       callers.add(optName);
     }
-    findCallersRecursively(calleeBinding, callers);
+    findCallersRecursively(calleeBinding, callers, point);
   }
 
   private Maybe<IASTName> findDeclaration(IIndexBinding calleeBinding) {
@@ -74,12 +76,12 @@ class FunctionCalleeReferenceResolver {
     return head(declarations);
   }
 
-  private void findCalledBy(IBinding calleeBinding, CalledByResult result) throws CoreException {
-    findCalledBy1(calleeBinding, true, result);
+  private void findCalledBy(IBinding calleeBinding, CalledByResult result, IASTNode point) throws CoreException {
+    findCalledBy1(calleeBinding, true, result, point);
     if (!(calleeBinding instanceof ICPPMethod))
       return;
     for (IBinding overridden : findOverriders(calleeBinding)) {
-      findCalledBy1(overridden, false, result);
+      findCalledBy1(overridden, false, result, point);
     }
   }
 
@@ -87,10 +89,10 @@ class FunctionCalleeReferenceResolver {
     return ClassTypeHelper.findOverridden((ICPPMethod) calleeBinding, null);
   }
 
-  private void findCalledBy1(IBinding callee, boolean includeOrdinaryCalls, CalledByResult result)
+  private void findCalledBy1(IBinding callee, boolean includeOrdinaryCalls, CalledByResult result, IASTNode point)
       throws CoreException {
     findCalledBy2(callee, includeOrdinaryCalls, result);
-    for (IBinding spec : IndexUI.findSpecializations(index, callee)) {
+    for (IBinding spec : IndexUI.findSpecializations(index, callee, point)) {
       findCalledBy2(spec, includeOrdinaryCalls, result);
     }
   }

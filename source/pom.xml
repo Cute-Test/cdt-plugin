@@ -10,7 +10,7 @@
 		<maven>3.0</maven>
 	</prerequisites>
     <properties>
-        <target-file>mockator-kepler</target-file>
+        <target-file>mockator-luna</target-file>
         <tycho-version>0.20.0</tycho-version>
 		<encoding>UTF-8</encoding>
 		<compiler-version>1.7</compiler-version>

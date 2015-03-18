@@ -52,7 +52,7 @@ public class NotReferencedFunctionFilter implements F1<StaticPolyMissingMemFun, 
   private boolean isCalled(ICPPASTFunctionDefinition sutFunction) {
     IBinding sutBinding = sutFunction.getDeclarator().getName().resolveBinding();
 
-    for (IASTName caller : calleeReferenceResolver.findCallers(sutBinding)) {
+    for (IASTName caller : calleeReferenceResolver.findCallers(sutBinding, sutFunction)) {
       if (matches(testFunction, getFunctionDefinition(caller)))
         return true;
     }
