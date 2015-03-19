@@ -27,20 +27,12 @@ public class SourceFolderHandler {
   public IFolder createFolder(String relativePath, IProgressMonitor pm) throws CoreException {
     IFolder newFolder = project.getFolder(relativePath);
 
-    if (newFolder.exists())
-      return newFolder;
-
-    createFolder(newFolder, pm);
-
-    if (isNewStyleProject()) {
-      addToSourceEntries(newFolder, pm);
+    if (!newFolder.exists()) {
+    	createFolder(newFolder, pm);
     }
+    addToSourceEntries(newFolder, pm);
 
     return newFolder;
-  }
-
-  private boolean isNewStyleProject() {
-    return CCorePlugin.getDefault().isNewStyleProject(project.getProject());
   }
 
   private static void createFolder(IFolder folder, IProgressMonitor pm) throws CoreException {
@@ -66,8 +58,10 @@ public class SourceFolderHandler {
     final boolean writableDesc = true;
     ICProjectDescription desc =
         CCorePlugin.getDefault().getProjectDescription(project, writableDesc);
-    addNewSourceEntry(desc, newEntry);
-    CCorePlugin.getDefault().setProjectDescription(project, desc, true, pm);
+    if (desc != null) {
+	    addNewSourceEntry(desc, newEntry);
+	    CCorePlugin.getDefault().setProjectDescription(project, desc, true, pm);
+    }
   }
 
   private static void addNewSourceEntry(ICProjectDescription desc, ICSourceEntry entry)
