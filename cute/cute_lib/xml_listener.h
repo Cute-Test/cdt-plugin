@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007-2013 Peter Sommerlad
+ * Copyright 2007-2015 Peter Sommerlad
  *
  *********************************************************************************/
 
@@ -30,12 +30,18 @@ namespace cute {
 	protected:
 		std::string mask_xml_chars(std::string in){
 			std::string::size_type pos=0;
-			while((pos=in.find_first_of("<&\"",pos))!=std::string::npos){
+			while((pos=in.find_first_of("\x00\x01\x02\x03\x04\x05\x06\x07\x08\x0b\x0c\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\"&'<>", pos, 34))!=std::string::npos){
 				switch(in[pos]){
 				case '&': in.replace(pos,1,"&amp;"); pos +=5; break;
 				case '<': in.replace(pos,1,"&lt;"); pos += 4; break;
+				case '>': in.replace(pos,1,"&gt;"); pos += 4; break;
 				case '"': in.replace(pos,1,"&quot;"); pos+=6; break;
-				default: throw "oops";break;
+				case '\'':in.replace(pos,1,"&apos;"); pos+=6; break;
+				default:
+					char c = in[pos];
+					std::string replacement = "0x" + cute_to_string::hexit(c);
+					in.replace(pos, 1, replacement); pos += replacement.size(); break;
+					break;
 				}
 			}
 			return in;

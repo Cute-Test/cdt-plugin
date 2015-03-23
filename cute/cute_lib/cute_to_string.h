@@ -45,6 +45,16 @@ namespace cute_to_string {
 		static inline std::string to_string(std::string const &s){
 			return s;
 		}
+		template <typename T>
+		std::string hexit(T const &t){ // must be an unsigned type
+			std::string hexed;
+			if (t == 0) hexed+='0';
+			for (T x=t;x>0;x /= 16){
+				hexed += "0123456789ABCDEF"[x%16];
+			}
+			reverse(hexed.begin(),hexed.end());
+			return hexed;
+		}
 	}
 }
 #ifndef DONT_USE_IOSTREAM
@@ -244,16 +254,6 @@ namespace cute_to_string {
 			reverse(convert.begin(),convert.end());
 			cute::cute_to_string::adjust_long(t,convert);
 			return convert;
-		}
-		template <typename T>
-		std::string hexit(T const &t){ // must be an unsigned type
-			std::string hexed;
-			if (t == 0) hexed+='0';
-			for (T x=t;x>0;x /= 16){
-				hexed += "0123456789ABCDEF"[x%16];
-			}
-			reverse(hexed.begin(),hexed.end());
-			return hexed;
 		}
 		template <typename T>
 		std::string to_string_embedded_int_signed(T const &t, impl_place_for_traits::false_type ){

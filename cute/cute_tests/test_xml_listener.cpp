@@ -51,8 +51,24 @@ void test_xml_masking(){
 		run(CUTE(test_xml_chars_in_failure));
 	}
 	ASSERT_EQUAL("<testsuites>\n\t\t<testcase classname=\"\" name=\"test_xml_chars_in_failure\">\n"
-			"\t\t\t<failure message=\"dummy.cpp:42 and &amp; &lt;or/> &quot;hello&quot;\">\n"
-			"and &amp; &lt;or/> &quot;hello&quot;\n"
+			"\t\t\t<failure message=\"dummy.cpp:42 and &amp; &lt;or/&gt; &quot;hello&quot;\">\n"
+			"and &amp; &lt;or/&gt; &quot;hello&quot;\n"
+			"\t\t\t</failure>\n\t\t</testcase>\n</testsuites>\n",out.str());
+}
+
+void test_non_xml_chars_in_failure(){
+	throw cute::test_failure("\x01 \x02 \x14","dummy.cpp",42);
+}
+
+void test_xml_invalid_char_escaping(){
+	std::ostringstream out;
+	{
+		MAKE_RUNNER_RUN_TO_OUT;
+		run(CUTE(test_non_xml_chars_in_failure));
+	}
+	ASSERT_EQUAL("<testsuites>\n\t\t<testcase classname=\"\" name=\"test_non_xml_chars_in_failure\">\n"
+			"\t\t\t<failure message=\"dummy.cpp:42 0x1 0x2 0x14\">\n"
+			"0x1 0x2 0x14\n"
 			"\t\t\t</failure>\n\t\t</testcase>\n</testsuites>\n",out.str());
 }
 
@@ -102,6 +118,7 @@ cute::suite make_suite_test_xml_listener(){
 	s.push_back(CUTE(test_xml_masking));
 	s.push_back(CUTE(test_xml_suite));
 	s.push_back(CUTE(test_for_error));
+	s.push_back(CUTE(test_xml_invalid_char_escaping));
 	return s;
 }
 
