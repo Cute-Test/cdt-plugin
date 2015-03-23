@@ -3,6 +3,8 @@ package ch.hsr.ifs.mockator.tests.project.cdt;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -35,7 +37,7 @@ public class IncludeFileHandlerTest {
     IncludeFileHandler handler = new IncludeFileHandler(project.getProject());
     handler.addInclude(headerFile);
     assertTrue(handler.hasInclude(headerFile));
-    String includeText = "${workspace_loc:/${ProjName}/mockator.h}";
+    String includeText = String.format("${workspace_loc:%s${ProjName}%smockator.h}", File.separator, File.separator);
     assertTrue(project.hasIncludeForFile(includeText));
     handler.removeInclude(headerFile);
     assertFalse(handler.hasInclude(headerFile));

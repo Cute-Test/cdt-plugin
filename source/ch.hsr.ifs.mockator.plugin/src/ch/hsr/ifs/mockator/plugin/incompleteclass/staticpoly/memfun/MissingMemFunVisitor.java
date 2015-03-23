@@ -15,6 +15,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPField;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPEvaluation;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalMemberAccess;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalTypeId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalUnary;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
@@ -49,12 +50,19 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
 
   protected boolean resolvesToTemplateParam(IType type) {
     IType resolvedType = CxxAstUtils.unwindTypedef(type);
-    IType unwindedType = AstUtil.unwindPointerOrRefType(resolvedType);
-
-    if (unwindedType == null)
+    IType unwoundType = AstUtil.unwindPointerOrRefType(resolvedType);
+    
+    if (unwoundType == null)
       return false;
 
-    return AstUtil.isSameType(unwindedType, templateParamType);
+    if (unwoundType instanceof TypeOfDependentExpression) {
+    	ICPPEvaluation evaluation = ((TypeOfDependentExpression) unwoundType).getEvaluation();
+    	if (evaluation instanceof EvalTypeId) {
+    		unwoundType = ((EvalTypeId) evaluation).getInputType();
+    	}
+    }
+    
+    return AstUtil.isSameType(unwoundType, templateParamType);
   }
 
   protected IType resolveTypeOfDependentExpression(TypeOfDependentExpression type) {

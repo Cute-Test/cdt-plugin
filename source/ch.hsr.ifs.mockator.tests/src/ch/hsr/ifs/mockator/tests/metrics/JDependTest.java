@@ -45,6 +45,7 @@ public class JDependTest {
     filter.addPackage("ch.hsr.ifs.cute.*");
     filter.addPackage("ch.hsr.ifs.mockator.plugin.incompleteclass.checker"); // FIXME try to get rid
                                                                              // of this one
+    filter.addPackage("ch.hsr.ifs.cdt.compatibility.changes"); //FIXME this package will vanish with future CDT releases
     return filter;
   }
 

@@ -28,8 +28,8 @@ public class ProjRelPathGeneratorTest {
   public void retrieveProjectRelFile() {
     IFile file = project.getFile(new Path("mockator/mockator.h"));
     String expected =
-        String.format("${workspace_loc:%s${ProjName}%smockator%smockator.h}", File.separator,
-            File.separator, File.separator);
+        String.format("${workspace_loc:%s${ProjName}%smockator/mockator.h}", File.separator,
+            File.separator);
     assertEquals(expected, ProjRelPathGenerator.getProjectRelativePath(file));
   }
 

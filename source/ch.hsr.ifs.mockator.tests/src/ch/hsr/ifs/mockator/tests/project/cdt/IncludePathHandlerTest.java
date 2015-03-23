@@ -3,6 +3,8 @@ package ch.hsr.ifs.mockator.tests.project.cdt;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
@@ -38,7 +40,7 @@ public class IncludePathHandlerTest {
     IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
     IncludePathHandler handler = new IncludePathHandler(project.getProject());
     handler.addInclude(folder);
-    String includeText = "${workspace_loc:/${ProjName}/mockator}";
+    String includeText = String.format("${workspace_loc:%s${ProjName}%smockator}", File.separator, File.separator);
     assertTrue(project.hasIncludeForFolder(includeText));
     assertTrue(handler.hasInclude(folder));
     handler.removeInclude(folder);

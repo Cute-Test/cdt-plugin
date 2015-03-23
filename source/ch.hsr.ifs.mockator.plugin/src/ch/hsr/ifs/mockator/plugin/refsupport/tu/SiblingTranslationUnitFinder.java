@@ -72,7 +72,7 @@ public class SiblingTranslationUnitFinder {
   }
 
   private String getBaseNameOfThisFile() {
-    return getBaseName(file.getFullPath().toString());
+    return getBaseName(file.getName().toString());
   }
 
   private IIndexFile getThisFile() throws CoreException {
