@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007-2013 Peter Sommerlad
+ * Copyright 2007-2015 Peter Sommerlad
  *
  *********************************************************************************/
 
@@ -44,6 +44,16 @@ namespace cute_to_string {
 		}
 		static inline std::string to_string(std::string const &s){
 			return s;
+		}
+		template <typename T>
+		std::string hexit(T const &t){ // must be an unsigned type
+			std::string hexed;
+			if (t == 0) hexed+='0';
+			for (T x=t;x>0;x /= 16){
+				hexed += "0123456789ABCDEF"[x%16];
+			}
+			reverse(hexed.begin(),hexed.end());
+			return hexed;
 		}
 	}
 }
@@ -246,16 +256,6 @@ namespace cute_to_string {
 			return convert;
 		}
 		template <typename T>
-		std::string hexit(T const &t){ // must be an unsigned type
-			std::string hexed;
-			if (t == 0) hexed+='0';
-			for (T x=t;x>0;x /= 16){
-				hexed += "0123456789ABCDEF"[x%16];
-			}
-			reverse(hexed.begin(),hexed.end());
-			return hexed;
-		}
-		template <typename T>
 		std::string to_string_embedded_int_signed(T const &t, impl_place_for_traits::false_type ){
 			// manual hex conversion to avoid ostream dependency for unsigned values
 			std::string hexed="0x"+cute::cute_to_string::hexit(t);
@@ -278,7 +278,7 @@ namespace cute_to_string {
 				result = cute::cute_to_string::hexit(reinterpret_cast<unsigned long>(t));
 			else
 #if defined(USE_STD11) /* should allow for all compilers supporting ULL*/
-			result = "p"+cute::cute_to_string::hexit(reinterpret_cast<unsigned long long>(t));
+			result = cute::cute_to_string::hexit(reinterpret_cast<unsigned long long>(t));
 #else
 			return "no to_string";
 #endif
