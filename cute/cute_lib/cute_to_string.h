@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CUTE.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2007-2013 Peter Sommerlad
+ * Copyright 2007-2015 Peter Sommerlad
  *
  *********************************************************************************/
 
@@ -278,7 +278,7 @@ namespace cute_to_string {
 				result = cute::cute_to_string::hexit(reinterpret_cast<unsigned long>(t));
 			else
 #if defined(USE_STD11) /* should allow for all compilers supporting ULL*/
-			result = "p"+cute::cute_to_string::hexit(reinterpret_cast<unsigned long long>(t));
+			result = cute::cute_to_string::hexit(reinterpret_cast<unsigned long long>(t));
 #else
 			return "no to_string";
 #endif
