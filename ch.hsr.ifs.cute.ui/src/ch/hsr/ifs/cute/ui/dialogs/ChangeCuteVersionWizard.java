@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 
-import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -62,9 +61,9 @@ public class ChangeCuteVersionWizard extends Wizard {
 			}
 			replaceHeaders(cuteVersion);
 		} catch (InvocationTargetException e) {
-			TDDPlugin.log("Exception while performing version change", e);
+			CuteUIPlugin.log("Exception while performing version change", e);
 		} catch (InterruptedException e) {
-			TDDPlugin.log("Exception while performing version change", e);
+			CuteUIPlugin.log("Exception while performing version change", e);
 		}
 		return true;
 	}
@@ -75,6 +74,9 @@ public class ChangeCuteVersionWizard extends Wizard {
 			public void run(IProgressMonitor monitor) {
 				IFolder cuteFolder = project.getFolder("cute");
 				try {
+					if (!cuteFolder.exists()) {
+						cuteFolder.create(true, true, monitor);
+					}
 					IResource[] files = cuteFolder.members();
 					SubMonitor mon = SubMonitor.convert(monitor, files.length * 2);
 					for (IResource resource : files) {
@@ -85,7 +87,7 @@ public class ChangeCuteVersionWizard extends Wizard {
 					cuteVersion.copyHeaderFiles(cuteFolder, mon.newChild(files.length));
 					project.setPersistentProperty(CuteUIPlugin.CUTE_VERSION_PROPERTY_NAME, cuteVersion.getVersionString());
 				} catch (CoreException e) {
-					TDDPlugin.log("Exception while replacing headers", e);
+					CuteUIPlugin.log("Exception while replacing headers", e);
 				}
 			}
 
