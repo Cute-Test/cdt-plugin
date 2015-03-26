@@ -121,7 +121,6 @@ public class CuteDebugLauncherDelegate extends AbstractCLaunchDelegate2 {
 		return new CuteConsoleEventParser();
 	}
 
-	@SuppressWarnings("unchecked")
 	private ILaunchConfigurationDelegate2 getPreferredDelegate(ILaunchConfiguration config, String mode) throws CoreException {
 		ILaunchManager launchMgr = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType localCfg = launchMgr.getLaunchConfigurationType(ICDTLaunchConfigurationConstants.ID_LAUNCH_C_APP);

@@ -128,9 +128,8 @@ public class LinkSuiteToRunnerProcessor {
 
 	protected IASTFunctionCallExpression createMakeRunnerFuncCall() {
 		IASTInitializerClause[] makeArgs = new IASTInitializerClause[1];
-		ICPPASTQualifiedName cuteMakeRunner = nodeFactory.newQualifiedName();
-		cuteMakeRunner.addName(nodeFactory.newName(CUTE));
-		cuteMakeRunner.addName(nodeFactory.newName("makeRunner".toCharArray()));
+		ICPPASTQualifiedName cuteMakeRunner = nodeFactory.newQualifiedName(nodeFactory.newName("makeRunner".toCharArray()));
+		cuteMakeRunner.addNameSpecifier(nodeFactory.newName(CUTE));
 		IASTIdExpression makeRunnerID = nodeFactory.newIdExpression(cuteMakeRunner);
 		makeArgs[0] = nodeFactory.newIdExpression(getListenerName());
 		IASTFunctionCallExpression makeRunnerFuncCallExp = nodeFactory.newFunctionCallExpression(makeRunnerID, makeArgs);
@@ -144,9 +143,8 @@ public class LinkSuiteToRunnerProcessor {
 	}
 
 	private IASTStatement createMakeSuiteStmt() {
-		ICPPASTQualifiedName cuteSuite = nodeFactory.newQualifiedName();
-		cuteSuite.addName(nodeFactory.newName(CUTE));
-		cuteSuite.addName(nodeFactory.newName("suite".toCharArray()));
+		ICPPASTQualifiedName cuteSuite = nodeFactory.newQualifiedName(nodeFactory.newName("suite".toCharArray()));
+		cuteSuite.addNameSpecifier(nodeFactory.newName(CUTE));
 		IASTDeclSpecifier declSpecifier = nodeFactory.newTypedefNameSpecifier(cuteSuite);
 		IASTSimpleDeclaration declaration = nodeFactory.newSimpleDeclaration(declSpecifier);
 
