@@ -124,6 +124,9 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		}
 
 		private boolean mustBeAMemberFunction(OverloadableOperator operator) {
+			if (operator == null) {
+				return false;
+			}
 			switch (operator) {
 			case ASSIGN:
 			case PAREN:
