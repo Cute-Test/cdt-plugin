@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2014, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2007-2015, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -65,14 +65,16 @@ public class GcovFileParser {
 		try {
 			try {
 				line = in.readLine();
-				Matcher sourceMatcher = SOURCE_PATTERN.matcher(line);
-				if (sourceMatcher.matches()) {
-					handleSource(sourceMatcher);
+				if (line != null) {
+					Matcher sourceMatcher = SOURCE_PATTERN.matcher(line);
+					if (sourceMatcher.matches()) {
+						handleSource(sourceMatcher);
+					}
+					if (file == null) {
+						return;
+					}
+					parseContent(in);
 				}
-				if (file == null) {
-					return;
-				}
-				parseContent(in);
 			} catch (NumberFormatException e) {
 				GcovPlugin.log(e);
 			} catch (IOException e) {
@@ -147,6 +149,10 @@ public class GcovFileParser {
 
 			} else {
 				int i = Integer.parseInt(count);
+				if (currentFunction == null) {
+					currentFunction = new Function("unknown function", 0, 0);
+					file.addFunction(currentFunction);
+				}
 				if (i > 0) {
 					currentLine = new Line(lineNumber, CoverageStatus.Covered);
 					currentFunction.addLine(currentLine);
