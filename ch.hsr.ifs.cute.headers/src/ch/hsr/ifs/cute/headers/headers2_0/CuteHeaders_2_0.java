@@ -28,7 +28,7 @@ public class CuteHeaders_2_0 implements ICuteHeaders {
 	}
 
 	public String getVersionString() {
-		return "CUTE Headers 2.0.0";
+		return "CUTE Headers 2.0.1";
 	}
 
 	public void copyHeaderFiles(IContainer container, IProgressMonitor monitor) throws CoreException {
