@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2007-2015, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -29,11 +29,20 @@ public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 
 	@Override
 	protected boolean isCustomPageComplete() {
-		if (suitenameText == null || suitenameText.getText().isEmpty()) {
+		if (suitenameText == null) {
 			errmsg = Messages.getString("NewCuteSuiteWizardCustomPage.EnterSuiteName");
 			return false;
 		}
-		if (!suitenameText.getText().matches("\\w+")) {
+		String suiteName = suitenameText.getText();
+		if (suiteName.isEmpty()) {
+			errmsg = String.format(Messages.getString("NewCuteSuiteWizardCustomPage.EnterSuiteName"), suiteName);
+			return false;
+		}
+		if (suiteName.toLowerCase().equals("test")) {
+			errmsg = Messages.getString("NewCuteSuiteWizardCustomPage.MustNotBeTest");
+			return false;
+		}
+		if (!suiteName.matches("\\w+")) {
 			errmsg = Messages.getString("NewCuteSuiteWizardCustomPage.InvalidSuiteName");
 			return false;
 		}
