@@ -1076,3 +1076,54 @@ template <typename T, unsigned N>
 void print_pair(T const (&t)[N]){
 	t+N;
 }
+//!Do not Report Binary Operator on Typedefed Pointer
+//@.config
+markerCount=0
+//@A.cpp
+void foo() {
+	struct S{};
+	typedef S* SP;
+	SP sp{};
+	sp = sp + 0;
+}
+//=
+void foo() {
+	struct S{};
+	typedef S* SP;
+	SP sp{};
+	sp = sp + 0;
+}
+//!Do not Report Binary Operator on Aliased Pointer
+//@.config
+markerCount=0
+//@A.cpp
+void foo() {
+	struct S{};
+	using SP = S*;
+	SP sp{};
+	sp = sp + 0;
+}
+//=
+void foo() {
+	struct S{};
+	using SP = S*;
+	SP sp{};
+	sp = sp + 0;
+}
+//!Do not Report Unary Operator on Aliased Pointer
+//@.config
+markerCount=0
+//@A.cpp
+void foo() {
+	struct S{};
+	using SP = S*;
+	SP sp{};
+	*sp = *sp;
+}
+//=
+void foo() {
+	struct S{};
+	using SP = S*;
+	SP sp{};
+	*sp = *sp;
+}

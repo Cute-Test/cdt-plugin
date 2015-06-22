@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2011-2015, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -167,9 +167,12 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 
 		private boolean hasPrimitiveType(IASTExpression operand) {
 			IType type = operand.getExpressionType();
-			if (type instanceof IPointerType || type instanceof IArrayType) return true;
-			type = SemanticUtil.getUltimateType(type, true);
-			return type instanceof IBasicType || type instanceof IEnumeration || type instanceof IFunctionType;
+			type = SemanticUtil.getUltimateTypeUptoPointers(type);
+			return     type instanceof IBasicType
+			        || type instanceof IEnumeration
+			        || type instanceof IFunctionType
+			        || type instanceof IPointerType
+			        || type instanceof IArrayType;
 		}
 
 		private boolean hasTypeOperand(IASTBinaryExpression expression) {
