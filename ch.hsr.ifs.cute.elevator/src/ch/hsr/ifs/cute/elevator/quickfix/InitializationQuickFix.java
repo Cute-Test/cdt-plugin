@@ -1,19 +1,15 @@
 package ch.hsr.ifs.cute.elevator.quickfix;
 
 import org.eclipse.cdt.codan.core.cxx.Activator;
-import org.eclipse.cdt.codan.ui.AbstractAstRewriteQuickFix;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
-import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.ltk.core.refactoring.Change;
 
 import ch.hsr.ifs.cute.elevator.ast.analysis.NodeProperties;
 import ch.hsr.ifs.cute.elevator.ast.transformation.ConstructorChainConverter;
@@ -21,11 +17,13 @@ import ch.hsr.ifs.cute.elevator.ast.transformation.DeclaratorConverter;
 import ch.hsr.ifs.cute.elevator.ast.transformation.NewExpressionConverter;
 
 /**
- * Elevates declarations, new-expressions, and constructor chains to the new Uniform Initializer syntax.
+ * Elevates declarations, new-expressions, and constructor chains to the new
+ * Uniform Initializer syntax.
  */
-public class InitializationQuickFix extends AbstractAstRewriteQuickFix {
+public class InitializationQuickFix extends ElevatorQuickFix {
 
-    private static final int AST_STYLE = ITranslationUnit.AST_SKIP_INDEXED_HEADERS | ITranslationUnit.AST_PARSE_INACTIVE_CODE;
+    private static final int AST_STYLE = ITranslationUnit.AST_SKIP_INDEXED_HEADERS
+            | ITranslationUnit.AST_PARSE_INACTIVE_CODE;
 
     private IASTTranslationUnit ast;
     private NodeProperties astNodeProperties;
@@ -34,7 +32,7 @@ public class InitializationQuickFix extends AbstractAstRewriteQuickFix {
     public String getLabel() {
         return "Replace with uniform variable initialization";
     }
-    
+
     @Override
     public void modifyAST(final IIndex index, final IMarker marker) {
         try {
@@ -54,29 +52,23 @@ public class InitializationQuickFix extends AbstractAstRewriteQuickFix {
     }
 
     private void transformConstructorchainInitializer() throws CoreException {
-        ICPPASTConstructorChainInitializer initializer = astNodeProperties.getAncestor(ICPPASTConstructorChainInitializer.class);
+        ICPPASTConstructorChainInitializer initializer = astNodeProperties
+                .getAncestor(ICPPASTConstructorChainInitializer.class);
         ICPPASTConstructorChainInitializer convertedInitializer = new ConstructorChainConverter(initializer).convert();
-        performChange(initializer, convertedInitializer);
+        performChange(initializer, convertedInitializer, ast);
+        marker.delete();
     }
 
     private void transformDeclarator() throws CoreException {
         IASTDeclarator declarator = astNodeProperties.getAncestor(IASTDeclarator.class);
         IASTDeclarator convertedDeclarator = new DeclaratorConverter(declarator).convert();
-        performChange(declarator, convertedDeclarator);
+        performChange(declarator, convertedDeclarator, ast);
     }
 
     private void transformNewExpression() throws CoreException {
         ICPPASTNewExpression expression = astNodeProperties.getAncestor(ICPPASTNewExpression.class);
         ICPPASTNewExpression convertedExpression = new NewExpressionConverter(expression).convert();
-        performChange(expression, convertedExpression);
-    }
-
-    private void performChange(IASTNode target, IASTNode replacement) throws CoreException {
-        ASTRewrite rewrite = ASTRewrite.create(ast);
-        rewrite.replace(target, replacement, null);
-        Change change = rewrite.rewriteAST();
-        change.perform(new NullProgressMonitor());
-        marker.delete();
+        performChange(expression, convertedExpression, ast);
     }
 
     private IASTNode getAstNameFromMarker(IMarker marker) {

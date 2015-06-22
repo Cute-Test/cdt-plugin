@@ -27,8 +27,18 @@
 			   	name="Replaceable default constructor calls"
 			   	markerType="ch.hsr.ifs.cute.elevator.elevationProblemMarker"
 			   	category="ch.hsr.ifs.elevator.enhancements"
-			   	messagePattern="replaceable default constructor call">
+			   	messagePattern="Replaceable default constructor call">
 		    </problem>
+      <problem
+            category="ch.hsr.ifs.elevator.enhancements"
+            defaultEnabled="true"
+            defaultSeverity="Warning"
+            description="Elevator Initialization Warning"
+            id="ch.hsr.ifs.elevator.nullMacro"
+            markerType="ch.hsr.ifs.cute.elevator.elevationProblemMarker"
+            messagePattern="Replaceable NULL macro reference"
+            name="NULL macro">
+      </problem>
 		    
 		</checker>	
 		
@@ -45,7 +55,11 @@
     	<resolution
             class="ch.hsr.ifs.cute.elevator.quickfix.InitializationQuickFix"
             problemId="ch.hsr.ifs.elevator.defaultctor">
-    	</resolution>    	
+    	</resolution>
+     <resolution
+           class="ch.hsr.ifs.cute.elevator.quickfix.NullMacroQuickFix"
+           problemId="ch.hsr.ifs.elevator.nullMacro">
+     </resolution>    	
 	</extension>
    <extension
         point="org.eclipse.ui.actionSets">

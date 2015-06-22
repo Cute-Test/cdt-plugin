@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2014 Institute for Software, HSR Hochschule fuer Technik 
+ * Copyright (c) 2014, 2015 Institute for Software, HSR Hochschule fuer Technik 
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,9 @@ import ch.hsr.ifs.cute.elevator.test.checker.DefaultConstructorNegativeMatchesTe
 import ch.hsr.ifs.cute.elevator.test.checker.DefaultConstructorPositiveMatchesTest;
 import ch.hsr.ifs.cute.elevator.test.checker.InitializationCheckerNegativeMatchesTest;
 import ch.hsr.ifs.cute.elevator.test.checker.InitializationCheckerPositiveMatchesTest;
+import ch.hsr.ifs.cute.elevator.test.checker.NullMacroCheckerTest;
 import ch.hsr.ifs.cute.elevator.test.quickfix.InitializationQuickFixTest;
+import ch.hsr.ifs.cute.elevator.test.quickfix.ReplaceNullMacroQuickFixTest;
 import ch.hsr.ifs.cute.elevator.test.refactoring.ElevateProjectRefactoringTest;
 
 @RunWith(Suite.class)
@@ -30,7 +32,9 @@ import ch.hsr.ifs.cute.elevator.test.refactoring.ElevateProjectRefactoringTest;
 	InitializationQuickFixTest.class, 
 	ElevateProjectRefactoringTest.class,
 	DefaultConstructorNegativeMatchesTest.class,
-	DefaultConstructorPositiveMatchesTest.class
+	DefaultConstructorPositiveMatchesTest.class,
+	NullMacroCheckerTest.class,
+	ReplaceNullMacroQuickFixTest.class
 //@formatter:on
 })
 public class AllElevatorTests {

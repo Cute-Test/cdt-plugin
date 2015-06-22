@@ -3,6 +3,7 @@ package ch.hsr.ifs.cute.elevator.checker;
 import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.codan.core.model.IChecker;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -11,6 +12,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import ch.hsr.ifs.cute.elevator.ast.analysis.DeclaratorCollector;
 import ch.hsr.ifs.cute.elevator.ast.analysis.InitializerCollector;
 import ch.hsr.ifs.cute.elevator.ast.analysis.NodeProperties;
+import ch.hsr.ifs.cute.elevator.ast.analysis.NullPointerCollector;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.Condition;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.HasDefaultConstructor;
 
@@ -18,12 +20,14 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
 
     public static final String UNINITIALIZED_VAR = "ch.hsr.ifs.elevator.uninitialized";
     public static final String DEFAULT_CTOR = "ch.hsr.ifs.elevator.defaultctor";
+    public static final String NULL_MACRO = "ch.hsr.ifs.elevator.nullMacro";
     private final Condition hasDefaultConstructor = new HasDefaultConstructor();
     
     @Override
     public void processAst(final IASTTranslationUnit ast) {
         collectAndReportDeclarators(ast);
         collectAndReportInitializers(ast);
+        collectAndReportAllNullPointerInitializations(ast);
     }
 
     private void collectAndReportInitializers(final IASTTranslationUnit ast) {
@@ -42,9 +46,21 @@ public class InitializationChecker extends AbstractIndexAstChecker implements IC
         }
     }
 
+    private void collectAndReportAllNullPointerInitializations(final IASTTranslationUnit ast) {
+        final NullPointerCollector nullPointerCollector = new NullPointerCollector();
+        ast.accept(nullPointerCollector);
+        for (IASTExpression expression : nullPointerCollector.getNullMacroCalls()) {
+            reportProblem(expression, NULL_MACRO);
+        }
+    }
+
     public void reportProblem(final IASTNode astNode, final Object... args) {
-        final NodeProperties nodeProperties = new NodeProperties(astNode);
         final String id = hasDefaultConstructor.satifies(astNode) ? DEFAULT_CTOR : UNINITIALIZED_VAR;
+        reportProblem(astNode, id, args);
+    }
+
+    private void reportProblem(final IASTNode astNode, final String id, final Object... args) {
+        final NodeProperties nodeProperties = new NodeProperties(astNode);
         if (nodeProperties.hasAncestor(ICPPASTNewExpression.class)) {
             super.reportProblem(id, nodeProperties.getAncestor(ICPPASTNewExpression.class), args);
         } else {
