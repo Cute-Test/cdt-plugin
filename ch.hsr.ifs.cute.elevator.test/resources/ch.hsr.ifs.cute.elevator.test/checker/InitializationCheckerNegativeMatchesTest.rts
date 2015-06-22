@@ -309,3 +309,6 @@ int main(int argc, char **argv) {
 		// do stuff
 	}
 }
+//!Ignore Extern Declaration
+//@main.cpp
+extern int i;

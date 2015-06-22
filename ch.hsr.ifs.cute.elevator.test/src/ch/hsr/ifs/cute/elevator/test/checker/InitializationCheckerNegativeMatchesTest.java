@@ -8,10 +8,10 @@ import ch.hsr.ifs.cute.elevator.checker.InitializationChecker;
 
 public class InitializationCheckerNegativeMatchesTest extends CDTTestingCodanCheckerTest {
 
-	@Override
-	protected String getProblemId() {
-		return InitializationChecker.UNINITIALIZED_VAR;
-	}
+    @Override
+    protected String getProblemId() {
+        return InitializationChecker.UNINITIALIZED_VAR;
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -19,9 +19,9 @@ public class InitializationCheckerNegativeMatchesTest extends CDTTestingCodanChe
         super.setUp();
     }
 
-	@Override
-	@Test
-	public void runTest() throws Throwable {
-		assertTrue(findMarkers().length == 0);
-	}
+    @Override
+    @Test
+    public void runTest() throws Throwable {
+        assertEquals(0, findMarkers().length);
+    }
 }

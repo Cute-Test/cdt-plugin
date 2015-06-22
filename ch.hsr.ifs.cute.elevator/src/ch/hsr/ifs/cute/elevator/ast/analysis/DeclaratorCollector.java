@@ -15,6 +15,7 @@ import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.HasInitializerListConstr
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.HasNarrowingTypeConversion;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsElevated;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsElevatedNewExpression;
+import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsExternDeclaration;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsInstanceOf;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.IsUninitializedReference;
 import ch.hsr.ifs.cute.elevator.ast.analysis.conditions.OtherDeclaratorElevationConditions;
@@ -31,12 +32,14 @@ public class DeclaratorCollector extends ASTVisitor {
     private final Condition hasNarrowingTypeConversion = new HasNarrowingTypeConversion();
     private final Condition hasInitializerListConstructor = new HasInitializerListConstructor();
     private final Condition containsPackExpansion = new ContainsPackExpansion();
+    private final Condition isExternDeclaration = new IsExternDeclaration();
     private final Condition isElevationCandidate = not(
             isAlreadyElevated
             .or(hasNarrowingTypeConversion)
             .or(hasInitializerListConstructor)
             .or(containsPackExpansion)
             .or(new IsUninitializedReference())
+            .or(isExternDeclaration)
             ).and(new OtherDeclaratorElevationConditions());
     
     public DeclaratorCollector() {
