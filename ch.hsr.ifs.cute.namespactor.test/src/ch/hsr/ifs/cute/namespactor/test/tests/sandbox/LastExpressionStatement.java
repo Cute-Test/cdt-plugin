@@ -23,56 +23,59 @@ package ch.hsr.ifs.cute.namespactor.test.tests.sandbox;
  * Thomas Corbat (IFS) - initial API and implementation
  *******************************************************************************/
 
+import java.io.IOException;
+
 import junit.framework.Test;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.parser.tests.rewrite.changegenerator.ChangeGeneratorTest;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTUsingDirective;
 import org.eclipse.cdt.internal.core.dom.rewrite.ASTModification;
-import org.eclipse.cdt.internal.core.dom.rewrite.ASTModificationStore;
 
 @SuppressWarnings("restriction")
 public class LastExpressionStatement extends ChangeGeneratorTest {
+    private final String source = "void f()\r\n{\r\n\tint i = 0;\r\n\tf();\r\n}\r\n";
+    private final String expectedSource = "void f()\r\n{\r\n\tint i = 0;\r\n\tusing namespace std;\r\n}\r\n";
 
-	public LastExpressionStatement() {
-		super("Last Replace After Insert Has No Line Break");
-	}
+    public LastExpressionStatement() {
+        super("Last Replace After Insert Has No Line Break");
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		source = "void f()\r\n{\r\n\tint i = 0;\r\n\tf();\r\n}\r\n";
-		expectedSource = "void f()\r\n{\r\n\tint i = 0;\r\n\tusing namespace std;\r\n}\r\n";
-		super.setUp();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
 
-	public static Test suite() {
-		return new LastExpressionStatement();
-	}
+    @Override
+    protected StringBuilder[] getTestSource(int sections) throws IOException {
+        StringBuilder[] sources = new StringBuilder[2];
+        sources[0] = new StringBuilder(source);
+        sources[1] = new StringBuilder(expectedSource);
+        return sources;
+    }
 
-	@Override
-	protected ASTVisitor createModificator(final ASTModificationStore modStore) {
-		return new ASTVisitor() {
-			{
-				shouldVisitStatements = true;
-			}
+    public static Test suite() {
+        return new LastExpressionStatement();
+    }
 
-			@Override
-			public int visit(IASTStatement statement) {
-				if (statement instanceof IASTExpressionStatement) {
-					IASTExpressionStatement exprStatement = (IASTExpressionStatement) statement;
+    public void testLastReplaceAfterInsertHasNoLineBreak() throws Exception {
+        compareResult(new ASTVisitor() {
+            {
+                shouldVisitStatements = true;
+            }
 
-					ASTModification modification1 = new ASTModification(ASTModification.ModificationKind.REPLACE, exprStatement, null, null);
-					CPPASTDeclarationStatement declStatement = new CPPASTDeclarationStatement(new CPPASTUsingDirective(new CPPASTName("std".toCharArray())));
-					ASTModification modification2 = new ASTModification(ASTModification.ModificationKind.INSERT_BEFORE, exprStatement, declStatement, null);
-					modStore.storeModification(null, modification1);
-					modStore.storeModification(null, modification2);
-				}
-				return PROCESS_CONTINUE;
-			}
-		};
-	}
+            @Override
+            public int visit(IASTStatement statement) {
+                if (statement instanceof IASTExpressionStatement) {
+                    addModification(null, ASTModification.ModificationKind.REPLACE, statement, null);
+                    IASTDeclarationStatement declStatement = factory.newDeclarationStatement(factory
+                            .newUsingDirective(factory.newName("std".toCharArray())));
+                    addModification(null, ASTModification.ModificationKind.INSERT_BEFORE, statement, declStatement);
+                }
+                return PROCESS_CONTINUE;
+            }
+        });
+    }
 }

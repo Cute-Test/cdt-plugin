@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.releng</artifactId>
-	<version>4.11.0-SNAPSHOT</version>
+	<version>4.12.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
 		<tycho-version>0.20.0</tycho-version>
@@ -39,22 +39,24 @@
 		</profile>
 		<profile>
 			<id>luna</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<properties>
 				<eclipse-version>luna</eclipse-version>
 				<eclipse-version-number>4.4</eclipse-version-number>
 			</properties>
 		</profile>
+		<profile>
+			<id>mars</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<eclipse-version>mars</eclipse-version>
+				<eclipse-version-number>4.5</eclipse-version-number>
+			</properties>
+		</profile>
 	</profiles>
 
 	<repositories>
-		<repository>
-			<id>cdt85-rc2</id>
-			<url>http://download.eclipse.org/tools/cdt/builds/luna/milestones/sr1-rc2</url>
-			<layout>p2</layout>
-		</repository>
 		<repository>
 			<id>release</id>
 			<url>http://download.eclipse.org/releases/${eclipse-version}/</url>
@@ -67,13 +69,8 @@
 		</repository>
 		<repository>
 			<id>ifs cdttesting</id>
-			<url>http://www.cevelop.com/cdt-test-plugins/development</url>
+			<url>http://www.cevelop.com/cdt-test-plugins/mars</url>
 			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>swtbot</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
 		</repository>
 	</repositories>
 	<modules>

@@ -81,7 +81,7 @@ public abstract class QuickFixTestCase extends CheckerTestCase {
 	}
 
 	@Override
-	public void tearDown() throws CoreException {
+	public void tearDown() throws Exception {
 		IWorkbenchPage[] pages = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPages();
 		for (IWorkbenchPage page : pages) {
 			page.closeAllEditors(false);

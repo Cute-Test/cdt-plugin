@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.charwars.feature"
       label="CharWars"
-      version="4.11.0.qualifier">
+      version="4.12.0.qualifier">
 
    <description url="http://www.example.com/description">
       This package contains the CharWars plugin to refactor pointers.
