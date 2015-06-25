@@ -3,7 +3,6 @@ package ch.hsr.ifs.cute.elevenator;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -14,16 +13,12 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.internal.dialogs.ViewContentProvider;
 
 public class SelectVersionWizardPage extends WizardPage {
 
@@ -216,7 +211,6 @@ public class SelectVersionWizardPage extends WizardPage {
 
 	@Override
 	public void setWizard(IWizard newWizard) {
-		// TODO Auto-generated method stub
 		super.setWizard(newWizard);
 	}
 
