@@ -15,6 +15,6 @@ public class FunctionCallSignaturesNoneMissingTest extends CDTTestingCodanChecke
   @Override
   @Test
   public void runTest() throws Throwable {
-    assertTrue(findMarkers().length == 0);
+    assertEquals(0, findMarkers().length);
   }
 }

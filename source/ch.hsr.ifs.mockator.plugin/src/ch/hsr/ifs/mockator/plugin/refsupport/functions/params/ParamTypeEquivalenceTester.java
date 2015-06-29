@@ -1,5 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
+import static ch.hsr.ifs.mockator.plugin.MockatorConstants.BASIC_STRING_CHAR;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.STD_STRING;
 import static ch.hsr.ifs.mockator.plugin.base.tuples.Tuple._1;
 import static ch.hsr.ifs.mockator.plugin.base.tuples.Tuple._2;
@@ -47,7 +48,7 @@ public class ParamTypeEquivalenceTester {
       Pair<IType, IType> types = it.next();
       IType callerType = _1(types);
       IType receiverType = _2(types);
-
+      
       if (filter != null && filter.apply(i, receiverType)) {
         continue;
       }
@@ -108,7 +109,8 @@ public class ParamTypeEquivalenceTester {
 
   private static boolean isString(IType type) {
     type = AstUtil.unwindPointerOrRefType(CxxAstUtils.unwindTypedef(type));
-    return unwindQualifierType(type).toString().contains(STD_STRING);
+    String unwoundQualifierType = unwindQualifierType(type).toString();
+	return unwoundQualifierType.contains(STD_STRING) || unwoundQualifierType.contains(BASIC_STRING_CHAR);
   }
 
   private static IType unwindQualifierType(IType type) {

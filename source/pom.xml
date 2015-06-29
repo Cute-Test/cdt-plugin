@@ -10,13 +10,28 @@
 		<maven>3.0</maven>
 	</prerequisites>
     <properties>
-        <target-file>mockator-luna</target-file>
+        <target-file>mockator-mars</target-file>
         <tycho-version>0.20.0</tycho-version>
 		<encoding>UTF-8</encoding>
 		<compiler-version>1.7</compiler-version>
 	</properties>
 	<repositories>
 		<repository>
+			<id>ecplise-cdt-mars</id>
+			<url>http://download.eclipse.org/releases/mars</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>CUTE</id>
+			<url>http://www.cute-test.com/updatesite/mars</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>Cevelop</id>
+			<url>http://www.cevelop.com/cdt-test-plugins/mars</url>
+			<layout>p2</layout>
+		</repository>
+	<!--	<repository>
 			<id>ecplise-cdt-luna</id>
 			<url>http://download.eclipse.org/releases/luna</url>
 			<layout>p2</layout>
@@ -31,7 +46,7 @@
 			<url>http://www.cevelop.com/cdt-test-plugins/development</url>
 			<layout>p2</layout>
 		</repository>
-	<!--	<repository>
+		<repository>
             <id>eclipse-cdt-kepler</id>
             <url>http://download.eclipse.org/tools/cdt/releases/kepler</url>
 			<layout>p2</layout>

@@ -16,6 +16,7 @@ public abstract class MockatorConstants {
   public static final String COMMA = ",";
   public static final String CONST_KEYWORD = "const";
   public static final String STD_STRING = "std::string";
+  public static final String BASIC_STRING_CHAR = "basic_string <char>";
   public static final String L_PARENTHESIS = "(";
   public static final String R_PARENTHESIS = ")";
   public static final String SEMICOLON = ";";

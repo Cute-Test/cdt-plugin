@@ -13,6 +13,7 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -69,9 +70,10 @@ public class MockatorInCUTEWizardTest extends AbstractMockatorUITests {
     bot.checkBox("Show project types and toolchains only if they are supported on the platform")
         .click();
     SWTBotTree projTypeTree = bot.treeWithLabel("Project type:");
-    projTypeTree.select("CUTE Project");
-    SWTBotTree toolChainsTree = bot.treeWithLabel("Toolchains:");
-    toolChainsTree.select("Linux GCC");
+    SWTBotTreeItem cuteCategory = projTypeTree.getTreeItem("CUTE");
+    cuteCategory.select("CUTE Project");
+//    SWTBotTree toolChainsTree = bot.treeWithLabel("Toolchains:");
+//    toolChainsTree.select("Linux GCC");
     bot.button("Next >").click();
     bot.comboBox().setSelection(0);
     bot.checkBox("Enable mock support with Mockator").click();

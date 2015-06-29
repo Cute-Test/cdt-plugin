@@ -3,13 +3,13 @@ package ch.hsr.ifs.mockator.plugin.refsupport.tu;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
+import org.eclipse.cdt.internal.ui.refactoring.changes.CreateFileChange;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.cdt.compatibility.changes.CreateFileChange;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
