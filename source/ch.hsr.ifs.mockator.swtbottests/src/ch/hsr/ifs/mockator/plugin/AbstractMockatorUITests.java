@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.core.resources.IProject;
@@ -10,10 +11,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.WidgetResult;
@@ -52,11 +53,13 @@ public abstract class AbstractMockatorUITests {
     SWTBotTreeItem expandNode = bot.tree().expandNode("General");
     expandNode.select("Existing Projects into Workspace");
     bot.button("Next >").click();
-    shell.pressShortcut(SWT.ALT, 'a');
+    bot.radio("Select archive file:").click();
+//    shell.pressShortcut(SWT.ALT, 'a');
     URL location = MockatorPlugin.getDefault().getBundle().getResource(zipName);
     location = FileLocator.toFileURL(location);
-    bot.text(1).setText(location.getPath());
-    shell.pressShortcut(SWT.ALT, 'e');
+    bot.comboBox(1).setText(location.getPath());
+    bot.button("Refresh").click();
+//    shell.pressShortcut(SWT.ALT, 'e');
     bot.button("Finish").click();
     bot.waitUntil(Conditions.shellCloses(shell), 10000);
     CCorePlugin.getIndexManager().joinIndexer(10000, new NullProgressMonitor());
@@ -76,14 +79,14 @@ public abstract class AbstractMockatorUITests {
 
   protected SWTBotMenu getSubMenuItem(final SWTBotMenu parentMenu, final String itemText)
       throws WidgetNotFoundException {
+	  
     MenuItem menuItem = UIThreadRunnable.syncExec(new WidgetResult<MenuItem>() {
       @Override
       public MenuItem run() {
         Menu bar = parentMenu.widget.getMenu();
-
         if (bar == null)
           return null;
-
+                
         for (MenuItem item : bar.getItems()) {
           if (item.getText().equals(itemText))
             return item;
@@ -99,9 +102,15 @@ public abstract class AbstractMockatorUITests {
     return new SWTBotMenu(menuItem);
   }
 
-  protected void selectCppPerspective() {
-    bot.perspectiveByLabel("C/C++").activate();
-  }
+	protected void selectCppPerspective() {
+		List<SWTBotView> views = bot.views();
+		for (SWTBotView view : views) {
+			if ("Welcome".equals(view.getTitle())) {
+				view.close();
+			}
+		}
+		bot.perspectiveByLabel("C/C++").activate();
+	}
 
   private static class JoinableMonitor extends NullProgressMonitor {
     private boolean isDone = false;

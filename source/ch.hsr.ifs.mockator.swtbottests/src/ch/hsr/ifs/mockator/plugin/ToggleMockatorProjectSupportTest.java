@@ -18,34 +18,34 @@ import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ToggleMockatorProjectSupportTest extends AbstractMockatorUITests {
 
-  @SuppressWarnings("nls")
-  @Before
-  public void setup() throws IOException {
-    selectCppPerspective();
-    importProjectByZip("MockatorProject.zip");
-  }
+	@SuppressWarnings("nls")
+	@Before
+	public void setup() throws IOException {
+		selectCppPerspective();
+		importProjectByZip("MockatorProject.zip");
+	}
 
-  @SuppressWarnings("nls")
-  @Test
-  public void toggleMockatorSupportYieldsNatureExistence() throws Exception {
-    enableMockatorSupport();
-    IProject project = getWorkspaceRoot().getProject("MockatorProject");
-    assertTrue(project.hasNature(MockatorNature.NATURE_ID));
-    removeMockatorSupport();
-    assertFalse(project.hasNature(MockatorNature.NATURE_ID));
-  }
+	@SuppressWarnings("nls")
+	@Test
+	public void toggleMockatorSupportYieldsNatureExistence() throws Exception {
+		enableMockatorSupport();
+		IProject project = getWorkspaceRoot().getProject("MockatorProject");
+		assertTrue(project.hasNature(MockatorNature.NATURE_ID));
+		removeMockatorSupport();
+		assertFalse(project.hasNature(MockatorNature.NATURE_ID));
+	}
 
-  private void enableMockatorSupport() {
-    SWTBotTree tree = getProjectExplorer();
-    tree.select("MockatorProject");
-    getSubMenuItem(tree.contextMenu("Mockator"), "&Add Mockator Support").click();
-  }
+	private void enableMockatorSupport() {
+		getSubMenuItem(getMockatorContextMenu(), "&Add Mockator Support").click();
+	}
 
-  private void removeMockatorSupport() {
-    getSubMenuItem(getMockatorContextMenu(), "&Remove Mockator Support").click();
-  }
+	private void removeMockatorSupport() {		
+		getSubMenuItem(getMockatorContextMenu(), "&Remove Mockator Support").click();
+	}
 
-  private SWTBotMenu getMockatorContextMenu() {
-    return getProjectExplorer().contextMenu("Mockator");
-  }
+	private SWTBotMenu getMockatorContextMenu() {
+		SWTBotTree tree = getProjectExplorer();
+		tree.select("MockatorProject");
+		return tree.contextMenu("Mockator");
+	}
 }
