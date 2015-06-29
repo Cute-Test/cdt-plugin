@@ -3,7 +3,7 @@
    <description name="Seam and Test Double Support for Eclipse CDT" url="http://mockator.com/update/">
       Mockator is an Eclipse CDT plug-in that helps in refactoring towards seams and to generate fake and mock objects for unit testing.
    </description>
-   <feature url="features/ch.hsr.ifs.mockator.feature_0.0.1.qualifier.jar" id="ch.hsr.ifs.mockator.feature" version="0.0.1.qualifier">
+   <feature url="features/ch.hsr.ifs.mockator.feature_1.0.0.qualifier.jar" id="ch.hsr.ifs.mockator.feature" version="1.0.0.qualifier">
        <category name="ch.hsr.ifs.mockator.updatesite.category"/>
    </feature>
    <category-def name="ch.hsr.ifs.mockator.updatesite.category" label="Seam and Test Double Support for Eclipse CDT"/>

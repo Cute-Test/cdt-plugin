@@ -29,7 +29,7 @@ Require-Bundle: org.eclipse.ui,
  ch.hsr.ifs.cute.core;bundle-version="4.6.0",
  ch.hsr.ifs.cute.ui;bundle-version="4.6.0",
  ch.hsr.ifs.mockator.plugin;bundle-version="0.0.1"
-Bundle-Version: 0.0.1.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: ch.hsr.ifs.mockator.tests.MockatorTestPlugin
 Bundle-SymbolicName: ch.hsr.ifs.mockator.tests;singleton:=true
