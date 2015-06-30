@@ -42,11 +42,12 @@ public class ArrayQuickFix extends BaseQuickFix {
 		IASTNode block =  ASTAnalyzer.getEnclosingBlock(oldDeclarator);
 		boolean isGlobal = (block == oldDeclarator.getTranslationUnit());
 		IASTSimpleDeclaration oldDeclaration = (IASTSimpleDeclaration)oldDeclarator.getParent();
+		int storageclass=oldDeclaration.getDeclSpecifier().getStorageClass();
 		IASTDeclarationStatement oldDeclarationStatement = isGlobal ? null : (IASTDeclarationStatement)oldDeclaration.getParent();
 		IASTNode beforeNode = isGlobal ? oldDeclaration : oldDeclarationStatement;
 
 		for(IASTDeclarator declarator : oldDeclaration.getDeclarators()) {
-			insertNewDeclarationStatementFromDeclarator(declarator, beforeNode, declarator.equals(oldDeclarator), block, rewrite);
+			insertNewDeclarationStatementFromDeclarator(declarator, beforeNode, declarator.equals(oldDeclarator),storageclass, block, rewrite);
 		}
 		
 		ASTModifier.remove(beforeNode, rewrite);
@@ -88,6 +89,7 @@ public class ArrayQuickFix extends BaseQuickFix {
 	}
 	
 	private String getNewName(IASTDeclarator declarator) {
+		// keep string based impl for the moment, might think about 
 		IASTSimpleDeclaration declaration = (IASTSimpleDeclaration)declarator.getParent();
 		ICPPASTArrayDeclarator arrayDeclarator = (ICPPASTArrayDeclarator)declarator;
 		String pointerOperators = getPointerOperators(declarator);
@@ -101,12 +103,18 @@ public class ArrayQuickFix extends BaseQuickFix {
 			newName = String.format("%s<%s, %s>", StdArray.STD_ARRAY, newName, count);
 		}
 
-		return handleStaticDatatypes(newName);
+		final String storageclasses []={ "static ", "extern ","typedef ","register ", "mutable ", "register "};
+		// arrays can never be auto, IMHO
+		for (String storageclasskeyword : storageclasses) {
+			if (newName.contains(storageclasskeyword)) {
+				return newName.replaceAll(storageclasskeyword, "");
+			}
+		}
+		return newName;
 	}
 	
-	private IASTDeclarationStatement newRefactoredDeclarationStatementFromDeclarator(IASTDeclarator declarator) {
+	private IASTDeclarationStatement newRefactoredDeclarationStatementFromDeclarator(IASTDeclarator declarator, int storageclass) {
 		String newName = getNewName(declarator);
-		// move the following into getNewName and set the storage class.
 		ICPPASTNamedTypeSpecifier newNamedTypeSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(newName);
 		IASTSimpleDeclaration newSimpleDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newNamedTypeSpecifier);
 		IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
@@ -117,12 +125,13 @@ public class ArrayQuickFix extends BaseQuickFix {
 		}
 
 		newSimpleDeclaration.addDeclarator(newDeclarator);
+		newSimpleDeclaration.getDeclSpecifier().setStorageClass(storageclass); // re-establish original storage class
 		return ExtendedNodeFactory.newDeclarationStatement(newSimpleDeclaration);
 	}
 	
-	private void insertNewDeclarationStatementFromDeclarator(IASTDeclarator declarator, IASTNode beforeNode, boolean isOldDeclarator, IASTNode block, ASTRewrite rewrite) {
+	private void insertNewDeclarationStatementFromDeclarator(IASTDeclarator declarator, IASTNode beforeNode, boolean isOldDeclarator, int storageclass, IASTNode block, ASTRewrite rewrite) {
 		boolean isGlobal = (block == declarator.getTranslationUnit());
-		IASTDeclarationStatement declarationStatement = isOldDeclarator ? newRefactoredDeclarationStatementFromDeclarator(declarator) : ExtendedNodeFactory.newDeclarationStatementFromDeclarator(declarator);
+		IASTDeclarationStatement declarationStatement = isOldDeclarator ? newRefactoredDeclarationStatementFromDeclarator(declarator,storageclass) : ExtendedNodeFactory.newDeclarationStatementFromDeclarator(declarator);
 		IASTNode nodeToInsert = declarationStatement;
 		if(isGlobal) {
 			nodeToInsert = declarationStatement.getDeclaration();

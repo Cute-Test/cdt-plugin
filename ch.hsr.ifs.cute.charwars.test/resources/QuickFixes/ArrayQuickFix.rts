@@ -236,7 +236,7 @@ int main(){
 }
 
 
-//!ConstArray
+//!StaticConstArray
 //@main.cpp
 static const int numbers[]= {1,2,3,4,5};
 //=
@@ -268,3 +268,28 @@ int main()  {
 	int len2 = arr.size();
 }
 
+//!TypedefArray
+//@A.cpp
+typedef int arr[10];
+//=
+#include <array>
+typedef std::array<int, 10> arr;
+//!ExternArray
+//@A.cpp
+extern double arr[10];
+//=
+#include <array>
+extern std::array<double, 10> arr;
+//!-MutableArrayMember
+//@.config
+#fails
+skiptest=1
+//@A.cpp
+struct X{
+ int arr[10];
+};
+//=
+#include <array>
+struct X{
+ std::array<int, 10> arr;
+}
