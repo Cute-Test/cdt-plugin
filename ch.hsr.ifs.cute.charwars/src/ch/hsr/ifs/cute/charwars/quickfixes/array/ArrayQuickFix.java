@@ -58,6 +58,7 @@ public class ArrayQuickFix extends BaseQuickFix {
 		headers.add(StdArray.HEADER_NAME);
 	}
 
+	// this seems to be the wrong approach, because all storage classes need to be handled
 	private String handleStaticDatatypes(String s) {
 		final String staticKeyword = "static ";
 		
@@ -105,6 +106,7 @@ public class ArrayQuickFix extends BaseQuickFix {
 	
 	private IASTDeclarationStatement newRefactoredDeclarationStatementFromDeclarator(IASTDeclarator declarator) {
 		String newName = getNewName(declarator);
+		// move the following into getNewName and set the storage class.
 		ICPPASTNamedTypeSpecifier newNamedTypeSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(newName);
 		IASTSimpleDeclaration newSimpleDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newNamedTypeSpecifier);
 		IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
@@ -125,7 +127,7 @@ public class ArrayQuickFix extends BaseQuickFix {
 		if(isGlobal) {
 			nodeToInsert = declarationStatement.getDeclaration();
 		}
-		
+		// need to transfer storage class here at latest!
 		ASTModifier.insertBefore(block, beforeNode, nodeToInsert, rewrite);
 	}
 }
