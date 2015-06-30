@@ -71,7 +71,7 @@ public class NSSelectionHelper extends SelectionHelper {
 
 	}
 
-	protected static Region getNodeSpan(IASTNode region) {
+	public static Region getNodeSpan(IASTNode region) {
 		int start = Integer.MAX_VALUE;
 		int nodeLength = 0;
 		IASTNodeLocation[] nodeLocations = region.getNodeLocations();

@@ -13,9 +13,11 @@ package ch.hsr.ifs.cute.namespactor.checkers;
 
 import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDeclaration;
@@ -33,10 +35,13 @@ public class UsingChecker extends AbstractIndexAstChecker {
 	private static final String UDEC_IN_HEADER_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDECInHeader";
 	private static final String UDIR_BEFORE_INCLUDE_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDIRBeforeInclude";
 	private static final String UDEC_BEFORE_INCLUDE_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDECBeforeInclude";
+	private static final String TYPEDEF_SHOULD_BE_ALIAS = "ch.hsr.ifs.cute.namespactor.Typedef2Alias";
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
 
+		checkTypedefs(ast);
+		
 		if (ast.isHeaderUnit()) {
 			checkUsingInHeader(ast);
 		}
@@ -106,4 +111,26 @@ public class UsingChecker extends AbstractIndexAstChecker {
 			}
 		});
 	}
+	private void checkTypedefs(final IASTTranslationUnit ast) {
+
+		ast.accept(new ASTVisitor() {
+
+			{
+				shouldVisitDeclarations = true;
+			}
+
+			@Override
+			public int visit(IASTDeclaration decl) {
+				if (decl instanceof IASTSimpleDeclaration) {
+					IASTSimpleDeclaration sd=(IASTSimpleDeclaration) decl;
+					if (sd.getDeclSpecifier().getStorageClass() == IASTDeclSpecifier.sc_typedef){
+						reportProblem(TYPEDEF_SHOULD_BE_ALIAS,decl);
+					}
+
+				}
+				return super.visit(decl);
+			}
+		});
+	}
+
 }

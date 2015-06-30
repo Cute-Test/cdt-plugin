@@ -19,11 +19,16 @@ Require-Bundle: org.eclipse.ui,
  ch.hsr.ifs.cute.tdd;bundle-version="1.1.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: ch.hsr.ifs.cute.namespactor.astutil,ch.hsr.ifs.cute.na
- mespactor.refactoring,ch.hsr.ifs.cute.namespactor.refactoring.eudec,c
- h.hsr.ifs.cute.namespactor.refactoring.eudir,ch.hsr.ifs.cute.namespac
- tor.refactoring.iu,ch.hsr.ifs.cute.namespactor.refactoring.iudec,ch.h
- sr.ifs.cute.namespactor.refactoring.iudir,ch.hsr.ifs.cute.namespactor
- .refactoring.qun,ch.hsr.ifs.cute.namespactor.ui.iu,ch.hsr.ifs.cute.na
- mespactor.ui.qun
+Export-Package: ch.hsr.ifs.cute.namespactor.astutil,
+ ch.hsr.ifs.cute.namespactor.refactoring,
+ ch.hsr.ifs.cute.namespactor.refactoring.eudec,
+ ch.hsr.ifs.cute.namespactor.refactoring.eudir,
+ ch.hsr.ifs.cute.namespactor.refactoring.iu,
+ ch.hsr.ifs.cute.namespactor.refactoring.iudec,
+ ch.hsr.ifs.cute.namespactor.refactoring.iudir,
+ ch.hsr.ifs.cute.namespactor.refactoring.qun,
+ ch.hsr.ifs.cute.namespactor.refactoring.td2a,
+ ch.hsr.ifs.cute.namespactor.ui.iu,
+ ch.hsr.ifs.cute.namespactor.ui.qun,
+ ch.hsr.ifs.cute.namespactor.ui.td2a
 Bundle-Vendor: %Bundle-Vendor

@@ -33,6 +33,8 @@ public final class Labels extends NLS {
 	public static String No_ExtractInTypeWithoutCorrectInheritance;
 	public static String IUDEC_ImplicitOperatorCall;
 	public static String IUDEC_TemplateArgument;
+	public static String TD2A_NoNameSelected;
+	public static String TD2A_NoTypedefSelected;
 
 	static {
 		NLS.initializeMessages(Labels.class.getName(), Labels.class);

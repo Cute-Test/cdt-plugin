@@ -20,10 +20,12 @@ import ch.hsr.ifs.cute.namespactor.test.tests.EUDirRefactoringTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.IUDecRefactoringTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.IUDirRefactoringTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.QUNRefactoringTest;
+import ch.hsr.ifs.cute.namespactor.test.tests.TD2ARefactoringTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
 //@formatter:off
+	TD2ARefactoringTest.class,
 	IUDirRefactoringTest.class,
 	IUDecRefactoringTest.class,
 	QUNRefactoringTest.class,

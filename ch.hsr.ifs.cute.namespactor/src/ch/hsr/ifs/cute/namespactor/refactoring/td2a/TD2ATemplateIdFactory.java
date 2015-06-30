@@ -10,7 +10,7 @@
  *   Peter Sommerlad - adaption and fixes for open cases/rewrites
  * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
  ******************************************************************************/
-package ch.hsr.ifs.cute.namespactor.refactoring.qun;
+package ch.hsr.ifs.cute.namespactor.refactoring.td2a;
 
 import java.util.Set;
 
@@ -29,12 +29,12 @@ import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
 import ch.hsr.ifs.cute.namespactor.refactoring.iu.InlineRefactoringContext;
 import ch.hsr.ifs.cute.namespactor.refactoring.iu.NamespaceInlineContext;
 
-public class QUNTemplateIdFactory extends TemplateIdFactory {
+public class TD2ATemplateIdFactory extends TemplateIdFactory {
 
 	private final NamespaceInlineContext enclosingNSContext;
 	private Set<ICPPASTTemplateId> templateIdsToIgnore = null;
 
-	public QUNTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context) {
+	public TD2ATemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext context) {
 		super(templateId);
 		this.enclosingNSContext = context.enclosingNSContext;
 //		this.templateIdsToIgnore = context.templateIdsToIgnore;

@@ -35,6 +35,14 @@
                label="Extract Namespace Using Declaration..."
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>
+         <action
+               class="ch.hsr.ifs.cute.namespactor.ui.td2a.TD2ARefactoringActionDelegate"
+               icon="icons/icon-green-star.png"
+               id="ch.hsr.ifs.cute.namespactor.td2a"
+               label="typedef2alias"
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
+               style="push">
+         </action>
       </actionSet>
    </extension>
      <extension
@@ -57,6 +65,12 @@
             description="Qualify Unqualified Name "
             id="ch.hsr.ifs.cute.namespactor.ui.qun.Refactoring"
             name="QUNRefactoring">
+      </command>
+      <command
+            categoryId="org.eclipse.cdt.ui.category.refactoring"
+            description="typedef to alias"
+            id="ch.hsr.ifs.cute.namespactor.ui.td2a.Refactoring"
+            name="TD2ARefactoring">
       </command>
    </extension>
    <extension
@@ -89,6 +103,14 @@
                class="ch.hsr.ifs.cute.namespactor.ui.iu.IURefactoringActionDelegate"
                id="ch.hsr.ifs.cute.namespactor.iu.1"
                label="Inline Using ..."
+               menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
+         </action>
+         <action
+               class="ch.hsr.ifs.cute.namespactor.ui.td2a.TD2ARefactoringActionDelegate"
+               definitionId="ch.hsr.ifs.cute.namespactor.ui.td2a.Refactoring"
+               icon="icons/icon-green-star.png"
+               id="ch.hsr.ifs.cute.namespactor.td2a.1"
+               label="typedef to alias"
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>         
       </viewerContribution>

@@ -50,7 +50,16 @@
                id="ch.hsr.ifs.cute.namespactor.UDIRUnqualified"
                messagePattern="Qualified names in using directives can lead to more readable code."
                name="Detects unqualified names in using directives">
-         </problem>         
+         </problem>
+   <problem
+         category="ch.hsr.ifs.elevator.enhancements"
+         defaultEnabled="true"
+         defaultSeverity="Warning"
+         description="Detects typedefs to become alias declarations"
+         id="ch.hsr.ifs.cute.namespactor.Typedef2Alias"
+         messagePattern="Detects typedefs to become alias declarations"
+         name="Detects typedefs to become alias declarations">
+   </problem>         
       </checker>
 	</extension>
 	<extension
@@ -84,6 +93,18 @@
 	   <resolution
 	             class="ch.hsr.ifs.cute.namespactor.quickfix.QualifyUDIRQuickFix"
 	             problemId="ch.hsr.ifs.cute.namespactor.UDIRUnqualified">
-	   </resolution>	   	   	    
+	   </resolution>
+    <resolution
+          class="ch.hsr.ifs.cute.namespactor.quickfix.Typedef2AliasQuickFix"
+          problemId="ch.hsr.ifs.cute.namespactor.Typedef2Alias">
+    </resolution>	   	   	    
 	</extension>
+ <extension
+       point="org.eclipse.cdt.ui.quickAssistProcessors">
+    <quickAssistProcessor
+          class="ch.hsr.ifs.cute.namespactor.quickfix.NamespactorQuickAssistProcessor"
+          id="ch.hsr.ifs.cute.namespactor.checkers.quickAssistProcessor"
+          name="typedef2aliasqa">
+    </quickAssistProcessor>
+ </extension>
 </plugin>

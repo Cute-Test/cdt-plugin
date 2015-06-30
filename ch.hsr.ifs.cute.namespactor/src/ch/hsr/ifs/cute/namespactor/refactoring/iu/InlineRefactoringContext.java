@@ -11,12 +11,9 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.iu;
 
-import java.util.Set;
-
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 
 /**
  * @author kunz@ideadapt.net

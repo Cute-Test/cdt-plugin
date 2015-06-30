@@ -15,6 +15,7 @@ import org.eclipse.cdt.core.dom.IName;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
@@ -109,14 +110,18 @@ public class NSNameHelper extends NameHelper {
 
 	public static ICPPASTQualifiedName copyQualifers(ICPPASTQualifiedName qName) {
 		ICPPASTQualifiedName newNameNode = null;
-		IASTName[] names = qName.getNames();
+		//IASTName[] names = qName.getNames();
+		ICPPASTNameSpecifier[] names = qName.getQualifier();
 
 		// add all except the last name
-		newNameNode = ASTNodeFactory.getDefault().newQualifiedName();
-		for (int i = 0; i < names.length - 1; i++) {
-			IASTName lastName = names[i].getLastName();
-			newNameNode.addName(lastName.copy());
+		newNameNode = ASTNodeFactory.getDefault().newQualifiedName(null);
+		for (ICPPASTNameSpecifier name:names){
+			newNameNode.addNameSpecifier(name.copy());
 		}
+//		for (int i = 0; i < names.length - 1; i++) {
+//			IASTName lastName = names[i].getLastName();
+//			newNameNode.addName(lastName.copy());
+//		}
 		return newNameNode;
 	}
 
@@ -151,9 +156,12 @@ public class NSNameHelper extends NameHelper {
 
 	private static void addPrefix(IASTName prefixName, ICPPASTQualifiedName newQName) {
 		if (prefixName instanceof ICPPASTQualifiedName) {
-			for (IASTName prefix : ((ICPPASTQualifiedName) prefixName).getNames()) {
-				newQName.addName(prefix.copy());
+			for (ICPPASTNameSpecifier prefix : ((ICPPASTQualifiedName) prefixName).getQualifier()) {
+				newQName.addNameSpecifier(prefix.copy());
 			}
+			IASTName lastName = prefixName.getLastName();
+			if (lastName != null) 
+				newQName.addName(lastName.copy());
 		} else {
 			newQName.addName(prefixName.copy());
 		}

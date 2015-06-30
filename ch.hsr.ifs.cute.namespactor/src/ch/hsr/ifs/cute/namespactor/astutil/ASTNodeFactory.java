@@ -32,7 +32,7 @@ public class ASTNodeFactory extends CPPNodeFactory {
 
 	public ICPPASTQualifiedName newQualifiedNameNode(String[] names) {
 		Assert.isTrue(names.length > 0);
-		ICPPASTQualifiedName qname = newQualifiedName();
+		ICPPASTQualifiedName qname = newQualifiedName(null);
 		for (String name : names) {
 			qname.addName(newName(name.toCharArray()));
 		}
