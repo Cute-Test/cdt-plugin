@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Copyright (c) 2012-2015 Institute for Software, HSR Hochschule fuer Technik 
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,23 +8,25 @@
  *
  * Contributors:
  * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ * Peter Sommerlad (peter.sommerlad@hsr.ch) - modernization and generalization
  ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.eudec;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
 
+import ch.hsr.ifs.cute.namespactor.astutil.NSNameHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EURefactoringContext;
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EUTemplateIdFactory;
 
 /**
- * @author Jules Weder
+ * @author Jules Weder and Peter Sommerlad
  * */
 public class EUDecTemplateIdFactory extends EUTemplateIdFactory {
 
@@ -32,13 +34,13 @@ public class EUDecTemplateIdFactory extends EUTemplateIdFactory {
 		super(templateId, context);
 	}
 	@Override
-	protected void buildReplaceName(ICPPASTQualifiedName replaceName, IASTName[] names) {
+	protected void buildReplaceName(ICPPASTQualifiedName replaceName, ICPPASTNameSpecifier[] names) {
 		boolean start = false;
-		for (IASTName iastName : names) {
-			IBinding binding = ((IASTName)iastName.getOriginalNode()).resolveBinding();
+		for (ICPPASTNameSpecifier iastName : names) {
+			IBinding binding = ((ICPPASTNameSpecifier)iastName.getOriginalNode()).resolveBinding();
 			if (start) {
 				if (binding instanceof ICPPNamespace || binding instanceof ICPPClassType) {
-					replaceName.addName(iastName.copy(CopyStyle.withLocations));
+					NSNameHelper.addNameOrNameSpecifierWithStyle(replaceName, iastName, CopyStyle.withLocations);
 				}
 				if (iastName instanceof ICPPASTTemplateId) {
 					replaceName.setLastName(((ICPPASTTemplateId)iastName).copy(CopyStyle.withLocations));
@@ -52,7 +54,7 @@ public class EUDecTemplateIdFactory extends EUTemplateIdFactory {
 	}
 
 	@Override
-	protected void precedeWithQualifiers(ICPPASTQualifiedName replaceName, IASTName[] names, IASTName templateName) {
+	protected void precedeWithQualifiers(ICPPASTQualifiedName replaceName, ICPPASTNameSpecifier[] names, IASTName templateName) {
 		IASTName type = selectedType;
 		if (selectedType instanceof ICPPASTTemplateId) {
 			type = ((ICPPASTTemplateId) selectedType).getTemplateName();
@@ -61,14 +63,14 @@ public class EUDecTemplateIdFactory extends EUTemplateIdFactory {
 			}
 		}
 		if (! ((IASTName)type.getOriginalNode()).resolveBinding().equals(((IASTName)templateName.getOriginalNode()).resolveBinding())) {
-			for (IASTName iastName : names) {
+			for (ICPPASTNameSpecifier iastName : names) {
 				if (iastName instanceof ICPPASTTemplateId) {
-					iastName = ((ICPPASTTemplateId) iastName).getTemplateName();
+					iastName = (ICPPASTNameSpecifier) ((ICPPASTTemplateId) iastName).getTemplateName();
 				}
 				if (((IASTName)iastName.getOriginalNode()).resolveBinding().equals(((IASTName)templateName.getOriginalNode()).resolveBinding())) {
 					break;
 				}
-				replaceName.addName(iastName.copy(CopyStyle.withLocations));
+				NSNameHelper.addNameOrNameSpecifierWithStyle(replaceName, iastName, CopyStyle.withLocations);
 			}
 		}
 	}

@@ -14,6 +14,7 @@ package ch.hsr.ifs.cute.namespactor.astutil;
 import org.eclipse.cdt.core.dom.IName;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
@@ -38,17 +39,15 @@ public class NSNameHelper extends NameHelper {
 		if (!(node.getParent() instanceof ICPPASTQualifiedName)) {
 			return false;
 		}
-		IASTName prevName = null;
-		IASTName[] names = ((ICPPASTQualifiedName) node.getParent()).getNames();
 
+		ICPPASTNameSpecifier[] names = ((ICPPASTQualifiedName) node.getParent()).getAllSegments();
 		for (int i = 1; i < names.length; ++i) {
 
 			if (names[i].equals(node) && names[i - 1].toString().equals(String.valueOf(name.getSimpleID()))) {
-				prevName = names[i - 1];
-				break;
+				return true;
 			}
 		}
-		return prevName != null;
+		return false;
 	}
 
 	public static String[] getQualifiedUsingName(IBinding binding) {
@@ -135,17 +134,22 @@ public class NSNameHelper extends NameHelper {
 	}
 
 	public static ICPPASTQualifiedName prefixNameWith(IASTName prefixName, IASTName nameToPrefix) {
-		ICPPASTQualifiedName newQName = ASTNodeFactory.getDefault().newQualifiedName();
+		ICPPASTQualifiedName newQName = ASTNodeFactory.getDefault().newQualifiedName(null);
 
 		if (nameToPrefix.getParent() instanceof ICPPASTQualifiedName && !(nameToPrefix instanceof ICPPASTTemplateId)) {
 
-			for (IASTName existingName : ((ICPPASTQualifiedName) nameToPrefix.getParent()).getNames()) {
+			ICPPASTNameSpecifier[] namespecifiers = ((ICPPASTQualifiedName) nameToPrefix.getParent()).getAllSegments();
+			for (ICPPASTNameSpecifier existingName : namespecifiers) {
 
 				if (existingName.equals(nameToPrefix)) {
 					addPrefix(prefixName, newQName);
 				}
-				newQName.addName(existingName.copy());
+				if (existingName instanceof IASTName)
+					newQName.addName((IASTName) existingName.copy());
+				else 
+					newQName.addNameSpecifier(existingName.copy());
 			}
+			
 		} else {
 			addPrefix(prefixName, newQName);
 			newQName.addName(nameToPrefix.copy());
@@ -218,5 +222,18 @@ public class NSNameHelper extends NameHelper {
 		}
 		result[ns.length] = binding.getName();
 		return result;
+	}
+
+	public static void addNameOrNameSpecifier(ICPPASTQualifiedName newQName, ICPPASTNameSpecifier n) {
+		CopyStyle style=CopyStyle.withoutLocations;
+		addNameOrNameSpecifierWithStyle(newQName, n, style);
+	}
+
+	public static void addNameOrNameSpecifierWithStyle(ICPPASTQualifiedName newQName, ICPPASTNameSpecifier n,
+			CopyStyle style) {
+		if (n instanceof IASTName)
+			newQName.addName((IASTName) n.copy(style));
+		else
+			newQName.addNameSpecifier(n.copy(style));
 	}
 }

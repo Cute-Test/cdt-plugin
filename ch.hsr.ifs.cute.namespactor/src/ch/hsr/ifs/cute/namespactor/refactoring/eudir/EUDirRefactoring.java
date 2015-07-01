@@ -14,6 +14,7 @@ package ch.hsr.ifs.cute.namespactor.refactoring.eudir;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDirective;
@@ -69,11 +70,11 @@ public class EUDirRefactoring extends EURefactoring {
 	@Override
 	protected void findStartingNames(EURefactoringContext context) {
 		IBinding binding;
-		IASTName[] names = context.selectedQualifiedName.getNames();
+		ICPPASTNameSpecifier[] names = context.selectedQualifiedName.getQualifier();
 		for (int i = names.length - 1; i >= 0; i--) {
 			binding = names[i].resolveBinding();
 			if (binding instanceof ICPPNamespace) {
-				context.startingNamespaceName = names[i];
+				context.startingNamespaceName = (IASTName) names[i]; // must be a name
 				return;
 			}
 		}

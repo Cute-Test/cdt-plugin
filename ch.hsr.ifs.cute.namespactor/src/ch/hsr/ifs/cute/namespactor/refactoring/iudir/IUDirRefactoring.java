@@ -424,12 +424,12 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 		ICPPASTQualifiedName qInlinedNameNode = NSNameHelper.prefixNameWith(ctx.enclosingNSContext.usingName, childRefNode);
 		ICPPASTQualifiedName templNameNode = NSNameHelper.copyQualifers(qInlinedNameNode);
 		// copy over the original names (i.e. the templateId and its following siblings)
-		for (IASTName n : qName.getNames()) {
+		for (ICPPASTNameSpecifier n : qName.getAllSegments()) {
 			if (n instanceof ICPPASTTemplateId) {
-				n = new IUDirTemplateIdFactory((ICPPASTTemplateId) n, ctx).buildTemplate();// ((ICPPASTTemplateId) n).getTemplateName();
-				templNameNode.addName(n);
+				IASTName newn = new IUDirTemplateIdFactory((ICPPASTTemplateId) n, ctx).buildTemplate();// ((ICPPASTTemplateId) n).getTemplateName();
+				templNameNode.addName(newn); // buildTemplate should not return a decltype()
 			} else {
-				templNameNode.addName(n.copy());
+				NSNameHelper.addNameOrNameSpecifier(templNameNode,n);
 			}
 		}
 		addReplacement(qName, templNameNode);

@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDeclaration;
@@ -97,13 +98,13 @@ public class EUDecRefactoring extends EURefactoring {
 			outermostTypeBinding = NSNameHelper.findOutermostClassTypeOfName(context.selectedQualifiedName.getLastName().resolveBinding());
 		}
 
-		IASTName[] names = context.selectedQualifiedName.getNames();
+		ICPPASTNameSpecifier[] names = context.selectedQualifiedName.getAllSegments();
 		if (outermostTypeBinding != null) {
-			IASTName precedingName = null;
-			for (IASTName iastName : names) {
+			ICPPASTNameSpecifier precedingName = null;
+			for (ICPPASTNameSpecifier iastName : names) {
 				if (iastName.resolveBinding().equals(outermostTypeBinding)) {
-					context.startingTypeName = iastName;
-					context.startingNamespaceName = precedingName;
+					context.startingTypeName = (IASTName) iastName; // check if startingTypeName should be ICPPASTNameSpecifier
+					context.startingNamespaceName = (IASTName) precedingName;
 					return;
 				}
 				precedingName = iastName;
@@ -114,7 +115,7 @@ public class EUDecRefactoring extends EURefactoring {
 		for (int i = names.length - 1; i >= 0; i--) {
 			binding = names[i].resolveBinding();
 			if (binding instanceof ICPPNamespace) {
-				context.startingNamespaceName = names[i];
+				context.startingNamespaceName = (IASTName) names[i];
 				return;
 			}
 		}
@@ -133,26 +134,18 @@ public class EUDecRefactoring extends EURefactoring {
 		return names;
 	}
 
-	private static ICPPASTQualifiedName buildNameWithTemplate(ICPPASTQualifiedName qualifiedName) {
-		ICPPASTQualifiedName qname = ASTNodeFactory.getDefault().newQualifiedName();
-		for (IASTName name : qualifiedName.getNames()) {
-				qname.addName(name.copy(CopyStyle.withLocations));//new CopyTemplateIdFactory((ICPPASTTemplateId) name).buildTemplate());
-		}
-		return qname;
-	}
-
 	@Override
 	public IASTNode findTypeScope() {
 		IASTNode scopeNode = null;
 		if (context.selectedLastName.resolveBinding() instanceof ICPPClassType) {
-			if (context.selectedQualifiedName.getNames().length >= 2) {
-				IASTName typeName = context.selectedQualifiedName.getNames()[context.selectedQualifiedName.getNames().length - 2];
+			if (context.selectedQualifiedName.getQualifier().length > 0) {
+				ICPPASTNameSpecifier typeName = context.selectedQualifiedName.getQualifier()[context.selectedQualifiedName.getQualifier().length - 1];
 				scopeNode = NSNodeHelper.findAncestorOf(context.selectedQualifiedName, ICPPASTCompositeTypeSpecifier.class);
 				if (scopeNode != null) {
 					ICPPASTBaseSpecifier[] baseSpecifiers = ((ICPPASTCompositeTypeSpecifier) scopeNode).getBaseSpecifiers();
 					boolean foundBaseType = false;
 					for (ICPPASTBaseSpecifier baseSpec : baseSpecifiers) {
-						if (baseSpec.getName().resolveBinding().equals(typeName.resolveBinding())) {
+						if (baseSpec.getNameSpecifier().resolveBinding().equals(typeName.resolveBinding())) {
 							foundBaseType = true;
 							break;
 						}

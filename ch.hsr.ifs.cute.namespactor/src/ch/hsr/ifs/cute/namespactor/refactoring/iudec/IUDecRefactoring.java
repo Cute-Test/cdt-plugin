@@ -14,16 +14,17 @@ package ch.hsr.ifs.cute.namespactor.refactoring.iudec;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.cdt.codan.core.cxx.CxxAstUtils;
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
@@ -160,11 +161,11 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 			nsDefNode = NSNodeHelper.findAncestorOf(declNode, ICPPASTNamespaceDefinition.class);
 			classDefNode = NSNodeHelper.findAncestorOf(declNode, ICPPASTCompositeTypeSpecifier.class);
 		}
-		ICPPASTQualifiedName newQName = ASTNodeFactory.getDefault().newQualifiedName();
+		ICPPASTQualifiedName newQName = ASTNodeFactory.getDefault().newQualifiedName(null);
 
 		if (ctx.selectedName instanceof ICPPASTQualifiedName) {
-			for (IASTName n : ((ICPPASTQualifiedName) ctx.selectedName).getNames()) {
-				newQName.addName(n.copy());
+			for (ICPPASTNameSpecifier n : ((ICPPASTQualifiedName) ctx.selectedName).getAllSegments()) {
+				NSNameHelper.addNameOrNameSpecifier(newQName, n);
 			}
 		} else {
 			newQName.addName(ctx.selectedName.getLastName().copy());
@@ -191,7 +192,7 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 		if (ctx.selectedName instanceof ICPPASTQualifiedName) {
 			newNameNode = (ICPPASTQualifiedName) ctx.selectedName.copy();
 		} else {
-			newNameNode = ASTNodeFactory.getDefault().newQualifiedName();
+			newNameNode = ASTNodeFactoryFactory.getDefaultCPPNodeFactory().newQualifiedName(null);
 			newNameNode.addName(ctx.selectedName.copy());
 		}
 		addQualifiersAfterRefNode(refNode, nodeToReplace, newNameNode);
@@ -202,20 +203,15 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 	private void addQualifiersAfterRefNode(IASTName refNode, IASTName nodeToReplace, ICPPASTQualifiedName newNameNode) {
 		if (refNode.getParent() instanceof ICPPASTQualifiedName) {
 			boolean addNames = false;
-			for (IASTName n : ((ICPPASTQualifiedName) nodeToReplace).getNames()) {
-				if (addNames && isNonInlineNamespace(n)) {
-					newNameNode.addName(n.copy());
+			for (ICPPASTNameSpecifier n : ((ICPPASTQualifiedName) nodeToReplace).getAllSegments()) {
+				if (addNames) {
+					NSNameHelper.addNameOrNameSpecifier(newNameNode,n);
 				}
 				if (n.equals(refNode)) {
 					addNames = true;
 				}
 			}
 		}
-	}
-
-	private boolean isNonInlineNamespace(IASTName n) {
-
-		return true;
 	}
 
 	@Override

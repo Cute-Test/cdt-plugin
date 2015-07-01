@@ -13,6 +13,7 @@ package ch.hsr.ifs.cute.namespactor.refactoring.eudec;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 
@@ -31,11 +32,11 @@ public class EUDecReplaceVisitor extends EUReplaceVisitor {
 	}
 
 	@Override
-	protected IASTName searchNamesFor(IASTName name, IASTName[] names) {
+	protected ICPPASTNameSpecifier searchNamesFor(IASTName name, ICPPASTNameSpecifier[] names) {
 		if (name == null) {
 			return null;
 		}
-		for (IASTName iastName : names) {
+		for (ICPPASTNameSpecifier iastName : names) {
 			if (name instanceof ICPPASTTemplateId && iastName instanceof ICPPASTTemplateId) {
 				if (NSNameHelper.isSameNameInTemplateId((ICPPASTTemplateId) name, (ICPPASTTemplateId) iastName)) {
 					return iastName;
@@ -49,13 +50,13 @@ public class EUDecReplaceVisitor extends EUReplaceVisitor {
 	}
 
 	@Override
-	protected boolean isReplaceCandidate(IASTName foundName, IASTName name, IASTName[] names) {
+	protected boolean isReplaceCandidate(ICPPASTNameSpecifier foundName, IASTName name, ICPPASTNameSpecifier[] names) {
 		return foundName != null && isSameName(name.getLastName(), names);
 	}
 
-	private boolean isSameName(IASTName name, IASTName[] names) {
+	private boolean isSameName(IASTName name, ICPPASTNameSpecifier[] names) {
 		if (context.startingTypeName != null) {
-			for (IASTName iastName : names) {
+			for (ICPPASTNameSpecifier iastName : names) {
 				if (context.startingTypeName.resolveBinding().equals(iastName.resolveBinding())) {
 					return true;
 				}
@@ -80,7 +81,7 @@ public class EUDecReplaceVisitor extends EUReplaceVisitor {
 	}
 
 	@Override
-	protected boolean isNameFound(IASTName foundName, IASTName iastName) {
+	protected boolean isNameFound(ICPPASTNameSpecifier foundName, ICPPASTNameSpecifier iastName) {
 		if (foundName instanceof ICPPASTTemplateId && iastName instanceof ICPPASTTemplateId) {
 			return NSNameHelper.isSameNameInTemplateId((ICPPASTTemplateId) foundName, (ICPPASTTemplateId) iastName);
 		} else {

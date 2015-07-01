@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2012 Institute for Software, HSR Hochschule fuer Technik 
+ * Copyright (c) 2012-2015 Institute for Software, HSR Hochschule fuer Technik 
  * Rapperswil, University of applied sciences and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,9 @@
  *
  * Contributors:
  * 	Ueli Kunz <kunz@ideadapt.net>, Jules Weder <julesweder@gmail.com> - initial API and implementation
+ * Peter Sommerlad <peter.sommerlad@hsr.ch> - modernization
  ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.iudir;
-
-import java.util.Set;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -82,7 +81,7 @@ public class IUDirTemplateIdFactory extends TemplateIdFactory {
 		//} else if (vTemplId.getOriginalNode().getParent() instanceof ICPPASTQualifiedName) {
 			//qnameNode = NSNameHelper.copyQualifers((ICPPASTQualifiedName) vTemplId.getOriginalNode().getParent());
 		} else {
-			qnameNode = factory.newQualifiedName();
+			qnameNode = factory.newQualifiedName(null);
 		}
 		qnameNode.addName(vTemplId.getTemplateName());
 

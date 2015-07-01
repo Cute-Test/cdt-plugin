@@ -13,18 +13,16 @@ package ch.hsr.ifs.cute.namespactor.refactoring;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
-import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
-import org.eclipse.cdt.core.dom.ast.IASTTypeId;
 import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
+import org.eclipse.cdt.core.dom.ast.IASTTypeId;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 
 import ch.hsr.ifs.cute.namespactor.astutil.ASTNodeFactory;
-import ch.hsr.ifs.cute.namespactor.astutil.NSNodeHelper;
 
 /**
  * @author kunz@ideadapt.net, Jules Weder
@@ -47,7 +45,7 @@ public abstract class TemplateIdFactory extends ASTVisitor {
 			return true;
 		}
 		if (name instanceof ICPPASTQualifiedName) {
-			for (IASTName n : ((ICPPASTQualifiedName) name).getNames()) {
+			for (ICPPASTNameSpecifier n : ((ICPPASTQualifiedName) name).getAllSegments()) {
 				if (n instanceof ICPPASTTemplateId) {
 					return true;
 				}

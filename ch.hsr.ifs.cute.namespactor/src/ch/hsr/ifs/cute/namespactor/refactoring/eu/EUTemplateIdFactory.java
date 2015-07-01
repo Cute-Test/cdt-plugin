@@ -14,10 +14,11 @@ package ch.hsr.ifs.cute.namespactor.refactoring.eu;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IASTTypeId;
 import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
+import org.eclipse.cdt.core.dom.ast.IASTTypeId;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
@@ -26,6 +27,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
 
 import ch.hsr.ifs.cute.namespactor.astutil.ASTNodeFactory;
+import ch.hsr.ifs.cute.namespactor.astutil.NSNameHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
 
 /**
@@ -77,7 +79,7 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 
 		});
 		if (!(newTemplateId instanceof ICPPASTQualifiedName)){
-			ICPPASTQualifiedName wrapper=ASTNodeFactory.getDefault().newQualifiedName();
+			ICPPASTQualifiedName wrapper=ASTNodeFactory.getDefault().newQualifiedName(null);
 			wrapper.addName(newTemplateId);
 			newTemplateId=wrapper;
 		}
@@ -85,9 +87,9 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 	}
 
 	
-	protected void buildReplaceName(ICPPASTQualifiedName replaceName, IASTName[] names) {
+	protected void buildReplaceName(ICPPASTQualifiedName replaceName, ICPPASTNameSpecifier[] names) {
 		boolean start = false;
-		for (IASTName iastName : names) {
+		for (ICPPASTNameSpecifier iastName : names) {
 			IBinding binding = ((IASTName)iastName.getOriginalNode()).resolveBinding();
 			if (start) {
 				//if (iastName instanceof ICPPASTTemplateId) {
@@ -95,7 +97,7 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 					//break;
 				//}
 				if (binding instanceof ICPPNamespace || binding instanceof ICPPClassType) {
-					replaceName.addName(iastName.copy(CopyStyle.withLocations));
+					NSNameHelper.addNameOrNameSpecifierWithStyle(replaceName, iastName,CopyStyle.withLocations);
 				}
 			}
 			if (binding.equals(selectedName.resolveBinding())) {
@@ -104,7 +106,7 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 		}
 	}
 
-	protected void precedeWithQualifiers(ICPPASTQualifiedName replaceName, IASTName[] names, IASTName templateName) {
+	protected void precedeWithQualifiers(ICPPASTQualifiedName replaceName, ICPPASTNameSpecifier[] names, IASTName templateName) {
 
 	}
 
@@ -112,10 +114,10 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 	protected ICPPASTNamedTypeSpecifier createNamedDeclSpec(IASTDeclSpecifier vDeclSpecifier) {
 		ICPPASTNamedTypeSpecifier newDeclSpec = (ICPPASTNamedTypeSpecifier)vDeclSpecifier;
 		IASTName specName = newDeclSpec.getName();
-		ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
+		ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName(null);
 
 		if (specName instanceof ICPPASTQualifiedName) {
-			IASTName[] names = ((ICPPASTQualifiedName) specName).getNames();
+			ICPPASTNameSpecifier[] names = ((ICPPASTQualifiedName) specName).getAllSegments();
 			precedeWithQualifiers(replaceName, names, specName.getLastName());
 			buildReplaceName(replaceName, names);
 			newDeclSpec.setName(replaceName);
@@ -128,13 +130,13 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 
 	@Override
 	protected ICPPASTQualifiedName modifyTemplateId(ICPPASTTemplateId vTemplId) {
-		ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
+		ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName(null);
 
-		IASTName[] names = null;
+		ICPPASTNameSpecifier[] names = null;
 		if (vTemplId.getOriginalNode().getParent() instanceof ICPPASTQualifiedName) {
-			names = ((ICPPASTQualifiedName) vTemplId.getOriginalNode().getParent()).getNames();
+			names = ((ICPPASTQualifiedName) vTemplId.getOriginalNode().getParent()).getAllSegments();
 		} else {
-			names = new IASTName[] { ((IASTName) vTemplId.getOriginalNode().getParent()).getLastName() };
+			names = new ICPPASTNameSpecifier[] { (ICPPASTNameSpecifier) ((IASTName) vTemplId.getOriginalNode().getParent()).getLastName() };
 		}
 		precedeWithQualifiers(replaceName, names, vTemplId.getTemplateName());
 		buildReplaceName(replaceName, names);

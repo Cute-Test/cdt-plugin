@@ -17,11 +17,13 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDirective;
 
 import ch.hsr.ifs.cute.namespactor.astutil.ASTNodeFactory;
+import ch.hsr.ifs.cute.namespactor.astutil.NSNameHelper;
 import ch.hsr.ifs.cute.namespactor.astutil.NSNodeHelper;
 import ch.hsr.ifs.cute.namespactor.astutil.NSSelectionHelper;
 
@@ -42,7 +44,7 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 		if (name instanceof ICPPASTQualifiedName) {
 			IASTName replacementName = buildReplacementName(name);
 			if (replacementName != null) {
-				if (((ICPPASTQualifiedName) replacementName).getNames().length <= 1) {
+				if (((ICPPASTQualifiedName) replacementName).getQualifier().length < 1) {
 					replacementName = replacementName.getLastName();
 				}
 				if (replacementName == null && name.getParent() instanceof ICPPASTUsingDirective) {
@@ -76,20 +78,20 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 
 	protected IASTName buildReplacementName(IASTName name) { // TODO: debug and fix with new template mechanism
 		if (isExtractCandidate(name)) {
-			ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName();
-			IASTName[] names = getNamesOf(name);
-			IASTName foundName = searchNamesFor(context.startingNamespaceName, names);
+			ICPPASTQualifiedName replaceName = ASTNodeFactory.getDefault().newQualifiedName(null);
+			ICPPASTNameSpecifier[] names = getNamesOf(name);
+			ICPPASTNameSpecifier foundName = searchNamesFor(context.startingNamespaceName, names);
 			if (foundName != null && CxxAstUtils.isInMacro(foundName))
 				return null;
 			if (isReplaceCandidate(foundName, name, names)) {
 				boolean start = false;
-				for (IASTName iastName : names) {
+				for (ICPPASTNameSpecifier iastName : names) {
 					if (isTemplateReplaceCandidate(foundName, iastName)) {
-						replaceName = buildReplacementTemplate(iastName);
+						replaceName = buildReplacementTemplate((IASTName) iastName);
 						continue;
 					}
 					if (start) {
-						replaceName.addName(iastName.copy());
+						NSNameHelper.addNameOrNameSpecifier(replaceName,iastName);
 					}
 					if (isNameFound(foundName, iastName)) {
 						start = true;
@@ -114,12 +116,12 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 
 	}
 
-	protected static IASTName[] getNamesOf(IASTName name) {
-		IASTName[] names = null;
+	private static ICPPASTNameSpecifier[] getNamesOf(IASTName name) {
+		ICPPASTNameSpecifier[] names = null;
 		if (name instanceof ICPPASTQualifiedName) {
-			names = ((ICPPASTQualifiedName) name).getNames();
+			names = ((ICPPASTQualifiedName) name).getAllSegments(); // this requires more work, because of decltype()
 		} else {
-			names = new IASTName[] { name.getLastName() };
+			names = new ICPPASTNameSpecifier[] { (ICPPASTNameSpecifier) name.getLastName() };
 		}
 		return names;
 	}
@@ -128,23 +130,21 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 		return NSSelectionHelper.isSelectionCandidate(name) || NSNodeHelper.hasAncestor(name, ICPPASTUsingDirective.class);
 	}
 
-	protected abstract IASTName searchNamesFor(IASTName name, IASTName[] names);
+	protected abstract ICPPASTNameSpecifier searchNamesFor(IASTName name, ICPPASTNameSpecifier[] names);
 
-	protected abstract boolean isReplaceCandidate(IASTName foundName, IASTName name, IASTName[] names);
+	protected abstract boolean isReplaceCandidate(ICPPASTNameSpecifier foundName, IASTName name, ICPPASTNameSpecifier[] names);
 
-	protected boolean isTemplateReplaceCandidate(IASTName foundName, IASTName iastName) {
+	protected boolean isTemplateReplaceCandidate(ICPPASTNameSpecifier foundName, ICPPASTNameSpecifier iastName) {
 		return iastName instanceof ICPPASTTemplateId && !(foundName instanceof ICPPASTTemplateId);
 	}
 
 	protected abstract ICPPASTQualifiedName buildReplacementTemplate(IASTName iastName);
 
-	protected abstract boolean isNameFound(IASTName foundName, IASTName iastName);
+	protected abstract boolean isNameFound(ICPPASTNameSpecifier foundName, ICPPASTNameSpecifier iastName);
 
 	protected boolean isUnqualifiedDefinition(IASTName name, ICPPASTQualifiedName replaceName) {
 		if (isFunctionDefinition(name) || name.getParent() instanceof ICPPASTCompositeTypeSpecifier) {
-			if (!(replaceName.getNames().length > 1)) {
-				return true;
-			}
+			return (replaceName.getQualifier().length <= 0);
 		}
 		return false;
 	}

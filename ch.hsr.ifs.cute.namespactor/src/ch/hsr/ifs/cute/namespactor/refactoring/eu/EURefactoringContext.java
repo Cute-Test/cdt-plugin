@@ -27,8 +27,8 @@ public class EURefactoringContext {
 	public IASTName selectedLastName;
 	public ICPPASTQualifiedName qualifiedUsingName;
 	public IASTNode firstNameToReplace;
-	public IASTName startingNamespaceName;
-	public IASTName startingTypeName;
+	public IASTName startingNamespaceName;// may be this needs to become a ICPPASTNameSpecifier
+	public IASTName startingTypeName; // may be this needs to become a ICPPASTNameSpecifier
 
 	public HashMap<IASTNode, IASTName> nodesToReplace = new HashMap<IASTNode, IASTName>();
 	public ArrayList<IASTNode> nodesToRemove = new ArrayList<IASTNode>();

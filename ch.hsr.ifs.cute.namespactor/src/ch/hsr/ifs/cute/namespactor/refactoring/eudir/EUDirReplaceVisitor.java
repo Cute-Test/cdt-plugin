@@ -11,12 +11,13 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.eudir;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDirective;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EURefactoringContext;
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EUReplaceVisitor;
@@ -42,11 +43,11 @@ public class EUDirReplaceVisitor extends EUReplaceVisitor {
 	}
 
 	@Override
-	protected IASTName searchNamesFor(IASTName name, IASTName[] names) {
+	protected ICPPASTNameSpecifier searchNamesFor(IASTName name, ICPPASTNameSpecifier[] names) {
 		if (name == null) {
 			return null;
 		}
-		for (IASTName iastName : names) {
+		for (ICPPASTNameSpecifier iastName : names) {
 			if (iastName.resolveBinding().equals(name.resolveBinding())) {
 				return iastName;
 			}
@@ -55,7 +56,7 @@ public class EUDirReplaceVisitor extends EUReplaceVisitor {
 	}
 
 	@Override
-	protected boolean isReplaceCandidate(IASTName foundName, IASTName name, IASTName[] names) {
+	protected boolean isReplaceCandidate(ICPPASTNameSpecifier foundName, IASTName name, ICPPASTNameSpecifier[] names) {
 		return foundName != null;
 	}
 
@@ -67,12 +68,12 @@ public class EUDirReplaceVisitor extends EUReplaceVisitor {
 		if (buildTemplate instanceof ICPPASTQualifiedName) {
 			return (ICPPASTQualifiedName) buildTemplate;
 		}
-		replaceName = CPPNodeFactory.getDefault().newQualifiedName((ICPPASTName)buildTemplate); // hack Thomas
+		replaceName = ASTNodeFactoryFactory.getDefaultCPPNodeFactory().newQualifiedName((ICPPASTName)buildTemplate);
 		return replaceName;
 	}
 
 	@Override
-	protected boolean isNameFound(IASTName foundName, IASTName iastName) {
+	protected boolean isNameFound(ICPPASTNameSpecifier foundName, ICPPASTNameSpecifier iastName) {
 		return iastName.equals(foundName);
 	}
 }
