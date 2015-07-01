@@ -54,13 +54,11 @@ public class TD2ACompletionProposal implements ICCompletionProposal {
 
 	@Override
 	public String getAdditionalProposalInfo() {
-		// TODO Auto-generated method stub
 		return "Use more obvious modern C++ syntax for type aliases";
 	}
 
 	@Override
 	public void apply(IDocument document) {
-		// TODO Auto-generated method stub
 		TD2ARefactoringAction action = new TD2ARefactoringAction(getIdString());
 		action.setEditor(editor);
 		action.run();

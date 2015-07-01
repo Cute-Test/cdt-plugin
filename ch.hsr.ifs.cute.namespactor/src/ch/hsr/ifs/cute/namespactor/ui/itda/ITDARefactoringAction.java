@@ -9,7 +9,7 @@
  * Contributors:
  * 	Peter Sommerlad <peter.sommerlad@hsr.ch>
  ******************************************************************************/
-package ch.hsr.ifs.cute.namespactor.ui.td2a;
+package ch.hsr.ifs.cute.namespactor.ui.itda;
 
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.IWorkingCopy;
@@ -18,9 +18,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.window.IShellProvider;
 
-public class TD2ARefactoringAction extends RefactoringAction {
+public class ITDARefactoringAction extends RefactoringAction {
 
-	public TD2ARefactoringAction(String label) {
+	public ITDARefactoringAction(String label) {
 		super(label);
 	}
 
@@ -29,7 +29,7 @@ public class TD2ARefactoringAction extends RefactoringAction {
 		if (!hasFileResource(wc)) {
 			return;
 		}
-		TD2ARefactoringRunner runner = new TD2ARefactoringRunner(wc, selection, shellProvider, wc.getCProject());
+		ITDARefactoringRunner runner = new ITDARefactoringRunner(wc, selection, shellProvider, wc.getCProject());
 		runner.run();
 	}
 

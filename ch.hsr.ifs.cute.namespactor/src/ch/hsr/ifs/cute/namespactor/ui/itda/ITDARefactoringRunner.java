@@ -9,7 +9,7 @@
  * Contributors:
  * 	Peter Sommerlad <peter.sommerlad@hsr.ch>
  ******************************************************************************/
-package ch.hsr.ifs.cute.namespactor.ui.td2a;
+package ch.hsr.ifs.cute.namespactor.ui.itda;
 
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
@@ -21,18 +21,18 @@ import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 
 import ch.hsr.ifs.cute.namespactor.refactoring.NSRefactoringWizard;
-import ch.hsr.ifs.cute.namespactor.refactoring.td2a.TD2ARefactoring;
+import ch.hsr.ifs.cute.namespactor.refactoring.itda.ITDARefactoring;
 
 @SuppressWarnings("restriction")
-public class TD2ARefactoringRunner extends RefactoringRunner {
+public class ITDARefactoringRunner extends RefactoringRunner {
 
-	public TD2ARefactoringRunner(ICElement element, ISelection selection, IShellProvider shellProvider, ICProject cProject) {
+	public ITDARefactoringRunner(ICElement element, ISelection selection, IShellProvider shellProvider, ICProject cProject) {
 		super(element, selection, shellProvider, cProject);
 	}
 
 	@Override
 	public void run() {
-		CRefactoring refactoring = new TD2ARefactoring(element, selection, project);
+		CRefactoring refactoring = new ITDARefactoring(element, selection, project);
 		RefactoringWizard wizard = new NSRefactoringWizard(refactoring);
 		run(wizard, refactoring, RefactoringSaveHelper.SAVE_REFACTORING);
 	}

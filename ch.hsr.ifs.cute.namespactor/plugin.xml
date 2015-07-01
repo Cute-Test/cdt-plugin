@@ -43,6 +43,14 @@
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
                style="push">
          </action>
+         <action
+               class="ch.hsr.ifs.cute.namespactor.ui.itda.ITDARefactoringActionDelegate"
+               icon="icons/icon-green-star.png"
+               id="ch.hsr.ifs.cute.namespactor.itda"
+               label="inlinetypealias"
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
+               style="push">
+         </action>
       </actionSet>
    </extension>
      <extension
@@ -71,6 +79,12 @@
             description="typedef to alias"
             id="ch.hsr.ifs.cute.namespactor.ui.td2a.Refactoring"
             name="TD2ARefactoring">
+      </command>
+      <command
+            categoryId="org.eclipse.cdt.ui.category.refactoring"
+            description="inline type alias"
+            id="ch.hsr.ifs.cute.namespactor.ui.idta.Refactoring"
+            name="ITDARefactoring">
       </command>
    </extension>
    <extension
@@ -111,6 +125,13 @@
                icon="icons/icon-green-star.png"
                id="ch.hsr.ifs.cute.namespactor.td2a.1"
                label="typedef to alias"
+               menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
+         </action>
+         <action
+               class="ch.hsr.ifs.cute.namespactor.ui.itda.ITDARefactoringAction"
+               icon="icons/icon-green-star.png"
+               id="ch.hsr.ifs.cute.namespactor.itda.1"
+               label="inline type alias"
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>         
       </viewerContribution>

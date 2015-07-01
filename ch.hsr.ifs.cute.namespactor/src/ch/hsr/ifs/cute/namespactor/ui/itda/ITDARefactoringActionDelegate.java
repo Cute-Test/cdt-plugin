@@ -9,7 +9,7 @@
  * Contributors:
  * 	Peter Sommerlad <peter.sommerlad@hsr.ch>
  ******************************************************************************/
-package ch.hsr.ifs.cute.namespactor.ui.td2a;
+package ch.hsr.ifs.cute.namespactor.ui.itda;
 
 import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.jface.action.IAction;
@@ -20,7 +20,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 @SuppressWarnings("restriction")
-public class TD2ARefactoringActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
+public class ITDARefactoringActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
 	private IWorkbenchWindow window;
 	public static final String ACTION_ID = "ch.hsr.ifs.cute.namespactor.td2a";
 
@@ -29,7 +29,7 @@ public class TD2ARefactoringActionDelegate implements IWorkbenchWindowActionDele
 		if (!isEditorCallSource()) {
 			return;
 		}
-		TD2ARefactoringAction inlineAction = new TD2ARefactoringAction(ACTION_ID);
+		ITDARefactoringAction inlineAction = new ITDARefactoringAction(ACTION_ID);
 		inlineAction.setEditor((IEditorPart) window.getActivePage().getActivePart());
 		inlineAction.run();
 
