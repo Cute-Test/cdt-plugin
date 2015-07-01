@@ -32,8 +32,8 @@ public class HasDefaultConstructor extends Condition {
     }
 
     private boolean containsInitializerList(IBinding binding) {
-        if (binding instanceof CPPConstructor) {
-            ICPPConstructor[] constructors = ((CPPConstructor) binding).getClassOwner().getConstructors();
+        if (binding instanceof CPPConstructor) { // TODO: tests break when ICPPConstructor is used. Too many implementors.
+            ICPPConstructor[] constructors = ((ICPPConstructor) binding).getClassOwner().getConstructors();
             for (ICPPConstructor constructor : constructors) {
                 if (constructor.getParameters().length == 0) {
                     return true;

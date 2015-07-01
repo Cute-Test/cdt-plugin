@@ -9,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPConstructor;
 
 import ch.hsr.ifs.cute.elevator.Activator;
 
@@ -17,6 +16,7 @@ import ch.hsr.ifs.cute.elevator.Activator;
  * Checks if type of the supplied node has a constructor with {@link IASTInitializerList} argument.
  */
 public class HasInitializerListConstructor extends Condition {
+	// TODO: duplicated code with HasDefaultConstructor
 
     @Override
     public boolean satifies(final IASTNode node) {
@@ -37,8 +37,8 @@ public class HasInitializerListConstructor extends Condition {
     }
 
     private boolean containsInitializerList(IBinding binding) {
-        if (binding instanceof CPPConstructor) {
-            ICPPConstructor[] constructors = ((CPPConstructor) binding).getClassOwner().getConstructors();
+        if (binding instanceof ICPPConstructor) {
+            ICPPConstructor[] constructors = ((ICPPConstructor) binding).getClassOwner().getConstructors();
             for (ICPPConstructor constructor : constructors) {
                 if (cotainsInitializerList(constructor)) {
                     return true;
