@@ -28,6 +28,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 import ch.hsr.ifs.cute.charwars.constants.Constants;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
@@ -36,7 +37,6 @@ import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.UEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.visitors.IdExpressionsCollector;
 import ch.hsr.ifs.cute.charwars.utils.visitors.NameOccurrenceChecker;
-import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class ASTAnalyzer {
 	public static boolean isFunctionDefinitionParameterDeclaration(IASTParameterDeclaration declaration) {
@@ -84,6 +84,7 @@ public class ASTAnalyzer {
 	}
 	
 	private static boolean isSizeOfDivision(IASTNode node) {
+		// TODO: very shaky special case, does not work in general!
 		if(BEAnalyzer.isDivision(node)) {
 			IASTNode dividend = BEAnalyzer.getOperand1(node);
 			IASTNode divisor = BEAnalyzer.getOperand2(node);

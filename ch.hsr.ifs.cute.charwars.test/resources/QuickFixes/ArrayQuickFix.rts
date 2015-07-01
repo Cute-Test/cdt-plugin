@@ -281,15 +281,12 @@ extern double arr[10];
 #include <array>
 extern std::array<double, 10> arr;
 //!-MutableArrayMember
-//@.config
-#fails
-skiptest=1
 //@A.cpp
 struct X{
- int arr[10];
+	int arr[10];
 };
 //=
 #include <array>
 struct X{
- std::array<int, 10> arr;
-}
+	std::array<int, 10> arr;
+};

@@ -26,13 +26,17 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
+import org.eclipse.cdt.core.dom.ast.IASTTypeId;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.cute.charwars.constants.StdString;
@@ -94,6 +98,11 @@ public class ExtendedNodeFactory {
 		npos.addName(newName(StdString.NPOS));
 		return factory.newIdExpression(npos);
 	}
+	
+	public static ICPPASTLiteralExpression newLiteralExpression(String dimensionFromInitializer) {
+		return factory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, dimensionFromInitializer);
+	}
+
 	
 	public static IASTUnaryExpression newDereferenceOperatorExpression(IASTExpression expression) {
 		return newUnaryExpression(IASTUnaryExpression.op_star, expression);
@@ -173,7 +182,7 @@ public class ExtendedNodeFactory {
 		return factory.newDeclarationStatement(newDeclaration);
 	}
 	
-	public static IASTName newName(String name) {
+	public static  ICPPASTName newName(String name) {
 		return factory.newName(name.toCharArray());
 	}
 	
@@ -188,11 +197,17 @@ public class ExtendedNodeFactory {
 	public static ICPPASTNamedTypeSpecifier newNamedTypeSpecifier(String typeName) {
 		return factory.newTypedefNameSpecifier(newName(typeName));
 	}
-	
+	public static ICPPASTTypeId newIASTTypeId(ICPPASTNamedTypeSpecifier newNamedTypeSpecifier) {
+		return factory.newTypeId(newNamedTypeSpecifier, factory.newDeclarator(factory.newName()));
+	}
+
 	public static ICPPASTDeclarator newDeclarator(String name) {
 		return factory.newDeclarator(newName(name));
 	}
-	
+	public static ICPPASTDeclarator newDeclarator() {
+		return factory.newDeclarator(factory.newName());
+	}
+
 	public static ICPPASTDeclarator newReferenceDeclarator(String name) {
 		ICPPASTDeclarator declarator = newDeclarator(name);
 		declarator.addPointerOperator(factory.newReferenceOperator(false));
@@ -217,5 +232,21 @@ public class ExtendedNodeFactory {
 	
 	public static IASTCompoundStatement newCompoundStatement() {
 		return factory.newCompoundStatement();
+	}
+
+	public static IASTTypeId newTypeId(IASTDeclSpecifier declspecifier, IASTDeclarator declarator) {
+		return factory.newTypeId(declspecifier, declarator);
+	}
+
+	public static ICPPASTTemplateId newTemplateId(ICPPASTName templatename) {
+		return factory.newTemplateId(templatename);
+	}
+
+	public static ICPPASTQualifiedName newQualifiedName(ICPPASTName first) {
+		return factory.newQualifiedName(first);
+	}
+
+	public static ICPPASTNamedTypeSpecifier newTypedefNameSpecifier(IASTName name) {
+		return factory.newTypedefNameSpecifier(name);
 	}
 }

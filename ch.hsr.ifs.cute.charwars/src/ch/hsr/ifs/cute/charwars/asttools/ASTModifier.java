@@ -24,6 +24,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressWarnings("restriction")
 public class ASTModifier {
 	public static void replaceNode(IASTNode oldNode, IASTNode newNode) {
+		//TODO: Hack...
 		IASTAmbiguityParent parent = (IASTAmbiguityParent)oldNode.getParent();
 		parent.replace(oldNode, newNode);
 	}

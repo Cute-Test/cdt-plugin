@@ -33,6 +33,7 @@ public class ReplaceIdExpressionsVisitor extends ASTVisitor {
 					// keep Array Subscript Expressions
 				} 
 				else if(ASTAnalyzer.isArrayLengthCalculation(idExpression)) {
+					// TODO: very shaky!! only special case addressed 
 					IASTNode currentNode = idExpression;
 					while(currentNode != null) {
 						currentNode = currentNode.getParent();
