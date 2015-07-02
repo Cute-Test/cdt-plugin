@@ -8,6 +8,7 @@
 	<properties>
 		<tycho-version>0.20.0</tycho-version>
 		<os-jvm-flags /> <!-- for the default case , mac requires special -->
+		<target-file>cdt</target-file>
 	</properties>
 	<profiles>
 		<profile>
@@ -69,7 +70,7 @@
 		</repository>
 		<repository>
 			<id>ifs cdttesting</id>
-			<url>http://www.cevelop.com/cdt-test-plugins/mars</url>
+			<url>http://www.cevelop.com/cdt-testing/${eclipse-version}/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
