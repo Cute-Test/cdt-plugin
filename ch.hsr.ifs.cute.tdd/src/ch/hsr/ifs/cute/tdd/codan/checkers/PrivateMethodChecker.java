@@ -49,7 +49,10 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				if (type != null) {
 					return PROCESS_CONTINUE;
 				}
-				final ICPPClassType owner = (ICPPClassType) member.getOwner();
+				final ICPPClassType owner = member.getClassOwner();
+				if (owner == null) {
+					return PROCESS_CONTINUE;
+				}
 				final ICPPMember[] methods = ClassTypeHelper.getAllDeclaredMethods(owner, name);
 				final ICPPMember[] fields = ClassTypeHelper.getDeclaredFields(owner, name);
 				if (ArrayUtil.contains(methods, member) || ArrayUtil.contains(fields, member)) {
