@@ -82,7 +82,7 @@ public class NamespactorQuickAssistProcessor implements IQuickAssistProcessor {
 				}
 				if (name != null || node instanceof ICPPASTName){
 					if (name == null) name = (IASTName) node;
-					IBinding thebinding = ((ICPPASTName) name).resolveBinding();
+					IBinding thebinding = name.resolveBinding();
 					
 					if (thebinding instanceof CPPTypedef){
 						System.out.println("detected typedef");
