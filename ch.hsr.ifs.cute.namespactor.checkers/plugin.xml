@@ -58,7 +58,7 @@
          description="Detects typedefs to become alias declarations"
          id="ch.hsr.ifs.cute.namespactor.Typedef2Alias"
          messagePattern="Detects typedefs to become alias declarations"
-         name="Detects typedefs to become alias declarations">
+         name="Typedef replaceable with alias declarations">
    </problem>         
       </checker>
 	</extension>
@@ -96,6 +96,7 @@
 	   </resolution>
     <resolution
           class="ch.hsr.ifs.cute.namespactor.quickfix.Typedef2AliasQuickFix"
+          messagePattern="Replace typedef with alias declaration"
           problemId="ch.hsr.ifs.cute.namespactor.Typedef2Alias">
     </resolution>	   	   	    
 	</extension>
