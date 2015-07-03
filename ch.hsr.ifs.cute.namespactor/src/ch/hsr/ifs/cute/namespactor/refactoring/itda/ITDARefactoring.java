@@ -12,6 +12,7 @@
 package ch.hsr.ifs.cute.namespactor.refactoring.itda;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
+import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -182,9 +183,7 @@ public class ITDARefactoring extends RefactoringBase {
 	@Override
 	protected void collectModifications(ASTRewriteStore store) {
 		ICPPNodeFactory factory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-
-		
-		IASTName replacement = factory.newName(theUnderlyingType.toString().toCharArray());
+		IASTName replacement = factory.newName(ASTTypeUtil.getType(theUnderlyingType, false).toCharArray());
 		store.addReplaceChange(theNodeToReplace, replacement  );
 		super.collectModifications(store);
 	}
