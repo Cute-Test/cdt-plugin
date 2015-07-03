@@ -53,7 +53,7 @@
          </problem>
    <problem
          category="ch.hsr.ifs.elevator.enhancements"
-         defaultEnabled="true"
+         defaultEnabled="false"
          defaultSeverity="Warning"
          description="Detects typedefs to become alias declarations"
          id="ch.hsr.ifs.cute.namespactor.Typedef2Alias"
