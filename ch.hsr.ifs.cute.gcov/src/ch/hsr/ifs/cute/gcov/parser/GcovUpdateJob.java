@@ -16,7 +16,6 @@ import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,6 +28,7 @@ import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.gcov.model.Function;
 import ch.hsr.ifs.cute.gcov.model.Line;
+import ch.hsr.ifs.cute.gcov.util.ProjectUtil;
 
 /**
  * @author Emanuel Graf IFS
@@ -48,7 +48,7 @@ public class GcovUpdateJob extends Job {
 			if (project.hasNature(GcovNature.NATURE_ID)) {
 				Collection<ch.hsr.ifs.cute.gcov.model.File> files = GcovPlugin.getDefault().getcModel().getMarkedFiles();
 				for (ch.hsr.ifs.cute.gcov.model.File file : files) {
-					deleteMarkers(file.getFile());
+					ProjectUtil.deleteMarkers(file.getFile());
 				}
 				GcovPlugin.getDefault().getcModel().clearModel();
 				updateGcov(project);
@@ -64,15 +64,6 @@ public class GcovUpdateJob extends Job {
 			return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, "Error");
 		}
 		return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK");
-	}
-
-	public void deleteMarkers(IFile file) {
-		try {
-			file.deleteMarkers(GcovPlugin.COVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
-			file.deleteMarkers(GcovPlugin.UNCOVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
-			file.deleteMarkers(GcovPlugin.PARTIALLY_MARKER_TYPE, true, IResource.DEPTH_ZERO);
-		} catch (CoreException ce) {
-		}
 	}
 
 	private void markFile(ch.hsr.ifs.cute.gcov.model.File file) throws CoreException {
