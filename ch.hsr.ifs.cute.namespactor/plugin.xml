@@ -49,7 +49,7 @@
                id="ch.hsr.ifs.cute.namespactor.itda"
                label="inlinetypealias"
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
-               style="push">
+               style="radio">
          </action>
       </actionSet>
    </extension>
@@ -128,7 +128,7 @@
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>
          <action
-               class="ch.hsr.ifs.cute.namespactor.ui.itda.ITDARefactoringAction"
+               class="ch.hsr.ifs.cute.namespactor.ui.itda.ITDARefactoringActionDelegate"
                icon="icons/icon-green-star.png"
                id="ch.hsr.ifs.cute.namespactor.itda.1"
                label="inline type alias"
