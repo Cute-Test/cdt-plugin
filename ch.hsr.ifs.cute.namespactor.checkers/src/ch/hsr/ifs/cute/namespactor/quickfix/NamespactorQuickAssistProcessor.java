@@ -93,8 +93,8 @@ public class NamespactorQuickAssistProcessor implements IQuickAssistProcessor {
 				}
 				if (node instanceof ICPPASTSimpleDeclSpecifier){
 					
-				 if (((ICPPASTSimpleDeclSpecifier) node).getType() == ICPPASTSimpleDeclSpecifier.t_auto)
-					System.out.println("auto detected");
+//				 if (((ICPPASTSimpleDeclSpecifier) node).getType() == ICPPASTSimpleDeclSpecifier.t_auto)
+//					System.out.println("auto detected");
 					
 				}
 				return Status.OK_STATUS;
