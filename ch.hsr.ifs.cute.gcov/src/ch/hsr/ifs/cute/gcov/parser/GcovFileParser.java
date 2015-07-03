@@ -99,7 +99,7 @@ public class GcovFileParser {
 				continue;
 			}
 			Matcher branchMatcher = BRANCH_PATTERN.matcher(line);
-			if (branchMatcher.matches()) {
+			if (branchMatcher.matches() && !line.endsWith("taken 0% (throw)")) {
 				int taken = Integer.parseInt(branchMatcher.group(4));
 				currentLine.addBranch(new Branch(taken));
 				continue;
