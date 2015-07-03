@@ -184,6 +184,10 @@
              optional="false">
        </commandParameter>
     </command>
+    <command
+          id="ch.hsr.ifs.cute.gcov.clearMarkers"
+          name="%command.name.2">
+    </command>
  </extension>
        <extension
          point="ch.hsr.ifs.testframework.launchObserver">
@@ -262,6 +266,11 @@
                   value="remove">
             </parameter>
          </command>
+         <command
+               commandId="ch.hsr.ifs.cute.gcov.clearMarkers"
+               label="%action.label.2"
+               style="push">
+         </command>
          <separator
                name="ch.hsr.ifs.cute.gcov.separator"
                visible="true">
@@ -273,6 +282,10 @@
       <handler
             class="ch.hsr.ifs.cute.gcov.actions.AddRemoveGcovHandler"
             commandId="ch.hsr.ifs.cute.gcov.addRemoveGcovCommand">
+      </handler>
+      <handler
+            class="ch.hsr.ifs.cute.gcov.actions.ClearMarkersHandler"
+            commandId="ch.hsr.ifs.cute.gcov.clearMarkers">
       </handler>
    </extension>
 

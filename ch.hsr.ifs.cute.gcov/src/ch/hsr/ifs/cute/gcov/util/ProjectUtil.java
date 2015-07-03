@@ -39,15 +39,19 @@ public final class ProjectUtil {
 	}
 	
 	public static void deleteMarkers(IProject project) {
+		if (project == null) {
+			return;
+		}
 		try {
 			project.accept(new IResourceVisitor() {
 				
 				@Override
-				public boolean visit(IResource resource) throws CoreException {
+				public boolean visit(IResource resource) {
 					if (resource instanceof IFile) {
 						deleteMarkers((IFile) resource);
+						return false;
 					}
-					return false;
+					return true;
 				}
 			});
 		} catch (CoreException e) {
