@@ -1,12 +1,17 @@
 package ch.hsr.ifs.cute.gcov.util;
 
+import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
 
@@ -31,5 +36,41 @@ public final class ProjectUtil {
 			file.deleteMarkers(GcovPlugin.PARTIALLY_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 		} catch (CoreException ce) {
 		}
+	}
+	
+	public static void deleteMarkers(IProject project) {
+		try {
+			project.accept(new IResourceVisitor() {
+				
+				@Override
+				public boolean visit(IResource resource) throws CoreException {
+					if (resource instanceof IFile) {
+						deleteMarkers((IFile) resource);
+					}
+					return false;
+				}
+			});
+		} catch (CoreException e) {
+			GcovPlugin.log(e);
+		}
+	}
+
+	public static IProject getSelectedProject(ISelection selection) {
+		if (!(selection instanceof IStructuredSelection))
+			return null;
+	
+		for (Object selected : ((IStructuredSelection) selection).toList()) {
+			if (selected instanceof IProject) {
+				return (IProject) selected;
+			} else if (selected instanceof IAdaptable) {
+				IProject proj = (IProject) ((IAdaptable) selected).getAdapter(IProject.class);
+				if (proj != null) {
+					return proj;
+				}
+			} else if (selected instanceof ICElement) {
+				return ((ICElement) selected).getCProject().getProject();
+			}
+		}
+		return null;
 	}
 }
