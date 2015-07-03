@@ -58,7 +58,13 @@ public class AddRemoveGcovHandler extends AbstractHandler {
 		if (project != null) {
 			try {
 				GcovNature.addGcovNature(project, new NullProgressMonitor());
-				new GcovAdditionHandler().addGcovConfig(project);
+				GcovAdditionHandler gcovAdditionHandler = new GcovAdditionHandler();
+				gcovAdditionHandler.addGcovConfig(project);
+				for(IProject referencedProject : project.getReferencedProjects()) {
+					GcovNature.addGcovNature(referencedProject, new NullProgressMonitor());
+					gcovAdditionHandler.addGcovConfig(referencedProject);
+					gcovAdditionHandler.adaptLibraryPath(project, referencedProject);
+				}
 				notifyUserSuccedd("Gcov Coverage Analysis successfull added to project.");
 			} catch (CoreException e) {
 				GcovPlugin.log(e);
@@ -89,8 +95,8 @@ public class AddRemoveGcovHandler extends AbstractHandler {
 				if (getConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
 					for (IConfiguration config : configs) {
 						if (config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) {
-							ManagedBuildManager.setSelectedConfiguration(project, config);
 							ManagedBuildManager.setDefaultConfiguration(project, config);
+							ManagedBuildManager.setSelectedConfiguration(project, config);
 						}
 					}
 				}

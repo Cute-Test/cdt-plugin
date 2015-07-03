@@ -250,10 +250,6 @@
                         <and>
                            <test
                                  property="org.eclipse.core.resources.projectNature"
-                                 value="ch.hsr.ifs.cute.ui.cutenature">
-                           </test>
-                           <test
-                                 property="org.eclipse.core.resources.projectNature"
                                  value="ch.hsr.ifs.cute.gcov.GcovNature">
                            </test>
                         </and>

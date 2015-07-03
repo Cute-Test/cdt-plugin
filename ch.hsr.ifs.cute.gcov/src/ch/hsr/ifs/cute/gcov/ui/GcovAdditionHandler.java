@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
+ * Copyright (c) 2007-2015, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
  * 
  * Permission to use, copy, and/or distribute this software for any
@@ -8,6 +8,18 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.gcov.ui;
 
+import java.util.List;
+
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.settings.model.CLibraryPathEntry;
+import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
+import org.eclipse.cdt.core.settings.model.ICFolderDescription;
+import org.eclipse.cdt.core.settings.model.ICLanguageSetting;
+import org.eclipse.cdt.core.settings.model.ICLanguageSettingEntry;
+import org.eclipse.cdt.core.settings.model.ICLibraryPathEntry;
+import org.eclipse.cdt.core.settings.model.ICProjectDescription;
+import org.eclipse.cdt.core.settings.model.ICSettingEntry;
+import org.eclipse.cdt.core.settings.model.util.CDataUtil;
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
@@ -28,6 +40,7 @@ import org.eclipse.ui.actions.BuildAction;
 import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.ui.ICuteWizardAdditionHandler;
+import ch.hsr.ifs.cute.ui.ProjectTools;
 
 /**
  * @author Emanuel Graf IFS
@@ -80,15 +93,9 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 			IConfiguration[] configs = info.getManagedProject().getConfigurations();
 			for (IConfiguration config : configs) {
 				if (config.getParent().getId().contains("debug")) {
-					IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, GCOV_CONFG_ID);
-					newConfig.setName("Debug Gcov");
-					setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_FLAGS);
-					setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_FLAGS);
-					setOptionInTool(newConfig, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
-					setOptionInTool(newConfig, MAC_CPP_LINKER_ID, MACOSX_LINKER_OPTION_FLAGS, GCOV_LINKER_FLAGS);
+					IConfiguration newConfig = createGcovConfig(project, info, config);
 					ManagedBuildManager.setDefaultConfiguration(project, newConfig);
 					ManagedBuildManager.setSelectedConfiguration(project, newConfig);
-
 					return newConfig;
 				}
 			}
@@ -98,42 +105,33 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 		return null;
 	}
 
-	public IConfiguration addGcovLibConfig(IProject project) throws CoreException {
-		try {
-			IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-			IConfiguration[] configs = info.getManagedProject().getConfigurations();
-			for (IConfiguration config : configs) {
-				if (config.getParent().getId().contains("debug")) {
-					IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, GCOV_CONFG_ID);
-					newConfig.setName("Debug Gcov");
-					setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_LIB_FLAGS);
-					setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_LIB_FLAGS);
-					setOptionInTool(newConfig, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
-					setOptionInTool(newConfig, MAC_CPP_LINKER_ID, MACOSX_LINKER_OPTION_FLAGS, GCOV_LINKER_FLAGS);
-					ManagedBuildManager.setDefaultConfiguration(project, newConfig);
-					ManagedBuildManager.setSelectedConfiguration(project, newConfig);
-
-					return newConfig;
-				}
-			}
-		} catch (BuildException e) {
-			throw new CoreException(new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getMessage(), e));
-		}
-		return null;
+	private IConfiguration createGcovConfig(IProject project, IManagedBuildInfo info, IConfiguration config)
+			throws BuildException {
+		IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, GCOV_CONFG_ID);
+		boolean isLibraryProject = ProjectTools.isLibraryProject(project);
+		newConfig.setName("Debug Gcov");
+		String cppCompilerFlags = isLibraryProject ? GCOV_CPP_COMPILER_LIB_FLAGS : GCOV_CPP_COMPILER_FLAGS;
+		setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, cppCompilerFlags);
+		String cCompilerFlags = isLibraryProject ? GCOV_C_COMPILER_LIB_FLAGS : GCOV_C_COMPILER_FLAGS;
+		setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, cCompilerFlags);
+		setOptionInTool(newConfig, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
+		setOptionInTool(newConfig, MAC_CPP_LINKER_ID, MACOSX_LINKER_OPTION_FLAGS, GCOV_LINKER_FLAGS);
+		return newConfig;
 	}
 
-	private void setOptionInTool(IConfiguration config, String toolId, String optionId, String optionValue) throws BuildException {
+	private void setOptionInTool(IConfiguration config, String toolId, String optionId, String optionValue)
+	throws BuildException {
 		ITool[] tools = config.getToolsBySuperClassId(toolId);
 		for (ITool tool : tools) {
 			IOption option = tool.getOptionById(optionId);
-			String value = option.getDefaultValue() == null ? optionValue : option.getDefaultValue().toString().trim() + " " + optionValue;
+			String value = option.getDefaultValue() == null ? optionValue : option.getDefaultValue().toString().trim() + " " + optionValue; //$NON-NLS-1$
 			ManagedBuildManager.setOption(config, tool, option, value);
 		}
 	}
 
 	public void configureLibProject(IProject libProject) throws CoreException {
 		if (isGcovEnabled() && libProjectNeedGcovConfig(libProject)) {
-			addGcovLibConfig(libProject);
+			addGcovConfig(libProject);
 			BuildAction buildAction = new BuildAction(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), IncrementalProjectBuilder.INCREMENTAL_BUILD);
 			buildAction.selectionChanged(new StructuredSelection(libProject));
 			buildAction.run();
@@ -150,4 +148,55 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 		return true;
 	}
 
+	public void adaptLibraryPath(IProject project, IProject referencedProject) throws CoreException {
+		adaptLibraryPathForLangId(project, referencedProject, GNU_CPP_LINKER_ID);
+		adaptLibraryPathForLangId(project, referencedProject, MAC_CPP_LINKER_ID);
+	}
+
+	private void adaptLibraryPathForLangId(IProject project, IProject referencedProject, String linkerID)
+			throws CoreException {
+		ICProjectDescription projectDescription = CoreModel.getDefault().getProjectDescription(project);
+        ICLanguageSetting lang = getLanguageSettingsForId(linkerID, projectDescription);
+        if (lang != null) {
+	        String gcovLibPath = getGcovLibraryOutputPath(referencedProject);
+	        CLibraryPathEntry entry = CDataUtil.createCLibraryPathEntry(gcovLibPath, ICSettingEntry.VALUE_WORKSPACE_PATH);
+	        List<ICLanguageSettingEntry> entries = lang.getSettingEntriesList(ICLibraryPathEntry.LIBRARY_PATH);
+	        ICLanguageSettingEntry obsoleteDebugEntry = findDebugEntry(referencedProject, entries);
+	        if (obsoleteDebugEntry != null) {
+	        	entries.remove(obsoleteDebugEntry);
+	        }
+	        entries.add(entry);
+	        lang.setSettingEntries(ICLibraryPathEntry.LIBRARY_PATH, entries);
+	        CoreModel.getDefault().setProjectDescription(project, projectDescription);
+        }
+	}
+
+	private ICLanguageSettingEntry findDebugEntry(IProject referencedProject, List<ICLanguageSettingEntry> entries) {
+		String debugPath = "/" + referencedProject.getName() + "/Debug";
+		for (ICLanguageSettingEntry entry : entries) {
+			String value = entry.getValue();
+			if (value != null && value.equals(debugPath)) {
+				return entry;
+			}
+		}
+		return null;
+	}
+
+	private String getGcovLibraryOutputPath(IProject referencedProject) {
+		return "/" + referencedProject.getName() + "/" + CoreModel.getDefault().getProjectDescription(referencedProject).getActiveConfiguration().getName();
+	}
+
+	private ICLanguageSetting getLanguageSettingsForId(String linkerID, ICProjectDescription projectDescription) {
+		ICConfigurationDescription activeConfiguration = projectDescription.getActiveConfiguration();
+        ICFolderDescription folderDescription = activeConfiguration.getRootFolderDescription();
+        ICLanguageSetting[] languageSettings = folderDescription.getLanguageSettings();
+        
+        for (ICLanguageSetting languageSetting : languageSettings) {
+        	String langId = languageSetting.getId();
+            if(langId.contains(linkerID)) {
+                return languageSetting;
+            }
+        }
+		return null;
+	}
 }
