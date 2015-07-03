@@ -136,3 +136,13 @@ int main(int argc, char **argv) {
 	for (int i; i < 10; ++i) { }
 }
 
+//!Should Mark Template Instantiation
+//@.config
+expectedMarkerLines=5
+//@main.cpp
+template<typename T>
+struct T {};
+
+int main(int argc, char **argv) {
+    T<int> t;
+}
