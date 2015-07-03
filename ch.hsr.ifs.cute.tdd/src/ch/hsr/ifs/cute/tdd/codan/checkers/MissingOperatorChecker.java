@@ -68,9 +68,11 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			ICPPFunction overload = binex.getOverload();
 			if (overload == null && hasTypeOperand(binex) && hasKnownTypes(binex)) {
 				OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binex.getOperator());
-				String strategy = getStrategy(binex);
-				reportMissingOperator(typename, binex, operator, strategy, binex.getOperand1().getExpressionType());
-				return PROCESS_SKIP;
+				if (operator != null) {
+					String strategy = getStrategy(binex);
+					reportMissingOperator(typename, binex, operator, strategy, binex.getOperand1().getExpressionType());
+					return PROCESS_SKIP;
+				}
 			}
 			return PROCESS_CONTINUE;
 		}
@@ -93,9 +95,11 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 					&& hasKnownType(uexpr.getOperand())
 					&& !isAddressOfOperator(uexpr)) {
 				OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uexpr.getOperator());
-				String strategy = getStrategy(uexpr);
-				reportMissingOperator(typename, expression, operator, strategy, uexpr.getOperand().getExpressionType());
-				return PROCESS_SKIP;
+				if (operator != null) {
+					String strategy = getStrategy(uexpr);
+					reportMissingOperator(typename, expression, operator, strategy, uexpr.getOperand().getExpressionType());
+					return PROCESS_SKIP;
+				}
 			}
 			return PROCESS_CONTINUE;
 		}
