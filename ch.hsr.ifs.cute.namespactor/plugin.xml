@@ -37,19 +37,15 @@
          </action>
          <action
                class="ch.hsr.ifs.cute.namespactor.ui.td2a.TD2ARefactoringActionDelegate"
-               icon="icons/icon-green-star.png"
                id="ch.hsr.ifs.cute.namespactor.td2a"
-               label="typedef2alias"
-               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
-               style="push">
+               label="Convert typedef to alias"
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>
          <action
                class="ch.hsr.ifs.cute.namespactor.ui.itda.ITDARefactoringActionDelegate"
-               icon="icons/icon-green-star.png"
                id="ch.hsr.ifs.cute.namespactor.itda"
-               label="inlinetypealias"
-               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup"
-               style="radio">
+               label="Inline type alias"
+               menubarPath="org.eclipse.jdt.ui.refactoring.menu/codingGroup">
          </action>
       </actionSet>
    </extension>
@@ -122,16 +118,14 @@
          <action
                class="ch.hsr.ifs.cute.namespactor.ui.td2a.TD2ARefactoringActionDelegate"
                definitionId="ch.hsr.ifs.cute.namespactor.ui.td2a.Refactoring"
-               icon="icons/icon-green-star.png"
                id="ch.hsr.ifs.cute.namespactor.td2a.1"
-               label="typedef to alias"
+               label="Convert typedef to alias"
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>
          <action
                class="ch.hsr.ifs.cute.namespactor.ui.itda.ITDARefactoringActionDelegate"
-               icon="icons/icon-green-star.png"
                id="ch.hsr.ifs.cute.namespactor.itda.1"
-               label="inline type alias"
+               label="Inline type alias"
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
          </action>         
       </viewerContribution>
