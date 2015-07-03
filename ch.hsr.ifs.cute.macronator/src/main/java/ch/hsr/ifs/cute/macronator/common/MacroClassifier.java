@@ -15,6 +15,7 @@ import org.eclipse.cdt.core.index.IIndexMacro;
 import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.index.IndexFilter;
 import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.parser.IToken;
@@ -98,6 +99,9 @@ public class MacroClassifier {
 
     private boolean isInsideConditionalPreprocessorStatement(IIndexName macroReference) {
         IASTTranslationUnit referenceAst = getTranslationUnit(macroReference);
+        if (referenceAst == null) {
+            return false;
+        }
         List<IASTPreprocessorStatement> statements = Arrays.<IASTPreprocessorStatement> asList(referenceAst.getAllPreprocessorStatements());
         for (IASTPreprocessorStatement statement : statements) {
             if (!isMacroDefinition(statement) && isReferenceContainedInStatement(macroReference, statement)) {
@@ -112,9 +116,14 @@ public class MacroClassifier {
     }
 
     private IASTTranslationUnit getTranslationUnit(IIndexName indexName) {
+        Path filePath = new Path(indexName.getFileLocation().getFileName());
+        ICElement celement = CoreModel.getDefault().create(filePath);
+        if (celement == null) {
+            return null;
+        }
+        ICProject project = celement.getCProject();
+        ITranslationUnit referenceTU = CoreModel.getDefault().createTranslationUnitFrom(project, filePath);
         try {
-            ICProject proj = CoreModel.getDefault().create(new Path(indexName.getFileLocation().getFileName())).getCProject();
-            ITranslationUnit referenceTU = CoreModel.getDefault().createTranslationUnitFrom(proj, (new Path(indexName.getFileLocation().getFileName())));
             return referenceTU.getAST(macroDefinition.getTranslationUnit().getIndex(), ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT | ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
         } catch (CoreException e) {
             throw new RuntimeException(e);
