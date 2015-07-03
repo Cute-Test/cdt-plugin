@@ -146,3 +146,25 @@ struct T {};
 int main(int argc, char **argv) {
     T<int> t;
 }
+//!Mark Ctor Call of Base Class
+//@.config
+expectedMarkerLines=6
+//@main.cpp
+struct Base {
+	Base(int){}
+};
+
+struct Sub : Base {
+	Sub(int i) : Base(i){}
+};
+//!Mark Ctor Call of Base Class with Multiple Arguments
+//@.config
+expectedMarkerLines=6
+//@main.cpp
+struct Base {
+	Base(int, int){}
+};
+
+struct Sub : Base {
+	Sub(int i) : Base(i, i){}
+};
