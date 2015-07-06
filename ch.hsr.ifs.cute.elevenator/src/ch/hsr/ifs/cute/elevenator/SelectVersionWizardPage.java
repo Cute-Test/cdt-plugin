@@ -170,6 +170,7 @@ public class SelectVersionWizardPage extends WizardPage {
 		}
 
 		combo.select(0);
+		selectedVersion = CppVersions.values()[0];
 		combo.setFont(font);
 
 		Group modificationsGroup = new Group(composite, SWT.NONE);

@@ -10,7 +10,6 @@ import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsProvide
 import org.eclipse.cdt.core.language.settings.providers.LanguageSettingsManager;
 import org.eclipse.cdt.core.language.settings.providers.LanguageSettingsSerializableProvider;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
-import org.eclipse.cdt.core.settings.model.ICLanguageSettingEntry;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
@@ -33,15 +32,19 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		IWizardPage[] pages = MBSCustomPageManager.getCustomPages();
 		IWizard wizard = pages[0].getWizard();
+		CppVersions selectedVersion = CppVersions.CPP_11;
+		if (pages[0] instanceof SelectVersionWizardPage) {
+			selectedVersion = ((SelectVersionWizardPage) pages[0]).getSelectedVersion();
+		}
 		if (wizard instanceof CDTCommonProjectWizard) {
 			CDTCommonProjectWizard projectWizard = (CDTCommonProjectWizard) wizard;
 			IProject project = projectWizard.getProject(false);
-			updateStandard(project);
-			updateProvider(project);
+			updateStandard(project, selectedVersion);
+			updateProvider(project, selectedVersion);
 		}
 	}
 
-	private void updateProvider(IProject project) {
+	private void updateProvider(IProject project, CppVersions selectedVersion) {
 		ILanguageSettingsProvider minGWProvider = LanguageSettingsManager
 				.getWorkspaceProvider("org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetectorMinGW");
 		// ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null :
@@ -55,55 +58,70 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		// for (ILanguageSettingsProvider provider : initialProviders) {
 		if (minGWProvider != null) {
 			ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(minGWProvider);
-			if (rawProvider instanceof ILanguageSettingsEditableProvider
-					&& !LanguageSettingsManager
-							.isStoringEntriesInProjectArea((LanguageSettingsSerializableProvider) rawProvider)) {
+			if (rawProvider instanceof ILanguageSettingsEditableProvider && !LanguageSettingsManager
+					.isStoringEntriesInProjectArea((LanguageSettingsSerializableProvider) rawProvider)) {
 
 				try {
 					ILanguageSettingsEditableProvider newProvider = ((ILanguageSettingsEditableProvider) rawProvider)
 							.cloneShallow();
-					if (newProvider instanceof GCCBuiltinSpecsDetectorMinGW){
+					if (newProvider instanceof GCCBuiltinSpecsDetectorMinGW) {
 						GCCBuiltinSpecsDetectorMinGW specsDetector = (GCCBuiltinSpecsDetectorMinGW) newProvider;
 						String parameterProperty = specsDetector.getProperty("parameter");
-						specsDetector.setProperty("parameter", parameterProperty + " -std=c++0x");
+						specsDetector.setProperty("parameter",
+								parameterProperty + " -std=" + selectedVersion.getCompilerVersionString());
 						LanguageSettingsManager.setStoringEntriesInProjectArea(specsDetector, true);
-						
-						LanguageSettingsManager.isStoringEntriesInProjectArea((LanguageSettingsSerializableProvider) specsDetector);
-						
+
+						LanguageSettingsManager.isStoringEntriesInProjectArea(specsDetector);
+
 						ICProjectDescription pDesc = CDTPropertyManager.getProjectDescription(project);
 						ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null : pDesc.getConfigurations();
 						for (ICConfigurationDescription configDescription : cfgDescs) {
 							if (configDescription instanceof ILanguageSettingsProvidersKeeper) {
-								List<ILanguageSettingsProvider> providers = ((ILanguageSettingsProvidersKeeper) configDescription).getLanguageSettingProviders();
-								ArrayList<ILanguageSettingsProvider> newProviders = new ArrayList<ILanguageSettingsProvider>(providers);
-								
+								List<ILanguageSettingsProvider> providers = ((ILanguageSettingsProvidersKeeper) configDescription)
+										.getLanguageSettingProviders();
+								ArrayList<ILanguageSettingsProvider> newProviders = new ArrayList<ILanguageSettingsProvider>(
+										providers);
+
 								newProviders.remove(minGWProvider);
 								newProviders.add(specsDetector);
-								((ILanguageSettingsProvidersKeeper) configDescription).setLanguageSettingProviders(newProviders);
-								
+								((ILanguageSettingsProvidersKeeper) configDescription)
+										.setLanguageSettingProviders(newProviders);
+
 							}
 						}
 						CDTPropertyManager.performOk(this);
-//						ICConfigurationDescription settingConfiguration = CDTPropertyManager.getProjectDescription(project).getDefaultSettingConfiguration();
-						
-//						if (settingConfiguration instanceof ILanguageSettingsProvidersKeeper) {
-//							ILanguageSettingsProvidersKeeper providersKeeper = (ILanguageSettingsProvidersKeeper) settingConfiguration;
-//							providersKeeper.setLanguageSettingProviders(providers)
-//						}
-//						if (sd instanceof ILanguageSettingsProvidersKeeper && dd instanceof ILanguageSettingsProvidersKeeper) {
-//							List<ILanguageSettingsProvider> newProviders = ((ILanguageSettingsProvidersKeeper) sd).getLanguageSettingProviders();
-//							((ILanguageSettingsProvidersKeeper) dd).setLanguageSettingProviders(newProviders);
-//						}
+						// ICConfigurationDescription settingConfiguration =
+						// CDTPropertyManager.getProjectDescription(project).getDefaultSettingConfiguration();
+
+						// if (settingConfiguration instanceof
+						// ILanguageSettingsProvidersKeeper) {
+						// ILanguageSettingsProvidersKeeper providersKeeper =
+						// (ILanguageSettingsProvidersKeeper)
+						// settingConfiguration;
+						// providersKeeper.setLanguageSettingProviders(providers)
+						// }
+						// if (sd instanceof ILanguageSettingsProvidersKeeper &&
+						// dd instanceof ILanguageSettingsProvidersKeeper) {
+						// List<ILanguageSettingsProvider> newProviders =
+						// ((ILanguageSettingsProvidersKeeper)
+						// sd).getLanguageSettingProviders();
+						// ((ILanguageSettingsProvidersKeeper)
+						// dd).setLanguageSettingProviders(newProviders);
+						// }
 					}
-//					ICProjectDescription pDesc = CDTPropertyManager.getProjectDescription(project);
-//					ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null : pDesc.getConfigurations();
-//					for (ICConfigurationDescription configDescription : cfgDescs) {
-//						List<ICLanguageSettingEntry> settings = newProvider.getSettingEntries(configDescription,
-//								project, "org.eclipse.cdt.core.g++");
-//						if (settings != null) {
-//							settings.isEmpty();
-//						}
-//					}
+					// ICProjectDescription pDesc =
+					// CDTPropertyManager.getProjectDescription(project);
+					// ICConfigurationDescription[] cfgDescs = (pDesc == null) ?
+					// null : pDesc.getConfigurations();
+					// for (ICConfigurationDescription configDescription :
+					// cfgDescs) {
+					// List<ICLanguageSettingEntry> settings =
+					// newProvider.getSettingEntries(configDescription,
+					// project, "org.eclipse.cdt.core.g++");
+					// if (settings != null) {
+					// settings.isEmpty();
+					// }
+					// }
 				} catch (CloneNotSupportedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -115,15 +133,20 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		System.out.println("Updating Provider");
 	}
 
-	private void updateStandard(IProject project) {
+	private void updateStandard(IProject project, CppVersions selectedVersion) {
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
 		for (IConfiguration config : configs) {
 			ITool[] tools = config.getToolsBySuperClassId("cdt.managedbuild.tool.gnu.cpp.compiler");
 			for (ITool tool : tools) {
-				IOption option = tool.getOptionById("gnu.cpp.compiler.option.dialect.std");
-				String value = "ISO C++11 (-std=c++0x)";
-				ManagedBuildManager.setOption(config, tool, option, value);
+				// IOption option =
+				// tool.getOptionById("gnu.cpp.compiler.option.dialect.std");
+				// String value = "ISO C++11 (-std=c++0x)";
+				// ManagedBuildManager.setOption(config, tool, option, value);
+
+				IOption otherFlagOption = tool.getOptionById("gnu.cpp.compiler.option.dialect.flags");
+				String newValue = "-std=" + selectedVersion.getCompilerVersionString();
+				ManagedBuildManager.setOption(config, tool, otherFlagOption, newValue);
 			}
 		}
 	}
