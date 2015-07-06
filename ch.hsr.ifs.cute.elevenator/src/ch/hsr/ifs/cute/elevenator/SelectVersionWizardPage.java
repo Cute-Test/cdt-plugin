@@ -11,6 +11,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -21,6 +23,12 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 public class SelectVersionWizardPage extends WizardPage {
+
+	public CppVersions selectedVersion;
+
+	public CppVersions getSelectedVersion() {
+		return selectedVersion;
+	}
 
 	private final class DialectBasedSetting {
 		private String name;
@@ -50,14 +58,10 @@ public class SelectVersionWizardPage extends WizardPage {
 	private final class DialectBasedSettingsProvider implements ITreeContentProvider, ILabelProvider {
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void dispose() {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
@@ -70,7 +74,6 @@ public class SelectVersionWizardPage extends WizardPage {
 
 		@Override
 		public Object getParent(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -90,25 +93,20 @@ public class SelectVersionWizardPage extends WizardPage {
 
 		@Override
 		public void addListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public boolean isLabelProperty(Object element, String property) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public void removeListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public Image getImage(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -149,14 +147,28 @@ public class SelectVersionWizardPage extends WizardPage {
 		label.setText("C++ Version:");
 		label.setFont(font);
 
-		Combo combo = new Combo(versionSelector, SWT.READ_ONLY);
+		final Combo combo = new Combo(versionSelector, SWT.READ_ONLY);
 		GridData comboLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		comboLayoutData.verticalIndent = INDENT;
 		combo.setLayoutData(comboLayoutData);
-		combo.add("C++ 03");
-		combo.add("C++ 11");
-		combo.add("C++ 14");
-		combo.add("C++ 17");
+
+		combo.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedVersion = (CppVersions) combo.getData(combo.getText());
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+
+		for (CppVersions cppVersion : CppVersions.values()) {
+			combo.add(cppVersion.getVersionString());
+			combo.setData(cppVersion.getVersionString(), cppVersion);
+		}
+
 		combo.select(0);
 		combo.setFont(font);
 
@@ -174,19 +186,6 @@ public class SelectVersionWizardPage extends WizardPage {
 		DialectBasedSetting settings = createSettings();
 
 		tree.setInput(settings);
-
-		// TreeItem setCompilerFlag = new TreeItem(tree, SWT.NONE);
-		// setCompilerFlag.setText("Set Compiler Flags");
-		// TreeItem enableCodanMarkers = new TreeItem(tree, SWT.NONE);
-		// enableCodanMarkers.setText("Enable Codan Markers");
-		// TreeItem enableElevator = new TreeItem(enableCodanMarkers, SWT.NONE);
-		// enableElevator.setText("Enable Elevator Markers");
-		// TreeItem enablePointerminator = new TreeItem(enableCodanMarkers,
-		// SWT.NONE);
-		// enablePointerminator.setText("Enable Pointerminator Markers");
-		// TreeItem setIndexFlag = new TreeItem(tree, SWT.NONE);
-		// setIndexFlag.setText("Set Index Flag");
-
 		setControl(composite);
 	}
 
@@ -213,6 +212,4 @@ public class SelectVersionWizardPage extends WizardPage {
 	public void setWizard(IWizard newWizard) {
 		super.setWizard(newWizard);
 	}
-
-	
 }
