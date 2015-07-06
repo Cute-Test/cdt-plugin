@@ -33,9 +33,15 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		IWizardPage[] pages = MBSCustomPageManager.getCustomPages();
 		IWizard wizard = pages[0].getWizard();
 		CppVersions selectedVersion = CppVersions.CPP_11;
-		if (pages[0] instanceof SelectVersionWizardPage) {
-			selectedVersion = ((SelectVersionWizardPage) pages[0]).getSelectedVersion();
+		// our wizard page can be anywhere, since other plug-ins can use the same extension point and add pages after
+		// ours. The C++ version selection page must not be the last one in this wizard.
+		for (IWizardPage page : pages) {
+			if (page instanceof SelectVersionWizardPage) {
+				selectedVersion = ((SelectVersionWizardPage) page).getSelectedVersion();
+				break;
+			}
 		}
+
 		if (wizard instanceof CDTCommonProjectWizard) {
 			CDTCommonProjectWizard projectWizard = (CDTCommonProjectWizard) wizard;
 			IProject project = projectWizard.getProject(false);
@@ -66,7 +72,21 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 							.cloneShallow();
 					if (newProvider instanceof GCCBuiltinSpecsDetectorMinGW) {
 						GCCBuiltinSpecsDetectorMinGW specsDetector = (GCCBuiltinSpecsDetectorMinGW) newProvider;
-						String parameterProperty = specsDetector.getProperty("parameter");
+						StringBuilder parameterProperty = new StringBuilder(specsDetector.getProperty("parameter"));
+
+						int startOfExistingVersionOption = parameterProperty.indexOf("-std=c++");
+						if (startOfExistingVersionOption > -1) {
+							int endOfExistingVersionOption = parameterProperty.indexOf(" ",
+									startOfExistingVersionOption);
+							if (endOfExistingVersionOption > -1) {
+								// + 1 at the end to also remove the space.
+								// There is still a space at the beginning we do
+								// not want two spaces
+								parameterProperty = parameterProperty.replace(startOfExistingVersionOption,
+										endOfExistingVersionOption + 1, "");
+							}
+						}
+
 						specsDetector.setProperty("parameter",
 								parameterProperty + " -std=" + selectedVersion.getCompilerVersionString());
 						LanguageSettingsManager.setStoringEntriesInProjectArea(specsDetector, true);
