@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point 
+   		 id="ch.hsr.ifs.cute.elevenator.versionmodification" 
+   		 name="Version Modification Operations" 
+   		 schema="schema/ch.hsr.ifs.cute.elevenator.versionmodification.exsd"
+   />
    <extension
          point="org.eclipse.cdt.managedbuilder.ui.newWizardPages">
       <wizardPage
@@ -18,6 +23,7 @@
          </nature>
       </wizardPage>
    </extension>
+   
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
