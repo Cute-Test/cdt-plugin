@@ -27,7 +27,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 
-import ch.hsr.ifs.cute.elevenator.preferences.PreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 
 public class SelectVersionOperation implements IRunnableWithProgress {
 
@@ -37,7 +37,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		IWizard wizard = pages[0].getWizard();
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
-		String defaultCppVersion = store.getDefaultString(PreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
+		String defaultCppVersion = store.getDefaultString(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
 		CppVersions selectedVersion = CppVersions.valueOf(defaultCppVersion);
 		// our wizard page can be anywhere, since other plug-ins can use the same extension point and add pages after
 		// ours. The C++ version selection page must not be the last one in this wizard.

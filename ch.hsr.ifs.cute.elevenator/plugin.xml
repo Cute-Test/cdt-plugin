@@ -44,7 +44,7 @@
          name="Version Selection"
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="ch.hsr.ifs.cute.elevenator.preferences.PreferenceInitializer">
+            class="ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceInitializer">
       </initializer>
    </extension>
    <extension

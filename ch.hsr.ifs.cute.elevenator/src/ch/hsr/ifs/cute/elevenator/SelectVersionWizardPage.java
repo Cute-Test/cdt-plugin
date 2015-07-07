@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
-import ch.hsr.ifs.cute.elevenator.preferences.PreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 
 public class SelectVersionWizardPage extends WizardPage {
 
@@ -172,7 +172,7 @@ public class SelectVersionWizardPage extends WizardPage {
 		}
 
 		String defaultCppVersionString = Activator.getDefault().getPreferenceStore()
-				.getString(PreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
+				.getString(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
 		selectedVersion = CppVersions.valueOf(defaultCppVersionString);
 		combo.select(selectedVersion.ordinal());
 

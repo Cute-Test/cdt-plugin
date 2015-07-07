@@ -30,7 +30,7 @@ public class CppVersionSelectionPreferencePage extends FieldEditorPreferencePage
 			comboVersions[i][0] = cppVersion.getVersionString();
 			comboVersions[i][1] = cppVersion.toString();
 		}
-		ComboFieldEditor cppVersionCombo = new ComboFieldEditor(PreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE,
+		ComboFieldEditor cppVersionCombo = new ComboFieldEditor(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE,
 				"Default C++ &Version", comboVersions, getFieldEditorParent());
 		addField(cppVersionCombo);
 
