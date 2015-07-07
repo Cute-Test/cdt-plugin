@@ -17,8 +17,22 @@
          </appinfo>
       </annotation>
       <complexType>
-         <choice minOccurs="1" maxOccurs="unbounded">
-            <element ref="version_modification"/>
+         <choice>
+            <choice minOccurs="0" maxOccurs="1">
+               <element ref="CPP_98"/>
+            </choice>
+            <choice minOccurs="0" maxOccurs="1">
+               <element ref="CPP_03"/>
+            </choice>
+            <choice minOccurs="0" maxOccurs="1">
+               <element ref="CPP_11"/>
+            </choice>
+            <choice minOccurs="0" maxOccurs="1">
+               <element ref="CPP_14"/>
+            </choice>
+            <choice minOccurs="0" maxOccurs="1">
+               <element ref="CPP_17"/>
+            </choice>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,8 +61,58 @@
       </complexType>
    </element>
 
+   <element name="CPP_98">
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="version_modification"/>
+         </choice>
+      </complexType>
+   </element>
+
+   <element name="CPP_03">
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="version_modification"/>
+         </choice>
+      </complexType>
+   </element>
+
+   <element name="CPP_11">
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="version_modification"/>
+         </choice>
+      </complexType>
+   </element>
+
+   <element name="CPP_14">
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="version_modification"/>
+         </choice>
+      </complexType>
+   </element>
+
+   <element name="CPP_17">
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="version_modification"/>
+         </choice>
+      </complexType>
+   </element>
+
    <element name="version_modification">
       <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="version_modification"/>
+         </choice>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  The name of the Version Modification
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="class" type="string">
             <annotation>
                <documentation>
