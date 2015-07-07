@@ -1,30 +1,19 @@
 package ch.hsr.ifs.cute.elevenator.preferences;
 
-import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.DirectoryFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.RadioGroupFieldEditor;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
-
-/**
- * This class represents a preference page that is contributed to the Preferences dialog. By subclassing
- * <samp>FieldEditorPreferencePage</samp>, we can use the field support built into JFace that allows us to create a page
- * that is small and knows how to save, restore and apply itself.
- * <p>
- * This page is used to modify preferences only. They are stored in the preference store that belongs to the main
- * plug-in class. That way, preferences can be accessed directly via the preference store.
- */
+import ch.hsr.ifs.cute.elevenator.CppVersions;
 
 public class CppVersionSelectionPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public CppVersionSelectionPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("A demonstration of a preference page implementation");
+		setDescription("Selection of default C++ version and their actions when creating new projects.");
 	}
 
 	/**
@@ -33,16 +22,25 @@ public class CppVersionSelectionPreferencePage extends FieldEditorPreferencePage
 	 */
 	@Override
 	public void createFieldEditors() {
-		// new ComboFieldEditor(PreferenceConstants.CPP_VERSION, "C++ &Version", entryNamesAndValues, parent)
+		String[][] comboVersions = new String[CppVersions.values().length][2];
 
-		addField(
-				new DirectoryFieldEditor(PreferenceConstants.P_PATH, "&Directory preference:", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_BOOLEAN, "&An example of a boolean preference",
-				getFieldEditorParent()));
+		CppVersions[] possibleCppVersions = CppVersions.values();
+		for (int i = 0; i < possibleCppVersions.length; i++) {
+			CppVersions cppVersion = possibleCppVersions[i];
+			comboVersions[i][0] = cppVersion.getVersionString();
+			comboVersions[i][1] = cppVersion.toString();
+		}
+		ComboFieldEditor cppVersionCombo = new ComboFieldEditor(PreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE,
+				"Default C++ &Version", comboVersions, getFieldEditorParent());
+		addField(cppVersionCombo);
 
-		addField(new RadioGroupFieldEditor(PreferenceConstants.P_CHOICE, "An example of a multiple-choice preference",
-				1, new String[][] { { "&Choice 1", "choice1" }, { "C&hoice 2", "choice2" } }, getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_STRING, "A &text preference:", getFieldEditorParent()));
+		// addField(new BooleanFieldEditor(PreferenceConstants.P_BOOLEAN, "&An example of a boolean preference",
+		// getFieldEditorParent()));
+		//
+		// addField(new RadioGroupFieldEditor(PreferenceConstants.P_CHOICE, "An example of a multiple-choice
+		// preference",
+		// 1, new String[][] { { "&Choice 1", "choice1" }, { "C&hoice 2", "choice2" } }, getFieldEditorParent()));
+		// addField(new StringFieldEditor(PreferenceConstants.P_STRING, "A &text preference:", getFieldEditorParent()));
 	}
 
 	/*

@@ -23,8 +23,11 @@ import org.eclipse.cdt.ui.wizards.CDTCommonProjectWizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
+
+import ch.hsr.ifs.cute.elevenator.preferences.PreferenceConstants;
 
 public class SelectVersionOperation implements IRunnableWithProgress {
 
@@ -32,7 +35,10 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		IWizardPage[] pages = MBSCustomPageManager.getCustomPages();
 		IWizard wizard = pages[0].getWizard();
-		CppVersions selectedVersion = CppVersions.CPP_11;
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+
+		String defaultCppVersion = store.getDefaultString(PreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
+		CppVersions selectedVersion = CppVersions.valueOf(defaultCppVersion);
 		// our wizard page can be anywhere, since other plug-ins can use the same extension point and add pages after
 		// ours. The C++ version selection page must not be the last one in this wizard.
 		for (IWizardPage page : pages) {
@@ -55,15 +61,6 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 	private void updateProvider(IProject project, CppVersions selectedVersion) {
 		ILanguageSettingsProvider minGWProvider = LanguageSettingsManager
 				.getWorkspaceProvider("org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetectorMinGW");
-		// ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null :
-		// pDesc.getConfigurations();
-		// for (ICConfigurationDescription configDescription : cfgDescs) {
-		// if (configDescription instanceof ILanguageSettingsProvidersKeeper) {
-		// String cfgId = configDescription.getId();
-		// List<ILanguageSettingsProvider> initialProviders =
-		// ((ILanguageSettingsProvidersKeeper) configDescription)
-		// .getLanguageSettingProviders();
-		// for (ILanguageSettingsProvider provider : initialProviders) {
 		if (minGWProvider != null) {
 			ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(minGWProvider);
 			if (rawProvider instanceof ILanguageSettingsEditableProvider && !LanguageSettingsManager
@@ -82,7 +79,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 									startOfExistingVersionOption);
 							if (endOfExistingVersionOption > -1) {
 								// + 1 at the end to also remove the space.
-								// There is still a space at the beginning we do
+								// There is still a space at the beginning and we do
 								// not want two spaces
 								parameterProperty = parameterProperty.replace(startOfExistingVersionOption,
 										endOfExistingVersionOption + 1, "");
@@ -112,24 +109,6 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 							}
 						}
 						CDTPropertyManager.performOk(this);
-						// ICConfigurationDescription settingConfiguration =
-						// CDTPropertyManager.getProjectDescription(project).getDefaultSettingConfiguration();
-
-						// if (settingConfiguration instanceof
-						// ILanguageSettingsProvidersKeeper) {
-						// ILanguageSettingsProvidersKeeper providersKeeper =
-						// (ILanguageSettingsProvidersKeeper)
-						// settingConfiguration;
-						// providersKeeper.setLanguageSettingProviders(providers)
-						// }
-						// if (sd instanceof ILanguageSettingsProvidersKeeper &&
-						// dd instanceof ILanguageSettingsProvidersKeeper) {
-						// List<ILanguageSettingsProvider> newProviders =
-						// ((ILanguageSettingsProvidersKeeper)
-						// sd).getLanguageSettingProviders();
-						// ((ILanguageSettingsProvidersKeeper)
-						// dd).setLanguageSettingProviders(newProviders);
-						// }
 					}
 					// ICProjectDescription pDesc =
 					// CDTPropertyManager.getProjectDescription(project);
@@ -148,9 +127,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println("copied");
 			}
-
 		}
 		System.out.println("Updating Provider");
 	}

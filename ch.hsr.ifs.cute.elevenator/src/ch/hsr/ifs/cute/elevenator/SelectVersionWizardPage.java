@@ -22,6 +22,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import ch.hsr.ifs.cute.elevenator.preferences.PreferenceConstants;
+
 public class SelectVersionWizardPage extends WizardPage {
 
 	public CppVersions selectedVersion;
@@ -169,8 +171,11 @@ public class SelectVersionWizardPage extends WizardPage {
 			combo.setData(cppVersion.getVersionString(), cppVersion);
 		}
 
-		combo.select(0);
-		selectedVersion = CppVersions.values()[0];
+		String defaultCppVersionString = Activator.getDefault().getPreferenceStore()
+				.getString(PreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
+		selectedVersion = CppVersions.valueOf(defaultCppVersionString);
+		combo.select(selectedVersion.ordinal());
+
 		combo.setFont(font);
 
 		Group modificationsGroup = new Group(composite, SWT.NONE);
