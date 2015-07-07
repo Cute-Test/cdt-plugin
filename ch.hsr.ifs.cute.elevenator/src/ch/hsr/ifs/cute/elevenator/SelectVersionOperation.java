@@ -48,6 +48,8 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 			updateStandard(project, selectedVersion);
 			updateProvider(project, selectedVersion);
 		}
+
+		EvaluateContributions.evaluateAll();
 	}
 
 	private void updateProvider(IProject project, CppVersions selectedVersion) {
