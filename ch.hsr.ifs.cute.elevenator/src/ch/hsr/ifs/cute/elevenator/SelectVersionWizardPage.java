@@ -3,16 +3,14 @@ package ch.hsr.ifs.cute.elevenator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -22,22 +20,38 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
+import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
+import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
+import ch.hsr.ifs.cute.elevenator.operation.DoNothingOperation;
 import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 
 public class SelectVersionWizardPage extends WizardPage {
 
-	public CppVersions selectedVersion;
+	private Combo versionCombo;
+	private CheckboxTreeViewer modificationTree;
 
-	public CppVersions getSelectedVersion() {
-		return selectedVersion;
+	public CPPVersion getSelectedVersion() {
+		return (CPPVersion) versionCombo.getData(versionCombo.getText());
 	}
 
-	private final class DialectBasedSetting {
+	public Object[] getCheckedModifications() {
+		// TODO cast to dialectbasedsetting[]?
+		return modificationTree.getCheckedElements();
+	}
+
+	public final class DialectBasedSetting {
 		private String name;
 		private List<DialectBasedSetting> subsettings = new ArrayList<DialectBasedSetting>();
+		private IVersionModificationOperation operation;
 
 		public DialectBasedSetting(String name) {
+			this(name, new DoNothingOperation());
+		}
+
+		public DialectBasedSetting(String name, IVersionModificationOperation operation) {
 			this.name = name;
+			this.operation = operation;
 		}
 
 		public void addSubsetting(DialectBasedSetting subsetting) {
@@ -48,12 +62,21 @@ public class SelectVersionWizardPage extends WizardPage {
 			return name;
 		}
 
+		public IVersionModificationOperation getOperation() {
+			return operation;
+		}
+
 		public boolean hasSubsettings() {
 			return !subsettings.isEmpty();
 		}
 
 		public List<DialectBasedSetting> getSubsettings() {
 			return subsettings;
+		}
+
+		@Override
+		public String toString() {
+			return name;
 		}
 	}
 
@@ -95,7 +118,6 @@ public class SelectVersionWizardPage extends WizardPage {
 
 		@Override
 		public void addListener(ILabelProviderListener listener) {
-
 		}
 
 		@Override
@@ -125,7 +147,6 @@ public class SelectVersionWizardPage extends WizardPage {
 
 	public SelectVersionWizardPage() {
 		super("mypage");
-		System.err.println("WizardPage1");
 		setMessage("Select the C++ standard version for this project");
 		setTitle("C++ Version");
 		setPageComplete(true);
@@ -133,7 +154,6 @@ public class SelectVersionWizardPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		System.err.println("Creating Control");
 		Font font = parent.getFont();
 
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -149,56 +169,45 @@ public class SelectVersionWizardPage extends WizardPage {
 		label.setText("C++ Version:");
 		label.setFont(font);
 
-		final Combo combo = new Combo(versionSelector, SWT.READ_ONLY);
 		GridData comboLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		comboLayoutData.verticalIndent = INDENT;
-		combo.setLayoutData(comboLayoutData);
+		versionCombo = new Combo(versionSelector, SWT.READ_ONLY);
+		versionCombo.setLayoutData(comboLayoutData);
 
-		combo.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectedVersion = (CppVersions) combo.getData(combo.getText());
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-
-		for (CppVersions cppVersion : CppVersions.values()) {
-			combo.add(cppVersion.getVersionString());
-			combo.setData(cppVersion.getVersionString(), cppVersion);
+		for (CPPVersion cppVersion : CPPVersion.values()) {
+			versionCombo.add(cppVersion.getVersionString());
+			versionCombo.setData(cppVersion.getVersionString(), cppVersion);
 		}
 
 		String defaultCppVersionString = Activator.getDefault().getPreferenceStore()
 				.getString(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
-		selectedVersion = CppVersions.valueOf(defaultCppVersionString);
-		combo.select(selectedVersion.ordinal());
+		CPPVersion versionToSelect = CPPVersion.valueOf(defaultCppVersionString);
+		versionCombo.select(versionToSelect.ordinal());
 
-		combo.setFont(font);
+		versionCombo.setFont(font);
 
 		Group modificationsGroup = new Group(composite, SWT.NONE);
 		modificationsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		modificationsGroup.setText("Modifications:");
 		modificationsGroup.setLayout(new GridLayout());
 
-		TreeViewer tree = new TreeViewer(modificationsGroup, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		tree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		modificationTree = new CheckboxTreeViewer(modificationsGroup, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		modificationTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		DialectBasedSettingsProvider provider = new DialectBasedSettingsProvider();
-		tree.setContentProvider(provider);
-		tree.setLabelProvider(provider);
+		modificationTree.setContentProvider(provider);
+		modificationTree.setLabelProvider(provider);
 
 		DialectBasedSetting settings = createSettings();
 
-		tree.setInput(settings);
+		modificationTree.setInput(settings);
 		setControl(composite);
 	}
 
 	private DialectBasedSetting createSettings() {
 		DialectBasedSetting dialectBasedSetting = new DialectBasedSetting("C++ 11 Settings");
 
-		DialectBasedSetting setCompilerFlag = new DialectBasedSetting("Set Compiler Flag");
+		DialectBasedSetting setCompilerFlag = new DialectBasedSetting("Set Compiler Flag",
+				new ChangeCompilerFlagOperation());
 		dialectBasedSetting.addSubsetting(setCompilerFlag);
 
 		DialectBasedSetting enableCodanMarkers = new DialectBasedSetting("Enable Codan Markers");
@@ -208,7 +217,7 @@ public class SelectVersionWizardPage extends WizardPage {
 		DialectBasedSetting enablePointerminator = new DialectBasedSetting("Enable Pointerminator");
 		enableCodanMarkers.addSubsetting(enablePointerminator);
 
-		DialectBasedSetting setIndexFlag = new DialectBasedSetting("Set Index Flag");
+		DialectBasedSetting setIndexFlag = new DialectBasedSetting("Set Index Flag", new ChangeIndexFlagOperation());
 		dialectBasedSetting.addSubsetting(setIndexFlag);
 
 		return dialectBasedSetting;

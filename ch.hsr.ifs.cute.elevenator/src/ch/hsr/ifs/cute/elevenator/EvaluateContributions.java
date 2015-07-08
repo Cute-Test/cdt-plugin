@@ -39,7 +39,7 @@ public class EvaluateContributions {
 
 			@Override
 			public void run() throws Exception {
-				((IVersionModificationOperation) o).perform();
+				((IVersionModificationOperation) o).perform(null, null);
 			}
 		};
 		SafeRunner.run(runnable);
