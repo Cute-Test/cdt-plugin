@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.charwars.asttools;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -12,8 +12,14 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.parser.IASTAmbiguityParent;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
+import org.eclipse.ltk.core.refactoring.TextFileChange;
+import org.eclipse.text.edits.InsertEdit;
+import org.eclipse.text.edits.MultiTextEdit;
 
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
 import ch.hsr.ifs.cute.charwars.utils.ErrorLogger;
@@ -23,31 +29,75 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @SuppressWarnings("restriction")
 public class ASTModifier {
+	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+	private static final String INCLUDE_FORMAT = "#include <%s>";
+	
 	public static void replaceNode(IASTNode oldNode, IASTNode newNode) {
 		//TODO: Hack...
 		IASTAmbiguityParent parent = (IASTAmbiguityParent)oldNode.getParent();
 		parent.replace(oldNode, newNode);
 	}
 	
-	public static void includeHeaders(HashSet<String> headers, IASTTranslationUnit ast, IDocument document) {
+	public static void includeHeaders(Set<String> headers, CompositeChange change, IFile file, IASTTranslationUnit astTranslationUnit, IDocument document) {
+		//replaces the existing CompositeChange with a new TextFileChange that
+		//contains an additional InsertEdit that inserts the header includes
+		TextFileChange textFileChange = getTextFileChangeForFile(change, file);
+		change.remove(textFileChange.getParent());
+		
+		int insertionPosition = getPositionForIncludeStatements(astTranslationUnit);
+		String includeText = getIncludeText(headers, astTranslationUnit, insertionPosition, document);
+		InsertEdit insertEdit = new InsertEdit(insertionPosition, includeText);
+		TextFileChange newTextFileChange = new TextFileChange(file.getName(), file);
+		MultiTextEdit multiTextEdit = new MultiTextEdit();
+		multiTextEdit.addChild(textFileChange.getEdit());
+		multiTextEdit.addChild(insertEdit);
+		newTextFileChange.setEdit(multiTextEdit);
+		change.add(newTextFileChange);
+	}
+	
+	private static TextFileChange getTextFileChangeForFile(Change change, IFile file) {
+		if(change instanceof CompositeChange) {
+			CompositeChange compositeChange = (CompositeChange)change;
+			for(Change c : compositeChange.getChildren()) {
+				TextFileChange textFileChange = getTextFileChangeForFile(c, file);
+				if(textFileChange != null) {
+					return textFileChange;
+				}
+			}
+		}
+		
+		if(change instanceof TextFileChange) {
+			TextFileChange textFileChange = (TextFileChange)change;
+			if(textFileChange.getFile().equals(file)) {
+				return textFileChange;
+			}
+		}
+		return null;
+	}
+	
+	private static String getIncludeText(Set<String> headers, IASTTranslationUnit ast, int insertionPosition, IDocument document) {
 		StringBuffer includeText = new StringBuffer();
 		for(String headerName : headers) {
 			if(!isHeaderAlreadyIncluded(headerName, ast)) {
-				includeText.append("\n#include <" + headerName + ">");	
+				if(includeText.length() != 0 || insertionPosition != 0) {
+					includeText.append(LINE_SEPARATOR);
+				}
+				includeText.append(String.format(INCLUDE_FORMAT, headerName));	
 			}
 		}
-
+		
 		if(includeText.length() > 0) {
 			try {
-				includeText.append("\n");
-				int position = getPositionForIncludeStatements(ast);
-				document.replace(position, 0, includeText.toString());
-			} 
-			catch(BadLocationException e) {
+				String s = document.get(insertionPosition, LINE_SEPARATOR.length());
+				if(!s.equals(LINE_SEPARATOR)) {
+					includeText.append(LINE_SEPARATOR);		
+				}
+			} catch (BadLocationException e) {
 				ErrorLogger.log(ErrorMessages.UNABLE_TO_ADD_INCLUDE_DIRECTIVE, e);
 				throw new RuntimeException(e);
 			}
 		}
+		return includeText.toString();
 	}
 	
 	private static boolean isHeaderAlreadyIncluded(String headerName, IASTTranslationUnit ast) {
@@ -106,8 +156,9 @@ public class ASTModifier {
 		}
 		
 		//return null to indicate, that there is no pointer offset
-		if(lastNode == idExpression)
+		if(lastNode == idExpression) {
 			return null;
+		}
 		
 		IASTNode parent = idExpression.getParent();
 		IASTExpression remainingOperand;
