@@ -1,12 +1,9 @@
 package ch.hsr.ifs.cute.elevenator;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SafeRunner;
 
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
@@ -77,20 +74,4 @@ public class EvaluateContributions {
 		}
 		return null;
 	}
-
-	private static void executeExtension(final Object o, final IProject project, final CPPVersion version) {
-		ISafeRunnable runnable = new ISafeRunnable() {
-			@Override
-			public void handleException(Throwable e) {
-				System.out.println("Exception in client");
-			}
-
-			@Override
-			public void run() throws Exception {
-				((IVersionModificationOperation) o).perform(project, version);
-			}
-		};
-		SafeRunner.run(runnable);
-	}
-
 }
