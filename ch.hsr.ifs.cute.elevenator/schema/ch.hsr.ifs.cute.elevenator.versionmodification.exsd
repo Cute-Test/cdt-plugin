@@ -123,6 +123,13 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="checked_by_default" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  Defines if a Version Modification is checked is active by default
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
