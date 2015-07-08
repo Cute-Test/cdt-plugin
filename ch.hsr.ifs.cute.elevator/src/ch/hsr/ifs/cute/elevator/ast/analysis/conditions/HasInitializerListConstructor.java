@@ -6,6 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassSpecialization;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
@@ -29,16 +30,16 @@ public class HasInitializerListConstructor extends Condition {
     private boolean hasInitializerListConstructor(IASTImplicitNameOwner implicitNameOwner) {
         IASTImplicitName[] implicitNames = implicitNameOwner.getImplicitNames();
         for (IASTImplicitName name : implicitNames) {
-            if (containsInitializerList(name.getBinding())) {
+            if (containsInitializerList(name.getBinding(), name)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean containsInitializerList(IBinding binding) {
+    private boolean containsInitializerList(IBinding binding, IASTNode point) {
         if (binding instanceof ICPPConstructor) {
-            ICPPConstructor[] constructors = ((ICPPConstructor) binding).getClassOwner().getConstructors();
+            ICPPConstructor[] constructors = getAllConstructors((ICPPConstructor) binding, point);
             for (ICPPConstructor constructor : constructors) {
                 if (cotainsInitializerList(constructor)) {
                     return true;
@@ -47,6 +48,14 @@ public class HasInitializerListConstructor extends Condition {
         }
         return false;
     }
+
+	private ICPPConstructor[] getAllConstructors(ICPPConstructor binding, IASTNode point) {
+		ICPPClassType classOwner = binding.getClassOwner();
+		if (classOwner instanceof ICPPClassSpecialization) {
+			return ((ICPPClassSpecialization) classOwner).getConstructors(point);
+		}
+		return classOwner.getConstructors();
+	}
 
     private boolean cotainsInitializerList(ICPPConstructor constructor) {
         for (ICPPParameter parameter : constructor.getParameters()) {

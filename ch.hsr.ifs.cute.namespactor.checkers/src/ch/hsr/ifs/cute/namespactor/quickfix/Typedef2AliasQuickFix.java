@@ -9,14 +9,11 @@ public class Typedef2AliasQuickFix extends RefactoringMarkerResolution {
 
 	@Override
 	public String getLabel() {
-		// TODO Auto-generated method stub
-		return "Typedef2Alias";
+		return "Convert typedef to alias";
 	}
 
 	@Override
 	protected RefactoringAction getRefactoringAction() {
-		// TODO Auto-generated method stub
-		System.out.println("typedef2aliasfix");
 		return new TD2ARefactoringAction(TD2ARefactoringActionDelegate.ACTION_ID);
 	}
 

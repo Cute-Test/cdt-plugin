@@ -1,6 +1,7 @@
 package ch.hsr.ifs.cute.elevator.ast.analysis.conditions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunctionType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateArgument;
@@ -73,7 +75,14 @@ public class HasNarrowingTypeConversion extends Condition {
     }
 
     private IType getType(IBinding binding) {
-        return ((binding instanceof IType) ? (IType) binding : ((IVariable) binding).getType());
+    	if (binding instanceof IType) {
+    		return (IType) binding;
+    	} else if (binding instanceof IVariable) {
+    		return ((IVariable) binding).getType();
+    	} else if (binding instanceof ICPPConstructor) {
+    		return ((ICPPConstructor) binding).getType();
+    	}
+        return null;
     }
 
     private boolean hasNarrowingTypeConversion(IBasicType target, IBasicType source) {
@@ -176,6 +185,9 @@ public class HasNarrowingTypeConversion extends Condition {
                 }
                 convertibleTypes.add(typeList);
             }
+        } else if (targetType instanceof ICPPFunctionType) {
+        	IType[] parameterTypes = ((ICPPFunctionType) targetType).getParameterTypes();
+        	convertibleTypes.add(Arrays.asList(parameterTypes));
         }
         return convertibleTypes;
     }

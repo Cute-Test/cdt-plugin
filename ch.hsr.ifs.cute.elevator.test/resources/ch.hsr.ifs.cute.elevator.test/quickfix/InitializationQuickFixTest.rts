@@ -249,3 +249,43 @@ int main(int argc, char const *argv[]) {
 	C c { 5 };
 }
 
+//!Transform Ctor Call of Base Class
+//@main.cpp
+struct Base {
+	Base(int){}
+};
+
+struct Sub : Base {
+	Sub(int i) : Base(i){}
+};
+//=
+struct Base {
+	Base(int){}
+};
+
+struct Sub : Base {
+	Sub(int i) :
+			Base { i } {
+	}
+};
+
+//!Transform Ctor Call of Base Class with Multiple Arguments
+//@main.cpp
+struct Base {
+	Base(int, int){}
+};
+
+struct Sub : Base {
+	Sub(int i) : Base(i, i){}
+};
+//=
+struct Base {
+	Base(int, int){}
+};
+
+struct Sub : Base {
+	Sub(int i) :
+			Base { i, i } {
+	}
+};
+

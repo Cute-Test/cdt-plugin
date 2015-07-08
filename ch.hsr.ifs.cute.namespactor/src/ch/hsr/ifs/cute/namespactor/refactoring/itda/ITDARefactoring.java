@@ -12,7 +12,9 @@
 package ch.hsr.ifs.cute.namespactor.refactoring.itda;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
+import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNodeSelector;
@@ -20,10 +22,12 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ILanguage;
+import org.eclipse.cdt.core.parser.util.StringUtil;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPTypedef;
 import org.eclipse.cdt.internal.core.model.ASTCache.ASTRunnable;
 import org.eclipse.cdt.internal.ui.refactoring.Container;
@@ -181,10 +185,15 @@ public class ITDARefactoring extends RefactoringBase {
 
 	@Override
 	protected void collectModifications(ASTRewriteStore store) {
+		String newTypeName = ASTTypeUtil.getType(theUnderlyingType, false);
 		ICPPNodeFactory factory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-
-		
-		IASTName replacement = factory.newName(theUnderlyingType.toString().toCharArray());
+		if (theUnderlyingType instanceof ICPPBinding) {
+			try {
+				String[] qName = ((ICPPBinding) theUnderlyingType).getQualifiedName();
+				newTypeName = StringUtil.join(qName, "::");
+			} catch (DOMException e) {}
+		}
+		IASTName replacement = factory.newName(newTypeName.toCharArray());
 		store.addReplaceChange(theNodeToReplace, replacement  );
 		super.collectModifications(store);
 	}

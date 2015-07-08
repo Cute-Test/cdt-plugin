@@ -71,7 +71,6 @@ public class TD2ACompletionProposal implements ICCompletionProposal {
 
 	@Override
 	public String getIdString() {
-		// TODO Auto-generated method stub
-		return null;
+		return getDisplayString();
 	}
 }

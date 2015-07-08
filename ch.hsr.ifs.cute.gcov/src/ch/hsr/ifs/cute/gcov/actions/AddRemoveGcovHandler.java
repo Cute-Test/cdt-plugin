@@ -10,7 +10,6 @@ package ch.hsr.ifs.cute.gcov.actions;
 
 import static ch.hsr.ifs.cute.gcov.util.ProjectUtil.getConfiguration;
 
-import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
@@ -19,11 +18,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -31,6 +28,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import ch.hsr.ifs.cute.gcov.GcovNature;
 import ch.hsr.ifs.cute.gcov.GcovPlugin;
 import ch.hsr.ifs.cute.gcov.ui.GcovAdditionHandler;
+import ch.hsr.ifs.cute.gcov.util.ProjectUtil;
 
 /**
  * @author Emanuel Graf IFS
@@ -41,7 +39,7 @@ public class AddRemoveGcovHandler extends AbstractHandler {
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		IProject project = getSelectedProject(selection);
+		IProject project = ProjectUtil.getSelectedProject(selection);
 		String action = event.getParameter("ch.hsr.ifs.cute.gcov.handleGcovNatrueParameter");
 		switch (action) {
 		case "add":
@@ -58,7 +56,13 @@ public class AddRemoveGcovHandler extends AbstractHandler {
 		if (project != null) {
 			try {
 				GcovNature.addGcovNature(project, new NullProgressMonitor());
-				new GcovAdditionHandler().addGcovConfig(project);
+				GcovAdditionHandler gcovAdditionHandler = new GcovAdditionHandler();
+				gcovAdditionHandler.addGcovConfig(project);
+				for(IProject referencedProject : project.getReferencedProjects()) {
+					GcovNature.addGcovNature(referencedProject, new NullProgressMonitor());
+					gcovAdditionHandler.addGcovConfig(referencedProject);
+					gcovAdditionHandler.adaptLibraryPath(project, referencedProject);
+				}
 				notifyUserSuccedd("Gcov Coverage Analysis successfull added to project.");
 			} catch (CoreException e) {
 				GcovPlugin.log(e);
@@ -89,8 +93,8 @@ public class AddRemoveGcovHandler extends AbstractHandler {
 				if (getConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
 					for (IConfiguration config : configs) {
 						if (config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) {
-							ManagedBuildManager.setSelectedConfiguration(project, config);
 							ManagedBuildManager.setDefaultConfiguration(project, config);
+							ManagedBuildManager.setSelectedConfiguration(project, config);
 						}
 					}
 				}
@@ -110,24 +114,5 @@ public class AddRemoveGcovHandler extends AbstractHandler {
 		if (activeWindow != null) {
 			MessageDialog.openInformation(activeWindow.getShell(), "Success", message);
 		}
-	}
-
-	private IProject getSelectedProject(ISelection selection) {
-		if (!(selection instanceof IStructuredSelection))
-			return null;
-
-		for (Object selected : ((IStructuredSelection) selection).toList()) {
-			if (selected instanceof IProject) {
-				return (IProject) selected;
-			} else if (selected instanceof IAdaptable) {
-				IProject proj = (IProject) ((IAdaptable) selected).getAdapter(IProject.class);
-				if (proj != null) {
-					return proj;
-				}
-			} else if (selected instanceof ICElement) {
-				return ((ICElement) selected).getCProject().getProject();
-			}
-		}
-		return null;
 	}
 }

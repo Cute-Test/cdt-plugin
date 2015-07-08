@@ -37,7 +37,7 @@
             id="ch.hsr.ifs.elevator.nullMacro"
             markerType="ch.hsr.ifs.cute.elevator.elevationProblemMarker"
             messagePattern="Replaceable NULL macro reference"
-            name="NULL macro">
+            name="NULL macro for nullptr replacement">
       </problem>
 		    
 		</checker>	
@@ -58,6 +58,7 @@
     	</resolution>
      <resolution
            class="ch.hsr.ifs.cute.elevator.quickfix.NullMacroQuickFix"
+           messagePattern="Replace NULL macro with nullptr"
            problemId="ch.hsr.ifs.elevator.nullMacro">
      </resolution>    	
 	</extension>

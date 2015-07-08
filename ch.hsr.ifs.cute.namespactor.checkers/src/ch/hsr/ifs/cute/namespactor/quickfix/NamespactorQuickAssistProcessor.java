@@ -7,7 +7,6 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNodeSelector;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.model.ILanguage;
@@ -82,23 +81,28 @@ public class NamespactorQuickAssistProcessor implements IQuickAssistProcessor {
 				}
 				if (name != null || node instanceof ICPPASTName){
 					if (name == null) name = (IASTName) node;
-					IBinding thebinding = ((ICPPASTName) name).resolveBinding();
+					IBinding thebinding = name.resolveBinding();
 					
-					if (thebinding instanceof CPPTypedef){
-						System.out.println("detected typedef");
-						IType type = ((CPPTypedef) thebinding).getType();
-							System.out.println("type: " + type);
+					if (thebinding instanceof CPPTypedef && !isWithinOwnTypedef(name, (CPPTypedef)thebinding)){
+//						System.out.println("detected typedef");
+//						IType type = ((CPPTypedef) thebinding).getType();
+//							System.out.println("type: " + type);
 						getITDARefactoringProposal(context,locations,false,proposals);
 						
 					}
 				}
 				if (node instanceof ICPPASTSimpleDeclSpecifier){
 					
-				 if (((ICPPASTSimpleDeclSpecifier) node).getType() == ICPPASTSimpleDeclSpecifier.t_auto)
-					System.out.println("auto detected");
+//				 if (((ICPPASTSimpleDeclSpecifier) node).getType() == ICPPASTSimpleDeclSpecifier.t_auto)
+//					System.out.println("auto detected");
 					
 				}
 				return Status.OK_STATUS;
+			}
+
+			private boolean isWithinOwnTypedef(IASTName name, CPPTypedef thebinding) {
+				IASTNode definition = thebinding.getDefinition();
+				return name.equals(definition);
 			}
 
 		});

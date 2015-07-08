@@ -62,8 +62,7 @@ public class ITDACompletionProposal implements ICCompletionProposal {
 
 	@Override
 	public String getIdString() {
-		// TODO Auto-generated method stub
-		return null;
+		return getDisplayString();
 	}
 
 	public void setRelevance(int fRelevance) {

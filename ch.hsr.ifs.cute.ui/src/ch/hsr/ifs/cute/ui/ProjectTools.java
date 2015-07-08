@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.ICSourceEntry;
 import org.eclipse.cdt.core.settings.model.WriteAccessException;
+import org.eclipse.cdt.managedbuilder.buildproperties.IBuildProperty;
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IHoldsOptions;
@@ -127,4 +128,19 @@ public class ProjectTools {
 		setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH, inclStratProv);
 	}
 
+	public static boolean isLibraryProject(IProject project) {
+		boolean isLibraryProject = false;
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+		if (info != null) {
+			IConfiguration[] configs = info.getManagedProject().getConfigurations();
+			IBuildProperty artifactType = configs[0].getBuildProperties().getProperty(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_ID);
+			if (artifactType != null) {
+				String artifactTypeName = artifactType.getValue().getId();
+				boolean isSharedLibProj = artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_SHAREDLIB);
+				boolean isStaticLibProj = artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_STATICLIB);
+				isLibraryProject = isSharedLibProj || isStaticLibProj;
+			}
+		}
+		return isLibraryProject;
+	}
 }
