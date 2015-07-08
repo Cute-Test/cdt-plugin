@@ -25,7 +25,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 
 		String defaultCppVersion = store.getString(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
 		CPPVersion selectedVersion = CPPVersion.valueOf(defaultCppVersion);
-		Object[] checkedModifications = null;
+		DialectBasedSetting[] checkedModifications = null;
 		// our wizard page can be anywhere, since other plug-ins can use the same extension point and add pages after
 		// ours. The C++ version selection page must not be the last one in this wizard so iterate through all and do
 		// not just get the last page

@@ -36,9 +36,17 @@ public class SelectVersionWizardPage extends WizardPage {
 		return (CPPVersion) versionCombo.getData(versionCombo.getText());
 	}
 
-	public Object[] getCheckedModifications() {
-		// TODO cast to dialectbasedsetting[]?
-		return modificationTree.getCheckedElements();
+	public DialectBasedSetting[] getCheckedModifications() {
+		Object[] checkedElements = modificationTree.getCheckedElements();
+		DialectBasedSetting[] checkedModifications = new DialectBasedSetting[checkedElements.length];
+
+		int modificationCount = 0;
+		for (Object elem : checkedElements) {
+			if (elem instanceof DialectBasedSetting) {
+				checkedModifications[modificationCount++] = (DialectBasedSetting) elem;
+			}
+		}
+		return checkedModifications;
 	}
 
 	public final class DialectBasedSetting {

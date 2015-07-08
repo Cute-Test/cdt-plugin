@@ -34,21 +34,9 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 							.cloneShallow();
 					if (newProvider instanceof GCCBuiltinSpecsDetectorMinGW) {
 						GCCBuiltinSpecsDetectorMinGW specsDetector = (GCCBuiltinSpecsDetectorMinGW) newProvider;
-						StringBuilder parameterProperty = new StringBuilder(specsDetector.getProperty("parameter"));
+						String parameterProperty = specsDetector.getProperty("parameter");
 
-						int startOfExistingVersionOption = parameterProperty.indexOf("-std=c++");
-						if (startOfExistingVersionOption > -1) {
-							int endOfExistingVersionOption = parameterProperty.indexOf(" ",
-									startOfExistingVersionOption);
-							if (endOfExistingVersionOption > -1) {
-								// + 1 at the end to also remove the space.
-								// There is still a space at the beginning and we do
-								// not want two spaces
-								parameterProperty = parameterProperty.replace(startOfExistingVersionOption,
-										endOfExistingVersionOption + 1, "");
-							}
-						}
-
+						parameterProperty = removeSubstringToNextSpace(parameterProperty, "-std=c++");
 						specsDetector.setProperty("parameter",
 								parameterProperty + " -std=" + selectedVersion.getCompilerVersionString());
 						LanguageSettingsManager.setStoringEntriesInProjectArea(specsDetector, true);
@@ -73,26 +61,28 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 						}
 						CDTPropertyManager.performOk(this);
 					}
-					// ICProjectDescription pDesc =
-					// CDTPropertyManager.getProjectDescription(project);
-					// ICConfigurationDescription[] cfgDescs = (pDesc == null) ?
-					// null : pDesc.getConfigurations();
-					// for (ICConfigurationDescription configDescription :
-					// cfgDescs) {
-					// List<ICLanguageSettingEntry> settings =
-					// newProvider.getSettingEntries(configDescription,
-					// project, "org.eclipse.cdt.core.g++");
-					// if (settings != null) {
-					// settings.isEmpty();
-					// }
-					// }
 				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
-		System.out.println("Updating Provider");
-
 	}
+
+	public static String removeSubstringToNextSpace(String original, String substringToRemove) {
+		StringBuilder sb = new StringBuilder(original);
+		String resultingString = original;
+
+		int start = original.indexOf(substringToRemove);
+		if (start > -1) {
+			int end = original.indexOf(" ", start);
+			if (end > -1) {
+				// + 1 at the end to also remove the space.
+				// There is still a space at the beginning and we do
+				// not want two spaces
+				resultingString = sb.replace(start, end + 1, "").toString();
+			}
+		}
+		return resultingString;
+	}
+
 }
