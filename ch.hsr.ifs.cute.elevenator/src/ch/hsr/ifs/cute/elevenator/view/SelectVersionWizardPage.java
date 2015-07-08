@@ -1,5 +1,8 @@
 package ch.hsr.ifs.cute.elevenator.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -108,11 +111,25 @@ public class SelectVersionWizardPage extends WizardPage {
 		setControl(composite);
 	}
 
+	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
+
 	private void updateSettings() {
-		// DialectBasedSetting settings = createSettings();
 		CPPVersion selectedVersion = getSelectedVersion();
-		DialectBasedSetting settings = EvaluateContributions.createSettings(selectedVersion);
+
+		DialectBasedSetting settings = null;
+		if (settingStore.containsKey(selectedVersion)) {
+			settings = settingStore.get(selectedVersion);
+		} else {
+			settings = EvaluateContributions.createSettings(selectedVersion);
+			settingStore.put(selectedVersion, settings);
+		}
+
 		modificationTree.setInput(settings);
+		updateCheckedSettings();
+	}
+
+	private void updateCheckedSettings() {
+		// TODO: Perform some magic
 	}
 
 	private DialectBasedSetting createSettings() {
