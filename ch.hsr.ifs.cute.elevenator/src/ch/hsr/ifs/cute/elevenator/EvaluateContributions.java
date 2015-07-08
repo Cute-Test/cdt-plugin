@@ -78,48 +78,6 @@ public class EvaluateContributions {
 		return null;
 	}
 
-	public static void evaluateAll(IProject project) {
-
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] config = registry.getConfigurationElementsFor(IVERSIONMODIFICATOR_ID);
-
-		for (IConfigurationElement e : config) {
-
-			String versionName = e.getName();
-			CPPVersion version = CPPVersion.valueOf(versionName);
-			System.out.println("Evaluating extensions for: " + version);
-
-			evaluateVersionModification(e, project, version);
-		}
-
-	}
-
-	private static void evaluateVersionModification(IConfigurationElement element, IProject project,
-			CPPVersion version) {
-
-		for (IConfigurationElement childElement : element.getChildren()) {
-			evaluateVersionModification(childElement, project, version);
-		}
-
-		try {
-
-			if (!element.getName().equals("version_modification")) {
-				return;
-			}
-			if (element.getAttribute("class") == null) {
-				return;
-			}
-
-			final Object o = element.createExecutableExtension("class");
-			if (o instanceof IVersionModificationOperation) {
-				System.out.println("Executing extension: " + o.getClass().toString());
-				executeExtension(o, project, version);
-			}
-		} catch (CoreException ex) {
-			System.out.println(ex.getMessage());
-		}
-	}
-
 	private static void executeExtension(final Object o, final IProject project, final CPPVersion version) {
 		ISafeRunnable runnable = new ISafeRunnable() {
 			@Override
