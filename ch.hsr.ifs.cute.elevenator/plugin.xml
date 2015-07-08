@@ -65,6 +65,16 @@
                checked_by_default="true"
                name="Also same for all 2">
          </version_modification>
+         <version_modification
+               checked_by_default="true"
+               class="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation"
+               name="Set Compiler Flag">
+         </version_modification>
+         <version_modification
+               checked_by_default="true"
+               class="ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation"
+               name="Set Index Flag">
+         </version_modification>
       </ALL_VERSIONS>
       <CPP_14>
          <version_modification

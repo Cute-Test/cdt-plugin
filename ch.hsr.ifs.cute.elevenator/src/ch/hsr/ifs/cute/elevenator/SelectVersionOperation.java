@@ -6,12 +6,15 @@ import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.cdt.ui.wizards.CDTCommonProjectWizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.ISafeRunnable;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage;
 
@@ -47,14 +50,26 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 			CDTCommonProjectWizard projectWizard = (CDTCommonProjectWizard) wizard;
 			IProject project = projectWizard.getProject(false);
 
-			for (Object setting : checkedModifications) {
-				if (setting instanceof DialectBasedSetting) {
-					// TODO: Use SafeRunner to prevent Crashing from Extensions
-					((DialectBasedSetting) setting).getOperation().perform(project, selectedVersion);
-				}
+			for (DialectBasedSetting setting : checkedModifications) {
+				executeExtension(setting.getOperation(), project, selectedVersion);
 			}
-			// EvaluateContributions.evaluateAll(project);
 		}
 
+	}
+
+	private void executeExtension(final IVersionModificationOperation versionOperation, final IProject project,
+			final CPPVersion version) {
+		ISafeRunnable runnable = new ISafeRunnable() {
+			@Override
+			public void handleException(Throwable e) {
+				System.err.println("Exception in extension");
+			}
+
+			@Override
+			public void run() throws Exception {
+				versionOperation.perform(project, version);
+			}
+		};
+		SafeRunner.run(runnable);
 	}
 }
