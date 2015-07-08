@@ -11,9 +11,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 
-import ch.hsr.ifs.cute.elevenator.SelectVersionWizardPage.DialectBasedSetting;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage;
 
 public class SelectVersionOperation implements IRunnableWithProgress {
 
@@ -41,10 +41,13 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 			CDTCommonProjectWizard projectWizard = (CDTCommonProjectWizard) wizard;
 			IProject project = projectWizard.getProject(false);
 
-			for (DialectBasedSetting setting : checkedModifications) {
-				setting.getOperation().perform(project, selectedVersion);
+			for (Object setting : checkedModifications) {
+				if (setting instanceof DialectBasedSetting) {
+					// TODO: Use SafeRunner to prevent Crashing from Extensions
+					((DialectBasedSetting) setting).getOperation().perform(project, selectedVersion);
+				}
 			}
-			EvaluateContributions.evaluateAll(project);
+			// EvaluateContributions.evaluateAll(project);
 		}
 
 	}
