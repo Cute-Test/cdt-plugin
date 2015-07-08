@@ -1,18 +1,10 @@
 package ch.hsr.ifs.cute.elevenator.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -22,10 +14,8 @@ import org.eclipse.swt.widgets.Label;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
-import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
-import ch.hsr.ifs.cute.elevenator.operation.DoNothingOperation;
 import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 
 public class SelectVersionWizardPage extends WizardPage {
@@ -48,109 +38,6 @@ public class SelectVersionWizardPage extends WizardPage {
 			}
 		}
 		return checkedModifications;
-	}
-
-	public final class DialectBasedSetting {
-		private String name;
-		private List<DialectBasedSetting> subsettings = new ArrayList<DialectBasedSetting>();
-		private IVersionModificationOperation operation;
-
-		public DialectBasedSetting(String name) {
-			this(name, new DoNothingOperation());
-		}
-
-		public DialectBasedSetting(String name, IVersionModificationOperation operation) {
-			this.name = name;
-			this.operation = operation;
-		}
-
-		public void addSubsetting(DialectBasedSetting subsetting) {
-			subsettings.add(subsetting);
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public IVersionModificationOperation getOperation() {
-			return operation;
-		}
-
-		public boolean hasSubsettings() {
-			return !subsettings.isEmpty();
-		}
-
-		public List<DialectBasedSetting> getSubsettings() {
-			return subsettings;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
-
-	private final class DialectBasedSettingsProvider implements ITreeContentProvider, ILabelProvider {
-		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		}
-
-		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public boolean hasChildren(Object element) {
-			if (element instanceof DialectBasedSetting) {
-				return ((DialectBasedSetting) element).hasSubsettings();
-			}
-			return false;
-		}
-
-		@Override
-		public Object getParent(Object element) {
-			return null;
-		}
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			return getChildren(inputElement);
-		}
-
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof DialectBasedSetting) {
-				List<DialectBasedSetting> subsettings = ((DialectBasedSetting) parentElement).getSubsettings();
-				return subsettings.toArray(new Object[subsettings.size()]);
-			}
-			return null;
-		}
-
-		@Override
-		public void addListener(ILabelProviderListener listener) {
-		}
-
-		@Override
-		public boolean isLabelProperty(Object element, String property) {
-			return false;
-		}
-
-		@Override
-		public void removeListener(ILabelProviderListener listener) {
-		}
-
-		@Override
-		public Image getImage(Object element) {
-			return null;
-		}
-
-		@Override
-		public String getText(Object element) {
-			if (element instanceof DialectBasedSetting) {
-				return ((DialectBasedSetting) element).getName();
-			}
-			return "<unknown>";
-		}
 	}
 
 	private static final int INDENT = 15;

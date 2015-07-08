@@ -13,8 +13,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.view.DialectBasedSetting;
 import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage;
-import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage.DialectBasedSetting;
 
 public class SelectVersionOperation implements IRunnableWithProgress {
 
