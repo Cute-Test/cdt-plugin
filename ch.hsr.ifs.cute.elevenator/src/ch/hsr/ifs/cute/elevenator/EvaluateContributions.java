@@ -49,7 +49,7 @@ public class EvaluateContributions {
 
 			final Object o = element.createExecutableExtension("class");
 			if (o instanceof IVersionModificationOperation) {
-				System.out.println("Executing extension: " + o.getClass().toGenericString());
+				System.out.println("Executing extension: " + o.getClass().toString());
 				executeExtension(o, project, version);
 			}
 		} catch (CoreException ex) {

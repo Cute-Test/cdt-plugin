@@ -43,6 +43,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 
 			for (Object setting : checkedModifications) {
 				if (setting instanceof DialectBasedSetting) {
+					// TODO: Use SafeRunner to prevent Crashing from Extensions
 					((DialectBasedSetting) setting).getOperation().perform(project, selectedVersion);
 				}
 			}
