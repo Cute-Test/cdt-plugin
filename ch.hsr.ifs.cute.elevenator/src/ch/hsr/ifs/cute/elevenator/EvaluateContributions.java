@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cute.elevenator;
 
+import javax.inject.Inject;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -28,6 +30,11 @@ public class EvaluateContributions {
 		} catch (CoreException ex) {
 			System.out.println(ex.getMessage());
 		}
+	}
+
+	@Inject
+	public void doSomething(IExtensionRegistry registry) {
+		registry.getConfigurationElementsFor("yourextension");
 	}
 
 	private static void executeExtension(final Object o) {

@@ -4,7 +4,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
-import ch.hsr.ifs.cute.elevenator.CPPVersion;
+import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 
 /**
  * Class used to initialize default preference values.

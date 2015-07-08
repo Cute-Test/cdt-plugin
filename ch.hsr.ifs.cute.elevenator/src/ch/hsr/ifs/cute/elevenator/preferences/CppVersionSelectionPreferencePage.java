@@ -6,7 +6,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
-import ch.hsr.ifs.cute.elevenator.CPPVersion;
+import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 
 public class CppVersionSelectionPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 

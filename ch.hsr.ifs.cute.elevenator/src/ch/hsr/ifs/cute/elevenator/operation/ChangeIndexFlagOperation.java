@@ -14,7 +14,7 @@ import org.eclipse.cdt.managedbuilder.internal.language.settings.providers.GCCBu
 import org.eclipse.cdt.ui.newui.CDTPropertyManager;
 import org.eclipse.core.resources.IProject;
 
-import ch.hsr.ifs.cute.elevenator.CPPVersion;
+import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 
 public class ChangeIndexFlagOperation implements IVersionModificationOperation {

@@ -54,5 +54,13 @@
             label="%preferenceKeywords.version">
       </keyword>
    </extension>
+   <extension
+         point="ch.hsr.ifs.cute.elevenator.versionmodification">
+      <CPP_14>
+         <version_modification
+               checked_by_default="true">
+         </version_modification>
+      </CPP_14>
+   </extension>
 
 </plugin>

@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.elevenator;
+package ch.hsr.ifs.cute.elevenator.definition;
 
 public enum CPPVersion {
 
