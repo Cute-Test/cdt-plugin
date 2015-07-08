@@ -3,20 +3,30 @@ package ch.hsr.ifs.cute.charwars.checkers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.cdt.codan.core.cxx.CxxAstUtils;
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
+import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.cdt.core.index.IIndexBinding;
+import org.eclipse.cdt.core.index.IIndexName;
+import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.core.resources.IFile;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
 import ch.hsr.ifs.cute.charwars.asttools.FunctionBindingAnalyzer;
 import ch.hsr.ifs.cute.charwars.constants.ProblemIDs;
+import ch.hsr.ifs.cute.charwars.utils.ErrorLogger;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 
 public class CStrProblemGenerator {
@@ -47,7 +57,10 @@ public class CStrProblemGenerator {
 				ICPPFunction[] validOverloads = overloadChecker.getValidOverloads(name, strArgIndex);
 				if(validOverloads.length > 0) {
 					ICPPFunction firstValidOverload = validOverloads[0];
-					String signature = getSignature(firstValidOverload);
+					String signature = findSignature(firstValidOverload, parent.getTranslationUnit());
+					if(signature == null) {
+						signature = buildSignature(firstValidOverload);
+					}
 					problemReports.add(new ProblemReport(file, ProblemIDs.C_STR_PROBLEM, cStrCall, signature));
 				}
 			}
@@ -55,9 +68,37 @@ public class CStrProblemGenerator {
 		return problemReports;
 	}
 	
-	private static String getSignature(ICPPFunction function) {
+	private static String findSignature(ICPPBinding binding, IASTTranslationUnit astTranslationUnit) {
+		try {
+			IIndex index = astTranslationUnit.getIndex();
+			IIndexBinding adaptedBinding = index.adaptBinding(binding);
+			IIndexName[] indexNames = index.findNames(adaptedBinding, IIndex.FIND_DECLARATIONS_DEFINITIONS);
+			for(IIndexName indexName : indexNames) {
+				ITranslationUnit translationUnit = CxxAstUtils.getTranslationUnitFromIndexName(indexName);
+				if(translationUnit == null) {
+					continue;
+				}
+
+				IASTTranslationUnit atu = translationUnit.getAST(index, ITranslationUnit.AST_SKIP_ALL_HEADERS | ITranslationUnit.AST_SKIP_FUNCTION_BODIES);
+				IASTName declarationName = (IASTName)ASTAnalyzer.getMarkedNode(atu, indexName.getNodeOffset(), indexName.getNodeLength());
+				IASTNode parent = declarationName.getParent().getParent();
+				if(parent instanceof ICPPASTFunctionDefinition) {
+					ICPPASTFunctionDefinition funcDefinition = (ICPPASTFunctionDefinition)parent.copy();
+					funcDefinition.setBody(null);
+					return ASTAnalyzer.nodeToString(funcDefinition).trim() + ";";
+				} else if(parent instanceof IASTSimpleDeclaration) {
+					return ASTAnalyzer.nodeToString(parent);
+				}
+			}
+		} catch(Exception e) {
+			ErrorLogger.log("Unable to detect function signature. Using fall-back solution instead.", e);
+		}
+		return null;
+	}
+	
+	private static String buildSignature(ICPPFunction function) {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(ASTTypeUtil.getType(function.getType().getReturnType()));
+		buffer.append(ASTTypeUtil.getType(function.getType().getReturnType(), false));
 		buffer.append(" ");
 		buffer.append(function.getName());
 		buffer.append("(");

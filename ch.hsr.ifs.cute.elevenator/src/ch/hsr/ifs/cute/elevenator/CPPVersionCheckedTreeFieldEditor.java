@@ -8,22 +8,36 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
-public class CPPVersionSelectedCheckedTreeFieldEditor extends CheckedTreeEditor {
-	public CPPVersionSelectedCheckedTreeFieldEditor() {
-		super();
+import ch.hsr.ifs.cute.elevenator.view.DialectBasedSettingsProvider;
+
+public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
+
+	public CPPVersionCheckedTreeFieldEditor(String name, String labelText, Composite parent,
+			DialectBasedSetting settings) {
+		super(name, labelText, parent);
+		setEmptySelectionAllowed(true);
+
+		DialectBasedSettingsProvider provider = new DialectBasedSettingsProvider();
+		getTreeViewer().setContentProvider(provider);
+		getTreeViewer().setLabelProvider(provider);
+		getTreeViewer().setInput(settings);
 	}
 
-	public CPPVersionSelectedCheckedTreeFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, parent);
+	@Override
+	protected void doLoad() {
+		System.out.println("doLoad");
+		super.doLoad();
 	}
 
 	@Override
 	protected Object modelFromString(String s) {
+		System.out.println("modelFromString");
 		return null;
 	}
 
 	@Override
 	protected String modelToString(Object model) {
+		System.out.println("modelToString^");
 		return null;
 	}
 

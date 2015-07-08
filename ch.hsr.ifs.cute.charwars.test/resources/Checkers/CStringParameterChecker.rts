@@ -61,13 +61,13 @@ void func(const char *str, const double x) {
 }
 
 
-//!IgnoresPointerToCStringParameer
+//!IgnoresPointerToCStringParameter
 //@main.cpp
 int main(int argc, const char **argv) {
 }
 
 
-//!IgnoresArrayOfCStringsParameer
+//!IgnoresArrayOfCStringsParameter
 //@main.cpp
 int main(int argc, const char *argv[]) {
 }

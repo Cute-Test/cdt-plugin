@@ -26,6 +26,9 @@ import org.eclipse.cdt.core.dom.ast.IASTTypeIdExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
+import org.eclipse.cdt.internal.core.dom.rewrite.ASTModificationStore;
+import org.eclipse.cdt.internal.core.dom.rewrite.changegenerator.ChangeGeneratorWriterVisitor;
+import org.eclipse.cdt.internal.core.dom.rewrite.commenthandler.NodeCommentMap;
 
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.Function;
@@ -38,6 +41,7 @@ import ch.hsr.ifs.cute.charwars.utils.analyzers.UEAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.visitors.IdExpressionsCollector;
 import ch.hsr.ifs.cute.charwars.utils.visitors.NameOccurrenceChecker;
 
+@SuppressWarnings("restriction")
 public class ASTAnalyzer {
 	public static boolean isFunctionDefinitionParameterDeclaration(IASTParameterDeclaration declaration) {
 		return declaration.getParent().getParent() instanceof IASTFunctionDefinition;
@@ -325,5 +329,11 @@ public class ASTAnalyzer {
 			ASTModifier.replaceNode(parent, remainingOperand);
 			return offset;
 		}
+	}
+	
+	public static String nodeToString(IASTNode node) {
+		ChangeGeneratorWriterVisitor writer = new ChangeGeneratorWriterVisitor(new ASTModificationStore(), new NodeCommentMap());
+		node.accept(writer);
+		return writer.toString();
 	}
 }

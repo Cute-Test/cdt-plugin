@@ -84,7 +84,7 @@ public class SelectVersionWizardPage extends WizardPage {
 		}
 
 		String defaultCppVersionString = Activator.getDefault().getPreferenceStore()
-				.getString(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
+				.getString(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
 		CPPVersion versionToSelect = CPPVersion.valueOf(defaultCppVersionString);
 		versionCombo.select(versionToSelect.ordinal());
 		versionCombo.setFont(font);
