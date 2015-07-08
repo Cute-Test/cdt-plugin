@@ -14,7 +14,7 @@ public class CppVersionPreferenceInitializer extends AbstractPreferenceInitializ
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE,
+		store.setDefault(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT,
 				CPPVersion.DEFAULT.toString());
 	}
 
