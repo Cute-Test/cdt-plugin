@@ -17,21 +17,21 @@
          </appinfo>
       </annotation>
       <complexType>
-         <choice minOccurs="0" maxOccurs="unbounded">
-            <choice minOccurs="0" maxOccurs="1">
-               <element ref="CPP_98" minOccurs="0" maxOccurs="1"/>
+         <choice>
+            <choice>
+               <element ref="CPP_98"/>
             </choice>
-            <choice minOccurs="0" maxOccurs="1">
-               <element ref="CPP_03" minOccurs="0" maxOccurs="1"/>
+            <choice>
+               <element ref="CPP_03"/>
             </choice>
-            <choice minOccurs="0" maxOccurs="1">
-               <element ref="CPP_11" minOccurs="0" maxOccurs="1"/>
+            <choice>
+               <element ref="CPP_11"/>
             </choice>
-            <choice minOccurs="0" maxOccurs="1">
-               <element ref="CPP_14" minOccurs="0" maxOccurs="1"/>
+            <choice>
+               <element ref="CPP_14"/>
             </choice>
-            <choice minOccurs="0" maxOccurs="1">
-               <element ref="CPP_17" minOccurs="0" maxOccurs="1"/>
+            <choice>
+               <element ref="CPP_17"/>
             </choice>
          </choice>
          <attribute name="point" type="string" use="required">
