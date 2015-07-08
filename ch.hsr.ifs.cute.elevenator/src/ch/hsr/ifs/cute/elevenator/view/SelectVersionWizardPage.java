@@ -4,6 +4,8 @@ import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -13,6 +15,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
+import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
+import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
@@ -80,8 +84,13 @@ public class SelectVersionWizardPage extends WizardPage {
 				.getString(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
 		CPPVersion versionToSelect = CPPVersion.valueOf(defaultCppVersionString);
 		versionCombo.select(versionToSelect.ordinal());
-
 		versionCombo.setFont(font);
+		versionCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateSettings();
+			}
+		});
 
 		Group modificationsGroup = new Group(composite, SWT.NONE);
 		modificationsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -94,10 +103,24 @@ public class SelectVersionWizardPage extends WizardPage {
 		modificationTree.setContentProvider(provider);
 		modificationTree.setLabelProvider(provider);
 
-		DialectBasedSetting settings = createSettings();
+		updateSettings();
+
+		setControl(composite);
+	}
+
+	private void updateSettings() {
+		// DialectBasedSetting settings = createSettings();
+		CPPVersion selectedVersion = getSelectedVersion();
+		DialectBasedSetting settings = EvaluateContributions.createSettings(selectedVersion);
+
+		DialectBasedSetting setCompilerFlag = new DialectBasedSetting("Set Compiler Flag",
+				new ChangeCompilerFlagOperation());
+		settings.addSubsetting(setCompilerFlag);
+
+		DialectBasedSetting setIndexFlag = new DialectBasedSetting("Set Index Flag", new ChangeIndexFlagOperation());
+		settings.addSubsetting(setIndexFlag);
 
 		modificationTree.setInput(settings);
-		setControl(composite);
 	}
 
 	private DialectBasedSetting createSettings() {

@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.elevenator.view;
+package ch.hsr.ifs.cute.elevenator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,11 @@ public final class DialectBasedSetting {
 	public DialectBasedSetting(String name, IVersionModificationOperation operation) {
 		this.name = name;
 		this.operation = operation;
+
+		// TODO: besseri Lösig finde!
+		if (operation == null) {
+			this.operation = new DoNothingOperation();
+		}
 	}
 
 	public void addSubsetting(DialectBasedSetting subsetting) {

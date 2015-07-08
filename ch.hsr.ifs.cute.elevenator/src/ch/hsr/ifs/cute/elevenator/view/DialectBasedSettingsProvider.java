@@ -8,6 +8,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 
+import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
+
 public final class DialectBasedSettingsProvider implements ITreeContentProvider, ILabelProvider {
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {

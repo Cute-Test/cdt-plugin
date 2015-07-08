@@ -106,7 +106,7 @@
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="version_modification"/>
          </choice>
-         <attribute name="name" type="string">
+         <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
                   The name of the Version Modification

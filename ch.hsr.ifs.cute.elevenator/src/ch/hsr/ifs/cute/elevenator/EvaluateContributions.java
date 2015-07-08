@@ -14,10 +14,66 @@ import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 public class EvaluateContributions {
 	private static final String IVERSIONMODIFICATOR_ID = "ch.hsr.ifs.cute.elevenator.versionmodification";
 
+	public static DialectBasedSetting createSettings(CPPVersion selectedVersion) {
+
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] config = registry.getConfigurationElementsFor(IVERSIONMODIFICATOR_ID);
+
+		DialectBasedSetting settings = new DialectBasedSetting(selectedVersion.getVersionString() + " Settings");
+
+		for (IConfigurationElement configElement : config) {
+
+			String versionName = configElement.getName();
+			CPPVersion version = CPPVersion.valueOf(versionName);
+
+			if (version.equals(selectedVersion)) {
+				System.out.println("Reading extensions for: " + version);
+
+				for (IConfigurationElement childElement : configElement.getChildren()) {
+					createChildSettings(childElement, settings);
+				}
+			}
+		}
+		return settings;
+	}
+
+	private static void createChildSettings(IConfigurationElement element, DialectBasedSetting parentSettings) {
+
+		IVersionModificationOperation versionModification = extractVersionModification(element);
+
+		String settingName = element.getAttribute("name");
+		DialectBasedSetting settings = new DialectBasedSetting(settingName, versionModification);
+		parentSettings.addSubsetting(settings);
+
+		for (IConfigurationElement childElement : element.getChildren()) {
+			createChildSettings(childElement, settings);
+		}
+
+	}
+
+	private static IVersionModificationOperation extractVersionModification(IConfigurationElement element) {
+		try {
+			if (!element.getName().equals("version_modification")) {
+				return null;
+			}
+			if (element.getAttribute("class") == null) {
+				return null;
+			}
+
+			final Object o = element.createExecutableExtension("class");
+			if (o instanceof IVersionModificationOperation) {
+				System.out.println("Found version modification: " + o.getClass().toString());
+				return (IVersionModificationOperation) o;
+			}
+		} catch (CoreException ex) {
+			System.out.println(ex.getMessage());
+		}
+		return null;
+	}
+
 	public static void evaluateAll(IProject project) {
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-
 		IConfigurationElement[] config = registry.getConfigurationElementsFor(IVERSIONMODIFICATOR_ID);
 
 		for (IConfigurationElement e : config) {
@@ -71,4 +127,5 @@ public class EvaluateContributions {
 		};
 		SafeRunner.run(runnable);
 	}
+
 }
