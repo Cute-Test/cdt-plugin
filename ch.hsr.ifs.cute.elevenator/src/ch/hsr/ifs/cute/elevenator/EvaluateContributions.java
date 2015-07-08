@@ -23,11 +23,18 @@ public class EvaluateContributions {
 
 		for (IConfigurationElement configElement : config) {
 
-			String versionName = configElement.getName();
-			CPPVersion version = CPPVersion.valueOf(versionName);
+			boolean supportedVersion = false;
 
-			if (version.equals(selectedVersion)) {
-				System.out.println("Reading extensions for: " + version);
+			String versionName = configElement.getName();
+			if (versionName.equals("ALL_VERSIONS")) {
+				supportedVersion = true;
+			} else {
+				CPPVersion version = CPPVersion.valueOf(versionName);
+				supportedVersion = version.equals(selectedVersion);
+			}
+
+			if (supportedVersion) {
+				System.out.println("Reading extensions for: " + selectedVersion);
 
 				for (IConfigurationElement childElement : configElement.getChildren()) {
 					createChildSettings(childElement, settings);

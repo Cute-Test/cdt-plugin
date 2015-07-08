@@ -56,6 +56,16 @@
    </extension>
    <extension
          point="ch.hsr.ifs.cute.elevenator.versionmodification">
+      <ALL_VERSIONS>
+         <version_modification
+               checked_by_default="true"
+               name="Same For All 1">
+         </version_modification>
+         <version_modification
+               checked_by_default="true"
+               name="Also same for all 2">
+         </version_modification>
+      </ALL_VERSIONS>
       <CPP_14>
          <version_modification
                checked_by_default="true"

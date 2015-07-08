@@ -112,14 +112,6 @@ public class SelectVersionWizardPage extends WizardPage {
 		// DialectBasedSetting settings = createSettings();
 		CPPVersion selectedVersion = getSelectedVersion();
 		DialectBasedSetting settings = EvaluateContributions.createSettings(selectedVersion);
-
-		DialectBasedSetting setCompilerFlag = new DialectBasedSetting("Set Compiler Flag",
-				new ChangeCompilerFlagOperation());
-		settings.addSubsetting(setCompilerFlag);
-
-		DialectBasedSetting setIndexFlag = new DialectBasedSetting("Set Index Flag", new ChangeIndexFlagOperation());
-		settings.addSubsetting(setIndexFlag);
-
 		modificationTree.setInput(settings);
 	}
 
