@@ -6,6 +6,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
+import ch.hsr.ifs.cute.elevenator.CPPVersionCheckedTreeFieldEditor;
+import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
+import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 
 public class CppVersionSelectionPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -27,9 +30,14 @@ public class CppVersionSelectionPreferencePage extends FieldEditorPreferencePage
 			comboVersions[i][1] = version.toString();
 		}
 		ComboFieldEditor versionCombo = new ComboFieldEditor(
-				CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE, "Default C++ &Version", comboVersions,
+				CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT, "Default C++ &Version", comboVersions,
 				getFieldEditorParent());
 		addField(versionCombo);
+
+		DialectBasedSetting rootSettings = EvaluateContributions.createSettings(CPPVersion.DEFAULT);
+		CPPVersionCheckedTreeFieldEditor modificationTree = new CPPVersionCheckedTreeFieldEditor(
+				"WHERE THE FUCK IS THIS NAME SHOWN?", "Possible modifications", getFieldEditorParent(), rootSettings);
+		addField(modificationTree);
 
 		// addField(new BooleanFieldEditor(PreferenceConstants.P_BOOLEAN, "&An example of a boolean preference",
 		// getFieldEditorParent()));

@@ -23,8 +23,14 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		IWizard wizard = pages[0].getWizard();
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
-		String defaultCppVersion = store.getString(CppVersionPreferenceConstants.DEFAULT_CPP_VERSION_FOR_WORKSPACE);
-		CPPVersion selectedVersion = CPPVersion.valueOf(defaultCppVersion);
+		String defaultCppVersion = store.getString(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
+
+		CPPVersion selectedVersion = CPPVersion.DEFAULT;
+		try {
+			selectedVersion = CPPVersion.valueOf(defaultCppVersion);
+		} catch (IllegalArgumentException e) {
+		}
+
 		DialectBasedSetting[] checkedModifications = null;
 		// our wizard page can be anywhere, since other plug-ins can use the same extension point and add pages after
 		// ours. The C++ version selection page must not be the last one in this wizard so iterate through all and do
