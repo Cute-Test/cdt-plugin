@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.e4.core.di,
  org.eclipse.cdt.core,
- org.eclipse.cdt.managedbuilder.core
+ org.eclipse.cdt.managedbuilder.core,
+ org.eclipse.cdt.codan.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.elevenator.definition
