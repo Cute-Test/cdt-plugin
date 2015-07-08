@@ -1,7 +1,6 @@
 package ch.hsr.ifs.cute.elevenator;
 
-import javax.inject.Inject;
-
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -9,35 +8,56 @@ import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 
+import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 
 public class EvaluateContributions {
 	private static final String IVERSIONMODIFICATOR_ID = "ch.hsr.ifs.cute.elevenator.versionmodification";
 
-	public static void evaluateAll() {
+	public static void evaluateAll(IProject project) {
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 
 		IConfigurationElement[] config = registry.getConfigurationElementsFor(IVERSIONMODIFICATOR_ID);
+
+		for (IConfigurationElement e : config) {
+
+			String versionName = e.getName();
+			CPPVersion version = CPPVersion.valueOf(versionName);
+			System.out.println("Evaluating extensions for: " + version);
+
+			evaluateVersionModification(e, project, version);
+		}
+
+	}
+
+	private static void evaluateVersionModification(IConfigurationElement element, IProject project,
+			CPPVersion version) {
+
+		for (IConfigurationElement childElement : element.getChildren()) {
+			evaluateVersionModification(childElement, project, version);
+		}
+
 		try {
-			for (IConfigurationElement e : config) {
-				System.out.println("Evaluating extension");
-				final Object o = e.createExecutableExtension("class");
-				if (o instanceof IVersionModificationOperation) {
-					executeExtension(o);
-				}
+
+			if (!element.getName().equals("version_modification")) {
+				return;
+			}
+			if (element.getAttribute("class") == null) {
+				return;
+			}
+
+			final Object o = element.createExecutableExtension("class");
+			if (o instanceof IVersionModificationOperation) {
+				System.out.println("Executing extension: " + o.getClass().toGenericString());
+				executeExtension(o, project, version);
 			}
 		} catch (CoreException ex) {
 			System.out.println(ex.getMessage());
 		}
 	}
 
-	@Inject
-	public void doSomething(IExtensionRegistry registry) {
-		registry.getConfigurationElementsFor("yourextension");
-	}
-
-	private static void executeExtension(final Object o) {
+	private static void executeExtension(final Object o, final IProject project, final CPPVersion version) {
 		ISafeRunnable runnable = new ISafeRunnable() {
 			@Override
 			public void handleException(Throwable e) {
@@ -46,7 +66,7 @@ public class EvaluateContributions {
 
 			@Override
 			public void run() throws Exception {
-				((IVersionModificationOperation) o).perform(null, null);
+				((IVersionModificationOperation) o).perform(project, version);
 			}
 		};
 		SafeRunner.run(runnable);

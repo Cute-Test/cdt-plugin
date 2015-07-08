@@ -46,8 +46,8 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 					((DialectBasedSetting) setting).getOperation().perform(project, selectedVersion);
 				}
 			}
+			EvaluateContributions.evaluateAll(project);
 		}
 
-		EvaluateContributions.evaluateAll();
 	}
 }
