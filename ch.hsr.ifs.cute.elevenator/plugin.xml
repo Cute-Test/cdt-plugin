@@ -11,7 +11,7 @@
       <wizardPage
             ID="ch.hsr.ifs.cute.elevenator.wizardPage1"
             operationClass="ch.hsr.ifs.cute.elevenator.SelectVersionOperation"
-            pageClass="ch.hsr.ifs.cute.elevenator.SelectVersionWizardPage">
+            pageClass="ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage">
          <projectType
                projectTypeID="cdt.managedbuild.target.gnu.mingw.exe">
          </projectType>

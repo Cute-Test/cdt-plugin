@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.elevenator;
+package ch.hsr.ifs.cute.elevenator.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
