@@ -43,3 +43,15 @@ using NUM = int;
 using PINT = int*;
 using CPINT = int*const;
 
+//!TD2A_SuperflousParentheses
+//@A1.cpp
+typedef int (*((PINT)));
+//=
+using PINT = int*;
+
+//!TD2A_SuperflousParenthesesInFunctionPointer
+//@A1.cpp
+typedef int (*((FPINT)))(void);
+//=
+using FPINT = int(*)(void);
+

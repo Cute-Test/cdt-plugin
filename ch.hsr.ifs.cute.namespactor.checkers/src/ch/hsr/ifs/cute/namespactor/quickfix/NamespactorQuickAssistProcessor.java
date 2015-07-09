@@ -84,9 +84,6 @@ public class NamespactorQuickAssistProcessor implements IQuickAssistProcessor {
 					IBinding thebinding = name.resolveBinding();
 					
 					if (thebinding instanceof CPPTypedef && !isWithinOwnTypedef(name, (CPPTypedef)thebinding)){
-//						System.out.println("detected typedef");
-//						IType type = ((CPPTypedef) thebinding).getType();
-//							System.out.println("type: " + type);
 						getITDARefactoringProposal(context,locations,false,proposals);
 						
 					}

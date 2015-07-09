@@ -189,7 +189,7 @@ public class NSNameHelper extends NameHelper {
 		return CPPVisitor.getContainingScope(selectedQualifiedName).getScopeName() == null;
 	}
 
-	public static boolean haveSameScope(IASTNode insertNode, ICPPASTQualifiedName selectedQualifiedName) {
+	public static boolean haveSameScope(IASTNode insertNode, IASTName selectedQualifiedName) {
 		return CPPVisitor.getContainingScope(insertNode).equals(CPPVisitor.getContainingScope(selectedQualifiedName));
 	}
 

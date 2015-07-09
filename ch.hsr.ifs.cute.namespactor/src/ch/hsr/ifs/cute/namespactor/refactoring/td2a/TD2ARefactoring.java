@@ -28,7 +28,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ILanguage;
-import org.eclipse.cdt.core.parser.util.CharArrayUtils;
 import org.eclipse.cdt.internal.core.model.ASTCache.ASTRunnable;
 import org.eclipse.cdt.internal.ui.refactoring.Container;
 import org.eclipse.core.runtime.CoreException;
@@ -42,6 +41,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+import ch.hsr.ifs.cute.namespactor.astutil.DeclarationHelper;
 import ch.hsr.ifs.cute.namespactor.astutil.NSSelectionHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.RefactoringBase;
 import ch.hsr.ifs.cute.namespactor.refactoring.rewrite.ASTRewriteStore;
@@ -195,11 +195,12 @@ public class TD2ARefactoring extends RefactoringBase {
 
 	private ICPPASTAliasDeclaration createAliasDeclaration(IASTDeclSpecifier declspecifier, IASTDeclarator declarator) {
 		ICPPNodeFactory factory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-		IASTName name = findNameOfDeclarator(declarator);
+		IASTName name = DeclarationHelper.findNameOfDeclarator(declarator);
 		if (name == null) return null; // OOPS, no name found
 		IASTDeclarator newdeclarator = declarator.copy(CopyStyle.withLocations);
 		// remove name selectedName from declarator
-		replacedeclaratorName(newdeclarator, factory);
+		DeclarationHelper.makeDeclaratorAbstract(newdeclarator, factory);
+		newdeclarator = DeclarationHelper.optimizeDeclaratorNesting(newdeclarator);
 		IASTDeclSpecifier newdeclspecifer = declspecifier.copy(CopyStyle.withLocations);
 		newdeclspecifer.setStorageClass(IASTDeclSpecifier.sc_unspecified);
 		ICPPASTTypeId aliasedType=factory.newTypeId(
@@ -207,26 +208,6 @@ public class TD2ARefactoring extends RefactoringBase {
 					newdeclarator);
 		ICPPASTAliasDeclaration alias = factory.newAliasDeclaration(name.copy(), aliasedType);
 		return alias;
-	}
-
-	private IASTName findNameOfDeclarator(IASTDeclarator declarator) {
-		IASTName name=declarator.getName();
-		while ((name == null||name.toString().length()==0) 
-				&& declarator.getNestedDeclarator() != null ){
-			declarator = declarator.getNestedDeclarator();
-			name=declarator.getName();
-		}
-		if (name.toString().length()==0) name = null;
-		return name;
-	}
-
-	private void replacedeclaratorName(IASTDeclarator newdeclarator, ICPPNodeFactory factory) {
-		// going into nested declarators seems to work OK.
-		//		while (newdeclarator.getName() == null || ! newdeclarator.getName().isDeclaration() ){
-		while(newdeclarator.getNestedDeclarator()!=null){
-			newdeclarator=newdeclarator.getNestedDeclarator();
-		}
-		newdeclarator.setName(factory.newName(CharArrayUtils.EMPTY));
 	}
 
 	@Override
