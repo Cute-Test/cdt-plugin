@@ -60,6 +60,26 @@
          <version_modification
                checked_by_default="true"
                name="Same For All 1">
+            <version_modification
+                  checked_by_default="true"
+                  name="ch.hsr.ifs.cute.elevenator.version_modification8">
+            </version_modification>
+            <version_modification
+                  checked_by_default="true"
+                  name="ch.hsr.ifs.cute.elevenator.version_modification7">
+               <version_modification
+                     checked_by_default="true"
+                     name="ch.hsr.ifs.cute.elevenator.version_modification9">
+               </version_modification>
+               <version_modification
+                     checked_by_default="true"
+                     name="ch.hsr.ifs.cute.elevenator.version_modification10">
+               </version_modification>
+            </version_modification>
+            <version_modification
+                  checked_by_default="true"
+                  name="ch.hsr.ifs.cute.elevenator.version_modification11">
+            </version_modification>
          </version_modification>
          <version_modification
                checked_by_default="true"

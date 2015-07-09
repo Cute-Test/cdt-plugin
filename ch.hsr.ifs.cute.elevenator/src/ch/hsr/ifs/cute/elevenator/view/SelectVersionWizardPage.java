@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -110,14 +111,56 @@ public class SelectVersionWizardPage extends WizardPage {
 		modificationTree.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				DialectBasedSetting setting = (DialectBasedSetting) event.getElement();
-				setting.setChecked(event.getChecked());
+				// DialectBasedSetting setting = (DialectBasedSetting) event.getElement();
+				// setting.setChecked(event.getChecked());
+
+				Object element = event.getElement();
+				modificationTree.setGrayed(element, false);
+				modificationTree.setSubtreeChecked(element, event.getChecked());
+				Object parent = getContentProvider().getParent(element);
+				if (parent != null) {
+					updateCheckedState(parent);
+					// modificationTree.setParentsGrayed(parent, true);
+				}
+
 			}
 		});
 
 		updateSettings();
 
 		setControl(composite);
+	}
+
+	private void updateCheckedState(Object parent) {
+		Object[] children = getContentProvider().getChildren(parent);
+		int i, count = 0;
+		for (i = 0; i < children.length; i++) {
+			Object object = children[i];
+			if (modificationTree.getChecked(object)) {
+				count++;
+			}
+		}
+		if (count > 0) {
+			modificationTree.setGrayed(parent, false);
+			modificationTree.setChecked(parent, true);
+		}
+		if (count == 0) {
+			modificationTree.setGrayed(parent, false);
+			modificationTree.setChecked(parent, false);
+			return;
+		}
+		if (count < i) {
+			modificationTree.setGrayed(parent, true);
+		}
+
+		Object parentParent = getContentProvider().getParent(parent);
+		if (parentParent != null) {
+			updateCheckedState(parentParent);
+		}
+	}
+
+	private ITreeContentProvider getContentProvider() {
+		return ((ITreeContentProvider) modificationTree.getContentProvider());
 	}
 
 	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
@@ -139,10 +182,10 @@ public class SelectVersionWizardPage extends WizardPage {
 	}
 
 	private void updateCheckedSettings(DialectBasedSetting setting) {
-		modificationTree.setChecked(setting, setting.isChecked());
 		if (setting.isChecked()) {
 			modificationTree.expandToLevel(setting, 1);
 		}
+		modificationTree.setChecked(setting, setting.isChecked());
 		for (DialectBasedSetting childSetting : setting.getSubsettings()) {
 			updateCheckedSettings(childSetting);
 		}

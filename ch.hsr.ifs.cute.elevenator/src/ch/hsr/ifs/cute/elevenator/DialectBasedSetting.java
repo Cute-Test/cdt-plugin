@@ -8,6 +8,7 @@ import ch.hsr.ifs.cute.elevenator.operation.DoNothingOperation;
 
 public final class DialectBasedSetting {
 	private String name;
+	private DialectBasedSetting parent = null;
 	private List<DialectBasedSetting> subsettings = new ArrayList<DialectBasedSetting>();
 	private IVersionModificationOperation operation;
 	private boolean checked = false;
@@ -26,7 +27,16 @@ public final class DialectBasedSetting {
 		}
 	}
 
+	private void setParent(DialectBasedSetting parent) {
+		this.parent = parent;
+	}
+
+	public DialectBasedSetting getParent() {
+		return parent;
+	}
+
 	public void addSubsetting(DialectBasedSetting subsetting) {
+		subsetting.setParent(this);
 		subsettings.add(subsetting);
 	}
 

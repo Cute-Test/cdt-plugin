@@ -29,6 +29,9 @@ public final class DialectBasedSettingsProvider implements ITreeContentProvider,
 
 	@Override
 	public Object getParent(Object element) {
+		if (element instanceof DialectBasedSetting) {
+			return ((DialectBasedSetting) element).getParent();
+		}
 		return null;
 	}
 
