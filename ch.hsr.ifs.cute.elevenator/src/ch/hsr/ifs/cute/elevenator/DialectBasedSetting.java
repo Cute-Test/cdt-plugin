@@ -62,6 +62,40 @@ public final class DialectBasedSetting {
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
+
+		checkedChangedDowntree(this);
+
+		if (getParent() != null) {
+			getParent().checkedChangedUptree();
+		}
+	}
+
+	private void checkedChangedDowntree(DialectBasedSetting setting) {
+		for (DialectBasedSetting subsetting : setting.getSubsettings()) {
+			subsetting.checked = setting.checked;
+			subsetting.checkedChangedDowntree(subsetting);
+		}
+	}
+
+	private void checkedChangedUptree() {
+		if (getCheckedChildCount() == getSubsettings().size()) {
+			this.checked = true;
+		} else {
+			this.checked = false;
+		}
+		if (getParent() != null) {
+			getParent().checkedChangedUptree();
+		}
+	}
+
+	public int getCheckedChildCount() {
+		int count = 0;
+		for (DialectBasedSetting subsetting : getSubsettings()) {
+			if (subsetting.isChecked()) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	@Override
