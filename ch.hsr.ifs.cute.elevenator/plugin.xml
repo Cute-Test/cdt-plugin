@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point 
+   		 id="ch.hsr.ifs.cute.elevenator.versionmodification" 
+   		 name="Version Modification Operations" 
+   		 schema="schema/ch.hsr.ifs.cute.elevenator.versionmodification.exsd"
+   />
    <extension
          point="org.eclipse.cdt.managedbuilder.ui.newWizardPages">
       <wizardPage
             ID="ch.hsr.ifs.cute.elevenator.wizardPage1"
             operationClass="ch.hsr.ifs.cute.elevenator.SelectVersionOperation"
-            pageClass="ch.hsr.ifs.cute.elevenator.SelectVersionWizardPage">
+            pageClass="ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage">
          <projectType
                projectTypeID="cdt.managedbuild.target.gnu.mingw.exe">
          </projectType>
@@ -17,6 +22,86 @@
                natureID="org.eclipse.cdt.core.ccnature">
          </nature>
       </wizardPage>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
+            class="ch.hsr.ifs.cute.elevenator.preferences.CppVersionSelectionPreferencePage"
+            id="ch.hsr.ifs.cute.elevenator.preferences.CppVersionSelectionPreferencePage"
+            name="%preferencePage.version.name">
+         <keywordReference
+               id="ch.hsr.ifs.cute.elevenator.keyword.version">
+         </keywordReference>
+         <keywordReference
+               id="org.eclipse.cdt.ui.common">
+         </keywordReference>
+      </page>
+   </extension>
+   <extension
+         id="ch.hsr.ifs.cute.elevenator.prefs.selection"
+         name="Version Selection"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="ch.hsr.ifs.cute.elevenator.keyword.version"
+            label="%preferenceKeywords.version">
+      </keyword>
+   </extension>
+   <extension
+         point="ch.hsr.ifs.cute.elevenator.versionmodification">
+      <ALL_VERSIONS>
+         <version_modification
+               checked_by_default="true"
+               name="Same For All 1">
+            <version_modification
+                  checked_by_default="true"
+                  name="ch.hsr.ifs.cute.elevenator.version_modification8">
+            </version_modification>
+            <version_modification
+                  checked_by_default="true"
+                  name="ch.hsr.ifs.cute.elevenator.version_modification7">
+               <version_modification
+                     checked_by_default="true"
+                     name="ch.hsr.ifs.cute.elevenator.version_modification9">
+               </version_modification>
+               <version_modification
+                     checked_by_default="true"
+                     name="ch.hsr.ifs.cute.elevenator.version_modification10">
+               </version_modification>
+            </version_modification>
+            <version_modification
+                  checked_by_default="true"
+                  name="ch.hsr.ifs.cute.elevenator.version_modification11">
+            </version_modification>
+         </version_modification>
+         <version_modification
+               checked_by_default="true"
+               name="Also same for all 2">
+         </version_modification>
+         <version_modification
+               checked_by_default="true"
+               class="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation"
+               name="Set Compiler Flag">
+         </version_modification>
+         <version_modification
+               checked_by_default="true"
+               class="ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation"
+               name="Set Index Flag">
+         </version_modification>
+      </ALL_VERSIONS>
+      <CPP_14>
+         <version_modification
+               checked_by_default="true"
+               name="YouSuckMod">
+         </version_modification>
+      </CPP_14>
    </extension>
 
 </plugin>

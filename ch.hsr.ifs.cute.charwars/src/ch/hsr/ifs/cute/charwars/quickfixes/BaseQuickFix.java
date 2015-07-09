@@ -8,10 +8,12 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
@@ -46,9 +48,13 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 				markedNode = markedNode.getParent();
 			}
 			
-			handleMarkedNode(markedNode, getRewrite(rewriteCache, markedNode), rewriteCache);
-			performChange(rewriteCache.getChange(), marker);
-			ASTModifier.includeHeaders(headers, astTranslationUnit, getDocument());
+			ASTRewrite mainRewrite = getRewrite(rewriteCache, markedNode);
+			handleMarkedNode(markedNode, mainRewrite, rewriteCache);
+			
+			CompositeChange change = (CompositeChange)rewriteCache.getChange();
+			IFile file = (IFile)marker.getResource();
+			ASTModifier.includeHeaders(headers, change, file, astTranslationUnit, getDocument());
+			performChange(change, marker);
 		} 
 		catch(Exception e) {
 			e.printStackTrace();

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
@@ -19,7 +20,6 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -29,6 +29,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 
 /**
  * @author Emanuel Graf IFS
@@ -64,7 +65,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 					IBinding suiteBinding = suiteName.resolveBinding();
 					IASTName[] suiteRefs = suiteName.getTranslationUnit().getReferences(suiteBinding);
 					for (IASTName ref : suiteRefs) {
-						if (isPushBack(ref)) {
+						if (isPushBack(ref) || isPlusAssignOperator(ref)) {
 							registeredTests.add(index.adaptBinding(getRegisteredFunctionBinding(ref)));
 						}
 					}
@@ -75,8 +76,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 	}
 
 	private IBinding getRegisteredFunctionBinding(IASTName ref) {
-		final IASTFunctionCallExpression funcCall = getFunctionCallParent(ref);
-		final IASTInitializerClause[] arguments = funcCall.getArguments();
+		final IASTInitializerClause[] arguments = getAddedArgument(ref);
 		if (isFunctionPushBack(arguments)) {
 			return getFunction(arguments);
 		}
@@ -93,6 +93,18 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 			return getFunctor(arguments);
 		}
 		return null;
+	}
+
+	private IASTInitializerClause[] getAddedArgument(IASTName ref) {
+		IASTInitializerClause[] arguments = null;
+		final IASTFunctionCallExpression funcCall = CPPVisitor.findAncestorWithType(ref, IASTFunctionCallExpression.class);
+		if (funcCall != null) {
+			arguments = funcCall.getArguments();
+		} else {
+			final IASTBinaryExpression binaryExpression = CPPVisitor.findAncestorWithType(ref, IASTBinaryExpression.class);
+			return new IASTInitializerClause[]{binaryExpression.getOperand2()};
+		} 
+		return arguments;
 	}
 
 	private IBinding getFunctor(IASTInitializerClause[] arguments) {
@@ -184,7 +196,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 	}
 
 	private boolean isPushBack(IASTName ref) {
-		IASTFunctionCallExpression funcCall = getFunctionCallParent(ref);
+		IASTFunctionCallExpression funcCall = CPPVisitor.findAncestorWithType(ref, IASTFunctionCallExpression.class);
 		if (funcCall != null) {
 			if (funcCall.getFunctionNameExpression() instanceof IASTFieldReference) {
 				IASTFieldReference idExp = (IASTFieldReference) funcCall.getFunctionNameExpression();
@@ -196,11 +208,12 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 		return false;
 	}
 
-	private IASTFunctionCallExpression getFunctionCallParent(IASTName ref) {
-		IASTNode n;
-		for (n = ref; n != null && !(n instanceof IASTFunctionCallExpression); n = n.getParent()) {
+	private boolean isPlusAssignOperator(IASTName ref) {
+		IASTBinaryExpression binaryExpression = CPPVisitor.findAncestorWithType(ref, IASTBinaryExpression.class);
+		if (binaryExpression != null) {
+			return binaryExpression.getOperator() == IASTBinaryExpression.op_plusAssign;
 		}
-		return (IASTFunctionCallExpression) n;
+		return false;
 	}
 
 	public static boolean isCuteSuite(IASTNamedTypeSpecifier typeSpec) {

@@ -279,7 +279,7 @@ markerLineNr=9
  void runSuite() {
  cute::suite s;
  }
-//!testRegisteredMemberFunction
+//!Member Function Registered with push_back
 //@.config
 noMarker=true
 //@main.cpp
@@ -300,12 +300,40 @@ noMarker=true
  };
 
  void testStruct::testIt(){
- ASSERT(true);
+  ASSERT(true);
  }
 
  void runSuite() {
  cute::suite s;
  s.push_back(CUTE_SMEMFUN(testStruct, testIt));
+ }
+//!Member Function Registered with Operator +=
+//@.config
+noMarker=true
+//@main.cpp
+ #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+ #define ASSERT(cond) ASSERTM(#cond,cond)
+ #define CUTE_SMEMFUN(TestClass,MemberFunctionName) \
+ cute::makeSimpleMemberFunctionTest<TestClass>(\
+ &TestClass::MemberFunctionName,\
+ #MemberFunctionName)
+
+ namespace cute{
+ template <typename TestClass, typename MemFun>
+ test makeSimpleMemberFunctionTest(MemFun fun,char const *name);
+ }
+
+ struct testStruct{
+ void testIt();
+ };
+
+ void testStruct::testIt(){
+  ASSERT(true);
+ }
+
+ void runSuite() {
+ cute::suite s;
+ s += CUTE_SMEMFUN(testStruct, testIt);
  }
 //!testUnregisteredMemberFunction
 //@.config
