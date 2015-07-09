@@ -1,6 +1,7 @@
 package ch.hsr.ifs.cute.elevenator;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.cdt.ui.wizards.CDTCommonProjectWizard;
@@ -34,7 +35,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		} catch (IllegalArgumentException e) {
 		}
 
-		DialectBasedSetting[] checkedModifications = null;
+		List<DialectBasedSetting> checkedModifications = null;
 		// our wizard page can be anywhere, since other plug-ins can use the same extension point and add pages after
 		// ours. The C++ version selection page must not be the last one in this wizard so iterate through all and do
 		// not just get the last page
@@ -51,7 +52,10 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 			IProject project = projectWizard.getProject(false);
 
 			for (DialectBasedSetting setting : checkedModifications) {
-				executeExtension(setting.getOperation(), project, selectedVersion);
+				if (setting.getOperation() != null) {
+					System.out.println("Executing version operation: " + setting.getName());
+					executeExtension(setting.getOperation(), project, selectedVersion);
+				}
 			}
 		}
 
@@ -62,7 +66,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		ISafeRunnable runnable = new ISafeRunnable() {
 			@Override
 			public void handleException(Throwable e) {
-				System.err.println("Exception in extension");
+				System.err.println("Exception in version operation extension: " + versionOperation.getClass());
 			}
 
 			@Override

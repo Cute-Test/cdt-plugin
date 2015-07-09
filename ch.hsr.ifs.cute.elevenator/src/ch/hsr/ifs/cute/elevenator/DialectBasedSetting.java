@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
-import ch.hsr.ifs.cute.elevenator.operation.DoNothingOperation;
 
 public final class DialectBasedSetting {
 	private String name;
@@ -14,17 +13,12 @@ public final class DialectBasedSetting {
 	private boolean checked = false;
 
 	public DialectBasedSetting(String name) {
-		this(name, new DoNothingOperation());
+		this(name, null);
 	}
 
 	public DialectBasedSetting(String name, IVersionModificationOperation operation) {
 		this.name = name;
 		this.operation = operation;
-
-		// TODO: besseri Lösig finde!
-		if (operation == null) {
-			this.operation = new DoNothingOperation();
-		}
 	}
 
 	private void setParent(DialectBasedSetting parent) {

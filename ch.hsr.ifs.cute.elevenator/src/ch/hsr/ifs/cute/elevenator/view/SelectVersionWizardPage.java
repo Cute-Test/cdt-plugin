@@ -1,6 +1,8 @@
 package ch.hsr.ifs.cute.elevenator.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -160,14 +162,16 @@ public class SelectVersionWizardPage extends WizardPage {
 		return (CPPVersion) versionCombo.getData(versionCombo.getText());
 	}
 
-	public DialectBasedSetting[] getCheckedModifications() {
+	public List<DialectBasedSetting> getCheckedModifications() {
 		Object[] checkedElements = modificationTree.getCheckedElements();
-		DialectBasedSetting[] checkedModifications = new DialectBasedSetting[checkedElements.length];
+		List<DialectBasedSetting> checkedModifications = new ArrayList<>();
 
-		int modificationCount = 0;
 		for (Object elem : checkedElements) {
 			if (elem instanceof DialectBasedSetting) {
-				checkedModifications[modificationCount++] = (DialectBasedSetting) elem;
+				DialectBasedSetting setting = (DialectBasedSetting) elem;
+				if (!setting.hasSubsettings()) {
+					checkedModifications.add(setting);
+				}
 			}
 		}
 		return checkedModifications;
