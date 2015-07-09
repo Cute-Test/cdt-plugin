@@ -5,7 +5,10 @@ namespace std {
 inline namespace __1 {
 	template <typename T>
 	struct vector {
+		typedef T* iterator;
 	};
-	struct string{};
+	struct string{
+		typedef char *iterator;
+	};
 }}
 #endif /* VETOR_HPP_ */
