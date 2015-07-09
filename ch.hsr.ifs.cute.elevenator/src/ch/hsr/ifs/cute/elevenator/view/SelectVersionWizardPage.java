@@ -6,8 +6,6 @@ import java.util.Map;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ICheckStateProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -34,27 +32,11 @@ import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 
 public class SelectVersionWizardPage extends WizardPage {
 
+	private static final int INDENT = 15;
+
 	private Combo versionCombo;
 	private CheckboxTreeViewer modificationTree;
-
-	public CPPVersion getSelectedVersion() {
-		return (CPPVersion) versionCombo.getData(versionCombo.getText());
-	}
-
-	public DialectBasedSetting[] getCheckedModifications() {
-		Object[] checkedElements = modificationTree.getCheckedElements();
-		DialectBasedSetting[] checkedModifications = new DialectBasedSetting[checkedElements.length];
-
-		int modificationCount = 0;
-		for (Object elem : checkedElements) {
-			if (elem instanceof DialectBasedSetting) {
-				checkedModifications[modificationCount++] = (DialectBasedSetting) elem;
-			}
-		}
-		return checkedModifications;
-	}
-
-	private static final int INDENT = 15;
+	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
 	public SelectVersionWizardPage() {
 		super("mypage");
@@ -108,76 +90,18 @@ public class SelectVersionWizardPage extends WizardPage {
 		modificationsGroup.setLayout(new GridLayout());
 
 		DialectBasedSettingsProvider treeContentProvider = new DialectBasedSettingsProvider();
-		// modificationTree = new CheckboxTreeViewer(modificationsGroup, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		modificationTree = createTreeViewer(modificationsGroup);
-
 		modificationTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		modificationTree.setContentProvider(treeContentProvider);
 		modificationTree.setLabelProvider(treeContentProvider);
+		modificationTree.setCheckStateProvider(treeContentProvider);
 		modificationTree.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				// modificationTree.setChecked(event.getElement(), event.getChecked());
 				DialectBasedSetting setting = (DialectBasedSetting) event.getElement();
 				setting.setChecked(event.getChecked());
 				modificationTree.refresh();
-				//
-				// if (event.getChecked()) {
-				// DialectBasedSetting parent = setting.getParent();
-				// while (parent != null) {
-				// parent.setChecked(true);
-				// parent = parent.getParent();
-				// }
-				// }
-				//
-				// checkTree(setting);
-				//
-				// modificationTree.refresh();
-
-				// Object element = event.getElement();
-				// modificationTree.setGrayed(element, false);
-				// modificationTree.setSubtreeChecked(element, event.getChecked());
-				// Object parent = getContentProvider().getParent(element);
-				// if (parent != null) {
-				// updateCheckedState(parent);
-				// }
-
-			}
-
-			private void checkTree(DialectBasedSetting setting) {
-				for (DialectBasedSetting child : setting.getSubsettings()) {
-					child.setChecked(setting.isChecked());
-					checkTree(child);
-				}
-			}
-		});
-
-		modificationTree.setCheckStateProvider(new ICheckStateProvider() {
-
-			@Override
-			public boolean isGrayed(Object element) {
-
-				if (element instanceof DialectBasedSetting) {
-					DialectBasedSetting setting = ((DialectBasedSetting) element);
-					if (setting.getCheckedChildCount() < setting.getSubsettings().size()) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			@Override
-			public boolean isChecked(Object element) {
-				if (element instanceof DialectBasedSetting) {
-					DialectBasedSetting setting = ((DialectBasedSetting) element);
-
-					if (setting.hasSubsettings() && setting.getCheckedChildCount() > 0) {
-						return setting.getSubsettings().size() > 0;
-					}
-					return setting.isChecked();
-				}
-				return false;
 			}
 		});
 
@@ -185,40 +109,6 @@ public class SelectVersionWizardPage extends WizardPage {
 
 		setControl(composite);
 	}
-
-	private void updateCheckedState(Object element) {
-		Object[] children = getContentProvider().getChildren(element);
-		int i, count = 0;
-		for (i = 0; i < children.length; i++) {
-			Object object = children[i];
-			if (modificationTree.getChecked(object)) {
-				count++;
-			}
-		}
-		if (count > 0) {
-			modificationTree.setGrayed(element, false);
-			modificationTree.setChecked(element, true);
-		}
-		if (count == 0) {
-			modificationTree.setGrayed(element, false);
-			modificationTree.setChecked(element, false);
-			return;
-		}
-		if (count < i) {
-			modificationTree.setGrayed(element, true);
-		}
-
-		Object parent = getContentProvider().getParent(element);
-		if (parent != null) {
-			updateCheckedState(parent);
-		}
-	}
-
-	private ITreeContentProvider getContentProvider() {
-		return ((ITreeContentProvider) modificationTree.getContentProvider());
-	}
-
-	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
 	private void updateSettings() {
 		CPPVersion selectedVersion = getSelectedVersion();
@@ -230,21 +120,7 @@ public class SelectVersionWizardPage extends WizardPage {
 			settings = EvaluateContributions.createSettings(selectedVersion);
 			settingStore.put(selectedVersion, settings);
 		}
-
 		modificationTree.setInput(settings);
-		// modificationTree.expandAll();
-		// updateCheckedSettings(settings);
-	}
-
-	private void updateCheckedSettings(DialectBasedSetting setting) {
-		if (setting.isChecked()) {
-			modificationTree.expandToLevel(setting, 1);
-		}
-		modificationTree.setChecked(setting, setting.isChecked());
-		updateCheckedState(setting);
-		for (DialectBasedSetting childSetting : setting.getSubsettings()) {
-			updateCheckedSettings(childSetting);
-		}
 	}
 
 	protected CheckboxTreeViewer createTreeViewer(Composite parent) {
@@ -278,6 +154,23 @@ public class SelectVersionWizardPage extends WizardPage {
 		dialectBasedSetting.addSubsetting(setIndexFlag);
 
 		return dialectBasedSetting;
+	}
+
+	public CPPVersion getSelectedVersion() {
+		return (CPPVersion) versionCombo.getData(versionCombo.getText());
+	}
+
+	public DialectBasedSetting[] getCheckedModifications() {
+		Object[] checkedElements = modificationTree.getCheckedElements();
+		DialectBasedSetting[] checkedModifications = new DialectBasedSetting[checkedElements.length];
+
+		int modificationCount = 0;
+		for (Object elem : checkedElements) {
+			if (elem instanceof DialectBasedSetting) {
+				checkedModifications[modificationCount++] = (DialectBasedSetting) elem;
+			}
+		}
+		return checkedModifications;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package ch.hsr.ifs.cute.elevenator.view;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -10,7 +11,7 @@ import org.eclipse.swt.graphics.Image;
 
 import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
 
-public final class DialectBasedSettingsProvider implements ITreeContentProvider, ILabelProvider {
+public final class DialectBasedSettingsProvider implements ITreeContentProvider, ILabelProvider, ICheckStateProvider {
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 	}
@@ -73,5 +74,28 @@ public final class DialectBasedSettingsProvider implements ITreeContentProvider,
 			return ((DialectBasedSetting) element).getName();
 		}
 		return "<unknown>";
+	}
+
+	@Override
+	public boolean isGrayed(Object element) {
+		if (element instanceof DialectBasedSetting) {
+			DialectBasedSetting setting = ((DialectBasedSetting) element);
+			if (setting.getCheckedChildCount() < setting.getSubsettings().size()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isChecked(Object element) {
+		if (element instanceof DialectBasedSetting) {
+			DialectBasedSetting setting = ((DialectBasedSetting) element);
+			if (setting.getCheckedChildCount() > 0) {
+				return true;
+			}
+			return setting.isChecked();
+		}
+		return false;
 	}
 }
