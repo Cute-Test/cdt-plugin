@@ -3,7 +3,9 @@ package ch.hsr.ifs.cute.elevenator.view;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -102,9 +104,16 @@ public class SelectVersionWizardPage extends WizardPage {
 
 		modificationTree = new CheckboxTreeViewer(modificationsGroup, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		modificationTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		DialectBasedSettingsProvider provider = new DialectBasedSettingsProvider();
-		modificationTree.setContentProvider(provider);
-		modificationTree.setLabelProvider(provider);
+		DialectBasedSettingsProvider treeContentProvider = new DialectBasedSettingsProvider();
+		modificationTree.setContentProvider(treeContentProvider);
+		modificationTree.setLabelProvider(treeContentProvider);
+		modificationTree.addCheckStateListener(new ICheckStateListener() {
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				DialectBasedSetting setting = (DialectBasedSetting) event.getElement();
+				setting.setChecked(event.getChecked());
+			}
+		});
 
 		updateSettings();
 
@@ -125,11 +134,18 @@ public class SelectVersionWizardPage extends WizardPage {
 		}
 
 		modificationTree.setInput(settings);
-		updateCheckedSettings();
+		// modificationTree.expandAll();
+		updateCheckedSettings(settings);
 	}
 
-	private void updateCheckedSettings() {
-		// TODO: Perform some magic
+	private void updateCheckedSettings(DialectBasedSetting setting) {
+		modificationTree.setChecked(setting, setting.isChecked());
+		if (setting.isChecked()) {
+			modificationTree.expandToLevel(setting, 1);
+		}
+		for (DialectBasedSetting childSetting : setting.getSubsettings()) {
+			updateCheckedSettings(childSetting);
+		}
 	}
 
 	private DialectBasedSetting createSettings() {

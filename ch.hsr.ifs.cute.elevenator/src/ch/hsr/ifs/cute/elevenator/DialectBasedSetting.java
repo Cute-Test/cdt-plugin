@@ -10,6 +10,7 @@ public final class DialectBasedSetting {
 	private String name;
 	private List<DialectBasedSetting> subsettings = new ArrayList<DialectBasedSetting>();
 	private IVersionModificationOperation operation;
+	private boolean checked = false;
 
 	public DialectBasedSetting(String name) {
 		this(name, new DoNothingOperation());
@@ -43,6 +44,14 @@ public final class DialectBasedSetting {
 
 	public List<DialectBasedSetting> getSubsettings() {
 		return subsettings;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
 	}
 
 	@Override
