@@ -15,12 +15,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
@@ -55,7 +58,8 @@ public class SelectVersionWizardPage extends WizardPage {
 		composite.setLayout(new GridLayout(1, false));
 
 		Composite versionSelector = new Composite(composite, SWT.NONE);
-		versionSelector.setLayout(new GridLayout(2, false));
+		versionSelector.setLayout(new GridLayout(3, false));
+
 		Label label = new Label(versionSelector, NONE);
 		GridData labelLayoutData = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
 		labelLayoutData.horizontalIndent = INDENT;
@@ -107,9 +111,41 @@ public class SelectVersionWizardPage extends WizardPage {
 			}
 		});
 
+		ToolBar toolBar = new ToolBar(modificationsGroup, SWT.NONE);
+
+		ToolItem selectAll = new ToolItem(toolBar, SWT.PUSH);
+		Image selectAllIcon = new Image(parent.getDisplay(), getClass().getResourceAsStream("/icons/select_all.png"));
+		selectAll.setImage(selectAllIcon);
+		selectAll.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectAll(true);
+			}
+		});
+
+		ToolItem deselectAll = new ToolItem(toolBar, SWT.PUSH);
+		Image deselectAllIcon = new Image(parent.getDisplay(),
+				getClass().getResourceAsStream("/icons/deselect_all.png"));
+		deselectAll.setImage(deselectAllIcon);
+		deselectAll.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectAll(false);
+			}
+		});
+
 		updateSettings();
 
 		setControl(composite);
+	}
+
+	private void selectAll(boolean select) {
+		CPPVersion selectedVersion = getSelectedVersion();
+		if (settingStore.containsKey(selectedVersion)) {
+			DialectBasedSetting setting = settingStore.get(selectedVersion);
+			setting.setChecked(select);
+			modificationTree.refresh();
+		}
 	}
 
 	private void updateSettings() {
