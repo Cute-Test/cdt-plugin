@@ -1,13 +1,18 @@
 package ch.hsr.ifs.cute.elevenator;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.osgi.framework.Bundle;
+
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
+import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 
 public final class DialectBasedSetting {
 	private String name;
 	private DialectBasedSetting parent = null;
+	private String preferenceName;
 	private List<DialectBasedSetting> subsettings = new ArrayList<DialectBasedSetting>();
 	private IVersionModificationOperation operation;
 	private boolean checked = false;
@@ -17,8 +22,13 @@ public final class DialectBasedSetting {
 	}
 
 	public DialectBasedSetting(String name, IVersionModificationOperation operation) {
+		this(name, operation, null);
+	}
+
+	public DialectBasedSetting(String name, IVersionModificationOperation operation, String preferenceName) {
 		this.name = name;
 		this.operation = operation;
+		this.preferenceName = preferenceName;
 	}
 
 	private void setParent(DialectBasedSetting parent) {
@@ -94,6 +104,11 @@ public final class DialectBasedSetting {
 
 	@Override
 	public String toString() {
-		return name;
+		return name + "(checked: " + isChecked() + ")";
+	}
+
+	public static String buildPreferenceName(Bundle contributingPlugin, String version, String settingName) {
+		return MessageFormat.format(CppVersionPreferenceConstants.ELEVENATOR_VERSION_SETTINGS_WITH_PLACEHOLDERS,
+				contributingPlugin.getSymbolicName(), version, settingName);
 	}
 }
