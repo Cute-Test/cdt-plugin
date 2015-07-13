@@ -39,6 +39,11 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 	}
 
 	@Override
+	protected void doLoadDefault() {
+		super.doLoadDefault();
+	}
+
+	@Override
 	protected void doLoad() {
 		// load from our own store since the user could have changed something, switched the version and this is not yet
 		// stored. selectedVersion must already be set correctly

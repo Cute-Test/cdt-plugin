@@ -3,6 +3,9 @@ package ch.hsr.ifs.cute.elevenator.preferences;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -11,8 +14,6 @@ import ch.hsr.ifs.cute.elevenator.CPPVersionCheckedTreeFieldEditor;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 
 public class CPPVersionSelectionPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-	// TODO save all other versions when apply is hit
-
 	private ComboFieldEditor versionCombo;
 	private CPPVersionCheckedTreeFieldEditor modificationTree;
 
@@ -36,11 +37,29 @@ public class CPPVersionSelectionPreferencePage extends FieldEditorPreferencePage
 				"Default C++ &Version", comboVersions, getFieldEditorParent());
 		addField(versionCombo);
 
-		String selectedVersion = getPreferenceStore()
+		Button button = new Button(getFieldEditorParent(), 0);
+
+		String selectedVersionString = getPreferenceStore()
 				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
-		modificationTree = new CPPVersionCheckedTreeFieldEditor(getFieldEditorParent(),
-				CPPVersion.valueOf(selectedVersion));
+		CPPVersion selectedVersion = CPPVersion.valueOf(selectedVersionString);
+		modificationTree = new CPPVersionCheckedTreeFieldEditor(getFieldEditorParent(), selectedVersion);
 		addField(modificationTree);
+
+		button.setText("Set " + selectedVersion.getVersionString() + " as default.");
+		button.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("button selected");
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 	}
 
 	@Override
