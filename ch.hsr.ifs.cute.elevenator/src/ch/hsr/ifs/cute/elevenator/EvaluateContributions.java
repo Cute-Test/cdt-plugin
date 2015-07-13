@@ -43,7 +43,19 @@ public class EvaluateContributions {
 				}
 			}
 		}
+
+		setSettingsBasedOnPreferences(settings);
+
 		return settings;
+	}
+
+	private static void setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
+		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
+			if (sub.getPreferenceName() != null) {
+				sub.setChecked(Activator.getDefault().getPreferenceStore().getBoolean(sub.getPreferenceName()), false);
+				setSettingsBasedOnPreferences(sub);
+			}
+		}
 	}
 
 	private static void createChildSettings(IConfigurationElement element, DialectBasedSetting parentSettings,

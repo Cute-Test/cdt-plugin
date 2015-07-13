@@ -50,20 +50,10 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 		DialectBasedSetting rootSettingForVersion = settingStore.get(getSelectedVersion());
 		if (rootSettingForVersion == null) {
 			rootSettingForVersion = EvaluateContributions.createSettings(getSelectedVersion());
-			setSettingsBasedOnPreferences(rootSettingForVersion);
 			settingStore.put(getSelectedVersion(), rootSettingForVersion);
 		}
 
 		return rootSettingForVersion;
-	}
-
-	private void setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
-		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
-			if (sub.getPreferenceName() != null) {
-				sub.setChecked(getPreferenceStore().getBoolean(sub.getPreferenceName()), false);
-				setSettingsBasedOnPreferences(sub);
-			}
-		}
 	}
 
 	@Override

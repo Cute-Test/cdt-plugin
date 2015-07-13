@@ -28,7 +28,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
-            class="ch.hsr.ifs.cute.elevenator.preferences.CppVersionSelectionPreferencePage"
+            class="ch.hsr.ifs.cute.elevenator.preferences.CPPVersionSelectionPreferencePage"
             id="ch.hsr.ifs.cute.elevenator.preferences.CppVersionSelectionPreferencePage"
             name="%preferencePage.version.name">
          <keywordReference
@@ -102,6 +102,12 @@
                name="YouSuckMod">
          </version_modification>
       </CPP_14>
+      <CPP_17>
+         <version_modification
+               checked_by_default="true"
+               name="hallo=true">
+         </version_modification>
+      </CPP_17>
    </extension>
 
 </plugin>
