@@ -14,13 +14,13 @@ import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
 import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 
-public class CppVersionSelectionPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class CPPVersionSelectionPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	// TODO save all other versions when apply is hit
 
 	private ComboFieldEditor versionCombo;
 	private CPPVersionCheckedTreeFieldEditor modificationTree;
 
-	public CppVersionSelectionPreferencePage() {
+	public CPPVersionSelectionPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Selection of default C++ version and their actions when creating new projects.");
