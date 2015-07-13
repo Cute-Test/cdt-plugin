@@ -117,7 +117,7 @@
          </choice>
       </complexType>
    </element>
-
+   
    <element name="versionModification">
       <complexType>
          <attribute name="name" type="string" use="required">
