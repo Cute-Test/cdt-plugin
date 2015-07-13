@@ -65,12 +65,22 @@ public final class DialectBasedSetting {
 	}
 
 	public void setChecked(boolean checked) {
+		setChecked(checked, true);
+	}
+
+	public String getPreferenceName() {
+		return preferenceName;
+	}
+
+	public void setChecked(boolean checked, boolean setChildren) {
 		this.checked = checked;
 
-		checkedChangedDowntree(this);
+		if (setChildren) {
+			checkedChangedDowntree(this);
 
-		if (getParent() != null) {
-			getParent().checkedChangedUptree();
+			if (getParent() != null) {
+				getParent().checkedChangedUptree();
+			}
 		}
 	}
 

@@ -39,7 +39,7 @@ public class EvaluateContributions {
 				// needed to build a unique preference name
 				Bundle contributingBundle = getContributingBundle(configElement);
 				for (IConfigurationElement childElement : configElement.getChildren()) {
-					createChildSettings(childElement, settings, contributingBundle, versionName);
+					createChildSettings(childElement, settings, contributingBundle, selectedVersion.toString());
 				}
 			}
 		}
