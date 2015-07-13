@@ -16,7 +16,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
-import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage;
 
 public class SelectVersionOperation implements IRunnableWithProgress {
@@ -27,7 +27,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		IWizard wizard = pages[0].getWizard();
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
-		String defaultCppVersion = store.getString(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
+		String defaultCppVersion = store.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
 
 		CPPVersion selectedVersion = CPPVersion.DEFAULT;
 		try {

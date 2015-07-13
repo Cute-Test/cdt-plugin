@@ -9,12 +9,12 @@ import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 /**
  * Class used to initialize default preference values.
  */
-public class CppVersionPreferenceInitializer extends AbstractPreferenceInitializer {
+public class CPPVersionPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT,
+		store.setDefault(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT,
 				CPPVersion.DEFAULT.toString());
 	}
 

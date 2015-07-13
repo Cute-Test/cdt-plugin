@@ -13,7 +13,6 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
-import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 import ch.hsr.ifs.cute.elevenator.view.DialectBasedSettingsProvider;
 
 /**
@@ -25,16 +24,18 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 	private CPPVersion selectedVersion;
 	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
-	public CPPVersionCheckedTreeFieldEditor(Composite parent, DialectBasedSetting settings) {
+	public CPPVersionCheckedTreeFieldEditor(Composite parent, CPPVersion selectedVersion) {
 		super("this_elevenator_preference_will_not_be_used", "Settings", parent);
+		this.selectedVersion = selectedVersion;
 		setEmptySelectionAllowed(true);
 
 		DialectBasedSettingsProvider provider = new DialectBasedSettingsProvider();
 		getTreeViewer().setContentProvider(provider);
 		getTreeViewer().setLabelProvider(provider);
 		getTreeViewer().setCheckStateProvider(provider);
-		getTreeViewer().setInput(settings);
-		currentSettings = settings;
+
+		currentSettings = EvaluateContributions.createSettings(selectedVersion);
+		getTreeViewer().setInput(currentSettings);
 	}
 
 	@Override
@@ -47,10 +48,10 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 	}
 
 	private DialectBasedSetting getSettings() {
-		DialectBasedSetting rootSettingForVersion = settingStore.get(getSelectedVersion());
+		DialectBasedSetting rootSettingForVersion = settingStore.get(selectedVersion);
 		if (rootSettingForVersion == null) {
-			rootSettingForVersion = EvaluateContributions.createSettings(getSelectedVersion());
-			settingStore.put(getSelectedVersion(), rootSettingForVersion);
+			rootSettingForVersion = EvaluateContributions.createSettings(selectedVersion);
+			settingStore.put(selectedVersion, rootSettingForVersion);
 		}
 
 		return rootSettingForVersion;
@@ -114,15 +115,6 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 			}
 		};
 		return (CheckboxTreeViewer) filteredTree.getViewer();
-	}
-
-	public CPPVersion getSelectedVersion() {
-		if (selectedVersion == null) {
-			selectedVersion = CPPVersion
-					.valueOf(getPreferenceStore().getString(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT));
-		}
-
-		return selectedVersion;
 	}
 
 }

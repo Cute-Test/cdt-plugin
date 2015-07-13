@@ -8,8 +8,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.CPPVersionCheckedTreeFieldEditor;
-import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
-import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 
 public class CPPVersionSelectionPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -34,19 +32,14 @@ public class CPPVersionSelectionPreferencePage extends FieldEditorPreferencePage
 			comboVersions[i][0] = version.getVersionString();
 			comboVersions[i][1] = version.toString();
 		}
-		versionCombo = new ComboFieldEditor(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT,
+		versionCombo = new ComboFieldEditor(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT,
 				"Default C++ &Version", comboVersions, getFieldEditorParent());
 		addField(versionCombo);
 
-		DialectBasedSetting rootSettings = null; // getPreferenceStore().get
-
-		if (rootSettings == null) {
-			rootSettings = EvaluateContributions.createSettings(CPPVersion.DEFAULT);
-		}
-
 		String selectedVersion = getPreferenceStore()
-				.getString(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
-		modificationTree = new CPPVersionCheckedTreeFieldEditor(getFieldEditorParent(), rootSettings);
+				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
+		modificationTree = new CPPVersionCheckedTreeFieldEditor(getFieldEditorParent(),
+				CPPVersion.valueOf(selectedVersion));
 		addField(modificationTree);
 	}
 

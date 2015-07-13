@@ -33,7 +33,7 @@ import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
-import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 
 public class SelectVersionWizardPage extends WizardPage {
 
@@ -79,7 +79,7 @@ public class SelectVersionWizardPage extends WizardPage {
 		}
 
 		String defaultCppVersionString = Activator.getDefault().getPreferenceStore()
-				.getString(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
+				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
 		CPPVersion versionToSelect = CPPVersion.valueOf(defaultCppVersionString);
 		versionCombo.select(versionToSelect.ordinal());
 		versionCombo.setFont(font);

@@ -7,7 +7,7 @@ import java.util.List;
 import org.osgi.framework.Bundle;
 
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
-import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 
 public final class DialectBasedSetting {
 	private String name;
@@ -112,7 +112,7 @@ public final class DialectBasedSetting {
 	}
 
 	public static String buildPreferenceName(Bundle contributingPlugin, String version, String settingName) {
-		return MessageFormat.format(CppVersionPreferenceConstants.ELEVENATOR_VERSION_SETTINGS_WITH_PLACEHOLDERS,
+		return MessageFormat.format(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_SETTINGS_WITH_PLACEHOLDERS,
 				contributingPlugin.getSymbolicName(), version, settingName);
 	}
 }
