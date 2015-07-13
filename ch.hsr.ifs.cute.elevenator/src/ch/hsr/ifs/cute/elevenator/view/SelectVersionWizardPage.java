@@ -115,8 +115,8 @@ public class SelectVersionWizardPage extends WizardPage {
 
 	private void selectAll(boolean select) {
 		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
-		if (settingStore.containsKey(selectedVersion)) {
-			DialectBasedSetting setting = settingStore.get(selectedVersion);
+		DialectBasedSetting setting = settingStore.get(selectedVersion);
+		if (setting != null) {
 			setting.setChecked(select);
 			modificationTree.refresh();
 		}
@@ -125,14 +125,14 @@ public class SelectVersionWizardPage extends WizardPage {
 	private void updateSettings() {
 		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
 
-		DialectBasedSetting settings = null;
-		if (settingStore.containsKey(selectedVersion)) {
-			settings = settingStore.get(selectedVersion);
+		DialectBasedSetting setting = settingStore.get(selectedVersion);
+		if (setting == null) {
+			setting = settingStore.get(selectedVersion);
 		} else {
-			settings = EvaluateContributions.createSettings(selectedVersion);
-			settingStore.put(selectedVersion, settings);
+			setting = EvaluateContributions.createSettings(selectedVersion);
+			settingStore.put(selectedVersion, setting);
 		}
-		modificationTree.setInput(settings);
+		modificationTree.setInput(setting);
 	}
 
 	protected CheckboxTreeViewer createTreeViewer(Composite parent) {

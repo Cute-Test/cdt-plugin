@@ -40,7 +40,20 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 
 	@Override
 	protected void doLoadDefault() {
-		super.doLoadDefault();
+		for (DialectBasedSetting dialectRootSetting : settingStore.values()) {
+			restoreDefaults(dialectRootSetting);
+		}
+
+		getTreeViewer().refresh();
+	}
+
+	private void restoreDefaults(DialectBasedSetting parentSetting) {
+		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
+			if (!sub.hasSubsettings()) {
+				sub.setChecked(sub.isCheckedByDefault());
+			}
+			restoreDefaults(sub);
+		}
 	}
 
 	@Override

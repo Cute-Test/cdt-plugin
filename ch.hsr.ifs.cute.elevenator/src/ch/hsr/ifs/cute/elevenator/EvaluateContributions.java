@@ -68,6 +68,9 @@ public class EvaluateContributions {
 		DialectBasedSetting settings = new DialectBasedSetting(settingName, versionModification, preferenceName);
 		parentSettings.addSubsetting(settings);
 
+		// defaults to false if attribute not present
+		settings.setCheckedByDefault(Boolean.valueOf(element.getAttribute("checkedByDefault")));
+
 		for (IConfigurationElement childElement : element.getChildren()) {
 			createChildSettings(childElement, settings, contributingBundle, versionName);
 		}

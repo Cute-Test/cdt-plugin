@@ -16,6 +16,7 @@ public final class DialectBasedSetting {
 	private List<DialectBasedSetting> subsettings = new ArrayList<DialectBasedSetting>();
 	private IVersionModificationOperation operation;
 	private boolean checked = false;
+	private boolean checkedByDefault = false;
 
 	public DialectBasedSetting(String name) {
 		this(name, null);
@@ -58,6 +59,14 @@ public final class DialectBasedSetting {
 
 	public List<DialectBasedSetting> getSubsettings() {
 		return subsettings;
+	}
+
+	public boolean isCheckedByDefault() {
+		return checkedByDefault;
+	}
+
+	public void setCheckedByDefault(boolean checkedByDefault) {
+		this.checkedByDefault = checkedByDefault;
 	}
 
 	public boolean isChecked() {
