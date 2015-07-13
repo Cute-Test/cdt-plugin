@@ -16,6 +16,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
+import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionProjectSetting;
 import ch.hsr.ifs.cute.elevenator.preferences.CppVersionPreferenceConstants;
 import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage;
 
@@ -50,6 +51,8 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		if (wizard instanceof CDTCommonProjectWizard) {
 			CDTCommonProjectWizard projectWizard = (CDTCommonProjectWizard) wizard;
 			IProject project = projectWizard.getProject(false);
+
+			CPPVersionProjectSetting.saveProjectVersion(project, selectedVersion);
 
 			for (DialectBasedSetting setting : checkedModifications) {
 				if (setting.getOperation() != null) {
