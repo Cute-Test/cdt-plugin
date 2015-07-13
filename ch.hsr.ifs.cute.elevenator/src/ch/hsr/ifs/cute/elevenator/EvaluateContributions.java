@@ -76,14 +76,14 @@ public class EvaluateContributions {
 
 	private static IVersionModificationOperation extractVersionModification(IConfigurationElement element) {
 		try {
-			if (!element.getName().equals("version_modification")) {
+			if (!element.getName().equals("versionModification")) {
 				return null;
 			}
-			if (element.getAttribute("class") == null) {
+			if (element.getAttribute("operationClass") == null) {
 				return null;
 			}
 
-			final Object o = element.createExecutableExtension("class");
+			final Object o = element.createExecutableExtension("operationClass");
 			if (o instanceof IVersionModificationOperation) {
 				System.out.println("Found version modification: " + o.getClass().toString());
 				return (IVersionModificationOperation) o;

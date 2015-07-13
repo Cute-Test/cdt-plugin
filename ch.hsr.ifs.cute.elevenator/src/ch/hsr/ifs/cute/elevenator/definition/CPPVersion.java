@@ -1,5 +1,9 @@
 package ch.hsr.ifs.cute.elevenator.definition;
 
+import org.eclipse.core.resources.IProject;
+
+import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionProjectSetting;
+
 public enum CPPVersion {
 
 	CPP_98("C++ 98", "c++98"), CPP_03("C++ 03", "c++03"), CPP_11("C++ 11", "c++11"), CPP_14("C++ 14",
@@ -21,6 +25,10 @@ public enum CPPVersion {
 
 	public String getCompilerVersionString() {
 		return compilerVersionString;
+	}
+
+	public static CPPVersion getForProject(IProject project) {
+		return CPPVersionProjectSetting.loadProjectVersion(project);
 	}
 
 }

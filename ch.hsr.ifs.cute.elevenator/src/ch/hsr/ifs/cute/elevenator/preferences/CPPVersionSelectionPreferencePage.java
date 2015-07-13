@@ -1,77 +1,67 @@
 package ch.hsr.ifs.cute.elevenator.preferences;
 
-import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.CPPVersionCheckedTreeFieldEditor;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.cute.elevenator.view.VersionSelectionGridCombo;
 
-public class CPPVersionSelectionPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-	private ComboFieldEditor versionCombo;
+public class CPPVersionSelectionPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 	private CPPVersionCheckedTreeFieldEditor modificationTree;
 
 	public CPPVersionSelectionPreferencePage() {
-		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Selection of default C++ version and their actions when creating new projects.");
-	}
-
-	@Override
-	public void createFieldEditors() {
-		String[][] comboVersions = new String[CPPVersion.values().length][2];
-
-		CPPVersion[] possibleCPPVersions = CPPVersion.values();
-		for (int i = 0; i < possibleCPPVersions.length; i++) {
-			CPPVersion version = possibleCPPVersions[i];
-			comboVersions[i][0] = version.getVersionString();
-			comboVersions[i][1] = version.toString();
-		}
-		versionCombo = new ComboFieldEditor(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT,
-				"Default C++ &Version", comboVersions, getFieldEditorParent());
-		addField(versionCombo);
-
-		Button button = new Button(getFieldEditorParent(), 0);
-
-		String selectedVersionString = getPreferenceStore()
-				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
-		CPPVersion selectedVersion = CPPVersion.valueOf(selectedVersionString);
-		modificationTree = new CPPVersionCheckedTreeFieldEditor(getFieldEditorParent(), selectedVersion);
-		addField(modificationTree);
-
-		button.setText("Set " + selectedVersion.getVersionString() + " as default.");
-		button.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				System.out.println("button selected");
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent event) {
-		super.propertyChange(event);
-		if (event.getSource() == versionCombo) {
-			modificationTree.changeVersion(CPPVersion.valueOf(event.getNewValue().toString()));
-		}
 	}
 
 	@Override
 	public void init(IWorkbench workbench) {
 	}
 
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite top = new Composite(parent, SWT.LEFT);
+
+		// Sets the layout data for the top composite's
+		// place in its parent's layout.
+		top.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		// Sets the layout for the top composite's
+		// children to populate.
+		top.setLayout(new GridLayout());
+
+		VersionSelectionGridCombo versionCombo = new VersionSelectionGridCombo(top, "C++ Version");
+		// Button button = new Button(getFieldEditorParent(), 0);
+
+		String selectedVersionString = getPreferenceStore()
+				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
+		CPPVersion selectedVersion = CPPVersion.valueOf(selectedVersionString);
+		modificationTree = new CPPVersionCheckedTreeFieldEditor(top, selectedVersion);
+
+		modificationTree.setPage(this);
+		modificationTree.setPreferenceStore(getPreferenceStore());
+		modificationTree.load();
+
+		return top;
+	}
+
+	@Override
+	protected void performDefaults() {
+		modificationTree.loadDefault();
+		super.performDefaults();
+	}
+
+	@Override
+	public boolean performOk() {
+		modificationTree.store();
+		return true;
+	}
 }

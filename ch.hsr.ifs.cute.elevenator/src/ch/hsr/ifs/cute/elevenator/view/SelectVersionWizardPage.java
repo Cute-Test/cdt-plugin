@@ -18,28 +18,24 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
-import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
 import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
-import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 
 public class SelectVersionWizardPage extends WizardPage {
 
 	private static final int INDENT = 15;
 
-	private Combo versionCombo;
+	private VersionSelectionGridCombo versionCombo;
 	private CheckboxTreeViewer modificationTree;
 	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
@@ -57,33 +53,8 @@ public class SelectVersionWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 
-		Composite versionSelector = new Composite(composite, SWT.NONE);
-		versionSelector.setLayout(new GridLayout(3, false));
-
-		Label label = new Label(versionSelector, NONE);
-		GridData labelLayoutData = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
-		labelLayoutData.horizontalIndent = INDENT;
-		labelLayoutData.verticalIndent = INDENT;
-		label.setLayoutData(labelLayoutData);
-		label.setText("C++ Version:");
-		label.setFont(font);
-
-		GridData comboLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		comboLayoutData.verticalIndent = INDENT;
-		versionCombo = new Combo(versionSelector, SWT.READ_ONLY);
-		versionCombo.setLayoutData(comboLayoutData);
-
-		for (CPPVersion cppVersion : CPPVersion.values()) {
-			versionCombo.add(cppVersion.getVersionString());
-			versionCombo.setData(cppVersion.getVersionString(), cppVersion);
-		}
-
-		String defaultCppVersionString = Activator.getDefault().getPreferenceStore()
-				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
-		CPPVersion versionToSelect = CPPVersion.valueOf(defaultCppVersionString);
-		versionCombo.select(versionToSelect.ordinal());
-		versionCombo.setFont(font);
-		versionCombo.addSelectionListener(new SelectionAdapter() {
+		versionCombo = new VersionSelectionGridCombo(composite, "C++ Version");
+		versionCombo.getCombo().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				updateSettings();
@@ -195,7 +166,7 @@ public class SelectVersionWizardPage extends WizardPage {
 	}
 
 	public CPPVersion getSelectedVersion() {
-		return (CPPVersion) versionCombo.getData(versionCombo.getText());
+		return (CPPVersion) versionCombo.getCombo().getData(versionCombo.getCombo().getText());
 	}
 
 	public List<DialectBasedSetting> getCheckedModifications() {
