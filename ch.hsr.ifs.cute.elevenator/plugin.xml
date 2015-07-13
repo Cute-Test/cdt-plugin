@@ -56,6 +56,18 @@
    </extension>
    <extension
          point="ch.hsr.ifs.cute.elevenator.versionmodification">
+      <ALL_VERSIONS>
+         <versionModification
+               checkedByDefault="true"
+               name="Set Compiler Flag"
+               operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation">
+         </versionModification>
+         <versionModification
+               checkedByDefault="true"
+               name="Set Index Flag"
+               operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation">
+         </versionModification>
+      </ALL_VERSIONS>
       
    </extension>
 
