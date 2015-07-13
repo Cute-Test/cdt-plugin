@@ -2,6 +2,8 @@ package ch.hsr.ifs.cute.elevenator.preferences;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -12,9 +14,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.CPPVersionCheckedTreeFieldEditor;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
-import ch.hsr.ifs.cute.elevenator.view.VersionSelectionGridCombo;
+import ch.hsr.ifs.cute.elevenator.view.VersionSelectionComboWithLabel;
 
 public class CPPVersionSelectionPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+	private VersionSelectionComboWithLabel versionCombo;
 	private CPPVersionCheckedTreeFieldEditor modificationTree;
 
 	public CPPVersionSelectionPreferencePage() {
@@ -38,8 +41,14 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 		// children to populate.
 		top.setLayout(new GridLayout());
 
-		VersionSelectionGridCombo versionCombo = new VersionSelectionGridCombo(top, "C++ Version");
-		// Button button = new Button(getFieldEditorParent(), 0);
+		versionCombo = new VersionSelectionComboWithLabel(top, "C++ Version");
+		versionCombo.getCombo().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				CPPVersion selectedVersion = versionCombo.getSelectedVersion();
+				modificationTree.changeVersion(selectedVersion);
+			}
+		});
 
 		String selectedVersionString = getPreferenceStore()
 				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);

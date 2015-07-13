@@ -1,6 +1,7 @@
 package ch.hsr.ifs.cute.elevenator.view;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,17 +26,19 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
+import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
 import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
+import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 
 public class SelectVersionWizardPage extends WizardPage {
 
 	private static final int INDENT = 15;
 
-	private VersionSelectionGridCombo versionCombo;
+	private VersionSelectionComboWithLabel versionCombo;
 	private CheckboxTreeViewer modificationTree;
 	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
@@ -53,7 +56,7 @@ public class SelectVersionWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 
-		versionCombo = new VersionSelectionGridCombo(composite, "C++ Version");
+		versionCombo = new VersionSelectionComboWithLabel(composite, "C++ Version");
 		versionCombo.getCombo().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -111,7 +114,7 @@ public class SelectVersionWizardPage extends WizardPage {
 	}
 
 	private void selectAll(boolean select) {
-		CPPVersion selectedVersion = getSelectedVersion();
+		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
 		if (settingStore.containsKey(selectedVersion)) {
 			DialectBasedSetting setting = settingStore.get(selectedVersion);
 			setting.setChecked(select);
@@ -120,7 +123,7 @@ public class SelectVersionWizardPage extends WizardPage {
 	}
 
 	private void updateSettings() {
-		CPPVersion selectedVersion = getSelectedVersion();
+		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
 
 		DialectBasedSetting settings = null;
 		if (settingStore.containsKey(selectedVersion)) {
@@ -165,27 +168,50 @@ public class SelectVersionWizardPage extends WizardPage {
 		return dialectBasedSetting;
 	}
 
-	public CPPVersion getSelectedVersion() {
-		return (CPPVersion) versionCombo.getCombo().getData(versionCombo.getCombo().getText());
-	}
+	public Collection<DialectBasedSetting> getCheckedModifications() {
+		if (modificationTree != null) {
+			Object[] checkedElements = modificationTree.getCheckedElements();
+			List<DialectBasedSetting> checkedModifications = new ArrayList<>();
 
-	public List<DialectBasedSetting> getCheckedModifications() {
-		Object[] checkedElements = modificationTree.getCheckedElements();
-		List<DialectBasedSetting> checkedModifications = new ArrayList<>();
-
-		for (Object elem : checkedElements) {
-			if (elem instanceof DialectBasedSetting) {
-				DialectBasedSetting setting = (DialectBasedSetting) elem;
-				if (!setting.hasSubsettings()) {
-					checkedModifications.add(setting);
+			for (Object elem : checkedElements) {
+				if (elem instanceof DialectBasedSetting) {
+					DialectBasedSetting setting = (DialectBasedSetting) elem;
+					if (!setting.hasSubsettings()) {
+						checkedModifications.add(setting);
+					}
 				}
 			}
+			return checkedModifications;
+		} else {
+			DialectBasedSetting defaultRootSetting = EvaluateContributions.createSettings(getSelectedVersion());
+			return getCheckedSettings(defaultRootSetting);
 		}
-		return checkedModifications;
+	}
+
+	private Collection<DialectBasedSetting> getCheckedSettings(DialectBasedSetting parentSetting) {
+		List<DialectBasedSetting> checkedModification = new ArrayList<>();
+		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
+			if (sub.hasSubsettings()) {
+				checkedModification.addAll(getCheckedSettings(sub));
+			} else if (sub.isChecked()) {
+				checkedModification.add(sub);
+			}
+		}
+		return checkedModification;
 	}
 
 	@Override
 	public void setWizard(IWizard newWizard) {
 		super.setWizard(newWizard);
+	}
+
+	public CPPVersion getSelectedVersion() {
+		if (versionCombo != null && !versionCombo.isDisposed()) {
+			return versionCombo.getSelectedVersion();
+		} else {
+			String defaultCppVersionString = Activator.getDefault().getPreferenceStore()
+					.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
+			return CPPVersion.valueOf(defaultCppVersionString);
+		}
 	}
 }
