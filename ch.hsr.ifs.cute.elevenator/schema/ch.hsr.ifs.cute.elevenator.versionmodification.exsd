@@ -67,7 +67,8 @@
    <element name="ALL_VERSIONS">
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="version_modification"/>
+            <element ref="versionModification"/>
+            <element ref="group"/>
          </choice>
       </complexType>
    </element>
@@ -75,7 +76,8 @@
    <element name="CPP_98">
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="version_modification"/>
+            <element ref="versionModification"/>
+            <element ref="group"/>
          </choice>
       </complexType>
    </element>
@@ -83,7 +85,8 @@
    <element name="CPP_03">
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="version_modification"/>
+            <element ref="versionModification"/>
+            <element ref="group"/>
          </choice>
       </complexType>
    </element>
@@ -91,7 +94,8 @@
    <element name="CPP_11">
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="version_modification"/>
+            <element ref="versionModification"/>
+            <element ref="group"/>
          </choice>
       </complexType>
    </element>
@@ -99,7 +103,8 @@
    <element name="CPP_14">
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="version_modification"/>
+            <element ref="versionModification"/>
+            <element ref="group"/>
          </choice>
       </complexType>
    </element>
@@ -107,16 +112,14 @@
    <element name="CPP_17">
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="version_modification"/>
+            <element ref="versionModification"/>
+            <element ref="group"/>
          </choice>
       </complexType>
    </element>
 
-   <element name="version_modification">
+   <element name="versionModification">
       <complexType>
-         <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="version_modification"/>
-         </choice>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
@@ -124,7 +127,7 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="class" type="string">
+         <attribute name="operationClass" type="string">
             <annotation>
                <documentation>
                   
@@ -134,10 +137,26 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="checked_by_default" type="boolean" use="required">
+         <attribute name="checkedByDefault" type="boolean" use="required">
             <annotation>
                <documentation>
                   Defines if a Version Modification is checked is active by default
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="group">
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="versionModification"/>
+            <element ref="group"/>
+         </choice>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Name of the Version Modification Group.
                </documentation>
             </annotation>
          </attribute>
