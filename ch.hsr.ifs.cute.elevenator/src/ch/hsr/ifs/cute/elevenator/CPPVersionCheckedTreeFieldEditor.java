@@ -76,10 +76,10 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 
 	private void storeSetting(DialectBasedSetting parentSetting) {
 		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
-			if (sub.getPreferenceName() != null) {
+			if (!sub.hasSubsettings() && sub.getPreferenceName() != null) {
 				getPreferenceStore().setValue(sub.getPreferenceName(), sub.isChecked());
-				storeSetting(sub);
 			}
+			storeSetting(sub);
 		}
 		if (parentSetting.getPreferenceName() != null) {
 			getPreferenceStore().setValue(parentSetting.getPreferenceName(), parentSetting.isChecked());

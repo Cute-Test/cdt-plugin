@@ -51,10 +51,10 @@ public class EvaluateContributions {
 
 	private static void setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
 		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
-			if (sub.getPreferenceName() != null) {
-				sub.setChecked(Activator.getDefault().getPreferenceStore().getBoolean(sub.getPreferenceName()), false);
-				setSettingsBasedOnPreferences(sub);
+			if (!sub.hasSubsettings() && sub.getPreferenceName() != null) {
+				sub.setChecked(Activator.getDefault().getPreferenceStore().getBoolean(sub.getPreferenceName()));
 			}
+			setSettingsBasedOnPreferences(sub);
 		}
 	}
 

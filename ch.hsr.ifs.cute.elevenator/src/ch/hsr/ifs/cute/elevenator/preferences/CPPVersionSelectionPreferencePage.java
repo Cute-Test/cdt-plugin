@@ -1,7 +1,5 @@
 package ch.hsr.ifs.cute.elevenator.preferences;
 
-import java.text.MessageFormat;
-
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -48,7 +46,6 @@ public class CPPVersionSelectionPreferencePage extends FieldEditorPreferencePage
 
 		String selectedVersion = getPreferenceStore()
 				.getString(CppVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
-		String dialectSettingsPreference = getPreferenceString(selectedVersion);
 		modificationTree = new CPPVersionCheckedTreeFieldEditor(getFieldEditorParent(), rootSettings);
 		addField(modificationTree);
 	}
@@ -59,11 +56,6 @@ public class CPPVersionSelectionPreferencePage extends FieldEditorPreferencePage
 		if (event.getSource() == versionCombo) {
 			modificationTree.changeVersion(CPPVersion.valueOf(event.getNewValue().toString()));
 		}
-	}
-
-	private static String getPreferenceString(String version) {
-		return MessageFormat.format(CppVersionPreferenceConstants.ELEVENATOR_VERSION_SETTINGS_WITH_PLACEHOLDERS,
-				version);
 	}
 
 	@Override
