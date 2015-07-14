@@ -16,7 +16,14 @@ public class CPPVersionProjectSetting {
 		IEclipsePreferences projectNode = projectScope.getNode(Activator.PLUGIN_ID);
 		if (projectNode != null) {
 			String versionString = projectNode.get("c_dialect", null);
-			return CPPVersion.valueOf(versionString);
+			CPPVersion version = null;
+			try {
+				version = CPPVersion.valueOf(versionString);
+			} catch (IllegalArgumentException e) {
+				Status status = new Status(Status.ERROR, Activator.PLUGIN_ID, "Corrupted Version File");
+				Activator.getDefault().getLog().log(status);
+			}
+			return version;
 		} else {
 			Status status = new Status(Status.ERROR, Activator.PLUGIN_ID, "Failed to get Project Preference Node");
 			Activator.getDefault().getLog().log(status);

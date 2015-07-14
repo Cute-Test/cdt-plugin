@@ -15,6 +15,11 @@
          <appinfo>
             <meta.element />
          </appinfo>
+         <documentation>
+            The Elevenator Version Modification Operations enable the User to perform a set of actions that can be executed for a specific C dialect or for all dialects. 
+
+Supported dialects are CPP_98, CPP_03, CPP_11, CPP_14 and CPP_17
+         </documentation>
       </annotation>
       <complexType>
          <choice>
@@ -74,6 +79,11 @@
    </element>
 
    <element name="CPP_98">
+      <annotation>
+         <documentation>
+            Root Node for Version Modifications for CPP_98.
+         </documentation>
+      </annotation>
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="versionModification"/>
@@ -83,6 +93,11 @@
    </element>
 
    <element name="CPP_03">
+      <annotation>
+         <documentation>
+            Root Node for Version Modifications for CPP_03.
+         </documentation>
+      </annotation>
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="versionModification"/>
@@ -92,6 +107,11 @@
    </element>
 
    <element name="CPP_11">
+      <annotation>
+         <documentation>
+            Root Node for Version Modifications for CPP_11.
+         </documentation>
+      </annotation>
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="versionModification"/>
@@ -101,6 +121,11 @@
    </element>
 
    <element name="CPP_14">
+      <annotation>
+         <documentation>
+            Root Node for Version Modifications for CPP_14.
+         </documentation>
+      </annotation>
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="versionModification"/>
@@ -110,6 +135,11 @@
    </element>
 
    <element name="CPP_17">
+      <annotation>
+         <documentation>
+            Root Node for Version Modifications for CPP_17.
+         </documentation>
+      </annotation>
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="versionModification"/>
@@ -117,20 +147,27 @@
          </choice>
       </complexType>
    </element>
-   
+
    <element name="versionModification">
+      <annotation>
+         <documentation>
+            A Version Modification is one action that can be performed for a dialect. It can not have additional child nodes.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  The name of the Version Modification
+                  The name of the Version Modification.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="operationClass" type="string">
             <annotation>
                <documentation>
-                  
+                  The source code that is executed when the version modification is executed. It has to implement the ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation interface. 
+
+To use the interface you have to add the ch.hsr.ifs.cute.elevenator.definition package to the required bundle of your plugin.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation"/>
@@ -140,7 +177,7 @@
          <attribute name="checkedByDefault" type="boolean" use="required">
             <annotation>
                <documentation>
-                  Defines if a Version Modification is checked is active by default
+                  Defines if a Version Modification is checked is active by default. This is relevant when the plugin is installed for the first time. The preference page is initialized accodring to the checked modifications.
                </documentation>
             </annotation>
          </attribute>
@@ -148,6 +185,13 @@
    </element>
 
    <element name="group">
+      <annotation>
+         <documentation>
+            A group can have an arbitrary number of Version Modifications as children. It also can have an arbitrary  number of groups as children to form a tree like structure. 
+
+A group can not have any code attached that is executed.
+         </documentation>
+      </annotation>
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="versionModification"/>
