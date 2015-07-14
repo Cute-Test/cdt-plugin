@@ -82,7 +82,6 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 
 	@Override
 	protected String modelToString(Object model) {
-		System.out.println("modelToString^");
 		return null;
 	}
 
@@ -133,6 +132,13 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 			}
 		};
 		return (CheckboxTreeViewer) filteredTree.getViewer();
+	}
+
+	public void selectAll(boolean select) {
+		if (currentSettings != null) {
+			currentSettings.setChecked(select);
+			getTreeViewer().refresh();
+		}
 	}
 
 }

@@ -6,6 +6,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
@@ -14,11 +15,15 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.CPPVersionCheckedTreeFieldEditor;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar;
+import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar.ISelectionToolbarAction;
 import ch.hsr.ifs.cute.elevenator.view.VersionSelectionComboWithLabel;
 
 public class CPPVersionSelectionPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+	private static final int INDENT = 15;
 	private VersionSelectionComboWithLabel versionCombo;
 	private CPPVersionCheckedTreeFieldEditor modificationTree;
+	private Button defaultVersionButton;
 
 	public CPPVersionSelectionPreferencePage() {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
@@ -33,20 +38,33 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 	protected Control createContents(Composite parent) {
 		Composite top = new Composite(parent, SWT.LEFT);
 
-		// Sets the layout data for the top composite's
-		// place in its parent's layout.
 		top.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		// Sets the layout for the top composite's
-		// children to populate.
 		top.setLayout(new GridLayout());
 
-		versionCombo = new VersionSelectionComboWithLabel(top, "C++ Version");
+		versionCombo = new VersionSelectionComboWithLabel(top, "C++ Version", INDENT);
+
+		defaultVersionButton = new Button(versionCombo.getComposite(), SWT.PUSH);
+		GridData buttonLayoutData = new GridData(SWT.RIGHT, SWT.FILL, false, false);
+		buttonLayoutData.verticalIndent = INDENT;
+		defaultVersionButton.setLayoutData(buttonLayoutData);
+		defaultVersionButton
+				.setText("Set " + versionCombo.getSelectedVersion().getVersionString() + " as default version.");
+
 		versionCombo.getCombo().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				defaultVersionButton.setText(
+						"Set " + versionCombo.getSelectedVersion().getVersionString() + " as default version.");
 				CPPVersion selectedVersion = versionCombo.getSelectedVersion();
 				modificationTree.changeVersion(selectedVersion);
+			}
+		});
+		defaultVersionButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getPreferenceStore().setValue(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT,
+						versionCombo.getSelectedVersion().toString());
+				super.widgetSelected(e);
 			}
 		});
 
@@ -58,6 +76,13 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 		modificationTree.setPage(this);
 		modificationTree.setPreferenceStore(getPreferenceStore());
 		modificationTree.load();
+
+		new TreeSelectionToolbar(top, new ISelectionToolbarAction() {
+			@Override
+			public void selectAll(boolean selected) {
+				modificationTree.selectAll(selected);
+			}
+		}, SWT.NONE);
 
 		return top;
 	}

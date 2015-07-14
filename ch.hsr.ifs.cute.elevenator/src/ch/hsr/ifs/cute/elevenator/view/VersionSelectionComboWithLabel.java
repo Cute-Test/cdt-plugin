@@ -14,11 +14,14 @@ import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 public class VersionSelectionComboWithLabel extends Composite {
 	private Combo versionCombo;
 
-	private static final int INDENT = 0;
+	private final int INDENT;
 
-	public VersionSelectionComboWithLabel(Composite parent, String labelText) {
+	private Composite versionSelector;
+
+	public VersionSelectionComboWithLabel(Composite parent, String labelText, int verticalIndent) {
 		super(parent, SWT.NONE);
-		Composite versionSelector = new Composite(parent, SWT.NONE);
+		INDENT = verticalIndent;
+		versionSelector = new Composite(parent, SWT.NONE);
 		versionSelector.setLayout(new GridLayout(3, false));
 
 		Label label = new Label(versionSelector, SWT.NONE);
@@ -29,7 +32,7 @@ public class VersionSelectionComboWithLabel extends Composite {
 		label.setText(labelText);
 		label.setFont(parent.getFont());
 
-		GridData comboLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		GridData comboLayoutData = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
 		comboLayoutData.verticalIndent = INDENT;
 		versionCombo = new Combo(versionSelector, SWT.READ_ONLY);
 		versionCombo.setLayoutData(comboLayoutData);
@@ -51,5 +54,9 @@ public class VersionSelectionComboWithLabel extends Composite {
 
 	public Combo getCombo() {
 		return versionCombo;
+	}
+
+	public Composite getComposite() {
+		return versionSelector;
 	}
 }

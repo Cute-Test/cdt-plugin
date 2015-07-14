@@ -15,14 +15,10 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
@@ -33,17 +29,15 @@ import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
 import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar.ISelectionToolbarAction;
 
 public class SelectVersionWizardPage extends WizardPage {
-
-	private static final int INDENT = 15;
-
 	private VersionSelectionComboWithLabel versionCombo;
 	private CheckboxTreeViewer modificationTree;
 	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
 	public SelectVersionWizardPage() {
-		super("mypage");
+		super("C++ version selection for project");
 		setMessage("Select the C++ standard version for this project");
 		setTitle("C++ Version");
 		setPageComplete(true);
@@ -51,12 +45,11 @@ public class SelectVersionWizardPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		Font font = parent.getFont();
-
 		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setFont(parent.getFont());
 		composite.setLayout(new GridLayout(1, false));
 
-		versionCombo = new VersionSelectionComboWithLabel(composite, "C++ Version");
+		versionCombo = new VersionSelectionComboWithLabel(composite, "C++ Version", 0);
 		versionCombo.getCombo().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -85,28 +78,12 @@ public class SelectVersionWizardPage extends WizardPage {
 			}
 		});
 
-		ToolBar toolBar = new ToolBar(modificationsGroup, SWT.NONE);
-
-		ToolItem selectAll = new ToolItem(toolBar, SWT.PUSH);
-		Image selectAllIcon = new Image(parent.getDisplay(), getClass().getResourceAsStream("/icons/select_all.png"));
-		selectAll.setImage(selectAllIcon);
-		selectAll.addSelectionListener(new SelectionAdapter() {
+		new TreeSelectionToolbar(modificationsGroup, new ISelectionToolbarAction() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectAll(true);
+			public void selectAll(boolean selected) {
+				SelectVersionWizardPage.this.selectAll(selected);
 			}
-		});
-
-		ToolItem deselectAll = new ToolItem(toolBar, SWT.PUSH);
-		Image deselectAllIcon = new Image(parent.getDisplay(),
-				getClass().getResourceAsStream("/icons/deselect_all.png"));
-		deselectAll.setImage(deselectAllIcon);
-		deselectAll.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectAll(false);
-			}
-		});
+		}, SWT.NONE);
 
 		updateSettings();
 
@@ -127,8 +104,6 @@ public class SelectVersionWizardPage extends WizardPage {
 
 		DialectBasedSetting setting = settingStore.get(selectedVersion);
 		if (setting == null) {
-			setting = settingStore.get(selectedVersion);
-		} else {
 			setting = EvaluateContributions.createSettings(selectedVersion);
 			settingStore.put(selectedVersion, setting);
 		}
