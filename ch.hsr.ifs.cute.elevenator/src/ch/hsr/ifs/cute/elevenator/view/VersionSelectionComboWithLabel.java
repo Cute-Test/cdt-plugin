@@ -5,6 +5,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
@@ -14,28 +15,19 @@ import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 public class VersionSelectionComboWithLabel extends Composite {
 	private Combo versionCombo;
 
-	private final int INDENT;
-
-	private Composite versionSelector;
-
-	public VersionSelectionComboWithLabel(Composite parent, String labelText, int verticalIndent) {
+	public VersionSelectionComboWithLabel(Composite parent, String labelText, Control thirdControl) {
 		super(parent, SWT.NONE);
-		INDENT = verticalIndent;
-		versionSelector = new Composite(parent, SWT.NONE);
+		Composite versionSelector = new Composite(parent, SWT.NONE);
+		versionSelector.setFont(parent.getFont());
+		versionSelector.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
 		versionSelector.setLayout(new GridLayout(3, false));
 
 		Label label = new Label(versionSelector, SWT.NONE);
-		GridData labelLayoutData = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
-		labelLayoutData.horizontalIndent = INDENT;
-		labelLayoutData.verticalIndent = INDENT;
-		label.setLayoutData(labelLayoutData);
 		label.setText(labelText);
-		label.setFont(parent.getFont());
+		label.setFont(versionSelector.getFont());
 
-		GridData comboLayoutData = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
-		comboLayoutData.verticalIndent = INDENT;
 		versionCombo = new Combo(versionSelector, SWT.READ_ONLY);
-		versionCombo.setLayoutData(comboLayoutData);
 
 		for (CPPVersion cppVersion : CPPVersion.values()) {
 			versionCombo.add(cppVersion.getVersionString());
@@ -46,6 +38,11 @@ public class VersionSelectionComboWithLabel extends Composite {
 				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
 		CPPVersion versionToSelect = CPPVersion.valueOf(defaultCppVersionString);
 		versionCombo.select(versionToSelect.ordinal());
+		versionCombo.setFont(versionSelector.getFont());
+
+		if (thirdControl != null) {
+			thirdControl.setParent(versionSelector);
+		}
 	}
 
 	public CPPVersion getSelectedVersion() {
@@ -54,9 +51,5 @@ public class VersionSelectionComboWithLabel extends Composite {
 
 	public Combo getCombo() {
 		return versionCombo;
-	}
-
-	public Composite getComposite() {
-		return versionSelector;
 	}
 }

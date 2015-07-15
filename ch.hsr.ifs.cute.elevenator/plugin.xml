@@ -9,7 +9,7 @@
    <extension
          point="org.eclipse.cdt.managedbuilder.ui.newWizardPages">
       <wizardPage
-            ID="ch.hsr.ifs.cute.elevenator.wizardPage1"
+            ID="ch.hsr.ifs.cute.elevenator.wizardpage.version"
             operationClass="ch.hsr.ifs.cute.elevenator.SelectVersionOperation"
             pageClass="ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage">
          <projectType
@@ -29,7 +29,7 @@
       <page
             category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
             class="ch.hsr.ifs.cute.elevenator.preferences.CPPVersionSelectionPreferencePage"
-            id="ch.hsr.ifs.cute.elevenator.preferences.CppVersionSelectionPreferencePage"
+            id="ch.hsr.ifs.cute.elevenator.preferences.CPPVersionSelectionPreferencePage"
             name="%preferencePage.version.name">
          <keywordReference
                id="ch.hsr.ifs.cute.elevenator.keyword.version">

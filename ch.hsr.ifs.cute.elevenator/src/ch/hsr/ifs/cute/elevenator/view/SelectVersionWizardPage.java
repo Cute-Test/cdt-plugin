@@ -10,17 +10,19 @@ import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
@@ -29,6 +31,7 @@ import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
 import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
 import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
+import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionSelectionPreferencePage;
 import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar.ISelectionToolbarAction;
 
 public class SelectVersionWizardPage extends WizardPage {
@@ -49,7 +52,8 @@ public class SelectVersionWizardPage extends WizardPage {
 		composite.setFont(parent.getFont());
 		composite.setLayout(new GridLayout(1, false));
 
-		versionCombo = new VersionSelectionComboWithLabel(composite, "C++ Version", 0);
+		versionCombo = new VersionSelectionComboWithLabel(composite, "C++ Version",
+				createLink(composite, "Configure Workspace Settings..."));
 		versionCombo.getCombo().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -62,13 +66,13 @@ public class SelectVersionWizardPage extends WizardPage {
 		modificationsGroup.setText("Modifications:");
 		modificationsGroup.setLayout(new GridLayout());
 
-		DialectBasedSettingsProvider treeContentProvider = new DialectBasedSettingsProvider();
+		DialectBasedSettingsProvider provider = new DialectBasedSettingsProvider();
 
 		modificationTree = createTreeViewer(modificationsGroup);
-		modificationTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		modificationTree.setContentProvider(treeContentProvider);
-		modificationTree.setLabelProvider(treeContentProvider);
-		modificationTree.setCheckStateProvider(treeContentProvider);
+		// modificationTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		modificationTree.setContentProvider(provider);
+		modificationTree.setLabelProvider(provider);
+		modificationTree.setCheckStateProvider(provider);
 		modificationTree.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
@@ -120,6 +124,7 @@ public class SelectVersionWizardPage extends WizardPage {
 				return new CheckboxTreeViewer(parent, style);
 			}
 		};
+		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		return (CheckboxTreeViewer) filteredTree.getViewer();
 	}
 
@@ -175,11 +180,6 @@ public class SelectVersionWizardPage extends WizardPage {
 		return checkedModification;
 	}
 
-	@Override
-	public void setWizard(IWizard newWizard) {
-		super.setWizard(newWizard);
-	}
-
 	public CPPVersion getSelectedVersion() {
 		if (versionCombo != null && !versionCombo.isDisposed()) {
 			return versionCombo.getSelectedVersion();
@@ -188,5 +188,29 @@ public class SelectVersionWizardPage extends WizardPage {
 					.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
 			return CPPVersion.valueOf(defaultCppVersionString);
 		}
+	}
+
+	private Link createLink(Composite composite, String text) {
+		Link link = new Link(composite, SWT.NONE);
+		link.setFont(composite.getFont());
+		link.setText("<A>" + text + "</A>"); //$NON-NLS-1$//$NON-NLS-2$
+		GridData gridData = new GridData(SWT.END, SWT.END, true, false);
+		link.setLayoutData(gridData);
+		link.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				PreferencesUtil
+						.createPreferenceDialogOn(getShell(), CPPVersionSelectionPreferencePage.PAGE_ID, null, null)
+						.open();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				PreferencesUtil
+						.createPreferenceDialogOn(getShell(), CPPVersionSelectionPreferencePage.PAGE_ID, null, null)
+						.open();
+			}
+		});
+		return link;
 	}
 }

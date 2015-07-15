@@ -20,10 +20,11 @@ import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar.ISelectionToolbarAct
 import ch.hsr.ifs.cute.elevenator.view.VersionSelectionComboWithLabel;
 
 public class CPPVersionSelectionPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
-	private static final int INDENT = 15;
 	private VersionSelectionComboWithLabel versionCombo;
 	private CPPVersionCheckedTreeFieldEditor modificationTree;
 	private Button defaultVersionButton;
+
+	public static final String PAGE_ID = "ch.hsr.ifs.cute.elevenator.preferences.CPPVersionSelectionPreferencePage";
 
 	public CPPVersionSelectionPreferencePage() {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
@@ -41,11 +42,9 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 		top.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		top.setLayout(new GridLayout());
 
-		versionCombo = new VersionSelectionComboWithLabel(top, "C++ Version", INDENT);
-
-		defaultVersionButton = new Button(versionCombo.getComposite(), SWT.PUSH);
+		defaultVersionButton = new Button(top, SWT.PUSH);
+		versionCombo = new VersionSelectionComboWithLabel(top, "C++ Version", defaultVersionButton);
 		GridData buttonLayoutData = new GridData(SWT.RIGHT, SWT.FILL, false, false);
-		buttonLayoutData.verticalIndent = INDENT;
 		defaultVersionButton.setLayoutData(buttonLayoutData);
 		defaultVersionButton
 				.setText("Set " + versionCombo.getSelectedVersion().getVersionString() + " as default version.");
