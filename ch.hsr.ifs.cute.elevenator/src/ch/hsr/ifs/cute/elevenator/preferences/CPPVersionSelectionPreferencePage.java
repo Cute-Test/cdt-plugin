@@ -65,6 +65,7 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage
 			public void widgetSelected(SelectionEvent e) {
 				getPreferenceStore().setValue(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT,
 						versionCombo.getSelectedVersion().toString());
+				updateDefaultVersionButton();
 				updateDefaultVersionLabel();
 				super.widgetSelected(e);
 			}
@@ -103,6 +104,12 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage
 	private void updateDefaultVersionButton() {
 		String versionString = selectedVersionString();
 		defaultVersionButton.setText("Set " + versionString + " as Default Version");
+
+		String storedDefaultVersionString = getPreferenceStore()
+				.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
+		String selectedDefaultVersionString = versionCombo.getSelectedVersion().toString();
+		boolean versionMatches = storedDefaultVersionString.equals(selectedDefaultVersionString);
+		defaultVersionButton.setEnabled(!versionMatches);
 	}
 
 	private String selectedVersionString() {
