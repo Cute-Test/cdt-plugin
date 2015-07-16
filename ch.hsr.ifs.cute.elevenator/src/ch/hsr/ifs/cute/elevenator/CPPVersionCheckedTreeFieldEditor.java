@@ -25,7 +25,7 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
 	public CPPVersionCheckedTreeFieldEditor(Composite parent, CPPVersion selectedVersion) {
-		super("this_elevenator_preference_will_not_be_used", "Settings", parent);
+		super("this_elevenator_preference_will_not_be_used", "", parent);
 		this.selectedVersion = selectedVersion;
 		setEmptySelectionAllowed(true);
 
