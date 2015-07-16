@@ -17,10 +17,10 @@ import ch.hsr.ifs.cute.elevenator.CPPVersionCheckedTreeFieldEditor;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar;
 import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar.ISelectionToolbarAction;
-import ch.hsr.ifs.cute.elevenator.view.VersionSelectionComboWithLabel;
+import ch.hsr.ifs.cute.elevenator.view.VersionSelectionCombo;
 
 public class CPPVersionSelectionPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
-	private VersionSelectionComboWithLabel versionCombo;
+	private VersionSelectionCombo versionCombo;
 	private CPPVersionCheckedTreeFieldEditor modificationTree;
 	private Button defaultVersionButton;
 
@@ -43,13 +43,13 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 		top.setLayout(new GridLayout());
 
 		defaultVersionButton = new Button(top, SWT.PUSH);
-		versionCombo = new VersionSelectionComboWithLabel(top, "C++ Version", defaultVersionButton);
+		versionCombo = new VersionSelectionCombo(top, "C++ Version", SWT.NONE);
 		GridData buttonLayoutData = new GridData(SWT.RIGHT, SWT.FILL, false, false);
 		defaultVersionButton.setLayoutData(buttonLayoutData);
 		defaultVersionButton
 				.setText("Set " + versionCombo.getSelectedVersion().getVersionString() + " as default version.");
 
-		versionCombo.getCombo().addSelectionListener(new SelectionAdapter() {
+		versionCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				defaultVersionButton.setText(

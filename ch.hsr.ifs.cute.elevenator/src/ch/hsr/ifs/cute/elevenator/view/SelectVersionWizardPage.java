@@ -28,14 +28,13 @@ import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
 import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
-import ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation;
-import ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation;
 import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionSelectionPreferencePage;
 import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar.ISelectionToolbarAction;
 
-public class SelectVersionWizardPage extends WizardPage {
-	private VersionSelectionComboWithLabel versionCombo;
+public class SelectVersionWizardPage extends WizardPage implements ISelectionToolbarAction {
+
+	private VersionSelectionCombo versionCombo;
 	private CheckboxTreeViewer modificationTree;
 	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
@@ -50,26 +49,28 @@ public class SelectVersionWizardPage extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setFont(parent.getFont());
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new GridLayout(2, false));
 
-		versionCombo = new VersionSelectionComboWithLabel(composite, "C++ Version",
-				createLink(composite, "Configure Workspace Settings..."));
-		versionCombo.getCombo().addSelectionListener(new SelectionAdapter() {
+		versionCombo = new VersionSelectionCombo(composite, "C++ Version", SWT.NONE);
+		versionCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				updateSettings();
 			}
 		});
 
+		Link workspaceSettingsLink = createLink(composite, "Configure Workspace Settings...");
+		workspaceSettingsLink.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
+
 		Group modificationsGroup = new Group(composite, SWT.NONE);
-		modificationsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		modificationsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		modificationsGroup.setText("Modifications:");
-		modificationsGroup.setLayout(new GridLayout());
+		modificationsGroup.setLayout(new GridLayout(1, false));
 
 		DialectBasedSettingsProvider provider = new DialectBasedSettingsProvider();
 
 		modificationTree = createTreeViewer(modificationsGroup);
-		// modificationTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		modificationTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		modificationTree.setContentProvider(provider);
 		modificationTree.setLabelProvider(provider);
 		modificationTree.setCheckStateProvider(provider);
@@ -82,19 +83,16 @@ public class SelectVersionWizardPage extends WizardPage {
 			}
 		});
 
-		new TreeSelectionToolbar(modificationsGroup, new ISelectionToolbarAction() {
-			@Override
-			public void selectAll(boolean selected) {
-				SelectVersionWizardPage.this.selectAll(selected);
-			}
-		}, SWT.NONE);
+		TreeSelectionToolbar selectionToolbar = new TreeSelectionToolbar(modificationsGroup, this, SWT.NONE);
+		selectionToolbar.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false));
 
 		updateSettings();
 
 		setControl(composite);
 	}
 
-	private void selectAll(boolean select) {
+	@Override
+	public void selectAll(boolean select) {
 		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
 		DialectBasedSetting setting = settingStore.get(selectedVersion);
 		if (setting != null) {
@@ -112,40 +110,6 @@ public class SelectVersionWizardPage extends WizardPage {
 			settingStore.put(selectedVersion, setting);
 		}
 		modificationTree.setInput(setting);
-	}
-
-	protected CheckboxTreeViewer createTreeViewer(Composite parent) {
-		PatternFilter filter = new PatternFilter();
-		filter.setIncludeLeadingWildcard(true);
-		FilteredTree filteredTree = new FilteredTree(parent,
-				SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION, filter, true) {
-			@Override
-			protected TreeViewer doCreateTreeViewer(Composite parent, int style) {
-				return new CheckboxTreeViewer(parent, style);
-			}
-		};
-		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		return (CheckboxTreeViewer) filteredTree.getViewer();
-	}
-
-	private DialectBasedSetting createSettings() {
-		DialectBasedSetting dialectBasedSetting = new DialectBasedSetting("C++ 11 Settings");
-
-		DialectBasedSetting setCompilerFlag = new DialectBasedSetting("Set Compiler Flag",
-				new ChangeCompilerFlagOperation());
-		dialectBasedSetting.addSubsetting(setCompilerFlag);
-
-		DialectBasedSetting enableCodanMarkers = new DialectBasedSetting("Enable Codan Markers");
-		dialectBasedSetting.addSubsetting(enableCodanMarkers);
-		DialectBasedSetting enableElevator = new DialectBasedSetting("Enable Elevator");
-		enableCodanMarkers.addSubsetting(enableElevator);
-		DialectBasedSetting enablePointerminator = new DialectBasedSetting("Enable Pointerminator");
-		enableCodanMarkers.addSubsetting(enablePointerminator);
-
-		DialectBasedSetting setIndexFlag = new DialectBasedSetting("Set Index Flag", new ChangeIndexFlagOperation());
-		dialectBasedSetting.addSubsetting(setIndexFlag);
-
-		return dialectBasedSetting;
 	}
 
 	public Collection<DialectBasedSetting> getCheckedModifications() {
@@ -190,12 +154,24 @@ public class SelectVersionWizardPage extends WizardPage {
 		}
 	}
 
+	protected CheckboxTreeViewer createTreeViewer(Composite parent) {
+		PatternFilter filter = new PatternFilter();
+		filter.setIncludeLeadingWildcard(true);
+		FilteredTree filteredTree = new FilteredTree(parent,
+				SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION, filter, true) {
+			@Override
+			protected TreeViewer doCreateTreeViewer(Composite parent, int style) {
+				return new CheckboxTreeViewer(parent, style);
+			}
+		};
+		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		return (CheckboxTreeViewer) filteredTree.getViewer();
+	}
+
 	private Link createLink(Composite composite, String text) {
 		Link link = new Link(composite, SWT.NONE);
 		link.setFont(composite.getFont());
 		link.setText("<A>" + text + "</A>"); //$NON-NLS-1$//$NON-NLS-2$
-		GridData gridData = new GridData(SWT.END, SWT.END, true, false);
-		link.setLayoutData(gridData);
 		link.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
