@@ -14,13 +14,13 @@ import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 public class EnableElevatorOperation implements IVersionModificationOperation {
 
 	@Override
-	public void perform(IProject project, CPPVersion selectedVersion) {
+	public void perform(IProject project, CPPVersion selectedVersion, boolean enabled) {
 
 		// EnableCodanCheckers.enableProblem(project, true, InitializationChecker.UNINITIALIZED_VAR);
 		// EnableCodanCheckers.enableProblem(project, false, InitializationChecker.DEFAULT_CTOR);
 		// EnableCodanCheckers.enableProblem(project, true, InitializationChecker.NULL_MACRO);
 
-		EnableCodanCheckers.enableProblems(project, false, InitializationChecker.UNINITIALIZED_VAR,
+		EnableCodanCheckers.enableProblems(project, enabled, InitializationChecker.UNINITIALIZED_VAR,
 				InitializationChecker.DEFAULT_CTOR, InitializationChecker.NULL_MACRO);
 
 		ProjectScope ps = new ProjectScope(project);

@@ -20,7 +20,11 @@ import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 
 	@Override
-	public void perform(IProject project, CPPVersion selectedVersion) {
+	public void perform(IProject project, CPPVersion selectedVersion, boolean enabled) {
+
+		if (!enabled) {
+			return;
+		}
 
 		ILanguageSettingsProvider minGWProvider = LanguageSettingsManager
 				.getWorkspaceProvider("org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetectorMinGW");

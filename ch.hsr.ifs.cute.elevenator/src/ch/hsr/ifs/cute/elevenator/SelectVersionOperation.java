@@ -15,7 +15,6 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
-import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionProjectSetting;
 import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage;
@@ -36,14 +35,14 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 		} catch (IllegalArgumentException e) {
 		}
 
-		Collection<DialectBasedSetting> checkedModifications = null;
+		Collection<DialectBasedSetting> modifications = null;
 		// our wizard page can be anywhere, since other plug-ins can use the same extension point and add pages after
 		// ours. The C++ version selection page must not be the last one in this wizard so iterate through all and do
 		// not just get the last page
 		for (IWizardPage page : pages) {
 			if (page instanceof SelectVersionWizardPage) {
 				selectedVersion = ((SelectVersionWizardPage) page).getSelectedVersion();
-				checkedModifications = ((SelectVersionWizardPage) page).getCheckedModifications();
+				modifications = ((SelectVersionWizardPage) page).getVersionModifications();
 				break;
 			}
 		}
@@ -54,27 +53,28 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 
 			CPPVersionProjectSetting.saveProjectVersion(project, selectedVersion);
 
-			for (DialectBasedSetting setting : checkedModifications) {
-				if (setting.getOperation() != null) {
-					System.out.println("Executing version operation: " + setting.getName());
-					executeExtension(setting.getOperation(), project, selectedVersion);
+			if (modifications != null) {
+				for (DialectBasedSetting setting : modifications) {
+					if (setting.getOperation() != null) {
+						System.out.println("Executing version operation: " + setting.getName());
+						executeExtension(setting, project, selectedVersion);
+					}
 				}
 			}
 		}
 
 	}
 
-	private void executeExtension(final IVersionModificationOperation versionOperation, final IProject project,
-			final CPPVersion version) {
+	private void executeExtension(final DialectBasedSetting setting, final IProject project, final CPPVersion version) {
 		ISafeRunnable runnable = new ISafeRunnable() {
 			@Override
 			public void handleException(Throwable e) {
-				System.err.println("Exception in version operation extension: " + versionOperation.getClass());
+				System.err.println("Exception in version operation extension: " + setting.getOperation().getClass());
 			}
 
 			@Override
 			public void run() throws Exception {
-				versionOperation.perform(project, version);
+				setting.getOperation().perform(project, version, setting.isChecked());
 			}
 		};
 		SafeRunner.run(runnable);

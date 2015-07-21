@@ -112,36 +112,26 @@ public class SelectVersionWizardPage extends WizardPage implements ISelectionToo
 		modificationTree.setInput(setting);
 	}
 
-	public Collection<DialectBasedSetting> getCheckedModifications() {
-		if (modificationTree != null) {
-			Object[] checkedElements = modificationTree.getCheckedElements();
-			List<DialectBasedSetting> checkedModifications = new ArrayList<>();
+	public Collection<DialectBasedSetting> getVersionModifications() {
+		CPPVersion selectedVersion = getSelectedVersion();
 
-			for (Object elem : checkedElements) {
-				if (elem instanceof DialectBasedSetting) {
-					DialectBasedSetting setting = (DialectBasedSetting) elem;
-					if (!setting.hasSubsettings()) {
-						checkedModifications.add(setting);
-					}
-				}
-			}
-			return checkedModifications;
-		} else {
-			DialectBasedSetting defaultRootSetting = EvaluateContributions.createSettings(getSelectedVersion());
-			return getCheckedSettings(defaultRootSetting);
+		DialectBasedSetting rootSetting = settingStore.get(selectedVersion);
+		if (rootSetting == null) {
+			rootSetting = EvaluateContributions.createSettings(selectedVersion);
 		}
+		return listSettings(rootSetting);
 	}
 
-	private Collection<DialectBasedSetting> getCheckedSettings(DialectBasedSetting parentSetting) {
-		List<DialectBasedSetting> checkedModification = new ArrayList<>();
-		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
-			if (sub.hasSubsettings()) {
-				checkedModification.addAll(getCheckedSettings(sub));
-			} else if (sub.isChecked()) {
-				checkedModification.add(sub);
+	private Collection<DialectBasedSetting> listSettings(DialectBasedSetting setting) {
+		List<DialectBasedSetting> settingList = new ArrayList<>();
+		for (DialectBasedSetting subSetting : setting.getSubsettings()) {
+			if (subSetting.hasSubsettings()) {
+				settingList.addAll(listSettings(subSetting));
+			} else {
+				settingList.add(subSetting);
 			}
 		}
-		return checkedModification;
+		return settingList;
 	}
 
 	public CPPVersion getSelectedVersion() {

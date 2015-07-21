@@ -13,7 +13,12 @@ import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 public class ChangeCompilerFlagOperation implements IVersionModificationOperation {
 
 	@Override
-	public void perform(IProject project, CPPVersion selectedVersion) {
+	public void perform(IProject project, CPPVersion selectedVersion, boolean enabled) {
+
+		if (!enabled) {
+			return;
+		}
+
 		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 		IConfiguration[] configs = info.getManagedProject().getConfigurations();
 		for (IConfiguration config : configs) {
