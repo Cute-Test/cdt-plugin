@@ -9,7 +9,7 @@
 	 		name="C++ Enhancements Checker">
 	 		
 		    <problem               
-			   	defaultEnabled="true"
+			   	defaultEnabled="false"
 			   	defaultSeverity="Warning"
 			   	description="Elevator Initialization Warning"
 			   	id="ch.hsr.ifs.elevator.uninitialized"
@@ -20,7 +20,7 @@
 		    </problem>
 		    
 		    <problem               
-				defaultEnabled="true"
+				defaultEnabled="false"
 			   	defaultSeverity="Warning"
 			   	description="Elevator Initialization Warning"
 			   	id="ch.hsr.ifs.elevator.defaultctor"
@@ -31,7 +31,7 @@
 		    </problem>
       <problem
             category="ch.hsr.ifs.elevator.enhancements"
-            defaultEnabled="true"
+            defaultEnabled="false"
             defaultSeverity="Warning"
             description="Elevator Initialization Warning"
             id="ch.hsr.ifs.elevator.nullMacro"
