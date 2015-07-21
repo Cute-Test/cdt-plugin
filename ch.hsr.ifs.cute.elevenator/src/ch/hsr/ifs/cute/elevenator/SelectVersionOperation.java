@@ -25,10 +25,9 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		IWizardPage[] pages = MBSCustomPageManager.getCustomPages();
 		IWizard wizard = pages[0].getWizard();
+
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-
 		String defaultCppVersion = store.getString(CPPVersionPreferenceConstants.ELEVENATOR_VERSION_DEFAULT);
-
 		CPPVersion selectedVersion = CPPVersion.DEFAULT;
 		try {
 			selectedVersion = CPPVersion.valueOf(defaultCppVersion);
@@ -37,7 +36,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 
 		Collection<DialectBasedSetting> modifications = null;
 		// our wizard page can be anywhere, since other plug-ins can use the same extension point and add pages after
-		// ours. The C++ version selection page must not be the last one in this wizard so iterate through all and do
+		// ours. The C++ version selection page may not be the last one in this wizard so iterate through all and do
 		// not just get the last page
 		for (IWizardPage page : pages) {
 			if (page instanceof SelectVersionWizardPage) {
@@ -56,7 +55,7 @@ public class SelectVersionOperation implements IRunnableWithProgress {
 			if (modifications != null) {
 				for (DialectBasedSetting setting : modifications) {
 					if (setting.getOperation() != null) {
-						System.out.println("Executing version operation: " + setting.getName());
+						// System.out.println("Executing version operation: " + setting.getName());
 						executeExtension(setting, project, selectedVersion);
 					}
 				}

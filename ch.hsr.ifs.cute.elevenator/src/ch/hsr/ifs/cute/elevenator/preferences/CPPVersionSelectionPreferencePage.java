@@ -1,6 +1,8 @@
 package ch.hsr.ifs.cute.elevenator.preferences;
 
+import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,6 +19,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.CPPVersionCheckedTreeFieldEditor;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage;
 import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar;
 import ch.hsr.ifs.cute.elevenator.view.TreeSelectionToolbar.ISelectionToolbarAction;
 import ch.hsr.ifs.cute.elevenator.view.VersionSelectionCombo;
@@ -112,6 +115,20 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage
 		defaultVersionButton.setEnabled(!versionMatches);
 	}
 
+	private void updateWizardFromPreferences() {
+		try {
+			IWizardPage[] pages = MBSCustomPageManager.getCustomPages();
+			for (IWizardPage page : pages) {
+				if (page instanceof SelectVersionWizardPage) {
+					((SelectVersionWizardPage) page).refreshSettings();
+					break;
+				}
+			}
+		} catch (NullPointerException e) {
+			// The wizard is not open, do nothing
+		}
+	}
+
 	private String selectedVersionString() {
 		return versionCombo.getSelectedVersion().getVersionString();
 	}
@@ -125,6 +142,7 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage
 	@Override
 	public boolean performOk() {
 		modificationTree.store();
+		updateWizardFromPreferences();
 		return true;
 	}
 

@@ -101,6 +101,14 @@ public class SelectVersionWizardPage extends WizardPage implements ISelectionToo
 		}
 	}
 
+	public void refreshSettings() {
+		for (CPPVersion version : settingStore.keySet()) {
+			DialectBasedSetting setting = EvaluateContributions.createSettings(version);
+			settingStore.put(version, setting);
+		}
+		updateSettings();
+	}
+
 	private void updateSettings() {
 		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
 

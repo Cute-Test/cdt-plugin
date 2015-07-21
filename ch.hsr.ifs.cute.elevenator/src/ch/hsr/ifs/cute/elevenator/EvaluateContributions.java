@@ -15,6 +15,12 @@ import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 public class EvaluateContributions {
 	private static final String IVERSIONMODIFICATOR_ID = "ch.hsr.ifs.cute.elevenator.versionmodification";
 
+	private static final String TAG_ALL_VERSIONS = "ALL_VERSIONS";
+	private static final String TAG_NAME = "name";
+	private static final String TAG_CHECKED_BY_DEFAULT = "checkedByDefault";
+	private static final String TAG_VERSION_MODIFICATION = "versionModification";
+	private static final String TAG_OPERATION_CLASS = "operationClass";
+
 	public static DialectBasedSetting createSettings(CPPVersion selectedVersion) {
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -27,7 +33,7 @@ public class EvaluateContributions {
 			boolean supportedVersion = false;
 
 			String versionName = configElement.getName();
-			if (versionName.equals("ALL_VERSIONS")) {
+			if (versionName.equals(TAG_ALL_VERSIONS)) {
 				supportedVersion = true;
 			} else {
 				CPPVersion version = CPPVersion.valueOf(versionName);
@@ -35,8 +41,6 @@ public class EvaluateContributions {
 			}
 
 			if (supportedVersion) {
-				System.out.println("Reading extensions for: " + selectedVersion);
-				// needed to build a unique preference name
 				Bundle contributingBundle = getContributingBundle(configElement);
 				for (IConfigurationElement childElement : configElement.getChildren()) {
 					createChildSettings(childElement, settings, contributingBundle, selectedVersion.toString());
@@ -63,13 +67,13 @@ public class EvaluateContributions {
 
 		IVersionModificationOperation versionModification = extractVersionModification(element);
 
-		String settingName = element.getAttribute("name");
+		String settingName = element.getAttribute(TAG_NAME);
 		String preferenceName = DialectBasedSetting.buildPreferenceName(contributingBundle, versionName, settingName);
 		DialectBasedSetting settings = new DialectBasedSetting(settingName, versionModification, preferenceName);
 		parentSettings.addSubsetting(settings);
 
 		// defaults to false if attribute not present
-		settings.setCheckedByDefault(Boolean.valueOf(element.getAttribute("checkedByDefault")));
+		settings.setCheckedByDefault(Boolean.valueOf(element.getAttribute(TAG_CHECKED_BY_DEFAULT)));
 
 		for (IConfigurationElement childElement : element.getChildren()) {
 			createChildSettings(childElement, settings, contributingBundle, versionName);
@@ -79,16 +83,15 @@ public class EvaluateContributions {
 
 	private static IVersionModificationOperation extractVersionModification(IConfigurationElement element) {
 		try {
-			if (!element.getName().equals("versionModification")) {
+			if (!element.getName().equals(TAG_VERSION_MODIFICATION)) {
 				return null;
 			}
-			if (element.getAttribute("operationClass") == null) {
+			if (element.getAttribute(TAG_OPERATION_CLASS) == null) {
 				return null;
 			}
 
-			final Object o = element.createExecutableExtension("operationClass");
+			final Object o = element.createExecutableExtension(TAG_OPERATION_CLASS);
 			if (o instanceof IVersionModificationOperation) {
-				System.out.println("Found version modification: " + o.getClass().toString());
 				return (IVersionModificationOperation) o;
 			}
 		} catch (CoreException ex) {
