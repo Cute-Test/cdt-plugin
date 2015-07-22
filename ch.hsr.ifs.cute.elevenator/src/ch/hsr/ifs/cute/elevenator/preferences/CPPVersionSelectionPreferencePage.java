@@ -70,7 +70,6 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage
 						versionCombo.getSelectedVersion().toString());
 				updateDefaultVersionButton();
 				updateDefaultVersionLabel();
-				super.widgetSelected(e);
 			}
 
 		});
