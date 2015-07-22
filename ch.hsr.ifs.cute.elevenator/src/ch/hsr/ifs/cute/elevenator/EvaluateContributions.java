@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.spi.RegistryContributor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
@@ -56,7 +57,13 @@ public class EvaluateContributions {
 	private static void setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
 		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
 			if (!sub.hasSubsettings() && sub.getPreferenceName() != null) {
-				sub.setChecked(Activator.getDefault().getPreferenceStore().getBoolean(sub.getPreferenceName()));
+				String prefName = sub.getPreferenceName();
+				IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
+				if (prefStore.contains(prefName)) {
+					sub.setChecked(prefStore.getBoolean(prefName));
+				} else {
+					sub.setChecked(sub.isCheckedByDefault());
+				}
 			}
 			setSettingsBasedOnPreferences(sub);
 		}
