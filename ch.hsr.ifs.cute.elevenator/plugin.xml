@@ -12,12 +12,6 @@
             ID="ch.hsr.ifs.cute.elevenator.wizardpage.version"
             operationClass="ch.hsr.ifs.cute.elevenator.SelectVersionOperation"
             pageClass="ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage">
-         <projectType
-               projectTypeID="cdt.managedbuild.target.gnu.mingw.exe">
-         </projectType>
-         <toolchain
-               toolchainID="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
-         </toolchain>
          <nature
                natureID="org.eclipse.cdt.core.ccnature">
          </nature>
