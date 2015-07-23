@@ -171,4 +171,14 @@
 		symbolicIcon="warning">
 	</specification>
   </extension>
+  
+  <extension point="ch.hsr.ifs.cute.elevenator.versionmodification">
+  	<ALL_VERSIONS>
+  		<versionModification
+  			checkedByDefault="false"
+  			name="Enable CharWars"
+  			operationClass="ch.hsr.ifs.cute.charwars.operation.EnableCharWarsOperation">
+  		</versionModification>
+  	</ALL_VERSIONS>
+  </extension>
 </plugin>
