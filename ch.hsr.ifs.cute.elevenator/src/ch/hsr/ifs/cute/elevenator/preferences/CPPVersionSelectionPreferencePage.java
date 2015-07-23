@@ -1,6 +1,8 @@
 package ch.hsr.ifs.cute.elevenator.preferences;
 
+import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPageManager;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,6 +19,7 @@ import ch.hsr.ifs.cute.elevenator.ModificationStore;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.view.DefaultVersionSelector;
 import ch.hsr.ifs.cute.elevenator.view.ModificationTree;
+import ch.hsr.ifs.cute.elevenator.view.SelectVersionWizardPage;
 import ch.hsr.ifs.cute.elevenator.view.VersionSelectionCombo;
 
 public class CPPVersionSelectionPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
@@ -82,6 +85,21 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 	@Override
 	public boolean performOk() {
 		modificationStore.savePreferences();
+		updateWizardFromPreferences();
 		return super.performOk();
+	}
+
+	private void updateWizardFromPreferences() {
+		try {
+			IWizardPage[] pages = MBSCustomPageManager.getCustomPages();
+			for (IWizardPage page : pages) {
+				if (page instanceof SelectVersionWizardPage) {
+					((SelectVersionWizardPage) page).refreshSettings();
+					break;
+				}
+			}
+		} catch (NullPointerException e) {
+			// The wizard is not open, do nothing
+		}
 	}
 }
