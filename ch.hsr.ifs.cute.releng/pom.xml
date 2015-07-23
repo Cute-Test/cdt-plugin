@@ -20,8 +20,8 @@
 			</activation>
 			<properties>
 				<os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
-				<eclipse-version>luna</eclipse-version>
-				<eclipse-version-number>4.4</eclipse-version-number>
+				<eclipse-version>mars</eclipse-version>
+				<eclipse-version-number>4.5</eclipse-version-number>
 			</properties>
 		</profile>
 		<profile>
