@@ -54,11 +54,20 @@ public class EvaluateContributions {
 		return settings;
 	}
 
+	private static void _setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
+		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
+			if (!sub.hasSubsettings() && sub.getPreferenceName() != null) {
+				sub.setChecked(Activator.getDefault().getPreferenceStore().getBoolean(sub.getPreferenceName()));
+			}
+			setSettingsBasedOnPreferences(sub);
+		}
+	}
+
 	private static void setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
+		IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
 		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
 			if (!sub.hasSubsettings() && sub.getPreferenceName() != null) {
 				String prefName = sub.getPreferenceName();
-				IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
 				if (prefStore.contains(prefName)) {
 					sub.setChecked(prefStore.getBoolean(prefName));
 				} else {
