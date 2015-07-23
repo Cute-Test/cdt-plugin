@@ -29,3 +29,4 @@ Export-Package: ch.hsr.ifs.cute.charwars.checkers,ch.hsr.ifs.cute.char
 Bundle-ClassPath: lib/annotations.jar,
  lib/jsr305.jar,
  .
+Import-Package: ch.hsr.ifs.cute.elevenator.definition

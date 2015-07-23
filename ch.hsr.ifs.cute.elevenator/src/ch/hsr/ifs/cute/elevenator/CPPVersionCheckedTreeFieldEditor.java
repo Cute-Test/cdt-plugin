@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.cdt.codan.internal.ui.preferences.CheckedTreeEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -93,9 +94,12 @@ public class CPPVersionCheckedTreeFieldEditor extends CheckedTreeEditor {
 	}
 
 	private void storeSetting(DialectBasedSetting parentSetting) {
+		IPreferenceStore prefStore = getPreferenceStore();
 		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
-			if (!sub.hasSubsettings() && sub.getPreferenceName() != null) {
-				getPreferenceStore().setValue(sub.getPreferenceName(), sub.isChecked());
+			String prefName = sub.getPreferenceName();
+			if (!sub.hasSubsettings() && prefName != null) {
+				prefStore.setDefault(prefName, sub.isCheckedByDefault());
+				prefStore.setValue(prefName, sub.isChecked());
 			}
 			storeSetting(sub);
 		}
