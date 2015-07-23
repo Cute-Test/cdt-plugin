@@ -12,6 +12,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
+import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
+import ch.hsr.ifs.cute.elevenator.ModificationStore;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.view.DefaultVersionSelector;
 import ch.hsr.ifs.cute.elevenator.view.ModificationTree;
@@ -24,6 +26,8 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 	private VersionSelectionCombo versionCombo;
 	private ModificationTree modificationTree;
 	private DefaultVersionSelector defaultVersionSelector;
+
+	private ModificationStore modificationStore = new ModificationStore();
 
 	public CPPVersionSelectionPreferencePage() {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
@@ -40,9 +44,7 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 		versionCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				CPPVersion selectedVersion = versionCombo.getSelectedVersion();
-				// modificationTree.changeVersion(selectedVersion);
-				defaultVersionSelector.updateDefaultVersionButton();
+				updateSettings();
 			}
 		});
 
@@ -52,25 +54,34 @@ public class CPPVersionSelectionPreferencePage extends PreferencePage implements
 		modificationTree = new ModificationTree(composite, SWT.NONE);
 		modificationTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 
+		updateSettings();
+
 		return composite;
+	}
+
+	private void updateSettings() {
+		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
+		DialectBasedSetting setting = modificationStore.get(selectedVersion);
+		modificationTree.setInput(setting);
+		defaultVersionSelector.updateDefaultVersionButton();
 	}
 
 	@Override
 	public void init(IWorkbench workbench) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	protected void performDefaults() {
-		// TODO Auto-generated method stub
 		super.performDefaults();
+		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
+		modificationStore.restoreDefaults(selectedVersion);
+		updateSettings();
 	}
 
 	@Override
 	public boolean performOk() {
-		// TODO Auto-generated method stub
+		modificationStore.savePreferences();
 		return super.performOk();
 	}
-
 }

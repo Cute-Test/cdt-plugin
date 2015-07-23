@@ -6,7 +6,6 @@ import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.spi.RegistryContributor;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
@@ -49,33 +48,7 @@ public class EvaluateContributions {
 			}
 		}
 
-		setSettingsBasedOnPreferences(settings);
-
 		return settings;
-	}
-
-	private static void _setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
-		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
-			if (!sub.hasSubsettings() && sub.getPreferenceName() != null) {
-				sub.setChecked(Activator.getDefault().getPreferenceStore().getBoolean(sub.getPreferenceName()));
-			}
-			setSettingsBasedOnPreferences(sub);
-		}
-	}
-
-	private static void setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
-		IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
-		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
-			if (!sub.hasSubsettings() && sub.getPreferenceName() != null) {
-				String prefName = sub.getPreferenceName();
-				if (prefStore.contains(prefName)) {
-					sub.setChecked(prefStore.getBoolean(prefName));
-				} else {
-					sub.setChecked(sub.isCheckedByDefault());
-				}
-			}
-			setSettingsBasedOnPreferences(sub);
-		}
 	}
 
 	private static void createChildSettings(IConfigurationElement element, DialectBasedSetting parentSettings,

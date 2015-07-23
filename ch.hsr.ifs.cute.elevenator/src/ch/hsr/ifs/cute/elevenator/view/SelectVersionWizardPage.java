@@ -1,10 +1,6 @@
 package ch.hsr.ifs.cute.elevenator.view;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -16,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import ch.hsr.ifs.cute.elevenator.Activator;
 import ch.hsr.ifs.cute.elevenator.DialectBasedSetting;
-import ch.hsr.ifs.cute.elevenator.EvaluateContributions;
+import ch.hsr.ifs.cute.elevenator.ModificationStore;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionPreferenceConstants;
 
@@ -24,7 +20,8 @@ public class SelectVersionWizardPage extends WizardPage {
 
 	private VersionSelectionCombo versionCombo;
 	private ModificationTree modificationTree;
-	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
+
+	private ModificationStore modificationStore = new ModificationStore();
 
 	public SelectVersionWizardPage() {
 		super("C++ version selection for project");
@@ -59,44 +56,19 @@ public class SelectVersionWizardPage extends WizardPage {
 	}
 
 	public void refreshSettings() {
-		for (CPPVersion version : settingStore.keySet()) {
-			DialectBasedSetting setting = EvaluateContributions.createSettings(version);
-			settingStore.put(version, setting);
-		}
+		modificationStore.refreshFromPreferences();
 		updateSettings();
 	}
 
 	private void updateSettings() {
 		CPPVersion selectedVersion = versionCombo.getSelectedVersion();
-
-		DialectBasedSetting setting = settingStore.get(selectedVersion);
-		if (setting == null) {
-			setting = EvaluateContributions.createSettings(selectedVersion);
-			settingStore.put(selectedVersion, setting);
-		}
+		DialectBasedSetting setting = modificationStore.get(selectedVersion);
 		modificationTree.setInput(setting);
 	}
 
 	public Collection<DialectBasedSetting> getVersionModifications() {
 		CPPVersion selectedVersion = getSelectedVersion();
-
-		DialectBasedSetting rootSetting = settingStore.get(selectedVersion);
-		if (rootSetting == null) {
-			rootSetting = EvaluateContributions.createSettings(selectedVersion);
-		}
-		return listSettings(rootSetting);
-	}
-
-	private Collection<DialectBasedSetting> listSettings(DialectBasedSetting setting) {
-		List<DialectBasedSetting> settingList = new ArrayList<>();
-		for (DialectBasedSetting subSetting : setting.getSubsettings()) {
-			if (subSetting.hasSubsettings()) {
-				settingList.addAll(listSettings(subSetting));
-			} else {
-				settingList.add(subSetting);
-			}
-		}
-		return settingList;
+		return modificationStore.getList(selectedVersion);
 	}
 
 	public CPPVersion getSelectedVersion() {

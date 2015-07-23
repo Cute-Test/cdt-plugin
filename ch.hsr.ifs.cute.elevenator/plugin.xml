@@ -58,7 +58,7 @@
          point="ch.hsr.ifs.cute.elevenator.versionmodification">
       <ALL_VERSIONS>
          <versionModification
-               checkedByDefault="true"
+               checkedByDefault="false"
                name="Set Compiler Flag"
                operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation">
          </versionModification>
@@ -70,7 +70,7 @@
       </ALL_VERSIONS>
       <CPP_14>
          <versionModification
-               checkedByDefault="true"
+               checkedByDefault="false"
                name="Enable Elevator"
                operationClass="ch.hsr.ifs.cute.elevenator.operation.EnableElevatorOperation">
          </versionModification></CPP_14>
@@ -82,7 +82,7 @@
          </versionModification></CPP_17>
       <CPP_11>
          <versionModification
-               checkedByDefault="true"
+               checkedByDefault="false"
                name="Enable Elevator"
                operationClass="ch.hsr.ifs.cute.elevenator.operation.EnableElevatorOperation">
          </versionModification>
