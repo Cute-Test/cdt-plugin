@@ -1,7 +1,9 @@
 package ch.hsr.ifs.cute.elevenator.operation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsEditableProvider;
 import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsProvider;
@@ -10,6 +12,10 @@ import org.eclipse.cdt.core.language.settings.providers.LanguageSettingsManager;
 import org.eclipse.cdt.core.language.settings.providers.LanguageSettingsSerializableProvider;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.IToolChain;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.internal.language.settings.providers.GCCBuiltinSpecsDetectorMinGW;
 import org.eclipse.cdt.ui.newui.CDTPropertyManager;
 import org.eclipse.core.resources.IProject;
@@ -19,6 +25,18 @@ import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 
 public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 
+	private static final String MIN_GW_GCC = "MinGW GCC";
+	private static final String LINUX_GCC = "Linux GCC";
+
+	private static Map<String, String> providerNames;
+
+	static {
+		providerNames = new HashMap<>();
+		providerNames.put(MIN_GW_GCC,
+				"org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetectorMinGW");
+		providerNames.put(LINUX_GCC, "org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector");
+	}
+
 	@Override
 	public void perform(IProject project, CPPVersion selectedVersion, boolean enabled) {
 
@@ -26,8 +44,15 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 			return;
 		}
 
+		// Get the selected Configuration to get the Tool Chain
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+		IConfiguration[] configurations = info.getManagedProject().getConfigurations();
+		IToolChain toolChain = configurations[0].getToolChain();
+
+		String languageSettingProviderName = providerNames.get(toolChain.toString());
+
 		ILanguageSettingsProvider minGWProvider = LanguageSettingsManager
-				.getWorkspaceProvider("org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetectorMinGW");
+				.getWorkspaceProvider(languageSettingProviderName);
 		if (minGWProvider != null) {
 			ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(minGWProvider);
 			if (rawProvider instanceof ILanguageSettingsEditableProvider && !LanguageSettingsManager
