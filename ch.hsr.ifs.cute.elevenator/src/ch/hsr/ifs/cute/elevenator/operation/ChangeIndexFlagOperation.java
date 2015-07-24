@@ -17,6 +17,7 @@ import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.internal.language.settings.providers.GCCBuiltinSpecsDetectorMinGW;
+import org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector;
 import org.eclipse.cdt.ui.newui.CDTPropertyManager;
 import org.eclipse.core.resources.IProject;
 
@@ -32,8 +33,7 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 
 	static {
 		providerNames = new HashMap<>();
-		providerNames.put(MIN_GW_GCC,
-				"org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetectorMinGW");
+		providerNames.put(MIN_GW_GCC, "org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetectorMinGW");
 		providerNames.put(LINUX_GCC, "org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector");
 	}
 
@@ -51,10 +51,10 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 
 		String languageSettingProviderName = providerNames.get(toolChain.toString());
 
-		ILanguageSettingsProvider minGWProvider = LanguageSettingsManager
+		ILanguageSettingsProvider workspaceProvider = LanguageSettingsManager
 				.getWorkspaceProvider(languageSettingProviderName);
-		if (minGWProvider != null) {
-			ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(minGWProvider);
+		if (workspaceProvider != null) {
+			ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(workspaceProvider);
 			if (rawProvider instanceof ILanguageSettingsEditableProvider && !LanguageSettingsManager
 					.isStoringEntriesInProjectArea((LanguageSettingsSerializableProvider) rawProvider)) {
 
@@ -63,38 +63,49 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 							.cloneShallow();
 					if (newProvider instanceof GCCBuiltinSpecsDetectorMinGW) {
 						GCCBuiltinSpecsDetectorMinGW specsDetector = (GCCBuiltinSpecsDetectorMinGW) newProvider;
-						String parameterProperty = specsDetector.getProperty("parameter");
-
-						parameterProperty = removeSubstringToNextSpace(parameterProperty, "-std=c++");
-						specsDetector.setProperty("parameter",
-								parameterProperty + " -std=" + selectedVersion.getCompilerVersionString());
-						LanguageSettingsManager.setStoringEntriesInProjectArea(specsDetector, true);
-
-						LanguageSettingsManager.isStoringEntriesInProjectArea(specsDetector);
-
-						ICProjectDescription pDesc = CDTPropertyManager.getProjectDescription(project);
-						ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null : pDesc.getConfigurations();
-						for (ICConfigurationDescription configDescription : cfgDescs) {
-							if (configDescription instanceof ILanguageSettingsProvidersKeeper) {
-								List<ILanguageSettingsProvider> providers = ((ILanguageSettingsProvidersKeeper) configDescription)
-										.getLanguageSettingProviders();
-								ArrayList<ILanguageSettingsProvider> newProviders = new ArrayList<ILanguageSettingsProvider>(
-										providers);
-
-								newProviders.remove(minGWProvider);
-								newProviders.add(specsDetector);
-								((ILanguageSettingsProvidersKeeper) configDescription)
-										.setLanguageSettingProviders(newProviders);
-
-							}
-						}
-						CDTPropertyManager.performOk(this);
+						setIndexFlag_MinGW_GCC(selectedVersion, specsDetector, project, workspaceProvider);
+					} else if (newProvider instanceof GCCBuiltinSpecsDetector) {
+						GCCBuiltinSpecsDetector specsDetector = (GCCBuiltinSpecsDetector) newProvider;
+						setIndexFlag_GCC(selectedVersion, specsDetector, project, workspaceProvider);
 					}
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
 			}
 		}
+	}
+
+	private void setIndexFlag_GCC(CPPVersion selectedVersion, GCCBuiltinSpecsDetector specsDetector, IProject project,
+			ILanguageSettingsProvider workspaceProvider) {
+
+	}
+
+	private void setIndexFlag_MinGW_GCC(CPPVersion selectedVersion, GCCBuiltinSpecsDetectorMinGW specsDetector,
+			IProject project, ILanguageSettingsProvider workspaceProvider) {
+		String parameterProperty = specsDetector.getProperty("parameter");
+
+		parameterProperty = removeSubstringToNextSpace(parameterProperty, "-std=c++");
+		specsDetector.setProperty("parameter",
+				parameterProperty + " -std=" + selectedVersion.getCompilerVersionString());
+		LanguageSettingsManager.setStoringEntriesInProjectArea(specsDetector, true);
+
+		LanguageSettingsManager.isStoringEntriesInProjectArea(specsDetector);
+
+		ICProjectDescription pDesc = CDTPropertyManager.getProjectDescription(project);
+		ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null : pDesc.getConfigurations();
+		for (ICConfigurationDescription configDescription : cfgDescs) {
+			if (configDescription instanceof ILanguageSettingsProvidersKeeper) {
+				List<ILanguageSettingsProvider> providers = ((ILanguageSettingsProvidersKeeper) configDescription)
+						.getLanguageSettingProviders();
+				ArrayList<ILanguageSettingsProvider> newProviders = new ArrayList<ILanguageSettingsProvider>(providers);
+
+				newProviders.remove(workspaceProvider);
+				newProviders.add(specsDetector);
+				((ILanguageSettingsProvidersKeeper) configDescription).setLanguageSettingProviders(newProviders);
+
+			}
+		}
+		CDTPropertyManager.performOk(this);
 	}
 
 	public static String removeSubstringToNextSpace(String original, String substringToRemove) {
