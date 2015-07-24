@@ -13,12 +13,6 @@ import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 public class ModificationStore {
 	private Map<CPPVersion, DialectBasedSetting> settingStore = new HashMap<>();
 
-	public void refreshFromPreferences() {
-		for (DialectBasedSetting setting : settingStore.values()) {
-			setSettingsBasedOnPreferences(setting);
-		}
-	}
-
 	public DialectBasedSetting get(CPPVersion version) {
 		DialectBasedSetting setting = settingStore.get(version);
 		if (setting == null) {
@@ -46,7 +40,6 @@ public class ModificationStore {
 		return settingList;
 	}
 
-	// TODO: Store default value
 	private void setSettingsBasedOnPreferences(DialectBasedSetting parentSetting) {
 		IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
 		for (DialectBasedSetting sub : parentSetting.getSubsettings()) {
@@ -59,6 +52,12 @@ public class ModificationStore {
 				}
 			}
 			setSettingsBasedOnPreferences(sub);
+		}
+	}
+
+	public void refreshFromPreferences() {
+		for (DialectBasedSetting setting : settingStore.values()) {
+			setSettingsBasedOnPreferences(setting);
 		}
 	}
 

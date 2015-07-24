@@ -6,8 +6,8 @@ import ch.hsr.ifs.cute.elevenator.preferences.CPPVersionProjectSetting;
 
 public enum CPPVersion {
 
-	CPP_98("C++ 98", "c++98"), CPP_03("C++ 03", "c++03"), CPP_11("C++ 11", "c++11"), CPP_14("C++ 14",
-			"c++14"), CPP_17("C++ 17", "c++17");
+	CPP_98("C++ 98", "c++98"), CPP_03("C++ 03", "c++03"), CPP_11("C++ 11", "c++0x"), CPP_14("C++ 14",
+			"c++1y"), CPP_17("C++ 17", "c++1z");
 
 	private String versionString;
 	private String compilerVersionString;
