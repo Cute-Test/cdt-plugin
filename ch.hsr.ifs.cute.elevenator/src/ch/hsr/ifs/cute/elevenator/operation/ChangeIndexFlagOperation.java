@@ -16,7 +16,6 @@ import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
-import org.eclipse.cdt.managedbuilder.internal.language.settings.providers.GCCBuiltinSpecsDetectorMinGW;
 import org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector;
 import org.eclipse.cdt.ui.newui.CDTPropertyManager;
 import org.eclipse.core.resources.IProject;
@@ -50,9 +49,9 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 		IToolChain toolChain = configurations[0].getToolChain();
 
 		String languageSettingProviderName = providerNames.get(toolChain.toString());
-
 		ILanguageSettingsProvider workspaceProvider = LanguageSettingsManager
 				.getWorkspaceProvider(languageSettingProviderName);
+
 		if (workspaceProvider != null) {
 			ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(workspaceProvider);
 			if (rawProvider instanceof ILanguageSettingsEditableProvider && !LanguageSettingsManager
@@ -61,12 +60,9 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 				try {
 					ILanguageSettingsEditableProvider newProvider = ((ILanguageSettingsEditableProvider) rawProvider)
 							.cloneShallow();
-					if (newProvider instanceof GCCBuiltinSpecsDetectorMinGW) {
-						GCCBuiltinSpecsDetectorMinGW specsDetector = (GCCBuiltinSpecsDetectorMinGW) newProvider;
-						setIndexFlag_MinGW_GCC(selectedVersion, specsDetector, project, workspaceProvider);
-					} else if (newProvider instanceof GCCBuiltinSpecsDetector) {
+					if (newProvider instanceof GCCBuiltinSpecsDetector) {
 						GCCBuiltinSpecsDetector specsDetector = (GCCBuiltinSpecsDetector) newProvider;
-						setIndexFlag_GCC(selectedVersion, specsDetector, project, workspaceProvider);
+						setIndexFlag(selectedVersion, specsDetector, project, workspaceProvider);
 					}
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
@@ -75,13 +71,9 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 		}
 	}
 
-	private void setIndexFlag_GCC(CPPVersion selectedVersion, GCCBuiltinSpecsDetector specsDetector, IProject project,
+	private void setIndexFlag(CPPVersion selectedVersion, GCCBuiltinSpecsDetector specsDetector, IProject project,
 			ILanguageSettingsProvider workspaceProvider) {
 
-	}
-
-	private void setIndexFlag_MinGW_GCC(CPPVersion selectedVersion, GCCBuiltinSpecsDetectorMinGW specsDetector,
-			IProject project, ILanguageSettingsProvider workspaceProvider) {
 		String parameterProperty = specsDetector.getProperty("parameter");
 
 		parameterProperty = removeSubstringToNextSpace(parameterProperty, "-std=c++");
