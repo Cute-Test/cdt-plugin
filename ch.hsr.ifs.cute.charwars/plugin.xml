@@ -141,36 +141,35 @@
         markerSeverity="1"/>
   </extension>
 
-  <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
-  	<specification
-  		annotationType="ch.hsr.ifs.cute.charwars.CharWarsAnnotation"
-  		colorPreferenceKey="ch.hsr.ifs.cute.charwars.keys.color"
-  		colorPreferenceValue="0,170,79" 
-  		contributesToHeader="false"
-  		includeOnPreferencePage="true"
-  		label="CharWars Marker"
-  		presentationLayer="0"
-  		overviewRulerPreferenceKey="ch.hsr.ifs.cute.charwars.keys.overviewruler"
-  		overviewRulerPreferenceValue="true"
-  		highlightPreferenceKey="ch.hsr.ifs.cute.charwars.keys.highlight"
-  		highlightPreferenceValue="true"
-  		textPreferenceKey="ch.hsr.ifs.cute.charwars.keys.text"
-  		textPreferenceValue="true"
-  		textStylePreferenceValue="SQUIGGLES"
-  		textStylePreferenceKey="ch.hsr.ifs.cute.charwars.keys.textstyle"
-  		verticalRulerPreferenceKey="ch.hsr.ifs.cute.charwars.keys.verticalruler"
-  		verticalRulerPreferenceValue="true"
-		showInNextPrevDropdownToolbarActionKey="ch.hsr.ifs.cute.charwars.keys.ShowInNextPrevDropdownToolbarAction"
-		showInNextPrevDropdownToolbarAction="true"
-		isGoToNextNavigationTargetKey="ch.hsr.ifs.cute.charwars.keys.GoToNextNavigationTarget"
-		isGoToNextNavigationTarget="true"
-		isGoToPreviousNavigationTargetKey="ch.hsr.ifs.cute.charwars.keys.GoToPreviousNavigationTarget"
-		isGoToPreviousNavigationTarget="true"
-  		icon="icons/icon-green-star.png"
-  		quickFixIcon="icons/icon-green-star.png"
-		symbolicIcon="warning">
-	</specification>
-  </extension>
+
+	<extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
+		<specification
+			annotationType="ch.hsr.ifs.cute.charwars.CharWarsAnnotation"
+			colorPreferenceKey="ch.hsr.ifs.cute.charwars.keys.color"
+			colorPreferenceValue="0,170,79"
+            overviewRulerPreferenceKey="ch.hsr.ifs.cute.charwars.keys.overviewruler"
+            overviewRulerPreferenceValue="true"
+            textPreferenceKey="ch.hsr.ifs.cute.charwars.keys.text"
+            textPreferenceValue="true"
+            textStylePreferenceKey="ch.hsr.ifs.cute.charwars.keys.textstyle"
+            textStylePreferenceValue="PROBLEM_UNDERLINE"
+            verticalRulerPreferenceKey="ch.hsr.ifs.cute.charwars.keys.verticalruler"
+            verticalRulerPreferenceValue="true"
+            showInNextPrevDropdownToolbarActionKey="ch.hsr.ifs.cute.charwars.keys.ShowInNextPrevDropdownToolbarAction"
+            showInNextPrevDropdownToolbarAction="true"
+            isGoToNextNavigationTargetKey="ch.hsr.ifs.cute.charwars.keys.GoToNextNavigationTarget"
+            isGoToNextNavigationTarget="true"
+            isGoToPreviousNavigationTargetKey="ch.hsr.ifs.cute.charwars.keys.GoToPreviousNavigationTarget"
+            isGoToPreviousNavigationTarget="true"
+            label="CharWars Marker"
+            icon="icons/icon-green-star.png"
+            quickFixIcon="icons/icon-green-star.png"
+            symbolicIcon="warning"
+            contributesToHeader="false"
+            includeOnPreferencePage="true"
+            presentationLayer="0">
+		</specification>
+	</extension>
   
   <extension point="ch.hsr.ifs.cute.elevenator.versionmodification">
   	<ALL_VERSIONS>
