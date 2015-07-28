@@ -91,10 +91,22 @@ public final class DialectBasedSettingsProvider implements ITreeContentProvider,
 	public boolean isChecked(Object element) {
 		if (element instanceof DialectBasedSetting) {
 			DialectBasedSetting setting = ((DialectBasedSetting) element);
-			if (setting.getCheckedChildCount() > 0) {
+			if (childrenChecked(setting)) {
 				return true;
 			}
 			return setting.isChecked();
+		}
+		return false;
+	}
+
+	private boolean childrenChecked(DialectBasedSetting setting) {
+		if (setting.getCheckedChildCount() > 0) {
+			return true;
+		}
+		for (DialectBasedSetting sub : setting.getSubsettings()) {
+			if (childrenChecked(sub)) {
+				return true;
+			}
 		}
 		return false;
 	}
