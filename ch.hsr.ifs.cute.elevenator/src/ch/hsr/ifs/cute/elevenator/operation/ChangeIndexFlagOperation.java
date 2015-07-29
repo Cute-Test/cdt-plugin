@@ -1,9 +1,7 @@
 package ch.hsr.ifs.cute.elevenator.operation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsEditableProvider;
 import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsProvider;
@@ -25,17 +23,6 @@ import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 
 public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 
-	private static final String MIN_GW_GCC = "MinGW GCC";
-	private static final String LINUX_GCC = "Linux GCC";
-
-	private static Map<String, String> providerNames;
-
-	static {
-		providerNames = new HashMap<>();
-		providerNames.put(MIN_GW_GCC, "org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetectorMinGW");
-		providerNames.put(LINUX_GCC, "org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector");
-	}
-
 	@Override
 	public void perform(IProject project, CPPVersion selectedVersion, boolean enabled) {
 
@@ -43,61 +30,80 @@ public class ChangeIndexFlagOperation implements IVersionModificationOperation {
 			return;
 		}
 
-		// Get the selected Configuration to get the Tool Chain
-		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-		IConfiguration[] configurations = info.getManagedProject().getConfigurations();
-		IToolChain toolChain = configurations[0].getToolChain();
+		ICProjectDescription pDesc = CDTPropertyManager.getProjectDescription(project);
+		ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null : pDesc.getConfigurations();
+		for (ICConfigurationDescription configDescription : cfgDescs) {
+			if (configDescription instanceof ILanguageSettingsProvidersKeeper) {
 
-		String languageSettingProviderName = providerNames.get(toolChain.toString());
-		ILanguageSettingsProvider workspaceProvider = LanguageSettingsManager
-				.getWorkspaceProvider(languageSettingProviderName);
+				ILanguageSettingsProvider workspaceProvider = getWorkspaceProvider(project, configDescription.getId());
+				if (workspaceProvider != null) {
 
-		if (workspaceProvider != null) {
-			ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(workspaceProvider);
-			if (rawProvider instanceof ILanguageSettingsEditableProvider && !LanguageSettingsManager
-					.isStoringEntriesInProjectArea((LanguageSettingsSerializableProvider) rawProvider)) {
+					GCCBuiltinSpecsDetector specsDetector = getSpecsDetector(workspaceProvider);
+					if (specsDetector != null) {
+						changeSpecDetector(selectedVersion, specsDetector);
 
-				try {
-					ILanguageSettingsEditableProvider newProvider = ((ILanguageSettingsEditableProvider) rawProvider)
-							.cloneShallow();
-					if (newProvider instanceof GCCBuiltinSpecsDetector) {
-						GCCBuiltinSpecsDetector specsDetector = (GCCBuiltinSpecsDetector) newProvider;
-						setIndexFlag(selectedVersion, specsDetector, project, workspaceProvider);
+						ILanguageSettingsProvidersKeeper providerKeeper = (ILanguageSettingsProvidersKeeper) configDescription;
+						List<ILanguageSettingsProvider> providers = providerKeeper.getLanguageSettingProviders();
+						ArrayList<ILanguageSettingsProvider> newProviders = new ArrayList<ILanguageSettingsProvider>(
+								providers);
+
+						newProviders.remove(workspaceProvider);
+						newProviders.add(specsDetector);
+						providerKeeper.setLanguageSettingProviders(newProviders);
+
 					}
-				} catch (CloneNotSupportedException e) {
-					e.printStackTrace();
 				}
 			}
 		}
+		CDTPropertyManager.performOk(this);
 	}
 
-	private void setIndexFlag(CPPVersion selectedVersion, GCCBuiltinSpecsDetector specsDetector, IProject project,
-			ILanguageSettingsProvider workspaceProvider) {
-
+	private void changeSpecDetector(CPPVersion selectedVersion, GCCBuiltinSpecsDetector specsDetector) {
 		String parameterProperty = specsDetector.getProperty("parameter");
 
 		parameterProperty = removeSubstringToNextSpace(parameterProperty, "-std=c++");
 		specsDetector.setProperty("parameter",
 				parameterProperty + " -std=" + selectedVersion.getCompilerVersionString());
+
 		LanguageSettingsManager.setStoringEntriesInProjectArea(specsDetector, true);
-
 		LanguageSettingsManager.isStoringEntriesInProjectArea(specsDetector);
+	}
 
-		ICProjectDescription pDesc = CDTPropertyManager.getProjectDescription(project);
-		ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null : pDesc.getConfigurations();
-		for (ICConfigurationDescription configDescription : cfgDescs) {
-			if (configDescription instanceof ILanguageSettingsProvidersKeeper) {
-				List<ILanguageSettingsProvider> providers = ((ILanguageSettingsProvidersKeeper) configDescription)
-						.getLanguageSettingProviders();
-				ArrayList<ILanguageSettingsProvider> newProviders = new ArrayList<ILanguageSettingsProvider>(providers);
+	private GCCBuiltinSpecsDetector getSpecsDetector(ILanguageSettingsProvider workspaceProvider) {
+		ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(workspaceProvider);
+		if (rawProvider instanceof ILanguageSettingsEditableProvider && !LanguageSettingsManager
+				.isStoringEntriesInProjectArea((LanguageSettingsSerializableProvider) rawProvider)) {
 
-				newProviders.remove(workspaceProvider);
-				newProviders.add(specsDetector);
-				((ILanguageSettingsProvidersKeeper) configDescription).setLanguageSettingProviders(newProviders);
-
+			try {
+				ILanguageSettingsEditableProvider newProvider = ((ILanguageSettingsEditableProvider) rawProvider)
+						.cloneShallow();
+				if (newProvider instanceof GCCBuiltinSpecsDetector) {
+					GCCBuiltinSpecsDetector specsDetector = (GCCBuiltinSpecsDetector) newProvider;
+					return specsDetector;
+				}
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
 			}
 		}
-		CDTPropertyManager.performOk(this);
+		return null;
+	}
+
+	private ILanguageSettingsProvider getWorkspaceProvider(IProject project, String configId) {
+		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+		IConfiguration configuration = info.getManagedProject().getConfiguration(configId);
+		IToolChain toolChain = configuration.getToolChain();
+
+		String defaultLanguageSettingsProviderIdsString = toolChain.getDefaultLanguageSettingsProviderIds();
+		String[] defaultLanguageSettingsProviderIds = defaultLanguageSettingsProviderIdsString.split(";");
+
+		// TODO: This is not completly safe i assume
+		if (defaultLanguageSettingsProviderIds.length < 2) {
+			return null;
+		}
+		String languageSettingProviderName = defaultLanguageSettingsProviderIds[1];
+		ILanguageSettingsProvider workspaceProvider = LanguageSettingsManager
+				.getWorkspaceProvider(languageSettingProviderName);
+		return workspaceProvider;
 	}
 
 	public static String removeSubstringToNextSpace(String original, String substringToRemove) {
