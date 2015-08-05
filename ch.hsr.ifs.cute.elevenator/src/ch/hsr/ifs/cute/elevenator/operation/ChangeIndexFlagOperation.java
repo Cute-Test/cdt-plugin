@@ -7,14 +7,9 @@ import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsEditabl
 import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsProvider;
 import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsProvidersKeeper;
 import org.eclipse.cdt.core.language.settings.providers.LanguageSettingsManager;
-import org.eclipse.cdt.core.language.settings.providers.LanguageSettingsSerializableProvider;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
-import org.eclipse.cdt.managedbuilder.core.IConfiguration;
-import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
-import org.eclipse.cdt.managedbuilder.core.IToolChain;
-import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
-import org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector;
+import org.eclipse.cdt.managedbuilder.language.settings.providers.ToolchainBuiltinSpecsDetector;
 import org.eclipse.cdt.ui.newui.CDTPropertyManager;
 import org.eclipse.core.resources.IProject;
 
@@ -22,91 +17,58 @@ import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 
 public class ChangeIndexFlagOperation implements IVersionModificationOperation {
-
+	private final static String PARAMETER_PROPERTY = "parameter";
+	
 	@Override
 	public void perform(IProject project, CPPVersion selectedVersion, boolean enabled) {
-
 		if (!enabled) {
 			return;
 		}
-
-		ICProjectDescription pDesc = CDTPropertyManager.getProjectDescription(project);
-		ICConfigurationDescription[] cfgDescs = (pDesc == null) ? null : pDesc.getConfigurations();
-		for (ICConfigurationDescription configDescription : cfgDescs) {
-			if (configDescription instanceof ILanguageSettingsProvidersKeeper) {
-
-				ILanguageSettingsProvider workspaceProvider = getWorkspaceProvider(project, configDescription.getId());
-				if (workspaceProvider != null) {
-
-					GCCBuiltinSpecsDetector specsDetector = getSpecsDetector(workspaceProvider);
-					if (specsDetector != null) {
-						changeSpecDetector(selectedVersion, specsDetector);
-
-						ILanguageSettingsProvidersKeeper providerKeeper = (ILanguageSettingsProvidersKeeper) configDescription;
-						List<ILanguageSettingsProvider> providers = providerKeeper.getLanguageSettingProviders();
-						ArrayList<ILanguageSettingsProvider> newProviders = new ArrayList<ILanguageSettingsProvider>(
-								providers);
-
-						newProviders.remove(workspaceProvider);
-						newProviders.add(specsDetector);
-						providerKeeper.setLanguageSettingProviders(newProviders);
-
-					}
-				}
+		
+		ICProjectDescription projectDescr = CDTPropertyManager.getProjectDescription(project);
+		ICConfigurationDescription[] configurations = projectDescr.getConfigurations();
+		for(ICConfigurationDescription config : configurations) {
+			if(config instanceof ILanguageSettingsProvidersKeeper) {
+				ILanguageSettingsProvidersKeeper providersKeeper = (ILanguageSettingsProvidersKeeper)config;
+				updateConfiguration(providersKeeper, selectedVersion);
 			}
 		}
 		CDTPropertyManager.performOk(this);
 	}
-
-	private void changeSpecDetector(CPPVersion selectedVersion, GCCBuiltinSpecsDetector specsDetector) {
-		String parameterProperty = specsDetector.getProperty("parameter");
-
-		parameterProperty = removeSubstringToNextSpace(parameterProperty, "-std=c++");
-		specsDetector.setProperty("parameter",
-				parameterProperty + " -std=" + selectedVersion.getCompilerVersionString());
-
-		LanguageSettingsManager.setStoringEntriesInProjectArea(specsDetector, true);
-		LanguageSettingsManager.isStoringEntriesInProjectArea(specsDetector);
-	}
-
-	private GCCBuiltinSpecsDetector getSpecsDetector(ILanguageSettingsProvider workspaceProvider) {
-		ILanguageSettingsProvider rawProvider = LanguageSettingsManager.getRawProvider(workspaceProvider);
-		if (rawProvider instanceof ILanguageSettingsEditableProvider && !LanguageSettingsManager
-				.isStoringEntriesInProjectArea((LanguageSettingsSerializableProvider) rawProvider)) {
-
-			try {
-				ILanguageSettingsEditableProvider newProvider = ((ILanguageSettingsEditableProvider) rawProvider)
-						.cloneShallow();
-				if (newProvider instanceof GCCBuiltinSpecsDetector) {
-					GCCBuiltinSpecsDetector specsDetector = (GCCBuiltinSpecsDetector) newProvider;
-					return specsDetector;
+	
+	private void updateConfiguration(ILanguageSettingsProvidersKeeper providersKeeper, CPPVersion selectedVersion) {
+		List<ILanguageSettingsProvider> providers = providersKeeper.getLanguageSettingProviders();
+		List<ILanguageSettingsProvider> newProviders = new ArrayList<ILanguageSettingsProvider>();
+		
+		for(ILanguageSettingsProvider settingsProvider : providers) {
+			ILanguageSettingsProvider rawSettingsProvider = LanguageSettingsManager.getRawProvider(settingsProvider);
+			if(rawSettingsProvider instanceof ToolchainBuiltinSpecsDetector && rawSettingsProvider instanceof ILanguageSettingsEditableProvider) {
+				try {
+					ILanguageSettingsEditableProvider newSettingsProvider = ((ILanguageSettingsEditableProvider) rawSettingsProvider).cloneShallow();
+					ToolchainBuiltinSpecsDetector builtinSpecsDetector = (ToolchainBuiltinSpecsDetector)newSettingsProvider;
+					
+					String parameterProperty = builtinSpecsDetector.getProperty(PARAMETER_PROPERTY);
+					builtinSpecsDetector.setProperty(PARAMETER_PROPERTY, setIndexFlag(parameterProperty, selectedVersion));
+					LanguageSettingsManager.setStoringEntriesInProjectArea(builtinSpecsDetector, true);
+		
+					newProviders.add(builtinSpecsDetector);
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
 				}
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
+			} else {
+				newProviders.add(settingsProvider);
 			}
 		}
-		return null;
+		providersKeeper.setLanguageSettingProviders(newProviders);
 	}
 
-	private ILanguageSettingsProvider getWorkspaceProvider(IProject project, String configId) {
-		IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-		IConfiguration configuration = info.getManagedProject().getConfiguration(configId);
-		IToolChain toolChain = configuration.getToolChain();
-
-		String defaultLanguageSettingsProviderIdsString = toolChain.getDefaultLanguageSettingsProviderIds();
-		String[] defaultLanguageSettingsProviderIds = defaultLanguageSettingsProviderIdsString.split(";");
-
-		// TODO: This is not completly safe i assume
-		if (defaultLanguageSettingsProviderIds.length < 2) {
-			return null;
-		}
-		String languageSettingProviderName = defaultLanguageSettingsProviderIds[1];
-		ILanguageSettingsProvider workspaceProvider = LanguageSettingsManager
-				.getWorkspaceProvider(languageSettingProviderName);
-		return workspaceProvider;
+	private static String setIndexFlag(String parameterProperty, CPPVersion selectedVersion) {
+		String newParameterProperty = removeSubstringToNextSpace(parameterProperty, "-std=c++");
+		newParameterProperty += " -std=" + selectedVersion.getCompilerVersionString();
+		return newParameterProperty;
 	}
-
-	public static String removeSubstringToNextSpace(String original, String substringToRemove) {
+	
+	private static String removeSubstringToNextSpace(String original, String substringToRemove) {
 		StringBuilder sb = new StringBuilder(original);
 		String resultingString = original;
 
