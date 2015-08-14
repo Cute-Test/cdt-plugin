@@ -115,6 +115,7 @@
 		<module>../ch.hsr.ifs.cute.elevator.test</module>
 		<!-- Elevenator -->
 		<module>../ch.hsr.ifs.cute.elevenator</module>
+		<module>../ch.hsr.ifs.cute.elevenator.feature</module>
 		<!-- CharWars -->
 		<module>../ch.hsr.ifs.cute.charwars</module>
 		<module>../ch.hsr.ifs.cute.charwars.feature</module>
