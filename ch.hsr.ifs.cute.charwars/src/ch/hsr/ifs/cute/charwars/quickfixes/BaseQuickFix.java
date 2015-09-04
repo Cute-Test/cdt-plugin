@@ -3,6 +3,7 @@ package ch.hsr.ifs.cute.charwars.quickfixes;
 import java.util.HashSet;
 
 import org.eclipse.cdt.codan.ui.AbstractAstRewriteQuickFix;
+import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -35,6 +36,12 @@ public abstract class BaseQuickFix extends AbstractAstRewriteQuickFix {
 	public boolean isApplicable(IMarker marker) {
 		currentMarker = marker;
 		return super.isApplicable(marker);
+	}
+	
+	@Override
+	protected IIndex getIndexFromMarker(IMarker marker) throws CoreException {
+		CCorePlugin.getIndexManager().joinIndexer(1000, new NullProgressMonitor());
+		return super.getIndexFromMarker(marker);
 	}
 	
 	@Override
