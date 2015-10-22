@@ -107,7 +107,7 @@
       </ALL_VERSIONS>
       <CPP_14>
          <versionModification
-               checkedByDefault="false"
+               checkedByDefault="true"
                name="Enable Elevator"
                operationClass="ch.hsr.ifs.cute.elevenator.operation.EnableElevatorOperation">
          </versionModification></CPP_14>
