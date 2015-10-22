@@ -175,37 +175,37 @@
   	<ALL_VERSIONS>
   		<group name="CharWars">
   			<versionModification
-  				checkedByDefault="true"
+  				checkedByDefault="false"
   				name="Use different overload that can take std::string directly."
   				operationClass="ch.hsr.ifs.cute.charwars.operation.EnableCStrProblemOperation">
   			</versionModification>
 			<versionModification
-  				checkedByDefault="true"
+  				checkedByDefault="false"
   				name="Use reference parameters instead of pointer parameters."
   				operationClass="ch.hsr.ifs.cute.charwars.operation.EnablePointerParameterProblemOperation">
   			</versionModification>
 			<versionModification
-  				checkedByDefault="true"
+  				checkedByDefault="false"
   				name="Use std::array instead of C-Arrays."
   				operationClass="ch.hsr.ifs.cute.charwars.operation.EnableArrayProblemOperation">
   			</versionModification>
 			<versionModification
-  				checkedByDefault="true"
+  				checkedByDefault="false"
   				name="Use std::string instead of C-Strings."
   				operationClass="ch.hsr.ifs.cute.charwars.operation.EnableCStringProblemOperation">
   			</versionModification>
 			<versionModification
-  				checkedByDefault="true"
+  				checkedByDefault="false"
   				name="Use std::string member functions instead of &lt;cstring&gt; functions."
   				operationClass="ch.hsr.ifs.cute.charwars.operation.EnableCStringCleanupProblemOperation">
   			</versionModification>
 			<versionModification
-  				checkedByDefault="true"
+  				checkedByDefault="false"
   				name="Use std::string parameter instead of C-String parameter."
   				operationClass="ch.hsr.ifs.cute.charwars.operation.EnableCStringParameterProblemOperation">
   			</versionModification>
 			<versionModification
-  				checkedByDefault="true"
+  				checkedByDefault="false"
   				name="Use std::string::size_type instead of C-String alias."
   				operationClass="ch.hsr.ifs.cute.charwars.operation.EnableCStringAliasProblemOperation">
   			</versionModification>
