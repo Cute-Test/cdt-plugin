@@ -48,6 +48,10 @@ public class TypedefHelper {
     }
   }
 
+  private String filterFilePartOfName(String typename) {
+	  return typename.replaceFirst("\\{.*\\}::", "");
+  }
+  
   public String findShortestType() throws CoreException {
     Set<IType> typedefs = findTypedefs(type);
     IType candidate = getTypeCandidate(typedefs, type);
@@ -55,7 +59,7 @@ public class TypedefHelper {
     if (candidate instanceof ITypedef && candidate instanceof ICPPBinding)
       return AstUtil.getQfName((ICPPBinding) candidate);
 
-    return ASTTypeUtil.getType(candidate);
+    return filterFilePartOfName(ASTTypeUtil.getType(candidate));
   }
 
   private static IType getTypeCandidate(Set<IType> typedefs, IType type) {
