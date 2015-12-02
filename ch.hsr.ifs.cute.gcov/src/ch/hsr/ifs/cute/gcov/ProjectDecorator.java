@@ -50,11 +50,13 @@ public class ProjectDecorator implements ILightweightLabelDecorator {
 			try {
 				if (proj.exists() && proj.isOpen() && proj.hasNature(GcovNature.NATURE_ID)) {
 					IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
-					IConfiguration config = info.getDefaultConfiguration();
-					if (config.getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
-						decoration.addOverlay(GCOV_ICON, IDecoration.BOTTOM_RIGHT);
-					} else {
-						decoration.addOverlay(GCOV_DEACT_ICON, IDecoration.BOTTOM_RIGHT);
+					if (info != null) {
+						IConfiguration config = info.getDefaultConfiguration();
+						if (config.getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
+							decoration.addOverlay(GCOV_ICON, IDecoration.BOTTOM_RIGHT);
+						} else {
+							decoration.addOverlay(GCOV_DEACT_ICON, IDecoration.BOTTOM_RIGHT);
+						}
 					}
 				}
 			} catch (CoreException e) {
