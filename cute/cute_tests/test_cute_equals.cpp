@@ -244,6 +244,25 @@ void test_doubleEqualsWithANaNFails(){
 	ASSERT_THROWS(ASSERT_EQUAL_DELTA(0.0,std::numeric_limits<double>::quiet_NaN(),1.0),cute::test_failure);
 }
 
+// new feature ranges
+void testRangesEqualSimple(){
+	std::vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(1);
+	ASSERT_EQUAL_RANGES(v.begin(),v.end(),v.rbegin(),v.rend());
+}
+
+#ifdef USE_STD11
+void testRangesFromInitializerList(){
+	std::vector<int> v{1,2,3};
+	ASSERT_EQUAL(cute::make_range({1,2,3}),v);
+}
+
+
+
+#endif
+
 
 cute::suite test_cute_equals(){
 	cute::suite s;
@@ -282,5 +301,7 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_equals_strings_fails));
 	s.push_back(CUTE(test_diff_values));
 	s.push_back(CUTE(test_equalsTwoNaNFails));
+	s.push_back(CUTE(testRangesEqualSimple));
+	s.push_back(CUTE(testRangesFromInitializerList));
 	return s;
 }
