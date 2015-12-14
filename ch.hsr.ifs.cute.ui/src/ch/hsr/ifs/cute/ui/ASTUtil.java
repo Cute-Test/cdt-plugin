@@ -12,6 +12,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTStandardFunctionDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
 /**
  * @author Emanuel Graf IFS
@@ -33,9 +34,20 @@ public class ASTUtil {
 	}
 
 	public static boolean containsAssert(IASTFunctionDefinition funcDef) {
+		IASTStatement functionBody = getFunctionBody(funcDef);
+		if (functionBody == null) {
+			return false;
+		}
 		AssertStatementCheckVisitor checker = new AssertStatementCheckVisitor();
-		funcDef.getBody().accept(checker);
+		functionBody.accept(checker);
 		return checker.hasAssertStmt;
+	}
+
+	private static IASTStatement getFunctionBody(IASTFunctionDefinition funcDef) {
+		if (funcDef != null) {
+			return funcDef.getBody();
+		}
+		return null;
 	}
 
 	public static boolean hasNoParameters(IASTFunctionDefinition funcDef) {
