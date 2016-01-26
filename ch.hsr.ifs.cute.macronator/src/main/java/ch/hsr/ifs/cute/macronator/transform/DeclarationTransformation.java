@@ -10,19 +10,19 @@ public class DeclarationTransformation extends ParameterizedExpressionTransforma
     }
 
     @Override
-    protected String generateTransformationCode() {
-        String type = getFunctionStyleMacroDefinition().getParameters()[0].getParameter();
-        String name = getFunctionStyleMacroDefinition().getParameters()[1].getParameter();
+    public String generateTransformationCode() {
+        final String type = getFunctionStyleMacroDefinition().getParameters()[0].getParameter();
+        final String name = getFunctionStyleMacroDefinition().getParameters()[1].getParameter();
         return String.format("%s %s;", type, name);
     }
 
     private boolean endsWithSemicolon() {
-        return getMacroDefinition().getExpansion().endsWith(";");
+        return getFunctionStyleMacroDefinition().getExpansion().endsWith(";");
     }
 
     @Override
     public boolean isValid() {
-        IASTFunctionStyleMacroParameter[] parameters = getFunctionStyleMacroDefinition().getParameters();
+        final IASTFunctionStyleMacroParameter[] parameters = getFunctionStyleMacroDefinition().getParameters();
         return (parameters != null && parameters.length == 2 && endsWithSemicolon());
     }
 }

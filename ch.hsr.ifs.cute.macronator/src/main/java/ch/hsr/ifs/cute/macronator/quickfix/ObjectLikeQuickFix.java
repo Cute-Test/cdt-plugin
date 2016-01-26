@@ -4,12 +4,13 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
 import org.eclipse.core.resources.IMarker;
 
 import ch.hsr.ifs.cute.macronator.transform.ConstexprTransformation;
+import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
 
 public class ObjectLikeQuickFix extends MacroQuickFix {
 
     @Override
-    public void apply(IASTPreprocessorMacroDefinition macroDefinition) {
-        applyTransformation(new ConstexprTransformation(macroDefinition));
+    public void apply(final IASTPreprocessorMacroDefinition macroDefinition) {
+        applyTransformation(macroDefinition, new MacroTransformation(new ConstexprTransformation(macroDefinition)));
     }
 
     @Override
@@ -18,7 +19,7 @@ public class ObjectLikeQuickFix extends MacroQuickFix {
     }
 
     @Override
-    public boolean isApplicable(IMarker marker) {
+    public boolean isApplicable(final IMarker marker) {
         return true;
     }
 }

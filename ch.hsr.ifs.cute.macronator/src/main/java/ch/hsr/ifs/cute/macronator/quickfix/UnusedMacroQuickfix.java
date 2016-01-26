@@ -12,17 +12,7 @@ public class UnusedMacroQuickfix extends MacroQuickFix {
     }
 
     @Override
-    public void apply(IASTPreprocessorMacroDefinition macroDefinition) {
-        this.applyTransformation(new MacroTransformation(macroDefinition) {
-            @Override
-            public boolean isValid() {
-                return true;
-            }
-
-            @Override
-            protected String generateTransformationCode() {
-                return "";
-            }
-        });
+    public void apply(final IASTPreprocessorMacroDefinition macroDefinition) {
+        this.applyTransformation(macroDefinition, new MacroTransformation(() -> ""));
     }
 }

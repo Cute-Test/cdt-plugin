@@ -1,6 +1,5 @@
 package ch.hsr.ifs.cute.macronator.transform;
 
-import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.internal.core.dom.rewrite.astwriter.ASTWriter;
 import org.eclipse.cdt.internal.core.dom.rewrite.astwriter.ProblemRuntimeException;
@@ -8,30 +7,52 @@ import org.eclipse.cdt.internal.core.dom.rewrite.astwriter.ProblemRuntimeExcepti
 import ch.hsr.ifs.cute.macronator.common.Parser;
 
 @SuppressWarnings("restriction")
-public abstract class MacroTransformation {
+public class MacroTransformation {
 
-    protected final IASTPreprocessorMacroDefinition macro;
-    private boolean transformationValid;
-    private String transformationCode;
-    private boolean transformed;
+    private final boolean isValid;
+    private final String transformedCode;
+    private final Transformer transformer;
 
-    public MacroTransformation(IASTPreprocessorMacroDefinition macro) {
-        this.macro = macro;
-        this.transformed = false;
+    public MacroTransformation(final Transformer transformer) {
+        this.transformer = transformer;
+        final TransformationResult result = transform();
+        isValid = result.isValid && !containsUnsupportedBuiltinMacros(result.code) && transformer.isValid();
+        transformedCode = result.code;
     }
 
-    private void transform() {
+    private TransformationResult transform() {
         try {
-            final String transformedCode = generateTransformationCode();
-            final Parser parser = new Parser(transformedCode);
-            final IASTTranslationUnit translationUnit = parser.parse();
-            transformationValid = !parser.encounteredErrors();
-            transformationCode = (transformationValid) ? new ASTWriter().write(translationUnit) : "";
-        } catch (ProblemRuntimeException e) {
-            transformationValid = false;
-            transformationCode = "";
+            if (transformer.isValid()) {
+                final String transformedCode = transformer.generateTransformationCode();
+                final Parser parser = new Parser(transformedCode);
+                final IASTTranslationUnit translationUnit = parser.parse();
+                if (!parser.encounteredErrors()) {
+                    return TransformationResult.valid(new ASTWriter().write(translationUnit));
+                }
+            }
+            return TransformationResult.invalid();
+        } catch (final ProblemRuntimeException e) {
+            return TransformationResult.invalid();
         }
-        transformed = true;
+    }
+
+    static class TransformationResult {
+        
+        final String code;
+        final boolean isValid;
+
+        public TransformationResult(final String code, final boolean isValid) {
+            this.code = code;
+            this.isValid = isValid;
+        }
+
+        static TransformationResult invalid() {
+            return new TransformationResult("", false);
+        }
+
+        static TransformationResult valid(final String code) {
+            return new TransformationResult(code, true);
+        }
     }
 
     /**
@@ -43,37 +64,18 @@ public abstract class MacroTransformation {
      * @return the transformation or the empty string
      */
     public String getCode() {
-        if (!transformed) {
-            transform();
-        }
-        return transformationCode;
-    }
-
-    /**
-     * Returns the {@link IASTPreprocessorMacroDefinition} associated with this
-     * macro transformation.
-     * 
-     * @return the associated macro definition
-     */
-    public IASTPreprocessorMacroDefinition getMacroDefinition() {
-        return macro;
+        return transformedCode;
     }
 
     /**
      * Returns true if a valid transformation for the supplied macro exists.
-     * 
      * @return true if a valid transformation exists
      */
     public boolean isValid() {
-        if (!transformed) {
-            transform();
-        }
-        return (transformationValid && !containsNotAllowedBuiltinMacros());
+        return isValid;
     }
 
-    private boolean containsNotAllowedBuiltinMacros() {
-        return (transformationCode.contains("__LINE__") || transformationCode.contains("__FILE__"));
+    private boolean containsUnsupportedBuiltinMacros(final String code) {
+        return (code.contains("__LINE__") || code.contains("__FILE__"));
     }
-
-    protected abstract String generateTransformationCode();
 }

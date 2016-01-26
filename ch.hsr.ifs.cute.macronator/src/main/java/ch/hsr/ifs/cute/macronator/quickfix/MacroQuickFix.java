@@ -34,24 +34,22 @@ import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
 
 public abstract class MacroQuickFix extends AbstractAstRewriteQuickFix {
 
-    protected IMarker marker;
-    protected IDocument document;
-
-    public IASTPreprocessorMacroDefinition macroDefinition;
-
+    private IMarker marker;
+    private IDocument document;
+    
     @Override
-    public void modifyAST(IIndex index, IMarker marker) {
+    public void modifyAST(final IIndex index, final IMarker marker) {
         try {
             this.marker = marker;
-            IASTTranslationUnit ast = getTranslationUnitViaEditor(marker).getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS | ITranslationUnit.AST_PARSE_INACTIVE_CODE);
-            int macroLength = document.getLineLength(getMarkerLineNumber());
-            IASTNode macroNode = ast.getNodeSelector(null).findFirstContainedNode(getMarkerOffset(), macroLength);
+            final IASTTranslationUnit ast = getTranslationUnitViaEditor(marker).getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS | ITranslationUnit.AST_PARSE_INACTIVE_CODE);
+            final int macroLength = document.getLineLength(getMarkerLineNumber());
+            final IASTNode macroNode = ast.getNodeSelector(null).findFirstContainedNode(getMarkerOffset(), macroLength);
             if (isMultilineMacro(macroNode)) {
                 apply((IASTPreprocessorMacroDefinition) macroNode.getParent());
             } else {
                 apply((IASTPreprocessorMacroDefinition) macroNode);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             MacronatorPlugin.log(e, "Quickfix could not be applied: no macro definition found.");
         }
     }
@@ -59,33 +57,33 @@ public abstract class MacroQuickFix extends AbstractAstRewriteQuickFix {
     public abstract void apply(IASTPreprocessorMacroDefinition macroDefinition);
 
     @Override
-    public final void apply(IMarker marker, IDocument document) {
+    public final void apply(final IMarker marker, final IDocument document) {
         this.document = document;
         super.apply(marker, document);
     }
 
-    private boolean isMultilineMacro(IASTNode macroNode) {
+    private boolean isMultilineMacro(final IASTNode macroNode) {
         return (macroNode.getParent() != null && macroNode.getParent() instanceof IASTPreprocessorMacroDefinition);
     }
 
-    protected void applyTransformation(MacroTransformation transformation) {
+    protected void applyTransformation(final IASTPreprocessorMacroDefinition macro, final MacroTransformation transformation) {
         try {
-            String replacementText = transformation.getCode();
-            int macroBeginningOffset = getMarkerOffset();
-            int length = getMacroTotalLength(macroBeginningOffset, transformation.getMacroDefinition());
-            TextFileChange change = new TextFileChange("Apply acro quickfix", (IFile) marker.getResource());
+            final String replacementText = transformation.getCode();
+            final int macroBeginningOffset = getMarkerOffset();
+            final int length = getMacroTotalLength(macroBeginningOffset, macro);
+            final TextFileChange change = new TextFileChange("Apply acro quickfix", (IFile) marker.getResource());
             change.setEdit(new ReplaceEdit(macroBeginningOffset, length, replacementText));
             change.perform(new NullProgressMonitor());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             MacronatorPlugin.log(e, "Quickfix could not be applied");
         }
     }
 
-    private int getMacroTotalLength(int macroStartOffset, IASTPreprocessorMacroDefinition macroDefinition) throws BadLocationException {
-        int macroEndOffset = macroStartOffset + macroDefinition.getRawSignature().length();
-        int macroStartLineNumber = document.getLineOfOffset(macroStartOffset);
-        int macroEndLine = document.getLineOfOffset(macroEndOffset);
-        int diff = macroStartOffset - document.getLineOffset(macroStartLineNumber);
+    private int getMacroTotalLength(final int macroStartOffset, final IASTPreprocessorMacroDefinition macroDefinition) throws BadLocationException {
+        final int macroEndOffset = macroStartOffset + macroDefinition.getRawSignature().length();
+        final int macroStartLineNumber = document.getLineOfOffset(macroStartOffset);
+        final int macroEndLine = document.getLineOfOffset(macroEndOffset);
+        final int diff = macroStartOffset - document.getLineOffset(macroStartLineNumber);
         int macroLength = -diff;
         for (int i = macroStartLineNumber; i < macroEndLine; i++) {
             macroLength += document.getLineLength(i);
@@ -103,13 +101,12 @@ public abstract class MacroQuickFix extends AbstractAstRewriteQuickFix {
     }
 
     private Integer getMarkerOffset() throws PartInitException {
-        ITextEditor editor = getTextEditor();
-        IDocumentProvider documentProvider = editor.getDocumentProvider();
-        IAnnotationModel model = documentProvider.getAnnotationModel(editor.getEditorInput());
-        AbstractMarkerAnnotationModel markerModel = (AbstractMarkerAnnotationModel) model;
-        Position position = markerModel.getMarkerPosition(marker);
+        final ITextEditor editor = getTextEditor();
+        final IDocumentProvider documentProvider = editor.getDocumentProvider();
+        final IAnnotationModel model = documentProvider.getAnnotationModel(editor.getEditorInput());
+        final AbstractMarkerAnnotationModel markerModel = (AbstractMarkerAnnotationModel) model;
+        final Position position = markerModel.getMarkerPosition(marker);
         return position.getOffset();
-
     }
 
     private ITextEditor getTextEditor() throws PartInitException {

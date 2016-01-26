@@ -4,17 +4,19 @@ import org.eclipse.cdt.core.dom.ast.ExpansionOverlapsBoundaryException;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
 import org.eclipse.cdt.core.parser.IToken;
 
-public class ConstexprTransformation extends MacroTransformation {
+public class ConstexprTransformation implements Transformer {
 
-    public ConstexprTransformation(IASTPreprocessorMacroDefinition macro) {
-        super(macro);
+    private final IASTPreprocessorMacroDefinition macro;
+
+    public ConstexprTransformation(final IASTPreprocessorMacroDefinition macro) {
+        this.macro = macro;
     }
 
     @Override
-    protected String generateTransformationCode() {
+    public String generateTransformationCode() {
         try {
             IToken token = macro.getSyntax().getNext().getNext(); // skip '#define'
-            StringBuilder replacementText = new StringBuilder(String.format("constexpr auto %s =", token.getImage()));
+            final StringBuilder replacementText = new StringBuilder(String.format("constexpr auto %s =", token.getImage()));
             token = token.getNext();
             while (token != null) {
                 replacementText.append(token.getImage() + " ");
@@ -22,7 +24,7 @@ public class ConstexprTransformation extends MacroTransformation {
             }
             replacementText.append(";");
             return replacementText.toString();
-        } catch (ExpansionOverlapsBoundaryException e) {
+        } catch (final ExpansionOverlapsBoundaryException e) {
             throw new RuntimeException(e);
         }
     }

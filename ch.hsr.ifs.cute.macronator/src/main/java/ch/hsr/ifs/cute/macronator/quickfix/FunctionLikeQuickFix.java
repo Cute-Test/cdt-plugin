@@ -18,21 +18,22 @@ public class FunctionLikeQuickFix extends MacroQuickFix {
     }
 
     @Override
-    public void apply(IASTPreprocessorMacroDefinition macroDefinition) {
+    public void apply(final IASTPreprocessorMacroDefinition macroDefinition) {
         if (!(macroDefinition instanceof IASTPreprocessorFunctionStyleMacroDefinition)) {
             MacronatorPlugin.getDefault().getLog().log(new Status(IStatus.WARNING, MacronatorPlugin.PLUGIN_ID, "No macro definiton found"));
             return;
         }
 
-        MacroTransformation autoFunctionTransformation = new AutoFunctionTransformation((IASTPreprocessorFunctionStyleMacroDefinition) macroDefinition);
-        if (autoFunctionTransformation.isValid()) {
-            applyTransformation(autoFunctionTransformation);
+        final IASTPreprocessorFunctionStyleMacroDefinition functionLikeMacro = (IASTPreprocessorFunctionStyleMacroDefinition) macroDefinition;      
+        final MacroTransformation macroTransformation = new MacroTransformation(new AutoFunctionTransformation(functionLikeMacro));
+        if (macroTransformation.isValid()) {
+            applyTransformation(macroDefinition, macroTransformation);
             return;
-        }
-
-        MacroTransformation voidFunctionTransformation = new VoidFunctionTransformation((IASTPreprocessorFunctionStyleMacroDefinition) macroDefinition);
+        } 
+        
+        final MacroTransformation voidFunctionTransformation = new MacroTransformation(new VoidFunctionTransformation(functionLikeMacro));
         if (voidFunctionTransformation.isValid()) {
-            applyTransformation(voidFunctionTransformation);
+            applyTransformation(macroDefinition, voidFunctionTransformation);
         }
     }
 }

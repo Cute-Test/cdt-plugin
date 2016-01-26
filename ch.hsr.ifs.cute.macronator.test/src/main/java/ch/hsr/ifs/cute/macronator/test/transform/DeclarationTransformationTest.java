@@ -2,43 +2,49 @@ package ch.hsr.ifs.cute.macronator.test.transform;
 
 import static ch.hsr.ifs.cute.macronator.test.testutils.TestUtils.assertTransformationEquals;
 import static ch.hsr.ifs.cute.macronator.test.testutils.TestUtils.createFunctionStyleMacroDefinition;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition;
 import org.junit.Test;
 
 import ch.hsr.ifs.cute.macronator.transform.DeclarationTransformation;
+import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
 
 public class DeclarationTransformationTest {
 	
 	@Test
 	public void testShouldBeValidIfMacroExpandsToDeclaration() {
-		IASTPreprocessorFunctionStyleMacroDefinition declarationMacro = createFunctionStyleMacroDefinition("#define DEF(X, Y) X Y;");
-		assertTrue(new DeclarationTransformation(declarationMacro).isValid());
+		final IASTPreprocessorFunctionStyleMacroDefinition declarationMacro = createFunctionStyleMacroDefinition("#define DEF(X, Y) X Y;");
+		assertTrue(createTransformation(declarationMacro).isValid());
 	}
 	
 	@Test
 	public void testShouldBeInvalidIfMacroExpansionIsMissingSemicolon() {
-		IASTPreprocessorFunctionStyleMacroDefinition declarationMacro = createFunctionStyleMacroDefinition("#define DEF(X, Y) X Y");
-		assertFalse(new DeclarationTransformation(declarationMacro).isValid());
+		final IASTPreprocessorFunctionStyleMacroDefinition declarationMacro = createFunctionStyleMacroDefinition("#define DEF(X, Y) X Y");
+		assertFalse(createTransformation(declarationMacro).isValid());
 	}
 	
 	@Test
 	public void testShouldGenerateCorrectTransformationIfMacroExpandsToDeclaration() {
-		IASTPreprocessorFunctionStyleMacroDefinition declarationMacro = createFunctionStyleMacroDefinition("#define DEF(X, Y) X Y;");
-		String expectedTransformation = "X Y;";
-		assertTransformationEquals(expectedTransformation, new DeclarationTransformation(declarationMacro));
+		final IASTPreprocessorFunctionStyleMacroDefinition declarationMacro = createFunctionStyleMacroDefinition("#define DEF(X, Y) X Y;");
+		final String expectedTransformation = "X Y;";
+		assertTransformationEquals(expectedTransformation, createTransformation(declarationMacro));
 	}
+
+    private MacroTransformation createTransformation(final IASTPreprocessorFunctionStyleMacroDefinition declarationMacro) {
+        return new MacroTransformation(new DeclarationTransformation(declarationMacro));
+    }
 	
 	@Test
 	public void testShouldBeInvalidIfMacroExpandsToStatement() {
-		IASTPreprocessorFunctionStyleMacroDefinition statementMacro = createFunctionStyleMacroDefinition("#define DO(X) do {X;} while(0)");
-		assertFalse( new DeclarationTransformation(statementMacro).isValid());
+		final IASTPreprocessorFunctionStyleMacroDefinition statementMacro = createFunctionStyleMacroDefinition("#define DO(X) do {X;} while(0)");
+		assertFalse(createTransformation(statementMacro).isValid());
 	}
 
 	@Test
 	public void testShouldBeInvalidIfMacroExpandsToExpression() {
-		IASTPreprocessorFunctionStyleMacroDefinition expressionMacro = createFunctionStyleMacroDefinition("#define DO(X) (X) * (X)");
-		assertFalse(new DeclarationTransformation(expressionMacro).isValid());
+		final IASTPreprocessorFunctionStyleMacroDefinition expressionMacro = createFunctionStyleMacroDefinition("#define DO(X) (X) * (X)");
+		assertFalse(createTransformation(expressionMacro).isValid());
 	}
 }

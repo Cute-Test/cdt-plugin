@@ -4,19 +4,19 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition
 
 public class AutoFunctionTransformation extends ParameterizedExpressionTransformation {
 
-    public AutoFunctionTransformation(IASTPreprocessorFunctionStyleMacroDefinition macroDefinition) {
+    public AutoFunctionTransformation(final IASTPreprocessorFunctionStyleMacroDefinition macroDefinition) {
         super(macroDefinition);
     }
 
     @Override
-    protected String generateTransformationCode() {
+    public String generateTransformationCode() {
         final StringBuilder transformation = new StringBuilder();
         transformation.append(generateTypenames(getFunctionStyleMacroDefinition().getParameters()));
         transformation.append("constexpr inline auto ");
-        transformation.append(getMacroDefinition().getName().toString());
+        transformation.append(getFunctionStyleMacroDefinition().getName().toString());
         transformation.append(generateFunctionParameters(getFunctionStyleMacroDefinition().getParameters()));
-        transformation.append(" -> decltype(" + getMacroDefinition().getExpansion() + "){");
-        transformation.append("return (" + getMacroDefinition().getExpansion() + "); }");
+        transformation.append(" -> decltype(" + getFunctionStyleMacroDefinition().getExpansion() + "){");
+        transformation.append("return (" + getFunctionStyleMacroDefinition().getExpansion() + "); }");
         return transformation.toString();
     }
 }

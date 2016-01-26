@@ -21,19 +21,19 @@ public class BuiltinMacroTest {
 
 	MacroTransformation transformation;
 
-    public BuiltinMacroTest(MacroTransformation transformation) {
+    public BuiltinMacroTest(final MacroTransformation transformation) {
 		this.transformation = transformation;
 
     }
 
     @Parameterized.Parameters
     public static Collection<Object[]> configs() {
-    	MacroTransformation constexprContaining__FILE__ = new ConstexprTransformation(createMacroDefinition("#define MACRO __FILE__"));
-    	MacroTransformation constexprContaining__LINE__ = new ConstexprTransformation(createMacroDefinition("#define MACRO __LINE__"));
-    	MacroTransformation autoFunctionContaining__FILE__ =  new AutoFunctionTransformation(createFunctionStyleMacroDefinition("#define MACRO(A) __FILE__"));
-    	MacroTransformation autoFunctionContaining__LINE__ =  new AutoFunctionTransformation(createFunctionStyleMacroDefinition("#define MACRO(A) __LINE__"));
-    	MacroTransformation voidFunctionContaining__FILE__ =  new VoidFunctionTransformation(createFunctionStyleMacroDefinition("#define MACRO(X) do {__FILE__;} while(0);"));
-    	MacroTransformation voidFunctionContaining__LINE__ =  new VoidFunctionTransformation(createFunctionStyleMacroDefinition("#define MACRO(X) do {__LINE__;} while(0);"));
+    	final MacroTransformation constexprContaining__FILE__ = new MacroTransformation(new ConstexprTransformation(createMacroDefinition("#define MACRO __FILE__")));
+    	final MacroTransformation constexprContaining__LINE__ = new MacroTransformation(new ConstexprTransformation(createMacroDefinition("#define MACRO __LINE__")));
+    	final MacroTransformation autoFunctionContaining__FILE__ =  new MacroTransformation(new AutoFunctionTransformation(createFunctionStyleMacroDefinition("#define MACRO(A) __FILE__")));
+    	final MacroTransformation autoFunctionContaining__LINE__ =  new MacroTransformation(new AutoFunctionTransformation(createFunctionStyleMacroDefinition("#define MACRO(A) __LINE__")));
+    	final MacroTransformation voidFunctionContaining__FILE__ =  new MacroTransformation(new VoidFunctionTransformation(createFunctionStyleMacroDefinition("#define MACRO(X) do {__FILE__;} while(0);")));
+    	final MacroTransformation voidFunctionContaining__LINE__ =  new MacroTransformation(new VoidFunctionTransformation(createFunctionStyleMacroDefinition("#define MACRO(X) do {__LINE__;} while(0);")));
 
         return Arrays.asList(new Object[][]{
         		{constexprContaining__FILE__},
