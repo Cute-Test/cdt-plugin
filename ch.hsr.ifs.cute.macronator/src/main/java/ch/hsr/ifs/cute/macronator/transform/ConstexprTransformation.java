@@ -4,7 +4,7 @@ import org.eclipse.cdt.core.dom.ast.ExpansionOverlapsBoundaryException;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
 import org.eclipse.cdt.core.parser.IToken;
 
-public class ConstexprTransformation implements Transformer {
+public class ConstexprTransformation extends Transformer {
 
     private final IASTPreprocessorMacroDefinition macro;
 
