@@ -2,9 +2,9 @@ package ch.hsr.ifs.cute.macronator.transform;
 
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition;
 
-public class AutoFunctionTransformation extends ParameterizedExpressionTransformation {
+public class AutoFunctionTransformer extends ParameterizedExpressionTransformer {
 
-    public AutoFunctionTransformation(final IASTPreprocessorFunctionStyleMacroDefinition macroDefinition) {
+    public AutoFunctionTransformer(final IASTPreprocessorFunctionStyleMacroDefinition macroDefinition) {
         super(macroDefinition);
     }
 
@@ -16,7 +16,9 @@ public class AutoFunctionTransformation extends ParameterizedExpressionTransform
         transformation.append(getFunctionStyleMacroDefinition().getName().toString());
         transformation.append(generateFunctionParameters(getFunctionStyleMacroDefinition().getParameters()));
         transformation.append(" -> decltype(" + getFunctionStyleMacroDefinition().getExpansion() + "){");
-        transformation.append("return (" + getFunctionStyleMacroDefinition().getExpansion() + "); }");
+        transformation.append("return (");
+        transformation.append(getFunctionStyleMacroDefinition().getExpansion());
+        transformation.append("); }");
         return transformation.toString();
     }
 }

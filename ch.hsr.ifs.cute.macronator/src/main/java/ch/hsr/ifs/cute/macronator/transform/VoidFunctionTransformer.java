@@ -2,9 +2,9 @@ package ch.hsr.ifs.cute.macronator.transform;
 
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition;
 
-public class VoidFunctionTransformation extends ParameterizedExpressionTransformation {
+public class VoidFunctionTransformer extends ParameterizedExpressionTransformer {
 
-    public VoidFunctionTransformation(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
+    public VoidFunctionTransformer(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
         super(macro);
     }
 

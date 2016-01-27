@@ -4,11 +4,11 @@ import org.eclipse.cdt.core.dom.ast.ExpansionOverlapsBoundaryException;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
 import org.eclipse.cdt.core.parser.IToken;
 
-public class ConstexprTransformation extends Transformer {
+public class ConstexprTransformer extends Transformer {
 
     private final IASTPreprocessorMacroDefinition macro;
 
-    public ConstexprTransformation(final IASTPreprocessorMacroDefinition macro) {
+    public ConstexprTransformer(final IASTPreprocessorMacroDefinition macro) {
         this.macro = macro;
     }
 

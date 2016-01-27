@@ -3,9 +3,9 @@ package ch.hsr.ifs.cute.macronator.transform;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionStyleMacroParameter;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition;
 
-public class DeclarationTransformation extends ParameterizedExpressionTransformation {
+public class DeclarationTransformer extends ParameterizedExpressionTransformer {
 
-    public DeclarationTransformation(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
+    public DeclarationTransformer(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
         super(macro);
     }
 

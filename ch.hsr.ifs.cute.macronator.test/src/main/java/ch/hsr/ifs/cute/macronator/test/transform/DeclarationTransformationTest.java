@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition;
 import org.junit.Test;
 
-import ch.hsr.ifs.cute.macronator.transform.DeclarationTransformation;
+import ch.hsr.ifs.cute.macronator.transform.DeclarationTransformer;
 import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
 
 public class DeclarationTransformationTest {
@@ -33,7 +33,7 @@ public class DeclarationTransformationTest {
 	}
 
     private MacroTransformation createTransformation(final IASTPreprocessorFunctionStyleMacroDefinition declarationMacro) {
-        return new MacroTransformation(new DeclarationTransformation(declarationMacro));
+        return new MacroTransformation(new DeclarationTransformer(declarationMacro));
     }
 	
 	@Test

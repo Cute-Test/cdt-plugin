@@ -7,10 +7,10 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
 import ch.hsr.ifs.cute.macronator.common.MacroClassifier;
 import ch.hsr.ifs.cute.macronator.common.MacroProperties;
-import ch.hsr.ifs.cute.macronator.transform.AutoFunctionTransformation;
-import ch.hsr.ifs.cute.macronator.transform.DeclarationTransformation;
+import ch.hsr.ifs.cute.macronator.transform.AutoFunctionTransformer;
+import ch.hsr.ifs.cute.macronator.transform.DeclarationTransformer;
 import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
-import ch.hsr.ifs.cute.macronator.transform.VoidFunctionTransformation;
+import ch.hsr.ifs.cute.macronator.transform.VoidFunctionTransformer;
 
 public class FunctionLikeMacroChecker extends AbstractIndexAstChecker {
 
@@ -31,10 +31,10 @@ public class FunctionLikeMacroChecker extends AbstractIndexAstChecker {
 	}
 
 	private boolean isTransformationValid(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
-		return isTransformableToFunction(macro) && !new DeclarationTransformation(macro).isValid();
+		return isTransformableToFunction(macro) && !new DeclarationTransformer(macro).isValid();
 	}
 
     private boolean isTransformableToFunction(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
-        return new MacroTransformation(new AutoFunctionTransformation(macro)).isValid() || new MacroTransformation(new VoidFunctionTransformation(macro)).isValid();
+        return new MacroTransformation(new AutoFunctionTransformer(macro)).isValid() || new MacroTransformation(new VoidFunctionTransformer(macro)).isValid();
     }
 }

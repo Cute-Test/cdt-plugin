@@ -7,7 +7,7 @@ import static org.junit.Assert.assertFalse;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition;
 import org.junit.Test;
 
-import ch.hsr.ifs.cute.macronator.transform.AutoFunctionTransformation;
+import ch.hsr.ifs.cute.macronator.transform.AutoFunctionTransformer;
 import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
 
 public class AutoFunctionTransformationTest {
@@ -20,7 +20,7 @@ public class AutoFunctionTransformationTest {
 	}
 
     private MacroTransformation createTransformation(final String macro) {
-        return new MacroTransformation(new AutoFunctionTransformation(createFunctionStyleMacroDefinition(macro)));
+        return new MacroTransformation(new AutoFunctionTransformer(createFunctionStyleMacroDefinition(macro)));
     }
 	
 	@Test
@@ -40,6 +40,6 @@ public class AutoFunctionTransformationTest {
 	@Test
 	public void testReturnFunctionTransformationShouldBeInvalidIfFunctionDoesntExpandIntoExpression() throws Exception {
 		final IASTPreprocessorFunctionStyleMacroDefinition macroDefinition = createFunctionStyleMacroDefinition("#define MACRO(A) do {x;} while(0);");
-		assertFalse(new MacroTransformation(new AutoFunctionTransformation(macroDefinition)).isValid());
+		assertFalse(new MacroTransformation(new AutoFunctionTransformer(macroDefinition)).isValid());
 	}
 }

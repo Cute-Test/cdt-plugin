@@ -3,12 +3,12 @@ package ch.hsr.ifs.cute.macronator.transform;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionStyleMacroParameter;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorFunctionStyleMacroDefinition;
 
-public abstract class ParameterizedExpressionTransformation extends Transformer {
+public abstract class ParameterizedExpressionTransformer extends Transformer {
 
     private final String PARAMETER_PATTERN = "T%s&& %s";
     private final IASTPreprocessorFunctionStyleMacroDefinition macro;
 
-    public ParameterizedExpressionTransformation(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
+    public ParameterizedExpressionTransformer(final IASTPreprocessorFunctionStyleMacroDefinition macro) {
         this.macro = macro;
     }
 

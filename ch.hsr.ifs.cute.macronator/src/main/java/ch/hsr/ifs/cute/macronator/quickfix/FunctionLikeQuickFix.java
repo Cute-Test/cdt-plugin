@@ -6,9 +6,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import ch.hsr.ifs.cute.macronator.MacronatorPlugin;
-import ch.hsr.ifs.cute.macronator.transform.AutoFunctionTransformation;
+import ch.hsr.ifs.cute.macronator.transform.AutoFunctionTransformer;
 import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
-import ch.hsr.ifs.cute.macronator.transform.VoidFunctionTransformation;
+import ch.hsr.ifs.cute.macronator.transform.VoidFunctionTransformer;
 
 public class FunctionLikeQuickFix extends MacroQuickFix {
 
@@ -25,13 +25,13 @@ public class FunctionLikeQuickFix extends MacroQuickFix {
         }
 
         final IASTPreprocessorFunctionStyleMacroDefinition functionLikeMacro = (IASTPreprocessorFunctionStyleMacroDefinition) macroDefinition;      
-        final MacroTransformation macroTransformation = new MacroTransformation(new AutoFunctionTransformation(functionLikeMacro));
+        final MacroTransformation macroTransformation = new MacroTransformation(new AutoFunctionTransformer(functionLikeMacro));
         if (macroTransformation.isValid()) {
             applyTransformation(macroDefinition, macroTransformation);
             return;
         } 
         
-        final MacroTransformation voidFunctionTransformation = new MacroTransformation(new VoidFunctionTransformation(functionLikeMacro));
+        final MacroTransformation voidFunctionTransformation = new MacroTransformation(new VoidFunctionTransformer(functionLikeMacro));
         if (voidFunctionTransformation.isValid()) {
             applyTransformation(macroDefinition, voidFunctionTransformation);
         }

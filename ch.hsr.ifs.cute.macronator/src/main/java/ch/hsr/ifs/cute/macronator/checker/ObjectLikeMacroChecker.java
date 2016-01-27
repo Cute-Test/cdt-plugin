@@ -6,7 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
 import ch.hsr.ifs.cute.macronator.common.MacroClassifier;
 import ch.hsr.ifs.cute.macronator.common.MacroProperties;
-import ch.hsr.ifs.cute.macronator.transform.ConstexprTransformation;
+import ch.hsr.ifs.cute.macronator.transform.ConstexprTransformer;
 import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
 
 public class ObjectLikeMacroChecker extends AbstractIndexAstChecker {
@@ -19,7 +19,7 @@ public class ObjectLikeMacroChecker extends AbstractIndexAstChecker {
 			final MacroClassifier classifier = new MacroClassifier(macro);
 			final MacroProperties properties = new MacroProperties(macro);
 			if (classifier.isObjectLike() && classifier.areDependenciesValid()
-					&& new MacroTransformation(new ConstexprTransformation(macro)).isValid() && !properties.suggestionsSuppressed()) {
+					&& new MacroTransformation(new ConstexprTransformer(macro)).isValid() && !properties.suggestionsSuppressed()) {
 				reportProblem(PROBLEM_ID, macro);
 			}
 		}

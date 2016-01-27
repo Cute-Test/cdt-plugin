@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="cdt" sequenceNumber="88">
+<?pde version="3.8"?><target name="cdt" sequenceNumber="89">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.sdk.ide" version="4.5.1.M20150904-0015"/>
@@ -7,13 +7,13 @@
 <repository location="http://download.eclipse.org/eclipse/updates/4.5"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="8.8.0.201511261058"/>
-<repository location="http://cevelop.com/cdt-testing/mars"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.11.1.v20150806-0404"/>
 <unit id="org.eclipse.cdt.sdk.feature.group" version="8.8.0.201509131935"/>
 <repository location="http://download.eclipse.org/releases/mars"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="8.8.0.201512170917"/>
+<repository location="http://cevelop.com/cdt-testing/mars"/>
 </location>
 </locations>
 </target>

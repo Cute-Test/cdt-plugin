@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
-import ch.hsr.ifs.cute.macronator.transform.VoidFunctionTransformation;
+import ch.hsr.ifs.cute.macronator.transform.VoidFunctionTransformer;
 
 public class VoidFunctionTransformationTest {
 	
@@ -67,6 +67,6 @@ public class VoidFunctionTransformationTest {
 	}
 	
     private MacroTransformation createTransformation(final String macro) {
-        return new MacroTransformation(new VoidFunctionTransformation(createFunctionStyleMacroDefinition(macro)));
+        return new MacroTransformation(new VoidFunctionTransformer(createFunctionStyleMacroDefinition(macro)));
     }
 }

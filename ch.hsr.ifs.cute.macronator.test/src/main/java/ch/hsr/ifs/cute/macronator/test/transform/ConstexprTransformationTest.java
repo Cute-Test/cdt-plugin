@@ -6,7 +6,7 @@ import static ch.hsr.ifs.cute.macronator.test.testutils.TestUtils.createMacroDef
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
 import org.junit.Test;
 
-import ch.hsr.ifs.cute.macronator.transform.ConstexprTransformation;
+import ch.hsr.ifs.cute.macronator.transform.ConstexprTransformer;
 import ch.hsr.ifs.cute.macronator.transform.MacroTransformation;
 
 public class ConstexprTransformationTest {
@@ -36,6 +36,6 @@ public class ConstexprTransformationTest {
 	}
 	
     private MacroTransformation createTransformation(final IASTPreprocessorMacroDefinition macro) {
-        return new MacroTransformation(new ConstexprTransformation(macro));
+        return new MacroTransformation(new ConstexprTransformer(macro));
     }
 }
