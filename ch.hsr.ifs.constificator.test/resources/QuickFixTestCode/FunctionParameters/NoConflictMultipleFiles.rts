@@ -1,0 +1,79 @@
+//!NoConflictingDeclarationsWithReferenceParameters
+//@main.cpp
+#include "main1.h"
+
+void f(int &) {
+}
+//=
+#include "main1.h"
+
+void f(const int &) {
+}
+//@main1.h
+void f(int &);
+//=
+void f(const int &);
+
+//!NoConflictingDeclarationsWithPointerParameters-1
+//@main.cpp
+#include "main2.h"
+
+void f(int *) {
+}
+//=
+#include "main2.h"
+
+void f(const int * const) {
+}
+//@main2.h
+void f(int *);
+//=
+void f(const int * const);
+
+//!NoConflictingDeclarationsWithPointerParameters-2
+//@main.cpp
+#include "main3.h"
+
+void f(int *) {
+}
+//=
+#include "main3.h"
+
+void f(const int * const) {
+}
+//@main3.h
+void f(int * const);
+//=
+void f(const int * const);
+
+//!NoConflictingDeclarationsWithValueParameters-1
+//@main.cpp
+#include "main4.h"
+
+void f(int) {
+}
+//=
+#include "main4.h"
+
+void f(const int) {
+}
+//@main4.h
+void f(int);
+//=
+void f(const int);
+
+//!NoConflictingDeclarationsWithValueParameters-2
+//@main.cpp
+#include "main5.h"
+
+void f(int) {
+}
+//=
+#include "main5.h"
+
+void f(const int) {
+}
+//@main5.h
+void f(const int);
+//=
+void f(const int);

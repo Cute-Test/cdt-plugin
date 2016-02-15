@@ -1,0 +1,15 @@
+//!NonConstDeclClassTypeCallNonConstNonStaticMemberFunctionOnly
+//@main.cpp
+#include "cls.h"
+
+int main() {
+	cls o { 42 };
+	o.number();
+}
+//=
+#include "cls.h"
+
+int main() {
+	const cls o { 42 };
+	o.number();
+}

@@ -1,0 +1,33 @@
+//!ConstPtrToNonConstPassedToFunctionTakingConstPtrToNonConst
+//@.config
+//@main.cpp
+#include "pod_funcs.h"
+
+int main()
+  {
+  int * const ptr{};
+  func_const_ptr_nonconst(ptr);
+  }
+
+//!ConstPtrToNonConstPassedToFunctionTakingConstPtrToConst
+//@.config
+markerLines=5
+//@main.cpp
+#include "pod_funcs.h"
+
+int main()
+  {
+  int * const ptr{};
+  func_const_ptr_const(ptr);
+  }
+
+//!ConstPtrToConstPassedToFunctionTakingConstPtrToConst
+//@.config
+//@main.cpp
+#include "pod_funcs.h"
+
+int main()
+  {
+  int const * const ptr{};
+  func_const_ptr_const(ptr);
+  }

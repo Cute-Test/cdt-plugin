@@ -1,0 +1,11 @@
+//!ConstPtrToNonConstBindRefToConstPtrToConst
+//@main.cpp
+int main() {
+	int * * const ptr { };
+	int const * const & ref { ptr };
+}
+//=
+int main() {
+	int * const * const ptr { };
+	int const * const & ref { ptr };
+}

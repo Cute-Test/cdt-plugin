@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="cevelop" sequenceNumber="1">
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.cdttesting.tools.feature.feature.group" version="0.0.0"/>
+<repository location="http://www.cevelop.com/cdt-testing/development"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="ch.hsr.ifs.cute.boost.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.cute.macronator.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.mockator.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.sconsolidator.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.cute.namespactor.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.cute.gcov.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.cute.refactoringPreview.clonewar.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.cute.elevator.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.sconsolidator.depviz.feature.feature.group" version="0.0.0"/>
+<unit id="com.cevelop.feature.feature.group" version="0.0.0"/>
+<unit id="ch.hsr.ifs.cute.feature.feature.group" version="0.0.0"/>
+<repository location="https://www.cevelop.com/updatesite/mars/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.test.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
+<unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.5"/>
+</location>
+</locations>
+<launcherArgs>
+<vmArgs>-Dosgi.requiredJavaVersion=1.8 -XX:MaxPermSize=256m -Xms256m -Xmx1024m</vmArgs>
+</launcherArgs>
+</target>

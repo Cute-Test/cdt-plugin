@@ -1,0 +1,59 @@
+//!NoConflictingDeclarationsWithReferenceParameters
+//@main.cpp
+void f(int &);
+
+void f(int &) {
+}
+//=
+void f(const int &);
+
+void f(const int &) {
+}
+
+//!NoConflictingDeclarationsWithPointerParameters-1
+//@main.cpp
+void f(int *);
+
+void f(int *) {
+}
+//=
+void f(const int * const);
+
+void f(const int * const) {
+}
+
+//!NoConflictingDeclarationsWithPointerParameters-2
+//@main.cpp
+void f(int * const);
+
+void f(int *) {
+}
+//=
+void f(const int * const);
+
+void f(const int * const) {
+}
+
+//!NoConflictingDeclarationsWithValueParameters-1
+//@main.cpp
+void f(int);
+
+void f(int) {
+}
+//=
+void f(const int);
+
+void f(const int) {
+}
+
+//!NoConflictingDeclarationsWithValueParameters-2
+//@main.cpp
+void f(const int);
+
+void f(int) {
+}
+//=
+void f(const int);
+
+void f(const int) {
+}

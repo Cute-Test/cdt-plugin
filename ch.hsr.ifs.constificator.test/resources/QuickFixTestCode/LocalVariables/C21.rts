@@ -1,0 +1,11 @@
+//!AddressOfNonConstPtrToConstAssignedToConstPtrToConstPtrToConst
+//@main.cpp
+int main() {
+	char const * ptr { };
+	char const * const * const pptr {&ptr};
+}
+//=
+int main() {
+	char const * const ptr { };
+	char const * const * const pptr {&ptr};
+}

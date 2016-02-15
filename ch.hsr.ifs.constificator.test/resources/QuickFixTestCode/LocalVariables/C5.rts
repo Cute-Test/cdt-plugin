@@ -1,0 +1,31 @@
+//!NonConstDeclAddressPassedToFunctionTakingNonConstPtrToConst
+//@main.cpp
+#include "pod_funcs.h"
+
+int main() {
+	int n { 42 };
+	func_nonconst_ptr_const(&n);
+}
+//=
+#include "pod_funcs.h"
+
+int main() {
+	const int n { 42 };
+	func_nonconst_ptr_const(&n);
+}
+
+//!NonConstDeclAddressPassedToFunctionTakingConstPtrToConst
+//@main.cpp
+#include "pod_funcs.h"
+
+int main() {
+	int n{42};
+	func_const_ptr_const(&n);
+}
+//=
+#include "pod_funcs.h"
+
+int main() {
+	const int n { 42 };
+	func_const_ptr_const(&n);
+}

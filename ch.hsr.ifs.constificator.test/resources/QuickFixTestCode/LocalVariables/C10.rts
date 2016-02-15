@@ -1,0 +1,15 @@
+//!NonConstDeclClassTypeBindConstRef
+//@main.cpp
+#include "cls.h"
+
+int main() {
+	cls o { 42 };
+	cls const & ref { o };
+}
+//=
+#include "cls.h"
+
+int main() {
+	const cls o { 42 };
+	cls const & ref { o };
+}

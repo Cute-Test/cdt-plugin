@@ -1,0 +1,15 @@
+//!NonConstDeclClassTypePassedToFunctionTakingReferenceToConstPtrConst
+//@main.cpp
+#include "cls.h"
+
+int main() {
+	cls o { 42 };
+	func_ref_const_ptr_const(&o);
+}
+//=
+#include "cls.h"
+
+int main() {
+	const cls o { 42 };
+	func_ref_const_ptr_const(&o);
+}

@@ -1,0 +1,36 @@
+//!NonConstDeclLocallyChangedIncrementPrefix
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  ++n;
+  }
+
+//!NonConstDeclLocallyChangedIncrementPostfix
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n++;
+  }
+  
+//!NonConstDeclLocallyChangedDecrementPrefix
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  --n;
+  }
+  
+//!NonConstDeclLocallyChangedDecrementPostfix
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n--;
+  }
+  

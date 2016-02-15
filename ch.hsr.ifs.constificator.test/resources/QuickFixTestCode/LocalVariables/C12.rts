@@ -1,0 +1,31 @@
+//!NonConstDeclClassTypeAssignToNonConstPtrConst
+//@main.cpp
+#include "cls.h"
+
+int main() {
+	cls o { 42 };
+	cls const * ptr { &o };
+}
+//=
+#include "cls.h"
+
+int main() {
+	const cls o { 42 };
+	cls const * const ptr { &o };
+}
+
+//!NonConstDeclClassTypeAssignToConstPtrConst
+//@main.cpp
+#include "cls.h"
+
+int main() {
+	cls o { 42 };
+	cls const * const ptr { &o };
+}
+//=
+#include "cls.h"
+
+int main() {
+	const cls o { 42 };
+	cls const * const ptr { &o };
+}

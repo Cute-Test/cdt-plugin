@@ -1,0 +1,32 @@
+//!NonConstPtrToConstAssign
+//@.config
+//@main.cpp
+#include "cls.h"
+
+int main()
+  {
+  char const * ptr{};
+  ptr = nullptr;
+  }
+
+//!NonConstPtrToConstPlusAssign
+//@.config
+//@main.cpp
+#include "cls.h"
+
+int main()
+  {
+  char const * ptr{};
+  ptr += 1;
+  }
+
+//!NonConstPtrToCOnstMinusAssign
+//@.config
+//@main.cpp
+#include "cls.h"
+
+int main()
+  {
+  char const * ptr{};
+  ptr -= 1;
+  }

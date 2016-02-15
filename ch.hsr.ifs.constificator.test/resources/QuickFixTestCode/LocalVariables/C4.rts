@@ -1,0 +1,11 @@
+//!NonConstDeclBindConstRef
+//@main.cpp
+int main() {
+	int n { 42 };
+	int const & ref { n };
+}
+//=
+int main() {
+	const int n { 42 };
+	int const & ref { n };
+}

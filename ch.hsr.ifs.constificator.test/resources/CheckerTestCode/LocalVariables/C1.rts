@@ -1,0 +1,98 @@
+//!NonConstDeclLocallyChangedAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n = 21;
+  }
+
+//!NonConstDeclLocallyChangedPlusAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n += 21;
+  }
+
+//!NonConstDeclLocallyChangedMinusAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n -= 21;
+  }
+
+//!NonConstDeclLocallyChangedTimesAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n *= 21;
+  }
+
+//!NonConstDeclLocallyChangedDivisionAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n /= 21;
+  }
+
+//!NonConstDeclLocallyChangedModuloAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n %= 21;
+  }
+
+//!NonConstDeclLocallyChangedShiftRightAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n >>= 2;
+  }
+
+//!NonConstDeclLocallyChangedShiftLeftAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n <<= 21;
+  }
+
+//!NonConstDeclLocallyChangedBinaryOrAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n |= 21;
+  }
+
+//!NonConstDeclLocallyChangedBinaryAndAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n &= 21;
+  }
+
+//!NonConstDeclLocallyChangedBinaryXorAssignment
+//@.config
+//@main.cpp
+int main()
+  {
+  int n{42};
+  n ^= 21;
+  }
