@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
+		<groupId>ch.hsr.ifs</groupId>
+		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
+		<version>4.13.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ch.hsr.ifs.cute.constificator.test</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
+	<version>4.13.0-SNAPSHOT</version>
+	
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<testSuite>ch.hsr.ifs.cute.constificator.test</testSuite>
+					<testClass>ch.hsr.ifs.cute.constificator.test.ConstificatorTests</testClass>
+					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
+					<useUIHarness>true</useUIHarness>
+					<argLine>${os-jvm-flags}</argLine>
+					<product>org.eclipse.epp.package.cpp.product</product>
+					<application>org.eclipse.ui.ide.workbench</application>
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.sdk.ide</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+					</dependencies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

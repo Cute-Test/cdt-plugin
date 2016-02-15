@@ -9,6 +9,6 @@
 	</parent>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.boost.feature</artifactId>
-	<version>1.42.0.qualifier</version>
+	<version>1.42.0-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 </project>
