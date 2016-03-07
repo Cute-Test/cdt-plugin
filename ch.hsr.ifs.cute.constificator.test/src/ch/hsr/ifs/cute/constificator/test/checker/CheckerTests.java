@@ -17,7 +17,9 @@ import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.C49_C6Test;
 import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.C49_C7Test;
 import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.C49_C8Test;
 import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.C49_C9Test;
+import ch.hsr.ifs.cute.constificator.test.checker.localvariables.C10Test;
 import ch.hsr.ifs.cute.constificator.test.checker.localvariables.C11Test;
+import ch.hsr.ifs.cute.constificator.test.checker.localvariables.C12Test;
 import ch.hsr.ifs.cute.constificator.test.checker.localvariables.C13Test;
 import ch.hsr.ifs.cute.constificator.test.checker.localvariables.C14Test;
 import ch.hsr.ifs.cute.constificator.test.checker.localvariables.C15Test;
@@ -52,8 +54,6 @@ import ch.hsr.ifs.cute.constificator.test.checker.memberfunctions.C54Test;
 import ch.hsr.ifs.cute.constificator.test.checker.memberfunctions.C55Test;
 import ch.hsr.ifs.cute.constificator.test.checker.memberfunctions.C56Test;
 import ch.hsr.ifs.cute.constificator.test.checker.membervariables.C52Test;
-import ch.hsr.ifs.cute.constificator.test.quickfix.localvariables.C10Test;
-import ch.hsr.ifs.cute.constificator.test.quickfix.localvariables.C12Test;
 
 @RunWith(Suite.class)
 @SuiteClasses({
