@@ -26,8 +26,11 @@ public abstract class QuickFixTest extends CDTTestingCodanQuickfixTest {
     @Test
     public void runTest() throws Throwable {
     	IMarker[] markers = findMarkers();
-    	for(IMarker marker : markers) {
-            runQuickFix(marker, getQuickFix());
+    	boolean hasMarkers = markers.length > 0;
+    	while(hasMarkers) {
+    		runQuickFix(markers[0], getQuickFix());
+    		markers = findMarkers();
+    		hasMarkers = markers.length > 0;
     	}
         assertEquals(getNormalizedExpectedSource(), getNormalizedCurrentSource());
     }
