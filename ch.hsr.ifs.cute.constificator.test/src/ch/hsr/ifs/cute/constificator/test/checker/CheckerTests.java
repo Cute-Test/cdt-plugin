@@ -17,6 +17,7 @@ import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.Checker_C49
 import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.Checker_C49_C7Test;
 import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.Checker_C49_C8Test;
 import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.Checker_C49_C9Test;
+import ch.hsr.ifs.cute.constificator.test.checker.functionparameters.Checker_ShiftOperatorsTest;
 import ch.hsr.ifs.cute.constificator.test.checker.localvariables.Checker_C10Test;
 import ch.hsr.ifs.cute.constificator.test.checker.localvariables.Checker_C11Test;
 import ch.hsr.ifs.cute.constificator.test.checker.localvariables.Checker_C12Test;
@@ -104,6 +105,7 @@ import ch.hsr.ifs.cute.constificator.test.checker.membervariables.Checker_C52Tes
 	Checker_C49_C11Test.class,
 	Checker_C49_C12Test.class,
 	Checker_C49_C13Test.class,
+	Checker_ShiftOperatorsTest.class,
 	Checker_C52Test.class,
 	Checker_C54Test.class,
 	Checker_C55Test.class,

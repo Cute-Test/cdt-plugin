@@ -16,7 +16,9 @@ public class Constants {
 			ICPPASTBinaryExpression.op_multiplyAssign,
 			ICPPASTBinaryExpression.op_plusAssign,
 			ICPPASTBinaryExpression.op_shiftLeftAssign,
-			ICPPASTBinaryExpression.op_shiftRightAssign
+			ICPPASTBinaryExpression.op_shiftRightAssign,
+			ICPPASTBinaryExpression.op_shiftLeft,
+			ICPPASTBinaryExpression.op_shiftRight
 			};
 
 	public static final Integer[] MODIFYING_UNARY_OPERATORS = {
