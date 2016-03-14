@@ -38,8 +38,7 @@ public class Types {
 							same &= ((ICPPFunctionType) original).isRValueReference() == ((ICPPFunctionType) suspect).isRValueReference();
 						}
 
-						return areSameTypeIgnoringConst(((ICPPFunctionType) original).getReturnType(),
-								((IFunctionType) suspect).getReturnType()) && same;
+						return same;
 
 					} else {
 						return false;
