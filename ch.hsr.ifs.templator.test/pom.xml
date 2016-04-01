@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ch.hsr.ifs</groupId>
+		<artifactId>ch.hsr.ifs.templator.parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ch.hsr.ifs.templator.test</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<testSuite>ch.hsr.ifs.templator.test</testSuite>
+					<testClass>ch.hsr.ifs.templator.test.TestSuiteAll</testClass>
+					<useUIHarness>true</useUIHarness>
+					<useUIThread>true</useUIThread>
+					<product>org.eclipse.epp.package.cpp.product</product>
+					<application>org.eclipse.ui.ide.workbench</application>
+
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<groupId>ch.hsr.ifs</groupId>
+							<artifactId>ch.hsr.ifs.templator.plugin</artifactId>
+						</dependency>
+					</dependencies>
+
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>  

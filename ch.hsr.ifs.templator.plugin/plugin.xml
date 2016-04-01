@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+ <extension
+    point="org.eclipse.ui.commands">
+    <command
+        category="ch.hsr.ifs.templator.plugin.Templator"
+        categoryId="ch.hsr.ifs.templator.plugin.Templator"
+        id="ch.hsr.ifs.templator.plugin.ShowTemplateInfoCommand"
+        name="Show Template Information">
+    </command>
+    <category
+        id="ch.hsr.ifs.templator.plugin.Templator"
+        name="Templator">
+    </category>
+ </extension>
+ <extension
+    point="org.eclipse.ui.handlers">
+    <handler
+        class="ch.hsr.ifs.templator.plugin.handler.ShowTemplateInfoHandler"
+        commandId="ch.hsr.ifs.templator.plugin.ShowTemplateInfoCommand">
+    </handler>
+ </extension>
+ <extension
+    point="org.eclipse.ui.bindings">
+    <key
+        commandId="ch.hsr.ifs.templator.plugin.ShowTemplateInfoCommand"
+        contextId="org.eclipse.ui.contexts.window"
+        schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+        sequence="M3+F8">
+    </key>
+ </extension>
+ 
+ <extension
+       point="org.eclipse.ui.views">    
+
+    <view
+          allowMultiple="false"
+          category="org.eclipse.cdt.ui.views"
+          class="ch.hsr.ifs.templator.plugin.view.tree.TreeTemplateView"
+          id="ch.hsr.ifs.templator.plugin.view.tree.TreeTemplateView"
+          name="Template Information"
+          restorable="true">
+    </view>
+    
+ </extension>
+ 
+ <extension
+      point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID = "org.eclipse.cdt.ui.CPerspective">
+      <showInPart id = "ch.hsr.ifs.templator.plugin.view.tree.TreeTemplateView"/>
+      </perspectiveExtension>
+ </extension>
+
+</plugin>

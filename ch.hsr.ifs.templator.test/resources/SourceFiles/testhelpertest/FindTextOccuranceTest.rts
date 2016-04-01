@@ -1,0 +1,14 @@
+//!FindTextOccuranceTest
+//@MyFileName.cpp
+void foo(){}
+void bar(){}
+int main() 
+{ 
+	foo();
+	foo();
+	foo();
+	bar();
+	return 0; 
+}
+//=
+int main() { return 0; }
