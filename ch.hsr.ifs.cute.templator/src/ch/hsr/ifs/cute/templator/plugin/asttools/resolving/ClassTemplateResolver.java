@@ -81,7 +81,7 @@ public final class ClassTemplateResolver {
 
 			postResolution = ReflectionMethodHelper.getNonAccessibleMethod(CPPSemantics.class, "postResolution",
 					IBinding.class, IASTName.class);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			TemplatorLogger.errorDialogWithStackTrace(
 					"Class Templates that depend on other template arguments cannot be deduced.",
 					"Methods in CPPTemplates are called via reflection to resolve class templates and their definition changed.",
@@ -90,15 +90,15 @@ public final class ClassTemplateResolver {
 
 	}
 
-	public static IBinding instantiateClassTemplate(ICPPASTTemplateId id, AbstractResolvedNameInfo parent)
+	public static IBinding instantiateClassTemplate(final ICPPASTTemplateId id, final AbstractResolvedNameInfo parent)
 			throws TemplatorException {
 		try {
-			Boolean isClassTemplate = ReflectionMethodHelper.<Boolean> invokeStaticMethod(isClassTemplateMethod, id);
+			final Boolean isClassTemplate = ReflectionMethodHelper.<Boolean> invokeStaticMethod(isClassTemplateMethod, id);
 			if (!isClassTemplate) {
 
 				// Functions are instantiated as part of the resolution process.
-				IBinding result = CPPVisitor.createBinding(id);
-				IASTName templateName = id.getTemplateName();
+				final IBinding result = CPPVisitor.createBinding(id);
+				final IASTName templateName = id.getTemplateName();
 				if (result instanceof ICPPClassTemplate) {
 					templateName.setBinding(result);
 					id.setBinding(null);
@@ -123,7 +123,7 @@ public final class ClassTemplateResolver {
 			boolean isDefinition = false;
 			boolean isExplicitSpecialization = false;
 			if (isLastName && parentOfName != null) {
-				IASTNode declaration = parentOfName.getParent();
+				final IASTNode declaration = parentOfName.getParent();
 				if (declaration instanceof IASTSimpleDeclaration) {
 					if (parentOfName instanceof ICPPASTElaboratedTypeSpecifier) {
 						isDeclaration = true;
@@ -131,7 +131,7 @@ public final class ClassTemplateResolver {
 						isDefinition = true;
 					}
 					if (isDeclaration || isDefinition) {
-						IASTNode parentOfDeclaration = declaration.getParent();
+						final IASTNode parentOfDeclaration = declaration.getParent();
 						if (parentOfDeclaration instanceof ICPPASTExplicitTemplateInstantiation) {
 							isDeclaration = false;
 						} else if (parentOfDeclaration instanceof ICPPASTTemplateSpecialization) {
@@ -142,38 +142,38 @@ public final class ClassTemplateResolver {
 			}
 
 			IBinding result = null;
-			IASTName templateName = id.getTemplateName();
+			final IASTName templateName = id.getTemplateName();
 			IBinding template = templateName.resolvePreBinding();
 
 			// Alias template.
 			if (template instanceof ICPPAliasTemplate) {
-				ICPPAliasTemplate aliasTemplate = (ICPPAliasTemplate) template;
+				final ICPPAliasTemplate aliasTemplate = (ICPPAliasTemplate) template;
 				ICPPTemplateArgument[] args = CPPTemplates.createTemplateArgumentArray(id);
 				args = addDefaultArguments(aliasTemplate, args, id);
 				if (args == null) {
 					return new ProblemBinding(id, IProblemBinding.SEMANTIC_INVALID_TEMPLATE_ARGUMENTS,
 							templateName.toCharArray());
 				}
-				ICPPTemplateParameterMap parameterMap = CPPTemplates.createParameterMap(aliasTemplate, args);
-				IType aliasedType = aliasTemplate.getType();
-				IBinding owner = template.getOwner();
+				final ICPPTemplateParameterMap parameterMap = CPPTemplates.createParameterMap(aliasTemplate, args, null);
+				final IType aliasedType = aliasTemplate.getType();
+				final IBinding owner = template.getOwner();
 				return ReflectionMethodHelper.<IBinding> invokeStaticMethod(createAliasTemplaceInstanceMethod,
 						aliasTemplate, args, parameterMap, aliasedType, owner, id);
 			}
 
 			// Alias template instance.
 			if (template instanceof ICPPAliasTemplateInstance) {
-				ICPPAliasTemplateInstance aliasTemplateInstance = (ICPPAliasTemplateInstance) template;
+				final ICPPAliasTemplateInstance aliasTemplateInstance = (ICPPAliasTemplateInstance) template;
 				ICPPTemplateArgument[] args = CPPTemplates.createTemplateArgumentArray(id);
-				ICPPAliasTemplate aliasTemplate = aliasTemplateInstance.getTemplateDefinition();
+				final ICPPAliasTemplate aliasTemplate = aliasTemplateInstance.getTemplateDefinition();
 				args = addDefaultArguments(aliasTemplate, args, id);
 				if (args == null) {
 					return new ProblemBinding(id, IProblemBinding.SEMANTIC_INVALID_TEMPLATE_ARGUMENTS,
 							templateName.toCharArray());
 				}
-				ICPPTemplateParameterMap parameterMap = CPPTemplates.createParameterMap(aliasTemplate, args);
-				IType aliasedType = aliasTemplateInstance.getType();
-				IBinding owner = aliasTemplateInstance.getOwner();
+				final ICPPTemplateParameterMap parameterMap = CPPTemplates.createParameterMap(aliasTemplate, args, null);
+				final IType aliasedType = aliasTemplateInstance.getType();
+				final IBinding owner = aliasTemplateInstance.getOwner();
 				return ReflectionMethodHelper.<IBinding> invokeStaticMethod(createAliasTemplaceInstanceMethod,
 						aliasTemplate, args, parameterMap, aliasedType, owner, id);
 			}
@@ -184,7 +184,7 @@ public final class ClassTemplateResolver {
 			}
 
 			if (template instanceof ICPPUnknownMemberClass) {
-				IType owner = ((ICPPUnknownMemberClass) template).getOwnerType();
+				final IType owner = ((ICPPUnknownMemberClass) template).getOwnerType();
 				ICPPTemplateArgument[] args = CPPTemplates.createTemplateArgumentArray(id);
 				args = SemanticUtil.getSimplifiedArguments(args);
 				return new CPPUnknownClassInstance(owner, id.getSimpleID(), args);
@@ -198,9 +198,9 @@ public final class ClassTemplateResolver {
 			final ICPPClassTemplate classTemplate = (ICPPClassTemplate) template;
 			ICPPTemplateArgument[] args = CPPTemplates.createTemplateArgumentArray(id);
 			if (CPPTemplates.hasDependentArgument(args)) {
-				ICPPASTTemplateDeclaration tdecl = CPPTemplates.getTemplateDeclaration(id);
+				final ICPPASTTemplateDeclaration tdecl = CPPTemplates.getTemplateDeclaration(id);
 				if (tdecl != null) {
-					Boolean argsAreTrivial = ReflectionMethodHelper.<Boolean> invokeStaticMethod(argsAreTrivialMethod,
+					final Boolean argsAreTrivial = ReflectionMethodHelper.<Boolean> invokeStaticMethod(argsAreTrivialMethod,
 							classTemplate.getTemplateParameters(), args);
 					if (argsAreTrivial) {
 						result = classTemplate;
@@ -250,26 +250,26 @@ public final class ClassTemplateResolver {
 		}
 	}
 
-	private static void replaceDependentTemplateArguments(ICPPASTTemplateId id, AbstractResolvedNameInfo parent,
-			ICPPTemplateArgument[] args) throws TemplatorException {
+	private static void replaceDependentTemplateArguments(final ICPPASTTemplateId id, final AbstractResolvedNameInfo parent,
+			final ICPPTemplateArgument[] args) throws TemplatorException {
 		for (int i = 0; i < args.length; i++) {
-			ICPPTemplateArgument arg = args[i];
-			IType typeValue = arg.getTypeValue();
+			final ICPPTemplateArgument arg = args[i];
+			final IType typeValue = arg.getTypeValue();
 			if (typeValue instanceof ICPPTemplateParameter) {
 				args[i] = parent.getArgument((ICPPTemplateParameter) typeValue);
 			} else if (typeValue instanceof ICPPDeferredClassInstance || typeValue instanceof ICPPUnknownMemberClass) {
-				IASTNode templateArgument = id.getTemplateArguments()[i];
+				final IASTNode templateArgument = id.getTemplateArguments()[i];
 				if (templateArgument instanceof IASTTypeId) {
-					IASTDeclSpecifier declSpecifier = ((IASTTypeId) templateArgument).getDeclSpecifier();
+					final IASTDeclSpecifier declSpecifier = ((IASTTypeId) templateArgument).getDeclSpecifier();
 					if (declSpecifier instanceof IASTNamedTypeSpecifier) {
-						IASTName typeName = ((IASTNamedTypeSpecifier) declSpecifier).getName();
+						final IASTName typeName = ((IASTNamedTypeSpecifier) declSpecifier).getName();
 						if (typeName instanceof ICPPASTTemplateId) {
-							IBinding nestedInstance = instantiateClassTemplate((ICPPASTTemplateId) typeName, parent);
+							final IBinding nestedInstance = instantiateClassTemplate((ICPPASTTemplateId) typeName, parent);
 							if (nestedInstance instanceof IType) {
 								args[i] = new CPPTemplateTypeArgument((IType) nestedInstance);
 							}
 						} else {
-							TypeNameToType nestedType = parent.getAnalyzer().getType(typeName, parent);
+							final TypeNameToType nestedType = parent.getAnalyzer().getType(typeName, parent);
 							if (nestedType == null || nestedType.getType() == null) {
 								throw new TemplatorException(
 										"Could not determine argument for " + args[i] + " in " + id + ".");
@@ -282,8 +282,8 @@ public final class ClassTemplateResolver {
 		}
 	}
 
-	public static ICPPTemplateArgument[] addDefaultArguments(ICPPTemplateDefinition template,
-			ICPPTemplateArgument[] arguments, IASTNode point) throws IllegalAccessException, IllegalArgumentException,
+	public static ICPPTemplateArgument[] addDefaultArguments(final ICPPTemplateDefinition template,
+			final ICPPTemplateArgument[] arguments, final IASTNode point) throws IllegalAccessException, IllegalArgumentException,
 					InvocationTargetException, ClassCastException {
 		return ReflectionMethodHelper.<ICPPTemplateArgument[]> invokeStaticMethod(addDefaultArgumentsMethod, template,
 				arguments, point);

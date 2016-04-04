@@ -21,9 +21,9 @@
 				<configuration>
 					<testSuite>ch.hsr.ifs.cute.ui.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.ui.test.AllUiTests</testClass>
+          <reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 					<!--useUIHarness>true</useUIHarness>
 					<useUiThread>false</useUiThread>
-					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 					<argLine>${swtbot.args}</argLine>
 					<product>org.eclipse.epp.package.cpp.product</product>
 					<application>org.eclipse.ui.ide.workbench</application>

@@ -11,52 +11,6 @@
 		<!--os-jvm-flags/>-->
 	</properties>
 	
-	<!--profiles>
-		<profile>
-			<id>macosx-jvm-flags</id>
-			<activation>
-				<os>
-					<family>mac</family>
-				</os>
-			</activation>
-			<properties>
-				<os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
-				<eclipse-version>mars</eclipse-version>
-				<eclipse-version-number>4.5</eclipse-version-number>
-			</properties>
-		</profile>
-		<profile>
-			<id>juno</id>
-			<properties>
-				<eclipse-version>juno</eclipse-version>
-				<eclipse-version-number>4.2</eclipse-version-number>
-			</properties>
-		</profile>
-		<profile>
-			<id>kepler</id>
-			<properties>
-				<eclipse-version>kepler</eclipse-version>
-				<eclipse-version-number>4.3</eclipse-version-number>
-			</properties>
-		</profile>
-		<profile>
-			<id>luna</id>
-			<properties>
-				<eclipse-version>luna</eclipse-version>
-				<eclipse-version-number>4.4</eclipse-version-number>
-			</properties>
-		</profile>
-		<profile>
-			<id>mars</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<eclipse-version>mars</eclipse-version>
-				<eclipse-version-number>4.5</eclipse-version-number>
-			</properties>
-		</profile>
-	</profiles -->
 	
 	<profiles>
 		<profile>
@@ -83,24 +37,6 @@
 		</profile>
 	</profiles>
 
-	<!--repositories>
-		<repository>
-			<id>release</id>
-			<url>http://download.eclipse.org/releases/${eclipse-version}/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>release-update</id>
-			<url>http://download.eclipse.org/eclipse/updates/${eclipse-version-number}</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>ifs cdttesting</id>
-			<url>http://www.cevelop.com/cdt-testing/${eclipse-version}/</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories-->
-	
 	<modules>
 		<!-- CUTE Target -->
 		<module>../ch.hsr.ifs.cute.target</module>
@@ -156,10 +92,10 @@
 		<module>../ch.hsr.ifs.cute.constificator.core</module>
 		<module>../ch.hsr.ifs.cute.constificator.feature</module>
 		<module>../ch.hsr.ifs.cute.constificator.test</module>
-		<!-- Templator -->
+		<!-- Templator
 		<module>../ch.hsr.ifs.cute.templator</module>
 		<module>../ch.hsr.ifs.cute.templator.feature</module>
-		<module>../ch.hsr.ifs.cute.templator.test</module>
+		<module>../ch.hsr.ifs.cute.templator.test</module> -->
 		
 		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.updatesite</module>
@@ -258,7 +194,7 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<!--dependencies>
+					<dependencies>
 						<dependency>
 							<type>p2-installable-unit</type>
 							<artifactId>org.eclipse.equinox.ds</artifactId>
@@ -266,10 +202,10 @@
 						<dependency>
 							<type>p2-installable-unit</type>
 							<artifactId>org.eclipse.platform</artifactId>
-						</dependency>
-					</dependencies> -->
+						</dependency> 
+					</dependencies>
 					<useUIHarness>true</useUIHarness>
-					<useUIThread>false</useUIThread>
+					<useUIThread>true</useUIThread>
 					<argLine>${swtbot.args}</argLine>
 					<product>org.eclipse.epp.package.cpp.product</product>
 					<application>org.eclipse.ui.ide.workbench</application>

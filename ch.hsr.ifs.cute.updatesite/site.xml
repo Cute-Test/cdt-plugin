@@ -33,9 +33,6 @@
    <feature url="features/ch.hsr.ifs.cute.constificator.feature_4.13.0.qualifier.jar" id="ch.hsr.ifs.cute.constificator.feature" version="4.13.0.qualifier">
       <category name="OptFeatures"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.templator.feature_4.13.0.qualifier.jar" id="ch.hsr.ifs.cute.templator.feature" version="4.13.0.qualifier">
-      <category name="OptFeatures"/>
-   </feature>
    <category-def name="CUTE Plugin" label="CUTE Plugin"/>
    <category-def name="OptFeatures" label="CUTE Optional Features"/>
 </site>
