@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Templator
 Bundle-SymbolicName: ch.hsr.ifs.cute.templator;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: ch.hsr.ifs.templator.plugin.TemplatorPlugin
+Bundle-Activator: ch.hsr.ifs.cute.templator.plugin.TemplatorPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.cdt.core,
@@ -19,11 +19,11 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: HSR IFS
-Export-Package: ch.hsr.ifs.templator.plugin,
- ch.hsr.ifs.templator.plugin.asttools,
- ch.hsr.ifs.templator.plugin.asttools.data,
- ch.hsr.ifs.templator.plugin.asttools.resolving,
- ch.hsr.ifs.templator.plugin.asttools.templatearguments,
- ch.hsr.ifs.templator.plugin.logger,
- ch.hsr.ifs.templator.plugin.util
+Export-Package: ch.hsr.ifs.cute.templator.plugin,
+ ch.hsr.ifs.cute.templator.plugin.asttools,
+ ch.hsr.ifs.cute.templator.plugin.asttools.data,
+ ch.hsr.ifs.cute.templator.plugin.asttools.resolving,
+ ch.hsr.ifs.cute.templator.plugin.asttools.templatearguments,
+ ch.hsr.ifs.cute.templator.plugin.logger,
+ ch.hsr.ifs.cute.templator.plugin.util
 

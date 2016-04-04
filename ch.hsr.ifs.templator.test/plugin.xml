@@ -5,6 +5,6 @@
 	<extension point="ch.hsr.ifs.cdttesting.testingPlugin">
 	   <testResouresLocation
 	         sourceLocation="/resources/SourceFiles"
-	         activatorClass="ch.hsr.ifs.templator.test.Activator"/>
+	         activatorClass="ch.hsr.ifs.cute.templator.test.Activator"/>
    </extension>
 </plugin>
