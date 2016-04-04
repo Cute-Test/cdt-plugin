@@ -127,6 +127,10 @@
 		<module>../ch.hsr.ifs.cute.constificator.core</module>
 		<module>../ch.hsr.ifs.cute.constificator.feature</module>
 		<module>../ch.hsr.ifs.cute.constificator.test</module>
+		<!-- Templator -->
+		<module>../ch.hsr.ifs.cute.templator</module>
+		<module>../ch.hsr.ifs.cute.templator.feature</module>
+		<module>../ch.hsr.ifs.cute.templator.test</module>
 		
 		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.updatesite</module>
