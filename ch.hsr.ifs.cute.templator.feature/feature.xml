@@ -10,7 +10,7 @@
    </description>
 
    <copyright url="">
-      /******************************************************************************
+/******************************************************************************
 * Copyright (c) 2016 Institute for Software, HSR Hochschule fuer Technik 
 * Rapperswil, University of applied sciences and others.
 * All rights reserved. This program and the accompanying materials
@@ -123,10 +123,10 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </requires>
 
    <plugin
-         id="ch.hsr.ifs.cute.templator"
+         id="ch.hsr.ifs.cute.templator.plugin"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="4.13.0.qualifier"
          unpack="false"/>
 
 </feature>

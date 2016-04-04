@@ -147,7 +147,7 @@ public final class ClassTemplateResolver {
 
 			// Alias template.
 			if (template instanceof ICPPAliasTemplate) {
-				ICPPTemplateDefinition aliasTemplate = (ICPPAliasTemplate) template;
+				ICPPAliasTemplate aliasTemplate = (ICPPAliasTemplate) template;
 				ICPPTemplateArgument[] args = CPPTemplates.createTemplateArgumentArray(id);
 				args = addDefaultArguments(aliasTemplate, args, id);
 				if (args == null) {
@@ -155,7 +155,7 @@ public final class ClassTemplateResolver {
 							templateName.toCharArray());
 				}
 				ICPPTemplateParameterMap parameterMap = CPPTemplates.createParameterMap(aliasTemplate, args);
-				IType aliasedType = ((ICPPAliasTemplate)aliasTemplate).getType();
+				IType aliasedType = aliasTemplate.getType();
 				IBinding owner = template.getOwner();
 				return ReflectionMethodHelper.<IBinding> invokeStaticMethod(createAliasTemplaceInstanceMethod,
 						aliasTemplate, args, parameterMap, aliasedType, owner, id);
@@ -165,7 +165,7 @@ public final class ClassTemplateResolver {
 			if (template instanceof ICPPAliasTemplateInstance) {
 				ICPPAliasTemplateInstance aliasTemplateInstance = (ICPPAliasTemplateInstance) template;
 				ICPPTemplateArgument[] args = CPPTemplates.createTemplateArgumentArray(id);
-				ICPPTemplateDefinition aliasTemplate = aliasTemplateInstance.getTemplateDefinition();
+				ICPPAliasTemplate aliasTemplate = aliasTemplateInstance.getTemplateDefinition();
 				args = addDefaultArguments(aliasTemplate, args, id);
 				if (args == null) {
 					return new ProblemBinding(id, IProblemBinding.SEMANTIC_INVALID_TEMPLATE_ARGUMENTS,

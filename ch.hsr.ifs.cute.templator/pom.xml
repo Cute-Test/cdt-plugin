@@ -11,7 +11,7 @@
 		<version>4.13.0-SNAPSHOT</version>
 	</parent>
 
-    <artifactId>ch.hsr.ifs.cute.templator</artifactId>
+    <artifactId>ch.hsr.ifs.cute.templator.plugin</artifactId>
     <packaging>eclipse-plugin</packaging>
     <version>4.13.0-SNAPSHOT</version>
     
