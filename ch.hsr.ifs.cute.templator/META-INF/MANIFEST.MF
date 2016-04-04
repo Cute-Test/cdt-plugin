@@ -4,6 +4,7 @@ Bundle-Name: Templator
 Bundle-SymbolicName: ch.hsr.ifs.cute.templator;singleton:=true
 Bundle-Version: 4.13.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.templator.plugin.TemplatorPlugin
+Bundle-Vendor: IFS
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.cdt.core,
@@ -18,7 +19,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: IFS
 Export-Package: ch.hsr.ifs.cute.templator.plugin,
  ch.hsr.ifs.cute.templator.plugin.asttools,
  ch.hsr.ifs.cute.templator.plugin.asttools.data,
