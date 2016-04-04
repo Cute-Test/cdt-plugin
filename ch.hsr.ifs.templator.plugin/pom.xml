@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ch.hsr.ifs</groupId>
-        <artifactId>ch.hsr.ifs.cute.templator.parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
+		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
+		<groupId>ch.hsr.ifs</groupId>
+		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
+		<version>4.13.0-SNAPSHOT</version>
+	</parent>
 
     <artifactId>ch.hsr.ifs.cute.templator.plugin</artifactId>
     <packaging>eclipse-plugin</packaging>
+    <version>4.13.0-SNAPSHOT</version>
     
-    <name>Templator</name>
-    <description>The templator plugin functionality. Displays the chosen template argument for a template call.</description>
 </project> 

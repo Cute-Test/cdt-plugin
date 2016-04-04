@@ -6,13 +6,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
+		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
 		<groupId>ch.hsr.ifs</groupId>
-		<artifactId>ch.hsr.ifs.cute.templator.parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
+		<version>4.13.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>ch.hsr.ifs.cute.templator.test</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
+	<version>4.13.0-SNAPSHOT</version>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -41,4 +43,5 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 </project>  

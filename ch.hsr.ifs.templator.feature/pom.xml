@@ -5,15 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ch.hsr.ifs</groupId>
-        <artifactId>ch.hsr.ifs.cute.templator.parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
+    	<artifactId>ch.hsr.ifs.cute.releng</artifactId>
+		<groupId>ch.hsr.ifs</groupId>
+		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
+		<version>4.13.0-SNAPSHOT</version>
+  	</parent>
 
     <artifactId>ch.hsr.ifs.cute.templator.feature</artifactId>
     <groupId>ch.hsr.ifs</groupId>
+    <version>4.13.0-SNAPSHOT</version>
     <packaging>eclipse-feature</packaging>
-    
-    <name>Templator feature</name>
-    <description>Feature that bundles the Templator plug-in functionality.</description>
+
 </project> 
