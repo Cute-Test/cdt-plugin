@@ -26,6 +26,7 @@ public class TestBugFixes extends CDTTestingTest {
 
 	@Test
 	public void testNewTestFunctionhighlight() throws Exception {
+		openActiveFileInEditor();
 		IEditorPart editor = EditorTestHelper.openInEditor(getActiveIFile(), true);
 		assertTrue(editor instanceof ICEditor);
 
