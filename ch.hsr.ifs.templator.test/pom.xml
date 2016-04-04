@@ -7,11 +7,11 @@
 
 	<parent>
 		<groupId>ch.hsr.ifs</groupId>
-		<artifactId>ch.hsr.ifs.templator.parent</artifactId>
+		<artifactId>ch.hsr.ifs.cute.templator.parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ch.hsr.ifs.templator.test</artifactId>
+	<artifactId>ch.hsr.ifs.cute.templator.test</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>
@@ -22,8 +22,8 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-					<testSuite>ch.hsr.ifs.templator.test</testSuite>
-					<testClass>ch.hsr.ifs.templator.test.TestSuiteAll</testClass>
+					<testSuite>ch.hsr.ifs.cute.templator.test</testSuite>
+					<testClass>ch.hsr.ifs.cute.templator.test.TestSuiteAll</testClass>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>true</useUIThread>
 					<product>org.eclipse.epp.package.cpp.product</product>
@@ -33,7 +33,7 @@
 						<dependency>
 							<type>p2-installable-unit</type>
 							<groupId>ch.hsr.ifs</groupId>
-							<artifactId>ch.hsr.ifs.templator.plugin</artifactId>
+							<artifactId>ch.hsr.ifs.cute.templator.plugin</artifactId>
 						</dependency>
 					</dependencies>
 

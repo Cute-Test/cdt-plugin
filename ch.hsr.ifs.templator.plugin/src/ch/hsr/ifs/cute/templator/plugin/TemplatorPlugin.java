@@ -12,7 +12,7 @@ import ch.hsr.ifs.cute.templator.plugin.util.ColorPalette;
 public class TemplatorPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.templator.plugin"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.templator.plugin"; //$NON-NLS-1$
 
 	// The shared instance
 	private static TemplatorPlugin plugin;

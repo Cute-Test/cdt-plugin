@@ -1,5 +1,8 @@
 package ch.hsr.ifs.cute.templator.plugin.view.tree;
 
+import java.util.List;
+import java.util.TreeSet;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -17,9 +20,6 @@ import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
 
-import java.util.List;
-import java.util.TreeSet;
-
 import ch.hsr.ifs.cute.templator.plugin.handler.ViewOpener;
 import ch.hsr.ifs.cute.templator.plugin.view.components.GlobalToolBar;
 import ch.hsr.ifs.cute.templator.plugin.view.components.ScrollAnimator;
@@ -30,7 +30,7 @@ import ch.hsr.ifs.cute.templator.plugin.viewdata.ViewData;
 
 public class TreeTemplateView extends ViewPart implements ITemplateView, ITreeViewController, IShowInTarget {
 
-	public static final String VIEW_ID = "ch.hsr.ifs.templator.plugin.view.tree.TreeTemplateView";
+	public static final String VIEW_ID = "ch.hsr.ifs.cute.templator.plugin.view.tree.TreeTemplateView";
 
 	public static final int MARGIN = 15;
 	public static final int BORDER_MARGIN = 30;

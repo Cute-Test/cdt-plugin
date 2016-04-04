@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>ch.hsr.ifs</groupId>
-        <artifactId>ch.hsr.ifs.templator.parent</artifactId>
+        <artifactId>ch.hsr.ifs.cute.templator.parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ch.hsr.ifs.templator.feature</artifactId>
+    <artifactId>ch.hsr.ifs.cute.templator.feature</artifactId>
     <groupId>ch.hsr.ifs</groupId>
     <packaging>eclipse-feature</packaging>
     
