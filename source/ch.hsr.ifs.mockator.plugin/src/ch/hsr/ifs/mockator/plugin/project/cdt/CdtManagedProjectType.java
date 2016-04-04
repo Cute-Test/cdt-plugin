@@ -1,5 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.project.cdt;
 
+import org.eclipse.cdt.managedbuilder.buildproperties.IBuildPropertyValue;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
@@ -10,7 +11,9 @@ import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 public enum CdtManagedProjectType {
   SharedLib, StaticLib, Executable;
 
-  public static CdtManagedProjectType fromProject(IProject project) {
+  private static final String UNKNOWN = "unknown";
+
+public static CdtManagedProjectType fromProject(IProject project) {
     String arteFactId = getArtefactId(project);
 
     if (arteFactId.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_SHAREDLIB))
@@ -24,7 +27,15 @@ public enum CdtManagedProjectType {
   }
 
   private static String getArtefactId(IProject project) {
-    return getDefaultConfiguration(project).getBuildArtefactType().getId();
+	 
+    IConfiguration defaultConfiguration = getDefaultConfiguration(project);
+    if (defaultConfiguration != null) {
+    	IBuildPropertyValue buildArtefactType = defaultConfiguration.getBuildArtefactType();
+    	if (buildArtefactType != null) {
+    		return buildArtefactType.getId();
+    	}
+    }
+    return UNKNOWN;
   }
 
   private static IConfiguration getDefaultConfiguration(IProject project) {
