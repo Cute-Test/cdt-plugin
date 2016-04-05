@@ -87,15 +87,15 @@
 		<module>../ch.hsr.ifs.cute.charwars</module>
 		<module>../ch.hsr.ifs.cute.charwars.feature</module>
 		<module>../ch.hsr.ifs.cute.charwars.test</module>
-		<!-- Constificator-->
+		<!-- Constificator -->
 		<module>../ch.hsr.ifs.cute.constificator</module>
 		<module>../ch.hsr.ifs.cute.constificator.core</module>
 		<module>../ch.hsr.ifs.cute.constificator.feature</module>
 		<module>../ch.hsr.ifs.cute.constificator.test</module>
-		<!-- Templator
+		<!-- Templator -->
 		<module>../ch.hsr.ifs.cute.templator</module>
 		<module>../ch.hsr.ifs.cute.templator.feature</module>
-		<module>../ch.hsr.ifs.cute.templator.test</module> -->
+		<module>../ch.hsr.ifs.cute.templator.test</module>
 		
 		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.updatesite</module>
