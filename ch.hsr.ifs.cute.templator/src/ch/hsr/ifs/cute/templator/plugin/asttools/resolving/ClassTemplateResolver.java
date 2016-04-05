@@ -58,6 +58,7 @@ public final class ClassTemplateResolver {
 	private static Method findPartialSpecializationMethod;
 	private static Method instantiateMethod;
 	private static Method postResolution;
+	private static Method createParameterMap;
 
 	private ClassTemplateResolver() {
 	}
@@ -78,6 +79,7 @@ public final class ClassTemplateResolver {
 			instantiateMethod = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class, "instantiate",
 					ICPPClassTemplate.class, ICPPTemplateArgument[].class, boolean.class, boolean.class,
 					IASTNode.class);
+			createParameterMap = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class, "createParameterMap", ICPPAliasTemplate.class, ICPPTemplateArgument[].class, IASTNode.class);
 
 			postResolution = ReflectionMethodHelper.getNonAccessibleMethod(CPPSemantics.class, "postResolution",
 					IBinding.class, IASTName.class);
@@ -154,7 +156,11 @@ public final class ClassTemplateResolver {
 					return new ProblemBinding(id, IProblemBinding.SEMANTIC_INVALID_TEMPLATE_ARGUMENTS,
 							templateName.toCharArray());
 				}
-				final ICPPTemplateParameterMap parameterMap = CPPTemplates.createParameterMap(aliasTemplate, args, null);
+				final ICPPTemplateParameterMap parameterMap = ReflectionMethodHelper.<ICPPTemplateParameterMap> invokeStaticMethod(createParameterMap, aliasTemplate,
+						args, null);
+						
+				//CPPTemplates.createParameterMap(aliasTemplate, args, null);
+						
 				final IType aliasedType = aliasTemplate.getType();
 				final IBinding owner = template.getOwner();
 				return ReflectionMethodHelper.<IBinding> invokeStaticMethod(createAliasTemplaceInstanceMethod,
@@ -171,7 +177,11 @@ public final class ClassTemplateResolver {
 					return new ProblemBinding(id, IProblemBinding.SEMANTIC_INVALID_TEMPLATE_ARGUMENTS,
 							templateName.toCharArray());
 				}
-				final ICPPTemplateParameterMap parameterMap = CPPTemplates.createParameterMap(aliasTemplate, args, null);
+				
+				//final ICPPTemplateParameterMap parameterMap = CPPTemplates.createParameterMap(aliasTemplate, args, null);
+				final ICPPTemplateParameterMap parameterMap = ReflectionMethodHelper.<ICPPTemplateParameterMap> invokeStaticMethod(createParameterMap, aliasTemplate,
+						args, null);
+				
 				final IType aliasedType = aliasTemplateInstance.getType();
 				final IBinding owner = aliasTemplateInstance.getOwner();
 				return ReflectionMethodHelper.<IBinding> invokeStaticMethod(createAliasTemplaceInstanceMethod,
