@@ -79,7 +79,8 @@ public final class ClassTemplateResolver {
 			instantiateMethod = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class, "instantiate",
 					ICPPClassTemplate.class, ICPPTemplateArgument[].class, boolean.class, boolean.class,
 					IASTNode.class);
-			createParameterMap = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class, "createParameterMap", ICPPAliasTemplate.class, ICPPTemplateArgument[].class, IASTNode.class);
+			createParameterMap = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class, "createParameterMap",
+					ICPPTemplateDefinition.class, ICPPTemplateArgument[].class, IASTNode.class);
 
 			postResolution = ReflectionMethodHelper.getNonAccessibleMethod(CPPSemantics.class, "postResolution",
 					IBinding.class, IASTName.class);
