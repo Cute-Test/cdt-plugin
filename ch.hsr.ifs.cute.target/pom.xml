@@ -11,7 +11,7 @@
 	</parent>
     
     <groupId>ch.hsr.ifs</groupId>
-    <artifactId>ch.hsr.ifs.cute.cdt.target</artifactId>
+    <artifactId>ch.hsr.ifs.cute.target.cdt900</artifactId>
     <version>4.13.0-SNAPSHOT</version>
     <packaging>eclipse-target-definition</packaging>
     

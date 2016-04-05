@@ -20,9 +20,7 @@ import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.IBinary;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.debug.core.CDebugCorePlugin;
 import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
-import org.eclipse.cdt.debug.core.ICDebugConfiguration;
 import org.eclipse.cdt.launch.AbstractCLaunchDelegate;
 import org.eclipse.cdt.launch.internal.ui.LaunchUIPlugin;
 import org.eclipse.cdt.ui.CElementLabelProvider;
@@ -31,7 +29,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -47,7 +44,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
@@ -101,45 +97,45 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 		// Otherwise, if there is more than one config associated with the IBinary, prompt the
 		// user to choose one.
 		int candidateCount = candidateConfigs.size();
-		if (candidateCount < 1) {
-			String programCPU = bin.getCPU();
-			// Try default debugger first
-			ICDebugConfiguration defaultConfig = CDebugCorePlugin.getDefault().getDefaultDebugConfiguration();
-			String os = Platform.getOS();
-			ICDebugConfiguration debugConfig = null;
-			if (defaultConfig != null) {
-				String platform = defaultConfig.getPlatform();
-				if (defaultConfig.supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
-					if (platform.equals("*") || platform.equals(os)) {
-						if (defaultConfig.supportsCPU(programCPU))
-							debugConfig = defaultConfig;
-					}
-				}
-			}
-			if (debugConfig == null) {
-				// Prompt the user if more then 1 debugger.
-				ICDebugConfiguration[] debugConfigs = CDebugCorePlugin.getDefault().getActiveDebugConfigurations();
-				List<ICDebugConfiguration> debugList = new ArrayList<ICDebugConfiguration>(debugConfigs.length);
-				for (int i = 0; i < debugConfigs.length; i++) {
-					String platform = debugConfigs[i].getPlatform();
-					if (debugConfigs[i].supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
-						if (platform.equals("*") || platform.equals(os)) {
-							if (debugConfigs[i].supportsCPU(programCPU))
-								debugList.add(debugConfigs[i]);
-						}
-					}
-				}
-				debugConfigs = debugList.toArray(new ICDebugConfiguration[0]);
-				if (debugConfigs.length == 1) {
-					debugConfig = debugConfigs[0];
-				} else if (debugConfigs.length > 1) {
-					debugConfig = chooseDebugConfig(debugConfigs, mode);
-				}
-			}
-			if (debugConfig != null) {
-				configuration = createConfiguration(bin, debugConfig, mode);
-			}
-		} else if (candidateCount == 1) {
+//		if (candidateCount < 1) {
+//			String programCPU = bin.getCPU();
+//			// Try default debugger first
+//			ICDebugConfiguration defaultConfig = CDebugCorePlugin.getDefault().getDefaultDebugConfiguration();
+//			String os = Platform.getOS();
+//			ICDebugConfiguration debugConfig = null;
+//			if (defaultConfig != null) {
+//				String platform = defaultConfig.getPlatform();
+//				if (defaultConfig.supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
+//					if (platform.equals("*") || platform.equals(os)) {
+//						if (defaultConfig.supportsCPU(programCPU))
+//							debugConfig = defaultConfig;
+//					}
+//				}
+//			}
+//			if (debugConfig == null) {
+//				// Prompt the user if more then 1 debugger.
+//				ICDebugConfiguration[] debugConfigs = CDebugCorePlugin.getDefault().getActiveDebugConfigurations();
+//				List<ICDebugConfiguration> debugList = new ArrayList<ICDebugConfiguration>(debugConfigs.length);
+//				for (int i = 0; i < debugConfigs.length; i++) {
+//					String platform = debugConfigs[i].getPlatform();
+//					if (debugConfigs[i].supportsMode(ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN)) {
+//						if (platform.equals("*") || platform.equals(os)) {
+//							if (debugConfigs[i].supportsCPU(programCPU))
+//								debugList.add(debugConfigs[i]);
+//						}
+//					}
+//				}
+//				debugConfigs = debugList.toArray(new ICDebugConfiguration[0]);
+//				if (debugConfigs.length == 1) {
+//					debugConfig = debugConfigs[0];
+//				} else if (debugConfigs.length > 1) {
+//					debugConfig = chooseDebugConfig(debugConfigs, mode);
+//				}
+//			}
+//			if (debugConfig != null) {
+//				configuration = createConfiguration(bin, debugConfig, mode);
+//			}
+		if (candidateCount == 1) {
 			configuration = candidateConfigs.get(0);
 		} else {
 			// Prompt the user to choose a config.  A null result means the user
@@ -177,7 +173,7 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 *            run or debug
 	 * @return ILaunchConfiguration
 	 */
-	private ILaunchConfiguration createConfiguration(IBinary bin, ICDebugConfiguration debugConfig, String mode) {
+	private ILaunchConfiguration createConfiguration(IBinary bin, String mode) {
 		ILaunchConfiguration config = null;
 		try {
 			String projectName = bin.getResource().getProjectRelativePath().toString();
@@ -188,7 +184,6 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, (String) null);
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_STOP_AT_MAIN, true);
 			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_START_MODE, ICDTLaunchConfigurationConstants.DEBUGGER_MODE_RUN);
-			wc.setAttribute(ICDTLaunchConfigurationConstants.ATTR_DEBUGGER_ID, debugConfig.getID());
 			wc.setMappedResources(new IResource[] { bin.getCProject().getProject() });
 
 			ICProject project = bin.getCProject();
@@ -226,56 +221,6 @@ public class CuteLaunchShortcut implements ILaunchShortcut {
 	 */
 	protected Shell getShell() {
 		return LaunchUIPlugin.getActiveWorkbenchShell();
-	}
-
-	/**
-	 * Method chooseDebugConfig.
-	 * 
-	 * @param debugConfigs
-	 * @param mode
-	 * @return ICDebugConfiguration
-	 */
-	private ICDebugConfiguration chooseDebugConfig(ICDebugConfiguration[] debugConfigs, String mode) {
-		ILabelProvider provider = new LabelProvider() {
-			/**
-			 * The <code>LabelProvider</code> implementation of this
-			 * <code>ILabelProvider</code> method returns the element's
-			 * <code>toString</code> string. Subclasses may override.
-			 */
-			@Override
-			public String getText(Object element) {
-				if (element == null) {
-					return "";
-				} else if (element instanceof ICDebugConfiguration) {
-					return ((ICDebugConfiguration) element).getName();
-				}
-				return element.toString();
-			}
-		};
-		ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), provider);
-		dialog.setElements(debugConfigs);
-		dialog.setTitle(getDebugConfigDialogTitleString(debugConfigs, mode));
-		dialog.setMessage(getDebugConfigDialogMessageString(debugConfigs, mode));
-		dialog.setMultipleSelection(false);
-		int result = dialog.open();
-		provider.dispose();
-		if (result == Window.OK) {
-			return (ICDebugConfiguration) dialog.getFirstResult();
-		}
-		return null;
-	}
-
-	protected String getDebugConfigDialogTitleString(ICDebugConfiguration[] configList, String mode) {
-		return "Launch Debug Configuration Selection";
-	}
-
-	protected String getDebugConfigDialogMessageString(ICDebugConfiguration[] configList, String mode) {
-		if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-			return "Choose a debug configuration to debug";
-		} else if (mode.equals(ILaunchManager.RUN_MODE)) {
-			return "Choose a configuration to run";
-		}
-		return "Invalid launch mode.";
 	}
 
 	/**

@@ -25,6 +25,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPAliasTemplateInstance;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassTemplate;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassTemplatePartialSpecialization;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPPartiallySpecializable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateArgument;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
@@ -71,13 +72,13 @@ public final class ClassTemplateResolver {
 					"addDefaultArguments", ICPPTemplateDefinition.class, ICPPTemplateArgument[].class, IASTNode.class);
 			createAliasTemplaceInstanceMethod = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class,
 					"createAliasTemplaceInstance", ICPPAliasTemplate.class, ICPPTemplateArgument[].class,
-					ICPPTemplateParameterMap.class, IType.class, IBinding.class, ICPPASTTemplateId.class);
+					ICPPTemplateParameterMap.class, IType.class, IBinding.class, IASTNode.class);
 			argsAreTrivialMethod = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class, "argsAreTrivial",
 					ICPPTemplateParameter[].class, ICPPTemplateArgument[].class);
 			findPartialSpecializationMethod = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class,
-					"findPartialSpecialization", ICPPClassTemplate.class, ICPPTemplateArgument[].class);
+					"findPartialSpecialization", ICPPPartiallySpecializable.class, ICPPTemplateArgument[].class);
 			instantiateMethod = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class, "instantiate",
-					ICPPClassTemplate.class, ICPPTemplateArgument[].class, boolean.class, boolean.class,
+					ICPPPartiallySpecializable.class, ICPPTemplateArgument[].class, boolean.class, boolean.class,
 					IASTNode.class);
 			createParameterMap = ReflectionMethodHelper.getNonAccessibleMethod(CPPTemplates.class, "createParameterMap",
 					ICPPTemplateDefinition.class, ICPPTemplateArgument[].class, IASTNode.class);

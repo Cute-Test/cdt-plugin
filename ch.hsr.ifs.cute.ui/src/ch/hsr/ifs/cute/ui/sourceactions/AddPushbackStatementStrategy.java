@@ -34,7 +34,6 @@ import org.eclipse.text.edits.TextEdit;
  * @since 4.0
  * 
  */
-@SuppressWarnings("deprecation")
 public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 
 	protected static final String EMPTY_STRING = "";

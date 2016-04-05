@@ -21,9 +21,10 @@ public class UnusedMacroChecker extends AbstractIndexAstChecker {
 		}
 	}
 	
+	
 	@Override
 	public void initPreferences(IProblemWorkingCopy problem) {
-	    getTopLevelPreference(problem);
+		super.initPreferences(problem);
 	    getLaunchModePreference(problem).enableInLaunchModes(); // disable by default
 	}
 
