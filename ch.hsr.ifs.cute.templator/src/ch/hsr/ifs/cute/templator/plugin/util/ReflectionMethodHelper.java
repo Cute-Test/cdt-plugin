@@ -1,5 +1,6 @@
 package ch.hsr.ifs.cute.templator.plugin.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -13,6 +14,12 @@ public final class ReflectionMethodHelper {
 		relevantMethod.setAccessible(true);
 
 		return relevantMethod;
+	}
+	
+	public static Field getNonAccessibleField(Class<? extends Object> containingClass, String fieldName) throws NoSuchFieldException, SecurityException {
+		Field relevantField = containingClass.getDeclaredField(fieldName);
+		relevantField.setAccessible(true);
+		return relevantField;
 	}
 
 	@SuppressWarnings("unchecked")

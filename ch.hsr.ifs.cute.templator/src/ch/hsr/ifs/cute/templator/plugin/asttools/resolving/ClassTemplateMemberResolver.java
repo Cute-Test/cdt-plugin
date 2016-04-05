@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPSpecialization;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownBinding;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.InstantiationContext;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPFunctionSet;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates;
 
@@ -133,8 +134,8 @@ public final class ClassTemplateMemberResolver {
 			 *
 			 * lost hours because of the last paragraph: 6
 			 */
-			specializedMember = CPPTemplates.instantiateBinding(deferredMemberBinding, parent.getTemplateArgumentMap(),
-					0, ownerInstance, 255, point);
+			InstantiationContext context = new InstantiationContext(parent.getTemplateArgumentMap(), 0, ownerInstance, point);
+			specializedMember = CPPTemplates.instantiateBinding(deferredMemberBinding, context, 255);
 		} catch (DOMException e) {
 			throw new TemplatorException(
 					"Could not instantiate the class template member " + deferredMemberBinding.getName(), e);

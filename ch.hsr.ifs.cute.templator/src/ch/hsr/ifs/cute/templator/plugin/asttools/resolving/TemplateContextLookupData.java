@@ -2,6 +2,7 @@ package ch.hsr.ifs.cute.templator.plugin.asttools.resolving;
 
 import static org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getSimplifiedType;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +38,14 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPPointerType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPQualifierType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPEvaluation;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownBinding;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.InstantiationContext;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalParameterPack;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.LookupData;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
+
+import ch.hsr.ifs.cute.templator.plugin.util.ReflectionMethodHelper;
 
 /**
  * LookupData that can be used to resolve calls that are dependent on template arguments.
@@ -61,15 +65,24 @@ public class TemplateContextLookupData extends LookupData {
 		nonDeferredImpliedObjectType = impliedObjectType;
 		// fTemplateArguments are the ones from the template-id. They also need to be replaced because they are passed
 		// to CPPTemplates.instantiateForFunctionCall inside CPPSemantics.resolveFunction
-		if (fTemplateArguments != null) {
-			for (int i = 0; i < fTemplateArguments.length; i++) {
-				ICPPTemplateArgument existingTemplateArgument = fTemplateArguments[i];
+		Field templateArgumentsField;
+		ICPPTemplateArgument[] templateArguments = null;
+		try {
+			templateArgumentsField = ReflectionMethodHelper.getNonAccessibleField(LookupData.class, "fTemplateArguments");
+			templateArguments = (ICPPTemplateArgument[])templateArgumentsField.get(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (templateArguments != null) {
+			for (int i = 0; i < templateArguments.length; i++) {
+				ICPPTemplateArgument existingTemplateArgument = templateArguments[i];
 				IType templateParameter = existingTemplateArgument.getTypeValue();
 				if (templateParameter instanceof ICPPTemplateParameter) {
 					ICPPTemplateArgument replacedArgument = templateParameterMap
 							.getArgument((ICPPTemplateParameter) templateParameter);
 					if (replacedArgument != null) {
-						fTemplateArguments[i] = replacedArgument;
+						templateArguments[i] = replacedArgument;
 					}
 				}
 			}
@@ -83,7 +96,7 @@ public class TemplateContextLookupData extends LookupData {
 				functionArgTypes = new IType[functionArgs.length];
 				for (int i = 0; i < functionArgs.length; i++) {
 					ICPPEvaluation e = functionArgs[i];
-					functionArgTypes[i] = getSimplifiedType(e.getTypeOrFunctionSet(getLookupPoint()));
+					functionArgTypes[i] = getSimplifiedType(e.getType(getLookupPoint()));
 				}
 			}
 			IType[] functionArgumentTypes = super.getFunctionArgumentTypes();
@@ -131,8 +144,8 @@ public class TemplateContextLookupData extends LookupData {
 
 		}
 		if (functionArgumentType instanceof TypeOfDependentExpression) {
-			return ((TypeOfDependentExpression) functionArgumentType).getEvaluation()
-					.instantiate(templateParameterMap, 0, null, 255, null).getTypeOrFunctionSet(null);
+			InstantiationContext context = new InstantiationContext(templateParameterMap, 0, null, null);
+			return ((TypeOfDependentExpression) functionArgumentType).getEvaluation().instantiate(context, 255).getType(null);
 		}
 		return adaptedType;
 	}
@@ -156,7 +169,8 @@ public class TemplateContextLookupData extends LookupData {
 		for (int expressionIndex = 0; expressionIndex < exprs.length; expressionIndex++) {
 			IType argumentType = functionArgumentTypes[expressionIndex];
 			if (argumentType instanceof TypeOfDependentExpression || argumentType instanceof ICPPTemplateParameter) {
-				newFunctionArgs.add(exprs[expressionIndex].instantiate(templateParameterMap, -1, null, 255, null));
+				InstantiationContext context = new InstantiationContext(templateParameterMap, -1, null, null);
+				newFunctionArgs.add(exprs[expressionIndex].instantiate(context, 255));
 			} else if (argumentType instanceof CPPParameterPackType) {
 				while (argumentType instanceof ICPPParameterPackType) {
 					argumentType = ((ICPPParameterPackType) argumentType).getType();
@@ -167,8 +181,8 @@ public class TemplateContextLookupData extends LookupData {
 					ICPPTemplateArgument[] packExpansion = templateParameterMap
 							.getPackExpansion((ICPPTemplateParameter) argumentType);
 					for (int i = 0; i < packExpansion.length; i++) {
-						ICPPEvaluation evalParamPack = exprs[expressionIndex].instantiate(templateParameterMap, i, null,
-								255, null);
+						InstantiationContext context = new InstantiationContext(templateParameterMap, i, null, null);
+						ICPPEvaluation evalParamPack = exprs[expressionIndex].instantiate(context, 255);
 						if (evalParamPack instanceof EvalParameterPack) {
 							ICPPEvaluation argumentEval = ((EvalParameterPack) evalParamPack).getExpansionPattern();
 							newFunctionArgs.add(argumentEval);

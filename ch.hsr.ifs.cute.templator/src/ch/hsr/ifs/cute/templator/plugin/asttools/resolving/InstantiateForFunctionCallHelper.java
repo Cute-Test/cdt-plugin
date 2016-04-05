@@ -73,7 +73,7 @@ public final class InstantiateForFunctionCallHelper {
 			IASTInitializerClause clause = arguments[i];
 			ICPPEvaluation eval = ((ICPPASTInitializerClause) clause).getEvaluation();
 			functionArgs[i] = eval;
-			IType type = SemanticUtil.getSimplifiedType(eval.getTypeOrFunctionSet(lookupPoint));
+			IType type = SemanticUtil.getSimplifiedType(eval.getType(lookupPoint));
 			if (type instanceof ICPPTemplateParameter) {
 				ICPPTemplateArgument argument = parentParameterMap.getArgument((ICPPTemplateParameter) type);
 				type = argument.getTypeValue();
