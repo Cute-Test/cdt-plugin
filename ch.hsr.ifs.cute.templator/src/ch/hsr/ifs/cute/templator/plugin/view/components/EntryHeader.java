@@ -1,33 +1,30 @@
 package ch.hsr.ifs.cute.templator.plugin.view.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 import ch.hsr.ifs.cute.templator.plugin.view.interfaces.IActionButtonCallback;
 import ch.hsr.ifs.cute.templator.plugin.view.interfaces.IActionButtonCallback.ButtonAction;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EntryHeader extends Composite {
-
-	private static final int ACTION_BUTTON_MARGIN = 50;
 
 	private Composite parent;
 
 	private Composite descriptionArea;
 	private Composite filler;
 
-	private ScrollingLabel titleLabel;
-	private List<ScrollingLabel> descLabels;
+	private Label titleLabel;
+	private List<Label> descLabels;
 
 	private ActionButtons actionButtons;
-	private Point actionButtonsSize;
 
 	public EntryHeader(Composite parent, int style) {
 		super(parent, style);
@@ -48,18 +45,19 @@ public class EntryHeader extends Composite {
 
 	protected void setDescription(String titleText, List<String> descriptions) {
 
-		int width = getSize().x - actionButtonsSize.x - ACTION_BUTTON_MARGIN;
-		titleLabel = new ScrollingLabel(descriptionArea, SWT.NONE, width, titleText);
+		titleLabel = new Label(descriptionArea, SWT.NONE);
+		titleLabel.setText(titleText);
 
 		descLabels = new ArrayList<>();
 		for (int i = 0; i < descriptions.size(); i++) {
 
-			ScrollingLabel descLabel = new ScrollingLabel(descriptionArea, SWT.NONE, width, descriptions.get(i));
+			Label descLabel = new Label(descriptionArea, SWT.NONE);
+			descLabel.setText(descriptions.get(i));
 
 			if (i == 0) {
 				GridData gridData = new GridData();
 				gridData.verticalIndent = 10;
-				descLabel.getLabel().setLayoutData(gridData);
+				descLabel.setLayoutData(gridData);
 			}
 			descLabels.add(descLabel);
 		}
@@ -70,8 +68,6 @@ public class EntryHeader extends Composite {
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = SWT.TOP;
 		actionButtons.setLayoutData(gridData);
-
-		actionButtonsSize = actionButtons.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 
 		MouseAdapter maximizeMouseListener = new MouseAdapter() {
 			@Override
@@ -86,12 +82,6 @@ public class EntryHeader extends Composite {
 	}
 
 	public void updateSize() {
-		int width = parent.getSize().x - actionButtonsSize.x - ACTION_BUTTON_MARGIN;
-
-		titleLabel.setWidth(width);
-		for (ScrollingLabel descLabel : descLabels) {
-			descLabel.setWidth(width);
-		}
 		layout();
 	}
 }
