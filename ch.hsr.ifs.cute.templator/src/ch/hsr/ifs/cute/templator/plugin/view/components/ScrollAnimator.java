@@ -11,7 +11,7 @@ public class ScrollAnimator {
 	private static final int AUTO_SCROLL_MAX_SPEED = 32;
 	private static final float AUTO_SCROLL_ACCELERATION = 1.14f;
 
-	private static final int TIMER_INTERVAL = 5;
+	private static final int TIMER_INTERVAL = 20;
 
 	private ScrolledForm form;
 
