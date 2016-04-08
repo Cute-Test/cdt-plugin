@@ -70,7 +70,7 @@ public class ScrollAnimator {
 				Point origin = form.getOrigin();
 
 				if (speed < AUTO_SCROLL_MAX_SPEED) {
-					speed += AUTO_SCROLL_ACCELERATION;
+					speed += 10*AUTO_SCROLL_ACCELERATION;
 				}
 
 				int newX = calcCoordinate(origin.x, scrollDestination.x);
