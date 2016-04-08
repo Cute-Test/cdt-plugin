@@ -67,7 +67,7 @@ public final class ViewOpener {
 
 		throw new TemplatorException("Could not visualize selected name: " + selectedName
 				+ ". The selected name either has no definition, is not yet supported (like normal classes) or depends on a template argument. "
-				+ "Please select a name that does not yet depent on a template argument.");
+				+ "Please select a name that does not yet depend on a template argument.");
 	}
 
 	@SuppressWarnings("unchecked")
