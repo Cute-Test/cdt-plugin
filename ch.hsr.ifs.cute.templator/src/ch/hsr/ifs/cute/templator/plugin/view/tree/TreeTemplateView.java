@@ -9,11 +9,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.IShowInTarget;
@@ -82,7 +79,11 @@ public class TreeTemplateView extends ViewPart implements ITemplateView, ITreeVi
 				treeComposite.setFocus();
 			}
 		});
-		treeComposite.addListener(SWT.MouseWheel, new Listener() {
+		
+		// This code enables to scroll left/right when control is pressed.
+		// This does not work with OSX/Linux (scrolling gets diagonal)
+		
+		/*treeComposite.addListener(SWT.MouseWheel, new Listener() {
 			@Override
 			public void handleEvent(Event e) {
 				if (e.stateMask == SWT.CONTROL) {
@@ -91,7 +92,7 @@ public class TreeTemplateView extends ViewPart implements ITemplateView, ITreeVi
 					form.setOrigin(newOrigin);
 				}
 			}
-		});
+		});*/
 
 		borderExtension = new Composite(treeComposite, SWT.NONE);
 		borderExtension.setSize(BORDER_MARGIN, BORDER_MARGIN);
