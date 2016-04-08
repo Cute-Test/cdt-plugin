@@ -121,7 +121,7 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 	
 	protected String functionAST(IASTInitializerClause[] arguments) {
 		String theName = EMPTY_STRING;
-		IASTUnaryExpression unaryex = (IASTUnaryExpression) arguments[1];
+		IASTUnaryExpression unaryex = (IASTUnaryExpression) arguments[0];
 		IASTLiteralExpression literalex = (IASTLiteralExpression) unaryex.getOperand();
 		theName = literalex.toString();
 		return theName;
