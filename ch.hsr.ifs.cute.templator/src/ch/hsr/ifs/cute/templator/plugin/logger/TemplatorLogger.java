@@ -60,7 +60,7 @@ public final class TemplatorLogger {
 
 		//MultiStatus ms = new MultiStatus(TemplatorPlugin.PLUGIN_ID, IStatus.ERROR, childStatuses.toArray(new Status[] {}), t.getLocalizedMessage(), t);
 		
-		String standardMessage = "No template information is available for the chosen name. Please select a name of one of the following types and refresh the Template Information view:"
+		String standardMessage = "No template information is available for the marked code. Please select one of the following and refresh the Template Information view:"
 				+ "\n\n- Function\n- Function Template\n- Class Template";
 
 		//ErrorDialog.openError(null, title, msg, ms);

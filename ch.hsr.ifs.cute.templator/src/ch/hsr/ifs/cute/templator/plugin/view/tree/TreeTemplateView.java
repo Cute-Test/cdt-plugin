@@ -9,6 +9,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -72,10 +74,13 @@ public class TreeTemplateView extends ViewPart implements ITemplateView, ITreeVi
 		form.getBody().setLayout(new FillLayout());
 		
 		form.setText("\nNO TEMPLATE INFORMATION AVAILABLE"
-				+ "\n\nPlease select a name of one of the following types and refresh this view:"
+				+ "\n\nPlease select one of the following types and refresh this view:"
 				+ "\n\n- Function"
 				+ "\n- Function Template"
 				+ "\n- Class Template");
+		Font font = new Font(form.getDisplay(), new FontData(form.getFont().toString(), 12, SWT.NONE));
+		form.setFont(font);
+		form.setForeground(form.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 
 		treeComposite = new Composite(form.getBody(), SWT.DOUBLE_BUFFERED);
 		treeComposite.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -142,7 +147,7 @@ public class TreeTemplateView extends ViewPart implements ITemplateView, ITreeVi
 		
 		if (entryCollection.getEntries().size() == 0) {
 			form.setText("\nNO TEMPLATE INFORMATION AVAILABLE"
-					+ "\n\nPlease select a name of one of the following types and refresh this view:"
+					+ "\n\nPlease select a name of one of the following and refresh this view:"
 					+ "\n\n- Function"
 					+ "\n- Function Template"
 					+ "\n- Class Template");
