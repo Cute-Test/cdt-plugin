@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 import ch.hsr.ifs.cute.templator.plugin.TemplatorPlugin;
 
@@ -59,9 +58,12 @@ public final class TemplatorLogger {
 			childStatuses.add(new Status(IStatus.ERROR, TemplatorPlugin.PLUGIN_ID, line));
 		}
 
-		MultiStatus ms = new MultiStatus(TemplatorPlugin.PLUGIN_ID, IStatus.ERROR,
-				childStatuses.toArray(new Status[] {}), t.getLocalizedMessage(), t);
+		//MultiStatus ms = new MultiStatus(TemplatorPlugin.PLUGIN_ID, IStatus.ERROR, childStatuses.toArray(new Status[] {}), t.getLocalizedMessage(), t);
+		
+		String standardMessage = "No template information is available for the chosen name. Please select a name of one of the following types and refresh the Template Information view:"
+				+ "\n\n- Function\n- Function Template\n- Class Template";
 
-		ErrorDialog.openError(null, title, msg, ms);
+		//ErrorDialog.openError(null, title, msg, ms);
+		MessageDialog.openInformation(null, title, standardMessage);
 	}
 }

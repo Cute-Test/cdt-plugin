@@ -39,11 +39,11 @@ public final class ViewOpener {
 				templateView.setRootData(viewData);
 			}
 		} catch (TemplatorException e) {
-			TemplatorLogger.errorDialogWithStackTrace("Name Resolving Error",
+			TemplatorLogger.errorDialogWithStackTrace("No Template Information Available",
 					"An error has occured while trying to resolve a name.", e);
 			e.printStackTrace();
 		} catch (Exception e) {
-			TemplatorLogger.errorDialogWithStackTrace("Name Resolving Error",
+			TemplatorLogger.errorDialogWithStackTrace("No Template Information Available",
 					"Unexpected error while trying to resolve a name.", e);
 			e.printStackTrace();
 		}
@@ -65,8 +65,8 @@ public final class ViewOpener {
 			return new ResolvedName(selectedName, createdResolvedName);
 		}
 
-		throw new TemplatorException("Could not visualize selected name: " + selectedName
-				+ ". The selected name either has no definition, is not yet supported (like normal classes) or depends on a template argument. "
+		throw new TemplatorException("The following name can not be visualized: " + selectedName
+				+ ".\n\nThe selected name either has no definition, is not yet supported (like normal classes) or depends on a template argument. "
 				+ "Please select a name that does not yet depend on a template argument.");
 	}
 
