@@ -70,6 +70,12 @@ public class TreeTemplateView extends ViewPart implements ITemplateView, ITreeVi
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		form = toolkit.createScrolledForm(parent);
 		form.getBody().setLayout(new FillLayout());
+		
+		form.setText("\nNO TEMPLATE INFORMATION AVAILABLE"
+				+ "\n\nPlease select a name of one of the following types and refresh this view:"
+				+ "\n\n- Function"
+				+ "\n- Function Template"
+				+ "\n- Class Template");
 
 		treeComposite = new Composite(form.getBody(), SWT.DOUBLE_BUFFERED);
 		treeComposite.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -133,6 +139,16 @@ public class TreeTemplateView extends ViewPart implements ITemplateView, ITreeVi
 	public void recalculateLayout() {
 		int currentLeft = BORDER_MARGIN;
 		int maxTop = 0;
+		
+		if (entryCollection.getEntries().size() == 0) {
+			form.setText("\nNO TEMPLATE INFORMATION AVAILABLE"
+					+ "\n\nPlease select a name of one of the following types and refresh this view:"
+					+ "\n\n- Function"
+					+ "\n- Function Template"
+					+ "\n- Class Template");
+		} else {
+			form.setText(null);
+		}
 
 		for (TreeSet<TreeEntry> column : entryCollection.getEntries()) {
 			int maxWidth = 0;
