@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>ch.hsr.ifs</groupId>
 		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
-		<version>4.13.0-SNAPSHOT</version>
+		<version>4.14.0-SNAPSHOT</version>
 		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
 	</parent>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.core</artifactId>
-	<version>4.13.0-SNAPSHOT</version>
+	<version>4.14.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	<build>
 		<plugins>
