@@ -31,6 +31,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.resources.ResourceLookup;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
@@ -40,7 +41,7 @@ import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.TextEdit;
-import org.eclipse.ui.texteditor.DocumentProviderRegistry;
+import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 /**
@@ -79,11 +80,15 @@ public class LinkSuiteToRunnerProcessor {
 		IPath implPath = new Path(tu.getContainingFilename());
 		IFile file = ResourceLookup.selectFileForLocation(implPath, null);
 		TextFileChange change = new TextFileChange("include", file);
-
-		final IDocumentProvider docProvider = DocumentProviderRegistry.getDefault().getDocumentProvider(file.getFileExtension());
-		IDocument document = docProvider.getDocument(tu);
+		IDocumentProvider provider = new TextFileDocumentProvider();
+		IDocument document = null;
+	    try { 
+	        provider.connect(file); 
+	        document = provider.getDocument(file);             
+	    } catch (CoreException e) {
+	    	e.printStackTrace();
+	    }	
 		String lineDelim = TextUtilities.getDefaultLineDelimiter(document);
-
 		int offset = getMaxIncludeOffset(tu);
 		String text = lineDelim + "#include \"" + suiteName + ".h\"";//$NON-NLS-2$
 		TextEdit edit = new InsertEdit(offset, text);
