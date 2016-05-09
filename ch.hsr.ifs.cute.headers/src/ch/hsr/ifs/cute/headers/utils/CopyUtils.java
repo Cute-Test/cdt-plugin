@@ -117,7 +117,11 @@ public class CopyUtils {
 		String linesep = System.getProperty("line.separator");
 		while (br.ready()) {
 			String a = br.readLine();
-			buffer.append(a.replaceAll("[$]suitename[$]", suitename) + linesep);
+			if(a.contains("$suitename$")) {
+				buffer.append(a.replaceAll("[$]suitename[$]", suitename) + linesep);
+			} else {
+				buffer.append(a.replaceAll("[$]SUITENAME[$]", suitename.toUpperCase()) + linesep);
+			}
 		}
 		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());
