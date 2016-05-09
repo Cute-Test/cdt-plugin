@@ -96,8 +96,13 @@
       <ALL_VERSIONS>
          <versionModification
                checkedByDefault="true"
-               name="Set Compiler Flag"
-               operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation">
+               name="Set Dialect Compiler Flag"
+               operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerDialectFlagOperation">
+         </versionModification>
+         <versionModification
+               checkedByDefault="true"
+               name="Set Disable Attribute Warning Compiler Flag"
+               operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerAttributeWarningsFlagOperation">
          </versionModification>
          <versionModification
                checkedByDefault="true"

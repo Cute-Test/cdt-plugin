@@ -10,7 +10,7 @@ import org.eclipse.core.resources.IProject;
 import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.elevenator.definition.IVersionModificationOperation;
 
-public class ChangeCompilerFlagOperation implements IVersionModificationOperation {
+public class ChangeCompilerDialectFlagOperation implements IVersionModificationOperation {
 
 	@Override
 	public void perform(IProject project, CPPVersion selectedVersion, boolean enabled) {
