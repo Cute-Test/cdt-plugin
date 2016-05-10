@@ -5,15 +5,15 @@
 #include "$suitename$.h"
 
 
-void runSuite(int argc, char const *argv[]){
+void runSuite(int argc, char const *argv[]) {
 	cute::xml_file_opener xmlfile(argc,argv);
-	cute::xml_listener<cute::ide_listener<>  > lis(xmlfile.out);
-	cute::suite s=make_suite_$suitename$();
-	cute::makeRunner(lis,argc,argv)(s, "$suitename$");
+	cute::xml_listener<cute::ide_listener<>> lis(xmlfile.out);
+	cute::suite s = make_suite_$suitename$();
+	cute::makeRunner(lis, argc, argv)(s, "$suitename$");
 }
 
-int main(int argc, char const *argv[]){
-    runSuite(argc,argv);
+int main(int argc, char const *argv[]) {
+    runSuite(argc, argv);
 }
 
 
