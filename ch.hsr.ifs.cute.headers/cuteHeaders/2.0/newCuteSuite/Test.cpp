@@ -8,7 +8,7 @@
 void runSuite(int argc, char const *argv[]) {
 	cute::xml_file_opener xmlfile(argc, argv);
 	cute::xml_listener<cute::ide_listener<>> lis(xmlfile.out);
-	cute::suite s=make_suite_$suitename$();
+	cute::suite s = make_suite_$suitename$();
 	cute::makeRunner(lis, argc, argv)(s, "$suitename$");
 }
 
