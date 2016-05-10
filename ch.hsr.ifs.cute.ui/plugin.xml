@@ -7,7 +7,7 @@
 		<wizard
 		category="org.eclipse.cdt.ui.newCWizards"
 		finalPerspective="org.eclipse.cdt.ui.CPerspective"
-		icon="icons/ovr16/cute_ovr.gif"
+		icon="icons/logo_16.png"
 		id="cute_plugin.createSuiteWizard"
 		name="%wizard.name.Suite">
 			<class class="ch.hsr.ifs.cute.ui.project.wizard.NewSuiteFileCreationWizard">
