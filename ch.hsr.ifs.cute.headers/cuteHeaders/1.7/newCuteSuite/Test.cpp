@@ -4,13 +4,13 @@
 #include "$suitename$.h"
 
 
-void runTest(){
+void runTest() {
 	cute::ide_listener lis;
 	cute::suite s=make_suite_$suitename$();
 	cute::makeRunner(lis)(s, "The Suite");
 }
 
-int main(){
+int main() {
     runTest();
 }
 

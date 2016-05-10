@@ -6,7 +6,7 @@ void thisIsATest() {
 	ASSERTM("start writing tests", false);	
 }
 
-void runSuite(){
+void runSuite() {
 	cute::suite s;
 	//TODO add your test here
 	s.push_back(CUTE(thisIsATest));
@@ -14,7 +14,7 @@ void runSuite(){
 	cute::makeRunner(lis)(s, "The Suite");
 }
 
-int main(){
+int main() {
     runSuite();
     return 0;
 }
