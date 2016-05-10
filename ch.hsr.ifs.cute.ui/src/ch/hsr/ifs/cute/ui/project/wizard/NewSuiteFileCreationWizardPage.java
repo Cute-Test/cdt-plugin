@@ -619,28 +619,28 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	}
 
 	private void initSourceFolder(ICElement elem) {
-		ICContainer folder = null;
-		if (elem != null) {
-			folder = CModelUtil.getSourceFolder(elem);
-			if (folder == null) {
-				ICProject cproject = elem.getCProject();
-				if (cproject != null) {
-					try {
-						if (cproject.exists()) {
-							ISourceRoot[] roots = cproject.getSourceRoots();
-							if (roots != null && roots.length > 0)
-								folder = roots[0];
-						}
-					} catch (CModelException e) {
-						CUIPlugin.log(e);
-					}
-					if (folder == null) {
-						folder = cproject.findSourceRoot(cproject.getResource());
-					}
-				}
-			}
-		}
-		setSourceFolderFullPath(folder != null ? folder.getResource().getFullPath() : null, false);
+//		ICContainer folder = null;
+//		if (elem != null) {
+//			folder = CModelUtil.getSourceFolder(elem);
+//			if (folder == null) {
+//				ICProject cproject = elem.getCProject();
+//				if (cproject != null) {
+//					try {
+//						if (cproject.exists()) {
+//							ISourceRoot[] roots = cproject.getSourceRoots();
+//							if (roots != null && roots.length > 0)
+//								folder = roots[0];
+//						}
+//					} catch (CModelException e) {
+//						CUIPlugin.log(e);
+//					}
+//					if (folder == null) {
+//						folder = cproject.findSourceRoot(cproject.getResource());
+//					}
+//				}
+//			}
+//		}
+		setSourceFolderFullPath(elem != null ? elem.getResource().getFullPath() : null, false);
 	}
 
 }
