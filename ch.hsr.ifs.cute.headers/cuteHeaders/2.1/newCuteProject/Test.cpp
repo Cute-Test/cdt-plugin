@@ -11,7 +11,7 @@ void thisIsATest() {
 void runAllTests(int argc, char const *argv[]) {
 	cute::suite s;
 	s.push_back(CUTE(thisIsATest));
-	cute::xml_file_opener xmlfile(argc,argv);
+	cute::xml_file_opener xmlfile(argc, argv);
 	cute::xml_listener<cute::ide_listener<>> lis(xmlfile.out);
 	cute::makeRunner(lis, argc, argv)(s, "AllTests");
 }
