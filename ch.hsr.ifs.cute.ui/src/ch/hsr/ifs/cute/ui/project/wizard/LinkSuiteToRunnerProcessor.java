@@ -19,11 +19,13 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
@@ -132,11 +134,18 @@ public class LinkSuiteToRunnerProcessor {
 	}
 
 	protected IASTFunctionCallExpression createMakeRunnerFuncCall() {
-		IASTInitializerClause[] makeArgs = new IASTInitializerClause[1];
+		IASTParameterDeclaration[] surroundingArgs = ((ICPPASTFunctionDeclarator)testRunner.getDeclarator()).getParameters();
+		IASTInitializerClause[] makeArgs = new IASTInitializerClause[surroundingArgs.length + 1];
 		ICPPASTQualifiedName cuteMakeRunner = nodeFactory.newQualifiedName(nodeFactory.newName("makeRunner".toCharArray()));
 		cuteMakeRunner.addNameSpecifier(nodeFactory.newName(CUTE));
 		IASTIdExpression makeRunnerID = nodeFactory.newIdExpression(cuteMakeRunner);
 		makeArgs[0] = nodeFactory.newIdExpression(getListenerName());
+		if(surroundingArgs.length > 0) {
+			for(int i=0; i<surroundingArgs.length; i++) {
+				IASTName argName = surroundingArgs[i].getDeclarator().getName().copy();
+				makeArgs[i+1] = nodeFactory.newIdExpression(argName);
+			}
+		}
 		IASTFunctionCallExpression makeRunnerFuncCallExp = nodeFactory.newFunctionCallExpression(makeRunnerID, makeArgs);
 		return makeRunnerFuncCallExp;
 	}
@@ -186,7 +195,8 @@ final class ListenerFinder extends ASTVisitor {
 				IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declStmt.getDeclaration();
 				if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
 					ICPPASTNamedTypeSpecifier typeName = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
-					if (typeName.getName().toString().equals("cute::ide_listener")) {
+					if (typeName.getName().toString().equals("cute::ide_listener")
+							|| typeName.getName().toString().equals("cute::xml_listener<cute::ide_listener<>>")) {
 						listener = simpDecl.getDeclarators()[0].getName();
 					}
 				}
