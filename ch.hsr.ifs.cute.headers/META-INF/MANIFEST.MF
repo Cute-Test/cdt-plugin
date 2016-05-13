@@ -14,3 +14,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.headers.headers1_7,ch.hsr.ifs.cute.hea
  ders.headers2_0
 Bundle-Localization: plugin
+Import-Package: ch.hsr.ifs.cute.elevenator.definition
