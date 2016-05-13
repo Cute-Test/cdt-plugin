@@ -52,6 +52,8 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 
 	private static final String MACOSX_LINKER_OPTION_FLAGS = "macosx.cpp.link.option.flags";
 	private static final String GCOV_LINKER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99";
+	private static final String GCOV_CPP_ID = "gnu.cpp.compiler.option.debugging.codecov";
+	private static final String GCOV_C_ID = "gnu.c.compiler.option.debugging.codecov";
 	private static final String GNU_CPP_LINK_OPTION_FLAGS = "gnu.cpp.link.option.flags";
 	private static final String GNU_CPP_LINKER_ID = "cdt.managedbuild.tool.gnu.cpp.linker";
 	private static final String MAC_CPP_LINKER_ID = "cdt.managedbuild.tool.macosx.cpp.linker";
@@ -59,10 +61,9 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 	private static final String GNU_C_COMPILER_ID = "cdt.managedbuild.tool.gnu.c.compiler";
 	private static final String GNU_CPP_COMPILER_OPTION_OTHER_OTHER = "gnu.cpp.compiler.option.other.other";
 	private static final String GNU_CPP_COMPILER_ID = "cdt.managedbuild.tool.gnu.cpp.compiler";
-	private static final String GCOV_C_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage -std=c99 ";
-	private static final String GCOV_CPP_COMPILER_FLAGS = "-fprofile-arcs -ftest-coverage ";
-	private static final String GCOV_CPP_COMPILER_LIB_FLAGS = GCOV_CPP_COMPILER_FLAGS + "-lgcov ";
-	private static final String GCOV_C_COMPILER_LIB_FLAGS = GCOV_C_COMPILER_FLAGS + "-lgcov ";
+	private static final String GCOV_C_COMPILER_FLAGS = "-std=c99 ";
+	private static final String GCOV_CPP_COMPILER_LIB_FLAGS = "-lgcov ";
+	private static final String GCOV_C_COMPILER_LIB_FLAGS = "-lgcov ";
 
 	private GcovWizardAddition addition;
 
@@ -110,13 +111,25 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 		IConfiguration newConfig = info.getManagedProject().createConfigurationClone(config, GCOV_CONFG_ID);
 		boolean isLibraryProject = ProjectTools.isLibraryProject(project);
 		newConfig.setName("Debug Gcov");
-		String cppCompilerFlags = isLibraryProject ? GCOV_CPP_COMPILER_LIB_FLAGS : GCOV_CPP_COMPILER_FLAGS;
-		setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, cppCompilerFlags);
-		String cCompilerFlags = isLibraryProject ? GCOV_C_COMPILER_LIB_FLAGS : GCOV_C_COMPILER_FLAGS;
-		setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, cCompilerFlags);
+		if(isLibraryProject) {
+			setOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GNU_CPP_COMPILER_OPTION_OTHER_OTHER, GCOV_CPP_COMPILER_LIB_FLAGS);
+			setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_LIB_FLAGS);
+		}
+		checkOptionInTool(newConfig, GNU_CPP_COMPILER_ID, GCOV_CPP_ID, true);
+		checkOptionInTool(newConfig, GNU_C_COMPILER_ID, GCOV_C_ID, true);
+		setOptionInTool(newConfig, GNU_C_COMPILER_ID, GNU_C_COMPILER_OPTION_MISC_OTHER, GCOV_C_COMPILER_FLAGS);
 		setOptionInTool(newConfig, GNU_CPP_LINKER_ID, GNU_CPP_LINK_OPTION_FLAGS, GCOV_LINKER_FLAGS);
 		setOptionInTool(newConfig, MAC_CPP_LINKER_ID, MACOSX_LINKER_OPTION_FLAGS, GCOV_LINKER_FLAGS);
 		return newConfig;
+	}
+	
+	private void checkOptionInTool(IConfiguration config, String toolId, String optionId, boolean optionValue)
+	throws BuildException {
+			ITool[] tools = config.getToolsBySuperClassId(toolId);
+			for (ITool tool : tools) {
+				IOption option = tool.getOptionBySuperClassId(optionId);
+				option.setValue(optionValue);
+			}
 	}
 
 	private void setOptionInTool(IConfiguration config, String toolId, String optionId, String optionValue)
