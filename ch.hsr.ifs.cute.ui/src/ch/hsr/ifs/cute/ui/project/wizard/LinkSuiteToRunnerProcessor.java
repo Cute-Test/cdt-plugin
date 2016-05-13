@@ -9,6 +9,7 @@
 package ch.hsr.ifs.cute.ui.project.wizard;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
@@ -18,6 +19,8 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
+import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
+import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
@@ -33,6 +36,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.resources.ResourceLookup;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -45,6 +49,8 @@ import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+
+import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 
 /**
  * @author Emanuel Graf IFS
@@ -112,10 +118,31 @@ public class LinkSuiteToRunnerProcessor {
 	}
 
 	protected void changeRunnerBody(ASTRewrite rw) {
-		IASTStatement makeSuiteStmt = createMakeSuiteStmt();
-		rw.insertBefore(testRunner.getBody(), null, makeSuiteStmt, null);
-		IASTStatement runnerStmt = createRunnerStmt();
-		rw.insertBefore(testRunner.getBody(), null, runnerStmt, null);
+		IProject project = testRunner.getTranslationUnit().getOriginatingTranslationUnit().getCProject().getProject();
+		if(isCPPVersionAboveOrEqualEleven(project)) {
+			IASTStatement makeNewSuiteStatement = createMakeSuiteStmt(true);
+			rw.insertBefore(testRunner.getBody(), testRunner.getBody().getChildren()[testRunner.getBody().getChildren().length-1], makeNewSuiteStatement, null);
+			IASTStatement newRunnerStatement = createRunnerCallStmt();
+			rw.insertBefore(testRunner.getBody(), testRunner.getBody().getChildren()[testRunner.getBody().getChildren().length-1], newRunnerStatement, null);
+		} else {
+			IASTStatement makeSuiteStmt = createMakeSuiteStmt(false);
+			rw.insertBefore(testRunner.getBody(), null, makeSuiteStmt, null);
+			IASTStatement runnerStmt = createRunnerStmt();
+			rw.insertBefore(testRunner.getBody(), null, runnerStmt, null);
+		}
+	}
+	
+	private IASTStatement createRunnerCallStmt() {
+		IASTIdExpression successExp = nodeFactory.newIdExpression(nodeFactory.newName("success"));
+		IASTIdExpression runnerExp = nodeFactory.newIdExpression(nodeFactory.newName("runner"));
+		IASTInitializerClause[] makeArgs = new IASTInitializerClause[2];
+		makeArgs[0] = nodeFactory.newIdExpression(nodeFactory.newName(suiteName));
+		makeArgs[1] = nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, STRING + suiteName + STRING);
+		IASTFunctionCallExpression runnerCallExp = nodeFactory.newFunctionCallExpression(runnerExp, makeArgs);
+		IASTBinaryExpression andExp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_logicalAnd, runnerCallExp, successExp);
+		IASTBinaryExpression assignExp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_assign, successExp, andExp);
+		IASTStatement statement = nodeFactory.newExpressionStatement(assignExp);
+		return statement;
 	}
 
 	private IASTStatement createRunnerStmt() {
@@ -156,27 +183,44 @@ public class LinkSuiteToRunnerProcessor {
 		return finder.listener != null ? finder.listener.copy() : nodeFactory.newName();
 	}
 
-	private IASTStatement createMakeSuiteStmt() {
+	private IASTStatement createMakeSuiteStmt(boolean isAboveEleven) {
 		ICPPASTQualifiedName cuteSuite = nodeFactory.newQualifiedName(nodeFactory.newName("suite".toCharArray()));
 		cuteSuite.addNameSpecifier(nodeFactory.newName(CUTE));
 		IASTDeclSpecifier declSpecifier = nodeFactory.newTypedefNameSpecifier(cuteSuite);
 		IASTSimpleDeclaration declaration = nodeFactory.newSimpleDeclaration(declSpecifier);
-
 		IASTName suiteASTName = getSuiteName();
 		ICPPASTDeclarator declarator = nodeFactory.newDeclarator(suiteASTName);
 		IASTName makeName = nodeFactory.newName(("make_suite_" + this.suiteName).toCharArray());
 		IASTIdExpression idExpr = nodeFactory.newIdExpression(makeName);
 		IASTInitializerClause initClause = nodeFactory.newFunctionCallExpression(idExpr, IASTExpression.EMPTY_EXPRESSION_ARRAY);
-		IASTEqualsInitializer initializer = nodeFactory.newEqualsInitializer(initClause);
-		declarator.setInitializer(initializer);
+		if(isAboveEleven) {
+			IASTInitializerList initializerList = nodeFactory.newInitializerList();
+			initializerList.addClause(initClause);
+			declarator.setInitializer(initializerList);
+		} else {
+			IASTEqualsInitializer initializer = nodeFactory.newEqualsInitializer(initClause);
+			declarator.setInitializer(initializer);
+		}
 		declaration.addDeclarator(declarator);
-
 		IASTDeclarationStatement declStmt = nodeFactory.newDeclarationStatement(declaration);
 		return declStmt;
 	}
 
 	protected IASTName getSuiteName() {
 		return nodeFactory.newName(this.suiteName.toCharArray());
+	}
+	
+	private static CPPVersion getCPPVersion(IProject project) {
+		return CPPVersion.getForProject(project);
+	}
+	
+	private static boolean isCPPVersionAboveOrEqualEleven(IProject project) {
+		CPPVersion version = getCPPVersion(project);
+		if(!version.toString().equals(CPPVersion.CPP_98.toString())
+				&& !version.toString().equals(CPPVersion.CPP_03.toString())) {
+			return true;
+		}
+		return false;
 	}
 
 }

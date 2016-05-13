@@ -32,3 +32,4 @@ Export-Package: ch.hsr.ifs.cute.ui,ch.hsr.ifs.cute.ui.actions,ch.hsr.i
  ceactions
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
+Import-Package: ch.hsr.ifs.cute.elevenator.definition
