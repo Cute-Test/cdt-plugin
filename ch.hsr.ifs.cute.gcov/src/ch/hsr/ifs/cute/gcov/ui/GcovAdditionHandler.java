@@ -123,8 +123,8 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
 	throws BuildException {
 		ITool[] tools = config.getToolsBySuperClassId(toolId);
 		for (ITool tool : tools) {
-			IOption option = tool.getOptionById(optionId);
-			String value = option.getDefaultValue() == null ? optionValue : option.getDefaultValue().toString().trim() + " " + optionValue; //$NON-NLS-1$
+			IOption option = tool.getOptionBySuperClassId(optionId);
+			String value = option.getValue() == null ? optionValue : option.getStringValue().trim() + " " + optionValue; //$NON-NLS-1$
 			ManagedBuildManager.setOption(config, tool, option, value);
 		}
 	}

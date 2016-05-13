@@ -24,7 +24,7 @@ public class ChangeCompilerAttributeWarningsFlagOperation implements IVersionMod
 		for (IConfiguration config : configs) {
 			ITool[] tools = config.getToolsBySuperClassId("cdt.managedbuild.tool.gnu.cpp.compiler");
 			for (ITool tool : tools) {
-				IOption otherFlagOption = tool.getOptionById("gnu.cpp.compiler.option.other.other");
+				IOption otherFlagOption = tool.getOptionBySuperClassId("gnu.cpp.compiler.option.other.other");
 				String newValue = otherFlagOption.getValue() + " -Wno-attributes";
 				ManagedBuildManager.setOption(config, tool, otherFlagOption, newValue);
 			}
