@@ -1,6 +1,3 @@
-
-//11+
-
 #include "cute.h"
 #include "ide_listener.h"
 #include "cute_runner.h"
@@ -9,18 +6,16 @@ void thisIsATest() {
 	ASSERTM("start writing tests", false);	
 }
 
-void runSuite() {
-	cute::suite s;
+bool runAllTests() {
+	cute::suite s { };
 	//TODO add your test here
 	s.push_back(CUTE(thisIsATest));
-	cute::ide_listener lis;
-	cute::makeRunner(lis)(s, "The Suite");
+	cute::ide_listener lis { };
+	const auto runner { cute::makeRunner(lis) };
+	bool success = runner(s, "The Suite");
+	return success;
 }
 
 int main() {
-    runSuite();
-    return 0;
+    return runAllTests() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-
-
-

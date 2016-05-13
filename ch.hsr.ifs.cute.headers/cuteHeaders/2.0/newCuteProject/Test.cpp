@@ -20,6 +20,3 @@ int main(int argc, char const *argv[]) {
     runAllTests(argc, argv);
     return 0;
 }
-
-
-

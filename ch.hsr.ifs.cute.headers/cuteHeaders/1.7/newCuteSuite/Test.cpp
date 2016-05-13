@@ -3,16 +3,12 @@
 #include "cute_runner.h"
 #include "$suitename$.h"
 
-
-void runTest() {
+void runSuite() {
 	cute::ide_listener lis;
 	cute::suite s = make_suite_$suitename$();
 	cute::makeRunner(lis)(s, "The Suite");
 }
 
 int main() {
-    runTest();
+    runSuite();
 }
-
-
-

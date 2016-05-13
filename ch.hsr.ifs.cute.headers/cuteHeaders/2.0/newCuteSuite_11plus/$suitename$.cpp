@@ -6,10 +6,7 @@ void thisIsA$suitename$Test() {
 }
 
 cute::suite make_suite_$suitename$() {
-	cute::suite s;
+	cute::suite s { };
 	s.push_back(CUTE(thisIsA$suitename$Test));
 	return s;
 }
-
-
-

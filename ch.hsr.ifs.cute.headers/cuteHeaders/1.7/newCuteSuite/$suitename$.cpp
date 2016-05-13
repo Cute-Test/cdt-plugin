@@ -12,6 +12,3 @@ cute::suite make_suite_$suitename$() {
 	s.push_back(CUTE(thisIsA$suitename$Test));
 	return s;
 }
-
-
-
