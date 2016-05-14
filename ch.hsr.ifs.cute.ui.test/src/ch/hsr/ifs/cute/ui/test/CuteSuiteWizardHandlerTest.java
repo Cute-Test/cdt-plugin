@@ -15,13 +15,18 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.hsr.ifs.cute.elevenator.Activator;
+import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.headers.headers1_7.CuteHeaders_1_7;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
@@ -32,12 +37,17 @@ public class CuteSuiteWizardHandlerTest {
 	private IFolder srcFolder;
 	private IFolder cuteFolder;
 	private IProject project;
+	private IScopeContext scope;
+	private IEclipsePreferences node;
 
 	@Before
 	public void setUp() throws Exception {
 		cswh = new CuteSuiteWizardHandler("theSuiteName");
 		IWorkspaceRoot iwsr = ResourcesPlugin.getWorkspace().getRoot();
 		project = iwsr.getProject("CSWHT");
+		scope = new ProjectScope(project);
+		node = scope.getNode(Activator.PLUGIN_ID);
+		node.put("c_dialect", CPPVersion.CPP_14.toString());
 		project.create(new NullProgressMonitor());
 		project.open(new NullProgressMonitor());
 		srcFolder = project.getProject().getFolder("/src");

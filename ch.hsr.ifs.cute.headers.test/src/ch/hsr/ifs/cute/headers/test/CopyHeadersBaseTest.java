@@ -8,21 +8,28 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.headers.test;
 
-import junit.framework.TestCase;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+
+import ch.hsr.ifs.cute.elevenator.Activator;
+import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import junit.framework.TestCase;
 
 public abstract class CopyHeadersBaseTest extends TestCase {
 
 	protected IFolder srcFolder;
 	private IFolder cuteFolder;
 	private IProject project;
+	private IScopeContext scope;
+	private IEclipsePreferences node;
 
 	public CopyHeadersBaseTest() {
 		super();
@@ -38,6 +45,9 @@ public abstract class CopyHeadersBaseTest extends TestCase {
 		super.setUp();
 		IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
 		project = iwsr.getProject("CSWHT");
+		scope = new ProjectScope(project);
+		node = scope.getNode(Activator.PLUGIN_ID);
+		node.put("c_dialect", CPPVersion.CPP_14.toString());
 		project.create(new NullProgressMonitor());
 		project.open(new NullProgressMonitor());
 		srcFolder = project.getProject().getFolder("/src");

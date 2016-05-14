@@ -13,7 +13,7 @@ bool runAllTests(int argc, char const *argv[]) {
 	s.push_back(CUTE(thisIsATest));
 	cute::xml_file_opener xmlfile(argc, argv);
 	cute::xml_listener<cute::ide_listener<>> lis(xmlfile.out);
-	const auto runner { cute::makeRunner(lis, argc, argv) };
+	auto runner { cute::makeRunner(lis, argc, argv) };
 	bool success = runner(s, "AllTests");
 	return success;
 }
