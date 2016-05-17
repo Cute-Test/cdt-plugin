@@ -44,7 +44,7 @@ public abstract class CopyHeadersBaseTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		IWorkspaceRoot iwsr=ResourcesPlugin.getWorkspace().getRoot();
-		project = iwsr.getProject("CSWHT");
+		project = iwsr.getProject("CHBT");
 		scope = new ProjectScope(project);
 		node = scope.getNode(Activator.PLUGIN_ID);
 		node.put("c_dialect", CPPVersion.CPP_14.toString());
