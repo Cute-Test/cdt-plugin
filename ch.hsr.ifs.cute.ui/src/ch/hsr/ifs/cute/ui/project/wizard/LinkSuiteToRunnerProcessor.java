@@ -22,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
@@ -121,9 +122,11 @@ public class LinkSuiteToRunnerProcessor {
 		IProject project = testRunner.getTranslationUnit().getOriginatingTranslationUnit().getCProject().getProject();
 		if(isCPPVersionAboveOrEqualEleven(project)) {
 			IASTStatement makeNewSuiteStatement = createMakeSuiteStmt(true);
-			rw.insertBefore(testRunner.getBody(), testRunner.getBody().getChildren()[testRunner.getBody().getChildren().length-1], makeNewSuiteStatement, null);
+			IASTStatement insertionStatement = testRunner.getBody();
+			IASTNode insertionPoint = insertionStatement.getChildren()[insertionStatement.getChildren().length-1];
+			rw.insertBefore(insertionStatement, insertionPoint, makeNewSuiteStatement, null);
 			IASTStatement newRunnerStatement = createRunnerCallStmt();
-			rw.insertBefore(testRunner.getBody(), testRunner.getBody().getChildren()[testRunner.getBody().getChildren().length-1], newRunnerStatement, null);
+			rw.insertBefore(insertionStatement, insertionPoint, newRunnerStatement, null);
 		} else {
 			IASTStatement makeSuiteStmt = createMakeSuiteStmt(false);
 			rw.insertBefore(testRunner.getBody(), null, makeSuiteStmt, null);
