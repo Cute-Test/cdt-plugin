@@ -98,7 +98,7 @@ public class GcovUpdateJob extends Job {
 	}
 
 	private void createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
-		Map<String, String> attributes = new HashMap<String, String>();
+		Map<String, Object> attributes = new HashMap<String, Object>();
 		MarkerUtilities.setMessage(attributes, message);
 		MarkerUtilities.setLineNumber(attributes, lineNum);
 		MarkerUtilities.createMarker(cppFile, attributes, type);

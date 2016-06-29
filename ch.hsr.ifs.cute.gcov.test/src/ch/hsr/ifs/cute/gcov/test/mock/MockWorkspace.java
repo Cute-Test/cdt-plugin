@@ -33,6 +33,7 @@ import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -190,7 +191,19 @@ public class MockWorkspace implements IWorkspace {
 	public void run(IWorkspaceRunnable action, IProgressMonitor monitor) throws CoreException {
 		throw new NotYetImplementedException();
 	}
+	
+	@Override
+	public void run(ICoreRunnable action, ISchedulingRule rule, int flags, IProgressMonitor monitor)
+			throws CoreException {
+		throw new NotYetImplementedException();
+		
+	}
 
+	@Override
+	public void run(ICoreRunnable action, IProgressMonitor monitor) throws CoreException {
+		throw new NotYetImplementedException();
+		
+	}
 	public IStatus save(boolean full, IProgressMonitor monitor) throws CoreException {
 		throw new NotYetImplementedException();
 	}
@@ -255,5 +268,7 @@ public class MockWorkspace implements IWorkspace {
 	public IBuildConfiguration newBuildConfig(String projectName, String configName) {
 		throw new NotYetImplementedException();
 	}
+
+
 
 }

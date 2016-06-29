@@ -22,7 +22,7 @@ public class MacronatorPlugin extends AbstractUIPlugin {
      * )
      */
     @Override
-    public void start(BundleContext context) throws Exception {
+    public void start(final BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
     }
@@ -35,7 +35,7 @@ public class MacronatorPlugin extends AbstractUIPlugin {
      * )
      */
     @Override
-    public void stop(BundleContext context) throws Exception {
+    public void stop(final BundleContext context) throws Exception {
         plugin = null;
         super.stop(context);
     }
@@ -55,7 +55,7 @@ public class MacronatorPlugin extends AbstractUIPlugin {
      * @param status
      *            status to log
      */
-    public static void log(IStatus status) {
+    public static void log(final IStatus status) {
         getDefault().getLog().log(status);
     }
 
@@ -65,7 +65,7 @@ public class MacronatorPlugin extends AbstractUIPlugin {
      * @param e
      *            the exception to be logged
      */
-    public static void log(Throwable e) {
+    public static void log(final Throwable e) {
         log(new Status(IStatus.ERROR, PLUGIN_ID, 1, "Internal Error", e));
     }
 
@@ -77,7 +77,7 @@ public class MacronatorPlugin extends AbstractUIPlugin {
      * @param message
      *            additional message
      */
-    public static void log(Throwable e, String message) {
+    public static void log(final Throwable e, final String message) {
         log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, e));
     }
 
@@ -87,7 +87,11 @@ public class MacronatorPlugin extends AbstractUIPlugin {
      * @param message
      *            the error message to log
      */
-    public static void log(String message) {
+    public static void logError(final String message) {
         log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
+    }
+    
+    public static void logInfo(final String message) {
+        log(new Status(IStatus.INFO, PLUGIN_ID, 1, message, null));
     }
 }

@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>ch.hsr.ifs</groupId>
 		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
-		<version>4.13.0-SNAPSHOT</version>
+		<version>4.14.0-SNAPSHOT</version>
 		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
 	</parent>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.ui.test</artifactId>
-	<version>4.13.0-SNAPSHOT</version>
+	<version>4.14.0-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -17,13 +17,14 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tycho-version}</version>
+				<!--version>${tycho-version}</version> -->
 				<configuration>
 					<testSuite>ch.hsr.ifs.cute.ui.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.ui.test.AllUiTests</testClass>
-					<useUIHarness>true</useUIHarness>
-					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
-					<argLine>${os-jvm-flags}</argLine>
+          <reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
+					<!--useUIHarness>true</useUIHarness>
+					<useUiThread>false</useUiThread>
+					<argLine>${swtbot.args}</argLine>
 					<product>org.eclipse.epp.package.cpp.product</product>
 					<application>org.eclipse.ui.ide.workbench</application>
 					<dependencies>
@@ -32,7 +33,7 @@
 							<artifactId>org.eclipse.sdk.ide</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-					</dependencies>
+					</dependencies -->
 				</configuration>
 			</plugin>
 		</plugins>

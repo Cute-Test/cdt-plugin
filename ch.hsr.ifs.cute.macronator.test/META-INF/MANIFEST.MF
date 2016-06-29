@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.ui.tests;bundle-version="5.4.0",
  ch.hsr.ifs.cute.macronator;bundle-version="1.0.0",
  ch.hsr.ifs.cdttesting;bundle-version="4.0.0"
-Bundle-Version: 4.13.0.qualifier
+Bundle-Version: 4.14.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: ch.hsr.ifs.cute.macronator.test.TestActivator
 Bundle-SymbolicName: ch.hsr.ifs.cute.macronator.test;singleton:=true

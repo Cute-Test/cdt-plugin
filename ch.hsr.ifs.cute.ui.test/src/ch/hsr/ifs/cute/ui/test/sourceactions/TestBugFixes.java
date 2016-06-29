@@ -9,6 +9,7 @@
 package ch.hsr.ifs.cute.ui.test.sourceactions;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.eclipse.cdt.ui.ICEditor;
 import org.eclipse.cdt.ui.testplugin.EditorTestHelper;
@@ -26,41 +27,41 @@ public class TestBugFixes extends CDTTestingTest {
 
 	@Test
 	public void testNewTestFunctionhighlight() throws Exception {
-		IEditorPart editor = EditorTestHelper.openInEditor(getActiveIFile(), true);
+		final IEditorPart editor = EditorTestHelper.openInEditor(getActiveIFile(), true);
 		assertTrue(editor instanceof ICEditor);
 
-		ISelectionProvider selectionProvider = ((ICEditor) editor).getSelectionProvider();
+		final ISelectionProvider selectionProvider = ((ICEditor) editor).getSelectionProvider();
 		selectionProvider.setSelection(new TextSelection(212, 0));
 
-		NewTestFunctionActionDelegate ntfad = new NewTestFunctionActionDelegate();
+		final NewTestFunctionActionDelegate ntfad = new NewTestFunctionActionDelegate();
 		ntfad.run(null);
 
 		// set cursor location to be at the newly created newTest^Function
 		selectionProvider.setSelection(new TextSelection(261, 0));
 		ntfad.run(null);
 
-		LinkedModeUI linked2ndCopy = ntfad.testOnlyGetLinkedMode();
+		final LinkedModeUI linked2ndCopy = ntfad.testOnlyGetLinkedMode();
 		linked2ndCopy.getSelectedRegion();
 
 		callLeave(linked2ndCopy);
 
-		String results = getCurrentSource();
+		final String results = getCurrentSource();
 
-		TextSelection selection = (TextSelection) selectionProvider.getSelection();
-		String actual = results.substring(selection.getOffset(), selection.getOffset() + selection.getLength());
+		final TextSelection selection = (TextSelection) selectionProvider.getSelection();
+		final String actual = results.substring(selection.getOffset(), selection.getOffset() + selection.getLength());
 
 		assertEquals("ASSERTM(\"start writing tests\", false);", actual);
 	}
 
-	private void callLeave(LinkedModeUI linked2ndCopy) throws IllegalAccessException, InvocationTargetException {
+	private void callLeave(final LinkedModeUI linked2ndCopy) throws IllegalAccessException, InvocationTargetException {
 		// default access, so need reflection
 		boolean flag = true;
 		final java.lang.reflect.Method[] methods = LinkedModeUI.class.getDeclaredMethods();
-		for (int i = 0; i < methods.length; ++i) {
-			if (methods[i].getName().equals("leave")) {
+		for (final Method method : methods) {
+			if (method.getName().equals("leave")) {
 				final Object params[] = { ILinkedModeListener.UPDATE_CARET };
-				methods[i].setAccessible(true);
-				methods[i].invoke(linked2ndCopy, params);
+				method.setAccessible(true);
+				method.invoke(linked2ndCopy, params);
 				flag = false;
 			}
 		}

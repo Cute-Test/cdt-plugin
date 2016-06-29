@@ -1,8 +1,11 @@
 package ch.hsr.ifs.cute.macronator.common;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.ast.ExpansionOverlapsBoundaryException;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorMacroDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
@@ -11,12 +14,12 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IPointerType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.IVariable;
+import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexMacro;
 import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.index.IndexFilter;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
-import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.parser.IToken;
 import org.eclipse.core.runtime.CoreException;
@@ -28,49 +31,54 @@ import ch.hsr.ifs.cute.macronator.MacronatorPlugin;
 /**
  * Implements the macro classification process.
  * 
- * @author silvano brugnoni
- * 
  */
 public class MacroClassifier {
 
     private final IASTPreprocessorMacroDefinition macroDefinition;
     private final MacroProperties macroProperties;
+    private final Map<ITranslationUnit, IASTTranslationUnit> astCache;
 
-    public MacroClassifier(IASTPreprocessorMacroDefinition macroDefinition) {
+    public MacroClassifier(final IASTPreprocessorMacroDefinition macroDefinition) {
+        this(macroDefinition, new HashMap<>());
+    }
+    
+    public MacroClassifier(final IASTPreprocessorMacroDefinition macroDefinition, final Map<ITranslationUnit, IASTTranslationUnit> astCache) {
         this.macroDefinition = macroDefinition;
-        this.macroProperties = new MacroProperties(macroDefinition);
+        macroProperties = new MacroProperties(macroDefinition);
+        this.astCache = astCache;
     }
 
     public boolean isObjectLike() {
-        return (macroProperties.isObjectStyle() && !isConfigurational());
+        return macroProperties.isObjectStyle() && !isConfigurational();
     }
 
     public boolean isFunctionLike() {
-        return (!macroProperties.isObjectStyle() && !isConfigurational());
+        return !macroProperties.isObjectStyle() && !isConfigurational();
     }
 
     public boolean areDependenciesValid() {
-        List<String> freeVariables = macroProperties.getFreeVariables();
-        for (String variableName : freeVariables) {
-            if (!inScope(variableName) || isPointer(variableName))
+        final List<String> freeVariables = macroProperties.getFreeVariables();
+        for (final String variableName : freeVariables) {
+            if (!inScope(variableName) || isPointer(variableName)) {
                 return false;
+            }
         }
         return true;
     }
 
-    private boolean inScope(String variableName) {
-        IIndexMacro[] macros = getMacroDefinitions(macroDefinition.getTranslationUnit(), variableName);
-        boolean isMacro = (macros.length == 1);
-        boolean inScope = (macroDefinition.getTranslationUnit().getScope().find(variableName).length > 0);
-        return (isMacro || inScope);
+    private boolean inScope(final String variableName) {
+        final IIndexMacro[] macros = getMacroDefinitions(macroDefinition.getTranslationUnit(), variableName);
+        final boolean isMacro = macros.length == 1;
+        final boolean inScope = macroDefinition.getTranslationUnit().getScope().find(variableName).length > 0;
+        return isMacro || inScope;
     }
 
-    private boolean isPointer(String variableName) {
-        IBinding[] find = macroDefinition.getTranslationUnit().getScope().find(variableName);
-        for (IBinding binding : find) {
+    private boolean isPointer(final String variableName) {
+        final IBinding[] find = macroDefinition.getTranslationUnit().getScope().find(variableName);
+        for (final IBinding binding : find) {
             if (binding instanceof IVariable) {
-                IVariable var = (IVariable) binding;
-                IType type = var.getType();
+                final IVariable var = (IVariable) binding;
+                final IType type = var.getType();
                 if (type instanceof IPointerType) {
                     return true;
                 }
@@ -79,17 +87,17 @@ public class MacroClassifier {
         return false;
     }
 
-    private IIndexMacro[] getMacroDefinitions(IASTTranslationUnit translationUnit, String variableName) {
+    private IIndexMacro[] getMacroDefinitions(final IASTTranslationUnit translationUnit, final String variableName) {
         try {
             return translationUnit.getIndex().findMacros(variableName.toCharArray(), IndexFilter.ALL, new NullProgressMonitor());
-        } catch (CoreException e) {
+        } catch (final CoreException e) {
             MacronatorPlugin.log(e);
         }
         return new IIndexMacro[0];
     }
 
     public boolean isConfigurational() {
-        for (IIndexName macroReference : macroProperties.getReferences()) {
+        for (final IIndexName macroReference : macroProperties.getReferences()) {
             if (isInsideConditionalPreprocessorStatement(macroReference)) {
                 return true;
             }
@@ -97,13 +105,13 @@ public class MacroClassifier {
         return false;
     }
 
-    private boolean isInsideConditionalPreprocessorStatement(IIndexName macroReference) {
-        IASTTranslationUnit referenceAst = getTranslationUnit(macroReference);
+    private boolean isInsideConditionalPreprocessorStatement(final IIndexName macroReference) {
+        final IASTTranslationUnit referenceAst = getTranslationUnit(macroReference);
         if (referenceAst == null) {
             return false;
         }
-        List<IASTPreprocessorStatement> statements = Arrays.<IASTPreprocessorStatement> asList(referenceAst.getAllPreprocessorStatements());
-        for (IASTPreprocessorStatement statement : statements) {
+        final List<IASTPreprocessorStatement> statements = Arrays.asList(referenceAst.getAllPreprocessorStatements());
+        for (final IASTPreprocessorStatement statement : statements) {
             if (!isMacroDefinition(statement) && isReferenceContainedInStatement(macroReference, statement)) {
                 return true;
             }
@@ -111,26 +119,37 @@ public class MacroClassifier {
         return false;
     }
 
-    private boolean isMacroDefinition(IASTPreprocessorStatement statement) {
+    private boolean isMacroDefinition(final IASTPreprocessorStatement statement) {
         return statement instanceof IASTPreprocessorMacroDefinition;
     }
 
-    private IASTTranslationUnit getTranslationUnit(IIndexName indexName) {
-        Path filePath = new Path(indexName.getFileLocation().getFileName());
-        ICElement celement = CoreModel.getDefault().create(filePath);
+    private IASTTranslationUnit getTranslationUnit(final IIndexName indexName) {
+        final Path filePath = new Path(indexName.getFileLocation().getFileName());
+        final ICElement celement = CoreModel.getDefault().create(filePath);
         if (celement == null) {
             return null;
         }
-        ICProject project = celement.getCProject();
-        ITranslationUnit referenceTU = CoreModel.getDefault().createTranslationUnitFrom(project, filePath);
-        try {
-            return referenceTU.getAST(macroDefinition.getTranslationUnit().getIndex(), ITranslationUnit.AST_CONFIGURE_USING_SOURCE_CONTEXT | ITranslationUnit.AST_SKIP_INDEXED_HEADERS);
-        } catch (CoreException e) {
-            throw new RuntimeException(e);
+        if (!(celement instanceof ITranslationUnit)) {
+            return null;
         }
+        final ITranslationUnit referenceTU = (ITranslationUnit) celement;
+
+        try {
+            final IIndex index = CCorePlugin.getIndexManager().getIndex(celement.getCProject());
+            if (!astCache.containsKey(referenceTU)) {
+                MacronatorPlugin.logInfo("parsing " + referenceTU.getFile().getName());
+                astCache.put(referenceTU, referenceTU.getAST(index, ITranslationUnit.AST_SKIP_ALL_HEADERS));
+            } else {
+                MacronatorPlugin.logInfo("reusing " + referenceTU.getFile().getName());
+            }
+        } catch (final CoreException e1) {
+            return null;
+        }
+        return astCache.get(referenceTU);
+
     }
 
-    private boolean isReferenceContainedInStatement(IIndexName macroReference, IASTPreprocessorStatement statement) {
+    private boolean isReferenceContainedInStatement(final IIndexName macroReference, final IASTPreprocessorStatement statement) {
         try {
             IToken token = statement.getSyntax();
             while (token != null) {
@@ -141,7 +160,7 @@ public class MacroClassifier {
                 }
                 token = token.getNext();
             }
-        } catch (ExpansionOverlapsBoundaryException e) {
+        } catch (final ExpansionOverlapsBoundaryException e) {
             MacronatorPlugin.log(e);
         }
         return false;

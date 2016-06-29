@@ -15,6 +15,8 @@ import java.util.List;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
+import org.eclipse.cdt.core.dom.ast.IASTConditionalExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
@@ -22,6 +24,7 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
+import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -185,6 +188,19 @@ public class RunnerFinder {
 					if (expStmt.getExpression() instanceof IASTFunctionCallExpression) {
 						IASTFunctionCallExpression funcCall = (IASTFunctionCallExpression) expStmt.getExpression();
 						res.add(funcCall);
+					}
+				}
+				if(statement instanceof IASTCompoundStatement) {
+					IASTCompoundStatement compStmt = (IASTCompoundStatement) statement;
+					if(compStmt.getStatements()[0] instanceof IASTReturnStatement) {
+						IASTReturnStatement retStmt = (IASTReturnStatement)compStmt.getStatements()[0];
+						if(retStmt.getReturnValue() instanceof IASTConditionalExpression) {
+							IASTConditionalExpression condExpr = (IASTConditionalExpression)retStmt.getReturnValue();
+							if(condExpr.getLogicalConditionExpression() instanceof IASTFunctionCallExpression) {
+								IASTFunctionCallExpression funcCall = (IASTFunctionCallExpression)condExpr.getLogicalConditionExpression();
+								res.add(funcCall);
+							}
+						}
 					}
 				}
 				return super.visit(statement);

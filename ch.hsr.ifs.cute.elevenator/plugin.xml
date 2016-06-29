@@ -96,8 +96,13 @@
       <ALL_VERSIONS>
          <versionModification
                checkedByDefault="true"
-               name="Set Compiler Flag"
-               operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerFlagOperation">
+               name="Set Dialect Compiler Flag"
+               operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerDialectFlagOperation">
+         </versionModification>
+         <versionModification
+               checkedByDefault="true"
+               name="Set Disable Attribute Warning Compiler Flag"
+               operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeCompilerAttributeWarningsFlagOperation">
          </versionModification>
          <versionModification
                checkedByDefault="true"
@@ -105,25 +110,6 @@
                operationClass="ch.hsr.ifs.cute.elevenator.operation.ChangeIndexFlagOperation">
          </versionModification>
       </ALL_VERSIONS>
-      <CPP_14>
-         <versionModification
-               checkedByDefault="true"
-               name="Enable Elevator"
-               operationClass="ch.hsr.ifs.cute.elevenator.operation.EnableElevatorOperation">
-         </versionModification></CPP_14>
-      <CPP_17>
-         <versionModification
-               checkedByDefault="true"
-               name="Enable Elevator"
-               operationClass="ch.hsr.ifs.cute.elevenator.operation.EnableElevatorOperation">
-         </versionModification></CPP_17>
-      <CPP_11>
-         <versionModification
-               checkedByDefault="true"
-               name="Enable Elevator"
-               operationClass="ch.hsr.ifs.cute.elevenator.operation.EnableElevatorOperation">
-         </versionModification>
-      </CPP_11>
    </extension>
 
 </plugin>

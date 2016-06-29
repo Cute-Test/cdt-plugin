@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.constificator.feature"
       label="Constificator"
-      version="4.13.0.qualifier"
+      version="4.14.0.qualifier"
       provider-name="IFS Institute for Software">
 
    <description url="">
@@ -131,14 +131,14 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="ch.hsr.ifs.cute.constificator"
          download-size="0"
          install-size="0"
-         version="4.13.0.qualifier"
+         version="4.14.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.constificator.core"
          download-size="0"
          install-size="0"
-         version="4.13.0.qualifier"
+         version="4.14.0.qualifier"
          unpack="false"/>
 
 </feature>

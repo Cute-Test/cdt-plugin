@@ -1,4 +1,4 @@
-package ch.hsr.ifs.cute.elevenator.operation;
+package ch.hsr.ifs.cute.elevator.operation;
 
 import org.eclipse.core.resources.IProject;
 
@@ -20,5 +20,7 @@ public class EnableElevatorOperation implements IVersionModificationOperation {
 				InitializationChecker.DEFAULT_CTOR, InitializationChecker.NULL_MACRO);
 
 		EnableCodanCheckers.setPreference_UseWorkspaceSettings(project, false);
+
 	}
+
 }

@@ -7,33 +7,22 @@
 		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
 		<groupId>ch.hsr.ifs</groupId>
 		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
-		<version>4.13.0-SNAPSHOT</version>
+		<version>4.14.0-SNAPSHOT</version>
 	</parent>
 	<groupId>ch.hsr.ifs.cute.refactoringPreview.clonewar</groupId>
 	<artifactId>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</artifactId>
-	<version>4.13.0-SNAPSHOT</version>
+	<version>4.14.0-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tycho-version}</version>
 				<configuration>
 					<testSuite>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.refactoringpreview.clonewar.test.CloneWarAllTests</testClass>
 					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
 					<useUIHarness>true</useUIHarness>
-					<argLine>${os-jvm-flags}</argLine>
-					<product>org.eclipse.epp.package.cpp.product</product>
-					<application>org.eclipse.ui.ide.workbench</application>
-					<dependencies>
-						<dependency>
-							<type>p2-installable-unit</type>
-							<artifactId>org.eclipse.sdk.ide</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-					</dependencies>
 				</configuration>
 			</plugin>
 		</plugins>

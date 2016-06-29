@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>ch.hsr.ifs</groupId>
 		<artifactId>ch.hsr.ifs.cute.releng</artifactId>
-		<version>4.13.0-SNAPSHOT</version>
+		<version>4.14.0-SNAPSHOT</version>
 		<relativePath>../ch.hsr.ifs.cute.releng</relativePath>
 	</parent>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.testframework.test</artifactId>
-	<version>4.13.0-SNAPSHOT</version>
+	<version>4.14.0-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
   	<build>
     	<sourceDirectory>src</sourceDirectory>
@@ -20,11 +20,9 @@
 		        <version>${tycho-version}</version>
     		    <configuration>
     		    	<testSuite>ch.hsr.ifs.testframework.test</testSuite>
-					<testClass>ch.hsr.ifs.testframework.test.AllTestframeworkTests</testClass>
-        			<useUIHarness>true</useUIHarness>
-          <argLine>${os-jvm-flags}</argLine>
+					    <testClass>ch.hsr.ifs.testframework.test.AllTestframeworkTests</testClass>
         			<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
-			</configuration>
+			       </configuration>
     	  	</plugin>
 	    </plugins>
 	</build>

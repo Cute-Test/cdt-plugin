@@ -9,11 +9,11 @@
 package ch.hsr.ifs.cute.ui.sourceactions;
 
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
-import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -34,7 +34,6 @@ import org.eclipse.text.edits.TextEdit;
  * @since 4.0
  * 
  */
-@SuppressWarnings("deprecation")
 public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 
 	protected static final String EMPTY_STRING = "";
@@ -117,15 +116,14 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 	}
 
 	protected String functionAST(IASTExpression thelist) {
+		return ((IASTIdExpression) thelist).getName().toString();
+	}
+	
+	protected String functionAST(IASTInitializerClause[] arguments) {
 		String theName = EMPTY_STRING;
-		if (thelist instanceof IASTExpressionList) {// normal run only
-			IASTExpression innerlist[] = ((IASTExpressionList) thelist).getExpressions();
-			IASTUnaryExpression unaryex = (IASTUnaryExpression) innerlist[1];
-			IASTLiteralExpression literalex = (IASTLiteralExpression) unaryex.getOperand();
-			theName = literalex.toString();
-		} else {// both normal run and unit test
-			theName = ((IASTIdExpression) thelist).getName().toString();
-		}
+		IASTUnaryExpression unaryex = (IASTUnaryExpression) arguments[0];
+		IASTLiteralExpression literalex = (IASTLiteralExpression) unaryex.getOperand();
+		theName = literalex.toString();
 		return theName;
 	}
 
@@ -158,11 +156,11 @@ public abstract class AddPushbackStatementStrategy implements IAddStrategy {
 					IASTFieldReference fRef = (ICPPASTFieldReference) name1.getParent().getParent();
 					if (fRef.getFieldName().toString().equals("push_back")) {
 						IASTFunctionCallExpression callex = (IASTFunctionCallExpression) name1.getParent().getParent().getParent();
-						IASTFunctionCallExpression innercallex = (IASTFunctionCallExpression) callex.getParameterExpression();
-						IASTExpression thelist = innercallex.getParameterExpression();
+						IASTFunctionCallExpression innercallex = (IASTFunctionCallExpression) callex.getArguments()[0];
+						IASTInitializerClause[] arguments = innercallex.getArguments();
 						String theName = EMPTY_STRING;
-						if (thelist != null) {
-							theName = functionAST(thelist);
+						if (arguments != null) {
+							theName = functionAST(arguments);
 						} else {
 							theName = functorAST(innercallex);
 						}

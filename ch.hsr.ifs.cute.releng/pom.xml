@@ -3,78 +3,43 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.releng</artifactId>
-	<version>4.13.0-SNAPSHOT</version>
+	<version>4.14.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	
 	<properties>
 		<tycho-version>0.24.0</tycho-version>
-		<os-jvm-flags /> <!-- for the default case , mac requires special -->
-		<target-file>cdt</target-file>
+		<!--os-jvm-flags/>-->
 	</properties>
+	
+	
 	<profiles>
 		<profile>
-			<id>macosx-jvm-flags</id>
+			<id>OSX</id>
 			<activation>
 				<os>
 					<family>mac</family>
 				</os>
 			</activation>
 			<properties>
-				<os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
-				<eclipse-version>mars</eclipse-version>
-				<eclipse-version-number>4.5</eclipse-version-number>
+				<swtbot.args>-Xmx1024m -XstartOnFirstThread</swtbot.args>
 			</properties>
 		</profile>
 		<profile>
-			<id>juno</id>
-			<properties>
-				<eclipse-version>juno</eclipse-version>
-				<eclipse-version-number>4.2</eclipse-version-number>
-			</properties>
-		</profile>
-		<profile>
-			<id>kepler</id>
-			<properties>
-				<eclipse-version>kepler</eclipse-version>
-				<eclipse-version-number>4.3</eclipse-version-number>
-			</properties>
-		</profile>
-		<profile>
-			<id>luna</id>
-			<properties>
-				<eclipse-version>luna</eclipse-version>
-				<eclipse-version-number>4.4</eclipse-version-number>
-			</properties>
-		</profile>
-		<profile>
-			<id>mars</id>
+			<id>notOSX</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<os>
+					<family>!mac</family>
+				</os>
 			</activation>
 			<properties>
-				<eclipse-version>mars</eclipse-version>
-				<eclipse-version-number>4.5</eclipse-version-number>
+				<swtbot.args>-Xmx1024m</swtbot.args>
 			</properties>
 		</profile>
 	</profiles>
 
-	<repositories>
-		<repository>
-			<id>release</id>
-			<url>http://download.eclipse.org/releases/${eclipse-version}/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>release-update</id>
-			<url>http://download.eclipse.org/eclipse/updates/${eclipse-version-number}</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>ifs cdttesting</id>
-			<url>http://www.cevelop.com/cdt-testing/${eclipse-version}/</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
 	<modules>
+		<!-- CUTE Target -->
+		<module>../ch.hsr.ifs.cute.target</module>
 		<!-- CUTE Plugin -->
 		<module>../ch.hsr.ifs.cute.feature</module>
 		<module>../ch.hsr.ifs.testframework</module>
@@ -122,11 +87,15 @@
 		<module>../ch.hsr.ifs.cute.charwars</module>
 		<module>../ch.hsr.ifs.cute.charwars.feature</module>
 		<module>../ch.hsr.ifs.cute.charwars.test</module>
-		<!-- Constificator-->
+		<!-- Constificator -->
 		<module>../ch.hsr.ifs.cute.constificator</module>
 		<module>../ch.hsr.ifs.cute.constificator.core</module>
 		<module>../ch.hsr.ifs.cute.constificator.feature</module>
 		<module>../ch.hsr.ifs.cute.constificator.test</module>
+		<!-- Templator -->
+		<module>../ch.hsr.ifs.cute.templator</module>
+		<module>../ch.hsr.ifs.cute.templator.feature</module>
+		<module>../ch.hsr.ifs.cute.templator.test</module>
 		
 		<!-- update site -->
 		<module>../ch.hsr.ifs.cute.updatesite</module>
@@ -146,7 +115,40 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<resolver>p2</resolver>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+					<target>
+						<artifact>
+							<groupId>ch.hsr.ifs</groupId>
+							<artifactId>ch.hsr.ifs.cute.target.cdt900</artifactId>
+							<version>4.14.0-SNAPSHOT</version>
+						</artifact>
+					</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -185,6 +187,35 @@
 					<alias>ifscodesigning</alias>
 					<storepass>${certpass}</storepass>
 					<storetype>pkcs12</storetype>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.equinox.ds</artifactId>
+						</dependency>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.platform</artifactId>
+						</dependency> 
+					</dependencies>
+					<useUIHarness>true</useUIHarness>
+					<useUIThread>true</useUIThread>
+					<argLine>${swtbot.args}</argLine>
+					<product>org.eclipse.epp.package.cpp.product</product>
+					<application>org.eclipse.ui.ide.workbench</application>
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.sdk.ide</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+					</dependencies>
 				</configuration>
 			</plugin>
 		</plugins>

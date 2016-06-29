@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cute.ui;singleton:=true
-Bundle-Version: 4.13.0.qualifier
+Bundle-Version: 4.14.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.ui.CuteUIPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.4.0",
@@ -32,3 +32,4 @@ Export-Package: ch.hsr.ifs.cute.ui,ch.hsr.ifs.cute.ui.actions,ch.hsr.i
  ceactions
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
+Import-Package: ch.hsr.ifs.cute.elevenator.definition

@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -20,6 +21,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
+import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.headers.CuteHeadersPlugin;
 import ch.hsr.ifs.cute.headers.Messages;
 
@@ -30,15 +32,20 @@ public class CopyUtils {
 	}
 
 	public static void copyTestFiles(IContainer container, IProgressMonitor monitor, String versionNumber) throws CoreException {
-		copyFilesToFolder(container, monitor, getTestFiles(versionNumber));
+		IProject project = container.getProject();
+		copyFilesToFolder(container, monitor, getTestFiles(versionNumber, project));
 	}
 
 	private static List<URL> getHeaderFiles(String versionNumber) {
 		return getFileListe("headers", "*.*", versionNumber);
 	}
 
-	private static List<URL> getTestFiles(String versionNumber) {
-		return getFileListe("newCuteProject", "*.*", versionNumber);
+	private static List<URL> getTestFiles(String versionNumber, IProject project) {
+		if(isCPPVersionAboveOrEqualEleven(project)) {
+			return getFileListe("newCuteProject_11plus", "*.*", versionNumber);
+		} else {
+			return getFileListe("newCuteProject", "*.*", versionNumber);
+		}
 	}
 
 	private static void copyFilesToFolder(IContainer container, IProgressMonitor monitor, List<URL> urls) throws CoreException {
@@ -91,7 +98,8 @@ public class CopyUtils {
 	}
 
 	private static void copySuiteFile(IFile targetFile, IProgressMonitor mon, String templateFilename, String suitename, String version) throws CoreException {
-		Enumeration<URL> en = CuteHeadersPlugin.getDefault().getBundle().findEntries(getFolderPath("newCuteSuite", version), templateFilename, false);
+		String subfolder = isCPPVersionAboveOrEqualEleven(targetFile.getProject()) ? "newCuteSuite_11plus" : "newCuteSuite";
+		Enumeration<URL> en = CuteHeadersPlugin.getDefault().getBundle().findEntries(getFolderPath(subfolder, version), templateFilename, false);
 		if (en.hasMoreElements()) {
 			URL url = en.nextElement();
 			try {
@@ -117,9 +125,27 @@ public class CopyUtils {
 		String linesep = System.getProperty("line.separator");
 		while (br.ready()) {
 			String a = br.readLine();
-			buffer.append(a.replaceAll("[$]suitename[$]", suitename) + linesep);
+			if(a.contains("$suitename$")) {
+				buffer.append(a.replaceAll("[$]suitename[$]", suitename) + linesep);
+			} else {
+				buffer.append(a.replaceAll("[$]SUITENAME[$]", suitename.toUpperCase()) + linesep);
+			}
 		}
 		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());
 	}
+	
+	private static CPPVersion getCPPVersion(IProject project) {
+		return CPPVersion.getForProject(project);
+	}
+	
+	private static boolean isCPPVersionAboveOrEqualEleven(IProject project) {
+		CPPVersion version = getCPPVersion(project);
+		if(!version.toString().equals(CPPVersion.CPP_98.toString())
+				&& !version.toString().equals(CPPVersion.CPP_03.toString())) {
+			return true;
+		}
+		return false;
+	}
+	
 }
