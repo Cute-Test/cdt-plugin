@@ -16,7 +16,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-pmd-plugin</artifactId>
-					<version>2.5</version>
+					<version>3.6</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -52,7 +52,7 @@
 					<format>xml</format>
 					<failOnViolation>false</failOnViolation>
 					<rulesets>
-						<ruleset>rulesets/android.xml</ruleset>
+						<ruleset>rulesets/java/android.xml</ruleset>
 					</rulesets>
 				</configuration>
 				<executions>

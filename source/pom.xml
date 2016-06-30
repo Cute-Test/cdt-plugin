@@ -11,11 +11,11 @@
 	</prerequisites>
     <properties>
         <target-file>mockator-mars</target-file>
-        <tycho-version>0.20.0</tycho-version>
+        <tycho-version>0.25.0</tycho-version>
 		<encoding>UTF-8</encoding>
-		<compiler-version>1.7</compiler-version>
+		<compiler-version>1.8</compiler-version>
 	</properties>
-	<repositories>
+	<!--<repositories>
 		<repository>
 			<id>ecplise-cdt-mars</id>
 			<url>http://download.eclipse.org/releases/mars</url>
@@ -31,7 +31,7 @@
 			<url>http://www.cevelop.com/cdt-test-plugins/mars</url>
 			<layout>p2</layout>
 		</repository>
-	<!--	<repository>
+		<repository>
 			<id>ecplise-cdt-luna</id>
 			<url>http://download.eclipse.org/releases/luna</url>
 			<layout>p2</layout>
@@ -70,14 +70,14 @@
             <id>cdttesting-ifs</id>
             <url>http://dev.ifs.hsr.ch/updatesites/cdttesting/kepler</url>
             <layout>p2</layout>
-        </repository>-->
-	</repositories>
+        </repository>
+	</repositories>-->
 	<modules>
         <module>ch.hsr.ifs.mockator.target</module>
-		<module>ch.hsr.ifs.mockator.feature</module>
 		<module>ch.hsr.ifs.mockator.plugin</module>
 		<module>ch.hsr.ifs.mockator.help</module>
 		<module>ch.hsr.ifs.mockator.tests</module>
+		<module>ch.hsr.ifs.mockator.feature</module>
 		<module>ch.hsr.ifs.mockator.updatesite</module>
 		<!--module>ch.hsr.ifs.mockator.swtbottests</module-->
 	</modules>
@@ -170,6 +170,13 @@
 						<arch>x86_64</arch>
 						</environment>
 					</environments>
+					<target>
+						<artifact>
+							<groupId>ch.hsr.ifs.mockator</groupId>
+							<artifactId>mockator-neon</artifactId>
+							<version>1.0.0-SNAPSHOT</version>
+						</artifact>
+					</target>
 				</configuration>
 			</plugin>
         </plugins>

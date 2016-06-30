@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.105.0",
  org.eclipse.cdt.debug.core;bundle-version="7.4.0",
  org.eclipse.cdt.core;bundle-version="5.6.0",
  org.eclipse.cdt.ui;bundle-version="5.7.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.mockator.plugin,
  ch.hsr.ifs.mockator.plugin.base,

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Mockator Luna Target" sequenceNumber="89">
+<?pde version="3.8"?><target name="Mockator NeonTarget" sequenceNumber="90">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.sdk.ide" version="4.6.0.I20160606-1100"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.6"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.cdt.sdk.feature.group" version="9.0.0.201606062011"/>
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.12.0.v20160526-0356"/>
@@ -24,6 +20,11 @@
 <unit id="org.eclipse.swtbot.ide.feature.group" version="2.4.0.201604200752"/>
 <unit id="org.eclipse.swtbot.forms.feature.group" version="2.4.0.201604200752"/>
 <repository location="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.platform.sdk" version="4.6.0.I20160606-1100"/>
+<unit id="org.eclipse.sdk.ide" version="4.6.0.I20160606-1100"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.6"/>
 </location>
 </locations>
 </target>
