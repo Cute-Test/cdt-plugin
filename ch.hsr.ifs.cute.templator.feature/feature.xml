@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.templator.feature"
       label="Templator"
-      version="4.14.0.qualifier"
+      version="5.0.0.qualifier"
       provider-name="IFS Institute for Software">
 
    <description url="http://www.example.com/description">
