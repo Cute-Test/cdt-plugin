@@ -10,6 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
@@ -82,12 +83,12 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
 
   private static ICPPASTQualifiedName getFunNameWithoutTemplateId(ICPPASTQualifiedName funName) {
     ICPPASTQualifiedName qfNameWithoutTemplateId = nodeFactory.newQualifiedName();
-    IASTName[] names = funName.getNames();
+    ICPPASTNameSpecifier[] names = funName.getAllSegments();
     for (int i = 0; i < names.length - 1; i++) {
       if (names[i] instanceof ICPPASTTemplateId) {
         qfNameWithoutTemplateId.addName(((ICPPASTTemplateId) names[i]).getTemplateName().copy());
       } else {
-        qfNameWithoutTemplateId.addName(names[i].copy());
+        qfNameWithoutTemplateId.addNameSpecifier(names[i].copy());
       }
     }
     return qfNameWithoutTemplateId;

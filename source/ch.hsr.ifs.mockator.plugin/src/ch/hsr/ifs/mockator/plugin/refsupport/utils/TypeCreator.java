@@ -68,8 +68,7 @@ public abstract class TypeCreator extends ASTQueries {
 
     IASTName name = fnDtor.getName();
     if (name instanceof ICPPASTQualifiedName) {
-      IASTName[] ns = ((ICPPASTQualifiedName) name).getNames();
-      name = ns[ns.length - 1];
+      name = ((ICPPASTQualifiedName) name).getLastName();
     }
     if (name instanceof ICPPASTConversionName) {
       returnType = createType(((ICPPASTConversionName) name).getTypeId());

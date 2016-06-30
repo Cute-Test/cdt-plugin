@@ -49,6 +49,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeleteExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTPackExpansionExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTPointerToMember;
@@ -494,12 +495,16 @@ public class ParameterSignatureHandler {
     if (name instanceof ICPPASTQualifiedName) {
       final ICPPASTQualifiedName qualifiedName = (ICPPASTQualifiedName) name;
       if (qualified) {
-        final IASTName[] names = qualifiedName.getNames();
+        final ICPPASTNameSpecifier[] names = qualifiedName.getAllSegments();
         for (int i = 0; i < names.length; i++) {
           if (i > 0) {
             buffer.append(Keywords.cpCOLONCOLON);
           }
-          appendQualifiedNameString(buffer, names[i]);
+          if (names[i] instanceof IASTName) {
+        	  appendQualifiedNameString(buffer, (IASTName) names[i]);
+          } else {
+        	  buffer.append(names[i].getRawSignature());
+          }
         }
       } else {
         buffer.append(qualifiedName.getLastName());
