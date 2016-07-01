@@ -30,12 +30,6 @@
    <feature url="features/ch.hsr.ifs.cute.elevenator.feature_5.0.0.qualifier.jar" id="ch.hsr.ifs.cute.elevenator.feature" version="5.0.0.qualifier">
       <category name="OptFeatures"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.constificator.feature_5.0.0.qualifier.jar" id="ch.hsr.ifs.cute.constificator.feature" version="5.0.0.qualifier">
-      <category name="OptFeatures"/>
-   </feature>
-   <feature url="features/ch.hsr.ifs.cute.templator.feature_5.0.0.qualifier.jar" id="ch.hsr.ifs.cute.templator.feature" version="5.0.0.qualifier">
-      <category name="OptFeatures"/>
-   </feature>
    <category-def name="CUTE Plugin" label="CUTE Plugin"/>
    <category-def name="OptFeatures" label="CUTE Optional Features"/>
 </site>
