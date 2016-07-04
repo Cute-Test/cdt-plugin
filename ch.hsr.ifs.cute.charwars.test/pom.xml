@@ -31,6 +31,7 @@
           <useUIThread>false</useUIThread>
           <testSuite>ch.hsr.ifs.cute.charwars.test</testSuite>
           <testClass>ch.hsr.ifs.cute.charwars.test.TestSuiteAll</testClass>
+		  <reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
           
           <appArgLine>-nl en</appArgLine>
       
