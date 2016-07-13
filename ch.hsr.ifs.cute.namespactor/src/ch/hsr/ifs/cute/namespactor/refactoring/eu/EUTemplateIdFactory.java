@@ -46,24 +46,11 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 	}
 
 	public ICPPASTQualifiedName buildTemplate() {
-//		templateId.accept(this);
-//		return this.getTemplateId();
 		IASTName newTemplateId=templateId.copy(CopyStyle.withLocations);
-
-	//	newTemplateId = templateId.copy(CopyStyle.withLocations);
 		newTemplateId.accept(new ASTVisitor() {
 			{
-				shouldVisitNames=true;
 				shouldVisitTypeIds=true;
 			}
-			public int visit(IASTName name){
-				if (name instanceof ICPPASTTemplateId){
-					ICPPASTQualifiedName newqname = modifyTemplateId((ICPPASTTemplateId)name);
-					((ICPPASTTemplateId) name).setTemplateName(newqname);
-				}
-				return super.visit(name);
-			}
-
 			public int visit(IASTTypeId typeId) {
 				IASTDeclSpecifier vDeclSpecifier = typeId.getDeclSpecifier();
 				IASTDeclSpecifier newDeclSpec = null;
@@ -83,7 +70,7 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 			wrapper.addName(newTemplateId);
 			newTemplateId=wrapper;
 		}
-		return (ICPPASTQualifiedName) newTemplateId;//this.getTemplateId();
+		return (ICPPASTQualifiedName) newTemplateId;
 	}
 
 	
@@ -92,10 +79,6 @@ public abstract class EUTemplateIdFactory extends TemplateIdFactory {
 		for (ICPPASTNameSpecifier iastName : names) {
 			IBinding binding = ((IASTName)iastName.getOriginalNode()).resolveBinding();
 			if (start) {
-				//if (iastName instanceof ICPPASTTemplateId) {
-					//replaceName.setLastName(((ICPPASTName)((ICPPASTTemplateId)iastName).getTemplateName()).copy(CopyStyle.withLocations));
-					//break;
-				//}
 				if (binding instanceof ICPPNamespace || binding instanceof ICPPClassType) {
 					NSNameHelper.addNameOrNameSpecifierWithStyle(replaceName, iastName,CopyStyle.withLocations);
 				}

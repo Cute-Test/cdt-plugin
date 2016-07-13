@@ -55,7 +55,7 @@ public abstract class EUReplaceVisitor extends ASTVisitor {
 			}
 		}
 		removeUnqualifiedUsingDirective(name);
-		return PROCESS_SKIP;
+		return PROCESS_CONTINUE;
 
 	}
 

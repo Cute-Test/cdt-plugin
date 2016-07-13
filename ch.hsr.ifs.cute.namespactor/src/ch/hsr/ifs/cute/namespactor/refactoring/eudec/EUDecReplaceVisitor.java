@@ -11,11 +11,13 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.namespactor.refactoring.eudec;
 
+import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 
 import ch.hsr.ifs.cute.namespactor.astutil.NSNameHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.eu.EURefactoringContext;
@@ -51,6 +53,26 @@ public class EUDecReplaceVisitor extends EUReplaceVisitor {
 
 	@Override
 	protected boolean isReplaceCandidate(ICPPASTNameSpecifier foundName, IASTName name, ICPPASTNameSpecifier[] names) {
+		if (context.firstNameToReplace != null) {
+			IBinding targetBinding = ((IASTName)context.firstNameToReplace).resolveBinding();
+			IBinding nameBinding = name.resolveBinding();
+			if (targetBinding instanceof ICPPBinding && nameBinding instanceof ICPPBinding) {
+				try {
+					String[] targetQualifiedNames = ((ICPPBinding)targetBinding).getQualifiedName();
+					String[] nameQualifiedNames = ((ICPPBinding)nameBinding).getQualifiedName();
+					if (nameQualifiedNames.length >= targetQualifiedNames.length) {
+						for (int i=0; i<targetQualifiedNames.length; i++) {
+							if(!targetQualifiedNames[i].equals(nameQualifiedNames[i])) {
+								return false;
+							}
+						}
+						return true;
+					}
+				} catch (DOMException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return foundName != null && isSameName(name.getLastName(), names);
 	}
 
