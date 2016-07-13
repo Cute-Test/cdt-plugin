@@ -1096,3 +1096,29 @@ int main() {
 }
 std::vector<std::vector<std::string>> vv;
 
+//!IUDIR Nested Name in Template ID
+//@main.cpp
+namespace NS {
+  namespace Nested {
+    struct S{};
+    template<typename T>
+    struct Tpl{};
+  }
+}
+using namespace /*$*/NS/*$$*/;
+
+void foo() {
+  Nested::Tpl<Nested::S> tpl{};
+}
+//=
+namespace NS {
+  namespace Nested {
+    struct S{};
+    template<typename T>
+    struct Tpl{};
+  }
+}
+
+void foo() {
+	NS::Nested::Tpl<NS::Nested::S> tpl { };
+}
