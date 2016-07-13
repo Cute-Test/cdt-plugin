@@ -137,12 +137,10 @@ public class MacroClassifier {
         try {
             final IIndex index = CCorePlugin.getIndexManager().getIndex(celement.getCProject());
             if (!astCache.containsKey(referenceTU)) {
-                MacronatorPlugin.logInfo("parsing " + referenceTU.getFile().getName());
                 astCache.put(referenceTU, referenceTU.getAST(index, ITranslationUnit.AST_SKIP_ALL_HEADERS));
-            } else {
-                MacronatorPlugin.logInfo("reusing " + referenceTU.getFile().getName());
             }
-        } catch (final CoreException e1) {
+        } catch (final CoreException e) {
+        	MacronatorPlugin.log(e);
             return null;
         }
         return astCache.get(referenceTU);
