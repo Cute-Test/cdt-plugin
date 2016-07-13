@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.codan.core.cxx.CxxAstUtils;
-import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -129,26 +128,12 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 	private void processTargets(SubMonitor sm) throws CoreException, NodeDefinitionNotInWorkspaceException {
 
 		for (IASTName name : targets) {
-			processReplaceOf(name);
+			nodesToReplace.put(name, ctx.selectedName);
 		}
-	}
-
-	private void processReplaceOf(IASTName childRefNode) {
-		// template ids are part of more complex qualified names, see #225
-		if (isPartOfTemplateVariableDeclaration(childRefNode)) {
-			processTemplateVariableDeclaration(childRefNode, ctx);
-		} else {
-			processDefaultReplace(childRefNode);
-		}
-	}
-
-	private void processDefaultReplace(IASTName childRefNode) {
-		IASTName nodeToReplace = getNodeToReplace(childRefNode);
-		addReplacement(nodeToReplace, getNewNameNode(childRefNode, nodeToReplace));
 	}
 
 	private void initContext(IProgressMonitor pm, IASTName refNode) throws CoreException, NodeDefinitionNotInWorkspaceException {
-//		ctx.templateIdsToIgnore = new HashSet<ICPPASTTemplateId>();
+
 		IBinding selectedNameBinding = ctx.selectedName.getLastName().resolveBinding();
 		ICPPUsingDeclaration selectedDeclaration = (ICPPUsingDeclaration) selectedNameBinding;
 
@@ -177,41 +162,6 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 		ctx.enclosingNSContext.usingName = NSNameHelper.copyQualifers(newQName);
 		ctx.enclosingNSContext.namespaceDefBinding = selectedDeclaration.getDelegates()[0].getOwner();
 
-	}
-
-	private IASTName getNodeToReplace(IASTName refNode) {
-		if (refNode.getParent() instanceof ICPPASTQualifiedName) {
-			return (ICPPASTQualifiedName) refNode.getParent();
-		}
-		return refNode;
-	}
-
-	private ICPPASTQualifiedName getNewNameNode(IASTName refNode, IASTName nodeToReplace) {
-		ICPPASTQualifiedName newNameNode = null;
-
-		if (ctx.selectedName instanceof ICPPASTQualifiedName) {
-			newNameNode = (ICPPASTQualifiedName) ctx.selectedName.copy();
-		} else {
-			newNameNode = ASTNodeFactoryFactory.getDefaultCPPNodeFactory().newQualifiedName(null);
-			newNameNode.addName(ctx.selectedName.copy());
-		}
-		addQualifiersAfterRefNode(refNode, nodeToReplace, newNameNode);
-
-		return newNameNode;
-	}
-
-	private void addQualifiersAfterRefNode(IASTName refNode, IASTName nodeToReplace, ICPPASTQualifiedName newNameNode) {
-		if (refNode.getParent() instanceof ICPPASTQualifiedName) {
-			boolean addNames = false;
-			for (ICPPASTNameSpecifier n : ((ICPPASTQualifiedName) nodeToReplace).getAllSegments()) {
-				if (addNames) {
-					NSNameHelper.addNameOrNameSpecifier(newNameNode,n);
-				}
-				if (n.equals(refNode)) {
-					addNames = true;
-				}
-			}
-		}
 	}
 
 	@Override
@@ -264,6 +214,12 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 					return false;
 				}
 				if (name instanceof ICPPASTQualifiedName) {
+					return false;
+				}
+				if (name instanceof ICPPASTTemplateId) {
+					return false;
+				}
+				if (!isFirstSpecifier(name)) {
 					return false;
 				}
 				IASTFileLocation pos = name.getFileLocation();

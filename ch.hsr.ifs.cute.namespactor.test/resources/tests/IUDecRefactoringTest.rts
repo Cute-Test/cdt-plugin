@@ -116,7 +116,7 @@ namespace B2{
 	};
 }
 int main(){
-	::B2::SB b2;
+	B2::SB b2;
 	b2.f(3.14);
 
 	B1::SB b1;
@@ -169,8 +169,8 @@ using namespace B::C;
 int main() {
 	C::CC<char> c1;
 	A::B::C::CC<char> c2;
-	C::CC<C::CC2> t1;
-	A::B::C::CC<C::CC2> t2;
+	C::CC<CC2> t1;
+	A::B::C::CC<CC2> t2;
 	C::CC<A::B::C::CC2> t3;
 	C::CC<C::CC<char> > tt1;
 	A::B::C::CC<C::CC<int> > tt2;
