@@ -14,16 +14,17 @@ package ch.hsr.ifs.cute.namespactor.refactoring.iu;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDeclaration;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 
-import ch.hsr.ifs.cute.namespactor.astutil.NSNodeHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.RefactoringBase;
 import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
 import ch.hsr.ifs.cute.namespactor.refactoring.rewrite.ASTRewriteStore;
@@ -44,39 +45,10 @@ public abstract class InlineRefactoringBase extends RefactoringBase {
 
 	protected abstract TemplateIdFactory getTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext ctx);
 
-	protected void processTemplateVariableDeclaration(IASTName childRefNode, InlineRefactoringContext ctx) {
-		IASTName nodeToReplace = null;
-		ICPPASTTemplateId vTemplId = (ICPPASTTemplateId) childRefNode.getParent();
-
-//		if (ctx.templateIdsToIgnore.contains(vTemplId)) {
-//			return;
-//		}
-
-		ICPPASTTemplateId outerMostTemplateId = NSNodeHelper.findOuterMost(ICPPASTTemplateId.class, vTemplId);
-		if (outerMostTemplateId == null) {
-			outerMostTemplateId = vTemplId;
-		}
-
-		nodeToReplace = outerMostTemplateId;
-		if (outerMostTemplateId.getParent() instanceof ICPPASTQualifiedName) {
-			nodeToReplace = (IASTName) outerMostTemplateId.getParent();
-		}
-
-		IASTName newTemplId = getTemplateIdFactory(outerMostTemplateId, ctx).buildTemplate();
-		addReplacement(nodeToReplace, newTemplId);
-	}
-
 	protected void addReplacement(IASTName nodeToReplace, IASTName newNameNode) {
 		if (nodeToReplace != null) {
 			nodesToReplace.put(nodeToReplace, newNameNode);
 		}
-	}
-
-	/**
-	 * @return true for names inside template specializations (e.g. SC in SC<ClassX> or SC in C<SC<char> >)
-	 * */
-	protected boolean isPartOfTemplateVariableDeclaration(IASTName childRefNode) {
-		return childRefNode.getParent() instanceof ICPPASTTemplateId && NSNodeHelper.findAncestorOf(childRefNode, ICPPASTUsingDeclaration.class) == null;
 	}
 
 	@Override
@@ -85,5 +57,23 @@ public abstract class InlineRefactoringBase extends RefactoringBase {
 			store.addReplaceChange(nodeToReplace, nodesToReplace.get(nodeToReplace));
 		}
 		super.collectModifications(store);
+	}
+
+	protected IASTName createQualifiedName(IASTName name, IASTName selectedName) {
+		ICPPNodeFactory factory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+		return factory.newQualifiedName(new String[]{selectedName.toString()}, name.toString());
+	}
+	
+	protected boolean isFirstSpecifier(IASTName name) {
+		IASTName target = name;
+		IASTNode parent = name.getParent();
+		if (parent instanceof ICPPASTTemplateId) {
+			target = (IASTName) parent;
+			parent = parent.getParent();
+		}
+		if (parent instanceof ICPPASTQualifiedName) {
+			return ((ICPPASTQualifiedName) parent).getAllSegments()[0] == target;
+		}
+		return true;
 	}
 }

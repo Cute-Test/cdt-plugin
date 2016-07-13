@@ -42,12 +42,10 @@ import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.internal.core.dom.parser.NodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTOperatorName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTranslationUnit;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPFunction;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNamespaceScope;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.cdt.internal.core.index.IIndexScope;
 import org.eclipse.cdt.internal.core.pdom.dom.PDOMName;
 import org.eclipse.core.resources.IFile;
@@ -131,14 +129,9 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 				ctx.enclosingNSContext.usingName = entry.getKey().usingName;
 				ctx.enclosingNSContext.namespaceDefName = entry.getKey().namespaceDefName;
 				ctx.enclosingNSContext.namespaceDefBinding = ((PDOMName) ctx.enclosingNSContext.namespaceDefName).getBinding();
-				nodesToReplace.put(name, createQualifiedName(name));
+				nodesToReplace.put(name, createQualifiedName(name, ctx.enclosingNSContext.usingName));
 			}
 		}
-	}
-
-	private IASTName createQualifiedName(IASTName name) {
-		CPPNodeFactory factory = CPPNodeFactory.getDefault();
-		return factory.newQualifiedName(new String[]{ctx.enclosingNSContext.usingName.toString()}, name.toString());
 	}
 
 	private void findTargetsInScope(IASTNode enclosingCompound) throws OperationCanceledException, CoreException {
@@ -276,19 +269,6 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 				return true;
 			}
 
-			private boolean isFirstSpecifier(IASTName name) {
-				IASTName target = name;
-				IASTNode parent = name.getParent();
-				if (parent instanceof ICPPASTTemplateId) {
-					target = (IASTName) parent;
-					parent = parent.getParent();
-				}
-				if (parent instanceof ICPPASTQualifiedName) {
-					return ((ICPPASTQualifiedName) parent).getAllSegments()[0] == target;
-				}
-				return true;
-			}
-
 			private void addNameToTargets(IASTName name, IIndexName nsDefName, IASTName usingName) {
 				List<IASTName> names = null;
 				for (NamespaceInlineContext ctx : targetsPerNamespace.keySet()) {
@@ -417,57 +397,10 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 		return usingdirparent;
 	}
 
-	private void processReplaceOf(IASTName childRefNode) {
-		// template ids are part of more complex qualified names, see #225
-		if (isPartOfTemplateVariableDeclaration(childRefNode)) { // check for inline namespace elements
-
-			processTemplateVariableDeclaration(childRefNode, ctx);
-
-		} else if (isPartOfTemplateMethodDefinition(childRefNode)) {
-
-			processTemplateMethodDefinition(childRefNode);
-
-		} else {
-			processDefaultReplace(childRefNode);
-		}
-	}
-
-	private void processDefaultReplace(IASTName childRefNode) {
-		IASTName nodeToReplace = childRefNode;
-		if (childRefNode.getParent() instanceof ICPPASTQualifiedName) {
-			nodeToReplace = (IASTName) childRefNode.getParent();
-		}
-		addReplacement(nodeToReplace, NSNameHelper.prefixNameWith(ctx.enclosingNSContext.usingName, childRefNode));
-	}
-
-	private void processTemplateMethodDefinition(IASTName childRefNode) {
-		// TODO inlining method definitions does not work, #271
-		ICPPASTQualifiedName qName = (ICPPASTQualifiedName) childRefNode.getParent();
-		ICPPASTQualifiedName qInlinedNameNode = NSNameHelper.prefixNameWith(ctx.enclosingNSContext.usingName, childRefNode);
-		ICPPASTQualifiedName templNameNode = NSNameHelper.copyQualifers(qInlinedNameNode);
-		// copy over the original names (i.e. the templateId and its following siblings)
-		for (ICPPASTNameSpecifier n : qName.getAllSegments()) {
-			if (n instanceof ICPPASTTemplateId) {
-				IASTName newn = new IUDirTemplateIdFactory((ICPPASTTemplateId) n, ctx).buildTemplate();// ((ICPPASTTemplateId) n).getTemplateName();
-				templNameNode.addName(newn); // buildTemplate should not return a decltype()
-			} else {
-				NSNameHelper.addNameOrNameSpecifier(templNameNode,n);
-			}
-		}
-		addReplacement(qName, templNameNode);
-	}
-
 	private boolean isImplicitOperator(IBinding binding, IName bindingRef) {
 		boolean isOperatorBinding = binding instanceof CPPFunction && ((CPPFunction) binding).getDefinition() != null
 				&& ((CPPFunction) binding).getDefinition().getName() instanceof CPPASTOperatorName;
 		return isOperatorBinding && bindingRef.getFileLocation().getNodeLength() < KEYWORD_OPERATOR_LENGTH;
-	}
-
-	/**
-	 * @return true for names inside template method definitions (e.g. template<class T> T SC<T>::get(){})
-	 * */
-	private boolean isPartOfTemplateMethodDefinition(IASTName childRefNode) {
-		return childRefNode instanceof ICPPASTTemplateId && childRefNode.getParent() instanceof ICPPASTQualifiedName;
 	}
 
 	@Override
