@@ -28,7 +28,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.cute.namespactor.astutil.ASTNodeFactory;
 import ch.hsr.ifs.cute.namespactor.astutil.NSNameHelper;
-import ch.hsr.ifs.cute.namespactor.astutil.NSNodeHelper;
 import ch.hsr.ifs.cute.namespactor.astutil.NSSelectionHelper;
 import ch.hsr.ifs.cute.namespactor.refactoring.TemplateIdFactory;
 import ch.hsr.ifs.cute.namespactor.refactoring.iu.InlineRefactoringBase;
@@ -81,30 +80,6 @@ public class QUNRefactoring extends InlineRefactoringBase {
 	@Override
 	protected TemplateIdFactory getTemplateIdFactory(ICPPASTTemplateId templateId, InlineRefactoringContext ctx) {
 		return new QUNTemplateIdFactory(templateId, ctx);
-	}
-
-	@Override
-	protected void processTemplateVariableDeclaration(IASTName childRefNode, InlineRefactoringContext ctx) {
-		IASTName nodeToReplace = null;
-		ICPPASTTemplateId vTemplId = (ICPPASTTemplateId) childRefNode.getParent();
-
-//		if (ctx.templateIdsToIgnore.contains(vTemplId)) {
-//			return;
-//		}
-
-		ICPPASTTemplateId outerMostTemplateId = NSNodeHelper.findOuterMost(ICPPASTTemplateId.class, vTemplId);
-		if (outerMostTemplateId == null) {
-			outerMostTemplateId = vTemplId;
-		}
-
-		nodeToReplace = outerMostTemplateId;
-		if (outerMostTemplateId.getParent() instanceof ICPPASTQualifiedName) {
-			nodeToReplace = (IASTName) outerMostTemplateId.getParent();
-		}
-
-		IASTName newTemplId = getTemplateIdFactory(outerMostTemplateId, ctx).buildTemplate();
-
-		addReplacement(nodeToReplace, newTemplId);
 	}
 
 }
