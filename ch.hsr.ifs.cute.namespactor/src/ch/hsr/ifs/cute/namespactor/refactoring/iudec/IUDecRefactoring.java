@@ -260,6 +260,9 @@ public class IUDecRefactoring extends InlineRefactoringBase {
 			private boolean isCandidate(IASTName name) {
 				if (name != null && name.getTranslationUnit() != null && name.getFileLocation() != null && CxxAstUtils.isInMacro(name))
 					return false;
+				if (name.toString().equals("")) {
+					return false;
+				}
 				if (name instanceof ICPPASTQualifiedName) {
 					return false;
 				}
