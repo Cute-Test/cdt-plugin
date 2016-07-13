@@ -42,10 +42,12 @@ import org.eclipse.cdt.core.model.CoreModelUtil;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.core.dom.parser.NodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTOperatorName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTranslationUnit;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPFunction;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNamespaceScope;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.cdt.internal.core.index.IIndexScope;
 import org.eclipse.cdt.internal.core.pdom.dom.PDOMName;
 import org.eclipse.core.resources.IFile;
@@ -123,18 +125,20 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 	}
 
 	private void processTargets() throws CoreException {
-
 		for (Entry<NamespaceInlineContext, List<IASTName>> entry : targetsPerNamespace.entrySet()) {
-
 			for (IASTName name : entry.getValue()) {
-
 				ctx.enclosingNSContext = new NamespaceInlineContext();
 				ctx.enclosingNSContext.usingName = entry.getKey().usingName;
 				ctx.enclosingNSContext.namespaceDefName = entry.getKey().namespaceDefName;
 				ctx.enclosingNSContext.namespaceDefBinding = ((PDOMName) ctx.enclosingNSContext.namespaceDefName).getBinding();
-				processReplaceOf(name);
+				nodesToReplace.put(name, createQualifiedName(name));
 			}
 		}
+	}
+
+	private IASTName createQualifiedName(IASTName name) {
+		CPPNodeFactory factory = CPPNodeFactory.getDefault();
+		return factory.newQualifiedName(new String[]{ctx.enclosingNSContext.usingName.toString()}, name.toString());
 	}
 
 	private void findTargetsInScope(IASTNode enclosingCompound) throws OperationCanceledException, CoreException {
@@ -263,6 +267,24 @@ public class IUDirRefactoring extends InlineRefactoringBase {
 					if (isAnoNamespace) {
 						return false;
 					}
+				}
+				
+				if (!isFirstSpecifier(name)) {
+					return false;
+				}
+				
+				return true;
+			}
+
+			private boolean isFirstSpecifier(IASTName name) {
+				IASTName target = name;
+				IASTNode parent = name.getParent();
+				if (parent instanceof ICPPASTTemplateId) {
+					target = (IASTName) parent;
+					parent = parent.getParent();
+				}
+				if (parent instanceof ICPPASTQualifiedName) {
+					return ((ICPPASTQualifiedName) parent).getAllSegments()[0] == target;
 				}
 				return true;
 			}

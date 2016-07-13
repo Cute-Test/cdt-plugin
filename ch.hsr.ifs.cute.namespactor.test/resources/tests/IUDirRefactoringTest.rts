@@ -1026,7 +1026,7 @@ vector<vector<double>> vv;
 int main() {
 	std::vector<int> v;
 }
-std::vector<std::vector<double> > vv;
+std::vector<std::vector<double>> vv;
 
 //!IUDIR_ExternalInlineNamespace_directiveInMiddle
 //@A1.cpp
@@ -1044,7 +1044,7 @@ int main() {
 	vector<int> v;
 }
 
-std::vector<std::vector<double> > vv;
+std::vector<std::vector<double>> vv;
 
 //!IUDIR_ArrayTemplate
 //@A1.cpp
@@ -1094,5 +1094,5 @@ vector<vector<string>> vv;
 int main() {
 	std::vector<std::string> v;
 }
-std::vector<std::vector<std::string> > vv;
+std::vector<std::vector<std::string>> vv;
 
