@@ -5,7 +5,7 @@
 
 bool runSuite() {
 	cute::ide_listener lis { };
-	auto runner { cute::makeRunner(lis) };
+	auto runner = cute::makeRunner(lis);
 	cute::suite s { make_suite_$suitename$() };
 	bool success = runner(s, "$suitename$");
 	return success;

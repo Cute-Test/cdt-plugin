@@ -11,7 +11,7 @@ bool runAllTests() {
 	//TODO add your test here
 	s.push_back(CUTE(thisIsATest));
 	cute::ide_listener lis { };
-	auto runner { cute::makeRunner(lis) };
+	auto runner = cute::makeRunner(lis);
 	bool success = runner(s, "The Suite");
 	return success;
 }
