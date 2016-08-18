@@ -24,6 +24,7 @@
 					<useUIHarness>true</useUIHarness>
 					<testClass>ch.hsr.ifs.cute.tdd.ui.tests.AllTddTests</testClass>
 					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
+	        		<enableAssertions>true</enableAssertions>
 				</configuration>
 			</plugin>
 		</plugins>

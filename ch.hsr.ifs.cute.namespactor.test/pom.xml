@@ -23,6 +23,7 @@
 					<testSuite>ch.hsr.ifs.cute.namespactor.test</testSuite>
 					<testClass>ch.hsr.ifs.cute.namespactor.test.AllNamespectorTests</testClass>
 					<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
+       				<enableAssertions>true</enableAssertions>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -55,6 +55,7 @@
           			<argLine>${swtbot.args}</argLine>
           			
         			<reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
+        			<enableAssertions>true</enableAssertions>
 				</configuration>
     	  	</plugin>
 			<plugin>

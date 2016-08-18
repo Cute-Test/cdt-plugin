@@ -34,6 +34,7 @@
 							<version>0.0.0</version>
 						</dependency>
 					</dependencies -->
+        			<enableAssertions>true</enableAssertions>
 				</configuration>
 			</plugin>
 		</plugins>

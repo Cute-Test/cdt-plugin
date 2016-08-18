@@ -34,6 +34,7 @@
 		  <reportsDirectory>../ch.hsr.ifs.cute.test.feature/surefire-reports</reportsDirectory>
           
           <appArgLine>-nl en</appArgLine>
+          <enableAssertions>true</enableAssertions>
       
         </configuration>
       </plugin>
