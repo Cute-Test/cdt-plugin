@@ -22,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
+import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
@@ -54,11 +55,18 @@ public class AddFunctorStrategy extends AddMemberFunctionBaseStrategy {
 
 		SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
 		astTu.accept(suitPushBackFinder);
-
-		if (!checkPushback(astTu, fname.toString(), suitPushBackFinder)) {
-			MultiTextEdit mEdit = new MultiTextEdit();
-			mEdit.addChild(createPushBackEdit(editorFile, astTu, suitPushBackFinder));
-			return mEdit;
+		IIndex index = astTu.getIndex();
+		try {
+		index.acquireReadLock();
+			if (!checkPushback(astTu, fname.toString(), suitPushBackFinder)) {
+				MultiTextEdit mEdit = new MultiTextEdit();
+				mEdit.addChild(createPushBackEdit(editorFile, astTu, suitPushBackFinder));
+				return mEdit;
+			}
+		} catch (InterruptedException e) {
+		}
+		finally {
+			index.releaseReadLock();
 		}
 		return new MultiTextEdit();
 	}

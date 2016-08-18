@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -51,24 +52,32 @@ public class AddNewTestStrategy extends AddFunctionStrategy {
 
 	@Override
 	public MultiTextEdit getEdit() {
-		MultiTextEdit mEdit = new MultiTextEdit();
-		if (selection != null) {
-
-			insertFileOffset = getInsertOffset(astTu, selection, document);
-
-			SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
-			astTu.accept(suitPushBackFinder);
-
-			mEdit.addChild(createInsertTestFunctionEdit(getInsertOffset(suitPushBackFinder, astTu), document, testName.toString()));
-
-			if (!checkPushback(astTu, testName.toString(), suitPushBackFinder))
-				mEdit.addChild(createPushBackEdit(file, astTu, suitPushBackFinder));
-			else {
-				createProblemMarker(file, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber);
+		IIndex index = astTu.getIndex();
+		try {
+			index.acquireReadLock();
+			MultiTextEdit mEdit = new MultiTextEdit();
+			if (selection != null) {
+	
+				insertFileOffset = getInsertOffset(astTu, selection, document);
+	
+				SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
+				astTu.accept(suitPushBackFinder);
+	
+				mEdit.addChild(createInsertTestFunctionEdit(getInsertOffset(suitPushBackFinder, astTu), document, testName.toString()));
+	
+				if (!checkPushback(astTu, testName.toString(), suitPushBackFinder))
+					mEdit.addChild(createPushBackEdit(file, astTu, suitPushBackFinder));
+				else {
+					createProblemMarker(file, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber);
+				}
+	
 			}
-
+			return mEdit;
+		} catch (InterruptedException e) {
+			return null;
+		} finally {
+			index.releaseReadLock();
 		}
-		return mEdit;
 	}
 
 	@Override

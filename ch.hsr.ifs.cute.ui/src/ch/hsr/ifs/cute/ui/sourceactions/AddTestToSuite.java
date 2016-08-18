@@ -10,6 +10,7 @@ package ch.hsr.ifs.cute.ui.sourceactions;
 
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
+import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -19,6 +20,7 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
+import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -38,49 +40,59 @@ public class AddTestToSuite extends AbstractFunctionAction {
 	public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
 		IAddStrategy adder = new NullStrategy(doc);
 		IASTTranslationUnit astTu = null;
+		IIndex index = null;
 		initContext();
-		if (sel != null && sel instanceof TextSelection) {
-			TextSelection selection = (TextSelection) sel;
+		try {
+			if (sel != null && sel instanceof TextSelection) {
+				TextSelection selection = (TextSelection) sel;
 
-			try {
-				astTu = acquireAST(file);
+				try {
+					astTu = acquireAST(file);
+					index = astTu.getIndex();
+					index.acquireReadLock();
+					NodeAtCaretFinder n = new NodeAtCaretFinder(selection.getOffset());
+					astTu.accept(n);
+					IASTFunctionDefinition def = getFunctionDefinition(n.getMatchingNode());
 
-				NodeAtCaretFinder n = new NodeAtCaretFinder(selection.getOffset());
-				astTu.accept(n);
-				IASTFunctionDefinition def = getFunctionDefinition(n.getMatchingNode());
+					if (ASTUtil.isTestFunction(def)) {
+						SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
+						astTu.accept(suiteFinder);
+						IASTNode suite = suiteFinder.getSuiteNode();
 
-				if (ASTUtil.isTestFunction(def)) {
-					SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
-					astTu.accept(suiteFinder);
-					IASTNode suite = suiteFinder.getSuiteNode();
-
-					AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
-					IASTName name = def.getDeclarator().getName();
-					if (isMemberFunction(def)) { // In .cpp file
-						if (name instanceof ICPPASTOperatorName && name.toString().contains("()")) {
-							lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file, suiteFinder);
-						} else {
-							lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
+						AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
+						IASTFunctionDeclarator declarator = def.getDeclarator();
+						IASTName name = declarator.getName();
+						if (isMemberFunction(def)) { // In .cpp file
+							if (ASTHelper.isFunctor(def.getDeclarator())) {
+								lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file,
+										suiteFinder);
+							} else {
+								lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
+							}
+						} else if (isFunction(def)) {
+							String functionName = name.toString();
+							lineStrategy = new AddFunctionStrategy(doc, file, astTu, functionName, suiteFinder);
 						}
-					} else if (isFunction(def)) {
-						String functionName = name.toString();
-						lineStrategy = new AddFunctionStrategy(doc, file, astTu, functionName, suiteFinder);
-					}
-					if (suite == null) {
-						adder = new AddSuiteStrategy(lineStrategy);
-					} else {
-						adder = lineStrategy;
-					}
+						if (suite == null) {
+							adder = new AddSuiteStrategy(lineStrategy);
+						} else {
+							adder = lineStrategy;
+						}
 
+					}
+				} catch (InterruptedException e) {
+					CuteCorePlugin.log(e);
+				} finally {
+					disposeContext();
 				}
-			} catch (InterruptedException e) {
-				CuteCorePlugin.log(e);
-			} finally {
-				disposeContext();
+			}
+
+			return adder.getEdit();
+		} finally {
+			if (index != null) {
+				index.releaseReadLock();
 			}
 		}
-
-		return adder.getEdit();
 	}
 
 	protected IASTFunctionDefinition getFunctionDefIfIsFunctor(IASTNode n) {
