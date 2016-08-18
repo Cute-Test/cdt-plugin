@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
@@ -23,8 +24,22 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
+import org.eclipse.cdt.core.index.IIndexName;
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.CoreModelUtil;
+import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 public class ASTHelper {
 	private static final String EMPTY_STRING = "";
@@ -364,4 +379,31 @@ public class ASTHelper {
 		}
 		return null;
 	}
+
+	public static boolean isFunctor(IASTFunctionDeclarator functionDeclarator) {
+		IASTName name = functionDeclarator.getName();
+		if (name instanceof ICPPASTQualifiedName) {
+			name = name.getLastName();
+		}
+		return name instanceof ICPPASTOperatorName;
+	}
+
+    public static ITranslationUnit getTranslationUnitFromIndexName(final IIndexName indexName) throws CoreException {
+        final ICProject cProject = findProject(indexName);
+        return CoreModelUtil.findTranslationUnitForLocation(indexName.getFile().getLocation(), cProject);
+    }
+
+    public static ICProject findProject(final IIndexName indexName) throws CoreException {
+        final IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
+        final IPath path = new Path(indexName.getFile().getLocation().toString());
+        final IFile file = workspace.getFile(path);
+        if (file == null || !file.exists()) {
+            return null; // TODO: sensible message
+        }
+        final IProject project = file.getProject();
+        if (project == null) {
+            return null;
+        }
+        return CoreModel.getDefault().create(project);
+    }
 }

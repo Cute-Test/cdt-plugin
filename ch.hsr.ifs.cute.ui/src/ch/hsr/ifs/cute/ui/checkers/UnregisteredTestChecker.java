@@ -17,18 +17,14 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexName;
-import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper;
@@ -36,9 +32,9 @@ import org.eclipse.cdt.internal.core.model.ASTCache;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
 
 /**
  * @author Emanuel Graf IFS
@@ -55,7 +51,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 	private void markUnregisteredFunctions(List<IASTDeclaration> testFunctions) {
 		ASTCache astCache = new ASTCache();
 		try {
-			final IIndex index = assembleIndex();
+			final IIndex index = assembleIndex(getProject());
 			try {
 				index.acquireReadLock();
 				final RegisteredTestFunctionFinderVisitor registeredFunctionFinder = new RegisteredTestFunctionFinderVisitor(index);
@@ -104,20 +100,20 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		}
 	}
 
-	private IIndex assembleIndex() throws CoreException {
-		ArrayList<ICProject> projects = assembleProjects();
+	private IIndex assembleIndex(IProject project) throws CoreException {
+		ArrayList<ICProject> projects = assembleProjects(project);
 
 		final ICProject[] projectArray = new ICProject[projects.size()];
 		final IIndex index = CCorePlugin.getIndexManager().getIndex(projects.toArray(projectArray));
 		return index;
 	}
 
-	private ArrayList<ICProject> assembleProjects() throws CoreException {
+	private static ArrayList<ICProject> assembleProjects(IProject project) throws CoreException {
 		ArrayList<ICProject> projects = new ArrayList<ICProject>();
 
-		ICProject cproject = CoreModel.getDefault().create(getProject());
+		ICProject cproject = CoreModel.getDefault().create(project);
 		projects.add(cproject);
-		IProject[] referencedProjects = getProject().getReferencingProjects();
+		IProject[] referencedProjects = project.getReferencingProjects();
 		for (IProject refProject : referencedProjects) {
 			final ICProject refCProject = CoreModel.getDefault().create(refProject);
 			projects.add(refCProject);
@@ -128,7 +124,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 	private void updateRegisteredTestsOfReferencedTUs(RegisteredTestFunctionFinderVisitor registeredFunctionFinder, IIndexName[] references, ASTCache astCache,
 			IIndex index) throws CoreException {
 		for (IIndexName testReference : references) {
-			final ITranslationUnit tu = findTranslationUnit(testReference);
+			final ITranslationUnit tu = ASTHelper.getTranslationUnitFromIndexName(testReference);
 			if (tu != null) {
 				IASTTranslationUnit ast;
 				if (getModelCache().getTranslationUnit().getResource().equals(tu.getResource())) {
@@ -141,58 +137,24 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		}
 	}
 
-	private ITranslationUnit findTranslationUnit(IIndexName testReference) throws CoreException, CModelException {
-		final ArrayList<ICProject> projects = assembleProjects();
-		final String file = testReference.getFileLocation().getFileName();
-		final Path path = new Path(file);
-
-		ICElement celement = null;
-		for (ICProject project : projects) {
-			celement = project.findElement(path);
-			if (celement != null) {
-				break;
-			}
-		}
-		if (celement == null) {
-			celement = CoreModel.getDefault().create(path);
-		}
-		if (celement == null) {
-			return null;
-		}
-		final ITranslationUnit tu = (ITranslationUnit) celement.getAdapter(ITranslationUnit.class);
-		return tu;
-	}
-
 	private IBinding getToBeRegisteredBinding(IASTDeclaration iastDeclaration) {
 		if (iastDeclaration instanceof IASTFunctionDefinition) {
 			IASTFunctionDefinition funcDef = (IASTFunctionDefinition) iastDeclaration;
-			if (isFunctor(funcDef)) {
-				IASTNode n = funcDef;
-				n = findSurroundingTypeSpecifier(n);
-				if (n != null) {
-					ICPPASTCompositeTypeSpecifier compType = (ICPPASTCompositeTypeSpecifier) n;
-					return compType.getName().resolveBinding();
+			IASTFunctionDeclarator declarator = funcDef.getDeclarator();
+			IASTName functionName = declarator.getName();
+			IBinding functionBinding = functionName.resolveBinding();
+			if (declarator != null) {
+				if (ASTHelper.isFunctor(funcDef.getDeclarator())) {
+					if (functionBinding instanceof ICPPMethod) {
+						ICPPMethod memberFunctionBinding = (ICPPMethod)functionBinding;
+						return memberFunctionBinding.getClassOwner();
+					}
 				}
-			} else {
-				final IASTFunctionDeclarator declarator = funcDef.getDeclarator();
-				if (declarator != null) {
-					final IASTName funcName = declarator.getName();
-					return funcName.resolveBinding();
-				}
+				return functionBinding;
 			}
 		}
 		return null;
 	}
 
-	private IASTNode findSurroundingTypeSpecifier(IASTNode n) {
-		while (n != null && !(n instanceof ICPPASTCompositeTypeSpecifier)) {
-			n = n.getParent();
-		}
-		return n;
-	}
-
-	protected boolean isFunctor(IASTFunctionDefinition funcDef) {
-		return funcDef.getDeclarator().getName() instanceof ICPPASTOperatorName;
-	}
 
 }

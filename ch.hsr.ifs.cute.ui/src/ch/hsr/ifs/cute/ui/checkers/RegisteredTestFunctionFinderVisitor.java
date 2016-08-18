@@ -17,6 +17,8 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
+import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
+import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
@@ -26,6 +28,7 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.index.IIndex;
@@ -108,24 +111,38 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 	}
 
 	private IBinding getFunctor(IASTInitializerClause[] arguments) {
+		IBinding targetBinding = null;
 		if (isFunctorPushBack(arguments)) {
-			final ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-			final IASTIdExpression idExp = (IASTIdExpression) funcCall.getFunctionNameExpression();
-			final IBinding expressionNameBinding = idExp.getName().resolveBinding();
-			if (expressionNameBinding instanceof ICPPConstructor) {
-				final ICPPConstructor constructorBinding = (ICPPConstructor) expressionNameBinding;
+			IASTInitializerClause argument = arguments[0];
+			if (argument instanceof ICPPASTFunctionCallExpression) {
+				final ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) argument;
+				final IASTIdExpression idExp = (IASTIdExpression) funcCall.getFunctionNameExpression();
+				targetBinding = idExp.getName().resolveBinding();
+			} else if (argument instanceof IASTImplicitNameOwner) {
+				IASTImplicitNameOwner constructorExpression = (IASTImplicitNameOwner) argument;
+				IASTImplicitName[] implicitNames = constructorExpression.getImplicitNames();
+				if (implicitNames.length > 0) {
+					targetBinding = implicitNames[0].getBinding();
+				}
+			}
+			if (targetBinding instanceof ICPPConstructor) {
+				final ICPPConstructor constructorBinding = (ICPPConstructor) targetBinding;
 				return constructorBinding.getClassOwner();
-			} else if (expressionNameBinding instanceof ICPPClassType) {
-				return expressionNameBinding;
+			} else if (targetBinding instanceof ICPPClassType) {
+				return targetBinding;
 			}
 		}
-		return null;
+		return targetBinding;
 	}
 
 	private boolean isFunctorPushBack(IASTInitializerClause[] arguments) {
-		if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
-			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-			return funcCall.getArguments().length == 0;
+		if (arguments.length == 1) {
+			IASTInitializerClause pushbackArgument = arguments[0];
+			if (pushbackArgument instanceof ICPPASTFunctionCallExpression) {
+				ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) pushbackArgument;
+				return funcCall.getArguments().length == 0;
+			} 
+			return pushbackArgument instanceof ICPPASTSimpleTypeConstructorExpression;
 		}
 		return false;
 	}
