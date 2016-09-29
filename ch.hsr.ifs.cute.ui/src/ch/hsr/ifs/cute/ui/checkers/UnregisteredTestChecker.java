@@ -34,6 +34,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.ui.ASTUtil;
+import ch.hsr.ifs.cute.ui.FunctorFinderVisitor;
 import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
 
 /**
@@ -43,9 +45,15 @@ import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
 public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 
 	public void processAst(IASTTranslationUnit ast) {
-		final TestFunctionFinderVisitor testFunctionFinder = new TestFunctionFinderVisitor();
-		ast.accept(testFunctionFinder);
-		markUnregisteredFunctions(testFunctionFinder.getTestFunctions());
+		final FunctorFinderVisitor functorFinderVisitor = new FunctorFinderVisitor();
+		ast.accept(functorFinderVisitor);
+		if(functorFinderVisitor.getFunctor() == null) {
+			final TestFunctionFinderVisitor testFunctionFinder = new TestFunctionFinderVisitor();
+			ast.accept(testFunctionFinder);
+			markUnregisteredFunctions(testFunctionFinder.getTestFunctions());
+		} else {
+			markUnregisteredFunctor(functorFinderVisitor.getFunctor(), ast.getDeclarations());
+		}
 	}
 
 	private void markUnregisteredFunctions(List<IASTDeclaration> testFunctions) {
@@ -55,7 +63,6 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 			try {
 				index.acquireReadLock();
 				final RegisteredTestFunctionFinderVisitor registeredFunctionFinder = new RegisteredTestFunctionFinderVisitor(index);
-
 				for (IASTDeclaration iastDeclaration : testFunctions) {
 					markFunctionIfUnregistered(astCache, index, registeredFunctionFinder, iastDeclaration);
 				}
@@ -155,6 +162,38 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		}
 		return null;
 	}
+	
+	private void markUnregisteredFunctor(IASTDeclaration functor, IASTDeclaration[] declarations) {
+		if (functor instanceof IASTFunctionDefinition) {
+			IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition)functor;
+			if(ASTUtil.containsAssert(functionDefinition)) {
+				// Check if registered and then mark or not
+			} else {
+				//TODO: Very complicated case
+			}
+		}
+	}
+	
+//	private IASTFunctionDefinition getFunctorDefinition(List<IASTDeclaration> declarations) {
+//		IASTFunctionDefinition functor = null;
+//		for (IASTDeclaration decl : declarations) {
+//			if (decl instanceof IASTFunctionDefinition) {
+//				IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition)decl;
+//				if (functionDefinition.getDeclarator().getName() instanceof ICPPASTOperatorName) {
+//					ICPPASTOperatorName operatorName = (ICPPASTOperatorName)functionDefinition.getDeclarator().getName();
+//					if (operatorName.toString().equals("operator ()")) {
+//						if (ASTUtil.containsAssert(functionDefinition)) {
+//							functor = functionDefinition;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return functor;
+//	}
 
+//	private boolean hasIndirectAssert(IASTFunctionDefinition funcDef) {
+//		return ASTUtil.containsIndirectAssert(funcDef);
+//	}
 
 }

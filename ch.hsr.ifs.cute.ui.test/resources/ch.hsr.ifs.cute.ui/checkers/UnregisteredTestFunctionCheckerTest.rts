@@ -161,6 +161,26 @@ markerLineNr=5
  void runSuite() {
  cute::suite s;
  }
+//!testUnregisteredFunctorAssertInMemberFunction
+//@.config
+markerLineNr=5,9
+//@main.cpp
+ #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+ #define ASSERT(cond) ASSERTM(#cond,cond)
+
+ struct testFunctor{
+ void operator()(){
+ member();
+ ASSERT(true);
+ }
+ void member() {
+ ASSERT(true);
+ }
+ };
+
+ void runSuite() {
+ cute::suite s;
+ }
 //!testRegisteredFunctor
 //@.config
 noMarker=true
@@ -170,6 +190,47 @@ noMarker=true
 
  struct testFunctor{
  void operator()(){
+ ASSERT(true);
+ }
+ };
+
+ void runSuite() {
+ cute::suite s;
+ s.push_back(testFunctor());
+ }
+ //!testRegisteredFunctorAssertInMemberFunction
+//@.config
+noMarker=true
+//@main.cpp
+ #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+ #define ASSERT(cond) ASSERTM(#cond,cond)
+
+ struct testFunctor{
+ void operator()(){
+ member();
+ }
+ void member() {
+ ASSERT(true);
+ }
+ };
+
+ void runSuite() {
+ cute::suite s;
+ s.push_back(testFunctor());
+ }
+ //!testRegisteredFunctorAssertInMemberFunctionAndOperator
+//@.config
+noMarker=true
+//@main.cpp
+ #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+ #define ASSERT(cond) ASSERTM(#cond,cond)
+
+ struct testFunctor{
+ void operator()(){
+ member();
+ ASSERT(true);
+ }
+ void member() {
  ASSERT(true);
  }
  };
