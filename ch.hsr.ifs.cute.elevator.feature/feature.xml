@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.elevator.feature"
       label="Elevator"
-      version="5.0.0.qualifier">
+      version="5.1.0.qualifier">
 
    <description url="">
       Elevator is a Plug-in for Eclipse CDT that helps refactor existing C++ code towards the C++11 ISO standard. It currently provides programmer assistance for migrating variable declarations and initializations to the new uniform initialization syntax.
