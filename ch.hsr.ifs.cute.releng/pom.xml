@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.releng</artifactId>
-	<version>5.0.0-SNAPSHOT</version>
+	<version>5.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<properties>
@@ -132,8 +132,8 @@
 					<target>
 						<artifact>
 							<groupId>ch.hsr.ifs</groupId>
-							<artifactId>ch.hsr.ifs.cute.target.cdt900</artifactId>
-							<version>5.0.0-SNAPSHOT</version>
+							<artifactId>ch.hsr.ifs.cute.target.cdt910</artifactId>
+							<version>5.1.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 				</configuration>

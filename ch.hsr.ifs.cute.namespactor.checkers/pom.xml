@@ -6,10 +6,10 @@
     <artifactId>ch.hsr.ifs.cute.releng</artifactId>
     <groupId>ch.hsr.ifs</groupId>
     <relativePath>../ch.hsr.ifs.cute.releng</relativePath>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>5.1.0-SNAPSHOT</version>
   </parent>
   <groupId>ch.hsr.ifs.cute.namespactor</groupId>
   <artifactId>ch.hsr.ifs.cute.namespactor.checkers</artifactId>
-  <version>5.0.0-SNAPSHOT</version>
+  <version>5.1.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project>

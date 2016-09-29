@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Main
+Bundle-Name: Charwars Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.charwars;singleton:=true
-Bundle-Version: 5.0.0.qualifier
+Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.charwars.CharWarsPlugin
-Bundle-Vendor: hsr
+Bundle-Vendor: IFS Institute for Software
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.cdt.codan.core;bundle-version="2.1.0",

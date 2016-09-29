@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Elevator Tests
+Bundle-Name: Elevator Test Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.elevator.test;singleton:=true
-Bundle-Version: 5.0.0.qualifier
+Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.elevator.test.TestActivator
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -30,3 +30,4 @@ Require-Bundle:
  org.eclipse.cdt.ui;bundle-version="5.7.0",
  ch.hsr.ifs.cdttesting;bundle-version="3.2.0",
  ch.hsr.ifs.cute.elevator;bundle-version="1.0.0"
+Bundle-Vendor: IFS Institute for Software

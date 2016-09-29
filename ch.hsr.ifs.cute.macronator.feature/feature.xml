@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.macronator.feature"
       label="Macronator"
-      version="5.0.0.qualifier">
+      version="5.1.0.qualifier">
 
    <description url="">
       The Macronator is an Eclipse CDT plugin that assists to remove macros from C++ code. It leverages language features introduced with the C++11 standard to transform macros into semantically identical, type safe C++ code.
