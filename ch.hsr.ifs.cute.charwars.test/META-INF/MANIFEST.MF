@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Test
+Bundle-Name: Charwars Test Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.charwars.test;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.charwars.test.Activator
@@ -21,3 +21,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: ch.hsr.ifs.cdttesting.cdttest,
  org.eclipse.ui
+Bundle-Vendor: IFS Institute for Software

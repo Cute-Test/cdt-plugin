@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %Bundle-Name
+Bundle-Name: Namespactor Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.namespactor;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.namespactor.NamespactorPlugin
@@ -33,4 +33,4 @@ Export-Package: ch.hsr.ifs.cute.namespactor.astutil,
  ch.hsr.ifs.cute.namespactor.ui.iu,
  ch.hsr.ifs.cute.namespactor.ui.qun,
  ch.hsr.ifs.cute.namespactor.ui.td2a
-Bundle-Vendor: %Bundle-Vendor
+Bundle-Vendor: IFS Institute for Software

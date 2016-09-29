@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Elevenator
+Bundle-Name: Elevenator Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.elevenator;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.elevenator.Activator
@@ -21,3 +21,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.elevenator,
  ch.hsr.ifs.cute.elevenator.definition
+Bundle-Vendor: IFS Institute for Software

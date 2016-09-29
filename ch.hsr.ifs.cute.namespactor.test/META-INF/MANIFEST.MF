@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: MyJunit4RtsTests
+Bundle-Name: Namespactor Test Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.namespactor.test;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.namespactor.test.TestActivator
@@ -19,3 +19,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.namespactor.test,ch.hsr.ifs.cute.names
  pactor.test.tests
+Bundle-Vendor: IFS Institute for Software

@@ -1,5 +1,5 @@
 Bundle-ActivationPolicy: lazy
-Bundle-Name: Macronator Unit Tests
+Bundle-Name: Macronator Test Plug-in
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -26,5 +26,5 @@ Bundle-Version: 5.1.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: ch.hsr.ifs.cute.macronator.test.TestActivator
 Bundle-SymbolicName: ch.hsr.ifs.cute.macronator.test;singleton:=true
-Bundle-Vendor: %Bundle-Vendor
+Bundle-Vendor: IFS Institute for Software
 

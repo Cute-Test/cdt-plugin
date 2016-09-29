@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %Bundle-Name
+Bundle-Name: Macronator Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.macronator;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Require-Bundle: org.eclipse.ui,
@@ -30,4 +30,4 @@ Export-Package: ch.hsr.ifs.cute.macronator,ch.hsr.ifs.cute.macronator.
  quickfix,ch.hsr.ifs.cute.macronator.refactoring,ch.hsr.ifs.cute.macro
  nator.transform
 Bundle-Activator: ch.hsr.ifs.cute.macronator.MacronatorPlugin
-Bundle-Vendor: %Bundle-Vendor
+Bundle-Vendor: IFS Institute for Software

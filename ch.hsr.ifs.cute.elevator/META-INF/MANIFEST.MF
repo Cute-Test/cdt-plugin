@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %Bundle-Name
+Bundle-Name: Elevator Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.elevator;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.elevator.Activator
@@ -27,4 +27,4 @@ Require-Bundle:
  ch.hsr.ifs.cute.elevenator
 Export-Package: ch.hsr.ifs.cute.elevator.checker,ch.hsr.ifs.cute.eleva
  tor.quickfix,ch.hsr.ifs.cute.elevator.refactoring
-Bundle-Vendor: %Bundle-Vendor
+Bundle-Vendor: IFS Institute for Software

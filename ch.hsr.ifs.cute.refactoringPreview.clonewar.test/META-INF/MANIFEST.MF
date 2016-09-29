@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: CloneWarTest
+Bundle-Name: Clone War Test Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.refactoringPreview.clonewar.test;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.refactoringpreview.clonewar.test.CloneWarTestPlugin
@@ -15,3 +15,4 @@ Require-Bundle: org.eclipse.ui,
  ch.hsr.ifs.cute.refactoringPreview.clonewar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: IFS Institute for Software

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: CUTE TDD Test Plugin
+Bundle-Name: CUTE TDD Test Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.tdd.tests;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.tdd.ui.tests.TDDTestPlugin
