@@ -58,7 +58,6 @@
     	</resolution>
      <resolution
            class="ch.hsr.ifs.cute.elevator.quickfix.NullMacroQuickFix"
-           messagePattern="Replace NULL macro with nullptr"
            problemId="ch.hsr.ifs.elevator.nullMacro">
      </resolution>    	
 	</extension>
