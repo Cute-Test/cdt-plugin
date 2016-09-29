@@ -145,7 +145,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		private boolean operandDefined(ICPPASTUnaryExpression uexpr) {
 			IASTExpression operand = uexpr.getOperand();
 			if (operand instanceof IASTIdExpression) {
-				return !(((IASTIdExpression) operand).getName().resolveBinding() instanceof IProblemBinding);
+				return !hasProblemBinding((IASTIdExpression)operand);
 			}
 			return false;
 		}
@@ -160,9 +160,13 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 			}
 
 			if (operand instanceof IASTIdExpression) {
-				return !(((IASTIdExpression) operand).getName().getBinding() instanceof IProblemBinding);
+				return !hasProblemBinding((IASTIdExpression)operand);
 			}
 			return false;
+		}
+
+		private boolean hasProblemBinding(IASTIdExpression operand) {
+			return operand.getName().getBinding() instanceof IProblemBinding;
 		}
 
 		private boolean hasNonPrimitiveType(IASTExpression operand) {
