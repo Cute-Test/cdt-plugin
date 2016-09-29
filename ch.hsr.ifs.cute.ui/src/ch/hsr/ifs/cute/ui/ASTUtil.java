@@ -42,6 +42,16 @@ public class ASTUtil {
 		functionBody.accept(checker);
 		return checker.hasAssertStmt;
 	}
+	
+	public static boolean containsIndirectAssert(IASTFunctionDefinition funcDef) {
+		IASTStatement functionBody = getFunctionBody(funcDef);
+		if (functionBody == null) {
+			return false;
+		}
+		IndirectAssertStatementCheckVisitor checker = new IndirectAssertStatementCheckVisitor();
+		functionBody.accept(checker);
+		return checker.hasIndirectAssertStmt;
+	}
 
 	private static IASTStatement getFunctionBody(IASTFunctionDefinition funcDef) {
 		if (funcDef != null) {
