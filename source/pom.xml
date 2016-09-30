@@ -173,7 +173,7 @@
 					<target>
 						<artifact>
 							<groupId>ch.hsr.ifs.mockator</groupId>
-							<artifactId>mockator-neon</artifactId>
+							<artifactId>mockator-neon.1</artifactId>
 							<version>1.0.0-SNAPSHOT</version>
 						</artifact>
 					</target>
