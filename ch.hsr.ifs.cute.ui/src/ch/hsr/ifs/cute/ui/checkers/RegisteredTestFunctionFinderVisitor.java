@@ -140,7 +140,10 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 			IASTInitializerClause pushbackArgument = arguments[0];
 			if (pushbackArgument instanceof ICPPASTFunctionCallExpression) {
 				ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) pushbackArgument;
-				return funcCall.getArguments().length == 0;
+				IASTImplicitName[] implicitNames = funcCall.getImplicitNames();
+				if(implicitNames.length != 0) {
+					return implicitNames[0].resolveBinding() instanceof ICPPConstructor;
+				}
 			} 
 			return pushbackArgument instanceof ICPPASTSimpleTypeConstructorExpression;
 		}

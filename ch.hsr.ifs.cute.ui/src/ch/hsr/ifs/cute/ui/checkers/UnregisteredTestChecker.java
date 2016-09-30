@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.ui.ASTUtil;
 import ch.hsr.ifs.cute.ui.FunctorFinderVisitor;
+import ch.hsr.ifs.cute.ui.IndirectAssertStatementCheckVisitor;
 import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
 
 /**
@@ -98,7 +99,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		if (toBeRegisteredBinding instanceof ICPPClassType) {
 			final ICPPConstructor[] constructors = ClassTypeHelper.getConstructors((ICPPClassType) toBeRegisteredBinding, point);
 			for (ICPPConstructor constructor : constructors) {
-				final IIndexName[] constructorReferences = index.findReferences(constructor);
+				final IIndexName[] constructorReferences = index.findReferences(constructor); // Here we don't get any references, only if default constructor is called
 				updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, constructorReferences, astCache, index);
 			}
 		} else {
@@ -167,33 +168,19 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		if (functor instanceof IASTFunctionDefinition) {
 			IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition)functor;
 			if(ASTUtil.containsAssert(functionDefinition)) {
-				// Check if registered and then mark or not
+				List<IASTDeclaration> functorList = new ArrayList<IASTDeclaration>();
+				functorList.add(functor);
+				markUnregisteredFunctions(functorList);
 			} else {
-				//TODO: Very complicated case
+				final IndirectAssertStatementCheckVisitor indirectAssertStatementCheckVisitor = new IndirectAssertStatementCheckVisitor();
+				functor.accept(indirectAssertStatementCheckVisitor);
+				if(indirectAssertStatementCheckVisitor.hasIndirectAssertStatement()) {
+					List<IASTDeclaration> functorList = new ArrayList<IASTDeclaration>();
+					functorList.add(functor);
+					markUnregisteredFunctions(functorList);
+				}
 			}
 		}
 	}
-	
-//	private IASTFunctionDefinition getFunctorDefinition(List<IASTDeclaration> declarations) {
-//		IASTFunctionDefinition functor = null;
-//		for (IASTDeclaration decl : declarations) {
-//			if (decl instanceof IASTFunctionDefinition) {
-//				IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition)decl;
-//				if (functionDefinition.getDeclarator().getName() instanceof ICPPASTOperatorName) {
-//					ICPPASTOperatorName operatorName = (ICPPASTOperatorName)functionDefinition.getDeclarator().getName();
-//					if (operatorName.toString().equals("operator ()")) {
-//						if (ASTUtil.containsAssert(functionDefinition)) {
-//							functor = functionDefinition;
-//						}
-//					}
-//				}
-//			}
-//		}
-//		return functor;
-//	}
-
-//	private boolean hasIndirectAssert(IASTFunctionDefinition funcDef) {
-//		return ASTUtil.containsIndirectAssert(funcDef);
-//	}
 
 }
