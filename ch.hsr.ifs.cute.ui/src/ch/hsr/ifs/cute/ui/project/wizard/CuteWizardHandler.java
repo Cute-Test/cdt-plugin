@@ -115,7 +115,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	protected void createCuteProjectSettings(IProject newProject, IProgressMonitor pm) {
 		try {
 			createCuteProject(newProject, pm);
-			createLibSetings(newProject);
+			createLibSettings(newProject);
 		} catch (CoreException e) {
 			TDDPlugin.log("Exception while creating cute project settings for project " + newProject.getName(), e);
 		}
@@ -162,16 +162,18 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		return new Path("/${ProjName}").append(cuteFolder.getProjectRelativePath());
 	}
 
-	private void createLibSetings(IProject project) throws CoreException {
+	private void createLibSettings(IProject project) throws CoreException {
 		List<IProject> projects = cuteWizardPage.getCheckedProjects();
-		for (IProject libProject : projects) {
-			for (ICuteWizardAddition addition : getAdditions()) {
-				addition.getHandler().configureLibProject(libProject);
+		if(projects.size() > 0) {
+			for (IProject libProject : projects) {
+				for (ICuteWizardAddition addition : getAdditions()) {
+					addition.getHandler().configureLibProject(libProject);
+				}
+				setToolChainIncludePath(project, libProject);
 			}
-			setToolChainIncludePath(project, libProject);
+			setProjectReference(project, projects);
+			ManagedBuildManager.saveBuildInfo(project, true);
 		}
-		setProjectReference(project, projects);
-		ManagedBuildManager.saveBuildInfo(project, true);
 	}
 
 	private void setProjectReference(IProject project, List<IProject> projects) throws CoreException {

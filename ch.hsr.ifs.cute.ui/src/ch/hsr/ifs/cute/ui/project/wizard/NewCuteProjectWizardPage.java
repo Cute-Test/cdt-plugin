@@ -91,7 +91,6 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 		composite = new Composite(parent, SWT.FILL);
 		composite.setLayout(new GridLayout(GRID_WIDTH, false));
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 		addCuteHeaderVersionSelectionDropdown();
 		addWizardPageAdditions();
 		addLibraryDependencyCheckmark();
@@ -120,7 +119,8 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 		check.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				listViewer.getControl().setEnabled(check.getSelection());
+				boolean checked = check.getSelection();
+				listViewer.getControl().setEnabled(checked);
 			}
 		});
 	}
