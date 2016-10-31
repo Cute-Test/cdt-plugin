@@ -29,9 +29,12 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
@@ -91,9 +94,10 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 
 		addCuteHeaderVersionSelectionDropdown();
 		addWizardPageAdditions();
+		addLibraryDependencyCheckmark();
 		addLibSelectionList();
 	}
-	
+
 	private void addCuteHeaderVersionSelectionDropdown() {
 		cuteVersionComp = new CuteVersionComposite(composite);
 		GridData gridData = new GridData();
@@ -109,6 +113,17 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 			newChild.setLayoutData(gridData);
 		}
 	}
+	
+	private void addLibraryDependencyCheckmark() {
+		final Button check = new Button(composite, SWT.CHECK);
+		check.setText(Messages.getString("LibraryDependencyCheckmark.Description"));
+		check.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				listViewer.getControl().setEnabled(check.getSelection());
+			}
+		});
+	}
 
 	private void addLibSelectionList() {
 		libProjects = getLibProjects();
@@ -118,23 +133,18 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 		data.verticalIndent = 20;
 		data.horizontalSpan = GRID_WIDTH;
 		listViewer.getTable().setLayoutData(data);
-
 		listViewer.setLabelProvider(WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider());
 		listViewer.setContentProvider(getContentProvider());
 		listViewer.setComparator(new ViewerComparator());
 		listViewer.setInput(libProjects);
 		listViewer.addCheckStateListener(this);
+		listViewer.getControl().setEnabled(false);
 	}
 
 	private IContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
-
-			public void dispose() {
-			}
-
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			}
-
+			public void dispose() {}
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 			@SuppressWarnings({ "rawtypes" })
 			public Object[] getElements(Object inputElement) {
 				if (inputElement instanceof List) {
@@ -163,7 +173,6 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 		if (listViewer == null) {
 			return checkedProjects;
 		}
-
 		for (Object obj : listViewer.getCheckedElements()) {
 			if (obj instanceof IProject) {
 				checkedProjects.add((IProject) obj);
@@ -175,7 +184,6 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 	public void checkStateChanged(CheckStateChangedEvent event) {
 		List<IProject> list = getCheckedProjects();
 		errorMessageFlag = list.isEmpty();
-
 		wizardDialog.updateMessage();
 		wizardDialog.updateButtons();
 	}
