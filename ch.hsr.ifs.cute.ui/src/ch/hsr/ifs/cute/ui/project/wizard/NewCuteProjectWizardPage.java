@@ -91,7 +91,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 
 		addCuteHeaderVersionSelectionDropdown();
 		addWizardPageAdditions();
-		addLibProjectSelectionList();
+		addLibSelectionList();
 	}
 	
 	private void addCuteHeaderVersionSelectionDropdown() {
@@ -110,7 +110,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 		}
 	}
 
-	private void addLibProjectSelectionList() {
+	private void addLibSelectionList() {
 		libProjects = getLibProjects();
 		listViewer = CheckboxTableViewer.newCheckList(composite, SWT.TOP | SWT.BORDER);
 		GridData data = new GridData(GridData.FILL_BOTH);
