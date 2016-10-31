@@ -61,6 +61,8 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 	private List<IProject> libProjects;
 	private final IWizardContainer wizardDialog;
 	
+	public boolean isLibrarySelectionActive = false;
+	
 	boolean errorMessageFlag = false;
 
 	public NewCuteProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage, String pageId, IWizardContainer wc) {
@@ -77,7 +79,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 
 	@Override
 	protected boolean isCustomPageComplete() {
-		if (getCheckedProjects().size() < 1) {
+		if (isLibrarySelectionActive && getCheckedProjects().size() < 1) {
 			return false;
 		}
 		return cuteVersionComp != null ? cuteVersionComp.isComplete() : !CuteUIPlugin.getInstalledCuteHeaders().isEmpty();
@@ -121,9 +123,9 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 			public void widgetSelected(SelectionEvent e) {
 				boolean checked = check.getSelection();
 				listViewer.getControl().setEnabled(checked);
-				if(!checked) {
-					listViewer.setAllChecked(false);
-				}
+				isLibrarySelectionActive = checked;
+				wizardDialog.updateMessage();
+				wizardDialog.updateButtons();
 			}
 		});
 	}

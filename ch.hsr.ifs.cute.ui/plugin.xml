@@ -189,12 +189,12 @@
              name="CUTE Category">
        </wizard>
        <wizard
-             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteProjectWizard"
-             name="CUTE Suite">
-       </wizard>
-       <wizard
              class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard"
              name="CUTE Project">
+       </wizard>
+       <wizard
+             class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteProjectWizard"
+             name="CUTE Suite">
        </wizard>
    </extension>
     <extension
