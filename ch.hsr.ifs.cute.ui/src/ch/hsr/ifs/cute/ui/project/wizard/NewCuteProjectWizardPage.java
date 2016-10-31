@@ -124,6 +124,8 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 				boolean checked = check.getSelection();
 				listViewer.getControl().setEnabled(checked);
 				isLibrarySelectionActive = checked;
+				List<IProject> list = getCheckedProjects();
+				errorMessageFlag = list.isEmpty();
 				wizardDialog.updateMessage();
 				wizardDialog.updateButtons();
 			}
