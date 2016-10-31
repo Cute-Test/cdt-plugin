@@ -121,6 +121,9 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 			public void widgetSelected(SelectionEvent e) {
 				boolean checked = check.getSelection();
 				listViewer.getControl().setEnabled(checked);
+				if(!checked) {
+					listViewer.setAllChecked(false);
+				}
 			}
 		});
 	}
