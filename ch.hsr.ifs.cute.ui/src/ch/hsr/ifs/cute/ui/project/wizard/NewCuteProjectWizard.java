@@ -31,5 +31,5 @@ public class NewCuteProjectWizard extends NewCuteProjectCategoryWizard {
 	protected CuteWizardHandler getHandler(IWizard wizard) {
 		return new CuteWizardHandler(parent, wizard);
 	}
-
+	
 }

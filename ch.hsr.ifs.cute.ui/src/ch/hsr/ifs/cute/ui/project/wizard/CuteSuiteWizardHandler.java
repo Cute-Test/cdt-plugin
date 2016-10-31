@@ -37,7 +37,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 
 	@Override
 	protected NewCuteProjectWizardPage initPage() {
-		suitewizPage = new NewCuteSuiteProjectWizardPage(getConfigPage(), getStartingPage());
+		suitewizPage = new NewCuteSuiteProjectWizardPage(getConfigPage(), getStartingPage(), getWizardContainer(getWizard()));
 		return suitewizPage;
 	}
 

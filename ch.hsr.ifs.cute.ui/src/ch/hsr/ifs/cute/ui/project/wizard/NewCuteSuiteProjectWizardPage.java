@@ -23,8 +23,8 @@ public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 	private String errmsg;
 	private Text suitenameText;
 
-	public NewCuteSuiteProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage) {
-		super(nextPage, previousPage, "ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage");
+	public NewCuteSuiteProjectWizardPage(IWizardPage nextPage, IWizardPage previousPage, IWizardContainer wc) {
+		super(nextPage, previousPage, "ch.hsr.ifs.cutelauncher.ui.NewCuteSuiteWizardCustomPage", wc);
 	}
 
 	@Override
