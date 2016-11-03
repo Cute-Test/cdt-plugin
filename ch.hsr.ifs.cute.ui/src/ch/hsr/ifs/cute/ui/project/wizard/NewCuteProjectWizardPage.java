@@ -125,7 +125,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 				listViewer.getControl().setEnabled(checked);
 				isLibrarySelectionActive = checked;
 				List<IProject> list = getCheckedProjects();
-				errorMessageFlag = list.isEmpty();
+				errorMessageFlag = isLibrarySelectionActive && list.isEmpty();
 				wizardDialog.updateMessage();
 				wizardDialog.updateButtons();
 			}
@@ -190,7 +190,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
 
 	public void checkStateChanged(CheckStateChangedEvent event) {
 		List<IProject> list = getCheckedProjects();
-		errorMessageFlag = list.isEmpty();
+		errorMessageFlag = isLibrarySelectionActive && list.isEmpty();
 		wizardDialog.updateMessage();
 		wizardDialog.updateButtons();
 	}
