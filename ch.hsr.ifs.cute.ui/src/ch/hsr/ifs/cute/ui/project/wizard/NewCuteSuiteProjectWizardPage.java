@@ -64,10 +64,11 @@ public class NewCuteSuiteProjectWizardPage extends NewCuteProjectWizardPage {
 	private void addSuiteNamePart() {
 		Label suitenameLabel = new Label(composite, SWT.NONE);
 		suitenameLabel.setText(Messages.getString("NewCuteSuiteWizardCustomPage.TestSuiteName"));
-
 		suitenameText = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		suitenameText.setFont(composite.getFont());
 		suitenameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		suitenameText.moveAbove(composite.getChildren()[0]);
+		suitenameLabel.moveAbove(suitenameText);
 		addSuiteNameListener();
 	}
 
