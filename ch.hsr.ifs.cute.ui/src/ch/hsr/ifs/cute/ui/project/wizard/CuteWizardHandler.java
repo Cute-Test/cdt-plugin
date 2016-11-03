@@ -269,7 +269,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 	@Override
 	public boolean canFinish() {
-		if (cuteWizardPage.getCheckedProjects().isEmpty()) {
+		if (cuteWizardPage.isLibrarySelectionActive && cuteWizardPage.getCheckedProjects().isEmpty()) {
 			return false;
 		}
 		return cuteWizardPage.isCustomPageComplete();
