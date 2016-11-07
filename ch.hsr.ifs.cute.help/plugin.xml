@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc.xml">
-      </toc>
-      <toc
-            file="testToc.xml"
-            primary="true">
-      </toc>
+   <extension point="org.eclipse.help.toc">
+      <toc file="docs/toc.xml" primary="true"/>
    </extension>
-   <extension
-         point="org.eclipse.ui.intro.configExtension">
+   <extension point="org.eclipse.ui.intro.configExtension">
       <configExtension
             configId="org.eclipse.ui.intro.universalConfig"
             content="intro/cute_tutorial.xml">
@@ -23,5 +14,4 @@
             content="intro/cute_overview.xml">
       </configExtension>
    </extension>
-
 </plugin>

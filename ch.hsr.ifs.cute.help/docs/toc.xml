@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="CUTE User Guide">
+	<topic label="Overview" href="docs/web/cute-test.com/projects/cute/wiki/Wiki.html"/>
+	<topic label="User Guide" href="docs/web/cute-test.com/projects/cute/wiki/User_Guide.html">
+		<topic label="Theory of Operation and Goals" href="docs/web/cute-test.com/projects/cute/wiki/Theory_of_Operation_and_Goals.html">
+			<topic label="How Things Work" href="docs/web/cute-test.com/projects/cute/wiki/How_Things_Work.html"/>
+			<topic label="New Features of CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/New_Features_of_CUTE_20.html"/>
+		</topic>
+		<topic label="CUTE Installation and System Requirements" href="docs/web/cute-test.com/projects/cute/wiki/CUTE_Installation_and_System_Requirements.html">
+			<topic label="Supported Platforms with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/Supported_Platforms_with_CUTE_20.html"/>
+		</topic>
+		<topic label="Using the CUTE Eclipse Plug-in" href="docs/web/cute-test.com/projects/cute/wiki/Using_the_CUTE_Eclipse_Plug-in.html">
+			<topic label="TDD Support" href="docs/web/cute-test.com/projects/cute/wiki/TDD_Support.html"/>
+			<topic label="New Features of the Plug-in with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/New_Features_of_the_Plug-in_with_CUTE_20.html"/>
+			<topic label="Namespactor - namespace refactoring support" href="docs/web/cute-test.com/projects/cute/wiki/Namespactor_-_namespace_refactoring_support.html"/>
+		</topic>
+		<topic label="Writing and Running CUTE Unit Test Suites" href="docs/web/cute-test.com/projects/cute/wiki/Writing_and_Running_CUTE_Unit_Test_Suites.html"/>
+		<topic label="Additional Plug-ins" href="docs/web/cute-test.com/projects/cute/wiki/Additional_Plug-ins.html">
+			<topic label="Elevenator" href="docs/web/cute-test.com/projects/cute/wiki/Elevenator.html"/>
+		</topic>
+    </topic>
+    <topic label="Contact" href="docs/web/cute-test.com/projects/cute/wiki/Contact.html"/>
+</toc>
