@@ -12,6 +12,7 @@
 			<topic label="Supported Platforms with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/Supported_Platforms_with_CUTE_20.html"/>
 		</topic>
 		<topic label="Using the CUTE Eclipse Plug-in" href="docs/web/cute-test.com/projects/cute/wiki/Using_the_CUTE_Eclipse_Plug-in.html">
+			<topic label="Specify Boost's Headers Installation Location" href="docs/web/cute-test.com/projects/cute/wiki/Specify_Boost's_Headers_Installation_Location.html"/>
 			<topic label="TDD Support" href="docs/web/cute-test.com/projects/cute/wiki/TDD_Support.html"/>
 			<topic label="New Features of the Plug-in with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/New_Features_of_the_Plug-in_with_CUTE_20.html"/>
 			<topic label="Namespactor - namespace refactoring support" href="docs/web/cute-test.com/projects/cute/wiki/Namespactor_-_namespace_refactoring_support.html"/>
