@@ -16,11 +16,11 @@
 			<topic label="Specify Boost's Headers Installation Location" href="docs/web/cute-test.com/projects/cute/wiki/Specify_Boost's_Headers_Installation_Location.html"/>
 			<topic label="TDD Support" href="docs/web/cute-test.com/projects/cute/wiki/TDD_Support.html"/>
 			<topic label="New Features of the Plug-in with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/New_Features_of_the_Plug-in_with_CUTE_20.html"/>
-			<topic label="Namespactor - namespace refactoring support" href="docs/web/cute-test.com/projects/cute/wiki/Namespactor_-_namespace_refactoring_support.html"/>
 		</topic>
 		<topic label="Writing and Running CUTE Unit Test Suites" href="docs/web/cute-test.com/projects/cute/wiki/Writing_and_Running_CUTE_Unit_Test_Suites.html"/>
 		<topic label="Additional Plug-ins" href="docs/web/cute-test.com/projects/cute/wiki/Additional_Plug-ins.html">
 			<topic label="Elevenator" href="docs/web/cute-test.com/projects/cute/wiki/Elevenator.html"/>
+			<topic label="Namespactor" href="docs/web/cute-test.com/projects/cute/wiki/Namespactor.html"/>
 		</topic>
     </topic>
     <topic label="Contact" href="docs/web/cute-test.com/projects/cute/wiki/Contact.html"/>
