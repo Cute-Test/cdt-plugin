@@ -6,16 +6,16 @@
 	<topic label="User Guide" href="docs/web/cute-test.com/projects/cute/wiki/User_Guide.html">
 		<topic label="Theory of Operation and Goals" href="docs/web/cute-test.com/projects/cute/wiki/Theory_of_Operation_and_Goals.html">
 			<topic label="How Things Work" href="docs/web/cute-test.com/projects/cute/wiki/How_Things_Work.html"/>
-			<topic label="New Features of CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/New_Features_of_CUTE_20.html"/>
+			<topic label="Features of CUTE" href="docs/web/cute-test.com/projects/cute/wiki/Features_of_CUTE.html"/>
 		</topic>
 		<topic label="CUTE Installation and System Requirements" href="docs/web/cute-test.com/projects/cute/wiki/CUTE_Installation_and_System_Requirements.html">
-			<topic label="Supported Platforms with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/Supported_Platforms_with_CUTE_20.html"/>
+			<topic label="Supported Platforms" href="docs/web/cute-test.com/projects/cute/wiki/Supported_Platforms.html"/>
 			<topic label="CUTE Standalone" href="docs/web/cute-test.com/projects/cute/wiki/CUTE_Standalone.html"/>
 		</topic>
 		<topic label="Using the CUTE Eclipse Plug-in" href="docs/web/cute-test.com/projects/cute/wiki/Using_the_CUTE_Eclipse_Plug-in.html">
 			<topic label="Specify Boost's Headers Installation Location" href="docs/web/cute-test.com/projects/cute/wiki/Specify_Boost's_Headers_Installation_Location.html"/>
 			<topic label="TDD Support" href="docs/web/cute-test.com/projects/cute/wiki/TDD_Support.html"/>
-			<topic label="New Features of the Plug-in with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/New_Features_of_the_Plug-in_with_CUTE_20.html"/>
+			<topic label="Features of the Plug-in" href="docs/web/cute-test.com/projects/cute/wiki/Features_of_the_Plug-in.html"/>
 		</topic>
 		<topic label="Writing and Running CUTE Unit Test Suites" href="docs/web/cute-test.com/projects/cute/wiki/Writing_and_Running_CUTE_Unit_Test_Suites.html">
 			<topic label="Adding New Test Functions" href="docs/web/cute-test.com/projects/cute/wiki/Adding_New_Test_Functions.html"/>
