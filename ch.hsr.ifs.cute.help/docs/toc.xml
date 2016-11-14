@@ -10,6 +10,7 @@
 		</topic>
 		<topic label="CUTE Installation and System Requirements" href="docs/web/cute-test.com/projects/cute/wiki/CUTE_Installation_and_System_Requirements.html">
 			<topic label="Supported Platforms with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/Supported_Platforms_with_CUTE_20.html"/>
+			<topic label="CUTE Standalone" href="docs/web/cute-test.com/projects/cute/wiki/CUTE_Standalone.html"/>
 		</topic>
 		<topic label="Using the CUTE Eclipse Plug-in" href="docs/web/cute-test.com/projects/cute/wiki/Using_the_CUTE_Eclipse_Plug-in.html">
 			<topic label="Specify Boost's Headers Installation Location" href="docs/web/cute-test.com/projects/cute/wiki/Specify_Boost's_Headers_Installation_Location.html"/>
