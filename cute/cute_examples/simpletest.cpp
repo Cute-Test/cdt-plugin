@@ -20,63 +20,64 @@
 
 #include "cute.h"
 
-int lifeTheUniverseAndEverything = 41;
+int lifeTheUniverseAndEverything = 6*7;
 
-void mysimpletest(){
-    ASSERT(lifeTheUniverseAndEverything == 6*7);
+void mySimpleTest(){
+    ASSERT_EQUAL(42, lifeTheUniverseAndEverything);
 }
-#include <iostream>
+
 #include "cute_runner.h"
-int main1(){
-	using namespace std;
-	cute::test t=CUTE(mysimpletest);
-	if (cute::runner<>()(t)){
-		cout << "OK" << endl;
-	} else {
-		cout << "failed" << endl;
-	}
-	return 0;
-}
 #include "ide_listener.h"
-int main2(){
-	using namespace std;
+#include <iostream>
 
-	return cute::runner<cute::ide_listener>()(CUTE(mysimpletest));
+void main1(){
+	cute::ide_listener<> listener{};
+    if (cute::makeRunner(listener)(mySimpleTest)){
+        std::cout << "success\n";
+    } else {
+        std::cout << "failure\n";
+    }   
 }
 
+void main2(){
+    cute::ide_listener<> listener{};
+    cute::makeRunner(listener)(mySimpleTest);
+}
 
 #include "cute_test.h"
 #include "cute_equals.h"
-int anothertest(){
-	ASSERT_EQUAL(42,lifeTheUniverseAndEverything);
+
+int anotherTest(){
+	ASSERT_EQUAL(42, lifeTheUniverseAndEverything);
 	return 0;
 }
 
 cute::test tests[]={
 #ifdef __GNUG__
-	CUTE(mysimpletest)
-	,mysimpletest
-	,CUTE(anothertest)
+	CUTE(mySimpleTest)
+	,mySimpleTest
+	,CUTE(anotherTest)
 #else /* for MSVC... */
-	CUTE(mysimpletest)
-	,CUTE(mysimpletest)
-	,CUTE(reinterpret_cast<void(*)()>(anothertest))
+	CUTE(mySimpleTest)
+	,CUTE(mySimpleTest)
+	,CUTE(reinterpret_cast<void(*)()>(anotherTest))
 #endif
 };
 
 struct ATestFunctor {
 	void operator()(){
-		ASSERT_EQUAL_DELTA(42.0,static_cast<double>(lifeTheUniverseAndEverything),0.001);
+		ASSERT_EQUAL_DELTA(42.0, static_cast<double>(lifeTheUniverseAndEverything), 0.001);
 	}
 };
-#include "cute_suite.h"
-int main3(){
-	using namespace std;
 
-	cute::runner<cute::ide_listener> run;
-	cute::suite s(tests,tests+(sizeof(tests)/sizeof(tests[0])));
-	s+=ATestFunctor();
-	return run(s,"suite");
+#include "cute_suite.h"
+
+int main3(){
+	cute::ide_listener<> listener{};
+    auto run = cute::makeRunner(listener);
+    cute::suite s(tests, tests + (sizeof(tests) / sizeof(tests[0])));
+	s += ATestFunctor();
+	return run(s, "suite");
 }
 
 int main(){
