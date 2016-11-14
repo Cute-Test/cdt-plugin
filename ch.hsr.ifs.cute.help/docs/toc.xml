@@ -17,7 +17,15 @@
 			<topic label="TDD Support" href="docs/web/cute-test.com/projects/cute/wiki/TDD_Support.html"/>
 			<topic label="New Features of the Plug-in with CUTE 2.0" href="docs/web/cute-test.com/projects/cute/wiki/New_Features_of_the_Plug-in_with_CUTE_20.html"/>
 		</topic>
-		<topic label="Writing and Running CUTE Unit Test Suites" href="docs/web/cute-test.com/projects/cute/wiki/Writing_and_Running_CUTE_Unit_Test_Suites.html"/>
+		<topic label="Writing and Running CUTE Unit Test Suites" href="docs/web/cute-test.com/projects/cute/wiki/Writing_and_Running_CUTE_Unit_Test_Suites.html">
+			<topic label="Adding New Test Functions" href="docs/web/cute-test.com/projects/cute/wiki/Adding_New_Test_Functions.html"/>
+			<topic label="Using Structs and Classes as Tests" href="docs/web/cute-test.com/projects/cute/wiki/Using_Structs_and_Classes_as_Tests.html"/>
+			<topic label="Creating a Library Test Project" href="docs/web/cute-test.com/projects/cute/wiki/Creating_a_Library_Test_Project.html"/>
+			<topic label="Creating a Suite Module Test Project" href="docs/web/cute-test.com/projects/cute/wiki/Creating_a_Suite_Module_Test_Project.html"/>
+			<topic label="Adding New Suite Modules" href="docs/web/cute-test.com/projects/cute/wiki/Adding_New_Suite_Modules.html"/>
+			<topic label="Setting Custom Source Path for Unmanaged Projects" href="docs/web/cute-test.com/projects/cute/wiki/Setting_Custom_Source_Path_for_Unmanaged_Projects.html"/>
+			<topic label="Setting Environment Variables for Run/Debug Configuration" href="docs/web/cute-test.com/projects/cute/wiki/Setting_Environment_Variables_for_RunDebug_Configuration.html"/>
+		</topic>
 		<topic label="Additional Plug-ins" href="docs/web/cute-test.com/projects/cute/wiki/Additional_Plug-ins.html">
 			<topic label="Elevenator" href="docs/web/cute-test.com/projects/cute/wiki/Elevenator.html"/>
 			<topic label="Namespactor" href="docs/web/cute-test.com/projects/cute/wiki/Namespactor.html"/>
