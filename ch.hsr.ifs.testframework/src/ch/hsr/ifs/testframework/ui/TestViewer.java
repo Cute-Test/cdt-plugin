@@ -324,7 +324,10 @@ public class TestViewer extends Composite implements ITestElementListener, ISess
 	}
 
 	public void selectFirstFailure() {
-		treeViewer.setSelection(new StructuredSelection(findFirstFailure()), true);
+		TestElement findFirstFailure = findFirstFailure();
+		if (findFirstFailure != null) {
+			treeViewer.setSelection(new StructuredSelection(findFirstFailure), true);
+		}
 	}
 
 	private TestElement findFirstFailure() {
