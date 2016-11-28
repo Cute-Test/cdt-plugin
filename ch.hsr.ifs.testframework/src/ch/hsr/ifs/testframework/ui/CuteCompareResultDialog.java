@@ -107,7 +107,6 @@ public class CuteCompareResultDialog extends TrayDialog {
 		ShowWhiteSpaceAction action = new ShowWhiteSpaceAction(compareViewer);
 		tbm.add(action);
 		tbm.update(true);
-		;
 		pane.setTopRight(tb);
 
 		pane.setContent(control);
