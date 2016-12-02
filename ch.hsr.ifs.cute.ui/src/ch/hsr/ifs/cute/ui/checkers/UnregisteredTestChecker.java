@@ -85,9 +85,11 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 
 		try {
 			updateRegisteredTests(astCache, index, registeredFunctionFinder, toBeRegisteredBinding, iastDeclaration);
-
-			if (!(registeredFunctionFinder.getRegisteredFunctionNames().contains(index.adaptBinding(toBeRegisteredBinding)))) {
-				reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastDeclaration);
+			if (iastDeclaration instanceof IASTFunctionDefinition) {
+				IASTFunctionDefinition iastFunctionDefinition = (IASTFunctionDefinition) iastDeclaration;
+				if (!(registeredFunctionFinder.getRegisteredFunctionNames().contains(index.adaptBinding(toBeRegisteredBinding)))) {
+					reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastFunctionDefinition.getDeclarator());
+				}
 			}
 		} catch (CoreException e) {
 			CuteCorePlugin.log(e);
