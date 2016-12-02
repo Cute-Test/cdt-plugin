@@ -27,6 +27,7 @@ import org.eclipse.cdt.core.dom.ast.IEnumeration;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.core.model.CoreModel;
@@ -170,7 +171,7 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			IASTInitializer initializer = ctorDecl.getInitializer();
 			// FIXME: now really? method hasXY return true if the thing is null? either the method name is crap or there is a bug for sure here
 			// (lfelber)
-			return initializer == null || initializer instanceof ICPPASTConstructorInitializer;
+			return initializer == null || initializer instanceof ICPPASTConstructorInitializer || initializer instanceof ICPPASTInitializerList;
 		}
 	}
 }
