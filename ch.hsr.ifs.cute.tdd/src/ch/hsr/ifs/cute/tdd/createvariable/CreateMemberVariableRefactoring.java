@@ -31,6 +31,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayDeclarator;
@@ -201,14 +202,17 @@ public class CreateMemberVariableRefactoring extends TddCRefactoring {
 	}
 
 	private IASTInitializerClause getInitializerClause(ICPPASTConstructorChainInitializer chain) {
-		if (!(chain.getInitializer() instanceof ICPPASTConstructorInitializer)) {
-			return null;
+		IASTInitializerClause[] clauses = null;
+		if (chain.getInitializer() instanceof ICPPASTConstructorInitializer) {
+			ICPPASTConstructorInitializer init = (ICPPASTConstructorInitializer) chain.getInitializer();
+			clauses = init.getArguments();
+		} else if (chain.getInitializer() instanceof ICPPASTInitializerList) {
+			ICPPASTInitializerList initList = (ICPPASTInitializerList) chain.getInitializer();
+			clauses = initList.getClauses();
 		}
-		ICPPASTConstructorInitializer init = (ICPPASTConstructorInitializer) chain.getInitializer();
-		IASTInitializerClause[] args = init.getArguments();
-		// Handle constructors with multiple arguments too
-		if (args.length > 0) {
-			return args[0];
+		// Constructors with multiple arguments are not handled properly. The type of the member will be void. 
+		if (clauses.length == 1) {
+			return clauses[0];
 		}
 		return null;
 	}
