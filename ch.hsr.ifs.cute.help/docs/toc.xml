@@ -15,7 +15,6 @@
 		<topic label="Using the CUTE Eclipse Plug-in" href="docs/web/cute-test.com/projects/cute/wiki/Using_the_CUTE_Eclipse_Plug-in.html">
 			<topic label="Specify Boost's Headers Installation Location" href="docs/web/cute-test.com/projects/cute/wiki/Specify_Boost's_Headers_Installation_Location.html"/>
 			<topic label="TDD Support" href="docs/web/cute-test.com/projects/cute/wiki/TDD_Support.html"/>
-			<topic label="Features of the Plug-in" href="docs/web/cute-test.com/projects/cute/wiki/Features_of_the_Plug-in.html"/>
 		</topic>
 		<topic label="Writing and Running CUTE Unit Test Suites" href="docs/web/cute-test.com/projects/cute/wiki/Writing_and_Running_CUTE_Unit_Test_Suites.html">
 			<topic label="Adding New Test Functions" href="docs/web/cute-test.com/projects/cute/wiki/Adding_New_Test_Functions.html"/>
