@@ -30,12 +30,12 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 @SuppressWarnings("restriction")
 public class UsingChecker extends AbstractIndexAstChecker {
 
-	private static final String UDIR_IN_HEADER_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDIRInHeader";
-	private static final String UDIR_UNQUALIFIED_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDIRUnqualified";
-	private static final String UDEC_IN_HEADER_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDECInHeader";
-	private static final String UDIR_BEFORE_INCLUDE_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDIRBeforeInclude";
-	private static final String UDEC_BEFORE_INCLUDE_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDECBeforeInclude";
-	private static final String TYPEDEF_SHOULD_BE_ALIAS = "ch.hsr.ifs.cute.namespactor.Typedef2Alias";
+	public static final String UDIR_IN_HEADER_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDIRInHeader";
+	public static final String UDIR_UNQUALIFIED_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDIRUnqualified";
+	public static final String UDEC_IN_HEADER_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDECInHeader";
+	public static final String UDIR_BEFORE_INCLUDE_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDIRBeforeInclude";
+	public static final String UDEC_BEFORE_INCLUDE_PROBLEM_ID = "ch.hsr.ifs.cute.namespactor.UDECBeforeInclude";
+	public static final String TYPEDEF_SHOULD_BE_ALIAS = "ch.hsr.ifs.cute.namespactor.Typedef2Alias";
 
 	@Override
 	public void processAst(IASTTranslationUnit ast) {
@@ -97,17 +97,21 @@ public class UsingChecker extends AbstractIndexAstChecker {
 
 			@Override
 			public int visit(IASTDeclaration decl) {
-				if (decl.getParent().equals(ast)) {
-
+				if (isInGlobalScope(decl)) {
 					if (decl instanceof ICPPASTUsingDirective) {
-						reportProblem(UDIR_IN_HEADER_PROBLEM_ID, decl);
+							reportProblem(UDIR_IN_HEADER_PROBLEM_ID, decl);
+					}
+					if (decl instanceof ICPPASTUsingDeclaration) {
+						if (isInGlobalScope(decl)) {
+							reportProblem(UDEC_IN_HEADER_PROBLEM_ID, decl);
+						}
 					}
 				}
-
-				if (decl instanceof ICPPASTUsingDeclaration) {
-					reportProblem(UDEC_IN_HEADER_PROBLEM_ID, decl);
-				}
 				return super.visit(decl);
+			}
+
+			private boolean isInGlobalScope(IASTDeclaration decl) {
+				return decl.getParent() == ast;
 			}
 		});
 	}

@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import ch.hsr.ifs.cute.namespactor.checker.tests.UsingCheckerTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.EUDecRefactoringTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.EUDirRefactoringTest;
 import ch.hsr.ifs.cute.namespactor.test.tests.ITDARefactoringTest;
@@ -34,6 +35,7 @@ import ch.hsr.ifs.cute.namespactor.test.tests.TD2ARefactoringTest;
 	EUDirRefactoringTest.class, 
 	EUDecRefactoringTest.class,
 	TestSuiteSandbox.class, 
+	UsingCheckerTest.class,
 //@formatter:on
 })
 public class AllNamespectorTests {

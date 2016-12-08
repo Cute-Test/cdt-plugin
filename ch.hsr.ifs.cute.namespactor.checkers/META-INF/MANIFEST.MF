@@ -21,3 +21,4 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: IFS Institute for Software
+Export-Package: ch.hsr.ifs.cute.namespactor.checkers

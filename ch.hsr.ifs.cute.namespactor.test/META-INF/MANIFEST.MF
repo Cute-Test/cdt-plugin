@@ -14,9 +14,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text;bundle-version="3.7.0",
  ch.hsr.ifs.cute.namespactor;bundle-version="0.0.1",
  ch.hsr.ifs.cdttesting;bundle-version="1.0.1",
- org.junit;bundle-version="4.10.0"
+ org.junit;bundle-version="4.10.0",
+ org.eclipse.cdt.codan.core.test,
+ ch.hsr.ifs.cute.namespactor.checkers
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cute.namespactor.test,ch.hsr.ifs.cute.names
- pactor.test.tests
 Bundle-Vendor: IFS Institute for Software
