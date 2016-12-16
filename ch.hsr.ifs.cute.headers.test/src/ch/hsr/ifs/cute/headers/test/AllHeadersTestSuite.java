@@ -19,6 +19,7 @@ public class AllHeadersTestSuite extends TestSuite {
 
 	public AllHeadersTestSuite() {
 		super("All Header Tests");
+		addTestSuite(CopyHeaders2_2Test.class);
 		addTestSuite(CopyHeaders2_1Test.class);
 		addTestSuite(CopyHeaders2_0Test.class);
 		addTestSuite(CopyHeaders1_7Test.class);
