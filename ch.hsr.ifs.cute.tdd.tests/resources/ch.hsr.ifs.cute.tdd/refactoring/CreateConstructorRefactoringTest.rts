@@ -500,7 +500,7 @@ void test()
 }
 //!No Constructor for Defaulted Init-List - C++11
 //@.config
-markerCount=1
+markerCount=0
 //@A.cpp
 struct A {
 };
@@ -511,8 +511,6 @@ void test()
 }
 //=
 struct A {
-	A() {
-	}
 };
 
 void test()

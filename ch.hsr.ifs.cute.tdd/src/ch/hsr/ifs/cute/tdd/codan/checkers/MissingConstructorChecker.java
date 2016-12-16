@@ -29,12 +29,15 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBasicType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownMemberClass;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeTraits;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.cute.tdd.CodanArguments;
@@ -171,7 +174,19 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			IASTInitializer initializer = ctorDecl.getInitializer();
 			// FIXME: now really? method hasXY return true if the thing is null? either the method name is crap or there is a bug for sure here
 			// (lfelber)
-			return initializer == null || initializer instanceof ICPPASTConstructorInitializer || initializer instanceof ICPPASTInitializerList;
+			return initializer == null || initializer instanceof ICPPASTConstructorInitializer  || (initializer instanceof ICPPASTInitializerList && !isAggregateInitializable(ctorDecl));
 		}
+
+		private boolean isAggregateInitializable(IASTDeclarator ctorDecl) {
+			if(ctorDecl.getName().resolveBinding() instanceof ICPPVariable) {
+				ICPPVariable variable = (ICPPVariable) ctorDecl.getName().resolveBinding();
+				if(variable.getType() instanceof ICPPClassType) {
+					ICPPClassType classType = (ICPPClassType) variable.getType();
+					return TypeTraits.isAggregateClass(classType, ctorDecl);
+				}
+			}
+			return false;
+		}
+		
 	}
 }
