@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension
-         point="ch.hsr.ifs.cute.ui.Headers">
-      <CuteHeader
-            class="ch.hsr.ifs.cute.headers.headers1_0.CuteHeaders_1_0">
-      </CuteHeader>
-   </extension>
-      <extension
-         point="ch.hsr.ifs.cute.ui.Headers">
-      <CuteHeader
-            class="ch.hsr.ifs.cute.headers.headers1_5.CuteHeaders_1_5">
-      </CuteHeader>
-   </extension>
-      <extension
-         point="ch.hsr.ifs.cute.ui.Headers">
-      <CuteHeader
-            class="ch.hsr.ifs.cute.headers.headers1_6.CuteHeaders_1_6">
-      </CuteHeader>
-   </extension>
       <extension
          point="ch.hsr.ifs.cute.ui.Headers">
       <CuteHeader
@@ -35,6 +17,12 @@
          point="ch.hsr.ifs.cute.ui.Headers">
       <CuteHeader
             class="ch.hsr.ifs.cute.headers.headers2_1.CuteHeaders_2_1">
+      </CuteHeader>
+   </extension>
+   <extension
+         point="ch.hsr.ifs.cute.ui.Headers">
+      <CuteHeader
+            class="ch.hsr.ifs.cute.headers.headers2_2.CuteHeaders_2_2">
       </CuteHeader>
    </extension>
 
