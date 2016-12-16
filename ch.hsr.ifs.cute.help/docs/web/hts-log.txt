@@ -1,4 +1,4 @@
-HTTrack3.48-21 launched on Fri, 16 Dec 2016 14:08:21 at http://cute-test.com/projects/cute/wiki/User_Guide http://cute-test.com/stylesheets/application.css +*/attachments/* +*/themes/* +*/stylesheets/* -*/javascripts/* -*/activity* +*/images* -*files?sort*
+HTTrack3.48-21 launched on Fri, 16 Dec 2016 16:40:53 at http://cute-test.com/projects/cute/wiki/User_Guide http://cute-test.com/stylesheets/application.css +*/attachments/* +*/themes/* +*/stylesheets/* -*/javascripts/* -*/activity* +*/images* -*files?sort*
 (httrack http://cute-test.com/projects/cute/wiki/User_Guide http://cute-test.com/stylesheets/application.css -n -C0 -O web +*/attachments/* +*/themes/* +*/stylesheets/* -*/javascripts/* -*/activity* +*/images* -*files?sort* )
 
 Information, Warnings and Errors reported for this mirror:
@@ -6,7 +6,7 @@ note:	the hts-log.txt file, and hts-cache folder, may contain sensitive informat
 	such as username/password authentication for websites mirrored in this project
 	do not share these files/folders if you want these information to remain private
 
-14:08:22	Warning: 	File not parsed, looks like binary: cute-test.com/robots.txt
+16:40:54	Warning: 	File not parsed, looks like binary: cute-test.com/robots.txt
 
-HTTrack Website Copier/3.48-21 mirror complete in 4 minutes 30 seconds : 195 links scanned, 194 files written (4062648 bytes overall) [3911004 bytes received at 14485 bytes/sec], 380672 bytes transferred using HTTP compression in 34 files, ratio 30%, 3.3 requests per connection
+HTTrack Website Copier/3.48-21 mirror complete in 4 minutes 50 seconds : 195 links scanned, 194 files written (4062630 bytes overall) [3910855 bytes received at 13485 bytes/sec], 380654 bytes transferred using HTTP compression in 34 files, ratio 30%, 3.3 requests per connection
 (No errors, 1 warnings, 0 messages)
