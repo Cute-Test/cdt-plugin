@@ -1,0 +1,4 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+cute-test.com	TRUE	/	FALSE	1999999999	_redmine_session	BAh7B0kiD3Nlc3Npb25faWQGOgZFRkkiJWFmMGFjNDJhMWMyZTJmMzhmZDk4Y2MyN2Q4MDc2OTk4BjsAVEkiEF9jc3JmX3Rva2VuBjsARkkiMWFvSGFGcEo2WndDRG5TeFRLNDI1QlB1bktXbWxZTjA1ZFFMeUd2V3FjNGs9BjsARg%3D%3D--b6808b3f5f164f9439a0d54a479b03ff05548ce9
+

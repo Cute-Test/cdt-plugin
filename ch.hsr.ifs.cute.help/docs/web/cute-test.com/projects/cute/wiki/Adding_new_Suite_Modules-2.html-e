@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/Adding_new_Suite_Modules by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:12:24 GMT -->
+<head>
+<meta charset="utf-8" />
+<title>Adding new Suite Modules - CUTE - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="aoHaFpJ6ZwCDnSxTK425BPunKWmlYN05dQLyGvWqc4k=" name="csrf-token" />
+<link href="../../../images/favicon803b.ico?1414674397" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<link href="../../../stylesheets/jquery/jquery-ui-1.9.2a99a.css?1400673351" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../themes/cute/stylesheets/application1bf4.css?1400673388" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/jquery-1.8.3-ui-1.9.2-ujs-2.0.3.js?1400673351" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1400673757" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(window).load(function(){ warnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+
+
+<!-- page specific tags -->
+</head>
+<body class="theme-Cute project-cute controller-wiki action-show">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="wrapper3">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+
+<div id="header">
+    <div id="quick-search">
+        <form accept-charset="UTF-8" action="http://cute-test.com/projects/cute/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+        <input name="wiki_pages" type="hidden" value="1" />
+        <label for='q'>
+          <a href="http://cute-test.com/projects/cute/search" accesskey="4">Search</a>:
+        </label>
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+</form>        
+    </div>
+
+    <h1>CUTE</h1>
+
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/boards" class="boards">Forums</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+</div>
+
+<div id="main" class="">
+    <div id="sidebar">
+            <a name="CUTE"></a>
+<h1 >CUTE<a href="#CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="Contact.html" class="wiki-page">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+<ul>
+  <li><a href="http://cute-test.com/">Start page</a></li>
+  <li><a href="index.html">Index by title</a></li>
+  <li><a href="date_index.html">Index by date</a></li>
+</ul>
+
+
+        
+    </div>
+
+    <div id="content">
+        
+        <div class="contextual">
+  
+  
+  
+  
+  
+  
+
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> » <a href="Writing_and_Running_CUTE_Unit_Test_Suites.html">Writing and Running CUTE Unit Test Suites</a> » </p>
+
+
+<div class="wiki wiki-page">
+  <a name="Adding-New-Suite-Modules"></a>
+<h1 >Adding New Suite Modules<a href="#Adding-New-Suite-Modules" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Right-click on a project, folder or file (<code>.cpp</code> or <code>.h</code>) and choose <em>New > CUTE Suite File</em>.</p>
+
+
+	<p><img src="../../../attachments/download/197/20161216_new_suite_file_menu.png" alt="" /></p>
+
+
+	<p>Enter the name of your new suite and click <em>Finish</em>.</p>
+
+
+	<p><img src="../../../attachments/download/198/20161216_new_suite_file_wizard.png" alt="" /></p>
+
+
+	<p>Now you need to have your <code>runner</code> also integrate the <code>cute::suite</code> that is returned by the <code>make&#95;suite&#95;&lt;your_suite_name&gt;()</code> function in <code>&lt;your_suite_name&gt;.h</code>.</p>
+
+
+	<p>The initial <code>Test.cpp</code> (or the file that contains your <code>cute::makeRunner(...)</code> call) should look similar to this:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="preprocessor">#include</span> <span class="include">&quot;cute.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;ide_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;xml_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;cute_runner.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;MyNewTestSuite.h&quot;</span> 
+
+<span class="predefined-type">bool</span> runSuite(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    cute::xml_file_opener xmlfile(argc, argv);
+    cute::xml_listener&lt;cute::ide_listener&lt;&gt;&gt; lis(xmlfile.out);
+
+    <span class="directive">auto</span> runner = cute::makeRunner(lis, argc, argv);
+    cute::suite s { make_suite_MyNewTestSuite() };
+
+    <span class="predefined-type">bool</span> success = runner(s, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyNewTestSuite</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span> success;
+}
+
+<span class="predefined-type">int</span> main(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    <span class="keyword">return</span> runSuite(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+</span></code></pre>
+
+	<p>Add an include to <code>&lt;your_suite_name&gt;.h</code> and instantiate a new <code>cute::suite</code> using <code>make&#95;suite&#95;&lt;your_suite_name&gt;()</code> as argument. Then add a <code>runner</code> call.</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="preprocessor">#include</span> <span class="include">&quot;cute.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;ide_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;xml_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;cute_runner.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;MyNewTestSuite.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;MyNewerTestSuite.h&quot;</span> <span class="comment">//new line</span>
+
+<span class="predefined-type">bool</span> runSuite(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    cute::xml_file_opener xmlfile(argc, argv);
+    cute::xml_listener&lt;cute::ide_listener&lt;&gt;&gt; lis(xmlfile.out);
+
+    <span class="directive">auto</span> runner = cute::makeRunner(lis, argc, argv);
+    cute::suite s { make_suite_MyNewTestSuite() };
+    cute::suite MyNewerTestSuite { make_suite_MyNewerTestSuite() }; <span class="comment">//new line</span>
+
+    <span class="predefined-type">bool</span> success = runner(s, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyNewTestSuite</span><span class="delimiter">&quot;</span></span>);
+    success = runner(MyNewerTestSuite, <span class="string"><span class="delimiter">&quot;</span><span class="content">MyNewerTestSuite</span><span class="delimiter">&quot;</span></span>) &#38;&#38; success; <span class="comment">//new line</span>
+    <span class="keyword">return</span> success;
+}
+
+<span class="predefined-type">int</span> main(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    <span class="keyword">return</span> runSuite(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+</span></code></pre>
+
+	<p>After this, the CUTE test view should look as shown below:</p>
+
+
+	<p><img src="../../../attachments/download/196/20161216_multiple_suites_test_view.png" alt="" /></p>
+</div>
+
+
+
+
+
+
+
+
+        
+        <div style="clear:both;"></div>
+    </div>
+</div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+<div id="ajax-modal" style="display:none;"></div>
+
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2014 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+
+</body>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://log.hsr.ch/" : "http://log.hsr.ch/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 59);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="https://log.hsr.ch/piwik.php?idsite=59" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
+
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/Adding_new_Suite_Modules by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:12:24 GMT -->
+</html>

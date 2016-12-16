@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/CUTE_Installation_and_System_Requirements by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:08:56 GMT -->
+<head>
+<meta charset="utf-8" />
+<title>CUTE Installation and System Requirements - CUTE - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="aoHaFpJ6ZwCDnSxTK425BPunKWmlYN05dQLyGvWqc4k=" name="csrf-token" />
+<link href="../../../images/favicon803b.ico?1414674397" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<link href="../../../stylesheets/jquery/jquery-ui-1.9.2a99a.css?1400673351" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../themes/cute/stylesheets/application1bf4.css?1400673388" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/jquery-1.8.3-ui-1.9.2-ujs-2.0.3.js?1400673351" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1400673757" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(window).load(function(){ warnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+
+
+<!-- page specific tags -->
+</head>
+<body class="theme-Cute project-cute controller-wiki action-show">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="wrapper3">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+
+<div id="header">
+    <div id="quick-search">
+        <form accept-charset="UTF-8" action="http://cute-test.com/projects/cute/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+        <input name="wiki_pages" type="hidden" value="1" />
+        <label for='q'>
+          <a href="http://cute-test.com/projects/cute/search" accesskey="4">Search</a>:
+        </label>
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+</form>        
+    </div>
+
+    <h1>CUTE</h1>
+
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/boards" class="boards">Forums</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+</div>
+
+<div id="main" class="">
+    <div id="sidebar">
+            <a name="CUTE"></a>
+<h1 >CUTE<a href="#CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="Contact.html" class="wiki-page">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+<ul>
+  <li><a href="http://cute-test.com/">Start page</a></li>
+  <li><a href="index.html">Index by title</a></li>
+  <li><a href="date_index.html">Index by date</a></li>
+</ul>
+
+
+        
+    </div>
+
+    <div id="content">
+        
+        <div class="contextual">
+  
+  
+  
+  
+  
+  
+
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> » </p>
+
+
+<div class="wiki wiki-page">
+  <a name="CUTE-Installation-and-System-Requirements"></a>
+<h1 >CUTE Installation and System Requirements<a href="#CUTE-Installation-and-System-Requirements" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>You can use the CUTE unit testing framework with the Eclipse IDE or as a standalone solution. If you use Eclipse for software development, the CUTE Eclipse plug-in has everything you need. If you use Microsoft Visual Studio, use the CUTE standalone version.</p>
+
+
+	<a name="CUTE-Eclipse-Plug-in"></a>
+<h2 >CUTE Eclipse Plug-in<a href="#CUTE-Eclipse-Plug-in" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The latest release of CUTE is version 5.0.0 for Eclipse Neon and CDT 9.0.0. If you are working with earlier versions of Eclipse and CDT have a look at the list of updatesites below.</p>
+
+
+	<p>The CUTE Eclipse plug-in depends on the following software:</p>
+
+
+	<ul>
+	<li><a href="http://wiki.eclipse.org/Eclipse/Installation#Install_a_JVM" title="for Java 8" class="external">Java JRE</a></li>
+		<li><a href="http://www.eclipse.org/" class="external">Eclipse IDE</a> (Recommended Eclipse Neon)
+	<ul>
+	<li>width installed <a href="http://www.eclipse.org/cdt/" title="CDT" class="external">Eclipse C/C++ Development Tooling</a>: Either
+	<ul>
+	<li>download CDT combined with Eclipse ("Eclipse IDE for C/C++ Developers" from <a href="http://www.eclipse.org/downloads/" class="external">Eclipse Download Page</a>) or</li>
+		<li>install into any Eclipse from the CDT <a href="http://download.eclipse.org/releases/neon" class="external">Updatesite</a>.</li>
+	</ul>
+	</li>
+	</ul>
+	</li>
+		<li>Boost C++ Libaries (pre C++11):
+	<ul>
+	<li>Install <a href="http://www.boost.org/" class="external">Boost C++ Libaries</a> on your system or</li>
+		<li>use the Boost Headers provided with the Cute plug-in.</li>
+		<li>Since C++11, Boost is no longer needed.</li>
+	</ul></li>
+	</ul>
+
+
+	<p>For CDT to be able to compile, you will also need to have an <a href="http://wiki.eclipse.org/CDT/User/FAQ#Does_CDT_include_a_compiler.3F" class="external">Eclipse compatible C++ compiler</a> installed.</p>
+
+
+	<a name="Install-the-CUTE-Eclipse-plug-in"></a>
+<h3 >Install the CUTE Eclipse plug-in<a href="#Install-the-CUTE-Eclipse-plug-in" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>The CUTE plug-in can either be installed from the Eclipse Marketplace or by using our updatesite directly.</p>
+
+
+	<a name="Installing-CUTE-Using-the-Eclipse-Marketplace"></a>
+<h4 ><em>Installing CUTE Using the Eclipse Marketplace</em><a href="#Installing-CUTE-Using-the-Eclipse-Marketplace" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>This is the easiest way to get CUTE. Choose <em>Help > Eclipse Marketplace</em>  in the Eclipse menu and search for CUTE. This will install the CUTE plug-in and required CUTE header files. If you require to install optional CUTE features, please install them from the CUTE <a href="http://www.cute-test.com/updatesite" class="external">Updatesite</a>.</p>
+
+
+	<a name="Installing-CUTE-Using-the-CUTE-Updatesite"></a>
+<h4 ><em>Installing CUTE Using the CUTE Updatesite</em><a href="#Installing-CUTE-Using-the-CUTE-Updatesite" class="wiki-anchor">&para;</a></h4>
+
+
+	<ol>
+	<li>Choose <em>Help > Install New Software</em> in the Eclipse menu to start the Eclipse software installer.</li>
+		<li>Click <em>Add...</em> to add the CUTE repository.</li>
+		<li>Type (or copy) <a class="external" href="http://www.cute-test.com/updatesite">http://www.cute-test.com/updatesite</a> into the "Work with:" text field and confirm with <em>Enter</em>.</li>
+		<li>Choose at least the CUTE Plugin feature.</li>
+		<li>Click <em>Next</em>. Eclipse will then resolve dependencies and show the install dialog.</li>
+		<li>Read and accept the licences and click <em>Finish</em> if you want to continue installing CUTE and agree with the licences.</li>
+	</ol>
+
+
+	<p><img src="../../../attachments/download/153/20161114_updatesite_neon.png" alt="" /></p>
+
+
+	<p>Eclipse will download and install everything you need to use CUTE in Eclipse (this may take a while). Eclipse will need to restart after the setup.</p>
+
+
+	<a name="Updatesites-for-Earlier-Versions-of-Eclipse-Are-Still-Available"></a>
+<h4 ><em>Updatesites for Earlier Versions of Eclipse Are Still Available</em><a href="#Updatesites-for-Earlier-Versions-of-Eclipse-Are-Still-Available" class="wiki-anchor">&para;</a></h4>
+
+
+	<ul>
+	<li>CDT 8.5 &#38; 8.6 and Eclipse Mars: <a class="external" href="http://www.cute-test.com/updatesite/mars">http://www.cute-test.com/updatesite/mars</a></li>
+		<li>CDT 8.4 and Eclipse Luna: <a class="external" href="http://www.cute-test.com/updatesite/luna">http://www.cute-test.com/updatesite/luna</a></li>
+		<li>CDT 8.2 &#38; 8.3 and Eclipse Kepler: <a class="external" href="http://www.cute-test.com/updatesite/kepler">http://www.cute-test.com/updatesite/kepler</a></li>
+		<li>CDT 8.1 and Eclipse Juno: <a class="external" href="http://www.cute-test.com/updatesite/juno">http://www.cute-test.com/updatesite/juno</a></li>
+		<li>CDT 8.0 and Eclipse Indigo: <a class="external" href="http://www.cute-test.com/updatesite/indigo">http://www.cute-test.com/updatesite/indigo</a></li>
+		<li>CDT 7.0 and Eclipse Helios: <a class="external" href="http://www.cute-test.com/updatesite/helios">http://www.cute-test.com/updatesite/helios</a></li>
+	</ul>
+
+
+	<a name="Bleeding-Edge-Versions"></a>
+<h4 ><em>Bleeding-Edge Versions</em><a href="#Bleeding-Edge-Versions" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>If you are interested in the latest features, which might be experimental and in some cases not stable, you can get the latest successful build at the following updatesite: <a class="external" href="http://www.cute-test.com/updatesite/development">http://www.cute-test.com/updatesite/development</a></p>
+
+
+	<a name="CUTE-Standalone-or-with-Microsoft-Visual-Studio"></a>
+<h2 >CUTE Standalone or with Microsoft Visual Studio<a href="#CUTE-Standalone-or-with-Microsoft-Visual-Studio" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Download the <a href="CUTE_Standalone.html" class="wiki-page">CUTE Standalone</a> source files and add them to your source tree.</p>
+
+
+	<p>CUTE works with modern GNU and Microsoft C++ toolchains, plus the Boost C++ Libraries.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+        <div style="clear:both;"></div>
+    </div>
+</div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+<div id="ajax-modal" style="display:none;"></div>
+
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2014 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+
+</body>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://log.hsr.ch/" : "http://log.hsr.ch/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 59);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="https://log.hsr.ch/piwik.php?idsite=59" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
+
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/CUTE_Installation_and_System_Requirements by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:08:56 GMT -->
+</html>

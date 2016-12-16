@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>Elevenator - CUTE - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="aoHaFpJ6ZwCDnSxTK425BPunKWmlYN05dQLyGvWqc4k=" name="csrf-token" />
+<link href="../../../images/favicon803b.ico?1414674397" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<link href="../../../stylesheets/jquery/jquery-ui-1.9.2a99a.css?1400673351" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../themes/cute/stylesheets/application1bf4.css?1400673388" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/jquery-1.8.3-ui-1.9.2-ujs-2.0.3.js?1400673351" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1400673757" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(window).load(function(){ warnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+
+
+<!-- page specific tags -->
+</head>
+<body class="theme-Cute project-cute controller-wiki action-show">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="wrapper3">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+
+<div id="header">
+    <div id="quick-search">
+        <form accept-charset="UTF-8" action="http://cute-test.com/projects/cute/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+        <input name="wiki_pages" type="hidden" value="1" />
+        <label for='q'>
+          <a href="http://cute-test.com/projects/cute/search" accesskey="4">Search</a>:
+        </label>
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+</form>        
+    </div>
+
+    <h1>CUTE</h1>
+
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/boards" class="boards">Forums</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+</div>
+
+<div id="main" class="">
+    <div id="sidebar">
+            <a name="CUTE"></a>
+<h1 >CUTE<a href="#CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="Contact.html" class="wiki-page">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+<ul>
+  <li><a href="http://cute-test.com/">Start page</a></li>
+  <li><a href="index.html">Index by title</a></li>
+  <li><a href="date_index.html">Index by date</a></li>
+</ul>
+
+
+        
+    </div>
+
+    <div id="content">
+        
+        <div class="contextual">
+  
+  
+  
+  
+  
+  
+
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> » <a href="Additional_Plug-ins.html">Additional Plug-ins</a> » </p>
+
+
+<div class="wiki wiki-page">
+  <a name="Elevenator"></a>
+<h1 >Elevenator<a href="#Elevenator" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>In Eclipse CDT it is inconvenient to configure the C++ version correctly for different projects. Multiple settings have to be adapted:</p>
+
+
+	<p>1. Compiler dialect settings<br />2. Discovery options<br />3. Optional: Configure Codan Checkers</p>
+
+
+	<p>The settings above need to be adapted to every new project in the worst case. Subsequently, creating new projects is a hassle of post-creation configuration. Elevenator makes this task significantly easier by allowing to configure the different C++ standard versions and the default setting to be used for new projects on workspace level.</p>
+
+
+	<p>Below we describe the possible options to be preconfigured for a new C++ project for a different C++ standard and how Elevantor sets up your projects.</p>
+
+
+	<a name="Features-of-Elevenator"></a>
+<h2 >Features of Elevenator<a href="#Features-of-Elevenator" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Applying all the settings for a different C++ version is repetitive work and the options are quite well hidden (see <a href="#Behind-the-scenes" class="wiki-page">Behind the scenes</a>). The Elevenator plug-in alleviates this and simplifies the configuration to a once and for all configuration for all new projects in a workspace. It allows to configure each C++ language standard version in one workspace and to select the desired version upon project creation in an additional wizard page.</p>
+
+
+	<a name="Workspace-Preferences"></a>
+<h3 >Workspace Preferences<a href="#Workspace-Preferences" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Elevenator allows to preconfigure the following versions of the C++ standard:</p>
+
+
+	<ul>
+	<li>C++98</li>
+		<li>C++03</li>
+		<li>C++11</li>
+		<li>C++14 (1y)</li>
+		<li>C++17 (1z)</li>
+	</ul>
+
+
+For each of the language versions above the following settings can be preconfigured:
+	<ul>
+	<li>Setting the compiler flag</li>
+		<li>Setting the discovery options</li>
+		<li>Enabling Elevator checkers</li>
+		<li>Enabling CharWars</li>
+	</ul>
+
+
+	<p>Furthermore, the default version of C++ that should be chosen for a new C++ project can be configured in <em>Preferences > C/C++ > Version</em>:</p>
+
+
+	<p><img src="../../../attachments/download/203/20161216_elevenator_set_cppversion.png" alt="" /></p>
+
+
+	<a name="New-Project-Wizard-Page"></a>
+<h3 >New Project Wizard Page<a href="#New-Project-Wizard-Page" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>With Elevenator, a new wizard page when creating a new C++ project and clicking two times <code>Next></code> is available. It does not require input for the project to be created, but it allows to refine the settings for the new project (if desired). The settings are the same as seen in the workspace version settings.</p>
+
+
+	<p><img src="../../../attachments/download/204/20161216_elevenator_wizard_page.png" alt="" /></p>
+
+
+	<a name="Behind-the-Scenes"></a>
+<h2 >Behind the Scenes<a href="#Behind-the-Scenes" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>In this section we describe what configuration would be required to be performed manually for C++ projects without Elevenator.</p>
+
+
+	<a name="Setting-Compiler-Dialect"></a>
+<h3 >Setting Compiler Dialect<a href="#Setting-Compiler-Dialect" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>In order to configure the underlying compiler to use the desired version of C++, a project needs to be configured accordingly. Eclipse CDT provides the possibility to configure this on project level for compilers supporting GCC options, like g++ and Clang. For example to configure g++ to use C++14, it needs the compiler flag <code>-std=c++14</code></p>
+
+
+	<p>This project setting is hidden in the project properties: <em>Project > Properties > C/C++ Build > Settings > Tool Settings > GCC C++ Compiler > Dialect > Language standard</em>.</p>
+
+
+	<p><img src="../../../attachments/download/202/20161216_elevenator_dialect_settings.png" alt="" /></p>
+
+
+	<p>There are several possible standard versions predefined. Non-predefined flags can also be set in the <em>Other dialect flags</em> field. Unfortunately, there is no possibility in Eclipse CDT to configure this dialect option workspace-wide or at least for all projects relying on the selected toolchain. Eventually, all new projects have to be configured by hand.</p>
+
+
+	<p>Selecting a C++ standard version in this way only configures the compiler to use it when compiling the translation units of the project. It does not configure the internal analysis. To handle this correctly the following has to be done.</p>
+
+
+	<a name="Setting-Discovery-Options"></a>
+<h3 >Setting Discovery Options<a href="#Setting-Discovery-Options" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Eclipse CDT and the integrated code analysis framework analyze the source code of C++ projects, resolve symbols for navigation and do correctness checks (even for names declared externally). Such analysis is based on the index, which relies on the discovery options to be configured accordingly. Here we have the possibility to configure the discovery options on workspace or on project scope. While the compilation only depends on the compiler flags to be configured correcty, Eclipse CDT might display code analysis problems or cannot resolve declarations of symbols correctly that are only available in newer standard versions.</p>
+
+
+	<a name="On-Workspace-Level"></a>
+<h4 >On Workspace Level<a href="#On-Workspace-Level" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Discovery options for workspace scope can be configured in the workspace preferences: <em>Preferences > C/C++ > Build > Settings > Discovery</em>. Here the corresponding language settings provider can be configured with the same compiler flag used for the compiler.</p>
+
+
+	<p><img src="../../../attachments/download/199/20161216_elevenator_build_settings.png" alt="" /></p>
+
+
+	<p>The workspace scope settings are applied to all projects that are not specifically configured with distinct settings.</p>
+
+
+	<a name="On-Project-Scope"></a>
+<h4 >On Project Scope<a href="#On-Project-Scope" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Discovery options can also be set on project scope: <em>Project > Properties > C/C++ General > Preprocessor Include Paths, Macros etc. > Providers</em>. Here the corresponding language settings provider can be configured with project specific flags for the discovery process.</p>
+
+
+	<p><img src="../../../attachments/download/205/20161216_elevenator_preprocessor_includes.png" alt="" /></p>
+
+
+	<a name="Configuring-Codan-Checkers"></a>
+<h3 >Configuring Codan Checkers<a href="#Configuring-Codan-Checkers" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>While compiler flags are mandatory for correct compilation and correctly set discovery options are very desirable, it might also be convenient to have further settings adapted to the C++ standard version. For example, the code analysis framework can have checkers available that analyze the source code targeting a specific C++ version. The Elevator plug-in for instance checks for correct initialization according to C++11 uniform initialization, which is undesirable in a C++03 project, because the proposed code is not valid.</p>
+
+
+Such codan checkers can be enabled and disabled on workspace and project level:
+	<ul>
+	<li>Workspace: <em>Preferences > C/C++ > Code Analysis</em></li>
+	</ul>
+
+
+	<p><img src="../../../attachments/download/201/20161216_elevenator_code_analysis_workspace.png" alt="" /></p>
+
+
+	<ul>
+	<li>Project: <em>Project > Properties > C/C++ General > Code Analysis</em></li>
+	</ul>
+
+
+	<p><img src="../../../attachments/download/200/20161216_elevenator_code_analysis_project.png" alt="" /></p>
+
+
+	<a name="Known-Problems"></a>
+<h2 >Known Problems<a href="#Known-Problems" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Elevenator can only configure the project according to the settings provided upon project creation. When the toolchain is changed afterwards, the settings applied by Elevenator may get overwritten and are then lost. Thus we have explained the settings in detail in the introduction of this page.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+        <div style="clear:both;"></div>
+    </div>
+</div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+<div id="ajax-modal" style="display:none;"></div>
+
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2014 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+
+</body>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://log.hsr.ch/" : "http://log.hsr.ch/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 59);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="https://log.hsr.ch/piwik.php?idsite=59" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
+
+
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/Theory_Of_Operation_and_Goals by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:12:44 GMT -->
+<head>
+<meta charset="utf-8" />
+<title>Theory of Operation and Goals - CUTE - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="aoHaFpJ6ZwCDnSxTK425BPunKWmlYN05dQLyGvWqc4k=" name="csrf-token" />
+<link href="../../../images/favicon803b.ico?1414674397" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<link href="../../../stylesheets/jquery/jquery-ui-1.9.2a99a.css?1400673351" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../themes/cute/stylesheets/application1bf4.css?1400673388" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/jquery-1.8.3-ui-1.9.2-ujs-2.0.3.js?1400673351" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1400673757" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(window).load(function(){ warnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+
+
+<!-- page specific tags -->
+</head>
+<body class="theme-Cute project-cute controller-wiki action-show">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="wrapper3">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+
+<div id="header">
+    <div id="quick-search">
+        <form accept-charset="UTF-8" action="http://cute-test.com/projects/cute/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+        <input name="wiki_pages" type="hidden" value="1" />
+        <label for='q'>
+          <a href="http://cute-test.com/projects/cute/search" accesskey="4">Search</a>:
+        </label>
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+</form>        
+    </div>
+
+    <h1>CUTE</h1>
+
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/boards" class="boards">Forums</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+</div>
+
+<div id="main" class="">
+    <div id="sidebar">
+            <a name="CUTE"></a>
+<h1 >CUTE<a href="#CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="Contact.html" class="wiki-page">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+<ul>
+  <li><a href="http://cute-test.com/">Start page</a></li>
+  <li><a href="index.html">Index by title</a></li>
+  <li><a href="date_index.html">Index by date</a></li>
+</ul>
+
+
+        
+    </div>
+
+    <div id="content">
+        
+        <div class="contextual">
+  
+  
+  
+  
+  
+  
+
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> » </p>
+
+
+<div class="wiki wiki-page">
+  <a name="Theory-of-Operation-and-Goals-of-CUTE"></a>
+<h1 >Theory of Operation and Goals of CUTE<a href="#Theory-of-Operation-and-Goals-of-CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>CUTE leverages modern C++ libraries and features to make writing C++ unit tests easier. For example, one disadvantage of <a href="http://sourceforge.net/apps/mediawiki/cppunit/index.php?title=Main_Page" class="external">CppUnit</a> is that you have to write a subclass in order to have your own test case. This is a lot of programming overhead, especially when you want to start small.</p>
+
+
+	<p>CUTE stands for C++ Unit Testing Easier. This article was first published by Peter Sommerlad in <a href="http://accu.org/index.php/journals/1349" class="external">ACCU Overload Journal #75</a>. It is maintained here in the wiki with updates to match the current version of CUTE.</p>
+
+
+	<p>I was inspired by Kevlin Henney's Java testing framework called JUTLAND (Java Unit Testing: Light, Adaptable 'n' Discreet), and the corresponding presentation he gave at JAOO 2005. In addition, I wondered if I could come up with a design that is similarly orthogonal, easily extendable and also much simpler to use than current C++ unit testing approaches.</p>
+
+
+	<p>Here you will learn how to use CUTE in your projects and also some of the more modern C++ coding techniques employed for its implementation. I also ask you to give feedback to help me further simplify and improve CUTE.</p>
+
+
+	<a name="My-Problems-with-CppUnit"></a>
+<h2 >My Problems with CppUnit<a href="#My-Problems-with-CppUnit" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Inheritance is a very strong coupling between classes. Requiring a test case class to inherit from a CppUnit framework class couples both closely together. The <a href="http://cppunit.sourceforge.net/doc/lastest/cppunit_cookbook.html" class="external">CppUnit Cookbook</a> tutorial lists at least six classes you must deal with in order to get things up and running. You even have to decide if you want to inherit from TestCase or TestFixture for even the simplest test case. I do not want to go into more details, but this is how I want to write tests:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="preprocessor">#include</span> <span class="include">&quot;cute.h&quot;</span> 
+
+<span class="predefined-type">int</span> lifeTheUniverseAndEverything = <span class="integer">6</span>*<span class="integer">7</span>;
+
+<span class="directive">void</span> mySimpleTest(){
+    ASSERT_EQUAL(<span class="integer">42</span>, lifeTheUniverseAndEverything);
+}
+</span></code></pre><br />That's it. A simple test is a simple void function. Done. Well, almost done.
+
+	<p>In addition, CppUnit originated in the days of non-standard C++ compilers, when the more modern features of the language were just not broadly available. From a modern perspective, this limits its design.</p>
+
+
+	<p>Today, all relevant compilers are able to compile most of standard C++ and the <code>std::tr1</code> libraries from boost.</p>
+
+
+	<a name="Running-a-Single-Test"></a>
+<h2 >Running a Single Test<a href="#Running-a-Single-Test" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Since we lack reflection mechanisms available in other programming languages, testing with CUTE requires its own main function. For simple cases this is straightforward. As with CppUnit you instantiate a runner object and pass it your test. The simplest possible way to produce some output is:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="preprocessor">#include</span> <span class="include">&quot;my_simple_test.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;cute_runner.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;ostream_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&lt;iostream&gt;</span>
+
+<span class="predefined-type">int</span> main(){
+    cute::ostream_listener&lt;&gt; listener{};
+    <span class="keyword">if</span> (cute::makeRunner(listener)(mySimpleTest)){
+        std::cout &lt;&lt; <span class="string"><span class="delimiter">&quot;</span><span class="content">success</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>;
+    } <span class="keyword">else</span> {
+        std::cout &lt;&lt; <span class="string"><span class="delimiter">&quot;</span><span class="content">failure</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>;
+    }   
+}
+</span></code></pre>
+
+	<p>This may not yet be very impressive, but it is simple. Reporting test outcome is important, so CUTE provides a means to configure the runner with a listener. You may have wondered why <code>cute::runner</code> has template brackets. This is where you specify the listener class:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="preprocessor">#include</span> <span class="include">&quot;my_simple_test.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;cute_runner.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;ostream_listener.h&quot;</span> 
+
+<span class="predefined-type">int</span> main(){
+    cute::ostream_listener&lt;&gt; listener{};
+    cute::makeRunner(listener)(mySimpleTest);
+}
+</span></code></pre>
+
+	<p>This test succeeds and outputs:</p>
+
+
+<pre><code class="txt syntaxhl"><span class="CodeRay">starting: void ()
+void () OK
+</span></code></pre>
+
+	<p>From the above test result, we know only that a void function without any arguments ran successfully. This shows the C++ introspection limitation, which only provides type information, not function names. But the preprocessor can help us. We make our test cuter by applying the macro <code>CUTE()</code>:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay">cute::makeRunner(listener)(CUTE(mySimpleTest));
+</span></code></pre>
+
+	<p>This test succeeds and produces the terse output "mySimpleTest OK". However, if we make the test fail by setting the variable <code>lifeTheUniverseAndEverything</code> to <code>6*6</code> instead of <code>6*7</code>, we get:</p>
+
+
+<pre><code class="txt syntaxhl"><span class="CodeRay">my_simple_test.h:16: testcase failed: mySimpleTest: 42 == lifeTheUniverseAndEverything expected: 42 but was: 36 in mySimpleTest
+</span></code></pre>
+
+	<p>This failure message contains everything we need to find the origin of the failure, plus some context help to hint at the problem. You probably already guessed that the preprocessor macro <code>ASSERT_EQUAL()</code> from <code>cute.h</code> contains the magic that collects this interesting information.</p>
+
+
+	<p>For a better integration into Visual Studio and Eclipse IDEs, CDT CUTE now provides yet another listener, <code>cute::ide_listener</code>. This listener allows navigation from failure messages to their source, and even provides a red/green bar UI within Eclipse CDT.</p>
+
+
+	<p>Have a look at the <a href="How_Things_Work.html" class="wiki-page">How Things Work</a> section to gain insight into the framework.</p>
+
+
+	<a name="Limitations-and-Outlook"></a>
+<h2 >Limitations and Outlook<a href="#Limitations-and-Outlook" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>One big difference between C++ and other languages is the lack of method-level introspection. The only way to create a list of tests to execute is for a programmer to specify it by registering test objects somewhere. Our CUTE Eclipse plug-in eases that task by automatically registering test functions and methods for you in the current file's suite object.</p>
+
+
+	<a name="Conclusion"></a>
+<h2 >Conclusion<a href="#Conclusion" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>CUTE 2.1 and its Eclipse plug-in are already very well established. CUTE comes with a small test suite for itself, but it may still have problems that I have not yet encountered. If you have not yet written unit tests for your code, try starting now using CUTE via its Eclipse plug-in and tell us how it feels and how it works for you.</p>
+
+
+	<p>If you have more ideas for extending CUTE to make it a more convenient environment: Tell me your ideas, or just implement them. Thank you in advance.</p>
+
+
+	<a name="References"></a>
+<h2 >References<a href="#References" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>Catch
+	<ul>
+	<li>Phil Nash <a class="external" href="https://github.com/philsquared/Catch">https://github.com/philsquared/Catch</a></li>
+	</ul>
+	</li>
+		<li>CppUnit
+	<ul>
+	<li><a class="external" href="http://cppunit.sourceforge.net/cppunit-wiki">http://cppunit.sourceforge.net/cppunit-wiki</a></li>
+	</ul>
+	</li>
+		<li>Unit Testing Cookbook
+	<ul>
+	<li><a class="external" href="http://cppunit.sourceforge.net/doc/lastest/cppunit_cookbook.html">http://cppunit.sourceforge.net/doc/lastest/cppunit_cookbook.html</a></li>
+	</ul>
+	</li>
+		<li>GoF
+	<ul>
+	<li>Gang of Four, E. Gamma, R. Helm, R. Johnson, J. Vlissides: Design Patterns - Elements of Reusable Object-Oriented Design</li>
+	</ul>
+	</li>
+		<li>JUTLAND
+	<ul>
+	<li>Kevlin Henney, "Java Unit Testing Light Adaptable 'N Discreet", presentation at JAOO 2005 and private communication</li>
+	</ul></li>
+	</ul>
+</div>
+
+
+
+
+
+
+
+
+        
+        <div style="clear:both;"></div>
+    </div>
+</div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+<div id="ajax-modal" style="display:none;"></div>
+
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2014 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+
+</body>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://log.hsr.ch/" : "http://log.hsr.ch/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 59);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="https://log.hsr.ch/piwik.php?idsite=59" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
+
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/Theory_Of_Operation_and_Goals by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:12:44 GMT -->
+</html>

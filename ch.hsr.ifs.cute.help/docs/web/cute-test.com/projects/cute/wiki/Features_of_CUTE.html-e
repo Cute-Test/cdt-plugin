@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/Features_of_CUTE by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:08:56 GMT -->
+<head>
+<meta charset="utf-8" />
+<title>Features of CUTE - CUTE - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="aoHaFpJ6ZwCDnSxTK425BPunKWmlYN05dQLyGvWqc4k=" name="csrf-token" />
+<link href="../../../images/favicon803b.ico?1414674397" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<link href="../../../stylesheets/jquery/jquery-ui-1.9.2a99a.css?1400673351" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../themes/cute/stylesheets/application1bf4.css?1400673388" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/jquery-1.8.3-ui-1.9.2-ujs-2.0.3.js?1400673351" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1400673757" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(window).load(function(){ warnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+
+
+<!-- page specific tags -->
+</head>
+<body class="theme-Cute project-cute controller-wiki action-show">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="wrapper3">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+
+<div id="header">
+    <div id="quick-search">
+        <form accept-charset="UTF-8" action="http://cute-test.com/projects/cute/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+        <input name="wiki_pages" type="hidden" value="1" />
+        <label for='q'>
+          <a href="http://cute-test.com/projects/cute/search" accesskey="4">Search</a>:
+        </label>
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+</form>        
+    </div>
+
+    <h1>CUTE</h1>
+
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/boards" class="boards">Forums</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+</div>
+
+<div id="main" class="">
+    <div id="sidebar">
+            <a name="CUTE"></a>
+<h1 >CUTE<a href="#CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="Contact.html" class="wiki-page">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+<ul>
+  <li><a href="http://cute-test.com/">Start page</a></li>
+  <li><a href="index.html">Index by title</a></li>
+  <li><a href="date_index.html">Index by date</a></li>
+</ul>
+
+
+        
+    </div>
+
+    <div id="content">
+        
+        <div class="contextual">
+  
+  
+  
+  
+  
+  
+
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> » <a href="Theory_of_Operation_and_Goals.html">Theory of Operation and Goals</a> » </p>
+
+
+<div class="wiki wiki-page">
+  <a name="Features-of-CUTE"></a>
+<h1 >Features of CUTE<a href="#Features-of-CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Many enhancements have been added to CUTE for more convenience within the Eclipse plug-in, e.g. support for C++11 and more modern compilers for easier and more comfortable test specification. The following things have been added to CUTE:</p>
+
+
+	<ul>
+	<li>Test with relational operators and plug-in diff view ability on failure</li>
+		<li>Support for data-driven tests</li>
+		<li>Filtering to run specific tests or suites by their name (this is used by the plug-in now)</li>
+		<li>XML output in JUnit compatible format (suite names as given to the runner and test names as registered)</li>
+		<li>Attempt to support running CUTE on devices where iostream would be too much overhead (<code>std::string</code> is needed, however)</li>
+	</ul>
+
+
+	<a name="Tests-with-Relational-Inequality-Operators"></a>
+<h2 >Tests with Relational Inequality Operators<a href="#Tests-with-Relational-Inequality-Operators" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>There were some complaints that CUTE did not allow to compare with other relational operators and still get the nice value output from <code>ASSERT_EQUAL</code>. We heard that complaint and now provide macros for comparing for inequality that will populate the nice diff view in the plug-in with the values compared.</p>
+
+
+	<p>Look for example at the following test:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay">ASSERT(x &gt; y);
+</span></code></pre>
+
+	<p>If it fails, you have no idea which values <code>x</code> and <code>y</code> caused the failure. You can either resolve to a debugger to determine that, or add your own mechanism to put the values in a message string first in any case.</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay">std::ostringstream out;
+out &lt;&lt; <span class="string"><span class="delimiter">&quot;</span><span class="content">x was </span><span class="delimiter">&quot;</span></span> &lt;&lt; x &lt;&lt; <span class="string"><span class="delimiter">&quot;</span><span class="content"> and y was </span><span class="delimiter">&quot;</span></span> &lt;&lt; y;
+ASSERTM(out.str(),x&lt;y);
+</span></code></pre>
+
+	<p>This tends to be clumsy and you don't get the nice diff viewer that helps great if <code>x</code> and <code>y</code> are longer strings. With CUTE you'll get all relational operators supported as macros and if any of those assertions fail, they generate output compatible with the CUTE plug-in test viewer that will show the values in a nice diff view if clicked. The spelling of the macros follows the names of the C++ standard library functors but in upper case and prefixed with <code>ASSERT_</code>, for example as follows:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="directive">void</span> test_cute_assert_greater_equal_success(){
+    <span class="predefined-type">int</span> <span class="directive">const</span> x=<span class="integer">4</span>;
+    <span class="predefined-type">int</span> <span class="directive">const</span> y=<span class="integer">4</span>;
+    ASSERT_GREATER_EQUAL(x,y);
+}
+</span></code></pre>
+
+	<a name="Data-Driven-Tests"></a>
+<h2 >Data-Driven Tests<a href="#Data-Driven-Tests" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Often you find writing the same test code again and again, if you want to test a set of values and expected results. Good style tells you to refactor your code and put the input and corresponding expected values in a table and have a single test function interpret that table. This comes at a price: When a test fails, you don't know which exact table entry actually made it fail. Adding output of the values helps, but still you won't be able to quickly locate the culprit in the table, for example, if it was a false positive and you need to fix the expected value. Now you can have the best of both worlds, table-driven tests that tell you the location of the table input in addition to the tests function name. Clicking on a failed test will put you into the table entry that caused the failure. If everything works fine, you end up on the table-interpreting function. It is best shown with an example:</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="keyword">struct</span> test_eq_data {
+    <span class="predefined-type">double</span> input,expected;
+    cute::test_failure failure; <span class="comment">// add a failure element to your table data</span>
+} eq_table [] = { <span class="comment">// define the test table</span>
+    { <span class="integer">4</span>,<span class="integer">16</span>,DDT() }, <span class="comment">// use the macro DDT() to mark your table entry</span>
+        { <span class="float">2</span><span class="float">.5</span>,<span class="float">6</span><span class="float">.25</span>,DDTM(<span class="string"><span class="delimiter">&quot;</span><span class="content">compare well?</span><span class="delimiter">&quot;</span></span>)}
+};
+<span class="predefined-type">double</span> square(<span class="predefined-type">double</span> x){<span class="keyword">return</span> x*x;}
+
+<span class="directive">void</span> test_cute_data_driven_equality_demo(){
+    test_eq_data <span class="directive">const</span>*<span class="directive">const</span> end=eq_table+<span class="keyword">sizeof</span>(eq_table)/<span class="keyword">sizeof</span>(*eq_table);
+    <span class="keyword">for</span>(test_eq_data *it=eq_table; it != end; ++it){
+        ASSERT_EQUAL_DDT(it-&gt;expected,square(it-&gt;input),it-&gt;failure);
+    } <span class="comment">// use macros with suffix _DDT to use the table entries, last part is the test failure memorized by DDT()</span>
+}
+</span></code></pre>
+
+	<a name="Test-Filtering"></a>
+<h2 >Test Filtering<a href="#Test-Filtering" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The default main program created by the plug-in as well as the test runner are now parameterized with arguments <code>argc</code> and <code>argv</code>. Giving test or suite names on the command line now will only execute the named tests. A test within a suite is named using the suite name, a hash/pound symbol ('#') and the test name. If you have existing CUTE main programs, you need to adapt them accordingly.</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="predefined-type">bool</span> runAllTests(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    cute::suite s { };
+    s.push_back(CUTE(thisIsATest));
+    cute::xml_file_opener xmlfile(argc, argv);
+    cute::xml_listener&lt;cute::ide_listener&lt;&gt;&gt; lis(xmlfile.out);
+    <span class="directive">auto</span> runner = cute::makeRunner(lis, argc, argv);
+    <span class="predefined-type">bool</span> success = runner(s, <span class="string"><span class="delimiter">&quot;</span><span class="content">AllTests</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span> success;
+}
+
+<span class="predefined-type">int</span> main(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    <span class="keyword">return</span> runAllTests(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+</span></code></pre>
+
+	<p>Running the above program as...</p>
+
+
+<pre><code class="bash syntaxhl"><span class="CodeRay">$ cutest 'AllTests#thisIsATest'
+</span></code></pre>
+
+	<p>...will select and run the single test. You can pass any number of test names on the command line. But again, the Eclipse plug-in provides a more convenient method to re-run failing tests.</p>
+
+
+	<a name="XML-Output"></a>
+<h2 >XML Output<a href="#XML-Output" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The above runAllTests function will also create an XML file named like the program with an extension of <code>.xml</code>. If you pass <code>argc</code> as zero the filename will be <code>testresult.xml</code>. This makes it more convenient to put your test executable into the build process of a build server that expects JUnit-compatible XML format, such as Jenkins.</p>
+
+
+	<a name="CUTE-Tests-on-Small-Embedded-Devices"></a>
+<h2 >CUTE Tests on Small Embedded Devices<a href="#CUTE-Tests-on-Small-Embedded-Devices" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This is an experimental feature to allow running CUTE tests using <code>ASSERT_EQUAL</code> to run on limited hardware, where using <code>iostream</code> for numeric conversions is too expensive. If you compile your CUTE tests using...</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="preprocessor">#define</span> DONT_USE_IOSTREAM <span class="integer">1</span>
+</span></code></pre>
+
+	<p>...respectively the compiler command-line setting of the macro with  "-DDONT_USE_IOSTREAM=1" then CUTE shouldn't include <code>iostream</code> headers. However, you might need to adjust your <code>main</code> function or <code>runner</code> as well, for example, to pass the output of the tests over a serial line instead. Feedback on the feasibility of that feature is highly welcome.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+        <div style="clear:both;"></div>
+    </div>
+</div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+<div id="ajax-modal" style="display:none;"></div>
+
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2014 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+
+</body>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://log.hsr.ch/" : "http://log.hsr.ch/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 59);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="https://log.hsr.ch/piwik.php?idsite=59" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
+
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/Features_of_CUTE by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:08:56 GMT -->
+</html>

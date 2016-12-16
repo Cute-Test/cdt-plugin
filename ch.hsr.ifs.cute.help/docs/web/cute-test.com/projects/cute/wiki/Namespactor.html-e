@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/Namespactor by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:12:12 GMT -->
+<head>
+<meta charset="utf-8" />
+<title>Namespactor - CUTE - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="aoHaFpJ6ZwCDnSxTK425BPunKWmlYN05dQLyGvWqc4k=" name="csrf-token" />
+<link href="../../../images/favicon803b.ico?1414674397" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<link href="../../../stylesheets/jquery/jquery-ui-1.9.2a99a.css?1400673351" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../themes/cute/stylesheets/application1bf4.css?1400673388" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/jquery-1.8.3-ui-1.9.2-ujs-2.0.3.js?1400673351" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1400673757" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(window).load(function(){ warnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+
+
+<!-- page specific tags -->
+</head>
+<body class="theme-Cute project-cute controller-wiki action-show">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="wrapper3">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+
+<div id="header">
+    <div id="quick-search">
+        <form accept-charset="UTF-8" action="http://cute-test.com/projects/cute/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+        <input name="wiki_pages" type="hidden" value="1" />
+        <label for='q'>
+          <a href="http://cute-test.com/projects/cute/search" accesskey="4">Search</a>:
+        </label>
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+</form>        
+    </div>
+
+    <h1>CUTE</h1>
+
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/boards" class="boards">Forums</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+</div>
+
+<div id="main" class="">
+    <div id="sidebar">
+            <a name="CUTE"></a>
+<h1 >CUTE<a href="#CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="Contact.html" class="wiki-page">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+<ul>
+  <li><a href="http://cute-test.com/">Start page</a></li>
+  <li><a href="index.html">Index by title</a></li>
+  <li><a href="date_index.html">Index by date</a></li>
+</ul>
+
+
+        
+    </div>
+
+    <div id="content">
+        
+        <div class="contextual">
+  
+  
+  
+  
+  
+  
+
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> » <a href="Additional_Plug-ins.html">Additional Plug-ins</a> » </p>
+
+
+<div class="wiki wiki-page">
+  <a name="Namespactor"></a>
+<h1 >Namespactor<a href="#Namespactor" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Are you getting "colon-blindness" from too many namespace prefixes, or a bad gut feeling because you import all identifiers from namespace <code>std</code> with a <code>using namespace std;</code> directive in all of your C++ files?</p>
+
+
+	<p>Our new namespace refactorings come to the rescue!</p>
+
+
+	<a name="Inline-Using"></a>
+<h2 >Inline Using...<a href="#Inline-Using" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Change the identifiers in your code to include their namespace or class prefix by eliminating using namespace directives or using declaration. No doubt, when looking at the source, where a function comes from.</p>
+
+
+	<a name="Extract-Using-Directive"></a>
+<h2 >Extract Using Directive<a href="#Extract-Using-Directive" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>A cure against "colon-blindness" might be the refactoring to extract a using directive, e.g., <code>using namespace std;</code> from code pieces that have so many namespace qualifiers, that the code becomes unreadable.</p>
+
+
+	<a name="Extract-Using-Declaration"></a>
+<h2 >Extract Using Declaration<a href="#Extract-Using-Declaration" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>A better solution than a using directive might be a using declaration that allows you to use the short name of something from another scope without relying on explicit qualification of the element, but also without incorporating everything available from another namespace. For example, if you rely heavily on <code>std::cout</code> for output, you can easily declare it once automatically (choosing the refactoring) and stick with <code>cout</code> in your code.</p>
+
+
+	<a name="Qualify-Unqualified-Name"></a>
+<h2 >Qualify Unqualified Name<a href="#Qualify-Unqualified-Name" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>When you are in doubt where that name came from and you want to help code readers not relying on a great IDE as the one you are using, just let the IDE provide the scope resolution to your name for your code readers.</p>
+
+
+	<a name="Typedef-to-Alias-Declaration"></a>
+<h2 >Typedef to Alias Declaration<a href="#Typedef-to-Alias-Declaration" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>In case you would like to replace typedef declarations with the more modern C++11 alias declaration, Namespactor offers a quick assist for this case too. Just place the cursor at the location of the typedef declaration and press <em>Ctrl+1</em>. Select <em>Change typedef to using alias</em>, which will invoke the refactoring. You will see a preview of the change, which can be applied by pressing <em>Finish</em>.</p>
+
+
+	<p><img src="../../../attachments/download/183/20161202_change_typedef_to_using_alias.png" alt="" /></p>
+
+
+	<p><img src="../../../attachments/download/182/20161202_change_typedef_changes_view.png" alt="" /></p>
+
+
+	<a name="Inline-TypedefAlias-Declaration"></a>
+<h2 >Inline Typedef/Alias Declaration<a href="#Inline-TypedefAlias-Declaration" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Namespactor supports inlining of typedefs and alias declarations. Select the reference to the name alias you want to replace and press <em>Ctrl+1</em>. Select <em>Inline type alias</em>, which will invoke the refactoring. You will see a preview of the change, which can be applied by pressing <em>Finish</em>.</p>
+
+
+	<p><img src="../../../attachments/download/185/20161202_inline_type_alias.png" alt="" /></p>
+
+
+	<p><img src="../../../attachments/download/184/20161202_inline_type_alias_changes_view.png" alt="" /></p>
+</div>
+
+
+
+
+
+
+
+
+        
+        <div style="clear:both;"></div>
+    </div>
+</div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+<div id="ajax-modal" style="display:none;"></div>
+
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2014 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+
+</body>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://log.hsr.ch/" : "http://log.hsr.ch/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 59);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="https://log.hsr.ch/piwik.php?idsite=59" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
+
+
+<!-- Mirrored from cute-test.com/projects/cute/wiki/Namespactor by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Dec 2016 13:12:23 GMT -->
+</html>

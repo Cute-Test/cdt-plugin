@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>Using the CUTE Eclipse Plug-in - CUTE - C++ Unit Testing Easier</title>
+<meta name="description" content="Redmine" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="aoHaFpJ6ZwCDnSxTK425BPunKWmlYN05dQLyGvWqc4k=" name="csrf-token" />
+<link href="../../../images/favicon803b.ico?1414674397" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<link href="../../../stylesheets/jquery/jquery-ui-1.9.2a99a.css?1400673351" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../themes/cute/stylesheets/application1bf4.css?1400673388" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://cute-test.com/javascripts/jquery-1.8.3-ui-1.9.2-ujs-2.0.3.js?1400673351" type="text/javascript"></script>
+<script src="http://cute-test.com/javascripts/application.js?1400673757" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(window).load(function(){ warnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+
+
+<!-- page specific tags -->
+</head>
+<body class="theme-Cute project-cute controller-wiki action-show">
+<div id="wrapper">
+<div id="wrapper2">
+<div id="wrapper3">
+<div id="top-menu">
+    <div id="account">
+        <ul><li><a href="http://cute-test.com/login" class="login">Sign in</a></li>
+<li><a href="http://cute-test.com/account/register" class="register">Register</a></li></ul>    </div>
+    
+    <ul><li><a href="http://cute-test.com/" class="home">Home</a></li>
+<li><a href="http://cute-test.com/projects" class="projects">Projects</a></li>
+<li><a href="http://www.redmine.org/guide" class="help">Help</a></li></ul></div>
+
+<div id="header">
+    <div id="quick-search">
+        <form accept-charset="UTF-8" action="http://cute-test.com/projects/cute/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+        <input name="wiki_pages" type="hidden" value="1" />
+        <label for='q'>
+          <a href="http://cute-test.com/projects/cute/search" accesskey="4">Search</a>:
+        </label>
+        <input accesskey="f" class="small" id="q" name="q" size="20" type="text" />
+</form>        
+    </div>
+
+    <h1>CUTE</h1>
+
+    <div id="main-menu">
+        <ul><li><a href="http://cute-test.com/projects/cute" class="overview">Overview</a></li>
+<li><a href="http://cute-test.com/projects/cute/activity" class="activity">Activity</a></li>
+<li><a href="http://cute-test.com/projects/cute/news" class="news">News</a></li>
+<li><a href="http://cute-test.com/projects/cute/wiki" class="wiki selected">Wiki</a></li>
+<li><a href="http://cute-test.com/projects/cute/boards" class="boards">Forums</a></li>
+<li><a href="http://cute-test.com/projects/cute/files" class="files">Files</a></li></ul>
+    </div>
+</div>
+
+<div id="main" class="">
+    <div id="sidebar">
+            <a name="CUTE"></a>
+<h1 >CUTE<a href="#CUTE" class="wiki-anchor">&para;</a></h1>
+
+
+	<p><strong><a href="http://cute-test.com/projects/cute/wiki">Main</a></strong></p>
+
+
+	<p><strong><a href="User_Guide.html" class="wiki-page">User Guide</a></strong></p>
+
+
+	<p><strong><a href="Contact.html" class="wiki-page">Contact</a></strong></p>
+
+<h3>Wiki</h3>
+<ul>
+  <li><a href="http://cute-test.com/">Start page</a></li>
+  <li><a href="index.html">Index by title</a></li>
+  <li><a href="date_index.html">Index by date</a></li>
+</ul>
+
+
+        
+    </div>
+
+    <div id="content">
+        
+        <div class="contextual">
+  
+  
+  
+  
+  
+  
+
+</div>
+
+<p class="breadcrumb"><a href="User_Guide.html">User Guide</a> » </p>
+
+
+<div class="wiki wiki-page">
+  <a name="Using-the-CUTE-Eclipse-Plug-in"></a>
+<h1 >Using the CUTE Eclipse Plug-in<a href="#Using-the-CUTE-Eclipse-Plug-in" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>The CUTE Eclipse plug-in integrates the CUTE C++ unit testing framework into the <a href="http://www.eclipse.org/cdt/" class="external">Eclipse CDT C/C++ integrated development environment.</a> This plug-in provides all the important features that Java developers know from the JUnit plug-in:</p>
+
+
+	<ul>
+	<li>Wizards to initialize and set up new tests</li>
+		<li>Test navigator with green/red bar</li>
+		<li>Diff-viewer for failing tests</li>
+		<li>Rerun functionality for single test (e.g. a failed one)</li>
+	</ul>
+
+
+	<p>This page shows how to use the CUTE Eclipse plug-in once it is <a href="CUTE_Installation_and_System_Requirements.html" class="wiki-page">installed</a>.</p>
+
+
+	<a name="Functionality"></a>
+<h2 >Functionality<a href="#Functionality" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="Create-a-Project"></a>
+<h3 >Create a Project<a href="#Create-a-Project" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Select <em>File > New > C++ Project</em>. In the C++ Project dialog, the CUTE Eclipse plug-in provides two new C++ project wizards in addition to those that come with CDT by default:</p>
+
+
+	<p><img src="../../../attachments/download/148/20161103_new_project_wizard.png" alt="" /></p>
+
+
+	<p>Select the type of CUTE project you want:</p>
+
+
+	<ul>
+	<li>CUTE Project creates a standalone test project.</li>
+		<li>CUTE Suite Project asks you for a name, and creates a test suite with that name.</li>
+	</ul>
+
+
+	<p>Specify the Project name and click <em>Next ></em>. On the following wizard page, you can choose which CUTE headers to use (recommended are the newest ones) and if you want to use <em>Gcov</em>  and/or CUTE's <em>boost</em>-headers (if one of these optional CUTE features was installed). If you specify an existing Eclipse project you want to test, CUTE creates a unit test for that project. Upon clicking <em>Finish</em>, the wizard creates a project containing all the CUTE unit test framework's source files.</p>
+
+
+	<p>If you did not install Boost in the standard location or use CUTE's <em>boost</em>-headers, you will need to <a href="Specify_boost%27s_headers_installation_location-2.html" class="wiki-page">specify boost&#x27;s headers installation location</a>.</p>
+
+
+	<p>All of the wizards create a trivial test in file <code>src/Test.cpp</code> that will get you started. Expand this <code>Test.cpp</code> to create your unit test.</p>
+
+
+	<p><img src="../../../attachments/download/147/20161103_new_project_editor.png" alt="" /></p>
+
+
+	<a name="Test-Navigator-with-GreenRed-Bar"></a>
+<h3 >Test Navigator with Green/Red Bar<a href="#Test-Navigator-with-GreenRed-Bar" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>To build the project, select the menu <em>Project > Build All</em>. Then, right click on the <em>HelloCute</em> project and select <em>Run As > CUTE Test</em>.</p>
+
+
+	<p><img src="../../../attachments/download/151/20161103_standard_fail.png" alt="" /></p>
+
+
+	<p>Modify <code>Test.cpp</code> as shown below to make your unit test succeed.</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="preprocessor">#include</span> <span class="include">&quot;cute.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;ide_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;xml_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;cute_runner.h&quot;</span> 
+
+<span class="directive">void</span> thisIsATest() {
+    std::<span class="predefined-type">string</span> first, second, expected;
+    first = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>;
+    second = <span class="string"><span class="delimiter">&quot;</span><span class="content">World</span><span class="delimiter">&quot;</span></span>;
+    expected = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World</span><span class="delimiter">&quot;</span></span>;
+    ASSERT_EQUAL(expected, first + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + second);
+}
+
+<span class="predefined-type">bool</span> runAllTests(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    cute::suite s { };
+    <span class="comment">//TODO add your test here</span>
+    s.push_back(CUTE(thisIsATest));
+    cute::xml_file_opener xmlfile(argc, argv);
+    cute::xml_listener&lt;cute::ide_listener&lt;&gt;&gt; lis(xmlfile.out);
+    <span class="directive">auto</span> runner = cute::makeRunner(lis, argc, argv);
+    <span class="predefined-type">bool</span> success = runner(s, <span class="string"><span class="delimiter">&quot;</span><span class="content">AllTests</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span> success;
+}
+
+<span class="predefined-type">int</span> main(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    <span class="keyword">return</span> runAllTests(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+</span></code></pre>
+
+	<a name="Diff-Viewer-for-Failing-Tests"></a>
+<h3 >Diff-Viewer for Failing Tests<a href="#Diff-Viewer-for-Failing-Tests" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>With <code>Test.cpp</code> modified as follows...</p>
+
+
+<pre>
+<code class="cpp syntaxhl"><span class="CodeRay"><span class="preprocessor">#include</span> <span class="include">&quot;cute.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;ide_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;xml_listener.h&quot;</span> 
+<span class="preprocessor">#include</span> <span class="include">&quot;cute_runner.h&quot;</span> 
+
+<span class="directive">void</span> thisIsATest() {
+    std::<span class="predefined-type">string</span> first, second, expected;
+    first = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span>;
+    second = <span class="string"><span class="delimiter">&quot;</span><span class="content">World</span><span class="delimiter">&quot;</span></span>;
+    expected = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World</span><span class="delimiter">&quot;</span></span>;
+    ASSERT_EQUAL(expected, first + <span class="string"><span class="delimiter">&quot;</span><span class="content">    </span><span class="char">\t</span><span class="content">  </span><span class="char">\n</span><span class="delimiter">&quot;</span></span> + second);
+}
+
+<span class="predefined-type">bool</span> runAllTests(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    cute::suite s { };
+    <span class="comment">//TODO add your test here</span>
+    s.push_back(CUTE(thisIsATest));
+    cute::xml_file_opener xmlfile(argc, argv);
+    cute::xml_listener&lt;cute::ide_listener&lt;&gt;&gt; lis(xmlfile.out);
+    <span class="directive">auto</span> runner = cute::makeRunner(lis, argc, argv);
+    <span class="predefined-type">bool</span> success = runner(s, <span class="string"><span class="delimiter">&quot;</span><span class="content">AllTests</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span> success;
+}
+
+<span class="predefined-type">int</span> main(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> <span class="directive">const</span> *argv[]) {
+    <span class="keyword">return</span> runAllTests(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+</span></code></pre>
+
+	<p><img src="../../../attachments/download/150/20161103_custom_fail.png" alt="" /></p>
+
+
+	<p>...double clicking at the location of the blue arrow (as shown above) pops up the result comparison.</p>
+
+
+	<p><img src="../../../attachments/download/146/20161103_diff_view_regular.png" alt="" /></p>
+
+
+	<p>Spaces, tabs and newlines can be turned on.</p>
+
+
+	<p><img src="../../../attachments/download/145/20161103_diff_view_detailed.png" alt="" /></p>
+
+
+	<a name="Assertion-Functions"></a>
+<h3 >Assertion Functions<a href="#Assertion-Functions" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>The following assertion macros are available in the CUTE testing framework.</p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay">ASSERTM(msg, cond)
+ASSERT(cond)
+ASSERT_EQUALM(msg, expected, actual)
+ASSERT_EQUAL(expected, actual)
+ASSERT_EQUAL_DELTAM(msg, expected, actual, delta)
+ASSERT_EQUAL_DELTA(expected, actual, delta)
+ASSERT_EQUAL_RANGES(expbeg, expend, actbeg, actend)
+ASSERT_EQUAL_RANGESM(msg, expbeg, expend, actbeg, actend)
+ASSERT_GREATERM(msg, left, right)
+ASSERT_GREATER(left, right)
+ASSERT_GREATER_EQUALM(msg, left, right)
+ASSERT_GREATER_EQUAL(left, right)
+ASSERT_LESSM(msg, left, right)
+ASSERT_LESS(left, right)
+ASSERT_LESS_EQUAL(left, right)
+ASSERT_LESS_EQUALM(msg, left, right)
+ASSERT_THROWS(code, exc)
+ASSERT_THROWSM(msg, code, exc)
+FAIL()
+FAILM(msg)
+ASSERT*_DDT(cond, failure)
+ASSERT*_DDTM(msg, cond, failure)
+ASSERT_NOT_EQUAL_TO(left, right)
+ASSERT_NOT_EQUAL_TOM(msg, left, right)
+</span></code></pre>
+
+	<p>See <a href="Writing_and_Running_CUTE_Unit_Test_Suites.html#Writing-Tests" class="wiki-page">Writing and Running CUTE Unit Test Suites</a> for details.</p>
+
+
+	<a name="Rerun-Individual-Tests-Suites-or-Groups-of-Tests"></a>
+<h2 >Rerun Individual Tests, Suites or Groups of Tests<a href="#Rerun-Individual-Tests-Suites-or-Groups-of-Tests" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>From within the CUTE Tests view you can select tests or suites from the tree and let these run individually. If the view was populated from a "Debug as CUTE Test" the re-run will be within the debugger as well.</p>
+
+
+	<a name="XML-Output"></a>
+<h2 >XML Output<a href="#XML-Output" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The CUTE framework can generate XML output. While this doesn't directly link with the CUTE framework, you can click on the generated XML file in the project's root folder from within CDT and might get Eclipse's JUnit View if you have installed JDT as well. The XML output might be interesting for you when using hudson or jenkins.</p>
+</div>
+
+
+
+
+
+
+
+
+        
+        <div style="clear:both;"></div>
+    </div>
+</div>
+</div>
+
+<div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+<div id="ajax-modal" style="display:none;"></div>
+
+<div id="footer">
+  <div class="bgl"><div class="bgr">
+    Powered by <a href="http://www.redmine.org/">Redmine</a> &copy; 2006-2014 Jean-Philippe Lang
+  </div></div>
+</div>
+</div>
+</div>
+
+</body>
+<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://log.hsr.ch/" : "http://log.hsr.ch/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 59);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="https://log.hsr.ch/piwik.php?idsite=59" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
+
+
+</html>
