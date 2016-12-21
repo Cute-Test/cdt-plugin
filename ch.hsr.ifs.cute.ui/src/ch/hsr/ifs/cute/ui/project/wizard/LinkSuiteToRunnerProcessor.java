@@ -147,9 +147,8 @@ public class LinkSuiteToRunnerProcessor {
 		makeArgs[0] = nodeFactory.newIdExpression(nodeFactory.newName(suiteName));
 		makeArgs[1] = nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, STRING + suiteName + STRING);
 		IASTFunctionCallExpression runnerCallExp = nodeFactory.newFunctionCallExpression(runnerExp, makeArgs);
-		IASTBinaryExpression andExp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_logicalAnd, runnerCallExp, successExp);
-		IASTBinaryExpression assignExp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_assign, successExp, andExp);
-		IASTStatement statement = nodeFactory.newExpressionStatement(assignExp);
+		IASTBinaryExpression andAssignExp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_binaryAndAssign, successExp, runnerCallExp);
+		IASTStatement statement = nodeFactory.newExpressionStatement(andAssignExp);
 		return statement;
 	}
 
