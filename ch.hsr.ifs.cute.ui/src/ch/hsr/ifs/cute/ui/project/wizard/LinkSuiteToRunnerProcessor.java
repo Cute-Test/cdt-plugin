@@ -284,10 +284,10 @@ final class MakeRunnerFinder extends ASTVisitor {
 				IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declStmt.getDeclaration();
 				if(simpDecl.getDeclarators()[0] instanceof IASTDeclarator) {
 					IASTDeclarator declarator = simpDecl.getDeclarators()[0];
-					if(declarator.getInitializer() instanceof IASTInitializerList) {
-						IASTInitializerList initList = (IASTInitializerList) declarator.getInitializer();
-						if(initList.getClauses()[0] instanceof IASTFunctionCallExpression) {
-							IASTFunctionCallExpression funcCallExp = (IASTFunctionCallExpression) initList.getClauses()[0];
+					if(declarator.getInitializer() instanceof IASTEqualsInitializer) {
+						IASTEqualsInitializer equalInit = (IASTEqualsInitializer) declarator.getInitializer();
+						if(equalInit.getInitializerClause() instanceof IASTFunctionCallExpression) {
+							IASTFunctionCallExpression funcCallExp = (IASTFunctionCallExpression) equalInit.getInitializerClause();
 							if(funcCallExp.getFunctionNameExpression() instanceof IASTIdExpression) {
 								IASTIdExpression funcNameExp = (IASTIdExpression) funcCallExp.getFunctionNameExpression();
 								if(funcNameExp.getName().toString().equals("cute::makeRunner")) {
