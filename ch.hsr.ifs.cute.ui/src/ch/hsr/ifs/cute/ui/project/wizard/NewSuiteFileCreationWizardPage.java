@@ -26,6 +26,8 @@ import org.eclipse.cdt.internal.ui.wizards.dialogfields.ComboDialogField;
 import org.eclipse.cdt.internal.ui.wizards.dialogfields.LayoutUtil;
 import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.cdt.utils.PathUtil;
+import org.eclipse.core.internal.resources.File;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -619,28 +621,15 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	}
 
 	private void initSourceFolder(ICElement elem) {
-//		ICContainer folder = null;
-//		if (elem != null) {
-//			folder = CModelUtil.getSourceFolder(elem);
-//			if (folder == null) {
-//				ICProject cproject = elem.getCProject();
-//				if (cproject != null) {
-//					try {
-//						if (cproject.exists()) {
-//							ISourceRoot[] roots = cproject.getSourceRoots();
-//							if (roots != null && roots.length > 0)
-//								folder = roots[0];
-//						}
-//					} catch (CModelException e) {
-//						CUIPlugin.log(e);
-//					}
-//					if (folder == null) {
-//						folder = cproject.findSourceRoot(cproject.getResource());
-//					}
-//				}
-//			}
-//		}
-		setSourceFolderFullPath(elem != null ? elem.getResource().getFullPath() : null, false);
+		IContainer resource = null;
+		if(elem.getResource() instanceof IFile) {
+			IFile file = (IFile) elem.getResource();
+			resource = file.getParent();
+		}
+		if(elem.getResource() instanceof IFolder) {
+			resource = (IFolder) elem.getResource();
+		}
+		setSourceFolderFullPath(elem != null ? resource.getFullPath() : null, false);
 	}
 
 }
