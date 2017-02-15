@@ -160,7 +160,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jarsigner-plugin</artifactId>
-				<version>1.2</version>
+				<version>1.4</version>
 				<executions>
 					<execution>
 						<id>sign</id>
@@ -171,7 +171,7 @@
 				</executions>
 				<configuration>
 					<keystore>${keystore}</keystore>
-					<alias>ifscodesigning</alias>
+					<alias>${keyalias}</alias>
 					<storepass>${certpass}</storepass>
 					<storetype>pkcs12</storetype>
 				</configuration>
