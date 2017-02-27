@@ -21,7 +21,11 @@ public class PointerParameterProblemGenerator {
 			&& !DeclaratorTypeAnalyzer.hasCStringType(declarator, false)
 			&& !DeclaratorTypeAnalyzer.hasCStringType(declarator, true)) {
 			IASTName name = declarator.getName();
-			problemReports.add(new ProblemReport(file, ProblemIDs.POINTER_PARAMETER_PROBLEM, name, name.toString()));
+			
+			ProblemReport report = ProblemReport.create(file, ProblemIDs.POINTER_PARAMETER_PROBLEM, name, name.toString());
+			if(report != null) {
+				problemReports.add(report);	
+			}
 		}
 		return problemReports;
 	}

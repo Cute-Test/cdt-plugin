@@ -37,3 +37,8 @@ int main(int argc, const char **argv) {
 //@main.cpp
 int main(int argc, const char *argv[]) {
 }
+
+//!PointerParameterIgnoresParameterWithoutName
+//@main.cpp
+void f(int *) {}
+int main() {}

@@ -20,7 +20,10 @@ public class CStringAliasProblemGenerator {
 			for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()) { 
 				if(DeclaratorAnalyzer.isCStringAlias(declarator)) {
 					IASTName name = declarator.getName();
-					problemReports.add(new ProblemReport(file, ProblemIDs.C_STRING_ALIAS_PROBLEM, name, name.toString()));
+					ProblemReport report = ProblemReport.create(file, ProblemIDs.C_STRING_ALIAS_PROBLEM, name, name.toString());
+					if(report != null) {
+						problemReports.add(report);	
+					}
 				}
 			}
 		}

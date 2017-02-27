@@ -19,7 +19,10 @@ public class ArrayProblemGenerator {
 			IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration)node;
 			for(IASTDeclarator declarator : simpleDeclaration.getDeclarators()) {
 				if(DeclaratorTypeAnalyzer.isArray(declarator) && !DeclaratorAnalyzer.isCString(declarator)) {
-					problemReports.add(new ProblemReport(file, ProblemIDs.ARRAY_PROBLEM, declarator));
+					ProblemReport report = ProblemReport.create(file, ProblemIDs.ARRAY_PROBLEM, declarator);
+					if(report != null) {
+						problemReports.add(report);	
+					}
 				}
 			}
 		}

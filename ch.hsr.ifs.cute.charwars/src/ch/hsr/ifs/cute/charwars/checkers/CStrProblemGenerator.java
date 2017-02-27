@@ -61,7 +61,11 @@ public class CStrProblemGenerator {
 					if(signature == null) {
 						signature = buildSignature(firstValidOverload);
 					}
-					problemReports.add(new ProblemReport(file, ProblemIDs.C_STR_PROBLEM, cStrCall, signature));
+					
+					ProblemReport report = ProblemReport.create(file, ProblemIDs.C_STR_PROBLEM, cStrCall, signature);
+					if(report != null) {
+						problemReports.add(report);	
+					}
 				}
 			}
 		}

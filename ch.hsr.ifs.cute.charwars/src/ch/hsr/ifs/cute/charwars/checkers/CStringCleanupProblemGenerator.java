@@ -32,7 +32,10 @@ public class CStringCleanupProblemGenerator {
 					IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)expression;
 					IASTInitializerClause[] args = functionCall.getArguments();
 					if(args.length > 0 && ASTAnalyzer.isConversionToCharPointer(args[0])) {
-						problemReports.add(new ProblemReport(file, ProblemIDs.C_STRING_CLEANUP_PROBLEM, functionCall, function.getName()));
+						ProblemReport report = ProblemReport.create(file, ProblemIDs.C_STRING_CLEANUP_PROBLEM, functionCall, function.getName());
+						if(report != null) {
+							problemReports.add(report);	
+						}
 						break;
 					}
 				}
