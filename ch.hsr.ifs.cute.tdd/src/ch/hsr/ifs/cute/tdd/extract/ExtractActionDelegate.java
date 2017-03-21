@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -29,6 +29,7 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.tdd.TddHelper;
+import ch.hsr.ifs.cute.tdd.TddRefactoringContext;
 
 public class ExtractActionDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
 
@@ -45,7 +46,7 @@ public class ExtractActionDelegate implements IWorkbenchWindowActionDelegate, IE
 		CRefactoringContext context = null;
 		try {
 			ExtractRefactoring refactoring = new ExtractRefactoring(project.findElement(file.getFullPath()), selection);
-			context = new CRefactoringContext(refactoring);
+			context = new TddRefactoringContext(refactoring);
 			refactoring.checkAllConditions(new NullProgressMonitor());
 			Change change = refactoring.createChange(new NullProgressMonitor());
 			change.perform(new NullProgressMonitor());

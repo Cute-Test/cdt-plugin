@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -94,7 +94,7 @@ public abstract class TddQuickFix extends AbstractCodanCMarkerResolution impleme
 		LinkedModeInformation lmi = null;
 		TddCRefactoring refactoring = getRefactoring(new TextSelection(markerOffset, markerLength));
 
-		CRefactoringContext context = new CRefactoringContext(refactoring);
+		CRefactoringContext context = new TddRefactoringContext(refactoring);
 		try {
 			refactoring.checkFinalConditions(new NullProgressMonitor());
 			lmi = refactoring.getLinkedModeInformation();

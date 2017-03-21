@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- *  
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -50,6 +50,7 @@ import ch.hsr.ifs.cdttesting.cdttest.CDTTestingTest;
 import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
 import ch.hsr.ifs.cute.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.tdd.TddCRefactoring;
+import ch.hsr.ifs.cute.tdd.TddRefactoringContext;
 
 @SuppressWarnings("restriction")
 public abstract class TddRefactoringTest extends CDTTestingTest {
@@ -88,7 +89,7 @@ public abstract class TddRefactoringTest extends CDTTestingTest {
 			if (typeExtraction) {
 				setSelectionOnFile();
 				refactoring = getRefactoring(null, null);
-				context = new CRefactoringContext(refactoring);
+				context = new TddRefactoringContext(refactoring);
 				createAndPerformChange(refactoring);
 				for (String filename : fileMap.keySet()) {
 					IFile iFile = project.getFile(new Path(filename));
@@ -110,8 +111,7 @@ public abstract class TddRefactoringTest extends CDTTestingTest {
 				IDocument doc = openDocument(marker);
 				setSelection(new TextSelection(doc, getOffset(marker, doc), EMPTY_SELECTION));
 				refactoring = getRefactoring(marker, doc);
-				context = new CRefactoringContext(refactoring);
-				refactoring.setContext(context);
+				context = new TddRefactoringContext(refactoring);
 				createAndPerformChange(refactoring);
 			}
 			compareFiles(fileMap);
