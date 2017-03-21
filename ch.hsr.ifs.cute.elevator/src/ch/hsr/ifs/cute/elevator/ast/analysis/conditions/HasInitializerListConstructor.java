@@ -62,7 +62,7 @@ public class HasInitializerListConstructor extends Condition {
             if (parameter.getType() instanceof ICPPClassType) {
                 ICPPClassType type = (ICPPClassType) parameter.getType();
                 try {
-                    return type.getScope().toString().equals("std") && type.getName().startsWith("initializer_list");
+                    return type.getScope().getScopeName().toString().equals("std") && type.getName().startsWith("initializer_list");
                 } catch (DOMException e) {
                     Activator.log(e);
                 }
