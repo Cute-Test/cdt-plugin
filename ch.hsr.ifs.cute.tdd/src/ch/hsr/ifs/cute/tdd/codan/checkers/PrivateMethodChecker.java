@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -55,7 +55,7 @@ public class PrivateMethodChecker extends AbstractTDDChecker {
 				}
 				final ICPPMember[] methods = ClassTypeHelper.getAllDeclaredMethods(owner, name);
 				final ICPPMember[] fields = ClassTypeHelper.getDeclaredFields(owner, name);
-				if (ArrayUtil.contains(methods, member) || ArrayUtil.contains(fields, member)) {
+				if (ArrayUtil.containsEqual(methods, member) || ArrayUtil.containsEqual(fields, member)) {
 					if (member.getVisibility() == ICPPMember.v_private) {
 						IBinding surroundingFunction = findAscendingFunctionBinding(name);
 						if (canAccessPrivateMember(owner, surroundingFunction)) {
