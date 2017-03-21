@@ -144,12 +144,6 @@ int main() {
 	auto a = 5;
 }
 
-//!ShouldIgnoreDeclarationWithTypeAuto
-//@main.cpp
-int main() {
-	auto a;
-}
-
 //!ShouldIgnoreDeclarationWithTypeAutoAndCopyConstructor
 //@main.cpp
 int main() {
