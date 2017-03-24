@@ -174,7 +174,9 @@ public class MissingConstructorChecker extends AbstractTDDChecker {
 			IASTInitializer initializer = ctorDecl.getInitializer();
 			// FIXME: now really? method hasXY return true if the thing is null? either the method name is crap or there is a bug for sure here
 			// (lfelber)
-			return initializer == null || initializer instanceof ICPPASTConstructorInitializer  || (initializer instanceof ICPPASTInitializerList && !isAggregateInitializable(ctorDecl));
+			// FIXME: One upon a time, we tried to handle braced initialization... We failed... This was part of the return statement:
+			//  || (initializer instanceof ICPPASTInitializerList && !isAggregateInitializable(ctorDecl));
+			return initializer == null || initializer instanceof ICPPASTConstructorInitializer;
 		}
 
 		private boolean isAggregateInitializable(IASTDeclarator ctorDecl) {
