@@ -117,7 +117,7 @@
                         <argument>-digestalg</argument><argument>SHA1</argument>
                     </arguments>
 					<keystore>${keystore}</keystore>
-					<alias>ifscodesigning</alias>
+          <alias>${keyalias}</alias>
 					<storepass>${certpass}</storepass>
 					<storetype>pkcs12</storetype>
 				</configuration>
