@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="ch.hsr.ifs.cute.target.cdt921" sequenceNumber="25">
-<locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="4.6.3.M20170301-0400"/>
-<unit id="org.eclipse.sdk.ide" version="4.6.3.M20170301-0400"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.6"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.2.0.201703131005"/>
-<repository location="http://cevelop.com/cdt-testing/neon"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.cdt.sdk.feature.group" version="9.2.1.201703062208"/>
-<repository location="http://download.eclipse.org/releases/neon"/>
-</location>
-</locations>
+<?pde?>
+<!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
+<target name="Cevelop based on Eclipse Neon and CDT 9.2.1" sequenceNumber="1490707909">
+  <locations>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.2.1.201703281113"/>
+      <repository location="https://www.cevelop.com/cdt-testing/neon"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.platform.sdk" version="4.6.3.M20170301-0400"/>
+      <unit id="org.eclipse.sdk.ide" version="4.6.3.M20170301-0400"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.6"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.cdt.sdk.feature.group" version="9.2.1.201703062208"/>
+      <repository location="http://download.eclipse.org/releases/neon"/>
+    </location>
+  </locations>
 </target>

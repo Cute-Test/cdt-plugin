@@ -1,0 +1,16 @@
+target "Cevelop based on Eclipse Neon and CDT 9.2.1"
+
+with source requirements
+
+location "https://www.cevelop.com/cdt-testing/neon" {
+	ch.hsr.ifs.cdttesting.feature.feature.group [9.2.1,9.3.0)
+}
+
+location "http://download.eclipse.org/eclipse/updates/4.6" {
+	org.eclipse.platform.sdk [4.6.0,4.7.0)
+	org.eclipse.sdk.ide [4.6.0,4.7.0)
+}
+
+location "http://download.eclipse.org/releases/neon" {
+	org.eclipse.cdt.sdk.feature.group [9.2.1,9.3.0)
+}
