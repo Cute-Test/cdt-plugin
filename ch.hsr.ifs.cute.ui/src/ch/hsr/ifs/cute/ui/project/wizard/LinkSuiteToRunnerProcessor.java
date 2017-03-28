@@ -125,14 +125,14 @@ public class LinkSuiteToRunnerProcessor {
 		ICProject cProject = testRunner.getTranslationUnit().getOriginatingTranslationUnit().getCProject();
 		IProject project = cProject.getProject();
 		if(isCPPVersionAboveOrEqualEleven(project)) {
-			IASTStatement makeNewSuiteStatement = createMakeSuiteStmt(true);
+			IASTStatement makeNewSuiteStatement = createMakeSuiteStmt();
 			IASTStatement insertionStatement = testRunner.getBody();
 			IASTNode insertionPoint = insertionStatement.getChildren()[insertionStatement.getChildren().length-1];
 			rw.insertBefore(insertionStatement, insertionPoint, makeNewSuiteStatement, null);
 			IASTStatement newRunnerStatement = createRunnerCallStmt(cProject);
 			rw.insertBefore(insertionStatement, insertionPoint, newRunnerStatement, null);
 		} else {
-			IASTStatement makeSuiteStmt = createMakeSuiteStmt(false);
+			IASTStatement makeSuiteStmt = createMakeSuiteStmt();
 			rw.insertBefore(testRunner.getBody(), null, makeSuiteStmt, null);
 			IASTStatement runnerStmt = createRunnerStmt();
 			rw.insertBefore(testRunner.getBody(), null, runnerStmt, null);
@@ -202,7 +202,7 @@ public class LinkSuiteToRunnerProcessor {
 		return finder.boolName != null ? finder.boolName.copy() : nodeFactory.newName();
 	}
 
-	private IASTStatement createMakeSuiteStmt(boolean isAboveEleven) {
+	private IASTStatement createMakeSuiteStmt() {
 		ICPPASTQualifiedName cuteSuite = nodeFactory.newQualifiedName(nodeFactory.newName("suite".toCharArray()));
 		cuteSuite.addNameSpecifier(nodeFactory.newName(CUTE));
 		IASTDeclSpecifier declSpecifier = nodeFactory.newTypedefNameSpecifier(cuteSuite);
@@ -212,14 +212,8 @@ public class LinkSuiteToRunnerProcessor {
 		IASTName makeName = nodeFactory.newName(("make_suite_" + this.suiteName).toCharArray());
 		IASTIdExpression idExpr = nodeFactory.newIdExpression(makeName);
 		IASTInitializerClause initClause = nodeFactory.newFunctionCallExpression(idExpr, IASTExpression.EMPTY_EXPRESSION_ARRAY);
-		if(isAboveEleven) {
-			IASTInitializerList initializerList = nodeFactory.newInitializerList();
-			initializerList.addClause(initClause);
-			declarator.setInitializer(initializerList);
-		} else {
-			IASTEqualsInitializer initializer = nodeFactory.newEqualsInitializer(initClause);
-			declarator.setInitializer(initializer);
-		}
+        IASTEqualsInitializer initializer = nodeFactory.newEqualsInitializer(initClause);
+        declarator.setInitializer(initializer);
 		declaration.addDeclarator(declarator);
 		IASTDeclarationStatement declStmt = nodeFactory.newDeclarationStatement(declaration);
 		return declStmt;
