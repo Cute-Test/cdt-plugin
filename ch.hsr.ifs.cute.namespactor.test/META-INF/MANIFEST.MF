@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Namespactor Test Plug-in
-Bundle-SymbolicName: ch.hsr.ifs.cute.namespactor.test;singleton:=true
+Bundle-SymbolicName: ch.hsr.ifs.cute.namespactor.tests;singleton:=true
 Bundle-Version: 5.2.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.namespactor.test.TestActivator
 Require-Bundle: org.eclipse.ui,
