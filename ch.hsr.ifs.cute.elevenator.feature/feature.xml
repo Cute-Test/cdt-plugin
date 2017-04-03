@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.elevenator.feature"
       label="Elevenator"
-      version="5.1.0.qualifier">
+      version="5.2.0.qualifier">
 
    <description url="www.cute-test.com">
       Elevenator provides an easy way for configuring C++ projects for specific C++ versions.

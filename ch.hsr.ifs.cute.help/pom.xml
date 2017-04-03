@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>ch.hsr.ifs</groupId>
 		<artifactId>ch.hsr.ifs.cute.parent</artifactId>
-		<version>5.1.0-SNAPSHOT</version>
+		<version>5.2.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<groupId>ch.hsr.ifs</groupId>
 	<artifactId>ch.hsr.ifs.cute.help</artifactId>
-	<version>5.1.0-SNAPSHOT</version>
+	<version>5.2.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	<properties>
 		<cute.doc.skip>true</cute.doc.skip>

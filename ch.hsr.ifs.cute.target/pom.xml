@@ -9,12 +9,12 @@
     <relativePath>..</relativePath>
     <groupId>ch.hsr.ifs</groupId>
     <artifactId>ch.hsr.ifs.cute.parent</artifactId>
-    <version>5.1.0-SNAPSHOT</version>
+    <version>5.2.0-SNAPSHOT</version>
   </parent>
 
   <groupId>ch.hsr.ifs</groupId>
   <artifactId>ch.hsr.ifs.cute.target.cdt921</artifactId>
-  <version>5.1.0-SNAPSHOT</version>
+  <version>5.2.0-SNAPSHOT</version>
   <packaging>eclipse-target-definition</packaging>
 
 </project>
