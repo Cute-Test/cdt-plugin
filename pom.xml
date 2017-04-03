@@ -1,211 +1,211 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>ch.hsr.ifs</groupId>
-	<artifactId>ch.hsr.ifs.cute.releng</artifactId>
-	<version>5.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	
-	<properties>
-		<tycho-version>0.24.0</tycho-version>
-		<!--os-jvm-flags/>-->
-	</properties>
-	
-	
-	<profiles>
-		<profile>
-			<id>OSX</id>
-			<activation>
-				<os>
-					<family>mac</family>
-				</os>
-			</activation>
-			<properties>
-				<swtbot.args>-Xmx1024m -XstartOnFirstThread</swtbot.args>
-			</properties>
-		</profile>
-		<profile>
-			<id>notOSX</id>
-			<activation>
-				<os>
-					<family>!mac</family>
-				</os>
-			</activation>
-			<properties>
-				<swtbot.args>-Xmx1024m</swtbot.args>
-			</properties>
-		</profile>
-	</profiles>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ch.hsr.ifs</groupId>
+  <artifactId>ch.hsr.ifs.cute.releng</artifactId>
+  <version>5.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-	<modules>
-		<!-- CUTE Target -->
-		<module>../ch.hsr.ifs.cute.target</module>
-		<!-- CUTE Plugin -->
-		<module>../ch.hsr.ifs.cute.feature</module>
-		<module>../ch.hsr.ifs.testframework</module>
-		<module>../ch.hsr.ifs.cute.framework.extension</module>
-		<module>../ch.hsr.ifs.cute.core</module>
-		<module>../ch.hsr.ifs.cute.tdd</module>
-		<module>../ch.hsr.ifs.cute.help</module>
-		<module>../ch.hsr.ifs.cute.ui</module>
-		<module>../ch.hsr.ifs.cute.ui.test</module>
-		<module>../ch.hsr.ifs.testframework.test</module>
-		<module>../ch.hsr.ifs.cute.tdd.tests</module>
-		<!--<module>../ch.hsr.ifs.cute.swtbottest</module> -->
-		<!-- CUTE Headers -->
-		<module>../ch.hsr.ifs.cute.headers</module>
-		<module>../ch.hsr.ifs.cute.headers.test</module>
-		<!-- GCOV -->
-		<module>../ch.hsr.ifs.cute.gcov.feature</module>
-		<module>../ch.hsr.ifs.cute.gcov</module>
-		<module>../ch.hsr.ifs.cute.gcov.test</module>
-		<!-- BOOST -->
-		<module>../ch.hsr.ifs.cute.boost.feature</module>
-		<module>../ch.hsr.ifs.cute.boost</module>
-		<!-- Refactoring Preview -->
-		<module>../ch.hsr.ifs.cute.namespactor</module>
-		<module>../ch.hsr.ifs.cute.namespactor.checkers</module>
-		<module>../ch.hsr.ifs.cute.namespactor.feature</module>
-		<module>../ch.hsr.ifs.cute.namespactor.test</module>
-		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module> 
-		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
-		<module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>
-		<!-- Macronator -->
-		<module>../ch.hsr.ifs.cute.macronator</module>
-		<module>../ch.hsr.ifs.cute.macronator.feature</module>
-		<module>../ch.hsr.ifs.cute.macronator.test</module>
-		<!-- Elevator -->
-		<module>../ch.hsr.ifs.cute.elevator</module>
-		<module>../ch.hsr.ifs.cute.elevator.feature</module>
-		<module>../ch.hsr.ifs.cute.elevator.test</module>
-		<!-- Elevenator -->
-		<module>../ch.hsr.ifs.cute.elevenator</module>
-		<module>../ch.hsr.ifs.cute.elevenator.feature</module>
-		<!-- CharWars -->
-		<module>../ch.hsr.ifs.cute.charwars</module>
-		<module>../ch.hsr.ifs.cute.charwars.feature</module>
-		<module>../ch.hsr.ifs.cute.charwars.test</module>
-		<!-- update site -->
-		<module>../ch.hsr.ifs.cute.updatesite</module>
-	</modules>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<extensions>true</extensions>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<environments>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-					<target>
-						<artifact>
-							<groupId>ch.hsr.ifs</groupId>
-							<artifactId>ch.hsr.ifs.cute.target.cdt921</artifactId>
-							<version>5.1.0-SNAPSHOT</version>
-						</artifact>
-					</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-compiler-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-packaging-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-				  <archive>
-					<addMavenDescriptor>false</addMavenDescriptor>
-				  </archive>
-				</configuration>
-			  </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jarsigner-plugin</artifactId>
-				<version>1.4</version>
-				<executions>
-					<execution>
-						<id>sign</id>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<keystore>${keystore}</keystore>
-					<alias>${keyalias}</alias>
-					<storepass>${certpass}</storepass>
-					<storetype>pkcs12</storetype>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<dependencies>
-						<dependency>
-							<type>p2-installable-unit</type>
-							<artifactId>org.eclipse.equinox.ds</artifactId>
-						</dependency>
-						<dependency>
-							<type>p2-installable-unit</type>
-							<artifactId>org.eclipse.platform</artifactId>
-						</dependency> 
-					</dependencies>
-					<useUIHarness>true</useUIHarness>
-					<useUIThread>true</useUIThread>
-					<argLine>${swtbot.args}</argLine>
-					<product>org.eclipse.epp.package.cpp.product</product>
-					<application>org.eclipse.ui.ide.workbench</application>
-					<dependencies>
-						<dependency>
-							<type>p2-installable-unit</type>
-							<artifactId>org.eclipse.sdk.ide</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-					</dependencies>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+  <properties>
+    <tycho-version>0.24.0</tycho-version>
+    <!--os-jvm-flags/>-->
+</properties>
+
+
+<profiles>
+  <profile>
+    <id>OSX</id>
+    <activation>
+      <os>
+        <family>mac</family>
+      </os>
+    </activation>
+    <properties>
+      <swtbot.args>-Xmx1024m -XstartOnFirstThread</swtbot.args>
+    </properties>
+  </profile>
+  <profile>
+    <id>notOSX</id>
+    <activation>
+      <os>
+        <family>!mac</family>
+      </os>
+    </activation>
+    <properties>
+      <swtbot.args>-Xmx1024m</swtbot.args>
+    </properties>
+  </profile>
+</profiles>
+
+<modules>
+  <!-- CUTE Target -->
+  <module>../ch.hsr.ifs.cute.target</module>
+  <!-- CUTE Plugin -->
+  <module>../ch.hsr.ifs.cute.feature</module>
+  <module>../ch.hsr.ifs.testframework</module>
+  <module>../ch.hsr.ifs.cute.framework.extension</module>
+  <module>../ch.hsr.ifs.cute.core</module>
+  <module>../ch.hsr.ifs.cute.tdd</module>
+  <module>../ch.hsr.ifs.cute.help</module>
+  <module>../ch.hsr.ifs.cute.ui</module>
+  <module>../ch.hsr.ifs.cute.ui.test</module>
+  <module>../ch.hsr.ifs.testframework.test</module>
+  <module>../ch.hsr.ifs.cute.tdd.tests</module>
+  <!--<module>../ch.hsr.ifs.cute.swtbottest</module> -->
+  <!-- CUTE Headers -->
+  <module>../ch.hsr.ifs.cute.headers</module>
+  <module>../ch.hsr.ifs.cute.headers.test</module>
+  <!-- GCOV -->
+  <module>../ch.hsr.ifs.cute.gcov.feature</module>
+  <module>../ch.hsr.ifs.cute.gcov</module>
+  <module>../ch.hsr.ifs.cute.gcov.test</module>
+  <!-- BOOST -->
+  <module>../ch.hsr.ifs.cute.boost.feature</module>
+  <module>../ch.hsr.ifs.cute.boost</module>
+  <!-- Refactoring Preview -->
+  <module>../ch.hsr.ifs.cute.namespactor</module>
+  <module>../ch.hsr.ifs.cute.namespactor.checkers</module>
+  <module>../ch.hsr.ifs.cute.namespactor.feature</module>
+  <module>../ch.hsr.ifs.cute.namespactor.test</module>
+  <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module>
+  <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
+  <module>../ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>
+  <!-- Macronator -->
+  <module>../ch.hsr.ifs.cute.macronator</module>
+  <module>../ch.hsr.ifs.cute.macronator.feature</module>
+  <module>../ch.hsr.ifs.cute.macronator.test</module>
+  <!-- Elevator -->
+  <module>../ch.hsr.ifs.cute.elevator</module>
+  <module>../ch.hsr.ifs.cute.elevator.feature</module>
+  <module>../ch.hsr.ifs.cute.elevator.test</module>
+  <!-- Elevenator -->
+  <module>../ch.hsr.ifs.cute.elevenator</module>
+  <module>../ch.hsr.ifs.cute.elevenator.feature</module>
+  <!-- CharWars -->
+  <module>../ch.hsr.ifs.cute.charwars</module>
+  <module>../ch.hsr.ifs.cute.charwars.feature</module>
+  <module>../ch.hsr.ifs.cute.charwars.test</module>
+  <!-- update site -->
+  <module>../ch.hsr.ifs.cute.updatesite</module>
+</modules>
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-maven-plugin</artifactId>
+      <version>${tycho-version}</version>
+      <extensions>true</extensions>
+    </plugin>
+    <plugin>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>target-platform-configuration</artifactId>
+      <version>${tycho-version}</version>
+      <configuration>
+        <environments>
+          <environment>
+            <os>linux</os>
+            <ws>gtk</ws>
+            <arch>x86</arch>
+          </environment>
+          <environment>
+            <os>linux</os>
+            <ws>gtk</ws>
+            <arch>x86_64</arch>
+          </environment>
+          <environment>
+            <os>win32</os>
+            <ws>win32</ws>
+            <arch>x86</arch>
+          </environment>
+          <environment>
+            <os>win32</os>
+            <ws>win32</ws>
+            <arch>x86_64</arch>
+          </environment>
+          <environment>
+            <os>macosx</os>
+            <ws>cocoa</ws>
+            <arch>x86_64</arch>
+          </environment>
+        </environments>
+        <target>
+          <artifact>
+            <groupId>ch.hsr.ifs</groupId>
+            <artifactId>ch.hsr.ifs.cute.target.cdt921</artifactId>
+            <version>5.1.0-SNAPSHOT</version>
+          </artifact>
+        </target>
+      </configuration>
+    </plugin>
+    <plugin>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-compiler-plugin</artifactId>
+      <version>${tycho-version}</version>
+      <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+      </configuration>
+    </plugin>
+    <plugin>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-packaging-plugin</artifactId>
+      <version>${tycho-version}</version>
+      <configuration>
+        <archive>
+          <addMavenDescriptor>false</addMavenDescriptor>
+        </archive>
+      </configuration>
+    </plugin>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jarsigner-plugin</artifactId>
+      <version>1.4</version>
+      <executions>
+        <execution>
+          <id>sign</id>
+          <goals>
+            <goal>sign</goal>
+          </goals>
+        </execution>
+      </executions>
+      <configuration>
+        <keystore>${keystore}</keystore>
+        <alias>${keyalias}</alias>
+        <storepass>${certpass}</storepass>
+        <storetype>pkcs12</storetype>
+      </configuration>
+    </plugin>
+    <plugin>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-surefire-plugin</artifactId>
+      <version>${tycho-version}</version>
+      <configuration>
+        <dependencies>
+          <dependency>
+            <type>p2-installable-unit</type>
+            <artifactId>org.eclipse.equinox.ds</artifactId>
+          </dependency>
+          <dependency>
+            <type>p2-installable-unit</type>
+            <artifactId>org.eclipse.platform</artifactId>
+          </dependency>
+        </dependencies>
+        <useUIHarness>true</useUIHarness>
+        <useUIThread>true</useUIThread>
+        <argLine>${swtbot.args}</argLine>
+        <product>org.eclipse.epp.package.cpp.product</product>
+        <application>org.eclipse.ui.ide.workbench</application>
+        <dependencies>
+          <dependency>
+            <type>p2-installable-unit</type>
+            <artifactId>org.eclipse.sdk.ide</artifactId>
+            <version>0.0.0</version>
+          </dependency>
+        </dependencies>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
 </project>
- 
+
