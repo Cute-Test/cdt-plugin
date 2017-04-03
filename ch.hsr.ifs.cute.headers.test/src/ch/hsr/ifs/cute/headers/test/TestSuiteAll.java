@@ -15,9 +15,9 @@ import junit.framework.TestSuite;
  * @author Emanuel Graf IFS
  * @author Thomas Corbat IFS
  */
-public class AllHeadersTestSuite extends TestSuite {
+public class TestSuiteAll extends TestSuite {
 
-	public AllHeadersTestSuite() {
+	public TestSuiteAll() {
 		super("All Header Tests");
 		addTestSuite(CopyHeaders2_2Test.class);
 		addTestSuite(CopyHeaders2_1Test.class);
@@ -26,6 +26,6 @@ public class AllHeadersTestSuite extends TestSuite {
 	}
 
 	public static Test suite() {
-		return new AllHeadersTestSuite();
+		return new TestSuiteAll();
 	}
 }
