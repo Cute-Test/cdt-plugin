@@ -12,6 +12,6 @@ import ch.hsr.ifs.cute.refactoringpreview.clonewar.test.tests.ExtractFunctionTem
 	ExtractFunctionTemplateTest.class,
 	ExtractClassTemplateTest.class
 })
-public class CloneWarAllTests {
+public class TestSuiteAll {
 
 }

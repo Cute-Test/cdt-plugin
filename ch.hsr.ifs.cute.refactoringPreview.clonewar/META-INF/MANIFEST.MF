@@ -5,7 +5,7 @@ Bundle-SymbolicName: ch.hsr.ifs.cute.refactoringPreview.clonewar;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.refactoringPreview.clonewar.app.Activator
 Bundle-Vendor: %Bundle-Vendor
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.ltk.core.refactoring,
  org.eclipse.ltk.core.refactoring.participants,

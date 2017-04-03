@@ -22,4 +22,4 @@ import ch.hsr.ifs.cute.ui.test.sourceactions.SourceActionsTests;
 	UnregisteredTestFunctionCheckerTest.class,
 	})
 //@formatter:off
-public class AllUiTests { }
+public class TestSuiteAll { }

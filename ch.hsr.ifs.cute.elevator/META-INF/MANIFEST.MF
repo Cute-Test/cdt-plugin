@@ -5,9 +5,8 @@ Bundle-SymbolicName: ch.hsr.ifs.cute.elevator;singleton:=true
 Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.elevator.Activator
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: 
- org.eclipse.core.runtime,
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.cdt.codan.core;bundle-version="2.0.0",
  org.eclipse.cdt.codan.core.cxx;bundle-version="1.0.0",
  org.eclipse.cdt.codan.ui;bundle-version="2.0.0",
@@ -25,6 +24,7 @@ Require-Bundle:
  org.eclipse.cdt.ui;bundle-version="5.7.0",
  org.eclipse.debug.core,
  ch.hsr.ifs.cute.elevenator
-Export-Package: ch.hsr.ifs.cute.elevator.checker,ch.hsr.ifs.cute.eleva
- tor.quickfix,ch.hsr.ifs.cute.elevator.refactoring
+Export-Package: ch.hsr.ifs.cute.elevator.checker,
+ ch.hsr.ifs.cute.elevator.quickfix,
+ ch.hsr.ifs.cute.elevator.refactoring
 Bundle-Vendor: IFS Institute for Software

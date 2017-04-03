@@ -61,5 +61,5 @@ import ch.hsr.ifs.cute.macronator.test.transform.VoidFunctionTransformationTest;
 	VoidFunctionTransformationTest.class
 //@formatter:on
 })
-public class AllMacronatorTests {
+public class TestSuiteAll {
 }

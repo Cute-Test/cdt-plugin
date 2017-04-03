@@ -18,9 +18,9 @@ import ch.hsr.ifs.testframework.test.patternlistener.PatternListenerSuite;
  * @author Emanuel Graf IFS
  * 
  */
-public class AllTestframeworkTests extends TestSuite {
+public class TestSuiteAll extends TestSuite {
 
-	public AllTestframeworkTests() {
+	public TestSuiteAll() {
 		super("Testframework All Core Tests");
 		addTest(PatternListenerSuite.suite());
 		addTest(ModelBuilderSuite.suite());
@@ -28,7 +28,7 @@ public class AllTestframeworkTests extends TestSuite {
 	}
 
 	public static Test suite() {
-		return new AllTestframeworkTests();
+		return new TestSuiteAll();
 	}
 
 }
