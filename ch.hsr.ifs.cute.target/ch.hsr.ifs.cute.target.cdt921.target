@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="Cevelop based on Eclipse Neon and CDT 9.2.1" sequenceNumber="1490707909">
+<target name="Cevelop based on Eclipse Neon and CDT 9.2.1" sequenceNumber="1491206747">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.2.1.201703281113"/>
+      <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.2.1.201703311635"/>
       <repository location="https://www.cevelop.com/cdt-testing/neon"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
