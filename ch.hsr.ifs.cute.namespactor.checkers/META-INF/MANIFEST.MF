@@ -19,6 +19,6 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.cdt.codan.checkers.ui;bundle-version="1.0.0",
  org.eclipse.ltk.core.refactoring;bundle-version="3.5.201"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: IFS Institute for Software
 Export-Package: ch.hsr.ifs.cute.namespactor.checkers
