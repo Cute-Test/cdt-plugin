@@ -12,20 +12,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import ch.hsr.ifs.cute.tdd.linkedMode.ChangeRecorderTest;
-import ch.hsr.ifs.cute.tdd.linkedMode.CreateClassLMTest;
-import ch.hsr.ifs.cute.tdd.linkedMode.NestedEditTest;
-import ch.hsr.ifs.cute.tdd.linkedMode.TddLinkedModeTest;
 import ch.hsr.ifs.cute.tdd.ui.tests.AllTddTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({
 //@formatter:off
     AllTddTests.class,
-    ChangeRecorderTest.class,
-    CreateClassLMTest.class,
-    NestedEditTest.class,
-    TddLinkedModeTest.class,
 //@formatter:on
 })
 public class TestSuiteAll {
