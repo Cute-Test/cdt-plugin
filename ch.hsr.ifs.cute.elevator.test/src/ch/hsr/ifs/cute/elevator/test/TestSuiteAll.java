@@ -37,5 +37,5 @@ import ch.hsr.ifs.cute.elevator.test.refactoring.ElevateProjectRefactoringTest;
 	ReplaceNullMacroQuickFixTest.class
 //@formatter:on
 })
-public class AllElevatorTests {
+public class TestSuiteAll {
 }

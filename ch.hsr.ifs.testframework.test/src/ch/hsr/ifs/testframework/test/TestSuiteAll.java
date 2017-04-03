@@ -6,27 +6,29 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.cute.gcov.test;
+package ch.hsr.ifs.testframework.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import ch.hsr.ifs.cute.gcov.test.job.DeleteMarkersTest;
-import ch.hsr.ifs.cute.gcov.test.parser.ModelBuilderLineParserTest;
+import ch.hsr.ifs.testframework.test.hyperlink.HyperlinkSuite;
+import ch.hsr.ifs.testframework.test.modelbuilder.ModelBuilderSuite;
+import ch.hsr.ifs.testframework.test.patternlistener.PatternListenerSuite;
 
 /**
  * @author Emanuel Graf IFS
  * 
  */
-public class AllGcovTests extends TestSuite {
+public class TestSuiteAll extends TestSuite {
 
-	public AllGcovTests() {
-		super("All Gcov Tests");
-		addTestSuite(ModelBuilderLineParserTest.class);
-		addTestSuite(DeleteMarkersTest.class);
+	public TestSuiteAll() {
+		super("Testframework All Core Tests");
+		addTest(PatternListenerSuite.suite());
+		addTest(ModelBuilderSuite.suite());
+		addTest(HyperlinkSuite.suite());
 	}
 
 	public static Test suite() {
-		return new AllGcovTests();
+		return new TestSuiteAll();
 	}
 
 }
