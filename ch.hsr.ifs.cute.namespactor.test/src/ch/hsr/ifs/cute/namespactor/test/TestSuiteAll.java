@@ -38,5 +38,5 @@ import ch.hsr.ifs.cute.namespactor.test.tests.TD2ARefactoringTest;
 	UsingCheckerTest.class,
 //@formatter:on
 })
-public class AllNamespectorTests {
+public class TestSuiteAll {
 }
