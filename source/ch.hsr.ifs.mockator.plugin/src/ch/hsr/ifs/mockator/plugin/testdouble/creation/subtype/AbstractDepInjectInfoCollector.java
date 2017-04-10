@@ -58,6 +58,10 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
 
   protected Maybe<Pair<IASTName, IType>> getTargetClassOfProblemType(
       ICPPASTFunctionDeclarator funDecl, int argPosOfProblemType) {
+	if(funDecl == null || funDecl.getParameters() == null || funDecl.getParameters().length <= argPosOfProblemType) {
+		return none();
+	}
+	
     ICPPASTParameterDeclaration paramForProblemArg = funDecl.getParameters()[argPosOfProblemType];
     IType paramType = TypeCreator.byDeclarator(paramForProblemArg.getDeclarator());
     IASTDeclSpecifier declSpecifier = paramForProblemArg.getDeclSpecifier();
