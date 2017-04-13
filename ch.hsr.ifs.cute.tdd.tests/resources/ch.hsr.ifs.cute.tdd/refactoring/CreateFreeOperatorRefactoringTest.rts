@@ -603,3 +603,24 @@ struct Templ {
 		5 + t;
 	}
 }
+//!Do Not Report Operator Depending on Unknown Type
+//@.config
+markerCount=0
+//@A.cpp
+template<typename T>
+auto function() { //Bug in CDT: return type deduction does not work
+  return T{};
+}
+
+void foo() {
+  function<int>() < 1;
+}
+//=
+template<typename T>
+auto function() { //Bug in CDT: return type deduction does not work
+  return T{};
+}
+
+void foo() {
+  function<int>() < 1;
+}

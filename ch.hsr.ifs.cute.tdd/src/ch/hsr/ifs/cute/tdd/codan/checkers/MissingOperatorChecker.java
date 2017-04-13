@@ -194,7 +194,7 @@ public class MissingOperatorChecker extends AbstractTDDChecker {
 		private boolean hasKnownType(IASTExpression operand) {
 			IType type = operand.getExpressionType();
 			type = SemanticUtil.getNestedType(type, SemanticUtil.TDEF | SemanticUtil.ALLCVQ);
-			return !(type instanceof ICPPUnknownType || type instanceof IProblemType);
+			return !(type instanceof ICPPUnknownType || type instanceof IProblemType || type instanceof IProblemBinding);
 		}
 
 		private boolean isAddressOfOperator(ICPPASTUnaryExpression uexpr) {
