@@ -172,8 +172,8 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 			}
 			setToolChainIncludePath(project, libProject);
 		}
-		setProjectReference(project, projects);
 		ManagedBuildManager.saveBuildInfo(project, true);
+		setProjectReference(project, projects);
 	}
 
 	private void setProjectReference(IProject project, List<IProject> projects) throws CoreException {
