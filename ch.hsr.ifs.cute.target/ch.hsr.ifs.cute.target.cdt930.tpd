@@ -1,0 +1,24 @@
+target "Cevelop based on Eclipse Neon and CDT 9.3.0"
+
+with source requirements
+
+location "https://www.cevelop.com/cdt-testing/development" {
+	ch.hsr.ifs.cdttesting.feature.feature.group [9.3.0,9.4.0)
+}
+
+location "http://download.eclipse.org/eclipse/updates/4.7milestones/" {
+	org.eclipse.platform.sdk [4.7.0,4.8.0)
+	org.eclipse.sdk.ide [4.7.0,4.8.0)
+}
+
+location "http://download.eclipse.org/tools/cdt/builds/oxygen/milestones/rc4" {
+	org.eclipse.cdt.sdk.feature.group [9.3.0,9.4.0)
+}
+
+location "https://hudson.eclipse.org/cdt/job/launchbar-master/lastSuccessfulBuild/artifact/repo/target/repository/" {
+	org.eclipse.launchbar.feature.group [2.1.1,2.20)
+}
+
+location "http://download.eclipse.org/tm/terminal/builds/development/nightly/" {
+	org.eclipse.tm.terminal.feature.feature.group [4.3.0,4.4.0)
+}

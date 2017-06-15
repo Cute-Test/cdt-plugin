@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.namespactor.checker.tests;
 
-import org.eclipse.cdt.codan.core.test.CheckerTestCase;
+import org.eclipse.cdt.codan.core.tests.CheckerTestCase;
 import org.eclipse.core.runtime.Plugin;
 
 import ch.hsr.ifs.cute.namespactor.checkers.UsingChecker;

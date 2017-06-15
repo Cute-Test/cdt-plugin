@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.hsr.ifs</groupId>
   <artifactId>ch.hsr.ifs.cute.parent</artifactId>
-  <version>5.2.0-SNAPSHOT</version>
+  <version>5.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -127,8 +127,8 @@
           <target>
             <artifact>
               <groupId>ch.hsr.ifs</groupId>
-              <artifactId>ch.hsr.ifs.cute.target.cdt921</artifactId>
-              <version>5.2.0-SNAPSHOT</version>
+              <artifactId>ch.hsr.ifs.cute.target.cdt930</artifactId>
+              <version>5.3.0-SNAPSHOT</version>
             </artifact>
           </target>
 

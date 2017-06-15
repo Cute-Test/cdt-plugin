@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.eclipse.cdt.codan.core.test.TestUtils;
+import org.eclipse.cdt.codan.core.tests.TestUtils;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.IPDOMManager;
 import org.eclipse.cdt.core.model.CModelException;

@@ -14,8 +14,8 @@ package ch.hsr.ifs.cute.elevator.test;
 import java.io.IOException;
 
 import org.eclipse.cdt.codan.core.PreferenceConstants;
-import org.eclipse.cdt.codan.core.test.CheckerTestCase;
-import org.eclipse.cdt.codan.core.test.TestUtils;
+import org.eclipse.cdt.codan.core.tests.CheckerTestCase;
+import org.eclipse.cdt.codan.core.tests.TestUtils;
 import org.eclipse.cdt.codan.internal.ui.CodanUIActivator;
 import org.eclipse.cdt.codan.ui.AbstractCodanCMarkerResolution;
 import org.eclipse.core.resources.IMarker;

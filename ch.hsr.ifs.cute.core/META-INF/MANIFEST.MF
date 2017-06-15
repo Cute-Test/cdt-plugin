@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ch.hsr.ifs.cute.core;singleton:=true
-Bundle-Version: 5.2.0.qualifier
+Bundle-Version: 5.3.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.core.CuteCorePlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.cdt.dsf.gdb.ui,
  org.eclipse.cdt.launch;bundle-version="7.0.0",
  org.eclipse.cdt.core;bundle-version="5.1.0",
  org.eclipse.jface.text;bundle-version="3.4.0",
- org.eclipse.cdt.ui;bundle-version="5.2.0",
+ org.eclipse.cdt.ui;bundle-version="5.3.0",
  org.eclipse.cdt.managedbuilder.core;bundle-version="7.0.0",
  ch.hsr.ifs.testframework;bundle-version="3.0.0"
 Eclipse-LazyStart: true

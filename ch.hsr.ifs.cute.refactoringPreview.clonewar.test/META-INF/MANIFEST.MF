@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Clone War Test Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.refactoringPreview.clonewar.tests;singleton:=true
-Bundle-Version: 5.2.0.qualifier
+Bundle-Version: 5.3.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.refactoringpreview.clonewar.test.CloneWarTestPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde?>
+<!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
+<target name="Cevelop based on Eclipse Neon and CDT 9.3.0" sequenceNumber="1497514949">
+  <locations>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.3.0.201706150810"/>
+      <repository location="https://www.cevelop.com/cdt-testing/development"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.platform.sdk" version="4.7.0.I20170612-0950"/>
+      <unit id="org.eclipse.sdk.ide" version="4.7.0.I20170612-0950"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.7milestones/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.cdt.sdk.feature.group" version="9.3.0.201706122201"/>
+      <repository location="http://download.eclipse.org/tools/cdt/builds/oxygen/milestones/rc4"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.launchbar.feature.group" version="2.1.1.201706131403"/>
+      <repository location="https://hudson.eclipse.org/cdt/job/launchbar-master/lastSuccessfulBuild/artifact/repo/target/repository/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.tm.terminal.feature.feature.group" version="4.3.0.201706140620"/>
+      <repository location="http://download.eclipse.org/tm/terminal/builds/development/nightly/"/>
+    </location>
+  </locations>
+</target>
