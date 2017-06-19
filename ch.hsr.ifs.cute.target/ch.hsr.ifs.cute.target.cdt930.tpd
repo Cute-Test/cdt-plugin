@@ -1,4 +1,4 @@
-target "Cevelop based on Eclipse Neon and CDT 9.3.0"
+target "Cevelop based on Eclipse Oxygen and CDT 9.3.0"
 
 with source requirements
 

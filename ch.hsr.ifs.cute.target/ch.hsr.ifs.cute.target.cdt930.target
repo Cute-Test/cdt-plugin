@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="Cevelop based on Eclipse Neon and CDT 9.3.0" sequenceNumber="1497514949">
+<target name="Cevelop based on Eclipse Oxygen and CDT 9.3.0" sequenceNumber="1497878041">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.3.0.201706150810"/>
@@ -17,11 +17,11 @@
       <repository location="http://download.eclipse.org/tools/cdt/builds/oxygen/milestones/rc4"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.launchbar.feature.group" version="2.1.1.201706131403"/>
+      <unit id="org.eclipse.launchbar.feature.group" version="2.1.1.201706151520"/>
       <repository location="https://hudson.eclipse.org/cdt/job/launchbar-master/lastSuccessfulBuild/artifact/repo/target/repository/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.tm.terminal.feature.feature.group" version="4.3.0.201706140620"/>
+      <unit id="org.eclipse.tm.terminal.feature.feature.group" version="4.3.0.201706151527"/>
       <repository location="http://download.eclipse.org/tm/terminal/builds/development/nightly/"/>
     </location>
   </locations>

@@ -64,3 +64,4 @@ runtime-EclipseApplication/
 junit-workspace/
 .metadata/
 ch.hsr.ifs.cute.namespactor/.settings/
+.polyglot.build.properties
