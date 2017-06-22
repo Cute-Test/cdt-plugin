@@ -14,8 +14,8 @@ markerPositions=4
 //@main.cpp
 #include "string.h"
 int main() {
-	std::string str = "Testtexte";
-	const char* ptr = str.c_str() + 5;
+	std::string str { "Testtexte" };
+	const char* ptr { str.c_str() };
 }
 
 //!CStringAliasChecker3
@@ -24,6 +24,66 @@ markerPositions=4
 //@main.cpp
 #include "string.h"
 int main() {
+	std::string str ( "Testtexte" );
+	const char* ptr ( str.c_str() );
+}
+
+//!CStringAliasChecker4
+//@.config
+markerPositions=4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = { "Testtexte" };
+	const char* ptr = { str.c_str() };
+}
+
+//!CStringAliasChecker5
+//@.config
+markerPositions=4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = "Testtexte";
+	const char* ptr = str.c_str() + 5;
+}
+
+//!CStringAliasChecker6
+//@.config
+markerPositions=4
+//@main.cpp
+#include "string.h"
+int main() {
 	std::string str = "Testtexte";
 	const char* ptr = 5 + str.c_str();
+}
+
+//!CStringAliasChecker7
+//@.config
+markerPositions=4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str { "Testtexte" };
+	const char* ptr { 5 + str.c_str() };
+}
+
+//!CStringAliasChecker8
+//@.config
+markerPositions=4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str("Testtexte");
+	const char* ptr(5 + str.c_str());
+}
+
+//!CStringAliasChecker9
+//@.config
+markerPositions=4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = { "Testtexte" };
+	const char* ptr = { 5 + str.c_str() };
 }

@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cute.charwars.quickfixes.cstring.general;
 
+import java.util.function.Function;
+
 import org.eclipse.cdt.core.dom.ast.IASTArrayModifier;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
@@ -80,11 +82,10 @@ public class CStringQuickFix extends BaseQuickFix {
 		final boolean isAlias = (getProblemId(currentMarker).equals(ProblemIDs.C_STRING_ALIAS_PROBLEM));
 
 		if(isAlias) {
-			final IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(oldDeclarator);
+			final IASTInitializerClause initializerClause = DeclaratorAnalyzer.getSingleElementInitializerClause(oldDeclarator.getInitializer());
 			final IASTIdExpression idExpression = ASTAnalyzer.getStdStringIdExpression((IASTExpression)initializerClause);
 			strName = idExpression.getName();
-		}
-		else {
+		} else {
 			strName = varName;
 		}
 
@@ -118,6 +119,32 @@ public class CStringQuickFix extends BaseQuickFix {
 		return stringBufferSize;
 	}
 
+	private static IASTInitializer mapSingleElementInitializer(IASTInitializer initializer, Function<IASTInitializerClause, IASTInitializerClause> transform) {
+		final IASTInitializerClause clause = DeclaratorAnalyzer.getSingleElementInitializerClause(initializer);
+		if(clause == null) {
+			return null;
+		}
+
+		final IASTInitializerClause transformedClause = transform.apply(clause);
+		if(transformedClause == null) {
+			return null;
+		}
+
+		if(initializer instanceof IASTEqualsInitializer) {
+			final IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
+			if(equalsInitializer.getInitializerClause() instanceof IASTInitializerList) {
+				return ExtendedNodeFactory.newEqualsInitializerWithList(transformedClause);
+			} else {
+				return ExtendedNodeFactory.newEqualsInitializer(transformedClause);
+			}
+		} else if(initializer instanceof ICPPASTInitializerList) {
+			return ExtendedNodeFactory.newInitializerList(transformedClause);
+		} else if(initializer instanceof ICPPASTConstructorInitializer) {
+			return ExtendedNodeFactory.newConstructorInitializer(transformedClause);
+		}
+		return null;
+	}
+
 	private IASTDeclarationStatement newRefactoredDeclarationStatementFromDeclarator(IASTDeclarator declarator) {
 		if(getProblemId(currentMarker).equals(ProblemIDs.C_STRING_PROBLEM)) {
 			final IASTSimpleDeclSpecifier ds = DeclaratorTypeAnalyzer.getDeclSpecifier(declarator);
@@ -125,22 +152,15 @@ public class CStringQuickFix extends BaseQuickFix {
 			final IASTSimpleDeclaration newDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newDeclSpecifier);
 			final IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
 
-			IASTInitializer initializer = null;
+			IASTInitializer initializer;
 			if(DeclaratorAnalyzer.hasStrdupAssignment(declarator)) {
-				final IASTFunctionCallExpression strdupCall = (IASTFunctionCallExpression)DeclaratorAnalyzer.getSingleElementInitializerClause(declarator);
-				final IASTInitializerClause strdupArg = strdupCall.getArguments()[0].copy();
-				if(declarator.getInitializer() instanceof IASTEqualsInitializer) {
-					final IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)declarator.getInitializer();
-					if(equalsInitializer.getInitializerClause() instanceof IASTInitializerList) {
-						initializer = ExtendedNodeFactory.newEqualsInitializerWithList(strdupArg);
-					} else {
-						initializer = ExtendedNodeFactory.newEqualsInitializer(strdupArg);
+				initializer = mapSingleElementInitializer(declarator.getInitializer(), clause -> {
+					if(clause instanceof IASTFunctionCallExpression) {
+						final IASTFunctionCallExpression strdupCall = (IASTFunctionCallExpression)clause;
+						return strdupCall.getArguments()[0].copy();
 					}
-				} else if(declarator.getInitializer() instanceof ICPPASTInitializerList) {
-					initializer = ExtendedNodeFactory.newInitializerList(strdupArg);
-				} else if(declarator.getInitializer() instanceof ICPPASTConstructorInitializer) {
-					initializer = ExtendedNodeFactory.newConstructorInitializer(strdupArg);
-				}
+					return null;
+				});
 			} else {
 				initializer = declarator.getInitializer().copy();
 			}
@@ -150,10 +170,15 @@ public class CStringQuickFix extends BaseQuickFix {
 			return ExtendedNodeFactory.newDeclarationStatement(newDeclaration);
 		} else {
 			final String name = declarator.getName().toString();
-			final IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(declarator);
-			final IASTExpression existingOffset = ASTAnalyzer.extractPointerOffset((IASTExpression)initializerClause);
-			final IASTExpression offset = (existingOffset != null) ? existingOffset : ExtendedNodeFactory.newIntegerLiteral(0);
-			return ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, name, offset);
+			final IASTInitializer initializer = mapSingleElementInitializer(declarator.getInitializer(), clause -> {
+				if(clause instanceof IASTExpression) {
+					final IASTExpression existingOffset = ASTAnalyzer.extractPointerOffset((IASTExpression)clause);
+					return (existingOffset != null) ? existingOffset : ExtendedNodeFactory.newIntegerLiteral(0);
+				}
+				return null;
+			});
+
+			return ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, name, initializer);
 		}
 	}
 

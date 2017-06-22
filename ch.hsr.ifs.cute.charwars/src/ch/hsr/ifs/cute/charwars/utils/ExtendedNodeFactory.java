@@ -147,10 +147,14 @@ public class ExtendedNodeFactory {
 	}
 
 	public static IASTDeclarationStatement newDeclarationStatement(String type, String varName, IASTInitializerClause initializerClause) {
+		final IASTInitializer initializer = factory.newEqualsInitializer(initializerClause);
+		return newDeclarationStatement(type, varName, initializer);
+	}
+
+	public static IASTDeclarationStatement newDeclarationStatement(String type, String varName, IASTInitializer initializer) {
 		final IASTDeclSpecifier declSpecifier = factory.newTypedefNameSpecifier(newName(type));
 		final IASTSimpleDeclaration simpleDeclaration = factory.newSimpleDeclaration(declSpecifier);
 		final IASTDeclarator declarator = factory.newDeclarator(newName(varName));
-		final IASTInitializer initializer = factory.newEqualsInitializer(initializerClause);
 		declarator.setInitializer(initializer);
 		simpleDeclaration.addDeclarator(declarator);
 		return factory.newDeclarationStatement(simpleDeclaration);

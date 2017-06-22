@@ -27,6 +27,81 @@ int main() {
 //@main.cpp
 #include "string.h"
 int main() {
+	std::string str { "Testtexte" };
+	const char* ptr { str.c_str() };
+	while(strchr(ptr, 'e') != NULL) {
+		ptr = strchr(ptr, 'e');
+		std::cout << (ptr - str.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str { "Testtexte" };
+	std::string::size_type ptr { 0 };
+	while (str.find('e', ptr) != std::string::npos) {
+		ptr = str.find('e', ptr);
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+//!CStringAliasQuickfix3
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str("Testtexte");
+	const char* ptr(str.c_str());
+	while(strchr(ptr, 'e') != NULL) {
+		ptr = strchr(ptr, 'e');
+		std::cout << (ptr - str.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str("Testtexte");
+	std::string::size_type ptr(0);
+	while (str.find('e', ptr) != std::string::npos) {
+		ptr = str.find('e', ptr);
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+//!CStringAliasQuickfix4
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string str = { "Testtexte" };
+	const char* ptr = { str.c_str() };
+	while(strchr(ptr, 'e') != NULL) {
+		ptr = strchr(ptr, 'e');
+		std::cout << (ptr - str.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string str = { "Testtexte" };
+	std::string::size_type ptr = { 0 };
+	while (str.find('e', ptr) != std::string::npos) {
+		ptr = str.find('e', ptr);
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+//!CStringAliasQuickfix5
+//@main.cpp
+#include "string.h"
+int main() {
 	std::string str = "Testtexte";
 	const char* ptr = str.c_str();
 	while(strstr(ptr, "tt") != NULL) {
@@ -49,7 +124,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix3
+//!CStringAliasQuickfix6
 //@main.cpp
 #include "string.h"
 int main() {
@@ -75,7 +150,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix4
+//!CStringAliasQuickfix7
 //@main.cpp
 #include "string.h"
 int main() {
@@ -97,7 +172,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix5
+//!CStringAliasQuickfix8
 //@main.cpp
 #include "string.h"
 int main() {
@@ -117,7 +192,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix6
+//!CStringAliasQuickfix9
 //@main.cpp
 #include "string.h"
 int main() {
@@ -137,7 +212,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix7
+//!CStringAliasQuickfix10
 //@main.cpp
 #include "string.h"
 int main() {
@@ -157,7 +232,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix8
+//!CStringAliasQuickfix11
 //@main.cpp
 #include "string.h"
 int main() {
@@ -181,7 +256,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix9
+//!CStringAliasQuickfix12
 //@main.cpp
 #include "string.h"
 int main() {
@@ -205,7 +280,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix10
+//!CStringAliasQuickfix13
 //@main.cpp
 #include "string.h"
 int main() {
@@ -229,7 +304,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix11
+//!CStringAliasQuickfix14
 //@main.cpp
 #include "string.h"
 int main() {
@@ -253,7 +328,7 @@ int main() {
 }
 
 
-//!CStringAliasQuickfix12
+//!CStringAliasQuickfix15
 //@main.cpp
 #include "string.h"
 int main() {
@@ -276,3 +351,71 @@ int main() {
 	}
 }
 
+//!CStringAliasQuickfix16
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string url { "http://www.google.ch" };
+	const char* ptr { 7 + url.c_str() };
+	while ((ptr = strpbrk(ptr, "aeiou"))) {
+		std::cout << (ptr - url.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string url { "http://www.google.ch" };
+	std::string::size_type ptr { 7 };
+	while ((ptr = url.find_first_of("aeiou", ptr)) != std::string::npos) {
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+//!CStringAliasQuickfix17
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string url("http://www.google.ch");
+	const char* ptr(7 + url.c_str());
+	while ((ptr = strpbrk(ptr, "aeiou"))) {
+		std::cout << (ptr - url.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string url("http://www.google.ch");
+	std::string::size_type ptr(7);
+	while ((ptr = url.find_first_of("aeiou", ptr)) != std::string::npos) {
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}
+
+//!CStringAliasQuickfix18
+//@main.cpp
+#include "string.h"
+int main() {
+	std::string url = { "http://www.google.ch" };
+	const char* ptr = { 7 + url.c_str() };
+	while ((ptr = strpbrk(ptr, "aeiou"))) {
+		std::cout << (ptr - url.c_str()) << std::endl;
+		ptr++;
+	}
+}
+//=
+#include <string>
+#include "string.h"
+int main() {
+	std::string url = { "http://www.google.ch" };
+	std::string::size_type ptr = { 7 };
+	while ((ptr = url.find_first_of("aeiou", ptr)) != std::string::npos) {
+		std::cout << ptr << std::endl;
+		ptr++;
+	}
+}

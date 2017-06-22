@@ -30,7 +30,7 @@ public class DeclaratorAnalyzer {
 	}
 
 	private static boolean hasCStringAssignment(IASTDeclarator declarator) {
-		final IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getSingleElementInitializerClause(declarator.getInitializer());
 		if(initializerClause != null) {
 			final boolean isConversionToCharPointer = ASTAnalyzer.isConversionToCharPointer(initializerClause, true);
 			if(isConversionToCharPointer) {
@@ -44,7 +44,7 @@ public class DeclaratorAnalyzer {
 	}
 
 	private static boolean hasOffsettedCStringAssignment(IASTDeclarator declarator) {
-		final IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getSingleElementInitializerClause(declarator.getInitializer());
 		if(initializerClause instanceof IASTExpression) {
 			final IASTExpression expr = (IASTExpression)initializerClause;
 			return ASTAnalyzer.isOffsettedCString(expr);
@@ -53,12 +53,12 @@ public class DeclaratorAnalyzer {
 	}
 
 	private static boolean hasStringLiteralAssignment(IASTDeclarator declarator) {
-		final IASTInitializerClause initializerClause = getSingleElementInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getSingleElementInitializerClause(declarator.getInitializer());
 		return LiteralAnalyzer.isString(initializerClause);
 	}
 
 	public static boolean hasStrdupAssignment(IASTDeclarator declarator) {
-		final IASTInitializerClause initializerClause = getSingleElementInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getSingleElementInitializerClause(declarator.getInitializer());
 		return FunctionAnalyzer.isCallToFunction(initializerClause, Function.STRDUP);
 	}
 
@@ -71,8 +71,7 @@ public class DeclaratorAnalyzer {
 		return null;
 	}
 
-	public static IASTInitializerClause getSingleElementInitializerClause(IASTDeclarator declarator) {
-		final IASTInitializer initializer = declarator.getInitializer();
+	public static IASTInitializerClause getSingleElementInitializerClause(IASTInitializer initializer) {
 		if(initializer instanceof IASTEqualsInitializer) {
 			final IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
 			IASTInitializerClause clause = equalsInitializer.getInitializerClause();
