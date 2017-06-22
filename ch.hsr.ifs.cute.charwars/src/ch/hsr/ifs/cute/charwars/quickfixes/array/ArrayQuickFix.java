@@ -94,9 +94,8 @@ public class ArrayQuickFix extends BaseQuickFix {
 		if(LiteralAnalyzer.isInteger(constantExpression)) {
 			return constantExpression;
 		} else {
-			final IASTInitializerClause initializerClause = getArrayInitializerClause(declarator);
-			if(initializerClause instanceof IASTInitializerList) {
-				final IASTInitializerList initializerList = (IASTInitializerList)initializerClause;
+			final IASTInitializerList initializerList = getArrayInitializerClause(declarator);
+			if(initializerList != null) {
 				final String dimensionFromInitializer = String.valueOf(initializerList.getClauses().length);
 				return ExtendedNodeFactory.newLiteralExpression(dimensionFromInitializer);
 			}
@@ -143,15 +142,15 @@ public class ArrayQuickFix extends BaseQuickFix {
 			}
 			newSimpleDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newNamedTypeSpecifier);
 			newDeclarator = ExtendedNodeFactory.newDeclarator(arrayDeclarator.getName().toString());
+
+			final IASTInitializer newInitializer = adaptInitializer(declarator);
+			if(newInitializer != null) {
+				newDeclarator.setInitializer(newInitializer);
+			}
 		} else {
 			// no array declarator, just use the copy
 			newSimpleDeclaration = ExtendedNodeFactory.newSimpleDeclaration(declSpecCopy);
 			newDeclarator = declaratorCopy;
-		}
-
-		final IASTInitializer newInitializer = adaptInitializer(declarator, isArrayDeclarator);
-		if(newInitializer != null) {
-			newDeclarator.setInitializer(newInitializer);
 		}
 
 		newSimpleDeclaration.addDeclarator(newDeclarator);
@@ -159,17 +158,17 @@ public class ArrayQuickFix extends BaseQuickFix {
 		return newSimpleDeclaration;
 	}
 
-	private IASTInitializer adaptInitializer(IASTDeclarator declarator, boolean isArrayDeclarator) {
-		IASTInitializerClause initializerClause = getArrayInitializerClause(declarator);
+	private IASTInitializer adaptInitializer(IASTDeclarator declarator) {
+		final IASTInitializerClause initializerClause = getArrayInitializerClause(declarator);
 		if(initializerClause == null) {
 			return null;
 		}
 
-		initializerClause = initializerClause.copy(CopyStyle.withLocations);
-		if(isArrayDeclarator) {
-			return ExtendedNodeFactory.newEqualsInitializerWithList(initializerClause);
+		final IASTInitializerClause initializerClauseCopy = initializerClause.copy(CopyStyle.withLocations);
+		if(declarator.getInitializer() instanceof IASTInitializerList) {
+			return ExtendedNodeFactory.newInitializerList(initializerClauseCopy);
 		} else {
-			return ExtendedNodeFactory.newEqualsInitializer(initializerClause);
+			return ExtendedNodeFactory.newEqualsInitializerWithList(initializerClauseCopy);
 		}
 	}
 
@@ -184,11 +183,12 @@ public class ArrayQuickFix extends BaseQuickFix {
 		return ExtendedNodeFactory.newTypedefNameSpecifier(qualifiedName);
 	}
 
-	private static IASTInitializerClause getArrayInitializerClause(IASTDeclarator declarator) {
+	private static IASTInitializerList getArrayInitializerClause(IASTDeclarator declarator) {
 		final IASTInitializer initializer = declarator.getInitializer();
 		if(initializer instanceof IASTEqualsInitializer) {
 			final IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
-			return equalsInitializer.getInitializerClause();
+			final IASTInitializerClause initializerClause = equalsInitializer.getInitializerClause();
+			return initializerClause instanceof IASTInitializerList ? (IASTInitializerList)initializerClause : null;
 		} else if(initializer instanceof IASTInitializerList) {
 			return (IASTInitializerList)initializer;
 		}

@@ -46,8 +46,7 @@ int main(){
 	std::array<int, 3> c = { { 12, 13, 44 } };
 }
 
-
-//!MultipleDeclarators
+//!MultipleDeclarators1
 //@main.cpp
 int main()  {
   int a = 12, b[] = {1,2,3}, c = 0; 
@@ -60,6 +59,44 @@ int main()  {
 	int c = 0;
 }
 
+//!MultipleDeclarators2
+//@main.cpp
+int main()  {
+  int a{12}, b[]{1,2,3}, c{0}; 
+}
+//=
+#include <array>
+int main()  {
+	int a { 12 };
+	std::array<int, 3> b { { 1, 2, 3 } };
+	int c { 0 };
+}
+
+//!MultipleDeclarators3
+//@main.cpp
+int main()  {
+  int a(12), b[]{1,2,3}, c(0); 
+}
+//=
+#include <array>
+int main()  {
+	int a(12);
+	std::array<int, 3> b { { 1, 2, 3 } };
+	int c(0);
+}
+
+//!MultipleDeclarators4
+//@main.cpp
+int main()  {
+  int a = { 12 }, b[] = {1,2,3}, c = {0}; 
+}
+//=
+#include <array>
+int main()  {
+	int a = { 12 };
+	std::array<int, 3> b = { { 1, 2, 3 } };
+	int c = { 0 };
+}
 
 //!ReplaceAllOccurrences
 //@main.cpp
@@ -301,7 +338,7 @@ int main()  {
 #include <string>
 #include <array>
 int main()  {
-	std::array < std::string, 3> arr = { {"One", "Two", "Three"}};
+	std::array < std::string, 3 > arr { { "One", "Two", "Three" } };
 }
 
 //!BraceInitialization2
@@ -314,5 +351,5 @@ int main()  {
 #include <string>
 #include <array>
 int main()  {
-	std::array < std::string, 5> arr = { {"One", "Two", "Three"}};
+	std::array < std::string, 5 > arr { { "One", "Two", "Three" } };
 }
