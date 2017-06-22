@@ -7,7 +7,9 @@ import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
+import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 
 import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
@@ -51,12 +53,12 @@ public class DeclaratorAnalyzer {
 	}
 
 	private static boolean hasStringLiteralAssignment(IASTDeclarator declarator) {
-		final IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getSingleElementInitializerClause(declarator);
 		return LiteralAnalyzer.isString(initializerClause);
 	}
 
 	public static boolean hasStrdupAssignment(IASTDeclarator declarator) {
-		final IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getSingleElementInitializerClause(declarator);
 		return FunctionAnalyzer.isCallToFunction(initializerClause, Function.STRDUP);
 	}
 
@@ -65,6 +67,32 @@ public class DeclaratorAnalyzer {
 		if(initializer instanceof IASTEqualsInitializer) {
 			final IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
 			return equalsInitializer.getInitializerClause();
+		}
+		return null;
+	}
+
+	public static IASTInitializerClause getSingleElementInitializerClause(IASTDeclarator declarator) {
+		final IASTInitializer initializer = declarator.getInitializer();
+		if(initializer instanceof IASTEqualsInitializer) {
+			final IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
+			IASTInitializerClause clause = equalsInitializer.getInitializerClause();
+			if(clause instanceof IASTInitializerList) {
+				final IASTInitializerList initializerList = (IASTInitializerList)clause;
+				if(initializerList.getClauses().length == 1) {
+					clause = initializerList.getClauses()[0];
+				}
+			}
+			return clause;
+		} else if(initializer instanceof IASTInitializerList) {
+			final IASTInitializerList initializerList = (IASTInitializerList)initializer;
+			if(initializerList.getClauses().length == 1) {
+				return initializerList.getClauses()[0];
+			}
+		} else if(initializer instanceof ICPPASTConstructorInitializer) {
+			final ICPPASTConstructorInitializer constructorInitializer = (ICPPASTConstructorInitializer)initializer;
+			if(constructorInitializer.getArguments().length == 1) {
+				return constructorInitializer.getArguments()[0];
+			}
 		}
 		return null;
 	}

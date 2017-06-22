@@ -1,4 +1,4 @@
-//!CharPointerString
+//!CharPointerString1
 //@main.cpp
 int main() {
 	char *str = "Hello, World";
@@ -9,8 +9,40 @@ int main() {
 	std::string str = "Hello, World";
 }
 
+//!CharPointerString2
+//@main.cpp
+int main() {
+	char *str{"Hello, World"};
+}
+//=
+#include <string>
+int main() {
+	std::string str { "Hello, World" };
+}
 
-//!CharArrayString
+//!CharPointerString3
+//@main.cpp
+int main() {
+	char *str("Hello, World");
+}
+//=
+#include <string>
+int main() {
+	std::string str("Hello, World");
+}
+
+//!CharPointerString4
+//@main.cpp
+int main() {
+	char *str = {"Hello, World"};
+}
+//=
+#include <string>
+int main() {
+	std::string str = { "Hello, World" };
+}
+
+//!CharArrayString1
 //@main.cpp
 int main() {
 	char str[] = "Hello, World";
@@ -21,6 +53,38 @@ int main() {
 	std::string str = "Hello, World";
 }
 
+//!CharArrayString2
+//@main.cpp
+int main() {
+	char str[]{"Hello, World"};
+}
+//=
+#include <string>
+int main() {
+	std::string str { "Hello, World" };
+}
+
+//!CharArrayString3
+//@main.cpp
+int main() {
+	char str[]("Hello, World");
+}
+//=
+#include <string>
+int main() {
+	std::string str("Hello, World");
+}
+
+//!CharArrayString4
+//@main.cpp
+int main() {
+	char str[] = {"Hello, World"};
+}
+//=
+#include <string>
+int main() {
+	std::string str = { "Hello, World" };
+}
 
 //!WcharString
 //@main.cpp
@@ -62,7 +126,7 @@ int main() {
 }
 
 
-//!CharPointerStringInitializedWithStrdup
+//!CharPointerStringInitializedWithStrdup1
 //@main.cpp
 int main() {
 	char *str = strdup("Hello, World");
@@ -73,8 +137,40 @@ int main() {
 	std::string str = "Hello, World";
 }
 
+//!CharPointerStringInitializedWithStrdup2
+//@main.cpp
+int main() {
+	char *str{strdup("Hello, World")};
+}
+//=
+#include <string>
+int main() {
+	std::string str { "Hello, World" };
+}
 
-//!MultipleDeclarators
+//!CharPointerStringInitializedWithStrdup3
+//@main.cpp
+int main() {
+	char *str(strdup("Hello, World"));
+}
+//=
+#include <string>
+int main() {
+	std::string str("Hello, World");
+}
+
+//!CharPointerStringInitializedWithStrdup4
+//@main.cpp
+int main() {
+	char *str = {strdup("Hello, World")};
+}
+//=
+#include <string>
+int main() {
+	std::string str = { "Hello, World" };
+}
+
+//!MultipleDeclarators1
 //@main.cpp
 int main() {
 	char *str1 = "Hello", a = 2;
@@ -86,6 +182,41 @@ int main() {
 	char a = 2;
 }
 
+//!MultipleDeclarators2
+//@main.cpp
+int main() {
+	char *str1{"Hello"}, a = 2;
+}
+//=
+#include <string>
+int main() {
+	std::string str1 { "Hello" };
+	char a = 2;
+}
+
+//!MultipleDeclarators3
+//@main.cpp
+int main() {
+	char *str1("Hello"), a = 2;
+}
+//=
+#include <string>
+int main() {
+	std::string str1("Hello");
+	char a = 2;
+}
+
+//!MultipleDeclarators4
+//@main.cpp
+int main() {
+	char *str1 = {"Hello"}, a = 2;
+}
+//=
+#include <string>
+int main() {
+	std::string str1 = { "Hello" };
+	char a = 2;
+}
 
 //!IgnoresShadowingVariable
 //@main.cpp

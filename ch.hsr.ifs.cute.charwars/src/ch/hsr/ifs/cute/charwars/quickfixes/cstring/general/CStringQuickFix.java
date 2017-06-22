@@ -5,12 +5,14 @@ import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
+import org.eclipse.cdt.core.dom.ast.IASTEqualsInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
+import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -18,6 +20,8 @@ import org.eclipse.cdt.core.dom.ast.IASTPointer;
 import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
@@ -39,7 +43,7 @@ import ch.hsr.ifs.cute.charwars.utils.analyzers.DeclaratorTypeAnalyzer;
 public class CStringQuickFix extends BaseQuickFix {
 	@Override
 	public String getLabel() {
-		String problemId = getProblemId(currentMarker);
+		final String problemId = getProblemId(currentMarker);
 		if(problemId.equals(ProblemIDs.C_STRING_PROBLEM)) {
 			return QuickFixLabels.C_STRING;
 		}
@@ -48,63 +52,63 @@ public class CStringQuickFix extends BaseQuickFix {
 		}
 		return "Unknown problem.";
 	}
-	
+
 	@Override
 	protected String getErrorMessage() {
 		return ErrorMessages.C_STRING_QUICK_FIX;
 	}
-	
+
 	@Override
 	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
-		IASTDeclarator oldDeclarator = (IASTDeclarator)markedNode;
-		IASTNode block =  ASTAnalyzer.getEnclosingBlock(oldDeclarator);
-		boolean isNotNested = (block == oldDeclarator.getTranslationUnit() || 
+		final IASTDeclarator oldDeclarator = (IASTDeclarator)markedNode;
+		final IASTNode block =  ASTAnalyzer.getEnclosingBlock(oldDeclarator);
+		final boolean isNotNested = (block == oldDeclarator.getTranslationUnit() ||
 				block instanceof ICPPASTNamespaceDefinition ||
 				block instanceof IASTCompositeTypeSpecifier );
-		IASTSimpleDeclaration oldDeclaration = (IASTSimpleDeclaration)oldDeclarator.getParent();
-		IASTDeclarationStatement oldDeclarationStatement = isNotNested ? null : (IASTDeclarationStatement)oldDeclaration.getParent();
-		IASTNode beforeNode = isNotNested ? oldDeclaration : oldDeclarationStatement;
-		
-		for(IASTDeclarator declarator : oldDeclaration.getDeclarators()) {
+		final IASTSimpleDeclaration oldDeclaration = (IASTSimpleDeclaration)oldDeclarator.getParent();
+		final IASTDeclarationStatement oldDeclarationStatement = isNotNested ? null : (IASTDeclarationStatement)oldDeclaration.getParent();
+		final IASTNode beforeNode = isNotNested ? oldDeclaration : oldDeclarationStatement;
+
+		for(final IASTDeclarator declarator : oldDeclaration.getDeclarators()) {
 			insertNewDeclarationStatementFromDeclarator(declarator, beforeNode, declarator.equals(oldDeclarator), block, rewrite);
 		}
-		
+
 		ASTModifier.remove(beforeNode, rewrite);
-		
-		IASTName varName = oldDeclarator.getName();
+
+		final IASTName varName = oldDeclarator.getName();
 		IASTName strName;
-		boolean isAlias = (getProblemId(currentMarker).equals(ProblemIDs.C_STRING_ALIAS_PROBLEM));
-		
+		final boolean isAlias = (getProblemId(currentMarker).equals(ProblemIDs.C_STRING_ALIAS_PROBLEM));
+
 		if(isAlias) {
-			IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(oldDeclarator);
-			IASTIdExpression idExpression = ASTAnalyzer.getStdStringIdExpression((IASTExpression)initializerClause);
+			final IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(oldDeclarator);
+			final IASTIdExpression idExpression = ASTAnalyzer.getStdStringIdExpression((IASTExpression)initializerClause);
 			strName = idExpression.getName();
 		}
 		else {
 			strName = varName;
 		}
-		
-		BlockRefactoringConfiguration config = new BlockRefactoringConfiguration();
+
+		final BlockRefactoringConfiguration config = new BlockRefactoringConfiguration();
 		config.setBlock(block);
 		config.skipStatement(oldDeclarationStatement);
 		config.setASTRewrite(rewrite);
 		config.setStringType(StringType.createFromDeclSpecifier(oldDeclaration.getDeclSpecifier()));
 		config.setStrName(strName);
 		config.setVarName(varName);
-		
-		BlockRefactoring blockRefactoring = new BlockRefactoring(config);
+
+		final BlockRefactoring blockRefactoring = new BlockRefactoring(config);
 		blockRefactoring.refactorAllStatements();
-		
+
 		headers.addAll(blockRefactoring.getHeadersToInclude());
 		headers.add(StdString.HEADER_NAME);
 	}
-	
+
 	private int getStringBufferSizeFromDeclarator(IASTDeclarator declarator) {
 		int stringBufferSize = -1;
-		for(IASTNode child : declarator.getChildren()) {
+		for(final IASTNode child : declarator.getChildren()) {
 			if(child instanceof IASTArrayModifier) {
-				IASTArrayModifier arrayModifier = (IASTArrayModifier)child;
-				IASTExpression constantExpr = arrayModifier.getConstantExpression();
+				final IASTArrayModifier arrayModifier = (IASTArrayModifier)child;
+				final IASTExpression constantExpr = arrayModifier.getConstantExpression();
 				if(constantExpr != null) {
 					stringBufferSize = Integer.parseInt(constantExpr.getRawSignature());
 					break;
@@ -113,65 +117,75 @@ public class CStringQuickFix extends BaseQuickFix {
 		}
 		return stringBufferSize;
 	}
-	
+
 	private IASTDeclarationStatement newRefactoredDeclarationStatementFromDeclarator(IASTDeclarator declarator) {
 		if(getProblemId(currentMarker).equals(ProblemIDs.C_STRING_PROBLEM)) {
-			IASTSimpleDeclSpecifier ds = DeclaratorTypeAnalyzer.getDeclSpecifier(declarator);
-			IASTDeclSpecifier newDeclSpecifier = newRefactoredDeclSpecifier(ds, declarator);
-			IASTSimpleDeclaration newDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newDeclSpecifier);
-			IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
-			
-			IASTInitializer initializer;
+			final IASTSimpleDeclSpecifier ds = DeclaratorTypeAnalyzer.getDeclSpecifier(declarator);
+			final IASTDeclSpecifier newDeclSpecifier = newRefactoredDeclSpecifier(ds, declarator);
+			final IASTSimpleDeclaration newDeclaration = ExtendedNodeFactory.newSimpleDeclaration(newDeclSpecifier);
+			final IASTDeclarator newDeclarator = ExtendedNodeFactory.newDeclarator(declarator.getName().toString());
+
+			IASTInitializer initializer = null;
 			if(DeclaratorAnalyzer.hasStrdupAssignment(declarator)) {
-				IASTFunctionCallExpression strdupCall = (IASTFunctionCallExpression)DeclaratorAnalyzer.getInitializerClause(declarator);
-				initializer = ExtendedNodeFactory.newEqualsInitializer(strdupCall.getArguments()[0].copy());
-			}
-			else {
+				final IASTFunctionCallExpression strdupCall = (IASTFunctionCallExpression)DeclaratorAnalyzer.getSingleElementInitializerClause(declarator);
+				final IASTInitializerClause strdupArg = strdupCall.getArguments()[0].copy();
+				if(declarator.getInitializer() instanceof IASTEqualsInitializer) {
+					final IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)declarator.getInitializer();
+					if(equalsInitializer.getInitializerClause() instanceof IASTInitializerList) {
+						initializer = ExtendedNodeFactory.newEqualsInitializerWithList(strdupArg);
+					} else {
+						initializer = ExtendedNodeFactory.newEqualsInitializer(strdupArg);
+					}
+				} else if(declarator.getInitializer() instanceof ICPPASTInitializerList) {
+					initializer = ExtendedNodeFactory.newInitializerList(strdupArg);
+				} else if(declarator.getInitializer() instanceof ICPPASTConstructorInitializer) {
+					initializer = ExtendedNodeFactory.newConstructorInitializer(strdupArg);
+				}
+			} else {
 				initializer = declarator.getInitializer().copy();
 			}
-			
+
 			newDeclarator.setInitializer(initializer);
 			newDeclaration.addDeclarator(newDeclarator);
 			return ExtendedNodeFactory.newDeclarationStatement(newDeclaration);
-		}
-		else {
-			String name = declarator.getName().toString();
-			IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(declarator);
-			IASTExpression existingOffset = ASTAnalyzer.extractPointerOffset((IASTExpression)initializerClause);
-			IASTExpression offset = (existingOffset != null) ? existingOffset : ExtendedNodeFactory.newIntegerLiteral(0);
+		} else {
+			final String name = declarator.getName().toString();
+			final IASTInitializerClause initializerClause = DeclaratorAnalyzer.getInitializerClause(declarator);
+			final IASTExpression existingOffset = ASTAnalyzer.extractPointerOffset((IASTExpression)initializerClause);
+			final IASTExpression offset = (existingOffset != null) ? existingOffset : ExtendedNodeFactory.newIntegerLiteral(0);
 			return ExtendedNodeFactory.newDeclarationStatement(StdString.STRING_SIZE_TYPE, name, offset);
 		}
 	}
-	
+
 	private IASTDeclSpecifier newRefactoredDeclSpecifier(IASTSimpleDeclSpecifier oldDeclSpecifier, IASTDeclarator oldDeclarator) {
-		IASTDeclSpecifier newDeclSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(DeclaratorAnalyzer.getStringReplacementType(oldDeclarator));
+		final IASTDeclSpecifier newDeclSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(DeclaratorAnalyzer.getStringReplacementType(oldDeclarator));
 		newDeclSpecifier.setStorageClass(oldDeclSpecifier.getStorageClass());
-		IASTPointerOperator pointerOperators[] = oldDeclarator.getPointerOperators();
+		final IASTPointerOperator pointerOperators[] = oldDeclarator.getPointerOperators();
 		if(pointerOperators.length > 0) {
-			IASTPointer pointer = (IASTPointer)pointerOperators[0];
+			final IASTPointer pointer = (IASTPointer)pointerOperators[0];
 			newDeclSpecifier.setConst(pointer.isConst() && oldDeclSpecifier.isConst());
 		}
 		newDeclSpecifier.setVolatile(oldDeclSpecifier.isVolatile());
 		return newDeclSpecifier;
 	}
-	
+
 	private void insertNewDeclarationStatementFromDeclarator(IASTDeclarator declarator, IASTNode beforeNode, boolean isOldDeclarator, IASTNode block, ASTRewrite rewrite) {
-		boolean isGlobal = (block == declarator.getTranslationUnit());
-		
+		final boolean isGlobal = (block == declarator.getTranslationUnit());
+
 		IASTNode nodeToInsert = isOldDeclarator ? newRefactoredDeclarationStatementFromDeclarator(declarator) : ExtendedNodeFactory.newDeclarationStatementFromDeclarator(declarator);
 		if(isGlobal) {
 			nodeToInsert = ((IASTDeclarationStatement)nodeToInsert).getDeclaration();
 		}
-		
+
 		ASTModifier.insertBefore(block, beforeNode, nodeToInsert, rewrite);
-			
+
 		if(isOldDeclarator && !isGlobal) {
-			int stringBufferSize = getStringBufferSizeFromDeclarator(declarator);
+			final int stringBufferSize = getStringBufferSizeFromDeclarator(declarator);
 			if(stringBufferSize != -1) {
-				IASTLiteralExpression new_cap = ExtendedNodeFactory.newIntegerLiteral(stringBufferSize);
-				IASTFunctionCallExpression reserveCall = ExtendedNodeFactory.newMemberFunctionCallExpression(declarator.getName(), StdString.RESERVE, new_cap);
-				IASTExpressionStatement reserveCallStatement = ExtendedNodeFactory.newExpressionStatement(reserveCall);
-				ASTModifier.insertBefore(block, beforeNode, reserveCallStatement , rewrite);		
+				final IASTLiteralExpression new_cap = ExtendedNodeFactory.newIntegerLiteral(stringBufferSize);
+				final IASTFunctionCallExpression reserveCall = ExtendedNodeFactory.newMemberFunctionCallExpression(declarator.getName(), StdString.RESERVE, new_cap);
+				final IASTExpressionStatement reserveCallStatement = ExtendedNodeFactory.newExpressionStatement(reserveCall);
+				ASTModifier.insertBefore(block, beforeNode, reserveCallStatement , rewrite);
 			}
 		}
 	}

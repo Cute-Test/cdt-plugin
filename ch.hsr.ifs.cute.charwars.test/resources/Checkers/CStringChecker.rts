@@ -6,7 +6,6 @@ int main() {
 	const char *str = "Hello, World!";
 }
 
-
 //!CharArrayString
 //@.config
 markerPositions=2
@@ -15,8 +14,7 @@ int main() {
 	char str[] = "Hello, World!";
 }
 
-
-//!MultipleDeclarators
+//!MultipleDeclarators1
 //@.config
 markerPositions=2
 //@main.cpp
@@ -24,6 +22,29 @@ int main() {
 	const char a = 'a', *b = "Hello, World!";
 }
 
+//!MultipleDeclarators2
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	const char a = 'a', *b{"Hello, World!"};
+}
+
+//!MultipleDeclarators3
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	const char a = 'a', *b("Hello, World!");
+}
+
+//!MultipleDeclarators4
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	const char a = 'a', *b = {"Hello, World!"};
+}
 
 //!IgnoresPointerToSingleChar
 //@main.cpp
@@ -32,13 +53,11 @@ int main() {
 	char *ptr = &c;
 }
 
-
 //!IgnoresCharArray
 //@main.cpp
 int main() {
 	char arr[] = {'a', 'b', 'c'};
 }
-
 
 //!WCHARString
 //@.config
@@ -48,8 +67,7 @@ int main() {
 	wchar_t w_str[] = L"Hello";
 }
 
-
-//!StrdupInitializer
+//!StrdupInitializer1
 //@.config
 markerPositions=2
 //@main.cpp
@@ -57,6 +75,29 @@ int main() {
 	char *str = strdup("mystr");
 }
 
+//!StrdupInitializer2
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	char *str{strdup("mystr")};
+}
+
+//!StrdupInitializer3
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	char *str(strdup("mystr"));
+}
+
+//!StrdupInitializer4
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	char *str = {strdup("mystr")};
+}
 
 //!IgnoresCFiles
 //@main.c
@@ -66,7 +107,6 @@ void printTest() {
 	char str[] = "test";
 	printf("%s", str);
 }
-
 
 //!IgnoresCharPointerInMacro
 //@mymacros.h
@@ -84,4 +124,28 @@ void printTest() {
 
 int main() {
 	PRINT()
+}
+
+//!BraceInitialization
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	const char *str{"hello"};
+}
+
+//!ConstructorInitialization
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	const char *str("hello");
+}
+
+//!AggregateInitialization
+//@.config
+markerPositions=2
+//@main.cpp
+int main() {
+	const char *str = { "hello" };
 }
