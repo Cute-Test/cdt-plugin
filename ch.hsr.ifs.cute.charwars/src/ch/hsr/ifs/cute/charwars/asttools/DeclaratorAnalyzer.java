@@ -18,70 +18,72 @@ import ch.hsr.ifs.cute.charwars.utils.analyzers.TypeAnalyzer;
 
 public class DeclaratorAnalyzer {
 	public static boolean isCString(IASTDeclarator declarator) {
-		boolean hasCStringType = DeclaratorTypeAnalyzer.hasCStringType(declarator); 
+		final boolean hasCStringType = DeclaratorTypeAnalyzer.hasCStringType(declarator);
 		return hasCStringType && (hasStringLiteralAssignment(declarator) || hasStrdupAssignment(declarator));
 	}
-	
+
 	public static boolean isCStringAlias(IASTDeclarator declarator) {
-		boolean hasCStringType = DeclaratorTypeAnalyzer.hasCStringType(declarator);
+		final boolean hasCStringType = DeclaratorTypeAnalyzer.hasCStringType(declarator);
 		return hasCStringType && (hasCStringAssignment(declarator) || hasOffsettedCStringAssignment(declarator));
 	}
-	
+
 	private static boolean hasCStringAssignment(IASTDeclarator declarator) {
-		IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getInitializerClause(declarator);
 		if(initializerClause != null) {
-			boolean isConversionToCharPointer = ASTAnalyzer.isConversionToCharPointer(initializerClause, true);
+			final boolean isConversionToCharPointer = ASTAnalyzer.isConversionToCharPointer(initializerClause, true);
 			if(isConversionToCharPointer) {
-				IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)initializerClause;
-				IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
-				IASTExpression fieldOwner = fieldReference.getFieldOwner();
+				final IASTFunctionCallExpression cstrCall = (IASTFunctionCallExpression)initializerClause;
+				final IASTFieldReference fieldReference = (IASTFieldReference)cstrCall.getFunctionNameExpression();
+				final IASTExpression fieldOwner = fieldReference.getFieldOwner();
 				return TypeAnalyzer.isStdStringType(fieldOwner.getExpressionType());
 			}
 		}
 		return false;
 	}
-	
+
 	private static boolean hasOffsettedCStringAssignment(IASTDeclarator declarator) {
-		IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getInitializerClause(declarator);
 		if(initializerClause instanceof IASTExpression) {
-			IASTExpression expr = (IASTExpression)initializerClause;
+			final IASTExpression expr = (IASTExpression)initializerClause;
 			return ASTAnalyzer.isOffsettedCString(expr);
 		}
 		return false;
 	}
-	
+
 	private static boolean hasStringLiteralAssignment(IASTDeclarator declarator) {
-		IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getInitializerClause(declarator);
 		return LiteralAnalyzer.isString(initializerClause);
 	}
-	
+
 	public static boolean hasStrdupAssignment(IASTDeclarator declarator) {
-		IASTInitializerClause initializerClause = getInitializerClause(declarator);
+		final IASTInitializerClause initializerClause = getInitializerClause(declarator);
 		return FunctionAnalyzer.isCallToFunction(initializerClause, Function.STRDUP);
 	}
-	
+
 	public static IASTInitializerClause getInitializerClause(IASTDeclarator declarator) {
-		IASTInitializer initializer = declarator.getInitializer();
+		final IASTInitializer initializer = declarator.getInitializer();
 		if(initializer instanceof IASTEqualsInitializer) {
-			IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
+			final IASTEqualsInitializer equalsInitializer = (IASTEqualsInitializer)initializer;
 			return equalsInitializer.getInitializerClause();
 		}
 		return null;
 	}
-	
+
 	public static String getStringReplacementType(IASTDeclarator declarator) {
-		IASTSimpleDeclSpecifier ds = DeclaratorTypeAnalyzer.getDeclSpecifier(declarator);
-		if(ds == null) return null;
-		
+		final IASTSimpleDeclSpecifier ds = DeclaratorTypeAnalyzer.getDeclSpecifier(declarator);
+		if(ds == null) {
+			return null;
+		}
+
 		switch(ds.getType()) {
-			case IASTSimpleDeclSpecifier.t_wchar_t:
-				return StdString.STD_WSTRING;
-			case IASTSimpleDeclSpecifier.t_char16_t:
-				return StdString.STD_U16STRING;
-			case IASTSimpleDeclSpecifier.t_char32_t:
-				return StdString.STD_U32STRING;
-			default:
-				return StdString.STD_STRING;
+		case IASTSimpleDeclSpecifier.t_wchar_t:
+			return StdString.STD_WSTRING;
+		case IASTSimpleDeclSpecifier.t_char16_t:
+			return StdString.STD_U16STRING;
+		case IASTSimpleDeclSpecifier.t_char32_t:
+			return StdString.STD_U32STRING;
+		default:
+			return StdString.STD_STRING;
 		}
 	}
 }

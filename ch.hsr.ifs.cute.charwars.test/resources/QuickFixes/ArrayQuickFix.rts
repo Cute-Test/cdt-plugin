@@ -290,3 +290,29 @@ struct X{
 struct X{
 	std::array<int, 10> arr;
 };
+
+//!BraceInitialization1
+//@main.cpp
+#include <string>
+int main()  {
+  std::string arr[]{ "One", "Two", "Three" };
+}
+//=
+#include <string>
+#include <array>
+int main()  {
+	std::array < std::string, 3> arr = { {"One", "Two", "Three"}};
+}
+
+//!BraceInitialization2
+//@main.cpp
+#include <string>
+int main()  {
+  std::string arr[5]{ "One", "Two", "Three" };
+}
+//=
+#include <string>
+#include <array>
+int main()  {
+	std::array < std::string, 5> arr = { {"One", "Two", "Three"}};
+}
