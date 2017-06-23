@@ -1146,6 +1146,106 @@ public:
 
 #endif
 
+//!MemberFunctionTest2
+//@C.h
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	void f(const char *str);
+};
+
+#endif
+//=
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	void f(const std::string& str);
+	void f(const char *str);
+};
+
+#endif
+//@C.cpp
+#include "C.h"
+#include <iostream>
+
+void C::f(const char* str) {
+	if(str) {
+		std::cout << str;
+	}
+}
+//=
+#include "C.h"
+#include <iostream>
+#include <string>
+
+void C::f(const std::string& str) {
+	std::cout << str;
+}
+
+void C::f(const char* str) {
+	if (str) {
+		C::f(std::string(str));
+	}
+}
+
+//!MemberFunctionTest3
+//@C.h
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	static void f(const char *str);
+};
+
+#endif
+//=
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	static void f(const std::string& str);
+	static void f(const char *str);
+};
+
+#endif
+//@C.cpp
+#include "C.h"
+#include <iostream>
+
+void C::f(const char* str) {
+	if(str) {
+		std::cout << str;
+	}
+}
+//=
+#include "C.h"
+#include <iostream>
+#include <string>
+
+void C::f(const std::string& str) {
+	std::cout << str;
+}
+
+void C::f(const char* str) {
+	if (str) {
+		C::f(std::string(str));
+	}
+}
+
 //!ParameterWithDefaultValue1
 //@main.cpp
 #include <iostream>
@@ -1268,4 +1368,86 @@ void f(const char* name) {
 	if (name) {
 		f(std::string(name));
 	}
+}
+
+//!ConstructorTest1
+//@C.h
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	explicit C(const char* const str);
+};
+
+#endif
+//=
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	explicit C(const std::string& str);
+};
+
+#endif
+//@C.cpp
+#include "C.h"
+#include <iostream>
+
+C::C(const char* const str) {
+	std::cout << strlen(str);
+}
+//=
+#include "C.h"
+#include <iostream>
+#include <string>
+
+C::C(const std::string& str) {
+	std::cout << str.size();
+}
+
+//!ConstructorTest2
+//@C.h
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	explicit C(const char* const str = "test");
+};
+
+#endif
+//=
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	explicit C(const std::string& str = "test");
+};
+
+#endif
+//@C.cpp
+#include "C.h"
+#include <iostream>
+
+C::C(const char* const str) {
+	std::cout << strlen(str);
+}
+//=
+#include "C.h"
+#include <iostream>
+#include <string>
+
+C::C(const std::string& str) {
+	std::cout << str.size();
 }
