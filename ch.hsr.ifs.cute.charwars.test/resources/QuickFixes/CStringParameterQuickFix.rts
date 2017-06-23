@@ -1022,3 +1022,126 @@ int main() {
 	f("toni");
 	f("");
 }
+
+//!MultiFileTest1
+//@utils.h
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+void f(const char *str);
+
+#endif
+//=
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+void f(const std::string& str);
+
+#endif
+//@utils.cpp
+#include "utils.h"
+#include <iostream>
+
+void f(const char *str) {
+	std::cout << str;
+}
+//=
+#include "utils.h"
+#include <iostream>
+#include <string>
+
+void f(const std::string& str) {
+	std::cout << str;
+}
+
+//!MemberFunctionTest1
+//@C.h
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	void f(const char *name);
+};
+
+#endif
+//=
+#ifndef C_H_
+#define C_H_
+
+#include <string>
+
+class C {
+public:
+	void f(const std::string& name);
+};
+
+#endif
+//@C.cpp
+#include "C.h"
+#include <iostream>
+
+void C::f(const char *name) {
+	if(strlen(name) > 0) {
+		std::cout << "hello " << name << "!\n";
+	} else {
+		std::cout << "hello!\n";
+	}
+}
+//=
+#include "C.h"
+#include <iostream>
+#include <string>
+
+void C::f(const std::string& name) {
+	if (name.size() > 0) {
+		std::cout << "hello " << name << "!\n";
+	} else {
+		std::cout << "hello!\n";
+	}
+}
+
+//!MemberFunctionTest2
+//@C.h
+#ifndef C_H_
+#define C_H_
+
+#include <iostream>
+
+class C {
+public:
+	void f(const char *name) {
+		if(strlen(name) > 0) {
+			std::cout << "hello " << name << "!\n";
+		} else {
+			std::cout << "hello!\n";
+		}
+	}
+};
+
+#endif
+//=
+#ifndef C_H_
+#define C_H_
+
+#include <iostream>
+#include <string>
+
+class C {
+public:
+	void f(const std::string& name) {
+		if (name.size() > 0) {
+			std::cout << "hello " << name << "!\n";
+		} else {
+			std::cout << "hello!\n";
+		}
+	}
+};
+
+#endif

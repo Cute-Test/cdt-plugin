@@ -7,19 +7,20 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
+
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.constants.Algorithm;
 import ch.hsr.ifs.cute.charwars.constants.Constants;
 import ch.hsr.ifs.cute.charwars.constants.ErrorMessages;
+import ch.hsr.ifs.cute.charwars.constants.Function;
 import ch.hsr.ifs.cute.charwars.constants.QuickFixLabels;
 import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
-import ch.hsr.ifs.cute.charwars.constants.Function;
 
 public class CStringCleanupQuickFix extends BaseQuickFix {
 	public static final Map<Function, Function> functionMap;
-	
+
 	static {
-		functionMap = new HashMap<Function, Function>();
+		functionMap = new HashMap<>();
 		functionMap.put(Function.STRSTR, Function.FIND);
 		functionMap.put(Function.STRCHR, Function.FIND);
 		functionMap.put(Function.STRRCHR, Function.RFIND);
@@ -28,23 +29,23 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		functionMap.put(Function.STRSPN, Function.FIND_FIRST_NOT_OF);
 		functionMap.put(Function.MEMCHR, Function.STD_FIND);
 	}
-	
+
 	@Override
 	public String getLabel() {
 		return QuickFixLabels.C_STRING_CLEANUP;
 	}
-	
+
 	@Override
 	protected String getErrorMessage() {
 		return ErrorMessages.C_STRING_CLEANUP_QUICK_FIX;
 	}
-	
+
 	@Override
 	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
-		IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)markedNode;		
-		Function inFunction = getInFunction(functionCall);
-		Function outFunction = getOutFunction(inFunction);
-		
+		final IASTFunctionCallExpression functionCall = (IASTFunctionCallExpression)markedNode;
+		final Function inFunction = getInFunction(functionCall);
+		final Function outFunction = getOutFunction(inFunction);
+
 		CleanupRefactoring refactoring = null;
 		if(inFunction == Function.MEMCHR) {
 			refactoring = new MemchrCleanupRefactoring(functionCall, inFunction, outFunction, rewrite);
@@ -55,25 +56,25 @@ public class CStringCleanupQuickFix extends BaseQuickFix {
 		else {
 			refactoring = new PtrCleanupRefactoring(functionCall, inFunction, outFunction, rewrite);
 		}
-		
+
 		refactoring.perform();
 		if(inFunction == Function.MEMCHR) {
 			headers.add(Algorithm.HEADER_NAME);
 		}
 	}
-	
+
 	private Function getInFunction(IASTFunctionCallExpression functionCall) {
-		IASTIdExpression functionNameExpr = (IASTIdExpression)functionCall.getFunctionNameExpression();
-		String functionName = functionNameExpr.getName().toString().replaceFirst("^" + Constants.STD_PREFIX, "");
-		
-		for(Function f : functionMap.keySet()) {
+		final IASTIdExpression functionNameExpr = (IASTIdExpression)functionCall.getFunctionNameExpression();
+		final String functionName = functionNameExpr.getName().toString().replaceFirst("^" + Constants.STD_PREFIX, "");
+
+		for(final Function f : functionMap.keySet()) {
 			if(f.getName().equals(functionName)) {
 				return f;
 			}
 		}
 		return null;
 	}
-	
+
 	private Function getOutFunction(Function inFunction) {
 		return functionMap.get(inFunction);
 	}

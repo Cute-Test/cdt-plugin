@@ -6,6 +6,7 @@ import org.eclipse.ui.IMarkerResolution;
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanQuickfixTest;
+import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
 
 public abstract class BaseQuickFixTest extends CDTTestingCodanQuickfixTest {
 	@Override
@@ -13,35 +14,39 @@ public abstract class BaseQuickFixTest extends CDTTestingCodanQuickfixTest {
 		addIncludeDirPath("commonIncludes");
 		super.setUp();
 	}
-	
+
 	private IMarker getFirstMarker() throws CoreException  {
-		IMarker[] markers = findMarkers();
+		final IMarker[] markers = findMarkers();
 		IMarker firstMarker = markers[0];
-		for(IMarker currentMarker : markers)  {
-			int startOfFirstMarker = firstMarker.getAttribute(IMarker.CHAR_START, Integer.MAX_VALUE);
-			int startOfCurrentMarker = currentMarker.getAttribute(IMarker.CHAR_START, Integer.MAX_VALUE);
+		for(final IMarker currentMarker : markers)  {
+			final int startOfFirstMarker = firstMarker.getAttribute(IMarker.CHAR_START, Integer.MAX_VALUE);
+			final int startOfCurrentMarker = currentMarker.getAttribute(IMarker.CHAR_START, Integer.MAX_VALUE);
 			if(startOfFirstMarker > startOfCurrentMarker)  {
 				firstMarker = currentMarker;
 			}
 		}
 		return firstMarker;
 	}
-	
-	private String getNormalizedExpectedSource() {
-		return getExpectedSource().replace("\n", "").replace("\r", "");
-	}
-	
-	private String getNormalizedCurrentSource() {
-		return getCurrentSource().replace("\n", "").replace("\r", "");
-	}
-	
+
 	@Override
 	@Test
 	public void runTest() throws Throwable {
-		IMarker firstMarker = getFirstMarker();
+		final IMarker firstMarker = getFirstMarker();
 		runQuickFix(firstMarker, getQuickFix());
-		assertEquals(getNormalizedExpectedSource(), getNormalizedCurrentSource());
+		compareFiles();
 	}
-	
+
+	private void compareFiles() {
+		for (final TestSourceFile testFile : fileMap.values()) {
+			final String expectedSource = normalizeSource(testFile.getExpectedSource());
+			final String actualSource = normalizeSource(getCurrentSource(testFile.getName()));
+			assertEquals(expectedSource, actualSource);
+		}
+	}
+
+	private static String normalizeSource(String source) {
+		return source.replace("\n", "").replace("\r", "");
+	}
+
 	protected abstract IMarkerResolution getQuickFix();
 }
