@@ -21,7 +21,6 @@ import ch.hsr.ifs.cute.charwars.asttools.ASTModifier;
 import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder;
 import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.IndexFinderInstruction;
-import ch.hsr.ifs.cute.charwars.asttools.IndexFinder.ResultHandler;
 import ch.hsr.ifs.cute.charwars.constants.StdString;
 import ch.hsr.ifs.cute.charwars.constants.StringType;
 import ch.hsr.ifs.cute.charwars.quickfixes.cstring.common.BlockRefactoring;
@@ -32,125 +31,122 @@ import ch.hsr.ifs.cute.charwars.utils.analyzers.FunctionAnalyzer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public abstract class RewriteStrategy {
-	protected ASTRewrite rewrite;
+	protected ASTRewriteCache rewriteCache;
 	protected IASTFunctionDefinition functionDefinition;
 	protected ICPPASTParameterDeclaration strParameter;
 	protected IASTName strName;
 	@SuppressFBWarnings(value="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	protected IASTStatement statements[];
-	
-	public void setRewrite(ASTRewrite rewrite) {
-		this.rewrite = rewrite;
+
+	public final void setRewriteCache(ASTRewriteCache rewriteCache) {
+		this.rewriteCache = rewriteCache;
 	}
-	
-	public void setStrParameter(ICPPASTParameterDeclaration strParameter) {
+
+	protected ASTRewrite getMainRewrite() {
+		return rewriteCache.getASTRewrite(strName.getTranslationUnit().getOriginatingTranslationUnit());
+	}
+
+	public final void setStrParameter(ICPPASTParameterDeclaration strParameter) {
 		this.strParameter = strParameter;
 		this.strName = strParameter.getDeclarator().getName();
 		this.functionDefinition = (IASTFunctionDefinition)strParameter.getParent().getParent();
 	}
-	
-	public void setStatements(IASTStatement statements[]) {
+
+	public final void setStatements(IASTStatement statements[]) {
 		this.statements = statements.clone();
 	}
-	
-	public void addStdStringOverload() {
-		ASTRewrite subrewrite1 = duplicateFunction(rewrite);
+
+	public final void addStdStringOverload() {
+		final ASTRewrite subrewrite1 = duplicateFunction(getMainRewrite());
 		adaptStrParameter(subrewrite1);
 		adaptFunctionBody(subrewrite1);
 	}
-	
-	public abstract void adaptCStringOverload();
-	
-	public void addNewDeclarations(ASTRewriteCache rewriteCache) {
-		final int strParameterIndex = FunctionAnalyzer.getParameterIndex(strParameter);
-		ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)strParameter.getParent();
 
-		IndexFinder.findDeclarations(functionDeclarator.getName(), rewriteCache, new ResultHandler() {
-			@Override
-			public IndexFinderInstruction handleResult(IASTName declarationFunctionName, ASTRewrite rewrite) {
-				ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)declarationFunctionName.getParent();
-				if(functionDeclarator.getParent() instanceof IASTSimpleDeclaration) {
-					IASTSimpleDeclaration oldFunctionDeclaration = (IASTSimpleDeclaration)functionDeclarator.getParent();
-					ASTRewrite subrewrite = rewrite.insertBefore(oldFunctionDeclaration.getParent(), oldFunctionDeclaration, oldFunctionDeclaration, null);
-					ICPPASTParameterDeclaration oldParameterDeclaration = functionDeclarator.getParameters()[strParameterIndex];
-					ICPPASTParameterDeclaration newParameterDeclaration = newAdaptedParameterDeclaration(oldParameterDeclaration);
-					ASTModifier.replace(oldParameterDeclaration, newParameterDeclaration, subrewrite);
-				}
-				return IndexFinderInstruction.CONTINUE_SEARCH;
+	public abstract void adaptCStringOverload();
+
+	public final void addNewDeclarations() {
+		final int strParameterIndex = FunctionAnalyzer.getParameterIndex(strParameter);
+		final ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)strParameter.getParent();
+
+		IndexFinder.findDeclarations(functionDeclarator.getName(), rewriteCache, (declarationFunctionName, rewrite) -> {
+			final ICPPASTFunctionDeclarator functionDeclarator1 = (ICPPASTFunctionDeclarator)declarationFunctionName.getParent();
+			if(functionDeclarator1.getParent() instanceof IASTSimpleDeclaration) {
+				final IASTSimpleDeclaration oldFunctionDeclaration = (IASTSimpleDeclaration)functionDeclarator1.getParent();
+				final ASTRewrite subrewrite = rewrite.insertBefore(oldFunctionDeclaration.getParent(), oldFunctionDeclaration, oldFunctionDeclaration, null);
+				final ICPPASTParameterDeclaration oldParameterDeclaration = functionDeclarator1.getParameters()[strParameterIndex];
+				final ICPPASTParameterDeclaration newParameterDeclaration = newAdaptedParameterDeclaration(oldParameterDeclaration);
+				ASTModifier.replace(oldParameterDeclaration, newParameterDeclaration, subrewrite);
 			}
+			return IndexFinderInstruction.CONTINUE_SEARCH;
 		});
 	}
-	
+
 	private ASTRewrite duplicateFunction(ASTRewrite rewrite) {
 		return rewrite.insertBefore(functionDefinition.getParent(), functionDefinition, functionDefinition, null);
 	}
 
 	private ASTRewrite adaptStrParameter(ASTRewrite rewrite) {
-		ICPPASTParameterDeclaration adaptedStrParameter = newAdaptedParameterDeclaration(strParameter);
+		final ICPPASTParameterDeclaration adaptedStrParameter = newAdaptedParameterDeclaration(strParameter);
 		return rewrite.replace(strParameter, adaptedStrParameter, null);
 	}
-	
+
 	private ASTRewrite adaptFunctionBody(ASTRewrite rewrite) {
 		//replace function body
-		IASTCompoundStatement originalFunctionBody = (IASTCompoundStatement)functionDefinition.getBody();
-		IASTCompoundStatement stdStringOverloadBody = getStdStringOverloadBody();
-		ASTRewrite subrewrite = rewrite.replace(originalFunctionBody, stdStringOverloadBody, null);
-		//subrewrite = subrewrite.insertBefore(stdStringOverloadBody, stdStringOverloadBody.getStatements()[0], ExtendedNodeFactory.newExpressionStatement(ExtendedNodeFactory.newNposExpression()), null);
-		//ASTModifier.insertBefore(stdStringOverloadBody, stdStringOverloadBody., ExtendedNodeFactory.factory.newExpressionStatement(null), subrewrite);
-		
+		final IASTCompoundStatement originalFunctionBody = (IASTCompoundStatement)functionDefinition.getBody();
+		final IASTCompoundStatement stdStringOverloadBody = getStdStringOverloadBody();
+		final ASTRewrite subrewrite = rewrite.replace(originalFunctionBody, stdStringOverloadBody, null);
+
 		//adapt variable occurrences
-		BlockRefactoringConfiguration config = new BlockRefactoringConfiguration();
+		final BlockRefactoringConfiguration config = new BlockRefactoringConfiguration();
 		config.setBlock(stdStringOverloadBody);
 		config.setASTRewrite(subrewrite);
 		config.setStringType(StringType.createFromDeclSpecifier(strParameter.getDeclSpecifier()));
 		config.setStrName(strName);
 		config.setVarName(strName);
-		
-		BlockRefactoring blockRefactoring = new BlockRefactoring(config);
+
+		final BlockRefactoring blockRefactoring = new BlockRefactoring(config);
 		blockRefactoring.refactorAllStatements();
 		return subrewrite;
 	}
-	
+
 	protected abstract IASTCompoundStatement getStdStringOverloadBody();
-	
+
 	private ICPPASTParameterDeclaration newAdaptedParameterDeclaration(ICPPASTParameterDeclaration parameterDeclaration) {
-		IASTDeclSpecifier declSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(StdString.STD_STRING);
+		final IASTDeclSpecifier declSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(StdString.STD_STRING);
 		declSpecifier.setConst(true);
-		IASTDeclarator declarator = ExtendedNodeFactory.newReferenceDeclarator(parameterDeclaration.getDeclarator().getName().toString());
+		final IASTDeclarator declarator = ExtendedNodeFactory.newReferenceDeclarator(parameterDeclaration.getDeclarator().getName().toString());
 		return ExtendedNodeFactory.newParameterDeclaration(declSpecifier, declarator);
 	}
-	
-	protected IASTStatement getStdStringFunctionCallStatement() {
-		IASTDeclarator functionDeclarator = functionDefinition.getDeclarator();
-		IASTFunctionCallExpression stdStringOverloadFunctionCall = getStdStringFunctionCallExpression();
-		
+
+	protected final IASTStatement getStdStringFunctionCallStatement() {
+		final IASTDeclarator functionDeclarator = functionDefinition.getDeclarator();
+		final IASTFunctionCallExpression stdStringOverloadFunctionCall = getStdStringFunctionCallExpression();
+
 		IASTStatement statement;
 		if(DeclaratorTypeAnalyzer.hasVoidType(functionDeclarator)) {
-			statement = ExtendedNodeFactory.newExpressionStatement(stdStringOverloadFunctionCall);		
-		}
-		else {
+			statement = ExtendedNodeFactory.newExpressionStatement(stdStringOverloadFunctionCall);
+		} else {
 			statement = ExtendedNodeFactory.newReturnStatement(stdStringOverloadFunctionCall);
 		}
-		
+
 		return statement;
 	}
-	
-	protected IASTFunctionCallExpression getStdStringFunctionCallExpression() {
-		ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)strParameter.getParent();
-		List<IASTNode> arguments = new ArrayList<IASTNode>();
-		
-		for(ICPPASTParameterDeclaration parameterDeclaration : functionDeclarator.getParameters()) {
-			IASTIdExpression idExpression = ExtendedNodeFactory.newIdExpression(parameterDeclaration.getDeclarator().getName().toString());
+
+	protected final IASTFunctionCallExpression getStdStringFunctionCallExpression() {
+		final ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)strParameter.getParent();
+		final List<IASTNode> arguments = new ArrayList<>();
+
+		for(final ICPPASTParameterDeclaration parameterDeclaration : functionDeclarator.getParameters()) {
+			final IASTIdExpression idExpression = ExtendedNodeFactory.newIdExpression(parameterDeclaration.getDeclarator().getName().toString());
 			if(parameterDeclaration == strParameter) {
 				arguments.add(ExtendedNodeFactory.newFunctionCallExpression(StdString.STD_STRING, idExpression));
-			}
-			else {
+			} else {
 				arguments.add(idExpression);
 			}
 		}
-		
-		String functionNameStr = functionDeclarator.getName().toString();
-		IASTNode argumentsArr[] = arguments.toArray(new IASTNode[]{});
+
+		final String functionNameStr = functionDeclarator.getName().toString();
+		final IASTNode argumentsArr[] = arguments.toArray(new IASTNode[]{});
 		return ExtendedNodeFactory.newFunctionCallExpression(functionNameStr, argumentsArr);
 	}
 }

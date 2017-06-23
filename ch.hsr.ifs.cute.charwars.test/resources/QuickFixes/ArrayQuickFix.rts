@@ -225,14 +225,12 @@ int main() {
 	std::array<char*, 3> words = { { "hello", "World", "!" } };
 }
 
-
 //!MultidimensionalArrays
 //@main.cpp
 int numbers[4][5][12];
 //=
 #include <array>
 std::array<std::array<std::array<int, 12>, 5>, 4> numbers;
-
 
 //!MultidimensionalArrayWithValues
 //@main.cpp
@@ -247,7 +245,6 @@ int main() {
 			19.11, 11.19 }, { 11.29, 22.49, 33.47, 17.29, 5.01 }, { 41.97,
 			22.09, 9.76, 22.55, 6.22 } } };
 }
-
 
 //!MacroModifier
 //@main.cpp
@@ -311,12 +308,14 @@ typedef int arr[10];
 //=
 #include <array>
 typedef std::array<int, 10> arr;
+
 //!ExternArray
 //@A.cpp
 extern double arr[10];
 //=
 #include <array>
 extern std::array<double, 10> arr;
+
 //!-MutableArrayMember
 //@A.cpp
 struct X{

@@ -11,21 +11,21 @@ import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 public class GuardClauseRewriteStrategy extends RewriteStrategy {
 	@Override
 	protected IASTCompoundStatement getStdStringOverloadBody() {
-		IASTCompoundStatement stdStringOverloadBody = ExtendedNodeFactory.newCompoundStatement();
-		IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, statements);
-		for(IASTStatement statement : nullCheckedStatements) {
-			stdStringOverloadBody.addStatement(statement.copy(CopyStyle.withLocations));
+		final IASTCompoundStatement body = ExtendedNodeFactory.newCompoundStatement();
+		final IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, statements);
+		for(final IASTStatement statement : nullCheckedStatements) {
+			body.addStatement(statement.copy(CopyStyle.withLocations));
 		}
-		return stdStringOverloadBody;
+		return body;
 	}
-	
+
 	@Override
 	public void adaptCStringOverload() {
-		IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, statements);
-		IASTStatement insertionPoint = nullCheckedStatements[0];
-		ASTModifier.insertBefore(insertionPoint.getParent(), insertionPoint, getStdStringFunctionCallStatement(), rewrite);
-		for(IASTStatement statement : nullCheckedStatements) {
-			ASTModifier.remove(statement, rewrite);
+		final IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, statements);
+		final IASTStatement insertionPoint = nullCheckedStatements[0];
+		ASTModifier.insertBefore(insertionPoint.getParent(), insertionPoint, getStdStringFunctionCallStatement(), getMainRewrite());
+		for(final IASTStatement statement : nullCheckedStatements) {
+			ASTModifier.remove(statement, getMainRewrite());
 		}
 	}
 }

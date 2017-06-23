@@ -958,3 +958,67 @@ static int findMonth(const char* monthStr) {
 int main() {
 	std::cout << findMonth("feb") << std::endl;
 }
+
+//!BodyWithoutNullCheck1
+//@main.cpp
+#include "iostream.h"
+#include "string.h"
+
+void f(const char* str);
+
+int main() {
+	f("hello");
+}
+
+void f(const char* str) {
+	std::cout << str << std::endl;
+}
+//=
+#include <string>
+#include "iostream.h"
+#include "string.h"
+
+void f(const std::string& str);
+
+int main() {
+	f("hello");
+}
+
+void f(const std::string& str) {
+	std::cout << str << std::endl;
+}
+
+//!BodyWithoutNullCheck2
+//@main.cpp
+#include <iostream>
+#include <cstring>
+
+void f(const char* name) {
+	if(strlen(name) > 0) {
+		std::cout << "hello " << name << "!\n";
+	} else {
+		std::cout << "hello!\n";
+	}
+}
+
+int main() {
+	f("toni");
+	f("");
+}
+//=
+#include <iostream>
+#include <cstring>
+#include <string>
+
+void f(const std::string& name) {
+	if (name.size() > 0) {
+		std::cout << "hello " << name << "!\n";
+	} else {
+		std::cout << "hello!\n";
+	}
+}
+
+int main() {
+	f("toni");
+	f("");
+}

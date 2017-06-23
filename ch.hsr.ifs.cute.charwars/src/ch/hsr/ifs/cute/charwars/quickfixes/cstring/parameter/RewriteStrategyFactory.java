@@ -13,82 +13,82 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
-import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.cute.charwars.asttools.ASTAnalyzer;
+import ch.hsr.ifs.cute.charwars.asttools.ASTRewriteCache;
 import ch.hsr.ifs.cute.charwars.asttools.CheckAnalyzer;
 import ch.hsr.ifs.cute.charwars.utils.analyzers.BEAnalyzer;
 
 public class RewriteStrategyFactory {
-	public static RewriteStrategy createRewriteStrategy(ICPPASTParameterDeclaration strParameter, ASTRewrite rewrite) {
+	public static RewriteStrategy createRewriteStrategy(ICPPASTParameterDeclaration strParameter, ASTRewriteCache rewriteCache) {
 		RewriteStrategy rewriteStrategy = null;
-		IASTName strName = strParameter.getDeclarator().getName();
-		ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)strParameter.getParent();
-		IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition)functionDeclarator.getParent();
-		IASTStatement statements[] = ((IASTCompoundStatement)functionDefinition.getBody()).getStatements();
-		
+		final IASTName strName = strParameter.getDeclarator().getName();
+		final ICPPASTFunctionDeclarator functionDeclarator = (ICPPASTFunctionDeclarator)strParameter.getParent();
+		final IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition)functionDeclarator.getParent();
+		final IASTStatement statements[] = ((IASTCompoundStatement)functionDefinition.getBody()).getStatements();
+
 		if(hasGuardClause(statements, strName)) {
 			rewriteStrategy = new GuardClauseRewriteStrategy();
-		}
-		else if(hasResultVariable(statements, strName)) {
+		} else if(hasResultVariable(statements, strName)) {
 			rewriteStrategy = new ResultVariableRewriteStrategy();
-		}
-		else if(hasNullCheck(statements, strName)) {
+		} else if(hasNullCheck(statements, strName)) {
 			rewriteStrategy = new NullCheckRewriteStrategy();
+		} else {
+			rewriteStrategy = new NoNullCheckRewriteStrategy();
 		}
-		else {
-			rewriteStrategy = new EmptyRewriteStrategy();
-		}
-		
-		rewriteStrategy.setRewrite(rewrite);
+
+		rewriteStrategy.setRewriteCache(rewriteCache);
 		rewriteStrategy.setStrParameter(strParameter);
 		rewriteStrategy.setStatements(statements);
 		return rewriteStrategy;
 	}
-	
+
 	private static boolean hasGuardClause(IASTStatement[] bodyStatements, IASTName strName) {
 		return CheckAnalyzer.findGuardClause(strName, bodyStatements) != null;
 	}
-	
+
 	private static boolean hasNullCheck(IASTStatement[] bodyStatements, IASTName strName) {
 		return CheckAnalyzer.findNullCheck(strName, bodyStatements) != null;
 	}
-	
+
 	private static boolean hasResultVariable(IASTStatement[] bodyStatements, IASTName strName) {
-		//check if null check exists
-		IASTIfStatement nullCheck = CheckAnalyzer.findNullCheck(strName, bodyStatements);
-		if(nullCheck == null) return false;
-		
-		//check if result variable exists
-		IASTName resultVariableName = ASTAnalyzer.getResultVariableName(bodyStatements);
-		if(resultVariableName == null) return false;
-		
-		//check if clause assigns to result variable
-		IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, bodyStatements);
-		if(nullCheckedStatements.length == 0) return false;
-		IASTStatement lastClauseStatement = nullCheckedStatements[nullCheckedStatements.length-1];
-		
+		final IASTIfStatement nullCheck = CheckAnalyzer.findNullCheck(strName, bodyStatements);
+		if(nullCheck == null) {
+			return false;
+		}
+
+		final IASTName resultVariableName = ASTAnalyzer.getResultVariableName(bodyStatements);
+		if(resultVariableName == null) {
+			return false;
+		}
+
+		final IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, bodyStatements);
+		if(nullCheckedStatements.length == 0) {
+			return false;
+		}
+		final IASTStatement lastClauseStatement = nullCheckedStatements[nullCheckedStatements.length-1];
+
 		if(!assignsToVariable(lastClauseStatement, resultVariableName)) {
 			return false;
 		}
-		
-		IASTDeclarationStatement resultVariableDeclaration = ASTAnalyzer.getVariableDeclaration(resultVariableName, bodyStatements);
+
+		final IASTDeclarationStatement resultVariableDeclaration = ASTAnalyzer.getVariableDeclaration(resultVariableName, bodyStatements);
 		if(resultVariableDeclaration != null) {
-			int resultVariableIndex = Arrays.asList(bodyStatements).indexOf(resultVariableDeclaration);
-			int nullCheckIndex = Arrays.asList(bodyStatements).indexOf(nullCheck);
+			final int resultVariableIndex = Arrays.asList(bodyStatements).indexOf(resultVariableDeclaration);
+			final int nullCheckIndex = Arrays.asList(bodyStatements).indexOf(nullCheck);
 			return nullCheckIndex > resultVariableIndex;
 		}
-		
+
 		return false;
 	}
-	
+
 	private static boolean assignsToVariable(IASTStatement statement, IASTName variableName) {
 		if(statement instanceof IASTExpressionStatement) {
-			IASTExpression expression = ((IASTExpressionStatement)statement).getExpression();
+			final IASTExpression expression = ((IASTExpressionStatement)statement).getExpression();
 			if(BEAnalyzer.isAssignment(expression)) {
-				IASTExpression variable = BEAnalyzer.getOperand1(expression);
+				final IASTExpression variable = BEAnalyzer.getOperand1(expression);
 				if(variable instanceof IASTIdExpression) {
-					IASTName name = ((IASTIdExpression)variable).getName();
+					final IASTName name = ((IASTIdExpression)variable).getName();
 					return name.resolveBinding().equals(variableName.resolveBinding());
 				}
 			}

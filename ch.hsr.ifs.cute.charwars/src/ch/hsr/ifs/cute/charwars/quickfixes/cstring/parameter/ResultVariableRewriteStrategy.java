@@ -17,29 +17,29 @@ import ch.hsr.ifs.cute.charwars.utils.ExtendedNodeFactory;
 public class ResultVariableRewriteStrategy extends RewriteStrategy {
 	@Override
 	protected IASTCompoundStatement getStdStringOverloadBody() {
-		IASTCompoundStatement stdStringOverloadBody = ExtendedNodeFactory.newCompoundStatement();
-		IASTName resultVariableName = ASTAnalyzer.getResultVariableName(statements);
-		IASTDeclarationStatement resultVariableDeclaration = ASTAnalyzer.getVariableDeclaration(resultVariableName, statements);
-		stdStringOverloadBody.addStatement(resultVariableDeclaration.copy(CopyStyle.withLocations));
-		
-		IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, statements);
-		for(IASTStatement statement : nullCheckedStatements) {
-			stdStringOverloadBody.addStatement(statement.copy(CopyStyle.withLocations));
+		final IASTCompoundStatement body = ExtendedNodeFactory.newCompoundStatement();
+		final IASTName resultVariableName = ASTAnalyzer.getResultVariableName(statements);
+		final IASTDeclarationStatement resultVariableDeclaration = ASTAnalyzer.getVariableDeclaration(resultVariableName, statements);
+		body.addStatement(resultVariableDeclaration.copy(CopyStyle.withLocations));
+
+		final IASTStatement[] nullCheckedStatements = CheckAnalyzer.getNullCheckedStatements(strName, statements);
+		for(final IASTStatement statement : nullCheckedStatements) {
+			body.addStatement(statement.copy(CopyStyle.withLocations));
 		}
-		
-		IASTStatement returnStatement = ExtendedNodeFactory.newReturnStatement(ExtendedNodeFactory.newIdExpression(resultVariableName.toString()));
-		stdStringOverloadBody.addStatement(returnStatement);
-		return stdStringOverloadBody;
+
+		final IASTStatement returnStatement = ExtendedNodeFactory.newReturnStatement(ExtendedNodeFactory.newIdExpression(resultVariableName.toString()));
+		body.addStatement(returnStatement);
+		return body;
 	}
-	
+
 	@Override
 	public void adaptCStringOverload() {
-		IASTName resultVariableName = ASTAnalyzer.getResultVariableName(statements);
-		IASTStatement nullCheckClause = CheckAnalyzer.getNullCheckClause(strName, statements);
-		IASTIdExpression resultVariable = ExtendedNodeFactory.newIdExpression(resultVariableName.toString());
-		IASTExpression assignment = ExtendedNodeFactory.newAssignment(resultVariable, getStdStringFunctionCallExpression());
-		IASTExpressionStatement expressionStatement = ExtendedNodeFactory.newExpressionStatement(assignment);
-		IASTCompoundStatement compoundStatement = ExtendedNodeFactory.newCompoundStatement(expressionStatement);
-		ASTModifier.replace(nullCheckClause, compoundStatement, rewrite);
+		final IASTName resultVariableName = ASTAnalyzer.getResultVariableName(statements);
+		final IASTStatement nullCheckClause = CheckAnalyzer.getNullCheckClause(strName, statements);
+		final IASTIdExpression resultVariable = ExtendedNodeFactory.newIdExpression(resultVariableName.toString());
+		final IASTExpression assignment = ExtendedNodeFactory.newAssignment(resultVariable, getStdStringFunctionCallExpression());
+		final IASTExpressionStatement expressionStatement = ExtendedNodeFactory.newExpressionStatement(assignment);
+		final IASTCompoundStatement compoundStatement = ExtendedNodeFactory.newCompoundStatement(expressionStatement);
+		ASTModifier.replace(nullCheckClause, compoundStatement, getMainRewrite());
 	}
 }

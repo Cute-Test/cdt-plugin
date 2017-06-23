@@ -12,24 +12,24 @@ import ch.hsr.ifs.cute.charwars.quickfixes.BaseQuickFix;
 
 public class CStringParameterQuickFix extends BaseQuickFix {
 	private RewriteStrategy rewriteStrategy;
-	
+
 	@Override
 	public String getLabel() {
 		return QuickFixLabels.C_STRING_PARAMETER;
 	}
-	
+
 	@Override
 	protected String getErrorMessage() {
 		return ErrorMessages.C_STRING_PARAMETER_QUICK_FIX;
 	}
-		
+
 	@Override
 	protected void handleMarkedNode(IASTNode markedNode, ASTRewrite rewrite, ASTRewriteCache rewriteCache) {
-		ICPPASTParameterDeclaration parameterDeclaration = (ICPPASTParameterDeclaration)markedNode.getParent();
-		rewriteStrategy = RewriteStrategyFactory.createRewriteStrategy(parameterDeclaration, rewrite);
+		final ICPPASTParameterDeclaration parameterDeclaration = (ICPPASTParameterDeclaration)markedNode.getParent();
+		rewriteStrategy = RewriteStrategyFactory.createRewriteStrategy(parameterDeclaration, rewriteCache);
 		rewriteStrategy.addStdStringOverload();
 		rewriteStrategy.adaptCStringOverload();
-		rewriteStrategy.addNewDeclarations(rewriteCache);
+		rewriteStrategy.addNewDeclarations();
 		headers.add(StdString.HEADER_NAME);
 	}
 }
