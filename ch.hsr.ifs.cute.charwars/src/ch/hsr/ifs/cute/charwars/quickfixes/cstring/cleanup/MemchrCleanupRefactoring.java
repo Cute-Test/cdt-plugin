@@ -26,26 +26,26 @@ public class MemchrCleanupRefactoring extends CleanupRefactoring {
 	public MemchrCleanupRefactoring(IASTFunctionCallExpression functionCall, Function inFunction, Function outFunction, ASTRewrite rewrite) {
 		super(functionCall, inFunction, outFunction, rewrite);
 	}
-	
+
 	@Override
 	protected boolean optimizedRefactoringPossible() {
 		return false;
 	}
-	
+
 	@Override
 	protected void performNormal() {
-		String posVarName = getPosVarName(functionCall);
-		IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(Constants.AUTO, posVarName, newOutFunctionCall());
+		final String posVarName = getPosVarName(functionCall);
+		final IASTDeclarationStatement posVarDS = ExtendedNodeFactory.newDeclarationStatement(Constants.AUTO, posVarName, newOutFunctionCall());
 		IASTExpression conditionalExpression = newMemchrConditionalExpression(posVarName);
 		if(functionCall.getParent() instanceof IASTCastExpression) {
 			conditionalExpression = ExtendedNodeFactory.newBracketedExpression(conditionalExpression);
 		}
-	
+
 		if(oldStatement.getParent() instanceof IASTIfStatement) {
-			IASTStatement oldStatementCopy = oldStatement.copy();
-			IASTFunctionCallExpression functionCallCopy = getFunctionCallNode(oldStatementCopy);
+			final IASTStatement oldStatementCopy = oldStatement.copy();
+			final IASTFunctionCallExpression functionCallCopy = getFunctionCallNode(oldStatementCopy);
 			ASTModifier.replaceNode(functionCallCopy, conditionalExpression);
-			IASTCompoundStatement compoundStatement = ExtendedNodeFactory.newCompoundStatement(posVarDS, oldStatementCopy);
+			final IASTCompoundStatement compoundStatement = ExtendedNodeFactory.newCompoundStatement(posVarDS, oldStatementCopy);
 			ASTModifier.replace(oldStatement, compoundStatement, rewrite);
 		}
 		else {
@@ -55,47 +55,47 @@ public class MemchrCleanupRefactoring extends CleanupRefactoring {
 	}
 
 	@Override
-	protected void performOptimized() { 
-		//not available for MemchrCleanupRefactoring 
+	protected void performOptimized() {
+		// not available for MemchrCleanupRefactoring
 	}
-	
+
 	private IASTFunctionCallExpression newOutFunctionCall() {
-		IASTExpression first = newStartIterator();
-		IASTExpression last = newEndIterator();
+		final IASTExpression first = newStartIterator();
+		final IASTExpression last = newEndIterator();
 		return ExtendedNodeFactory.newFunctionCallExpression(outFunction.getName(), first, last, secondArg.copy());
 	}
-	
+
 	private IASTExpression newStartIterator() {
-		IASTName stringName = str.getName();
+		final IASTName stringName = str.getName();
 		return ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.BEGIN);
 	}
-	
+
 	private IASTExpression newEndIterator() {
-		IASTName stringName = str.getName();
-		IASTNode thirdArg = functionCall.getArguments()[2];
+		final IASTName stringName = str.getName();
+		final IASTNode thirdArg = functionCall.getArguments()[2];
 		IASTExpression last = null;
-		
+
 		if(FunctionAnalyzer.isCallToMemberFunction(thirdArg, Function.SIZE)) {
-			IASTFunctionCallExpression sizeCall = (IASTFunctionCallExpression)thirdArg;
-			IASTFieldReference functionNameExpr = (IASTFieldReference)sizeCall.getFunctionNameExpression();
-			IASTIdExpression fieldOwner = (IASTIdExpression)functionNameExpr.getFieldOwner();
+			final IASTFunctionCallExpression sizeCall = (IASTFunctionCallExpression)thirdArg;
+			final IASTFieldReference functionNameExpr = (IASTFieldReference)sizeCall.getFunctionNameExpression();
+			final IASTIdExpression fieldOwner = (IASTIdExpression)functionNameExpr.getFieldOwner();
 			if(ASTAnalyzer.isSameName(fieldOwner.getName(), stringName)) {
 				last = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.END);
 			}
 		}
-		
+
 		if(last == null) {
-			IASTExpression lhs = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.BEGIN);
+			final IASTExpression lhs = ExtendedNodeFactory.newMemberFunctionCallExpression(stringName, StdString.BEGIN);
 			last = ExtendedNodeFactory.newPlusExpression(lhs.copy(), (IASTExpression)thirdArg.copy());
 		}
 		return last;
-	} 
-	
+	}
+
 	private IASTConditionalExpression newMemchrConditionalExpression(String posVarName) {
-		IASTIdExpression posVar = ExtendedNodeFactory.newIdExpression(posVarName);
-		IASTExpression condition = ExtendedNodeFactory.newEqualityComparison(posVar, newEndIterator(), false);
-		IASTExpression positive = ExtendedNodeFactory.newAdressOperatorExpression(ExtendedNodeFactory.newDereferenceOperatorExpression(posVar));
-		IASTExpression negative = ExtendedNodeFactory.newIdExpression(Constants.NULLPTR);
+		final IASTIdExpression posVar = ExtendedNodeFactory.newIdExpression(posVarName);
+		final IASTExpression condition = ExtendedNodeFactory.newEqualityComparison(posVar, newEndIterator(), false);
+		final IASTExpression positive = ExtendedNodeFactory.newAdressOperatorExpression(ExtendedNodeFactory.newDereferenceOperatorExpression(posVar));
+		final IASTExpression negative = ExtendedNodeFactory.newIdExpression(Constants.NULLPTR);
 		return ExtendedNodeFactory.newConditionalExpression(condition, positive, negative);
 	}
 }

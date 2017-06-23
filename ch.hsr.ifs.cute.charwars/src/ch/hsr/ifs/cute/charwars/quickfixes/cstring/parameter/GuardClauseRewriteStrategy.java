@@ -28,4 +28,9 @@ public class GuardClauseRewriteStrategy extends RewriteStrategy {
 			ASTModifier.remove(statement, getMainRewrite());
 		}
 	}
+
+	@Override
+	protected boolean shouldCopyDefaultValueOfParameter() {
+		return false;
+	}
 }

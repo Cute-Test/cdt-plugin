@@ -27,4 +27,9 @@ public class NullCheckRewriteStrategy extends RewriteStrategy {
 		final IASTCompoundStatement newClause = ExtendedNodeFactory.newCompoundStatement(getStdStringFunctionCallStatement());
 		ASTModifier.replace(nullCheckClause, newClause, getMainRewrite());
 	}
+
+	@Override
+	protected boolean shouldCopyDefaultValueOfParameter() {
+		return false;
+	}
 }

@@ -1145,3 +1145,127 @@ public:
 };
 
 #endif
+
+//!ParameterWithDefaultValue1
+//@main.cpp
+#include <iostream>
+
+void f(const char* name = "world") {
+	std::cout << "Hello, " << name << "!\n";
+}
+
+int main() {
+	f("toni");
+	f();
+}
+//=
+#include <iostream>
+#include <string>
+
+void f(const std::string& name = "world") {
+	std::cout << "Hello, " << name << "!\n";
+}
+
+int main() {
+	f("toni");
+	f();
+}
+
+//!ParameterWithDefaultValue2
+//@main.cpp
+#include <iostream>
+
+void f(const char* name = "world") {
+    if(name) {
+    	std::cout << "Hello, " << name << "!\n";
+	}
+}
+
+int main() {
+	f("toni");
+	f();
+}
+//=
+#include <iostream>
+#include <string>
+
+void f(const std::string& name) {
+	std::cout << "Hello, " << name << "!\n";
+}
+void f(const char* name = "world") {
+	if (name) {
+		f(std::string(name));
+	}
+}
+
+int main() {
+	f("toni");
+	f();
+}
+
+//!ParameterWithDefaultValue3
+//@main.cpp
+#include <iostream>
+
+void f(const char* name = "world");
+
+int main() {
+	f("toni");
+	f();
+}
+
+void f(const char* name) {
+	std::cout << "Hello, " << name << "!\n";
+}
+//=
+#include <iostream>
+#include <string>
+
+void f(const std::string& name = "world");
+
+int main() {
+	f("toni");
+	f();
+}
+
+void f(const std::string& name) {
+	std::cout << "Hello, " << name << "!\n";
+}
+
+//!ParameterWithDefaultValue4
+//@main.cpp
+#include <iostream>
+
+void f(const char* name = "world");
+
+int main() {
+	f("toni");
+	f();
+}
+
+void f(const char* name) {
+    if(name) {
+    	std::cout << "Hello, " << name << "!\n";
+	}
+}
+//=
+#include <iostream>
+#include <string>
+
+void f(const std::string& name);
+void f(const char* name = "world");
+
+int main() {
+	f("toni");
+	f();
+}
+
+void f(const std::string& name) {
+	std::cout << "Hello, " << name << "!\n";
+}
+
+void f(const char* name) {
+	if (name) {
+		f(std::string(name));
+	}
+}

@@ -42,4 +42,9 @@ public class ResultVariableRewriteStrategy extends RewriteStrategy {
 		final IASTCompoundStatement compoundStatement = ExtendedNodeFactory.newCompoundStatement(expressionStatement);
 		ASTModifier.replace(nullCheckClause, compoundStatement, getMainRewrite());
 	}
+
+	@Override
+	protected boolean shouldCopyDefaultValueOfParameter() {
+		return false;
+	}
 }

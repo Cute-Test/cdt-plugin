@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
@@ -112,11 +113,17 @@ public abstract class RewriteStrategy {
 	protected abstract IASTCompoundStatement getStdStringOverloadBody();
 
 	private ICPPASTParameterDeclaration newAdaptedParameterDeclaration(ICPPASTParameterDeclaration parameterDeclaration) {
+		final IASTDeclarator oldDeclarator = parameterDeclaration.getDeclarator();
 		final IASTDeclSpecifier declSpecifier = ExtendedNodeFactory.newNamedTypeSpecifier(StdString.STD_STRING);
 		declSpecifier.setConst(true);
-		final IASTDeclarator declarator = ExtendedNodeFactory.newReferenceDeclarator(parameterDeclaration.getDeclarator().getName().toString());
+		final IASTDeclarator declarator = ExtendedNodeFactory.newReferenceDeclarator(oldDeclarator.getName().toString());
+		if(shouldCopyDefaultValueOfParameter() && oldDeclarator.getInitializer() != null) {
+			declarator.setInitializer(oldDeclarator.getInitializer().copy(CopyStyle.withLocations));
+		}
 		return ExtendedNodeFactory.newParameterDeclaration(declSpecifier, declarator);
 	}
+
+	protected abstract boolean shouldCopyDefaultValueOfParameter();
 
 	protected final IASTStatement getStdStringFunctionCallStatement() {
 		final IASTDeclarator functionDeclarator = functionDefinition.getDeclarator();

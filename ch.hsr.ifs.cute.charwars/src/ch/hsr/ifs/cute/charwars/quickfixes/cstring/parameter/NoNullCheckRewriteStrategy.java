@@ -32,4 +32,9 @@ public class NoNullCheckRewriteStrategy extends RewriteStrategy {
 			return IndexFinderInstruction.CONTINUE_SEARCH;
 		});
 	}
+
+	@Override
+	protected boolean shouldCopyDefaultValueOfParameter() {
+		return true;
+	}
 }
