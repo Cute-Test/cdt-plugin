@@ -2,7 +2,7 @@ target "Cevelop based on Eclipse Oxygen and CDT 9.3.0"
 
 with source requirements
 
-location "https://www.cevelop.com/cdt-testing/development" {
+location "https://www.cevelop.com/cdt-testing/9.3.0" {
 	ch.hsr.ifs.cdttesting.feature.feature.group [9.3.0,9.4.0)
 }
 
