@@ -976,7 +976,7 @@ struct SUT {
 };
 
 //@A.cpp
-#include "SUT.h"
+#include "ParameterNaming.h"
 
 void testSUT(){
   struct /*$*/Fake/*$$*/ {
@@ -985,7 +985,7 @@ void testSUT(){
   sut.bar();
 }
 //=
-#include "SUT.h"
+#include "ParameterNaming.h"
 
 void testSUT(){
   struct Fake {
