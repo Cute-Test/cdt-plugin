@@ -16,6 +16,9 @@ public class CPPVersionProjectSetting {
 		IEclipsePreferences projectNode = projectScope.getNode(Activator.PLUGIN_ID);
 		if (projectNode != null) {
 			String versionString = projectNode.get("c_dialect", null);
+			if (versionString == null) {
+				return null;
+			}
 			CPPVersion version = null;
 			try {
 				version = CPPVersion.valueOf(versionString);

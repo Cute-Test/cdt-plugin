@@ -141,7 +141,7 @@ public class CopyUtils {
 	
 	private static boolean isCPPVersionAboveOrEqualEleven(IProject project) {
 		CPPVersion version = getCPPVersion(project);
-		if(!version.toString().equals(CPPVersion.CPP_98.toString())
+		if(version != null && !version.toString().equals(CPPVersion.CPP_98.toString())
 				&& !version.toString().equals(CPPVersion.CPP_03.toString())) {
 			return true;
 		}

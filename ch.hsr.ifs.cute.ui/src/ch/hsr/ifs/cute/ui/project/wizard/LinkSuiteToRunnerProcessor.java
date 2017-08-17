@@ -20,7 +20,6 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
-import org.eclipse.cdt.core.dom.ast.IASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -229,7 +228,7 @@ public class LinkSuiteToRunnerProcessor {
 	
 	private static boolean isCPPVersionAboveOrEqualEleven(IProject project) {
 		CPPVersion version = getCPPVersion(project);
-		if(!version.toString().equals(CPPVersion.CPP_98.toString())
+		if(version != null && !version.toString().equals(CPPVersion.CPP_98.toString())
 				&& !version.toString().equals(CPPVersion.CPP_03.toString())) {
 			return true;
 		}
