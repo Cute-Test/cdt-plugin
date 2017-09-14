@@ -2,12 +2,12 @@
 <introContent>
   	<extensionContent id="ch.hsr.ifs.cute.help" style="css/overview.css" 
   	                  alt-style="css/overview.properties"
-  	                  name="Cute C++ Unit Testing Easier" path="overview/@">
+  	                  name="CUTE C++ Unit Testing Easier" path="overview/@">
   	    <group id="content-group" style-id="content-group">
-    	<link style-id="content-link" label="Cute C++ Unit Testing Easier" 
-       		      url="http://org.eclipse.ui.intro/showHelpTopic?id=/ch.hsr.ifs.cute.help/html/overview.html"  
+    	<link style-id="content-link" label="CUTE C++ Unit Testing Easier" 
+       		      url="http://org.eclipse.ui.intro/showHelpTopic?id=/ch.hsr.ifs.cute.help/docs/web/cute-test.com/projects/cute/wiki/Wiki.html"  
        		      id="cute">
-          		<text>Learn more about Cute.</text></link>
+          		<text>Learn more about CUTE.</text></link>
        	</group>
   	</extensionContent>
  
