@@ -43,8 +43,8 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
   private void prepareRefactoring(RefactoringStatus status, IProgressMonitor pm)
       throws OperationCanceledException, CoreException {
-    context.setSelectedName(getSelectedName(getAST(tu, pm)));
     context.setStatus(status);
+    context.setSelectedName(getSelectedName(getAST(tu, pm)));
     context.setProgressMonitor(pm);
     context.setCRefContext(refactoringContext);
     handler = new ExtractInterfaceHandler(context);

@@ -1177,6 +1177,105 @@ struct FooInterface
 };
 #endif
 
+//!Extract with members having templates
+//@.config
+filename=Foo.cpp
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Foo.cpp
+#include <map>
+#include <string>
+
+struct /*$*/Foo/*$$*/ {
+	void foo() const {}
+	
+	std::map<int, std::string> m;
+};
+
+//=
+#include <map>
+#include <string>
+
+#include "FooInterface.h"
+struct Foo : FooInterface {
+	void foo() const {
+	}
+	
+	std::map<int, std::string> m;
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+#include <map>
+#include <string>
+
+struct FooInterface {
+	virtual ~FooInterface() {
+	}
+	virtual void foo() const = 0;
+};
+#endif
+
+//!Extract with members having complex templates
+//@.config
+filename=Bar.cpp
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@Bar.cpp
+#include <map>
+#include <string>
+#include <vector>
+
+struct Foo {
+	void foo() const {}
+	
+	std::map<int, std::string> m;
+};
+
+struct Bar {
+	void bar() const {}
+	
+	std::map<std::string, std::vector<std::map<int, /*$*/Foo/*$$*/>>> m;
+};
+
+//=
+#include <map>
+#include <string>
+#include <vector>
+
+#include "FooInterface.h"
+struct Foo: FooInterface {
+	void foo() const {
+	}
+	
+	std::map<int, std::string> m;
+};
+
+struct Bar {
+	void bar() const {
+	}
+	
+	std::map<std::string, std::vector<std::map<int, Foo> > > m;
+};
+
+//@FooInterface.h
+//=
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+#include <map>
+#include <string>
+#include <vector>
+
+struct FooInterface {
+	virtual ~FooInterface() {
+	}
+};
+#endif
+
 //!Separate declaration and definition
 //@.config
 filename=Foo.h

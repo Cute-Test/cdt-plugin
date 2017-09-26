@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.extractinterface.transform;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -82,11 +83,25 @@ public class ExistingReferencesReplacer implements F1V<ExtractInterfaceContext> 
   }
 
   private static IASTDeclarator getDeclarator(IASTNode declaration, IASTName className) {
-    if (hasTemplateId(declaration)) {
+    if (hasTemplateId(declaration, className)) {
       ICPPASTNamedTypeSpecifier namedType = getTypeSpecIfRefersToClass(declaration, className);
       return AstUtil.getChildOfType(namedType.getParent(), IASTDeclarator.class);
     }
     return AstUtil.getDeclaratorForNode(declaration);
+  }
+
+  private static boolean hasTemplateId(IASTNode node, final IASTName className) {
+    ICPPASTTemplateId templatedChild = AstUtil.getChildOfType(node, ICPPASTTemplateId.class);
+
+    if (templatedChild == null) {
+        return false;
+    }
+
+    return Arrays.stream(templatedChild.getTemplateArguments())
+            .anyMatch(t -> 
+                    t instanceof ICPPASTTypeId 
+                    && ((ICPPASTTypeId) t).getDeclSpecifier().toString().equals(className.toString())
+                );
   }
 
   private static boolean hasTemplateId(IASTNode node) {
