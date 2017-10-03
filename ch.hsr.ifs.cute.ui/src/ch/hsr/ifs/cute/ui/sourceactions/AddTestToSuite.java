@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
@@ -35,6 +36,8 @@ import ch.hsr.ifs.cute.ui.ASTUtil;
  * @since 4.0
  */
 public class AddTestToSuite extends AbstractFunctionAction {
+
+	private static final String SCOPE = "::";
 
 	@Override
 	public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
@@ -61,17 +64,15 @@ public class AddTestToSuite extends AbstractFunctionAction {
 
 						AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
 						IASTFunctionDeclarator declarator = def.getDeclarator();
-						IASTName name = declarator.getName();
 						if (isMemberFunction(def)) { // In .cpp file
 							if (ASTHelper.isFunctor(def.getDeclarator())) {
 								lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file,
 										suiteFinder);
 							} else {
-								lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, name, suiteFinder);
+								lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, declarator.getName(), suiteFinder);
 							}
 						} else if (isFunction(def)) {
-							String functionName = name.toString();
-							lineStrategy = new AddFunctionStrategy(doc, file, astTu, functionName, suiteFinder);
+							lineStrategy = new AddFunctionStrategy(doc, file, astTu, getQualifiedFunctionName(def), suiteFinder);
 						}
 						if (suite == null) {
 							adder = new AddSuiteStrategy(lineStrategy);
@@ -136,5 +137,18 @@ public class AddTestToSuite extends AbstractFunctionAction {
 			IASTNode parent = node.getParent();
 			return getFunctionDefinition(parent);
 		}
+	}
+
+	private static String getQualifiedFunctionName(final IASTFunctionDefinition def) {
+		String result = def.getDeclarator().getName().toString();
+
+		IASTNode parent = def.getParent();
+
+		while (parent instanceof ICPPASTNamespaceDefinition) {
+			result = ((ICPPASTNamespaceDefinition) parent).getName().toString() + SCOPE + result;
+			parent = parent.getParent();
+		}
+
+		return result;
 	}
 }

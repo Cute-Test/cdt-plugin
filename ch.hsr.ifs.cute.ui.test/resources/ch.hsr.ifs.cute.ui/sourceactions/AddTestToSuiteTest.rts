@@ -449,3 +449,63 @@ cute::suite make_suite(){
 	s.push_back(S());
 	return s;
 }
+//!test pushback with namespace
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+namespace Test {
+void /*$*/anotherTest/*$$*/(){
+	ASSERTM("start writing tests", false);
+}
+}
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+namespace Test {
+void anotherTest(){
+	ASSERTM("start writing tests", false);
+}
+}
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTest));
+	s.push_back(CUTE(Test::anotherTest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//!test pushback with nested namespaces
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+namespace Test {
+namespace InnerTest {
+void /*$*/anotherTest/*$$*/(){
+	ASSERTM("start writing tests", false);
+}
+}
+}
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
+//=
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+namespace Test {
+namespace InnerTest {
+void anotherTest(){
+	ASSERTM("start writing tests", false);
+}
+}
+}
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTest));
+	s.push_back(CUTE(Test::InnerTest::anotherTest));
+	cute::ide_listener lis;
+	cute::makeRunner(lis)(s, "The Suite");
+}
