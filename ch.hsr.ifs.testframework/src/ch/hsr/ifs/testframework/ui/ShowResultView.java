@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.progress.UIJob;
 
@@ -28,24 +27,19 @@ public class ShowResultView extends UIJob {
 	}
 
 	private TestRunnerViewPart showTestRunnerViewPartInActivePage(TestRunnerViewPart testRunner) {
-		IWorkbenchPart activePart = null;
 		IWorkbenchPage page = null;
 		try {
-			if (testRunner != null && testRunner.isCreated())
-				return testRunner;
 			page = TestFrameworkPlugin.getActivePage();
 			if (page == null)
 				return null;
-			activePart = page.getActivePart();
-
+			if (testRunner != null && testRunner.isCreated()) {
+				page.activate(testRunner);
+				return testRunner;
+			}
 			return (TestRunnerViewPart) page.showView(TestRunnerViewPart.ID);
 		} catch (PartInitException pie) {
 			TestFrameworkPlugin.log(pie);
 			return null;
-		} finally {
-			// restore focus stolen by the creation of the result view
-			if (page != null && activePart != null)
-				page.activate(activePart);
 		}
 	}
 
