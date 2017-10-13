@@ -44,11 +44,6 @@
     <module>ch.hsr.ifs.cute.boost.feature</module>
     <module>ch.hsr.ifs.cute.boost</module>
 
-    <!-- Elevator -->
-    <module>ch.hsr.ifs.cute.elevator</module>
-    <module>ch.hsr.ifs.cute.elevator.feature</module>
-    <module>ch.hsr.ifs.cute.elevator.test</module>
-
     <!-- Elevenator -->
     <module>ch.hsr.ifs.cute.elevenator</module>
     <module>ch.hsr.ifs.cute.elevenator.feature</module>
