@@ -49,9 +49,6 @@
     <module>ch.hsr.ifs.cute.namespactor.checkers</module>
     <module>ch.hsr.ifs.cute.namespactor.feature</module>
     <module>ch.hsr.ifs.cute.namespactor.test</module>
-    <module>ch.hsr.ifs.cute.refactoringPreview.clonewar.feature</module>
-    <module>ch.hsr.ifs.cute.refactoringPreview.clonewar</module>
-    <module>ch.hsr.ifs.cute.refactoringPreview.clonewar.test</module>
 
     <!-- Macronator -->
     <module>ch.hsr.ifs.cute.macronator</module>
