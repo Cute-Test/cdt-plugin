@@ -44,12 +44,6 @@
     <module>ch.hsr.ifs.cute.boost.feature</module>
     <module>ch.hsr.ifs.cute.boost</module>
 
-    <!-- Refactoring Preview -->
-    <module>ch.hsr.ifs.cute.namespactor</module>
-    <module>ch.hsr.ifs.cute.namespactor.checkers</module>
-    <module>ch.hsr.ifs.cute.namespactor.feature</module>
-    <module>ch.hsr.ifs.cute.namespactor.test</module>
-
     <!-- Macronator -->
     <module>ch.hsr.ifs.cute.macronator</module>
     <module>ch.hsr.ifs.cute.macronator.feature</module>
