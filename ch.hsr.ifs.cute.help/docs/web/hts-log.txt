@@ -1,4 +1,4 @@
-HTTrack3.48-21 launched on Fri, 16 Dec 2016 16:40:53 at http://cute-test.com/projects/cute/wiki/User_Guide http://cute-test.com/stylesheets/application.css +*/attachments/* +*/themes/* +*/stylesheets/* -*/javascripts/* -*/activity* +*/images* -*files?sort*
+HTTrack3.48-1+libhtsjava.so.2 launched on Thu, 14 Sep 2017 13:15:08 at http://cute-test.com/projects/cute/wiki/User_Guide http://cute-test.com/stylesheets/application.css +*/attachments/* +*/themes/* +*/stylesheets/* -*/javascripts/* -*/activity* +*/images* -*files?sort*
 (httrack http://cute-test.com/projects/cute/wiki/User_Guide http://cute-test.com/stylesheets/application.css -n -C0 -O web +*/attachments/* +*/themes/* +*/stylesheets/* -*/javascripts/* -*/activity* +*/images* -*files?sort* )
 
 Information, Warnings and Errors reported for this mirror:
@@ -6,7 +6,299 @@ note:	the hts-log.txt file, and hts-cache folder, may contain sensitive informat
 	such as username/password authentication for websites mirrored in this project
 	do not share these files/folders if you want these information to remain private
 
-16:40:54	Warning: 	File not parsed, looks like binary: cute-test.com/robots.txt
+13:15:09	Warning: 	File not parsed, looks like binary: cute-test.com/robots.txt
+13:15:19	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/application.css, 'web/cute-test.com/stylesheets/application.html' could not be found on disk
+13:15:19	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/favicon.ico?1414674397, 'web/cute-test.com/images/favicon803b.html' could not be found on disk
+13:15:19	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351, 'web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html' could not be found on disk
+13:15:19	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/themes/cute/stylesheets/application.css?1400673388, 'web/cute-test.com/themes/cute/stylesheets/application1bf4.html' could not be found on disk
+13:15:19	Warning: 	Could not create temporary reference file for cute-test.com/images/favicon.ico?1414674397
+13:15:20	Warning: 	engine: unexpected duplicate file entry: cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (200 'OK') / cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable')
+13:15:20	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (200 'OK') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:20	Warning: 	engine: unexpected duplicate file entry: cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable') / cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable')
+13:15:21	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:24	Warning: 	engine: unexpected duplicate file entry: cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable') / cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable')
+13:15:25	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:25	Warning: 	engine: unexpected duplicate file entry: cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable') / cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable')
+13:15:25	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:26	Warning: 	engine: unexpected duplicate file entry: cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable') / cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable')
+13:15:26	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:26	Warning: 	engine: unexpected duplicate file entry: cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable') / cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable')
+13:15:27	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:27	Warning: 	engine: unexpected duplicate file entry: cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable') / cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351 -> web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html (416 'Requested Range Not Satisfiable')
+13:15:27	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:28	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/153/20161114_updatesite_neon.png
+13:15:29	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:29	Warning: 	engine: unexpected duplicate file entry: cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable') / cute-test.com/themes/cute/stylesheets/application.css?1400673388 -> web/cute-test.com/themes/cute/stylesheets/application1bf4.html (416 'Requested Range Not Satisfiable')
+13:15:29	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/86/cute2_0_0.zip
+13:15:30	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/87/cute2_0_0.tar.gz
+13:15:30	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/36/cute1_7_0.zip
+13:15:30	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/38/cute1_7_0.tar.gz
+13:15:36	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/4/cute1_6_1.zip
+13:15:37	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/3/cute1_6_1.tar.gz
+13:15:42	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/148/20161103_new_project_wizard.png
+13:15:43	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/147/20161103_new_project_editor.png
+13:15:44	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/151/20161103_standard_fail.png
+13:15:48	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/150/20161103_custom_fail.png
+13:15:50	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/146/20161103_diff_view_regular.png
+13:15:53	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/145/20161103_diff_view_detailed.png
+13:15:55	Warning: 	Could not create temporary reference file for www.cute-test.com/attachments/download/152/20161110_include_boost.png
+13:15:56	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/171/20161202_calculator_type_missing.png
+13:15:56	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/170/20161202_calculator_type_could_not_be_resolved.png
+13:15:57	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/174/20161202_create_type_calculator.png
+13:16:03	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/177/20161202_struct_calculator.png
+13:16:05	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/176/20161202_extract_to_new_header_file.png
+13:16:11	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/169/20161202_calculator_header.png
+13:16:11	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/178/20161202_toggle_function_definition.png
+13:16:15	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/168/20161202_calculator_source.png
+13:16:17	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/175/20161202_no_such_constructor_for_type_calculator.png
+13:16:21	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/172/20161202_create_constructor_calculator.png
+13:16:25	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/180/20161202_member_variable_cannot_be_resolved.png
+13:16:26	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/179/20161202_create_member_variable.png
+13:16:26	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/173/20161202_create_default_constructor.png
+13:16:29	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/181/20161202_add_test_to_suite.png
+13:16:32	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/189/20161216_new_test_function_cursor_position.png
+13:16:33	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/190/20161216_new_test_function_source_menu.png
+13:16:33	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/188/20161216_inserted_new_test_function.png
+13:16:36	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/187/20161216_add_test_to_suite.png
+13:16:46	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/192/20161216_new_library_test_project.png
+13:16:47	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/191/20161216_select_library_to_test.png
+13:16:48	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/197/20161216_new_suite_file_menu.png
+13:16:49	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/198/20161216_new_suite_file_wizard.png
+13:16:56	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/196/20161216_multiple_suites_test_view.png
+13:16:58	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/203/20161216_elevenator_set_cppversion.png
+13:16:59	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/204/20161216_elevenator_wizard_page.png
+13:17:03	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/202/20161216_elevenator_dialect_settings.png
+13:17:03	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/199/20161216_elevenator_build_settings.png
+13:17:09	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/205/20161216_elevenator_preprocessor_includes.png
+13:17:16	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/201/20161216_elevenator_code_analysis_workspace.png
+13:17:22	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/200/20161216_elevenator_code_analysis_project.png
+13:17:30	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/183/20161202_change_typedef_to_using_alias.png
+13:17:33	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/182/20161202_change_typedef_changes_view.png
+13:17:39	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/185/20161202_inline_type_alias.png
+13:17:43	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/184/20161202_inline_type_alias_changes_view.png
+13:17:44	Warning: 	Could not create temporary reference file for cute-test.com/images/projects.png
+13:18:05	Warning: 	HTML file (9662 bytes) retransferred due to lack of cache: cute-test.com/images/favicon.ico?1414674397
+13:18:05	Warning: 	Could not create temporary reference file for cute-test.com/images/favicon.ico?1414674397
+13:18:05	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/jquery-ui-1.9.2.css?1400673351, 'web/cute-test.com/stylesheets/jquery/jquery-ui-1.9.2a99a.html' could not be found on disk
+13:18:05	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/themes/cute/stylesheets/application.css?1400673388, 'web/cute-test.com/themes/cute/stylesheets/application1bf4.html' could not be found on disk
+13:18:07	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/194/20161216_new_suite_project.png
+13:18:07	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/193/20161216_enter_suite_name.png
+13:18:08	Warning: 	Could not create temporary reference file for cute-test.com/attachments/download/195/20161216_suite_project_explorer_view.png
+13:18:08	Warning: 	Could not create temporary reference file for www.cute-test.com/attachments/download/149/20161103_overview_small.png
+13:18:15	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_highlight-soft_100_eeeeee_1x100.png
+13:18:19	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/user.png, 'web/cute-test.com/images/user.html' could not be found on disk
+13:18:19	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/group.png, 'web/cute-test.com/images/group.html' could not be found on disk
+13:18:19	Warning: 	Could not create temporary reference file for cute-test.com/images/user.png
+13:18:19	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/database_key.png, 'web/cute-test.com/images/database_key.html' could not be found on disk
+13:18:19	Warning: 	Could not create temporary reference file for cute-test.com/images/group.png
+13:18:20	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/ticket.png, 'web/cute-test.com/images/ticket.html' could not be found on disk
+13:18:20	Warning: 	Could not create temporary reference file for cute-test.com/images/database_key.png
+13:18:20	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/ticket_edit.png, 'web/cute-test.com/images/ticket_edit.html' could not be found on disk
+13:18:20	Warning: 	Could not create temporary reference file for cute-test.com/images/ticket.png
+13:18:20	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/ticket_go.png, 'web/cute-test.com/images/ticket_go.html' could not be found on disk
+13:18:20	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/textfield.png, 'web/cute-test.com/images/textfield.html' could not be found on disk
+13:18:20	Warning: 	Could not create temporary reference file for cute-test.com/images/ticket_edit.png
+13:18:21	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/text_list_bullets.png, 'web/cute-test.com/images/text_list_bullets.html' could not be found on disk
+13:18:21	Warning: 	Could not create temporary reference file for cute-test.com/images/ticket_go.png
+13:18:21	Warning: 	Could not create temporary reference file for cute-test.com/images/textfield.png
+13:18:21	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/changeset.png, 'web/cute-test.com/images/changeset.html' could not be found on disk
+13:18:21	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/plugin.png, 'web/cute-test.com/images/plugin.html' could not be found on disk
+13:18:21	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/help.png, 'web/cute-test.com/images/help.html' could not be found on disk
+13:18:21	Warning: 	Could not create temporary reference file for cute-test.com/images/text_list_bullets.png
+13:18:21	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/server_key.png, 'web/cute-test.com/images/server_key.html' could not be found on disk
+13:18:21	Warning: 	Could not create temporary reference file for cute-test.com/images/changeset.png
+13:18:21	Warning: 	Could not create temporary reference file for cute-test.com/images/plugin.png
+13:18:21	Warning: 	Could not create temporary reference file for cute-test.com/images/help.png
+13:18:21	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/openid-bg.gif, 'web/cute-test.com/images/openid-bg.html' could not be found on disk
+13:18:21	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/arrow_expanded.png, 'web/cute-test.com/images/arrow_expanded.html' could not be found on disk
+13:18:21	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/arrow_collapsed.png, 'web/cute-test.com/images/arrow_collapsed.html' could not be found on disk
+13:18:22	Warning: 	Could not create temporary reference file for cute-test.com/images/server_key.png
+13:18:22	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/bullet_arrow_right.png, 'web/cute-test.com/images/bullet_arrow_right.html' could not be found on disk
+13:18:22	Warning: 	Could not create temporary reference file for cute-test.com/images/openid-bg.gif
+13:18:22	Warning: 	Could not create temporary reference file for cute-test.com/images/arrow_expanded.png
+13:18:22	Warning: 	Could not create temporary reference file for cute-test.com/images/arrow_collapsed.png
+13:18:22	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/bullet_toggle_plus.png, 'web/cute-test.com/images/bullet_toggle_plus.html' could not be found on disk
+13:18:22	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/bullet_toggle_minus.png, 'web/cute-test.com/images/bullet_toggle_minus.html' could not be found on disk
+13:18:22	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/locked.png, 'web/cute-test.com/images/locked.html' could not be found on disk
+13:18:22	Warning: 	Could not create temporary reference file for cute-test.com/images/bullet_arrow_right.png
+13:18:22	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/bullet_go.png, 'web/cute-test.com/images/bullet_go.html' could not be found on disk
+13:18:22	Warning: 	Could not create temporary reference file for cute-test.com/images/bullet_toggle_plus.png
+13:18:22	Warning: 	Could not create temporary reference file for cute-test.com/images/bullet_toggle_minus.png
+13:18:23	Warning: 	Could not create temporary reference file for cute-test.com/images/locked.png
+13:18:23	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/link.png, 'web/cute-test.com/images/link.html' could not be found on disk
+13:18:23	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/sort_asc.png, 'web/cute-test.com/images/sort_asc.html' could not be found on disk
+13:18:23	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/sort_desc.png, 'web/cute-test.com/images/sort_desc.html' could not be found on disk
+13:18:23	Warning: 	Could not create temporary reference file for cute-test.com/images/bullet_go.png
+13:18:23	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/comment.png, 'web/cute-test.com/images/comment.html' could not be found on disk
+13:18:23	Warning: 	Could not create temporary reference file for cute-test.com/images/sort_asc.png
+13:18:23	Warning: 	Could not create temporary reference file for cute-test.com/images/link.png
+13:18:23	Warning: 	Could not create temporary reference file for cute-test.com/images/sort_desc.png
+13:18:23	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/package.png, 'web/cute-test.com/images/package.html' could not be found on disk
+13:18:23	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/news.png, 'web/cute-test.com/images/news.html' could not be found on disk
+13:18:23	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/bullet_add.png, 'web/cute-test.com/images/bullet_add.html' could not be found on disk
+13:18:23	Warning: 	Could not create temporary reference file for cute-test.com/images/comment.png
+13:18:24	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/ticket_checked.png, 'web/cute-test.com/images/ticket_checked.html' could not be found on disk
+13:18:24	Warning: 	Could not create temporary reference file for cute-test.com/images/package.png
+13:18:24	Warning: 	Could not create temporary reference file for cute-test.com/images/news.png
+13:18:24	Warning: 	Could not create temporary reference file for cute-test.com/images/bullet_add.png
+13:18:24	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/ticket_note.png, 'web/cute-test.com/images/ticket_note.html' could not be found on disk
+13:18:24	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/message.png, 'web/cute-test.com/images/message.html' could not be found on disk
+13:18:24	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/comments.png, 'web/cute-test.com/images/comments.html' could not be found on disk
+13:18:24	Warning: 	Could not create temporary reference file for cute-test.com/images/ticket_checked.png
+13:18:24	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/wiki_edit.png, 'web/cute-test.com/images/wiki_edit.html' could not be found on disk
+13:18:24	Warning: 	Could not create temporary reference file for cute-test.com/images/ticket_note.png
+13:18:24	Warning: 	Could not create temporary reference file for cute-test.com/images/message.png
+13:18:24	Warning: 	Could not create temporary reference file for cute-test.com/images/comments.png
+13:18:24	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/attachment.png, 'web/cute-test.com/images/attachment.html' could not be found on disk
+13:18:24	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/document.png, 'web/cute-test.com/images/document.html' could not be found on disk
+13:18:24	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/time.png, 'web/cute-test.com/images/time.html' could not be found on disk
+13:18:24	Warning: 	Could not create temporary reference file for cute-test.com/images/wiki_edit.png
+13:18:25	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/fav.png, 'web/cute-test.com/images/fav.html' could not be found on disk
+13:18:25	Warning: 	Could not create temporary reference file for cute-test.com/images/attachment.png
+13:18:25	Warning: 	Could not create temporary reference file for cute-test.com/images/document.png
+13:18:25	Warning: 	Could not create temporary reference file for cute-test.com/images/time.png
+13:18:25	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/draft.png, 'web/cute-test.com/images/draft.html' could not be found on disk
+13:18:25	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/feed.png, 'web/cute-test.com/images/feed.html' could not be found on disk
+13:18:25	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/exclamation.png, 'web/cute-test.com/images/exclamation.html' could not be found on disk
+13:18:25	Warning: 	Could not create temporary reference file for cute-test.com/images/fav.png
+13:18:25	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/magnifier.png, 'web/cute-test.com/images/magnifier.html' could not be found on disk
+13:18:25	Warning: 	Could not create temporary reference file for cute-test.com/images/feed.png
+13:18:25	Warning: 	Could not create temporary reference file for cute-test.com/images/draft.png
+13:18:25	Warning: 	Could not create temporary reference file for cute-test.com/images/exclamation.png
+13:18:26	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/loading.gif, 'web/cute-test.com/images/loading.html' could not be found on disk
+13:18:26	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/true.png, 'web/cute-test.com/images/true.html' could not be found on disk
+13:18:26	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/warning.png, 'web/cute-test.com/images/warning.html' could not be found on disk
+13:18:26	Warning: 	Could not create temporary reference file for cute-test.com/images/magnifier.png
+13:18:26	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/bullet_end.png, 'web/cute-test.com/images/bullet_end.html' could not be found on disk
+13:18:26	Warning: 	Could not create temporary reference file for cute-test.com/images/true.png
+13:18:26	Warning: 	Could not create temporary reference file for cute-test.com/images/loading.gif
+13:18:26	Warning: 	Could not create temporary reference file for cute-test.com/images/warning.png
+13:18:26	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/bullet_diamond.png, 'web/cute-test.com/images/bullet_diamond.html' could not be found on disk
+13:18:26	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/bullet_arrow_left.png, 'web/cute-test.com/images/bullet_arrow_left.html' could not be found on disk
+13:18:26	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/external.png, 'web/cute-test.com/images/external.html' could not be found on disk
+13:18:26	Warning: 	Could not create temporary reference file for cute-test.com/images/bullet_end.png
+13:18:26	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/close.png, 'web/cute-test.com/images/close.html' could not be found on disk
+13:18:26	Warning: 	Could not create temporary reference file for cute-test.com/images/bullet_diamond.png
+13:18:27	Warning: 	Could not create temporary reference file for cute-test.com/images/bullet_arrow_left.png
+13:18:27	Warning: 	Could not create temporary reference file for cute-test.com/images/external.png
+13:18:27	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/close_hl.png, 'web/cute-test.com/images/close_hl.html' could not be found on disk
+13:18:27	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/task_late.png, 'web/cute-test.com/images/task_late.html' could not be found on disk
+13:18:27	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/task_done.png, 'web/cute-test.com/images/task_done.html' could not be found on disk
+13:18:27	Warning: 	Could not create temporary reference file for cute-test.com/images/close.png
+13:18:27	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/task_todo.png, 'web/cute-test.com/images/task_todo.html' could not be found on disk
+13:18:27	Warning: 	Could not create temporary reference file for cute-test.com/images/close_hl.png
+13:18:27	Warning: 	Could not create temporary reference file for cute-test.com/images/task_late.png
+13:18:27	Warning: 	Could not create temporary reference file for cute-test.com/images/task_done.png
+13:18:27	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/task_parent_end.png, 'web/cute-test.com/images/task_parent_end.html' could not be found on disk
+13:18:27	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/milestone_late.png, 'web/cute-test.com/images/milestone_late.html' could not be found on disk
+13:18:27	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/milestone_done.png, 'web/cute-test.com/images/milestone_done.html' could not be found on disk
+13:18:27	Warning: 	Could not create temporary reference file for cute-test.com/images/task_todo.png
+13:18:28	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/milestone_todo.png, 'web/cute-test.com/images/milestone_todo.html' could not be found on disk
+13:18:28	Warning: 	Could not create temporary reference file for cute-test.com/images/task_parent_end.png
+13:18:28	Warning: 	Could not create temporary reference file for cute-test.com/images/milestone_late.png
+13:18:28	Warning: 	Could not create temporary reference file for cute-test.com/images/milestone_done.png
+13:18:28	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/version_marker.png, 'web/cute-test.com/images/version_marker.html' could not be found on disk
+13:18:28	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/project_marker.png, 'web/cute-test.com/images/project_marker.html' could not be found on disk
+13:18:28	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/add.png, 'web/cute-test.com/images/add.html' could not be found on disk
+13:18:28	Warning: 	Could not create temporary reference file for cute-test.com/images/milestone_todo.png
+13:18:28	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/edit.png, 'web/cute-test.com/images/edit.html' could not be found on disk
+13:18:28	Warning: 	Could not create temporary reference file for cute-test.com/images/version_marker.png
+13:18:28	Warning: 	Could not create temporary reference file for cute-test.com/images/project_marker.png
+13:18:28	Warning: 	Could not create temporary reference file for cute-test.com/images/add.png
+13:18:29	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/copy.png, 'web/cute-test.com/images/copy.html' could not be found on disk
+13:18:29	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/duplicate.png, 'web/cute-test.com/images/duplicate.html' could not be found on disk
+13:18:29	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/delete.png, 'web/cute-test.com/images/delete.html' could not be found on disk
+13:18:29	Warning: 	Could not create temporary reference file for cute-test.com/images/edit.png
+13:18:29	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/move.png, 'web/cute-test.com/images/move.html' could not be found on disk
+13:18:29	Warning: 	Could not create temporary reference file for cute-test.com/images/copy.png
+13:18:29	Warning: 	Could not create temporary reference file for cute-test.com/images/duplicate.png
+13:18:29	Warning: 	Could not create temporary reference file for cute-test.com/images/delete.png
+13:18:29	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/save.png, 'web/cute-test.com/images/save.html' could not be found on disk
+13:18:29	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/cancel.png, 'web/cute-test.com/images/cancel.html' could not be found on disk
+13:18:29	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/table_multiple.png, 'web/cute-test.com/images/table_multiple.html' could not be found on disk
+13:18:29	Warning: 	Could not create temporary reference file for cute-test.com/images/move.png
+13:18:29	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/folder.png, 'web/cute-test.com/images/folder.html' could not be found on disk
+13:18:29	Warning: 	Could not create temporary reference file for cute-test.com/images/save.png
+13:18:29	Warning: 	Could not create temporary reference file for cute-test.com/images/cancel.png
+13:18:30	Warning: 	Could not create temporary reference file for cute-test.com/images/table_multiple.png
+13:18:30	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/folder_open.png, 'web/cute-test.com/images/folder_open.html' could not be found on disk
+13:18:30	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/history.png, 'web/cute-test.com/images/history.html' could not be found on disk
+13:18:30	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/time_add.png, 'web/cute-test.com/images/time_add.html' could not be found on disk
+13:18:30	Warning: 	Could not create temporary reference file for cute-test.com/images/folder.png
+13:18:30	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/stats.png, 'web/cute-test.com/images/stats.html' could not be found on disk
+13:18:30	Warning: 	Could not create temporary reference file for cute-test.com/images/folder_open.png
+13:18:30	Warning: 	Could not create temporary reference file for cute-test.com/images/history.png
+13:18:30	Warning: 	Could not create temporary reference file for cute-test.com/images/time_add.png
+13:18:30	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/fav_off.png, 'web/cute-test.com/images/fav_off.html' could not be found on disk
+13:18:30	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/reload.png, 'web/cute-test.com/images/reload.html' could not be found on disk
+13:18:30	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/unlock.png, 'web/cute-test.com/images/unlock.html' could not be found on disk
+13:18:30	Warning: 	Could not create temporary reference file for cute-test.com/images/stats.png
+13:18:31	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/zoom_in.png, 'web/cute-test.com/images/zoom_in.html' could not be found on disk
+13:18:31	Warning: 	Could not create temporary reference file for cute-test.com/images/fav_off.png
+13:18:31	Warning: 	Could not create temporary reference file for cute-test.com/images/reload.png
+13:18:31	Warning: 	Could not create temporary reference file for cute-test.com/images/unlock.png
+13:18:31	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/report.png, 'web/cute-test.com/images/report.html' could not be found on disk
+13:18:31	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/lightning.png, 'web/cute-test.com/images/lightning.html' could not be found on disk
+13:18:31	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/zoom_out.png, 'web/cute-test.com/images/zoom_out.html' could not be found on disk
+13:18:31	Warning: 	Could not create temporary reference file for cute-test.com/images/zoom_in.png
+13:18:31	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/textfield_key.png, 'web/cute-test.com/images/textfield_key.html' could not be found on disk
+13:18:31	Warning: 	Could not create temporary reference file for cute-test.com/images/lightning.png
+13:18:31	Warning: 	Could not create temporary reference file for cute-test.com/images/report.png
+13:18:31	Warning: 	Could not create temporary reference file for cute-test.com/images/zoom_out.png
+13:18:32	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/default.png, 'web/cute-test.com/images/files/default.html' could not be found on disk
+13:18:32	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/text.png, 'web/cute-test.com/images/files/text.html' could not be found on disk
+13:18:32	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/c.png, 'web/cute-test.com/images/files/c.html' could not be found on disk
+13:18:32	Warning: 	Could not create temporary reference file for cute-test.com/images/textfield_key.png
+13:18:32	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/csharp.png, 'web/cute-test.com/images/files/csharp.html' could not be found on disk
+13:18:32	Warning: 	Could not create temporary reference file for cute-test.com/images/files/default.png
+13:18:32	Warning: 	Could not create temporary reference file for cute-test.com/images/files/text.png
+13:18:32	Warning: 	Could not create temporary reference file for cute-test.com/images/files/c.png
+13:18:32	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/java.png, 'web/cute-test.com/images/files/java.html' could not be found on disk
+13:18:32	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/js.png, 'web/cute-test.com/images/files/js.html' could not be found on disk
+13:18:32	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/php.png, 'web/cute-test.com/images/files/php.html' could not be found on disk
+13:18:32	Warning: 	Could not create temporary reference file for cute-test.com/images/files/csharp.png
+13:18:32	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/ruby.png, 'web/cute-test.com/images/files/ruby.html' could not be found on disk
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/java.png
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/js.png
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/php.png
+13:18:33	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/xml.png, 'web/cute-test.com/images/files/xml.html' could not be found on disk
+13:18:33	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/css.png, 'web/cute-test.com/images/files/css.html' could not be found on disk
+13:18:33	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/html.png, 'web/cute-test.com/images/files/html.html' could not be found on disk
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/ruby.png
+13:18:33	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/image.png, 'web/cute-test.com/images/files/image.html' could not be found on disk
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/xml.png
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/css.png
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/html.png
+13:18:33	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/pdf.png, 'web/cute-test.com/images/files/pdf.html' could not be found on disk
+13:18:33	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/images/files/zip.png, 'web/cute-test.com/images/files/zip.html' could not be found on disk
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/image.png
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/pdf.png
+13:18:33	Warning: 	Could not create temporary reference file for cute-test.com/images/files/zip.png
+13:18:34	Warning: 	engine: unexpected duplicate file entry: cute-test.com/stylesheets/application.css -> web/cute-test.com/stylesheets/application.html (416 'Requested Range Not Satisfiable') / cute-test.com/stylesheets/application.css -> web/cute-test.com/stylesheets/application.html (416 'Requested Range Not Satisfiable')
+13:18:34	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-bg_gloss-wave_35_759fcf_500x100.png, 'web/cute-test.com/stylesheets/jquery/images/ui-bg_gloss-wave_35_759fcf_500x100.html' could not be found on disk
+13:18:34	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-bg_glass_100_f6f6f6_1x400.png, 'web/cute-test.com/stylesheets/jquery/images/ui-bg_glass_100_f6f6f6_1x400.html' could not be found on disk
+13:18:34	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-bg_glass_100_eef5fd_1x400.png, 'web/cute-test.com/stylesheets/jquery/images/ui-bg_glass_100_eef5fd_1x400.html' could not be found on disk
+13:18:34	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-bg_glass_65_ffffff_1x400.png, 'web/cute-test.com/stylesheets/jquery/images/ui-bg_glass_65_ffffff_1x400.html' could not be found on disk
+13:18:34	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_glass_100_f6f6f6_1x400.png
+13:18:34	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_glass_100_eef5fd_1x400.png
+13:18:34	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_glass_65_ffffff_1x400.png
+13:18:34	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-bg_highlight-soft_75_759fcf_1x100.png, 'web/cute-test.com/stylesheets/jquery/images/ui-bg_highlight-soft_75_759fcf_1x100.html' could not be found on disk
+13:18:34	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-bg_diagonals-thick_18_b81900_40x40.png, 'web/cute-test.com/stylesheets/jquery/images/ui-bg_diagonals-thick_18_b81900_40x40.html' could not be found on disk
+13:18:34	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-icons_222222_256x240.png, 'web/cute-test.com/stylesheets/jquery/images/ui-icons_222222_256x240.html' could not be found on disk
+13:18:34	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_gloss-wave_35_759fcf_500x100.png
+13:18:35	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-icons_ffffff_256x240.png, 'web/cute-test.com/stylesheets/jquery/images/ui-icons_ffffff_256x240.html' could not be found on disk
+13:18:35	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_highlight-soft_75_759fcf_1x100.png
+13:18:35	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_diagonals-thick_18_b81900_40x40.png
+13:18:35	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-icons_222222_256x240.png
+13:18:35	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-icons_759fcf_256x240.png, 'web/cute-test.com/stylesheets/jquery/images/ui-icons_759fcf_256x240.html' could not be found on disk
+13:18:35	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-icons_ffd27a_256x240.png, 'web/cute-test.com/stylesheets/jquery/images/ui-icons_ffd27a_256x240.html' could not be found on disk
+13:18:35	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-bg_diagonals-thick_20_666666_40x40.png, 'web/cute-test.com/stylesheets/jquery/images/ui-bg_diagonals-thick_20_666666_40x40.html' could not be found on disk
+13:18:35	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-icons_ffffff_256x240.png
+13:18:35	Warning: 	Unexpected 412/416 error (Requested Range Not Satisfiable) for cute-test.com/stylesheets/jquery/images/ui-bg_flat_10_000000_40x100.png, 'web/cute-test.com/stylesheets/jquery/images/ui-bg_flat_10_000000_40x100.html' could not be found on disk
+13:18:35	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-icons_ffd27a_256x240.png
+13:18:35	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_diagonals-thick_20_666666_40x40.png
+13:18:35	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-icons_759fcf_256x240.png
+13:18:35	Warning: 	Could not create temporary reference file for cute-test.com/stylesheets/jquery/images/ui-bg_flat_10_000000_40x100.png
 
-HTTrack Website Copier/3.48-21 mirror complete in 4 minutes 50 seconds : 195 links scanned, 194 files written (4062630 bytes overall) [3910855 bytes received at 13485 bytes/sec], 380654 bytes transferred using HTTP compression in 34 files, ratio 30%, 3.3 requests per connection
-(No errors, 1 warnings, 0 messages)
+HTTrack Website Copier/3.48-1 mirror complete in 3 minutes 27 seconds : 310 links scanned, 199 files written (4134390 bytes overall) [4000639 bytes received at 19326 bytes/sec], 442752 bytes transferred using HTTP compression in 38 files, ratio 28%, 4.8 requests per connection
+(No errors, 293 warnings, 0 messages)

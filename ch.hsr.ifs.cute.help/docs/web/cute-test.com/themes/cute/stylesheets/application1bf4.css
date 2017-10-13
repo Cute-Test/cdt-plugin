@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css);
+@import url(../../../stylesheets/application.html);
 
 body, #wrapper { background-color:#EEEEEE; }
 #header { margin: 0px 10px 0px 11px; height: 120px; background-color: #C7230D;  }
