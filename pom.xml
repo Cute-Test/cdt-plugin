@@ -24,12 +24,10 @@
     <module>ch.hsr.ifs.testframework</module>
     <module>ch.hsr.ifs.cute.framework.extension</module>
     <module>ch.hsr.ifs.cute.core</module>
-    <module>ch.hsr.ifs.cute.tdd</module>
     <module>ch.hsr.ifs.cute.help</module>
     <module>ch.hsr.ifs.cute.ui</module>
     <module>ch.hsr.ifs.cute.ui.test</module>
     <module>ch.hsr.ifs.testframework.test</module>
-    <module>ch.hsr.ifs.cute.tdd.tests</module>
 
     <!-- CUTE Headers -->
     <module>ch.hsr.ifs.cute.headers</module>
