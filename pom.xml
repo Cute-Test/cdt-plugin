@@ -67,11 +67,6 @@
     <module>ch.hsr.ifs.cute.elevenator</module>
     <module>ch.hsr.ifs.cute.elevenator.feature</module>
 
-    <!-- CharWars -->
-    <module>ch.hsr.ifs.cute.charwars</module>
-    <module>ch.hsr.ifs.cute.charwars.feature</module>
-    <module>ch.hsr.ifs.cute.charwars.test</module>
-
     <!-- CUTE Updatesite -->
     <module>ch.hsr.ifs.cute.updatesite</module>
   </modules>
