@@ -4,6 +4,7 @@
 .bundledata*
 .contributions*
 .contributors*
+.settings
 /*/bin
 *.class
 /*/target/
