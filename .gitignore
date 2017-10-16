@@ -5,6 +5,8 @@
 .contributions*
 .contributors*
 .settings
+*.jpeg
+*.jpg
 /*/bin
 *.class
 /*/target/
