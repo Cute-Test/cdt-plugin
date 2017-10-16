@@ -30,7 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.hsr.ifs.cute.ui.UiPlugin;
+import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -57,7 +57,7 @@ public class CuteProjectWizardTest {
 		IProject proj = workspace.getRoot().getProject(projectName);
 		assertNotNull("No Project", proj);
 		assertTrue(proj.hasNature(CuteNature.CUTE_NATURE_ID));
-		ICuteHeaders header = UiPlugin.getCuteVersionString(proj);
+		ICuteHeaders header = CuteUIPlugin.getCuteVersion(proj);
 		assertEquals(header.getVersionString(), cuteVersion);
 		assertSrcFolderCreated(projectName, proj, "cute");
 	}
@@ -90,7 +90,7 @@ public class CuteProjectWizardTest {
 		assertTrue(proj.hasNature(CuteNature.CUTE_NATURE_ID));
 		IFolder cuteFolder =  proj.getFolder("cute");
 		assertNotNull(cuteFolder);
-		ICuteHeaders header = UiPlugin.getCuteVersionString(proj);
+		ICuteHeaders header = CuteUIPlugin.getCuteVersion(proj);
 		assertEquals(header.getVersionString(), cuteVersion);
 	}
 
