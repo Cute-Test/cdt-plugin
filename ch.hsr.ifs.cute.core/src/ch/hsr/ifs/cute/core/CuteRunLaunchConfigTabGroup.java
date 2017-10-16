@@ -11,7 +11,7 @@ package ch.hsr.ifs.cute.core;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.launch.ui.CArgumentsTab;
 import org.eclipse.cdt.launch.ui.CLaunchConfigurationTab;
-import org.eclipse.cdt.launch.ui.CMainTab;
+import org.eclipse.cdt.launch.ui.CMainTab2;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -27,7 +27,7 @@ import ch.hsr.ifs.testframework.launch.CustomisedLaunchConfigTab;
 public class CuteRunLaunchConfigTabGroup extends AbstractLaunchConfigurationTabGroup {
 
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] { new CMainTab(true), new CArgumentsTab(), new org.eclipse.debug.ui.EnvironmentTab(),
+		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] { new CMainTab2(), new CArgumentsTab(), new org.eclipse.debug.ui.EnvironmentTab(),
 				new CommonTab(), new CustomisedLaunchConfigTab() };
 		setTabs(tabs);
 	}
