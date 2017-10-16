@@ -47,7 +47,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import com.cevelop.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
@@ -119,7 +118,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 				createLibSettings(newProject);
 			}
 		} catch (CoreException e) {
-			TDDPlugin.log("Exception while creating cute project settings for project " + newProject.getName(), e);
+			CuteUIPlugin.log("Exception while creating cute project settings for project " + newProject.getName(), e);
 		}
 	}
 	

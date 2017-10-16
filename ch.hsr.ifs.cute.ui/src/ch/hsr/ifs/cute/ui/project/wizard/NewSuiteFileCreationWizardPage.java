@@ -62,7 +62,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import com.cevelop.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
@@ -225,9 +224,9 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			}
 			return runnerStrings;
 		} catch (InvocationTargetException e) {
-			TDDPlugin.log("Exception while finding runners", e);
+			CuteUIPlugin.log("Exception while finding runners", e);
 		} catch (InterruptedException e) {
-			TDDPlugin.log("Exception while finding runners", e);
+			CuteUIPlugin.log("Exception while finding runners", e);
 		}
 		return new String[] { Messages.getString("NewSuiteFileCreationWizardPage.noRunners") };
 	}
