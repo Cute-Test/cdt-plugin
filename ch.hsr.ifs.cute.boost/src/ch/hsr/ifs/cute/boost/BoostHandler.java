@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAdditionHandler;
@@ -82,7 +81,7 @@ public class BoostHandler implements ICuteWizardAdditionHandler, IIncludeStrateg
 				mon.subTask(Messages.BoostHandler_copy + filename);
 				IFile targetFile = folder.getFile(filename);
 				try {
-					targetFile.create(url.openStream(), IResource.FORCE, new SubProgressMonitor(monitor, 1));
+					targetFile.create(url.openStream(), IResource.FORCE, SubMonitor.convert(monitor, 1));
 				} catch (IOException e) {
 					throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 42, e.getMessage(), e));
 				}

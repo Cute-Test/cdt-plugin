@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 
 import com.cevelop.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.headers.CuteHeadersPlugin;
@@ -56,7 +55,7 @@ public class CopyUtils {
 			mon.subTask(Messages.CuteHeaders_copy + filename);
 			IFile targetFile = container.getFile(new Path(filename));
 			try {
-				targetFile.create(url.openStream(), IResource.FORCE, new SubProgressMonitor(monitor, 1));
+				targetFile.create(url.openStream(), IResource.FORCE, SubMonitor.convert(monitor, 1));
 			} catch (IOException e) {
 				throw new CoreException(new Status(IStatus.ERROR, CuteHeadersPlugin.PLUGIN_ID, 42, e.getMessage(), e));
 			}
@@ -104,7 +103,7 @@ public class CopyUtils {
 			URL url = en.nextElement();
 			try {
 				ByteArrayInputStream str = implantActualSuiteName(url, suitename);
-				targetFile.create(str, IResource.FORCE, new SubProgressMonitor(mon, 1));
+				targetFile.create(str, IResource.FORCE, SubMonitor.convert(mon, 1));
 			} catch (IOException e) {
 				throw new CoreException(new Status(IStatus.ERROR, CuteHeadersPlugin.PLUGIN_ID, 42, e.getMessage(), e));
 			}
