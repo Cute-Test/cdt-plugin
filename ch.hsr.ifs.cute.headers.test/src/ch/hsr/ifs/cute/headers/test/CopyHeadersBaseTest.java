@@ -19,8 +19,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 
-import ch.hsr.ifs.cute.elevenator.Activator;
-import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import com.cevelop.elevenator.Activator;
+import com.cevelop.elevenator.definition.CPPVersion;
 import junit.framework.TestCase;
 
 public abstract class CopyHeadersBaseTest extends TestCase {

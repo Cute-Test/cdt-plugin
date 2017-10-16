@@ -62,7 +62,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import ch.hsr.ifs.cute.tdd.TDDPlugin;
+import com.cevelop.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 

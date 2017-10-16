@@ -25,8 +25,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.hsr.ifs.cute.elevenator.Activator;
-import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import com.cevelop.elevenator.Activator;
+import com.cevelop.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.headers.headers1_7.CuteHeaders_1_7;
 import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;

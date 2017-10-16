@@ -16,4 +16,4 @@ Export-Package: ch.hsr.ifs.cute.headers.headers1_7,
  ch.hsr.ifs.cute.headers.headers2_1,
  ch.hsr.ifs.cute.headers.headers2_2
 Bundle-Localization: plugin
-Import-Package: ch.hsr.ifs.cute.elevenator.definition
+Import-Package: com.cevelop.elevenator.definition

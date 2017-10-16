@@ -30,7 +30,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.ui.test,ch.hsr.ifs.cute.ui.test.checke
  rs,ch.hsr.ifs.cute.ui.test.sourceactions
-Import-Package: ch.hsr.ifs.cute.elevenator,
- ch.hsr.ifs.cute.elevenator.definition,
+Import-Package: com.cevelop.elevenator,
+ com.cevelop.elevenator.definition,
  org.eclipse.cdt.codan.core,
  org.eclipse.cdt.codan.core.model

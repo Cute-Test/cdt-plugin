@@ -47,7 +47,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.tdd.TDDPlugin;
+import com.cevelop.tdd.TDDPlugin;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;

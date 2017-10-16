@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
-import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import com.cevelop.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.headers.CuteHeadersPlugin;
 import ch.hsr.ifs.cute.headers.Messages;
 

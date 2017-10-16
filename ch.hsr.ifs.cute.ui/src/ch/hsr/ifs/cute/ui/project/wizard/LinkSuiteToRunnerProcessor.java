@@ -53,7 +53,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
-import ch.hsr.ifs.cute.elevenator.definition.CPPVersion;
+import com.cevelop.elevenator.definition.CPPVersion;
 
 /**
  * @author Emanuel Graf IFS
