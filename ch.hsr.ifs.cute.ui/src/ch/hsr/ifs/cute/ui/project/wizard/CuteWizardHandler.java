@@ -75,7 +75,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	}
 
 	protected NewCuteProjectWizardPage initPage() {
-		return new NewCuteProjectWizardPage(getConfigPage(), getStartingPage(), getWizardContainer(getWizard()));
+		return new NewCuteProjectWizardPage(getConfigPage(), getNewProjectCreationPage(), getWizardContainer(getWizard()));
 	}
 
 	protected IWizardContainer getWizardContainer(IWizard w) {

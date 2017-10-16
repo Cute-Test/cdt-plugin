@@ -29,7 +29,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 
 	public CuteSuiteWizardHandler(Composite p, IWizard w) {
 		super(p, w);
-		suitewizPage.setPreviousPage(getStartingPage());
+		suitewizPage.setPreviousPage(getNewProjectCreationPage());
 		suitewizPage.setWizard(getWizard());
 		MBSCustomPageManager.init();
 		MBSCustomPageManager.addStockPage(suitewizPage, suitewizPage.getPageID());
@@ -37,7 +37,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 
 	@Override
 	protected NewCuteProjectWizardPage initPage() {
-		suitewizPage = new NewCuteSuiteProjectWizardPage(getConfigPage(), getStartingPage(), getWizardContainer(getWizard()));
+		suitewizPage = new NewCuteSuiteProjectWizardPage(getConfigPage(), getNewProjectCreationPage(), getWizardContainer(getWizard()));
 		return suitewizPage;
 	}
 
