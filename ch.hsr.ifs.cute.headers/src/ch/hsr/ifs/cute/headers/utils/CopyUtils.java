@@ -20,9 +20,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 
-import com.cevelop.elevenator.definition.CPPVersion;
 import ch.hsr.ifs.cute.headers.CuteHeadersPlugin;
 import ch.hsr.ifs.cute.headers.Messages;
+import ch.hsr.ifs.cute.ui.VersionQuery;
 
 public class CopyUtils {
 
@@ -39,12 +39,12 @@ public class CopyUtils {
 		return getFileListe("headers", "*.*", versionNumber);
 	}
 
+	private static String getCpp11Appendix(IProject project) {
+		return VersionQuery.isCPPVersionAboveOrEqualEleven(project) ? "_11plus" : "";
+	}
+
 	private static List<URL> getTestFiles(String versionNumber, IProject project) {
-		if(isCPPVersionAboveOrEqualEleven(project)) {
-			return getFileListe("newCuteProject_11plus", "*.*", versionNumber);
-		} else {
-			return getFileListe("newCuteProject", "*.*", versionNumber);
-		}
+		return getFileListe("newCuteProject" + getCpp11Appendix(project), "*.*", versionNumber);
 	}
 
 	private static void copyFilesToFolder(IContainer container, IProgressMonitor monitor, List<URL> urls) throws CoreException {
@@ -97,7 +97,7 @@ public class CopyUtils {
 	}
 
 	private static void copySuiteFile(IFile targetFile, IProgressMonitor mon, String templateFilename, String suitename, String version) throws CoreException {
-		String subfolder = isCPPVersionAboveOrEqualEleven(targetFile.getProject()) ? "newCuteSuite_11plus" : "newCuteSuite";
+		String subfolder = "newCuteSuite" + getCpp11Appendix(targetFile.getProject());
 		Enumeration<URL> en = CuteHeadersPlugin.getDefault().getBundle().findEntries(getFolderPath(subfolder, version), templateFilename, false);
 		if (en.hasMoreElements()) {
 			URL url = en.nextElement();
@@ -133,18 +133,4 @@ public class CopyUtils {
 		br.close();
 		return new ByteArrayInputStream(buffer.toString().getBytes());
 	}
-	
-	private static CPPVersion getCPPVersion(IProject project) {
-		return CPPVersion.getForProject(project);
-	}
-	
-	private static boolean isCPPVersionAboveOrEqualEleven(IProject project) {
-		CPPVersion version = getCPPVersion(project);
-		if(version != null && !version.toString().equals(CPPVersion.CPP_98.toString())
-				&& !version.toString().equals(CPPVersion.CPP_03.toString())) {
-			return true;
-		}
-		return false;
-	}
-	
 }

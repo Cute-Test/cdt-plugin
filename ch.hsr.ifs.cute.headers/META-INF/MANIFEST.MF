@@ -7,8 +7,8 @@ Bundle-Activator: ch.hsr.ifs.cute.headers.CuteHeadersPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- ch.hsr.ifs.cute.ui;bundle-version="2.2.1",
- org.eclipse.core.resources;bundle-version="3.4.1"
+ org.eclipse.core.resources;bundle-version="3.4.1",
+ ch.hsr.ifs.cute.ui;bundle-version="5.3.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.headers.headers1_7,
@@ -16,4 +16,3 @@ Export-Package: ch.hsr.ifs.cute.headers.headers1_7,
  ch.hsr.ifs.cute.headers.headers2_1,
  ch.hsr.ifs.cute.headers.headers2_2
 Bundle-Localization: plugin
-Import-Package: com.cevelop.elevenator.definition

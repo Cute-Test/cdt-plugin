@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -53,13 +53,13 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
-import com.cevelop.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.cute.ui.VersionQuery;
 
 /**
  * @author Emanuel Graf IFS
  * @author Thomas Corbat IFS
  * @since 4.0
- * 
+ *
  */
 public class LinkSuiteToRunnerProcessor {
 
@@ -93,12 +93,12 @@ public class LinkSuiteToRunnerProcessor {
 		TextFileChange change = new TextFileChange("include", file);
 		IDocumentProvider provider = new TextFileDocumentProvider();
 		IDocument document = null;
-	    try { 
-	        provider.connect(file); 
-	        document = provider.getDocument(file);             
+	    try {
+	        provider.connect(file);
+	        document = provider.getDocument(file);
 	    } catch (CoreException e) {
 	    	e.printStackTrace();
-	    }	
+	    }
 		String lineDelim = TextUtilities.getDefaultLineDelimiter(document);
 		int offset = getMaxIncludeOffset(tu);
 		String text = lineDelim + "#include \"" + suiteName + ".h\"";//$NON-NLS-2$
@@ -123,7 +123,7 @@ public class LinkSuiteToRunnerProcessor {
 	protected void changeRunnerBody(ASTRewrite rw) {
 		ICProject cProject = testRunner.getTranslationUnit().getOriginatingTranslationUnit().getCProject();
 		IProject project = cProject.getProject();
-		if(isCPPVersionAboveOrEqualEleven(project)) {
+		if(VersionQuery.isCPPVersionAboveOrEqualEleven(project)) {
 			IASTStatement makeNewSuiteStatement = createMakeSuiteStmt();
 			IASTStatement insertionStatement = testRunner.getBody();
 			IASTNode insertionPoint = insertionStatement.getChildren()[insertionStatement.getChildren().length-1];
@@ -137,7 +137,7 @@ public class LinkSuiteToRunnerProcessor {
 			rw.insertBefore(testRunner.getBody(), null, runnerStmt, null);
 		}
 	}
-	
+
 	private IASTStatement createRunnerCallStmt(ICProject project) {
 		IASTName makeRunnerName = getMakeRunnerName();
 		IASTIdExpression successExp = nodeFactory.newIdExpression(getBoolName(makeRunnerName));
@@ -188,13 +188,13 @@ public class LinkSuiteToRunnerProcessor {
 		testRunner.getBody().accept(finder);
 		return finder.listener != null ? finder.listener.copy() : nodeFactory.newName();
 	}
-	
+
 	private IASTName getMakeRunnerName() {
 		MakeRunnerFinder finder = new MakeRunnerFinder();
 		testRunner.getBody().accept(finder);
 		return finder.makeRunner != null ? finder.makeRunner.copy() : nodeFactory.newName();
 	}
-	
+
 	private IASTName getBoolName(IASTName makeRunnerName) {
 		BoolNameFinder finder = new BoolNameFinder(makeRunnerName);
 		testRunner.getBody().accept(finder);
@@ -221,20 +221,6 @@ public class LinkSuiteToRunnerProcessor {
 	protected IASTName getSuiteName() {
 		return nodeFactory.newName(this.suiteName.toCharArray());
 	}
-	
-	private static CPPVersion getCPPVersion(IProject project) {
-		return CPPVersion.getForProject(project);
-	}
-	
-	private static boolean isCPPVersionAboveOrEqualEleven(IProject project) {
-		CPPVersion version = getCPPVersion(project);
-		if(version != null && !version.toString().equals(CPPVersion.CPP_98.toString())
-				&& !version.toString().equals(CPPVersion.CPP_03.toString())) {
-			return true;
-		}
-		return false;
-	}
-
 }
 
 final class ListenerFinder extends ASTVisitor {
@@ -267,7 +253,7 @@ final class MakeRunnerFinder extends ASTVisitor {
 	{
 		shouldVisitStatements = true;
 	}
-	
+
 	@Override
 	public int visit(IASTStatement statement) {
 		if (statement instanceof IASTDeclarationStatement) {
@@ -301,11 +287,11 @@ final class BoolNameFinder extends ASTVisitor {
 	{
 		shouldVisitStatements = true;
 	}
-	
+
 	public BoolNameFinder(IASTName makeRunnerName) {
 		this.makeRunnerName = makeRunnerName;
 	}
-	
+
 	@Override
 	public int visit(IASTStatement statement) {
 		if (statement instanceof IASTDeclarationStatement) {
@@ -331,7 +317,7 @@ final class BoolNameFinder extends ASTVisitor {
 							}
 						}
 					}
-					
+
 				}
 			}
 		}
