@@ -47,6 +47,7 @@ public class CuteProjectWizardTest {
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		bot = new SWTWorkbenchBot();
+		bot.viewByTitle("Welcome").close();
 	}
 
 	@SuppressWarnings("nls")
@@ -116,7 +117,7 @@ public class CuteProjectWizardTest {
 		bot.textWithLabel("Project name:").setText(projectName);
 		SWTBotTree swtTree = bot.tree();
 		bot.checkBox("Show project types and toolchains only if they are supported on the platform").click();
-		swtTree.select("Cute Project");
+		swtTree.expandNode("CUTE").select("CUTE Project");
 		bot.button("Next >").click();
 		bot.comboBox().setSelection(headerIndex);
 		cuteVersion = bot.comboBox().selection();
