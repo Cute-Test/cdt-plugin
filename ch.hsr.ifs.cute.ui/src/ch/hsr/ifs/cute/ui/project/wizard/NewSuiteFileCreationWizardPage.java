@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -623,11 +623,16 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 		if(elem.getResource() instanceof IFile) {
 			IFile file = (IFile) elem.getResource();
 			resource = file.getParent();
-		}
-		if(elem.getResource() instanceof IFolder) {
+		} else if(elem.getResource() instanceof IFolder) {
 			resource = (IFolder) elem.getResource();
+		} else if(elem.getResource() instanceof IProject){
+            IProject project = (IProject) elem.getResource();
+            IResource src = project.findMember("src");
+            if(src.exists() && src.getType() == IResource.FOLDER) {
+                resource = (IContainer) src;
+            }
 		}
-		setSourceFolderFullPath(elem != null ? resource.getFullPath() : null, false);
+		setSourceFolderFullPath(resource != null ? resource.getFullPath() : null, false);
 	}
 
 }
