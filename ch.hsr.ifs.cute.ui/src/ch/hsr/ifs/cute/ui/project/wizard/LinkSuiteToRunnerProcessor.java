@@ -25,10 +25,12 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
+import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
@@ -128,8 +130,7 @@ public class LinkSuiteToRunnerProcessor {
 			IASTStatement insertionStatement = testRunner.getBody();
 			IASTNode insertionPoint = insertionStatement.getChildren()[insertionStatement.getChildren().length-1];
 			rw.insertBefore(insertionStatement, insertionPoint, makeNewSuiteStatement, null);
-			IASTStatement newRunnerStatement = createRunnerCallStmt(cProject);
-			rw.insertBefore(insertionStatement, insertionPoint, newRunnerStatement, null);
+			insertRunnerCallStmt(cProject, rw);
 		} else {
 			IASTStatement makeSuiteStmt = createMakeSuiteStmt();
 			rw.insertBefore(testRunner.getBody(), null, makeSuiteStmt, null);
@@ -138,20 +139,42 @@ public class LinkSuiteToRunnerProcessor {
 		}
 	}
 
-	private IASTStatement createRunnerCallStmt(ICProject project) {
+	private void insertRunnerCallStmt(ICProject project, ASTRewrite rw) {
 		IASTName makeRunnerName = getMakeRunnerName();
-		IASTIdExpression successExp = nodeFactory.newIdExpression(getBoolName(makeRunnerName));
+		IASTName successBool = getBoolName(makeRunnerName);
 		IASTIdExpression runnerExp = nodeFactory.newIdExpression(makeRunnerName);
 		IASTInitializerClause[] makeArgs = new IASTInitializerClause[2];
 		makeArgs[0] = nodeFactory.newIdExpression(nodeFactory.newName(suiteName));
 		makeArgs[1] = nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, STRING + suiteName + STRING);
 		IASTFunctionCallExpression runnerCallExp = nodeFactory.newFunctionCallExpression(runnerExp, makeArgs);
-		IASTBinaryExpression andAssignExp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_binaryAndAssign, successExp, runnerCallExp);
-		IASTStatement statement = nodeFactory.newExpressionStatement(andAssignExp);
-		return statement;
+        if(successBool.toString().isEmpty()) {
+            appendRunnerCallToReturn(runnerCallExp, rw);
+        } else {
+            appendRunnerCallToBool(runnerCallExp, successBool, rw);
+        }
 	}
 
-	private IASTStatement createRunnerStmt() {
+    private void appendRunnerCallToReturn(IASTFunctionCallExpression runnerCallExp, ASTRewrite rw) {
+        ReturnStatementFinder finder = new ReturnStatementFinder();
+        testRunner.getBody().accept(finder);
+        if(finder.returnStatement == null) {
+            throw new RuntimeException("Failed to find return statement!");
+        }
+        IASTReturnStatement returnStatement = finder.returnStatement;
+        IASTExpression returnValue = returnStatement.getReturnValue();
+        ICPPASTBinaryExpression newReturnValue = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_binaryAnd, returnValue.copy(), runnerCallExp);
+        rw.replace(returnValue, newReturnValue, null);
+    }
+
+    private void appendRunnerCallToBool(IASTFunctionCallExpression runnerCallExp, IASTName successBool, ASTRewrite rw) {
+        IASTIdExpression successExp = nodeFactory.newIdExpression(successBool);
+        IASTBinaryExpression andAssignExp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_binaryAndAssign, successExp, runnerCallExp);
+        IASTStatement statement = nodeFactory.newExpressionStatement(andAssignExp);
+        IASTStatement body = testRunner.getBody();
+        rw.insertBefore(body, body.getChildren()[body.getChildren().length - 1], statement, null);
+    }
+
+    private IASTStatement createRunnerStmt() {
 		IASTFunctionCallExpression makeRunnerFuncCallExp = createMakeRunnerFuncCall();
 		IASTFunctionCallExpression callRunnerFuncCallExp = createCallRunnerFuncCall(makeRunnerFuncCallExp);
 		IASTStatement expStatement = nodeFactory.newExpressionStatement(callRunnerFuncCallExp);
@@ -323,4 +346,22 @@ final class BoolNameFinder extends ASTVisitor {
 		}
 		return ASTVisitor.PROCESS_CONTINUE;
 	}
+}
+
+final class ReturnStatementFinder extends ASTVisitor {
+    IASTReturnStatement returnStatement = null;
+
+    {
+        shouldVisitStatements = true;
+    }
+
+    @Override
+    public int visit(IASTStatement statement) {
+        if (statement instanceof IASTReturnStatement) {
+            returnStatement = (IASTReturnStatement) statement;
+            return ASTVisitor.PROCESS_ABORT;
+        }
+
+        return ASTVisitor.PROCESS_CONTINUE;
+    }
 }
