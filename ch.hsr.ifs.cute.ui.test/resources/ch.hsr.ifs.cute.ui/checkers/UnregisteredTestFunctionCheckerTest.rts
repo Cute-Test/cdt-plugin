@@ -466,3 +466,78 @@ void myclassTest::operator()() {
 	ASSERT(false);
 }
 
+//!TestRegisteredByCallingCuteTestDirectlyWithNoNameAndImplicitFunctionToPointerToFunctionDecay
+//@.config
+noMarker=true
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+namespace std { struct vector{void push_back(...){}}; }
+namespace cute { typedef std::vector suite; }
+
+void thisIsATest(){
+	ASSERT(true);
+}
+
+void runSuite() {
+	using cute::suite;
+	suite s;
+	s.push_back(cute::test(thisIsATest));
+}
+
+//!TestRegisteredByCallingCuteTestDirectlyWithNoNameAndExplicitnFunctionToPointerToFunctionConversion
+//@.config
+noMarker=true
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+namespace std { struct vector{void push_back(...){}}; }
+namespace cute { typedef std::vector suite; }
+
+void thisIsATest(){
+	ASSERT(true);
+}
+
+void runSuite() {
+	using cute::suite;
+	suite s;
+	s.push_back(cute::test(&thisIsATest));
+}
+
+//!TestRegisteredByCallingCuteTestDirectlyWithNameAndImplicitFunctionToPointerToFunctionDecay
+//@.config
+noMarker=true
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+namespace std { struct vector{void push_back(...){}}; }
+namespace cute { typedef std::vector suite; }
+
+void thisIsATest(){
+	ASSERT(true);
+}
+
+void runSuite() {
+	using cute::suite;
+	suite s;
+	s.push_back(cute::test(thisIsATest, "some test"));
+}
+
+//!TestRegisteredByCallingCuteTestDirectlyWithNameAndExplicitnFunctionToPointerToFunctionConversion
+//@.config
+noMarker=true
+//@main.cpp
+#define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
+#define ASSERT(cond) ASSERTM(#cond,cond)
+namespace std { struct vector{void push_back(...){}}; }
+namespace cute { typedef std::vector suite; }
+
+void thisIsATest(){
+	ASSERT(true);
+}
+
+void runSuite() {
+	using cute::suite;
+	suite s;
+	s.push_back(cute::test(&thisIsATest, "some test"));
+}

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -37,7 +37,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 /**
  * @author Emanuel Graf IFS
  * @author Thomas Corbat IFS
- * 
+ *
  */
 public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 
@@ -106,7 +106,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 		} else {
 			final IASTBinaryExpression binaryExpression = CPPVisitor.findAncestorWithType(ref, IASTBinaryExpression.class);
 			return new IASTInitializerClause[]{binaryExpression.getOperand2()};
-		} 
+		}
 		return arguments;
 	}
 
@@ -144,7 +144,7 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 				if(implicitNames.length != 0) {
 					return implicitNames[0].resolveBinding() instanceof ICPPConstructor;
 				}
-			} 
+			}
 			return pushbackArgument instanceof ICPPASTSimpleTypeConstructorExpression;
 		}
 		return false;
@@ -189,20 +189,35 @@ public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 	}
 
 	private IBinding getFunction(IASTInitializerClause[] arguments) {
-		if (isFunctionPushBack(arguments)) {
-			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-			if (funcCall.getArguments().length == 2 && funcCall.getArguments()[0] instanceof IASTUnaryExpression) {
-				IASTUnaryExpression unExp = (IASTUnaryExpression) funcCall.getArguments()[0];
-				if (unExp.getOperand() instanceof IASTUnaryExpression && ((IASTUnaryExpression) unExp.getOperand()).getOperand() instanceof IASTIdExpression) {
-					IASTIdExpression idExp = (IASTIdExpression) ((IASTUnaryExpression) unExp.getOperand()).getOperand();
-					return idExp.getName().resolveBinding();
-				}
-			}
-		}
-		return null;
+	    if (!isFunctionPushBack(arguments)) {
+	       return null;
+	    }
+
+	    ICPPASTFunctionCallExpression cuteTestCall = (ICPPASTFunctionCallExpression) arguments[0];
+	    IASTInitializerClause[] cuteTestArguments = cuteTestCall.getArguments();
+
+	    if(cuteTestArguments.length == 0) {
+	        return null;
+	    }
+
+	    if(cuteTestArguments[0] instanceof IASTIdExpression) {
+	        return ((IASTIdExpression) cuteTestArguments[0]).getName().resolveBinding();
+	    } else if (cuteTestArguments[0] instanceof IASTUnaryExpression) {
+            IASTUnaryExpression unary = (IASTUnaryExpression) cuteTestArguments[0];
+	        if(unary.getOperand() instanceof IASTIdExpression && unary.getOperator() == IASTUnaryExpression.op_amper) {
+	            return ((IASTIdExpression) unary.getOperand()).getName().resolveBinding();
+	        } else if (unary.getOperand() instanceof IASTUnaryExpression) {
+                IASTUnaryExpression innerUnary = (IASTUnaryExpression) unary.getOperand();
+                if (innerUnary.getOperand() instanceof IASTIdExpression) {
+                    return ((IASTIdExpression) innerUnary.getOperand()).getName().resolveBinding();
+                }
+	        }
+	    }
+
+	    return null;
 	}
 
-	private boolean isFunctionPushBack(IASTInitializerClause[] arguments) {
+    private boolean isFunctionPushBack(IASTInitializerClause[] arguments) {
 		if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
 			ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
 			return functionNameIs(funcCall, "cute::test");
