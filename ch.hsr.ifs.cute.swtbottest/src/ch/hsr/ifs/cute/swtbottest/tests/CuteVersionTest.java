@@ -76,7 +76,7 @@ public class CuteVersionTest extends AutomatedUITest {
 
 	@Test
 	@TestProjectType("CUTE Project")
-	public void newProjectV210() throws Exception {
+	public void newProjectV211() throws Exception {
 		final String cuteHeaderVersion = "2.1.1";
 
 		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
@@ -87,7 +87,7 @@ public class CuteVersionTest extends AutomatedUITest {
 
 	@Test
 	@TestProjectType("CUTE Project")
-	public void newProjectV220() throws Exception {
+	public void newProjectV221() throws Exception {
 		final String cuteHeaderVersion = "2.2.1";
 
 		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));

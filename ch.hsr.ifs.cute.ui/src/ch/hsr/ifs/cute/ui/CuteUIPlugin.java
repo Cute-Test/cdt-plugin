@@ -36,6 +36,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.core.headers.CuteHeaders;
 
 public class CuteUIPlugin extends AbstractUIPlugin {
@@ -116,7 +117,7 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 	public static synchronized SortedSet<CuteHeaders> getInstalledCuteHeaders() {
 		if (installedHeaders == null) {
 			installedHeaders = new TreeSet<CuteHeaders>();
-			IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CuteUIPlugin.PLUGIN_ID, "Headers");
+			IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CuteCorePlugin.PLUGIN_ID, "Headers");
 			if (extensionPoint != null) {
 				IExtension[] extensions = extensionPoint.getExtensions();
 				for (IExtension extension : extensions) {
