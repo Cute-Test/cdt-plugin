@@ -55,7 +55,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
-import ch.hsr.ifs.cute.ui.VersionQuery;
+import ch.hsr.ifs.cute.core.utils.VersionQuery;
 
 /**
  * @author Emanuel Graf IFS

@@ -36,8 +36,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import ch.hsr.ifs.cute.ui.project.headers.CuteHeaderComparator;
-import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
+import ch.hsr.ifs.cute.core.headers.CuteHeaders;
 
 public class CuteUIPlugin extends AbstractUIPlugin {
 
@@ -45,7 +44,7 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 	private static CuteUIPlugin plugin;
 	private static final IPath ICONS_PATH = new Path("$nl$/icons");
 	public static final QualifiedName CUTE_VERSION_PROPERTY_NAME = new QualifiedName(PLUGIN_ID, "cuteVersion");
-	public static SortedSet<ICuteHeaders> installedHeaders;
+	public static SortedSet<CuteHeaders> installedHeaders;
 
 	public CuteUIPlugin() {
 	}
@@ -62,16 +61,16 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	public static ICuteHeaders getCuteVersion(String cuteVersionString) {
-		SortedSet<ICuteHeaders> headers = getInstalledCuteHeaders();
-		for (ICuteHeaders cuteHeaders : headers) {
+	public static CuteHeaders getCuteVersion(String cuteVersionString) {
+		SortedSet<CuteHeaders> headers = getInstalledCuteHeaders();
+		for (CuteHeaders cuteHeaders : headers) {
 			if (cuteVersionString.equals(cuteHeaders.getVersionString()))
 				return cuteHeaders;
 		}
 		return null;
 	}
 
-	public static ICuteHeaders getCuteVersion(IProject project) throws CoreException {
+	public static CuteHeaders getCuteVersion(IProject project) throws CoreException {
 		String versionString = project.getPersistentProperty(CUTE_VERSION_PROPERTY_NAME);
 		if (versionString != null) {
 			return getCuteVersion(versionString);
@@ -114,9 +113,9 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 		return createImageDescriptor(getDefault().getBundle(), path);
 	}
 
-	public static synchronized SortedSet<ICuteHeaders> getInstalledCuteHeaders() {
+	public static synchronized SortedSet<CuteHeaders> getInstalledCuteHeaders() {
 		if (installedHeaders == null) {
-			installedHeaders = new TreeSet<ICuteHeaders>(new CuteHeaderComparator());
+			installedHeaders = new TreeSet<CuteHeaders>();
 			IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CuteUIPlugin.PLUGIN_ID, "Headers");
 			if (extensionPoint != null) {
 				IExtension[] extensions = extensionPoint.getExtensions();
@@ -125,7 +124,7 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 				}
 			}
 		}
-		return new TreeSet<ICuteHeaders>(installedHeaders);
+		return new TreeSet<CuteHeaders>(installedHeaders);
 	}
 
 	private static void addHeaderInstance(IExtension extension) {
@@ -133,7 +132,7 @@ public class CuteUIPlugin extends AbstractUIPlugin {
 			IConfigurationElement[] configElements = extension.getConfigurationElements();
 			String className = configElements[0].getAttribute("class");
 			Class<?> obj = Platform.getBundle(extension.getContributor().getName()).loadClass(className);
-			installedHeaders.add((ICuteHeaders) obj.newInstance());
+			installedHeaders.add((CuteHeaders) obj.newInstance());
 		} catch (AbstractMethodError e) {
 			// igonoring outdated (incompatible) old header plugins (which might still be installed when updating to current cute version
 		} catch (ClassNotFoundException e) {

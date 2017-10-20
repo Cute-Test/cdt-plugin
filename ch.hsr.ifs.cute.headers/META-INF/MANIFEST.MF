@@ -7,12 +7,10 @@ Bundle-Activator: ch.hsr.ifs.cute.headers.CuteHeadersPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.core.resources;bundle-version="3.4.1",
- ch.hsr.ifs.cute.ui;bundle-version="5.3.0"
+ org.eclipse.core.resources,
+ ch.hsr.ifs.cute.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: ch.hsr.ifs.cute.headers.headers1_7,
- ch.hsr.ifs.cute.headers.headers2_0,
- ch.hsr.ifs.cute.headers.headers2_1,
- ch.hsr.ifs.cute.headers.headers2_2
+Export-Package: ch.hsr.ifs.cute.headers,
+ ch.hsr.ifs.cute.headers.versions
 Bundle-Localization: plugin

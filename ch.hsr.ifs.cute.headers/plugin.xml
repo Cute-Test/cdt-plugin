@@ -2,27 +2,27 @@
 <?eclipse version="3.2"?>
 <plugin>
       <extension
-         point="ch.hsr.ifs.cute.ui.Headers">
+         point="ch.hsr.ifs.cute.core.Headers">
       <CuteHeader
-            class="ch.hsr.ifs.cute.headers.headers1_7.CuteHeaders_1_7">
+            class="ch.hsr.ifs.cute.headers.versions.CuteHeaders_1_7">
       </CuteHeader>
    </extension>
    <extension
-         point="ch.hsr.ifs.cute.ui.Headers">
+         point="ch.hsr.ifs.cute.core.Headers">
       <CuteHeader
-            class="ch.hsr.ifs.cute.headers.headers2_0.CuteHeaders_2_0">
+            class="ch.hsr.ifs.cute.headers.versions.CuteHeaders_2_0">
       </CuteHeader>
    </extension>
    <extension
-         point="ch.hsr.ifs.cute.ui.Headers">
+         point="ch.hsr.ifs.cute.core.Headers">
       <CuteHeader
-            class="ch.hsr.ifs.cute.headers.headers2_1.CuteHeaders_2_1">
+            class="ch.hsr.ifs.cute.headers.versions.CuteHeaders_2_1">
       </CuteHeader>
    </extension>
    <extension
-         point="ch.hsr.ifs.cute.ui.Headers">
+         point="ch.hsr.ifs.cute.core.Headers">
       <CuteHeader
-            class="ch.hsr.ifs.cute.headers.headers2_2.CuteHeaders_2_2">
+            class="ch.hsr.ifs.cute.headers.versions.CuteHeaders_2_2">
       </CuteHeader>
    </extension>
 

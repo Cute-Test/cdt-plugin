@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -17,13 +17,13 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import ch.hsr.ifs.cute.core.headers.CuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
-import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author egraf
  * @since 4.0
- * 
+ *
  */
 public class CuteVersionComposite extends Composite {
 
@@ -66,9 +66,9 @@ public class CuteVersionComposite extends Composite {
 		int indexToSelect = 0;
 		int i = 0;
 		combo = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN);
-		SortedSet<ICuteHeaders> set = CuteUIPlugin.getInstalledCuteHeaders();
+		SortedSet<CuteHeaders> set = CuteUIPlugin.getInstalledCuteHeaders();
 		if (!set.isEmpty()) {
-			for (ICuteHeaders cuteHeaders : set) {
+			for (CuteHeaders cuteHeaders : set) {
 				String versionString = cuteHeaders.getVersionString();
 				combo.add(versionString);
 				if (versionString.equals(currentCuteHeadersVersionName)) {

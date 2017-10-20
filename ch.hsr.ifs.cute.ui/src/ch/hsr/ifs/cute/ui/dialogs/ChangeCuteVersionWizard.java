@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -22,13 +22,13 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 
+import ch.hsr.ifs.cute.core.headers.CuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
-import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author egraf
  * @since 4.0
- * 
+ *
  */
 public class ChangeCuteVersionWizard extends Wizard {
 
@@ -55,7 +55,7 @@ public class ChangeCuteVersionWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 		try {
-			ICuteHeaders cuteVersion = getCuteVersion(page.getVersionString());
+			CuteHeaders cuteVersion = getCuteVersion(page.getVersionString());
 			if (cuteVersion.getVersionString().equals(activeHeadersVersionName)) {
 				return true; //do nothing since same version was chosen as before
 			}
@@ -68,9 +68,10 @@ public class ChangeCuteVersionWizard extends Wizard {
 		return true;
 	}
 
-	private void replaceHeaders(final ICuteHeaders cuteVersion) throws InvocationTargetException, InterruptedException {
+	private void replaceHeaders(final CuteHeaders cuteVersion) throws InvocationTargetException, InterruptedException {
 		this.getContainer().run(true, false, new IRunnableWithProgress() {
 
+			@Override
 			public void run(IProgressMonitor monitor) {
 				IFolder cuteFolder = project.getFolder("cute");
 				try {
@@ -94,9 +95,9 @@ public class ChangeCuteVersionWizard extends Wizard {
 		});
 	}
 
-	protected ICuteHeaders getCuteVersion(String cuteVersionString) {
-		SortedSet<ICuteHeaders> headers = CuteUIPlugin.getInstalledCuteHeaders();
-		for (ICuteHeaders cuteHeaders : headers) {
+	protected CuteHeaders getCuteVersion(String cuteVersionString) {
+		SortedSet<CuteHeaders> headers = CuteUIPlugin.getInstalledCuteHeaders();
+		for (CuteHeaders cuteHeaders : headers) {
 			if (cuteVersionString.equals(cuteHeaders.getVersionString()))
 				return cuteHeaders;
 		}

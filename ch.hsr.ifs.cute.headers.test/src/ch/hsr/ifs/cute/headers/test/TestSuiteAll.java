@@ -8,6 +8,10 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.headers.test;
 
+import ch.hsr.ifs.cute.headers.test.tests.CopyHeaders1_7Test;
+import ch.hsr.ifs.cute.headers.test.tests.CopyHeaders2_0Test;
+import ch.hsr.ifs.cute.headers.test.tests.CopyHeaders2_1Test;
+import ch.hsr.ifs.cute.headers.test.tests.CopyHeaders2_2Test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

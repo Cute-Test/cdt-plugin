@@ -7,7 +7,7 @@
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
 
-package ch.hsr.ifs.cute.ui;
+package ch.hsr.ifs.cute.core.utils;
 
 import org.eclipse.core.resources.IProject;
 

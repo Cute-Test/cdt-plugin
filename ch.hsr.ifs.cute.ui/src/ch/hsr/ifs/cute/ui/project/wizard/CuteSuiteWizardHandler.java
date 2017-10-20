@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -16,7 +16,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
+import ch.hsr.ifs.cute.core.headers.CuteHeaders;
 
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	private NewCuteSuiteProjectWizardPage suitewizPage;
@@ -47,7 +47,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
 	}
 
 	@Override
-	public void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
+	public void copyExampleTestFiles(IFolder srcFolder, CuteHeaders cuteVersion) throws CoreException {
 		suitename = suitewizPage.getSuiteName();
 		cuteVersion.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
 	}

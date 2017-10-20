@@ -8,10 +8,11 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.hsr.ifs.cute.headers.headers1_7.CuteHeaders_1_7;
-import ch.hsr.ifs.cute.headers.headers2_0.CuteHeaders_2_0;
-import ch.hsr.ifs.cute.headers.headers2_1.CuteHeaders_2_1;
-import ch.hsr.ifs.cute.headers.headers2_2.CuteHeaders_2_2;
+import ch.hsr.ifs.cute.core.headers.CuteHeaders;
+import ch.hsr.ifs.cute.headers.versions.CuteHeaders_1_7;
+import ch.hsr.ifs.cute.headers.versions.CuteHeaders_2_0;
+import ch.hsr.ifs.cute.headers.versions.CuteHeaders_2_1;
+import ch.hsr.ifs.cute.headers.versions.CuteHeaders_2_2;
 import ch.hsr.ifs.cute.swtbottest.annotations.TestProjectCategory;
 import ch.hsr.ifs.cute.swtbottest.annotations.TestProjectType;
 import ch.hsr.ifs.cute.swtbottest.base.AutomatedUITest;
@@ -19,7 +20,6 @@ import ch.hsr.ifs.cute.swtbottest.base.AutomatedUITestRunner;
 import ch.hsr.ifs.cute.swtbottest.util.BotConditions;
 import ch.hsr.ifs.cute.swtbottest.util.FileUtils;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
-import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 @TestProjectCategory("CUTE")
 @RunWith(AutomatedUITestRunner.class)
@@ -35,10 +35,10 @@ public class CuteVersionTest extends AutomatedUITest {
 	@Test
 	@TestProjectType("CUTE Project")
 	public void newProjectDefaultVersion() throws Exception {
-		final String defaultCuteVersion = "2.2.0";
+		final String defaultCuteVersion = "2.2.1";
 
 		IProject project = createProject();
-		ICuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
 		assertTrue(cuteVersion instanceof CuteHeaders_2_2);
 		assertCuteVersion(project, defaultCuteVersion);
 	}
@@ -50,13 +50,15 @@ public class CuteVersionTest extends AutomatedUITest {
 		versionComboBox.setSelection(cuteVersion);
 	}
 
+	private static final String CUTE_HEADERS_PREFIX = "CUTE Headers ";
+
 	@Test
 	@TestProjectType("CUTE Project")
 	public void newProjectV170() throws Exception {
 		final String cuteHeaderVersion = "1.7.0";
 
-		IProject project = createProject(() -> setCuteVersion("CUTE Headers " + cuteHeaderVersion));
-		ICuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
 		assertTrue(cuteVersion instanceof CuteHeaders_1_7);
 		assertCuteVersion(project, cuteHeaderVersion);
 	}
@@ -66,8 +68,8 @@ public class CuteVersionTest extends AutomatedUITest {
 	public void newProjectV201() throws Exception {
 		final String cuteHeaderVersion = "2.0.1";
 
-		IProject project = createProject(() -> setCuteVersion("CUTE Headers " + cuteHeaderVersion));
-		ICuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
 		assertTrue(cuteVersion instanceof CuteHeaders_2_0);
 		assertCuteVersion(project, cuteHeaderVersion);
 	}
@@ -75,10 +77,10 @@ public class CuteVersionTest extends AutomatedUITest {
 	@Test
 	@TestProjectType("CUTE Project")
 	public void newProjectV210() throws Exception {
-		final String cuteHeaderVersion = "2.1.0";
+		final String cuteHeaderVersion = "2.1.1";
 
-		IProject project = createProject(() -> setCuteVersion("CUTE Headers " + cuteHeaderVersion));
-		ICuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
 		assertTrue(cuteVersion instanceof CuteHeaders_2_1);
 		assertCuteVersion(project, cuteHeaderVersion);
 	}
@@ -86,10 +88,10 @@ public class CuteVersionTest extends AutomatedUITest {
 	@Test
 	@TestProjectType("CUTE Project")
 	public void newProjectV220() throws Exception {
-		final String cuteHeaderVersion = "2.2.0";
+		final String cuteHeaderVersion = "2.2.1";
 
-		IProject project = createProject(() -> setCuteVersion("CUTE Headers " + cuteHeaderVersion));
-		ICuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
 		assertTrue(cuteVersion instanceof CuteHeaders_2_2);
 		assertCuteVersion(project, cuteHeaderVersion);
 	}

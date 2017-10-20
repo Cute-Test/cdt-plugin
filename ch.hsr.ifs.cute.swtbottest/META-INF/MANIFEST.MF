@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.ui,
  org.apache.log4j,
  ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.gcov,
- ch.hsr.ifs.cute.headers
+ ch.hsr.ifs.cute.headers,
+ ch.hsr.ifs.cute.core
 Eclipse-RegisterBuddy: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

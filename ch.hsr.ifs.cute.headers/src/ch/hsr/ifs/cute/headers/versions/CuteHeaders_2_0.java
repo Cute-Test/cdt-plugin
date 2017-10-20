@@ -1,24 +1,23 @@
 /*******************************************************************************
  * Copyright (c) 2007-2013, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.cute.headers;
+package ch.hsr.ifs.cute.headers.versions;
 
-import org.eclipse.osgi.util.NLS;
+import ch.hsr.ifs.cute.core.headers.CuteVersionNumber;
+import ch.hsr.ifs.cute.headers.BundledHeaders;
 
-public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.headers.messages";
-	public static String CuteHeaders_copy;
-	public static String CuteHeaders_copySuite;
-	public static String CuteHeaders_copyTestCPP;
-	static {
-		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
-	}
+/**
+ * @author egraf
+ * @author tcorbat
+ * @since 2.0
+ *
+ */
+@CuteVersionNumber(major = 2, minor = 0, patch = 1)
+public class CuteHeaders_2_0 extends BundledHeaders {
 
-	private Messages() {
-	}
 }

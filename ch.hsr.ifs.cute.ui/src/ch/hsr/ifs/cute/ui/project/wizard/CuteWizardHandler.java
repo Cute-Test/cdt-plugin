@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -47,6 +47,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
+import ch.hsr.ifs.cute.core.headers.CuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
@@ -54,11 +55,10 @@ import ch.hsr.ifs.cute.ui.IIncludeStrategyProvider;
 import ch.hsr.ifs.cute.ui.IncludePathStrategy;
 import ch.hsr.ifs.cute.ui.ProjectTools;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
-import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
 
 /**
  * @author Emanuel Graf
- * 
+ *
  */
 public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrategyProvider {
 
@@ -80,7 +80,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	protected IWizardContainer getWizardContainer(IWizard w) {
 		return w == null ? null : w.getContainer();
 	}
-	
+
 	@Override
 	public IWizardPage getSpecificPage() {
 		return cuteWizardPage;
@@ -98,6 +98,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 	protected void doCustom(final IProject newProject) {
 		super.doCustom(newProject);
 		IRunnableWithProgress op = new IRunnableWithProgress() {
+			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				createCuteProjectSettings(newProject, monitor);
 			}
@@ -121,7 +122,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 			CuteUIPlugin.log("Exception while creating cute project settings for project " + newProject.getName(), e);
 		}
 	}
-	
+
 	protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
 		CuteNature.addCuteNature(project, new NullProgressMonitor());
 		project.setPersistentProperty(CuteUIPlugin.CUTE_VERSION_PROPERTY_NAME, getCuteVersion().getVersionString());
@@ -129,7 +130,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		callAdditionalHandlers(project, pm);
 		ManagedBuildManager.saveBuildInfo(project, true);
 	}
-	
+
 	private void callAdditionalHandlers(IProject project, IProgressMonitor pm) throws CoreException {
 		List<ICuteWizardAddition> adds = getAdditions();
 		SubMonitor mon = SubMonitor.convert(pm, adds.size());
@@ -139,13 +140,13 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		}
 		mon.done();
 	}
-	
+
 	protected List<ICuteWizardAddition> getAdditions() {
 		return cuteWizardPage.getAdditions();
 	}
-	
+
 	private void createCuteProjectFolders(IProject project) throws CoreException {
-		ICuteHeaders cuteVersion = getCuteVersion();
+		CuteHeaders cuteVersion = getCuteVersion();
 		IFolder srcFolder = ProjectTools.createFolder(project, "src", false);
 		copyExampleTestFiles(srcFolder, cuteVersion);
 		IFolder cuteFolder = ProjectTools.createFolder(project, "cute", false);
@@ -154,11 +155,11 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 		IFile srcFile = project.getFile("src/Test.cpp");
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), srcFile, true);
 	}
-	
-	protected void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
+
+	protected void copyExampleTestFiles(IFolder srcFolder, CuteHeaders cuteVersion) throws CoreException {
 		cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
 	}
-	
+
 	private IPath replaceProjectLocation(IFolder cuteFolder) {
 		return new Path("/${ProjName}").append(cuteFolder.getProjectRelativePath());
 	}
@@ -276,6 +277,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 	private static class LibraryPathsStrategy implements GetOptionsStrategy {
 
+		@Override
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getBasicStringListValue();
 		}
@@ -283,12 +285,13 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
 	private static class LibrariesStrategy implements GetOptionsStrategy {
 
+		@Override
 		public String[] getValues(IOption option) throws BuildException {
 			return option.getLibraries();
 		}
 	}
-	
-	private ICuteHeaders getCuteVersion() {
+
+	private CuteHeaders getCuteVersion() {
 		return CuteUIPlugin.getCuteVersion(cuteWizardPage.getCuteVersionString());
 	}
 }

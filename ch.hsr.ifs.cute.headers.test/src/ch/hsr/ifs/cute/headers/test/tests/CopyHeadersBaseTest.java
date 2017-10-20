@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.cute.headers.test;
+package ch.hsr.ifs.cute.headers.test.tests;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 
 import com.cevelop.elevenator.Activator;
 import com.cevelop.elevenator.definition.CPPVersion;
+
 import junit.framework.TestCase;
 
 public abstract class CopyHeadersBaseTest extends TestCase {

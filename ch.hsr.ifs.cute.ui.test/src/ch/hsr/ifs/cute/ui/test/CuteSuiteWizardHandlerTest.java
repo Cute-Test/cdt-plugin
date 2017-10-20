@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -27,8 +27,9 @@ import org.junit.Test;
 
 import com.cevelop.elevenator.Activator;
 import com.cevelop.elevenator.definition.CPPVersion;
-import ch.hsr.ifs.cute.headers.headers1_7.CuteHeaders_1_7;
-import ch.hsr.ifs.cute.ui.project.headers.ICuteHeaders;
+
+import ch.hsr.ifs.cute.core.headers.CuteHeaders;
+import ch.hsr.ifs.cute.headers.versions.CuteHeaders_1_7;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
 
 public class CuteSuiteWizardHandlerTest {
@@ -63,7 +64,7 @@ public class CuteSuiteWizardHandlerTest {
 		assertCuteHeaderFilesExist();
 	}
 
-	private void addTestFiles(ICuteHeaders cuteHeader) throws CoreException {
+	private void addTestFiles(CuteHeaders cuteHeader) throws CoreException {
 		cswh.copyExampleTestFiles(srcFolder, cuteHeader);
 
 		IFile file = srcFolder.getFile("Test.cpp");
