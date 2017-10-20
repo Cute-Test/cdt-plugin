@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -44,6 +44,7 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 		page.init(getSelection());
 	}
 
+	@Override
 	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
 		selection = currentSelection;
 	}
@@ -59,6 +60,7 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 		IWorkspaceRunnable op = new IWorkspaceRunnable() {
+			@Override
 			public void run(IProgressMonitor monitor) throws CoreException, OperationCanceledException {
 				page.createFile(monitor);
 			}
@@ -66,6 +68,7 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 		try {
 			getContainer().run(true, true, new WorkbenchRunnableAdapter(op, getSchedulingRule()));
 		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 			return false;
 		} catch (InterruptedException e) {
 			return false;

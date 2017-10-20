@@ -99,6 +99,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 
 		newFileDialogField = new StringDialogField();
 		newFileDialogField.setDialogFieldListener(new IDialogFieldListener() {
+			@Override
 			public void dialogFieldChanged(DialogField field) {
 				handleFieldChanged(NEW_FILE_ID);
 			}
@@ -206,6 +207,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			if (runners == null) {
 				getWizard().getContainer().run(true, false, new IRunnableWithProgress() {
 
+					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
 							runners = runnerFinder.findTestRunners(monitor);
@@ -330,6 +332,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	/**
 	 * @since 4.0
 	 */
+	@Override
 	public void createControl(Composite parent) {
 		initializeDialogUnits(parent);
 
@@ -450,6 +453,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			this.fieldID = fieldID;
 		}
 
+		@Override
 		public void focusGained(FocusEvent e) {
 			fLastFocusedField = this.fieldID;
 			if (isFirstTime) {
@@ -459,6 +463,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			doStatusUpdate();
 		}
 
+		@Override
 		public void focusLost(FocusEvent e) {
 			fLastFocusedField = 0;
 			doStatusUpdate();
@@ -528,6 +533,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 	}
 
 	private class SourceFolderFieldAdapter implements IStringButtonAdapter, IDialogFieldListener {
+		@Override
 		public void changeControlPressed(DialogField field) {
 			IPath oldFolderPath = getSourceFolderFullPath();
 			IPath newFolderPath = chooseSourceFolder(oldFolderPath);
@@ -537,6 +543,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			}
 		}
 
+		@Override
 		public void dialogFieldChanged(DialogField field) {
 			handleFieldChanged(ALL_FIELDS);
 		}
@@ -561,12 +568,12 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			if (selectedElement instanceof IAdaptable) {
 				IAdaptable adaptable = (IAdaptable) selectedElement;
 
-				celem = (ICElement) adaptable.getAdapter(ICElement.class);
+				celem = adaptable.getAdapter(ICElement.class);
 				if (celem == null) {
-					IResource resource = (IResource) adaptable.getAdapter(IResource.class);
+					IResource resource = adaptable.getAdapter(IResource.class);
 					if (resource != null && resource.getType() != IResource.ROOT) {
 						while (celem == null && resource.getType() != IResource.PROJECT) {
-							celem = (ICElement) resource.getAdapter(ICElement.class);
+							celem = resource.getAdapter(ICElement.class);
 							resource = resource.getParent();
 						}
 						if (celem == null) {
@@ -592,7 +599,7 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 			if (celem == null && part instanceof CEditor) {
 				IEditorInput input = ((IEditorPart) part).getEditorInput();
 				if (input != null) {
-					final IResource res = (IResource) input.getAdapter(IResource.class);
+					final IResource res = input.getAdapter(IResource.class);
 					if (res != null && res instanceof IFile) {
 						celem = CoreModel.getDefault().create((IFile) res);
 					}
