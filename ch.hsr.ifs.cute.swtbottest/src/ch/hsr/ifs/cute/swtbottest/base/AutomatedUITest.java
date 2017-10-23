@@ -4,6 +4,7 @@ import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.allOf;
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.inGroup;
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withStyle;
+import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withText;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -22,10 +23,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotRootMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -44,6 +45,9 @@ import ch.hsr.ifs.cute.swtbottest.util.Performer;
  */
 public abstract class AutomatedUITest {
 
+	private static final int TEST_TIMEOUT = 5000;
+	private static final int BOT_LONG_TIMEOUT = 1000;
+	private static final int BOT_SHORT_TIMEOUT = 100;
 	private static final int INDEXER_TIMEOUT = 10000;
 
 	protected static SWTWorkbenchBot fBot = null;
@@ -59,10 +63,9 @@ public abstract class AutomatedUITest {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-//		SWTBotPreferences.PLAYBACK_DELAY = 500;
-		SWTBotPreferences.TIMEOUT = 5000;
+		SWTBotPreferences.TIMEOUT = TEST_TIMEOUT;
 		fBot = new SWTWorkbenchBot();
-//		fBot.sleep(5000);
+		fBot.sleep(BOT_LONG_TIMEOUT);
 
 		fMainShell = findMainShell();
 
@@ -105,7 +108,7 @@ public abstract class AutomatedUITest {
 		for (SWTBotTreeItem item : fBot.tree().getAllItems()) {
 			item.expand();
 		}
-		fBot.sleep(500);
+		fBot.sleep(BOT_SHORT_TIMEOUT);
 	}
 
 	private void deleteAllProjects() throws Exception {
@@ -160,8 +163,7 @@ public abstract class AutomatedUITest {
 	 */
 	protected static void clickMenuEntry(SWTBotShell shell, String menu, String... path) {
 		shell.setFocus();
-		SWTBotMenu shellMenu = shell.menu().menu(menu);
-		shellMenu.menu(path).click();
+		shell.menu().menu(menu).menu(path).click();
 	}
 
 	/**
@@ -252,7 +254,7 @@ public abstract class AutomatedUITest {
 	private static IProject finalizeProjectCreation(String name, SWTBotShell newProjectShell) {
 		fBot.button("Finish").click();
 		fBot.waitUntil(shellCloses(newProjectShell));
-		fBot.sleep(1000);
+		fBot.sleep(BOT_LONG_TIMEOUT);
 		return getProject(name);
 	}
 
@@ -314,8 +316,8 @@ public abstract class AutomatedUITest {
 
 	private static void enableAutomaticPerspectiveChange() {
 		clickMenuEntry("Window", "Preferences");
+		fBot.waitUntil(Conditions.waitForShell(withText("Preferences")));
 		fBot.shell("Preferences").activate();
-		fBot.sleep(500);
 		fBot.text().setText("Perspectives");
 		fBot.waitUntil(BotConditions.selectNodeInTree(fBot.tree(), "General", "Perspectives"));
 		selectRadioButtonInGroup(RADIO_BUTTON_ALWAYS_OPEN, RADIO_GROUP_OPEN_PERSPECTIVE);

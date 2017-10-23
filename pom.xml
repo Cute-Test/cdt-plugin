@@ -49,6 +49,75 @@
     <module>ch.hsr.ifs.cute.swtbottest</module>
   </modules>
 
+  <profiles>
+    <!-- Default Surefire settings profile -->
+    <profile>
+      <id>ui-test-plugin</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.tycho</groupId>
+            <artifactId>tycho-surefire-plugin</artifactId>
+            <version>${tycho-version}</version>
+            <configuration>
+              <dependencies>
+                <dependency>
+                  <type>p2-installable-unit</type>
+                  <artifactId>org.eclipse.sdk.ide</artifactId>
+                  <version>0.0.0</version>
+                </dependency>
+              </dependencies>
+              <useUIHarness>true</useUIHarness>
+              <useUIThread>true</useUIThread>
+              <product>org.eclipse.epp.package.cpp.product</product>
+              <application>org.eclipse.ui.ide.workbench</application>
+              <includes>
+                <include>**/TestSuiteAll.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <!-- Automatic profile to define the settings for SWTBot test plugins -->
+    <profile>
+      <id>swtbot-test-plugin</id>
+      <activation>
+        <file>
+          <exists>swtbot-test-plugin.properties</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.tycho</groupId>
+            <artifactId>tycho-surefire-plugin</artifactId>
+            <version>${tycho-version}</version>
+            <configuration>
+              <dependencies>
+                <dependency>
+                  <type>p2-installable-unit</type>
+                  <artifactId>org.eclipse.sdk.ide</artifactId>
+                  <version>0.0.0</version>
+                </dependency>
+              </dependencies>
+              <useUIHarness>true</useUIHarness>
+              <useUIThread>false</useUIThread>
+              <product>org.eclipse.epp.package.cpp.product</product>
+              <application>org.eclipse.ui.ide.workbench</application>
+              <includes>
+                <include>**/TestSuiteAll.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <build>
     <plugins>
 
@@ -152,29 +221,6 @@
           <storetype>pkcs12</storetype>
         </configuration>
       </plugin>
-
-      <!-- Surefire settings -->
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-surefire-plugin</artifactId>
-        <version>${tycho-version}</version>
-        <configuration>
-          <dependencies>
-            <dependency>
-              <type>p2-installable-unit</type>
-              <artifactId>org.eclipse.sdk.ide</artifactId>
-              <version>0.0.0</version>
-            </dependency>
-          </dependencies>
-	  <useUIHarness>true</useUIHarness>
-          <product>org.eclipse.epp.package.cpp.product</product>
-          <application>org.eclipse.ui.ide.workbench</application>
-          <includes>
-            <include>**/TestSuiteAll.java</include>
-          </includes>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
 
