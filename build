@@ -30,7 +30,9 @@ BEFORE transformations are applied. Add modules that should never occur in any
 list of modules.
 """
 IGNORE = [
-    'ch.hsr.ifs.cute.target'
+    'ch.hsr.ifs.cute.target',
+    'ch.hsr.ifs.cute.help',
+    'ch.hsr.ifs.cute.feature'
 ]
 
 logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.INFO)
@@ -42,7 +44,7 @@ def get_modules():
     Retrieve the modules present in the working tree.
     """
     modules = dict()
-    matcher = re.compile(r'^(?P<module>\w+\.\w+\.(?P<id>\w+).*)$')
+    matcher = re.compile(r'^(?P<module>\w+.\w+\.\w+\.(\w+\.)?(?P<id>\w+).*)$')
     for entry in listdir(abspath('.')):
         if isdir(entry) and not entry.startswith('.') and entry not in IGNORE:
             match = matcher.match(entry)
@@ -128,7 +130,7 @@ def get_skipstring(excluded):
     for key, val in excluded.items():
         LOGGER.info('Skipping module \'%s\'', key.capitalize())
         for entry in val:
-            skips += '!com.cevelop.plugins:%s,' % entry
+            skips += '!ch.hsr.ifs.cute:%s,' % entry
     return skips.strip(',')
 
 

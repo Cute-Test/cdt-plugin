@@ -6,18 +6,16 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
-
-	// The plug-in ID
-	public static final String PLUGIN_ID = "ch.hsr.ifs.cute.swtbottest"; //$NON-NLS-1$
+public class SWTBotTestPlugin extends AbstractUIPlugin {
 
 	// The shared instance
-	private static Activator plugin;
+	private static SWTBotTestPlugin plugin;
 
 	/**
 	 * The constructor
 	 */
-	public Activator() {
+	public SWTBotTestPlugin() {
+		plugin = this;
 	}
 
 	/*
@@ -45,7 +43,7 @@ public class Activator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static SWTBotTestPlugin getDefault() {
 		return plugin;
 	}
 

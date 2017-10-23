@@ -10,7 +10,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public final class WaitUtils {
 
 	private static final int INDEXER_TIMEOUT = 5000;
-	private static final int BOT_TIMEOUT = 500;
+	private static final int BOT_TIMEOUT = 100;
 
 	private static final String CPP_INDEXER_JOBNAME = "C/C++ Indexer";
 	private static final String BUILD_PROJECT_JOBNAME = "Build Project";

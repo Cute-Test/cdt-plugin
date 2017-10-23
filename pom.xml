@@ -44,6 +44,9 @@
 
     <!-- CUTE Updatesite -->
     <module>ch.hsr.ifs.cute.updatesite</module>
+
+    <!-- CUTE SWTBotTests -->
+    <module>ch.hsr.ifs.cute.swtbottest</module>
   </modules>
 
   <build>
@@ -163,7 +166,7 @@
               <version>0.0.0</version>
             </dependency>
           </dependencies>
-          <useUIHarness>true</useUIHarness>
+	  <useUIHarness>true</useUIHarness>
           <product>org.eclipse.epp.package.cpp.product</product>
           <application>org.eclipse.ui.ide.workbench</application>
           <includes>

@@ -315,6 +315,7 @@ public abstract class AutomatedUITest {
 	private static void enableAutomaticPerspectiveChange() {
 		clickMenuEntry("Window", "Preferences");
 		fBot.shell("Preferences").activate();
+		fBot.sleep(500);
 		fBot.text().setText("Perspectives");
 		fBot.waitUntil(BotConditions.selectNodeInTree(fBot.tree(), "General", "Perspectives"));
 		selectRadioButtonInGroup(RADIO_BUTTON_ALWAYS_OPEN, RADIO_GROUP_OPEN_PERSPECTIVE);

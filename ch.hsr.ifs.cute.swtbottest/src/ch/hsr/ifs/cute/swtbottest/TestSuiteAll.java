@@ -14,6 +14,6 @@ import ch.hsr.ifs.cute.swtbottest.tests.CuteVersionTest;
 	CuteSuiteFileTest.class,
 	CuteVersionTest.class
 })
-public class AllTests {
+public class TestSuiteAll {
 
 }

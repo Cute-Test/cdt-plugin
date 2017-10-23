@@ -17,6 +17,8 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 public final class BotConditions {
 
+	private static final int BOT_TIMEOUT = 100;
+
 	/**
 	 * Create a new view text contents matching condition
 	 * <p>
@@ -34,7 +36,7 @@ public final class BotConditions {
 	 */
 	public static ViewTextContains viewTextContains(SWTBotView view, Supplier<AbstractSWTBotControl<? extends Control>> textAccessor, String pattern) {
 		view.setFocus();
-		view.bot().sleep(500);
+		view.bot().sleep(BOT_TIMEOUT);
 		return new ViewTextContains(view, textAccessor.get()::getText, pattern);
 	}
 

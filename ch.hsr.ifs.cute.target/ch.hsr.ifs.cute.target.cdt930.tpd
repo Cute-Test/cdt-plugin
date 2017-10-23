@@ -18,5 +18,5 @@ location "http://download.eclipse.org/releases/oxygen" {
 }
 
 location "https://www.cevelop.com/internal/latest" {
-	com.cevelop.elevenator.feature.feature.group [1.8.0,1.9.0)
+	com.cevelop.elevenator.feature.feature.group lazy
 }
