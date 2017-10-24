@@ -31,8 +31,7 @@ public class CuteSuiteFileTest extends AutomatedUITest {
 	public void newLinkedSuiteFileTest() throws Exception {
 		final ICProject project = createProject(this::setSuiteName);
 
-		forceReindex(project);
-		waitForIndexer(project);
+		updateIndex(project);
 
 		SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName(project)).expand().getNode("src").select();
 
@@ -62,8 +61,7 @@ public class CuteSuiteFileTest extends AutomatedUITest {
 
 		final ICProject project = createProject(this::setSuiteName);
 
-		forceReindex(project);
-		waitForIndexer(project);
+		updateIndex(project);
 
 		SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName(project)).expand().getNode("src").select();
 

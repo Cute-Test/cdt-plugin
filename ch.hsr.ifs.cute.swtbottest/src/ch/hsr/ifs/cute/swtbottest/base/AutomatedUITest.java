@@ -313,6 +313,24 @@ public abstract class AutomatedUITest {
 				.get();
 	}
 
+	/**
+	 * Wait for the default project indexer to complete (forces a reindex)
+	 */
+	protected static void updateIndex() {
+		updateIndex(getCProject());
+	}
+
+	/**
+	 * Wait for the project indexer to complete (forces a reindex)
+	 *
+	 * @param project
+	 *             The project for which the index needs to be up-to-date
+	 */
+	protected static void updateIndex(ICProject project) {
+		forceReindex(project);
+		fBot.waitUntil(BotConditions.indexerIsDone(INDEXER_TIMEOUT, project));
+	}
+
 	private static void closeWelcome() {
 		try {
 			fBot.viewByTitle("Welcome").close();
@@ -357,20 +375,8 @@ public abstract class AutomatedUITest {
 		}
 	}
 
-	protected static void forceReindex() {
-		forceReindex(getCProject());
-	}
-
-	protected static void forceReindex(ICProject project) {
+	private static void forceReindex(ICProject project) {
 		CCorePlugin.getIndexManager().reindex(project);
-	}
-
-	protected static void waitForIndexer() {
-		waitForIndexer(getCProject());
-	}
-
-	protected static void waitForIndexer(ICProject project) {
-		fBot.waitUntil(BotConditions.indexerIsDone(INDEXER_TIMEOUT, project));
 	}
 
 	private static void enableAutomaticPerspectiveChange() {
