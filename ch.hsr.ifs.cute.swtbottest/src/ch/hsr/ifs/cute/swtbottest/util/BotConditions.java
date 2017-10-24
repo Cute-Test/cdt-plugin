@@ -1,5 +1,6 @@
 package ch.hsr.ifs.cute.swtbottest.util;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,7 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
@@ -96,10 +98,26 @@ public final class BotConditions {
 	 * @param timeout
 	 *            Timeout for the indexer join job. If the timeout is
 	 *            smaller than 0, no timeout will be used.
+	 * @param project
+	 *            The project for which indexing should be done
 	 * @return
 	 */
 	public static IndexerIsDone indexerIsDone(int timeout, ICProject project) {
 		return new IndexerIsDone(timeout, project);
+	}
+
+	/**
+	 * Create a new job exists condition
+	 * <p>
+	 * The condition evaluates to true if a job with a given name exists
+	 * </p>
+	 *
+	 * @param name
+	 *            The name of the job
+	 * @return
+	 */
+	public static JobExists jobExists(String name) {
+		return new JobExists(name);
 	}
 
 	/**
@@ -230,7 +248,7 @@ public final class BotConditions {
 	}
 
 	/**
-	 * A condition to wait until the job can be found
+	 * A condition to wait until the indexer is done
 	 */
 	private static final class IndexerIsDone extends DefaultCondition {
 
@@ -256,6 +274,30 @@ public final class BotConditions {
 		public String getFailureMessage() {
 			return "Unable finish indexing within " + fTimeout + "ms.";
 		}
+	}
+
+	/**
+	 * A condition to wait until the job can be found
+	 */
+	private static final class JobExists extends DefaultCondition {
+
+		private final String fJobName;
+
+		private JobExists(String jobName) {
+			fJobName = jobName;
+		}
+
+		@Override
+		public boolean test() throws Exception {
+			return Arrays.stream(Job.getJobManager().find(null))
+					.anyMatch(job -> job.getName().equals(fJobName));
+		}
+
+		@Override
+		public String getFailureMessage() {
+			return "Unable to find '" + fJobName + "' job.";
+		}
+
 	}
 
 	/**

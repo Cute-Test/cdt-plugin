@@ -31,9 +31,9 @@ public class CuteSuiteFileTest extends AutomatedUITest {
 	public void newLinkedSuiteFileTest() throws Exception {
 		final ICProject project = createProject(this::setSuiteName);
 
-		updateIndex(project);
-
 		SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName(project)).expand().getNode("src").select();
+
+		updateIndex(project);
 
 		clickContextMenuEntry(srcFolder, "New", "CUTE Suite File");
 
@@ -60,8 +60,6 @@ public class CuteSuiteFileTest extends AutomatedUITest {
 	public void newSuiteFileTest() throws Exception {
 
 		final ICProject project = createProject(this::setSuiteName);
-
-		updateIndex(project);
 
 		SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName(project)).expand().getNode("src").select();
 

@@ -377,6 +377,7 @@ public abstract class AutomatedUITest {
 
 	private static void forceReindex(ICProject project) {
 		CCorePlugin.getIndexManager().reindex(project);
+		fBot.waitUntil(BotConditions.jobExists("C/C++ Indexer"));
 	}
 
 	private static void enableAutomaticPerspectiveChange() {
