@@ -358,7 +358,11 @@ public abstract class AutomatedUITest {
 	}
 
 	protected static void forceReindex() {
-		CCorePlugin.getIndexManager().reindex(getCProject());
+		forceReindex(getCProject());
+	}
+
+	protected static void forceReindex(ICProject project) {
+		CCorePlugin.getIndexManager().reindex(project);
 	}
 
 	protected static void waitForIndexer() {
