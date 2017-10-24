@@ -2,7 +2,7 @@ package ch.hsr.ifs.cute.swtbottest.tests;
 
 import static org.junit.Assert.assertNotNull;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.cdt.core.model.ICProject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -20,20 +20,20 @@ public class CuteExecutableProjectTest extends AutomatedUITest {
 	@Test
 	@TestProjectType("CUTE Project")
 	public void newProject() throws Exception {
-		IProject project = createProject();
-		assertNotNull("Project does not have CUTE nature", project.getNature(CuteNature.CUTE_NATURE_ID));
+		ICProject project = createProject();
+		assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.CUTE_NATURE_ID));
 	}
 
 	private void setSuiteName() {
 		fBot.button("Next >").click();
-		fBot.text().setText(getProject().getName() + "suite");
+		fBot.text().setText(getCProject().getProject().getName() + "suite");
 	}
 
 	@Test
 	@TestProjectType("CUTE Suite Project")
 	public void newSuiteProject() throws Exception {
-		IProject project = createProject(this::setSuiteName);
-		assertNotNull("Project does not have CUTE nature", project.getNature(CuteNature.CUTE_NATURE_ID));
+		ICProject project = createProject(this::setSuiteName);
+		assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.CUTE_NATURE_ID));
 	}
 
 	private void copyBoostHeaders() {
@@ -44,8 +44,8 @@ public class CuteExecutableProjectTest extends AutomatedUITest {
 	@Test
 	@TestProjectType("CUTE Project")
 	public void newProjectWithBoost() throws Exception {
-		IProject project = createProject(this::copyBoostHeaders);
-		assertNotNull("Project does not have CUTE nature", project.getNature(CuteNature.CUTE_NATURE_ID));
+		ICProject project = createProject(this::copyBoostHeaders);
+		assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.CUTE_NATURE_ID));
 		getFolder(project, "boost");
 	}
 
@@ -57,8 +57,8 @@ public class CuteExecutableProjectTest extends AutomatedUITest {
 	@Test
 	@TestProjectType("CUTE Project")
 	public void newProjectWithGCov() throws Exception {
-		IProject project = createProject(this::enableGCov);
-		assertNotNull("Project does not have CUTE nature", project.getNature(CuteNature.CUTE_NATURE_ID));
-		assertNotNull("Project does not have GCov nature", project.getNature(GcovNature.NATURE_ID));
+		ICProject project = createProject(this::enableGCov);
+		assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.CUTE_NATURE_ID));
+		assertNotNull("Project does not have GCov nature", getProjectNature(project, GcovNature.NATURE_ID));
 	}
 }

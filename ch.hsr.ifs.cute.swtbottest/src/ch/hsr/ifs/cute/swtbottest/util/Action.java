@@ -1,17 +1,19 @@
 package ch.hsr.ifs.cute.swtbottest.util;
 
+// Copied from: https://stackoverflow.com/a/45419418
+
 @FunctionalInterface
-public interface Performer {
+public interface Action {
     void run();
 
-    default Performer andThen(Performer after){
+    default Action andThen(Action after){
         return () -> {
             this.run();
             after.run();
         };
     }
 
-    default Performer compose(Performer before){
+    default Action compose(Action before){
         return () -> {
             before.run();
             this.run();

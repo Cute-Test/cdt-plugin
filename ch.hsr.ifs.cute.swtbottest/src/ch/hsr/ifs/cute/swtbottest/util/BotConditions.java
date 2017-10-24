@@ -3,6 +3,9 @@ package ch.hsr.ifs.cute.swtbottest.util;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
+import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.index.IIndexManager;
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -85,6 +88,21 @@ public final class BotConditions {
 	}
 
 	/**
+	 * Create a new indexer is done condition
+	 * <p>
+	 * The condition evaluates to true if the Indexer is done
+	 * </p>
+	 *
+	 * @param timeout
+	 *            Timeout for the indexer join job. If the timeout is
+	 *            smaller than 0, no timeout will be used.
+	 * @return
+	 */
+	public static IndexerIsDone indexerIsDone(int timeout, ICProject project) {
+		return new IndexerIsDone(timeout, project);
+	}
+
+	/**
 	 * Create a new tree node selection condition
 	 *
 	 * @param tree
@@ -95,8 +113,22 @@ public final class BotConditions {
 	 *            The node to select
 	 * @return A waitable SWTBot condition that selects the desired node.
 	 */
-	public static TreeNodeSelected selectNodeInTree(SWTBotTree tree, String parent, String node) {
-		return new TreeNodeSelected(tree, parent, node);
+	public static TreeNodeIsSelected selectNodeInTree(SWTBotTree tree, String parent, String node) {
+		return new TreeNodeIsSelected(tree, parent, node);
+	}
+
+	/**
+	 * Create a new tree item expansion condition
+	 * <p>
+	 * The condition evaluates to true a tree node is expanded
+	 * </p>
+	 *
+	 * @param item
+	 *            The {@link #SWTBotTreeItem} containing which should be expanded
+	 * @return
+	 */
+	public static TreeItemIsExpanded expandTreeItem(SWTBotTreeItem item) {
+		return new TreeItemIsExpanded(item);
 	}
 
 	private static final class ViewTextContains extends DefaultCondition {
@@ -198,15 +230,44 @@ public final class BotConditions {
 	}
 
 	/**
+	 * A condition to wait until the job can be found
+	 */
+	private static final class IndexerIsDone extends DefaultCondition {
+
+		private final int fTimeout;
+		private final ICProject fProject;
+
+		private IndexerIsDone(int timeout, ICProject project) {
+			fTimeout = (timeout < 0) ? IIndexManager.FOREVER : timeout;
+			fProject = project;
+		}
+
+		@Override
+		public boolean test() throws Exception {
+			final IIndexManager indexManager = CCorePlugin.getIndexManager();
+			return indexManager.isProjectIndexed(fProject)
+					&& indexManager.isIndexerIdle()
+					&& !indexManager.isIndexerSetupPostponed(fProject)
+					&& indexManager.joinIndexer(fTimeout, new NullProgressMonitor());
+
+		}
+
+		@Override
+		public String getFailureMessage() {
+			return "Unable finish indexing within " + fTimeout + "ms.";
+		}
+	}
+
+	/**
 	 * A condition to wait until the file contains the needle.
 	 */
-	private static final class TreeNodeSelected extends DefaultCondition {
+	private static final class TreeNodeIsSelected extends DefaultCondition {
 
 		private final SWTBotTree fTree;
 		private final String fNode;
 		private final String fChild;
 
-		private TreeNodeSelected(SWTBotTree tree, String node, String child) {
+		private TreeNodeIsSelected(SWTBotTree tree, String node, String child) {
 			fTree = tree;
 			fNode = node;
 			fChild = child;
@@ -226,6 +287,28 @@ public final class BotConditions {
 		@Override
 		public String getFailureMessage() {
 			return "Failed to select node \"" + fNode + "->" + fChild + "\".";
+		}
+	}
+
+	/**
+	 * A condition to wait until a SWTBotTreeItem is expanded
+	 */
+	private static final class TreeItemIsExpanded extends DefaultCondition {
+
+		final SWTBotTreeItem fItem;
+
+		private TreeItemIsExpanded(SWTBotTreeItem item) {
+			fItem = item;
+		}
+
+		@Override
+		public boolean test() throws Exception {
+			return fItem.isExpanded();
+		}
+
+		@Override
+		public String getFailureMessage() {
+			return "Unable to expand item " + fItem.getText() + ".";
 		}
 	}
 }

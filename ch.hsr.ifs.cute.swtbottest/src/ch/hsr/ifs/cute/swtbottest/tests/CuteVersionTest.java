@@ -2,8 +2,8 @@ package ch.hsr.ifs.cute.swtbottest.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +25,7 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 @RunWith(AutomatedUITestRunner.class)
 public class CuteVersionTest extends AutomatedUITest {
 
-	private void assertCuteVersion(IProject project, String cuteVersion) throws Exception {
+	private void assertCuteVersion(ICProject project, String cuteVersion) throws Exception {
 		String cuteVersionFile = "cute/cute_version.h";
 		IFile file = getFile(project, cuteVersionFile);
 		String content = FileUtils.getCodeFromIFile(file);
@@ -37,8 +37,8 @@ public class CuteVersionTest extends AutomatedUITest {
 	public void newProjectDefaultVersion() throws Exception {
 		final String defaultCuteVersion = "2.2.1";
 
-		IProject project = createProject();
-		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		ICProject project = createProject();
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project.getProject());
 		assertTrue(cuteVersion instanceof CuteHeaders_2_2);
 		assertCuteVersion(project, defaultCuteVersion);
 	}
@@ -57,8 +57,8 @@ public class CuteVersionTest extends AutomatedUITest {
 	public void newProjectV170() throws Exception {
 		final String cuteHeaderVersion = "1.7.0";
 
-		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
-		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		ICProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project.getProject());
 		assertTrue(cuteVersion instanceof CuteHeaders_1_7);
 		assertCuteVersion(project, cuteHeaderVersion);
 	}
@@ -68,8 +68,8 @@ public class CuteVersionTest extends AutomatedUITest {
 	public void newProjectV201() throws Exception {
 		final String cuteHeaderVersion = "2.0.1";
 
-		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
-		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		ICProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project.getProject());
 		assertTrue(cuteVersion instanceof CuteHeaders_2_0);
 		assertCuteVersion(project, cuteHeaderVersion);
 	}
@@ -79,8 +79,8 @@ public class CuteVersionTest extends AutomatedUITest {
 	public void newProjectV211() throws Exception {
 		final String cuteHeaderVersion = "2.1.1";
 
-		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
-		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		ICProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project.getProject());
 		assertTrue(cuteVersion instanceof CuteHeaders_2_1);
 		assertCuteVersion(project, cuteHeaderVersion);
 	}
@@ -90,8 +90,8 @@ public class CuteVersionTest extends AutomatedUITest {
 	public void newProjectV221() throws Exception {
 		final String cuteHeaderVersion = "2.2.1";
 
-		IProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
-		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project);
+		ICProject project = createProject(() -> setCuteVersion(CUTE_HEADERS_PREFIX + cuteHeaderVersion));
+		CuteHeaders cuteVersion = CuteUIPlugin.getCuteVersion(project.getProject());
 		assertTrue(cuteVersion instanceof CuteHeaders_2_2);
 		assertCuteVersion(project, cuteHeaderVersion);
 	}

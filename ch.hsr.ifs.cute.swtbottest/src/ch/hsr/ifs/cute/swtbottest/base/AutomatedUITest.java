@@ -5,19 +5,22 @@ import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.inGrou
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withStyle;
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withText;
-import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -27,7 +30,6 @@ import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotRootMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.ui.PlatformUI;
@@ -35,8 +37,8 @@ import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.BeforeClass;
 
+import ch.hsr.ifs.cute.swtbottest.util.Action;
 import ch.hsr.ifs.cute.swtbottest.util.BotConditions;
-import ch.hsr.ifs.cute.swtbottest.util.Performer;
 
 /**
  * @author Felix Morgner IFS
@@ -44,11 +46,6 @@ import ch.hsr.ifs.cute.swtbottest.util.Performer;
  *
  */
 public abstract class AutomatedUITest {
-
-	private static final int TEST_TIMEOUT = 5000;
-	private static final int BOT_LONG_TIMEOUT = 1000;
-	private static final int BOT_SHORT_TIMEOUT = 100;
-	private static final int INDEXER_TIMEOUT = 10000;
 
 	protected static SWTWorkbenchBot fBot = null;
 	protected static SWTBotShell fMainShell = null;
@@ -58,6 +55,9 @@ public abstract class AutomatedUITest {
 	private static String fProjectCategory = null;
 	private static String fProjectType = null;
 
+	private static final int TEST_TIMEOUT = 10000;
+	private static final int INDEXER_TIMEOUT = 20000;
+
 	private static final String RADIO_BUTTON_ALWAYS_OPEN = "Always open";
 	private static final String RADIO_GROUP_OPEN_PERSPECTIVE = "Open the associated perspective when creating a new project";
 
@@ -65,19 +65,11 @@ public abstract class AutomatedUITest {
 	public static void beforeClass() throws Exception {
 		SWTBotPreferences.TIMEOUT = TEST_TIMEOUT;
 		fBot = new SWTWorkbenchBot();
-		fBot.sleep(BOT_LONG_TIMEOUT);
-
 		fMainShell = findMainShell();
 
 		goFullscreen();
 		closeWelcome();
 		enableAutomaticPerspectiveChange();
-	}
-
-	private static void goFullscreen() {
-		UIThreadRunnable.syncExec(() -> {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setFullScreen(true);
-		});
 	}
 
 	@After
@@ -103,19 +95,16 @@ public abstract class AutomatedUITest {
 		fMainShell.activate();
 	}
 
-	private void expandAllProjects() {
-		fBot.viewByTitle("Project Explorer");
-		for (SWTBotTreeItem item : fBot.tree().getAllItems()) {
-			item.expand();
-		}
-		fBot.sleep(BOT_SHORT_TIMEOUT);
+	protected static IProjectNature getProjectNature(ICProject project, String natureId) throws CoreException {
+		return project.getProject().getNature(natureId);
 	}
 
-	private void deleteAllProjects() throws Exception {
-		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-			CCorePlugin.getIndexManager().joinIndexer(INDEXER_TIMEOUT, new NullProgressMonitor());
-			project.delete(true, new NullProgressMonitor());
-		}
+	protected static String getProjectName() {
+		return getProjectName(getCProject());
+	}
+
+	protected static String getProjectName(ICProject project) {
+		return project.getProject().getName();
 	}
 
 	/**
@@ -128,8 +117,7 @@ public abstract class AutomatedUITest {
 	 *            The path of the item to click
 	 */
 	protected static void clickContextMenuEntry(AbstractSWTBot<? extends Widget> element, String... path) {
-		SWTBotRootMenu contextMenu = element.contextMenu();
-		contextMenu.menu(path).click();
+		element.contextMenu().menu(path).click();
 	}
 
 	/**
@@ -171,26 +159,26 @@ public abstract class AutomatedUITest {
 	 *
 	 * @param name
 	 *            The desired project's name
-	 * @return An {@link #IProject} handle to the project
+	 * @return An {@link #ICProject} handle to the project
 	 */
-	protected static IProject getProject(String name) {
+	protected static ICProject getCProject(String name) {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		assertNotNull("Failed to get workspace", workspace);
 		IWorkspaceRoot root = workspace.getRoot();
 		assertNotNull("Failed to get workspace root", root);
 		IProject project = root.getProject(name);
 		assertNotNull("Could not find project \"" + name + '"', project);
-		return project;
+		return CoreModel.getDefault().create(project);
 	}
 
 	/**
 	 * Get the project specified by the {@link #TestProjectName} specification on
 	 * the test function
 	 *
-	 * @return An {@link #IProject} handle to the project
+	 * @return An {@link #ICProject} handle to the project
 	 */
-	protected static IProject getProject() {
-		return getProject(fProjectName);
+	protected static ICProject getCProject() {
+		return getCProject(fProjectName);
 	}
 
 	/**
@@ -200,9 +188,9 @@ public abstract class AutomatedUITest {
 	 *            The type of the project
 	 * @param name
 	 *            The name of the project
-	 * @return An {@link #IProject} handle to the newly created project
+	 * @return An {@link #ICProject} handle to the newly created project
 	 */
-	protected static IProject createProject(String category, String type, String name) {
+	protected static ICProject createProject(String category, String type, String name) {
 		return finalizeProjectCreation(name, prepareProjectCreation(category, type, name));
 	}
 
@@ -215,9 +203,9 @@ public abstract class AutomatedUITest {
 	 *            The name of the project
 	 * @param creationHandler
 	 *            Custom project creation handler with shell access
-	 * @return An {@link #IProject} handle to the newly created project
+	 * @return An {@link #ICProject} handle to the newly created project
 	 */
-	protected static IProject createProject(String category, String type, String name, Consumer<SWTBotShell> creationHandler) {
+	protected static ICProject createProject(String category, String type, String name, Consumer<SWTBotShell> creationHandler) {
 		SWTBotShell newProjectShell = prepareProjectCreation(category, type, name);
 		creationHandler.accept(newProjectShell);
 		return finalizeProjectCreation(name, newProjectShell);
@@ -232,12 +220,110 @@ public abstract class AutomatedUITest {
 	 *            The name of the project
 	 * @param creationHandler
 	 *            Custom project creation handler without shell access
-	 * @return An {@link #IProject} handle to the newly created project
+	 * @return An {@link #ICProject} handle to the newly created project
 	 */
-	protected static IProject createProject(String category, String type, String name, Performer creationHandler) {
+	protected static ICProject createProject(String category, String type, String name, Action creationHandler) {
 		SWTBotShell newProjectShell = prepareProjectCreation(category, type, name);
 		creationHandler.run();
 		return finalizeProjectCreation(name, newProjectShell);
+	}
+
+	/**
+	 * Create a project as specified by the {@link #TestProjectCategory},
+	 * {@link #TestProjectType} and {@link #TestProjectName} annotations
+	 * of the test function
+	 *
+	 * @return An {@link #ICProject} handle to the newly created project
+	 */
+	protected static ICProject createProject() {
+		return createProject(fProjectCategory, fProjectType, fProjectName);
+	}
+
+	/**
+	 * Create a project as specified by the {@link #TestProjectCategory},
+	 * {@link #TestProjectType} and {@link #TestProjectName} annotations
+	 * of the test function
+	 *
+	 * @param creationHandler
+	 *            Custom project creation handler without shell access
+	 * @return An {@link #ICProject} handle to the newly created project
+	 */
+	protected static ICProject createProject(Action creationHandler) {
+		return createProject(fProjectCategory, fProjectType, fProjectName, creationHandler);
+	}
+
+	/**
+	 * Create a project as specified by the {@link #TestProjectCategory},
+	 * {@link #TestProjectType} and {@link #TestProjectName} annotations
+	 * of the test function
+	 *
+	 * @param creationHandler
+	 *            Custom project creation handler with shell access
+	 * @return An {@link #ICProject} handle to the newly created project
+	 */
+	protected static ICProject createProject(Consumer<SWTBotShell> creationHandler) {
+		return createProject(fProjectCategory, fProjectType, fProjectName, creationHandler);
+	}
+
+	/**
+	 * Get a file with the given name inside the project, this methods
+	 * ensures that the file exists. Otherwise the test will time out.
+	 *
+	 * @param project
+	 *            Project containing the folder
+	 * @param fileName
+	 *            Name of the file one is looking for
+	 * @return
+	 */
+	protected static IFile getFile(ICProject project, String fileName) {
+		IFile file = project.getProject().getFile(fileName);
+		fBot.waitUntil(BotConditions.resourceExists(file));
+		return file;
+	}
+
+	/**
+	 * Get a folder with the given name inside the project, this methods
+	 * ensures that the folder exists. Otherwise the test will time out.
+	 *
+	 * @param project
+	 *            Project containing the folder
+	 * @param folderName
+	 *            Name of the folder one is looking for
+	 * @return
+	 */
+	protected static IFolder getFolder(ICProject project, String folderName) {
+		IFolder folder = project.getProject().getFolder(folderName);
+		fBot.waitUntil(BotConditions.resourceExists(folder));
+		return folder;
+	}
+
+	/**
+	 * Find a shell with the given text. This method ensures that the shell
+	 * exists. Otherwise the test will time out.
+	 *
+	 * @param shellText
+	 *            Text of the shell one is looking for
+	 * @return
+	 */
+	protected static SWTBotShell findShell(String shellText) {
+		fBot.waitUntil(Conditions.waitForShell(withText(shellText)));
+		return Arrays.stream(fBot.shells())
+				.filter(shell -> shell.getText().equals(shellText))
+				.findFirst()
+				.get();
+	}
+
+	private static void closeWelcome() {
+		try {
+			fBot.viewByTitle("Welcome").close();
+		} catch (Exception e) {
+		}
+	}
+
+	private static void goFullscreen() {
+		UIThreadRunnable.syncExec(() -> {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setFullScreen(true);
+		});
 	}
 
 	private static SWTBotShell prepareProjectCreation(String category, String type, String name) {
@@ -251,73 +337,41 @@ public abstract class AutomatedUITest {
 		return newProjectShell;
 	}
 
-	private static IProject finalizeProjectCreation(String name, SWTBotShell newProjectShell) {
+	private static ICProject finalizeProjectCreation(String name, SWTBotShell newProjectShell) {
 		fBot.button("Finish").click();
-		fBot.waitUntil(shellCloses(newProjectShell));
-		fBot.sleep(BOT_LONG_TIMEOUT);
-		return getProject(name);
+		fBot.waitUntil(Conditions.shellCloses(newProjectShell));
+		return getCProject(name);
 	}
 
-	/**
-	 * Create a project as specified by the {@link #TestProjectCategory},
-	 * {@link #TestProjectType} and {@link #TestProjectName} annotations
-	 * of the test function
-	 *
-	 * @return An {@link #IProject} handle to the newly created project
-	 */
-	protected static IProject createProject() {
-		return createProject(fProjectCategory, fProjectType, fProjectName);
-	}
-
-	/**
-	 * Create a project as specified by the {@link #TestProjectCategory},
-	 * {@link #TestProjectType} and {@link #TestProjectName} annotations
-	 * of the test function
-	 *
-	 * @param creationHandler
-	 *            Custom project creation handler without shell access
-	 * @return An {@link #IProject} handle to the newly created project
-	 */
-	protected static IProject createProject(Performer creationHandler) {
-		return createProject(fProjectCategory, fProjectType, fProjectName, creationHandler);
-	}
-
-	/**
-	 * Create a project as specified by the {@link #TestProjectCategory},
-	 * {@link #TestProjectType} and {@link #TestProjectName} annotations
-	 * of the test function
-	 *
-	 * @param creationHandler
-	 *            Custom project creation handler with shell access
-	 * @return An {@link #IProject} handle to the newly created project
-	 */
-	protected static IProject createProject(Consumer<SWTBotShell> creationHandler) {
-		return createProject(fProjectCategory, fProjectType, fProjectName, creationHandler);
-	}
-
-	protected static IFile getFile(IProject project, String fileName) {
-		IFile file = project.getFile(fileName);
-		fBot.waitUntil(BotConditions.resourceExists(file));
-		return file;
-	}
-
-	protected static IFolder getFolder(IProject project, String folderName) {
-		IFolder folder = project.getFolder(folderName);
-		fBot.waitUntil(BotConditions.resourceExists(folder));
-		return folder;
-	}
-
-	private static void closeWelcome() {
-		try {
-			fBot.viewByTitle("Welcome").close();
-		} catch (Exception e) {
+	private static void expandAllProjects() {
+		fBot.viewByTitle("Project Explorer");
+		for (SWTBotTreeItem item : fBot.tree().getAllItems()) {
+			item.expand();
+			fBot.waitUntil(BotConditions.expandTreeItem(item));
 		}
+	}
+
+	private static void deleteAllProjects() throws Exception {
+		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+			project.delete(true, new NullProgressMonitor());
+		}
+	}
+
+	protected static void forceReindex() {
+		CCorePlugin.getIndexManager().reindex(getCProject());
+	}
+
+	protected static void waitForIndexer() {
+		waitForIndexer(getCProject());
+	}
+
+	protected static void waitForIndexer(ICProject project) {
+		fBot.waitUntil(BotConditions.indexerIsDone(INDEXER_TIMEOUT, project));
 	}
 
 	private static void enableAutomaticPerspectiveChange() {
 		clickMenuEntry("Window", "Preferences");
-		fBot.waitUntil(Conditions.waitForShell(withText("Preferences")));
-		fBot.shell("Preferences").activate();
+		findShell("Preferences").activate();
 		fBot.text().setText("Perspectives");
 		fBot.waitUntil(BotConditions.selectNodeInTree(fBot.tree(), "General", "Perspectives"));
 		selectRadioButtonInGroup(RADIO_BUTTON_ALWAYS_OPEN, RADIO_GROUP_OPEN_PERSPECTIVE);
@@ -325,18 +379,11 @@ public abstract class AutomatedUITest {
 	}
 
 	private static SWTBotShell findMainShell() {
-		String shellTitle = UIThreadRunnable.syncExec(() -> {
+		String mainShellText = UIThreadRunnable.syncExec(() -> {
 			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getText();
 		});
 
-		for (SWTBotShell shell : fBot.shells()) {
-			if (shell.getText().equals(shellTitle)) {
-				return shell;
-			}
-		}
-
-		fail("No Eclipse shell found!");
-		return null;
+		return findShell(mainShellText);
 	}
 
 	@SuppressWarnings("unchecked")

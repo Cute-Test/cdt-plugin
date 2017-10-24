@@ -2,8 +2,8 @@ package ch.hsr.ifs.cute.swtbottest.tests;
 
 import static org.junit.Assert.assertTrue;
 
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +14,6 @@ import ch.hsr.ifs.cute.swtbottest.base.AutomatedUITest;
 import ch.hsr.ifs.cute.swtbottest.base.AutomatedUITestRunner;
 import ch.hsr.ifs.cute.swtbottest.util.BotConditions;
 import ch.hsr.ifs.cute.swtbottest.util.FileUtils;
-import ch.hsr.ifs.cute.swtbottest.util.WaitUtils;
 
 @TestProjectCategory("CUTE")
 @RunWith(AutomatedUITestRunner.class)
@@ -24,17 +23,18 @@ public class CuteSuiteFileTest extends AutomatedUITest {
 
 	private void setSuiteName() {
 		fBot.button("Next >").click();
-		fBot.text().setText(getProject().getName() + "suite");
+		fBot.text().setText(getProjectName() + "Suite");
 	}
 
 	@Test
 	@TestProjectType("CUTE Suite Project")
 	public void newLinkedSuiteFileTest() throws Exception {
-		IProject project = createProject(this::setSuiteName);
+		final ICProject project = createProject(this::setSuiteName);
 
-		WaitUtils.waitForIndexer(fBot);
+		forceReindex();
+		waitForIndexer(project);
 
-		SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProject().getName()).expand().getNode("src").select();
+		SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName()).expand().getNode("src").select();
 
 		clickContextMenuEntry(srcFolder, "New", "CUTE Suite File");
 
@@ -60,11 +60,12 @@ public class CuteSuiteFileTest extends AutomatedUITest {
 	@TestProjectType("CUTE Suite Project")
 	public void newSuiteFileTest() throws Exception {
 
-		final IProject project = createProject(this::setSuiteName);
+		final ICProject project = createProject(this::setSuiteName);
 
-		WaitUtils.waitForIndexer(fBot);
+		forceReindex();
+		waitForIndexer(project);
 
-		SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProject().getName()).expand().getNode("src").select();
+		SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName()).expand().getNode("src").select();
 
 		clickContextMenuEntry(srcFolder, "New", "CUTE Suite File");
 
