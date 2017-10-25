@@ -1,0 +1,6 @@
+target "Mockator for Eclipse Oxygen" with source requirements
+include "base.tpd"
+
+location "http://www.cute-test.com/updatesite/oxygen" {
+    ch.hsr.ifs.cute.feature.feature.group lazy
+}
