@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -66,8 +66,7 @@ public class AddTestToSuite extends AbstractFunctionAction {
 						IASTFunctionDeclarator declarator = def.getDeclarator();
 						if (isMemberFunction(def)) { // In .cpp file
 							if (ASTHelper.isFunctor(def.getDeclarator())) {
-								lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file,
-										suiteFinder);
+								lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file, suiteFinder);
 							} else {
 								lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, declarator.getName(), suiteFinder);
 							}
@@ -145,7 +144,8 @@ public class AddTestToSuite extends AbstractFunctionAction {
 		IASTNode parent = def.getParent();
 
 		while (parent instanceof ICPPASTNamespaceDefinition) {
-			result = ((ICPPASTNamespaceDefinition) parent).getName().toString() + SCOPE + result;
+			final String namespaceName = ((ICPPASTNamespaceDefinition) parent).getName().toString();
+			result = namespaceName.isEmpty() ? result : namespaceName + SCOPE + result;
 			parent = parent.getParent();
 		}
 
