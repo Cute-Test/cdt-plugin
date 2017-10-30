@@ -97,7 +97,7 @@ def get_arguments(modules):
         '-j',
         '--jobs',
         metavar='N',
-        default=1,
+        default=cpu_count(),
         help='how many parallel jobs to run'
     )
     parser.add_argument(
