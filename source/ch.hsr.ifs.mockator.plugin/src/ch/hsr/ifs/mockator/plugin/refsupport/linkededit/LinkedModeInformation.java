@@ -8,65 +8,67 @@ import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup;
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.PositionInformation;
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
 
+
 @SuppressWarnings("restriction")
 public class LinkedModeInformation {
-  private final List<LinkedProposalPositionGroup> groups;
 
-  public LinkedModeInformation() {
-    groups = list();
-  }
+   private final List<LinkedProposalPositionGroup> groups;
 
-  public void addPosition(int offset, int length) {
-    LinkedProposalPositionGroup group = new LinkedProposalPositionGroup("group" + offset);
-    group.addPosition(new Position(offset, length));
-    groups.add(group);
-  }
+   public LinkedModeInformation() {
+      groups = list();
+   }
 
-  public void addProposal(int offset, Proposal[] proposals) {
-    LinkedProposalPositionGroup group = getGroup(offset);
+   public void addPosition(int offset, int length) {
+      LinkedProposalPositionGroup group = new LinkedProposalPositionGroup("group" + offset);
+      group.addPosition(new Position(offset, length));
+      groups.add(group);
+   }
 
-    for (Proposal proposal : proposals) {
-      group.addProposal(proposal);
-    }
-  }
+   public void addProposal(int offset, Proposal[] proposals) {
+      LinkedProposalPositionGroup group = getGroup(offset);
 
-  List<LinkedProposalPositionGroup> getGroups() {
-    return groups;
-  }
-
-  public LinkedProposalPositionGroup getGroup(int offset) {
-    for (LinkedProposalPositionGroup group : groups) {
-      for (PositionInformation pos : group.getPositions()) {
-        if (pos.getOffset() == offset)
-          return group;
+      for (Proposal proposal : proposals) {
+         group.addProposal(proposal);
       }
-    }
+   }
 
-    return null;
-  }
+   List<LinkedProposalPositionGroup> getGroups() {
+      return groups;
+   }
 
-  private static class Position extends PositionInformation {
-    private final int offset;
-    private final int length;
+   public LinkedProposalPositionGroup getGroup(int offset) {
+      for (LinkedProposalPositionGroup group : groups) {
+         for (PositionInformation pos : group.getPositions()) {
+            if (pos.getOffset() == offset) return group;
+         }
+      }
 
-    public Position(int offset, int length) {
-      this.offset = offset;
-      this.length = length;
-    }
+      return null;
+   }
 
-    @Override
-    public int getOffset() {
-      return offset;
-    }
+   private static class Position extends PositionInformation {
 
-    @Override
-    public int getLength() {
-      return length;
-    }
+      private final int offset;
+      private final int length;
 
-    @Override
-    public int getSequenceRank() {
-      return 0;
-    }
-  }
+      public Position(int offset, int length) {
+         this.offset = offset;
+         this.length = length;
+      }
+
+      @Override
+      public int getOffset() {
+         return offset;
+      }
+
+      @Override
+      public int getLength() {
+         return length;
+      }
+
+      @Override
+      public int getSequenceRank() {
+         return 0;
+      }
+   }
 }

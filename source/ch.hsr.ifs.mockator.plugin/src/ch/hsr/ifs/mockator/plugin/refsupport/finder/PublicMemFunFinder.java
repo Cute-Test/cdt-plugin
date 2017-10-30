@@ -20,93 +20,93 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class PublicMemFunFinder {
-  private final ICPPASTCompositeTypeSpecifier klass;
-  private final Set<Types> typesToConsider;
-  private boolean publicVisibility;
 
-  public enum Types {
-    withCtors, withDtors, withStatics
-  }
+   private final ICPPASTCompositeTypeSpecifier klass;
+   private final Set<Types>                    typesToConsider;
+   private boolean                             publicVisibility;
 
-  public static final EnumSet<Types> ALL_TYPES = EnumSet.allOf(Types.class);
+   public enum Types {
+      withCtors, withDtors, withStatics
+   }
 
-  public PublicMemFunFinder(ICPPASTCompositeTypeSpecifier klass, Set<Types> typesToConsider) {
-    this.klass = klass;
-    this.typesToConsider = typesToConsider;
-    initVisibility();
-  }
+   public static final EnumSet<Types> ALL_TYPES = EnumSet.allOf(Types.class);
 
-  private void initVisibility() {
-    if (AstUtil.isStructType(klass)) {
-      publicVisibility = true;
-    } else if (AstUtil.isClassType(klass)) {
-      publicVisibility = false;
-    } else
-      throw new MockatorException("Union types not supported");
-  }
+   public PublicMemFunFinder(ICPPASTCompositeTypeSpecifier klass, Set<Types> typesToConsider) {
+      this.klass = klass;
+      this.typesToConsider = typesToConsider;
+      initVisibility();
+   }
 
-  public List<IASTDeclaration> getPublicMemFuns() {
-    List<IASTDeclaration> publicMemFuns = list();
+   private void initVisibility() {
+      if (AstUtil.isStructType(klass)) {
+         publicVisibility = true;
+      } else if (AstUtil.isClassType(klass)) {
+         publicVisibility = false;
+      } else throw new MockatorException("Union types not supported");
+   }
 
-    for (IASTDeclaration classMember : klass.getMembers()) {
-      if (classMember instanceof ICPPASTVisibilityLabel) {
-        publicVisibility = isPublic((ICPPASTVisibilityLabel) classMember);
-        continue;
+   public List<IASTDeclaration> getPublicMemFuns() {
+      List<IASTDeclaration> publicMemFuns = list();
+
+      for (IASTDeclaration classMember : klass.getMembers()) {
+         if (classMember instanceof ICPPASTVisibilityLabel) {
+            publicVisibility = isPublic((ICPPASTVisibilityLabel) classMember);
+            continue;
+         }
+
+         if (!publicVisibility) {
+            continue;
+         }
+
+         IASTDeclarator declarator = AstUtil.getDeclaratorForNode(classMember);
+
+         if (!(declarator instanceof ICPPASTFunctionDeclarator)) {
+            continue;
+         }
+
+         ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) declarator;
+         IASTName memFunName = funDecl.getName();
+         ICPPASTDeclSpecifier funSpec = AstUtil.getDeclSpec(funDecl);
+
+         if (funSpec == null || isFriend(funSpec) || ignoreStatic(funSpec) || ignoreCtor(memFunName) || ignoreDtor(memFunName)) {
+            continue;
+         }
+
+         publicMemFuns.add(classMember);
       }
 
-      if (!publicVisibility) {
-        continue;
-      }
+      return publicMemFuns;
+   }
 
-      IASTDeclarator declarator = AstUtil.getDeclaratorForNode(classMember);
+   private static boolean isFriend(ICPPASTDeclSpecifier funDeclSpec) {
+      return funDeclSpec.isFriend();
+   }
 
-      if (!(declarator instanceof ICPPASTFunctionDeclarator)) {
-        continue;
-      }
+   private boolean ignoreStatic(ICPPASTDeclSpecifier funDeclSpec) {
+      return AstUtil.isStatic(funDeclSpec) && !typesToConsider.contains(Types.withStatics);
+   }
 
-      ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) declarator;
-      IASTName memFunName = funDecl.getName();
-      ICPPASTDeclSpecifier funSpec = AstUtil.getDeclSpec(funDecl);
+   private boolean ignoreDtor(IASTName memFunName) {
+      return isDtor(memFunName) && !typesToConsider.contains(Types.withDtors);
+   }
 
-      if (funSpec == null || isFriend(funSpec) || ignoreStatic(funSpec) || ignoreCtor(memFunName)
-          || ignoreDtor(memFunName)) {
-        continue;
-      }
+   private static boolean isDtor(IASTName memFunName) {
+      IBinding binding = memFunName.resolveBinding();
+      return binding instanceof ICPPMethod && ((ICPPMethod) binding).isDestructor();
+   }
 
-      publicMemFuns.add(classMember);
-    }
+   private boolean ignoreCtor(IASTName memFunName) {
+      return isCtor(memFunName) && !typesToConsider.contains(Types.withCtors);
+   }
 
-    return publicMemFuns;
-  }
+   private static boolean isCtor(IASTName memFunName) {
+      IBinding binding = memFunName.resolveBinding();
+      return binding instanceof ICPPConstructor;
+   }
 
-  private static boolean isFriend(ICPPASTDeclSpecifier funDeclSpec) {
-    return funDeclSpec.isFriend();
-  }
-
-  private boolean ignoreStatic(ICPPASTDeclSpecifier funDeclSpec) {
-    return AstUtil.isStatic(funDeclSpec) && !typesToConsider.contains(Types.withStatics);
-  }
-
-  private boolean ignoreDtor(IASTName memFunName) {
-    return isDtor(memFunName) && !typesToConsider.contains(Types.withDtors);
-  }
-
-  private static boolean isDtor(IASTName memFunName) {
-    IBinding binding = memFunName.resolveBinding();
-    return binding instanceof ICPPMethod && ((ICPPMethod) binding).isDestructor();
-  }
-
-  private boolean ignoreCtor(IASTName memFunName) {
-    return isCtor(memFunName) && !typesToConsider.contains(Types.withCtors);
-  }
-
-  private static boolean isCtor(IASTName memFunName) {
-    IBinding binding = memFunName.resolveBinding();
-    return binding instanceof ICPPConstructor;
-  }
-
-  private static boolean isPublic(ICPPASTVisibilityLabel node) {
-    return node.getVisibility() == ICPPASTVisibilityLabel.v_public;
-  }
+   private static boolean isPublic(ICPPASTVisibilityLabel node) {
+      return node.getVisibility() == ICPPASTVisibilityLabel.v_public;
+   }
 }

@@ -11,40 +11,44 @@ import ch.hsr.ifs.mockator.plugin.project.cdt.CdtManagedProjectType;
 import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 
+
 public class ReferencingExecutableFinder {
-  private final IProject project;
 
-  public ReferencingExecutableFinder(IProject project) {
-    this.project = project;
-  }
+   private final IProject project;
 
-  public Collection<IProject> findReferencingExecutables() {
-    return getReferencingProjectsWithProperty(new F1<IProject, Boolean>() {
-      @Override
-      public Boolean apply(IProject proj) {
-        return isExecutableArtifactType(proj);
-      }
-    });
-  }
+   public ReferencingExecutableFinder(IProject project) {
+      this.project = project;
+   }
 
-  public Collection<IProject> findReferencingMockatorExecutables() {
-    return getReferencingProjectsWithProperty(new F1<IProject, Boolean>() {
-      @Override
-      public Boolean apply(IProject proj) {
-        return isExecutableArtifactType(proj) && isMockatorProject(proj);
-      }
-    });
-  }
+   public Collection<IProject> findReferencingExecutables() {
+      return getReferencingProjectsWithProperty(new F1<IProject, Boolean>() {
 
-  private Collection<IProject> getReferencingProjectsWithProperty(F1<IProject, Boolean> criteria) {
-    return filter(project.getReferencingProjects(), criteria);
-  }
+         @Override
+         public Boolean apply(IProject proj) {
+            return isExecutableArtifactType(proj);
+         }
+      });
+   }
 
-  private static boolean isMockatorProject(IProject project) {
-    return new NatureHandler(project).hasNature(MockatorNature.NATURE_ID);
-  }
+   public Collection<IProject> findReferencingMockatorExecutables() {
+      return getReferencingProjectsWithProperty(new F1<IProject, Boolean>() {
 
-  private static boolean isExecutableArtifactType(IProject project) {
-    return CdtManagedProjectType.fromProject(project) == CdtManagedProjectType.Executable;
-  }
+         @Override
+         public Boolean apply(IProject proj) {
+            return isExecutableArtifactType(proj) && isMockatorProject(proj);
+         }
+      });
+   }
+
+   private Collection<IProject> getReferencingProjectsWithProperty(F1<IProject, Boolean> criteria) {
+      return filter(project.getReferencingProjects(), criteria);
+   }
+
+   private static boolean isMockatorProject(IProject project) {
+      return new NatureHandler(project).hasNature(MockatorNature.NATURE_ID);
+   }
+
+   private static boolean isExecutableArtifactType(IProject project) {
+      return CdtManagedProjectType.fromProject(project) == CdtManagedProjectType.Executable;
+   }
 }

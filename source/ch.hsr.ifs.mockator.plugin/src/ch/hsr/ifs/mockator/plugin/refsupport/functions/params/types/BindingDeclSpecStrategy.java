@@ -9,22 +9,25 @@ import org.eclipse.core.runtime.CoreException;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypedefHelper;
 
+
 @SuppressWarnings("restriction")
 class BindingDeclSpecStrategy implements DeclSpecGeneratorStrategy {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
-  @Override
-  public ICPPASTDeclSpecifier createDeclSpec(IType type) {
-    String shortestType = getShortestType(type);
-    IASTName newName = nodeFactory.newName(shortestType.toCharArray());
-    return nodeFactory.newTypedefNameSpecifier(newName);
-  }
+   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
-  private static String getShortestType(IType type) {
-    try {
-      return new TypedefHelper(type).findShortestType();
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
+   @Override
+   public ICPPASTDeclSpecifier createDeclSpec(IType type) {
+      String shortestType = getShortestType(type);
+      IASTName newName = nodeFactory.newName(shortestType.toCharArray());
+      return nodeFactory.newTypedefNameSpecifier(newName);
+   }
+
+   private static String getShortestType(IType type) {
+      try {
+         return new TypedefHelper(type).findShortestType();
+      }
+      catch (CoreException e) {
+         throw new MockatorException(e);
+      }
+   }
 }

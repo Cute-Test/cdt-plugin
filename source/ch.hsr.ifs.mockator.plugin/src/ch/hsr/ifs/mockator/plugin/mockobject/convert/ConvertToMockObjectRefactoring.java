@@ -4,6 +4,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
@@ -19,7 +20,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
@@ -37,123 +37,116 @@ import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestDoubleKindAnalyzer;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestDoubleKindAnalyzer.TestDoubleKind;
 
+
 @SuppressWarnings("restriction")
 public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
-  private final CppStandard cppStd;
-  private final LinkedEditModeStrategy linkedEditStrategy;
-  private MockObject newMockObject;
 
-  public ConvertToMockObjectRefactoring(CppStandard cppStd, ICElement element,
-      ITextSelection selection, ICProject cproject, LinkedEditModeStrategy linkedEditStrategy) {
-    super(element, selection, cproject);
-    this.cppStd = cppStd;
-    this.linkedEditStrategy = linkedEditStrategy;
-  }
+   private final CppStandard            cppStd;
+   private final LinkedEditModeStrategy linkedEditStrategy;
+   private MockObject                   newMockObject;
 
-  @Override
-  public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException,
-      OperationCanceledException {
-    RefactoringStatus status = super.checkInitialConditions(pm);
-    Maybe<ICPPASTCompositeTypeSpecifier> klass = getClassInSelection(getAST(tu, pm));
+   public ConvertToMockObjectRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cproject,
+         final LinkedEditModeStrategy linkedEditStrategy) {
+      super(element, selection, cproject);
+      this.cppStd = cppStd;
+      this.linkedEditStrategy = linkedEditStrategy;
+   }
 
-    if (klass.isNone()) {
-      status.addFatalError("Class could not be found in selection");
-    } else if (!isFakeObject(klass.get())) {
-      status.addFatalError("Chosen test double must be a fake object");
-    } else {
-      newMockObject = new MockObject(klass.get());
-    }
+   @Override
+   public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+      final RefactoringStatus status = super.checkInitialConditions(pm);
+      final Optional<ICPPASTCompositeTypeSpecifier> klass = getClassInSelection(getAST(tu, pm));
 
-    return status;
-  }
+      if (!klass.isPresent()) {
+         status.addFatalError("Class could not be found in selection");
+      } else if (!isFakeObject(klass.get())) {
+         status.addFatalError("Chosen test double must be a fake object");
+      } else {
+         newMockObject = new MockObject(klass.get());
+      }
 
-  private static boolean isFakeObject(ICPPASTCompositeTypeSpecifier klass) {
-    return new TestDoubleKindAnalyzer(klass).getKindOfTestDouble() == TestDoubleKind.FakeObject;
-  }
+      return status;
+   }
 
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector collector)
-      throws CoreException, OperationCanceledException {
-    IASTTranslationUnit ast = getAST(tu, pm);
-    ASTRewrite rewriter = createRewriter(collector, ast);
-    addMockSupportToFakeObject(ast, rewriter, pm);
-  }
+   private static boolean isFakeObject(final ICPPASTCompositeTypeSpecifier klass) {
+      return new TestDoubleKindAnalyzer(klass).getKindOfTestDouble() == TestDoubleKind.FakeObject;
+   }
 
-  private void addMockSupportToFakeObject(IASTTranslationUnit ast, ASTRewrite re,
-      IProgressMonitor pm) {
-    Maybe<? extends MissingMemberFunction> defaultCtor = createDefaultCtorIfNecessary();
-    List<TestDoubleMemFun> expectations = getExpectations(defaultCtor);
-    MockSupportAdder mockSupport = new MockSupportAdder(buildContext(re, ast, expectations, pm));
-    mockSupport.addMockSupport();
-    insertDefaultCtorIfNecessary(re, defaultCtor);
-    addCallVectorRegistrations(re);
-  }
+   @Override
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException, OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = createRewriter(collector, ast);
+      addMockSupportToFakeObject(ast, rewriter, pm);
+   }
 
-  private MockSupportContext buildContext(ASTRewrite rewriter, IASTTranslationUnit ast,
-      Collection<TestDoubleMemFun> withNewExpectations, IProgressMonitor pm) {
-    return new MockSupportContext.ContextBuilder(project, refactoringContext, newMockObject,
-        rewriter, ast, cppStd, getPublicVisibilityInserter(rewriter), hasOnlyStaticMemFuns(), pm)
-        .withLinkedEditStrategy(linkedEditStrategy).withNewExpectations(withNewExpectations)
-        .build();
-  }
+   private void addMockSupportToFakeObject(final IASTTranslationUnit ast, final ASTRewrite re, final IProgressMonitor pm) {
+      final Optional<? extends MissingMemberFunction> defaultCtor = createDefaultCtorIfNecessary();
+      final List<TestDoubleMemFun> expectations = getExpectations(defaultCtor);
+      final MockSupportAdder mockSupport = new MockSupportAdder(buildContext(re, ast, expectations, pm));
+      mockSupport.addMockSupport();
+      insertDefaultCtorIfNecessary(re, defaultCtor);
+      addCallVectorRegistrations(re);
+   }
 
-  private boolean hasOnlyStaticMemFuns() {
-    List<MissingMemberFunction> noNewMemFuns = list();
-    return newMockObject.hasOnlyStaticFunctions(noNewMemFuns);
-  }
+   private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final Collection<TestDoubleMemFun> withNewExpectations,
+         final IProgressMonitor pm) {
+      return new MockSupportContext.ContextBuilder(project, refactoringContext, newMockObject, rewriter, ast, cppStd, getPublicVisibilityInserter(
+            rewriter), hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEditStrategy).withNewExpectations(withNewExpectations).build();
+   }
 
-  private ClassPublicVisibilityInserter getPublicVisibilityInserter(ASTRewrite rewriter) {
-    return new ClassPublicVisibilityInserter(newMockObject.getKlass(), rewriter);
-  }
+   private boolean hasOnlyStaticMemFuns() {
+      final List<MissingMemberFunction> noNewMemFuns = list();
+      return newMockObject.hasOnlyStaticFunctions(noNewMemFuns);
+   }
 
-  private List<TestDoubleMemFun> getExpectations(Maybe<? extends MissingMemberFunction> defaultCtor) {
-    List<TestDoubleMemFun> publicMemFuns = list();
+   private ClassPublicVisibilityInserter getPublicVisibilityInserter(final ASTRewrite rewriter) {
+      return new ClassPublicVisibilityInserter(newMockObject.getKlass(), rewriter);
+   }
 
-    for (MissingMemberFunction optDefaultCtor : defaultCtor) {
-      publicMemFuns.add(optDefaultCtor);
-    }
+   private List<TestDoubleMemFun> getExpectations(final Optional<? extends MissingMemberFunction> defaultCtor) {
+      final List<TestDoubleMemFun> publicMemFuns = list();
 
-    publicMemFuns.addAll(newMockObject.getPublicMemFuns());
-    return publicMemFuns;
-  }
+      defaultCtor.ifPresent((defCtor) -> publicMemFuns.add(defCtor));
 
-  private Maybe<? extends MissingMemberFunction> createDefaultCtorIfNecessary() {
-    Collection<MissingMemberFunction> noNewFunctions = list();
-    return getDefaultCtorProvider().createMissingDefaultCtor(noNewFunctions);
-  }
+      publicMemFuns.addAll(newMockObject.getPublicMemFuns());
+      return publicMemFuns;
+   }
 
-  private void insertDefaultCtorIfNecessary(ASTRewrite rewriter,
-      Maybe<? extends MissingMemberFunction> defaultCtor) {
-    for (MissingMemberFunction optDefaultCtor : defaultCtor) {
-      MockObjectMemFunImplStrategy strategy =
-          new MockObjectMemFunImplStrategy(cppStd, newMockObject);
-      ICPPASTFunctionDefinition fun = optDefaultCtor.createFunctionDefinition(strategy, cppStd);
-      new ClassPublicVisibilityInserter(newMockObject.getKlass(), rewriter).insert(fun);
-    }
-  }
+   private Optional<? extends MissingMemberFunction> createDefaultCtorIfNecessary() {
+      final Collection<MissingMemberFunction> noNewFunctions = list();
+      return getDefaultCtorProvider().createMissingDefaultCtor(noNewFunctions);
+   }
 
-  private DefaultCtorProvider getDefaultCtorProvider() {
-    return new MockObject(newMockObject.getKlass()).getDefaultCtorProvider(cppStd);
-  }
+   private void insertDefaultCtorIfNecessary(final ASTRewrite rewriter, final Optional<? extends MissingMemberFunction> defaultCtor) {
+      defaultCtor.ifPresent((defCtor) -> {
+         final MockObjectMemFunImplStrategy strategy = new MockObjectMemFunImplStrategy(cppStd, newMockObject);
+         final ICPPASTFunctionDefinition fun = defCtor.createFunctionDefinition(strategy, cppStd);
+         new ClassPublicVisibilityInserter(newMockObject.getKlass(), rewriter).insert(fun);
+      });
+   }
 
-  private void addCallVectorRegistrations(ASTRewrite rewriter) {
-    MockCallRegistrationFinder callRegFinder = new MockCallRegistrationFinder(cppStd);
+   private DefaultCtorProvider getDefaultCtorProvider() {
+      return new MockObject(newMockObject.getKlass()).getDefaultCtorProvider(cppStd);
+   }
 
-    for (ExistingTestDoubleMemFun memFun : newMockObject.getPublicMemFuns()) {
-      memFun.addMockSupport(getMockSupportFor(memFun, rewriter), callRegFinder);
-    }
-  }
+   private void addCallVectorRegistrations(final ASTRewrite rewriter) {
+      final MockCallRegistrationFinder callRegFinder = new MockCallRegistrationFinder(cppStd);
 
-  private MemFunMockSupportAdder getMockSupportFor(ExistingTestDoubleMemFun fun, ASTRewrite rewriter) {
-    return newMockObject.getMockSupport(rewriter, cppStd, fun);
-  }
+      for (final ExistingTestDoubleMemFun memFun : newMockObject.getPublicMemFuns()) {
+         memFun.addMockSupport(getMockSupportFor(memFun, rewriter), callRegFinder);
+      }
+   }
 
-  MockObject getNewMockObject() {
-    return newMockObject;
-  }
+   private MemFunMockSupportAdder getMockSupportFor(final ExistingTestDoubleMemFun fun, final ASTRewrite rewriter) {
+      return newMockObject.getMockSupport(rewriter, cppStd, fun);
+   }
 
-  @Override
-  public String getDescription() {
-    return I18N.ConvertToMockObjectRefactoringDesc;
-  }
+   MockObject getNewMockObject() {
+      return newMockObject;
+   }
+
+   @Override
+   public String getDescription() {
+      return I18N.ConvertToMockObjectRefactoringDesc;
+   }
 }

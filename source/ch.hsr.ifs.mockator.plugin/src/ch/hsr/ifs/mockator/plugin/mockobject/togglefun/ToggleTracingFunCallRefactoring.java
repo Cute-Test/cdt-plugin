@@ -2,6 +2,8 @@ package ch.hsr.ifs.mockator.plugin.mockobject.togglefun;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -19,7 +21,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.reconcile.ExpectationsHandler;
@@ -36,121 +37,117 @@ import ch.hsr.ifs.mockator.plugin.testdouble.MemFunMockSupportAdder;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.MemFunSignature;
 
+
 @SuppressWarnings("restriction")
 public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
-  private final CppStandard cppStd;
-  private final LinkedEditModeStrategy linkedEdit;
-  private ExistingTestDoubleMemFun testDoubleMemFun;
-  private MockObject mockObject;
 
-  public ToggleTracingFunCallRefactoring(CppStandard cppStd, ICElement element,
-      ITextSelection selection, ICProject cProject, LinkedEditModeStrategy linkedEdit) {
-    super(element, selection, cProject);
-    this.cppStd = cppStd;
-    this.linkedEdit = linkedEdit;
-  }
+   private final CppStandard            cppStd;
+   private final LinkedEditModeStrategy linkedEdit;
+   private ExistingTestDoubleMemFun     testDoubleMemFun;
+   private MockObject                   mockObject;
 
-  @Override
-  public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException {
-    RefactoringStatus status = super.checkInitialConditions(pm);
-    Maybe<IASTName> selectedName = getSelectedName(getAST(tu, pm));
+   public ToggleTracingFunCallRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cProject,
+            final LinkedEditModeStrategy linkedEdit) {
+      super(element, selection, cProject);
+      this.cppStd = cppStd;
+      this.linkedEdit = linkedEdit;
+   }
 
-    if (selectedName.isNone()) {
-      status.addFatalError("Not a valid name selected");
+   @Override
+   public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
+      final RefactoringStatus status = super.checkInitialConditions(pm);
+      final Optional<IASTName> selectedName = getSelectedName(getAST(tu, pm));
+
+      if (!selectedName.isPresent()) {
+         status.addFatalError("Not a valid name selected");
+         return status;
+      }
+
+      final ICPPASTFunctionDefinition function = AstUtil.getAncestorOfType(selectedName.get(), ICPPASTFunctionDefinition.class);
+      assureIsMemberFunction(status, function);
       return status;
-    }
+   }
 
-    ICPPASTFunctionDefinition function =
-        AstUtil.getAncestorOfType(selectedName.get(), ICPPASTFunctionDefinition.class);
-    assureIsMemberFunction(status, function);
-    return status;
-  }
+   private void assureIsMemberFunction(final RefactoringStatus status, final ICPPASTFunctionDefinition function) {
+      if (function == null) {
+         status.addFatalError("Not a valid function selected");
+      }
 
-  private void assureIsMemberFunction(RefactoringStatus status, ICPPASTFunctionDefinition function) {
-    if (function == null) {
-      status.addFatalError("Not a valid function selected");
-    }
+      testDoubleMemFun = new ExistingTestDoubleMemFun(function);
+      final ICPPASTCompositeTypeSpecifier klass = testDoubleMemFun.getContainingClass();
 
-    testDoubleMemFun = new ExistingTestDoubleMemFun(function);
-    ICPPASTCompositeTypeSpecifier klass = testDoubleMemFun.getContainingClass();
+      if (klass == null) {
+         status.addFatalError("No test double member function selected");
+      } else {
+         mockObject = new MockObject(klass);
+      }
+   }
 
-    if (klass == null) {
-      status.addFatalError("No test double member function selected");
-    } else {
-      mockObject = new MockObject(klass);
-    }
-  }
+   @Override
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException, OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = createRewriter(collector, ast);
+      toggleTraceSupport(buildContext(rewriter, ast, pm));
+   }
 
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector collector)
-      throws CoreException, OperationCanceledException {
-    IASTTranslationUnit ast = getAST(tu, pm);
-    ASTRewrite rewriter = createRewriter(collector, ast);
-    toggleTraceSupport(buildContext(rewriter, ast, pm));
-  }
+   private void toggleTraceSupport(final MockSupportContext context) {
+      final Optional<? extends MemFunSignature> tracedCall = getRegisteredCallInSelectedFun();
 
-  private void toggleTraceSupport(MockSupportContext context) {
-    Maybe<? extends MemFunSignature> tracedCall = getRegisteredCallInSelectedFun();
+      if (!tracedCall.isPresent()) {
+         addMockSupport(context);
+      } else {
+         removeTraceSupport(context.getRewriter(), (ExistingMemFunCallRegistration) tracedCall.get());
+         removeExpectation(context);
+      }
+   }
 
-    if (tracedCall.isNone()) {
-      addMockSupport(context);
-    } else {
-      removeTraceSupport(context.getRewriter(), (ExistingMemFunCallRegistration) tracedCall.get());
-      removeExpectation(context);
-    }
-  }
+   private void addMockSupport(final MockSupportContext context) {
+      new MockSupportAdder(context).addMockSupport();
+      addCallVectorRegistrations(context.getRewriter());
+   }
 
-  private void addMockSupport(MockSupportContext context) {
-    new MockSupportAdder(context).addMockSupport();
-    addCallVectorRegistrations(context.getRewriter());
-  }
+   private void removeExpectation(final MockSupportContext context) {
+      final ExpectationsHandler handler = new ExpectationsHandler(context);
+      handler.removeExpectation(new ExistingMemFunCallRegistration(testDoubleMemFun), context.getProgressMonitor());
+   }
 
-  private void removeExpectation(MockSupportContext context) {
-    ExpectationsHandler handler = new ExpectationsHandler(context);
-    handler.removeExpectation(new ExistingMemFunCallRegistration(testDoubleMemFun),
-        context.getProgressMonitor());
-  }
+   private Optional<? extends MemFunSignature> getRegisteredCallInSelectedFun() {
+      return testDoubleMemFun.getRegisteredCall(new MockCallRegistrationFinder(cppStd));
+   }
 
-  private Maybe<? extends MemFunSignature> getRegisteredCallInSelectedFun() {
-    return testDoubleMemFun.getRegisteredCall(new MockCallRegistrationFinder(cppStd));
-  }
+   private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final IProgressMonitor pm) {
+      return new MockSupportContext.ContextBuilder(project, refactoringContext, mockObject, rewriter, ast, cppStd, getPublicVisibilityInserter(
+               rewriter), hasMockObjectOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(list(testDoubleMemFun))
+               .build();
+   }
 
-  private MockSupportContext buildContext(ASTRewrite rewriter, IASTTranslationUnit ast,
-      IProgressMonitor pm) {
-    return new MockSupportContext.ContextBuilder(project, refactoringContext, mockObject, rewriter,
-        ast, cppStd, getPublicVisibilityInserter(rewriter), hasMockObjectOnlyStaticMemFuns(), pm)
-        .withLinkedEditStrategy(linkedEdit).withNewExpectations(list(testDoubleMemFun)).build();
-  }
+   private boolean hasMockObjectOnlyStaticMemFuns() {
+      return mockObject.hasOnlyStaticFunctions(CollectionHelper.<MissingMemberFunction>list());
+   }
 
-  private boolean hasMockObjectOnlyStaticMemFuns() {
-    return mockObject.hasOnlyStaticFunctions(CollectionHelper.<MissingMemberFunction>list());
-  }
+   private ClassPublicVisibilityInserter getPublicVisibilityInserter(final ASTRewrite rewriter) {
+      return new ClassPublicVisibilityInserter(mockObject.getKlass(), rewriter);
+   }
 
-  private ClassPublicVisibilityInserter getPublicVisibilityInserter(ASTRewrite rewriter) {
-    return new ClassPublicVisibilityInserter(mockObject.getKlass(), rewriter);
-  }
+   private void addCallVectorRegistrations(final ASTRewrite rewriter) {
+      testDoubleMemFun.addMockSupport(getMockSupportAdder(rewriter), new MockCallRegistrationFinder(cppStd));
+   }
 
-  private void addCallVectorRegistrations(ASTRewrite rewriter) {
-    testDoubleMemFun.addMockSupport(getMockSupportAdder(rewriter), new MockCallRegistrationFinder(
-        cppStd));
-  }
+   private MemFunMockSupportAdder getMockSupportAdder(final ASTRewrite rewriter) {
+      return mockObject.getMockSupport(rewriter, cppStd, testDoubleMemFun);
+   }
 
-  private MemFunMockSupportAdder getMockSupportAdder(ASTRewrite rewriter) {
-    return mockObject.getMockSupport(rewriter, cppStd, testDoubleMemFun);
-  }
+   private static void removeTraceSupport(final ASTRewrite rewriter, final ExistingMemFunCallRegistration existingMemFunCallRegistration) {
+      final IASTStatement registrationStmt = existingMemFunCallRegistration.getRegistrationStmt();
+      rewriter.remove(registrationStmt, null);
+   }
 
-  private static void removeTraceSupport(ASTRewrite rewriter,
-      ExistingMemFunCallRegistration existingMemFunCallRegistration) {
-    IASTStatement registrationStmt = existingMemFunCallRegistration.getRegistrationStmt();
-    rewriter.remove(registrationStmt, null);
-  }
+   @Override
+   public String getDescription() {
+      return I18N.ToggleTracingFunctionRefactoringDesc;
+   }
 
-  @Override
-  public String getDescription() {
-    return I18N.ToggleTracingFunctionRefactoringDesc;
-  }
-
-  ExistingTestDoubleMemFun getToggledFunction() {
-    return testDoubleMemFun;
-  }
+   ExistingTestDoubleMemFun getToggledFunction() {
+      return testDoubleMemFun;
+   }
 }

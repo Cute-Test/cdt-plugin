@@ -5,6 +5,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 interface LdPreloadFunBodyStrategy {
-  IASTCompoundStatement getPreloadFunBody(CppStandard cppStd, ICPPASTFunctionDeclarator function);
+
+   IASTCompoundStatement getPreloadFunBody(CppStandard cppStd, ICPPASTFunctionDeclarator function);
 }

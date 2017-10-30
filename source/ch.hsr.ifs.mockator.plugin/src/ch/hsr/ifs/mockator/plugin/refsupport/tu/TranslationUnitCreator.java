@@ -10,43 +10,46 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
+
 
 @SuppressWarnings("restriction")
 public class TranslationUnitCreator {
-  private final CRefactoringContext context;
-  private final IProject project;
 
-  public TranslationUnitCreator(IProject project, CRefactoringContext context) {
-    this.project = project;
-    this.context = context;
-  }
+   private final CRefactoringContext context;
+   private final IProject            project;
 
-  public IASTTranslationUnit createAndGetNewTu(IPath filePath, IProgressMonitor pm)
-      throws CoreException {
-    CreateFileChange fileChange = createFileChange(filePath);
-    fileChange.perform(pm);
-    return loadNewTu(filePath, pm);
-  }
+   public TranslationUnitCreator(IProject project, CRefactoringContext context) {
+      this.project = project;
+      this.context = context;
+   }
 
-  private CreateFileChange createFileChange(IPath filePath) {
-    return new CreateFileChange(filePath.lastSegment(), filePath, "", getCharset());
-  }
+   public IASTTranslationUnit createAndGetNewTu(IPath filePath, IProgressMonitor pm) throws CoreException {
+      CreateFileChange fileChange = createFileChange(filePath);
+      fileChange.perform(pm);
+      return loadNewTu(filePath, pm);
+   }
 
-  private String getCharset() {
-    try {
-      return project.getDefaultCharset();
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
+   private CreateFileChange createFileChange(IPath filePath) {
+      return new CreateFileChange(filePath.lastSegment(), filePath, "", getCharset());
+   }
 
-  private IASTTranslationUnit loadNewTu(IPath filePath, IProgressMonitor pm) throws CoreException {
-    IFile file = FileUtil.toIFile(filePath);
-    ICProject cProject = ProjectUtil.getCProject(file.getProject());
-    TranslationUnitLoader tuLoader = new TranslationUnitLoader(cProject, context, pm);
-    return tuLoader.loadAst(file);
-  }
+   private String getCharset() {
+      try {
+         return project.getDefaultCharset();
+      }
+      catch (CoreException e) {
+         throw new MockatorException(e);
+      }
+   }
+
+   private IASTTranslationUnit loadNewTu(IPath filePath, IProgressMonitor pm) throws CoreException {
+      IFile file = FileUtil.toIFile(filePath);
+      ICProject cProject = CPPResourceHelper.getCProject(file.getProject());
+      TranslationUnitLoader tuLoader = new TranslationUnitLoader(cProject, context, pm);
+      return tuLoader.loadAst(file);
+   }
 }

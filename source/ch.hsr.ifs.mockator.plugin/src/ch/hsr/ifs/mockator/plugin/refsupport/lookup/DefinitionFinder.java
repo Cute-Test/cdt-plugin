@@ -1,11 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.lookup;
 
 import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -19,92 +18,102 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.functional.F1;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
+
 
 class DefinitionFinder extends AbstractNodeFinder {
 
-  public DefinitionFinder(ICProject projectOrigin, IIndex index, TranslationUnitLoader tuLoader) {
-    super(projectOrigin, index, tuLoader);
-  }
+   public DefinitionFinder(final ICProject projectOrigin, final IIndex index, final TranslationUnitLoader tuLoader) {
+      super(projectOrigin, index, tuLoader);
+   }
 
-  public Maybe<IASTName> findDefinition(IASTName name) {
-    return findDefinition(name.resolveBinding());
-  }
+   public Optional<IASTName> findDefinition(final IASTName name) {
+      return findDefinition(name.resolveBinding());
+   }
 
-  public Maybe<IASTName> findDefinition(IBinding binding) {
-    try {
-      return findDefinition(lookup(binding));
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
-
-  public Maybe<IASTName> findDefinition(String name) {
-    try {
-      return findDefinition(lookup(name));
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
-
-  private Maybe<IASTName> findDefinition(IIndexName[] iNames) {
-    try {
-      for (IIndexName iName : filterAccessibleDefinitions(iNames)) {
-        for (IASTName optNode : findMatchingASTName(iName))
-          // just return the first accessible definition found although
-          // multiple definitions could violate C++'s one definition rule
-          return maybe(optNode);
+   public Optional<IASTName> findDefinition(final IBinding binding) {
+      try {
+         return findDefinition(lookup(binding));
       }
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-
-    return none();
-  }
-
-  private IIndexName[] lookup(String name) throws CoreException {
-    IIndexBinding[] bind =
-        index.findBindings(name.toCharArray(), IndexFilter.ALL, new NullProgressMonitor());
-
-    if (bind.length > 0)
-      return index.findDefinitions(bind[0]);
-
-    return new IIndexName[] {};
-  }
-
-  private Collection<IIndexName> filterAccessibleDefinitions(IIndexName[] iNames) {
-    return filter(iNames, new F1<IIndexName, Boolean>() {
-      @Override
-      public Boolean apply(IIndexName iName) {
-        try {
-          IIndexFile file = iName.getFile();
-          URI uri = file.getLocation().getURI();
-          return isPartOfOriginProject(uri) || isInOneOfReferencingPrjects(uri);
-        } catch (CoreException e) {
-          throw new MockatorException(e);
-        }
+      catch (final CoreException e) {
+         throw new MockatorException(e);
       }
-    });
-  }
+   }
 
-  private boolean isPartOfOriginProject(URI uri) {
-    return ProjectUtil.isPartOfProject(uri, projectOrigin.getProject());
-  }
+   public Optional<IASTName> findDefinition(final String name) {
+      try {
+         return findDefinition(lookup(name));
+      }
+      catch (final CoreException e) {
+         throw new MockatorException(e);
+      }
+   }
 
-  private boolean isInOneOfReferencingPrjects(URI uri) throws CoreException {
-    for (IProject project : projectOrigin.getProject().getReferencedProjects())
-      if (ProjectUtil.isPartOfProject(uri, project))
-        return true;
+   private Optional<IASTName> findDefinition(final IIndexName[] iNames) {
+      try {
+         for (final IIndexName iName : filterAccessibleDefinitions(iNames)) {
+            final Optional<IASTName> matchingASTName = findMatchingASTName(iName);
+            if (matchingASTName.isPresent()) {
+               // just return the first accessible definition found although
+               // multiple definitions could violate C++'s one definition rule
+               return Optional.of(matchingASTName.get());
+            }
+         }
+      }
+      catch (final CoreException e) {
+         throw new MockatorException(e);
+      }
 
-    return false;
-  }
+      return Optional.empty();
+   }
 
-  @Override
-  protected int getLookupFlags() {
-    return IIndex.FIND_DEFINITIONS;
-  }
+   private IIndexName[] lookup(final String name) throws CoreException {
+      final IIndexBinding[] bind = index.findBindings(name.toCharArray(), IndexFilter.ALL, new NullProgressMonitor());
+
+      if (bind.length > 0) {
+         return index.findDefinitions(bind[0]);
+      }
+
+      return new IIndexName[] {};
+   }
+
+   private Collection<IIndexName> filterAccessibleDefinitions(final IIndexName[] iNames) {
+      return filter(iNames, new F1<IIndexName, Boolean>() {
+
+         @Override
+         public Boolean apply(final IIndexName iName) {
+            try {
+               final IIndexFile file = iName.getFile();
+               final URI uri = file.getLocation().getURI();
+               return isPartOfOriginProject(uri) || isInOneOfReferencingPrjects(uri);
+            }
+            catch (final CoreException e) {
+               throw new MockatorException(e);
+            }
+         }
+      });
+   }
+
+   private boolean isPartOfOriginProject(final URI uri) {
+      return CPPResourceHelper.isPartOfProject(uri, projectOrigin.getProject());
+   }
+
+   private boolean isInOneOfReferencingPrjects(final URI uri) throws CoreException {
+      for (final IProject project : projectOrigin.getProject().getReferencedProjects()) {
+         if (CPPResourceHelper.isPartOfProject(uri, project)) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   @Override
+   protected int getLookupFlags() {
+      return IIndex.FIND_DEFINITIONS;
+   }
 }

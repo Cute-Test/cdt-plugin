@@ -9,24 +9,26 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
 
+
 @SuppressWarnings("restriction")
 class UndefMacroAdder {
-  private final ASTRewrite rewriter;
-  private final IASTTranslationUnit ast;
-  private final IASTNode insertionPoint;
 
-  public UndefMacroAdder(IASTTranslationUnit tu, ASTRewrite rewriter, IASTNode insertionPoint) {
-    this.ast = tu;
-    this.rewriter = rewriter;
-    this.insertionPoint = insertionPoint;
-  }
+   private final ASTRewrite          rewriter;
+   private final IASTTranslationUnit ast;
+   private final IASTNode            insertionPoint;
 
-  public void addUndefMacro(String funName) {
-    rewriter.insertBefore(ast, insertionPoint, getUndefMacro(funName), null);
-  }
+   public UndefMacroAdder(IASTTranslationUnit tu, ASTRewrite rewriter, IASTNode insertionPoint) {
+      this.ast = tu;
+      this.rewriter = rewriter;
+      this.insertionPoint = insertionPoint;
+   }
 
-  private static ASTLiteralNode getUndefMacro(String funName) {
-    String undef = UNDEF_DIRECTIVE + SPACE + funName + SYSTEM_NEW_LINE;
-    return new ASTLiteralNode(undef);
-  }
+   public void addUndefMacro(String funName) {
+      rewriter.insertBefore(ast, insertionPoint, getUndefMacro(funName), null);
+   }
+
+   private static ASTLiteralNode getUndefMacro(String funName) {
+      String undef = UNDEF_DIRECTIVE + SPACE + funName + SYSTEM_NEW_LINE;
+      return new ASTLiteralNode(undef);
+   }
 }

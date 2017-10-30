@@ -5,6 +5,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
@@ -19,66 +20,61 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.functional.F1;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.BoostAssignInitializerCreator;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
-  @Override
-  public List<IASTStatement> createExpectationsVector(
-      Collection<? extends TestDoubleMemFun> memFuns, String newExpectationsName,
-      ICPPASTFunctionDefinition testFunction, Maybe<IASTName> expectationsVector,
-      LinkedEditModeStrategy linkedEdit) {
-    List<IASTStatement> expectations = list();
+   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
-    if (expectationsVector.isNone()) {
-      expectations.add(createExpectationVectorDeclStmt(newExpectationsName));
-      expectations.add(createBoostAssignInitializer(memFuns, newExpectationsName, linkedEdit));
-    } else if (!hasBoostAssignInitializer(testFunction, expectationsVector.get())) {
-      expectations.add(createBoostAssignInitializer(memFuns, expectationsVector.get().toString(),
-          linkedEdit));
-    }
+   @Override
+   public List<IASTStatement> createExpectationsVector(final Collection<? extends TestDoubleMemFun> memFuns, final String newExpectationsName,
+            final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
+      final List<IASTStatement> expectations = list();
 
-    return expectations;
-  }
-
-  private static IASTExpressionStatement createBoostAssignInitializer(
-      Collection<? extends TestDoubleMemFun> memFuns, String vectorName,
-      LinkedEditModeStrategy linkedEdit) {
-    BoostAssignInitializerCreator creator =
-        new BoostAssignInitializerCreator(memFuns, vectorName, linkedEdit);
-    return creator.createBoostAssignInitializer();
-  }
-
-  private static boolean hasBoostAssignInitializer(ICPPASTFunctionDefinition testFun,
-      final IASTName expVector) {
-    return new NameFinder(testFun).getNameMatchingCriteria(new F1<IASTName, Boolean>() {
-      @Override
-      public Boolean apply(IASTName name) {
-        return name.toString().equals(expVector.toString()) && isInBoostAssign(name);
+      if (!expectationsVector.isPresent()) {
+         expectations.add(createExpectationVectorDeclStmt(newExpectationsName));
+         expectations.add(createBoostAssignInitializer(memFuns, newExpectationsName, linkedEdit));
+      } else if (!hasBoostAssignInitializer(testFunction, expectationsVector.get())) {
+         expectations.add(createBoostAssignInitializer(memFuns, expectationsVector.get().toString(), linkedEdit));
       }
 
-      private boolean isInBoostAssign(IASTName name) {
-        ICPPASTBinaryExpression binExp =
-            AstUtil.getAncestorOfType(name, ICPPASTBinaryExpression.class);
-        return binExp != null && binExp.getOperator() == IASTBinaryExpression.op_plusAssign;
-      }
-    }).isSome();
-  }
+      return expectations;
+   }
 
-  private static IASTDeclarationStatement createExpectationVectorDeclStmt(String expectationsName) {
-    IASTName expectedName = nodeFactory.newName(expectationsName.toCharArray());
-    ICPPASTDeclarator declarator = nodeFactory.newDeclarator(expectedName);
-    IASTName callsName = nodeFactory.newName(CALLS.toCharArray());
-    ICPPASTNamedTypeSpecifier namedType = nodeFactory.newTypedefNameSpecifier(callsName);
-    IASTSimpleDeclaration declaration = nodeFactory.newSimpleDeclaration(namedType);
-    declaration.addDeclarator(declarator);
-    return nodeFactory.newDeclarationStatement(declaration);
-  }
+   private static IASTExpressionStatement createBoostAssignInitializer(final Collection<? extends TestDoubleMemFun> memFuns, final String vectorName,
+            final LinkedEditModeStrategy linkedEdit) {
+      final BoostAssignInitializerCreator creator = new BoostAssignInitializerCreator(memFuns, vectorName, linkedEdit);
+      return creator.createBoostAssignInitializer();
+   }
+
+   private static boolean hasBoostAssignInitializer(final ICPPASTFunctionDefinition testFun, final IASTName expVector) {
+      return new NameFinder(testFun).getNameMatchingCriteria(new F1<IASTName, Boolean>() {
+
+         @Override
+         public Boolean apply(final IASTName name) {
+            return name.toString().equals(expVector.toString()) && isInBoostAssign(name);
+         }
+
+         private boolean isInBoostAssign(final IASTName name) {
+            final ICPPASTBinaryExpression binExp = AstUtil.getAncestorOfType(name, ICPPASTBinaryExpression.class);
+            return binExp != null && binExp.getOperator() == IASTBinaryExpression.op_plusAssign;
+         }
+      }).isPresent();
+   }
+
+   private static IASTDeclarationStatement createExpectationVectorDeclStmt(final String expectationsName) {
+      final IASTName expectedName = nodeFactory.newName(expectationsName.toCharArray());
+      final ICPPASTDeclarator declarator = nodeFactory.newDeclarator(expectedName);
+      final IASTName callsName = nodeFactory.newName(CALLS.toCharArray());
+      final ICPPASTNamedTypeSpecifier namedType = nodeFactory.newTypedefNameSpecifier(callsName);
+      final IASTSimpleDeclaration declaration = nodeFactory.newSimpleDeclaration(namedType);
+      declaration.addDeclarator(declarator);
+      return nodeFactory.newDeclarationStatement(declaration);
+   }
 }

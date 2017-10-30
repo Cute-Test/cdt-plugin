@@ -15,61 +15,61 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifi
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterToFunctionAdder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 class Constructor extends AbstractStaticPolyMissingMemFun {
-  private final ICPPASTFunctionCallExpression funCall;
 
-  public Constructor(ICPPASTFunctionCallExpression funCall) {
-    this.funCall = funCall;
-  }
+   private final ICPPASTFunctionCallExpression funCall;
 
-  @SuppressWarnings("restriction")
-  @Override
-  protected ICPPASTFunctionDeclarator createFunDecl() {
-    IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());
-    ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
-    new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);
-    return funDecl;
-  }
+   public Constructor(ICPPASTFunctionCallExpression funCall) {
+      this.funCall = funCall;
+   }
 
-  @Override
-  protected ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl) {
-    return createCtorReturnType();
-  }
+   @SuppressWarnings("restriction")
+   @Override
+   protected ICPPASTFunctionDeclarator createFunDecl() {
+      IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());
+      ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
+      new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);
+      return funDecl;
+   }
 
-  @Override
-  public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy,
-      CppStandard cppStd) {
-    ICPPASTFunctionDefinition function = super.createFunctionDefinition(strategy, cppStd);
-    strategy.addCtorInitializer(function);
-    return function;
-  }
+   @Override
+   protected ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl) {
+      return createCtorReturnType();
+   }
 
-  @Override
-  protected IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy,
-      ICPPASTFunctionDeclarator funDecl, ICPPASTDeclSpecifier specifier, CppStandard cppStd) {
-    IASTCompoundStatement newFunBody = createEmptyFunBody();
-    strategy.addCallVectorRegistration(newFunBody, funDecl, false);
-    return newFunBody;
-  }
+   @Override
+   public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy, CppStandard cppStd) {
+      ICPPASTFunctionDefinition function = super.createFunctionDefinition(strategy, cppStd);
+      strategy.addCtorInitializer(function);
+      return function;
+   }
 
-  public boolean isDefaultConstructor() {
-    return funCall.getArguments().length == 0;
-  }
+   @Override
+   protected IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, ICPPASTFunctionDeclarator funDecl,
+         ICPPASTDeclSpecifier specifier, CppStandard cppStd) {
+      IASTCompoundStatement newFunBody = createEmptyFunBody();
+      strategy.addCallVectorRegistration(newFunBody, funDecl, false);
+      return newFunBody;
+   }
 
-  @Override
-  public boolean isCallEquivalent(ICPPASTFunctionDefinition function, ConstStrategy strategy) {
-    FunctionEquivalenceVerifier checker =
-        new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
-    return checker.isEquivalent(funCall, strategy);
-  }
+   public boolean isDefaultConstructor() {
+      return funCall.getArguments().length == 0;
+   }
 
-  @Override
-  protected IASTExpression getUnderlyingExpression() {
-    return funCall;
-  }
+   @Override
+   public boolean isCallEquivalent(ICPPASTFunctionDefinition function, ConstStrategy strategy) {
+      FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
+      return checker.isEquivalent(funCall, strategy);
+   }
 
-  @Override
-  public boolean isStatic() {
-    return false;
-  }
+   @Override
+   protected IASTExpression getUnderlyingExpression() {
+      return funCall;
+   }
+
+   @Override
+   public boolean isStatic() {
+      return false;
+   }
 }

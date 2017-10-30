@@ -15,35 +15,36 @@ import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class ForwardDeclCollector implements F1V<ExtractInterfaceContext> {
 
-  @Override
-  public void apply(ExtractInterfaceContext context) {
-    Collection<IASTSimpleDeclaration> fwdDecls = getClassFwdDecls(context.getTuOfChosenClass());
-    context.setClassFwdDecls(fwdDecls);
-  }
+   @Override
+   public void apply(ExtractInterfaceContext context) {
+      Collection<IASTSimpleDeclaration> fwdDecls = getClassFwdDecls(context.getTuOfChosenClass());
+      context.setClassFwdDecls(fwdDecls);
+   }
 
-  private static Collection<IASTSimpleDeclaration> getClassFwdDecls(IASTTranslationUnit ast) {
-    final List<IASTSimpleDeclaration> fwdDecls = list();
-    ast.accept(new ASTVisitor() {
-      {
-        shouldVisitDeclarations = true;
-      }
+   private static Collection<IASTSimpleDeclaration> getClassFwdDecls(IASTTranslationUnit ast) {
+      final List<IASTSimpleDeclaration> fwdDecls = list();
+      ast.accept(new ASTVisitor() {
 
-      @Override
-      public int visit(IASTDeclaration decl) {
-        if (decl instanceof IASTSimpleDeclaration) {
-          ICPPASTElaboratedTypeSpecifier forwardDecl =
-              AstUtil.getChildOfType(decl, ICPPASTElaboratedTypeSpecifier.class);
+         {
+            shouldVisitDeclarations = true;
+         }
 
-          if (forwardDecl != null) {
-            fwdDecls.add((IASTSimpleDeclaration) decl);
-          }
-        }
+         @Override
+         public int visit(IASTDeclaration decl) {
+            if (decl instanceof IASTSimpleDeclaration) {
+               ICPPASTElaboratedTypeSpecifier forwardDecl = AstUtil.getChildOfType(decl, ICPPASTElaboratedTypeSpecifier.class);
 
-        return PROCESS_CONTINUE;
-      }
-    });
-    return fwdDecls;
-  }
+               if (forwardDecl != null) {
+                  fwdDecls.add((IASTSimpleDeclaration) decl);
+               }
+            }
+
+            return PROCESS_CONTINUE;
+         }
+      });
+      return fwdDecls;
+   }
 }

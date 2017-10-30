@@ -21,106 +21,100 @@ import ch.hsr.ifs.mockator.plugin.base.functional.F2;
 import ch.hsr.ifs.mockator.plugin.base.tuples.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 public class ParamTypeEquivalenceTester {
-  private final Collection<IType> caller;
-  private final Collection<IType> receiver;
-  private final F2<Integer, IType, Boolean> filter;
 
-  public ParamTypeEquivalenceTester(Collection<IType> caller, Collection<IType> receiver) {
-    this(caller, receiver, null);
-  }
+   private final Collection<IType>           caller;
+   private final Collection<IType>           receiver;
+   private final F2<Integer, IType, Boolean> filter;
 
-  public ParamTypeEquivalenceTester(Collection<IType> caller, Collection<IType> receiver,
-      F2<Integer, IType, Boolean> filter) {
-    this.caller = caller;
-    this.receiver = receiver;
-    this.filter = filter;
-  }
+   public ParamTypeEquivalenceTester(Collection<IType> caller, Collection<IType> receiver) {
+      this(caller, receiver, null);
+   }
 
-  public boolean areParametersEquivalent() {
-    if (caller.size() != receiver.size())
-      return false;
+   public ParamTypeEquivalenceTester(Collection<IType> caller, Collection<IType> receiver, F2<Integer, IType, Boolean> filter) {
+      this.caller = caller;
+      this.receiver = receiver;
+      this.filter = filter;
+   }
 
-    ParallelIterator<IType, IType> it = getIterator();
+   public boolean areParametersEquivalent() {
+      if (caller.size() != receiver.size()) return false;
 
-    for (int i = 0; it.hasNext(); i++) {
-      Pair<IType, IType> types = it.next();
-      IType callerType = _1(types);
-      IType receiverType = _2(types);
-      
-      if (filter != null && filter.apply(i, receiverType)) {
-        continue;
+      ParallelIterator<IType, IType> it = getIterator();
+
+      for (int i = 0; it.hasNext(); i++) {
+         Pair<IType, IType> types = it.next();
+         IType callerType = _1(types);
+         IType receiverType = _2(types);
+
+         if (filter != null && filter.apply(i, receiverType)) {
+            continue;
+         }
+
+         IType underlyingCaller = getUnderlyingType(callerType);
+
+         // passing this which is an instantiated class template yields a
+         // deferred instance
+         if (isClassInstantiationType(callerType, underlyingCaller) && receiverType instanceof IPointerType) {
+            IType type = unwindQualifierType(((IPointerType) receiverType).getType());
+
+            if (type instanceof ICPPTemplateInstance) {
+               ICPPTemplateDefinition callerDef = ((ICPPDeferredClassInstance) underlyingCaller).getTemplateDefinition();
+               ICPPTemplateDefinition receiverDef = ((ICPPTemplateInstance) type).getTemplateDefinition();
+               return receiverDef.equals(callerDef);
+            }
+         }
+
+         if (callerType instanceof IArrayType && receiverType instanceof IArrayType) {
+            callerType = ((IArrayType) callerType).getType();
+            receiverType = ((IArrayType) receiverType).getType();
+         }
+
+         if (isPointerType(callerType) ^ isPointerType(receiverType)) return false;
+
+         if (isConstCharArray(callerType) && isString(receiverType)) {
+            continue;
+         }
+
+         if (!AstUtil.isSameType(getUnderlyingType(receiverType), getUnderlyingType(callerType))) return false;
       }
 
-      IType underlyingCaller = getUnderlyingType(callerType);
+      return true;
+   }
 
-      // passing this which is an instantiated class template yields a
-      // deferred instance
-      if (isClassInstantiationType(callerType, underlyingCaller)
-          && receiverType instanceof IPointerType) {
-        IType type = unwindQualifierType(((IPointerType) receiverType).getType());
+   private static boolean isClassInstantiationType(IType callerType, IType unwindedCallerType) {
+      return callerType instanceof IPointerType && unwindedCallerType instanceof ICPPDeferredClassInstance;
+   }
 
-        if (type instanceof ICPPTemplateInstance) {
-          ICPPTemplateDefinition callerDef =
-              ((ICPPDeferredClassInstance) underlyingCaller).getTemplateDefinition();
-          ICPPTemplateDefinition receiverDef =
-              ((ICPPTemplateInstance) type).getTemplateDefinition();
-          return receiverDef.equals(callerDef);
-        }
+   private static boolean isPointerType(IType type) {
+      return type instanceof IPointerType;
+   }
+
+   private ParallelIterator<IType, IType> getIterator() {
+      return new ParallelIterator<IType, IType>(caller.iterator(), receiver.iterator());
+   }
+
+   private static IType getUnderlyingType(IType type) {
+      type = CxxAstUtils.unwindTypedef(type);
+      return AstUtil.asNonConst(AstUtil.unwindPointerOrRefType(type));
+   }
+
+   private static boolean isString(IType type) {
+      type = AstUtil.unwindPointerOrRefType(CxxAstUtils.unwindTypedef(type));
+      String unwoundQualifierType = unwindQualifierType(type).toString();
+      return unwoundQualifierType.contains(STD_STRING) || unwoundQualifierType.contains(BASIC_STRING_CHAR);
+   }
+
+   private static IType unwindQualifierType(IType type) {
+      while (type instanceof IQualifierType) {
+         type = ((IQualifierType) type).getType();
       }
+      return type;
+   }
 
-      if (callerType instanceof IArrayType && receiverType instanceof IArrayType) {
-        callerType = ((IArrayType) callerType).getType();
-        receiverType = ((IArrayType) receiverType).getType();
-      }
-
-      if (isPointerType(callerType) ^ isPointerType(receiverType))
-        return false;
-
-      if (isConstCharArray(callerType) && isString(receiverType)) {
-        continue;
-      }
-
-      if (!AstUtil.isSameType(getUnderlyingType(receiverType), getUnderlyingType(callerType)))
-        return false;
-    }
-
-    return true;
-  }
-
-  private static boolean isClassInstantiationType(IType callerType, IType unwindedCallerType) {
-    return callerType instanceof IPointerType
-        && unwindedCallerType instanceof ICPPDeferredClassInstance;
-  }
-
-  private static boolean isPointerType(IType type) {
-    return type instanceof IPointerType;
-  }
-
-  private ParallelIterator<IType, IType> getIterator() {
-    return new ParallelIterator<IType, IType>(caller.iterator(), receiver.iterator());
-  }
-
-  private static IType getUnderlyingType(IType type) {
-    type = CxxAstUtils.unwindTypedef(type);
-    return AstUtil.asNonConst(AstUtil.unwindPointerOrRefType(type));
-  }
-
-  private static boolean isString(IType type) {
-    type = AstUtil.unwindPointerOrRefType(CxxAstUtils.unwindTypedef(type));
-    String unwoundQualifierType = unwindQualifierType(type).toString();
-	return unwoundQualifierType.contains(STD_STRING) || unwoundQualifierType.contains(BASIC_STRING_CHAR);
-  }
-
-  private static IType unwindQualifierType(IType type) {
-    while (type instanceof IQualifierType) {
-      type = ((IQualifierType) type).getType();
-    }
-    return type;
-  }
-
-  private static boolean isConstCharArray(IType type) {
-    return new ConstArrayVerifier(type).isConstCharArray();
-  }
+   private static boolean isConstCharArray(IType type) {
+      return new ConstArrayVerifier(type).isConstCharArray();
+   }
 }

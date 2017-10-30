@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
@@ -12,52 +11,50 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.StdString;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
+
 abstract class RegistrationFinder {
 
-  public Maybe<ExistingMemFunCallRegistration> findRegistration(IASTName callsVectorUsage) {
-    if (!AstUtil.isPushBack(callsVectorUsage) || !isArrayAccess(callsVectorUsage))
-      return none();
+   public Optional<ExistingMemFunCallRegistration> findRegistration(final IASTName callsVectorUsage) {
+      if (!AstUtil.isPushBack(callsVectorUsage) || !isArrayAccess(callsVectorUsage)) {
+         return Optional.empty();
+      }
 
-    ICPPASTFunctionCallExpression funCall =
-        AstUtil.getAncestorOfType(callsVectorUsage, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(callsVectorUsage, ICPPASTFunctionCallExpression.class);
 
-    if (funCall == null || funCall.getArguments().length != 1)
-      return none();
+      if (funCall == null || funCall.getArguments().length != 1) {
+         return Optional.empty();
+      }
 
-    IASTInitializerClause call = funCall.getArguments()[0];
-    return maybe(collectRegistration(call));
-  }
+      final IASTInitializerClause call = funCall.getArguments()[0];
+      return Optional.of(collectRegistration(call));
+   }
 
-  protected abstract ExistingMemFunCallRegistration collectRegistration(
-      IASTInitializerClause pushBackArg);
+   protected abstract ExistingMemFunCallRegistration collectRegistration(IASTInitializerClause pushBackArg);
 
-  private static boolean isArrayAccess(IASTName callsVector) {
-    return AstUtil.getAncestorOfType(callsVector, ICPPASTArraySubscriptExpression.class) != null;
-  }
+   private static boolean isArrayAccess(final IASTName callsVector) {
+      return AstUtil.getAncestorOfType(callsVector, ICPPASTArraySubscriptExpression.class) != null;
+   }
 
-  protected ExistingMemFunCallRegistration toExistingCallRegistration(
-      IASTInitializerClause funSignature, IASTStatement containingStmt) {
-    String signature = String.valueOf(((IASTLiteralExpression) funSignature).getValue());
-    ICPPASTFunctionDefinition parent =
-        AstUtil.getAncestorOfType(containingStmt, ICPPASTFunctionDefinition.class);
-    ExistingTestDoubleMemFun memFun = new ExistingTestDoubleMemFun(parent);
-    return new ExistingMemFunCallRegistration(memFun, containingStmt, signature);
-  }
+   protected ExistingMemFunCallRegistration toExistingCallRegistration(final IASTInitializerClause funSignature, final IASTStatement containingStmt) {
+      final String signature = String.valueOf(((IASTLiteralExpression) funSignature).getValue());
+      final ICPPASTFunctionDefinition parent = AstUtil.getAncestorOfType(containingStmt, ICPPASTFunctionDefinition.class);
+      final ExistingTestDoubleMemFun memFun = new ExistingTestDoubleMemFun(parent);
+      return new ExistingMemFunCallRegistration(memFun, containingStmt, signature);
+   }
 
-  protected boolean isNameCall(IASTName name) {
-    return name.toString().equals(MockatorConstants.CALL);
-  }
+   protected boolean isNameCall(final IASTName name) {
+      return name.toString().equals(MockatorConstants.CALL);
+   }
 
-  protected boolean isStringLiteral(IASTInitializerClause param) {
-    return new StdString().isStdString(param);
-  }
+   protected boolean isStringLiteral(final IASTInitializerClause param) {
+      return new StdString().isStdString(param);
+   }
 
-  protected IASTStatement getContainingStmt(IASTInitializerClause param) {
-    return AstUtil.getAncestorOfType(param, IASTStatement.class);
-  }
+   protected IASTStatement getContainingStmt(final IASTInitializerClause param) {
+      return AstUtil.getAncestorOfType(param, IASTStatement.class);
+   }
 }

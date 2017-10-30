@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
@@ -13,126 +12,126 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
+
 
 @SuppressWarnings("restriction")
 public class ClassPublicVisibilityInserter {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final ICPPASTCompositeTypeSpecifier targetClass;
-  private final ASTRewrite rewriter;
-  private Maybe<ICPPASTVisibilityLabel> publicVisibilityLabel;
 
-  public ClassPublicVisibilityInserter(ICPPASTCompositeTypeSpecifier targetClass,
-      ASTRewrite rewriter) {
-    this.targetClass = targetClass;
-    this.rewriter = rewriter;
-    publicVisibilityLabel = none();
-  }
+   private static final CPPNodeFactory         nodeFactory = CPPNodeFactory.getDefault();
+   private final ICPPASTCompositeTypeSpecifier targetClass;
+   private final ASTRewrite                    rewriter;
+   private Optional<ICPPASTVisibilityLabel>    publicVisibilityLabel;
 
-  public void insert(IASTNode classMember) {
-    if (isStruct()) {
-      insertIntoStruct(classMember);
-    } else if (isClass()) {
-      insertIntoClass(classMember);
-    } else
-      throw new MockatorException("Union types are not supported");
-  }
+   public ClassPublicVisibilityInserter(final ICPPASTCompositeTypeSpecifier targetClass, final ASTRewrite rewriter) {
+      this.targetClass = targetClass;
+      this.rewriter = rewriter;
+      publicVisibilityLabel = Optional.empty();
+   }
 
-  private boolean isClass() {
-    return targetClass.getKey() == ICPPASTCompositeTypeSpecifier.k_class;
-  }
+   public void insert(final IASTNode classMember) {
+      if (isStruct()) {
+         insertIntoStruct(classMember);
+      } else if (isClass()) {
+         insertIntoClass(classMember);
+      } else {
+         throw new MockatorException("Union types are not supported");
+      }
+   }
 
-  private boolean isStruct() {
-    return targetClass.getKey() == IASTCompositeTypeSpecifier.k_struct;
-  }
+   private boolean isClass() {
+      return targetClass.getKey() == ICPPASTCompositeTypeSpecifier.k_class;
+   }
 
-  private void insertIntoClass(IASTNode classMember) {
-    Maybe<ICPPASTVisibilityLabel> publicLabel = findPublicVisibilityLabel();
+   private boolean isStruct() {
+      return targetClass.getKey() == IASTCompositeTypeSpecifier.k_struct;
+   }
 
-    if (isVisibilityLabelNeeded(publicLabel)) {
-      publicLabel = createAndInsertPublicVisibilityLabel();
-    } else if (publicVisibilityLabel.isSome()) {
-      publicLabel = publicVisibilityLabel;
-    }
+   private void insertIntoClass(final IASTNode classMember) {
+      Optional<ICPPASTVisibilityLabel> publicLabel = findPublicVisibilityLabel();
 
-    IASTNode otherLabel = findVisibilityLabelAfterPublic(publicLabel.get());
-    rewriter.insertBefore(targetClass, otherLabel, classMember, null);
-  }
-
-  private boolean isVisibilityLabelNeeded(Maybe<ICPPASTVisibilityLabel> publicLabel) {
-    return publicLabel.isNone() && publicVisibilityLabel.isNone();
-  }
-
-  private void insertIntoStruct(IASTNode classMember) {
-    Maybe<ICPPASTVisibilityLabel> publicLabel = findPublicVisibilityLabel();
-
-    if (publicLabel.isNone()) {
-      IASTNode insertionPoint = null;
-      IASTDeclaration[] classDecls = getDeclarationsInClass();
-
-      if (isNonEmptyClass(classDecls)) {
-        insertionPoint = classDecls[0];
+      if (isVisibilityLabelNeeded(publicLabel)) {
+         publicLabel = createAndInsertPublicVisibilityLabel();
+      } else if (publicVisibilityLabel.isPresent()) {
+         publicLabel = publicVisibilityLabel;
       }
 
-      rewriter.insertBefore(targetClass, insertionPoint, classMember.copy(), null);
-    } else {
-      IASTNode otherLabelAfterPublic = findVisibilityLabelAfterPublic(publicLabel.get());
-      rewriter.insertBefore(targetClass, otherLabelAfterPublic, classMember.copy(), null);
-    }
-  }
+      final IASTNode otherLabel = findVisibilityLabelAfterPublic(publicLabel.get());
+      rewriter.insertBefore(targetClass, otherLabel, classMember, null);
+   }
 
-  private static boolean isNonEmptyClass(IASTDeclaration[] classDecls) {
-    return classDecls.length > 0;
-  }
+   private boolean isVisibilityLabelNeeded(final Optional<ICPPASTVisibilityLabel> publicLabel) {
+      return !publicLabel.isPresent() && !publicVisibilityLabel.isPresent();
+   }
 
-  private IASTDeclaration[] getDeclarationsInClass() {
-    return AstUtil.getAllDeclarations(targetClass);
-  }
+   private void insertIntoStruct(final IASTNode classMember) {
+      final Optional<ICPPASTVisibilityLabel> publicLabel = findPublicVisibilityLabel();
 
-  private IASTNode findVisibilityLabelAfterPublic(IASTNode label) {
-    boolean found = false;
+      if (!publicLabel.isPresent()) {
+         IASTNode insertionPoint = null;
+         final IASTDeclaration[] classDecls = getDeclarationsInClass();
 
-    for (IASTDeclaration d : getDeclarationsInClass()) {
-      if (found)
-        return d;
+         if (isNonEmptyClass(classDecls)) {
+            insertionPoint = classDecls[0];
+         }
 
-      if (d.equals(label)) {
-        found = true;
+         rewriter.insertBefore(targetClass, insertionPoint, classMember.copy(), null);
+      } else {
+         final IASTNode otherLabelAfterPublic = findVisibilityLabelAfterPublic(publicLabel.get());
+         rewriter.insertBefore(targetClass, otherLabelAfterPublic, classMember.copy(), null);
       }
-    }
-    return null;
-  }
+   }
 
-  private Maybe<ICPPASTVisibilityLabel> createAndInsertPublicVisibilityLabel() {
-    ICPPASTVisibilityLabel publicLabel =
-        nodeFactory.newVisibilityLabel(ICPPASTVisibilityLabel.v_public);
-    rewriter.insertBefore(targetClass, null, publicLabel, null);
-    publicVisibilityLabel = maybe(publicLabel);
-    return maybe(publicLabel);
-  }
+   private static boolean isNonEmptyClass(final IASTDeclaration[] classDecls) {
+      return classDecls.length > 0;
+   }
 
-  private Maybe<ICPPASTVisibilityLabel> findPublicVisibilityLabel() {
-    final NodeContainer<ICPPASTVisibilityLabel> container =
-        new NodeContainer<ICPPASTVisibilityLabel>();
-    targetClass.accept(new ASTVisitor() {
-      {
-        shouldVisitDeclarations = true;
+   private IASTDeclaration[] getDeclarationsInClass() {
+      return AstUtil.getAllDeclarations(targetClass);
+   }
+
+   private IASTNode findVisibilityLabelAfterPublic(final IASTNode label) {
+      boolean found = false;
+
+      for (final IASTDeclaration d : getDeclarationsInClass()) {
+         if (found) {
+            return d;
+         }
+
+         if (d.equals(label)) {
+            found = true;
+         }
       }
+      return null;
+   }
 
-      @Override
-      public int visit(IASTDeclaration declaration) {
-        if (declaration instanceof ICPPASTVisibilityLabel) {
-          ICPPASTVisibilityLabel label = (ICPPASTVisibilityLabel) declaration;
+   private Optional<ICPPASTVisibilityLabel> createAndInsertPublicVisibilityLabel() {
+      final ICPPASTVisibilityLabel publicLabel = nodeFactory.newVisibilityLabel(ICPPASTVisibilityLabel.v_public);
+      rewriter.insertBefore(targetClass, null, publicLabel, null);
+      return publicVisibilityLabel = Optional.of(publicLabel);
+   }
 
-          if (label.getVisibility() == ICPPASTVisibilityLabel.v_public) {
-            container.setNode(label);
-            return PROCESS_ABORT;
-          }
-        }
-        return PROCESS_CONTINUE;
-      }
-    });
+   private Optional<ICPPASTVisibilityLabel> findPublicVisibilityLabel() {
+      final NodeContainer<ICPPASTVisibilityLabel> container = new NodeContainer<>();
+      targetClass.accept(new ASTVisitor() {
 
-    return container.getNode();
-  }
+         {
+            shouldVisitDeclarations = true;
+         }
+
+         @Override
+         public int visit(final IASTDeclaration declaration) {
+            if (declaration instanceof ICPPASTVisibilityLabel) {
+               final ICPPASTVisibilityLabel label = (ICPPASTVisibilityLabel) declaration;
+
+               if (label.getVisibility() == ICPPASTVisibilityLabel.v_public) {
+                  container.setNode(label);
+                  return PROCESS_ABORT;
+               }
+            }
+            return PROCESS_CONTINUE;
+         }
+      });
+
+      return container.getNode();
+   }
 }

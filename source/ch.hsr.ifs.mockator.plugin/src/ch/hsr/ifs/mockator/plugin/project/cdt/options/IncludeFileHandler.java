@@ -8,20 +8,21 @@ import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.core.resources.IProject;
 
+
 public class IncludeFileHandler extends IncludeHandler {
 
-  public IncludeFileHandler(IProject project) {
-    super(project);
-  }
+   public IncludeFileHandler(IProject project) {
+      super(project);
+   }
 
-  @Override
-  protected int getOptionType() {
-    return IOption.INCLUDE_FILES;
-  }
+   @Override
+   protected int getOptionType() {
+      return IOption.INCLUDE_FILES;
+   }
 
-  @Override
-  protected Set<String> getOptionValues(IOption option) throws BuildException {
-    String[] includes = option.getBasicStringListValue();
-    return orderPreservingSet(includes);
-  }
+   @Override
+   protected Set<String> getOptionValues(IOption option) throws BuildException {
+      String[] includes = option.getBasicStringListValue();
+      return orderPreservingSet(includes);
+   }
 }

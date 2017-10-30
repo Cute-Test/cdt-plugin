@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.preprocessor.qf;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.ui.CDTSharedImages;
@@ -10,56 +12,61 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.graphics.Image;
 
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludeFileHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.SiblingTranslationUnitFinder;
 
+
 public abstract class TraceFunctionQuickFix extends MockatorQuickFix {
 
-  protected boolean isTraceFunctionActive(IMarker marker) {
-    IncludeFileHandler includeHandler = new IncludeFileHandler(getCProject().getProject());
-    IResource siblingHeaderFile = getPathOfSiblingHeaderFile(marker);
+   protected boolean isTraceFunctionActive(final IMarker marker) {
+      final IncludeFileHandler includeHandler = new IncludeFileHandler(getCProject().getProject());
+      final IResource siblingHeaderFile = getPathOfSiblingHeaderFile(marker);
 
-    if (siblingHeaderFile == null)
-      return true;
+      if (siblingHeaderFile == null) {
+         return true;
+      }
 
-    return includeHandler.hasInclude(siblingHeaderFile);
-  }
+      return includeHandler.hasInclude(siblingHeaderFile);
+   }
 
-  @Override
-  public String getDescription() {
-    return null;
-  }
+   @Override
+   public String getDescription() {
+      return null;
+   }
 
-  @Override
-  public Image getImage() {
-    return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
-  }
+   @Override
+   public Image getImage() {
+      return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
+   }
 
-  protected IResource getPathOfSiblingHeaderFile(IMarker marker) {
-    try {
-      ITranslationUnit tu = getTranslationUnitViaWorkspace(marker);
+   protected IResource getPathOfSiblingHeaderFile(final IMarker marker) {
+      try {
+         final ITranslationUnit tu = getTranslationUnitViaWorkspace(marker);
 
-      if (tu == null)
-        return null;
+         if (tu == null) {
+            return null;
+         }
 
-      // If we have a template function then the marker will be in the header file
-      if (tu.isHeaderUnit())
-        return tu.getResource();
+         // If we have a template function then the marker will be in the header file
+         if (tu.isHeaderUnit()) {
+            return tu.getResource();
+         }
 
-      for (String path : getSiblingFilePath(tu, getIndexFromMarker(marker)))
-        return FileUtil.toIFile(path);
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
+         final Optional<String> path = getSiblingFilePath(tu, getIndexFromMarker(marker));
+         if (path.isPresent()) {
+            return FileUtil.toIFile(path.get());
+         }
+      }
+      catch (final CoreException e) {
+         throw new MockatorException(e);
+      }
 
-    return null;
-  }
+      return null;
+   }
 
-  private Maybe<String> getSiblingFilePath(ITranslationUnit tu, IIndex index) throws CoreException {
-    return new SiblingTranslationUnitFinder((IFile) tu.getResource(), tu.getAST(), index)
-        .getSiblingTuPath();
-  }
+   private Optional<String> getSiblingFilePath(final ITranslationUnit tu, final IIndex index) throws CoreException {
+      return new SiblingTranslationUnitFinder((IFile) tu.getResource(), tu.getAST(), index).getSiblingTuPath();
+   }
 }

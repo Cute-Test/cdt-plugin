@@ -2,8 +2,8 @@ package ch.hsr.ifs.mockator.plugin.incompleteclass.subtype;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+
+import java.util.Optional;
 
 import org.eclipse.cdt.codan.core.cxx.CxxAstUtils;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
@@ -25,163 +25,160 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
+import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.checker.AbstractMissingMemFunChecker;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
-  public static final String SUBTYPE_MISSING_MEMFUNS_IMPL_PROBLEM_ID =
-      "ch.hsr.ifs.mockator.SubtypeMissingMemFunsProblem";
 
-  @Override
-  protected ASTVisitor getAstVisitor() {
-    return new AbstractClassInstantiationFinder();
-  }
+   public static final String SUBTYPE_MISSING_MEMFUNS_IMPL_PROBLEM_ID = "ch.hsr.ifs.mockator.SubtypeMissingMemFunsProblem";
 
-  private class AbstractClassInstantiationFinder extends ASTVisitor {
-    {
-      shouldVisitDeclarations = true;
-      shouldVisitExpressions = true;
-    }
+   @Override
+   protected ASTVisitor getAstVisitor() {
+      return new AbstractClassInstantiationFinder();
+   }
 
-    @Override
-    public int visit(IASTDeclaration declaration) {
-      if (declaration instanceof IASTSimpleDeclaration) {
-        IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
-        checkForClassInstantiation(simpleDecl);
+   private class AbstractClassInstantiationFinder extends ASTVisitor {
+
+      {
+         shouldVisitDeclarations = true;
+         shouldVisitExpressions = true;
       }
 
-      return PROCESS_CONTINUE;
-    }
+      @Override
+      public int visit(final IASTDeclaration declaration) {
+         if (declaration instanceof IASTSimpleDeclaration) {
+            final IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
+            checkForClassInstantiation(simpleDecl);
+         }
 
-    private void checkForClassInstantiation(IASTSimpleDeclaration simpleDecl) {
-      IASTDeclSpecifier declSpec = simpleDecl.getDeclSpecifier();
-
-      if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef)
-        return;
-
-      for (IASTDeclarator declarator : simpleDecl.getDeclarators()) {
-        if (!AstUtil.hasPointerOrRefType(declarator)) {
-          checkIfAbstract(declSpec);
-          break;
-        }
-      }
-    }
-
-    @Override
-    public int visit(IASTExpression expr) {
-      if (expr instanceof ICPPASTNewExpression) {
-        ICPPASTNewExpression newExpression = (ICPPASTNewExpression) expr;
-
-        if (!AstUtil.hasPointerOrRefType(newExpression.getTypeId().getAbstractDeclarator())) {
-          IASTDeclSpecifier declSpec = newExpression.getTypeId().getDeclSpecifier();
-
-          if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
-            IASTName constructorName = ((ICPPASTNamedTypeSpecifier) declSpec).getName();
-            checkIfAbstract(constructorName);
-          }
-        }
-      } else if (expr instanceof ICPPASTFunctionCallExpression) {
-        ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) expr;
-        IASTExpression functionName = funCall.getFunctionNameExpression();
-
-        if (functionName instanceof IASTIdExpression) {
-          IASTName ctorName = ((IASTIdExpression) functionName).getName();
-          checkIfAbstract(ctorName);
-        }
+         return PROCESS_CONTINUE;
       }
 
-      return PROCESS_CONTINUE;
-    }
-  }
+      private void checkForClassInstantiation(final IASTSimpleDeclaration simpleDecl) {
+         final IASTDeclSpecifier declSpec = simpleDecl.getDeclSpecifier();
 
-  private void checkIfAbstract(IASTDeclSpecifier declSpec) {
-    IASTName className = null;
+         if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef) {
+            return;
+         }
 
-    if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
-      className = ((ICPPASTNamedTypeSpecifier) declSpec).getName();
-    } else if (AstUtil.isClass(declSpec)) {
-      className = ((ICPPASTCompositeTypeSpecifier) declSpec).getName();
-    }
+         for (final IASTDeclarator declarator : simpleDecl.getDeclarators()) {
+            if (!AstUtil.hasPointerOrRefType(declarator)) {
+               checkIfAbstract(declSpec);
+               break;
+            }
+         }
+      }
 
-    if (className == null)
-      return;
+      @Override
+      public int visit(final IASTExpression expr) {
+         if (expr instanceof ICPPASTNewExpression) {
+            final ICPPASTNewExpression newExpression = (ICPPASTNewExpression) expr;
 
-    IBinding binding = className.resolveBinding();
+            if (!AstUtil.hasPointerOrRefType(newExpression.getTypeId().getAbstractDeclarator())) {
+               final IASTDeclSpecifier declSpec = newExpression.getTypeId().getDeclSpecifier();
 
-    if (binding instanceof IType) {
-      reportProblemsIfAbstract((IType) binding);
-    }
-  }
+               if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
+                  final IASTName constructorName = ((ICPPASTNamedTypeSpecifier) declSpec).getName();
+                  checkIfAbstract(constructorName);
+               }
+            }
+         } else if (expr instanceof ICPPASTFunctionCallExpression) {
+            final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) expr;
+            final IASTExpression functionName = funCall.getFunctionNameExpression();
 
-  private void checkIfAbstract(IASTName ctorName) {
-    IBinding binding = ctorName.resolveBinding();
+            if (functionName instanceof IASTIdExpression) {
+               final IASTName ctorName = ((IASTIdExpression) functionName).getName();
+               checkIfAbstract(ctorName);
+            }
+         }
 
-    if (binding instanceof ICPPConstructor) {
-      reportProblemsIfAbstract(((ICPPConstructor) binding).getClassOwner());
-    } else if (binding instanceof IType) {
-      reportProblemsIfAbstract((IType) binding);
-    }
-  }
+         return PROCESS_CONTINUE;
+      }
+   }
 
-  private void reportProblemsIfAbstract(IType typeToCheck) {
-    IType unwindedType = CxxAstUtils.unwindTypedef(typeToCheck);
+   private void checkIfAbstract(final IASTDeclSpecifier declSpec) {
+      IASTName className = null;
 
-    if (!(unwindedType instanceof ICPPClassType) || unwindedType instanceof IProblemBinding)
-      return;
+      if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
+         className = ((ICPPASTNamedTypeSpecifier) declSpec).getName();
+      } else if (AstUtil.isClass(declSpec)) {
+         className = ((ICPPASTCompositeTypeSpecifier) declSpec).getName();
+      }
 
-    for (ICPPASTCompositeTypeSpecifier optClass : getClassDefinition(unwindedType)) {
-      markIfHasMissingMemFuns(optClass);
-    }
-  }
+      if (className == null) {
+         return;
+      }
 
-  private Maybe<ICPPASTCompositeTypeSpecifier> getClassDefinition(IType type) {
-    IType realType = AstUtil.windDownToRealType(type, false);
+      final IBinding binding = className.resolveBinding();
 
-    if (realType instanceof ICPPClassType)
-      return lookupDefinition((ICPPClassType) realType);
+      if (binding instanceof IType) {
+         reportProblemsIfAbstract((IType) binding);
+      }
+   }
 
-    return none();
-  }
+   private void checkIfAbstract(final IASTName ctorName) {
+      final IBinding binding = ctorName.resolveBinding();
 
-  private Maybe<ICPPASTCompositeTypeSpecifier> lookupDefinition(ICPPClassType type) {
-    for (IASTName optClassName : findDefinitionInAst(type)) {
-      ICPPASTCompositeTypeSpecifier klass = getKlassOf(optClassName);
+      if (binding instanceof ICPPConstructor) {
+         reportProblemsIfAbstract(((ICPPConstructor) binding).getClassOwner());
+      } else if (binding instanceof IType) {
+         reportProblemsIfAbstract((IType) binding);
+      }
+   }
 
-      if (klass != null)
-        return maybe(klass);
-    }
+   private void reportProblemsIfAbstract(final IType typeToCheck) {
+      final IType unwindedType = CxxAstUtils.unwindTypedef(typeToCheck);
+      if (!(unwindedType instanceof ICPPClassType) || unwindedType instanceof IProblemBinding) {
+         return;
+      }
+      getClassDefinition(unwindedType).ifPresent((clazz) -> markIfHasMissingMemFuns(clazz));
+   }
 
-    return none();
-  }
+   private Optional<ICPPASTCompositeTypeSpecifier> getClassDefinition(final IType type) {
+      final IType realType = AstUtil.windDownToRealType(type, false);
 
-  private Maybe<IASTName> findDefinitionInAst(ICPPClassType type) {
-    return head(list(getAst().getDefinitionsInAST(type)));
-  }
+      if (realType instanceof ICPPClassType) {
+         return lookupDefinition((ICPPClassType) realType);
+      }
 
-  private static ICPPASTCompositeTypeSpecifier getKlassOf(IASTNode node) {
-    return AstUtil.getAncestorOfType(node, ICPPASTCompositeTypeSpecifier.class);
-  }
+      return Optional.empty();
+   }
 
-  @Override
-  protected MissingMemFunFinder getMissingMemFunsFinder() {
-    return new SubtypeMissingMemFunFinder(getCProject(), getIndex());
-  }
+   private Optional<ICPPASTCompositeTypeSpecifier> lookupDefinition(final ICPPClassType type) {
+      return OptHelper.returnIfPresentElseEmpty(findDefinitionInAst(type), (className) -> Optional.ofNullable(getKlassOf(className)));
+   }
 
-  @Override
-  protected Maybe<IASTName> getNameToMark(ICPPASTCompositeTypeSpecifier klass) {
-    if (klass.getName().toString().trim().isEmpty())
-      // this trick is necessary because when we deal with an anonymous
-      // class and we have to mark something that we can lookup afterwards
-      // to find the enclosing node
-      return maybe(klass.getBaseSpecifiers()[0].getName());
+   private Optional<IASTName> findDefinitionInAst(final ICPPClassType type) {
+      return head(list(getAst().getDefinitionsInAST(type)));
+   }
 
-    return maybe(klass.getName());
-  }
+   private static ICPPASTCompositeTypeSpecifier getKlassOf(final IASTNode node) {
+      return AstUtil.getAncestorOfType(node, ICPPASTCompositeTypeSpecifier.class);
+   }
 
-  @Override
-  protected String getProblemId() {
-    return SUBTYPE_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
-  }
+   @Override
+   protected MissingMemFunFinder getMissingMemFunsFinder() {
+      return new SubtypeMissingMemFunFinder(getCProject(), getIndex());
+   }
+
+   @Override
+   protected Optional<IASTName> getNameToMark(final ICPPASTCompositeTypeSpecifier klass) {
+      if (klass.getName().toString().trim().isEmpty()) {
+         // this trick is necessary because when we deal with an anonymous
+         // class and we have to mark something that we can lookup afterwards
+         // to find the enclosing node
+         return Optional.of(klass.getBaseSpecifiers()[0].getName());
+      }
+
+      return Optional.of(klass.getName());
+   }
+
+   @Override
+   protected String getProblemId() {
+      return SUBTYPE_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
+   }
 }

@@ -5,16 +5,16 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 class LdPreloadFunBodyFactory {
 
-  public LdPreloadFunBodyStrategy getFunBodyStrategy(ICPPASTFunctionDeclarator funDecl) {
-    if (isFreeFunction(funDecl))
-      return new FreeFunBodyStrategy();
+   public LdPreloadFunBodyStrategy getFunBodyStrategy(ICPPASTFunctionDeclarator funDecl) {
+      if (isFreeFunction(funDecl)) return new FreeFunBodyStrategy();
 
-    return new MemFunBodyStrategy();
-  }
+      return new MemFunBodyStrategy();
+   }
 
-  private static boolean isFreeFunction(ICPPASTFunctionDeclarator funDecl) {
-    return AstUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
-  }
+   private static boolean isFreeFunction(ICPPASTFunctionDeclarator funDecl) {
+      return AstUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
+   }
 }

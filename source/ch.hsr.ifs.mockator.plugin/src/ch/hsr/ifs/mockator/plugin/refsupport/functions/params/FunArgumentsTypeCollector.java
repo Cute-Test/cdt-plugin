@@ -1,11 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
@@ -13,36 +12,38 @@ import org.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTypeId;
 import org.eclipse.cdt.core.dom.ast.IType;
 
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
+
 public class FunArgumentsTypeCollector {
-  private final Collection<IASTInitializerClause> funArgs;
 
-  public FunArgumentsTypeCollector(Collection<IASTInitializerClause> funArgs) {
-    this.funArgs = funArgs;
-  }
+   private final Collection<IASTInitializerClause> funArgs;
 
-  public List<IType> getFunArgTypes() {
-    List<IType> argTypes = list();
+   public FunArgumentsTypeCollector(final Collection<IASTInitializerClause> funArgs) {
+      this.funArgs = funArgs;
+   }
 
-    for (IASTInitializerClause arg : funArgs) {
-      for (IType optType : getType(arg)) {
-        argTypes.add(optType);
+   public List<IType> getFunArgTypes() {
+      final List<IType> argTypes = list();
+
+      for (final IASTInitializerClause arg : funArgs) {
+         getType(arg).ifPresent((type) -> argTypes.add(type));
       }
-    }
 
-    return argTypes;
-  }
+      return argTypes;
+   }
 
-  private static Maybe<IType> getType(IASTInitializerClause clause) {
-    if (clause instanceof IASTExpression)
-      return maybe(((IASTExpression) clause).getExpressionType());
-    if (clause instanceof IASTTypeId)
-      return maybe(TypeCreator.byDeclarator(((IASTTypeId) clause).getAbstractDeclarator()));
-    if (clause instanceof IASTParameterDeclaration)
-      return maybe(TypeCreator.byDeclarator(((IASTParameterDeclaration) clause).getDeclarator()));
+   private static Optional<IType> getType(final IASTInitializerClause clause) {
+      if (clause instanceof IASTExpression) {
+         return Optional.of(((IASTExpression) clause).getExpressionType());
+      }
+      if (clause instanceof IASTTypeId) {
+         return Optional.of(TypeCreator.byDeclarator(((IASTTypeId) clause).getAbstractDeclarator()));
+      }
+      if (clause instanceof IASTParameterDeclaration) {
+         return Optional.of(TypeCreator.byDeclarator(((IASTParameterDeclaration) clause).getDeclarator()));
+      }
 
-    return none();
-  }
+      return Optional.empty();
+   }
 }

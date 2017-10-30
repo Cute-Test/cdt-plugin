@@ -28,63 +28,57 @@ import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
+
 @SuppressWarnings("restriction")
 class PreprocessorSourceFileCreator extends PreprocessorFileCreator {
-  private final IPath newHeaderFilePath;
 
-  public PreprocessorSourceFileCreator(IPath newHeaderFilePath, ModificationCollector collector,
-      ICProject cProject, CRefactoringContext context) {
-    super(collector, cProject, context);
-    this.newHeaderFilePath = newHeaderFilePath;
-  }
+   private final IPath newHeaderFilePath;
 
-  @Override
-  protected void addContentToTu(IASTTranslationUnit newAst, ASTRewrite rewriter,
-      ICPPASTFunctionDeclarator funDecl, IProgressMonitor pm) throws CoreException {
-    addHeaderInclude(newAst, rewriter);
-    addUndef(newAst, rewriter, null, funDecl.getName().toString());
-    insertFunctionDefinition(funDecl, newAst, rewriter);
-  }
+   public PreprocessorSourceFileCreator(IPath newHeaderFilePath, ModificationCollector collector, ICProject cProject, CRefactoringContext context) {
+      super(collector, cProject, context);
+      this.newHeaderFilePath = newHeaderFilePath;
+   }
 
-  private static void addUndef(IASTTranslationUnit tu, ASTRewrite rewriter,
-      IASTNode insertionPoint, String funName) {
-    new UndefMacroAdder(tu, rewriter, insertionPoint).addUndefMacro(funName);
-  }
+   @Override
+   protected void addContentToTu(IASTTranslationUnit newAst, ASTRewrite rewriter, ICPPASTFunctionDeclarator funDecl, IProgressMonitor pm)
+         throws CoreException {
+      addHeaderInclude(newAst, rewriter);
+      addUndef(newAst, rewriter, null, funDecl.getName().toString());
+      insertFunctionDefinition(funDecl, newAst, rewriter);
+   }
 
-  private void insertFunctionDefinition(ICPPASTFunctionDeclarator funDecl,
-      IASTTranslationUnit source, ASTRewrite rewriter) {
-    ICPPASTDeclSpecifier newDeclSpec = getReturnValue(funDecl);
-    ICPPASTFunctionDeclarator newFunDecl = createNewFunDecl(funDecl);
-    IASTCompoundStatement funBody = createFunctionBody(funDecl, newFunDecl);
-    ICPPASTFunctionDefinition funDef =
-        nodeFactory.newFunctionDefinition(newDeclSpec, newFunDecl, funBody);
-    rewriter.insertBefore(source, null, funDef, null);
-  }
+   private static void addUndef(IASTTranslationUnit tu, ASTRewrite rewriter, IASTNode insertionPoint, String funName) {
+      new UndefMacroAdder(tu, rewriter, insertionPoint).addUndefMacro(funName);
+   }
 
-  private static IASTCompoundStatement createFunctionBody(ICPPASTFunctionDeclarator funDecl,
-      ICPPASTFunctionDeclarator newFunDecl) {
-    int numOfParams = newFunDecl.getParameters().length;
-    Set<Integer> lastTwoParamsToBeIgnored = orderPreservingSet(numOfParams - 2, numOfParams - 1);
-    FunctionDelegateCallCreator creator =
-        new FunctionDelegateCallCreator(newFunDecl, lastTwoParamsToBeIgnored);
-    IASTStatement delegateToOriginal =
-        creator.createDelegate(funDecl.getName(), AstUtil.getDeclSpec(funDecl));
-    return AstUtil.toCompoundStatement(delegateToOriginal);
-  }
+   private void insertFunctionDefinition(ICPPASTFunctionDeclarator funDecl, IASTTranslationUnit source, ASTRewrite rewriter) {
+      ICPPASTDeclSpecifier newDeclSpec = getReturnValue(funDecl);
+      ICPPASTFunctionDeclarator newFunDecl = createNewFunDecl(funDecl);
+      IASTCompoundStatement funBody = createFunctionBody(funDecl, newFunDecl);
+      ICPPASTFunctionDefinition funDef = nodeFactory.newFunctionDefinition(newDeclSpec, newFunDecl, funBody);
+      rewriter.insertBefore(source, null, funDef, null);
+   }
 
-  private void addHeaderInclude(IASTTranslationUnit source, ASTRewrite rewriter) {
-    AstIncludeNode astIncludeNode =
-        new AstIncludeNode(FileUtil.getFilePart(newHeaderFilePath.toString()));
-    rewriter.insertBefore(source, null, astIncludeNode, null);
-  }
+   private static IASTCompoundStatement createFunctionBody(ICPPASTFunctionDeclarator funDecl, ICPPASTFunctionDeclarator newFunDecl) {
+      int numOfParams = newFunDecl.getParameters().length;
+      Set<Integer> lastTwoParamsToBeIgnored = orderPreservingSet(numOfParams - 2, numOfParams - 1);
+      FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(newFunDecl, lastTwoParamsToBeIgnored);
+      IASTStatement delegateToOriginal = creator.createDelegate(funDecl.getName(), AstUtil.getDeclSpec(funDecl));
+      return AstUtil.toCompoundStatement(delegateToOriginal);
+   }
 
-  @Override
-  protected IASTName getNewFunName(ICPPASTFunctionDeclarator funDecl) {
-    QualifiedNameCreator resolver = new QualifiedNameCreator(funDecl.getName());
-    ICPPASTQualifiedName qualifiedName = resolver.createQualifiedName();
-    String traceFunName = MockatorConstants.MOCKED_TRACE_PREFIX + funDecl.getName().toString();
-    IASTName newName = nodeFactory.newName(traceFunName.toCharArray());
-    qualifiedName.addName(newName);
-    return qualifiedName;
-  }
+   private void addHeaderInclude(IASTTranslationUnit source, ASTRewrite rewriter) {
+      AstIncludeNode astIncludeNode = new AstIncludeNode(FileUtil.getFilePart(newHeaderFilePath.toString()));
+      rewriter.insertBefore(source, null, astIncludeNode, null);
+   }
+
+   @Override
+   protected IASTName getNewFunName(ICPPASTFunctionDeclarator funDecl) {
+      QualifiedNameCreator resolver = new QualifiedNameCreator(funDecl.getName());
+      ICPPASTQualifiedName qualifiedName = resolver.createQualifiedName();
+      String traceFunName = MockatorConstants.MOCKED_TRACE_PREFIX + funDecl.getName().toString();
+      IASTName newName = nodeFactory.newName(traceFunName.toCharArray());
+      qualifiedName.addName(newName);
+      return qualifiedName;
+   }
 }

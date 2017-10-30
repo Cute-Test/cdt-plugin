@@ -18,82 +18,80 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
+
 @SuppressWarnings("restriction")
 public class TestDoubleUsingNsHandler {
-  private static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final ICPPASTCompositeTypeSpecifier testDouble;
-  private final ASTRewrite rewriter;
 
-  public TestDoubleUsingNsHandler(ICPPASTCompositeTypeSpecifier testDouble, ASTRewrite rewriter) {
-    this.testDouble = testDouble;
-    this.rewriter = rewriter;
-  }
+   private static final ICPPNodeFactory        nodeFactory = CPPNodeFactory.getDefault();
+   private final ICPPASTCompositeTypeSpecifier testDouble;
+   private final ASTRewrite                    rewriter;
 
-  public void insertUsingNamespaceStmt(ICPPASTFunctionDefinition testFunction) {
-    ICPPASTQualifiedName qNameForUsing = getQNameForUsingNs();
+   public TestDoubleUsingNsHandler(final ICPPASTCompositeTypeSpecifier testDouble, final ASTRewrite rewriter) {
+      this.testDouble = testDouble;
+      this.rewriter = rewriter;
+   }
 
-    if (hasUsingNamespaceStmt(testFunction, qNameForUsing))
-      return;
+   public void insertUsingNamespaceStmt(final ICPPASTFunctionDefinition testFunction) {
+      final ICPPASTQualifiedName qNameForUsing = getQNameForUsingNs();
 
-    IASTDeclarationStatement usingStmt = createUsingNameSpaceStmt(qNameForUsing);
-    IASTNode firstPosInTestfun = getFirstPositionInFunBody(testFunction);
-    rewriter.insertBefore(testFunction.getBody(), firstPosInTestfun, usingStmt, null);
-  }
-
-  private static IASTNode getFirstPositionInFunBody(ICPPASTFunctionDefinition testFunction) {
-    IASTNode[] children = testFunction.getBody().getChildren();
-    return children.length > 0 ? children[0] : null;
-  }
-
-  private ICPPASTQualifiedName getQNameForUsingNs() {
-    QualifiedNameCreator creator = new QualifiedNameCreator(testDouble.getName());
-    ICPPASTQualifiedName qualifiedName = creator.createQualifiedName();
-    ICPPASTNameSpecifier[] qualifiers = qualifiedName.getQualifier();
-    String[] qualifierNames = Arrays.stream(qualifiers).map(ICPPASTNameSpecifier::toString)
-        .toArray(size -> new String[size]);
-
-    ICPPASTQualifiedName qfNameForNs = nodeFactory.newQualifiedName(
-        Arrays.copyOf(qualifierNames, qualifierNames.length - 1), last(qualifierNames));
-    return qfNameForNs;
-  }
-
-  private <T> T last(T[] array) {
-    if (array.length == 0) {
-      return null;
-    }
-    return array[array.length - 1];
-  }
-
-  private static boolean hasUsingNamespaceStmt(ICPPASTFunctionDefinition testFun,
-      final ICPPASTQualifiedName qNameForUsing) {
-    final NodeContainer<ICPPASTUsingDirective> usingDirective =
-        new NodeContainer<ICPPASTUsingDirective>();
-    testFun.accept(new ASTVisitor() {
-      {
-        shouldVisitDeclarations = true;
+      if (hasUsingNamespaceStmt(testFunction, qNameForUsing)) {
+         return;
       }
 
-      @Override
-      public int visit(IASTDeclaration decl) {
-        if (!(decl instanceof ICPPASTUsingDirective))
-          return PROCESS_CONTINUE;
+      final IASTDeclarationStatement usingStmt = createUsingNameSpaceStmt(qNameForUsing);
+      final IASTNode firstPosInTestfun = getFirstPositionInFunBody(testFunction);
+      rewriter.insertBefore(testFunction.getBody(), firstPosInTestfun, usingStmt, null);
+   }
 
-        ICPPASTUsingDirective using = (ICPPASTUsingDirective) decl;
+   private static IASTNode getFirstPositionInFunBody(final ICPPASTFunctionDefinition testFunction) {
+      final IASTNode[] children = testFunction.getBody().getChildren();
+      return children.length > 0 ? children[0] : null;
+   }
 
-        if (using.getQualifiedName().toString().equals(qNameForUsing.toString())) {
-          usingDirective.setNode(using);
-          return PROCESS_ABORT;
-        }
+   private ICPPASTQualifiedName getQNameForUsingNs() {
+      final QualifiedNameCreator creator = new QualifiedNameCreator(testDouble.getName());
+      final ICPPASTQualifiedName qualifiedName = creator.createQualifiedName();
+      final ICPPASTNameSpecifier[] qualifiers = qualifiedName.getQualifier();
+      final String[] qualifierNames = Arrays.stream(qualifiers).map(ICPPASTNameSpecifier::toString).toArray(size -> new String[size]);
 
-        return PROCESS_CONTINUE;
-      }
-    });
-    return usingDirective.getNode().isSome();
-  }
+      final ICPPASTQualifiedName qfNameForNs = nodeFactory.newQualifiedName(Arrays.copyOf(qualifierNames, qualifierNames.length - 1), last(qualifierNames));
+      return qfNameForNs;
+   }
 
-  private static IASTDeclarationStatement createUsingNameSpaceStmt(
-      ICPPASTQualifiedName qNameForUsing) {
-    ICPPASTUsingDirective usingDirective = nodeFactory.newUsingDirective(qNameForUsing);
-    return nodeFactory.newDeclarationStatement(usingDirective);
-  }
+   private <T> T last(final T[] array) {
+      if (array.length == 0) { return null; }
+      return array[array.length - 1];
+   }
+
+   private static boolean hasUsingNamespaceStmt(final ICPPASTFunctionDefinition testFun, final ICPPASTQualifiedName qNameForUsing) {
+      final NodeContainer<ICPPASTUsingDirective> usingDirective = new NodeContainer<>();
+      testFun.accept(new ASTVisitor() {
+
+         {
+            shouldVisitDeclarations = true;
+         }
+
+         @Override
+         public int visit(final IASTDeclaration decl) {
+            if (!(decl instanceof ICPPASTUsingDirective)) {
+               return PROCESS_CONTINUE;
+            }
+
+            final ICPPASTUsingDirective using = (ICPPASTUsingDirective) decl;
+
+            if (using.getQualifiedName().toString().equals(qNameForUsing.toString())) {
+               usingDirective.setNode(using);
+               return PROCESS_ABORT;
+            }
+
+            return PROCESS_CONTINUE;
+         }
+      });
+      return usingDirective.getNode().isPresent();
+   }
+
+   private static IASTDeclarationStatement createUsingNameSpaceStmt(final ICPPASTQualifiedName qNameForUsing) {
+      final ICPPASTUsingDirective usingDirective = nodeFactory.newUsingDirective(qNameForUsing);
+      return nodeFactory.newDeclarationStatement(usingDirective);
+   }
 }

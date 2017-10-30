@@ -11,30 +11,32 @@ import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.StdString;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
+
 abstract class AbstractExpectationsFinder {
-  protected final NodeContainer<IASTName> expectationVector;
-  protected Collection<MemFunCallExpectation> callExpectations;
-  private final IASTName expectationsName;
 
-  public AbstractExpectationsFinder(Collection<MemFunCallExpectation> callExpectations,
-      NodeContainer<IASTName> expectationVector, IASTName expectationsVectorName) {
-    this.callExpectations = callExpectations;
-    this.expectationVector = expectationVector;
-    this.expectationsName = expectationsVectorName;
-  }
+   protected final NodeContainer<IASTName>     expectationVector;
+   protected Collection<MemFunCallExpectation> callExpectations;
+   private final IASTName                      expectationsName;
 
-  protected abstract void collectExpectations(IASTStatement expectationStmt);
+   public AbstractExpectationsFinder(Collection<MemFunCallExpectation> callExpectations, NodeContainer<IASTName> expectationVector,
+                                     IASTName expectationsVectorName) {
+      this.callExpectations = callExpectations;
+      this.expectationVector = expectationVector;
+      this.expectationsName = expectationsVectorName;
+   }
 
-  protected boolean matchesName(IASTName name) {
-    return name.toString().equals(expectationsName.toString());
-  }
+   protected abstract void collectExpectations(IASTStatement expectationStmt);
 
-  protected MemFunCallExpectation toMemberFunctionCall(IASTInitializerClause funSignature) {
-    String signature = String.valueOf(((IASTLiteralExpression) funSignature).getValue());
-    return new MemFunCallExpectation(signature);
-  }
+   protected boolean matchesName(IASTName name) {
+      return name.toString().equals(expectationsName.toString());
+   }
 
-  protected boolean isStringLiteral(IASTInitializerClause literal) {
-    return new StdString().isStdString(literal);
-  }
+   protected MemFunCallExpectation toMemberFunctionCall(IASTInitializerClause funSignature) {
+      String signature = String.valueOf(((IASTLiteralExpression) funSignature).getValue());
+      return new MemFunCallExpectation(signature);
+   }
+
+   protected boolean isStringLiteral(IASTInitializerClause literal) {
+      return new StdString().isStdString(literal);
+   }
 }

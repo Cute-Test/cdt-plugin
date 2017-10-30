@@ -11,62 +11,63 @@ import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 
+
 public enum LinkedEditModeStrategy implements PropertyTypeWithDefault {
 
-  ChooseFunctions(I18N.ChooseFunctionsDesc) {
-    @Override
-    public boolean isDefault() {
+   ChooseFunctions(I18N.ChooseFunctionsDesc) {
+
+   @Override
+   public boolean isDefault() {
       return false;
-    }
-  },
-  ChooseArguments(I18N.ChooseArgumentsDesc) {
-    @Override
-    public boolean isDefault() {
+   }
+   },
+   ChooseArguments(I18N.ChooseArgumentsDesc) {
+
+   @Override
+   public boolean isDefault() {
       return true;
-    }
-  };
+   }
+   };
 
-  private static final Map<String, LinkedEditModeStrategy> STRING_TO_ENUM = unorderedMap();
+   private static final Map<String, LinkedEditModeStrategy> STRING_TO_ENUM = unorderedMap();
 
-  static {
-    for (LinkedEditModeStrategy order : values()) {
-      STRING_TO_ENUM.put(order.name(), order);
-    }
-  }
+   static {
+      for (LinkedEditModeStrategy order : values()) {
+         STRING_TO_ENUM.put(order.name(), order);
+      }
+   }
 
-  public static final QualifiedName QF_NAME = new QualifiedName(MockatorPlugin.PLUGIN_ID,
-      "LinkedEditModeStrategy");
+   public static final QualifiedName QF_NAME = new QualifiedName(MockatorPlugin.PLUGIN_ID, "LinkedEditModeStrategy");
 
-  private final String description;
+   private final String description;
 
-  private LinkedEditModeStrategy(String description) {
-    this.description = description;
-  }
+   private LinkedEditModeStrategy(String description) {
+      this.description = description;
+   }
 
-  public String getDescription() {
-    return description;
-  }
+   public String getDescription() {
+      return description;
+   }
 
-  public static LinkedEditModeStrategy fromProjectSettings(IProject project) {
-    String linkedEditStrategy = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
+   public static LinkedEditModeStrategy fromProjectSettings(IProject project) {
+      String linkedEditStrategy = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
 
-    if (linkedEditStrategy == null)
-      return getDefault();
+      if (linkedEditStrategy == null) return getDefault();
 
-    return fromName(linkedEditStrategy);
-  }
+      return fromName(linkedEditStrategy);
+   }
 
-  public static void storeInProjectSettings(IProject project, LinkedEditModeStrategy linkedEdit) {
-    new ProjectPropertiesHandler(project).setProjectProperty(QF_NAME, linkedEdit.toString());
-  }
+   public static void storeInProjectSettings(IProject project, LinkedEditModeStrategy linkedEdit) {
+      new ProjectPropertiesHandler(project).setProjectProperty(QF_NAME, linkedEdit.toString());
+   }
 
-  public static LinkedEditModeStrategy fromName(String name) {
-    LinkedEditModeStrategy result = STRING_TO_ENUM.get(name);
-    Assert.notNull(result, String.format("Unknown linked edit strategy '%s'", name));
-    return result;
-  }
+   public static LinkedEditModeStrategy fromName(String name) {
+      LinkedEditModeStrategy result = STRING_TO_ENUM.get(name);
+      Assert.notNull(result, String.format("Unknown linked edit strategy '%s'", name));
+      return result;
+   }
 
-  public static LinkedEditModeStrategy getDefault() {
-    return DefaultPropertyHandler.getDefault(LinkedEditModeStrategy.class);
-  }
+   public static LinkedEditModeStrategy getDefault() {
+      return DefaultPropertyHandler.getDefault(LinkedEditModeStrategy.class);
+   }
 }

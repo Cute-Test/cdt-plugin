@@ -11,29 +11,30 @@ import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFun
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 
+
 @SuppressWarnings("restriction")
 abstract class AbstractExpectationsReconciler {
-  protected static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  protected final ASTRewrite rewriter;
-  protected final Collection<? extends TestDoubleMemFun> callsToAdd;
-  protected final CppStandard cppStd;
-  protected final LinkedEditModeStrategy linkedEdit;
-  private final Collection<ExistingMemFunCallRegistration> callsToRemove;
 
-  public AbstractExpectationsReconciler(ASTRewrite rewriter,
-      Collection<? extends TestDoubleMemFun> toAdd,
-      Collection<ExistingMemFunCallRegistration> toRemove, CppStandard cppStd,
-      LinkedEditModeStrategy linkedEditMode) {
-    this.rewriter = rewriter;
-    this.callsToAdd = toAdd;
-    this.callsToRemove = toRemove;
-    this.cppStd = cppStd;
-    this.linkedEdit = linkedEditMode;
-  }
+   protected static final CPPNodeFactory                    nodeFactory = CPPNodeFactory.getDefault();
+   protected final ASTRewrite                               rewriter;
+   protected final Collection<? extends TestDoubleMemFun>   callsToAdd;
+   protected final CppStandard                              cppStd;
+   protected final LinkedEditModeStrategy                   linkedEdit;
+   private final Collection<ExistingMemFunCallRegistration> callsToRemove;
 
-  public abstract void reconcileExpectations(IASTName expectationsVector);
+   public AbstractExpectationsReconciler(ASTRewrite rewriter, Collection<? extends TestDoubleMemFun> toAdd,
+                                         Collection<ExistingMemFunCallRegistration> toRemove, CppStandard cppStd,
+                                         LinkedEditModeStrategy linkedEditMode) {
+      this.rewriter = rewriter;
+      this.callsToAdd = toAdd;
+      this.callsToRemove = toRemove;
+      this.cppStd = cppStd;
+      this.linkedEdit = linkedEditMode;
+   }
 
-  protected boolean isToBeRemoved(String funSignature) {
-    return callsToRemove.contains(new ExistingMemFunCallRegistration(funSignature));
-  }
+   public abstract void reconcileExpectations(IASTName expectationsVector);
+
+   protected boolean isToBeRemoved(String funSignature) {
+      return callsToRemove.contains(new ExistingMemFunCallRegistration(funSignature));
+   }
 }

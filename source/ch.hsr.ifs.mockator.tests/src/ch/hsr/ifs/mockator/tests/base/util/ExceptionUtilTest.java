@@ -10,21 +10,23 @@ import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 
 public class ExceptionUtilTest {
 
-  @Test
-  public void singleExceptionHasNoRootCause() {
-    IllegalStateException rootCause = new IllegalStateException();
+   @Test
+   public void singleExceptionHasNoRootCause() {
+      final IllegalStateException rootCause = new IllegalStateException();
 
-    for (@SuppressWarnings("unused")
-    Throwable optCause : ExceptionUtil.getRootCause(rootCause)) {
-      assertTrue(false);
-    }
-  }
+      ExceptionUtil.getRootCause(rootCause).ifPresent((ignored) -> assertTrue(false));
+      //TODO remove unused code
+      //    for (@SuppressWarnings("unused")
+      //    Throwable optCause : ExceptionUtil.getRootCause(rootCause)) {
+      //      assertTrue(false);
+      //    }
+   }
 
-  @Test
-  public void stackedExceptionsYieldsRootCause() {
-    IllegalStateException rootCause = new IllegalStateException();
-    MockatorException ex = new MockatorException(new IllegalArgumentException(rootCause));
-    Throwable cause = ExceptionUtil.getRootCause(ex).get();
-    assertEquals(rootCause, cause);
-  }
+   @Test
+   public void stackedExceptionsYieldsRootCause() {
+      final IllegalStateException rootCause = new IllegalStateException();
+      final MockatorException ex = new MockatorException(new IllegalArgumentException(rootCause));
+      final Throwable cause = ExceptionUtil.getRootCause(ex).get();
+      assertEquals(rootCause, cause);
+   }
 }

@@ -8,45 +8,48 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
+
 public class TestDoubleKindAnalyzer {
 
-  public enum TestDoubleKind {
-    FakeObject, MockObject;
-  }
+   public enum TestDoubleKind {
+      FakeObject, MockObject;
+   }
 
-  private final ICPPASTCompositeTypeSpecifier testDouble;
+   private final ICPPASTCompositeTypeSpecifier testDouble;
 
-  public TestDoubleKindAnalyzer(ICPPASTCompositeTypeSpecifier testDouble) {
-    this.testDouble = testDouble;
-  }
+   public TestDoubleKindAnalyzer(final ICPPASTCompositeTypeSpecifier testDouble) {
+      this.testDouble = testDouble;
+   }
 
-  public TestDoubleKind getKindOfTestDouble() {
-    return usesVectorOfCalls() ? TestDoubleKind.MockObject : TestDoubleKind.FakeObject;
-  }
+   public TestDoubleKind getKindOfTestDouble() {
+      return usesVectorOfCalls() ? TestDoubleKind.MockObject : TestDoubleKind.FakeObject;
+   }
 
-  private boolean usesVectorOfCalls() {
-    final NodeContainer<IASTIdExpression> callsVector = new NodeContainer<IASTIdExpression>();
-    testDouble.accept(new ASTVisitor() {
-      {
-        shouldVisitExpressions = true;
-      }
+   private boolean usesVectorOfCalls() {
+      final NodeContainer<IASTIdExpression> callsVector = new NodeContainer<>();
+      testDouble.accept(new ASTVisitor() {
 
-      @Override
-      public int visit(IASTExpression expr) {
-        if (!(expr instanceof IASTIdExpression))
-          return PROCESS_CONTINUE;
+         {
+            shouldVisitExpressions = true;
+         }
 
-        IASTIdExpression idExpr = (IASTIdExpression) expr;
-        CallsVectorTypeVerifier verifier = new CallsVectorTypeVerifier(idExpr);
+         @Override
+         public int visit(final IASTExpression expr) {
+            if (!(expr instanceof IASTIdExpression)) {
+               return PROCESS_CONTINUE;
+            }
 
-        if (verifier.isVectorOfCallsVector()) {
-          callsVector.setNode(idExpr);
-          return PROCESS_ABORT;
-        }
+            final IASTIdExpression idExpr = (IASTIdExpression) expr;
+            final CallsVectorTypeVerifier verifier = new CallsVectorTypeVerifier(idExpr);
 
-        return PROCESS_CONTINUE;
-      }
-    });
-    return callsVector.getNode().isSome();
-  }
+            if (verifier.isVectorOfCallsVector()) {
+               callsVector.setNode(idExpr);
+               return PROCESS_ABORT;
+            }
+
+            return PROCESS_CONTINUE;
+         }
+      });
+      return callsVector.getNode().isPresent();
+   }
 }

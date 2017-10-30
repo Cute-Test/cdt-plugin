@@ -10,28 +10,26 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStdFactory;
 
+
 public class CallRegistrationCollector {
-  private final CppStandard cppStd;
 
-  public CallRegistrationCollector(CppStandard cppStd) {
-    this.cppStd = cppStd;
-  }
+   private final CppStandard cppStd;
 
-  public Collection<ExistingMemFunCallRegistration> getRegistrations(
-      List<IASTName> registrationVectorUses) {
-    List<ExistingMemFunCallRegistration> callRegistrations = list();
-    RegistrationFinder finder = getRegistrationFinder();
+   public CallRegistrationCollector(final CppStandard cppStd) {
+      this.cppStd = cppStd;
+   }
 
-    for (IASTName usage : registrationVectorUses) {
-      for (ExistingMemFunCallRegistration candidate : finder.findRegistration(usage)) {
-        callRegistrations.add(candidate);
+   public Collection<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> registrationVectorUses) {
+      final List<ExistingMemFunCallRegistration> callRegistrations = list();
+      final RegistrationFinder finder = getRegistrationFinder();
+
+      for (final IASTName usage : registrationVectorUses) {
+         finder.findRegistration(usage).ifPresent((candidate) -> callRegistrations.add(candidate));
       }
-    }
-    return callRegistrations;
-  }
+      return callRegistrations;
+   }
 
-  private RegistrationFinder getRegistrationFinder() {
-    return CppStdFactory.from(Cpp03RegistrationFinder.class, Cpp11RegistrationFinder.class)
-        .getHandler(cppStd);
-  }
+   private RegistrationFinder getRegistrationFinder() {
+      return CppStdFactory.from(Cpp03RegistrationFinder.class, Cpp11RegistrationFinder.class).getHandler(cppStd);
+   }
 }

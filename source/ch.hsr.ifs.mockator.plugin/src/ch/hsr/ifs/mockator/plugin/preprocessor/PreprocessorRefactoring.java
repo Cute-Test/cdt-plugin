@@ -1,6 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.preprocessor;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -22,155 +23,150 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
 import ch.hsr.ifs.mockator.plugin.project.cdt.SourceFolderHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NotInSameTuAsCalleeVerifier;
 
+
 @SuppressWarnings("restriction")
 public class PreprocessorRefactoring extends MockatorRefactoring {
-  private IPath newHeaderFilePath;
-  private IPath newSourceFilePath;
 
-  public PreprocessorRefactoring(ICElement element, ITextSelection selection, ICProject cproject) {
-    super(element, selection, cproject);
-  }
+   private IPath newHeaderFilePath;
+   private IPath newSourceFilePath;
 
-  @Override
-  public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException {
-    RefactoringStatus status = super.checkInitialConditions(pm);
-    IASTTranslationUnit ast = getAST(tu, pm);
-    Maybe<IASTName> selectedName = getSelectedName(ast);
+   public PreprocessorRefactoring(final ICElement element, final ITextSelection selection, final ICProject cproject) {
+      super(element, selection, cproject);
+   }
 
-    if (selectedName.isNone()) {
-      status.addFatalError("No name in selection found");
-      return status;
-    }
+   @Override
+   public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
+      final RefactoringStatus status = super.checkInitialConditions(pm);
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final Optional<IASTName> selectedName = getSelectedName(ast);
 
-    if (isFunctionTemplate(selectedName.get())) {
-      status.addFatalError("Function templates are currently not supported");
-      return status;
-    }
-
-    Maybe<ICPPASTFunctionDeclarator> funDeclCandidate = findFunDeclaration(selectedName.get(), pm);
-
-    if (funDeclCandidate.isNone()) {
-      status.addFatalError("No function declaration found");
-    } else if (!isFreeFunction(funDeclCandidate.get())) {
-      status.addFatalError("Member functions cannot be traced");
-    } else {
-      assureHasDefinitionNotInSameTu(status, ast, selectedName.get());
-    }
-
-    return status;
-  }
-
-  private static boolean isFunctionTemplate(IASTName funName) {
-    IBinding binding = funName.resolveBinding();
-    return binding instanceof ICPPFunctionTemplate || binding instanceof ICPPTemplateInstance;
-  }
-
-  private static void assureHasDefinitionNotInSameTu(RefactoringStatus status,
-      IASTTranslationUnit ast, IASTName funName) {
-    new NotInSameTuAsCalleeVerifier(status, ast).assurehasDefinitionNotInSameTu(funName
-        .resolveBinding());
-  }
-
-  private static boolean isFreeFunction(ICPPASTFunctionDeclarator funDecl) {
-    return AstUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
-  }
-
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector collector)
-      throws CoreException, OperationCanceledException {
-    for (IASTName optName : getSelectedName(getAST(tu, pm))) {
-      for (ICPPASTFunctionDeclarator optFunDecl : findFunDeclaration(optName, pm)) {
-        createTraceFolder(pm);
-        createHeaderFile(pm, collector, optFunDecl);
-        createSourceFile(pm, collector, optFunDecl);
-        addUndefBeforeFunDefinition(optName, collector, pm);
+      if (!selectedName.isPresent()) {
+         status.addFatalError("No name in selection found");
+         return status;
       }
-    }
-  }
 
-  private IFolder createTraceFolder(IProgressMonitor pm) {
-    SourceFolderHandler handler = new SourceFolderHandler(project.getProject());
-
-    try {
-      return handler.createFolder(MockatorConstants.TRACE_FOLDER, pm);
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
-
-  private void createHeaderFile(IProgressMonitor pm, ModificationCollector collector,
-      ICPPASTFunctionDeclarator funDecl) throws CoreException {
-    newHeaderFilePath = getProjectHeaderFilePath(funDecl);
-    PreprocessorHeaderFileCreator creator =
-        new PreprocessorHeaderFileCreator(collector, project, refactoringContext);
-    creator.createFile(newHeaderFilePath, funDecl, pm);
-  }
-
-  private IPath getProjectHeaderFilePath(ICPPASTFunctionDeclarator funDecl) {
-    return new TraceFileNameCreator(funDecl.getName().toString(), project.getProject())
-        .getHeaderFilePath();
-  }
-
-  private void createSourceFile(IProgressMonitor pm, ModificationCollector collector,
-      ICPPASTFunctionDeclarator funDecl) throws CoreException {
-    String funDeclName = funDecl.getName().toString();
-    newSourceFilePath =
-        new TraceFileNameCreator(funDeclName, project.getProject()).getSourceFilePath();
-    PreprocessorSourceFileCreator creator =
-        new PreprocessorSourceFileCreator(newHeaderFilePath, collector, project, refactoringContext);
-    creator.createFile(newSourceFilePath, funDecl, pm);
-  }
-
-  private void addUndefBeforeFunDefinition(IASTName selectedName, ModificationCollector collector,
-      IProgressMonitor pm) {
-    for (ICPPASTFunctionDefinition optFunDef : findFunDefinition(selectedName, pm)) {
-      IASTTranslationUnit tuOfFunDef = optFunDef.getTranslationUnit();
-
-      if (isTuOfDefinitionInSameProject(tuOfFunDef)) {
-        ASTRewrite rewriter = createRewriter(collector, tuOfFunDef);
-        UndefMacroAdder undefAdder = new UndefMacroAdder(tuOfFunDef, rewriter, optFunDef);
-        undefAdder.addUndefMacro(selectedName.toString());
+      if (isFunctionTemplate(selectedName.get())) {
+         status.addFatalError("Function templates are currently not supported");
+         return status;
       }
-    }
-  }
 
-  private boolean isTuOfDefinitionInSameProject(IASTTranslationUnit tuOfFunDef) {
-    URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
-    return ProjectUtil.isPartOfProject(uriOfTu, project.getProject());
-  }
+      final Optional<ICPPASTFunctionDeclarator> funDeclCandidate = findFunDeclaration(selectedName.get(), pm);
 
-  private Maybe<ICPPASTFunctionDeclarator> findFunDeclaration(IASTName funName, IProgressMonitor pm) {
-    NodeLookup lookup = new NodeLookup(project, pm);
-    return lookup.findFunctionDeclaration(funName, refactoringContext);
-  }
+      if (!funDeclCandidate.isPresent()) {
+         status.addFatalError("No function declaration found");
+      } else if (!isFreeFunction(funDeclCandidate.get())) {
+         status.addFatalError("Member functions cannot be traced");
+      } else {
+         assureHasDefinitionNotInSameTu(status, ast, selectedName.get());
+      }
 
-  private Maybe<ICPPASTFunctionDefinition> findFunDefinition(IASTName funName, IProgressMonitor pm) {
-    NodeLookup lookup = new NodeLookup(project, pm);
-    return lookup.findFunctionDefinition(funName, refactoringContext);
-  }
+      return status;
+   }
 
-  IPath getNewHeaderFilePath() {
-    return newHeaderFilePath;
-  }
+   private static boolean isFunctionTemplate(final IASTName funName) {
+      final IBinding binding = funName.resolveBinding();
+      return binding instanceof ICPPFunctionTemplate || binding instanceof ICPPTemplateInstance;
+   }
 
-  IPath getNewSourceFilePath() {
-    return newSourceFilePath;
-  }
+   private static void assureHasDefinitionNotInSameTu(final RefactoringStatus status, final IASTTranslationUnit ast, final IASTName funName) {
+      new NotInSameTuAsCalleeVerifier(status, ast).assurehasDefinitionNotInSameTu(funName.resolveBinding());
+   }
 
-  @Override
-  public String getDescription() {
-    return I18N.PreprocessorRefactoringDesc;
-  }
+   private static boolean isFreeFunction(final ICPPASTFunctionDeclarator funDecl) {
+      return AstUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
+   }
+
+   @Override
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException, OperationCanceledException {
+      final Optional<IASTName> optSelectedName = getSelectedName(getAST(tu, pm));
+      if (optSelectedName.isPresent()) {
+         final Optional<ICPPASTFunctionDeclarator> funDecl = findFunDeclaration(optSelectedName.get(), pm);
+         if (funDecl.isPresent()) {
+            createTraceFolder(pm);
+            createHeaderFile(pm, collector, funDecl.get());
+            createSourceFile(pm, collector, funDecl.get());
+            addUndefBeforeFunDefinition(optSelectedName.get(), collector, pm);
+         }
+      }
+   }
+
+   private IFolder createTraceFolder(final IProgressMonitor pm) {
+      final SourceFolderHandler handler = new SourceFolderHandler(project.getProject());
+
+      try {
+         return handler.createFolder(MockatorConstants.TRACE_FOLDER, pm);
+      }
+      catch (final CoreException e) {
+         throw new MockatorException(e);
+      }
+   }
+
+   private void createHeaderFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl) throws CoreException {
+      newHeaderFilePath = getProjectHeaderFilePath(funDecl);
+      final PreprocessorHeaderFileCreator creator = new PreprocessorHeaderFileCreator(collector, project, refactoringContext);
+      creator.createFile(newHeaderFilePath, funDecl, pm);
+   }
+
+   private IPath getProjectHeaderFilePath(final ICPPASTFunctionDeclarator funDecl) {
+      return new TraceFileNameCreator(funDecl.getName().toString(), project.getProject()).getHeaderFilePath();
+   }
+
+   private void createSourceFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl) throws CoreException {
+      final String funDeclName = funDecl.getName().toString();
+      newSourceFilePath = new TraceFileNameCreator(funDeclName, project.getProject()).getSourceFilePath();
+      final PreprocessorSourceFileCreator creator = new PreprocessorSourceFileCreator(newHeaderFilePath, collector, project, refactoringContext);
+      creator.createFile(newSourceFilePath, funDecl, pm);
+   }
+
+   private void addUndefBeforeFunDefinition(final IASTName selectedName, final ModificationCollector collector, final IProgressMonitor pm) {
+      findFunDefinition(selectedName, pm).ifPresent((funDef) -> {
+         final IASTTranslationUnit tuOfFunDef = funDef.getTranslationUnit();
+
+         if (isTuOfDefinitionInSameProject(tuOfFunDef)) {
+            final ASTRewrite rewriter = createRewriter(collector, tuOfFunDef);
+            final UndefMacroAdder undefAdder = new UndefMacroAdder(tuOfFunDef, rewriter, funDef);
+            undefAdder.addUndefMacro(selectedName.toString());
+         }
+      });
+   }
+
+   private boolean isTuOfDefinitionInSameProject(final IASTTranslationUnit tuOfFunDef) {
+      final URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
+      return CPPResourceHelper.isPartOfProject(uriOfTu, project.getProject());
+   }
+
+   private Optional<ICPPASTFunctionDeclarator> findFunDeclaration(final IASTName funName, final IProgressMonitor pm) {
+      final NodeLookup lookup = new NodeLookup(project, pm);
+      return lookup.findFunctionDeclaration(funName, refactoringContext);
+   }
+
+   private Optional<ICPPASTFunctionDefinition> findFunDefinition(final IASTName funName, final IProgressMonitor pm) {
+      final NodeLookup lookup = new NodeLookup(project, pm);
+      return lookup.findFunctionDefinition(funName, refactoringContext);
+   }
+
+   IPath getNewHeaderFilePath() {
+      return newHeaderFilePath;
+   }
+
+   IPath getNewSourceFilePath() {
+      return newSourceFilePath;
+   }
+
+   @Override
+   public String getDescription() {
+      return I18N.PreprocessorRefactoringDesc;
+   }
 }

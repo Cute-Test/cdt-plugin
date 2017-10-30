@@ -20,61 +20,58 @@ import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleRefactoring;
 
+
 @SuppressWarnings("restriction")
 public class CreateTestDoubleSubTypeRefactoring extends AbstractCreateTestDoubleRefactoring {
-  private static ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final CreateTestDoubleSubTypeCodanArgs ca;
 
-  public CreateTestDoubleSubTypeRefactoring(ICElement cElement, ITextSelection sel,
-      CreateTestDoubleSubTypeCodanArgs ca) {
-    super(cElement, sel, null);
-    this.ca = ca;
-  }
+   private static ICPPNodeFactory                 nodeFactory = CPPNodeFactory.getDefault();
+   private final CreateTestDoubleSubTypeCodanArgs ca;
 
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector collector)
-      throws CoreException, OperationCanceledException {
-    IASTTranslationUnit ast = getAST(tu, pm);
-    ASTRewrite rewriter = createRewriter(collector, ast);
-    addIncludeIfNecessary(ast, rewriter);
-    replaceKindOfPassingArgIfNecessary(ast, rewriter);
-    insertBeforeCurrentStmt(createNewTestDoubleClass(), ast, rewriter);
-  }
+   public CreateTestDoubleSubTypeRefactoring(final ICElement cElement, final ITextSelection sel, final CreateTestDoubleSubTypeCodanArgs ca) {
+      super(cElement, sel, null);
+      this.ca = ca;
+   }
 
-  private void addIncludeIfNecessary(IASTTranslationUnit ast, ASTRewrite rewriter) {
-    String targetIncludePath = ca.getTargetIncludePath();
-    AstIncludeNode includeNode = new AstIncludeNode(targetIncludePath);
-    includeNode.insertInTu(ast, rewriter);
-  }
+   @Override
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException, OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = createRewriter(collector, ast);
+      addIncludeIfNecessary(ast, rewriter);
+      replaceKindOfPassingArgIfNecessary(ast, rewriter);
+      insertBeforeCurrentStmt(createNewTestDoubleClass(), ast, rewriter);
+   }
 
-  private void replaceKindOfPassingArgIfNecessary(IASTTranslationUnit ast, ASTRewrite rewriter) {
-    for (IASTName optProblemArgName : getSelectedName(ast)) {
-      ca.getPassByStrategy().adaptArguments(optProblemArgName, ca.getNameOfMissingInstance(),
-          rewriter);
-    }
-  }
+   private void addIncludeIfNecessary(final IASTTranslationUnit ast, final ASTRewrite rewriter) {
+      final String targetIncludePath = ca.getTargetIncludePath();
+      final AstIncludeNode includeNode = new AstIncludeNode(targetIncludePath);
+      includeNode.insertInTu(ast, rewriter);
+   }
 
-  private IASTDeclarationStatement createNewTestDoubleClass() {
-    String className = StringUtil.capitalize(ca.getNameOfMissingInstance());
-    ICPPASTCompositeTypeSpecifier newClass = createNewTestDoubleClass(className);
-    addPublicInheritance(newClass);
-    IASTSimpleDeclaration newSimpleDeclaration = nodeFactory.newSimpleDeclaration(newClass);
-    addClassInstance(newSimpleDeclaration);
-    return nodeFactory.newDeclarationStatement(newSimpleDeclaration);
-  }
+   private void replaceKindOfPassingArgIfNecessary(final IASTTranslationUnit ast, final ASTRewrite rewriter) {
+      getSelectedName(ast).ifPresent((problemArgName) -> ca.getPassByStrategy().adaptArguments(problemArgName, ca.getNameOfMissingInstance(),
+               rewriter));
+   }
 
-  private void addClassInstance(IASTSimpleDeclaration newSimpleDeclaration) {
-    IASTName classInstanceName = nodeFactory.newName(ca.getNameOfMissingInstance().toCharArray());
-    newSimpleDeclaration.addDeclarator(nodeFactory.newDeclarator(classInstanceName));
-  }
+   private IASTDeclarationStatement createNewTestDoubleClass() {
+      final String className = StringUtil.capitalize(ca.getNameOfMissingInstance());
+      final ICPPASTCompositeTypeSpecifier newClass = createNewTestDoubleClass(className);
+      addPublicInheritance(newClass);
+      final IASTSimpleDeclaration newSimpleDeclaration = nodeFactory.newSimpleDeclaration(newClass);
+      addClassInstance(newSimpleDeclaration);
+      return nodeFactory.newDeclarationStatement(newSimpleDeclaration);
+   }
 
-  private void addPublicInheritance(ICPPASTCompositeTypeSpecifier newClass) {
-    boolean nonVirtual = false;
-    int noVisibility = 0; // we always create the new test doubles as 'struct' and use default
-                          // (public) visibility
-    IASTName parentClassName = nodeFactory.newName(ca.getParentClassName().toCharArray());
-    ICPPASTBaseSpecifier baseSpecifier =
-        nodeFactory.newBaseSpecifier(parentClassName, noVisibility, nonVirtual);
-    newClass.addBaseSpecifier(baseSpecifier);
-  }
+   private void addClassInstance(final IASTSimpleDeclaration newSimpleDeclaration) {
+      final IASTName classInstanceName = nodeFactory.newName(ca.getNameOfMissingInstance().toCharArray());
+      newSimpleDeclaration.addDeclarator(nodeFactory.newDeclarator(classInstanceName));
+   }
+
+   private void addPublicInheritance(final ICPPASTCompositeTypeSpecifier newClass) {
+      final boolean nonVirtual = false;
+      final int noVisibility = 0; // we always create the new test doubles as 'struct' and use default
+      // (public) visibility
+      final IASTName parentClassName = nodeFactory.newName(ca.getParentClassName().toCharArray());
+      final ICPPASTBaseSpecifier baseSpecifier = nodeFactory.newBaseSpecifier(parentClassName, noVisibility, nonVirtual);
+      newClass.addBaseSpecifier(baseSpecifier);
+   }
 }

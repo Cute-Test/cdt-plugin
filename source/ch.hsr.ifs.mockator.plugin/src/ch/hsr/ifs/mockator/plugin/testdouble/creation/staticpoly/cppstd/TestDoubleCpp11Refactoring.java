@@ -14,24 +14,24 @@ import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleRefactoring;
 
+
 @SuppressWarnings("restriction")
 class TestDoubleCpp11Refactoring extends AbstractCreateTestDoubleRefactoring {
 
-  public TestDoubleCpp11Refactoring(ICElement cElement, ITextSelection selection, ICProject cProject) {
-    super(cElement, selection, cProject);
-  }
+   public TestDoubleCpp11Refactoring(ICElement cElement, ITextSelection selection, ICProject cProject) {
+      super(cElement, selection, cProject);
+   }
 
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector collector)
-      throws CoreException, OperationCanceledException {
-    IASTTranslationUnit ast = getAST(tu, pm);
-    ASTRewrite rewriter = createRewriter(collector, ast);
-    insertBeforeCurrentStmt(createNewClassDefinition(ast), ast, rewriter);
-  }
+   @Override
+   protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+      IASTTranslationUnit ast = getAST(tu, pm);
+      ASTRewrite rewriter = createRewriter(collector, ast);
+      insertBeforeCurrentStmt(createNewClassDefinition(ast), ast, rewriter);
+   }
 
-  private IASTDeclarationStatement createNewClassDefinition(IASTTranslationUnit ast) {
-    String newClassName = getSelectedName(ast).get().toString();
-    ICPPASTCompositeTypeSpecifier testDouble = createNewTestDoubleClass(newClassName);
-    return nodeFactory.newDeclarationStatement(nodeFactory.newSimpleDeclaration(testDouble));
-  }
+   private IASTDeclarationStatement createNewClassDefinition(IASTTranslationUnit ast) {
+      String newClassName = getSelectedName(ast).get().toString();
+      ICPPASTCompositeTypeSpecifier testDouble = createNewTestDoubleClass(newClassName);
+      return nodeFactory.newDeclarationStatement(nodeFactory.newSimpleDeclaration(testDouble));
+   }
 }

@@ -18,92 +18,91 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 // Inspired by TDD
 @SuppressWarnings("restriction")
 public class ParameterNameCreator {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final Map<String, Boolean> nameHistory;
 
-  public ParameterNameCreator(Map<String, Boolean> nameHistory) {
-    this.nameHistory = nameHistory;
-  }
+   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private final Map<String, Boolean>  nameHistory;
 
-  public IASTName getParamName(IASTInitializerClause clause) {
-    return createName(replaceNonAlphanumericCharacters(clause));
-  }
+   public ParameterNameCreator(Map<String, Boolean> nameHistory) {
+      this.nameHistory = nameHistory;
+   }
 
-  public IASTName getParamName(IType type) {
-    return createName(getParameterCharacter(getFallBackName(type)));
-  }
+   public IASTName getParamName(IASTInitializerClause clause) {
+      return createName(replaceNonAlphanumericCharacters(clause));
+   }
 
-  public IASTName getParamName(String type) {
-    return createName(getParameterCharacter(type));
-  }
+   public IASTName getParamName(IType type) {
+      return createName(getParameterCharacter(getFallBackName(type)));
+   }
 
-  public IASTName getParamName(IASTCompositeTypeSpecifier klass) {
-    return createName(getParameterCharacter(String.valueOf(klass.getName().getSimpleID())));
-  }
+   public IASTName getParamName(String type) {
+      return createName(getParameterCharacter(type));
+   }
 
-  public IASTName createParameterName(IASTIdExpression idExpr) {
-    return createName(String.valueOf(idExpr.getName().getSimpleID()));
-  }
+   public IASTName getParamName(IASTCompositeTypeSpecifier klass) {
+      return createName(getParameterCharacter(String.valueOf(klass.getName().getSimpleID())));
+   }
 
-  private static String getFallBackName(IType type) {
-    type = AstUtil.unwindPointerOrRefType(type);
+   public IASTName createParameterName(IASTIdExpression idExpr) {
+      return createName(String.valueOf(idExpr.getName().getSimpleID()));
+   }
 
-    if (type instanceof IQualifierType) {
-      type = ((IQualifierType) type).getType();
-    }
+   private static String getFallBackName(IType type) {
+      type = AstUtil.unwindPointerOrRefType(type);
 
-    if (type instanceof ITypedef)
-      return ASTTypeUtil.getQualifiedName((ICPPBinding) type).substring(0, 1);
-    if (type instanceof ICPPTemplateInstance || type instanceof ICPPClassType)
-      return ASTTypeUtil.getType(type).toLowerCase();
-    else if (type instanceof IBasicType)
-      return ((IBasicType) type).getKind().toString().substring(1).toLowerCase();
+      if (type instanceof IQualifierType) {
+         type = ((IQualifierType) type).getType();
+      }
 
-    return " ";
-  }
+      if (type instanceof ITypedef) return ASTTypeUtil.getQualifiedName((ICPPBinding) type).substring(0, 1);
+      if (type instanceof ICPPTemplateInstance || type instanceof ICPPClassType) return ASTTypeUtil.getType(type).toLowerCase();
+      else if (type instanceof IBasicType) return ((IBasicType) type).getKind().toString().substring(1).toLowerCase();
 
-  private String getParameterCharacter(String fallBackVarName) {
-    String newName = Character.toString(fallBackVarName.charAt(0)).toLowerCase();
+      return " ";
+   }
 
-    while (nameHistory.get(newName) != null) {
-      newName = (char) (newName.charAt(0) + 1) + "";
-    }
+   private String getParameterCharacter(String fallBackVarName) {
+      String newName = Character.toString(fallBackVarName.charAt(0)).toLowerCase();
 
-    return newName;
-  }
+      while (nameHistory.get(newName) != null) {
+         newName = (char) (newName.charAt(0) + 1) + "";
+      }
 
-  private IASTName createName(String name) {
-    char[] result = name.toCharArray();
+      return newName;
+   }
 
-    if (result.length > 0) {
-      result[0] = Character.toLowerCase(result[0]);
-    }
+   private IASTName createName(String name) {
+      char[] result = name.toCharArray();
 
-    return makeUniqueName(String.valueOf(result));
-  }
+      if (result.length > 0) {
+         result[0] = Character.toLowerCase(result[0]);
+      }
 
-  private IASTName makeUniqueName(String name) {
-    String newName = name;
+      return makeUniqueName(String.valueOf(result));
+   }
 
-    if (nameHistory.get(newName) != null) {
-      newName = newName + "1";
-    }
+   private IASTName makeUniqueName(String name) {
+      String newName = name;
 
-    StringBuilder sb = new StringBuilder(newName);
+      if (nameHistory.get(newName) != null) {
+         newName = newName + "1";
+      }
 
-    while (nameHistory.get(newName) != null) {
-      sb.append((newName.charAt(newName.length() - 1) + 1));
-    }
+      StringBuilder sb = new StringBuilder(newName);
 
-    newName = sb.toString();
-    nameHistory.put(newName, true);
-    return nodeFactory.newName(newName.toCharArray());
-  }
+      while (nameHistory.get(newName) != null) {
+         sb.append((newName.charAt(newName.length() - 1) + 1));
+      }
 
-  private static String replaceNonAlphanumericCharacters(IASTInitializerClause clause) {
-    return clause.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "");
-  }
+      newName = sb.toString();
+      nameHistory.put(newName, true);
+      return nodeFactory.newName(newName.toCharArray());
+   }
+
+   private static String replaceNonAlphanumericCharacters(IASTInitializerClause clause) {
+      return clause.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "");
+   }
 }

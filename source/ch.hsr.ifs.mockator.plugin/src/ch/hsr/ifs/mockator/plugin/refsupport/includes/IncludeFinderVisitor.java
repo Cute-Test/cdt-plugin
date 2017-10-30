@@ -9,35 +9,36 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
 import ch.hsr.ifs.mockator.plugin.base.functional.F1;
 
+
 class IncludeFinderVisitor {
-  private final IASTTranslationUnit tu;
 
-  public IncludeFinderVisitor(IASTTranslationUnit tu) {
-    this.tu = tu;
-  }
+   private final IASTTranslationUnit tu;
 
-  public boolean hasIncludeStatement(String includeName) {
-    if (includeName.isEmpty())
-      return true;
+   public IncludeFinderVisitor(IASTTranslationUnit tu) {
+      this.tu = tu;
+   }
 
-    IASTPreprocessorStatement[] prepStmts = tu.getAllPreprocessorStatements();
-    return !filter(prepStmts, new IncludeStatementFinder(includeName)).isEmpty();
-  }
+   public boolean hasIncludeStatement(String includeName) {
+      if (includeName.isEmpty()) return true;
 
-  private static class IncludeStatementFinder implements F1<IASTPreprocessorStatement, Boolean> {
-    private final String includeName;
+      IASTPreprocessorStatement[] prepStmts = tu.getAllPreprocessorStatements();
+      return !filter(prepStmts, new IncludeStatementFinder(includeName)).isEmpty();
+   }
 
-    public IncludeStatementFinder(String includeName) {
-      this.includeName = includeName;
-    }
+   private static class IncludeStatementFinder implements F1<IASTPreprocessorStatement, Boolean> {
 
-    @Override
-    public Boolean apply(IASTPreprocessorStatement stmt) {
-      if (!(stmt instanceof IASTPreprocessorIncludeStatement))
-        return false;
+      private final String includeName;
 
-      IASTName foundIncludeName = ((IASTPreprocessorIncludeStatement) stmt).getName();
-      return includeName.equals(foundIncludeName.toString());
-    }
-  }
+      public IncludeStatementFinder(String includeName) {
+         this.includeName = includeName;
+      }
+
+      @Override
+      public Boolean apply(IASTPreprocessorStatement stmt) {
+         if (!(stmt instanceof IASTPreprocessorIncludeStatement)) return false;
+
+         IASTName foundIncludeName = ((IASTPreprocessorIncludeStatement) stmt).getName();
+         return includeName.equals(foundIncludeName.toString());
+      }
+   }
 }

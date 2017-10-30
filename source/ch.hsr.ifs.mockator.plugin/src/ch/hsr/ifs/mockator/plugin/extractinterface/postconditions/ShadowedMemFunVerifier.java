@@ -26,81 +26,83 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.MethodParamEquival
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.SubClassFinder;
 
+
 public class ShadowedMemFunVerifier {
-  private final ExtractInterfaceContext context;
 
-  public ShadowedMemFunVerifier(ExtractInterfaceContext context) {
-    this.context = context;
-  }
+   private final ExtractInterfaceContext context;
 
-  public void checkForShadowedFunctions(RefactoringStatus status) throws CoreException {
-    Collection<ICPPClassType> subClasses = getSubClassesOfChosenClass();
+   public ShadowedMemFunVerifier(ExtractInterfaceContext context) {
+      this.context = context;
+   }
 
-    for (ICPPMethod chosenMemFun : getChosenNonVirtualMemFuns()) {
-      Set<ICPPMethod> shadowingMemFuns = unorderedSet();
+   public void checkForShadowedFunctions(RefactoringStatus status) throws CoreException {
+      Collection<ICPPClassType> subClasses = getSubClassesOfChosenClass();
 
-      for (ICPPClassType klass : subClasses) {
-        for (ICPPMethod memFun : klass.getDeclaredMethods()) {
-          if (haveSameSignature(chosenMemFun, memFun)) {
-            shadowingMemFuns.add(memFun);
-          }
-        }
+      for (ICPPMethod chosenMemFun : getChosenNonVirtualMemFuns()) {
+         Set<ICPPMethod> shadowingMemFuns = unorderedSet();
+
+         for (ICPPClassType klass : subClasses) {
+            for (ICPPMethod memFun : klass.getDeclaredMethods()) {
+               if (haveSameSignature(chosenMemFun, memFun)) {
+                  shadowingMemFuns.add(memFun);
+               }
+            }
+         }
+
+         for (ICPPMethod shadowing : shadowingMemFuns) {
+            status.addWarning(createShadowWarning(chosenMemFun, shadowing));
+         }
       }
+   }
 
-      for (ICPPMethod shadowing : shadowingMemFuns) {
-        status.addWarning(createShadowWarning(chosenMemFun, shadowing));
-      }
-    }
-  }
+   private static boolean haveSameSignature(ICPPMethod chosenMemFun, ICPPMethod scMemFun) {
+      return chosenMemFun.getName().equals(scMemFun.getName()) && haveSameParameters(chosenMemFun, scMemFun);
+   }
 
-  private static boolean haveSameSignature(ICPPMethod chosenMemFun, ICPPMethod scMemFun) {
-    return chosenMemFun.getName().equals(scMemFun.getName())
-        && haveSameParameters(chosenMemFun, scMemFun);
-  }
+   private Collection<ICPPMethod> getChosenNonVirtualMemFuns() {
+      return filter(map(context.getChosenMemFuns(), new F1<IASTDeclaration, ICPPMethod>() {
 
-  private Collection<ICPPMethod> getChosenNonVirtualMemFuns() {
-    return filter(map(context.getChosenMemFuns(), new F1<IASTDeclaration, ICPPMethod>() {
-      @Override
-      public ICPPMethod apply(IASTDeclaration decl) {
-        return getCppMethodIn(decl);
-      }
-    }), new F1<ICPPMethod, Boolean>() {
-      @Override
-      public Boolean apply(ICPPMethod memFun) {
-        return !memFun.isVirtual();
-      }
-    });
-  }
+         @Override
+         public ICPPMethod apply(IASTDeclaration decl) {
+            return getCppMethodIn(decl);
+         }
+      }), new F1<ICPPMethod, Boolean>() {
 
-  private static ICPPMethod getCppMethodIn(IASTDeclaration declaration) {
-    ICPPASTFunctionDeclarator funDecl =
-        AstUtil.getChildOfType(declaration, ICPPASTFunctionDeclarator.class);
-    IBinding binding = funDecl.getName().resolveBinding();
-    Assert.instanceOf(binding, ICPPMethod.class, "Chosen member function is not valid");
-    return (ICPPMethod) binding;
-  }
+         @Override
+         public Boolean apply(ICPPMethod memFun) {
+            return !memFun.isVirtual();
+         }
+      });
+   }
 
-  private static String createShadowWarning(ICPPMethod chosenMemFun, ICPPMethod shadowingMemFun) {
-    String chosenFunQfName = AstUtil.getQfName(chosenMemFun);
-    String shadowFunQfName = AstUtil.getQfName(shadowingMemFun);
-    return NLS.bind(I18N.ExtractInterfaceShadowedFunction, chosenFunQfName, shadowFunQfName);
-  }
+   private static ICPPMethod getCppMethodIn(IASTDeclaration declaration) {
+      ICPPASTFunctionDeclarator funDecl = AstUtil.getChildOfType(declaration, ICPPASTFunctionDeclarator.class);
+      IBinding binding = funDecl.getName().resolveBinding();
+      Assert.instanceOf(binding, ICPPMethod.class, "Chosen member function is not valid");
+      return (ICPPMethod) binding;
+   }
 
-  @SuppressWarnings("restriction")
-  private Collection<ICPPClassType> getSubClassesOfChosenClass() throws CoreException {
-    IIndex index = context.getCRefContext().getIndex();
-    ICPPClassType klass = getChosenClassType();
-    return new SubClassFinder(index).getSubClasses(klass);
-  }
+   private static String createShadowWarning(ICPPMethod chosenMemFun, ICPPMethod shadowingMemFun) {
+      String chosenFunQfName = AstUtil.getQfName(chosenMemFun);
+      String shadowFunQfName = AstUtil.getQfName(shadowingMemFun);
+      return NLS.bind(I18N.ExtractInterfaceShadowedFunction, chosenFunQfName, shadowFunQfName);
+   }
 
-  private ICPPClassType getChosenClassType() {
-    ICPPASTCompositeTypeSpecifier chosenClass = context.getChosenClass();
-    IBinding b = chosenClass.getName().resolveBinding();
-    Assert.instanceOf(b, ICPPClassType.class, "Not a valid class to extract an interface for");
-    return (ICPPClassType) b;
-  }
+   @SuppressWarnings("restriction")
+   private Collection<ICPPClassType> getSubClassesOfChosenClass() throws CoreException {
+      IIndex index = context.getCRefContext().getIndex();
+      ICPPClassType klass = getChosenClassType();
+      return new SubClassFinder(index).getSubClasses(klass);
+   }
 
-  private static boolean haveSameParameters(ICPPMethod chosenMemFun, ICPPMethod subclassMemFun) {
-    return new MethodParamEquivalenceTester(chosenMemFun).hasSameParameters(subclassMemFun);
-  }
+   private ICPPClassType getChosenClassType() {
+      ICPPASTCompositeTypeSpecifier chosenClass = context.getChosenClass();
+      IBinding b = chosenClass.getName().resolveBinding();
+      Assert.instanceOf(b, ICPPClassType.class, "Not a valid class to extract an interface for");
+      return (ICPPClassType) b;
+   }
+
+   private static boolean haveSameParameters(ICPPMethod chosenMemFun, ICPPMethod subclassMemFun) {
+      return new MethodParamEquivalenceTester(chosenMemFun).hasSameParameters(subclassMemFun);
+   }
 }

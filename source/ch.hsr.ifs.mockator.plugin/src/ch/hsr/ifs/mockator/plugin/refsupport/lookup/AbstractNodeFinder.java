@@ -1,10 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.lookup;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -16,59 +16,60 @@ import org.eclipse.cdt.internal.ui.refactoring.IndexToASTNameHelper;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
+
 
 @SuppressWarnings("restriction")
 abstract class AbstractNodeFinder {
-  protected final ICProject projectOrigin;
-  protected final IIndex index;
-  protected final TranslationUnitLoader tuLoader;
 
-  public AbstractNodeFinder(ICProject projectOrigin, IIndex index, TranslationUnitLoader tuLoader) {
-    this.projectOrigin = projectOrigin;
-    this.index = index;
-    this.tuLoader = tuLoader;
-  }
+   protected final ICProject             projectOrigin;
+   protected final IIndex                index;
+   protected final TranslationUnitLoader tuLoader;
 
-  protected Collection<IASTName> collectMatchingNames(IASTName name) {
-    return collectMatchingNames(name.resolveBinding());
-  }
+   public AbstractNodeFinder(final ICProject projectOrigin, final IIndex index, final TranslationUnitLoader tuLoader) {
+      this.projectOrigin = projectOrigin;
+      this.index = index;
+      this.tuLoader = tuLoader;
+   }
 
-  protected Collection<IASTName> collectMatchingNames(IBinding name) {
-    List<IASTName> names = list();
+   protected Collection<IASTName> collectMatchingNames(final IASTName name) {
+      return collectMatchingNames(name.resolveBinding());
+   }
 
-    try {
-      for (IIndexName iName : lookup(name)) {
-        for (IASTName optName : findMatchingASTName(iName)) {
-          names.add(optName);
-        }
+   protected Collection<IASTName> collectMatchingNames(final IBinding name) {
+      final List<IASTName> names = list();
+
+      try {
+         for (final IIndexName iName : lookup(name)) {
+            findMatchingASTName(iName).ifPresent((astName) -> {
+               names.add(astName);
+            });
+         }
       }
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
+      catch (final CoreException e) {
+         throw new MockatorException(e);
+      }
 
-    return names;
-  }
+      return names;
+   }
 
-  protected Maybe<IASTName> findMatchingASTName(IIndexName name) throws CoreException {
-    IASTTranslationUnit ast = loadAst(name);
-    return maybe(findMatchingAstName(name, ast));
-  }
+   protected Optional<IASTName> findMatchingASTName(final IIndexName name) throws CoreException {
+      final IASTTranslationUnit ast = loadAst(name);
+      return Optional.ofNullable(findMatchingAstName(name, ast));
+   }
 
-  private IASTName findMatchingAstName(IIndexName name, IASTTranslationUnit ast)
-      throws CoreException {
-    return IndexToASTNameHelper.findMatchingASTName(ast, name, index);
-  }
+   private IASTName findMatchingAstName(final IIndexName name, final IASTTranslationUnit ast) throws CoreException {
+      return IndexToASTNameHelper.findMatchingASTName(ast, name, index);
+   }
 
-  private IASTTranslationUnit loadAst(IIndexName name) throws CoreException {
-    return tuLoader.loadAst(name);
-  }
+   private IASTTranslationUnit loadAst(final IIndexName name) throws CoreException {
+      return tuLoader.loadAst(name);
+   }
 
-  protected IIndexName[] lookup(IBinding binding) throws CoreException {
-    int flags = getLookupFlags() | IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES;
-    return index.findNames(binding, flags);
-  }
+   protected IIndexName[] lookup(final IBinding binding) throws CoreException {
+      final int flags = getLookupFlags() | IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES;
+      return index.findNames(binding, flags);
+   }
 
-  protected abstract int getLookupFlags();
+   protected abstract int getLookupFlags();
 }

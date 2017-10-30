@@ -9,25 +9,26 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
+
 @SuppressWarnings("restriction")
 public class StdString {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
-  public boolean isStdString(IASTInitializerClause param) {
-    if (param instanceof IASTLiteralExpression)
-      return isStringLiteral((IASTLiteralExpression) param);
+   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
-    return false;
-  }
+   public boolean isStdString(IASTInitializerClause param) {
+      if (param instanceof IASTLiteralExpression) return isStringLiteral((IASTLiteralExpression) param);
 
-  private static boolean isStringLiteral(IASTLiteralExpression literal) {
-    return literal.getKind() == IASTLiteralExpression.lk_string_literal;
-  }
+      return false;
+   }
 
-  public ICPPASTDeclSpecifier createStdStringDecl() {
-    IASTName stdString = nodeFactory.newName(STD_STRING.toCharArray());
-    ICPPASTNamedTypeSpecifier declspec = nodeFactory.newTypedefNameSpecifier(stdString);
-    declspec.setConst(true);
-    return declspec;
-  }
+   private static boolean isStringLiteral(IASTLiteralExpression literal) {
+      return literal.getKind() == IASTLiteralExpression.lk_string_literal;
+   }
+
+   public ICPPASTDeclSpecifier createStdStringDecl() {
+      IASTName stdString = nodeFactory.newName(STD_STRING.toCharArray());
+      ICPPASTNamedTypeSpecifier declspec = nodeFactory.newTypedefNameSpecifier(stdString);
+      declspec.setConst(true);
+      return declspec;
+   }
 }

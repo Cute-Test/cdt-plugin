@@ -8,19 +8,20 @@ import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.core.resources.IProject;
 
+
 public class IncludePathHandler extends IncludeHandler {
 
-  public IncludePathHandler(IProject project) {
-    super(project);
-  }
+   public IncludePathHandler(IProject project) {
+      super(project);
+   }
 
-  @Override
-  protected int getOptionType() {
-    return IOption.INCLUDE_PATH;
-  }
+   @Override
+   protected int getOptionType() {
+      return IOption.INCLUDE_PATH;
+   }
 
-  @Override
-  protected Set<String> getOptionValues(IOption option) throws BuildException {
-    return orderPreservingSet(option.getIncludePaths());
-  }
+   @Override
+   protected Set<String> getOptionValues(IOption option) throws BuildException {
+      return orderPreservingSet(option.getIncludePaths());
+   }
 }

@@ -17,64 +17,64 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+
 public class SourceFolderHandler {
-  private final IProject project;
 
-  public SourceFolderHandler(IProject project) {
-    this.project = project;
-  }
+   private final IProject project;
 
-  public IFolder createFolder(String relativePath, IProgressMonitor pm) throws CoreException {
-    IFolder newFolder = project.getFolder(relativePath);
+   public SourceFolderHandler(IProject project) {
+      this.project = project;
+   }
 
-    if (!newFolder.exists()) {
-    	createFolder(newFolder, pm);
-    }
-    addToSourceEntries(newFolder, pm);
+   public IFolder createFolder(String relativePath, IProgressMonitor pm) throws CoreException {
+      IFolder newFolder = project.getFolder(relativePath);
 
-    return newFolder;
-  }
+      if (!newFolder.exists()) {
+         createFolder(newFolder, pm);
+      }
+      addToSourceEntries(newFolder, pm);
 
-  private static void createFolder(IFolder folder, IProgressMonitor pm) throws CoreException {
-    IContainer parent = folder.getParent();
+      return newFolder;
+   }
 
-    if (parent instanceof IFolder) {
-      createFolder((IFolder) parent, pm);
-    }
+   private static void createFolder(IFolder folder, IProgressMonitor pm) throws CoreException {
+      IContainer parent = folder.getParent();
 
-    folder.create(true, true, pm);
-  }
+      if (parent instanceof IFolder) {
+         createFolder((IFolder) parent, pm);
+      }
 
-  public void deleteFolder(String relativePath, IProgressMonitor pm) throws CoreException {
-    IFolder folder = project.getFolder(relativePath);
+      folder.create(true, true, pm);
+   }
 
-    if (folder.exists()) {
-      folder.delete(true, pm);
-    }
-  }
+   public void deleteFolder(String relativePath, IProgressMonitor pm) throws CoreException {
+      IFolder folder = project.getFolder(relativePath);
 
-  private void addToSourceEntries(IFolder newFolder, IProgressMonitor pm) throws CoreException {
-    ICSourceEntry newEntry = new CSourceEntry(newFolder, null, ICSettingEntry.SOURCE_PATH);
-    final boolean writableDesc = true;
-    ICProjectDescription desc =
-        CCorePlugin.getDefault().getProjectDescription(project, writableDesc);
-    if (desc != null) {
-	    addNewSourceEntry(desc, newEntry);
-	    CCorePlugin.getDefault().setProjectDescription(project, desc, true, pm);
-    }
-  }
+      if (folder.exists()) {
+         folder.delete(true, pm);
+      }
+   }
 
-  private static void addNewSourceEntry(ICProjectDescription desc, ICSourceEntry entry)
-      throws WriteAccessException, CoreException {
-    for (ICConfigurationDescription configDesc : desc.getConfigurations()) {
-      ICSourceEntry[] entries = configDesc.getSourceEntries();
-      configDesc.setSourceEntries(addEntry(entries, entry));
-    }
-  }
+   private void addToSourceEntries(IFolder newFolder, IProgressMonitor pm) throws CoreException {
+      ICSourceEntry newEntry = new CSourceEntry(newFolder, null, ICSettingEntry.SOURCE_PATH);
+      final boolean writableDesc = true;
+      ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(project, writableDesc);
+      if (desc != null) {
+         addNewSourceEntry(desc, newEntry);
+         CCorePlugin.getDefault().setProjectDescription(project, desc, true, pm);
+      }
+   }
 
-  private static ICSourceEntry[] addEntry(ICSourceEntry[] oldEntries, ICSourceEntry entry) {
-    Set<ICSourceEntry> newEntries = orderPreservingSet(oldEntries);
-    newEntries.add(entry);
-    return newEntries.toArray(new ICSourceEntry[newEntries.size()]);
-  }
+   private static void addNewSourceEntry(ICProjectDescription desc, ICSourceEntry entry) throws WriteAccessException, CoreException {
+      for (ICConfigurationDescription configDesc : desc.getConfigurations()) {
+         ICSourceEntry[] entries = configDesc.getSourceEntries();
+         configDesc.setSourceEntries(addEntry(entries, entry));
+      }
+   }
+
+   private static ICSourceEntry[] addEntry(ICSourceEntry[] oldEntries, ICSourceEntry entry) {
+      Set<ICSourceEntry> newEntries = orderPreservingSet(oldEntries);
+      newEntries.add(entry);
+      return newEntries.toArray(new ICSourceEntry[newEntries.size()]);
+   }
 }

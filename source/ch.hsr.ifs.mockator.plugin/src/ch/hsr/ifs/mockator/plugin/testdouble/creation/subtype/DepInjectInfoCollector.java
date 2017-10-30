@@ -1,11 +1,14 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IType;
 
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.base.tuples.Pair;
 
+
 interface DepInjectInfoCollector {
-  Maybe<Pair<IASTName, IType>> collectDependencyInfos(IASTName problemArgName);
+
+   Optional<Pair<IASTName, IType>> collectDependencyInfos(IASTName problemArgName);
 }

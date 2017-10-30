@@ -26,57 +26,56 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.TestDouble;
 import ch.hsr.ifs.mockator.plugin.testdouble.qf.AbstractTestDoubleRefactoring;
 
+
 @SuppressWarnings("restriction")
 public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
-  private final Collection<MissingMemberFunction> missingMemFuns;
-  private final LinkedEditModeStrategy linkedEdit;
 
-  public MockObjectRefactoring(CppStandard cppStd, ICElement cElement, ITextSelection selection,
-      ICProject cProject, LinkedEditModeStrategy linkedEdit) {
-    super(cppStd, cElement, selection, cProject);
-    this.linkedEdit = linkedEdit;
-    missingMemFuns = list();
-  }
+   private final Collection<MissingMemberFunction> missingMemFuns;
+   private final LinkedEditModeStrategy            linkedEdit;
 
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector collector)
-      throws CoreException, OperationCanceledException {
-    IASTTranslationUnit ast = getAST(tu, pm);
-    ASTRewrite rewriter = createRewriter(collector, ast);
-    missingMemFuns.addAll(collectMissingMemFuns(pm));
-    ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
-    addMockSupport(ast, rewriter, inserter, pm);
-    testDouble.addMissingMemFuns(missingMemFuns, inserter, cppStd);
-  }
+   public MockObjectRefactoring(CppStandard cppStd, ICElement cElement, ITextSelection selection, ICProject cProject,
+                                LinkedEditModeStrategy linkedEdit) {
+      super(cppStd, cElement, selection, cProject);
+      this.linkedEdit = linkedEdit;
+      missingMemFuns = list();
+   }
 
-  private boolean hasOnlyStaticMemFuns() {
-    return testDouble.hasOnlyStaticFunctions(missingMemFuns);
-  }
+   @Override
+   protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+      IASTTranslationUnit ast = getAST(tu, pm);
+      ASTRewrite rewriter = createRewriter(collector, ast);
+      missingMemFuns.addAll(collectMissingMemFuns(pm));
+      ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
+      addMockSupport(ast, rewriter, inserter, pm);
+      testDouble.addMissingMemFuns(missingMemFuns, inserter, cppStd);
+   }
 
-  private void addMockSupport(IASTTranslationUnit ast, ASTRewrite r,
-      ClassPublicVisibilityInserter ci, IProgressMonitor pm) {
-    MockSupportAdder adder = new MockSupportAdder(buildContext(r, ast, ci, pm));
-    adder.addMockSupport();
-  }
+   private boolean hasOnlyStaticMemFuns() {
+      return testDouble.hasOnlyStaticFunctions(missingMemFuns);
+   }
 
-  private MockSupportContext buildContext(ASTRewrite rewriter, IASTTranslationUnit ast,
-      ClassPublicVisibilityInserter inserter, IProgressMonitor pm) {
-    return new MockSupportContext.ContextBuilder(project, refactoringContext,
-        (MockObject) testDouble, rewriter, ast, cppStd, inserter, hasOnlyStaticMemFuns(), pm)
-        .withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
-  }
+   private void addMockSupport(IASTTranslationUnit ast, ASTRewrite r, ClassPublicVisibilityInserter ci, IProgressMonitor pm) {
+      MockSupportAdder adder = new MockSupportAdder(buildContext(r, ast, ci, pm));
+      adder.addMockSupport();
+   }
 
-  Collection<MissingMemberFunction> getMemberFunctionsForLinkedEdit() {
-    return missingMemFuns;
-  }
+   private MockSupportContext buildContext(ASTRewrite rewriter, IASTTranslationUnit ast, ClassPublicVisibilityInserter inserter,
+         IProgressMonitor pm) {
+      return new MockSupportContext.ContextBuilder(project, refactoringContext, (MockObject) testDouble, rewriter, ast, cppStd, inserter,
+            hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
+   }
 
-  @Override
-  public String getDescription() {
-    return I18N.MockObjectRefactoringDesc;
-  }
+   Collection<MissingMemberFunction> getMemberFunctionsForLinkedEdit() {
+      return missingMemFuns;
+   }
 
-  @Override
-  protected TestDouble createTestDouble(ICPPASTCompositeTypeSpecifier selectedClass) {
-    return new MockObject(selectedClass);
-  }
+   @Override
+   public String getDescription() {
+      return I18N.MockObjectRefactoringDesc;
+   }
+
+   @Override
+   protected TestDouble createTestDouble(ICPPASTCompositeTypeSpecifier selectedClass) {
+      return new MockObject(selectedClass);
+   }
 }

@@ -8,20 +8,21 @@ import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.mockator.plugin.linker.ReferencingExecutableFinder;
 
+
 public class LinkerTargetProjectFinder {
-  private final IProject project;
 
-  public LinkerTargetProjectFinder(IProject project) {
-    this.project = project;
-  }
+   private final IProject project;
 
-  public Collection<IProject> findLinkerTargetProjects() {
-    ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project);
-    Collection<IProject> executables = finder.findReferencingExecutables();
+   public LinkerTargetProjectFinder(IProject project) {
+      this.project = project;
+   }
 
-    if (executables.isEmpty())
-      return list(project);
+   public Collection<IProject> findLinkerTargetProjects() {
+      ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project);
+      Collection<IProject> executables = finder.findReferencingExecutables();
 
-    return executables;
-  }
+      if (executables.isEmpty()) return list(project);
+
+      return executables;
+   }
 }

@@ -12,48 +12,49 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.dialogs.IMessageProvider;
 
+
 // Copied and adapted from CUTE
 class StatusUtil {
-  private StatusUtil() {
-    throw new AssertionError();
-  }
 
-  public static IStatus getMostSevere(IStatus[] status) {
-    IStatus max = null;
+   private StatusUtil() {
+      throw new AssertionError();
+   }
 
-    for (IStatus curr : status) {
-      if (curr.matches(IStatus.ERROR))
-        return curr;
-      if (max == null || curr.getSeverity() > max.getSeverity()) {
-        max = curr;
+   public static IStatus getMostSevere(IStatus[] status) {
+      IStatus max = null;
+
+      for (IStatus curr : status) {
+         if (curr.matches(IStatus.ERROR)) return curr;
+         if (max == null || curr.getSeverity() > max.getSeverity()) {
+            max = curr;
+         }
       }
-    }
 
-    return max;
-  }
+      return max;
+   }
 
-  public static void applyToStatusLine(DialogPage page, IStatus status) {
-    String message = status.getMessage();
-    switch (status.getSeverity()) {
+   public static void applyToStatusLine(DialogPage page, IStatus status) {
+      String message = status.getMessage();
+      switch (status.getSeverity()) {
       case IStatus.OK:
-        page.setMessage(message, IMessageProvider.NONE);
-        page.setErrorMessage(null);
-        break;
+         page.setMessage(message, IMessageProvider.NONE);
+         page.setErrorMessage(null);
+         break;
       case IStatus.WARNING:
-        page.setMessage(message, IMessageProvider.WARNING);
-        page.setErrorMessage(null);
-        break;
+         page.setMessage(message, IMessageProvider.WARNING);
+         page.setErrorMessage(null);
+         break;
       case IStatus.INFO:
-        page.setMessage(message, IMessageProvider.INFORMATION);
-        page.setErrorMessage(null);
-        break;
+         page.setMessage(message, IMessageProvider.INFORMATION);
+         page.setErrorMessage(null);
+         break;
       default:
-        if (message.length() == 0) {
-          message = null;
-        }
-        page.setMessage(null);
-        page.setErrorMessage(message);
-        break;
-    }
-  }
+         if (message.length() == 0) {
+            message = null;
+         }
+         page.setMessage(null);
+         page.setErrorMessage(message);
+         break;
+      }
+   }
 }

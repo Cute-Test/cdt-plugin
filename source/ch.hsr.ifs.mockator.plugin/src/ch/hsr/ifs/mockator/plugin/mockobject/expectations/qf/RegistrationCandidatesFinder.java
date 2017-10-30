@@ -12,23 +12,23 @@ import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.CallRegistrati
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 class RegistrationCandidatesFinder {
-  private final IASTTranslationUnit ast;
-  private final CppStandard cppStd;
 
-  public RegistrationCandidatesFinder(IASTTranslationUnit ast, CppStandard cppStd) {
-    this.ast = ast;
-    this.cppStd = cppStd;
-  }
+   private final IASTTranslationUnit ast;
+   private final CppStandard         cppStd;
 
-  public Collection<ExistingMemFunCallRegistration> findCallRegistrations(
-      IASTName callRegistrationVector) {
-    IASTName[] references = ast.getReferences(callRegistrationVector.resolveBinding());
-    return getRegistrations(list(references));
-  }
+   public RegistrationCandidatesFinder(IASTTranslationUnit ast, CppStandard cppStd) {
+      this.ast = ast;
+      this.cppStd = cppStd;
+   }
 
-  private Collection<ExistingMemFunCallRegistration> getRegistrations(
-      List<IASTName> callRegistrations) {
-    return new CallRegistrationCollector(cppStd).getRegistrations(callRegistrations);
-  }
+   public Collection<ExistingMemFunCallRegistration> findCallRegistrations(IASTName callRegistrationVector) {
+      IASTName[] references = ast.getReferences(callRegistrationVector.resolveBinding());
+      return getRegistrations(list(references));
+   }
+
+   private Collection<ExistingMemFunCallRegistration> getRegistrations(List<IASTName> callRegistrations) {
+      return new CallRegistrationCollector(cppStd).getRegistrations(callRegistrations);
+   }
 }

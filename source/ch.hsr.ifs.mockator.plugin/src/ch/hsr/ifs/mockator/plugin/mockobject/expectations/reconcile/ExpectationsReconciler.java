@@ -15,45 +15,43 @@ import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFun
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 
+
 public class ExpectationsReconciler {
-  private final ASTRewrite rewriter;
-  private final IASTName expectationsVector;
-  private final ICPPASTFunctionDefinition testFun;
-  private final LinkedEditModeStrategy linkedEditMode;
-  private final CppStandard cppStd;
 
-  public ExpectationsReconciler(ASTRewrite rewriter, IASTName expectationsVector,
-      ICPPASTFunctionDefinition testFun, CppStandard cppStd, LinkedEditModeStrategy linkedEditMode) {
-    this.rewriter = rewriter;
-    this.expectationsVector = expectationsVector;
-    this.testFun = testFun;
-    this.cppStd = cppStd;
-    this.linkedEditMode = linkedEditMode;
-  }
+   private final ASTRewrite                rewriter;
+   private final IASTName                  expectationsVector;
+   private final ICPPASTFunctionDefinition testFun;
+   private final LinkedEditModeStrategy    linkedEditMode;
+   private final CppStandard               cppStd;
 
-  public void consolidateExpectations(Collection<? extends TestDoubleMemFun> toAdd,
-      Collection<ExistingMemFunCallRegistration> toRemove) {
-    IASTName assignedExpectationsVector = getAssignExpectationsVector();
-    getExpectationsReconciler(toAdd, toRemove).reconcileExpectations(assignedExpectationsVector);
-  }
+   public ExpectationsReconciler(ASTRewrite rewriter, IASTName expectationsVector, ICPPASTFunctionDefinition testFun, CppStandard cppStd,
+                                 LinkedEditModeStrategy linkedEditMode) {
+      this.rewriter = rewriter;
+      this.expectationsVector = expectationsVector;
+      this.testFun = testFun;
+      this.cppStd = cppStd;
+      this.linkedEditMode = linkedEditMode;
+   }
 
-  private IASTName getAssignExpectationsVector() {
-    ExpectationsFinder finder = new ExpectationsFinder(testFun);
-    return _2(finder.getExpectations(expectationsVector));
-  }
+   public void consolidateExpectations(Collection<? extends TestDoubleMemFun> toAdd, Collection<ExistingMemFunCallRegistration> toRemove) {
+      IASTName assignedExpectationsVector = getAssignExpectationsVector();
+      getExpectationsReconciler(toAdd, toRemove).reconcileExpectations(assignedExpectationsVector);
+   }
 
-  private AbstractExpectationsReconciler getExpectationsReconciler(
-      Collection<? extends TestDoubleMemFun> toAdd,
-      Collection<ExistingMemFunCallRegistration> toRemove) {
-    switch (cppStd) {
+   private IASTName getAssignExpectationsVector() {
+      ExpectationsFinder finder = new ExpectationsFinder(testFun);
+      return _2(finder.getExpectations(expectationsVector));
+   }
+
+   private AbstractExpectationsReconciler getExpectationsReconciler(Collection<? extends TestDoubleMemFun> toAdd,
+         Collection<ExistingMemFunCallRegistration> toRemove) {
+      switch (cppStd) {
       case Cpp03Std:
-        return new BoostVectorExpectationsReconciler(rewriter, toAdd, toRemove, cppStd,
-            linkedEditMode);
+         return new BoostVectorExpectationsReconciler(rewriter, toAdd, toRemove, cppStd, linkedEditMode);
       case Cpp11Std:
-        return new InitializerExpectationsReconciler(rewriter, toAdd, toRemove, cppStd,
-            linkedEditMode);
+         return new InitializerExpectationsReconciler(rewriter, toAdd, toRemove, cppStd, linkedEditMode);
       default:
-        throw new MockatorException("Unsupported C++ standard");
-    }
-  }
+         throw new MockatorException("Unsupported C++ standard");
+      }
+   }
 }

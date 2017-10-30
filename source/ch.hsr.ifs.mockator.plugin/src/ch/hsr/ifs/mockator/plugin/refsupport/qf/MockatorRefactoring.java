@@ -2,8 +2,8 @@ package ch.hsr.ifs.mockator.plugin.refsupport.qf;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.last;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
@@ -34,138 +34,141 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ui.ide.IDE;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 public abstract class MockatorRefactoring extends CRefactoring {
-  protected static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final ITextSelection selection;
 
-  public MockatorRefactoring(ICElement element, ITextSelection selection, ICProject project) {
-    super(element, selection, project);
-    this.selection = selection;
-    saveAllDirtyEditors();
-  }
+   protected static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private final ITextSelection           selection;
 
-  private void saveAllDirtyEditors() {
-    UiUtil.runInDisplayThread(new F1V<RefactoringStatus>() {
-      @Override
-      public void apply(RefactoringStatus a) {
-        if (!IDE.saveAllEditors(getWorkspaceRoot(), false)) {
-          initStatus.addFatalError("Was not able to save all editors");
-        }
+   public MockatorRefactoring(final ICElement element, final ITextSelection selection, final ICProject project) {
+      super(element, selection, project);
+      this.selection = selection;
+      saveAllDirtyEditors();
+   }
+
+   private void saveAllDirtyEditors() {
+      UiUtil.runInDisplayThread(new F1V<RefactoringStatus>() {
+
+         @Override
+         public void apply(final RefactoringStatus a) {
+            if (!IDE.saveAllEditors(getWorkspaceRoot(), false)) {
+               initStatus.addFatalError("Was not able to save all editors");
+            }
+         }
+      }, initStatus);
+   }
+
+   private static IResource[] getWorkspaceRoot() {
+      return new IResource[] { CPPResourceHelper.getWorkspaceRoot() };
+   }
+
+   protected ITextSelection getSelection() {
+      return selection;
+   }
+
+   public abstract String getDescription();
+
+   protected ASTRewrite createRewriter(final ModificationCollector collector, final IASTTranslationUnit ast) {
+      return collector.rewriterForTranslationUnit(ast);
+   }
+
+   protected Optional<ICPPASTCompositeTypeSpecifier> getClassInSelection(final IASTTranslationUnit ast) {
+      final ClassInSelectionFinder finder = new ClassInSelectionFinder(getSelection(), ast);
+      return finder.getClassInSelection();
+   }
+
+   protected Optional<IASTName> checkSelectedNameIsInFunction(final RefactoringStatus status, final IProgressMonitor pm) throws CoreException {
+      final Optional<IASTName> selectedName = getSelectedName(getAST(tu, pm));
+
+      if (!selectedName.isPresent()) {
+         status.addFatalError("Selection does not contain a name");
       }
-    }, initStatus);
-  }
 
-  private static IResource[] getWorkspaceRoot() {
-    return new IResource[] {ProjectUtil.getWorkspaceRoot()};
-  }
+      if (getParentFunction(selectedName.get()) == null) {
+         status.addFatalError("Selection is not part of a function");
+      }
 
-  protected ITextSelection getSelection() {
-    return selection;
-  }
+      return selectedName;
+   }
 
-  public abstract String getDescription();
+   protected ICPPASTFunctionDefinition getParentFunction(final IASTName name) {
+      return AstUtil.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
+   }
 
-  protected ASTRewrite createRewriter(ModificationCollector collector, IASTTranslationUnit ast) {
-    return collector.rewriterForTranslationUnit(ast);
-  }
+   @Override
+   protected RefactoringStatus checkFinalConditions(final IProgressMonitor subProgressMonitor, final CheckConditionsContext checkContext)
+         throws CoreException, OperationCanceledException {
+      return initStatus;
+   }
 
-  protected Maybe<ICPPASTCompositeTypeSpecifier> getClassInSelection(IASTTranslationUnit ast) {
-    ClassInSelectionFinder finder = new ClassInSelectionFinder(getSelection(), ast);
-    return finder.getClassInSelection();
-  }
+   @Override
+   protected RefactoringDescriptor getRefactoringDescriptor() {
+      return null;
+   }
 
-  protected Maybe<IASTName> checkSelectedNameIsInFunction(RefactoringStatus status,
-      IProgressMonitor pm) throws CoreException {
-    Maybe<IASTName> selectedName = getSelectedName(getAST(tu, pm));
+   protected Optional<IASTName> getSelectedName(final IASTTranslationUnit ast) {
+      final IASTNode selectedNode = getSelectedNode(ast);
 
-    if (selectedName.isNone()) {
-      status.addFatalError("Selection does not contain a name");
-    }
+      if (selectedNode instanceof IASTImplicitNameOwner && ((IASTImplicitNameOwner) selectedNode).getImplicitNames().length > 0) {
+         return findOperator(selectedNode);
+      }
 
-    ICPPASTFunctionDefinition function = getParentFunction(selectedName.get());
+      if (selectedNode instanceof IASTName) {
+         return Optional.of((IASTName) selectedNode);
+      }
 
-    if (function == null) {
-      status.addFatalError("Selection is not part of a function");
-    }
+      final IASTName name = AstUtil.getAncestorOfType(selectedNode, IASTName.class);
 
-    return selectedName;
-  }
+      if (name != null) {
+         return Optional.of(name);
+      }
 
-  protected ICPPASTFunctionDefinition getParentFunction(IASTName name) {
-    return AstUtil.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
-  }
+      return last(findAllMarkedNames(ast));
+   }
 
-  @Override
-  protected RefactoringStatus checkFinalConditions(IProgressMonitor subProgressMonitor,
-      CheckConditionsContext checkContext) throws CoreException, OperationCanceledException {
-    return initStatus;
-  }
+   private static Optional<IASTName> findOperator(final IASTNode selectedNode) {
+      for (final IASTImplicitName iName : getNames(selectedNode)) {
+         if (iName != null && iName.isOperator()) {
+            return Optional.of((IASTName) iName);
+         }
+      }
 
-  @Override
-  protected RefactoringDescriptor getRefactoringDescriptor() {
-    return null;
-  }
+      return Optional.empty();
+   }
 
-  protected Maybe<IASTName> getSelectedName(IASTTranslationUnit ast) {
-    IASTNode selectedNode = getSelectedNode(ast);
+   private static IASTImplicitName[] getNames(final IASTNode selectedNode) {
+      if (selectedNode instanceof ICPPASTUnaryExpression || selectedNode instanceof ICPPASTBinaryExpression
+            || selectedNode instanceof ICPPASTNewExpression || selectedNode instanceof ICPPASTDeleteExpression) {
+         return ((IASTImplicitNameOwner) selectedNode).getImplicitNames();
+      }
 
-    if (selectedNode instanceof IASTImplicitNameOwner
-        && ((IASTImplicitNameOwner) selectedNode).getImplicitNames().length > 0)
-      return findOperator(selectedNode);
+      return array();
+   }
 
-    if (selectedNode instanceof IASTName)
-      return maybe((IASTName) selectedNode);
+   protected IASTNode getSelectedNode(final IASTTranslationUnit ast) {
+      final String rootSourceOfTu = null;
+      return ast.getNodeSelector(rootSourceOfTu).findEnclosingNodeInExpansion(selection.getOffset(), selection.getLength());
+   }
 
-    IASTName name = AstUtil.getAncestorOfType(selectedNode, IASTName.class);
-
-    if (name != null)
-      return maybe(name);
-
-    return last(findAllMarkedNames(ast));
-  }
-
-  private static Maybe<IASTName> findOperator(IASTNode selectedNode) {
-    for (IASTImplicitName iName : getNames(selectedNode)) {
-      if (iName != null && iName.isOperator())
-        return maybe((IASTName) iName);
-    }
-
-    return none();
-  }
-
-  private static IASTImplicitName[] getNames(IASTNode selectedNode) {
-    if (selectedNode instanceof ICPPASTUnaryExpression
-        || selectedNode instanceof ICPPASTBinaryExpression
-        || selectedNode instanceof ICPPASTNewExpression
-        || selectedNode instanceof ICPPASTDeleteExpression)
-      return ((IASTImplicitNameOwner) selectedNode).getImplicitNames();
-
-    return array();
-  }
-
-  protected IASTNode getSelectedNode(IASTTranslationUnit ast) {
-    final String rootSourceOfTu = null;
-    return ast.getNodeSelector(rootSourceOfTu).findEnclosingNodeInExpansion(selection.getOffset(),
-        selection.getLength());
-  }
-
-  @Override
-  protected IIndex getIndex() {
-    try {
-      return super.getIndex();
-    } catch (OperationCanceledException e) {
-      throw new MockatorException(e);
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
+   @Override
+   protected IIndex getIndex() {
+      try {
+         return super.getIndex();
+      }
+      catch (final OperationCanceledException e) {
+         throw new MockatorException(e);
+      }
+      catch (final CoreException e) {
+         throw new MockatorException(e);
+      }
+   }
 }

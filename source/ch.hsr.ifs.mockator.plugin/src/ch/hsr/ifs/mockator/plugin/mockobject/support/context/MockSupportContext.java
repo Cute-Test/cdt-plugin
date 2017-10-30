@@ -18,141 +18,142 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter;
 
+
 @SuppressWarnings("restriction")
 public final class MockSupportContext {
-  private final ICProject cProject;
-  private final CRefactoringContext context;
-  private final IASTTranslationUnit ast;
-  private final CppStandard cppStd;
-  private final boolean hasOnlyStaticMemFuns;
-  private final ClassPublicVisibilityInserter inserter;
-  private final ASTRewrite rewriter;
-  private final MockObject mockObject;
-  private final IProgressMonitor pm;
-  private final LinkedEditModeStrategy linkedEditStrategy;
-  private final Collection<? extends TestDoubleMemFun> newForExpectations;
 
-  public static class ContextBuilder implements Builder<MockSupportContext> {
-    private final ICProject cProject;
-    private final CRefactoringContext context;
-    private final IASTTranslationUnit ast;
-    private final CppStandard cppStandard;
-    private final boolean hasOnlyStaticMemFuns;
-    private final ClassPublicVisibilityInserter inserter;
-    private final ASTRewrite rewriter;
-    private final MockObject mockObject;
-    private final IProgressMonitor pm;
-    private LinkedEditModeStrategy linkedEditStrategy;
-    private Collection<? extends TestDoubleMemFun> newForExpectations;
+   private final ICProject                              cProject;
+   private final CRefactoringContext                    context;
+   private final IASTTranslationUnit                    ast;
+   private final CppStandard                            cppStd;
+   private final boolean                                hasOnlyStaticMemFuns;
+   private final ClassPublicVisibilityInserter          inserter;
+   private final ASTRewrite                             rewriter;
+   private final MockObject                             mockObject;
+   private final IProgressMonitor                       pm;
+   private final LinkedEditModeStrategy                 linkedEditStrategy;
+   private final Collection<? extends TestDoubleMemFun> newForExpectations;
 
-    public ContextBuilder(ICProject cProject, CRefactoringContext context, MockObject mockObject,
-        ASTRewrite rewriter, IASTTranslationUnit ast, CppStandard cppStandard,
-        ClassPublicVisibilityInserter inserter, boolean hasOnlyStaticMemFuns, IProgressMonitor pm) {
-      this.cProject = cProject;
-      this.context = context;
-      this.mockObject = mockObject;
-      this.rewriter = rewriter;
-      this.ast = ast;
-      this.cppStandard = cppStandard;
-      this.inserter = inserter;
-      this.hasOnlyStaticMemFuns = hasOnlyStaticMemFuns;
-      this.pm = pm;
-    }
+   public static class ContextBuilder implements Builder<MockSupportContext> {
 
-    public ContextBuilder withNewExpectations(
-        Collection<? extends TestDoubleMemFun> newForExpectations) {
-      this.newForExpectations = newForExpectations;
-      return this;
-    }
+      private final ICProject                        cProject;
+      private final CRefactoringContext              context;
+      private final IASTTranslationUnit              ast;
+      private final CppStandard                      cppStandard;
+      private final boolean                          hasOnlyStaticMemFuns;
+      private final ClassPublicVisibilityInserter    inserter;
+      private final ASTRewrite                       rewriter;
+      private final MockObject                       mockObject;
+      private final IProgressMonitor                 pm;
+      private LinkedEditModeStrategy                 linkedEditStrategy;
+      private Collection<? extends TestDoubleMemFun> newForExpectations;
 
-    public ContextBuilder withLinkedEditStrategy(LinkedEditModeStrategy linkedEditStrategy) {
-      this.linkedEditStrategy = linkedEditStrategy;
-      return this;
-    }
+      public ContextBuilder(ICProject cProject, CRefactoringContext context, MockObject mockObject, ASTRewrite rewriter, IASTTranslationUnit ast,
+                            CppStandard cppStandard, ClassPublicVisibilityInserter inserter, boolean hasOnlyStaticMemFuns, IProgressMonitor pm) {
+         this.cProject = cProject;
+         this.context = context;
+         this.mockObject = mockObject;
+         this.rewriter = rewriter;
+         this.ast = ast;
+         this.cppStandard = cppStandard;
+         this.inserter = inserter;
+         this.hasOnlyStaticMemFuns = hasOnlyStaticMemFuns;
+         this.pm = pm;
+      }
 
-    @Override
-    public MockSupportContext build() {
-      return new MockSupportContext(this);
-    }
-  }
+      public ContextBuilder withNewExpectations(Collection<? extends TestDoubleMemFun> newForExpectations) {
+         this.newForExpectations = newForExpectations;
+         return this;
+      }
 
-  private MockSupportContext(ContextBuilder builder) {
-    cProject = builder.cProject;
-    context = builder.context;
-    mockObject = builder.mockObject;
-    rewriter = builder.rewriter;
-    ast = builder.ast;
-    cppStd = builder.cppStandard;
-    inserter = builder.inserter;
-    hasOnlyStaticMemFuns = builder.hasOnlyStaticMemFuns;
-    pm = builder.pm;
+      public ContextBuilder withLinkedEditStrategy(LinkedEditModeStrategy linkedEditStrategy) {
+         this.linkedEditStrategy = linkedEditStrategy;
+         return this;
+      }
 
-    if (builder.newForExpectations == null) {
-      newForExpectations = list();
-    } else {
-      newForExpectations = builder.newForExpectations;
-    }
+      @Override
+      public MockSupportContext build() {
+         return new MockSupportContext(this);
+      }
+   }
 
-    if (builder.linkedEditStrategy == null) {
-      linkedEditStrategy = LinkedEditModeStrategy.fromProjectSettings(cProject.getProject());
-    } else {
-      linkedEditStrategy = builder.linkedEditStrategy;
-    }
-  }
+   private MockSupportContext(ContextBuilder builder) {
+      cProject = builder.cProject;
+      context = builder.context;
+      mockObject = builder.mockObject;
+      rewriter = builder.rewriter;
+      ast = builder.ast;
+      cppStd = builder.cppStandard;
+      inserter = builder.inserter;
+      hasOnlyStaticMemFuns = builder.hasOnlyStaticMemFuns;
+      pm = builder.pm;
 
-  public ICProject getProject() {
-    return cProject;
-  }
+      if (builder.newForExpectations == null) {
+         newForExpectations = list();
+      } else {
+         newForExpectations = builder.newForExpectations;
+      }
 
-  public CRefactoringContext getCRefContext() {
-    return context;
-  }
+      if (builder.linkedEditStrategy == null) {
+         linkedEditStrategy = LinkedEditModeStrategy.fromProjectSettings(cProject.getProject());
+      } else {
+         linkedEditStrategy = builder.linkedEditStrategy;
+      }
+   }
 
-  public IASTTranslationUnit getAst() {
-    return ast;
-  }
+   public ICProject getProject() {
+      return cProject;
+   }
 
-  public CppStandard getCppStandard() {
-    return cppStd;
-  }
+   public CRefactoringContext getCRefContext() {
+      return context;
+   }
 
-  public boolean hasOnlyStaticMemFuns() {
-    return hasOnlyStaticMemFuns;
-  }
+   public IASTTranslationUnit getAst() {
+      return ast;
+   }
 
-  public ClassPublicVisibilityInserter getInserter() {
-    return inserter;
-  }
+   public CppStandard getCppStandard() {
+      return cppStd;
+   }
 
-  public ASTRewrite getRewriter() {
-    return rewriter;
-  }
+   public boolean hasOnlyStaticMemFuns() {
+      return hasOnlyStaticMemFuns;
+   }
 
-  public MockObject getMockObject() {
-    return mockObject;
-  }
+   public ClassPublicVisibilityInserter getInserter() {
+      return inserter;
+   }
 
-  public IProgressMonitor getProgressMonitor() {
-    return pm;
-  }
+   public ASTRewrite getRewriter() {
+      return rewriter;
+   }
 
-  public LinkedEditModeStrategy getLinkedEditStrategy() {
-    return linkedEditStrategy;
-  }
+   public MockObject getMockObject() {
+      return mockObject;
+   }
 
-  public Collection<? extends TestDoubleMemFun> getNewForExpectations() {
-    return newForExpectations;
-  }
+   public IProgressMonitor getProgressMonitor() {
+      return pm;
+   }
 
-  public String getNameForExpectationsVector() {
-    return getMockObject().getNameForExpectationVector();
-  }
+   public LinkedEditModeStrategy getLinkedEditStrategy() {
+      return linkedEditStrategy;
+   }
 
-  public String getFqNameForAllCallsVector() {
-    return getMockObject().getFqNameOfAllCallsVector();
-  }
+   public Collection<? extends TestDoubleMemFun> getNewForExpectations() {
+      return newForExpectations;
+   }
 
-  public Collection<ICPPASTFunctionDefinition> getReferencingFunctions() {
-    return mockObject.getReferencingTestFunctions(context, cProject, pm);
-  }
+   public String getNameForExpectationsVector() {
+      return getMockObject().getNameForExpectationVector();
+   }
+
+   public String getFqNameForAllCallsVector() {
+      return getMockObject().getFqNameOfAllCallsVector();
+   }
+
+   public Collection<ICPPASTFunctionDefinition> getReferencingFunctions() {
+      return mockObject.getReferencingTestFunctions(context, cProject, pm);
+   }
 }

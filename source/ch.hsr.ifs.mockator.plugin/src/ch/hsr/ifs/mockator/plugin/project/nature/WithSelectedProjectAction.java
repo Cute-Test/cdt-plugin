@@ -11,43 +11,42 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
 
-abstract class WithSelectedProjectAction extends AbstractHandler implements
-		IWorkbenchWindowActionDelegate {
-	private IProject project;
 
-	public void withProject(F1V<IProject> f) {
-		if (project != null) {
-			f.apply(project);
-			project = null;
-		}
-	}
+abstract class WithSelectedProjectAction extends AbstractHandler implements IWorkbenchWindowActionDelegate {
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		if ((selection instanceof TreeSelection)) {
-			TreeSelection treeSel = (TreeSelection) selection;
-			updateProjectFromSelection(treeSel);
-		} else {
-			project = null;
-		}
-	}
+   private IProject project;
 
-	protected void updateProjectFromSelection(TreeSelection treeSel) {
-		Object firstElement = treeSel.getFirstElement();
+   public void withProject(F1V<IProject> f) {
+      if (project != null) {
+         f.apply(project);
+         project = null;
+      }
+   }
 
-		if ((firstElement instanceof IProject)) {
-			project = ((IProject) firstElement);
-			return;
-		} else if ((firstElement instanceof ICElement)) {
-			project = ((ICElement) firstElement).getCProject().getProject();
-		}
-	}
+   @Override
+   public void selectionChanged(IAction action, ISelection selection) {
+      if ((selection instanceof TreeSelection)) {
+         TreeSelection treeSel = (TreeSelection) selection;
+         updateProjectFromSelection(treeSel);
+      } else {
+         project = null;
+      }
+   }
 
-	@Override
-	public void dispose() {
-	}
+   protected void updateProjectFromSelection(TreeSelection treeSel) {
+      Object firstElement = treeSel.getFirstElement();
 
-	@Override
-	public void init(IWorkbenchWindow window) {
-	}
+      if ((firstElement instanceof IProject)) {
+         project = ((IProject) firstElement);
+         return;
+      } else if ((firstElement instanceof ICElement)) {
+         project = ((ICElement) firstElement).getCProject().getProject();
+      }
+   }
+
+   @Override
+   public void dispose() {}
+
+   @Override
+   public void init(IWorkbenchWindow window) {}
 }

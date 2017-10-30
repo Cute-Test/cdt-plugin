@@ -10,39 +10,38 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 public class MemberFunCallRegistrationAdder extends AbstractFunCallRegistrationAdder {
-  private final boolean isStatic;
-  private final String nameOfAllCallsVector;
 
-  public MemberFunCallRegistrationAdder(ICPPASTFunctionDeclarator newFunDecl, boolean isStatic,
-      CppStandard cppStd, String nameOfAllCallsVector) {
-    super(newFunDecl, cppStd);
-    this.isStatic = isStatic;
-    this.nameOfAllCallsVector = nameOfAllCallsVector;
-  }
+   private final boolean isStatic;
+   private final String  nameOfAllCallsVector;
 
-  @Override
-  protected String getNameForCallsVector() {
-    return nameOfAllCallsVector;
-  }
+   public MemberFunCallRegistrationAdder(ICPPASTFunctionDeclarator newFunDecl, boolean isStatic, CppStandard cppStd, String nameOfAllCallsVector) {
+      super(newFunDecl, cppStd);
+      this.isStatic = isStatic;
+      this.nameOfAllCallsVector = nameOfAllCallsVector;
+   }
 
-  @SuppressWarnings("restriction")
-  @Override
-  protected IASTExpression getPushBackOwner() {
-    ICPPASTLiteralExpression arraySubscript = getArraySubscript();
-    return nodeFactory.newArraySubscriptExpression(createCallSequence(), arraySubscript);
-  }
+   @Override
+   protected String getNameForCallsVector() {
+      return nameOfAllCallsVector;
+   }
 
-  @SuppressWarnings("restriction")
-  private ICPPASTLiteralExpression getArraySubscript() {
-    if (isStatic)
-      return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, "0");
-    else
-      return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, MOCK_ID);
-  }
+   @SuppressWarnings("restriction")
+   @Override
+   protected IASTExpression getPushBackOwner() {
+      ICPPASTLiteralExpression arraySubscript = getArraySubscript();
+      return nodeFactory.newArraySubscriptExpression(createCallSequence(), arraySubscript);
+   }
 
-  @Override
-  protected String getNameForCall() {
-    return MockatorConstants.CALL;
-  }
+   @SuppressWarnings("restriction")
+   private ICPPASTLiteralExpression getArraySubscript() {
+      if (isStatic) return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, "0");
+      else return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, MOCK_ID);
+   }
+
+   @Override
+   protected String getNameForCall() {
+      return MockatorConstants.CALL;
+   }
 }

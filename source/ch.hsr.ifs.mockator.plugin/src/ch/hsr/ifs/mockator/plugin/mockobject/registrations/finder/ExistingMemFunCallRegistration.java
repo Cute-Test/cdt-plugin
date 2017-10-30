@@ -5,30 +5,31 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.MemFunSignature;
 
+
 public class ExistingMemFunCallRegistration extends MemFunSignature {
-  private final ExistingTestDoubleMemFun memFun;
-  private final IASTStatement registrationStmt;
 
-  public ExistingMemFunCallRegistration(ExistingTestDoubleMemFun memFun) {
-    this(memFun, null, memFun.getFunctionSignature());
-  }
+   private final ExistingTestDoubleMemFun memFun;
+   private final IASTStatement            registrationStmt;
 
-  public ExistingMemFunCallRegistration(String registredMemFunSig) {
-    this(null, null, registredMemFunSig);
-  }
+   public ExistingMemFunCallRegistration(ExistingTestDoubleMemFun memFun) {
+      this(memFun, null, memFun.getFunctionSignature());
+   }
 
-  protected ExistingMemFunCallRegistration(ExistingTestDoubleMemFun memFun,
-      IASTStatement registrationStmt, String funSignature) {
-    super(funSignature);
-    this.memFun = memFun;
-    this.registrationStmt = registrationStmt;
-  }
+   public ExistingMemFunCallRegistration(String registredMemFunSig) {
+      this(null, null, registredMemFunSig);
+   }
 
-  public ExistingTestDoubleMemFun getExistingMemFun() {
-    return memFun;
-  }
+   protected ExistingMemFunCallRegistration(ExistingTestDoubleMemFun memFun, IASTStatement registrationStmt, String funSignature) {
+      super(funSignature);
+      this.memFun = memFun;
+      this.registrationStmt = registrationStmt;
+   }
 
-  public IASTStatement getRegistrationStmt() {
-    return registrationStmt;
-  }
+   public ExistingTestDoubleMemFun getExistingMemFun() {
+      return memFun;
+   }
+
+   public IASTStatement getRegistrationStmt() {
+      return registrationStmt;
+   }
 }

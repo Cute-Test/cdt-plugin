@@ -2,11 +2,10 @@ package ch.hsr.ifs.mockator.plugin.testdouble.support;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
@@ -23,83 +22,81 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.functional.F1;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 public class BaseClassCtorCallHandler {
-  private static CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final ICPPClassType baseClass;
 
-  public BaseClassCtorCallHandler(ICPPClassType testDouble) {
-    ICPPBase[] bases = testDouble.getBases();
-    Assert.isFalse(bases.length < 1, "Test double is expected to at least one base class!");
-    IBinding binding = bases[0].getBaseClass(); // just consider the first one
-    Assert.instanceOf(binding, ICPPClassType.class, "Class type as base class expected");
-    baseClass = (ICPPClassType) binding;
-  }
+   private static CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private final ICPPClassType   baseClass;
 
-  public boolean hasBaseClassDefaultCtor() {
-    Collection<ICPPConstructor> defaultCtors =
-        filter(baseClass.getConstructors(), new F1<ICPPConstructor, Boolean>() {
-          @Override
-          public Boolean apply(ICPPConstructor ctor) {
+   public BaseClassCtorCallHandler(final ICPPClassType testDouble) {
+      final ICPPBase[] bases = testDouble.getBases();
+      Assert.isFalse(bases.length < 1, "Test double is expected to at least one base class!");
+      final IBinding binding = bases[0].getBaseClass(); // just consider the first one
+      Assert.instanceOf(binding, ICPPClassType.class, "Class type as base class expected");
+      baseClass = (ICPPClassType) binding;
+   }
+
+   public boolean hasBaseClassDefaultCtor() {
+      final Collection<ICPPConstructor> defaultCtors = filter(baseClass.getConstructors(), new F1<ICPPConstructor, Boolean>() {
+
+         @Override
+         public Boolean apply(final ICPPConstructor ctor) {
             return AstUtil.isDefaultCtor(ctor);
-          }
-        });
-    return !defaultCtors.isEmpty();
-  }
+         }
+      });
+      return !defaultCtors.isEmpty();
+   }
 
-  public Maybe<ICPPASTConstructorChainInitializer> getBaseClassInitializer(CppStandard cppStd) {
-    ICPPConstructor baseCtor = getBaseCtorWithMinParams();
+   public Optional<ICPPASTConstructorChainInitializer> getBaseClassInitializer(final CppStandard cppStd) {
+      final ICPPConstructor baseCtor = getBaseCtorWithMinParams();
 
-    if (baseCtor == null)
-      return none();
-
-    List<IASTInitializerClause> clauses = getInitializerClauses(baseCtor, cppStd);
-    return maybe(getInitializer(baseCtor, clauses));
-  }
-
-  private static ICPPASTConstructorChainInitializer getInitializer(ICPPConstructor baseCtor,
-      List<IASTInitializerClause> initializers) {
-    ICPPASTConstructorInitializer ctorInitializer =
-        nodeFactory.newConstructorInitializer(initializers
-            .toArray(new IASTInitializerClause[initializers.size()]));
-    IASTName baseCtorName = nodeFactory.newName(baseCtor.getName().toCharArray());
-    return nodeFactory.newConstructorChainInitializer(baseCtorName, ctorInitializer);
-  }
-
-  private static List<IASTInitializerClause> getInitializerClauses(ICPPConstructor baseCtor,
-      CppStandard cppStd) {
-    List<IASTInitializerClause> clauses = list();
-
-    for (ICPPParameter param : baseCtor.getParameters()) {
-      ICPPASTDeclSpecifier declSpec = new DeclSpecGenerator(param.getType()).getDeclSpec();
-      declSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
-      clauses.add(nodeFactory.newSimpleTypeConstructorExpression(declSpec,
-          cppStd.getEmptyInitializer()));
-    }
-
-    return clauses;
-  }
-
-  private ICPPConstructor getBaseCtorWithMinParams() {
-    int minArgCount = Integer.MAX_VALUE;
-    ICPPConstructor chosen = null;
-
-    for (ICPPConstructor ctor : baseClass.getConstructors()) {
-      if (AstUtil.isDefaultCtor(ctor) || AstUtil.isCopyCtor(ctor, baseClass)) {
-        continue;
+      if (baseCtor == null) {
+         return Optional.empty();
       }
 
-      int requiredArgs = ctor.getRequiredArgumentCount();
-      if (requiredArgs < minArgCount) {
-        minArgCount = requiredArgs;
-        chosen = ctor;
+      final List<IASTInitializerClause> clauses = getInitializerClauses(baseCtor, cppStd);
+      return Optional.of(getInitializer(baseCtor, clauses));
+   }
+
+   private static ICPPASTConstructorChainInitializer getInitializer(final ICPPConstructor baseCtor, final List<IASTInitializerClause> initializers) {
+      final ICPPASTConstructorInitializer ctorInitializer = nodeFactory.newConstructorInitializer(initializers.toArray(
+               new IASTInitializerClause[initializers.size()]));
+      final IASTName baseCtorName = nodeFactory.newName(baseCtor.getName().toCharArray());
+      return nodeFactory.newConstructorChainInitializer(baseCtorName, ctorInitializer);
+   }
+
+   private static List<IASTInitializerClause> getInitializerClauses(final ICPPConstructor baseCtor, final CppStandard cppStd) {
+      final List<IASTInitializerClause> clauses = list();
+
+      for (final ICPPParameter param : baseCtor.getParameters()) {
+         final ICPPASTDeclSpecifier declSpec = new DeclSpecGenerator(param.getType()).getDeclSpec();
+         declSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
+         clauses.add(nodeFactory.newSimpleTypeConstructorExpression(declSpec, cppStd.getEmptyInitializer()));
       }
-    }
-    return chosen;
-  }
+
+      return clauses;
+   }
+
+   private ICPPConstructor getBaseCtorWithMinParams() {
+      int minArgCount = Integer.MAX_VALUE;
+      ICPPConstructor chosen = null;
+
+      for (final ICPPConstructor ctor : baseClass.getConstructors()) {
+         if (AstUtil.isDefaultCtor(ctor) || AstUtil.isCopyCtor(ctor, baseClass)) {
+            continue;
+         }
+
+         final int requiredArgs = ctor.getRequiredArgumentCount();
+         if (requiredArgs < minArgCount) {
+            minArgCount = requiredArgs;
+            chosen = ctor;
+         }
+      }
+      return chosen;
+   }
 }

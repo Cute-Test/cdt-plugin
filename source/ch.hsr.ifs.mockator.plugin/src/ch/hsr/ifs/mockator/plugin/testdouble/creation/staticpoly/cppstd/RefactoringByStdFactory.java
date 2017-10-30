@@ -8,17 +8,17 @@ import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
+
 public class RefactoringByStdFactory {
 
-  public MockatorRefactoring getRefactoring(CppStandard std, ICProject project, ICElement cElement,
-      ITextSelection selection) {
-    switch (std) {
+   public MockatorRefactoring getRefactoring(CppStandard std, ICProject project, ICElement cElement, ITextSelection selection) {
+      switch (std) {
       case Cpp03Std:
-        return new TestDoubleCpp03Refactoring(cElement, selection, project);
+         return new TestDoubleCpp03Refactoring(cElement, selection, project);
       case Cpp11Std:
-        return new TestDoubleCpp11Refactoring(cElement, selection, project);
+         return new TestDoubleCpp11Refactoring(cElement, selection, project);
       default:
-        throw new MockatorException("Unexpected C++ standard");
-    }
-  }
+         throw new MockatorException("Unexpected C++ standard");
+      }
+   }
 }

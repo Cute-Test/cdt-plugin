@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
@@ -8,41 +8,42 @@ import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.internal.ui.refactoring.Container;
 
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 
 @SuppressWarnings("restriction")
 public class AllCallsVectorFinderVisitor extends ASTVisitor {
-  private final Container<IASTName> registrationVector;
 
-  {
-    shouldVisitExpressions = true;
-  }
+   private final Container<IASTName> registrationVector;
 
-  public AllCallsVectorFinderVisitor() {
-    registrationVector = new Container<IASTName>();
-  }
+   {
+      shouldVisitExpressions = true;
+   }
 
-  @Override
-  public int visit(IASTExpression expression) {
-    if (!(expression instanceof IASTIdExpression))
+   public AllCallsVectorFinderVisitor() {
+      registrationVector = new Container<>();
+   }
+
+   @Override
+   public int visit(final IASTExpression expression) {
+      if (!(expression instanceof IASTIdExpression)) {
+         return PROCESS_CONTINUE;
+      }
+
+      final IASTIdExpression idExpr = (IASTIdExpression) expression;
+
+      if (hasCallsVectorType(idExpr)) {
+         registrationVector.setObject(idExpr.getName());
+         return PROCESS_ABORT;
+      }
+
       return PROCESS_CONTINUE;
+   }
 
-    IASTIdExpression idExpr = (IASTIdExpression) expression;
+   private static boolean hasCallsVectorType(final IASTIdExpression idExpr) {
+      final CallsVectorTypeVerifier verifier = new CallsVectorTypeVerifier(idExpr);
+      return verifier.isVectorOfCallsVector();
+   }
 
-    if (hasCallsVectorType(idExpr)) {
-      registrationVector.setObject(idExpr.getName());
-      return PROCESS_ABORT;
-    }
-
-    return PROCESS_CONTINUE;
-  }
-
-  private static boolean hasCallsVectorType(IASTIdExpression idExpr) {
-    CallsVectorTypeVerifier verifier = new CallsVectorTypeVerifier(idExpr);
-    return verifier.isVectorOfCallsVector();
-  }
-
-  public Maybe<IASTName> getFoundCallsVector() {
-    return maybe(registrationVector.getObject());
-  }
+   public Optional<IASTName> getFoundCallsVector() {
+      return Optional.ofNullable(registrationVector.getObject());
+   }
 }

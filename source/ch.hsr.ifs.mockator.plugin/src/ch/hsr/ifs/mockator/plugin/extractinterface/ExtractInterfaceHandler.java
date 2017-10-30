@@ -11,36 +11,39 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.postconditions.ShadowedMemFun
 import ch.hsr.ifs.mockator.plugin.extractinterface.preconditions.DiagnosticsRegistry;
 import ch.hsr.ifs.mockator.plugin.extractinterface.transform.TransformationsRegistry;
 
+
 class ExtractInterfaceHandler {
-  private final ExtractInterfaceContext context;
 
-  public ExtractInterfaceHandler(ExtractInterfaceContext context) {
-    this.context = context;
-  }
+   private final ExtractInterfaceContext context;
 
-  public void preProcess() {
-    StopWhenFatalErrorCondition stopWhen = new StopWhenFatalErrorCondition(context.getStatus());
-    forEach(new DiagnosticsRegistry().createInstances(), context, stopWhen);
-  }
+   public ExtractInterfaceHandler(ExtractInterfaceContext context) {
+      this.context = context;
+   }
 
-  public void performChanges() {
-    forEach(new TransformationsRegistry().createInstances(), context);
-  }
+   public void preProcess() {
+      StopWhenFatalErrorCondition stopWhen = new StopWhenFatalErrorCondition(context.getStatus());
+      forEach(new DiagnosticsRegistry().createInstances(), context, stopWhen);
+   }
 
-  public void postProcess(RefactoringStatus status) throws CoreException {
-    new ShadowedMemFunVerifier(context).checkForShadowedFunctions(status);
-  }
+   public void performChanges() {
+      forEach(new TransformationsRegistry().createInstances(), context);
+   }
 
-  private static class StopWhenFatalErrorCondition implements F1<Void, Boolean> {
-    private final RefactoringStatus status;
+   public void postProcess(RefactoringStatus status) throws CoreException {
+      new ShadowedMemFunVerifier(context).checkForShadowedFunctions(status);
+   }
 
-    public StopWhenFatalErrorCondition(RefactoringStatus status) {
-      this.status = status;
-    }
+   private static class StopWhenFatalErrorCondition implements F1<Void, Boolean> {
 
-    @Override
-    public Boolean apply(Void ignore) {
-      return status.hasFatalError();
-    }
-  }
+      private final RefactoringStatus status;
+
+      public StopWhenFatalErrorCondition(RefactoringStatus status) {
+         this.status = status;
+      }
+
+      @Override
+      public Boolean apply(Void ignore) {
+         return status.hasFatalError();
+      }
+   }
 }

@@ -15,57 +15,53 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
+
 // Copied and adapted from CUTE
 class TypedElementSelectionValidator implements ISelectionStatusValidator {
-  private final IStatus fgErrorStatus = new StatusInfo(IStatus.ERROR, "");
-  private final IStatus fgOKStatus = new StatusInfo();
-  private final Class<?>[] fAcceptedTypes;
-  private final boolean fAllowMultipleSelection;
-  private final Collection<?> fRejectedElements;
 
-  public TypedElementSelectionValidator(Class<?>[] acceptedTypes, boolean allowMultipleSelection) {
-    this(acceptedTypes, allowMultipleSelection, null);
-  }
+   private final IStatus       fgErrorStatus = new StatusInfo(IStatus.ERROR, "");
+   private final IStatus       fgOKStatus    = new StatusInfo();
+   private final Class<?>[]    fAcceptedTypes;
+   private final boolean       fAllowMultipleSelection;
+   private final Collection<?> fRejectedElements;
 
-  public TypedElementSelectionValidator(Class<?>[] acceptedTypes, boolean allowMultipleSelection,
-      Collection<Object> rejectedElements) {
-    Assert.notNull(acceptedTypes, "accepted types must not be null");
-    fAcceptedTypes = acceptedTypes;
-    fAllowMultipleSelection = allowMultipleSelection;
-    fRejectedElements = rejectedElements;
-  }
+   public TypedElementSelectionValidator(Class<?>[] acceptedTypes, boolean allowMultipleSelection) {
+      this(acceptedTypes, allowMultipleSelection, null);
+   }
 
-  @Override
-  public IStatus validate(Object[] elements) {
-    if (isValid(elements))
-      return fgOKStatus;
-    return fgErrorStatus;
-  }
+   public TypedElementSelectionValidator(Class<?>[] acceptedTypes, boolean allowMultipleSelection, Collection<Object> rejectedElements) {
+      Assert.notNull(acceptedTypes, "accepted types must not be null");
+      fAcceptedTypes = acceptedTypes;
+      fAllowMultipleSelection = allowMultipleSelection;
+      fRejectedElements = rejectedElements;
+   }
 
-  private boolean isOfAcceptedType(Object o) {
-    for (Class<?> fAcceptedType : fAcceptedTypes) {
-      if (fAcceptedType.isInstance(o))
-        return true;
-    }
-    return false;
-  }
+   @Override
+   public IStatus validate(Object[] elements) {
+      if (isValid(elements)) return fgOKStatus;
+      return fgErrorStatus;
+   }
 
-  private boolean isRejectedElement(Object elem) {
-    return (fRejectedElements != null) && fRejectedElements.contains(elem);
-  }
-
-  private boolean isValid(Object[] selection) {
-    if (selection.length == 0)
+   private boolean isOfAcceptedType(Object o) {
+      for (Class<?> fAcceptedType : fAcceptedTypes) {
+         if (fAcceptedType.isInstance(o)) return true;
+      }
       return false;
+   }
 
-    if (!fAllowMultipleSelection && selection.length != 1)
-      return false;
+   private boolean isRejectedElement(Object elem) {
+      return (fRejectedElements != null) && fRejectedElements.contains(elem);
+   }
 
-    for (Object element : selection) {
-      Object o = element;
-      if (!isOfAcceptedType(o) || isRejectedElement(o))
-        return false;
-    }
-    return true;
-  }
+   private boolean isValid(Object[] selection) {
+      if (selection.length == 0) return false;
+
+      if (!fAllowMultipleSelection && selection.length != 1) return false;
+
+      for (Object element : selection) {
+         Object o = element;
+         if (!isOfAcceptedType(o) || isRejectedElement(o)) return false;
+      }
+      return true;
+   }
 }

@@ -13,62 +13,59 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateParameter;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 
+
 public class MissingMemFunCollector {
-  private static final Set<Class<? extends MissingMemFunVisitor>> MISSING_MEM_FUNS_FINDER =
-      orderPreservingSet();
-  private final ICPPASTTemplateDeclaration sut;
-  private final ICPPASTCompositeTypeSpecifier testDouble;
-  private final Collection<ICPPASTTemplateDeclaration> templateFunctions;
 
-  static {
-    MISSING_MEM_FUNS_FINDER.add(MissingCtorFinderVisitor.class);
-    MISSING_MEM_FUNS_FINDER.add(MissingFunctionFinderVisitor.class);
-    MISSING_MEM_FUNS_FINDER.add(MissingOperatorFinderVisitor.class);
-  }
+   private static final Set<Class<? extends MissingMemFunVisitor>> MISSING_MEM_FUNS_FINDER = orderPreservingSet();
+   private final ICPPASTTemplateDeclaration                        sut;
+   private final ICPPASTCompositeTypeSpecifier                     testDouble;
+   private final Collection<ICPPASTTemplateDeclaration>            templateFunctions;
 
-  public MissingMemFunCollector(ICPPASTTemplateDeclaration sut,
-      ICPPASTCompositeTypeSpecifier testDouble,
-      Collection<ICPPASTTemplateDeclaration> templateFunctions) {
-    this.sut = sut;
-    this.testDouble = testDouble;
-    this.templateFunctions = templateFunctions;
-  }
+   static {
+      MISSING_MEM_FUNS_FINDER.add(MissingCtorFinderVisitor.class);
+      MISSING_MEM_FUNS_FINDER.add(MissingFunctionFinderVisitor.class);
+      MISSING_MEM_FUNS_FINDER.add(MissingOperatorFinderVisitor.class);
+   }
 
-  public Collection<StaticPolyMissingMemFun> getMissingMemberFunctions(
-      ICPPASTTemplateParameter templateParameter) {
-    Collection<StaticPolyMissingMemFun> missingMemFuns = orderPreservingSet();
+   public MissingMemFunCollector(ICPPASTTemplateDeclaration sut, ICPPASTCompositeTypeSpecifier testDouble,
+                                 Collection<ICPPASTTemplateDeclaration> templateFunctions) {
+      this.sut = sut;
+      this.testDouble = testDouble;
+      this.templateFunctions = templateFunctions;
+   }
 
-    for (Class<? extends MissingMemFunVisitor> visitor : MISSING_MEM_FUNS_FINDER) {
-      collectMissingMemFuns(templateParameter, missingMemFuns, visitor);
-    }
+   public Collection<StaticPolyMissingMemFun> getMissingMemberFunctions(ICPPASTTemplateParameter templateParameter) {
+      Collection<StaticPolyMissingMemFun> missingMemFuns = orderPreservingSet();
 
-    return missingMemFuns;
-  }
+      for (Class<? extends MissingMemFunVisitor> visitor : MISSING_MEM_FUNS_FINDER) {
+         collectMissingMemFuns(templateParameter, missingMemFuns, visitor);
+      }
 
-  private void collectMissingMemFuns(ICPPASTTemplateParameter templateParameter,
-      Collection<StaticPolyMissingMemFun> missingMemFuns,
-      Class<? extends MissingMemFunVisitor> kindOfFinder) {
-    MissingMemFunVisitor memFunFinder = getMissingMemFunFinder(templateParameter, kindOfFinder);
-    sut.accept(memFunFinder);
-    collectInTemplateMemFuns(memFunFinder);
-    missingMemFuns.addAll(memFunFinder.getMissingMemberFunctions());
-  }
+      return missingMemFuns;
+   }
 
-  private void collectInTemplateMemFuns(MissingMemFunVisitor memFunFinder) {
-    for (ICPPASTTemplateDeclaration templateFun : templateFunctions) {
-      templateFun.accept(memFunFinder);
-    }
-  }
+   private void collectMissingMemFuns(ICPPASTTemplateParameter templateParameter, Collection<StaticPolyMissingMemFun> missingMemFuns,
+         Class<? extends MissingMemFunVisitor> kindOfFinder) {
+      MissingMemFunVisitor memFunFinder = getMissingMemFunFinder(templateParameter, kindOfFinder);
+      sut.accept(memFunFinder);
+      collectInTemplateMemFuns(memFunFinder);
+      missingMemFuns.addAll(memFunFinder.getMissingMemberFunctions());
+   }
 
-  private MissingMemFunVisitor getMissingMemFunFinder(ICPPASTTemplateParameter templateParam,
-      Class<? extends MissingMemFunVisitor> visitor) {
-    try {
-      Constructor<?> ctor =
-          visitor.getConstructor(ICPPASTCompositeTypeSpecifier.class,
-              ICPPASTTemplateParameter.class, ICPPASTTemplateDeclaration.class);
-      return (MissingMemFunVisitor) ctor.newInstance(testDouble, templateParam, sut);
-    } catch (Exception e) {
-      throw new MockatorException(e);
-    }
-  }
+   private void collectInTemplateMemFuns(MissingMemFunVisitor memFunFinder) {
+      for (ICPPASTTemplateDeclaration templateFun : templateFunctions) {
+         templateFun.accept(memFunFinder);
+      }
+   }
+
+   private MissingMemFunVisitor getMissingMemFunFinder(ICPPASTTemplateParameter templateParam, Class<? extends MissingMemFunVisitor> visitor) {
+      try {
+         Constructor<?> ctor = visitor.getConstructor(ICPPASTCompositeTypeSpecifier.class, ICPPASTTemplateParameter.class,
+               ICPPASTTemplateDeclaration.class);
+         return (MissingMemFunVisitor) ctor.newInstance(testDouble, templateParam, sut);
+      }
+      catch (Exception e) {
+         throw new MockatorException(e);
+      }
+   }
 }

@@ -6,12 +6,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
 
+
 class FakeObjectMemFunImplStrategy implements TestDoubleMemFunImplStrategy {
 
-  @Override
-  public void addCtorInitializer(ICPPASTFunctionDefinition ctor) {}
+   @Override
+   public void addCtorInitializer(ICPPASTFunctionDefinition ctor) {}
 
-  @Override
-  public void addCallVectorRegistration(IASTCompoundStatement body, ICPPASTFunctionDeclarator decl,
-      boolean isStatic) {}
+   @Override
+   public void addCallVectorRegistration(IASTCompoundStatement body, ICPPASTFunctionDeclarator decl, boolean isStatic) {}
 }

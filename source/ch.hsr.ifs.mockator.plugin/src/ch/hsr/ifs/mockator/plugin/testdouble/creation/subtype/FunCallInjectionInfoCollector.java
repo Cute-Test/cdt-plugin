@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
@@ -15,69 +15,68 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
+import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.functional.F1;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.base.tuples.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 
+
 class FunCallInjectionInfoCollector extends AbstractDepInjectInfoCollector {
 
-  public FunCallInjectionInfoCollector(IIndex index, ICProject cProject) {
-    super(index, cProject);
-  }
+   public FunCallInjectionInfoCollector(final IIndex index, final ICProject cProject) {
+      super(index, cProject);
+   }
 
-  @Override
-  public Maybe<Pair<IASTName, IType>> collectDependencyInfos(IASTName problemArgName) {
-    ICPPASTFunctionCallExpression funCall =
-        AstUtil.getAncestorOfType(problemArgName, ICPPASTFunctionCallExpression.class);
+   @Override
+   public Optional<Pair<IASTName, IType>> collectDependencyInfos(final IASTName problemArgName) {
+      final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(problemArgName, ICPPASTFunctionCallExpression.class);
 
-    if (funCall == null)
-      return none();
-
-    int args = getArgPosOfProblemType(problemArgName, list(funCall.getArguments()));
-
-    for (ICPPASTFunctionDeclarator optMatch : findMatchingFunction(getCandidateBindings(funCall),
-        funCall, args))
-      return getTargetClassOfProblemType(optMatch, args);
-
-    return none();
-  }
-
-  private Maybe<ICPPASTFunctionDeclarator> findMatchingFunction(IBinding[] functions,
-      ICPPASTFunctionCallExpression funCall, int argPosOfProblemType) {
-    for (IBinding fun : functions) {
-      for (ICPPASTFunctionDeclarator optFunDecl : lookup.findFunctionDeclaration(fun, index)) {
-        if (areEquivalentExceptProblemType(list(funCall.getArguments()), optFunDecl,
-            argPosOfProblemType))
-          return maybe(optFunDecl);
+      if (funCall == null) {
+         return Optional.empty();
       }
-    }
-    return none();
-  }
 
-  private static IBinding[] getCandidateBindings(IASTFunctionCallExpression caller) {
-    IASTExpression funNameExpr = caller.getFunctionNameExpression();
+      final int args = getArgPosOfProblemType(problemArgName, list(funCall.getArguments()));
 
-    for (IASTName optProblem : findProblemBinding(funNameExpr)) {
-      IProblemBinding iProblemBinding = (IProblemBinding) optProblem.resolveBinding();
-      return iProblemBinding.getCandidateBindings();
-    }
-    return new IBinding[] {};
-  }
+      return OptHelper.returnIfPresentElseEmpty(findMatchingFunction(getCandidateBindings(funCall), funCall, args), (
+               match) -> getTargetClassOfProblemType(match, args));
+   }
 
-  private static Maybe<IASTName> findProblemBinding(IASTExpression funNameExpr) {
-    NameFinder finder = new NameFinder(funNameExpr);
-    return finder.getNameMatchingCriteria(new F1<IASTName, Boolean>() {
-      @Override
-      public Boolean apply(IASTName name) {
-        return isProblemBinding(name.resolveBinding());
+   private Optional<ICPPASTFunctionDeclarator> findMatchingFunction(final IBinding[] functions, final ICPPASTFunctionCallExpression funCall,
+            final int argPosOfProblemType) {
+      for (final IBinding fun : functions) {
+
+         final Optional<ICPPASTFunctionDeclarator> funDecl = lookup.findFunctionDeclaration(fun, index);
+         if (funDecl.isPresent() && areEquivalentExceptProblemType(list(funCall.getArguments()), funDecl.get(), argPosOfProblemType)) {
+            return funDecl;
+         }
       }
-    });
-  }
+      return Optional.empty();
+   }
 
-  private static boolean isProblemBinding(IBinding binding) {
-    return BindingTypeVerifier.isOfType(binding, IProblemBinding.class);
-  }
+   private static IBinding[] getCandidateBindings(final IASTFunctionCallExpression caller) {
+      final IASTExpression funNameExpr = caller.getFunctionNameExpression();
+
+      return OptHelper.returnIfPresentElse(findProblemBinding(funNameExpr), (problem) -> {
+         final IProblemBinding iProblemBinding = (IProblemBinding) problem.resolveBinding();
+         return iProblemBinding.getCandidateBindings();
+      }, () -> new IBinding[] {});
+   }
+
+   private static Optional<IASTName> findProblemBinding(final IASTExpression funNameExpr) {
+      final NameFinder finder = new NameFinder(funNameExpr);
+      return finder.getNameMatchingCriteria(new F1<IASTName, Boolean>() {
+
+         @Override
+         public Boolean apply(final IASTName name) {
+            return isProblemBinding(name.resolveBinding());
+         }
+      });
+   }
+
+   private static boolean isProblemBinding(final IBinding binding) {
+      return BindingTypeVerifier.isOfType(binding, IProblemBinding.class);
+   }
 }

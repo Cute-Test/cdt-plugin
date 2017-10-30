@@ -19,73 +19,74 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExp
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
-  private final Collection<Function> unresolvedFunCalls;
 
-  {
-    shouldVisitNames = true;
-  }
+   private final Collection<Function> unresolvedFunCalls;
 
-  public MissingFunctionFinderVisitor(ICPPASTCompositeTypeSpecifier testDouble,
-      ICPPASTTemplateParameter templateParam, ICPPASTTemplateDeclaration sut) {
-    super(testDouble, templateParam, sut);
-    unresolvedFunCalls = orderPreservingSet();
-  }
+   {
+      shouldVisitNames = true;
+   }
 
-  @Override
-  public Collection<? extends StaticPolyMissingMemFun> getMissingMemberFunctions() {
-    return unresolvedFunCalls;
-  }
+   public MissingFunctionFinderVisitor(ICPPASTCompositeTypeSpecifier testDouble, ICPPASTTemplateParameter templateParam,
+                                       ICPPASTTemplateDeclaration sut) {
+      super(testDouble, templateParam, sut);
+      unresolvedFunCalls = orderPreservingSet();
+   }
 
-  @Override
-  public int visit(IASTName name) {
-    IBinding binding = name.resolveBinding();
+   @Override
+   public Collection<? extends StaticPolyMissingMemFun> getMissingMemberFunctions() {
+      return unresolvedFunCalls;
+   }
 
-    if (!isMemFunReferenceToUnknownClass(binding))
-      return PROCESS_CONTINUE;
+   @Override
+   public int visit(IASTName name) {
+      IBinding binding = name.resolveBinding();
 
-    if (isReferenceToTemplateParameter(binding)) {
-      ICPPASTFunctionCallExpression funCall = getFunctionCall(name);
+      if (!isMemFunReferenceToUnknownClass(binding)) return PROCESS_CONTINUE;
 
-      if (funCall != null) {
-        boolean isStaticFunCall = !isFieldReference(name);
-        addToResultSet(funCall, isStaticFunCall);
-        return PROCESS_SKIP;
+      if (isReferenceToTemplateParameter(binding)) {
+         ICPPASTFunctionCallExpression funCall = getFunctionCall(name);
+
+         if (funCall != null) {
+            boolean isStaticFunCall = !isFieldReference(name);
+            addToResultSet(funCall, isStaticFunCall);
+            return PROCESS_SKIP;
+         }
       }
-    }
 
-    return PROCESS_CONTINUE;
-  }
+      return PROCESS_CONTINUE;
+   }
 
-  private ICPPASTFunctionCallExpression getFunctionCall(IASTName name) {
-    return AstUtil.getAncestorOfType(name, ICPPASTFunctionCallExpression.class);
-  }
+   private ICPPASTFunctionCallExpression getFunctionCall(IASTName name) {
+      return AstUtil.getAncestorOfType(name, ICPPASTFunctionCallExpression.class);
+   }
 
-  private static boolean isMemFunReferenceToUnknownClass(IBinding binding) {
-    return binding instanceof CPPUnknownMethod;
-  }
+   private static boolean isMemFunReferenceToUnknownClass(IBinding binding) {
+      return binding instanceof CPPUnknownMethod;
+   }
 
-  private static boolean isFieldReference(IASTName name) {
-    return name.getParent() instanceof ICPPASTFieldReference;
-  }
+   private static boolean isFieldReference(IASTName name) {
+      return name.getParent() instanceof ICPPASTFieldReference;
+   }
 
-  private void addToResultSet(ICPPASTFunctionCallExpression funCall, boolean isStatic) {
-    Function newFunction = new Function(funCall, isStatic, templateParamType, getTestDoubleName());
-    unresolvedFunCalls.add(newFunction);
-  }
+   private void addToResultSet(ICPPASTFunctionCallExpression funCall, boolean isStatic) {
+      Function newFunction = new Function(funCall, isStatic, templateParamType, getTestDoubleName());
+      unresolvedFunCalls.add(newFunction);
+   }
 
-  private boolean isReferenceToTemplateParameter(IBinding binding) {
-    IType type = null;
+   private boolean isReferenceToTemplateParameter(IBinding binding) {
+      IType type = null;
 
-    if (!(binding instanceof CPPTemplateTypeParameter)) {
-      type = ((CPPUnknownMethod) binding).getOwnerType();
-    }
+      if (!(binding instanceof CPPTemplateTypeParameter)) {
+         type = ((CPPUnknownMethod) binding).getOwnerType();
+      }
 
-    if (type instanceof TypeOfDependentExpression) {
-      type = resolveTypeOfDependentExpression((TypeOfDependentExpression) type);
-    }
+      if (type instanceof TypeOfDependentExpression) {
+         type = resolveTypeOfDependentExpression((TypeOfDependentExpression) type);
+      }
 
-    return resolvesToTemplateParam(type);
-  }
+      return resolvesToTemplateParam(type);
+   }
 }

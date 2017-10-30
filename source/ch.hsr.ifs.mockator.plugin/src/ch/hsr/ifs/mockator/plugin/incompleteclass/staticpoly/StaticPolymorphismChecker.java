@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
@@ -8,55 +8,57 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.checker.AbstractMissingMemFunChecker;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
-  public static final String STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID =
-      "ch.hsr.ifs.mockator.StaticPolyMissingMemFunsProblem";
 
-  @Override
-  protected ASTVisitor getAstVisitor() {
-    return new OnEachClass();
-  }
+   public static final String STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID = "ch.hsr.ifs.mockator.StaticPolyMissingMemFunsProblem";
 
-  private class OnEachClass extends ASTVisitor {
-    {
-      shouldVisitDeclSpecifiers = true;
-    }
+   @Override
+   protected ASTVisitor getAstVisitor() {
+      return new OnEachClass();
+   }
 
-    @Override
-    public int visit(IASTDeclSpecifier specifier) {
-      if (!AstUtil.isClass(specifier))
-        return PROCESS_CONTINUE;
+   private class OnEachClass extends ASTVisitor {
 
-      ICPPASTCompositeTypeSpecifier klass = (ICPPASTCompositeTypeSpecifier) specifier;
-
-      if (isNonTemplateClass(klass)) {
-        markIfHasMissingMemFuns(klass);
+      {
+         shouldVisitDeclSpecifiers = true;
       }
 
-      return PROCESS_CONTINUE;
-    }
-  }
+      @Override
+      public int visit(final IASTDeclSpecifier specifier) {
+         if (!AstUtil.isClass(specifier)) {
+            return PROCESS_CONTINUE;
+         }
 
-  private static boolean isNonTemplateClass(ICPPASTCompositeTypeSpecifier klass) {
-    return AstUtil.getAncestorOfType(klass, ICPPASTTemplateDeclaration.class) == null;
-  }
+         final ICPPASTCompositeTypeSpecifier klass = (ICPPASTCompositeTypeSpecifier) specifier;
 
-  @Override
-  protected StaticPolyMissingMemFunFinder getMissingMemFunsFinder() {
-    return new StaticPolyMissingMemFunFinder(getCProject(), getIndex());
-  }
+         if (isNonTemplateClass(klass)) {
+            markIfHasMissingMemFuns(klass);
+         }
 
-  @Override
-  protected String getProblemId() {
-    return STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
-  }
+         return PROCESS_CONTINUE;
+      }
+   }
 
-  @Override
-  protected Maybe<IASTName> getNameToMark(ICPPASTCompositeTypeSpecifier klass) {
-    return maybe(klass.getName());
-  }
+   private static boolean isNonTemplateClass(final ICPPASTCompositeTypeSpecifier klass) {
+      return AstUtil.getAncestorOfType(klass, ICPPASTTemplateDeclaration.class) == null;
+   }
+
+   @Override
+   protected StaticPolyMissingMemFunFinder getMissingMemFunsFinder() {
+      return new StaticPolyMissingMemFunFinder(getCProject(), getIndex());
+   }
+
+   @Override
+   protected String getProblemId() {
+      return STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
+   }
+
+   @Override
+   protected Optional<IASTName> getNameToMark(final ICPPASTCompositeTypeSpecifier klass) {
+      return Optional.of(klass.getName());
+   }
 }

@@ -3,37 +3,39 @@ package ch.hsr.ifs.mockator.plugin.base.collections;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+
 // java.util.Stack is seriously flawed, so I use a java.util.Deque
 // here for my purposes (there is even a note in the JavaDoc of java.util.Stack
 // that suggests this)
 public class MyStack<T> {
-  private final Deque<T> stack;
 
-  public MyStack() {
-    stack = new ArrayDeque<T>();
-  }
+   private final Deque<T> stack;
 
-  public void push(T node) {
-    stack.addFirst(node);
-  }
+   public MyStack() {
+      stack = new ArrayDeque<T>();
+   }
 
-  public T pop() {
-    return stack.removeFirst();
-  }
+   public void push(T node) {
+      stack.addFirst(node);
+   }
 
-  public T peek() {
-    return stack.getFirst();
-  }
+   public T pop() {
+      return stack.removeFirst();
+   }
 
-  public void clear() {
-    stack.clear();
-  }
+   public T peek() {
+      return stack.getFirst();
+   }
 
-  public boolean isEmpty() {
-    return stack.isEmpty();
-  }
+   public void clear() {
+      stack.clear();
+   }
 
-  public int size() {
-    return stack.size();
-  }
+   public boolean isEmpty() {
+      return stack.isEmpty();
+   }
+
+   public int size() {
+      return stack.size();
+   }
 }

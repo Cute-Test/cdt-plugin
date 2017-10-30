@@ -9,24 +9,25 @@ import ch.hsr.ifs.mockator.plugin.mockobject.registrations.MemberFunCallRegistra
 import ch.hsr.ifs.mockator.plugin.mockobject.support.memfun.MockIdInitializerAdder;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 public class MockObjectMemFunImplStrategy implements TestDoubleMemFunImplStrategy {
-  private final CppStandard cppStd;
-  private final MockObject mockObject;
 
-  public MockObjectMemFunImplStrategy(CppStandard cppStd, MockObject mockObject) {
-    this.cppStd = cppStd;
-    this.mockObject = mockObject;
-  }
+   private final CppStandard cppStd;
+   private final MockObject  mockObject;
 
-  @Override
-  public void addCallVectorRegistration(IASTCompoundStatement body, ICPPASTFunctionDeclarator decl,
-      boolean isStatic) {
-    String name = mockObject.getNameOfAllCallsVector();
-    new MemberFunCallRegistrationAdder(decl, isStatic, cppStd, name).addRegistrationTo(body);
-  }
+   public MockObjectMemFunImplStrategy(CppStandard cppStd, MockObject mockObject) {
+      this.cppStd = cppStd;
+      this.mockObject = mockObject;
+   }
 
-  @Override
-  public void addCtorInitializer(ICPPASTFunctionDefinition function) {
-    new MockIdInitializerAdder(mockObject.getNameOfAllCallsVector(), cppStd).apply(function);
-  }
+   @Override
+   public void addCallVectorRegistration(IASTCompoundStatement body, ICPPASTFunctionDeclarator decl, boolean isStatic) {
+      String name = mockObject.getNameOfAllCallsVector();
+      new MemberFunCallRegistrationAdder(decl, isStatic, cppStd, name).addRegistrationTo(body);
+   }
+
+   @Override
+   public void addCtorInitializer(ICPPASTFunctionDefinition function) {
+      new MockIdInitializerAdder(mockObject.getNameOfAllCallsVector(), cppStd).apply(function);
+   }
 }

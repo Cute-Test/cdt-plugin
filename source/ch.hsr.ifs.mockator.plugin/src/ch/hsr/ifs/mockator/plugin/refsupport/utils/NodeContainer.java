@@ -1,22 +1,23 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
+import java.util.Optional;
+
 
 public class NodeContainer<T> {
-  private T node;
 
-  public NodeContainer(T node) {
-    this.node = node;
-  }
+   private T node;
 
-  public NodeContainer() {}
+   public NodeContainer(final T node) {
+      this.node = node;
+   }
 
-  public Maybe<T> getNode() {
-    return maybe(node);
-  }
+   public NodeContainer() {}
 
-  public void setNode(T node) {
-    this.node = node;
-  }
+   public Optional<T> getNode() {
+      return Optional.ofNullable(node);
+   }
+
+   public void setNode(final T node) {
+      this.node = node;
+   }
 }

@@ -8,35 +8,35 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorIndexAstChecker;
 
-public abstract class TestFunctionChecker extends MockatorIndexAstChecker implements
-    ICheckerWithPreferences {
 
-  @Override
-  protected ASTVisitor getAstVisitor() {
-    return new ASTVisitor() {
-      {
-        shouldVisitDeclarations = true;
-      }
+public abstract class TestFunctionChecker extends MockatorIndexAstChecker implements ICheckerWithPreferences {
 
-      @Override
-      public int visit(IASTDeclaration declaration) {
-        if (!(declaration instanceof IASTFunctionDefinition))
-          return PROCESS_CONTINUE;
+   @Override
+   protected ASTVisitor getAstVisitor() {
+      return new ASTVisitor() {
 
-        IASTFunctionDefinition candidate = (IASTFunctionDefinition) declaration;
+         {
+            shouldVisitDeclarations = true;
+         }
 
-        if (isValidTestFunction(candidate)) {
-          processTestFunction((IASTFunctionDefinition) declaration);
-        }
+         @Override
+         public int visit(IASTDeclaration declaration) {
+            if (!(declaration instanceof IASTFunctionDefinition)) return PROCESS_CONTINUE;
 
-        return PROCESS_SKIP;
-      }
-    };
-  }
+            IASTFunctionDefinition candidate = (IASTFunctionDefinition) declaration;
 
-  private boolean isValidTestFunction(IASTFunctionDefinition function) {
-    return FunctionsToAnalyze.fromProjectSettings(getProject()).shouldConsider(function);
-  }
+            if (isValidTestFunction(candidate)) {
+               processTestFunction((IASTFunctionDefinition) declaration);
+            }
 
-  protected abstract void processTestFunction(IASTFunctionDefinition function);
+            return PROCESS_SKIP;
+         }
+      };
+   }
+
+   private boolean isValidTestFunction(IASTFunctionDefinition function) {
+      return FunctionsToAnalyze.fromProjectSettings(getProject()).shouldConsider(function);
+   }
+
+   protected abstract void processTestFunction(IASTFunctionDefinition function);
 }

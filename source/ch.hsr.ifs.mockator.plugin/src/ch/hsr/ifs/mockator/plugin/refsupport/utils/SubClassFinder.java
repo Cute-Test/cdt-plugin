@@ -15,51 +15,51 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.core.runtime.CoreException;
 
+
 // Inspired by ClassTypeHelper.getSubClasses method
 public class SubClassFinder {
-  private final IIndex index;
 
-  public SubClassFinder(IIndex index) {
-    this.index = index;
-  }
+   private final IIndex index;
 
-  public Collection<ICPPClassType> getSubClasses(ICPPClassType klass) throws CoreException {
-    List<ICPPClassType> subClasses = list();
-    Set<String> alreadyHandled = unorderedSet();
-    collectSubClasses(klass, subClasses, alreadyHandled);
-    subClasses.remove(0);
-    return subClasses;
-  }
+   public SubClassFinder(IIndex index) {
+      this.index = index;
+   }
 
-  private void collectSubClasses(ICPPClassType klass, List<ICPPClassType> subClasses,
-      Set<String> alreadyHandled) throws CoreException {
-    String type = ASTTypeUtil.getType(klass, true);
+   public Collection<ICPPClassType> getSubClasses(ICPPClassType klass) throws CoreException {
+      List<ICPPClassType> subClasses = list();
+      Set<String> alreadyHandled = unorderedSet();
+      collectSubClasses(klass, subClasses, alreadyHandled);
+      subClasses.remove(0);
+      return subClasses;
+   }
 
-    if (!alreadyHandled.add(type))
-      return;
+   private void collectSubClasses(ICPPClassType klass, List<ICPPClassType> subClasses, Set<String> alreadyHandled) throws CoreException {
+      String type = ASTTypeUtil.getType(klass, true);
 
-    subClasses.add(klass);
+      if (!alreadyHandled.add(type)) return;
 
-    for (IIndexName i : findRefsAndDefs(klass)) {
-      if (!i.isBaseSpecifier()) {
-        continue;
+      subClasses.add(klass);
+
+      for (IIndexName i : findRefsAndDefs(klass)) {
+         if (!i.isBaseSpecifier()) {
+            continue;
+         }
+
+         IIndexName subClassDef = i.getEnclosingDefinition();
+
+         if (subClassDef == null) {
+            continue;
+         }
+
+         IBinding subClass = index.findBinding(subClassDef);
+
+         if (subClass instanceof ICPPClassType) {
+            collectSubClasses((ICPPClassType) subClass, subClasses, alreadyHandled);
+         }
       }
+   }
 
-      IIndexName subClassDef = i.getEnclosingDefinition();
-
-      if (subClassDef == null) {
-        continue;
-      }
-
-      IBinding subClass = index.findBinding(subClassDef);
-
-      if (subClass instanceof ICPPClassType) {
-        collectSubClasses((ICPPClassType) subClass, subClasses, alreadyHandled);
-      }
-    }
-  }
-
-  private IIndexName[] findRefsAndDefs(ICPPBinding klass) throws CoreException {
-    return index.findNames(klass, IIndex.FIND_REFERENCES | IIndex.FIND_DEFINITIONS);
-  }
+   private IIndexName[] findRefsAndDefs(ICPPBinding klass) throws CoreException {
+      return index.findNames(klass, IIndex.FIND_REFERENCES | IIndex.FIND_DEFINITIONS);
+   }
 }

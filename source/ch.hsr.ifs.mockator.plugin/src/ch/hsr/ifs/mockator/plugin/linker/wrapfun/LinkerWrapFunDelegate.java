@@ -7,31 +7,32 @@ import ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.LdPreloadLinkerWrapFu
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtManagedProjectType;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorDelegate;
 
+
 public class LinkerWrapFunDelegate extends MockatorDelegate {
 
-	@Override
-	protected boolean arePreconditionsSatisfied() {
-		return getLinkWrapHandler().arePreconditionsSatisfied();
-	}
+   @Override
+   protected boolean arePreconditionsSatisfied() {
+      return getLinkWrapHandler().arePreconditionsSatisfied();
+   }
 
-	@Override
-	protected void execute() {
-		getLinkWrapHandler().performWork();
-	}
+   @Override
+   protected void execute() {
+      getLinkWrapHandler().performWork();
+   }
 
-	private LinkerWrapFun getLinkWrapHandler() {
-		switch (getProjectType()) {
-		case Executable:
-		case StaticLib:
-			return new GnuOptionLinkerWrapFun(cProject, selection, cElement);
-		case SharedLib:
-			return new LdPreloadLinkerWrapFun(cProject, selection, cElement, getCppStd());
-		default:
-			throw new MockatorException("Unrecognized project type");
-		}
-	}
+   private LinkerWrapFun getLinkWrapHandler() {
+      switch (getProjectType()) {
+      case Executable:
+      case StaticLib:
+         return new GnuOptionLinkerWrapFun(cProject, selection, cElement);
+      case SharedLib:
+         return new LdPreloadLinkerWrapFun(cProject, selection, cElement, getCppStd());
+      default:
+         throw new MockatorException("Unrecognized project type");
+      }
+   }
 
-	private CdtManagedProjectType getProjectType() {
-		return CdtManagedProjectType.fromProject(cProject.getProject());
-	}
+   private CdtManagedProjectType getProjectType() {
+      return CdtManagedProjectType.fromProject(cProject.getProject());
+   }
 }

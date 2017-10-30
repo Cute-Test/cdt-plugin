@@ -13,38 +13,39 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 class TestFunctionFinderVisitor extends ASTVisitor {
-  private final List<IASTFunctionDefinition> functions;
-  private final FunctionsToAnalyze strategy;
 
-  {
-    shouldVisitDeclarations = true;
-  }
+   private final List<IASTFunctionDefinition> functions;
+   private final FunctionsToAnalyze           strategy;
 
-  public TestFunctionFinderVisitor(FunctionsToAnalyze strategy) {
-    this.strategy = strategy;
-    functions = list();
-  }
+   {
+      shouldVisitDeclarations = true;
+   }
 
-  public Collection<IASTFunctionDefinition> getFunctions() {
-    return functions;
-  }
+   public TestFunctionFinderVisitor(FunctionsToAnalyze strategy) {
+      this.strategy = strategy;
+      functions = list();
+   }
 
-  @Override
-  public int visit(IASTDeclaration declaration) {
-    if (!(declaration instanceof ICPPASTFunctionDefinition))
+   public Collection<IASTFunctionDefinition> getFunctions() {
+      return functions;
+   }
+
+   @Override
+   public int visit(IASTDeclaration declaration) {
+      if (!(declaration instanceof ICPPASTFunctionDefinition)) return PROCESS_CONTINUE;
+
+      ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
+
+      if (!isFunctionOfLocalClass(function) && strategy.shouldConsider(function)) {
+         functions.add((IASTFunctionDefinition) declaration);
+      }
+
       return PROCESS_CONTINUE;
+   }
 
-    ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
-
-    if (!isFunctionOfLocalClass(function) && strategy.shouldConsider(function)) {
-      functions.add((IASTFunctionDefinition) declaration);
-    }
-
-    return PROCESS_CONTINUE;
-  }
-
-  private static boolean isFunctionOfLocalClass(ICPPASTFunctionDefinition function) {
-    return AstUtil.getAncestorOfType(function.getParent(), ICPPASTFunctionDefinition.class) != null;
-  }
+   private static boolean isFunctionOfLocalClass(ICPPASTFunctionDefinition function) {
+      return AstUtil.getAncestorOfType(function.getParent(), ICPPASTFunctionDefinition.class) != null;
+   }
 }

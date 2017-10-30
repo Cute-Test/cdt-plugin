@@ -13,50 +13,51 @@ import org.eclipse.core.runtime.IStatus;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
+
 public class NatureHandler {
-  private final IProject project;
 
-  public NatureHandler(IProject project) {
-    Assert.isTrue(project.exists() && project.isOpen(),
-        "Only existing and open projects are supported");
-    this.project = project;
-  }
+   private final IProject project;
 
-  public void addNature(String natureId, IProgressMonitor pm) throws CoreException {
-    if (hasNature(natureId))
-      return;
+   public NatureHandler(IProject project) {
+      Assert.isTrue(project.exists() && project.isOpen(), "Only existing and open projects are supported");
+      this.project = project;
+   }
 
-    IProjectDescription desc = getProjectDescription();
-    List<String> natures = list(desc.getNatureIds());
-    natures.add(natureId);
-    String[] newNatures = natures.toArray(new String[natures.size()]);
-    validateNewNatures(newNatures);
-    desc.setNatureIds(newNatures);
-    project.setDescription(desc, pm);
-  }
+   public void addNature(String natureId, IProgressMonitor pm) throws CoreException {
+      if (hasNature(natureId)) return;
 
-  private IProjectDescription getProjectDescription() throws CoreException {
-    return project.getDescription();
-  }
+      IProjectDescription desc = getProjectDescription();
+      List<String> natures = list(desc.getNatureIds());
+      natures.add(natureId);
+      String[] newNatures = natures.toArray(new String[natures.size()]);
+      validateNewNatures(newNatures);
+      desc.setNatureIds(newNatures);
+      project.setDescription(desc, pm);
+   }
 
-  private static void validateNewNatures(String[] newNatures) {
-    IStatus status = ResourcesPlugin.getWorkspace().validateNatureSet(newNatures);
-    Assert.isTrue(status.getCode() == IStatus.OK, status.getMessage());
-  }
+   private IProjectDescription getProjectDescription() throws CoreException {
+      return project.getDescription();
+   }
 
-  public void removeNature(String natureId, IProgressMonitor pm) throws CoreException {
-    IProjectDescription description = getProjectDescription();
-    List<String> newNatures = list(description.getNatureIds());
-    newNatures.remove(natureId);
-    description.setNatureIds(newNatures.toArray(new String[newNatures.size()]));
-    project.setDescription(description, pm);
-  }
+   private static void validateNewNatures(String[] newNatures) {
+      IStatus status = ResourcesPlugin.getWorkspace().validateNatureSet(newNatures);
+      Assert.isTrue(status.getCode() == IStatus.OK, status.getMessage());
+   }
 
-  public boolean hasNature(String natureId) {
-    try {
-      return project.hasNature(natureId);
-    } catch (CoreException e) {
-      return false;
-    }
-  }
+   public void removeNature(String natureId, IProgressMonitor pm) throws CoreException {
+      IProjectDescription description = getProjectDescription();
+      List<String> newNatures = list(description.getNatureIds());
+      newNatures.remove(natureId);
+      description.setNatureIds(newNatures.toArray(new String[newNatures.size()]));
+      project.setDescription(description, pm);
+   }
+
+   public boolean hasNature(String natureId) {
+      try {
+         return project.hasNature(natureId);
+      }
+      catch (CoreException e) {
+         return false;
+      }
+   }
 }

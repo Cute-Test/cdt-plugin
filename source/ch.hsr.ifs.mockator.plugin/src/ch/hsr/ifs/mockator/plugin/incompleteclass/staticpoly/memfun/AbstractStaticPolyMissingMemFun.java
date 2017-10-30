@@ -21,60 +21,59 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatte
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.DefaultArgumentCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
-public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDoubleMemFun implements
-    StaticPolyMissingMemFun {
-  protected static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private ICPPASTFunctionDeclarator funDecl;
+public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDoubleMemFun implements StaticPolyMissingMemFun {
 
-  @Override
-  public String getFunctionSignature() {
-    return new FunctionSignatureFormatter(getFunDecl()).getFunctionSignature();
-  }
+   protected static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private ICPPASTFunctionDeclarator     funDecl;
 
-  @Override
-  public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy,
-      CppStandard cppStd) {
-    ICPPASTFunctionDeclarator funDecl = createFunDecl();
-    ICPPASTDeclSpecifier returnType = createReturnType(funDecl);
-    IASTCompoundStatement funBody = createFunBody(strategy, funDecl, returnType, cppStd);
-    return nodeFactory.newFunctionDefinition(returnType, funDecl, funBody);
-  }
+   @Override
+   public String getFunctionSignature() {
+      return new FunctionSignatureFormatter(getFunDecl()).getFunctionSignature();
+   }
 
-  private ICPPASTFunctionDeclarator getFunDecl() {
-    if (funDecl == null) {
-      funDecl = createFunDecl();
-    }
-    return funDecl;
-  }
+   @Override
+   public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy, CppStandard cppStd) {
+      ICPPASTFunctionDeclarator funDecl = createFunDecl();
+      ICPPASTDeclSpecifier returnType = createReturnType(funDecl);
+      IASTCompoundStatement funBody = createFunBody(strategy, funDecl, returnType, cppStd);
+      return nodeFactory.newFunctionDefinition(returnType, funDecl, funBody);
+   }
 
-  protected abstract ICPPASTFunctionDeclarator createFunDecl();
+   private ICPPASTFunctionDeclarator getFunDecl() {
+      if (funDecl == null) {
+         funDecl = createFunDecl();
+      }
+      return funDecl;
+   }
 
-  protected abstract ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl);
+   protected abstract ICPPASTFunctionDeclarator createFunDecl();
 
-  protected abstract IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy,
-      ICPPASTFunctionDeclarator funDecl, ICPPASTDeclSpecifier specifier, CppStandard cppStd);
+   protected abstract ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl);
 
-  protected IASTCompoundStatement createEmptyFunBody() {
-    return nodeFactory.newCompoundStatement();
-  }
+   protected abstract IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, ICPPASTFunctionDeclarator funDecl,
+         ICPPASTDeclSpecifier specifier, CppStandard cppStd);
 
-  @Override
-  public ICPPASTFunctionDefinition getContainingFunction() {
-    IASTExpression expr = getUnderlyingExpression();
-    return AstUtil.getAncestorOfType(expr, ICPPASTFunctionDefinition.class);
-  }
+   protected IASTCompoundStatement createEmptyFunBody() {
+      return nodeFactory.newCompoundStatement();
+   }
 
-  protected abstract IASTExpression getUnderlyingExpression();
+   @Override
+   public ICPPASTFunctionDefinition getContainingFunction() {
+      IASTExpression expr = getUnderlyingExpression();
+      return AstUtil.getAncestorOfType(expr, ICPPASTFunctionDefinition.class);
+   }
 
-  @Override
-  public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd,
-      LinkedEditModeStrategy linkedEditStrategy) {
-    DefaultArgumentCreator creator = new DefaultArgumentCreator(linkedEditStrategy, cppStd);
-    return creator.createDefaultArguments(list(getFunDecl().getParameters()));
-  }
+   protected abstract IASTExpression getUnderlyingExpression();
 
-  protected ICPPASTDeclSpecifier createCtorReturnType() {
-    return nodeFactory.newSimpleDeclSpecifier();
-  }
+   @Override
+   public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd, LinkedEditModeStrategy linkedEditStrategy) {
+      DefaultArgumentCreator creator = new DefaultArgumentCreator(linkedEditStrategy, cppStd);
+      return creator.createDefaultArguments(list(getFunDecl().getParameters()));
+   }
+
+   protected ICPPASTDeclSpecifier createCtorReturnType() {
+      return nodeFactory.newSimpleDeclSpecifier();
+   }
 }

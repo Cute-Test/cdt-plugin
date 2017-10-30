@@ -10,48 +10,50 @@ import org.eclipse.cdt.core.dom.ast.IASTMacroExpansionLocation;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 
+
 public class MacroFinderVisitor extends ASTVisitor {
-  private final List<IASTMacroExpansionLocation> macroExpansions;
-  private final String macroName;
 
-  {
-    shouldVisitNames = true;
-  }
+   private final List<IASTMacroExpansionLocation> macroExpansions;
+   private final String                           macroName;
 
-  public MacroFinderVisitor(String macroName) {
-    this.macroName = macroName;
-    macroExpansions = list();
-  }
+   {
+      shouldVisitNames = true;
+   }
 
-  public Collection<IASTMacroExpansionLocation> getMatchingMacroExpansions() {
-    return macroExpansions;
-  }
+   public MacroFinderVisitor(String macroName) {
+      this.macroName = macroName;
+      macroExpansions = list();
+   }
 
-  @Override
-  public int visit(IASTName name) {
-    for (IASTMacroExpansionLocation loc : getMacroExpansionLocations(name)) {
-      if (getMacroName(loc).equals(macroName)) {
-        macroExpansions.add(loc);
-        return PROCESS_SKIP;
+   public Collection<IASTMacroExpansionLocation> getMatchingMacroExpansions() {
+      return macroExpansions;
+   }
+
+   @Override
+   public int visit(IASTName name) {
+      for (IASTMacroExpansionLocation loc : getMacroExpansionLocations(name)) {
+         if (getMacroName(loc).equals(macroName)) {
+            macroExpansions.add(loc);
+            return PROCESS_SKIP;
+         }
       }
-    }
-    return PROCESS_CONTINUE;
-  }
+      return PROCESS_CONTINUE;
+   }
 
-  private static Collection<IASTMacroExpansionLocation> getMacroExpansionLocations(IASTName name) {
-    List<IASTMacroExpansionLocation> macroExpansions = list();
+   private static Collection<IASTMacroExpansionLocation> getMacroExpansionLocations(IASTName name) {
+      List<IASTMacroExpansionLocation> macroExpansions = list();
 
-    for (IASTNodeLocation loc : name.getNodeLocations()) {
-      if (!(loc instanceof IASTMacroExpansionLocation)) {
-        continue;
+      for (IASTNodeLocation loc : name.getNodeLocations()) {
+         if (!(loc instanceof IASTMacroExpansionLocation)) {
+            continue;
+         }
+
+         macroExpansions.add((IASTMacroExpansionLocation) loc);
       }
+      return macroExpansions;
+   }
 
-      macroExpansions.add((IASTMacroExpansionLocation) loc);
-    }
-    return macroExpansions;
-  }
-
-  private static String getMacroName(IASTMacroExpansionLocation expansionLoc) {
-    return expansionLoc.getExpansion().getMacroDefinition().getName().toString();
-  }
+   private static String getMacroName(IASTMacroExpansionLocation expansionLoc) {
+      return expansionLoc.getExpansion().getMacroDefinition().getName().toString();
+   }
 }

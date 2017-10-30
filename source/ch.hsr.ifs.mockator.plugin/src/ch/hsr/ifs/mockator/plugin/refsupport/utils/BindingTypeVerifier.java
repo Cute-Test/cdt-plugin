@@ -1,27 +1,28 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IBinding;
 
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
+
 
 public class BindingTypeVerifier {
 
-  public static <T> boolean isOfType(IBinding binding, Class<T> klass) {
-    return getAdapter(binding, klass).isSome();
-  }
+   public static <T> boolean isOfType(final IBinding binding, final Class<T> klass) {
+      return getAdapter(binding, klass).isPresent();
+   }
 
-  public static <T> Maybe<T> getAsType(IBinding binding, Class<T> klass) {
-    return getAdapter(binding, klass);
-  }
+   public static <T> Optional<T> getAsType(final IBinding binding, final Class<T> klass) {
+      return getAdapter(binding, klass);
+   }
 
-  @SuppressWarnings("unchecked")
-  private static <T> Maybe<T> getAdapter(IBinding binding, Class<T> klass) {
-    if (binding == null)
-      return none();
+   @SuppressWarnings("unchecked")
+   private static <T> Optional<T> getAdapter(final IBinding binding, final Class<T> klass) {
+      if (binding == null) {
+         return Optional.empty();
+      }
 
-    return maybe((T) binding.getAdapter(klass));
-  }
+      return Optional.ofNullable(binding.getAdapter(klass));
+   }
 }

@@ -7,35 +7,39 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.CoreException;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
+
 
 public abstract class MockatorIndexAstChecker extends AbstractIndexAstChecker {
 
-  @Override
-  public void processAst(IASTTranslationUnit ast) {
-    ast.accept(getAstVisitor());
-  }
+   @Override
+   public void processAst(IASTTranslationUnit ast) {
+      ast.accept(getAstVisitor());
+   }
 
-  protected abstract ASTVisitor getAstVisitor();
+   protected abstract ASTVisitor getAstVisitor();
 
-  protected IIndex getIndex() {
-    try {
-      return getModelCache().getIndex();
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
+   protected IIndex getIndex() {
+      try {
+         return getModelCache().getIndex();
+      }
+      catch (CoreException e) {
+         throw new MockatorException(e);
+      }
+   }
 
-  protected IASTTranslationUnit getAst() {
-    try {
-      return getModelCache().getAST();
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
+   protected IASTTranslationUnit getAst() {
+      try {
+         return getModelCache().getAST();
+      }
+      catch (CoreException e) {
+         throw new MockatorException(e);
+      }
+   }
 
-  protected ICProject getCProject() {
-    return ProjectUtil.getCProject(getFile());
-  }
+   protected ICProject getCProject() {
+      return CPPResourceHelper.getCProject(getFile());
+   }
 }

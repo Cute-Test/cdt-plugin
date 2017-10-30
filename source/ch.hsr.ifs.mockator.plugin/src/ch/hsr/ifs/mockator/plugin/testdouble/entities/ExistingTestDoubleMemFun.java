@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.testdouble.entities;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -14,7 +15,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
@@ -26,63 +26,64 @@ import ch.hsr.ifs.mockator.plugin.testdouble.CallRegistrationFinder;
 import ch.hsr.ifs.mockator.plugin.testdouble.MemFunMockSupportAdder;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.MemFunSignature;
 
+
 public class ExistingTestDoubleMemFun extends AbstractTestDoubleMemFun {
-  private final ICPPASTFunctionDefinition function;
 
-  public ExistingTestDoubleMemFun(ICPPASTFunctionDefinition function) {
-    this.function = function;
-  }
+   private final ICPPASTFunctionDefinition function;
 
-  private ICPPASTFunctionDeclarator getFunDecl() {
-    return (ICPPASTFunctionDeclarator) function.getDeclarator();
-  }
+   public ExistingTestDoubleMemFun(final ICPPASTFunctionDefinition function) {
+      this.function = function;
+   }
 
-  private IASTName getFunctionName() {
-    return getFunDecl().getName();
-  }
+   private ICPPASTFunctionDeclarator getFunDecl() {
+      return (ICPPASTFunctionDeclarator) function.getDeclarator();
+   }
 
-  public Maybe<? extends MemFunSignature> getRegisteredCall(CallRegistrationFinder finder) {
-    return finder.findRegisteredCall(function);
-  }
+   private IASTName getFunctionName() {
+      return getFunDecl().getName();
+   }
 
-  public void addMockSupport(MemFunMockSupportAdder mockSupportAdder, CallRegistrationFinder finder) {
-    if (hasAlreadyMockSupport(finder))
-      return;
+   public Optional<? extends MemFunSignature> getRegisteredCall(final CallRegistrationFinder finder) {
+      return finder.findRegisteredCall(function);
+   }
 
-    mockSupportAdder.addMockSupport(function);
-  }
+   public void addMockSupport(final MemFunMockSupportAdder mockSupportAdder, final CallRegistrationFinder finder) {
+      if (hasAlreadyMockSupport(finder)) {
+         return;
+      }
 
-  private boolean hasAlreadyMockSupport(CallRegistrationFinder finder) {
-    return getRegisteredCall(finder).isSome();
-  }
+      mockSupportAdder.addMockSupport(function);
+   }
 
-  @Override
-  public String getFunctionSignature() {
-    return new FunctionSignatureFormatter(getFunDecl()).getFunctionSignature();
-  }
+   private boolean hasAlreadyMockSupport(final CallRegistrationFinder finder) {
+      return getRegisteredCall(finder).isPresent();
+   }
 
-  @Override
-  public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd,
-      LinkedEditModeStrategy linkedEditStrategy) {
-    return new DefaultArgumentCreator(linkedEditStrategy, cppStd)
-        .createDefaultArguments(getFunParams());
-  }
+   @Override
+   public String getFunctionSignature() {
+      return new FunctionSignatureFormatter(getFunDecl()).getFunctionSignature();
+   }
 
-  private Collection<ICPPASTParameterDeclaration> getFunParams() {
-    return list(getFunDecl().getParameters());
-  }
+   @Override
+   public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEditStrategy) {
+      return new DefaultArgumentCreator(linkedEditStrategy, cppStd).createDefaultArguments(getFunParams());
+   }
 
-  @Override
-  public boolean isStatic() {
-    IBinding binding = getFunctionName().resolveBinding();
-    return ((ICPPFunction) binding).isStatic();
-  }
+   private Collection<ICPPASTParameterDeclaration> getFunParams() {
+      return list(getFunDecl().getParameters());
+   }
 
-  public boolean isConstructor() {
-    return BindingTypeVerifier.isOfType(getFunctionName().resolveBinding(), ICPPConstructor.class);
-  }
+   @Override
+   public boolean isStatic() {
+      final IBinding binding = getFunctionName().resolveBinding();
+      return ((ICPPFunction) binding).isStatic();
+   }
 
-  public ICPPASTCompositeTypeSpecifier getContainingClass() {
-    return AstUtil.getAncestorOfType(getFunDecl(), ICPPASTCompositeTypeSpecifier.class);
-  }
+   public boolean isConstructor() {
+      return BindingTypeVerifier.isOfType(getFunctionName().resolveBinding(), ICPPConstructor.class);
+   }
+
+   public ICPPASTCompositeTypeSpecifier getContainingClass() {
+      return AstUtil.getAncestorOfType(getFunDecl(), ICPPASTCompositeTypeSpecifier.class);
+   }
 }

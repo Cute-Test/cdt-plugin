@@ -19,88 +19,84 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceConte
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 public class ExtractInterfaceRefactoring extends MockatorRefactoring {
-  public static final String ID =
-      "ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring";
-  private final ExtractInterfaceContext context;
-  private ExtractInterfaceHandler handler;
 
-  public ExtractInterfaceRefactoring(ExtractInterfaceContext context) {
-    super(context.getTuOfSelection(), context.getSelection(), context.getCProject());
-    this.context = context;
-  }
+   public static final String            ID = "ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring";
+   private final ExtractInterfaceContext context;
+   private ExtractInterfaceHandler       handler;
 
-  @Override
-  public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException,
-      OperationCanceledException {
-    RefactoringStatus status = super.checkInitialConditions(pm);
-    pm.subTask(I18N.ExtractInterfaceAnalyzingInProgress);
-    prepareRefactoring(status, pm);
-    handler.preProcess();
-    return status;
-  }
+   public ExtractInterfaceRefactoring(ExtractInterfaceContext context) {
+      super(context.getTuOfSelection(), context.getSelection(), context.getCProject());
+      this.context = context;
+   }
 
-  private void prepareRefactoring(RefactoringStatus status, IProgressMonitor pm)
-      throws OperationCanceledException, CoreException {
-    context.setStatus(status);
-    context.setSelectedName(getSelectedName(getAST(tu, pm)));
-    context.setProgressMonitor(pm);
-    context.setCRefContext(refactoringContext);
-    handler = new ExtractInterfaceHandler(context);
-  }
+   @Override
+   public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException, OperationCanceledException {
+      RefactoringStatus status = super.checkInitialConditions(pm);
+      pm.subTask(I18N.ExtractInterfaceAnalyzingInProgress);
+      prepareRefactoring(status, pm);
+      handler.preProcess();
+      return status;
+   }
 
-  @Override
-  protected RefactoringStatus checkFinalConditions(IProgressMonitor pm, CheckConditionsContext c)
-      throws CoreException {
-    RefactoringStatus status = c.check(pm);
+   private void prepareRefactoring(RefactoringStatus status, IProgressMonitor pm) throws OperationCanceledException, CoreException {
+      context.setStatus(status);
+      context.setSelectedName(getSelectedName(getAST(tu, pm)));
+      context.setProgressMonitor(pm);
+      context.setCRefContext(refactoringContext);
+      handler = new ExtractInterfaceHandler(context);
+   }
 
-    try {
-      handler.postProcess(status);
-    } catch (MockatorException e) {
-      status.addFatalError("Extract interface refactoring failed: " + e.getMessage());
-    }
+   @Override
+   protected RefactoringStatus checkFinalConditions(IProgressMonitor pm, CheckConditionsContext c) throws CoreException {
+      RefactoringStatus status = c.check(pm);
 
-    return status;
-  }
+      try {
+         handler.postProcess(status);
+      }
+      catch (MockatorException e) {
+         status.addFatalError("Extract interface refactoring failed: " + e.getMessage());
+      }
 
-  @Override
-  protected RefactoringDescriptor getRefactoringDescriptor() {
-    return new ExtractInterfaceDescriptor(ID, project.getProject().getName(),
-        "Extract Interface Refactoring", getRefactoringDescription(), getArgumentMap());
-  }
+      return status;
+   }
 
-  private String getRefactoringDescription() {
-    String className = AstUtil.getQfNameF(context.getChosenClass());
-    return String.format("Extract interface for class '%s'", className);
-  }
+   @Override
+   protected RefactoringDescriptor getRefactoringDescriptor() {
+      return new ExtractInterfaceDescriptor(ID, project.getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
+            getArgumentMap());
+   }
 
-  private Map<String, String> getArgumentMap() {
-    Map<String, String> args = unorderedMap();
-    args.put(CRefactoringDescriptor.FILE_NAME, tu.getLocationURI().toString());
-    args.put(CRefactoringDescriptor.SELECTION,
-        selectedRegion.getOffset() + "," + selectedRegion.getLength());
-    args.put(ExtractInterfaceDescriptor.NEW_INTERFACE_NAME, context.getNewInterfaceName());
-    args.put(ExtractInterfaceDescriptor.REPLACE_ALL_OCCURENCES,
-        String.valueOf(context.shouldReplaceAllOccurences()));
-    return args;
-  }
+   private String getRefactoringDescription() {
+      String className = AstUtil.getQfNameF(context.getChosenClass());
+      return String.format("Extract interface for class '%s'", className);
+   }
 
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector c)
-      throws CoreException, OperationCanceledException {
-    pm.subTask(I18N.ExtractInterfacePerformingChangesInProgress);
-    context.setModificationCollector(c);
-    context.setProgressMonitor(pm);
-    handler.performChanges();
-  }
+   private Map<String, String> getArgumentMap() {
+      Map<String, String> args = unorderedMap();
+      args.put(CRefactoringDescriptor.FILE_NAME, tu.getLocationURI().toString());
+      args.put(CRefactoringDescriptor.SELECTION, selectedRegion.getOffset() + "," + selectedRegion.getLength());
+      args.put(ExtractInterfaceDescriptor.NEW_INTERFACE_NAME, context.getNewInterfaceName());
+      args.put(ExtractInterfaceDescriptor.REPLACE_ALL_OCCURENCES, String.valueOf(context.shouldReplaceAllOccurences()));
+      return args;
+   }
 
-  public ExtractInterfaceContext getContext() {
-    return context;
-  }
+   @Override
+   protected void collectModifications(IProgressMonitor pm, ModificationCollector c) throws CoreException, OperationCanceledException {
+      pm.subTask(I18N.ExtractInterfacePerformingChangesInProgress);
+      context.setModificationCollector(c);
+      context.setProgressMonitor(pm);
+      handler.performChanges();
+   }
 
-  @Override
-  public String getDescription() {
-    return I18N.ExtractInterfaceName;
-  }
+   public ExtractInterfaceContext getContext() {
+      return context;
+   }
+
+   @Override
+   public String getDescription() {
+      return I18N.ExtractInterfaceName;
+   }
 }

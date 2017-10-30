@@ -1,12 +1,11 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
 import static ch.hsr.ifs.mockator.plugin.base.misc.CastHelper.unsecureCast;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.ASTTypeMatcher;
 import org.eclipse.cdt.core.dom.ast.DOMException;
@@ -60,408 +59,431 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
+
 
 @SuppressWarnings("restriction")
 public abstract class AstUtil {
 
-  public static boolean isSameType(IType lhs, IType rhs) {
-    return new ASTTypeMatcher().isEquivalent(lhs, rhs);
-  }
+   public static boolean isSameType(final IType lhs, final IType rhs) {
+      return new ASTTypeMatcher().isEquivalent(lhs, rhs);
+   }
 
-  public static boolean isStructType(ICPPASTCompositeTypeSpecifier klass) {
-    return klass.getKey() == IASTCompositeTypeSpecifier.k_struct;
-  }
+   public static boolean isStructType(final ICPPASTCompositeTypeSpecifier klass) {
+      return klass.getKey() == IASTCompositeTypeSpecifier.k_struct;
+   }
 
-  public static boolean isClassType(ICPPASTCompositeTypeSpecifier klass) {
-    return klass.getKey() == ICPPASTCompositeTypeSpecifier.k_class;
-  }
+   public static boolean isClassType(final ICPPASTCompositeTypeSpecifier klass) {
+      return klass.getKey() == ICPPASTCompositeTypeSpecifier.k_class;
+   }
 
-  public static boolean isClass(IASTNode node) {
-    return node instanceof ICPPASTCompositeTypeSpecifier;
-  }
+   public static boolean isClass(final IASTNode node) {
+      return node instanceof ICPPASTCompositeTypeSpecifier;
+   }
 
-  public static boolean isQualifiedName(IASTName name) {
-    return name instanceof ICPPASTQualifiedName;
-  }
+   public static boolean isQualifiedName(final IASTName name) {
+      return name instanceof ICPPASTQualifiedName;
+   }
 
-  public static IASTName getName(IASTFunctionCallExpression callExpr) {
-    if (callExpr instanceof IASTIdExpression) {
-      IASTIdExpression idExpr = (IASTIdExpression) callExpr.getFunctionNameExpression();
-      return idExpr.getName();
-    }
-
-    IASTExpression expression = callExpr.getFunctionNameExpression();
-
-    if (expression instanceof ICPPASTFieldReference)
-      return ((ICPPASTFieldReference) expression).getFieldName();
-    else if (expression instanceof IASTIdExpression)
-      return ((IASTIdExpression) expression).getName().getLastName();
-
-    throw new MockatorException("Was not able to determine name of function call");
-  }
-
-  public static IASTDeclaration[] getAllDeclarations(IASTNode parent) {
-    if ((parent instanceof IASTTranslationUnit))
-      return ((IASTTranslationUnit) parent).getDeclarations();
-    if ((parent instanceof ICPPASTCompositeTypeSpecifier))
-      return ((ICPPASTCompositeTypeSpecifier) parent).getMembers();
-    if ((parent instanceof ICPPASTNamespaceDefinition))
-      return ((ICPPASTNamespaceDefinition) parent).getDeclarations();
-
-    return new IASTDeclaration[0];
-  }
-
-  public static ICPPASTDeclSpecifier getDeclSpec(ICPPASTFunctionDeclarator funDecl) {
-    ICPPASTFunctionDefinition funDef =
-        AstUtil.getAncestorOfType(funDecl, ICPPASTFunctionDefinition.class);
-
-    if (funDef != null)
-      return (ICPPASTDeclSpecifier) funDef.getDeclSpecifier();
-
-    IASTSimpleDeclaration simpleDecl =
-        AstUtil.getAncestorOfType(funDecl, IASTSimpleDeclaration.class);
-    return (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
-  }
-
-  public static boolean hasConstPart(IType type) {
-    if (!(type instanceof ITypeContainer))
-      return false;
-
-    if (type instanceof IQualifierType) {
-      if (((IQualifierType) type).isConst())
-        return true;
-    }
-
-    return hasConstPart(((ITypeContainer) type).getType());
-  }
-
-  public static boolean hasVolatilePart(IType type) {
-    if (!(type instanceof ITypeContainer))
-      return false;
-
-    if (type instanceof IQualifierType) {
-      if (((IQualifierType) type).isVolatile())
-        return true;
-    }
-    return hasVolatilePart(((ITypeContainer) type).getType());
-  }
-
-  public static boolean isStatic(IASTDeclSpecifier specifier) {
-    return specifier != null && specifier.getStorageClass() == IASTDeclSpecifier.sc_static;
-  }
-
-  public static boolean isConstructor(ICPPASTFunctionDefinition function) {
-    return function.getDeclarator().getName().resolveBinding() instanceof ICPPConstructor;
-  }
-
-  public static boolean isDeclConstructor(IASTDeclaration declaration) {
-    IASTDeclarator declaratorForNode = AstUtil.getDeclaratorForNode(declaration);
-
-    if (!(declaratorForNode instanceof ICPPASTFunctionDeclarator))
-      return false;
-
-    for (IASTDeclSpecifier optDeclSpec : AstUtil.getDeclarationSpecifier(declaration))
-      return optDeclSpec instanceof IASTSimpleDeclSpecifier
-          && isUnspecified((IASTSimpleDeclSpecifier) optDeclSpec);
-
-    return false;
-  }
-
-  public static boolean isUnspecified(IASTSimpleDeclSpecifier declSpec) {
-    return declSpec.getType() == IASTSimpleDeclSpecifier.t_unspecified;
-  }
-
-  public static List<ICPPASTFunctionDefinition> getFunctionDefinitions(
-      Collection<IASTDeclaration> publicMemFuns) {
-    List<ICPPASTFunctionDefinition> result = list();
-
-    for (IASTDeclaration fun : publicMemFuns) {
-      ICPPASTFunctionDefinition candidate =
-          AstUtil.getChildOfType(fun, ICPPASTFunctionDefinition.class);
-
-      if (candidate != null) {
-        result.add(candidate);
+   public static IASTName getName(final IASTFunctionCallExpression callExpr) {
+      if (callExpr instanceof IASTIdExpression) {
+         final IASTIdExpression idExpr = (IASTIdExpression) callExpr.getFunctionNameExpression();
+         return idExpr.getName();
       }
-    }
-    return result;
-  }
 
-  public static <T> T getAncestorOfType(IASTNode node, Class<? extends IASTNode> T) {
-    IASTNode currentNode = node;
+      final IASTExpression expression = callExpr.getFunctionNameExpression();
 
-    while (currentNode != null) {
-      if (T.isInstance(currentNode))
-        return unsecureCast(currentNode);
+      if (expression instanceof ICPPASTFieldReference) {
+         return ((ICPPASTFieldReference) expression).getFieldName();
+      } else if (expression instanceof IASTIdExpression) {
+         return ((IASTIdExpression) expression).getName().getLastName();
+      }
 
-      currentNode = currentNode.getParent();
-    }
-    return null;
-  }
+      throw new MockatorException("Was not able to determine name of function call");
+   }
 
-  public static <T> T getChildOfType(IASTNode node, Class<? extends IASTNode> T) {
-    if (node == null)
+   public static IASTDeclaration[] getAllDeclarations(final IASTNode parent) {
+      if ((parent instanceof IASTTranslationUnit)) {
+         return ((IASTTranslationUnit) parent).getDeclarations();
+      }
+      if ((parent instanceof ICPPASTCompositeTypeSpecifier)) {
+         return ((ICPPASTCompositeTypeSpecifier) parent).getMembers();
+      }
+      if ((parent instanceof ICPPASTNamespaceDefinition)) {
+         return ((ICPPASTNamespaceDefinition) parent).getDeclarations();
+      }
+
+      return new IASTDeclaration[0];
+   }
+
+   public static ICPPASTDeclSpecifier getDeclSpec(final ICPPASTFunctionDeclarator funDecl) {
+      final ICPPASTFunctionDefinition funDef = AstUtil.getAncestorOfType(funDecl, ICPPASTFunctionDefinition.class);
+
+      if (funDef != null) {
+         return (ICPPASTDeclSpecifier) funDef.getDeclSpecifier();
+      }
+
+      final IASTSimpleDeclaration simpleDecl = AstUtil.getAncestorOfType(funDecl, IASTSimpleDeclaration.class);
+      return (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
+   }
+
+   public static boolean hasConstPart(final IType type) {
+      if (!(type instanceof ITypeContainer)) {
+         return false;
+      }
+
+      if (type instanceof IQualifierType) {
+         if (((IQualifierType) type).isConst()) {
+            return true;
+         }
+      }
+
+      return hasConstPart(((ITypeContainer) type).getType());
+   }
+
+   public static boolean hasVolatilePart(final IType type) {
+      if (!(type instanceof ITypeContainer)) {
+         return false;
+      }
+
+      if (type instanceof IQualifierType && ((IQualifierType) type).isVolatile()) {
+         return true;
+      }
+
+      return hasVolatilePart(((ITypeContainer) type).getType());
+   }
+
+   public static boolean isStatic(final IASTDeclSpecifier specifier) {
+      return specifier != null && specifier.getStorageClass() == IASTDeclSpecifier.sc_static;
+   }
+
+   public static boolean isConstructor(final ICPPASTFunctionDefinition function) {
+      return function.getDeclarator().getName().resolveBinding() instanceof ICPPConstructor;
+   }
+
+   public static boolean isDeclConstructor(final IASTDeclaration declaration) {
+      final IASTDeclarator declaratorForNode = AstUtil.getDeclaratorForNode(declaration);
+
+      if (!(declaratorForNode instanceof ICPPASTFunctionDeclarator)) {
+         return false;
+      }
+
+      final Optional<IASTDeclSpecifier> declSpec = AstUtil.getDeclarationSpecifier(declaration);
+      if (declSpec.isPresent()) {
+         return declSpec.get() instanceof IASTSimpleDeclSpecifier && isUnspecified((IASTSimpleDeclSpecifier) (declSpec.get()));
+      }
+
+      return false;
+   }
+
+   public static boolean isUnspecified(final IASTSimpleDeclSpecifier declSpec) {
+      return declSpec.getType() == IASTSimpleDeclSpecifier.t_unspecified;
+   }
+
+   public static List<ICPPASTFunctionDefinition> getFunctionDefinitions(final Collection<IASTDeclaration> publicMemFuns) {
+      final List<ICPPASTFunctionDefinition> result = list();
+
+      for (final IASTDeclaration fun : publicMemFuns) {
+         final ICPPASTFunctionDefinition candidate = AstUtil.getChildOfType(fun, ICPPASTFunctionDefinition.class);
+
+         if (candidate != null) {
+            result.add(candidate);
+         }
+      }
+      return result;
+   }
+
+   public static <T> T getAncestorOfType(final IASTNode node, final Class<? extends IASTNode> T) {
+      IASTNode currentNode = node;
+
+      while (currentNode != null) {
+         if (T.isInstance(currentNode)) {
+            return unsecureCast(currentNode);
+         }
+
+         currentNode = currentNode.getParent();
+      }
       return null;
+   }
 
-    if (T.isInstance(node))
-      return unsecureCast(node);
-
-    for (IASTNode child : node.getChildren()) {
-      T currentNode = getChildOfType(child, T);
-
-      if (currentNode != null)
-        return currentNode;
-    }
-
-    return null;
-  }
-
-  public static boolean hasPointerOrRefType(IASTDeclarator declarator) {
-    if (declarator == null)
-      return false;
-
-    if (declarator instanceof IASTArrayDeclarator) {
-      IASTArrayDeclarator arrayDecl = (IASTArrayDeclarator) declarator;
-      return arrayDecl.getPointerOperators().length > 0;
-    }
-
-    if (declarator.getPointerOperators().length > 0)
-      return true;
-
-    IBinding declBinding = declarator.getName().resolveBinding();
-
-    if (declBinding instanceof IVariable) {
-      IType type = ((IVariable) declBinding).getType();
-      return hasPointerOrRefType(type);
-    } else if (declBinding instanceof ICPPMethod) {
-      IType type = ((ICPPMethod) declBinding).getType().getReturnType();
-      return hasPointerOrRefType(type);
-    }
-
-    return false;
-  }
-
-  public static boolean hasPointerOrRefType(IType type) {
-    return type instanceof ICPPReferenceType || type instanceof IPointerType;
-  }
-
-  public static IType unwindPointerOrRefType(IType type) {
-    if (type instanceof IPointerType) {
-      type = ((IPointerType) type).getType();
-    }
-
-    if (type instanceof ICPPReferenceType) {
-      type = ((ICPPReferenceType) type).getType();
-    }
-
-    return type;
-  }
-
-  public static IASTCompoundStatement toCompoundStatement(IASTStatement stmt) {
-    if (stmt instanceof IASTCompoundStatement)
-      return (IASTCompoundStatement) stmt;
-
-    IASTCompoundStatement compound = new CPPASTCompoundStatement();
-    compound.addStatement(stmt);
-    return compound;
-  }
-
-  public static IType asNonConst(IType type) {
-    while (type instanceof IQualifierType && ((IQualifierType) type).isConst()) {
-      type = ((IQualifierType) type).getType();
-    }
-    return type;
-  }
-
-  public static IASTDeclarator getDeclaratorForNode(IASTNode node) {
-    IASTDeclarator declarator = null;
-
-    if (node instanceof IASTSimpleDeclaration) {
-      IASTSimpleDeclaration decl = (IASTSimpleDeclaration) node;
-
-      if (decl.getDeclarators().length > 0) {
-        declarator = decl.getDeclarators()[0];
+   public static <T> T getChildOfType(final IASTNode node, final Class<? extends IASTNode> T) {
+      if (node == null) {
+         return null;
       }
-    } else if (node instanceof IASTParameterDeclaration) {
-      IASTParameterDeclaration decl = (IASTParameterDeclaration) node;
-      declarator = decl.getDeclarator();
-    } else if (node instanceof ICPPASTFunctionDefinition) {
-      ICPPASTFunctionDefinition fun = (ICPPASTFunctionDefinition) node;
-      declarator = fun.getDeclarator();
-    }
 
-    return declarator;
-  }
+      if (T.isInstance(node)) {
+         return unsecureCast(node);
+      }
 
-  public static Maybe<IASTDeclSpecifier> getDeclarationSpecifier(IASTNode node) {
-    if (isPartOf(node, ICPPASTParameterDeclaration.class)) {
-      ICPPASTParameterDeclaration paramDecl =
-          AstUtil.getAncestorOfType(node, ICPPASTParameterDeclaration.class);
-      return maybe(paramDecl.getDeclSpecifier());
-    } else if (isPartOf(node, ICPPASTFunctionDefinition.class)) {
-      ICPPASTFunctionDefinition funDef =
-          AstUtil.getAncestorOfType(node, ICPPASTFunctionDefinition.class);
-      return maybe(funDef.getDeclSpecifier());
-    } else if (isPartOf(node, IASTSimpleDeclaration.class)) {
-      IASTSimpleDeclaration simpleDecl =
-          AstUtil.getAncestorOfType(node, IASTSimpleDeclaration.class);
-      return maybe(simpleDecl.getDeclSpecifier());
-    }
-    return none();
-  }
+      for (final IASTNode child : node.getChildren()) {
+         final T currentNode = getChildOfType(child, T);
 
-  public static boolean isCopyCtor(ICPPConstructor ctor, ICPPClassType classType) {
-    IType[] paramTypes = ctor.getType().getParameterTypes();
+         if (currentNode != null) {
+            return currentNode;
+         }
+      }
 
-    if (paramTypes.length == 0)
+      return null;
+   }
+
+   public static boolean hasPointerOrRefType(final IASTDeclarator declarator) {
+      if (declarator == null) {
+         return false;
+      }
+
+      if (declarator instanceof IASTArrayDeclarator) {
+         final IASTArrayDeclarator arrayDecl = (IASTArrayDeclarator) declarator;
+         return arrayDecl.getPointerOperators().length > 0;
+      }
+
+      if (declarator.getPointerOperators().length > 0) {
+         return true;
+      }
+
+      final IBinding declBinding = declarator.getName().resolveBinding();
+
+      if (declBinding instanceof IVariable) {
+         final IType type = ((IVariable) declBinding).getType();
+         return hasPointerOrRefType(type);
+      } else if (declBinding instanceof ICPPMethod) {
+         final IType type = ((ICPPMethod) declBinding).getType().getReturnType();
+         return hasPointerOrRefType(type);
+      }
+
       return false;
+   }
 
-    if (!isFstCopyCtorParam(paramTypes[0], classType))
+   public static boolean hasPointerOrRefType(final IType type) {
+      return type instanceof ICPPReferenceType || type instanceof IPointerType;
+   }
+
+   public static IType unwindPointerOrRefType(IType type) {
+      if (type instanceof IPointerType) {
+         type = ((IPointerType) type).getType();
+      }
+
+      if (type instanceof ICPPReferenceType) {
+         type = ((ICPPReferenceType) type).getType();
+      }
+
+      return type;
+   }
+
+   public static IASTCompoundStatement toCompoundStatement(final IASTStatement stmt) {
+      if (stmt instanceof IASTCompoundStatement) {
+         return (IASTCompoundStatement) stmt;
+      }
+
+      final IASTCompoundStatement compound = new CPPASTCompoundStatement();
+      compound.addStatement(stmt);
+      return compound;
+   }
+
+   public static IType asNonConst(IType type) {
+      while (type instanceof IQualifierType && ((IQualifierType) type).isConst()) {
+         type = ((IQualifierType) type).getType();
+      }
+      return type;
+   }
+
+   public static IASTDeclarator getDeclaratorForNode(final IASTNode node) {
+      IASTDeclarator declarator = null;
+
+      if (node instanceof IASTSimpleDeclaration) {
+         final IASTSimpleDeclaration decl = (IASTSimpleDeclaration) node;
+
+         if (decl.getDeclarators().length > 0) {
+            declarator = decl.getDeclarators()[0];
+         }
+      } else if (node instanceof IASTParameterDeclaration) {
+         final IASTParameterDeclaration decl = (IASTParameterDeclaration) node;
+         declarator = decl.getDeclarator();
+      } else if (node instanceof ICPPASTFunctionDefinition) {
+         final ICPPASTFunctionDefinition fun = (ICPPASTFunctionDefinition) node;
+         declarator = fun.getDeclarator();
+      }
+
+      return declarator;
+   }
+
+   public static Optional<IASTDeclSpecifier> getDeclarationSpecifier(final IASTNode node) {
+      if (isPartOf(node, ICPPASTParameterDeclaration.class)) {
+         final ICPPASTParameterDeclaration paramDecl = AstUtil.getAncestorOfType(node, ICPPASTParameterDeclaration.class);
+         return Optional.of(paramDecl.getDeclSpecifier());
+      } else if (isPartOf(node, ICPPASTFunctionDefinition.class)) {
+         final ICPPASTFunctionDefinition funDef = AstUtil.getAncestorOfType(node, ICPPASTFunctionDefinition.class);
+         return Optional.of(funDef.getDeclSpecifier());
+      } else if (isPartOf(node, IASTSimpleDeclaration.class)) {
+         final IASTSimpleDeclaration simpleDecl = AstUtil.getAncestorOfType(node, IASTSimpleDeclaration.class);
+         return Optional.of(simpleDecl.getDeclSpecifier());
+      }
+      return Optional.empty();
+   }
+
+   public static boolean isCopyCtor(final ICPPConstructor ctor, final ICPPClassType classType) {
+      final IType[] paramTypes = ctor.getType().getParameterTypes();
+
+      if (paramTypes.length == 0) {
+         return false;
+      }
+
+      if (!isFstCopyCtorParam(paramTypes[0], classType)) {
+         return false;
+      }
+
+      final ICPPParameter[] params = ctor.getParameters();
+
+      for (int i = 1; i < params.length; i++) {
+         if (!params[i].hasDefaultValue()) {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+   private static boolean isFstCopyCtorParam(final IType paramType, final ICPPClassType classType) {
+      if (!(paramType instanceof ICPPReferenceType)) {
+         return false;
+      }
+
+      IType candidate = ((ICPPReferenceType) paramType).getType();
+
+      if ((candidate instanceof IQualifierType)) {
+         candidate = ((IQualifierType) candidate).getType();
+      }
+
+      if ((candidate instanceof ICPPDeferredClassInstance)) {
+         candidate = ((ICPPDeferredClassInstance) candidate).getClassTemplate();
+      }
+
+      if (candidate == null) {
+         return false;
+      }
+
+      return candidate.isSameType(classType);
+   }
+
+   public static boolean isDefaultCtor(final ICPPConstructor ctor) {
+      final ICPPParameter[] params = ctor.getParameters();
+      return params.length == 0 || ((params.length == 1) && (isVoid(params[0]))) || haveAllDefaultValue(params);
+   }
+
+   private static boolean isVoid(final ICPPParameter param) {
+      if ((param.getType() instanceof IBasicType)) {
+         return ((IBasicType) param.getType()).getKind().equals(IBasicType.Kind.eVoid);
+      }
+
       return false;
+   }
 
-    ICPPParameter[] params = ctor.getParameters();
+   private static boolean haveAllDefaultValue(final ICPPParameter[] parameters) {
+      for (int i = 0; i < parameters.length; i++) {
+         if (!parameters[i].hasDefaultValue()) {
+            return false;
+         }
+      }
 
-    for (int i = 1; i < params.length; i++) {
-      if (!params[i].hasDefaultValue())
-        return false;
-    }
+      return true;
+   }
 
-    return true;
-  }
+   public static String getQfNameF(final ICPPASTCompositeTypeSpecifier klass) {
+      final IBinding klassBinding = klass.getName().resolveBinding();
+      Assert.instanceOf(klassBinding, ICPPClassType.class, "Class expected");
+      return getQfName(((ICPPClassType) klassBinding));
+   }
 
-  private static boolean isFstCopyCtorParam(IType paramType, ICPPClassType classType) {
-    if (!(paramType instanceof ICPPReferenceType))
+   public static String getQfName(final ICPPBinding binding) {
+      try {
+         return getQfName(binding.getQualifiedName());
+      }
+      catch (final DOMException e) {
+         throw new MockatorException(e);
+      }
+   }
+
+   public static String getQfName(final String[] names) {
+      return StringUtil.join(list(names), "::");
+   }
+
+   public static boolean isVoid(final ICPPASTParameterDeclaration param) {
+      return param.getDeclarator().getPointerOperators().length == 0 && isVoid(param.getDeclSpecifier());
+   }
+
+   public static boolean isVoid(final IASTDeclSpecifier specifier) {
+      return specifier instanceof IASTSimpleDeclSpecifier && ((IASTSimpleDeclSpecifier) specifier).getType() == IASTSimpleDeclSpecifier.t_void;
+   }
+
+   public static void removeExternalStorageIfSet(final IASTDeclSpecifier newDeclSpec) {
+      if (newDeclSpec.getStorageClass() == IASTDeclSpecifier.sc_extern) {
+         newDeclSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
+      }
+   }
+
+   public static boolean isPushBack(final IASTName name) {
+      final IASTFunctionCallExpression funcCall = getAncestorOfType(name, IASTFunctionCallExpression.class);
+
+      if (funcCall != null && funcCall.getFunctionNameExpression() instanceof IASTFieldReference) {
+         final IASTFieldReference idExp = (IASTFieldReference) funcCall.getFunctionNameExpression();
+         return idExp.getFieldName().toString().equals(MockatorConstants.PUSH_BACK);
+      }
+
       return false;
+   }
 
-    IType candidate = ((ICPPReferenceType) paramType).getType();
+   public static boolean isPartOf(final IASTNode node, final Class<? extends IASTNode> klass) {
+      return getAncestorOfType(node, klass) != null;
+   }
 
-    if ((candidate instanceof IQualifierType)) {
-      candidate = ((IQualifierType) candidate).getType();
-    }
+   public static IType windDownToRealType(IType type, final boolean stopAtTypeDef) {
+      if (type instanceof ITypeContainer) {
+         if (stopAtTypeDef && type instanceof ITypedef) {
+            return type;
+         }
 
-    if ((candidate instanceof ICPPDeferredClassInstance)) {
-      candidate = ((ICPPDeferredClassInstance) candidate).getClassTemplate();
-    }
+         type = ((ITypeContainer) type).getType();
+         return windDownToRealType(type, stopAtTypeDef);
+      }
 
-    if (candidate == null)
-      return false;
+      return type;
+   }
 
-    return candidate.isSameType(classType);
-  }
+   public static IType getType(final IASTInitializerClause clause) {
+      if (clause instanceof IASTInitializerList) {
+         final IASTInitializerClause[] clauses = ((IASTInitializerList) clause).getClauses();
+         if (clauses.length > 0) {
+            return getType(clauses[0]);
+         }
 
-  public static boolean isDefaultCtor(ICPPConstructor ctor) {
-    ICPPParameter[] params = ctor.getParameters();
-    return params.length == 0 || ((params.length == 1) && (isVoid(params[0])))
-        || haveAllDefaultValue(params);
-  }
+         final int noQualifiers = 0;
+         return new CPPBasicType(Kind.eInt, noQualifiers);
+      }
 
-  private static boolean isVoid(ICPPParameter param) {
-    if ((param.getType() instanceof IBasicType))
-      return ((IBasicType) param.getType()).getKind().equals(IBasicType.Kind.eVoid);
+      if (clause instanceof IASTIdExpression) {
+         final IASTName name = ((IASTIdExpression) clause).getName();
+         final IBinding binding = name.resolveBinding();
 
-    return false;
-  }
+         if (binding instanceof IVariable) {
+            return ((IVariable) binding).getType();
+         }
+         if (binding instanceof ICPPConstructor) {
+            return ((ICPPConstructor) binding).getClassOwner();
+         }
+         if (binding instanceof IFunction) {
+            return ((IFunction) binding).getType().getReturnType();
+         }
+         if (binding instanceof ITypedef) {
+            return ((ITypedef) binding).getType();
+         }
+         if (binding instanceof ICPPClassType) {
+            return ((ICPPClassType) binding);
+         }
+      }
 
-  private static boolean haveAllDefaultValue(ICPPParameter[] parameters) {
-    for (int i = 0; i < parameters.length; i++) {
-      if (!parameters[i].hasDefaultValue())
-        return false;
-    }
+      if (clause instanceof IASTExpression) {
+         return ((IASTExpression) clause).getExpressionType();
+      }
 
-    return true;
-  }
-
-  public static String getQfNameF(ICPPASTCompositeTypeSpecifier klass) {
-    IBinding klassBinding = klass.getName().resolveBinding();
-    Assert.instanceOf(klassBinding, ICPPClassType.class, "Class expected");
-    return getQfName(((ICPPClassType) klassBinding));
-  }
-
-  public static String getQfName(ICPPBinding binding) {
-    try {
-      return getQfName(binding.getQualifiedName());
-    } catch (DOMException e) {
-      throw new MockatorException(e);
-    }
-  }
-
-  public static String getQfName(String[] names) {
-    return StringUtil.join(list(names), "::");
-  }
-
-  public static boolean isVoid(ICPPASTParameterDeclaration param) {
-    return param.getDeclarator().getPointerOperators().length == 0
-        && isVoid(param.getDeclSpecifier());
-  }
-
-  public static boolean isVoid(IASTDeclSpecifier specifier) {
-    return specifier instanceof IASTSimpleDeclSpecifier
-        && ((IASTSimpleDeclSpecifier) specifier).getType() == IASTSimpleDeclSpecifier.t_void;
-  }
-
-  public static void removeExternalStorageIfSet(IASTDeclSpecifier newDeclSpec) {
-    if (newDeclSpec.getStorageClass() == IASTDeclSpecifier.sc_extern) {
-      newDeclSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
-    }
-  }
-
-  public static boolean isPushBack(IASTName name) {
-    IASTFunctionCallExpression funcCall = getAncestorOfType(name, IASTFunctionCallExpression.class);
-
-    if (funcCall != null && funcCall.getFunctionNameExpression() instanceof IASTFieldReference) {
-      IASTFieldReference idExp = (IASTFieldReference) funcCall.getFunctionNameExpression();
-      return idExp.getFieldName().toString().equals(MockatorConstants.PUSH_BACK);
-    }
-
-    return false;
-  }
-
-  public static boolean isPartOf(IASTNode node, Class<? extends IASTNode> klass) {
-    return getAncestorOfType(node, klass) != null;
-  }
-
-  public static IType windDownToRealType(IType type, boolean stopAtTypeDef) {
-    if (type instanceof ITypeContainer) {
-      if (stopAtTypeDef && type instanceof ITypedef)
-        return type;
-
-      type = ((ITypeContainer) type).getType();
-      return windDownToRealType(type, stopAtTypeDef);
-    }
-
-    return type;
-  }
-
-  public static IType getType(IASTInitializerClause clause) {
-    if (clause instanceof IASTInitializerList) {
-      IASTInitializerClause[] clauses = ((IASTInitializerList) clause).getClauses();
-      if (clauses.length > 0)
-        return getType(clauses[0]);
-
-      final int noQualifiers = 0;
-      return new CPPBasicType(Kind.eInt, noQualifiers);
-    }
-
-    if (clause instanceof IASTIdExpression) {
-      IASTName name = ((IASTIdExpression) clause).getName();
-      IBinding binding = name.resolveBinding();
-
-      if (binding instanceof IVariable)
-        return ((IVariable) binding).getType();
-      if (binding instanceof ICPPConstructor)
-        return ((ICPPConstructor) binding).getClassOwner();
-      if (binding instanceof IFunction)
-        return ((IFunction) binding).getType().getReturnType();
-      if (binding instanceof ITypedef)
-        return ((ITypedef) binding).getType();
-      if (binding instanceof ICPPClassType)
-        return ((ICPPClassType) binding);
-    }
-
-    if (clause instanceof IASTExpression)
-      return ((IASTExpression) clause).getExpressionType();
-
-    return new CPPBasicType(Kind.eInt, 0);
-  }
+      return new CPPBasicType(Kind.eInt, 0);
+   }
 }

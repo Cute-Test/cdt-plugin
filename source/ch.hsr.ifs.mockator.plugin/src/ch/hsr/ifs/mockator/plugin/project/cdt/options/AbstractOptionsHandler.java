@@ -1,9 +1,9 @@
 package ch.hsr.ifs.mockator.plugin.project.cdt.options;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
@@ -12,82 +12,83 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.mockator.plugin.base.functional.F2;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtHelper;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.GnuCdtProjectVariables;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChainProjectVariables;
 
+
 abstract class AbstractOptionsHandler {
-  protected ToolChainProjectVariables projectVariables;
-  private final IProject project;
 
-  public AbstractOptionsHandler(IProject project) {
-    this.project = project;
-    initProjectVariables(project);
-  }
+   protected ToolChainProjectVariables projectVariables;
+   private final IProject              project;
 
-  private void initProjectVariables(IProject project) {
-    Maybe<ToolChain> tc = ToolChain.fromProject(project);
+   public AbstractOptionsHandler(final IProject project) {
+      this.project = project;
+      initProjectVariables(project);
+   }
 
-    if (tc.isSome()) {
-      projectVariables = tc.get().getCdtProjectVariables();
-    } else {
-      projectVariables = new GnuCdtProjectVariables(); // default
-    }
-  }
+   private void initProjectVariables(final IProject project) {
+      final Optional<ToolChain> tc = ToolChain.fromProject(project);
 
-  protected Maybe<ITool> getToolToAnanalyze() {
-    for (ITool tool : getDefaultConfiguration().getToolChain().getTools()) {
-      if (isRequestedTool(tool))
-        return maybe(tool);
-    }
-
-    return none();
-  }
-
-  protected abstract boolean isRequestedTool(ITool tool);
-
-  protected void withEveryTool(F2<ITool, IConfiguration, Void> callBack) {
-    for (IConfiguration config : getConfigurations()) {
-      for (ITool tool : config.getToolChain().getTools()) {
-        if (isRequestedTool(tool)) {
-          callBack.apply(tool, config);
-        }
+      if (tc.isPresent()) {
+         projectVariables = tc.get().getCdtProjectVariables();
+      } else {
+         projectVariables = new GnuCdtProjectVariables(); // default
       }
-    }
-  }
+   }
 
-  protected IConfiguration[] getConfigurations() {
-    return getProjectBuildInfo().getManagedProject().getConfigurations();
-  }
+   protected Optional<ITool> getToolToAnanalyze() {
+      for (final ITool tool : getDefaultConfiguration().getToolChain().getTools()) {
+         if (isRequestedTool(tool)) {
+            return Optional.of(tool);
+         }
+      }
 
-  protected IConfiguration getDefaultConfiguration() {
-    return getProjectBuildInfo().getDefaultConfiguration();
-  }
+      return Optional.empty();
+   }
 
-  private IManagedBuildInfo getProjectBuildInfo() {
-    return CdtHelper.getManagedBuildInfo(project);
-  }
+   protected abstract boolean isRequestedTool(ITool tool);
 
-  protected boolean isCppCompiler(ITool tool) {
-    return projectVariables.getCppCompilerToolId().equals(CdtHelper.getSuperTool(tool).getId());
-  }
+   protected void withEveryTool(final F2<ITool, IConfiguration, Void> callBack) {
+      for (final IConfiguration config : getConfigurations()) {
+         for (final ITool tool : config.getToolChain().getTools()) {
+            if (isRequestedTool(tool)) {
+               callBack.apply(tool, config);
+            }
+         }
+      }
+   }
 
-  protected boolean isLinker(ITool tool) {
-    return projectVariables.getLinkerToolIds().contains(CdtHelper.getSuperTool(tool).getId());
-  }
+   protected IConfiguration[] getConfigurations() {
+      return getProjectBuildInfo().getManagedProject().getConfigurations();
+   }
 
-  protected void setAndSaveOption(IConfiguration config, ITool tool, IOption option, String newFlags) {
-    CdtHelper.setAndSaveOption(project, config, tool, option, newFlags);
-  }
+   protected IConfiguration getDefaultConfiguration() {
+      return getProjectBuildInfo().getDefaultConfiguration();
+   }
 
-  protected void setAndSaveOption(IConfiguration config, ITool tool, IOption option,
-      Collection<String> values) {
-    CdtHelper.setAndSaveOption(project, config, tool, option, values);
-  }
+   private IManagedBuildInfo getProjectBuildInfo() {
+      return CdtHelper.getManagedBuildInfo(project);
+   }
 
-  protected void setAndSaveOption(IConfiguration config, ITool tool, IOption option, boolean active) {
-    CdtHelper.setAndSaveOption(project, config, tool, option, active);
-  }
+   protected boolean isCppCompiler(final ITool tool) {
+      return projectVariables.getCppCompilerToolId().equals(CdtHelper.getSuperTool(tool).getId());
+   }
+
+   protected boolean isLinker(final ITool tool) {
+      return projectVariables.getLinkerToolIds().contains(CdtHelper.getSuperTool(tool).getId());
+   }
+
+   protected void setAndSaveOption(final IConfiguration config, final ITool tool, final IOption option, final String newFlags) {
+      CdtHelper.setAndSaveOption(project, config, tool, option, newFlags);
+   }
+
+   protected void setAndSaveOption(final IConfiguration config, final ITool tool, final IOption option, final Collection<String> values) {
+      CdtHelper.setAndSaveOption(project, config, tool, option, values);
+   }
+
+   protected void setAndSaveOption(final IConfiguration config, final ITool tool, final IOption option, final boolean active) {
+      CdtHelper.setAndSaveOption(project, config, tool, option, active);
+   }
 }

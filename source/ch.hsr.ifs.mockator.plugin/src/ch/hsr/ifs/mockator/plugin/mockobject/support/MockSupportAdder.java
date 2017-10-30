@@ -9,49 +9,49 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorInse
 import ch.hsr.ifs.mockator.plugin.mockobject.support.context.MockSupportContext;
 import ch.hsr.ifs.mockator.plugin.testdouble.TestDoubleParentFinder;
 
+
 public class MockSupportAdder {
-  private final MockSupportContext context;
 
-  public MockSupportAdder(MockSupportContext context) {
-    this.context = context;
-  }
+   private final MockSupportContext context;
 
-  public void addMockSupport() {
-    createMockatorInclude();
-    createMockatorInitCall();
-    createAllCallsSequenceVector();
-    addMockatorIdMember();
-    addExpectations();
-    addAssertEquals();
-  }
+   public MockSupportAdder(MockSupportContext context) {
+      this.context = context;
+   }
 
-  private void addAssertEquals() {
-    new AssertEqualsInserter(context).insertAssertEqual();
-  }
+   public void addMockSupport() {
+      createMockatorInclude();
+      createMockatorInitCall();
+      createAllCallsSequenceVector();
+      addMockatorIdMember();
+      addExpectations();
+      addAssertEquals();
+   }
 
-  private void addExpectations() {
-    ExpectationsHandler handler = new ExpectationsHandler(context);
-    handler.addExpectations();
-  }
+   private void addAssertEquals() {
+      new AssertEqualsInserter(context).insertAssertEqual();
+   }
 
-  private void createMockatorInclude() {
-    new MockatorIncludeInserter(context.getAst()).insertWith(context.getRewriter());
-  }
+   private void addExpectations() {
+      ExpectationsHandler handler = new ExpectationsHandler(context);
+      handler.addExpectations();
+   }
 
-  private void createMockatorInitCall() {
-    ICPPASTCompositeTypeSpecifier mockClass = context.getMockObject().getKlass();
-    IASTNode parent = new TestDoubleParentFinder(mockClass).getParentOfTestDouble();
-    new MockatorInitCallInserter(mockClass, parent).insertWith(context.getRewriter());
-  }
+   private void createMockatorInclude() {
+      new MockatorIncludeInserter(context.getAst()).insertWith(context.getRewriter());
+   }
 
-  private void createAllCallsSequenceVector() {
-    new AllCallsVectorInserter(context.getMockObject().getKlass(), context.getMockObject()
-        .getParent(), context.getMockObject().getAllCallsVector(), context.getCppStandard())
-        .insert(context.getRewriter());
-  }
+   private void createMockatorInitCall() {
+      ICPPASTCompositeTypeSpecifier mockClass = context.getMockObject().getKlass();
+      IASTNode parent = new TestDoubleParentFinder(mockClass).getParentOfTestDouble();
+      new MockatorInitCallInserter(mockClass, parent).insertWith(context.getRewriter());
+   }
 
-  private void addMockatorIdMember() {
-    new MockIdFieldInserter(context.getInserter()).insert(context.getMockObject().hasMockIdField(),
-        context.hasOnlyStaticMemFuns());
-  }
+   private void createAllCallsSequenceVector() {
+      new AllCallsVectorInserter(context.getMockObject().getKlass(), context.getMockObject().getParent(), context.getMockObject().getAllCallsVector(),
+            context.getCppStandard()).insert(context.getRewriter());
+   }
+
+   private void addMockatorIdMember() {
+      new MockIdFieldInserter(context.getInserter()).insert(context.getMockObject().hasMockIdField(), context.hasOnlyStaticMemFuns());
+   }
 }

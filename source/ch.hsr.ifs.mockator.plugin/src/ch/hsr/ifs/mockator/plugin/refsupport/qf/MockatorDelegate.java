@@ -23,91 +23,89 @@ import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.FileEditorOpener;
 
+
 @SuppressWarnings("restriction")
-public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate,
-    IEditorActionDelegate {
-  protected IWorkbenchWindow window;
-  protected ICProject cProject;
-  protected ITextSelection selection;
-  protected ICElement cElement;
+public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
 
-  @Override
-  public void init(IWorkbenchWindow window) {
-    this.window = window;
-  }
+   protected IWorkbenchWindow window;
+   protected ICProject        cProject;
+   protected ITextSelection   selection;
+   protected ICElement        cElement;
 
-  @Override
-  public void run(IAction action) {
-    if (!(isCEditorActive() && arePreconditionsSatisfied()))
-      return;
+   @Override
+   public void init(IWorkbenchWindow window) {
+      this.window = window;
+   }
 
-    try {
-      execute();
-    } catch (MockatorException e) {
-      // pass null as message; e.getMessage() would lead to a message
-      // containing twice the same text for msg and reason
-      ExceptionUtil.showException(I18N.ExceptionErrorTitle, null, e);
-    }
-  }
+   @Override
+   public void run(IAction action) {
+      if (!(isCEditorActive() && arePreconditionsSatisfied())) return;
 
-  protected boolean arePreconditionsSatisfied() {
-    return true;
-  }
+      try {
+         execute();
+      }
+      catch (MockatorException e) {
+         // pass null as message; e.getMessage() would lead to a message
+         // containing twice the same text for msg and reason
+         ExceptionUtil.showException(I18N.ExceptionErrorTitle, null, e);
+      }
+   }
 
-  @Override
-  public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-    if (targetEditor != null) {
-      window = targetEditor.getSite().getWorkbenchWindow();
-    }
-  }
+   protected boolean arePreconditionsSatisfied() {
+      return true;
+   }
 
-  private boolean isCEditorActive() {
-    IWorkbenchPart activePart = window.getActivePage().getActivePart();
+   @Override
+   public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+      if (targetEditor != null) {
+         window = targetEditor.getSite().getWorkbenchWindow();
+      }
+   }
 
-    if (!(activePart instanceof CEditor))
-      return false;
+   private boolean isCEditorActive() {
+      IWorkbenchPart activePart = window.getActivePage().getActivePart();
 
-    CEditor activeEditor = (CEditor) activePart;
-    IWorkingCopy wc = getWorkingCopy(activeEditor.getEditorInput());
+      if (!(activePart instanceof CEditor)) return false;
 
-    if (wc == null || !(wc.getResource() instanceof IFile))
-      return false;
+      CEditor activeEditor = (CEditor) activePart;
+      IWorkingCopy wc = getWorkingCopy(activeEditor.getEditorInput());
 
-    cProject = wc.getCProject();
-    cElement = activeEditor.getInputCElement();
+      if (wc == null || !(wc.getResource() instanceof IFile)) return false;
 
-    if (cProject == null || cElement == null)
-      return false;
+      cProject = wc.getCProject();
+      cElement = activeEditor.getInputCElement();
 
-    return true;
-  }
+      if (cProject == null || cElement == null) return false;
 
-  protected abstract void execute();
+      return true;
+   }
 
-  private static IWorkingCopy getWorkingCopy(IEditorInput editor) {
-    IWorkingCopyManager wcManager = CUIPlugin.getDefault().getWorkingCopyManager();
-    return wcManager.getWorkingCopy(editor);
-  }
+   protected abstract void execute();
 
-  protected void openInEditor(IFile file) {
-    FileEditorOpener opener = new FileEditorOpener(file);
-    opener.openInEditor();
-  }
+   private static IWorkingCopy getWorkingCopy(IEditorInput editor) {
+      IWorkingCopyManager wcManager = CUIPlugin.getDefault().getWorkingCopyManager();
+      return wcManager.getWorkingCopy(editor);
+   }
 
-  @Override
-  public void selectionChanged(IAction action, ISelection newSelection) {
-    if (newSelection instanceof ITextSelection) {
-      selection = (ITextSelection) newSelection;
-      action.setEnabled(true);
-    } else {
-      action.setEnabled(false);
-    }
-  }
+   protected void openInEditor(IFile file) {
+      FileEditorOpener opener = new FileEditorOpener(file);
+      opener.openInEditor();
+   }
 
-  protected CppStandard getCppStd() {
-    return CppStandard.fromCompilerFlags(cProject.getProject());
-  }
+   @Override
+   public void selectionChanged(IAction action, ISelection newSelection) {
+      if (newSelection instanceof ITextSelection) {
+         selection = (ITextSelection) newSelection;
+         action.setEnabled(true);
+      } else {
+         action.setEnabled(false);
+      }
+   }
 
-  @Override
-  public void dispose() {}
+   protected CppStandard getCppStd() {
+      return CppStandard.fromCompilerFlags(cProject.getProject());
+   }
+
+   @Override
+   public void dispose() {}
 }

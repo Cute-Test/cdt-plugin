@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -11,6 +11,7 @@ package ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
@@ -37,213 +38,222 @@ import org.eclipse.core.runtime.SubMonitor;
 
 import ch.hsr.ifs.mockator.plugin.base.functional.F1;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
+
 // Copied and adapted from CUTE
 public class RunnerFinder {
-  private static final String MAKE_RUNNER_FQ = "cute::makeRunner";
-  private final IIndex index;
-  private final ICProject cProject;
 
-  public RunnerFinder(ICProject cProject) throws CoreException {
-    this.cProject = cProject;
-    index = CCorePlugin.getIndexManager().getIndex(cProject);
-  }
+   private static final String MAKE_RUNNER_FQ = "cute::makeRunner";
+   private final IIndex        index;
+   private final ICProject     cProject;
 
-  public List<IASTFunctionDefinition> findTestRunners(IProgressMonitor monitor)
-      throws CoreException {
-    SubMonitor mon = SubMonitor.convert(monitor, 2);
+   public RunnerFinder(final ICProject cProject) throws CoreException {
+      this.cProject = cProject;
+      index = CCorePlugin.getIndexManager().getIndex(cProject);
+   }
 
-    try {
-      mon.beginTask(I18N.RunnerFinderFindMain, 1);
-      IASTFunctionDefinition mainFunc = findMain(mon);
-      mon.beginTask(I18N.RunnerFinderFindRunners, 1);
-      return getTestRunnersFunctions(mainFunc, mon);
-    } finally {
-      mon.done();
-    }
-  }
+   public List<IASTFunctionDefinition> findTestRunners(final IProgressMonitor monitor) throws CoreException {
+      final SubMonitor mon = SubMonitor.convert(monitor, 2);
 
-  private List<IASTFunctionDefinition> getTestRunnersFunctions(IASTFunctionDefinition mainFunc,
-      IProgressMonitor pm) throws CoreException {
-    if (mainFunc == null)
-      return list();
+      try {
+         mon.beginTask(I18N.RunnerFinderFindMain, 1);
+         final IASTFunctionDefinition mainFunc = findMain(mon);
+         mon.beginTask(I18N.RunnerFinderFindRunners, 1);
+         return getTestRunnersFunctions(mainFunc, mon);
+      }
+      finally {
+         mon.done();
+      }
+   }
 
-    IIndex index = mainFunc.getTranslationUnit().getIndex();
+   private List<IASTFunctionDefinition> getTestRunnersFunctions(final IASTFunctionDefinition mainFunc, final IProgressMonitor pm)
+            throws CoreException {
+      if (mainFunc == null) {
+         return list();
+      }
 
-    try {
-      index.acquireReadLock();
-      List<IASTFunctionCallExpression> funcCalls = getFunctionCalls(mainFunc);
-      List<IASTFunctionDefinition> testRunners = list();
+      final IIndex index = mainFunc.getTranslationUnit().getIndex();
 
-      for (IASTFunctionCallExpression callExpression : funcCalls) {
-        if (callExpression.getFunctionNameExpression() instanceof IASTIdExpression) {
-          IASTIdExpression idExp = (IASTIdExpression) callExpression.getFunctionNameExpression();
-          IBinding binding = idExp.getName().resolveBinding();
-          IASTName[] defs = mainFunc.getTranslationUnit().getDefinitionsInAST(binding);
+      try {
+         index.acquireReadLock();
+         final List<IASTFunctionCallExpression> funcCalls = getFunctionCalls(mainFunc);
+         final List<IASTFunctionDefinition> testRunners = list();
 
-          if (defs.length > 0) {
-            addTestRunnerFuncDef(testRunners, defs);
-          } else {
-            IIndexName[] indexDefs = index.findDefinitions(binding);
-            IASTTranslationUnit ast = getAST(indexDefs[0], pm);
+         for (final IASTFunctionCallExpression callExpression : funcCalls) {
+            if (callExpression.getFunctionNameExpression() instanceof IASTIdExpression) {
+               final IASTIdExpression idExp = (IASTIdExpression) callExpression.getFunctionNameExpression();
+               final IBinding binding = idExp.getName().resolveBinding();
+               IASTName[] defs = mainFunc.getTranslationUnit().getDefinitionsInAST(binding);
 
-            for (IASTName optName : findName(ast, String.valueOf(indexDefs[0].getSimpleID()))) {
-              defs = ast.getDeclarationsInAST(optName.resolveBinding());
+               if (defs.length > 0) {
+                  addTestRunnerFuncDef(testRunners, defs);
+               } else {
+                  final IIndexName[] indexDefs = index.findDefinitions(binding);
+                  final IASTTranslationUnit ast = getAST(indexDefs[0], pm);
 
-              if (defs.length > 0) {
-                addTestRunnerFuncDef(testRunners, defs);
-              }
+                  final Optional<IASTName> name = findName(ast, String.valueOf(indexDefs[0].getSimpleID()));
+                  if (name.isPresent()) {
+                     defs = ast.getDeclarationsInAST(name.get().resolveBinding());
+
+                     if (defs.length > 0) {
+                        addTestRunnerFuncDef(testRunners, defs);
+                     }
+                  }
+               }
             }
-          }
-        }
+         }
+
+         return testRunners;
+      }
+      catch (final InterruptedException e) {
+         Thread.currentThread().interrupt();
+      }
+      finally {
+         index.releaseReadLock();
       }
 
-      return testRunners;
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    } finally {
-      index.releaseReadLock();
-    }
+      return list();
+   }
 
-    return list();
-  }
+   private static Optional<IASTName> findName(final IASTTranslationUnit ast, final String nameToLookFor) {
+      final NameFinder nameFinder = new NameFinder(ast);
+      return nameFinder.getNameMatchingCriteria(new F1<IASTName, Boolean>() {
 
-  private static Maybe<IASTName> findName(IASTTranslationUnit ast, final String nameToLookFor) {
-    NameFinder nameFinder = new NameFinder(ast);
-    return nameFinder.getNameMatchingCriteria(new F1<IASTName, Boolean>() {
-      @Override
-      public Boolean apply(IASTName name) {
-        return nameToLookFor.equals(name.toString());
+         @Override
+         public Boolean apply(final IASTName name) {
+            return nameToLookFor.equals(name.toString());
+         }
+      });
+   }
+
+   private static void addTestRunnerFuncDef(final List<IASTFunctionDefinition> testRunners, final IASTName[] defs) {
+      final IASTFunctionDefinition funcDef = getFunctionDefinition(defs[0]);
+
+      if (isTestRunner(funcDef)) {
+         testRunners.add(funcDef);
       }
-    });
-  }
+   }
 
-  private static void addTestRunnerFuncDef(List<IASTFunctionDefinition> testRunners, IASTName[] defs) {
-    IASTFunctionDefinition funcDef = getFunctionDefinition(defs[0]);
+   private static boolean isTestRunner(final IASTFunctionDefinition funcDef) {
+      final TestRunnerVisitor finder = new TestRunnerVisitor();
+      funcDef.getBody().accept(finder);
+      return finder.res;
+   }
 
-    if (isTestRunner(funcDef)) {
-      testRunners.add(funcDef);
-    }
-  }
+   private static List<IASTFunctionCallExpression> getFunctionCalls(final IASTFunctionDefinition mainFunc) {
+      final List<IASTFunctionCallExpression> funCalls = list();
+      mainFunc.getBody().accept(new ASTVisitor() {
 
-  private static boolean isTestRunner(IASTFunctionDefinition funcDef) {
-    TestRunnerVisitor finder = new TestRunnerVisitor();
-    funcDef.getBody().accept(finder);
-    return finder.res;
-  }
+         {
+            shouldVisitStatements = true;
+         }
 
-  private static List<IASTFunctionCallExpression> getFunctionCalls(IASTFunctionDefinition mainFunc) {
-    final List<IASTFunctionCallExpression> funCalls = list();
-    mainFunc.getBody().accept(new ASTVisitor() {
+         @Override
+         public int visit(final IASTStatement statement) {
+            if (statement instanceof IASTExpressionStatement) {
+               final IASTExpressionStatement expStmt = (IASTExpressionStatement) statement;
+
+               if (expStmt.getExpression() instanceof IASTFunctionCallExpression) {
+                  final IASTFunctionCallExpression funcCall = (IASTFunctionCallExpression) expStmt.getExpression();
+                  funCalls.add(funcCall);
+               }
+            }
+
+            return PROCESS_CONTINUE;
+         }
+      });
+      return funCalls;
+   }
+
+   private IASTFunctionDefinition findMain(final SubMonitor m) throws CoreException {
+      try {
+         index.acquireReadLock();
+         final IIndexBinding[] bindings = index.findBindings("main".toCharArray(), IndexFilter.ALL, new NullProgressMonitor());
+
+         if (bindings.length > 0) {
+            final IIndexName[] main = index.findDefinitions(bindings[0]);
+            final IASTTranslationUnit ast = getAST(main[0], m);
+
+            final Optional<IASTName> oMain = findDefinitionInTranslationUnit(ast, main[0]);
+            if (oMain.isPresent()) {
+               return getFunctionDefinition(oMain.get());
+            }
+         }
+      }
+      catch (final InterruptedException e) {
+         Thread.currentThread().interrupt();
+      }
+      finally {
+         index.releaseReadLock();
+      }
+
+      return null;
+   }
+
+   private static Optional<IASTName> findDefinitionInTranslationUnit(final IASTTranslationUnit ast, final IIndexName iName) {
+      final NodeContainer<IASTName> defName = new NodeContainer<>();
+      ast.accept(new ASTVisitor() {
+
+         {
+            shouldVisitNames = true;
+         }
+
+         @Override
+         public int visit(final IASTName name) {
+            if (name.isDefinition() && name.getNodeLocations().length > 0) {
+               final IASTNodeLocation nodeLocation = name.getNodeLocations()[0];
+
+               if (isSame(iName, nodeLocation)) {
+                  defName.setNode(name);
+                  return PROCESS_ABORT;
+               }
+            }
+            return PROCESS_CONTINUE;
+         }
+
+      });
+      return defName.getNode();
+   }
+
+   private static boolean isSame(final IIndexName iName, final IASTNodeLocation nodeLocation) {
+      final Path fileName = new Path(nodeLocation.asFileLocation().getFileName());
+      return iName.getNodeOffset() == nodeLocation.getNodeOffset() && iName.getNodeLength() == nodeLocation.getNodeLength() && new Path(iName
+               .getFileLocation().getFileName()).equals(fileName);
+   }
+
+   private static IASTFunctionDefinition getFunctionDefinition(final IASTName name) {
+      return AstUtil.getAncestorOfType(name, IASTFunctionDefinition.class);
+   }
+
+   private IASTTranslationUnit getAST(final IIndexName iName, final IProgressMonitor pm) throws CoreException {
+      final TranslationUnitLoader loader = new TranslationUnitLoader(cProject, index, pm);
+      return loader.loadAst(iName);
+   }
+
+   private static final class TestRunnerVisitor extends ASTVisitor {
+
+      private boolean res = false;
+
       {
-        shouldVisitStatements = true;
+         shouldVisitNames = true;
       }
 
       @Override
-      public int visit(IASTStatement statement) {
-        if (statement instanceof IASTExpressionStatement) {
-          IASTExpressionStatement expStmt = (IASTExpressionStatement) statement;
+      public int visit(final IASTName name) {
+         if (AstUtil.isQualifiedName(name)) {
+            final ICPPASTQualifiedName qName = (ICPPASTQualifiedName) name;
 
-          if (expStmt.getExpression() instanceof IASTFunctionCallExpression) {
-            IASTFunctionCallExpression funcCall =
-                (IASTFunctionCallExpression) expStmt.getExpression();
-            funCalls.add(funcCall);
-          }
-        }
+            if (qName.toString().equals(MAKE_RUNNER_FQ)) {
+               res = true;
+               return PROCESS_ABORT;
+            }
+         }
 
-        return PROCESS_CONTINUE;
+         return PROCESS_CONTINUE;
       }
-    });
-    return funCalls;
-  }
-
-  private IASTFunctionDefinition findMain(SubMonitor m) throws CoreException {
-    try {
-      index.acquireReadLock();
-      IIndexBinding[] bindings =
-          index.findBindings("main".toCharArray(), IndexFilter.ALL, new NullProgressMonitor());
-
-      if (bindings.length > 0) {
-        IIndexName[] main = index.findDefinitions(bindings[0]);
-        IASTTranslationUnit ast = getAST(main[0], m);
-
-        for (IASTName optMain : findDefinitionInTranslationUnit(ast, main[0]))
-          return getFunctionDefinition(optMain);
-      }
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    } finally {
-      index.releaseReadLock();
-    }
-
-    return null;
-  }
-
-  private static Maybe<IASTName> findDefinitionInTranslationUnit(IASTTranslationUnit ast,
-      final IIndexName iName) {
-    final NodeContainer<IASTName> defName = new NodeContainer<IASTName>();
-    ast.accept(new ASTVisitor() {
-      {
-        shouldVisitNames = true;
-      }
-
-      @Override
-      public int visit(IASTName name) {
-        if (name.isDefinition() && name.getNodeLocations().length > 0) {
-          IASTNodeLocation nodeLocation = name.getNodeLocations()[0];
-
-          if (isSame(iName, nodeLocation)) {
-            defName.setNode(name);
-            return PROCESS_ABORT;
-          }
-        }
-        return PROCESS_CONTINUE;
-      }
-
-    });
-    return defName.getNode();
-  }
-
-  private static boolean isSame(IIndexName iName, IASTNodeLocation nodeLocation) {
-    Path fileName = new Path(nodeLocation.asFileLocation().getFileName());
-    return iName.getNodeOffset() == nodeLocation.getNodeOffset()
-        && iName.getNodeLength() == nodeLocation.getNodeLength()
-        && new Path(iName.getFileLocation().getFileName()).equals(fileName);
-  }
-
-  private static IASTFunctionDefinition getFunctionDefinition(IASTName name) {
-    return AstUtil.getAncestorOfType(name, IASTFunctionDefinition.class);
-  }
-
-  private IASTTranslationUnit getAST(IIndexName iName, IProgressMonitor pm) throws CoreException {
-    TranslationUnitLoader loader = new TranslationUnitLoader(cProject, index, pm);
-    return loader.loadAst(iName);
-  }
-
-  private static final class TestRunnerVisitor extends ASTVisitor {
-    private boolean res = false;
-
-    {
-      shouldVisitNames = true;
-    }
-
-    @Override
-    public int visit(IASTName name) {
-      if (AstUtil.isQualifiedName(name)) {
-        ICPPASTQualifiedName qName = (ICPPASTQualifiedName) name;
-
-        if (qName.toString().equals(MAKE_RUNNER_FQ)) {
-          res = true;
-          return PROCESS_ABORT;
-        }
-      }
-
-      return PROCESS_CONTINUE;
-    }
-  }
+   }
 }

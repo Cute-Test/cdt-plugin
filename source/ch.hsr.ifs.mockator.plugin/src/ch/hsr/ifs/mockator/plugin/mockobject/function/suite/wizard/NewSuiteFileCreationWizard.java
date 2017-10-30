@@ -23,63 +23,68 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.LinkSuiteToRunnerRefactoring;
+
 
 // Copied and adapted from CUTE
 @SuppressWarnings("restriction")
 public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
-  private NewSuiteFileCreationWizardPage page;
-  private final ICProject mockatorCProject;
-  private final MockFunctionCommunication mockFunction;
-  private final LinkSuiteToRunnerRefactoring runnerRefactoring;
 
-  public NewSuiteFileCreationWizard(ICProject mockatorCProject,
-      MockFunctionCommunication mockFunction, LinkSuiteToRunnerRefactoring runnerRefactoring) {
-    this.mockatorCProject = mockatorCProject;
-    this.mockFunction = mockFunction;
-    this.runnerRefactoring = runnerRefactoring;
-    setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
-    setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
-    setWindowTitle(I18N.NewSuiteWizardNewCuiteSuiteFile);
-  }
+   private NewSuiteFileCreationWizardPage     page;
+   private final ICProject                    mockatorCProject;
+   private final MockFunctionCommunication    mockFunction;
+   private final LinkSuiteToRunnerRefactoring runnerRefactoring;
 
-  @Override
-  public void addPages() {
-    super.addPages();
-    page = new NewSuiteFileCreationWizardPage(mockatorCProject, mockFunction, runnerRefactoring);
-    addPage(page);
-  }
+   public NewSuiteFileCreationWizard(ICProject mockatorCProject, MockFunctionCommunication mockFunction,
+                                     LinkSuiteToRunnerRefactoring runnerRefactoring) {
+      this.mockatorCProject = mockatorCProject;
+      this.mockFunction = mockFunction;
+      this.runnerRefactoring = runnerRefactoring;
+      setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
+      setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
+      setWindowTitle(I18N.NewSuiteWizardNewCuiteSuiteFile);
+   }
 
-  @Override
-  public boolean performFinish() {
-    try {
-      WorkbenchRunnableAdapter adapter =
-          new WorkbenchRunnableAdapter(createWorkspaceRunnable(), ProjectUtil.getWorkspaceRoot());
-      getContainer().run(true, true, adapter);
-    } catch (InvocationTargetException e) {
-      ExceptionUtil.showException(e);
-      return false;
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      return false;
-    }
+   @Override
+   public void addPages() {
+      super.addPages();
+      page = new NewSuiteFileCreationWizardPage(mockatorCProject, mockFunction, runnerRefactoring);
+      addPage(page);
+   }
 
-    return true;
-  }
-
-  private IWorkspaceRunnable createWorkspaceRunnable() {
-    IWorkspaceRunnable op = new IWorkspaceRunnable() {
-      @Override
-      public void run(IProgressMonitor monitor) throws CoreException, OperationCanceledException {
-        page.createNewSuiteLinkedToRunner(monitor);
+   @Override
+   public boolean performFinish() {
+      try {
+         WorkbenchRunnableAdapter adapter = new WorkbenchRunnableAdapter(createWorkspaceRunnable(), CPPResourceHelper.getWorkspaceRoot());
+         getContainer().run(true, true, adapter);
       }
-    };
-    return op;
-  }
+      catch (InvocationTargetException e) {
+         ExceptionUtil.showException(e);
+         return false;
+      }
+      catch (InterruptedException e) {
+         Thread.currentThread().interrupt();
+         return false;
+      }
 
-  @Override
-  public void init(IWorkbench workbench, IStructuredSelection selection) {}
+      return true;
+   }
+
+   private IWorkspaceRunnable createWorkspaceRunnable() {
+      IWorkspaceRunnable op = new IWorkspaceRunnable() {
+
+         @Override
+         public void run(IProgressMonitor monitor) throws CoreException, OperationCanceledException {
+            page.createNewSuiteLinkedToRunner(monitor);
+         }
+      };
+      return op;
+   }
+
+   @Override
+   public void init(IWorkbench workbench, IStructuredSelection selection) {}
 }

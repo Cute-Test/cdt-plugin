@@ -12,34 +12,34 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
+
 // /Copied and adapted from CUTE
 class TypedViewerFilter extends ViewerFilter {
-  private final Class<?>[] fAcceptedTypes;
-  private final Object[] fRejectedElements;
 
-  public TypedViewerFilter(Class<?>[] acceptedTypes) {
-    this(acceptedTypes, null);
-  }
+   private final Class<?>[] fAcceptedTypes;
+   private final Object[]   fRejectedElements;
 
-  public TypedViewerFilter(Class<?>[] acceptedTypes, Object[] rejectedElements) {
-    Assert.isNotNull(acceptedTypes);
-    fAcceptedTypes = acceptedTypes;
-    fRejectedElements = rejectedElements;
-  }
+   public TypedViewerFilter(Class<?>[] acceptedTypes) {
+      this(acceptedTypes, null);
+   }
 
-  @Override
-  public boolean select(Viewer viewer, Object parentElement, Object element) {
-    if (fRejectedElements != null) {
-      for (Object fRejectedElement : fRejectedElements) {
-        if (element.equals(fRejectedElement))
-          return false;
+   public TypedViewerFilter(Class<?>[] acceptedTypes, Object[] rejectedElements) {
+      Assert.isNotNull(acceptedTypes);
+      fAcceptedTypes = acceptedTypes;
+      fRejectedElements = rejectedElements;
+   }
+
+   @Override
+   public boolean select(Viewer viewer, Object parentElement, Object element) {
+      if (fRejectedElements != null) {
+         for (Object fRejectedElement : fRejectedElements) {
+            if (element.equals(fRejectedElement)) return false;
+         }
       }
-    }
 
-    for (Class<?> fAcceptedType : fAcceptedTypes) {
-      if (fAcceptedType.isInstance(element))
-        return true;
-    }
-    return false;
-  }
+      for (Class<?> fAcceptedType : fAcceptedTypes) {
+         if (fAcceptedType.isInstance(element)) return true;
+      }
+      return false;
+   }
 }

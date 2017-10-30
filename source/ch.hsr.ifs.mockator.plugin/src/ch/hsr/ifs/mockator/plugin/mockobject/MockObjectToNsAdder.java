@@ -17,53 +17,50 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorCrea
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 class MockObjectToNsAdder {
-  private static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final CppStandard cppStd;
-  private final ICPPASTCompositeTypeSpecifier testDoubleToMove;
 
-  public MockObjectToNsAdder(CppStandard cppStd, ICPPASTCompositeTypeSpecifier testDoubleToMove) {
-    this.cppStd = cppStd;
-    this.testDoubleToMove = testDoubleToMove;
-  }
+   private static final ICPPNodeFactory        nodeFactory = CPPNodeFactory.getDefault();
+   private final CppStandard                   cppStd;
+   private final ICPPASTCompositeTypeSpecifier testDoubleToMove;
 
-  public void addTestDoubleToNs(IASTSimpleDeclaration testDouble,
-      ICPPASTNamespaceDefinition parentNs) {
-    ICPPASTCompositeTypeSpecifier testDoubleClass = getTestDoubleClass(testDouble);
-    ICPPASTNamespaceDefinition mockObjectNs = createMockObjectNs(testDoubleClass);
-    mockObjectNs.addDeclaration(createMockatorInitCall());
-    IASTSimpleDeclaration allCallsVector = createAllCallsVector();
-    mockObjectNs.addDeclaration(allCallsVector);
-    mockObjectNs.addDeclaration(testDouble);
-    parentNs.addDeclaration(mockObjectNs);
-  }
+   public MockObjectToNsAdder(CppStandard cppStd, ICPPASTCompositeTypeSpecifier testDoubleToMove) {
+      this.cppStd = cppStd;
+      this.testDoubleToMove = testDoubleToMove;
+   }
 
-  private static ICPPASTCompositeTypeSpecifier getTestDoubleClass(IASTSimpleDeclaration simpleDecl) {
-    return AstUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
-  }
+   public void addTestDoubleToNs(IASTSimpleDeclaration testDouble, ICPPASTNamespaceDefinition parentNs) {
+      ICPPASTCompositeTypeSpecifier testDoubleClass = getTestDoubleClass(testDouble);
+      ICPPASTNamespaceDefinition mockObjectNs = createMockObjectNs(testDoubleClass);
+      mockObjectNs.addDeclaration(createMockatorInitCall());
+      IASTSimpleDeclaration allCallsVector = createAllCallsVector();
+      mockObjectNs.addDeclaration(allCallsVector);
+      mockObjectNs.addDeclaration(testDouble);
+      parentNs.addDeclaration(mockObjectNs);
+   }
 
-  private IASTSimpleDeclaration createAllCallsVector() {
-    MockObject mockObject = new MockObject(testDoubleToMove);
-    AllCallsVectorCreator creator =
-        new AllCallsVectorCreator(mockObject.getNameOfAllCallsVector(),
-            CallsVectorParent.Namespace, cppStd);
-    return creator.getAllCallsVector();
-  }
+   private static ICPPASTCompositeTypeSpecifier getTestDoubleClass(IASTSimpleDeclaration simpleDecl) {
+      return AstUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+   }
 
-  private static IASTSimpleDeclaration createMockatorInitCall() {
-    IASTName initMockator =
-        nodeFactory.newName((INIT_MOCKATOR + L_PARENTHESIS + R_PARENTHESIS).toCharArray());
-    return nodeFactory.newSimpleDeclaration(nodeFactory.newTypedefNameSpecifier(initMockator));
-  }
+   private IASTSimpleDeclaration createAllCallsVector() {
+      MockObject mockObject = new MockObject(testDoubleToMove);
+      AllCallsVectorCreator creator = new AllCallsVectorCreator(mockObject.getNameOfAllCallsVector(), CallsVectorParent.Namespace, cppStd);
+      return creator.getAllCallsVector();
+   }
 
-  private static ICPPASTNamespaceDefinition createMockObjectNs(
-      ICPPASTCompositeTypeSpecifier testDouble) {
-    IASTName nsName = nodeFactory.newName(getMockObjectNsName(testDouble).toCharArray());
-    return nodeFactory.newNamespaceDefinition(nsName);
-  }
+   private static IASTSimpleDeclaration createMockatorInitCall() {
+      IASTName initMockator = nodeFactory.newName((INIT_MOCKATOR + L_PARENTHESIS + R_PARENTHESIS).toCharArray());
+      return nodeFactory.newSimpleDeclaration(nodeFactory.newTypedefNameSpecifier(initMockator));
+   }
 
-  private static String getMockObjectNsName(ICPPASTCompositeTypeSpecifier testDouble) {
-    return testDouble.getName().toString() + MockatorConstants.NS_SUFFIX;
-  }
+   private static ICPPASTNamespaceDefinition createMockObjectNs(ICPPASTCompositeTypeSpecifier testDouble) {
+      IASTName nsName = nodeFactory.newName(getMockObjectNsName(testDouble).toCharArray());
+      return nodeFactory.newNamespaceDefinition(nsName);
+   }
+
+   private static String getMockObjectNsName(ICPPASTCompositeTypeSpecifier testDouble) {
+      return testDouble.getName().toString() + MockatorConstants.NS_SUFFIX;
+   }
 }

@@ -8,18 +8,19 @@ import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
+
 class ReferenceFinder extends AbstractNodeFinder {
 
-  public ReferenceFinder(ICProject projectOrigin, IIndex index, TranslationUnitLoader tuLoader) {
-    super(projectOrigin, index, tuLoader);
-  }
+   public ReferenceFinder(ICProject projectOrigin, IIndex index, TranslationUnitLoader tuLoader) {
+      super(projectOrigin, index, tuLoader);
+   }
 
-  public Collection<IASTName> findReferences(IASTName name) {
-    return collectMatchingNames(name);
-  }
+   public Collection<IASTName> findReferences(IASTName name) {
+      return collectMatchingNames(name);
+   }
 
-  @Override
-  protected int getLookupFlags() {
-    return IIndex.FIND_REFERENCES;
-  }
+   @Override
+   protected int getLookupFlags() {
+      return IIndex.FIND_REFERENCES;
+   }
 }

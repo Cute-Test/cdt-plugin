@@ -10,35 +10,37 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorDelegate;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoringRunner;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.FileEditorOpener;
 
+
 public class PreprocessorDelegate extends MockatorDelegate {
 
-  @Override
-  protected void execute() {
-    performRefactoring();
-  }
+   @Override
+   protected void execute() {
+      performRefactoring();
+   }
 
-  private void performRefactoring() {
-    final PreprocessorRefactoring refactoring = getRefactoring();
-    new MockatorRefactoringRunner(refactoring).runInNewJob(new F1V<ChangeEdit>() {
-      @Override
-      public void apply(ChangeEdit notUsed) {
-        addHeaderIncludeForProject(refactoring.getNewHeaderFilePath());
-        openInEditor(refactoring.getNewSourceFilePath());
-      }
-    });
-  }
+   private void performRefactoring() {
+      final PreprocessorRefactoring refactoring = getRefactoring();
+      new MockatorRefactoringRunner(refactoring).runInNewJob(new F1V<ChangeEdit>() {
 
-  private void addHeaderIncludeForProject(IPath headerFilePath) {
-    IncludeFileHandler handler = new IncludeFileHandler(cProject.getProject());
-    handler.addInclude(FileUtil.toIFile(headerFilePath));
-  }
+         @Override
+         public void apply(ChangeEdit notUsed) {
+            addHeaderIncludeForProject(refactoring.getNewHeaderFilePath());
+            openInEditor(refactoring.getNewSourceFilePath());
+         }
+      });
+   }
 
-  private PreprocessorRefactoring getRefactoring() {
-    return new PreprocessorRefactoring(cElement, selection, cProject);
-  }
+   private void addHeaderIncludeForProject(IPath headerFilePath) {
+      IncludeFileHandler handler = new IncludeFileHandler(cProject.getProject());
+      handler.addInclude(FileUtil.toIFile(headerFilePath));
+   }
 
-  private static void openInEditor(IPath sourceFilePath) {
-    FileEditorOpener opener = new FileEditorOpener(FileUtil.toIFile(sourceFilePath));
-    opener.openInEditor();
-  }
+   private PreprocessorRefactoring getRefactoring() {
+      return new PreprocessorRefactoring(cElement, selection, cProject);
+   }
+
+   private static void openInEditor(IPath sourceFilePath) {
+      FileEditorOpener opener = new FileEditorOpener(FileUtil.toIFile(sourceFilePath));
+      opener.openInEditor();
+   }
 }

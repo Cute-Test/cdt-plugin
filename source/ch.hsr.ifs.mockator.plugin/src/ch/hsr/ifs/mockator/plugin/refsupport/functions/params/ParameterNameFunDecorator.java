@@ -15,50 +15,51 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
+
 @SuppressWarnings("restriction")
 public class ParameterNameFunDecorator {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final ICPPASTFunctionDeclarator function;
 
-  public ParameterNameFunDecorator(ICPPASTFunctionDeclarator function) {
-    this.function = function;
-  }
+   private static final CPPNodeFactory     nodeFactory = CPPNodeFactory.getDefault();
+   private final ICPPASTFunctionDeclarator function;
 
-  public void adjustParamNamesIfNecessary() {
-    ParameterNameCreator nameCreator = getParamNameCreator();
+   public ParameterNameFunDecorator(ICPPASTFunctionDeclarator function) {
+      this.function = function;
+   }
 
-    for (ICPPASTParameterDeclaration param : function.getParameters()) {
-      ICPPASTDeclarator declarator = param.getDeclarator();
-      String paramName = declarator.getName().toString();
+   public void adjustParamNamesIfNecessary() {
+      ParameterNameCreator nameCreator = getParamNameCreator();
 
-      if (!(paramName.isEmpty() && !isVoid(param))) {
-        continue;
+      for (ICPPASTParameterDeclaration param : function.getParameters()) {
+         ICPPASTDeclarator declarator = param.getDeclarator();
+         String paramName = declarator.getName().toString();
+
+         if (!(paramName.isEmpty() && !isVoid(param))) {
+            continue;
+         }
+
+         IType type = TypeCreator.byParamDeclaration(param);
+
+         if (type instanceof IProblemType && isNamedSpecifier(param)) {
+            String typeName = ((ICPPASTNamedTypeSpecifier) param.getDeclSpecifier()).getName().toString();
+            paramName = nameCreator.getParamName(typeName).toString();
+         } else {
+            paramName = nameCreator.getParamName(type).toString();
+         }
+
+         declarator.setName(nodeFactory.newName(paramName.toCharArray()));
       }
+   }
 
-      IType type = TypeCreator.byParamDeclaration(param);
+   private static boolean isNamedSpecifier(ICPPASTParameterDeclaration param) {
+      return param.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier;
+   }
 
-      if (type instanceof IProblemType && isNamedSpecifier(param)) {
-        String typeName =
-            ((ICPPASTNamedTypeSpecifier) param.getDeclSpecifier()).getName().toString();
-        paramName = nameCreator.getParamName(typeName).toString();
-      } else {
-        paramName = nameCreator.getParamName(type).toString();
-      }
+   private static ParameterNameCreator getParamNameCreator() {
+      Map<String, Boolean> nameHistory = unorderedMap();
+      return new ParameterNameCreator(nameHistory);
+   }
 
-      declarator.setName(nodeFactory.newName(paramName.toCharArray()));
-    }
-  }
-
-  private static boolean isNamedSpecifier(ICPPASTParameterDeclaration param) {
-    return param.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier;
-  }
-
-  private static ParameterNameCreator getParamNameCreator() {
-    Map<String, Boolean> nameHistory = unorderedMap();
-    return new ParameterNameCreator(nameHistory);
-  }
-
-  private static boolean isVoid(ICPPASTParameterDeclaration param) {
-    return AstUtil.isVoid(param) && param.getDeclarator().getPointerOperators().length == 0;
-  }
+   private static boolean isVoid(ICPPASTParameterDeclaration param) {
+      return AstUtil.isVoid(param) && param.getDeclarator().getPointerOperators().length == 0;
+   }
 }

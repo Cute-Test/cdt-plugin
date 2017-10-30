@@ -9,69 +9,72 @@ import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.LinkerOptionHandler;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.MacroOptionHandler;
 
+
 class WrappedFunctionQuickFixSupport {
-  private final IProject project;
 
-  WrappedFunctionQuickFixSupport(IProject project) {
-    this.project = project;
-  }
+   private final IProject project;
 
-  boolean isWrappedFunctionActive(String wrapFunName) {
-    for (IProject proj : getLinkerTargetProjects()) {
-      LinkerOptionHandler flagHandler = new LinkerOptionHandler(proj);
+   WrappedFunctionQuickFixSupport(IProject project) {
+      this.project = project;
+   }
 
-      if (flagHandler.hasLinkerFlag(getWrappedLinkerFlagName(wrapFunName)))
-        return true;
-    }
+   boolean isWrappedFunctionActive(String wrapFunName) {
+      for (IProject proj : getLinkerTargetProjects()) {
+         LinkerOptionHandler flagHandler = new LinkerOptionHandler(proj);
 
-    return false;
-  }
-
-  void addWrapLinkerOption(final String wrapFunName) {
-    withLinkerTargetProjects(new F1V<IProject>() {
-      @Override
-      public void apply(IProject project) {
-        LinkerOptionHandler flagHandler = new LinkerOptionHandler(project);
-        flagHandler.addLinkerFlag(getWrappedLinkerFlagName(wrapFunName));
+         if (flagHandler.hasLinkerFlag(getWrappedLinkerFlagName(wrapFunName))) return true;
       }
-    });
-  }
 
-  private static String getWrappedLinkerFlagName(String wrapFunName) {
-    return new WrappedLinkerFlagNameCreator(wrapFunName).getWrappedLinkerFlagName();
-  }
+      return false;
+   }
 
-  void addWrapMacro(String wrapFunName) {
-    MacroOptionHandler macroHandler = new MacroOptionHandler(project);
-    macroHandler.addMacro(getWrappedFunMacroName(wrapFunName));
-  }
+   void addWrapLinkerOption(final String wrapFunName) {
+      withLinkerTargetProjects(new F1V<IProject>() {
 
-  void removeWrapLinkerOption(final String wrapFunName) {
-    withLinkerTargetProjects(new F1V<IProject>() {
-      @Override
-      public void apply(IProject project) {
-        LinkerOptionHandler flagHandler = new LinkerOptionHandler(project);
-        flagHandler.removeLinkerFlag(getWrappedLinkerFlagName(wrapFunName));
+         @Override
+         public void apply(IProject project) {
+            LinkerOptionHandler flagHandler = new LinkerOptionHandler(project);
+            flagHandler.addLinkerFlag(getWrappedLinkerFlagName(wrapFunName));
+         }
+      });
+   }
+
+   private static String getWrappedLinkerFlagName(String wrapFunName) {
+      return new WrappedLinkerFlagNameCreator(wrapFunName).getWrappedLinkerFlagName();
+   }
+
+   void addWrapMacro(String wrapFunName) {
+      MacroOptionHandler macroHandler = new MacroOptionHandler(project);
+      macroHandler.addMacro(getWrappedFunMacroName(wrapFunName));
+   }
+
+   void removeWrapLinkerOption(final String wrapFunName) {
+      withLinkerTargetProjects(new F1V<IProject>() {
+
+         @Override
+         public void apply(IProject project) {
+            LinkerOptionHandler flagHandler = new LinkerOptionHandler(project);
+            flagHandler.removeLinkerFlag(getWrappedLinkerFlagName(wrapFunName));
+         }
+      });
+   }
+
+   void removeWrapMacro(String wrapFunName) {
+      MacroOptionHandler macroHandler = new MacroOptionHandler(project);
+      macroHandler.removeMacro(getWrappedFunMacroName(wrapFunName));
+   }
+
+   private static String getWrappedFunMacroName(String wrapFunName) {
+      return MockatorConstants.WRAP_MACRO_PREFIX + wrapFunName;
+   }
+
+   private void withLinkerTargetProjects(F1V<IProject> fun) {
+      for (IProject proj : getLinkerTargetProjects()) {
+         fun.apply(proj);
       }
-    });
-  }
+   }
 
-  void removeWrapMacro(String wrapFunName) {
-    MacroOptionHandler macroHandler = new MacroOptionHandler(project);
-    macroHandler.removeMacro(getWrappedFunMacroName(wrapFunName));
-  }
-
-  private static String getWrappedFunMacroName(String wrapFunName) {
-    return MockatorConstants.WRAP_MACRO_PREFIX + wrapFunName;
-  }
-
-  private void withLinkerTargetProjects(F1V<IProject> fun) {
-    for (IProject proj : getLinkerTargetProjects()) {
-      fun.apply(proj);
-    }
-  }
-
-  private Collection<IProject> getLinkerTargetProjects() {
-    return new LinkerTargetProjectFinder(project).findLinkerTargetProjects();
-  }
+   private Collection<IProject> getLinkerTargetProjects() {
+      return new LinkerTargetProjectFinder(project).findLinkerTargetProjects();
+   }
 }

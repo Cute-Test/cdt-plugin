@@ -17,105 +17,108 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+
 // Copied and adapted from CUTE
 @SuppressWarnings("restriction")
 class SelectionButtonDialogField extends DialogField {
-  private final int fButtonStyle;
-  private Button fButton;
-  private boolean fIsSelected;
-  private final DialogField[] fAttachedDialogFields;
 
-  public SelectionButtonDialogField(int buttonStyle) {
-    fIsSelected = false;
-    fAttachedDialogFields = null;
-    fButtonStyle = buttonStyle;
-  }
+   private final int           fButtonStyle;
+   private Button              fButton;
+   private boolean             fIsSelected;
+   private final DialogField[] fAttachedDialogFields;
 
-  @Override
-  public Control[] doFillIntoGrid(Composite parent, int nColumns) {
-    assertEnoughColumns(nColumns);
-    Button button = getSelectionButton(parent);
-    GridData gd = new GridData();
-    gd.horizontalSpan = nColumns;
-    gd.horizontalAlignment = GridData.FILL;
+   public SelectionButtonDialogField(int buttonStyle) {
+      fIsSelected = false;
+      fAttachedDialogFields = null;
+      fButtonStyle = buttonStyle;
+   }
 
-    if (fButtonStyle == SWT.PUSH) {
-      gd.widthHint = SWTUtil.getButtonWidthHint(button);
-    }
+   @Override
+   public Control[] doFillIntoGrid(Composite parent, int nColumns) {
+      assertEnoughColumns(nColumns);
+      Button button = getSelectionButton(parent);
+      GridData gd = new GridData();
+      gd.horizontalSpan = nColumns;
+      gd.horizontalAlignment = GridData.FILL;
 
-    button.setLayoutData(gd);
-    return new Control[] {button};
-  }
-
-  @Override
-  public int getNumberOfControls() {
-    return 1;
-  }
-
-  Button getSelectionButton(Composite group) {
-    if (fButton == null) {
-      assertCompositeNotNull(group);
-      fButton = new Button(group, fButtonStyle);
-      fButton.setFont(group.getFont());
-      fButton.setText(fLabelText);
-      fButton.setEnabled(isEnabled());
-      fButton.setSelection(fIsSelected);
-      fButton.addSelectionListener(new SelectionListener() {
-        @Override
-        public void widgetDefaultSelected(SelectionEvent e) {
-          doWidgetSelected();
-        }
-
-        @Override
-        public void widgetSelected(SelectionEvent e) {
-          doWidgetSelected();
-        }
-      });
-    }
-    return fButton;
-  }
-
-  private void doWidgetSelected() {
-    if (isOkToUse(fButton)) {
-      changeValue(fButton.getSelection());
-    }
-  }
-
-  private void changeValue(boolean newState) {
-    if (fIsSelected != newState) {
-      fIsSelected = newState;
-
-      if (fAttachedDialogFields != null) {
-        boolean focusSet = false;
-        for (DialogField fAttachedDialogField : fAttachedDialogFields) {
-          fAttachedDialogField.setEnabled(fIsSelected);
-          if (fIsSelected && !focusSet) {
-            focusSet = fAttachedDialogField.setFocus();
-          }
-        }
+      if (fButtonStyle == SWT.PUSH) {
+         gd.widthHint = SWTUtil.getButtonWidthHint(button);
       }
-      dialogFieldChanged();
-    } else if (fButtonStyle == SWT.PUSH) {
-      dialogFieldChanged();
-    }
-  }
 
-  boolean isSelected() {
-    return fIsSelected;
-  }
+      button.setLayoutData(gd);
+      return new Control[] { button };
+   }
 
-  void setSelection(boolean selected) {
-    changeValue(selected);
-    if (isOkToUse(fButton)) {
-      fButton.setSelection(selected);
-    }
-  }
+   @Override
+   public int getNumberOfControls() {
+      return 1;
+   }
 
-  @Override
-  protected void updateEnableState() {
-    super.updateEnableState();
-    if (isOkToUse(fButton)) {
-      fButton.setEnabled(isEnabled());
-    }
-  }
+   Button getSelectionButton(Composite group) {
+      if (fButton == null) {
+         assertCompositeNotNull(group);
+         fButton = new Button(group, fButtonStyle);
+         fButton.setFont(group.getFont());
+         fButton.setText(fLabelText);
+         fButton.setEnabled(isEnabled());
+         fButton.setSelection(fIsSelected);
+         fButton.addSelectionListener(new SelectionListener() {
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+               doWidgetSelected();
+            }
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+               doWidgetSelected();
+            }
+         });
+      }
+      return fButton;
+   }
+
+   private void doWidgetSelected() {
+      if (isOkToUse(fButton)) {
+         changeValue(fButton.getSelection());
+      }
+   }
+
+   private void changeValue(boolean newState) {
+      if (fIsSelected != newState) {
+         fIsSelected = newState;
+
+         if (fAttachedDialogFields != null) {
+            boolean focusSet = false;
+            for (DialogField fAttachedDialogField : fAttachedDialogFields) {
+               fAttachedDialogField.setEnabled(fIsSelected);
+               if (fIsSelected && !focusSet) {
+                  focusSet = fAttachedDialogField.setFocus();
+               }
+            }
+         }
+         dialogFieldChanged();
+      } else if (fButtonStyle == SWT.PUSH) {
+         dialogFieldChanged();
+      }
+   }
+
+   boolean isSelected() {
+      return fIsSelected;
+   }
+
+   void setSelection(boolean selected) {
+      changeValue(selected);
+      if (isOkToUse(fButton)) {
+         fButton.setSelection(selected);
+      }
+   }
+
+   @Override
+   protected void updateEnableState() {
+      super.updateEnableState();
+      if (isOkToUse(fButton)) {
+         fButton.setEnabled(isEnabled());
+      }
+   }
 }

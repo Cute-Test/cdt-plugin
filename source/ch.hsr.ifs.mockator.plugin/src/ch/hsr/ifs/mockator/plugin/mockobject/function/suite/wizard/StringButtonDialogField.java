@@ -19,77 +19,80 @@ import org.eclipse.swt.widgets.Control;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.wizard.NewSuiteFileCreationWizardPage.SourceFolderFieldAdapter;
 
+
 // Copied and adapted from CUTE
 @SuppressWarnings("restriction")
 class StringButtonDialogField extends StringDialogField {
-  private Button fBrowseButton;
-  private String fBrowseButtonLabel;
-  private final SourceFolderFieldAdapter fStringButtonAdapter;
-  private final boolean fButtonEnabled;
 
-  public StringButtonDialogField(SourceFolderFieldAdapter sourceFolderAdapter) {
-    fStringButtonAdapter = sourceFolderAdapter;
-    fBrowseButtonLabel = "!Browse...!";
-    fButtonEnabled = true;
-  }
+   private Button                         fBrowseButton;
+   private String                         fBrowseButtonLabel;
+   private final SourceFolderFieldAdapter fStringButtonAdapter;
+   private final boolean                  fButtonEnabled;
 
-  void setButtonLabel(String label) {
-    fBrowseButtonLabel = label;
-  }
+   public StringButtonDialogField(SourceFolderFieldAdapter sourceFolderAdapter) {
+      fStringButtonAdapter = sourceFolderAdapter;
+      fBrowseButtonLabel = "!Browse...!";
+      fButtonEnabled = true;
+   }
 
-  void changeControlPressed() {
-    fStringButtonAdapter.changeControlPressed();
-  }
+   void setButtonLabel(String label) {
+      fBrowseButtonLabel = label;
+   }
 
-  @Override
-  public Control[] doFillIntoGrid(Composite parent, int nColumns) {
-    assertEnoughColumns(nColumns);
-    Button button = getChangeControl(parent);
-    button.setLayoutData(gridDataForButton(button, 1));
-    return new Control[] {getLabel(parent), getText(parent, nColumns - 2), button};
-  }
+   void changeControlPressed() {
+      fStringButtonAdapter.changeControlPressed();
+   }
 
-  @Override
-  public int getNumberOfControls() {
-    return 3;
-  }
+   @Override
+   public Control[] doFillIntoGrid(Composite parent, int nColumns) {
+      assertEnoughColumns(nColumns);
+      Button button = getChangeControl(parent);
+      button.setLayoutData(gridDataForButton(button, 1));
+      return new Control[] { getLabel(parent), getText(parent, nColumns - 2), button };
+   }
 
-  private static GridData gridDataForButton(Button button, int span) {
-    GridData gd = new GridData();
-    gd.horizontalAlignment = GridData.FILL;
-    gd.grabExcessHorizontalSpace = false;
-    gd.horizontalSpan = span;
-    gd.widthHint = SWTUtil.getButtonWidthHint(button);
-    return gd;
-  }
+   @Override
+   public int getNumberOfControls() {
+      return 3;
+   }
 
-  private Button getChangeControl(Composite parent) {
-    if (fBrowseButton == null) {
-      assertCompositeNotNull(parent);
-      fBrowseButton = new Button(parent, SWT.PUSH);
-      fBrowseButton.setText(fBrowseButtonLabel);
-      fBrowseButton.setEnabled(isEnabled() && fButtonEnabled);
-      fBrowseButton.addSelectionListener(new SelectionListener() {
-        @Override
-        public void widgetDefaultSelected(SelectionEvent e) {
-          changeControlPressed();
-        }
+   private static GridData gridDataForButton(Button button, int span) {
+      GridData gd = new GridData();
+      gd.horizontalAlignment = GridData.FILL;
+      gd.grabExcessHorizontalSpace = false;
+      gd.horizontalSpan = span;
+      gd.widthHint = SWTUtil.getButtonWidthHint(button);
+      return gd;
+   }
 
-        @Override
-        public void widgetSelected(SelectionEvent e) {
-          changeControlPressed();
-        }
-      });
+   private Button getChangeControl(Composite parent) {
+      if (fBrowseButton == null) {
+         assertCompositeNotNull(parent);
+         fBrowseButton = new Button(parent, SWT.PUSH);
+         fBrowseButton.setText(fBrowseButtonLabel);
+         fBrowseButton.setEnabled(isEnabled() && fButtonEnabled);
+         fBrowseButton.addSelectionListener(new SelectionListener() {
 
-    }
-    return fBrowseButton;
-  }
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+               changeControlPressed();
+            }
 
-  @Override
-  protected void updateEnableState() {
-    super.updateEnableState();
-    if (isOkToUse(fBrowseButton)) {
-      fBrowseButton.setEnabled(isEnabled() && fButtonEnabled);
-    }
-  }
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+               changeControlPressed();
+            }
+         });
+
+      }
+      return fBrowseButton;
+   }
+
+   @Override
+   protected void updateEnableState() {
+      super.updateEnableState();
+      if (isOkToUse(fBrowseButton)) {
+         fBrowseButton.setEnabled(isEnabled() && fButtonEnabled);
+      }
+   }
 }

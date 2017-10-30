@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.linker.shadowfun;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -20,12 +21,13 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
 import ch.hsr.ifs.mockator.plugin.linker.LinkerRefactoring;
 import ch.hsr.ifs.mockator.plugin.linker.ReferencingExecutableFinder;
 import ch.hsr.ifs.mockator.plugin.linker.WeakDeclAdder;
@@ -35,99 +37,99 @@ import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
 
+
 @SuppressWarnings("restriction")
 public class ShadowFunctionRefactoring extends LinkerRefactoring {
-  private static final String SHADOW_FOLDER_NAME = "shadows";
-  private IFile newFile;
 
-  public ShadowFunctionRefactoring(ICElement element, ITextSelection selection, ICProject cProject) {
-    super(element, selection, cProject);
-  }
+   private static final String SHADOW_FOLDER_NAME = "shadows";
+   private IFile               newFile;
 
-  @Override
-  protected void createLinkerSeamSupport(ModificationCollector collector, IASTName funName,
-      IProgressMonitor pm) throws CoreException {
-    for (ICPPASTFunctionDeclarator optFunDecl : findFunDeclaration(funName, pm)) {
-      for (IProject refProj : getReferencingExecutables()) {
-        IASTTranslationUnit newTu = createAndGetNewTu(refProj, funName.toString(), pm);
-        ICPPASTFunctionDefinition funDef = createFunDefinition(refProj, optFunDecl);
-        ASTRewrite rewriter = createRewriter(collector, newTu);
-        ICProject cProject = ProjectUtil.getCProject(refProj);
-        insertFunDeclInclude(optFunDecl, newTu, rewriter, cProject);
-        insertFunDefinition(funDef, newTu, rewriter);
+   public ShadowFunctionRefactoring(final ICElement element, final ITextSelection selection, final ICProject cProject) {
+      super(element, selection, cProject);
+   }
+
+   @Override
+   protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
+         throws CoreException {
+      final Optional<ICPPASTFunctionDeclarator> optFunDecl = findFunDeclaration(funName, pm);
+      if (optFunDecl.isPresent()) {
+         for (final IProject refProj : getReferencingExecutables()) {
+            final IASTTranslationUnit newTu = createAndGetNewTu(refProj, funName.toString(), pm);
+            final ICPPASTFunctionDefinition funDef = createFunDefinition(refProj, optFunDecl.get());
+            final ASTRewrite rewriter = createRewriter(collector, newTu);
+            final ICProject cProject = CPPResourceHelper.getCProject(refProj);
+            insertFunDeclInclude(optFunDecl.get(), newTu, rewriter, cProject);
+            insertFunDefinition(funDef, newTu, rewriter);
+         }
+
+         setWeakDeclPropertyIfNecessary(collector, optFunDecl.get());
+      }
+   }
+
+   private static void setWeakDeclPropertyIfNecessary(final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl) {
+      new WeakDeclAdder(collector).addWeakDeclAttribute(funDecl);
+   }
+
+   private void insertFunDeclInclude(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit tu, final ASTRewrite rewriter,
+         final ICProject mockatorProject) {
+      final CppIncludeResolver resolver = new CppIncludeResolver(tu, mockatorProject, getIndex());
+      final String funDeclTuPath = funDecl.getTranslationUnit().getFilePath();
+      final AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDeclTuPath);
+      rewriter.insertBefore(tu, null, includeForFunDecl, null);
+   }
+
+   private static void insertFunDefinition(final ICPPASTFunctionDefinition funDef, final IASTTranslationUnit newTu, final ASTRewrite rewriter) {
+      rewriter.insertBefore(newTu, null, funDef, null);
+   }
+
+   private IASTTranslationUnit createAndGetNewTu(final IProject referencingProj, final String funName, final IProgressMonitor pm)
+         throws CoreException {
+      final IFolder shadowFolder = createShadowFolder(referencingProj, pm);
+      final IPath newFilePath = getPathForNewFile(shadowFolder, funName);
+      newFile = FileUtil.toIFile(newFilePath);
+      final TranslationUnitCreator creator = new TranslationUnitCreator(referencingProj, refactoringContext);
+      return creator.createAndGetNewTu(newFilePath, pm);
+   }
+
+   private static IPath getPathForNewFile(final IFolder shadowFolder, final String funName) {
+      final PathProposalUtil proposal = new PathProposalUtil(shadowFolder.getFullPath());
+      return proposal.getUniquePathForNewFile(funName, MockatorConstants.SOURCE_SUFFIX);
+   }
+
+   private static IFolder createShadowFolder(final IProject project, final IProgressMonitor pm) {
+      final SourceFolderHandler handler = new SourceFolderHandler(project);
+      try {
+         return handler.createFolder(SHADOW_FOLDER_NAME, pm);
+      }
+      catch (final CoreException e) {
+         throw new MockatorException(e);
+      }
+   }
+
+   private Collection<IProject> getReferencingExecutables() {
+      final ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project.getProject());
+      final Collection<IProject> referencingExecutables = finder.findReferencingExecutables();
+
+      if (referencingExecutables.isEmpty()) {
+         // this is just for unit testing purposes because there we don't
+         // have a referencing project there
+         return list(project.getProject());
       }
 
-      setWeakDeclPropertyIfNecessary(collector, optFunDecl);
-    }
-  }
+      return referencingExecutables;
+   }
 
-  private static void setWeakDeclPropertyIfNecessary(ModificationCollector collector,
-      ICPPASTFunctionDeclarator funDecl) {
-    new WeakDeclAdder(collector).addWeakDeclAttribute(funDecl);
-  }
+   private static ICPPASTFunctionDefinition createFunDefinition(final IProject referencingProj, final ICPPASTFunctionDeclarator funDecl) {
+      final CppStandard cppStd = CppStandard.fromCompilerFlags(referencingProj);
+      return new ShadowFunctionGenerator(cppStd).createShadowedFunction(funDecl, nodeFactory.newCompoundStatement());
+   }
 
-  private void insertFunDeclInclude(ICPPASTFunctionDeclarator funDecl, IASTTranslationUnit tu,
-      ASTRewrite rewriter, ICProject mockatorProject) {
-    CppIncludeResolver resolver = new CppIncludeResolver(tu, mockatorProject, getIndex());
-    String funDeclTuPath = funDecl.getTranslationUnit().getFilePath();
-    AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDeclTuPath);
-    rewriter.insertBefore(tu, null, includeForFunDecl, null);
-  }
+   IFile getNewFile() {
+      return newFile;
+   }
 
-  private static void insertFunDefinition(ICPPASTFunctionDefinition funDef,
-      IASTTranslationUnit newTu, ASTRewrite rewriter) {
-    rewriter.insertBefore(newTu, null, funDef, null);
-  }
-
-  private IASTTranslationUnit createAndGetNewTu(IProject referencingProj, String funName,
-      IProgressMonitor pm) throws CoreException {
-    IFolder shadowFolder = createShadowFolder(referencingProj, pm);
-    IPath newFilePath = getPathForNewFile(shadowFolder, funName);
-    newFile = FileUtil.toIFile(newFilePath);
-    TranslationUnitCreator creator =
-        new TranslationUnitCreator(referencingProj, refactoringContext);
-    return creator.createAndGetNewTu(newFilePath, pm);
-  }
-
-  private static IPath getPathForNewFile(IFolder shadowFolder, String funName) {
-    PathProposalUtil proposal = new PathProposalUtil(shadowFolder.getFullPath());
-    return proposal.getUniquePathForNewFile(funName, MockatorConstants.SOURCE_SUFFIX);
-  }
-
-  private static IFolder createShadowFolder(IProject project, IProgressMonitor pm) {
-    SourceFolderHandler handler = new SourceFolderHandler(project);
-    try {
-      return handler.createFolder(SHADOW_FOLDER_NAME, pm);
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
-
-  private Collection<IProject> getReferencingExecutables() {
-    ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project.getProject());
-    Collection<IProject> referencingExecutables = finder.findReferencingExecutables();
-
-    if (referencingExecutables.isEmpty())
-      // this is just for unit testing purposes because there we don't
-      // have a referencing project there
-      return list(project.getProject());
-
-    return referencingExecutables;
-  }
-
-  private static ICPPASTFunctionDefinition createFunDefinition(IProject referencingProj,
-      ICPPASTFunctionDeclarator funDecl) {
-    CppStandard cppStd = CppStandard.fromCompilerFlags(referencingProj);
-    return new ShadowFunctionGenerator(cppStd).createShadowedFunction(funDecl,
-        nodeFactory.newCompoundStatement());
-  }
-
-  IFile getNewFile() {
-    return newFile;
-  }
-
-  @Override
-  public String getDescription() {
-    return I18N.ShadwoFunctionRefactoringDesc;
-  }
+   @Override
+   public String getDescription() {
+      return I18N.ShadwoFunctionRefactoringDesc;
+   }
 }

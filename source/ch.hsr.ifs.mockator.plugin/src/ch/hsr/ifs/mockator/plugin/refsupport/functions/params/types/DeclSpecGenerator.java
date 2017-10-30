@@ -10,38 +10,34 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class DeclSpecGenerator {
-  private final IType type;
 
-  public DeclSpecGenerator(IType type) {
-    this.type = AstUtil.windDownToRealType(type, true);
-  }
+   private final IType type;
 
-  public ICPPASTDeclSpecifier getDeclSpec() {
-    DeclSpecGeneratorStrategy strategy = getStrategy(type);
-    return strategy.createDeclSpec(type);
-  }
+   public DeclSpecGenerator(IType type) {
+      this.type = AstUtil.windDownToRealType(type, true);
+   }
 
-  private static DeclSpecGeneratorStrategy getStrategy(IType type) {
-    if (type instanceof ICPPTemplateInstance
-        && hasDefaultTemplateParams((ICPPTemplateInstance) type))
-      return new TemplateInstDeclSpecStrategy();
-    if (type instanceof ICPPBinding)
-      return new BindingDeclSpecStrategy();
-    else if (type instanceof IBasicType)
-      return new BasicTypeDeclSpecStrategy();
-    else
-      return new DefaultDeclSpecStrategy();
-  }
+   public ICPPASTDeclSpecifier getDeclSpec() {
+      DeclSpecGeneratorStrategy strategy = getStrategy(type);
+      return strategy.createDeclSpec(type);
+   }
 
-  private static boolean hasDefaultTemplateParams(ICPPTemplateInstance templateInst) {
-    ICPPTemplateDefinition templateDefinition = templateInst.getTemplateDefinition();
+   private static DeclSpecGeneratorStrategy getStrategy(IType type) {
+      if (type instanceof ICPPTemplateInstance && hasDefaultTemplateParams((ICPPTemplateInstance) type)) return new TemplateInstDeclSpecStrategy();
+      if (type instanceof ICPPBinding) return new BindingDeclSpecStrategy();
+      else if (type instanceof IBasicType) return new BasicTypeDeclSpecStrategy();
+      else return new DefaultDeclSpecStrategy();
+   }
 
-    for (ICPPTemplateParameter param : templateDefinition.getTemplateParameters()) {
-      if (param.getDefaultValue() != null)
-        return true;
-    }
+   private static boolean hasDefaultTemplateParams(ICPPTemplateInstance templateInst) {
+      ICPPTemplateDefinition templateDefinition = templateInst.getTemplateDefinition();
 
-    return false;
-  }
+      for (ICPPTemplateParameter param : templateDefinition.getTemplateParameters()) {
+         if (param.getDefaultValue() != null) return true;
+      }
+
+      return false;
+   }
 }

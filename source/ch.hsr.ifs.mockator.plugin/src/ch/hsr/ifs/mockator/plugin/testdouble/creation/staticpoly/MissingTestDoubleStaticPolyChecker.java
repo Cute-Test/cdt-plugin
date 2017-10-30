@@ -12,45 +12,46 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
 
+
 public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
-  public static final String MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID =
-      "ch.hsr.ifs.mockator.MissingTestDoublStaticPolyProblem";
 
-  @Override
-  protected void processTestFunction(IASTFunctionDefinition function) {
-    function.accept(new OnEachFunction());
-  }
+   public static final String MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID = "ch.hsr.ifs.mockator.MissingTestDoublStaticPolyProblem";
 
-  private class OnEachFunction extends ASTVisitor {
-    {
-      shouldVisitNames = true;
-    }
+   @Override
+   protected void processTestFunction(IASTFunctionDefinition function) {
+      function.accept(new OnEachFunction());
+   }
 
-    @Override
-    public int visit(IASTName name) {
-      IBinding binding = name.resolveBinding();
+   private class OnEachFunction extends ASTVisitor {
 
-      if (binding instanceof IProblemBinding) {
-        if (isPartOfTemplateId(name) && isTypeId(name)) {
-          mark(name);
-        }
+      {
+         shouldVisitNames = true;
       }
 
-      return PROCESS_CONTINUE;
-    }
-  };
+      @Override
+      public int visit(IASTName name) {
+         IBinding binding = name.resolveBinding();
 
-  private void mark(IASTName name) {
-    reportProblem(MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID, name, name.toString());
-  }
+         if (binding instanceof IProblemBinding) {
+            if (isPartOfTemplateId(name) && isTypeId(name)) {
+               mark(name);
+            }
+         }
 
-  private static boolean isTypeId(IASTName name) {
-    ICPPASTNamedTypeSpecifier nts =
-        AstUtil.getAncestorOfType(name, ICPPASTNamedTypeSpecifier.class);
-    return nts != null && AstUtil.getAncestorOfType(nts, ICPPASTTypeId.class) != null;
-  }
+         return PROCESS_CONTINUE;
+      }
+   };
 
-  private static boolean isPartOfTemplateId(IASTName name) {
-    return AstUtil.getAncestorOfType(name, ICPPASTTemplateId.class) != null;
-  }
+   private void mark(IASTName name) {
+      reportProblem(MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID, name, name.toString());
+   }
+
+   private static boolean isTypeId(IASTName name) {
+      ICPPASTNamedTypeSpecifier nts = AstUtil.getAncestorOfType(name, ICPPASTNamedTypeSpecifier.class);
+      return nts != null && AstUtil.getAncestorOfType(nts, ICPPASTTypeId.class) != null;
+   }
+
+   private static boolean isPartOfTemplateId(IASTName name) {
+      return AstUtil.getAncestorOfType(name, ICPPASTTemplateId.class) != null;
+   }
 }

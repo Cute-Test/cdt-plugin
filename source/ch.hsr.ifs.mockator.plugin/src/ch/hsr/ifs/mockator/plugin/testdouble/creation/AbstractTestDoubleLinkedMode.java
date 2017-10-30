@@ -1,98 +1,99 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.creation;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+import java.util.Optional;
 
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
 import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
+import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInfoCreater;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInformation;
 
+
 @SuppressWarnings("restriction")
 public abstract class AbstractTestDoubleLinkedMode implements LinkedModeInfoCreater {
-  private static final Proposal[] TEST_DOUBLE_PROPOSALS;
-  protected final String newClassName;
-  private final ChangeEdit edit;
-  private final IDocument document;
 
-  static {
-    TEST_DOUBLE_PROPOSALS =
-        new Proposal[] {
-            new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0),
-            new Proposal("struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0)};
-  }
+   private static final Proposal[] TEST_DOUBLE_PROPOSALS;
+   protected final String          newClassName;
+   private final ChangeEdit        edit;
+   private final IDocument         document;
 
-  public AbstractTestDoubleLinkedMode(ChangeEdit edit, IDocument document, String newClassName) {
-    this.edit = edit;
-    this.document = document;
-    this.newClassName = newClassName;
-  }
+   static {
+      TEST_DOUBLE_PROPOSALS = new Proposal[] { new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0), new Proposal(
+               "struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0) };
+   }
 
-  @Override
-  public LinkedModeInformation createLinkedModeInfo() {
-    LinkedModeInformation lm = new LinkedModeInformation();
+   public AbstractTestDoubleLinkedMode(final ChangeEdit edit, final IDocument document, final String newClassName) {
+      this.edit = edit;
+      this.document = document;
+      this.newClassName = newClassName;
+   }
 
-    try {
-      for (Integer optOffset : getBeginOfClassDefinition()) {
-        for (Integer optLength : getClassSpecifierLength(optOffset)) {
-          lm.addPosition(optOffset, optLength);
-          lm.addProposal(optOffset, TEST_DOUBLE_PROPOSALS);
-        }
+   @Override
+   public LinkedModeInformation createLinkedModeInfo() {
+      final LinkedModeInformation lm = new LinkedModeInformation();
+      try {
+         getBeginOfClassDefinition().ifPresent((offset) -> {
+            try {
+               getClassSpecifierLength(offset).ifPresent((length) -> {
+                  lm.addPosition(offset, length);
+                  lm.addProposal(offset, TEST_DOUBLE_PROPOSALS);
+               });
+            } catch (final BadLocationException ignored) {}
+         });
+      } catch (final BadLocationException ignored) {}
+      return lm;
+   }
+
+   private Optional<Integer> getBeginOfClassDefinition() throws BadLocationException {
+      final Optional<Integer> optOffset = getBeginOfTestDouble();
+      if (optOffset.isPresent()) {
+         Integer offset = optOffset.get();
+         for (; offset >= 0; offset--) {
+            if (isNewline(offset)) {
+               break;
+            }
+         }
+
+         for (; offset <= document.getLength(); offset++) {
+            if (!isWhitespace(offset)) {
+               return Optional.of(offset);
+            }
+         }
       }
-    } catch (BadLocationException e) {
-    }
 
-    return lm;
-  }
+      return Optional.empty();
+   }
 
-  private Maybe<Integer> getBeginOfClassDefinition() throws BadLocationException {
-    for (int optOffset : getBeginOfTestDouble()) {
-      for (; optOffset >= 0; optOffset--) {
-        if (isNewline(optOffset)) {
-          break;
-        }
+   protected Optional<Integer> getBeginOfTestDouble() {
+      return edit.getAbsoluteIndex(newClassName, newClassName);
+   }
+
+   private boolean isNewline(final int offset) throws BadLocationException {
+      return document.getChar(offset) == '\n';
+   }
+
+   private boolean isWhitespace(final int offset) throws BadLocationException {
+      return Character.isWhitespace(document.getChar(offset));
+   }
+
+   private Optional<Integer> getClassSpecifierLength(final Integer startOffset) throws BadLocationException {
+      return OptHelper.returnIfPresentElseEmpty(getEndOfClassSpecifier(), (endOffset) -> Optional.of(endOffset - startOffset));
+   }
+
+   private Optional<Integer> getEndOfClassSpecifier() throws BadLocationException {
+      final Optional<Integer> posIndex = getBeginOfTestDouble();
+      if (posIndex.isPresent()) {
+         for (int i = posIndex.get(); i >= 0; i--) {
+            if (isWhitespace(i)) {
+               return Optional.of(i);
+            }
+         }
       }
-
-      for (; optOffset <= document.getLength(); optOffset++) {
-        if (!isWhitespace(optOffset))
-          return maybe(optOffset);
-      }
-    }
-
-    return none();
-  }
-
-  protected Maybe<Integer> getBeginOfTestDouble() {
-    return edit.getAbsoluteIndex(newClassName, newClassName);
-  }
-
-  private boolean isNewline(int offset) throws BadLocationException {
-    return document.getChar(offset) == '\n';
-  }
-
-  private boolean isWhitespace(int offset) throws BadLocationException {
-    return Character.isWhitespace(document.getChar(offset));
-  }
-
-  private Maybe<Integer> getClassSpecifierLength(Integer startOffset) throws BadLocationException {
-    for (Integer optEndOffset : getEndOfClassSpecifier())
-      return maybe(optEndOffset - startOffset);
-
-    return none();
-  }
-
-  private Maybe<Integer> getEndOfClassSpecifier() throws BadLocationException {
-    for (Integer posIndex : getBeginOfTestDouble()) {
-      for (int i = posIndex; i >= 0; i--) {
-        if (isWhitespace(i))
-          return maybe(i);
-      }
-    }
-    return none();
-  }
+      return Optional.empty();
+   }
 }

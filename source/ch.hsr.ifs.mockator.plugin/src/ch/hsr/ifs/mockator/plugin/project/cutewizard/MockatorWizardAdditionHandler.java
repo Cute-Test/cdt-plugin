@@ -11,39 +11,41 @@ import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 public class MockatorWizardAdditionHandler implements ICuteWizardAdditionHandler {
-  private final boolean withMockatorSupport;
-  private final CppStandard cppStd;
 
-  public MockatorWizardAdditionHandler(boolean withMockatorSupport, CppStandard cppStd) {
-    this.withMockatorSupport = withMockatorSupport;
-    this.cppStd = cppStd;
-  }
+   private final boolean     withMockatorSupport;
+   private final CppStandard cppStd;
 
-  @Override
-  public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
-    Assert.isTrue(isCppProject(project), "Mockator only supports C++ projects");
+   public MockatorWizardAdditionHandler(boolean withMockatorSupport, CppStandard cppStd) {
+      this.withMockatorSupport = withMockatorSupport;
+      this.cppStd = cppStd;
+   }
 
-    if (withMockatorSupport) {
-      setCppStd(project);
-      addMockatorNature(project, pm);
-    }
-  }
+   @Override
+   public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
+      Assert.isTrue(isCppProject(project), "Mockator only supports C++ projects");
 
-  private static boolean isCppProject(IProject project) {
-    return new NatureHandler(project).hasNature(CCProjectNature.CC_NATURE_ID);
-  }
+      if (withMockatorSupport) {
+         setCppStd(project);
+         addMockatorNature(project, pm);
+      }
+   }
 
-  private static void addMockatorNature(IProject project, IProgressMonitor pm) throws CoreException {
-    MockatorNature.addMockatorNature(project, pm);
-  }
+   private static boolean isCppProject(IProject project) {
+      return new NatureHandler(project).hasNature(CCProjectNature.CC_NATURE_ID);
+   }
 
-  private void setCppStd(IProject project) {
-    CppStandard.storeInProjectSettings(project, cppStd);
-  }
+   private static void addMockatorNature(IProject project, IProgressMonitor pm) throws CoreException {
+      MockatorNature.addMockatorNature(project, pm);
+   }
 
-  @Override
-  public void configureLibProject(IProject project) throws CoreException {
-    // Nothing necessary
-  }
+   private void setCppStd(IProject project) {
+      CppStandard.storeInProjectSettings(project, cppStd);
+   }
+
+   @Override
+   public void configureLibProject(IProject project) throws CoreException {
+      // Nothing necessary
+   }
 }

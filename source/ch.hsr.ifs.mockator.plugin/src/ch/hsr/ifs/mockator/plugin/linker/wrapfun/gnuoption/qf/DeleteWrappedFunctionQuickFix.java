@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.gnuoption.qf;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.none;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.ui.CDTSharedImages;
@@ -10,7 +10,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.graphics.Image;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInfoCreater;
@@ -18,47 +17,45 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.CodanArguments;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQfWithRefactoringSupport;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
+
 public class DeleteWrappedFunctionQuickFix extends MockatorQfWithRefactoringSupport {
 
-  @Override
-  public String getLabel() {
-    return I18N.WrapFunctionDelete;
-  }
+   @Override
+   public String getLabel() {
+      return I18N.WrapFunctionDelete;
+   }
 
-  @Override
-  protected MockatorRefactoring getRefactoring(ICElement cElement, ITextSelection sel,
-      CodanArguments ca) {
-    IDocument doc = UiUtil.getCurrentDocument().get();
-    return new DeleteWrappedFunctionRefactoring(cElement, sel, getCProject(), doc);
-  }
+   @Override
+   protected MockatorRefactoring getRefactoring(final ICElement cElement, final ITextSelection sel, final CodanArguments ca) {
+      final IDocument doc = UiUtil.getCurrentDocument().get();
+      return new DeleteWrappedFunctionRefactoring(cElement, sel, getCProject(), doc);
+   }
 
-  @Override
-  public void apply(IMarker marker, IDocument doc) {
-    super.apply(marker, doc);
-    WrappedFunctionQuickFixSupport support =
-        new WrappedFunctionQuickFixSupport(getCProject().getProject());
-    String wrappedFunName = getWrappedFunName(marker);
-    support.removeWrapLinkerOption(wrappedFunName);
-    support.removeWrapMacro(wrappedFunName);
-  }
+   @Override
+   public void apply(final IMarker marker, final IDocument doc) {
+      super.apply(marker, doc);
+      final WrappedFunctionQuickFixSupport support = new WrappedFunctionQuickFixSupport(getCProject().getProject());
+      final String wrappedFunName = getWrappedFunName(marker);
+      support.removeWrapLinkerOption(wrappedFunName);
+      support.removeWrapMacro(wrappedFunName);
+   }
 
-  private String getWrappedFunName(IMarker marker) {
-    return getProblemArgument(marker, 0);
-  }
+   private String getWrappedFunName(final IMarker marker) {
+      return getProblemArgument(marker, 0);
+   }
 
-  @Override
-  public String getDescription() {
-    return getLabel();
-  }
+   @Override
+   public String getDescription() {
+      return getLabel();
+   }
 
-  @Override
-  public Image getImage() {
-    return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
-  }
+   @Override
+   public Image getImage() {
+      return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
+   }
 
-  @Override
-  protected Maybe<LinkedModeInfoCreater> getLinkedModeCreator(ChangeEdit edit, IDocument doc,
-      MockatorRefactoring refactoring) {
-    return none();
-  }
+   @Override
+   protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument doc, final MockatorRefactoring refactoring) {
+      return Optional.empty();
+   }
 }

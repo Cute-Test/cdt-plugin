@@ -15,38 +15,39 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 
+
 public class TypeDefCollector implements F1V<ExtractInterfaceContext> {
 
-  @Override
-  public void apply(ExtractInterfaceContext context) {
-    Collection<IASTSimpleDeclaration> fwdDecls = findTypeDefDecls(context.getTuOfChosenClass());
-    context.setTypeDefDecls(fwdDecls);
-  }
+   @Override
+   public void apply(ExtractInterfaceContext context) {
+      Collection<IASTSimpleDeclaration> fwdDecls = findTypeDefDecls(context.getTuOfChosenClass());
+      context.setTypeDefDecls(fwdDecls);
+   }
 
-  private static Collection<IASTSimpleDeclaration> findTypeDefDecls(IASTTranslationUnit ast) {
-    final List<IASTSimpleDeclaration> typeDefs = list();
-    ast.accept(new ASTVisitor() {
-      {
-        shouldVisitDeclarations = true;
-      }
+   private static Collection<IASTSimpleDeclaration> findTypeDefDecls(IASTTranslationUnit ast) {
+      final List<IASTSimpleDeclaration> typeDefs = list();
+      ast.accept(new ASTVisitor() {
 
-      @Override
-      public int visit(IASTDeclaration declaration) {
-        if (declaration instanceof IASTSimpleDeclaration) {
-          IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
+         {
+            shouldVisitDeclarations = true;
+         }
 
-          if (isTypeDef(simpleDecl.getDeclSpecifier())) {
-            typeDefs.add((IASTSimpleDeclaration) declaration);
-          }
-        }
-        return PROCESS_CONTINUE;
-      }
-    });
-    return typeDefs;
-  }
+         @Override
+         public int visit(IASTDeclaration declaration) {
+            if (declaration instanceof IASTSimpleDeclaration) {
+               IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
 
-  private static boolean isTypeDef(IASTDeclSpecifier typeSpec) {
-    return typeSpec instanceof IASTNamedTypeSpecifier
-        && typeSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef;
-  }
+               if (isTypeDef(simpleDecl.getDeclSpecifier())) {
+                  typeDefs.add((IASTSimpleDeclaration) declaration);
+               }
+            }
+            return PROCESS_CONTINUE;
+         }
+      });
+      return typeDefs;
+   }
+
+   private static boolean isTypeDef(IASTDeclSpecifier typeSpec) {
+      return typeSpec instanceof IASTNamedTypeSpecifier && typeSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef;
+   }
 }

@@ -2,18 +2,20 @@ package ch.hsr.ifs.mockator.plugin.project.cdt.toolchains;
 
 import java.util.Collection;
 
+
 public interface ToolChainProjectVariables {
-  String getCppCompilerToolId();
 
-  String getCppCompilerOtherFlagsId();
+   String getCppCompilerToolId();
 
-  Collection<String> getLinkerToolIds();
+   String getCppCompilerOtherFlagsId();
 
-  String getLinkerOtherFlags();
+   Collection<String> getLinkerToolIds();
 
-  String getPreprocessorDefinesId();
+   String getLinkerOtherFlags();
 
-  String getCpp11ExperimentalFlag();
+   String getPreprocessorDefinesId();
 
-  String getCompilerPicId();
+   String getCpp11ExperimentalFlag();
+
+   String getCompilerPicId();
 }

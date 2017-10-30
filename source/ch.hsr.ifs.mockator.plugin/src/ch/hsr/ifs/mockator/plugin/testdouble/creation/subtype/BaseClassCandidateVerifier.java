@@ -6,42 +6,41 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPBase;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 
+
 public class BaseClassCandidateVerifier {
-  private final ICPPClassType classType;
 
-  public BaseClassCandidateVerifier(ICPPClassType classType) {
-    this.classType = classType;
-  }
+   private final ICPPClassType classType;
 
-  public boolean isConsideredAsBaseClass() {
-    return hasNonPrivateVirtualDtor(classType);
-  }
+   public BaseClassCandidateVerifier(ICPPClassType classType) {
+      this.classType = classType;
+   }
 
-  private static boolean hasNonPrivateVirtualDtor(ICPPClassType classType) {
-    ICPPMethod dtor = getDtor(classType);
+   public boolean isConsideredAsBaseClass() {
+      return hasNonPrivateVirtualDtor(classType);
+   }
 
-    if (dtor != null && dtor.isVirtual() && isNotPrivate(dtor))
-      return true;
+   private static boolean hasNonPrivateVirtualDtor(ICPPClassType classType) {
+      ICPPMethod dtor = getDtor(classType);
 
-    for (ICPPBase base : classType.getBases()) {
-      IBinding baseClass = base.getBaseClass();
+      if (dtor != null && dtor.isVirtual() && isNotPrivate(dtor)) return true;
 
-      if (baseClass instanceof ICPPClassType && hasNonPrivateVirtualDtor((ICPPClassType) baseClass))
-        return true;
-    }
+      for (ICPPBase base : classType.getBases()) {
+         IBinding baseClass = base.getBaseClass();
 
-    return false;
-  }
+         if (baseClass instanceof ICPPClassType && hasNonPrivateVirtualDtor((ICPPClassType) baseClass)) return true;
+      }
 
-  private static ICPPMethod getDtor(ICPPClassType classType) {
-    for (ICPPMethod method : classType.getDeclaredMethods()) {
-      if (method.isDestructor())
-        return method;
-    }
-    return null;
-  }
+      return false;
+   }
 
-  private static boolean isNotPrivate(ICPPMethod memberFun) {
-    return memberFun.getVisibility() != ICPPASTVisibilityLabel.v_private;
-  }
+   private static ICPPMethod getDtor(ICPPClassType classType) {
+      for (ICPPMethod method : classType.getDeclaredMethods()) {
+         if (method.isDestructor()) return method;
+      }
+      return null;
+   }
+
+   private static boolean isNotPrivate(ICPPMethod memberFun) {
+      return memberFun.getVisibility() != ICPPASTVisibilityLabel.v_private;
+   }
 }

@@ -10,79 +10,83 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
+import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.functional.F2;
 
+
 public class LinkerOptionHandler extends AbstractOptionsHandler {
 
-  public LinkerOptionHandler(IProject project) {
-    super(project);
-  }
+   public LinkerOptionHandler(final IProject project) {
+      super(project);
+   }
 
-  public void removeLinkerFlag(String flagName) {
-    toggleLinkerFlag(new LinkerOtherFlagRemover(), flagName);
-  }
+   public void removeLinkerFlag(final String flagName) {
+      toggleLinkerFlag(new LinkerOtherFlagRemover(), flagName);
+   }
 
-  public void addLinkerFlag(String flagName) {
-    toggleLinkerFlag(new LinkerOtherFlagAdder(), flagName);
-  }
+   public void addLinkerFlag(final String flagName) {
+      toggleLinkerFlag(new LinkerOtherFlagAdder(), flagName);
+   }
 
-  public boolean hasLinkerFlag(String flagName) {
-    for (ITool optTool : getToolToAnanalyze()) {
-      IOption flagsOption = optTool.getOptionBySuperClassId(projectVariables.getLinkerOtherFlags());
+   public boolean hasLinkerFlag(final String flagName) {
+      return OptHelper.returnIfPresentElse(getToolToAnanalyze(), (tool) -> {
+         final IOption flagsOption = tool.getOptionBySuperClassId(projectVariables.getLinkerOtherFlags());
 
-      if (flagsOption == null)
-        return false;
+         if (flagsOption == null) {
+            return false;
+         }
 
-      Collection<String> currentFlags = getListValues(flagsOption);
+         final Collection<String> currentFlags = getListValues(flagsOption);
 
-      if (currentFlags.contains(flagName))
-        return true;
-    }
+         return currentFlags.contains(flagName);
+      }, () -> false);
+   }
 
-    return false;
-  }
+   private void toggleLinkerFlag(final F2<String, Collection<String>, Void> linkerFlagOp, final String flagName) {
+      withEveryTool(new F2<ITool, IConfiguration, Void>() {
 
-  private void toggleLinkerFlag(final F2<String, Collection<String>, Void> linkerFlagOp,
-      final String flagName) {
-    withEveryTool(new F2<ITool, IConfiguration, Void>() {
-      @Override
-      public Void apply(ITool tool, IConfiguration config) {
-        IOption flagsOption = tool.getOptionBySuperClassId(projectVariables.getLinkerOtherFlags());
-        Collection<String> linkerOptions = getListValues(flagsOption);
-        linkerFlagOp.apply(flagName, linkerOptions);
-        setAndSaveOption(config, tool, flagsOption, linkerOptions);
-        return null;
+         @Override
+         public Void apply(final ITool tool, final IConfiguration config) {
+            final IOption flagsOption = tool.getOptionBySuperClassId(projectVariables.getLinkerOtherFlags());
+            final Collection<String> linkerOptions = getListValues(flagsOption);
+            linkerFlagOp.apply(flagName, linkerOptions);
+            setAndSaveOption(config, tool, flagsOption, linkerOptions);
+            return null;
+         }
+      });
+   }
+
+   private static Collection<String> getListValues(final IOption option) {
+      try {
+         return orderPreservingSet(option.getStringListValue());
       }
-    });
-  }
+      catch (final BuildException e) {
+         throw new MockatorException(e);
+      }
+   }
 
-  private static Collection<String> getListValues(IOption option) {
-    try {
-      return orderPreservingSet(option.getStringListValue());
-    } catch (BuildException e) {
-      throw new MockatorException(e);
-    }
-  }
+   @Override
+   protected boolean isRequestedTool(final ITool tool) {
+      return isLinker(tool);
+   }
 
-  @Override
-  protected boolean isRequestedTool(ITool tool) {
-    return isLinker(tool);
-  }
+   private static class LinkerOtherFlagAdder implements F2<String, Collection<String>, Void> {
 
-  private static class LinkerOtherFlagAdder implements F2<String, Collection<String>, Void> {
-    @Override
-    public Void apply(String wrapFunName, Collection<String> flags) {
-      flags.add(wrapFunName);
-      return null;
-    }
-  }
+      @Override
+      public Void apply(final String wrapFunName, final Collection<String> flags) {
+         flags.add(wrapFunName);
+         return null;
+      }
+   }
 
-  private static class LinkerOtherFlagRemover implements F2<String, Collection<String>, Void> {
-    @Override
-    public Void apply(String wrapFunName, Collection<String> flags) {
-      flags.remove(wrapFunName);
-      return null;
-    }
-  }
+   private static class LinkerOtherFlagRemover implements F2<String, Collection<String>, Void> {
+
+      @Override
+      public Void apply(final String wrapFunName, final Collection<String> flags) {
+         flags.remove(wrapFunName);
+         return null;
+      }
+   }
 }

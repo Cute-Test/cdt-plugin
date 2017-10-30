@@ -14,49 +14,48 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.MemFunMockSupportAdder;
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 
+
 @SuppressWarnings("restriction")
 abstract class AbstractMemFunMockSupport implements MemFunMockSupportAdder {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  protected final ASTRewrite rewriter;
-  protected final CppStandard cppStd;
-  protected final String callsVectorName;
-  private final PolymorphismKind polyKind;
 
-  public AbstractMemFunMockSupport(ASTRewrite rewriter, CppStandard cppStd,
-      String nameOfAllCallsVector, PolymorphismKind polymorphismKind) {
-    this.rewriter = rewriter;
-    this.cppStd = cppStd;
-    this.callsVectorName = nameOfAllCallsVector;
-    this.polyKind = polymorphismKind;
-  }
+   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   protected final ASTRewrite          rewriter;
+   protected final CppStandard         cppStd;
+   protected final String              callsVectorName;
+   private final PolymorphismKind      polyKind;
 
-  @Override
-  public abstract void addMockSupport(ICPPASTFunctionDefinition function);
+   public AbstractMemFunMockSupport(ASTRewrite rewriter, CppStandard cppStd, String nameOfAllCallsVector, PolymorphismKind polymorphismKind) {
+      this.rewriter = rewriter;
+      this.cppStd = cppStd;
+      this.callsVectorName = nameOfAllCallsVector;
+      this.polyKind = polymorphismKind;
+   }
 
-  protected void addAllExistingBodyStmts(IASTCompoundStatement body, ICPPASTFunctionDefinition fun) {
-    for (IASTStatement bodyStmt : ((IASTCompoundStatement) fun.getBody()).getStatements()) {
-      body.addStatement(bodyStmt.copy());
-    }
-  }
+   @Override
+   public abstract void addMockSupport(ICPPASTFunctionDefinition function);
 
-  protected IASTCompoundStatement createNewFunBody(ICPPASTFunctionDefinition function) {
-    IASTCompoundStatement funBody = nodeFactory.newCompoundStatement();
-    Assert.instanceOf(function.getBody(), IASTCompoundStatement.class,
-        "Compound statement expected as function body");
-    fillFunBody(funBody, function);
-    return funBody;
-  }
+   protected void addAllExistingBodyStmts(IASTCompoundStatement body, ICPPASTFunctionDefinition fun) {
+      for (IASTStatement bodyStmt : ((IASTCompoundStatement) fun.getBody()).getStatements()) {
+         body.addStatement(bodyStmt.copy());
+      }
+   }
 
-  protected abstract void fillFunBody(IASTCompoundStatement funBody, ICPPASTFunctionDefinition fun);
+   protected IASTCompoundStatement createNewFunBody(ICPPASTFunctionDefinition function) {
+      IASTCompoundStatement funBody = nodeFactory.newCompoundStatement();
+      Assert.instanceOf(function.getBody(), IASTCompoundStatement.class, "Compound statement expected as function body");
+      fillFunBody(funBody, function);
+      return funBody;
+   }
 
-  protected void addCallRegistration(IASTCompoundStatement newBody, ICPPASTFunctionDefinition fun) {
-    ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) fun.getDeclarator();
-    boolean isStatic = AstUtil.isStatic(fun.getDeclSpecifier());
-    new MemberFunCallRegistrationAdder(funDecl, isStatic, cppStd, callsVectorName)
-        .addRegistrationTo(newBody);
-  }
+   protected abstract void fillFunBody(IASTCompoundStatement funBody, ICPPASTFunctionDefinition fun);
 
-  protected boolean isSubTypePoly() {
-    return polyKind == PolymorphismKind.SubTypePoly;
-  }
+   protected void addCallRegistration(IASTCompoundStatement newBody, ICPPASTFunctionDefinition fun) {
+      ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) fun.getDeclarator();
+      boolean isStatic = AstUtil.isStatic(fun.getDeclSpecifier());
+      new MemberFunCallRegistrationAdder(funDecl, isStatic, cppStd, callsVectorName).addRegistrationTo(newBody);
+   }
+
+   protected boolean isSubTypePoly() {
+      return polyKind == PolymorphismKind.SubTypePoly;
+   }
 }

@@ -7,45 +7,47 @@ import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.IMarkerResolution2;
 
+import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 @SuppressWarnings("restriction")
-public abstract class MockatorQuickFix extends AbstractCodanCMarkerResolution implements
-    IMarkerResolution2 {
-  protected CodanArguments ca;
-  protected IMarker marker;
-  protected boolean shouldRunInCurrentThread;
-  private CEditor cEditor;
+public abstract class MockatorQuickFix extends AbstractCodanCMarkerResolution implements IMarkerResolution2 {
 
-  @Override
-  public boolean isApplicable(IMarker marker) {
-    ca = getCodanArguments(marker);
-    this.marker = marker;
-    return super.isApplicable(marker);
-  }
+   protected CodanArguments ca;
+   protected IMarker        marker;
+   protected boolean        shouldRunInCurrentThread;
+   private CEditor          cEditor;
 
-  protected CodanArguments getCodanArguments(IMarker marker) {
-    return null;
-  }
+   @Override
+   public boolean isApplicable(final IMarker marker) {
+      ca = getCodanArguments(marker);
+      this.marker = marker;
+      return super.isApplicable(marker);
+   }
 
-  protected ICProject getCProject() {
-    return getCElement().getCProject();
-  }
+   protected CodanArguments getCodanArguments(final IMarker marker) {
+      return null;
+   }
 
-  protected CppStandard getCppStandard() {
-    return CppStandard.fromCompilerFlags(getCProject().getProject());
-  }
+   protected ICProject getCProject() {
+      return getCElement().getCProject();
+   }
 
-  protected ICElement getCElement() {
-    for (CEditor optCEditor : UiUtil.getActiveCEditor()) {
-      cEditor = optCEditor;
-      return optCEditor.getInputCElement();
-    }
-    return cEditor.getInputCElement();
-  }
+   protected CppStandard getCppStandard() {
+      return CppStandard.fromCompilerFlags(getCProject().getProject());
+   }
 
-  public void setRunInCurrentThread(boolean runInCurrentThread) {
-    shouldRunInCurrentThread = runInCurrentThread;
-  }
+   protected ICElement getCElement() {
+      return OptHelper.returnIfPresentElse(UiUtil.getActiveCEditor(), (editor) -> {
+         cEditor = editor;
+         return editor.getInputCElement();
+      }, () -> cEditor.getInputCElement());
+   }
+
+   public void setRunInCurrentThread(final boolean runInCurrentThread) {
+      shouldRunInCurrentThread = runInCurrentThread;
+   }
 }

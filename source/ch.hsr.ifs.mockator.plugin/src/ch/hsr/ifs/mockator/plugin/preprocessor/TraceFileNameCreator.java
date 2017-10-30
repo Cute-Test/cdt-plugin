@@ -11,26 +11,28 @@ import org.eclipse.core.runtime.IPath;
 
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 
+
 class TraceFileNameCreator {
-  private final String funName;
-  private final IProject project;
 
-  public TraceFileNameCreator(String funName, IProject project) {
-    this.funName = funName;
-    this.project = project;
-  }
+   private final String   funName;
+   private final IProject project;
 
-  public IPath getSourceFilePath() {
-    return getPathForNewFile(SOURCE_SUFFIX);
-  }
+   public TraceFileNameCreator(String funName, IProject project) {
+      this.funName = funName;
+      this.project = project;
+   }
 
-  public IPath getHeaderFilePath() {
-    return getPathForNewFile(HEADER_SUFFIX);
-  }
+   public IPath getSourceFilePath() {
+      return getPathForNewFile(SOURCE_SUFFIX);
+   }
 
-  private IPath getPathForNewFile(String suffix) {
-    IFolder traceFolder = project.getFolder(TRACE_FOLDER);
-    PathProposalUtil proposal = new PathProposalUtil(traceFolder.getFullPath());
-    return proposal.getUniquePathForNewFile(MOCKED_TRACE_PREFIX + funName, suffix);
-  }
+   public IPath getHeaderFilePath() {
+      return getPathForNewFile(HEADER_SUFFIX);
+   }
+
+   private IPath getPathForNewFile(String suffix) {
+      IFolder traceFolder = project.getFolder(TRACE_FOLDER);
+      PathProposalUtil proposal = new PathProposalUtil(traceFolder.getFullPath());
+      return proposal.getUniquePathForNewFile(MOCKED_TRACE_PREFIX + funName, suffix);
+   }
 }

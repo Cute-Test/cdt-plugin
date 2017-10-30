@@ -9,24 +9,24 @@ import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 class InjectionInfoCollectorFactory {
-  private final IIndex index;
-  private final ICProject cProject;
 
-  public InjectionInfoCollectorFactory(IIndex index, ICProject cProject) {
-    this.index = index;
-    this.cProject = cProject;
-  }
+   private final IIndex    index;
+   private final ICProject cProject;
 
-  public DepInjectInfoCollector getInfoCollectorStrategy(IASTName name) {
-    if (isPartOfCtorCall(name))
-      return new CtorInjectionInfoCollector(index, cProject);
-    else
-      return new FunCallInjectionInfoCollector(index, cProject);
-  }
+   public InjectionInfoCollectorFactory(IIndex index, ICProject cProject) {
+      this.index = index;
+      this.cProject = cProject;
+   }
 
-  private static boolean isPartOfCtorCall(IASTNode node) {
-    return AstUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null
-        || AstUtil.getAncestorOfType(node, ICPPASTInitializerList.class) != null;
-  }
+   public DepInjectInfoCollector getInfoCollectorStrategy(IASTName name) {
+      if (isPartOfCtorCall(name)) return new CtorInjectionInfoCollector(index, cProject);
+      else return new FunCallInjectionInfoCollector(index, cProject);
+   }
+
+   private static boolean isPartOfCtorCall(IASTNode node) {
+      return AstUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || AstUtil.getAncestorOfType(node,
+            ICPPASTInitializerList.class) != null;
+   }
 }

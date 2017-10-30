@@ -26,76 +26,75 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDe
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnStatementCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFunction {
-  private static CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final ICPPASTFunctionDeclarator funDecl;
-  private final IASTSimpleDeclaration simpleDecl;
 
-  public MissingMemFun(IASTSimpleDeclaration simpleDecl) {
-    funDecl = AstUtil.getChildOfType(simpleDecl, ICPPASTFunctionDeclarator.class);
-    Assert.notNull(funDecl, "Not a valid function declaration");
-    this.simpleDecl = simpleDecl;
-  }
+   private static CPPNodeFactory           nodeFactory = CPPNodeFactory.getDefault();
+   private final ICPPASTFunctionDeclarator funDecl;
+   private final IASTSimpleDeclaration     simpleDecl;
 
-  @Override
-  public String getFunctionSignature() {
-    return new FunctionSignatureFormatter(funDecl).getFunctionSignature();
-  }
+   public MissingMemFun(IASTSimpleDeclaration simpleDecl) {
+      funDecl = AstUtil.getChildOfType(simpleDecl, ICPPASTFunctionDeclarator.class);
+      Assert.notNull(funDecl, "Not a valid function declaration");
+      this.simpleDecl = simpleDecl;
+   }
 
-  @Override
-  public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy,
-      CppStandard cppStd) {
-    ICPPASTFunctionDeclarator newFunDecl = createFunDecl();
-    ICPPASTDeclSpecifier newReturnType = createReturnType();
-    IASTCompoundStatement newFunBody = createFunBody(strategy, cppStd, newFunDecl, newReturnType);
-    return nodeFactory.newFunctionDefinition(newReturnType, newFunDecl, newFunBody);
-  }
+   @Override
+   public String getFunctionSignature() {
+      return new FunctionSignatureFormatter(funDecl).getFunctionSignature();
+   }
 
-  private ICPPASTFunctionDeclarator createFunDecl() {
-    ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
-    adjustParamNamesIfNecessary(newFunDecl);
-    newFunDecl.setPureVirtual(false);
-    return newFunDecl;
-  }
+   @Override
+   public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy, CppStandard cppStd) {
+      ICPPASTFunctionDeclarator newFunDecl = createFunDecl();
+      ICPPASTDeclSpecifier newReturnType = createReturnType();
+      IASTCompoundStatement newFunBody = createFunBody(strategy, cppStd, newFunDecl, newReturnType);
+      return nodeFactory.newFunctionDefinition(newReturnType, newFunDecl, newFunBody);
+   }
 
-  private ICPPASTDeclSpecifier createReturnType() {
-    ICPPASTDeclSpecifier returnType = (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
-    ICPPASTDeclSpecifier newReturnType = returnType.copy();
-    newReturnType.setVirtual(false);
-    return newReturnType;
-  }
+   private ICPPASTFunctionDeclarator createFunDecl() {
+      ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
+      adjustParamNamesIfNecessary(newFunDecl);
+      newFunDecl.setPureVirtual(false);
+      return newFunDecl;
+   }
 
-  private IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy,
-      CppStandard cppStd, ICPPASTFunctionDeclarator newFunDecl, ICPPASTDeclSpecifier newReturnType) {
-    IASTCompoundStatement newFunBody = nodeFactory.newCompoundStatement();
-    strategy.addCallVectorRegistration(newFunBody, newFunDecl, isStatic());
-    ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, getClassName());
-    IASTReturnStatement returnStatement = creator.createReturnStatement(funDecl, newReturnType);
-    newFunBody.addStatement(returnStatement);
-    return newFunBody;
-  }
+   private ICPPASTDeclSpecifier createReturnType() {
+      ICPPASTDeclSpecifier returnType = (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
+      ICPPASTDeclSpecifier newReturnType = returnType.copy();
+      newReturnType.setVirtual(false);
+      return newReturnType;
+   }
 
-  private static void adjustParamNamesIfNecessary(ICPPASTFunctionDeclarator newFunDecl) {
-    ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
-    funDecorator.adjustParamNamesIfNecessary();
-  }
+   private IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, CppStandard cppStd, ICPPASTFunctionDeclarator newFunDecl,
+         ICPPASTDeclSpecifier newReturnType) {
+      IASTCompoundStatement newFunBody = nodeFactory.newCompoundStatement();
+      strategy.addCallVectorRegistration(newFunBody, newFunDecl, isStatic());
+      ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, getClassName());
+      IASTReturnStatement returnStatement = creator.createReturnStatement(funDecl, newReturnType);
+      newFunBody.addStatement(returnStatement);
+      return newFunBody;
+   }
 
-  private String getClassName() {
-    ICPPASTCompositeTypeSpecifier klass =
-        AstUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
-    return klass.getName().toString();
-  }
+   private static void adjustParamNamesIfNecessary(ICPPASTFunctionDeclarator newFunDecl) {
+      ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
+      funDecorator.adjustParamNamesIfNecessary();
+   }
 
-  @Override
-  public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd,
-      LinkedEditModeStrategy strategy) {
-    DefaultArgumentCreator creator = new DefaultArgumentCreator(strategy, cppStd);
-    return creator.createDefaultArguments(list(funDecl.getParameters()));
-  }
+   private String getClassName() {
+      ICPPASTCompositeTypeSpecifier klass = AstUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      return klass.getName().toString();
+   }
 
-  @Override
-  public boolean isStatic() {
-    return false;
-  }
+   @Override
+   public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd, LinkedEditModeStrategy strategy) {
+      DefaultArgumentCreator creator = new DefaultArgumentCreator(strategy, cppStd);
+      return creator.createDefaultArguments(list(funDecl.getParameters()));
+   }
+
+   @Override
+   public boolean isStatic() {
+      return false;
+   }
 }

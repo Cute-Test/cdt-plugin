@@ -6,29 +6,27 @@ import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.context.MockSupportContext;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 
+
 public class AssertEqualsInserter {
-  private final MockSupportContext context;
 
-  public AssertEqualsInserter(MockSupportContext context) {
-    this.context = context;
-  }
+   private final MockSupportContext context;
 
-  public void insertAssertEqual() {
-    for (ICPPASTFunctionDefinition testFunction : context.getReferencingFunctions()) {
-      getAssertEqualsStrategy(testFunction).insertAssertEqual(context.getRewriter());
-    }
-  }
+   public AssertEqualsInserter(MockSupportContext context) {
+      this.context = context;
+   }
 
-  private AbstractAssertEqualsInserter getAssertEqualsStrategy(
-      ICPPASTFunctionDefinition testFunction) {
-    if (isCuteProject())
-      return new CuteAssertEqualsInserter(testFunction, context);
-    else
-      return new CAssertEqualsInserter(testFunction, context);
-  }
+   public void insertAssertEqual() {
+      for (ICPPASTFunctionDefinition testFunction : context.getReferencingFunctions()) {
+         getAssertEqualsStrategy(testFunction).insertAssertEqual(context.getRewriter());
+      }
+   }
 
-  private boolean isCuteProject() {
-    return new NatureHandler(context.getProject().getProject())
-        .hasNature(MockatorConstants.CUTE_NATURE);
-  }
+   private AbstractAssertEqualsInserter getAssertEqualsStrategy(ICPPASTFunctionDefinition testFunction) {
+      if (isCuteProject()) return new CuteAssertEqualsInserter(testFunction, context);
+      else return new CAssertEqualsInserter(testFunction, context);
+   }
+
+   private boolean isCuteProject() {
+      return new NatureHandler(context.getProject().getProject()).hasNature(MockatorConstants.CUTE_NATURE);
+   }
 }

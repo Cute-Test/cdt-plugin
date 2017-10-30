@@ -8,7 +8,6 @@ import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
@@ -22,79 +21,76 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifi
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.BaseClassCtorCallHandler;
 
+
 @SuppressWarnings("restriction")
 public class DefaultConstructor extends AbstractStaticPolyMissingMemFun {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final TestDouble testDouble;
 
-  public DefaultConstructor(TestDouble testDouble) {
-    this.testDouble = testDouble;
-  }
+   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private final TestDouble            testDouble;
 
-  @Override
-  public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy,
-      CppStandard cppStd) {
-    ICPPASTFunctionDefinition defaultCtor = super.createFunctionDefinition(strategy, cppStd);
-    addBaseClassCtorCallIfNecessary(defaultCtor, cppStd);
-    addAdditionalCtorSupport(defaultCtor, cppStd);
-    return defaultCtor;
-  }
+   public DefaultConstructor(final TestDouble testDouble) {
+      this.testDouble = testDouble;
+   }
 
-  @Override
-  protected ICPPASTFunctionDeclarator createFunDecl() {
-    IASTName ctorName = createNewCtorName();
-    return nodeFactory.newFunctionDeclarator(ctorName);
-  }
+   @Override
+   public ICPPASTFunctionDefinition createFunctionDefinition(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd) {
+      final ICPPASTFunctionDefinition defaultCtor = super.createFunctionDefinition(strategy, cppStd);
+      addBaseClassCtorCallIfNecessary(defaultCtor, cppStd);
+      addAdditionalCtorSupport(defaultCtor, cppStd);
+      return defaultCtor;
+   }
 
-  @Override
-  protected ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl) {
-    return createCtorReturnType();
-  }
+   @Override
+   protected ICPPASTFunctionDeclarator createFunDecl() {
+      final IASTName ctorName = createNewCtorName();
+      return nodeFactory.newFunctionDeclarator(ctorName);
+   }
 
-  @Override
-  protected IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy,
-      ICPPASTFunctionDeclarator funDecl, ICPPASTDeclSpecifier specifier, CppStandard cppStd) {
-    return createEmptyFunBody();
-  }
+   @Override
+   protected ICPPASTDeclSpecifier createReturnType(final ICPPASTFunctionDeclarator funDecl) {
+      return createCtorReturnType();
+   }
 
-  @Override
-  public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd,
-      LinkedEditModeStrategy linkedEdit) {
-    return list();
-  }
+   @Override
+   protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
+            final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
+      return createEmptyFunBody();
+   }
 
-  private void addAdditionalCtorSupport(ICPPASTFunctionDefinition defaultCtor, CppStandard cppStd) {
-    testDouble.addAdditionalCtorSupport(defaultCtor, cppStd);
-  }
+   @Override
+   public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEdit) {
+      return list();
+   }
 
-  private void addBaseClassCtorCallIfNecessary(ICPPASTFunctionDefinition defaultCtor,
-      CppStandard cppStd) {
-    if (testDouble.getPolymorphismKind() != PolymorphismKind.SubTypePoly)
-      return;
+   private void addAdditionalCtorSupport(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {
+      testDouble.addAdditionalCtorSupport(defaultCtor, cppStd);
+   }
 
-    BaseClassCtorCallHandler handler = new BaseClassCtorCallHandler(testDouble.getClassType());
+   private void addBaseClassCtorCallIfNecessary(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {
+      if (testDouble.getPolymorphismKind() != PolymorphismKind.SubTypePoly) {
+         return;
+      }
 
-    for (ICPPASTConstructorChainInitializer candidate : handler.getBaseClassInitializer(cppStd)) {
-      defaultCtor.addMemberInitializer(candidate);
-    }
-  }
+      final BaseClassCtorCallHandler handler = new BaseClassCtorCallHandler(testDouble.getClassType());
+      handler.getBaseClassInitializer(cppStd).ifPresent((candidate) -> defaultCtor.addMemberInitializer(candidate));
+   }
 
-  private IASTName createNewCtorName() {
-    return nodeFactory.newName(testDouble.getName().toCharArray());
-  }
+   private IASTName createNewCtorName() {
+      return nodeFactory.newName(testDouble.getName().toCharArray());
+   }
 
-  @Override
-  public boolean isCallEquivalent(ICPPASTFunctionDefinition function, ConstStrategy strategy) {
-    return false;
-  }
+   @Override
+   public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
+      return false;
+   }
 
-  @Override
-  public boolean isStatic() {
-    return false;
-  }
+   @Override
+   public boolean isStatic() {
+      return false;
+   }
 
-  @Override
-  protected IASTExpression getUnderlyingExpression() {
-    return null;
-  }
+   @Override
+   protected IASTExpression getUnderlyingExpression() {
+      return null;
+   }
 }

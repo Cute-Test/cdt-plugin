@@ -12,60 +12,54 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 
+
 public class CallsVectorTypeVerifier {
-  private final IType type;
 
-  public CallsVectorTypeVerifier(IASTIdExpression idExpr) {
-    type = getUnderlyingType(idExpr.getName());
-  }
+   private final IType type;
 
-  public CallsVectorTypeVerifier(IASTName name) {
-    type = getUnderlyingType(name);
-  }
+   public CallsVectorTypeVerifier(IASTIdExpression idExpr) {
+      type = getUnderlyingType(idExpr.getName());
+   }
 
-  private static IType getUnderlyingType(IASTName name) {
-    IBinding binding = name.resolveBinding();
+   public CallsVectorTypeVerifier(IASTName name) {
+      type = getUnderlyingType(name);
+   }
 
-    if (!(binding instanceof IVariable))
-      return null;
+   private static IType getUnderlyingType(IASTName name) {
+      IBinding binding = name.resolveBinding();
 
-    return ((IVariable) binding).getType();
-  }
+      if (!(binding instanceof IVariable)) return null;
 
-  public boolean hasCallsVectorType() {
-    if (!(type instanceof ITypedef))
-      return false;
+      return ((IVariable) binding).getType();
+   }
 
-    String name = ((ITypedef) type).getName();
-    return name.equals(MockatorConstants.CALLS);
-  }
+   public boolean hasCallsVectorType() {
+      if (!(type instanceof ITypedef)) return false;
 
-  public boolean isVectorOfCallsVector() {
-    if (!(type instanceof ICPPTemplateInstance))
-      return false;
+      String name = ((ITypedef) type).getName();
+      return name.equals(MockatorConstants.CALLS);
+   }
 
-    ICPPTemplateArgument[] templateArgs = ((ICPPTemplateInstance) type).getTemplateArguments();
+   public boolean isVectorOfCallsVector() {
+      if (!(type instanceof ICPPTemplateInstance)) return false;
 
-    if (templateArgs.length == 0)
-      return false;
+      ICPPTemplateArgument[] templateArgs = ((ICPPTemplateInstance) type).getTemplateArguments();
 
-    ICPPTemplateArgument fstTemplateArg = templateArgs[0];
-    IType fstTypeValue = fstTemplateArg.getTypeValue();
+      if (templateArgs.length == 0) return false;
 
-    if (!(fstTypeValue instanceof ICPPTemplateInstance))
-      return false;
+      ICPPTemplateArgument fstTemplateArg = templateArgs[0];
+      IType fstTypeValue = fstTemplateArg.getTypeValue();
 
-    ICPPTemplateArgument[] innerTemplateArg =
-        ((ICPPTemplateInstance) fstTypeValue).getTemplateArguments();
+      if (!(fstTypeValue instanceof ICPPTemplateInstance)) return false;
 
-    if (innerTemplateArg.length == 0)
-      return false;
+      ICPPTemplateArgument[] innerTemplateArg = ((ICPPTemplateInstance) fstTypeValue).getTemplateArguments();
 
-    IType innerTypeValue = innerTemplateArg[0].getTypeValue();
+      if (innerTemplateArg.length == 0) return false;
 
-    if (!(innerTypeValue instanceof ICPPClassType))
-      return false;
+      IType innerTypeValue = innerTemplateArg[0].getTypeValue();
 
-    return ((ICPPClassType) innerTypeValue).getName().equals(MockatorConstants.CALL);
-  }
+      if (!(innerTypeValue instanceof ICPPClassType)) return false;
+
+      return ((ICPPClassType) innerTypeValue).getName().equals(MockatorConstants.CALL);
+   }
 }

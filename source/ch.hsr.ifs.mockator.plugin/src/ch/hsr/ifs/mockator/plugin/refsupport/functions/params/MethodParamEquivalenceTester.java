@@ -4,31 +4,31 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunctionType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 
+
 public class MethodParamEquivalenceTester {
-  private final ICPPFunctionType methodType;
 
-  public MethodParamEquivalenceTester(ICPPMethod method) {
-    methodType = method.getType();
-  }
+   private final ICPPFunctionType methodType;
 
-  public boolean hasSameParameters(ICPPMethod otherMethod) {
-    ICPPFunctionType otherMethodType = otherMethod.getType();
+   public MethodParamEquivalenceTester(ICPPMethod method) {
+      methodType = method.getType();
+   }
 
-    if (!haveEqualNumOfParams(otherMethodType))
-      return false;
+   public boolean hasSameParameters(ICPPMethod otherMethod) {
+      ICPPFunctionType otherMethodType = otherMethod.getType();
 
-    for (int i = 0; i < methodType.getParameterTypes().length; i++) {
-      IType methodParamType = methodType.getParameterTypes()[i];
-      IType otherParamType = otherMethodType.getParameterTypes()[i];
+      if (!haveEqualNumOfParams(otherMethodType)) return false;
 
-      if (!methodParamType.isSameType(otherParamType))
-        return false;
-    }
+      for (int i = 0; i < methodType.getParameterTypes().length; i++) {
+         IType methodParamType = methodType.getParameterTypes()[i];
+         IType otherParamType = otherMethodType.getParameterTypes()[i];
 
-    return true;
-  }
+         if (!methodParamType.isSameType(otherParamType)) return false;
+      }
 
-  private boolean haveEqualNumOfParams(ICPPFunctionType otherMethodType) {
-    return methodType.getParameterTypes().length == otherMethodType.getParameterTypes().length;
-  }
+      return true;
+   }
+
+   private boolean haveEqualNumOfParams(ICPPFunctionType otherMethodType) {
+      return methodType.getParameterTypes().length == otherMethodType.getParameterTypes().length;
+   }
 }

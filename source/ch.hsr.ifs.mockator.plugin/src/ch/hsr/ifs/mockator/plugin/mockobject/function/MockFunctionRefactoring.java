@@ -1,8 +1,9 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.function;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
@@ -16,7 +17,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.linker.LinkerFunctionPreconVerifier;
 import ch.hsr.ifs.mockator.plugin.linker.WeakDeclAdder;
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.wizard.MockFunctionCommunication;
@@ -26,112 +26,107 @@ import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoringRunner;
 
+
 @SuppressWarnings("restriction")
-public class MockFunctionRefactoring extends MockatorRefactoring implements
-    MockFunctionCommunication {
-  private final CppStandard cppStd;
-  private final ICProject mockatorProj;
-  private IPath destination;
-  private IFile newFile;
-  private String suiteName;
+public class MockFunctionRefactoring extends MockatorRefactoring implements MockFunctionCommunication {
 
-  public MockFunctionRefactoring(CppStandard cppStd, ICElement cElement, ITextSelection selection,
-      ICProject referencedProj, ICProject mockatorProj) {
-    super(cElement, selection, referencedProj);
-    this.cppStd = cppStd;
-    this.mockatorProj = mockatorProj;
-    destination = mockatorProj.getPath();
-  }
+   private final CppStandard cppStd;
+   private final ICProject   mockatorProj;
+   private IPath             destination;
+   private IFile             newFile;
+   private String            suiteName;
 
-  @Override
-  public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException {
-    RefactoringStatus status = super.checkInitialConditions(pm);
-    IASTTranslationUnit ast = getAST(tu, pm);
-    assureFunHasLinkSeamProperties(status, getSelectedName(ast), ast);
-    return status;
-  }
+   public MockFunctionRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject referencedProj,
+            final ICProject mockatorProj) {
+      super(cElement, selection, referencedProj);
+      this.cppStd = cppStd;
+      this.mockatorProj = mockatorProj;
+      destination = mockatorProj.getPath();
+   }
 
-  private static void assureFunHasLinkSeamProperties(RefactoringStatus status,
-      Maybe<IASTName> selectedFunName, IASTTranslationUnit ast) {
-    LinkerFunctionPreconVerifier verifier = new LinkerFunctionPreconVerifier(status, ast);
-    verifier.assureSatisfiesLinkSeamProperties(selectedFunName);
-  }
+   @Override
+   public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
+      final RefactoringStatus status = super.checkInitialConditions(pm);
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      assureFunHasLinkSeamProperties(status, getSelectedName(ast), ast);
+      return status;
+   }
 
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector collector)
-      throws CoreException, OperationCanceledException {
-    for (IASTName optFunName : getSelectedName(getAST(tu, pm))) {
-      MockFunctionFileCreator fileCreator = getFileCreator(collector, pm);
-      createHeaderFile(optFunName, fileCreator);
-      createSourceFile(optFunName, fileCreator);
-      setWeakDeclPropertyIfNecessary(optFunName, collector, pm);
-    }
-  }
+   private static void assureFunHasLinkSeamProperties(final RefactoringStatus status, final Optional<IASTName> selectedFunName,
+            final IASTTranslationUnit ast) {
+      final LinkerFunctionPreconVerifier verifier = new LinkerFunctionPreconVerifier(status, ast);
+      verifier.assureSatisfiesLinkSeamProperties(selectedFunName);
+   }
 
-  private void createSourceFile(IASTName selectedFunName, MockFunctionFileCreator fileCreator)
-      throws CoreException {
-    String suiteName = getSuiteName(selectedFunName);
-    newFile = fileCreator.createSourceFile(suiteName, destination, selectedFunName);
-  }
+   @Override
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+   OperationCanceledException {
+      final Optional<IASTName> funName = getSelectedName(getAST(tu, pm));
+      if (funName.isPresent()) {
+         final MockFunctionFileCreator fileCreator = getFileCreator(collector, pm);
+         createHeaderFile(funName.get(), fileCreator);
+         createSourceFile(funName.get(), fileCreator);
+         setWeakDeclPropertyIfNecessary(funName.get(), collector, pm);
+      }
+   }
 
-  private void createHeaderFile(IASTName selectedFunName, MockFunctionFileCreator fileCreator)
-      throws CoreException {
-    fileCreator.createHeaderFile(getSuiteName(selectedFunName), destination, selectedFunName);
-  }
+   private void createSourceFile(final IASTName selectedFunName, final MockFunctionFileCreator fileCreator) throws CoreException {
+      final String suiteName = getSuiteName(selectedFunName);
+      newFile = fileCreator.createSourceFile(suiteName, destination, selectedFunName);
+   }
 
-  private void setWeakDeclPropertyIfNecessary(IASTName funName, ModificationCollector collector,
-      IProgressMonitor pm) {
-    NodeLookup lookup = new NodeLookup(project, pm);
-    for (ICPPASTFunctionDeclarator optFunDecl : lookup.findFunctionDeclaration(funName,
-        refactoringContext)) {
-      WeakDeclAdder weakDeclAdder = new WeakDeclAdder(collector);
-      weakDeclAdder.addWeakDeclAttribute(optFunDecl);
-    }
-  }
+   private void createHeaderFile(final IASTName selectedFunName, final MockFunctionFileCreator fileCreator) throws CoreException {
+      fileCreator.createHeaderFile(getSuiteName(selectedFunName), destination, selectedFunName);
+   }
 
-  private String getSuiteName(IASTName selectedFunName) {
-    if (suiteName == null)
-      return selectedFunName.toString();
+   private void setWeakDeclPropertyIfNecessary(final IASTName funName, final ModificationCollector collector, final IProgressMonitor pm) {
+      new NodeLookup(project, pm).findFunctionDeclaration(funName, refactoringContext).ifPresent((funDecl) -> new WeakDeclAdder(collector)
+               .addWeakDeclAttribute(funDecl));
+   }
 
-    return suiteName;
-  }
+   private String getSuiteName(final IASTName selectedFunName) {
+      if (suiteName == null) {
+         return selectedFunName.toString();
+      }
 
-  private MockFunctionFileCreator getFileCreator(ModificationCollector c, IProgressMonitor pm) {
-    if (hasMockatorProjectCuteNature())
-      return new WithCuteSuiteFileCreator(c, refactoringContext, tu, mockatorProj, project, cppStd,
-          pm);
-    else
-      return new WithoutCuteFileCreator(c, refactoringContext, tu, mockatorProj, project, cppStd,
-          pm);
-  }
+      return suiteName;
+   }
 
-  private boolean hasMockatorProjectCuteNature() {
-    return new NatureHandler(mockatorProj.getProject()).hasNature(MockatorConstants.CUTE_NATURE);
-  }
+   private MockFunctionFileCreator getFileCreator(final ModificationCollector c, final IProgressMonitor pm) {
+      if (hasMockatorProjectCuteNature()) {
+         return new WithCuteSuiteFileCreator(c, refactoringContext, tu, mockatorProj, project, cppStd, pm);
+      } else {
+         return new WithoutCuteFileCreator(c, refactoringContext, tu, mockatorProj, project, cppStd, pm);
+      }
+   }
 
-  @Override
-  public IFile getNewFile() {
-    return newFile;
-  }
+   private boolean hasMockatorProjectCuteNature() {
+      return new NatureHandler(mockatorProj.getProject()).hasNature(MockatorConstants.CUTE_NATURE);
+   }
 
-  @Override
-  public String getDescription() {
-    return I18N.MockFunctionRefactoringDesc;
-  }
+   @Override
+   public IFile getNewFile() {
+      return newFile;
+   }
 
-  @Override
-  public void setSuiteName(String suiteName) {
-    this.suiteName = suiteName;
-  }
+   @Override
+   public String getDescription() {
+      return I18N.MockFunctionRefactoringDesc;
+   }
 
-  @Override
-  public void setDestinationFolder(IPath destinationPath) {
-    this.destination = destinationPath;
-  }
+   @Override
+   public void setSuiteName(final String suiteName) {
+      this.suiteName = suiteName;
+   }
 
-  @Override
-  public void execute(IProgressMonitor pm) {
-    MockatorRefactoringRunner executor = new MockatorRefactoringRunner(this);
-    executor.runInCurrentThread(pm);
-  }
+   @Override
+   public void setDestinationFolder(final IPath destinationPath) {
+      destination = destinationPath;
+   }
+
+   @Override
+   public void execute(final IProgressMonitor pm) {
+      final MockatorRefactoringRunner executor = new MockatorRefactoringRunner(this);
+      executor.runInCurrentThread(pm);
+   }
 }

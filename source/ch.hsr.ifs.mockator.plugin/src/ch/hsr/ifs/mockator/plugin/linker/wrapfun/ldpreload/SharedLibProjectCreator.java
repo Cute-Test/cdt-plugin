@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.cdt.core.model.CoreModel;
@@ -19,121 +21,117 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtHelper;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 
+
 @SuppressWarnings("restriction")
 class SharedLibProjectCreator {
-  private final String newProjectName;
-  private final IProject projectToInheritFrom;
 
-  public SharedLibProjectCreator(String projectName, IProject projectToInheritFrom) {
-    this.newProjectName = projectName;
-    this.projectToInheritFrom = projectToInheritFrom;
-  }
+   private final String   newProjectName;
+   private final IProject projectToInheritFrom;
 
-  public IProject createSharedLib(IProgressMonitor pm) throws CoreException {
-    IProject project = createEmptyProject(pm);
-    addCdtNatures(project, pm);
-    makeManagedCdtSharedLibProj(project);
-    return project;
-  }
+   public SharedLibProjectCreator(final String projectName, final IProject projectToInheritFrom) {
+      newProjectName = projectName;
+      this.projectToInheritFrom = projectToInheritFrom;
+   }
 
-  private IProject createEmptyProject(IProgressMonitor pm) throws CoreException {
-    IProject project = ProjectUtil.getWorkspaceRoot().getProject(newProjectName);
-    project.create(pm);
-    project.open(pm);
-    return project;
-  }
+   public IProject createSharedLib(final IProgressMonitor pm) throws CoreException {
+      final IProject project = createEmptyProject(pm);
+      addCdtNatures(project, pm);
+      makeManagedCdtSharedLibProj(project);
+      return project;
+   }
 
-  private static void addCdtNatures(IProject project, IProgressMonitor pm) throws CoreException {
-    CProjectNature.addCNature(project, pm);
-    CCProjectNature.addCCNature(project, pm);
-  }
+   private IProject createEmptyProject(final IProgressMonitor pm) throws CoreException {
+      final IProject project = CPPResourceHelper.getWorkspaceRoot().getProject(newProjectName);
+      project.create(pm);
+      project.open(pm);
+      return project;
+   }
 
-  private void makeManagedCdtSharedLibProj(IProject project) throws CoreException {
-    ICProjectDescriptionManager mgr = CoreModel.getDefault().getProjectDescriptionManager();
+   private static void addCdtNatures(final IProject project, final IProgressMonitor pm) throws CoreException {
+      CProjectNature.addCNature(project, pm);
+      CCProjectNature.addCCNature(project, pm);
+   }
 
-    if (hasAlreadyProjectDescription(project, mgr))
-      return;
+   private void makeManagedCdtSharedLibProj(final IProject project) throws CoreException {
+      final ICProjectDescriptionManager mgr = CoreModel.getDefault().getProjectDescriptionManager();
 
-    setSharedLibProjectDesc(project, mgr);
-  }
-
-  private void setSharedLibProjectDesc(IProject project, ICProjectDescriptionManager mgr)
-      throws CoreException {
-    ManagedBuildInfo mbInfo = ManagedBuildManager.createBuildInfo(project);
-    IProjectType projType = getGnuSharedLibProjType();
-    ManagedProject mProj = createManagedProject(project, mbInfo, projType);
-    ICProjectDescription projDesc = createConfigurations(project, mgr, projType, mProj);
-    mgr.setProjectDescription(project, projDesc);
-  }
-
-  private ICProjectDescription createConfigurations(IProject project,
-      ICProjectDescriptionManager mgr, IProjectType projType, ManagedProject mProj)
-      throws CoreException {
-    ICProjectDescription projDesc = mgr.createProjectDescription(project, true);
-    IToolChain tc = getToolChain();
-
-    for (IConfiguration config : ManagedBuildManager.getExtensionConfigurations(tc, projType)) {
-      if (!(config instanceof Configuration)) {
-        continue;
+      if (hasAlreadyProjectDescription(project, mgr)) {
+         return;
       }
 
-      Configuration cf =
-          createNewConfiguration(projDesc, (Configuration) config, mProj, project, tc);
-      configureBuilder(cf);
-    }
+      setSharedLibProjectDesc(project, mgr);
+   }
 
-    return projDesc;
-  }
+   private void setSharedLibProjectDesc(final IProject project, final ICProjectDescriptionManager mgr) throws CoreException {
+      final ManagedBuildInfo mbInfo = ManagedBuildManager.createBuildInfo(project);
+      final IProjectType projType = getGnuSharedLibProjType();
+      final ManagedProject mProj = createManagedProject(project, mbInfo, projType);
+      final ICProjectDescription projDesc = createConfigurations(project, mgr, projType, mProj);
+      mgr.setProjectDescription(project, projDesc);
+   }
 
-  private static ManagedProject createManagedProject(IProject project, ManagedBuildInfo mbInfo,
-      IProjectType pType) {
-    ManagedProject mProject = new ManagedProject(project, pType);
-    mbInfo.setManagedProject(mProject);
-    return mProject;
-  }
+   private ICProjectDescription createConfigurations(final IProject project, final ICProjectDescriptionManager mgr, final IProjectType projType, final ManagedProject mProj)
+         throws CoreException {
+      final ICProjectDescription projDesc = mgr.createProjectDescription(project, true);
+      final IToolChain tc = getToolChain();
 
-  private static void configureBuilder(Configuration config) throws CoreException {
-    IBuilder builder = config.getEditableBuilder();
-    builder.setManagedBuildOn(true);
-  }
+      for (final IConfiguration config : ManagedBuildManager.getExtensionConfigurations(tc, projType)) {
+         if (!(config instanceof Configuration)) {
+            continue;
+         }
 
-  private static Configuration createNewConfiguration(ICProjectDescription desc, Configuration cf,
-      ManagedProject managed, IProject p, IToolChain tc) throws WriteAccessException, CoreException {
-    String id = ManagedBuildManager.calculateChildId(cf.getId(), null);
-    Configuration config = new Configuration(managed, cf, id, false, true);
-    ICConfigurationDescription cfgDes =
-        desc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID,
-            config.getConfigurationData());
-    config.setConfigurationDescription(cfgDes);
-    config.exportArtifactInfo();
-    config.setName(tc.getName().replaceAll("\\s", ""));
-    config.setArtifactName(p.getName());
-    return config;
-  }
+         final Configuration cf = createNewConfiguration(projDesc, (Configuration) config, mProj, project, tc);
+         configureBuilder(cf);
+      }
 
-  private static boolean hasAlreadyProjectDescription(IProject project,
-      ICProjectDescriptionManager mgr) {
-    return mgr.getProjectDescription(project, true) != null;
-  }
+      return projDesc;
+   }
 
-  private IProjectType getGnuSharedLibProjType() {
-    Maybe<ToolChain> tc = ToolChain.fromProject(projectToInheritFrom);
-    Assert.isTrue(tc.isSome(), "Could not determine toolchain");
-    String sharedLibProjectType = tc.get().getSharedLibProjectType();
-    return ManagedBuildManager.getExtensionProjectType(sharedLibProjectType);
-  }
+   private static ManagedProject createManagedProject(final IProject project, final ManagedBuildInfo mbInfo, final IProjectType pType) {
+      final ManagedProject mProject = new ManagedProject(project, pType);
+      mbInfo.setManagedProject(mProject);
+      return mProject;
+   }
 
-  private IConfiguration getDefaultConfig() {
-    return CdtHelper.getManagedBuildInfo(projectToInheritFrom).getDefaultConfiguration();
-  }
+   private static void configureBuilder(final Configuration config) throws CoreException {
+      final IBuilder builder = config.getEditableBuilder();
+      builder.setManagedBuildOn(true);
+   }
 
-  private IToolChain getToolChain() {
-    return ToolChain.getSuperToolChain(getDefaultConfig().getToolChain());
-  }
+   private static Configuration createNewConfiguration(final ICProjectDescription desc, final Configuration cf, final ManagedProject managed, final IProject p, final IToolChain tc)
+         throws WriteAccessException, CoreException {
+      final String id = ManagedBuildManager.calculateChildId(cf.getId(), null);
+      final Configuration config = new Configuration(managed, cf, id, false, true);
+      final ICConfigurationDescription cfgDes = desc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, config.getConfigurationData());
+      config.setConfigurationDescription(cfgDes);
+      config.exportArtifactInfo();
+      config.setName(tc.getName().replaceAll("\\s", ""));
+      config.setArtifactName(p.getName());
+      return config;
+   }
+
+   private static boolean hasAlreadyProjectDescription(final IProject project, final ICProjectDescriptionManager mgr) {
+      return mgr.getProjectDescription(project, true) != null;
+   }
+
+   private IProjectType getGnuSharedLibProjType() {
+      final Optional<ToolChain> tc = ToolChain.fromProject(projectToInheritFrom);
+      Assert.isTrue(tc.isPresent(), "Could not determine toolchain");
+      final String sharedLibProjectType = tc.get().getSharedLibProjectType();
+      return ManagedBuildManager.getExtensionProjectType(sharedLibProjectType);
+   }
+
+   private IConfiguration getDefaultConfig() {
+      return CdtHelper.getManagedBuildInfo(projectToInheritFrom).getDefaultConfiguration();
+   }
+
+   private IToolChain getToolChain() {
+      return ToolChain.getSuperToolChain(getDefaultConfig().getToolChain());
+   }
 }

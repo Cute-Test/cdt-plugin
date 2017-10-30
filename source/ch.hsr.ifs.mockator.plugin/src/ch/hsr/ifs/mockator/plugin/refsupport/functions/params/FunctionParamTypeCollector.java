@@ -10,24 +10,26 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
+
 public class FunctionParamTypeCollector {
-  private final ICPPASTFunctionDeclarator function;
 
-  public FunctionParamTypeCollector(ICPPASTFunctionDeclarator function) {
-    this.function = function;
-  }
+   private final ICPPASTFunctionDeclarator function;
 
-  public List<IType> getParameterTypes() {
-    List<IType> paramTypes = list();
+   public FunctionParamTypeCollector(ICPPASTFunctionDeclarator function) {
+      this.function = function;
+   }
 
-    for (ICPPASTParameterDeclaration param : function.getParameters()) {
-      paramTypes.add(getTypeOfParam(param));
-    }
+   public List<IType> getParameterTypes() {
+      List<IType> paramTypes = list();
 
-    return paramTypes;
-  }
+      for (ICPPASTParameterDeclaration param : function.getParameters()) {
+         paramTypes.add(getTypeOfParam(param));
+      }
 
-  private static IType getTypeOfParam(ICPPASTParameterDeclaration param) {
-    return TypeCreator.byDeclarator(param.getDeclarator());
-  }
+      return paramTypes;
+   }
+
+   private static IType getTypeOfParam(ICPPASTParameterDeclaration param) {
+      return TypeCreator.byDeclarator(param.getDeclarator());
+   }
 }

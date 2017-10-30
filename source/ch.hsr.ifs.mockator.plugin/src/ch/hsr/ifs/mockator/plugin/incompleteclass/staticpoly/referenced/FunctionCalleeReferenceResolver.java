@@ -7,12 +7,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ILinkage;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
@@ -27,8 +27,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
-import ch.hsr.ifs.mockator.plugin.base.maybe.Maybe;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
+
 
 // Code partially taken from org.eclipse.cdt.internal.ui.callhierarchy.CHQueries
 // Does not work properly for references made through dependent names because
@@ -36,109 +36,110 @@ import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 // therein at this point. See CDT Bugs 326070 and 332430.
 @SuppressWarnings("restriction")
 class FunctionCalleeReferenceResolver {
-  private final IIndex index;
-  private final ICProject cProject;
 
-  public FunctionCalleeReferenceResolver(IIndex index, ICProject cProject) {
-    this.index = index;
-    this.cProject = cProject;
-  }
+   private final IIndex    index;
+   private final ICProject cProject;
 
-  public Collection<IASTName> findCallers(IBinding binding, IASTNode point) {
-    Assert.notNull(binding, "Binding must not be null");
-    try {
-      List<IASTName> callers = new ArrayList<IASTName>();
-      findCallersRecursively(binding, callers, point);
-      return callers;
-    } catch (CoreException e) {
-      throw new MockatorException(e);
-    }
-  }
+   public FunctionCalleeReferenceResolver(final IIndex index, final ICProject cProject) {
+      this.index = index;
+      this.cProject = cProject;
+   }
 
-  private void findCallersRecursively(IBinding binding, List<IASTName> callers, IASTNode point)
-      throws CoreException {
-    CalledByResult result = new CalledByResult();
-    findCalledBy(binding, result, point);
-    List<ICElement> elements = result.getElements();
-    if (elements.isEmpty())
-      return;
-    IIndexBinding calleeBinding =
-        IndexUI.elementToBinding(index, elements.get(0), ILinkage.CPP_LINKAGE_ID);
-    for (IASTName optName : findDeclaration(calleeBinding)) {
-      callers.add(optName);
-    }
-    findCallersRecursively(calleeBinding, callers, point);
-  }
-
-  private Maybe<IASTName> findDeclaration(IIndexBinding calleeBinding) {
-    NodeLookup nodeLookup = new NodeLookup(cProject, new NullProgressMonitor());
-    Collection<IASTName> declarations = nodeLookup.findDeclarations(calleeBinding, index);
-    return head(declarations);
-  }
-
-  private void findCalledBy(IBinding calleeBinding, CalledByResult result, IASTNode point) throws CoreException {
-    findCalledBy1(calleeBinding, true, result, point);
-    if (!(calleeBinding instanceof ICPPMethod))
-      return;
-    for (IBinding overridden : findOverriders(calleeBinding)) {
-      findCalledBy1(overridden, false, result, point);
-    }
-  }
-
-  private ICPPMethod[] findOverriders(IBinding calleeBinding) {
-    return ClassTypeHelper.findOverridden((ICPPMethod) calleeBinding, null);
-  }
-
-  private void findCalledBy1(IBinding callee, boolean includeOrdinaryCalls, CalledByResult result, IASTNode point)
-      throws CoreException {
-    findCalledBy2(callee, includeOrdinaryCalls, result);
-    for (IBinding spec : IndexUI.findSpecializations(index, callee, point)) {
-      findCalledBy2(spec, includeOrdinaryCalls, result);
-    }
-  }
-
-  private void findCalledBy2(IBinding callee, boolean includeOrdinaryCalls, CalledByResult result)
-      throws CoreException {
-    for (IIndexName rname : findReferences(callee)) {
-      if (includeOrdinaryCalls || rname.couldBePolymorphicMethodCall()) {
-        IIndexName caller = rname.getEnclosingDefinition();
-        if (caller == null) {
-          continue;
-        }
-        ICElement elem = getICElement(caller);
-        if (elem != null) {
-          result.add(elem, rname);
-        }
+   public Collection<IASTName> findCallers(final IBinding binding, final IASTNode point) {
+      Assert.notNull(binding, "Binding must not be null");
+      try {
+         final List<IASTName> callers = new ArrayList<>();
+         findCallersRecursively(binding, callers, point);
+         return callers;
       }
-    }
-  }
-
-  private ICElementHandle getICElement(IIndexName caller) throws CoreException {
-    return IndexUI.getCElementForName(cProject, index, caller);
-  }
-
-  private IIndexName[] findReferences(IBinding callee) throws CoreException {
-    return index.findReferences(callee);
-  }
-
-  private static class CalledByResult {
-    private final Map<ICElement, List<IIndexName>> elementReferences;
-
-    public CalledByResult() {
-      elementReferences = new HashMap<ICElement, List<IIndexName>>();
-    }
-
-    public List<ICElement> getElements() {
-      return new ArrayList<ICElement>(elementReferences.keySet());
-    }
-
-    public void add(ICElement elem, IIndexName ref) {
-      List<IIndexName> list = elementReferences.get(elem);
-      if (list == null) {
-        list = new ArrayList<IIndexName>();
-        elementReferences.put(elem, list);
+      catch (final CoreException e) {
+         throw new MockatorException(e);
       }
-      list.add(ref);
-    }
-  }
+   }
+
+   private void findCallersRecursively(final IBinding binding, final List<IASTName> callers, final IASTNode point) throws CoreException {
+      final CalledByResult result = new CalledByResult();
+      findCalledBy(binding, result, point);
+      final List<ICElement> elements = result.getElements();
+      if (elements.isEmpty()) {
+         return;
+      }
+
+      final IIndexBinding calleeBinding = IndexUI.elementToBinding(index, elements.get(0), ILinkage.CPP_LINKAGE_ID);
+      findDeclaration(calleeBinding).ifPresent((name) -> callers.add(name));
+
+      findCallersRecursively(calleeBinding, callers, point);
+   }
+
+   private Optional<IASTName> findDeclaration(final IIndexBinding calleeBinding) {
+      final NodeLookup nodeLookup = new NodeLookup(cProject, new NullProgressMonitor());
+      return head(nodeLookup.findDeclarations(calleeBinding, index));
+   }
+
+   private void findCalledBy(final IBinding calleeBinding, final CalledByResult result, final IASTNode point) throws CoreException {
+      findCalledBy1(calleeBinding, true, result, point);
+      if (!(calleeBinding instanceof ICPPMethod)) {
+         return;
+      }
+      for (final IBinding overridden : findOverriders(calleeBinding)) {
+         findCalledBy1(overridden, false, result, point);
+      }
+   }
+
+   private ICPPMethod[] findOverriders(final IBinding calleeBinding) {
+      return ClassTypeHelper.findOverridden((ICPPMethod) calleeBinding, null);
+   }
+
+   private void findCalledBy1(final IBinding callee, final boolean includeOrdinaryCalls, final CalledByResult result, final IASTNode point)
+         throws CoreException {
+      findCalledBy2(callee, includeOrdinaryCalls, result);
+      for (final IBinding spec : IndexUI.findSpecializations(index, callee, point)) {
+         findCalledBy2(spec, includeOrdinaryCalls, result);
+      }
+   }
+
+   private void findCalledBy2(final IBinding callee, final boolean includeOrdinaryCalls, final CalledByResult result) throws CoreException {
+      for (final IIndexName rname : findReferences(callee)) {
+         if (includeOrdinaryCalls || rname.couldBePolymorphicMethodCall()) {
+            final IIndexName caller = rname.getEnclosingDefinition();
+            if (caller == null) {
+               continue;
+            }
+            final ICElement elem = getICElement(caller);
+            if (elem != null) {
+               result.add(elem, rname);
+            }
+         }
+      }
+   }
+
+   private ICElementHandle getICElement(final IIndexName caller) throws CoreException {
+      return IndexUI.getCElementForName(cProject, index, caller);
+   }
+
+   private IIndexName[] findReferences(final IBinding callee) throws CoreException {
+      return index.findReferences(callee);
+   }
+
+   private static class CalledByResult {
+
+      private final Map<ICElement, List<IIndexName>> elementReferences;
+
+      public CalledByResult() {
+         elementReferences = new HashMap<>();
+      }
+
+      public List<ICElement> getElements() {
+         return new ArrayList<>(elementReferences.keySet());
+      }
+
+      public void add(final ICElement elem, final IIndexName ref) {
+         List<IIndexName> list = elementReferences.get(elem);
+         if (list == null) {
+            list = new ArrayList<>();
+            elementReferences.put(elem, list);
+         }
+         list.add(ref);
+      }
+   }
 }

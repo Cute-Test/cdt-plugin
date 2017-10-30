@@ -13,70 +13,73 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 
+import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.tuples.Pair;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
+
 public class ExpectationsFinder {
-  private final Collection<MemFunCallExpectation> callExpectations;
-  private final NodeContainer<IASTName> expectationVector;
-  private final IASTFunctionDefinition testFunction;
 
-  public ExpectationsFinder(IASTFunctionDefinition testFunction) {
-    this.testFunction = testFunction;
-    callExpectations = orderPreservingSet();
-    expectationVector = new NodeContainer<IASTName>();
-  }
+   private final Collection<MemFunCallExpectation> callExpectations;
+   private final NodeContainer<IASTName>           expectationVector;
+   private final IASTFunctionDefinition            testFunction;
 
-  public Pair<Collection<MemFunCallExpectation>, IASTName> getExpectations(
-      final IASTName assertedExpectetation) {
-    testFunction.accept(new ASTVisitor() {
-      {
-        shouldVisitNames = true;
-      }
+   public ExpectationsFinder(final IASTFunctionDefinition testFunction) {
+      this.testFunction = testFunction;
+      callExpectations = orderPreservingSet();
+      expectationVector = new NodeContainer<>();
+   }
 
-      @Override
-      public int visit(IASTName name) {
-        if (!nameMatches(name))
-          return PROCESS_SKIP;
+   public Pair<Collection<MemFunCallExpectation>, IASTName> getExpectations(final IASTName assertedExpectetation) {
+      testFunction.accept(new ASTVisitor() {
 
-        return collectExpectations(name);
-      }
+         {
+            shouldVisitNames = true;
+         }
 
-      private boolean nameMatches(IASTName name) {
-        return name.toString().equals(assertedExpectetation.toString());
-      }
+         @Override
+         public int visit(final IASTName name) {
+            if (!nameMatches(name)) {
+               return PROCESS_SKIP;
+            }
 
-      private int collectExpectations(IASTName name) {
-        IASTStatement stmt = AstUtil.getAncestorOfType(name, IASTStatement.class);
+            return collectExpectations(name);
+         }
 
-        if (stmt instanceof IASTDeclarationStatement) {
-          new InitializerExpectationsFinder(callExpectations, expectationVector,
-              assertedExpectetation).collectExpectations(stmt);
-        } else if (stmt instanceof IASTExpressionStatement) {
-          new BoostVectorExpectationsFinder(callExpectations, expectationVector,
-              assertedExpectetation).collectExpectations(stmt);
-        }
+         private boolean nameMatches(final IASTName name) {
+            return name.toString().equals(assertedExpectetation.toString());
+         }
 
-        if (callExpectations.isEmpty())
-          return PROCESS_CONTINUE;
+         private int collectExpectations(final IASTName name) {
+            final IASTStatement stmt = AstUtil.getAncestorOfType(name, IASTStatement.class);
 
-        return PROCESS_ABORT;
-      }
-    });
+            if (stmt instanceof IASTDeclarationStatement) {
+               new InitializerExpectationsFinder(callExpectations, expectationVector, assertedExpectetation).collectExpectations(stmt);
+            } else if (stmt instanceof IASTExpressionStatement) {
+               new BoostVectorExpectationsFinder(callExpectations, expectationVector, assertedExpectetation).collectExpectations(stmt);
+            }
 
-    return from(callExpectations, getNameOfExpectationVector(assertedExpectetation));
-  }
+            if (callExpectations.isEmpty()) {
+               return PROCESS_CONTINUE;
+            }
 
-  private IASTName getNameOfExpectationVector(IASTName assertedExpectation) {
-    if (expectationVector.getNode().isSome())
-      return expectationVector.getNode().get();
+            return PROCESS_ABORT;
+         }
+      });
 
-    IBinding binding = assertedExpectation.resolveBinding();
-    IASTName[] definitions = assertedExpectation.getTranslationUnit().getDefinitionsInAST(binding);
-    Assert.isTrue(definitions.length > 0, "Expectation vector must have a definition");
-    return definitions[0];
-  }
+      return from(callExpectations, getNameOfExpectationVector(assertedExpectetation));
+   }
+
+   private IASTName getNameOfExpectationVector(final IASTName assertedExpectation) {
+      return OptHelper.returnIfPresentElse(expectationVector.getNode(), (node) -> node, () -> {
+         final IBinding binding = assertedExpectation.resolveBinding();
+         final IASTName[] definitions = assertedExpectation.getTranslationUnit().getDefinitionsInAST(binding);
+         Assert.isTrue(definitions.length > 0, "Expectation vector must have a definition");
+         return definitions[0];
+      });
+   }
 }

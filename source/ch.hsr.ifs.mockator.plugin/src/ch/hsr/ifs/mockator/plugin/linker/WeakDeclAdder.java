@@ -16,62 +16,64 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.resources.IFile;
 
+import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
-import ch.hsr.ifs.mockator.plugin.base.util.ProjectUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterSignatureHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 public class WeakDeclAdder {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private static final String WEAK_DECL_ATTR = "__attribute__((weak))";
-  private final ModificationCollector collector;
 
-  public WeakDeclAdder(ModificationCollector collector) {
-    this.collector = collector;
-  }
+   private static final CPPNodeFactory nodeFactory    = CPPNodeFactory.getDefault();
+   private static final String         WEAK_DECL_ATTR = "__attribute__((weak))";
+   private final ModificationCollector collector;
 
-  public void addWeakDeclAttribute(ICPPASTFunctionDeclarator funDecl) {
-    IASTTranslationUnit tu = funDecl.getTranslationUnit();
+   public WeakDeclAdder(ModificationCollector collector) {
+      this.collector = collector;
+   }
 
-    if (!isTuPartOfWorkspace(tu)) // otherwise we cannot adapt its function declaration
-      return;
+   public void addWeakDeclAttribute(ICPPASTFunctionDeclarator funDecl) {
+      IASTTranslationUnit tu = funDecl.getTranslationUnit();
 
-    ICPPASTNamedTypeSpecifier withWeakDeclSpec = createWeakDeclSpec(funDecl);
-    IASTNode funDeclParentCopy = getWeakParentCopy(funDecl, withWeakDeclSpec);
-    ASTRewrite rewriter = collector.rewriterForTranslationUnit(tu);
-    rewriter.replace(funDecl.getParent(), funDeclParentCopy, null);
-  }
+      if (!isTuPartOfWorkspace(tu)) // otherwise we cannot adapt its function declaration
+         return;
 
-  private static boolean isTuPartOfWorkspace(IASTTranslationUnit tuOfFunDef) {
-    URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
-    IFile[] files = ProjectUtil.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
-    return files.length > 0;
-  }
+      ICPPASTNamedTypeSpecifier withWeakDeclSpec = createWeakDeclSpec(funDecl);
+      IASTNode funDeclParentCopy = getWeakParentCopy(funDecl, withWeakDeclSpec);
+      ASTRewrite rewriter = collector.rewriterForTranslationUnit(tu);
+      rewriter.replace(funDecl.getParent(), funDeclParentCopy, null);
+   }
 
-  private static IASTNode getWeakParentCopy(ICPPASTFunctionDeclarator funDecl,
-      ICPPASTNamedTypeSpecifier withWeakDeclSpec) {
-    IASTNode copy = funDecl.getParent().copy(CopyStyle.withLocations);
+   private static boolean isTuPartOfWorkspace(IASTTranslationUnit tuOfFunDef) {
+      URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
+      IFile[] files = CPPResourceHelper.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
+      return files.length > 0;
+   }
 
-    if (funDecl.getParent() instanceof ICPPASTFunctionDefinition) {
-      ((ICPPASTFunctionDefinition) copy).setDeclSpecifier(withWeakDeclSpec);
-    } else if (funDecl.getParent() instanceof IASTSimpleDeclaration) {
-      ((IASTSimpleDeclaration) copy).setDeclSpecifier(withWeakDeclSpec);
-    }
-    return copy;
-  }
+   private static IASTNode getWeakParentCopy(ICPPASTFunctionDeclarator funDecl, ICPPASTNamedTypeSpecifier withWeakDeclSpec) {
+      IASTNode copy = funDecl.getParent().copy(CopyStyle.withLocations);
 
-  private static ICPPASTNamedTypeSpecifier createWeakDeclSpec(ICPPASTFunctionDeclarator funDecl) {
-    ICPPASTDeclSpecifier declSpec = AstUtil.getDeclSpec(funDecl);
-    String returnTypeSpec = getStringRepresentation(declSpec);
-    String weakDecl = WEAK_DECL_ATTR + " " + returnTypeSpec;
-    IASTName weakDeclSpec = nodeFactory.newName(weakDecl.toCharArray());
-    return nodeFactory.newTypedefNameSpecifier(weakDeclSpec);
-  }
+      if (funDecl.getParent() instanceof ICPPASTFunctionDefinition) {
+         ((ICPPASTFunctionDefinition) copy).setDeclSpecifier(withWeakDeclSpec);
+      } else if (funDecl.getParent() instanceof IASTSimpleDeclaration) {
+         ((IASTSimpleDeclaration) copy).setDeclSpecifier(withWeakDeclSpec);
+      }
+      return copy;
+   }
 
-  private static String getStringRepresentation(ICPPASTDeclSpecifier declSpec) {
-    StringBuilder sb = new StringBuilder();
-    ParameterSignatureHandler.appendDeclSpecifierString(sb, declSpec);
-    return sb.toString();
-  }
+   private static ICPPASTNamedTypeSpecifier createWeakDeclSpec(ICPPASTFunctionDeclarator funDecl) {
+      ICPPASTDeclSpecifier declSpec = AstUtil.getDeclSpec(funDecl);
+      String returnTypeSpec = getStringRepresentation(declSpec);
+      String weakDecl = WEAK_DECL_ATTR + " " + returnTypeSpec;
+      IASTName weakDeclSpec = nodeFactory.newName(weakDecl.toCharArray());
+      return nodeFactory.newTypedefNameSpecifier(weakDeclSpec);
+   }
+
+   private static String getStringRepresentation(ICPPASTDeclSpecifier declSpec) {
+      StringBuilder sb = new StringBuilder();
+      ParameterSignatureHandler.appendDeclSpecifierString(sb, declSpec);
+      return sb.toString();
+   }
 }

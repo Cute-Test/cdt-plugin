@@ -10,26 +10,28 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class FreeFunCallRegistrationAdder extends AbstractFunCallRegistrationAdder {
-  private final String callsVectorName;
 
-  public FreeFunCallRegistrationAdder(ICPPASTFunctionDeclarator fun, CppStandard cppStd, String name) {
-    super(fun, cppStd);
-    this.callsVectorName = name;
-  }
+   private final String callsVectorName;
 
-  @Override
-  protected String getNameForCallsVector() {
-    return callsVectorName;
-  }
+   public FreeFunCallRegistrationAdder(ICPPASTFunctionDeclarator fun, CppStandard cppStd, String name) {
+      super(fun, cppStd);
+      this.callsVectorName = name;
+   }
 
-  @Override
-  protected IASTExpression getPushBackOwner() {
-    return createCallSequence();
-  }
+   @Override
+   protected String getNameForCallsVector() {
+      return callsVectorName;
+   }
 
-  @Override
-  protected String getNameForCall() {
-    return AstUtil.getQfName(array(MOCKATOR_NS, CALL));
-  }
+   @Override
+   protected IASTExpression getPushBackOwner() {
+      return createCallSequence();
+   }
+
+   @Override
+   protected String getNameForCall() {
+      return AstUtil.getQfName(array(MOCKATOR_NS, CALL));
+   }
 }

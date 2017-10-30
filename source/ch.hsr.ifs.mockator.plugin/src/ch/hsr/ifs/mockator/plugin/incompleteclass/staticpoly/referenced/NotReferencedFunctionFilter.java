@@ -16,61 +16,57 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class NotReferencedFunctionFilter implements F1<StaticPolyMissingMemFun, Boolean> {
-  private final Map<ICPPASTFunctionDefinition, Boolean> cache;
-  private final FunctionCalleeReferenceResolver calleeReferenceResolver;
-  private final ICPPASTFunctionDefinition testFunction;
 
-  public NotReferencedFunctionFilter(IIndex index, ICProject cProject,
-      ICPPASTFunctionDefinition testFunction) {
-    this.testFunction = testFunction;
-    calleeReferenceResolver = new FunctionCalleeReferenceResolver(index, cProject);
-    cache = unorderedMap();
-  }
+   private final Map<ICPPASTFunctionDefinition, Boolean> cache;
+   private final FunctionCalleeReferenceResolver         calleeReferenceResolver;
+   private final ICPPASTFunctionDefinition               testFunction;
 
-  @Override
-  public Boolean apply(StaticPolyMissingMemFun memFunCall) {
-    ICPPASTFunctionDefinition sutFunction = memFunCall.getContainingFunction();
+   public NotReferencedFunctionFilter(IIndex index, ICProject cProject, ICPPASTFunctionDefinition testFunction) {
+      this.testFunction = testFunction;
+      calleeReferenceResolver = new FunctionCalleeReferenceResolver(index, cProject);
+      cache = unorderedMap();
+   }
 
-    if (!shouldConsider(sutFunction))
-      return true;
+   @Override
+   public Boolean apply(StaticPolyMissingMemFun memFunCall) {
+      ICPPASTFunctionDefinition sutFunction = memFunCall.getContainingFunction();
 
-    Boolean called = cache.get(sutFunction);
+      if (!shouldConsider(sutFunction)) return true;
 
-    if (called == null) {
-      called = isCalled(sutFunction);
-      cache.put(sutFunction, called);
-    }
+      Boolean called = cache.get(sutFunction);
 
-    return called;
-  }
+      if (called == null) {
+         called = isCalled(sutFunction);
+         cache.put(sutFunction, called);
+      }
 
-  private static boolean shouldConsider(ICPPASTFunctionDefinition sutFunction) {
-    return sutFunction != null && !AstUtil.isConstructor(sutFunction);
-  }
+      return called;
+   }
 
-  private boolean isCalled(ICPPASTFunctionDefinition sutFunction) {
-    IBinding sutBinding = sutFunction.getDeclarator().getName().resolveBinding();
+   private static boolean shouldConsider(ICPPASTFunctionDefinition sutFunction) {
+      return sutFunction != null && !AstUtil.isConstructor(sutFunction);
+   }
 
-    for (IASTName caller : calleeReferenceResolver.findCallers(sutBinding, sutFunction)) {
-      if (matches(testFunction, getFunctionDefinition(caller)))
-        return true;
-    }
+   private boolean isCalled(ICPPASTFunctionDefinition sutFunction) {
+      IBinding sutBinding = sutFunction.getDeclarator().getName().resolveBinding();
 
-    return false;
-  }
+      for (IASTName caller : calleeReferenceResolver.findCallers(sutBinding, sutFunction)) {
+         if (matches(testFunction, getFunctionDefinition(caller))) return true;
+      }
 
-  private ICPPASTFunctionDefinition getFunctionDefinition(IASTName caller) {
-    return AstUtil.getAncestorOfType(caller, ICPPASTFunctionDefinition.class);
-  }
-
-  private static boolean matches(ICPPASTFunctionDefinition functionInUse,
-      ICPPASTFunctionDefinition missingMemFun) {
-    if (functionInUse == null || missingMemFun == null)
       return false;
+   }
 
-    FunctionEquivalenceVerifier checker =
-        new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) functionInUse.getDeclarator());
-    return checker.isEquivalent((ICPPASTFunctionDeclarator) missingMemFun.getDeclarator());
-  }
+   private ICPPASTFunctionDefinition getFunctionDefinition(IASTName caller) {
+      return AstUtil.getAncestorOfType(caller, ICPPASTFunctionDefinition.class);
+   }
+
+   private static boolean matches(ICPPASTFunctionDefinition functionInUse, ICPPASTFunctionDefinition missingMemFun) {
+      if (functionInUse == null || missingMemFun == null) return false;
+
+      FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) functionInUse.getDeclarator());
+      return checker.isEquivalent((ICPPASTFunctionDeclarator) missingMemFun.getDeclarator());
+   }
 }

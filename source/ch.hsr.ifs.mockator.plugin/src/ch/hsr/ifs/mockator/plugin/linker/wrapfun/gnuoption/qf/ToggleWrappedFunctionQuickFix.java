@@ -6,28 +6,28 @@ import org.eclipse.swt.graphics.Image;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 
+
 abstract class ToggleWrappedFunctionQuickFix extends MockatorQuickFix {
 
-  @Override
-  public Image getImage() {
-    return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
-  }
+   @Override
+   public Image getImage() {
+      return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
+   }
 
-  protected boolean isWrappedFunctionActive(IMarker marker) {
-    return new WrappedFunctionQuickFixSupport(getCProject().getProject())
-        .isWrappedFunctionActive(getWrappedFunName(marker));
-  }
+   protected boolean isWrappedFunctionActive(IMarker marker) {
+      return new WrappedFunctionQuickFixSupport(getCProject().getProject()).isWrappedFunctionActive(getWrappedFunName(marker));
+   }
 
-  protected WrappedFunctionQuickFixSupport getQfSupport() {
-    return new WrappedFunctionQuickFixSupport(getCProject().getProject());
-  }
+   protected WrappedFunctionQuickFixSupport getQfSupport() {
+      return new WrappedFunctionQuickFixSupport(getCProject().getProject());
+   }
 
-  protected String getWrappedFunName(IMarker marker) {
-    return getProblemArgument(marker, 0);
-  }
+   protected String getWrappedFunName(IMarker marker) {
+      return getProblemArgument(marker, 0);
+   }
 
-  @Override
-  public String getDescription() {
-    return null;
-  }
+   @Override
+   public String getDescription() {
+      return null;
+   }
 }

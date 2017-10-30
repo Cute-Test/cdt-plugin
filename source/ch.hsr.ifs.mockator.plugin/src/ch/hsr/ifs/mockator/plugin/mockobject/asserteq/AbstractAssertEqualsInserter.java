@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.asserteq;
 
-import static ch.hsr.ifs.mockator.plugin.base.maybe.Maybe.maybe;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTArraySubscriptExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
@@ -17,53 +17,51 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.context.MockSupportContext;
 
+
 @SuppressWarnings("restriction")
 abstract class AbstractAssertEqualsInserter {
-  protected static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  protected final ICPPASTFunctionDefinition testFunction;
-  protected final MockSupportContext context;
 
-  public AbstractAssertEqualsInserter(ICPPASTFunctionDefinition testFunction,
-      MockSupportContext context) {
-    this.testFunction = testFunction;
-    this.context = context;
-  }
+   protected static final CPPNodeFactory     nodeFactory = CPPNodeFactory.getDefault();
+   protected final ICPPASTFunctionDefinition testFunction;
+   protected final MockSupportContext        context;
 
-  public void insertAssertEqual(ASTRewrite rewriter) {
-    if (!hasAssertEqual()) {
-      insertWith(rewriter);
-    }
-  }
+   public AbstractAssertEqualsInserter(final ICPPASTFunctionDefinition testFunction, final MockSupportContext context) {
+      this.testFunction = testFunction;
+      this.context = context;
+   }
 
-  private boolean hasAssertEqual() {
-    AssertEqualFinderVisitor assertFinder =
-        new AssertEqualFinderVisitor(maybe(context.getMockObject().getKlass()));
-    testFunction.accept(assertFinder);
-    Collection<ExpectedActualPair> assertedCalls = assertFinder.getExpectedActual();
-    return !assertedCalls.isEmpty();
-  }
+   public void insertAssertEqual(final ASTRewrite rewriter) {
+      if (!hasAssertEqual()) {
+         insertWith(rewriter);
+      }
+   }
 
-  protected abstract void insertWith(ASTRewrite rewriter);
+   private boolean hasAssertEqual() {
+      final AssertEqualFinderVisitor assertFinder = new AssertEqualFinderVisitor(Optional.of(context.getMockObject().getKlass()));
+      testFunction.accept(assertFinder);
+      final Collection<ExpectedActualPair> assertedCalls = assertFinder.getExpectedActual();
+      return !assertedCalls.isEmpty();
+   }
 
-  protected void insertAssertEqual(ASTRewrite rewriter, IASTNode assertEquals) {
-    rewriter.insertBefore(testFunction.getBody(), null, assertEquals, null);
-  }
+   protected abstract void insertWith(ASTRewrite rewriter);
 
-  protected abstract String getNameOfAssert();
+   protected void insertAssertEqual(final ASTRewrite rewriter, final IASTNode assertEquals) {
+      rewriter.insertBefore(testFunction.getBody(), null, assertEquals, null);
+   }
 
-  protected IASTArraySubscriptExpression createActual() {
-    IASTName allCalls = nodeFactory.newName(context.getFqNameForAllCallsVector().toCharArray());
-    return nodeFactory.newArraySubscriptExpression(nodeFactory.newIdExpression(allCalls),
-        createCallsVectorIndex());
-  }
+   protected abstract String getNameOfAssert();
 
-  private IASTExpression createCallsVectorIndex() {
-    return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant,
-        context.hasOnlyStaticMemFuns() ? "0" : "1");
-  }
+   protected IASTArraySubscriptExpression createActual() {
+      final IASTName allCalls = nodeFactory.newName(context.getFqNameForAllCallsVector().toCharArray());
+      return nodeFactory.newArraySubscriptExpression(nodeFactory.newIdExpression(allCalls), createCallsVectorIndex());
+   }
 
-  protected IASTIdExpression createExpectations() {
-    IASTName name = nodeFactory.newName(context.getNameForExpectationsVector().toCharArray());
-    return nodeFactory.newIdExpression(name);
-  }
+   private IASTExpression createCallsVectorIndex() {
+      return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, context.hasOnlyStaticMemFuns() ? "0" : "1");
+   }
+
+   protected IASTIdExpression createExpectations() {
+      final IASTName name = nodeFactory.newName(context.getNameForExpectationsVector().toCharArray());
+      return nodeFactory.newIdExpression(name);
+   }
 }

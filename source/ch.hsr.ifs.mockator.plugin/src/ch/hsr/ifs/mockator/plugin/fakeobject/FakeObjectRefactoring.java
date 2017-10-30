@@ -19,30 +19,29 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.TestDouble;
 import ch.hsr.ifs.mockator.plugin.testdouble.qf.AbstractTestDoubleRefactoring;
 
+
 @SuppressWarnings("restriction")
 public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
 
-  public FakeObjectRefactoring(CppStandard cppStd, ICElement cElement, ITextSelection selection,
-      ICProject cProject) {
-    super(cppStd, cElement, selection, cProject);
-  }
+   public FakeObjectRefactoring(CppStandard cppStd, ICElement cElement, ITextSelection selection, ICProject cProject) {
+      super(cppStd, cElement, selection, cProject);
+   }
 
-  @Override
-  protected void collectModifications(IProgressMonitor pm, ModificationCollector collector)
-      throws CoreException, OperationCanceledException {
-    Collection<? extends MissingMemberFunction> missingMemFuns = collectMissingMemFuns(pm);
-    ASTRewrite rewriter = createRewriter(collector, getAST(tu, pm));
-    ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
-    testDouble.addMissingMemFuns(missingMemFuns, inserter, cppStd);
-  }
+   @Override
+   protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+      Collection<? extends MissingMemberFunction> missingMemFuns = collectMissingMemFuns(pm);
+      ASTRewrite rewriter = createRewriter(collector, getAST(tu, pm));
+      ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
+      testDouble.addMissingMemFuns(missingMemFuns, inserter, cppStd);
+   }
 
-  @Override
-  public String getDescription() {
-    return I18N.FakeObjectRefactoringDesc;
-  }
+   @Override
+   public String getDescription() {
+      return I18N.FakeObjectRefactoringDesc;
+   }
 
-  @Override
-  protected TestDouble createTestDouble(ICPPASTCompositeTypeSpecifier selectedClass) {
-    return new FakeObject(selectedClass);
-  }
+   @Override
+   protected TestDouble createTestDouble(ICPPASTCompositeTypeSpecifier selectedClass) {
+      return new FakeObject(selectedClass);
+   }
 }

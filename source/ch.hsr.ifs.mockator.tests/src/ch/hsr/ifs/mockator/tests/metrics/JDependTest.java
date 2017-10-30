@@ -12,136 +12,138 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import jdepend.framework.JDepend;
 import jdepend.framework.JavaPackage;
 import jdepend.framework.PackageFilter;
 
-import org.junit.Before;
-import org.junit.Test;
 
 // Taken and adapted from http://clarkware.com/software/JDepend.html#junit
 public class JDependTest {
-  private JDepend jdepend;
-  private Collection<JavaPackage> packages;
 
-  @Before
-  public void setUp() throws IOException {
-    initJDepend();
-    startAnalysis();
-  }
+   private JDepend                 jdepend;
+   private Collection<JavaPackage> packages;
 
-  private void initJDepend() throws IOException {
-    PackageFilter filter = createPackageFilter();
-    jdepend = new JDepend(filter);
-    jdepend.addDirectory(getBinaryDirectory());
-    handleNotVolatilePackages();
-  }
+   @Before
+   public void setUp() throws IOException {
+      initJDepend();
+      startAnalysis();
+   }
 
-  private static PackageFilter createPackageFilter() {
-    PackageFilter filter = new PackageFilter();
-    filter.addPackage("java.*");
-    filter.addPackage("javax.*");
-    filter.addPackage("org.*");
-    filter.addPackage("ch.hsr.ifs.cute.*");
-    filter.addPackage("ch.hsr.ifs.mockator.plugin.incompleteclass.checker"); // FIXME try to get rid
-                                                                             // of this one
-    filter.addPackage("ch.hsr.ifs.cdt.compatibility.changes"); //FIXME this package will vanish with future CDT releases
-    return filter;
-  }
+   private void initJDepend() throws IOException {
+      final PackageFilter filter = createPackageFilter();
+      jdepend = new JDepend(filter);
+      jdepend.addDirectory(getBinaryDirectory());
+      handleNotVolatilePackages();
+   }
 
-  private void handleNotVolatilePackages() {
-    // Packages that are not expected to change can be specifically
-    // configured with a volatility (V) value.
-    // V can either be 0 or 1. If V=0, meaning the package is not at all
-    // subject to change, then the package will automatically fall
-    // directly on the main sequence (D=0). The following
-    // packages are not volatile and maximally stable. Creating
-    // dependencies on them is therefore no concern.
+   private static PackageFilter createPackageFilter() {
+      final PackageFilter filter = new PackageFilter();
+      filter.addPackage("java.*");
+      filter.addPackage("javax.*");
+      filter.addPackage("org.*");
+      filter.addPackage("ch.hsr.ifs.cute.*");
+      filter.addPackage("ch.hsr.ifs.mockator.plugin.incompleteclass.checker"); // FIXME try to get rid of this one
+      filter.addPackage("ch.hsr.ifs.cdt.compatibility.changes"); //FIXME this package will vanish with future CDT releases
+      return filter;
+   }
 
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base.tuples");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base.maybe");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base.collections");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.finder");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.functions");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.tu");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.utils");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.functions.params");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.includes");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.mockobject.support.context");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.extractinterface.context");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.testdouble.creation");
-    addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.testdouble.qf");
-  }
+   private void handleNotVolatilePackages() {
+      // Packages that are not expected to change can be specifically
+      // configured with a volatility (V) value.
+      // V can either be 0 or 1. If V=0, meaning the package is not at all
+      // subject to change, then the package will automatically fall
+      // directly on the main sequence (D=0). The following
+      // packages are not volatile and maximally stable. Creating
+      // dependencies on them is therefore no concern.
 
-  private void addNotVolatilePackage(String packageName) {
-    JavaPackage javaPackage = new JavaPackage(packageName);
-    javaPackage.setVolatility(0);
-    jdepend.addPackage(javaPackage);
-  }
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base.tuples");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base.maybe");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base.collections");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.finder");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.functions");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.tu");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.utils");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.functions.params");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.refsupport.includes");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.mockobject.support.context");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.extractinterface.context");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.testdouble.creation");
+      addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.testdouble.qf");
+   }
 
-  private void startAnalysis() {
-    packages = checkedCast(jdepend.analyze(), JavaPackage.class);
-  }
+   private void addNotVolatilePackage(final String packageName) {
+      final JavaPackage javaPackage = new JavaPackage(packageName);
+      javaPackage.setVolatility(0);
+      jdepend.addPackage(javaPackage);
+   }
 
-  @Test
-  public void noCyclicPackageDependencies() throws Exception {
-    StringBuilder cycles = new StringBuilder();
+   private void startAnalysis() {
+      packages = checkedCast(jdepend.analyze(), JavaPackage.class);
+   }
 
-    for (JavaPackage p : packages) {
-      List<JavaPackage> packages = list();
+   @Test
+   public void noCyclicPackageDependencies() throws Exception {
+      final StringBuilder cycles = new StringBuilder();
 
-      if (p.collectCycle(packages)) {
-        cycles.append(String.format("%n$ %s $ [", p.getName()));
+      for (final JavaPackage p : packages) {
+         final List<JavaPackage> packages = list();
 
-        for (int i = 0; i < packages.size(); i++) {
-          if (i > 0) {
-            cycles.append(" -> ");
-          }
+         if (p.collectCycle(packages)) {
+            cycles.append(String.format("%n$ %s $ [", p.getName()));
 
-          cycles.append(packages.get(i).getName());
-        }
+            for (int i = 0; i < packages.size(); i++) {
+               if (i > 0) {
+                  cycles.append(" -> ");
+               }
 
-        cycles.append("]");
+               cycles.append(packages.get(i).getName());
+            }
+
+            cycles.append("]");
+         }
       }
-    }
 
-    assertEquals("Cycles exist in packages: " + cycles.toString(), false, jdepend.containsCycles());
-  }
+      assertEquals("Cycles exist in packages: " + cycles.toString(), false, jdepend.containsCycles());
+   }
 
-  @Test
-  public void conformanceOfDistanceFromMainSequence() {
-    double ideal = 0.0;
-    double tolerance = 0.52;
+   @Test
+   public void conformanceOfDistanceFromMainSequence() {
+      final double ideal = 0.0;
+      final double tolerance = 0.52;
 
-    for (JavaPackage p : packages) {
-      assertEquals("Distance exceeded of package: " + p.getName(), ideal, p.distance(), tolerance);
-    }
-  }
+      for (final JavaPackage p : packages) {
+         assertEquals("Distance exceeded of package: " + p.getName(), ideal, p.distance(), tolerance);
+      }
+   }
 
-  private static String getBinaryDirectory() {
-    try {
-      // Locally we should take bin directory because Eclipse keeps this
-      // always up-to-date; on the build server only the target/classes directory
-      // exists because Maven stores the class files there
-      File eclipseBinDir = getEclipseBinaryDir();
+   private static String getBinaryDirectory() {
+      try {
+         // Locally we should take bin directory because Eclipse keeps this
+         // always up-to-date; on the build server only the target/classes directory
+         // exists because Maven stores the class files there
+         final File eclipseBinDir = getEclipseBinaryDir();
 
-      if (eclipseBinDir.exists())
-        return eclipseBinDir.getPath();
-    } catch (Exception e) {
-      return getMavenTargetDir();
-    }
+         if (eclipseBinDir.exists()) {
+            return eclipseBinDir.getPath();
+         }
+      } catch (final Exception e) {
+         return getMavenTargetDir();
+      }
 
-    throw new IllegalStateException("Problems determining binary directory for metric tests");
-  }
+      throw new IllegalStateException("Problems determining binary directory for metric tests");
+   }
 
-  private static String getMavenTargetDir() {
-    return "../ch.hsr.ifs.mockator.plugin/target/classes";
-  }
+   private static String getMavenTargetDir() {
+      return "../ch.hsr.ifs.mockator.plugin/target/classes";
+   }
 
-  private static File getEclipseBinaryDir() throws URISyntaxException, MalformedURLException {
-    String relPathToMockatorPlugin = "../../../../../../../../ch.hsr.ifs.mockator.plugin/";
-    URL currentDir = JDependTest.class.getResource("./");
-    return new File(new URL(currentDir, relPathToMockatorPlugin + "bin").toURI());
-  }
+   private static File getEclipseBinaryDir() throws URISyntaxException, MalformedURLException {
+      final String relPathToMockatorPlugin = "../../../../../../../../ch.hsr.ifs.mockator.plugin/";
+      final URL currentDir = JDependTest.class.getResource("./");
+      return new File(new URL(currentDir, relPathToMockatorPlugin + "bin").toURI());
+   }
 }

@@ -7,48 +7,49 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.collections.MyStack;
 
+
 @SuppressWarnings("restriction")
 public class NamespaceApplier {
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final IASTNode origin;
 
-  public NamespaceApplier(IASTNode origin) {
-    this.origin = origin;
-  }
+   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private final IASTNode              origin;
 
-  public IASTNode packInSameNamespaces(IASTSimpleDeclaration decl) {
-    MyStack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
+   public NamespaceApplier(IASTNode origin) {
+      this.origin = origin;
+   }
 
-    if (namespaces.isEmpty())
-      return decl;
+   public IASTNode packInSameNamespaces(IASTSimpleDeclaration decl) {
+      MyStack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
 
-    ICPPASTNamespaceDefinition topNs = namespaces.pop();
-    ICPPASTNamespaceDefinition parentNs = topNs;
-    ICPPASTNamespaceDefinition currentNs = null;
+      if (namespaces.isEmpty()) return decl;
 
-    while (!namespaces.isEmpty()) {
-      currentNs = namespaces.pop();
-      parentNs.addDeclaration(currentNs);
-      parentNs = currentNs;
-    }
+      ICPPASTNamespaceDefinition topNs = namespaces.pop();
+      ICPPASTNamespaceDefinition parentNs = topNs;
+      ICPPASTNamespaceDefinition currentNs = null;
 
-    parentNs.addDeclaration(decl);
-    return topNs;
-  }
-
-  private MyStack<ICPPASTNamespaceDefinition> getOriginNamespaces() {
-    MyStack<ICPPASTNamespaceDefinition> namespaces = new MyStack<ICPPASTNamespaceDefinition>();
-
-    for (IASTNode currNode = origin; currNode != null; currNode = currNode.getParent()) {
-      if (currNode instanceof ICPPASTNamespaceDefinition) {
-        namespaces.push(copyNamespace((ICPPASTNamespaceDefinition) currNode));
+      while (!namespaces.isEmpty()) {
+         currentNs = namespaces.pop();
+         parentNs.addDeclaration(currentNs);
+         parentNs = currentNs;
       }
-    }
 
-    return namespaces;
-  }
+      parentNs.addDeclaration(decl);
+      return topNs;
+   }
 
-  private static ICPPASTNamespaceDefinition copyNamespace(ICPPASTNamespaceDefinition ns) {
-    return nodeFactory.newNamespaceDefinition(ns.getName().copy());
-  }
+   private MyStack<ICPPASTNamespaceDefinition> getOriginNamespaces() {
+      MyStack<ICPPASTNamespaceDefinition> namespaces = new MyStack<ICPPASTNamespaceDefinition>();
+
+      for (IASTNode currNode = origin; currNode != null; currNode = currNode.getParent()) {
+         if (currNode instanceof ICPPASTNamespaceDefinition) {
+            namespaces.push(copyNamespace((ICPPASTNamespaceDefinition) currNode));
+         }
+      }
+
+      return namespaces;
+   }
+
+   private static ICPPASTNamespaceDefinition copyNamespace(ICPPASTNamespaceDefinition ns) {
+      return nodeFactory.newNamespaceDefinition(ns.getName().copy());
+   }
 }
