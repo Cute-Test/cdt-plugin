@@ -43,7 +43,7 @@ public class GnuOptionLinkerWrapFun implements LinkerWrapFun {
 
    private boolean checkForGnuLinkerOnLinux() {
       return OptHelper.returnIfPresentElse(ToolChain.fromProject(cProject.getProject()), (optTc) -> optTc == ToolChain.GnuLinux && hasGnuLinker()
-            ? true : informUser(), () -> informUser());
+               ? true : informUser(), () -> informUser());
    }
 
    private boolean hasGnuLinker() {
