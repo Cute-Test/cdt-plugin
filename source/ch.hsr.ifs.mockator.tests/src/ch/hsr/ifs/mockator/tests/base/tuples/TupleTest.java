@@ -7,7 +7,7 @@ import static org.junit.Assert.assertNull;
 import java.util.Map;
 
 import org.junit.Test;
-import ch.hsr.ifs.iltis.core.data.AbstractPair;
+
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 
 public class TupleTest {
@@ -28,7 +28,6 @@ public class TupleTest {
   public void pairToString() {
     final Pair<String, String> couple = new Pair<>("Bill", "Hillary");
     final String s = couple.toString();
-    final AbstractPair<String, String> foo = new Pair<>("foo", "baar");
     assertEquals("(Bill, Hillary)", s);
   }
 

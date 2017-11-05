@@ -19,115 +19,106 @@ import org.eclipse.debug.core.ILaunchManager;
 
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1;
-
 
 public class RunConfigEnvManager {
 
-   private final IProject                        targetProject;
-   private final Optional<PreloadRunStrategy>    strategy;
-   private static final ILaunchConfigurationType CUTE_LAUNCH;
-   private static final ILaunchConfigurationType CDT_APP_LAUNCH;
+  private final IProject targetProject;
+  private final Optional<PreloadRunStrategy> strategy;
+  private static final ILaunchConfigurationType CUTE_LAUNCH;
+  private static final ILaunchConfigurationType CDT_APP_LAUNCH;
 
-   static {
-      CUTE_LAUNCH = getManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig");
-      CDT_APP_LAUNCH = getManager().getLaunchConfigurationType("org.eclipse.cdt.launch.applicationLaunchType");
-   }
+  static {
+    CUTE_LAUNCH = getManager().getLaunchConfigurationType("ch.hsr.ifs.cutelauncher.launchConfig");
+    CDT_APP_LAUNCH = getManager().getLaunchConfigurationType("org.eclipse.cdt.launch.applicationLaunchType");
+  }
 
-   public RunConfigEnvManager(final IProject targetProject, final IProject sharedLibProj) {
-      this.targetProject = targetProject;
-      strategy = new PreloadRunFactory().getRunConfig(sharedLibProj);
-   }
+  public RunConfigEnvManager(final IProject targetProject, final IProject sharedLibProj) {
+    this.targetProject = targetProject;
+    strategy = new PreloadRunFactory().getRunConfig(sharedLibProj);
+  }
 
-   public boolean hasPreloadLaunchConfig(final String sharedLibPath) {
-      if (strategy.isPresent()) {
-         try {
-            for (final ILaunchConfiguration config : getLaunchConfigs()) {
-               final Map<String, String> envVariables = getEnvVars(config.getWorkingCopy());
+  public boolean hasPreloadLaunchConfig(final String sharedLibPath) {
+    if (strategy.isPresent()) {
+      try {
+        for (final ILaunchConfiguration config : getLaunchConfigs()) {
+          final Map<String, String> envVariables = getEnvVars(config.getWorkingCopy());
 
-               if (strategy.get().hasPreloadConfig(sharedLibPath, envVariables)) {
-                  return true;
-               }
-            }
-         }
-         catch (final CoreException e) {}
+          if (strategy.get().hasPreloadConfig(sharedLibPath, envVariables)) {
+            return true;
+          }
+        }
+      } catch (final CoreException e) {
       }
+    }
+    return false;
+  }
+
+  public void addPreloadLaunchConfig(final String sharedLibPath) {
+    strategy.ifPresent((strat) -> {
+      try {
+        for (final ILaunchConfiguration config : getLaunchConfigs()) {
+          final ILaunchConfigurationWorkingCopy wc = config.getWorkingCopy();
+          final Map<String, String> envVariables = getEnvVars(wc);
+          strat.addPreloadConfig(sharedLibPath, envVariables);
+          saveEnvVars(wc, envVariables);
+        }
+      } catch (final CoreException e) {
+        throw new MockatorException(e);
+      }
+    });
+  }
+
+  private static void saveEnvVars(final ILaunchConfigurationWorkingCopy wc, final Map<String, String> env) throws CoreException {
+    wc.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, env);
+    wc.doSave();
+  }
+
+  private static Map<String, String> getEnvVars(final ILaunchConfigurationWorkingCopy wc) throws CoreException {
+    return checkedCast(wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, CollectionHelper.<String, String>orderPreservingMap()),
+        String.class);
+  }
+
+  public void removePreloadLaunchConfig(final String sharedLibPath) {
+    strategy.ifPresent((strat) -> {
+      try {
+        for (final ILaunchConfiguration config : getLaunchConfigs()) {
+          final ILaunchConfigurationWorkingCopy wc = config.getWorkingCopy();
+          final Map<String, String> envVariables = getEnvVars(wc);
+          strat.removePreloadConfig(sharedLibPath, envVariables);
+          saveEnvVars(wc, envVariables);
+        }
+      } catch (final CoreException e) {
+        throw new MockatorException(e);
+      }
+    });
+  }
+
+  private Collection<ILaunchConfiguration> getLaunchConfigs() throws CoreException {
+    return filter(getManager().getLaunchConfigurations(), (config) -> {
+      try {
+        final String typeId = config.getType().getIdentifier();
+        return isCuteOrCdtExecutable(typeId) && matchesProject(config);
+      } catch (final CoreException e) {
+        throw new MockatorException(e);
+      }
+    });
+  }
+
+  private static boolean isCuteOrCdtExecutable(final String typeId) {
+    return typeId.equals(CUTE_LAUNCH.getIdentifier()) || typeId.equals(CDT_APP_LAUNCH.getIdentifier());
+  }
+
+  private boolean matchesProject(final ILaunchConfiguration launchConfig) throws CoreException {
+    final ICProject cProject = CDebugUtils.getCProject(launchConfig);
+
+    if (cProject == null) {
       return false;
-   }
+    }
 
-   public void addPreloadLaunchConfig(final String sharedLibPath) {
-      strategy.ifPresent((strat) -> {
-         try {
-            for (final ILaunchConfiguration config : getLaunchConfigs()) {
-               final ILaunchConfigurationWorkingCopy wc = config.getWorkingCopy();
-               final Map<String, String> envVariables = getEnvVars(wc);
-               strat.addPreloadConfig(sharedLibPath, envVariables);
-               saveEnvVars(wc, envVariables);
-            }
-         }
-         catch (final CoreException e) {
-            throw new MockatorException(e);
-         }
-      });
-   }
+    return targetProject.equals(cProject.getProject());
+  }
 
-   private static void saveEnvVars(final ILaunchConfigurationWorkingCopy wc, final Map<String, String> env) throws CoreException {
-      wc.setAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, env);
-      wc.doSave();
-   }
-
-   private static Map<String, String> getEnvVars(final ILaunchConfigurationWorkingCopy wc) throws CoreException {
-      return checkedCast(wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, CollectionHelper.<String, String>orderPreservingMap()),
-            String.class);
-   }
-
-   public void removePreloadLaunchConfig(final String sharedLibPath) {
-      strategy.ifPresent((strat) -> {
-         try {
-            for (final ILaunchConfiguration config : getLaunchConfigs()) {
-               final ILaunchConfigurationWorkingCopy wc = config.getWorkingCopy();
-               final Map<String, String> envVariables = getEnvVars(wc);
-               strat.removePreloadConfig(sharedLibPath, envVariables);
-               saveEnvVars(wc, envVariables);
-            }
-         }
-         catch (final CoreException e) {
-            throw new MockatorException(e);
-         }
-      });
-   }
-
-   private Collection<ILaunchConfiguration> getLaunchConfigs() throws CoreException {
-      return filter(getManager().getLaunchConfigurations(), new F1<ILaunchConfiguration, Boolean>() {
-
-         @Override
-         public Boolean apply(final ILaunchConfiguration config) {
-            try {
-               final String typeId = config.getType().getIdentifier();
-               return isCuteOrCdtExecutable(typeId) && matchesProject(config);
-            }
-            catch (final CoreException e) {
-               throw new MockatorException(e);
-            }
-         }
-      });
-   }
-
-   private static boolean isCuteOrCdtExecutable(final String typeId) {
-      return typeId.equals(CUTE_LAUNCH.getIdentifier()) || typeId.equals(CDT_APP_LAUNCH.getIdentifier());
-   }
-
-   private boolean matchesProject(final ILaunchConfiguration launchConfig) throws CoreException {
-      final ICProject cProject = CDebugUtils.getCProject(launchConfig);
-
-      if (cProject == null) {
-         return false;
-      }
-
-      return targetProject.equals(cProject.getProject());
-   }
-
-   private static ILaunchManager getManager() {
-      return DebugPlugin.getDefault().getLaunchManager();
-   }
+  private static ILaunchManager getManager() {
+    return DebugPlugin.getDefault().getLaunchManager();
+  }
 }

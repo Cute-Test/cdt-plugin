@@ -9,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
@@ -39,21 +38,8 @@ class ExpectationsVectorDefinitionFinder {
   }
 
   private Optional<IASTName> getNameOfDefinition(final IASTName expectationsVector) {
-    return new NameFinder(testFunction).getNameMatchingCriteria(new F1<IASTName, Boolean>() {
-
-      @Override
-      public Boolean apply(final IASTName name) {
-        return nameMatches(name) && isInDeclStmt(name);
-      }
-
-      private boolean nameMatches(final IASTName name) {
-        return name.toString().equals(expectationsVector.toString());
-      }
-
-      private boolean isInDeclStmt(final IASTName name) {
-        return AstUtil.getAncestorOfType(name, IASTDeclarationStatement.class) != null;
-      }
-    });
+    return new NameFinder(testFunction).getNameMatchingCriteria(
+        (name) -> name.toString().equals(expectationsVector.toString()) && AstUtil.getAncestorOfType(name, IASTDeclarationStatement.class) != null);
   }
 
   private static Optional<IASTName> getExpectationsVector(final ExpectedActualPair expectedActual, final IASTName registrationVector) {

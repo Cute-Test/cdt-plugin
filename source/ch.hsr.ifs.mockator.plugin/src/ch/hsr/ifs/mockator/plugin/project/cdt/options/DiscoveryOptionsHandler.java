@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.project.cdt.options;
 
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.SPACE;
 
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import org.eclipse.cdt.build.core.scannerconfig.CfgInfoContext;
@@ -14,79 +15,61 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1;
-
 
 @SuppressWarnings("restriction")
 public class DiscoveryOptionsHandler extends AbstractOptionsHandler {
 
-   public DiscoveryOptionsHandler(IProject project) {
-      super(project);
-   }
+  public DiscoveryOptionsHandler(final IProject project) {
+    super(project);
+  }
 
-   public void addCpp11Support() {
-      toggleCpp11Support(new F1<String, String>() {
+  public void addCpp11Support() {
+    toggleCpp11Support((runArgs) -> {
+      final String cpp11ExperimentalFlag = projectVariables.getCpp11ExperimentalFlag();
+      return runArgs.indexOf(cpp11ExperimentalFlag) < 0 ? cpp11ExperimentalFlag + SPACE + runArgs : runArgs;
+    });
+  }
 
-         @Override
-         public String apply(String runArgs) {
-            String cpp11ExperimentalFlag = projectVariables.getCpp11ExperimentalFlag();
+  public void removeCpp11Support() {
+    toggleCpp11Support((runArgs) -> {
+      final String p = Pattern.quote(projectVariables.getCpp11ExperimentalFlag());
+      return runArgs.replaceAll(p, "").trim();
+    });
+  }
 
-            if (isMissingCpp11Flag(runArgs, cpp11ExperimentalFlag)) return cpp11ExperimentalFlag + SPACE + runArgs;
+  private void toggleCpp11Support(final Function<String, String> runArgsHandler) {
+    final ICfgScannerConfigBuilderInfo2Set scannerSet = getDiscoveryScannerConfig(getDefaultConfiguration());
 
-            return runArgs;
-         }
-
-         private boolean isMissingCpp11Flag(String runArgs, String cpp11ExperimentalFlag) {
-            return runArgs.indexOf(cpp11ExperimentalFlag) < 0;
-         }
-      });
-   }
-
-   public void removeCpp11Support() {
-      toggleCpp11Support(new F1<String, String>() {
-
-         @Override
-         public String apply(String runArgs) {
-            String p = Pattern.quote(projectVariables.getCpp11ExperimentalFlag());
-            return runArgs.replaceAll(p, "").trim();
-         }
-      });
-   }
-
-   private void toggleCpp11Support(F1<String, String> runArgsHandler) {
-      ICfgScannerConfigBuilderInfo2Set scannerSet = getDiscoveryScannerConfig(getDefaultConfiguration());
-
-      for (CfgInfoContext context : scannerSet.getContexts()) {
-         if (!isRequestedTool(context.getTool())) {
-            continue;
-         }
-
-         IScannerConfigBuilderInfo2 scannerConfig = scannerSet.getInfo(context);
-         for (String providerId : scannerConfig.getProviderIdList()) {
-            try {
-               String runArgs = scannerSet.getInfo(context).getProviderRunArguments(providerId);
-               String modifiedRunArgs = runArgsHandler.apply(runArgs);
-               setAndSaveScannerConfig(scannerConfig, providerId, modifiedRunArgs);
-            }
-            catch (CoreException e) {
-               throw new MockatorException(e);
-            }
-         }
+    for (final CfgInfoContext context : scannerSet.getContexts()) {
+      if (!isRequestedTool(context.getTool())) {
+        continue;
       }
-   }
 
-   private static void setAndSaveScannerConfig(IScannerConfigBuilderInfo2 scannerConfig, String providerId, String modifiedRunArgs)
-         throws CoreException {
-      scannerConfig.setProviderRunArguments(providerId, modifiedRunArgs);
-      scannerConfig.save();
-   }
+      final IScannerConfigBuilderInfo2 scannerConfig = scannerSet.getInfo(context);
+      for (final String providerId : scannerConfig.getProviderIdList()) {
+        try {
+          final String runArgs = scannerSet.getInfo(context).getProviderRunArguments(providerId);
+          final String modifiedRunArgs = runArgsHandler.apply(runArgs);
+          setAndSaveScannerConfig(scannerConfig, providerId, modifiedRunArgs);
+        } catch (final CoreException e) {
+          throw new MockatorException(e);
+        }
+      }
+    }
+  }
 
-   private static ICfgScannerConfigBuilderInfo2Set getDiscoveryScannerConfig(IConfiguration configuration) {
-      return CfgScannerConfigProfileManager.getCfgScannerConfigBuildInfo(configuration);
-   }
+  private static void setAndSaveScannerConfig(final IScannerConfigBuilderInfo2 scannerConfig, final String providerId, final String modifiedRunArgs)
+      throws CoreException {
+    scannerConfig.setProviderRunArguments(providerId, modifiedRunArgs);
+    scannerConfig.save();
+  }
 
-   @Override
-   protected boolean isRequestedTool(ITool tool) {
-      return isCppCompiler(tool);
-   }
+  private static ICfgScannerConfigBuilderInfo2Set getDiscoveryScannerConfig(final IConfiguration configuration) {
+    return CfgScannerConfigProfileManager.getCfgScannerConfigBuildInfo(configuration);
+  }
+
+  @Override
+  protected boolean isRequestedTool(final ITool tool) {
+    return isCppCompiler(tool);
+  }
 }

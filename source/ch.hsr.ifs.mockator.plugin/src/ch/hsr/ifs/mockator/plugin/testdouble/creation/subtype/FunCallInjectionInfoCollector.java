@@ -17,7 +17,6 @@ import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
@@ -65,13 +64,7 @@ class FunCallInjectionInfoCollector extends AbstractDepInjectInfoCollector {
 
   private static Optional<IASTName> findProblemBinding(final IASTExpression funNameExpr) {
     final NameFinder finder = new NameFinder(funNameExpr);
-    return finder.getNameMatchingCriteria(new F1<IASTName, Boolean>() {
-
-      @Override
-      public Boolean apply(final IASTName name) {
-        return isProblemBinding(name.resolveBinding());
-      }
-    });
+    return finder.getNameMatchingCriteria((name) -> isProblemBinding(name.resolveBinding()));
   }
 
   private static boolean isProblemBinding(final IBinding binding) {

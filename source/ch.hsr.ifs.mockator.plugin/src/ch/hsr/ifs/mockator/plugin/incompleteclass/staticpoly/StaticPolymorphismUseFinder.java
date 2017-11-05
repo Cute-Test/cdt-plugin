@@ -5,6 +5,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.order
 import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -16,14 +17,13 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun.MissingMemFunCollector;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.referenced.NotReferencedFunctionFilter;
 import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
-class StaticPolymorphismUseFinder implements F1<IASTFunctionDefinition, Collection<StaticPolyMissingMemFun>> {
+class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Collection<StaticPolyMissingMemFun>> {
   private final ICProject cProject;
   private final ICPPASTCompositeTypeSpecifier testDouble;
   private final IIndex index;

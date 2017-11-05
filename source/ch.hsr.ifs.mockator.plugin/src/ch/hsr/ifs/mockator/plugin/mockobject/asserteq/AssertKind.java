@@ -20,7 +20,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 
 import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
@@ -99,13 +98,7 @@ public enum AssertKind {
   }
 
   public static Collection<AssertKind> getAssertProposals() {
-    return filter(values(), new F1<AssertKind, Boolean>() {
-
-      @Override
-      public Boolean apply(final AssertKind kind) {
-        return kind.includeInProposals;
-      }
-    });
+    return filter(values(), (kind) -> kind.includeInProposals);
   }
 
   private static boolean hasCallsVectorType(final IASTIdExpression idExpr) {

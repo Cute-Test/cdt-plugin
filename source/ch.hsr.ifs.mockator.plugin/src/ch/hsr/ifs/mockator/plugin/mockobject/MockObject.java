@@ -21,9 +21,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.ExpectedNameCreator;
@@ -39,129 +37,114 @@ import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.AbstractTestDouble;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
-
 public class MockObject extends AbstractTestDouble {
 
-   public MockObject(final ICPPASTCompositeTypeSpecifier klass) {
-      super(klass);
-   }
+  public MockObject(final ICPPASTCompositeTypeSpecifier klass) {
+    super(klass);
+  }
 
-   public Collection<ExistingTestDoubleMemFun> getRegisteredMemFuns(final CppStandard cppStd) {
-      return filter(getPublicMemFuns(), new F1<ExistingTestDoubleMemFun, Boolean>() {
+  public Collection<ExistingTestDoubleMemFun> getRegisteredMemFuns(final CppStandard cppStd) {
+    return filter(getPublicMemFuns(), (function) -> function.getRegisteredCall(new MockCallRegistrationFinder(cppStd)).isPresent());
+  }
 
-         @Override
-         public Boolean apply(final ExistingTestDoubleMemFun function) {
-            final MockCallRegistrationFinder finder = new MockCallRegistrationFinder(cppStd);
-            return function.getRegisteredCall(finder).isPresent();
-         }
-      });
-   }
+  @Override
+  public void addToNamespace(final ICPPASTNamespaceDefinition parentNs, final IASTSimpleDeclaration testDouble,
+      final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
+    final MockObjectToNsAdder nsAdder = new MockObjectToNsAdder(cppStd, testDoubleToMove);
+    nsAdder.addTestDoubleToNs(testDouble, parentNs);
+    removeAllCallsVector(rewriter);
+  }
 
-   @Override
-   public void addToNamespace(final ICPPASTNamespaceDefinition parentNs, final IASTSimpleDeclaration testDouble,
-            final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
-      final MockObjectToNsAdder nsAdder = new MockObjectToNsAdder(cppStd, testDoubleToMove);
-      nsAdder.addTestDoubleToNs(testDouble, parentNs);
-      removeAllCallsVector(rewriter);
-   }
+  private void removeAllCallsVector(final ASTRewrite rewriter) {
+    getAllCallsVector().ifPresent((calls) -> rewriter.remove(AstUtil.getAncestorOfType(calls, IASTDeclarationStatement.class), null));
+  }
 
-   private void removeAllCallsVector(final ASTRewrite rewriter) {
-      getAllCallsVector().ifPresent((calls) -> rewriter.remove(AstUtil.getAncestorOfType(calls, IASTDeclarationStatement.class), null));
-   }
+  @Override
+  public void addAdditionalCtorSupport(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {
+    new DefaultCtorMockSupportAdder(cppStd, getPolymorphismKind(), getNameOfAllCallsVector()).apply(defaultCtor);
+  }
 
-   @Override
-   public void addAdditionalCtorSupport(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {
-      new DefaultCtorMockSupportAdder(cppStd, getPolymorphismKind(), getNameOfAllCallsVector()).apply(defaultCtor);
-   }
+  @Override
+  public DefaultCtorProvider getDefaultCtorProvider(final CppStandard cppStd) {
+    return new MockObjectDefaultCtorProvider(getKlass(), cppStd);
+  }
 
-   @Override
-   public DefaultCtorProvider getDefaultCtorProvider(final CppStandard cppStd) {
-      return new MockObjectDefaultCtorProvider(getKlass(), cppStd);
-   }
+  @Override
+  protected TestDoubleMemFunImplStrategy getImplStrategy(final CppStandard cppStd) {
+    return new MockObjectMemFunImplStrategy(cppStd, this);
+  }
 
-   @Override
-   protected TestDoubleMemFunImplStrategy getImplStrategy(final CppStandard cppStd) {
-      return new MockObjectMemFunImplStrategy(cppStd, this);
-   }
+  public boolean hasMockIdField() {
+    final Collection<IASTDeclaration> mockIdField = filter(getKlass().getMembers(), (decl) -> isMockIdField(decl));
+    return !mockIdField.isEmpty();
+  }
 
-   public boolean hasMockIdField() {
-      final Collection<IASTDeclaration> mockIdField = filter(getKlass().getMembers(), new F1<IASTDeclaration, Boolean>() {
+  private static boolean isMockIdField(final IASTDeclaration declaration) {
+    if (!(declaration instanceof IASTSimpleDeclaration)) {
+      return false;
+    }
 
-         @Override
-         public Boolean apply(final IASTDeclaration decl) {
-            return isMockIdField(decl);
-         }
+    final IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
+    return hasMockIdName(simpleDecl) && hasMockIdType(simpleDecl);
+  }
 
-      });
-      return !mockIdField.isEmpty();
-   }
+  private static boolean hasMockIdType(final IASTSimpleDeclaration simpleDecl) {
+    final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
 
-   private static boolean isMockIdField(final IASTDeclaration declaration) {
-      if (!(declaration instanceof IASTSimpleDeclaration)) {
-         return false;
-      }
+    if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
+      return false;
+    }
 
-      final IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
-      return hasMockIdName(simpleDecl) && hasMockIdType(simpleDecl);
-   }
+    return isConstSizeT((ICPPASTNamedTypeSpecifier) declSpecifier);
+  }
 
-   private static boolean hasMockIdType(final IASTSimpleDeclaration simpleDecl) {
-      final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
+  private static boolean isConstSizeT(final ICPPASTNamedTypeSpecifier namedSpec) {
+    return namedSpec.getName().toString().equals(MockatorConstants.SIZE_T) && namedSpec.isConst();
+  }
 
-      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
-         return false;
-      }
+  private static boolean hasMockIdName(final IASTSimpleDeclaration simpleDecl) {
+    final IASTDeclarator[] declarators = simpleDecl.getDeclarators();
 
-      return isConstSizeT((ICPPASTNamedTypeSpecifier) declSpecifier);
-   }
+    if (declarators.length != 1) {
+      return false;
+    }
 
-   private static boolean isConstSizeT(final ICPPASTNamedTypeSpecifier namedSpec) {
-      return namedSpec.getName().toString().equals(MockatorConstants.SIZE_T) && namedSpec.isConst();
-   }
+    return declarators[0].getName().toString().equals(MOCK_ID);
+  }
 
-   private static boolean hasMockIdName(final IASTSimpleDeclaration simpleDecl) {
-      final IASTDeclarator[] declarators = simpleDecl.getDeclarators();
+  public String getNameOfAllCallsVector() {
+    final AllCallsVectorNameCreator creator = new AllCallsVectorNameCreator(getKlass(), getParent());
+    return creator.getNameOfAllCallsVector();
+  }
 
-      if (declarators.length != 1) {
-         return false;
-      }
+  public Optional<IASTName> getRegistrationVector() {
+    final AllCallsVectorFinderVisitor finder = new AllCallsVectorFinderVisitor();
+    getKlass().accept(finder);
+    return finder.getFoundCallsVector();
+  }
 
-      return declarators[0].getName().toString().equals(MOCK_ID);
-   }
+  public Optional<IASTName> getAllCallsVector() {
+    return OptHelper.returnIfPresentElseEmpty(getRegistrationVector(),
+        (vector) -> head(list(getKlass().getTranslationUnit().getDefinitionsInAST(vector.resolveBinding()))));
+  }
 
-   public String getNameOfAllCallsVector() {
-      final AllCallsVectorNameCreator creator = new AllCallsVectorNameCreator(getKlass(), getParent());
-      return creator.getNameOfAllCallsVector();
-   }
+  public String getNameForExpectationVector() {
+    return new ExpectedNameCreator(getName()).getNameForExpectationsVector();
+  }
 
-   public Optional<IASTName> getRegistrationVector() {
-      final AllCallsVectorFinderVisitor finder = new AllCallsVectorFinderVisitor();
-      getKlass().accept(finder);
-      return finder.getFoundCallsVector();
-   }
+  public String getFqNameOfAllCallsVector() {
+    final AllCallsVectorNameCreator creator = new AllCallsVectorNameCreator(getKlass(), getParent());
+    return creator.getFqNameOfAllCallsVector();
+  }
 
-   public Optional<IASTName> getAllCallsVector() {
-      return OptHelper.returnIfPresentElseEmpty(getRegistrationVector(), (vector) -> head(list(getKlass().getTranslationUnit().getDefinitionsInAST(
-               vector.resolveBinding()))));
-   }
+  public MemFunMockSupportAdder getMockSupport(final ASTRewrite rewriter, final CppStandard std, final ExistingTestDoubleMemFun memFun) {
+    final String callsVectorName = getNameOfAllCallsVector();
+    final PolymorphismKind polyKind = getPolymorphismKind();
 
-   public String getNameForExpectationVector() {
-      return new ExpectedNameCreator(getName()).getNameForExpectationsVector();
-   }
-
-   public String getFqNameOfAllCallsVector() {
-      final AllCallsVectorNameCreator creator = new AllCallsVectorNameCreator(getKlass(), getParent());
-      return creator.getFqNameOfAllCallsVector();
-   }
-
-   public MemFunMockSupportAdder getMockSupport(final ASTRewrite rewriter, final CppStandard std, final ExistingTestDoubleMemFun memFun) {
-      final String callsVectorName = getNameOfAllCallsVector();
-      final PolymorphismKind polyKind = getPolymorphismKind();
-
-      if (memFun.isConstructor()) {
-         return new CtorMockSupport(rewriter, std, callsVectorName, polyKind);
-      } else {
-         return new MemFunMockSupport(rewriter, std, callsVectorName, polyKind);
-      }
-   }
+    if (memFun.isConstructor()) {
+      return new CtorMockSupport(rewriter, std, callsVectorName, polyKind);
+    } else {
+      return new MemFunMockSupport(rewriter, std, callsVectorName, polyKind);
+    }
+  }
 }
