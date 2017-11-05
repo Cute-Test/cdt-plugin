@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.managedbuilder.gnu.ui;bundle-version="8.2.1",
  ch.hsr.ifs.cute.core;bundle-version="4.6.0",
  ch.hsr.ifs.cute.ui;bundle-version="4.6.0",
- ch.hsr.ifs.mockator.plugin;bundle-version="0.0.1"
+ ch.hsr.ifs.mockator.plugin;bundle-version="0.0.1",
+ ch.hsr.ifs.iltis.core
 Bundle-Version: 1.0.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: ch.hsr.ifs.mockator.tests.MockatorTestPlugin

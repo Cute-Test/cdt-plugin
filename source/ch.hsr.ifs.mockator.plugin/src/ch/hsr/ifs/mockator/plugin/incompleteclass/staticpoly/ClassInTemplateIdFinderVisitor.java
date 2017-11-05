@@ -28,122 +28,120 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
-import ch.hsr.ifs.mockator.plugin.base.tuples.Pair;
-import ch.hsr.ifs.mockator.plugin.base.tuples.Tuple;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
-
 
 @SuppressWarnings("restriction")
 class ClassInTemplateIdFinderVisitor extends ASTVisitor {
 
-   private final ICPPASTCompositeTypeSpecifier                                   testDouble;
-   private final Set<Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter>> templateParams;
-   private final ICProject                                                       cProject;
-   private final IIndex                                                          index;
+  private final ICPPASTCompositeTypeSpecifier testDouble;
+  private final Set<Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter>> templateParams;
+  private final ICProject cProject;
+  private final IIndex index;
 
-   {
-      shouldVisitNames = true;
-   }
+  {
+    shouldVisitNames = true;
+  }
 
-   public ClassInTemplateIdFinderVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICProject cProject, final IIndex index) {
-      this.testDouble = testDouble;
-      this.cProject = cProject;
-      this.index = index;
-      templateParams = orderPreservingSet();
-   }
+  public ClassInTemplateIdFinderVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICProject cProject, final IIndex index) {
+    this.testDouble = testDouble;
+    this.cProject = cProject;
+    this.index = index;
+    templateParams = orderPreservingSet();
+  }
 
-   public Collection<Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter>> getTemplateParamCombinations() {
-      return templateParams;
-   }
+  public Collection<Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter>> getTemplateParamCombinations() {
+    return templateParams;
+  }
 
-   @Override
-   public int visit(final IASTName name) {
-      final IBinding binding = name.resolveBinding();
+  @Override
+  public int visit(final IASTName name) {
+    final IBinding binding = name.resolveBinding();
 
-      if (!(binding instanceof ICPPTemplateInstance)) {
-         return PROCESS_CONTINUE;
+    if (!(binding instanceof ICPPTemplateInstance)) {
+      return PROCESS_CONTINUE;
+    }
+
+    processTemplateArguments((ICPPTemplateInstance) binding, name);
+    return PROCESS_SKIP;
+  }
+
+  private void processTemplateArguments(final ICPPTemplateInstance templateInstance, final IASTName name) {
+    final IType testDoubleType = CPPVisitor.createType(testDouble);
+    final ICPPTemplateArgument[] templateArguments = templateInstance.getTemplateArguments();
+    final List<Integer> positions = list();
+
+    for (int i = 0; i < templateArguments.length; i++) {
+      final IType templateArg = templateArguments[i].getTypeValue();
+
+      if (AstUtil.isSameType(templateArg, testDoubleType) || refersToTestDouble(name, i)) {
+        positions.add(i);
       }
+    }
 
-      processTemplateArguments((ICPPTemplateInstance) binding, name);
-      return PROCESS_SKIP;
-   }
+    if (positions.isEmpty()) {
+      return;
+    }
 
-   private void processTemplateArguments(final ICPPTemplateInstance templateInstance, final IASTName name) {
-      final IType testDoubleType = CPPVisitor.createType(testDouble);
-      final ICPPTemplateArgument[] templateArguments = templateInstance.getTemplateArguments();
-      final List<Integer> positions = list();
+    processTemplateDefinition(positions, templateInstance.getTemplateDefinition());
+  }
 
-      for (int i = 0; i < templateArguments.length; i++) {
-         final IType templateArg = templateArguments[i].getTypeValue();
-
-         if (AstUtil.isSameType(templateArg, testDoubleType) || refersToTestDouble(name, i)) {
-            positions.add(i);
-         }
-      }
-
-      if (positions.isEmpty()) {
-         return;
-      }
-
-      processTemplateDefinition(positions, templateInstance.getTemplateDefinition());
-   }
-
-   private boolean refersToTestDouble(final IASTName name, final int templateArgPos) {
-      if (!(name instanceof ICPPASTTemplateId)) {
-         return false;
-      }
-
-      final IASTNode node = ((ICPPASTTemplateId) name).getTemplateArguments()[templateArgPos];
-
-      if (node instanceof ICPPASTTypeId) {
-         final IASTDeclSpecifier declSpecifier = ((ICPPASTTypeId) node).getDeclSpecifier();
-
-         if (declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
-            final IASTName argName = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName();
-            return argName.resolveBinding().equals(testDouble.getName().resolveBinding());
-         }
-      }
-
+  private boolean refersToTestDouble(final IASTName name, final int templateArgPos) {
+    if (!(name instanceof ICPPASTTemplateId)) {
       return false;
-   }
+    }
 
-   private void processTemplateDefinition(final Collection<Integer> positions, final ICPPTemplateDefinition definition) {
-      for (final ICPPASTTemplateDeclaration candidate : findTemplate(definition)) {
-         final ICPPASTTemplateParameter[] templateParams = candidate.getTemplateParameters();
+    final IASTNode node = ((ICPPASTTemplateId) name).getTemplateArguments()[templateArgPos];
 
-         for (final Integer pos : positions) {
-            Assert.isTrue(pos < templateParams.length, "Wrong deduction of template parameter position");
-            addToTemplateParamCombinations(candidate, templateParams[pos]);
-         }
+    if (node instanceof ICPPASTTypeId) {
+      final IASTDeclSpecifier declSpecifier = ((ICPPASTTypeId) node).getDeclSpecifier();
+
+      if (declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
+        final IASTName argName = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName();
+        return argName.resolveBinding().equals(testDouble.getName().resolveBinding());
       }
-   }
+    }
 
-   private void addToTemplateParamCombinations(final ICPPASTTemplateDeclaration templateDecl, final ICPPASTTemplateParameter templateParam) {
-      templateParams.add(Tuple.from(templateDecl, templateParam));
-   }
+    return false;
+  }
 
-   private static Collection<ICPPASTTemplateDeclaration> lookupInAst(final IASTName name) {
-      final ICPPASTTemplateDeclaration templateDecl = AstUtil.getAncestorOfType(name, ICPPASTTemplateDeclaration.class);
-      return list(templateDecl);
-   }
+  private void processTemplateDefinition(final Collection<Integer> positions, final ICPPTemplateDefinition definition) {
+    for (final ICPPASTTemplateDeclaration candidate : findTemplate(definition)) {
+      final ICPPASTTemplateParameter[] templateParams = candidate.getTemplateParameters();
 
-   private Collection<ICPPASTTemplateDeclaration> findTemplate(final IBinding template) {
-      final IASTName[] definitionNames = testDouble.getTranslationUnit().getDefinitionsInAST(template);
-
-      if (definitionNames.length > 0) {
-         return lookupInAst(definitionNames[0]);
+      for (final Integer pos : positions) {
+        Assert.isTrue(pos < templateParams.length, "Wrong deduction of template parameter position");
+        addToTemplateParamCombinations(candidate, templateParams[pos]);
       }
+    }
+  }
 
-      final List<ICPPASTTemplateDeclaration> templates = list();
+  private void addToTemplateParamCombinations(final ICPPASTTemplateDeclaration templateDecl, final ICPPASTTemplateParameter templateParam) {
+    templateParams.add(new Pair<>(templateDecl, templateParam));
+  }
 
-      lookupInIndex(template).ifPresent((candidate) -> templates.add(candidate));
-      return templates;
-   }
+  private static Collection<ICPPASTTemplateDeclaration> lookupInAst(final IASTName name) {
+    final ICPPASTTemplateDeclaration templateDecl = AstUtil.getAncestorOfType(name, ICPPASTTemplateDeclaration.class);
+    return list(templateDecl);
+  }
 
-   private Optional<ICPPASTTemplateDeclaration> lookupInIndex(final IBinding template) {
-      final NodeLookup lookup = new NodeLookup(cProject, new NullProgressMonitor());
-      return lookup.findTemplateDefinition(template, index);
-   }
+  private Collection<ICPPASTTemplateDeclaration> findTemplate(final IBinding template) {
+    final IASTName[] definitionNames = testDouble.getTranslationUnit().getDefinitionsInAST(template);
+
+    if (definitionNames.length > 0) {
+      return lookupInAst(definitionNames[0]);
+    }
+
+    final List<ICPPASTTemplateDeclaration> templates = list();
+
+    lookupInIndex(template).ifPresent((candidate) -> templates.add(candidate));
+    return templates;
+  }
+
+  private Optional<ICPPASTTemplateDeclaration> lookupInIndex(final IBinding template) {
+    final NodeLookup lookup = new NodeLookup(cProject, new NullProgressMonitor());
+    return lookup.findTemplateDefinition(template, index);
+  }
 }

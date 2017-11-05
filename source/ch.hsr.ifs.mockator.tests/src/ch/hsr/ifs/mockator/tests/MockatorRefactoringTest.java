@@ -48,27 +48,26 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
   }
 
   private void addCuteNature() throws CoreException {
-    new NatureHandler(project)
-        .addNature("ch.hsr.ifs.cute.ui.cutenature", new NullProgressMonitor());
+    new NatureHandler(project).addNature("ch.hsr.ifs.cute.ui.cutenature", new NullProgressMonitor());
   }
 
   private void addMockatorIncludePaths() {
-    for (String includePath : new String[] {"mockator", "cute", "stl"}) {
+    for (final String includePath : new String[] { "mockator", "cute", "stl" }) {
       addIncludeDirPath(includePath);
     }
   }
 
-  protected IASTTranslationUnit getAst(CRefactoringContext context) {
+  protected IASTTranslationUnit getAst(final CRefactoringContext context) {
     try {
       return context.getAST(getTu(getActiveCElement()), new NullProgressMonitor());
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
     }
     fail("Not able to get AST for translation unit");
     return null;
   }
 
-  protected ITranslationUnit getTu(ICElement cElement) {
-    ISourceReference sourceRef = (ISourceReference) cElement;
+  protected ITranslationUnit getTu(final ICElement cElement) {
+    final ISourceReference sourceRef = (ISourceReference) cElement;
     return CModelUtil.toWorkingCopy(sourceRef.getTranslationUnit());
   }
 
@@ -82,21 +81,21 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
 
   @Override
   protected void compareFiles() throws Exception {
-    for (TestSourceFile testFile : fileMap.values()) {
-      String expectedSource = testFile.getExpectedSource();
-      String actualSource = getCurrentSource(testFile.getName());
+    for (final TestSourceFile testFile : fileMap.values()) {
+      final String expectedSource = testFile.getExpectedSource();
+      final String actualSource = getCurrentSource(testFile.getName());
       new AssertThat(actualSource).isEqualByIgnoringWhitespace(expectedSource);
     }
   }
 
   @Override
-  protected String makeProjectAbsolutePath(String relativePath) {
-    IPath projectPath = project.getLocation();
+  protected String makeProjectAbsolutePath(final String relativePath) {
+    final IPath projectPath = project.getLocation();
     return projectPath.append(relativePath).toOSString();
   }
 
   private void activateManagedBuild() throws CoreException {
-    CdtManagedProjectActivator configurator = new CdtManagedProjectActivator(cproject.getProject());
+    final CdtManagedProjectActivator configurator = new CdtManagedProjectActivator(cproject.getProject());
     configurator.activateManagedBuild();
   }
 
@@ -119,25 +118,19 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
   }
 
   @Override
-  protected void configureTest(Properties refProps) {
-    markerCount =
-        Integer
-            .valueOf(refProps.getProperty("markerCount", Integer.toString(DEFAULT_MARKER_COUNT)));
+  protected void configureTest(final Properties refProps) {
+    markerCount = Integer.valueOf(refProps.getProperty("markerCount", Integer.toString(DEFAULT_MARKER_COUNT)));
     expectedFinalWarnings = Integer.parseInt(refProps.getProperty("expectedFinalWarnings", "0"));
     fatalError = Boolean.valueOf(refProps.getProperty("fatalError", "false")).booleanValue();
-    newFileCreation =
-        Boolean.valueOf(refProps.getProperty("newFileCreation", "false")).booleanValue();
+    newFileCreation = Boolean.valueOf(refProps.getProperty("newFileCreation", "false")).booleanValue();
     newFiles = getNewFiles(refProps);
-    needsManagedCProject =
-        Boolean.valueOf(refProps.getProperty("needsManagedCProject", "false")).booleanValue();
-    withCuteNature =
-        Boolean.valueOf(refProps.getProperty("withCuteNature", "false")).booleanValue();
+    needsManagedCProject = Boolean.valueOf(refProps.getProperty("needsManagedCProject", "false")).booleanValue();
+    withCuteNature = Boolean.valueOf(refProps.getProperty("withCuteNature", "false")).booleanValue();
   }
 
   @SuppressWarnings("nls")
-  private static String[] getNewFiles(Properties refactoringProperties) {
-    return String.valueOf(refactoringProperties.getProperty("newFiles", "")).replaceAll(" ", "")
-        .split(",");
+  private static String[] getNewFiles(final Properties refactoringProperties) {
+    return String.valueOf(refactoringProperties.getProperty("newFiles", "")).replaceAll(" ", "").split(",");
   }
 
   private void ensureNewFilesDoNotExist() throws Exception {
@@ -148,10 +141,10 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
   private void removeFiles() {
     executeOnNewFiles(new F1V<String>() {
       @Override
-      public void apply(String filePath) {
+      public void apply(final String filePath) {
         try {
           getFile(filePath).delete(true, new NullProgressMonitor());
-        } catch (CoreException e) {
+        } catch (final CoreException e) {
         }
       }
     });
@@ -160,7 +153,7 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
   private void filesDoExist() {
     executeOnNewFiles(new F1V<String>() {
       @Override
-      public void apply(String filePath) {
+      public void apply(final String filePath) {
         assertTrue(getFile(filePath).exists());
       }
     });
@@ -169,19 +162,19 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
   private void filesDoNotExist() {
     executeOnNewFiles(new F1V<String>() {
       @Override
-      public void apply(String filePath) {
+      public void apply(final String filePath) {
         assertFalse(getFile(filePath).exists());
       }
     });
   }
 
-  private void executeOnNewFiles(F1V<String> f) {
-    for (String file : newFiles) {
+  private void executeOnNewFiles(final F1V<String> f) {
+    for (final String file : newFiles) {
       f.apply(file);
     }
   }
 
-  private IFile getFile(String filePath) {
+  private IFile getFile(final String filePath) {
     return project.getFile(new Path(filePath));
   }
 }

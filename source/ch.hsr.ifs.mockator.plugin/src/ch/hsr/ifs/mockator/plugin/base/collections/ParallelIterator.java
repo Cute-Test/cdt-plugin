@@ -2,7 +2,7 @@ package ch.hsr.ifs.mockator.plugin.base.collections;
 
 import java.util.Iterator;
 
-import ch.hsr.ifs.mockator.plugin.base.tuples.Pair;
+import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 
 
 public class ParallelIterator<T1, T2> implements Iterator<Pair<T1, T2>> {

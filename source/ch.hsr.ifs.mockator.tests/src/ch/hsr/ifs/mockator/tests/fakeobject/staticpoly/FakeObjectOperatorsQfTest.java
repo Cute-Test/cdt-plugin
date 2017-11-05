@@ -40,6 +40,6 @@ public class FakeObjectOperatorsQfTest extends MockatorQuickfixTest {
 
   @Override
   protected String[] getMarkerMessages() {
-    return new String[] {"Necessary member function(s) not existing in class Fake"};
+    return new String[] { "Necessary member function(s) not existing in class Fake" };
   }
 }
