@@ -9,6 +9,7 @@ import java.util.function.Function;
 
 public abstract class HigherOrder {
 
+  //TODO replace with stream operations
   public static <T> Collection<T> filter(final Iterable<T> elements, final Function<T, Boolean> predicate) {
     final List<T> filtered = new ArrayList<>();
 

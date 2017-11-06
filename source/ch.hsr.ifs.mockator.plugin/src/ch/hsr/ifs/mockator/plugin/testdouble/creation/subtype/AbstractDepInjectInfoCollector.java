@@ -21,8 +21,8 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
-import ch.hsr.ifs.mockator.plugin.base.functional.F2;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunArgumentsTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunctionParamTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParamTypeEquivalenceTester;
@@ -90,7 +90,7 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
       final int posToIgnore) {
     final FunArgumentsTypeCollector extractor = new FunArgumentsTypeCollector(funArgs);
     final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(extractor.getFunArgTypes(), getTypesOfFunDecl(funDecl),
-        new F2<Integer, IType, Boolean>() {
+        new Function2<Integer, IType, Boolean>() {
 
           @Override
           public Boolean apply(final Integer pos, final IType receiverType) {

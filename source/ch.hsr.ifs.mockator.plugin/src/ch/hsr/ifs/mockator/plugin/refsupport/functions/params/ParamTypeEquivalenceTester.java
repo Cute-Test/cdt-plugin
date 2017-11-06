@@ -14,9 +14,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 
+import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 import ch.hsr.ifs.mockator.plugin.base.collections.ParallelIterator;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
-import ch.hsr.ifs.mockator.plugin.base.functional.F2;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 @SuppressWarnings("restriction")
@@ -24,13 +24,14 @@ public class ParamTypeEquivalenceTester {
 
   private final Collection<IType> caller;
   private final Collection<IType> receiver;
-  private final F2<Integer, IType, Boolean> filter;
+  private final Function2<Integer, IType, Boolean> filter;
 
   public ParamTypeEquivalenceTester(final Collection<IType> caller, final Collection<IType> receiver) {
     this(caller, receiver, null);
   }
 
-  public ParamTypeEquivalenceTester(final Collection<IType> caller, final Collection<IType> receiver, final F2<Integer, IType, Boolean> filter) {
+  public ParamTypeEquivalenceTester(final Collection<IType> caller, final Collection<IType> receiver,
+      final Function2<Integer, IType, Boolean> filter) {
     this.caller = caller;
     this.receiver = receiver;
     this.filter = filter;

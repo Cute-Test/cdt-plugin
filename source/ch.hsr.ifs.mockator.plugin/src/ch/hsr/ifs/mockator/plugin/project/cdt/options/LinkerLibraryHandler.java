@@ -11,83 +11,81 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
+import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
-import ch.hsr.ifs.mockator.plugin.base.functional.F2;
-
 
 public class LinkerLibraryHandler extends AbstractOptionsHandler {
 
-   public LinkerLibraryHandler(final IProject project) {
-      super(project);
-   }
+  public LinkerLibraryHandler(final IProject project) {
+    super(project);
+  }
 
-   public void addLibrary(final String libName) {
-      toggleLibrary(new LibraryAdder(), libName);
-   }
+  public void addLibrary(final String libName) {
+    toggleLibrary(new LibraryAdder(), libName);
+  }
 
-   public void removeLibrary(final String libName) {
-      toggleLibrary(new LibraryRemover(), libName);
-   }
+  public void removeLibrary(final String libName) {
+    toggleLibrary(new LibraryRemover(), libName);
+  }
 
-   private void toggleLibrary(final F2<String, Set<String>, Void> libraryOp, final String libName) {
-      withEveryTool(new F2<ITool, IConfiguration, Void>() {
-
-         @Override
-         public Void apply(final ITool tool, final IConfiguration config) {
-            for (final IOption option : tool.getOptions()) {
-               try {
-                  if (option.getValueType() == IOption.LIBRARIES) {
-                     final Set<String> libs = orderPreservingSet(option.getLibraries());
-                     libraryOp.apply(libName, libs);
-                     setAndSaveOption(config, tool, option, libs);
-                  }
-               } catch (final BuildException e) {
-                  throw new MockatorException(e);
-               }
-            }
-
-            return null;
-         }
-      });
-   }
-
-   private static class LibraryAdder implements F2<String, Set<String>, Void> {
+  private void toggleLibrary(final Function2<String, Set<String>, Void> libraryOp, final String libName) {
+    withEveryTool(new Function2<ITool, IConfiguration, Void>() {
 
       @Override
-      public Void apply(final String newLibrary, final Set<String> libraries) {
-         libraries.add(newLibrary);
-         return null;
-      }
-   }
-
-   private static class LibraryRemover implements F2<String, Set<String>, Void> {
-
-      @Override
-      public Void apply(final String newLibrary, final Set<String> libraries) {
-         libraries.remove(newLibrary);
-         return null;
-      }
-   }
-
-   public boolean hasLibrary(final String libName) {
-      return OptHelper.returnIfPresentElse(getToolToAnanalyze(), (tool) -> {
-         for (final IOption option : tool.getOptions()) {
-            try {
-               if (option.getValueType() == IOption.LIBRARIES) {
-                  final Set<String> libs = orderPreservingSet(option.getLibraries());
-                  return libs.contains(libName);
-               }
-            } catch (final BuildException e) {
-               throw new MockatorException(e);
+      public Void apply(final ITool tool, final IConfiguration config) {
+        for (final IOption option : tool.getOptions()) {
+          try {
+            if (option.getValueType() == IOption.LIBRARIES) {
+              final Set<String> libs = orderPreservingSet(option.getLibraries());
+              libraryOp.apply(libName, libs);
+              setAndSaveOption(config, tool, option, libs);
             }
-         }
-         return false;
-      }, () -> false);
-   }
+          } catch (final BuildException e) {
+            throw new MockatorException(e);
+          }
+        }
 
-   @Override
-   protected boolean isRequestedTool(final ITool tool) {
-      return isLinker(tool);
-   }
+        return null;
+      }
+    });
+  }
+
+  private static class LibraryAdder implements Function2<String, Set<String>, Void> {
+
+    @Override
+    public Void apply(final String newLibrary, final Set<String> libraries) {
+      libraries.add(newLibrary);
+      return null;
+    }
+  }
+
+  private static class LibraryRemover implements Function2<String, Set<String>, Void> {
+
+    @Override
+    public Void apply(final String newLibrary, final Set<String> libraries) {
+      libraries.remove(newLibrary);
+      return null;
+    }
+  }
+
+  public boolean hasLibrary(final String libName) {
+    return OptHelper.returnIfPresentElse(getToolToAnanalyze(), (tool) -> {
+      for (final IOption option : tool.getOptions()) {
+        try {
+          if (option.getValueType() == IOption.LIBRARIES) {
+            final Set<String> libs = orderPreservingSet(option.getLibraries());
+            return libs.contains(libName);
+          }
+        } catch (final BuildException e) {
+          throw new MockatorException(e);
+        }
+      }
+      return false;
+    }, () -> false);
+  }
+
+  @Override
+  protected boolean isRequestedTool(final ITool tool) {
+    return isLinker(tool);
+  }
 }
