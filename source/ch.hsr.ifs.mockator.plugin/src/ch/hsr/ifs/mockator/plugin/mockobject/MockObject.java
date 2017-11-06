@@ -61,7 +61,7 @@ public class MockObject extends AbstractTestDouble {
 
   @Override
   public void addAdditionalCtorSupport(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {
-    new DefaultCtorMockSupportAdder(cppStd, getPolymorphismKind(), getNameOfAllCallsVector()).apply(defaultCtor);
+    new DefaultCtorMockSupportAdder(cppStd, getPolymorphismKind(), getNameOfAllCallsVector()).accept(defaultCtor);
   }
 
   @Override

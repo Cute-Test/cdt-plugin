@@ -1,6 +1,7 @@
 package ch.hsr.ifs.mockator.tests;
 
 import java.util.Properties;
+import java.util.function.Consumer;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.model.ICElement;
@@ -17,7 +18,6 @@ import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingRefactoringTest;
 import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
 
@@ -139,38 +139,25 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
   }
 
   private void removeFiles() {
-    executeOnNewFiles(new F1V<String>() {
-      @Override
-      public void apply(final String filePath) {
-        try {
-          getFile(filePath).delete(true, new NullProgressMonitor());
-        } catch (final CoreException e) {
-        }
+    executeOnNewFiles((filePath) -> {
+      try {
+        getFile(filePath).delete(true, new NullProgressMonitor());
+      } catch (final CoreException e) {
       }
     });
   }
 
   private void filesDoExist() {
-    executeOnNewFiles(new F1V<String>() {
-      @Override
-      public void apply(final String filePath) {
-        assertTrue(getFile(filePath).exists());
-      }
-    });
+    executeOnNewFiles((filePath) -> assertTrue(getFile(filePath).exists()));
   }
 
   private void filesDoNotExist() {
-    executeOnNewFiles(new F1V<String>() {
-      @Override
-      public void apply(final String filePath) {
-        assertFalse(getFile(filePath).exists());
-      }
-    });
+    executeOnNewFiles((filePath) -> assertFalse(getFile(filePath).exists()));
   }
 
-  private void executeOnNewFiles(final F1V<String> f) {
+  private void executeOnNewFiles(final Consumer<String> f) {
     for (final String file : newFiles) {
-      f.apply(file);
+      f.accept(file);
     }
   }
 

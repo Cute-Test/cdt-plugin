@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class HigherOrder {
@@ -36,22 +37,22 @@ public abstract class HigherOrder {
 
   public static <T, Y> Y fold(final Iterable<T> elements, final Injector<T, Y> injector) {
     for (final T e : elements) {
-      injector.apply(e);
+      injector.accept(e);
     }
 
     return injector.yield();
   }
 
-  public static <T> void forEach(final Iterable<F1V<T>> funs, final T param) {
-    for (final F1V<T> f : funs) {
-      f.apply(param);
+  public static <T> void forEach(final Iterable<Consumer<T>> funs, final T param) {
+    for (final Consumer<T> f : funs) {
+      f.accept(param);
     }
   }
 
-  public static <T> void forEach(final Iterable<F1V<T>> funs, final T param, final Function<Void, Boolean> stopWhen) {
-    for (final F1V<T> f : funs) {
+  public static <T> void forEach(final Iterable<Consumer<T>> funs, final T param, final Function<Void, Boolean> stopWhen) {
+    for (final Consumer<T> f : funs) {
       if (!stopWhen.apply(null)) {
-        f.apply(param);
+        f.accept(param);
       }
     }
   }

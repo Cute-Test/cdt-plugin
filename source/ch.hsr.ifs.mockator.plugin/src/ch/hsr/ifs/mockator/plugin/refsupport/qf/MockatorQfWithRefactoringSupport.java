@@ -9,60 +9,52 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 
-import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInfoCreater;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeStarter;
 
-
 public abstract class MockatorQfWithRefactoringSupport extends MockatorQuickFix {
 
-   private IDocument document;
+  private IDocument document;
 
-   @Override
-   public void apply(final IMarker marker, final IDocument document) {
-      this.marker = marker;
-      this.document = document;
-      ca = getCodanArguments(marker);
-      performRefactoring();
-   }
+  @Override
+  public void apply(final IMarker marker, final IDocument document) {
+    this.marker = marker;
+    this.document = document;
+    ca = getCodanArguments(marker);
+    performRefactoring();
+  }
 
-   private void performRefactoring() {
-      final MockatorRefactoring refactoring = getRefactoring(getCElement(), getSelection(), ca);
+  private void performRefactoring() {
+    final MockatorRefactoring refactoring = getRefactoring(getCElement(), getSelection(), ca);
 
-      if (shouldRunInCurrentThread) {
-         runInCurrentThread(refactoring);
-      } else {
-         runInSeparateJob(refactoring);
-      }
-   }
+    if (shouldRunInCurrentThread) {
+      runInCurrentThread(refactoring);
+    } else {
+      runInSeparateJob(refactoring);
+    }
+  }
 
-   private ITextSelection getSelection() {
-      final int offset = getOffset(marker, document);
-      return new TextSelection(document, offset, 0);
-   }
+  private ITextSelection getSelection() {
+    final int offset = getOffset(marker, document);
+    return new TextSelection(document, offset, 0);
+  }
 
-   private void runInSeparateJob(final MockatorRefactoring refactoring) {
-      new MockatorRefactoringRunner(refactoring).runInNewJob(new F1V<ChangeEdit>() {
+  private void runInSeparateJob(final MockatorRefactoring refactoring) {
+    new MockatorRefactoringRunner(refactoring).runInNewJob((changeEdit) -> startLinkedMode(refactoring, changeEdit));
+  }
 
-         @Override
-         public void apply(final ChangeEdit changeEdit) {
-            startLinkedMode(refactoring, changeEdit);
-         }
-      });
-   }
+  private void runInCurrentThread(final MockatorRefactoring refactoring) {
+    final NullProgressMonitor npm = new NullProgressMonitor();
+    final ChangeEdit changeEdit = new MockatorRefactoringRunner(refactoring).runInCurrentThread(npm);
+    startLinkedMode(refactoring, changeEdit);
+  }
 
-   private void runInCurrentThread(final MockatorRefactoring refactoring) {
-      final NullProgressMonitor npm = new NullProgressMonitor();
-      final ChangeEdit changeEdit = new MockatorRefactoringRunner(refactoring).runInCurrentThread(npm);
-      startLinkedMode(refactoring, changeEdit);
-   }
+  private void startLinkedMode(final MockatorRefactoring refactoring, final ChangeEdit edit) {
+    getLinkedModeCreator(edit, document, refactoring).ifPresent((linkedMode) -> new LinkedModeStarter().accept(linkedMode));
+  }
 
-   private void startLinkedMode(final MockatorRefactoring refactoring, final ChangeEdit edit) {
-      getLinkedModeCreator(edit, document, refactoring).ifPresent((linkedMode) -> new LinkedModeStarter().apply(linkedMode));
-   }
+  protected abstract MockatorRefactoring getRefactoring(ICElement cElement, ITextSelection selection, CodanArguments ca);
 
-   protected abstract MockatorRefactoring getRefactoring(ICElement cElement, ITextSelection selection, CodanArguments ca);
-
-   protected abstract Optional<LinkedModeInfoCreater> getLinkedModeCreator(ChangeEdit edit, IDocument document, MockatorRefactoring refactoring);
+  protected abstract Optional<LinkedModeInfoCreater> getLinkedModeCreator(ChangeEdit edit, IDocument document, MockatorRefactoring refactoring);
 }

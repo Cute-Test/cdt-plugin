@@ -35,140 +35,131 @@ import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
-
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
-import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
-
 @SuppressWarnings("restriction")
 public abstract class MockatorRefactoring extends CRefactoring {
 
-   protected static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-   private final ITextSelection           selection;
+  protected static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+  private final ITextSelection selection;
 
-   public MockatorRefactoring(final ICElement element, final ITextSelection selection, final ICProject project) {
-      super(element, selection, project);
-      this.selection = selection;
-      saveAllDirtyEditors();
-   }
+  public MockatorRefactoring(final ICElement element, final ITextSelection selection, final ICProject project) {
+    super(element, selection, project);
+    this.selection = selection;
+    saveAllDirtyEditors();
+  }
 
-   private void saveAllDirtyEditors() {
-      UiUtil.runInDisplayThread(new F1V<RefactoringStatus>() {
-
-         @Override
-         public void apply(final RefactoringStatus a) {
-            if (!IDE.saveAllEditors(getWorkspaceRoot(), false)) {
-               initStatus.addFatalError("Was not able to save all editors");
-            }
-         }
-      }, initStatus);
-   }
-
-   private static IResource[] getWorkspaceRoot() {
-      return new IResource[] { CPPResourceHelper.getWorkspaceRoot() };
-   }
-
-   protected ITextSelection getSelection() {
-      return selection;
-   }
-
-   public abstract String getDescription();
-
-   protected ASTRewrite createRewriter(final ModificationCollector collector, final IASTTranslationUnit ast) {
-      return collector.rewriterForTranslationUnit(ast);
-   }
-
-   protected Optional<ICPPASTCompositeTypeSpecifier> getClassInSelection(final IASTTranslationUnit ast) {
-      final ClassInSelectionFinder finder = new ClassInSelectionFinder(getSelection(), ast);
-      return finder.getClassInSelection();
-   }
-
-   protected Optional<IASTName> checkSelectedNameIsInFunction(final RefactoringStatus status, final IProgressMonitor pm) throws CoreException {
-      final Optional<IASTName> selectedName = getSelectedName(getAST(tu, pm));
-
-      if (!selectedName.isPresent()) {
-         status.addFatalError("Selection does not contain a name");
+  private void saveAllDirtyEditors() {
+    UiUtil.runInDisplayThread((ignored) -> {
+      if (!IDE.saveAllEditors(getWorkspaceRoot(), false)) {
+        initStatus.addFatalError("Was not able to save all editors");
       }
+    }, initStatus);
+  }
 
-      if (getParentFunction(selectedName.get()) == null) {
-         status.addFatalError("Selection is not part of a function");
+  private static IResource[] getWorkspaceRoot() {
+    return new IResource[] { CPPResourceHelper.getWorkspaceRoot() };
+  }
+
+  protected ITextSelection getSelection() {
+    return selection;
+  }
+
+  public abstract String getDescription();
+
+  protected ASTRewrite createRewriter(final ModificationCollector collector, final IASTTranslationUnit ast) {
+    return collector.rewriterForTranslationUnit(ast);
+  }
+
+  protected Optional<ICPPASTCompositeTypeSpecifier> getClassInSelection(final IASTTranslationUnit ast) {
+    final ClassInSelectionFinder finder = new ClassInSelectionFinder(getSelection(), ast);
+    return finder.getClassInSelection();
+  }
+
+  protected Optional<IASTName> checkSelectedNameIsInFunction(final RefactoringStatus status, final IProgressMonitor pm) throws CoreException {
+    final Optional<IASTName> selectedName = getSelectedName(getAST(tu, pm));
+
+    if (!selectedName.isPresent()) {
+      status.addFatalError("Selection does not contain a name");
+    }
+
+    if (getParentFunction(selectedName.get()) == null) {
+      status.addFatalError("Selection is not part of a function");
+    }
+
+    return selectedName;
+  }
+
+  protected ICPPASTFunctionDefinition getParentFunction(final IASTName name) {
+    return AstUtil.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
+  }
+
+  @Override
+  protected RefactoringStatus checkFinalConditions(final IProgressMonitor subProgressMonitor, final CheckConditionsContext checkContext)
+      throws CoreException, OperationCanceledException {
+    return initStatus;
+  }
+
+  @Override
+  protected RefactoringDescriptor getRefactoringDescriptor() {
+    return null;
+  }
+
+  protected Optional<IASTName> getSelectedName(final IASTTranslationUnit ast) {
+    final IASTNode selectedNode = getSelectedNode(ast);
+
+    if (selectedNode instanceof IASTImplicitNameOwner && ((IASTImplicitNameOwner) selectedNode).getImplicitNames().length > 0) {
+      return findOperator(selectedNode);
+    }
+
+    if (selectedNode instanceof IASTName) {
+      return Optional.of((IASTName) selectedNode);
+    }
+
+    final IASTName name = AstUtil.getAncestorOfType(selectedNode, IASTName.class);
+
+    if (name != null) {
+      return Optional.of(name);
+    }
+
+    return last(findAllMarkedNames(ast));
+  }
+
+  private static Optional<IASTName> findOperator(final IASTNode selectedNode) {
+    for (final IASTImplicitName iName : getNames(selectedNode)) {
+      if (iName != null && iName.isOperator()) {
+        return Optional.of((IASTName) iName);
       }
+    }
 
-      return selectedName;
-   }
+    return Optional.empty();
+  }
 
-   protected ICPPASTFunctionDefinition getParentFunction(final IASTName name) {
-      return AstUtil.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
-   }
+  private static IASTImplicitName[] getNames(final IASTNode selectedNode) {
+    if (selectedNode instanceof ICPPASTUnaryExpression || selectedNode instanceof ICPPASTBinaryExpression
+        || selectedNode instanceof ICPPASTNewExpression || selectedNode instanceof ICPPASTDeleteExpression) {
+      return ((IASTImplicitNameOwner) selectedNode).getImplicitNames();
+    }
 
-   @Override
-   protected RefactoringStatus checkFinalConditions(final IProgressMonitor subProgressMonitor, final CheckConditionsContext checkContext)
-         throws CoreException, OperationCanceledException {
-      return initStatus;
-   }
+    return array();
+  }
 
-   @Override
-   protected RefactoringDescriptor getRefactoringDescriptor() {
-      return null;
-   }
+  protected IASTNode getSelectedNode(final IASTTranslationUnit ast) {
+    final String rootSourceOfTu = null;
+    return ast.getNodeSelector(rootSourceOfTu).findEnclosingNodeInExpansion(selection.getOffset(), selection.getLength());
+  }
 
-   protected Optional<IASTName> getSelectedName(final IASTTranslationUnit ast) {
-      final IASTNode selectedNode = getSelectedNode(ast);
-
-      if (selectedNode instanceof IASTImplicitNameOwner && ((IASTImplicitNameOwner) selectedNode).getImplicitNames().length > 0) {
-         return findOperator(selectedNode);
-      }
-
-      if (selectedNode instanceof IASTName) {
-         return Optional.of((IASTName) selectedNode);
-      }
-
-      final IASTName name = AstUtil.getAncestorOfType(selectedNode, IASTName.class);
-
-      if (name != null) {
-         return Optional.of(name);
-      }
-
-      return last(findAllMarkedNames(ast));
-   }
-
-   private static Optional<IASTName> findOperator(final IASTNode selectedNode) {
-      for (final IASTImplicitName iName : getNames(selectedNode)) {
-         if (iName != null && iName.isOperator()) {
-            return Optional.of((IASTName) iName);
-         }
-      }
-
-      return Optional.empty();
-   }
-
-   private static IASTImplicitName[] getNames(final IASTNode selectedNode) {
-      if (selectedNode instanceof ICPPASTUnaryExpression || selectedNode instanceof ICPPASTBinaryExpression
-            || selectedNode instanceof ICPPASTNewExpression || selectedNode instanceof ICPPASTDeleteExpression) {
-         return ((IASTImplicitNameOwner) selectedNode).getImplicitNames();
-      }
-
-      return array();
-   }
-
-   protected IASTNode getSelectedNode(final IASTTranslationUnit ast) {
-      final String rootSourceOfTu = null;
-      return ast.getNodeSelector(rootSourceOfTu).findEnclosingNodeInExpansion(selection.getOffset(), selection.getLength());
-   }
-
-   @Override
-   protected IIndex getIndex() {
-      try {
-         return super.getIndex();
-      }
-      catch (final OperationCanceledException e) {
-         throw new MockatorException(e);
-      }
-      catch (final CoreException e) {
-         throw new MockatorException(e);
-      }
-   }
+  @Override
+  protected IIndex getIndex() {
+    try {
+      return super.getIndex();
+    } catch (final OperationCanceledException e) {
+      throw new MockatorException(e);
+    } catch (final CoreException e) {
+      throw new MockatorException(e);
+    }
+  }
 }

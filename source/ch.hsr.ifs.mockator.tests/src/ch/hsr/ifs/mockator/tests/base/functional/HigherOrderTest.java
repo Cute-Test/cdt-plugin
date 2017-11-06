@@ -5,10 +5,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.junit.Test;
 
-import ch.hsr.ifs.mockator.plugin.base.functional.F1V;
 import ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder;
 import ch.hsr.ifs.mockator.plugin.base.functional.Injector;
 
@@ -56,7 +56,7 @@ public class HigherOrderTest {
       double runningSum;
 
       @Override
-      public void apply(final Integer param) {
+      public void accept(final Integer param) {
         runningSum += param;
       }
 
@@ -75,10 +75,10 @@ public class HigherOrderTest {
       int i = 0;
     }
     final Counter counter = new Counter();
-    final Collection<F1V<Integer>> funs = list();
-    final F1V<Integer> fun = new F1V<Integer>() {
+    final Collection<Consumer<Integer>> funs = list();
+    final Consumer<Integer> fun = new Consumer<Integer>() {
       @Override
-      public void apply(final Integer number) {
+      public void accept(final Integer number) {
         counter.i += number;
       }
     };
