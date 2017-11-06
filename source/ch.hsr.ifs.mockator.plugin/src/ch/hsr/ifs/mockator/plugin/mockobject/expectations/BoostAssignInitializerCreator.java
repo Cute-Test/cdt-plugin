@@ -34,8 +34,8 @@ public class BoostAssignInitializerCreator {
    private final String                                 expectationsName;
    private final LinkedEditModeStrategy                 linkedEditStrategy;
 
-   public BoostAssignInitializerCreator(Collection<? extends TestDoubleMemFun> memFuns, String expectationsName,
-                                        LinkedEditModeStrategy linkedEditStrategy) {
+   public BoostAssignInitializerCreator(final Collection<? extends TestDoubleMemFun> memFuns, final String expectationsName,
+                                        final LinkedEditModeStrategy linkedEditStrategy) {
       this.memFuns = memFuns;
       this.expectationsName = expectationsName;
       this.linkedEditStrategy = linkedEditStrategy;
@@ -43,35 +43,35 @@ public class BoostAssignInitializerCreator {
 
    public IASTExpressionStatement createBoostAssignInitializer() {
       Assert.isFalse(memFuns.isEmpty(), "Should not be called with no fun signatures");
-      ICPPASTExpressionList expressionList = nodeFactory.newExpressionList();
-      IASTIdExpression vector = nodeFactory.newIdExpression(nodeFactory.newName(expectationsName.toCharArray()));
-      ICPPASTBinaryExpression expression = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_plusAssign, vector, createNextCall(head(memFuns)
-            .get(), linkedEditStrategy));
+      final ICPPASTExpressionList expressionList = nodeFactory.newExpressionList();
+      final IASTIdExpression vector = nodeFactory.newIdExpression(nodeFactory.newName(expectationsName.toCharArray()));
+      final ICPPASTBinaryExpression expression = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_plusAssign, vector, createNextCall(head(
+            memFuns).get(), linkedEditStrategy));
       expressionList.addExpression(expression);
       addAllSignatures(expressionList, tail(memFuns));
       return nodeFactory.newExpressionStatement(expressionList);
    }
 
-   private void addAllSignatures(ICPPASTExpressionList expressions, Collection<? extends TestDoubleMemFun> signatures) {
-      for (TestDoubleMemFun s : signatures) {
+   private void addAllSignatures(final ICPPASTExpressionList expressions, final Collection<? extends TestDoubleMemFun> signatures) {
+      for (final TestDoubleMemFun s : signatures) {
          expressions.addExpression(createNextCall(s, linkedEditStrategy));
       }
    }
 
-   private static ICPPASTFunctionCallExpression createNextCall(TestDoubleMemFun memFun, LinkedEditModeStrategy edit) {
-      IASTIdExpression ctorCall = nodeFactory.newIdExpression(nodeFactory.newName(CALL.toCharArray()));
-      IASTInitializerClause[] funArgs = getCallExpectations(memFun, edit).toArray(new IASTInitializerClause[] {});
+   private static ICPPASTFunctionCallExpression createNextCall(final TestDoubleMemFun memFun, final LinkedEditModeStrategy edit) {
+      final IASTIdExpression ctorCall = nodeFactory.newIdExpression(nodeFactory.newName(CALL.toCharArray()));
+      final IASTInitializerClause[] funArgs = getCallExpectations(memFun, edit).toArray(new IASTInitializerClause[] {});
       return nodeFactory.newFunctionCallExpression(ctorCall, funArgs);
    }
 
-   private static List<IASTInitializerClause> getCallExpectations(TestDoubleMemFun memFun, LinkedEditModeStrategy edit) {
-      List<IASTInitializerClause> clauses = list();
+   private static List<IASTInitializerClause> getCallExpectations(final TestDoubleMemFun memFun, final LinkedEditModeStrategy edit) {
+      final List<IASTInitializerClause> clauses = list();
       clauses.add(createSignatureLiteral(memFun.getFunctionSignature()));
       clauses.addAll(memFun.createDefaultArguments(CppStandard.Cpp03Std, edit));
       return clauses;
    }
 
-   private static ICPPASTLiteralExpression createSignatureLiteral(String signature) {
+   private static ICPPASTLiteralExpression createSignatureLiteral(final String signature) {
       return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(signature));
    }
 }

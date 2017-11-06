@@ -19,15 +19,11 @@ import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 abstract class RegistrationFinder {
 
    public Optional<ExistingMemFunCallRegistration> findRegistration(final IASTName callsVectorUsage) {
-      if (!AstUtil.isPushBack(callsVectorUsage) || !isArrayAccess(callsVectorUsage)) {
-         return Optional.empty();
-      }
+      if (!AstUtil.isPushBack(callsVectorUsage) || !isArrayAccess(callsVectorUsage)) { return Optional.empty(); }
 
       final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(callsVectorUsage, ICPPASTFunctionCallExpression.class);
 
-      if (funCall == null || funCall.getArguments().length != 1) {
-         return Optional.empty();
-      }
+      if (funCall == null || funCall.getArguments().length != 1) { return Optional.empty(); }
 
       final IASTInitializerClause call = funCall.getArguments()[0];
       return Optional.of(collectRegistration(call));

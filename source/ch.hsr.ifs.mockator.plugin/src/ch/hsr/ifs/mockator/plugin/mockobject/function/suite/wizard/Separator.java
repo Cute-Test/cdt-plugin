@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -25,20 +25,20 @@ class Separator extends DialogField {
       this(SWT.NONE);
    }
 
-   public Separator(int style) {
+   public Separator(final int style) {
       super();
       fStyle = style;
    }
 
-   Control[] doFillIntoGrid(Composite parent, int nColumns, int height) {
+   Control[] doFillIntoGrid(final Composite parent, final int nColumns, final int height) {
       assertEnoughColumns(nColumns);
-      Control separator = getSeparator(parent);
+      final Control separator = getSeparator(parent);
       separator.setLayoutData(gridDataForSeperator(nColumns, height));
       return new Control[] { separator };
    }
 
    @Override
-   public Control[] doFillIntoGrid(Composite parent, int nColumns) {
+   public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
       return doFillIntoGrid(parent, nColumns, 4);
    }
 
@@ -47,8 +47,8 @@ class Separator extends DialogField {
       return 1;
    }
 
-   private static GridData gridDataForSeperator(int span, int height) {
-      GridData gd = new GridData();
+   private static GridData gridDataForSeperator(final int span, final int height) {
+      final GridData gd = new GridData();
       gd.horizontalAlignment = GridData.FILL;
       gd.verticalAlignment = GridData.BEGINNING;
       gd.heightHint = height;
@@ -56,7 +56,7 @@ class Separator extends DialogField {
       return gd;
    }
 
-   private Control getSeparator(Composite parent) {
+   private Control getSeparator(final Composite parent) {
       if (fSeparator == null) {
          assertCompositeNotNull(parent);
          fSeparator = new Label(parent, fStyle);

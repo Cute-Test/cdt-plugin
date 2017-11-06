@@ -10,16 +10,16 @@ class LinuxPreloadRunConfig extends AbstractPreloadRunStrategy {
    private static final String LD_PRELOAD      = "LD_PRELOAD";
    private static final String LD_LIBRARY_PATH = "LD_LIBRARY_PATH";
 
-   private void putLibInPathIfNecessary(String pathToShLib, Map<String, String> envVariables) {
-      String ldLibraryPath = envVariables.get(LD_LIBRARY_PATH);
-      String path = FileUtil.removeFilePart(pathToShLib);
+   private void putLibInPathIfNecessary(final String pathToShLib, final Map<String, String> envVariables) {
+      final String ldLibraryPath = envVariables.get(LD_LIBRARY_PATH);
+      final String path = FileUtil.removeFilePart(pathToShLib);
       envVariables.put(LD_LIBRARY_PATH, appendToList(ldLibraryPath, path));
    }
 
    @Override
-   public boolean hasPreloadConfig(String sharedLibPath, Map<String, String> envVariables) {
-      String ldPreloadLibs = envVariables.get(LD_PRELOAD);
-      String ldLibraryPath = envVariables.get(LD_LIBRARY_PATH);
+   public boolean hasPreloadConfig(final String sharedLibPath, final Map<String, String> envVariables) {
+      final String ldPreloadLibs = envVariables.get(LD_PRELOAD);
+      final String ldLibraryPath = envVariables.get(LD_LIBRARY_PATH);
 
       if (ldLibraryPath == null || ldPreloadLibs == null) return false;
 
@@ -27,19 +27,19 @@ class LinuxPreloadRunConfig extends AbstractPreloadRunStrategy {
    }
 
    @Override
-   public void addPreloadConfig(String sharedLibPath, Map<String, String> envVariables) {
+   public void addPreloadConfig(final String sharedLibPath, final Map<String, String> envVariables) {
       addLibToLdPreload(sharedLibPath, envVariables);
       putLibInPathIfNecessary(FileUtil.removeFilePart(sharedLibPath), envVariables);
    }
 
-   private void addLibToLdPreload(String sharedLibPath, Map<String, String> envVariables) {
-      String ldPreloadLibs = envVariables.get(LD_PRELOAD);
-      String updatedPreloadLibs = appendToList(ldPreloadLibs, sharedLibPath);
+   private void addLibToLdPreload(final String sharedLibPath, final Map<String, String> envVariables) {
+      final String ldPreloadLibs = envVariables.get(LD_PRELOAD);
+      final String updatedPreloadLibs = appendToList(ldPreloadLibs, sharedLibPath);
       envVariables.put(LD_PRELOAD, updatedPreloadLibs);
    }
 
    @Override
-   public void removePreloadConfig(String sharedLibPath, Map<String, String> envVariables) {
+   public void removePreloadConfig(final String sharedLibPath, final Map<String, String> envVariables) {
       removeEntryFromEnv(sharedLibPath, LD_PRELOAD, envVariables);
    }
 }

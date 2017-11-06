@@ -7,16 +7,17 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import ch.hsr.ifs.mockator.plugin.preprocessor.PreprocessorRefactoring;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
+
 public class PreprocessorRefactoringTest extends MockatorRefactoringTest {
 
-  @Override
-  protected void configureTest(Properties refactoringProperties) {
-    super.configureTest(refactoringProperties);
-    markerCount = 0;
-  }
+   @Override
+   protected void configureTest(final Properties refactoringProperties) {
+      super.configureTest(refactoringProperties);
+      markerCount = 0;
+   }
 
-  @Override
-  protected Refactoring createRefactoring() {
-    return new PreprocessorRefactoring(getActiveCElement(), selection, cproject);
-  }
+   @Override
+   protected Refactoring createRefactoring() {
+      return new PreprocessorRefactoring(getActiveCElement(), selection, cproject);
+   }
 }

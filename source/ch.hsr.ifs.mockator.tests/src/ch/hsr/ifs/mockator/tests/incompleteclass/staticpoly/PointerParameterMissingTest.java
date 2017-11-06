@@ -5,18 +5,19 @@ import org.junit.Test;
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.StaticPolymorphismChecker;
 
+
 public class PointerParameterMissingTest extends CDTTestingCodanCheckerTest {
 
-  @Override
-  protected String getProblemId() {
-    return StaticPolymorphismChecker.STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
-  }
+   @Override
+   protected String getProblemId() {
+      return StaticPolymorphismChecker.STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
+   }
 
-  @Override
-  @Test
-  public void runTest() throws Throwable {
-    int markerExpectedOnLine = 13;
-    assertProblemMarkerPositions(markerExpectedOnLine);
-    assertProblemMarkerMessages(new String[] {"Necessary member function(s) not existing in class Fake"});
-  }
+   @Override
+   @Test
+   public void runTest() throws Throwable {
+      final int markerExpectedOnLine = 13;
+      assertProblemMarkerPositions(markerExpectedOnLine);
+      assertProblemMarkerMessages(new String[] { "Necessary member function(s) not existing in class Fake" });
+   }
 }

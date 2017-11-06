@@ -5,7 +5,7 @@ import ch.hsr.ifs.mockator.plugin.testdouble.support.MemFunSignature;
 
 public class MemFunCallExpectation extends MemFunSignature {
 
-   public MemFunCallExpectation(String memFunSig) {
+   public MemFunCallExpectation(final String memFunSig) {
       super(memFunSig);
    }
 }

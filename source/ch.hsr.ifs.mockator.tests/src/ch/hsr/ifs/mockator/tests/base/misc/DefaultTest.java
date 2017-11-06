@@ -6,15 +6,16 @@ import org.junit.Test;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.Default;
 
+
 public class DefaultTest {
 
-  @Test
-  public void nullValueShouldYieldDefault() {
-    assertEquals(Integer.valueOf(42), Default.whenNull(null, 42));
-  }
+   @Test
+   public void nullValueShouldYieldDefault() {
+      assertEquals(Integer.valueOf(42), Default.whenNull(null, 42));
+   }
 
-  @Test
-  public void nonNullValueShouldYieldGivenValue() {
-    assertEquals(Integer.valueOf(3), Default.whenNull(3, 42));
-  }
+   @Test
+   public void nonNullValueShouldYieldGivenValue() {
+      assertEquals(Integer.valueOf(3), Default.whenNull(3, 42));
+   }
 }

@@ -6,7 +6,7 @@ import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 
 class ExtractInterfaceWizard extends RefactoringWizard {
 
-   public ExtractInterfaceWizard(Refactoring refactoring) {
+   public ExtractInterfaceWizard(final Refactoring refactoring) {
       super(refactoring, WIZARD_BASED_USER_INTERFACE);
       setForcePreviewReview(true);
    }

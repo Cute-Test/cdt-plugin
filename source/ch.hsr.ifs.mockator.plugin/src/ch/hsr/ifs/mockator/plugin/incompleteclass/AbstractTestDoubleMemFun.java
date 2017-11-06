@@ -13,17 +13,17 @@ public abstract class AbstractTestDoubleMemFun implements TestDoubleMemFun, Comp
    }
 
    @Override
-   public boolean equals(Object obj) {
+   public boolean equals(final Object obj) {
       if (obj == this) return true;
 
       if (!(obj instanceof TestDoubleMemFun)) return false;
 
-      TestDoubleMemFun rhs = (TestDoubleMemFun) obj;
+      final TestDoubleMemFun rhs = (TestDoubleMemFun) obj;
       return rhs.getFunctionSignature().equals(getFunctionSignature());
    }
 
    @Override
-   public int compareTo(TestDoubleMemFun other) {
+   public int compareTo(final TestDoubleMemFun other) {
       return getFunctionSignature().compareTo(other.getFunctionSignature());
    }
 }

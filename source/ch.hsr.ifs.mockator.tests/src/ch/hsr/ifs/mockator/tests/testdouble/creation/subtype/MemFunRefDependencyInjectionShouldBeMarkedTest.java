@@ -5,17 +5,18 @@ import org.junit.Test;
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype.MissingTestDoubleSubTypeChecker;
 
+
 public class MemFunRefDependencyInjectionShouldBeMarkedTest extends CDTTestingCodanCheckerTest {
 
-  @Override
-  protected String getProblemId() {
-    return MissingTestDoubleSubTypeChecker.MISSING_TEST_DOUBLE_SUBTYPE_PROBLEM_ID;
-  }
+   @Override
+   protected String getProblemId() {
+      return MissingTestDoubleSubTypeChecker.MISSING_TEST_DOUBLE_SUBTYPE_PROBLEM_ID;
+   }
 
-  @Test
-  public void testTestDoubleAlreadyProvided() throws Throwable {
-    int markerExpectedOnLine = 13;
-    assertProblemMarkerPositions(markerExpectedOnLine);
-    assertProblemMarkerMessages(new String[] {"Object seam \"foo\" cannot be resolved"});
-  }
+   @Test
+   public void testTestDoubleAlreadyProvided() throws Throwable {
+      final int markerExpectedOnLine = 13;
+      assertProblemMarkerPositions(markerExpectedOnLine);
+      assertProblemMarkerMessages(new String[] { "Object seam \"foo\" cannot be resolved" });
+   }
 }

@@ -10,7 +10,7 @@ public abstract class MemFunSignature implements Comparable<MemFunSignature> {
    private static final String REGEX_PREFIX = "^";
    private final String        funSignature;
 
-   public MemFunSignature(String funSignature) {
+   public MemFunSignature(final String funSignature) {
       this.funSignature = StringUtil.unquote(funSignature);
    }
 
@@ -29,21 +29,21 @@ public abstract class MemFunSignature implements Comparable<MemFunSignature> {
    }
 
    @Override
-   public boolean equals(Object obj) {
+   public boolean equals(final Object obj) {
       if (obj == this) return true;
 
       if (!(obj instanceof MemFunSignature)) return false;
 
-      MemFunSignature other = (MemFunSignature) obj;
+      final MemFunSignature other = (MemFunSignature) obj;
       return funSignature.equals(other.funSignature);
    }
 
    @Override
-   public int compareTo(MemFunSignature o) {
+   public int compareTo(final MemFunSignature o) {
       return funSignature.compareTo(o.funSignature);
    }
 
-   public boolean isCovered(Collection<? extends MemFunSignature> signatures) {
+   public boolean isCovered(final Collection<? extends MemFunSignature> signatures) {
       if (signatures.contains(this)) return true;
 
       // we cannot match by using regular expressions because they are
@@ -51,7 +51,7 @@ public abstract class MemFunSignature implements Comparable<MemFunSignature> {
       // everything matches as soon as the user has an expectation with a regex
       if (funSignature.startsWith(REGEX_PREFIX)) return true;
 
-      for (MemFunSignature sig : signatures) {
+      for (final MemFunSignature sig : signatures) {
          if (sig.funSignature.startsWith(REGEX_PREFIX)) return true;
       }
 

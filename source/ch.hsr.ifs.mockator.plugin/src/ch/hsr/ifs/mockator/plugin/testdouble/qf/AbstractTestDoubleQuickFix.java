@@ -28,7 +28,7 @@ public abstract class AbstractTestDoubleQuickFix extends MockatorQfWithRefactori
    }
 
    @Override
-   protected MissingMemFunCodanArguments getCodanArguments(IMarker marker) {
+   protected MissingMemFunCodanArguments getCodanArguments(final IMarker marker) {
       return new MissingMemFunCodanArguments(marker);
    }
 }

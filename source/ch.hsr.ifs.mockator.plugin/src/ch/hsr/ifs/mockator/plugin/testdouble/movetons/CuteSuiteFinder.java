@@ -50,9 +50,7 @@ class CuteSuiteFinder extends ASTVisitor {
 
    @Override
    public int visit(final IASTName name) {
-      if (!isCuiteSuiteName(name)) {
-         return PROCESS_CONTINUE;
-      }
+      if (!isCuiteSuiteName(name)) { return PROCESS_CONTINUE; }
 
       final IBinding suiteBinding = name.resolveBinding();
 
@@ -69,28 +67,20 @@ class CuteSuiteFinder extends ASTVisitor {
    private static boolean isCuiteSuiteName(final IASTName name) {
       final IASTSimpleDeclaration simpleDecl = AstUtil.getAncestorOfType(name, IASTSimpleDeclaration.class);
 
-      if (simpleDecl == null) {
-         return false;
-      }
+      if (simpleDecl == null) { return false; }
 
       final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
 
-      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
-         return false;
-      }
+      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return false; }
 
       final ICPPASTNamedTypeSpecifier namedSpec = (ICPPASTNamedTypeSpecifier) declSpecifier;
       final IASTName typeName = namedSpec.getName();
 
-      if (typeName.toString().equals(FQ_CUTE_SUITE)) {
-         return true;
-      }
+      if (typeName.toString().equals(FQ_CUTE_SUITE)) { return true; }
 
       final IBinding binding = typeName.resolveBinding();
 
-      if (!(binding instanceof ITypedef)) {
-         return false;
-      }
+      if (!(binding instanceof ITypedef)) { return false; }
 
       final ITypedef typeDef = (ITypedef) binding;
       return typeDef.getName().equals(MockatorConstants.CUTE_SUITE) && typeDef.getOwner().getName().equals(MockatorConstants.CUTE_NS);
@@ -98,22 +88,16 @@ class CuteSuiteFinder extends ASTVisitor {
 
    private boolean matchesTestFunction(final IASTName referencingName) {
       return OptHelper.returnIfPresentElse(getRegisteredFunctionName(referencingName), (registeredFunName) -> registeredFunName.equals(testFunction
-               .getDeclarator().getName().toString()), () -> false);
+            .getDeclarator().getName().toString()), () -> false);
    }
 
    private static Optional<String> getRegisteredFunctionName(final IASTName name) {
       final IASTFunctionCallExpression funcCall = AstUtil.getAncestorOfType(name, IASTFunctionCallExpression.class);
       final IASTInitializerClause[] arguments = funcCall.getArguments();
 
-      if (isFunctionPushBack(arguments)) {
-         return getFunctionName(arguments);
-      }
-      if (isSimpleMemberFunctionPushBack(arguments)) {
-         return getSimpleMemFunName(arguments);
-      }
-      if (isFunctorPushBack(arguments)) {
-         return getFunctorName(arguments);
-      }
+      if (isFunctionPushBack(arguments)) { return getFunctionName(arguments); }
+      if (isSimpleMemberFunctionPushBack(arguments)) { return getSimpleMemFunName(arguments); }
+      if (isFunctorPushBack(arguments)) { return getFunctorName(arguments); }
 
       return Optional.empty();
    }
@@ -128,18 +112,14 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    private static boolean isFunctorPushBack(final IASTInitializerClause[] arguments) {
-      if (!(arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression)) {
-         return false;
-      }
+      if (!(arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression)) { return false; }
 
       final ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
       return funcCall.getArguments().length == 0;
    }
 
    private static Optional<String> getSimpleMemFunName(final IASTInitializerClause[] arguments) {
-      if (!isSimpleMemberFunctionPushBack(arguments)) {
-         return Optional.empty();
-      }
+      if (!isSimpleMemberFunctionPushBack(arguments)) { return Optional.empty(); }
 
       final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) arguments[0];
 
@@ -156,13 +136,11 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    private static boolean hasFunCallTwoArgsWithUnaryExpr(final ICPPASTFunctionCallExpression funCall) {
-      return (funCall.getArguments().length == 2 && funCall.getArguments()[0] instanceof IASTUnaryExpression);
+      return funCall.getArguments().length == 2 && funCall.getArguments()[0] instanceof IASTUnaryExpression;
    }
 
    private static Optional<String> getFunctionName(final IASTInitializerClause[] arguments) {
-      if (!isFunctionPushBack(arguments)) {
-         return Optional.empty();
-      }
+      if (!isFunctionPushBack(arguments)) { return Optional.empty(); }
 
       final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) arguments[0];
 
@@ -170,7 +148,7 @@ class CuteSuiteFinder extends ASTVisitor {
          final IASTUnaryExpression unExp = (IASTUnaryExpression) funCall.getArguments()[0];
 
          if (unExp.getOperand() instanceof IASTUnaryExpression && ((IASTUnaryExpression) unExp.getOperand())
-                  .getOperand() instanceof IASTIdExpression) {
+               .getOperand() instanceof IASTIdExpression) {
             final IASTIdExpression idExp = (IASTIdExpression) ((IASTUnaryExpression) unExp.getOperand()).getOperand();
             return Optional.of(idExp.getName().toString());
          }
@@ -197,9 +175,7 @@ class CuteSuiteFinder extends ASTVisitor {
 
    private static boolean isSameFunctionName(final ICPPASTFunctionCallExpression funCall, final String funName) {
       final IASTExpression funNameExpr = funCall.getFunctionNameExpression();
-      if (!(funNameExpr instanceof IASTIdExpression)) {
-         return false;
-      }
+      if (!(funNameExpr instanceof IASTIdExpression)) { return false; }
       return ((IASTIdExpression) funNameExpr).getName().toString().startsWith(funName);
    }
 }

@@ -20,7 +20,7 @@ public class MacroFinderVisitor extends ASTVisitor {
       shouldVisitNames = true;
    }
 
-   public MacroFinderVisitor(String macroName) {
+   public MacroFinderVisitor(final String macroName) {
       this.macroName = macroName;
       macroExpansions = list();
    }
@@ -30,8 +30,8 @@ public class MacroFinderVisitor extends ASTVisitor {
    }
 
    @Override
-   public int visit(IASTName name) {
-      for (IASTMacroExpansionLocation loc : getMacroExpansionLocations(name)) {
+   public int visit(final IASTName name) {
+      for (final IASTMacroExpansionLocation loc : getMacroExpansionLocations(name)) {
          if (getMacroName(loc).equals(macroName)) {
             macroExpansions.add(loc);
             return PROCESS_SKIP;
@@ -40,10 +40,10 @@ public class MacroFinderVisitor extends ASTVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private static Collection<IASTMacroExpansionLocation> getMacroExpansionLocations(IASTName name) {
-      List<IASTMacroExpansionLocation> macroExpansions = list();
+   private static Collection<IASTMacroExpansionLocation> getMacroExpansionLocations(final IASTName name) {
+      final List<IASTMacroExpansionLocation> macroExpansions = list();
 
-      for (IASTNodeLocation loc : name.getNodeLocations()) {
+      for (final IASTNodeLocation loc : name.getNodeLocations()) {
          if (!(loc instanceof IASTMacroExpansionLocation)) {
             continue;
          }
@@ -53,7 +53,7 @@ public class MacroFinderVisitor extends ASTVisitor {
       return macroExpansions;
    }
 
-   private static String getMacroName(IASTMacroExpansionLocation expansionLoc) {
+   private static String getMacroName(final IASTMacroExpansionLocation expansionLoc) {
       return expansionLoc.getExpansion().getMacroDefinition().getName().toString();
    }
 }

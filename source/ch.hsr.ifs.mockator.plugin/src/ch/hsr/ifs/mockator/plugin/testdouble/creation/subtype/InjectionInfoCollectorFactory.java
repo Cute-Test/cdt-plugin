@@ -15,17 +15,17 @@ class InjectionInfoCollectorFactory {
    private final IIndex    index;
    private final ICProject cProject;
 
-   public InjectionInfoCollectorFactory(IIndex index, ICProject cProject) {
+   public InjectionInfoCollectorFactory(final IIndex index, final ICProject cProject) {
       this.index = index;
       this.cProject = cProject;
    }
 
-   public DepInjectInfoCollector getInfoCollectorStrategy(IASTName name) {
+   public DepInjectInfoCollector getInfoCollectorStrategy(final IASTName name) {
       if (isPartOfCtorCall(name)) return new CtorInjectionInfoCollector(index, cProject);
       else return new FunCallInjectionInfoCollector(index, cProject);
    }
 
-   private static boolean isPartOfCtorCall(IASTNode node) {
+   private static boolean isPartOfCtorCall(final IASTNode node) {
       return AstUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || AstUtil.getAncestorOfType(node,
             ICPPASTInitializerList.class) != null;
    }

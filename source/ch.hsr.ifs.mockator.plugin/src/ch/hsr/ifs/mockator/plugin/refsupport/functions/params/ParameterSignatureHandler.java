@@ -78,14 +78,14 @@ public class ParameterSignatureHandler {
    private static final String                  COMMA_SPACE = ", ";
    private final IASTStandardFunctionDeclarator funDecl;
 
-   public ParameterSignatureHandler(IASTStandardFunctionDeclarator funDecl) {
+   public ParameterSignatureHandler(final IASTStandardFunctionDeclarator funDecl) {
       this.funDecl = funDecl;
    }
 
    public Collection<String> getParameterSignatures() {
-      IASTParameterDeclaration[] parameters = funDecl.getParameters();
-      boolean takesVarArgs = funDecl.takesVarArgs();
-      String[] parameterStrings = new String[parameters.length + (takesVarArgs ? 1 : 0)];
+      final IASTParameterDeclaration[] parameters = funDecl.getParameters();
+      final boolean takesVarArgs = funDecl.takesVarArgs();
+      final String[] parameterStrings = new String[parameters.length + (takesVarArgs ? 1 : 0)];
       int i;
       for (i = 0; i < parameters.length; ++i) {
          parameterStrings[i] = getParameterSignatureString(parameters[i]);
@@ -96,16 +96,16 @@ public class ParameterSignatureHandler {
       return list(parameterStrings);
    }
 
-   private static String getExpressionString(IASTExpression expression) {
-      StringBuilder buf = new StringBuilder();
+   private static String getExpressionString(final IASTExpression expression) {
+      final StringBuilder buf = new StringBuilder();
       return appendExpressionString(buf, expression).toString();
    }
 
-   private static String getParameterSignatureString(IASTParameterDeclaration parameterDeclaration) {
+   private static String getParameterSignatureString(final IASTParameterDeclaration parameterDeclaration) {
       return trimRight(appendParameterDeclarationString(new StringBuilder(), parameterDeclaration)).toString();
    }
 
-   private static StringBuilder appendSignatureString(StringBuilder buffer, IASTDeclarator declarator) {
+   private static StringBuilder appendSignatureString(final StringBuilder buffer, IASTDeclarator declarator) {
       IASTNode node = declarator.getParent();
       while (node instanceof IASTDeclarator) {
          declarator = (IASTDeclarator) node;
@@ -128,8 +128,8 @@ public class ParameterSignatureHandler {
       return appendDeclarationString(buffer, declSpec, declarator, null);
    }
 
-   private static StringBuilder appendDeclarationString(StringBuilder buffer, IASTDeclSpecifier declSpecifier, IASTDeclarator declarator,
-         IASTFunctionDeclarator returnTypeOf) {
+   private static StringBuilder appendDeclarationString(final StringBuilder buffer, final IASTDeclSpecifier declSpecifier,
+         final IASTDeclarator declarator, final IASTFunctionDeclarator returnTypeOf) {
       if (declSpecifier != null) {
          appendDeclSpecifierString(buffer, declSpecifier);
          trimRight(buffer);
@@ -138,8 +138,8 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendDeclaratorString(StringBuilder buffer, IASTDeclarator declarator, boolean protectPointers,
-         IASTFunctionDeclarator returnTypeOf) {
+   private static StringBuilder appendDeclaratorString(final StringBuilder buffer, final IASTDeclarator declarator, boolean protectPointers,
+         final IASTFunctionDeclarator returnTypeOf) {
       if (declarator == null) return buffer;
       final IASTPointerOperator[] ptrs = declarator.getPointerOperators();
       final boolean useParenthesis = protectPointers && ptrs.length > 0;
@@ -206,7 +206,7 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendInitializerString(StringBuilder buffer, IASTInitializer initializer) {
+   private static StringBuilder appendInitializerString(final StringBuilder buffer, final IASTInitializer initializer) {
       if (initializer instanceof IASTEqualsInitializer) {
          final IASTEqualsInitializer initializerExpression = (IASTEqualsInitializer) initializer;
          buffer.append(Keywords.cpASSIGN);
@@ -240,13 +240,13 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendInitClauseString(StringBuilder buffer, IASTInitializerClause initializerClause) {
+   private static StringBuilder appendInitClauseString(final StringBuilder buffer, final IASTInitializerClause initializerClause) {
       if (initializerClause instanceof IASTExpression) return appendExpressionString(buffer, (IASTExpression) initializerClause);
       if (initializerClause instanceof IASTInitializer) return appendInitializerString(buffer, (IASTInitializer) initializerClause);
       return buffer;
    }
 
-   private static StringBuilder appendTypeIdString(StringBuilder buffer, IASTTypeId typeId) {
+   private static StringBuilder appendTypeIdString(final StringBuilder buffer, final IASTTypeId typeId) {
       appendDeclSpecifierString(buffer, typeId.getDeclSpecifier());
       appendDeclaratorString(buffer, typeId.getAbstractDeclarator(), false, null);
       if (typeId instanceof ICPPASTTypeId && ((ICPPASTTypeId) typeId).isPackExpansion()) {
@@ -255,7 +255,7 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder trimRight(StringBuilder buffer) {
+   private static StringBuilder trimRight(final StringBuilder buffer) {
       int length = buffer.length();
       while (length > 0 && buffer.charAt(length - 1) == ' ') {
          --length;
@@ -264,7 +264,7 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendArrayQualifiersString(StringBuilder buffer, IASTArrayDeclarator declarator) {
+   private static StringBuilder appendArrayQualifiersString(final StringBuilder buffer, final IASTArrayDeclarator declarator) {
       final IASTArrayModifier[] modifiers = declarator.getArrayModifiers();
       final int count = modifiers.length;
       for (int i = 0; i < count; i++) {
@@ -273,7 +273,7 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendPointerOperatorsString(StringBuilder buffer, IASTPointerOperator[] pointerOperators) {
+   private static StringBuilder appendPointerOperatorsString(final StringBuilder buffer, final IASTPointerOperator[] pointerOperators) {
       for (final IASTPointerOperator pointerOperator : pointerOperators) {
          if (pointerOperator instanceof IASTPointer) {
             final IASTPointer pointer = (IASTPointer) pointerOperator;
@@ -298,7 +298,7 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendParameterSignatureString(StringBuilder buffer, IASTFunctionDeclarator functionDeclarator) {
+   private static StringBuilder appendParameterSignatureString(final StringBuilder buffer, final IASTFunctionDeclarator functionDeclarator) {
       if (functionDeclarator instanceof IASTStandardFunctionDeclarator) {
          final IASTStandardFunctionDeclarator standardFunctionDecl = (IASTStandardFunctionDeclarator) functionDeclarator;
          final IASTParameterDeclaration[] parameters = standardFunctionDecl.getParameters();
@@ -339,7 +339,7 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendParameterDeclarationString(StringBuilder buffer, IASTParameterDeclaration parameter) {
+   private static StringBuilder appendParameterDeclarationString(final StringBuilder buffer, final IASTParameterDeclaration parameter) {
       final IASTDeclSpecifier declSpecifier = parameter.getDeclSpecifier();
       if (declSpecifier != null) {
          appendDeclSpecifierString(buffer, declSpecifier);
@@ -353,7 +353,7 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   public static StringBuilder appendDeclSpecifierString(StringBuilder builder, IASTDeclSpecifier declSpecifier) {
+   public static StringBuilder appendDeclSpecifierString(final StringBuilder builder, final IASTDeclSpecifier declSpecifier) {
       if (declSpecifier.isConst()) {
          builder.append(Keywords.CONST).append(' ');
       }
@@ -466,11 +466,11 @@ public class ParameterSignatureHandler {
       return builder;
    }
 
-   private static StringBuilder appendQualifiedNameString(StringBuilder buffer, IASTName name) {
+   private static StringBuilder appendQualifiedNameString(final StringBuilder buffer, final IASTName name) {
       return appendNameString(buffer, name, true);
    }
 
-   private static StringBuilder appendNameString(StringBuilder buffer, IASTName name, boolean qualified) {
+   private static StringBuilder appendNameString(final StringBuilder buffer, final IASTName name, final boolean qualified) {
       if (name instanceof ICPPASTQualifiedName) {
          final ICPPASTQualifiedName qualifiedName = (ICPPASTQualifiedName) name;
          if (qualified) {
@@ -513,7 +513,7 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendExpressionString(StringBuilder buffer, IASTExpression expression) {
+   private static StringBuilder appendExpressionString(final StringBuilder buffer, final IASTExpression expression) {
       if (expression instanceof IASTIdExpression) {
          final IASTIdExpression idExpression = (IASTIdExpression) expression;
          return appendQualifiedNameString(buffer, idExpression.getName());
@@ -557,15 +557,15 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendArraySubscriptExpression(StringBuilder buffer, IASTArraySubscriptExpression expression) {
+   private static StringBuilder appendArraySubscriptExpression(final StringBuilder buffer, final IASTArraySubscriptExpression expression) {
       appendExpressionString(buffer, expression.getArrayExpression());
       buffer.append(Keywords.cpLBRACKET);
       appendInitClauseString(buffer, expression.getArgument());
       return buffer.append(Keywords.cpRBRACKET);
    }
 
-   private static StringBuilder appendCastExpression(StringBuilder buffer, IASTCastExpression expression) {
-      if ((expression.getOperator() == IASTCastExpression.op_cast)) {
+   private static StringBuilder appendCastExpression(final StringBuilder buffer, final IASTCastExpression expression) {
+      if (expression.getOperator() == IASTCastExpression.op_cast) {
          buffer.append(Keywords.cpLPAREN);
          appendTypeIdString(buffer, expression.getTypeId());
          buffer.append(Keywords.cpRPAREN);
@@ -582,46 +582,46 @@ public class ParameterSignatureHandler {
       return buffer.append(Keywords.cpRPAREN);
    }
 
-   private static StringBuilder appendFieldReference(StringBuilder buffer, IASTFieldReference expression) {
+   private static StringBuilder appendFieldReference(final StringBuilder buffer, final IASTFieldReference expression) {
       appendExpressionString(buffer, expression.getFieldOwner());
       buffer.append(expression.isPointerDereference() ? Keywords.cpARROW : Keywords.cpDOT);
 
       return appendNameString(buffer, expression.getFieldName(), true);
    }
 
-   private static StringBuilder appendFunctionCallExpression(StringBuilder buffer, IASTFunctionCallExpression expression) {
+   private static StringBuilder appendFunctionCallExpression(final StringBuilder buffer, final IASTFunctionCallExpression expression) {
       appendExpressionString(buffer, expression.getFunctionNameExpression());
       buffer.append(Keywords.cpLPAREN);
-      IASTInitializerClause[] clauses = expression.getArguments();
+      final IASTInitializerClause[] clauses = expression.getArguments();
       for (int i = 0; i < clauses.length; i++) {
          if (i > 0) {
             buffer.append(COMMA_SPACE);
          }
-         appendInitClauseString(buffer, (clauses[i]));
+         appendInitClauseString(buffer, clauses[i]);
       }
       return buffer.append(Keywords.cpRPAREN);
    }
 
-   private static StringBuilder appendTypeIdInitializerExpression(StringBuilder buffer, ICASTTypeIdInitializerExpression expression) {
+   private static StringBuilder appendTypeIdInitializerExpression(final StringBuilder buffer, final ICASTTypeIdInitializerExpression expression) {
       buffer.append(Keywords.cpLPAREN);
       appendTypeIdString(buffer, expression.getTypeId());
       buffer.append(Keywords.cpRPAREN);
       return appendInitializerString(buffer, expression.getInitializer());
    }
 
-   private static StringBuilder appendDeleteExpression(StringBuilder buffer, ICPPASTDeleteExpression expression) {
+   private static StringBuilder appendDeleteExpression(final StringBuilder buffer, final ICPPASTDeleteExpression expression) {
       buffer.append(Keywords.DELETE);
       buffer.append(SPACE);
       return appendExpressionString(buffer, expression.getOperand());
    }
 
-   private static StringBuilder appendCompoundStatementExpression(StringBuilder buffer) {
+   private static StringBuilder appendCompoundStatementExpression(final StringBuilder buffer) {
       buffer.append(Keywords.cpLPAREN).append(Keywords.cpLBRACE);
       buffer.append(Keywords.cpELLIPSIS);
       return buffer.append(Keywords.cpRBRACE).append(Keywords.cpRPAREN);
    }
 
-   private static StringBuilder appendTypeIdExpression(StringBuilder buffer, IASTTypeIdExpression expression) {
+   private static StringBuilder appendTypeIdExpression(final StringBuilder buffer, final IASTTypeIdExpression expression) {
       buffer.append(getTypeIdExpressionOperator(expression));
       buffer.append(Keywords.cpLPAREN);
       appendTypeIdString(buffer, expression.getTypeId());
@@ -629,8 +629,8 @@ public class ParameterSignatureHandler {
       return buffer.append(Keywords.cpRPAREN);
    }
 
-   private static StringBuilder appendExpressionList(StringBuilder buffer, IASTExpressionList expression) {
-      IASTExpression[] exps = expression.getExpressions();
+   private static StringBuilder appendExpressionList(final StringBuilder buffer, final IASTExpressionList expression) {
+      final IASTExpression[] exps = expression.getExpressions();
       if (exps != null) {
          for (int i = 0; i < exps.length; i++) {
             if (i > 0) {
@@ -642,11 +642,11 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static StringBuilder appendLiteralExpression(StringBuilder buffer, IASTLiteralExpression expression) {
+   private static StringBuilder appendLiteralExpression(final StringBuilder buffer, final IASTLiteralExpression expression) {
       return buffer.append(expression.toString());
    }
 
-   private static StringBuilder appendConditionalExpression(StringBuilder buffer, IASTConditionalExpression expression) {
+   private static StringBuilder appendConditionalExpression(final StringBuilder buffer, final IASTConditionalExpression expression) {
       appendExpressionString(buffer, expression.getLogicalConditionExpression());
       buffer.append(SPACE);
       buffer.append(Keywords.cpQUESTION);
@@ -658,7 +658,7 @@ public class ParameterSignatureHandler {
       return appendExpressionString(buffer, expression.getNegativeResultExpression());
    }
 
-   private static StringBuilder appendNewExpression(StringBuilder buffer, ICPPASTNewExpression expression) {
+   private static StringBuilder appendNewExpression(final StringBuilder buffer, final ICPPASTNewExpression expression) {
       buffer.append(Keywords.NEW);
       buffer.append(SPACE);
       final IASTInitializerClause[] args = expression.getPlacementArguments();
@@ -676,7 +676,7 @@ public class ParameterSignatureHandler {
       return appendInitializerString(buffer, expression.getInitializer());
    }
 
-   private static StringBuilder appendBinaryExpression(StringBuilder buffer, IASTBinaryExpression expression) {
+   private static StringBuilder appendBinaryExpression(final StringBuilder buffer, final IASTBinaryExpression expression) {
       appendExpressionString(buffer, expression.getOperand1());
       buffer.append(SPACE);
       buffer.append(getBinaryOperatorString(expression));
@@ -684,7 +684,7 @@ public class ParameterSignatureHandler {
       return appendExpressionString(buffer, expression.getOperand2());
    }
 
-   private static StringBuilder appendUnaryExpression(StringBuilder buffer, IASTUnaryExpression expression) {
+   private static StringBuilder appendUnaryExpression(final StringBuilder buffer, final IASTUnaryExpression expression) {
       boolean postOperator = false;
       boolean primaryBracketed = false;
 
@@ -729,8 +729,8 @@ public class ParameterSignatureHandler {
       return buffer;
    }
 
-   private static String getCastOperatorString(IASTCastExpression expression) {
-      int op = expression.getOperator();
+   private static String getCastOperatorString(final IASTCastExpression expression) {
+      final int op = expression.getOperator();
       switch (op) {
       case ICPPASTCastExpression.op_const_cast:
          return Keywords.CONST_CAST;
@@ -744,8 +744,8 @@ public class ParameterSignatureHandler {
       return "";
    }
 
-   private static char[] getUnaryOperatorString(IASTUnaryExpression ue) {
-      int op = ue.getOperator();
+   private static char[] getUnaryOperatorString(final IASTUnaryExpression ue) {
+      final int op = ue.getOperator();
       switch (op) {
       case IASTUnaryExpression.op_throw:
          return Keywords.cTHROW;
@@ -780,7 +780,7 @@ public class ParameterSignatureHandler {
       return CharArrayUtils.EMPTY;
    }
 
-   private static char[] getBinaryOperatorString(IASTBinaryExpression be) {
+   private static char[] getBinaryOperatorString(final IASTBinaryExpression be) {
       switch (be.getOperator()) {
       case IASTBinaryExpression.op_multiply:
          return Keywords.cpSTAR;
@@ -853,7 +853,7 @@ public class ParameterSignatureHandler {
       return CharArrayUtils.EMPTY;
    }
 
-   private static String getTypeIdExpressionOperator(IASTTypeIdExpression expression) {
+   private static String getTypeIdExpressionOperator(final IASTTypeIdExpression expression) {
       switch (expression.getOperator()) {
       case IASTTypeIdExpression.op_alignof:
          return Keywords.ALIGNOF;
@@ -867,7 +867,7 @@ public class ParameterSignatureHandler {
       return "";
    }
 
-   private static StringBuilder appendPackExpansionExpression(StringBuilder buffer, ICPPASTPackExpansionExpression expression) {
+   private static StringBuilder appendPackExpansionExpression(final StringBuilder buffer, final ICPPASTPackExpansionExpression expression) {
       appendExpressionString(buffer, expression.getPattern());
       return buffer.append(Keywords.cpELLIPSIS);
    }

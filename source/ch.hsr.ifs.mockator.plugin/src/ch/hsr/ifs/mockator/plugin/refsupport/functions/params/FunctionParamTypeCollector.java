@@ -15,21 +15,21 @@ public class FunctionParamTypeCollector {
 
    private final ICPPASTFunctionDeclarator function;
 
-   public FunctionParamTypeCollector(ICPPASTFunctionDeclarator function) {
+   public FunctionParamTypeCollector(final ICPPASTFunctionDeclarator function) {
       this.function = function;
    }
 
    public List<IType> getParameterTypes() {
-      List<IType> paramTypes = list();
+      final List<IType> paramTypes = list();
 
-      for (ICPPASTParameterDeclaration param : function.getParameters()) {
+      for (final ICPPASTParameterDeclaration param : function.getParameters()) {
          paramTypes.add(getTypeOfParam(param));
       }
 
       return paramTypes;
    }
 
-   private static IType getTypeOfParam(ICPPASTParameterDeclaration param) {
+   private static IType getTypeOfParam(final ICPPASTParameterDeclaration param) {
       return TypeCreator.byDeclarator(param.getDeclarator());
    }
 }

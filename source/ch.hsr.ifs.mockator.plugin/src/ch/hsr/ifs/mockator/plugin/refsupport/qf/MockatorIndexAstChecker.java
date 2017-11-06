@@ -15,7 +15,7 @@ import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 public abstract class MockatorIndexAstChecker extends AbstractIndexAstChecker {
 
    @Override
-   public void processAst(IASTTranslationUnit ast) {
+   public void processAst(final IASTTranslationUnit ast) {
       ast.accept(getAstVisitor());
    }
 
@@ -25,7 +25,7 @@ public abstract class MockatorIndexAstChecker extends AbstractIndexAstChecker {
       try {
          return getModelCache().getIndex();
       }
-      catch (CoreException e) {
+      catch (final CoreException e) {
          throw new MockatorException(e);
       }
    }
@@ -34,7 +34,7 @@ public abstract class MockatorIndexAstChecker extends AbstractIndexAstChecker {
       try {
          return getModelCache().getAST();
       }
-      catch (CoreException e) {
+      catch (final CoreException e) {
          throw new MockatorException(e);
       }
    }

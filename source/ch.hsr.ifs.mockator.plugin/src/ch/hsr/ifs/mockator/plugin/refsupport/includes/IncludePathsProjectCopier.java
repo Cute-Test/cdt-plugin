@@ -19,27 +19,27 @@ public class IncludePathsProjectCopier {
 
    private final ICProject sourceProject;
 
-   public IncludePathsProjectCopier(ICProject sourceProject) {
+   public IncludePathsProjectCopier(final ICProject sourceProject) {
       this.sourceProject = sourceProject;
    }
 
-   public void addIncludePaths(IProject targetProject) {
+   public void addIncludePaths(final IProject targetProject) {
       addProjectIncludePaths(targetProject);
       addSourcePathsAsIncludes(targetProject);
    }
 
-   private void addProjectIncludePaths(IProject targetProject) {
-      IncludePathHandler includePathHandler = new IncludePathHandler(targetProject);
+   private void addProjectIncludePaths(final IProject targetProject) {
+      final IncludePathHandler includePathHandler = new IncludePathHandler(targetProject);
 
-      for (String include : getSourceProjectIncludes()) {
-         IFolder pathToAdd = getFolder(include);
+      for (final String include : getSourceProjectIncludes()) {
+         final IFolder pathToAdd = getFolder(include);
          includePathHandler.addInclude(pathToAdd);
       }
 
       includePathHandler.addInclude(sourceProject.getProject());
    }
 
-   private static IFolder getFolder(String include) {
+   private static IFolder getFolder(final String include) {
       return CPPResourceHelper.getWorkspaceRoot().getFolder(new Path(include));
    }
 
@@ -47,18 +47,18 @@ public class IncludePathsProjectCopier {
       return new IncludePathHandler(sourceProject.getProject()).getAllIncludes();
    }
 
-   private void addSourcePathsAsIncludes(IProject targetProject) {
-      IncludePathHandler includePathHandler = new IncludePathHandler(targetProject);
+   private void addSourcePathsAsIncludes(final IProject targetProject) {
+      final IncludePathHandler includePathHandler = new IncludePathHandler(targetProject);
 
       try {
-         for (ISourceRoot sr : sourceProject.getSourceRoots()) {
+         for (final ISourceRoot sr : sourceProject.getSourceRoots()) {
             if (sr.getPath().segmentCount() > 1) {
-               IFolder include = CPPResourceHelper.getWorkspaceRoot().getFolder(sr.getPath());
+               final IFolder include = CPPResourceHelper.getWorkspaceRoot().getFolder(sr.getPath());
                includePathHandler.addInclude(include);
             }
          }
       }
-      catch (CModelException e) {
+      catch (final CModelException e) {
          throw new MockatorException(e);
       }
    }

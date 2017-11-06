@@ -9,7 +9,7 @@ class UniqueProjectNameCreator {
 
    private final String projectName;
 
-   public UniqueProjectNameCreator(String projectName) {
+   public UniqueProjectNameCreator(final String projectName) {
       this.projectName = projectName;
    }
 
@@ -23,7 +23,7 @@ class UniqueProjectNameCreator {
       return newProjectName;
    }
 
-   private static IProject getProject(String projectName) {
+   private static IProject getProject(final String projectName) {
       return CPPResourceHelper.getWorkspaceRoot().getProject(projectName);
    }
 }

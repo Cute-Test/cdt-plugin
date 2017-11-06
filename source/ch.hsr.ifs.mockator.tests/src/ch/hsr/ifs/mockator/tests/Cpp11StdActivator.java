@@ -14,47 +14,49 @@ import org.eclipse.core.resources.IProject;
 
 
 public class Cpp11StdActivator {
-  private final IProject project;
 
-  public Cpp11StdActivator(IProject project) {
-    this.project = project;
-  }
+   private final IProject project;
 
-  public void activateCpp11Support() {
-    setMacros(project, array("-std=c++0x"));
-  }
+   public Cpp11StdActivator(final IProject project) {
+      this.project = project;
+   }
 
-  private static void setMacros(IProject project, String[] macros) {
-    setOptionInAllConfigs(project, IOption.PREPROCESSOR_SYMBOLS, macros);
-    ManagedBuildManager.saveBuildInfo(project, true);
-  }
+   public void activateCpp11Support() {
+      setMacros(project, array("-std=c++0x"));
+   }
 
-  private static void setOptionInAllConfigs(IProject project, int optionType, String[] newValues) {
-    IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-    IConfiguration[] configs = info.getManagedProject().getConfigurations();
+   private static void setMacros(final IProject project, final String[] macros) {
+      setOptionInAllConfigs(project, IOption.PREPROCESSOR_SYMBOLS, macros);
+      ManagedBuildManager.saveBuildInfo(project, true);
+   }
 
-    try {
-      for (IConfiguration conf : configs) {
-        IToolChain toolChain = conf.getToolChain();
-        setOptionInConfig(conf, toolChain.getOptions(), toolChain, optionType, newValues);
-        ITool[] tools = conf.getTools();
+   private static void setOptionInAllConfigs(final IProject project, final int optionType, final String[] newValues) {
+      final IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+      final IConfiguration[] configs = info.getManagedProject().getConfigurations();
 
-        for (ITool tool : tools) {
-          if (tool.getName().equals("GCC C++ Compiler")) {
-            setOptionInConfig(conf, tool.getOptions(), tool, optionType, newValues);
-          }
-        }
+      try {
+         for (final IConfiguration conf : configs) {
+            final IToolChain toolChain = conf.getToolChain();
+            setOptionInConfig(conf, toolChain.getOptions(), toolChain, optionType, newValues);
+            final ITool[] tools = conf.getTools();
+
+            for (final ITool tool : tools) {
+               if (tool.getName().equals("GCC C++ Compiler")) {
+                  setOptionInConfig(conf, tool.getOptions(), tool, optionType, newValues);
+               }
+            }
+         }
       }
-    } catch (BuildException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private static void setOptionInConfig(IConfiguration config, IOption[] options,
-      IHoldsOptions optionHolder, int optionType, String[] newValues) throws BuildException {
-    for (IOption each : options)
-      if (each.getValueType() == optionType) {
-        ManagedBuildManager.setOption(config, optionHolder, each, newValues);
+      catch (final BuildException e) {
+         throw new RuntimeException(e);
       }
-  }
+   }
+
+   private static void setOptionInConfig(final IConfiguration config, final IOption[] options, final IHoldsOptions optionHolder, final int optionType,
+         final String[] newValues) throws BuildException {
+      for (final IOption each : options)
+         if (each.getValueType() == optionType) {
+            ManagedBuildManager.setOption(config, optionHolder, each, newValues);
+         }
+   }
 }

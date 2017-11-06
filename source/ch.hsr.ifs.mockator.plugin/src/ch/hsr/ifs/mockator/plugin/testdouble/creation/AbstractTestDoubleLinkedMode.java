@@ -24,7 +24,7 @@ public abstract class AbstractTestDoubleLinkedMode implements LinkedModeInfoCrea
 
    static {
       TEST_DOUBLE_PROPOSALS = new Proposal[] { new Proposal("class", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CLASS), 0), new Proposal(
-               "struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0) };
+            "struct", CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT), 0) };
    }
 
    public AbstractTestDoubleLinkedMode(final ChangeEdit edit, final IDocument document, final String newClassName) {
@@ -43,9 +43,11 @@ public abstract class AbstractTestDoubleLinkedMode implements LinkedModeInfoCrea
                   lm.addPosition(offset, length);
                   lm.addProposal(offset, TEST_DOUBLE_PROPOSALS);
                });
-            } catch (final BadLocationException ignored) {}
+            }
+            catch (final BadLocationException ignored) {}
          });
-      } catch (final BadLocationException ignored) {}
+      }
+      catch (final BadLocationException ignored) {}
       return lm;
    }
 
@@ -60,9 +62,7 @@ public abstract class AbstractTestDoubleLinkedMode implements LinkedModeInfoCrea
          }
 
          for (; offset <= document.getLength(); offset++) {
-            if (!isWhitespace(offset)) {
-               return Optional.of(offset);
-            }
+            if (!isWhitespace(offset)) { return Optional.of(offset); }
          }
       }
 
@@ -89,9 +89,7 @@ public abstract class AbstractTestDoubleLinkedMode implements LinkedModeInfoCrea
       final Optional<Integer> posIndex = getBeginOfTestDouble();
       if (posIndex.isPresent()) {
          for (int i = posIndex.get(); i >= 0; i--) {
-            if (isWhitespace(i)) {
-               return Optional.of(i);
-            }
+            if (isWhitespace(i)) { return Optional.of(i); }
          }
       }
       return Optional.empty();

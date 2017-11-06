@@ -13,32 +13,34 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 
+
 public class RemoveNatureAction extends WithSelectedProjectAction {
 
-  @Override
-  public void run(final IAction action) {
-    removeNature();
-  }
-
-  private void removeNature() {
-    withProject((p) -> {
-      try {
-        MockatorNature.removeMockatorNature(p, new NullProgressMonitor());
-      } catch (final CoreException e) {
-        showException(I18N.NatureRemovalFailedTitle, I18N.NatureRemovalFailedMsg, e);
-      }
-    });
-  }
-
-  @Override
-  public Object execute(final ExecutionEvent event) throws ExecutionException {
-    final ISelection selection = HandlerUtil.getCurrentSelection(event);
-    if ((selection instanceof TreeSelection)) {
-      final TreeSelection treeSelection = (TreeSelection) selection;
-      updateProjectFromSelection(treeSelection);
+   @Override
+   public void run(final IAction action) {
       removeNature();
-    }
-    return null;
-  }
+   }
+
+   private void removeNature() {
+      withProject((p) -> {
+         try {
+            MockatorNature.removeMockatorNature(p, new NullProgressMonitor());
+         }
+         catch (final CoreException e) {
+            showException(I18N.NatureRemovalFailedTitle, I18N.NatureRemovalFailedMsg, e);
+         }
+      });
+   }
+
+   @Override
+   public Object execute(final ExecutionEvent event) throws ExecutionException {
+      final ISelection selection = HandlerUtil.getCurrentSelection(event);
+      if (selection instanceof TreeSelection) {
+         final TreeSelection treeSelection = (TreeSelection) selection;
+         updateProjectFromSelection(treeSelection);
+         removeNature();
+      }
+      return null;
+   }
 
 }

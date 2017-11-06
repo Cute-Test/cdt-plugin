@@ -17,63 +17,63 @@ public enum ToolChain {
 
    GnuMacOSX {
 
-      @Override
-      public String getSharedLibProjectType() {
-         return "cdt.managedbuild.target.macosx.so";
-      }
+   @Override
+   public String getSharedLibProjectType() {
+      return "cdt.managedbuild.target.macosx.so";
+   }
 
-      @Override
-      public ToolChainProjectVariables getCdtProjectVariables() {
-         return new GnuCdtProjectVariables();
-      }
+   @Override
+   public ToolChainProjectVariables getCdtProjectVariables() {
+      return new GnuCdtProjectVariables();
+   }
    },
    GnuLinux {
 
-      @Override
-      public String getSharedLibProjectType() {
-         return "cdt.managedbuild.target.gnu.so";
-      }
+   @Override
+   public String getSharedLibProjectType() {
+      return "cdt.managedbuild.target.gnu.so";
+   }
 
-      @Override
-      public ToolChainProjectVariables getCdtProjectVariables() {
-         return new GnuCdtProjectVariables();
-      }
+   @Override
+   public ToolChainProjectVariables getCdtProjectVariables() {
+      return new GnuCdtProjectVariables();
+   }
    },
    ClangLinux {
 
-      @Override
-      public String getSharedLibProjectType() {
-         return "cdt.managedbuild.target.clang.so";
-      }
+   @Override
+   public String getSharedLibProjectType() {
+      return "cdt.managedbuild.target.clang.so";
+   }
 
-      @Override
-      public ToolChainProjectVariables getCdtProjectVariables() {
-         return new ClangCdtProjectVariables();
-      }
+   @Override
+   public ToolChainProjectVariables getCdtProjectVariables() {
+      return new ClangCdtProjectVariables();
+   }
    },
    GnuCygWin {
 
-      @Override
-      public String getSharedLibProjectType() {
-         return "cdt.managedbuild.target.gnu.cygwin.so";
-      }
+   @Override
+   public String getSharedLibProjectType() {
+      return "cdt.managedbuild.target.gnu.cygwin.so";
+   }
 
-      @Override
-      public ToolChainProjectVariables getCdtProjectVariables() {
-         return new GnuCdtProjectVariables();
-      }
+   @Override
+   public ToolChainProjectVariables getCdtProjectVariables() {
+      return new GnuCdtProjectVariables();
+   }
    },
    GnuMinGw {
 
-      @Override
-      public String getSharedLibProjectType() {
-         return "cdt.managedbuild.target.gnu.mingw.so";
-      }
+   @Override
+   public String getSharedLibProjectType() {
+      return "cdt.managedbuild.target.gnu.mingw.so";
+   }
 
-      @Override
-      public ToolChainProjectVariables getCdtProjectVariables() {
-         return new GnuCdtProjectVariables();
-      }
+   @Override
+   public ToolChainProjectVariables getCdtProjectVariables() {
+      return new GnuCdtProjectVariables();
+   }
    };
 
    public abstract String getSharedLibProjectType();
@@ -91,9 +91,7 @@ public enum ToolChain {
          return Optional.of(GnuMacOSX);
       } else if (tcId.equals("cdt.managedbuild.toolchain.gnu.cygwin.base")) {
          return Optional.of(GnuCygWin);
-      } else if (tcId.equals("cdt.managedbuild.toolchain.gnu.mingw.base")) {
-         return Optional.of(GnuMinGw);
-      }
+      } else if (tcId.equals("cdt.managedbuild.toolchain.gnu.mingw.base")) { return Optional.of(GnuMinGw); }
 
       return Optional.empty();
    }
@@ -113,9 +111,7 @@ public enum ToolChain {
       final Collection<String> linkerToolIds = toolChain.getCdtProjectVariables().getLinkerToolIds();
 
       for (final ITool tool : config.getToolChain().getTools()) {
-         if (linkerToolIds.contains(CdtHelper.getSuperTool(tool).getId())) {
-            return true;
-         }
+         if (linkerToolIds.contains(CdtHelper.getSuperTool(tool).getId())) { return true; }
       }
 
       return false;

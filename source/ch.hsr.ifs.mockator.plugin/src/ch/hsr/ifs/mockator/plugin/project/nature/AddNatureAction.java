@@ -13,32 +13,34 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 
+
 public class AddNatureAction extends WithSelectedProjectAction {
 
-  @Override
-  public void run(final IAction action) {
-    addNature();
-  }
-
-  private void addNature() {
-    withProject((proj) -> {
-      try {
-        MockatorNature.addMockatorNature(proj, new NullProgressMonitor());
-      } catch (final CoreException e) {
-        showException(I18N.NatureAdditionFailedTitle, I18N.NatureAdditionFailedMsg, e);
-      }
-    });
-  }
-
-  @Override
-  public Object execute(final ExecutionEvent event) throws ExecutionException {
-    final ISelection selection = HandlerUtil.getCurrentSelection(event);
-    if ((selection instanceof TreeSelection)) {
-      final TreeSelection treeSelection = (TreeSelection) selection;
-      updateProjectFromSelection(treeSelection);
+   @Override
+   public void run(final IAction action) {
       addNature();
-    }
+   }
 
-    return null;
-  }
+   private void addNature() {
+      withProject((proj) -> {
+         try {
+            MockatorNature.addMockatorNature(proj, new NullProgressMonitor());
+         }
+         catch (final CoreException e) {
+            showException(I18N.NatureAdditionFailedTitle, I18N.NatureAdditionFailedMsg, e);
+         }
+      });
+   }
+
+   @Override
+   public Object execute(final ExecutionEvent event) throws ExecutionException {
+      final ISelection selection = HandlerUtil.getCurrentSelection(event);
+      if (selection instanceof TreeSelection) {
+         final TreeSelection treeSelection = (TreeSelection) selection;
+         updateProjectFromSelection(treeSelection);
+         addNature();
+      }
+
+      return null;
+   }
 }

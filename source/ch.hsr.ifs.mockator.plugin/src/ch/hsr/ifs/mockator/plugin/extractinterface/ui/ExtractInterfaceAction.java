@@ -12,21 +12,21 @@ class ExtractInterfaceAction extends RefactoringAction {
 
    private final ICProject cProject;
 
-   public ExtractInterfaceAction(String label, ICProject cProject) {
+   public ExtractInterfaceAction(final String label, final ICProject cProject) {
       super(label);
       this.cProject = cProject;
    }
 
    @Override
-   public void run(IShellProvider shellProvider, IWorkingCopy wc, ITextSelection selection) {
-      ExtractInterfaceRunner runner = createRunner(shellProvider, wc, selection);
+   public void run(final IShellProvider shellProvider, final IWorkingCopy wc, final ITextSelection selection) {
+      final ExtractInterfaceRunner runner = createRunner(shellProvider, wc, selection);
       runner.run();
    }
 
-   private ExtractInterfaceRunner createRunner(IShellProvider p, IWorkingCopy wc, ITextSelection sel) {
+   private ExtractInterfaceRunner createRunner(final IShellProvider p, final IWorkingCopy wc, final ITextSelection sel) {
       return new ExtractInterfaceRunner(sel, wc, p, cProject);
    }
 
    @Override
-   public void run(IShellProvider shellProvider, ICElement elem) {}
+   public void run(final IShellProvider shellProvider, final ICElement elem) {}
 }

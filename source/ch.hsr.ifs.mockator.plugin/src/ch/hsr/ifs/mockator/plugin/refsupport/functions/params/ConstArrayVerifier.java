@@ -10,22 +10,22 @@ class ConstArrayVerifier {
 
    private final IType type;
 
-   public ConstArrayVerifier(IType type) {
+   public ConstArrayVerifier(final IType type) {
       this.type = type;
    }
 
    public boolean isConstCharArray() {
       if (!(type instanceof IArrayType)) return false;
 
-      IType arrayType = ((IArrayType) type).getType();
+      final IType arrayType = ((IArrayType) type).getType();
 
       if (!(arrayType instanceof IQualifierType)) return false;
 
-      IQualifierType qualifierType = (IQualifierType) arrayType;
-      IType qualifiedType = qualifierType.getType();
+      final IQualifierType qualifierType = (IQualifierType) arrayType;
+      final IType qualifiedType = qualifierType.getType();
 
       if (qualifierType.isConst() && qualifiedType instanceof IBasicType) {
-         IBasicType basicType = (IBasicType) qualifiedType;
+         final IBasicType basicType = (IBasicType) qualifiedType;
          return basicType.getKind() == IBasicType.Kind.eChar;
       }
 

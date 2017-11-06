@@ -14,7 +14,7 @@ public class MockSupportAdder {
 
    private final MockSupportContext context;
 
-   public MockSupportAdder(MockSupportContext context) {
+   public MockSupportAdder(final MockSupportContext context) {
       this.context = context;
    }
 
@@ -32,7 +32,7 @@ public class MockSupportAdder {
    }
 
    private void addExpectations() {
-      ExpectationsHandler handler = new ExpectationsHandler(context);
+      final ExpectationsHandler handler = new ExpectationsHandler(context);
       handler.addExpectations();
    }
 
@@ -41,8 +41,8 @@ public class MockSupportAdder {
    }
 
    private void createMockatorInitCall() {
-      ICPPASTCompositeTypeSpecifier mockClass = context.getMockObject().getKlass();
-      IASTNode parent = new TestDoubleParentFinder(mockClass).getParentOfTestDouble();
+      final ICPPASTCompositeTypeSpecifier mockClass = context.getMockObject().getKlass();
+      final IASTNode parent = new TestDoubleParentFinder(mockClass).getParentOfTestDouble();
       new MockatorInitCallInserter(mockClass, parent).insertWith(context.getRewriter());
    }
 

@@ -18,20 +18,21 @@ import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleRe
 @SuppressWarnings("restriction")
 class TestDoubleCpp11Refactoring extends AbstractCreateTestDoubleRefactoring {
 
-   public TestDoubleCpp11Refactoring(ICElement cElement, ITextSelection selection, ICProject cProject) {
+   public TestDoubleCpp11Refactoring(final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
       super(cElement, selection, cProject);
    }
 
    @Override
-   protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
-      IASTTranslationUnit ast = getAST(tu, pm);
-      ASTRewrite rewriter = createRewriter(collector, ast);
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+         OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = createRewriter(collector, ast);
       insertBeforeCurrentStmt(createNewClassDefinition(ast), ast, rewriter);
    }
 
-   private IASTDeclarationStatement createNewClassDefinition(IASTTranslationUnit ast) {
-      String newClassName = getSelectedName(ast).get().toString();
-      ICPPASTCompositeTypeSpecifier testDouble = createNewTestDoubleClass(newClassName);
+   private IASTDeclarationStatement createNewClassDefinition(final IASTTranslationUnit ast) {
+      final String newClassName = getSelectedName(ast).get().toString();
+      final ICPPASTCompositeTypeSpecifier testDouble = createNewTestDoubleClass(newClassName);
       return nodeFactory.newDeclarationStatement(nodeFactory.newSimpleDeclaration(testDouble));
    }
 }

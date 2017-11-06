@@ -21,6 +21,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDe
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
+
 @SuppressWarnings("restriction")
 public abstract class LinkerRefactoring extends MockatorRefactoring {
 
@@ -40,7 +41,8 @@ public abstract class LinkerRefactoring extends MockatorRefactoring {
    }
 
    @Override
-   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException, OperationCanceledException {
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+         OperationCanceledException {
       OptHelper.doIfPresentT(getSelectedName(getAST(tu, pm)), (selectedName) -> createLinkerSeamSupport(collector, selectedName, pm));
       //      final Optional<IASTName> selectedName = getSelectedName(getAST(tu, pm));
       //      if (selectedName.isPresent()) {

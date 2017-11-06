@@ -14,13 +14,13 @@ public class MockatorPlugin extends AbstractUIPlugin {
    private static MockatorPlugin plugin;
 
    @Override
-   public void start(BundleContext context) throws Exception {
+   public void start(final BundleContext context) throws Exception {
       super.start(context);
       plugin = this;
    }
 
    @Override
-   public void stop(BundleContext context) throws Exception {
+   public void stop(final BundleContext context) throws Exception {
       plugin = null;
       super.stop(context);
    }
@@ -30,7 +30,7 @@ public class MockatorPlugin extends AbstractUIPlugin {
       return plugin;
    }
 
-   public static void logMsg(String msg) {
+   public static void logMsg(final String msg) {
       getDefault().getLog().log(new Status(IStatus.INFO, PLUGIN_ID, 0, msg, null));
    }
 }

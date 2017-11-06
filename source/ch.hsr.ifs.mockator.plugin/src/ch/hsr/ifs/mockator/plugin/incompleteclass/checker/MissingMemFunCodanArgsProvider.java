@@ -22,16 +22,14 @@ class MissingMemFunCodanArgsProvider {
    private final ICPPASTCompositeTypeSpecifier               klass;
 
    public MissingMemFunCodanArgsProvider(final CppStandard cppStd, final Collection<? extends MissingMemberFunction> missingMemFuns,
-         final ICPPASTCompositeTypeSpecifier klass) {
+                                         final ICPPASTCompositeTypeSpecifier klass) {
       this.cppStd = cppStd;
       this.missingMemFuns = missingMemFuns;
       this.klass = klass;
    }
 
    public Optional<MissingMemFunCodanArguments> createMemFunCodanArgs() {
-      if (missingMemFuns.isEmpty()) {
-         return Optional.empty();
-      }
+      if (missingMemFuns.isEmpty()) { return Optional.empty(); }
 
       final Collection<MissingMemberFunction> fake = collectMissingMemFuns(getFakeCtorProvider());
       final Collection<MissingMemberFunction> mock = collectMissingMemFuns(getMockCtorProvider());

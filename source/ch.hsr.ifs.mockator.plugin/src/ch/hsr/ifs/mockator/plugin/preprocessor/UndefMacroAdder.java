@@ -17,18 +17,18 @@ class UndefMacroAdder {
    private final IASTTranslationUnit ast;
    private final IASTNode            insertionPoint;
 
-   public UndefMacroAdder(IASTTranslationUnit tu, ASTRewrite rewriter, IASTNode insertionPoint) {
-      this.ast = tu;
+   public UndefMacroAdder(final IASTTranslationUnit tu, final ASTRewrite rewriter, final IASTNode insertionPoint) {
+      ast = tu;
       this.rewriter = rewriter;
       this.insertionPoint = insertionPoint;
    }
 
-   public void addUndefMacro(String funName) {
+   public void addUndefMacro(final String funName) {
       rewriter.insertBefore(ast, insertionPoint, getUndefMacro(funName), null);
    }
 
-   private static ASTLiteralNode getUndefMacro(String funName) {
-      String undef = UNDEF_DIRECTIVE + SPACE + funName + SYSTEM_NEW_LINE;
+   private static ASTLiteralNode getUndefMacro(final String funName) {
+      final String undef = UNDEF_DIRECTIVE + SPACE + funName + SYSTEM_NEW_LINE;
       return new ASTLiteralNode(undef);
    }
 }

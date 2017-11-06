@@ -16,35 +16,37 @@ import org.junit.Test;
 import ch.hsr.ifs.mockator.plugin.base.util.IOUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 
+
 public class PathProposalUtilTest {
-  private IProject project;
 
-  @Before
-  public void setUp() throws CoreException {
-    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-    project = root.getProject("Test");
-    project.create(new NullProgressMonitor());
-    project.open(new NullProgressMonitor());
-  }
+   private IProject project;
 
-  @After
-  public void tearDown() throws CoreException {
-    project.delete(true, true, new NullProgressMonitor());
-  }
+   @Before
+   public void setUp() throws CoreException {
+      final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+      project = root.getProject("Test");
+      project.create(new NullProgressMonitor());
+      project.open(new NullProgressMonitor());
+   }
 
-  @Test
-  public void fileAlreadyExistsYieldsAlternative() throws CoreException {
-    IFile file = project.getFile("test.cpp");
-    file.create(IOUtil.stringToStream("test"), true, new NullProgressMonitor());
-    PathProposalUtil util = new PathProposalUtil(project.getFullPath());
-    IPath uniquePath = util.getUniquePathForNewFile("test", ".cpp");
-    Assert.assertEquals(new Path("/Test/test1.cpp"), uniquePath);
-  }
+   @After
+   public void tearDown() throws CoreException {
+      project.delete(true, true, new NullProgressMonitor());
+   }
 
-  @Test
-  public void fileNotExistsYieldsOriginal() {
-    PathProposalUtil util = new PathProposalUtil(project.getFullPath());
-    IPath uniquePath = util.getUniquePathForNewFile("test", ".cpp");
-    Assert.assertEquals(new Path("/Test/test.cpp"), uniquePath);
-  }
+   @Test
+   public void fileAlreadyExistsYieldsAlternative() throws CoreException {
+      final IFile file = project.getFile("test.cpp");
+      file.create(IOUtil.stringToStream("test"), true, new NullProgressMonitor());
+      final PathProposalUtil util = new PathProposalUtil(project.getFullPath());
+      final IPath uniquePath = util.getUniquePathForNewFile("test", ".cpp");
+      Assert.assertEquals(new Path("/Test/test1.cpp"), uniquePath);
+   }
+
+   @Test
+   public void fileNotExistsYieldsOriginal() {
+      final PathProposalUtil util = new PathProposalUtil(project.getFullPath());
+      final IPath uniquePath = util.getUniquePathForNewFile("test", ".cpp");
+      Assert.assertEquals(new Path("/Test/test.cpp"), uniquePath);
+   }
 }

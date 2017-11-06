@@ -22,25 +22,25 @@ public class ParameterNameFunDecorator {
    private static final CPPNodeFactory     nodeFactory = CPPNodeFactory.getDefault();
    private final ICPPASTFunctionDeclarator function;
 
-   public ParameterNameFunDecorator(ICPPASTFunctionDeclarator function) {
+   public ParameterNameFunDecorator(final ICPPASTFunctionDeclarator function) {
       this.function = function;
    }
 
    public void adjustParamNamesIfNecessary() {
-      ParameterNameCreator nameCreator = getParamNameCreator();
+      final ParameterNameCreator nameCreator = getParamNameCreator();
 
-      for (ICPPASTParameterDeclaration param : function.getParameters()) {
-         ICPPASTDeclarator declarator = param.getDeclarator();
+      for (final ICPPASTParameterDeclaration param : function.getParameters()) {
+         final ICPPASTDeclarator declarator = param.getDeclarator();
          String paramName = declarator.getName().toString();
 
          if (!(paramName.isEmpty() && !isVoid(param))) {
             continue;
          }
 
-         IType type = TypeCreator.byParamDeclaration(param);
+         final IType type = TypeCreator.byParamDeclaration(param);
 
          if (type instanceof IProblemType && isNamedSpecifier(param)) {
-            String typeName = ((ICPPASTNamedTypeSpecifier) param.getDeclSpecifier()).getName().toString();
+            final String typeName = ((ICPPASTNamedTypeSpecifier) param.getDeclSpecifier()).getName().toString();
             paramName = nameCreator.getParamName(typeName).toString();
          } else {
             paramName = nameCreator.getParamName(type).toString();
@@ -50,16 +50,16 @@ public class ParameterNameFunDecorator {
       }
    }
 
-   private static boolean isNamedSpecifier(ICPPASTParameterDeclaration param) {
+   private static boolean isNamedSpecifier(final ICPPASTParameterDeclaration param) {
       return param.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier;
    }
 
    private static ParameterNameCreator getParamNameCreator() {
-      Map<String, Boolean> nameHistory = unorderedMap();
+      final Map<String, Boolean> nameHistory = unorderedMap();
       return new ParameterNameCreator(nameHistory);
    }
 
-   private static boolean isVoid(ICPPASTParameterDeclaration param) {
+   private static boolean isVoid(final ICPPASTParameterDeclaration param) {
       return AstUtil.isVoid(param) && param.getDeclarator().getPointerOperators().length == 0;
    }
 }

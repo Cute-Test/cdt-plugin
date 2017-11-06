@@ -33,15 +33,15 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 @SuppressWarnings("restriction")
 class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
 
-   public BoostVectorExpectationsReconciler(ASTRewrite rewriter, Collection<? extends TestDoubleMemFun> toAdd,
-                                            Collection<ExistingMemFunCallRegistration> toRemove, CppStandard cppStd,
-                                            LinkedEditModeStrategy linkedEditMode) {
+   public BoostVectorExpectationsReconciler(final ASTRewrite rewriter, final Collection<? extends TestDoubleMemFun> toAdd,
+                                            final Collection<ExistingMemFunCallRegistration> toRemove, final CppStandard cppStd,
+                                            final LinkedEditModeStrategy linkedEditMode) {
       super(rewriter, toAdd, toRemove, cppStd, linkedEditMode);
    }
 
    @Override
-   public void reconcileExpectations(IASTName expectations) {
-      IASTExpressionStatement boostAssign = AstUtil.getAncestorOfType(expectations, IASTExpressionStatement.class);
+   public void reconcileExpectations(final IASTName expectations) {
+      final IASTExpressionStatement boostAssign = AstUtil.getAncestorOfType(expectations, IASTExpressionStatement.class);
 
       if (boostAssign != null) {
          rewriteExistingExpectations(boostAssign);
@@ -50,25 +50,25 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
       }
    }
 
-   private void addNewBoostAssignInitializer(IASTName expectations) {
-      IASTExpressionStatement boostAssignInitializer = new BoostAssignInitializerCreator(callsToAdd, expectations.toString(), linkedEdit)
+   private void addNewBoostAssignInitializer(final IASTName expectations) {
+      final IASTExpressionStatement boostAssignInitializer = new BoostAssignInitializerCreator(callsToAdd, expectations.toString(), linkedEdit)
             .createBoostAssignInitializer();
-      ICPPASTFunctionDefinition testFun = AstUtil.getAncestorOfType(expectations, ICPPASTFunctionDefinition.class);
-      IASTExpressionStatement insertionPoint = getInsertionPointForBoostInitializer(expectations);
+      final ICPPASTFunctionDefinition testFun = AstUtil.getAncestorOfType(expectations, ICPPASTFunctionDefinition.class);
+      final IASTExpressionStatement insertionPoint = getInsertionPointForBoostInitializer(expectations);
       rewriter.insertBefore(testFun.getBody(), insertionPoint, boostAssignInitializer, null);
    }
 
-   private static IASTExpressionStatement getInsertionPointForBoostInitializer(IASTName vector) {
-      IASTName[] references = vector.getTranslationUnit().getReferences(vector.resolveBinding());
+   private static IASTExpressionStatement getInsertionPointForBoostInitializer(final IASTName vector) {
+      final IASTName[] references = vector.getTranslationUnit().getReferences(vector.resolveBinding());
 
       if (references.length > 0) return AstUtil.getAncestorOfType(references[0], IASTExpressionStatement.class);
 
       return null;
    }
 
-   private void rewriteExistingExpectations(IASTExpressionStatement vector) {
-      List<ICPPASTFunctionCallExpression> expectationsCalls = list();
-      IASTExpression expression = vector.getExpression();
+   private void rewriteExistingExpectations(final IASTExpressionStatement vector) {
+      final List<ICPPASTFunctionCallExpression> expectationsCalls = list();
+      final IASTExpression expression = vector.getExpression();
 
       if (expression instanceof ICPPASTBinaryExpression) {
          collectStillRegisteredSingleCall(expression, expectationsCalls);
@@ -80,14 +80,14 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
       rewriteExpectations(vector, expression, expectationsCalls);
    }
 
-   private void rewriteExpectations(IASTExpressionStatement expectationsVector, IASTExpression expr,
-         List<ICPPASTFunctionCallExpression> expectationCalls) {
+   private void rewriteExpectations(final IASTExpressionStatement expectationsVector, final IASTExpression expr,
+         final List<ICPPASTFunctionCallExpression> expectationCalls) {
       if (expectationCalls.isEmpty()) {
          rewriter.remove(expectationsVector, null);
          return;
       }
 
-      ICPPASTBinaryExpression newBinExp = getBinaryExpr(expr).copy();
+      final ICPPASTBinaryExpression newBinExp = getBinaryExpr(expr).copy();
       newBinExp.setOperand2(expectationCalls.get(0));
 
       if (expectationCalls.size() > 1) {
@@ -97,9 +97,9 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
       }
    }
 
-   private void replaceExpressionList(IASTExpressionStatement expectationsVector, List<ICPPASTFunctionCallExpression> expectationCalls,
-         ICPPASTBinaryExpression newBinExp) {
-      ICPPASTExpressionList newExpressionList = nodeFactory.newExpressionList();
+   private void replaceExpressionList(final IASTExpressionStatement expectationsVector, final List<ICPPASTFunctionCallExpression> expectationCalls,
+         final ICPPASTBinaryExpression newBinExp) {
+      final ICPPASTExpressionList newExpressionList = nodeFactory.newExpressionList();
       newExpressionList.addExpression(newBinExp);
 
       for (int i = 1; i < expectationCalls.size(); i++) {
@@ -108,57 +108,57 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
       replaceExpressionStmt(expectationsVector, newExpressionList);
    }
 
-   private void replaceExpressionStmt(IASTExpressionStatement expectationsVector, IASTExpression toReplace) {
-      IASTExpressionStatement newCallVectorInit = nodeFactory.newExpressionStatement(toReplace);
+   private void replaceExpressionStmt(final IASTExpressionStatement expectationsVector, final IASTExpression toReplace) {
+      final IASTExpressionStatement newCallVectorInit = nodeFactory.newExpressionStatement(toReplace);
       rewriter.replace(expectationsVector, newCallVectorInit, null);
    }
 
-   private void addMissingExpectations(List<ICPPASTFunctionCallExpression> expectationsCalls) {
-      for (TestDoubleMemFun toAdd : callsToAdd) {
-         ICPPASTLiteralExpression newCall = createFunSignatureLiteral(toAdd);
-         ICPPASTInitializerList newInitializerList = nodeFactory.newInitializerList();
+   private void addMissingExpectations(final List<ICPPASTFunctionCallExpression> expectationsCalls) {
+      for (final TestDoubleMemFun toAdd : callsToAdd) {
+         final ICPPASTLiteralExpression newCall = createFunSignatureLiteral(toAdd);
+         final ICPPASTInitializerList newInitializerList = nodeFactory.newInitializerList();
          newInitializerList.addClause(newCall);
          addDefaultArgs(toAdd, newInitializerList);
-         IASTName callsName = nodeFactory.newName(MockatorConstants.CALL.toCharArray());
-         ICPPASTFunctionCallExpression newFunCall = nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(callsName), newInitializerList
-               .getClauses());
+         final IASTName callsName = nodeFactory.newName(MockatorConstants.CALL.toCharArray());
+         final ICPPASTFunctionCallExpression newFunCall = nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(callsName),
+               newInitializerList.getClauses());
          expectationsCalls.add(newFunCall);
       }
    }
 
-   private void addDefaultArgs(TestDoubleMemFun memFun, ICPPASTInitializerList newInitializerList) {
-      for (IASTInitializerClause initializer : memFun.createDefaultArguments(cppStd, linkedEdit)) {
+   private void addDefaultArgs(final TestDoubleMemFun memFun, final ICPPASTInitializerList newInitializerList) {
+      for (final IASTInitializerClause initializer : memFun.createDefaultArguments(cppStd, linkedEdit)) {
          newInitializerList.addClause(initializer);
       }
    }
 
-   private static ICPPASTLiteralExpression createFunSignatureLiteral(TestDoubleMemFun memFun) {
+   private static ICPPASTLiteralExpression createFunSignatureLiteral(final TestDoubleMemFun memFun) {
       return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(memFun.getFunctionSignature()));
    }
 
-   private void collectStillRegisteredCalls(IASTExpression expression, List<ICPPASTFunctionCallExpression> expectations) {
-      for (IASTExpression expr : ((IASTExpressionList) expression).getExpressions()) {
-         ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expr, ICPPASTFunctionCallExpression.class);
+   private void collectStillRegisteredCalls(final IASTExpression expression, final List<ICPPASTFunctionCallExpression> expectations) {
+      for (final IASTExpression expr : ((IASTExpressionList) expression).getExpressions()) {
+         final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expr, ICPPASTFunctionCallExpression.class);
          addCallIfStillRegistered(funCall, expectations);
       }
    }
 
-   private void collectStillRegisteredSingleCall(IASTExpression expr, List<ICPPASTFunctionCallExpression> expectationsCalls) {
-      ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) getBinaryExpr(expr).getOperand2();
+   private void collectStillRegisteredSingleCall(final IASTExpression expr, final List<ICPPASTFunctionCallExpression> expectationsCalls) {
+      final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) getBinaryExpr(expr).getOperand2();
       addCallIfStillRegistered(funCall, expectationsCalls);
    }
 
-   private static ICPPASTBinaryExpression getBinaryExpr(IASTExpression expression) {
-      ICPPASTBinaryExpression binExp = AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
+   private static ICPPASTBinaryExpression getBinaryExpr(final IASTExpression expression) {
+      final ICPPASTBinaryExpression binExp = AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
       Assert.notNull(binExp, "Not a valid expectation vector assignment");
       return binExp;
    }
 
-   private void addCallIfStillRegistered(ICPPASTFunctionCallExpression fun, List<ICPPASTFunctionCallExpression> calls) {
+   private void addCallIfStillRegistered(final ICPPASTFunctionCallExpression fun, final List<ICPPASTFunctionCallExpression> calls) {
       Assert.isTrue(fun.getArguments().length > 0, "Not a valid call expectation");
-      IASTInitializerClause firstArg = fun.getArguments()[0];
+      final IASTInitializerClause firstArg = fun.getArguments()[0];
       Assert.instanceOf(firstArg, IASTLiteralExpression.class, "Only literals allowed as 1st argument");
-      IASTLiteralExpression literal = (IASTLiteralExpression) firstArg;
+      final IASTLiteralExpression literal = (IASTLiteralExpression) firstArg;
 
       if (!isToBeRemoved(literal.toString())) {
          calls.add(fun.copy());

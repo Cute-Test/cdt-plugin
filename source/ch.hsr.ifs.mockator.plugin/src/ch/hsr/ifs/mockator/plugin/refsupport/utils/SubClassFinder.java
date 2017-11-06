@@ -21,37 +21,38 @@ public class SubClassFinder {
 
    private final IIndex index;
 
-   public SubClassFinder(IIndex index) {
+   public SubClassFinder(final IIndex index) {
       this.index = index;
    }
 
-   public Collection<ICPPClassType> getSubClasses(ICPPClassType klass) throws CoreException {
-      List<ICPPClassType> subClasses = list();
-      Set<String> alreadyHandled = unorderedSet();
+   public Collection<ICPPClassType> getSubClasses(final ICPPClassType klass) throws CoreException {
+      final List<ICPPClassType> subClasses = list();
+      final Set<String> alreadyHandled = unorderedSet();
       collectSubClasses(klass, subClasses, alreadyHandled);
       subClasses.remove(0);
       return subClasses;
    }
 
-   private void collectSubClasses(ICPPClassType klass, List<ICPPClassType> subClasses, Set<String> alreadyHandled) throws CoreException {
-      String type = ASTTypeUtil.getType(klass, true);
+   private void collectSubClasses(final ICPPClassType klass, final List<ICPPClassType> subClasses, final Set<String> alreadyHandled)
+         throws CoreException {
+      final String type = ASTTypeUtil.getType(klass, true);
 
       if (!alreadyHandled.add(type)) return;
 
       subClasses.add(klass);
 
-      for (IIndexName i : findRefsAndDefs(klass)) {
+      for (final IIndexName i : findRefsAndDefs(klass)) {
          if (!i.isBaseSpecifier()) {
             continue;
          }
 
-         IIndexName subClassDef = i.getEnclosingDefinition();
+         final IIndexName subClassDef = i.getEnclosingDefinition();
 
          if (subClassDef == null) {
             continue;
          }
 
-         IBinding subClass = index.findBinding(subClassDef);
+         final IBinding subClass = index.findBinding(subClassDef);
 
          if (subClass instanceof ICPPClassType) {
             collectSubClasses((ICPPClassType) subClass, subClasses, alreadyHandled);
@@ -59,7 +60,7 @@ public class SubClassFinder {
       }
    }
 
-   private IIndexName[] findRefsAndDefs(ICPPBinding klass) throws CoreException {
+   private IIndexName[] findRefsAndDefs(final ICPPBinding klass) throws CoreException {
       return index.findNames(klass, IIndex.FIND_REFERENCES | IIndex.FIND_DEFINITIONS);
    }
 }

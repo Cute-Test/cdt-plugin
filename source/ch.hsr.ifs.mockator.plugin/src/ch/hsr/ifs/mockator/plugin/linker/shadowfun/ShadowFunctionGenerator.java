@@ -21,30 +21,30 @@ public class ShadowFunctionGenerator {
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
    private final CppStandard           cppStd;
 
-   public ShadowFunctionGenerator(CppStandard cppStd) {
+   public ShadowFunctionGenerator(final CppStandard cppStd) {
       this.cppStd = cppStd;
    }
 
-   public ICPPASTFunctionDefinition createShadowedFunction(ICPPASTFunctionDeclarator funDecl, IASTCompoundStatement newBody) {
-      ICPPASTDeclSpecifier newDeclSpec = AstUtil.getDeclSpec(funDecl).copy();
+   public ICPPASTFunctionDefinition createShadowedFunction(final ICPPASTFunctionDeclarator funDecl, final IASTCompoundStatement newBody) {
+      final ICPPASTDeclSpecifier newDeclSpec = AstUtil.getDeclSpec(funDecl).copy();
       AstUtil.removeExternalStorageIfSet(newDeclSpec);
-      ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
+      final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
       adjustParamNamesIfNecessary(newFunDecl);
       newFunDecl.setName(createFullyQualifiedName(funDecl));
-      ReturnStatementCreator creator = new ReturnStatementCreator(cppStd);
+      final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd);
       newBody.addStatement(creator.createReturnStatement(funDecl, newDeclSpec));
       return nodeFactory.newFunctionDefinition(newDeclSpec, newFunDecl, newBody);
    }
 
-   private static IASTName createFullyQualifiedName(ICPPASTFunctionDeclarator funDecl) {
-      QualifiedNameCreator resolver = new QualifiedNameCreator(funDecl.getName());
-      ICPPASTQualifiedName qualifiedName = resolver.createQualifiedName();
+   private static IASTName createFullyQualifiedName(final ICPPASTFunctionDeclarator funDecl) {
+      final QualifiedNameCreator resolver = new QualifiedNameCreator(funDecl.getName());
+      final ICPPASTQualifiedName qualifiedName = resolver.createQualifiedName();
       qualifiedName.addName(funDecl.getName().copy());
       return qualifiedName;
    }
 
-   private static void adjustParamNamesIfNecessary(ICPPASTFunctionDeclarator newFunDecl) {
-      ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
+   private static void adjustParamNamesIfNecessary(final ICPPASTFunctionDeclarator newFunDecl) {
+      final ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
       funDecorator.adjustParamNamesIfNecessary();
    }
 }

@@ -16,58 +16,57 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 
+
 class FunCallInjectionInfoCollector extends AbstractDepInjectInfoCollector {
 
-  public FunCallInjectionInfoCollector(final IIndex index, final ICProject cProject) {
-    super(index, cProject);
-  }
+   public FunCallInjectionInfoCollector(final IIndex index, final ICProject cProject) {
+      super(index, cProject);
+   }
 
-  @Override
-  public Optional<Pair<IASTName, IType>> collectDependencyInfos(final IASTName problemArgName) {
-    final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(problemArgName, ICPPASTFunctionCallExpression.class);
+   @Override
+   public Optional<Pair<IASTName, IType>> collectDependencyInfos(final IASTName problemArgName) {
+      final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(problemArgName, ICPPASTFunctionCallExpression.class);
 
-    if (funCall == null) {
-      return Optional.empty();
-    }
+      if (funCall == null) { return Optional.empty(); }
 
-    final int args = getArgPosOfProblemType(problemArgName, list(funCall.getArguments()));
+      final int args = getArgPosOfProblemType(problemArgName, list(funCall.getArguments()));
 
-    return OptHelper.returnIfPresentElseEmpty(findMatchingFunction(getCandidateBindings(funCall), funCall, args),
-        (match) -> getTargetClassOfProblemType(match, args));
-  }
+      return OptHelper.returnIfPresentElseEmpty(findMatchingFunction(getCandidateBindings(funCall), funCall, args), (
+            match) -> getTargetClassOfProblemType(match, args));
+   }
 
-  private Optional<ICPPASTFunctionDeclarator> findMatchingFunction(final IBinding[] functions, final ICPPASTFunctionCallExpression funCall,
-      final int argPosOfProblemType) {
-    for (final IBinding fun : functions) {
+   private Optional<ICPPASTFunctionDeclarator> findMatchingFunction(final IBinding[] functions, final ICPPASTFunctionCallExpression funCall,
+         final int argPosOfProblemType) {
+      for (final IBinding fun : functions) {
 
-      final Optional<ICPPASTFunctionDeclarator> funDecl = lookup.findFunctionDeclaration(fun, index);
-      if (funDecl.isPresent() && areEquivalentExceptProblemType(list(funCall.getArguments()), funDecl.get(), argPosOfProblemType)) {
-        return funDecl;
+         final Optional<ICPPASTFunctionDeclarator> funDecl = lookup.findFunctionDeclaration(fun, index);
+         if (funDecl.isPresent() && areEquivalentExceptProblemType(list(funCall.getArguments()), funDecl.get(),
+               argPosOfProblemType)) { return funDecl; }
       }
-    }
-    return Optional.empty();
-  }
+      return Optional.empty();
+   }
 
-  private static IBinding[] getCandidateBindings(final IASTFunctionCallExpression caller) {
-    final IASTExpression funNameExpr = caller.getFunctionNameExpression();
+   private static IBinding[] getCandidateBindings(final IASTFunctionCallExpression caller) {
+      final IASTExpression funNameExpr = caller.getFunctionNameExpression();
 
-    return OptHelper.returnIfPresentElse(findProblemBinding(funNameExpr), (problem) -> {
-      final IProblemBinding iProblemBinding = (IProblemBinding) problem.resolveBinding();
-      return iProblemBinding.getCandidateBindings();
-    }, () -> new IBinding[] {});
-  }
+      return OptHelper.returnIfPresentElse(findProblemBinding(funNameExpr), (problem) -> {
+         final IProblemBinding iProblemBinding = (IProblemBinding) problem.resolveBinding();
+         return iProblemBinding.getCandidateBindings();
+      }, () -> new IBinding[] {});
+   }
 
-  private static Optional<IASTName> findProblemBinding(final IASTExpression funNameExpr) {
-    final NameFinder finder = new NameFinder(funNameExpr);
-    return finder.getNameMatchingCriteria((name) -> isProblemBinding(name.resolveBinding()));
-  }
+   private static Optional<IASTName> findProblemBinding(final IASTExpression funNameExpr) {
+      final NameFinder finder = new NameFinder(funNameExpr);
+      return finder.getNameMatchingCriteria((name) -> isProblemBinding(name.resolveBinding()));
+   }
 
-  private static boolean isProblemBinding(final IBinding binding) {
-    return BindingTypeVerifier.isOfType(binding, IProblemBinding.class);
-  }
+   private static boolean isProblemBinding(final IBinding binding) {
+      return BindingTypeVerifier.isOfType(binding, IProblemBinding.class);
+   }
 }

@@ -1,6 +1,5 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.asserteq;
 
-
 import java.util.Collection;
 import java.util.Optional;
 

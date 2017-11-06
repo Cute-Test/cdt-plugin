@@ -34,10 +34,10 @@ public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDouble
    }
 
    @Override
-   public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy, CppStandard cppStd) {
-      ICPPASTFunctionDeclarator funDecl = createFunDecl();
-      ICPPASTDeclSpecifier returnType = createReturnType(funDecl);
-      IASTCompoundStatement funBody = createFunBody(strategy, funDecl, returnType, cppStd);
+   public ICPPASTFunctionDefinition createFunctionDefinition(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd) {
+      final ICPPASTFunctionDeclarator funDecl = createFunDecl();
+      final ICPPASTDeclSpecifier returnType = createReturnType(funDecl);
+      final IASTCompoundStatement funBody = createFunBody(strategy, funDecl, returnType, cppStd);
       return nodeFactory.newFunctionDefinition(returnType, funDecl, funBody);
    }
 
@@ -61,15 +61,15 @@ public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDouble
 
    @Override
    public ICPPASTFunctionDefinition getContainingFunction() {
-      IASTExpression expr = getUnderlyingExpression();
+      final IASTExpression expr = getUnderlyingExpression();
       return AstUtil.getAncestorOfType(expr, ICPPASTFunctionDefinition.class);
    }
 
    protected abstract IASTExpression getUnderlyingExpression();
 
    @Override
-   public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd, LinkedEditModeStrategy linkedEditStrategy) {
-      DefaultArgumentCreator creator = new DefaultArgumentCreator(linkedEditStrategy, cppStd);
+   public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEditStrategy) {
+      final DefaultArgumentCreator creator = new DefaultArgumentCreator(linkedEditStrategy, cppStd);
       return creator.createDefaultArguments(list(getFunDecl().getParameters()));
    }
 

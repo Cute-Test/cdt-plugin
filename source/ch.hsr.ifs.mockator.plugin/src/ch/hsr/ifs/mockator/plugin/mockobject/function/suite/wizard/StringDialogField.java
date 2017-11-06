@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -13,7 +13,6 @@ package ch.hsr.ifs.mockator.plugin.mockobject.function.suite.wizard;
  */
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -34,19 +33,19 @@ class StringDialogField extends DialogField {
    }
 
    @Override
-   public Control[] doFillIntoGrid(Composite parent, int nColumns) {
+   public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
       assertEnoughColumns(nColumns);
       return new Control[] { getLabel(parent), getText(parent, nColumns - 1) };
    }
 
-   protected Text getText(Composite parent, int nColumns) {
-      Text text = getTextControl(parent);
+   protected Text getText(final Composite parent, final int nColumns) {
+      final Text text = getTextControl(parent);
       text.setLayoutData(gridDataForText(nColumns));
       return text;
    }
 
-   protected Label getLabel(Composite parent) {
-      Label label = getLabelControl(parent);
+   protected Label getLabel(final Composite parent) {
+      final Label label = getLabelControl(parent);
       label.setLayoutData(gridDataForLabel(1));
       return label;
    }
@@ -56,8 +55,8 @@ class StringDialogField extends DialogField {
       return 2;
    }
 
-   protected static GridData gridDataForText(int span) {
-      GridData gd = new GridData();
+   protected static GridData gridDataForText(final int span) {
+      final GridData gd = new GridData();
       gd.horizontalAlignment = GridData.FILL;
       gd.grabExcessHorizontalSpace = true;
       gd.horizontalSpan = span;
@@ -73,16 +72,10 @@ class StringDialogField extends DialogField {
       return true;
    }
 
-   Text getTextControl(Composite parent) {
+   Text getTextControl(final Composite parent) {
       if (fTextControl == null) {
          assertCompositeNotNull(parent);
-         fModifyListener = new ModifyListener() {
-
-            @Override
-            public void modifyText(ModifyEvent e) {
-               doModifyText();
-            }
-         };
+         fModifyListener = e -> doModifyText();
 
          fTextControl = new Text(parent, SWT.SINGLE | SWT.BORDER);
          fTextControl.setText(fText);
@@ -112,7 +105,7 @@ class StringDialogField extends DialogField {
       return fText;
    }
 
-   void setTextWithoutUpdate(String text) {
+   void setTextWithoutUpdate(final String text) {
       fText = text;
       if (isOkToUse(fTextControl)) {
          fTextControl.removeModifyListener(fModifyListener);

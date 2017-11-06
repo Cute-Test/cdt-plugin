@@ -13,17 +13,17 @@ public class MissingMemFunCodanArguments extends CodanArguments {
    private final String missingMemFunsForFake;
    private final String missingMemFunsForMock;
 
-   public MissingMemFunCodanArguments(IMarker marker) {
-      String[] problemArguments = getProblemArguments(marker);
+   public MissingMemFunCodanArguments(final IMarker marker) {
+      final String[] problemArguments = getProblemArguments(marker);
       testDoubleName = problemArguments[0];
       missingMemFunsForFake = problemArguments[1];
       missingMemFunsForMock = problemArguments[2];
    }
 
-   public MissingMemFunCodanArguments(String testDoubleName, String forFake, String forMock) {
+   public MissingMemFunCodanArguments(final String testDoubleName, final String forFake, final String forMock) {
       this.testDoubleName = testDoubleName;
-      this.missingMemFunsForFake = forFake;
-      this.missingMemFunsForMock = forMock;
+      missingMemFunsForFake = forFake;
+      missingMemFunsForMock = forMock;
    }
 
    @Override

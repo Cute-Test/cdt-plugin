@@ -33,7 +33,8 @@ public class CreateTestDoubleSubTypeRefactoring extends AbstractCreateTestDouble
    }
 
    @Override
-   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException, OperationCanceledException {
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu, pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       addIncludeIfNecessary(ast, rewriter);
@@ -49,7 +50,7 @@ public class CreateTestDoubleSubTypeRefactoring extends AbstractCreateTestDouble
 
    private void replaceKindOfPassingArgIfNecessary(final IASTTranslationUnit ast, final ASTRewrite rewriter) {
       getSelectedName(ast).ifPresent((problemArgName) -> ca.getPassByStrategy().adaptArguments(problemArgName, ca.getNameOfMissingInstance(),
-               rewriter));
+            rewriter));
    }
 
    private IASTDeclarationStatement createNewTestDoubleClass() {

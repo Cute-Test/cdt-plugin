@@ -10,17 +10,18 @@ import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 
 public class MemFunMockSupport extends AbstractMemFunMockSupport {
 
-   public MemFunMockSupport(ASTRewrite rewriter, CppStandard cppStd, String nameOfAllCallsVector, PolymorphismKind polymorphismKind) {
+   public MemFunMockSupport(final ASTRewrite rewriter, final CppStandard cppStd, final String nameOfAllCallsVector,
+                            final PolymorphismKind polymorphismKind) {
       super(rewriter, cppStd, nameOfAllCallsVector, polymorphismKind);
    }
 
    @Override
-   public void addMockSupport(ICPPASTFunctionDefinition function) {
+   public void addMockSupport(final ICPPASTFunctionDefinition function) {
       rewriter.replace(function.getBody(), createNewFunBody(function), null);
    }
 
    @Override
-   protected void fillFunBody(IASTCompoundStatement newBody, ICPPASTFunctionDefinition function) {
+   protected void fillFunBody(final IASTCompoundStatement newBody, final ICPPASTFunctionDefinition function) {
       addCallRegistration(newBody, function);
       addAllExistingBodyStmts(newBody, function);
    }

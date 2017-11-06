@@ -16,15 +16,15 @@ public class ReferencingProjectAdder {
 
    private final IProject originProject;
 
-   public ReferencingProjectAdder(IProject originProject) {
+   public ReferencingProjectAdder(final IProject originProject) {
       this.originProject = originProject;
    }
 
-   public void setReferenceToProject(IProject referencedProject) throws CoreException {
-      ICProjectDescription desc = getProjectDescription();
+   public void setReferenceToProject(final IProject referencedProject) throws CoreException {
+      final ICProjectDescription desc = getProjectDescription();
 
-      for (ICConfigurationDescription config : desc.getConfigurations()) {
-         Map<String, String> refMap = config.getReferenceInfo();
+      for (final ICConfigurationDescription config : desc.getConfigurations()) {
+         final Map<String, String> refMap = config.getReferenceInfo();
          refMap.put(referencedProject.getName(), "");
          config.setReferenceInfo(refMap);
       }
@@ -32,7 +32,7 @@ public class ReferencingProjectAdder {
       storeProjectDescription(desc);
    }
 
-   private void storeProjectDescription(ICProjectDescription desc) throws CoreException {
+   private void storeProjectDescription(final ICProjectDescription desc) throws CoreException {
       CCorePlugin.getDefault().setProjectDescription(originProject, desc);
    }
 

@@ -28,6 +28,7 @@ import org.junit.Test;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 
+
 public class CollectionHelperTest {
 
    @Test
@@ -135,8 +136,7 @@ public class CollectionHelperTest {
 
    @Test
    public void zipMap() {
-      final Map<String, Integer> map =
-               CollectionHelper.zipMap(array("one", "two", "three"), array(1, 2, 3));
+      final Map<String, Integer> map = CollectionHelper.zipMap(array("one", "two", "three"), array(1, 2, 3));
       assertEquals(map.get("one"), Integer.valueOf(1));
       assertEquals(map.get("two"), Integer.valueOf(2));
       assertEquals(map.get("three"), Integer.valueOf(3));
@@ -145,8 +145,13 @@ public class CollectionHelperTest {
    @Test
    public void checkedCastWithTypeCompatibleObjects() {
       @SuppressWarnings("serial")
-      final
-      List<Object> strings = new ArrayList<Object>() {
+      final List<Object> strings = new ArrayList<Object>() {
+
+         /**
+          *
+          */
+         private static final long serialVersionUID = 5534740326174887503L;
+
          {
             add("one");
             add("two");
@@ -159,8 +164,13 @@ public class CollectionHelperTest {
    @Test(expected = ClassCastException.class)
    public void checkedCastWithUncompatibleObjects() {
       @SuppressWarnings("serial")
-      final
-      List<Object> objects = new ArrayList<Object>() {
+      final List<Object> objects = new ArrayList<Object>() {
+
+         /**
+          *
+          */
+         private static final long serialVersionUID = -3125602429432402437L;
+
          {
             add("one");
             add(2);

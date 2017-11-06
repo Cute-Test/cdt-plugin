@@ -43,9 +43,9 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
 @SuppressWarnings("restriction")
 public abstract class TypeCreator extends ASTQueries {
 
-   public static IType byParamDeclaration(ICPPASTParameterDeclaration pdecl) {
-      IASTDeclSpecifier pDeclSpec = pdecl.getDeclSpecifier();
-      ICPPASTDeclarator pDtor = pdecl.getDeclarator();
+   public static IType byParamDeclaration(final ICPPASTParameterDeclaration pdecl) {
+      final IASTDeclSpecifier pDeclSpec = pdecl.getDeclSpecifier();
+      final ICPPASTDeclarator pDtor = pdecl.getDeclarator();
       IType pt = CPPVisitor.createType(pDeclSpec);
 
       if (pDtor != null) {
@@ -60,12 +60,12 @@ public abstract class TypeCreator extends ASTQueries {
       return pt;
    }
 
-   public static IType byDeclarator(IASTDeclarator declarator) {
+   public static IType byDeclarator(final IASTDeclarator declarator) {
       return CPPVisitor.createType(declarator);
    }
 
-   private static IType createType(IType returnType, ICPPASTFunctionDeclarator fnDtor) {
-      IType[] pTypes = createParameterTypes(fnDtor);
+   private static IType createType(IType returnType, final ICPPASTFunctionDeclarator fnDtor) {
+      final IType[] pTypes = createParameterTypes(fnDtor);
 
       IASTName name = fnDtor.getName();
       if (name instanceof ICPPASTQualifiedName) {
@@ -78,21 +78,22 @@ public abstract class TypeCreator extends ASTQueries {
          returnType = getPointerTypes(returnType, fnDtor);
       }
 
-      CPPFunctionType type = new CPPFunctionType(returnType, pTypes, fnDtor.isConst(), fnDtor.isVolatile(), false, false, fnDtor.takesVarArgs());
+      final CPPFunctionType type = new CPPFunctionType(returnType, pTypes, fnDtor.isConst(), fnDtor.isVolatile(), false, false, fnDtor
+            .takesVarArgs());
       final IASTDeclarator nested = fnDtor.getNestedDeclarator();
       if (nested != null) return createType(type, nested);
       return type;
    }
 
-   private static IType applyAttributes(IType type, IASTDeclarator declarator) {
+   private static IType applyAttributes(IType type, final IASTDeclarator declarator) {
       if (type instanceof IBasicType) {
-         IBasicType basicType = (IBasicType) type;
+         final IBasicType basicType = (IBasicType) type;
          if (basicType.getKind() == IBasicType.Kind.eInt) {
-            IASTAttribute[] attributes = declarator.getAttributes();
-            for (IASTAttribute attribute : attributes) {
-               char[] name = attribute.getName();
+            final IASTAttribute[] attributes = declarator.getAttributes();
+            for (final IASTAttribute attribute : attributes) {
+               final char[] name = attribute.getName();
                if (CharArrayUtils.equals(name, "__mode__") || CharArrayUtils.equals(name, "mode")) { //$NON-NLS-2$
-                  char[] mode = AttributeUtil.getSimpleArgument(attribute);
+                  final char[] mode = AttributeUtil.getSimpleArgument(attribute);
                   if (CharArrayUtils.equals(mode, "__QI__") || CharArrayUtils.equals(mode, "QI")) { //$NON-NLS-2$
                      type = new CPPBasicType(IBasicType.Kind.eChar, basicType.isUnsigned() ? IBasicType.IS_UNSIGNED : IBasicType.IS_SIGNED);
                   } else if (CharArrayUtils.equals(mode, "__HI__") || CharArrayUtils.equals(mode, "HI")) { //$NON-NLS-2$
@@ -100,7 +101,7 @@ public abstract class TypeCreator extends ASTQueries {
                   } else if (CharArrayUtils.equals(mode, "__SI__") || CharArrayUtils.equals(mode, "SI")) { //$NON-NLS-2$
                      type = new CPPBasicType(IBasicType.Kind.eInt, getSignModifiers(basicType));
                   } else if (CharArrayUtils.equals(mode, "__DI__") || CharArrayUtils.equals(mode, "DI")) { //$NON-NLS-2$
-                     SizeofCalculator sizeofs = new SizeofCalculator(declarator.getTranslationUnit());
+                     final SizeofCalculator sizeofs = new SizeofCalculator(declarator.getTranslationUnit());
                      int modifier;
                      if (sizeofs.sizeof_long != null && sizeofs.sizeof_int != null && sizeofs.sizeof_long.size == 2 * sizeofs.sizeof_int.size) {
                         modifier = IBasicType.IS_LONG;
@@ -118,17 +119,17 @@ public abstract class TypeCreator extends ASTQueries {
       return type;
    }
 
-   private static int getSignModifiers(IBasicType type) {
+   private static int getSignModifiers(final IBasicType type) {
       return type.getModifiers() & (IBasicType.IS_SIGNED | IBasicType.IS_UNSIGNED);
    }
 
-   private static IType createType(IASTTypeId typeid) {
+   private static IType createType(final IASTTypeId typeid) {
       return byDeclarator(typeid.getAbstractDeclarator());
    }
 
-   private static IType[] createParameterTypes(ICPPASTFunctionDeclarator fnDtor) {
-      ICPPASTParameterDeclaration[] params = fnDtor.getParameters();
-      IType[] pTypes = new IType[params.length];
+   private static IType[] createParameterTypes(final ICPPASTFunctionDeclarator fnDtor) {
+      final ICPPASTParameterDeclaration[] params = fnDtor.getParameters();
+      final IType[] pTypes = new IType[params.length];
 
       for (int i = 0; i < params.length; i++) {
          pTypes[i] = byParamDeclaration(params[i]);
@@ -137,11 +138,11 @@ public abstract class TypeCreator extends ASTQueries {
       return pTypes;
    }
 
-   private static IType adjustParameterType(IType pt) {
-      IType t = SemanticUtil.getNestedType(pt, TDEF);
+   private static IType adjustParameterType(final IType pt) {
+      final IType t = SemanticUtil.getNestedType(pt, TDEF);
 
       if (t instanceof IArrayType) {
-         IArrayType at = (IArrayType) t;
+         final IArrayType at = (IArrayType) t;
          return new CPPPointerType(at.getType());
       }
 
@@ -152,9 +153,9 @@ public abstract class TypeCreator extends ASTQueries {
       return pt;
    }
 
-   private static IType getPointerTypes(IType type, IASTDeclarator declarator) {
-      IASTPointerOperator[] ptrOps = declarator.getPointerOperators();
-      for (IASTPointerOperator ptrOp : ptrOps) {
+   private static IType getPointerTypes(IType type, final IASTDeclarator declarator) {
+      final IASTPointerOperator[] ptrOps = declarator.getPointerOperators();
+      for (final IASTPointerOperator ptrOp : ptrOps) {
          if (ptrOp instanceof ICPPASTPointerToMember) {
             type = new CPPPointerToMemberType(type, (ICPPASTPointerToMember) ptrOp);
          } else if (ptrOp instanceof IASTPointer) {
@@ -167,18 +168,18 @@ public abstract class TypeCreator extends ASTQueries {
       return type;
    }
 
-   private static IType getArrayTypes(IType type, IASTArrayDeclarator declarator) {
-      IASTArrayModifier[] mods = declarator.getArrayModifiers();
+   private static IType getArrayTypes(IType type, final IASTArrayDeclarator declarator) {
+      final IASTArrayModifier[] mods = declarator.getArrayModifiers();
 
       for (int i = mods.length - 1; i >= 0; i--) {
-         IASTArrayModifier mod = mods[i];
+         final IASTArrayModifier mod = mods[i];
          type = new CPPArrayType(type, mod.getConstantExpression());
       }
 
       return type;
    }
 
-   private static IType createType(IType baseType, IASTDeclarator declarator) {
+   private static IType createType(final IType baseType, final IASTDeclarator declarator) {
       if (declarator instanceof ICPPASTFunctionDeclarator) return createType(baseType, (ICPPASTFunctionDeclarator) declarator);
 
       IType type = baseType;
@@ -188,7 +189,7 @@ public abstract class TypeCreator extends ASTQueries {
          type = getArrayTypes(type, (IASTArrayDeclarator) declarator);
       }
 
-      IASTDeclarator nested = declarator.getNestedDeclarator();
+      final IASTDeclarator nested = declarator.getNestedDeclarator();
 
       if (nested != null) return createType(type, nested);
       return type;

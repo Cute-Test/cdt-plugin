@@ -16,41 +16,42 @@ import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
+
 @SuppressWarnings("restriction")
 public class CdtManagedProjectActivator {
-  private final IProject project;
 
-  public CdtManagedProjectActivator(IProject project) {
-    Assert.notNull(project, "Project to activate managed build must not be null");
-    this.project = project;
-  }
+   private final IProject project;
 
-  public void activateManagedBuild() throws CoreException {
-    ICProjectDescriptionManager mgr = CoreModel.getDefault().getProjectDescriptionManager();
-    CCorePlugin.getDefault().mapCProjectOwner(project, "Test", true);
-    ICProjectDescription desc = mgr.getProjectDescription(project, true);
-    IManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
-    String gnuExe = "cdt.managedbuild.target.gnu.exe";
-    IProjectType projType = ManagedBuildManager.getExtensionProjectType(gnuExe);
-    ManagedProject managedProj = new ManagedProject(project, projType);
-    info.setManagedProject(managedProj);
-    activateManagedBuildInConfigs(desc, projType, managedProj);
-    mgr.setProjectDescription(project, desc);
-  }
+   public CdtManagedProjectActivator(final IProject project) {
+      Assert.notNull(project, "Project to activate managed build must not be null");
+      this.project = project;
+   }
 
-  private static void activateManagedBuildInConfigs(ICProjectDescription des,
-      IProjectType projType, ManagedProject managedProj) throws CoreException {
-    for (IConfiguration each : getConfigsIn(projType)) {
-      String id = ManagedBuildManager.calculateChildId(each.getId(), null);
-      IConfiguration config = new Configuration(managedProj, (Configuration) each, id, false, true);
-      des.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID,
-          config.getConfigurationData());
-    }
-  }
+   public void activateManagedBuild() throws CoreException {
+      final ICProjectDescriptionManager mgr = CoreModel.getDefault().getProjectDescriptionManager();
+      CCorePlugin.getDefault().mapCProjectOwner(project, "Test", true);
+      final ICProjectDescription desc = mgr.getProjectDescription(project, true);
+      final IManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
+      final String gnuExe = "cdt.managedbuild.target.gnu.exe";
+      final IProjectType projType = ManagedBuildManager.getExtensionProjectType(gnuExe);
+      final ManagedProject managedProj = new ManagedProject(project, projType);
+      info.setManagedProject(managedProj);
+      activateManagedBuildInConfigs(desc, projType, managedProj);
+      mgr.setProjectDescription(project, desc);
+   }
 
-  private static IConfiguration[] getConfigsIn(IProjectType projType) {
-    String gnuExeDebug = "cdt.managedbuild.toolchain.gnu.exe.debug";
-    IToolChain tc = ManagedBuildManager.getExtensionToolChain(gnuExeDebug);
-    return ManagedBuildManager.getExtensionConfigurations(tc, projType);
-  }
+   private static void activateManagedBuildInConfigs(final ICProjectDescription des, final IProjectType projType, final ManagedProject managedProj)
+         throws CoreException {
+      for (final IConfiguration each : getConfigsIn(projType)) {
+         final String id = ManagedBuildManager.calculateChildId(each.getId(), null);
+         final IConfiguration config = new Configuration(managedProj, (Configuration) each, id, false, true);
+         des.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, config.getConfigurationData());
+      }
+   }
+
+   private static IConfiguration[] getConfigsIn(final IProjectType projType) {
+      final String gnuExeDebug = "cdt.managedbuild.toolchain.gnu.exe.debug";
+      final IToolChain tc = ManagedBuildManager.getExtensionToolChain(gnuExeDebug);
+      return ManagedBuildManager.getExtensionConfigurations(tc, projType);
+   }
 }

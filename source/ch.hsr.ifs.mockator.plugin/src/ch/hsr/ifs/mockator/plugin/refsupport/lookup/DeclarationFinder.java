@@ -12,15 +12,15 @@ import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
 class DeclarationFinder extends AbstractNodeFinder {
 
-   public DeclarationFinder(ICProject projectOrigin, IIndex index, TranslationUnitLoader tuLoader) {
+   public DeclarationFinder(final ICProject projectOrigin, final IIndex index, final TranslationUnitLoader tuLoader) {
       super(projectOrigin, index, tuLoader);
    }
 
-   public Collection<IASTName> findDeclarations(IASTName name) {
+   public Collection<IASTName> findDeclarations(final IASTName name) {
       return collectMatchingNames(name);
    }
 
-   public Collection<IASTName> findDeclarations(IBinding binding) {
+   public Collection<IASTName> findDeclarations(final IBinding binding) {
       return collectMatchingNames(binding);
    }
 

@@ -13,63 +13,64 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.RemoveInitMockatorRefactoring;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
+
 @SuppressWarnings("restriction")
 public class RemoveInitMockatorRefactoringTest extends MockatorRefactoringTest {
 
-  @Override
-  protected MockatorRefactoring createRefactoring() {
-    try {
-      return new RemoveInitMockatorRefactoring(getActiveDocument(), getActiveCElement(), selection,
-          cproject);
-    } catch (Exception e) {
-      fail(e.getMessage());
-    }
-    return null;
-  }
+   @Override
+   protected MockatorRefactoring createRefactoring() {
+      try {
+         return new RemoveInitMockatorRefactoring(getActiveDocument(), getActiveCElement(), selection, cproject);
+      }
+      catch (final Exception e) {
+         fail(e.getMessage());
+      }
+      return null;
+   }
 
-  @Override
-  protected void simulateUserInput(RefactoringContext context) {
-    CRefactoringContext ccontext = (CRefactoringContext) context;
-    ICPPASTFunctionDefinition testFunction = getTestFunctionIn(getAst(ccontext));
-    ((RemoveInitMockatorRefactoring) context.getRefactoring()).setTestFunction(testFunction);
-  }
+   @Override
+   protected void simulateUserInput(final RefactoringContext context) {
+      final CRefactoringContext ccontext = (CRefactoringContext) context;
+      final ICPPASTFunctionDefinition testFunction = getTestFunctionIn(getAst(ccontext));
+      ((RemoveInitMockatorRefactoring) context.getRefactoring()).setTestFunction(testFunction);
+   }
 
-  private static ICPPASTFunctionDefinition getTestFunctionIn(IASTTranslationUnit ast) {
-    FunFinderVisitor funVisitor = new FunFinderVisitor();
-    ast.accept(funVisitor);
-    return funVisitor.getFunction();
-  }
+   private static ICPPASTFunctionDefinition getTestFunctionIn(final IASTTranslationUnit ast) {
+      final FunFinderVisitor funVisitor = new FunFinderVisitor();
+      ast.accept(funVisitor);
+      return funVisitor.getFunction();
+   }
 
-  private static class FunFinderVisitor extends ASTVisitor {
-    private final NodeContainer container;
+   private static class FunFinderVisitor extends ASTVisitor {
 
-    {
-      shouldVisitDeclarators = true;
-    }
+      private final NodeContainer container;
 
-    public FunFinderVisitor() {
-      container = new NodeContainer();
-    }
-
-    public ICPPASTFunctionDefinition getFunction() {
-      return (ICPPASTFunctionDefinition) container.getNodesToWrite().get(0);
-    }
-
-    @Override
-    public int visit(IASTDeclarator decl) {
-      ICPPASTFunctionDefinition function =
-          AstUtil.getAncestorOfType(decl, ICPPASTFunctionDefinition.class);
-
-      if (function != null && isTestFunction(function)) {
-        container.add(function);
-        return PROCESS_ABORT;
+      {
+         shouldVisitDeclarators = true;
       }
 
-      return PROCESS_CONTINUE;
-    }
+      public FunFinderVisitor() {
+         container = new NodeContainer();
+      }
 
-    private static boolean isTestFunction(ICPPASTFunctionDefinition function) {
-      return function.getDeclarator().getName().toString().startsWith("test");
-    }
-  }
+      public ICPPASTFunctionDefinition getFunction() {
+         return (ICPPASTFunctionDefinition) container.getNodesToWrite().get(0);
+      }
+
+      @Override
+      public int visit(final IASTDeclarator decl) {
+         final ICPPASTFunctionDefinition function = AstUtil.getAncestorOfType(decl, ICPPASTFunctionDefinition.class);
+
+         if (function != null && isTestFunction(function)) {
+            container.add(function);
+            return PROCESS_ABORT;
+         }
+
+         return PROCESS_CONTINUE;
+      }
+
+      private static boolean isTestFunction(final ICPPASTFunctionDefinition function) {
+         return function.getDeclarator().getName().toString().startsWith("test");
+      }
+   }
 }

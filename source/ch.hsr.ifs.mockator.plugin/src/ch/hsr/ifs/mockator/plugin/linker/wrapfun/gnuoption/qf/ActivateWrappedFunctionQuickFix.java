@@ -14,14 +14,14 @@ public class ActivateWrappedFunctionQuickFix extends ToggleWrappedFunctionQuickF
    }
 
    @Override
-   public boolean isApplicable(IMarker marker) {
+   public boolean isApplicable(final IMarker marker) {
       return super.isApplicable(marker) && !isWrappedFunctionActive(marker);
    }
 
    @Override
-   public void apply(IMarker marker, IDocument document) {
-      String wrappedFunName = getWrappedFunName(marker);
-      WrappedFunctionQuickFixSupport support = getQfSupport();
+   public void apply(final IMarker marker, final IDocument document) {
+      final String wrappedFunName = getWrappedFunName(marker);
+      final WrappedFunctionQuickFixSupport support = getQfSupport();
       support.addWrapLinkerOption(wrappedFunName);
       support.addWrapMacro(wrappedFunName);
    }

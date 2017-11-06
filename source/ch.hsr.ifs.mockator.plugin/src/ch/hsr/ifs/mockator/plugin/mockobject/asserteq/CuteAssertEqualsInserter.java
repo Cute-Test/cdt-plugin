@@ -14,19 +14,19 @@ import ch.hsr.ifs.mockator.plugin.project.properties.AssertionOrder;
 @SuppressWarnings("restriction")
 class CuteAssertEqualsInserter extends AbstractAssertEqualsInserter {
 
-   public CuteAssertEqualsInserter(ICPPASTFunctionDefinition testFunction, MockSupportContext context) {
+   public CuteAssertEqualsInserter(final ICPPASTFunctionDefinition testFunction, final MockSupportContext context) {
       super(testFunction, context);
    }
 
    @Override
-   protected void insertWith(ASTRewrite rewriter) {
-      IASTExpressionStatement assertEqual = createAssertEqualStmt();
+   protected void insertWith(final ASTRewrite rewriter) {
+      final IASTExpressionStatement assertEqual = createAssertEqualStmt();
       insertAssertEqual(rewriter, assertEqual);
    }
 
    private IASTExpressionStatement createAssertEqualStmt() {
-      IASTInitializerClause[] initializer = new IASTInitializerClause[] { createExpectations(), createActual() };
-      IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(getAssertMacroId(), initializer);
+      final IASTInitializerClause[] initializer = new IASTInitializerClause[] { createExpectations(), createActual() };
+      final IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(getAssertMacroId(), initializer);
       return nodeFactory.newExpressionStatement(assertEqual);
    }
 

@@ -32,30 +32,30 @@ abstract class PreprocessorFileCreator {
    protected CRefactoringContext         context;
    private final ModificationCollector   collector;
 
-   public PreprocessorFileCreator(ModificationCollector collector, ICProject cProject, CRefactoringContext context) {
+   public PreprocessorFileCreator(final ModificationCollector collector, final ICProject cProject, final CRefactoringContext context) {
       this.collector = collector;
       this.cProject = cProject;
       this.context = context;
    }
 
-   public void createFile(IPath pathForNewFile, ICPPASTFunctionDeclarator funDecl, IProgressMonitor pm) throws CoreException {
-      IASTTranslationUnit newAst = createNewTu(pathForNewFile, pm);
-      ASTRewrite rewriter = collector.rewriterForTranslationUnit(newAst);
+   public void createFile(final IPath pathForNewFile, final ICPPASTFunctionDeclarator funDecl, final IProgressMonitor pm) throws CoreException {
+      final IASTTranslationUnit newAst = createNewTu(pathForNewFile, pm);
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(newAst);
       addContentToTu(newAst, rewriter, funDecl, pm);
    }
 
    protected abstract void addContentToTu(IASTTranslationUnit newAst, ASTRewrite rewriter, ICPPASTFunctionDeclarator funDecl, IProgressMonitor pm)
          throws CoreException;
 
-   protected ICPPASTDeclSpecifier getReturnValue(ICPPASTFunctionDeclarator funDecl) {
-      ICPPASTDeclSpecifier newDeclSpec = AstUtil.getDeclSpec(funDecl).copy();
+   protected ICPPASTDeclSpecifier getReturnValue(final ICPPASTFunctionDeclarator funDecl) {
+      final ICPPASTDeclSpecifier newDeclSpec = AstUtil.getDeclSpec(funDecl).copy();
       AstUtil.removeExternalStorageIfSet(newDeclSpec);
       return newDeclSpec;
    }
 
-   protected ICPPASTFunctionDeclarator createNewFunDecl(ICPPASTFunctionDeclarator funDecl) {
-      IASTName newFunName = getNewFunName(funDecl);
-      ICPPASTFunctionDeclarator newFunDecl = nodeFactory.newFunctionDeclarator(newFunName);
+   protected ICPPASTFunctionDeclarator createNewFunDecl(final ICPPASTFunctionDeclarator funDecl) {
+      final IASTName newFunName = getNewFunName(funDecl);
+      final ICPPASTFunctionDeclarator newFunDecl = nodeFactory.newFunctionDeclarator(newFunName);
       addParamsExceptVoid(funDecl, newFunDecl);
       adjustParamNamesIfNecessary(newFunDecl);
       addFileNameParam(newFunDecl);
@@ -65,16 +65,16 @@ abstract class PreprocessorFileCreator {
 
    protected abstract IASTName getNewFunName(ICPPASTFunctionDeclarator funDecl);
 
-   private static void addLineNumberParam(ICPPASTFunctionDeclarator newFunDecl) {
+   private static void addLineNumberParam(final ICPPASTFunctionDeclarator newFunDecl) {
       newFunDecl.addParameterDeclaration(getLineNumberParam());
    }
 
-   private static void addFileNameParam(ICPPASTFunctionDeclarator newFunDecl) {
+   private static void addFileNameParam(final ICPPASTFunctionDeclarator newFunDecl) {
       newFunDecl.addParameterDeclaration(getFileNameParam());
    }
 
-   private static void addParamsExceptVoid(ICPPASTFunctionDeclarator funDecl, ICPPASTFunctionDeclarator newFunDecl) {
-      for (ICPPASTParameterDeclaration param : funDecl.getParameters()) {
+   private static void addParamsExceptVoid(final ICPPASTFunctionDeclarator funDecl, final ICPPASTFunctionDeclarator newFunDecl) {
+      for (final ICPPASTParameterDeclaration param : funDecl.getParameters()) {
          if (!AstUtil.isVoid(param)) {
             newFunDecl.addParameterDeclaration(param.copy());
          }
@@ -82,29 +82,29 @@ abstract class PreprocessorFileCreator {
    }
 
    private static ICPPASTParameterDeclaration getLineNumberParam() {
-      ICPPASTSimpleDeclSpecifier intType = nodeFactory.newSimpleDeclSpecifier();
+      final ICPPASTSimpleDeclSpecifier intType = nodeFactory.newSimpleDeclSpecifier();
       intType.setType(IBasicType.Kind.eInt);
-      ICPPASTDeclarator lineNumberDecl = nodeFactory.newDeclarator(nodeFactory.newName(LINE_NUMBER.toCharArray()));
-      ICPPASTParameterDeclaration lineNumberParam = nodeFactory.newParameterDeclaration(intType, lineNumberDecl);
+      final ICPPASTDeclarator lineNumberDecl = nodeFactory.newDeclarator(nodeFactory.newName(LINE_NUMBER.toCharArray()));
+      final ICPPASTParameterDeclaration lineNumberParam = nodeFactory.newParameterDeclaration(intType, lineNumberDecl);
       return lineNumberParam;
    }
 
    private static ICPPASTParameterDeclaration getFileNameParam() {
-      ICPPASTDeclarator fileNameDecl = nodeFactory.newDeclarator(nodeFactory.newName(FILE_NAME.toCharArray()));
-      ICPPASTSimpleDeclSpecifier charType = nodeFactory.newSimpleDeclSpecifier();
+      final ICPPASTDeclarator fileNameDecl = nodeFactory.newDeclarator(nodeFactory.newName(FILE_NAME.toCharArray()));
+      final ICPPASTSimpleDeclSpecifier charType = nodeFactory.newSimpleDeclSpecifier();
       charType.setType(IBasicType.Kind.eChar);
       charType.setConst(true);
       fileNameDecl.addPointerOperator(nodeFactory.newPointer());
       return nodeFactory.newParameterDeclaration(charType, fileNameDecl);
    }
 
-   private static void adjustParamNamesIfNecessary(ICPPASTFunctionDeclarator newFunDecl) {
-      ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
+   private static void adjustParamNamesIfNecessary(final ICPPASTFunctionDeclarator newFunDecl) {
+      final ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
       funDecorator.adjustParamNamesIfNecessary();
    }
 
-   protected IASTTranslationUnit createNewTu(IPath pathForNewFile, IProgressMonitor pm) throws CoreException {
-      TranslationUnitCreator creator = new TranslationUnitCreator(cProject.getProject(), context);
+   protected IASTTranslationUnit createNewTu(final IPath pathForNewFile, final IProgressMonitor pm) throws CoreException {
+      final TranslationUnitCreator creator = new TranslationUnitCreator(cProject.getProject(), context);
       return creator.createAndGetNewTu(pathForNewFile, pm);
    }
 }

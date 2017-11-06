@@ -14,13 +14,13 @@ public class GnuOptionChecker extends AbstractIndexAstChecker {
    public static final String WRAP_FUNCTION_PROBLEM_ID = "ch.hsr.ifs.mockator.WrapFunctionProblem";
 
    @Override
-   public void processAst(IASTTranslationUnit ast) {
-      for (IASTPreprocessorStatement pStmt : ast.getAllPreprocessorStatements()) {
+   public void processAst(final IASTTranslationUnit ast) {
+      for (final IASTPreprocessorStatement pStmt : ast.getAllPreprocessorStatements()) {
          if (!(pStmt instanceof IASTPreprocessorIfdefStatement)) {
             continue;
          }
 
-         IASTPreprocessorIfdefStatement ifDefStmt = (IASTPreprocessorIfdefStatement) pStmt;
+         final IASTPreprocessorIfdefStatement ifDefStmt = (IASTPreprocessorIfdefStatement) pStmt;
 
          if (isWrapMacroCheck(ifDefStmt)) {
             reportProblem(WRAP_FUNCTION_PROBLEM_ID, ifDefStmt, unpackName(getMacroCheckName(ifDefStmt)));
@@ -28,16 +28,16 @@ public class GnuOptionChecker extends AbstractIndexAstChecker {
       }
    }
 
-   private static boolean isWrapMacroCheck(IASTPreprocessorIfdefStatement ifDefStmt) {
+   private static boolean isWrapMacroCheck(final IASTPreprocessorIfdefStatement ifDefStmt) {
       return getMacroCheckName(ifDefStmt).startsWith(MockatorConstants.WRAP_MACRO_PREFIX);
    }
 
-   private static String getMacroCheckName(IASTPreprocessorIfdefStatement ifDefStmt) {
+   private static String getMacroCheckName(final IASTPreprocessorIfdefStatement ifDefStmt) {
       return ifDefStmt.getMacroReference().toString();
    }
 
-   private static String unpackName(String wrapFunName) {
-      int idx = wrapFunName.indexOf(MockatorConstants.WRAP_MACRO_PREFIX);
+   private static String unpackName(final String wrapFunName) {
+      final int idx = wrapFunName.indexOf(MockatorConstants.WRAP_MACRO_PREFIX);
       Assert.isTrue(idx >= 0, "Invalid wrapped function");
       return wrapFunName.substring(idx + MockatorConstants.WRAP_MACRO_PREFIX.length());
    }

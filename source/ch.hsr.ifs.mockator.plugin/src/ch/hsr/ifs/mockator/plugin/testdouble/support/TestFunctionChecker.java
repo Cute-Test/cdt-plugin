@@ -20,10 +20,10 @@ public abstract class TestFunctionChecker extends MockatorIndexAstChecker implem
          }
 
          @Override
-         public int visit(IASTDeclaration declaration) {
+         public int visit(final IASTDeclaration declaration) {
             if (!(declaration instanceof IASTFunctionDefinition)) return PROCESS_CONTINUE;
 
-            IASTFunctionDefinition candidate = (IASTFunctionDefinition) declaration;
+            final IASTFunctionDefinition candidate = (IASTFunctionDefinition) declaration;
 
             if (isValidTestFunction(candidate)) {
                processTestFunction((IASTFunctionDefinition) declaration);
@@ -34,7 +34,7 @@ public abstract class TestFunctionChecker extends MockatorIndexAstChecker implem
       };
    }
 
-   private boolean isValidTestFunction(IASTFunctionDefinition function) {
+   private boolean isValidTestFunction(final IASTFunctionDefinition function) {
       return FunctionsToAnalyze.fromProjectSettings(getProject()).shouldConsider(function);
    }
 

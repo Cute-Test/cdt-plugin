@@ -48,8 +48,8 @@ public class MockatorPropertyPage extends PropertyPage implements IWorkbenchProp
    }
 
    @Override
-   protected Control createContents(Composite parent) {
-      Composite comp = createContainer(parent);
+   protected Control createContents(final Composite parent) {
+      final Composite comp = createContainer(parent);
       createCppStdSection(comp);
       createFunctionSection(comp);
       createAssertOrderSection(comp);
@@ -58,63 +58,63 @@ public class MockatorPropertyPage extends PropertyPage implements IWorkbenchProp
       return comp;
    }
 
-   private static Composite createContainer(Composite parent) {
-      Composite comp = new Composite(parent, SWT.NONE);
-      GridLayout layout = new GridLayout(2, false);
+   private static Composite createContainer(final Composite parent) {
+      final Composite comp = new Composite(parent, SWT.NONE);
+      final GridLayout layout = new GridLayout(2, false);
       comp.setLayout(layout);
       return comp;
    }
 
-   private void createFunctionSection(Composite comp) {
-      Group functionGroup = createNamedGroup(comp, I18N.FunctionAnalyzeStrategyDesc);
+   private void createFunctionSection(final Composite comp) {
+      final Group functionGroup = createNamedGroup(comp, I18N.FunctionAnalyzeStrategyDesc);
       createFunctionButtons(functionGroup);
    }
 
-   private void createFunctionButtons(Composite comp) {
+   private void createFunctionButtons(final Composite comp) {
       onlyTestFunctionsButton = createRadioButton(comp, FunctionsToAnalyze.OnlyTestFunctions.getDescription());
       allFunctionsButton = createRadioButton(comp, FunctionsToAnalyze.AllFunctions.getDescription());
       initFunctionStrategy();
    }
 
-   private void createMarkMemFunsSection(Composite comp) {
-      Group markMemFunsGroup = createNamedGroup(comp, I18N.MarkMemFunsDesc);
+   private void createMarkMemFunsSection(final Composite comp) {
+      final Group markMemFunsGroup = createNamedGroup(comp, I18N.MarkMemFunsDesc);
       createMarkMemFunsButtons(markMemFunsGroup);
    }
 
-   private void createMarkMemFunsButtons(Group comp) {
+   private void createMarkMemFunsButtons(final Group comp) {
       onlyMarkReferencedMemFunsButton = createRadioButton(comp, MarkMissingMemFuns.OnlyReferencedFromTest.getDescription());
       markAllMemFunsButton = createRadioButton(comp, MarkMissingMemFuns.AllMemFuns.getDescription());
       initMarkMemFuns();
    }
 
-   private void createCppStdSection(Composite comp) {
-      Group cppStdGroup = createNamedGroup(comp, I18N.CppStandardDesc);
+   private void createCppStdSection(final Composite comp) {
+      final Group cppStdGroup = createNamedGroup(comp, I18N.CppStandardDesc);
       createCppStdButtons(cppStdGroup);
    }
 
-   private void createCppStdButtons(Group comp) {
+   private void createCppStdButtons(final Group comp) {
       cpp03Button = createRadioButton(comp, CppStandard.Cpp03Std.getDescription());
       cpp11Button = createRadioButton(comp, CppStandard.Cpp11Std.getDescription());
       initCppStd();
    }
 
-   private void createAssertOrderSection(Composite comp) {
-      Group assertGroup = createNamedGroup(comp, I18N.AssertStrategyDesc);
+   private void createAssertOrderSection(final Composite comp) {
+      final Group assertGroup = createNamedGroup(comp, I18N.AssertStrategyDesc);
       createAssertButtons(assertGroup);
    }
 
-   private void createLinkedEditSection(Composite comp) {
-      Group linkedEditGroup = createNamedGroup(comp, I18N.LinkedEditStrategyDesc);
+   private void createLinkedEditSection(final Composite comp) {
+      final Group linkedEditGroup = createNamedGroup(comp, I18N.LinkedEditStrategyDesc);
       createLinkedEditButtons(linkedEditGroup);
    }
 
-   private void createAssertButtons(Composite comp) {
+   private void createAssertButtons(final Composite comp) {
       orderDependentButton = createRadioButton(comp, AssertionOrder.OrderDependent.getDescription());
       orderIndependentButton = createRadioButton(comp, AssertionOrder.OrderIndependent.getDescription());
       initAssert();
    }
 
-   private void createLinkedEditButtons(Composite comp) {
+   private void createLinkedEditButtons(final Composite comp) {
       linkedEditArgumentsButton = createRadioButton(comp, LinkedEditModeStrategy.ChooseArguments.getDescription());
       linkedEditFunctionsButton = createRadioButton(comp, LinkedEditModeStrategy.ChooseFunctions.getDescription());
       initLinkedEdit();
@@ -165,14 +165,14 @@ public class MockatorPropertyPage extends PropertyPage implements IWorkbenchProp
    }
 
    private IResource getResource() {
-      return (IResource) getElement().getAdapter(IResource.class);
+      return getElement().getAdapter(IResource.class);
    }
 
-   private static Group createNamedGroup(Composite parent, String label) {
-      Group group = new Group(parent, SWT.NONE);
+   private static Group createNamedGroup(final Composite parent, final String label) {
+      final Group group = new Group(parent, SWT.NONE);
       group.setText(label);
-      GridLayout layout = new GridLayout();
-      GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+      final GridLayout layout = new GridLayout();
+      final GridData gd = new GridData(GridData.FILL_HORIZONTAL);
       gd.horizontalSpan = 2;
       layout.numColumns = 2;
       group.setLayout(layout);
@@ -180,8 +180,8 @@ public class MockatorPropertyPage extends PropertyPage implements IWorkbenchProp
       return group;
    }
 
-   private static Button createRadioButton(Composite comp, String text) {
-      Button button = new Button(comp, SWT.RADIO);
+   private static Button createRadioButton(final Composite comp, final String text) {
+      final Button button = new Button(comp, SWT.RADIO);
       button.setText(text);
       return button;
    }

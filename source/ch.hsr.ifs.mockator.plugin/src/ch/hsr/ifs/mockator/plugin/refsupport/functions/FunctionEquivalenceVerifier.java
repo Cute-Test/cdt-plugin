@@ -22,23 +22,23 @@ public class FunctionEquivalenceVerifier {
 
    private final ICPPASTFunctionDeclarator funDecl;
 
-   public FunctionEquivalenceVerifier(ICPPASTFunctionDeclarator funDecl) {
+   public FunctionEquivalenceVerifier(final ICPPASTFunctionDeclarator funDecl) {
       this.funDecl = funDecl;
    }
 
-   public boolean isEquivalent(ICPPASTFunctionDeclarator other) {
+   public boolean isEquivalent(final ICPPASTFunctionDeclarator other) {
       if (!funDecl.getName().toString().equals(other.getName().toString())) return false;
 
-      ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(getParameterTypes(funDecl), getParameterTypes(other));
+      final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(getParameterTypes(funDecl), getParameterTypes(other));
       return tester.areParametersEquivalent() && funDecl.isConst() == other.isConst();
    }
 
-   private static List<IType> getParameterTypes(ICPPASTFunctionDeclarator funDecl) {
-      FunctionParamTypeCollector helper = new FunctionParamTypeCollector(funDecl);
+   private static List<IType> getParameterTypes(final ICPPASTFunctionDeclarator funDecl) {
+      final FunctionParamTypeCollector helper = new FunctionParamTypeCollector(funDecl);
       return helper.getParameterTypes();
    }
 
-   public boolean isEquivalent(ICPPASTFunctionCallExpression functionCall, ConstStrategy constStrategy) {
+   public boolean isEquivalent(final ICPPASTFunctionCallExpression functionCall, final ConstStrategy constStrategy) {
       if (!funDecl.getName().toString().equals(AstUtil.getName(functionCall).toString())) return false;
 
       boolean result = areParamsEquivalentToArguments(functionCall, funDecl);
@@ -50,12 +50,12 @@ public class FunctionEquivalenceVerifier {
       return result;
    }
 
-   private static boolean areParamsEquivalentToArguments(ICPPASTFunctionCallExpression funCall, ICPPASTFunctionDeclarator function) {
-      FunArgumentsTypeCollector ex = new FunArgumentsTypeCollector(list(funCall.getArguments()));
-      FunctionParamTypeCollector helper = new FunctionParamTypeCollector(function);
-      List<IType> paramTypes = helper.getParameterTypes();
-      List<IType> funArgTypes = ex.getFunArgTypes();
-      ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(funArgTypes, paramTypes);
+   private static boolean areParamsEquivalentToArguments(final ICPPASTFunctionCallExpression funCall, final ICPPASTFunctionDeclarator function) {
+      final FunArgumentsTypeCollector ex = new FunArgumentsTypeCollector(list(funCall.getArguments()));
+      final FunctionParamTypeCollector helper = new FunctionParamTypeCollector(function);
+      final List<IType> paramTypes = helper.getParameterTypes();
+      final List<IType> funArgTypes = ex.getFunArgTypes();
+      final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(funArgTypes, paramTypes);
       return tester.areParametersEquivalent();
    }
 }

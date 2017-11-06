@@ -145,27 +145,21 @@ public abstract class CollectionHelper {
    }
 
    public static <E> Iterable<E> toIterable(final Enumeration<E> e) {
-      return new Iterable<E>() {
+      return () -> new Iterator<E>() {
 
          @Override
-         public Iterator<E> iterator() {
-            return new Iterator<E>() {
+         public boolean hasNext() {
+            return e.hasMoreElements();
+         }
 
-               @Override
-               public boolean hasNext() {
-                  return e.hasMoreElements();
-               }
+         @Override
+         public E next() {
+            return e.nextElement();
+         }
 
-               @Override
-               public E next() {
-                  return e.nextElement();
-               }
-
-               @Override
-               public void remove() {
-                  throw new UnsupportedOperationException();
-               }
-            };
+         @Override
+         public void remove() {
+            throw new UnsupportedOperationException();
          }
       };
    }

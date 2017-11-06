@@ -35,7 +35,7 @@ public class TestDoubleInNsInserter {
    }
 
    public void insertTestDouble(final IASTSimpleDeclaration testDouble, final ICPPASTCompositeTypeSpecifier testDoubleToMove,
-            final ICPPASTFunctionDefinition testFunction) {
+         final ICPPASTFunctionDefinition testFunction) {
       final Optional<String> cuteSuiteName = getCuteSuiteName(testFunction);
 
       if (!cuteSuiteName.isPresent()) {
@@ -52,7 +52,7 @@ public class TestDoubleInNsInserter {
    }
 
    private void insertTestDoubleInCuteSuiteNs(final ICPPASTFunctionDefinition testFunction, final String cuteSuiteName,
-            final IASTSimpleDeclaration testDouble, final ICPPASTCompositeTypeSpecifier testDoubleToMove) {
+         final IASTSimpleDeclaration testDouble, final ICPPASTCompositeTypeSpecifier testDoubleToMove) {
       final IASTTranslationUnit testFunTu = testFunction.getTranslationUnit();
       final Optional<ICPPASTNamespaceDefinition> cuteSuiteNs = findNamespaceDefinition(testFunTu, cuteSuiteName);
 
@@ -68,7 +68,7 @@ public class TestDoubleInNsInserter {
    }
 
    private void insertTestDoubleInNs(final IASTNode parent, final ICPPASTFunctionDefinition testFunction, final IASTSimpleDeclaration testDouble,
-            final ICPPASTCompositeTypeSpecifier testDoubleToMove) {
+         final ICPPASTCompositeTypeSpecifier testDoubleToMove) {
       final String funNameNs = getNamespaceName(testFunction);
       final Optional<ICPPASTNamespaceDefinition> testFunctionNs = findNamespaceDefinition(parent, funNameNs);
 
@@ -91,7 +91,7 @@ public class TestDoubleInNsInserter {
    }
 
    private void addTestDoubleToNs(final ICPPASTNamespaceDefinition parentNs, final IASTSimpleDeclaration simpleDecl,
-            final ICPPASTCompositeTypeSpecifier toMove) {
+         final ICPPASTCompositeTypeSpecifier toMove) {
       TestDouble testDouble = null;
 
       switch (new TestDoubleKindAnalyzer(toMove).getKindOfTestDouble()) {

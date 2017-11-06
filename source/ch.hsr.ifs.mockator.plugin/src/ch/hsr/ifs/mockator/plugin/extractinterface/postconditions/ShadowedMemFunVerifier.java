@@ -25,71 +25,72 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.MethodParamEquival
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.SubClassFinder;
 
+
 public class ShadowedMemFunVerifier {
 
-  private final ExtractInterfaceContext context;
+   private final ExtractInterfaceContext context;
 
-  public ShadowedMemFunVerifier(final ExtractInterfaceContext context) {
-    this.context = context;
-  }
+   public ShadowedMemFunVerifier(final ExtractInterfaceContext context) {
+      this.context = context;
+   }
 
-  public void checkForShadowedFunctions(final RefactoringStatus status) throws CoreException {
-    final Collection<ICPPClassType> subClasses = getSubClassesOfChosenClass();
+   public void checkForShadowedFunctions(final RefactoringStatus status) throws CoreException {
+      final Collection<ICPPClassType> subClasses = getSubClassesOfChosenClass();
 
-    for (final ICPPMethod chosenMemFun : getChosenNonVirtualMemFuns()) {
-      final Set<ICPPMethod> shadowingMemFuns = unorderedSet();
+      for (final ICPPMethod chosenMemFun : getChosenNonVirtualMemFuns()) {
+         final Set<ICPPMethod> shadowingMemFuns = unorderedSet();
 
-      for (final ICPPClassType klass : subClasses) {
-        for (final ICPPMethod memFun : klass.getDeclaredMethods()) {
-          if (haveSameSignature(chosenMemFun, memFun)) {
-            shadowingMemFuns.add(memFun);
-          }
-        }
+         for (final ICPPClassType klass : subClasses) {
+            for (final ICPPMethod memFun : klass.getDeclaredMethods()) {
+               if (haveSameSignature(chosenMemFun, memFun)) {
+                  shadowingMemFuns.add(memFun);
+               }
+            }
+         }
+
+         for (final ICPPMethod shadowing : shadowingMemFuns) {
+            status.addWarning(createShadowWarning(chosenMemFun, shadowing));
+         }
       }
+   }
 
-      for (final ICPPMethod shadowing : shadowingMemFuns) {
-        status.addWarning(createShadowWarning(chosenMemFun, shadowing));
-      }
-    }
-  }
+   private static boolean haveSameSignature(final ICPPMethod chosenMemFun, final ICPPMethod scMemFun) {
+      return chosenMemFun.getName().equals(scMemFun.getName()) && haveSameParameters(chosenMemFun, scMemFun);
+   }
 
-  private static boolean haveSameSignature(final ICPPMethod chosenMemFun, final ICPPMethod scMemFun) {
-    return chosenMemFun.getName().equals(scMemFun.getName()) && haveSameParameters(chosenMemFun, scMemFun);
-  }
+   private Collection<ICPPMethod> getChosenNonVirtualMemFuns() {
+      return filter(map(context.getChosenMemFuns(), (final IASTDeclaration decl) -> getCppMethodIn(decl)), (final ICPPMethod memFun) -> !memFun
+            .isVirtual());
+   }
 
-  private Collection<ICPPMethod> getChosenNonVirtualMemFuns() {
-    return filter(map(context.getChosenMemFuns(), (final IASTDeclaration decl) -> getCppMethodIn(decl)),
-        (final ICPPMethod memFun) -> !memFun.isVirtual());
-  }
+   private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {
+      final ICPPASTFunctionDeclarator funDecl = AstUtil.getChildOfType(declaration, ICPPASTFunctionDeclarator.class);
+      final IBinding binding = funDecl.getName().resolveBinding();
+      Assert.instanceOf(binding, ICPPMethod.class, "Chosen member function is not valid");
+      return (ICPPMethod) binding;
+   }
 
-  private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {
-    final ICPPASTFunctionDeclarator funDecl = AstUtil.getChildOfType(declaration, ICPPASTFunctionDeclarator.class);
-    final IBinding binding = funDecl.getName().resolveBinding();
-    Assert.instanceOf(binding, ICPPMethod.class, "Chosen member function is not valid");
-    return (ICPPMethod) binding;
-  }
+   private static String createShadowWarning(final ICPPMethod chosenMemFun, final ICPPMethod shadowingMemFun) {
+      final String chosenFunQfName = AstUtil.getQfName(chosenMemFun);
+      final String shadowFunQfName = AstUtil.getQfName(shadowingMemFun);
+      return NLS.bind(I18N.ExtractInterfaceShadowedFunction, chosenFunQfName, shadowFunQfName);
+   }
 
-  private static String createShadowWarning(final ICPPMethod chosenMemFun, final ICPPMethod shadowingMemFun) {
-    final String chosenFunQfName = AstUtil.getQfName(chosenMemFun);
-    final String shadowFunQfName = AstUtil.getQfName(shadowingMemFun);
-    return NLS.bind(I18N.ExtractInterfaceShadowedFunction, chosenFunQfName, shadowFunQfName);
-  }
+   @SuppressWarnings("restriction")
+   private Collection<ICPPClassType> getSubClassesOfChosenClass() throws CoreException {
+      final IIndex index = context.getCRefContext().getIndex();
+      final ICPPClassType klass = getChosenClassType();
+      return new SubClassFinder(index).getSubClasses(klass);
+   }
 
-  @SuppressWarnings("restriction")
-  private Collection<ICPPClassType> getSubClassesOfChosenClass() throws CoreException {
-    final IIndex index = context.getCRefContext().getIndex();
-    final ICPPClassType klass = getChosenClassType();
-    return new SubClassFinder(index).getSubClasses(klass);
-  }
+   private ICPPClassType getChosenClassType() {
+      final ICPPASTCompositeTypeSpecifier chosenClass = context.getChosenClass();
+      final IBinding b = chosenClass.getName().resolveBinding();
+      Assert.instanceOf(b, ICPPClassType.class, "Not a valid class to extract an interface for");
+      return (ICPPClassType) b;
+   }
 
-  private ICPPClassType getChosenClassType() {
-    final ICPPASTCompositeTypeSpecifier chosenClass = context.getChosenClass();
-    final IBinding b = chosenClass.getName().resolveBinding();
-    Assert.instanceOf(b, ICPPClassType.class, "Not a valid class to extract an interface for");
-    return (ICPPClassType) b;
-  }
-
-  private static boolean haveSameParameters(final ICPPMethod chosenMemFun, final ICPPMethod subclassMemFun) {
-    return new MethodParamEquivalenceTester(chosenMemFun).hasSameParameters(subclassMemFun);
-  }
+   private static boolean haveSameParameters(final ICPPMethod chosenMemFun, final ICPPMethod subclassMemFun) {
+      return new MethodParamEquivalenceTester(chosenMemFun).hasSameParameters(subclassMemFun);
+   }
 }

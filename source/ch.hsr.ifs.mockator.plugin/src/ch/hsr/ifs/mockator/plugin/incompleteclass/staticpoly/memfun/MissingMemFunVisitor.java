@@ -30,14 +30,15 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
    protected final IType                       templateParamType;
    private final ICPPASTCompositeTypeSpecifier testDouble;
 
-   public MissingMemFunVisitor(ICPPASTCompositeTypeSpecifier testDouble, ICPPASTTemplateParameter templateParam, ICPPASTTemplateDeclaration sut) {
+   public MissingMemFunVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICPPASTTemplateParameter templateParam,
+                               final ICPPASTTemplateDeclaration sut) {
       this.testDouble = testDouble;
       this.sut = sut;
       templateParamType = getType(templateParam);
    }
 
-   private static IType getType(ICPPASTTemplateParameter param) {
-      IASTName name = ((ICPPASTSimpleTypeTemplateParameter) param).getName();
+   private static IType getType(final ICPPASTTemplateParameter param) {
+      final IASTName name = ((ICPPASTSimpleTypeTemplateParameter) param).getName();
       return (IType) name.resolveBinding();
    }
 
@@ -49,14 +50,14 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
       return testDouble.getName().toString();
    }
 
-   protected boolean resolvesToTemplateParam(IType type) {
-      IType resolvedType = CxxAstUtils.unwindTypedef(type);
+   protected boolean resolvesToTemplateParam(final IType type) {
+      final IType resolvedType = CxxAstUtils.unwindTypedef(type);
       IType unwoundType = AstUtil.unwindPointerOrRefType(resolvedType);
 
       if (unwoundType == null) return false;
 
       if (unwoundType instanceof TypeOfDependentExpression) {
-         ICPPEvaluation evaluation = ((TypeOfDependentExpression) unwoundType).getEvaluation();
+         final ICPPEvaluation evaluation = ((TypeOfDependentExpression) unwoundType).getEvaluation();
          if (evaluation instanceof EvalTypeId) {
             unwoundType = ((EvalTypeId) evaluation).getInputType();
          }
@@ -65,18 +66,18 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
       return AstUtil.isSameType(unwoundType, templateParamType);
    }
 
-   protected IType resolveTypeOfDependentExpression(TypeOfDependentExpression type) {
+   protected IType resolveTypeOfDependentExpression(final TypeOfDependentExpression type) {
       IType evalType = type.getEvaluation().getType(null);
-      ICPPEvaluation evaluation = ((TypeOfDependentExpression) evalType).getEvaluation();
+      final ICPPEvaluation evaluation = ((TypeOfDependentExpression) evalType).getEvaluation();
 
       if (evaluation instanceof EvalMemberAccess) {
-         IBinding binding = ((EvalMemberAccess) evaluation).getMember();
+         final IBinding binding = ((EvalMemberAccess) evaluation).getMember();
 
          if (binding instanceof CPPField) {
             evalType = ((CPPField) binding).getType();
          }
       } else if (evaluation instanceof EvalUnary) {
-         ICPPEvaluation argument = ((EvalUnary) evaluation).getArgument();
+         final ICPPEvaluation argument = ((EvalUnary) evaluation).getArgument();
          evalType = argument.getType(null);
       }
 

@@ -15,13 +15,13 @@ public class MockatorNature implements IProjectNature {
    private static final String BOOST_REGEX_LIB = "boost_regex";
    private IProject            project;
 
-   public static void addMockatorNature(IProject project, IProgressMonitor pm) throws CoreException {
-      NatureHandler handler = new NatureHandler(project);
+   public static void addMockatorNature(final IProject project, final IProgressMonitor pm) throws CoreException {
+      final NatureHandler handler = new NatureHandler(project);
       handler.addNature(NATURE_ID, pm);
    }
 
-   public static void removeMockatorNature(IProject project, IProgressMonitor pm) throws CoreException {
-      NatureHandler handler = new NatureHandler(project);
+   public static void removeMockatorNature(final IProject project, final IProgressMonitor pm) throws CoreException {
+      final NatureHandler handler = new NatureHandler(project);
       handler.removeNature(NATURE_ID, pm);
    }
 
@@ -32,7 +32,7 @@ public class MockatorNature implements IProjectNature {
       addBoostRegexLibrary(project);
    }
 
-   private static void addBoostRegexLibrary(IProject project) {
+   private static void addBoostRegexLibrary(final IProject project) {
       new LinkerLibraryHandler(project).addLibrary(BOOST_REGEX_LIB);
    }
 
@@ -42,7 +42,7 @@ public class MockatorNature implements IProjectNature {
       removeBoostRegexLibrary(project);
    }
 
-   private static void removeBoostRegexLibrary(IProject project) {
+   private static void removeBoostRegexLibrary(final IProject project) {
       new LinkerLibraryHandler(project).removeLibrary(BOOST_REGEX_LIB);
    }
 
@@ -52,7 +52,7 @@ public class MockatorNature implements IProjectNature {
    }
 
    @Override
-   public void setProject(IProject project) {
+   public void setProject(final IProject project) {
       this.project = project;
    }
 

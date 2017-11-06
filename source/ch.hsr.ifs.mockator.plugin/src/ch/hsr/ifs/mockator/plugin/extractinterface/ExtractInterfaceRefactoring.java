@@ -27,21 +27,21 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    private final ExtractInterfaceContext context;
    private ExtractInterfaceHandler       handler;
 
-   public ExtractInterfaceRefactoring(ExtractInterfaceContext context) {
+   public ExtractInterfaceRefactoring(final ExtractInterfaceContext context) {
       super(context.getTuOfSelection(), context.getSelection(), context.getCProject());
       this.context = context;
    }
 
    @Override
-   public RefactoringStatus checkInitialConditions(IProgressMonitor pm) throws CoreException, OperationCanceledException {
-      RefactoringStatus status = super.checkInitialConditions(pm);
+   public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+      final RefactoringStatus status = super.checkInitialConditions(pm);
       pm.subTask(I18N.ExtractInterfaceAnalyzingInProgress);
       prepareRefactoring(status, pm);
       handler.preProcess();
       return status;
    }
 
-   private void prepareRefactoring(RefactoringStatus status, IProgressMonitor pm) throws OperationCanceledException, CoreException {
+   private void prepareRefactoring(final RefactoringStatus status, final IProgressMonitor pm) throws OperationCanceledException, CoreException {
       context.setStatus(status);
       context.setSelectedName(getSelectedName(getAST(tu, pm)));
       context.setProgressMonitor(pm);
@@ -50,13 +50,13 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    }
 
    @Override
-   protected RefactoringStatus checkFinalConditions(IProgressMonitor pm, CheckConditionsContext c) throws CoreException {
-      RefactoringStatus status = c.check(pm);
+   protected RefactoringStatus checkFinalConditions(final IProgressMonitor pm, final CheckConditionsContext c) throws CoreException {
+      final RefactoringStatus status = c.check(pm);
 
       try {
          handler.postProcess(status);
       }
-      catch (MockatorException e) {
+      catch (final MockatorException e) {
          status.addFatalError("Extract interface refactoring failed: " + e.getMessage());
       }
 
@@ -70,12 +70,12 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    }
 
    private String getRefactoringDescription() {
-      String className = AstUtil.getQfNameF(context.getChosenClass());
+      final String className = AstUtil.getQfNameF(context.getChosenClass());
       return String.format("Extract interface for class '%s'", className);
    }
 
    private Map<String, String> getArgumentMap() {
-      Map<String, String> args = unorderedMap();
+      final Map<String, String> args = unorderedMap();
       args.put(CRefactoringDescriptor.FILE_NAME, tu.getLocationURI().toString());
       args.put(CRefactoringDescriptor.SELECTION, selectedRegion.getOffset() + "," + selectedRegion.getLength());
       args.put(ExtractInterfaceDescriptor.NEW_INTERFACE_NAME, context.getNewInterfaceName());
@@ -84,7 +84,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    }
 
    @Override
-   protected void collectModifications(IProgressMonitor pm, ModificationCollector c) throws CoreException, OperationCanceledException {
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector c) throws CoreException, OperationCanceledException {
       pm.subTask(I18N.ExtractInterfacePerformingChangesInProgress);
       context.setModificationCollector(c);
       context.setProgressMonitor(pm);

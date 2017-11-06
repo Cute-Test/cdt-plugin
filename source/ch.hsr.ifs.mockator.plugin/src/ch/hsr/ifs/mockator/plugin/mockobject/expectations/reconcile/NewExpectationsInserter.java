@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
@@ -21,62 +22,62 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 // Inserts the vector with the expected calls for the mock object at the end of the function:
 // calls expected = {{"foo1(int const&) const", int{}}, {"foo2(double const&) const", double{}}};
 class NewExpectationsInserter {
 
-  private final ASTRewrite rewriter;
-  private final ICPPASTFunctionDefinition testFunction;
-  private final ExpectationsCppStdStrategy cppStdStrategy;
-  private final LinkedEditModeStrategy linkedEditStrategy;
-  private final MockObject mockObject;
+   private final ASTRewrite                 rewriter;
+   private final ICPPASTFunctionDefinition  testFunction;
+   private final ExpectationsCppStdStrategy cppStdStrategy;
+   private final LinkedEditModeStrategy     linkedEditStrategy;
+   private final MockObject                 mockObject;
 
-  public NewExpectationsInserter(final ICPPASTFunctionDefinition testFunction, final MockObject mockObject, final CppStandard cppStd,
-      final ASTRewrite rewriter, final LinkedEditModeStrategy linkedEditStrategy) {
-    this.testFunction = testFunction;
-    this.mockObject = mockObject;
-    this.rewriter = rewriter;
-    this.linkedEditStrategy = linkedEditStrategy;
-    cppStdStrategy = getCppStdStrategy(cppStd);
-  }
+   public NewExpectationsInserter(final ICPPASTFunctionDefinition testFunction, final MockObject mockObject, final CppStandard cppStd,
+                                  final ASTRewrite rewriter, final LinkedEditModeStrategy linkedEditStrategy) {
+      this.testFunction = testFunction;
+      this.mockObject = mockObject;
+      this.rewriter = rewriter;
+      this.linkedEditStrategy = linkedEditStrategy;
+      cppStdStrategy = getCppStdStrategy(cppStd);
+   }
 
-  public void insertExpectations(final Collection<? extends TestDoubleMemFun> memFunsForExpectations) {
-    for (final IASTStatement stmt : createExpectationStatements(memFunsForExpectations)) {
-      rewriter.insertBefore(testFunction.getBody(), getInsertionPosition(), stmt, null);
-    }
-  }
+   public void insertExpectations(final Collection<? extends TestDoubleMemFun> memFunsForExpectations) {
+      for (final IASTStatement stmt : createExpectationStatements(memFunsForExpectations)) {
+         rewriter.insertBefore(testFunction.getBody(), getInsertionPosition(), stmt, null);
+      }
+   }
 
-  private Collection<IASTStatement> createExpectationStatements(final Collection<? extends TestDoubleMemFun> memberFunctions) {
-    return cppStdStrategy.createExpectationsVector(memberFunctions, createNameForExpectationsVector(), testFunction, getExpectationsVector(),
-        linkedEditStrategy);
-  }
+   private Collection<IASTStatement> createExpectationStatements(final Collection<? extends TestDoubleMemFun> memberFunctions) {
+      return cppStdStrategy.createExpectationsVector(memberFunctions, createNameForExpectationsVector(), testFunction, getExpectationsVector(),
+            linkedEditStrategy);
+   }
 
-  private String createNameForExpectationsVector() {
-    return mockObject.getNameForExpectationVector();
-  }
+   private String createNameForExpectationsVector() {
+      return mockObject.getNameForExpectationVector();
+   }
 
-  private static ExpectationsCppStdStrategy getCppStdStrategy(final CppStandard cppStd) {
-    return new ExpectationsVectorFactory(cppStd).getStrategy();
-  }
+   private static ExpectationsCppStdStrategy getCppStdStrategy(final CppStandard cppStd) {
+      return new ExpectationsVectorFactory(cppStd).getStrategy();
+   }
 
-  private IASTStatement getInsertionPosition() {
-    final AssertEqualFinderVisitor visitor = new AssertEqualFinderVisitor(Optional.of(mockObject.getKlass()));
-    testFunction.accept(visitor);
-    final Collection<ExpectedActualPair> assertedCalls = visitor.getExpectedActual();
+   private IASTStatement getInsertionPosition() {
+      final AssertEqualFinderVisitor visitor = new AssertEqualFinderVisitor(Optional.of(mockObject.getKlass()));
+      testFunction.accept(visitor);
+      final Collection<ExpectedActualPair> assertedCalls = visitor.getExpectedActual();
 
-    if (assertedCalls.isEmpty()) {
-      return null; // insert at the end of the test function
-    }
+      if (assertedCalls.isEmpty()) { return null; // insert at the end of the test function
+      }
 
-    return getStatementOfFirstAssert(assertedCalls);
-  }
+      return getStatementOfFirstAssert(assertedCalls);
+   }
 
-  private static IASTStatement getStatementOfFirstAssert(final Collection<ExpectedActualPair> assertedCalls) {
-    return OptHelper.returnIfPresentElseNull(head(assertedCalls), (pair) -> AstUtil.getAncestorOfType(pair.expected(), IASTStatement.class));
-  }
+   private static IASTStatement getStatementOfFirstAssert(final Collection<ExpectedActualPair> assertedCalls) {
+      return OptHelper.returnIfPresentElseNull(head(assertedCalls), (pair) -> AstUtil.getAncestorOfType(pair.expected(), IASTStatement.class));
+   }
 
-  private Optional<IASTName> getExpectationsVector() {
-    final ExpectationsVectorDefinitionFinder finder = new ExpectationsVectorDefinitionFinder(mockObject, testFunction);
-    return finder.findExpectationsVector();
-  }
+   private Optional<IASTName> getExpectationsVector() {
+      final ExpectationsVectorDefinitionFinder finder = new ExpectationsVectorDefinitionFinder(mockObject, testFunction);
+      return finder.findExpectationsVector();
+   }
 }

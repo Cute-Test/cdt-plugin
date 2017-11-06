@@ -16,31 +16,31 @@ import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 
 class CAssertEqualsInserter extends AbstractAssertEqualsInserter {
 
-   public CAssertEqualsInserter(ICPPASTFunctionDefinition testFunction, MockSupportContext context) {
+   public CAssertEqualsInserter(final ICPPASTFunctionDefinition testFunction, final MockSupportContext context) {
       super(testFunction, context);
    }
 
    @Override
-   protected void insertWith(ASTRewrite rewriter) {
+   protected void insertWith(final ASTRewrite rewriter) {
       insertCAssertInclude(rewriter);
-      IASTExpressionStatement cAssert = createAssertEqualStmt();
+      final IASTExpressionStatement cAssert = createAssertEqualStmt();
       insertAssertEqual(rewriter, cAssert);
    }
 
-   private void insertCAssertInclude(ASTRewrite rewriter) {
-      AstIncludeNode cAssert = new AstIncludeNode(MockatorConstants.C_ASSERT_INCLUDE, true);
+   private void insertCAssertInclude(final ASTRewrite rewriter) {
+      final AstIncludeNode cAssert = new AstIncludeNode(MockatorConstants.C_ASSERT_INCLUDE, true);
       cAssert.insertInTu(testFunction.getTranslationUnit(), rewriter);
    }
 
    @SuppressWarnings("restriction")
    private IASTExpressionStatement createAssertEqualStmt() {
-      IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(createCAssert(), getAssertEqualParams());
+      final IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(createCAssert(), getAssertEqualParams());
       return nodeFactory.newExpressionStatement(assertEqual);
    }
 
    @SuppressWarnings("restriction")
    private IASTInitializerClause[] getAssertEqualParams() {
-      ICPPASTBinaryExpression binOp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_equals, createExpectations(), createActual());
+      final ICPPASTBinaryExpression binOp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_equals, createExpectations(), createActual());
       return new IASTInitializerClause[] { binOp };
    }
 

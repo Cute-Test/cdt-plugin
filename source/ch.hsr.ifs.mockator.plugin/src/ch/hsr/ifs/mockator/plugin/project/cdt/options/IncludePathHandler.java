@@ -11,7 +11,7 @@ import org.eclipse.core.resources.IProject;
 
 public class IncludePathHandler extends IncludeHandler {
 
-   public IncludePathHandler(IProject project) {
+   public IncludePathHandler(final IProject project) {
       super(project);
    }
 
@@ -21,7 +21,7 @@ public class IncludePathHandler extends IncludeHandler {
    }
 
    @Override
-   protected Set<String> getOptionValues(IOption option) throws BuildException {
+   protected Set<String> getOptionValues(final IOption option) throws BuildException {
       return orderPreservingSet(option.getIncludePaths());
    }
 }

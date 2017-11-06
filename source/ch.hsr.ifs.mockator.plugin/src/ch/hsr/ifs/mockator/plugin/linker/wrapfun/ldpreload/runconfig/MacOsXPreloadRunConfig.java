@@ -12,9 +12,9 @@ class MacOsXPreloadRunConfig extends AbstractPreloadRunStrategy {
    private static String DYLD_LIBRARY_PATH         = "DYLD_LIBRARY_PATH";
 
    @Override
-   public boolean hasPreloadConfig(String sharedLibPath, Map<String, String> envVariables) {
-      String ldPreloadLibs = envVariables.get(DYLD_INSERT_LIBRARIES);
-      String dyldLibPath = envVariables.get(DYLD_LIBRARY_PATH);
+   public boolean hasPreloadConfig(final String sharedLibPath, final Map<String, String> envVariables) {
+      final String ldPreloadLibs = envVariables.get(DYLD_INSERT_LIBRARIES);
+      final String dyldLibPath = envVariables.get(DYLD_LIBRARY_PATH);
 
       if (ldPreloadLibs == null || dyldLibPath == null) return false;
 
@@ -22,29 +22,29 @@ class MacOsXPreloadRunConfig extends AbstractPreloadRunStrategy {
    }
 
    @Override
-   public void addPreloadConfig(String sharedLibPath, Map<String, String> envVariables) {
+   public void addPreloadConfig(final String sharedLibPath, final Map<String, String> envVariables) {
       forceFlatNamespace(envVariables);
       insertLibrary(sharedLibPath, envVariables);
       putLibInPathIfNecessary(sharedLibPath, envVariables);
    }
 
    @Override
-   public void removePreloadConfig(String sharedLibPath, Map<String, String> envVariables) {
+   public void removePreloadConfig(final String sharedLibPath, final Map<String, String> envVariables) {
       removeEntryFromEnv(sharedLibPath, DYLD_INSERT_LIBRARIES, envVariables);
    }
 
-   private void putLibInPathIfNecessary(String pathToShLib, Map<String, String> envVariables) {
-      String dyldLibPath = envVariables.get(DYLD_LIBRARY_PATH);
-      String path = FileUtil.removeFilePart(pathToShLib);
+   private void putLibInPathIfNecessary(final String pathToShLib, final Map<String, String> envVariables) {
+      final String dyldLibPath = envVariables.get(DYLD_LIBRARY_PATH);
+      final String path = FileUtil.removeFilePart(pathToShLib);
       envVariables.put(DYLD_LIBRARY_PATH, appendToList(dyldLibPath, path));
    }
 
-   private void insertLibrary(String pathToShLib, Map<String, String> envVariables) {
-      String dyldInsertLibs = envVariables.get(DYLD_INSERT_LIBRARIES);
+   private void insertLibrary(final String pathToShLib, final Map<String, String> envVariables) {
+      final String dyldInsertLibs = envVariables.get(DYLD_INSERT_LIBRARIES);
       envVariables.put(DYLD_INSERT_LIBRARIES, appendToList(dyldInsertLibs, pathToShLib));
    }
 
-   private static void forceFlatNamespace(Map<String, String> envVariables) {
+   private static void forceFlatNamespace(final Map<String, String> envVariables) {
       envVariables.put(DYLD_FORCE_FLAT_NAMESPACE, "1");
    }
 }

@@ -22,18 +22,18 @@ public class TranslationUnitCreator {
    private final CRefactoringContext context;
    private final IProject            project;
 
-   public TranslationUnitCreator(IProject project, CRefactoringContext context) {
+   public TranslationUnitCreator(final IProject project, final CRefactoringContext context) {
       this.project = project;
       this.context = context;
    }
 
-   public IASTTranslationUnit createAndGetNewTu(IPath filePath, IProgressMonitor pm) throws CoreException {
-      CreateFileChange fileChange = createFileChange(filePath);
+   public IASTTranslationUnit createAndGetNewTu(final IPath filePath, final IProgressMonitor pm) throws CoreException {
+      final CreateFileChange fileChange = createFileChange(filePath);
       fileChange.perform(pm);
       return loadNewTu(filePath, pm);
    }
 
-   private CreateFileChange createFileChange(IPath filePath) {
+   private CreateFileChange createFileChange(final IPath filePath) {
       return new CreateFileChange(filePath.lastSegment(), filePath, "", getCharset());
    }
 
@@ -41,15 +41,15 @@ public class TranslationUnitCreator {
       try {
          return project.getDefaultCharset();
       }
-      catch (CoreException e) {
+      catch (final CoreException e) {
          throw new MockatorException(e);
       }
    }
 
-   private IASTTranslationUnit loadNewTu(IPath filePath, IProgressMonitor pm) throws CoreException {
-      IFile file = FileUtil.toIFile(filePath);
-      ICProject cProject = CPPResourceHelper.getCProject(file.getProject());
-      TranslationUnitLoader tuLoader = new TranslationUnitLoader(cProject, context, pm);
+   private IASTTranslationUnit loadNewTu(final IPath filePath, final IProgressMonitor pm) throws CoreException {
+      final IFile file = FileUtil.toIFile(filePath);
+      final ICProject cProject = CPPResourceHelper.getCProject(file.getProject());
+      final TranslationUnitLoader tuLoader = new TranslationUnitLoader(cProject, context, pm);
       return tuLoader.loadAst(file);
    }
 }

@@ -8,13 +8,13 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 class LdPreloadFunBodyFactory {
 
-   public LdPreloadFunBodyStrategy getFunBodyStrategy(ICPPASTFunctionDeclarator funDecl) {
+   public LdPreloadFunBodyStrategy getFunBodyStrategy(final ICPPASTFunctionDeclarator funDecl) {
       if (isFreeFunction(funDecl)) return new FreeFunBodyStrategy();
 
       return new MemFunBodyStrategy();
    }
 
-   private static boolean isFreeFunction(ICPPASTFunctionDeclarator funDecl) {
+   private static boolean isFreeFunction(final ICPPASTFunctionDeclarator funDecl) {
       return AstUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
    }
 }

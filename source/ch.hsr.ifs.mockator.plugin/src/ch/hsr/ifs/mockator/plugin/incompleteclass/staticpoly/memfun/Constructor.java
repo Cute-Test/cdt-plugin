@@ -20,35 +20,35 @@ class Constructor extends AbstractStaticPolyMissingMemFun {
 
    private final ICPPASTFunctionCallExpression funCall;
 
-   public Constructor(ICPPASTFunctionCallExpression funCall) {
+   public Constructor(final ICPPASTFunctionCallExpression funCall) {
       this.funCall = funCall;
    }
 
    @SuppressWarnings("restriction")
    @Override
    protected ICPPASTFunctionDeclarator createFunDecl() {
-      IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());
-      ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
+      final IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());
+      final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
       new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);
       return funDecl;
    }
 
    @Override
-   protected ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl) {
+   protected ICPPASTDeclSpecifier createReturnType(final ICPPASTFunctionDeclarator funDecl) {
       return createCtorReturnType();
    }
 
    @Override
-   public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy, CppStandard cppStd) {
-      ICPPASTFunctionDefinition function = super.createFunctionDefinition(strategy, cppStd);
+   public ICPPASTFunctionDefinition createFunctionDefinition(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd) {
+      final ICPPASTFunctionDefinition function = super.createFunctionDefinition(strategy, cppStd);
       strategy.addCtorInitializer(function);
       return function;
    }
 
    @Override
-   protected IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, ICPPASTFunctionDeclarator funDecl,
-         ICPPASTDeclSpecifier specifier, CppStandard cppStd) {
-      IASTCompoundStatement newFunBody = createEmptyFunBody();
+   protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
+         final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
+      final IASTCompoundStatement newFunBody = createEmptyFunBody();
       strategy.addCallVectorRegistration(newFunBody, funDecl, false);
       return newFunBody;
    }
@@ -58,8 +58,8 @@ class Constructor extends AbstractStaticPolyMissingMemFun {
    }
 
    @Override
-   public boolean isCallEquivalent(ICPPASTFunctionDefinition function, ConstStrategy strategy) {
-      FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
+   public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
+      final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
       return checker.isEquivalent(funCall, strategy);
    }
 

@@ -14,7 +14,7 @@ abstract class ToggleWrappedFunctionQuickFix extends MockatorQuickFix {
       return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
    }
 
-   protected boolean isWrappedFunctionActive(IMarker marker) {
+   protected boolean isWrappedFunctionActive(final IMarker marker) {
       return new WrappedFunctionQuickFixSupport(getCProject().getProject()).isWrappedFunctionActive(getWrappedFunName(marker));
    }
 
@@ -22,7 +22,7 @@ abstract class ToggleWrappedFunctionQuickFix extends MockatorQuickFix {
       return new WrappedFunctionQuickFixSupport(getCProject().getProject());
    }
 
-   protected String getWrappedFunName(IMarker marker) {
+   protected String getWrappedFunName(final IMarker marker) {
       return getProblemArgument(marker, 0);
    }
 

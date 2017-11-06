@@ -24,7 +24,7 @@ public class IncludeGuardCreator {
    private final ICProject cProject;
    private final String    includeGuardSymbol;
 
-   public IncludeGuardCreator(IResource file, ICProject cProject) {
+   public IncludeGuardCreator(final IResource file, final ICProject cProject) {
       this.file = file;
       this.cProject = cProject;
       includeGuardSymbol = generateIncludeGuardSymbol();
@@ -57,7 +57,7 @@ public class IncludeGuardCreator {
 
    private IPath getFilePath() {
       IPath path = file.getFullPath();
-      ISourceRoot root = cProject.findSourceRoot(file);
+      final ISourceRoot root = cProject.findSourceRoot(file);
 
       if (root != null) {
          path = PathUtil.makeRelativePath(path, root.getPath());
@@ -67,15 +67,16 @@ public class IncludeGuardCreator {
    }
 
    private int getIncludeGuardScheme() {
-      int scheme = PreferenceConstants.getPreference(CODE_TEMPLATES_INCLUDE_GUARD_SCHEME, cProject, CODE_TEMPLATES_INCLUDE_GUARD_SCHEME_FILE_NAME);
+      final int scheme = PreferenceConstants.getPreference(CODE_TEMPLATES_INCLUDE_GUARD_SCHEME, cProject,
+            CODE_TEMPLATES_INCLUDE_GUARD_SCHEME_FILE_NAME);
       return scheme;
    }
 
-   private static String createIncludeGuardSymbolFromFileName(String fileName) {
-      StringBuilder includeGuard = new StringBuilder(fileName.length() + 1);
+   private static String createIncludeGuardSymbolFromFileName(final String fileName) {
+      final StringBuilder includeGuard = new StringBuilder(fileName.length() + 1);
 
       for (int i = 0; i < fileName.length(); ++i) {
-         char ch = fileName.charAt(i);
+         final char ch = fileName.charAt(i);
 
          if (Character.isLetterOrDigit(ch)) {
             includeGuard.append(Character.toUpperCase(ch));
@@ -89,12 +90,12 @@ public class IncludeGuardCreator {
    }
 
    private static String createIncludeGuardSymbolFromUUID() {
-      String uuid = generateRandomUuid();
-      StringBuilder includeGuard = new StringBuilder();
+      final String uuid = generateRandomUuid();
+      final StringBuilder includeGuard = new StringBuilder();
       includeGuard.append('H');
 
       for (int i = 0; i < uuid.length(); ++i) {
-         char ch = uuid.charAt(i);
+         final char ch = uuid.charAt(i);
 
          if (Character.isLetterOrDigit(ch)) {
             includeGuard.append(Character.toUpperCase(ch));

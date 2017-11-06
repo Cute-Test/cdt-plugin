@@ -9,22 +9,22 @@ import java.io.UnsupportedEncodingException;
 
 public abstract class IOUtil {
 
-   public static void safeClose(Closeable toClose) {
+   public static void safeClose(final Closeable toClose) {
       if (toClose != null) {
          try {
             toClose.close();
          }
-         catch (IOException e) {
+         catch (final IOException e) {
             // Do nothing
          }
       }
    }
 
-   public static InputStream stringToStream(String text) {
+   public static InputStream stringToStream(final String text) {
       try {
          return new ByteArrayInputStream(text.getBytes("UTF-8"));
       }
-      catch (UnsupportedEncodingException e) {
+      catch (final UnsupportedEncodingException e) {
          return new ByteArrayInputStream(text.getBytes());
       }
    }

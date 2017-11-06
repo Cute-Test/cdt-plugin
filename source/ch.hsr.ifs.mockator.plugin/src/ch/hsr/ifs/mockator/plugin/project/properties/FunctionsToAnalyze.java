@@ -20,7 +20,7 @@ public enum FunctionsToAnalyze implements PropertyTypeWithDefault {
    AllFunctions(I18N.AllFunctionsDesc) {
 
    @Override
-   public boolean shouldConsider(IASTFunctionDefinition function) {
+   public boolean shouldConsider(final IASTFunctionDefinition function) {
       return true;
    }
 
@@ -32,7 +32,7 @@ public enum FunctionsToAnalyze implements PropertyTypeWithDefault {
    OnlyTestFunctions(I18N.TestFunctionsDesc) {
 
    @Override
-   public boolean shouldConsider(IASTFunctionDefinition function) {
+   public boolean shouldConsider(final IASTFunctionDefinition function) {
       return isNiladicFunction(function);
    }
 
@@ -45,7 +45,7 @@ public enum FunctionsToAnalyze implements PropertyTypeWithDefault {
    private static final Map<String, FunctionsToAnalyze> STRING_TO_ENUM = unorderedMap();
 
    static {
-      for (FunctionsToAnalyze standard : values()) {
+      for (final FunctionsToAnalyze standard : values()) {
          STRING_TO_ENUM.put(standard.name(), standard);
       }
    }
@@ -56,7 +56,7 @@ public enum FunctionsToAnalyze implements PropertyTypeWithDefault {
 
    private final String description;
 
-   private FunctionsToAnalyze(String description) {
+   private FunctionsToAnalyze(final String description) {
       this.description = description;
    }
 
@@ -68,31 +68,31 @@ public enum FunctionsToAnalyze implements PropertyTypeWithDefault {
       return DefaultPropertyHandler.getDefault(FunctionsToAnalyze.class);
    }
 
-   public static FunctionsToAnalyze fromProjectSettings(IProject project) {
-      String functionsToAnalyze = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
+   public static FunctionsToAnalyze fromProjectSettings(final IProject project) {
+      final String functionsToAnalyze = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
 
       if (functionsToAnalyze == null) return getDefault();
 
       return fromName(functionsToAnalyze);
    }
 
-   public static void storeInProjectSettings(IProject project, FunctionsToAnalyze functionsToAnalyze) {
+   public static void storeInProjectSettings(final IProject project, final FunctionsToAnalyze functionsToAnalyze) {
       new ProjectPropertiesHandler(project).setProjectProperty(QF_NAME, functionsToAnalyze.toString());
    }
 
-   public static FunctionsToAnalyze fromName(String name) {
-      FunctionsToAnalyze result = STRING_TO_ENUM.get(name);
+   public static FunctionsToAnalyze fromName(final String name) {
+      final FunctionsToAnalyze result = STRING_TO_ENUM.get(name);
       Assert.notNull(result, String.format("Unkown function strategy '%s'", name));
       return result;
    }
 
    // Niladic: zero arguments (see Robert C. Martin's Clean Code book)
-   private static boolean isNiladicFunction(IASTFunctionDefinition function) {
-      IASTFunctionDeclarator funDecl = function.getDeclarator();
+   private static boolean isNiladicFunction(final IASTFunctionDefinition function) {
+      final IASTFunctionDeclarator funDecl = function.getDeclarator();
 
       if (!(funDecl instanceof ICPPASTFunctionDeclarator)) return false;
 
-      ICPPASTFunctionDeclarator cppFunDecl = (ICPPASTFunctionDeclarator) funDecl;
+      final ICPPASTFunctionDeclarator cppFunDecl = (ICPPASTFunctionDeclarator) funDecl;
       return cppFunDecl.getParameters() == null || cppFunDecl.getParameters().length == 0;
    }
 

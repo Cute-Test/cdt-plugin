@@ -11,7 +11,7 @@ public class BaseClassCandidateVerifier {
 
    private final ICPPClassType classType;
 
-   public BaseClassCandidateVerifier(ICPPClassType classType) {
+   public BaseClassCandidateVerifier(final ICPPClassType classType) {
       this.classType = classType;
    }
 
@@ -19,13 +19,13 @@ public class BaseClassCandidateVerifier {
       return hasNonPrivateVirtualDtor(classType);
    }
 
-   private static boolean hasNonPrivateVirtualDtor(ICPPClassType classType) {
-      ICPPMethod dtor = getDtor(classType);
+   private static boolean hasNonPrivateVirtualDtor(final ICPPClassType classType) {
+      final ICPPMethod dtor = getDtor(classType);
 
       if (dtor != null && dtor.isVirtual() && isNotPrivate(dtor)) return true;
 
-      for (ICPPBase base : classType.getBases()) {
-         IBinding baseClass = base.getBaseClass();
+      for (final ICPPBase base : classType.getBases()) {
+         final IBinding baseClass = base.getBaseClass();
 
          if (baseClass instanceof ICPPClassType && hasNonPrivateVirtualDtor((ICPPClassType) baseClass)) return true;
       }
@@ -33,14 +33,14 @@ public class BaseClassCandidateVerifier {
       return false;
    }
 
-   private static ICPPMethod getDtor(ICPPClassType classType) {
-      for (ICPPMethod method : classType.getDeclaredMethods()) {
+   private static ICPPMethod getDtor(final ICPPClassType classType) {
+      for (final ICPPMethod method : classType.getDeclaredMethods()) {
          if (method.isDestructor()) return method;
       }
       return null;
    }
 
-   private static boolean isNotPrivate(ICPPMethod memberFun) {
+   private static boolean isNotPrivate(final ICPPMethod memberFun) {
       return memberFun.getVisibility() != ICPPASTVisibilityLabel.v_private;
    }
 }

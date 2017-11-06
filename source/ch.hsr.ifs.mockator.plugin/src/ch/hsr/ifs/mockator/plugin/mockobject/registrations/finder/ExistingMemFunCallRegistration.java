@@ -11,15 +11,15 @@ public class ExistingMemFunCallRegistration extends MemFunSignature {
    private final ExistingTestDoubleMemFun memFun;
    private final IASTStatement            registrationStmt;
 
-   public ExistingMemFunCallRegistration(ExistingTestDoubleMemFun memFun) {
+   public ExistingMemFunCallRegistration(final ExistingTestDoubleMemFun memFun) {
       this(memFun, null, memFun.getFunctionSignature());
    }
 
-   public ExistingMemFunCallRegistration(String registredMemFunSig) {
+   public ExistingMemFunCallRegistration(final String registredMemFunSig) {
       this(null, null, registredMemFunSig);
    }
 
-   protected ExistingMemFunCallRegistration(ExistingTestDoubleMemFun memFun, IASTStatement registrationStmt, String funSignature) {
+   protected ExistingMemFunCallRegistration(final ExistingTestDoubleMemFun memFun, final IASTStatement registrationStmt, final String funSignature) {
       super(funSignature);
       this.memFun = memFun;
       this.registrationStmt = registrationStmt;

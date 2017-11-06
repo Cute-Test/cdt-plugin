@@ -12,10 +12,10 @@ public class MyStack<T> {
    private final Deque<T> stack;
 
    public MyStack() {
-      stack = new ArrayDeque<T>();
+      stack = new ArrayDeque<>();
    }
 
-   public void push(T node) {
+   public void push(final T node) {
       stack.addFirst(node);
    }
 

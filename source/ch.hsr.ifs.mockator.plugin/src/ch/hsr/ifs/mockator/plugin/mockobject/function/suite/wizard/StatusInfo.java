@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -22,7 +22,7 @@ class StatusInfo implements IStatus {
       this(OK, null);
    }
 
-   public StatusInfo(int severity, String message) {
+   public StatusInfo(final int severity, final String message) {
       fStatusMessage = message;
       fSeverity = severity;
    }
@@ -68,23 +68,23 @@ class StatusInfo implements IStatus {
    }
 
    @Override
-   public boolean matches(int severityMask) {
+   public boolean matches(final int severityMask) {
       return (fSeverity & severityMask) != 0;
    }
 
-   public void setError(String errorMessage) {
+   public void setError(final String errorMessage) {
       fStatusMessage = errorMessage;
       fSeverity = IStatus.ERROR;
    }
 
-   public void setWarning(String warningMessage) {
+   public void setWarning(final String warningMessage) {
       fStatusMessage = warningMessage;
       fSeverity = IStatus.WARNING;
    }
 
    @Override
    public String toString() {
-      StringBuffer buf = new StringBuffer();
+      final StringBuffer buf = new StringBuffer();
       buf.append("StatusInfo ");
       if (fSeverity == OK) {
          buf.append("OK");

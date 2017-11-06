@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -33,11 +33,11 @@ class DialogField {
       fLabelText = "";
    }
 
-   public void setLabelText(String labeltext) {
+   public void setLabelText(final String labeltext) {
       fLabelText = labeltext;
    }
 
-   public final void setDialogFieldListener(SourceFolderFieldAdapter sourceFolderAdapter) {
+   public final void setDialogFieldListener(final SourceFolderFieldAdapter sourceFolderAdapter) {
       fDialogFieldListener = sourceFolderAdapter;
    }
 
@@ -51,21 +51,15 @@ class DialogField {
       return false;
    }
 
-   public void postSetFocusOnDialogField(Display display) {
+   public void postSetFocusOnDialogField(final Display display) {
       if (display != null) {
-         display.asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-               setFocus();
-            }
-         });
+         display.asyncExec(() -> setFocus());
       }
    }
 
-   public Control[] doFillIntoGrid(Composite parent, int nColumns) {
+   public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
       assertEnoughColumns(nColumns);
-      Label label = getLabelControl(parent);
+      final Label label = getLabelControl(parent);
       label.setLayoutData(gridDataForLabel(nColumns));
       return new Control[] { label };
    }
@@ -74,13 +68,13 @@ class DialogField {
       return 1;
    }
 
-   protected static GridData gridDataForLabel(int span) {
-      GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+   protected static GridData gridDataForLabel(final int span) {
+      final GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
       gd.horizontalSpan = span;
       return gd;
    }
 
-   public Label getLabelControl(Composite parent) {
+   public Label getLabelControl(final Composite parent) {
       if (fLabel == null) {
          assertCompositeNotNull(parent);
 
@@ -97,13 +91,13 @@ class DialogField {
       return fLabel;
    }
 
-   public static Control createEmptySpace(Composite parent) {
+   public static Control createEmptySpace(final Composite parent) {
       return createEmptySpace(parent, 1);
    }
 
-   public static Control createEmptySpace(Composite parent, int span) {
-      Label label = new Label(parent, SWT.LEFT);
-      GridData gd = new GridData();
+   public static Control createEmptySpace(final Composite parent, final int span) {
+      final Label label = new Label(parent, SWT.LEFT);
+      final GridData gd = new GridData();
       gd.horizontalAlignment = GridData.BEGINNING;
       gd.grabExcessHorizontalSpace = false;
       gd.horizontalSpan = span;
@@ -114,11 +108,11 @@ class DialogField {
       return label;
    }
 
-   protected static boolean isOkToUse(Control control) {
-      return (control != null) && !(control.isDisposed());
+   protected static boolean isOkToUse(final Control control) {
+      return control != null && !control.isDisposed();
    }
 
-   public final void setEnabled(boolean enabled) {
+   public final void setEnabled(final boolean enabled) {
       if (enabled != fEnabled) {
          fEnabled = enabled;
          updateEnableState();
@@ -135,11 +129,11 @@ class DialogField {
       return fEnabled;
    }
 
-   protected static void assertCompositeNotNull(Composite comp) {
+   protected static void assertCompositeNotNull(final Composite comp) {
       Assert.notNull(comp, "uncreated control requested with composite null");
    }
 
-   protected final void assertEnoughColumns(int nColumns) {
+   protected final void assertEnoughColumns(final int nColumns) {
       Assert.isTrue(nColumns >= getNumberOfControls(), "given number of columns is too small");
    }
 }

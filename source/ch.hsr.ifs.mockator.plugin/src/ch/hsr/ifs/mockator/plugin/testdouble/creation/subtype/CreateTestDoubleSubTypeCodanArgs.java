@@ -14,15 +14,16 @@ public class CreateTestDoubleSubTypeCodanArgs extends CodanArguments {
    private final String targetIncludePath;
    private final String passByStrategy;
 
-   public CreateTestDoubleSubTypeCodanArgs(IMarker marker) {
-      String[] problemArgs = getProblemArguments(marker);
+   public CreateTestDoubleSubTypeCodanArgs(final IMarker marker) {
+      final String[] problemArgs = getProblemArguments(marker);
       nameOfMissingInstance = problemArgs[0];
       parentClassName = problemArgs[1];
       targetIncludePath = problemArgs[2];
       passByStrategy = problemArgs[3];
    }
 
-   public CreateTestDoubleSubTypeCodanArgs(String nameOfMissingInstance, String parentClassName, String targetIncludePath, String passByStrategy) {
+   public CreateTestDoubleSubTypeCodanArgs(final String nameOfMissingInstance, final String parentClassName, final String targetIncludePath,
+                                           final String passByStrategy) {
       this.nameOfMissingInstance = nameOfMissingInstance;
       this.parentClassName = parentClassName;
       this.targetIncludePath = targetIncludePath;

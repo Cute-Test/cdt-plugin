@@ -16,33 +16,34 @@ import ch.hsr.ifs.mockator.tests.CdtCppTestProject;
 
 
 public class SourceFolderHandlerTest {
-  private static final String FOLDER_NAME = "mockator";
-  private CdtCppTestProject project;
-  private SourceFolderHandler folderHandler;
 
-  @Before
-  public void setUp() throws CoreException {
-    project = CdtCppTestProject.withOpenedProject();
-    folderHandler = new SourceFolderHandler(project.getProject());
-  }
+   private static final String FOLDER_NAME = "mockator";
+   private CdtCppTestProject   project;
+   private SourceFolderHandler folderHandler;
 
-  @After
-  public void tearDown() throws CoreException {
-    project.dispose();
-  }
+   @Before
+   public void setUp() throws CoreException {
+      project = CdtCppTestProject.withOpenedProject();
+      folderHandler = new SourceFolderHandler(project.getProject());
+   }
 
-  @Test
-  public void createFolder() throws CoreException {
-    IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
-    assertTrue(folder.exists());
-    assertEquals(FOLDER_NAME, folder.getName());
-  }
+   @After
+   public void tearDown() throws CoreException {
+      project.dispose();
+   }
 
-  @Test
-  public void deleteFolder() throws CoreException {
-    IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
-    assertTrue(folder.exists());
-    folderHandler.deleteFolder(FOLDER_NAME, new NullProgressMonitor());
-    assertFalse(folder.exists());
-  }
+   @Test
+   public void createFolder() throws CoreException {
+      final IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
+      assertTrue(folder.exists());
+      assertEquals(FOLDER_NAME, folder.getName());
+   }
+
+   @Test
+   public void deleteFolder() throws CoreException {
+      final IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
+      assertTrue(folder.exists());
+      folderHandler.deleteFolder(FOLDER_NAME, new NullProgressMonitor());
+      assertFalse(folder.exists());
+   }
 }

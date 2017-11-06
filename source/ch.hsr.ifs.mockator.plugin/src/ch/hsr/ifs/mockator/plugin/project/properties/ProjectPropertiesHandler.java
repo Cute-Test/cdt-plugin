@@ -11,24 +11,24 @@ class ProjectPropertiesHandler {
 
    private final IProject project;
 
-   public ProjectPropertiesHandler(IProject project) {
+   public ProjectPropertiesHandler(final IProject project) {
       this.project = project;
    }
 
-   public void setProjectProperty(QualifiedName qfName, String value) {
+   public void setProjectProperty(final QualifiedName qfName, final String value) {
       try {
          project.setPersistentProperty(qfName, value);
       }
-      catch (CoreException e) {
+      catch (final CoreException e) {
          throw new MockatorException("Not able to store property for " + qfName.toString(), e);
       }
    }
 
-   public String getProjectProperty(QualifiedName qfName) {
+   public String getProjectProperty(final QualifiedName qfName) {
       try {
          return project.getPersistentProperty(qfName);
       }
-      catch (CoreException e) {
+      catch (final CoreException e) {
          throw new MockatorException("Not able to determine property for " + qfName.toString(), e);
       }
    }

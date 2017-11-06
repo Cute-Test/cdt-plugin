@@ -21,33 +21,33 @@ class MockIdFieldInserter {
    private static final CPPNodeFactory         nodeFactory = CPPNodeFactory.getDefault();
    private final ClassPublicVisibilityInserter inserter;
 
-   public MockIdFieldInserter(ClassPublicVisibilityInserter inserter) {
+   public MockIdFieldInserter(final ClassPublicVisibilityInserter inserter) {
       this.inserter = inserter;
    }
 
-   public void insert(boolean hasMockIdField, boolean hasOnlyStaticMemFuns) {
+   public void insert(final boolean hasMockIdField, final boolean hasOnlyStaticMemFuns) {
       if (!hasMockIdField && !hasOnlyStaticMemFuns) {
-         IASTSimpleDeclaration mockIdField = createMockIdField();
+         final IASTSimpleDeclaration mockIdField = createMockIdField();
          insertMockIdField(mockIdField);
       }
    }
 
    private static IASTSimpleDeclaration createMockIdField() {
-      ICPPASTNamedTypeSpecifier constIntSpecifier = createConstSizeTSpecifier();
-      IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(constIntSpecifier);
-      IASTName mockIdName = nodeFactory.newName(MOCK_ID.toCharArray());
+      final ICPPASTNamedTypeSpecifier constIntSpecifier = createConstSizeTSpecifier();
+      final IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(constIntSpecifier);
+      final IASTName mockIdName = nodeFactory.newName(MOCK_ID.toCharArray());
       simpleDecl.addDeclarator(nodeFactory.newDeclarator(mockIdName));
       return simpleDecl;
    }
 
    private static ICPPASTNamedTypeSpecifier createConstSizeTSpecifier() {
-      IASTName name = nodeFactory.newName(SIZE_T.toCharArray());
-      ICPPASTNamedTypeSpecifier sizeT = nodeFactory.newTypedefNameSpecifier(name);
+      final IASTName name = nodeFactory.newName(SIZE_T.toCharArray());
+      final ICPPASTNamedTypeSpecifier sizeT = nodeFactory.newTypedefNameSpecifier(name);
       sizeT.setConst(true);
       return sizeT;
    }
 
-   private void insertMockIdField(IASTSimpleDeclaration mockIdField) {
+   private void insertMockIdField(final IASTSimpleDeclaration mockIdField) {
       inserter.insert(mockIdField);
    }
 }

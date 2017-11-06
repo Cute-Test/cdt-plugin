@@ -8,11 +8,11 @@ public class ExpectedNameCreator {
    private static final String EXPECTED = "expected";
    private final String        testDoubleName;
 
-   public ExpectedNameCreator(IASTName testDoubleName) {
+   public ExpectedNameCreator(final IASTName testDoubleName) {
       this.testDoubleName = testDoubleName.toString();
    }
 
-   public ExpectedNameCreator(String testDoubleName) {
+   public ExpectedNameCreator(final String testDoubleName) {
       this.testDoubleName = testDoubleName;
    }
 

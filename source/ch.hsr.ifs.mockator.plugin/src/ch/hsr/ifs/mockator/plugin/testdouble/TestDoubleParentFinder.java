@@ -10,7 +10,7 @@ public class TestDoubleParentFinder {
 
    private final ICPPASTCompositeTypeSpecifier testDouble;
 
-   public TestDoubleParentFinder(ICPPASTCompositeTypeSpecifier testDouble) {
+   public TestDoubleParentFinder(final ICPPASTCompositeTypeSpecifier testDouble) {
       this.testDouble = testDouble;
    }
 

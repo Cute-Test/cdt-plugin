@@ -18,16 +18,16 @@ public class FunctionCallParameterCollector {
 
    private final ICPPASTFunctionCallExpression funCall;
 
-   public FunctionCallParameterCollector(ICPPASTFunctionCallExpression funCall) {
+   public FunctionCallParameterCollector(final ICPPASTFunctionCallExpression funCall) {
       this.funCall = funCall;
    }
 
    public List<ICPPASTParameterDeclaration> getFunctionParameters() {
-      Map<String, Boolean> nameHistory = unorderedMap();
-      List<ICPPASTParameterDeclaration> params = list();
+      final Map<String, Boolean> nameHistory = unorderedMap();
+      final List<ICPPASTParameterDeclaration> params = list();
 
-      for (IASTInitializerClause arg : funCall.getArguments()) {
-         IASTExpression idExpr = AstUtil.getChildOfType(arg, IASTExpression.class);
+      for (final IASTInitializerClause arg : funCall.getArguments()) {
+         final IASTExpression idExpr = AstUtil.getChildOfType(arg, IASTExpression.class);
 
          if (idExpr == null) {
             continue;

@@ -29,9 +29,7 @@ public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
 
       @Override
       public int visit(final IASTDeclSpecifier specifier) {
-         if (!AstUtil.isClass(specifier)) {
-            return PROCESS_CONTINUE;
-         }
+         if (!AstUtil.isClass(specifier)) { return PROCESS_CONTINUE; }
 
          final ICPPASTCompositeTypeSpecifier klass = (ICPPASTCompositeTypeSpecifier) specifier;
 

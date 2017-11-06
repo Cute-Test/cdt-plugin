@@ -10,8 +10,8 @@ public class ExtractInterfaceContribution extends CRefactoringContribution {
 
    @SuppressWarnings({ "unchecked", "rawtypes" })
    @Override
-   public ExtractInterfaceDescriptor createDescriptor(String id, String proj, String desc, String comment, Map args, int flags)
-         throws IllegalArgumentException {
+   public ExtractInterfaceDescriptor createDescriptor(final String id, final String proj, final String desc, final String comment, final Map args,
+         final int flags) throws IllegalArgumentException {
       return new ExtractInterfaceDescriptor(ExtractInterfaceRefactoring.ID, proj, desc, comment, args);
    }
 }

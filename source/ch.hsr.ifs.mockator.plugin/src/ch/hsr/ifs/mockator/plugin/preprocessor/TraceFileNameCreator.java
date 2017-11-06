@@ -17,7 +17,7 @@ class TraceFileNameCreator {
    private final String   funName;
    private final IProject project;
 
-   public TraceFileNameCreator(String funName, IProject project) {
+   public TraceFileNameCreator(final String funName, final IProject project) {
       this.funName = funName;
       this.project = project;
    }
@@ -30,9 +30,9 @@ class TraceFileNameCreator {
       return getPathForNewFile(HEADER_SUFFIX);
    }
 
-   private IPath getPathForNewFile(String suffix) {
-      IFolder traceFolder = project.getFolder(TRACE_FOLDER);
-      PathProposalUtil proposal = new PathProposalUtil(traceFolder.getFullPath());
+   private IPath getPathForNewFile(final String suffix) {
+      final IFolder traceFolder = project.getFolder(TRACE_FOLDER);
+      final PathProposalUtil proposal = new PathProposalUtil(traceFolder.getFullPath());
       return proposal.getUniquePathForNewFile(MOCKED_TRACE_PREFIX + funName, suffix);
    }
 }

@@ -91,12 +91,6 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    private static Comparator<ICPPMethod> createMethodNameComparator() {
-      return new Comparator<ICPPMethod>() {
-
-         @Override
-         public int compare(final ICPPMethod m1, final ICPPMethod m2) {
-            return m1.getName().compareTo(m2.getName());
-         }
-      };
+      return (m1, m2) -> m1.getName().compareTo(m2.getName());
    }
 }

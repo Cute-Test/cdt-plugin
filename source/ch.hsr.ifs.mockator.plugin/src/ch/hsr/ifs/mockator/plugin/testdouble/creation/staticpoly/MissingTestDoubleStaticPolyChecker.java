@@ -18,7 +18,7 @@ public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
    public static final String MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID = "ch.hsr.ifs.mockator.MissingTestDoublStaticPolyProblem";
 
    @Override
-   protected void processTestFunction(IASTFunctionDefinition function) {
+   protected void processTestFunction(final IASTFunctionDefinition function) {
       function.accept(new OnEachFunction());
    }
 
@@ -29,8 +29,8 @@ public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
       }
 
       @Override
-      public int visit(IASTName name) {
-         IBinding binding = name.resolveBinding();
+      public int visit(final IASTName name) {
+         final IBinding binding = name.resolveBinding();
 
          if (binding instanceof IProblemBinding) {
             if (isPartOfTemplateId(name) && isTypeId(name)) {
@@ -42,16 +42,16 @@ public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
       }
    };
 
-   private void mark(IASTName name) {
+   private void mark(final IASTName name) {
       reportProblem(MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID, name, name.toString());
    }
 
-   private static boolean isTypeId(IASTName name) {
-      ICPPASTNamedTypeSpecifier nts = AstUtil.getAncestorOfType(name, ICPPASTNamedTypeSpecifier.class);
+   private static boolean isTypeId(final IASTName name) {
+      final ICPPASTNamedTypeSpecifier nts = AstUtil.getAncestorOfType(name, ICPPASTNamedTypeSpecifier.class);
       return nts != null && AstUtil.getAncestorOfType(nts, ICPPASTTypeId.class) != null;
    }
 
-   private static boolean isPartOfTemplateId(IASTName name) {
+   private static boolean isPartOfTemplateId(final IASTName name) {
       return AstUtil.getAncestorOfType(name, ICPPASTTemplateId.class) != null;
    }
 }

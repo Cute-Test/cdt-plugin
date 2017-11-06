@@ -21,7 +21,7 @@ public class MockObjectLinkedEditModeFactory {
    private final Optional<String>                       expectationsName;
 
    public MockObjectLinkedEditModeFactory(final ChangeEdit edit, final Collection<? extends TestDoubleMemFun> memFuns, final CppStandard cppStd,
-         final AssertionOrder assertOrder, final Optional<String> expectationsVectorName) {
+                                          final AssertionOrder assertOrder, final Optional<String> expectationsVectorName) {
       this.edit = edit;
       this.memFuns = memFuns;
       this.cppStd = cppStd;

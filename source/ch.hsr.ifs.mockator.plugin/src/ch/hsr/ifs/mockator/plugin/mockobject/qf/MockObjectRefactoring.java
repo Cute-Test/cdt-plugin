@@ -33,19 +33,20 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
    private final Collection<MissingMemberFunction> missingMemFuns;
    private final LinkedEditModeStrategy            linkedEdit;
 
-   public MockObjectRefactoring(CppStandard cppStd, ICElement cElement, ITextSelection selection, ICProject cProject,
-                                LinkedEditModeStrategy linkedEdit) {
+   public MockObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject cProject,
+                                final LinkedEditModeStrategy linkedEdit) {
       super(cppStd, cElement, selection, cProject);
       this.linkedEdit = linkedEdit;
       missingMemFuns = list();
    }
 
    @Override
-   protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
-      IASTTranslationUnit ast = getAST(tu, pm);
-      ASTRewrite rewriter = createRewriter(collector, ast);
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+         OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = createRewriter(collector, ast);
       missingMemFuns.addAll(collectMissingMemFuns(pm));
-      ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
+      final ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
       addMockSupport(ast, rewriter, inserter, pm);
       testDouble.addMissingMemFuns(missingMemFuns, inserter, cppStd);
    }
@@ -54,13 +55,13 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
       return testDouble.hasOnlyStaticFunctions(missingMemFuns);
    }
 
-   private void addMockSupport(IASTTranslationUnit ast, ASTRewrite r, ClassPublicVisibilityInserter ci, IProgressMonitor pm) {
-      MockSupportAdder adder = new MockSupportAdder(buildContext(r, ast, ci, pm));
+   private void addMockSupport(final IASTTranslationUnit ast, final ASTRewrite r, final ClassPublicVisibilityInserter ci, final IProgressMonitor pm) {
+      final MockSupportAdder adder = new MockSupportAdder(buildContext(r, ast, ci, pm));
       adder.addMockSupport();
    }
 
-   private MockSupportContext buildContext(ASTRewrite rewriter, IASTTranslationUnit ast, ClassPublicVisibilityInserter inserter,
-         IProgressMonitor pm) {
+   private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final ClassPublicVisibilityInserter inserter,
+         final IProgressMonitor pm) {
       return new MockSupportContext.ContextBuilder(project, refactoringContext, (MockObject) testDouble, rewriter, ast, cppStd, inserter,
             hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
    }
@@ -75,7 +76,7 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
    }
 
    @Override
-   protected TestDouble createTestDouble(ICPPASTCompositeTypeSpecifier selectedClass) {
+   protected TestDouble createTestDouble(final ICPPASTCompositeTypeSpecifier selectedClass) {
       return new MockObject(selectedClass);
    }
 }

@@ -48,8 +48,9 @@ public final class MockSupportContext {
       private LinkedEditModeStrategy                 linkedEditStrategy;
       private Collection<? extends TestDoubleMemFun> newForExpectations;
 
-      public ContextBuilder(ICProject cProject, CRefactoringContext context, MockObject mockObject, ASTRewrite rewriter, IASTTranslationUnit ast,
-                            CppStandard cppStandard, ClassPublicVisibilityInserter inserter, boolean hasOnlyStaticMemFuns, IProgressMonitor pm) {
+      public ContextBuilder(final ICProject cProject, final CRefactoringContext context, final MockObject mockObject, final ASTRewrite rewriter,
+                            final IASTTranslationUnit ast, final CppStandard cppStandard, final ClassPublicVisibilityInserter inserter,
+                            final boolean hasOnlyStaticMemFuns, final IProgressMonitor pm) {
          this.cProject = cProject;
          this.context = context;
          this.mockObject = mockObject;
@@ -61,12 +62,12 @@ public final class MockSupportContext {
          this.pm = pm;
       }
 
-      public ContextBuilder withNewExpectations(Collection<? extends TestDoubleMemFun> newForExpectations) {
+      public ContextBuilder withNewExpectations(final Collection<? extends TestDoubleMemFun> newForExpectations) {
          this.newForExpectations = newForExpectations;
          return this;
       }
 
-      public ContextBuilder withLinkedEditStrategy(LinkedEditModeStrategy linkedEditStrategy) {
+      public ContextBuilder withLinkedEditStrategy(final LinkedEditModeStrategy linkedEditStrategy) {
          this.linkedEditStrategy = linkedEditStrategy;
          return this;
       }
@@ -77,7 +78,7 @@ public final class MockSupportContext {
       }
    }
 
-   private MockSupportContext(ContextBuilder builder) {
+   private MockSupportContext(final ContextBuilder builder) {
       cProject = builder.cProject;
       context = builder.context;
       mockObject = builder.mockObject;

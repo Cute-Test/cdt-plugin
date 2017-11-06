@@ -23,15 +23,16 @@ import ch.hsr.ifs.mockator.plugin.testdouble.qf.AbstractTestDoubleRefactoring;
 @SuppressWarnings("restriction")
 public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
 
-   public FakeObjectRefactoring(CppStandard cppStd, ICElement cElement, ITextSelection selection, ICProject cProject) {
+   public FakeObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
       super(cppStd, cElement, selection, cProject);
    }
 
    @Override
-   protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
-      Collection<? extends MissingMemberFunction> missingMemFuns = collectMissingMemFuns(pm);
-      ASTRewrite rewriter = createRewriter(collector, getAST(tu, pm));
-      ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+         OperationCanceledException {
+      final Collection<? extends MissingMemberFunction> missingMemFuns = collectMissingMemFuns(pm);
+      final ASTRewrite rewriter = createRewriter(collector, getAST(tu, pm));
+      final ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
       testDouble.addMissingMemFuns(missingMemFuns, inserter, cppStd);
    }
 
@@ -41,7 +42,7 @@ public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
    }
 
    @Override
-   protected TestDouble createTestDouble(ICPPASTCompositeTypeSpecifier selectedClass) {
+   protected TestDouble createTestDouble(final ICPPASTCompositeTypeSpecifier selectedClass) {
       return new FakeObject(selectedClass);
    }
 }

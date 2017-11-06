@@ -33,7 +33,7 @@ public class PublicMemFunFinder {
 
    public static final EnumSet<Types> ALL_TYPES = EnumSet.allOf(Types.class);
 
-   public PublicMemFunFinder(ICPPASTCompositeTypeSpecifier klass, Set<Types> typesToConsider) {
+   public PublicMemFunFinder(final ICPPASTCompositeTypeSpecifier klass, final Set<Types> typesToConsider) {
       this.klass = klass;
       this.typesToConsider = typesToConsider;
       initVisibility();
@@ -48,9 +48,9 @@ public class PublicMemFunFinder {
    }
 
    public List<IASTDeclaration> getPublicMemFuns() {
-      List<IASTDeclaration> publicMemFuns = list();
+      final List<IASTDeclaration> publicMemFuns = list();
 
-      for (IASTDeclaration classMember : klass.getMembers()) {
+      for (final IASTDeclaration classMember : klass.getMembers()) {
          if (classMember instanceof ICPPASTVisibilityLabel) {
             publicVisibility = isPublic((ICPPASTVisibilityLabel) classMember);
             continue;
@@ -60,15 +60,15 @@ public class PublicMemFunFinder {
             continue;
          }
 
-         IASTDeclarator declarator = AstUtil.getDeclaratorForNode(classMember);
+         final IASTDeclarator declarator = AstUtil.getDeclaratorForNode(classMember);
 
          if (!(declarator instanceof ICPPASTFunctionDeclarator)) {
             continue;
          }
 
-         ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) declarator;
-         IASTName memFunName = funDecl.getName();
-         ICPPASTDeclSpecifier funSpec = AstUtil.getDeclSpec(funDecl);
+         final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) declarator;
+         final IASTName memFunName = funDecl.getName();
+         final ICPPASTDeclSpecifier funSpec = AstUtil.getDeclSpec(funDecl);
 
          if (funSpec == null || isFriend(funSpec) || ignoreStatic(funSpec) || ignoreCtor(memFunName) || ignoreDtor(memFunName)) {
             continue;
@@ -80,33 +80,33 @@ public class PublicMemFunFinder {
       return publicMemFuns;
    }
 
-   private static boolean isFriend(ICPPASTDeclSpecifier funDeclSpec) {
+   private static boolean isFriend(final ICPPASTDeclSpecifier funDeclSpec) {
       return funDeclSpec.isFriend();
    }
 
-   private boolean ignoreStatic(ICPPASTDeclSpecifier funDeclSpec) {
+   private boolean ignoreStatic(final ICPPASTDeclSpecifier funDeclSpec) {
       return AstUtil.isStatic(funDeclSpec) && !typesToConsider.contains(Types.withStatics);
    }
 
-   private boolean ignoreDtor(IASTName memFunName) {
+   private boolean ignoreDtor(final IASTName memFunName) {
       return isDtor(memFunName) && !typesToConsider.contains(Types.withDtors);
    }
 
-   private static boolean isDtor(IASTName memFunName) {
-      IBinding binding = memFunName.resolveBinding();
+   private static boolean isDtor(final IASTName memFunName) {
+      final IBinding binding = memFunName.resolveBinding();
       return binding instanceof ICPPMethod && ((ICPPMethod) binding).isDestructor();
    }
 
-   private boolean ignoreCtor(IASTName memFunName) {
+   private boolean ignoreCtor(final IASTName memFunName) {
       return isCtor(memFunName) && !typesToConsider.contains(Types.withCtors);
    }
 
-   private static boolean isCtor(IASTName memFunName) {
-      IBinding binding = memFunName.resolveBinding();
+   private static boolean isCtor(final IASTName memFunName) {
+      final IBinding binding = memFunName.resolveBinding();
       return binding instanceof ICPPConstructor;
    }
 
-   private static boolean isPublic(ICPPASTVisibilityLabel node) {
+   private static boolean isPublic(final ICPPASTVisibilityLabel node) {
       return node.getVisibility() == ICPPASTVisibilityLabel.v_public;
    }
 }

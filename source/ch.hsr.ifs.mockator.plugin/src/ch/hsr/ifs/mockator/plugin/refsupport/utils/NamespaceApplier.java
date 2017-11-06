@@ -14,16 +14,16 @@ public class NamespaceApplier {
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
    private final IASTNode              origin;
 
-   public NamespaceApplier(IASTNode origin) {
+   public NamespaceApplier(final IASTNode origin) {
       this.origin = origin;
    }
 
-   public IASTNode packInSameNamespaces(IASTSimpleDeclaration decl) {
-      MyStack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
+   public IASTNode packInSameNamespaces(final IASTSimpleDeclaration decl) {
+      final MyStack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
 
       if (namespaces.isEmpty()) return decl;
 
-      ICPPASTNamespaceDefinition topNs = namespaces.pop();
+      final ICPPASTNamespaceDefinition topNs = namespaces.pop();
       ICPPASTNamespaceDefinition parentNs = topNs;
       ICPPASTNamespaceDefinition currentNs = null;
 
@@ -38,7 +38,7 @@ public class NamespaceApplier {
    }
 
    private MyStack<ICPPASTNamespaceDefinition> getOriginNamespaces() {
-      MyStack<ICPPASTNamespaceDefinition> namespaces = new MyStack<ICPPASTNamespaceDefinition>();
+      final MyStack<ICPPASTNamespaceDefinition> namespaces = new MyStack<>();
 
       for (IASTNode currNode = origin; currNode != null; currNode = currNode.getParent()) {
          if (currNode instanceof ICPPASTNamespaceDefinition) {
@@ -49,7 +49,7 @@ public class NamespaceApplier {
       return namespaces;
    }
 
-   private static ICPPASTNamespaceDefinition copyNamespace(ICPPASTNamespaceDefinition ns) {
+   private static ICPPASTNamespaceDefinition copyNamespace(final ICPPASTNamespaceDefinition ns) {
       return nodeFactory.newNamespaceDefinition(ns.getName().copy());
    }
 }

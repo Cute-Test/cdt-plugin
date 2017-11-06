@@ -18,23 +18,23 @@ public class FileEditorOpener {
 
    private final IFile file;
 
-   public FileEditorOpener(IFile file) {
+   public FileEditorOpener(final IFile file) {
       this.file = file;
    }
 
    public void openInEditor() {
-      IWorkbenchPage activePage = getActivePage();
+      final IWorkbenchPage activePage = getActivePage();
 
       if (activePage == null) return;
 
       try {
-         String editorId = getEditorId();
+         final String editorId = getEditorId();
          // activate should be false otherwise this triggers another switch
          // to a different editor
          final boolean activate = false;
          activePage.openEditor(new FileEditorInput(file), editorId, activate);
       }
-      catch (Exception e) {
+      catch (final Exception e) {
          throw new MockatorException(e);
       }
    }
@@ -44,7 +44,7 @@ public class FileEditorOpener {
    }
 
    private String getEditorId() throws CoreException {
-      IContentType contentType = getFileContentType();
+      final IContentType contentType = getFileContentType();
       IEditorDescriptor desc = getEditorDescriptor(contentType);
 
       if (desc == null) {
@@ -54,7 +54,7 @@ public class FileEditorOpener {
       return desc.getId();
    }
 
-   private IEditorDescriptor getEditorDescriptor(IContentType contentType) {
+   private IEditorDescriptor getEditorDescriptor(final IContentType contentType) {
       return getEditorRegistry().getDefaultEditor(file.getName(), contentType);
    }
 
@@ -67,7 +67,7 @@ public class FileEditorOpener {
    }
 
    private IContentType getFileContentType() throws CoreException {
-      IContentDescription desc = file.getContentDescription();
+      final IContentDescription desc = file.getContentDescription();
 
       if (desc != null) return desc.getContentType();
 

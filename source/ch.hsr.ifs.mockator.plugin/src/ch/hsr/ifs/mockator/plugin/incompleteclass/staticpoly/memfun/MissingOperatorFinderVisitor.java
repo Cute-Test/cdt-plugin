@@ -41,8 +41,8 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       shouldVisitExpressions = true;
    }
 
-   public MissingOperatorFinderVisitor(ICPPASTCompositeTypeSpecifier testDouble, ICPPASTTemplateParameter templateParam,
-                                       ICPPASTTemplateDeclaration sut) {
+   public MissingOperatorFinderVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICPPASTTemplateParameter templateParam,
+                                       final ICPPASTTemplateDeclaration sut) {
       super(testDouble, templateParam, sut);
       missingOperators = orderPreservingSet();
    }
@@ -53,7 +53,7 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
    }
 
    @Override
-   public int visit(IASTExpression expr) {
+   public int visit(final IASTExpression expr) {
       if (expr instanceof ICPPASTUnaryExpression) return handleUnaryOperator(expr, (ICPPASTUnaryExpression) expr);
       else if (expr instanceof ICPPASTBinaryExpression) return handleBinaryOperator((ICPPASTBinaryExpression) expr);
       else if (expr instanceof ICPPASTFunctionCallExpression) return handleFunCallOperator((ICPPASTFunctionCallExpression) expr);
@@ -62,7 +62,7 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private int handleIndexOperator(ICPPASTArraySubscriptExpression expr) {
+   private int handleIndexOperator(final ICPPASTArraySubscriptExpression expr) {
       if (resolvesToTemplateType(expr.getArrayExpression()) && expr.getExpressionType() instanceof TypeOfDependentExpression) {
          reportMissingOperator(expr, OverloadableOperator.BRACKET);
          return PROCESS_SKIP;
@@ -70,9 +70,9 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private int handleFunCallOperator(ICPPASTFunctionCallExpression funCall) {
-      IASTExpression functionNameExpression = funCall.getFunctionNameExpression();
-      IType expressionType = funCall.getExpressionType();
+   private int handleFunCallOperator(final ICPPASTFunctionCallExpression funCall) {
+      final IASTExpression functionNameExpression = funCall.getFunctionNameExpression();
+      final IType expressionType = funCall.getExpressionType();
 
       if (resolvesToTemplateType(functionNameExpression) && expressionType instanceof TypeOfDependentExpression) {
          reportMissingOperator(funCall, OverloadableOperator.PAREN);
@@ -81,24 +81,24 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private boolean resolvesToTemplateType(IASTExpression expr) {
+   private boolean resolvesToTemplateType(final IASTExpression expr) {
       if (!(expr instanceof IASTIdExpression)) return false;
 
-      IBinding resolveBinding = ((IASTIdExpression) expr).getName().resolveBinding();
+      final IBinding resolveBinding = ((IASTIdExpression) expr).getName().resolveBinding();
 
       if (!(resolveBinding instanceof ICPPVariable)) return false;
 
-      IType type = ((ICPPVariable) resolveBinding).getType();
+      final IType type = ((ICPPVariable) resolveBinding).getType();
       return resolvesToTemplateParam(type);
    }
 
-   private int handleBinaryOperator(ICPPASTBinaryExpression binEx) {
-      IASTImplicitName[] iNames = binEx.getImplicitNames();
+   private int handleBinaryOperator(final ICPPASTBinaryExpression binEx) {
+      final IASTImplicitName[] iNames = binEx.getImplicitNames();
 
       if (wasOperatorFound(iNames)) return PROCESS_CONTINUE;
 
       if (isAppropriateType(binEx.getOperand1())) {
-         OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binEx.getOperator());
+         final OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binEx.getOperator());
 
          if (shouldSkipBinaryOperator(operator)) return PROCESS_CONTINUE;
 
@@ -109,20 +109,20 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private static boolean shouldSkipBinaryOperator(OverloadableOperator operator) {
+   private static boolean shouldSkipBinaryOperator(final OverloadableOperator operator) {
       return operator == null || isImplicitlyAvailable(operator);
    }
 
-   private static boolean isImplicitlyAvailable(OverloadableOperator operator) {
+   private static boolean isImplicitlyAvailable(final OverloadableOperator operator) {
       return operator == OverloadableOperator.ASSIGN;
    }
 
-   private int handleUnaryOperator(IASTExpression expression, ICPPASTUnaryExpression uExpr) {
-      IASTImplicitName[] iNames = uExpr.getImplicitNames();
+   private int handleUnaryOperator(final IASTExpression expression, final ICPPASTUnaryExpression uExpr) {
+      final IASTImplicitName[] iNames = uExpr.getImplicitNames();
 
       if (wasOperatorFound(iNames)) return PROCESS_CONTINUE;
 
-      OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uExpr.getOperator());
+      final OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uExpr.getOperator());
 
       if (shouldSkipUnaryOperator(uExpr, operator)) return PROCESS_CONTINUE;
 
@@ -134,19 +134,19 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private static boolean shouldSkipUnaryOperator(ICPPASTUnaryExpression uExpr, OverloadableOperator operator) {
+   private static boolean shouldSkipUnaryOperator(final ICPPASTUnaryExpression uExpr, final OverloadableOperator operator) {
       return isUnaryOperatorToSkip(operator, uExpr) || !isOperandDefined(uExpr);
    }
 
-   private void reportMissingOperator(IASTExpression expr, OverloadableOperator operator) {
+   private void reportMissingOperator(final IASTExpression expr, final OverloadableOperator operator) {
       missingOperators.add(new Operator(expr, operator, templateParamType, getTestDoubleName()));
    }
 
-   private static boolean isOperandDefined(ICPPASTUnaryExpression uExpr) {
-      IASTExpression operand = uExpr.getOperand();
+   private static boolean isOperandDefined(final ICPPASTUnaryExpression uExpr) {
+      final IASTExpression operand = uExpr.getOperand();
 
       if (operand instanceof IASTIdExpression) {
-         IASTIdExpression idexpr = (IASTIdExpression) operand;
+         final IASTIdExpression idexpr = (IASTIdExpression) operand;
 
          if (idexpr.getName().resolveBinding() instanceof IProblemBinding) return false;
       }
@@ -154,10 +154,10 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       return true;
    }
 
-   private static boolean isUnaryOperatorToSkip(OverloadableOperator op, ICPPASTUnaryExpression uExpr) {
+   private static boolean isUnaryOperatorToSkip(final OverloadableOperator op, final ICPPASTUnaryExpression uExpr) {
       if (op == null) return true;
 
-      IType operandType = uExpr.getOperand().getExpressionType();
+      final IType operandType = uExpr.getOperand().getExpressionType();
 
       if (operandType instanceof IPointerType || operandType instanceof IArrayType) {
          switch (op) {
@@ -171,14 +171,14 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       return false;
    }
 
-   private static boolean wasOperatorFound(IASTImplicitName[] iNames) {
+   private static boolean wasOperatorFound(final IASTImplicitName[] iNames) {
       if (iNames.length != 1) return false;
 
-      IBinding binding = iNames[0].resolveBinding();
+      final IBinding binding = iNames[0].resolveBinding();
       return binding instanceof ICPPFunction && !(binding instanceof ICPPUnknownBinding);
    }
 
-   private boolean isAppropriateType(IASTExpression operand) {
+   private boolean isAppropriateType(final IASTExpression operand) {
       if (operand instanceof ICPPASTLiteralExpression) return false;
 
       IType type = operand.getExpressionType();
@@ -198,7 +198,7 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       return resolvesToTemplateParam(type);
    }
 
-   private boolean isProblemBinding(IASTExpression operand) {
+   private boolean isProblemBinding(final IASTExpression operand) {
       return ((IASTIdExpression) operand).getName().getBinding() instanceof IProblemBinding;
    }
 }

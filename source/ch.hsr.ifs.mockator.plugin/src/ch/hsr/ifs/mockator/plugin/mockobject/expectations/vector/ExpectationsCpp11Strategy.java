@@ -34,12 +34,12 @@ public class ExpectationsCpp11Strategy implements ExpectationsCppStdStrategy {
 
    @Override
    public List<IASTStatement> createExpectationsVector(final Collection<? extends TestDoubleMemFun> memFuns, final String newExpectationsName,
-            final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
+         final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
       return OptHelper.returnIfPresentElse(expectationsVector, () -> list(), () -> getExpectations(memFuns, newExpectationsName, linkedEdit));
    }
 
    private static List<IASTStatement> getExpectations(final Collection<? extends TestDoubleMemFun> memFuns, final String newExpectations,
-            final LinkedEditModeStrategy linkedEdit) {
+         final LinkedEditModeStrategy linkedEdit) {
       final IASTName calls = nodeFactory.newName(CALLS.toCharArray());
       final IASTSimpleDeclaration declaration = nodeFactory.newSimpleDeclaration(nodeFactory.newTypedefNameSpecifier(calls));
       final IASTInitializerClause callInitializer = getCallInitializer(memFuns, linkedEdit);
@@ -51,7 +51,7 @@ public class ExpectationsCpp11Strategy implements ExpectationsCppStdStrategy {
    }
 
    private static IASTInitializerClause getCallInitializer(final Collection<? extends TestDoubleMemFun> memFuns,
-            final LinkedEditModeStrategy strategy) {
+         final LinkedEditModeStrategy strategy) {
       final ICPPASTInitializerList result = nodeFactory.newInitializerList();
       for (final TestDoubleMemFun memFun : memFuns) {
          addToInitializerList(result, memFun, strategy);
@@ -60,7 +60,7 @@ public class ExpectationsCpp11Strategy implements ExpectationsCppStdStrategy {
    }
 
    private static void addToInitializerList(final ICPPASTInitializerList vectorInitializerList, final TestDoubleMemFun memFun,
-            final LinkedEditModeStrategy strategy) {
+         final LinkedEditModeStrategy strategy) {
       final ICPPASTInitializerList callInitializerList = nodeFactory.newInitializerList();
       for (final IASTInitializerClause clause : getCallExpectations(memFun, strategy)) {
          callInitializerList.addClause(clause);

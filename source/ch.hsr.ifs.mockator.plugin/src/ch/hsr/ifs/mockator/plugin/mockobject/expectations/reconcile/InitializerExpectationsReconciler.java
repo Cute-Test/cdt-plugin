@@ -24,30 +24,30 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 @SuppressWarnings("restriction")
 class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
 
-   public InitializerExpectationsReconciler(ASTRewrite rewriter, Collection<? extends TestDoubleMemFun> toAdd,
-                                            Collection<ExistingMemFunCallRegistration> toRemove, CppStandard cppStd,
-                                            LinkedEditModeStrategy linkedEditMode) {
+   public InitializerExpectationsReconciler(final ASTRewrite rewriter, final Collection<? extends TestDoubleMemFun> toAdd,
+                                            final Collection<ExistingMemFunCallRegistration> toRemove, final CppStandard cppStd,
+                                            final LinkedEditModeStrategy linkedEditMode) {
       super(rewriter, toAdd, toRemove, cppStd, linkedEditMode);
    }
 
    @Override
-   public void reconcileExpectations(IASTName expectationsVector) {
-      IASTEqualsInitializer eqInitializer = getEqualsInitializer(expectationsVector);
-      ICPPASTInitializerList callsInitializerList = getInitializerListFrom(eqInitializer);
-      ICPPASTInitializerList newCallsList = createCallsInitializerList();
+   public void reconcileExpectations(final IASTName expectationsVector) {
+      final IASTEqualsInitializer eqInitializer = getEqualsInitializer(expectationsVector);
+      final ICPPASTInitializerList callsInitializerList = getInitializerListFrom(eqInitializer);
+      final ICPPASTInitializerList newCallsList = createCallsInitializerList();
       collectRegisteredCalls(callsInitializerList, newCallsList);
       collectNewCalls(newCallsList);
       replaceCallsInitializer(eqInitializer, newCallsList);
    }
 
-   private static IASTEqualsInitializer getEqualsInitializer(IASTName expVector) {
-      IASTDeclarationStatement declStmt = AstUtil.getAncestorOfType(expVector, IASTDeclarationStatement.class);
-      IASTEqualsInitializer eqInitializer = AstUtil.getChildOfType(declStmt, IASTEqualsInitializer.class);
+   private static IASTEqualsInitializer getEqualsInitializer(final IASTName expVector) {
+      final IASTDeclarationStatement declStmt = AstUtil.getAncestorOfType(expVector, IASTDeclarationStatement.class);
+      final IASTEqualsInitializer eqInitializer = AstUtil.getChildOfType(declStmt, IASTEqualsInitializer.class);
       Assert.notNull(eqInitializer, "Not a valid call initialization");
       return eqInitializer;
    }
 
-   private static ICPPASTInitializerList getInitializerListFrom(IASTEqualsInitializer eqInitializer) {
+   private static ICPPASTInitializerList getInitializerListFrom(final IASTEqualsInitializer eqInitializer) {
       Assert.instanceOf(eqInitializer.getInitializerClause(), ICPPASTInitializerList.class, "Initializer list expected");
       return (ICPPASTInitializerList) eqInitializer.getInitializerClause();
    }
@@ -56,12 +56,12 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
       return nodeFactory.newInitializerList();
    }
 
-   private void collectNewCalls(ICPPASTInitializerList newCallsList) {
-      for (TestDoubleMemFun toAdd : callsToAdd) {
-         ICPPASTInitializerList call = createCallsInitializerList();
+   private void collectNewCalls(final ICPPASTInitializerList newCallsList) {
+      for (final TestDoubleMemFun toAdd : callsToAdd) {
+         final ICPPASTInitializerList call = createCallsInitializerList();
          call.addClause(nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(toAdd.getFunctionSignature())));
 
-         for (IASTInitializerClause initializer : toAdd.createDefaultArguments(cppStd, linkedEdit)) {
+         for (final IASTInitializerClause initializer : toAdd.createDefaultArguments(cppStd, linkedEdit)) {
             call.addClause(initializer);
          }
 
@@ -69,9 +69,9 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
       }
    }
 
-   private void collectRegisteredCalls(ICPPASTInitializerList callsInitializerList, ICPPASTInitializerList newCallsList) {
-      for (IASTInitializerClause clause : callsInitializerList.getClauses()) {
-         IASTInitializerClause[] arguments = getArguments(clause);
+   private void collectRegisteredCalls(final ICPPASTInitializerList callsInitializerList, final ICPPASTInitializerList newCallsList) {
+      for (final IASTInitializerClause clause : callsInitializerList.getClauses()) {
+         final IASTInitializerClause[] arguments = getArguments(clause);
 
          if (!isValidFunRegistrationVector(arguments)) {
             continue;
@@ -83,22 +83,22 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
       }
    }
 
-   private static boolean isValidFunRegistrationVector(IASTInitializerClause[] arguments) {
+   private static boolean isValidFunRegistrationVector(final IASTInitializerClause[] arguments) {
       return arguments.length > 0 && arguments[0] instanceof IASTLiteralExpression;
    }
 
-   private static IASTInitializerClause[] getArguments(IASTInitializerClause clause) {
+   private static IASTInitializerClause[] getArguments(final IASTInitializerClause clause) {
       if (clause instanceof ICPPASTInitializerList) return ((ICPPASTInitializerList) clause).getClauses();
 
       return array();
    }
 
-   private static String getFunctionSignature(IASTInitializerClause[] arguments) {
+   private static String getFunctionSignature(final IASTInitializerClause[] arguments) {
       return String.valueOf(((IASTLiteralExpression) arguments[0]).getValue());
    }
 
-   private void replaceCallsInitializer(IASTEqualsInitializer eqInitializer, ICPPASTInitializerList newCallsList) {
-      IASTEqualsInitializer copy = nodeFactory.newEqualsInitializer(newCallsList);
+   private void replaceCallsInitializer(final IASTEqualsInitializer eqInitializer, final ICPPASTInitializerList newCallsList) {
+      final IASTEqualsInitializer copy = nodeFactory.newEqualsInitializer(newCallsList);
       rewriter.replace(eqInitializer, copy, null);
    }
 }

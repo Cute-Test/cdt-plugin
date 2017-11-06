@@ -18,7 +18,7 @@ public class FunctionSignatureFormatter {
 
    private final ICPPASTFunctionDeclarator funDecl;
 
-   public FunctionSignatureFormatter(ICPPASTFunctionDeclarator funDecl) {
+   public FunctionSignatureFormatter(final ICPPASTFunctionDeclarator funDecl) {
       this.funDecl = funDecl;
    }
 
@@ -36,8 +36,8 @@ public class FunctionSignatureFormatter {
    }
 
    private String getParameters() {
-      Collection<String> params = new ParameterSignatureHandler(funDecl).getParameterSignatures();
-      String delimiter = COMMA + SPACE;
+      final Collection<String> params = new ParameterSignatureHandler(funDecl).getParameterSignatures();
+      final String delimiter = COMMA + SPACE;
       return StringUtil.join(params, delimiter);
    }
 }

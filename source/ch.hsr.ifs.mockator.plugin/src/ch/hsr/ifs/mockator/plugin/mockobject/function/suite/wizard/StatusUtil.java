@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -20,10 +20,10 @@ class StatusUtil {
       throw new AssertionError();
    }
 
-   public static IStatus getMostSevere(IStatus[] status) {
+   public static IStatus getMostSevere(final IStatus[] status) {
       IStatus max = null;
 
-      for (IStatus curr : status) {
+      for (final IStatus curr : status) {
          if (curr.matches(IStatus.ERROR)) return curr;
          if (max == null || curr.getSeverity() > max.getSeverity()) {
             max = curr;
@@ -33,7 +33,7 @@ class StatusUtil {
       return max;
    }
 
-   public static void applyToStatusLine(DialogPage page, IStatus status) {
+   public static void applyToStatusLine(final DialogPage page, final IStatus status) {
       String message = status.getMessage();
       switch (status.getSeverity()) {
       case IStatus.OK:

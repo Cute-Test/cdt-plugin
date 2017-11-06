@@ -47,7 +47,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
    private MockObject                   mockObject;
 
    public ToggleTracingFunCallRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cProject,
-            final LinkedEditModeStrategy linkedEdit) {
+                                          final LinkedEditModeStrategy linkedEdit) {
       super(element, selection, cProject);
       this.cppStd = cppStd;
       this.linkedEdit = linkedEdit;
@@ -84,7 +84,8 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
    }
 
    @Override
-   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException, OperationCanceledException {
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu, pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       toggleTraceSupport(buildContext(rewriter, ast, pm));
@@ -117,8 +118,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final IProgressMonitor pm) {
       return new MockSupportContext.ContextBuilder(project, refactoringContext, mockObject, rewriter, ast, cppStd, getPublicVisibilityInserter(
-               rewriter), hasMockObjectOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(list(testDoubleMemFun))
-               .build();
+            rewriter), hasMockObjectOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(list(testDoubleMemFun)).build();
    }
 
    private boolean hasMockObjectOnlyStaticMemFuns() {

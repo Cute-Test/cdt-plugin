@@ -61,9 +61,7 @@ class FunctionCalleeReferenceResolver {
       final CalledByResult result = new CalledByResult();
       findCalledBy(binding, result, point);
       final List<ICElement> elements = result.getElements();
-      if (elements.isEmpty()) {
-         return;
-      }
+      if (elements.isEmpty()) { return; }
 
       final IIndexBinding calleeBinding = IndexUI.elementToBinding(index, elements.get(0), ILinkage.CPP_LINKAGE_ID);
       findDeclaration(calleeBinding).ifPresent((name) -> callers.add(name));
@@ -78,9 +76,7 @@ class FunctionCalleeReferenceResolver {
 
    private void findCalledBy(final IBinding calleeBinding, final CalledByResult result, final IASTNode point) throws CoreException {
       findCalledBy1(calleeBinding, true, result, point);
-      if (!(calleeBinding instanceof ICPPMethod)) {
-         return;
-      }
+      if (!(calleeBinding instanceof ICPPMethod)) { return; }
       for (final IBinding overridden : findOverriders(calleeBinding)) {
          findCalledBy1(overridden, false, result, point);
       }

@@ -11,22 +11,23 @@ import org.junit.Test;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.CastHelper;
 
+
 public class CastHelperTest {
 
-  @Test
-  public void instanceIsOfSameClass() {
-    assertTrue(CastHelper.isInstanceOf(42, Integer.class));
-  }
+   @Test
+   public void instanceIsOfSameClass() {
+      assertTrue(CastHelper.isInstanceOf(42, Integer.class));
+   }
 
-  @Test
-  public void instanceIsOfDifferentClass() {
-    assertFalse(CastHelper.isInstanceOf(42, String.class));
-  }
+   @Test
+   public void instanceIsOfDifferentClass() {
+      assertFalse(CastHelper.isInstanceOf(42, String.class));
+   }
 
-  @Test
-  public void unsecureCastYieldsCastedValue() {
-    Map<String, String> m = unorderedMap();
-    HashMap<String, String> hm = CastHelper.unsecureCast(m);
-    assertTrue(hm != null);
-  }
+   @Test
+   public void unsecureCastYieldsCastedValue() {
+      final Map<String, String> m = unorderedMap();
+      final HashMap<String, String> hm = CastHelper.unsecureCast(m);
+      assertTrue(hm != null);
+   }
 }

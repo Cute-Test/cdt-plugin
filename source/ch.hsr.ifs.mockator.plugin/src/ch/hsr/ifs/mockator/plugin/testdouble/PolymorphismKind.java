@@ -15,22 +15,22 @@ public enum PolymorphismKind {
    private static final Map<String, PolymorphismKind> STRING_TO_ENUM = unorderedMap();
 
    static {
-      for (PolymorphismKind standard : values()) {
+      for (final PolymorphismKind standard : values()) {
          STRING_TO_ENUM.put(standard.toString(), standard);
       }
    }
 
-   public static PolymorphismKind from(String name) {
-      PolymorphismKind kind = STRING_TO_ENUM.get(name);
+   public static PolymorphismKind from(final String name) {
+      final PolymorphismKind kind = STRING_TO_ENUM.get(name);
       Assert.notNull(kind, String.format("Unknown polymorphism name '%s'", name));
       return kind;
    }
 
-   public static PolymorphismKind from(ICPPASTCompositeTypeSpecifier testDouble) {
+   public static PolymorphismKind from(final ICPPASTCompositeTypeSpecifier testDouble) {
       return hasAtLeastOneBaseClass(testDouble) ? SubTypePoly : StaticPoly;
    }
 
-   private static boolean hasAtLeastOneBaseClass(ICPPASTCompositeTypeSpecifier testDouble) {
+   private static boolean hasAtLeastOneBaseClass(final ICPPASTCompositeTypeSpecifier testDouble) {
       return testDouble.getBaseSpecifiers().length > 0;
    }
 }

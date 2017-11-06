@@ -11,11 +11,11 @@ import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
 class ReferenceFinder extends AbstractNodeFinder {
 
-   public ReferenceFinder(ICProject projectOrigin, IIndex index, TranslationUnitLoader tuLoader) {
+   public ReferenceFinder(final ICProject projectOrigin, final IIndex index, final TranslationUnitLoader tuLoader) {
       super(projectOrigin, index, tuLoader);
    }
 
-   public Collection<IASTName> findReferences(IASTName name) {
+   public Collection<IASTName> findReferences(final IASTName name) {
       return collectMatchingNames(name);
    }
 

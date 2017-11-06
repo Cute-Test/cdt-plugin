@@ -50,7 +50,7 @@ public class ItaniumMangledNameGenerator {
    private final StringBuilder       mangledName;
    private final SubstitutionHistory history;
 
-   public ItaniumMangledNameGenerator(ICPPFunction function) {
+   public ItaniumMangledNameGenerator(final ICPPFunction function) {
       this.function = function;
       mangledName = new StringBuilder();
       history = new SubstitutionHistory();
@@ -81,7 +81,7 @@ public class ItaniumMangledNameGenerator {
    // ::= <unscoped-template-name> <template-args>
    // ::= <local-name> # See Scope Encoding below
    private void functionName() {
-      String[] qualifiedName = getQualifiedFunctionName();
+      final String[] qualifiedName = getQualifiedFunctionName();
 
       if (qualifiedName.length > 1) {
          nestedName(qualifiedName);
@@ -92,12 +92,12 @@ public class ItaniumMangledNameGenerator {
 
    // <bare-function-type> ::= <signature type>+
    private void bareFunctionType() {
-      ICPPParameter[] parameters = function.getParameters();
+      final ICPPParameter[] parameters = function.getParameters();
 
       if (parameters.length == 0) {
          type(getVoidType());
       } else {
-         for (ICPPParameter param : parameters) {
+         for (final ICPPParameter param : parameters) {
             type(param.getType());
          }
       }
@@ -111,14 +111,14 @@ public class ItaniumMangledNameGenerator {
    // ::= <unscoped-name>
    // ::= <unscoped-template-name> <template-args>
    // ::= <local-name> # See Scope Encoding below
-   private void name(IType type) {
+   private void name(final IType type) {
       if (type instanceof ICPPTemplateInstance) {
-         ICPPTemplateInstance instance = (ICPPTemplateInstance) type;
+         final ICPPTemplateInstance instance = (ICPPTemplateInstance) type;
          unscopedName(AstUtil.getQfName(instance.getTemplateDefinition()));
          templateArgs(list(instance.getTemplateArguments()));
       } else if (type instanceof ICPPClassType) {
-         ICPPClassType classType = (ICPPClassType) type;
-         String[] qualifiedName = getQualifiedName(classType);
+         final ICPPClassType classType = (ICPPClassType) type;
+         final String[] qualifiedName = getQualifiedName(classType);
 
          if (qualifiedName.length == 1) {
             unscopedName(classType.getName());
@@ -130,11 +130,11 @@ public class ItaniumMangledNameGenerator {
 
    // <nested-name> ::= N [<CV-qualifiers>] <prefix> <unqualified-name> E
    // ::= N [<CV-qualifiers>] <template-prefix> <template-args> E
-   private void nestedName(String[] names) {
+   private void nestedName(final String[] names) {
       mangledName.append("N");
       cvQualifiers(function.getType());
       boolean substituted = false;
-      String qfName = StringUtil.join(list(names), "::");
+      final String qfName = StringUtil.join(list(names), "::");
 
       if (isSubstitutionNecessary(qfName)) {
          substitution(qfName, null);
@@ -180,7 +180,7 @@ public class ItaniumMangledNameGenerator {
    // ::= Si # ::std::basic_istream<char, std::char_traits<char> >
    // ::= So # ::std::basic_ostream<char, std::char_traits<char> >
    // ::= Sd # ::std::basic_iostream<char, std::char_traits<char> >
-   private void substitution(String typeStr, IType type) {
+   private void substitution(final String typeStr, final IType type) {
       mangledName.append("S");
 
       if (typeStr.startsWith("std::basic_string<char") || typeStr.startsWith("std::allocator<char>") || typeStr.startsWith(
@@ -190,7 +190,7 @@ public class ItaniumMangledNameGenerator {
          mangledName.append("a");
 
          if (type instanceof ICPPTemplateInstance) {
-            ICPPTemplateInstance instance = (ICPPTemplateInstance) type;
+            final ICPPTemplateInstance instance = (ICPPTemplateInstance) type;
             templateArgs(list(instance.getTemplateArguments()));
          }
       } else if (typeStr.equals("std::basic_string")) {
@@ -209,7 +209,7 @@ public class ItaniumMangledNameGenerator {
       }
    }
 
-   private boolean isSubstitutionNecessary(String typeStr) {
+   private boolean isSubstitutionNecessary(final String typeStr) {
       if (typeStr.startsWith("std::basic_string") || typeStr.startsWith("std::basic_ostream<char") || typeStr.startsWith("std::basic_istream<char") ||
           typeStr.startsWith("std::basic_iostream<char") || typeStr.startsWith("std::allocator")) return true;
 
@@ -217,11 +217,11 @@ public class ItaniumMangledNameGenerator {
    }
 
    // <template-args> ::= I <template-arg>+ E
-   private void templateArgs(Collection<ICPPTemplateArgument> templateArgs) {
+   private void templateArgs(final Collection<ICPPTemplateArgument> templateArgs) {
       Assert.isTrue(templateArgs.size() >= 1, "templateArgs should not be called with empty template arg list");
       mangledName.append("I");
 
-      for (ICPPTemplateArgument arg : templateArgs) {
+      for (final ICPPTemplateArgument arg : templateArgs) {
          templateArg(arg);
       }
 
@@ -232,22 +232,22 @@ public class ItaniumMangledNameGenerator {
    // ::= X <expression> E # expression
    // ::= <expr-primary> # simple expressions
    // ::= J <template-arg>* E # argument pack
-   private void templateArg(ICPPTemplateArgument templateArg) {
+   private void templateArg(final ICPPTemplateArgument templateArg) {
       if (templateArg.isTypeValue()) {
-         IType type = templateArg.getTypeValue();
+         final IType type = templateArg.getTypeValue();
          type(type);
       }
    }
 
    // <template-param> ::= T_ # first template parameter
    // ::= T <parameter-2 non-negative number> _
-   private void templateParam(ICPPTemplateParameter type) {
+   private void templateParam(final ICPPTemplateParameter type) {
       // TODO
    }
 
    // <template-template-param> ::= <template-param>
    // ::= <substitution>
-   private void templateTemplateParam(ICPPTemplateParameter type) {
+   private void templateTemplateParam(final ICPPTemplateParameter type) {
       templateParam(type);
    }
 
@@ -258,7 +258,7 @@ public class ItaniumMangledNameGenerator {
    // ::= # empty
    // ::= <substitution>
    // ::= <prefix> <data-member-prefix>
-   private void prefix(String type) {
+   private void prefix(final String type) {
       // TODO
    }
 
@@ -266,7 +266,7 @@ public class ItaniumMangledNameGenerator {
    // ::= <ctor-dtor-name>
    // ::= <source-name>
    // ::= <unnamed-type-name>
-   private void unQualifiedName(String name) {
+   private void unQualifiedName(final String name) {
       if (name.isEmpty()) return;
 
       if (isCtor() || isDtor()) {
@@ -283,7 +283,7 @@ public class ItaniumMangledNameGenerator {
       return function instanceof ICPPConstructor;
    }
 
-   private static boolean isOperatorName(String name) {
+   private static boolean isOperatorName(final String name) {
       return name.startsWith("operator");
    }
 
@@ -359,8 +359,8 @@ public class ItaniumMangledNameGenerator {
    // ::= cv <type> # (cast)
    // ::= v <digit> <source-name> # vendor extended operator
    private void operatorName() {
-      String operatorName = function.getName().replaceAll("operator", "").trim();
-      ICPPParameter[] parameters = function.getParameters();
+      final String operatorName = function.getName().replaceAll("operator", "").trim();
+      final ICPPParameter[] parameters = function.getParameters();
 
       if (operatorName.equals("new")) {
          mangledName.append("nw");
@@ -462,13 +462,13 @@ public class ItaniumMangledNameGenerator {
    }
 
    // <source-name> ::= <positive length number> <identifier>
-   private void sourceName(String name) {
+   private void sourceName(final String name) {
       number(name.length(), mangledName);
       identifier(name);
    }
 
    // <number> ::= [n] <non-negative decimal integer>
-   private static void number(int n, StringBuilder mangledName) {
+   private static void number(final int n, final StringBuilder mangledName) {
       if (n < 0) {
          mangledName.append("n");
       }
@@ -476,12 +476,12 @@ public class ItaniumMangledNameGenerator {
    }
 
    // <identifier> ::= <unqualified source code identifier>
-   private void identifier(String name) {
+   private void identifier(final String name) {
       mangledName.append(name);
    }
 
    // <CV-qualifiers> ::= [r] [V] [K] # restrict (C99), volatile, const
-   private void cvQualifiers(IType type) {
+   private void cvQualifiers(final IType type) {
       boolean isVolatile = false;
       boolean isConst = false;
 
@@ -531,7 +531,7 @@ public class ItaniumMangledNameGenerator {
          mangledName.append("P");
          type(((IPointerType) type).getType());
       } else if (type instanceof ICPPReferenceType) {
-         ICPPReferenceType refType = (ICPPReferenceType) type;
+         final ICPPReferenceType refType = (ICPPReferenceType) type;
 
          if (refType.isRValueReference()) {
             mangledName.append("O");
@@ -541,11 +541,11 @@ public class ItaniumMangledNameGenerator {
 
          type(((ICPPReferenceType) type).getType());
       } else if (type instanceof IQualifierType) {
-         IQualifierType qualifiedType = (IQualifierType) type;
+         final IQualifierType qualifiedType = (IQualifierType) type;
          cvQualifiers(qualifiedType);
          type(qualifiedType.getType());
       } else if (type instanceof IBasicType) {
-         IBasicType basicType = (IBasicType) type;
+         final IBasicType basicType = (IBasicType) type;
 
          if (basicType.isComplex()) {
             mangledName.append("C");
@@ -555,7 +555,7 @@ public class ItaniumMangledNameGenerator {
 
          builtinType(basicType);
       } else if (isClassOrEnumType(type)) {
-         String typeStr = ASTTypeUtil.getType(type);
+         final String typeStr = ASTTypeUtil.getType(type);
 
          if (isSubstitutionNecessary(typeStr)) {
             substitution(typeStr, type);
@@ -576,25 +576,25 @@ public class ItaniumMangledNameGenerator {
       }
    }
 
-   private static boolean isClassOrEnumType(IType type) {
+   private static boolean isClassOrEnumType(final IType type) {
       return type instanceof IEnumeration || type instanceof ICompositeType;
    }
 
    // <class-enum-type> ::= <name>
-   private void classEnumType(IType type) {
+   private void classEnumType(final IType type) {
       name(type);
    }
 
    // <array-type> ::= A <positive dimension number> _ <element type>
    // ::= A [<dimension expression>] _ <element type>
-   private void arrayType(IArrayType type) {
+   private void arrayType(final IArrayType type) {
       mangledName.append("A");
       mangledName.append(type.getSize());
       type(type);
    }
 
    // <pointer-to-member-type> ::= M <class type> <member type>
-   private void pointerToMemberType(IType type) {}
+   private void pointerToMemberType(final IType type) {}
 
    // <builtin-type> ::= v # void
    // ::= w # wchar_t
@@ -626,7 +626,7 @@ public class ItaniumMangledNameGenerator {
    // ::= Da # auto (in dependent new-expressions)
    // ::= Dn # std::nullptr_t (i.e., decltype(nullptr))
    // ::= u <source-name> # vendor extended type
-   private void builtinType(IBasicType type) {
+   private void builtinType(final IBasicType type) {
       switch (type.getKind()) {
       case eVoid:
          mangledName.append("v");
@@ -687,7 +687,7 @@ public class ItaniumMangledNameGenerator {
    }
 
    private String[] getQualifiedFunctionName() {
-      String[] qfName = getQualifiedName(function);
+      final String[] qfName = getQualifiedName(function);
 
       if (isCtor() || isDtor()) return array(qfName[0], "");
 
@@ -703,14 +703,14 @@ public class ItaniumMangledNameGenerator {
          history = unorderedMap();
       }
 
-      void addToHistory(String type) {
+      void addToHistory(final String type) {
          if (!alreadySeen(type)) {
             history.put(type, seqId++);
          }
       }
 
-      String getBase36Value(String type) {
-         Integer seqId = history.get(type);
+      String getBase36Value(final String type) {
+         final Integer seqId = history.get(type);
          Assert.notNull(seqId, "Type must have occurred once already");
 
          // <substitution> ::= S <seq-id> _
@@ -724,16 +724,16 @@ public class ItaniumMangledNameGenerator {
          }
       }
 
-      boolean alreadySeen(String type) {
+      boolean alreadySeen(final String type) {
          return history.containsKey(type);
       }
    }
 
-   private static String[] getQualifiedName(ICPPBinding binding) {
+   private static String[] getQualifiedName(final ICPPBinding binding) {
       try {
          return binding.getQualifiedName();
       }
-      catch (DOMException e) {
+      catch (final DOMException e) {
          throw new MockatorException(e);
       }
    }

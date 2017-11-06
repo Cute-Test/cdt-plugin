@@ -22,49 +22,49 @@ public class DialogWithDecisionMemory {
    private final IProject   project;
    private final String     keyStore;
 
-   public DialogWithDecisionMemory(IProject project, String keyToStore) {
+   public DialogWithDecisionMemory(final IProject project, final String keyToStore) {
       this.project = project;
-      this.keyStore = keyToStore;
+      keyStore = keyToStore;
    }
 
-   public boolean informUser(String title, String msg) {
-      ScopedPreferenceStore store = getPreferenceStore(project);
+   public boolean informUser(final String title, final String msg) {
+      final ScopedPreferenceStore store = getPreferenceStore(project);
 
       if (!alreadyAskedUser(store) || !userRejectedToSeeAgain(store)) {
-         boolean ok = showDialog(title, msg, store);
+         final boolean ok = showDialog(title, msg, store);
          rememberDecision(store);
          return ok;
       }
       return true;
    }
 
-   private static void rememberDecision(ScopedPreferenceStore store) {
+   private static void rememberDecision(final ScopedPreferenceStore store) {
       try {
          store.save();
       }
-      catch (IOException e) {
+      catch (final IOException e) {
          throw new MockatorException(e);
       }
    }
 
-   private boolean alreadyAskedUser(IPreferenceStore store) {
+   private boolean alreadyAskedUser(final IPreferenceStore store) {
       return store.contains(keyStore);
    }
 
-   private boolean userRejectedToSeeAgain(IPreferenceStore store) {
+   private boolean userRejectedToSeeAgain(final IPreferenceStore store) {
       return store.getString(keyStore).equals(MessageDialogWithToggle.ALWAYS);
    }
 
-   private boolean showDialog(String title, String msg, IPreferenceStore store) {
-      boolean toggleState = false;
-      MessageDialogWithToggle dialog = MessageDialogWithToggle.open(MessageDialog.QUESTION, UiUtil.getWindowShell(), title, msg,
+   private boolean showDialog(final String title, final String msg, final IPreferenceStore store) {
+      final boolean toggleState = false;
+      final MessageDialogWithToggle dialog = MessageDialogWithToggle.open(MessageDialog.QUESTION, UiUtil.getWindowShell(), title, msg,
             I18N.WrapFunctionDoNotShowAgainMsg, toggleState, store, keyStore, SWT.SHEET);
       return dialog.getReturnCode() == OK_RETURN;
    }
 
-   private static ScopedPreferenceStore getPreferenceStore(IProject project) {
-      ProjectScope ps = new ProjectScope(project);
-      ScopedPreferenceStore scoped = new ScopedPreferenceStore(ps, MockatorPlugin.PLUGIN_ID);
+   private static ScopedPreferenceStore getPreferenceStore(final IProject project) {
+      final ProjectScope ps = new ProjectScope(project);
+      final ScopedPreferenceStore scoped = new ScopedPreferenceStore(ps, MockatorPlugin.PLUGIN_ID);
       return scoped;
    }
 }

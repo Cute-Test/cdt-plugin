@@ -17,9 +17,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorIndexAstChecker;
 public abstract class AbstractMissingMemFunChecker extends MockatorIndexAstChecker {
 
    protected void markIfHasMissingMemFuns(final ICPPASTCompositeTypeSpecifier klass) {
-      if (!hasReferencingTestFunctions(klass)) {
-         return;
-      }
+      if (!hasReferencingTestFunctions(klass)) { return; }
       final MissingMemFunFinder finder = getMissingMemFunsFinder();
       createCodanArgs(klass, finder.findMissingMemberFunctions(klass)).ifPresent((codanArgs) -> mark(klass, codanArgs));
    }

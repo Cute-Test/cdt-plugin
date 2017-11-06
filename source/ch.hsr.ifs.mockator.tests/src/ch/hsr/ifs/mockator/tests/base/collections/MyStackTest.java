@@ -11,73 +11,75 @@ import org.junit.Test;
 
 import ch.hsr.ifs.mockator.plugin.base.collections.MyStack;
 
+
 public class MyStackTest {
-  private MyStack<String> stack;
 
-  @Before
-  public void setUp() {
-    stack = new MyStack<String>();
-  }
+   private MyStack<String> stack;
 
-  @Test
-  public void newStackIsEmpty() {
-    assertTrue(stack.isEmpty());
-    assertEquals(0, stack.size());
-  }
+   @Before
+   public void setUp() {
+      stack = new MyStack<>();
+   }
 
-  @Test
-  public void pushesToEmptyStack() {
-    int numberOfPushes = 6;
+   @Test
+   public void newStackIsEmpty() {
+      assertTrue(stack.isEmpty());
+      assertEquals(0, stack.size());
+   }
 
-    for (int i = 0; i < numberOfPushes; i++) {
-      stack.push("test");
-    }
+   @Test
+   public void pushesToEmptyStack() {
+      final int numberOfPushes = 6;
 
-    assertFalse(stack.isEmpty());
-    assertEquals(numberOfPushes, stack.size());
-  }
+      for (int i = 0; i < numberOfPushes; i++) {
+         stack.push("test");
+      }
 
-  @Test
-  public void pushThenPopYieldsSameElementAndEmptyStack() {
-    String message = "test";
-    stack.push(message);
-    assertEquals(message, stack.pop());
-    assertTrue(stack.isEmpty());
-  }
+      assertFalse(stack.isEmpty());
+      assertEquals(numberOfPushes, stack.size());
+   }
 
-  @Test
-  public void pushThenPeekYieldsSameElementWithoutRemovingIt() {
-    String message = "test";
-    stack.push(message);
-    int size = stack.size();
-    assertEquals(message, stack.peek());
-    assertEquals(size, stack.size());
-  }
+   @Test
+   public void pushThenPopYieldsSameElementAndEmptyStack() {
+      final String message = "test";
+      stack.push(message);
+      assertEquals(message, stack.pop());
+      assertTrue(stack.isEmpty());
+   }
 
-  @Test
-  public void popDownToEmptyStack() {
-    int numberOfPushes = (int) (Math.random() * 42 + 1);
+   @Test
+   public void pushThenPeekYieldsSameElementWithoutRemovingIt() {
+      final String message = "test";
+      stack.push(message);
+      final int size = stack.size();
+      assertEquals(message, stack.peek());
+      assertEquals(size, stack.size());
+   }
 
-    for (int i = 0; i < numberOfPushes; i++) {
-      stack.push("test");
-    }
+   @Test
+   public void popDownToEmptyStack() {
+      final int numberOfPushes = (int) (Math.random() * 42 + 1);
 
-    for (int i = 0; i < numberOfPushes; i++) {
+      for (int i = 0; i < numberOfPushes; i++) {
+         stack.push("test");
+      }
+
+      for (int i = 0; i < numberOfPushes; i++) {
+         stack.pop();
+      }
+      assertTrue(stack.isEmpty());
+      assertEquals(0, stack.size());
+   }
+
+   @Test(expected = NoSuchElementException.class)
+   public void popOnEmptyStack() {
+      assertTrue(stack.isEmpty());
       stack.pop();
-    }
-    assertTrue(stack.isEmpty());
-    assertEquals(0, stack.size());
-  }
+   }
 
-  @Test(expected = NoSuchElementException.class)
-  public void popOnEmptyStack() {
-    assertTrue(stack.isEmpty());
-    stack.pop();
-  }
-
-  @Test(expected = NoSuchElementException.class)
-  public void peekIntoEmptyStack() {
-    assertTrue(stack.isEmpty());
-    stack.peek();
-  }
+   @Test(expected = NoSuchElementException.class)
+   public void peekIntoEmptyStack() {
+      assertTrue(stack.isEmpty());
+      stack.peek();
+   }
 }

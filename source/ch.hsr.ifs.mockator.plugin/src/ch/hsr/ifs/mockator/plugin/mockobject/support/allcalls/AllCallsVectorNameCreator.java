@@ -13,64 +13,66 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
+
 @SuppressWarnings("restriction")
 public class AllCallsVectorNameCreator {
 
-  private static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final ICPPASTCompositeTypeSpecifier mockObject;
-  private final IASTNode parent;
+   private static final ICPPNodeFactory        nodeFactory = CPPNodeFactory.getDefault();
+   private final ICPPASTCompositeTypeSpecifier mockObject;
+   private final IASTNode                      parent;
 
-  public AllCallsVectorNameCreator(final ICPPASTCompositeTypeSpecifier mockObject, final IASTNode parent) {
-    this.mockObject = mockObject;
-    this.parent = parent;
-  }
+   public AllCallsVectorNameCreator(final ICPPASTCompositeTypeSpecifier mockObject, final IASTNode parent) {
+      this.mockObject = mockObject;
+      this.parent = parent;
+   }
 
-  public String getNameOfAllCallsVector() {
-    return OptHelper.returnIfPresentElse(getRegistrationVector(), (name) -> name.toString(), () -> createAllCallsVectorName().toString());
-  }
+   public String getNameOfAllCallsVector() {
+      return OptHelper.returnIfPresentElse(getRegistrationVector(), (name) -> name.toString(), () -> createAllCallsVectorName().toString());
+   }
 
-  public String getFqNameOfAllCallsVector() {
-    return OptHelper.returnIfPresentElse(getRegistrationVector(), (name) -> new QualifiedNameCreator(name).createQualifiedName().toString(),
-        () -> createNewFqNameForAllCallsVector().toString());
-  }
+   public String getFqNameOfAllCallsVector() {
+      return OptHelper.returnIfPresentElse(getRegistrationVector(), (name) -> new QualifiedNameCreator(name).createQualifiedName().toString(),
+            () -> createNewFqNameForAllCallsVector().toString());
+   }
 
-  private ICPPASTQualifiedName createNewFqNameForAllCallsVector() {
-    final ICPPASTQualifiedName className = new QualifiedNameCreator(mockObject.getName()).createQualifiedName();
-    final ICPPASTName allCallsName = createAllCallsVectorName();
-    final ICPPASTQualifiedName fqAllCallsName = nodeFactory.newQualifiedName(allCallsName);
+   private ICPPASTQualifiedName createNewFqNameForAllCallsVector() {
+      final ICPPASTQualifiedName className = new QualifiedNameCreator(mockObject.getName()).createQualifiedName();
+      final ICPPASTName allCallsName = createAllCallsVectorName();
+      final ICPPASTQualifiedName fqAllCallsName = nodeFactory.newQualifiedName(allCallsName);
 
-    final ICPPASTNameSpecifier[] allSegments = className.getQualifier();
-    for (final ICPPASTNameSpecifier segment : allSegments) {
-      fqAllCallsName.addNameSpecifier(segment.copy());
-    }
-
-    return fqAllCallsName;
-  }
-
-  private Optional<IASTName> getRegistrationVector() {
-    final AllCallsVectorFinderVisitor finder = new AllCallsVectorFinderVisitor();
-    mockObject.accept(finder);
-    return finder.getFoundCallsVector();
-  }
-
-  private ICPPASTName createAllCallsVectorName() {
-    String proposedName = MockatorConstants.ALL_CALLS_VECTOR_NAME;
-
-    if (parent instanceof IASTCompoundStatement) {
-      final IASTCompoundStatement funBody = (IASTCompoundStatement) parent;
-
-      if (isNameAlreadyExisting(funBody, proposedName)) {
-        proposedName = proposedName + mockObject.getName().toString();
+      final ICPPASTNameSpecifier[] allSegments = className.getQualifier();
+      for (final ICPPASTNameSpecifier segment : allSegments) {
+         fqAllCallsName.addNameSpecifier(segment.copy());
       }
-    }
-    return nodeFactory.newName(proposedName.toCharArray());
-  }
 
-  private static boolean isNameAlreadyExisting(final IASTCompoundStatement funBody, final String allCallsVectorName) {
-    return new NameFinder(funBody).getNameMatchingCriteria((name) -> name.toString().equals(allCallsVectorName)).isPresent();
-  }
+      return fqAllCallsName;
+   }
+
+   private Optional<IASTName> getRegistrationVector() {
+      final AllCallsVectorFinderVisitor finder = new AllCallsVectorFinderVisitor();
+      mockObject.accept(finder);
+      return finder.getFoundCallsVector();
+   }
+
+   private ICPPASTName createAllCallsVectorName() {
+      String proposedName = MockatorConstants.ALL_CALLS_VECTOR_NAME;
+
+      if (parent instanceof IASTCompoundStatement) {
+         final IASTCompoundStatement funBody = (IASTCompoundStatement) parent;
+
+         if (isNameAlreadyExisting(funBody, proposedName)) {
+            proposedName = proposedName + mockObject.getName().toString();
+         }
+      }
+      return nodeFactory.newName(proposedName.toCharArray());
+   }
+
+   private static boolean isNameAlreadyExisting(final IASTCompoundStatement funBody, final String allCallsVectorName) {
+      return new NameFinder(funBody).getNameMatchingCriteria((name) -> name.toString().equals(allCallsVectorName)).isPresent();
+   }
 }

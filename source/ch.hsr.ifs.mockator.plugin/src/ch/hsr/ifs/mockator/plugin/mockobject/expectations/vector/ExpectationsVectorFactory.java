@@ -8,7 +8,7 @@ public class ExpectationsVectorFactory {
 
    private final CppStandard cppStd;
 
-   public ExpectationsVectorFactory(CppStandard cppStd) {
+   public ExpectationsVectorFactory(final CppStandard cppStd) {
       this.cppStd = cppStd;
    }
 

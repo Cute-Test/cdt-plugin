@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -27,17 +27,17 @@ class SelectionButtonDialogField extends DialogField {
    private boolean             fIsSelected;
    private final DialogField[] fAttachedDialogFields;
 
-   public SelectionButtonDialogField(int buttonStyle) {
+   public SelectionButtonDialogField(final int buttonStyle) {
       fIsSelected = false;
       fAttachedDialogFields = null;
       fButtonStyle = buttonStyle;
    }
 
    @Override
-   public Control[] doFillIntoGrid(Composite parent, int nColumns) {
+   public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
       assertEnoughColumns(nColumns);
-      Button button = getSelectionButton(parent);
-      GridData gd = new GridData();
+      final Button button = getSelectionButton(parent);
+      final GridData gd = new GridData();
       gd.horizontalSpan = nColumns;
       gd.horizontalAlignment = GridData.FILL;
 
@@ -54,7 +54,7 @@ class SelectionButtonDialogField extends DialogField {
       return 1;
    }
 
-   Button getSelectionButton(Composite group) {
+   Button getSelectionButton(final Composite group) {
       if (fButton == null) {
          assertCompositeNotNull(group);
          fButton = new Button(group, fButtonStyle);
@@ -65,12 +65,12 @@ class SelectionButtonDialogField extends DialogField {
          fButton.addSelectionListener(new SelectionListener() {
 
             @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
+            public void widgetDefaultSelected(final SelectionEvent e) {
                doWidgetSelected();
             }
 
             @Override
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(final SelectionEvent e) {
                doWidgetSelected();
             }
          });
@@ -84,13 +84,13 @@ class SelectionButtonDialogField extends DialogField {
       }
    }
 
-   private void changeValue(boolean newState) {
+   private void changeValue(final boolean newState) {
       if (fIsSelected != newState) {
          fIsSelected = newState;
 
          if (fAttachedDialogFields != null) {
             boolean focusSet = false;
-            for (DialogField fAttachedDialogField : fAttachedDialogFields) {
+            for (final DialogField fAttachedDialogField : fAttachedDialogFields) {
                fAttachedDialogField.setEnabled(fIsSelected);
                if (fIsSelected && !focusSet) {
                   focusSet = fAttachedDialogField.setFocus();
@@ -107,7 +107,7 @@ class SelectionButtonDialogField extends DialogField {
       return fIsSelected;
    }
 
-   void setSelection(boolean selected) {
+   void setSelection(final boolean selected) {
       changeValue(selected);
       if (isOkToUse(fButton)) {
          fButton.setSelection(selected);

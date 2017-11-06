@@ -18,25 +18,25 @@ abstract class AbstractExpectationsFinder {
    protected Collection<MemFunCallExpectation> callExpectations;
    private final IASTName                      expectationsName;
 
-   public AbstractExpectationsFinder(Collection<MemFunCallExpectation> callExpectations, NodeContainer<IASTName> expectationVector,
-                                     IASTName expectationsVectorName) {
+   public AbstractExpectationsFinder(final Collection<MemFunCallExpectation> callExpectations, final NodeContainer<IASTName> expectationVector,
+                                     final IASTName expectationsVectorName) {
       this.callExpectations = callExpectations;
       this.expectationVector = expectationVector;
-      this.expectationsName = expectationsVectorName;
+      expectationsName = expectationsVectorName;
    }
 
    protected abstract void collectExpectations(IASTStatement expectationStmt);
 
-   protected boolean matchesName(IASTName name) {
+   protected boolean matchesName(final IASTName name) {
       return name.toString().equals(expectationsName.toString());
    }
 
-   protected MemFunCallExpectation toMemberFunctionCall(IASTInitializerClause funSignature) {
-      String signature = String.valueOf(((IASTLiteralExpression) funSignature).getValue());
+   protected MemFunCallExpectation toMemberFunctionCall(final IASTInitializerClause funSignature) {
+      final String signature = String.valueOf(((IASTLiteralExpression) funSignature).getValue());
       return new MemFunCallExpectation(signature);
    }
 
-   protected boolean isStringLiteral(IASTInitializerClause literal) {
+   protected boolean isStringLiteral(final IASTInitializerClause literal) {
       return new StdString().isStdString(literal);
    }
 }

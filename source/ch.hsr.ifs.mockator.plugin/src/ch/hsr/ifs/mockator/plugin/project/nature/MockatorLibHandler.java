@@ -27,14 +27,14 @@ public class MockatorLibHandler {
    private static final String MOCKATOR_SRC_HEADER_FOLDER    = "headers";
    private final IProject      project;
 
-   public MockatorLibHandler(IProject project) {
+   public MockatorLibHandler(final IProject project) {
       this.project = project;
    }
 
    public void addLibToProject() throws CoreException {
       if (hasLib()) return;
 
-      IFolder targetFolder = createMockatorFolder();
+      final IFolder targetFolder = createMockatorFolder();
       copyLibFiles(targetFolder);
       addIncludePath(targetFolder);
    }
@@ -50,40 +50,40 @@ public class MockatorLibHandler {
    }
 
    private void deleteFolder() throws CoreException {
-      SourceFolderHandler handler = new SourceFolderHandler(project);
+      final SourceFolderHandler handler = new SourceFolderHandler(project);
       handler.deleteFolder(MOCKATOR_TARGET_HEADER_FOLDER, new NullProgressMonitor());
    }
 
    private void removeIncludePath() {
-      IFolder mockatorDir = project.getProject().getFolder(MOCKATOR_TARGET_HEADER_FOLDER);
-      IncludePathHandler handler = new IncludePathHandler(project);
+      final IFolder mockatorDir = project.getProject().getFolder(MOCKATOR_TARGET_HEADER_FOLDER);
+      final IncludePathHandler handler = new IncludePathHandler(project);
       handler.removeInclude(mockatorDir);
    }
 
-   private void addIncludePath(IFolder mockatorDir) {
-      IncludePathHandler handler = new IncludePathHandler(project);
+   private void addIncludePath(final IFolder mockatorDir) {
+      final IncludePathHandler handler = new IncludePathHandler(project);
       handler.addInclude(mockatorDir);
    }
 
-   private static void copyLibFiles(IFolder destination) throws CoreException {
-      Collection<URL> files = getMockatorFiles(MOCKATOR_SRC_HEADER_FOLDER);
+   private static void copyLibFiles(final IFolder destination) throws CoreException {
+      final Collection<URL> files = getMockatorFiles(MOCKATOR_SRC_HEADER_FOLDER);
       copyFilesToFolder(destination, files);
    }
 
    private IFolder createMockatorFolder() throws CoreException {
-      SourceFolderHandler handler = new SourceFolderHandler(project);
-      IFolder targetFolder = handler.createFolder(MOCKATOR_TARGET_HEADER_FOLDER, new NullProgressMonitor());
+      final SourceFolderHandler handler = new SourceFolderHandler(project);
+      final IFolder targetFolder = handler.createFolder(MOCKATOR_TARGET_HEADER_FOLDER, new NullProgressMonitor());
       Assert.isTrue(targetFolder.exists(), "Mockator library target folder must be existing");
       return targetFolder;
    }
 
-   private static Collection<URL> getMockatorFiles(String folder) {
+   private static Collection<URL> getMockatorFiles(final String folder) {
       return list(MockatorPlugin.getDefault().getBundle().findEntries(folder, "*.h", false));
    }
 
-   private static void copyFilesToFolder(IFolder destination, Collection<URL> mockatorFiles) throws CoreException {
-      for (URL file : mockatorFiles) {
-         IFile targetFile = getTargetFile(destination, file);
+   private static void copyFilesToFolder(final IFolder destination, final Collection<URL> mockatorFiles) throws CoreException {
+      for (final URL file : mockatorFiles) {
+         final IFile targetFile = getTargetFile(destination, file);
 
          if (targetFile.exists()) {
             continue;
@@ -94,13 +94,13 @@ public class MockatorLibHandler {
             // necessary
             targetFile.create(file.openStream(), IResource.FORCE, new NullProgressMonitor());
          }
-         catch (IOException e) {
+         catch (final IOException e) {
             throw new MockatorException("Was not able to copy Mockator header files", e);
          }
       }
    }
 
-   private static IFile getTargetFile(IFolder destination, URL mockatorFile) {
+   private static IFile getTargetFile(final IFolder destination, final URL mockatorFile) {
       return destination.getFile(FileUtil.getFilePart(mockatorFile.getFile()));
    }
 }

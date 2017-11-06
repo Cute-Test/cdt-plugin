@@ -50,7 +50,8 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
       shouldVisitInitializers = true;
    }
 
-   public MissingCtorFinderVisitor(ICPPASTCompositeTypeSpecifier testDouble, ICPPASTTemplateParameter templateParam, ICPPASTTemplateDeclaration sut) {
+   public MissingCtorFinderVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICPPASTTemplateParameter templateParam,
+                                   final ICPPASTTemplateDeclaration sut) {
       super(testDouble, templateParam, sut);
       missingCtors = orderPreservingSet();
       initialisers = unorderedMap();
@@ -72,22 +73,22 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    }
 
    private boolean hasDefaultInitTemplateParamMember() {
-      ICPPASTCompositeTypeSpecifier sutClass = AstUtil.getChildOfType(sut, ICPPASTCompositeTypeSpecifier.class);
+      final ICPPASTCompositeTypeSpecifier sutClass = AstUtil.getChildOfType(sut, ICPPASTCompositeTypeSpecifier.class);
 
       if (sutClass == null) return false;
 
-      for (IASTDeclaration member : sutClass.getMembers()) {
+      for (final IASTDeclaration member : sutClass.getMembers()) {
          if (!(member instanceof IASTSimpleDeclaration)) {
             continue;
          }
 
-         IASTDeclarator[] declarators = ((IASTSimpleDeclaration) member).getDeclarators();
+         final IASTDeclarator[] declarators = ((IASTSimpleDeclaration) member).getDeclarators();
 
          if (!(declarators.length == 1 && declarators[0] instanceof ICPPASTDeclarator)) {
             continue;
          }
 
-         IASTName name = declarators[0].getName();
+         final IASTName name = declarators[0].getName();
 
          if (!resolvesToTemplateParam(getType(name))) {
             continue;
@@ -99,16 +100,16 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
       return false;
    }
 
-   private boolean isTypeNotInitialized(IASTName name) {
-      ICPPASTConstructorChainInitializer chainInitializer = initialisers.get(name.toString());
+   private boolean isTypeNotInitialized(final IASTName name) {
+      final ICPPASTConstructorChainInitializer chainInitializer = initialisers.get(name.toString());
 
       if (chainInitializer == null) return true;
 
-      IASTInitializer initializer = chainInitializer.getInitializer();
+      final IASTInitializer initializer = chainInitializer.getInitializer();
       return !(initializer instanceof ICPPASTConstructorInitializer) || hasEmptyInitializer(initializer);
    }
 
-   private static boolean hasEmptyInitializer(IASTInitializer initializer) {
+   private static boolean hasEmptyInitializer(final IASTInitializer initializer) {
       return ((ICPPASTConstructorInitializer) initializer).getArguments().length == 0;
    }
 
@@ -117,10 +118,10 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    }
 
    @Override
-   public int visit(IASTInitializer initializer) {
+   public int visit(final IASTInitializer initializer) {
       if (!(initializer instanceof ICPPASTConstructorInitializer)) return PROCESS_CONTINUE;
 
-      ICPPASTConstructorInitializer ctorInitializer = (ICPPASTConstructorInitializer) initializer;
+      final ICPPASTConstructorInitializer ctorInitializer = (ICPPASTConstructorInitializer) initializer;
 
       if (AstUtil.isPartOf(ctorInitializer, ICPPASTConstructorChainInitializer.class)) return handleCtorInitializer(initializer, ctorInitializer);
       else if (AstUtil.isPartOf(ctorInitializer, ICPPASTNewExpression.class)) return handleNewExpression(ctorInitializer);
@@ -129,8 +130,8 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private int handleSimpleDecl(ICPPASTConstructorInitializer ctorInitializer) {
-      ICPPASTDeclarator declarator = AstUtil.getAncestorOfType(ctorInitializer, ICPPASTDeclarator.class);
+   private int handleSimpleDecl(final ICPPASTConstructorInitializer ctorInitializer) {
+      final ICPPASTDeclarator declarator = AstUtil.getAncestorOfType(ctorInitializer, ICPPASTDeclarator.class);
 
       if (resolvesToTemplateParam(getType(declarator.getName()))) {
          addToMissingCtors(declarator.getInitializer());
@@ -140,8 +141,8 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private int handleNewExpression(ICPPASTConstructorInitializer ctorInitializer) {
-      ICPPASTNewExpression newExpr = AstUtil.getAncestorOfType(ctorInitializer, ICPPASTNewExpression.class);
+   private int handleNewExpression(final ICPPASTConstructorInitializer ctorInitializer) {
+      final ICPPASTNewExpression newExpr = AstUtil.getAncestorOfType(ctorInitializer, ICPPASTNewExpression.class);
 
       if (resolvesToTemplateParam(newExpr.getExpressionType())) {
          addToMissingCtors(newExpr.getInitializer());
@@ -151,9 +152,9 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private int handleCtorInitializer(IASTInitializer initializer, ICPPASTConstructorInitializer ctorInitializer) {
-      ICPPASTConstructorChainInitializer ctor = AstUtil.getAncestorOfType(ctorInitializer, ICPPASTConstructorChainInitializer.class);
-      IASTName memberInitializerId = ctor.getMemberInitializerId();
+   private int handleCtorInitializer(final IASTInitializer initializer, final ICPPASTConstructorInitializer ctorInitializer) {
+      final ICPPASTConstructorChainInitializer ctor = AstUtil.getAncestorOfType(ctorInitializer, ICPPASTConstructorChainInitializer.class);
+      final IASTName memberInitializerId = ctor.getMemberInitializerId();
 
       if (resolvesToTemplateParam(getType(memberInitializerId))) {
          initialisers.put(memberInitializerId.toString(), ctor);
@@ -165,15 +166,15 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    }
 
    @Override
-   public int visit(IASTDeclaration decl) {
+   public int visit(final IASTDeclaration decl) {
       if (!(decl instanceof IASTSimpleDeclaration && AstUtil.isPartOf(decl, ICPPASTFunctionDefinition.class))) return PROCESS_CONTINUE;
 
-      ICPPASTConstructorInitializer ctorInit = AstUtil.getChildOfType(decl, ICPPASTConstructorInitializer.class);
-      ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(decl, ICPPASTFunctionCallExpression.class);
+      final ICPPASTConstructorInitializer ctorInit = AstUtil.getChildOfType(decl, ICPPASTConstructorInitializer.class);
+      final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(decl, ICPPASTFunctionCallExpression.class);
 
       if (ctorInit != null || funCall != null) return PROCESS_CONTINUE;
 
-      IASTDeclarator[] declarators = ((IASTSimpleDeclaration) decl).getDeclarators();
+      final IASTDeclarator[] declarators = ((IASTSimpleDeclaration) decl).getDeclarators();
 
       if (declarators.length == 0) return PROCESS_CONTINUE;
 
@@ -185,21 +186,21 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private void addToMissingCtors(IASTInitializer initializerToUse) {
+   private void addToMissingCtors(final IASTInitializer initializerToUse) {
       missingCtors.add(createCtorWith(initializerToUse));
    }
 
    @Override
-   public int visit(IASTExpression expression) {
+   public int visit(final IASTExpression expression) {
       if (!(expression instanceof ICPPASTFunctionCallExpression)) return PROCESS_CONTINUE;
 
-      ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) expression;
-      IASTExpression functionNameExpression = funCall.getFunctionNameExpression();
+      final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) expression;
+      final IASTExpression functionNameExpression = funCall.getFunctionNameExpression();
 
       if (!(functionNameExpression instanceof IASTIdExpression)) return PROCESS_CONTINUE;
 
-      IASTIdExpression idExpr = (IASTIdExpression) functionNameExpression;
-      IASTName name = idExpr.getName();
+      final IASTIdExpression idExpr = (IASTIdExpression) functionNameExpression;
+      final IASTName name = idExpr.getName();
 
       if (!hasTemplateParamType(name)) return PROCESS_CONTINUE;
 
@@ -207,9 +208,9 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_SKIP;
    }
 
-   private static ICPPASTConstructorInitializer createInitializer(ICPPASTFunctionCallExpression call) {
-      IASTInitializerClause[] arguments = call.getArguments();
-      IASTInitializerClause[] clauses = new IASTInitializerClause[arguments.length];
+   private static ICPPASTConstructorInitializer createInitializer(final ICPPASTFunctionCallExpression call) {
+      final IASTInitializerClause[] arguments = call.getArguments();
+      final IASTInitializerClause[] clauses = new IASTInitializerClause[arguments.length];
 
       for (int i = 0; i < arguments.length; i++) {
          clauses[i] = arguments[i].copy();
@@ -218,42 +219,42 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
       return nodeFactory.newConstructorInitializer(clauses);
    }
 
-   private boolean hasTemplateParamType(IASTName name) {
+   private boolean hasTemplateParamType(final IASTName name) {
       return getType(name) instanceof ICPPTemplateParameter && name.toString().equals(getTemplateParamName());
    }
 
-   private static IType getType(IASTName name) {
-      IBinding binding = name.resolveBinding();
+   private static IType getType(final IASTName name) {
+      final IBinding binding = name.resolveBinding();
 
       if (binding instanceof ICPPVariable) {
-         ICPPVariable var = (ICPPVariable) binding;
+         final ICPPVariable var = (ICPPVariable) binding;
          return var.getType();
       } else if (binding instanceof IType) return (IType) binding;
 
       return null;
    }
 
-   private Constructor createCtorWith(IASTInitializer initializer) {
-      IASTName constructorName = nodeFactory.newName(getTestDoubleName().toCharArray());
-      IASTIdExpression idExpr = nodeFactory.newIdExpression(constructorName);
-      Collection<IASTInitializerClause> arguments = getArguments(initializer);
-      ICPPASTFunctionCallExpression call = nodeFactory.newFunctionCallExpression(idExpr, arguments.toArray(new IASTInitializerClause[arguments
+   private Constructor createCtorWith(final IASTInitializer initializer) {
+      final IASTName constructorName = nodeFactory.newName(getTestDoubleName().toCharArray());
+      final IASTIdExpression idExpr = nodeFactory.newIdExpression(constructorName);
+      final Collection<IASTInitializerClause> arguments = getArguments(initializer);
+      final ICPPASTFunctionCallExpression call = nodeFactory.newFunctionCallExpression(idExpr, arguments.toArray(new IASTInitializerClause[arguments
             .size()]));
       call.setParent(getParent(initializer));
       return new Constructor(call);
    }
 
-   private static Collection<IASTInitializerClause> getArguments(IASTInitializer initializer) {
+   private static Collection<IASTInitializerClause> getArguments(final IASTInitializer initializer) {
       if (initializer instanceof ICPPASTConstructorInitializer) {
-         CtorArgumentsCopier h = new CtorArgumentsCopier((ICPPASTConstructorInitializer) initializer);
+         final CtorArgumentsCopier h = new CtorArgumentsCopier((ICPPASTConstructorInitializer) initializer);
          return h.getArguments();
       }
 
       return list();
    }
 
-   private static IASTNode getParent(IASTNode ctor) {
-      ICPPASTFunctionDefinition parentFunction = AstUtil.getAncestorOfType(ctor, ICPPASTFunctionDefinition.class);
+   private static IASTNode getParent(final IASTNode ctor) {
+      final ICPPASTFunctionDefinition parentFunction = AstUtil.getAncestorOfType(ctor, ICPPASTFunctionDefinition.class);
 
       if (parentFunction == null) return AstUtil.getAncestorOfType(ctor, ICPPASTCompositeTypeSpecifier.class);
 

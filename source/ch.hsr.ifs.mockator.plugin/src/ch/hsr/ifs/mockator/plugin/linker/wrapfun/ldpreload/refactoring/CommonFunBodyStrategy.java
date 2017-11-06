@@ -39,8 +39,8 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
    protected static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
    @Override
-   public IASTCompoundStatement getPreloadFunBody(CppStandard cppStd, ICPPASTFunctionDeclarator function) {
-      IASTCompoundStatement funBody = nodeFactory.newCompoundStatement();
+   public IASTCompoundStatement getPreloadFunBody(final CppStandard cppStd, final ICPPASTFunctionDeclarator function) {
+      final IASTCompoundStatement funBody = nodeFactory.newCompoundStatement();
       funBody.addStatement(createFunTypedef(function));
       funBody.addStatement(getOrigFunPtr(cppStd));
       funBody.addStatement(getLazyInit(function));
@@ -54,10 +54,10 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
    // void *tmpPtr = dlsym(RTLD_NEXT, "_Z3fooi");
    // origFun = reinterpret_cast<fptr>(tmpPtr);
    // }
-   private IASTIfStatement getLazyInit(ICPPASTFunctionDeclarator function) {
-      ICPPASTUnaryExpression notExpr = nodeFactory.newUnaryExpression(IASTUnaryExpression.op_not, nodeFactory.newIdExpression(nodeFactory.newName(
-            ORIG_FUN.toCharArray())));
-      IASTCompoundStatement then = nodeFactory.newCompoundStatement();
+   private IASTIfStatement getLazyInit(final ICPPASTFunctionDeclarator function) {
+      final ICPPASTUnaryExpression notExpr = nodeFactory.newUnaryExpression(IASTUnaryExpression.op_not, nodeFactory.newIdExpression(nodeFactory
+            .newName(ORIG_FUN.toCharArray())));
+      final IASTCompoundStatement then = nodeFactory.newCompoundStatement();
       then.addStatement(getDlSym(function));
       then.addStatement(createReinterpretCast());
       return nodeFactory.newIfStatement(notExpr, then, null);
@@ -66,50 +66,50 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
    protected abstract IASTStatement createReinterpretCast();
 
    // void *tmpPtr = dlsym(RTLD_NEXT, "_Z3fooi");
-   private static IASTStatement getDlSym(ICPPASTFunctionDeclarator function) {
-      IASTInitializerClause[] args = new IASTInitializerClause[2];
+   private static IASTStatement getDlSym(final ICPPASTFunctionDeclarator function) {
+      final IASTInitializerClause[] args = new IASTInitializerClause[2];
       args[0] = nodeFactory.newIdExpression(nodeFactory.newName("RTLD_NEXT".toCharArray()));
       args[1] = nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(getMangledFunName(function)));
-      ICPPASTFunctionCallExpression dlsymcall = nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(nodeFactory.newName("dlsym"
+      final ICPPASTFunctionCallExpression dlsymcall = nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(nodeFactory.newName("dlsym"
             .toCharArray())), args);
-      ICPPASTSimpleDeclSpecifier voidDeclSpec = nodeFactory.newSimpleDeclSpecifier();
+      final ICPPASTSimpleDeclSpecifier voidDeclSpec = nodeFactory.newSimpleDeclSpecifier();
       voidDeclSpec.setType(IASTSimpleDeclSpecifier.t_void);
-      IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(voidDeclSpec);
-      ICPPASTDeclarator tmpPtrDecl = nodeFactory.newDeclarator(nodeFactory.newName(TMP_PTR.toCharArray()));
+      final IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(voidDeclSpec);
+      final ICPPASTDeclarator tmpPtrDecl = nodeFactory.newDeclarator(nodeFactory.newName(TMP_PTR.toCharArray()));
       tmpPtrDecl.addPointerOperator(nodeFactory.newPointer());
       tmpPtrDecl.setInitializer(nodeFactory.newEqualsInitializer(dlsymcall));
       simpleDecl.addDeclarator(tmpPtrDecl);
       return nodeFactory.newDeclarationStatement(simpleDecl);
    }
 
-   private static String getMangledFunName(ICPPASTFunctionDeclarator function) {
-      IBinding binding = function.getName().resolveBinding();
+   private static String getMangledFunName(final ICPPASTFunctionDeclarator function) {
+      final IBinding binding = function.getName().resolveBinding();
       Assert.instanceOf(binding, ICPPFunction.class, "Function expected");
-      ItaniumMangledNameGenerator mangledGenerator = new ItaniumMangledNameGenerator((ICPPFunction) binding);
+      final ItaniumMangledNameGenerator mangledGenerator = new ItaniumMangledNameGenerator((ICPPFunction) binding);
       return mangledGenerator.createMangledName();
    }
 
    protected abstract IASTStatement createFunTypedef(ICPPASTFunctionDeclarator funDecl);
 
    // static funPtr origFun = nullptr;
-   private static IASTDeclarationStatement getOrigFunPtr(CppStandard cppStd) {
-      IASTName funPtr = nodeFactory.newName(FUN_PTR.toCharArray());
-      ICPPASTNamedTypeSpecifier namedTypeSpec = nodeFactory.newTypedefNameSpecifier(funPtr);
+   private static IASTDeclarationStatement getOrigFunPtr(final CppStandard cppStd) {
+      final IASTName funPtr = nodeFactory.newName(FUN_PTR.toCharArray());
+      final ICPPASTNamedTypeSpecifier namedTypeSpec = nodeFactory.newTypedefNameSpecifier(funPtr);
       namedTypeSpec.setStorageClass(IASTDeclSpecifier.sc_static);
-      IASTSimpleDeclaration newSimpleDecl = nodeFactory.newSimpleDeclaration(namedTypeSpec);
-      ICPPASTDeclarator newDecl = nodeFactory.newDeclarator(nodeFactory.newName(ORIG_FUN.toCharArray()));
+      final IASTSimpleDeclaration newSimpleDecl = nodeFactory.newSimpleDeclaration(namedTypeSpec);
+      final ICPPASTDeclarator newDecl = nodeFactory.newDeclarator(nodeFactory.newName(ORIG_FUN.toCharArray()));
       newDecl.setInitializer(nodeFactory.newEqualsInitializer(cppStd.getNullPtr()));
       newSimpleDecl.addDeclarator(newDecl);
       return nodeFactory.newDeclarationStatement(newSimpleDecl);
    }
 
-   protected ICPPASTDeclSpecifier createNewFunDeclSpec(ICPPASTFunctionDeclarator funDecl) {
+   protected ICPPASTDeclSpecifier createNewFunDeclSpec(final ICPPASTFunctionDeclarator funDecl) {
       return AstUtil.getDeclSpec(funDecl).copy();
    }
 
-   protected void addParams(ICPPASTFunctionDeclarator funDecl, ICPPASTFunctionDeclarator newFunDecl) {
-      for (ICPPASTParameterDeclaration param : funDecl.getParameters()) {
-         ICPPASTParameterDeclaration newParam = param.copy();
+   protected void addParams(final ICPPASTFunctionDeclarator funDecl, final ICPPASTFunctionDeclarator newFunDecl) {
+      for (final ICPPASTParameterDeclaration param : funDecl.getParameters()) {
+         final ICPPASTParameterDeclaration newParam = param.copy();
          newParam.getDeclarator().setName(nodeFactory.newName());
          newFunDecl.addParameterDeclaration(newParam);
       }

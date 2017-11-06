@@ -13,12 +13,12 @@ public class MockatorIncludeInserter {
    private static final String       MOCKATOR_HEADER = "mockator.h";
    private final IASTTranslationUnit ast;
 
-   public MockatorIncludeInserter(IASTTranslationUnit ast) {
+   public MockatorIncludeInserter(final IASTTranslationUnit ast) {
       this.ast = ast;
    }
 
-   public void insertWith(ASTRewrite rewriter) {
-      AstIncludeNode include = new AstIncludeNode(MOCKATOR_HEADER);
+   public void insertWith(final ASTRewrite rewriter) {
+      final AstIncludeNode include = new AstIncludeNode(MOCKATOR_HEADER);
       include.insertInTu(ast, rewriter);
    }
 }

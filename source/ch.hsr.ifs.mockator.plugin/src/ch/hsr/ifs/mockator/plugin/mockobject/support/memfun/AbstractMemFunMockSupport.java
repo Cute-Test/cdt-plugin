@@ -24,24 +24,25 @@ abstract class AbstractMemFunMockSupport implements MemFunMockSupportAdder {
    protected final String              callsVectorName;
    private final PolymorphismKind      polyKind;
 
-   public AbstractMemFunMockSupport(ASTRewrite rewriter, CppStandard cppStd, String nameOfAllCallsVector, PolymorphismKind polymorphismKind) {
+   public AbstractMemFunMockSupport(final ASTRewrite rewriter, final CppStandard cppStd, final String nameOfAllCallsVector,
+                                    final PolymorphismKind polymorphismKind) {
       this.rewriter = rewriter;
       this.cppStd = cppStd;
-      this.callsVectorName = nameOfAllCallsVector;
-      this.polyKind = polymorphismKind;
+      callsVectorName = nameOfAllCallsVector;
+      polyKind = polymorphismKind;
    }
 
    @Override
    public abstract void addMockSupport(ICPPASTFunctionDefinition function);
 
-   protected void addAllExistingBodyStmts(IASTCompoundStatement body, ICPPASTFunctionDefinition fun) {
-      for (IASTStatement bodyStmt : ((IASTCompoundStatement) fun.getBody()).getStatements()) {
+   protected void addAllExistingBodyStmts(final IASTCompoundStatement body, final ICPPASTFunctionDefinition fun) {
+      for (final IASTStatement bodyStmt : ((IASTCompoundStatement) fun.getBody()).getStatements()) {
          body.addStatement(bodyStmt.copy());
       }
    }
 
-   protected IASTCompoundStatement createNewFunBody(ICPPASTFunctionDefinition function) {
-      IASTCompoundStatement funBody = nodeFactory.newCompoundStatement();
+   protected IASTCompoundStatement createNewFunBody(final ICPPASTFunctionDefinition function) {
+      final IASTCompoundStatement funBody = nodeFactory.newCompoundStatement();
       Assert.instanceOf(function.getBody(), IASTCompoundStatement.class, "Compound statement expected as function body");
       fillFunBody(funBody, function);
       return funBody;
@@ -49,9 +50,9 @@ abstract class AbstractMemFunMockSupport implements MemFunMockSupportAdder {
 
    protected abstract void fillFunBody(IASTCompoundStatement funBody, ICPPASTFunctionDefinition fun);
 
-   protected void addCallRegistration(IASTCompoundStatement newBody, ICPPASTFunctionDefinition fun) {
-      ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) fun.getDeclarator();
-      boolean isStatic = AstUtil.isStatic(fun.getDeclSpecifier());
+   protected void addCallRegistration(final IASTCompoundStatement newBody, final ICPPASTFunctionDefinition fun) {
+      final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) fun.getDeclarator();
+      final boolean isStatic = AstUtil.isStatic(fun.getDeclSpecifier());
       new MemberFunCallRegistrationAdder(funDecl, isStatic, cppStd, callsVectorName).addRegistrationTo(newBody);
    }
 

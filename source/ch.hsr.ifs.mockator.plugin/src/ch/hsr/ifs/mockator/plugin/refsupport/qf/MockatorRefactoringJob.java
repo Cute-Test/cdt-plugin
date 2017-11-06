@@ -12,32 +12,33 @@ import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 
+
 class MockatorRefactoringJob extends Job {
 
-  private final MockatorRefactoring refactoring;
-  private final Consumer<ChangeEdit> uiCallBack;
+   private final MockatorRefactoring  refactoring;
+   private final Consumer<ChangeEdit> uiCallBack;
 
-  public MockatorRefactoringJob(final MockatorRefactoring refactoring, final Consumer<ChangeEdit> uiCallBack) {
-    super(refactoring.getDescription());
-    this.refactoring = refactoring;
-    this.uiCallBack = uiCallBack;
-    // let's schedule this job as soon as possible but we do not want to
-    // slow down any interactive jobs; short is a good trade-off value
-    setPriority(Job.SHORT);
-  }
+   public MockatorRefactoringJob(final MockatorRefactoring refactoring, final Consumer<ChangeEdit> uiCallBack) {
+      super(refactoring.getDescription());
+      this.refactoring = refactoring;
+      this.uiCallBack = uiCallBack;
+      // let's schedule this job as soon as possible but we do not want to
+      // slow down any interactive jobs; short is a good trade-off value
+      setPriority(Job.SHORT);
+   }
 
-  @Override
-  protected IStatus run(final IProgressMonitor pm) {
-    try {
-      final ChangeEdit changeEdit = new MockatorRefactoringExecutor().apply(refactoring, pm);
+   @Override
+   protected IStatus run(final IProgressMonitor pm) {
+      try {
+         final ChangeEdit changeEdit = new MockatorRefactoringExecutor().apply(refactoring, pm);
 
-      if (pm.isCanceled())
-        return Status.CANCEL_STATUS;
+         if (pm.isCanceled()) return Status.CANCEL_STATUS;
 
-      UiUtil.runInDisplayThread(uiCallBack, changeEdit);
-      return Status.OK_STATUS;
-    } catch (final MockatorException e) {
-      return new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, e.getMessage());
-    }
-  }
+         UiUtil.runInDisplayThread(uiCallBack, changeEdit);
+         return Status.OK_STATUS;
+      }
+      catch (final MockatorException e) {
+         return new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, e.getMessage());
+      }
+   }
 }

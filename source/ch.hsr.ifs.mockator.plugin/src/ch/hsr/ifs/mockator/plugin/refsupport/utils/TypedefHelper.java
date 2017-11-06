@@ -56,9 +56,7 @@ public class TypedefHelper {
       final Set<IType> typedefs = findTypedefs(type);
       final IType candidate = getTypeCandidate(typedefs, type);
 
-      if (candidate instanceof ITypedef && candidate instanceof ICPPBinding) {
-         return AstUtil.getQfName((ICPPBinding) candidate);
-      }
+      if (candidate instanceof ITypedef && candidate instanceof ICPPBinding) { return AstUtil.getQfName((ICPPBinding) candidate); }
 
       return filterFilePartOfName(ASTTypeUtil.getType(candidate));
    }
@@ -80,18 +78,18 @@ public class TypedefHelper {
    }
 
    private Set<IType> findTypedefs(final IType type) throws CoreException {
-      if (!(type instanceof IBinding)) {
-         return Collections.emptySet();
-      }
+      if (!(type instanceof IBinding)) { return Collections.emptySet(); }
 
       final IIndex index = getIndex();
       try {
          index.acquireReadLock();
          final IIndexName[] indexNames = index.findNames((IBinding) type, IIndex.FIND_REFERENCES | IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES);
          return resolveTypedefs(index, indexNames);
-      } catch (final InterruptedException e) {
+      }
+      catch (final InterruptedException e) {
          Thread.currentThread().interrupt();
-      } finally {
+      }
+      finally {
          index.releaseReadLock();
       }
 
@@ -128,15 +126,11 @@ public class TypedefHelper {
    }
 
    private IASTSimpleDeclaration findContainingTypedef(final IASTNode node, final int recursionsLeft) {
-      if (node == null) {
-         return null;
-      }
+      if (node == null) { return null; }
 
       final IToken syntax = getSyntax(node);
 
-      if (syntax != null && syntax.getImage().equals("typedef")) {
-         return (IASTSimpleDeclaration) node.getParent();
-      }
+      if (syntax != null && syntax.getImage().equals("typedef")) { return (IASTSimpleDeclaration) node.getParent(); }
 
       return recursionsLeft > 0 ? findContainingTypedef(node.getParent(), recursionsLeft - 1) : null;
    }
@@ -144,7 +138,8 @@ public class TypedefHelper {
    private static IToken getSyntax(final IASTNode node) {
       try {
          return node.getSyntax();
-      } catch (final ExpansionOverlapsBoundaryException e) {
+      }
+      catch (final ExpansionOverlapsBoundaryException e) {
          return null;
       }
    }
@@ -156,15 +151,15 @@ public class TypedefHelper {
       if (isHeader(contentType)) {
          final String contentId = contentType.getId();
          final URI uri = URIUtil.toURI(location.getFileName());
-         return OptHelper.returnIfPresentElseNull(getAst(index, contentId, uri), (ast) -> ast.getNodeSelector(null).findFirstContainedNode(location.getNodeOffset(),
-                  location.getNodeLength()));
+         return OptHelper.returnIfPresentElseNull(getAst(index, contentId, uri), (ast) -> ast.getNodeSelector(null).findFirstContainedNode(location
+               .getNodeOffset(), location.getNodeLength()));
       }
 
       return null;
    }
 
    private static Optional<IASTTranslationUnit> getAst(final IIndex index, final String contentId, final URI uri) throws CModelException,
-   CoreException {
+         CoreException {
       final ICProject cProject = getProjects()[0];
       final ITranslationUnit tu = new ExternalTranslationUnit(cProject, uri, contentId);
       return Optional.of(tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS));

@@ -34,9 +34,7 @@ public class TestDoubleUsingNsHandler {
    public void insertUsingNamespaceStmt(final ICPPASTFunctionDefinition testFunction) {
       final ICPPASTQualifiedName qNameForUsing = getQNameForUsingNs();
 
-      if (hasUsingNamespaceStmt(testFunction, qNameForUsing)) {
-         return;
-      }
+      if (hasUsingNamespaceStmt(testFunction, qNameForUsing)) { return; }
 
       final IASTDeclarationStatement usingStmt = createUsingNameSpaceStmt(qNameForUsing);
       final IASTNode firstPosInTestfun = getFirstPositionInFunBody(testFunction);
@@ -54,7 +52,8 @@ public class TestDoubleUsingNsHandler {
       final ICPPASTNameSpecifier[] qualifiers = qualifiedName.getQualifier();
       final String[] qualifierNames = Arrays.stream(qualifiers).map(ICPPASTNameSpecifier::toString).toArray(size -> new String[size]);
 
-      final ICPPASTQualifiedName qfNameForNs = nodeFactory.newQualifiedName(Arrays.copyOf(qualifierNames, qualifierNames.length - 1), last(qualifierNames));
+      final ICPPASTQualifiedName qfNameForNs = nodeFactory.newQualifiedName(Arrays.copyOf(qualifierNames, qualifierNames.length - 1), last(
+            qualifierNames));
       return qfNameForNs;
    }
 
@@ -73,9 +72,7 @@ public class TestDoubleUsingNsHandler {
 
          @Override
          public int visit(final IASTDeclaration decl) {
-            if (!(decl instanceof ICPPASTUsingDirective)) {
-               return PROCESS_CONTINUE;
-            }
+            if (!(decl instanceof ICPPASTUsingDirective)) { return PROCESS_CONTINUE; }
 
             final ICPPASTUsingDirective using = (ICPPASTUsingDirective) decl;
 

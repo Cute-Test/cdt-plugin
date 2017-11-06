@@ -16,46 +16,46 @@ class TestDoubleToNsMover {
    private final ASTRewrite  rewriter;
    private final CppStandard cppStd;
 
-   public TestDoubleToNsMover(ASTRewrite rewriter, CppStandard cppStd) {
+   public TestDoubleToNsMover(final ASTRewrite rewriter, final CppStandard cppStd) {
       this.rewriter = rewriter;
       this.cppStd = cppStd;
    }
 
-   public void moveToNamespace(ICPPASTCompositeTypeSpecifier testDoubleToMove) {
-      ICPPASTFunctionDefinition testFunction = getParentFunction(testDoubleToMove);
+   public void moveToNamespace(final ICPPASTCompositeTypeSpecifier testDoubleToMove) {
+      final ICPPASTFunctionDefinition testFunction = getParentFunction(testDoubleToMove);
       Assert.notNull(testFunction, "Test double is not a local class");
-      IASTSimpleDeclaration movedTestDouble = getClassDeclaration(testDoubleToMove).copy();
+      final IASTSimpleDeclaration movedTestDouble = getClassDeclaration(testDoubleToMove).copy();
       insertTestDoubleInNamespace(movedTestDouble, testDoubleToMove, testFunction);
       removeTestDoubleInFunction(testDoubleToMove);
       insertUsingNamespaceStmt(getTestDoubleClass(movedTestDouble), testFunction);
    }
 
-   private static ICPPASTCompositeTypeSpecifier getTestDoubleClass(IASTSimpleDeclaration simpleDecl) {
+   private static ICPPASTCompositeTypeSpecifier getTestDoubleClass(final IASTSimpleDeclaration simpleDecl) {
       return AstUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
    }
 
-   private static IASTSimpleDeclaration getClassDeclaration(ICPPASTCompositeTypeSpecifier testDouble) {
+   private static IASTSimpleDeclaration getClassDeclaration(final ICPPASTCompositeTypeSpecifier testDouble) {
       return AstUtil.getAncestorOfType(testDouble, IASTSimpleDeclaration.class);
    }
 
-   private void insertTestDoubleInNamespace(IASTSimpleDeclaration testDouble, ICPPASTCompositeTypeSpecifier testDoubleToMove,
-         ICPPASTFunctionDefinition testFunction) {
-      TestDoubleInNsInserter inserter = new TestDoubleInNsInserter(rewriter, cppStd);
+   private void insertTestDoubleInNamespace(final IASTSimpleDeclaration testDouble, final ICPPASTCompositeTypeSpecifier testDoubleToMove,
+         final ICPPASTFunctionDefinition testFunction) {
+      final TestDoubleInNsInserter inserter = new TestDoubleInNsInserter(rewriter, cppStd);
       inserter.insertTestDouble(testDouble, testDoubleToMove, testFunction);
    }
 
-   private void removeTestDoubleInFunction(ICPPASTCompositeTypeSpecifier testDoubleToMove) {
+   private void removeTestDoubleInFunction(final ICPPASTCompositeTypeSpecifier testDoubleToMove) {
       rewriter.remove(getClassDeclaration(testDoubleToMove), null);
    }
 
-   private static ICPPASTFunctionDefinition getParentFunction(IASTCompositeTypeSpecifier testDouble) {
-      ICPPASTFunctionDefinition testFun = AstUtil.getAncestorOfType(testDouble, ICPPASTFunctionDefinition.class);
+   private static ICPPASTFunctionDefinition getParentFunction(final IASTCompositeTypeSpecifier testDouble) {
+      final ICPPASTFunctionDefinition testFun = AstUtil.getAncestorOfType(testDouble, ICPPASTFunctionDefinition.class);
       Assert.notNull(testFun, "Test double class must be a member of a function!");
       return testFun;
    }
 
-   private void insertUsingNamespaceStmt(ICPPASTCompositeTypeSpecifier testDouble, ICPPASTFunctionDefinition testFun) {
-      TestDoubleUsingNsHandler namespaceHandler = new TestDoubleUsingNsHandler(testDouble, rewriter);
+   private void insertUsingNamespaceStmt(final ICPPASTCompositeTypeSpecifier testDouble, final ICPPASTFunctionDefinition testFun) {
+      final TestDoubleUsingNsHandler namespaceHandler = new TestDoubleUsingNsHandler(testDouble, rewriter);
       namespaceHandler.insertUsingNamespaceStmt(testFun);
    }
 }

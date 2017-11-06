@@ -14,38 +14,38 @@ import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.LinkSuit
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.RunnerFinder;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
+
 public class LinkSuiteToRunnerRefactoringTest extends MockatorRefactoringTest {
-  private String newSuiteName;
 
-  @Override
-  protected void configureTest(Properties p) {
-    super.configureTest(p);
-    newSuiteName = p.getProperty("newSuiteName");
-    markerCount = 0;
-  }
+   private String newSuiteName;
 
-  @Override
-  protected Refactoring createRefactoring() {
-    try {
-      LinkSuiteToRunnerRefactoring runnerRefactoring =
-          new LinkSuiteToRunnerRefactoring(getActiveCElement(), selection, cproject);
-      runnerRefactoring.setSuiteName(newSuiteName);
-      runnerRefactoring.setTestRunner(getTestRunnerFunction());
-      runnerRefactoring.setDestinationPath(cproject.getPath());
-      return runnerRefactoring;
-    } catch (CoreException e) {
-      throw new AssertionError(e.getMessage(), e);
-    }
-  }
+   @Override
+   protected void configureTest(final Properties p) {
+      super.configureTest(p);
+      newSuiteName = p.getProperty("newSuiteName");
+      markerCount = 0;
+   }
 
-  private IASTFunctionDefinition getTestRunnerFunction() throws CoreException {
-    RunnerFinder runnerFinder = new RunnerFinder(cproject);
-    List<IASTFunctionDefinition> testRunners =
-        runnerFinder.findTestRunners(new NullProgressMonitor());
+   @Override
+   protected Refactoring createRefactoring() {
+      try {
+         final LinkSuiteToRunnerRefactoring runnerRefactoring = new LinkSuiteToRunnerRefactoring(getActiveCElement(), selection, cproject);
+         runnerRefactoring.setSuiteName(newSuiteName);
+         runnerRefactoring.setTestRunner(getTestRunnerFunction());
+         runnerRefactoring.setDestinationPath(cproject.getPath());
+         return runnerRefactoring;
+      }
+      catch (final CoreException e) {
+         throw new AssertionError(e.getMessage(), e);
+      }
+   }
 
-    if (testRunners.isEmpty())
-      return null;
+   private IASTFunctionDefinition getTestRunnerFunction() throws CoreException {
+      final RunnerFinder runnerFinder = new RunnerFinder(cproject);
+      final List<IASTFunctionDefinition> testRunners = runnerFinder.findTestRunners(new NullProgressMonitor());
 
-    return head(testRunners).get();
-  }
+      if (testRunners.isEmpty()) return null;
+
+      return head(testRunners).get();
+   }
 }

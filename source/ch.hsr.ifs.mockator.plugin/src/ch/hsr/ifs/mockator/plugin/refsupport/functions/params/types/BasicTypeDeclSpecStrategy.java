@@ -15,10 +15,10 @@ class BasicTypeDeclSpecStrategy implements DeclSpecGeneratorStrategy {
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
    @Override
-   public ICPPASTDeclSpecifier createDeclSpec(IType type) {
+   public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
       Assert.instanceOf(type, IBasicType.class, "This strategy can only handle basic types");
-      ICPPASTSimpleDeclSpecifier simpleDeclSpec = nodeFactory.newSimpleDeclSpecifier();
-      IBasicType basicType = (IBasicType) type;
+      final ICPPASTSimpleDeclSpecifier simpleDeclSpec = nodeFactory.newSimpleDeclSpecifier();
+      final IBasicType basicType = (IBasicType) type;
       simpleDeclSpec.setType(basicType.getKind());
       simpleDeclSpec.setSigned(basicType.isSigned());
       simpleDeclSpec.setUnsigned(basicType.isUnsigned());

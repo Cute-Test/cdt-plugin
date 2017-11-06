@@ -17,16 +17,16 @@ public class CallsVectorTypeVerifier {
 
    private final IType type;
 
-   public CallsVectorTypeVerifier(IASTIdExpression idExpr) {
+   public CallsVectorTypeVerifier(final IASTIdExpression idExpr) {
       type = getUnderlyingType(idExpr.getName());
    }
 
-   public CallsVectorTypeVerifier(IASTName name) {
+   public CallsVectorTypeVerifier(final IASTName name) {
       type = getUnderlyingType(name);
    }
 
-   private static IType getUnderlyingType(IASTName name) {
-      IBinding binding = name.resolveBinding();
+   private static IType getUnderlyingType(final IASTName name) {
+      final IBinding binding = name.resolveBinding();
 
       if (!(binding instanceof IVariable)) return null;
 
@@ -36,27 +36,27 @@ public class CallsVectorTypeVerifier {
    public boolean hasCallsVectorType() {
       if (!(type instanceof ITypedef)) return false;
 
-      String name = ((ITypedef) type).getName();
+      final String name = ((ITypedef) type).getName();
       return name.equals(MockatorConstants.CALLS);
    }
 
    public boolean isVectorOfCallsVector() {
       if (!(type instanceof ICPPTemplateInstance)) return false;
 
-      ICPPTemplateArgument[] templateArgs = ((ICPPTemplateInstance) type).getTemplateArguments();
+      final ICPPTemplateArgument[] templateArgs = ((ICPPTemplateInstance) type).getTemplateArguments();
 
       if (templateArgs.length == 0) return false;
 
-      ICPPTemplateArgument fstTemplateArg = templateArgs[0];
-      IType fstTypeValue = fstTemplateArg.getTypeValue();
+      final ICPPTemplateArgument fstTemplateArg = templateArgs[0];
+      final IType fstTypeValue = fstTemplateArg.getTypeValue();
 
       if (!(fstTypeValue instanceof ICPPTemplateInstance)) return false;
 
-      ICPPTemplateArgument[] innerTemplateArg = ((ICPPTemplateInstance) fstTypeValue).getTemplateArguments();
+      final ICPPTemplateArgument[] innerTemplateArg = ((ICPPTemplateInstance) fstTypeValue).getTemplateArguments();
 
       if (innerTemplateArg.length == 0) return false;
 
-      IType innerTypeValue = innerTemplateArg[0].getTypeValue();
+      final IType innerTypeValue = innerTemplateArg[0].getTypeValue();
 
       if (!(innerTypeValue instanceof ICPPClassType)) return false;
 

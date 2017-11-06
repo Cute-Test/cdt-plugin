@@ -61,9 +61,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
       private void checkForClassInstantiation(final IASTSimpleDeclaration simpleDecl) {
          final IASTDeclSpecifier declSpec = simpleDecl.getDeclSpecifier();
 
-         if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef) {
-            return;
-         }
+         if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef) { return; }
 
          for (final IASTDeclarator declarator : simpleDecl.getDeclarators()) {
             if (!AstUtil.hasPointerOrRefType(declarator)) {
@@ -109,9 +107,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
          className = ((ICPPASTCompositeTypeSpecifier) declSpec).getName();
       }
 
-      if (className == null) {
-         return;
-      }
+      if (className == null) { return; }
 
       final IBinding binding = className.resolveBinding();
 
@@ -132,18 +128,14 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
 
    private void reportProblemsIfAbstract(final IType typeToCheck) {
       final IType unwindedType = CxxAstUtils.unwindTypedef(typeToCheck);
-      if (!(unwindedType instanceof ICPPClassType) || unwindedType instanceof IProblemBinding) {
-         return;
-      }
+      if (!(unwindedType instanceof ICPPClassType) || unwindedType instanceof IProblemBinding) { return; }
       getClassDefinition(unwindedType).ifPresent((clazz) -> markIfHasMissingMemFuns(clazz));
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> getClassDefinition(final IType type) {
       final IType realType = AstUtil.windDownToRealType(type, false);
 
-      if (realType instanceof ICPPClassType) {
-         return lookupDefinition((ICPPClassType) realType);
-      }
+      if (realType instanceof ICPPClassType) { return lookupDefinition((ICPPClassType) realType); }
 
       return Optional.empty();
    }

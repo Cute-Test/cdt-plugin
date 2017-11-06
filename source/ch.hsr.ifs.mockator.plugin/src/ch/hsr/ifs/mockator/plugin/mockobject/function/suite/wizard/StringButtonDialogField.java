@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -29,13 +29,13 @@ class StringButtonDialogField extends StringDialogField {
    private final SourceFolderFieldAdapter fStringButtonAdapter;
    private final boolean                  fButtonEnabled;
 
-   public StringButtonDialogField(SourceFolderFieldAdapter sourceFolderAdapter) {
+   public StringButtonDialogField(final SourceFolderFieldAdapter sourceFolderAdapter) {
       fStringButtonAdapter = sourceFolderAdapter;
       fBrowseButtonLabel = "!Browse...!";
       fButtonEnabled = true;
    }
 
-   void setButtonLabel(String label) {
+   void setButtonLabel(final String label) {
       fBrowseButtonLabel = label;
    }
 
@@ -44,9 +44,9 @@ class StringButtonDialogField extends StringDialogField {
    }
 
    @Override
-   public Control[] doFillIntoGrid(Composite parent, int nColumns) {
+   public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
       assertEnoughColumns(nColumns);
-      Button button = getChangeControl(parent);
+      final Button button = getChangeControl(parent);
       button.setLayoutData(gridDataForButton(button, 1));
       return new Control[] { getLabel(parent), getText(parent, nColumns - 2), button };
    }
@@ -56,8 +56,8 @@ class StringButtonDialogField extends StringDialogField {
       return 3;
    }
 
-   private static GridData gridDataForButton(Button button, int span) {
-      GridData gd = new GridData();
+   private static GridData gridDataForButton(final Button button, final int span) {
+      final GridData gd = new GridData();
       gd.horizontalAlignment = GridData.FILL;
       gd.grabExcessHorizontalSpace = false;
       gd.horizontalSpan = span;
@@ -65,7 +65,7 @@ class StringButtonDialogField extends StringDialogField {
       return gd;
    }
 
-   private Button getChangeControl(Composite parent) {
+   private Button getChangeControl(final Composite parent) {
       if (fBrowseButton == null) {
          assertCompositeNotNull(parent);
          fBrowseButton = new Button(parent, SWT.PUSH);
@@ -74,12 +74,12 @@ class StringButtonDialogField extends StringDialogField {
          fBrowseButton.addSelectionListener(new SelectionListener() {
 
             @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
+            public void widgetDefaultSelected(final SelectionEvent e) {
                changeControlPressed();
             }
 
             @Override
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(final SelectionEvent e) {
                changeControlPressed();
             }
          });

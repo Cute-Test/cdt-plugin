@@ -15,17 +15,17 @@ public class ActivateTraceFunctionQuickFix extends TraceFunctionQuickFix {
    }
 
    @Override
-   public boolean isApplicable(IMarker marker) {
+   public boolean isApplicable(final IMarker marker) {
       return super.isApplicable(marker) && !isTraceFunctionActive(marker);
    }
 
    @Override
-   public void apply(IMarker marker, IDocument document) {
+   public void apply(final IMarker marker, final IDocument document) {
       addIncludeFile(marker);
    }
 
-   private void addIncludeFile(IMarker marker) {
-      IncludeFileHandler handler = new IncludeFileHandler(getCProject().getProject());
+   private void addIncludeFile(final IMarker marker) {
+      final IncludeFileHandler handler = new IncludeFileHandler(getCProject().getProject());
       handler.addInclude(getPathOfSiblingHeaderFile(marker));
    }
 }

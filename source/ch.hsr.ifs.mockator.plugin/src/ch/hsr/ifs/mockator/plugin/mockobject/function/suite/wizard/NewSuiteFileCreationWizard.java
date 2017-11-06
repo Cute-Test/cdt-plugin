@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil, Switzerland,
  * http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any purpose without fee is hereby
  * granted, provided that the above copyright notice and this permission notice appear in all
  * copies.
@@ -15,9 +15,6 @@ import org.eclipse.cdt.internal.ui.CPluginImages;
 import org.eclipse.cdt.internal.ui.actions.WorkbenchRunnableAdapter;
 import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -39,8 +36,8 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
    private final MockFunctionCommunication    mockFunction;
    private final LinkSuiteToRunnerRefactoring runnerRefactoring;
 
-   public NewSuiteFileCreationWizard(ICProject mockatorCProject, MockFunctionCommunication mockFunction,
-                                     LinkSuiteToRunnerRefactoring runnerRefactoring) {
+   public NewSuiteFileCreationWizard(final ICProject mockatorCProject, final MockFunctionCommunication mockFunction,
+                                     final LinkSuiteToRunnerRefactoring runnerRefactoring) {
       this.mockatorCProject = mockatorCProject;
       this.mockFunction = mockFunction;
       this.runnerRefactoring = runnerRefactoring;
@@ -59,14 +56,14 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
    @Override
    public boolean performFinish() {
       try {
-         WorkbenchRunnableAdapter adapter = new WorkbenchRunnableAdapter(createWorkspaceRunnable(), CPPResourceHelper.getWorkspaceRoot());
+         final WorkbenchRunnableAdapter adapter = new WorkbenchRunnableAdapter(createWorkspaceRunnable(), CPPResourceHelper.getWorkspaceRoot());
          getContainer().run(true, true, adapter);
       }
-      catch (InvocationTargetException e) {
+      catch (final InvocationTargetException e) {
          ExceptionUtil.showException(e);
          return false;
       }
-      catch (InterruptedException e) {
+      catch (final InterruptedException e) {
          Thread.currentThread().interrupt();
          return false;
       }
@@ -75,16 +72,10 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
    }
 
    private IWorkspaceRunnable createWorkspaceRunnable() {
-      IWorkspaceRunnable op = new IWorkspaceRunnable() {
-
-         @Override
-         public void run(IProgressMonitor monitor) throws CoreException, OperationCanceledException {
-            page.createNewSuiteLinkedToRunner(monitor);
-         }
-      };
+      final IWorkspaceRunnable op = monitor -> page.createNewSuiteLinkedToRunner(monitor);
       return op;
    }
 
    @Override
-   public void init(IWorkbench workbench, IStructuredSelection selection) {}
+   public void init(final IWorkbench workbench, final IStructuredSelection selection) {}
 }

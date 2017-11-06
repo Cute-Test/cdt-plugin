@@ -9,40 +9,40 @@ import java.net.URL;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import junit.framework.AssertionFailedError;
-
 import org.eclipse.cdt.core.model.ICProject;
+
+import junit.framework.AssertionFailedError;
 
 
 public class FormatterOptionsLoader {
-  private final ICProject cProject;
 
-  public FormatterOptionsLoader(ICProject cProject) {
-    this.cProject = cProject;
-  }
+   private final ICProject cProject;
 
-  public void setFormatterOptions() {
-    for (Entry<Object, Object> option : loadFormatterOptions().entrySet()) {
-      cProject.setOption((String) option.getKey(), (String) option.getValue());
-    }
-  }
+   public FormatterOptionsLoader(final ICProject cProject) {
+      this.cProject = cProject;
+   }
 
-  private static Properties loadFormatterOptions() {
-    Iterable<URL> mockatorFile =
-        toIterable(MockatorTestPlugin.getDefault().getBundle()
-            .findEntries("resources", "mockator_formatter.prefs", true));
+   public void setFormatterOptions() {
+      for (final Entry<Object, Object> option : loadFormatterOptions().entrySet()) {
+         cProject.setOption((String) option.getKey(), (String) option.getValue());
+      }
+   }
 
-    if (!mockatorFile.iterator().hasNext()) {
-      fail("Mockator formatter preferences could not be found");
-    }
+   private static Properties loadFormatterOptions() {
+      final Iterable<URL> mockatorFile = toIterable(MockatorTestPlugin.getDefault().getBundle().findEntries("resources", "mockator_formatter.prefs",
+            true));
 
-    try {
-      Properties formatterOptions = new Properties();
-      formatterOptions.load(head(mockatorFile).get().openStream());
-      return formatterOptions;
-    } catch (IOException e) {
-    }
+      if (!mockatorFile.iterator().hasNext()) {
+         fail("Mockator formatter preferences could not be found");
+      }
 
-    throw new AssertionFailedError("Problems occured while loading mockator formatter options");
-  }
+      try {
+         final Properties formatterOptions = new Properties();
+         formatterOptions.load(head(mockatorFile).get().openStream());
+         return formatterOptions;
+      }
+      catch (final IOException e) {}
+
+      throw new AssertionFailedError("Problems occured while loading mockator formatter options");
+   }
 }

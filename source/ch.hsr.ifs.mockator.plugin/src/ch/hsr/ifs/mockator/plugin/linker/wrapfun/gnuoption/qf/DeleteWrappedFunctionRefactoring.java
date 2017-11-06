@@ -30,42 +30,43 @@ class DeleteWrappedFunctionRefactoring extends MockatorRefactoring {
 
    private final IDocument doc;
 
-   public DeleteWrappedFunctionRefactoring(ICElement element, ITextSelection selection, ICProject project, IDocument doc) {
+   public DeleteWrappedFunctionRefactoring(final ICElement element, final ITextSelection selection, final ICProject project, final IDocument doc) {
       super(element, selection, project);
       this.doc = doc;
    }
 
    @Override
-   public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
-      CCompositeChange cChange = new CCompositeChange("Delete wrapped code segment");
-      int offset = getSelection().getOffset();
-      DeleteEdit deleteEdit = new DeleteEdit(offset, getLengthOfWrappedFunCode(offset));
-      MultiTextEdit multiTextEdit = new MultiTextEdit();
+   public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+      final CCompositeChange cChange = new CCompositeChange("Delete wrapped code segment");
+      final int offset = getSelection().getOffset();
+      final DeleteEdit deleteEdit = new DeleteEdit(offset, getLengthOfWrappedFunCode(offset));
+      final MultiTextEdit multiTextEdit = new MultiTextEdit();
       multiTextEdit.addChild(deleteEdit);
-      TextFileChange change = createTextFileChange(pm, multiTextEdit);
+      final TextFileChange change = createTextFileChange(pm, multiTextEdit);
       cChange.add(change);
       return cChange;
    }
 
-   private TextFileChange createTextFileChange(IProgressMonitor pm, MultiTextEdit multiTextEdit) throws CoreException {
-      IASTTranslationUnit ast = getAST(tu, pm);
-      IFile tuFile = FileUtil.toIFile(ast.getFilePath());
-      TextFileChange change = new TextFileChange("Delete wrapped function", tuFile);
+   private TextFileChange createTextFileChange(final IProgressMonitor pm, final MultiTextEdit multiTextEdit) throws CoreException {
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final IFile tuFile = FileUtil.toIFile(ast.getFilePath());
+      final TextFileChange change = new TextFileChange("Delete wrapped function", tuFile);
       change.setEdit(multiTextEdit);
       return change;
    }
 
-   private int getLengthOfWrappedFunCode(int offset) {
+   private int getLengthOfWrappedFunCode(final int offset) {
       try {
-         String wrappedCode = doc.get(offset, doc.getLength() - offset);
+         final String wrappedCode = doc.get(offset, doc.getLength() - offset);
          return wrappedCode.indexOf(END_IF_DIRECTIVE) + END_IF_DIRECTIVE.length();
       }
-      catch (BadLocationException e) {}
+      catch (final BadLocationException e) {}
       throw new MockatorException("Was not able to determine wrapped code segment");
    }
 
    @Override
-   protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {}
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+         OperationCanceledException {}
 
    @Override
    public String getDescription() {

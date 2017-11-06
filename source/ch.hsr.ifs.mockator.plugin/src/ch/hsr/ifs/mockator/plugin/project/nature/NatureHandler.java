@@ -18,18 +18,18 @@ public class NatureHandler {
 
    private final IProject project;
 
-   public NatureHandler(IProject project) {
+   public NatureHandler(final IProject project) {
       Assert.isTrue(project.exists() && project.isOpen(), "Only existing and open projects are supported");
       this.project = project;
    }
 
-   public void addNature(String natureId, IProgressMonitor pm) throws CoreException {
+   public void addNature(final String natureId, final IProgressMonitor pm) throws CoreException {
       if (hasNature(natureId)) return;
 
-      IProjectDescription desc = getProjectDescription();
-      List<String> natures = list(desc.getNatureIds());
+      final IProjectDescription desc = getProjectDescription();
+      final List<String> natures = list(desc.getNatureIds());
       natures.add(natureId);
-      String[] newNatures = natures.toArray(new String[natures.size()]);
+      final String[] newNatures = natures.toArray(new String[natures.size()]);
       validateNewNatures(newNatures);
       desc.setNatureIds(newNatures);
       project.setDescription(desc, pm);
@@ -39,24 +39,24 @@ public class NatureHandler {
       return project.getDescription();
    }
 
-   private static void validateNewNatures(String[] newNatures) {
-      IStatus status = ResourcesPlugin.getWorkspace().validateNatureSet(newNatures);
+   private static void validateNewNatures(final String[] newNatures) {
+      final IStatus status = ResourcesPlugin.getWorkspace().validateNatureSet(newNatures);
       Assert.isTrue(status.getCode() == IStatus.OK, status.getMessage());
    }
 
-   public void removeNature(String natureId, IProgressMonitor pm) throws CoreException {
-      IProjectDescription description = getProjectDescription();
-      List<String> newNatures = list(description.getNatureIds());
+   public void removeNature(final String natureId, final IProgressMonitor pm) throws CoreException {
+      final IProjectDescription description = getProjectDescription();
+      final List<String> newNatures = list(description.getNatureIds());
       newNatures.remove(natureId);
       description.setNatureIds(newNatures.toArray(new String[newNatures.size()]));
       project.setDescription(description, pm);
    }
 
-   public boolean hasNature(String natureId) {
+   public boolean hasNature(final String natureId) {
       try {
          return project.hasNature(natureId);
       }
-      catch (CoreException e) {
+      catch (final CoreException e) {
          return false;
       }
    }

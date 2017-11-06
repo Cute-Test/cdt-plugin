@@ -33,18 +33,18 @@ public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate
    protected ICElement        cElement;
 
    @Override
-   public void init(IWorkbenchWindow window) {
+   public void init(final IWorkbenchWindow window) {
       this.window = window;
    }
 
    @Override
-   public void run(IAction action) {
+   public void run(final IAction action) {
       if (!(isCEditorActive() && arePreconditionsSatisfied())) return;
 
       try {
          execute();
       }
-      catch (MockatorException e) {
+      catch (final MockatorException e) {
          // pass null as message; e.getMessage() would lead to a message
          // containing twice the same text for msg and reason
          ExceptionUtil.showException(I18N.ExceptionErrorTitle, null, e);
@@ -56,19 +56,19 @@ public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate
    }
 
    @Override
-   public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+   public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
       if (targetEditor != null) {
          window = targetEditor.getSite().getWorkbenchWindow();
       }
    }
 
    private boolean isCEditorActive() {
-      IWorkbenchPart activePart = window.getActivePage().getActivePart();
+      final IWorkbenchPart activePart = window.getActivePage().getActivePart();
 
       if (!(activePart instanceof CEditor)) return false;
 
-      CEditor activeEditor = (CEditor) activePart;
-      IWorkingCopy wc = getWorkingCopy(activeEditor.getEditorInput());
+      final CEditor activeEditor = (CEditor) activePart;
+      final IWorkingCopy wc = getWorkingCopy(activeEditor.getEditorInput());
 
       if (wc == null || !(wc.getResource() instanceof IFile)) return false;
 
@@ -82,18 +82,18 @@ public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate
 
    protected abstract void execute();
 
-   private static IWorkingCopy getWorkingCopy(IEditorInput editor) {
-      IWorkingCopyManager wcManager = CUIPlugin.getDefault().getWorkingCopyManager();
+   private static IWorkingCopy getWorkingCopy(final IEditorInput editor) {
+      final IWorkingCopyManager wcManager = CUIPlugin.getDefault().getWorkingCopyManager();
       return wcManager.getWorkingCopy(editor);
    }
 
-   protected void openInEditor(IFile file) {
-      FileEditorOpener opener = new FileEditorOpener(file);
+   protected void openInEditor(final IFile file) {
+      final FileEditorOpener opener = new FileEditorOpener(file);
       opener.openInEditor();
    }
 
    @Override
-   public void selectionChanged(IAction action, ISelection newSelection) {
+   public void selectionChanged(final IAction action, final ISelection newSelection) {
       if (newSelection instanceof ITextSelection) {
          selection = (ITextSelection) newSelection;
          action.setEnabled(true);

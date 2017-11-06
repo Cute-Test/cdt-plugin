@@ -32,7 +32,7 @@ public enum LinkedEditModeStrategy implements PropertyTypeWithDefault {
    private static final Map<String, LinkedEditModeStrategy> STRING_TO_ENUM = unorderedMap();
 
    static {
-      for (LinkedEditModeStrategy order : values()) {
+      for (final LinkedEditModeStrategy order : values()) {
          STRING_TO_ENUM.put(order.name(), order);
       }
    }
@@ -41,7 +41,7 @@ public enum LinkedEditModeStrategy implements PropertyTypeWithDefault {
 
    private final String description;
 
-   private LinkedEditModeStrategy(String description) {
+   private LinkedEditModeStrategy(final String description) {
       this.description = description;
    }
 
@@ -49,20 +49,20 @@ public enum LinkedEditModeStrategy implements PropertyTypeWithDefault {
       return description;
    }
 
-   public static LinkedEditModeStrategy fromProjectSettings(IProject project) {
-      String linkedEditStrategy = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
+   public static LinkedEditModeStrategy fromProjectSettings(final IProject project) {
+      final String linkedEditStrategy = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
 
       if (linkedEditStrategy == null) return getDefault();
 
       return fromName(linkedEditStrategy);
    }
 
-   public static void storeInProjectSettings(IProject project, LinkedEditModeStrategy linkedEdit) {
+   public static void storeInProjectSettings(final IProject project, final LinkedEditModeStrategy linkedEdit) {
       new ProjectPropertiesHandler(project).setProjectProperty(QF_NAME, linkedEdit.toString());
    }
 
-   public static LinkedEditModeStrategy fromName(String name) {
-      LinkedEditModeStrategy result = STRING_TO_ENUM.get(name);
+   public static LinkedEditModeStrategy fromName(final String name) {
+      final LinkedEditModeStrategy result = STRING_TO_ENUM.get(name);
       Assert.notNull(result, String.format("Unknown linked edit strategy '%s'", name));
       return result;
    }

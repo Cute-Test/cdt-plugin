@@ -6,11 +6,11 @@ import ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.refactoring.LdPreload
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
+
 public class LdPreloadRefactoringTest extends MockatorRefactoringTest {
 
-  @Override
-  protected Refactoring createRefactoring() {
-    return new LdPreloadRefactoring(CppStandard.Cpp11Std, getActiveCElement(), selection, cproject,
-        project);
-  }
+   @Override
+   protected Refactoring createRefactoring() {
+      return new LdPreloadRefactoring(CppStandard.Cpp11Std, getActiveCElement(), selection, cproject, project);
+   }
 }

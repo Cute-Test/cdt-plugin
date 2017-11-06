@@ -26,13 +26,13 @@ public class DefaultArgumentCreator {
    private final CppStandard            cppStd;
    private final LinkedEditModeStrategy linkedEdit;
 
-   public DefaultArgumentCreator(LinkedEditModeStrategy linkedEdit, CppStandard cppStd) {
+   public DefaultArgumentCreator(final LinkedEditModeStrategy linkedEdit, final CppStandard cppStd) {
       this.linkedEdit = linkedEdit;
       this.cppStd = cppStd;
    }
 
-   public Collection<IASTInitializerClause> createDefaultArguments(Collection<ICPPASTParameterDeclaration> funParams) {
-      List<IASTInitializerClause> defaultArguments = list();
+   public Collection<IASTInitializerClause> createDefaultArguments(final Collection<ICPPASTParameterDeclaration> funParams) {
+      final List<IASTInitializerClause> defaultArguments = list();
 
       if (linkedEdit != LinkedEditModeStrategy.ChooseArguments) return defaultArguments;
 
@@ -40,26 +40,26 @@ public class DefaultArgumentCreator {
       return defaultArguments;
    }
 
-   private void addDefaultArgs(Collection<ICPPASTParameterDeclaration> funParams, List<IASTInitializerClause> defaultArgs) {
-      for (ICPPASTParameterDeclaration p : funParams) {
-         ICPPASTDeclSpecifier returnDeclSpec = (ICPPASTDeclSpecifier) p.getDeclSpecifier().copy();
+   private void addDefaultArgs(final Collection<ICPPASTParameterDeclaration> funParams, final List<IASTInitializerClause> defaultArgs) {
+      for (final ICPPASTParameterDeclaration p : funParams) {
+         final ICPPASTDeclSpecifier returnDeclSpec = (ICPPASTDeclSpecifier) p.getDeclSpecifier().copy();
          returnDeclSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
          returnDeclSpec.setConst(false);
          removeUnsignedIfNecessary(returnDeclSpec);
-         IASTInitializer emptyInitializer = getEmptyInitializer(cppStd);
-         ICPPASTSimpleTypeConstructorExpression returnType = nodeFactory.newSimpleTypeConstructorExpression(returnDeclSpec, emptyInitializer);
+         final IASTInitializer emptyInitializer = getEmptyInitializer(cppStd);
+         final ICPPASTSimpleTypeConstructorExpression returnType = nodeFactory.newSimpleTypeConstructorExpression(returnDeclSpec, emptyInitializer);
          defaultArgs.add(returnType);
       }
    }
 
-   private static void removeUnsignedIfNecessary(ICPPASTDeclSpecifier declSpec) {
+   private static void removeUnsignedIfNecessary(final ICPPASTDeclSpecifier declSpec) {
       // unsigned int{} is not allowed in C++
       if (declSpec instanceof ICPPASTSimpleDeclSpecifier && ((ICPPASTSimpleDeclSpecifier) declSpec).isUnsigned()) {
          ((ICPPASTSimpleDeclSpecifier) declSpec).setUnsigned(false);
       }
    }
 
-   private static IASTInitializer getEmptyInitializer(CppStandard cppStd) {
+   private static IASTInitializer getEmptyInitializer(final CppStandard cppStd) {
       return cppStd.getEmptyInitializer();
    }
 }

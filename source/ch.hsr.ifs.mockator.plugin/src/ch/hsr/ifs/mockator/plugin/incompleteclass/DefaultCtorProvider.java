@@ -5,5 +5,6 @@ import java.util.Optional;
 
 
 public interface DefaultCtorProvider {
+
    Optional<? extends MissingMemberFunction> createMissingDefaultCtor(Collection<? extends MissingMemberFunction> missingMemFuns);
 }

@@ -16,7 +16,8 @@ public class MemberFunCallRegistrationAdder extends AbstractFunCallRegistrationA
    private final boolean isStatic;
    private final String  nameOfAllCallsVector;
 
-   public MemberFunCallRegistrationAdder(ICPPASTFunctionDeclarator newFunDecl, boolean isStatic, CppStandard cppStd, String nameOfAllCallsVector) {
+   public MemberFunCallRegistrationAdder(final ICPPASTFunctionDeclarator newFunDecl, final boolean isStatic, final CppStandard cppStd,
+                                         final String nameOfAllCallsVector) {
       super(newFunDecl, cppStd);
       this.isStatic = isStatic;
       this.nameOfAllCallsVector = nameOfAllCallsVector;
@@ -30,7 +31,7 @@ public class MemberFunCallRegistrationAdder extends AbstractFunCallRegistrationA
    @SuppressWarnings("restriction")
    @Override
    protected IASTExpression getPushBackOwner() {
-      ICPPASTLiteralExpression arraySubscript = getArraySubscript();
+      final ICPPASTLiteralExpression arraySubscript = getArraySubscript();
       return nodeFactory.newArraySubscriptExpression(createCallSequence(), arraySubscript);
    }
 

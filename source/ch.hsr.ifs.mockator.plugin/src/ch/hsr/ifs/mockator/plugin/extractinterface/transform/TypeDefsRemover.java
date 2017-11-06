@@ -7,14 +7,15 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 
+
 public class TypeDefsRemover implements Consumer<ExtractInterfaceContext> {
 
-  @Override
-  public void accept(final ExtractInterfaceContext context) {
-    final ASTRewrite rewriter = context.getRewriterFor(context.getTuOfChosenClass());
+   @Override
+   public void accept(final ExtractInterfaceContext context) {
+      final ASTRewrite rewriter = context.getRewriterFor(context.getTuOfChosenClass());
 
-    for (final IASTSimpleDeclaration typeDef : context.getTypeDefDecls()) {
-      rewriter.remove(typeDef, null);
-    }
-  }
+      for (final IASTSimpleDeclaration typeDef : context.getTypeDefDecls()) {
+         rewriter.remove(typeDef, null);
+      }
+   }
 }

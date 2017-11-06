@@ -52,7 +52,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    private final IType                injectedType;
    private final String               memberClassName;
 
-   public Operator(IASTExpression operatorExpr, OverloadableOperator operator, IType injectedType, String memberClassName) {
+   public Operator(final IASTExpression operatorExpr, final OverloadableOperator operator, final IType injectedType, final String memberClassName) {
       this.operatorExpr = operatorExpr;
       this.operator = operator;
       this.injectedType = injectedType;
@@ -66,8 +66,8 @@ class Operator extends AbstractStaticPolyMissingMemFun {
 
    @Override
    protected ICPPASTFunctionDeclarator createFunDecl() {
-      IASTName opName = nodeFactory.newName(getOperatorName().toCharArray());
-      ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(opName);
+      final IASTName opName = nodeFactory.newName(getOperatorName().toCharArray());
+      final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(opName);
       funDecl.setConst(isConstMemberFun());
 
       if (isBinaryExpression()) {
@@ -94,34 +94,34 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    @Override
-   protected ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl) {
+   protected ICPPASTDeclSpecifier createReturnType(final ICPPASTFunctionDeclarator funDecl) {
       if (isComparisonOperator() || isLogicalOperator()) return boolType();
       else if (isArithmeticOperator() || isBitwiseOpterator() || isCompoundAssignOperator()) return classType();
       else return lookupReturnType(funDecl);
    }
 
-   private ICPPASTDeclSpecifier lookupReturnType(ICPPASTFunctionDeclarator funDecl) {
+   private ICPPASTDeclSpecifier lookupReturnType(final ICPPASTFunctionDeclarator funDecl) {
       return new ReturnTypeDeducer(funDecl, injectedType, memberClassName).determineReturnType(operatorExpr);
    }
 
    @Override
-   protected IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, ICPPASTFunctionDeclarator funDecl,
-         ICPPASTDeclSpecifier returnType, CppStandard cppStd) {
-      IASTCompoundStatement funBody = createEmptyFunBody();
+   protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
+         final ICPPASTDeclSpecifier returnType, final CppStandard cppStd) {
+      final IASTCompoundStatement funBody = createEmptyFunBody();
       strategy.addCallVectorRegistration(funBody, funDecl, false);
       addReturnStmtToFunBody(cppStd, returnType, funBody, funDecl);
       return funBody;
    }
 
-   private void addReturnStmtToFunBody(CppStandard cppStd, ICPPASTDeclSpecifier returnType, IASTCompoundStatement funBody,
-         ICPPASTFunctionDeclarator funDecl) {
-      ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);
+   private void addReturnStmtToFunBody(final CppStandard cppStd, final ICPPASTDeclSpecifier returnType, final IASTCompoundStatement funBody,
+         final ICPPASTFunctionDeclarator funDecl) {
+      final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);
       funBody.addStatement(creator.createReturnStatement(funDecl, returnType));
    }
 
-   private void addParameterForArrayIndex(ICPPASTFunctionDeclarator funDecl) {
-      IASTInitializerClause argument = ((ICPPASTArraySubscriptExpression) operatorExpr).getArgument();
-      IASTExpression expr = AstUtil.getChildOfType(argument, IASTExpression.class);
+   private void addParameterForArrayIndex(final ICPPASTFunctionDeclarator funDecl) {
+      final IASTInitializerClause argument = ((ICPPASTArraySubscriptExpression) operatorExpr).getArgument();
+      final IASTExpression expr = AstUtil.getChildOfType(argument, IASTExpression.class);
       funDecl.addParameterDeclaration(ParamDeclCreator.createParameterFrom(expr, new HashMap<String, Boolean>()));
    }
 
@@ -144,10 +144,10 @@ class Operator extends AbstractStaticPolyMissingMemFun {
       }
    }
 
-   private void addParamsForFunArgs(ICPPASTFunctionDeclarator funDecl) {
-      FunctionCallParameterCollector ex = new FunctionCallParameterCollector((ICPPASTFunctionCallExpression) operatorExpr);
+   private void addParamsForFunArgs(final ICPPASTFunctionDeclarator funDecl) {
+      final FunctionCallParameterCollector ex = new FunctionCallParameterCollector((ICPPASTFunctionCallExpression) operatorExpr);
 
-      for (ICPPASTParameterDeclaration param : ex.getFunctionParameters()) {
+      for (final ICPPASTParameterDeclaration param : ex.getFunctionParameters()) {
          funDecl.addParameterDeclaration(param);
       }
    }
@@ -156,18 +156,18 @@ class Operator extends AbstractStaticPolyMissingMemFun {
       return operator == OverloadableOperator.PAREN;
    }
 
-   private static void addReferenceOperator(ICPPASTFunctionDeclarator funDecl) {
+   private static void addReferenceOperator(final ICPPASTFunctionDeclarator funDecl) {
       final boolean isRValueReference = false;
       funDecl.addPointerOperator(nodeFactory.newReferenceOperator(isRValueReference));
    }
 
-   private static void addPointerOperator(ICPPASTFunctionDeclarator funDecl) {
+   private static void addPointerOperator(final ICPPASTFunctionDeclarator funDecl) {
       funDecl.addPointerOperator(nodeFactory.newPointer());
    }
 
-   private void addParamForRightHandSide(ICPPASTFunctionDeclarator funDecl) {
-      IASTExpression binOp2Expr = ((ICPPASTBinaryExpression) operatorExpr).getOperand2();
-      Map<String, Boolean> nameHistory = unorderedMap();
+   private void addParamForRightHandSide(final ICPPASTFunctionDeclarator funDecl) {
+      final IASTExpression binOp2Expr = ((ICPPASTBinaryExpression) operatorExpr).getOperand2();
+      final Map<String, Boolean> nameHistory = unorderedMap();
 
       if (binOp2Expr instanceof IASTIdExpression) {
          handleNamedParam(funDecl, binOp2Expr, nameHistory);
@@ -176,25 +176,26 @@ class Operator extends AbstractStaticPolyMissingMemFun {
       }
    }
 
-   private static void handleLiteralParam(ICPPASTFunctionDeclarator funDecl, IASTExpression binOp2Expr, Map<String, Boolean> nameHistory) {
-      IASTLiteralExpression litexpr = (IASTLiteralExpression) binOp2Expr;
-      ICPPASTParameterDeclaration literalParam = ParamDeclCreator.createParameter(litexpr, nameHistory);
+   private static void handleLiteralParam(final ICPPASTFunctionDeclarator funDecl, final IASTExpression binOp2Expr,
+         final Map<String, Boolean> nameHistory) {
+      final IASTLiteralExpression litexpr = (IASTLiteralExpression) binOp2Expr;
+      final ICPPASTParameterDeclaration literalParam = ParamDeclCreator.createParameter(litexpr, nameHistory);
       funDecl.addParameterDeclaration(literalParam);
    }
 
-   private void handleNamedParam(ICPPASTFunctionDeclarator funDecl, IASTExpression binOp2Expr, Map<String, Boolean> nameHistory) {
-      IASTIdExpression opExpr = (IASTIdExpression) binOp2Expr;
+   private void handleNamedParam(final ICPPASTFunctionDeclarator funDecl, final IASTExpression binOp2Expr, final Map<String, Boolean> nameHistory) {
+      final IASTIdExpression opExpr = (IASTIdExpression) binOp2Expr;
 
       if (resolvesToTemplateParameter(opExpr)) {
          addReferenceParamToThisClass(funDecl, nameHistory);
       } else {
-         ICPPASTParameterDeclaration param = ParamDeclCreator.createParameter(opExpr, nameHistory);
+         final ICPPASTParameterDeclaration param = ParamDeclCreator.createParameter(opExpr, nameHistory);
          funDecl.addParameterDeclaration(param);
       }
    }
 
-   private void addReferenceParamToThisClass(ICPPASTFunctionDeclarator funDecl, Map<String, Boolean> nameHistory) {
-      ICPPASTParameterDeclaration referenceToThis = ParamDeclCreator.createReferenceParamFrom(memberClassName, nameHistory);
+   private void addReferenceParamToThisClass(final ICPPASTFunctionDeclarator funDecl, final Map<String, Boolean> nameHistory) {
+      final ICPPASTParameterDeclaration referenceToThis = ParamDeclCreator.createReferenceParamFrom(memberClassName, nameHistory);
       funDecl.addParameterDeclaration(referenceToThis);
    }
 
@@ -202,12 +203,12 @@ class Operator extends AbstractStaticPolyMissingMemFun {
       return String.valueOf(operator.toCharArray());
    }
 
-   private boolean resolvesToTemplateParameter(IASTIdExpression opExpr) {
-      IBinding binding = opExpr.getName().resolveBinding();
+   private boolean resolvesToTemplateParameter(final IASTIdExpression opExpr) {
+      final IBinding binding = opExpr.getName().resolveBinding();
 
       if (binding instanceof ICPPVariable) {
-         IType type = ((ICPPVariable) binding).getType();
-         IType resolvedType = CxxAstUtils.unwindTypedef(type);
+         final IType type = ((ICPPVariable) binding).getType();
+         final IType resolvedType = CxxAstUtils.unwindTypedef(type);
          return AstUtil.isSameType(resolvedType, injectedType);
       }
 
@@ -230,20 +231,20 @@ class Operator extends AbstractStaticPolyMissingMemFun {
       return AstUtil.getAncestorOfType(operatorExpr, ICPPASTUnaryExpression.class);
    }
 
-   private static void addEmptyIntParameter(ICPPASTFunctionDeclarator decl) {
-      ICPPASTDeclarator emptyDecl = nodeFactory.newDeclarator(nodeFactory.newName());
-      ICPPASTParameterDeclaration emptyIntParam = nodeFactory.newParameterDeclaration(getDefaultType(), emptyDecl);
+   private static void addEmptyIntParameter(final ICPPASTFunctionDeclarator decl) {
+      final ICPPASTDeclarator emptyDecl = nodeFactory.newDeclarator(nodeFactory.newName());
+      final ICPPASTParameterDeclaration emptyIntParam = nodeFactory.newParameterDeclaration(getDefaultType(), emptyDecl);
       decl.addParameterDeclaration(emptyIntParam);
    }
 
    private static ICPPASTSimpleDeclSpecifier getDefaultType() {
-      ICPPASTSimpleDeclSpecifier intSpec = nodeFactory.newSimpleDeclSpecifier();
+      final ICPPASTSimpleDeclSpecifier intSpec = nodeFactory.newSimpleDeclSpecifier();
       intSpec.setType(IASTSimpleDeclSpecifier.t_int);
       return intSpec;
    }
 
    private boolean isPostfixOperator() {
-      IASTUnaryExpression uExpr = (IASTUnaryExpression) operatorExpr;
+      final IASTUnaryExpression uExpr = (IASTUnaryExpression) operatorExpr;
       return uExpr != null && (uExpr.getOperator() == IASTUnaryExpression.op_postFixDecr || uExpr
             .getOperator() == IASTUnaryExpression.op_postFixIncr);
    }
@@ -274,7 +275,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private static ICPPASTDeclSpecifier boolType() {
-      ICPPASTSimpleDeclSpecifier bool = nodeFactory.newSimpleDeclSpecifier();
+      final ICPPASTSimpleDeclSpecifier bool = nodeFactory.newSimpleDeclSpecifier();
       bool.setType(IASTSimpleDeclSpecifier.t_bool);
       return bool;
    }
@@ -361,18 +362,18 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    @Override
-   public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd, LinkedEditModeStrategy linkedEditStrategy) {
+   public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEditStrategy) {
       if (isUnaryExpression() && isPostfixOperator()) return list();
       return super.createDefaultArguments(cppStd, linkedEditStrategy);
    }
 
    @Override
-   public boolean isCallEquivalent(ICPPASTFunctionDefinition function, ConstStrategy strategy) {
+   public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
       if (!function.getDeclarator().getName().toString().equals(getOperatorName())) return false;
 
-      ICPPASTParameterDeclaration[] generatedParams = createFunDecl().getParameters();
-      ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) function.getDeclarator();
-      ICPPASTParameterDeclaration[] realParams = funDecl.getParameters();
+      final ICPPASTParameterDeclaration[] generatedParams = createFunDecl().getParameters();
+      final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) function.getDeclarator();
+      final ICPPASTParameterDeclaration[] realParams = funDecl.getParameters();
       return generatedParams.length == realParams.length;
    }
 

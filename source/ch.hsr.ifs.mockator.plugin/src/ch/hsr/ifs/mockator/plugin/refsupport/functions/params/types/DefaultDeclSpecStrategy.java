@@ -13,8 +13,8 @@ class DefaultDeclSpecStrategy implements DeclSpecGeneratorStrategy {
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
    @Override
-   public ICPPASTDeclSpecifier createDeclSpec(IType type) {
-      ICPPASTSimpleDeclSpecifier spec = nodeFactory.newSimpleDeclSpecifier();
+   public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
+      final ICPPASTSimpleDeclSpecifier spec = nodeFactory.newSimpleDeclSpecifier();
       spec.setType(IASTSimpleDeclSpecifier.t_int);
       spec.setConst(true);
       return spec;

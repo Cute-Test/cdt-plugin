@@ -5,15 +5,16 @@ import org.junit.Test;
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly.MissingTestDoubleStaticPolyChecker;
 
+
 public class TestDoubleAlreadyProvidedTest extends CDTTestingCodanCheckerTest {
 
-  @Override
-  protected String getProblemId() {
-    return MissingTestDoubleStaticPolyChecker.MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID;
-  }
+   @Override
+   protected String getProblemId() {
+      return MissingTestDoubleStaticPolyChecker.MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID;
+   }
 
-  @Test
-  public void testTestDoubleAlreadyProvided() throws Throwable {
-    assertTrue(findMarkers().length == 0);
-  }
+   @Test
+   public void testTestDoubleAlreadyProvided() throws Throwable {
+      assertTrue(findMarkers().length == 0);
+   }
 }

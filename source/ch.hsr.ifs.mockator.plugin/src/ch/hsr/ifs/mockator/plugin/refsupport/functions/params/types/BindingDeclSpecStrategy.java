@@ -16,17 +16,17 @@ class BindingDeclSpecStrategy implements DeclSpecGeneratorStrategy {
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
    @Override
-   public ICPPASTDeclSpecifier createDeclSpec(IType type) {
-      String shortestType = getShortestType(type);
-      IASTName newName = nodeFactory.newName(shortestType.toCharArray());
+   public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
+      final String shortestType = getShortestType(type);
+      final IASTName newName = nodeFactory.newName(shortestType.toCharArray());
       return nodeFactory.newTypedefNameSpecifier(newName);
    }
 
-   private static String getShortestType(IType type) {
+   private static String getShortestType(final IType type) {
       try {
          return new TypedefHelper(type).findShortestType();
       }
-      catch (CoreException e) {
+      catch (final CoreException e) {
          throw new MockatorException(e);
       }
    }

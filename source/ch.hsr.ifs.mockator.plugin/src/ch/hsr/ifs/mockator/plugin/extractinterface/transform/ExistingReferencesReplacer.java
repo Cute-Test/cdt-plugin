@@ -33,220 +33,214 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceConte
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 @SuppressWarnings("restriction")
 public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceContext> {
 
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
-  @Override
-  public void accept(final ExtractInterfaceContext context) {
-    if (context.shouldReplaceAllOccurences()) {
-      replaceAllOccurences(context);
-    }
-  }
-
-  private static void replaceAllOccurences(final ExtractInterfaceContext context) {
-    for (final IASTName usage : getUsagesOfConcreteType(context))
-      if (isPointerOrRefOrFwdDeclToChosenClass(usage, context)) {
-        replaceDeclarationWithNewType(usage, context);
+   @Override
+   public void accept(final ExtractInterfaceContext context) {
+      if (context.shouldReplaceAllOccurences()) {
+         replaceAllOccurences(context);
       }
-  }
+   }
 
-  private static Collection<IASTName> getUsagesOfConcreteType(final ExtractInterfaceContext context) {
-    final IASTName chosenClassName = context.getChosenClass().getName();
-    final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
-    final Collection<IASTName> usages = lookup.findReferencingNames(chosenClassName, context.getCRefContext());
-    addLocalUsagesIfNecessary(context, chosenClassName, usages);
-    usages.addAll(lookup.findDeclarations(chosenClassName, context.getCRefContext()));
-    return usages;
-  }
+   private static void replaceAllOccurences(final ExtractInterfaceContext context) {
+      for (final IASTName usage : getUsagesOfConcreteType(context))
+         if (isPointerOrRefOrFwdDeclToChosenClass(usage, context)) {
+            replaceDeclarationWithNewType(usage, context);
+         }
+   }
 
-  private static void addLocalUsagesIfNecessary(final ExtractInterfaceContext context, final IASTName className, final Collection<IASTName> usages) {
-    if (!usages.isEmpty())
-      return;
-    final IASTName[] references = context.getTuOfChosenClass().getReferences(className.resolveBinding());
-    usages.addAll(list(references));
-  }
+   private static Collection<IASTName> getUsagesOfConcreteType(final ExtractInterfaceContext context) {
+      final IASTName chosenClassName = context.getChosenClass().getName();
+      final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
+      final Collection<IASTName> usages = lookup.findReferencingNames(chosenClassName, context.getCRefContext());
+      addLocalUsagesIfNecessary(context, chosenClassName, usages);
+      usages.addAll(lookup.findDeclarations(chosenClassName, context.getCRefContext()));
+      return usages;
+   }
 
-  private static boolean isPointerOrRefOrFwdDeclToChosenClass(final IASTName usage, final ExtractInterfaceContext context) {
-    if (isPartOfExpression(usage))
-      return false;
-    final IASTNode declaration = getDeclaration(usage);
-    final IASTDeclarator declarator = getDeclarator(declaration, context.getChosenClass().getName());
-    return AstUtil.hasPointerOrRefType(declarator) || isClassForwardDeclaration(declaration);
-  }
+   private static void addLocalUsagesIfNecessary(final ExtractInterfaceContext context, final IASTName className, final Collection<IASTName> usages) {
+      if (!usages.isEmpty()) return;
+      final IASTName[] references = context.getTuOfChosenClass().getReferences(className.resolveBinding());
+      usages.addAll(list(references));
+   }
 
-  private static boolean isPartOfExpression(final IASTName usage) {
-    return AstUtil.getAncestorOfType(usage, ICPPASTExpression.class) != null;
-  }
+   private static boolean isPointerOrRefOrFwdDeclToChosenClass(final IASTName usage, final ExtractInterfaceContext context) {
+      if (isPartOfExpression(usage)) return false;
+      final IASTNode declaration = getDeclaration(usage);
+      final IASTDeclarator declarator = getDeclarator(declaration, context.getChosenClass().getName());
+      return AstUtil.hasPointerOrRefType(declarator) || isClassForwardDeclaration(declaration);
+   }
 
-  private static IASTDeclarator getDeclarator(final IASTNode declaration, final IASTName className) {
-    if (hasTemplateId(declaration, className)) {
-      final ICPPASTNamedTypeSpecifier namedType = getTypeSpecIfRefersToClass(declaration, className);
-      return AstUtil.getChildOfType(namedType.getParent(), IASTDeclarator.class);
-    }
-    return AstUtil.getDeclaratorForNode(declaration);
-  }
+   private static boolean isPartOfExpression(final IASTName usage) {
+      return AstUtil.getAncestorOfType(usage, ICPPASTExpression.class) != null;
+   }
 
-  private static boolean hasTemplateId(final IASTNode node, final IASTName className) {
-    final ICPPASTTemplateId templatedChild = AstUtil.getChildOfType(node, ICPPASTTemplateId.class);
-
-    if (templatedChild == null) {
-      return false;
-    }
-
-    return Arrays.stream(templatedChild.getTemplateArguments())
-        .anyMatch(t -> t instanceof ICPPASTTypeId && ((ICPPASTTypeId) t).getDeclSpecifier().toString().equals(className.toString()));
-  }
-
-  private static boolean hasTemplateId(final IASTNode node) {
-    return AstUtil.getChildOfType(node, ICPPASTTemplateId.class) != null;
-  }
-
-  private static void replaceDeclarationWithNewType(final IASTName name, final ExtractInterfaceContext context) {
-    final ASTRewrite rewriter = context.getRewriterFor(name.getTranslationUnit());
-    final IASTNode declaration = getDeclaration(name);
-
-    if (declaration instanceof IASTSimpleDeclaration) {
-      handleSimpleDecl(context.getNewInterfaceName(), rewriter, (IASTSimpleDeclaration) declaration, name);
-    } else if (declaration instanceof ICPPASTParameterDeclaration) {
-      handleParameter(context.getNewInterfaceName(), rewriter, (ICPPASTParameterDeclaration) declaration, name);
-    } else if (declaration instanceof ICPPASTFunctionDefinition) {
-      handleReturnType(context.getNewInterfaceName(), rewriter, (ICPPASTFunctionDefinition) declaration);
-    }
-  }
-
-  private static ICPPASTNamedTypeSpecifier getTypeSpecIfRefersToClass(final IASTNode selectedNode, final IASTName className) {
-    if (referesToSameEntity(selectedNode, className))
-      return (ICPPASTNamedTypeSpecifier) selectedNode;
-
-    for (final IASTNode node : selectedNode.getChildren()) {
-      final ICPPASTNamedTypeSpecifier namedSpec = getTypeSpecIfRefersToClass(node, className);
-
-      if (namedSpec != null)
-        return namedSpec;
-    }
-
-    return null;
-  }
-
-  private static boolean referesToSameEntity(final IASTNode node, final IASTName astName) {
-    return node instanceof ICPPASTNamedTypeSpecifier && ((ICPPASTNamedTypeSpecifier) node).getName().toString().equals(astName.toString());
-  }
-
-  private static IASTNode getDeclaration(IASTNode node) {
-    while (node != null && !(node instanceof IASTSimpleDeclaration) && !(node instanceof IASTParameterDeclaration)
-        && !(node instanceof ICPPASTFunctionDefinition)) {
-      node = node.getParent();
-    }
-    return node;
-  }
-
-  private static boolean isClassForwardDeclaration(IASTNode node) {
-    if ((node instanceof ICPPASTTemplateDeclaration)) {
-      node = ((ICPPASTTemplateDeclaration) node).getDeclaration();
-    }
-
-    if ((node instanceof IASTSimpleDeclaration))
-      return isClassFwd(((IASTSimpleDeclaration) node).getDeclSpecifier());
-
-    return false;
-  }
-
-  private static boolean isClassFwd(final IASTDeclSpecifier specifier) {
-    return specifier instanceof IASTElaboratedTypeSpecifier;
-  }
-
-  private static void handleSimpleDecl(final String newInterfaceName, final ASTRewrite rewriter, final IASTSimpleDeclaration simpleDecl,
-      final IASTName astName) {
-    final IASTDeclSpecifier declSpec = simpleDecl.getDeclSpecifier();
-
-    if (isClassFwd(declSpec)) {
-      handleClassFwdDecl(newInterfaceName, rewriter, (ICPPASTElaboratedTypeSpecifier) declSpec);
-    } else if (hasTemplateId(simpleDecl)) {
-      handleTemplateId(newInterfaceName, rewriter, simpleDecl, astName);
-    } else {
-      handleNamedType(newInterfaceName, rewriter, declSpec);
-    }
-  }
-
-  private static void handleNamedType(final String newName, final ASTRewrite r, final IASTDeclSpecifier declSpec) {
-    r.replace(declSpec, createNewNamedType(newName, (ICPPASTNamedTypeSpecifier) declSpec), null);
-  }
-
-  private static void handleClassFwdDecl(final String newInterfaceName, final ASTRewrite rewriter,
-      final ICPPASTElaboratedTypeSpecifier declSpecifier) {
-    final ICPPASTElaboratedTypeSpecifier specifier = declSpecifier.copy();
-    specifier.setName(createNewInterfaceName(newInterfaceName, specifier.getName()));
-    rewriter.replace(declSpecifier, specifier, null);
-  }
-
-  private static void handleReturnType(final String interfaceName, final ASTRewrite rewriter, final ICPPASTFunctionDefinition funDef) {
-    final IASTDeclSpecifier declSpec = funDef.getDeclSpecifier();
-    final ICPPASTNamedTypeSpecifier newSpecifier = createNewNamedType(interfaceName, (ICPPASTNamedTypeSpecifier) declSpec);
-    rewriter.replace(declSpec, newSpecifier, null);
-  }
-
-  private static void handleParameter(final String newInterfaceName, final ASTRewrite rewriter, final ICPPASTParameterDeclaration paramDecl,
-      final IASTName astName) {
-    if (hasTemplateId(paramDecl)) {
-      handleTemplateId(newInterfaceName, rewriter, paramDecl, astName);
-    } else {
-      final ICPPASTNamedTypeSpecifier newSpecifier = createNewNamedType(newInterfaceName, (ICPPASTNamedTypeSpecifier) paramDecl.getDeclSpecifier());
-      rewriter.replace(paramDecl.getDeclSpecifier(), newSpecifier, null);
-    }
-  }
-
-  private static void handleTemplateId(final String newName, final ASTRewrite rewriter, final IASTNode parentDecl, final IASTName astName) {
-    final ICPPASTTemplateId templateId = AstUtil.getChildOfType(parentDecl, ICPPASTTemplateId.class);
-    final IASTName templateName = templateId.getTemplateName().copy();
-    final ICPPASTTemplateId newTemplateId = nodeFactory.newTemplateId(templateName);
-
-    for (final IASTNode arg : templateId.getTemplateArguments()) {
-      if (arg instanceof ICPPASTTypeId) {
-        newTemplateId.addTemplateArgument(getType(newName, astName, arg));
-      } else if (arg instanceof IASTExpression) {
-        newTemplateId.addTemplateArgument((IASTExpression) arg.copy());
+   private static IASTDeclarator getDeclarator(final IASTNode declaration, final IASTName className) {
+      if (hasTemplateId(declaration, className)) {
+         final ICPPASTNamedTypeSpecifier namedType = getTypeSpecIfRefersToClass(declaration, className);
+         return AstUtil.getChildOfType(namedType.getParent(), IASTDeclarator.class);
       }
-    }
+      return AstUtil.getDeclaratorForNode(declaration);
+   }
 
-    rewriter.replace(templateId, newTemplateId, null);
-  }
+   private static boolean hasTemplateId(final IASTNode node, final IASTName className) {
+      final ICPPASTTemplateId templatedChild = AstUtil.getChildOfType(node, ICPPASTTemplateId.class);
 
-  private static ICPPASTTypeId getType(final String newInterfaceName, final IASTName astName, final IASTNode templateArg) {
-    final ICPPASTTypeId copy = (ICPPASTTypeId) templateArg.copy();
-    final ICPPASTNamedTypeSpecifier classSpec = getTypeSpecIfRefersToClass(templateArg, astName);
+      if (templatedChild == null) { return false; }
 
-    if (classSpec != null) {
-      final ICPPASTNamedTypeSpecifier newTypeSpec = createNewNamedType(newInterfaceName, classSpec);
-      copy.setDeclSpecifier(newTypeSpec);
-    }
+      return Arrays.stream(templatedChild.getTemplateArguments()).anyMatch(t -> t instanceof ICPPASTTypeId && ((ICPPASTTypeId) t).getDeclSpecifier()
+            .toString().equals(className.toString()));
+   }
 
-    return copy;
-  }
+   private static boolean hasTemplateId(final IASTNode node) {
+      return AstUtil.getChildOfType(node, ICPPASTTemplateId.class) != null;
+   }
 
-  private static ICPPASTNamedTypeSpecifier createNewNamedType(final String newInterfaceName, final ICPPASTDeclSpecifier declSpec) {
-    final ICPPASTNamedTypeSpecifier newNameSpec = (ICPPASTNamedTypeSpecifier) declSpec.copy();
-    final IASTName name = createNewInterfaceName(newInterfaceName, newNameSpec.getName());
-    newNameSpec.setName(name);
-    return newNameSpec;
-  }
+   private static void replaceDeclarationWithNewType(final IASTName name, final ExtractInterfaceContext context) {
+      final ASTRewrite rewriter = context.getRewriterFor(name.getTranslationUnit());
+      final IASTNode declaration = getDeclaration(name);
 
-  private static IASTName createNewInterfaceName(final String newInterfaceName, final IASTName oldName) {
-    if (AstUtil.isQualifiedName(oldName))
-      return getNewQNameForInterface((ICPPASTQualifiedName) oldName, newInterfaceName);
+      if (declaration instanceof IASTSimpleDeclaration) {
+         handleSimpleDecl(context.getNewInterfaceName(), rewriter, (IASTSimpleDeclaration) declaration, name);
+      } else if (declaration instanceof ICPPASTParameterDeclaration) {
+         handleParameter(context.getNewInterfaceName(), rewriter, (ICPPASTParameterDeclaration) declaration, name);
+      } else if (declaration instanceof ICPPASTFunctionDefinition) {
+         handleReturnType(context.getNewInterfaceName(), rewriter, (ICPPASTFunctionDefinition) declaration);
+      }
+   }
 
-    return nodeFactory.newName(newInterfaceName.toCharArray());
-  }
+   private static ICPPASTNamedTypeSpecifier getTypeSpecIfRefersToClass(final IASTNode selectedNode, final IASTName className) {
+      if (referesToSameEntity(selectedNode, className)) return (ICPPASTNamedTypeSpecifier) selectedNode;
 
-  private static ICPPASTQualifiedName getNewQNameForInterface(final ICPPASTQualifiedName qName, final String newInterfaceName) {
-    final ICPPASTQualifiedName newQfName = nodeFactory.newQualifiedName(nodeFactory.newName(newInterfaceName.toCharArray()));
-    final List<ICPPASTNameSpecifier> qNameWithoutClassName = list(qName.getQualifier());
+      for (final IASTNode node : selectedNode.getChildren()) {
+         final ICPPASTNamedTypeSpecifier namedSpec = getTypeSpecIfRefersToClass(node, className);
 
-    for (final ICPPASTNameSpecifier name : qNameWithoutClassName) {
-      newQfName.addNameSpecifier(name);
-    }
+         if (namedSpec != null) return namedSpec;
+      }
 
-    return newQfName;
-  }
+      return null;
+   }
+
+   private static boolean referesToSameEntity(final IASTNode node, final IASTName astName) {
+      return node instanceof ICPPASTNamedTypeSpecifier && ((ICPPASTNamedTypeSpecifier) node).getName().toString().equals(astName.toString());
+   }
+
+   private static IASTNode getDeclaration(IASTNode node) {
+      while (node != null && !(node instanceof IASTSimpleDeclaration) && !(node instanceof IASTParameterDeclaration) &&
+             !(node instanceof ICPPASTFunctionDefinition)) {
+         node = node.getParent();
+      }
+      return node;
+   }
+
+   private static boolean isClassForwardDeclaration(IASTNode node) {
+      if (node instanceof ICPPASTTemplateDeclaration) {
+         node = ((ICPPASTTemplateDeclaration) node).getDeclaration();
+      }
+
+      if (node instanceof IASTSimpleDeclaration) return isClassFwd(((IASTSimpleDeclaration) node).getDeclSpecifier());
+
+      return false;
+   }
+
+   private static boolean isClassFwd(final IASTDeclSpecifier specifier) {
+      return specifier instanceof IASTElaboratedTypeSpecifier;
+   }
+
+   private static void handleSimpleDecl(final String newInterfaceName, final ASTRewrite rewriter, final IASTSimpleDeclaration simpleDecl,
+         final IASTName astName) {
+      final IASTDeclSpecifier declSpec = simpleDecl.getDeclSpecifier();
+
+      if (isClassFwd(declSpec)) {
+         handleClassFwdDecl(newInterfaceName, rewriter, (ICPPASTElaboratedTypeSpecifier) declSpec);
+      } else if (hasTemplateId(simpleDecl)) {
+         handleTemplateId(newInterfaceName, rewriter, simpleDecl, astName);
+      } else {
+         handleNamedType(newInterfaceName, rewriter, declSpec);
+      }
+   }
+
+   private static void handleNamedType(final String newName, final ASTRewrite r, final IASTDeclSpecifier declSpec) {
+      r.replace(declSpec, createNewNamedType(newName, (ICPPASTNamedTypeSpecifier) declSpec), null);
+   }
+
+   private static void handleClassFwdDecl(final String newInterfaceName, final ASTRewrite rewriter,
+         final ICPPASTElaboratedTypeSpecifier declSpecifier) {
+      final ICPPASTElaboratedTypeSpecifier specifier = declSpecifier.copy();
+      specifier.setName(createNewInterfaceName(newInterfaceName, specifier.getName()));
+      rewriter.replace(declSpecifier, specifier, null);
+   }
+
+   private static void handleReturnType(final String interfaceName, final ASTRewrite rewriter, final ICPPASTFunctionDefinition funDef) {
+      final IASTDeclSpecifier declSpec = funDef.getDeclSpecifier();
+      final ICPPASTNamedTypeSpecifier newSpecifier = createNewNamedType(interfaceName, (ICPPASTNamedTypeSpecifier) declSpec);
+      rewriter.replace(declSpec, newSpecifier, null);
+   }
+
+   private static void handleParameter(final String newInterfaceName, final ASTRewrite rewriter, final ICPPASTParameterDeclaration paramDecl,
+         final IASTName astName) {
+      if (hasTemplateId(paramDecl)) {
+         handleTemplateId(newInterfaceName, rewriter, paramDecl, astName);
+      } else {
+         final ICPPASTNamedTypeSpecifier newSpecifier = createNewNamedType(newInterfaceName, (ICPPASTNamedTypeSpecifier) paramDecl
+               .getDeclSpecifier());
+         rewriter.replace(paramDecl.getDeclSpecifier(), newSpecifier, null);
+      }
+   }
+
+   private static void handleTemplateId(final String newName, final ASTRewrite rewriter, final IASTNode parentDecl, final IASTName astName) {
+      final ICPPASTTemplateId templateId = AstUtil.getChildOfType(parentDecl, ICPPASTTemplateId.class);
+      final IASTName templateName = templateId.getTemplateName().copy();
+      final ICPPASTTemplateId newTemplateId = nodeFactory.newTemplateId(templateName);
+
+      for (final IASTNode arg : templateId.getTemplateArguments()) {
+         if (arg instanceof ICPPASTTypeId) {
+            newTemplateId.addTemplateArgument(getType(newName, astName, arg));
+         } else if (arg instanceof IASTExpression) {
+            newTemplateId.addTemplateArgument((IASTExpression) arg.copy());
+         }
+      }
+
+      rewriter.replace(templateId, newTemplateId, null);
+   }
+
+   private static ICPPASTTypeId getType(final String newInterfaceName, final IASTName astName, final IASTNode templateArg) {
+      final ICPPASTTypeId copy = (ICPPASTTypeId) templateArg.copy();
+      final ICPPASTNamedTypeSpecifier classSpec = getTypeSpecIfRefersToClass(templateArg, astName);
+
+      if (classSpec != null) {
+         final ICPPASTNamedTypeSpecifier newTypeSpec = createNewNamedType(newInterfaceName, classSpec);
+         copy.setDeclSpecifier(newTypeSpec);
+      }
+
+      return copy;
+   }
+
+   private static ICPPASTNamedTypeSpecifier createNewNamedType(final String newInterfaceName, final ICPPASTDeclSpecifier declSpec) {
+      final ICPPASTNamedTypeSpecifier newNameSpec = (ICPPASTNamedTypeSpecifier) declSpec.copy();
+      final IASTName name = createNewInterfaceName(newInterfaceName, newNameSpec.getName());
+      newNameSpec.setName(name);
+      return newNameSpec;
+   }
+
+   private static IASTName createNewInterfaceName(final String newInterfaceName, final IASTName oldName) {
+      if (AstUtil.isQualifiedName(oldName)) return getNewQNameForInterface((ICPPASTQualifiedName) oldName, newInterfaceName);
+
+      return nodeFactory.newName(newInterfaceName.toCharArray());
+   }
+
+   private static ICPPASTQualifiedName getNewQNameForInterface(final ICPPASTQualifiedName qName, final String newInterfaceName) {
+      final ICPPASTQualifiedName newQfName = nodeFactory.newQualifiedName(nodeFactory.newName(newInterfaceName.toCharArray()));
+      final List<ICPPASTNameSpecifier> qNameWithoutClassName = list(qName.getQualifier());
+
+      for (final ICPPASTNameSpecifier name : qNameWithoutClassName) {
+         newQfName.addNameSpecifier(name);
+      }
+
+      return newQfName;
+   }
 }

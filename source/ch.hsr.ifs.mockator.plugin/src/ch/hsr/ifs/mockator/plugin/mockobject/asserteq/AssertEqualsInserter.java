@@ -11,17 +11,17 @@ public class AssertEqualsInserter {
 
    private final MockSupportContext context;
 
-   public AssertEqualsInserter(MockSupportContext context) {
+   public AssertEqualsInserter(final MockSupportContext context) {
       this.context = context;
    }
 
    public void insertAssertEqual() {
-      for (ICPPASTFunctionDefinition testFunction : context.getReferencingFunctions()) {
+      for (final ICPPASTFunctionDefinition testFunction : context.getReferencingFunctions()) {
          getAssertEqualsStrategy(testFunction).insertAssertEqual(context.getRewriter());
       }
    }
 
-   private AbstractAssertEqualsInserter getAssertEqualsStrategy(ICPPASTFunctionDefinition testFunction) {
+   private AbstractAssertEqualsInserter getAssertEqualsStrategy(final ICPPASTFunctionDefinition testFunction) {
       if (isCuteProject()) return new CuteAssertEqualsInserter(testFunction, context);
       else return new CAssertEqualsInserter(testFunction, context);
    }

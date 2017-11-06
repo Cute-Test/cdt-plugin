@@ -28,7 +28,7 @@ class Function extends AbstractStaticPolyMissingMemFun {
    private final IType                         injectedType;
    private final String                        memberClassName;
 
-   public Function(ICPPASTFunctionCallExpression funCall, boolean isStatic, IType injectedType, String memberClassName) {
+   public Function(final ICPPASTFunctionCallExpression funCall, final boolean isStatic, final IType injectedType, final String memberClassName) {
       this.funCall = funCall;
       this.isStatic = isStatic;
       this.injectedType = injectedType;
@@ -38,17 +38,17 @@ class Function extends AbstractStaticPolyMissingMemFun {
    @Override
    @SuppressWarnings("restriction")
    protected ICPPASTFunctionDeclarator createFunDecl() {
-      IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());
-      ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
+      final IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());
+      final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
       funDecl.setConst(!isStatic);
       new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);
       return funDecl;
    }
 
    @Override
-   protected ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl) {
-      ReturnTypeDeducer deducer = new ReturnTypeDeducer(funDecl, injectedType, memberClassName);
-      ICPPASTDeclSpecifier returnType = deducer.determineReturnType(funCall);
+   protected ICPPASTDeclSpecifier createReturnType(final ICPPASTFunctionDeclarator funDecl) {
+      final ReturnTypeDeducer deducer = new ReturnTypeDeducer(funDecl, injectedType, memberClassName);
+      final ICPPASTDeclSpecifier returnType = deducer.determineReturnType(funCall);
 
       if (isStatic) {
          returnType.setStorageClass(IASTDeclSpecifier.sc_static);
@@ -58,12 +58,12 @@ class Function extends AbstractStaticPolyMissingMemFun {
    }
 
    @Override
-   protected IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, ICPPASTFunctionDeclarator funDecl,
-         ICPPASTDeclSpecifier specifier, CppStandard cppStd) {
-      IASTCompoundStatement newFunBody = createEmptyFunBody();
+   protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
+         final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
+      final IASTCompoundStatement newFunBody = createEmptyFunBody();
       strategy.addCallVectorRegistration(newFunBody, funDecl, isStatic);
-      ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);
-      IASTReturnStatement returnStatement = creator.createReturnStatement(funDecl, specifier);
+      final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);
+      final IASTReturnStatement returnStatement = creator.createReturnStatement(funDecl, specifier);
       newFunBody.addStatement(returnStatement);
       return newFunBody;
    }
@@ -74,8 +74,8 @@ class Function extends AbstractStaticPolyMissingMemFun {
    }
 
    @Override
-   public boolean isCallEquivalent(ICPPASTFunctionDefinition function, ConstStrategy strategy) {
-      FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
+   public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
+      final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
       return checker.isEquivalent(funCall, strategy);
    }
 

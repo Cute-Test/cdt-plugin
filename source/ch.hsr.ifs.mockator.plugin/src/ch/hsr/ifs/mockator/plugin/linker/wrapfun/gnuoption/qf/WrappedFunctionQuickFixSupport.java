@@ -9,64 +9,64 @@ import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.LinkerOptionHandler;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.MacroOptionHandler;
 
+
 class WrappedFunctionQuickFixSupport {
 
-  private final IProject project;
+   private final IProject project;
 
-  WrappedFunctionQuickFixSupport(final IProject project) {
-    this.project = project;
-  }
+   WrappedFunctionQuickFixSupport(final IProject project) {
+      this.project = project;
+   }
 
-  boolean isWrappedFunctionActive(final String wrapFunName) {
-    for (final IProject proj : getLinkerTargetProjects()) {
-      final LinkerOptionHandler flagHandler = new LinkerOptionHandler(proj);
+   boolean isWrappedFunctionActive(final String wrapFunName) {
+      for (final IProject proj : getLinkerTargetProjects()) {
+         final LinkerOptionHandler flagHandler = new LinkerOptionHandler(proj);
 
-      if (flagHandler.hasLinkerFlag(getWrappedLinkerFlagName(wrapFunName)))
-        return true;
-    }
+         if (flagHandler.hasLinkerFlag(getWrappedLinkerFlagName(wrapFunName))) return true;
+      }
 
-    return false;
-  }
+      return false;
+   }
 
-  void addWrapLinkerOption(final String wrapFunName) {
-    withLinkerTargetProjects((project) -> {
-      final LinkerOptionHandler flagHandler = new LinkerOptionHandler(project);
-      flagHandler.addLinkerFlag(getWrappedLinkerFlagName(wrapFunName));
-    });
-  }
+   void addWrapLinkerOption(final String wrapFunName) {
+      withLinkerTargetProjects((project) -> {
+         final LinkerOptionHandler flagHandler = new LinkerOptionHandler(project);
+         flagHandler.addLinkerFlag(getWrappedLinkerFlagName(wrapFunName));
+      });
+   }
 
-  private static String getWrappedLinkerFlagName(final String wrapFunName) {
-    return new WrappedLinkerFlagNameCreator(wrapFunName).getWrappedLinkerFlagName();
-  }
+   private static String getWrappedLinkerFlagName(final String wrapFunName) {
+      return new WrappedLinkerFlagNameCreator(wrapFunName).getWrappedLinkerFlagName();
+   }
 
-  void addWrapMacro(final String wrapFunName) {
-    final MacroOptionHandler macroHandler = new MacroOptionHandler(project);
-    macroHandler.addMacro(getWrappedFunMacroName(wrapFunName));
-  }
+   void addWrapMacro(final String wrapFunName) {
+      final MacroOptionHandler macroHandler = new MacroOptionHandler(project);
+      macroHandler.addMacro(getWrappedFunMacroName(wrapFunName));
+   }
 
-  void removeWrapLinkerOption(final String wrapFunName) {
-    withLinkerTargetProjects((project) -> {
-      final LinkerOptionHandler flagHandler = new LinkerOptionHandler(project);
-      flagHandler.removeLinkerFlag(getWrappedLinkerFlagName(wrapFunName));
-    });
-  }
+   void removeWrapLinkerOption(final String wrapFunName) {
+      withLinkerTargetProjects((project) -> {
+         final LinkerOptionHandler flagHandler = new LinkerOptionHandler(project);
+         flagHandler.removeLinkerFlag(getWrappedLinkerFlagName(wrapFunName));
+      });
+   }
 
-  void removeWrapMacro(final String wrapFunName) {
-    final MacroOptionHandler macroHandler = new MacroOptionHandler(project);
-    macroHandler.removeMacro(getWrappedFunMacroName(wrapFunName));
-  }
+   void removeWrapMacro(final String wrapFunName) {
+      final MacroOptionHandler macroHandler = new MacroOptionHandler(project);
+      macroHandler.removeMacro(getWrappedFunMacroName(wrapFunName));
+   }
 
-  private static String getWrappedFunMacroName(final String wrapFunName) {
-    return MockatorConstants.WRAP_MACRO_PREFIX + wrapFunName;
-  }
+   private static String getWrappedFunMacroName(final String wrapFunName) {
+      return MockatorConstants.WRAP_MACRO_PREFIX + wrapFunName;
+   }
 
-  private void withLinkerTargetProjects(final Consumer<IProject> fun) {
-    for (final IProject proj : getLinkerTargetProjects()) {
-      fun.accept(proj);
-    }
-  }
+   private void withLinkerTargetProjects(final Consumer<IProject> fun) {
+      for (final IProject proj : getLinkerTargetProjects()) {
+         fun.accept(proj);
+      }
+   }
 
-  private Collection<IProject> getLinkerTargetProjects() {
-    return new LinkerTargetProjectFinder(project).findLinkerTargetProjects();
-  }
+   private Collection<IProject> getLinkerTargetProjects() {
+      return new LinkerTargetProjectFinder(project).findLinkerTargetProjects();
+   }
 }

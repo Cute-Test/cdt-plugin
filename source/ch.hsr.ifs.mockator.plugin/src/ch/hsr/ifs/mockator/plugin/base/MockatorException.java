@@ -31,8 +31,6 @@ public class MockatorException extends RuntimeException {
     * }
     */
    public void rethrow() throws Exception {
-      if (originalException != null) {
-         throw originalException;
-      }
+      if (originalException != null) { throw originalException; }
    }
 }

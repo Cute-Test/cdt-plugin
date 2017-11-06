@@ -25,29 +25,29 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 // calls expectedMock = {{"Mock()"}, {"foo() const"}};
 class InitializerExpectationsFinder extends AbstractExpectationsFinder {
 
-   public InitializerExpectationsFinder(Collection<MemFunCallExpectation> callExpectations, NodeContainer<IASTName> expectationVector,
-                                        IASTName expectationsVectorName) {
+   public InitializerExpectationsFinder(final Collection<MemFunCallExpectation> callExpectations, final NodeContainer<IASTName> expectationVector,
+                                        final IASTName expectationsVectorName) {
       super(callExpectations, expectationVector, expectationsVectorName);
    }
 
    @Override
-   protected void collectExpectations(IASTStatement expectationStmt) {
+   protected void collectExpectations(final IASTStatement expectationStmt) {
       Assert.instanceOf(expectationStmt, IASTDeclarationStatement.class, "Should be called with an declaration statement");
-      IASTDeclarationStatement declStmt = (IASTDeclarationStatement) expectationStmt;
-      IASTDeclaration declaration = declStmt.getDeclaration();
+      final IASTDeclarationStatement declStmt = (IASTDeclarationStatement) expectationStmt;
+      final IASTDeclaration declaration = declStmt.getDeclaration();
 
       if (!(declaration instanceof IASTSimpleDeclaration)) return;
 
-      IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
-      IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
+      final IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
+      final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
 
-      if (!(isCallsVector(declSpecifier))) return;
+      if (!isCallsVector(declSpecifier)) return;
 
-      IASTName matchingName = getMatchingName(simpleDecl);
+      final IASTName matchingName = getMatchingName(simpleDecl);
 
       if (matchingName == null) return;
 
-      ICPPASTInitializerList initializer = AstUtil.getChildOfType(declaration, ICPPASTInitializerList.class);
+      final ICPPASTInitializerList initializer = AstUtil.getChildOfType(declaration, ICPPASTInitializerList.class);
 
       if (initializer == null) return;
 
@@ -55,40 +55,40 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
       callExpectations.addAll(getCallExpectations(initializer));
    }
 
-   private Collection<MemFunCallExpectation> getCallExpectations(ICPPASTInitializerList initializer) {
-      Collection<MemFunCallExpectation> callExpectations = orderPreservingSet();
+   private Collection<MemFunCallExpectation> getCallExpectations(final ICPPASTInitializerList initializer) {
+      final Collection<MemFunCallExpectation> callExpectations = orderPreservingSet();
 
-      for (IASTInitializerClause clause : initializer.getClauses()) {
+      for (final IASTInitializerClause clause : initializer.getClauses()) {
          if (!(clause instanceof ICPPASTInitializerList)) {
             continue;
          }
-         IASTInitializerClause[] clauses = ((ICPPASTInitializerList) clause).getClauses();
+         final IASTInitializerClause[] clauses = ((ICPPASTInitializerList) clause).getClauses();
          Assert.isTrue(clauses.length > 0, "Not a valid call initializer");
          Assert.isTrue(isStringLiteral(clauses[0]), "Not a string literal");
-         MemFunCallExpectation memFunCall = toMemberFunctionCall(clauses[0]);
+         final MemFunCallExpectation memFunCall = toMemberFunctionCall(clauses[0]);
          callExpectations.add(memFunCall);
       }
 
       return callExpectations;
    }
 
-   private static boolean isCallsVector(IASTDeclSpecifier declSpecifier) {
+   private static boolean isCallsVector(final IASTDeclSpecifier declSpecifier) {
       if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) return false;
 
-      ICPPASTNamedTypeSpecifier namedTypeSpec = (ICPPASTNamedTypeSpecifier) declSpecifier;
+      final ICPPASTNamedTypeSpecifier namedTypeSpec = (ICPPASTNamedTypeSpecifier) declSpecifier;
       return isCallsTypedef(namedTypeSpec);
    }
 
-   private static boolean isCallsTypedef(ICPPASTNamedTypeSpecifier namedTypeSpec) {
+   private static boolean isCallsTypedef(final ICPPASTNamedTypeSpecifier namedTypeSpec) {
       return namedTypeSpec.getName().toString().equals(MockatorConstants.CALLS);
    }
 
-   private IASTName getMatchingName(IASTSimpleDeclaration simpleDecl) {
-      IASTDeclarator[] declarators = simpleDecl.getDeclarators();
+   private IASTName getMatchingName(final IASTSimpleDeclaration simpleDecl) {
+      final IASTDeclarator[] declarators = simpleDecl.getDeclarators();
 
       if (declarators.length < 1) return null;
 
-      IASTName name = declarators[0].getName();
+      final IASTName name = declarators[0].getName();
 
       if (matchesName(name)) return name;
 

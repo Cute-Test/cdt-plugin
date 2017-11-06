@@ -89,7 +89,8 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
    }
 
    @Override
-   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException, OperationCanceledException {
+   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+         OperationCanceledException {
       final Optional<IASTName> optSelectedName = getSelectedName(getAST(tu, pm));
       if (optSelectedName.isPresent()) {
          final Optional<ICPPASTFunctionDeclarator> funDecl = findFunDeclaration(optSelectedName.get(), pm);
@@ -113,7 +114,8 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
       }
    }
 
-   private void createHeaderFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl) throws CoreException {
+   private void createHeaderFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl)
+         throws CoreException {
       newHeaderFilePath = getProjectHeaderFilePath(funDecl);
       final PreprocessorHeaderFileCreator creator = new PreprocessorHeaderFileCreator(collector, project, refactoringContext);
       creator.createFile(newHeaderFilePath, funDecl, pm);
@@ -123,7 +125,8 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
       return new TraceFileNameCreator(funDecl.getName().toString(), project.getProject()).getHeaderFilePath();
    }
 
-   private void createSourceFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl) throws CoreException {
+   private void createSourceFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl)
+         throws CoreException {
       final String funDeclName = funDecl.getName().toString();
       newSourceFilePath = new TraceFileNameCreator(funDeclName, project.getProject()).getSourceFilePath();
       final PreprocessorSourceFileCreator creator = new PreprocessorSourceFileCreator(newHeaderFilePath, collector, project, refactoringContext);

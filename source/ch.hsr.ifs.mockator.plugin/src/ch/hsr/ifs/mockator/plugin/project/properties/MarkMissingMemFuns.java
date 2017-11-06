@@ -32,7 +32,7 @@ public enum MarkMissingMemFuns implements PropertyTypeWithDefault {
    private static final Map<String, MarkMissingMemFuns> STRING_TO_ENUM = unorderedMap();
 
    static {
-      for (MarkMissingMemFuns standard : values()) {
+      for (final MarkMissingMemFuns standard : values()) {
          STRING_TO_ENUM.put(standard.name(), standard);
       }
    }
@@ -41,7 +41,7 @@ public enum MarkMissingMemFuns implements PropertyTypeWithDefault {
 
    private final String description;
 
-   private MarkMissingMemFuns(String description) {
+   private MarkMissingMemFuns(final String description) {
       this.description = description;
    }
 
@@ -53,20 +53,20 @@ public enum MarkMissingMemFuns implements PropertyTypeWithDefault {
       return DefaultPropertyHandler.getDefault(MarkMissingMemFuns.class);
    }
 
-   public static MarkMissingMemFuns fromProjectSettings(IProject project) {
-      String markMissingMemFunStrategy = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
+   public static MarkMissingMemFuns fromProjectSettings(final IProject project) {
+      final String markMissingMemFunStrategy = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
 
       if (markMissingMemFunStrategy == null) return getDefault();
 
       return fromName(markMissingMemFunStrategy);
    }
 
-   public static void storeInProjectSettings(IProject project, MarkMissingMemFuns markMissingMemFuns) {
+   public static void storeInProjectSettings(final IProject project, final MarkMissingMemFuns markMissingMemFuns) {
       new ProjectPropertiesHandler(project).setProjectProperty(QF_NAME, markMissingMemFuns.toString());
    }
 
-   public static MarkMissingMemFuns fromName(String name) {
-      MarkMissingMemFuns result = STRING_TO_ENUM.get(name);
+   public static MarkMissingMemFuns fromName(final String name) {
+      final MarkMissingMemFuns result = STRING_TO_ENUM.get(name);
       Assert.notNull(result, String.format("Unknown mark missing memfun strategy '%s'", name));
       return result;
    }

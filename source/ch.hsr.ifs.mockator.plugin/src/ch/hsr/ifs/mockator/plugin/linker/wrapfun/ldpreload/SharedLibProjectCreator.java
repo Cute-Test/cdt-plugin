@@ -61,9 +61,7 @@ class SharedLibProjectCreator {
    private void makeManagedCdtSharedLibProj(final IProject project) throws CoreException {
       final ICProjectDescriptionManager mgr = CoreModel.getDefault().getProjectDescriptionManager();
 
-      if (hasAlreadyProjectDescription(project, mgr)) {
-         return;
-      }
+      if (hasAlreadyProjectDescription(project, mgr)) { return; }
 
       setSharedLibProjectDesc(project, mgr);
    }
@@ -76,8 +74,8 @@ class SharedLibProjectCreator {
       mgr.setProjectDescription(project, projDesc);
    }
 
-   private ICProjectDescription createConfigurations(final IProject project, final ICProjectDescriptionManager mgr, final IProjectType projType, final ManagedProject mProj)
-         throws CoreException {
+   private ICProjectDescription createConfigurations(final IProject project, final ICProjectDescriptionManager mgr, final IProjectType projType,
+         final ManagedProject mProj) throws CoreException {
       final ICProjectDescription projDesc = mgr.createProjectDescription(project, true);
       final IToolChain tc = getToolChain();
 
@@ -104,8 +102,8 @@ class SharedLibProjectCreator {
       builder.setManagedBuildOn(true);
    }
 
-   private static Configuration createNewConfiguration(final ICProjectDescription desc, final Configuration cf, final ManagedProject managed, final IProject p, final IToolChain tc)
-         throws WriteAccessException, CoreException {
+   private static Configuration createNewConfiguration(final ICProjectDescription desc, final Configuration cf, final ManagedProject managed,
+         final IProject p, final IToolChain tc) throws WriteAccessException, CoreException {
       final String id = ManagedBuildManager.calculateChildId(cf.getId(), null);
       final Configuration config = new Configuration(managed, cf, id, false, true);
       final ICConfigurationDescription cfgDes = desc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, config.getConfigurationData());

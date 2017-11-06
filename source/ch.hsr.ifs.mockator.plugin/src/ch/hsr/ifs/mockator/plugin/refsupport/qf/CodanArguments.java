@@ -11,12 +11,12 @@ public abstract class CodanArguments {
 
    private static final String MISMATCH_CODAN_ARGUMENTS_MSG = "Wrong number of problem arguments passed; expected: %d, got: %d";
 
-   public String[] getProblemArguments(IMarker marker) {
+   public String[] getProblemArguments(final IMarker marker) {
       Assert.notNull(marker, "Marker should not be null");
-      String[] problemArguments = CodanProblemMarker.getProblemArguments(marker);
-      int actualNumArgs = problemArguments.length;
-      int expectedNumArgs = getNumOfProblemArguments();
-      String mismatchText = getMismatchText(actualNumArgs, expectedNumArgs);
+      final String[] problemArguments = CodanProblemMarker.getProblemArguments(marker);
+      final int actualNumArgs = problemArguments.length;
+      final int expectedNumArgs = getNumOfProblemArguments();
+      final String mismatchText = getMismatchText(actualNumArgs, expectedNumArgs);
       Assert.isTrue(actualNumArgs == expectedNumArgs, mismatchText);
       return problemArguments;
    }
@@ -25,7 +25,7 @@ public abstract class CodanArguments {
 
    public abstract int getNumOfProblemArguments();
 
-   private static String getMismatchText(int actualNumArgs, int expectedNumArgs) {
+   private static String getMismatchText(final int actualNumArgs, final int expectedNumArgs) {
       return String.format(MISMATCH_CODAN_ARGUMENTS_MSG, expectedNumArgs, actualNumArgs);
    }
 }

@@ -15,35 +15,36 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class ForwardDeclCollector implements Consumer<ExtractInterfaceContext> {
 
-  @Override
-  public void accept(final ExtractInterfaceContext context) {
-    final Collection<IASTSimpleDeclaration> fwdDecls = getClassFwdDecls(context.getTuOfChosenClass());
-    context.setClassFwdDecls(fwdDecls);
-  }
+   @Override
+   public void accept(final ExtractInterfaceContext context) {
+      final Collection<IASTSimpleDeclaration> fwdDecls = getClassFwdDecls(context.getTuOfChosenClass());
+      context.setClassFwdDecls(fwdDecls);
+   }
 
-  private static Collection<IASTSimpleDeclaration> getClassFwdDecls(final IASTTranslationUnit ast) {
-    final List<IASTSimpleDeclaration> fwdDecls = list();
-    ast.accept(new ASTVisitor() {
+   private static Collection<IASTSimpleDeclaration> getClassFwdDecls(final IASTTranslationUnit ast) {
+      final List<IASTSimpleDeclaration> fwdDecls = list();
+      ast.accept(new ASTVisitor() {
 
-      {
-        shouldVisitDeclarations = true;
-      }
+         {
+            shouldVisitDeclarations = true;
+         }
 
-      @Override
-      public int visit(final IASTDeclaration decl) {
-        if (decl instanceof IASTSimpleDeclaration) {
-          final ICPPASTElaboratedTypeSpecifier forwardDecl = AstUtil.getChildOfType(decl, ICPPASTElaboratedTypeSpecifier.class);
+         @Override
+         public int visit(final IASTDeclaration decl) {
+            if (decl instanceof IASTSimpleDeclaration) {
+               final ICPPASTElaboratedTypeSpecifier forwardDecl = AstUtil.getChildOfType(decl, ICPPASTElaboratedTypeSpecifier.class);
 
-          if (forwardDecl != null) {
-            fwdDecls.add((IASTSimpleDeclaration) decl);
-          }
-        }
+               if (forwardDecl != null) {
+                  fwdDecls.add((IASTSimpleDeclaration) decl);
+               }
+            }
 
-        return PROCESS_CONTINUE;
-      }
-    });
-    return fwdDecls;
-  }
+            return PROCESS_CONTINUE;
+         }
+      });
+      return fwdDecls;
+   }
 }

@@ -10,7 +10,7 @@ public class ParallelIterator<T1, T2> implements Iterator<Pair<T1, T2>> {
    private final Iterator<T1> it1;
    private final Iterator<T2> it2;
 
-   public ParallelIterator(Iterator<T1> it1, Iterator<T2> it2) {
+   public ParallelIterator(final Iterator<T1> it1, final Iterator<T2> it2) {
       this.it1 = it1;
       this.it2 = it2;
    }
@@ -22,7 +22,7 @@ public class ParallelIterator<T1, T2> implements Iterator<Pair<T1, T2>> {
 
    @Override
    public Pair<T1, T2> next() {
-      return new Pair<T1, T2>(it1.next(), it2.next());
+      return Pair.from(it1.next(), it2.next());
    }
 
    @Override

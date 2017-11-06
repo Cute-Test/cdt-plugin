@@ -29,29 +29,29 @@ public class FunctionDelegateCallCreator {
    private final ICPPASTFunctionDeclarator function;
    private final Collection<Integer>       paramPositionsToIgnore;
 
-   public FunctionDelegateCallCreator(ICPPASTFunctionDeclarator function) {
+   public FunctionDelegateCallCreator(final ICPPASTFunctionDeclarator function) {
       this(function, new HashSet<Integer>());
    }
 
-   public FunctionDelegateCallCreator(ICPPASTFunctionDeclarator function, Collection<Integer> paramPositionsToIgnore) {
+   public FunctionDelegateCallCreator(final ICPPASTFunctionDeclarator function, final Collection<Integer> paramPositionsToIgnore) {
       this.function = function;
       this.paramPositionsToIgnore = paramPositionsToIgnore;
    }
 
-   public IASTStatement createDelegate(IASTName funName) {
+   public IASTStatement createDelegate(final IASTName funName) {
       return createDelegate(funName, AstUtil.getDeclSpec(function));
    }
 
-   public IASTStatement createDelegate(IASTName funName, IASTDeclSpecifier declSpec) {
-      ICPPASTFunctionCallExpression call = createFunCall(funName);
+   public IASTStatement createDelegate(final IASTName funName, final IASTDeclSpecifier declSpec) {
+      final ICPPASTFunctionCallExpression call = createFunCall(funName);
 
       if (AstUtil.isVoid(declSpec) && hasNoPointers()) return nodeFactory.newExpressionStatement(call);
 
       return nodeFactory.newReturnStatement(call);
    }
 
-   private ICPPASTFunctionCallExpression createFunCall(IASTName funName) {
-      IASTIdExpression idExpr = nodeFactory.newIdExpression(funName.copy());
+   private ICPPASTFunctionCallExpression createFunCall(final IASTName funName) {
+      final IASTIdExpression idExpr = nodeFactory.newIdExpression(funName.copy());
       return nodeFactory.newFunctionCallExpression(idExpr, getFunctionArgs());
    }
 
@@ -60,9 +60,9 @@ public class FunctionDelegateCallCreator {
    }
 
    private IASTInitializerClause[] getFunctionArgs() {
-      ICPPASTParameterDeclaration[] params = function.getParameters();
-      IASTInitializerClause[] args = new IASTInitializerClause[params.length - paramPositionsToIgnore.size()];
-      ParameterNameCreator paramNameCreator = getParamNameCreator();
+      final ICPPASTParameterDeclaration[] params = function.getParameters();
+      final IASTInitializerClause[] args = new IASTInitializerClause[params.length - paramPositionsToIgnore.size()];
+      final ParameterNameCreator paramNameCreator = getParamNameCreator();
 
       for (int i = 0; i < params.length; ++i) {
          if (!paramPositionsToIgnore.contains(i)) {
@@ -73,11 +73,11 @@ public class FunctionDelegateCallCreator {
       return args;
    }
 
-   private static IASTIdExpression createExpression(ICPPASTParameterDeclaration param, ParameterNameCreator nameCreator) {
+   private static IASTIdExpression createExpression(final ICPPASTParameterDeclaration param, final ParameterNameCreator nameCreator) {
       String paramName = param.getDeclarator().getName().toString();
 
       if (paramName.isEmpty() && !AstUtil.isVoid(param)) {
-         IType paramType = TypeCreator.byParamDeclaration(param);
+         final IType paramType = TypeCreator.byParamDeclaration(param);
          paramName = nameCreator.getParamName(paramType).toString();
       }
 
@@ -85,8 +85,8 @@ public class FunctionDelegateCallCreator {
    }
 
    private static ParameterNameCreator getParamNameCreator() {
-      Map<String, Boolean> nameHistory = unorderedMap();
-      ParameterNameCreator nameCreator = new ParameterNameCreator(nameHistory);
+      final Map<String, Boolean> nameHistory = unorderedMap();
+      final ParameterNameCreator nameCreator = new ParameterNameCreator(nameHistory);
       return nameCreator;
    }
 }

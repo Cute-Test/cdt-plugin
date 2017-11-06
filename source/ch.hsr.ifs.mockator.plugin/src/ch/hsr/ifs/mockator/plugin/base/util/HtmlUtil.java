@@ -20,19 +20,19 @@ public abstract class HtmlUtil {
       LOOKUP_TABLE.put("\\", "&#092;");
    }
 
-   public final static String escapeHtml(String html) {
-      StringBuilder escapedHtml = new StringBuilder(html.length() * 2);
+   public final static String escapeHtml(final String html) {
+      final StringBuilder escapedHtml = new StringBuilder(html.length() * 2);
 
       for (int i = 0; i < html.length(); ++i) {
-         char c = html.charAt(i);
-         String escaped = escapeSingleChar(c);
+         final char c = html.charAt(i);
+         final String escaped = escapeSingleChar(c);
          escapedHtml.append(Default.whenNull(escaped, c));
       }
 
       return escapedHtml.toString();
    }
 
-   private static String escapeSingleChar(char c) {
+   private static String escapeSingleChar(final char c) {
       return LOOKUP_TABLE.get(String.valueOf(c));
    }
 }

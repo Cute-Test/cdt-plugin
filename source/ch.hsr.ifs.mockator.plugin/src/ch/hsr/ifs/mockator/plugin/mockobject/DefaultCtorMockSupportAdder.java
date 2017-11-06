@@ -11,35 +11,35 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.memfun.MockIdInitializerAdd
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 
+
 class DefaultCtorMockSupportAdder implements Consumer<ICPPASTFunctionDefinition> {
 
-  private final CppStandard cppStd;
-  private final PolymorphismKind polymorphismKind;
-  private final String callsVectorName;
+   private final CppStandard      cppStd;
+   private final PolymorphismKind polymorphismKind;
+   private final String           callsVectorName;
 
-  public DefaultCtorMockSupportAdder(final CppStandard cppStd, final PolymorphismKind polyKind, final String callsVectorName) {
-    this.cppStd = cppStd;
-    this.polymorphismKind = polyKind;
-    this.callsVectorName = callsVectorName;
-  }
+   public DefaultCtorMockSupportAdder(final CppStandard cppStd, final PolymorphismKind polyKind, final String callsVectorName) {
+      this.cppStd = cppStd;
+      polymorphismKind = polyKind;
+      this.callsVectorName = callsVectorName;
+   }
 
-  @Override
-  public void accept(final ICPPASTFunctionDefinition defaultCtor) {
-    addCtorInitializer(defaultCtor);
-    addRegistrationIfNecessary(defaultCtor);
-  }
+   @Override
+   public void accept(final ICPPASTFunctionDefinition defaultCtor) {
+      addCtorInitializer(defaultCtor);
+      addRegistrationIfNecessary(defaultCtor);
+   }
 
-  private void addRegistrationIfNecessary(final ICPPASTFunctionDefinition defaultCtor) {
-    if (polymorphismKind != PolymorphismKind.StaticPoly)
-      return;
+   private void addRegistrationIfNecessary(final ICPPASTFunctionDefinition defaultCtor) {
+      if (polymorphismKind != PolymorphismKind.StaticPoly) return;
 
-    final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) defaultCtor.getDeclarator();
-    final IASTCompoundStatement ctorBody = (IASTCompoundStatement) defaultCtor.getBody();
-    final boolean isStatic = false;
-    new MemberFunCallRegistrationAdder(funDecl, isStatic, cppStd, callsVectorName).addRegistrationTo(ctorBody);
-  }
+      final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) defaultCtor.getDeclarator();
+      final IASTCompoundStatement ctorBody = (IASTCompoundStatement) defaultCtor.getBody();
+      final boolean isStatic = false;
+      new MemberFunCallRegistrationAdder(funDecl, isStatic, cppStd, callsVectorName).addRegistrationTo(ctorBody);
+   }
 
-  private void addCtorInitializer(final ICPPASTFunctionDefinition defaultCtor) {
-    new MockIdInitializerAdder(callsVectorName, cppStd).accept(defaultCtor);
-  }
+   private void addCtorInitializer(final ICPPASTFunctionDefinition defaultCtor) {
+      new MockIdInitializerAdder(callsVectorName, cppStd).accept(defaultCtor);
+   }
 }

@@ -34,7 +34,7 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    private final ICPPASTFunctionDeclarator funDecl;
    private final IASTSimpleDeclaration     simpleDecl;
 
-   public MissingMemFun(IASTSimpleDeclaration simpleDecl) {
+   public MissingMemFun(final IASTSimpleDeclaration simpleDecl) {
       funDecl = AstUtil.getChildOfType(simpleDecl, ICPPASTFunctionDeclarator.class);
       Assert.notNull(funDecl, "Not a valid function declaration");
       this.simpleDecl = simpleDecl;
@@ -46,50 +46,50 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    }
 
    @Override
-   public ICPPASTFunctionDefinition createFunctionDefinition(TestDoubleMemFunImplStrategy strategy, CppStandard cppStd) {
-      ICPPASTFunctionDeclarator newFunDecl = createFunDecl();
-      ICPPASTDeclSpecifier newReturnType = createReturnType();
-      IASTCompoundStatement newFunBody = createFunBody(strategy, cppStd, newFunDecl, newReturnType);
+   public ICPPASTFunctionDefinition createFunctionDefinition(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd) {
+      final ICPPASTFunctionDeclarator newFunDecl = createFunDecl();
+      final ICPPASTDeclSpecifier newReturnType = createReturnType();
+      final IASTCompoundStatement newFunBody = createFunBody(strategy, cppStd, newFunDecl, newReturnType);
       return nodeFactory.newFunctionDefinition(newReturnType, newFunDecl, newFunBody);
    }
 
    private ICPPASTFunctionDeclarator createFunDecl() {
-      ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
+      final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
       adjustParamNamesIfNecessary(newFunDecl);
       newFunDecl.setPureVirtual(false);
       return newFunDecl;
    }
 
    private ICPPASTDeclSpecifier createReturnType() {
-      ICPPASTDeclSpecifier returnType = (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
-      ICPPASTDeclSpecifier newReturnType = returnType.copy();
+      final ICPPASTDeclSpecifier returnType = (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
+      final ICPPASTDeclSpecifier newReturnType = returnType.copy();
       newReturnType.setVirtual(false);
       return newReturnType;
    }
 
-   private IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, CppStandard cppStd, ICPPASTFunctionDeclarator newFunDecl,
-         ICPPASTDeclSpecifier newReturnType) {
-      IASTCompoundStatement newFunBody = nodeFactory.newCompoundStatement();
+   private IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd,
+         final ICPPASTFunctionDeclarator newFunDecl, final ICPPASTDeclSpecifier newReturnType) {
+      final IASTCompoundStatement newFunBody = nodeFactory.newCompoundStatement();
       strategy.addCallVectorRegistration(newFunBody, newFunDecl, isStatic());
-      ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, getClassName());
-      IASTReturnStatement returnStatement = creator.createReturnStatement(funDecl, newReturnType);
+      final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, getClassName());
+      final IASTReturnStatement returnStatement = creator.createReturnStatement(funDecl, newReturnType);
       newFunBody.addStatement(returnStatement);
       return newFunBody;
    }
 
-   private static void adjustParamNamesIfNecessary(ICPPASTFunctionDeclarator newFunDecl) {
-      ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
+   private static void adjustParamNamesIfNecessary(final ICPPASTFunctionDeclarator newFunDecl) {
+      final ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
       funDecorator.adjustParamNamesIfNecessary();
    }
 
    private String getClassName() {
-      ICPPASTCompositeTypeSpecifier klass = AstUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      final ICPPASTCompositeTypeSpecifier klass = AstUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
       return klass.getName().toString();
    }
 
    @Override
-   public Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd, LinkedEditModeStrategy strategy) {
-      DefaultArgumentCreator creator = new DefaultArgumentCreator(strategy, cppStd);
+   public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy strategy) {
+      final DefaultArgumentCreator creator = new DefaultArgumentCreator(strategy, cppStd);
       return creator.createDefaultArguments(list(funDecl.getParameters()));
    }
 

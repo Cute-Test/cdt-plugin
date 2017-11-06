@@ -13,13 +13,13 @@ public class LinkerTargetProjectFinder {
 
    private final IProject project;
 
-   public LinkerTargetProjectFinder(IProject project) {
+   public LinkerTargetProjectFinder(final IProject project) {
       this.project = project;
    }
 
    public Collection<IProject> findLinkerTargetProjects() {
-      ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project);
-      Collection<IProject> executables = finder.findReferencingExecutables();
+      final ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project);
+      final Collection<IProject> executables = finder.findReferencingExecutables();
 
       if (executables.isEmpty()) return list(project);
 

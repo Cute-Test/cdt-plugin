@@ -14,6 +14,7 @@ import org.eclipse.text.edits.ReplaceEdit;
 
 import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
@@ -24,167 +25,169 @@ import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInfoCreater;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInformation;
 
+
 @SuppressWarnings("restriction")
 abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
 
-  protected final Collection<? extends TestDoubleMemFun> memFuns;
-  protected final LinkedModeInformation linkedMode;
-  protected final CppStandard cppStd;
-  private final ChangeEdit changeEdit;
-  private final Optional<String> expectationsName;
-  private final AssertionOrder assertOrder;
-  private final Pattern prefixPattern;
+   protected final Collection<? extends TestDoubleMemFun> memFuns;
+   protected final LinkedModeInformation                  linkedMode;
+   protected final CppStandard                            cppStd;
+   private final ChangeEdit                               changeEdit;
+   private final Optional<String>                         expectationsName;
+   private final AssertionOrder                           assertOrder;
+   private final Pattern                                  prefixPattern;
 
-  public MockObjectLinkedModeSupport(final ChangeEdit changeEdit, final Collection<? extends TestDoubleMemFun> memFuns, final CppStandard cppStd,
-      final AssertionOrder assertOrder, final Optional<String> expectationsVectorName) {
-    this.changeEdit = changeEdit;
-    this.memFuns = memFuns;
-    this.cppStd = cppStd;
-    this.assertOrder = assertOrder;
-    expectationsName = expectationsVectorName;
-    linkedMode = new LinkedModeInformation();
-    prefixPattern = createPrefixPattern(cppStd);
-  }
+   public MockObjectLinkedModeSupport(final ChangeEdit changeEdit, final Collection<? extends TestDoubleMemFun> memFuns, final CppStandard cppStd,
+                                      final AssertionOrder assertOrder, final Optional<String> expectationsVectorName) {
+      this.changeEdit = changeEdit;
+      this.memFuns = memFuns;
+      this.cppStd = cppStd;
+      this.assertOrder = assertOrder;
+      expectationsName = expectationsVectorName;
+      linkedMode = new LinkedModeInformation();
+      prefixPattern = createPrefixPattern(cppStd);
+   }
 
-  private static Pattern createPrefixPattern(final CppStandard cppStd) {
-    return Pattern.compile(String.format("^(?:\\%s\\s*,\\s*)(.*)", cppStd.getExpectationDelimiter()));
-  }
+   private static Pattern createPrefixPattern(final CppStandard cppStd) {
+      return Pattern.compile(String.format("^(?:\\%s\\s*,\\s*)(.*)", cppStd.getExpectationDelimiter()));
+   }
 
-  @Override
-  public LinkedModeInformation createLinkedModeInfo() {
-    final List<OffsetAndLength> expectationPositions = getFunSignaturePositions();
-    addPositions(expectationPositions);
-    addFunSignatureProposals(expectationPositions);
-    addAssertPositionsAndProposals();
-    return linkedMode;
-  }
+   @Override
+   public LinkedModeInformation createLinkedModeInfo() {
+      final List<OffsetAndLength> expectationPositions = getFunSignaturePositions();
+      addPositions(expectationPositions);
+      addFunSignatureProposals(expectationPositions);
+      addAssertPositionsAndProposals();
+      return linkedMode;
+   }
 
-  protected abstract void addFunSignatureProposals(Collection<OffsetAndLength> expectationPositions);
+   protected abstract void addFunSignatureProposals(Collection<OffsetAndLength> expectationPositions);
 
-  protected List<OffsetAndLength> getFunSignaturePositions() {
-    final List<OffsetAndLength> offsetsAndLengths = list();
-    final Optional<Pair<Integer, String>> expectationInfos = getExpectationVectorInfo();
+   protected List<OffsetAndLength> getFunSignaturePositions() {
+      final List<OffsetAndLength> offsetsAndLengths = list();
+      final Optional<Pair<Integer, String>> expectationInfos = getExpectationVectorInfo();
 
-    if (expectationInfos.isPresent()) {
-      collectPositionsWithNewVector(offsetsAndLengths, expectationInfos.get());
-    } else {
-      collectPositionsInVector(offsetsAndLengths);
-    }
-
-    return offsetsAndLengths;
-  }
-
-  protected abstract void collectPositionsWithNewVector(List<OffsetAndLength> offsetsAndLengths, Pair<Integer, String> expectationInfos);
-
-  private void collectPositionsInVector(final List<OffsetAndLength> offsetsAndLengths) {
-    getEditForCallRegistration().ifPresent((edit) -> {
-      int beginOfExpectations = edit.getOffset();
-      final String editText = edit.getText() + cppStd.getExpectationDelimiter();
-      final Matcher matcher = prefixPattern.matcher(editText);
-
-      if (matcher.matches()) {
-        beginOfExpectations += matcher.start(0);
+      if (expectationInfos.isPresent()) {
+         collectPositionsWithNewVector(offsetsAndLengths, expectationInfos.get());
+      } else {
+         collectPositionsInVector(offsetsAndLengths);
       }
 
-      collectVectorInsidePositions(offsetsAndLengths, editText, beginOfExpectations);
-    });
-  }
+      return offsetsAndLengths;
+   }
 
-  protected abstract void collectVectorInsidePositions(List<OffsetAndLength> offsetsAndLengths, String editText, int beginOfExpectations);
+   protected abstract void collectPositionsWithNewVector(List<OffsetAndLength> offsetsAndLengths, Pair<Integer, String> expectationInfos);
 
-  private void addAssertPositionsAndProposals() {
-    getAssertOffsetAndLength().ifPresent((offset) -> {
-      addAssertPosition(offset);
-      addAssertProposals(offset);
-    });
-  }
+   private void collectPositionsInVector(final List<OffsetAndLength> offsetsAndLengths) {
+      getEditForCallRegistration().ifPresent((edit) -> {
+         int beginOfExpectations = edit.getOffset();
+         final String editText = edit.getText() + cppStd.getExpectationDelimiter();
+         final Matcher matcher = prefixPattern.matcher(editText);
 
-  private void addAssertProposals(final OffsetAndLength assertPosition) {
-    final List<Proposal> proposals = list();
+         if (matcher.matches()) {
+            beginOfExpectations += matcher.start(0);
+         }
 
-    for (final AssertKind each : AssertKind.getAssertProposals()) {
-      proposals.add(createNewProposal(each.toString()));
-    }
+         collectVectorInsidePositions(offsetsAndLengths, editText, beginOfExpectations);
+      });
+   }
 
-    linkedMode.addProposal(assertPosition.offset(), proposals.toArray(new Proposal[proposals.size()]));
-  }
+   protected abstract void collectVectorInsidePositions(List<OffsetAndLength> offsetsAndLengths, String editText, int beginOfExpectations);
 
-  protected Proposal createNewProposal(final String text) {
-    return new Proposal(text, CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION), 0);
-  }
+   private void addAssertPositionsAndProposals() {
+      getAssertOffsetAndLength().ifPresent((offset) -> {
+         addAssertPosition(offset);
+         addAssertProposals(offset);
+      });
+   }
 
-  private void addAssertPosition(final OffsetAndLength assertPosition) {
-    linkedMode.addPosition(assertPosition.offset(), assertPosition.length());
-  }
+   private void addAssertProposals(final OffsetAndLength assertPosition) {
+      final List<Proposal> proposals = list();
 
-  private void addPositions(final Collection<OffsetAndLength> initializerPositions) {
-    for (final OffsetAndLength pos : initializerPositions) {
-      addAssertPosition(pos);
-    }
-  }
-
-  private Optional<OffsetAndLength> getAssertOffsetAndLength() {
-    return OptHelper.returnIfPresentElseEmpty(getAssertPosition(),
-        (assertPos) -> Optional.of(new OffsetAndLength(assertPos, assertOrder.getAssertionCommand().length())));
-  }
-
-  private Optional<Integer> getAssertPosition() {
-    return OptHelper.returnIfPresentElseEmpty(getChangeEditText(), (changeEditText) -> {
-      final Matcher m = getAssertPattern().matcher(changeEditText);
-      return m.find() ? Optional.of(getChangeEditOffset().get() + m.start()) : Optional.empty();
-    });
-  }
-
-  private Optional<String> getChangeEditText() {
-    return OptHelper.returnIfPresentElseEmpty(expectationsName, (name) -> changeEdit.getText(name));
-  }
-
-  protected Optional<Integer> getChangeEditOffset() {
-    return OptHelper.returnIfPresentElseEmpty(expectationsName, (name) -> Optional.of(changeEdit.getOffset(name)));
-  }
-
-  private Pattern getAssertPattern() {
-    final String assertCommand = assertOrder.getAssertionCommand();
-    final String regex = String.format("%s\\s*\\(\\s*(%s\\s*,.*)|(.*,\\s*%s\\s*)\\)", assertCommand, expectationsName.get(), expectationsName.get());
-    return Pattern.compile(regex, Pattern.MULTILINE);
-  }
-
-  private Optional<Pair<Integer, String>> getExpectationVectorInfo() {
-    return OptHelper.returnIfPresentElseEmpty(getChangeEditText(), (changeText) -> {
-      final Matcher m = getExpectationsVectorPattern().matcher(changeText);
-
-      if (m.find()) {
-        final int startPos = m.start(1);
-        final String callSequenceVectorText = m.group(1);
-        return Optional.of(Pair.from(startPos, callSequenceVectorText));
+      for (final AssertKind each : AssertKind.getAssertProposals()) {
+         proposals.add(createNewProposal(each.toString()));
       }
-      return Optional.empty();
-    });
 
-  }
+      linkedMode.addProposal(assertPosition.offset(), proposals.toArray(new Proposal[proposals.size()]));
+   }
 
-  private Pattern getExpectationsVectorPattern() {
-    final String regex = expectationsName.get() + "\\s*\\+?=\\s*([^;]*);$";
-    return Pattern.compile(regex, Pattern.MULTILINE);
-  }
+   protected Proposal createNewProposal(final String text) {
+      return new Proposal(text, CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION), 0);
+   }
 
-  private Optional<ReplaceEdit> getEditForCallRegistration() {
-    final Pattern pushBackMatcher = Pattern.compile("\\." + MockatorConstants.PUSH_BACK + "\\s*\\(\\s*" + MockatorConstants.CALL);
-    return changeEdit.getNonMatchingReplaceEdit(pushBackMatcher);
-  }
+   private void addAssertPosition(final OffsetAndLength assertPosition) {
+      linkedMode.addPosition(assertPosition.offset(), assertPosition.length());
+   }
 
-  protected static class OffsetAndLength extends AbstractPair<Integer, Integer> {
+   private void addPositions(final Collection<OffsetAndLength> initializerPositions) {
+      for (final OffsetAndLength pos : initializerPositions) {
+         addAssertPosition(pos);
+      }
+   }
 
-    public OffsetAndLength(final Integer offset, final Integer length) {
-      super(offset, length);
-    }
+   private Optional<OffsetAndLength> getAssertOffsetAndLength() {
+      return OptHelper.returnIfPresentElseEmpty(getAssertPosition(), (assertPos) -> Optional.of(new OffsetAndLength(assertPos, assertOrder
+            .getAssertionCommand().length())));
+   }
 
-    public int offset() {
-      return first;
-    }
+   private Optional<Integer> getAssertPosition() {
+      return OptHelper.returnIfPresentElseEmpty(getChangeEditText(), (changeEditText) -> {
+         final Matcher m = getAssertPattern().matcher(changeEditText);
+         return m.find() ? Optional.of(getChangeEditOffset().get() + m.start()) : Optional.empty();
+      });
+   }
 
-    public int length() {
-      return second;
-    }
-  }
+   private Optional<String> getChangeEditText() {
+      return OptHelper.returnIfPresentElseEmpty(expectationsName, (name) -> changeEdit.getText(name));
+   }
+
+   protected Optional<Integer> getChangeEditOffset() {
+      return OptHelper.returnIfPresentElseEmpty(expectationsName, (name) -> Optional.of(changeEdit.getOffset(name)));
+   }
+
+   private Pattern getAssertPattern() {
+      final String assertCommand = assertOrder.getAssertionCommand();
+      final String regex = String.format("%s\\s*\\(\\s*(%s\\s*,.*)|(.*,\\s*%s\\s*)\\)", assertCommand, expectationsName.get(), expectationsName
+            .get());
+      return Pattern.compile(regex, Pattern.MULTILINE);
+   }
+
+   private Optional<Pair<Integer, String>> getExpectationVectorInfo() {
+      return OptHelper.returnIfPresentElseEmpty(getChangeEditText(), (changeText) -> {
+         final Matcher m = getExpectationsVectorPattern().matcher(changeText);
+
+         if (m.find()) {
+            final int startPos = m.start(1);
+            final String callSequenceVectorText = m.group(1);
+            return Optional.of(Pair.from(startPos, callSequenceVectorText));
+         }
+         return Optional.empty();
+      });
+
+   }
+
+   private Pattern getExpectationsVectorPattern() {
+      final String regex = expectationsName.get() + "\\s*\\+?=\\s*([^;]*);$";
+      return Pattern.compile(regex, Pattern.MULTILINE);
+   }
+
+   private Optional<ReplaceEdit> getEditForCallRegistration() {
+      final Pattern pushBackMatcher = Pattern.compile("\\." + MockatorConstants.PUSH_BACK + "\\s*\\(\\s*" + MockatorConstants.CALL);
+      return changeEdit.getNonMatchingReplaceEdit(pushBackMatcher);
+   }
+
+   protected static class OffsetAndLength extends AbstractPair<Integer, Integer> {
+
+      public OffsetAndLength(final Integer offset, final Integer length) {
+         super(offset, length);
+      }
+
+      public int offset() {
+         return first;
+      }
+
+      public int length() {
+         return second;
+      }
+   }
 }

@@ -22,7 +22,7 @@ public class MockatorInitCallCreator {
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
    private final IASTNode              parent;
 
-   public MockatorInitCallCreator(IASTNode parent) {
+   public MockatorInitCallCreator(final IASTNode parent) {
       this.parent = parent;
    }
 
@@ -36,14 +36,14 @@ public class MockatorInitCallCreator {
    }
 
    private static IASTNode createMockatorInitForNamespace() {
-      IASTName initMockator = nodeFactory.newName((INIT_MOCKATOR + L_PARENTHESIS + R_PARENTHESIS).toCharArray());
+      final IASTName initMockator = nodeFactory.newName((INIT_MOCKATOR + L_PARENTHESIS + R_PARENTHESIS).toCharArray());
       return nodeFactory.newSimpleDeclaration(nodeFactory.newTypedefNameSpecifier(initMockator));
    }
 
    private static IASTExpressionStatement createMockatorInitForFunction() {
-      IASTIdExpression initMockator = nodeFactory.newIdExpression(nodeFactory.newName(INIT_MOCKATOR.toCharArray()));
-      IASTInitializerClause[] noArgs = new IASTInitializerClause[] {};
-      IASTFunctionCallExpression initMockatorFunCall = nodeFactory.newFunctionCallExpression(initMockator, noArgs);
+      final IASTIdExpression initMockator = nodeFactory.newIdExpression(nodeFactory.newName(INIT_MOCKATOR.toCharArray()));
+      final IASTInitializerClause[] noArgs = new IASTInitializerClause[] {};
+      final IASTFunctionCallExpression initMockatorFunCall = nodeFactory.newFunctionCallExpression(initMockator, noArgs);
       return nodeFactory.newExpressionStatement(initMockatorFunCall);
    }
 }

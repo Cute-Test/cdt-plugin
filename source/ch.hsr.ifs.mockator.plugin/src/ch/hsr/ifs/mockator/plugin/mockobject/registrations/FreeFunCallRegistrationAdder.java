@@ -15,9 +15,9 @@ public class FreeFunCallRegistrationAdder extends AbstractFunCallRegistrationAdd
 
    private final String callsVectorName;
 
-   public FreeFunCallRegistrationAdder(ICPPASTFunctionDeclarator fun, CppStandard cppStd, String name) {
+   public FreeFunCallRegistrationAdder(final ICPPASTFunctionDeclarator fun, final CppStandard cppStd, final String name) {
       super(fun, cppStd);
-      this.callsVectorName = name;
+      callsVectorName = name;
    }
 
    @Override

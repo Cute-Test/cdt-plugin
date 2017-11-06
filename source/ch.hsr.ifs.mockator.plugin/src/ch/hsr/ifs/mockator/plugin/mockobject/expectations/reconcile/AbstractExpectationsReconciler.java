@@ -22,19 +22,19 @@ abstract class AbstractExpectationsReconciler {
    protected final LinkedEditModeStrategy                   linkedEdit;
    private final Collection<ExistingMemFunCallRegistration> callsToRemove;
 
-   public AbstractExpectationsReconciler(ASTRewrite rewriter, Collection<? extends TestDoubleMemFun> toAdd,
-                                         Collection<ExistingMemFunCallRegistration> toRemove, CppStandard cppStd,
-                                         LinkedEditModeStrategy linkedEditMode) {
+   public AbstractExpectationsReconciler(final ASTRewrite rewriter, final Collection<? extends TestDoubleMemFun> toAdd,
+                                         final Collection<ExistingMemFunCallRegistration> toRemove, final CppStandard cppStd,
+                                         final LinkedEditModeStrategy linkedEditMode) {
       this.rewriter = rewriter;
-      this.callsToAdd = toAdd;
-      this.callsToRemove = toRemove;
+      callsToAdd = toAdd;
+      callsToRemove = toRemove;
       this.cppStd = cppStd;
-      this.linkedEdit = linkedEditMode;
+      linkedEdit = linkedEditMode;
    }
 
    public abstract void reconcileExpectations(IASTName expectationsVector);
 
-   protected boolean isToBeRemoved(String funSignature) {
+   protected boolean isToBeRemoved(final String funSignature) {
       return callsToRemove.contains(new ExistingMemFunCallRegistration(funSignature));
    }
 }

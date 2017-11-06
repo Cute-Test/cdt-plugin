@@ -23,7 +23,7 @@ class TestFunctionFinderVisitor extends ASTVisitor {
       shouldVisitDeclarations = true;
    }
 
-   public TestFunctionFinderVisitor(FunctionsToAnalyze strategy) {
+   public TestFunctionFinderVisitor(final FunctionsToAnalyze strategy) {
       this.strategy = strategy;
       functions = list();
    }
@@ -33,10 +33,10 @@ class TestFunctionFinderVisitor extends ASTVisitor {
    }
 
    @Override
-   public int visit(IASTDeclaration declaration) {
+   public int visit(final IASTDeclaration declaration) {
       if (!(declaration instanceof ICPPASTFunctionDefinition)) return PROCESS_CONTINUE;
 
-      ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
+      final ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
 
       if (!isFunctionOfLocalClass(function) && strategy.shouldConsider(function)) {
          functions.add((IASTFunctionDefinition) declaration);
@@ -45,7 +45,7 @@ class TestFunctionFinderVisitor extends ASTVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private static boolean isFunctionOfLocalClass(ICPPASTFunctionDefinition function) {
+   private static boolean isFunctionOfLocalClass(final ICPPASTFunctionDefinition function) {
       return AstUtil.getAncestorOfType(function.getParent(), ICPPASTFunctionDefinition.class) != null;
    }
 }

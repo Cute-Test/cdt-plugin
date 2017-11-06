@@ -12,95 +12,92 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> {
 
-  @Override
-  public void accept(final ExtractInterfaceContext context) {
-    final IASTName classNameToLookup = getNameOfSelectedSpecifier(context.getSelectedName());
-    ICPPASTCompositeTypeSpecifier classDefinition = null;
+   @Override
+   public void accept(final ExtractInterfaceContext context) {
+      final IASTName classNameToLookup = getNameOfSelectedSpecifier(context.getSelectedName());
+      ICPPASTCompositeTypeSpecifier classDefinition = null;
 
-    if (classNameToLookup != null) {
-      classDefinition = lookupInAst(classNameToLookup);
+      if (classNameToLookup != null) {
+         classDefinition = lookupInAst(classNameToLookup);
+
+         if (classDefinition == null) {
+            classDefinition = lookupInIndex(context, classNameToLookup);
+         }
+      }
 
       if (classDefinition == null) {
-        classDefinition = lookupInIndex(context, classNameToLookup);
+         warnUserAboutMissingClass(context.getStatus());
+      } else {
+         rememberClassInformation(context, classDefinition, getSutClass(classNameToLookup));
       }
-    }
+   }
 
-    if (classDefinition == null) {
-      warnUserAboutMissingClass(context.getStatus());
-    } else {
-      rememberClassInformation(context, classDefinition, getSutClass(classNameToLookup));
-    }
-  }
+   private static ICPPASTCompositeTypeSpecifier lookupInAst(final IASTName classNameToLookup) {
+      final IBinding binding = classNameToLookup.resolveBinding();
 
-  private static ICPPASTCompositeTypeSpecifier lookupInAst(final IASTName classNameToLookup) {
-    final IBinding binding = classNameToLookup.resolveBinding();
+      for (final IASTName name : classNameToLookup.getTranslationUnit().getDefinitionsInAST(binding)) {
 
-    for (final IASTName name : classNameToLookup.getTranslationUnit().getDefinitionsInAST(binding)) {
-
-      final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClass(name);
-      if (clazz.isPresent()) {
-        return clazz.get();
+         final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClass(name);
+         if (clazz.isPresent()) { return clazz.get(); }
       }
-    }
 
-    return null;
-  }
+      return null;
+   }
 
-  private static ICPPASTCompositeTypeSpecifier lookupInIndex(final ExtractInterfaceContext context, final IASTName classNameToLookup) {
-    return OptHelper.returnIfPresentElseNull(findClassDefinition(classNameToLookup, context), (def) -> def);
-  }
+   private static ICPPASTCompositeTypeSpecifier lookupInIndex(final ExtractInterfaceContext context, final IASTName classNameToLookup) {
+      return OptHelper.returnIfPresentElseNull(findClassDefinition(classNameToLookup, context), (def) -> def);
+   }
 
-  private static Optional<ICPPASTCompositeTypeSpecifier> findClassDefinition(final IASTName classNameToLookup,
-      final ExtractInterfaceContext context) {
-    final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
-    return lookup.findClassDefinition(classNameToLookup, context.getCRefContext());
-  }
+   private static Optional<ICPPASTCompositeTypeSpecifier> findClassDefinition(final IASTName classNameToLookup,
+         final ExtractInterfaceContext context) {
+      final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
+      return lookup.findClassDefinition(classNameToLookup, context.getCRefContext());
+   }
 
-  private static IASTName getNameOfSelectedSpecifier(final IASTName selectedName) {
-    return OptHelper.returnIfPresentElse(getNamedSpecifier(selectedName), (spec) -> spec.getName(), () -> selectedName);
-  }
+   private static IASTName getNameOfSelectedSpecifier(final IASTName selectedName) {
+      return OptHelper.returnIfPresentElse(getNamedSpecifier(selectedName), (spec) -> spec.getName(), () -> selectedName);
+   }
 
-  private static Optional<ICPPASTNamedTypeSpecifier> getNamedSpecifier(final IASTNode originalNode) {
-    //TODO use OptHelper
-    final ICPPASTNamedTypeSpecifier namedSpec = AstUtil.getAncestorOfType(originalNode, ICPPASTNamedTypeSpecifier.class);
+   private static Optional<ICPPASTNamedTypeSpecifier> getNamedSpecifier(final IASTNode originalNode) {
+      //TODO use OptHelper
+      final ICPPASTNamedTypeSpecifier namedSpec = AstUtil.getAncestorOfType(originalNode, ICPPASTNamedTypeSpecifier.class);
 
-    if (namedSpec != null) {
-      return Optional.of(namedSpec);
-    }
+      if (namedSpec != null) { return Optional.of(namedSpec); }
 
-    final Optional<IASTDeclSpecifier> declSpec = AstUtil.getDeclarationSpecifier(originalNode);
-    if (declSpec.isPresent() && declSpec.get() instanceof ICPPASTNamedTypeSpecifier) {
-      return Optional.of((ICPPASTNamedTypeSpecifier) declSpec.get());
-    }
+      final Optional<IASTDeclSpecifier> declSpec = AstUtil.getDeclarationSpecifier(originalNode);
+      if (declSpec.isPresent() && declSpec.get() instanceof ICPPASTNamedTypeSpecifier) { return Optional.of((ICPPASTNamedTypeSpecifier) declSpec
+            .get()); }
 
-    return Optional.empty();
-  }
+      return Optional.empty();
+   }
 
-  private static void warnUserAboutMissingClass(final RefactoringStatus status) {
-    status.addFatalError("No class found to extract an interface from!");
-  }
+   private static void warnUserAboutMissingClass(final RefactoringStatus status) {
+      status.addFatalError("No class found to extract an interface from!");
+   }
 
-  private static Optional<ICPPASTCompositeTypeSpecifier> getSutClass(final IASTName selectedName) {
-    return getClass(selectedName).filter((clazz) -> !clazz.getName().toString().equals(selectedName.toString()));
-  }
+   private static Optional<ICPPASTCompositeTypeSpecifier> getSutClass(final IASTName selectedName) {
+      return getClass(selectedName).filter((clazz) -> !clazz.getName().toString().equals(selectedName.toString()));
+   }
 
-  private static Optional<ICPPASTCompositeTypeSpecifier> getClass(final IASTName originalNode) {
-    return Optional.ofNullable(AstUtil.getAncestorOfType(originalNode, ICPPASTCompositeTypeSpecifier.class));
-  }
+   private static Optional<ICPPASTCompositeTypeSpecifier> getClass(final IASTName originalNode) {
+      return Optional.ofNullable(AstUtil.getAncestorOfType(originalNode, ICPPASTCompositeTypeSpecifier.class));
+   }
 
-  private static void rememberClassInformation(final ExtractInterfaceContext context, final ICPPASTCompositeTypeSpecifier dependency,
-      final Optional<ICPPASTCompositeTypeSpecifier> sutClass) {
-    context.setChosenClass(dependency);
-    context.setTuOfChosenClass(dependency.getTranslationUnit());
+   private static void rememberClassInformation(final ExtractInterfaceContext context, final ICPPASTCompositeTypeSpecifier dependency,
+         final Optional<ICPPASTCompositeTypeSpecifier> sutClass) {
+      context.setChosenClass(dependency);
+      context.setTuOfChosenClass(dependency.getTranslationUnit());
 
-    sutClass.ifPresent((sc) -> {
-      context.setSutClass(sc);
-    });
-  }
+      sutClass.ifPresent((sc) -> {
+         context.setSutClass(sc);
+      });
+   }
 }

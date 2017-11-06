@@ -9,18 +9,18 @@ public class MethodParamEquivalenceTester {
 
    private final ICPPFunctionType methodType;
 
-   public MethodParamEquivalenceTester(ICPPMethod method) {
+   public MethodParamEquivalenceTester(final ICPPMethod method) {
       methodType = method.getType();
    }
 
-   public boolean hasSameParameters(ICPPMethod otherMethod) {
-      ICPPFunctionType otherMethodType = otherMethod.getType();
+   public boolean hasSameParameters(final ICPPMethod otherMethod) {
+      final ICPPFunctionType otherMethodType = otherMethod.getType();
 
       if (!haveEqualNumOfParams(otherMethodType)) return false;
 
       for (int i = 0; i < methodType.getParameterTypes().length; i++) {
-         IType methodParamType = methodType.getParameterTypes()[i];
-         IType otherParamType = otherMethodType.getParameterTypes()[i];
+         final IType methodParamType = methodType.getParameterTypes()[i];
+         final IType otherParamType = otherMethodType.getParameterTypes()[i];
 
          if (!methodParamType.isSameType(otherParamType)) return false;
       }
@@ -28,7 +28,7 @@ public class MethodParamEquivalenceTester {
       return true;
    }
 
-   private boolean haveEqualNumOfParams(ICPPFunctionType otherMethodType) {
+   private boolean haveEqualNumOfParams(final ICPPFunctionType otherMethodType) {
       return methodType.getParameterTypes().length == otherMethodType.getParameterTypes().length;
    }
 }

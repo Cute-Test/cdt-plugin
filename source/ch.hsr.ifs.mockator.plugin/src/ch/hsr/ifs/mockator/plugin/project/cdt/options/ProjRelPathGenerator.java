@@ -12,8 +12,8 @@ public class ProjRelPathGenerator {
 
    // Examples: ${workspace_loc:/${ProjName}/trace/mockator_getYear.h}
    // ${workspace_loc:/${ProjName}/mockator}
-   public static <T extends IResource> String getProjectRelativePath(T folder) {
-      String projRelPath = folder.getProjectRelativePath().toString();
+   public static <T extends IResource> String getProjectRelativePath(final T folder) {
+      final String projRelPath = folder.getProjectRelativePath().toString();
       return pythonFormat("${workspace_loc:%(pathSep)s${ProjName}%(pathSep)s%(projRelPath)s}", zipMap(array("pathSep", "projRelPath"), array(
             PATH_SEGMENT_SEPARATOR, projRelPath)));
    }

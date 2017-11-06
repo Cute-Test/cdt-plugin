@@ -18,14 +18,14 @@ class MockatorInitCallInserter {
    private final ICPPASTCompositeTypeSpecifier mockObject;
    private final IASTNode                      parent;
 
-   public MockatorInitCallInserter(ICPPASTCompositeTypeSpecifier mockObject, IASTNode parent) {
+   public MockatorInitCallInserter(final ICPPASTCompositeTypeSpecifier mockObject, final IASTNode parent) {
       this.mockObject = mockObject;
       this.parent = parent;
    }
 
-   public void insertWith(ASTRewrite rewriter) {
+   public void insertWith(final ASTRewrite rewriter) {
       if (!hasMockatorInitCall()) {
-         IASTNode initCall = createMockatorInitCall();
+         final IASTNode initCall = createMockatorInitCall();
          insertMockatorInitCall(rewriter, initCall);
       }
    }
@@ -34,15 +34,15 @@ class MockatorInitCallInserter {
       return new MockatorInitCallCreator(parent).createMockatorInitCall();
    }
 
-   private void insertMockatorInitCall(ASTRewrite rewriter, IASTNode initCall) {
+   private void insertMockatorInitCall(final ASTRewrite rewriter, final IASTNode initCall) {
       rewriter.insertBefore(parent, getInsertionPoint(), initCall, null);
    }
 
    private IASTNode getInsertionPoint() {
-      ICPPASTFunctionDefinition function = getFunctionParent();
+      final ICPPASTFunctionDefinition function = getFunctionParent();
 
       if (function != null) {
-         IASTNode[] children = function.getBody().getChildren();
+         final IASTNode[] children = function.getBody().getChildren();
          return children.length > 0 ? children[0] : null;
       }
       return AstUtil.getAncestorOfType(mockObject, IASTSimpleDeclaration.class);
@@ -53,7 +53,7 @@ class MockatorInitCallInserter {
    }
 
    private boolean hasMockatorInitCall() {
-      MacroFinderVisitor macroFinder = new MacroFinderVisitor(MockatorConstants.INIT_MOCKATOR);
+      final MacroFinderVisitor macroFinder = new MacroFinderVisitor(MockatorConstants.INIT_MOCKATOR);
       parent.accept(macroFinder);
       return !macroFinder.getMatchingMacroExpansions().isEmpty();
    }

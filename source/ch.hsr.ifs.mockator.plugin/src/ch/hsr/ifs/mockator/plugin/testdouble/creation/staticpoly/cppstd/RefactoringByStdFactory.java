@@ -11,7 +11,8 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
 public class RefactoringByStdFactory {
 
-   public MockatorRefactoring getRefactoring(CppStandard std, ICProject project, ICElement cElement, ITextSelection selection) {
+   public MockatorRefactoring getRefactoring(final CppStandard std, final ICProject project, final ICElement cElement,
+         final ITextSelection selection) {
       switch (std) {
       case Cpp03Std:
          return new TestDoubleCpp03Refactoring(cElement, selection, project);

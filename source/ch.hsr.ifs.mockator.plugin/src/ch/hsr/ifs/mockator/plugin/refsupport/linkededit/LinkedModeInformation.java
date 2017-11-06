@@ -18,16 +18,16 @@ public class LinkedModeInformation {
       groups = list();
    }
 
-   public void addPosition(int offset, int length) {
-      LinkedProposalPositionGroup group = new LinkedProposalPositionGroup("group" + offset);
+   public void addPosition(final int offset, final int length) {
+      final LinkedProposalPositionGroup group = new LinkedProposalPositionGroup("group" + offset);
       group.addPosition(new Position(offset, length));
       groups.add(group);
    }
 
-   public void addProposal(int offset, Proposal[] proposals) {
-      LinkedProposalPositionGroup group = getGroup(offset);
+   public void addProposal(final int offset, final Proposal[] proposals) {
+      final LinkedProposalPositionGroup group = getGroup(offset);
 
-      for (Proposal proposal : proposals) {
+      for (final Proposal proposal : proposals) {
          group.addProposal(proposal);
       }
    }
@@ -36,9 +36,9 @@ public class LinkedModeInformation {
       return groups;
    }
 
-   public LinkedProposalPositionGroup getGroup(int offset) {
-      for (LinkedProposalPositionGroup group : groups) {
-         for (PositionInformation pos : group.getPositions()) {
+   public LinkedProposalPositionGroup getGroup(final int offset) {
+      for (final LinkedProposalPositionGroup group : groups) {
+         for (final PositionInformation pos : group.getPositions()) {
             if (pos.getOffset() == offset) return group;
          }
       }
@@ -51,7 +51,7 @@ public class LinkedModeInformation {
       private final int offset;
       private final int length;
 
-      public Position(int offset, int length) {
+      public Position(final int offset, final int length) {
          this.offset = offset;
          this.length = length;
       }

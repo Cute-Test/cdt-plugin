@@ -8,18 +8,19 @@ import java.util.function.Consumer;
 import ch.hsr.ifs.mockator.plugin.base.misc.DefaultCtorClassRegistry;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 
+
 public class DiagnosticsRegistry extends DefaultCtorClassRegistry<Consumer<ExtractInterfaceContext>> {
 
-  @SuppressWarnings("unchecked")
-  private static final Set<Class<? extends Consumer<ExtractInterfaceContext>>> DIAGNOSTICS = orderPreservingSet(
-      //TODO formatt
-      // @formatter:off
+   @SuppressWarnings("unchecked")
+   private static final Set<Class<? extends Consumer<ExtractInterfaceContext>>> DIAGNOSTICS = orderPreservingSet(
+         //TODO formatt
+         // @formatter:off
       ClassDefinitionLookup.class, MemFunCollector.class, IncludeDirectiveCollector.class, ForwardDeclCollector.class, TypeDefCollector.class,
       NewInterfaceNameProposal.class
   // @formatter:on
-  );
+   );
 
-  public DiagnosticsRegistry() {
-    super(DIAGNOSTICS);
-  }
+   public DiagnosticsRegistry() {
+      super(DIAGNOSTICS);
+   }
 }

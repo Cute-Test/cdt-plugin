@@ -12,48 +12,47 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 // Mock() : mock_id(reserveNextCallId(allCalls)) { }
 @SuppressWarnings("restriction")
 public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinition> {
 
-  private static final String NEXT_CALL_ID_RESERVATION = "reserveNextCallId";
-  private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
-  private final String allCallsVectorName;
-  private final CppStandard cppStd;
+   private static final String         NEXT_CALL_ID_RESERVATION = "reserveNextCallId";
+   private static final CPPNodeFactory nodeFactory              = CPPNodeFactory.getDefault();
+   private final String                allCallsVectorName;
+   private final CppStandard           cppStd;
 
-  public MockIdInitializerAdder(final String allCallsVectorName, final CppStandard cppStd) {
-    this.allCallsVectorName = allCallsVectorName;
-    this.cppStd = cppStd;
-  }
+   public MockIdInitializerAdder(final String allCallsVectorName, final CppStandard cppStd) {
+      this.allCallsVectorName = allCallsVectorName;
+      this.cppStd = cppStd;
+   }
 
-  @Override
-  public void accept(final ICPPASTFunctionDefinition ctor) {
-    if (alreadyHasMockIdInitializer(ctor))
-      return;
+   @Override
+   public void accept(final ICPPASTFunctionDefinition ctor) {
+      if (alreadyHasMockIdInitializer(ctor)) return;
 
-    final IASTInitializerClause nextCallIdReservation = createNextCallReservation();
-    final ICPPASTConstructorChainInitializer ctorInitializer = getMockIdInitializer(nextCallIdReservation);
-    ctor.addMemberInitializer(ctorInitializer);
-  }
+      final IASTInitializerClause nextCallIdReservation = createNextCallReservation();
+      final ICPPASTConstructorChainInitializer ctorInitializer = getMockIdInitializer(nextCallIdReservation);
+      ctor.addMemberInitializer(ctorInitializer);
+   }
 
-  private IASTInitializerClause createNextCallReservation() {
-    final IASTName nextCallIdReservation = nodeFactory.newName(NEXT_CALL_ID_RESERVATION.toCharArray());
-    final IASTInitializerClause[] params = new IASTInitializerClause[1];
-    params[0] = nodeFactory.newIdExpression(nodeFactory.newName(allCallsVectorName.toCharArray()));
-    return nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(nextCallIdReservation), params);
-  }
+   private IASTInitializerClause createNextCallReservation() {
+      final IASTName nextCallIdReservation = nodeFactory.newName(NEXT_CALL_ID_RESERVATION.toCharArray());
+      final IASTInitializerClause[] params = new IASTInitializerClause[1];
+      params[0] = nodeFactory.newIdExpression(nodeFactory.newName(allCallsVectorName.toCharArray()));
+      return nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(nextCallIdReservation), params);
+   }
 
-  private static boolean alreadyHasMockIdInitializer(final ICPPASTFunctionDefinition ctor) {
-    for (final ICPPASTConstructorChainInitializer initializer : ctor.getMemberInitializers()) {
-      if (initializer.getMemberInitializerId().toString().equals(MockatorConstants.MOCK_ID))
-        return true;
-    }
-    return false;
-  }
+   private static boolean alreadyHasMockIdInitializer(final ICPPASTFunctionDefinition ctor) {
+      for (final ICPPASTConstructorChainInitializer initializer : ctor.getMemberInitializers()) {
+         if (initializer.getMemberInitializerId().toString().equals(MockatorConstants.MOCK_ID)) return true;
+      }
+      return false;
+   }
 
-  private ICPPASTConstructorChainInitializer getMockIdInitializer(final IASTInitializerClause nextCallIdReservation) {
-    final IASTName mockId = nodeFactory.newName(MockatorConstants.MOCK_ID.toCharArray());
-    final IASTInitializer init = cppStd.getInitializer(nextCallIdReservation);
-    return nodeFactory.newConstructorChainInitializer(mockId, init);
-  }
+   private ICPPASTConstructorChainInitializer getMockIdInitializer(final IASTInitializerClause nextCallIdReservation) {
+      final IASTName mockId = nodeFactory.newName(MockatorConstants.MOCK_ID.toCharArray());
+      final IASTInitializer init = cppStd.getInitializer(nextCallIdReservation);
+      return nodeFactory.newConstructorChainInitializer(mockId, init);
+   }
 }

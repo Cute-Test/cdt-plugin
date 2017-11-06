@@ -16,53 +16,50 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.DefaultConstructor;
 
+
 public class MockObjectDefaultCtorProvider implements DefaultCtorProvider {
 
-  private final MockObject mockObject;
-  private final CppStandard cppStd;
+   private final MockObject  mockObject;
+   private final CppStandard cppStd;
 
-  public MockObjectDefaultCtorProvider(final ICPPASTCompositeTypeSpecifier klass, final CppStandard cppStd) {
-    mockObject = new MockObject(klass);
-    this.cppStd = cppStd;
-  }
+   public MockObjectDefaultCtorProvider(final ICPPASTCompositeTypeSpecifier klass, final CppStandard cppStd) {
+      mockObject = new MockObject(klass);
+      this.cppStd = cppStd;
+   }
 
-  @Override
-  public Optional<DefaultConstructor> createMissingDefaultCtor(final Collection<? extends MissingMemberFunction> memFuns) {
-    switch (mockObject.getPolymorphismKind()) {
-    case StaticPoly:
-      return handleStaticPoly(memFuns);
-    case SubTypePoly:
-      return handleSubTypePoly();
-    default:
-      throw new MockatorException("Not supported polymorphism kind");
-    }
-  }
+   @Override
+   public Optional<DefaultConstructor> createMissingDefaultCtor(final Collection<? extends MissingMemberFunction> memFuns) {
+      switch (mockObject.getPolymorphismKind()) {
+      case StaticPoly:
+         return handleStaticPoly(memFuns);
+      case SubTypePoly:
+         return handleSubTypePoly();
+      default:
+         throw new MockatorException("Not supported polymorphism kind");
+      }
+   }
 
-  private Optional<DefaultConstructor> handleSubTypePoly() {
-    if (!mockObject.hasPublicCtor()) {
-      return Optional.of(new DefaultConstructor(mockObject));
-    }
+   private Optional<DefaultConstructor> handleSubTypePoly() {
+      if (!mockObject.hasPublicCtor()) { return Optional.of(new DefaultConstructor(mockObject)); }
 
-    return Optional.empty();
-  }
+      return Optional.empty();
+   }
 
-  private Optional<DefaultConstructor> handleStaticPoly(final Collection<? extends MissingMemberFunction> memFuns) {
-    if (!hasPublicCtors(memFuns) && !mockObject.hasOnlyStaticFunctions(memFuns)) {
-      return Optional.of(new DefaultConstructor(mockObject));
-    }
+   private Optional<DefaultConstructor> handleStaticPoly(final Collection<? extends MissingMemberFunction> memFuns) {
+      if (!hasPublicCtors(memFuns) && !mockObject.hasOnlyStaticFunctions(memFuns)) { return Optional.of(new DefaultConstructor(mockObject)); }
 
-    return Optional.empty();
-  }
+      return Optional.empty();
+   }
 
-  private boolean hasPublicCtors(final Collection<? extends MissingMemberFunction> memFuns) {
-    final Collection<ICPPASTFunctionDefinition> onlyCtors = filter(toFunctions(memFuns), (function) -> AstUtil.isDeclConstructor(function));
-    return mockObject.hasPublicCtor() || !onlyCtors.isEmpty();
-  }
+   private boolean hasPublicCtors(final Collection<? extends MissingMemberFunction> memFuns) {
+      final Collection<ICPPASTFunctionDefinition> onlyCtors = filter(toFunctions(memFuns), (function) -> AstUtil.isDeclConstructor(function));
+      return mockObject.hasPublicCtor() || !onlyCtors.isEmpty();
+   }
 
-  private <T extends MissingMemberFunction> Collection<ICPPASTFunctionDefinition> toFunctions(final Collection<T> memFuns) {
-    return map(memFuns, (missingMemFun) -> {
-      final MockObjectMemFunImplStrategy strategy = new MockObjectMemFunImplStrategy(cppStd, mockObject);
-      return missingMemFun.createFunctionDefinition(strategy, cppStd);
-    });
-  }
+   private <T extends MissingMemberFunction> Collection<ICPPASTFunctionDefinition> toFunctions(final Collection<T> memFuns) {
+      return map(memFuns, (missingMemFun) -> {
+         final MockObjectMemFunImplStrategy strategy = new MockObjectMemFunImplStrategy(cppStd, mockObject);
+         return missingMemFun.createFunctionDefinition(strategy, cppStd);
+      });
+   }
 }

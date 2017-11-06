@@ -30,16 +30,16 @@ public class ReturnStatementCreator {
    private final CppStandard           cppStd;
    private final String                memberClassName;
 
-   public ReturnStatementCreator(CppStandard cppStd, String memberClassName) {
+   public ReturnStatementCreator(final CppStandard cppStd, final String memberClassName) {
       this.cppStd = cppStd;
       this.memberClassName = memberClassName;
    }
 
-   public ReturnStatementCreator(CppStandard cppStd) {
+   public ReturnStatementCreator(final CppStandard cppStd) {
       this(cppStd, "");
    }
 
-   public IASTReturnStatement createReturnStatement(ICPPASTFunctionDeclarator funDecl, ICPPASTDeclSpecifier specifier) {
+   public IASTReturnStatement createReturnStatement(final ICPPASTFunctionDeclarator funDecl, final ICPPASTDeclSpecifier specifier) {
       if (AstUtil.isVoid(specifier)) return null; // return type is void
       else if (hasPointerReturnType(funDecl)) return createNullPtr();
       else if (isReferenceToThis(funDecl, specifier)) return createDereferencedThisPointer();
@@ -47,8 +47,8 @@ public class ReturnStatementCreator {
       return createDefaultReturn(specifier);
    }
 
-   private static boolean hasPointerReturnType(ICPPASTFunctionDeclarator funDecl) {
-      IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
+   private static boolean hasPointerReturnType(final ICPPASTFunctionDeclarator funDecl) {
+      final IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
 
       if (pointerOperators.length == 0) return false;
 
@@ -59,21 +59,21 @@ public class ReturnStatementCreator {
       return nodeFactory.newReturnStatement(cppStd.getNullPtr());
    }
 
-   private boolean isReferenceToThis(ICPPASTFunctionDeclarator funDecl, ICPPASTDeclSpecifier specifier) {
+   private boolean isReferenceToThis(final ICPPASTFunctionDeclarator funDecl, final ICPPASTDeclSpecifier specifier) {
       return hasReferenceReturnType(funDecl) && isReturnTypeOfClassType(specifier);
    }
 
-   private boolean isReturnTypeOfClassType(ICPPASTDeclSpecifier specifier) {
+   private boolean isReturnTypeOfClassType(final ICPPASTDeclSpecifier specifier) {
       if (specifier instanceof IASTNamedTypeSpecifier) {
-         IASTName name = ((IASTNamedTypeSpecifier) specifier).getName();
+         final IASTName name = ((IASTNamedTypeSpecifier) specifier).getName();
          return name.toString().equals(memberClassName);
       }
 
       return false;
    }
 
-   private static boolean hasReferenceReturnType(ICPPASTFunctionDeclarator funDecl) {
-      IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
+   private static boolean hasReferenceReturnType(final ICPPASTFunctionDeclarator funDecl) {
+      final IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
 
       if (pointerOperators.length != 1) return false;
 
@@ -81,16 +81,16 @@ public class ReturnStatementCreator {
    }
 
    private static IASTReturnStatement createDereferencedThisPointer() {
-      ICPPASTLiteralExpression thisPtr = nodeFactory.newLiteralExpression(lk_string_literal, THIS_POINTER);
-      ICPPASTUnaryExpression dereferencedThisPtr = nodeFactory.newUnaryExpression(op_star, thisPtr);
+      final ICPPASTLiteralExpression thisPtr = nodeFactory.newLiteralExpression(lk_string_literal, THIS_POINTER);
+      final ICPPASTUnaryExpression dereferencedThisPtr = nodeFactory.newUnaryExpression(op_star, thisPtr);
       return nodeFactory.newReturnStatement(dereferencedThisPtr);
    }
 
-   private IASTReturnStatement createDefaultReturn(ICPPASTDeclSpecifier specifier) {
-      ICPPASTDeclSpecifier returnDeclSpec = specifier.copy();
+   private IASTReturnStatement createDefaultReturn(final ICPPASTDeclSpecifier specifier) {
+      final ICPPASTDeclSpecifier returnDeclSpec = specifier.copy();
       returnDeclSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
-      IASTInitializer emptyInitializer = cppStd.getEmptyInitializer();
-      ICPPASTSimpleTypeConstructorExpression returnType = nodeFactory.newSimpleTypeConstructorExpression(returnDeclSpec, emptyInitializer);
+      final IASTInitializer emptyInitializer = cppStd.getEmptyInitializer();
+      final ICPPASTSimpleTypeConstructorExpression returnType = nodeFactory.newSimpleTypeConstructorExpression(returnDeclSpec, emptyInitializer);
       return nodeFactory.newReturnStatement(returnType);
    }
 }

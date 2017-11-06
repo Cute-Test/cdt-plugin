@@ -32,16 +32,16 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
       shouldVisitDeclarations = true;
    }
 
-   public NotInlineDefMemFunFinderVisitor(ICPPASTTemplateDeclaration templateClass) {
+   public NotInlineDefMemFunFinderVisitor(final ICPPASTTemplateDeclaration templateClass) {
       this.templateClass = templateClass;
       templateMemFuns = orderPreservingSet();
       fqClassName = getQualifiedClassName();
    }
 
    private String getQualifiedClassName() {
-      IASTName name = getClassInTemplateDecl().getName();
-      QualifiedNameCreator creator = new QualifiedNameCreator(name);
-      ICPPASTQualifiedName qName = creator.createQualifiedName();
+      final IASTName name = getClassInTemplateDecl().getName();
+      final QualifiedNameCreator creator = new QualifiedNameCreator(name);
+      final ICPPASTQualifiedName qName = creator.createQualifiedName();
       return qName.toString();
    }
 
@@ -54,12 +54,12 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
    }
 
    @Override
-   public int visit(IASTDeclaration declaration) {
+   public int visit(final IASTDeclaration declaration) {
       if (!(declaration instanceof ICPPASTFunctionDefinition)) return PROCESS_CONTINUE;
 
-      ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
-      ICPPASTTemplateDeclaration templateDecl = getTemplateDecl(function);
-      IASTName funName = function.getDeclarator().getName();
+      final ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
+      final ICPPASTTemplateDeclaration templateDecl = getTemplateDecl(function);
+      final IASTName funName = function.getDeclarator().getName();
 
       if (templateDecl == null || !isFunNameQualified(funName)) return PROCESS_CONTINUE;
 
@@ -71,18 +71,18 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private boolean isTemplateFunClassMember(IASTName funName) {
-      ICPPASTQualifiedName funNameWithoutTemplateId = getFunNameWithoutTemplateId((ICPPASTQualifiedName) funName);
+   private boolean isTemplateFunClassMember(final IASTName funName) {
+      final ICPPASTQualifiedName funNameWithoutTemplateId = getFunNameWithoutTemplateId((ICPPASTQualifiedName) funName);
       return funNameWithoutTemplateId.toString().equals(fqClassName);
    }
 
-   private static boolean isFunNameQualified(IASTName funName) {
+   private static boolean isFunNameQualified(final IASTName funName) {
       return funName instanceof ICPPASTQualifiedName;
    }
 
-   private static ICPPASTQualifiedName getFunNameWithoutTemplateId(ICPPASTQualifiedName funName) {
-      ICPPASTQualifiedName qfNameWithoutTemplateId = nodeFactory.newQualifiedName();
-      ICPPASTNameSpecifier[] names = funName.getAllSegments();
+   private static ICPPASTQualifiedName getFunNameWithoutTemplateId(final ICPPASTQualifiedName funName) {
+      final ICPPASTQualifiedName qfNameWithoutTemplateId = nodeFactory.newQualifiedName();
+      final ICPPASTNameSpecifier[] names = funName.getAllSegments();
       for (int i = 0; i < names.length - 1; i++) {
          if (names[i] instanceof ICPPASTTemplateId) {
             qfNameWithoutTemplateId.addName(((ICPPASTTemplateId) names[i]).getTemplateName().copy());
@@ -93,11 +93,11 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
       return qfNameWithoutTemplateId;
    }
 
-   private static ICPPASTTemplateDeclaration getTemplateDecl(ICPPASTFunctionDefinition function) {
+   private static ICPPASTTemplateDeclaration getTemplateDecl(final ICPPASTFunctionDefinition function) {
       return AstUtil.getAncestorOfType(function, ICPPASTTemplateDeclaration.class);
    }
 
-   private boolean haveEqualNumOfArgs(ICPPASTTemplateDeclaration templateDecl) {
+   private boolean haveEqualNumOfArgs(final ICPPASTTemplateDeclaration templateDecl) {
       return templateDecl.getTemplateParameters().length == templateClass.getTemplateParameters().length;
    }
 }

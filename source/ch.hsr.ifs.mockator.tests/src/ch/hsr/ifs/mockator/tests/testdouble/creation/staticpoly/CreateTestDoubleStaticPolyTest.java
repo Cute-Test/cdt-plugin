@@ -8,18 +8,19 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly.cppstd.RefactoringByStdFactory;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
+
 public class CreateTestDoubleStaticPolyTest extends MockatorRefactoringTest {
-  private CppStandard cppStandard;
 
-  @Override
-  protected void configureTest(Properties refactoringProperties) {
-    super.configureTest(refactoringProperties);
-    cppStandard = CppStandard.fromName(refactoringProperties.getProperty("cppStandard"));
-  }
+   private CppStandard cppStandard;
 
-  @Override
-  protected Refactoring createRefactoring() {
-    return new RefactoringByStdFactory().getRefactoring(cppStandard, cproject, getActiveCElement(),
-        selection);
-  }
+   @Override
+   protected void configureTest(final Properties refactoringProperties) {
+      super.configureTest(refactoringProperties);
+      cppStandard = CppStandard.fromName(refactoringProperties.getProperty("cppStandard"));
+   }
+
+   @Override
+   protected Refactoring createRefactoring() {
+      return new RefactoringByStdFactory().getRefactoring(cppStandard, cproject, getActiveCElement(), selection);
+   }
 }

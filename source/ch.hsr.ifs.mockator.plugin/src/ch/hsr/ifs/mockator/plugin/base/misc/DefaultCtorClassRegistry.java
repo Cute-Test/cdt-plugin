@@ -11,21 +11,21 @@ public class DefaultCtorClassRegistry<T> {
 
    private final Collection<Class<? extends T>> classes;
 
-   public DefaultCtorClassRegistry(Collection<Class<? extends T>> classes) {
+   public DefaultCtorClassRegistry(final Collection<Class<? extends T>> classes) {
       this.classes = classes;
    }
 
    public Collection<T> createInstances() {
-      List<T> instances = new ArrayList<T>();
+      final List<T> instances = new ArrayList<>();
 
-      for (Class<? extends T> klass : classes) {
+      for (final Class<? extends T> klass : classes) {
          try {
             instances.add(klass.newInstance());
          }
-         catch (InstantiationException e) {
+         catch (final InstantiationException e) {
             throw new MockatorException("Class has no default constructor: " + klass.getSimpleName(), e);
          }
-         catch (IllegalAccessException e) {
+         catch (final IllegalAccessException e) {
             throw new MockatorException("No access to class " + klass.getSimpleName(), e);
          }
       }

@@ -52,7 +52,7 @@ abstract class MockObjectQuickFix extends AbstractTestDoubleQuickFix {
       final Collection<MissingMemberFunction> missingMemFuns = getMissingMemberFunctions(ref);
       final AssertionOrder assertionOrder = AssertionOrder.fromProjectSettings(getCProject().getProject());
       final MockObjectLinkedEditModeFactory factory = new MockObjectLinkedEditModeFactory(edit, missingMemFuns, getCppStandard(), assertionOrder,
-               Optional.of(getNameForExpectationsVector()));
+            Optional.of(getNameForExpectationsVector()));
       return Optional.of(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
    }
 

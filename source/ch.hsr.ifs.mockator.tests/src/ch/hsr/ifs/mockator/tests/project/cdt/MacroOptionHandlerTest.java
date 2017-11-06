@@ -12,36 +12,38 @@ import org.junit.Test;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.MacroOptionHandler;
 import ch.hsr.ifs.mockator.tests.CdtCppTestProject;
 
+
 public class MacroOptionHandlerTest {
-  private static final String MACRO = "-PLAT=x86_64";
-  private CdtCppTestProject project;
-  private MacroOptionHandler handler;
 
-  @Before
-  public void setUp() throws CoreException {
-    project = CdtCppTestProject.withOpenedProject();
-    project.addCppNatures();
-    project.activateManagedBuild();
-    handler = new MacroOptionHandler(project.getProject());
-  }
+   private static final String MACRO = "-PLAT=x86_64";
+   private CdtCppTestProject   project;
+   private MacroOptionHandler  handler;
 
-  @After
-  public void tearDown() throws CoreException {
-    project.dispose();
-  }
+   @Before
+   public void setUp() throws CoreException {
+      project = CdtCppTestProject.withOpenedProject();
+      project.addCppNatures();
+      project.activateManagedBuild();
+      handler = new MacroOptionHandler(project.getProject());
+   }
 
-  @Test
-  public void hasMacroAfterAdding() throws BuildException {
-    assertFalse(project.hasMacroSet(MACRO));
-    handler.addMacro(MACRO);
-    assertTrue(project.hasMacroSet(MACRO));
-  }
+   @After
+   public void tearDown() throws CoreException {
+      project.dispose();
+   }
 
-  @Test
-  public void macroMissingAfterRemoval() throws BuildException {
-    handler.addMacro(MACRO);
-    assertTrue(project.hasMacroSet(MACRO));
-    handler.removeMacro(MACRO);
-    assertFalse(project.hasMacroSet(MACRO));
-  }
+   @Test
+   public void hasMacroAfterAdding() throws BuildException {
+      assertFalse(project.hasMacroSet(MACRO));
+      handler.addMacro(MACRO);
+      assertTrue(project.hasMacroSet(MACRO));
+   }
+
+   @Test
+   public void macroMissingAfterRemoval() throws BuildException {
+      handler.addMacro(MACRO);
+      assertTrue(project.hasMacroSet(MACRO));
+      handler.removeMacro(MACRO);
+      assertFalse(project.hasMacroSet(MACRO));
+   }
 }

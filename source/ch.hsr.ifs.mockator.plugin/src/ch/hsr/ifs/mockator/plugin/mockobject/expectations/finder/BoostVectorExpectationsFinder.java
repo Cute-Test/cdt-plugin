@@ -23,111 +23,107 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVer
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
+
 // calls expectedMock;
 // expectedMock += call("Mock()");
 class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
 
-  public BoostVectorExpectationsFinder(final Collection<MemFunCallExpectation> callExpectations, final NodeContainer<IASTName> expectationVector,
-      final IASTName expectationsVectorName) {
-    super(callExpectations, expectationVector, expectationsVectorName);
-  }
+   public BoostVectorExpectationsFinder(final Collection<MemFunCallExpectation> callExpectations, final NodeContainer<IASTName> expectationVector,
+                                        final IASTName expectationsVectorName) {
+      super(callExpectations, expectationVector, expectationsVectorName);
+   }
 
-  @Override
-  protected void collectExpectations(final IASTStatement expectationStmt) {
-    Assert.instanceOf(expectationStmt, IASTExpressionStatement.class, "Should be called with an expression statement");
-    final IASTExpression expression = ((IASTExpressionStatement) expectationStmt).getExpression();
-    final ICPPASTBinaryExpression binExpr = getBinaryExpr(expression);
+   @Override
+   protected void collectExpectations(final IASTStatement expectationStmt) {
+      Assert.instanceOf(expectationStmt, IASTExpressionStatement.class, "Should be called with an expression statement");
+      final IASTExpression expression = ((IASTExpressionStatement) expectationStmt).getExpression();
+      final ICPPASTBinaryExpression binExpr = getBinaryExpr(expression);
 
-    if (binExpr == null)
-      return;
+      if (binExpr == null) return;
 
-    final IASTExpression operand1 = binExpr.getOperand1();
+      final IASTExpression operand1 = binExpr.getOperand1();
 
-    if (!(operand1 instanceof IASTIdExpression))
-      return;
+      if (!(operand1 instanceof IASTIdExpression)) return;
 
-    final IASTIdExpression idExpr = (IASTIdExpression) operand1;
+      final IASTIdExpression idExpr = (IASTIdExpression) operand1;
 
-    if (!matchesName(idExpr.getName()) || !isTypeDefForCallsVector(idExpr))
-      return;
+      if (!matchesName(idExpr.getName()) || !isTypeDefForCallsVector(idExpr)) return;
 
-    expectationVector.setNode(idExpr.getName());
-    callExpectations.addAll(getMemFunCalls(expression));
-  }
+      expectationVector.setNode(idExpr.getName());
+      callExpectations.addAll(getMemFunCalls(expression));
+   }
 
-  private static boolean isTypeDefForCallsVector(final IASTIdExpression idExpr) {
-    return new CallsVectorTypeVerifier(idExpr).hasCallsVectorType();
-  }
+   private static boolean isTypeDefForCallsVector(final IASTIdExpression idExpr) {
+      return new CallsVectorTypeVerifier(idExpr).hasCallsVectorType();
+   }
 
-  private static ICPPASTBinaryExpression getBinaryExpr(final IASTExpression expression) {
-    return AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
-  }
+   private static ICPPASTBinaryExpression getBinaryExpr(final IASTExpression expression) {
+      return AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
+   }
 
-  private Collection<MemFunCallExpectation> getMemFunCalls(final IASTExpression expression) {
-    final Collection<MemFunCallExpectation> expectations = orderPreservingSet();
+   private Collection<MemFunCallExpectation> getMemFunCalls(final IASTExpression expression) {
+      final Collection<MemFunCallExpectation> expectations = orderPreservingSet();
 
-    if (expression instanceof ICPPASTBinaryExpression) {
-      collectSingleCallExpr(expression, expectations);
-    } else if (expression instanceof IASTExpressionList) {
-      collectCallsInExprList(expression, expectations);
-    }
+      if (expression instanceof ICPPASTBinaryExpression) {
+         collectSingleCallExpr(expression, expectations);
+      } else if (expression instanceof IASTExpressionList) {
+         collectCallsInExprList(expression, expectations);
+      }
 
-    return expectations;
-  }
+      return expectations;
+   }
 
-  private void collectSingleCallExpr(final IASTExpression expression, final Collection<MemFunCallExpectation> expectations) {
-    final ICPPASTBinaryExpression binExpr = AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
-    final IASTExpression operand2 = binExpr.getOperand2();
+   private void collectSingleCallExpr(final IASTExpression expression, final Collection<MemFunCallExpectation> expectations) {
+      final ICPPASTBinaryExpression binExpr = AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
+      final IASTExpression operand2 = binExpr.getOperand2();
 
-    if (isCallExpr(operand2)) {
-      final MemFunCallExpectation memFunCall = getMemFunCallIn(operand2);
-      expectations.add(memFunCall);
-    }
-  }
+      if (isCallExpr(operand2)) {
+         final MemFunCallExpectation memFunCall = getMemFunCallIn(operand2);
+         expectations.add(memFunCall);
+      }
+   }
 
-  private void collectCallsInExprList(final IASTExpression expression, final Collection<MemFunCallExpectation> callExpectations) {
-    Assert.instanceOf(expression, IASTExpressionList.class, "expression list expected");
-    final IASTExpression[] expressions = ((IASTExpressionList) expression).getExpressions();
-    final Collection<IASTExpression> onlyCalls = filterNonCallExpressions(expressions);
-    toMemberFunctionCalls(callExpectations, onlyCalls);
-  }
+   private void collectCallsInExprList(final IASTExpression expression, final Collection<MemFunCallExpectation> callExpectations) {
+      Assert.instanceOf(expression, IASTExpressionList.class, "expression list expected");
+      final IASTExpression[] expressions = ((IASTExpressionList) expression).getExpressions();
+      final Collection<IASTExpression> onlyCalls = filterNonCallExpressions(expressions);
+      toMemberFunctionCalls(callExpectations, onlyCalls);
+   }
 
-  private static Collection<IASTExpression> filterNonCallExpressions(final IASTExpression[] expressions) {
-    return filter(expressions, (param) -> isCallExpr(param));
-  }
+   private static Collection<IASTExpression> filterNonCallExpressions(final IASTExpression[] expressions) {
+      return filter(expressions, (param) -> isCallExpr(param));
+   }
 
-  private void toMemberFunctionCalls(final Collection<MemFunCallExpectation> callExpectations, final Collection<IASTExpression> onlyCalls) {
-    final Collection<MemFunCallExpectation> memFunCalls = map(onlyCalls, (param) -> getMemFunCallIn(param));
-    for (final MemFunCallExpectation call : memFunCalls) {
-      callExpectations.add(call);
-    }
-  }
+   private void toMemberFunctionCalls(final Collection<MemFunCallExpectation> callExpectations, final Collection<IASTExpression> onlyCalls) {
+      final Collection<MemFunCallExpectation> memFunCalls = map(onlyCalls, (param) -> getMemFunCallIn(param));
+      for (final MemFunCallExpectation call : memFunCalls) {
+         callExpectations.add(call);
+      }
+   }
 
-  private MemFunCallExpectation getMemFunCallIn(final IASTExpression expression) {
-    final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
-    Assert.notNull(funCall, "Function call exprected");
-    final IASTInitializerClause[] arguments = funCall.getArguments();
-    Assert.isTrue(arguments.length > 0, "Call objects must have a fun signature");
-    final IASTInitializerClause funSignature = arguments[0];
-    Assert.isTrue(isStringLiteral(funSignature), "Fun signature must be a string literal");
-    return toMemberFunctionCall(funSignature);
-  }
+   private MemFunCallExpectation getMemFunCallIn(final IASTExpression expression) {
+      final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
+      Assert.notNull(funCall, "Function call exprected");
+      final IASTInitializerClause[] arguments = funCall.getArguments();
+      Assert.isTrue(arguments.length > 0, "Call objects must have a fun signature");
+      final IASTInitializerClause funSignature = arguments[0];
+      Assert.isTrue(isStringLiteral(funSignature), "Fun signature must be a string literal");
+      return toMemberFunctionCall(funSignature);
+   }
 
-  private static boolean isCallExpr(final IASTExpression expression) {
-    final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
+   private static boolean isCallExpr(final IASTExpression expression) {
+      final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
 
-    if (funCall == null)
-      return false;
+      if (funCall == null) return false;
 
-    final IASTExpression functionNameExpr = funCall.getFunctionNameExpression();
+      final IASTExpression functionNameExpr = funCall.getFunctionNameExpression();
 
-    if (!(functionNameExpr instanceof IASTIdExpression))
-      return false;
+      if (!(functionNameExpr instanceof IASTIdExpression)) return false;
 
-    return isNameCall(functionNameExpr);
-  }
+      return isNameCall(functionNameExpr);
+   }
 
-  private static boolean isNameCall(final IASTExpression functionNameExpr) {
-    return ((IASTIdExpression) functionNameExpr).getName().toString().equals(MockatorConstants.CALL);
-  }
+   private static boolean isNameCall(final IASTExpression functionNameExpr) {
+      return ((IASTIdExpression) functionNameExpr).getName().toString().equals(MockatorConstants.CALL);
+   }
 }

@@ -17,13 +17,13 @@ public class MockatorWizardAdditionHandler implements ICuteWizardAdditionHandler
    private final boolean     withMockatorSupport;
    private final CppStandard cppStd;
 
-   public MockatorWizardAdditionHandler(boolean withMockatorSupport, CppStandard cppStd) {
+   public MockatorWizardAdditionHandler(final boolean withMockatorSupport, final CppStandard cppStd) {
       this.withMockatorSupport = withMockatorSupport;
       this.cppStd = cppStd;
    }
 
    @Override
-   public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
+   public void configureProject(final IProject project, final IProgressMonitor pm) throws CoreException {
       Assert.isTrue(isCppProject(project), "Mockator only supports C++ projects");
 
       if (withMockatorSupport) {
@@ -32,20 +32,20 @@ public class MockatorWizardAdditionHandler implements ICuteWizardAdditionHandler
       }
    }
 
-   private static boolean isCppProject(IProject project) {
+   private static boolean isCppProject(final IProject project) {
       return new NatureHandler(project).hasNature(CCProjectNature.CC_NATURE_ID);
    }
 
-   private static void addMockatorNature(IProject project, IProgressMonitor pm) throws CoreException {
+   private static void addMockatorNature(final IProject project, final IProgressMonitor pm) throws CoreException {
       MockatorNature.addMockatorNature(project, pm);
    }
 
-   private void setCppStd(IProject project) {
+   private void setCppStd(final IProject project) {
       CppStandard.storeInProjectSettings(project, cppStd);
    }
 
    @Override
-   public void configureLibProject(IProject project) throws CoreException {
+   public void configureLibProject(final IProject project) throws CoreException {
       // Nothing necessary
    }
 }

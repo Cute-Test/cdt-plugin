@@ -12,36 +12,38 @@ import org.junit.Test;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.LinkerOptionHandler;
 import ch.hsr.ifs.mockator.tests.CdtCppTestProject;
 
+
 public class LinkerOptionHandlerTest {
-  private static final String LINKER_OPTION = "-wrap=test";
-  private CdtCppTestProject project;
-  private LinkerOptionHandler handler;
 
-  @Before
-  public void setUp() throws CoreException {
-    project = CdtCppTestProject.withOpenedProject();
-    project.addCppNatures();
-    project.activateManagedBuild();
-    handler = new LinkerOptionHandler(project.getProject());
-  }
+   private static final String LINKER_OPTION = "-wrap=test";
+   private CdtCppTestProject   project;
+   private LinkerOptionHandler handler;
 
-  @After
-  public void tearDown() throws CoreException {
-    project.dispose();
-  }
+   @Before
+   public void setUp() throws CoreException {
+      project = CdtCppTestProject.withOpenedProject();
+      project.addCppNatures();
+      project.activateManagedBuild();
+      handler = new LinkerOptionHandler(project.getProject());
+   }
 
-  @Test
-  public void hasLinkerOptionAfterAdding() throws BuildException {
-    assertFalse(project.hasLinkerOption(LINKER_OPTION));
-    handler.addLinkerFlag(LINKER_OPTION);
-    assertTrue(project.hasLinkerOption(LINKER_OPTION));
-  }
+   @After
+   public void tearDown() throws CoreException {
+      project.dispose();
+   }
 
-  @Test
-  public void linkerOptionMissingAfterRemoval() throws BuildException {
-    handler.addLinkerFlag(LINKER_OPTION);
-    assertTrue(project.hasLinkerOption(LINKER_OPTION));
-    handler.removeLinkerFlag(LINKER_OPTION);
-    assertFalse(project.hasLinkerOption(LINKER_OPTION));
-  }
+   @Test
+   public void hasLinkerOptionAfterAdding() throws BuildException {
+      assertFalse(project.hasLinkerOption(LINKER_OPTION));
+      handler.addLinkerFlag(LINKER_OPTION);
+      assertTrue(project.hasLinkerOption(LINKER_OPTION));
+   }
+
+   @Test
+   public void linkerOptionMissingAfterRemoval() throws BuildException {
+      handler.addLinkerFlag(LINKER_OPTION);
+      assertTrue(project.hasLinkerOption(LINKER_OPTION));
+      handler.removeLinkerFlag(LINKER_OPTION);
+      assertFalse(project.hasLinkerOption(LINKER_OPTION));
+   }
 }

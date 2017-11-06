@@ -10,7 +10,7 @@ import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 
 abstract class AbstractPreloadRunStrategy implements PreloadRunStrategy {
 
-   protected String appendToList(String list, String newVal) {
+   protected String appendToList(final String list, final String newVal) {
       if (list == null || list.trim().isEmpty()) return newVal;
 
       if (list.contains(newVal)) return list;
@@ -18,8 +18,8 @@ abstract class AbstractPreloadRunStrategy implements PreloadRunStrategy {
       return String.format("%s:%s", list, newVal);
    }
 
-   protected void removeEntryFromEnv(String sharedLibPath, String envName, Map<String, String> env) {
-      Set<String> ldPreloadLibs = orderPreservingSet(env.get(envName).split(":"));
+   protected void removeEntryFromEnv(final String sharedLibPath, final String envName, final Map<String, String> env) {
+      final Set<String> ldPreloadLibs = orderPreservingSet(env.get(envName).split(":"));
       ldPreloadLibs.remove(sharedLibPath);
       env.put(envName, StringUtil.join(ldPreloadLibs, ":"));
    }

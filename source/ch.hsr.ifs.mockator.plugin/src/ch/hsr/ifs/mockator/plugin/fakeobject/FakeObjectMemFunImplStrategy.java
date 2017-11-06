@@ -10,8 +10,8 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
 class FakeObjectMemFunImplStrategy implements TestDoubleMemFunImplStrategy {
 
    @Override
-   public void addCtorInitializer(ICPPASTFunctionDefinition ctor) {}
+   public void addCtorInitializer(final ICPPASTFunctionDefinition ctor) {}
 
    @Override
-   public void addCallVectorRegistration(IASTCompoundStatement body, ICPPASTFunctionDeclarator decl, boolean isStatic) {}
+   public void addCallVectorRegistration(final IASTCompoundStatement body, final ICPPASTFunctionDeclarator decl, final boolean isStatic) {}
 }

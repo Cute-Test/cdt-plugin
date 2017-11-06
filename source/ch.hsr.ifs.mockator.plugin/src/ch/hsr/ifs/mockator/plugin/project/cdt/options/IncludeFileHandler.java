@@ -11,7 +11,7 @@ import org.eclipse.core.resources.IProject;
 
 public class IncludeFileHandler extends IncludeHandler {
 
-   public IncludeFileHandler(IProject project) {
+   public IncludeFileHandler(final IProject project) {
       super(project);
    }
 
@@ -21,8 +21,8 @@ public class IncludeFileHandler extends IncludeHandler {
    }
 
    @Override
-   protected Set<String> getOptionValues(IOption option) throws BuildException {
-      String[] includes = option.getBasicStringListValue();
+   protected Set<String> getOptionValues(final IOption option) throws BuildException {
+      final String[] includes = option.getBasicStringListValue();
       return orderPreservingSet(includes);
    }
 }

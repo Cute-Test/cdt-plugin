@@ -35,45 +35,46 @@ public class ParamDeclCreator {
 
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
-   public static ICPPASTParameterDeclaration createReferenceParamFrom(String typeName, Map<String, Boolean> nameHistory) {
-      IASTName name = nodeFactory.newName(typeName.toCharArray());
-      ICPPASTNamedTypeSpecifier spec = nodeFactory.newTypedefNameSpecifier(name);
+   public static ICPPASTParameterDeclaration createReferenceParamFrom(final String typeName, final Map<String, Boolean> nameHistory) {
+      final IASTName name = nodeFactory.newName(typeName.toCharArray());
+      final ICPPASTNamedTypeSpecifier spec = nodeFactory.newTypedefNameSpecifier(name);
       spec.setConst(true);
-      IASTName parameterName = new ParameterNameCreator(nameHistory).getParamName(typeName);
-      IASTDeclarator decl = nodeFactory.newDeclarator(parameterName);
+      final IASTName parameterName = new ParameterNameCreator(nameHistory).getParamName(typeName);
+      final IASTDeclarator decl = nodeFactory.newDeclarator(parameterName);
       decl.addPointerOperator(nodeFactory.newReferenceOperator(false));
       return nodeFactory.newParameterDeclaration(spec, decl);
    }
 
-   public static ICPPASTParameterDeclaration createParameterFrom(IASTExpression idExpr, Map<String, Boolean> nameHistory) {
+   public static ICPPASTParameterDeclaration createParameterFrom(final IASTExpression idExpr, final Map<String, Boolean> nameHistory) {
       if (idExpr instanceof ICPPASTLiteralExpression) return createParameter((ICPPASTLiteralExpression) idExpr, nameHistory);
       else if (idExpr instanceof IASTIdExpression) return createParameter((IASTIdExpression) idExpr, nameHistory);
       else if (idExpr instanceof IASTFunctionCallExpression) return createParameter((IASTFunctionCallExpression) idExpr, nameHistory);
       else return createParameter(idExpr.getExpressionType(), idExpr, nameHistory);
    }
 
-   public static ICPPASTParameterDeclaration createParameter(IType type, IASTInitializerClause clause, Map<String, Boolean> nameHistory) {
-      ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
-      IASTName parameterName = getParmeterName(clause, nameHistory);
-      IASTDeclarator decl = getParameterDeclarator(parameterName, type, false);
+   public static ICPPASTParameterDeclaration createParameter(final IType type, final IASTInitializerClause clause,
+         final Map<String, Boolean> nameHistory) {
+      final ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
+      final IASTName parameterName = getParmeterName(clause, nameHistory);
+      final IASTDeclarator decl = getParameterDeclarator(parameterName, type, false);
       spec.setConst(true);
       return nodeFactory.newParameterDeclaration(spec, decl);
    }
 
-   public static ICPPASTParameterDeclaration createParameter(IASTIdExpression idExpr, Map<String, Boolean> nameHistory) {
-      IType type = AstUtil.getType(idExpr);
-      ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
-      IASTName parameterName = getParmeterName(idExpr, nameHistory);
-      IASTDeclarator declarator = getParameterDeclarator(parameterName, type, false);
+   public static ICPPASTParameterDeclaration createParameter(final IASTIdExpression idExpr, final Map<String, Boolean> nameHistory) {
+      final IType type = AstUtil.getType(idExpr);
+      final ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
+      final IASTName parameterName = getParmeterName(idExpr, nameHistory);
+      final IASTDeclarator declarator = getParameterDeclarator(parameterName, type, false);
       return nodeFactory.newParameterDeclaration(spec, declarator);
    }
 
-   public static ICPPASTParameterDeclaration createParameter(IASTLiteralExpression litexpr, Map<String, Boolean> nameHistory) {
+   public static ICPPASTParameterDeclaration createParameter(final IASTLiteralExpression litexpr, final Map<String, Boolean> nameHistory) {
       boolean skipConstCharArray = false;
       ICPPASTDeclSpecifier spec = null;
       IASTName paramName = null;
-      ParameterNameCreator paramNameCreator = new ParameterNameCreator(nameHistory);
-      StdString stdString = new StdString();
+      final ParameterNameCreator paramNameCreator = new ParameterNameCreator(nameHistory);
+      final StdString stdString = new StdString();
 
       if (stdString.isStdString(litexpr)) {
          spec = stdString.createStdStringDecl();
@@ -87,16 +88,16 @@ public class ParamDeclCreator {
       }
 
       spec.setConst(true);
-      IASTDeclarator declarator = getParameterDeclarator(paramName, litexpr.getExpressionType(), skipConstCharArray);
+      final IASTDeclarator declarator = getParameterDeclarator(paramName, litexpr.getExpressionType(), skipConstCharArray);
       makeLastPtrOpConst(declarator);
       return nodeFactory.newParameterDeclaration(spec, declarator);
    }
 
-   public static ICPPASTParameterDeclaration createParameter(IASTFunctionCallExpression call, Map<String, Boolean> nameHistory) {
-      IASTExpression functionName = call.getFunctionNameExpression();
+   public static ICPPASTParameterDeclaration createParameter(final IASTFunctionCallExpression call, final Map<String, Boolean> nameHistory) {
+      final IASTExpression functionName = call.getFunctionNameExpression();
 
       if (functionName instanceof IASTIdExpression) {
-         ICPPASTParameterDeclaration paramDecl = createParameter((IASTIdExpression) functionName, nameHistory);
+         final ICPPASTParameterDeclaration paramDecl = createParameter((IASTIdExpression) functionName, nameHistory);
          paramDecl.getDeclSpecifier().setConst(true);
          return paramDecl;
       }
@@ -104,26 +105,26 @@ public class ParamDeclCreator {
       return createParameter(call.getExpressionType(), call, nameHistory);
    }
 
-   private static IASTName getParmeterName(IASTInitializerClause clause, Map<String, Boolean> nameHistory) {
-      ParameterNameCreator creator = new ParameterNameCreator(nameHistory);
+   private static IASTName getParmeterName(final IASTInitializerClause clause, final Map<String, Boolean> nameHistory) {
+      final ParameterNameCreator creator = new ParameterNameCreator(nameHistory);
       return creator.getParamName(clause);
    }
 
-   private static ICPPASTDeclSpecifier createDeclSpecifier(IType type) {
-      DeclSpecGenerator generator = new DeclSpecGenerator(type);
-      ICPPASTDeclSpecifier spec = generator.getDeclSpec();
+   private static ICPPASTDeclSpecifier createDeclSpecifier(final IType type) {
+      final DeclSpecGenerator generator = new DeclSpecGenerator(type);
+      final ICPPASTDeclSpecifier spec = generator.getDeclSpec();
       spec.setConst(true);
       spec.setVolatile(AstUtil.hasVolatilePart(type));
       return spec;
    }
 
-   private static boolean makeLastPtrOpConst(IASTDeclarator declarator) {
-      IASTPointerOperator[] ptrOperators = declarator.getPointerOperators();
+   private static boolean makeLastPtrOpConst(final IASTDeclarator declarator) {
+      final IASTPointerOperator[] ptrOperators = declarator.getPointerOperators();
 
       if (ptrOperators == null) return false;
 
       for (int i = ptrOperators.length - 1; i >= 0; i--) {
-         IASTPointerOperator currentPtrOp = ptrOperators[i];
+         final IASTPointerOperator currentPtrOp = ptrOperators[i];
 
          if (currentPtrOp instanceof IASTPointer) {
             ((IASTPointer) currentPtrOp).setConst(true);
@@ -134,8 +135,8 @@ public class ParamDeclCreator {
       return false;
    }
 
-   private static IASTDeclarator getParameterDeclarator(IASTName parameterName, IType type, boolean skipConstCharArray) {
-      IASTDeclarator paramDecl = assembleDeclarator(parameterName, type, skipConstCharArray);
+   private static IASTDeclarator getParameterDeclarator(final IASTName parameterName, final IType type, final boolean skipConstCharArray) {
+      final IASTDeclarator paramDecl = assembleDeclarator(parameterName, type, skipConstCharArray);
 
       if (!(paramDecl instanceof ICPPASTArrayDeclarator)) {
          paramDecl.addPointerOperator(nodeFactory.newReferenceOperator(false));
@@ -144,7 +145,7 @@ public class ParamDeclCreator {
       return paramDecl;
    }
 
-   private static IASTDeclarator assembleDeclarator(IASTName parameterName, IType type, boolean skipConstCharArray) {
+   private static IASTDeclarator assembleDeclarator(final IASTName parameterName, final IType type, final boolean skipConstCharArray) {
       IASTDeclarator paramDecl;
       if (type instanceof IPointerType) {
          paramDecl = getPointerParameterDeclarator(parameterName, (IPointerType) type);
@@ -156,23 +157,23 @@ public class ParamDeclCreator {
       return paramDecl;
    }
 
-   private static boolean isConstCharArray(IType type) {
+   private static boolean isConstCharArray(final IType type) {
       return new ConstArrayVerifier(type).isConstCharArray();
    }
 
-   private static IASTDeclarator getPointerParameterDeclarator(IASTName parameterName, IPointerType type) {
-      IType pointedType = type.getType();
-      IASTDeclarator paramDecl = assembleDeclarator(parameterName, pointedType, false);
-      IASTPointer ptrOperator = nodeFactory.newPointer();
+   private static IASTDeclarator getPointerParameterDeclarator(final IASTName parameterName, final IPointerType type) {
+      final IType pointedType = type.getType();
+      final IASTDeclarator paramDecl = assembleDeclarator(parameterName, pointedType, false);
+      final IASTPointer ptrOperator = nodeFactory.newPointer();
       ptrOperator.setConst(type.isConst());
       ptrOperator.setVolatile(type.isVolatile());
       paramDecl.addPointerOperator(ptrOperator);
       return paramDecl;
    }
 
-   private static ICPPASTDeclarator getArrayParameterDeclarator(IASTName parameterName) {
-      ICPPASTArrayDeclarator arrayDecl = nodeFactory.newArrayDeclarator(parameterName);
-      CPPASTArrayModifier arrayModifier = new CPPASTArrayModifier();
+   private static ICPPASTDeclarator getArrayParameterDeclarator(final IASTName parameterName) {
+      final ICPPASTArrayDeclarator arrayDecl = nodeFactory.newArrayDeclarator(parameterName);
+      final CPPASTArrayModifier arrayModifier = new CPPASTArrayModifier();
       arrayDecl.addArrayModifier(arrayModifier);
       return arrayDecl;
    }

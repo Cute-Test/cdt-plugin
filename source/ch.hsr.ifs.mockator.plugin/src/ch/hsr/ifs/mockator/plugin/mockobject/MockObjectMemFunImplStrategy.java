@@ -9,24 +9,25 @@ import ch.hsr.ifs.mockator.plugin.mockobject.registrations.MemberFunCallRegistra
 import ch.hsr.ifs.mockator.plugin.mockobject.support.memfun.MockIdInitializerAdder;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 public class MockObjectMemFunImplStrategy implements TestDoubleMemFunImplStrategy {
 
-  private final CppStandard cppStd;
-  private final MockObject mockObject;
+   private final CppStandard cppStd;
+   private final MockObject  mockObject;
 
-  public MockObjectMemFunImplStrategy(final CppStandard cppStd, final MockObject mockObject) {
-    this.cppStd = cppStd;
-    this.mockObject = mockObject;
-  }
+   public MockObjectMemFunImplStrategy(final CppStandard cppStd, final MockObject mockObject) {
+      this.cppStd = cppStd;
+      this.mockObject = mockObject;
+   }
 
-  @Override
-  public void addCallVectorRegistration(final IASTCompoundStatement body, final ICPPASTFunctionDeclarator decl, final boolean isStatic) {
-    final String name = mockObject.getNameOfAllCallsVector();
-    new MemberFunCallRegistrationAdder(decl, isStatic, cppStd, name).addRegistrationTo(body);
-  }
+   @Override
+   public void addCallVectorRegistration(final IASTCompoundStatement body, final ICPPASTFunctionDeclarator decl, final boolean isStatic) {
+      final String name = mockObject.getNameOfAllCallsVector();
+      new MemberFunCallRegistrationAdder(decl, isStatic, cppStd, name).addRegistrationTo(body);
+   }
 
-  @Override
-  public void addCtorInitializer(final ICPPASTFunctionDefinition function) {
-    new MockIdInitializerAdder(mockObject.getNameOfAllCallsVector(), cppStd).accept(function);
-  }
+   @Override
+   public void addCtorInitializer(final ICPPASTFunctionDefinition function) {
+      new MockIdInitializerAdder(mockObject.getNameOfAllCallsVector(), cppStd).accept(function);
+   }
 }

@@ -14,7 +14,7 @@ import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 public abstract class CdtHelper {
 
-   public static ITool getSuperTool(ITool tool) {
+   public static ITool getSuperTool(final ITool tool) {
       ITool currentTool = tool;
 
       while (currentTool.getSuperClass() != null) {
@@ -24,28 +24,30 @@ public abstract class CdtHelper {
       return currentTool;
    }
 
-   public static IManagedBuildInfo getManagedBuildInfo(IProject proj) {
-      IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
+   public static IManagedBuildInfo getManagedBuildInfo(final IProject proj) {
+      final IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
       Assert.notNull(info, String.format("Project '%s' does not have managed build information", proj.getName()));
       return info;
    }
 
-   public static void setAndSaveOption(IProject proj, IConfiguration conf, ITool tool, IOption option, String newFlags) {
+   public static void setAndSaveOption(final IProject proj, final IConfiguration conf, final ITool tool, final IOption option,
+         final String newFlags) {
       ManagedBuildManager.setOption(conf, tool, option, newFlags);
       saveBuildInfo(proj);
    }
 
-   public static void setAndSaveOption(IProject proj, IConfiguration conf, ITool tool, IOption option, Collection<String> values) {
+   public static void setAndSaveOption(final IProject proj, final IConfiguration conf, final ITool tool, final IOption option,
+         final Collection<String> values) {
       ManagedBuildManager.setOption(conf, tool, option, values.toArray(new String[values.size()]));
       saveBuildInfo(proj);
    }
 
-   public static void setAndSaveOption(IProject proj, IConfiguration conf, ITool tool, IOption option, boolean active) {
+   public static void setAndSaveOption(final IProject proj, final IConfiguration conf, final ITool tool, final IOption option, final boolean active) {
       ManagedBuildManager.setOption(conf, tool, option, active);
       saveBuildInfo(proj);
    }
 
-   private static void saveBuildInfo(IProject proj) {
+   private static void saveBuildInfo(final IProject proj) {
       ManagedBuildManager.saveBuildInfo(proj, true);
    }
 }

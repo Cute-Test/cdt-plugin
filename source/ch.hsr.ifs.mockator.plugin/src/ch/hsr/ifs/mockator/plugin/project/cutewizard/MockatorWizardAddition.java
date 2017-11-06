@@ -21,14 +21,14 @@ public class MockatorWizardAddition implements ICuteWizardAddition {
    private Button  cpp11Button;
 
    @Override
-   public Control createComposite(Composite comp) {
+   public Control createComposite(final Composite comp) {
       final Button check = createMockatorCheckBox(comp);
       createCppStdArea(comp);
       setDefaultCppStd();
       check.addSelectionListener(new SelectionAdapter() {
 
          @Override
-         public void widgetSelected(SelectionEvent e) {
+         public void widgetSelected(final SelectionEvent e) {
             withMockatorSupport = check.getSelection();
             cpp03Button.setEnabled(withMockatorSupport);
             cpp11Button.setEnabled(withMockatorSupport);
@@ -37,14 +37,14 @@ public class MockatorWizardAddition implements ICuteWizardAddition {
       return comp;
    }
 
-   private static Button createMockatorCheckBox(Composite comp) {
-      Button check = new Button(comp, SWT.CHECK);
+   private static Button createMockatorCheckBox(final Composite comp) {
+      final Button check = new Button(comp, SWT.CHECK);
       check.setText(I18N.AddMockatorSupportToCUTEProject);
       return check;
    }
 
-   private void createCppStdArea(Composite parent) {
-      Composite comp = createRadioGroup(parent);
+   private void createCppStdArea(final Composite parent) {
+      final Composite comp = createRadioGroup(parent);
       createRadioButtons(comp);
    }
 
@@ -56,7 +56,7 @@ public class MockatorWizardAddition implements ICuteWizardAddition {
       }
    }
 
-   private void createRadioButtons(Composite comp) {
+   private void createRadioButtons(final Composite comp) {
       cpp03Button = new Button(comp, SWT.RADIO);
       cpp03Button.setText(CppStandard.Cpp03Std.toString());
       cpp03Button.setEnabled(false);
@@ -66,9 +66,9 @@ public class MockatorWizardAddition implements ICuteWizardAddition {
       cpp11Button.setSelection(true);
    }
 
-   private static Composite createRadioGroup(Composite parent) {
-      Composite comp = new Composite(parent, SWT.NONE);
-      GridLayout layout = new GridLayout(2, false);
+   private static Composite createRadioGroup(final Composite parent) {
+      final Composite comp = new Composite(parent, SWT.NONE);
+      final GridLayout layout = new GridLayout(2, false);
       comp.setLayout(layout);
       return comp;
    }

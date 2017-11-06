@@ -21,7 +21,7 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-import ch.hsr.ifs.iltis.core.functional.functions.Function2;
+
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunArgumentsTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunctionParamTypeCollector;
@@ -30,102 +30,87 @@ import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
+
 abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector {
 
-  protected final IIndex index;
-  protected final NodeLookup lookup;
+   protected final IIndex     index;
+   protected final NodeLookup lookup;
 
-  public AbstractDepInjectInfoCollector(final IIndex index, final ICProject cProject) {
-    this.index = index;
-    lookup = new NodeLookup(cProject, new NullProgressMonitor());
-  }
+   public AbstractDepInjectInfoCollector(final IIndex index, final ICProject cProject) {
+      this.index = index;
+      lookup = new NodeLookup(cProject, new NullProgressMonitor());
+   }
 
-  protected int getArgPosOfProblemType(final IASTName name, final Collection<IASTInitializerClause> arguments) {
-    int argPos = 0;
+   protected int getArgPosOfProblemType(final IASTName name, final Collection<IASTInitializerClause> arguments) {
+      int argPos = 0;
 
-    for (final IASTInitializerClause arg : arguments) {
-      if (isProblemArgumentWithSameName(name, arg)) {
-        break;
+      for (final IASTInitializerClause arg : arguments) {
+         if (isProblemArgumentWithSameName(name, arg)) {
+            break;
+         }
+
+         argPos++;
       }
 
-      argPos++;
-    }
+      return argPos;
+   }
 
-    return argPos;
-  }
+   protected Optional<Pair<IASTName, IType>> getTargetClassOfProblemType(final ICPPASTFunctionDeclarator funDecl, final int argPosOfProblemType) {
+      if (funDecl == null || funDecl.getParameters() == null || funDecl.getParameters().length <= argPosOfProblemType) { return Optional.empty(); }
 
-  protected Optional<Pair<IASTName, IType>> getTargetClassOfProblemType(final ICPPASTFunctionDeclarator funDecl, final int argPosOfProblemType) {
-    if (funDecl == null || funDecl.getParameters() == null || funDecl.getParameters().length <= argPosOfProblemType) {
-      return Optional.empty();
-    }
+      final ICPPASTParameterDeclaration paramForProblemArg = funDecl.getParameters()[argPosOfProblemType];
+      final IType paramType = TypeCreator.byDeclarator(paramForProblemArg.getDeclarator());
+      final IASTDeclSpecifier declSpecifier = paramForProblemArg.getDeclSpecifier();
 
-    final ICPPASTParameterDeclaration paramForProblemArg = funDecl.getParameters()[argPosOfProblemType];
-    final IType paramType = TypeCreator.byDeclarator(paramForProblemArg.getDeclarator());
-    final IASTDeclSpecifier declSpecifier = paramForProblemArg.getDeclSpecifier();
+      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
 
-    if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
-      return Optional.empty();
-    }
+      final ICPPASTNamedTypeSpecifier namedType = (ICPPASTNamedTypeSpecifier) declSpecifier;
 
-    final ICPPASTNamedTypeSpecifier namedType = ((ICPPASTNamedTypeSpecifier) declSpecifier);
+      return OptHelper.returnIfPresentElseEmpty(findClassDefinitionOfProblemType(namedType.getName()), (clazz) -> Optional.of(Pair.from(clazz
+            .getName(), paramType)));
+   }
 
-    return OptHelper.returnIfPresentElseEmpty(findClassDefinitionOfProblemType(namedType.getName()),
-        (clazz) -> Optional.of(Pair.from(clazz.getName(), paramType)));
-  }
+   private Optional<ICPPASTCompositeTypeSpecifier> findClassDefinitionOfProblemType(final IASTName problemTypeName) {
+      return lookup.findClassDefinition(problemTypeName.resolveBinding(), index);
+   }
 
-  private Optional<ICPPASTCompositeTypeSpecifier> findClassDefinitionOfProblemType(final IASTName problemTypeName) {
-    return lookup.findClassDefinition(problemTypeName.resolveBinding(), index);
-  }
+   private static boolean isProblemArgumentWithSameName(final IASTName name, final IASTInitializerClause initializer) {
+      if (!(initializer instanceof IASTIdExpression)) { return false; }
 
-  private static boolean isProblemArgumentWithSameName(final IASTName name, final IASTInitializerClause initializer) {
-    if (!(initializer instanceof IASTIdExpression)) {
-      return false;
-    }
+      final IASTName argName = ((IASTIdExpression) initializer).getName();
+      return argName.resolveBinding() instanceof IProblemBinding && argName.toString().equals(name.toString());
+   }
 
-    final IASTName argName = ((IASTIdExpression) initializer).getName();
-    return argName.resolveBinding() instanceof IProblemBinding && argName.toString().equals(name.toString());
-  }
+   protected boolean areEquivalentExceptProblemType(final Collection<IASTInitializerClause> funArgs, final ICPPASTFunctionDeclarator funDecl,
+         final int posToIgnore) {
+      final FunArgumentsTypeCollector extractor = new FunArgumentsTypeCollector(funArgs);
+      final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(extractor.getFunArgTypes(), getTypesOfFunDecl(funDecl), (pos,
+            receiverType) -> pos == posToIgnore && isPointerOrReferenceToClass(receiverType) && isConsideredAsBaseClass(receiverType));
+      return tester.areParametersEquivalent();
+   }
 
-  protected boolean areEquivalentExceptProblemType(final Collection<IASTInitializerClause> funArgs, final ICPPASTFunctionDeclarator funDecl,
-      final int posToIgnore) {
-    final FunArgumentsTypeCollector extractor = new FunArgumentsTypeCollector(funArgs);
-    final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(extractor.getFunArgTypes(), getTypesOfFunDecl(funDecl),
-        new Function2<Integer, IType, Boolean>() {
+   private static boolean isPointerOrReferenceToClass(final IType type) {
+      if (!AstUtil.hasPointerOrRefType(type)) { return false; }
 
-          @Override
-          public Boolean apply(final Integer pos, final IType receiverType) {
-            return pos == posToIgnore && isPointerOrReferenceToClass(receiverType) && isConsideredAsBaseClass(receiverType);
-          }
-        });
-    return tester.areParametersEquivalent();
-  }
+      IType underlyingType = AstUtil.unwindPointerOrRefType(type);
 
-  private static boolean isPointerOrReferenceToClass(final IType type) {
-    if (!AstUtil.hasPointerOrRefType(type)) {
-      return false;
-    }
+      if (underlyingType instanceof IQualifierType) {
+         underlyingType = ((IQualifierType) underlyingType).getType();
+      }
 
-    IType underlyingType = AstUtil.unwindPointerOrRefType(type);
+      return underlyingType instanceof ICPPClassType;
+   }
 
-    if (underlyingType instanceof IQualifierType) {
-      underlyingType = ((IQualifierType) underlyingType).getType();
-    }
+   private static List<IType> getTypesOfFunDecl(final ICPPASTFunctionDeclarator funDecl) {
+      final FunctionParamTypeCollector helper = new FunctionParamTypeCollector(funDecl);
+      return helper.getParameterTypes();
+   }
 
-    return underlyingType instanceof ICPPClassType;
-  }
+   private static boolean isConsideredAsBaseClass(final IType missingArgType) {
+      final IType type = AstUtil.windDownToRealType(missingArgType, false);
 
-  private static List<IType> getTypesOfFunDecl(final ICPPASTFunctionDeclarator funDecl) {
-    final FunctionParamTypeCollector helper = new FunctionParamTypeCollector(funDecl);
-    return helper.getParameterTypes();
-  }
+      if (!(type instanceof ICPPClassType)) { return false; }
 
-  private static boolean isConsideredAsBaseClass(final IType missingArgType) {
-    final IType type = AstUtil.windDownToRealType(missingArgType, false);
-
-    if (!(type instanceof ICPPClassType)) {
-      return false;
-    }
-
-    return new BaseClassCandidateVerifier((ICPPClassType) type).isConsideredAsBaseClass();
-  }
+      return new BaseClassCandidateVerifier((ICPPClassType) type).isConsideredAsBaseClass();
+   }
 }

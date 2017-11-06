@@ -11,18 +11,18 @@ public class ParameterToFunctionAdder {
 
    private final ICPPASTFunctionDeclarator funDecl;
 
-   public ParameterToFunctionAdder(ICPPASTFunctionDeclarator funDecl) {
+   public ParameterToFunctionAdder(final ICPPASTFunctionDeclarator funDecl) {
       this.funDecl = funDecl;
    }
 
-   public void addParametersFromFunCall(ICPPASTFunctionCallExpression funCall) {
-      FunctionCallParameterCollector ex = new FunctionCallParameterCollector(funCall);
-      List<ICPPASTParameterDeclaration> parameters = ex.getFunctionParameters();
+   public void addParametersFromFunCall(final ICPPASTFunctionCallExpression funCall) {
+      final FunctionCallParameterCollector ex = new FunctionCallParameterCollector(funCall);
+      final List<ICPPASTParameterDeclaration> parameters = ex.getFunctionParameters();
       addParametersToDeclarator(parameters);
    }
 
-   private void addParametersToDeclarator(List<ICPPASTParameterDeclaration> parameters) {
-      for (ICPPASTParameterDeclaration each : parameters) {
+   private void addParametersToDeclarator(final List<ICPPASTParameterDeclaration> parameters) {
+      for (final ICPPASTParameterDeclaration each : parameters) {
          funDecl.addParameterDeclaration(each);
       }
    }

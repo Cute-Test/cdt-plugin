@@ -6,40 +6,41 @@ import ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype.CreateTestDoubleSu
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype.MissingTestDoubleSubTypeChecker;
 import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
 
+
 public class CreateTestDoubleSubTypeByRefQfTest extends MockatorQuickfixTest {
 
-  @Override
-  protected String getProblemId() {
-    return MissingTestDoubleSubTypeChecker.MISSING_TEST_DOUBLE_SUBTYPE_PROBLEM_ID;
-  }
+   @Override
+   protected String getProblemId() {
+      return MissingTestDoubleSubTypeChecker.MISSING_TEST_DOUBLE_SUBTYPE_PROBLEM_ID;
+   }
 
-  @Override
-  protected CppStandard getCppStdToUse() {
-    return CppStandard.Cpp03Std;
-  }
+   @Override
+   protected CppStandard getCppStdToUse() {
+      return CppStandard.Cpp03Std;
+   }
 
-  @Override
-  protected boolean isManagedBuildProjectNecessary() {
-    return false;
-  }
+   @Override
+   protected boolean isManagedBuildProjectNecessary() {
+      return false;
+   }
 
-  @Override
-  protected boolean isRefactoringUsed() {
-    return true;
-  }
+   @Override
+   protected boolean isRefactoringUsed() {
+      return true;
+   }
 
-  @Override
-  protected MockatorQuickFix getQuickfix() {
-    return new CreateTestDoubleSubTypeQuickFix();
-  }
+   @Override
+   protected MockatorQuickFix getQuickfix() {
+      return new CreateTestDoubleSubTypeQuickFix();
+   }
 
-  @Override
-  protected String getResolutionMessage() {
-    return null;
-  }
+   @Override
+   protected String getResolutionMessage() {
+      return null;
+   }
 
-  @Override
-  protected String[] getMarkerMessages() {
-    return new String[] {"Object seam \"dependency\" cannot be resolved"};
-  }
+   @Override
+   protected String[] getMarkerMessages() {
+      return new String[] { "Object seam \"dependency\" cannot be resolved" };
+   }
 }

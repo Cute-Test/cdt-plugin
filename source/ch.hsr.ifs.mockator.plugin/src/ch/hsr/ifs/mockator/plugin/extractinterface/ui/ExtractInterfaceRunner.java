@@ -17,24 +17,24 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceConte
 @SuppressWarnings("restriction")
 class ExtractInterfaceRunner extends RefactoringRunner {
 
-   public ExtractInterfaceRunner(ITextSelection selection, ICElement element, IShellProvider shell, ICProject cProject) {
+   public ExtractInterfaceRunner(final ITextSelection selection, final ICElement element, final IShellProvider shell, final ICProject cProject) {
       super(element, selection, shell, cProject);
    }
 
    @Override
    public void run() {
-      ExtractInterfaceRefactoring refactoring = createRefactoring();
-      RefactoringWizard wizard = createWizard(refactoring);
+      final ExtractInterfaceRefactoring refactoring = createRefactoring();
+      final RefactoringWizard wizard = createWizard(refactoring);
       run(wizard, refactoring, RefactoringSaveHelper.SAVE_REFACTORING);
    }
 
-   private static RefactoringWizard createWizard(Refactoring refactoring) {
+   private static RefactoringWizard createWizard(final Refactoring refactoring) {
       return new ExtractInterfaceWizard(refactoring);
    }
 
    private ExtractInterfaceRefactoring createRefactoring() {
-      ExtractInterfaceContext context = new ExtractInterfaceContext.ContextBuilder((ITranslationUnit) element, project, (ITextSelection) selection)
-            .replaceAllOccurences(true).build();
+      final ExtractInterfaceContext context = new ExtractInterfaceContext.ContextBuilder((ITranslationUnit) element, project,
+            (ITextSelection) selection).replaceAllOccurences(true).build();
       return new ExtractInterfaceRefactoring(context);
    }
 }

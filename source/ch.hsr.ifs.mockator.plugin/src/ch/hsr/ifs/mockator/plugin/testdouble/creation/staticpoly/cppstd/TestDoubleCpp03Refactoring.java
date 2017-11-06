@@ -32,7 +32,7 @@ class TestDoubleCpp03Refactoring extends AbstractCreateTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu, pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       final String newClassName = getSelectedName(ast).get().toString();
@@ -45,19 +45,19 @@ class TestDoubleCpp03Refactoring extends AbstractCreateTestDoubleRefactoring {
    }
 
    private static void insertUsingNamespaceStmt(final ICPPASTFunctionDefinition testFunction, final ASTRewrite rewriter,
-            final ICPPASTCompositeTypeSpecifier testDouble) {
+         final ICPPASTCompositeTypeSpecifier testDouble) {
       final TestDoubleUsingNsHandler namespaceHandler = new TestDoubleUsingNsHandler(testDouble, rewriter);
       namespaceHandler.insertUsingNamespaceStmt(testFunction);
    }
 
    private static void insertTestDoubleInNamespace(final ICPPASTFunctionDefinition testFunction, final ASTRewrite rewriter,
-            final ICPPASTCompositeTypeSpecifier testDouble) {
+         final ICPPASTCompositeTypeSpecifier testDouble) {
       final TestDoubleInNsInserter inserter = new TestDoubleInNsInserter(rewriter, CppStandard.Cpp03Std);
       inserter.insertTestDouble(nodeFactory.newSimpleDeclaration(testDouble), testDouble, testFunction);
    }
 
    private Optional<ICPPASTFunctionDefinition> getSelectedTestFunction(final IASTTranslationUnit ast) {
       return OptHelper.returnIfPresentElseEmpty(getSelectedName(ast), (funName) -> Optional.of((ICPPASTFunctionDefinition) AstUtil.getAncestorOfType(
-               funName, ICPPASTFunctionDefinition.class)));
+            funName, ICPPASTFunctionDefinition.class)));
    }
 }

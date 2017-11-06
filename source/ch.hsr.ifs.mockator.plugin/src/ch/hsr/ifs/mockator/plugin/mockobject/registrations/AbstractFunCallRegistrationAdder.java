@@ -41,22 +41,22 @@ abstract class AbstractFunCallRegistrationAdder {
    private final ICPPASTParameterDeclaration[] funParameters;
    private final CppStandard                   cppStd;
 
-   public AbstractFunCallRegistrationAdder(ICPPASTFunctionDeclarator function, CppStandard cppStd) {
+   public AbstractFunCallRegistrationAdder(final ICPPASTFunctionDeclarator function, final CppStandard cppStd) {
       this.cppStd = cppStd;
       funParameters = function.getParameters();
       signature = new FunctionSignatureFormatter(function).getFunctionSignature();
    }
 
-   public void addRegistrationTo(IASTCompoundStatement functionBody) {
+   public void addRegistrationTo(final IASTCompoundStatement functionBody) {
       functionBody.addStatement(createFunCallRegistration());
    }
 
    protected IASTExpressionStatement createFunCallRegistration() {
-      IASTName pushBack = nodeFactory.newName(PUSH_BACK.toCharArray());
-      ICPPASTFieldReference fieldRef = nodeFactory.newFieldReference(pushBack, getPushBackOwner());
-      Collection<IASTInitializerClause> args = createRegistrationArgs();
-      IASTInitializerClause[] callParam = new IASTInitializerClause[] { cppStd.getCtorCall(getNameForCall(), args) };
-      IASTFunctionCallExpression funExpr = nodeFactory.newFunctionCallExpression(fieldRef, callParam);
+      final IASTName pushBack = nodeFactory.newName(PUSH_BACK.toCharArray());
+      final ICPPASTFieldReference fieldRef = nodeFactory.newFieldReference(pushBack, getPushBackOwner());
+      final Collection<IASTInitializerClause> args = createRegistrationArgs();
+      final IASTInitializerClause[] callParam = new IASTInitializerClause[] { cppStd.getCtorCall(getNameForCall(), args) };
+      final IASTFunctionCallExpression funExpr = nodeFactory.newFunctionCallExpression(fieldRef, callParam);
       return nodeFactory.newExpressionStatement(funExpr);
    }
 
@@ -71,11 +71,11 @@ abstract class AbstractFunCallRegistrationAdder {
    }
 
    protected Collection<IASTInitializerClause> createRegistrationArgs() {
-      List<IASTInitializerClause> params = list();
+      final List<IASTInitializerClause> params = list();
       params.add(createArgument(StringUtil.quote(signature)));
 
-      for (ICPPASTParameterDeclaration param : funParameters) {
-         IASTName funParamName = param.getDeclarator().getName();
+      for (final ICPPASTParameterDeclaration param : funParameters) {
+         final IASTName funParamName = param.getDeclarator().getName();
          // e.g. operator ++(int)
          if (funParamName.toString().isEmpty()) {
             continue;
@@ -85,7 +85,7 @@ abstract class AbstractFunCallRegistrationAdder {
       return params;
    }
 
-   private static IASTIdExpression createArgument(String arg) {
+   private static IASTIdExpression createArgument(final String arg) {
       return nodeFactory.newIdExpression(nodeFactory.newName(arg.toCharArray()));
    }
 }

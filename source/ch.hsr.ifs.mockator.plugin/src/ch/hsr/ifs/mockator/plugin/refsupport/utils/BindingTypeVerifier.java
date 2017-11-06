@@ -1,10 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-
 import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IBinding;
-
 
 
 public class BindingTypeVerifier {
@@ -19,9 +17,7 @@ public class BindingTypeVerifier {
 
    @SuppressWarnings("unchecked")
    private static <T> Optional<T> getAdapter(final IBinding binding, final Class<T> klass) {
-      if (binding == null) {
-         return Optional.empty();
-      }
+      if (binding == null) { return Optional.empty(); }
 
       return Optional.ofNullable(binding.getAdapter(klass));
    }

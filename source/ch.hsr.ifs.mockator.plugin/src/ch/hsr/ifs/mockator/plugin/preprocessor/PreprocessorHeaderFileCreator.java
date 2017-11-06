@@ -32,14 +32,14 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
    private static final String FILE_MACRO        = "__FILE__";
    private static final String LINE_NUMBER_MACRO = "__LINE__";
 
-   public PreprocessorHeaderFileCreator(ModificationCollector collector, ICProject cProject, CRefactoringContext context) {
+   public PreprocessorHeaderFileCreator(final ModificationCollector collector, final ICProject cProject, final CRefactoringContext context) {
       super(collector, cProject, context);
    }
 
    @Override
-   protected void addContentToTu(IASTTranslationUnit newAst, ASTRewrite rewriter, ICPPASTFunctionDeclarator funDecl, IProgressMonitor pm)
-         throws CoreException {
-      IncludeGuardCreator guardCreator = getIncludeGuardCreator(newAst);
+   protected void addContentToTu(final IASTTranslationUnit newAst, final ASTRewrite rewriter, final ICPPASTFunctionDeclarator funDecl,
+         final IProgressMonitor pm) throws CoreException {
+      final IncludeGuardCreator guardCreator = getIncludeGuardCreator(newAst);
       addIncludeGuardsStart(newAst, rewriter, guardCreator);
       insertFunDeclInclude(funDecl, newAst, rewriter);
       insertFunDecl(funDecl, newAst, rewriter);
@@ -47,46 +47,46 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
       addIncludeGuardsEnd(newAst, rewriter, guardCreator);
    }
 
-   private IncludeGuardCreator getIncludeGuardCreator(IASTTranslationUnit newAst) {
-      IFile file = FileUtil.toIFile(newAst.getFilePath());
+   private IncludeGuardCreator getIncludeGuardCreator(final IASTTranslationUnit newAst) {
+      final IFile file = FileUtil.toIFile(newAst.getFilePath());
       return new IncludeGuardCreator(file, cProject);
    }
 
-   private static void addIncludeGuardsEnd(IASTTranslationUnit header, ASTRewrite r, IncludeGuardCreator guardCreator) {
+   private static void addIncludeGuardsEnd(final IASTTranslationUnit header, final ASTRewrite r, final IncludeGuardCreator guardCreator) {
       r.insertBefore(header, null, guardCreator.createEndIf(), null);
    }
 
-   private static void addIncludeGuardsStart(IASTTranslationUnit header, ASTRewrite r, IncludeGuardCreator guardCreator) {
+   private static void addIncludeGuardsStart(final IASTTranslationUnit header, final ASTRewrite r, final IncludeGuardCreator guardCreator) {
       r.insertBefore(header, null, guardCreator.createIfNDef(), null);
       r.insertBefore(header, null, guardCreator.createDefine(), null);
    }
 
-   private void insertFunDecl(ICPPASTFunctionDeclarator funDecl, IASTTranslationUnit newTu, ASTRewrite r) {
-      ICPPASTDeclSpecifier newDeclSpec = getReturnValue(funDecl);
-      ICPPASTFunctionDeclarator newFunDecl = createNewFunDecl(funDecl);
-      IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(newDeclSpec);
+   private void insertFunDecl(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit newTu, final ASTRewrite r) {
+      final ICPPASTDeclSpecifier newDeclSpec = getReturnValue(funDecl);
+      final ICPPASTFunctionDeclarator newFunDecl = createNewFunDecl(funDecl);
+      final IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(newDeclSpec);
       simpleDecl.addDeclarator(newFunDecl);
-      NamespaceApplier applier = new NamespaceApplier(funDecl);
-      IASTNode packedInNs = applier.packInSameNamespaces(simpleDecl);
+      final NamespaceApplier applier = new NamespaceApplier(funDecl);
+      final IASTNode packedInNs = applier.packInSameNamespaces(simpleDecl);
       r.insertBefore(newTu, null, packedInNs, null);
    }
 
-   private static void insertTraceMacro(ICPPASTFunctionDeclarator funDecl, IASTTranslationUnit header, ASTRewrite r) {
-      ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
+   private static void insertTraceMacro(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit header, final ASTRewrite r) {
+      final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
       adjustParamNamesIfNecessary(newFunDecl);
-      ASTLiteralNode defineNode = createTraceMacro(newFunDecl);
+      final ASTLiteralNode defineNode = createTraceMacro(newFunDecl);
       r.insertBefore(header, null, defineNode, null);
    }
 
-   private static void adjustParamNamesIfNecessary(ICPPASTFunctionDeclarator newFunDecl) {
-      ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
+   private static void adjustParamNamesIfNecessary(final ICPPASTFunctionDeclarator newFunDecl) {
+      final ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
       funDecorator.adjustParamNamesIfNecessary();
    }
 
-   private static String getParamString(ICPPASTFunctionDeclarator funDecl, boolean shouldQuote) {
-      StringBuilder params = new StringBuilder();
+   private static String getParamString(final ICPPASTFunctionDeclarator funDecl, final boolean shouldQuote) {
+      final StringBuilder params = new StringBuilder();
 
-      for (ICPPASTParameterDeclaration param : funDecl.getParameters()) {
+      for (final ICPPASTParameterDeclaration param : funDecl.getParameters()) {
          if (AstUtil.isVoid(param)) {
             continue;
          }
@@ -109,15 +109,15 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
       return params.toString();
    }
 
-   private static ASTLiteralNode createTraceMacro(ICPPASTFunctionDeclarator funDecl) {
-      StringBuilder define = new StringBuilder();
+   private static ASTLiteralNode createTraceMacro(final ICPPASTFunctionDeclarator funDecl) {
+      final StringBuilder define = new StringBuilder();
       addMacroName(funDecl, define, getParamString(funDecl, false));
       define.append(MockatorConstants.SPACE);
       addMacroValue(funDecl, define, getParamString(funDecl, true));
       return new ASTLiteralNode(define.toString());
    }
 
-   private static void addMacroValue(ICPPASTFunctionDeclarator funDecl, StringBuilder define, String paramString) {
+   private static void addMacroValue(final ICPPASTFunctionDeclarator funDecl, final StringBuilder define, final String paramString) {
       define.append(MockatorConstants.MOCKED_TRACE_PREFIX + funDecl.getName().toString());
       define.append(MockatorConstants.L_PARENTHESIS);
       define.append(paramString);
@@ -133,7 +133,7 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
       define.append(MockatorConstants.R_PARENTHESIS);
    }
 
-   private static String addMacroName(ICPPASTFunctionDeclarator funDecl, StringBuilder define, String paramString) {
+   private static String addMacroName(final ICPPASTFunctionDeclarator funDecl, final StringBuilder define, final String paramString) {
       define.append(MockatorConstants.DEFINE_DIRECTIVE);
       define.append(MockatorConstants.SPACE);
       define.append(funDecl.getName().toString());
@@ -143,15 +143,16 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
       return paramString;
    }
 
-   private void insertFunDeclInclude(ICPPASTFunctionDeclarator funDecl, IASTTranslationUnit tu, ASTRewrite rewriter) throws CoreException {
-      CppIncludeResolver resolver = new CppIncludeResolver(tu, cProject, context.getIndex());
-      AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDecl.getTranslationUnit().getFilePath());
+   private void insertFunDeclInclude(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit tu, final ASTRewrite rewriter)
+         throws CoreException {
+      final CppIncludeResolver resolver = new CppIncludeResolver(tu, cProject, context.getIndex());
+      final AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDecl.getTranslationUnit().getFilePath());
       rewriter.insertBefore(tu, null, includeForFunDecl, null);
    }
 
    @Override
-   protected IASTName getNewFunName(ICPPASTFunctionDeclarator funDecl) {
-      String traceFunName = MockatorConstants.MOCKED_TRACE_PREFIX + funDecl.getName().toString();
+   protected IASTName getNewFunName(final ICPPASTFunctionDeclarator funDecl) {
+      final String traceFunName = MockatorConstants.MOCKED_TRACE_PREFIX + funDecl.getName().toString();
       return nodeFactory.newName(traceFunName.toCharArray());
    }
 }

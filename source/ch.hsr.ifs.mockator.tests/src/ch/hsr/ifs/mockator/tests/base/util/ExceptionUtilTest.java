@@ -8,6 +8,7 @@ import org.junit.Test;
 import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 
+
 public class ExceptionUtilTest {
 
    @Test

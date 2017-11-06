@@ -26,27 +26,27 @@ public class ParameterNameCreator {
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
    private final Map<String, Boolean>  nameHistory;
 
-   public ParameterNameCreator(Map<String, Boolean> nameHistory) {
+   public ParameterNameCreator(final Map<String, Boolean> nameHistory) {
       this.nameHistory = nameHistory;
    }
 
-   public IASTName getParamName(IASTInitializerClause clause) {
+   public IASTName getParamName(final IASTInitializerClause clause) {
       return createName(replaceNonAlphanumericCharacters(clause));
    }
 
-   public IASTName getParamName(IType type) {
+   public IASTName getParamName(final IType type) {
       return createName(getParameterCharacter(getFallBackName(type)));
    }
 
-   public IASTName getParamName(String type) {
+   public IASTName getParamName(final String type) {
       return createName(getParameterCharacter(type));
    }
 
-   public IASTName getParamName(IASTCompositeTypeSpecifier klass) {
+   public IASTName getParamName(final IASTCompositeTypeSpecifier klass) {
       return createName(getParameterCharacter(String.valueOf(klass.getName().getSimpleID())));
    }
 
-   public IASTName createParameterName(IASTIdExpression idExpr) {
+   public IASTName createParameterName(final IASTIdExpression idExpr) {
       return createName(String.valueOf(idExpr.getName().getSimpleID()));
    }
 
@@ -64,7 +64,7 @@ public class ParameterNameCreator {
       return " ";
    }
 
-   private String getParameterCharacter(String fallBackVarName) {
+   private String getParameterCharacter(final String fallBackVarName) {
       String newName = Character.toString(fallBackVarName.charAt(0)).toLowerCase();
 
       while (nameHistory.get(newName) != null) {
@@ -74,8 +74,8 @@ public class ParameterNameCreator {
       return newName;
    }
 
-   private IASTName createName(String name) {
-      char[] result = name.toCharArray();
+   private IASTName createName(final String name) {
+      final char[] result = name.toCharArray();
 
       if (result.length > 0) {
          result[0] = Character.toLowerCase(result[0]);
@@ -84,17 +84,17 @@ public class ParameterNameCreator {
       return makeUniqueName(String.valueOf(result));
    }
 
-   private IASTName makeUniqueName(String name) {
+   private IASTName makeUniqueName(final String name) {
       String newName = name;
 
       if (nameHistory.get(newName) != null) {
          newName = newName + "1";
       }
 
-      StringBuilder sb = new StringBuilder(newName);
+      final StringBuilder sb = new StringBuilder(newName);
 
       while (nameHistory.get(newName) != null) {
-         sb.append((newName.charAt(newName.length() - 1) + 1));
+         sb.append(newName.charAt(newName.length() - 1) + 1);
       }
 
       newName = sb.toString();
@@ -102,7 +102,7 @@ public class ParameterNameCreator {
       return nodeFactory.newName(newName.toCharArray());
    }
 
-   private static String replaceNonAlphanumericCharacters(IASTInitializerClause clause) {
+   private static String replaceNonAlphanumericCharacters(final IASTInitializerClause clause) {
       return clause.getRawSignature().replaceAll("[\\P{Alpha}&&\\P{Digit}]", "");
    }
 }

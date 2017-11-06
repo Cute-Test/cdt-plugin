@@ -51,9 +51,7 @@ public class AllCallsVectorInserter {
    }
 
    private static IASTNode getAllCallsVector(final IASTSimpleDeclaration allCallsVector, final IASTNode parent) {
-      if (isPartOfFunction(parent)) {
-         return nodeFactory.newDeclarationStatement(allCallsVector);
-      }
+      if (isPartOfFunction(parent)) { return nodeFactory.newDeclarationStatement(allCallsVector); }
 
       return allCallsVector;
    }

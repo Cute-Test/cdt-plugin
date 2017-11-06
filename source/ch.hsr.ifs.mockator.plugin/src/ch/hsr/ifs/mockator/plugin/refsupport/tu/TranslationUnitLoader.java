@@ -31,31 +31,31 @@ public class TranslationUnitLoader {
    private CRefactoringContext    context;
    private IIndex                 index;
 
-   public TranslationUnitLoader(ICProject cProject, CRefactoringContext context, IProgressMonitor pm) {
+   public TranslationUnitLoader(final ICProject cProject, final CRefactoringContext context, final IProgressMonitor pm) {
       this.cProject = cProject;
       this.context = context;
       this.pm = pm;
    }
 
-   public TranslationUnitLoader(ICProject cProject, IIndex index, IProgressMonitor pm) {
+   public TranslationUnitLoader(final ICProject cProject, final IIndex index, final IProgressMonitor pm) {
       this.cProject = cProject;
       this.index = index;
       this.pm = pm;
    }
 
-   public IASTTranslationUnit loadAst(IFile file) throws CoreException {
+   public IASTTranslationUnit loadAst(final IFile file) throws CoreException {
       return loadAst(file.getLocationURI());
    }
 
-   public IASTTranslationUnit loadAst(IIndexName iName) throws CoreException {
+   public IASTTranslationUnit loadAst(final IIndexName iName) throws CoreException {
       return loadAst(getURI(iName));
    }
 
-   private static URI getURI(IIndexName iName) throws CoreException {
+   private static URI getURI(final IIndexName iName) throws CoreException {
       return iName.getFile().getLocation().getURI();
    }
 
-   private IASTTranslationUnit loadAst(URI uri) throws CoreException, CModelException {
+   private IASTTranslationUnit loadAst(final URI uri) throws CoreException, CModelException {
       // findTranslationUnitForLocation is also able to deliver translation
       // units for external header files like time.h
       ITranslationUnit tu = CoreModelUtil.findTranslationUnitForLocation(uri, cProject);
@@ -68,17 +68,17 @@ public class TranslationUnitLoader {
       return loadAst(tu);
    }
 
-   private IASTTranslationUnit loadAst(ITranslationUnit tu) throws CoreException {
+   private IASTTranslationUnit loadAst(final ITranslationUnit tu) throws CoreException {
       if (context != null) return context.getAST(tu, pm);
 
       return loadAstFromTu(tu);
    }
 
-   private IASTTranslationUnit loadAstFromTu(ITranslationUnit tu) {
+   private IASTTranslationUnit loadAstFromTu(final ITranslationUnit tu) {
       try {
          return tu.getAST(index, AST_FLAGS);
       }
-      catch (CoreException e) {
+      catch (final CoreException e) {
          throw new MockatorException(e);
       }
    }

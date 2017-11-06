@@ -29,8 +29,8 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
       shouldVisitNames = true;
    }
 
-   public MissingFunctionFinderVisitor(ICPPASTCompositeTypeSpecifier testDouble, ICPPASTTemplateParameter templateParam,
-                                       ICPPASTTemplateDeclaration sut) {
+   public MissingFunctionFinderVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICPPASTTemplateParameter templateParam,
+                                       final ICPPASTTemplateDeclaration sut) {
       super(testDouble, templateParam, sut);
       unresolvedFunCalls = orderPreservingSet();
    }
@@ -41,16 +41,16 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
    }
 
    @Override
-   public int visit(IASTName name) {
-      IBinding binding = name.resolveBinding();
+   public int visit(final IASTName name) {
+      final IBinding binding = name.resolveBinding();
 
       if (!isMemFunReferenceToUnknownClass(binding)) return PROCESS_CONTINUE;
 
       if (isReferenceToTemplateParameter(binding)) {
-         ICPPASTFunctionCallExpression funCall = getFunctionCall(name);
+         final ICPPASTFunctionCallExpression funCall = getFunctionCall(name);
 
          if (funCall != null) {
-            boolean isStaticFunCall = !isFieldReference(name);
+            final boolean isStaticFunCall = !isFieldReference(name);
             addToResultSet(funCall, isStaticFunCall);
             return PROCESS_SKIP;
          }
@@ -59,24 +59,24 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
       return PROCESS_CONTINUE;
    }
 
-   private ICPPASTFunctionCallExpression getFunctionCall(IASTName name) {
+   private ICPPASTFunctionCallExpression getFunctionCall(final IASTName name) {
       return AstUtil.getAncestorOfType(name, ICPPASTFunctionCallExpression.class);
    }
 
-   private static boolean isMemFunReferenceToUnknownClass(IBinding binding) {
+   private static boolean isMemFunReferenceToUnknownClass(final IBinding binding) {
       return binding instanceof CPPUnknownMethod;
    }
 
-   private static boolean isFieldReference(IASTName name) {
+   private static boolean isFieldReference(final IASTName name) {
       return name.getParent() instanceof ICPPASTFieldReference;
    }
 
-   private void addToResultSet(ICPPASTFunctionCallExpression funCall, boolean isStatic) {
-      Function newFunction = new Function(funCall, isStatic, templateParamType, getTestDoubleName());
+   private void addToResultSet(final ICPPASTFunctionCallExpression funCall, final boolean isStatic) {
+      final Function newFunction = new Function(funCall, isStatic, templateParamType, getTestDoubleName());
       unresolvedFunCalls.add(newFunction);
    }
 
-   private boolean isReferenceToTemplateParameter(IBinding binding) {
+   private boolean isReferenceToTemplateParameter(final IBinding binding) {
       IType type = null;
 
       if (!(binding instanceof CPPTemplateTypeParameter)) {

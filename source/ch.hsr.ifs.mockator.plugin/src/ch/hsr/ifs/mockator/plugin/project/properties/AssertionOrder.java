@@ -23,7 +23,7 @@ public enum AssertionOrder implements PropertyTypeWithDefault {
    }
 
    @Override
-   public LinkedEditModeStrategy getLinkedEditModeStrategy(IProject project) {
+   public LinkedEditModeStrategy getLinkedEditModeStrategy(final IProject project) {
       return LinkedEditModeStrategy.fromProjectSettings(project);
    }
 
@@ -40,7 +40,7 @@ public enum AssertionOrder implements PropertyTypeWithDefault {
    }
 
    @Override
-   public LinkedEditModeStrategy getLinkedEditModeStrategy(IProject project) {
+   public LinkedEditModeStrategy getLinkedEditModeStrategy(final IProject project) {
       return LinkedEditModeStrategy.ChooseArguments;
    }
 
@@ -53,7 +53,7 @@ public enum AssertionOrder implements PropertyTypeWithDefault {
    private static final Map<String, AssertionOrder> STRING_TO_ENUM = unorderedMap();
 
    static {
-      for (AssertionOrder order : values()) {
+      for (final AssertionOrder order : values()) {
          STRING_TO_ENUM.put(order.name(), order);
       }
    }
@@ -66,7 +66,7 @@ public enum AssertionOrder implements PropertyTypeWithDefault {
 
    private final String description;
 
-   private AssertionOrder(String description) {
+   private AssertionOrder(final String description) {
       this.description = description;
    }
 
@@ -78,20 +78,20 @@ public enum AssertionOrder implements PropertyTypeWithDefault {
       return DefaultPropertyHandler.getDefault(AssertionOrder.class);
    }
 
-   public static AssertionOrder fromProjectSettings(IProject project) {
-      String assertionOrder = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
+   public static AssertionOrder fromProjectSettings(final IProject project) {
+      final String assertionOrder = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
 
       if (assertionOrder == null) return getDefault();
 
       return fromName(assertionOrder);
    }
 
-   public static void storeInProjectSettings(IProject project, AssertionOrder order) {
+   public static void storeInProjectSettings(final IProject project, final AssertionOrder order) {
       new ProjectPropertiesHandler(project).setProjectProperty(QF_NAME, order.toString());
    }
 
-   public static AssertionOrder fromName(String name) {
-      AssertionOrder result = STRING_TO_ENUM.get(name);
+   public static AssertionOrder fromName(final String name) {
+      final AssertionOrder result = STRING_TO_ENUM.get(name);
       Assert.notNull(result, String.format("Unknown assertion order strategy '%s'", name));
       return result;
    }

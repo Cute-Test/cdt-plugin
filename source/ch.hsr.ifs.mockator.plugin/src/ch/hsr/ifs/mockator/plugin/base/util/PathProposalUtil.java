@@ -10,11 +10,11 @@ public class PathProposalUtil {
 
    private final IPath path;
 
-   public PathProposalUtil(IPath path) {
+   public PathProposalUtil(final IPath path) {
       this.path = path;
    }
 
-   public IPath getUniquePathForNewFile(String filePrefix, String fileSuffix) {
+   public IPath getUniquePathForNewFile(String filePrefix, final String fileSuffix) {
       filePrefix = filePrefix.replaceAll("\\s", "");
       IPath proposal = path.append(filePrefix + fileSuffix);
 
@@ -25,8 +25,8 @@ public class PathProposalUtil {
       return proposal;
    }
 
-   private static boolean isFileAlreadyExisting(IPath proposal) {
-      IFile file = CPPResourceHelper.getWorkspaceRoot().getFile(proposal);
+   private static boolean isFileAlreadyExisting(final IPath proposal) {
+      final IFile file = CPPResourceHelper.getWorkspaceRoot().getFile(proposal);
       return file.getLocation().toFile().exists();
    }
 }

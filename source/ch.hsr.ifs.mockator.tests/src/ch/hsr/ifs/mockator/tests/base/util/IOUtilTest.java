@@ -13,37 +13,40 @@ import org.junit.Test;
 
 import ch.hsr.ifs.mockator.plugin.base.util.IOUtil;
 
+
 public class IOUtilTest {
-  private static final String TMP_FILE_NAME = "tmp.txt";
 
-  @Test
-  public void safeCloseWithNullShouldNotYieldException() {
-    IOUtil.safeClose(null);
-  }
+   private static final String TMP_FILE_NAME = "tmp.txt";
 
-  @Test(expected = IOException.class)
-  public void safeCloseWithWriteAfterCloseYieldsIOException() throws IOException {
-    try {
-      DataOutputStream os = new DataOutputStream(new FileOutputStream(TMP_FILE_NAME));
-      IOUtil.safeClose(os);
-      os.write(0);
-    } finally {
-      boolean success = new File(TMP_FILE_NAME).delete();
-      assertTrue(success);
-    }
-  }
+   @Test
+   public void safeCloseWithNullShouldNotYieldException() {
+      IOUtil.safeClose(null);
+   }
 
-  @Test
-  public void stringToStreamYieldsSameString() throws IOException {
-    String text = "Mockator";
-    InputStream stringToStream = IOUtil.stringToStream(text);
-    StringBuilder sb = new StringBuilder();
+   @Test(expected = IOException.class)
+   public void safeCloseWithWriteAfterCloseYieldsIOException() throws IOException {
+      try {
+         final DataOutputStream os = new DataOutputStream(new FileOutputStream(TMP_FILE_NAME));
+         IOUtil.safeClose(os);
+         os.write(0);
+      }
+      finally {
+         final boolean success = new File(TMP_FILE_NAME).delete();
+         assertTrue(success);
+      }
+   }
 
-    int c;
-    while ((c = stringToStream.read()) != -1) {
-      sb.append((char) c);
-    }
+   @Test
+   public void stringToStreamYieldsSameString() throws IOException {
+      final String text = "Mockator";
+      final InputStream stringToStream = IOUtil.stringToStream(text);
+      final StringBuilder sb = new StringBuilder();
 
-    assertEquals(text, sb.toString());
-  }
+      int c;
+      while ((c = stringToStream.read()) != -1) {
+         sb.append((char) c);
+      }
+
+      assertEquals(text, sb.toString());
+   }
 }

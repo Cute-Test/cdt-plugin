@@ -27,7 +27,7 @@ public class MoveTestDoubleToNsRefactoring extends MockatorRefactoring {
    private ICPPASTFunctionDefinition testFunction;
 
    public MoveTestDoubleToNsRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection,
-            final ICProject cProject) {
+                                        final ICProject cProject) {
       super(cElement, selection, cProject);
       this.cppStd = cppStd;
    }
@@ -47,7 +47,7 @@ public class MoveTestDoubleToNsRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClassInSelection(getAST(tu, pm));
       if (clazz.isPresent()) {
          final IASTTranslationUnit ast = getAST(tu, pm);

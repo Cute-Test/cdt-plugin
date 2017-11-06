@@ -42,14 +42,16 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
    private final IProject    targetProject;
    private IFile             newFile;
 
-   public LdPreloadRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cProject, final IProject targetProject) {
+   public LdPreloadRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cProject,
+                               final IProject targetProject) {
       super(element, selection, cProject);
       this.cppStd = cppStd;
       this.targetProject = targetProject;
    }
 
    @Override
-   protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm) throws CoreException {
+   protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
+         throws CoreException {
       final Optional<ICPPASTFunctionDeclarator> optFunDecl = findFunDeclaration(funName, pm);
       if (optFunDecl.isPresent()) {
          final IASTTranslationUnit newTu = createAndGetNewTu(funName.toString(), pm);

@@ -25,48 +25,49 @@ public class PureVirtualMemFunCollector {
 
    private final ICPPClassType klass;
 
-   public PureVirtualMemFunCollector(ICPPClassType klass) {
+   public PureVirtualMemFunCollector(final ICPPClassType klass) {
       this.klass = klass;
    }
 
    public ICPPMethod[] collectPureVirtualMemFuns() {
-      Map<String, List<ICPPMethod>> result = getPureVirtualMemFuns(klass, new HashMap<ICPPClassType, Map<String, List<ICPPMethod>>>());
+      final Map<String, List<ICPPMethod>> result = getPureVirtualMemFuns(klass, new HashMap<ICPPClassType, Map<String, List<ICPPMethod>>>());
 
       int resultArraySize = 0;
-      for (List<ICPPMethod> methods : result.values()) {
+      for (final List<ICPPMethod> methods : result.values()) {
          resultArraySize += methods.size();
       }
 
-      ICPPMethod[] resultArray = new ICPPMethod[resultArraySize];
+      final ICPPMethod[] resultArray = new ICPPMethod[resultArraySize];
       int resultArrayIdx = 0;
 
-      for (List<ICPPMethod> methods : result.values()) {
-         for (ICPPMethod method : methods) {
+      for (final List<ICPPMethod> methods : result.values()) {
+         for (final ICPPMethod method : methods) {
             resultArray[resultArrayIdx++] = method;
          }
       }
       return resultArray;
    }
 
-   private Map<String, List<ICPPMethod>> getPureVirtualMemFuns(ICPPClassType classType, Map<ICPPClassType, Map<String, List<ICPPMethod>>> cache) {
+   private Map<String, List<ICPPMethod>> getPureVirtualMemFuns(final ICPPClassType classType,
+         final Map<ICPPClassType, Map<String, List<ICPPMethod>>> cache) {
       Map<String, List<ICPPMethod>> result = cache.get(classType);
       if (result != null) return result;
 
-      result = new HashMap<String, List<ICPPMethod>>();
+      result = new HashMap<>();
       cache.put(classType, result);
 
       // Look at the pure virtual methods of the base classes
-      Set<IBinding> handledBaseClasses = new HashSet<IBinding>();
-      for (ICPPBase base : ClassTypeHelper.getBases(classType, null)) {
+      final Set<IBinding> handledBaseClasses = new HashSet<>();
+      for (final ICPPBase base : ClassTypeHelper.getBases(classType, null)) {
          final IBinding baseClass = base.getBaseClass();
 
          if (baseClass instanceof ICPPClassType && handledBaseClasses.add(baseClass)) {
-            Map<String, List<ICPPMethod>> pureVirtuals = getPureVirtualMemFuns((ICPPClassType) baseClass, cache);
+            final Map<String, List<ICPPMethod>> pureVirtuals = getPureVirtualMemFuns((ICPPClassType) baseClass, cache);
             // Merge derived pure virtual methods
-            for (String key : pureVirtuals.keySet()) {
+            for (final String key : pureVirtuals.keySet()) {
                List<ICPPMethod> list = result.get(key);
                if (list == null) {
-                  list = new ArrayList<ICPPMethod>();
+                  list = new ArrayList<>();
                   result.put(key, list);
                }
                list.addAll(pureVirtuals.get(key));
@@ -76,15 +77,15 @@ public class PureVirtualMemFunCollector {
 
       // Remove overridden pure-virtual methods and add in new pure virtuals.
       final ObjectSet<ICPPMethod> methods = ClassTypeHelper.getOwnMethods(classType, null);
-      for (ICPPMethod method : methods) {
-         String key = getMethodNameForOverrideKey(method);
+      for (final ICPPMethod method : methods) {
+         final String key = getMethodNameForOverrideKey(method);
          List<ICPPMethod> list = result.get(key);
 
          if (list != null) {
             final ICPPFunctionType methodType = method.getType();
 
-            for (Iterator<ICPPMethod> it = list.iterator(); it.hasNext();) {
-               ICPPMethod pureVirtual = it.next();
+            for (final Iterator<ICPPMethod> it = list.iterator(); it.hasNext();) {
+               final ICPPMethod pureVirtual = it.next();
                if (functionTypesAllowOverride(methodType, pureVirtual.getType())) {
                   it.remove();
                }
@@ -92,7 +93,7 @@ public class PureVirtualMemFunCollector {
          }
          if (method.isPureVirtual()) {
             if (list == null) {
-               list = new ArrayList<ICPPMethod>();
+               list = new ArrayList<>();
                result.put(key, list);
             }
             list.add(method);
@@ -103,11 +104,11 @@ public class PureVirtualMemFunCollector {
       return result;
    }
 
-   private static boolean functionTypesAllowOverride(ICPPFunctionType a, ICPPFunctionType b) {
+   private static boolean functionTypesAllowOverride(final ICPPFunctionType a, final ICPPFunctionType b) {
       if (a.isConst() != b.isConst() || a.isVolatile() != b.isVolatile() || a.takesVarArgs() != b.takesVarArgs()) return false;
 
-      IType[] paramsA = a.getParameterTypes();
-      IType[] paramsB = b.getParameterTypes();
+      final IType[] paramsA = a.getParameterTypes();
+      final IType[] paramsB = b.getParameterTypes();
 
       if (paramsA.length == 1 && paramsB.length == 0) {
          if (!SemanticUtil.isVoidType(paramsA[0])) return false;
@@ -122,7 +123,7 @@ public class PureVirtualMemFunCollector {
       return true;
    }
 
-   private static String getMethodNameForOverrideKey(ICPPMethod method) {
+   private static String getMethodNameForOverrideKey(final ICPPMethod method) {
       if (method.isDestructor())
          // Destructor's names may differ but they will override each other.
          return "~";

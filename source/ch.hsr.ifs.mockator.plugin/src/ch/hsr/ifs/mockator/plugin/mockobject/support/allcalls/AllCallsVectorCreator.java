@@ -53,7 +53,7 @@ public class AllCallsVectorCreator {
 
       abstract int getStorageClassForCallsVector();
 
-      public static CallsVectorParent fromAstNode(IASTNode node) {
+      public static CallsVectorParent fromAstNode(final IASTNode node) {
          if (node instanceof ICPPASTNamespaceDefinition) return Namespace;
          else if (node instanceof IASTCompoundStatement) return Function;
 
@@ -61,39 +61,39 @@ public class AllCallsVectorCreator {
       }
    }
 
-   public AllCallsVectorCreator(String nameOfAllCallsVector, IASTNode callsVectorParent, CppStandard cppStd) {
+   public AllCallsVectorCreator(final String nameOfAllCallsVector, final IASTNode callsVectorParent, final CppStandard cppStd) {
       this(nameOfAllCallsVector, CallsVectorParent.fromAstNode(callsVectorParent), cppStd);
    }
 
-   public AllCallsVectorCreator(String nameOfAllCallsVector, CallsVectorParent callsVectorParent, CppStandard cppStd) {
+   public AllCallsVectorCreator(final String nameOfAllCallsVector, final CallsVectorParent callsVectorParent, final CppStandard cppStd) {
       this.nameOfAllCallsVector = nameOfAllCallsVector;
       this.callsVectorParent = callsVectorParent;
       this.cppStd = cppStd;
    }
 
    public IASTSimpleDeclaration getAllCallsVector() {
-      ICPPASTTemplateId stdVectorTemplateId = createStdVectorOfCalls();
+      final ICPPASTTemplateId stdVectorTemplateId = createStdVectorOfCalls();
       return createDeclarator(stdVectorTemplateId);
    }
 
-   private IASTSimpleDeclaration createDeclarator(ICPPASTTemplateId stdVectorTemplateId) {
-      ICPPASTNamedTypeSpecifier declSpecifier = nodeFactory.newTypedefNameSpecifier(stdVectorTemplateId);
-      IASTSimpleDeclaration result = nodeFactory.newSimpleDeclaration(declSpecifier);
-      IASTName typeDefName = nodeFactory.newName(nameOfAllCallsVector.toCharArray());
-      ICPPASTLiteralExpression literal1 = nodeFactory.newLiteralExpression(lk_integer_constant, "1");
-      ICPPASTDeclarator declarator = new CPPASTDeclarator(typeDefName, cppStd.getInitializer(literal1));
+   private IASTSimpleDeclaration createDeclarator(final ICPPASTTemplateId stdVectorTemplateId) {
+      final ICPPASTNamedTypeSpecifier declSpecifier = nodeFactory.newTypedefNameSpecifier(stdVectorTemplateId);
+      final IASTSimpleDeclaration result = nodeFactory.newSimpleDeclaration(declSpecifier);
+      final IASTName typeDefName = nodeFactory.newName(nameOfAllCallsVector.toCharArray());
+      final ICPPASTLiteralExpression literal1 = nodeFactory.newLiteralExpression(lk_integer_constant, "1");
+      final ICPPASTDeclarator declarator = new CPPASTDeclarator(typeDefName, cppStd.getInitializer(literal1));
       result.addDeclarator(declarator);
       declSpecifier.setStorageClass(callsVectorParent.getStorageClassForCallsVector());
       return result;
    }
 
    private static ICPPASTTemplateId createStdVectorOfCalls() {
-      ICPPASTQualifiedName allCalls = nodeFactory.newQualifiedName();
+      final ICPPASTQualifiedName allCalls = nodeFactory.newQualifiedName();
       allCalls.addName(nodeFactory.newName(STD.toCharArray()));
       allCalls.addName(nodeFactory.newName(VECTOR.toCharArray()));
-      ICPPASTNamedTypeSpecifier calls = nodeFactory.newTypedefNameSpecifier(nodeFactory.newName(CALLS.toCharArray()));
-      ICPPASTTemplateId stdVectorOfCalls = nodeFactory.newTemplateId(nodeFactory.newName(allCalls.toCharArray()));
-      ICPPASTTypeId id = nodeFactory.newTypeId(calls, null);
+      final ICPPASTNamedTypeSpecifier calls = nodeFactory.newTypedefNameSpecifier(nodeFactory.newName(CALLS.toCharArray()));
+      final ICPPASTTemplateId stdVectorOfCalls = nodeFactory.newTemplateId(nodeFactory.newName(allCalls.toCharArray()));
+      final ICPPASTTypeId id = nodeFactory.newTypeId(calls, null);
       stdVectorOfCalls.addTemplateArgument(id);
       return stdVectorOfCalls;
    }

@@ -14,34 +14,34 @@ import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 public class Cpp03RegistrationFinder extends RegistrationFinder {
 
    @Override
-   protected ExistingMemFunCallRegistration collectRegistration(IASTInitializerClause pushBackArg) {
-      ICPPASTFunctionCallExpression funCall = getFunCall(pushBackArg);
+   protected ExistingMemFunCallRegistration collectRegistration(final IASTInitializerClause pushBackArg) {
+      final ICPPASTFunctionCallExpression funCall = getFunCall(pushBackArg);
       assureIsCallType(funCall);
-      IASTInitializerClause[] funArgs = funCall.getArguments();
+      final IASTInitializerClause[] funArgs = funCall.getArguments();
       assureHasFunSignatureArg(funArgs);
-      IASTStatement containingStmt = getContainingStmt(pushBackArg);
+      final IASTStatement containingStmt = getContainingStmt(pushBackArg);
       return toExistingCallRegistration(funArgs[0], containingStmt);
    }
 
-   private static ICPPASTFunctionCallExpression getFunCall(IASTInitializerClause pushBackArg) {
+   private static ICPPASTFunctionCallExpression getFunCall(final IASTInitializerClause pushBackArg) {
       Assert.instanceOf(pushBackArg, ICPPASTFunctionCallExpression.class, "Wrong call argument type");
       return (ICPPASTFunctionCallExpression) pushBackArg;
    }
 
-   private void assureHasFunSignatureArg(IASTInitializerClause[] funArgs) {
+   private void assureHasFunSignatureArg(final IASTInitializerClause[] funArgs) {
       Assert.isTrue(funArgs.length > 0, "A call must have arguments");
       Assert.isTrue(isStringLiteral(funArgs[0]), "Fun signature must be a string literal");
    }
 
-   private static void assureIsCallType(ICPPASTFunctionCallExpression funCall) {
-      IASTExpression funNameExpr = funCall.getFunctionNameExpression();
+   private static void assureIsCallType(final ICPPASTFunctionCallExpression funCall) {
+      final IASTExpression funNameExpr = funCall.getFunctionNameExpression();
       Assert.isTrue(isCall(funNameExpr), "Not of call type");
    }
 
-   private static boolean isCall(IASTExpression functionNameExpression) {
+   private static boolean isCall(final IASTExpression functionNameExpression) {
       if (!(functionNameExpression instanceof IASTIdExpression)) return false;
 
-      IASTName name = ((IASTIdExpression) functionNameExpression).getName();
+      final IASTName name = ((IASTIdExpression) functionNameExpression).getName();
       return name.toString().equals(MockatorConstants.CALL);
    }
 }

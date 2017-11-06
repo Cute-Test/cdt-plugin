@@ -18,16 +18,16 @@ public class QualifiedNameCreator {
    private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
    private final IASTName              name;
 
-   public QualifiedNameCreator(IASTName name) {
+   public QualifiedNameCreator(final IASTName name) {
       this.name = name;
    }
 
    public ICPPASTQualifiedName createQualifiedName() {
-      MyStack<IASTNode> nodes = collectQualifiedNames();
-      ICPPASTQualifiedName qName = nodeFactory.newQualifiedName();
+      final MyStack<IASTNode> nodes = collectQualifiedNames();
+      final ICPPASTQualifiedName qName = nodeFactory.newQualifiedName();
 
       while (!nodes.isEmpty()) {
-         IASTNode node = nodes.pop();
+         final IASTNode node = nodes.pop();
 
          if (node instanceof IASTCompositeTypeSpecifier) {
             qName.addName(((IASTCompositeTypeSpecifier) node).getName());
@@ -41,7 +41,7 @@ public class QualifiedNameCreator {
    }
 
    private MyStack<IASTNode> collectQualifiedNames() {
-      MyStack<IASTNode> qNames = new MyStack<IASTNode>();
+      final MyStack<IASTNode> qNames = new MyStack<>();
       IASTNode tmpNode = name;
 
       while (tmpNode.getParent() != null && tmpNode.getParent() != name.getTranslationUnit()) {

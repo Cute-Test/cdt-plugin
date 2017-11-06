@@ -14,26 +14,26 @@ import ch.hsr.ifs.mockator.plugin.testdouble.entities.AbstractTestDouble;
 
 public class FakeObject extends AbstractTestDouble {
 
-   public FakeObject(ICPPASTCompositeTypeSpecifier klass) {
+   public FakeObject(final ICPPASTCompositeTypeSpecifier klass) {
       super(klass);
    }
 
    @Override
-   public void addAdditionalCtorSupport(ICPPASTFunctionDefinition defaultCtor, CppStandard cppStd) {}
+   public void addAdditionalCtorSupport(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {}
 
    @Override
-   public DefaultCtorProvider getDefaultCtorProvider(CppStandard cppStd) {
+   public DefaultCtorProvider getDefaultCtorProvider(final CppStandard cppStd) {
       return new FakeObjectDefaultCtorProvider(getKlass());
    }
 
    @Override
-   protected TestDoubleMemFunImplStrategy getImplStrategy(CppStandard cppStd) {
+   protected TestDoubleMemFunImplStrategy getImplStrategy(final CppStandard cppStd) {
       return new FakeObjectMemFunImplStrategy();
    }
 
    @Override
-   public void addToNamespace(ICPPASTNamespaceDefinition parentNs, IASTSimpleDeclaration testDouble, ICPPASTCompositeTypeSpecifier testDoubleToMove,
-         CppStandard cppStd, ASTRewrite rewriter) {
+   public void addToNamespace(final ICPPASTNamespaceDefinition parentNs, final IASTSimpleDeclaration testDouble,
+         final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
       parentNs.addDeclaration(testDouble);
    }
 }

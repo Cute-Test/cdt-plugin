@@ -37,7 +37,7 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
    private String            suiteName;
 
    public MockFunctionRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject referencedProj,
-            final ICProject mockatorProj) {
+                                  final ICProject mockatorProj) {
       super(cElement, selection, referencedProj);
       this.cppStd = cppStd;
       this.mockatorProj = mockatorProj;
@@ -53,14 +53,14 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
    }
 
    private static void assureFunHasLinkSeamProperties(final RefactoringStatus status, final Optional<IASTName> selectedFunName,
-            final IASTTranslationUnit ast) {
+         final IASTTranslationUnit ast) {
       final LinkerFunctionPreconVerifier verifier = new LinkerFunctionPreconVerifier(status, ast);
       verifier.assureSatisfiesLinkSeamProperties(selectedFunName);
    }
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final Optional<IASTName> funName = getSelectedName(getAST(tu, pm));
       if (funName.isPresent()) {
          final MockFunctionFileCreator fileCreator = getFileCreator(collector, pm);
@@ -81,13 +81,11 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
 
    private void setWeakDeclPropertyIfNecessary(final IASTName funName, final ModificationCollector collector, final IProgressMonitor pm) {
       new NodeLookup(project, pm).findFunctionDeclaration(funName, refactoringContext).ifPresent((funDecl) -> new WeakDeclAdder(collector)
-               .addWeakDeclAttribute(funDecl));
+            .addWeakDeclAttribute(funDecl));
    }
 
    private String getSuiteName(final IASTName selectedFunName) {
-      if (suiteName == null) {
-         return selectedFunName.toString();
-      }
+      if (suiteName == null) { return selectedFunName.toString(); }
 
       return suiteName;
    }

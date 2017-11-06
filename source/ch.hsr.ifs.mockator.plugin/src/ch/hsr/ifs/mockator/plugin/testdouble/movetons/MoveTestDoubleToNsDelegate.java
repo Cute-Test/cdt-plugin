@@ -13,18 +13,18 @@ public class MoveTestDoubleToNsDelegate extends MockatorDelegate {
 
    @Override
    protected void execute() {
-      MoveTestDoubleToNsRefactoring refactoring = moveTestDoubleToNs();
+      final MoveTestDoubleToNsRefactoring refactoring = moveTestDoubleToNs();
       deleteInitMockatorCall(refactoring);
    }
 
    private MoveTestDoubleToNsRefactoring moveTestDoubleToNs() {
-      MoveTestDoubleToNsRefactoring refactoring = getMoveRefactoring();
+      final MoveTestDoubleToNsRefactoring refactoring = getMoveRefactoring();
       new MockatorRefactoringRunner(refactoring).runInCurrentThread(new NullProgressMonitor());
       return refactoring;
    }
 
-   private void deleteInitMockatorCall(MoveTestDoubleToNsRefactoring moveRefactoring) {
-      RemoveInitMockatorRefactoring deleteRefactoring = getRemoveInitRefactoring(moveRefactoring);
+   private void deleteInitMockatorCall(final MoveTestDoubleToNsRefactoring moveRefactoring) {
+      final RemoveInitMockatorRefactoring deleteRefactoring = getRemoveInitRefactoring(moveRefactoring);
       new MockatorRefactoringRunner(deleteRefactoring).runInCurrentThread(new NullProgressMonitor());
    }
 
@@ -32,10 +32,10 @@ public class MoveTestDoubleToNsDelegate extends MockatorDelegate {
       return new MoveTestDoubleToNsRefactoring(getCppStd(), cElement, selection, cProject);
    }
 
-   private RemoveInitMockatorRefactoring getRemoveInitRefactoring(MoveTestDoubleToNsRefactoring refactoring) {
-      IDocument doc = UiUtil.getCurrentDocument().get();
-      ICPPASTFunctionDefinition funDef = refactoring.getTestFunction();
-      RemoveInitMockatorRefactoring removeRef = new RemoveInitMockatorRefactoring(doc, cElement, selection, cProject);
+   private RemoveInitMockatorRefactoring getRemoveInitRefactoring(final MoveTestDoubleToNsRefactoring refactoring) {
+      final IDocument doc = UiUtil.getCurrentDocument().get();
+      final ICPPASTFunctionDefinition funDef = refactoring.getTestFunction();
+      final RemoveInitMockatorRefactoring removeRef = new RemoveInitMockatorRefactoring(doc, cElement, selection, cProject);
       removeRef.setTestFunction(funDef);
       return removeRef;
    }

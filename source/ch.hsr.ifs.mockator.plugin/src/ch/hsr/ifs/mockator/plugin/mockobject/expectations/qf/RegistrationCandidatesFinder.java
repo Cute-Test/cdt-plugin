@@ -18,17 +18,17 @@ class RegistrationCandidatesFinder {
    private final IASTTranslationUnit ast;
    private final CppStandard         cppStd;
 
-   public RegistrationCandidatesFinder(IASTTranslationUnit ast, CppStandard cppStd) {
+   public RegistrationCandidatesFinder(final IASTTranslationUnit ast, final CppStandard cppStd) {
       this.ast = ast;
       this.cppStd = cppStd;
    }
 
-   public Collection<ExistingMemFunCallRegistration> findCallRegistrations(IASTName callRegistrationVector) {
-      IASTName[] references = ast.getReferences(callRegistrationVector.resolveBinding());
+   public Collection<ExistingMemFunCallRegistration> findCallRegistrations(final IASTName callRegistrationVector) {
+      final IASTName[] references = ast.getReferences(callRegistrationVector.resolveBinding());
       return getRegistrations(list(references));
    }
 
-   private Collection<ExistingMemFunCallRegistration> getRegistrations(List<IASTName> callRegistrations) {
+   private Collection<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> callRegistrations) {
       return new CallRegistrationCollector(cppStd).getRegistrations(callRegistrations);
    }
 }
