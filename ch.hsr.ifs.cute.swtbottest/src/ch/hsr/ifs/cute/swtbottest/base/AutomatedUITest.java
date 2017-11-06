@@ -365,7 +365,6 @@ public abstract class AutomatedUITest {
 		fBot.viewByTitle("Project Explorer");
 		for (SWTBotTreeItem item : fBot.tree().getAllItems()) {
 			item.expand();
-//			fBot.waitUntil(BotConditions.expandTreeItem(item));
 		}
 	}
 

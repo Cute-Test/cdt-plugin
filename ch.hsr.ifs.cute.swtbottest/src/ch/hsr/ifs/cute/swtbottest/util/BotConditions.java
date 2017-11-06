@@ -135,20 +135,6 @@ public final class BotConditions {
 		return new TreeNodeIsSelected(tree, parent, node);
 	}
 
-	/**
-	 * Create a new tree item expansion condition
-	 * <p>
-	 * The condition evaluates to true a tree node is expanded
-	 * </p>
-	 *
-	 * @param item
-	 *            The {@link #SWTBotTreeItem} containing which should be expanded
-	 * @return
-	 */
-	public static TreeItemIsExpanded expandTreeItem(SWTBotTreeItem item) {
-		return new TreeItemIsExpanded(item);
-	}
-
 	private static final class ViewTextContains extends DefaultCondition {
 
 		private final SWTBotView fView;
@@ -329,28 +315,6 @@ public final class BotConditions {
 		@Override
 		public String getFailureMessage() {
 			return "Failed to select node \"" + fNode + "->" + fChild + "\".";
-		}
-	}
-
-	/**
-	 * A condition to wait until a SWTBotTreeItem is expanded
-	 */
-	private static final class TreeItemIsExpanded extends DefaultCondition {
-
-		final SWTBotTreeItem fItem;
-
-		private TreeItemIsExpanded(SWTBotTreeItem item) {
-			fItem = item;
-		}
-
-		@Override
-		public boolean test() throws Exception {
-			return fItem.isExpanded();
-		}
-
-		@Override
-		public String getFailureMessage() {
-			return "Unable to expand item " + fItem.getText() + ".";
 		}
 	}
 }
