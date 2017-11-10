@@ -2,7 +2,7 @@ package ch.hsr.ifs.mockator.plugin.refsupport.includes;
 
 import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
@@ -19,13 +19,15 @@ class IncludeFinderVisitor {
    }
 
    public boolean hasIncludeStatement(final String includeName) {
-      if (includeName.isEmpty()) return true;
+      if (includeName.isEmpty()) {
+         return true;
+      }
 
       final IASTPreprocessorStatement[] prepStmts = tu.getAllPreprocessorStatements();
       return !filter(prepStmts, new IncludeStatementFinder(includeName)).isEmpty();
    }
 
-   private static class IncludeStatementFinder implements Function<IASTPreprocessorStatement, Boolean> {
+   private static class IncludeStatementFinder implements Predicate<IASTPreprocessorStatement> {
 
       private final String includeName;
 
@@ -34,8 +36,10 @@ class IncludeFinderVisitor {
       }
 
       @Override
-      public Boolean apply(final IASTPreprocessorStatement stmt) {
-         if (!(stmt instanceof IASTPreprocessorIncludeStatement)) return false;
+      public boolean test(final IASTPreprocessorStatement stmt) {
+         if (!(stmt instanceof IASTPreprocessorIncludeStatement)) {
+            return false;
+         }
 
          final IASTName foundIncludeName = ((IASTPreprocessorIncludeStatement) stmt).getName();
          return includeName.equals(foundIncludeName.toString());

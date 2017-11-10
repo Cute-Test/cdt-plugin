@@ -6,6 +6,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -24,10 +26,14 @@ public class HigherOrderTest {
       }
 
       final Collection<Integer> filtered = HigherOrder.filter(numbersUpToIncluding100, (number) -> {
-         if (number <= 1) return false;
+         if (number <= 1) {
+            return false;
+         }
 
          for (int i = 2; i <= Math.sqrt(number); i++) {
-            if (number % i == 0) return false;
+            if (number % i == 0) {
+               return false;
+            }
          }
          return true;
       });
@@ -44,7 +50,7 @@ public class HigherOrderTest {
    @Test
    public void mapDoubleNumbers() {
       final List<Integer> numbersUpto10 = list(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-      final Collection<Integer> doubledNumbers = HigherOrder.map(numbersUpto10, (number) -> number * 2);
+      final Collection<Integer> doubledNumbers = (Collection<T>) numbersUpto10.stream().map((Function<S, T>) (number) -> number * 2).collect(Collectors.toList());
       final List<Integer> expected = list(0, 2, 4, 6, 8, 10, 12, 14, 16, 18);
       assertEquals(expected, doubledNumbers);
    }
@@ -82,7 +88,7 @@ public class HigherOrderTest {
       funs.add(fun);
       funs.add(fun);
       funs.add(fun);
-      HigherOrder.forEach(funs, 1);
+      funs.stream().forEachOrdered((it) -> it.accept(1));
       assertEquals(3, counter.i);
    }
 }

@@ -3,13 +3,13 @@ package ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.map;
 import static ch.hsr.ifs.mockator.plugin.base.util.HtmlUtil.escapeHtml;
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.quote;
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.unquote;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarker;
 
@@ -41,7 +41,7 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    private static Collection<String> toStrings(final Collection<MemFunSignature> signatures) {
-      return map(signatures, (expectation) -> expectation.toString());
+      return signatures.stream().map((expectation) -> expectation.toString()).collect(Collectors.toList());
    }
 
    private static String getResolutionDesc(final Collection<MemFunSignature> toRemove, final Collection<MemFunSignature> toAdd) {
@@ -63,7 +63,9 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    private static List<String> split(final String expectations) {
-      if (expectations.trim().isEmpty()) return list();
+      if (expectations.trim().isEmpty()) {
+         return list();
+      }
       return list(expectations.split(SIGNATURE_DELIMITER));
    }
 

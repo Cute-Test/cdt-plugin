@@ -2,10 +2,10 @@ package ch.hsr.ifs.mockator.plugin.testdouble.entities;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.map;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -59,8 +59,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public Collection<ExistingTestDoubleMemFun> getPublicMemFuns() {
-      //TODO was lambda with constructor
-      return map(AstUtil.getFunctionDefinitions(collectPublicMemFuns()), ExistingTestDoubleMemFun::new);
+      return AstUtil.getFunctionDefinitions(collectPublicMemFuns()).stream().map(ExistingTestDoubleMemFun::new).collect(Collectors.toList());
    }
 
    private Collection<IASTDeclaration> collectPublicMemFuns() {

@@ -2,10 +2,10 @@ package ch.hsr.ifs.mockator.plugin.extractinterface.postconditions;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedSet;
 import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.map;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -59,8 +59,8 @@ public class ShadowedMemFunVerifier {
    }
 
    private Collection<ICPPMethod> getChosenNonVirtualMemFuns() {
-      return filter(map(context.getChosenMemFuns(), (final IASTDeclaration decl) -> getCppMethodIn(decl)), (final ICPPMethod memFun) -> !memFun
-            .isVirtual());
+      return filter(context.getChosenMemFuns().stream().map((final IASTDeclaration decl) -> getCppMethodIn(decl)).collect(Collectors.toList()), (
+            final ICPPMethod memFun) -> !memFun.isVirtual());
    }
 
    private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {

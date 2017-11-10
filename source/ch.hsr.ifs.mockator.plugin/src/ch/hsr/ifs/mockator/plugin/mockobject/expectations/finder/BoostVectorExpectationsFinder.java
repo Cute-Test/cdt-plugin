@@ -2,9 +2,9 @@ package ch.hsr.ifs.mockator.plugin.mockobject.expectations.finder;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
 import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.map;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionList;
@@ -29,7 +29,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
 
    public BoostVectorExpectationsFinder(final Collection<MemFunCallExpectation> callExpectations, final NodeContainer<IASTName> expectationVector,
-                                        final IASTName expectationsVectorName) {
+         final IASTName expectationsVectorName) {
       super(callExpectations, expectationVector, expectationsVectorName);
    }
 
@@ -39,15 +39,21 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
       final IASTExpression expression = ((IASTExpressionStatement) expectationStmt).getExpression();
       final ICPPASTBinaryExpression binExpr = getBinaryExpr(expression);
 
-      if (binExpr == null) return;
+      if (binExpr == null) {
+         return;
+      }
 
       final IASTExpression operand1 = binExpr.getOperand1();
 
-      if (!(operand1 instanceof IASTIdExpression)) return;
+      if (!(operand1 instanceof IASTIdExpression)) {
+         return;
+      }
 
       final IASTIdExpression idExpr = (IASTIdExpression) operand1;
 
-      if (!matchesName(idExpr.getName()) || !isTypeDefForCallsVector(idExpr)) return;
+      if (!matchesName(idExpr.getName()) || !isTypeDefForCallsVector(idExpr)) {
+         return;
+      }
 
       expectationVector.setNode(idExpr.getName());
       callExpectations.addAll(getMemFunCalls(expression));
@@ -95,7 +101,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private void toMemberFunctionCalls(final Collection<MemFunCallExpectation> callExpectations, final Collection<IASTExpression> onlyCalls) {
-      final Collection<MemFunCallExpectation> memFunCalls = map(onlyCalls, (param) -> getMemFunCallIn(param));
+      final Collection<MemFunCallExpectation> memFunCalls = onlyCalls.stream().map((param) -> getMemFunCallIn(param)).collect(Collectors.toList());
       for (final MemFunCallExpectation call : memFunCalls) {
          callExpectations.add(call);
       }
@@ -114,11 +120,15 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    private static boolean isCallExpr(final IASTExpression expression) {
       final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
 
-      if (funCall == null) return false;
+      if (funCall == null) {
+         return false;
+      }
 
       final IASTExpression functionNameExpr = funCall.getFunctionNameExpression();
 
-      if (!(functionNameExpr instanceof IASTIdExpression)) return false;
+      if (!(functionNameExpr instanceof IASTIdExpression)) {
+         return false;
+      }
 
       return isNameCall(functionNameExpr);
    }

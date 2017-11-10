@@ -1,8 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface;
 
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.forEach;
-
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -23,18 +21,22 @@ class ExtractInterfaceHandler {
 
    public void preProcess() {
       final StopWhenFatalErrorCondition stopWhen = new StopWhenFatalErrorCondition(context.getStatus());
-      forEach(new DiagnosticsRegistry().createInstances(), context, stopWhen);
+      new DiagnosticsRegistry().createInstances().stream().forEachOrdered((it) -> {
+         if (!stopWhen.test(null)) {
+            it.accept(context);
+         }
+      });
    }
 
    public void performChanges() {
-      forEach(new TransformationsRegistry().createInstances(), context);
+      new TransformationsRegistry().createInstances().stream().forEachOrdered((it) -> it.accept(context));
    }
 
    public void postProcess(final RefactoringStatus status) throws CoreException {
       new ShadowedMemFunVerifier(context).checkForShadowedFunctions(status);
    }
 
-   private static class StopWhenFatalErrorCondition implements Function<Void, Boolean> {
+   private static class StopWhenFatalErrorCondition implements Predicate<Void> {
 
       private final RefactoringStatus status;
 
@@ -43,7 +45,7 @@ class ExtractInterfaceHandler {
       }
 
       @Override
-      public Boolean apply(final Void ignore) {
+      public boolean test(final Void ignore) {
          return status.hasFatalError();
       }
    }

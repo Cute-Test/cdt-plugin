@@ -1,9 +1,9 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.checker;
 
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.map;
 import static ch.hsr.ifs.mockator.plugin.base.i18n.I18N.MemberFunctionsToImplementTitle;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import ch.hsr.ifs.mockator.plugin.base.util.HtmlUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
@@ -17,7 +17,7 @@ class MissingMemFunSignaturesGenerator {
    private final Collection<String> missingMemFunSignatures;
 
    public MissingMemFunSignaturesGenerator(final Collection<MissingMemberFunction> missingMemFuns) {
-      missingMemFunSignatures = map(missingMemFuns, (memFun) -> memFun.getFunctionSignature());
+      missingMemFunSignatures = missingMemFuns.stream().map((memFun) -> memFun.getFunctionSignature()).collect(Collectors.toList());
    }
 
    public String getSignaturesWithStatistics() {
@@ -40,6 +40,6 @@ class MissingMemFunSignaturesGenerator {
    }
 
    private static Collection<String> htmlize(final Collection<String> signatures) {
-      return map(signatures, (signature) -> HtmlUtil.escapeHtml(signature));
+      return signatures.stream().map((signature) -> HtmlUtil.escapeHtml(signature)).collect(Collectors.toList());
    }
 }

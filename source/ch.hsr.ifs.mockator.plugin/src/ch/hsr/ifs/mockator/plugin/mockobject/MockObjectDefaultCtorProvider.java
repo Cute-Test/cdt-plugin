@@ -1,15 +1,16 @@
 package ch.hsr.ifs.mockator.plugin.mockobject;
 
 import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.map;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -57,9 +58,9 @@ public class MockObjectDefaultCtorProvider implements DefaultCtorProvider {
    }
 
    private <T extends MissingMemberFunction> Collection<ICPPASTFunctionDefinition> toFunctions(final Collection<T> memFuns) {
-      return map(memFuns, (missingMemFun) -> {
+      return memFuns.stream().map((missingMemFun) -> {
          final MockObjectMemFunImplStrategy strategy = new MockObjectMemFunImplStrategy(cppStd, mockObject);
          return missingMemFun.createFunctionDefinition(strategy, cppStd);
-      });
+      }).collect(Collectors.toList());
    }
 }

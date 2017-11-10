@@ -25,6 +25,6 @@ public class PathProposalUtil {
    }
 
    private static boolean isFileAlreadyExisting(final IPath proposal) {
-      return FileUtil.toFile(proposal).exists();
+      return FileUtil.toIFile(proposal).exists();
    }
 }

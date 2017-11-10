@@ -1,9 +1,9 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.map;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -27,7 +27,7 @@ public class CtorArgumentsCopier {
    }
 
    public Collection<IASTInitializerClause> getArguments() {
-      return map(list(ctorInitializer.getArguments()), (clause) -> copyPreservingNameBindings(clause));
+      return list(ctorInitializer.getArguments()).stream().map((clause) -> copyPreservingNameBindings(clause)).collect(Collectors.toList());
    }
 
    private static <T extends IASTNode> T copyPreservingNameBindings(final T node) {
