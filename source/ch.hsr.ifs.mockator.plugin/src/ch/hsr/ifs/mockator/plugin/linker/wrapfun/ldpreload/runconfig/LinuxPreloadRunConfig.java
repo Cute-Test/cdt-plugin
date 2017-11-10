@@ -2,7 +2,7 @@ package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.runconfig;
 
 import java.util.Map;
 
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 
 class LinuxPreloadRunConfig extends AbstractPreloadRunStrategy {
@@ -21,7 +21,9 @@ class LinuxPreloadRunConfig extends AbstractPreloadRunStrategy {
       final String ldPreloadLibs = envVariables.get(LD_PRELOAD);
       final String ldLibraryPath = envVariables.get(LD_LIBRARY_PATH);
 
-      if (ldLibraryPath == null || ldPreloadLibs == null) return false;
+      if (ldLibraryPath == null || ldPreloadLibs == null) {
+         return false;
+      }
 
       return ldPreloadLibs.contains(sharedLibPath) && ldLibraryPath.contains(FileUtil.removeFilePart(sharedLibPath));
    }

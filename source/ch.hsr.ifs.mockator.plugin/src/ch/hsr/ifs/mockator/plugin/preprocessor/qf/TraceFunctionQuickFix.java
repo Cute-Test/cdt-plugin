@@ -12,7 +12,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.graphics.Image;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
+
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludeFileHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.SiblingTranslationUnitFinder;

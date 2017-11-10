@@ -31,8 +31,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 import ch.hsr.ifs.mockator.plugin.linker.shadowfun.ShadowFunctionGenerator;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector.ExpectationsCppStdStrategy;
@@ -67,8 +68,8 @@ abstract class MockFunctionFileCreator {
    private IFile                          newlyCreatedFile;
 
    public MockFunctionFileCreator(final ModificationCollector collector, final CRefactoringContext cRefContext, final ITranslationUnit originTu,
-                                  final ICProject mockatorProject, final ICProject originProject, final CppStandard cppStd,
-                                  final IProgressMonitor pm) {
+         final ICProject mockatorProject, final ICProject originProject, final CppStandard cppStd,
+         final IProgressMonitor pm) {
       this.collector = collector;
       this.cRefContext = cRefContext;
       this.originTu = originTu;

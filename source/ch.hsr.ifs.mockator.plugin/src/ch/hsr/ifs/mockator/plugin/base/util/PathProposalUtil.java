@@ -1,9 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.base.util;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 
 public class PathProposalUtil {
@@ -26,7 +25,6 @@ public class PathProposalUtil {
    }
 
    private static boolean isFileAlreadyExisting(final IPath proposal) {
-      final IFile file = CProjectUtil.getWorkspaceRoot().getFile(proposal);
-      return file.getLocation().toFile().exists();
+      return FileUtil.toFile(proposal).exists();
    }
 }

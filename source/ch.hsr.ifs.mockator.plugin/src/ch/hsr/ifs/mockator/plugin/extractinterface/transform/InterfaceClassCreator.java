@@ -30,7 +30,9 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.core.resources.IFile;
 
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.resources.CFileUtil;
+
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.IncludeGuardCreator;
@@ -207,7 +209,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
 
    private static IFile getInterfaceFile(final ExtractInterfaceContext context) {
       final String interfaceFilePath = context.getInterfaceFilePath();
-      final IFile classFile = FileUtil.getFile(context.getTuOfChosenClass());
+      final IFile classFile = CFileUtil.getFile(context.getTuOfChosenClass());
       return FileUtil.toIFile(FileUtil.getPath(classFile).append(interfaceFilePath));
    }
 }

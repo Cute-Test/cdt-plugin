@@ -21,8 +21,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionDelegateCallCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
@@ -35,7 +36,7 @@ class PreprocessorSourceFileCreator extends PreprocessorFileCreator {
    private final IPath newHeaderFilePath;
 
    public PreprocessorSourceFileCreator(final IPath newHeaderFilePath, final ModificationCollector collector, final ICProject cProject,
-                                        final CRefactoringContext context) {
+         final CRefactoringContext context) {
       super(collector, cProject, context);
       this.newHeaderFilePath = newHeaderFilePath;
    }

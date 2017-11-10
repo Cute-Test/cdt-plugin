@@ -8,9 +8,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.resources.CFileUtil;
+
+import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
@@ -26,7 +28,7 @@ public class InterfaceFileCreator implements Consumer<ExtractInterfaceContext> {
    }
 
    private static IPath getUniquePathForNewFile(final ExtractInterfaceContext context) {
-      final IFile classFile = FileUtil.getFile(context.getChosenClass());
+      final IFile classFile = CFileUtil.getFile(context.getChosenClass());
       final PathProposalUtil proposal = new PathProposalUtil(FileUtil.getPath(classFile));
       return proposal.getUniquePathForNewFile(context.getNewInterfaceName(), MockatorConstants.HEADER_SUFFIX);
    }

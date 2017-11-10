@@ -9,7 +9,8 @@ import java.util.Enumeration;
 
 import org.junit.Test;
 
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
+
 import ch.hsr.ifs.mockator.tests.MockatorTestPlugin;
 
 

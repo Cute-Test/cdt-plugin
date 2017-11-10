@@ -16,9 +16,9 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.resources.IFile;
 
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterSignatureHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
@@ -37,8 +37,9 @@ public class WeakDeclAdder {
    public void addWeakDeclAttribute(final ICPPASTFunctionDeclarator funDecl) {
       final IASTTranslationUnit tu = funDecl.getTranslationUnit();
 
-      if (!isTuPartOfWorkspace(tu)) // otherwise we cannot adapt its function declaration
+      if (!isTuPartOfWorkspace(tu)) {
          return;
+      }
 
       final ICPPASTNamedTypeSpecifier withWeakDeclSpec = createWeakDeclSpec(funDecl);
       final IASTNode funDeclParentCopy = getWeakParentCopy(funDecl, withWeakDeclSpec);

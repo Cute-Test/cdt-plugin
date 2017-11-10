@@ -27,11 +27,12 @@ import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
-import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
+
+import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.MacroFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
@@ -80,7 +81,9 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
 
    @Override
    public Change createChange(final IProgressMonitor pm) throws CoreException {
-      if (!hasMockatorInitCall()) return new NullChange();
+      if (!hasMockatorInitCall()) {
+         return new NullChange();
+      }
 
       return createDeleteChange(pm);
    }
