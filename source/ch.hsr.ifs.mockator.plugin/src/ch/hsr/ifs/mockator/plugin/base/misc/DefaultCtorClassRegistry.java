@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class DefaultCtorClassRegistry<T> {
@@ -23,10 +23,10 @@ public class DefaultCtorClassRegistry<T> {
             instances.add(klass.newInstance());
          }
          catch (final InstantiationException e) {
-            throw new MockatorException("Class has no default constructor: " + klass.getSimpleName(), e);
+            new ILTISException("Class has no default constructor: " + klass.getSimpleName(), e).rethrowUnchecked();;
          }
          catch (final IllegalAccessException e) {
-            throw new MockatorException("No access to class " + klass.getSimpleName(), e);
+            new ILTISException("No access to class " + klass.getSimpleName(), e).rethrowUnchecked();;
          }
       }
       return instances;

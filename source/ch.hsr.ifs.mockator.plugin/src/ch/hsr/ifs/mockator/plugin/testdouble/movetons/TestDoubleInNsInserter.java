@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.fakeobject.FakeObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -102,7 +102,7 @@ public class TestDoubleInNsInserter {
          testDouble = new MockObject(toMove);
          break;
       default:
-         throw new MockatorException("Unexpected kind of testdouble");
+         throw new ILTISException("Unexpected kind of testdouble").rethrowUnchecked();
       }
 
       testDouble.addToNamespace(parentNs, simpleDecl, toMove, cppStd, rewriter);

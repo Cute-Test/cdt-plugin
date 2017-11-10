@@ -6,7 +6,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypedefHelper;
 
 
@@ -27,7 +27,7 @@ class BindingDeclSpecStrategy implements DeclSpecGeneratorStrategy {
          return new TypedefHelper(type).findShortestType();
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 }

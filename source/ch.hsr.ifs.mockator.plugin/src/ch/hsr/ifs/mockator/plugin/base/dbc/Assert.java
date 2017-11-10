@@ -1,6 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.base.dbc;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.base.misc.CastHelper;
 
 
@@ -41,6 +42,6 @@ public abstract class Assert {
    }
 
    private static void throwWith(final String message) {
-      throw new MockatorException(message);
+      new ILTISException(message).rethrowUnchecked();
    }
 }

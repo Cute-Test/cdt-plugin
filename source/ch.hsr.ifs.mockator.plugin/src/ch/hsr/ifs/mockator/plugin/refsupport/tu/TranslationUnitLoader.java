@@ -18,7 +18,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
@@ -79,7 +79,7 @@ public class TranslationUnitLoader {
          return tu.getAST(index, AST_FLAGS);
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 }

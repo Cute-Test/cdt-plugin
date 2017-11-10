@@ -21,10 +21,10 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
@@ -57,7 +57,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
             final IASTTranslationUnit newTu = createAndGetNewTu(refProj, funName.toString(), pm);
             final ICPPASTFunctionDefinition funDef = createFunDefinition(refProj, optFunDecl.get());
             final ASTRewrite rewriter = createRewriter(collector, newTu);
-            final ICProject cProject = CPPResourceHelper.getCProject(refProj);
+            final ICProject cProject = CProjectUtil.getCProject(refProj);
             insertFunDeclInclude(optFunDecl.get(), newTu, rewriter, cProject);
             insertFunDefinition(funDef, newTu, rewriter);
          }
@@ -102,7 +102,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
          return handler.createFolder(SHADOW_FOLDER_NAME, pm);
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 

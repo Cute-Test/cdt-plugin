@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
@@ -88,7 +88,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
          return finder.findCallRegistrations(vector.getName());
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 

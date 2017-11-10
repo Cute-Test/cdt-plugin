@@ -19,7 +19,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
@@ -28,24 +28,24 @@ enum ArgumentPassByStrategy {
 
    asPointer {
 
-   @Override
-   public void adaptArguments(final IASTName problemArg, final String nameOfNewInstance, final ASTRewrite rewriter) {
-      final ICPPASTConstructorInitializer ctorInit = AstUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
-      final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(problemArg, ICPPASTFunctionCallExpression.class);
+      @Override
+      public void adaptArguments(final IASTName problemArg, final String nameOfNewInstance, final ASTRewrite rewriter) {
+         final ICPPASTConstructorInitializer ctorInit = AstUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
+         final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(problemArg, ICPPASTFunctionCallExpression.class);
 
-      if (ctorInit != null) {
-         adaptCtorArguments(nameOfNewInstance, rewriter, ctorInit);
-      } else if (funCall != null) {
-         adaptFunCallArguments(nameOfNewInstance, rewriter, funCall);
+         if (ctorInit != null) {
+            adaptCtorArguments(nameOfNewInstance, rewriter, ctorInit);
+         } else if (funCall != null) {
+            adaptFunCallArguments(nameOfNewInstance, rewriter, funCall);
+         }
       }
-   }
    },
    asReference {
 
-   @Override
-   public void adaptArguments(final IASTName problemArgument, final String nameOfNewInstance, final ASTRewrite rewriter) {
-      // no argument adaption necessary when passed by reference
-   }
+      @Override
+      public void adaptArguments(final IASTName problemArgument, final String nameOfNewInstance, final ASTRewrite rewriter) {
+         // no argument adaption necessary when passed by reference
+      }
    };
 
    private static final CPPNodeFactory                      nodeFactory    = CPPNodeFactory.getDefault();
@@ -98,16 +98,21 @@ enum ArgumentPassByStrategy {
    }
 
    public static ArgumentPassByStrategy getStrategy(final IType type) {
-      if (type instanceof ICPPReferenceType) return asReference;
-      else if (type instanceof IPointerType) return asPointer;
+      if (type instanceof ICPPReferenceType) {
+         return asReference;
+      } else if (type instanceof IPointerType) {
+         return asPointer;
+      }
 
-      throw new MockatorException("Pass by value is not possible with subtype polymorphism");
+      throw new ILTISException("Pass by value is not possible with subtype polymorphism").rethrowUnchecked();
    }
 
    public static ArgumentPassByStrategy fromName(final String name) {
       final ArgumentPassByStrategy strategy = STRING_TO_ENUM.get(name);
 
-      if (strategy == null) throw new MockatorException(String.format("Unknown pass by strategy '%s'", name));
+      if (strategy == null) {
+         throw new ILTISException(String.format("Unknown pass by strategy '%s'", name)).rethrowUnchecked();
+      }
 
       return strategy;
    }

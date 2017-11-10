@@ -11,7 +11,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.graphics.Image;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludeFileHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
@@ -52,7 +52,7 @@ public abstract class TraceFunctionQuickFix extends MockatorQuickFix {
          if (path.isPresent()) { return FileUtil.toIFile(path.get()); }
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
 
       return null;

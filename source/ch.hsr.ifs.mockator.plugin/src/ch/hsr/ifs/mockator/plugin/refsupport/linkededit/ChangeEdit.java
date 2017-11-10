@@ -17,7 +17,7 @@ import org.eclipse.text.edits.TextEdit;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
@@ -69,7 +69,7 @@ public class ChangeEdit {
          return ((CompositeChange) fstChange).getChildren();
       } else if (fstChange instanceof TextChange) { return array(fstChange); }
 
-      throw new MockatorException("Unsupported change object passed");
+      throw new ILTISException("Unsupported change object passed").rethrowUnchecked();
    }
 
    private static boolean isReplaceOrInsertEdit(final TextEdit edit) {

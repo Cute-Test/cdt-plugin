@@ -13,7 +13,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
@@ -56,7 +55,8 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
       try {
          handler.postProcess(status);
       }
-      catch (final MockatorException e) {
+      //TODO check if Exception is the right replacement for ILTISException
+      catch (final Exception e) {
          status.addFatalError("Extract interface refactoring failed: " + e.getMessage());
       }
 

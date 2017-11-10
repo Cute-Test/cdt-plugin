@@ -10,7 +10,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -51,7 +51,7 @@ public class MockFunctionDelegate extends MockatorDelegate implements IWorkbench
    }
 
    private void showCuteSuiteWizard(final IProject mockatorProject) {
-      final ICProject cProject = CPPResourceHelper.getCProject(mockatorProject);
+      final ICProject cProject = CProjectUtil.getCProject(mockatorProject);
       final MockFunctionRefactoring refactoring = getMockFunRefactoring(cProject);
       final LinkSuiteToRunnerRefactoring runner = getRunnerRefactoring(cProject);
       createAndOpenWizard(new NewSuiteFileCreationWizard(cProject, refactoring, runner));
@@ -100,7 +100,7 @@ public class MockFunctionDelegate extends MockatorDelegate implements IWorkbench
    }
 
    private void mockFreeFunction(final IProject mockatorProject) {
-      final MockFunctionRefactoring refactoring = getMockFunRefactoring(CPPResourceHelper.getCProject(mockatorProject));
+      final MockFunctionRefactoring refactoring = getMockFunRefactoring(CProjectUtil.getCProject(mockatorProject));
       new MockatorRefactoringRunner(refactoring).runInNewJob((ignored) -> openInEditor(refactoring.getNewFile()));
    }
 

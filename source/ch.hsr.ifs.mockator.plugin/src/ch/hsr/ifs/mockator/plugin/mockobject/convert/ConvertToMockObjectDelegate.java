@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.linkedmode.MockObjectLinkedEditModeFactory;
 import ch.hsr.ifs.mockator.plugin.project.nature.MockatorLibHandler;
@@ -31,7 +31,7 @@ public class ConvertToMockObjectDelegate extends MockatorDelegate {
          new MockatorLibHandler(cProject.getProject()).addLibToProject();
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 

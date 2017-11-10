@@ -14,7 +14,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 @SuppressWarnings("restriction")
@@ -51,7 +51,7 @@ public class IncludeGuardCreator {
       case PreferenceConstants.CODE_TEMPLATES_INCLUDE_GUARD_SCHEME_UUID:
          return createIncludeGuardSymbolFromUUID();
       default:
-         throw new MockatorException("Unknown include guard scheme");
+         throw new ILTISException("Unknown include guard scheme").rethrowUnchecked();
       }
    }
 

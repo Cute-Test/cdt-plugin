@@ -21,7 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtHelper;
@@ -47,7 +47,7 @@ class SharedLibProjectCreator {
    }
 
    private IProject createEmptyProject(final IProgressMonitor pm) throws CoreException {
-      final IProject project = CPPResourceHelper.getWorkspaceRoot().getProject(newProjectName);
+      final IProject project = CProjectUtil.getWorkspaceRoot().getProject(newProjectName);
       project.create(pm);
       project.open(pm);
       return project;

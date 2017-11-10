@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 @SuppressWarnings("restriction")
@@ -34,7 +34,7 @@ public class ClassPublicVisibilityInserter {
       } else if (isClass()) {
          insertIntoClass(classMember);
       } else {
-         throw new MockatorException("Union types are not supported");
+         throw new ILTISException("Union types are not supported").rethrowUnchecked();
       }
    }
 

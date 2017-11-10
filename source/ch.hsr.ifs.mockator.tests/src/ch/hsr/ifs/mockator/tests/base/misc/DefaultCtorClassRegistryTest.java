@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 import ch.hsr.ifs.mockator.plugin.base.misc.DefaultCtorClassRegistry;
 
@@ -28,7 +28,7 @@ public class DefaultCtorClassRegistryTest {
 
    @Test
    public void oneNonDefaultCtorYieldsException() {
-      thrown.expect(MockatorException.class);
+      thrown.expect(ILTISException.class);
       thrown.expectMessage("Class has no default constructor: Bicycle");
       @SuppressWarnings("unchecked")
       final Set<Class<? extends Vehicle>> classes = orderPreservingSet(Car.class, Plane.class, Bicycle.class);
@@ -37,7 +37,7 @@ public class DefaultCtorClassRegistryTest {
 
    @Test
    public void oneNotAccessibleClassYieldsException() {
-      thrown.expect(MockatorException.class);
+      thrown.expect(ILTISException.class);
       thrown.expectMessage("No access to class Bike");
       @SuppressWarnings("unchecked")
       final Set<Class<? extends Vehicle>> classes = orderPreservingSet(Car.class, Plane.class, Bike.class);

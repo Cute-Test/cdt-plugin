@@ -4,19 +4,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-public class MockatorExceptionTest {
+public class ExceptionTest {
 
    @Rule
    public ExpectedException thrown = ExpectedException.none();
 
    @Test
    public void preservesExceptionMessage() {
-      thrown.expect(MockatorException.class);
+      thrown.expect(ILTISException.class);
       thrown.expectMessage("Invalid XYZ");
-      throw new MockatorException("Invalid XYZ");
+      throw new ILTISException("Invalid XYZ").rethrowUnchecked();
    }
 
    @Test
@@ -25,9 +25,9 @@ public class MockatorExceptionTest {
       thrown.expectMessage("Number not in range");
 
       try {
-         throw new MockatorException(new IllegalArgumentException("Number not in range"));
+         throw new ILTISException(new IllegalArgumentException("Number not in range"));
       }
-      catch (final MockatorException e1) {
+      catch (final ILTISException e1) {
          e1.rethrow();
       }
    }

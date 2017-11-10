@@ -19,7 +19,7 @@ import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
@@ -61,12 +61,12 @@ class DeleteWrappedFunctionRefactoring extends MockatorRefactoring {
          return wrappedCode.indexOf(END_IF_DIRECTIVE) + END_IF_DIRECTIVE.length();
       }
       catch (final BadLocationException e) {}
-      throw new MockatorException("Was not able to determine wrapped code segment");
+      throw new ILTISException("Was not able to determine wrapped code segment").rethrowUnchecked();
    }
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {}
+   OperationCanceledException {}
 
    @Override
    public String getDescription() {

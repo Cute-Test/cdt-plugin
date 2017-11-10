@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.project.properties;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class CppStdFactory<T> {
@@ -25,14 +25,14 @@ public class CppStdFactory<T> {
          case Cpp11Std:
             return cpp11Class.newInstance();
          default:
-            throw new MockatorException("Unsupported C++ Standard");
+            throw new ILTISException("Unsupported C++ Standard").rethrowUnchecked();
          }
       }
       catch (final InstantiationException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
       catch (final IllegalAccessException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 }

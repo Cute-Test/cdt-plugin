@@ -34,9 +34,9 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ui.ide.IDE;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
@@ -63,7 +63,7 @@ public abstract class MockatorRefactoring extends CRefactoring {
    }
 
    private static IResource[] getWorkspaceRoot() {
-      return new IResource[] { CPPResourceHelper.getWorkspaceRoot() };
+      return new IResource[] { CProjectUtil.getWorkspaceRoot() };
    }
 
    protected ITextSelection getSelection() {
@@ -152,10 +152,10 @@ public abstract class MockatorRefactoring extends CRefactoring {
          return super.getIndex();
       }
       catch (final OperationCanceledException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 }

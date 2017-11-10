@@ -25,7 +25,7 @@ import org.eclipse.cdt.internal.ui.viewsupport.IndexUI;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 
@@ -53,7 +53,7 @@ class FunctionCalleeReferenceResolver {
          return callers;
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 

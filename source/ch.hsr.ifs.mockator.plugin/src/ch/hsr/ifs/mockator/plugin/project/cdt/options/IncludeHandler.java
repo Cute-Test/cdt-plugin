@@ -12,7 +12,7 @@ import org.eclipse.core.resources.IResource;
 
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 abstract class IncludeHandler extends AbstractOptionsHandler {
@@ -40,7 +40,7 @@ abstract class IncludeHandler extends AbstractOptionsHandler {
          }
       }
 
-      throw new MockatorException("Problems determining includes");
+      throw new ILTISException("Problems determining includes").rethrowUnchecked();
    }
 
    public <U extends IResource> boolean hasInclude(final U folder) {
@@ -56,7 +56,7 @@ abstract class IncludeHandler extends AbstractOptionsHandler {
          }
       }
 
-      throw new MockatorException("Problems determining includes");
+      throw new ILTISException("Problems determining includes").rethrowUnchecked();
    }
 
    @Override
@@ -76,7 +76,7 @@ abstract class IncludeHandler extends AbstractOptionsHandler {
                }
             }
             catch (final BuildException e) {
-               throw new MockatorException(e);
+               throw new ILTISException(e).rethrowUnchecked();
             }
          }
 

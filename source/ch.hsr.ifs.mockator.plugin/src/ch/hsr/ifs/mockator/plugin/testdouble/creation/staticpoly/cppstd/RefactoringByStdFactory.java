@@ -4,7 +4,7 @@ import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
@@ -19,7 +19,7 @@ public class RefactoringByStdFactory {
       case Cpp11Std:
          return new TestDoubleCpp11Refactoring(cElement, selection, project);
       default:
-         throw new MockatorException("Unexpected C++ standard");
+         throw new ILTISException("Unexpected C++ standard").rethrowUnchecked();
       }
    }
 }

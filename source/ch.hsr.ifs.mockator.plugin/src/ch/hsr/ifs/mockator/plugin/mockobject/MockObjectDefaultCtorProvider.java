@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -35,7 +35,7 @@ public class MockObjectDefaultCtorProvider implements DefaultCtorProvider {
       case SubTypePoly:
          return handleSubTypePoly();
       default:
-         throw new MockatorException("Not supported polymorphism kind");
+         throw new ILTISException("Not supported polymorphism kind").rethrowUnchecked();
       }
    }
 

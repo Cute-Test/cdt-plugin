@@ -18,9 +18,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
 
@@ -39,7 +39,7 @@ class DefinitionFinder extends AbstractNodeFinder {
          return findDefinition(lookup(binding));
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 
@@ -48,7 +48,7 @@ class DefinitionFinder extends AbstractNodeFinder {
          return findDefinition(lookup(name));
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 
@@ -64,7 +64,7 @@ class DefinitionFinder extends AbstractNodeFinder {
          }
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
 
       return Optional.empty();
@@ -86,18 +86,18 @@ class DefinitionFinder extends AbstractNodeFinder {
             return isPartOfOriginProject(uri) || isInOneOfReferencingPrjects(uri);
          }
          catch (final CoreException e) {
-            throw new MockatorException(e);
+            throw new ILTISException(e).rethrowUnchecked();
          }
       });
    }
 
    private boolean isPartOfOriginProject(final URI uri) {
-      return CPPResourceHelper.isPartOfProject(uri, projectOrigin.getProject());
+      return CProjectUtil.isPartOfProject(uri, projectOrigin.getProject());
    }
 
    private boolean isInOneOfReferencingPrjects(final URI uri) throws CoreException {
       for (final IProject project : projectOrigin.getProject().getReferencedProjects()) {
-         if (CPPResourceHelper.isPartOfProject(uri, project)) { return true; }
+         if (CProjectUtil.isPartOfProject(uri, project)) { return true; }
       }
 
       return false;

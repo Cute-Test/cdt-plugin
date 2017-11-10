@@ -17,7 +17,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
@@ -44,7 +44,7 @@ public class PublicMemFunFinder {
          publicVisibility = true;
       } else if (AstUtil.isClassType(klass)) {
          publicVisibility = false;
-      } else throw new MockatorException("Union types not supported");
+      } else throw new ILTISException("Union types not supported").rethrowUnchecked();
    }
 
    public List<IASTDeclaration> getPublicMemFuns() {

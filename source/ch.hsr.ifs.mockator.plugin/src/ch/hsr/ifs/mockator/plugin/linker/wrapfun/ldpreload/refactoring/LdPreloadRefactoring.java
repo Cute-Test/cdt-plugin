@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
@@ -43,7 +43,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
    private IFile             newFile;
 
    public LdPreloadRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cProject,
-                               final IProject targetProject) {
+         final IProject targetProject) {
       super(element, selection, cProject);
       this.cppStd = cppStd;
       this.targetProject = targetProject;
@@ -83,7 +83,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
          rewriter.insertBefore(tu, null, includeForFunDecl, null);
       }
       catch (final Exception e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 

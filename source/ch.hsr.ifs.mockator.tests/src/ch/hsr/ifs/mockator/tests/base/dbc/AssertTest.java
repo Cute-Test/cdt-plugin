@@ -2,13 +2,13 @@ package ch.hsr.ifs.mockator.tests.base.dbc;
 
 import org.junit.Test;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
 public class AssertTest {
 
-   @Test(expected = MockatorException.class)
+   @Test(expected = ILTISException.class)
    public void throwsIfNull() {
       Assert.notNull(null, "");
    }
@@ -18,7 +18,7 @@ public class AssertTest {
       Assert.notNull(Integer.valueOf(42), "");
    }
 
-   @Test(expected = MockatorException.class)
+   @Test(expected = ILTISException.class)
    public void throwsIfNotTrue() {
       Assert.isTrue(false, "");
    }
@@ -28,7 +28,7 @@ public class AssertTest {
       Assert.isTrue(true, "");
    }
 
-   @Test(expected = MockatorException.class)
+   @Test(expected = ILTISException.class)
    public void throwsIfNotFalse() {
       Assert.isFalse(true, "");
    }
@@ -38,7 +38,7 @@ public class AssertTest {
       Assert.isFalse(false, "");
    }
 
-   @Test(expected = MockatorException.class)
+   @Test(expected = ILTISException.class)
    public void throwsIfObjOfClassType() {
       final Integer i = 42;
       Assert.notInstanceOf(i, Number.class, "");
@@ -50,7 +50,7 @@ public class AssertTest {
       Assert.notInstanceOf(s, Number.class, "");
    }
 
-   @Test(expected = MockatorException.class)
+   @Test(expected = ILTISException.class)
    public void throwsIfObjNotOfClassType() {
       final String s = "Mockator";
       Assert.instanceOf(s, Number.class, "");

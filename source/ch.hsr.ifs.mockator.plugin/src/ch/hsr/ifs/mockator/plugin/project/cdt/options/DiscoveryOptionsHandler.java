@@ -14,7 +14,7 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 @SuppressWarnings("restriction")
@@ -54,7 +54,7 @@ public class DiscoveryOptionsHandler extends AbstractOptionsHandler {
                setAndSaveScannerConfig(scannerConfig, providerId, modifiedRunArgs);
             }
             catch (final CoreException e) {
-               throw new MockatorException(e);
+               throw new ILTISException(e).rethrowUnchecked();
             }
          }
       }

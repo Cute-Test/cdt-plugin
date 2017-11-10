@@ -10,7 +10,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateParameter;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 
 
@@ -28,7 +28,7 @@ public class MissingMemFunCollector {
    }
 
    public MissingMemFunCollector(final ICPPASTTemplateDeclaration sut, final ICPPASTCompositeTypeSpecifier testDouble,
-                                 final Collection<ICPPASTTemplateDeclaration> templateFunctions) {
+         final Collection<ICPPASTTemplateDeclaration> templateFunctions) {
       this.sut = sut;
       this.testDouble = testDouble;
       this.templateFunctions = templateFunctions;
@@ -66,7 +66,7 @@ public class MissingMemFunCollector {
          return (MissingMemFunVisitor) ctor.newInstance(testDouble, templateParam, sut);
       }
       catch (final Exception e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 }

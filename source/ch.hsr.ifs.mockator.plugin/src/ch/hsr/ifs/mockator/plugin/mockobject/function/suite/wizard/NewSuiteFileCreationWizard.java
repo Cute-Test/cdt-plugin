@@ -20,7 +20,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
@@ -56,7 +56,7 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
    @Override
    public boolean performFinish() {
       try {
-         final WorkbenchRunnableAdapter adapter = new WorkbenchRunnableAdapter(createWorkspaceRunnable(), CPPResourceHelper.getWorkspaceRoot());
+         final WorkbenchRunnableAdapter adapter = new WorkbenchRunnableAdapter(createWorkspaceRunnable(), CProjectUtil.getWorkspaceRoot());
          getContainer().run(true, true, adapter);
       }
       catch (final InvocationTargetException e) {

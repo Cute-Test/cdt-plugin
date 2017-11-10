@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.base.functional.Injector;
 
 
@@ -56,7 +57,7 @@ public abstract class StringUtil {
    }
 
    public static String getBase36Value(final int n) {
-      Assert.isTrue(n < 36, "Value not in range for base36 conversion");
+      ILTISException.Unless.isTrue(n < 36, "Value not in range for base36 conversion");
       return Integer.toString(n, 36).toUpperCase();
    }
 

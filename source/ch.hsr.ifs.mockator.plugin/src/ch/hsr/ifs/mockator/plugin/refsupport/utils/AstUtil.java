@@ -57,7 +57,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 
@@ -97,7 +97,7 @@ public abstract class AstUtil {
          return ((ICPPASTFieldReference) expression).getFieldName();
       } else if (expression instanceof IASTIdExpression) { return ((IASTIdExpression) expression).getName().getLastName(); }
 
-      throw new MockatorException("Was not able to determine name of function call");
+      throw new ILTISException("Was not able to determine name of function call").rethrowUnchecked();
    }
 
    public static IASTDeclaration[] getAllDeclarations(final IASTNode parent) {
@@ -349,7 +349,7 @@ public abstract class AstUtil {
          return getQfName(binding.getQualifiedName());
       }
       catch (final DOMException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 

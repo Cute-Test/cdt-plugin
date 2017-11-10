@@ -9,7 +9,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
@@ -39,7 +39,7 @@ public class InterfaceFileCreator implements Consumer<ExtractInterfaceContext> {
          context.setTuOfInterface(newTu);
       }
       catch (final CoreException e) {
-         throw new MockatorException("Not able to create new file " + pathOfNewFile.lastSegment(), e);
+         new ILTISException("Not able to create new file " + pathOfNewFile.lastSegment(), e).rethrowUnchecked();;
       }
    }
 

@@ -16,7 +16,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.resources.IFile;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterSignatureHandler;
@@ -48,7 +48,7 @@ public class WeakDeclAdder {
 
    private static boolean isTuPartOfWorkspace(final IASTTranslationUnit tuOfFunDef) {
       final URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
-      final IFile[] files = CPPResourceHelper.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
+      final IFile[] files = CProjectUtil.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
       return files.length > 0;
    }
 

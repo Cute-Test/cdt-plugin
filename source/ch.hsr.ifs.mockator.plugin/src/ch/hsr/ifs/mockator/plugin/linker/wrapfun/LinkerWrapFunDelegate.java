@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.linker.wrapfun.common.LinkerWrapFun;
 import ch.hsr.ifs.mockator.plugin.linker.wrapfun.gnuoption.GnuOptionLinkerWrapFun;
 import ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.LdPreloadLinkerWrapFun;
@@ -28,7 +28,7 @@ public class LinkerWrapFunDelegate extends MockatorDelegate {
       case SharedLib:
          return new LdPreloadLinkerWrapFun(cProject, selection, cElement, getCppStd());
       default:
-         throw new MockatorException("Unrecognized project type");
+         throw new ILTISException("Unrecognized project type").rethrowUnchecked();
       }
    }
 

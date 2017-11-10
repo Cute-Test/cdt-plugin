@@ -6,7 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.finder.ExpectationsFinder;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
@@ -23,7 +23,7 @@ public class ExpectationsReconciler {
    private final CppStandard               cppStd;
 
    public ExpectationsReconciler(final ASTRewrite rewriter, final IASTName expectationsVector, final ICPPASTFunctionDefinition testFun,
-                                 final CppStandard cppStd, final LinkedEditModeStrategy linkedEditMode) {
+         final CppStandard cppStd, final LinkedEditModeStrategy linkedEditMode) {
       this.rewriter = rewriter;
       this.expectationsVector = expectationsVector;
       this.testFun = testFun;
@@ -50,7 +50,7 @@ public class ExpectationsReconciler {
       case Cpp11Std:
          return new InitializerExpectationsReconciler(rewriter, toAdd, toRemove, cppStd, linkedEditMode);
       default:
-         throw new MockatorException("Unsupported C++ standard");
+         throw new ILTISException("Unsupported C++ standard").rethrowUnchecked();
       }
    }
 }

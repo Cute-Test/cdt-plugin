@@ -25,7 +25,7 @@ import java.util.Vector;
 
 import org.junit.Test;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 
 
@@ -193,7 +193,7 @@ public class CollectionHelperTest {
       assertFalse(CollectionHelper.notNull(numbers));
    }
 
-   @Test(expected = MockatorException.class)
+   @Test(expected = ILTISException.class)
    public void iterableWithNullListThrowsException() {
       CollectionHelper.notNull((Iterable<Object>) null);
    }

@@ -17,7 +17,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -39,12 +38,14 @@ public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate
 
    @Override
    public void run(final IAction action) {
-      if (!(isCEditorActive() && arePreconditionsSatisfied())) return;
+      if (!(isCEditorActive() && arePreconditionsSatisfied())) {
+         return;
+      }
 
       try {
          execute();
       }
-      catch (final MockatorException e) {
+      catch (final RuntimeException e) {
          // pass null as message; e.getMessage() would lead to a message
          // containing twice the same text for msg and reason
          ExceptionUtil.showException(I18N.ExceptionErrorTitle, null, e);
@@ -65,17 +66,23 @@ public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate
    private boolean isCEditorActive() {
       final IWorkbenchPart activePart = window.getActivePage().getActivePart();
 
-      if (!(activePart instanceof CEditor)) return false;
+      if (!(activePart instanceof CEditor)) {
+         return false;
+      }
 
       final CEditor activeEditor = (CEditor) activePart;
       final IWorkingCopy wc = getWorkingCopy(activeEditor.getEditorInput());
 
-      if (wc == null || !(wc.getResource() instanceof IFile)) return false;
+      if (wc == null || !(wc.getResource() instanceof IFile)) {
+         return false;
+      }
 
       cProject = wc.getCProject();
       cElement = activeEditor.getInputCElement();
 
-      if (cProject == null || cElement == null) return false;
+      if (cProject == null || cElement == null) {
+         return false;
+      }
 
       return true;
    }

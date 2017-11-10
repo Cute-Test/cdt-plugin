@@ -28,7 +28,7 @@ import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
@@ -63,7 +63,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
          return (ICPPASTFunctionDefinition) head(testFunctions).get();
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 
@@ -128,7 +128,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
          return doc.get(funNodeOffset, funNodeLength);
       }
       catch (final BadLocationException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 

@@ -11,7 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 import ch.hsr.ifs.mockator.tests.CdtCppTestProject;
@@ -31,7 +31,7 @@ public class NatureHandlerTest {
 
    @Test
    public void exceptionIsThrownWithClosedProject() throws CoreException {
-      thrown.expect(MockatorException.class);
+      thrown.expect(ILTISException.class);
       thrown.expectMessage("Only existing and open projects are supported");
       project = CdtCppTestProject.withClosedProject();
       new NatureHandler(project.getProject());
@@ -39,7 +39,7 @@ public class NatureHandlerTest {
 
    @Test
    public void exceptionIsThrownWhenNoCppNature() throws CoreException {
-      thrown.expect(MockatorException.class);
+      thrown.expect(ILTISException.class);
       thrown.expectMessage("The set of natures is not valid.");
       project = CdtCppTestProject.withOpenedProject();
       final NatureHandler handler = new NatureHandler(project.getProject());

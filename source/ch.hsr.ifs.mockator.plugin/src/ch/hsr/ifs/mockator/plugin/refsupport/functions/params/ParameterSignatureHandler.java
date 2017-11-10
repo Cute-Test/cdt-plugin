@@ -65,7 +65,7 @@ import org.eclipse.cdt.core.dom.ast.gnu.c.ICASTKnRFunctionDeclarator;
 import org.eclipse.cdt.core.parser.Keywords;
 import org.eclipse.cdt.core.parser.util.CharArrayUtils;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
@@ -140,7 +140,9 @@ public class ParameterSignatureHandler {
 
    private static StringBuilder appendDeclaratorString(final StringBuilder buffer, final IASTDeclarator declarator, boolean protectPointers,
          final IASTFunctionDeclarator returnTypeOf) {
-      if (declarator == null) return buffer;
+      if (declarator == null) {
+         return buffer;
+      }
       final IASTPointerOperator[] ptrs = declarator.getPointerOperators();
       final boolean useParenthesis = protectPointers && ptrs.length > 0;
       if (useParenthesis) {
@@ -154,7 +156,7 @@ public class ParameterSignatureHandler {
          final IASTDeclarator nestedDeclarator = declarator.getNestedDeclarator();
          if (nestedDeclarator != null) {
             protectPointers = protectPointers || declarator instanceof IASTArrayDeclarator || declarator instanceof IASTFunctionDeclarator ||
-                              declarator instanceof IASTFieldDeclarator;
+                  declarator instanceof IASTFieldDeclarator;
             appendDeclaratorString(buffer, nestedDeclarator, protectPointers, returnTypeOf);
          } else if (declarator instanceof ICPPASTDeclarator && ((ICPPASTDeclarator) declarator).declaresParameterPack()) {
             buffer.append(Keywords.cpELLIPSIS);
@@ -236,13 +238,19 @@ public class ParameterSignatureHandler {
          }
          trimRight(buffer);
          buffer.append(Keywords.cpRPAREN);
-      } else if (initializer != null) throw new MockatorException("Not impplemented: " + initializer.getClass().getName());
+      } else if (initializer != null) {
+         throw new ILTISException("Not impplemented: " + initializer.getClass().getName()).rethrowUnchecked();
+      }
       return buffer;
    }
 
    private static StringBuilder appendInitClauseString(final StringBuilder buffer, final IASTInitializerClause initializerClause) {
-      if (initializerClause instanceof IASTExpression) return appendExpressionString(buffer, (IASTExpression) initializerClause);
-      if (initializerClause instanceof IASTInitializer) return appendInitializerString(buffer, (IASTInitializer) initializerClause);
+      if (initializerClause instanceof IASTExpression) {
+         return appendExpressionString(buffer, (IASTExpression) initializerClause);
+      }
+      if (initializerClause instanceof IASTInitializer) {
+         return appendInitializerString(buffer, (IASTInitializer) initializerClause);
+      }
       return buffer;
    }
 
@@ -535,24 +543,54 @@ public class ParameterSignatureHandler {
          trimRight(buffer);
          return appendInitializerString(buffer, typeCast.getInitializer());
       }
-      if (expression instanceof IASTArraySubscriptExpression) return appendArraySubscriptExpression(buffer,
-            (IASTArraySubscriptExpression) expression);
-      if (expression instanceof IASTBinaryExpression) return appendBinaryExpression(buffer, (IASTBinaryExpression) expression);
-      if (expression instanceof IASTCastExpression) return appendCastExpression(buffer, (IASTCastExpression) expression);
-      if (expression instanceof IASTConditionalExpression) return appendConditionalExpression(buffer, (IASTConditionalExpression) expression);
-      if (expression instanceof IASTExpressionList) return appendExpressionList(buffer, (IASTExpressionList) expression);
-      if (expression instanceof IASTFieldReference) return appendFieldReference(buffer, (IASTFieldReference) expression);
-      if (expression instanceof IASTFunctionCallExpression) return appendFunctionCallExpression(buffer, (IASTFunctionCallExpression) expression);
-      if (expression instanceof IASTLiteralExpression) return appendLiteralExpression(buffer, (IASTLiteralExpression) expression);
-      if (expression instanceof IASTTypeIdExpression) return appendTypeIdExpression(buffer, (IASTTypeIdExpression) expression);
-      if (expression instanceof IASTUnaryExpression) return appendUnaryExpression(buffer, (IASTUnaryExpression) expression);
-      if (expression instanceof ICASTTypeIdInitializerExpression) return appendTypeIdInitializerExpression(buffer,
-            (ICASTTypeIdInitializerExpression) expression);
-      if (expression instanceof ICPPASTDeleteExpression) return appendDeleteExpression(buffer, (ICPPASTDeleteExpression) expression);
-      if (expression instanceof ICPPASTNewExpression) return appendNewExpression(buffer, (ICPPASTNewExpression) expression);
-      if (expression instanceof IGNUASTCompoundStatementExpression) return appendCompoundStatementExpression(buffer);
-      if (expression instanceof ICPPASTPackExpansionExpression) return appendPackExpansionExpression(buffer,
-            (ICPPASTPackExpansionExpression) expression);
+      if (expression instanceof IASTArraySubscriptExpression) {
+         return appendArraySubscriptExpression(buffer,
+               (IASTArraySubscriptExpression) expression);
+      }
+      if (expression instanceof IASTBinaryExpression) {
+         return appendBinaryExpression(buffer, (IASTBinaryExpression) expression);
+      }
+      if (expression instanceof IASTCastExpression) {
+         return appendCastExpression(buffer, (IASTCastExpression) expression);
+      }
+      if (expression instanceof IASTConditionalExpression) {
+         return appendConditionalExpression(buffer, (IASTConditionalExpression) expression);
+      }
+      if (expression instanceof IASTExpressionList) {
+         return appendExpressionList(buffer, (IASTExpressionList) expression);
+      }
+      if (expression instanceof IASTFieldReference) {
+         return appendFieldReference(buffer, (IASTFieldReference) expression);
+      }
+      if (expression instanceof IASTFunctionCallExpression) {
+         return appendFunctionCallExpression(buffer, (IASTFunctionCallExpression) expression);
+      }
+      if (expression instanceof IASTLiteralExpression) {
+         return appendLiteralExpression(buffer, (IASTLiteralExpression) expression);
+      }
+      if (expression instanceof IASTTypeIdExpression) {
+         return appendTypeIdExpression(buffer, (IASTTypeIdExpression) expression);
+      }
+      if (expression instanceof IASTUnaryExpression) {
+         return appendUnaryExpression(buffer, (IASTUnaryExpression) expression);
+      }
+      if (expression instanceof ICASTTypeIdInitializerExpression) {
+         return appendTypeIdInitializerExpression(buffer,
+               (ICASTTypeIdInitializerExpression) expression);
+      }
+      if (expression instanceof ICPPASTDeleteExpression) {
+         return appendDeleteExpression(buffer, (ICPPASTDeleteExpression) expression);
+      }
+      if (expression instanceof ICPPASTNewExpression) {
+         return appendNewExpression(buffer, (ICPPASTNewExpression) expression);
+      }
+      if (expression instanceof IGNUASTCompoundStatementExpression) {
+         return appendCompoundStatementExpression(buffer);
+      }
+      if (expression instanceof ICPPASTPackExpansionExpression) {
+         return appendPackExpansionExpression(buffer,
+               (ICPPASTPackExpansionExpression) expression);
+      }
 
       return buffer;
    }

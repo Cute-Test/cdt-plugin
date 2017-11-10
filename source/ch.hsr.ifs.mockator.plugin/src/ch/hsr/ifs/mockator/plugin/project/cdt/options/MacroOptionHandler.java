@@ -11,7 +11,7 @@ import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class MacroOptionHandler extends AbstractOptionsHandler {
@@ -66,7 +66,7 @@ public class MacroOptionHandler extends AbstractOptionsHandler {
          return orderPreservingSet(option.getDefinedSymbols());
       }
       catch (final BuildException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 }

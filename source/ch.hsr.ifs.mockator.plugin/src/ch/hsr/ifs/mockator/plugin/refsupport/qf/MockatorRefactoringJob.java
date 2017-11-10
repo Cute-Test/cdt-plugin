@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 
@@ -32,12 +31,14 @@ class MockatorRefactoringJob extends Job {
       try {
          final ChangeEdit changeEdit = new MockatorRefactoringExecutor().apply(refactoring, pm);
 
-         if (pm.isCanceled()) return Status.CANCEL_STATUS;
+         if (pm.isCanceled()) {
+            return Status.CANCEL_STATUS;
+         }
 
          UiUtil.runInDisplayThread(uiCallBack, changeEdit);
          return Status.OK_STATUS;
       }
-      catch (final MockatorException e) {
+      catch (final RuntimeException e) {
          return new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, e.getMessage());
       }
    }

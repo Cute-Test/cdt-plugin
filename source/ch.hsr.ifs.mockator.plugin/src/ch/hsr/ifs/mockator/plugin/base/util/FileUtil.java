@@ -9,9 +9,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
 public abstract class FileUtil {
@@ -21,19 +21,23 @@ public abstract class FileUtil {
    }
 
    private static IFile toIFile(final URI fileURI) {
-      final IFile[] files = CPPResourceHelper.getWorkspaceRoot().findFilesForLocationURI(fileURI);
+      final IFile[] files = CProjectUtil.getWorkspaceRoot().findFilesForLocationURI(fileURI);
 
-      if (files.length == 1) return files[0];
+      if (files.length == 1) {
+         return files[0];
+      }
 
       for (final IFile file : files) {
-         if (fileURI.getPath().endsWith(file.getFullPath().toString())) return file;
+         if (fileURI.getPath().endsWith(file.getFullPath().toString())) {
+            return file;
+         }
       }
 
       return null;
    }
 
    public static IFile toIFile(final IPath filePath) {
-      return CPPResourceHelper.getWorkspaceRoot().getFile(filePath);
+      return CProjectUtil.getWorkspaceRoot().getFile(filePath);
    }
 
    public static String getFilenameWithoutExtension(final String filename) {
@@ -46,7 +50,7 @@ public abstract class FileUtil {
    }
 
    public static IFile getFile(final IASTNode node) {
-      return CPPResourceHelper.getWorkspaceRoot().getFileForLocation(new Path(node.getFileLocation().getFileName()));
+      return CProjectUtil.getWorkspaceRoot().getFileForLocation(new Path(node.getFileLocation().getFileName()));
    }
 
    public static IASTFileLocation getNodeFileLocation(final IASTNode node) {
@@ -55,7 +59,7 @@ public abstract class FileUtil {
 
    public static String getFilePart(final String filePath) {
       final Path path = new Path(filePath);
-      Assert.isTrue(path.segmentCount() > 0, "Path elements must not be empty");
+      ILTISException.Unless.isTrue(path.segmentCount() > 0, "Path elements must not be empty");
       return path.segment(path.segmentCount() - 1);
    }
 

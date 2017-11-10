@@ -10,7 +10,7 @@ import org.eclipse.core.resources.IProject;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class CompilerFlagHandler extends AbstractOptionsHandler {
@@ -47,7 +47,7 @@ public class CompilerFlagHandler extends AbstractOptionsHandler {
             setAndSaveOption(config, tool, flagsOption, newFlags);
          }
          catch (final BuildException e) {
-            throw new MockatorException(e);
+            throw new ILTISException(e).rethrowUnchecked();
          }
 
          return null;

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 
 
@@ -26,7 +26,7 @@ public class ExceptionUtilTest {
    @Test
    public void stackedExceptionsYieldsRootCause() {
       final IllegalStateException rootCause = new IllegalStateException();
-      final MockatorException ex = new MockatorException(new IllegalArgumentException(rootCause));
+      final ILTISException ex = new ILTISException(new IllegalArgumentException(rootCause));
       final Throwable cause = ExceptionUtil.getRootCause(ex).get();
       assertEquals(rootCause, cause);
    }

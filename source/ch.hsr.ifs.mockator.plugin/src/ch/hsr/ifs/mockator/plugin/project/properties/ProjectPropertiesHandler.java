@@ -4,7 +4,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 class ProjectPropertiesHandler {
@@ -20,7 +20,7 @@ class ProjectPropertiesHandler {
          project.setPersistentProperty(qfName, value);
       }
       catch (final CoreException e) {
-         throw new MockatorException("Not able to store property for " + qfName.toString(), e);
+         throw new ILTISException("Not able to store property for " + qfName.toString(), e).rethrowUnchecked();
       }
    }
 
@@ -29,7 +29,7 @@ class ProjectPropertiesHandler {
          return project.getPersistentProperty(qfName);
       }
       catch (final CoreException e) {
-         throw new MockatorException("Not able to determine property for " + qfName.toString(), e);
+         throw new ILTISException("Not able to determine property for " + qfName.toString(), e).rethrowUnchecked();
       }
    }
 }

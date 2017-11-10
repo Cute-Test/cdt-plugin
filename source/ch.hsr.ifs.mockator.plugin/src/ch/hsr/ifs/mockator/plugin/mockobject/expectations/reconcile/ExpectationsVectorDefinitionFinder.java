@@ -16,10 +16,11 @@ import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualP
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
+
 class ExpectationsVectorDefinitionFinder {
 
    private final ICPPASTFunctionDefinition testFunction;
-   private final MockObject mockObject;
+   private final MockObject                mockObject;
 
    public ExpectationsVectorDefinitionFinder(final MockObject mockObject, final ICPPASTFunctionDefinition testFun) {
       this.mockObject = mockObject;
@@ -30,17 +31,15 @@ class ExpectationsVectorDefinitionFinder {
       return OptHelper.returnIfPresentElseEmpty(mockObject.getRegistrationVector(), (regVector) -> {
          for (final ExpectedActualPair expectedActual : findAssertedCallsInTestFunction()) {
             final Optional<IASTName> expVector = getExpectationsVector(expectedActual, regVector);
-            if (expVector.isPresent()) {
-               return getNameOfDefinition(expVector.get());
-            }
+            if (expVector.isPresent()) { return getNameOfDefinition(expVector.get()); }
          }
          return Optional.empty();
       });
    }
 
    private Optional<IASTName> getNameOfDefinition(final IASTName expectationsVector) {
-      return new NameFinder(testFunction).getNameMatchingCriteria(
-            (name) -> name.toString().equals(expectationsVector.toString()) && AstUtil.getAncestorOfType(name, IASTDeclarationStatement.class) != null);
+      return new NameFinder(testFunction).getNameMatchingCriteria((name) -> name.toString().equals(expectationsVector.toString()) && AstUtil
+            .getAncestorOfType(name, IASTDeclarationStatement.class) != null);
    }
 
    private static Optional<IASTName> getExpectationsVector(final ExpectedActualPair expectedActual, final IASTName registrationVector) {

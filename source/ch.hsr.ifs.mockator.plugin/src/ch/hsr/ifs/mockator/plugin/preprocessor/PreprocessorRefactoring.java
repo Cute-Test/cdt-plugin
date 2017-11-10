@@ -23,10 +23,10 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 import ch.hsr.ifs.mockator.plugin.project.cdt.SourceFolderHandler;
@@ -110,7 +110,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
          return handler.createFolder(MockatorConstants.TRACE_FOLDER, pm);
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 
@@ -147,7 +147,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
 
    private boolean isTuOfDefinitionInSameProject(final IASTTranslationUnit tuOfFunDef) {
       final URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
-      return CPPResourceHelper.isPartOfProject(uriOfTu, project.getProject());
+      return CProjectUtil.isPartOfProject(uriOfTu, project.getProject());
    }
 
    private Optional<ICPPASTFunctionDeclarator> findFunDeclaration(final IASTName funName, final IProgressMonitor pm) {

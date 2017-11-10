@@ -10,9 +10,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.util.FileUtil;
 
 
@@ -42,13 +42,13 @@ public class TranslationUnitCreator {
          return project.getDefaultCharset();
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 
    private IASTTranslationUnit loadNewTu(final IPath filePath, final IProgressMonitor pm) throws CoreException {
       final IFile file = FileUtil.toIFile(filePath);
-      final ICProject cProject = CPPResourceHelper.getCProject(file.getProject());
+      final ICProject cProject = CProjectUtil.getCProject(file.getProject());
       final TranslationUnitLoader tuLoader = new TranslationUnitLoader(cProject, context, pm);
       return tuLoader.loadAst(file);
    }

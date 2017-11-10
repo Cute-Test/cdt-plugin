@@ -11,7 +11,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 
 
@@ -38,10 +38,10 @@ class MockatorRefactoringExecutor implements Function2<MockatorRefactoring, IPro
          return changeEdit;
       }
       catch (final IllegalStateException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
       catch (final CoreException e) {
-         throw new MockatorException("Failure during change generation", e);
+         throw new ILTISException("Failure during change generation", e).rethrowUnchecked();
       }
       finally {
          prepareUndo(refactoring.getDescription(), change, undoChange, success, pm);
@@ -49,7 +49,9 @@ class MockatorRefactoringExecutor implements Function2<MockatorRefactoring, IPro
    }
 
    private static void assureChangeObjectIsValid(final Change change, final IProgressMonitor pm) throws CoreException {
-      if (!change.isValid(pm).isOK()) throw new MockatorException("Change object is invalid");
+      if (!change.isValid(pm).isOK()) {
+         throw new ILTISException("Change object is invalid").rethrowUnchecked();
+      }
    }
 
    private static void prepareUndo(final String refactoringDesc, final Change change, final Change undoChange, final boolean success,
@@ -74,12 +76,12 @@ class MockatorRefactoringExecutor implements Function2<MockatorRefactoring, IPro
          if (status.hasFatalError()) {
             context.dispose();
             final String message = status.getEntryWithHighestSeverity().getMessage();
-            throw new MockatorException("Conditions not satisified for refactoring: " + message);
+            throw new ILTISException("Conditions not satisified for refactoring: " + message).rethrowUnchecked();
          }
       }
       catch (final CoreException e) {
          context.dispose();
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 
@@ -88,7 +90,7 @@ class MockatorRefactoringExecutor implements Function2<MockatorRefactoring, IPro
          return refactoring.createChange(pm);
       }
       catch (final CoreException e) {
-         throw new MockatorException("Creating change object failed: " + refactoring.getDescription(), e);
+         throw new ILTISException("Creating change object failed: " + refactoring.getDescription(), e).rethrowUnchecked();
       }
       finally {
          context.dispose();

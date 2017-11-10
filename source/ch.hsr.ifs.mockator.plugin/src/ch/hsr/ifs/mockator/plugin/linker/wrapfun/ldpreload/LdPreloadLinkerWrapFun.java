@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-import ch.hsr.ifs.iltis.cpp.resources.CPPResourceHelper;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
@@ -162,7 +162,7 @@ public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
    }
 
    private IProject getNewlyCreatedProject() {
-      return CPPResourceHelper.getWorkspaceRoot().getProject(newProjectName);
+      return CProjectUtil.getWorkspaceRoot().getProject(newProjectName);
    }
 
    private void createAndConfigureShLibProject(final IProgressMonitor monitor) throws CoreException {

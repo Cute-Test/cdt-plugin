@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
@@ -130,10 +130,10 @@ public class NodeLookup {
          return context.getIndex();
       }
       catch (final OperationCanceledException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
       catch (final CoreException e) {
-         throw new MockatorException(e);
+         throw new ILTISException(e).rethrowUnchecked();
       }
    }
 

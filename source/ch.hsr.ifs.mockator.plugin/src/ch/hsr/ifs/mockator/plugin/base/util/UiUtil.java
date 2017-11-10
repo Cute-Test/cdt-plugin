@@ -13,9 +13,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
 @SuppressWarnings("restriction")
@@ -34,7 +33,7 @@ public abstract class UiUtil {
 
    private static Display getDisplay() {
       final Display display = PlatformUI.getWorkbench().getDisplay();
-      Assert.isFalse(display == null || display.isDisposed(), "Display should not be null or already disposed");
+      ILTISException.Unless.isFalse(display == null || display.isDisposed(), "Display should not be null or already disposed");
       return display;
    }
 
@@ -50,7 +49,7 @@ public abstract class UiUtil {
 
    public static IWorkbenchWindow getActiveWorkbenchWindow() {
       final IWorkbenchWindow activeWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-      Assert.notNull(activeWindow, "Not called from the UI thread");
+      ILTISException.Unless.notNull(activeWindow, "Not called from the UI thread");
       return activeWindow;
    }
 

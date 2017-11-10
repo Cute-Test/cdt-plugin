@@ -17,7 +17,7 @@ import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 
 
@@ -63,7 +63,7 @@ public class RunConfigEnvManager {
             }
          }
          catch (final CoreException e) {
-            throw new MockatorException(e);
+            throw new ILTISException(e).rethrowUnchecked();
          }
       });
    }
@@ -89,7 +89,7 @@ public class RunConfigEnvManager {
             }
          }
          catch (final CoreException e) {
-            throw new MockatorException(e);
+            throw new ILTISException(e).rethrowUnchecked();
          }
       });
    }
@@ -101,7 +101,7 @@ public class RunConfigEnvManager {
             return isCuteOrCdtExecutable(typeId) && matchesProject(config);
          }
          catch (final CoreException e) {
-            throw new MockatorException(e);
+            throw new ILTISException(e).rethrowUnchecked();
          }
       });
    }

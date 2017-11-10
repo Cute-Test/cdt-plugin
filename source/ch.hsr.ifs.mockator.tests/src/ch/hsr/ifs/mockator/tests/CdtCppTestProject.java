@@ -22,7 +22,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.mockator.plugin.base.MockatorException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtHelper;
 
 
@@ -91,7 +91,7 @@ public class CdtCppTestProject {
          }
       }
 
-      throw new MockatorException("Problems determining includes");
+      throw new ILTISException("Problems determining includes").rethrowUnchecked();
    }
 
    public boolean hasIncludeForFile(final String filePath) throws BuildException {
@@ -106,7 +106,7 @@ public class CdtCppTestProject {
          }
       }
 
-      throw new MockatorException("Problems determining includes");
+      throw new ILTISException("Problems determining includes").rethrowUnchecked();
    }
 
    private IConfiguration getDefaultConfiguration() {
