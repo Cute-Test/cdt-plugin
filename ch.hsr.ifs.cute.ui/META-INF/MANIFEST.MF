@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: CUTE UI
 Bundle-SymbolicName: ch.hsr.ifs.cute.ui;singleton:=true
 Bundle-Version: 5.3.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.ui.CuteUIPlugin
-Bundle-Vendor: %providerName
+Bundle-Vendor: IFS Institute for Software
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.4.0",
  org.eclipse.core.expressions;bundle-version="3.4.0",
  org.eclipse.ltk.core.refactoring;bundle-version="3.5.100",

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ch.hsr.ifs.cute.boost.feature"
-      label="%featureName"
-      version="1.42.0.qualifier">
+      label="CUTE Boost"
+      version="1.42.0.qualifier"
+      provider-name="IFS Institute for Software">
 
    <description>
       %description
