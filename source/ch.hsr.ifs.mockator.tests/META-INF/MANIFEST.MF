@@ -36,3 +36,4 @@ Bundle-Activator: ch.hsr.ifs.mockator.tests.MockatorTestPlugin
 Bundle-SymbolicName: ch.hsr.ifs.mockator.tests;singleton:=true
 Bundle-ClassPath: lib/jdepend-2.9.1.jar,
  .
+Bundle-Vendor: IFS Institut for Software

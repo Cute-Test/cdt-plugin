@@ -29,7 +29,6 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.105.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.mockator.plugin,
- ch.hsr.ifs.mockator.plugin.base,
  ch.hsr.ifs.mockator.plugin.base.collections,
  ch.hsr.ifs.mockator.plugin.base.data,
  ch.hsr.ifs.mockator.plugin.base.dbc,
