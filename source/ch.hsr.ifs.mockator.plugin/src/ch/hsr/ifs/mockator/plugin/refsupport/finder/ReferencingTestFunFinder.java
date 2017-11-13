@@ -1,10 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.finder;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -50,7 +50,8 @@ public class ReferencingTestFunFinder {
    }
 
    public Collection<ICPPASTFunctionDefinition> filterTestFunctions(final Collection<ICPPASTFunctionDefinition> functions) {
-      final List<ICPPASTFunctionDefinition> testFunctions = list(filter(functions, (function) -> isValidTestFunction(function)));
+      final List<ICPPASTFunctionDefinition> testFunctions = list(functions.stream().filter((function) -> isValidTestFunction(function)).collect(
+            Collectors.toList()));
       addContainingFunctionIfNecessary(testFunctions);
       return testFunctions;
    }
@@ -62,7 +63,9 @@ public class ReferencingTestFunFinder {
    }
 
    private void addContainingFunctionIfNecessary(final List<ICPPASTFunctionDefinition> testFunctions) {
-      if (!testFunctions.isEmpty()) return;
+      if (!testFunctions.isEmpty()) {
+         return;
+      }
 
       final ICPPASTFunctionDefinition testFunction = getContainingTestFunction(testDouble);
 
@@ -74,7 +77,9 @@ public class ReferencingTestFunFinder {
    private ICPPASTFunctionDefinition getContainingTestFunction(final ICPPASTCompositeTypeSpecifier testDouble) {
       final ICPPASTFunctionDefinition containedFunction = getFunctionParent(testDouble);
 
-      if (containedFunction != null && isValidTestFunction(containedFunction)) return containedFunction;
+      if (containedFunction != null && isValidTestFunction(containedFunction)) {
+         return containedFunction;
+      }
 
       return null;
    }

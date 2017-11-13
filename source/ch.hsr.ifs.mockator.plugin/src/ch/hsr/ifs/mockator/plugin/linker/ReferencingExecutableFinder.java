@@ -1,9 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.linker;
 
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 
@@ -29,7 +30,7 @@ public class ReferencingExecutableFinder {
    }
 
    private Collection<IProject> getReferencingProjectsWithProperty(final Predicate<IProject> criteria) {
-      return filter(project.getReferencingProjects(), criteria);
+      return Arrays.asList(project.getReferencingProjects()).stream().filter(criteria).collect(Collectors.toList());
    }
 
    private static boolean isMockatorProject(final IProject project) {

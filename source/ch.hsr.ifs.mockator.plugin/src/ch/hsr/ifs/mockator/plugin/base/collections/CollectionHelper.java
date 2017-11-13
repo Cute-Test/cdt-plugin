@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.StreamSupport;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
@@ -130,8 +131,9 @@ public abstract class CollectionHelper {
    }
 
    public static <E> E head(final Iterable<E> it, final E defaultValue) {
-      final Iterator<E> iterator = it.iterator();
-      return iterator.hasNext() ? iterator.next() : defaultValue;
+      //      final Iterator<E> iterator = it.iterator();
+      //      return iterator.hasNext() ? iterator.next() : defaultValue;
+      return StreamSupport.stream(it.spliterator(), false).findFirst().orElse(defaultValue);
    }
 
    public static <E> Optional<E> last(final E[] elements) {

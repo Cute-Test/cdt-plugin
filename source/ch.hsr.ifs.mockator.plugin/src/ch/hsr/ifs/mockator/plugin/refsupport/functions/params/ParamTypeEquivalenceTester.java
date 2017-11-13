@@ -4,6 +4,9 @@ import static ch.hsr.ifs.mockator.plugin.MockatorConstants.BASIC_STRING_CHAR;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.STD_STRING;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.eclipse.cdt.codan.core.cxx.CxxAstUtils;
 import org.eclipse.cdt.core.dom.ast.IArrayType;
@@ -14,10 +17,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 
+import ch.hsr.ifs.iltis.core.functional.Functional;
+import ch.hsr.ifs.iltis.core.functional.StreamTripple;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
-import ch.hsr.ifs.mockator.plugin.base.collections.ParallelIterator;
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
@@ -33,23 +36,25 @@ public class ParamTypeEquivalenceTester {
    }
 
    public ParamTypeEquivalenceTester(final Collection<IType> caller, final Collection<IType> receiver,
-                                     final Function2<Integer, IType, Boolean> filter) {
+         final Function2<Integer, IType, Boolean> filter) {
       this.caller = caller;
       this.receiver = receiver;
       this.filter = filter;
    }
 
    public boolean areParametersEquivalent() {
-      if (caller.size() != receiver.size()) return false;
+      if (caller.size() != receiver.size()) { return false; }
 
-      final ParallelIterator<IType, IType> it = getIterator();
+      final Iterator<StreamTripple<IType, IType, Integer>> it = getZipedStream().iterator();
 
-      for (int i = 0; it.hasNext(); i++) {
-         final Pair<IType, IType> types = it.next();
-         IType callerType = types.first();
-         IType receiverType = types.second();
+      while (it.hasNext()) {
+         final StreamTripple<IType, IType, Integer> tripple = it.next();
 
-         if (filter != null && filter.apply(i, receiverType)) {
+         IType callerType = tripple.first();
+         IType receiverType = tripple.second();
+         final int argNo = tripple.third();
+
+         if (filter != null && filter.apply(argNo, receiverType)) {
             continue;
          }
 
@@ -72,13 +77,13 @@ public class ParamTypeEquivalenceTester {
             receiverType = ((IArrayType) receiverType).getType();
          }
 
-         if (isPointerType(callerType) ^ isPointerType(receiverType)) return false;
+         if (isPointerType(callerType) ^ isPointerType(receiverType)) { return false; }
 
          if (isConstCharArray(callerType) && isString(receiverType)) {
             continue;
          }
 
-         if (!AstUtil.isSameType(getUnderlyingType(receiverType), getUnderlyingType(callerType))) return false;
+         if (!AstUtil.isSameType(getUnderlyingType(receiverType), getUnderlyingType(callerType))) { return false; }
       }
 
       return true;
@@ -92,8 +97,8 @@ public class ParamTypeEquivalenceTester {
       return type instanceof IPointerType;
    }
 
-   private ParallelIterator<IType, IType> getIterator() {
-      return new ParallelIterator<>(caller.iterator(), receiver.iterator());
+   private Stream<StreamTripple<IType, IType, Integer>> getZipedStream() {
+      return Functional.zip(caller.stream(), receiver.stream(), IntStream.rangeClosed(0, Math.max(caller.size(), receiver.size())).boxed());
    }
 
    private static IType getUnderlyingType(IType type) {

@@ -6,6 +6,7 @@ import static ch.hsr.ifs.mockator.plugin.base.misc.CastHelper.unsecureCast;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.ASTTypeMatcher;
 import org.eclipse.cdt.core.dom.ast.DOMException;
@@ -354,7 +355,7 @@ public abstract class AstUtil {
    }
 
    public static String getQfName(final String[] names) {
-      return StringUtil.join(list(names), "::");
+      return list(names).stream().collect(Collectors.joining("::"));
    }
 
    public static boolean isVoid(final ICPPASTParameterDeclaration param) {

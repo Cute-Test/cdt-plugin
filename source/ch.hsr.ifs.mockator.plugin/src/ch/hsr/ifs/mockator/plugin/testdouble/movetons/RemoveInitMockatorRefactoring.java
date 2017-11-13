@@ -1,9 +1,9 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.movetons;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
@@ -58,8 +58,8 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    private ICPPASTFunctionDefinition getUpdatedTestFunction(final ICPPASTFunctionDefinition testFunction) {
       try {
          final FunctionEquivalenceVerifier verifier = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) testFunction.getDeclarator());
-         final Collection<IASTFunctionDefinition> testFunctions = filter(getTestfunctionsInTu(), (funDef) -> verifier.isEquivalent(
-               (ICPPASTFunctionDeclarator) funDef.getDeclarator()));
+         final Collection<IASTFunctionDefinition> testFunctions = getTestfunctionsInTu().stream().filter((funDef) -> verifier.isEquivalent(
+               (ICPPASTFunctionDeclarator) funDef.getDeclarator())).collect(Collectors.toList());
          Assert.isTrue(testFunctions.size() == 1, "Was not able not unambiguously determine test function");
          return (ICPPASTFunctionDefinition) head(testFunctions).get();
       }
@@ -141,8 +141,9 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
 
    private IASTFunctionDefinition getMatchingTestFunction(final Collection<IASTFunctionDefinition> allTestFunctions) {
       final String testFunName = testFunction.getDeclarator().getName().toString();
-      final Collection<IASTFunctionDefinition> functions = filter(allTestFunctions, (funDef) -> funDef.getDeclarator().getName().toString().equals(
-            testFunName));
+      final Collection<IASTFunctionDefinition> functions = allTestFunctions.stream().filter((funDef) -> funDef.getDeclarator().getName().toString()
+            .equals(
+            testFunName)).collect(Collectors.toList());
       Assert.isFalse(functions.isEmpty(), "Could not find test function");
       return head(functions).get();
    }

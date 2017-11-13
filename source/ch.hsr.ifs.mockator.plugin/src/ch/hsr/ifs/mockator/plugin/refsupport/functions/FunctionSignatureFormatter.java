@@ -7,6 +7,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.zipMap;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
@@ -38,6 +39,6 @@ public class FunctionSignatureFormatter {
    private String getParameters() {
       final Collection<String> params = new ParameterSignatureHandler(funDecl).getParameterSignatures();
       final String delimiter = COMMA + SPACE;
-      return StringUtil.join(params, delimiter);
+      return params.stream().collect(Collectors.joining(delimiter));
    }
 }

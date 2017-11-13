@@ -6,6 +6,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unord
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.DOMException;
@@ -135,7 +136,7 @@ public class ItaniumMangledNameGenerator {
       mangledName.append("N");
       cvQualifiers(function.getType());
       boolean substituted = false;
-      final String qfName = StringUtil.join(list(names), "::");
+      final String qfName = list(names).stream().collect(Collectors.joining("::"));
 
       if (isSubstitutionNecessary(qfName)) {
          substitution(qfName, null);

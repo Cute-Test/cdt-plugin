@@ -75,7 +75,7 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    private static String toString(final Collection<String> expectations) {
-      return StringUtil.join(expectations, SIGNATURE_DELIMITER);
+      return expectations.stream().collect(Collectors.joining(SIGNATURE_DELIMITER));
    }
 
    public Collection<ExistingMemFunCallRegistration> getExpectationsToRemove() {

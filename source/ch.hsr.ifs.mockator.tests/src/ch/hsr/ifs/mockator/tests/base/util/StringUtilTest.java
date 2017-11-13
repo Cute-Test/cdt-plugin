@@ -4,8 +4,10 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -17,9 +19,11 @@ public class StringUtilTest {
    @Test
    public void joinListOfStrings() {
       List<String> famousPainters = list();
-      assertEquals("", StringUtil.join(famousPainters, ", "));
+      final Collection<String> elements = famousPainters;
+      assertEquals("", elements.stream().collect(Collectors.joining(", ")));
       famousPainters = list("Andy Warhol", "Claude Monet", "Pablo Picasso", "Paul Gaguin", "Wassily Kandinsky");
-      final String joinedPainters = StringUtil.join(famousPainters, ", ");
+      final Collection<String> elements1 = famousPainters;
+      final String joinedPainters = elements1.stream().collect(Collectors.joining(", "));
       assertEquals("Andy Warhol, Claude Monet, Pablo Picasso, Paul Gaguin, Wassily Kandinsky", joinedPainters);
    }
 

@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.finder;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -97,7 +97,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private static Collection<IASTExpression> filterNonCallExpressions(final IASTExpression[] expressions) {
-      return filter(expressions, (param) -> isCallExpr(param));
+      return Arrays.asList(expressions).stream().filter((param) -> isCallExpr(param)).collect(Collectors.toList());
    }
 
    private void toMemberFunctionCalls(final Collection<MemFunCallExpectation> callExpectations, final Collection<IASTExpression> onlyCalls) {

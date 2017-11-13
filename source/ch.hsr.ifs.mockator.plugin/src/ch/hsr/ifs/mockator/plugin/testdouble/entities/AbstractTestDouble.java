@@ -1,10 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.entities;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
@@ -80,7 +80,7 @@ public abstract class AbstractTestDouble implements TestDouble {
    }
 
    private static <T extends TestDoubleMemFun> boolean hasOnlyStatics(final Collection<T> testDoubleFuns) {
-      final Collection<T> nonStatics = filter(testDoubleFuns, (memFun) -> !memFun.isStatic());
+      final Collection<T> nonStatics = testDoubleFuns.stream().filter((Predicate<T>) (memFun) -> !memFun.isStatic()).collect(Collectors.toList());
       return nonStatics.isEmpty();
    }
 
@@ -123,7 +123,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public boolean hasPublicCtor() {
-      final Collection<IASTDeclaration> onlyCtors = filter(collectPublicMemFuns(), AstUtil::isDeclConstructor);
+      final Collection<IASTDeclaration> onlyCtors = collectPublicMemFuns().stream().filter(AstUtil::isDeclConstructor).collect(Collectors.toList());
       return !onlyCtors.isEmpty();
    }
 

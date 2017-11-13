@@ -26,6 +26,7 @@ import java.util.Vector;
 import org.junit.Test;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 
 
@@ -144,7 +145,6 @@ public class CollectionHelperTest {
 
    @Test
    public void checkedCastWithTypeCompatibleObjects() {
-      @SuppressWarnings("serial")
       final List<Object> strings = new ArrayList<Object>() {
 
          /**
@@ -163,7 +163,6 @@ public class CollectionHelperTest {
 
    @Test(expected = ClassCastException.class)
    public void checkedCastWithUncompatibleObjects() {
-      @SuppressWarnings("serial")
       final List<Object> objects = new ArrayList<Object>() {
 
          /**

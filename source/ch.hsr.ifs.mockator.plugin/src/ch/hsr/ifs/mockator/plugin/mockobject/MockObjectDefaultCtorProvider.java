@@ -1,7 +1,5 @@
 package ch.hsr.ifs.mockator.plugin.mockobject;
 
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
-
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,7 +51,8 @@ public class MockObjectDefaultCtorProvider implements DefaultCtorProvider {
    }
 
    private boolean hasPublicCtors(final Collection<? extends MissingMemberFunction> memFuns) {
-      final Collection<ICPPASTFunctionDefinition> onlyCtors = filter(toFunctions(memFuns), (function) -> AstUtil.isDeclConstructor(function));
+      final Collection<ICPPASTFunctionDefinition> onlyCtors = toFunctions(memFuns).stream().filter((function) -> AstUtil
+            .isDeclConstructor(function)).collect(Collectors.toList());
       return mockObject.hasPublicCtor() || !onlyCtors.isEmpty();
    }
 

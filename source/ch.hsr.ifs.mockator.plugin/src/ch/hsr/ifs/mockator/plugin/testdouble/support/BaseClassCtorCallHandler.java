@@ -1,11 +1,12 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.support;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
@@ -41,7 +42,8 @@ public class BaseClassCtorCallHandler {
    }
 
    public boolean hasBaseClassDefaultCtor() {
-      final Collection<ICPPConstructor> defaultCtors = filter(baseClass.getConstructors(), (ctor) -> AstUtil.isDefaultCtor(ctor));
+      final Collection<ICPPConstructor> defaultCtors = Arrays.asList(baseClass.getConstructors()).stream().filter((ctor) -> AstUtil.isDefaultCtor(
+            ctor)).collect(Collectors.toList());
       return !defaultCtors.isEmpty();
    }
 

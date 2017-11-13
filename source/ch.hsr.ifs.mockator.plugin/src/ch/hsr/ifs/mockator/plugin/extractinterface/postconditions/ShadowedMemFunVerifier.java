@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.postconditions;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedSet;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
 import java.util.Collection;
 import java.util.Set;
@@ -59,8 +58,8 @@ public class ShadowedMemFunVerifier {
    }
 
    private Collection<ICPPMethod> getChosenNonVirtualMemFuns() {
-      return filter(context.getChosenMemFuns().stream().map((final IASTDeclaration decl) -> getCppMethodIn(decl)).collect(Collectors.toList()), (
-            final ICPPMethod memFun) -> !memFun.isVirtual());
+      return context.getChosenMemFuns().stream().map((final IASTDeclaration decl) -> getCppMethodIn(decl)).collect(Collectors.toList()).stream()
+            .filter((final ICPPMethod memFun) -> !memFun.isVirtual()).collect(Collectors.toList());
    }
 
    private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {

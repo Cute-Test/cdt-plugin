@@ -2,10 +2,10 @@ package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
 import java.util.Collection;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -67,7 +67,9 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
    }
 
    private static Collection<ICPPASTTemplateDeclaration> getTemplateFunctions(final ICPPASTTemplateDeclaration templateDecl) {
-      if (!hasClassInTemplateDecl(templateDecl)) return list();
+      if (!hasClassInTemplateDecl(templateDecl)) {
+         return list();
+      }
 
       final NotInlineDefMemFunFinderVisitor visitor = new NotInlineDefMemFunFinderVisitor(templateDecl);
       templateDecl.getTranslationUnit().accept(visitor);
@@ -88,7 +90,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
    private Collection<StaticPolyMissingMemFun> filterNotReferenced(final Collection<StaticPolyMissingMemFun> missingMemFuns,
          final IASTTranslationUnit tuOfTemplate, final IASTFunctionDefinition testFunction) {
       final NotReferencedFunctionFilter filter = getNotReferencedFunFilter(tuOfTemplate, testFunction);
-      return filter(missingMemFuns, filter);
+      return missingMemFuns.stream().filter(filter).collect(Collectors.toList());
    }
 
    private NotReferencedFunctionFilter getNotReferencedFunFilter(final IASTTranslationUnit tuOfTemplate, final IASTFunctionDefinition testFunction) {

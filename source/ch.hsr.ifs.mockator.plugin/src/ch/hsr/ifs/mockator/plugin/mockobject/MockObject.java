@@ -3,10 +3,11 @@ package ch.hsr.ifs.mockator.plugin.mockobject;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.MOCK_ID;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
@@ -46,7 +47,8 @@ public class MockObject extends AbstractTestDouble {
    }
 
    public Collection<ExistingTestDoubleMemFun> getRegisteredMemFuns(final CppStandard cppStd) {
-      return filter(getPublicMemFuns(), (function) -> function.getRegisteredCall(new MockCallRegistrationFinder(cppStd)).isPresent());
+      return getPublicMemFuns().stream().filter((function) -> function.getRegisteredCall(new MockCallRegistrationFinder(cppStd)).isPresent()).collect(
+            Collectors.toList());
    }
 
    @Override
@@ -77,7 +79,8 @@ public class MockObject extends AbstractTestDouble {
    }
 
    public boolean hasMockIdField() {
-      final Collection<IASTDeclaration> mockIdField = filter(getKlass().getMembers(), (decl) -> isMockIdField(decl));
+      final Collection<IASTDeclaration> mockIdField = Arrays.asList(getKlass().getMembers()).stream().filter((decl) -> isMockIdField(decl)).collect(
+            Collectors.toList());
       return !mockIdField.isEmpty();
    }
 

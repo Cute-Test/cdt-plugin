@@ -1,8 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
-import java.util.Iterator;
+import java.util.stream.Stream;
 
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -20,8 +18,9 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.mockator.plugin.base.collections.ParallelIterator;
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
+import ch.hsr.ifs.iltis.core.functional.Functional;
+import ch.hsr.ifs.iltis.core.functional.StreamPair;
+
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypedefHelper;
@@ -37,17 +36,15 @@ class TemplateInstDeclSpecStrategy implements DeclSpecGeneratorStrategy {
       Assert.instanceOf(type, ICPPTemplateInstance.class, "This strategy can only handle template instances");
       final ICPPTemplateInstance templateInstance = (ICPPTemplateInstance) type;
       final ICPPASTTemplateId templateId = nodeFactory.newTemplateId(getName(templateInstance));
-      final ParallelIterator<ICPPTemplateParameter, ICPPTemplateArgument> it = getParallelIt(templateInstance);
 
-      while (it.hasNext()) {
-         final Pair<ICPPTemplateParameter, ICPPTemplateArgument> next = it.next();
-         final ICPPTemplateParameter templateParam = next.first();
-         final ICPPTemplateArgument templateArg = next.second();
+      getZipedStream(templateInstance).forEachOrdered((pair) -> {
+         final ICPPTemplateParameter templateParam = pair.first();
+         final ICPPTemplateArgument templateArg = pair.second();
 
          if (considerTemplateArgument(templateParam.getDefaultValue(), templateArg)) {
             templateId.addTemplateArgument(toASTTypeId(templateArg));
          }
-      }
+      });
 
       return nodeFactory.newTypedefNameSpecifier(templateId);
    }
@@ -73,20 +70,22 @@ class TemplateInstDeclSpecStrategy implements DeclSpecGeneratorStrategy {
       return argValue.matches(regex);
    }
 
-   private static ParallelIterator<ICPPTemplateParameter, ICPPTemplateArgument> getParallelIt(final ICPPTemplateInstance ti) {
+   private static Stream<StreamPair<ICPPTemplateParameter, ICPPTemplateArgument>> getZipedStream(final ICPPTemplateInstance ti) {
       final ICPPTemplateDefinition templateDefinition = ti.getTemplateDefinition();
-      final Iterator<ICPPTemplateParameter> paramsIt = getTemplateParamIterator(templateDefinition);
-      final Iterator<ICPPTemplateArgument> argsIt = getTemplateArgIterator(ti);
-      return new ParallelIterator<>(paramsIt, argsIt);
+      return Functional.zip(templateDefinition.getTemplateParameters(), ti.getTemplateArguments());
+      //      final Iterator<ICPPTemplateParameter> paramsIt = getTemplateParamIterator(templateDefinition);
+      //      final Iterator<ICPPTemplateArgument> argsIt = getTemplateArgIterator(ti);
+      //      return new ParallelIterator<>(paramsIt, argsIt);
    }
 
-   private static Iterator<ICPPTemplateArgument> getTemplateArgIterator(final ICPPTemplateInstance templateInstance) {
-      return list(templateInstance.getTemplateArguments()).iterator();
-   }
+   //   private static Iterator<ICPPTemplateParameter> getTemplateParamIterator(final ICPPTemplateDefinition templateDef) {
+   //      return list(templateDef.getTemplateParameters()).iterator();
+   //   }
+   //
+   //   private static Iterator<ICPPTemplateArgument> getTemplateArgIterator(final ICPPTemplateInstance templateInstance) {
+   //      return list(templateInstance.getTemplateArguments()).iterator();
+   //   }
 
-   private static Iterator<ICPPTemplateParameter> getTemplateParamIterator(final ICPPTemplateDefinition templateDef) {
-      return list(templateDef.getTemplateParameters()).iterator();
-   }
 
    private static IASTTypeId toASTTypeId(final ICPPTemplateArgument templateArgument) {
       final IType type = templateArgument.getTypeValue();

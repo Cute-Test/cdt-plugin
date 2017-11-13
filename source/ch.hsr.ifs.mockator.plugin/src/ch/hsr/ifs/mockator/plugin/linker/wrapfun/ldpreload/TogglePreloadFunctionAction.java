@@ -1,9 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -113,10 +114,8 @@ public class TogglePreloadFunctionAction implements IObjectActionDelegate, IMenu
 
    private Collection<IProject> getReferencedShLibProjectsWithDlSupport() {
       try {
-         return filter(project.getReferencedProjects(), (project) -> CdtManagedProjectType.fromProject(project) != CdtManagedProjectType.SharedLib
-                                                                                                                                                   ? false
-                                                                                                                                                   : usesDynamicLibrary(
-                                                                                                                                                         project));
+         return Arrays.asList(project.getReferencedProjects()).stream().filter((project) -> CdtManagedProjectType.fromProject(
+               project) != CdtManagedProjectType.SharedLib ? false : usesDynamicLibrary(project)).collect(Collectors.toList());
       }
       catch (final CoreException e) {
          return list();

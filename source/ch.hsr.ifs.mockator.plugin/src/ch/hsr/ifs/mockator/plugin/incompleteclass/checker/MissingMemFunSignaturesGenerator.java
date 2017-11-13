@@ -36,7 +36,7 @@ class MissingMemFunSignaturesGenerator {
    }
 
    private static String getFunSignaturesAsMultiLineString(final Collection<String> signatures) {
-      return StringUtil.join(htmlize(signatures), HTML_NEW_LINE);
+      return htmlize(signatures).stream().collect(Collectors.joining(HTML_NEW_LINE));
    }
 
    private static Collection<String> htmlize(final Collection<String> signatures) {

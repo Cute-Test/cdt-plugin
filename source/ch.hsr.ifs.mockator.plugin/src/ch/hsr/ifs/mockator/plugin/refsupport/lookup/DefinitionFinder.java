@@ -1,10 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.lookup;
 
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
-
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -18,9 +18,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
 
@@ -79,7 +79,7 @@ class DefinitionFinder extends AbstractNodeFinder {
    }
 
    private Collection<IIndexName> filterAccessibleDefinitions(final IIndexName[] iNames) {
-      return filter(iNames, (iName) -> {
+      return Arrays.asList(iNames).stream().filter((iName) -> {
          try {
             final IIndexFile file = iName.getFile();
             final URI uri = file.getLocation().getURI();
@@ -88,7 +88,7 @@ class DefinitionFinder extends AbstractNodeFinder {
          catch (final CoreException e) {
             throw new ILTISException(e).rethrowUnchecked();
          }
-      });
+      }).collect(Collectors.toList());
    }
 
    private boolean isPartOfOriginProject(final URI uri) {

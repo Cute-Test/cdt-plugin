@@ -1,45 +1,14 @@
 package ch.hsr.ifs.mockator.plugin.base.util;
 
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.DOUBLE_QUOTE;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.fold;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-import ch.hsr.ifs.mockator.plugin.base.functional.Injector;
-
 
 public abstract class StringUtil {
-
-   public static String join(final Collection<String> elements) {
-      return join(elements, "");
-   }
-
-   public static String join(final Collection<String> elements, final String delimiter) {
-      final Injector<String, String> injector = new Injector<String, String>() {
-
-         private final StringBuilder result = new StringBuilder();
-
-         @Override
-         public void accept(final String item) {
-            if (result.length() > 0) {
-               result.append(delimiter);
-            }
-
-            result.append(item);
-         }
-
-         @Override
-         public String yield() {
-            return result.toString();
-         }
-      };
-      fold(elements, injector);
-      return injector.yield();
-   }
 
    public static String unquote(String s) {
       if (s != null && startsAndEndsWithQuotes(s)) {

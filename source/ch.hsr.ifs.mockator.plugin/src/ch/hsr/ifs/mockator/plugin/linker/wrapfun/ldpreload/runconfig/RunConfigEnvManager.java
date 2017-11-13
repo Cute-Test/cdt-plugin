@@ -1,11 +1,12 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.runconfig;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.checkedCast;
-import static ch.hsr.ifs.mockator.plugin.base.functional.HigherOrder.filter;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.debug.core.CDebugUtils;
@@ -18,6 +19,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 
 
@@ -95,7 +97,7 @@ public class RunConfigEnvManager {
    }
 
    private Collection<ILaunchConfiguration> getLaunchConfigs() throws CoreException {
-      return filter(getManager().getLaunchConfigurations(), (config) -> {
+      return Arrays.asList(getManager().getLaunchConfigurations()).stream().filter((config) -> {
          try {
             final String typeId = config.getType().getIdentifier();
             return isCuteOrCdtExecutable(typeId) && matchesProject(config);
@@ -103,7 +105,7 @@ public class RunConfigEnvManager {
          catch (final CoreException e) {
             throw new ILTISException(e).rethrowUnchecked();
          }
-      });
+      }).collect(Collectors.toList());
    }
 
    private static boolean isCuteOrCdtExecutable(final String typeId) {
