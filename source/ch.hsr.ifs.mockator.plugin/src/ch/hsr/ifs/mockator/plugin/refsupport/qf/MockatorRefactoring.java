@@ -5,6 +5,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.last;
 
 import java.util.Optional;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitName;
 import org.eclipse.cdt.core.dom.ast.IASTImplicitNameOwner;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -21,9 +22,6 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoring;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -34,18 +32,21 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ui.ide.IDE;
 
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
-
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoring;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
+// TODO use ILTIS
+
 public abstract class MockatorRefactoring extends CRefactoring {
 
-   protected static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   protected static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final ITextSelection           selection;
 
    public MockatorRefactoring(final ICElement element, final ITextSelection selection, final ICProject project) {
@@ -57,9 +58,9 @@ public abstract class MockatorRefactoring extends CRefactoring {
    private void saveAllDirtyEditors() {
       UiUtil.runInDisplayThread((ignored) -> {
          if (!IDE.saveAllEditors(getWorkspaceRoot(), false)) {
-            initStatus.addFatalError("Was not able to save all editors");
+            initStatus().addFatalError("Was not able to save all editors");
          }
-      }, initStatus);
+      }, initStatus());
    }
 
    private static IResource[] getWorkspaceRoot() {
@@ -82,7 +83,7 @@ public abstract class MockatorRefactoring extends CRefactoring {
    }
 
    protected Optional<IASTName> checkSelectedNameIsInFunction(final RefactoringStatus status, final IProgressMonitor pm) throws CoreException {
-      final Optional<IASTName> selectedName = getSelectedName(getAST(tu, pm));
+      final Optional<IASTName> selectedName = getSelectedName(getAST(getTranslationUnit(), pm));
 
       if (!selectedName.isPresent()) {
          status.addFatalError("Selection does not contain a name");
@@ -102,7 +103,7 @@ public abstract class MockatorRefactoring extends CRefactoring {
    @Override
    protected RefactoringStatus checkFinalConditions(final IProgressMonitor subProgressMonitor, final CheckConditionsContext checkContext)
          throws CoreException, OperationCanceledException {
-      return initStatus;
+      return initStatus();
    }
 
    @Override
@@ -135,8 +136,8 @@ public abstract class MockatorRefactoring extends CRefactoring {
 
    private static IASTImplicitName[] getNames(final IASTNode selectedNode) {
       if (selectedNode instanceof ICPPASTUnaryExpression || selectedNode instanceof ICPPASTBinaryExpression ||
-          selectedNode instanceof ICPPASTNewExpression ||
-          selectedNode instanceof ICPPASTDeleteExpression) { return ((IASTImplicitNameOwner) selectedNode).getImplicitNames(); }
+            selectedNode instanceof ICPPASTNewExpression ||
+            selectedNode instanceof ICPPASTDeleteExpression) { return ((IASTImplicitNameOwner) selectedNode).getImplicitNames(); }
 
       return array();
    }

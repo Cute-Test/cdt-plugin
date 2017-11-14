@@ -14,7 +14,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInfoCreater;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInformation;
 
 
-@SuppressWarnings("restriction")
 public abstract class AbstractTestDoubleLinkedMode implements LinkedModeInfoCreater {
 
    private static final Proposal[] TEST_DOUBLE_PROPOSALS;

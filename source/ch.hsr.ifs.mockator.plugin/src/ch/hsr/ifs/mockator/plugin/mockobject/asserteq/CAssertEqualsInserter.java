@@ -32,19 +32,16 @@ class CAssertEqualsInserter extends AbstractAssertEqualsInserter {
       cAssert.insertInTu(testFunction.getTranslationUnit(), rewriter);
    }
 
-   @SuppressWarnings("restriction")
    private IASTExpressionStatement createAssertEqualStmt() {
       final IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(createCAssert(), getAssertEqualParams());
       return nodeFactory.newExpressionStatement(assertEqual);
    }
 
-   @SuppressWarnings("restriction")
    private IASTInitializerClause[] getAssertEqualParams() {
       final ICPPASTBinaryExpression binOp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_equals, createExpectations(), createActual());
       return new IASTInitializerClause[] { binOp };
    }
 
-   @SuppressWarnings("restriction")
    private IASTIdExpression createCAssert() {
       return nodeFactory.newIdExpression(nodeFactory.newName(getNameOfAssert().toCharArray()));
    }

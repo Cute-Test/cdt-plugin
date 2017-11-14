@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.testdouble.movetons;
 
 import java.util.Arrays;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
@@ -13,16 +14,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUsingDirective;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
 
-@SuppressWarnings("restriction")
 public class TestDoubleUsingNsHandler {
 
-   private static final ICPPNodeFactory        nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory        nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final ICPPASTCompositeTypeSpecifier testDouble;
    private final ASTRewrite                    rewriter;
 

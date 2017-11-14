@@ -36,7 +36,6 @@ class Function extends AbstractStaticPolyMissingMemFun {
    }
 
    @Override
-   @SuppressWarnings("restriction")
    protected ICPPASTFunctionDeclarator createFunDecl() {
       final IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());
       final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);

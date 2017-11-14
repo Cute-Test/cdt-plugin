@@ -12,12 +12,13 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
@@ -37,8 +38,6 @@ import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestDoubleKindAnalyzer;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestDoubleKindAnalyzer.TestDoubleKind;
 
-
-@SuppressWarnings("restriction")
 public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
 
    private final CppStandard            cppStd;
@@ -46,7 +45,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    private MockObject                   newMockObject;
 
    public ConvertToMockObjectRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cproject,
-                                         final LinkedEditModeStrategy linkedEditStrategy) {
+         final LinkedEditModeStrategy linkedEditStrategy) {
       super(element, selection, cproject);
       this.cppStd = cppStd;
       this.linkedEditStrategy = linkedEditStrategy;
@@ -55,7 +54,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<ICPPASTCompositeTypeSpecifier> klass = getClassInSelection(getAST(tu, pm));
+      final Optional<ICPPASTCompositeTypeSpecifier> klass = getClassInSelection(getAST(tu(), pm));
 
       if (!klass.isPresent()) {
          status.addFatalError("Class could not be found in selection");
@@ -74,8 +73,8 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu, pm);
+   OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       addMockSupportToFakeObject(ast, rewriter, pm);
    }
@@ -91,7 +90,8 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast,
          final Collection<TestDoubleMemFun> withNewExpectations, final IProgressMonitor pm) {
-      return new MockSupportContext.ContextBuilder(project, refactoringContext, newMockObject, rewriter, ast, cppStd, getPublicVisibilityInserter(
+      return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), newMockObject, rewriter, ast, cppStd,
+            getPublicVisibilityInserter(
             rewriter), hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEditStrategy).withNewExpectations(withNewExpectations).build();
    }
 

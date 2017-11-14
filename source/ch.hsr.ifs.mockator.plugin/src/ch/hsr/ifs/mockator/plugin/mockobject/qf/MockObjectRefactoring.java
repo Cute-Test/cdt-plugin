@@ -9,11 +9,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
+
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
@@ -26,15 +27,13 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.TestDouble;
 import ch.hsr.ifs.mockator.plugin.testdouble.qf.AbstractTestDoubleRefactoring;
 
-
-@SuppressWarnings("restriction")
 public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    private final Collection<MissingMemberFunction> missingMemFuns;
    private final LinkedEditModeStrategy            linkedEdit;
 
    public MockObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject cProject,
-                                final LinkedEditModeStrategy linkedEdit) {
+         final LinkedEditModeStrategy linkedEdit) {
       super(cppStd, cElement, selection, cProject);
       this.linkedEdit = linkedEdit;
       missingMemFuns = list();
@@ -42,8 +41,8 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu, pm);
+   OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       missingMemFuns.addAll(collectMissingMemFuns(pm));
       final ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
@@ -62,7 +61,7 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final ClassPublicVisibilityInserter inserter,
          final IProgressMonitor pm) {
-      return new MockSupportContext.ContextBuilder(project, refactoringContext, (MockObject) testDouble, rewriter, ast, cppStd, inserter,
+      return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), (MockObject) testDouble, rewriter, ast, cppStd, inserter,
             hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
    }
 

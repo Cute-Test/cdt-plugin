@@ -1,5 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -7,15 +8,14 @@ import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.collections.MyStack;
 
 
-@SuppressWarnings("restriction")
 public class QualifiedNameCreator {
 
-   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final IASTName              name;
 
    public QualifiedNameCreator(final IASTName name) {
@@ -24,11 +24,9 @@ public class QualifiedNameCreator {
 
    public ICPPASTQualifiedName createQualifiedName() {
       final MyStack<IASTNode> nodes = collectQualifiedNames();
-      final ICPPASTQualifiedName qName = nodeFactory.newQualifiedName();
+      final ICPPASTQualifiedName qName = nodeFactory.newQualifiedName(null);
 
-      while (!nodes.isEmpty()) {
-         final IASTNode node = nodes.pop();
-
+      nodes.stream().forEach((node) -> {
          if (node instanceof IASTCompositeTypeSpecifier) {
             qName.addName(((IASTCompositeTypeSpecifier) node).getName());
          } else if (node instanceof ICPPASTNamespaceDefinition) {
@@ -36,7 +34,8 @@ public class QualifiedNameCreator {
          } else if (node instanceof ICPPASTTemplateId) {
             qName.addName((ICPPASTTemplateId) node);
          }
-      }
+      });
+
       return qName;
    }
 

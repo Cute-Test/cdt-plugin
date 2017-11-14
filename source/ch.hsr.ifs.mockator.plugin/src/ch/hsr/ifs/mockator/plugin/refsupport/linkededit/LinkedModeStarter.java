@@ -12,7 +12,6 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 
 
-@SuppressWarnings("restriction")
 public class LinkedModeStarter implements Consumer<LinkedModeInfoCreater> {
 
    @Override

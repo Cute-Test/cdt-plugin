@@ -4,22 +4,22 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unord
 
 import java.util.Map;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IProblemType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
 
-@SuppressWarnings("restriction")
 public class ParameterNameFunDecorator {
 
-   private static final CPPNodeFactory     nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory    nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final ICPPASTFunctionDeclarator function;
 
    public ParameterNameFunDecorator(final ICPPASTFunctionDeclarator function) {

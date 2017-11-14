@@ -13,7 +13,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -23,6 +22,7 @@ import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -35,8 +35,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
-
-@SuppressWarnings("restriction")
 public class LdPreloadRefactoring extends LinkerRefactoring {
 
    private final CppStandard cppStd;
@@ -79,7 +77,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
 
    private void insertFunDeclInclude(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit tu, final ASTRewrite rewriter) {
       try {
-         final CppIncludeResolver resolver = new CppIncludeResolver(tu, project, getIndex());
+         final CppIncludeResolver resolver = new CppIncludeResolver(tu, getProject(), getIndex());
          final AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDecl.getTranslationUnit().getFilePath());
          rewriter.insertBefore(tu, null, includeForFunDecl, null);
       }
@@ -95,7 +93,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
    private IASTTranslationUnit createAndGetNewTu(final String funName, final IProgressMonitor pm) throws CoreException {
       final IPath newLocation = getPathForNewFile(funName);
       newFile = FileUtil.toIFile(newLocation);
-      final TranslationUnitCreator creator = new TranslationUnitCreator(targetProject, refactoringContext);
+      final TranslationUnitCreator creator = new TranslationUnitCreator(targetProject, refactoringContext());
       return creator.createAndGetNewTu(newLocation, pm);
    }
 

@@ -28,17 +28,18 @@ public class MemberFunCallRegistrationAdder extends AbstractFunCallRegistrationA
       return nameOfAllCallsVector;
    }
 
-   @SuppressWarnings("restriction")
    @Override
    protected IASTExpression getPushBackOwner() {
       final ICPPASTLiteralExpression arraySubscript = getArraySubscript();
       return nodeFactory.newArraySubscriptExpression(createCallSequence(), arraySubscript);
    }
 
-   @SuppressWarnings("restriction")
    private ICPPASTLiteralExpression getArraySubscript() {
-      if (isStatic) return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, "0");
-      else return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, MOCK_ID);
+      if (isStatic) {
+         return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, "0");
+      } else {
+         return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, MOCK_ID);
+      }
    }
 
    @Override

@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
+import static ch.hsr.ifs.iltis.core.functional.FunHelper.as;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.misc.CastHelper.unsecureCast;
 
 import java.util.Collection;
 import java.util.List;
@@ -57,13 +57,13 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 
-import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
-import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 
 
-@SuppressWarnings("restriction")
+// TODO extract to ILTIS
 public abstract class AstUtil {
 
    public static boolean isSameType(final IType lhs, final IType rhs) {
@@ -177,7 +177,7 @@ public abstract class AstUtil {
       IASTNode currentNode = node;
 
       while (currentNode != null) {
-         if (T.isInstance(currentNode)) { return unsecureCast(currentNode); }
+         if (T.isInstance(currentNode)) { return as(currentNode); }
 
          currentNode = currentNode.getParent();
       }
@@ -187,7 +187,7 @@ public abstract class AstUtil {
    public static <T> T getChildOfType(final IASTNode node, final Class<? extends IASTNode> T) {
       if (node == null) { return null; }
 
-      if (T.isInstance(node)) { return unsecureCast(node); }
+      if (T.isInstance(node)) { return as(node); }
 
       for (final IASTNode child : node.getChildren()) {
          final T currentNode = getChildOfType(child, T);

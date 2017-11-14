@@ -30,7 +30,6 @@ import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
 
    public BoostVectorExpectationsReconciler(final ASTRewrite rewriter, final Collection<? extends TestDoubleMemFun> toAdd,
@@ -61,7 +60,9 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
    private static IASTExpressionStatement getInsertionPointForBoostInitializer(final IASTName vector) {
       final IASTName[] references = vector.getTranslationUnit().getReferences(vector.resolveBinding());
 
-      if (references.length > 0) return AstUtil.getAncestorOfType(references[0], IASTExpressionStatement.class);
+      if (references.length > 0) {
+         return AstUtil.getAncestorOfType(references[0], IASTExpressionStatement.class);
+      }
 
       return null;
    }

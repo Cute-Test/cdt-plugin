@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CALLS;
 import static org.eclipse.cdt.core.dom.ast.IASTLiteralExpression.lk_integer_constant;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -15,17 +16,17 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
 
-@SuppressWarnings("restriction")
 public class AllCallsVectorCreator {
 
-   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private static final String         STD         = "std";
    private static final String         VECTOR      = "vector";
    private final CallsVectorParent     callsVectorParent;
@@ -91,7 +92,7 @@ public class AllCallsVectorCreator {
    }
 
    private static ICPPASTTemplateId createStdVectorOfCalls() {
-      final ICPPASTQualifiedName allCalls = nodeFactory.newQualifiedName();
+      final ICPPASTQualifiedName allCalls = nodeFactory.newQualifiedName(null);
       allCalls.addName(nodeFactory.newName(STD.toCharArray()));
       allCalls.addName(nodeFactory.newName(VECTOR.toCharArray()));
       final ICPPASTNamedTypeSpecifier calls = nodeFactory.newTypedefNameSpecifier(nodeFactory.newName(CALLS.toCharArray()));

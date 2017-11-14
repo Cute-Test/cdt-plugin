@@ -2,22 +2,22 @@ package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
 import java.util.Optional;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-@SuppressWarnings("restriction")
 public class ClassPublicVisibilityInserter {
 
-   private static final CPPNodeFactory         nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory        nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final ICPPASTCompositeTypeSpecifier targetClass;
    private final ASTRewrite                    rewriter;
    private Optional<ICPPASTVisibilityLabel>    publicVisibilityLabel;

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 
 
@@ -14,13 +15,7 @@ public class ExceptionUtilTest {
    @Test
    public void singleExceptionHasNoRootCause() {
       final IllegalStateException rootCause = new IllegalStateException();
-
       ExceptionUtil.getRootCause(rootCause).ifPresent((ignored) -> assertTrue(false));
-      //TODO remove unused code
-      //    for (@SuppressWarnings("unused")
-      //    Throwable optCause : ExceptionUtil.getRootCause(rootCause)) {
-      //      assertTrue(false);
-      //    }
    }
 
    @Test

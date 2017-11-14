@@ -4,15 +4,11 @@ import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
-@SuppressWarnings("restriction")
 class BasicTypeDeclSpecStrategy implements DeclSpecGeneratorStrategy {
-
-   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
    @Override
    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {

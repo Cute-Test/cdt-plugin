@@ -2,7 +2,6 @@ package ch.hsr.ifs.mockator.plugin.refsupport.tu;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.cdt.internal.ui.refactoring.changes.CreateFileChange;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -13,9 +12,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 
-@SuppressWarnings("restriction")
 public class TranslationUnitCreator {
 
    private final CRefactoringContext context;

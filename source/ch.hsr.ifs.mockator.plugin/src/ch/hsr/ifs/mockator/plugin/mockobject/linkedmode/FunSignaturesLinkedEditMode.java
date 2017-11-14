@@ -17,7 +17,6 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 
 
-@SuppressWarnings("restriction")
 class FunSignaturesLinkedEditMode extends MockObjectLinkedModeSupport {
 
    public FunSignaturesLinkedEditMode(final ChangeEdit edit, final Collection<? extends TestDoubleMemFun> memFuns, final CppStandard cppStd,

@@ -8,7 +8,6 @@ import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ISourceReference;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.corext.util.CModelUtil;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -16,13 +15,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.junit.Test;
 
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingRefactoringTest;
 import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
 
 
-@SuppressWarnings("restriction")
 public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest {
 
    private static int DEFAULT_MARKER_COUNT = 1;

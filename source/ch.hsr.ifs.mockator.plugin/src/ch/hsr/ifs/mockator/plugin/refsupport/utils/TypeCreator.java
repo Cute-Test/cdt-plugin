@@ -40,7 +40,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
 
 
 // parts copied and adapted from org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CppVisitor
-@SuppressWarnings("restriction")
 public abstract class TypeCreator extends ASTQueries {
 
    public static IType byParamDeclaration(final ICPPASTParameterDeclaration pdecl) {
@@ -81,7 +80,9 @@ public abstract class TypeCreator extends ASTQueries {
       final CPPFunctionType type = new CPPFunctionType(returnType, pTypes, fnDtor.isConst(), fnDtor.isVolatile(), false, false, fnDtor
             .takesVarArgs());
       final IASTDeclarator nested = fnDtor.getNestedDeclarator();
-      if (nested != null) return createType(type, nested);
+      if (nested != null) {
+         return createType(type, nested);
+      }
       return type;
    }
 
@@ -146,9 +147,13 @@ public abstract class TypeCreator extends ASTQueries {
          return new CPPPointerType(at.getType());
       }
 
-      if (t instanceof IFunctionType) return new CPPPointerType(pt);
+      if (t instanceof IFunctionType) {
+         return new CPPPointerType(pt);
+      }
 
-      if (SemanticUtil.getCVQualifier(t) != CVQualifier.NONE) return SemanticUtil.getNestedType(t, TDEF | ALLCVQ);
+      if (SemanticUtil.getCVQualifier(t) != CVQualifier.NONE) {
+         return SemanticUtil.getNestedType(t, TDEF | ALLCVQ);
+      }
 
       return pt;
    }
@@ -180,7 +185,9 @@ public abstract class TypeCreator extends ASTQueries {
    }
 
    private static IType createType(final IType baseType, final IASTDeclarator declarator) {
-      if (declarator instanceof ICPPASTFunctionDeclarator) return createType(baseType, (ICPPASTFunctionDeclarator) declarator);
+      if (declarator instanceof ICPPASTFunctionDeclarator) {
+         return createType(baseType, (ICPPASTFunctionDeclarator) declarator);
+      }
 
       IType type = baseType;
       type = getPointerTypes(type, declarator);
@@ -191,7 +198,9 @@ public abstract class TypeCreator extends ASTQueries {
 
       final IASTDeclarator nested = declarator.getNestedDeclarator();
 
-      if (nested != null) return createType(type, nested);
+      if (nested != null) {
+         return createType(type, nested);
+      }
       return type;
    }
 }

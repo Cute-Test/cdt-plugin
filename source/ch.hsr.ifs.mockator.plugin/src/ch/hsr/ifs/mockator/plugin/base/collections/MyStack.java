@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.base.collections;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.stream.Stream;
 
 
 // java.util.Stack is seriously flawed, so I use a java.util.Deque
@@ -37,5 +38,13 @@ public class MyStack<T> {
 
    public int size() {
       return stack.size();
+   }
+
+   public Stream<T> stream() {
+      return stack.stream();
+   }
+
+   public Stream<T> parallelStream() {
+      return stack.parallelStream();
    }
 }

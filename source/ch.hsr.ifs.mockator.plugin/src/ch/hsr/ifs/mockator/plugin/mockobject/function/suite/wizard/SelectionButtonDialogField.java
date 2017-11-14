@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Control;
 
 
 // Copied and adapted from CUTE
-@SuppressWarnings("restriction")
 class SelectionButtonDialogField extends DialogField {
 
    private final int           fButtonStyle;

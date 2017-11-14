@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
@@ -13,7 +14,7 @@ import org.eclipse.cdt.core.dom.ast.IASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.QualifiedName;
 
@@ -26,127 +27,125 @@ import ch.hsr.ifs.mockator.plugin.project.cdt.options.CompilerFlagHandler;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.DiscoveryOptionsHandler;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 
-
-@SuppressWarnings("restriction")
 public enum CppStandard implements PropertyTypeWithDefault {
 
    Cpp03Std("C++03", I18N.Cpp03Desc) {
 
-   @Override
-   public void toggleCppStdSupport(final IProject project) {
-      final String cpp11ExperimentalFlag = getCpp11ExperimentalFlag(project);
-      new CompilerFlagHandler(project).removeCompilerFlag(cpp11ExperimentalFlag);
-      new DiscoveryOptionsHandler(project).removeCpp11Support();
-   }
+      @Override
+      public void toggleCppStdSupport(final IProject project) {
+         final String cpp11ExperimentalFlag = getCpp11ExperimentalFlag(project);
+         new CompilerFlagHandler(project).removeCompilerFlag(cpp11ExperimentalFlag);
+         new DiscoveryOptionsHandler(project).removeCpp11Support();
+      }
 
-   @Override
-   public Pattern getInitializerPattern() {
-      return CPP03_INITIALIZER_PATTERN;
-   }
+      @Override
+      public Pattern getInitializerPattern() {
+         return CPP03_INITIALIZER_PATTERN;
+      }
 
-   @Override
-   public IASTLiteralExpression getNullPtr() {
-      return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, "0");
-   }
+      @Override
+      public IASTLiteralExpression getNullPtr() {
+         return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_integer_constant, "0");
+      }
 
-   @Override
-   public IASTInitializerClause getCtorCall(final String ctorName, final Collection<IASTInitializerClause> args) {
-      final IASTName newCtorName = nodeFactory.newName(ctorName.toCharArray());
-      final IASTIdExpression ctorCall = nodeFactory.newIdExpression(newCtorName);
-      final IASTInitializerClause[] newArgs = args.toArray(new IASTInitializerClause[args.size()]);
-      return nodeFactory.newFunctionCallExpression(ctorCall, newArgs);
-   }
+      @Override
+      public IASTInitializerClause getCtorCall(final String ctorName, final Collection<IASTInitializerClause> args) {
+         final IASTName newCtorName = nodeFactory.newName(ctorName.toCharArray());
+         final IASTIdExpression ctorCall = nodeFactory.newIdExpression(newCtorName);
+         final IASTInitializerClause[] newArgs = args.toArray(new IASTInitializerClause[args.size()]);
+         return nodeFactory.newFunctionCallExpression(ctorCall, newArgs);
+      }
 
-   @Override
-   public IASTInitializer getEmptyInitializer() {
-      return nodeFactory.newConstructorInitializer(new IASTInitializerClause[] {});
-   }
+      @Override
+      public IASTInitializer getEmptyInitializer() {
+         return nodeFactory.newConstructorInitializer(new IASTInitializerClause[] {});
+      }
 
-   @Override
-   public IASTInitializer getInitializer(final IASTInitializerClause clause) {
-      return nodeFactory.newConstructorInitializer(new IASTInitializerClause[] { clause });
-   }
+      @Override
+      public IASTInitializer getInitializer(final IASTInitializerClause clause) {
+         return nodeFactory.newConstructorInitializer(new IASTInitializerClause[] { clause });
+      }
 
-   @Override
-   public Pattern getFunExpectationsPattern() {
-      return CPP03_FUN_EXPECTATION_PATTERN;
-   }
+      @Override
+      public Pattern getFunExpectationsPattern() {
+         return CPP03_FUN_EXPECTATION_PATTERN;
+      }
 
-   @Override
-   public Pattern getAllFunArgsPattern() {
-      return CPP03_ALL_FUN_ARGS_PATTERN;
-   }
+      @Override
+      public Pattern getAllFunArgsPattern() {
+         return CPP03_ALL_FUN_ARGS_PATTERN;
+      }
 
-   @Override
-   public boolean isDefault() {
-      return false;
-   }
+      @Override
+      public boolean isDefault() {
+         return false;
+      }
 
-   @Override
-   public String getExpectationDelimiter() {
-      return ")";
-   }
+      @Override
+      public String getExpectationDelimiter() {
+         return ")";
+      }
    },
    Cpp11Std("C++11", I18N.Cpp11Desc) {
 
-   @Override
-   public void toggleCppStdSupport(final IProject project) {
-      new CompilerFlagHandler(project).addCompilerFlag(getCpp11ExperimentalFlag(project));
-      new DiscoveryOptionsHandler(project).addCpp11Support();
-   }
-
-   @Override
-   public Pattern getInitializerPattern() {
-      return CPP11_INITIALIZER_PATTERN;
-   }
-
-   @Override
-   public IASTLiteralExpression getNullPtr() {
-      return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, NULLPTR);
-   }
-
-   @Override
-   public IASTInitializer getEmptyInitializer() {
-      return nodeFactory.newInitializerList();
-   }
-
-   @Override
-   public IASTInitializer getInitializer(final IASTInitializerClause clause) {
-      final ICPPASTInitializerList initializerList = nodeFactory.newInitializerList();
-      initializerList.addClause(clause);
-      return initializerList;
-   }
-
-   @Override
-   public IASTInitializerClause getCtorCall(final String ctorName, final Collection<IASTInitializerClause> args) {
-      final IASTName newCtorName = nodeFactory.newName(ctorName.toCharArray());
-      final ICPPASTNamedTypeSpecifier nameSpec = nodeFactory.newTypedefNameSpecifier(newCtorName);
-      final ICPPASTInitializerList newArgs = nodeFactory.newInitializerList();
-      for (final IASTInitializerClause arg : args) {
-         newArgs.addClause(arg);
+      @Override
+      public void toggleCppStdSupport(final IProject project) {
+         new CompilerFlagHandler(project).addCompilerFlag(getCpp11ExperimentalFlag(project));
+         new DiscoveryOptionsHandler(project).addCpp11Support();
       }
-      return nodeFactory.newSimpleTypeConstructorExpression(nameSpec, newArgs);
-   }
 
-   @Override
-   public Pattern getFunExpectationsPattern() {
-      return CPP11_FUN_EXPECTATION_PATTERN;
-   }
+      @Override
+      public Pattern getInitializerPattern() {
+         return CPP11_INITIALIZER_PATTERN;
+      }
 
-   @Override
-   public Pattern getAllFunArgsPattern() {
-      return CPP11_ALL_FUN_ARGS_PATTERN;
-   }
+      @Override
+      public IASTLiteralExpression getNullPtr() {
+         return nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, NULLPTR);
+      }
 
-   @Override
-   public boolean isDefault() {
-      return true;
-   }
+      @Override
+      public IASTInitializer getEmptyInitializer() {
+         return nodeFactory.newInitializerList();
+      }
 
-   @Override
-   public String getExpectationDelimiter() {
-      return "}";
-   }
+      @Override
+      public IASTInitializer getInitializer(final IASTInitializerClause clause) {
+         final ICPPASTInitializerList initializerList = nodeFactory.newInitializerList();
+         initializerList.addClause(clause);
+         return initializerList;
+      }
+
+      @Override
+      public IASTInitializerClause getCtorCall(final String ctorName, final Collection<IASTInitializerClause> args) {
+         final IASTName newCtorName = nodeFactory.newName(ctorName.toCharArray());
+         final ICPPASTNamedTypeSpecifier nameSpec = nodeFactory.newTypedefNameSpecifier(newCtorName);
+         final ICPPASTInitializerList newArgs = nodeFactory.newInitializerList();
+         for (final IASTInitializerClause arg : args) {
+            newArgs.addClause(arg);
+         }
+         return nodeFactory.newSimpleTypeConstructorExpression(nameSpec, newArgs);
+      }
+
+      @Override
+      public Pattern getFunExpectationsPattern() {
+         return CPP11_FUN_EXPECTATION_PATTERN;
+      }
+
+      @Override
+      public Pattern getAllFunArgsPattern() {
+         return CPP11_ALL_FUN_ARGS_PATTERN;
+      }
+
+      @Override
+      public boolean isDefault() {
+         return true;
+      }
+
+      @Override
+      public String getExpectationDelimiter() {
+         return "}";
+      }
    };
 
    public abstract void toggleCppStdSupport(IProject project);
@@ -178,7 +177,7 @@ public enum CppStandard implements PropertyTypeWithDefault {
    private static final Pattern CPP11_ALL_FUN_ARGS_PATTERN = Pattern.compile("\"\\s*,\\s*([\\s\\S]*?\\})\\s*\\}");
    private static final Pattern CPP03_ALL_FUN_ARGS_PATTERN = Pattern.compile("\"\\s*,\\s*([\\s\\S]*?\\))\\s*\\)");
 
-   private static final CPPNodeFactory           nodeFactory    = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory          nodeFactory    = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private static final String                   NULLPTR        = "nullptr";
    private static final Map<String, CppStandard> STRING_TO_ENUM = unorderedMap();
 

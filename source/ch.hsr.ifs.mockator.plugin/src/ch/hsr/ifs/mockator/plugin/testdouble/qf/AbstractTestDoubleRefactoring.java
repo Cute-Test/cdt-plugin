@@ -14,6 +14,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.StaticPolyMissingMemFunFinder;
@@ -24,7 +25,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.TestDouble;
 
 
-@SuppressWarnings("restriction")
 public abstract class AbstractTestDoubleRefactoring extends MockatorRefactoring {
 
    protected CppStandard cppStd;
@@ -38,7 +38,7 @@ public abstract class AbstractTestDoubleRefactoring extends MockatorRefactoring 
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<ICPPASTCompositeTypeSpecifier> classInSelection = getClassInSelection(getAST(tu, pm));
+      final Optional<ICPPASTCompositeTypeSpecifier> classInSelection = getClassInSelection(getAST(tu(), pm));
 
       if (!classInSelection.isPresent()) {
          status.addFatalError("Could not find a class in the current selection");
@@ -62,9 +62,9 @@ public abstract class AbstractTestDoubleRefactoring extends MockatorRefactoring 
    private MissingMemFunFinder getMissingMemFunFinder(final IProgressMonitor pm) {
       switch (testDouble.getPolymorphismKind()) {
       case StaticPoly:
-         return new StaticPolyMissingMemFunFinder(project, getIndex());
+         return new StaticPolyMissingMemFunFinder(getProject(), getIndex());
       case SubTypePoly:
-         return new SubtypeMissingMemFunFinder(project, getIndex(), pm);
+         return new SubtypeMissingMemFunFinder(getProject(), getIndex(), pm);
       default:
          throw new ILTISException("Unsupported polymorphism kind").rethrowUnchecked();
       }

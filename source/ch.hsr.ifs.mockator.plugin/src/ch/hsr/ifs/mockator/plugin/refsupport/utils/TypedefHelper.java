@@ -34,7 +34,6 @@ import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 
 // Taken and adapted from ds8
-@SuppressWarnings("restriction")
 public class TypedefHelper {
 
    private static final IContentType HEADER_CONTENT_TYPE = CCorePlugin.getContentType("header.h");

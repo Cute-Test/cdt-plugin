@@ -9,7 +9,6 @@ import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.PositionI
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
 
 
-@SuppressWarnings("restriction")
 public class LinkedModeInformation {
 
    private final List<LinkedProposalPositionGroup> groups;
@@ -39,7 +38,9 @@ public class LinkedModeInformation {
    public LinkedProposalPositionGroup getGroup(final int offset) {
       for (final LinkedProposalPositionGroup group : groups) {
          for (final PositionInformation pos : group.getPositions()) {
-            if (pos.getOffset() == offset) return group;
+            if (pos.getOffset() == offset) {
+               return group;
+            }
          }
       }
 

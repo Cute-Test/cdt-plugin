@@ -15,7 +15,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -23,6 +22,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
@@ -36,8 +36,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
-
-@SuppressWarnings("restriction")
 class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
    private final ConsistentExpectationsCodanArgs ca;
@@ -46,8 +44,8 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    private final List<ExistingTestDoubleMemFun>  expectationsToAdd;
 
    public ConsistentExpectationsRefactoring(final ICElement cElement, final ITextSelection selection, final ICProject project,
-                                            final ConsistentExpectationsCodanArgs ca, final CppStandard cppStd,
-                                            final LinkedEditModeStrategy linkedEditMode) {
+         final ConsistentExpectationsCodanArgs ca, final CppStandard cppStd,
+         final LinkedEditModeStrategy linkedEditMode) {
       super(cElement, selection, project);
       this.ca = ca;
       this.cppStd = cppStd;
@@ -58,7 +56,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<IASTName> expectationsVector = getSelectedName(getAST(tu, pm));
+      final Optional<IASTName> expectationsVector = getSelectedName(getAST(tu(), pm));
 
       if (!expectationsVector.isPresent()) {
          status.addFatalError("Not a valid name selected");
@@ -74,8 +72,8 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu, pm);
+   OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu(), pm);
       getSelectedName(ast).ifPresent((expectations) -> reconcileExpectations(collector, ast, expectations));
    }
 

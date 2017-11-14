@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.eclipse.cdt.internal.ui.editor.CEditor;
+import org.eclipse.cdt.ui.ICEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
@@ -41,9 +42,10 @@ public abstract class UiUtil {
       return Thread.currentThread().equals(display.getThread());
    }
 
+
    public static Optional<CEditor> getActiveCEditor() {
       final IEditorPart editor = getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-      if (editor instanceof CEditor) { return Optional.of((CEditor) editor); }
+      if (editor instanceof ICEditor) { return Optional.of((CEditor) editor); }
       return Optional.empty();
    }
 

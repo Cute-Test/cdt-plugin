@@ -24,7 +24,6 @@ class Constructor extends AbstractStaticPolyMissingMemFun {
       this.funCall = funCall;
    }
 
-   @SuppressWarnings("restriction")
    @Override
    protected ICPPASTFunctionDeclarator createFunDecl() {
       final IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());

@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarker;
 
-import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.CodanArguments;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.MemFunSignature;

@@ -3,10 +3,11 @@ package ch.hsr.ifs.mockator.plugin.mockobject.support;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.MOCK_ID;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.SIZE_T;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter;
 
@@ -15,10 +16,9 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter
 // struct Mock {
 // const size_t mock_id;
 // };
-@SuppressWarnings("restriction")
 class MockIdFieldInserter {
 
-   private static final CPPNodeFactory         nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory        nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final ClassPublicVisibilityInserter inserter;
 
    public MockIdFieldInserter(final ClassPublicVisibilityInserter inserter) {

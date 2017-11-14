@@ -6,25 +6,22 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleRefactoring;
 
-
-@SuppressWarnings("restriction")
 public class CreateTestDoubleSubTypeRefactoring extends AbstractCreateTestDoubleRefactoring {
 
-   private static ICPPNodeFactory                 nodeFactory = CPPNodeFactory.getDefault();
    private final CreateTestDoubleSubTypeCodanArgs ca;
 
    public CreateTestDoubleSubTypeRefactoring(final ICElement cElement, final ITextSelection sel, final CreateTestDoubleSubTypeCodanArgs ca) {
@@ -34,8 +31,8 @@ public class CreateTestDoubleSubTypeRefactoring extends AbstractCreateTestDouble
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu, pm);
+   OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(getTranslationUnit(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       addIncludeIfNecessary(ast, rewriter);
       replaceKindOfPassingArgIfNecessary(ast, rewriter);
@@ -69,10 +66,9 @@ public class CreateTestDoubleSubTypeRefactoring extends AbstractCreateTestDouble
 
    private void addPublicInheritance(final ICPPASTCompositeTypeSpecifier newClass) {
       final boolean nonVirtual = false;
-      final int noVisibility = 0; // we always create the new test doubles as 'struct' and use default
-      // (public) visibility
+      final int noVisibility = 0; /* we always create the new test doubles as 'struct' and use default (public) visibility */
       final IASTName parentClassName = nodeFactory.newName(ca.getParentClassName().toCharArray());
-      final ICPPASTBaseSpecifier baseSpecifier = nodeFactory.newBaseSpecifier(parentClassName, noVisibility, nonVirtual);
+      final ICPPASTBaseSpecifier baseSpecifier = nodeFactory.newBaseSpecifier((ICPPASTNameSpecifier) parentClassName, noVisibility, nonVirtual);
       newClass.addBaseSpecifier(baseSpecifier);
    }
 }

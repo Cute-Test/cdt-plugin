@@ -20,8 +20,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionDelegateCallCreat
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
-
-@SuppressWarnings("restriction")
 class MemFunBodyStrategy extends CommonFunBodyStrategy {
 
    // typedef int (Foo::*memFunType)() const;

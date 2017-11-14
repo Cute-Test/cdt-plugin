@@ -11,7 +11,6 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.context.MockSupportContext;
 import ch.hsr.ifs.mockator.plugin.project.properties.AssertionOrder;
 
 
-@SuppressWarnings("restriction")
 class CuteAssertEqualsInserter extends AbstractAssertEqualsInserter {
 
    public CuteAssertEqualsInserter(final ICPPASTFunctionDefinition testFunction, final MockSupportContext context) {

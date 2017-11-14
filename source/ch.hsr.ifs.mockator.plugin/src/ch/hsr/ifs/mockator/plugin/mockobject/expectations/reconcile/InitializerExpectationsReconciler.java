@@ -21,7 +21,6 @@ import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
 
    public InitializerExpectationsReconciler(final ASTRewrite rewriter, final Collection<? extends TestDoubleMemFun> toAdd,
@@ -88,7 +87,9 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    }
 
    private static IASTInitializerClause[] getArguments(final IASTInitializerClause clause) {
-      if (clause instanceof ICPPASTInitializerList) return ((ICPPASTInitializerList) clause).getClauses();
+      if (clause instanceof ICPPASTInitializerList) {
+         return ((ICPPASTInitializerList) clause).getClauses();
+      }
 
       return array();
    }

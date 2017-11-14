@@ -28,7 +28,6 @@ import ch.hsr.ifs.mockator.plugin.project.cdt.CdtHelper;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 
 
-@SuppressWarnings("restriction")
 class SharedLibProjectCreator {
 
    private final String   newProjectName;

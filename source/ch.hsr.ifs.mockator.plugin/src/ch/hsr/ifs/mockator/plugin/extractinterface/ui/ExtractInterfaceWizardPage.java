@@ -1,5 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.ui;
 
+import static ch.hsr.ifs.iltis.core.functional.FunHelper.as;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.checkedCast;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
@@ -32,13 +33,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.base.misc.CastHelper;
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatter;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 class ExtractInterfaceWizardPage extends UserInputWizardPage {
 
    private Button              selectAllButton;
@@ -200,7 +199,7 @@ class ExtractInterfaceWizardPage extends UserInputWizardPage {
    }
 
    private Collection<IASTDeclaration> getMemFunsInTable() {
-      return CastHelper.unsecureCast(memFunsTableViewer.getInput());
+      return as(memFunsTableViewer.getInput());
    }
 
    private void updateChosenMemFuns() {

@@ -20,7 +20,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
 
 
 // Taken and adapted from CDT 8.2
-@SuppressWarnings("restriction")
 public class PureVirtualMemFunCollector {
 
    private final ICPPClassType klass;
@@ -51,7 +50,9 @@ public class PureVirtualMemFunCollector {
    private Map<String, List<ICPPMethod>> getPureVirtualMemFuns(final ICPPClassType classType,
          final Map<ICPPClassType, Map<String, List<ICPPMethod>>> cache) {
       Map<String, List<ICPPMethod>> result = cache.get(classType);
-      if (result != null) return result;
+      if (result != null) {
+         return result;
+      }
 
       result = new HashMap<>();
       cache.put(classType, result);
@@ -105,28 +106,39 @@ public class PureVirtualMemFunCollector {
    }
 
    private static boolean functionTypesAllowOverride(final ICPPFunctionType a, final ICPPFunctionType b) {
-      if (a.isConst() != b.isConst() || a.isVolatile() != b.isVolatile() || a.takesVarArgs() != b.takesVarArgs()) return false;
+      if (a.isConst() != b.isConst() || a.isVolatile() != b.isVolatile() || a.takesVarArgs() != b.takesVarArgs()) {
+         return false;
+      }
 
       final IType[] paramsA = a.getParameterTypes();
       final IType[] paramsB = b.getParameterTypes();
 
       if (paramsA.length == 1 && paramsB.length == 0) {
-         if (!SemanticUtil.isVoidType(paramsA[0])) return false;
+         if (!SemanticUtil.isVoidType(paramsA[0])) {
+            return false;
+         }
       } else if (paramsB.length == 1 && paramsA.length == 0) {
-         if (!SemanticUtil.isVoidType(paramsB[0])) return false;
-      } else if (paramsA.length != paramsB.length) return false;
-      else {
+         if (!SemanticUtil.isVoidType(paramsB[0])) {
+            return false;
+         }
+      } else if (paramsA.length != paramsB.length) {
+         return false;
+      } else {
          for (int i = 0; i < paramsA.length; i++) {
-            if (paramsA[i] == null || !paramsA[i].isSameType(paramsB[i])) return false;
+            if (paramsA[i] == null || !paramsA[i].isSameType(paramsB[i])) {
+               return false;
+            }
          }
       }
       return true;
    }
 
    private static String getMethodNameForOverrideKey(final ICPPMethod method) {
-      if (method.isDestructor())
+      if (method.isDestructor()) {
          // Destructor's names may differ but they will override each other.
          return "~";
-      else return method.getName();
+      } else {
+         return method.getName();
+      }
    }
 }

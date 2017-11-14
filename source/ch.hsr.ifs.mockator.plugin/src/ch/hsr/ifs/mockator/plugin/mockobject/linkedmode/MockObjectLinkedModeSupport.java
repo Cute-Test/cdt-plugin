@@ -26,7 +26,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInfoCreater;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInformation;
 
 
-@SuppressWarnings("restriction")
 abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
 
    protected final Collection<? extends TestDoubleMemFun> memFuns;

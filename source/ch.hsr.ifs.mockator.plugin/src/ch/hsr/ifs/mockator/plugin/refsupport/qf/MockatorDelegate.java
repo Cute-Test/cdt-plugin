@@ -23,7 +23,6 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.FileEditorOpener;
 
 
-@SuppressWarnings("restriction")
 public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
 
    protected IWorkbenchWindow window;

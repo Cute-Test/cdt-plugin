@@ -16,8 +16,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
@@ -33,7 +34,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 
 
-@SuppressWarnings("restriction")
 public abstract class AbstractTestDouble implements TestDouble {
 
    private final ICPPASTCompositeTypeSpecifier klass;

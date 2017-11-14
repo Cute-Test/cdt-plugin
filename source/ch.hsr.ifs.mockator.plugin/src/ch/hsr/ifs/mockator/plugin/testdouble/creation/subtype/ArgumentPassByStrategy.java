@@ -6,6 +6,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unord
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -15,15 +16,15 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 enum ArgumentPassByStrategy {
 
    asPointer {
@@ -48,7 +49,7 @@ enum ArgumentPassByStrategy {
       }
    };
 
-   private static final CPPNodeFactory                      nodeFactory    = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory                     nodeFactory    = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private static final Map<String, ArgumentPassByStrategy> STRING_TO_ENUM = unorderedMap();
 
    static {

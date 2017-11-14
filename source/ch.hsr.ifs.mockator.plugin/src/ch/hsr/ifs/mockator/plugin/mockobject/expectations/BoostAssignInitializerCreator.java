@@ -8,6 +8,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.tail;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -17,7 +18,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTExpressionList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
@@ -26,16 +27,15 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 
 
-@SuppressWarnings("restriction")
 public class BoostAssignInitializerCreator {
 
-   private static final CPPNodeFactory                  nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory                 nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final Collection<? extends TestDoubleMemFun> memFuns;
    private final String                                 expectationsName;
    private final LinkedEditModeStrategy                 linkedEditStrategy;
 
    public BoostAssignInitializerCreator(final Collection<? extends TestDoubleMemFun> memFuns, final String expectationsName,
-                                        final LinkedEditModeStrategy linkedEditStrategy) {
+         final LinkedEditModeStrategy linkedEditStrategy) {
       this.memFuns = memFuns;
       this.expectationsName = expectationsName;
       this.linkedEditStrategy = linkedEditStrategy;

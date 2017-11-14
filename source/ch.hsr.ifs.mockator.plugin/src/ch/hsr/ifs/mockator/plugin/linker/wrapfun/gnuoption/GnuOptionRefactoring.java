@@ -19,10 +19,11 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
+
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
@@ -34,7 +35,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionDelegateCallCreat
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 public class GnuOptionRefactoring extends LinkerRefactoring {
 
    private static final String REAL_PREFIX = "__real_";
@@ -51,7 +51,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
          throws CoreException {
       rememberFunName(funName);
-      createWrapperFunction(funName, collector, getAST(tu, pm), pm);
+      createWrapperFunction(funName, collector, getAST(tu(), pm), pm);
    }
 
    private void rememberFunName(final IASTName funName) {
@@ -135,7 +135,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
 
    private ASTLiteralNode createIfDefWrapFun() {
       return new ASTLiteralNode(MockatorConstants.IFDEF_DIRECTIVE + MockatorConstants.SPACE + MockatorConstants.WRAP_MACRO_PREFIX + newFunName +
-                                NEW_LINE);
+            NEW_LINE);
    }
 
    private static ICPPASTLinkageSpecification wrapFunctionsInCLinkage(final IASTSimpleDeclaration realFunDecl,

@@ -75,7 +75,6 @@ public class ShadowedMemFunVerifier {
       return NLS.bind(I18N.ExtractInterfaceShadowedFunction, chosenFunQfName, shadowFunQfName);
    }
 
-   @SuppressWarnings("restriction")
    private Collection<ICPPClassType> getSubClassesOfChosenClass() throws CoreException {
       final IIndex index = context.getCRefContext().getIndex();
       final ICPPClassType klass = getChosenClassType();

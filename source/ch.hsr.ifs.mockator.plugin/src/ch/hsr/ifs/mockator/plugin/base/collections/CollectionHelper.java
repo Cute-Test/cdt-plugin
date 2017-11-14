@@ -12,11 +12,13 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import ch.hsr.ifs.iltis.core.functional.Functional;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
@@ -24,9 +26,9 @@ import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 // some generic type inference magic to get rid of
 // boilerplate java collection creation
 // some get obsolete with Java 1.7
-@SuppressWarnings("unchecked")
 public abstract class CollectionHelper {
 
+   @SafeVarargs
    public static <T> T[] array(final T... elements) {
       return elements;
    }
@@ -35,6 +37,7 @@ public abstract class CollectionHelper {
       return new ArrayList<>();
    }
 
+   @SafeVarargs
    public static <T> List<T> list(final T... elements) {
       return new ArrayList<>(asList(elements));
    }
@@ -43,6 +46,7 @@ public abstract class CollectionHelper {
       return new ArrayList<>(elements);
    }
 
+   @SafeVarargs
    public static <T> Set<T> unorderedSet(final T... elements) {
       return new HashSet<>(asList(elements));
    }
@@ -55,6 +59,7 @@ public abstract class CollectionHelper {
       return new LinkedHashSet<>();
    }
 
+   @SafeVarargs
    public static <T> Set<T> orderPreservingSet(final T... elements) {
       return new LinkedHashSet<>(asList(elements));
    }
@@ -85,18 +90,16 @@ public abstract class CollectionHelper {
    }
 
    public static <T> Collection<T> checkedCast(final Collection<?> list, final Class<T> klass) {
-      for (final Object o : list) {
-         klass.cast(o);
-      }
-      return (Collection<T>) list;
+      return list.stream().map((it) -> klass.cast(it)).collect(Collectors.toList());
    }
 
    public static <T> Map<T, T> checkedCast(final Map<?, ?> map, final Class<T> klass) {
-      for (final Entry<?, ?> e : map.entrySet()) {
-         klass.cast(e.getKey());
-         klass.cast(e.getValue());
-      }
-      return (Map<T, T>) map;
+      return Functional.zip(map).map((pair) -> pair.<T, T>as()).collect(Collectors.toMap((pair) -> pair.first(), (pair) -> pair.second()));
+      //      for (final Entry<?, ?> e : map.entrySet()) {
+      //         klass.cast(e.getKey());
+      //         klass.cast(e.getValue());
+      //      }
+      //      return (Map<T, T>) map;
    }
 
    public static <T> boolean notNull(final Iterable<T> it) {

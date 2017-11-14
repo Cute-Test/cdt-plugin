@@ -28,7 +28,6 @@ import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.LinkSuit
 
 
 // Copied and adapted from CUTE
-@SuppressWarnings("restriction")
 public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 
    private NewSuiteFileCreationWizardPage     page;

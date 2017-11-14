@@ -24,7 +24,6 @@ import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 public class ParamTypeEquivalenceTester {
 
    private final Collection<IType>                  caller;

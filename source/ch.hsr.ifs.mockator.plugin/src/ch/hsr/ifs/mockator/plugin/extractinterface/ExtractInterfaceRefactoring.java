@@ -4,8 +4,6 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unord
 
 import java.util.Map;
 
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringDescriptor;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -13,13 +11,15 @@ import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringDescriptor;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
    public static final String            ID = "ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring";
@@ -42,9 +42,9 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
    private void prepareRefactoring(final RefactoringStatus status, final IProgressMonitor pm) throws OperationCanceledException, CoreException {
       context.setStatus(status);
-      context.setSelectedName(getSelectedName(getAST(tu, pm)));
+      context.setSelectedName(getSelectedName(getAST(getTranslationUnit(), pm)));
       context.setProgressMonitor(pm);
-      context.setCRefContext(refactoringContext);
+      context.setCRefContext(refactoringContext());
       handler = new ExtractInterfaceHandler(context);
    }
 
@@ -65,7 +65,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
    @Override
    protected RefactoringDescriptor getRefactoringDescriptor() {
-      return new ExtractInterfaceDescriptor(ID, project.getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
+      return new ExtractInterfaceDescriptor(ID, getProject().getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
             getArgumentMap());
    }
 
@@ -76,8 +76,8 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
    private Map<String, String> getArgumentMap() {
       final Map<String, String> args = unorderedMap();
-      args.put(CRefactoringDescriptor.FILE_NAME, tu.getLocationURI().toString());
-      args.put(CRefactoringDescriptor.SELECTION, selectedRegion.getOffset() + "," + selectedRegion.getLength());
+      args.put(CRefactoringDescriptor.FILE_NAME, getTranslationUnit().getLocationURI().toString());
+      args.put(CRefactoringDescriptor.SELECTION, selectedRegion().getOffset() + "," + selectedRegion().getLength());
       args.put(ExtractInterfaceDescriptor.NEW_INTERFACE_NAME, context.getNewInterfaceName());
       args.put(ExtractInterfaceDescriptor.REPLACE_ALL_OCCURENCES, String.valueOf(context.shouldReplaceAllOccurences()));
       return args;

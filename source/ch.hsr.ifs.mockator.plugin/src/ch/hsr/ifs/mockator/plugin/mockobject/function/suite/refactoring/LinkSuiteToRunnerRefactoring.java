@@ -28,8 +28,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,6 +36,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -48,13 +47,11 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
 
 // Taken and adapted from CUTE
-@SuppressWarnings("restriction")
 public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
 
    private static final String         MAKE_SUITE_PREFIX = "make_suite_";
    private static final String         MAKE_RUNNER       = "makeRunner";
    private static final String         CUTE_ID_LISTENER  = "cute::ide_listener";
-   private static final CPPNodeFactory nodeFactory       = CPPNodeFactory.getDefault();
    private IASTFunctionDefinition      testRunner;
    private String                      suiteName;
    private IPath                       destinationPath;
@@ -90,7 +87,7 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
    }
 
    private IASTStatement createMakeSuiteStmt() {
-      final ICPPASTQualifiedName cuteSuite = nodeFactory.newQualifiedName();
+      final ICPPASTQualifiedName cuteSuite = nodeFactory.newQualifiedName(null);
       cuteSuite.addName(nodeFactory.newName(MockatorConstants.CUTE_NS.toCharArray()));
       cuteSuite.addName(nodeFactory.newName(MockatorConstants.CUTE_SUITE.toCharArray()));
       final IASTDeclSpecifier declSpecifier = nodeFactory.newTypedefNameSpecifier(cuteSuite);
@@ -120,7 +117,7 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
       final IPath suiteIncludePath = destinationPath.append(suiteInclude);
       final String includeAbsPath = FileUtil.toIFile(suiteIncludePath).getLocation().toString();
       final IASTTranslationUnit ast = testRunner.getTranslationUnit();
-      final CppIncludeResolver resolver = new CppIncludeResolver(ast, project, getIndex());
+      final CppIncludeResolver resolver = new CppIncludeResolver(ast, getProject(), getIndex());
       final AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(includeAbsPath);
       includeForFunDecl.insertInTu(ast, rewriter);
    }
@@ -135,7 +132,7 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
 
    private IASTFunctionCallExpression createMakeRunnerFuncCall() {
       final IASTInitializerClause[] makeArgs = new IASTInitializerClause[1];
-      final ICPPASTQualifiedName cuteMakeRunner = nodeFactory.newQualifiedName();
+      final ICPPASTQualifiedName cuteMakeRunner = nodeFactory.newQualifiedName(null);
       cuteMakeRunner.addName(nodeFactory.newName(MockatorConstants.CUTE_NS.toCharArray()));
       cuteMakeRunner.addName(nodeFactory.newName(MAKE_RUNNER.toCharArray()));
       final IASTIdExpression makeRunnerID = nodeFactory.newIdExpression(cuteMakeRunner);

@@ -6,6 +6,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -23,15 +24,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
@@ -52,11 +52,9 @@ import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
-
-@SuppressWarnings("restriction")
 abstract class MockFunctionFileCreator {
 
-   protected static final ICPPNodeFactory nodeFactory          = CPPNodeFactory.getDefault();
+   protected static final ICPPNodeFactory nodeFactory          = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    protected static final String          EXPECTED_VECTOR_NAME = "expected";
    private final ModificationCollector    collector;
    private final IProgressMonitor         pm;
@@ -154,7 +152,7 @@ abstract class MockFunctionFileCreator {
    }
 
    private static ICPPASTQualifiedName createCallsVectorType() {
-      final ICPPASTQualifiedName callsVectorTypeName = nodeFactory.newQualifiedName();
+      final ICPPASTQualifiedName callsVectorTypeName = nodeFactory.newQualifiedName(null);
       callsVectorTypeName.addName(nodeFactory.newName(MockatorConstants.MOCKATOR_NS.toCharArray()));
       callsVectorTypeName.addName(nodeFactory.newName(MockatorConstants.CALLS.toCharArray()));
       return callsVectorTypeName;

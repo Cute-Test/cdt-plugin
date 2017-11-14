@@ -1,5 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
+import static ch.hsr.ifs.iltis.core.functional.FunHelper.as;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
 import java.util.Collection;
@@ -14,10 +15,7 @@ import org.eclipse.cdt.core.dom.ast.IProblemType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownBinding;
 
-import ch.hsr.ifs.mockator.plugin.base.misc.CastHelper;
 
-
-@SuppressWarnings("restriction")
 public class CtorArgumentsCopier {
 
    private final ICPPASTConstructorInitializer ctorInitializer;
@@ -31,7 +29,7 @@ public class CtorArgumentsCopier {
    }
 
    private static <T extends IASTNode> T copyPreservingNameBindings(final T node) {
-      final T copy = CastHelper.unsecureCast(node.copy());
+      final T copy = as(node.copy());
       preserveNameBinding(copy, node);
       return copy;
    }

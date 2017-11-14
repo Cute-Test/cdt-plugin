@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.CoreException;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
-@SuppressWarnings("restriction")
 public class CdtManagedProjectActivator {
 
    private final IProject project;

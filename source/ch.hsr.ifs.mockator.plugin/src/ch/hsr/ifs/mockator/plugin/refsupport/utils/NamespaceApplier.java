@@ -1,17 +1,17 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.collections.MyStack;
 
 
-@SuppressWarnings("restriction")
 public class NamespaceApplier {
 
-   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final IASTNode              origin;
 
    public NamespaceApplier(final IASTNode origin) {
@@ -21,7 +21,9 @@ public class NamespaceApplier {
    public IASTNode packInSameNamespaces(final IASTSimpleDeclaration decl) {
       final MyStack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
 
-      if (namespaces.isEmpty()) return decl;
+      if (namespaces.isEmpty()) {
+         return decl;
+      }
 
       final ICPPASTNamespaceDefinition topNs = namespaces.pop();
       ICPPASTNamespaceDefinition parentNs = topNs;

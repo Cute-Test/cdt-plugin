@@ -10,7 +10,6 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
 
 
-@SuppressWarnings("restriction")
 class UndefMacroAdder {
 
    private final ASTRewrite          rewriter;

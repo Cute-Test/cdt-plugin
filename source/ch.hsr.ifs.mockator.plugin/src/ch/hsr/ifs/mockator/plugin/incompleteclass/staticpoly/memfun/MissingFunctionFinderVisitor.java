@@ -20,7 +20,6 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
 
    private final Collection<Function> unresolvedFunCalls;
@@ -44,7 +43,9 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
    public int visit(final IASTName name) {
       final IBinding binding = name.resolveBinding();
 
-      if (!isMemFunReferenceToUnknownClass(binding)) return PROCESS_CONTINUE;
+      if (!isMemFunReferenceToUnknownClass(binding)) {
+         return PROCESS_CONTINUE;
+      }
 
       if (isReferenceToTemplateParameter(binding)) {
          final ICPPASTFunctionCallExpression funCall = getFunctionCall(name);

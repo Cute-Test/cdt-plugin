@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import ch.hsr.ifs.mockator.plugin.base.util.HtmlUtil;
-import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 
 

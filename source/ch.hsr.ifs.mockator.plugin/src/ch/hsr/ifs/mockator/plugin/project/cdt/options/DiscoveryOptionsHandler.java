@@ -16,8 +16,6 @@ import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-
-@SuppressWarnings("restriction")
 public class DiscoveryOptionsHandler extends AbstractOptionsHandler {
 
    public DiscoveryOptionsHandler(final IProject project) {

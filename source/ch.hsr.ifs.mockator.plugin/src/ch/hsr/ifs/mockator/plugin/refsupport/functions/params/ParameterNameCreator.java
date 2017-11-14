@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
 import java.util.Map;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.ASTTypeUtil;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -13,17 +14,16 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.ITypedef;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
 // Inspired by TDD
-@SuppressWarnings("restriction")
 public class ParameterNameCreator {
 
-   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final Map<String, Boolean>  nameHistory;
 
    public ParameterNameCreator(final Map<String, Boolean> nameHistory) {
@@ -57,9 +57,14 @@ public class ParameterNameCreator {
          type = ((IQualifierType) type).getType();
       }
 
-      if (type instanceof ITypedef) return ASTTypeUtil.getQualifiedName((ICPPBinding) type).substring(0, 1);
-      if (type instanceof ICPPTemplateInstance || type instanceof ICPPClassType) return ASTTypeUtil.getType(type).toLowerCase();
-      else if (type instanceof IBasicType) return ((IBasicType) type).getKind().toString().substring(1).toLowerCase();
+      if (type instanceof ITypedef) {
+         return ASTTypeUtil.getQualifiedName((ICPPBinding) type).substring(0, 1);
+      }
+      if (type instanceof ICPPTemplateInstance || type instanceof ICPPClassType) {
+         return ASTTypeUtil.getType(type).toLowerCase();
+      } else if (type instanceof IBasicType) {
+         return ((IBasicType) type).getKind().toString().substring(1).toLowerCase();
+      }
 
       return " ";
    }

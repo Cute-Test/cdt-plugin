@@ -12,7 +12,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -24,6 +23,7 @@ import org.eclipse.jface.text.ITextSelection;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -37,8 +37,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
 
-
-@SuppressWarnings("restriction")
 public class ShadowFunctionRefactoring extends LinkerRefactoring {
 
    private static final String SHADOW_FOLDER_NAME = "shadows";
@@ -87,7 +85,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
       final IFolder shadowFolder = createShadowFolder(referencingProj, pm);
       final IPath newFilePath = getPathForNewFile(shadowFolder, funName);
       newFile = FileUtil.toIFile(newFilePath);
-      final TranslationUnitCreator creator = new TranslationUnitCreator(referencingProj, refactoringContext);
+      final TranslationUnitCreator creator = new TranslationUnitCreator(referencingProj, refactoringContext());
       return creator.createAndGetNewTu(newFilePath, pm);
    }
 
@@ -107,13 +105,13 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
    }
 
    private Collection<IProject> getReferencingExecutables() {
-      final ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project.getProject());
+      final ReferencingExecutableFinder finder = new ReferencingExecutableFinder(getProject().getProject());
       final Collection<IProject> referencingExecutables = finder.findReferencingExecutables();
 
       if (referencingExecutables.isEmpty()) {
          // this is just for unit testing purposes because there we don't
          // have a referencing project there
-         return list(project.getProject());
+         return list(getProject().getProject());
       }
 
       return referencingExecutables;

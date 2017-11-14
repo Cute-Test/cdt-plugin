@@ -9,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.internal.ui.refactoring.Container;
 
 
-@SuppressWarnings("restriction")
 public class AllCallsVectorFinderVisitor extends ASTVisitor {
 
    private final Container<IASTName> registrationVector;

@@ -17,7 +17,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.cdt.internal.ui.refactoring.utils.SelectionHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -27,6 +26,8 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringContext;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.extractinterface.preconditions.ClassDefinitionLookup;
@@ -35,7 +36,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
 
-@SuppressWarnings("restriction")
 public class ExtractInterfaceRefactoringTest extends MockatorRefactoringTest {
 
    private static final String INTERFACE_NAME_DEFAULT = "FooInterface";
@@ -125,7 +125,7 @@ public class ExtractInterfaceRefactoringTest extends MockatorRefactoringTest {
          @Override
          public int visit(final IASTName name) {
             if (name.isPartOfTranslationUnitFile() && SelectionHelper.isNodeInsideSelection(name, region) &&
-                !(name instanceof ICPPASTQualifiedName)) {
+                  !(name instanceof ICPPASTQualifiedName)) {
                names.add(name);
             }
             return PROCESS_CONTINUE;

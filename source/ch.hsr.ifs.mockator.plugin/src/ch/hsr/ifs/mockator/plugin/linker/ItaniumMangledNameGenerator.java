@@ -36,6 +36,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateTemplateParameter;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
@@ -44,7 +45,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 // Implements Itanium C++ ABI name mangling according to
 // http://sourcery.mentor.com/public/cxx-abi/abi.html#mangling
 // that is used by the GNU Compiler Collection and others.
-@SuppressWarnings({ "nls", "restriction" })
+@SuppressWarnings({ "nls" })
 public class ItaniumMangledNameGenerator {
 
    private final ICPPFunction        function;

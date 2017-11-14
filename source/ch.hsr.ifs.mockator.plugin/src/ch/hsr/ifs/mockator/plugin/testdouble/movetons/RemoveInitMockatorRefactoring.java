@@ -12,7 +12,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.cdt.internal.ui.refactoring.changes.CCompositeChange;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,6 +28,7 @@ import org.eclipse.text.edits.MultiTextEdit;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
@@ -38,8 +38,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.finder.MacroFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
-
-@SuppressWarnings("restriction")
 public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
 
    private final IDocument           doc;
@@ -69,14 +67,14 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    }
 
    private Collection<IASTFunctionDefinition> getTestfunctionsInTu() throws CoreException {
-      final IASTTranslationUnit ast = getAST(tu, new NullProgressMonitor());
+      final IASTTranslationUnit ast = getAST(tu(), new NullProgressMonitor());
       final TestFunctionFinderVisitor finder = new TestFunctionFinderVisitor(getFunctionsToAnalyze());
       ast.accept(finder);
       return finder.getFunctions();
    }
 
    private FunctionsToAnalyze getFunctionsToAnalyze() {
-      return FunctionsToAnalyze.fromProjectSettings(project.getProject());
+      return FunctionsToAnalyze.fromProjectSettings(getIProject());
    }
 
    @Override
@@ -143,14 +141,14 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
       final String testFunName = testFunction.getDeclarator().getName().toString();
       final Collection<IASTFunctionDefinition> functions = allTestFunctions.stream().filter((funDef) -> funDef.getDeclarator().getName().toString()
             .equals(
-            testFunName)).collect(Collectors.toList());
+                  testFunName)).collect(Collectors.toList());
       Assert.isFalse(functions.isEmpty(), "Could not find test function");
       return head(functions).get();
    }
 
    private Collection<IASTFunctionDefinition> getAllTestFunctions(final IProgressMonitor pm) throws CoreException {
       final TestFunctionFinderVisitor finder = new TestFunctionFinderVisitor(getFunctionsToAnalyze());
-      final IASTTranslationUnit ast = getAST(tu, pm);
+      final IASTTranslationUnit ast = getAST(tu(), pm);
       ast.accept(finder);
       return finder.getFunctions();
    }
@@ -159,7 +157,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector c) throws CoreException, OperationCanceledException {}
 
    private TextFileChange createTextFileChange(final MultiTextEdit multiTextEdit, final IProgressMonitor pm) throws CoreException {
-      final IASTTranslationUnit ast = getAST(tu, pm);
+      final IASTTranslationUnit ast = getAST(tu(), pm);
       final TextFileChange change = new TextFileChange("Delete mockator init call", FileUtil.toIFile(ast.getFilePath()));
       change.setEdit(multiTextEdit);
       return change;

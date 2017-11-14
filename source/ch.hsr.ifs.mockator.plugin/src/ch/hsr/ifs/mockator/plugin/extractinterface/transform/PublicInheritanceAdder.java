@@ -2,39 +2,39 @@ package ch.hsr.ifs.mockator.plugin.extractinterface.transform;
 
 import java.util.function.Consumer;
 
-import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier.ICPPASTBaseSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
-
-@SuppressWarnings("restriction")
 public class PublicInheritanceAdder implements Consumer<ExtractInterfaceContext> {
 
-   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
    @Override
    public void accept(final ExtractInterfaceContext context) {
-      final IASTName newInterfaceName = createNewInterfaceName(context);
+      final ICPPASTName newInterfaceName = createNewInterfaceName(context);
       final ICPPASTCompositeTypeSpecifier klass = context.getChosenClass();
       final ICPPASTBaseSpecifier baseSpecifier = createPublicBase(klass, newInterfaceName);
       final ICPPASTCompositeTypeSpecifier newClass = addInterfaceAsBaseClass(klass, baseSpecifier);
       replaceOldClassWithNew(context, klass, newClass);
    }
 
-   private static IASTName createNewInterfaceName(final ExtractInterfaceContext context) {
+   private static ICPPASTName createNewInterfaceName(final ExtractInterfaceContext context) {
       return nodeFactory.newName(context.getNewInterfaceName().toCharArray());
    }
 
-   private static ICPPASTBaseSpecifier createPublicBase(final ICPPASTCompositeTypeSpecifier klass, final IASTName newInterfaceName) {
+   private static ICPPASTBaseSpecifier createPublicBase(final ICPPASTCompositeTypeSpecifier klass, final ICPPASTName newInterfaceName) {
       final boolean nonVirtual = false;
       final int visibility = getInheritanceVisibility(klass);
-      return nodeFactory.newBaseSpecifier(newInterfaceName, visibility, nonVirtual);
+      return nodeFactory.newBaseSpecifier((ICPPASTNameSpecifier) newInterfaceName, visibility, nonVirtual);
    }
 
    private static int getInheritanceVisibility(final ICPPASTCompositeTypeSpecifier klass) {

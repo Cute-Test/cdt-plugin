@@ -16,10 +16,10 @@ import org.eclipse.cdt.internal.ui.refactoring.IndexToASTNameHelper;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
 
-@SuppressWarnings("restriction")
 abstract class AbstractNodeFinder {
 
    protected final ICProject             projectOrigin;

@@ -5,6 +5,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.order
 import java.util.Collection;
 import java.util.Set;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -14,16 +15,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
-
-@SuppressWarnings("restriction")
 class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
 
-   private static final CPPNodeFactory           nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory          nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final Set<ICPPASTTemplateDeclaration> templateMemFuns;
    private final ICPPASTTemplateDeclaration      templateClass;
    private final String                          fqClassName;
@@ -55,13 +54,17 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
 
    @Override
    public int visit(final IASTDeclaration declaration) {
-      if (!(declaration instanceof ICPPASTFunctionDefinition)) return PROCESS_CONTINUE;
+      if (!(declaration instanceof ICPPASTFunctionDefinition)) {
+         return PROCESS_CONTINUE;
+      }
 
       final ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
       final ICPPASTTemplateDeclaration templateDecl = getTemplateDecl(function);
       final IASTName funName = function.getDeclarator().getName();
 
-      if (templateDecl == null || !isFunNameQualified(funName)) return PROCESS_CONTINUE;
+      if (templateDecl == null || !isFunNameQualified(funName)) {
+         return PROCESS_CONTINUE;
+      }
 
       if (isTemplateFunClassMember(funName) && haveEqualNumOfArgs(templateDecl)) {
          templateMemFuns.add(templateDecl);
@@ -81,7 +84,7 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
    }
 
    private static ICPPASTQualifiedName getFunNameWithoutTemplateId(final ICPPASTQualifiedName funName) {
-      final ICPPASTQualifiedName qfNameWithoutTemplateId = nodeFactory.newQualifiedName();
+      final ICPPASTQualifiedName qfNameWithoutTemplateId = nodeFactory.newQualifiedName(null);
       final ICPPASTNameSpecifier[] names = funName.getAllSegments();
       for (int i = 0; i < names.length - 1; i++) {
          if (names[i] instanceof ICPPASTTemplateId) {

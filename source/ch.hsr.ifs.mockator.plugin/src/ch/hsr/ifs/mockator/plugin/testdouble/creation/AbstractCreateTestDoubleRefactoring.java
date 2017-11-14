@@ -32,7 +32,6 @@ public abstract class AbstractCreateTestDoubleRefactoring extends MockatorRefact
 
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-      @SuppressWarnings("restriction")
       final RefactoringStatus status = super.checkInitialConditions(pm);
 
       checkSelectedNameIsInFunction(status, pm).ifPresent((name) -> {

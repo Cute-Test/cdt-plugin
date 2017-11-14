@@ -22,16 +22,15 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 
-
-@SuppressWarnings("restriction")
 class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
 
    private static final String CUTE_SUITE_FQ         = "cute::suite";
@@ -42,8 +41,8 @@ class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
    private static final String CUTE_SUITE_NAME       = "s";
 
    public WithCuteSuiteFileCreator(final ModificationCollector collector, final CRefactoringContext refactoringContext,
-                                   final ITranslationUnit originTu, final ICProject mockatorProject, final ICProject originProject,
-                                   final CppStandard cppStd, final IProgressMonitor pm) {
+         final ITranslationUnit originTu, final ICProject mockatorProject, final ICProject originProject,
+         final CppStandard cppStd, final IProgressMonitor pm) {
       super(collector, refactoringContext, originTu, mockatorProject, originProject, cppStd, pm);
    }
 

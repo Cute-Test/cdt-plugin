@@ -43,10 +43,10 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.LinkSuiteToRunnerRefactoring;
@@ -56,7 +56,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.FileEditorOpener;
 
 
 // Copied and adapted from CUTE
-@SuppressWarnings("restriction")
 class NewSuiteFileCreationWizardPage extends WizardPage {
 
    private static final int                   SOURCE_FOLDER_ID = 1;

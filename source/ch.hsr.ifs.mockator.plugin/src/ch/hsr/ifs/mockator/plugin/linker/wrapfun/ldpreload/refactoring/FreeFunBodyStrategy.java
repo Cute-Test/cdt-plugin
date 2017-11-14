@@ -16,7 +16,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionDelegateCallCreator;
 
 
-@SuppressWarnings("restriction")
 class FreeFunBodyStrategy extends CommonFunBodyStrategy {
 
    // typedef int (*fptr)();

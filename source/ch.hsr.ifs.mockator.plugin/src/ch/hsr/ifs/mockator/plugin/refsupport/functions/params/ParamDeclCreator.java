@@ -4,6 +4,7 @@ import static ch.hsr.ifs.mockator.plugin.MockatorConstants.STD_STRING;
 
 import java.util.Map;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
@@ -22,18 +23,17 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
 // Inspired by TDD
-@SuppressWarnings("restriction")
 public class ParamDeclCreator {
 
-   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
    public static ICPPASTParameterDeclaration createReferenceParamFrom(final String typeName, final Map<String, Boolean> nameHistory) {
       final IASTName name = nodeFactory.newName(typeName.toCharArray());
@@ -46,10 +46,15 @@ public class ParamDeclCreator {
    }
 
    public static ICPPASTParameterDeclaration createParameterFrom(final IASTExpression idExpr, final Map<String, Boolean> nameHistory) {
-      if (idExpr instanceof ICPPASTLiteralExpression) return createParameter((ICPPASTLiteralExpression) idExpr, nameHistory);
-      else if (idExpr instanceof IASTIdExpression) return createParameter((IASTIdExpression) idExpr, nameHistory);
-      else if (idExpr instanceof IASTFunctionCallExpression) return createParameter((IASTFunctionCallExpression) idExpr, nameHistory);
-      else return createParameter(idExpr.getExpressionType(), idExpr, nameHistory);
+      if (idExpr instanceof ICPPASTLiteralExpression) {
+         return createParameter((ICPPASTLiteralExpression) idExpr, nameHistory);
+      } else if (idExpr instanceof IASTIdExpression) {
+         return createParameter((IASTIdExpression) idExpr, nameHistory);
+      } else if (idExpr instanceof IASTFunctionCallExpression) {
+         return createParameter((IASTFunctionCallExpression) idExpr, nameHistory);
+      } else {
+         return createParameter(idExpr.getExpressionType(), idExpr, nameHistory);
+      }
    }
 
    public static ICPPASTParameterDeclaration createParameter(final IType type, final IASTInitializerClause clause,
@@ -121,7 +126,9 @@ public class ParamDeclCreator {
    private static boolean makeLastPtrOpConst(final IASTDeclarator declarator) {
       final IASTPointerOperator[] ptrOperators = declarator.getPointerOperators();
 
-      if (ptrOperators == null) return false;
+      if (ptrOperators == null) {
+         return false;
+      }
 
       for (int i = ptrOperators.length - 1; i >= 0; i--) {
          final IASTPointerOperator currentPtrOp = ptrOperators[i];

@@ -6,6 +6,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTExpressionStatement;
@@ -16,7 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -33,10 +34,9 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatte
 // }
 //
 // Note: If it is a static function, index 0 is used in the subscript.
-@SuppressWarnings("restriction")
 abstract class AbstractFunCallRegistrationAdder {
 
-   protected static final CPPNodeFactory       nodeFactory = CPPNodeFactory.getDefault();
+   protected static final ICPPNodeFactory      nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final String                        signature;
    private final ICPPASTParameterDeclaration[] funParameters;
    private final CppStandard                   cppStd;

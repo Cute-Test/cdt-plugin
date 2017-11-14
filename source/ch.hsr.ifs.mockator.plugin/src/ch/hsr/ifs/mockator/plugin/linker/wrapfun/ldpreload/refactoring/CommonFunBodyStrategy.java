@@ -1,5 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.refactoring;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
@@ -21,7 +22,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
@@ -30,13 +31,12 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
 
    protected static final String         ORIG_FUN    = "origFun";
    protected static final String         FUN_PTR     = "funPtr";
    protected static final String         TMP_PTR     = "tmpPtr";
-   protected static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   protected static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
    @Override
    public IASTCompoundStatement getPreloadFunBody(final CppStandard cppStd, final ICPPASTFunctionDeclarator function) {

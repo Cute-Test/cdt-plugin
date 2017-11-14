@@ -34,7 +34,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 class ClassInTemplateIdFinderVisitor extends ASTVisitor {
 
    private final ICPPASTCompositeTypeSpecifier                                   testDouble;

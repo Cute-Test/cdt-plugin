@@ -14,7 +14,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateArgument;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
@@ -26,10 +25,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypedefHelper;
 
 
-@SuppressWarnings("restriction")
 class TemplateInstDeclSpecStrategy implements DeclSpecGeneratorStrategy {
-
-   private static final CPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
 
    @Override
    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
@@ -73,19 +69,7 @@ class TemplateInstDeclSpecStrategy implements DeclSpecGeneratorStrategy {
    private static Stream<StreamPair<ICPPTemplateParameter, ICPPTemplateArgument>> getZipedStream(final ICPPTemplateInstance ti) {
       final ICPPTemplateDefinition templateDefinition = ti.getTemplateDefinition();
       return Functional.zip(templateDefinition.getTemplateParameters(), ti.getTemplateArguments());
-      //      final Iterator<ICPPTemplateParameter> paramsIt = getTemplateParamIterator(templateDefinition);
-      //      final Iterator<ICPPTemplateArgument> argsIt = getTemplateArgIterator(ti);
-      //      return new ParallelIterator<>(paramsIt, argsIt);
    }
-
-   //   private static Iterator<ICPPTemplateParameter> getTemplateParamIterator(final ICPPTemplateDefinition templateDef) {
-   //      return list(templateDef.getTemplateParameters()).iterator();
-   //   }
-   //
-   //   private static Iterator<ICPPTemplateArgument> getTemplateArgIterator(final ICPPTemplateInstance templateInstance) {
-   //      return list(templateInstance.getTemplateArguments()).iterator();
-   //   }
-
 
    private static IASTTypeId toASTTypeId(final ICPPTemplateArgument templateArgument) {
       final IType type = templateArgument.getTypeValue();

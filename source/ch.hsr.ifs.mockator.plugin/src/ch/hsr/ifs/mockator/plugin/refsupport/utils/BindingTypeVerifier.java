@@ -15,7 +15,6 @@ public class BindingTypeVerifier {
       return getAdapter(binding, klass);
    }
 
-   @SuppressWarnings("unchecked")
    private static <T> Optional<T> getAdapter(final IBinding binding, final Class<T> klass) {
       if (binding == null) { return Optional.empty(); }
 

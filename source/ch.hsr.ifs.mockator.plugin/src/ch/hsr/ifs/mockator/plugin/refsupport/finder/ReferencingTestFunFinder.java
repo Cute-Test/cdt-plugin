@@ -12,15 +12,15 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 public class ReferencingTestFunFinder {
 
    private final ICProject                     cProject;
@@ -50,8 +50,8 @@ public class ReferencingTestFunFinder {
    }
 
    public Collection<ICPPASTFunctionDefinition> filterTestFunctions(final Collection<ICPPASTFunctionDefinition> functions) {
-      final List<ICPPASTFunctionDefinition> testFunctions = list(functions.stream().filter((function) -> isValidTestFunction(function)).collect(
-            Collectors.toList()));
+      final List<ICPPASTFunctionDefinition> testFunctions = functions.stream().filter((function) -> isValidTestFunction(function)).collect(Collectors
+            .toList());
       addContainingFunctionIfNecessary(testFunctions);
       return testFunctions;
    }

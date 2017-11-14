@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes;
 import static org.eclipse.cdt.core.dom.ast.IASTLiteralExpression.lk_string_literal;
 import static org.eclipse.cdt.core.dom.ast.IASTUnaryExpression.op_star;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -16,16 +17,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTReferenceOperator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
-
-@SuppressWarnings("restriction")
 public class ReturnStatementCreator {
 
-   private static final CPPNodeFactory nodeFactory  = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory  = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private static final String         THIS_POINTER = "this";
    private final CppStandard           cppStd;
    private final String                memberClassName;
@@ -40,9 +39,13 @@ public class ReturnStatementCreator {
    }
 
    public IASTReturnStatement createReturnStatement(final ICPPASTFunctionDeclarator funDecl, final ICPPASTDeclSpecifier specifier) {
-      if (AstUtil.isVoid(specifier)) return null; // return type is void
-      else if (hasPointerReturnType(funDecl)) return createNullPtr();
-      else if (isReferenceToThis(funDecl, specifier)) return createDereferencedThisPointer();
+      if (AstUtil.isVoid(specifier)) {
+         return null; // return type is void
+      } else if (hasPointerReturnType(funDecl)) {
+         return createNullPtr();
+      } else if (isReferenceToThis(funDecl, specifier)) {
+         return createDereferencedThisPointer();
+      }
 
       return createDefaultReturn(specifier);
    }
@@ -50,7 +53,9 @@ public class ReturnStatementCreator {
    private static boolean hasPointerReturnType(final ICPPASTFunctionDeclarator funDecl) {
       final IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
 
-      if (pointerOperators.length == 0) return false;
+      if (pointerOperators.length == 0) {
+         return false;
+      }
 
       return pointerOperators[0] instanceof IASTPointer;
    }
@@ -75,7 +80,9 @@ public class ReturnStatementCreator {
    private static boolean hasReferenceReturnType(final ICPPASTFunctionDeclarator funDecl) {
       final IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
 
-      if (pointerOperators.length != 1) return false;
+      if (pointerOperators.length != 1) {
+         return false;
+      }
 
       return pointerOperators[0] instanceof ICPPASTReferenceOperator;
    }

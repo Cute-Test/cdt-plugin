@@ -4,12 +4,12 @@ import static ch.hsr.ifs.mockator.plugin.MockatorConstants.INIT_MOCKATOR;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.L_PARENTHESIS;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.R_PARENTHESIS;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorCreator;
@@ -18,10 +18,9 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 class MockObjectToNsAdder {
 
-   private static final ICPPNodeFactory        nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory        nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final CppStandard                   cppStd;
    private final ICPPASTCompositeTypeSpecifier testDoubleToMove;
 

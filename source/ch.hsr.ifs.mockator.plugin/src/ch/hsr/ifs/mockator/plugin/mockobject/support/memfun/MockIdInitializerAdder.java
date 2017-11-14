@@ -2,23 +2,23 @@ package ch.hsr.ifs.mockator.plugin.mockobject.support.memfun;
 
 import java.util.function.Consumer;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorChainInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
 
 // Mock() : mock_id(reserveNextCallId(allCalls)) { }
-@SuppressWarnings("restriction")
 public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinition> {
 
    private static final String         NEXT_CALL_ID_RESERVATION = "reserveNextCallId";
-   private static final CPPNodeFactory nodeFactory              = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory              = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final String                allCallsVectorName;
    private final CppStandard           cppStd;
 
@@ -29,7 +29,9 @@ public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinitio
 
    @Override
    public void accept(final ICPPASTFunctionDefinition ctor) {
-      if (alreadyHasMockIdInitializer(ctor)) return;
+      if (alreadyHasMockIdInitializer(ctor)) {
+         return;
+      }
 
       final IASTInitializerClause nextCallIdReservation = createNextCallReservation();
       final ICPPASTConstructorChainInitializer ctorInitializer = getMockIdInitializer(nextCallIdReservation);
@@ -45,7 +47,9 @@ public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinitio
 
    private static boolean alreadyHasMockIdInitializer(final ICPPASTFunctionDefinition ctor) {
       for (final ICPPASTConstructorChainInitializer initializer : ctor.getMemberInitializers()) {
-         if (initializer.getMemberInitializerId().toString().equals(MockatorConstants.MOCK_ID)) return true;
+         if (initializer.getMemberInitializerId().toString().equals(MockatorConstants.MOCK_ID)) {
+            return true;
+         }
       }
       return false;
    }

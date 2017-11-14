@@ -5,6 +5,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
@@ -13,16 +14,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 
 
-@SuppressWarnings("restriction")
 public class DefaultArgumentCreator {
 
-   private static final ICPPNodeFactory nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final CppStandard            cppStd;
    private final LinkedEditModeStrategy linkedEdit;
 
@@ -34,7 +33,9 @@ public class DefaultArgumentCreator {
    public Collection<IASTInitializerClause> createDefaultArguments(final Collection<ICPPASTParameterDeclaration> funParams) {
       final List<IASTInitializerClause> defaultArguments = list();
 
-      if (linkedEdit != LinkedEditModeStrategy.ChooseArguments) return defaultArguments;
+      if (linkedEdit != LinkedEditModeStrategy.ChooseArguments) {
+         return defaultArguments;
+      }
 
       addDefaultArgs(funParams, defaultArguments);
       return defaultArguments;

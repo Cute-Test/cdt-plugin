@@ -12,12 +12,13 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.ModificationCollector;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+
+import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -38,7 +39,6 @@ import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.MemFunSignature;
 
 
-@SuppressWarnings("restriction")
 public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
 
    private final CppStandard            cppStd;
@@ -47,7 +47,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
    private MockObject                   mockObject;
 
    public ToggleTracingFunCallRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cProject,
-                                          final LinkedEditModeStrategy linkedEdit) {
+         final LinkedEditModeStrategy linkedEdit) {
       super(element, selection, cProject);
       this.cppStd = cppStd;
       this.linkedEdit = linkedEdit;
@@ -56,7 +56,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<IASTName> selectedName = getSelectedName(getAST(tu, pm));
+      final Optional<IASTName> selectedName = getSelectedName(getAST(tu(), pm));
 
       if (!selectedName.isPresent()) {
          status.addFatalError("Not a valid name selected");
@@ -85,8 +85,8 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu, pm);
+   OperationCanceledException {
+      final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       toggleTraceSupport(buildContext(rewriter, ast, pm));
    }
@@ -117,7 +117,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
    }
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final IProgressMonitor pm) {
-      return new MockSupportContext.ContextBuilder(project, refactoringContext, mockObject, rewriter, ast, cppStd, getPublicVisibilityInserter(
+      return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), mockObject, rewriter, ast, cppStd, getPublicVisibilityInserter(
             rewriter), hasMockObjectOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(list(testDoubleMemFun)).build();
    }
 

@@ -1,6 +1,5 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.qf;
 
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -9,14 +8,14 @@ import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.core.functional.functions.Function2;
-
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.functional.functions.Function2;
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 
 
 // Handling inspired by CDT's RefactoringJob
-@SuppressWarnings("restriction")
 class MockatorRefactoringExecutor implements Function2<MockatorRefactoring, IProgressMonitor, ChangeEdit> {
 
    @Override

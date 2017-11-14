@@ -9,7 +9,6 @@ import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
 import ch.hsr.ifs.mockator.plugin.base.util.PlatformUtil;
 
 
-@SuppressWarnings("restriction")
 public class AstIncludeNode extends ASTLiteralNode {
 
    private static final String NEW_LINE = PlatformUtil.toSystemNewLine("%n");
@@ -39,8 +38,11 @@ public class AstIncludeNode extends ASTLiteralNode {
    }
 
    private static String getIncludeCode(final String include, final boolean isSystemInclude) {
-      if (isSystemInclude) return getSystemInclude(include);
-      else return getUserInclude(include);
+      if (isSystemInclude) {
+         return getSystemInclude(include);
+      } else {
+         return getUserInclude(include);
+      }
    }
 
    private static String getSystemInclude(final String include) {
@@ -62,7 +64,9 @@ public class AstIncludeNode extends ASTLiteralNode {
    private static IASTNode getInsertionPoint(final IASTTranslationUnit ast) {
       final IASTNode[] children = ast.getChildren();
 
-      if (children == null || children.length == 0) return null;
+      if (children == null || children.length == 0) {
+         return null;
+      }
 
       return children[0];
    }

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
@@ -15,17 +16,16 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPNodeFactory;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
 
-@SuppressWarnings("restriction")
 public class FunctionDelegateCallCreator {
 
-   private static final CPPNodeFactory     nodeFactory = CPPNodeFactory.getDefault();
+   private static final ICPPNodeFactory    nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private final ICPPASTFunctionDeclarator function;
    private final Collection<Integer>       paramPositionsToIgnore;
 
@@ -45,7 +45,9 @@ public class FunctionDelegateCallCreator {
    public IASTStatement createDelegate(final IASTName funName, final IASTDeclSpecifier declSpec) {
       final ICPPASTFunctionCallExpression call = createFunCall(funName);
 
-      if (AstUtil.isVoid(declSpec) && hasNoPointers()) return nodeFactory.newExpressionStatement(call);
+      if (AstUtil.isVoid(declSpec) && hasNoPointers()) {
+         return nodeFactory.newExpressionStatement(call);
+      }
 
       return nodeFactory.newReturnStatement(call);
    }

@@ -23,7 +23,6 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
-@SuppressWarnings("restriction")
 abstract class MissingMemFunVisitor extends ASTVisitor {
 
    protected final ICPPASTTemplateDeclaration  sut;
@@ -54,7 +53,9 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
       final IType resolvedType = CxxAstUtils.unwindTypedef(type);
       IType unwoundType = AstUtil.unwindPointerOrRefType(resolvedType);
 
-      if (unwoundType == null) return false;
+      if (unwoundType == null) {
+         return false;
+      }
 
       if (unwoundType instanceof TypeOfDependentExpression) {
          final ICPPEvaluation evaluation = ((TypeOfDependentExpression) unwoundType).getEvaluation();

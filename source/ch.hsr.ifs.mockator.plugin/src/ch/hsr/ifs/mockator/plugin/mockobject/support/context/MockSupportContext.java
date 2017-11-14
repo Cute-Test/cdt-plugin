@@ -8,8 +8,9 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.CRefactoringContext;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.Builder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
@@ -19,7 +20,6 @@ import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter;
 
 
-@SuppressWarnings("restriction")
 public final class MockSupportContext {
 
    private final ICProject                              cProject;
@@ -49,8 +49,8 @@ public final class MockSupportContext {
       private Collection<? extends TestDoubleMemFun> newForExpectations;
 
       public ContextBuilder(final ICProject cProject, final CRefactoringContext context, final MockObject mockObject, final ASTRewrite rewriter,
-                            final IASTTranslationUnit ast, final CppStandard cppStandard, final ClassPublicVisibilityInserter inserter,
-                            final boolean hasOnlyStaticMemFuns, final IProgressMonitor pm) {
+            final IASTTranslationUnit ast, final CppStandard cppStandard, final ClassPublicVisibilityInserter inserter,
+            final boolean hasOnlyStaticMemFuns, final IProgressMonitor pm) {
          this.cProject = cProject;
          this.context = context;
          this.mockObject = mockObject;
