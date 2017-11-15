@@ -15,7 +15,7 @@ import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorCreator;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorCreator.CallsVectorParent;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class MockObjectToNsAdder {
@@ -40,7 +40,7 @@ class MockObjectToNsAdder {
    }
 
    private static ICPPASTCompositeTypeSpecifier getTestDoubleClass(final IASTSimpleDeclaration simpleDecl) {
-      return AstUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      return ASTUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
    }
 
    private IASTSimpleDeclaration createAllCallsVector() {

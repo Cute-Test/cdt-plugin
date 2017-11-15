@@ -32,7 +32,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceContext> {
@@ -77,23 +77,23 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
       }
       final IASTNode declaration = getDeclaration(usage);
       final IASTDeclarator declarator = getDeclarator(declaration, context.getChosenClass().getName());
-      return AstUtil.hasPointerOrRefType(declarator) || isClassForwardDeclaration(declaration);
+      return ASTUtil.hasPointerOrRefType(declarator) || isClassForwardDeclaration(declaration);
    }
 
    private static boolean isPartOfExpression(final IASTName usage) {
-      return AstUtil.getAncestorOfType(usage, ICPPASTExpression.class) != null;
+      return ASTUtil.getAncestorOfType(usage, ICPPASTExpression.class) != null;
    }
 
    private static IASTDeclarator getDeclarator(final IASTNode declaration, final IASTName className) {
       if (hasTemplateId(declaration, className)) {
          final ICPPASTNamedTypeSpecifier namedType = getTypeSpecIfRefersToClass(declaration, className);
-         return AstUtil.getChildOfType(namedType.getParent(), IASTDeclarator.class);
+         return ASTUtil.getChildOfType(namedType.getParent(), IASTDeclarator.class);
       }
-      return AstUtil.getDeclaratorForNode(declaration);
+      return ASTUtil.getDeclaratorForNode(declaration);
    }
 
    private static boolean hasTemplateId(final IASTNode node, final IASTName className) {
-      final ICPPASTTemplateId templatedChild = AstUtil.getChildOfType(node, ICPPASTTemplateId.class);
+      final ICPPASTTemplateId templatedChild = ASTUtil.getChildOfType(node, ICPPASTTemplateId.class);
 
       if (templatedChild == null) { return false; }
 
@@ -102,7 +102,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static boolean hasTemplateId(final IASTNode node) {
-      return AstUtil.getChildOfType(node, ICPPASTTemplateId.class) != null;
+      return ASTUtil.getChildOfType(node, ICPPASTTemplateId.class) != null;
    }
 
    private static void replaceDeclarationWithNewType(final IASTName name, final ExtractInterfaceContext context) {
@@ -204,7 +204,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static void handleTemplateId(final String newName, final ASTRewrite rewriter, final IASTNode parentDecl, final IASTName astName) {
-      final ICPPASTTemplateId templateId = AstUtil.getChildOfType(parentDecl, ICPPASTTemplateId.class);
+      final ICPPASTTemplateId templateId = ASTUtil.getChildOfType(parentDecl, ICPPASTTemplateId.class);
       final IASTName templateName = templateId.getTemplateName().copy();
       final ICPPASTTemplateId newTemplateId = nodeFactory.newTemplateId(templateName);
 
@@ -239,7 +239,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static IASTName createNewInterfaceName(final String newInterfaceName, final IASTName oldName) {
-      if (AstUtil.isQualifiedName(oldName)) {
+      if (ASTUtil.isQualifiedName(oldName)) {
          return getNewQNameForInterface((ICPPASTQualifiedName) oldName, newInterfaceName);
       }
 

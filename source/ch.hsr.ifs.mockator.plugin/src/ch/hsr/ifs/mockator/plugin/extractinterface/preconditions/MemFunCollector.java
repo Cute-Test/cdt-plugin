@@ -31,7 +31,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder.Types;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
@@ -88,7 +88,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static IType getTypeOfDependency(final IASTNode dependency) {
-      final IASTSimpleDeclaration decl = AstUtil.getAncestorOfType(dependency, IASTSimpleDeclaration.class);
+      final IASTSimpleDeclaration decl = ASTUtil.getAncestorOfType(dependency, IASTSimpleDeclaration.class);
       return CPPVisitor.createType(decl.getDeclSpecifier());
    }
 
@@ -126,11 +126,11 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static FunctionEquivalenceVerifier.ConstStrategy getConstStrategy(final IType typeOfSelection) {
-      return AstUtil.hasConstPart(typeOfSelection) ? ConsiderConst : IgnoreConst;
+      return ASTUtil.hasConstPart(typeOfSelection) ? ConsiderConst : IgnoreConst;
    }
 
    private static ICPPASTFunctionDeclarator getDeclarator(final IASTDeclaration function) {
-      return AstUtil.getChildOfType(function, IASTFunctionDeclarator.class);
+      return ASTUtil.getChildOfType(function, IASTFunctionDeclarator.class);
    }
 
    private static Collection<ICPPASTFunctionDeclarator> getAllMemberFunctions(final ICPPASTCompositeTypeSpecifier klass) {
@@ -143,7 +143,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
          @Override
          public int visit(final IASTDeclaration decl) {
-            final ICPPASTFunctionDeclarator candidate = AstUtil.getChildOfType(decl, ICPPASTFunctionDeclarator.class);
+            final ICPPASTFunctionDeclarator candidate = ASTUtil.getChildOfType(decl, ICPPASTFunctionDeclarator.class);
 
             if (candidate != null) {
                allMemFuns.add(candidate);
@@ -190,7 +190,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
       private void processFieldReference(final ICPPASTFunctionCallExpression funCall, final ICPPASTFieldReference field) {
          final IASTExpression owner = field.getFieldOwner();
-         final IType typeOfInstance = AstUtil.unwindPointerOrRefType(owner.getExpressionType());
+         final IType typeOfInstance = ASTUtil.unwindPointerOrRefType(owner.getExpressionType());
 
          if (hasSameTypeAsSelection(typeOfInstance)) {
             funCalls.add(funCall);
@@ -198,7 +198,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
       }
 
       private boolean hasSameTypeAsSelection(final IType typeOfInstance) {
-         return AstUtil.isSameType(typeOfInstance, typeOfSelection);
+         return ASTUtil.isSameType(typeOfInstance, typeOfSelection);
       }
    }
 }

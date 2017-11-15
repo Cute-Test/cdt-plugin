@@ -29,7 +29,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.PureVirtualMemFunCollector;
 
 
@@ -82,7 +82,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    private static Optional<IASTSimpleDeclaration> getFunDeclarator(final IASTName name) {
-      final IASTSimpleDeclaration simpleDecl = AstUtil.getAncestorOfType(name, IASTSimpleDeclaration.class);
+      final IASTSimpleDeclaration simpleDecl = ASTUtil.getAncestorOfType(name, IASTSimpleDeclaration.class);
       return Optional.of(simpleDecl);
    }
 

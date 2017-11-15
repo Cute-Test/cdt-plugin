@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ClassInSelectionFinder {
@@ -38,6 +38,6 @@ public class ClassInSelectionFinder {
    }
 
    private static ICPPASTCompositeTypeSpecifier getContainingClass(final IASTNode node) {
-      return AstUtil.getAncestorOfType(node, ICPPASTCompositeTypeSpecifier.class);
+      return ASTUtil.getAncestorOfType(node, ICPPASTCompositeTypeSpecifier.class);
    }
 }

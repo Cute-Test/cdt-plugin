@@ -21,7 +21,7 @@ import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDecorator;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 abstract class PreprocessorFileCreator {
@@ -49,8 +49,8 @@ abstract class PreprocessorFileCreator {
          throws CoreException;
 
    protected ICPPASTDeclSpecifier getReturnValue(final ICPPASTFunctionDeclarator funDecl) {
-      final ICPPASTDeclSpecifier newDeclSpec = AstUtil.getDeclSpec(funDecl).copy();
-      AstUtil.removeExternalStorageIfSet(newDeclSpec);
+      final ICPPASTDeclSpecifier newDeclSpec = ASTUtil.getDeclSpec(funDecl).copy();
+      ASTUtil.removeExternalStorageIfSet(newDeclSpec);
       return newDeclSpec;
    }
 
@@ -76,7 +76,7 @@ abstract class PreprocessorFileCreator {
 
    private static void addParamsExceptVoid(final ICPPASTFunctionDeclarator funDecl, final ICPPASTFunctionDeclarator newFunDecl) {
       for (final ICPPASTParameterDeclaration param : funDecl.getParameters()) {
-         if (!AstUtil.isVoid(param)) {
+         if (!ASTUtil.isVoid(param)) {
             newFunDecl.addParameterDeclaration(param.copy());
          }
       }

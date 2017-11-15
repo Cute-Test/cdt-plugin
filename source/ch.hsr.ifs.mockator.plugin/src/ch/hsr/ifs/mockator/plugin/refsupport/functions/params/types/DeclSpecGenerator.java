@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class DeclSpecGenerator {
@@ -16,7 +16,7 @@ public class DeclSpecGenerator {
    private final IType type;
 
    public DeclSpecGenerator(final IType type) {
-      this.type = AstUtil.windDownToRealType(type, true);
+      this.type = ASTUtil.windDownToRealType(type, true);
    }
 
    public ICPPASTDeclSpecifier getDeclSpec() {

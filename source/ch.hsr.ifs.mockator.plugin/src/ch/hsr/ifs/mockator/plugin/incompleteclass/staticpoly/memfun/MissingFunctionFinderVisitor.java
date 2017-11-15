@@ -17,7 +17,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPUnknownMethod;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
@@ -61,7 +61,7 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
    }
 
    private ICPPASTFunctionCallExpression getFunctionCall(final IASTName name) {
-      return AstUtil.getAncestorOfType(name, ICPPASTFunctionCallExpression.class);
+      return ASTUtil.getAncestorOfType(name, ICPPASTFunctionCallExpression.class);
    }
 
    private static boolean isMemFunReferenceToUnknownClass(final IBinding binding) {

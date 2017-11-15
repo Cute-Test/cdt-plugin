@@ -20,7 +20,7 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.ClassInTemplateIdFi
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun.MissingMemFunCollector;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.referenced.NotReferencedFunctionFilter;
 import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Collection<StaticPolyMissingMemFun>> {
@@ -75,7 +75,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
    }
 
    private static boolean hasClassInTemplateDecl(final ICPPASTTemplateDeclaration templateDecl) {
-      return AstUtil.getChildOfType(templateDecl, ICPPASTCompositeTypeSpecifier.class) != null;
+      return ASTUtil.getChildOfType(templateDecl, ICPPASTCompositeTypeSpecifier.class) != null;
    }
 
    private Collection<TemplateParamCombination> getTestDoubleAsTemplateArgUsages(

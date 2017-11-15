@@ -20,7 +20,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.Functional;
 import ch.hsr.ifs.iltis.core.functional.StreamPair;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypedefHelper;
 
 
@@ -54,7 +54,7 @@ class TemplateInstDeclSpecStrategy implements DeclSpecGeneratorStrategy {
    }
 
    private static char[] getQName(final ICPPTemplateDefinition templateDefinition) {
-      return AstUtil.getQfName(templateDefinition).toCharArray();
+      return ASTUtil.getQfName(templateDefinition).toCharArray();
    }
 
    private static boolean isDefValEqualsToTemplateArg(final IType defaultValType, final IType argTypeVal) {

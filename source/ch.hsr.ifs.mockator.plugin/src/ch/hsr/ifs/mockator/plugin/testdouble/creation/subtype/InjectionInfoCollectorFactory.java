@@ -7,7 +7,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class InjectionInfoCollectorFactory {
@@ -26,7 +26,7 @@ class InjectionInfoCollectorFactory {
    }
 
    private static boolean isPartOfCtorCall(final IASTNode node) {
-      return AstUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || AstUtil.getAncestorOfType(node,
+      return ASTUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || ASTUtil.getAncestorOfType(node,
             ICPPASTInitializerList.class) != null;
    }
 }

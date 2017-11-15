@@ -18,7 +18,7 @@ import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
@@ -53,7 +53,7 @@ public class ExpectationsFinder {
          }
 
          private int collectExpectations(final IASTName name) {
-            final IASTStatement stmt = AstUtil.getAncestorOfType(name, IASTStatement.class);
+            final IASTStatement stmt = ASTUtil.getAncestorOfType(name, IASTStatement.class);
 
             if (stmt instanceof IASTDeclarationStatement) {
                new InitializerExpectationsFinder(callExpectations, expectationVector, assertedExpectetation).collectExpectations(stmt);

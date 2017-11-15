@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunArgumentsTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunctionParamTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParamTypeEquivalenceTester;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class FunctionEquivalenceVerifier {
@@ -39,7 +39,7 @@ public class FunctionEquivalenceVerifier {
    }
 
    public boolean isEquivalent(final ICPPASTFunctionCallExpression functionCall, final ConstStrategy constStrategy) {
-      if (!funDecl.getName().toString().equals(AstUtil.getName(functionCall).toString())) return false;
+      if (!funDecl.getName().toString().equals(ASTUtil.getName(functionCall).toString())) return false;
 
       boolean result = areParamsEquivalentToArguments(functionCall, funDecl);
 

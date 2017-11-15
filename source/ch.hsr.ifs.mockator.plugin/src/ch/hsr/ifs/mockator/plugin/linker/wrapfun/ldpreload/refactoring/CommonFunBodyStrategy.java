@@ -30,7 +30,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.linker.ItaniumMangledNameGenerator;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
@@ -106,7 +106,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
    }
 
    protected ICPPASTDeclSpecifier createNewFunDeclSpec(final ICPPASTFunctionDeclarator funDecl) {
-      return AstUtil.getDeclSpec(funDecl).copy();
+      return ASTUtil.getDeclSpec(funDecl).copy();
    }
 
    protected void addParams(final ICPPASTFunctionDeclarator funDecl, final ICPPASTFunctionDeclarator newFunDecl) {

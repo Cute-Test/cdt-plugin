@@ -29,7 +29,7 @@ import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.checker.AbstractMissingMemFunChecker;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
@@ -64,7 +64,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
          if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef) { return; }
 
          for (final IASTDeclarator declarator : simpleDecl.getDeclarators()) {
-            if (!AstUtil.hasPointerOrRefType(declarator)) {
+            if (!ASTUtil.hasPointerOrRefType(declarator)) {
                checkIfAbstract(declSpec);
                break;
             }
@@ -76,7 +76,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
          if (expr instanceof ICPPASTNewExpression) {
             final ICPPASTNewExpression newExpression = (ICPPASTNewExpression) expr;
 
-            if (!AstUtil.hasPointerOrRefType(newExpression.getTypeId().getAbstractDeclarator())) {
+            if (!ASTUtil.hasPointerOrRefType(newExpression.getTypeId().getAbstractDeclarator())) {
                final IASTDeclSpecifier declSpec = newExpression.getTypeId().getDeclSpecifier();
 
                if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
@@ -103,7 +103,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
 
       if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
          className = ((ICPPASTNamedTypeSpecifier) declSpec).getName();
-      } else if (AstUtil.isClass(declSpec)) {
+      } else if (ASTUtil.isClass(declSpec)) {
          className = ((ICPPASTCompositeTypeSpecifier) declSpec).getName();
       }
 
@@ -133,7 +133,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> getClassDefinition(final IType type) {
-      final IType realType = AstUtil.windDownToRealType(type, false);
+      final IType realType = ASTUtil.windDownToRealType(type, false);
 
       if (realType instanceof ICPPClassType) { return lookupDefinition((ICPPClassType) realType); }
 
@@ -149,7 +149,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
    }
 
    private static ICPPASTCompositeTypeSpecifier getKlassOf(final IASTNode node) {
-      return AstUtil.getAncestorOfType(node, ICPPASTCompositeTypeSpecifier.class);
+      return ASTUtil.getAncestorOfType(node, ICPPASTCompositeTypeSpecifier.class);
    }
 
    @Override

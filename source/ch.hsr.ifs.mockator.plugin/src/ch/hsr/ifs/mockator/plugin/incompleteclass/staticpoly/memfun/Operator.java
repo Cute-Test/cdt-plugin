@@ -40,7 +40,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunctionCallParame
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParamDeclCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnStatementCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnTypeDeducer;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 // partially inspired by TDD
@@ -124,7 +124,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
 
    private void addParameterForArrayIndex(final ICPPASTFunctionDeclarator funDecl) {
       final IASTInitializerClause argument = ((ICPPASTArraySubscriptExpression) operatorExpr).getArgument();
-      final IASTExpression expr = AstUtil.getChildOfType(argument, IASTExpression.class);
+      final IASTExpression expr = ASTUtil.getChildOfType(argument, IASTExpression.class);
       funDecl.addParameterDeclaration(ParamDeclCreator.createParameterFrom(expr, new HashMap<String, Boolean>()));
    }
 
@@ -216,7 +216,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
       if (binding instanceof ICPPVariable) {
          final IType type = ((ICPPVariable) binding).getType();
          final IType resolvedType = CxxAstUtils.unwindTypedef(type);
-         return AstUtil.isSameType(resolvedType, injectedType);
+         return ASTUtil.isSameType(resolvedType, injectedType);
       }
 
       return false;
@@ -227,7 +227,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private ICPPASTBinaryExpression getBinaryExpression() {
-      return AstUtil.getAncestorOfType(operatorExpr, ICPPASTBinaryExpression.class);
+      return ASTUtil.getAncestorOfType(operatorExpr, ICPPASTBinaryExpression.class);
    }
 
    private boolean isUnaryExpression() {
@@ -235,7 +235,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private ICPPASTUnaryExpression getUnaryExpression() {
-      return AstUtil.getAncestorOfType(operatorExpr, ICPPASTUnaryExpression.class);
+      return ASTUtil.getAncestorOfType(operatorExpr, ICPPASTUnaryExpression.class);
    }
 
    private static void addEmptyIntParameter(final ICPPASTFunctionDeclarator decl) {

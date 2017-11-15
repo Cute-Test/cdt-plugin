@@ -23,7 +23,7 @@ import ch.hsr.ifs.iltis.core.data.AbstractPair;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVerifier;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public enum AssertKind {
@@ -32,7 +32,7 @@ public enum AssertKind {
 
       @Override
       protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-         final ICPPASTBinaryExpression startingNode = AstUtil.getChildOfType(stmt, ICPPASTBinaryExpression.class);
+         final ICPPASTBinaryExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTBinaryExpression.class);
          return ExpectedActualPair.from(collectExpectedActual(startingNode));
       }
    },
@@ -41,7 +41,7 @@ public enum AssertKind {
 
       @Override
       protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-         final ICPPASTFunctionCallExpression startingNode = AstUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+         final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
          return ExpectedActualPair.from(collectExpectedActual(startingNode));
       }
    },
@@ -50,7 +50,7 @@ public enum AssertKind {
 
       @Override
       protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-         final ICPPASTFunctionCallExpression startingNode = AstUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+         final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
          final IASTInitializerClause[] arguments = startingNode.getArguments();
 
          if (arguments.length < 2) { return Optional.empty(); }
@@ -66,7 +66,7 @@ public enum AssertKind {
 
       @Override
       protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-         final ICPPASTFunctionCallExpression startingNode = AstUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+         final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
          return ExpectedActualPair.from(collectExpectedActual(startingNode));
       }
    };

@@ -15,7 +15,7 @@ import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> {
@@ -68,11 +68,11 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
 
    private static Optional<ICPPASTNamedTypeSpecifier> getNamedSpecifier(final IASTNode originalNode) {
       //TODO use OptHelper
-      final ICPPASTNamedTypeSpecifier namedSpec = AstUtil.getAncestorOfType(originalNode, ICPPASTNamedTypeSpecifier.class);
+      final ICPPASTNamedTypeSpecifier namedSpec = ASTUtil.getAncestorOfType(originalNode, ICPPASTNamedTypeSpecifier.class);
 
       if (namedSpec != null) { return Optional.of(namedSpec); }
 
-      final Optional<IASTDeclSpecifier> declSpec = AstUtil.getDeclarationSpecifier(originalNode);
+      final Optional<IASTDeclSpecifier> declSpec = ASTUtil.getDeclarationSpecifier(originalNode);
       if (declSpec.isPresent() && declSpec.get() instanceof ICPPASTNamedTypeSpecifier) { return Optional.of((ICPPASTNamedTypeSpecifier) declSpec
             .get()); }
 
@@ -88,7 +88,7 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
    }
 
    private static Optional<ICPPASTCompositeTypeSpecifier> getClass(final IASTName originalNode) {
-      return Optional.ofNullable(AstUtil.getAncestorOfType(originalNode, ICPPASTCompositeTypeSpecifier.class));
+      return Optional.ofNullable(ASTUtil.getAncestorOfType(originalNode, ICPPASTCompositeTypeSpecifier.class));
    }
 
    private static void rememberClassInformation(final ExtractInterfaceContext context, final ICPPASTCompositeTypeSpecifier dependency,

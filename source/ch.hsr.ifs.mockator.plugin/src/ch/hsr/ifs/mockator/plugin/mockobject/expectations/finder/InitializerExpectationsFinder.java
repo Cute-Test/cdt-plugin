@@ -20,7 +20,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
@@ -49,7 +49,7 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
 
       if (matchingName == null) return;
 
-      final ICPPASTInitializerList initializer = AstUtil.getChildOfType(declaration, ICPPASTInitializerList.class);
+      final ICPPASTInitializerList initializer = ASTUtil.getChildOfType(declaration, ICPPASTInitializerList.class);
 
       if (initializer == null) return;
 

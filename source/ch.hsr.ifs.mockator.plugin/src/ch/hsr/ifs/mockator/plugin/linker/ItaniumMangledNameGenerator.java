@@ -39,7 +39,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 // Implements Itanium C++ ABI name mangling according to
@@ -117,7 +117,7 @@ public class ItaniumMangledNameGenerator {
    private void name(final IType type) {
       if (type instanceof ICPPTemplateInstance) {
          final ICPPTemplateInstance instance = (ICPPTemplateInstance) type;
-         unscopedName(AstUtil.getQfName(instance.getTemplateDefinition()));
+         unscopedName(ASTUtil.getQfName(instance.getTemplateDefinition()));
          templateArgs(list(instance.getTemplateArguments()));
       } else if (type instanceof ICPPClassType) {
          final ICPPClassType classType = (ICPPClassType) type;

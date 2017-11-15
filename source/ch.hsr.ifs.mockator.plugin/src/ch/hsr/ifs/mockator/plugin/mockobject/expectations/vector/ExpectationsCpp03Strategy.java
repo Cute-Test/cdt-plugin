@@ -24,7 +24,7 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.BoostAssignInitializerCreator;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
@@ -54,7 +54,7 @@ public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
 
    private static boolean hasBoostAssignInitializer(final ICPPASTFunctionDefinition testFun, final IASTName expVector) {
       return new NameFinder(testFun).getNameMatchingCriteria((name) -> {
-         final ICPPASTBinaryExpression binExp = AstUtil.getAncestorOfType(name, ICPPASTBinaryExpression.class);
+         final ICPPASTBinaryExpression binExp = ASTUtil.getAncestorOfType(name, ICPPASTBinaryExpression.class);
          return name.toString().equals(expVector.toString()) && binExp != null && binExp.getOperator() == IASTBinaryExpression.op_plusAssign;
       }).isPresent();
    }

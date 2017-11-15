@@ -9,7 +9,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class TestDoubleToNsMover {
@@ -32,11 +32,11 @@ class TestDoubleToNsMover {
    }
 
    private static ICPPASTCompositeTypeSpecifier getTestDoubleClass(final IASTSimpleDeclaration simpleDecl) {
-      return AstUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      return ASTUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
    }
 
    private static IASTSimpleDeclaration getClassDeclaration(final ICPPASTCompositeTypeSpecifier testDouble) {
-      return AstUtil.getAncestorOfType(testDouble, IASTSimpleDeclaration.class);
+      return ASTUtil.getAncestorOfType(testDouble, IASTSimpleDeclaration.class);
    }
 
    private void insertTestDoubleInNamespace(final IASTSimpleDeclaration testDouble, final ICPPASTCompositeTypeSpecifier testDoubleToMove,
@@ -50,7 +50,7 @@ class TestDoubleToNsMover {
    }
 
    private static ICPPASTFunctionDefinition getParentFunction(final IASTCompositeTypeSpecifier testDouble) {
-      final ICPPASTFunctionDefinition testFun = AstUtil.getAncestorOfType(testDouble, ICPPASTFunctionDefinition.class);
+      final ICPPASTFunctionDefinition testFun = ASTUtil.getAncestorOfType(testDouble, ICPPASTFunctionDefinition.class);
       ILTISException.Unless.notNull(testFun, "Test double class must be a member of a function!");
       return testFun;
    }

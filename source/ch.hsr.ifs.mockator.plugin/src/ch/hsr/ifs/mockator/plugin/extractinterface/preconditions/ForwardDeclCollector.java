@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ForwardDeclCollector implements Consumer<ExtractInterfaceContext> {
@@ -35,7 +35,7 @@ public class ForwardDeclCollector implements Consumer<ExtractInterfaceContext> {
          @Override
          public int visit(final IASTDeclaration decl) {
             if (decl instanceof IASTSimpleDeclaration) {
-               final ICPPASTElaboratedTypeSpecifier forwardDecl = AstUtil.getChildOfType(decl, ICPPASTElaboratedTypeSpecifier.class);
+               final ICPPASTElaboratedTypeSpecifier forwardDecl = ASTUtil.getChildOfType(decl, ICPPASTElaboratedTypeSpecifier.class);
 
                if (forwardDecl != null) {
                   fwdDecls.add((IASTSimpleDeclaration) decl);

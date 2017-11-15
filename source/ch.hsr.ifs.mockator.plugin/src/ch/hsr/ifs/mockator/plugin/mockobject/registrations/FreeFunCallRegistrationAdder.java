@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class FreeFunCallRegistrationAdder extends AbstractFunCallRegistrationAdder {
@@ -32,6 +32,6 @@ public class FreeFunCallRegistrationAdder extends AbstractFunCallRegistrationAdd
 
    @Override
    protected String getNameForCall() {
-      return AstUtil.getQfName(array(MOCKATOR_NS, CALL));
+      return ASTUtil.getQfName(array(MOCKATOR_NS, CALL));
    }
 }

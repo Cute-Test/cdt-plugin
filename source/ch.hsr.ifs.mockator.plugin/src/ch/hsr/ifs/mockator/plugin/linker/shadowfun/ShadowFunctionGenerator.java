@@ -12,7 +12,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDecorator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnStatementCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
 
@@ -26,8 +26,8 @@ public class ShadowFunctionGenerator {
    }
 
    public ICPPASTFunctionDefinition createShadowedFunction(final ICPPASTFunctionDeclarator funDecl, final IASTCompoundStatement newBody) {
-      final ICPPASTDeclSpecifier newDeclSpec = AstUtil.getDeclSpec(funDecl).copy();
-      AstUtil.removeExternalStorageIfSet(newDeclSpec);
+      final ICPPASTDeclSpecifier newDeclSpec = ASTUtil.getDeclSpec(funDecl).copy();
+      ASTUtil.removeExternalStorageIfSet(newDeclSpec);
       final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
       adjustParamNamesIfNecessary(newFunDecl);
       newFunDecl.setName(createFullyQualifiedName(funDecl));

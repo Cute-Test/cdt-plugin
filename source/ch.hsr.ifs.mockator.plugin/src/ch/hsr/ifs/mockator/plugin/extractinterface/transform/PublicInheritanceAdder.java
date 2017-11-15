@@ -12,7 +12,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 public class PublicInheritanceAdder implements Consumer<ExtractInterfaceContext> {
 
@@ -39,7 +39,7 @@ public class PublicInheritanceAdder implements Consumer<ExtractInterfaceContext>
 
    private static int getInheritanceVisibility(final ICPPASTCompositeTypeSpecifier klass) {
       final int noBaseSpecifier = 0;
-      final int visibility = AstUtil.isStructType(klass) ? noBaseSpecifier : ICPPASTBaseSpecifier.v_public;
+      final int visibility = ASTUtil.isStructType(klass) ? noBaseSpecifier : ICPPASTBaseSpecifier.v_public;
       return visibility;
    }
 

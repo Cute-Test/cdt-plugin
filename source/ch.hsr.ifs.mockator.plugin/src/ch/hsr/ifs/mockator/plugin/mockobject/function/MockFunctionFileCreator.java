@@ -49,7 +49,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.SiblingTranslationUnitFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
 abstract class MockFunctionFileCreator {
@@ -128,7 +128,7 @@ abstract class MockFunctionFileCreator {
    }
 
    private static String createFqCallsVectorName(final ICPPASTNamespaceDefinition callsVectorNs, final IASTName callsVectorName) {
-      return AstUtil.getQfName(array(callsVectorNs.getName().toString(), callsVectorName.toString()));
+      return ASTUtil.getQfName(array(callsVectorNs.getName().toString(), callsVectorName.toString()));
    }
 
    private static void insertNamespaceWithCallsVector(final IASTTranslationUnit newTu, final ASTRewrite rewriter,

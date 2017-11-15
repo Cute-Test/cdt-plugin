@@ -3,7 +3,7 @@ package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.refactoring;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class LdPreloadFunBodyFactory {
@@ -15,6 +15,6 @@ class LdPreloadFunBodyFactory {
    }
 
    private static boolean isFreeFunction(final ICPPASTFunctionDeclarator funDecl) {
-      return AstUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
+      return ASTUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
    }
 }

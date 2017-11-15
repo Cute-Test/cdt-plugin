@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.MacroFinderVisitor;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 // Inserts the preprocessor statement for initializing Mockator functionality:
@@ -45,11 +45,11 @@ class MockatorInitCallInserter {
          final IASTNode[] children = function.getBody().getChildren();
          return children.length > 0 ? children[0] : null;
       }
-      return AstUtil.getAncestorOfType(mockObject, IASTSimpleDeclaration.class);
+      return ASTUtil.getAncestorOfType(mockObject, IASTSimpleDeclaration.class);
    }
 
    private ICPPASTFunctionDefinition getFunctionParent() {
-      return AstUtil.getAncestorOfType(mockObject, ICPPASTFunctionDefinition.class);
+      return ASTUtil.getAncestorOfType(mockObject, ICPPASTFunctionDefinition.class);
    }
 
    private boolean hasMockatorInitCall() {

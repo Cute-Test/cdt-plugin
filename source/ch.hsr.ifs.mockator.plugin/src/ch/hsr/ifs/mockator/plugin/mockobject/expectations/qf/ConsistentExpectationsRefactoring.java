@@ -33,7 +33,7 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVer
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
 class ConsistentExpectationsRefactoring extends MockatorRefactoring {
@@ -126,7 +126,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    }
 
    private static ICPPASTFunctionDefinition getTestFunction(final IASTName expectationsVector) {
-      return AstUtil.getAncestorOfType(expectationsVector, ICPPASTFunctionDefinition.class);
+      return ASTUtil.getAncestorOfType(expectationsVector, ICPPASTFunctionDefinition.class);
    }
 
    @Override

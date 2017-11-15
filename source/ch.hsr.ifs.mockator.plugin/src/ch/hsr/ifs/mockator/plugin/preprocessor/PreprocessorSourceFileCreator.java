@@ -26,7 +26,7 @@ import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionDelegateCallCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
 
@@ -64,8 +64,8 @@ class PreprocessorSourceFileCreator extends PreprocessorFileCreator {
       final int numOfParams = newFunDecl.getParameters().length;
       final Set<Integer> lastTwoParamsToBeIgnored = orderPreservingSet(numOfParams - 2, numOfParams - 1);
       final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(newFunDecl, lastTwoParamsToBeIgnored);
-      final IASTStatement delegateToOriginal = creator.createDelegate(funDecl.getName(), AstUtil.getDeclSpec(funDecl));
-      return AstUtil.toCompoundStatement(delegateToOriginal);
+      final IASTStatement delegateToOriginal = creator.createDelegate(funDecl.getName(), ASTUtil.getDeclSpec(funDecl));
+      return ASTUtil.toCompoundStatement(delegateToOriginal);
    }
 
    private void addHeaderInclude(final IASTTranslationUnit source, final ASTRewrite rewriter) {

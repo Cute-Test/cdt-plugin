@@ -10,7 +10,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.RemoveInitMockatorRefactoring;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
@@ -58,7 +58,7 @@ public class RemoveInitMockatorRefactoringTest extends MockatorRefactoringTest {
 
       @Override
       public int visit(final IASTDeclarator decl) {
-         final ICPPASTFunctionDefinition function = AstUtil.getAncestorOfType(decl, ICPPASTFunctionDefinition.class);
+         final ICPPASTFunctionDefinition function = ASTUtil.getAncestorOfType(decl, ICPPASTFunctionDefinition.class);
 
          if (function != null && isTestFunction(function)) {
             container.add(function);

@@ -21,7 +21,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public abstract class AbstractCreateTestDoubleRefactoring extends MockatorRefactoring {
@@ -49,7 +49,7 @@ public abstract class AbstractCreateTestDoubleRefactoring extends MockatorRefact
    }
 
    private Optional<IASTStatement> findFirstSelectedStmt(final IASTTranslationUnit ast) {
-      final IASTStatement stmt = AstUtil.getAncestorOfType(getSelectedNode(ast), IASTStatement.class);
+      final IASTStatement stmt = ASTUtil.getAncestorOfType(getSelectedNode(ast), IASTStatement.class);
       return Optional.of(stmt);
    }
 

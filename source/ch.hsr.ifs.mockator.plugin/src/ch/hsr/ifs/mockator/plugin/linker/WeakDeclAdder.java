@@ -21,7 +21,7 @@ import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterSignatureHandler;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class WeakDeclAdder {
@@ -65,7 +65,7 @@ public class WeakDeclAdder {
    }
 
    private static ICPPASTNamedTypeSpecifier createWeakDeclSpec(final ICPPASTFunctionDeclarator funDecl) {
-      final ICPPASTDeclSpecifier declSpec = AstUtil.getDeclSpec(funDecl);
+      final ICPPASTDeclSpecifier declSpec = ASTUtil.getDeclSpec(funDecl);
       final String returnTypeSpec = getStringRepresentation(declSpec);
       final String weakDecl = WEAK_DECL_ATTR + " " + returnTypeSpec;
       final IASTName weakDeclSpec = nodeFactory.newName(weakDecl.toCharArray());

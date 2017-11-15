@@ -14,7 +14,7 @@ import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingMemFun> {
@@ -48,7 +48,7 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
    }
 
    private static boolean shouldConsider(final ICPPASTFunctionDefinition sutFunction) {
-      return sutFunction != null && !AstUtil.isConstructor(sutFunction);
+      return sutFunction != null && !ASTUtil.isConstructor(sutFunction);
    }
 
    private boolean isCalled(final ICPPASTFunctionDefinition sutFunction) {
@@ -64,7 +64,7 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
    }
 
    private ICPPASTFunctionDefinition getFunctionDefinition(final IASTName caller) {
-      return AstUtil.getAncestorOfType(caller, ICPPASTFunctionDefinition.class);
+      return ASTUtil.getAncestorOfType(caller, ICPPASTFunctionDefinition.class);
    }
 
    private static boolean matches(final ICPPASTFunctionDefinition functionInUse, final ICPPASTFunctionDefinition missingMemFun) {

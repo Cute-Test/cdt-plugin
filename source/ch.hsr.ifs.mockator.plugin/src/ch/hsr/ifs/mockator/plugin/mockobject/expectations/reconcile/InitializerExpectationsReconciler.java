@@ -20,7 +20,7 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
@@ -42,8 +42,8 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    }
 
    private static IASTEqualsInitializer getEqualsInitializer(final IASTName expVector) {
-      final IASTDeclarationStatement declStmt = AstUtil.getAncestorOfType(expVector, IASTDeclarationStatement.class);
-      final IASTEqualsInitializer eqInitializer = AstUtil.getChildOfType(declStmt, IASTEqualsInitializer.class);
+      final IASTDeclarationStatement declStmt = ASTUtil.getAncestorOfType(expVector, IASTDeclarationStatement.class);
+      final IASTEqualsInitializer eqInitializer = ASTUtil.getChildOfType(declStmt, IASTEqualsInitializer.class);
       ILTISException.Unless.notNull(eqInitializer, "Not a valid call initialization");
       return eqInitializer;
    }

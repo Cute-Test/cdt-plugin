@@ -18,7 +18,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifi
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterToFunctionAdder;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnStatementCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnTypeDeducer;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class Function extends AbstractStaticPolyMissingMemFun {
@@ -37,7 +37,7 @@ class Function extends AbstractStaticPolyMissingMemFun {
 
    @Override
    protected ICPPASTFunctionDeclarator createFunDecl() {
-      final IASTName funName = nodeFactory.newName(AstUtil.getName(funCall).toCharArray());
+      final IASTName funName = nodeFactory.newName(ASTUtil.getName(funCall).toCharArray());
       final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
       funDecl.setConst(!isStatic);
       new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);

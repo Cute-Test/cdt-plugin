@@ -32,7 +32,7 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
 public class LdPreloadRefactoring extends LinkerRefactoring {
@@ -72,7 +72,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
    }
 
    private static boolean isMemberFunction(final ICPPASTFunctionDeclarator funDecl) {
-      return AstUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) != null;
+      return ASTUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) != null;
    }
 
    private void insertFunDeclInclude(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit tu, final ASTRewrite rewriter) {
@@ -104,7 +104,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
 
    private ICPPASTFunctionDefinition createFunDefinition(final ICPPASTFunctionDeclarator funDecl) {
       final ICPPASTDeclSpecifier newDeclSpec = getNewFunDeclSpec(funDecl);
-      AstUtil.removeExternalStorageIfSet(newDeclSpec);
+      ASTUtil.removeExternalStorageIfSet(newDeclSpec);
       final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
       adjustParamNamesIfNecessary(newFunDecl);
       newFunDecl.setName(getFullyQualifiedName(funDecl));
@@ -113,7 +113,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
    }
 
    private static ICPPASTDeclSpecifier getNewFunDeclSpec(final ICPPASTFunctionDeclarator funDecl) {
-      return AstUtil.getDeclSpec(funDecl).copy();
+      return ASTUtil.getDeclSpec(funDecl).copy();
    }
 
    private IASTCompoundStatement getFunBody(final ICPPASTFunctionDeclarator funDecl) {

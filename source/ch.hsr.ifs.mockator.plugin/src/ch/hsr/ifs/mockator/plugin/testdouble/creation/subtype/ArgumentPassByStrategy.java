@@ -22,7 +22,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 enum ArgumentPassByStrategy {
@@ -31,8 +31,8 @@ enum ArgumentPassByStrategy {
 
       @Override
       public void adaptArguments(final IASTName problemArg, final String nameOfNewInstance, final ASTRewrite rewriter) {
-         final ICPPASTConstructorInitializer ctorInit = AstUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
-         final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(problemArg, ICPPASTFunctionCallExpression.class);
+         final ICPPASTConstructorInitializer ctorInit = ASTUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
+         final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(problemArg, ICPPASTFunctionCallExpression.class);
 
          if (ctorInit != null) {
             adaptCtorArguments(nameOfNewInstance, rewriter, ctorInit);

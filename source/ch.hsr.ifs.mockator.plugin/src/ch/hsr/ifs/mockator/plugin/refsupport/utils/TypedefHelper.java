@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 // Taken and adapted from ds8
@@ -55,7 +56,7 @@ public class TypedefHelper {
       final Set<IType> typedefs = findTypedefs(type);
       final IType candidate = getTypeCandidate(typedefs, type);
 
-      if (candidate instanceof ITypedef && candidate instanceof ICPPBinding) { return AstUtil.getQfName((ICPPBinding) candidate); }
+      if (candidate instanceof ITypedef && candidate instanceof ICPPBinding) { return ASTUtil.getQfName((ICPPBinding) candidate); }
 
       return filterFilePartOfName(ASTTypeUtil.getType(candidate));
    }
@@ -158,7 +159,7 @@ public class TypedefHelper {
    }
 
    private static Optional<IASTTranslationUnit> getAst(final IIndex index, final String contentId, final URI uri) throws CModelException,
-         CoreException {
+   CoreException {
       final ICProject cProject = getProjects()[0];
       final ITranslationUnit tu = new ExternalTranslationUnit(cProject, uri, contentId);
       return Optional.of(tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS));

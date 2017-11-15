@@ -33,7 +33,7 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorName
 import ch.hsr.ifs.mockator.plugin.mockobject.support.memfun.CtorMockSupport;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.memfun.MemFunMockSupport;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.MemFunMockSupportAdder;
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.AbstractTestDouble;
@@ -60,7 +60,7 @@ public class MockObject extends AbstractTestDouble {
    }
 
    private void removeAllCallsVector(final ASTRewrite rewriter) {
-      getAllCallsVector().ifPresent((calls) -> rewriter.remove(AstUtil.getAncestorOfType(calls, IASTDeclarationStatement.class), null));
+      getAllCallsVector().ifPresent((calls) -> rewriter.remove(ASTUtil.getAncestorOfType(calls, IASTDeclarationStatement.class), null));
    }
 
    @Override

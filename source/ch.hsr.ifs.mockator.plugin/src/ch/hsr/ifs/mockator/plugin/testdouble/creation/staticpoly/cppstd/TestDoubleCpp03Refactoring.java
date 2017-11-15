@@ -17,7 +17,7 @@ import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleRefactoring;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.TestDoubleInNsInserter;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.TestDoubleUsingNsHandler;
@@ -55,7 +55,7 @@ class TestDoubleCpp03Refactoring extends AbstractCreateTestDoubleRefactoring {
    }
 
    private Optional<ICPPASTFunctionDefinition> getSelectedTestFunction(final IASTTranslationUnit ast) {
-      return OptHelper.returnIfPresentElseEmpty(getSelectedName(ast), (funName) -> Optional.of((ICPPASTFunctionDefinition) AstUtil.getAncestorOfType(
+      return OptHelper.returnIfPresentElseEmpty(getSelectedName(ast), (funName) -> Optional.of((ICPPASTFunctionDefinition) ASTUtil.getAncestorOfType(
             funName, ICPPASTFunctionDefinition.class)));
    }
 }

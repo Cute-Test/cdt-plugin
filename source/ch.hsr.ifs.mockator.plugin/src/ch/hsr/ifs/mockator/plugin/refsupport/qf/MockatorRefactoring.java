@@ -39,7 +39,7 @@ import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 // TODO use ILTIS
@@ -97,7 +97,7 @@ public abstract class MockatorRefactoring extends CRefactoring {
    }
 
    protected ICPPASTFunctionDefinition getParentFunction(final IASTName name) {
-      return AstUtil.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
+      return ASTUtil.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
    }
 
    @Override
@@ -119,7 +119,7 @@ public abstract class MockatorRefactoring extends CRefactoring {
 
       if (selectedNode instanceof IASTName) { return Optional.of((IASTName) selectedNode); }
 
-      final IASTName name = AstUtil.getAncestorOfType(selectedNode, IASTName.class);
+      final IASTName name = ASTUtil.getAncestorOfType(selectedNode, IASTName.class);
 
       if (name != null) { return Optional.of(name); }
 

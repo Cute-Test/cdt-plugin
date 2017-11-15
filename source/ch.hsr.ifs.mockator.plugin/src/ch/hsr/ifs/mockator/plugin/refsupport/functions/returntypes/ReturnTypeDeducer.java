@@ -47,7 +47,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExp
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
@@ -75,7 +75,7 @@ public class ReturnTypeDeducer {
    }
 
    private static IASTNode getNodeToAnalyse(final IASTExpression funCall) {
-      final IASTStatement stmt = AstUtil.getAncestorOfType(funCall, IASTStatement.class);
+      final IASTStatement stmt = ASTUtil.getAncestorOfType(funCall, IASTStatement.class);
       ILTISException.Unless.notNull(stmt, "Could not determine return type for missing function");
       return stmt;
    }
@@ -210,7 +210,7 @@ public class ReturnTypeDeducer {
       }
 
       private int useReturnTypeOfParentFunction(final IASTReturnStatement returnStmt) {
-         final ICPPASTFunctionDefinition function = AstUtil.getAncestorOfType(returnStmt, ICPPASTFunctionDefinition.class);
+         final ICPPASTFunctionDefinition function = ASTUtil.getAncestorOfType(returnStmt, ICPPASTFunctionDefinition.class);
          final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) function.getDeclarator();
          setPointerReturnType(getPointers(funDecl));
          final ICPPASTDeclSpecifier declSpecifier = (ICPPASTDeclSpecifier) function.getDeclSpecifier();

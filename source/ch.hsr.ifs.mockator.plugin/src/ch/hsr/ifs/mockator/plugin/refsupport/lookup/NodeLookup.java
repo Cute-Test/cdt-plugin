@@ -25,7 +25,7 @@ import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class NodeLookup {
@@ -121,7 +121,7 @@ public class NodeLookup {
    }
 
    private static <T extends IASTNode, U extends IASTNode> Optional<T> getNodeAncestor(final U node, final Class<T> clazz) {
-      return Optional.ofNullable(AstUtil.getAncestorOfType(node, clazz));
+      return Optional.ofNullable(ASTUtil.getAncestorOfType(node, clazz));
    }
 
    private static IIndex getIndex(final CRefactoringContext context) {

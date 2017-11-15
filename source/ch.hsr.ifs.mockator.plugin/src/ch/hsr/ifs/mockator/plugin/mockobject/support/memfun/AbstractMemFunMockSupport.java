@@ -13,7 +13,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.MemberFunCallRegistrationAdder;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.MemFunMockSupportAdder;
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 
@@ -54,7 +54,7 @@ abstract class AbstractMemFunMockSupport implements MemFunMockSupportAdder {
 
    protected void addCallRegistration(final IASTCompoundStatement newBody, final ICPPASTFunctionDefinition fun) {
       final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) fun.getDeclarator();
-      final boolean isStatic = AstUtil.isStatic(fun.getDeclSpecifier());
+      final boolean isStatic = ASTUtil.isStatic(fun.getDeclSpecifier());
       new MemberFunCallRegistrationAdder(funDecl, isStatic, cppStd, callsVectorName).addRegistrationTo(newBody);
    }
 

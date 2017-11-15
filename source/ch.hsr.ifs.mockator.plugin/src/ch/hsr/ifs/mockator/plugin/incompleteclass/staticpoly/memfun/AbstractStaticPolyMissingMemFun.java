@@ -20,7 +20,7 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatter;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.DefaultArgumentCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDoubleMemFun implements StaticPolyMissingMemFun {
@@ -62,7 +62,7 @@ public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDouble
    @Override
    public ICPPASTFunctionDefinition getContainingFunction() {
       final IASTExpression expr = getUnderlyingExpression();
-      return AstUtil.getAncestorOfType(expr, ICPPASTFunctionDefinition.class);
+      return ASTUtil.getAncestorOfType(expr, ICPPASTFunctionDefinition.class);
    }
 
    protected abstract IASTExpression getUnderlyingExpression();

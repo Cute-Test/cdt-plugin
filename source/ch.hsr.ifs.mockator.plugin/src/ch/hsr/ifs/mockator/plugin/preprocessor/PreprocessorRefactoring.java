@@ -32,7 +32,7 @@ import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.project.cdt.SourceFolderHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NotInSameTuAsCalleeVerifier;
 
 
@@ -84,7 +84,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
    }
 
    private static boolean isFreeFunction(final ICPPASTFunctionDeclarator funDecl) {
-      return AstUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
+      return ASTUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
    }
 
    @Override

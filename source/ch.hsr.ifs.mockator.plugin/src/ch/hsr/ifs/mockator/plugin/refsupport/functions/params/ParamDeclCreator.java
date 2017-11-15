@@ -27,7 +27,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 // Inspired by TDD
@@ -67,7 +67,7 @@ public class ParamDeclCreator {
    }
 
    public static ICPPASTParameterDeclaration createParameter(final IASTIdExpression idExpr, final Map<String, Boolean> nameHistory) {
-      final IType type = AstUtil.getType(idExpr);
+      final IType type = ASTUtil.getType(idExpr);
       final ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
       final IASTName parameterName = getParmeterName(idExpr, nameHistory);
       final IASTDeclarator declarator = getParameterDeclarator(parameterName, type, false);
@@ -87,7 +87,7 @@ public class ParamDeclCreator {
          skipConstCharArray = true;
       } else {
          IType type = litexpr.getExpressionType();
-         type = AstUtil.windDownToRealType(type, true);
+         type = ASTUtil.windDownToRealType(type, true);
          paramName = paramNameCreator.getParamName(type);
          spec = createDeclSpecifier(type);
       }
@@ -119,7 +119,7 @@ public class ParamDeclCreator {
       final DeclSpecGenerator generator = new DeclSpecGenerator(type);
       final ICPPASTDeclSpecifier spec = generator.getDeclSpec();
       spec.setConst(true);
-      spec.setVolatile(AstUtil.hasVolatilePart(type));
+      spec.setVolatile(ASTUtil.hasVolatilePart(type));
       return spec;
    }
 

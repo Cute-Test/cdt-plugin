@@ -18,7 +18,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class PublicMemFunFinder {
@@ -40,9 +40,9 @@ public class PublicMemFunFinder {
    }
 
    private void initVisibility() {
-      if (AstUtil.isStructType(klass)) {
+      if (ASTUtil.isStructType(klass)) {
          publicVisibility = true;
-      } else if (AstUtil.isClassType(klass)) {
+      } else if (ASTUtil.isClassType(klass)) {
          publicVisibility = false;
       } else throw new ILTISException("Union types not supported").rethrowUnchecked();
    }
@@ -60,7 +60,7 @@ public class PublicMemFunFinder {
             continue;
          }
 
-         final IASTDeclarator declarator = AstUtil.getDeclaratorForNode(classMember);
+         final IASTDeclarator declarator = ASTUtil.getDeclaratorForNode(classMember);
 
          if (!(declarator instanceof ICPPASTFunctionDeclarator)) {
             continue;
@@ -68,7 +68,7 @@ public class PublicMemFunFinder {
 
          final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) declarator;
          final IASTName memFunName = funDecl.getName();
-         final ICPPASTDeclSpecifier funSpec = AstUtil.getDeclSpec(funDecl);
+         final ICPPASTDeclSpecifier funSpec = ASTUtil.getDeclSpec(funDecl);
 
          if (funSpec == null || isFriend(funSpec) || ignoreStatic(funSpec) || ignoreCtor(memFunName) || ignoreDtor(memFunName)) {
             continue;
@@ -85,7 +85,7 @@ public class PublicMemFunFinder {
    }
 
    private boolean ignoreStatic(final ICPPASTDeclSpecifier funDeclSpec) {
-      return AstUtil.isStatic(funDeclSpec) && !typesToConsider.contains(Types.withStatics);
+      return ASTUtil.isStatic(funDeclSpec) && !typesToConsider.contains(Types.withStatics);
    }
 
    private boolean ignoreDtor(final IASTName memFunName) {

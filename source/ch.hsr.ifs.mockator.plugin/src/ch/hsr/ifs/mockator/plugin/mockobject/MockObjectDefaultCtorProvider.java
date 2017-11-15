@@ -12,7 +12,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.DefaultConstructor;
 
 
@@ -51,7 +51,7 @@ public class MockObjectDefaultCtorProvider implements DefaultCtorProvider {
    }
 
    private boolean hasPublicCtors(final Collection<? extends MissingMemberFunction> memFuns) {
-      final Collection<ICPPASTFunctionDefinition> onlyCtors = toFunctions(memFuns).stream().filter((function) -> AstUtil
+      final Collection<ICPPASTFunctionDefinition> onlyCtors = toFunctions(memFuns).stream().filter((function) -> ASTUtil
             .isDeclConstructor(function)).collect(Collectors.toList());
       return mockObject.hasPublicCtor() || !onlyCtors.isEmpty();
    }

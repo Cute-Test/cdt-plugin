@@ -23,7 +23,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDe
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.IncludeGuardCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NamespaceApplier;
 
 
@@ -87,7 +87,7 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
       final StringBuilder params = new StringBuilder();
 
       for (final ICPPASTParameterDeclaration param : funDecl.getParameters()) {
-         if (AstUtil.isVoid(param)) {
+         if (ASTUtil.isVoid(param)) {
             continue;
          }
 

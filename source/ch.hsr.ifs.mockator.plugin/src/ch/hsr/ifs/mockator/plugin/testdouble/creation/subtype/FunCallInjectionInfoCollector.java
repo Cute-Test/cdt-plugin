@@ -19,7 +19,7 @@ import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 
 
@@ -31,7 +31,7 @@ class FunCallInjectionInfoCollector extends AbstractDepInjectInfoCollector {
 
    @Override
    public Optional<Pair<IASTName, IType>> collectDependencyInfos(final IASTName problemArgName) {
-      final ICPPASTFunctionCallExpression funCall = AstUtil.getAncestorOfType(problemArgName, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(problemArgName, ICPPASTFunctionCallExpression.class);
 
       if (funCall == null) { return Optional.empty(); }
 

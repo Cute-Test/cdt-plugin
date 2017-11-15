@@ -26,7 +26,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class BaseClassCtorCallHandler {
@@ -43,7 +43,7 @@ public class BaseClassCtorCallHandler {
    }
 
    public boolean hasBaseClassDefaultCtor() {
-      final Collection<ICPPConstructor> defaultCtors = Arrays.asList(baseClass.getConstructors()).stream().filter((ctor) -> AstUtil.isDefaultCtor(
+      final Collection<ICPPConstructor> defaultCtors = Arrays.asList(baseClass.getConstructors()).stream().filter((ctor) -> ASTUtil.isDefaultCtor(
             ctor)).collect(Collectors.toList());
       return !defaultCtors.isEmpty();
    }
@@ -81,7 +81,7 @@ public class BaseClassCtorCallHandler {
       ICPPConstructor chosen = null;
 
       for (final ICPPConstructor ctor : baseClass.getConstructors()) {
-         if (AstUtil.isDefaultCtor(ctor) || AstUtil.isCopyCtor(ctor, baseClass)) {
+         if (ASTUtil.isDefaultCtor(ctor) || ASTUtil.isCopyCtor(ctor, baseClass)) {
             continue;
          }
 

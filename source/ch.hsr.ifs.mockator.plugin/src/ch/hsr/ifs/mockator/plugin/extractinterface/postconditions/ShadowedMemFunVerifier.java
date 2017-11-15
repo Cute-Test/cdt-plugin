@@ -22,7 +22,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.MethodParamEquivalenceTester;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.SubClassFinder;
 
 
@@ -64,15 +64,15 @@ public class ShadowedMemFunVerifier {
    }
 
    private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {
-      final ICPPASTFunctionDeclarator funDecl = AstUtil.getChildOfType(declaration, ICPPASTFunctionDeclarator.class);
+      final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType(declaration, ICPPASTFunctionDeclarator.class);
       final IBinding binding = funDecl.getName().resolveBinding();
       ILTISException.Unless.instanceOf(binding, ICPPMethod.class, "Chosen member function is not valid");
       return (ICPPMethod) binding;
    }
 
    private static String createShadowWarning(final ICPPMethod chosenMemFun, final ICPPMethod shadowingMemFun) {
-      final String chosenFunQfName = AstUtil.getQfName(chosenMemFun);
-      final String shadowFunQfName = AstUtil.getQfName(shadowingMemFun);
+      final String chosenFunQfName = ASTUtil.getQfName(chosenMemFun);
+      final String shadowFunQfName = ASTUtil.getQfName(shadowingMemFun);
       return NLS.bind(I18N.ExtractInterfaceShadowedFunction, chosenFunQfName, shadowFunQfName);
    }
 

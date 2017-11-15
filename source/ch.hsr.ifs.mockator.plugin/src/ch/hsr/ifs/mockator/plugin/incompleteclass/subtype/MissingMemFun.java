@@ -27,7 +27,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatte
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.DefaultArgumentCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDecorator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnStatementCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFunction {
@@ -37,7 +37,7 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    private final IASTSimpleDeclaration     simpleDecl;
 
    public MissingMemFun(final IASTSimpleDeclaration simpleDecl) {
-      funDecl = AstUtil.getChildOfType(simpleDecl, ICPPASTFunctionDeclarator.class);
+      funDecl = ASTUtil.getChildOfType(simpleDecl, ICPPASTFunctionDeclarator.class);
       ILTISException.Unless.notNull(funDecl, "Not a valid function declaration");
       this.simpleDecl = simpleDecl;
    }
@@ -85,7 +85,7 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    }
 
    private String getClassName() {
-      final ICPPASTCompositeTypeSpecifier klass = AstUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      final ICPPASTCompositeTypeSpecifier klass = ASTUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
       return klass.getName().toString();
    }
 

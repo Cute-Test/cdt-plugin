@@ -13,7 +13,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
 
@@ -60,6 +61,6 @@ public class ParameterNameFunDecorator {
    }
 
    private static boolean isVoid(final ICPPASTParameterDeclaration param) {
-      return AstUtil.isVoid(param) && param.getDeclarator().getPointerOperators().length == 0;
+      return ASTUtil.isVoid(param) && param.getDeclarator().getPointerOperators().length == 0;
    }
 }

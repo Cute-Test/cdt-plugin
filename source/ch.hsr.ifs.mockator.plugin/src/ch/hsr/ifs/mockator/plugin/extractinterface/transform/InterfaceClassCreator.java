@@ -37,7 +37,7 @@ import ch.hsr.ifs.iltis.cpp.resources.CFileUtil;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.IncludeGuardCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NamespaceApplier;
 
 
@@ -73,7 +73,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    private static void addPureVirtualMemFuns(final Collection<IASTDeclaration> publicMemFuns, final ICPPASTCompositeTypeSpecifier newInterface,
          final ICPPASTCompositeTypeSpecifier klass) {
       for (final IASTDeclaration memFun : publicMemFuns) {
-         final ICPPASTFunctionDeclarator oldDeclarator = AstUtil.getChildOfType(memFun, ICPPASTFunctionDeclarator.class);
+         final ICPPASTFunctionDeclarator oldDeclarator = ASTUtil.getChildOfType(memFun, ICPPASTFunctionDeclarator.class);
          final ICPPASTFunctionDeclarator newDeclarator = createNewFunDeclarator(oldDeclarator, newInterface.getName().toString(), klass);
          final ICPPASTDeclSpecifier newDeclSpec = createNewFunDeclSpecifier(newInterface, klass, oldDeclarator, memFun);
          final IASTSimpleDeclaration funDeclaration = nodeFactory.newSimpleDeclaration(newDeclSpec);
@@ -138,7 +138,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
 
    private static boolean hasPointerOrReferenceToInterface(final ICPPASTDeclarator declarator, final IASTDeclSpecifier declSpecifier,
          final ICPPASTCompositeTypeSpecifier klass) {
-      if (AstUtil.hasPointerOrRefType(declarator) && declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
+      if (ASTUtil.hasPointerOrRefType(declarator) && declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
          final String paramName = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName().toString();
          return paramName.equals(klass.getName().toString());
       }
@@ -147,7 +147,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
 
    private static ICPPASTDeclSpecifier createNewFunDeclSpecifier(final ICPPASTCompositeTypeSpecifier newInterface,
          final ICPPASTCompositeTypeSpecifier klass, final ICPPASTFunctionDeclarator declarator, final IASTDeclaration declaration) {
-      final ICPPASTDeclSpecifier oldDeclSpec = AstUtil.getChildOfType(declaration, ICPPASTDeclSpecifier.class);
+      final ICPPASTDeclSpecifier oldDeclSpec = ASTUtil.getChildOfType(declaration, ICPPASTDeclSpecifier.class);
       final ICPPASTDeclSpecifier newDeclSpec = oldDeclSpec.copy();
 
       if (hasPointerOrReferenceToInterface(declarator, oldDeclSpec, klass)) {

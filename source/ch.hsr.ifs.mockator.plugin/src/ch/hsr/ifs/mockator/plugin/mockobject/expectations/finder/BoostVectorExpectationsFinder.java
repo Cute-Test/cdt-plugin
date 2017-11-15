@@ -22,7 +22,7 @@ import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVerifier;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
@@ -66,7 +66,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private static ICPPASTBinaryExpression getBinaryExpr(final IASTExpression expression) {
-      return AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
+      return ASTUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
    }
 
    private Collection<MemFunCallExpectation> getMemFunCalls(final IASTExpression expression) {
@@ -82,7 +82,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private void collectSingleCallExpr(final IASTExpression expression, final Collection<MemFunCallExpectation> expectations) {
-      final ICPPASTBinaryExpression binExpr = AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
+      final ICPPASTBinaryExpression binExpr = ASTUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
       final IASTExpression operand2 = binExpr.getOperand2();
 
       if (isCallExpr(operand2)) {
@@ -110,7 +110,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private MemFunCallExpectation getMemFunCallIn(final IASTExpression expression) {
-      final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
       ILTISException.Unless.notNull(funCall, "Function call exprected");
       final IASTInitializerClause[] arguments = funCall.getArguments();
       ILTISException.Unless.isTrue(arguments.length > 0, "Call objects must have a fun signature");
@@ -120,7 +120,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private static boolean isCallExpr(final IASTExpression expression) {
-      final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
 
       if (funCall == null) {
          return false;

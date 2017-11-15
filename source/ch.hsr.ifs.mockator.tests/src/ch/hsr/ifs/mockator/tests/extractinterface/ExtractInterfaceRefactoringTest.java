@@ -32,7 +32,7 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.extractinterface.preconditions.ClassDefinitionLookup;
 import ch.hsr.ifs.mockator.plugin.extractinterface.preconditions.MemFunCollector;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
 
@@ -141,7 +141,7 @@ public class ExtractInterfaceRefactoringTest extends MockatorRefactoringTest {
       final List<String> chosenMemFunNames = list(funNames.split(","));
 
       for (final IASTDeclaration decl : context.getAvailablePupMemFuns()) {
-         final IASTDeclarator declarator = AstUtil.getDeclaratorForNode(decl);
+         final IASTDeclarator declarator = ASTUtil.getDeclaratorForNode(decl);
          final String memFunName = declarator.getName().toString();
 
          if (chosenMemFunNames.contains(memFunName)) {

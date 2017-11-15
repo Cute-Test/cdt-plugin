@@ -19,7 +19,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ReferencingTestFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier.ConstStrategy;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
@@ -78,7 +78,7 @@ public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
 
    private static Collection<ICPPASTFunctionDefinition> getPublicMemberFunctions(final ICPPASTCompositeTypeSpecifier klass) {
       final PublicMemFunFinder finder = new PublicMemFunFinder(klass, PublicMemFunFinder.ALL_TYPES);
-      return AstUtil.getFunctionDefinitions(finder.getPublicMemFuns());
+      return ASTUtil.getFunctionDefinitions(finder.getPublicMemFuns());
    }
 
    private Collection<ICPPASTFunctionDefinition> getReferencingTestFunctions(final ICPPASTCompositeTypeSpecifier refClass) {
@@ -87,7 +87,7 @@ public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    private static ConstStrategy getConstStrategy(final ICPPASTFunctionDefinition function) {
-      if (!AstUtil.isStatic(function.getDeclSpecifier()) && !AstUtil.isConstructor(function))
+      if (!ASTUtil.isStatic(function.getDeclSpecifier()) && !ASTUtil.isConstructor(function))
          return FunctionEquivalenceVerifier.ConstStrategy.ConsiderConst;
 
       return FunctionEquivalenceVerifier.ConstStrategy.IgnoreConst;

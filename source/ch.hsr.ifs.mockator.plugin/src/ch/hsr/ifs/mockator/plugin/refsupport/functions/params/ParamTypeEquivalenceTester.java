@@ -20,8 +20,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 import ch.hsr.ifs.iltis.core.functional.Functional;
 import ch.hsr.ifs.iltis.core.functional.StreamTripple;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
-
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ParamTypeEquivalenceTester {
@@ -82,7 +81,7 @@ public class ParamTypeEquivalenceTester {
             continue;
          }
 
-         if (!AstUtil.isSameType(getUnderlyingType(receiverType), getUnderlyingType(callerType))) { return false; }
+         if (!ASTUtil.isSameType(getUnderlyingType(receiverType), getUnderlyingType(callerType))) { return false; }
       }
 
       return true;
@@ -102,11 +101,11 @@ public class ParamTypeEquivalenceTester {
 
    private static IType getUnderlyingType(IType type) {
       type = CxxAstUtils.unwindTypedef(type);
-      return AstUtil.asNonConst(AstUtil.unwindPointerOrRefType(type));
+      return ASTUtil.asNonConst(ASTUtil.unwindPointerOrRefType(type));
    }
 
    private static boolean isString(IType type) {
-      type = AstUtil.unwindPointerOrRefType(CxxAstUtils.unwindTypedef(type));
+      type = ASTUtil.unwindPointerOrRefType(CxxAstUtils.unwindTypedef(type));
       final String unwoundQualifierType = unwindQualifierType(type).toString();
       return unwoundQualifierType.contains(STD_STRING) || unwoundQualifierType.contains(BASIC_STRING_CHAR);
    }

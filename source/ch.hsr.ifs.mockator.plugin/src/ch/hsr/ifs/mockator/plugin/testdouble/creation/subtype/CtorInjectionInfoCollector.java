@@ -28,10 +28,10 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
 class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
@@ -42,11 +42,11 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
 
    @Override
    public Optional<Pair<IASTName, IType>> collectDependencyInfos(final IASTName problemArg) {
-      IASTInitializer initializer = AstUtil.getAncestorOfType(problemArg, ICPPASTInitializerList.class);
+      IASTInitializer initializer = ASTUtil.getAncestorOfType(problemArg, ICPPASTInitializerList.class);
       List<IASTInitializerClause> ctorArgs;
 
       if (initializer == null) {
-         initializer = AstUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
+         initializer = ASTUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
 
          if (initializer == null) { return Optional.empty(); }
 
@@ -82,11 +82,11 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       final List<ICPPASTFunctionDeclarator> publicCtors = list();
 
       for (final IASTDeclaration memFun : finder.getPublicMemFuns()) {
-         if (!AstUtil.isDeclConstructor(memFun)) {
+         if (!ASTUtil.isDeclConstructor(memFun)) {
             continue;
          }
 
-         final ICPPASTFunctionDeclarator funDecl = AstUtil.getChildOfType(memFun, ICPPASTFunctionDeclarator.class);
+         final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType(memFun, ICPPASTFunctionDeclarator.class);
 
          if (funDecl == null) {
             continue;
@@ -104,15 +104,15 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    private static boolean isCopyCtor(final ICPPASTCompositeTypeSpecifier klass, final ICPPASTFunctionDeclarator funDecl) {
       final ICPPConstructor ctor = (ICPPConstructor) funDecl.getName().resolveBinding();
       final ICPPClassType targetClass = (ICPPClassType) klass.getName().resolveBinding();
-      return AstUtil.isCopyCtor(ctor, targetClass);
+      return ASTUtil.isCopyCtor(ctor, targetClass);
    }
 
    private static boolean isPartOf(final IASTNode node, final Class<? extends IASTNode> klass) {
-      return AstUtil.getAncestorOfType(node, klass) != null;
+      return ASTUtil.getAncestorOfType(node, klass) != null;
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> findTargetClassForSimpleDecl(final IASTInitializer ctorInitializer) {
-      final IASTSimpleDeclaration simpleDecl = AstUtil.getAncestorOfType(ctorInitializer, IASTSimpleDeclaration.class);
+      final IASTSimpleDeclaration simpleDecl = ASTUtil.getAncestorOfType(ctorInitializer, IASTSimpleDeclaration.class);
       final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
 
       if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
@@ -122,7 +122,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> findTargetClassForNewExpression(final IASTInitializer ctorInitializer) {
-      final ICPPASTNewExpression newExpr = AstUtil.getAncestorOfType(ctorInitializer, ICPPASTNewExpression.class);
+      final ICPPASTNewExpression newExpr = ASTUtil.getAncestorOfType(ctorInitializer, ICPPASTNewExpression.class);
       final IASTTypeId typeId = newExpr.getTypeId();
       final IASTDeclSpecifier declSpecifier = typeId.getDeclSpecifier();
 

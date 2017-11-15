@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
@@ -59,12 +59,12 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
    }
 
    private static boolean isPartOfCtorCall(final IASTNode node) {
-      return AstUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || AstUtil.getAncestorOfType(node,
+      return ASTUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || ASTUtil.getAncestorOfType(node,
             ICPPASTInitializerList.class) != null;
    }
 
    private static boolean isPartOfFunCall(final IASTNode node) {
-      return AstUtil.getAncestorOfType(node, ICPPASTFunctionCallExpression.class) != null;
+      return ASTUtil.getAncestorOfType(node, ICPPASTFunctionCallExpression.class) != null;
    }
 
    private void markMissingInjectedTestDouble(final IASTName name, final Pair<IASTName, IType> optResult) {

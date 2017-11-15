@@ -37,7 +37,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
@@ -213,7 +213,7 @@ public class RunnerFinder {
    }
 
    private static IASTFunctionDefinition getFunctionDefinition(final IASTName name) {
-      return AstUtil.getAncestorOfType(name, IASTFunctionDefinition.class);
+      return ASTUtil.getAncestorOfType(name, IASTFunctionDefinition.class);
    }
 
    private IASTTranslationUnit getAST(final IIndexName iName, final IProgressMonitor pm) throws CoreException {
@@ -231,7 +231,7 @@ public class RunnerFinder {
 
       @Override
       public int visit(final IASTName name) {
-         if (AstUtil.isQualifiedName(name)) {
+         if (ASTUtil.isQualifiedName(name)) {
             final ICPPASTQualifiedName qName = (ICPPASTQualifiedName) name;
 
             if (qName.toString().equals(MAKE_RUNNER_FQ)) {

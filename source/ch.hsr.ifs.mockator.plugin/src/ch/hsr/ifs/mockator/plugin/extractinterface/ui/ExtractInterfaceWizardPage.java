@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Label;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatter;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class ExtractInterfaceWizardPage extends UserInputWizardPage {
@@ -231,7 +231,7 @@ class ExtractInterfaceWizardPage extends UserInputWizardPage {
 
          @Override
          public String getText(final Object element) {
-            final ICPPASTFunctionDeclarator funDecl = AstUtil.getChildOfType((IASTNode) element, ICPPASTFunctionDeclarator.class);
+            final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType((IASTNode) element, ICPPASTFunctionDeclarator.class);
             return getFunSignatureFor(funDecl);
          }
       };

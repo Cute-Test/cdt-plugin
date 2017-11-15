@@ -18,8 +18,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
 
@@ -39,13 +40,13 @@ public class FunctionDelegateCallCreator {
    }
 
    public IASTStatement createDelegate(final IASTName funName) {
-      return createDelegate(funName, AstUtil.getDeclSpec(function));
+      return createDelegate(funName, ASTUtil.getDeclSpec(function));
    }
 
    public IASTStatement createDelegate(final IASTName funName, final IASTDeclSpecifier declSpec) {
       final ICPPASTFunctionCallExpression call = createFunCall(funName);
 
-      if (AstUtil.isVoid(declSpec) && hasNoPointers()) {
+      if (ASTUtil.isVoid(declSpec) && hasNoPointers()) {
          return nodeFactory.newExpressionStatement(call);
       }
 
@@ -78,7 +79,7 @@ public class FunctionDelegateCallCreator {
    private static IASTIdExpression createExpression(final ICPPASTParameterDeclaration param, final ParameterNameCreator nameCreator) {
       String paramName = param.getDeclarator().getName().toString();
 
-      if (paramName.isEmpty() && !AstUtil.isVoid(param)) {
+      if (paramName.isEmpty() && !ASTUtil.isVoid(param)) {
          final IType paramType = TypeCreator.byParamDeclaration(param);
          paramName = nameCreator.getParamName(paramType).toString();
       }

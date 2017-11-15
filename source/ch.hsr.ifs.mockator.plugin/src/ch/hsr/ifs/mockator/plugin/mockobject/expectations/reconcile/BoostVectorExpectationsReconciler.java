@@ -29,7 +29,7 @@ import ch.hsr.ifs.mockator.plugin.mockobject.expectations.BoostAssignInitializer
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
@@ -42,7 +42,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
 
    @Override
    public void reconcileExpectations(final IASTName expectations) {
-      final IASTExpressionStatement boostAssign = AstUtil.getAncestorOfType(expectations, IASTExpressionStatement.class);
+      final IASTExpressionStatement boostAssign = ASTUtil.getAncestorOfType(expectations, IASTExpressionStatement.class);
 
       if (boostAssign != null) {
          rewriteExistingExpectations(boostAssign);
@@ -54,7 +54,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
    private void addNewBoostAssignInitializer(final IASTName expectations) {
       final IASTExpressionStatement boostAssignInitializer = new BoostAssignInitializerCreator(callsToAdd, expectations.toString(), linkedEdit)
             .createBoostAssignInitializer();
-      final ICPPASTFunctionDefinition testFun = AstUtil.getAncestorOfType(expectations, ICPPASTFunctionDefinition.class);
+      final ICPPASTFunctionDefinition testFun = ASTUtil.getAncestorOfType(expectations, ICPPASTFunctionDefinition.class);
       final IASTExpressionStatement insertionPoint = getInsertionPointForBoostInitializer(expectations);
       rewriter.insertBefore(testFun.getBody(), insertionPoint, boostAssignInitializer, null);
    }
@@ -63,7 +63,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
       final IASTName[] references = vector.getTranslationUnit().getReferences(vector.resolveBinding());
 
       if (references.length > 0) {
-         return AstUtil.getAncestorOfType(references[0], IASTExpressionStatement.class);
+         return ASTUtil.getAncestorOfType(references[0], IASTExpressionStatement.class);
       }
 
       return null;
@@ -141,7 +141,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
 
    private void collectStillRegisteredCalls(final IASTExpression expression, final List<ICPPASTFunctionCallExpression> expectations) {
       for (final IASTExpression expr : ((IASTExpressionList) expression).getExpressions()) {
-         final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expr, ICPPASTFunctionCallExpression.class);
+         final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(expr, ICPPASTFunctionCallExpression.class);
          addCallIfStillRegistered(funCall, expectations);
       }
    }
@@ -152,7 +152,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
    }
 
    private static ICPPASTBinaryExpression getBinaryExpr(final IASTExpression expression) {
-      final ICPPASTBinaryExpression binExp = AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
+      final ICPPASTBinaryExpression binExp = ASTUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
       ILTISException.Unless.notNull(binExp, "Not a valid expectation vector assignment");
       return binExp;
    }

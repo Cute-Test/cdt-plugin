@@ -33,7 +33,7 @@ import ch.hsr.ifs.mockator.plugin.base.util.PlatformUtil;
 import ch.hsr.ifs.mockator.plugin.linker.ItaniumMangledNameGenerator;
 import ch.hsr.ifs.mockator.plugin.linker.LinkerRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionDelegateCallCreator;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class GnuOptionRefactoring extends LinkerRefactoring {
@@ -64,7 +64,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    private void createWrapperFunction(final IASTName funName, final ModificationCollector collector, final IASTTranslationUnit tu,
          final IProgressMonitor pm) {
       findFunDeclaration(funName, pm).ifPresent((funDecl) -> {
-         final IASTDeclSpecifier declSpecifier = AstUtil.getDeclSpec(funDecl);
+         final IASTDeclSpecifier declSpecifier = ASTUtil.getDeclSpec(funDecl);
          final IASTSimpleDeclaration realFunDecl = createRealFunDecl(declSpecifier, funDecl);
          final ICPPASTFunctionDefinition wrapFunDef = createWrappedFun(declSpecifier, funDecl, realFunDecl);
          final ICPPASTLinkageSpecification cLinkage = wrapFunctionsInCLinkage(realFunDecl, wrapFunDef);
@@ -108,7 +108,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
       final IASTCompoundStatement funBody = createWrappedFunReturnStmt(realFunDecl, newFunDecl);
       final IASTDeclSpecifier newDeclSpec = declSpec.copy();
       prepareDeclSpecifier(newDeclSpec);
-      AstUtil.removeExternalStorageIfSet(newDeclSpec);
+      ASTUtil.removeExternalStorageIfSet(newDeclSpec);
       return nodeFactory.newFunctionDefinition(newDeclSpec, newFunDecl, funBody);
    }
 
@@ -148,23 +148,23 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    }
 
    private static IASTNode getInsertionPoint(final IASTName funName) {
-      IASTNode insertionPoint = AstUtil.getAncestorOfType(funName, ICPPASTCompositeTypeSpecifier.class);
+      IASTNode insertionPoint = ASTUtil.getAncestorOfType(funName, ICPPASTCompositeTypeSpecifier.class);
 
       if (insertionPoint != null) { return insertionPoint.getParent(); }
 
-      insertionPoint = AstUtil.getAncestorOfType(funName, ICPPASTFunctionDefinition.class);
+      insertionPoint = ASTUtil.getAncestorOfType(funName, ICPPASTFunctionDefinition.class);
 
       if (insertionPoint != null) { return insertionPoint; }
 
-      return AstUtil.getAncestorOfType(funName, IASTStatement.class);
+      return ASTUtil.getAncestorOfType(funName, IASTStatement.class);
    }
 
    private static IASTCompoundStatement createWrappedFunReturnStmt(final IASTSimpleDeclaration realFunDecl,
          final ICPPASTFunctionDeclarator wrapFunDecl) {
       final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(wrapFunDecl);
-      final ICPPASTFunctionDeclarator funDecl = AstUtil.getChildOfType(realFunDecl, ICPPASTFunctionDeclarator.class);
+      final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType(realFunDecl, ICPPASTFunctionDeclarator.class);
       final IASTStatement delegateToRealFun = creator.createDelegate(funDecl.getName(), realFunDecl.getDeclSpecifier());
-      return AstUtil.toCompoundStatement(delegateToRealFun);
+      return ASTUtil.toCompoundStatement(delegateToRealFun);
    }
 
    String getNewFunName() {
@@ -182,7 +182,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
       final ICPPASTSimpleDeclSpecifier simpleDeclSpec = (ICPPASTSimpleDeclSpecifier) declSpec;
       simpleDeclSpec.setExplicit(false);
 
-      if (AstUtil.isUnspecified(simpleDeclSpec)) {
+      if (ASTUtil.isUnspecified(simpleDeclSpec)) {
          simpleDeclSpec.setType(IASTSimpleDeclSpecifier.t_void);
       }
    }

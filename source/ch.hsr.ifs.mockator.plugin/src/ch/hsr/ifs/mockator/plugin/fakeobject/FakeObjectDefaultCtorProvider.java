@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.DefaultConstructor;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.BaseClassCtorCallHandler;
@@ -39,6 +39,6 @@ public class FakeObjectDefaultCtorProvider implements DefaultCtorProvider {
    private boolean hasOnlyImplicitDefaultCtor() {
       final ICPPConstructor[] ctors = fakeObject.getClassType().getConstructors();
       // 2 = 1 implicit default + 1 copy ctor
-      return ctors.length <= 2 && ctors[0].isImplicit() && AstUtil.isDefaultCtor(ctors[0]);
+      return ctors.length <= 2 && ctors[0].isImplicit() && ASTUtil.isDefaultCtor(ctors[0]);
    }
 }

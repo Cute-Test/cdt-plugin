@@ -32,7 +32,7 @@ import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class ClassInTemplateIdFinderVisitor extends ASTVisitor {
@@ -75,7 +75,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
       for (int i = 0; i < templateArguments.length; i++) {
          final IType templateArg = templateArguments[i].getTypeValue();
 
-         if (AstUtil.isSameType(templateArg, testDoubleType) || refersToTestDouble(name, i)) {
+         if (ASTUtil.isSameType(templateArg, testDoubleType) || refersToTestDouble(name, i)) {
             positions.add(i);
          }
       }
@@ -118,7 +118,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
    }
 
    private static Collection<ICPPASTTemplateDeclaration> lookupInAst(final IASTName name) {
-      final ICPPASTTemplateDeclaration templateDecl = AstUtil.getAncestorOfType(name, ICPPASTTemplateDeclaration.class);
+      final ICPPASTTemplateDeclaration templateDecl = ASTUtil.getAncestorOfType(name, ICPPASTTemplateDeclaration.class);
       return list(templateDecl);
    }
 

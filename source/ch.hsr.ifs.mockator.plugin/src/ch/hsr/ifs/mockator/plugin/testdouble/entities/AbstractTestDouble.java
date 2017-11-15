@@ -29,7 +29,7 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ReferencingTestFunFinder;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter;
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 
@@ -59,7 +59,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public Collection<ExistingTestDoubleMemFun> getPublicMemFuns() {
-      return AstUtil.getFunctionDefinitions(collectPublicMemFuns()).stream().map(ExistingTestDoubleMemFun::new).collect(Collectors.toList());
+      return ASTUtil.getFunctionDefinitions(collectPublicMemFuns()).stream().map(ExistingTestDoubleMemFun::new).collect(Collectors.toList());
    }
 
    private Collection<IASTDeclaration> collectPublicMemFuns() {
@@ -123,7 +123,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public boolean hasPublicCtor() {
-      final Collection<IASTDeclaration> onlyCtors = collectPublicMemFuns().stream().filter(AstUtil::isDeclConstructor).collect(Collectors.toList());
+      final Collection<IASTDeclaration> onlyCtors = collectPublicMemFuns().stream().filter(ASTUtil::isDeclConstructor).collect(Collectors.toList());
       return !onlyCtors.isEmpty();
    }
 

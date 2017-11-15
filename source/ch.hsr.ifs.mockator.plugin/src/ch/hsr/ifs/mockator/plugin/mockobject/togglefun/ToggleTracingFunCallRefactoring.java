@@ -32,7 +32,7 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.context.MockSupportContext;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter;
 import ch.hsr.ifs.mockator.plugin.testdouble.MemFunMockSupportAdder;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
@@ -63,7 +63,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
          return status;
       }
 
-      final ICPPASTFunctionDefinition function = AstUtil.getAncestorOfType(selectedName.get(), ICPPASTFunctionDefinition.class);
+      final ICPPASTFunctionDefinition function = ASTUtil.getAncestorOfType(selectedName.get(), ICPPASTFunctionDefinition.class);
       assureIsMemberFunction(status, function);
       return status;
    }

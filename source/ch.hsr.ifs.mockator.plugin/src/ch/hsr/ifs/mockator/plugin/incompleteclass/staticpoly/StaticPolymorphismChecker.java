@@ -8,8 +8,9 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.checker.AbstractMissingMemFunChecker;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
 public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
@@ -29,7 +30,7 @@ public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
 
       @Override
       public int visit(final IASTDeclSpecifier specifier) {
-         if (!AstUtil.isClass(specifier)) { return PROCESS_CONTINUE; }
+         if (!ASTUtil.isClass(specifier)) { return PROCESS_CONTINUE; }
 
          final ICPPASTCompositeTypeSpecifier klass = (ICPPASTCompositeTypeSpecifier) specifier;
 
@@ -42,7 +43,7 @@ public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
    }
 
    private static boolean isNonTemplateClass(final ICPPASTCompositeTypeSpecifier klass) {
-      return AstUtil.getAncestorOfType(klass, ICPPASTTemplateDeclaration.class) == null;
+      return ASTUtil.getAncestorOfType(klass, ICPPASTTemplateDeclaration.class) == null;
    }
 
    @Override

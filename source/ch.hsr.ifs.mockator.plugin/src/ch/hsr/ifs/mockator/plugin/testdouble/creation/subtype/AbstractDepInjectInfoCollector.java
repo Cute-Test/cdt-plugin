@@ -27,7 +27,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunArgumentsTypeCo
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunctionParamTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParamTypeEquivalenceTester;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypeCreator;
 
 
@@ -90,9 +90,9 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
    }
 
    private static boolean isPointerOrReferenceToClass(final IType type) {
-      if (!AstUtil.hasPointerOrRefType(type)) { return false; }
+      if (!ASTUtil.hasPointerOrRefType(type)) { return false; }
 
-      IType underlyingType = AstUtil.unwindPointerOrRefType(type);
+      IType underlyingType = ASTUtil.unwindPointerOrRefType(type);
 
       if (underlyingType instanceof IQualifierType) {
          underlyingType = ((IQualifierType) underlyingType).getType();
@@ -107,7 +107,7 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
    }
 
    private static boolean isConsideredAsBaseClass(final IType missingArgType) {
-      final IType type = AstUtil.windDownToRealType(missingArgType, false);
+      final IType type = ASTUtil.windDownToRealType(missingArgType, false);
 
       if (!(type instanceof ICPPClassType)) { return false; }
 

@@ -19,8 +19,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 public class ReturnStatementCreator {
 
@@ -39,7 +40,7 @@ public class ReturnStatementCreator {
    }
 
    public IASTReturnStatement createReturnStatement(final ICPPASTFunctionDeclarator funDecl, final ICPPASTDeclSpecifier specifier) {
-      if (AstUtil.isVoid(specifier)) {
+      if (ASTUtil.isVoid(specifier)) {
          return null; // return type is void
       } else if (hasPointerReturnType(funDecl)) {
          return createNullPtr();

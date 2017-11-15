@@ -24,14 +24,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
 // Parts taken from CUTE
 class CuteSuiteFinder extends ASTVisitor {
 
-   private static final String             FQ_CUTE_SUITE = AstUtil.getQfName(array(CUTE_NS, CUTE_SUITE));
+   private static final String             FQ_CUTE_SUITE = ASTUtil.getQfName(array(CUTE_NS, CUTE_SUITE));
    private final NodeContainer<IASTName>   relatedSuiteName;
    private final ICPPASTFunctionDefinition testFunction;
 
@@ -55,7 +55,7 @@ class CuteSuiteFinder extends ASTVisitor {
       final IBinding suiteBinding = name.resolveBinding();
 
       for (final IASTName refName : name.getTranslationUnit().getReferences(suiteBinding)) {
-         if (AstUtil.isPushBack(refName) && matchesTestFunction(refName)) {
+         if (ASTUtil.isPushBack(refName) && matchesTestFunction(refName)) {
             relatedSuiteName.setNode(name);
             return PROCESS_ABORT;
          }
@@ -65,7 +65,7 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    private static boolean isCuiteSuiteName(final IASTName name) {
-      final IASTSimpleDeclaration simpleDecl = AstUtil.getAncestorOfType(name, IASTSimpleDeclaration.class);
+      final IASTSimpleDeclaration simpleDecl = ASTUtil.getAncestorOfType(name, IASTSimpleDeclaration.class);
 
       if (simpleDecl == null) { return false; }
 
@@ -92,7 +92,7 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    private static Optional<String> getRegisteredFunctionName(final IASTName name) {
-      final IASTFunctionCallExpression funcCall = AstUtil.getAncestorOfType(name, IASTFunctionCallExpression.class);
+      final IASTFunctionCallExpression funcCall = ASTUtil.getAncestorOfType(name, IASTFunctionCallExpression.class);
       final IASTInitializerClause[] arguments = funcCall.getArguments();
 
       if (isFunctionPushBack(arguments)) { return getFunctionName(arguments); }
@@ -157,11 +157,11 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    private static boolean isFunctionPushBack(final IASTInitializerClause[] arguments) {
-      return isFunctionPushBackWithName(arguments, AstUtil.getQfName(array(MockatorConstants.CUTE_NS, "test")));
+      return isFunctionPushBackWithName(arguments, ASTUtil.getQfName(array(MockatorConstants.CUTE_NS, "test")));
    }
 
    private static boolean isSimpleMemberFunctionPushBack(final IASTInitializerClause[] arguments) {
-      return isFunctionPushBackWithName(arguments, AstUtil.getQfName(array(MockatorConstants.CUTE_NS, "makeSimpleMemberFunctionTest")));
+      return isFunctionPushBackWithName(arguments, ASTUtil.getQfName(array(MockatorConstants.CUTE_NS, "makeSimpleMemberFunctionTest")));
    }
 
    private static boolean isFunctionPushBackWithName(final IASTInitializerClause[] arguments, final String funName) {

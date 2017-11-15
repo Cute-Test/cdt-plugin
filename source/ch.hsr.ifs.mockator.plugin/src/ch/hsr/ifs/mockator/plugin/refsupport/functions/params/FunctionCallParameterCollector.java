@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class FunctionCallParameterCollector {
@@ -27,7 +27,7 @@ public class FunctionCallParameterCollector {
       final List<ICPPASTParameterDeclaration> params = list();
 
       for (final IASTInitializerClause arg : funCall.getArguments()) {
-         final IASTExpression idExpr = AstUtil.getChildOfType(arg, IASTExpression.class);
+         final IASTExpression idExpr = ASTUtil.getChildOfType(arg, IASTExpression.class);
 
          if (idExpr == null) {
             continue;

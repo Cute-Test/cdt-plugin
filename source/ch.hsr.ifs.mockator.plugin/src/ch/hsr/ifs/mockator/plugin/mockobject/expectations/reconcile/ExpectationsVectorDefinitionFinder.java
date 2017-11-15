@@ -14,7 +14,7 @@ import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class ExpectationsVectorDefinitionFinder {
@@ -38,7 +38,7 @@ class ExpectationsVectorDefinitionFinder {
    }
 
    private Optional<IASTName> getNameOfDefinition(final IASTName expectationsVector) {
-      return new NameFinder(testFunction).getNameMatchingCriteria((name) -> name.toString().equals(expectationsVector.toString()) && AstUtil
+      return new NameFinder(testFunction).getNameMatchingCriteria((name) -> name.toString().equals(expectationsVector.toString()) && ASTUtil
             .getAncestorOfType(name, IASTDeclarationStatement.class) != null);
    }
 

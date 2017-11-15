@@ -18,7 +18,7 @@ import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ReferencingTestFunFinder {
@@ -89,6 +89,6 @@ public class ReferencingTestFunFinder {
    }
 
    private static ICPPASTFunctionDefinition getFunctionParent(final IASTNode astNode) {
-      return AstUtil.getAncestorOfType(astNode, ICPPASTFunctionDefinition.class);
+      return ASTUtil.getAncestorOfType(astNode, ICPPASTFunctionDefinition.class);
    }
 }

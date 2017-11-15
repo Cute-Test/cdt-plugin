@@ -20,7 +20,7 @@ import ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector.ExpectationsCpp
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector.ExpectationsVectorFactory;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 // Inserts the vector with the expected calls for the mock object at the end of the function:
@@ -73,7 +73,7 @@ class NewExpectationsInserter {
    }
 
    private static IASTStatement getStatementOfFirstAssert(final Collection<ExpectedActualPair> assertedCalls) {
-      return OptHelper.returnIfPresentElseNull(head(assertedCalls), (pair) -> AstUtil.getAncestorOfType(pair.expected(), IASTStatement.class));
+      return OptHelper.returnIfPresentElseNull(head(assertedCalls), (pair) -> ASTUtil.getAncestorOfType(pair.expected(), IASTStatement.class));
    }
 
    private Optional<IASTName> getExpectationsVector() {

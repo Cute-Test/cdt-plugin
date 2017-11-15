@@ -17,7 +17,7 @@ import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ExtractInterfaceRefactoring extends MockatorRefactoring {
@@ -70,7 +70,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    }
 
    private String getRefactoringDescription() {
-      final String className = AstUtil.getQfNameF(context.getChosenClass());
+      final String className = ASTUtil.getQfNameF(context.getChosenClass());
       return String.format("Extract interface for class '%s'", className);
    }
 
