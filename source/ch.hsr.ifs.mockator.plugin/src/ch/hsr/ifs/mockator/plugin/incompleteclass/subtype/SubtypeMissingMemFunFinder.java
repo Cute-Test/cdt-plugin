@@ -24,7 +24,9 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
@@ -50,7 +52,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
    @Override
    public Collection<MissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier klass) {
       final IBinding binding = klass.getName().resolveBinding();
-      Assert.instanceOf(binding, ICPPClassType.class, "Class type expected");
+      ILTISException.Unless.instanceOf(binding, ICPPClassType.class, "Class type expected");
       return collectPureVirtualMemFuns(klass.getTranslationUnit(), (ICPPClassType) binding);
    }
 
@@ -58,7 +60,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
       final Set<MissingMemFun> missingMethods = orderPreservingSet();
 
       for (final ICPPMethod method : getPureVirtualMemFunsIn(klass)) {
-         Assert.notInstanceOf(method, ICPPConstructor.class, "Ctors are not supported because they are not inherited");
+         ILTISException.Unless.notInstanceOf(method, ICPPConstructor.class, "Ctors are not supported because they are not inherited");
          final IASTName[] declarations = ast.getDeclarationsInAST(method);
 
          if (declarations.length > 0) {

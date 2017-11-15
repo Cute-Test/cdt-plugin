@@ -31,7 +31,6 @@ import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.MacroFinderVisitor;
@@ -58,7 +57,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
          final FunctionEquivalenceVerifier verifier = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) testFunction.getDeclarator());
          final Collection<IASTFunctionDefinition> testFunctions = getTestfunctionsInTu().stream().filter((funDef) -> verifier.isEquivalent(
                (ICPPASTFunctionDeclarator) funDef.getDeclarator())).collect(Collectors.toList());
-         Assert.isTrue(testFunctions.size() == 1, "Was not able not unambiguously determine test function");
+         ILTISException.Unless.isTrue(testFunctions.size() == 1, "Was not able not unambiguously determine test function");
          return (ICPPASTFunctionDefinition) head(testFunctions).get();
       }
       catch (final CoreException e) {
@@ -142,7 +141,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
       final Collection<IASTFunctionDefinition> functions = allTestFunctions.stream().filter((funDef) -> funDef.getDeclarator().getName().toString()
             .equals(
                   testFunName)).collect(Collectors.toList());
-      Assert.isFalse(functions.isEmpty(), "Could not find test function");
+      ILTISException.Unless.isFalse(functions.isEmpty(), "Could not find test function");
       return head(functions).get();
    }
 

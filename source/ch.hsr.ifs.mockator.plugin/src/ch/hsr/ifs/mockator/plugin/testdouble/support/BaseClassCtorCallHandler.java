@@ -22,7 +22,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
@@ -35,9 +36,9 @@ public class BaseClassCtorCallHandler {
 
    public BaseClassCtorCallHandler(final ICPPClassType testDouble) {
       final ICPPBase[] bases = testDouble.getBases();
-      Assert.isFalse(bases.length < 1, "Test double is expected to at least one base class!");
+      ILTISException.Unless.isFalse(bases.length < 1, "Test double is expected to at least one base class!");
       final IBinding binding = bases[0].getBaseClass(); // just consider the first one
-      Assert.instanceOf(binding, ICPPClassType.class, "Class type as base class expected");
+      ILTISException.Unless.instanceOf(binding, ICPPClassType.class, "Class type as base class expected");
       baseClass = (ICPPClassType) binding;
    }
 

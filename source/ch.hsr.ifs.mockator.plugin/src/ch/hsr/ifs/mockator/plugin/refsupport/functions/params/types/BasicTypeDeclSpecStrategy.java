@@ -5,14 +5,14 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 class BasicTypeDeclSpecStrategy implements DeclSpecGeneratorStrategy {
 
    @Override
    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
-      Assert.instanceOf(type, IBasicType.class, "This strategy can only handle basic types");
+      ILTISException.Unless.instanceOf(type, IBasicType.class, "This strategy can only handle basic types");
       final ICPPASTSimpleDeclSpecifier simpleDeclSpec = nodeFactory.newSimpleDeclSpecifier();
       final IBasicType basicType = (IBasicType) type;
       simpleDeclSpec.setType(basicType.getKind());

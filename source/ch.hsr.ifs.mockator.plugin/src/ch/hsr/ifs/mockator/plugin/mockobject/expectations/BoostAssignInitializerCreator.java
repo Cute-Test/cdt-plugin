@@ -20,7 +20,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -42,7 +44,7 @@ public class BoostAssignInitializerCreator {
    }
 
    public IASTExpressionStatement createBoostAssignInitializer() {
-      Assert.isFalse(memFuns.isEmpty(), "Should not be called with no fun signatures");
+      ILTISException.Unless.isFalse(memFuns.isEmpty(), "Should not be called with no fun signatures");
       final ICPPASTExpressionList expressionList = nodeFactory.newExpressionList();
       final IASTIdExpression vector = nodeFactory.newIdExpression(nodeFactory.newName(expectationsName.toCharArray()));
       final ICPPASTBinaryExpression expression = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_plusAssign, vector, createNextCall(head(

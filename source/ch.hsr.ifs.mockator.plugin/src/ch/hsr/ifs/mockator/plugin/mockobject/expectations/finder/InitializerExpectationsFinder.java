@@ -15,8 +15,10 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
@@ -32,7 +34,7 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
 
    @Override
    protected void collectExpectations(final IASTStatement expectationStmt) {
-      Assert.instanceOf(expectationStmt, IASTDeclarationStatement.class, "Should be called with an declaration statement");
+      ILTISException.Unless.instanceOf(expectationStmt, IASTDeclarationStatement.class, "Should be called with an declaration statement");
       final IASTDeclarationStatement declStmt = (IASTDeclarationStatement) expectationStmt;
       final IASTDeclaration declaration = declStmt.getDeclaration();
 
@@ -63,8 +65,8 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
             continue;
          }
          final IASTInitializerClause[] clauses = ((ICPPASTInitializerList) clause).getClauses();
-         Assert.isTrue(clauses.length > 0, "Not a valid call initializer");
-         Assert.isTrue(isStringLiteral(clauses[0]), "Not a string literal");
+         ILTISException.Unless.isTrue(clauses.length > 0, "Not a valid call initializer");
+         ILTISException.Unless.isTrue(isStringLiteral(clauses[0]), "Not a string literal");
          final MemFunCallExpectation memFunCall = toMemberFunctionCall(clauses[0]);
          callExpectations.add(memFunCall);
       }

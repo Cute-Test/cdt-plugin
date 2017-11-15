@@ -12,10 +12,11 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
@@ -73,7 +74,7 @@ public class ExpectationsFinder {
       return OptHelper.returnIfPresentElse(expectationVector.getNode(), (node) -> node, () -> {
          final IBinding binding = assertedExpectation.resolveBinding();
          final IASTName[] definitions = assertedExpectation.getTranslationUnit().getDefinitionsInAST(binding);
-         Assert.isTrue(definitions.length > 0, "Expectation vector must have a definition");
+         ILTISException.Unless.isTrue(definitions.length > 0, "Expectation vector must have a definition");
          return definitions[0];
       });
    }

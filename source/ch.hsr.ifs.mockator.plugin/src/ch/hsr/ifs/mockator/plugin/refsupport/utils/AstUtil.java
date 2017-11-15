@@ -60,7 +60,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
 // TODO extract to ILTIS
@@ -341,7 +340,7 @@ public abstract class AstUtil {
 
    public static String getQfNameF(final ICPPASTCompositeTypeSpecifier klass) {
       final IBinding klassBinding = klass.getName().resolveBinding();
-      Assert.instanceOf(klassBinding, ICPPClassType.class, "Class expected");
+      ILTISException.Unless.instanceOf(klassBinding, ICPPClassType.class, "Class expected");
       return getQfName((ICPPClassType) klassBinding);
    }
 

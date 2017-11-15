@@ -9,7 +9,9 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IProject;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 
 
 public abstract class CdtHelper {
@@ -26,7 +28,7 @@ public abstract class CdtHelper {
 
    public static IManagedBuildInfo getManagedBuildInfo(final IProject proj) {
       final IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
-      Assert.notNull(info, String.format("Project '%s' does not have managed build information", proj.getName()));
+      ILTISException.Unless.notNull(info, String.format("Project '%s' does not have managed build information", proj.getName()));
       return info;
    }
 

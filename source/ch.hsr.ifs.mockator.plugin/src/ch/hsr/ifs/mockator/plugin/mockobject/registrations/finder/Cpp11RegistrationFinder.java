@@ -7,7 +7,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 
 
 public class Cpp11RegistrationFinder extends RegistrationFinder {
@@ -21,21 +23,21 @@ public class Cpp11RegistrationFinder extends RegistrationFinder {
 
    private IASTInitializerClause getFunSignatureClause(final ICPPASTSimpleTypeConstructorExpression ctor) {
       final IASTInitializer ctorInitializer = ctor.getInitializer();
-      Assert.instanceOf(ctorInitializer, ICPPASTInitializerList.class, "Initializer list expected");
+      ILTISException.Unless.instanceOf(ctorInitializer, ICPPASTInitializerList.class, "Initializer list expected");
       final IASTInitializerClause[] ctorClauses = ((ICPPASTInitializerList) ctorInitializer).getClauses();
-      Assert.isTrue(ctorClauses.length > 0, "Empty call ctor not allowed");
+      ILTISException.Unless.isTrue(ctorClauses.length > 0, "Empty call ctor not allowed");
       final IASTInitializerClause funSignature = ctorClauses[0];
-      Assert.isTrue(isStringLiteral(funSignature), "Fun signature must be a string literal");
+      ILTISException.Unless.isTrue(isStringLiteral(funSignature), "Fun signature must be a string literal");
       return funSignature;
    }
 
    private void assureIsCallType(final ICPPASTSimpleTypeConstructorExpression typeCtor) {
       final ICPPASTDeclSpecifier declSpecifier = typeCtor.getDeclSpecifier();
-      Assert.isTrue(isCall(declSpecifier), "Not of call type");
+      ILTISException.Unless.isTrue(isCall(declSpecifier), "Not of call type");
    }
 
    private ICPPASTSimpleTypeConstructorExpression getCallTypeCtor(final IASTInitializerClause pushBackArg) {
-      Assert.instanceOf(pushBackArg, ICPPASTSimpleTypeConstructorExpression.class, "Wrong push_back argument: " + pushBackArg.getClass().getName());
+      ILTISException.Unless.instanceOf(pushBackArg, ICPPASTSimpleTypeConstructorExpression.class, "Wrong push_back argument: " + pushBackArg.getClass().getName());
       final ICPPASTSimpleTypeConstructorExpression typeCtor = (ICPPASTSimpleTypeConstructorExpression) pushBackArg;
       assureIsCallType(typeCtor);
       return typeCtor;

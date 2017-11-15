@@ -44,9 +44,9 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
@@ -76,7 +76,7 @@ public class ReturnTypeDeducer {
 
    private static IASTNode getNodeToAnalyse(final IASTExpression funCall) {
       final IASTStatement stmt = AstUtil.getAncestorOfType(funCall, IASTStatement.class);
-      Assert.notNull(stmt, "Could not determine return type for missing function");
+      ILTISException.Unless.notNull(stmt, "Could not determine return type for missing function");
       return stmt;
    }
 

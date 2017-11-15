@@ -8,7 +8,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.MemberFunCallRegistrationAdder;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
@@ -43,7 +45,7 @@ abstract class AbstractMemFunMockSupport implements MemFunMockSupportAdder {
 
    protected IASTCompoundStatement createNewFunBody(final ICPPASTFunctionDefinition function) {
       final IASTCompoundStatement funBody = nodeFactory.newCompoundStatement();
-      Assert.instanceOf(function.getBody(), IASTCompoundStatement.class, "Compound statement expected as function body");
+      ILTISException.Unless.instanceOf(function.getBody(), IASTCompoundStatement.class, "Compound statement expected as function body");
       fillFunBody(funBody, function);
       return funBody;
    }

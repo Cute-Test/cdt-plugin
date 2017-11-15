@@ -16,8 +16,10 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
@@ -35,7 +37,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
 
    @Override
    protected void collectExpectations(final IASTStatement expectationStmt) {
-      Assert.instanceOf(expectationStmt, IASTExpressionStatement.class, "Should be called with an expression statement");
+      ILTISException.Unless.instanceOf(expectationStmt, IASTExpressionStatement.class, "Should be called with an expression statement");
       final IASTExpression expression = ((IASTExpressionStatement) expectationStmt).getExpression();
       final ICPPASTBinaryExpression binExpr = getBinaryExpr(expression);
 
@@ -90,7 +92,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private void collectCallsInExprList(final IASTExpression expression, final Collection<MemFunCallExpectation> callExpectations) {
-      Assert.instanceOf(expression, IASTExpressionList.class, "expression list expected");
+      ILTISException.Unless.instanceOf(expression, IASTExpressionList.class, "expression list expected");
       final IASTExpression[] expressions = ((IASTExpressionList) expression).getExpressions();
       final Collection<IASTExpression> onlyCalls = filterNonCallExpressions(expressions);
       toMemberFunctionCalls(callExpectations, onlyCalls);
@@ -109,11 +111,11 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
 
    private MemFunCallExpectation getMemFunCallIn(final IASTExpression expression) {
       final ICPPASTFunctionCallExpression funCall = AstUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
-      Assert.notNull(funCall, "Function call exprected");
+      ILTISException.Unless.notNull(funCall, "Function call exprected");
       final IASTInitializerClause[] arguments = funCall.getArguments();
-      Assert.isTrue(arguments.length > 0, "Call objects must have a fun signature");
+      ILTISException.Unless.isTrue(arguments.length > 0, "Call objects must have a fun signature");
       final IASTInitializerClause funSignature = arguments[0];
-      Assert.isTrue(isStringLiteral(funSignature), "Fun signature must be a string literal");
+      ILTISException.Unless.isTrue(isStringLiteral(funSignature), "Fun signature must be a string literal");
       return toMemberFunctionCall(funSignature);
    }
 

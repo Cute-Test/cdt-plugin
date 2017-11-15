@@ -13,7 +13,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.hsr.ifs.mockator.plugin.base.util.IOUtil;
+import ch.hsr.ifs.iltis.core.resources.IOUtil;
+
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 
 
@@ -37,7 +38,7 @@ public class PathProposalUtilTest {
    @Test
    public void fileAlreadyExistsYieldsAlternative() throws CoreException {
       final IFile file = project.getFile("test.cpp");
-      file.create(IOUtil.stringToStream("test"), true, new NullProgressMonitor());
+      file.create(IOUtil.StringIO.read("test"), true, new NullProgressMonitor());
       final PathProposalUtil util = new PathProposalUtil(project.getFullPath());
       final IPath uniquePath = util.getUniquePathForNewFile("test", ".cpp");
       Assert.assertEquals(new Path("/Test/test1.cpp"), uniquePath);

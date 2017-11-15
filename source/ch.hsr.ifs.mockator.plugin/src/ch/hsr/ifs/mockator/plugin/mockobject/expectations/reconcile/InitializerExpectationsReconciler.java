@@ -12,7 +12,9 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
@@ -42,12 +44,12 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    private static IASTEqualsInitializer getEqualsInitializer(final IASTName expVector) {
       final IASTDeclarationStatement declStmt = AstUtil.getAncestorOfType(expVector, IASTDeclarationStatement.class);
       final IASTEqualsInitializer eqInitializer = AstUtil.getChildOfType(declStmt, IASTEqualsInitializer.class);
-      Assert.notNull(eqInitializer, "Not a valid call initialization");
+      ILTISException.Unless.notNull(eqInitializer, "Not a valid call initialization");
       return eqInitializer;
    }
 
    private static ICPPASTInitializerList getInitializerListFrom(final IASTEqualsInitializer eqInitializer) {
-      Assert.instanceOf(eqInitializer.getInitializerClause(), ICPPASTInitializerList.class, "Initializer list expected");
+      ILTISException.Unless.instanceOf(eqInitializer.getInitializerClause(), ICPPASTInitializerList.class, "Initializer list expected");
       return (ICPPASTInitializerList) eqInitializer.getInitializerClause();
    }
 

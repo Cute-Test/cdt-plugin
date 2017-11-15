@@ -3,7 +3,6 @@ package ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
-import static ch.hsr.ifs.mockator.plugin.base.util.HtmlUtil.escapeHtml;
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.quote;
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.unquote;
 
@@ -12,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarker;
+
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.CodanArguments;
@@ -58,7 +59,7 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    private static String htmlize(final MemFunSignature funCallExpectation) {
-      return quote(escapeHtml(unquote(funCallExpectation.toString())));
+      return quote(StringUtil.CodeString.escapeHtml(unquote(funCallExpectation.toString())));
    }
 
    private static List<String> split(final String expectations) {

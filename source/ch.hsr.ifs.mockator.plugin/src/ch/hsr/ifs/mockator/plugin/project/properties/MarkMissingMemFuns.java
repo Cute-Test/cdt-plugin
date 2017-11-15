@@ -7,8 +7,10 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.QualifiedName;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 
 
@@ -67,7 +69,7 @@ public enum MarkMissingMemFuns implements PropertyTypeWithDefault {
 
    public static MarkMissingMemFuns fromName(final String name) {
       final MarkMissingMemFuns result = STRING_TO_ENUM.get(name);
-      Assert.notNull(result, String.format("Unknown mark missing memfun strategy '%s'", name));
+      ILTISException.Unless.notNull(result, String.format("Unknown mark missing memfun strategy '%s'", name));
       return result;
    }
 }

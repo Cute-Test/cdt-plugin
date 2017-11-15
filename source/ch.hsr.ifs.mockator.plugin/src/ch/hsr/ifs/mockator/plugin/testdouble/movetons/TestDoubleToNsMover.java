@@ -6,7 +6,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
@@ -23,7 +24,7 @@ class TestDoubleToNsMover {
 
    public void moveToNamespace(final ICPPASTCompositeTypeSpecifier testDoubleToMove) {
       final ICPPASTFunctionDefinition testFunction = getParentFunction(testDoubleToMove);
-      Assert.notNull(testFunction, "Test double is not a local class");
+      ILTISException.Unless.notNull(testFunction, "Test double is not a local class");
       final IASTSimpleDeclaration movedTestDouble = getClassDeclaration(testDoubleToMove).copy();
       insertTestDoubleInNamespace(movedTestDouble, testDoubleToMove, testFunction);
       removeTestDoubleInFunction(testDoubleToMove);
@@ -50,7 +51,7 @@ class TestDoubleToNsMover {
 
    private static ICPPASTFunctionDefinition getParentFunction(final IASTCompositeTypeSpecifier testDouble) {
       final ICPPASTFunctionDefinition testFun = AstUtil.getAncestorOfType(testDouble, ICPPASTFunctionDefinition.class);
-      Assert.notNull(testFun, "Test double class must be a member of a function!");
+      ILTISException.Unless.notNull(testFun, "Test double class must be a member of a function!");
       return testFun;
    }
 

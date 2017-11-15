@@ -5,7 +5,8 @@ import static ch.hsr.ifs.mockator.plugin.base.i18n.I18N.MemberFunctionsToImpleme
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import ch.hsr.ifs.mockator.plugin.base.util.HtmlUtil;
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 
 
@@ -39,6 +40,6 @@ class MissingMemFunSignaturesGenerator {
    }
 
    private static Collection<String> htmlize(final Collection<String> signatures) {
-      return signatures.stream().map((signature) -> HtmlUtil.escapeHtml(signature)).collect(Collectors.toList());
+      return signatures.stream().map((signature) -> StringUtil.CodeString.escapeHtml(signature)).collect(Collectors.toList());
    }
 }

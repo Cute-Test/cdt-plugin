@@ -15,10 +15,8 @@ import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 
 public class ChangeEdit {
@@ -33,7 +31,7 @@ public class ChangeEdit {
 
    private void initTextEditSource(final Change[] changes) {
       for (final Change change : changes) {
-         Assert.instanceOf(change, TextChange.class, "Expected text change");
+         ILTISException.Unless.instanceOf(change, TextChange.class, "Expected text change");
          final TextEdit[] textEdits = ((TextChange) change).getEdit().getChildren();
 
          for (final TextEdit edit : textEdits) {
@@ -60,9 +58,9 @@ public class ChangeEdit {
    private static Change[] collectUnderlyingChanges(final Change change) {
       if (change instanceof NullChange) { return array(); }
 
-      Assert.instanceOf(change, CompositeChange.class, "Composite change expected");
+      ILTISException.Unless.instanceOf(change, CompositeChange.class, "Composite change expected");
       final Change[] subChanges = ((CompositeChange) change).getChildren();
-      Assert.isFalse(subChanges.length == 0, "No changes passed");
+      ILTISException.Unless.isFalse(subChanges.length == 0, "No changes passed");
       final Change fstChange = subChanges[0];
 
       if (fstChange instanceof CompositeChange) {

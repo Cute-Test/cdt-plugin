@@ -14,7 +14,7 @@ import org.eclipse.cdt.managedbuilder.internal.core.ManagedProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class CdtManagedProjectActivator {
@@ -22,7 +22,7 @@ public class CdtManagedProjectActivator {
    private final IProject project;
 
    public CdtManagedProjectActivator(final IProject project) {
-      Assert.notNull(project, "Project to activate managed build must not be null");
+      ILTISException.Unless.notNull(project, "Project to activate managed build must not be null");
       this.project = project;
    }
 

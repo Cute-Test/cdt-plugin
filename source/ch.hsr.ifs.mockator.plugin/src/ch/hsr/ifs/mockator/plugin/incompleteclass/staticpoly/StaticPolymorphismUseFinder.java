@@ -12,12 +12,11 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateParameter;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
+import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.ClassInTemplateIdFinderVisitor.TemplateParamCombination;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun.MissingMemFunCollector;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.referenced.NotReferencedFunctionFilter;
 import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
@@ -40,18 +39,17 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
    public Collection<StaticPolyMissingMemFun> apply(final IASTFunctionDefinition testFunction) {
       final Collection<StaticPolyMissingMemFun> missingMemFuns = orderPreservingSet();
 
-      for (final Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter> declParam : getTestDoubleAsTemplateArgUsages(testFunction)) {
+      for (final TemplateParamCombination declParam : getTestDoubleAsTemplateArgUsages(testFunction)) {
          missingMemFuns.addAll(collectMissingMemFuns(testFunction, declParam));
       }
 
       return missingMemFuns;
    }
 
-   private Collection<StaticPolyMissingMemFun> collectMissingMemFuns(final IASTFunctionDefinition testFun,
-         final Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter> declParam) {
+   private Collection<StaticPolyMissingMemFun> collectMissingMemFuns(final IASTFunctionDefinition testFun, final TemplateParamCombination declParam) {
       Collection<StaticPolyMissingMemFun> missingFuns = collectUsedMemFunsInSut(declParam);
       if (considerOnlyReferencedMemFuns()) {
-         missingFuns = filterNotReferenced(missingFuns, declParam.first().getTranslationUnit(), testFun);
+         missingFuns = filterNotReferenced(missingFuns, declParam.decl().getTranslationUnit(), testFun);
       }
       return missingFuns;
    }
@@ -60,10 +58,10 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
       return MarkMissingMemFuns.fromProjectSettings(cProject.getProject()) == MarkMissingMemFuns.OnlyReferencedFromTest;
    }
 
-   private Collection<StaticPolyMissingMemFun> collectUsedMemFunsInSut(final Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter> declParam) {
-      final Collection<ICPPASTTemplateDeclaration> funs = getTemplateFunctions(declParam.first());
-      final MissingMemFunCollector finder = new MissingMemFunCollector(declParam.first(), testDouble, funs);
-      return finder.getMissingMemberFunctions(declParam.second());
+   private Collection<StaticPolyMissingMemFun> collectUsedMemFunsInSut(final TemplateParamCombination declParam) {
+      final Collection<ICPPASTTemplateDeclaration> funs = getTemplateFunctions(declParam.decl());
+      final MissingMemFunCollector finder = new MissingMemFunCollector(declParam.decl(), testDouble, funs);
+      return finder.getMissingMemberFunctions(declParam.param());
    }
 
    private static Collection<ICPPASTTemplateDeclaration> getTemplateFunctions(final ICPPASTTemplateDeclaration templateDecl) {
@@ -80,7 +78,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
       return AstUtil.getChildOfType(templateDecl, ICPPASTCompositeTypeSpecifier.class) != null;
    }
 
-   private Collection<Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter>> getTestDoubleAsTemplateArgUsages(
+   private Collection<TemplateParamCombination> getTestDoubleAsTemplateArgUsages(
          final IASTFunctionDefinition testFunction) {
       final ClassInTemplateIdFinderVisitor finder = new ClassInTemplateIdFinderVisitor(testDouble, cProject, index);
       testFunction.accept(finder);

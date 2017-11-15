@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
 public class TranslationUnitLoader {
@@ -63,8 +62,9 @@ public class TranslationUnitLoader {
       if (tu == null) {
          tu = CoreModel.getDefault().createTranslationUnitFrom(cProject, uri);
       }
+      final Object object = tu;
 
-      Assert.notNull(tu, "Was not able to determine translation unit for " + uri.getPath());
+      ILTISException.Unless.notNull(object, "Was not able to determine translation unit for " + uri.getPath());
       return loadAst(tu);
    }
 

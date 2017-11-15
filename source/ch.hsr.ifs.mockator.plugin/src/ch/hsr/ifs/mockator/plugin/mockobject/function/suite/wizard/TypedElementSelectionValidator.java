@@ -13,7 +13,9 @@ import java.util.Collection;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 
 
 // Copied and adapted from CUTE
@@ -31,7 +33,7 @@ class TypedElementSelectionValidator implements ISelectionStatusValidator {
 
    public TypedElementSelectionValidator(final Class<?>[] acceptedTypes, final boolean allowMultipleSelection,
                                          final Collection<Object> rejectedElements) {
-      Assert.notNull(acceptedTypes, "accepted types must not be null");
+      ILTISException.Unless.notNull(acceptedTypes, "accepted types must not be null");
       fAcceptedTypes = acceptedTypes;
       fAllowMultipleSelection = allowMultipleSelection;
       fRejectedElements = rejectedElements;

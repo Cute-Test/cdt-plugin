@@ -17,7 +17,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.osgi.util.NLS;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.MethodParamEquivalenceTester;
@@ -65,7 +66,7 @@ public class ShadowedMemFunVerifier {
    private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {
       final ICPPASTFunctionDeclarator funDecl = AstUtil.getChildOfType(declaration, ICPPASTFunctionDeclarator.class);
       final IBinding binding = funDecl.getName().resolveBinding();
-      Assert.instanceOf(binding, ICPPMethod.class, "Chosen member function is not valid");
+      ILTISException.Unless.instanceOf(binding, ICPPMethod.class, "Chosen member function is not valid");
       return (ICPPMethod) binding;
    }
 
@@ -84,7 +85,7 @@ public class ShadowedMemFunVerifier {
    private ICPPClassType getChosenClassType() {
       final ICPPASTCompositeTypeSpecifier chosenClass = context.getChosenClass();
       final IBinding b = chosenClass.getName().resolveBinding();
-      Assert.instanceOf(b, ICPPClassType.class, "Not a valid class to extract an interface for");
+      ILTISException.Unless.instanceOf(b, ICPPClassType.class, "Not a valid class to extract an interface for");
       return (ICPPClassType) b;
    }
 

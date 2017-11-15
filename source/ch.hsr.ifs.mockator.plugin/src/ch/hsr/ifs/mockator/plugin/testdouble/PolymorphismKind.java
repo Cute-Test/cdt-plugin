@@ -6,7 +6,8 @@ import java.util.Map;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 
 
 public enum PolymorphismKind {
@@ -22,7 +23,7 @@ public enum PolymorphismKind {
 
    public static PolymorphismKind from(final String name) {
       final PolymorphismKind kind = STRING_TO_ENUM.get(name);
-      Assert.notNull(kind, String.format("Unknown polymorphism name '%s'", name));
+      ILTISException.Unless.notNull(kind, String.format("Unknown polymorphism name '%s'", name));
       return kind;
    }
 

@@ -15,7 +15,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
@@ -36,7 +38,7 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
 
    public MissingMemFun(final IASTSimpleDeclaration simpleDecl) {
       funDecl = AstUtil.getChildOfType(simpleDecl, ICPPASTFunctionDeclarator.class);
-      Assert.notNull(funDecl, "Not a valid function declaration");
+      ILTISException.Unless.notNull(funDecl, "Not a valid function declaration");
       this.simpleDecl = simpleDecl;
    }
 

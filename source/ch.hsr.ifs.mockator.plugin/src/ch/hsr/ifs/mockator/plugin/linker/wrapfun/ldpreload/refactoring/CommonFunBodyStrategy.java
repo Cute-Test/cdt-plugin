@@ -24,7 +24,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.linker.ItaniumMangledNameGenerator;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -84,7 +86,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
 
    private static String getMangledFunName(final ICPPASTFunctionDeclarator function) {
       final IBinding binding = function.getName().resolveBinding();
-      Assert.instanceOf(binding, ICPPFunction.class, "Function expected");
+      ILTISException.Unless.instanceOf(binding, ICPPFunction.class, "Function expected");
       final ItaniumMangledNameGenerator mangledGenerator = new ItaniumMangledNameGenerator((ICPPFunction) binding);
       return mangledGenerator.createMangledName();
    }

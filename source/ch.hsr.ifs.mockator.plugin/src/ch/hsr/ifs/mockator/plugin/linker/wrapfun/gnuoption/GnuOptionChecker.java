@@ -5,8 +5,10 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIfdefStatement;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 
 
 public class GnuOptionChecker extends AbstractIndexAstChecker {
@@ -38,7 +40,7 @@ public class GnuOptionChecker extends AbstractIndexAstChecker {
 
    private static String unpackName(final String wrapFunName) {
       final int idx = wrapFunName.indexOf(MockatorConstants.WRAP_MACRO_PREFIX);
-      Assert.isTrue(idx >= 0, "Invalid wrapped function");
+      ILTISException.Unless.isTrue(idx >= 0, "Invalid wrapped function");
       return wrapFunName.substring(idx + MockatorConstants.WRAP_MACRO_PREFIX.length());
    }
 }

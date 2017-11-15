@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 
 
 class DefaultPropertyHandler {
@@ -17,7 +19,7 @@ class DefaultPropertyHandler {
          final PropertyTypeWithDefault typeWithDefault = as(enumConst);
          return typeWithDefault.isDefault();
       }).collect(Collectors.toList());
-      Assert.isTrue(defaults.size() == 1, "Exactly one default strategy expected");
+      ILTISException.Unless.isTrue(defaults.size() == 1, "Exactly one default strategy expected");
       final E defaultType = as(head(defaults).get());
       return defaultType;
    }

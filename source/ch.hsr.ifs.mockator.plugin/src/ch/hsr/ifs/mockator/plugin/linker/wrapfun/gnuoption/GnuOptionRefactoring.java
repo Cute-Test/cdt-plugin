@@ -23,10 +23,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.PlatformUtil;
 import ch.hsr.ifs.mockator.plugin.linker.ItaniumMangledNameGenerator;
@@ -56,7 +57,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
 
    private void rememberFunName(final IASTName funName) {
       final IBinding binding = funName.resolveBinding();
-      Assert.instanceOf(binding, ICPPFunction.class, "Function expected");
+      ILTISException.Unless.instanceOf(binding, ICPPFunction.class, "Function expected");
       newFunName = new ItaniumMangledNameGenerator((ICPPFunction) binding).createMangledName();
    }
 

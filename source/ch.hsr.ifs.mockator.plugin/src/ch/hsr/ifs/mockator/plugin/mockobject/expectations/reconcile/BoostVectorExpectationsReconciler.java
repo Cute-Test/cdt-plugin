@@ -19,8 +19,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.BoostAssignInitializerCreator;
@@ -151,14 +153,14 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
 
    private static ICPPASTBinaryExpression getBinaryExpr(final IASTExpression expression) {
       final ICPPASTBinaryExpression binExp = AstUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
-      Assert.notNull(binExp, "Not a valid expectation vector assignment");
+      ILTISException.Unless.notNull(binExp, "Not a valid expectation vector assignment");
       return binExp;
    }
 
    private void addCallIfStillRegistered(final ICPPASTFunctionCallExpression fun, final List<ICPPASTFunctionCallExpression> calls) {
-      Assert.isTrue(fun.getArguments().length > 0, "Not a valid call expectation");
+      ILTISException.Unless.isTrue(fun.getArguments().length > 0, "Not a valid call expectation");
       final IASTInitializerClause firstArg = fun.getArguments()[0];
-      Assert.instanceOf(firstArg, IASTLiteralExpression.class, "Only literals allowed as 1st argument");
+      ILTISException.Unless.instanceOf(firstArg, IASTLiteralExpression.class, "Only literals allowed as 1st argument");
       final IASTLiteralExpression literal = (IASTLiteralExpression) firstArg;
 
       if (!isToBeRemoved(literal.toString())) {

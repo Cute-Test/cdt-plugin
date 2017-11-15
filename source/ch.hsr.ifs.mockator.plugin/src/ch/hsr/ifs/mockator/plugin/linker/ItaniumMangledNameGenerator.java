@@ -37,7 +37,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
@@ -223,7 +223,7 @@ public class ItaniumMangledNameGenerator {
 
    // <template-args> ::= I <template-arg>+ E
    private void templateArgs(final Collection<ICPPTemplateArgument> templateArgs) {
-      Assert.isTrue(templateArgs.size() >= 1, "templateArgs should not be called with empty template arg list");
+      ILTISException.Unless.isTrue(templateArgs.size() >= 1, "templateArgs should not be called with empty template arg list");
       mangledName.append("I");
 
       for (final ICPPTemplateArgument arg : templateArgs) {
@@ -720,7 +720,7 @@ public class ItaniumMangledNameGenerator {
 
       String getBase36Value(final String type) {
          final Integer seqId = history.get(type);
-         Assert.notNull(seqId, "Type must have occurred once already");
+         ILTISException.Unless.notNull(seqId, "Type must have occurred once already");
 
          // <substitution> ::= S <seq-id> _
          // ::= S_

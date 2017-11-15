@@ -21,9 +21,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtHelper;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 
@@ -119,7 +120,7 @@ class SharedLibProjectCreator {
 
    private IProjectType getGnuSharedLibProjType() {
       final Optional<ToolChain> tc = ToolChain.fromProject(projectToInheritFrom);
-      Assert.isTrue(tc.isPresent(), "Could not determine toolchain");
+      ILTISException.Unless.isTrue(tc.isPresent(), "Could not determine toolchain");
       final String sharedLibProjectType = tc.get().getSharedLibProjectType();
       return ManagedBuildManager.getExtensionProjectType(sharedLibProjectType);
    }

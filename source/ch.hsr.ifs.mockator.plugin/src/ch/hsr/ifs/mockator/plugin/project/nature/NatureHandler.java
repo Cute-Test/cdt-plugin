@@ -11,7 +11,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 
 
 public class NatureHandler {
@@ -19,7 +21,7 @@ public class NatureHandler {
    private final IProject project;
 
    public NatureHandler(final IProject project) {
-      Assert.isTrue(project.exists() && project.isOpen(), "Only existing and open projects are supported");
+      ILTISException.Unless.isTrue(project.exists() && project.isOpen(), "Only existing and open projects are supported");
       this.project = project;
    }
 
@@ -41,7 +43,7 @@ public class NatureHandler {
 
    private static void validateNewNatures(final String[] newNatures) {
       final IStatus status = ResourcesPlugin.getWorkspace().validateNatureSet(newNatures);
-      Assert.isTrue(status.getCode() == IStatus.OK, status.getMessage());
+      ILTISException.Unless.isTrue(status.getCode() == IStatus.OK, status.getMessage());
    }
 
    public void removeNature(final String natureId, final IProgressMonitor pm) throws CoreException {

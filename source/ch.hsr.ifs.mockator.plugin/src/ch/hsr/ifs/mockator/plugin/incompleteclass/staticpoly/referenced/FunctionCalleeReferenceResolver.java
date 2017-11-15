@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 
 
@@ -46,7 +46,7 @@ class FunctionCalleeReferenceResolver {
    }
 
    public Collection<IASTName> findCallers(final IBinding binding, final IASTNode point) {
-      Assert.notNull(binding, "Binding must not be null");
+      ILTISException.Unless.notNull(binding, "Binding must not be null");
       try {
          final List<IASTName> callers = new ArrayList<>();
          findCallersRecursively(binding, callers, point);

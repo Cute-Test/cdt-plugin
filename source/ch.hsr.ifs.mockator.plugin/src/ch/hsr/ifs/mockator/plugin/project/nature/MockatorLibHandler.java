@@ -17,7 +17,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.project.cdt.SourceFolderHandler;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludePathHandler;
 
@@ -76,7 +76,7 @@ public class MockatorLibHandler {
    private IFolder createMockatorFolder() throws CoreException {
       final SourceFolderHandler handler = new SourceFolderHandler(project);
       final IFolder targetFolder = handler.createFolder(MOCKATOR_TARGET_HEADER_FOLDER, new NullProgressMonitor());
-      Assert.isTrue(targetFolder.exists(), "Mockator library target folder must be existing");
+      ILTISException.Unless.isTrue(targetFolder.exists(), "Mockator library target folder must be existing");
       return targetFolder;
    }
 

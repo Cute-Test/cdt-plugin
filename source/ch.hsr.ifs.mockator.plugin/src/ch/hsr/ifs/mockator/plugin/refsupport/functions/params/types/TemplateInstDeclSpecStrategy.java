@@ -20,7 +20,6 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.Functional;
 import ch.hsr.ifs.iltis.core.functional.StreamPair;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypedefHelper;
 
@@ -29,7 +28,7 @@ class TemplateInstDeclSpecStrategy implements DeclSpecGeneratorStrategy {
 
    @Override
    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
-      Assert.instanceOf(type, ICPPTemplateInstance.class, "This strategy can only handle template instances");
+      ILTISException.Unless.instanceOf(type, ICPPTemplateInstance.class, "This strategy can only handle template instances");
       final ICPPTemplateInstance templateInstance = (ICPPTemplateInstance) type;
       final ICPPASTTemplateId templateId = nodeFactory.newTemplateId(getName(templateInstance));
 

@@ -18,9 +18,8 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.Functional;
-
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
 
 
 // some generic type inference magic to get rid of
@@ -93,17 +92,12 @@ public abstract class CollectionHelper {
       return list.stream().map((it) -> klass.cast(it)).collect(Collectors.toList());
    }
 
-   public static <T> Map<T, T> checkedCast(final Map<?, ?> map, final Class<T> klass) {
-      return Functional.zip(map).map((pair) -> pair.<T, T>as()).collect(Collectors.toMap((pair) -> pair.first(), (pair) -> pair.second()));
-      //      for (final Entry<?, ?> e : map.entrySet()) {
-      //         klass.cast(e.getKey());
-      //         klass.cast(e.getValue());
-      //      }
-      //      return (Map<T, T>) map;
+   public static <T> Map<T, T> checkedCast(final Map<?, ?> map, final Class<T> clazz) {
+      return Functional.zip(map).map((pair) -> pair.cast(clazz, clazz)).collect(Collectors.toMap((pair) -> pair.first(), (pair) -> pair.second()));
    }
 
    public static <T> boolean notNull(final Iterable<T> it) {
-      Assert.notNull(it, "iterable must not be null");
+      ILTISException.Unless.notNull(it, "iterable must not be null");
 
       for (final T e : it) {
          if (e == null) { return false; }
@@ -134,8 +128,6 @@ public abstract class CollectionHelper {
    }
 
    public static <E> E head(final Iterable<E> it, final E defaultValue) {
-      //      final Iterator<E> iterator = it.iterator();
-      //      return iterator.hasNext() ? iterator.next() : defaultValue;
       return StreamSupport.stream(it.spliterator(), false).findFirst().orElse(defaultValue);
    }
 

@@ -5,7 +5,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 
 
 public class MockatorPlugin extends AbstractUIPlugin {
@@ -26,7 +27,8 @@ public class MockatorPlugin extends AbstractUIPlugin {
    }
 
    public static MockatorPlugin getDefault() {
-      Assert.notNull(plugin, "Plugin not active, access not possible");
+      final Object object = plugin;
+      ILTISException.Unless.notNull(object, "Plugin not active, access not possible");
       return plugin;
    }
 

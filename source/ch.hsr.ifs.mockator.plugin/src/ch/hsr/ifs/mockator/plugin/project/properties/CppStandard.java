@@ -18,10 +18,11 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.QualifiedName;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.CompilerFlagHandler;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.DiscoveryOptionsHandler;
@@ -232,7 +233,7 @@ public enum CppStandard implements PropertyTypeWithDefault {
 
    public static CppStandard fromName(final String name) {
       final CppStandard result = STRING_TO_ENUM.get(name);
-      Assert.notNull(result, String.format("Unknown C++ Standard '%s'", name));
+      ILTISException.Unless.notNull(result, String.format("Unknown C++ Standard '%s'", name));
       return result;
    }
 

@@ -15,7 +15,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
+
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.wizard.NewSuiteFileCreationWizardPage.SourceFolderFieldAdapter;
 
 
@@ -130,10 +132,10 @@ class DialogField {
    }
 
    protected static void assertCompositeNotNull(final Composite comp) {
-      Assert.notNull(comp, "uncreated control requested with composite null");
+      ILTISException.Unless.notNull(comp, "uncreated control requested with composite null");
    }
 
    protected final void assertEnoughColumns(final int nColumns) {
-      Assert.isTrue(nColumns >= getNumberOfControls(), "given number of columns is too small");
+      ILTISException.Unless.isTrue(nColumns >= getNumberOfControls(), "given number of columns is too small");
    }
 }

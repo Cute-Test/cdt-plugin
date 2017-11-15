@@ -5,8 +5,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.cute.ui.ICuteWizardAdditionHandler;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -24,7 +26,7 @@ public class MockatorWizardAdditionHandler implements ICuteWizardAdditionHandler
 
    @Override
    public void configureProject(final IProject project, final IProgressMonitor pm) throws CoreException {
-      Assert.isTrue(isCppProject(project), "Mockator only supports C++ projects");
+      ILTISException.Unless.isTrue(isCppProject(project), "Mockator only supports C++ projects");
 
       if (withMockatorSupport) {
          setCppStd(project);

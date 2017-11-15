@@ -19,10 +19,9 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.functions.Builder;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
-import ch.hsr.ifs.mockator.plugin.base.misc.Builder;
 
 public final class ExtractInterfaceContext {
 

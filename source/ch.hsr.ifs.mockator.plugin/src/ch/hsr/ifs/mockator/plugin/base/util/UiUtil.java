@@ -18,7 +18,6 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 
-@SuppressWarnings("restriction")
 public abstract class UiUtil {
 
    public static <T> void runInDisplayThread(final Consumer<T> callBack, final T param) {

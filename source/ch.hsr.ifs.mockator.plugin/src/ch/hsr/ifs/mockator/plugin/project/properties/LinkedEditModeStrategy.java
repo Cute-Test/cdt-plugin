@@ -7,8 +7,10 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.QualifiedName;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 
 
@@ -63,7 +65,7 @@ public enum LinkedEditModeStrategy implements PropertyTypeWithDefault {
 
    public static LinkedEditModeStrategy fromName(final String name) {
       final LinkedEditModeStrategy result = STRING_TO_ENUM.get(name);
-      Assert.notNull(result, String.format("Unknown linked edit strategy '%s'", name));
+      ILTISException.Unless.notNull(result, String.format("Unknown linked edit strategy '%s'", name));
       return result;
    }
 

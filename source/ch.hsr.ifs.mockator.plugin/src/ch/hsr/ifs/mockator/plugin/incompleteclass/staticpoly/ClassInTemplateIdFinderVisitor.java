@@ -28,18 +28,19 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
-import ch.hsr.ifs.mockator.plugin.base.dbc.Assert;
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.AstUtil;
 
 
 class ClassInTemplateIdFinderVisitor extends ASTVisitor {
 
-   private final ICPPASTCompositeTypeSpecifier                                   testDouble;
-   private final Set<Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter>> templateParams;
-   private final ICProject                                                       cProject;
-   private final IIndex                                                          index;
+   private final ICPPASTCompositeTypeSpecifier testDouble;
+   private final Set<TemplateParamCombination> templateParams;
+   private final ICProject                     cProject;
+   private final IIndex                        index;
 
    {
       shouldVisitNames = true;
@@ -52,7 +53,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
       templateParams = orderPreservingSet();
    }
 
-   public Collection<Pair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter>> getTemplateParamCombinations() {
+   public Collection<TemplateParamCombination> getTemplateParamCombinations() {
       return templateParams;
    }
 
@@ -106,14 +107,14 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
          final ICPPASTTemplateParameter[] templateParams = candidate.getTemplateParameters();
 
          for (final Integer pos : positions) {
-            Assert.isTrue(pos < templateParams.length, "Wrong deduction of template parameter position");
+            ILTISException.Unless.isTrue(pos < templateParams.length, "Wrong deduction of template parameter position");
             addToTemplateParamCombinations(candidate, templateParams[pos]);
          }
       }
    }
 
    private void addToTemplateParamCombinations(final ICPPASTTemplateDeclaration templateDecl, final ICPPASTTemplateParameter templateParam) {
-      templateParams.add(new Pair<>(templateDecl, templateParam));
+      templateParams.add(new TemplateParamCombination(templateDecl, templateParam));
    }
 
    private static Collection<ICPPASTTemplateDeclaration> lookupInAst(final IASTName name) {
@@ -135,5 +136,20 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
    private Optional<ICPPASTTemplateDeclaration> lookupInIndex(final IBinding template) {
       final NodeLookup lookup = new NodeLookup(cProject, new NullProgressMonitor());
       return lookup.findTemplateDefinition(template, index);
+   }
+
+   public class TemplateParamCombination extends AbstractPair<ICPPASTTemplateDeclaration, ICPPASTTemplateParameter> {
+
+      public TemplateParamCombination(final ICPPASTTemplateDeclaration templateDecl, final ICPPASTTemplateParameter templateParam) {
+         super(templateDecl, templateParam);
+      }
+
+      public ICPPASTTemplateDeclaration decl() {
+         return first;
+      }
+
+      public ICPPASTTemplateParameter param() {
+         return second;
+      }
    }
 }
