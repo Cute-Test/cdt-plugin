@@ -22,14 +22,14 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil;
 // Taken and adapted from CDT 8.2
 public class PureVirtualMemFunCollector {
 
-   private final ICPPClassType klass;
+   private final ICPPClassType clazz;
 
-   public PureVirtualMemFunCollector(final ICPPClassType klass) {
-      this.klass = klass;
+   public PureVirtualMemFunCollector(final ICPPClassType clazz) {
+      this.clazz = clazz;
    }
 
    public ICPPMethod[] collectPureVirtualMemFuns() {
-      final Map<String, List<ICPPMethod>> result = getPureVirtualMemFuns(klass, new HashMap<ICPPClassType, Map<String, List<ICPPMethod>>>());
+      final Map<String, List<ICPPMethod>> result = getPureVirtualMemFuns(clazz, new HashMap<ICPPClassType, Map<String, List<ICPPMethod>>>());
 
       int resultArraySize = 0;
       for (final List<ICPPMethod> methods : result.values()) {

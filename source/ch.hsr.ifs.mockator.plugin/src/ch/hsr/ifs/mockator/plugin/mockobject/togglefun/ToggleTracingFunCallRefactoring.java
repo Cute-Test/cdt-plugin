@@ -74,12 +74,12 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
       }
 
       testDoubleMemFun = new ExistingTestDoubleMemFun(function);
-      final ICPPASTCompositeTypeSpecifier klass = testDoubleMemFun.getContainingClass();
+      final ICPPASTCompositeTypeSpecifier clazz = testDoubleMemFun.getContainingClass();
 
-      if (klass == null) {
+      if (clazz == null) {
          status.addFatalError("No test double member function selected");
       } else {
-         mockObject = new MockObject(klass);
+         mockObject = new MockObject(clazz);
       }
    }
 

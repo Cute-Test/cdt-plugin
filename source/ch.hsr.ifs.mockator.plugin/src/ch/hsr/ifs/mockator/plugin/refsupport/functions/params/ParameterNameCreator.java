@@ -42,8 +42,8 @@ public class ParameterNameCreator {
       return createName(getParameterCharacter(type));
    }
 
-   public IASTName getParamName(final IASTCompositeTypeSpecifier klass) {
-      return createName(getParameterCharacter(String.valueOf(klass.getName().getSimpleID())));
+   public IASTName getParamName(final IASTCompositeTypeSpecifier clazz) {
+      return createName(getParameterCharacter(String.valueOf(clazz.getName().getSimpleID())));
    }
 
    public IASTName createParameterName(final IASTIdExpression idExpr) {

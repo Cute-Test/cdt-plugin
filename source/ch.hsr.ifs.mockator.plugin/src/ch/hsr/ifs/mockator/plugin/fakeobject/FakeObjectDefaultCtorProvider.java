@@ -18,8 +18,8 @@ public class FakeObjectDefaultCtorProvider implements DefaultCtorProvider {
 
    private final FakeObject fakeObject;
 
-   public FakeObjectDefaultCtorProvider(final ICPPASTCompositeTypeSpecifier klass) {
-      fakeObject = new FakeObject(klass);
+   public FakeObjectDefaultCtorProvider(final ICPPASTCompositeTypeSpecifier clazz) {
+      fakeObject = new FakeObject(clazz);
    }
 
    @Override

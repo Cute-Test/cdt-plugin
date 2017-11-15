@@ -54,21 +54,21 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<ICPPASTCompositeTypeSpecifier> klass = getClassInSelection(getAST(tu(), pm));
+      final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClassInSelection(getAST(tu(), pm));
 
-      if (!klass.isPresent()) {
+      if (!clazz.isPresent()) {
          status.addFatalError("Class could not be found in selection");
-      } else if (!isFakeObject(klass.get())) {
+      } else if (!isFakeObject(clazz.get())) {
          status.addFatalError("Chosen test double must be a fake object");
       } else {
-         newMockObject = new MockObject(klass.get());
+         newMockObject = new MockObject(clazz.get());
       }
 
       return status;
    }
 
-   private static boolean isFakeObject(final ICPPASTCompositeTypeSpecifier klass) {
-      return new TestDoubleKindAnalyzer(klass).getKindOfTestDouble() == TestDoubleKind.FakeObject;
+   private static boolean isFakeObject(final ICPPASTCompositeTypeSpecifier clazz) {
+      return new TestDoubleKindAnalyzer(clazz).getKindOfTestDouble() == TestDoubleKind.FakeObject;
    }
 
    @Override

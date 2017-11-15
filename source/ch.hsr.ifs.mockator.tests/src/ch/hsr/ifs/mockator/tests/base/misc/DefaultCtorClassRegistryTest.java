@@ -19,8 +19,8 @@ public class DefaultCtorClassRegistryTest {
 
    @Test
    public void classesWithAllDefaultCtors() {
-      final Set<Class<? extends Vehicle>> klasses = orderPreservingSet(Car.class, Plane.class);
-      assertEquals(CollectionHelper.list(new Car(), new Plane()), new DefaultCtorClassRegistry<>(klasses).createInstances());
+      final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class);
+      assertEquals(CollectionHelper.list(new Car(), new Plane()), new DefaultCtorClassRegistry<>(clazzes).createInstances());
    }
 
    @Rule

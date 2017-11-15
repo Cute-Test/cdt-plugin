@@ -22,11 +22,11 @@ public class ClassInSelectionFinder {
    }
 
    public Optional<ICPPASTCompositeTypeSpecifier> getClassInSelection() {
-      ICPPASTCompositeTypeSpecifier klass = getFirstContainingNodeSelection();
-      if (klass == null) {
-         klass = getFirstEnclosingNodeSelection();
+      ICPPASTCompositeTypeSpecifier clazz = getFirstContainingNodeSelection();
+      if (clazz == null) {
+         clazz = getFirstEnclosingNodeSelection();
       }
-      return Optional.ofNullable(klass);
+      return Optional.ofNullable(clazz);
    }
 
    private ICPPASTCompositeTypeSpecifier getFirstEnclosingNodeSelection() {

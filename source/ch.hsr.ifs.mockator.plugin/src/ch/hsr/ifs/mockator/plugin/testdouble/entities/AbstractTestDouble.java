@@ -36,25 +36,25 @@ import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 
 public abstract class AbstractTestDouble implements TestDouble {
 
-   private final ICPPASTCompositeTypeSpecifier klass;
+   private final ICPPASTCompositeTypeSpecifier clazz;
 
-   public AbstractTestDouble(final ICPPASTCompositeTypeSpecifier klass) {
-      this.klass = klass;
+   public AbstractTestDouble(final ICPPASTCompositeTypeSpecifier clazz) {
+      this.clazz = clazz;
    }
 
    @Override
    public PolymorphismKind getPolymorphismKind() {
-      return PolymorphismKind.from(klass);
+      return PolymorphismKind.from(clazz);
    }
 
    @Override
    public IASTName getName() {
-      return klass.getName();
+      return clazz.getName();
    }
 
    @Override
    public ICPPASTCompositeTypeSpecifier getKlass() {
-      return klass;
+      return clazz;
    }
 
    @Override
@@ -63,14 +63,14 @@ public abstract class AbstractTestDouble implements TestDouble {
    }
 
    private Collection<IASTDeclaration> collectPublicMemFuns() {
-      final PublicMemFunFinder finder = new PublicMemFunFinder(klass, PublicMemFunFinder.ALL_TYPES);
+      final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, PublicMemFunFinder.ALL_TYPES);
       return finder.getPublicMemFuns();
    }
 
    @Override
    public Collection<ICPPASTFunctionDefinition> getReferencingTestFunctions(final CRefactoringContext context, final ICProject cProject,
          final IProgressMonitor pm) {
-      final ReferencingTestFunFinder testFunFinder = new ReferencingTestFunFinder(cProject, klass);
+      final ReferencingTestFunFinder testFunFinder = new ReferencingTestFunFinder(cProject, clazz);
       return testFunFinder.findByIndexLookup(context, pm);
    }
 
@@ -87,7 +87,7 @@ public abstract class AbstractTestDouble implements TestDouble {
    @Override
    public Collection<? extends MissingMemberFunction> collectMissingMemFuns(final MissingMemFunFinder finder, final CppStandard cppStd) {
       final List<MissingMemberFunction> missingMemFuns = list();
-      missingMemFuns.addAll(finder.findMissingMemberFunctions(klass));
+      missingMemFuns.addAll(finder.findMissingMemberFunctions(clazz));
       addDefaultCtorIfNecessary(cppStd, missingMemFuns);
       return missingMemFuns;
    }
@@ -129,7 +129,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public IASTNode getParent() {
-      IASTNode currentNode = klass;
+      IASTNode currentNode = clazz;
 
       while (currentNode != null) {
          if (currentNode instanceof ICPPASTFunctionDefinition) { return ((ICPPASTFunctionDefinition) currentNode).getBody(); }

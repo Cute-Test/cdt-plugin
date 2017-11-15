@@ -42,8 +42,8 @@ import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
 public class MockObject extends AbstractTestDouble {
 
-   public MockObject(final ICPPASTCompositeTypeSpecifier klass) {
-      super(klass);
+   public MockObject(final ICPPASTCompositeTypeSpecifier clazz) {
+      super(clazz);
    }
 
    public Collection<ExistingTestDoubleMemFun> getRegisteredMemFuns(final CppStandard cppStd) {

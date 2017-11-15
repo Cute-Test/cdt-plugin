@@ -21,8 +21,8 @@ public class MockObjectDefaultCtorProvider implements DefaultCtorProvider {
    private final MockObject  mockObject;
    private final CppStandard cppStd;
 
-   public MockObjectDefaultCtorProvider(final ICPPASTCompositeTypeSpecifier klass, final CppStandard cppStd) {
-      mockObject = new MockObject(klass);
+   public MockObjectDefaultCtorProvider(final ICPPASTCompositeTypeSpecifier clazz, final CppStandard cppStd) {
+      mockObject = new MockObject(clazz);
       this.cppStd = cppStd;
    }
 

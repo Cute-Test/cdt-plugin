@@ -14,8 +14,8 @@ import ch.hsr.ifs.mockator.plugin.testdouble.entities.AbstractTestDouble;
 
 public class FakeObject extends AbstractTestDouble {
 
-   public FakeObject(final ICPPASTCompositeTypeSpecifier klass) {
-      super(klass);
+   public FakeObject(final ICPPASTCompositeTypeSpecifier clazz) {
+      super(clazz);
    }
 
    @Override

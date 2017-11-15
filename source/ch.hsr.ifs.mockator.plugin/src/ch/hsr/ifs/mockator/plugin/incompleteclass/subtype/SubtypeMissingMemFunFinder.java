@@ -50,16 +50,16 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    @Override
-   public Collection<MissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier klass) {
-      final IBinding binding = klass.getName().resolveBinding();
+   public Collection<MissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
+      final IBinding binding = clazz.getName().resolveBinding();
       ILTISException.Unless.instanceOf(binding, ICPPClassType.class, "Class type expected");
-      return collectPureVirtualMemFuns(klass.getTranslationUnit(), (ICPPClassType) binding);
+      return collectPureVirtualMemFuns(clazz.getTranslationUnit(), (ICPPClassType) binding);
    }
 
-   private Set<MissingMemFun> collectPureVirtualMemFuns(final IASTTranslationUnit ast, final ICPPClassType klass) {
+   private Set<MissingMemFun> collectPureVirtualMemFuns(final IASTTranslationUnit ast, final ICPPClassType clazz) {
       final Set<MissingMemFun> missingMethods = orderPreservingSet();
 
-      for (final ICPPMethod method : getPureVirtualMemFunsIn(klass)) {
+      for (final ICPPMethod method : getPureVirtualMemFunsIn(clazz)) {
          ILTISException.Unless.notInstanceOf(method, ICPPConstructor.class, "Ctors are not supported because they are not inherited");
          final IASTName[] declarations = ast.getDeclarationsInAST(method);
 
@@ -86,8 +86,8 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
       return Optional.of(simpleDecl);
    }
 
-   private Collection<ICPPMethod> getPureVirtualMemFunsIn(final ICPPClassType klass) {
-      final List<ICPPMethod> pureVirtualMemFuns = list(new PureVirtualMemFunCollector(klass).collectPureVirtualMemFuns());
+   private Collection<ICPPMethod> getPureVirtualMemFunsIn(final ICPPClassType clazz) {
+      final List<ICPPMethod> pureVirtualMemFuns = list(new PureVirtualMemFunCollector(clazz).collectPureVirtualMemFuns());
       Collections.sort(pureVirtualMemFuns, createMethodNameComparator());
       return pureVirtualMemFuns;
    }

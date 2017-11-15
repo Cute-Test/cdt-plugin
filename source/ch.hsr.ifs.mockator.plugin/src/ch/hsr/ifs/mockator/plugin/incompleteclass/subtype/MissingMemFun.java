@@ -85,8 +85,8 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    }
 
    private String getClassName() {
-      final ICPPASTCompositeTypeSpecifier klass = ASTUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
-      return klass.getName().toString();
+      final ICPPASTCompositeTypeSpecifier clazz = ASTUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      return clazz.getName().toString();
    }
 
    @Override

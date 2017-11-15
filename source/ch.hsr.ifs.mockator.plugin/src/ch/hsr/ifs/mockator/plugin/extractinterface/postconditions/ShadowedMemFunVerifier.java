@@ -40,8 +40,8 @@ public class ShadowedMemFunVerifier {
       for (final ICPPMethod chosenMemFun : getChosenNonVirtualMemFuns()) {
          final Set<ICPPMethod> shadowingMemFuns = unorderedSet();
 
-         for (final ICPPClassType klass : subClasses) {
-            for (final ICPPMethod memFun : klass.getDeclaredMethods()) {
+         for (final ICPPClassType clazz : subClasses) {
+            for (final ICPPMethod memFun : clazz.getDeclaredMethods()) {
                if (haveSameSignature(chosenMemFun, memFun)) {
                   shadowingMemFuns.add(memFun);
                }
@@ -78,8 +78,8 @@ public class ShadowedMemFunVerifier {
 
    private Collection<ICPPClassType> getSubClassesOfChosenClass() throws CoreException {
       final IIndex index = context.getCRefContext().getIndex();
-      final ICPPClassType klass = getChosenClassType();
-      return new SubClassFinder(index).getSubClasses(klass);
+      final ICPPClassType clazz = getChosenClassType();
+      return new SubClassFinder(index).getSubClasses(clazz);
    }
 
    private ICPPClassType getChosenClassType() {

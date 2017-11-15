@@ -71,11 +71,11 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static void addPureVirtualMemFuns(final Collection<IASTDeclaration> publicMemFuns, final ICPPASTCompositeTypeSpecifier newInterface,
-         final ICPPASTCompositeTypeSpecifier klass) {
+         final ICPPASTCompositeTypeSpecifier clazz) {
       for (final IASTDeclaration memFun : publicMemFuns) {
          final ICPPASTFunctionDeclarator oldDeclarator = ASTUtil.getChildOfType(memFun, ICPPASTFunctionDeclarator.class);
-         final ICPPASTFunctionDeclarator newDeclarator = createNewFunDeclarator(oldDeclarator, newInterface.getName().toString(), klass);
-         final ICPPASTDeclSpecifier newDeclSpec = createNewFunDeclSpecifier(newInterface, klass, oldDeclarator, memFun);
+         final ICPPASTFunctionDeclarator newDeclarator = createNewFunDeclarator(oldDeclarator, newInterface.getName().toString(), clazz);
+         final ICPPASTDeclSpecifier newDeclSpec = createNewFunDeclSpecifier(newInterface, clazz, oldDeclarator, memFun);
          final IASTSimpleDeclaration funDeclaration = nodeFactory.newSimpleDeclaration(newDeclSpec);
          funDeclaration.addDeclarator(newDeclarator);
          newInterface.addMemberDeclaration(funDeclaration);
@@ -83,13 +83,13 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static ICPPASTFunctionDeclarator createNewFunDeclarator(final ICPPASTFunctionDeclarator oldDecl, final String newInterfaceName,
-         final ICPPASTCompositeTypeSpecifier klass) {
+         final ICPPASTCompositeTypeSpecifier clazz) {
       final IASTName funName = oldDecl.getName().copy();
       final ICPPASTFunctionDeclarator newDecl = nodeFactory.newFunctionDeclarator(funName);
       newDecl.setConst(oldDecl.isConst());
       copyPointers(oldDecl, newDecl);
       copyExceptionSpecifications(oldDecl, newDecl);
-      adaptParametersIfNecessary(newInterfaceName, oldDecl, newDecl, klass);
+      adaptParametersIfNecessary(newInterfaceName, oldDecl, newDecl, clazz);
       makePureVirtual(newDecl);
       return newDecl;
    }
@@ -111,21 +111,21 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static void adaptParametersIfNecessary(final String newInterfaceName, final ICPPASTFunctionDeclarator oldDecl,
-         final ICPPASTFunctionDeclarator newDecl, final ICPPASTCompositeTypeSpecifier klass) {
-      for (final ICPPASTParameterDeclaration param : createNewParameters(oldDecl, newInterfaceName, klass)) {
+         final ICPPASTFunctionDeclarator newDecl, final ICPPASTCompositeTypeSpecifier clazz) {
+      for (final ICPPASTParameterDeclaration param : createNewParameters(oldDecl, newInterfaceName, clazz)) {
          newDecl.addParameterDeclaration(param);
       }
    }
 
    private static Collection<ICPPASTParameterDeclaration> createNewParameters(final ICPPASTFunctionDeclarator funDecl, final String newInterfaceName,
-         final ICPPASTCompositeTypeSpecifier klass) {
+         final ICPPASTCompositeTypeSpecifier clazz) {
       final List<ICPPASTParameterDeclaration> adaptedParams = list();
 
       for (final ICPPASTParameterDeclaration oldParam : funDecl.getParameters()) {
          final IASTDeclSpecifier paramDeclSpec = oldParam.getDeclSpecifier();
          final ICPPASTParameterDeclaration newParamDecl = oldParam.copy();
 
-         if (hasPointerOrReferenceToInterface(oldParam.getDeclarator(), paramDeclSpec, klass)) {
+         if (hasPointerOrReferenceToInterface(oldParam.getDeclarator(), paramDeclSpec, clazz)) {
             final ICPPASTNamedTypeSpecifier newTypeSpec = ((ICPPASTNamedTypeSpecifier) paramDeclSpec).copy();
             newTypeSpec.setName(nodeFactory.newName(newInterfaceName.toCharArray()));
             newParamDecl.setDeclSpecifier(newTypeSpec);
@@ -137,20 +137,20 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static boolean hasPointerOrReferenceToInterface(final ICPPASTDeclarator declarator, final IASTDeclSpecifier declSpecifier,
-         final ICPPASTCompositeTypeSpecifier klass) {
+         final ICPPASTCompositeTypeSpecifier clazz) {
       if (ASTUtil.hasPointerOrRefType(declarator) && declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
          final String paramName = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName().toString();
-         return paramName.equals(klass.getName().toString());
+         return paramName.equals(clazz.getName().toString());
       }
       return false;
    }
 
    private static ICPPASTDeclSpecifier createNewFunDeclSpecifier(final ICPPASTCompositeTypeSpecifier newInterface,
-         final ICPPASTCompositeTypeSpecifier klass, final ICPPASTFunctionDeclarator declarator, final IASTDeclaration declaration) {
+         final ICPPASTCompositeTypeSpecifier clazz, final ICPPASTFunctionDeclarator declarator, final IASTDeclaration declaration) {
       final ICPPASTDeclSpecifier oldDeclSpec = ASTUtil.getChildOfType(declaration, ICPPASTDeclSpecifier.class);
       final ICPPASTDeclSpecifier newDeclSpec = oldDeclSpec.copy();
 
-      if (hasPointerOrReferenceToInterface(declarator, oldDeclSpec, klass)) {
+      if (hasPointerOrReferenceToInterface(declarator, oldDeclSpec, clazz)) {
          ((ICPPASTNamedTypeSpecifier) newDeclSpec).setName(newInterface.getName());
       }
 
@@ -160,9 +160,9 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static IASTNode createInterfaceDeclWithNamespaces(final ICPPASTCompositeTypeSpecifier newClass,
-         final ICPPASTCompositeTypeSpecifier klass) {
+         final ICPPASTCompositeTypeSpecifier clazz) {
       final IASTSimpleDeclaration newClassDecl = nodeFactory.newSimpleDeclaration(newClass);
-      final NamespaceApplier applier = new NamespaceApplier(klass);
+      final NamespaceApplier applier = new NamespaceApplier(clazz);
       return applier.packInSameNamespaces(newClassDecl);
    }
 

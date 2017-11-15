@@ -119,8 +119,8 @@ public final class ExtractInterfaceContext {
       return chosenClass;
    }
 
-   public void setChosenClass(final ICPPASTCompositeTypeSpecifier klass) {
-      chosenClass = klass;
+   public void setChosenClass(final ICPPASTCompositeTypeSpecifier clazz) {
+      chosenClass = clazz;
    }
 
    public ICPPASTCompositeTypeSpecifier getSutClass() {

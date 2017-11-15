@@ -42,8 +42,8 @@ class MemFunBodyStrategy extends CommonFunBodyStrategy {
       return ASTUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class);
    }
 
-   private static ICPPASTQualifiedName getFullyQualifiedNameFor(final IASTCompositeTypeSpecifier klass) {
-      return new QualifiedNameCreator(klass.getName()).createQualifiedName();
+   private static ICPPASTQualifiedName getFullyQualifiedNameFor(final IASTCompositeTypeSpecifier clazz) {
+      return new QualifiedNameCreator(clazz.getName()).createQualifiedName();
    }
 
    // return (this->*origMemFun)();

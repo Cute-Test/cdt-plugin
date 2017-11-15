@@ -19,13 +19,13 @@ class MissingMemFunCodanArgsProvider {
 
    private final CppStandard                                 cppStd;
    private final Collection<? extends MissingMemberFunction> missingMemFuns;
-   private final ICPPASTCompositeTypeSpecifier               klass;
+   private final ICPPASTCompositeTypeSpecifier               clazz;
 
    public MissingMemFunCodanArgsProvider(final CppStandard cppStd, final Collection<? extends MissingMemberFunction> missingMemFuns,
-                                         final ICPPASTCompositeTypeSpecifier klass) {
+                                         final ICPPASTCompositeTypeSpecifier clazz) {
       this.cppStd = cppStd;
       this.missingMemFuns = missingMemFuns;
-      this.klass = klass;
+      this.clazz = clazz;
    }
 
    public Optional<MissingMemFunCodanArguments> createMemFunCodanArgs() {
@@ -33,16 +33,16 @@ class MissingMemFunCodanArgsProvider {
 
       final Collection<MissingMemberFunction> fake = collectMissingMemFuns(getFakeCtorProvider());
       final Collection<MissingMemberFunction> mock = collectMissingMemFuns(getMockCtorProvider());
-      final String className = klass.getName().toString();
+      final String className = clazz.getName().toString();
       return Optional.of(new MissingMemFunCodanArguments(className, getFunSignatures(fake), getFunSignatures(mock)));
    }
 
    private MockObjectDefaultCtorProvider getMockCtorProvider() {
-      return new MockObjectDefaultCtorProvider(klass, cppStd);
+      return new MockObjectDefaultCtorProvider(clazz, cppStd);
    }
 
    private FakeObjectDefaultCtorProvider getFakeCtorProvider() {
-      return new FakeObjectDefaultCtorProvider(klass);
+      return new FakeObjectDefaultCtorProvider(clazz);
    }
 
    private List<MissingMemberFunction> collectMissingMemFuns(final DefaultCtorProvider defaultCtorProvider) {

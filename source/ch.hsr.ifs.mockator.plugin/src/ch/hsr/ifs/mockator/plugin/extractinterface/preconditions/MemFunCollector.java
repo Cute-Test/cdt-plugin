@@ -42,9 +42,9 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
       context.setUsedPublicMemFuns(getUsedMemFuns(context, publicMemFuns));
    }
 
-   private static Collection<IASTDeclaration> getPublicMemFuns(final ICPPASTCompositeTypeSpecifier klass) {
+   private static Collection<IASTDeclaration> getPublicMemFuns(final ICPPASTCompositeTypeSpecifier clazz) {
       final EnumSet<Types> onlyInstanceMemFuns = EnumSet.noneOf(PublicMemFunFinder.Types.class);
-      final PublicMemFunFinder finder = new PublicMemFunFinder(klass, onlyInstanceMemFuns);
+      final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, onlyInstanceMemFuns);
       return finder.getPublicMemFuns();
    }
 
@@ -133,9 +133,9 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
       return ASTUtil.getChildOfType(function, IASTFunctionDeclarator.class);
    }
 
-   private static Collection<ICPPASTFunctionDeclarator> getAllMemberFunctions(final ICPPASTCompositeTypeSpecifier klass) {
+   private static Collection<ICPPASTFunctionDeclarator> getAllMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
       final List<ICPPASTFunctionDeclarator> allMemFuns = list();
-      klass.accept(new ASTVisitor() {
+      clazz.accept(new ASTVisitor() {
 
          {
             shouldVisitDeclarations = true;

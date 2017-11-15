@@ -158,15 +158,15 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
    }
 
    @Override
-   protected Optional<IASTName> getNameToMark(final ICPPASTCompositeTypeSpecifier klass) {
-      if (klass.getName().toString().trim().isEmpty()) {
+   protected Optional<IASTName> getNameToMark(final ICPPASTCompositeTypeSpecifier clazz) {
+      if (clazz.getName().toString().trim().isEmpty()) {
          // this trick is necessary because when we deal with an anonymous
          // class and we have to mark something that we can lookup afterwards
          // to find the enclosing node
-         return Optional.of(klass.getBaseSpecifiers()[0].getName());
+         return Optional.of(clazz.getBaseSpecifiers()[0].getName());
       }
 
-      return Optional.of(klass.getName());
+      return Optional.of(clazz.getName());
    }
 
    @Override

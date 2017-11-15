@@ -33,26 +33,26 @@ public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    @Override
-   public Collection<StaticPolyMissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier klass) {
-      final StaticPolymorphismUseFinder staticPolyFinder = getStaticPolyUseFinder(klass);
+   public Collection<StaticPolyMissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
+      final StaticPolymorphismUseFinder staticPolyFinder = getStaticPolyUseFinder(clazz);
       final Set<StaticPolyMissingMemFun> missingMemFuns = orderPreservingSet();
 
-      for (final IASTFunctionDefinition testFun : getReferencingTestFunctions(klass)) {
+      for (final IASTFunctionDefinition testFun : getReferencingTestFunctions(clazz)) {
          final Collection<StaticPolyMissingMemFun> usedMemFunsInSut = staticPolyFinder.apply(testFun);
-         final Collection<StaticPolyMissingMemFun> onlyMissing = filterAlreadyExisting(usedMemFunsInSut, klass);
+         final Collection<StaticPolyMissingMemFun> onlyMissing = filterAlreadyExisting(usedMemFunsInSut, clazz);
          missingMemFuns.addAll(onlyMissing);
       }
 
       return missingMemFuns;
    }
 
-   private StaticPolymorphismUseFinder getStaticPolyUseFinder(final ICPPASTCompositeTypeSpecifier klass) {
-      return new StaticPolymorphismUseFinder(klass, cProject, index);
+   private StaticPolymorphismUseFinder getStaticPolyUseFinder(final ICPPASTCompositeTypeSpecifier clazz) {
+      return new StaticPolymorphismUseFinder(clazz, cProject, index);
    }
 
    private static Collection<StaticPolyMissingMemFun> filterAlreadyExisting(final Collection<StaticPolyMissingMemFun> candidates,
-         final ICPPASTCompositeTypeSpecifier klass) {
-      final Collection<ICPPASTFunctionDefinition> existingMemFuns = getPublicMemberFunctions(klass);
+         final ICPPASTCompositeTypeSpecifier clazz) {
+      final Collection<ICPPASTFunctionDefinition> existingMemFuns = getPublicMemberFunctions(clazz);
       final List<StaticPolyMissingMemFun> onlyMissing = list();
 
       for (final StaticPolyMissingMemFun candidate : candidates) {
@@ -76,8 +76,8 @@ public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
       return missingMemFun.isCallEquivalent(function, getConstStrategy(function));
    }
 
-   private static Collection<ICPPASTFunctionDefinition> getPublicMemberFunctions(final ICPPASTCompositeTypeSpecifier klass) {
-      final PublicMemFunFinder finder = new PublicMemFunFinder(klass, PublicMemFunFinder.ALL_TYPES);
+   private static Collection<ICPPASTFunctionDefinition> getPublicMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
+      final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, PublicMemFunFinder.ALL_TYPES);
       return ASTUtil.getFunctionDefinitions(finder.getPublicMemFuns());
    }
 

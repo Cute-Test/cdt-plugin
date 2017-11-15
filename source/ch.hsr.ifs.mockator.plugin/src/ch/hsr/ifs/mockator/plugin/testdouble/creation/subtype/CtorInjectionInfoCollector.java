@@ -69,16 +69,16 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    }
 
    private Optional<ICPPASTFunctionDeclarator> findMatchingCtor(final List<IASTInitializerClause> ctorArgs, final int argPosOfProblemType,
-         final ICPPASTCompositeTypeSpecifier klass) {
-      for (final ICPPASTFunctionDeclarator publicCtor : getPublicCtors(klass)) {
+         final ICPPASTCompositeTypeSpecifier clazz) {
+      for (final ICPPASTFunctionDeclarator publicCtor : getPublicCtors(clazz)) {
          if (areEquivalentExceptProblemType(ctorArgs, publicCtor, argPosOfProblemType)) { return Optional.of(publicCtor); }
       }
 
       return Optional.empty();
    }
 
-   private static Collection<ICPPASTFunctionDeclarator> getPublicCtors(final ICPPASTCompositeTypeSpecifier klass) {
-      final PublicMemFunFinder finder = new PublicMemFunFinder(klass, PublicMemFunFinder.ALL_TYPES);
+   private static Collection<ICPPASTFunctionDeclarator> getPublicCtors(final ICPPASTCompositeTypeSpecifier clazz) {
+      final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, PublicMemFunFinder.ALL_TYPES);
       final List<ICPPASTFunctionDeclarator> publicCtors = list();
 
       for (final IASTDeclaration memFun : finder.getPublicMemFuns()) {
@@ -92,7 +92,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
             continue;
          }
 
-         if (isCopyCtor(klass, funDecl)) {
+         if (isCopyCtor(clazz, funDecl)) {
             continue;
          }
          publicCtors.add(funDecl);
@@ -101,14 +101,14 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       return publicCtors;
    }
 
-   private static boolean isCopyCtor(final ICPPASTCompositeTypeSpecifier klass, final ICPPASTFunctionDeclarator funDecl) {
+   private static boolean isCopyCtor(final ICPPASTCompositeTypeSpecifier clazz, final ICPPASTFunctionDeclarator funDecl) {
       final ICPPConstructor ctor = (ICPPConstructor) funDecl.getName().resolveBinding();
-      final ICPPClassType targetClass = (ICPPClassType) klass.getName().resolveBinding();
+      final ICPPClassType targetClass = (ICPPClassType) clazz.getName().resolveBinding();
       return ASTUtil.isCopyCtor(ctor, targetClass);
    }
 
-   private static boolean isPartOf(final IASTNode node, final Class<? extends IASTNode> klass) {
-      return ASTUtil.getAncestorOfType(node, klass) != null;
+   private static boolean isPartOf(final IASTNode node, final Class<? extends IASTNode> clazz) {
+      return ASTUtil.getAncestorOfType(node, clazz) != null;
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> findTargetClassForSimpleDecl(final IASTInitializer ctorInitializer) {

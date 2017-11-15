@@ -4,7 +4,7 @@ public abstract class CastHelper {
 
    //TODO does not describe well what it does
 
-   public static <T> boolean isInstanceOf(final Object obj, final Class<T> klass) {
-      return klass.isAssignableFrom(obj.getClass());
+   public static <T> boolean isInstanceOf(final Object obj, final Class<T> clazz) {
+      return clazz.isAssignableFrom(obj.getClass());
    }
 }

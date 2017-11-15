@@ -21,30 +21,30 @@ public class PublicInheritanceAdder implements Consumer<ExtractInterfaceContext>
    @Override
    public void accept(final ExtractInterfaceContext context) {
       final ICPPASTName newInterfaceName = createNewInterfaceName(context);
-      final ICPPASTCompositeTypeSpecifier klass = context.getChosenClass();
-      final ICPPASTBaseSpecifier baseSpecifier = createPublicBase(klass, newInterfaceName);
-      final ICPPASTCompositeTypeSpecifier newClass = addInterfaceAsBaseClass(klass, baseSpecifier);
-      replaceOldClassWithNew(context, klass, newClass);
+      final ICPPASTCompositeTypeSpecifier clazz = context.getChosenClass();
+      final ICPPASTBaseSpecifier baseSpecifier = createPublicBase(clazz, newInterfaceName);
+      final ICPPASTCompositeTypeSpecifier newClass = addInterfaceAsBaseClass(clazz, baseSpecifier);
+      replaceOldClassWithNew(context, clazz, newClass);
    }
 
    private static ICPPASTName createNewInterfaceName(final ExtractInterfaceContext context) {
       return nodeFactory.newName(context.getNewInterfaceName().toCharArray());
    }
 
-   private static ICPPASTBaseSpecifier createPublicBase(final ICPPASTCompositeTypeSpecifier klass, final ICPPASTName newInterfaceName) {
+   private static ICPPASTBaseSpecifier createPublicBase(final ICPPASTCompositeTypeSpecifier clazz, final ICPPASTName newInterfaceName) {
       final boolean nonVirtual = false;
-      final int visibility = getInheritanceVisibility(klass);
+      final int visibility = getInheritanceVisibility(clazz);
       return nodeFactory.newBaseSpecifier((ICPPASTNameSpecifier) newInterfaceName, visibility, nonVirtual);
    }
 
-   private static int getInheritanceVisibility(final ICPPASTCompositeTypeSpecifier klass) {
+   private static int getInheritanceVisibility(final ICPPASTCompositeTypeSpecifier clazz) {
       final int noBaseSpecifier = 0;
-      final int visibility = ASTUtil.isStructType(klass) ? noBaseSpecifier : ICPPASTBaseSpecifier.v_public;
+      final int visibility = ASTUtil.isStructType(clazz) ? noBaseSpecifier : ICPPASTBaseSpecifier.v_public;
       return visibility;
    }
 
-   private static ICPPASTCompositeTypeSpecifier addInterfaceAsBaseClass(final ICPPASTCompositeTypeSpecifier klass, final ICPPASTBaseSpecifier base) {
-      final ICPPASTCompositeTypeSpecifier copy = klass.copy();
+   private static ICPPASTCompositeTypeSpecifier addInterfaceAsBaseClass(final ICPPASTCompositeTypeSpecifier clazz, final ICPPASTBaseSpecifier base) {
+      final ICPPASTCompositeTypeSpecifier copy = clazz.copy();
       copy.addBaseSpecifier(base);
       return copy;
    }

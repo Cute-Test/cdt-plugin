@@ -32,18 +32,18 @@ public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
       public int visit(final IASTDeclSpecifier specifier) {
          if (!ASTUtil.isClass(specifier)) { return PROCESS_CONTINUE; }
 
-         final ICPPASTCompositeTypeSpecifier klass = (ICPPASTCompositeTypeSpecifier) specifier;
+         final ICPPASTCompositeTypeSpecifier clazz = (ICPPASTCompositeTypeSpecifier) specifier;
 
-         if (isNonTemplateClass(klass)) {
-            markIfHasMissingMemFuns(klass);
+         if (isNonTemplateClass(clazz)) {
+            markIfHasMissingMemFuns(clazz);
          }
 
          return PROCESS_CONTINUE;
       }
    }
 
-   private static boolean isNonTemplateClass(final ICPPASTCompositeTypeSpecifier klass) {
-      return ASTUtil.getAncestorOfType(klass, ICPPASTTemplateDeclaration.class) == null;
+   private static boolean isNonTemplateClass(final ICPPASTCompositeTypeSpecifier clazz) {
+      return ASTUtil.getAncestorOfType(clazz, ICPPASTTemplateDeclaration.class) == null;
    }
 
    @Override
@@ -57,7 +57,7 @@ public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
    }
 
    @Override
-   protected Optional<IASTName> getNameToMark(final ICPPASTCompositeTypeSpecifier klass) {
-      return Optional.of(klass.getName());
+   protected Optional<IASTName> getNameToMark(final ICPPASTCompositeTypeSpecifier clazz) {
+      return Optional.of(clazz.getName());
    }
 }

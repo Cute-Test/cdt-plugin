@@ -69,12 +69,12 @@
 //      return new ASTTypeMatcher().isEquivalent(lhs, rhs);
 //   }
 //
-//   public static boolean isStructType(final ICPPASTCompositeTypeSpecifier klass) {
-//      return klass.getKey() == IASTCompositeTypeSpecifier.k_struct;
+//   public static boolean isStructType(final ICPPASTCompositeTypeSpecifier clazz) {
+//      return clazz.getKey() == IASTCompositeTypeSpecifier.k_struct;
 //   }
 //
-//   public static boolean isClassType(final ICPPASTCompositeTypeSpecifier klass) {
-//      return klass.getKey() == ICPPASTCompositeTypeSpecifier.k_class;
+//   public static boolean isClassType(final ICPPASTCompositeTypeSpecifier clazz) {
+//      return clazz.getKey() == ICPPASTCompositeTypeSpecifier.k_class;
 //   }
 //
 //   public static boolean isClass(final IASTNode node) {
@@ -338,10 +338,10 @@
 //      return true;
 //   }
 //
-//   public static String getQfNameF(final ICPPASTCompositeTypeSpecifier klass) {
-//      final IBinding klassBinding = klass.getName().resolveBinding();
-//      ILTISException.Unless.instanceOf(klassBinding, ICPPClassType.class, "Class expected");
-//      return getQfName((ICPPClassType) klassBinding);
+//   public static String getQfNameF(final ICPPASTCompositeTypeSpecifier clazz) {
+//      final IBinding clazzBinding = clazz.getName().resolveBinding();
+//      ILTISException.Unless.instanceOf(clazzBinding, ICPPClassType.class, "Class expected");
+//      return getQfName((ICPPClassType) clazzBinding);
 //   }
 //
 //   public static String getQfName(final ICPPBinding binding) {
@@ -382,8 +382,8 @@
 //      return false;
 //   }
 //
-//   public static boolean isPartOf(final IASTNode node, final Class<? extends IASTNode> klass) {
-//      return getAncestorOfType(node, klass) != null;
+//   public static boolean isPartOf(final IASTNode node, final Class<? extends IASTNode> clazz) {
+//      return getAncestorOfType(node, clazz) != null;
 //   }
 //
 //   public static IType windDownToRealType(IType type, final boolean stopAtTypeDef) {

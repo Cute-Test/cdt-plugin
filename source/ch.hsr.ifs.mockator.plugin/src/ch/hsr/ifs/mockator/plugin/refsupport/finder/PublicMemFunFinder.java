@@ -23,7 +23,7 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 public class PublicMemFunFinder {
 
-   private final ICPPASTCompositeTypeSpecifier klass;
+   private final ICPPASTCompositeTypeSpecifier clazz;
    private final Set<Types>                    typesToConsider;
    private boolean                             publicVisibility;
 
@@ -33,16 +33,16 @@ public class PublicMemFunFinder {
 
    public static final EnumSet<Types> ALL_TYPES = EnumSet.allOf(Types.class);
 
-   public PublicMemFunFinder(final ICPPASTCompositeTypeSpecifier klass, final Set<Types> typesToConsider) {
-      this.klass = klass;
+   public PublicMemFunFinder(final ICPPASTCompositeTypeSpecifier clazz, final Set<Types> typesToConsider) {
+      this.clazz = clazz;
       this.typesToConsider = typesToConsider;
       initVisibility();
    }
 
    private void initVisibility() {
-      if (ASTUtil.isStructType(klass)) {
+      if (ASTUtil.isStructType(clazz)) {
          publicVisibility = true;
-      } else if (ASTUtil.isClassType(klass)) {
+      } else if (ASTUtil.isClassType(clazz)) {
          publicVisibility = false;
       } else throw new ILTISException("Union types not supported").rethrowUnchecked();
    }
@@ -50,7 +50,7 @@ public class PublicMemFunFinder {
    public List<IASTDeclaration> getPublicMemFuns() {
       final List<IASTDeclaration> publicMemFuns = list();
 
-      for (final IASTDeclaration classMember : klass.getMembers()) {
+      for (final IASTDeclaration classMember : clazz.getMembers()) {
          if (classMember instanceof ICPPASTVisibilityLabel) {
             publicVisibility = isPublic((ICPPASTVisibilityLabel) classMember);
             continue;

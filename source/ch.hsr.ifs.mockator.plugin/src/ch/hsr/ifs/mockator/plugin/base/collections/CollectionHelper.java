@@ -88,8 +88,8 @@ public abstract class CollectionHelper {
       return map;
    }
 
-   public static <T> Collection<T> checkedCast(final Collection<?> list, final Class<T> klass) {
-      return list.stream().map((it) -> klass.cast(it)).collect(Collectors.toList());
+   public static <T> Collection<T> checkedCast(final Collection<?> list, final Class<T> clazz) {
+      return list.stream().map((it) -> clazz.cast(it)).collect(Collectors.toList());
    }
 
    public static <T> Map<T, T> checkedCast(final Map<?, ?> map, final Class<T> clazz) {

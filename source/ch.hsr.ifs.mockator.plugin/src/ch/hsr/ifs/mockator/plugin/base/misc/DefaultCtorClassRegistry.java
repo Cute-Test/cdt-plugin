@@ -18,15 +18,15 @@ public class DefaultCtorClassRegistry<T> {
    public Collection<T> createInstances() {
       final List<T> instances = new ArrayList<>();
 
-      for (final Class<? extends T> klass : classes) {
+      for (final Class<? extends T> clazz : classes) {
          try {
-            instances.add(klass.newInstance());
+            instances.add(clazz.newInstance());
          }
          catch (final InstantiationException e) {
-            new ILTISException("Class has no default constructor: " + klass.getSimpleName(), e).rethrowUnchecked();;
+            new ILTISException("Class has no default constructor: " + clazz.getSimpleName(), e).rethrowUnchecked();;
          }
          catch (final IllegalAccessException e) {
-            new ILTISException("No access to class " + klass.getSimpleName(), e).rethrowUnchecked();;
+            new ILTISException("No access to class " + clazz.getSimpleName(), e).rethrowUnchecked();;
          }
       }
       return instances;

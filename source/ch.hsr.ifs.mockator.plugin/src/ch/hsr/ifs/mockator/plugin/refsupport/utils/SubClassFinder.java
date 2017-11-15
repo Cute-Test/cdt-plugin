@@ -25,23 +25,23 @@ public class SubClassFinder {
       this.index = index;
    }
 
-   public Collection<ICPPClassType> getSubClasses(final ICPPClassType klass) throws CoreException {
+   public Collection<ICPPClassType> getSubClasses(final ICPPClassType clazz) throws CoreException {
       final List<ICPPClassType> subClasses = list();
       final Set<String> alreadyHandled = unorderedSet();
-      collectSubClasses(klass, subClasses, alreadyHandled);
+      collectSubClasses(clazz, subClasses, alreadyHandled);
       subClasses.remove(0);
       return subClasses;
    }
 
-   private void collectSubClasses(final ICPPClassType klass, final List<ICPPClassType> subClasses, final Set<String> alreadyHandled)
+   private void collectSubClasses(final ICPPClassType clazz, final List<ICPPClassType> subClasses, final Set<String> alreadyHandled)
          throws CoreException {
-      final String type = ASTTypeUtil.getType(klass, true);
+      final String type = ASTTypeUtil.getType(clazz, true);
 
       if (!alreadyHandled.add(type)) return;
 
-      subClasses.add(klass);
+      subClasses.add(clazz);
 
-      for (final IIndexName i : findRefsAndDefs(klass)) {
+      for (final IIndexName i : findRefsAndDefs(clazz)) {
          if (!i.isBaseSpecifier()) {
             continue;
          }
@@ -60,7 +60,7 @@ public class SubClassFinder {
       }
    }
 
-   private IIndexName[] findRefsAndDefs(final ICPPBinding klass) throws CoreException {
-      return index.findNames(klass, IIndex.FIND_REFERENCES | IIndex.FIND_DEFINITIONS);
+   private IIndexName[] findRefsAndDefs(final ICPPBinding clazz) throws CoreException {
+      return index.findNames(clazz, IIndex.FIND_REFERENCES | IIndex.FIND_DEFINITIONS);
    }
 }
