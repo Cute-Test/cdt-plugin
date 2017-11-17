@@ -12,7 +12,6 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 
 
-
 public class Cpp03RegistrationFinder extends RegistrationFinder {
 
    @Override

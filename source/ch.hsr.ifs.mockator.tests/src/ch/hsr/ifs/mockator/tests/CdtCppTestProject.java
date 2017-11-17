@@ -128,9 +128,7 @@ public class CdtCppTestProject {
          for (final String providerId : scannerConfig.getProviderIdList()) {
             final String runArgs = scannerSet.getInfo(context).getProviderRunArguments(providerId);
 
-            if (runArgs.contains("-std=c++0x")) {
-               return true;
-            }
+            if (runArgs.contains("-std=c++0x")) { return true; }
          }
       }
 
@@ -143,9 +141,7 @@ public class CdtCppTestProject {
 
    public boolean hasCompilerFlag(final String compilerFlag) throws BuildException {
       for (final ITool tool : getDefaultConfiguration().getToolChain().getTools()) {
-         if (isToolCppCompiler(tool)) {
-            return tool.getToolCommandFlagsString(null, null).contains(compilerFlag);
-         }
+         if (isToolCppCompiler(tool)) { return tool.getToolCommandFlagsString(null, null).contains(compilerFlag); }
       }
 
       return false;
@@ -171,9 +167,7 @@ public class CdtCppTestProject {
 
          final IOption flagsOption = tool.getOptionBySuperClassId("gnu.cpp.link.option.other");
 
-         if (orderPreservingSet(flagsOption.getStringListValue()).contains(linkerOption)) {
-            return true;
-         }
+         if (orderPreservingSet(flagsOption.getStringListValue()).contains(linkerOption)) { return true; }
       }
 
       return false;
@@ -186,9 +180,7 @@ public class CdtCppTestProject {
          }
 
          final IOption option = tool.getOptionBySuperClassId("gnu.cpp.compiler.option.preprocessor.def");
-         if (orderPreservingSet(option.getDefinedSymbols()).contains(macro)) {
-            return true;
-         }
+         if (orderPreservingSet(option.getDefinedSymbols()).contains(macro)) { return true; }
       }
 
       return false;
@@ -205,9 +197,7 @@ public class CdtCppTestProject {
                continue;
             }
 
-            if (orderPreservingSet(option.getLibraries()).contains(linkerLibrary)) {
-               return true;
-            }
+            if (orderPreservingSet(option.getLibraries()).contains(linkerLibrary)) { return true; }
          }
       }
 

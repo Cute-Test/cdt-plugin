@@ -29,7 +29,7 @@ public class AllCallsVectorInserter {
    private final IASTNode                      parent;
 
    public AllCallsVectorInserter(final ICPPASTCompositeTypeSpecifier mockObject, final IASTNode parent, final Optional<IASTName> allCallsVector,
-         final CppStandard cppStd) {
+                                 final CppStandard cppStd) {
       this.mockObject = mockObject;
       this.parent = parent;
       this.allCallsVector = allCallsVector;

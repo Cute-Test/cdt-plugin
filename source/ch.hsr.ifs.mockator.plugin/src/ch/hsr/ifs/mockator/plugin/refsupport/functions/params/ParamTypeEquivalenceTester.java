@@ -34,7 +34,7 @@ public class ParamTypeEquivalenceTester {
    }
 
    public ParamTypeEquivalenceTester(final Collection<IType> caller, final Collection<IType> receiver,
-         final Function2<Integer, IType, Boolean> filter) {
+                                     final Function2<Integer, IType, Boolean> filter) {
       this.caller = caller;
       this.receiver = receiver;
       this.filter = filter;

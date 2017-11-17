@@ -25,11 +25,12 @@ import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 
+
 class WithoutCuteFileCreator extends MockFunctionFileCreator {
 
    public WithoutCuteFileCreator(final ModificationCollector collector, final CRefactoringContext cRefContext, final ITranslationUnit originTu,
-         final ICProject mockatorProject, final ICProject originProject, final CppStandard cppStd,
-         final IProgressMonitor pm) {
+                                 final ICProject mockatorProject, final ICProject originProject, final CppStandard cppStd,
+                                 final IProgressMonitor pm) {
       super(collector, cRefContext, originTu, mockatorProject, originProject, cppStd, pm);
    }
 

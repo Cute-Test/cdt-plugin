@@ -31,7 +31,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
 
    public BoostVectorExpectationsFinder(final Collection<MemFunCallExpectation> callExpectations, final NodeContainer<IASTName> expectationVector,
-         final IASTName expectationsVectorName) {
+                                        final IASTName expectationsVectorName) {
       super(callExpectations, expectationVector, expectationsVectorName);
    }
 
@@ -41,21 +41,15 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
       final IASTExpression expression = ((IASTExpressionStatement) expectationStmt).getExpression();
       final ICPPASTBinaryExpression binExpr = getBinaryExpr(expression);
 
-      if (binExpr == null) {
-         return;
-      }
+      if (binExpr == null) { return; }
 
       final IASTExpression operand1 = binExpr.getOperand1();
 
-      if (!(operand1 instanceof IASTIdExpression)) {
-         return;
-      }
+      if (!(operand1 instanceof IASTIdExpression)) { return; }
 
       final IASTIdExpression idExpr = (IASTIdExpression) operand1;
 
-      if (!matchesName(idExpr.getName()) || !isTypeDefForCallsVector(idExpr)) {
-         return;
-      }
+      if (!matchesName(idExpr.getName()) || !isTypeDefForCallsVector(idExpr)) { return; }
 
       expectationVector.setNode(idExpr.getName());
       callExpectations.addAll(getMemFunCalls(expression));
@@ -122,15 +116,11 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    private static boolean isCallExpr(final IASTExpression expression) {
       final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
 
-      if (funCall == null) {
-         return false;
-      }
+      if (funCall == null) { return false; }
 
       final IASTExpression functionNameExpr = funCall.getFunctionNameExpression();
 
-      if (!(functionNameExpr instanceof IASTIdExpression)) {
-         return false;
-      }
+      if (!(functionNameExpr instanceof IASTIdExpression)) { return false; }
 
       return isNameCall(functionNameExpr);
    }

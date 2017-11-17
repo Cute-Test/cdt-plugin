@@ -159,7 +159,7 @@ public class TypedefHelper {
    }
 
    private static Optional<IASTTranslationUnit> getAst(final IIndex index, final String contentId, final URI uri) throws CModelException,
-   CoreException {
+         CoreException {
       final ICProject cProject = getProjects()[0];
       final ITranslationUnit tu = new ExternalTranslationUnit(cProject, uri, contentId);
       return Optional.of(tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS));

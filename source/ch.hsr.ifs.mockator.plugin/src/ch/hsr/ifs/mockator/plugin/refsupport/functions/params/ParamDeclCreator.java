@@ -126,9 +126,7 @@ public class ParamDeclCreator {
    private static boolean makeLastPtrOpConst(final IASTDeclarator declarator) {
       final IASTPointerOperator[] ptrOperators = declarator.getPointerOperators();
 
-      if (ptrOperators == null) {
-         return false;
-      }
+      if (ptrOperators == null) { return false; }
 
       for (int i = ptrOperators.length - 1; i >= 0; i--) {
          final IASTPointerOperator currentPtrOp = ptrOperators[i];

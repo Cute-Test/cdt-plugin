@@ -65,9 +65,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
    }
 
    private static Collection<ICPPASTTemplateDeclaration> getTemplateFunctions(final ICPPASTTemplateDeclaration templateDecl) {
-      if (!hasClassInTemplateDecl(templateDecl)) {
-         return list();
-      }
+      if (!hasClassInTemplateDecl(templateDecl)) { return list(); }
 
       final NotInlineDefMemFunFinderVisitor visitor = new NotInlineDefMemFunFinderVisitor(templateDecl);
       templateDecl.getTranslationUnit().accept(visitor);
@@ -78,8 +76,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
       return ASTUtil.getChildOfType(templateDecl, ICPPASTCompositeTypeSpecifier.class) != null;
    }
 
-   private Collection<TemplateParamCombination> getTestDoubleAsTemplateArgUsages(
-         final IASTFunctionDefinition testFunction) {
+   private Collection<TemplateParamCombination> getTestDoubleAsTemplateArgUsages(final IASTFunctionDefinition testFunction) {
       final ClassInTemplateIdFinderVisitor finder = new ClassInTemplateIdFinderVisitor(testDouble, cProject, index);
       testFunction.accept(finder);
       return finder.getTemplateParamCombinations();

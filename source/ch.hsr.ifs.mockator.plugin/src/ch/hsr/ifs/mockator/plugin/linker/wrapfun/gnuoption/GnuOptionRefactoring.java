@@ -136,7 +136,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
 
    private ASTLiteralNode createIfDefWrapFun() {
       return new ASTLiteralNode(MockatorConstants.IFDEF_DIRECTIVE + MockatorConstants.SPACE + MockatorConstants.WRAP_MACRO_PREFIX + newFunName +
-            NEW_LINE);
+                                NEW_LINE);
    }
 
    private static ICPPASTLinkageSpecification wrapFunctionsInCLinkage(final IASTSimpleDeclaration realFunDecl,

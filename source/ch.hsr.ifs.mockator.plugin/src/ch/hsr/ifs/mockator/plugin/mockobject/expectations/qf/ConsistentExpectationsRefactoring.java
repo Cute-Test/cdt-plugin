@@ -36,6 +36,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
+
 class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
    private final ConsistentExpectationsCodanArgs ca;
@@ -44,8 +45,8 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    private final List<ExistingTestDoubleMemFun>  expectationsToAdd;
 
    public ConsistentExpectationsRefactoring(final ICElement cElement, final ITextSelection selection, final ICProject project,
-         final ConsistentExpectationsCodanArgs ca, final CppStandard cppStd,
-         final LinkedEditModeStrategy linkedEditMode) {
+                                            final ConsistentExpectationsCodanArgs ca, final CppStandard cppStd,
+                                            final LinkedEditModeStrategy linkedEditMode) {
       super(cElement, selection, project);
       this.ca = ca;
       this.cppStd = cppStd;
@@ -72,7 +73,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       getSelectedName(ast).ifPresent((expectations) -> reconcileExpectations(collector, ast, expectations));
    }

@@ -12,8 +12,6 @@ import org.eclipse.core.resources.IProject;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-
-
 public abstract class CdtHelper {
 
    public static ITool getSuperTool(final ITool tool) {

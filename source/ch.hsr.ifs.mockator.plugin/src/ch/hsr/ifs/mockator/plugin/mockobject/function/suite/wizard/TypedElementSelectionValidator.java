@@ -16,8 +16,6 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-
-
 // Copied and adapted from CUTE
 class TypedElementSelectionValidator implements ISelectionStatusValidator {
 

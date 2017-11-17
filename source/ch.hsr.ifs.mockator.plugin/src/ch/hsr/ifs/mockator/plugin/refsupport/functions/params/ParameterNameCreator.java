@@ -24,7 +24,7 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 public class ParameterNameCreator {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final Map<String, Boolean>  nameHistory;
+   private final Map<String, Boolean>   nameHistory;
 
    public ParameterNameCreator(final Map<String, Boolean> nameHistory) {
       this.nameHistory = nameHistory;
@@ -57,14 +57,10 @@ public class ParameterNameCreator {
          type = ((IQualifierType) type).getType();
       }
 
-      if (type instanceof ITypedef) {
-         return ASTTypeUtil.getQualifiedName((ICPPBinding) type).substring(0, 1);
-      }
+      if (type instanceof ITypedef) { return ASTTypeUtil.getQualifiedName((ICPPBinding) type).substring(0, 1); }
       if (type instanceof ICPPTemplateInstance || type instanceof ICPPClassType) {
          return ASTTypeUtil.getType(type).toLowerCase();
-      } else if (type instanceof IBasicType) {
-         return ((IBasicType) type).getKind().toString().substring(1).toLowerCase();
-      }
+      } else if (type instanceof IBasicType) { return ((IBasicType) type).getKind().toString().substring(1).toLowerCase(); }
 
       return " ";
    }

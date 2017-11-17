@@ -33,9 +33,7 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
    public boolean test(final StaticPolyMissingMemFun memFunCall) {
       final ICPPASTFunctionDefinition sutFunction = memFunCall.getContainingFunction();
 
-      if (!shouldConsider(sutFunction)) {
-         return true;
-      }
+      if (!shouldConsider(sutFunction)) { return true; }
 
       Boolean called = cache.get(sutFunction);
 
@@ -55,9 +53,7 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
       final IBinding sutBinding = sutFunction.getDeclarator().getName().resolveBinding();
 
       for (final IASTName caller : calleeReferenceResolver.findCallers(sutBinding, sutFunction)) {
-         if (matches(testFunction, getFunctionDefinition(caller))) {
-            return true;
-         }
+         if (matches(testFunction, getFunctionDefinition(caller))) { return true; }
       }
 
       return false;
@@ -68,9 +64,7 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
    }
 
    private static boolean matches(final ICPPASTFunctionDefinition functionInUse, final ICPPASTFunctionDefinition missingMemFun) {
-      if (functionInUse == null || missingMemFun == null) {
-         return false;
-      }
+      if (functionInUse == null || missingMemFun == null) { return false; }
 
       final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) functionInUse.getDeclarator());
       return checker.isEquivalent((ICPPASTFunctionDeclarator) missingMemFun.getDeclarator());

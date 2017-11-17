@@ -33,6 +33,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifi
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
+
 public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
    @Override

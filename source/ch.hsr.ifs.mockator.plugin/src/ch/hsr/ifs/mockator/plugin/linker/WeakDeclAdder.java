@@ -27,8 +27,8 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 public class WeakDeclAdder {
 
    private static final ICPPNodeFactory nodeFactory    = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private static final String         WEAK_DECL_ATTR = "__attribute__((weak))";
-   private final ModificationCollector collector;
+   private static final String          WEAK_DECL_ATTR = "__attribute__((weak))";
+   private final ModificationCollector  collector;
 
    public WeakDeclAdder(final ModificationCollector collector) {
       this.collector = collector;
@@ -37,9 +37,7 @@ public class WeakDeclAdder {
    public void addWeakDeclAttribute(final ICPPASTFunctionDeclarator funDecl) {
       final IASTTranslationUnit tu = funDecl.getTranslationUnit();
 
-      if (!isTuPartOfWorkspace(tu)) {
-         return;
-      }
+      if (!isTuPartOfWorkspace(tu)) { return; }
 
       final ICPPASTNamedTypeSpecifier withWeakDeclSpec = createWeakDeclSpec(funDecl);
       final IASTNode funDeclParentCopy = getWeakParentCopy(funDecl, withWeakDeclSpec);

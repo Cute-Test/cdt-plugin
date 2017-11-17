@@ -63,9 +63,7 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    private static List<String> split(final String expectations) {
-      if (expectations.trim().isEmpty()) {
-         return list();
-      }
+      if (expectations.trim().isEmpty()) { return list(); }
       return list(expectations.split(SIGNATURE_DELIMITER));
    }
 

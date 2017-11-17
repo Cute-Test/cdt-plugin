@@ -64,9 +64,7 @@ public class AstIncludeNode extends ASTLiteralNode {
    private static IASTNode getInsertionPoint(final IASTTranslationUnit ast) {
       final IASTNode[] children = ast.getChildren();
 
-      if (children == null || children.length == 0) {
-         return null;
-      }
+      if (children == null || children.length == 0) { return null; }
 
       return children[0];
    }

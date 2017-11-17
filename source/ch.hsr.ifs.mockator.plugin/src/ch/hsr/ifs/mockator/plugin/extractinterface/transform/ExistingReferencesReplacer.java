@@ -64,17 +64,13 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static void addLocalUsagesIfNecessary(final ExtractInterfaceContext context, final IASTName className, final Collection<IASTName> usages) {
-      if (!usages.isEmpty()) {
-         return;
-      }
+      if (!usages.isEmpty()) { return; }
       final IASTName[] references = context.getTuOfChosenClass().getReferences(className.resolveBinding());
       usages.addAll(list(references));
    }
 
    private static boolean isPointerOrRefOrFwdDeclToChosenClass(final IASTName usage, final ExtractInterfaceContext context) {
-      if (isPartOfExpression(usage)) {
-         return false;
-      }
+      if (isPartOfExpression(usage)) { return false; }
       final IASTNode declaration = getDeclaration(usage);
       final IASTDeclarator declarator = getDeclarator(declaration, context.getChosenClass().getName());
       return ASTUtil.hasPointerOrRefType(declarator) || isClassForwardDeclaration(declaration);
@@ -119,16 +115,12 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static ICPPASTNamedTypeSpecifier getTypeSpecIfRefersToClass(final IASTNode selectedNode, final IASTName className) {
-      if (referesToSameEntity(selectedNode, className)) {
-         return (ICPPASTNamedTypeSpecifier) selectedNode;
-      }
+      if (referesToSameEntity(selectedNode, className)) { return (ICPPASTNamedTypeSpecifier) selectedNode; }
 
       for (final IASTNode node : selectedNode.getChildren()) {
          final ICPPASTNamedTypeSpecifier namedSpec = getTypeSpecIfRefersToClass(node, className);
 
-         if (namedSpec != null) {
-            return namedSpec;
-         }
+         if (namedSpec != null) { return namedSpec; }
       }
 
       return null;
@@ -140,7 +132,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
 
    private static IASTNode getDeclaration(IASTNode node) {
       while (node != null && !(node instanceof IASTSimpleDeclaration) && !(node instanceof IASTParameterDeclaration) &&
-            !(node instanceof ICPPASTFunctionDefinition)) {
+             !(node instanceof ICPPASTFunctionDefinition)) {
          node = node.getParent();
       }
       return node;
@@ -151,9 +143,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
          node = ((ICPPASTTemplateDeclaration) node).getDeclaration();
       }
 
-      if (node instanceof IASTSimpleDeclaration) {
-         return isClassFwd(((IASTSimpleDeclaration) node).getDeclSpecifier());
-      }
+      if (node instanceof IASTSimpleDeclaration) { return isClassFwd(((IASTSimpleDeclaration) node).getDeclSpecifier()); }
 
       return false;
    }
@@ -239,9 +229,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static IASTName createNewInterfaceName(final String newInterfaceName, final IASTName oldName) {
-      if (ASTUtil.isQualifiedName(oldName)) {
-         return getNewQNameForInterface((ICPPASTQualifiedName) oldName, newInterfaceName);
-      }
+      if (ASTUtil.isQualifiedName(oldName)) { return getNewQNameForInterface((ICPPASTQualifiedName) oldName, newInterfaceName); }
 
       return nodeFactory.newName(newInterfaceName.toCharArray());
    }

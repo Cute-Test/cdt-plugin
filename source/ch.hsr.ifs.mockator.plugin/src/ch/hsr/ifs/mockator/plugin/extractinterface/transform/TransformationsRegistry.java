@@ -12,7 +12,7 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceConte
 public class TransformationsRegistry extends DefaultCtorClassRegistry<Consumer<ExtractInterfaceContext>> {
 
    private static final Set<Class<? extends Consumer<ExtractInterfaceContext>>> TRANSFORMATIONS = orderPreservingSet(
-         //@formatter:off
+   //@formatter:off
          ExistingReferencesReplacer.class,
          PublicInheritanceAdder.class,
          InterfaceFileCreator.class,
@@ -21,7 +21,7 @@ public class TransformationsRegistry extends DefaultCtorClassRegistry<Consumer<E
          ForwardDeclsRemover.class,
          TypeDefsRemover.class
          //@formatter:on
-         );
+   );
 
    public TransformationsRegistry() {
       super(TRANSFORMATIONS);

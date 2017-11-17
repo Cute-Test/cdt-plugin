@@ -23,7 +23,7 @@ public class ExpectationsReconciler {
    private final CppStandard               cppStd;
 
    public ExpectationsReconciler(final ASTRewrite rewriter, final IASTName expectationsVector, final ICPPASTFunctionDefinition testFun,
-         final CppStandard cppStd, final LinkedEditModeStrategy linkedEditMode) {
+                                 final CppStandard cppStd, final LinkedEditModeStrategy linkedEditMode) {
       this.rewriter = rewriter;
       this.expectationsVector = expectationsVector;
       this.testFun = testFun;

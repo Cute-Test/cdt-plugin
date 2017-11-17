@@ -63,9 +63,7 @@ public class ReferencingTestFunFinder {
    }
 
    private void addContainingFunctionIfNecessary(final List<ICPPASTFunctionDefinition> testFunctions) {
-      if (!testFunctions.isEmpty()) {
-         return;
-      }
+      if (!testFunctions.isEmpty()) { return; }
 
       final ICPPASTFunctionDefinition testFunction = getContainingTestFunction(testDouble);
 
@@ -77,9 +75,7 @@ public class ReferencingTestFunFinder {
    private ICPPASTFunctionDefinition getContainingTestFunction(final ICPPASTCompositeTypeSpecifier testDouble) {
       final ICPPASTFunctionDefinition containedFunction = getFunctionParent(testDouble);
 
-      if (containedFunction != null && isValidTestFunction(containedFunction)) {
-         return containedFunction;
-      }
+      if (containedFunction != null && isValidTestFunction(containedFunction)) { return containedFunction; }
 
       return null;
    }

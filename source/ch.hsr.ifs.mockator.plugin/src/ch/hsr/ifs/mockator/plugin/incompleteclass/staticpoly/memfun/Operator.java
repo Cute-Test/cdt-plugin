@@ -133,13 +133,9 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private boolean isConstMemberFun() {
-      if (isCompoundAssignOperator()) {
-         return false;
-      }
+      if (isCompoundAssignOperator()) { return false; }
 
-      if (isLogicalOperator() || isBinaryExpression()) {
-         return true;
-      }
+      if (isLogicalOperator() || isBinaryExpression()) { return true; }
 
       switch (operator) {
       case NOT:
@@ -271,9 +267,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
          return false;
       }
 
-      if (isCompoundAssignOperator()) {
-         return true;
-      }
+      if (isCompoundAssignOperator()) { return true; }
 
       switch (opType) {
       case IASTBinaryExpression.op_assign:
@@ -374,17 +368,13 @@ class Operator extends AbstractStaticPolyMissingMemFun {
 
    @Override
    public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEditStrategy) {
-      if (isUnaryExpression() && isPostfixOperator()) {
-         return list();
-      }
+      if (isUnaryExpression() && isPostfixOperator()) { return list(); }
       return super.createDefaultArguments(cppStd, linkedEditStrategy);
    }
 
    @Override
    public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
-      if (!function.getDeclarator().getName().toString().equals(getOperatorName())) {
-         return false;
-      }
+      if (!function.getDeclarator().getName().toString().equals(getOperatorName())) { return false; }
 
       final ICPPASTParameterDeclaration[] generatedParams = createFunDecl().getParameters();
       final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) function.getDeclarator();

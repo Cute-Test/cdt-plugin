@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-
-
 class DefaultPropertyHandler {
 
    public static <E extends Enum<? extends PropertyTypeWithDefault>> E getDefault(final Class<E> enumKlass) {

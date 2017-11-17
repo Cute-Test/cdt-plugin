@@ -66,7 +66,7 @@ class DeleteWrappedFunctionRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {}
+         OperationCanceledException {}
 
    @Override
    public String getDescription() {

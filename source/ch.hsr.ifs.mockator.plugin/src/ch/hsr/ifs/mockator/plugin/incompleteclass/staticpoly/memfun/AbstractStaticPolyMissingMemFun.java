@@ -26,7 +26,7 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDoubleMemFun implements StaticPolyMissingMemFun {
 
    protected static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private ICPPASTFunctionDeclarator     funDecl;
+   private ICPPASTFunctionDeclarator      funDecl;
 
    @Override
    public String getFunctionSignature() {

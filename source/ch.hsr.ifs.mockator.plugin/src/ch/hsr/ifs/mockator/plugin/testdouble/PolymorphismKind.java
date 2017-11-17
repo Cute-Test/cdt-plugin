@@ -9,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-
 public enum PolymorphismKind {
    SubTypePoly, StaticPoly;
 

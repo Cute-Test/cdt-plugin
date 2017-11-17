@@ -22,6 +22,7 @@ import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleRe
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.TestDoubleInNsInserter;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.TestDoubleUsingNsHandler;
 
+
 class TestDoubleCpp03Refactoring extends AbstractCreateTestDoubleRefactoring {
 
    public TestDoubleCpp03Refactoring(final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
@@ -30,7 +31,7 @@ class TestDoubleCpp03Refactoring extends AbstractCreateTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       final String newClassName = getSelectedName(ast).get().toString();

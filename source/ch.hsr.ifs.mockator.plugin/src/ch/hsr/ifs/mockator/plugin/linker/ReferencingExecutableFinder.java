@@ -1,6 +1,5 @@
 package ch.hsr.ifs.mockator.plugin.linker;
 
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Predicate;

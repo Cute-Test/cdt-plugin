@@ -31,6 +31,7 @@ import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 
+
 class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
 
    private static final String CUTE_SUITE_FQ         = "cute::suite";
@@ -41,8 +42,8 @@ class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
    private static final String CUTE_SUITE_NAME       = "s";
 
    public WithCuteSuiteFileCreator(final ModificationCollector collector, final CRefactoringContext refactoringContext,
-         final ITranslationUnit originTu, final ICProject mockatorProject, final ICProject originProject,
-         final CppStandard cppStd, final IProgressMonitor pm) {
+                                   final ITranslationUnit originTu, final ICProject mockatorProject, final ICProject originProject,
+                                   final CppStandard cppStd, final IProgressMonitor pm) {
       super(collector, refactoringContext, originTu, mockatorProject, originProject, cppStd, pm);
    }
 

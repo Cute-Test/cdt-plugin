@@ -20,6 +20,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.TestDouble;
 import ch.hsr.ifs.mockator.plugin.testdouble.qf.AbstractTestDoubleRefactoring;
 
+
 public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    public FakeObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
@@ -28,7 +29,7 @@ public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final Collection<? extends MissingMemberFunction> missingMemFuns = collectMissingMemFuns(pm);
       final ASTRewrite rewriter = createRewriter(collector, getAST(tu(), pm));
       final ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);

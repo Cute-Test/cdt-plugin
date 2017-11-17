@@ -51,8 +51,8 @@ public class MockObjectDefaultCtorProvider implements DefaultCtorProvider {
    }
 
    private boolean hasPublicCtors(final Collection<? extends MissingMemberFunction> memFuns) {
-      final Collection<ICPPASTFunctionDefinition> onlyCtors = toFunctions(memFuns).stream().filter((function) -> ASTUtil
-            .isDeclConstructor(function)).collect(Collectors.toList());
+      final Collection<ICPPASTFunctionDefinition> onlyCtors = toFunctions(memFuns).stream().filter((function) -> ASTUtil.isDeclConstructor(function))
+            .collect(Collectors.toList());
       return mockObject.hasPublicCtor() || !onlyCtors.isEmpty();
    }
 

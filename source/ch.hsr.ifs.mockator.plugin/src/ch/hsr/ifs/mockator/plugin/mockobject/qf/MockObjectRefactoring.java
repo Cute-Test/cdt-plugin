@@ -27,13 +27,14 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.TestDouble;
 import ch.hsr.ifs.mockator.plugin.testdouble.qf.AbstractTestDoubleRefactoring;
 
+
 public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    private final Collection<MissingMemberFunction> missingMemFuns;
    private final LinkedEditModeStrategy            linkedEdit;
 
    public MockObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject cProject,
-         final LinkedEditModeStrategy linkedEdit) {
+                                final LinkedEditModeStrategy linkedEdit) {
       super(cppStd, cElement, selection, cProject);
       this.linkedEdit = linkedEdit;
       missingMemFuns = list();
@@ -41,7 +42,7 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       missingMemFuns.addAll(collectMissingMemFuns(pm));

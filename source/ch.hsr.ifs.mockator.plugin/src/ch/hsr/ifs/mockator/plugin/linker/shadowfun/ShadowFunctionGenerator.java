@@ -19,7 +19,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 public class ShadowFunctionGenerator {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final CppStandard           cppStd;
+   private final CppStandard            cppStd;
 
    public ShadowFunctionGenerator(final CppStandard cppStd) {
       this.cppStd = cppStd;

@@ -41,7 +41,6 @@ public abstract class UiUtil {
       return Thread.currentThread().equals(display.getThread());
    }
 
-
    public static Optional<CEditor> getActiveCEditor() {
       final IEditorPart editor = getActiveWorkbenchWindow().getActivePage().getActiveEditor();
       if (editor instanceof ICEditor) { return Optional.of((CEditor) editor); }

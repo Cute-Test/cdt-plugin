@@ -136,8 +136,8 @@ public abstract class MockatorRefactoring extends CRefactoring {
 
    private static IASTImplicitName[] getNames(final IASTNode selectedNode) {
       if (selectedNode instanceof ICPPASTUnaryExpression || selectedNode instanceof ICPPASTBinaryExpression ||
-            selectedNode instanceof ICPPASTNewExpression ||
-            selectedNode instanceof ICPPASTDeleteExpression) { return ((IASTImplicitNameOwner) selectedNode).getImplicitNames(); }
+          selectedNode instanceof ICPPASTNewExpression ||
+          selectedNode instanceof ICPPASTDeleteExpression) { return ((IASTImplicitNameOwner) selectedNode).getImplicitNames(); }
 
       return array();
    }

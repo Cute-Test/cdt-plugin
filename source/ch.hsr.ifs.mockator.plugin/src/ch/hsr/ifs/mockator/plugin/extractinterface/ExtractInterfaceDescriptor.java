@@ -18,7 +18,7 @@ public class ExtractInterfaceDescriptor extends CRefactoringDescriptor {
    public static final String REPLACE_ALL_OCCURENCES = "replace";
 
    public ExtractInterfaceDescriptor(final String id, final String project, final String desc, final String comment,
-         final Map<String, String> arguments) {
+                                     final Map<String, String> arguments) {
       super(id, project, desc, comment, MULTI_CHANGE, arguments);
    }
 

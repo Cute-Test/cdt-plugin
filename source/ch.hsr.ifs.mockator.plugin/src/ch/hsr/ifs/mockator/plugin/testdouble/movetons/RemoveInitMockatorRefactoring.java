@@ -37,6 +37,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.finder.MacroFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
+
 public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
 
    private final IDocument           doc;
@@ -78,9 +79,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
 
    @Override
    public Change createChange(final IProgressMonitor pm) throws CoreException {
-      if (!hasMockatorInitCall()) {
-         return new NullChange();
-      }
+      if (!hasMockatorInitCall()) { return new NullChange(); }
 
       return createDeleteChange(pm);
    }
@@ -139,8 +138,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    private IASTFunctionDefinition getMatchingTestFunction(final Collection<IASTFunctionDefinition> allTestFunctions) {
       final String testFunName = testFunction.getDeclarator().getName().toString();
       final Collection<IASTFunctionDefinition> functions = allTestFunctions.stream().filter((funDef) -> funDef.getDeclarator().getName().toString()
-            .equals(
-                  testFunName)).collect(Collectors.toList());
+            .equals(testFunName)).collect(Collectors.toList());
       ILTISException.Unless.isFalse(functions.isEmpty(), "Could not find test function");
       return head(functions).get();
    }

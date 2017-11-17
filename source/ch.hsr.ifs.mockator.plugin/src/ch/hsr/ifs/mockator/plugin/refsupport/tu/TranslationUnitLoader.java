@@ -21,7 +21,6 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 
-
 public class TranslationUnitLoader {
 
    private static final int       AST_FLAGS = AST_CONFIGURE_USING_SOURCE_CONTEXT | AST_SKIP_INDEXED_HEADERS;
@@ -69,9 +68,7 @@ public class TranslationUnitLoader {
    }
 
    private IASTTranslationUnit loadAst(final ITranslationUnit tu) throws CoreException {
-      if (context != null) {
-         return context.getAST(tu, pm);
-      }
+      if (context != null) { return context.getAST(tu, pm); }
 
       return loadAstFromTu(tu);
    }

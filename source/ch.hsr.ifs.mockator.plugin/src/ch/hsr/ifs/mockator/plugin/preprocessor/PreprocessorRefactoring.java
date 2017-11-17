@@ -89,7 +89,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final Optional<IASTName> optSelectedName = getSelectedName(getAST(tu(), pm));
       if (optSelectedName.isPresent()) {
          final Optional<ICPPASTFunctionDeclarator> funDecl = findFunDeclaration(optSelectedName.get(), pm);

@@ -17,10 +17,10 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 // Mock() : mock_id(reserveNextCallId(allCalls)) { }
 public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinition> {
 
-   private static final String         NEXT_CALL_ID_RESERVATION = "reserveNextCallId";
+   private static final String          NEXT_CALL_ID_RESERVATION = "reserveNextCallId";
    private static final ICPPNodeFactory nodeFactory              = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final String                allCallsVectorName;
-   private final CppStandard           cppStd;
+   private final String                 allCallsVectorName;
+   private final CppStandard            cppStd;
 
    public MockIdInitializerAdder(final String allCallsVectorName, final CppStandard cppStd) {
       this.allCallsVectorName = allCallsVectorName;
@@ -29,9 +29,7 @@ public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinitio
 
    @Override
    public void accept(final ICPPASTFunctionDefinition ctor) {
-      if (alreadyHasMockIdInitializer(ctor)) {
-         return;
-      }
+      if (alreadyHasMockIdInitializer(ctor)) { return; }
 
       final IASTInitializerClause nextCallIdReservation = createNextCallReservation();
       final ICPPASTConstructorChainInitializer ctorInitializer = getMockIdInitializer(nextCallIdReservation);
@@ -47,9 +45,7 @@ public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinitio
 
    private static boolean alreadyHasMockIdInitializer(final ICPPASTFunctionDefinition ctor) {
       for (final ICPPASTConstructorChainInitializer initializer : ctor.getMemberInitializers()) {
-         if (initializer.getMemberInitializerId().toString().equals(MockatorConstants.MOCK_ID)) {
-            return true;
-         }
+         if (initializer.getMemberInitializerId().toString().equals(MockatorConstants.MOCK_ID)) { return true; }
       }
       return false;
    }

@@ -37,7 +37,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
@@ -59,9 +58,7 @@ public class ItaniumMangledNameGenerator {
    }
 
    public String createMangledName() {
-      if (function.isExternC()) {
-         return function.getName();
-      }
+      if (function.isExternC()) { return function.getName(); }
 
       mangledName();
       return mangledName.toString();
@@ -214,9 +211,7 @@ public class ItaniumMangledNameGenerator {
 
    private boolean isSubstitutionNecessary(final String typeStr) {
       if (typeStr.startsWith("std::basic_string") || typeStr.startsWith("std::basic_ostream<char") || typeStr.startsWith("std::basic_istream<char") ||
-            typeStr.startsWith("std::basic_iostream<char") || typeStr.startsWith("std::allocator")) {
-         return true;
-      }
+          typeStr.startsWith("std::basic_iostream<char") || typeStr.startsWith("std::allocator")) { return true; }
 
       return history.alreadySeen(typeStr);
    }
@@ -272,9 +267,7 @@ public class ItaniumMangledNameGenerator {
    // ::= <source-name>
    // ::= <unnamed-type-name>
    private void unQualifiedName(final String name) {
-      if (name.isEmpty()) {
-         return;
-      }
+      if (name.isEmpty()) { return; }
 
       if (isCtor() || isDtor()) {
          sourceName(name);
@@ -696,9 +689,7 @@ public class ItaniumMangledNameGenerator {
    private String[] getQualifiedFunctionName() {
       final String[] qfName = getQualifiedName(function);
 
-      if (isCtor() || isDtor()) {
-         return array(qfName[0], "");
-      }
+      if (isCtor() || isDtor()) { return array(qfName[0], ""); }
 
       return qfName;
    }
@@ -727,7 +718,7 @@ public class ItaniumMangledNameGenerator {
          switch (seqId) {
          case 0:
             return ""; // The first repetition yields an empty string after
-            // S_
+         // S_
          default:
             return StringUtil.getBase36Value(seqId - 1);
          }

@@ -5,7 +5,6 @@ import java.util.Map;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContribution;
 
 
-
 public class ExtractInterfaceContribution extends CRefactoringContribution {
 
    @Override

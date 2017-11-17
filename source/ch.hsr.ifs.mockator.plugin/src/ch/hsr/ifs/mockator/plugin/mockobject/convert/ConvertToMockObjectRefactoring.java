@@ -38,6 +38,7 @@ import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestDoubleKindAnalyzer;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestDoubleKindAnalyzer.TestDoubleKind;
 
+
 public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
 
    private final CppStandard            cppStd;
@@ -45,7 +46,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    private MockObject                   newMockObject;
 
    public ConvertToMockObjectRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cproject,
-         final LinkedEditModeStrategy linkedEditStrategy) {
+                                         final LinkedEditModeStrategy linkedEditStrategy) {
       super(element, selection, cproject);
       this.cppStd = cppStd;
       this.linkedEditStrategy = linkedEditStrategy;
@@ -73,7 +74,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       addMockSupportToFakeObject(ast, rewriter, pm);
@@ -91,8 +92,8 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast,
          final Collection<TestDoubleMemFun> withNewExpectations, final IProgressMonitor pm) {
       return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), newMockObject, rewriter, ast, cppStd,
-            getPublicVisibilityInserter(
-            rewriter), hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEditStrategy).withNewExpectations(withNewExpectations).build();
+            getPublicVisibilityInserter(rewriter), hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEditStrategy).withNewExpectations(
+                  withNewExpectations).build();
    }
 
    private boolean hasOnlyStaticMemFuns() {

@@ -37,6 +37,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
 
+
 public class ShadowFunctionRefactoring extends LinkerRefactoring {
 
    private static final String SHADOW_FOLDER_NAME = "shadows";

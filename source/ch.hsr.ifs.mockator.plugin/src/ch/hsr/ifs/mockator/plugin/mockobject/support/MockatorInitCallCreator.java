@@ -20,7 +20,7 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 public class MockatorInitCallCreator {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final IASTNode              parent;
+   private final IASTNode               parent;
 
    public MockatorInitCallCreator(final IASTNode parent) {
       this.parent = parent;

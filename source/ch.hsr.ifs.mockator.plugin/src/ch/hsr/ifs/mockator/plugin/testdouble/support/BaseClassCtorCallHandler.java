@@ -32,7 +32,7 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 public class BaseClassCtorCallHandler {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final ICPPClassType   baseClass;
+   private final ICPPClassType          baseClass;
 
    public BaseClassCtorCallHandler(final ICPPClassType testDouble) {
       final ICPPBase[] bases = testDouble.getBases();

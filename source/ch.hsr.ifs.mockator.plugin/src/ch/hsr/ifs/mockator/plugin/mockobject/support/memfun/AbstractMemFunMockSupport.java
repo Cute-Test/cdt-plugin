@@ -10,7 +10,6 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.MemberFunCallRegistrationAdder;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
@@ -21,13 +20,13 @@ import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 abstract class AbstractMemFunMockSupport implements MemFunMockSupportAdder {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   protected final ASTRewrite          rewriter;
-   protected final CppStandard         cppStd;
-   protected final String              callsVectorName;
-   private final PolymorphismKind      polyKind;
+   protected final ASTRewrite           rewriter;
+   protected final CppStandard          cppStd;
+   protected final String               callsVectorName;
+   private final PolymorphismKind       polyKind;
 
    public AbstractMemFunMockSupport(final ASTRewrite rewriter, final CppStandard cppStd, final String nameOfAllCallsVector,
-         final PolymorphismKind polymorphismKind) {
+                                    final PolymorphismKind polymorphismKind) {
       this.rewriter = rewriter;
       this.cppStd = cppStd;
       callsVectorName = nameOfAllCallsVector;

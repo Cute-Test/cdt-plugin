@@ -37,7 +37,7 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
    private String            suiteName;
 
    public MockFunctionRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject referencedProj,
-         final ICProject mockatorProj) {
+                                  final ICProject mockatorProj) {
       super(cElement, selection, referencedProj);
       this.cppStd = cppStd;
       this.mockatorProj = mockatorProj;
@@ -60,7 +60,7 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final Optional<IASTName> funName = getSelectedName(getAST(tu(), pm));
       if (funName.isPresent()) {
          final MockFunctionFileCreator fileCreator = getFileCreator(collector, pm);

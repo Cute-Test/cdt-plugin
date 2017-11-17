@@ -62,9 +62,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
    private static IASTExpressionStatement getInsertionPointForBoostInitializer(final IASTName vector) {
       final IASTName[] references = vector.getTranslationUnit().getReferences(vector.resolveBinding());
 
-      if (references.length > 0) {
-         return ASTUtil.getAncestorOfType(references[0], IASTExpressionStatement.class);
-      }
+      if (references.length > 0) { return ASTUtil.getAncestorOfType(references[0], IASTExpressionStatement.class); }
 
       return null;
    }

@@ -12,7 +12,7 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceConte
 public class DiagnosticsRegistry extends DefaultCtorClassRegistry<Consumer<ExtractInterfaceContext>> {
 
    private static final Set<Class<? extends Consumer<ExtractInterfaceContext>>> DIAGNOSTICS = orderPreservingSet(
-         //@formatter:off
+   //@formatter:off
          ClassDefinitionLookup.class,
          MemFunCollector.class,
          IncludeDirectiveCollector.class,
@@ -20,7 +20,7 @@ public class DiagnosticsRegistry extends DefaultCtorClassRegistry<Consumer<Extra
          TypeDefCollector.class,
          NewInterfaceNameProposal.class
          //@formatter:on
-         );
+   );
 
    public DiagnosticsRegistry() {
       super(DIAGNOSTICS);

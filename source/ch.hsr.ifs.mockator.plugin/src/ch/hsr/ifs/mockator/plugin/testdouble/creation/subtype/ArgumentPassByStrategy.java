@@ -29,24 +29,24 @@ enum ArgumentPassByStrategy {
 
    asPointer {
 
-      @Override
-      public void adaptArguments(final IASTName problemArg, final String nameOfNewInstance, final ASTRewrite rewriter) {
-         final ICPPASTConstructorInitializer ctorInit = ASTUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
-         final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(problemArg, ICPPASTFunctionCallExpression.class);
+   @Override
+   public void adaptArguments(final IASTName problemArg, final String nameOfNewInstance, final ASTRewrite rewriter) {
+      final ICPPASTConstructorInitializer ctorInit = ASTUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
+      final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(problemArg, ICPPASTFunctionCallExpression.class);
 
-         if (ctorInit != null) {
-            adaptCtorArguments(nameOfNewInstance, rewriter, ctorInit);
-         } else if (funCall != null) {
-            adaptFunCallArguments(nameOfNewInstance, rewriter, funCall);
-         }
+      if (ctorInit != null) {
+         adaptCtorArguments(nameOfNewInstance, rewriter, ctorInit);
+      } else if (funCall != null) {
+         adaptFunCallArguments(nameOfNewInstance, rewriter, funCall);
       }
+   }
    },
    asReference {
 
-      @Override
-      public void adaptArguments(final IASTName problemArgument, final String nameOfNewInstance, final ASTRewrite rewriter) {
-         // no argument adaption necessary when passed by reference
-      }
+   @Override
+   public void adaptArguments(final IASTName problemArgument, final String nameOfNewInstance, final ASTRewrite rewriter) {
+      // no argument adaption necessary when passed by reference
+   }
    };
 
    private static final ICPPNodeFactory                     nodeFactory    = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
@@ -101,9 +101,7 @@ enum ArgumentPassByStrategy {
    public static ArgumentPassByStrategy getStrategy(final IType type) {
       if (type instanceof ICPPReferenceType) {
          return asReference;
-      } else if (type instanceof IPointerType) {
-         return asPointer;
-      }
+      } else if (type instanceof IPointerType) { return asPointer; }
 
       throw new ILTISException("Pass by value is not possible with subtype polymorphism").rethrowUnchecked();
    }
@@ -111,9 +109,7 @@ enum ArgumentPassByStrategy {
    public static ArgumentPassByStrategy fromName(final String name) {
       final ArgumentPassByStrategy strategy = STRING_TO_ENUM.get(name);
 
-      if (strategy == null) {
-         throw new ILTISException(String.format("Unknown pass by strategy '%s'", name)).rethrowUnchecked();
-      }
+      if (strategy == null) { throw new ILTISException(String.format("Unknown pass by strategy '%s'", name)).rethrowUnchecked(); }
 
       return strategy;
    }

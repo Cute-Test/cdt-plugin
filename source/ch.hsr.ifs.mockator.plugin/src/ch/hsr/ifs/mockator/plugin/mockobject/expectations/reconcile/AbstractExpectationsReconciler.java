@@ -23,8 +23,8 @@ abstract class AbstractExpectationsReconciler {
    private final Collection<ExistingMemFunCallRegistration> callsToRemove;
 
    public AbstractExpectationsReconciler(final ASTRewrite rewriter, final Collection<? extends TestDoubleMemFun> toAdd,
-         final Collection<ExistingMemFunCallRegistration> toRemove, final CppStandard cppStd,
-         final LinkedEditModeStrategy linkedEditMode) {
+                                         final Collection<ExistingMemFunCallRegistration> toRemove, final CppStandard cppStd,
+                                         final LinkedEditModeStrategy linkedEditMode) {
       this.rewriter = rewriter;
       callsToAdd = toAdd;
       callsToRemove = toRemove;

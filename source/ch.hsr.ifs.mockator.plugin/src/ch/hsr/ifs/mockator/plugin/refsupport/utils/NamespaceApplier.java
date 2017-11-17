@@ -12,7 +12,7 @@ import ch.hsr.ifs.mockator.plugin.base.collections.MyStack;
 public class NamespaceApplier {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final IASTNode              origin;
+   private final IASTNode               origin;
 
    public NamespaceApplier(final IASTNode origin) {
       this.origin = origin;
@@ -21,9 +21,7 @@ public class NamespaceApplier {
    public IASTNode packInSameNamespaces(final IASTSimpleDeclaration decl) {
       final MyStack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
 
-      if (namespaces.isEmpty()) {
-         return decl;
-      }
+      if (namespaces.isEmpty()) { return decl; }
 
       final ICPPASTNamespaceDefinition topNs = namespaces.pop();
       ICPPASTNamespaceDefinition parentNs = topNs;

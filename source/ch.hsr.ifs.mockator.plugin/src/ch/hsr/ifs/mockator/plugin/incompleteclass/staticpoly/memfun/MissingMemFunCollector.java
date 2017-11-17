@@ -28,7 +28,7 @@ public class MissingMemFunCollector {
    }
 
    public MissingMemFunCollector(final ICPPASTTemplateDeclaration sut, final ICPPASTCompositeTypeSpecifier testDouble,
-         final Collection<ICPPASTTemplateDeclaration> templateFunctions) {
+                                 final Collection<ICPPASTTemplateDeclaration> templateFunctions) {
       this.sut = sut;
       this.testDouble = testDouble;
       this.templateFunctions = templateFunctions;

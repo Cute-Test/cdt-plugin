@@ -16,7 +16,7 @@ import ch.hsr.ifs.mockator.plugin.base.collections.MyStack;
 public class QualifiedNameCreator {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final IASTName              name;
+   private final IASTName               name;
 
    public QualifiedNameCreator(final IASTName name) {
       this.name = name;

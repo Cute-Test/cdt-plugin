@@ -21,9 +21,7 @@ public enum CdtManagedProjectType {
          return SharedLib;
       } else if (arteFactId.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_STATICLIB)) {
          return StaticLib;
-      } else if (arteFactId.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_EXE)) {
-         return Executable;
-      }
+      } else if (arteFactId.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_EXE)) { return Executable; }
 
       throw new ILTISException("Project type not supported").rethrowUnchecked();
    }

@@ -49,8 +49,8 @@ public final class MockSupportContext {
       private Collection<? extends TestDoubleMemFun> newForExpectations;
 
       public ContextBuilder(final ICProject cProject, final CRefactoringContext context, final MockObject mockObject, final ASTRewrite rewriter,
-            final IASTTranslationUnit ast, final CppStandard cppStandard, final ClassPublicVisibilityInserter inserter,
-            final boolean hasOnlyStaticMemFuns, final IProgressMonitor pm) {
+                            final IASTTranslationUnit ast, final CppStandard cppStandard, final ClassPublicVisibilityInserter inserter,
+                            final boolean hasOnlyStaticMemFuns, final IProgressMonitor pm) {
          this.cProject = cProject;
          this.context = context;
          this.mockObject = mockObject;

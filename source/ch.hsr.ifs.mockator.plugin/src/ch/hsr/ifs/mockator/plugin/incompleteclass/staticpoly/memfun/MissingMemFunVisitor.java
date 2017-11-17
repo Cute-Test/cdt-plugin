@@ -53,9 +53,7 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
       final IType resolvedType = CxxAstUtils.unwindTypedef(type);
       IType unwoundType = ASTUtil.unwindPointerOrRefType(resolvedType);
 
-      if (unwoundType == null) {
-         return false;
-      }
+      if (unwoundType == null) { return false; }
 
       if (unwoundType instanceof TypeOfDependentExpression) {
          final ICPPEvaluation evaluation = ((TypeOfDependentExpression) unwoundType).getEvaluation();

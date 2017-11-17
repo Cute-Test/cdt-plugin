@@ -27,29 +27,29 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 public class AllCallsVectorCreator {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private static final String         STD         = "std";
-   private static final String         VECTOR      = "vector";
-   private final CallsVectorParent     callsVectorParent;
-   private final String                nameOfAllCallsVector;
-   private final CppStandard           cppStd;
+   private static final String          STD         = "std";
+   private static final String          VECTOR      = "vector";
+   private final CallsVectorParent      callsVectorParent;
+   private final String                 nameOfAllCallsVector;
+   private final CppStandard            cppStd;
 
    public enum CallsVectorParent {
       Function {
 
-         @Override
-         int getStorageClassForCallsVector() {
-            // C++0x standard 9.8: Declarations in a local class can
-            // use only type names, static variables, extern variables
-            // and functions, and enumerators from the enclosing scope.
-            return IASTDeclSpecifier.sc_static;
-         }
+      @Override
+      int getStorageClassForCallsVector() {
+         // C++0x standard 9.8: Declarations in a local class can
+         // use only type names, static variables, extern variables
+         // and functions, and enumerators from the enclosing scope.
+         return IASTDeclSpecifier.sc_static;
+      }
       },
       Namespace {
 
-         @Override
-         int getStorageClassForCallsVector() {
-            return IASTDeclSpecifier.sc_unspecified;
-         }
+      @Override
+      int getStorageClassForCallsVector() {
+         return IASTDeclSpecifier.sc_unspecified;
+      }
       };
 
       abstract int getStorageClassForCallsVector();
@@ -57,9 +57,7 @@ public class AllCallsVectorCreator {
       public static CallsVectorParent fromAstNode(final IASTNode node) {
          if (node instanceof ICPPASTNamespaceDefinition) {
             return Namespace;
-         } else if (node instanceof IASTCompoundStatement) {
-            return Function;
-         }
+         } else if (node instanceof IASTCompoundStatement) { return Function; }
 
          throw new ILTISException("Unexpected test double parent").rethrowUnchecked();
       }

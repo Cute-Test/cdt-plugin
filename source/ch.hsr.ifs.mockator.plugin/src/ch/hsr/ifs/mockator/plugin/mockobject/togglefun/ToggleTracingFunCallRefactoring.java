@@ -47,7 +47,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
    private MockObject                   mockObject;
 
    public ToggleTracingFunCallRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cProject,
-         final LinkedEditModeStrategy linkedEdit) {
+                                          final LinkedEditModeStrategy linkedEdit) {
       super(element, selection, cProject);
       this.cppStd = cppStd;
       this.linkedEdit = linkedEdit;
@@ -85,7 +85,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       toggleTraceSupport(buildContext(rewriter, ast, pm));

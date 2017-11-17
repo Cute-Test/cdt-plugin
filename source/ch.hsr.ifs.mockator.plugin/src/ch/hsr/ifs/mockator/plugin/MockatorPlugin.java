@@ -8,7 +8,6 @@ import org.osgi.framework.BundleContext;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-
 public class MockatorPlugin extends AbstractUIPlugin {
 
    public static final String    PLUGIN_ID = "ch.hsr.ifs.mockator.plugin";

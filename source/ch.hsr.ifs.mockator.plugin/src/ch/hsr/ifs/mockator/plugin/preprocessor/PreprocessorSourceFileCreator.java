@@ -35,7 +35,7 @@ class PreprocessorSourceFileCreator extends PreprocessorFileCreator {
    private final IPath newHeaderFilePath;
 
    public PreprocessorSourceFileCreator(final IPath newHeaderFilePath, final ModificationCollector collector, final ICProject cProject,
-         final CRefactoringContext context) {
+                                        final CRefactoringContext context) {
       super(collector, cProject, context);
       this.newHeaderFilePath = newHeaderFilePath;
    }

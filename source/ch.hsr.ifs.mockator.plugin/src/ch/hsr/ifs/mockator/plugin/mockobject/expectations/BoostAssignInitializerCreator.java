@@ -22,7 +22,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -37,7 +36,7 @@ public class BoostAssignInitializerCreator {
    private final LinkedEditModeStrategy                 linkedEditStrategy;
 
    public BoostAssignInitializerCreator(final Collection<? extends TestDoubleMemFun> memFuns, final String expectationsName,
-         final LinkedEditModeStrategy linkedEditStrategy) {
+                                        final LinkedEditModeStrategy linkedEditStrategy) {
       this.memFuns = memFuns;
       this.expectationsName = expectationsName;
       this.linkedEditStrategy = linkedEditStrategy;

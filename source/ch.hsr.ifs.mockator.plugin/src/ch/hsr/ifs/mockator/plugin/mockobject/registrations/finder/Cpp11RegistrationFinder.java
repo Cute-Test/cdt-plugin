@@ -10,8 +10,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-
-
 public class Cpp11RegistrationFinder extends RegistrationFinder {
 
    @Override
@@ -37,7 +35,8 @@ public class Cpp11RegistrationFinder extends RegistrationFinder {
    }
 
    private ICPPASTSimpleTypeConstructorExpression getCallTypeCtor(final IASTInitializerClause pushBackArg) {
-      ILTISException.Unless.instanceOf(pushBackArg, ICPPASTSimpleTypeConstructorExpression.class, "Wrong push_back argument: " + pushBackArg.getClass().getName());
+      ILTISException.Unless.instanceOf(pushBackArg, ICPPASTSimpleTypeConstructorExpression.class, "Wrong push_back argument: " + pushBackArg
+            .getClass().getName());
       final ICPPASTSimpleTypeConstructorExpression typeCtor = (ICPPASTSimpleTypeConstructorExpression) pushBackArg;
       assureIsCallType(typeCtor);
       return typeCtor;

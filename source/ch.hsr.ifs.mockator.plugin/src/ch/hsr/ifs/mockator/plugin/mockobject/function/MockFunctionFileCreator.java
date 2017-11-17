@@ -52,6 +52,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
+
 abstract class MockFunctionFileCreator {
 
    protected static final ICPPNodeFactory nodeFactory          = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
@@ -66,8 +67,8 @@ abstract class MockFunctionFileCreator {
    private IFile                          newlyCreatedFile;
 
    public MockFunctionFileCreator(final ModificationCollector collector, final CRefactoringContext cRefContext, final ITranslationUnit originTu,
-         final ICProject mockatorProject, final ICProject originProject, final CppStandard cppStd,
-         final IProgressMonitor pm) {
+                                  final ICProject mockatorProject, final ICProject originProject, final CppStandard cppStd,
+                                  final IProgressMonitor pm) {
       this.collector = collector;
       this.cRefContext = cRefContext;
       this.originTu = originTu;

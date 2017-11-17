@@ -23,6 +23,7 @@ import ch.hsr.ifs.iltis.core.functional.functions.Builder;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
+
 public final class ExtractInterfaceContext {
 
    private final ICProject                              cProject;

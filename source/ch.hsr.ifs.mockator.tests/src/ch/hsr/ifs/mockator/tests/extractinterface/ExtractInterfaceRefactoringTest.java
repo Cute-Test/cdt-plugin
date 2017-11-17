@@ -125,7 +125,7 @@ public class ExtractInterfaceRefactoringTest extends MockatorRefactoringTest {
          @Override
          public int visit(final IASTName name) {
             if (name.isPartOfTranslationUnitFile() && SelectionHelper.isNodeInsideSelection(name, region) &&
-                  !(name instanceof ICPPASTQualifiedName)) {
+                !(name instanceof ICPPASTQualifiedName)) {
                names.add(name);
             }
             return PROCESS_CONTINUE;

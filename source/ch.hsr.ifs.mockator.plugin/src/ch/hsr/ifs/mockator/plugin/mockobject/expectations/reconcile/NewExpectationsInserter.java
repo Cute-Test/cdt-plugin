@@ -34,7 +34,7 @@ class NewExpectationsInserter {
    private final MockObject                 mockObject;
 
    public NewExpectationsInserter(final ICPPASTFunctionDefinition testFunction, final MockObject mockObject, final CppStandard cppStd,
-         final ASTRewrite rewriter, final LinkedEditModeStrategy linkedEditStrategy) {
+                                  final ASTRewrite rewriter, final LinkedEditModeStrategy linkedEditStrategy) {
       this.testFunction = testFunction;
       this.mockObject = mockObject;
       this.rewriter = rewriter;

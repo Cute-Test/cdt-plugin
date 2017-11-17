@@ -43,9 +43,7 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
    public int visit(final IASTName name) {
       final IBinding binding = name.resolveBinding();
 
-      if (!isMemFunReferenceToUnknownClass(binding)) {
-         return PROCESS_CONTINUE;
-      }
+      if (!isMemFunReferenceToUnknownClass(binding)) { return PROCESS_CONTINUE; }
 
       if (isReferenceToTemplateParameter(binding)) {
          final ICPPASTFunctionCallExpression funCall = getFunctionCall(name);

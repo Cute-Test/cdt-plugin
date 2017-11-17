@@ -33,9 +33,7 @@ public class DefaultArgumentCreator {
    public Collection<IASTInitializerClause> createDefaultArguments(final Collection<ICPPASTParameterDeclaration> funParams) {
       final List<IASTInitializerClause> defaultArguments = list();
 
-      if (linkedEdit != LinkedEditModeStrategy.ChooseArguments) {
-         return defaultArguments;
-      }
+      if (linkedEdit != LinkedEditModeStrategy.ChooseArguments) { return defaultArguments; }
 
       addDefaultArgs(funParams, defaultArguments);
       return defaultArguments;

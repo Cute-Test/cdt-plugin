@@ -6,7 +6,6 @@ import org.eclipse.core.resources.IMarker;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
-
 public abstract class CodanArguments {
 
    private static final String MISMATCH_CODAN_ARGUMENTS_MSG = "Wrong number of problem arguments passed; expected: %d, got: %d";

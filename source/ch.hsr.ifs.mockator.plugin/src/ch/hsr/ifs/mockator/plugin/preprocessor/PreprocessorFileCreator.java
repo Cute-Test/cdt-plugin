@@ -26,12 +26,12 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 abstract class PreprocessorFileCreator {
 
-   private static final String           FILE_NAME   = "fileName";
-   private static final String           LINE_NUMBER = "lineNumber";
+   private static final String            FILE_NAME   = "fileName";
+   private static final String            LINE_NUMBER = "lineNumber";
    protected static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   protected ICProject                   cProject;
-   protected CRefactoringContext         context;
-   private final ModificationCollector   collector;
+   protected ICProject                    cProject;
+   protected CRefactoringContext          context;
+   private final ModificationCollector    collector;
 
    public PreprocessorFileCreator(final ModificationCollector collector, final ICProject cProject, final CRefactoringContext context) {
       this.collector = collector;

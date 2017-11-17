@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;

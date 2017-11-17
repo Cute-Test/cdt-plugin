@@ -20,6 +20,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDe
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
+
 public abstract class LinkerRefactoring extends MockatorRefactoring {
 
    public LinkerRefactoring(final ICElement element, final ITextSelection selection, final ICProject project) {
@@ -37,7 +38,7 @@ public abstract class LinkerRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       OptHelper.doIfPresentT(getSelectedName(getAST(tu(), pm)), (selectedName) -> createLinkerSeamSupport(collector, selectedName, pm));
    }
 

@@ -10,7 +10,6 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 
 
-
 public class GnuOptionChecker extends AbstractIndexAstChecker {
 
    public static final String WRAP_FUNCTION_PROBLEM_ID = "ch.hsr.ifs.mockator.WrapFunctionProblem";

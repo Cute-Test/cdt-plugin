@@ -59,9 +59,7 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
          return handleBinaryOperator((ICPPASTBinaryExpression) expr);
       } else if (expr instanceof ICPPASTFunctionCallExpression) {
          return handleFunCallOperator((ICPPASTFunctionCallExpression) expr);
-      } else if (expr instanceof ICPPASTArraySubscriptExpression) {
-         return handleIndexOperator((ICPPASTArraySubscriptExpression) expr);
-      }
+      } else if (expr instanceof ICPPASTArraySubscriptExpression) { return handleIndexOperator((ICPPASTArraySubscriptExpression) expr); }
 
       return PROCESS_CONTINUE;
    }
@@ -86,15 +84,11 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
    }
 
    private boolean resolvesToTemplateType(final IASTExpression expr) {
-      if (!(expr instanceof IASTIdExpression)) {
-         return false;
-      }
+      if (!(expr instanceof IASTIdExpression)) { return false; }
 
       final IBinding resolveBinding = ((IASTIdExpression) expr).getName().resolveBinding();
 
-      if (!(resolveBinding instanceof ICPPVariable)) {
-         return false;
-      }
+      if (!(resolveBinding instanceof ICPPVariable)) { return false; }
 
       final IType type = ((ICPPVariable) resolveBinding).getType();
       return resolvesToTemplateParam(type);
@@ -103,16 +97,12 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
    private int handleBinaryOperator(final ICPPASTBinaryExpression binEx) {
       final IASTImplicitName[] iNames = binEx.getImplicitNames();
 
-      if (wasOperatorFound(iNames)) {
-         return PROCESS_CONTINUE;
-      }
+      if (wasOperatorFound(iNames)) { return PROCESS_CONTINUE; }
 
       if (isAppropriateType(binEx.getOperand1())) {
          final OverloadableOperator operator = OverloadableOperator.fromBinaryExpression(binEx.getOperator());
 
-         if (shouldSkipBinaryOperator(operator)) {
-            return PROCESS_CONTINUE;
-         }
+         if (shouldSkipBinaryOperator(operator)) { return PROCESS_CONTINUE; }
 
          reportMissingOperator(binEx, operator);
          return PROCESS_SKIP;
@@ -132,15 +122,11 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
    private int handleUnaryOperator(final IASTExpression expression, final ICPPASTUnaryExpression uExpr) {
       final IASTImplicitName[] iNames = uExpr.getImplicitNames();
 
-      if (wasOperatorFound(iNames)) {
-         return PROCESS_CONTINUE;
-      }
+      if (wasOperatorFound(iNames)) { return PROCESS_CONTINUE; }
 
       final OverloadableOperator operator = OverloadableOperator.fromUnaryExpression(uExpr.getOperator());
 
-      if (shouldSkipUnaryOperator(uExpr, operator)) {
-         return PROCESS_CONTINUE;
-      }
+      if (shouldSkipUnaryOperator(uExpr, operator)) { return PROCESS_CONTINUE; }
 
       if (isAppropriateType(uExpr.getOperand())) {
          reportMissingOperator(expression, operator);
@@ -164,18 +150,14 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
       if (operand instanceof IASTIdExpression) {
          final IASTIdExpression idexpr = (IASTIdExpression) operand;
 
-         if (idexpr.getName().resolveBinding() instanceof IProblemBinding) {
-            return false;
-         }
+         if (idexpr.getName().resolveBinding() instanceof IProblemBinding) { return false; }
       }
 
       return true;
    }
 
    private static boolean isUnaryOperatorToSkip(final OverloadableOperator op, final ICPPASTUnaryExpression uExpr) {
-      if (op == null) {
-         return true;
-      }
+      if (op == null) { return true; }
 
       final IType operandType = uExpr.getOperand().getExpressionType();
 
@@ -192,18 +174,14 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
    }
 
    private static boolean wasOperatorFound(final IASTImplicitName[] iNames) {
-      if (iNames.length != 1) {
-         return false;
-      }
+      if (iNames.length != 1) { return false; }
 
       final IBinding binding = iNames[0].resolveBinding();
       return binding instanceof ICPPFunction && !(binding instanceof ICPPUnknownBinding);
    }
 
    private boolean isAppropriateType(final IASTExpression operand) {
-      if (operand instanceof ICPPASTLiteralExpression) {
-         return false;
-      }
+      if (operand instanceof ICPPASTLiteralExpression) { return false; }
 
       IType type = operand.getExpressionType();
 
@@ -211,13 +189,9 @@ class MissingOperatorFinderVisitor extends MissingMemFunVisitor {
          type = ((IQualifierType) type).getType();
       }
 
-      if (type instanceof IBasicType || type instanceof IEnumeration) {
-         return false;
-      }
+      if (type instanceof IBasicType || type instanceof IEnumeration) { return false; }
 
-      if (operand instanceof IASTIdExpression && isProblemBinding(operand)) {
-         return false;
-      }
+      if (operand instanceof IASTIdExpression && isProblemBinding(operand)) { return false; }
 
       if (type instanceof TypeOfDependentExpression) {
          type = resolveTypeOfDependentExpression((TypeOfDependentExpression) type);

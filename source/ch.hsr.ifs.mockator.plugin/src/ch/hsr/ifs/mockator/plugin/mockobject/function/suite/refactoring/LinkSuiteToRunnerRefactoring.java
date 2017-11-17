@@ -49,12 +49,12 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 // Taken and adapted from CUTE
 public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
 
-   private static final String         MAKE_SUITE_PREFIX = "make_suite_";
-   private static final String         MAKE_RUNNER       = "makeRunner";
-   private static final String         CUTE_ID_LISTENER  = "cute::ide_listener";
-   private IASTFunctionDefinition      testRunner;
-   private String                      suiteName;
-   private IPath                       destinationPath;
+   private static final String    MAKE_SUITE_PREFIX = "make_suite_";
+   private static final String    MAKE_RUNNER       = "makeRunner";
+   private static final String    CUTE_ID_LISTENER  = "cute::ide_listener";
+   private IASTFunctionDefinition testRunner;
+   private String                 suiteName;
+   private IPath                  destinationPath;
 
    public LinkSuiteToRunnerRefactoring(final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
       super(cElement, selection, cProject);
@@ -73,7 +73,7 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-   OperationCanceledException {
+         OperationCanceledException {
       final ASTRewrite rewriter = createRewriter(collector, testRunner.getTranslationUnit());
       changeRunnerBody(rewriter);
       addIncludeForSuite(rewriter);
@@ -172,15 +172,11 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
 
       @Override
       public int visit(final IASTStatement statement) {
-         if (!(statement instanceof IASTDeclarationStatement)) {
-            return PROCESS_CONTINUE;
-         }
+         if (!(statement instanceof IASTDeclarationStatement)) { return PROCESS_CONTINUE; }
 
          final IASTDeclarationStatement declStmt = (IASTDeclarationStatement) statement;
 
-         if (!(declStmt.getDeclaration() instanceof IASTSimpleDeclaration)) {
-            return PROCESS_CONTINUE;
-         }
+         if (!(declStmt.getDeclaration() instanceof IASTSimpleDeclaration)) { return PROCESS_CONTINUE; }
 
          final IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declStmt.getDeclaration();
 

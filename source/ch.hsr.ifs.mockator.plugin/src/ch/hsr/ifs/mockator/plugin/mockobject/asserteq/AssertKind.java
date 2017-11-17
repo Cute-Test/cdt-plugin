@@ -30,45 +30,45 @@ public enum AssertKind {
    // assert(expectedMock == callsMock[1]);
    cassert(MockatorConstants.C_ASSERT_EQUAL, false) {
 
-      @Override
-      protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-         final ICPPASTBinaryExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTBinaryExpression.class);
-         return ExpectedActualPair.from(collectExpectedActual(startingNode));
-      }
+   @Override
+   protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
+      final ICPPASTBinaryExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTBinaryExpression.class);
+      return ExpectedActualPair.from(collectExpectedActual(startingNode));
+   }
    },
    // ASSERT_EQUAL(expectedMock, callsMock[1]);
    cute_equals(MockatorConstants.CUTE_ASSERT_EQUAL, true) {
 
-      @Override
-      protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-         final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
-         return ExpectedActualPair.from(collectExpectedActual(startingNode));
-      }
+   @Override
+   protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
+      final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+      return ExpectedActualPair.from(collectExpectedActual(startingNode));
+   }
    },
    // ASSERT_ANY_ORDER(expectedMock, callsMock[1]);
    any_order(MockatorConstants.ASSERT_ANY_ORDER, true) {
 
-      @Override
-      protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-         final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
-         final IASTInitializerClause[] arguments = startingNode.getArguments();
+   @Override
+   protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
+      final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+      final IASTInitializerClause[] arguments = startingNode.getArguments();
 
-         if (arguments.length < 2) { return Optional.empty(); }
+      if (arguments.length < 2) { return Optional.empty(); }
 
-         final List<IASTIdExpression> callVectors = list();
-         callVectors.add(collectExpectedActual(arguments[0]).get(0));
-         callVectors.add(collectExpectedActual(arguments[1]).get(0));
-         return ExpectedActualPair.from(callVectors);
-      }
+      final List<IASTIdExpression> callVectors = list();
+      callVectors.add(collectExpectedActual(arguments[0]).get(0));
+      callVectors.add(collectExpectedActual(arguments[1]).get(0));
+      return ExpectedActualPair.from(callVectors);
+   }
    },
    // ASSERT_MATCHES(expectedMock, callsMock[1]);
    assert_matches(MockatorConstants.ASSERT_MATCHES, true) {
 
-      @Override
-      protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-         final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
-         return ExpectedActualPair.from(collectExpectedActual(startingNode));
-      }
+   @Override
+   protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
+      final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+      return ExpectedActualPair.from(collectExpectedActual(startingNode));
+   }
    };
 
    private final String  code;

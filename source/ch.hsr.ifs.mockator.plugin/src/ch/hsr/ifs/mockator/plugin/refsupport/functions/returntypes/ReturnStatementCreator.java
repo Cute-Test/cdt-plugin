@@ -23,12 +23,13 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
+
 public class ReturnStatementCreator {
 
    private static final ICPPNodeFactory nodeFactory  = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private static final String         THIS_POINTER = "this";
-   private final CppStandard           cppStd;
-   private final String                memberClassName;
+   private static final String          THIS_POINTER = "this";
+   private final CppStandard            cppStd;
+   private final String                 memberClassName;
 
    public ReturnStatementCreator(final CppStandard cppStd, final String memberClassName) {
       this.cppStd = cppStd;
@@ -44,9 +45,7 @@ public class ReturnStatementCreator {
          return null; // return type is void
       } else if (hasPointerReturnType(funDecl)) {
          return createNullPtr();
-      } else if (isReferenceToThis(funDecl, specifier)) {
-         return createDereferencedThisPointer();
-      }
+      } else if (isReferenceToThis(funDecl, specifier)) { return createDereferencedThisPointer(); }
 
       return createDefaultReturn(specifier);
    }
@@ -54,9 +53,7 @@ public class ReturnStatementCreator {
    private static boolean hasPointerReturnType(final ICPPASTFunctionDeclarator funDecl) {
       final IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
 
-      if (pointerOperators.length == 0) {
-         return false;
-      }
+      if (pointerOperators.length == 0) { return false; }
 
       return pointerOperators[0] instanceof IASTPointer;
    }
@@ -81,9 +78,7 @@ public class ReturnStatementCreator {
    private static boolean hasReferenceReturnType(final ICPPASTFunctionDeclarator funDecl) {
       final IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
 
-      if (pointerOperators.length != 1) {
-         return false;
-      }
+      if (pointerOperators.length != 1) { return false; }
 
       return pointerOperators[0] instanceof ICPPASTReferenceOperator;
    }

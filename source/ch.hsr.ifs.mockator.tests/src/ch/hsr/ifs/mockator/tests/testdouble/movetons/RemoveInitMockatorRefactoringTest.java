@@ -14,6 +14,7 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.RemoveInitMockatorRefactoring;
 import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
 
+
 public class RemoveInitMockatorRefactoringTest extends MockatorRefactoringTest {
 
    @Override

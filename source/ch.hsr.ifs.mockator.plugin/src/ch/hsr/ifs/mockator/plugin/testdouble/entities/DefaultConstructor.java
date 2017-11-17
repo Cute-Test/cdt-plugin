@@ -26,7 +26,7 @@ import ch.hsr.ifs.mockator.plugin.testdouble.support.BaseClassCtorCallHandler;
 public class DefaultConstructor extends AbstractStaticPolyMissingMemFun {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final TestDouble            testDouble;
+   private final TestDouble             testDouble;
 
    public DefaultConstructor(final TestDouble testDouble) {
       this.testDouble = testDouble;

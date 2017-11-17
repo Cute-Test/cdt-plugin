@@ -21,9 +21,7 @@ class LinuxPreloadRunConfig extends AbstractPreloadRunStrategy {
       final String ldPreloadLibs = envVariables.get(LD_PRELOAD);
       final String ldLibraryPath = envVariables.get(LD_LIBRARY_PATH);
 
-      if (ldLibraryPath == null || ldPreloadLibs == null) {
-         return false;
-      }
+      if (ldLibraryPath == null || ldPreloadLibs == null) { return false; }
 
       return ldPreloadLibs.contains(sharedLibPath) && ldLibraryPath.contains(FileUtil.removeFilePart(sharedLibPath));
    }

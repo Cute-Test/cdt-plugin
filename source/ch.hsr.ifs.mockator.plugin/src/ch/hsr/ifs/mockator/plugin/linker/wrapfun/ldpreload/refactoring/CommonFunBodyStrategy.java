@@ -26,7 +26,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.linker.ItaniumMangledNameGenerator;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -35,9 +34,9 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
 
-   protected static final String         ORIG_FUN    = "origFun";
-   protected static final String         FUN_PTR     = "funPtr";
-   protected static final String         TMP_PTR     = "tmpPtr";
+   protected static final String          ORIG_FUN    = "origFun";
+   protected static final String          FUN_PTR     = "funPtr";
+   protected static final String          TMP_PTR     = "tmpPtr";
    protected static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
    @Override
