@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde?>
+<!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
+<target name="Cevelop based on Eclipse Oxygen and CDT 9.4.0" sequenceNumber="1511768256">
+  <locations>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.3.0.201707120748"/>
+      <repository location="https://www.cevelop.com/cdt-testing/9.3.0"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.platform.sdk" version="4.7.1.M20171009-0410"/>
+      <unit id="org.eclipse.sdk.ide" version="4.7.1.M20171009-0410"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.7"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.cdt.sdk.feature.group" version="9.4.0.201711211850"/>
+      <repository location="http://download.eclipse.org/tools/cdt/builds/9.4/rc2/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.6.0.201706141832"/>
+      <unit id="org.apache.log4j" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/releases/oxygen"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="com.cevelop.elevenator.feature.feature.group" version="0.0.0"/>
+      <repository location="https://www.cevelop.com/internal/latest"/>
+    </location>
+  </locations>
+</target>

@@ -13,7 +13,7 @@
   </parent>
 
   <groupId>ch.hsr.ifs</groupId>
-  <artifactId>ch.hsr.ifs.cute.target.cdt930</artifactId>
+  <artifactId>ch.hsr.ifs.cute.target.cdt940</artifactId>
   <version>5.3.0-SNAPSHOT</version>
   <packaging>eclipse-target-definition</packaging>
 

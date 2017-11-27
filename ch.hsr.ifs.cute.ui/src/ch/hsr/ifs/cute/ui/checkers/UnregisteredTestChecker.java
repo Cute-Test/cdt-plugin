@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
  * Switzerland, http://ifs.hsr.ch
- * 
+ *
  * Permission to use, copy, and/or distribute this software for any
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
@@ -27,7 +27,6 @@ import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper;
 import org.eclipse.cdt.internal.core.model.ASTCache;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -45,6 +44,7 @@ import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
  */
 public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 
+	@Override
 	public void processAst(IASTTranslationUnit ast) {
 		final FunctorFinderVisitor functorFinderVisitor = new FunctorFinderVisitor();
 		ast.accept(functorFinderVisitor);
@@ -99,7 +99,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 	private void updateRegisteredTests(ASTCache astCache, final IIndex index, final RegisteredTestFunctionFinderVisitor registeredFunctionFinder,
 			final IBinding toBeRegisteredBinding, IASTDeclaration point) throws CoreException {
 		if (toBeRegisteredBinding instanceof ICPPClassType) {
-			final ICPPConstructor[] constructors = ClassTypeHelper.getConstructors((ICPPClassType) toBeRegisteredBinding, point);
+			final ICPPConstructor[] constructors = ((ICPPClassType) toBeRegisteredBinding).getConstructors();
 			for (ICPPConstructor constructor : constructors) {
 				final IIndexName[] constructorReferences = index.findReferences(constructor); // Here we don't get any references, only if default constructor is called
 				updateRegisteredTestsOfReferencedTUs(registeredFunctionFinder, constructorReferences, astCache, index);
@@ -165,7 +165,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 		}
 		return null;
 	}
-	
+
 	private void markUnregisteredFunctor(IASTDeclaration functor, IASTDeclaration[] declarations) {
 		if (functor instanceof IASTFunctionDefinition) {
 			IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition)functor;
