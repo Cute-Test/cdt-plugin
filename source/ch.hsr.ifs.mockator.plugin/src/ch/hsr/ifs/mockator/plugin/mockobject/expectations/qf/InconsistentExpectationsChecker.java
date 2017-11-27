@@ -12,7 +12,9 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
@@ -26,10 +28,9 @@ import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
 
 public class InconsistentExpectationsChecker extends TestFunctionChecker {
 
-   public static final String INCONSISTENT_EXPECTATIONS_PROBLEM_ID = "ch.hsr.ifs.mockator.InconsistentExpectationsProblem";
-
    @Override
-   protected void processTestFunction(final IASTFunctionDefinition testFun) {
+   protected void processTestFunction(final CheckerResult<ProblemId> result) {
+      final IASTFunctionDefinition testFun = (IASTFunctionDefinition) result.getNode();
       for (final ExpectedActualPair expectedActual : getAssertedCalls(testFun)) {
          getExpectationsAndRegistrations(expectedActual).ifPresent((expReg) -> {
             final Pair<Collection<MemFunCallExpectation>, IASTName> expectations = getExpectations(testFun, expReg.first());
@@ -60,7 +61,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    }
 
    private void markDiffsIfNecessary(final Collection<MemFunCallExpectation> expectedCalls, final IASTName toMark,
-         final Collection<ExistingMemFunCallRegistration> callRegistrations) {
+            final Collection<ExistingMemFunCallRegistration> callRegistrations) {
       final Collection<MemFunSignature> toRemove = orderPreservingDiff(expectedCalls, callRegistrations);
       final Collection<MemFunSignature> toAdd = orderPreservingDiff(callRegistrations, expectedCalls);
 
@@ -70,7 +71,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    }
 
    private static Collection<MemFunSignature> orderPreservingDiff(final Collection<? extends MemFunSignature> setA,
-         final Collection<? extends MemFunSignature> setB) {
+            final Collection<? extends MemFunSignature> setB) {
       final Collection<MemFunSignature> diff = orderPreservingSet();
 
       for (final MemFunSignature signature : setA) {
@@ -86,8 +87,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
          final IASTTranslationUnit ast = getModelCache().getAST();
          final RegistrationCandidatesFinder finder = new RegistrationCandidatesFinder(ast, getCppStandard());
          return finder.findCallRegistrations(vector.getName());
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -97,7 +97,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    }
 
    private void mark(final IASTName toMark, final Collection<MemFunSignature> toRemove, final Collection<MemFunSignature> toAdd) {
-      reportProblem(INCONSISTENT_EXPECTATIONS_PROBLEM_ID, toMark, getCodanArgs(toRemove, toAdd));
+      addNodeForReporting(new CheckerResult<>(getProblemId(), toMark), getCodanArgs(toRemove, toAdd));
    }
 
    private static Object[] getCodanArgs(final Collection<MemFunSignature> toRemove, final Collection<MemFunSignature> toAdd) {
@@ -105,7 +105,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    }
 
    private static Pair<Collection<MemFunCallExpectation>, IASTName> getExpectations(final IASTFunctionDefinition function,
-         final IASTIdExpression expectedCalls) {
+            final IASTIdExpression expectedCalls) {
       final ExpectationsFinder finder = new ExpectationsFinder(function);
       return finder.getExpectations(expectedCalls.getName());
    }
@@ -114,5 +114,10 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       final AssertEqualFinderVisitor visitor = new AssertEqualFinderVisitor(Optional.empty());
       function.accept(visitor);
       return visitor.getExpectedActual();
+   }
+
+   @Override
+   protected ProblemId getProblemId() {
+      return ProblemId.INCONSISTENT_EXPECTATIONS;
    }
 }

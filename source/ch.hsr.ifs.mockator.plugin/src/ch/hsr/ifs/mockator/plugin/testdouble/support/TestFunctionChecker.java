@@ -5,15 +5,18 @@ import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 
+import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.ast.checker.SimpleChecker;
+import ch.hsr.ifs.iltis.cpp.ast.visitor.SimpleVisitor;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
-import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorIndexAstChecker;
 
 
-public abstract class TestFunctionChecker extends MockatorIndexAstChecker implements ICheckerWithPreferences {
+public abstract class TestFunctionChecker extends SimpleChecker<ProblemId> implements ICheckerWithPreferences {
 
    @Override
-   protected ASTVisitor getAstVisitor() {
-      return new ASTVisitor() {
+   protected ASTVisitor getVisitor() {
+      return new SimpleVisitor<ProblemId>(this::processTestFunction) {
 
          {
             shouldVisitDeclarations = true;
@@ -26,7 +29,7 @@ public abstract class TestFunctionChecker extends MockatorIndexAstChecker implem
             final IASTFunctionDefinition candidate = (IASTFunctionDefinition) declaration;
 
             if (isValidTestFunction(candidate)) {
-               processTestFunction((IASTFunctionDefinition) declaration);
+               report(getProblemId(), declaration);
             }
 
             return PROCESS_SKIP;
@@ -34,9 +37,11 @@ public abstract class TestFunctionChecker extends MockatorIndexAstChecker implem
       };
    }
 
+   protected abstract ProblemId getProblemId();
+
    private boolean isValidTestFunction(final IASTFunctionDefinition function) {
       return FunctionsToAnalyze.fromProjectSettings(getProject()).shouldConsider(function);
    }
 
-   protected abstract void processTestFunction(IASTFunctionDefinition function);
+   protected abstract void processTestFunction(CheckerResult<ProblemId> result /* IASTFunctionDefinition function */);
 }

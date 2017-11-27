@@ -1,6 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly;
 
-import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import java.util.function.Consumer;
+
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -10,19 +11,24 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.ast.visitor.SimpleVisitor;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
 
 
 public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
 
-   public static final String MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID = "ch.hsr.ifs.mockator.MissingTestDoublStaticPolyProblem";
-
    @Override
-   protected void processTestFunction(final IASTFunctionDefinition function) {
-      function.accept(new OnEachFunction());
+   protected void processTestFunction(final CheckerResult<ProblemId> result) {
+      ((IASTFunctionDefinition) result.getNode()).accept(new OnEachFunction(this::mark));
    }
 
-   private class OnEachFunction extends ASTVisitor {
+   private class OnEachFunction extends SimpleVisitor<ProblemId> {
+
+      public OnEachFunction(final Consumer<CheckerResult<ProblemId>> callback) {
+         super(callback);
+      }
 
       {
          shouldVisitNames = true;
@@ -34,7 +40,7 @@ public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
 
          if (binding instanceof IProblemBinding) {
             if (isPartOfTemplateId(name) && isTypeId(name)) {
-               mark(name);
+               report(getProblemId(), name);
             }
          }
 
@@ -42,8 +48,8 @@ public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
       }
    };
 
-   private void mark(final IASTName name) {
-      reportProblem(MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID, name, name.toString());
+   private void mark(final CheckerResult<ProblemId> result) {
+      addNodeForReporting(result, result.getNode().toString());
    }
 
    private static boolean isTypeId(final IASTName name) {
@@ -53,5 +59,10 @@ public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
 
    private static boolean isPartOfTemplateId(final IASTName name) {
       return ASTUtil.getAncestorOfType(name, ICPPASTTemplateId.class) != null;
+   }
+
+   @Override
+   protected ProblemId getProblemId() {
+      return ProblemId.MISSING_TEST_DOUBLE_STATICPOLY;
    }
 }

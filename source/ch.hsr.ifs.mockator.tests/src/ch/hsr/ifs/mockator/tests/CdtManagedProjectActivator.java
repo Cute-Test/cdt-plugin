@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
+@SuppressWarnings("restriction")
 public class CdtManagedProjectActivator {
 
    private final IProject project;
@@ -40,7 +41,7 @@ public class CdtManagedProjectActivator {
    }
 
    private static void activateManagedBuildInConfigs(final ICProjectDescription des, final IProjectType projType, final ManagedProject managedProj)
-         throws CoreException {
+            throws CoreException {
       for (final IConfiguration each : getConfigsIn(projType)) {
          final String id = ManagedBuildManager.calculateChildId(each.getId(), null);
          final IConfiguration config = new Configuration(managedProj, (Configuration) each, id, false, true);

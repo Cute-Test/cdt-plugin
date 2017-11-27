@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.tests.mockobject.staticpoly;
 
-import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.StaticPolymorphismChecker;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.qf.MockObjectByFunsQuickFix;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
@@ -10,8 +10,8 @@ import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
 public class MockObjectCpp11StaticPolyQfTest extends MockatorQuickfixTest {
 
    @Override
-   protected String getProblemId() {
-      return StaticPolymorphismChecker.STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
+   protected ProblemId getProblemId() {
+      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
    }
 
    @Override

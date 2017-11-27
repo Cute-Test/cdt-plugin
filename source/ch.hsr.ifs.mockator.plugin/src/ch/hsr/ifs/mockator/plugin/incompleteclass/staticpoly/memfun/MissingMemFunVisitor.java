@@ -19,10 +19,11 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalTypeId;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalUnary;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
-import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 
 
+@SuppressWarnings("restriction")
 abstract class MissingMemFunVisitor extends ASTVisitor {
 
    protected final ICPPASTTemplateDeclaration  sut;
@@ -53,7 +54,9 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
       final IType resolvedType = CxxAstUtils.unwindTypedef(type);
       IType unwoundType = ASTUtil.unwindPointerOrRefType(resolvedType);
 
-      if (unwoundType == null) { return false; }
+      if (unwoundType == null) {
+         return false;
+      }
 
       if (unwoundType instanceof TypeOfDependentExpression) {
          final ICPPEvaluation evaluation = ((TypeOfDependentExpression) unwoundType).getEvaluation();

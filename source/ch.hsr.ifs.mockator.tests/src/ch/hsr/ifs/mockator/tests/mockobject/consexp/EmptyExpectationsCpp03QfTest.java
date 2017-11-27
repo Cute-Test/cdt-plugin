@@ -2,8 +2,8 @@ package ch.hsr.ifs.mockator.tests.mockobject.consexp;
 
 import org.junit.Ignore;
 
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf.ConsistentExpectationsQuickFix;
-import ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf.InconsistentExpectationsChecker;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
@@ -12,8 +12,8 @@ import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
 public class EmptyExpectationsCpp03QfTest extends MockatorQuickfixTest {
 
    @Override
-   protected String getProblemId() {
-      return InconsistentExpectationsChecker.INCONSISTENT_EXPECTATIONS_PROBLEM_ID;
+   protected ProblemId getProblemId() {
+      return ProblemId.INCONSISTENT_EXPECTATIONS;
    }
 
    @Override

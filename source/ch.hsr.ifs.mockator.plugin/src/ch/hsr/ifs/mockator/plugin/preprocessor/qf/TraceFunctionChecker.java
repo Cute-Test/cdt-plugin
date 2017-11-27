@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
-
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludeFileHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.SiblingTranslationUnitFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
@@ -31,15 +31,19 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 
 public class TraceFunctionChecker extends AbstractAstFunctionChecker {
 
-   public static final String TRACE_FUNCTIONS_PROBLEM_ID = "ch.hsr.ifs.mockator.TraceFunctionProblem";
+   //TODO Transform
 
    @Override
    protected void processFunction(final IASTFunctionDefinition function) {
-      if (!(function instanceof ICPPASTFunctionDefinition)) { return; }
+      if (!(function instanceof ICPPASTFunctionDefinition)) {
+         return;
+      }
 
       final ICPPASTFunctionDefinition funDef = (ICPPASTFunctionDefinition) function;
 
-      if (!isFreeFunction(funDef) || !hasConstCharPointerAndIntAsLastTwoArguments(funDef)) { return; }
+      if (!isFreeFunction(funDef) || !hasConstCharPointerAndIntAsLastTwoArguments(funDef)) {
+         return;
+      }
 
       if (startsWithTraceFunPrefix(funDef) || isIncludedIntoEveryTu(funDef)) {
          mark(funDef);
@@ -55,7 +59,9 @@ public class TraceFunctionChecker extends AbstractAstFunctionChecker {
       final ICPPASTFunctionDeclarator declarator = (ICPPASTFunctionDeclarator) function.getDeclarator();
       final ICPPASTParameterDeclaration[] parameters = declarator.getParameters();
 
-      if (parameters.length < 2) { return false; }
+      if (parameters.length < 2) {
+         return false;
+      }
 
       return hasConstCharPointerType(parameters[parameters.length - 2]) && hasIntType(parameters[parameters.length - 1]);
    }
@@ -63,8 +69,9 @@ public class TraceFunctionChecker extends AbstractAstFunctionChecker {
    private static boolean hasIntType(final ICPPASTParameterDeclaration param) {
       final IASTDeclSpecifier declSpecifier = param.getDeclSpecifier();
 
-      if (declSpecifier instanceof IASTSimpleDeclSpecifier) { return ((IASTSimpleDeclSpecifier) declSpecifier)
-            .getType() == IASTSimpleDeclSpecifier.t_int; }
+      if (declSpecifier instanceof IASTSimpleDeclSpecifier) {
+         return ((IASTSimpleDeclSpecifier) declSpecifier).getType() == IASTSimpleDeclSpecifier.t_int;
+      }
 
       return false;
    }
@@ -75,7 +82,7 @@ public class TraceFunctionChecker extends AbstractAstFunctionChecker {
       if (declSpecifier instanceof IASTSimpleDeclSpecifier) {
          final IASTSimpleDeclSpecifier simpleSpec = (IASTSimpleDeclSpecifier) declSpecifier;
          return simpleSpec.getType() == IASTSimpleDeclSpecifier.t_char && simpleSpec.isConst() && param.getDeclarator()
-               .getPointerOperators().length == 1;
+                  .getPointerOperators().length == 1;
       }
 
       return false;
@@ -89,15 +96,20 @@ public class TraceFunctionChecker extends AbstractAstFunctionChecker {
    private Optional<? extends IResource> getPathOfSiblingHeaderFile(final ICPPASTFunctionDefinition function) {
       final ITranslationUnit tu = function.getTranslationUnit().getOriginatingTranslationUnit();
 
-      if (tu == null) { return Optional.empty(); }
+      if (tu == null) {
+         return Optional.empty();
+      }
 
-      if (tu.isHeaderUnit()) { return Optional.of(tu.getResource()); }
+      if (tu.isHeaderUnit()) {
+         return Optional.of(tu.getResource());
+      }
 
       try {
          final Optional<String> path = getSiblingFilePath(tu, getModelCache().getIndex());
-         if (path.isPresent()) { return Optional.of(FileUtil.toIFile(path.get())); }
-      }
-      catch (final CoreException e) {
+         if (path.isPresent()) {
+            return Optional.of(FileUtil.toIFile(path.get()));
+         }
+      } catch (final CoreException e) {
          // to ignore, we do not want to propagate errors in a checker
       }
 
@@ -110,7 +122,7 @@ public class TraceFunctionChecker extends AbstractAstFunctionChecker {
 
    private void mark(final ICPPASTFunctionDefinition function) {
       final IASTName funName = function.getDeclarator().getName();
-      reportProblem(TRACE_FUNCTIONS_PROBLEM_ID, funName, funName.toString());
+      reportProblem(ProblemId.TRACE_FUNCTIONS.getId(), funName, funName.toString());
    }
 
    private static boolean startsWithTraceFunPrefix(final ICPPASTFunctionDefinition function) {

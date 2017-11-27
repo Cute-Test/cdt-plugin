@@ -12,11 +12,10 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.IndexToASTNameHelper;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
+import ch.hsr.ifs.iltis.cpp.wrappers.IndexToASTNameHelper;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
 
@@ -45,8 +44,7 @@ abstract class AbstractNodeFinder {
                names.add(astName);
             });
          }
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
 

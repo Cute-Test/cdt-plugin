@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 
 
@@ -34,6 +33,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 // Does not work properly for references made through dependent names because
 // the CDT parser does not actually instantiate the function body to resolve names
 // therein at this point. See CDT Bugs 326070 and 332430.
+@SuppressWarnings("restriction")
 class FunctionCalleeReferenceResolver {
 
    private final IIndex    index;
@@ -50,8 +50,7 @@ class FunctionCalleeReferenceResolver {
          final List<IASTName> callers = new ArrayList<>();
          findCallersRecursively(binding, callers, point);
          return callers;
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -60,7 +59,9 @@ class FunctionCalleeReferenceResolver {
       final CalledByResult result = new CalledByResult();
       findCalledBy(binding, result, point);
       final List<ICElement> elements = result.getElements();
-      if (elements.isEmpty()) { return; }
+      if (elements.isEmpty()) {
+         return;
+      }
 
       final IIndexBinding calleeBinding = IndexUI.elementToBinding(index, elements.get(0), ILinkage.CPP_LINKAGE_ID);
       findDeclaration(calleeBinding).ifPresent((name) -> callers.add(name));
@@ -75,7 +76,9 @@ class FunctionCalleeReferenceResolver {
 
    private void findCalledBy(final IBinding calleeBinding, final CalledByResult result, final IASTNode point) throws CoreException {
       findCalledBy1(calleeBinding, true, result, point);
-      if (!(calleeBinding instanceof ICPPMethod)) { return; }
+      if (!(calleeBinding instanceof ICPPMethod)) {
+         return;
+      }
       for (final IBinding overridden : findOverriders(calleeBinding)) {
          findCalledBy1(overridden, false, result, point);
       }
@@ -86,7 +89,7 @@ class FunctionCalleeReferenceResolver {
    }
 
    private void findCalledBy1(final IBinding callee, final boolean includeOrdinaryCalls, final CalledByResult result, final IASTNode point)
-         throws CoreException {
+            throws CoreException {
       findCalledBy2(callee, includeOrdinaryCalls, result);
       for (final IBinding spec : IndexUI.findSpecializations(index, callee, point)) {
          findCalledBy2(spec, includeOrdinaryCalls, result);

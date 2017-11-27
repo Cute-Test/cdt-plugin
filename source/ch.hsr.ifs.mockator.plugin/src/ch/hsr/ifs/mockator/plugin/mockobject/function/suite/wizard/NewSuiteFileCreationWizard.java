@@ -21,13 +21,13 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
-
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.LinkSuiteToRunnerRefactoring;
 
 
 // Copied and adapted from CUTE
+@SuppressWarnings("restriction")
 public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 
    private NewSuiteFileCreationWizardPage     page;
@@ -57,12 +57,10 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
       try {
          final WorkbenchRunnableAdapter adapter = new WorkbenchRunnableAdapter(createWorkspaceRunnable(), CProjectUtil.getWorkspaceRoot());
          getContainer().run(true, true, adapter);
-      }
-      catch (final InvocationTargetException e) {
+      } catch (final InvocationTargetException e) {
          ExceptionUtil.showException(e);
          return false;
-      }
-      catch (final InterruptedException e) {
+      } catch (final InterruptedException e) {
          Thread.currentThread().interrupt();
          return false;
       }

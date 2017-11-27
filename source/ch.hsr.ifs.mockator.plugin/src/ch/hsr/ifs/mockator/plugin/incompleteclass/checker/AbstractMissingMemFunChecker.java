@@ -7,23 +7,28 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
+import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.ast.checker.SimpleChecker;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ReferencingTestFunFinder;
-import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorIndexAstChecker;
 
 
-public abstract class AbstractMissingMemFunChecker extends MockatorIndexAstChecker {
+public abstract class AbstractMissingMemFunChecker extends SimpleChecker<ProblemId> {
 
-   protected void markIfHasMissingMemFuns(final ICPPASTCompositeTypeSpecifier clazz) {
-      if (!hasReferencingTestFunctions(clazz)) { return; }
+   protected void markIfHasMissingMemFuns(final CheckerResult<ProblemId> result) {
+      final ICPPASTCompositeTypeSpecifier clazz = (ICPPASTCompositeTypeSpecifier) result.getNode();
+      if (!hasReferencingTestFunctions(clazz)) {
+         return;
+      }
       final MissingMemFunFinder finder = getMissingMemFunsFinder();
       createCodanArgs(clazz, finder.findMissingMemberFunctions(clazz)).ifPresent((codanArgs) -> mark(clazz, codanArgs));
    }
 
    private Optional<MissingMemFunCodanArguments> createCodanArgs(final ICPPASTCompositeTypeSpecifier clazz,
-         final Collection<? extends MissingMemberFunction> missingMemFuns) {
+            final Collection<? extends MissingMemberFunction> missingMemFuns) {
       return new MissingMemFunCodanArgsProvider(getCppStandard(), missingMemFuns, clazz).createMemFunCodanArgs();
    }
 
@@ -34,12 +39,12 @@ public abstract class AbstractMissingMemFunChecker extends MockatorIndexAstCheck
    }
 
    private void mark(final ICPPASTCompositeTypeSpecifier clazz, final MissingMemFunCodanArguments ca) {
-      getNameToMark(clazz).ifPresent((name) -> reportProblem(getProblemId(), name, ca.toArray()));
+      getNameToMark(clazz).ifPresent((name) -> addNodeForReporting(new CheckerResult<>(getProblemId(), clazz), ca.toArray()));
    }
 
    protected abstract Optional<IASTName> getNameToMark(ICPPASTCompositeTypeSpecifier clazz);
 
-   protected abstract String getProblemId();
+   protected abstract ProblemId getProblemId();
 
    protected abstract MissingMemFunFinder getMissingMemFunsFinder();
 

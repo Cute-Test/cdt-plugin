@@ -15,18 +15,18 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDecorator;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.IncludeGuardCreator;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NamespaceApplier;
 
 
+@SuppressWarnings("restriction")
 class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
 
    private static final String FILE_MACRO        = "__FILE__";
@@ -38,7 +38,7 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
 
    @Override
    protected void addContentToTu(final IASTTranslationUnit newAst, final ASTRewrite rewriter, final ICPPASTFunctionDeclarator funDecl,
-         final IProgressMonitor pm) throws CoreException {
+            final IProgressMonitor pm) throws CoreException {
       final IncludeGuardCreator guardCreator = getIncludeGuardCreator(newAst);
       addIncludeGuardsStart(newAst, rewriter, guardCreator);
       insertFunDeclInclude(funDecl, newAst, rewriter);
@@ -144,7 +144,7 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
    }
 
    private void insertFunDeclInclude(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit tu, final ASTRewrite rewriter)
-         throws CoreException {
+            throws CoreException {
       final CppIncludeResolver resolver = new CppIncludeResolver(tu, cProject, context.getIndex());
       final AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDecl.getTranslationUnit().getFilePath());
       rewriter.insertBefore(tu, null, includeForFunDecl, null);

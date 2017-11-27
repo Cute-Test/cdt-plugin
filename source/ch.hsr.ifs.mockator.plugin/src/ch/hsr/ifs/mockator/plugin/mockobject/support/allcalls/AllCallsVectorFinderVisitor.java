@@ -6,29 +6,26 @@ import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
-import org.eclipse.cdt.internal.ui.refactoring.Container;
 
 
 public class AllCallsVectorFinderVisitor extends ASTVisitor {
 
-   private final Container<IASTName> registrationVector;
+   private IASTName registrationVector = null;
 
    {
       shouldVisitExpressions = true;
    }
 
-   public AllCallsVectorFinderVisitor() {
-      registrationVector = new Container<>();
-   }
-
    @Override
    public int visit(final IASTExpression expression) {
-      if (!(expression instanceof IASTIdExpression)) { return PROCESS_CONTINUE; }
+      if (!(expression instanceof IASTIdExpression)) {
+         return PROCESS_CONTINUE;
+      }
 
       final IASTIdExpression idExpr = (IASTIdExpression) expression;
 
       if (hasCallsVectorType(idExpr)) {
-         registrationVector.setObject(idExpr.getName());
+         registrationVector = idExpr.getName();
          return PROCESS_ABORT;
       }
 
@@ -41,6 +38,6 @@ public class AllCallsVectorFinderVisitor extends ASTVisitor {
    }
 
    public Optional<IASTName> getFoundCallsVector() {
-      return Optional.ofNullable(registrationVector.getObject());
+      return Optional.ofNullable(registrationVector);
    }
 }

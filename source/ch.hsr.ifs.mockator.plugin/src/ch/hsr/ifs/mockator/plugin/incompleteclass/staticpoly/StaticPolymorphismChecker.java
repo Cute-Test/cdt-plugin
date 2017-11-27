@@ -1,6 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
@@ -9,20 +10,24 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-
+import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.ast.visitor.SimpleVisitor;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.checker.AbstractMissingMemFunChecker;
 
 
 public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
 
-   public static final String STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID = "ch.hsr.ifs.mockator.StaticPolyMissingMemFunsProblem";
-
    @Override
-   protected ASTVisitor getAstVisitor() {
-      return new OnEachClass();
+   protected ASTVisitor getVisitor() {
+      return new OnEachClass(this::markIfHasMissingMemFuns);
    }
 
-   private class OnEachClass extends ASTVisitor {
+   private class OnEachClass extends SimpleVisitor<ProblemId> {
+
+      public OnEachClass(final Consumer<CheckerResult<ProblemId>> callback) {
+         super(callback);
+      }
 
       {
          shouldVisitDeclSpecifiers = true;
@@ -30,12 +35,14 @@ public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
 
       @Override
       public int visit(final IASTDeclSpecifier specifier) {
-         if (!ASTUtil.isClass(specifier)) { return PROCESS_CONTINUE; }
+         if (!ASTUtil.isClass(specifier)) {
+            return PROCESS_CONTINUE;
+         }
 
          final ICPPASTCompositeTypeSpecifier clazz = (ICPPASTCompositeTypeSpecifier) specifier;
 
          if (isNonTemplateClass(clazz)) {
-            markIfHasMissingMemFuns(clazz);
+            report(getProblemId(), clazz);
          }
 
          return PROCESS_CONTINUE;
@@ -52,8 +59,8 @@ public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
    }
 
    @Override
-   protected String getProblemId() {
-      return STATIC_POLY_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
+   protected ProblemId getProblemId() {
+      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
    }
 
    @Override

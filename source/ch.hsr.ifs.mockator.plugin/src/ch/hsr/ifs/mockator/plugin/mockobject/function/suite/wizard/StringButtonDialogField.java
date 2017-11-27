@@ -21,6 +21,7 @@ import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.wizard.NewSuiteFileC
 
 
 // Copied and adapted from CUTE
+@SuppressWarnings("restriction")
 class StringButtonDialogField extends StringDialogField {
 
    private Button                         fBrowseButton;

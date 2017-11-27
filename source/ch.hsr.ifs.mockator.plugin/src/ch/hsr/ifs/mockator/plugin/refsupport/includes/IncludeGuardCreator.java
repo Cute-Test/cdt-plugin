@@ -14,10 +14,10 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 
 
+@SuppressWarnings("restriction")
 public class IncludeGuardCreator {
 
    private final IResource file;
@@ -68,7 +68,7 @@ public class IncludeGuardCreator {
 
    private int getIncludeGuardScheme() {
       final int scheme = PreferenceConstants.getPreference(CODE_TEMPLATES_INCLUDE_GUARD_SCHEME, cProject,
-            CODE_TEMPLATES_INCLUDE_GUARD_SCHEME_FILE_NAME);
+               CODE_TEMPLATES_INCLUDE_GUARD_SCHEME_FILE_NAME);
       return scheme;
    }
 

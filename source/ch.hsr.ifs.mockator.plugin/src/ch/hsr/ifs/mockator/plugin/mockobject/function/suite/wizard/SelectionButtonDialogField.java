@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 
+@SuppressWarnings("restriction")
 // Copied and adapted from CUTE
 class SelectionButtonDialogField extends DialogField {
 

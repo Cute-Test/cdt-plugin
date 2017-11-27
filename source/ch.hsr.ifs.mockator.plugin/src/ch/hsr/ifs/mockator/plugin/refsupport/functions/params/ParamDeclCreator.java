@@ -26,11 +26,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
 
-import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
 
 
 // Inspired by TDD
+@SuppressWarnings("restriction")
 public class ParamDeclCreator {
 
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
@@ -58,7 +59,7 @@ public class ParamDeclCreator {
    }
 
    public static ICPPASTParameterDeclaration createParameter(final IType type, final IASTInitializerClause clause,
-         final Map<String, Boolean> nameHistory) {
+            final Map<String, Boolean> nameHistory) {
       final ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
       final IASTName parameterName = getParmeterName(clause, nameHistory);
       final IASTDeclarator decl = getParameterDeclarator(parameterName, type, false);
@@ -126,7 +127,9 @@ public class ParamDeclCreator {
    private static boolean makeLastPtrOpConst(final IASTDeclarator declarator) {
       final IASTPointerOperator[] ptrOperators = declarator.getPointerOperators();
 
-      if (ptrOperators == null) { return false; }
+      if (ptrOperators == null) {
+         return false;
+      }
 
       for (int i = ptrOperators.length - 1; i >= 0; i--) {
          final IASTPointerOperator currentPtrOp = ptrOperators[i];

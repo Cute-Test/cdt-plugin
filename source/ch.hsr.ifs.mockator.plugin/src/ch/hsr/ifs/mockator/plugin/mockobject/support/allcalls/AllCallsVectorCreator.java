@@ -17,10 +17,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
 
@@ -57,7 +55,9 @@ public class AllCallsVectorCreator {
       public static CallsVectorParent fromAstNode(final IASTNode node) {
          if (node instanceof ICPPASTNamespaceDefinition) {
             return Namespace;
-         } else if (node instanceof IASTCompoundStatement) { return Function; }
+         } else if (node instanceof IASTCompoundStatement) {
+            return Function;
+         }
 
          throw new ILTISException("Unexpected test double parent").rethrowUnchecked();
       }
@@ -83,7 +83,8 @@ public class AllCallsVectorCreator {
       final IASTSimpleDeclaration result = nodeFactory.newSimpleDeclaration(declSpecifier);
       final IASTName typeDefName = nodeFactory.newName(nameOfAllCallsVector.toCharArray());
       final ICPPASTLiteralExpression literal1 = nodeFactory.newLiteralExpression(lk_integer_constant, "1");
-      final ICPPASTDeclarator declarator = new CPPASTDeclarator(typeDefName, cppStd.getInitializer(literal1));
+      final ICPPASTDeclarator declarator = ASTNodeFactoryFactory.getDefaultCPPNodeFactory().newDeclarator(typeDefName);
+      declarator.setInitializer(cppStd.getInitializer(literal1));
       result.addDeclarator(declarator);
       declSpecifier.setStorageClass(callsVectorParent.getStorageClassForCallsVector());
       return result;

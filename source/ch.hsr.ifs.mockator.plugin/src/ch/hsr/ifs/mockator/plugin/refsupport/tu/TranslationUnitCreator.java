@@ -15,6 +15,7 @@ import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 
+@SuppressWarnings("restriction")
 public class TranslationUnitCreator {
 
    private final CRefactoringContext context;
@@ -38,8 +39,7 @@ public class TranslationUnitCreator {
    private String getCharset() {
       try {
          return project.getDefaultCharset();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

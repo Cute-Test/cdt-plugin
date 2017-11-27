@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
+@SuppressWarnings("restriction")
 public class DiscoveryOptionsHandler extends AbstractOptionsHandler {
 
    public DiscoveryOptionsHandler(final IProject project) {
@@ -51,8 +52,7 @@ public class DiscoveryOptionsHandler extends AbstractOptionsHandler {
                final String runArgs = scannerSet.getInfo(context).getProviderRunArguments(providerId);
                final String modifiedRunArgs = runArgsHandler.apply(runArgs);
                setAndSaveScannerConfig(scannerConfig, providerId, modifiedRunArgs);
-            }
-            catch (final CoreException e) {
+            } catch (final CoreException e) {
                throw new ILTISException(e).rethrowUnchecked();
             }
          }
@@ -60,7 +60,7 @@ public class DiscoveryOptionsHandler extends AbstractOptionsHandler {
    }
 
    private static void setAndSaveScannerConfig(final IScannerConfigBuilderInfo2 scannerConfig, final String providerId, final String modifiedRunArgs)
-         throws CoreException {
+            throws CoreException {
       scannerConfig.setProviderRunArguments(providerId, modifiedRunArgs);
       scannerConfig.save();
    }

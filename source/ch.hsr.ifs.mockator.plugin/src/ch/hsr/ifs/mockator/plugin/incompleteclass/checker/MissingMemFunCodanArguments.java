@@ -2,6 +2,9 @@ package ch.hsr.ifs.mockator.plugin.incompleteclass.checker;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.core.resources.IMarker;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.CodanArguments;
@@ -29,6 +32,10 @@ public class MissingMemFunCodanArguments extends CodanArguments {
    @Override
    public Object[] toArray() {
       return array(testDoubleName, missingMemFunsForFake, missingMemFunsForMock);
+   }
+
+   public List<Object> toList() {
+      return Arrays.asList(toArray());
    }
 
    public String getTestDoubleName() {

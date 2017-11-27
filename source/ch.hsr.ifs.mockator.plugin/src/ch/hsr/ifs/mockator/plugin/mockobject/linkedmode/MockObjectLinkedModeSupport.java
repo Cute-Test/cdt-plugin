@@ -14,7 +14,6 @@ import org.eclipse.text.edits.ReplaceEdit;
 
 import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
@@ -26,6 +25,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInfoCreater;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInformation;
 
 
+@SuppressWarnings("restriction")
 abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
 
    protected final Collection<? extends TestDoubleMemFun> memFuns;
@@ -126,7 +126,7 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
 
    private Optional<OffsetAndLength> getAssertOffsetAndLength() {
       return OptHelper.returnIfPresentElseEmpty(getAssertPosition(), (assertPos) -> Optional.of(new OffsetAndLength(assertPos, assertOrder
-            .getAssertionCommand().length())));
+               .getAssertionCommand().length())));
    }
 
    private Optional<Integer> getAssertPosition() {
@@ -147,7 +147,7 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
    private Pattern getAssertPattern() {
       final String assertCommand = assertOrder.getAssertionCommand();
       final String regex = String.format("%s\\s*\\(\\s*(%s\\s*,.*)|(.*,\\s*%s\\s*)\\)", assertCommand, expectationsName.get(), expectationsName
-            .get());
+               .get());
       return Pattern.compile(regex, Pattern.MULTILINE);
    }
 

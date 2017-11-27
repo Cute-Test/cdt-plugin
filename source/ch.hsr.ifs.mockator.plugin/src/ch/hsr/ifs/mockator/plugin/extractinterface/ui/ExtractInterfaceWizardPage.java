@@ -32,12 +32,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatter;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
+@SuppressWarnings("restriction")
 class ExtractInterfaceWizardPage extends UserInputWizardPage {
 
    private Button              selectAllButton;

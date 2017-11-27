@@ -3,14 +3,14 @@ package ch.hsr.ifs.mockator.tests.preprocessor;
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
-import ch.hsr.ifs.mockator.plugin.preprocessor.qf.TraceFunctionChecker;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
 public class TraceFunctionCheckerTest extends CDTTestingCodanCheckerTest {
 
    @Override
-   protected String getProblemId() {
-      return TraceFunctionChecker.TRACE_FUNCTIONS_PROBLEM_ID;
+   protected ProblemId getProblemId() {
+      return ProblemId.TRACE_FUNCTIONS;
    }
 
    @Override

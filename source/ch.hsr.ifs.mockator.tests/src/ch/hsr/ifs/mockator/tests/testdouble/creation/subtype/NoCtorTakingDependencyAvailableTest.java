@@ -3,14 +3,14 @@ package ch.hsr.ifs.mockator.tests.testdouble.creation.subtype;
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
-import ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype.MissingTestDoubleSubTypeChecker;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
 public class NoCtorTakingDependencyAvailableTest extends CDTTestingCodanCheckerTest {
 
    @Override
-   protected String getProblemId() {
-      return MissingTestDoubleSubTypeChecker.MISSING_TEST_DOUBLE_SUBTYPE_PROBLEM_ID;
+   protected ProblemId getProblemId() {
+      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
    }
 
    @Test

@@ -12,7 +12,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.ui.refactoring.changes.CCompositeChange;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -28,8 +27,8 @@ import org.eclipse.text.edits.MultiTextEdit;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CCompositeChange;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
@@ -57,11 +56,10 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
       try {
          final FunctionEquivalenceVerifier verifier = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) testFunction.getDeclarator());
          final Collection<IASTFunctionDefinition> testFunctions = getTestfunctionsInTu().stream().filter((funDef) -> verifier.isEquivalent(
-               (ICPPASTFunctionDeclarator) funDef.getDeclarator())).collect(Collectors.toList());
+                  (ICPPASTFunctionDeclarator) funDef.getDeclarator())).collect(Collectors.toList());
          ILTISException.Unless.isTrue(testFunctions.size() == 1, "Was not able not unambiguously determine test function");
          return (ICPPASTFunctionDefinition) head(testFunctions).get();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -79,7 +77,9 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
 
    @Override
    public Change createChange(final IProgressMonitor pm) throws CoreException {
-      if (!hasMockatorInitCall()) { return new NullChange(); }
+      if (!hasMockatorInitCall()) {
+         return new NullChange();
+      }
 
       return createDeleteChange(pm);
    }
@@ -125,8 +125,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    private static String getFunctionText(final IDocument doc, final int funNodeOffset, final int funNodeLength) {
       try {
          return doc.get(funNodeOffset, funNodeLength);
-      }
-      catch (final BadLocationException e) {
+      } catch (final BadLocationException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -138,7 +137,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    private IASTFunctionDefinition getMatchingTestFunction(final Collection<IASTFunctionDefinition> allTestFunctions) {
       final String testFunName = testFunction.getDeclarator().getName().toString();
       final Collection<IASTFunctionDefinition> functions = allTestFunctions.stream().filter((funDef) -> funDef.getDeclarator().getName().toString()
-            .equals(testFunName)).collect(Collectors.toList());
+               .equals(testFunName)).collect(Collectors.toList());
       ILTISException.Unless.isFalse(functions.isEmpty(), "Could not find test function");
       return head(functions).get();
    }

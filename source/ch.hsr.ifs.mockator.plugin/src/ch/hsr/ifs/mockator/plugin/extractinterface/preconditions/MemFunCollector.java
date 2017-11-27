@@ -24,14 +24,14 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder.Types;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
@@ -50,7 +50,9 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<IASTDeclaration> getUsedMemFuns(final ExtractInterfaceContext context, final Collection<IASTDeclaration> publicMemFuns) {
-      if (!considerOnlyReferencedMemFuns(context)) { return publicMemFuns; }
+      if (!considerOnlyReferencedMemFuns(context)) {
+         return publicMemFuns;
+      }
 
       final Collection<ICPPASTFunctionDefinition> functionsToAnalyse = getFunctionsToAnalyse(context);
       final IType dependencyType = getTypeOfDependency(context.getSelectedName());
@@ -76,7 +78,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<ICPPASTFunctionCallExpression> getFunCallsOnDependency(final Collection<ICPPASTFunctionDefinition> functionsToAnalyze,
-         final IType typeOfSelection) {
+            final IType typeOfSelection) {
       final MemFunCallFinder memFunCallFinder = new MemFunCallFinder(typeOfSelection);
 
       for (final ICPPASTFunctionDefinition fun : functionsToAnalyze) {
@@ -98,7 +100,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Optional<ICPPASTFunctionDefinition> lookupDefinition(final ExtractInterfaceContext context,
-         final ICPPASTFunctionDeclarator funDecl) {
+            final ICPPASTFunctionDeclarator funDecl) {
       final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
       return lookup.findFunctionDefinition(funDecl.getName(), context.getCRefContext());
    }
@@ -108,7 +110,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<IASTDeclaration> filterUsed(final Collection<ICPPASTFunctionCallExpression> funCalls,
-         final Collection<IASTDeclaration> availableFunctions, final IType typeOfSelection) {
+            final Collection<IASTDeclaration> availableFunctions, final IType typeOfSelection) {
       final List<IASTDeclaration> usedFuns = list();
       final FunctionEquivalenceVerifier.ConstStrategy strategy = getConstStrategy(typeOfSelection);
 
@@ -176,7 +178,9 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
       @Override
       public int visit(final IASTExpression expression) {
-         if (!(expression instanceof ICPPASTFunctionCallExpression)) { return PROCESS_CONTINUE; }
+         if (!(expression instanceof ICPPASTFunctionCallExpression)) {
+            return PROCESS_CONTINUE;
+         }
 
          final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) expression;
          final IASTExpression nameExpr = funCall.getFunctionNameExpression();

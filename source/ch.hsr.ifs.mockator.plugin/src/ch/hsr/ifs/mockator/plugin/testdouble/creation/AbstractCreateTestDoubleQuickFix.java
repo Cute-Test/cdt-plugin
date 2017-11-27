@@ -8,6 +8,7 @@ import org.eclipse.swt.graphics.Image;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQfWithRefactoringSupport;
 
 
+@SuppressWarnings("restriction")
 public abstract class AbstractCreateTestDoubleQuickFix extends MockatorQfWithRefactoringSupport {
 
    @Override

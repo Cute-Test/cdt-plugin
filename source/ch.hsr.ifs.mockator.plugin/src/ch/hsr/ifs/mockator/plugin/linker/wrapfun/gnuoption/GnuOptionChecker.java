@@ -6,13 +6,12 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
 public class GnuOptionChecker extends AbstractIndexAstChecker {
-
-   public static final String WRAP_FUNCTION_PROBLEM_ID = "ch.hsr.ifs.mockator.WrapFunctionProblem";
+   //TODO transform
 
    @Override
    public void processAst(final IASTTranslationUnit ast) {
@@ -24,7 +23,7 @@ public class GnuOptionChecker extends AbstractIndexAstChecker {
          final IASTPreprocessorIfdefStatement ifDefStmt = (IASTPreprocessorIfdefStatement) pStmt;
 
          if (isWrapMacroCheck(ifDefStmt)) {
-            reportProblem(WRAP_FUNCTION_PROBLEM_ID, ifDefStmt, unpackName(getMacroCheckName(ifDefStmt)));
+            reportProblem(ProblemId.WRAP_FUNCTION.getId(), ifDefStmt, unpackName(getMacroCheckName(ifDefStmt)));
          }
       }
    }

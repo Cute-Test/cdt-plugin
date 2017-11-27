@@ -14,9 +14,11 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
-import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
+import ch.hsr.ifs.mockator.plugin.base.data.Pair;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
+import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
@@ -24,10 +26,9 @@ import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
 
 public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
 
-   public static final String MISSING_TEST_DOUBLE_SUBTYPE_PROBLEM_ID = "ch.hsr.ifs.mockator.MissingTestDoubleSubTypeProblem";
-
    @Override
-   protected void processTestFunction(final IASTFunctionDefinition function) {
+   protected void processTestFunction(final CheckerResult<ProblemId> result) {
+      final IASTFunctionDefinition function = (IASTFunctionDefinition) result.getNode();
       final InjectionInfoCollectorFactory factory = new InjectionInfoCollectorFactory(getIndex(), getCProject());
       function.accept(new ASTVisitor() {
 
@@ -49,18 +50,22 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
    private static boolean isUnknownArgumentType(final IASTName name) {
       final IBinding binding = name.resolveBinding();
 
-      if (!isProblemBinding(binding)) { return false; }
+      if (!isProblemBinding(binding)) {
+         return false;
+      }
 
       final IASTNode parent = name.getParent();
 
-      if (!(parent instanceof IASTIdExpression || parent instanceof ICPPASTNamedTypeSpecifier)) { return false; }
+      if (!(parent instanceof IASTIdExpression || parent instanceof ICPPASTNamedTypeSpecifier)) {
+         return false;
+      }
 
       return isPartOfCtorCall(name) || isPartOfFunCall(name);
    }
 
    private static boolean isPartOfCtorCall(final IASTNode node) {
       return ASTUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || ASTUtil.getAncestorOfType(node,
-            ICPPASTInitializerList.class) != null;
+               ICPPASTInitializerList.class) != null;
    }
 
    private static boolean isPartOfFunCall(final IASTNode node) {
@@ -69,7 +74,7 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
 
    private void markMissingInjectedTestDouble(final IASTName name, final Pair<IASTName, IType> optResult) {
       final CreateTestDoubleSubTypeCodanArgs codanArgs = getCodanArgs(name, optResult);
-      reportProblem(MissingTestDoubleSubTypeChecker.MISSING_TEST_DOUBLE_SUBTYPE_PROBLEM_ID, name, codanArgs.toArray());
+      addNodeForReporting(new CheckerResult<>(ProblemId.MISSING_TEST_DOUBLE_SUBTYPE, name), codanArgs.toArray());
    }
 
    private CreateTestDoubleSubTypeCodanArgs getCodanArgs(final IASTName name, final Pair<IASTName, IType> targetNameAndType) {
@@ -81,7 +86,9 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
 
    private String getInclude(final IASTTranslationUnit targetTypeAst) {
       final IASTTranslationUnit thisAst = getAst();
-      if (isInSameTu(targetTypeAst, thisAst)) { return ""; }
+      if (isInSameTu(targetTypeAst, thisAst)) {
+         return "";
+      }
       final CppIncludeResolver resolver = new CppIncludeResolver(thisAst, getCProject(), getIndex());
       return resolver.resolveIncludePath(targetTypeAst.getFilePath());
    }
@@ -97,5 +104,10 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
 
    private static boolean isProblemBinding(final IBinding binding) {
       return BindingTypeVerifier.isOfType(binding, IProblemBinding.class);
+   }
+
+   @Override
+   protected ProblemId getProblemId() {
+      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
    }
 }

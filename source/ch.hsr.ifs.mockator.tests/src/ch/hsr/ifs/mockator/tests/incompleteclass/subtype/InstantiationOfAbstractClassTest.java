@@ -3,14 +3,14 @@ package ch.hsr.ifs.mockator.tests.incompleteclass.subtype;
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
-import ch.hsr.ifs.mockator.plugin.incompleteclass.subtype.SubtypePolymorphismChecker;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
 public class InstantiationOfAbstractClassTest extends CDTTestingCodanCheckerTest {
 
    @Override
-   protected String getProblemId() {
-      return SubtypePolymorphismChecker.SUBTYPE_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
+   protected ProblemId getProblemId() {
+      return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL;
    }
 
    @Override

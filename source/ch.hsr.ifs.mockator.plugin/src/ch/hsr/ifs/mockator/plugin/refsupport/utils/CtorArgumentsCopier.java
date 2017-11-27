@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownBinding;
 
 
+@SuppressWarnings("restriction")
 public class CtorArgumentsCopier {
 
    private final ICPPASTConstructorInitializer ctorInitializer;

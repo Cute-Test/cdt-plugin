@@ -15,14 +15,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.junit.Test;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
-
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingRefactoringTest;
 import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
 
 
+@SuppressWarnings("restriction")
 public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest {
 
    private static int DEFAULT_MARKER_COUNT = 1;
@@ -62,8 +62,7 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
    protected IASTTranslationUnit getAst(final CRefactoringContext context) {
       try {
          return context.getAST(getTu(getActiveCElement()), new NullProgressMonitor());
-      }
-      catch (final CoreException e) {}
+      } catch (final CoreException e) {}
       fail("Not able to get AST for translation unit");
       return null;
    }
@@ -144,8 +143,7 @@ public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest 
       executeOnNewFiles((filePath) -> {
          try {
             getFile(filePath).delete(true, new NullProgressMonitor());
-         }
-         catch (final CoreException e) {}
+         } catch (final CoreException e) {}
       });
    }
 

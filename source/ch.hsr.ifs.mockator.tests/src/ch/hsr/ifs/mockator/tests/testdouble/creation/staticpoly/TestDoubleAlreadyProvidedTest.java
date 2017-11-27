@@ -3,14 +3,14 @@ package ch.hsr.ifs.mockator.tests.testdouble.creation.staticpoly;
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
-import ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly.MissingTestDoubleStaticPolyChecker;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
 public class TestDoubleAlreadyProvidedTest extends CDTTestingCodanCheckerTest {
 
    @Override
-   protected String getProblemId() {
-      return MissingTestDoubleStaticPolyChecker.MISSING_TEST_DOUBLE_STATICPOLY_PROBLEM_ID;
+   protected ProblemId getProblemId() {
+      return ProblemId.MISSING_TEST_DOUBLE_STATICPOLY;
    }
 
    @Test

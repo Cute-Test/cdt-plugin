@@ -20,24 +20,24 @@ import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
+import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.checker.AbstractMissingMemFunChecker;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
 
-   public static final String SUBTYPE_MISSING_MEMFUNS_IMPL_PROBLEM_ID = "ch.hsr.ifs.mockator.SubtypeMissingMemFunsProblem";
-
    @Override
-   protected ASTVisitor getAstVisitor() {
+   protected ASTVisitor getVisitor() {
       return new AbstractClassInstantiationFinder();
    }
 
@@ -61,7 +61,9 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
       private void checkForClassInstantiation(final IASTSimpleDeclaration simpleDecl) {
          final IASTDeclSpecifier declSpec = simpleDecl.getDeclSpecifier();
 
-         if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef) { return; }
+         if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef) {
+            return;
+         }
 
          for (final IASTDeclarator declarator : simpleDecl.getDeclarators()) {
             if (!ASTUtil.hasPointerOrRefType(declarator)) {
@@ -107,7 +109,9 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
          className = ((ICPPASTCompositeTypeSpecifier) declSpec).getName();
       }
 
-      if (className == null) { return; }
+      if (className == null) {
+         return;
+      }
 
       final IBinding binding = className.resolveBinding();
 
@@ -128,14 +132,18 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
 
    private void reportProblemsIfAbstract(final IType typeToCheck) {
       final IType unwindedType = CxxAstUtils.unwindTypedef(typeToCheck);
-      if (!(unwindedType instanceof ICPPClassType) || unwindedType instanceof IProblemBinding) { return; }
-      getClassDefinition(unwindedType).ifPresent((clazz) -> markIfHasMissingMemFuns(clazz));
+      if (!(unwindedType instanceof ICPPClassType) || unwindedType instanceof IProblemBinding) {
+         return;
+      }
+      getClassDefinition(unwindedType).ifPresent((clazz) -> markIfHasMissingMemFuns(new CheckerResult<>(getProblemId(), clazz)));
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> getClassDefinition(final IType type) {
       final IType realType = ASTUtil.windDownToRealType(type, false);
 
-      if (realType instanceof ICPPClassType) { return lookupDefinition((ICPPClassType) realType); }
+      if (realType instanceof ICPPClassType) {
+         return lookupDefinition((ICPPClassType) realType);
+      }
 
       return Optional.empty();
    }
@@ -163,14 +171,17 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
          // this trick is necessary because when we deal with an anonymous
          // class and we have to mark something that we can lookup afterwards
          // to find the enclosing node
-         return Optional.of(clazz.getBaseSpecifiers()[0].getName());
+         final ICPPASTNameSpecifier spec = clazz.getBaseSpecifiers()[0].getNameSpecifier();
+         if (spec instanceof IASTName) {
+            return Optional.of((IASTName) spec);
+         }
       }
 
       return Optional.of(clazz.getName());
    }
 
    @Override
-   protected String getProblemId() {
-      return SUBTYPE_MISSING_MEMFUNS_IMPL_PROBLEM_ID;
+   protected ProblemId getProblemId() {
+      return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL;
    }
 }

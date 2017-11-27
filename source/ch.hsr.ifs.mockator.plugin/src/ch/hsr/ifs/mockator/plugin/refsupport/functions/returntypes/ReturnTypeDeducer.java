@@ -46,11 +46,11 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExp
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
+@SuppressWarnings("restriction")
 public class ReturnTypeDeducer {
 
    private static final ICPPNodeFactory    nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
@@ -121,8 +121,12 @@ public class ReturnTypeDeducer {
                return handleType(operand.getExpressionType());
             } else if (operand instanceof ICPPASTBinaryExpression) {
                return handleBinaryExpression((ICPPASTBinaryExpression) operand);
-            } else if (operand instanceof ICPPASTUnaryExpression) { return handleUnaryExpression((ICPPASTUnaryExpression) operand); }
-         } else if (expression instanceof ICPPASTBinaryExpression) { return handleBinaryExpression((ICPPASTBinaryExpression) expression); }
+            } else if (operand instanceof ICPPASTUnaryExpression) {
+               return handleUnaryExpression((ICPPASTUnaryExpression) operand);
+            }
+         } else if (expression instanceof ICPPASTBinaryExpression) {
+            return handleBinaryExpression((ICPPASTBinaryExpression) expression);
+         }
 
          return PROCESS_CONTINUE;
       }
@@ -154,7 +158,9 @@ public class ReturnTypeDeducer {
 
       @Override
       public int visit(final IASTStatement statement) {
-         if (statement instanceof IASTCompoundStatement) { return PROCESS_CONTINUE; }
+         if (statement instanceof IASTCompoundStatement) {
+            return PROCESS_CONTINUE;
+         }
 
          if (statement instanceof IASTDeclarationStatement) {
             return handleDeclStatement((IASTDeclarationStatement) statement);
@@ -162,7 +168,9 @@ public class ReturnTypeDeducer {
             return handleExprStatement((IASTExpressionStatement) statement);
          } else if (statement instanceof IASTIfStatement) {
             return handleIfStatement((IASTIfStatement) statement);
-         } else if (statement instanceof IASTReturnStatement) { return handleReturnStatement((IASTReturnStatement) statement); }
+         } else if (statement instanceof IASTReturnStatement) {
+            return handleReturnStatement((IASTReturnStatement) statement);
+         }
 
          return PROCESS_CONTINUE;
       }
@@ -170,7 +178,9 @@ public class ReturnTypeDeducer {
       private int handleDeclStatement(final IASTDeclarationStatement statement) {
          final IASTDeclaration declaration = statement.getDeclaration();
 
-         if (!(declaration instanceof IASTSimpleDeclaration)) { return PROCESS_CONTINUE; }
+         if (!(declaration instanceof IASTSimpleDeclaration)) {
+            return PROCESS_CONTINUE;
+         }
 
          final IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
          ICPPASTDeclSpecifier declSpecifier = (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
@@ -193,13 +203,17 @@ public class ReturnTypeDeducer {
 
          if (expr instanceof ICPPASTBinaryExpression) {
             return handleBinaryExpression((ICPPASTBinaryExpression) expr);
-         } else if (expr instanceof ICPPASTUnaryExpression) { return handleUnaryExpression((ICPPASTUnaryExpression) expr); }
+         } else if (expr instanceof ICPPASTUnaryExpression) {
+            return handleUnaryExpression((ICPPASTUnaryExpression) expr);
+         }
 
          return PROCESS_CONTINUE;
       }
 
       private int handleReturnStatement(final IASTReturnStatement returnStmt) {
-         if (isReturnTypeOfFunApplicable(returnStmt)) { return useReturnTypeOfParentFunction(returnStmt); }
+         if (isReturnTypeOfFunApplicable(returnStmt)) {
+            return useReturnTypeOfParentFunction(returnStmt);
+         }
 
          return PROCESS_CONTINUE;
       }
@@ -219,7 +233,9 @@ public class ReturnTypeDeducer {
             final ICPPASTNamedTypeSpecifier typeSpec = (ICPPASTNamedTypeSpecifier) declSpecifier;
             final IBinding binding = typeSpec.getName().resolveBinding();
 
-            if (binding instanceof ITypedef) { return handleType((ITypedef) binding); }
+            if (binding instanceof ITypedef) {
+               return handleType((ITypedef) binding);
+            }
          }
 
          returnType.setNode(declSpecifier.copy());
@@ -233,7 +249,9 @@ public class ReturnTypeDeducer {
             return handleBinaryExpression((ICPPASTBinaryExpression) expr);
          } else if (expr instanceof ICPPASTUnaryExpression) {
             return handleUnaryExpression((ICPPASTUnaryExpression) expr);
-         } else if (expr instanceof ICPPASTFunctionCallExpression) { return handleType(CPPBasicType.BOOLEAN); }
+         } else if (expr instanceof ICPPASTFunctionCallExpression) {
+            return handleType(CPPBasicType.BOOLEAN);
+         }
 
          return PROCESS_CONTINUE;
       }
@@ -248,11 +266,14 @@ public class ReturnTypeDeducer {
          } else if (operand instanceof IASTIdExpression) {
             unaryExpType = getType((IASTIdExpression) operand);
 
-            if (unaryExpType instanceof ITypedef) { return handleType(unaryExpType); }
+            if (unaryExpType instanceof ITypedef) {
+               return handleType(unaryExpType);
+            }
          } else if (opType instanceof ICPPTemplateTypeParameter) {
             return handleType(opType);
-         } else if (unaryExpType instanceof ICPPUnknownType && unaryExp.getParent() instanceof IASTIfStatement) { return handleType(
-               CPPBasicType.BOOLEAN); }
+         } else if (unaryExpType instanceof ICPPUnknownType && unaryExp.getParent() instanceof IASTIfStatement) {
+            return handleType(CPPBasicType.BOOLEAN);
+         }
 
          return handleType(unaryExpType);
       }
@@ -293,7 +314,9 @@ public class ReturnTypeDeducer {
          final IASTName name = idExpr.getName();
          final IBinding var = name.resolveBinding();
 
-         if (var instanceof IVariable) { return ((IVariable) var).getType(); }
+         if (var instanceof IVariable) {
+            return ((IVariable) var).getType();
+         }
 
          return null;
       }
@@ -316,7 +339,9 @@ public class ReturnTypeDeducer {
       private static List<IASTPointerOperator> getPointersInDecl(final IASTSimpleDeclaration simpleDecl) {
          final IASTDeclarator[] declarators = simpleDecl.getDeclarators();
 
-         if (declarators.length == 0) { return list(); }
+         if (declarators.length == 0) {
+            return list();
+         }
 
          return list(declarators[0].getPointerOperators());
       }
