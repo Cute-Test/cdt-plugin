@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.finder;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class MacroFinderVisitor extends ASTVisitor {
 
    public MacroFinderVisitor(final String macroName) {
       this.macroName = macroName;
-      macroExpansions = list();
+      macroExpansions = new ArrayList<>();
    }
 
    public Collection<IASTMacroExpansionLocation> getMatchingMacroExpansions() {
@@ -41,7 +40,7 @@ public class MacroFinderVisitor extends ASTVisitor {
    }
 
    private static Collection<IASTMacroExpansionLocation> getMacroExpansionLocations(final IASTName name) {
-      final List<IASTMacroExpansionLocation> macroExpansions = list();
+      final List<IASTMacroExpansionLocation> macroExpansions = new ArrayList<>();
 
       for (final IASTNodeLocation loc : name.getNodeLocations()) {
          if (!(loc instanceof IASTMacroExpansionLocation)) {

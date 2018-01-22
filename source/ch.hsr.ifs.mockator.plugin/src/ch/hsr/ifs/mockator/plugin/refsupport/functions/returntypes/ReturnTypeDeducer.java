@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -340,7 +341,7 @@ public class ReturnTypeDeducer {
          final IASTDeclarator[] declarators = simpleDecl.getDeclarators();
 
          if (declarators.length == 0) {
-            return list();
+            return new ArrayList<>();
          }
 
          return list(declarators[0].getPointerOperators());

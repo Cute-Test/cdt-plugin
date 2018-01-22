@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.base.util;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.last;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ public abstract class ExceptionUtil {
    }
 
    private static List<Throwable> getCausesOf(Throwable t) {
-      final List<Throwable> causes = list();
+      final List<Throwable> causes = new ArrayList<>();
 
       while (t != null && !causes.contains(t)) {
          causes.add(t);
@@ -45,7 +45,7 @@ public abstract class ExceptionUtil {
 
    private static void showExceptionInThread(final String title, final String message, final Throwable t) {
       final IStatus status = new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, IStatus.OK, t.getMessage() == null ? t.getClass().getName() : t
-            .getMessage(), t);
+               .getMessage(), t);
       MockatorPlugin.getDefault().getLog().log(status);
       ErrorDialog.openError(UiUtil.getWindowShell(), title, message, status);
    }

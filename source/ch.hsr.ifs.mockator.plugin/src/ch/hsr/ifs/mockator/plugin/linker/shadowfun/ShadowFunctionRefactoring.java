@@ -24,7 +24,6 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
@@ -49,7 +48,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
 
    @Override
    protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
-         throws CoreException {
+            throws CoreException {
       final Optional<ICPPASTFunctionDeclarator> optFunDecl = findFunDeclaration(funName, pm);
       if (optFunDecl.isPresent()) {
          for (final IProject refProj : getReferencingExecutables()) {
@@ -70,7 +69,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
    }
 
    private void insertFunDeclInclude(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit tu, final ASTRewrite rewriter,
-         final ICProject mockatorProject) {
+            final ICProject mockatorProject) {
       final CppIncludeResolver resolver = new CppIncludeResolver(tu, mockatorProject, getIndex());
       final String funDeclTuPath = funDecl.getTranslationUnit().getFilePath();
       final AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDeclTuPath);
@@ -82,7 +81,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
    }
 
    private IASTTranslationUnit createAndGetNewTu(final IProject referencingProj, final String funName, final IProgressMonitor pm)
-         throws CoreException {
+            throws CoreException {
       final IFolder shadowFolder = createShadowFolder(referencingProj, pm);
       final IPath newFilePath = getPathForNewFile(shadowFolder, funName);
       newFile = FileUtil.toIFile(newFilePath);
@@ -99,8 +98,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
       final SourceFolderHandler handler = new SourceFolderHandler(project);
       try {
          return handler.createFolder(SHADOW_FOLDER_NAME, pm);
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

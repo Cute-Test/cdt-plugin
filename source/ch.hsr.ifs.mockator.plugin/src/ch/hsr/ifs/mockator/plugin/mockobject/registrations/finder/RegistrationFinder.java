@@ -10,20 +10,24 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTArraySubscriptExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.StdString;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
 
 abstract class RegistrationFinder {
 
    public Optional<ExistingMemFunCallRegistration> findRegistration(final IASTName callsVectorUsage) {
-      if (!ASTUtil.isPushBack(callsVectorUsage) || !isArrayAccess(callsVectorUsage)) { return Optional.empty(); }
+      if (!ASTUtil.isPushBack(callsVectorUsage) || !isArrayAccess(callsVectorUsage)) {
+         return Optional.empty();
+      }
 
       final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(callsVectorUsage, ICPPASTFunctionCallExpression.class);
 
-      if (funCall == null || funCall.getArguments().length != 1) { return Optional.empty(); }
+      if (funCall == null || funCall.getArguments().length != 1) {
+         return Optional.empty();
+      }
 
       final IASTInitializerClause call = funCall.getArguments()[0];
       return Optional.of(collectRegistration(call));

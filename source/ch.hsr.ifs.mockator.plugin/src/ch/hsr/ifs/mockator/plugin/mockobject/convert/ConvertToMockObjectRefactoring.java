@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.convert;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
@@ -74,7 +72,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
+            OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       addMockSupportToFakeObject(ast, rewriter, pm);
@@ -90,14 +88,14 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    }
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast,
-         final Collection<TestDoubleMemFun> withNewExpectations, final IProgressMonitor pm) {
+            final Collection<TestDoubleMemFun> withNewExpectations, final IProgressMonitor pm) {
       return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), newMockObject, rewriter, ast, cppStd,
-            getPublicVisibilityInserter(rewriter), hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEditStrategy).withNewExpectations(
-                  withNewExpectations).build();
+               getPublicVisibilityInserter(rewriter), hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEditStrategy).withNewExpectations(
+                        withNewExpectations).build();
    }
 
    private boolean hasOnlyStaticMemFuns() {
-      final List<MissingMemberFunction> noNewMemFuns = list();
+      final List<MissingMemberFunction> noNewMemFuns = new ArrayList<>();
       return newMockObject.hasOnlyStaticFunctions(noNewMemFuns);
    }
 
@@ -106,7 +104,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    }
 
    private List<TestDoubleMemFun> getExpectations(final Optional<? extends MissingMemberFunction> defaultCtor) {
-      final List<TestDoubleMemFun> publicMemFuns = list();
+      final List<TestDoubleMemFun> publicMemFuns = new ArrayList<>();
 
       defaultCtor.ifPresent((defCtor) -> publicMemFuns.add(defCtor));
 
@@ -115,7 +113,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    }
 
    private Optional<? extends MissingMemberFunction> createDefaultCtorIfNecessary() {
-      final Collection<MissingMemberFunction> noNewFunctions = list();
+      final Collection<MissingMemberFunction> noNewFunctions = new ArrayList<>();
       return getDefaultCtorProvider().createMissingDefaultCtor(noNewFunctions);
    }
 

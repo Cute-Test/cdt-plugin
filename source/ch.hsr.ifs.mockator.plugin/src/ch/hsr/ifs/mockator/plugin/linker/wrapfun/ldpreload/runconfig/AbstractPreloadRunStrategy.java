@@ -10,9 +10,13 @@ import java.util.stream.Collectors;
 abstract class AbstractPreloadRunStrategy implements PreloadRunStrategy {
 
    protected String appendToList(final String list, final String newVal) {
-      if (list == null || list.trim().isEmpty()) { return newVal; }
+      if (list == null || list.trim().isEmpty()) {
+         return newVal;
+      }
 
-      if (list.contains(newVal)) { return list; }
+      if (list.contains(newVal)) {
+         return list;
+      }
 
       return String.format("%s:%s", list, newVal);
    }

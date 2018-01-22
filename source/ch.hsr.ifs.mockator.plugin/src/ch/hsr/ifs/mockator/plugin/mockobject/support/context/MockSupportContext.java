@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.support.context;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -12,7 +11,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.functional.functions.Builder;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
-
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -90,7 +88,7 @@ public final class MockSupportContext {
       pm = builder.pm;
 
       if (builder.newForExpectations == null) {
-         newForExpectations = list();
+         newForExpectations = new ArrayList<>();
       } else {
          newForExpectations = builder.newForExpectations;
       }

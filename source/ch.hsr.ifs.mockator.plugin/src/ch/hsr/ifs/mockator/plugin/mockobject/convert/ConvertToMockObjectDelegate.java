@@ -29,8 +29,7 @@ public class ConvertToMockObjectDelegate extends MockatorDelegate {
    private void copyMockatorLibIfNecessary() {
       try {
          new MockatorLibHandler(cProject.getProject()).addLibToProject();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -38,7 +37,7 @@ public class ConvertToMockObjectDelegate extends MockatorDelegate {
    private void performRefactoring() {
       final ConvertToMockObjectRefactoring refactoring = getRefactoring();
       new MockatorRefactoringRunner(refactoring).runInNewJob((edit) -> startLinkedMode(edit, refactoring.getNewMockObject().getPublicMemFuns(),
-            refactoring.getNewMockObject()));
+               refactoring.getNewMockObject()));
    }
 
    private ConvertToMockObjectRefactoring getRefactoring() {
@@ -47,7 +46,7 @@ public class ConvertToMockObjectDelegate extends MockatorDelegate {
 
    private void startLinkedMode(final ChangeEdit edit, final Collection<ExistingTestDoubleMemFun> memFuns, final MockObject mockObject) {
       final MockObjectLinkedEditModeFactory factory = new MockObjectLinkedEditModeFactory(edit, memFuns, getCppStd(), getAssertionOrder(), Optional
-            .of(mockObject.getNameForExpectationVector()));
+               .of(mockObject.getNameForExpectationVector()));
       new LinkedModeStarter().accept(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
    }
 

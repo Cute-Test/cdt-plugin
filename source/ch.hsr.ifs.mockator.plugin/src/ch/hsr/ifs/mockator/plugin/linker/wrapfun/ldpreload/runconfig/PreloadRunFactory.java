@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 
 

@@ -16,7 +16,9 @@ public class StdString {
    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
    public boolean isStdString(final IASTInitializerClause param) {
-      if (param instanceof IASTLiteralExpression) { return isStringLiteral((IASTLiteralExpression) param); }
+      if (param instanceof IASTLiteralExpression) {
+         return isStringLiteral((IASTLiteralExpression) param);
+      }
 
       return false;
    }

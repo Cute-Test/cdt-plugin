@@ -17,11 +17,11 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.core.resources.IFile;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterSignatureHandler;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class WeakDeclAdder {
@@ -37,7 +37,9 @@ public class WeakDeclAdder {
    public void addWeakDeclAttribute(final ICPPASTFunctionDeclarator funDecl) {
       final IASTTranslationUnit tu = funDecl.getTranslationUnit();
 
-      if (!isTuPartOfWorkspace(tu)) { return; }
+      if (!isTuPartOfWorkspace(tu)) {
+         return;
+      }
 
       final ICPPASTNamedTypeSpecifier withWeakDeclSpec = createWeakDeclSpec(funDecl);
       final IASTNode funDeclParentCopy = getWeakParentCopy(funDecl, withWeakDeclSpec);
@@ -47,7 +49,7 @@ public class WeakDeclAdder {
 
    private static boolean isTuPartOfWorkspace(final IASTTranslationUnit tuOfFunDef) {
       final URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
-      final IFile[] files = CProjectUtil.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
+      final IFile[] files = ProjectUtil.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
       return files.length > 0;
    }
 

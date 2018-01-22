@@ -11,7 +11,6 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;

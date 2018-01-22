@@ -15,7 +15,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
@@ -47,7 +46,7 @@ public class MoveTestDoubleToNsRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
+            OperationCanceledException {
       final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClassInSelection(getAST(tu(), pm));
       if (clazz.isPresent()) {
          final IASTTranslationUnit ast = getAST(tu(), pm);

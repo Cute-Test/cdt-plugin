@@ -11,8 +11,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 
 
 public class PublicInheritanceAdder implements Consumer<ExtractInterfaceContext> {
@@ -51,7 +51,7 @@ public class PublicInheritanceAdder implements Consumer<ExtractInterfaceContext>
    }
 
    private static void replaceOldClassWithNew(final ExtractInterfaceContext context, final ICPPASTCompositeTypeSpecifier oldClass,
-         final ICPPASTCompositeTypeSpecifier newClass) {
+            final ICPPASTCompositeTypeSpecifier newClass) {
       final IASTTranslationUnit tuOfChosenClass = context.getTuOfChosenClass();
       final ASTRewrite rewriter = context.getRewriterFor(tuOfChosenClass);
       rewriter.replace(oldClass, newClass, null);

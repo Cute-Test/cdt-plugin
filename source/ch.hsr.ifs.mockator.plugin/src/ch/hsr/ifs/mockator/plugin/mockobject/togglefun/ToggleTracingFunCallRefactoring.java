@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.mockobject.togglefun;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -18,11 +19,9 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
-import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
-import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.reconcile.ExpectationsHandler;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
@@ -32,7 +31,6 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.context.MockSupportContext;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter;
 import ch.hsr.ifs.mockator.plugin.testdouble.MemFunMockSupportAdder;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
@@ -85,7 +83,7 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
+            OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       toggleTraceSupport(buildContext(rewriter, ast, pm));
@@ -118,11 +116,12 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final IProgressMonitor pm) {
       return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), mockObject, rewriter, ast, cppStd, getPublicVisibilityInserter(
-            rewriter), hasMockObjectOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(list(testDoubleMemFun)).build();
+               rewriter), hasMockObjectOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(list(testDoubleMemFun))
+                        .build();
    }
 
    private boolean hasMockObjectOnlyStaticMemFuns() {
-      return mockObject.hasOnlyStaticFunctions(CollectionHelper.<MissingMemberFunction>list());
+      return mockObject.hasOnlyStaticFunctions(new ArrayList<>());
    }
 
    private ClassPublicVisibilityInserter getPublicVisibilityInserter(final ASTRewrite rewriter) {

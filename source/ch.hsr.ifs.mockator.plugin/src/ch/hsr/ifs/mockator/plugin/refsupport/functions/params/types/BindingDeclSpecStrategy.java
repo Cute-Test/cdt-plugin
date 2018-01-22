@@ -8,7 +8,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypedefHelper;
 
 
@@ -26,8 +25,7 @@ class BindingDeclSpecStrategy implements DeclSpecGeneratorStrategy {
    private static String getShortestType(final IType type) {
       try {
          return new TypedefHelper(type).findShortestType();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

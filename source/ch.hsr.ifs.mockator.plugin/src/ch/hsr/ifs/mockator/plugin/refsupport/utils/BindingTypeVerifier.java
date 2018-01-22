@@ -16,7 +16,9 @@ public class BindingTypeVerifier {
    }
 
    private static <T> Optional<T> getAdapter(final IBinding binding, final Class<T> clazz) {
-      if (binding == null) { return Optional.empty(); }
+      if (binding == null) {
+         return Optional.empty();
+      }
 
       return Optional.ofNullable(binding.getAdapter(clazz));
    }

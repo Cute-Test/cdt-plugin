@@ -21,12 +21,13 @@ class InjectionInfoCollectorFactory {
    }
 
    public DepInjectInfoCollector getInfoCollectorStrategy(final IASTName name) {
-      if (isPartOfCtorCall(name)) return new CtorInjectionInfoCollector(index, cProject);
+      if (isPartOfCtorCall(name))
+         return new CtorInjectionInfoCollector(index, cProject);
       else return new FunCallInjectionInfoCollector(index, cProject);
    }
 
    private static boolean isPartOfCtorCall(final IASTNode node) {
       return ASTUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || ASTUtil.getAncestorOfType(node,
-            ICPPASTInitializerList.class) != null;
+               ICPPASTInitializerList.class) != null;
    }
 }

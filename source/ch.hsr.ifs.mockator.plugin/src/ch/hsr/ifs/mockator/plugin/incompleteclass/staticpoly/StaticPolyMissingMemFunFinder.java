@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -13,13 +13,13 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ReferencingTestFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier.ConstStrategy;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
@@ -51,9 +51,9 @@ public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    private static Collection<StaticPolyMissingMemFun> filterAlreadyExisting(final Collection<StaticPolyMissingMemFun> candidates,
-         final ICPPASTCompositeTypeSpecifier clazz) {
+            final ICPPASTCompositeTypeSpecifier clazz) {
       final Collection<ICPPASTFunctionDefinition> existingMemFuns = getPublicMemberFunctions(clazz);
-      final List<StaticPolyMissingMemFun> onlyMissing = list();
+      final List<StaticPolyMissingMemFun> onlyMissing = new ArrayList<>();
 
       for (final StaticPolyMissingMemFun candidate : candidates) {
          boolean match = false;

@@ -10,8 +10,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 
@@ -41,8 +41,7 @@ public class DialogWithDecisionMemory {
    private static void rememberDecision(final ScopedPreferenceStore store) {
       try {
          store.save();
-      }
-      catch (final IOException e) {
+      } catch (final IOException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -58,7 +57,7 @@ public class DialogWithDecisionMemory {
    private boolean showDialog(final String title, final String msg, final IPreferenceStore store) {
       final boolean toggleState = false;
       final MessageDialogWithToggle dialog = MessageDialogWithToggle.open(MessageDialog.QUESTION, UiUtil.getWindowShell(), title, msg,
-            I18N.WrapFunctionDoNotShowAgainMsg, toggleState, store, keyStore, SWT.SHEET);
+               I18N.WrapFunctionDoNotShowAgainMsg, toggleState, store, keyStore, SWT.SHEET);
       return dialog.getReturnCode() == OK_RETURN;
    }
 

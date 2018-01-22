@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.linkedmode;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +34,7 @@ class FunSignaturesLinkedEditMode extends MockObjectLinkedModeSupport {
    }
 
    private Proposal[] getMemFunSignatureProposals() {
-      final List<Proposal> proposals = list();
+      final List<Proposal> proposals = new ArrayList<>();
 
       for (final TestDoubleMemFun memFun : memFuns) {
          proposals.add(createNewProposal(getFunSignature(memFun)));

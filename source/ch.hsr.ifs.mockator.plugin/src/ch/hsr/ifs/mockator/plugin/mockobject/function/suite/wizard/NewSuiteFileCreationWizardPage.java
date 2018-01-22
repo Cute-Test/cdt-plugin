@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -261,7 +262,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
       }
 
       final IPath folderPath = filePath.removeLastSegments(1).makeRelative();
-      final IResource folder = CProjectUtil.getWorkspaceRoot().findMember(folderPath);
+      final IResource folder = ProjectUtil.getWorkspaceRoot().findMember(folderPath);
 
       if (folder == null || !folder.exists() || folder.getType() != IResource.PROJECT && folder.getType() != IResource.FOLDER) {
          status.setError(I18N.NewSuiteWizardFolder + folderPath + I18N.NewSuiteWizardNotExisting);
@@ -294,7 +295,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
 
    private static StatusInfo checkIfFileExists(final IPath filePath) {
       final StatusInfo status = new StatusInfo();
-      final IResource file = CProjectUtil.getWorkspaceRoot().findMember(filePath);
+      final IResource file = ProjectUtil.getWorkspaceRoot().findMember(filePath);
 
       if (file != null && file.exists()) {
          if (file.getType() == IResource.FILE) {
@@ -409,7 +410,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
          return status;
       }
 
-      final IResource res = CProjectUtil.getWorkspaceRoot().findMember(folderPath);
+      final IResource res = ProjectUtil.getWorkspaceRoot().findMember(folderPath);
 
       if (res != null && res.exists()) {
          final int resType = res.getType();
@@ -482,7 +483,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
       }
 
       final SourceFolderSelectionDialog dialog = new SourceFolderSelectionDialog(getShell());
-      dialog.setInput(CoreModel.create(CProjectUtil.getWorkspaceRoot()));
+      dialog.setInput(CoreModel.create(ProjectUtil.getWorkspaceRoot()));
       dialog.setInitialSelection(initElement);
 
       if (dialog.open() != Window.OK) {
@@ -515,7 +516,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
       }
 
       while (path.segmentCount() > 0) {
-         final IResource res = CProjectUtil.getWorkspaceRoot().findMember(path);
+         final IResource res = ProjectUtil.getWorkspaceRoot().findMember(path);
 
          if (res != null && res.exists()) {
             final int resType = res.getType();

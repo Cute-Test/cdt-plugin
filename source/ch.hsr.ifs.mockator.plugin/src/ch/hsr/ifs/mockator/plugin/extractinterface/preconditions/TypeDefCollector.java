@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.preconditions;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -25,7 +24,7 @@ public class TypeDefCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<IASTSimpleDeclaration> findTypeDefDecls(final IASTTranslationUnit ast) {
-      final List<IASTSimpleDeclaration> typeDefs = list();
+      final List<IASTSimpleDeclaration> typeDefs = new ArrayList<>();
       ast.accept(new ASTVisitor() {
 
          {

@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.support;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -23,10 +22,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPParameter;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class BaseClassCtorCallHandler {
@@ -44,14 +42,16 @@ public class BaseClassCtorCallHandler {
 
    public boolean hasBaseClassDefaultCtor() {
       final Collection<ICPPConstructor> defaultCtors = Arrays.asList(baseClass.getConstructors()).stream().filter((ctor) -> ASTUtil.isDefaultCtor(
-            ctor)).collect(Collectors.toList());
+               ctor)).collect(Collectors.toList());
       return !defaultCtors.isEmpty();
    }
 
    public Optional<ICPPASTConstructorChainInitializer> getBaseClassInitializer(final CppStandard cppStd) {
       final ICPPConstructor baseCtor = getBaseCtorWithMinParams();
 
-      if (baseCtor == null) { return Optional.empty(); }
+      if (baseCtor == null) {
+         return Optional.empty();
+      }
 
       final List<IASTInitializerClause> clauses = getInitializerClauses(baseCtor, cppStd);
       return Optional.of(getInitializer(baseCtor, clauses));
@@ -59,13 +59,13 @@ public class BaseClassCtorCallHandler {
 
    private static ICPPASTConstructorChainInitializer getInitializer(final ICPPConstructor baseCtor, final List<IASTInitializerClause> initializers) {
       final ICPPASTConstructorInitializer ctorInitializer = nodeFactory.newConstructorInitializer(initializers.toArray(
-            new IASTInitializerClause[initializers.size()]));
+               new IASTInitializerClause[initializers.size()]));
       final IASTName baseCtorName = nodeFactory.newName(baseCtor.getName().toCharArray());
       return nodeFactory.newConstructorChainInitializer(baseCtorName, ctorInitializer);
    }
 
    private static List<IASTInitializerClause> getInitializerClauses(final ICPPConstructor baseCtor, final CppStandard cppStd) {
-      final List<IASTInitializerClause> clauses = list();
+      final List<IASTInitializerClause> clauses = new ArrayList<>();
 
       for (final ICPPParameter param : baseCtor.getParameters()) {
          final ICPPASTDeclSpecifier declSpec = new DeclSpecGenerator(param.getType()).getDeclSpec();

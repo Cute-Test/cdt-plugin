@@ -13,13 +13,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
@@ -88,7 +87,9 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    }
 
    private static IASTInitializerClause[] getArguments(final IASTInitializerClause clause) {
-      if (clause instanceof ICPPASTInitializerList) { return ((ICPPASTInitializerList) clause).getClauses(); }
+      if (clause instanceof ICPPASTInitializerList) {
+         return ((ICPPASTInitializerList) clause).getClauses();
+      }
 
       return array();
    }

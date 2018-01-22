@@ -9,8 +9,8 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 public class PassedToFreeFunctionTest extends CDTTestingCodanCheckerTest {
 
    @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
+   protected String getProblemId() {
+      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE.getId();
    }
 
    @Test

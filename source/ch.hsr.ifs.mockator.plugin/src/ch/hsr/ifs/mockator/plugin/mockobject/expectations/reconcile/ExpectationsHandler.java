@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.mockobject.expectations.reconcile;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,9 @@ public class ExpectationsHandler {
    }
 
    public void addExpectations() {
-      if (context.getNewForExpectations().isEmpty()) { return; }
+      if (context.getNewForExpectations().isEmpty()) {
+         return;
+      }
 
       for (final ICPPASTFunctionDefinition testFun : context.getReferencingFunctions()) {
          if (findExpectationsVector(testFun).isPresent()) {
@@ -48,31 +51,33 @@ public class ExpectationsHandler {
    }
 
    private void reconcileExistingExpectations(final ICPPASTFunctionDefinition testFun) {
-      final List<ExistingMemFunCallRegistration> nothingToTemove = list();
+      final List<ExistingMemFunCallRegistration> nothingToTemove = new ArrayList<>();
       reconcileExistingExpectations(testFun, context.getNewForExpectations(), nothingToTemove);
    }
 
    public void removeExpectation(final ExistingMemFunCallRegistration memFun, final IProgressMonitor pm) {
       for (final ICPPASTFunctionDefinition f : getReferencingTestFunctions(pm)) {
-         final List<TestDoubleMemFun> nothingToAdd = list();
+         final List<TestDoubleMemFun> nothingToAdd = new ArrayList<>();
          reconcileExistingExpectations(f, nothingToAdd, list(memFun));
       }
    }
 
    private void filterDefaultCtorIfNecessary(final Set<TestDoubleMemFun> allTestDoubleMemFuns) {
-      if (context.getMockObject().getPolymorphismKind() != PolymorphismKind.SubTypePoly) { return; }
+      if (context.getMockObject().getPolymorphismKind() != PolymorphismKind.SubTypePoly) {
+         return;
+      }
 
       allTestDoubleMemFuns.remove(new DefaultConstructor(context.getMockObject()));
    }
 
    private void insertNewExpectationVector(final Collection<? extends TestDoubleMemFun> newMemFunsForExpectations,
-         final ICPPASTFunctionDefinition testFun) {
+            final ICPPASTFunctionDefinition testFun) {
       new NewExpectationsInserter(testFun, context.getMockObject(), context.getCppStandard(), context.getRewriter(), context.getLinkedEditStrategy())
-            .insertExpectations(newMemFunsForExpectations);
+               .insertExpectations(newMemFunsForExpectations);
    }
 
    private void reconcileExistingExpectations(final ICPPASTFunctionDefinition testFun, final Collection<? extends TestDoubleMemFun> newMemFuns,
-         final Collection<ExistingMemFunCallRegistration> toRemove) {
+            final Collection<ExistingMemFunCallRegistration> toRemove) {
       findExpectationsVector(testFun).ifPresent((vector) -> createReconciler(testFun, vector).consolidateExpectations(newMemFuns, toRemove));
    }
 

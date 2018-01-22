@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.entities;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -19,8 +18,8 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
-
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
@@ -29,7 +28,6 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ReferencingTestFunFinder;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.ClassPublicVisibilityInserter;
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 
@@ -69,7 +67,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public Collection<ICPPASTFunctionDefinition> getReferencingTestFunctions(final CRefactoringContext context, final ICProject cProject,
-         final IProgressMonitor pm) {
+            final IProgressMonitor pm) {
       final ReferencingTestFunFinder testFunFinder = new ReferencingTestFunFinder(cProject, clazz);
       return testFunFinder.findByIndexLookup(context, pm);
    }
@@ -86,7 +84,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public Collection<? extends MissingMemberFunction> collectMissingMemFuns(final MissingMemFunFinder finder, final CppStandard cppStd) {
-      final List<MissingMemberFunction> missingMemFuns = list();
+      final List<MissingMemberFunction> missingMemFuns = new ArrayList<>();
       missingMemFuns.addAll(finder.findMissingMemberFunctions(clazz));
       addDefaultCtorIfNecessary(cppStd, missingMemFuns);
       return missingMemFuns;
@@ -102,7 +100,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public void addMissingMemFuns(final Collection<? extends MissingMemberFunction> missingMemFuns, final ClassPublicVisibilityInserter inserter,
-         final CppStandard cppStd) {
+            final CppStandard cppStd) {
       for (final MissingMemberFunction m : missingMemFuns) {
          final TestDoubleMemFunImplStrategy implStrategy = getImplStrategy(cppStd);
          inserter.insert(m.createFunctionDefinition(implStrategy, cppStd));
@@ -132,9 +130,13 @@ public abstract class AbstractTestDouble implements TestDouble {
       IASTNode currentNode = clazz;
 
       while (currentNode != null) {
-         if (currentNode instanceof ICPPASTFunctionDefinition) { return ((ICPPASTFunctionDefinition) currentNode).getBody(); }
+         if (currentNode instanceof ICPPASTFunctionDefinition) {
+            return ((ICPPASTFunctionDefinition) currentNode).getBody();
+         }
 
-         if (currentNode instanceof ICPPASTNamespaceDefinition) { return currentNode; }
+         if (currentNode instanceof ICPPASTNamespaceDefinition) {
+            return currentNode;
+         }
 
          currentNode = currentNode.getParent();
       }

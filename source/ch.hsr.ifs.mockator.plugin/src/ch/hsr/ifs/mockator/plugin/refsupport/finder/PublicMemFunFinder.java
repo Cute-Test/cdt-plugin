@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.finder;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +47,7 @@ public class PublicMemFunFinder {
    }
 
    public List<IASTDeclaration> getPublicMemFuns() {
-      final List<IASTDeclaration> publicMemFuns = list();
+      final List<IASTDeclaration> publicMemFuns = new ArrayList<>();
 
       for (final IASTDeclaration classMember : clazz.getMembers()) {
          if (classMember instanceof ICPPASTVisibilityLabel) {

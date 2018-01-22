@@ -25,11 +25,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.linker.ItaniumMangledNameGenerator;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
@@ -57,7 +56,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
    // }
    private IASTIfStatement getLazyInit(final ICPPASTFunctionDeclarator function) {
       final ICPPASTUnaryExpression notExpr = nodeFactory.newUnaryExpression(IASTUnaryExpression.op_not, nodeFactory.newIdExpression(nodeFactory
-            .newName(ORIG_FUN.toCharArray())));
+               .newName(ORIG_FUN.toCharArray())));
       final IASTCompoundStatement then = nodeFactory.newCompoundStatement();
       then.addStatement(getDlSym(function));
       then.addStatement(createReinterpretCast());
@@ -72,7 +71,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
       args[0] = nodeFactory.newIdExpression(nodeFactory.newName("RTLD_NEXT".toCharArray()));
       args[1] = nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(getMangledFunName(function)));
       final ICPPASTFunctionCallExpression dlsymcall = nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(nodeFactory.newName("dlsym"
-            .toCharArray())), args);
+               .toCharArray())), args);
       final ICPPASTSimpleDeclSpecifier voidDeclSpec = nodeFactory.newSimpleDeclSpecifier();
       voidDeclSpec.setType(IASTSimpleDeclSpecifier.t_void);
       final IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(voidDeclSpec);

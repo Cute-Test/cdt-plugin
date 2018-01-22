@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.asserteq;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,6 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorFinderVisitor;
 
@@ -34,7 +32,7 @@ public class AssertEqualFinderVisitor extends ASTVisitor {
    public AssertEqualFinderVisitor(final Optional<ICPPASTCompositeTypeSpecifier> mockObject) {
       this.mockObject = mockObject;
       registrationVector = findRegistrationVectorInTestDouble();
-      expectedActualPairs = list();
+      expectedActualPairs = new ArrayList<>();
    }
 
    private Optional<IASTName> findRegistrationVectorInTestDouble() {
@@ -51,7 +49,9 @@ public class AssertEqualFinderVisitor extends ASTVisitor {
 
    @Override
    public int visit(final IASTStatement stmt) {
-      if (stmt instanceof IASTCompoundStatement || !involvesMacroExpansion(stmt)) { return PROCESS_CONTINUE; }
+      if (stmt instanceof IASTCompoundStatement || !involvesMacroExpansion(stmt)) {
+         return PROCESS_CONTINUE;
+      }
 
       for (final IASTMacroExpansionLocation loc : getMacroExpansionLocations(stmt.getNodeLocations())) {
          final Optional<AssertKind> optKind = getAssertionKind(loc);
@@ -81,7 +81,7 @@ public class AssertEqualFinderVisitor extends ASTVisitor {
    }
 
    private static Collection<IASTMacroExpansionLocation> getMacroExpansionLocations(final IASTNodeLocation[] locations) {
-      final List<IASTMacroExpansionLocation> macroExpansions = list();
+      final List<IASTMacroExpansionLocation> macroExpansions = new ArrayList<>();
 
       for (final IASTNodeLocation loc : locations) {
          if (loc instanceof IASTMacroExpansionLocation) {

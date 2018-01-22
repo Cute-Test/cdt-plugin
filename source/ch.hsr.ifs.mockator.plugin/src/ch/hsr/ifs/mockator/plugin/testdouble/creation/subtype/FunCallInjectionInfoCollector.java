@@ -16,10 +16,9 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 
 
@@ -33,21 +32,24 @@ class FunCallInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    public Optional<Pair<IASTName, IType>> collectDependencyInfos(final IASTName problemArgName) {
       final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(problemArgName, ICPPASTFunctionCallExpression.class);
 
-      if (funCall == null) { return Optional.empty(); }
+      if (funCall == null) {
+         return Optional.empty();
+      }
 
       final int args = getArgPosOfProblemType(problemArgName, list(funCall.getArguments()));
 
       return OptHelper.returnIfPresentElseEmpty(findMatchingFunction(getCandidateBindings(funCall), funCall, args), (
-            match) -> getTargetClassOfProblemType(match, args));
+               match) -> getTargetClassOfProblemType(match, args));
    }
 
    private Optional<ICPPASTFunctionDeclarator> findMatchingFunction(final IBinding[] functions, final ICPPASTFunctionCallExpression funCall,
-         final int argPosOfProblemType) {
+            final int argPosOfProblemType) {
       for (final IBinding fun : functions) {
 
          final Optional<ICPPASTFunctionDeclarator> funDecl = lookup.findFunctionDeclaration(fun, index);
-         if (funDecl.isPresent() && areEquivalentExceptProblemType(list(funCall.getArguments()), funDecl.get(),
-               argPosOfProblemType)) { return funDecl; }
+         if (funDecl.isPresent() && areEquivalentExceptProblemType(list(funCall.getArguments()), funDecl.get(), argPosOfProblemType)) {
+            return funDecl;
+         }
       }
       return Optional.empty();
    }

@@ -6,6 +6,7 @@ import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.order
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.quote;
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.unquote;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,6 @@ import java.util.stream.Collectors;
 import org.eclipse.core.resources.IMarker;
 
 import ch.hsr.ifs.iltis.core.resources.StringUtil;
-
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.CodanArguments;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.MemFunSignature;
@@ -63,7 +63,9 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    private static List<String> split(final String expectations) {
-      if (expectations.trim().isEmpty()) { return list(); }
+      if (expectations.trim().isEmpty()) {
+         return new ArrayList<>();
+      }
       return list(expectations.split(SIGNATURE_DELIMITER));
    }
 

@@ -33,8 +33,7 @@ public class ToggleTracingFunCallDelegate extends MockatorDelegate {
    private void copyMockatorLibIfNecessary() {
       try {
          new MockatorLibHandler(cProject.getProject()).addLibToProject();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -54,7 +53,7 @@ public class ToggleTracingFunCallDelegate extends MockatorDelegate {
 
    private void startLinkedMode(final ToggleTracingFunCallRefactoring refactoring, final ChangeEdit changeEdit) {
       final MockObjectLinkedEditModeFactory factory = new MockObjectLinkedEditModeFactory(changeEdit, list(refactoring.getToggledFunction()),
-            getCppStd(), getAssertionOrder(), Optional.empty());
+               getCppStd(), getAssertionOrder(), Optional.empty());
       new LinkedModeStarter().accept(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
    }
 }

@@ -25,8 +25,7 @@ public class AddNatureAction extends WithSelectedProjectAction {
       withProject((proj) -> {
          try {
             MockatorNature.addMockatorNature(proj, new NullProgressMonitor());
-         }
-         catch (final CoreException e) {
+         } catch (final CoreException e) {
             showException(I18N.NatureAdditionFailedTitle, I18N.NatureAdditionFailedMsg, e);
          }
       });

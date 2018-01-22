@@ -22,8 +22,8 @@ import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
@@ -32,7 +32,6 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
 
@@ -51,7 +50,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
 
    @Override
    protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
-         throws CoreException {
+            throws CoreException {
       final Optional<ICPPASTFunctionDeclarator> optFunDecl = findFunDeclaration(funName, pm);
       if (optFunDecl.isPresent()) {
          final IASTTranslationUnit newTu = createAndGetNewTu(funName.toString(), pm);
@@ -81,8 +80,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
          final CppIncludeResolver resolver = new CppIncludeResolver(tu, getProject(), getIndex());
          final AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDecl.getTranslationUnit().getFilePath());
          rewriter.insertBefore(tu, null, includeForFunDecl, null);
-      }
-      catch (final Exception e) {
+      } catch (final Exception e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

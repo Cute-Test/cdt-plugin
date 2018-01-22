@@ -1,5 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,7 +61,7 @@ public class PureVirtualMemFunCollector {
 
       // Look at the pure virtual methods of the base classes
       final Set<IBinding> handledBaseClasses = new HashSet<>();
-      for (final ICPPBase base : ClassTypeHelper.getBases(classType, null)) {
+      for (final ICPPBase base : classType.getBases()) {
          final IBinding baseClass = base.getBaseClass();
 
          if (baseClass instanceof ICPPClassType && handledBaseClasses.add(baseClass)) {
@@ -78,7 +79,7 @@ public class PureVirtualMemFunCollector {
       }
 
       // Remove overridden pure-virtual methods and add in new pure virtuals.
-      final ObjectSet<ICPPMethod> methods = ClassTypeHelper.getOwnMethods(classType, null);
+      final ObjectSet<ICPPMethod> methods = ClassTypeHelper.getOwnMethods(classType);
       for (final ICPPMethod method : methods) {
          final String key = getMethodNameForOverrideKey(method);
          List<ICPPMethod> list = result.get(key);

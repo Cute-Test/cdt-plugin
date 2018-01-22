@@ -8,7 +8,6 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.IMarkerResolution2;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
@@ -42,7 +41,7 @@ public abstract class MockatorQuickFix extends AbstractCodanCMarkerResolution im
 
    protected ICElement getCElement() {
       return OptHelper.returnIfPresentElse(UiUtil.getActiveCEditor(), (editor) -> (cEditor = editor).getInputCElement(), () -> cEditor
-            .getInputCElement());
+               .getInputCElement());
    }
 
    public void setRunInCurrentThread(final boolean runInCurrentThread) {

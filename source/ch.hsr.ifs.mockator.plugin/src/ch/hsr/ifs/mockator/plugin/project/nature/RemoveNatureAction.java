@@ -25,8 +25,7 @@ public class RemoveNatureAction extends WithSelectedProjectAction {
       withProject((p) -> {
          try {
             MockatorNature.removeMockatorNature(p, new NullProgressMonitor());
-         }
-         catch (final CoreException e) {
+         } catch (final CoreException e) {
             showException(I18N.NatureRemovalFailedTitle, I18N.NatureRemovalFailedMsg, e);
          }
       });

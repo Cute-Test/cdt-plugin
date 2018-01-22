@@ -9,7 +9,6 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.RefactoringRunner;
-
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 
@@ -33,7 +32,7 @@ class ExtractInterfaceRunner extends RefactoringRunner {
 
    private ExtractInterfaceRefactoring createRefactoring() {
       final ExtractInterfaceContext context = new ExtractInterfaceContext.ContextBuilder((ITranslationUnit) getElement(), getProject(),
-            (ITextSelection) getSelection()).replaceAllOccurences(true).build();
+               (ITextSelection) getSelection()).replaceAllOccurences(true).build();
       return new ExtractInterfaceRefactoring(context);
    }
 }

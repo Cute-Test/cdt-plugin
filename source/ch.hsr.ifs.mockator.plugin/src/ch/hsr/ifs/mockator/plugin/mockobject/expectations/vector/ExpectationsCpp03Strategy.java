@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector;
 
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CALLS;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +20,11 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.BoostAssignInitializerCreator;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
@@ -33,8 +33,8 @@ public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
 
    @Override
    public List<IASTStatement> createExpectationsVector(final Collection<? extends TestDoubleMemFun> memFuns, final String newExpectationsName,
-         final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
-      final List<IASTStatement> expectations = list();
+            final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
+      final List<IASTStatement> expectations = new ArrayList<>();
 
       if (!expectationsVector.isPresent()) {
          expectations.add(createExpectationVectorDeclStmt(newExpectationsName));
@@ -47,7 +47,7 @@ public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
    }
 
    private static IASTExpressionStatement createBoostAssignInitializer(final Collection<? extends TestDoubleMemFun> memFuns, final String vectorName,
-         final LinkedEditModeStrategy linkedEdit) {
+            final LinkedEditModeStrategy linkedEdit) {
       final BoostAssignInitializerCreator creator = new BoostAssignInitializerCreator(memFuns, vectorName, linkedEdit);
       return creator.createBoostAssignInitializer();
    }

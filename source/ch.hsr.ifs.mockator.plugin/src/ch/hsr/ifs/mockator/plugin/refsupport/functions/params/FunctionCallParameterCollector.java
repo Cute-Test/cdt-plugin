@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public class FunctionCallParameterCollector {
 
    public List<ICPPASTParameterDeclaration> getFunctionParameters() {
       final Map<String, Boolean> nameHistory = unorderedMap();
-      final List<ICPPASTParameterDeclaration> params = list();
+      final List<ICPPASTParameterDeclaration> params = new ArrayList<>();
 
       for (final IASTInitializerClause arg : funCall.getArguments()) {
          final IASTExpression idExpr = ASTUtil.getChildOfType(arg, IASTExpression.class);

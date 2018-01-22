@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.lookup;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +35,7 @@ abstract class AbstractNodeFinder {
    }
 
    protected Collection<IASTName> collectMatchingNames(final IBinding name) {
-      final List<IASTName> names = list();
+      final List<IASTName> names = new ArrayList<>();
 
       try {
          for (final IIndexName iName : lookup(name)) {

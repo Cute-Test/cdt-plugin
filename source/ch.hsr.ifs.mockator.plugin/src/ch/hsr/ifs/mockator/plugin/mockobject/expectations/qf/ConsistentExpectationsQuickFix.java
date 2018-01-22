@@ -47,7 +47,7 @@ public class ConsistentExpectationsQuickFix extends MockatorQfWithRefactoringSup
    @Override
    protected MockatorRefactoring getRefactoring(final ICElement cElement, final ITextSelection selection, final CodanArguments ca) {
       return new ConsistentExpectationsRefactoring(cElement, selection, getCProject(), (ConsistentExpectationsCodanArgs) ca, getCppStandard(),
-            getLinkedEditStrategy());
+               getLinkedEditStrategy());
    }
 
    private LinkedEditModeStrategy getLinkedEditStrategy() {
@@ -61,9 +61,9 @@ public class ConsistentExpectationsQuickFix extends MockatorQfWithRefactoringSup
 
    @Override
    protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument document,
-         final MockatorRefactoring refactoring) {
+            final MockatorRefactoring refactoring) {
       final MockObjectLinkedEditModeFactory factory = new MockObjectLinkedEditModeFactory(edit, getExpectationsToAdd(refactoring), getCppStandard(),
-            getAssertionOrderFor(), Optional.empty());
+               getAssertionOrderFor(), Optional.empty());
       return Optional.of(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
    }
 

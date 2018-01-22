@@ -10,9 +10,8 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
-import ch.hsr.ifs.iltis.core.functional.functions.Function2;
-
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
 
 abstract class IncludeHandler extends AbstractOptionsHandler {
@@ -34,9 +33,10 @@ abstract class IncludeHandler extends AbstractOptionsHandler {
       if (tool.isPresent()) {
          for (final IOption option : tool.get().getOptions()) {
             try {
-               if (option.getValueType() == getOptionType()) { return getOptionValues(option); }
-            }
-            catch (final BuildException e) {}
+               if (option.getValueType() == getOptionType()) {
+                  return getOptionValues(option);
+               }
+            } catch (final BuildException e) {}
          }
       }
 
@@ -50,9 +50,10 @@ abstract class IncludeHandler extends AbstractOptionsHandler {
       if (tool.isPresent()) {
          for (final IOption option : tool.get().getOptions()) {
             try {
-               if (option.getValueType() == getOptionType()) { return getOptionValues(option).contains(includePath); }
-            }
-            catch (final BuildException e) {}
+               if (option.getValueType() == getOptionType()) {
+                  return getOptionValues(option).contains(includePath);
+               }
+            } catch (final BuildException e) {}
          }
       }
 
@@ -74,8 +75,7 @@ abstract class IncludeHandler extends AbstractOptionsHandler {
                   includePathOp.apply(includePath, includePaths);
                   setAndSaveOption(config, tool, option, includePaths);
                }
-            }
-            catch (final BuildException e) {
+            } catch (final BuildException e) {
                throw new ILTISException(e).rethrowUnchecked();
             }
          }

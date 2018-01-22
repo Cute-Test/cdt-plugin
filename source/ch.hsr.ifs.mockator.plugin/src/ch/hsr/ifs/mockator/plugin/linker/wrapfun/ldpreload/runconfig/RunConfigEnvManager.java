@@ -19,7 +19,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 
 
@@ -46,10 +45,11 @@ public class RunConfigEnvManager {
             for (final ILaunchConfiguration config : getLaunchConfigs()) {
                final Map<String, String> envVariables = getEnvVars(config.getWorkingCopy());
 
-               if (strategy.get().hasPreloadConfig(sharedLibPath, envVariables)) { return true; }
+               if (strategy.get().hasPreloadConfig(sharedLibPath, envVariables)) {
+                  return true;
+               }
             }
-         }
-         catch (final CoreException e) {}
+         } catch (final CoreException e) {}
       }
       return false;
    }
@@ -63,8 +63,7 @@ public class RunConfigEnvManager {
                strat.addPreloadConfig(sharedLibPath, envVariables);
                saveEnvVars(wc, envVariables);
             }
-         }
-         catch (final CoreException e) {
+         } catch (final CoreException e) {
             throw new ILTISException(e).rethrowUnchecked();
          }
       });
@@ -77,7 +76,7 @@ public class RunConfigEnvManager {
 
    private static Map<String, String> getEnvVars(final ILaunchConfigurationWorkingCopy wc) throws CoreException {
       return checkedCast(wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, CollectionHelper.<String, String>orderPreservingMap()),
-            String.class);
+               String.class);
    }
 
    public void removePreloadLaunchConfig(final String sharedLibPath) {
@@ -89,8 +88,7 @@ public class RunConfigEnvManager {
                strat.removePreloadConfig(sharedLibPath, envVariables);
                saveEnvVars(wc, envVariables);
             }
-         }
-         catch (final CoreException e) {
+         } catch (final CoreException e) {
             throw new ILTISException(e).rethrowUnchecked();
          }
       });
@@ -101,8 +99,7 @@ public class RunConfigEnvManager {
          try {
             final String typeId = config.getType().getIdentifier();
             return isCuteOrCdtExecutable(typeId) && matchesProject(config);
-         }
-         catch (final CoreException e) {
+         } catch (final CoreException e) {
             throw new ILTISException(e).rethrowUnchecked();
          }
       }).collect(Collectors.toList());
@@ -115,7 +112,9 @@ public class RunConfigEnvManager {
    private boolean matchesProject(final ILaunchConfiguration launchConfig) throws CoreException {
       final ICProject cProject = CDebugUtils.getCProject(launchConfig);
 
-      if (cProject == null) { return false; }
+      if (cProject == null) {
+         return false;
+      }
 
       return targetProject.equals(cProject.getProject());
    }

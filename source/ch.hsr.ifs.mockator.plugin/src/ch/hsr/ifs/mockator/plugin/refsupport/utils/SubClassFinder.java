@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedSet;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +26,7 @@ public class SubClassFinder {
    }
 
    public Collection<ICPPClassType> getSubClasses(final ICPPClassType clazz) throws CoreException {
-      final List<ICPPClassType> subClasses = list();
+      final List<ICPPClassType> subClasses = new ArrayList<>();
       final Set<String> alreadyHandled = unorderedSet();
       collectSubClasses(clazz, subClasses, alreadyHandled);
       subClasses.remove(0);
@@ -34,7 +34,7 @@ public class SubClassFinder {
    }
 
    private void collectSubClasses(final ICPPClassType clazz, final List<ICPPClassType> subClasses, final Set<String> alreadyHandled)
-         throws CoreException {
+            throws CoreException {
       final String type = ASTTypeUtil.getType(clazz, true);
 
       if (!alreadyHandled.add(type)) return;

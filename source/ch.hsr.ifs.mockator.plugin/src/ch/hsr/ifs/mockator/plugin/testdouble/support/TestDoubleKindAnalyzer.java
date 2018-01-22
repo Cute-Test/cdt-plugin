@@ -35,7 +35,9 @@ public class TestDoubleKindAnalyzer {
 
          @Override
          public int visit(final IASTExpression expr) {
-            if (!(expr instanceof IASTIdExpression)) { return PROCESS_CONTINUE; }
+            if (!(expr instanceof IASTIdExpression)) {
+               return PROCESS_CONTINUE;
+            }
 
             final IASTIdExpression idExpr = (IASTIdExpression) expr;
             final CallsVectorTypeVerifier verifier = new CallsVectorTypeVerifier(idExpr);

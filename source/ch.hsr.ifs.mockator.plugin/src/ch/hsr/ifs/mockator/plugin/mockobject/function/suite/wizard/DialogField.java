@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.wizard.NewSuiteFileCreationWizardPage.SourceFolderFieldAdapter;
 
 

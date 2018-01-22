@@ -12,8 +12,8 @@ import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
 public class MockObjectCpp03SubTypeQfTest extends MockatorQuickfixTest {
 
    @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL;
+   protected String getProblemId() {
+      return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL.getId();
    }
 
    @Override

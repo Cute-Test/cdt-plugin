@@ -10,8 +10,8 @@ import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
 public class FakeObjectCpp03QfTest extends MockatorQuickfixTest {
 
    @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
+   protected String getProblemId() {
+      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL.getId();
    }
 
    @Override

@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.PolymorphismKind;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.DefaultConstructor;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.BaseClassCtorCallHandler;
@@ -24,9 +24,13 @@ public class FakeObjectDefaultCtorProvider implements DefaultCtorProvider {
 
    @Override
    public Optional<? extends MissingMemberFunction> createMissingDefaultCtor(final Collection<? extends MissingMemberFunction> memFuns) {
-      if (fakeObject.getPolymorphismKind() != PolymorphismKind.SubTypePoly) { return Optional.empty(); }
+      if (fakeObject.getPolymorphismKind() != PolymorphismKind.SubTypePoly) {
+         return Optional.empty();
+      }
 
-      if (!hasBaseClassDefaultCtor() && hasOnlyImplicitDefaultCtor()) { return Optional.of(new DefaultConstructor(fakeObject)); }
+      if (!hasBaseClassDefaultCtor() && hasOnlyImplicitDefaultCtor()) {
+         return Optional.of(new DefaultConstructor(fakeObject));
+      }
 
       return Optional.empty();
    }

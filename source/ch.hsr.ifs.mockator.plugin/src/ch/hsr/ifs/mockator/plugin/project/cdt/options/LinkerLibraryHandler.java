@@ -9,10 +9,9 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
-
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class LinkerLibraryHandler extends AbstractOptionsHandler {
@@ -38,8 +37,7 @@ public class LinkerLibraryHandler extends AbstractOptionsHandler {
                   libraryOp.apply(libName, libs);
                   setAndSaveOption(config, tool, option, libs);
                }
-            }
-            catch (final BuildException e) {
+            } catch (final BuildException e) {
                throw new ILTISException(e).rethrowUnchecked();
             }
          }
@@ -74,8 +72,7 @@ public class LinkerLibraryHandler extends AbstractOptionsHandler {
                   final Set<String> libs = orderPreservingSet(option.getLibraries());
                   return libs.contains(libName);
                }
-            }
-            catch (final BuildException e) {
+            } catch (final BuildException e) {
                throw new ILTISException(e).rethrowUnchecked();
             }
          }

@@ -12,8 +12,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.testdouble.TestDoubleParentFinder;
 
 
@@ -51,7 +51,9 @@ public class AllCallsVectorInserter {
    }
 
    private static IASTNode getAllCallsVector(final IASTSimpleDeclaration allCallsVector, final IASTNode parent) {
-      if (isPartOfFunction(parent)) { return nodeFactory.newDeclarationStatement(allCallsVector); }
+      if (isPartOfFunction(parent)) {
+         return nodeFactory.newDeclarationStatement(allCallsVector);
+      }
 
       return allCallsVector;
    }

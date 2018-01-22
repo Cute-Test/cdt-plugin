@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import ch.hsr.ifs.iltis.core.resources.StringUtil;
-
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 
 

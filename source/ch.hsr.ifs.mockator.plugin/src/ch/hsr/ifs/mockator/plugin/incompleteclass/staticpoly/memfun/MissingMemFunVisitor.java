@@ -69,7 +69,7 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
    }
 
    protected IType resolveTypeOfDependentExpression(final TypeOfDependentExpression type) {
-      IType evalType = type.getEvaluation().getType(null);
+      IType evalType = type.getEvaluation().getType();
       final ICPPEvaluation evaluation = ((TypeOfDependentExpression) evalType).getEvaluation();
 
       if (evaluation instanceof EvalMemberAccess) {
@@ -80,7 +80,7 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
          }
       } else if (evaluation instanceof EvalUnary) {
          final ICPPEvaluation argument = ((EvalUnary) evaluation).getArgument();
-         evalType = argument.getType(null);
+         evalType = argument.getType();
       }
 
       return evalType;

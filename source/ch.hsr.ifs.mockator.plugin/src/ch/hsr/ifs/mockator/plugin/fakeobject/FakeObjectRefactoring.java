@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -29,7 +28,7 @@ public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
+            OperationCanceledException {
       final Collection<? extends MissingMemberFunction> missingMemFuns = collectMissingMemFuns(pm);
       final ASTRewrite rewriter = createRewriter(collector, getAST(tu(), pm));
       final ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);

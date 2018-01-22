@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.movetons;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,8 +9,8 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
-import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 
 
 class TestFunctionFinderVisitor extends ASTVisitor {
@@ -25,7 +24,7 @@ class TestFunctionFinderVisitor extends ASTVisitor {
 
    public TestFunctionFinderVisitor(final FunctionsToAnalyze strategy) {
       this.strategy = strategy;
-      functions = list();
+      functions = new ArrayList<>();
    }
 
    public Collection<IASTFunctionDefinition> getFunctions() {

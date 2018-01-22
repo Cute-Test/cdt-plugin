@@ -3,7 +3,6 @@ package ch.hsr.ifs.mockator.plugin.preprocessor;
 import org.eclipse.core.runtime.IPath;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
-
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludeFileHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorDelegate;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoringRunner;

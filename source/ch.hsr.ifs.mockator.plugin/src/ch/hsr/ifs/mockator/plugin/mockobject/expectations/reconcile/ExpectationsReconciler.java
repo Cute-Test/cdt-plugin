@@ -32,7 +32,7 @@ public class ExpectationsReconciler {
    }
 
    public void consolidateExpectations(final Collection<? extends TestDoubleMemFun> toAdd,
-         final Collection<ExistingMemFunCallRegistration> toRemove) {
+            final Collection<ExistingMemFunCallRegistration> toRemove) {
       final IASTName assignedExpectationsVector = getAssignExpectationsVector();
       getExpectationsReconciler(toAdd, toRemove).reconcileExpectations(assignedExpectationsVector);
    }
@@ -43,7 +43,7 @@ public class ExpectationsReconciler {
    }
 
    private AbstractExpectationsReconciler getExpectationsReconciler(final Collection<? extends TestDoubleMemFun> toAdd,
-         final Collection<ExistingMemFunCallRegistration> toRemove) {
+            final Collection<ExistingMemFunCallRegistration> toRemove) {
       switch (cppStd) {
       case Cpp03Std:
          return new BoostVectorExpectationsReconciler(rewriter, toAdd, toRemove, cppStd, linkedEditMode);

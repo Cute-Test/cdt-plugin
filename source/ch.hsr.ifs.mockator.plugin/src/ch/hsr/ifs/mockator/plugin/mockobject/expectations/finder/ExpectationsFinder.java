@@ -14,11 +14,9 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
-
-import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.mockator.plugin.base.data.Pair;
+import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
@@ -43,7 +41,9 @@ public class ExpectationsFinder {
 
          @Override
          public int visit(final IASTName name) {
-            if (!nameMatches(name)) { return PROCESS_SKIP; }
+            if (!nameMatches(name)) {
+               return PROCESS_SKIP;
+            }
 
             return collectExpectations(name);
          }
@@ -61,7 +61,9 @@ public class ExpectationsFinder {
                new BoostVectorExpectationsFinder(callExpectations, expectationVector, assertedExpectetation).collectExpectations(stmt);
             }
 
-            if (callExpectations.isEmpty()) { return PROCESS_CONTINUE; }
+            if (callExpectations.isEmpty()) {
+               return PROCESS_CONTINUE;
+            }
 
             return PROCESS_ABORT;
          }

@@ -48,7 +48,7 @@ public class MockSupportAdder {
 
    private void createAllCallsSequenceVector() {
       new AllCallsVectorInserter(context.getMockObject().getKlass(), context.getMockObject().getParent(), context.getMockObject().getAllCallsVector(),
-            context.getCppStandard()).insert(context.getRewriter());
+               context.getCppStandard()).insert(context.getRewriter());
    }
 
    private void addMockatorIdMember() {

@@ -1,10 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.preconditions;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
 import static ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier.ConstStrategy.ConsiderConst;
 import static ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier.ConstStrategy.IgnoreConst;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -111,7 +111,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
    private static Collection<IASTDeclaration> filterUsed(final Collection<ICPPASTFunctionCallExpression> funCalls,
             final Collection<IASTDeclaration> availableFunctions, final IType typeOfSelection) {
-      final List<IASTDeclaration> usedFuns = list();
+      final List<IASTDeclaration> usedFuns = new ArrayList<>();
       final FunctionEquivalenceVerifier.ConstStrategy strategy = getConstStrategy(typeOfSelection);
 
       for (final IASTDeclaration fun : availableFunctions) {
@@ -137,7 +137,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<ICPPASTFunctionDeclarator> getAllMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
-      final List<ICPPASTFunctionDeclarator> allMemFuns = list();
+      final List<ICPPASTFunctionDeclarator> allMemFuns = new ArrayList<>();
       clazz.accept(new ASTVisitor() {
 
          {

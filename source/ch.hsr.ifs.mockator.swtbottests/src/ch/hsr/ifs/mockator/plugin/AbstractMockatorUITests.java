@@ -121,8 +121,7 @@ public abstract class AbstractMockatorUITests {
          while (!isDone) {
             try {
                wait();
-            }
-            catch (final InterruptedException e) {
+            } catch (final InterruptedException e) {
                Thread.currentThread().interrupt();
             }
          }

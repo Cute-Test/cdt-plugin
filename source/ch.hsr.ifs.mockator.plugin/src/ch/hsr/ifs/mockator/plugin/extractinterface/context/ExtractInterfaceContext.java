@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.context;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -99,9 +98,9 @@ public final class ExtractInterfaceContext {
       refContext = builder.context;
       chosenInterfaceName = builder.newInterfaceName;
       replaceAllOccurences = builder.replaceAllOccurences;
-      chosenFunctions = list();
-      availablePublicMemFuns = list();
-      usedPublicMemFuns = list();
+      chosenFunctions = new ArrayList<>();
+      availablePublicMemFuns = new ArrayList<>();
+      usedPublicMemFuns = new ArrayList<>();
    }
 
    public void setSelectedName(final Optional<IASTName> name) {

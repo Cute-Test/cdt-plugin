@@ -68,7 +68,9 @@ public class TranslationUnitLoader {
    }
 
    private IASTTranslationUnit loadAst(final ITranslationUnit tu) throws CoreException {
-      if (context != null) { return context.getAST(tu, pm); }
+      if (context != null) {
+         return context.getAST(tu, pm);
+      }
 
       return loadAstFromTu(tu);
    }
@@ -76,8 +78,7 @@ public class TranslationUnitLoader {
    private IASTTranslationUnit loadAstFromTu(final ITranslationUnit tu) {
       try {
          return tu.getAST(index, AST_FLAGS);
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

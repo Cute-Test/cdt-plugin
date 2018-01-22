@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.CoreException;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.Functional;
 import ch.hsr.ifs.iltis.core.functional.StreamPair;
-
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.TypedefHelper;
 
@@ -81,8 +80,7 @@ class TemplateInstDeclSpecStrategy implements DeclSpecGeneratorStrategy {
    private static String getShortestType(final IType type) {
       try {
          return new TypedefHelper(type).findShortestType();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

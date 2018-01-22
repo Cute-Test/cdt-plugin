@@ -6,8 +6,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,10 +33,10 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
 
@@ -61,22 +60,23 @@ public class RunnerFinder {
          final IASTFunctionDefinition mainFunc = findMain(mon);
          mon.beginTask(I18N.RunnerFinderFindRunners, 1);
          return getTestRunnersFunctions(mainFunc, mon);
-      }
-      finally {
+      } finally {
          mon.done();
       }
    }
 
    private List<IASTFunctionDefinition> getTestRunnersFunctions(final IASTFunctionDefinition mainFunc, final IProgressMonitor pm)
-         throws CoreException {
-      if (mainFunc == null) { return list(); }
+            throws CoreException {
+      if (mainFunc == null) {
+         return new ArrayList<>();
+      }
 
       final IIndex index = mainFunc.getTranslationUnit().getIndex();
 
       try {
          index.acquireReadLock();
          final List<IASTFunctionCallExpression> funcCalls = getFunctionCalls(mainFunc);
-         final List<IASTFunctionDefinition> testRunners = list();
+         final List<IASTFunctionDefinition> testRunners = new ArrayList<>();
 
          for (final IASTFunctionCallExpression callExpression : funcCalls) {
             if (callExpression.getFunctionNameExpression() instanceof IASTIdExpression) {
@@ -103,15 +103,13 @@ public class RunnerFinder {
          }
 
          return testRunners;
-      }
-      catch (final InterruptedException e) {
+      } catch (final InterruptedException e) {
          Thread.currentThread().interrupt();
-      }
-      finally {
+      } finally {
          index.releaseReadLock();
       }
 
-      return list();
+      return new ArrayList<>();
    }
 
    private static Optional<IASTName> findName(final IASTTranslationUnit ast, final String nameToLookFor) {
@@ -134,7 +132,7 @@ public class RunnerFinder {
    }
 
    private static List<IASTFunctionCallExpression> getFunctionCalls(final IASTFunctionDefinition mainFunc) {
-      final List<IASTFunctionCallExpression> funCalls = list();
+      final List<IASTFunctionCallExpression> funCalls = new ArrayList<>();
       mainFunc.getBody().accept(new ASTVisitor() {
 
          {
@@ -168,13 +166,13 @@ public class RunnerFinder {
             final IASTTranslationUnit ast = getAST(main[0], m);
 
             final Optional<IASTName> oMain = findDefinitionInTranslationUnit(ast, main[0]);
-            if (oMain.isPresent()) { return getFunctionDefinition(oMain.get()); }
+            if (oMain.isPresent()) {
+               return getFunctionDefinition(oMain.get());
+            }
          }
-      }
-      catch (final InterruptedException e) {
+      } catch (final InterruptedException e) {
          Thread.currentThread().interrupt();
-      }
-      finally {
+      } finally {
          index.releaseReadLock();
       }
 
@@ -209,7 +207,7 @@ public class RunnerFinder {
    private static boolean isSame(final IIndexName iName, final IASTNodeLocation nodeLocation) {
       final Path fileName = new Path(nodeLocation.asFileLocation().getFileName());
       return iName.getNodeOffset() == nodeLocation.getNodeOffset() && iName.getNodeLength() == nodeLocation.getNodeLength() && new Path(iName
-            .getFileLocation().getFileName()).equals(fileName);
+               .getFileLocation().getFileName()).equals(fileName);
    }
 
    private static IASTFunctionDefinition getFunctionDefinition(final IASTName name) {

@@ -55,8 +55,7 @@ public class NatureHandler {
    public boolean hasNature(final String natureId) {
       try {
          return project.hasNature(natureId);
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          return false;
       }
    }

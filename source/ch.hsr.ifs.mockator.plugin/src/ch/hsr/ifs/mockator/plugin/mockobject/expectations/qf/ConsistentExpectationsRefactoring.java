@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -22,8 +21,8 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
@@ -33,7 +32,6 @@ import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVer
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.ExistingTestDoubleMemFun;
 
 
@@ -51,7 +49,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
       this.ca = ca;
       this.cppStd = cppStd;
       this.linkedEditMode = linkedEditMode;
-      expectationsToAdd = list();
+      expectationsToAdd = new ArrayList<>();
    }
 
    @Override
@@ -73,7 +71,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
+            OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       getSelectedName(ast).ifPresent((expectations) -> reconcileExpectations(collector, ast, expectations));
    }
@@ -86,7 +84,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
    private void consolidateExpectations(final IASTName expectationsVector, final ASTRewrite rewriter) {
       final ExpectationsReconciler reconciler = new ExpectationsReconciler(rewriter, expectationsVector, getTestFunction(expectationsVector), cppStd,
-            linkedEditMode);
+               linkedEditMode);
       reconciler.consolidateExpectations(expectationsToAdd, ca.getExpectationsToRemove());
    }
 
@@ -103,14 +101,18 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
       final ICPPASTFunctionDefinition testFunction = getTestFunction(expectationsVector);
 
       return OptHelper.returnIfPresentElse(getRegistrationVector(testFunction, expectationsVector), (regVector) -> finder.findCallRegistrations(
-            regVector), () -> list());
+               regVector), () -> new ArrayList<>());
    }
 
    private static Optional<IASTName> getRegistrationVector(final ICPPASTFunctionDefinition testFun, final IASTName expectationsVector) {
       for (final ExpectedActualPair expectedActual : getAssertedCalls(testFun)) {
-         if (equalsName(expectedActual.actual(), expectationsVector)) { return Optional.of(expectedActual.expected().getName()); }
+         if (equalsName(expectedActual.actual(), expectationsVector)) {
+            return Optional.of(expectedActual.expected().getName());
+         }
 
-         if (equalsName(expectedActual.expected(), expectationsVector)) { return Optional.of(expectedActual.actual().getName()); }
+         if (equalsName(expectedActual.expected(), expectationsVector)) {
+            return Optional.of(expectedActual.actual().getName());
+         }
       }
 
       return Optional.empty();

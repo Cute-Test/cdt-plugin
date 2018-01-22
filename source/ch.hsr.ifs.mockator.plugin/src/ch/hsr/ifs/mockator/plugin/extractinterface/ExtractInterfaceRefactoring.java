@@ -11,13 +11,12 @@ import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringDescriptor;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ExtractInterfaceRefactoring extends MockatorRefactoring {
@@ -66,7 +65,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    @Override
    protected RefactoringDescriptor getRefactoringDescriptor() {
       return new ExtractInterfaceDescriptor(ID, getProject().getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
-            getArgumentMap());
+               getArgumentMap());
    }
 
    private String getRefactoringDescription() {

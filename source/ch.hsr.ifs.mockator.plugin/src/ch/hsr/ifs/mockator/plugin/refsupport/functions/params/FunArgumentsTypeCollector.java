@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public class FunArgumentsTypeCollector {
    }
 
    public List<IType> getFunArgTypes() {
-      final List<IType> argTypes = list();
+      final List<IType> argTypes = new ArrayList<>();
 
       for (final IASTInitializerClause arg : funArgs) {
          getType(arg).ifPresent((type) -> argTypes.add(type));
@@ -34,10 +33,15 @@ public class FunArgumentsTypeCollector {
    }
 
    private static Optional<IType> getType(final IASTInitializerClause clause) {
-      if (clause instanceof IASTExpression) { return Optional.of(((IASTExpression) clause).getExpressionType()); }
-      if (clause instanceof IASTTypeId) { return Optional.of(TypeCreator.byDeclarator(((IASTTypeId) clause).getAbstractDeclarator())); }
-      if (clause instanceof IASTParameterDeclaration) { return Optional.of(TypeCreator.byDeclarator(((IASTParameterDeclaration) clause)
-            .getDeclarator())); }
+      if (clause instanceof IASTExpression) {
+         return Optional.of(((IASTExpression) clause).getExpressionType());
+      }
+      if (clause instanceof IASTTypeId) {
+         return Optional.of(TypeCreator.byDeclarator(((IASTTypeId) clause).getAbstractDeclarator()));
+      }
+      if (clause instanceof IASTParameterDeclaration) {
+         return Optional.of(TypeCreator.byDeclarator(((IASTParameterDeclaration) clause).getDeclarator()));
+      }
 
       return Optional.empty();
    }

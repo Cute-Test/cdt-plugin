@@ -21,11 +21,9 @@ public class DefaultCtorClassRegistry<T> {
       for (final Class<? extends T> clazz : classes) {
          try {
             instances.add(clazz.newInstance());
-         }
-         catch (final InstantiationException e) {
+         } catch (final InstantiationException e) {
             new ILTISException("Class has no default constructor: " + clazz.getSimpleName(), e).rethrowUnchecked();;
-         }
-         catch (final IllegalAccessException e) {
+         } catch (final IllegalAccessException e) {
             new ILTISException("No access to class " + clazz.getSimpleName(), e).rethrowUnchecked();;
          }
       }

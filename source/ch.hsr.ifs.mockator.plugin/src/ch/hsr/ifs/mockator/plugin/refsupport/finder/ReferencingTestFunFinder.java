@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.finder;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,11 +13,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
-
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ReferencingTestFunFinder {
@@ -36,7 +34,7 @@ public class ReferencingTestFunFinder {
    }
 
    public Collection<ICPPASTFunctionDefinition> findInAst(final IASTTranslationUnit ast) {
-      final List<ICPPASTFunctionDefinition> functions = list();
+      final List<ICPPASTFunctionDefinition> functions = new ArrayList<>();
 
       for (final IASTName astNode : ast.getReferences(testDouble.getName().resolveBinding())) {
          final ICPPASTFunctionDefinition function = getFunctionParent(astNode);
@@ -51,19 +49,21 @@ public class ReferencingTestFunFinder {
 
    public Collection<ICPPASTFunctionDefinition> filterTestFunctions(final Collection<ICPPASTFunctionDefinition> functions) {
       final List<ICPPASTFunctionDefinition> testFunctions = functions.stream().filter((function) -> isValidTestFunction(function)).collect(Collectors
-            .toList());
+               .toList());
       addContainingFunctionIfNecessary(testFunctions);
       return testFunctions;
    }
 
    private Collection<ICPPASTFunctionDefinition> getReferencingFunctions(final ICPPASTCompositeTypeSpecifier testDouble,
-         final CRefactoringContext context, final IProgressMonitor pm) {
+            final CRefactoringContext context, final IProgressMonitor pm) {
       final NodeLookup lookup = new NodeLookup(cProject, pm);
       return lookup.findReferencingFunctions(testDouble.getName(), context);
    }
 
    private void addContainingFunctionIfNecessary(final List<ICPPASTFunctionDefinition> testFunctions) {
-      if (!testFunctions.isEmpty()) { return; }
+      if (!testFunctions.isEmpty()) {
+         return;
+      }
 
       final ICPPASTFunctionDefinition testFunction = getContainingTestFunction(testDouble);
 
@@ -75,7 +75,9 @@ public class ReferencingTestFunFinder {
    private ICPPASTFunctionDefinition getContainingTestFunction(final ICPPASTCompositeTypeSpecifier testDouble) {
       final ICPPASTFunctionDefinition containedFunction = getFunctionParent(testDouble);
 
-      if (containedFunction != null && isValidTestFunction(containedFunction)) { return containedFunction; }
+      if (containedFunction != null && isValidTestFunction(containedFunction)) {
+         return containedFunction;
+      }
 
       return null;
    }

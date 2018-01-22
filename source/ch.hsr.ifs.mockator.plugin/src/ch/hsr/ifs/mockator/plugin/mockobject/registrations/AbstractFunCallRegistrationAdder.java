@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.registrations;
 
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.PUSH_BACK;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -71,7 +71,7 @@ abstract class AbstractFunCallRegistrationAdder {
    }
 
    protected Collection<IASTInitializerClause> createRegistrationArgs() {
-      final List<IASTInitializerClause> params = list();
+      final List<IASTInitializerClause> params = new ArrayList<>();
       params.add(createArgument(StringUtil.quote(signature)));
 
       for (final ICPPASTParameterDeclaration param : funParameters) {

@@ -24,15 +24,15 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.project.cdt.SourceFolderHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NotInSameTuAsCalleeVerifier;
 
 
@@ -89,7 +89,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
+            OperationCanceledException {
       final Optional<IASTName> optSelectedName = getSelectedName(getAST(tu(), pm));
       if (optSelectedName.isPresent()) {
          final Optional<ICPPASTFunctionDeclarator> funDecl = findFunDeclaration(optSelectedName.get(), pm);
@@ -107,14 +107,13 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
 
       try {
          return handler.createFolder(MockatorConstants.TRACE_FOLDER, pm);
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
 
    private void createHeaderFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl)
-         throws CoreException {
+            throws CoreException {
       newHeaderFilePath = getProjectHeaderFilePath(funDecl);
       final PreprocessorHeaderFileCreator creator = new PreprocessorHeaderFileCreator(collector, getProject(), refactoringContext());
       creator.createFile(newHeaderFilePath, funDecl, pm);
@@ -125,11 +124,11 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
    }
 
    private void createSourceFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl)
-         throws CoreException {
+            throws CoreException {
       final String funDeclName = funDecl.getName().toString();
       newSourceFilePath = new TraceFileNameCreator(funDeclName, getIProject()).getSourceFilePath();
       final PreprocessorSourceFileCreator creator = new PreprocessorSourceFileCreator(newHeaderFilePath, collector, getProject(),
-            refactoringContext());
+               refactoringContext());
       creator.createFile(newSourceFilePath, funDecl, pm);
    }
 
@@ -147,7 +146,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
 
    private boolean isTuOfDefinitionInSameProject(final IASTTranslationUnit tuOfFunDef) {
       final URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
-      return CProjectUtil.isPartOfProject(uriOfTu, getIProject());
+      return ProjectUtil.isPartOfProject(uriOfTu, getIProject());
    }
 
    private Optional<ICPPASTFunctionDeclarator> findFunDeclaration(final IASTName funName, final IProgressMonitor pm) {

@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.preconditions;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -12,8 +11,8 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTElaboratedTypeSpecifier;
 
-import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 
 
 public class ForwardDeclCollector implements Consumer<ExtractInterfaceContext> {
@@ -25,7 +24,7 @@ public class ForwardDeclCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<IASTSimpleDeclaration> getClassFwdDecls(final IASTTranslationUnit ast) {
-      final List<IASTSimpleDeclaration> fwdDecls = list();
+      final List<IASTSimpleDeclaration> fwdDecls = new ArrayList<>();
       ast.accept(new ASTVisitor() {
 
          {

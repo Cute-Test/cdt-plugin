@@ -9,9 +9,8 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
-import ch.hsr.ifs.iltis.core.functional.functions.Function2;
-
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
 
 public class MacroOptionHandler extends AbstractOptionsHandler {
@@ -64,8 +63,7 @@ public class MacroOptionHandler extends AbstractOptionsHandler {
    private static Collection<String> getListValues(final IOption option) {
       try {
          return orderPreservingSet(option.getDefinedSymbols());
-      }
-      catch (final BuildException e) {
+      } catch (final BuildException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

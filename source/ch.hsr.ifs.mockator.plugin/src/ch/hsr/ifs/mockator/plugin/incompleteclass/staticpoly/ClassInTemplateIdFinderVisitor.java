@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +72,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
    private void processTemplateArguments(final ICPPTemplateInstance templateInstance, final IASTName name) {
       final IType testDoubleType = CPPVisitor.createType(testDouble);
       final ICPPTemplateArgument[] templateArguments = templateInstance.getTemplateArguments();
-      final List<Integer> positions = list();
+      final List<Integer> positions = new ArrayList<>();
 
       for (int i = 0; i < templateArguments.length; i++) {
          final IType templateArg = templateArguments[i].getTypeValue();
@@ -134,7 +135,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
          return lookupInAst(definitionNames[0]);
       }
 
-      final List<ICPPASTTemplateDeclaration> templates = list();
+      final List<ICPPASTTemplateDeclaration> templates = new ArrayList<>();
 
       lookupInIndex(template).ifPresent((candidate) -> templates.add(candidate));
       return templates;

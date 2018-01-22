@@ -76,20 +76,22 @@ public class ExtractInterfaceRefactoringTest extends MockatorRefactoringTest {
 
    @Override
    protected void simulateUserInput(final RefactoringContext context) {
-      final CRefactoringContext ccontext = (CRefactoringContext) context;
-      final ExtractInterfaceContext eiContext = ((ExtractInterfaceRefactoring) context.getRefactoring()).getContext();
-      eiContext.setCRefContext(ccontext);
-      final IASTTranslationUnit ast = getAst(ccontext);
-      eiContext.setSelectedName(getSelectedName(ast));
-      new ClassDefinitionLookup().accept(eiContext);
-      if (eiContext.getChosenClass() != null) {
-         new MemFunCollector().accept(eiContext);
-      }
-      eiContext.setChosenMemFuns(getChosenMemFuns(eiContext));
-      if (!tuOfChosenClass.equals("")) {
-         eiContext.setTuOfChosenClass(getTuOfChosenClass(ccontext));
-      } else {
-         eiContext.setTuOfChosenClass(ast);
+      final CRefactoringContext ccontext = CRefactoringContext.wrapp(context);
+      if (ccontext != null) {
+         final ExtractInterfaceContext eiContext = ((ExtractInterfaceRefactoring) context.getRefactoring()).getContext();
+         eiContext.setCRefContext(ccontext);
+         final IASTTranslationUnit ast = getAst(ccontext);
+         eiContext.setSelectedName(getSelectedName(ast));
+         new ClassDefinitionLookup().accept(eiContext);
+         if (eiContext.getChosenClass() != null) {
+            new MemFunCollector().accept(eiContext);
+         }
+         eiContext.setChosenMemFuns(getChosenMemFuns(eiContext));
+         if (!tuOfChosenClass.equals("")) {
+            eiContext.setTuOfChosenClass(getTuOfChosenClass(ccontext));
+         } else {
+            eiContext.setTuOfChosenClass(ast);
+         }
       }
    }
 

@@ -12,8 +12,8 @@ import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
 public class EmptyExpectationsCpp03QfTest extends MockatorQuickfixTest {
 
    @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.INCONSISTENT_EXPECTATIONS;
+   protected String getProblemId() {
+      return ProblemId.INCONSISTENT_EXPECTATIONS.getId();
    }
 
    @Override

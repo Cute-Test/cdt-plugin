@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.linkededit;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup;
@@ -15,7 +14,7 @@ public class LinkedModeInformation {
    private final List<LinkedProposalPositionGroup> groups;
 
    public LinkedModeInformation() {
-      groups = list();
+      groups = new ArrayList<>();
    }
 
    public void addPosition(final int offset, final int length) {

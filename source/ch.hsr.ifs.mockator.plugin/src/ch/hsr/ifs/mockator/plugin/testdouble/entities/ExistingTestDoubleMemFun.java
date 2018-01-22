@@ -15,12 +15,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatter;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.DefaultArgumentCreator;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 import ch.hsr.ifs.mockator.plugin.testdouble.CallRegistrationFinder;
 import ch.hsr.ifs.mockator.plugin.testdouble.MemFunMockSupportAdder;
@@ -48,7 +48,9 @@ public class ExistingTestDoubleMemFun extends AbstractTestDoubleMemFun {
    }
 
    public void addMockSupport(final MemFunMockSupportAdder mockSupportAdder, final CallRegistrationFinder finder) {
-      if (hasAlreadyMockSupport(finder)) { return; }
+      if (hasAlreadyMockSupport(finder)) {
+         return;
+      }
 
       mockSupportAdder.addMockSupport(function);
    }

@@ -55,13 +55,17 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
 
    @Override
    public int visit(final IASTDeclaration declaration) {
-      if (!(declaration instanceof ICPPASTFunctionDefinition)) { return PROCESS_CONTINUE; }
+      if (!(declaration instanceof ICPPASTFunctionDefinition)) {
+         return PROCESS_CONTINUE;
+      }
 
       final ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
       final ICPPASTTemplateDeclaration templateDecl = getTemplateDecl(function);
       final IASTName funName = function.getDeclarator().getName();
 
-      if (templateDecl == null || !isFunNameQualified(funName)) { return PROCESS_CONTINUE; }
+      if (templateDecl == null || !isFunNameQualified(funName)) {
+         return PROCESS_CONTINUE;
+      }
 
       if (isTemplateFunClassMember(funName) && haveEqualNumOfArgs(templateDecl)) {
          templateMemFuns.add(templateDecl);

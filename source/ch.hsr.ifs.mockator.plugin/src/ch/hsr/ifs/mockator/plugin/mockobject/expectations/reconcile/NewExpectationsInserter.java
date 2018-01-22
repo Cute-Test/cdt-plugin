@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
@@ -20,7 +20,6 @@ import ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector.ExpectationsCpp
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector.ExpectationsVectorFactory;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 // Inserts the vector with the expected calls for the mock object at the end of the function:
@@ -50,7 +49,7 @@ class NewExpectationsInserter {
 
    private Collection<IASTStatement> createExpectationStatements(final Collection<? extends TestDoubleMemFun> memberFunctions) {
       return cppStdStrategy.createExpectationsVector(memberFunctions, createNameForExpectationsVector(), testFunction, getExpectationsVector(),
-            linkedEditStrategy);
+               linkedEditStrategy);
    }
 
    private String createNameForExpectationsVector() {
@@ -66,7 +65,8 @@ class NewExpectationsInserter {
       testFunction.accept(visitor);
       final Collection<ExpectedActualPair> assertedCalls = visitor.getExpectedActual();
 
-      if (assertedCalls.isEmpty()) { return null; // insert at the end of the test function
+      if (assertedCalls.isEmpty()) {
+         return null; // insert at the end of the test function
       }
 
       return getStatementOfFirstAssert(assertedCalls);

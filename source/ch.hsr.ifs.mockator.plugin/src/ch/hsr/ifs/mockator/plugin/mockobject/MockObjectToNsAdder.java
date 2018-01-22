@@ -11,11 +11,11 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorCreator;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorCreator.CallsVectorParent;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class MockObjectToNsAdder {

@@ -7,10 +7,9 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
-
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class CompilerFlagHandler extends AbstractOptionsHandler {
@@ -31,8 +30,7 @@ public class CompilerFlagHandler extends AbstractOptionsHandler {
       return OptHelper.returnIfPresentElseNull(getToolToAnanalyze(), (tool) -> {
          try {
             return tool.getToolCommandFlagsString(null, null);
-         }
-         catch (final BuildException e) {
+         } catch (final BuildException e) {
             return null;
          }
       });
@@ -45,8 +43,7 @@ public class CompilerFlagHandler extends AbstractOptionsHandler {
             final String flags = flagsOption.getStringValue();
             final String newFlags = compilerFlagOp.apply(flag, flags);
             setAndSaveOption(config, tool, flagsOption, newFlags);
-         }
-         catch (final BuildException e) {
+         } catch (final BuildException e) {
             throw new ILTISException(e).rethrowUnchecked();
          }
 
@@ -66,7 +63,9 @@ public class CompilerFlagHandler extends AbstractOptionsHandler {
 
       @Override
       public String apply(final String flagToAdd, final String flags) {
-         if (!flags.contains(flagToAdd)) { return flags + " " + flagToAdd; }
+         if (!flags.contains(flagToAdd)) {
+            return flags + " " + flagToAdd;
+         }
          return flags;
       }
    }

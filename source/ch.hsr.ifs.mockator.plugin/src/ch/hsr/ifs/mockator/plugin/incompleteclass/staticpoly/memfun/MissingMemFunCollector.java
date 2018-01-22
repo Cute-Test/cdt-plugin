@@ -45,7 +45,7 @@ public class MissingMemFunCollector {
    }
 
    private void collectMissingMemFuns(final ICPPASTTemplateParameter templateParameter, final Collection<StaticPolyMissingMemFun> missingMemFuns,
-         final Class<? extends MissingMemFunVisitor> kindOfFinder) {
+            final Class<? extends MissingMemFunVisitor> kindOfFinder) {
       final MissingMemFunVisitor memFunFinder = getMissingMemFunFinder(templateParameter, kindOfFinder);
       sut.accept(memFunFinder);
       collectInTemplateMemFuns(memFunFinder);
@@ -59,13 +59,12 @@ public class MissingMemFunCollector {
    }
 
    private MissingMemFunVisitor getMissingMemFunFinder(final ICPPASTTemplateParameter templateParam,
-         final Class<? extends MissingMemFunVisitor> visitor) {
+            final Class<? extends MissingMemFunVisitor> visitor) {
       try {
          final Constructor<?> ctor = visitor.getConstructor(ICPPASTCompositeTypeSpecifier.class, ICPPASTTemplateParameter.class,
-               ICPPASTTemplateDeclaration.class);
+                  ICPPASTTemplateDeclaration.class);
          return (MissingMemFunVisitor) ctor.newInstance(testDouble, templateParam, sut);
-      }
-      catch (final Exception e) {
+      } catch (final Exception e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

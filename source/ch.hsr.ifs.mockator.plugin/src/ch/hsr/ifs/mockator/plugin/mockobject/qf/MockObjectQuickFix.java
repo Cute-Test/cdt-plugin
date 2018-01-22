@@ -34,8 +34,7 @@ abstract class MockObjectQuickFix extends AbstractTestDoubleQuickFix {
    private void copyMockatorLibIfNecessary() {
       try {
          new MockatorLibHandler(getCProject().getProject()).addLibToProject();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -52,7 +51,7 @@ abstract class MockObjectQuickFix extends AbstractTestDoubleQuickFix {
       final Collection<MissingMemberFunction> missingMemFuns = getMissingMemberFunctions(ref);
       final AssertionOrder assertionOrder = AssertionOrder.fromProjectSettings(getCProject().getProject());
       final MockObjectLinkedEditModeFactory factory = new MockObjectLinkedEditModeFactory(edit, missingMemFuns, getCppStandard(), assertionOrder,
-            Optional.of(getNameForExpectationsVector()));
+               Optional.of(getNameForExpectationsVector()));
       return Optional.of(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
    }
 

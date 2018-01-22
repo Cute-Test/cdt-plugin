@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
@@ -26,7 +26,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatte
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.DefaultArgumentCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDecorator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnStatementCreator;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFunction {
@@ -69,7 +68,7 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    }
 
    private IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd,
-         final ICPPASTFunctionDeclarator newFunDecl, final ICPPASTDeclSpecifier newReturnType) {
+            final ICPPASTFunctionDeclarator newFunDecl, final ICPPASTDeclSpecifier newReturnType) {
       final IASTCompoundStatement newFunBody = nodeFactory.newCompoundStatement();
       strategy.addCallVectorRegistration(newFunBody, newFunDecl, isStatic());
       final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, getClassName());

@@ -20,9 +20,7 @@ import org.eclipse.core.runtime.QualifiedName;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
-
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.CompilerFlagHandler;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.DiscoveryOptionsHandler;
@@ -214,7 +212,9 @@ public enum CppStandard implements PropertyTypeWithDefault {
       final String cppCompilerFlags = new CompilerFlagHandler(project).getCompilerFlags();
       final String cpp11ExperimentalFlag = getCpp11ExperimentalFlag(project);
 
-      if (cppCompilerFlags == null || cpp11ExperimentalFlag == null) { return getDefaultCppStd(); }
+      if (cppCompilerFlags == null || cpp11ExperimentalFlag == null) {
+         return getDefaultCppStd();
+      }
 
       return cppCompilerFlags.contains(cpp11ExperimentalFlag) ? Cpp11Std : Cpp03Std;
    }
@@ -227,7 +227,9 @@ public enum CppStandard implements PropertyTypeWithDefault {
    public static CppStandard fromProjectSettings(final IProject project) {
       final String cppStd = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
 
-      if (cppStd == null) { return getDefaultCppStd(); }
+      if (cppStd == null) {
+         return getDefaultCppStd();
+      }
 
       return fromName(cppStd);
    }

@@ -85,13 +85,13 @@ class FunctionCalleeReferenceResolver {
    }
 
    private ICPPMethod[] findOverriders(final IBinding calleeBinding) {
-      return ClassTypeHelper.findOverridden((ICPPMethod) calleeBinding, null);
+      return ClassTypeHelper.findOverridden((ICPPMethod) calleeBinding);
    }
 
    private void findCalledBy1(final IBinding callee, final boolean includeOrdinaryCalls, final CalledByResult result, final IASTNode point)
             throws CoreException {
       findCalledBy2(callee, includeOrdinaryCalls, result);
-      for (final IBinding spec : IndexUI.findSpecializations(index, callee, point)) {
+      for (final IBinding spec : IndexUI.findSpecializations(index, callee)) {
          findCalledBy2(spec, includeOrdinaryCalls, result);
       }
    }

@@ -9,10 +9,9 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
-
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class LinkerOptionHandler extends AbstractOptionsHandler {
@@ -33,7 +32,9 @@ public class LinkerOptionHandler extends AbstractOptionsHandler {
       return OptHelper.returnIfPresentElse(getToolToAnanalyze(), (tool) -> {
          final IOption flagsOption = tool.getOptionBySuperClassId(projectVariables.getLinkerOtherFlags());
 
-         if (flagsOption == null) { return false; }
+         if (flagsOption == null) {
+            return false;
+         }
 
          final Collection<String> currentFlags = getListValues(flagsOption);
 
@@ -54,8 +55,7 @@ public class LinkerOptionHandler extends AbstractOptionsHandler {
    private static Collection<String> getListValues(final IOption option) {
       try {
          return orderPreservingSet(option.getStringListValue());
-      }
-      catch (final BuildException e) {
+      } catch (final BuildException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.lookup;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +22,9 @@ import org.eclipse.core.runtime.OperationCanceledException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
-
-import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
 
 public class NodeLookup {
@@ -83,7 +82,7 @@ public class NodeLookup {
    public Collection<ICPPASTFunctionDefinition> findReferencingFunctions(final IASTName name, final CRefactoringContext context) {
       final TranslationUnitLoader tuLoader = getTuLoader(context);
       final ReferenceFinder finder = new ReferenceFinder(originProject, getIndex(context), tuLoader);
-      final List<ICPPASTFunctionDefinition> referencingFunctions = list();
+      final List<ICPPASTFunctionDefinition> referencingFunctions = new ArrayList<>();
 
       for (final IASTNode optReference : finder.findReferences(name)) {
          getNodeAncestor(optReference, ICPPASTFunctionDefinition.class).ifPresent((fun) -> referencingFunctions.add(fun));
@@ -101,7 +100,7 @@ public class NodeLookup {
    public Collection<IASTName> findReferencingNames(final IASTName name, final CRefactoringContext context) {
       final TranslationUnitLoader tuLoader = getTuLoader(context);
       final ReferenceFinder finder = new ReferenceFinder(originProject, getIndex(context), tuLoader);
-      final List<IASTName> referencingNodes = list();
+      final List<IASTName> referencingNodes = new ArrayList<>();
 
       for (final IASTName reference : finder.findReferences(name)) {
          referencingNodes.add(reference);
@@ -127,11 +126,9 @@ public class NodeLookup {
    private static IIndex getIndex(final CRefactoringContext context) {
       try {
          return context.getIndex();
-      }
-      catch (final OperationCanceledException e) {
+      } catch (final OperationCanceledException e) {
          throw new ILTISException(e).rethrowUnchecked();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

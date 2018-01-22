@@ -27,11 +27,9 @@ public class CppStdFactory<T> {
          default:
             throw new ILTISException("Unsupported C++ Standard").rethrowUnchecked();
          }
-      }
-      catch (final InstantiationException e) {
+      } catch (final InstantiationException e) {
          throw new ILTISException(e).rethrowUnchecked();
-      }
-      catch (final IllegalAccessException e) {
+      } catch (final IllegalAccessException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

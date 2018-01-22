@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.qf;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -15,7 +14,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
@@ -37,12 +35,12 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
                                 final LinkedEditModeStrategy linkedEdit) {
       super(cppStd, cElement, selection, cProject);
       this.linkedEdit = linkedEdit;
-      missingMemFuns = list();
+      missingMemFuns = new ArrayList<>();
    }
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
+            OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       missingMemFuns.addAll(collectMissingMemFuns(pm));
@@ -61,9 +59,9 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
    }
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final ClassPublicVisibilityInserter inserter,
-         final IProgressMonitor pm) {
+            final IProgressMonitor pm) {
       return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), (MockObject) testDouble, rewriter, ast, cppStd, inserter,
-            hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
+               hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
    }
 
    Collection<MissingMemberFunction> getMemberFunctionsForLinkedEdit() {

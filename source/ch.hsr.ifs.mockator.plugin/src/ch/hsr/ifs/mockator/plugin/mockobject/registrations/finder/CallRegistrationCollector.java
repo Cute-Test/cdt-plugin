@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class CallRegistrationCollector {
    }
 
    public Collection<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> registrationVectorUses) {
-      final List<ExistingMemFunCallRegistration> callRegistrations = list();
+      final List<ExistingMemFunCallRegistration> callRegistrations = new ArrayList<>();
       final RegistrationFinder finder = getRegistrationFinder();
 
       for (final IASTName usage : registrationVectorUses) {

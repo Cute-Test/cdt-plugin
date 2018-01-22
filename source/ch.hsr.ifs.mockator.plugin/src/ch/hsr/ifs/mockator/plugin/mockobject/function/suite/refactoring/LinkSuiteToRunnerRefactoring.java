@@ -37,7 +37,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
@@ -73,7 +72,7 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
+            OperationCanceledException {
       final ASTRewrite rewriter = createRewriter(collector, testRunner.getTranslationUnit());
       changeRunnerBody(rewriter);
       addIncludeForSuite(rewriter);
@@ -172,11 +171,15 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
 
       @Override
       public int visit(final IASTStatement statement) {
-         if (!(statement instanceof IASTDeclarationStatement)) { return PROCESS_CONTINUE; }
+         if (!(statement instanceof IASTDeclarationStatement)) {
+            return PROCESS_CONTINUE;
+         }
 
          final IASTDeclarationStatement declStmt = (IASTDeclarationStatement) statement;
 
-         if (!(declStmt.getDeclaration() instanceof IASTSimpleDeclaration)) { return PROCESS_CONTINUE; }
+         if (!(declStmt.getDeclaration() instanceof IASTSimpleDeclaration)) {
+            return PROCESS_CONTINUE;
+         }
 
          final IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declStmt.getDeclaration();
 

@@ -8,10 +8,10 @@ import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunArgumentsTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunctionParamTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParamTypeEquivalenceTester;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class FunctionEquivalenceVerifier {

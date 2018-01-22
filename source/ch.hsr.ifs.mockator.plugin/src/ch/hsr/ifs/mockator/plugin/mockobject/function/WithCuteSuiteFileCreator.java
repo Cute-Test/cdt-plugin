@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
@@ -65,7 +64,7 @@ class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
 
    @Override
    protected void insertContentForHeaderFile(final IASTTranslationUnit newTu, final ASTRewrite rewriter, final IASTName functionToMock,
-         final String suiteName) {
+            final String suiteName) {
       insertCuteSuiteInclude(newTu, rewriter);
       insertCuteSuiteFunDecl(newTu, rewriter, suiteName);
    }
@@ -77,7 +76,7 @@ class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
 
    @Override
    protected void createAddtitionalTestSupport(final IASTTranslationUnit newTu, final ASTRewrite rewriter,
-         final ICPPASTFunctionDeclarator funDeclToMock, final String suiteName) {
+            final ICPPASTFunctionDeclarator funDeclToMock, final String suiteName) {
       insertCuteSuiteFunction(newTu, rewriter, funDeclToMock, suiteName);
    }
 
@@ -87,7 +86,7 @@ class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
    }
 
    private static void insertCuteSuiteFunction(final IASTTranslationUnit newTu, final ASTRewrite rewriter,
-         final ICPPASTFunctionDeclarator freeFunction, final String suiteName) {
+            final ICPPASTFunctionDeclarator freeFunction, final String suiteName) {
       final IASTName cuteSuiteFunName = nodeFactory.newName((CUTE_SUITE_FUN_PREFIX + suiteName).toCharArray());
       final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(cuteSuiteFunName);
       final IASTName fullQfName = nodeFactory.newName(CUTE_SUITE_FQ.toCharArray());
@@ -113,7 +112,7 @@ class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
    }
 
    private static IASTExpressionStatement createTestFunctionRegistration(final ICPPASTFunctionDeclarator funToMock,
-         final IASTIdExpression newIdExpression) {
+            final IASTIdExpression newIdExpression) {
       final ICPPASTFieldReference pushBack = createPushBack(newIdExpression);
       final IASTInitializerClause[] funArgs = new IASTInitializerClause[1];
       funArgs[0] = createCuteTestWith(funToMock);
@@ -141,7 +140,7 @@ class WithCuteSuiteFileCreator extends MockFunctionFileCreator {
       final IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(getAssertMacro(), new IASTInitializerClause[] {
                                                                                                                                            createExpected(),
                                                                                                                                            createActual(
-                                                                                                                                                 fqCallsVectorName) });
+                                                                                                                                                    fqCallsVectorName) });
       return nodeFactory.newExpressionStatement(assertEqual);
    }
 

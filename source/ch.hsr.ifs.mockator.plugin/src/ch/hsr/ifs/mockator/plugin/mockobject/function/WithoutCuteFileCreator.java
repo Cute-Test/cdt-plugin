@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
@@ -36,7 +35,7 @@ class WithoutCuteFileCreator extends MockFunctionFileCreator {
 
    @Override
    protected void insertContentForHeaderFile(final IASTTranslationUnit newTu, final ASTRewrite rewriter, final IASTName functionToMock,
-         final String suiteName) {
+            final String suiteName) {
       insertTestFunDecl(functionToMock, newTu, rewriter);
    }
 
@@ -57,7 +56,7 @@ class WithoutCuteFileCreator extends MockFunctionFileCreator {
 
    @Override
    protected void createAddtitionalTestSupport(final IASTTranslationUnit newTu, final ASTRewrite rewriter,
-         final ICPPASTFunctionDeclarator funDeclToMock, final String suiteName) {}
+            final ICPPASTFunctionDeclarator funDeclToMock, final String suiteName) {}
 
    private static void insertCAssertInclude(final IASTTranslationUnit newTu, final ASTRewrite rewriter) {
       final AstIncludeNode cute = new AstIncludeNode(MockatorConstants.C_ASSERT_INCLUDE, true);
@@ -73,7 +72,7 @@ class WithoutCuteFileCreator extends MockFunctionFileCreator {
 
    private static IASTInitializerClause[] createAssertEqualParams(final String fqCallsVectorName) {
       final ICPPASTBinaryExpression binOp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_equals, createExpectation(), createActual(
-            fqCallsVectorName));
+               fqCallsVectorName));
       return new IASTInitializerClause[] { binOp };
    }
 

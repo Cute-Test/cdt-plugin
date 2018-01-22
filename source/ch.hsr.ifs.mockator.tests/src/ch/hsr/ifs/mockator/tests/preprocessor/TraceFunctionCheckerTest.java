@@ -9,8 +9,8 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 public class TraceFunctionCheckerTest extends CDTTestingCodanCheckerTest {
 
    @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.TRACE_FUNCTIONS;
+   protected String getProblemId() {
+      return ProblemId.TRACE_FUNCTIONS.getId();
    }
 
    @Override

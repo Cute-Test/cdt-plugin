@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.linkedmode;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +62,7 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
    protected abstract void addFunSignatureProposals(Collection<OffsetAndLength> expectationPositions);
 
    protected List<OffsetAndLength> getFunSignaturePositions() {
-      final List<OffsetAndLength> offsetsAndLengths = list();
+      final List<OffsetAndLength> offsetsAndLengths = new ArrayList<>();
       final Optional<Pair<Integer, String>> expectationInfos = getExpectationVectorInfo();
 
       if (expectationInfos.isPresent()) {
@@ -101,7 +100,7 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
    }
 
    private void addAssertProposals(final OffsetAndLength assertPosition) {
-      final List<Proposal> proposals = list();
+      final List<Proposal> proposals = new ArrayList<>();
 
       for (final AssertKind each : AssertKind.getAssertProposals()) {
          proposals.add(createNewProposal(each.toString()));

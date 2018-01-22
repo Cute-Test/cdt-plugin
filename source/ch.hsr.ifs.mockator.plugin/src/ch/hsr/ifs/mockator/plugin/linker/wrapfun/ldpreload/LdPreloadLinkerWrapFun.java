@@ -18,8 +18,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -108,8 +108,7 @@ public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
                   setProjectReference(proj, pm);
                   addRuntimeConfiguration(proj);
                }
-            }
-            catch (final CoreException e) {
+            } catch (final CoreException e) {
                return new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, I18N.RuntimeWrapCreateInfrastructureFailed, e);
             }
             return Status.OK_STATUS;
@@ -162,7 +161,7 @@ public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
    }
 
    private IProject getNewlyCreatedProject() {
-      return CProjectUtil.getWorkspaceRoot().getProject(newProjectName);
+      return ProjectUtil.getWorkspaceRoot().getProject(newProjectName);
    }
 
    private void createAndConfigureShLibProject(final IProgressMonitor monitor) throws CoreException {

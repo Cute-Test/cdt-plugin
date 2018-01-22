@@ -9,8 +9,8 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 public class WithMultipleInheritanceHierarchiesTest extends CDTTestingCodanCheckerTest {
 
    @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL;
+   protected String getProblemId() {
+      return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL.getId();
    }
 
    @Override

@@ -8,7 +8,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoring;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringDescriptor;
-
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 
 
@@ -31,6 +30,6 @@ public class ExtractInterfaceDescriptor extends CRefactoringDescriptor {
       final boolean doReplace = Boolean.parseBoolean(getParameterMap().get(REPLACE_ALL_OCCURENCES));
       final String name = getParameterMap().get(NEW_INTERFACE_NAME);
       return new ExtractInterfaceContext.ContextBuilder(getTranslationUnit(), getCProject(), (ITextSelection) getSelection()).withRefactoringStatus(
-            status).replaceAllOccurences(doReplace).withNewInterfaceName(name).build();
+               status).replaceAllOccurences(doReplace).withNewInterfaceName(name).build();
    }
 }

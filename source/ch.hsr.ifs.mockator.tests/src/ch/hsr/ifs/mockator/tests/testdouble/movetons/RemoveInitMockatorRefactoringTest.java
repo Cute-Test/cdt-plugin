@@ -29,7 +29,7 @@ public class RemoveInitMockatorRefactoringTest extends MockatorRefactoringTest {
 
    @Override
    protected void simulateUserInput(final RefactoringContext context) {
-      final CRefactoringContext ccontext = (CRefactoringContext) context;
+      final CRefactoringContext ccontext = CRefactoringContext.wrapp(context);
       final ICPPASTFunctionDefinition testFunction = getTestFunctionIn(getAst(ccontext));
       ((RemoveInitMockatorRefactoring) context.getRefactoring()).setTestFunction(testFunction);
    }

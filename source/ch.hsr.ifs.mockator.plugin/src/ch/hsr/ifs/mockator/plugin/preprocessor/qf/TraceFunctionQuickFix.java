@@ -13,7 +13,6 @@ import org.eclipse.swt.graphics.Image;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
-
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludeFileHandler;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.SiblingTranslationUnitFinder;
@@ -25,7 +24,9 @@ public abstract class TraceFunctionQuickFix extends MockatorQuickFix {
       final IncludeFileHandler includeHandler = new IncludeFileHandler(getCProject().getProject());
       final IResource siblingHeaderFile = getPathOfSiblingHeaderFile(marker);
 
-      if (siblingHeaderFile == null) { return true; }
+      if (siblingHeaderFile == null) {
+         return true;
+      }
 
       return includeHandler.hasInclude(siblingHeaderFile);
    }
@@ -44,15 +45,20 @@ public abstract class TraceFunctionQuickFix extends MockatorQuickFix {
       try {
          final ITranslationUnit tu = getTranslationUnitViaWorkspace(marker);
 
-         if (tu == null) { return null; }
+         if (tu == null) {
+            return null;
+         }
 
          // If we have a template function then the marker will be in the header file
-         if (tu.isHeaderUnit()) { return tu.getResource(); }
+         if (tu.isHeaderUnit()) {
+            return tu.getResource();
+         }
 
          final Optional<String> path = getSiblingFilePath(tu, getIndexFromMarker(marker));
-         if (path.isPresent()) { return FileUtil.toIFile(path.get()); }
-      }
-      catch (final CoreException e) {
+         if (path.isPresent()) {
+            return FileUtil.toIFile(path.get());
+         }
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
 

@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.asserteq;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -20,10 +20,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 
 import ch.hsr.ifs.iltis.core.data.AbstractPair;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVerifier;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public enum AssertKind {
@@ -53,9 +52,11 @@ public enum AssertKind {
       final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
       final IASTInitializerClause[] arguments = startingNode.getArguments();
 
-      if (arguments.length < 2) { return Optional.empty(); }
+      if (arguments.length < 2) {
+         return Optional.empty();
+      }
 
-      final List<IASTIdExpression> callVectors = list();
+      final List<IASTIdExpression> callVectors = new ArrayList<>();
       callVectors.add(collectExpectedActual(arguments[0]).get(0));
       callVectors.add(collectExpectedActual(arguments[1]).get(0));
       return ExpectedActualPair.from(callVectors);
@@ -108,9 +109,11 @@ public enum AssertKind {
    }
 
    private static List<IASTIdExpression> collectExpectedActual(final IASTNode startingNode) {
-      final List<IASTIdExpression> callVectors = list();
+      final List<IASTIdExpression> callVectors = new ArrayList<>();
 
-      if (startingNode == null) { return callVectors; }
+      if (startingNode == null) {
+         return callVectors;
+      }
 
       startingNode.accept(new ASTVisitor() {
 
@@ -122,7 +125,9 @@ public enum AssertKind {
          public int visit(final IASTName name) {
             final IASTNode parent = name.getParent();
 
-            if (!(parent instanceof IASTIdExpression)) { return PROCESS_SKIP; }
+            if (!(parent instanceof IASTIdExpression)) {
+               return PROCESS_SKIP;
+            }
 
             final IASTIdExpression idExpr = (IASTIdExpression) parent;
 

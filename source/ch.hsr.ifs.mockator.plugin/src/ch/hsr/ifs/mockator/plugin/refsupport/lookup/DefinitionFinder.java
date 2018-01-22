@@ -19,8 +19,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
-
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 
 
@@ -37,8 +37,7 @@ class DefinitionFinder extends AbstractNodeFinder {
    public Optional<IASTName> findDefinition(final IBinding binding) {
       try {
          return findDefinition(lookup(binding));
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -46,8 +45,7 @@ class DefinitionFinder extends AbstractNodeFinder {
    public Optional<IASTName> findDefinition(final String name) {
       try {
          return findDefinition(lookup(name));
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -62,8 +60,7 @@ class DefinitionFinder extends AbstractNodeFinder {
                return Optional.of(matchingASTName.get());
             }
          }
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
 
@@ -73,7 +70,9 @@ class DefinitionFinder extends AbstractNodeFinder {
    private IIndexName[] lookup(final String name) throws CoreException {
       final IIndexBinding[] bind = index.findBindings(name.toCharArray(), IndexFilter.ALL, new NullProgressMonitor());
 
-      if (bind.length > 0) { return index.findDefinitions(bind[0]); }
+      if (bind.length > 0) {
+         return index.findDefinitions(bind[0]);
+      }
 
       return new IIndexName[] {};
    }
@@ -84,20 +83,21 @@ class DefinitionFinder extends AbstractNodeFinder {
             final IIndexFile file = iName.getFile();
             final URI uri = file.getLocation().getURI();
             return isPartOfOriginProject(uri) || isInOneOfReferencingPrjects(uri);
-         }
-         catch (final CoreException e) {
+         } catch (final CoreException e) {
             throw new ILTISException(e).rethrowUnchecked();
          }
       }).collect(Collectors.toList());
    }
 
    private boolean isPartOfOriginProject(final URI uri) {
-      return CProjectUtil.isPartOfProject(uri, projectOrigin.getProject());
+      return ProjectUtil.isPartOfProject(uri, projectOrigin.getProject());
    }
 
    private boolean isInOneOfReferencingPrjects(final URI uri) throws CoreException {
       for (final IProject project : projectOrigin.getProject().getReferencedProjects()) {
-         if (CProjectUtil.isPartOfProject(uri, project)) { return true; }
+         if (ProjectUtil.isPartOfProject(uri, project)) {
+            return true;
+         }
       }
 
       return false;

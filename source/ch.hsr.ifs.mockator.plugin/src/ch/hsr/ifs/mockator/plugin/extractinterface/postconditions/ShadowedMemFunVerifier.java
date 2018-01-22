@@ -18,11 +18,10 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.osgi.util.NLS;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.MethodParamEquivalenceTester;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.SubClassFinder;
 
 
@@ -60,7 +59,7 @@ public class ShadowedMemFunVerifier {
 
    private Collection<ICPPMethod> getChosenNonVirtualMemFuns() {
       return context.getChosenMemFuns().stream().map((final IASTDeclaration decl) -> getCppMethodIn(decl)).collect(Collectors.toList()).stream()
-            .filter((final ICPPMethod memFun) -> !memFun.isVirtual()).collect(Collectors.toList());
+               .filter((final ICPPMethod memFun) -> !memFun.isVirtual()).collect(Collectors.toList());
    }
 
    private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {

@@ -33,8 +33,7 @@ public class FileEditorOpener {
          // to a different editor
          final boolean activate = false;
          activePage.openEditor(new FileEditorInput(file), editorId, activate);
-      }
-      catch (final Exception e) {
+      } catch (final Exception e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

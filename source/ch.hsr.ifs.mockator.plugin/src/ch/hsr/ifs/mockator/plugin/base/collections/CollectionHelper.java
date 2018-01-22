@@ -32,10 +32,6 @@ public abstract class CollectionHelper {
       return elements;
    }
 
-   public static <T> List<T> list() {
-      return new ArrayList<>();
-   }
-
    @SafeVarargs
    public static <T> List<T> list(final T... elements) {
       return new ArrayList<>(asList(elements));
@@ -100,7 +96,9 @@ public abstract class CollectionHelper {
       ILTISException.Unless.notNull(it, "iterable must not be null");
 
       for (final T e : it) {
-         if (e == null) { return false; }
+         if (e == null) {
+            return false;
+         }
       }
 
       return true;
@@ -116,7 +114,7 @@ public abstract class CollectionHelper {
    }
 
    public static <E> Collection<E> tail(final Iterable<E> it) {
-      final List<E> l = list();
+      final List<E> l = new ArrayList<>();
       final Iterator<E> i = it.iterator();
       if (i.hasNext()) {
          i.next();
@@ -132,12 +130,16 @@ public abstract class CollectionHelper {
    }
 
    public static <E> Optional<E> last(final E[] elements) {
-      if (elements.length < 1) { return Optional.empty(); }
+      if (elements.length < 1) {
+         return Optional.empty();
+      }
       return Optional.of(elements[elements.length - 1]);
    }
 
    public static <E> Optional<E> last(final List<E> elements) {
-      if (elements.isEmpty()) { return Optional.empty(); }
+      if (elements.isEmpty()) {
+         return Optional.empty();
+      }
       return Optional.of(elements.get(elements.size() - 1));
    }
 
@@ -164,7 +166,9 @@ public abstract class CollectionHelper {
    public static <E> boolean haveSameElementsInSameOrder(final Collection<E> c1, final Collection<E> c2) {
       final Iterator<E> it = c2.iterator();
       for (final E e : c1) {
-         if (!e.equals(it.next())) { return false; }
+         if (!e.equals(it.next())) {
+            return false;
+         }
       }
       return true;
    }

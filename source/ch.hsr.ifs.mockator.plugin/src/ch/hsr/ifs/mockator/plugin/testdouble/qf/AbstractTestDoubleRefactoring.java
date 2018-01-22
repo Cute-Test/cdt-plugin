@@ -14,7 +14,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.StaticPolyMissingMemFunFinder;

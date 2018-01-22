@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CALLS;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -34,12 +34,13 @@ public class ExpectationsCpp11Strategy implements ExpectationsCppStdStrategy {
 
    @Override
    public List<IASTStatement> createExpectationsVector(final Collection<? extends TestDoubleMemFun> memFuns, final String newExpectationsName,
-         final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
-      return OptHelper.returnIfPresentElse(expectationsVector, () -> list(), () -> getExpectations(memFuns, newExpectationsName, linkedEdit));
+            final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
+      return OptHelper.returnIfPresentElse(expectationsVector, () -> new ArrayList<>(), () -> getExpectations(memFuns, newExpectationsName,
+               linkedEdit));
    }
 
    private static List<IASTStatement> getExpectations(final Collection<? extends TestDoubleMemFun> memFuns, final String newExpectations,
-         final LinkedEditModeStrategy linkedEdit) {
+            final LinkedEditModeStrategy linkedEdit) {
       final IASTName calls = nodeFactory.newName(CALLS.toCharArray());
       final IASTSimpleDeclaration declaration = nodeFactory.newSimpleDeclaration(nodeFactory.newTypedefNameSpecifier(calls));
       final IASTInitializerClause callInitializer = getCallInitializer(memFuns, linkedEdit);
@@ -51,7 +52,7 @@ public class ExpectationsCpp11Strategy implements ExpectationsCppStdStrategy {
    }
 
    private static IASTInitializerClause getCallInitializer(final Collection<? extends TestDoubleMemFun> memFuns,
-         final LinkedEditModeStrategy strategy) {
+            final LinkedEditModeStrategy strategy) {
       final ICPPASTInitializerList result = nodeFactory.newInitializerList();
       for (final TestDoubleMemFun memFun : memFuns) {
          addToInitializerList(result, memFun, strategy);
@@ -60,7 +61,7 @@ public class ExpectationsCpp11Strategy implements ExpectationsCppStdStrategy {
    }
 
    private static void addToInitializerList(final ICPPASTInitializerList vectorInitializerList, final TestDoubleMemFun memFun,
-         final LinkedEditModeStrategy strategy) {
+            final LinkedEditModeStrategy strategy) {
       final ICPPASTInitializerList callInitializerList = nodeFactory.newInitializerList();
       for (final IASTInitializerClause clause : getCallExpectations(memFun, strategy)) {
          callInitializerList.addClause(clause);
@@ -69,7 +70,7 @@ public class ExpectationsCpp11Strategy implements ExpectationsCppStdStrategy {
    }
 
    private static List<IASTInitializerClause> getCallExpectations(final TestDoubleMemFun fun, final LinkedEditModeStrategy strategy) {
-      final List<IASTInitializerClause> clauses = list();
+      final List<IASTInitializerClause> clauses = new ArrayList<>();
       clauses.add(getSignatureLiteral(fun.getFunctionSignature()));
       clauses.addAll(fun.createDefaultArguments(CppStandard.Cpp11Std, strategy));
       return clauses;

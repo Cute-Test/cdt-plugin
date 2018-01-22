@@ -10,8 +10,8 @@ import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
 public class IntoMemberFunctionByReferenceCreateTestDoubleQfTest extends MockatorQuickfixTest {
 
    @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
+   protected String getProblemId() {
+      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE.getId();
    }
 
    @Override

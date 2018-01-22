@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.checker;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +28,9 @@ class MissingMemFunCodanArgsProvider {
    }
 
    public Optional<MissingMemFunCodanArguments> createMemFunCodanArgs() {
-      if (missingMemFuns.isEmpty()) { return Optional.empty(); }
+      if (missingMemFuns.isEmpty()) {
+         return Optional.empty();
+      }
 
       final Collection<MissingMemberFunction> fake = collectMissingMemFuns(getFakeCtorProvider());
       final Collection<MissingMemberFunction> mock = collectMissingMemFuns(getMockCtorProvider());
@@ -46,7 +47,7 @@ class MissingMemFunCodanArgsProvider {
    }
 
    private List<MissingMemberFunction> collectMissingMemFuns(final DefaultCtorProvider defaultCtorProvider) {
-      final List<MissingMemberFunction> memFuns = list();
+      final List<MissingMemberFunction> memFuns = new ArrayList<>();
       memFuns.addAll(missingMemFuns);
 
       defaultCtorProvider.createMissingDefaultCtor(missingMemFuns).ifPresent((defaultCtor) -> memFuns.add(0, defaultCtor));

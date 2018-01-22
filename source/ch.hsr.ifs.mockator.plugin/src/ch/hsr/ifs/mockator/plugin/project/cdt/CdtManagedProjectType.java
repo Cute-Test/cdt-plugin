@@ -21,7 +21,9 @@ public enum CdtManagedProjectType {
          return SharedLib;
       } else if (arteFactId.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_STATICLIB)) {
          return StaticLib;
-      } else if (arteFactId.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_EXE)) { return Executable; }
+      } else if (arteFactId.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_EXE)) {
+         return Executable;
+      }
 
       throw new ILTISException("Project type not supported").rethrowUnchecked();
    }
@@ -31,7 +33,9 @@ public enum CdtManagedProjectType {
       final IConfiguration defaultConfiguration = getDefaultConfiguration(project);
       if (defaultConfiguration != null) {
          final IBuildPropertyValue buildArtefactType = defaultConfiguration.getBuildArtefactType();
-         if (buildArtefactType != null) { return buildArtefactType.getId(); }
+         if (buildArtefactType != null) {
+            return buildArtefactType.getId();
+         }
       }
       return UNKNOWN;
    }

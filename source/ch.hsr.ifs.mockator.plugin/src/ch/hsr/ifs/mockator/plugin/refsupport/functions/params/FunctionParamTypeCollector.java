@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IType;
@@ -20,7 +19,7 @@ public class FunctionParamTypeCollector {
    }
 
    public List<IType> getParameterTypes() {
-      final List<IType> paramTypes = list();
+      final List<IType> paramTypes = new ArrayList<>();
 
       for (final ICPPASTParameterDeclaration param : function.getParameters()) {
          paramTypes.add(getTypeOfParam(param));

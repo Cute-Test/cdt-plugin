@@ -13,6 +13,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
@@ -20,7 +21,6 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionSignatureFormatter;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.DefaultArgumentCreator;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDoubleMemFun implements StaticPolyMissingMemFun {
@@ -53,7 +53,7 @@ public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDouble
    protected abstract ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl);
 
    protected abstract IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, ICPPASTFunctionDeclarator funDecl,
-         ICPPASTDeclSpecifier specifier, CppStandard cppStd);
+            ICPPASTDeclSpecifier specifier, CppStandard cppStd);
 
    protected IASTCompoundStatement createEmptyFunBody() {
       return nodeFactory.newCompoundStatement();

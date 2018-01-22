@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class MockCallRegistrationFinder implements CallRegistrationFinder {
    }
 
    private List<IASTName> getRegistrationVectorUsesIn(final ICPPASTFunctionDefinition function) {
-      final List<IASTName> callRegistrations = list();
+      final List<IASTName> callRegistrations = new ArrayList<>();
       function.accept(new ASTVisitor() {
 
          {
@@ -56,7 +56,9 @@ public class MockCallRegistrationFinder implements CallRegistrationFinder {
          private boolean hasCallsVectorType(final IASTName name) {
             final IASTNode parent = name.getParent();
 
-            if (!(parent instanceof IASTIdExpression)) { return false; }
+            if (!(parent instanceof IASTIdExpression)) {
+               return false;
+            }
 
             return new CallsVectorTypeVerifier((IASTIdExpression) parent).isVectorOfCallsVector();
          }

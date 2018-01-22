@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
@@ -18,7 +19,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifi
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterToFunctionAdder;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnStatementCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.returntypes.ReturnTypeDeducer;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 class Function extends AbstractStaticPolyMissingMemFun {
@@ -58,7 +58,7 @@ class Function extends AbstractStaticPolyMissingMemFun {
 
    @Override
    protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
-         final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
+            final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
       final IASTCompoundStatement newFunBody = createEmptyFunBody();
       strategy.addCallVectorRegistration(newFunBody, funDecl, isStatic);
       final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);

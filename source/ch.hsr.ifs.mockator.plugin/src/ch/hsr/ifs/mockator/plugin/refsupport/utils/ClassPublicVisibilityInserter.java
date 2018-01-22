@@ -94,7 +94,9 @@ public class ClassPublicVisibilityInserter {
       boolean found = false;
 
       for (final IASTDeclaration d : getDeclarationsInClass()) {
-         if (found) { return d; }
+         if (found) {
+            return d;
+         }
 
          if (d.equals(label)) {
             found = true;

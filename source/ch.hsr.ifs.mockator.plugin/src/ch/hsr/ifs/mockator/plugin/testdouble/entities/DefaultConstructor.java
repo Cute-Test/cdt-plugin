@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.entities;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
@@ -53,13 +52,13 @@ public class DefaultConstructor extends AbstractStaticPolyMissingMemFun {
 
    @Override
    protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
-         final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
+            final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
       return createEmptyFunBody();
    }
 
    @Override
    public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEdit) {
-      return list();
+      return new ArrayList<>();
    }
 
    private void addAdditionalCtorSupport(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {
@@ -67,7 +66,9 @@ public class DefaultConstructor extends AbstractStaticPolyMissingMemFun {
    }
 
    private void addBaseClassCtorCallIfNecessary(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {
-      if (testDouble.getPolymorphismKind() != PolymorphismKind.SubTypePoly) { return; }
+      if (testDouble.getPolymorphismKind() != PolymorphismKind.SubTypePoly) {
+         return;
+      }
 
       final BaseClassCtorCallHandler handler = new BaseClassCtorCallHandler(testDouble.getClassType());
       handler.getBaseClassInitializer(cppStd).ifPresent((candidate) -> defaultCtor.addMemberInitializer(candidate));

@@ -12,10 +12,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
 public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> {
@@ -46,7 +45,9 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
       for (final IASTName name : classNameToLookup.getTranslationUnit().getDefinitionsInAST(binding)) {
 
          final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClass(name);
-         if (clazz.isPresent()) { return clazz.get(); }
+         if (clazz.isPresent()) {
+            return clazz.get();
+         }
       }
 
       return null;
@@ -57,7 +58,7 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
    }
 
    private static Optional<ICPPASTCompositeTypeSpecifier> findClassDefinition(final IASTName classNameToLookup,
-         final ExtractInterfaceContext context) {
+            final ExtractInterfaceContext context) {
       final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
       return lookup.findClassDefinition(classNameToLookup, context.getCRefContext());
    }
@@ -70,11 +71,14 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
       //TODO use OptHelper
       final ICPPASTNamedTypeSpecifier namedSpec = ASTUtil.getAncestorOfType(originalNode, ICPPASTNamedTypeSpecifier.class);
 
-      if (namedSpec != null) { return Optional.of(namedSpec); }
+      if (namedSpec != null) {
+         return Optional.of(namedSpec);
+      }
 
       final Optional<IASTDeclSpecifier> declSpec = ASTUtil.getDeclarationSpecifier(originalNode);
-      if (declSpec.isPresent() && declSpec.get() instanceof ICPPASTNamedTypeSpecifier) { return Optional.of((ICPPASTNamedTypeSpecifier) declSpec
-            .get()); }
+      if (declSpec.isPresent() && declSpec.get() instanceof ICPPASTNamedTypeSpecifier) {
+         return Optional.of((ICPPASTNamedTypeSpecifier) declSpec.get());
+      }
 
       return Optional.empty();
    }
@@ -92,7 +96,7 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
    }
 
    private static void rememberClassInformation(final ExtractInterfaceContext context, final ICPPASTCompositeTypeSpecifier dependency,
-         final Optional<ICPPASTCompositeTypeSpecifier> sutClass) {
+            final Optional<ICPPASTCompositeTypeSpecifier> sutClass) {
       context.setChosenClass(dependency);
       context.setTuOfChosenClass(dependency.getTranslationUnit());
 

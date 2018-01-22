@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -376,7 +376,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    @Override
    public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEditStrategy) {
       if (isUnaryExpression() && isPostfixOperator()) {
-         return list();
+         return new ArrayList<>();
       }
       return super.createDefaultArguments(cppStd, linkedEditStrategy);
    }

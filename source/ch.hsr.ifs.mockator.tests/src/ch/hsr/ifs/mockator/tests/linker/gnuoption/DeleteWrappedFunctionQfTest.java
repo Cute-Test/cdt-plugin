@@ -10,8 +10,8 @@ import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
 public class DeleteWrappedFunctionQfTest extends MockatorQuickfixTest {
 
    @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.WRAP_FUNCTION;
+   protected String getProblemId() {
+      return ProblemId.WRAP_FUNCTION.getId();
    }
 
    @Override

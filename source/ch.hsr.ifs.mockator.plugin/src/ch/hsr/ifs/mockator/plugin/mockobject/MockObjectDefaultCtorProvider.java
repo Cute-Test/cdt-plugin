@@ -8,11 +8,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.testdouble.entities.DefaultConstructor;
 
 
@@ -39,20 +38,24 @@ public class MockObjectDefaultCtorProvider implements DefaultCtorProvider {
    }
 
    private Optional<DefaultConstructor> handleSubTypePoly() {
-      if (!mockObject.hasPublicCtor()) { return Optional.of(new DefaultConstructor(mockObject)); }
+      if (!mockObject.hasPublicCtor()) {
+         return Optional.of(new DefaultConstructor(mockObject));
+      }
 
       return Optional.empty();
    }
 
    private Optional<DefaultConstructor> handleStaticPoly(final Collection<? extends MissingMemberFunction> memFuns) {
-      if (!hasPublicCtors(memFuns) && !mockObject.hasOnlyStaticFunctions(memFuns)) { return Optional.of(new DefaultConstructor(mockObject)); }
+      if (!hasPublicCtors(memFuns) && !mockObject.hasOnlyStaticFunctions(memFuns)) {
+         return Optional.of(new DefaultConstructor(mockObject));
+      }
 
       return Optional.empty();
    }
 
    private boolean hasPublicCtors(final Collection<? extends MissingMemberFunction> memFuns) {
       final Collection<ICPPASTFunctionDefinition> onlyCtors = toFunctions(memFuns).stream().filter((function) -> ASTUtil.isDeclConstructor(function))
-            .collect(Collectors.toList());
+               .collect(Collectors.toList());
       return mockObject.hasPublicCtor() || !onlyCtors.isEmpty();
    }
 

@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype;
 
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,6 @@ import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-
 import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 
@@ -48,7 +48,9 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       if (initializer == null) {
          initializer = ASTUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
 
-         if (initializer == null) { return Optional.empty(); }
+         if (initializer == null) {
+            return Optional.empty();
+         }
 
          ctorArgs = list(((ICPPASTConstructorInitializer) initializer).getArguments());
       } else {
@@ -64,14 +66,18 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    private Optional<ICPPASTCompositeTypeSpecifier> findTargetClass(final IASTInitializer ctorInitializer) {
       if (isPartOf(ctorInitializer, ICPPASTNewExpression.class)) {
          return findTargetClassForNewExpression(ctorInitializer);
-      } else if (isPartOf(ctorInitializer, ICPPASTDeclarator.class)) { return findTargetClassForSimpleDecl(ctorInitializer); }
+      } else if (isPartOf(ctorInitializer, ICPPASTDeclarator.class)) {
+         return findTargetClassForSimpleDecl(ctorInitializer);
+      }
       return Optional.empty();
    }
 
    private Optional<ICPPASTFunctionDeclarator> findMatchingCtor(final List<IASTInitializerClause> ctorArgs, final int argPosOfProblemType,
-         final ICPPASTCompositeTypeSpecifier clazz) {
+            final ICPPASTCompositeTypeSpecifier clazz) {
       for (final ICPPASTFunctionDeclarator publicCtor : getPublicCtors(clazz)) {
-         if (areEquivalentExceptProblemType(ctorArgs, publicCtor, argPosOfProblemType)) { return Optional.of(publicCtor); }
+         if (areEquivalentExceptProblemType(ctorArgs, publicCtor, argPosOfProblemType)) {
+            return Optional.of(publicCtor);
+         }
       }
 
       return Optional.empty();
@@ -79,7 +85,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
 
    private static Collection<ICPPASTFunctionDeclarator> getPublicCtors(final ICPPASTCompositeTypeSpecifier clazz) {
       final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, PublicMemFunFinder.ALL_TYPES);
-      final List<ICPPASTFunctionDeclarator> publicCtors = list();
+      final List<ICPPASTFunctionDeclarator> publicCtors = new ArrayList<>();
 
       for (final IASTDeclaration memFun : finder.getPublicMemFuns()) {
          if (!ASTUtil.isDeclConstructor(memFun)) {
@@ -115,7 +121,9 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       final IASTSimpleDeclaration simpleDecl = ASTUtil.getAncestorOfType(ctorInitializer, IASTSimpleDeclaration.class);
       final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
 
-      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
+      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
+         return Optional.empty();
+      }
 
       final IASTName name = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName();
       return lookup.findClassDefinition(name.resolveBinding(), index);
@@ -126,7 +134,9 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       final IASTTypeId typeId = newExpr.getTypeId();
       final IASTDeclSpecifier declSpecifier = typeId.getDeclSpecifier();
 
-      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
+      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
+         return Optional.empty();
+      }
 
       final IASTName name = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName();
       return lookup.findClassDefinition(name.toString(), index);

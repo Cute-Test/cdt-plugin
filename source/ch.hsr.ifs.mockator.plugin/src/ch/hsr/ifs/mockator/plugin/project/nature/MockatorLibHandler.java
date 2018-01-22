@@ -15,9 +15,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
-
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
-
 import ch.hsr.ifs.mockator.plugin.project.cdt.SourceFolderHandler;
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludePathHandler;
 
@@ -33,7 +31,9 @@ public class MockatorLibHandler {
    }
 
    public void addLibToProject() throws CoreException {
-      if (hasLib()) { return; }
+      if (hasLib()) {
+         return;
+      }
 
       final IFolder targetFolder = createMockatorFolder();
       copyLibFiles(targetFolder);
@@ -94,8 +94,7 @@ public class MockatorLibHandler {
             // create closes stream in any case -> no separate clean
             // necessary
             targetFile.create(file.openStream(), IResource.FORCE, new NullProgressMonitor());
-         }
-         catch (final IOException e) {
+         } catch (final IOException e) {
             throw new ILTISException("Was not able to copy Mockator header files", e).rethrowUnchecked();
          }
       }

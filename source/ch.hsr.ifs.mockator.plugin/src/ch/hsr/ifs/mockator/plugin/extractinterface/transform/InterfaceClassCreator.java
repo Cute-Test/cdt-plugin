@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.transform;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -32,12 +31,11 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.core.resources.IFile;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CFileUtil;
-
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.IncludeGuardCreator;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NamespaceApplier;
 
 
@@ -71,7 +69,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static void addPureVirtualMemFuns(final Collection<IASTDeclaration> publicMemFuns, final ICPPASTCompositeTypeSpecifier newInterface,
-         final ICPPASTCompositeTypeSpecifier clazz) {
+            final ICPPASTCompositeTypeSpecifier clazz) {
       for (final IASTDeclaration memFun : publicMemFuns) {
          final ICPPASTFunctionDeclarator oldDeclarator = ASTUtil.getChildOfType(memFun, ICPPASTFunctionDeclarator.class);
          final ICPPASTFunctionDeclarator newDeclarator = createNewFunDeclarator(oldDeclarator, newInterface.getName().toString(), clazz);
@@ -83,7 +81,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static ICPPASTFunctionDeclarator createNewFunDeclarator(final ICPPASTFunctionDeclarator oldDecl, final String newInterfaceName,
-         final ICPPASTCompositeTypeSpecifier clazz) {
+            final ICPPASTCompositeTypeSpecifier clazz) {
       final IASTName funName = oldDecl.getName().copy();
       final ICPPASTFunctionDeclarator newDecl = nodeFactory.newFunctionDeclarator(funName);
       newDecl.setConst(oldDecl.isConst());
@@ -111,15 +109,15 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static void adaptParametersIfNecessary(final String newInterfaceName, final ICPPASTFunctionDeclarator oldDecl,
-         final ICPPASTFunctionDeclarator newDecl, final ICPPASTCompositeTypeSpecifier clazz) {
+            final ICPPASTFunctionDeclarator newDecl, final ICPPASTCompositeTypeSpecifier clazz) {
       for (final ICPPASTParameterDeclaration param : createNewParameters(oldDecl, newInterfaceName, clazz)) {
          newDecl.addParameterDeclaration(param);
       }
    }
 
    private static Collection<ICPPASTParameterDeclaration> createNewParameters(final ICPPASTFunctionDeclarator funDecl, final String newInterfaceName,
-         final ICPPASTCompositeTypeSpecifier clazz) {
-      final List<ICPPASTParameterDeclaration> adaptedParams = list();
+            final ICPPASTCompositeTypeSpecifier clazz) {
+      final List<ICPPASTParameterDeclaration> adaptedParams = new ArrayList<>();
 
       for (final ICPPASTParameterDeclaration oldParam : funDecl.getParameters()) {
          final IASTDeclSpecifier paramDeclSpec = oldParam.getDeclSpecifier();
@@ -137,7 +135,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static boolean hasPointerOrReferenceToInterface(final ICPPASTDeclarator declarator, final IASTDeclSpecifier declSpecifier,
-         final ICPPASTCompositeTypeSpecifier clazz) {
+            final ICPPASTCompositeTypeSpecifier clazz) {
       if (ASTUtil.hasPointerOrRefType(declarator) && declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
          final String paramName = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName().toString();
          return paramName.equals(clazz.getName().toString());
@@ -146,7 +144,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static ICPPASTDeclSpecifier createNewFunDeclSpecifier(final ICPPASTCompositeTypeSpecifier newInterface,
-         final ICPPASTCompositeTypeSpecifier clazz, final ICPPASTFunctionDeclarator declarator, final IASTDeclaration declaration) {
+            final ICPPASTCompositeTypeSpecifier clazz, final ICPPASTFunctionDeclarator declarator, final IASTDeclaration declaration) {
       final ICPPASTDeclSpecifier oldDeclSpec = ASTUtil.getChildOfType(declaration, ICPPASTDeclSpecifier.class);
       final ICPPASTDeclSpecifier newDeclSpec = oldDeclSpec.copy();
 
@@ -160,7 +158,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static IASTNode createInterfaceDeclWithNamespaces(final ICPPASTCompositeTypeSpecifier newClass,
-         final ICPPASTCompositeTypeSpecifier clazz) {
+            final ICPPASTCompositeTypeSpecifier clazz) {
       final IASTSimpleDeclaration newClassDecl = nodeFactory.newSimpleDeclaration(newClass);
       final NamespaceApplier applier = new NamespaceApplier(clazz);
       return applier.packInSameNamespaces(newClassDecl);
@@ -187,21 +185,21 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    }
 
    private static IASTTranslationUnit insertIncludeGuardStart(final IncludeGuardCreator creator, final ASTRewrite rewriter,
-         final IASTTranslationUnit tu) {
+            final IASTTranslationUnit tu) {
       rewriter.insertBefore(tu, null, creator.createIfNDef(), null);
       rewriter.insertBefore(tu, null, creator.createDefine(), null);
       return tu;
    }
 
    private static void insertDeclarations(final Collection<IASTSimpleDeclaration> declarations, final ASTRewrite rewriter,
-         final IASTTranslationUnit tuOfInterface) {
+            final IASTTranslationUnit tuOfInterface) {
       for (final IASTSimpleDeclaration decl : declarations) {
          rewriter.insertBefore(tuOfInterface, null, decl.copy(), null);
       }
    }
 
    private static void insertIncludes(final Collection<IASTPreprocessorIncludeStatement> includes, final ASTRewrite rewriter,
-         final IASTTranslationUnit tuOfInterface) {
+            final IASTTranslationUnit tuOfInterface) {
       for (final IASTPreprocessorIncludeStatement include : includes) {
          rewriter.insertBefore(tuOfInterface, null, new AstIncludeNode(include), null);
       }

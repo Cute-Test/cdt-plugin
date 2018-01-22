@@ -18,8 +18,7 @@ class ProjectPropertiesHandler {
    public void setProjectProperty(final QualifiedName qfName, final String value) {
       try {
          project.setPersistentProperty(qfName, value);
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException("Not able to store property for " + qfName.toString(), e).rethrowUnchecked();
       }
    }
@@ -27,8 +26,7 @@ class ProjectPropertiesHandler {
    public String getProjectProperty(final QualifiedName qfName) {
       try {
          return project.getPersistentProperty(qfName);
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException("Not able to determine property for " + qfName.toString(), e).rethrowUnchecked();
       }
    }

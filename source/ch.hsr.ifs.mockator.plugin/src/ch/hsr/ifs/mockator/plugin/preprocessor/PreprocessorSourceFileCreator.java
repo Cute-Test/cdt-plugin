@@ -20,13 +20,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionDelegateCallCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
 
@@ -42,7 +41,7 @@ class PreprocessorSourceFileCreator extends PreprocessorFileCreator {
 
    @Override
    protected void addContentToTu(final IASTTranslationUnit newAst, final ASTRewrite rewriter, final ICPPASTFunctionDeclarator funDecl,
-         final IProgressMonitor pm) throws CoreException {
+            final IProgressMonitor pm) throws CoreException {
       addHeaderInclude(newAst, rewriter);
       addUndef(newAst, rewriter, null, funDecl.getName().toString());
       insertFunctionDefinition(funDecl, newAst, rewriter);

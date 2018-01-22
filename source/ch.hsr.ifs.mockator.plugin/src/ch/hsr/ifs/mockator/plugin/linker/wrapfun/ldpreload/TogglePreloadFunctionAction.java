@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -23,7 +22,6 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.runconfig.RunConfigEnvManager;
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtManagedProjectType;
@@ -60,7 +58,9 @@ public class TogglePreloadFunctionAction implements IObjectActionDelegate, IMenu
 
          @Override
          public void menuShown(final MenuEvent e) {
-            if (!fillMenu) { return; }
+            if (!fillMenu) {
+               return;
+            }
 
             final Menu m = (Menu) e.widget;
 
@@ -115,10 +115,9 @@ public class TogglePreloadFunctionAction implements IObjectActionDelegate, IMenu
    private Collection<IProject> getReferencedShLibProjectsWithDlSupport() {
       try {
          return Arrays.asList(project.getReferencedProjects()).stream().filter((project) -> CdtManagedProjectType.fromProject(
-               project) != CdtManagedProjectType.SharedLib ? false : usesDynamicLibrary(project)).collect(Collectors.toList());
-      }
-      catch (final CoreException e) {
-         return list();
+                  project) != CdtManagedProjectType.SharedLib ? false : usesDynamicLibrary(project)).collect(Collectors.toList());
+      } catch (final CoreException e) {
+         return new ArrayList<>();
       }
    }
 
@@ -133,11 +132,15 @@ public class TogglePreloadFunctionAction implements IObjectActionDelegate, IMenu
 
    @Override
    public void selectionChanged(final IAction action, final ISelection selection) {
-      if (!(selection instanceof IStructuredSelection)) { return; }
+      if (!(selection instanceof IStructuredSelection)) {
+         return;
+      }
 
       final Object obj = ((IStructuredSelection) selection).getFirstElement();
 
-      if (!(obj instanceof IProject)) { return; }
+      if (!(obj instanceof IProject)) {
+         return;
+      }
 
       project = (IProject) obj;
 

@@ -25,7 +25,7 @@ public class FunctionSignatureFormatter {
 
    public String getFunctionSignature() {
       return StringUtil.pythonFormat("%(funName)s(%(params)s)%(const)s", zipMap(array("funName", "params", "const"), array(getFunDeclName(),
-            getParameters(), getConstDeclIfNecessary())));
+               getParameters(), getConstDeclIfNecessary())));
    }
 
    private String getFunDeclName() {

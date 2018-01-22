@@ -31,12 +31,13 @@ class MockatorRefactoringJob extends Job {
       try {
          final ChangeEdit changeEdit = new MockatorRefactoringExecutor().apply(refactoring, pm);
 
-         if (pm.isCanceled()) { return Status.CANCEL_STATUS; }
+         if (pm.isCanceled()) {
+            return Status.CANCEL_STATUS;
+         }
 
          UiUtil.runInDisplayThread(uiCallBack, changeEdit);
          return Status.OK_STATUS;
-      }
-      catch (final RuntimeException e) {
+      } catch (final RuntimeException e) {
          return new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, e.getMessage());
       }
    }

@@ -14,7 +14,6 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
-
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
@@ -52,5 +51,5 @@ public interface TestDouble {
    IASTNode getParent();
 
    void addToNamespace(ICPPASTNamespaceDefinition parentNs, IASTSimpleDeclaration testDouble, ICPPASTCompositeTypeSpecifier toMove,
-         CppStandard cppStd, ASTRewrite rewriter);
+            CppStandard cppStd, ASTRewrite rewriter);
 }

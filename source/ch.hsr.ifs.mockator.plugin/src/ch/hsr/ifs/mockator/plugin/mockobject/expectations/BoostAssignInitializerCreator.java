@@ -2,9 +2,9 @@ package ch.hsr.ifs.mockator.plugin.mockobject.expectations;
 
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CALL;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
 import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.tail;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +21,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -47,7 +46,7 @@ public class BoostAssignInitializerCreator {
       final ICPPASTExpressionList expressionList = nodeFactory.newExpressionList();
       final IASTIdExpression vector = nodeFactory.newIdExpression(nodeFactory.newName(expectationsName.toCharArray()));
       final ICPPASTBinaryExpression expression = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_plusAssign, vector, createNextCall(head(
-            memFuns).get(), linkedEditStrategy));
+               memFuns).get(), linkedEditStrategy));
       expressionList.addExpression(expression);
       addAllSignatures(expressionList, tail(memFuns));
       return nodeFactory.newExpressionStatement(expressionList);
@@ -66,7 +65,7 @@ public class BoostAssignInitializerCreator {
    }
 
    private static List<IASTInitializerClause> getCallExpectations(final TestDoubleMemFun memFun, final LinkedEditModeStrategy edit) {
-      final List<IASTInitializerClause> clauses = list();
+      final List<IASTInitializerClause> clauses = new ArrayList<>();
       clauses.add(createSignatureLiteral(memFun.getFunctionSignature()));
       clauses.addAll(memFun.createDefaultArguments(CppStandard.Cpp03Std, edit));
       return clauses;

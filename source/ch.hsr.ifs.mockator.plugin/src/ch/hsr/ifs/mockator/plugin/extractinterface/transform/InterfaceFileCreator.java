@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CFileUtil;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
@@ -39,8 +38,7 @@ public class InterfaceFileCreator implements Consumer<ExtractInterfaceContext> {
          final IProgressMonitor pm = context.getProgressMonitor();
          final IASTTranslationUnit newTu = creator.createAndGetNewTu(pathOfNewFile, pm);
          context.setTuOfInterface(newTu);
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          new ILTISException("Not able to create new file " + pathOfNewFile.lastSegment(), e).rethrowUnchecked();;
       }
    }

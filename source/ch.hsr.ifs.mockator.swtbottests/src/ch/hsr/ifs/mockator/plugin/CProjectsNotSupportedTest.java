@@ -1,9 +1,9 @@
 package ch.hsr.ifs.mockator.plugin;
 
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
-import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -7,9 +7,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
-import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
 
 class TestDoubleToNsMover {
@@ -40,7 +39,7 @@ class TestDoubleToNsMover {
    }
 
    private void insertTestDoubleInNamespace(final IASTSimpleDeclaration testDouble, final ICPPASTCompositeTypeSpecifier testDoubleToMove,
-         final ICPPASTFunctionDefinition testFunction) {
+            final ICPPASTFunctionDefinition testFunction) {
       final TestDoubleInNsInserter inserter = new TestDoubleInNsInserter(rewriter, cppStd);
       inserter.insertTestDouble(testDouble, testDoubleToMove, testFunction);
    }
