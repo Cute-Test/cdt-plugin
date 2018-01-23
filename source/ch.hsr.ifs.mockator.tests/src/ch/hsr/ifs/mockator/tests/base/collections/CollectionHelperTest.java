@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import org.junit.Test;
 
@@ -246,15 +245,5 @@ public class CollectionHelperTest {
    public void getLastOfEmptyList() {
       final List<Integer> numbers = CollectionHelper.list();
       assertTrue(!CollectionHelper.last(numbers).isPresent());
-   }
-
-   @Test
-   public void toIterableWithEnumeration() {
-      final Vector<Integer> v = new Vector<>(CollectionHelper.list(1, 2, 3));
-      final Iterable<Integer> iterable = CollectionHelper.toIterable(v.elements());
-      assertEquals(Integer.valueOf(1), iterable.iterator().next());
-      assertEquals(Integer.valueOf(2), iterable.iterator().next());
-      assertEquals(Integer.valueOf(3), iterable.iterator().next());
-      assertFalse(iterable.iterator().hasNext());
    }
 }

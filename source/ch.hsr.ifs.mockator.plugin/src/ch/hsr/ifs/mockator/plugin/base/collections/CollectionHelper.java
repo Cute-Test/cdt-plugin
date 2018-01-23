@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,9 +21,6 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.Functional;
 
 
-// some generic type inference magic to get rid of
-// boilerplate java collection creation
-// some get obsolete with Java 1.7
 public abstract class CollectionHelper {
 
    @SafeVarargs
@@ -141,26 +137,6 @@ public abstract class CollectionHelper {
          return Optional.empty();
       }
       return Optional.of(elements.get(elements.size() - 1));
-   }
-
-   public static <E> Iterable<E> toIterable(final Enumeration<E> e) {
-      return () -> new Iterator<E>() {
-
-         @Override
-         public boolean hasNext() {
-            return e.hasMoreElements();
-         }
-
-         @Override
-         public E next() {
-            return e.nextElement();
-         }
-
-         @Override
-         public void remove() {
-            throw new UnsupportedOperationException();
-         }
-      };
    }
 
    public static <E> boolean haveSameElementsInSameOrder(final Collection<E> c1, final Collection<E> c2) {

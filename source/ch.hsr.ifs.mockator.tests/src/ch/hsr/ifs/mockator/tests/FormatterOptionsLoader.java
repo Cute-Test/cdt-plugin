@@ -1,15 +1,17 @@
 package ch.hsr.ifs.mockator.tests;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.toIterable;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.eclipse.cdt.core.model.ICProject;
+
+import ch.hsr.ifs.iltis.core.functional.StreamHelper;
 
 import junit.framework.AssertionFailedError;
 
@@ -29,16 +31,18 @@ public class FormatterOptionsLoader {
    }
 
    private static Properties loadFormatterOptions() {
-      final Iterable<URL> mockatorFile = toIterable(MockatorTestPlugin.getDefault().getBundle().findEntries("resources", "mockator_formatter.prefs",
-            true));
+      final Stream<URL> mockatorFile = StreamHelper.from(MockatorTestPlugin.getDefault().getBundle().findEntries("resources",
+            "mockator_formatter.prefs", true));
 
-      if (!mockatorFile.iterator().hasNext()) {
+      final Optional<URL> first = mockatorFile.findFirst();
+      
+      if (!first.isPresent()) {
          fail("Mockator formatter preferences could not be found");
       }
 
       try {
          final Properties formatterOptions = new Properties();
-         formatterOptions.load(head(mockatorFile).get().openStream());
+         formatterOptions.load(first.get().openStream());
          return formatterOptions;
       }
       catch (final IOException e) {}
