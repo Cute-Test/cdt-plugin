@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.linker.wrapfun.common.DialogWithDecisionMemory;

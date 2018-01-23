@@ -3,7 +3,6 @@ package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload;
 import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 
 
 class UniqueProjectNameCreator {

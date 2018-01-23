@@ -21,6 +21,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CCompositeChange;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 

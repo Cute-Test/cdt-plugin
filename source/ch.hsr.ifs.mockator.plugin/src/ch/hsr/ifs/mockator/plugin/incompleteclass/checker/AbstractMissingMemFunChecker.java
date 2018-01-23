@@ -9,6 +9,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
 import ch.hsr.ifs.iltis.cpp.ast.checker.SimpleChecker;
+
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;

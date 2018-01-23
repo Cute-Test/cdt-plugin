@@ -35,9 +35,9 @@ import org.eclipse.ui.ide.IDE;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoring;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
 

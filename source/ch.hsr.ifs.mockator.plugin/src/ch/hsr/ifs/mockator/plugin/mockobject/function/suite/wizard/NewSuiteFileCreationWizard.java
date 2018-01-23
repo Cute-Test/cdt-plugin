@@ -21,7 +21,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.LinkSuiteToRunnerRefactoring;

@@ -37,6 +37,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 
 

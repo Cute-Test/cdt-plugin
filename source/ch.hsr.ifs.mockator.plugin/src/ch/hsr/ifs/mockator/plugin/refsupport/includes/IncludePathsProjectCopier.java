@@ -11,7 +11,7 @@ import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludePathHandler;
 
 

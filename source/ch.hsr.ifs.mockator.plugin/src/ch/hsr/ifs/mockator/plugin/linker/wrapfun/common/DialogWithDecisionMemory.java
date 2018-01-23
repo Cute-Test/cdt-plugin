@@ -11,6 +11,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;

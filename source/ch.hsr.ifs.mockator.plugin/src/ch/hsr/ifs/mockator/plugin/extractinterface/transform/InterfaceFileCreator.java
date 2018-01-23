@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CFileUtil;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;

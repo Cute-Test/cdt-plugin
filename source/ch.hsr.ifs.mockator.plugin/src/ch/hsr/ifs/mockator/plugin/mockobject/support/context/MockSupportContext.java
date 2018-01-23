@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.functional.functions.Builder;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;

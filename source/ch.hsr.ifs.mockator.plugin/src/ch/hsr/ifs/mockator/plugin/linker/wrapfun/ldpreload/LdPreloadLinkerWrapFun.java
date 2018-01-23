@@ -19,7 +19,7 @@ import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;

@@ -19,8 +19,8 @@ import org.eclipse.core.resources.IFile;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterSignatureHandler;
 
 

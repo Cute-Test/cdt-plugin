@@ -11,6 +11,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 
 

@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtHelper;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 
