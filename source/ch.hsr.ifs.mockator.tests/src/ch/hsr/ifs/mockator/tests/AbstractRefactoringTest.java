@@ -23,7 +23,7 @@ import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
 
 
 @SuppressWarnings("restriction")
-public abstract class MockatorRefactoringTest extends CDTTestingRefactoringTest {
+public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest {
 
    private static int DEFAULT_MARKER_COUNT = 1;
    protected int      markerCount;

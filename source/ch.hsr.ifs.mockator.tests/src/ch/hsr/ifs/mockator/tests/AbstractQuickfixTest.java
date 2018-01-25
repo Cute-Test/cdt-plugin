@@ -8,7 +8,7 @@ import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 
 
-public abstract class MockatorQuickfixTest extends CDTTestingCodanQuickfixTest {
+public abstract class AbstractQuickfixTest extends CDTTestingCodanQuickfixTest {
 
    @Override
    public void setUp() throws Exception {
