@@ -21,7 +21,7 @@ import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;
 
 
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class MockatorInCUTEWizardTest extends AbstractMockatorUITests {
+public class MockatorInCUTEWizardTest extends AbstractMockatorUITest {
 
    private static final String PROJECT_NAME = "MockatorProj";
 

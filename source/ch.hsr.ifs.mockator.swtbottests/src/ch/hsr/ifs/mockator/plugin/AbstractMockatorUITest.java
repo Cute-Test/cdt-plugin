@@ -17,6 +17,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.matchers.WithText;
 import org.eclipse.swtbot.swt.finder.results.WidgetResult;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
@@ -27,7 +28,7 @@ import org.junit.After;
 import org.junit.BeforeClass;
 
 
-public abstract class AbstractMockatorUITests {
+public abstract class AbstractMockatorUITest {
 
    protected static SWTWorkbenchBot bot;
 
@@ -43,6 +44,7 @@ public abstract class AbstractMockatorUITests {
          proj.delete(true, monitor);
          monitor.join();
       }
+      bot.menu("File").menu("Exit").click();
    }
 
    protected SWTBotTree getProjectExplorer() {
@@ -73,7 +75,9 @@ public abstract class AbstractMockatorUITests {
 
    protected SWTBotShell createNewCppProject() {
       bot.menu("File").menu("New").menu("Project...").click();
-      final SWTBotShell shell = bot.shell("New Project").activate();
+      bot.waitUntil(Conditions.waitForShell(WithText.withTextIgnoringCase("New Project")));
+
+      final SWTBotShell shell = bot.shell("New Project")/* .activate() */;
       bot.tree().expandNode("C/C++").select("C++ Project");
       bot.button("Next >").click();
       return shell;
@@ -121,7 +125,8 @@ public abstract class AbstractMockatorUITests {
          while (!isDone) {
             try {
                wait();
-            } catch (final InterruptedException e) {
+            }
+            catch (final InterruptedException e) {
                Thread.currentThread().interrupt();
             }
          }

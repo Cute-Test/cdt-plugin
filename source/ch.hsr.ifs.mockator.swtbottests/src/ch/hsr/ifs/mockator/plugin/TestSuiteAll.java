@@ -13,4 +13,4 @@ import org.junit.runners.Suite.SuiteClasses;
 	CProjectsNotSupportedTest.class
 //@formatter:on
 })
-public class AllSWTBotTests {}
+public class TestSuiteAll {}

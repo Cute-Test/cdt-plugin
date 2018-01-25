@@ -17,7 +17,7 @@ import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;
 
 
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class ToggleMockatorProjectSupportTest extends AbstractMockatorUITests {
+public class ToggleMockatorProjectSupportTest extends AbstractMockatorUITest {
 
    @SuppressWarnings("nls")
    @Before

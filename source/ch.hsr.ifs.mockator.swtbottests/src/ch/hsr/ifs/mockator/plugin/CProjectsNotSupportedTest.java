@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class CProjectsNotSupportedTest extends AbstractMockatorUITests {
+public class CProjectsNotSupportedTest extends AbstractMockatorUITest {
 
    @SuppressWarnings("nls")
    @Before
