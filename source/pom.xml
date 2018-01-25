@@ -134,6 +134,29 @@
         </configuration>
       </plugin>
 
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <dependencies>
+             <dependency>
+              <type>p2-installable-unit</type>
+               <artifactId>org.eclipse.sdk.ide</artifactId>
+               <version>0.0.0</version>
+            </dependency>
+          </dependencies>
+          <useUIHarness>true</useUIHarness>
+          <useUIThread>true</useUIThread>
+          <product>org.eclipse.epp.package.cpp.product</product>
+          <application>org.eclipse.ui.ide.workbench</application>
+          <includes>
+            <include>**/TestSuiteAll.java</include>                                                                
+          </includes>
+        </configuration>
+      </plugin>
+      
     </plugins>
   </build>
+
 </project>
