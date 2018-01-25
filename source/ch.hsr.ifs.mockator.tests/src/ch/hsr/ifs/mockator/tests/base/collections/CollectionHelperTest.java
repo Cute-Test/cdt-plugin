@@ -231,6 +231,7 @@ public class CollectionHelperTest {
       assertEquals(Integer.valueOf(1), CollectionHelper.head(numbers, 1));
    }
 
+   @Test
    public void getHeadOfEmptyList() {
       final List<Integer> numbers = CollectionHelper.list();
       assertTrue(!CollectionHelper.head(numbers).isPresent());
@@ -242,6 +243,7 @@ public class CollectionHelperTest {
       assertEquals(Integer.valueOf(3), CollectionHelper.last(numbers).get());
    }
 
+   @Test
    public void getLastOfEmptyList() {
       final List<Integer> numbers = CollectionHelper.list();
       assertTrue(!CollectionHelper.last(numbers).isPresent());
