@@ -7,10 +7,10 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import ch.hsr.ifs.mockator.plugin.mockobject.convert.ConvertToMockObjectRefactoring;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
-public class ConvertToMockObjectRefactoringTest extends MockatorRefactoringTest {
+public class ConvertToMockObjectRefactoringTest extends AbstractRefactoringTest {
 
    private CppStandard            cppStandard;
    private LinkedEditModeStrategy linkedEditStrategy;

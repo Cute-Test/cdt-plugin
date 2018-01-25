@@ -5,10 +5,10 @@ import java.util.Properties;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 
 import ch.hsr.ifs.mockator.plugin.preprocessor.PreprocessorRefactoring;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
-public class PreprocessorRefactoringTest extends MockatorRefactoringTest {
+public class PreprocessorRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected void configureTest(final Properties refactoringProperties) {

@@ -6,10 +6,10 @@ import ch.hsr.ifs.mockator.plugin.mockobject.qf.MockObjectRefactoring;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
-public class SubTypeMockObjectRefactoringTest extends MockatorRefactoringTest {
+public class SubTypeMockObjectRefactoringTest extends AbstractRefactoringTest {
 
    private CppStandard            cppStandard;
    private LinkedEditModeStrategy linkedEditStrategy;

@@ -12,10 +12,10 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.LinkSuiteToRunnerRefactoring;
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.RunnerFinder;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
-public class LinkSuiteToRunnerRefactoringTest extends MockatorRefactoringTest {
+public class LinkSuiteToRunnerRefactoringTest extends AbstractRefactoringTest {
 
    private String newSuiteName;
 

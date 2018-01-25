@@ -4,10 +4,10 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 
 import ch.hsr.ifs.mockator.plugin.fakeobject.FakeObjectRefactoring;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
-public class FakeObjectRefactoringTest extends MockatorRefactoringTest {
+public class FakeObjectRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {

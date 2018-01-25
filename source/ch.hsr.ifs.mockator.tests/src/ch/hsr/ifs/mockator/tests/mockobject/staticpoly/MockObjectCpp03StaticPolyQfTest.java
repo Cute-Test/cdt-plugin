@@ -4,10 +4,10 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.qf.MockObjectByFunsQuickFix;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
-import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
+import ch.hsr.ifs.mockator.tests.AbstractQuickfixTest;
 
 
-public class MockObjectCpp03StaticPolyQfTest extends MockatorQuickfixTest {
+public class MockObjectCpp03StaticPolyQfTest extends AbstractQuickfixTest {
 
    @Override
    protected String getProblemId() {

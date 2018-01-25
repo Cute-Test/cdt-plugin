@@ -6,10 +6,10 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly.cppstd.RefactoringByStdFactory;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
-public class CreateTestDoubleStaticPolyTest extends MockatorRefactoringTest {
+public class CreateTestDoubleStaticPolyTest extends AbstractRefactoringTest {
 
    private CppStandard cppStandard;
 

@@ -7,10 +7,10 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import ch.hsr.ifs.mockator.plugin.mockobject.togglefun.ToggleTracingFunCallRefactoring;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
-public class ToggleTracingFunCallRefactoringTest extends MockatorRefactoringTest {
+public class ToggleTracingFunCallRefactoringTest extends AbstractRefactoringTest {
 
    private CppStandard            cppStandard;
    private LinkedEditModeStrategy linkedEditStrategy;

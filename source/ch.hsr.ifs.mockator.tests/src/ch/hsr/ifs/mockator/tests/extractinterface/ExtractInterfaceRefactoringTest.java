@@ -32,10 +32,10 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.extractinterface.preconditions.ClassDefinitionLookup;
 import ch.hsr.ifs.mockator.plugin.extractinterface.preconditions.MemFunCollector;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
-public class ExtractInterfaceRefactoringTest extends MockatorRefactoringTest {
+public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
 
    private static final String INTERFACE_NAME_DEFAULT = "FooInterface";
    private String              newInterfaceName;
@@ -76,7 +76,7 @@ public class ExtractInterfaceRefactoringTest extends MockatorRefactoringTest {
 
    @Override
    protected void simulateUserInput(final RefactoringContext context) {
-      final CRefactoringContext ccontext = CRefactoringContext.wrapp(context);
+      final CRefactoringContext ccontext = (CRefactoringContext) context;
       if (ccontext != null) {
          final ExtractInterfaceContext eiContext = ((ExtractInterfaceRefactoring) context.getRefactoring()).getContext();
          eiContext.setCRefContext(ccontext);

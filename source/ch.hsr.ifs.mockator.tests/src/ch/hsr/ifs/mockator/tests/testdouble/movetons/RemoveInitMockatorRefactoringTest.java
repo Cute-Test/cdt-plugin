@@ -11,11 +11,11 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.RemoveInitMockatorRefactoring;
-import ch.hsr.ifs.mockator.tests.MockatorRefactoringTest;
+import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
 
 
 @SuppressWarnings("restriction")
-public class RemoveInitMockatorRefactoringTest extends MockatorRefactoringTest {
+public class RemoveInitMockatorRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected MockatorRefactoring createRefactoring() {
@@ -29,7 +29,7 @@ public class RemoveInitMockatorRefactoringTest extends MockatorRefactoringTest {
 
    @Override
    protected void simulateUserInput(final RefactoringContext context) {
-      final CRefactoringContext ccontext = CRefactoringContext.wrapp(context);
+      final CRefactoringContext ccontext = CRefactoringContext.wrap(context);
       final ICPPASTFunctionDefinition testFunction = getTestFunctionIn(getAst(ccontext));
       ((RemoveInitMockatorRefactoring) context.getRefactoring()).setTestFunction(testFunction);
    }

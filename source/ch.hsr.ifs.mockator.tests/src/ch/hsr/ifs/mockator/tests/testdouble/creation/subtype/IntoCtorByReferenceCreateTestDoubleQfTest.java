@@ -4,10 +4,10 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype.CreateTestDoubleSubTypeQuickFix;
-import ch.hsr.ifs.mockator.tests.MockatorQuickfixTest;
+import ch.hsr.ifs.mockator.tests.AbstractQuickfixTest;
 
 
-public class IntoCtorByReferenceCreateTestDoubleQfTest extends MockatorQuickfixTest {
+public class IntoCtorByReferenceCreateTestDoubleQfTest extends AbstractQuickfixTest {
 
    @Override
    protected String getProblemId() {
