@@ -15,19 +15,20 @@ import ch.hsr.ifs.mockator.tests.preprocessor.TestSuitePreprocessor;
 import ch.hsr.ifs.mockator.tests.project.TestSuiteProject;
 import ch.hsr.ifs.mockator.tests.testdouble.TestSuiteTestDouble;
 
+
 @RunWith(Suite.class)
-//@formatter:off
 @SuiteClasses({
+   //@formatter:off
    TestSuiteBase.class,
-//   TestSuiteExtractInterface.class,
-   TestSuiteFakeobject.class, //error but does not block
-   TestSuiteIncompleteclass.class, //fails but does not block
+   TestSuiteExtractInterface.class,
+   TestSuiteFakeobject.class,
+   TestSuiteIncompleteclass.class,
    TestSuiteLinker.class,
    TestSuiteMetrics.class,
-   TestSuiteMockobject.class, //error but does not block
-//   TestSuitePreprocessor.class,
+   TestSuiteMockobject.class,
+   TestSuitePreprocessor.class,
    TestSuiteProject.class,
    TestSuiteTestDouble.class,
+   //@formatter:on
 })
-public class TestSuiteAll {
-}
+public class TestSuiteAll {}
