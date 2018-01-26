@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedSet;
 
 import java.util.ArrayList;
 import java.util.Collection;

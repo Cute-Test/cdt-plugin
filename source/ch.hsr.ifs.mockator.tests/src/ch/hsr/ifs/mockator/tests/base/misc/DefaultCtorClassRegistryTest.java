@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.tests.base.misc;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Set;
@@ -9,9 +9,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import ch.hsr.ifs.iltis.core.collections.CollectionHelper;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
-import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 import ch.hsr.ifs.mockator.plugin.base.misc.DefaultCtorClassRegistry;
 
 

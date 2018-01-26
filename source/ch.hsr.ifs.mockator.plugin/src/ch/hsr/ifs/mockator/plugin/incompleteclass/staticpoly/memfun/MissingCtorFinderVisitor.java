@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
 
 import java.util.ArrayList;
 import java.util.Collection;

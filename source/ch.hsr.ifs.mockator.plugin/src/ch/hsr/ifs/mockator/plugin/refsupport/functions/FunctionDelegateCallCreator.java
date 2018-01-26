@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
 
 import java.util.Collection;
 import java.util.HashSet;

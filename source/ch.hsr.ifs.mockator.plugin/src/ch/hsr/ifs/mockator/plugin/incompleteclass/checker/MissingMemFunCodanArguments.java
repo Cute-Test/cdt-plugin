@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.checker;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
 
 import java.util.Arrays;
 import java.util.List;

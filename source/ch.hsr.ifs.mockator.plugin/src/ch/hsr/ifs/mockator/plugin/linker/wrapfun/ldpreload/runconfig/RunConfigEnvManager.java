@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.runconfig;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.checkedCast;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.checkedCast;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,9 +18,8 @@ import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
+import ch.hsr.ifs.iltis.core.collections.CollectionHelper;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
-import ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper;
 
 
 public class RunConfigEnvManager {

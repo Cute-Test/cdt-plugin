@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
 
 import org.eclipse.core.resources.IMarker;
 

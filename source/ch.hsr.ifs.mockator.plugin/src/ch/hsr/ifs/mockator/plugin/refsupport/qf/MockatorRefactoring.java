@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.qf;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.last;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.last;
 
 import java.util.Optional;
 
@@ -40,9 +40,6 @@ import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
-
-
-// TODO use ILTIS
 
 public abstract class MockatorRefactoring extends CRefactoring {
 

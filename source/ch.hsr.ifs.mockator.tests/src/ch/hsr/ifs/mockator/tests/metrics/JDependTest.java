@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.tests.metrics;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.checkedCast;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.checkedCast;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;

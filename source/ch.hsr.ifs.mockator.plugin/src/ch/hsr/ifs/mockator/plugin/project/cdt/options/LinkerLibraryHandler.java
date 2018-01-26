@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.project.cdt.options;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
 
 import java.util.Set;
 

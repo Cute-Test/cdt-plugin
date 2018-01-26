@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
 
 import java.util.Collection;
 

@@ -6,7 +6,7 @@ import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.base.collections.MyStack;
+import ch.hsr.ifs.iltis.core.collections.Stack;
 
 
 public class NamespaceApplier {
@@ -19,7 +19,7 @@ public class NamespaceApplier {
    }
 
    public IASTNode packInSameNamespaces(final IASTSimpleDeclaration decl) {
-      final MyStack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
+      final Stack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
 
       if (namespaces.isEmpty()) {
          return decl;
@@ -39,8 +39,8 @@ public class NamespaceApplier {
       return topNs;
    }
 
-   private MyStack<ICPPASTNamespaceDefinition> getOriginNamespaces() {
-      final MyStack<ICPPASTNamespaceDefinition> namespaces = new MyStack<>();
+   private Stack<ICPPASTNamespaceDefinition> getOriginNamespaces() {
+      final Stack<ICPPASTNamespaceDefinition> namespaces = new Stack<>();
 
       for (IASTNode currNode = origin; currNode != null; currNode = currNode.getParent()) {
          if (currNode instanceof ICPPASTNamespaceDefinition) {

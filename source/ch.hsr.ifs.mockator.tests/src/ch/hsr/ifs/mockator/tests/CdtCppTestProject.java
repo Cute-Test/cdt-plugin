@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.tests;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
 
 import org.eclipse.cdt.build.core.scannerconfig.CfgInfoContext;
 import org.eclipse.cdt.build.core.scannerconfig.ICfgScannerConfigBuilderInfo2Set;

@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.subtype;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.list;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
 
 import java.util.Collection;
 import java.util.Collections;

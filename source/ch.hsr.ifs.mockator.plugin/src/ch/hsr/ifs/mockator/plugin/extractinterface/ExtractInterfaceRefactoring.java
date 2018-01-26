@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
 
 import java.util.Map;
 

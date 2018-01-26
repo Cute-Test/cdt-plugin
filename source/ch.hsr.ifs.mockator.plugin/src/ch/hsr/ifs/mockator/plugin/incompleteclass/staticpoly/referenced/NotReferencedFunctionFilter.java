@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.referenced;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
 
 import java.util.Map;
 import java.util.function.Predicate;

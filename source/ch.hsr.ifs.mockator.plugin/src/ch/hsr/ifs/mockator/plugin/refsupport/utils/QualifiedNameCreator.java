@@ -10,7 +10,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.mockator.plugin.base.collections.MyStack;
+import ch.hsr.ifs.iltis.core.collections.Stack;
 
 
 public class QualifiedNameCreator {
@@ -23,7 +23,7 @@ public class QualifiedNameCreator {
    }
 
    public ICPPASTQualifiedName createQualifiedName() {
-      final MyStack<IASTNode> nodes = collectQualifiedNames();
+      final Stack<IASTNode> nodes = collectQualifiedNames();
       final ICPPASTQualifiedName qName = nodeFactory.newQualifiedName(null);
 
       nodes.stream().forEach((node) -> {
@@ -39,8 +39,8 @@ public class QualifiedNameCreator {
       return qName;
    }
 
-   private MyStack<IASTNode> collectQualifiedNames() {
-      final MyStack<IASTNode> qNames = new MyStack<>();
+   private Stack<IASTNode> collectQualifiedNames() {
+      final Stack<IASTNode> qNames = new Stack<>();
       IASTNode tmpNode = name;
 
       while (tmpNode.getParent() != null && tmpNode.getParent() != name.getTranslationUnit()) {

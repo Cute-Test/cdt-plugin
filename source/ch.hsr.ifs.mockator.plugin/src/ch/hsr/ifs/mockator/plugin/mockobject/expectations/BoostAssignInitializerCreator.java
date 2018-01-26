@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations;
 
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.tail;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CALL;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.head;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.tail;
 
 import java.util.ArrayList;
 import java.util.Collection;

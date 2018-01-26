@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.asserteq;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedMap;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;

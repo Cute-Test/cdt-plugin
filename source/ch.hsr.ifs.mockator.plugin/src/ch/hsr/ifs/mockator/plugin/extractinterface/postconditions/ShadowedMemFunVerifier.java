@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.postconditions;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.unorderedSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedSet;
 
 import java.util.Collection;
 import java.util.Set;

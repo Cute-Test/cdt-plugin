@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.project.cdt.options;
 
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.array;
-import static ch.hsr.ifs.mockator.plugin.base.collections.CollectionHelper.zipMap;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.zipMap;
 import static ch.hsr.ifs.mockator.plugin.base.util.PlatformUtil.PATH_SEGMENT_SEPARATOR;
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.pythonFormat;
 
