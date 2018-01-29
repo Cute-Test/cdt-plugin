@@ -4,7 +4,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import ch.hsr.ifs.mockator.tests.base.misc.CastHelperTest;
 import ch.hsr.ifs.mockator.tests.base.misc.DefaultCtorClassRegistryTest;
 import ch.hsr.ifs.mockator.tests.base.util.ExceptionUtilTest;
 import ch.hsr.ifs.mockator.tests.base.util.PathProposalUtilTest;
@@ -15,7 +14,6 @@ import ch.hsr.ifs.mockator.tests.base.util.StringUtilTest;
 @SuiteClasses({
    
    /*Base*/
-   CastHelperTest.class,
    DefaultCtorClassRegistryTest.class,
    ExceptionUtilTest.class,
    PathProposalUtilTest.class,
