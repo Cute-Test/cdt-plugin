@@ -15,7 +15,6 @@ import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind;
 import ch.hsr.ifs.mockator.plugin.project.properties.AssertionOrder;
@@ -64,7 +63,7 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
 
    protected List<OffsetAndLength> getFunSignaturePositions() {
       final List<OffsetAndLength> offsetsAndLengths = new ArrayList<>();
-      final Optional<Pair<Integer, String>> expectationInfos = getExpectationVectorInfo();
+      final Optional<ExpectationVectorInfo> expectationInfos = getExpectationVectorInfo();
 
       if (expectationInfos.isPresent()) {
          collectPositionsWithNewVector(offsetsAndLengths, expectationInfos.get());
@@ -75,7 +74,7 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
       return offsetsAndLengths;
    }
 
-   protected abstract void collectPositionsWithNewVector(List<OffsetAndLength> offsetsAndLengths, Pair<Integer, String> expectationInfos);
+   protected abstract void collectPositionsWithNewVector(List<OffsetAndLength> offsetsAndLengths, ExpectationVectorInfo expectationInfos);
 
    private void collectPositionsInVector(final List<OffsetAndLength> offsetsAndLengths) {
       getEditForCallRegistration().ifPresent((edit) -> {
@@ -126,7 +125,7 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
 
    private Optional<OffsetAndLength> getAssertOffsetAndLength() {
       return OptHelper.returnIfPresentElseEmpty(getAssertPosition(), (assertPos) -> Optional.of(new OffsetAndLength(assertPos, assertOrder
-               .getAssertionCommand().length())));
+            .getAssertionCommand().length())));
    }
 
    private Optional<Integer> getAssertPosition() {
@@ -147,18 +146,18 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
    private Pattern getAssertPattern() {
       final String assertCommand = assertOrder.getAssertionCommand();
       final String regex = String.format("%s\\s*\\(\\s*(%s\\s*,.*)|(.*,\\s*%s\\s*)\\)", assertCommand, expectationsName.get(), expectationsName
-               .get());
+            .get());
       return Pattern.compile(regex, Pattern.MULTILINE);
    }
 
-   private Optional<Pair<Integer, String>> getExpectationVectorInfo() {
+   private Optional<ExpectationVectorInfo> getExpectationVectorInfo() {
       return OptHelper.returnIfPresentElseEmpty(getChangeEditText(), (changeText) -> {
          final Matcher m = getExpectationsVectorPattern().matcher(changeText);
 
          if (m.find()) {
             final int startPos = m.start(1);
             final String callSequenceVectorText = m.group(1);
-            return Optional.of(Pair.from(startPos, callSequenceVectorText));
+            return Optional.of(new ExpectationVectorInfo(startPos, callSequenceVectorText));
          }
          return Optional.empty();
       });
@@ -188,5 +187,21 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
       public int length() {
          return second;
       }
+   }
+
+   class ExpectationVectorInfo extends AbstractPair<Integer, String> {
+
+      public ExpectationVectorInfo(Integer first, String second) {
+         super(first, second);
+      }
+
+      public Integer getStartPosition() {
+         return first;
+      }
+
+      public String getEditText() {
+         return second;
+      }
+
    }
 }

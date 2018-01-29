@@ -9,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
-import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.index.IIndex;
@@ -18,7 +17,6 @@ import org.eclipse.cdt.core.model.ICProject;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 
@@ -30,7 +28,7 @@ class FunCallInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    }
 
    @Override
-   public Optional<Pair<IASTName, IType>> collectDependencyInfos(final IASTName problemArgName) {
+   public Optional<DependencyInfo> collectDependencyInfos(final IASTName problemArgName) {
       final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(problemArgName, ICPPASTFunctionCallExpression.class);
 
       if (funCall == null) {

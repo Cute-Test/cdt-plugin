@@ -8,7 +8,6 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
-import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
@@ -17,11 +16,11 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
+import ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype.DepInjectInfoCollector.DependencyInfo;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
 
 
@@ -73,15 +72,15 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
       return ASTUtil.getAncestorOfType(node, ICPPASTFunctionCallExpression.class) != null;
    }
 
-   private void markMissingInjectedTestDouble(final IASTName name, final Pair<IASTName, IType> optResult) {
+   private void markMissingInjectedTestDouble(final IASTName name, final DependencyInfo optResult) {
       final CreateTestDoubleSubTypeCodanArgs codanArgs = getCodanArgs(name, optResult);
       addNodeForReporting(new CheckerResult<>(ProblemId.MISSING_TEST_DOUBLE_SUBTYPE, name), codanArgs.toArray());
    }
 
-   private CreateTestDoubleSubTypeCodanArgs getCodanArgs(final IASTName name, final Pair<IASTName, IType> targetNameAndType) {
-      final IASTTranslationUnit ast = targetNameAndType.first().getTranslationUnit();
-      final String parentClassName = getQualifiedNameFor(targetNameAndType.first());
-      final String passByStrategy = ArgumentPassByStrategy.getStrategy(targetNameAndType.second()).toString();
+   private CreateTestDoubleSubTypeCodanArgs getCodanArgs(final IASTName name, final DependencyInfo targetNameAndType) {
+      final IASTTranslationUnit ast = targetNameAndType.getName().getTranslationUnit();
+      final String parentClassName = getQualifiedNameFor(targetNameAndType.getName());
+      final String passByStrategy = ArgumentPassByStrategy.getStrategy(targetNameAndType.getType()).toString();
       return new CreateTestDoubleSubTypeCodanArgs(name.toString(), parentClassName, getInclude(ast), passByStrategy);
    }
 

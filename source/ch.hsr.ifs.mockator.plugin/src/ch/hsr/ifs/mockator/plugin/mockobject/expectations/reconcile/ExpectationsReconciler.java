@@ -40,7 +40,7 @@ public class ExpectationsReconciler {
 
    private IASTName getAssignExpectationsVector() {
       final ExpectationsFinder finder = new ExpectationsFinder(testFun);
-      return finder.getExpectations(expectationsVector).second();
+      return finder.getExpectations(expectationsVector).getAssignExpectationsVector();
    }
 
    private AbstractExpectationsReconciler getExpectationsReconciler(final Collection<? extends TestDoubleMemFun> toAdd,

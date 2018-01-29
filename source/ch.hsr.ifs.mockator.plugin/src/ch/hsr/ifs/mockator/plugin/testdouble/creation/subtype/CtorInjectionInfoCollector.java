@@ -15,7 +15,6 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTypeId;
-import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTConstructorInitializer;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclarator;
@@ -31,7 +30,6 @@ import org.eclipse.cdt.core.model.ICProject;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 
 
@@ -42,7 +40,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    }
 
    @Override
-   public Optional<Pair<IASTName, IType>> collectDependencyInfos(final IASTName problemArg) {
+   public Optional<DependencyInfo> collectDependencyInfos(final IASTName problemArg) {
       IASTInitializer initializer = ASTUtil.getAncestorOfType(problemArg, ICPPASTInitializerList.class);
       List<IASTInitializerClause> ctorArgs;
 

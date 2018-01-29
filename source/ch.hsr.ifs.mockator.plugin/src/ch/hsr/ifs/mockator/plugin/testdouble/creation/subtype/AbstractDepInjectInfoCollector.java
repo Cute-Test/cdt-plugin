@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunArgumentsTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunctionParamTypeCollector;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParamTypeEquivalenceTester;
@@ -55,7 +54,7 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
       return argPos;
    }
 
-   protected Optional<Pair<IASTName, IType>> getTargetClassOfProblemType(final ICPPASTFunctionDeclarator funDecl, final int argPosOfProblemType) {
+   protected Optional<DependencyInfo> getTargetClassOfProblemType(final ICPPASTFunctionDeclarator funDecl, final int argPosOfProblemType) {
       if (funDecl == null || funDecl.getParameters() == null || funDecl.getParameters().length <= argPosOfProblemType) {
          return Optional.empty();
       }
@@ -70,7 +69,7 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
 
       final ICPPASTNamedTypeSpecifier namedType = (ICPPASTNamedTypeSpecifier) declSpecifier;
 
-      return OptHelper.returnIfPresentElseEmpty(findClassDefinitionOfProblemType(namedType.getName()), (clazz) -> Optional.of(Pair.from(clazz
+      return OptHelper.returnIfPresentElseEmpty(findClassDefinitionOfProblemType(namedType.getName()), (clazz) -> Optional.of(new DependencyInfo(clazz
                .getName(), paramType)));
    }
 

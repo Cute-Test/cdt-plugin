@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.AssertionOrder;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -23,11 +22,11 @@ class FunArgumentsLinkedEditMode extends MockObjectLinkedModeSupport {
    }
 
    @Override
-   protected void collectPositionsWithNewVector(final List<OffsetAndLength> offsetsAndLengths, final Pair<Integer, String> expectationInfo) {
+   protected void collectPositionsWithNewVector(final List<OffsetAndLength> offsetsAndLengths, final ExpectationVectorInfo expectationInfo) {
       getChangeEditOffset().ifPresent((editOffset) -> {
-         final int posOfExpectations = expectationInfo.first();
+         final int posOfExpectations = expectationInfo.getStartPosition();
          final int beginOfExpectations = posOfExpectations + editOffset;
-         collectVectorInsidePositions(offsetsAndLengths, expectationInfo.second(), beginOfExpectations);
+         collectVectorInsidePositions(offsetsAndLengths, expectationInfo.getEditText(), beginOfExpectations);
       });
    }
 

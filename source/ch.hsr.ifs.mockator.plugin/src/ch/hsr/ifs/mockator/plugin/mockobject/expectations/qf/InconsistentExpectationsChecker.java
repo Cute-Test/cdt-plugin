@@ -11,15 +11,16 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.core.runtime.CoreException;
 
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.finder.ExpectationsFinder;
+import ch.hsr.ifs.mockator.plugin.mockobject.expectations.finder.ExpectationsFinder.ExpectionsInfo;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVerifier;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -34,20 +35,20 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       final IASTFunctionDefinition testFun = (IASTFunctionDefinition) result.getNode();
       for (final ExpectedActualPair expectedActual : getAssertedCalls(testFun)) {
          getExpectationsAndRegistrations(expectedActual).ifPresent((expReg) -> {
-            final Pair<Collection<MemFunCallExpectation>, IASTName> expectations = getExpectations(testFun, expReg.first());
-            markDiffsIfNecessary(expectations.first(), expectations.second(), getCallRegistrations(expReg.second()));
+            final ExpectionsInfo expectations = getExpectations(testFun, expReg.getExpectations());
+            markDiffsIfNecessary(expectations.getExpectations(), expectations.getAssignExpectationsVector(), getCallRegistrations(expReg.getRegistrations()));
          });
       }
    }
 
-   private static Optional<Pair<IASTIdExpression, IASTIdExpression>> getExpectationsAndRegistrations(final ExpectedActualPair expectedActual) {
+   private static Optional<ExpectedAndRegistration> getExpectationsAndRegistrations(final ExpectedActualPair expectedActual) {
       final IASTIdExpression fstInAssert = expectedActual.expected();
       final IASTIdExpression sndInAssert = expectedActual.actual();
 
       if (isOfExpectationsType(fstInAssert) && isOfRegistrationsType(sndInAssert)) {
-         return Optional.of(Pair.from(fstInAssert, sndInAssert));
+         return Optional.of(new ExpectedAndRegistration(fstInAssert, sndInAssert));
       } else if (isOfRegistrationsType(fstInAssert) && isOfExpectationsType(sndInAssert)) {
-         return Optional.of(Pair.from(sndInAssert, fstInAssert));
+         return Optional.of(new ExpectedAndRegistration(sndInAssert, fstInAssert));
       } else {
          return Optional.empty();
       }
@@ -105,7 +106,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       return new ConsistentExpectationsCodanArgs(toRemove, toAdd).toArray();
    }
 
-   private static Pair<Collection<MemFunCallExpectation>, IASTName> getExpectations(final IASTFunctionDefinition function,
+   private static ExpectionsInfo getExpectations(final IASTFunctionDefinition function,
             final IASTIdExpression expectedCalls) {
       final ExpectationsFinder finder = new ExpectationsFinder(function);
       return finder.getExpectations(expectedCalls.getName());
@@ -120,5 +121,21 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    @Override
    protected ProblemId getProblemId() {
       return ProblemId.INCONSISTENT_EXPECTATIONS;
+   }
+   
+   private static class ExpectedAndRegistration extends AbstractPair<IASTIdExpression, IASTIdExpression>{
+
+      public ExpectedAndRegistration(IASTIdExpression expected, IASTIdExpression registration) {
+         super(expected, registration);
+      }
+      
+      public IASTIdExpression getExpectations() {
+         return first;
+      }
+      
+      public IASTIdExpression getRegistrations() {
+         return second;
+      }
+      
    }
 }

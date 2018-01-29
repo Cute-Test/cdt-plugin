@@ -17,9 +17,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 
 
 public class CppIncludeResolver {
@@ -60,15 +59,15 @@ public class CppIncludeResolver {
    }
 
    public AstIncludeNode resolveIncludeNode(final String targetIncludePath) {
-      final Pair<String, Boolean> result = getIncludePath(targetIncludePath);
-      return new AstIncludeNode(result.first(), result.second());
+      final IncludeInfo result = getIncludePath(targetIncludePath);
+      return new AstIncludeNode(result.getIncludePath(), result.isSystemInclude());
    }
 
    public String resolveIncludePath(final String targetIncludePath) {
-      return getIncludePath(targetIncludePath).first();
+      return getIncludePath(targetIncludePath).getIncludePath();
    }
 
-   private Pair<String, Boolean> getIncludePath(final String targetIncludePath) {
+   private IncludeInfo getIncludePath(final String targetIncludePath) {
       try {
          final IIndexFile indexFile = getIndexFile(targetIncludePath, targetProject, index);
 
@@ -77,12 +76,12 @@ public class CppIncludeResolver {
 
             if (includes.length > 0 && includes[0].isSystemInclude()) {
                final boolean isSystemInclude = true;
-               return Pair.from(toCppIncludeIfNecessary(includes[0].getFullName()), isSystemInclude);
+               return new IncludeInfo(toCppIncludeIfNecessary(includes[0].getFullName()), isSystemInclude);
             }
          }
 
          final boolean isSystemInclude = false;
-         return Pair.from(getBestRelativePath(targetIncludePath), isSystemInclude);
+         return new IncludeInfo(getBestRelativePath(targetIncludePath), isSystemInclude);
       } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
@@ -117,5 +116,21 @@ public class CppIncludeResolver {
    private static IIndexFile getIndexFile(final IIndexFileLocation fileLocation, final IIndex index) throws CoreException {
       final IIndexFile[] files = index.getFiles(fileLocation);
       return files.length != 0 ? files[0] : null;
+   }
+   
+   private class IncludeInfo extends AbstractPair<String, Boolean>{
+
+      public IncludeInfo(String first, Boolean second) {
+         super(first, second);
+      }
+      
+      public String getIncludePath() {
+         return first;
+      }
+      
+      public boolean isSystemInclude() {
+         return second;
+      }
+      
    }
 }

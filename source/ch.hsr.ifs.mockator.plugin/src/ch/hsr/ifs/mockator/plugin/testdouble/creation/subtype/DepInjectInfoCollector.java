@@ -5,10 +5,26 @@ import java.util.Optional;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IType;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
 
 
 interface DepInjectInfoCollector {
 
-   Optional<Pair<IASTName, IType>> collectDependencyInfos(IASTName problemArgName);
+   Optional<DependencyInfo> collectDependencyInfos(IASTName problemArgName);
+   
+   class DependencyInfo extends AbstractPair<IASTName, IType>{
+
+      public DependencyInfo(IASTName name, IType type) {
+         super(name, type);
+      }
+      
+      public IASTName getName() {
+         return first;
+      }
+      
+      public IType getType() {
+         return second;
+      }
+      
+   }
 }

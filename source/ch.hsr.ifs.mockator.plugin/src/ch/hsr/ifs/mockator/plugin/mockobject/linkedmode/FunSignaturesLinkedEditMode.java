@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.AssertionOrder;
@@ -48,10 +47,8 @@ class FunSignaturesLinkedEditMode extends MockObjectLinkedModeSupport {
    }
 
    @Override
-   protected void collectPositionsWithNewVector(final List<OffsetAndLength> offsetsAndLengths, final Pair<Integer, String> expectationInfo) {
-      final Integer posOfCallSpecs = expectationInfo.first();
-      final String callSpecText = expectationInfo.second();
-      collectVectorInsidePositions(offsetsAndLengths, callSpecText, posOfCallSpecs);
+   protected void collectPositionsWithNewVector(final List<OffsetAndLength> offsetsAndLengths, final ExpectationVectorInfo expectationInfo) {
+      collectVectorInsidePositions(offsetsAndLengths, expectationInfo.getEditText(), expectationInfo.getStartPosition());
    }
 
    @Override

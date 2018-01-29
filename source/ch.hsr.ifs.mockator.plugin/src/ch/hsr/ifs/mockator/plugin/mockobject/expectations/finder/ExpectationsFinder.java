@@ -12,11 +12,11 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.functional.OptHelper;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.data.Pair;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
@@ -33,7 +33,7 @@ public class ExpectationsFinder {
       expectationVector = new NodeContainer<>();
    }
 
-   public Pair<Collection<MemFunCallExpectation>, IASTName> getExpectations(final IASTName assertedExpectetation) {
+   public ExpectionsInfo getExpectations(final IASTName assertedExpectation) {
       testFunction.accept(new ASTVisitor() {
 
          {
@@ -50,16 +50,16 @@ public class ExpectationsFinder {
          }
 
          private boolean nameMatches(final IASTName name) {
-            return name.toString().equals(assertedExpectetation.toString());
+            return name.toString().equals(assertedExpectation.toString());
          }
 
          private int collectExpectations(final IASTName name) {
             final IASTStatement stmt = ASTUtil.getAncestorOfType(name, IASTStatement.class);
 
             if (stmt instanceof IASTDeclarationStatement) {
-               new InitializerExpectationsFinder(callExpectations, expectationVector, assertedExpectetation).collectExpectations(stmt);
+               new InitializerExpectationsFinder(callExpectations, expectationVector, assertedExpectation).collectExpectations(stmt);
             } else if (stmt instanceof IASTExpressionStatement) {
-               new BoostVectorExpectationsFinder(callExpectations, expectationVector, assertedExpectetation).collectExpectations(stmt);
+               new BoostVectorExpectationsFinder(callExpectations, expectationVector, assertedExpectation).collectExpectations(stmt);
             }
 
             if (callExpectations.isEmpty()) {
@@ -70,7 +70,7 @@ public class ExpectationsFinder {
          }
       });
 
-      return Pair.from(callExpectations, getNameOfExpectationVector(assertedExpectetation));
+      return new ExpectionsInfo(callExpectations, getNameOfExpectationVector(assertedExpectation));
    }
 
    private IASTName getNameOfExpectationVector(final IASTName assertedExpectation) {
@@ -80,5 +80,21 @@ public class ExpectationsFinder {
          ILTISException.Unless.isTrue(definitions.length > 0, "Expectation vector must have a definition");
          return definitions[0];
       });
+   }
+   
+   public class ExpectionsInfo extends AbstractPair<Collection<MemFunCallExpectation>, IASTName> {
+
+      public ExpectionsInfo(Collection<MemFunCallExpectation> expectations, IASTName vectorName) {
+         super(expectations, vectorName);
+      }
+      
+      public Collection<MemFunCallExpectation> getExpectations(){
+         return first;
+      }
+      
+      public IASTName getAssignExpectationsVector() {
+         return second;
+      }
+      
    }
 }
