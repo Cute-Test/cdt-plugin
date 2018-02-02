@@ -24,6 +24,10 @@
         <artifactId>target-platform-configuration</artifactId>
         <version>${tycho-version}</version>
         <configuration>
+          <useUIHarness>true</useUIHarness>
+          <useUIThread>false</useUIThread>
+          <product>org.eclipse.sdk.ide</product>
+          <application>org.eclipse.ui.ide.workbench</application>
           <systemPropertyVariables>
             <SWT_GTK3>0</SWT_GTK3>
           </systemPropertyVariables>
