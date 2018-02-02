@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.tests.base.misc;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.orderPreservingSet;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Set;
@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import ch.hsr.ifs.iltis.core.collections.CollectionHelper;
+import ch.hsr.ifs.iltis.core.collections.CollectionUtil;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.DefaultCtorClassRegistry;
@@ -20,7 +20,7 @@ public class DefaultCtorClassRegistryTest {
    @Test
    public void classesWithAllDefaultCtors() {
       final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class);
-      assertEquals(CollectionHelper.list(new Car(), new Plane()), new DefaultCtorClassRegistry<>(clazzes).createInstances());
+      assertEquals(CollectionUtil.list(new Car(), new Plane()), new DefaultCtorClassRegistry<>(clazzes).createInstances());
    }
 
    @Rule

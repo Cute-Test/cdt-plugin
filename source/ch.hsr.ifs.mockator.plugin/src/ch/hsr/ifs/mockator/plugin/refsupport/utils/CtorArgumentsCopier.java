@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 import static ch.hsr.ifs.iltis.core.functional.Functional.as;
 
 import java.util.Collection;

@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.ui;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.checkedCast;
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.checkedCast;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 import static ch.hsr.ifs.iltis.core.functional.Functional.as;
 
 import java.util.Collection;

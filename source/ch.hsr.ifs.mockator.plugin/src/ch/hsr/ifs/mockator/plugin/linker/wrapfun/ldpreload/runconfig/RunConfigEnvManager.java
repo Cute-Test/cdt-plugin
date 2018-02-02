@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.runconfig;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.checkedCast;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.checkedCast;
 
 import java.util.Arrays;
 import java.util.Collection;

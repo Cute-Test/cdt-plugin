@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.reconcile;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
 
 import java.util.Collection;
 

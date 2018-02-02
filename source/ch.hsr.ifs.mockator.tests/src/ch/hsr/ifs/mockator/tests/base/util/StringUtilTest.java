@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.tests.base.util;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;

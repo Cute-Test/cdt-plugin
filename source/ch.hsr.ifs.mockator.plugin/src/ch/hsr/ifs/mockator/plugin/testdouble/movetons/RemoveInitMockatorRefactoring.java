@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.movetons;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

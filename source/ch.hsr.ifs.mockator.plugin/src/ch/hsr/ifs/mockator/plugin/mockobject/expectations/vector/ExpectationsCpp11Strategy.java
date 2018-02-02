@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CALLS;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.linkededit;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
 
 import java.util.ArrayList;
 import java.util.List;

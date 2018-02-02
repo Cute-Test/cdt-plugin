@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.movetons;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CUTE_NS;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CUTE_SUITE;
 

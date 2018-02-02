@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.tests.mockobject.function;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
 
 import java.util.List;
 import java.util.Properties;

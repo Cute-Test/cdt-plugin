@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.subtype;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.head;
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 
 import java.util.Optional;
 

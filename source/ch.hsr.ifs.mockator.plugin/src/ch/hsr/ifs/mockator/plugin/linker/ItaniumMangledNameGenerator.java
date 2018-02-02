@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.linker;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 
 import java.util.Collection;
 import java.util.HashMap;
