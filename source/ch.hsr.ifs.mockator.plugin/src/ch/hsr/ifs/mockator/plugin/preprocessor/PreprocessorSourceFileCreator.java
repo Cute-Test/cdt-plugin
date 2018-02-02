@@ -69,7 +69,7 @@ class PreprocessorSourceFileCreator extends PreprocessorFileCreator {
    }
 
    private void addHeaderInclude(final IASTTranslationUnit source, final ASTRewrite rewriter) {
-      final AstIncludeNode astIncludeNode = new AstIncludeNode(FileUtil.getFilePart(newHeaderFilePath.toString()));
+      final AstIncludeNode astIncludeNode = new AstIncludeNode(FileUtil.getFilename(newHeaderFilePath.toString()));
       rewriter.insertBefore(source, null, astIncludeNode, null);
    }
 

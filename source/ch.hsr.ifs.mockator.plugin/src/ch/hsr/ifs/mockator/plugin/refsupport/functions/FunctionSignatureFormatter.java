@@ -3,7 +3,7 @@ package ch.hsr.ifs.mockator.plugin.refsupport.functions;
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.zipMap;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.COMMA;
-import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CONST_KEYWORD;
+import static ch.hsr.ifs.iltis.cpp.util.CPPNameConstants.CONST_KEYWORD;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.SPACE;
 
 import java.util.Collection;

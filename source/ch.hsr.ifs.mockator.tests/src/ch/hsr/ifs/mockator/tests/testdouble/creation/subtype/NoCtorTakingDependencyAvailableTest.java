@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.tests.testdouble.creation.subtype;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;

@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.referenced;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -27,16 +26,14 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
    public NotReferencedFunctionFilter(final IIndex index, final ICProject cProject, final ICPPASTFunctionDefinition testFunction) {
       this.testFunction = testFunction;
       calleeReferenceResolver = new FunctionCalleeReferenceResolver(index, cProject);
-      cache = unorderedMap();
+      cache = new HashMap<>();
    }
 
    @Override
    public boolean test(final StaticPolyMissingMemFun memFunCall) {
       final ICPPASTFunctionDefinition sutFunction = memFunCall.getContainingFunction();
 
-      if (!shouldConsider(sutFunction)) {
-         return true;
-      }
+      if (!shouldConsider(sutFunction)) { return true; }
 
       Boolean called = cache.get(sutFunction);
 
@@ -56,9 +53,7 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
       final IBinding sutBinding = sutFunction.getDeclarator().getName().resolveBinding();
 
       for (final IASTName caller : calleeReferenceResolver.findCallers(sutBinding, sutFunction)) {
-         if (matches(testFunction, getFunctionDefinition(caller))) {
-            return true;
-         }
+         if (matches(testFunction, getFunctionDefinition(caller))) { return true; }
       }
 
       return false;
@@ -69,9 +64,7 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
    }
 
    private static boolean matches(final ICPPASTFunctionDefinition functionInUse, final ICPPASTFunctionDefinition missingMemFun) {
-      if (functionInUse == null || missingMemFun == null) {
-         return false;
-      }
+      if (functionInUse == null || missingMemFun == null) { return false; }
 
       final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) functionInUse.getDeclarator());
       return checker.isEquivalent((ICPPASTFunctionDeclarator) missingMemFun.getDeclarator());

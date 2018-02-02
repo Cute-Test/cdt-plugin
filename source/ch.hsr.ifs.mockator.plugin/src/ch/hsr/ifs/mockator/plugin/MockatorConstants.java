@@ -15,8 +15,6 @@ public abstract class MockatorConstants {
    public static final String PUSH_BACK             = "push_back";
    public static final String SPACE                 = " ";
    public static final String COMMA                 = ",";
-   public static final String CONST_KEYWORD         = "const";
-   public static final String STD_STRING            = "std::string";
    public static final String BASIC_STRING_CHAR     = "basic_string <char>";
    public static final String L_PARENTHESIS         = "(";
    public static final String R_PARENTHESIS         = ")";
@@ -24,11 +22,6 @@ public abstract class MockatorConstants {
    public static final String DOUBLE_QUOTE          = "\"";
    public static final String HEADER_SUFFIX         = ".h";
    public static final String SOURCE_SUFFIX         = ".cpp";
-   public static final String END_IF_DIRECTIVE      = "#endif";
-   public static final String DEFINE_DIRECTIVE      = "#define";
-   public static final String UNDEF_DIRECTIVE       = "#undef";
-   public static final String IFNDEF_DIRECTIVE      = "#ifndef";
-   public static final String IFDEF_DIRECTIVE       = "#ifdef";
    public static final String WRAP_MACRO_PREFIX     = "WRAP_";
    public static final String MOCKED_TRACE_PREFIX   = "mockator_";
    public static final String TRACE_FOLDER          = "trace";

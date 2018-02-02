@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 
@@ -12,7 +12,7 @@ import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 class PreloadRunFactory {
 
    public Optional<PreloadRunStrategy> getRunConfig(final IProject project) {
-      return OptHelper.returnIfPresentElseEmpty(ToolChain.fromProject(project), (tc) -> {
+      return OptionalUtil.returnIfPresentElseEmpty(ToolChain.fromProject(project), (tc) -> {
          switch (tc) {
          case GnuLinux:
             return Optional.of(new LinuxPreloadRunConfig());

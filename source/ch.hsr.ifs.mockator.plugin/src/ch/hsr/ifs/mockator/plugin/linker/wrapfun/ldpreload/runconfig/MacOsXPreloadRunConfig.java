@@ -20,7 +20,7 @@ class MacOsXPreloadRunConfig extends AbstractPreloadRunStrategy {
          return false;
       }
 
-      return ldPreloadLibs.contains(sharedLibPath) && dyldLibPath.contains(FileUtil.removeFilePart(sharedLibPath));
+      return ldPreloadLibs.contains(sharedLibPath) && dyldLibPath.contains(FileUtil.getPathWithoutFilename(sharedLibPath));
    }
 
    @Override
@@ -37,7 +37,7 @@ class MacOsXPreloadRunConfig extends AbstractPreloadRunStrategy {
 
    private void putLibInPathIfNecessary(final String pathToShLib, final Map<String, String> envVariables) {
       final String dyldLibPath = envVariables.get(DYLD_LIBRARY_PATH);
-      final String path = FileUtil.removeFilePart(pathToShLib);
+      final String path = FileUtil.getPathWithoutFilename(pathToShLib);
       envVariables.put(DYLD_LIBRARY_PATH, appendToList(dyldLibPath, path));
    }
 

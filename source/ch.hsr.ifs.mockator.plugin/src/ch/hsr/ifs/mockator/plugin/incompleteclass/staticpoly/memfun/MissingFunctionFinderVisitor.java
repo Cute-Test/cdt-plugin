@@ -1,8 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
-
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
@@ -21,7 +20,6 @@ import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 
 
-// TODO check for better solution than SuppressWarnings
 @SuppressWarnings("restriction")
 class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
 
@@ -34,7 +32,7 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
    public MissingFunctionFinderVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICPPASTTemplateParameter templateParam,
                                        final ICPPASTTemplateDeclaration sut) {
       super(testDouble, templateParam, sut);
-      unresolvedFunCalls = orderPreservingSet();
+      unresolvedFunCalls = new LinkedHashSet<>();
    }
 
    @Override
@@ -46,9 +44,7 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
    public int visit(final IASTName name) {
       final IBinding binding = name.resolveBinding();
 
-      if (!isMemFunReferenceToUnknownClass(binding)) {
-         return PROCESS_CONTINUE;
-      }
+      if (!isMemFunReferenceToUnknownClass(binding)) { return PROCESS_CONTINUE; }
 
       if (isReferenceToTemplateParameter(binding)) {
          final ICPPASTFunctionCallExpression funCall = getFunctionCall(name);

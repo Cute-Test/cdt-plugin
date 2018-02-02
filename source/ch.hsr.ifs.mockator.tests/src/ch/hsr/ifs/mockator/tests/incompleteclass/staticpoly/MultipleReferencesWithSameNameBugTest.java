@@ -13,7 +13,6 @@ public class MultipleReferencesWithSameNameBugTest extends CDTTestingCodanChecke
       return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL.getId();
    }
 
-   @Override
    @Test
    public void runTest() throws Throwable {
       assertProblemMarkerPositions(10, 18);

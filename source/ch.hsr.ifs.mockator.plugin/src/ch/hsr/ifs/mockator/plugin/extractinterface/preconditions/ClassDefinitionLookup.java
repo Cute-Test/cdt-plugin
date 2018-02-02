@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
@@ -55,7 +55,7 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
    }
 
    private static ICPPASTCompositeTypeSpecifier lookupInIndex(final ExtractInterfaceContext context, final IASTName classNameToLookup) {
-      return OptHelper.returnIfPresentElseNull(findClassDefinition(classNameToLookup, context), (def) -> def);
+      return OptionalUtil.returnIfPresentElseNull(findClassDefinition(classNameToLookup, context), (def) -> def);
    }
 
    private static Optional<ICPPASTCompositeTypeSpecifier> findClassDefinition(final IASTName classNameToLookup,
@@ -65,7 +65,7 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
    }
 
    private static IASTName getNameOfSelectedSpecifier(final IASTName selectedName) {
-      return OptHelper.returnIfPresentElse(getNamedSpecifier(selectedName), (spec) -> spec.getName(), () -> selectedName);
+      return OptionalUtil.returnIfPresentElse(getNamedSpecifier(selectedName), (spec) -> spec.getName(), () -> selectedName);
    }
 
    private static Optional<ICPPASTNamedTypeSpecifier> getNamedSpecifier(final IASTNode originalNode) {

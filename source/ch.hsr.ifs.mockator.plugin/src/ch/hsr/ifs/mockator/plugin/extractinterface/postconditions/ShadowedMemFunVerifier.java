@@ -1,8 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.postconditions;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedSet;
-
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,7 @@ public class ShadowedMemFunVerifier {
       final Collection<ICPPClassType> subClasses = getSubClassesOfChosenClass();
 
       for (final ICPPMethod chosenMemFun : getChosenNonVirtualMemFuns()) {
-         final Set<ICPPMethod> shadowingMemFuns = unorderedSet();
+         final Set<ICPPMethod> shadowingMemFuns = new HashSet<>();
 
          for (final ICPPClassType clazz : subClasses) {
             for (final ICPPMethod memFun : clazz.getDeclaredMethods()) {
@@ -60,7 +59,7 @@ public class ShadowedMemFunVerifier {
 
    private Collection<ICPPMethod> getChosenNonVirtualMemFuns() {
       return context.getChosenMemFuns().stream().map((final IASTDeclaration decl) -> getCppMethodIn(decl)).collect(Collectors.toList()).stream()
-               .filter((final ICPPMethod memFun) -> !memFun.isVirtual()).collect(Collectors.toList());
+            .filter((final ICPPMethod memFun) -> !memFun.isVirtual()).collect(Collectors.toList());
    }
 
    private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {

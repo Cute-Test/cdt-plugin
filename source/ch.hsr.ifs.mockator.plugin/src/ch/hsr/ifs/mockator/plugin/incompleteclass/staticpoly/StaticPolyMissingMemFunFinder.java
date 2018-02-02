@@ -1,9 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +35,7 @@ public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
    @Override
    public Collection<StaticPolyMissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
       final StaticPolymorphismUseFinder staticPolyFinder = getStaticPolyUseFinder(clazz);
-      final Set<StaticPolyMissingMemFun> missingMemFuns = orderPreservingSet();
+      final Set<StaticPolyMissingMemFun> missingMemFuns = new LinkedHashSet<>();
 
       for (final IASTFunctionDefinition testFun : getReferencingTestFunctions(clazz)) {
          final Collection<StaticPolyMissingMemFun> usedMemFunsInSut = staticPolyFinder.apply(testFun);
@@ -52,7 +51,7 @@ public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    private static Collection<StaticPolyMissingMemFun> filterAlreadyExisting(final Collection<StaticPolyMissingMemFun> candidates,
-            final ICPPASTCompositeTypeSpecifier clazz) {
+         final ICPPASTCompositeTypeSpecifier clazz) {
       final Collection<ICPPASTFunctionDefinition> existingMemFuns = getPublicMemberFunctions(clazz);
       final List<StaticPolyMissingMemFun> onlyMissing = new ArrayList<>();
 

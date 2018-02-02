@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
@@ -56,7 +55,7 @@ public class ParameterNameFunDecorator {
    }
 
    private static ParameterNameCreator getParamNameCreator() {
-      final Map<String, Boolean> nameHistory = unorderedMap();
+      final Map<String, Boolean> nameHistory = new HashMap<>();
       return new ParameterNameCreator(nameHistory);
    }
 

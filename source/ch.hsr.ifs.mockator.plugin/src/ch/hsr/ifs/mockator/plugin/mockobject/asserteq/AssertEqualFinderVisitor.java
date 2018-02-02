@@ -14,7 +14,7 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorFinderVisitor;
@@ -37,7 +37,7 @@ public class AssertEqualFinderVisitor extends ASTVisitor {
    }
 
    private Optional<IASTName> findRegistrationVectorInTestDouble() {
-      return OptHelper.returnIfPresentElseEmpty(mockObject, (mockObj) -> {
+      return OptionalUtil.returnIfPresentElseEmpty(mockObject, (mockObj) -> {
          final AllCallsVectorFinderVisitor finder = new AllCallsVectorFinderVisitor();
          mockObj.accept(finder);
          return finder.getFoundCallsVector();
@@ -70,7 +70,7 @@ public class AssertEqualFinderVisitor extends ASTVisitor {
    }
 
    private boolean belongsToRegistrationVector(final ExpectedActualPair expectedActual) {
-      return OptHelper.returnIfPresentElse(registrationVector, (vector) -> {
+      return OptionalUtil.returnIfPresentElse(registrationVector, (vector) -> {
          final IBinding expectedActual1 = expectedActual.expected().getName().resolveBinding();
          final IBinding expectedActual2 = expectedActual.actual().getName().resolveBinding();
          return vector.resolveBinding().equals(expectedActual1) || vector.resolveBinding().equals(expectedActual2);

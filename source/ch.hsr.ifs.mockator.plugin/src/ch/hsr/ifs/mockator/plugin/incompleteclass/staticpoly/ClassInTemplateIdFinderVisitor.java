@@ -1,10 +1,10 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -51,7 +51,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
       this.testDouble = testDouble;
       this.cProject = cProject;
       this.index = index;
-      templateParams = orderPreservingSet();
+      templateParams = new LinkedHashSet<>();
    }
 
    public Collection<TemplateParamCombination> getTemplateParamCombinations() {
@@ -62,9 +62,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
    public int visit(final IASTName name) {
       final IBinding binding = name.resolveBinding();
 
-      if (!(binding instanceof ICPPTemplateInstance)) {
-         return PROCESS_CONTINUE;
-      }
+      if (!(binding instanceof ICPPTemplateInstance)) { return PROCESS_CONTINUE; }
 
       processTemplateArguments((ICPPTemplateInstance) binding, name);
       return PROCESS_SKIP;
@@ -83,17 +81,13 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
          }
       }
 
-      if (positions.isEmpty()) {
-         return;
-      }
+      if (positions.isEmpty()) { return; }
 
       processTemplateDefinition(positions, templateInstance.getTemplateDefinition());
    }
 
    private boolean refersToTestDouble(final IASTName name, final int templateArgPos) {
-      if (!(name instanceof ICPPASTTemplateId)) {
-         return false;
-      }
+      if (!(name instanceof ICPPASTTemplateId)) { return false; }
 
       final IASTNode node = ((ICPPASTTemplateId) name).getTemplateArguments()[templateArgPos];
 
@@ -132,9 +126,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
    private Collection<ICPPASTTemplateDeclaration> findTemplate(final IBinding template) {
       final IASTName[] definitionNames = testDouble.getTranslationUnit().getDefinitionsInAST(template);
 
-      if (definitionNames.length > 0) {
-         return lookupInAst(definitionNames[0]);
-      }
+      if (definitionNames.length > 0) { return lookupInAst(definitionNames[0]); }
 
       final List<ICPPASTTemplateDeclaration> templates = new ArrayList<>();
 

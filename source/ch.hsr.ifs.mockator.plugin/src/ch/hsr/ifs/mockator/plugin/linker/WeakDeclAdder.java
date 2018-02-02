@@ -45,6 +45,9 @@ public class WeakDeclAdder {
       final IASTNode funDeclParentCopy = getWeakParentCopy(funDecl, withWeakDeclSpec);
       final ASTRewrite rewriter = collector.rewriterForTranslationUnit(tu);
       rewriter.replace(funDecl.getParent(), funDeclParentCopy, null);
+      
+      //TODO remove line below
+      System.out.println("TODO remove");
    }
 
    private static boolean isTuPartOfWorkspace(final IASTTranslationUnit tuOfFunDef) {
@@ -68,7 +71,7 @@ public class WeakDeclAdder {
       final ICPPASTDeclSpecifier declSpec = ASTUtil.getDeclSpec(funDecl);
       final String returnTypeSpec = getStringRepresentation(declSpec);
       final String weakDecl = WEAK_DECL_ATTR + " " + returnTypeSpec;
-      final IASTName weakDeclSpec = nodeFactory.newName(weakDecl.toCharArray());
+      final IASTName weakDeclSpec = nodeFactory.newName(weakDecl);
       return nodeFactory.newTypedefNameSpecifier(weakDeclSpec);
    }
 

@@ -12,7 +12,7 @@ class LinuxPreloadRunConfig extends AbstractPreloadRunStrategy {
 
    private void putLibInPathIfNecessary(final String pathToShLib, final Map<String, String> envVariables) {
       final String ldLibraryPath = envVariables.get(LD_LIBRARY_PATH);
-      final String path = FileUtil.removeFilePart(pathToShLib);
+      final String path = FileUtil.getPathWithoutFilename(pathToShLib);
       envVariables.put(LD_LIBRARY_PATH, appendToList(ldLibraryPath, path));
    }
 
@@ -25,13 +25,13 @@ class LinuxPreloadRunConfig extends AbstractPreloadRunStrategy {
          return false;
       }
 
-      return ldPreloadLibs.contains(sharedLibPath) && ldLibraryPath.contains(FileUtil.removeFilePart(sharedLibPath));
+      return ldPreloadLibs.contains(sharedLibPath) && ldLibraryPath.contains(FileUtil.getPathWithoutFilename(sharedLibPath));
    }
 
    @Override
    public void addPreloadConfig(final String sharedLibPath, final Map<String, String> envVariables) {
       addLibToLdPreload(sharedLibPath, envVariables);
-      putLibInPathIfNecessary(FileUtil.removeFilePart(sharedLibPath), envVariables);
+      putLibInPathIfNecessary(FileUtil.getPathWithoutFilename(sharedLibPath), envVariables);
    }
 
    private void addLibToLdPreload(final String sharedLibPath, final Map<String, String> envVariables) {

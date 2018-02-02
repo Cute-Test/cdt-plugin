@@ -27,7 +27,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
@@ -56,9 +56,9 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
          ctorArgs = list(((ICPPASTInitializerList) initializer).getClauses());
       }
 
-      return OptHelper.returnIfPresentElseEmpty(findTargetClass(initializer), (clazz) -> {
+      return OptionalUtil.returnIfPresentElseEmpty(findTargetClass(initializer), (clazz) -> {
          final int args = getArgPosOfProblemType(problemArg, ctorArgs);
-         return OptHelper.returnIfPresentElseEmpty(findMatchingCtor(ctorArgs, args, clazz), (ctor) -> getTargetClassOfProblemType(ctor, args));
+         return OptionalUtil.returnIfPresentElseEmpty(findMatchingCtor(ctorArgs, args, clazz), (ctor) -> getTargetClassOfProblemType(ctor, args));
       });
    }
 

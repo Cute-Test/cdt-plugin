@@ -15,7 +15,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 
 @SuppressWarnings("restriction")
@@ -61,7 +61,7 @@ public abstract class UiUtil {
    }
 
    public static Optional<IDocument> getCurrentDocument() {
-      return OptHelper.returnIfPresentElseEmpty(getActiveCEditor(), (editor) -> Optional.of(editor.getDocumentProvider().getDocument(editor
+      return OptionalUtil.returnIfPresentElseEmpty(getActiveCEditor(), (editor) -> Optional.of(editor.getDocumentProvider().getDocument(editor
                .getEditorInput())));
    }
 

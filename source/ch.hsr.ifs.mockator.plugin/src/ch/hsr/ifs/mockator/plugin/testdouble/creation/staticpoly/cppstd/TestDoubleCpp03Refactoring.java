@@ -13,7 +13,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
@@ -56,7 +56,7 @@ class TestDoubleCpp03Refactoring extends AbstractCreateTestDoubleRefactoring {
    }
 
    private Optional<ICPPASTFunctionDefinition> getSelectedTestFunction(final IASTTranslationUnit ast) {
-      return OptHelper.returnIfPresentElseEmpty(getSelectedName(ast), (funName) -> Optional.of((ICPPASTFunctionDefinition) ASTUtil.getAncestorOfType(
+      return OptionalUtil.returnIfPresentElseEmpty(getSelectedName(ast), (funName) -> Optional.of((ICPPASTFunctionDefinition) ASTUtil.getAncestorOfType(
                funName, ICPPASTFunctionDefinition.class)));
    }
 }

@@ -2,11 +2,11 @@ package ch.hsr.ifs.mockator.plugin.incompleteclass.subtype;
 
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.head;
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -56,7 +56,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    private Set<MissingMemFun> collectPureVirtualMemFuns(final IASTTranslationUnit ast, final ICPPClassType clazz) {
-      final Set<MissingMemFun> missingMethods = orderPreservingSet();
+      final Set<MissingMemFun> missingMethods = new LinkedHashSet<>();
 
       for (final ICPPMethod method : getPureVirtualMemFunsIn(clazz)) {
          ILTISException.Unless.notInstanceOf(method, ICPPConstructor.class, "Ctors are not supported because they are not inherited");

@@ -25,6 +25,7 @@ import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.util.CPPNameConstants;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
@@ -131,11 +132,11 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    }
 
    private static ASTLiteralNode createEndIf() {
-      return new ASTLiteralNode(MockatorConstants.END_IF_DIRECTIVE + NEW_LINE);
+      return new ASTLiteralNode(CPPNameConstants.END_IF_DIRECTIVE + NEW_LINE);
    }
 
    private ASTLiteralNode createIfDefWrapFun() {
-      return new ASTLiteralNode(MockatorConstants.IFDEF_DIRECTIVE + MockatorConstants.SPACE + MockatorConstants.WRAP_MACRO_PREFIX + newFunName
+      return new ASTLiteralNode(CPPNameConstants.IFDEF_DIRECTIVE + MockatorConstants.SPACE + MockatorConstants.WRAP_MACRO_PREFIX + newFunName
                                 + NEW_LINE);
    }
 

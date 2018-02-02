@@ -1,9 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
 
    @Override
    public Collection<StaticPolyMissingMemFun> apply(final IASTFunctionDefinition testFunction) {
-      final Collection<StaticPolyMissingMemFun> missingMemFuns = orderPreservingSet();
+      final Collection<StaticPolyMissingMemFun> missingMemFuns = new LinkedHashSet<>();
 
       for (final TemplateParamCombination declParam : getTestDoubleAsTemplateArgUsages(testFunction)) {
          missingMemFuns.addAll(collectMissingMemFuns(testFunction, declParam));
@@ -66,9 +65,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
    }
 
    private static Collection<ICPPASTTemplateDeclaration> getTemplateFunctions(final ICPPASTTemplateDeclaration templateDecl) {
-      if (!hasClassInTemplateDecl(templateDecl)) {
-         return new ArrayList<>();
-      }
+      if (!hasClassInTemplateDecl(templateDecl)) { return new ArrayList<>(); }
 
       final NotInlineDefMemFunFinderVisitor visitor = new NotInlineDefMemFunFinderVisitor(templateDecl);
       templateDecl.getTranslationUnit().accept(visitor);
@@ -86,7 +83,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
    }
 
    private Collection<StaticPolyMissingMemFun> filterNotReferenced(final Collection<StaticPolyMissingMemFun> missingMemFuns,
-            final IASTTranslationUnit tuOfTemplate, final IASTFunctionDefinition testFunction) {
+         final IASTTranslationUnit tuOfTemplate, final IASTFunctionDefinition testFunction) {
       final NotReferencedFunctionFilter filter = getNotReferencedFunFilter(tuOfTemplate, testFunction);
       return missingMemFuns.stream().filter(filter).collect(Collectors.toList());
    }

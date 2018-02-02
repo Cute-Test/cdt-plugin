@@ -46,7 +46,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
@@ -67,7 +67,7 @@ public class ReturnTypeDeducer {
    }
 
    public ICPPASTDeclSpecifier determineReturnType(final IASTExpression funCall) {
-      return OptHelper.returnIfPresentElse(findPossibleReturnType(funCall), (returnType) -> returnType.copy(), () -> createDefaultReturnType());
+      return OptionalUtil.returnIfPresentElse(findPossibleReturnType(funCall), (returnType) -> returnType.copy(), () -> createDefaultReturnType());
    }
 
    private Optional<ICPPASTDeclSpecifier> findPossibleReturnType(final IASTExpression funCall) {

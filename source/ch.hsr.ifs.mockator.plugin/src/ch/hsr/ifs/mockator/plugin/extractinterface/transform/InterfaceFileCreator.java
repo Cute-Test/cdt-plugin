@@ -23,7 +23,7 @@ public class InterfaceFileCreator implements Consumer<ExtractInterfaceContext> {
    @Override
    public void accept(final ExtractInterfaceContext context) {
       final IPath pathOfNewFile = getUniquePathForNewFile(context);
-      context.setInterfaceFilePath(FileUtil.getFilePart(pathOfNewFile.toString()));
+      context.setInterfaceFilePath(FileUtil.getFilename(pathOfNewFile.toString()));
       createNewTu(context, pathOfNewFile);
    }
 

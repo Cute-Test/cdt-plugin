@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.gnuoption.qf;
 
-import static ch.hsr.ifs.mockator.plugin.MockatorConstants.END_IF_DIRECTIVE;
+import static ch.hsr.ifs.iltis.cpp.util.CPPNameConstants.END_IF_DIRECTIVE;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.model.ICElement;

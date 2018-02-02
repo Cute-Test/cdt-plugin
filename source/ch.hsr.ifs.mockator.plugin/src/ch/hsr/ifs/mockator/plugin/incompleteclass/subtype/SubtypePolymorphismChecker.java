@@ -26,7 +26,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
 
@@ -150,7 +150,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> lookupDefinition(final ICPPClassType type) {
-      return OptHelper.returnIfPresentElseEmpty(findDefinitionInAst(type), (className) -> Optional.ofNullable(getKlassOf(className)));
+      return OptionalUtil.returnIfPresentElseEmpty(findDefinitionInAst(type), (className) -> Optional.ofNullable(getKlassOf(className)));
    }
 
    private Optional<IASTName> findDefinitionInAst(final ICPPClassType type) {

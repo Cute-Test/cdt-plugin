@@ -2,9 +2,9 @@ package ch.hsr.ifs.mockator.plugin.linker;
 
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -58,9 +58,7 @@ public class ItaniumMangledNameGenerator {
    }
 
    public String createMangledName() {
-      if (function.isExternC()) {
-         return function.getName();
-      }
+      if (function.isExternC()) { return function.getName(); }
 
       mangledName();
       return mangledName.toString();
@@ -186,7 +184,7 @@ public class ItaniumMangledNameGenerator {
       mangledName.append("S");
 
       if (typeStr.startsWith("std::basic_string<char") || typeStr.startsWith("std::allocator<char>") || typeStr.startsWith(
-               "std::char_traits<char>")) {
+            "std::char_traits<char>")) {
          mangledName.append("s");
       } else if (typeStr.startsWith("std::allocator")) {
          mangledName.append("a");
@@ -212,10 +210,8 @@ public class ItaniumMangledNameGenerator {
    }
 
    private boolean isSubstitutionNecessary(final String typeStr) {
-      if (typeStr.startsWith("std::basic_string") || typeStr.startsWith("std::basic_ostream<char") || typeStr.startsWith("std::basic_istream<char")
-          || typeStr.startsWith("std::basic_iostream<char") || typeStr.startsWith("std::allocator")) {
-         return true;
-      }
+      if (typeStr.startsWith("std::basic_string") || typeStr.startsWith("std::basic_ostream<char") || typeStr.startsWith("std::basic_istream<char") ||
+          typeStr.startsWith("std::basic_iostream<char") || typeStr.startsWith("std::allocator")) { return true; }
 
       return history.alreadySeen(typeStr);
    }
@@ -271,9 +267,7 @@ public class ItaniumMangledNameGenerator {
    // ::= <source-name>
    // ::= <unnamed-type-name>
    private void unQualifiedName(final String name) {
-      if (name.isEmpty()) {
-         return;
-      }
+      if (name.isEmpty()) { return; }
 
       if (isCtor() || isDtor()) {
          sourceName(name);
@@ -695,9 +689,7 @@ public class ItaniumMangledNameGenerator {
    private String[] getQualifiedFunctionName() {
       final String[] qfName = getQualifiedName(function);
 
-      if (isCtor() || isDtor()) {
-         return array(qfName[0], "");
-      }
+      if (isCtor() || isDtor()) { return array(qfName[0], ""); }
 
       return qfName;
    }
@@ -708,7 +700,7 @@ public class ItaniumMangledNameGenerator {
       private int                        seqId;
 
       SubstitutionHistory() {
-         history = unorderedMap();
+         history = new HashMap<>();
       }
 
       void addToHistory(final String type) {
@@ -740,7 +732,8 @@ public class ItaniumMangledNameGenerator {
    private static String[] getQualifiedName(final ICPPBinding binding) {
       try {
          return binding.getQualifiedName();
-      } catch (final DOMException e) {
+      }
+      catch (final DOMException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

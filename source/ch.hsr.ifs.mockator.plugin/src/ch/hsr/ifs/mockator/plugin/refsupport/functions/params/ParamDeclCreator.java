@@ -1,7 +1,5 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
-import static ch.hsr.ifs.mockator.plugin.MockatorConstants.STD_STRING;
-
 import java.util.Map;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
@@ -27,6 +25,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.util.CPPNameConstants;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
 
@@ -85,7 +84,7 @@ public class ParamDeclCreator {
 
       if (stdString.isStdString(litexpr)) {
          spec = stdString.createStdStringDecl();
-         paramName = paramNameCreator.getParamName(STD_STRING);
+         paramName = paramNameCreator.getParamName(CPPNameConstants.STD_STRING);
          skipConstCharArray = true;
       } else {
          IType type = litexpr.getExpressionType();

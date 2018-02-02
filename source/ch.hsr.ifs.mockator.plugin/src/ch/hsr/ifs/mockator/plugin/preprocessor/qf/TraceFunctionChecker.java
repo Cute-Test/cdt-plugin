@@ -21,7 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
@@ -91,7 +91,7 @@ public class TraceFunctionChecker extends AbstractAstFunctionChecker {
 
    private boolean isIncludedIntoEveryTu(final ICPPASTFunctionDefinition function) {
       final IncludeFileHandler includeHandler = new IncludeFileHandler(getProject());
-      return OptHelper.returnIfPresentElse(getPathOfSiblingHeaderFile(function), (sibling) -> includeHandler.hasInclude(sibling), () -> false);
+      return OptionalUtil.returnIfPresentElse(getPathOfSiblingHeaderFile(function), (sibling) -> includeHandler.hasInclude(sibling), () -> false);
    }
 
    private Optional<? extends IResource> getPathOfSiblingHeaderFile(final ICPPASTFunctionDefinition function) {

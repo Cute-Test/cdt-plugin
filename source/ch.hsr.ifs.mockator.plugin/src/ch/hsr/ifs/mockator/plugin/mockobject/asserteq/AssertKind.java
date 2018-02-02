@@ -1,10 +1,9 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.asserteq;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -53,9 +52,7 @@ public enum AssertKind {
       final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
       final IASTInitializerClause[] arguments = startingNode.getArguments();
 
-      if (arguments.length < 2) {
-         return Optional.empty();
-      }
+      if (arguments.length < 2) { return Optional.empty(); }
 
       final List<IASTIdExpression> callVectors = new ArrayList<>();
       callVectors.add(collectExpectedActual(arguments[0]).get(0));
@@ -76,7 +73,7 @@ public enum AssertKind {
    private final String  code;
    private final boolean includeInProposals;
 
-   private static final Map<String, AssertKind> STRING_TO_ENUM = unorderedMap();
+   private static final Map<String, AssertKind> STRING_TO_ENUM = new HashMap<>();
 
    static {
       for (final AssertKind each : values()) {
@@ -112,9 +109,7 @@ public enum AssertKind {
    private static List<IASTIdExpression> collectExpectedActual(final IASTNode startingNode) {
       final List<IASTIdExpression> callVectors = new ArrayList<>();
 
-      if (startingNode == null) {
-         return callVectors;
-      }
+      if (startingNode == null) { return callVectors; }
 
       startingNode.accept(new ASTVisitor() {
 
@@ -126,9 +121,7 @@ public enum AssertKind {
          public int visit(final IASTName name) {
             final IASTNode parent = name.getParent();
 
-            if (!(parent instanceof IASTIdExpression)) {
-               return PROCESS_SKIP;
-            }
+            if (!(parent instanceof IASTIdExpression)) { return PROCESS_SKIP; }
 
             final IASTIdExpression idExpr = (IASTIdExpression) parent;
 

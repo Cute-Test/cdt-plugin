@@ -21,7 +21,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
@@ -45,7 +45,7 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    public Optional<String> getCuteSuiteName() {
-      return OptHelper.returnIfPresentElseEmpty(relatedSuiteName.getNode(), (name) -> Optional.of(name.toString()));
+      return OptionalUtil.returnIfPresentElseEmpty(relatedSuiteName.getNode(), (name) -> Optional.of(name.toString()));
    }
 
    @Override
@@ -97,7 +97,7 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    private boolean matchesTestFunction(final IASTName referencingName) {
-      return OptHelper.returnIfPresentElse(getRegisteredFunctionName(referencingName), (registeredFunName) -> registeredFunName.equals(testFunction
+      return OptionalUtil.returnIfPresentElse(getRegisteredFunctionName(referencingName), (registeredFunName) -> registeredFunName.equals(testFunction
                .getDeclarator().getName().toString()), () -> false);
    }
 

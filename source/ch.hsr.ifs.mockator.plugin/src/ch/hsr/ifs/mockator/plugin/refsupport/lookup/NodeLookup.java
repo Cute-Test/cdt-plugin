@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
@@ -42,7 +42,7 @@ public class NodeLookup {
       final DefinitionFinder finder = new DefinitionFinder(originProject, getIndex(context), getTuLoader(context));
 
       final Optional<IASTName> definition = finder.findDefinition(funName);
-      return OptHelper.returnIfPresentElseEmpty(definition, () -> getNodeAncestor(definition.get(), ICPPASTFunctionDefinition.class));
+      return OptionalUtil.returnIfPresentElseEmpty(definition, () -> getNodeAncestor(definition.get(), ICPPASTFunctionDefinition.class));
    }
 
    public Optional<ICPPASTFunctionDeclarator> findFunctionDeclaration(final IBinding binding, final IIndex index) {
@@ -58,12 +58,12 @@ public class NodeLookup {
    private static Optional<ICPPASTFunctionDeclarator> getFirstFunDeclaration(final IBinding funName, final DeclarationFinder finder) {
       // just consider the first declaration found
       final Optional<IASTName> head = head(finder.findDeclarations(funName));
-      return OptHelper.returnIfPresentElseEmpty(head, () -> getNodeAncestor(head.get(), ICPPASTFunctionDeclarator.class));
+      return OptionalUtil.returnIfPresentElseEmpty(head, () -> getNodeAncestor(head.get(), ICPPASTFunctionDeclarator.class));
    }
 
    public Optional<ICPPASTCompositeTypeSpecifier> findClassDefinition(final IASTName className, final CRefactoringContext context) {
       final DefinitionFinder finder = new DefinitionFinder(originProject, getIndex(context), getTuLoader(context));
-      return OptHelper.returnIfPresentElseEmpty(finder.findDefinition(className), (def) -> getClassAncestor(def));
+      return OptionalUtil.returnIfPresentElseEmpty(finder.findDefinition(className), (def) -> getClassAncestor(def));
    }
 
    private static Optional<ICPPASTCompositeTypeSpecifier> getClassAncestor(final IASTNode node) {
@@ -72,12 +72,12 @@ public class NodeLookup {
 
    public <T> Optional<ICPPASTCompositeTypeSpecifier> findClassDefinition(final IBinding binding, final IIndex index) {
       final DefinitionFinder finder = new DefinitionFinder(originProject, index, getTuLoader(index));
-      return OptHelper.returnIfPresentElseEmpty(finder.findDefinition(binding), (def) -> getClassAncestor(def));
+      return OptionalUtil.returnIfPresentElseEmpty(finder.findDefinition(binding), (def) -> getClassAncestor(def));
    }
 
    public Optional<ICPPASTCompositeTypeSpecifier> findClassDefinition(final String name, final IIndex index) {
       final DefinitionFinder finder = new DefinitionFinder(originProject, index, getTuLoader(index));
-      return OptHelper.returnIfPresentElseEmpty(finder.findDefinition(name), (def) -> getClassAncestor(def));
+      return OptionalUtil.returnIfPresentElseEmpty(finder.findDefinition(name), (def) -> getClassAncestor(def));
    }
 
    public Collection<ICPPASTFunctionDefinition> findReferencingFunctions(final IASTName name, final CRefactoringContext context) {
@@ -95,7 +95,7 @@ public class NodeLookup {
    public Optional<ICPPASTTemplateDeclaration> findTemplateDefinition(final IBinding binding, final IIndex index) {
       final DefinitionFinder finder = new DefinitionFinder(originProject, index, getTuLoader(index));
 
-      return OptHelper.returnIfPresentElseEmpty(finder.findDefinition(binding), (def) -> getNodeAncestor(def, ICPPASTTemplateDeclaration.class));
+      return OptionalUtil.returnIfPresentElseEmpty(finder.findDefinition(binding), (def) -> getNodeAncestor(def, ICPPASTTemplateDeclaration.class));
    }
 
    public Collection<IASTName> findReferencingNames(final IASTName name, final CRefactoringContext context) {

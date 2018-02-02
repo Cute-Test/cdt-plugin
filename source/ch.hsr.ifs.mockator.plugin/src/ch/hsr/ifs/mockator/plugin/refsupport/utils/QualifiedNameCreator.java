@@ -26,7 +26,7 @@ public class QualifiedNameCreator {
       final Stack<IASTNode> nodes = collectQualifiedNames();
       final ICPPASTQualifiedName qName = nodeFactory.newQualifiedName(null);
 
-      nodes.stream().forEach((node) -> {
+      nodes.nonConsumingStream().forEach((node) -> {
          if (node instanceof IASTCompositeTypeSpecifier) {
             qName.addName(((IASTCompositeTypeSpecifier) node).getName());
          } else if (node instanceof ICPPASTNamespaceDefinition) {

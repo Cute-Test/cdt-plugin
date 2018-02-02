@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
@@ -12,7 +11,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 public enum PolymorphismKind {
    SubTypePoly, StaticPoly;
 
-   private static final Map<String, PolymorphismKind> STRING_TO_ENUM = unorderedMap();
+   private static final Map<String, PolymorphismKind> STRING_TO_ENUM = new HashMap<>();
 
    static {
       for (final PolymorphismKind standard : values()) {

@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.BASIC_STRING_CHAR;
-import static ch.hsr.ifs.mockator.plugin.MockatorConstants.STD_STRING;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -21,6 +20,7 @@ import ch.hsr.ifs.iltis.core.functional.Functional;
 import ch.hsr.ifs.iltis.core.functional.StreamTripple;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.util.CPPNameConstants;
 
 
 @SuppressWarnings("restriction")
@@ -114,7 +114,7 @@ public class ParamTypeEquivalenceTester {
    private static boolean isString(IType type) {
       type = ASTUtil.unwindPointerOrRefType(CxxAstUtils.unwindTypedef(type));
       final String unwoundQualifierType = unwindQualifierType(type).toString();
-      return unwoundQualifierType.contains(STD_STRING) || unwoundQualifierType.contains(BASIC_STRING_CHAR);
+      return unwoundQualifierType.contains(CPPNameConstants.STD_STRING) || unwoundQualifierType.contains(BASIC_STRING_CHAR);
    }
 
    private static IType unwindQualifierType(IType type) {

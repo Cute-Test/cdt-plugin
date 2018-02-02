@@ -13,7 +13,6 @@ public class WithMultipleInheritanceHierarchiesTest extends CDTTestingCodanCheck
       return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL.getId();
    }
 
-   @Override
    @Test
    public void runTest() throws Throwable {
       final int markerExpectedOnLine = 9;

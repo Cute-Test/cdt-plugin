@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.tests.incompleteclass.staticpoly;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
@@ -13,7 +15,6 @@ public class StringParameterBugTest extends CDTTestingCodanCheckerTest {
       return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL.getId();
    }
 
-   @Override
    @Test
    public void runTest() throws Throwable {
       assertTrue(findMarkers().length == 0);

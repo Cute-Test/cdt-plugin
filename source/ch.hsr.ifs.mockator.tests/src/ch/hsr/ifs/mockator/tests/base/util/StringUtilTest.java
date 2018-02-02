@@ -1,10 +1,10 @@
 package ch.hsr.ifs.mockator.tests.base.util;
 
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -69,7 +69,7 @@ public class StringUtilTest {
 
    @Test
    public void pythonFormatWithKeyValue() {
-      final Map<String, Object> m = unorderedMap();
+      final Map<String, Object> m = new HashMap<>();
       m.put("key", "mockator");
       m.put("value", 123);
       assertEquals("The key 'mockator' has the value 123", StringUtil.pythonFormat("The key '%(key)s' has the value %(value)d", m));

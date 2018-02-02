@@ -2,12 +2,12 @@ package ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf;
 
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.array;
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.quote;
 import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.unquote;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,9 +64,7 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    private static List<String> split(final String expectations) {
-      if (expectations.trim().isEmpty()) {
-         return new ArrayList<>();
-      }
+      if (expectations.trim().isEmpty()) { return new ArrayList<>(); }
       return list(expectations.split(SIGNATURE_DELIMITER));
    }
 
@@ -80,7 +78,7 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    public Collection<ExistingMemFunCallRegistration> getExpectationsToRemove() {
-      final Collection<ExistingMemFunCallRegistration> expectations = orderPreservingSet();
+      final Collection<ExistingMemFunCallRegistration> expectations = new LinkedHashSet<>();
       for (final String expectation : expectationsToRemove) {
          expectations.add(new ExistingMemFunCallRegistration(expectation));
       }

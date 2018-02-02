@@ -2,6 +2,8 @@ package ch.hsr.ifs.mockator.tests.extractinterface;
 
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.head;
 import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.list;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.List;

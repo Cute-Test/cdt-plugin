@@ -4,6 +4,7 @@ import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.checkedCast;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,7 +19,6 @@ import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 
-import ch.hsr.ifs.iltis.core.collections.CollectionHelper;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
@@ -75,7 +75,7 @@ public class RunConfigEnvManager {
    }
 
    private static Map<String, String> getEnvVars(final ILaunchConfigurationWorkingCopy wc) throws CoreException {
-      return checkedCast(wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, CollectionHelper.<String, String>orderPreservingMap()),
+      return checkedCast(wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, new LinkedHashMap<>()),
                String.class);
    }
 

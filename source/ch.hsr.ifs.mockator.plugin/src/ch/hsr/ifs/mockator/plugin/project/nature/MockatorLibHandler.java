@@ -102,6 +102,6 @@ public class MockatorLibHandler {
    }
 
    private static IFile getTargetFile(final IFolder destination, final URL mockatorFile) {
-      return destination.getFile(FileUtil.getFilePart(mockatorFile.getFile()));
+      return destination.getFile(FileUtil.getFilename(mockatorFile.getFile()));
    }
 }

@@ -1,8 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
-
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
@@ -35,7 +34,7 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
 
    public NotInlineDefMemFunFinderVisitor(final ICPPASTTemplateDeclaration templateClass) {
       this.templateClass = templateClass;
-      templateMemFuns = orderPreservingSet();
+      templateMemFuns = new LinkedHashSet<>();
       fqClassName = getQualifiedClassName();
    }
 
@@ -56,17 +55,13 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
 
    @Override
    public int visit(final IASTDeclaration declaration) {
-      if (!(declaration instanceof ICPPASTFunctionDefinition)) {
-         return PROCESS_CONTINUE;
-      }
+      if (!(declaration instanceof ICPPASTFunctionDefinition)) { return PROCESS_CONTINUE; }
 
       final ICPPASTFunctionDefinition function = (ICPPASTFunctionDefinition) declaration;
       final ICPPASTTemplateDeclaration templateDecl = getTemplateDecl(function);
       final IASTName funName = function.getDeclarator().getName();
 
-      if (templateDecl == null || !isFunNameQualified(funName)) {
-         return PROCESS_CONTINUE;
-      }
+      if (templateDecl == null || !isFunNameQualified(funName)) { return PROCESS_CONTINUE; }
 
       if (isTemplateFunClassMember(funName) && haveEqualNumOfArgs(templateDecl)) {
          templateMemFuns.add(templateDecl);

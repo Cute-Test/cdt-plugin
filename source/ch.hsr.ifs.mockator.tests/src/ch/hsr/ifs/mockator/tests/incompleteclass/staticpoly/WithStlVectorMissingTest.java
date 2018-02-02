@@ -13,7 +13,6 @@ public class WithStlVectorMissingTest extends CDTTestingCodanCheckerTest {
       return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL.getId();
    }
 
-   @Override
    @Test
    public void runTest() throws Throwable {
       final int markerExpectedOnLine = 26;

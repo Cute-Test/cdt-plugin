@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
@@ -101,7 +101,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
       final RegistrationCandidatesFinder finder = new RegistrationCandidatesFinder(ast, cppStd);
       final ICPPASTFunctionDefinition testFunction = getTestFunction(expectationsVector);
 
-      return OptHelper.returnIfPresentElse(getRegistrationVector(testFunction, expectationsVector), (regVector) -> finder.findCallRegistrations(
+      return OptionalUtil.returnIfPresentElse(getRegistrationVector(testFunction, expectationsVector), (regVector) -> finder.findCallRegistrations(
                regVector), () -> new ArrayList<>());
    }
 

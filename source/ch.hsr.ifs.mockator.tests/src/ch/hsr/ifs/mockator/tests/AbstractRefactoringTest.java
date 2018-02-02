@@ -1,5 +1,9 @@
 package ch.hsr.ifs.mockator.tests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Properties;
 import java.util.function.Consumer;
 
@@ -100,7 +104,6 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
       configurator.activateManagedBuild();
    }
 
-   @Override
    @Test
    public void runTest() throws Throwable {
       closeWelcomeScreen();

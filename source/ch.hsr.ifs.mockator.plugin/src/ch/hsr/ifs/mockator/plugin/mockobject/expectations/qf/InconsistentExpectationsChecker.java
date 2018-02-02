@@ -1,8 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
-
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
@@ -36,7 +35,8 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       for (final ExpectedActualPair expectedActual : getAssertedCalls(testFun)) {
          getExpectationsAndRegistrations(expectedActual).ifPresent((expReg) -> {
             final ExpectionsInfo expectations = getExpectations(testFun, expReg.getExpectations());
-            markDiffsIfNecessary(expectations.getExpectations(), expectations.getAssignExpectationsVector(), getCallRegistrations(expReg.getRegistrations()));
+            markDiffsIfNecessary(expectations.getExpectations(), expectations.getAssignExpectationsVector(), getCallRegistrations(expReg
+                  .getRegistrations()));
          });
       }
    }
@@ -63,7 +63,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    }
 
    private void markDiffsIfNecessary(final Collection<MemFunCallExpectation> expectedCalls, final IASTName toMark,
-            final Collection<ExistingMemFunCallRegistration> callRegistrations) {
+         final Collection<ExistingMemFunCallRegistration> callRegistrations) {
       final Collection<MemFunSignature> toRemove = orderPreservingDiff(expectedCalls, callRegistrations);
       final Collection<MemFunSignature> toAdd = orderPreservingDiff(callRegistrations, expectedCalls);
 
@@ -73,8 +73,8 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    }
 
    private static Collection<MemFunSignature> orderPreservingDiff(final Collection<? extends MemFunSignature> setA,
-            final Collection<? extends MemFunSignature> setB) {
-      final Collection<MemFunSignature> diff = orderPreservingSet();
+         final Collection<? extends MemFunSignature> setB) {
+      final Collection<MemFunSignature> diff = new LinkedHashSet<>();
 
       for (final MemFunSignature signature : setA) {
          if (!signature.isCovered(setB)) {
@@ -89,7 +89,8 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
          final IASTTranslationUnit ast = getModelCache().getAST();
          final RegistrationCandidatesFinder finder = new RegistrationCandidatesFinder(ast, getCppStandard());
          return finder.findCallRegistrations(vector.getName());
-      } catch (final CoreException e) {
+      }
+      catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -106,8 +107,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       return new ConsistentExpectationsCodanArgs(toRemove, toAdd).toArray();
    }
 
-   private static ExpectionsInfo getExpectations(final IASTFunctionDefinition function,
-            final IASTIdExpression expectedCalls) {
+   private static ExpectionsInfo getExpectations(final IASTFunctionDefinition function, final IASTIdExpression expectedCalls) {
       final ExpectationsFinder finder = new ExpectationsFinder(function);
       return finder.getExpectations(expectedCalls.getName());
    }
@@ -122,20 +122,20 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    protected ProblemId getProblemId() {
       return ProblemId.INCONSISTENT_EXPECTATIONS;
    }
-   
-   private static class ExpectedAndRegistration extends AbstractPair<IASTIdExpression, IASTIdExpression>{
+
+   private static class ExpectedAndRegistration extends AbstractPair<IASTIdExpression, IASTIdExpression> {
 
       public ExpectedAndRegistration(IASTIdExpression expected, IASTIdExpression registration) {
          super(expected, registration);
       }
-      
+
       public IASTIdExpression getExpectations() {
          return first;
       }
-      
+
       public IASTIdExpression getRegistrations() {
          return second;
       }
-      
+
    }
 }

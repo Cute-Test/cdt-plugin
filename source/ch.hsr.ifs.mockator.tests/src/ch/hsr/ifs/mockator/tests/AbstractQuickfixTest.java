@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.tests;
 
+import static org.junit.Assert.assertEquals;
+
 import org.eclipse.core.runtime.CoreException;
 import org.junit.Test;
 
@@ -22,7 +24,6 @@ public abstract class AbstractQuickfixTest extends CDTTestingCodanQuickfixTest {
       return new String[] {};
    }
 
-   @Override
    @Test
    public void runTest() throws Throwable {
       closeWelcomeScreen();

@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.tests.testdouble.movetons;
 
+import static org.junit.Assert.fail;
+
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;

@@ -1,8 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -46,9 +45,7 @@ public class FunctionDelegateCallCreator {
    public IASTStatement createDelegate(final IASTName funName, final IASTDeclSpecifier declSpec) {
       final ICPPASTFunctionCallExpression call = createFunCall(funName);
 
-      if (ASTUtil.isVoid(declSpec) && hasNoPointers()) {
-         return nodeFactory.newExpressionStatement(call);
-      }
+      if (ASTUtil.isVoid(declSpec) && hasNoPointers()) { return nodeFactory.newExpressionStatement(call); }
 
       return nodeFactory.newReturnStatement(call);
    }
@@ -88,7 +85,7 @@ public class FunctionDelegateCallCreator {
    }
 
    private static ParameterNameCreator getParamNameCreator() {
-      final Map<String, Boolean> nameHistory = unorderedMap();
+      final Map<String, Boolean> nameHistory = new HashMap<>();
       final ParameterNameCreator nameCreator = new ParameterNameCreator(nameHistory);
       return nameCreator;
    }

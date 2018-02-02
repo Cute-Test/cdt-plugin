@@ -21,7 +21,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
@@ -129,7 +129,7 @@ public class MockObject extends AbstractTestDouble {
    }
 
    public Optional<IASTName> getAllCallsVector() {
-      return OptHelper.returnIfPresentElseEmpty(getRegistrationVector(), (vector) -> head(list(getKlass().getTranslationUnit().getDefinitionsInAST(
+      return OptionalUtil.returnIfPresentElseEmpty(getRegistrationVector(), (vector) -> head(list(getKlass().getTranslationUnit().getDefinitionsInAST(
                vector.resolveBinding()))));
    }
 

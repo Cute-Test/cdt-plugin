@@ -16,7 +16,7 @@ import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 
 public class ChangeEdit {
@@ -43,15 +43,15 @@ public class ChangeEdit {
    }
 
    public int getOffset(final String linkedModeText) {
-      return OptHelper.returnIfPresentElse(getEdit(linkedModeText), (edit) -> edit.getOffset(), () -> 0);
+      return OptionalUtil.returnIfPresentElse(getEdit(linkedModeText), (edit) -> edit.getOffset(), () -> 0);
    }
 
    public Optional<Integer> getAbsoluteIndex(final String linkedModeText, final String text) {
-      return OptHelper.returnIfPresentElseEmpty(getText(linkedModeText), (oText) -> Optional.of(getOffset(linkedModeText) + oText.indexOf(text)));
+      return OptionalUtil.returnIfPresentElseEmpty(getText(linkedModeText), (oText) -> Optional.of(getOffset(linkedModeText) + oText.indexOf(text)));
    }
 
    public Optional<String> getText(final String text) {
-      return OptHelper.returnIfPresentElseEmpty(getEdit(text), (textEdit) -> textEdit instanceof ReplaceEdit ? Optional.of(((ReplaceEdit) textEdit)
+      return OptionalUtil.returnIfPresentElseEmpty(getEdit(text), (textEdit) -> textEdit instanceof ReplaceEdit ? Optional.of(((ReplaceEdit) textEdit)
                .getText()) : Optional.of(((InsertEdit) textEdit).getText()));
    }
 

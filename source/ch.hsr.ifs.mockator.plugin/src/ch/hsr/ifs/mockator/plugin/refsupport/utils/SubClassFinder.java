@@ -1,9 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedSet;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,14 +26,14 @@ public class SubClassFinder {
 
    public Collection<ICPPClassType> getSubClasses(final ICPPClassType clazz) throws CoreException {
       final List<ICPPClassType> subClasses = new ArrayList<>();
-      final Set<String> alreadyHandled = unorderedSet();
+      final Set<String> alreadyHandled = new HashSet<>();
       collectSubClasses(clazz, subClasses, alreadyHandled);
       subClasses.remove(0);
       return subClasses;
    }
 
    private void collectSubClasses(final ICPPClassType clazz, final List<ICPPClassType> subClasses, final Set<String> alreadyHandled)
-            throws CoreException {
+         throws CoreException {
       final String type = ASTTypeUtil.getType(clazz, true);
 
       if (!alreadyHandled.add(type)) return;

@@ -1,9 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.finder;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
-
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
@@ -40,21 +39,15 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
       final IASTExpression expression = ((IASTExpressionStatement) expectationStmt).getExpression();
       final ICPPASTBinaryExpression binExpr = getBinaryExpr(expression);
 
-      if (binExpr == null) {
-         return;
-      }
+      if (binExpr == null) { return; }
 
       final IASTExpression operand1 = binExpr.getOperand1();
 
-      if (!(operand1 instanceof IASTIdExpression)) {
-         return;
-      }
+      if (!(operand1 instanceof IASTIdExpression)) { return; }
 
       final IASTIdExpression idExpr = (IASTIdExpression) operand1;
 
-      if (!matchesName(idExpr.getName()) || !isTypeDefForCallsVector(idExpr)) {
-         return;
-      }
+      if (!matchesName(idExpr.getName()) || !isTypeDefForCallsVector(idExpr)) { return; }
 
       expectationVector.setNode(idExpr.getName());
       callExpectations.addAll(getMemFunCalls(expression));
@@ -69,7 +62,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private Collection<MemFunCallExpectation> getMemFunCalls(final IASTExpression expression) {
-      final Collection<MemFunCallExpectation> expectations = orderPreservingSet();
+      final Collection<MemFunCallExpectation> expectations = new LinkedHashSet<>();
 
       if (expression instanceof ICPPASTBinaryExpression) {
          collectSingleCallExpr(expression, expectations);
@@ -121,15 +114,11 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    private static boolean isCallExpr(final IASTExpression expression) {
       final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
 
-      if (funCall == null) {
-         return false;
-      }
+      if (funCall == null) { return false; }
 
       final IASTExpression functionNameExpr = funCall.getFunctionNameExpression();
 
-      if (!(functionNameExpr instanceof IASTIdExpression)) {
-         return false;
-      }
+      if (!(functionNameExpr instanceof IASTIdExpression)) { return false; }
 
       return isNameCall(functionNameExpr);
    }

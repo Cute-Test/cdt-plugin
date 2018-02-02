@@ -1,8 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.finder;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
-
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
@@ -57,7 +56,7 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private Collection<MemFunCallExpectation> getCallExpectations(final ICPPASTInitializerList initializer) {
-      final Collection<MemFunCallExpectation> callExpectations = orderPreservingSet();
+      final Collection<MemFunCallExpectation> callExpectations = new LinkedHashSet<>();
 
       for (final IASTInitializerClause clause : initializer.getClauses()) {
          if (!(clause instanceof ICPPASTInitializerList)) {

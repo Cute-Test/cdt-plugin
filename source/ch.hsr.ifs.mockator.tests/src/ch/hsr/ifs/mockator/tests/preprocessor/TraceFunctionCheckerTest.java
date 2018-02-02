@@ -13,7 +13,6 @@ public class TraceFunctionCheckerTest extends CDTTestingCodanCheckerTest {
       return ProblemId.TRACE_FUNCTIONS.getId();
    }
 
-   @Override
    @Test
    public void runTest() throws Throwable {
       final int markerExpectedOnLine = 2;

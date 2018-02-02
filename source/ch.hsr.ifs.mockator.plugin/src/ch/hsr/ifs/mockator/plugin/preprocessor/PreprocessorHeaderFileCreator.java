@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.util.CPPNameConstants;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
@@ -135,7 +136,7 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
    }
 
    private static String addMacroName(final ICPPASTFunctionDeclarator funDecl, final StringBuilder define, final String paramString) {
-      define.append(MockatorConstants.DEFINE_DIRECTIVE);
+      define.append(CPPNameConstants.DEFINE_DIRECTIVE);
       define.append(MockatorConstants.SPACE);
       define.append(funDecl.getName().toString());
       define.append(MockatorConstants.L_PARENTHESIS);

@@ -1,8 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ public class FunctionCallParameterCollector {
    }
 
    public List<ICPPASTParameterDeclaration> getFunctionParameters() {
-      final Map<String, Boolean> nameHistory = unorderedMap();
+      final Map<String, Boolean> nameHistory = new HashMap<>();
       final List<ICPPASTParameterDeclaration> params = new ArrayList<>();
 
       for (final IASTInitializerClause arg : funCall.getArguments()) {

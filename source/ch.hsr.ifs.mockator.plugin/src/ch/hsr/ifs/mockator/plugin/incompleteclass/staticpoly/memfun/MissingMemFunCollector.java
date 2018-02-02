@@ -1,9 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
-
 import java.lang.reflect.Constructor;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
@@ -17,7 +16,7 @@ import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 
 public class MissingMemFunCollector {
 
-   private static final Set<Class<? extends MissingMemFunVisitor>> MISSING_MEM_FUNS_FINDER = orderPreservingSet();
+   private static final Set<Class<? extends MissingMemFunVisitor>> MISSING_MEM_FUNS_FINDER = new LinkedHashSet<>();
    private final ICPPASTTemplateDeclaration                        sut;
    private final ICPPASTCompositeTypeSpecifier                     testDouble;
    private final Collection<ICPPASTTemplateDeclaration>            templateFunctions;
@@ -36,7 +35,7 @@ public class MissingMemFunCollector {
    }
 
    public Collection<StaticPolyMissingMemFun> getMissingMemberFunctions(final ICPPASTTemplateParameter templateParameter) {
-      final Collection<StaticPolyMissingMemFun> missingMemFuns = orderPreservingSet();
+      final Collection<StaticPolyMissingMemFun> missingMemFuns = new LinkedHashSet<>();
 
       for (final Class<? extends MissingMemFunVisitor> visitor : MISSING_MEM_FUNS_FINDER) {
          collectMissingMemFuns(templateParameter, missingMemFuns, visitor);
@@ -46,7 +45,7 @@ public class MissingMemFunCollector {
    }
 
    private void collectMissingMemFuns(final ICPPASTTemplateParameter templateParameter, final Collection<StaticPolyMissingMemFun> missingMemFuns,
-            final Class<? extends MissingMemFunVisitor> kindOfFinder) {
+         final Class<? extends MissingMemFunVisitor> kindOfFinder) {
       final MissingMemFunVisitor memFunFinder = getMissingMemFunFinder(templateParameter, kindOfFinder);
       sut.accept(memFunFinder);
       collectInTemplateMemFuns(memFunFinder);
@@ -60,12 +59,13 @@ public class MissingMemFunCollector {
    }
 
    private MissingMemFunVisitor getMissingMemFunFinder(final ICPPASTTemplateParameter templateParam,
-            final Class<? extends MissingMemFunVisitor> visitor) {
+         final Class<? extends MissingMemFunVisitor> visitor) {
       try {
          final Constructor<?> ctor = visitor.getConstructor(ICPPASTCompositeTypeSpecifier.class, ICPPASTTemplateParameter.class,
-                  ICPPASTTemplateDeclaration.class);
+               ICPPASTTemplateDeclaration.class);
          return (MissingMemFunVisitor) ctor.newInstance(testDouble, templateParam, sut);
-      } catch (final Exception e) {
+      }
+      catch (final Exception e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

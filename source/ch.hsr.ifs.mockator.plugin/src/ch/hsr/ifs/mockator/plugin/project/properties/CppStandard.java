@@ -1,8 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.project.properties;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -19,7 +18,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.QualifiedName;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -180,7 +179,7 @@ public enum CppStandard implements PropertyTypeWithDefault {
 
    private static final ICPPNodeFactory          nodeFactory    = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
    private static final String                   NULLPTR        = "nullptr";
-   private static final Map<String, CppStandard> STRING_TO_ENUM = unorderedMap();
+   private static final Map<String, CppStandard> STRING_TO_ENUM = new HashMap<>();
 
    static {
       for (final CppStandard standard : values()) {
@@ -213,9 +212,7 @@ public enum CppStandard implements PropertyTypeWithDefault {
       final String cppCompilerFlags = new CompilerFlagHandler(project).getCompilerFlags();
       final String cpp11ExperimentalFlag = getCpp11ExperimentalFlag(project);
 
-      if (cppCompilerFlags == null || cpp11ExperimentalFlag == null) {
-         return getDefaultCppStd();
-      }
+      if (cppCompilerFlags == null || cpp11ExperimentalFlag == null) { return getDefaultCppStd(); }
 
       return cppCompilerFlags.contains(cpp11ExperimentalFlag) ? Cpp11Std : Cpp03Std;
    }
@@ -228,9 +225,7 @@ public enum CppStandard implements PropertyTypeWithDefault {
    public static CppStandard fromProjectSettings(final IProject project) {
       final String cppStd = new ProjectPropertiesHandler(project).getProjectProperty(QF_NAME);
 
-      if (cppStd == null) {
-         return getDefaultCppStd();
-      }
+      if (cppStd == null) { return getDefaultCppStd(); }
 
       return fromName(cppStd);
    }
@@ -242,6 +237,6 @@ public enum CppStandard implements PropertyTypeWithDefault {
    }
 
    private static String getCpp11ExperimentalFlag(final IProject project) {
-      return OptHelper.returnIfPresentElseNull(ToolChain.fromProject(project), (tc) -> tc.getCdtProjectVariables().getCpp11ExperimentalFlag());
+      return OptionalUtil.returnIfPresentElseNull(ToolChain.fromProject(project), (tc) -> tc.getCdtProjectVariables().getCpp11ExperimentalFlag());
    }
 }

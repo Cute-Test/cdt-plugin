@@ -13,7 +13,6 @@ public class MissingMemFunWhenCalledFromTestFunctorTest extends CDTTestingCodanC
       return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL.getId();
    }
 
-   @Override
    @Test
    public void runTest() throws Throwable {
       final int markerExpectedOnLine = 12;

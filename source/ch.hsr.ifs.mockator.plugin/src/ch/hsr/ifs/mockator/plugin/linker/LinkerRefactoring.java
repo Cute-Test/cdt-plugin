@@ -13,7 +13,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDecorator;
@@ -39,7 +39,7 @@ public abstract class LinkerRefactoring extends MockatorRefactoring {
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
             OperationCanceledException {
-      OptHelper.doIfPresentT(getSelectedName(getAST(tu(), pm)), (selectedName) -> createLinkerSeamSupport(collector, selectedName, pm));
+      OptionalUtil.doIfPresentT(getSelectedName(getAST(tu(), pm)), (selectedName) -> createLinkerSeamSupport(collector, selectedName, pm));
    }
 
    protected abstract void createLinkerSeamSupport(ModificationCollector collector, IASTName selectedName, IProgressMonitor pm) throws CoreException;

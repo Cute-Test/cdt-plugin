@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.project.properties;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -51,7 +50,7 @@ public enum AssertionOrder implements PropertyTypeWithDefault {
    }
    };
 
-   private static final Map<String, AssertionOrder> STRING_TO_ENUM = unorderedMap();
+   private static final Map<String, AssertionOrder> STRING_TO_ENUM = new HashMap<>();
 
    static {
       for (final AssertionOrder order : values()) {

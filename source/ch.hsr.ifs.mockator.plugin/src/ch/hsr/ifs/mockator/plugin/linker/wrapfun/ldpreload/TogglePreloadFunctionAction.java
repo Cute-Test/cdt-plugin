@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.runconfig.RunConfigEnvManager;
@@ -164,7 +164,7 @@ public class TogglePreloadFunctionAction implements IObjectActionDelegate, IMenu
    }
 
    private boolean isSupportedToolChain() {
-      return OptHelper.returnIfPresentElse(ToolChain.fromProject(project), (tc) -> {
+      return OptionalUtil.returnIfPresentElse(ToolChain.fromProject(project), (tc) -> {
          switch (tc) {
          case GnuLinux:
          case GnuMacOSX:

@@ -1,7 +1,5 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -111,7 +109,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
 
    @Override
    protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
-            final ICPPASTDeclSpecifier returnType, final CppStandard cppStd) {
+         final ICPPASTDeclSpecifier returnType, final CppStandard cppStd) {
       final IASTCompoundStatement funBody = createEmptyFunBody();
       strategy.addCallVectorRegistration(funBody, funDecl, false);
       addReturnStmtToFunBody(cppStd, returnType, funBody, funDecl);
@@ -119,7 +117,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private void addReturnStmtToFunBody(final CppStandard cppStd, final ICPPASTDeclSpecifier returnType, final IASTCompoundStatement funBody,
-            final ICPPASTFunctionDeclarator funDecl) {
+         final ICPPASTFunctionDeclarator funDecl) {
       final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);
       funBody.addStatement(creator.createReturnStatement(funDecl, returnType));
    }
@@ -135,13 +133,9 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private boolean isConstMemberFun() {
-      if (isCompoundAssignOperator()) {
-         return false;
-      }
+      if (isCompoundAssignOperator()) { return false; }
 
-      if (isLogicalOperator() || isBinaryExpression()) {
-         return true;
-      }
+      if (isLogicalOperator() || isBinaryExpression()) { return true; }
 
       switch (operator) {
       case NOT:
@@ -176,7 +170,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
 
    private void addParamForRightHandSide(final ICPPASTFunctionDeclarator funDecl) {
       final IASTExpression binOp2Expr = ((ICPPASTBinaryExpression) operatorExpr).getOperand2();
-      final Map<String, Boolean> nameHistory = unorderedMap();
+      final Map<String, Boolean> nameHistory = new HashMap<>();
 
       if (binOp2Expr instanceof IASTIdExpression) {
          handleNamedParam(funDecl, binOp2Expr, nameHistory);
@@ -186,7 +180,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private static void handleLiteralParam(final ICPPASTFunctionDeclarator funDecl, final IASTExpression binOp2Expr,
-            final Map<String, Boolean> nameHistory) {
+         final Map<String, Boolean> nameHistory) {
       final IASTLiteralExpression litexpr = (IASTLiteralExpression) binOp2Expr;
       final ICPPASTParameterDeclaration literalParam = ParamDeclCreator.createParameter(litexpr, nameHistory);
       funDecl.addParameterDeclaration(literalParam);
@@ -255,7 +249,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    private boolean isPostfixOperator() {
       final IASTUnaryExpression uExpr = (IASTUnaryExpression) operatorExpr;
       return uExpr != null && (uExpr.getOperator() == IASTUnaryExpression.op_postFixDecr || uExpr
-               .getOperator() == IASTUnaryExpression.op_postFixIncr);
+            .getOperator() == IASTUnaryExpression.op_postFixIncr);
    }
 
    private boolean shouldYieldByPointer() {
@@ -273,9 +267,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
          return false;
       }
 
-      if (isCompoundAssignOperator()) {
-         return true;
-      }
+      if (isCompoundAssignOperator()) { return true; }
 
       switch (opType) {
       case IASTBinaryExpression.op_assign:
@@ -376,17 +368,13 @@ class Operator extends AbstractStaticPolyMissingMemFun {
 
    @Override
    public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEditStrategy) {
-      if (isUnaryExpression() && isPostfixOperator()) {
-         return new ArrayList<>();
-      }
+      if (isUnaryExpression() && isPostfixOperator()) { return new ArrayList<>(); }
       return super.createDefaultArguments(cppStd, linkedEditStrategy);
    }
 
    @Override
    public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
-      if (!function.getDeclarator().getName().toString().equals(getOperatorName())) {
-         return false;
-      }
+      if (!function.getDeclarator().getName().toString().equals(getOperatorName())) { return false; }
 
       final ICPPASTParameterDeclaration[] generatedParams = createFunDecl().getParameters();
       final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) function.getDeclarator();

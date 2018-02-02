@@ -1,12 +1,12 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.preconditions;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.orderPreservingSet;
 import static ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier.ConstStrategy.ConsiderConst;
 import static ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier.ConstStrategy.IgnoreConst;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -51,9 +51,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<IASTDeclaration> getUsedMemFuns(final ExtractInterfaceContext context, final Collection<IASTDeclaration> publicMemFuns) {
-      if (!considerOnlyReferencedMemFuns(context)) {
-         return publicMemFuns;
-      }
+      if (!considerOnlyReferencedMemFuns(context)) { return publicMemFuns; }
 
       final Collection<ICPPASTFunctionDefinition> functionsToAnalyse = getFunctionsToAnalyse(context);
       final IType dependencyType = getTypeOfDependency(context.getSelectedName());
@@ -62,7 +60,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<ICPPASTFunctionDefinition> getFunctionsToAnalyse(final ExtractInterfaceContext context) {
-      final Set<ICPPASTFunctionDefinition> functions = orderPreservingSet();
+      final Set<ICPPASTFunctionDefinition> functions = new LinkedHashSet<>();
 
       for (final ICPPASTFunctionDeclarator funDecl : getAllMemberFunctions(context.getSutClass())) {
          if (isDeclarationDefinition(funDecl)) {
@@ -79,14 +77,14 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<ICPPASTFunctionCallExpression> getFunCallsOnDependency(final Collection<ICPPASTFunctionDefinition> functionsToAnalyze,
-            final IType typeOfSelection) {
+         final IType typeOfSelection) {
       final MemFunCallFinder memFunCallFinder = new MemFunCallFinder(typeOfSelection);
 
       for (final ICPPASTFunctionDefinition fun : functionsToAnalyze) {
          fun.accept(memFunCallFinder);
       }
 
-      final Set<ICPPASTFunctionCallExpression> funCalls = orderPreservingSet();
+      final Set<ICPPASTFunctionCallExpression> funCalls = new LinkedHashSet<>();
       funCalls.addAll(memFunCallFinder.getReferencedCalls());
       return funCalls;
    }
@@ -101,7 +99,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Optional<ICPPASTFunctionDefinition> lookupDefinition(final ExtractInterfaceContext context,
-            final ICPPASTFunctionDeclarator funDecl) {
+         final ICPPASTFunctionDeclarator funDecl) {
       final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
       return lookup.findFunctionDefinition(funDecl.getName(), context.getCRefContext());
    }
@@ -111,7 +109,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static Collection<IASTDeclaration> filterUsed(final Collection<ICPPASTFunctionCallExpression> funCalls,
-            final Collection<IASTDeclaration> availableFunctions, final IType typeOfSelection) {
+         final Collection<IASTDeclaration> availableFunctions, final IType typeOfSelection) {
       final List<IASTDeclaration> usedFuns = new ArrayList<>();
       final FunctionEquivalenceVerifier.ConstStrategy strategy = getConstStrategy(typeOfSelection);
 
@@ -169,7 +167,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
       }
 
       public MemFunCallFinder(final IType typeOfSelection) {
-         funCalls = orderPreservingSet();
+         funCalls = new LinkedHashSet<>();
          this.typeOfSelection = typeOfSelection;
       }
 
@@ -179,9 +177,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
       @Override
       public int visit(final IASTExpression expression) {
-         if (!(expression instanceof ICPPASTFunctionCallExpression)) {
-            return PROCESS_CONTINUE;
-         }
+         if (!(expression instanceof ICPPASTFunctionCallExpression)) { return PROCESS_CONTINUE; }
 
          final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) expression;
          final IASTExpression nameExpr = funCall.getFunctionNameExpression();

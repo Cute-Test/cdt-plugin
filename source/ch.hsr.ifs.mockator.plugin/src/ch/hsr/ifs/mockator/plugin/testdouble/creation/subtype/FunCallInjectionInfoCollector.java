@@ -14,7 +14,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
@@ -37,7 +37,7 @@ class FunCallInjectionInfoCollector extends AbstractDepInjectInfoCollector {
 
       final int args = getArgPosOfProblemType(problemArgName, list(funCall.getArguments()));
 
-      return OptHelper.returnIfPresentElseEmpty(findMatchingFunction(getCandidateBindings(funCall), funCall, args), (
+      return OptionalUtil.returnIfPresentElseEmpty(findMatchingFunction(getCandidateBindings(funCall), funCall, args), (
                match) -> getTargetClassOfProblemType(match, args));
    }
 
@@ -56,7 +56,7 @@ class FunCallInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    private static IBinding[] getCandidateBindings(final IASTFunctionCallExpression caller) {
       final IASTExpression funNameExpr = caller.getFunctionNameExpression();
 
-      return OptHelper.returnIfPresentElse(findProblemBinding(funNameExpr), (problem) -> {
+      return OptionalUtil.returnIfPresentElse(findProblemBinding(funNameExpr), (problem) -> {
          final IProblemBinding iProblemBinding = (IProblemBinding) problem.resolveBinding();
          return iProblemBinding.getCandidateBindings();
       }, () -> new IBinding[] {});

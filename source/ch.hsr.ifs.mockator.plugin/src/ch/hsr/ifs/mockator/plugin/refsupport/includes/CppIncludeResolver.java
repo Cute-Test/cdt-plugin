@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.includes;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -26,7 +25,7 @@ public class CppIncludeResolver {
    private static final Map<String, String> CPP_INCLUDES;
 
    static {
-      CPP_INCLUDES = unorderedMap();
+      CPP_INCLUDES = new HashMap<>();
       CPP_INCLUDES.put("assert.h", "cassert"); //$NON-NLS-2$
       CPP_INCLUDES.put("ctype.h", "cctype"); //$NON-NLS-2$
       CPP_INCLUDES.put("errno.h", "cerrno"); //$NON-NLS-2$
@@ -82,7 +81,8 @@ public class CppIncludeResolver {
 
          final boolean isSystemInclude = false;
          return new IncludeInfo(getBestRelativePath(targetIncludePath), isSystemInclude);
-      } catch (final CoreException e) {
+      }
+      catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }
@@ -117,20 +117,20 @@ public class CppIncludeResolver {
       final IIndexFile[] files = index.getFiles(fileLocation);
       return files.length != 0 ? files[0] : null;
    }
-   
-   private class IncludeInfo extends AbstractPair<String, Boolean>{
+
+   private class IncludeInfo extends AbstractPair<String, Boolean> {
 
       public IncludeInfo(String first, Boolean second) {
          super(first, second);
       }
-      
+
       public String getIncludePath() {
          return first;
       }
-      
+
       public boolean isSystemInclude() {
          return second;
       }
-      
+
    }
 }

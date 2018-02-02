@@ -1,7 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionHelper.unorderedMap;
-
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -66,7 +65,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    @Override
    protected RefactoringDescriptor getRefactoringDescriptor() {
       return new ExtractInterfaceDescriptor(ID, getProject().getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
-               getArgumentMap());
+            getArgumentMap());
    }
 
    private String getRefactoringDescription() {
@@ -75,7 +74,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    }
 
    private Map<String, String> getArgumentMap() {
-      final Map<String, String> args = unorderedMap();
+      final Map<String, String> args = new HashMap<>();
       args.put(CRefactoringDescriptor.FILE_NAME, getTranslationUnit().getLocationURI().toString());
       args.put(CRefactoringDescriptor.SELECTION, selectedRegion().getOffset() + "," + selectedRegion().getLength());
       args.put(ExtractInterfaceDescriptor.NEW_INTERFACE_NAME, context.getNewInterfaceName());

@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
@@ -28,7 +28,7 @@ class ExpectationsVectorDefinitionFinder {
    }
 
    public Optional<IASTName> findExpectationsVector() {
-      return OptHelper.returnIfPresentElseEmpty(mockObject.getRegistrationVector(), (regVector) -> {
+      return OptionalUtil.returnIfPresentElseEmpty(mockObject.getRegistrationVector(), (regVector) -> {
          for (final ExpectedActualPair expectedActual : findAssertedCallsInTestFunction()) {
             final Optional<IASTName> expVector = getExpectationsVector(expectedActual, regVector);
             if (expVector.isPresent()) {

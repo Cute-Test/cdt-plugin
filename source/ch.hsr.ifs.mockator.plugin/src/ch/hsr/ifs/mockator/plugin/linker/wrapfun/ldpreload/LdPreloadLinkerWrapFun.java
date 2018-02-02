@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.functional.OptHelper;
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
@@ -60,7 +60,7 @@ public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
    }
 
    private boolean assureIsMacOrLinuxGnuToolchain() {
-      return OptHelper.returnIfPresentElse(ToolChain.fromProject(cProject.getProject()), (tc) -> {
+      return OptionalUtil.returnIfPresentElse(ToolChain.fromProject(cProject.getProject()), (tc) -> {
          switch (tc) {
          case GnuLinux:
          case GnuMacOSX:
