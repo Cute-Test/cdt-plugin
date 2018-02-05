@@ -9,12 +9,12 @@
     <relativePath>..</relativePath>
     <groupId>ch.hsr.ifs</groupId>
     <artifactId>ch.hsr.ifs.cute.parent</artifactId>
-    <version>5.3.0-SNAPSHOT</version>
+    <version>5.4.0-SNAPSHOT</version>
   </parent>
 
   <groupId>ch.hsr.ifs</groupId>
   <artifactId>ch.hsr.ifs.cute.swtbottest</artifactId>
-  <version>5.3.0-SNAPSHOT</version>
+  <version>5.4.0-SNAPSHOT</version>
   <packaging>eclipse-test-plugin</packaging>
   
   <build>
