@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Cevelop based on Eclipse Oxygen and CDT 9.4.1" sequenceNumber="1517563438">
-<locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.4.0.201802020859"/>
-<repository location="https://www.cevelop.com/cdt-testing/9.4.0"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="4.7.2.M20171130-0510"/>
-<unit id="org.eclipse.sdk.ide" version="4.7.2.M20171130-0510"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.7"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.cdt.sdk.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/tools/cdt/releases/9.4/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.apache.log4j" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.6.0.201706141832"/>
-<repository location="http://download.eclipse.org/releases/oxygen"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="com.cevelop.elevenator.feature.feature.group" version="0.0.0"/>
-<repository location="https://www.cevelop.com/internal/latest"/>
-</location>
-</locations>
+<?pde?>
+<!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
+<target name="Cevelop based on Eclipse Oxygen and CDT 9.4.0" sequenceNumber="1517832362">
+  <locations>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="ch.hsr.ifs.cdttesting.feature.feature.group" version="9.4.0.201802020859"/>
+      <repository location="https://www.cevelop.com/cdt-testing/9.4.0"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.platform.sdk" version="4.7.2.M20171130-0510"/>
+      <unit id="org.eclipse.sdk.ide" version="4.7.2.M20171130-0510"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.7"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.cdt.sdk.feature.group" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/tools/cdt/releases/9.4/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.6.0.201706141832"/>
+      <unit id="org.apache.log4j" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/releases/oxygen"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="com.cevelop.elevenator.feature.feature.group" version="0.0.0"/>
+      <repository location="https://www.cevelop.com/internal/1.9.0"/>
+    </location>
+  </locations>
 </target>

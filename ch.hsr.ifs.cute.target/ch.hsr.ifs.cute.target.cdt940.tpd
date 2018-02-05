@@ -20,6 +20,6 @@ location "http://download.eclipse.org/releases/oxygen" {
 	org.apache.log4j lazy
 }
 
-location "https://www.cevelop.com/internal/latest" {
+location "https://www.cevelop.com/internal/1.9.0" {
 	com.cevelop.elevenator.feature.feature.group lazy
 }
