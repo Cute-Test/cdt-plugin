@@ -58,8 +58,7 @@ public class PureVirtualMemFunCollector {
 
     // Look at the pure virtual methods of the base classes
     Set<IBinding> handledBaseClasses = new HashSet<IBinding>();
-    for (ICPPBase base : ClassTypeHelper.getBases(classType, null)) {
-      final IBinding baseClass = base.getBaseClass();
+    for (ICPPClassType baseClass : ClassTypeHelper.getAllBases(classType)) {
 
       if (baseClass instanceof ICPPClassType && handledBaseClasses.add(baseClass)) {
         Map<String, List<ICPPMethod>> pureVirtuals =
@@ -77,7 +76,7 @@ public class PureVirtualMemFunCollector {
     }
 
     // Remove overridden pure-virtual methods and add in new pure virtuals.
-    final ObjectSet<ICPPMethod> methods = ClassTypeHelper.getOwnMethods(classType, null);
+    final ObjectSet<ICPPMethod> methods = ClassTypeHelper.getOwnMethods(classType);
     for (ICPPMethod method : methods) {
       String key = getMethodNameForOverrideKey(method);
       List<ICPPMethod> list = result.get(key);

@@ -44,21 +44,21 @@ class FunctionCalleeReferenceResolver {
     this.cProject = cProject;
   }
 
-  public Collection<IASTName> findCallers(IBinding binding, IASTNode point) {
+  public Collection<IASTName> findCallers(IBinding binding) {
     Assert.notNull(binding, "Binding must not be null");
     try {
       List<IASTName> callers = new ArrayList<IASTName>();
-      findCallersRecursively(binding, callers, point);
+      findCallersRecursively(binding, callers);
       return callers;
     } catch (CoreException e) {
       throw new MockatorException(e);
     }
   }
 
-  private void findCallersRecursively(IBinding binding, List<IASTName> callers, IASTNode point)
+  private void findCallersRecursively(IBinding binding, List<IASTName> callers)
       throws CoreException {
     CalledByResult result = new CalledByResult();
-    findCalledBy(binding, result, point);
+    findCalledBy(binding, result);
     List<ICElement> elements = result.getElements();
     if (elements.isEmpty())
       return;
@@ -67,7 +67,7 @@ class FunctionCalleeReferenceResolver {
     for (IASTName optName : findDeclaration(calleeBinding)) {
       callers.add(optName);
     }
-    findCallersRecursively(calleeBinding, callers, point);
+    findCallersRecursively(calleeBinding, callers);
   }
 
   private Maybe<IASTName> findDeclaration(IIndexBinding calleeBinding) {
@@ -76,23 +76,23 @@ class FunctionCalleeReferenceResolver {
     return head(declarations);
   }
 
-  private void findCalledBy(IBinding calleeBinding, CalledByResult result, IASTNode point) throws CoreException {
-    findCalledBy1(calleeBinding, true, result, point);
+  private void findCalledBy(IBinding calleeBinding, CalledByResult result) throws CoreException {
+    findCalledBy1(calleeBinding, true, result);
     if (!(calleeBinding instanceof ICPPMethod))
       return;
     for (IBinding overridden : findOverriders(calleeBinding)) {
-      findCalledBy1(overridden, false, result, point);
+      findCalledBy1(overridden, false, result);
     }
   }
 
   private ICPPMethod[] findOverriders(IBinding calleeBinding) {
-    return ClassTypeHelper.findOverridden((ICPPMethod) calleeBinding, null);
+    return ClassTypeHelper.findOverridden((ICPPMethod) calleeBinding);
   }
 
-  private void findCalledBy1(IBinding callee, boolean includeOrdinaryCalls, CalledByResult result, IASTNode point)
+  private void findCalledBy1(IBinding callee, boolean includeOrdinaryCalls, CalledByResult result)
       throws CoreException {
     findCalledBy2(callee, includeOrdinaryCalls, result);
-    for (IBinding spec : IndexUI.findSpecializations(index, callee, point)) {
+    for (IBinding spec : IndexUI.findSpecializations(index, callee)) {
       findCalledBy2(spec, includeOrdinaryCalls, result);
     }
   }
