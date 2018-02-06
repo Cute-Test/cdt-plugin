@@ -45,9 +45,10 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
       return called;
    }
 
-   private static boolean shouldConsider(final ICPPASTFunctionDefinition sutFunction) {
-      return sutFunction != null && !ASTUtil.isConstructor(sutFunction);
-   }
+    for (IASTName caller : calleeReferenceResolver.findCallers(sutBinding)) {
+      if (matches(testFunction, getFunctionDefinition(caller)))
+        return true;
+    }
 
    private boolean isCalled(final ICPPASTFunctionDefinition sutFunction) {
       final IBinding sutBinding = sutFunction.getDeclarator().getName().resolveBinding();
