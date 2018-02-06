@@ -6,8 +6,8 @@ location "http://download.eclipse.org/releases/oxygen" {
     org.eclipse.equinox.common lazy
 }
 
-location "https://www.cevelop.com/cdt-testing/9.3.0" {
-    ch.hsr.ifs.cdttesting.feature.feature.group [9.3.0,9.4.0)
+location "https://www.cevelop.com/cdt-testing/9.4.0" {
+    ch.hsr.ifs.cdttesting.feature.feature.group [9.4.0,9.5.0)
 }
 
 location "http://download.eclipse.org/technology/swtbot/releases/latest/" {
