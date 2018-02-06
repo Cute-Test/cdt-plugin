@@ -31,7 +31,7 @@ public class FormatterOptionsLoader {
    }
 
    private static Properties loadFormatterOptions() {
-      final Stream<URL> mockatorFile = StreamFactory.from(MockatorTestPlugin.getDefault().getBundle().findEntries("resources",
+      final Stream<URL> mockatorFile = StreamFactory.stream(MockatorTestPlugin.getDefault().getBundle().findEntries("resources",
             "mockator_formatter.prefs", true));
 
       final Optional<URL> first = mockatorFile.findFirst();
