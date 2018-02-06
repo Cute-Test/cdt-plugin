@@ -35,7 +35,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
 
    @Override
    protected void collectExpectations(final IASTStatement expectationStmt) {
-      ILTISException.Unless.instanceOf(expectationStmt, IASTExpressionStatement.class, "Should be called with an expression statement");
+      ILTISException.Unless.assignableFrom(IASTExpressionStatement.class, expectationStmt, "Should be called with an expression statement");
       final IASTExpression expression = ((IASTExpressionStatement) expectationStmt).getExpression();
       final ICPPASTBinaryExpression binExpr = getBinaryExpr(expression);
 
@@ -84,7 +84,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private void collectCallsInExprList(final IASTExpression expression, final Collection<MemFunCallExpectation> callExpectations) {
-      ILTISException.Unless.instanceOf(expression, IASTExpressionList.class, "expression list expected");
+      ILTISException.Unless.assignableFrom(IASTExpressionList.class, expression, "expression list expected");
       final IASTExpression[] expressions = ((IASTExpressionList) expression).getExpressions();
       final Collection<IASTExpression> onlyCalls = filterNonCallExpressions(expressions);
       toMemberFunctionCalls(callExpectations, onlyCalls);

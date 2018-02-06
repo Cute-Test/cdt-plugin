@@ -158,7 +158,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
    private void addCallIfStillRegistered(final ICPPASTFunctionCallExpression fun, final List<ICPPASTFunctionCallExpression> calls) {
       ILTISException.Unless.isTrue(fun.getArguments().length > 0, "Not a valid call expectation");
       final IASTInitializerClause firstArg = fun.getArguments()[0];
-      ILTISException.Unless.instanceOf(firstArg, IASTLiteralExpression.class, "Only literals allowed as 1st argument");
+      ILTISException.Unless.assignableFrom(IASTLiteralExpression.class, firstArg, "Only literals allowed as 1st argument");
       final IASTLiteralExpression literal = (IASTLiteralExpression) firstArg;
 
       if (!isToBeRemoved(literal.toString())) {

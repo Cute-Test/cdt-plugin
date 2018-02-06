@@ -31,7 +31,7 @@ public class ChangeEdit {
 
    private void initTextEditSource(final Change[] changes) {
       for (final Change change : changes) {
-         ILTISException.Unless.instanceOf(change, TextChange.class, "Expected text change");
+         ILTISException.Unless.assignableFrom(TextChange.class, change, "Expected text change");
          final TextEdit[] textEdits = ((TextChange) change).getEdit().getChildren();
 
          for (final TextEdit edit : textEdits) {
@@ -60,7 +60,7 @@ public class ChangeEdit {
          return array();
       }
 
-      ILTISException.Unless.instanceOf(change, CompositeChange.class, "Composite change expected");
+      ILTISException.Unless.assignableFrom(CompositeChange.class, change, "Composite change expected");
       final Change[] subChanges = ((CompositeChange) change).getChildren();
       ILTISException.Unless.isFalse(subChanges.length == 0, "No changes passed");
       final Change fstChange = subChanges[0];

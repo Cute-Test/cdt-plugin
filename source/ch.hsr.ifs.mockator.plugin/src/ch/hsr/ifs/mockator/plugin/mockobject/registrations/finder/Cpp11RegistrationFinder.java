@@ -21,7 +21,7 @@ public class Cpp11RegistrationFinder extends RegistrationFinder {
 
    private IASTInitializerClause getFunSignatureClause(final ICPPASTSimpleTypeConstructorExpression ctor) {
       final IASTInitializer ctorInitializer = ctor.getInitializer();
-      ILTISException.Unless.instanceOf(ctorInitializer, ICPPASTInitializerList.class, "Initializer list expected");
+      ILTISException.Unless.assignableFrom(ICPPASTInitializerList.class, ctorInitializer, "Initializer list expected");
       final IASTInitializerClause[] ctorClauses = ((ICPPASTInitializerList) ctorInitializer).getClauses();
       ILTISException.Unless.isTrue(ctorClauses.length > 0, "Empty call ctor not allowed");
       final IASTInitializerClause funSignature = ctorClauses[0];
@@ -35,7 +35,7 @@ public class Cpp11RegistrationFinder extends RegistrationFinder {
    }
 
    private ICPPASTSimpleTypeConstructorExpression getCallTypeCtor(final IASTInitializerClause pushBackArg) {
-      ILTISException.Unless.instanceOf(pushBackArg, ICPPASTSimpleTypeConstructorExpression.class, "Wrong push_back argument: " + pushBackArg
+      ILTISException.Unless.assignableFrom(ICPPASTSimpleTypeConstructorExpression.class, pushBackArg, "Wrong push_back argument: " + pushBackArg
                .getClass().getName());
       final ICPPASTSimpleTypeConstructorExpression typeCtor = (ICPPASTSimpleTypeConstructorExpression) pushBackArg;
       assureIsCallType(typeCtor);

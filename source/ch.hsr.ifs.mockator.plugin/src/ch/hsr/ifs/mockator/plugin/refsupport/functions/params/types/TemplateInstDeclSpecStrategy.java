@@ -28,7 +28,7 @@ class TemplateInstDeclSpecStrategy implements DeclSpecGeneratorStrategy {
 
    @Override
    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
-      ILTISException.Unless.instanceOf(type, ICPPTemplateInstance.class, "This strategy can only handle template instances");
+      ILTISException.Unless.assignableFrom(ICPPTemplateInstance.class, type, "This strategy can only handle template instances");
       final ICPPTemplateInstance templateInstance = (ICPPTemplateInstance) type;
       final ICPPASTTemplateId templateId = nodeFactory.newTemplateId(getName(templateInstance));
 

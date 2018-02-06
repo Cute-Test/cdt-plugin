@@ -32,7 +32,7 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
 
    @Override
    protected void collectExpectations(final IASTStatement expectationStmt) {
-      ILTISException.Unless.instanceOf(expectationStmt, IASTDeclarationStatement.class, "Should be called with an declaration statement");
+      ILTISException.Unless.assignableFrom(IASTDeclarationStatement.class, expectationStmt, "Should be called with an declaration statement");
       final IASTDeclarationStatement declStmt = (IASTDeclarationStatement) expectationStmt;
       final IASTDeclaration declaration = declStmt.getDeclaration();
 

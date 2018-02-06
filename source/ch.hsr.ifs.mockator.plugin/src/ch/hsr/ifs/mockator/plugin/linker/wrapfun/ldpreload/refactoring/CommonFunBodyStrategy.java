@@ -85,7 +85,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
 
    private static String getMangledFunName(final ICPPASTFunctionDeclarator function) {
       final IBinding binding = function.getName().resolveBinding();
-      ILTISException.Unless.instanceOf(binding, ICPPFunction.class, "Function expected");
+      ILTISException.Unless.assignableFrom(ICPPFunction.class, binding, "Function expected");
       final ItaniumMangledNameGenerator mangledGenerator = new ItaniumMangledNameGenerator((ICPPFunction) binding);
       return mangledGenerator.createMangledName();
    }

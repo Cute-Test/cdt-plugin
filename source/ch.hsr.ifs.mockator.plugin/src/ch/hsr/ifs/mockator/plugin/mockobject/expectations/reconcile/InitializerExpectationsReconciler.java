@@ -48,7 +48,7 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    }
 
    private static ICPPASTInitializerList getInitializerListFrom(final IASTEqualsInitializer eqInitializer) {
-      ILTISException.Unless.instanceOf(eqInitializer.getInitializerClause(), ICPPASTInitializerList.class, "Initializer list expected");
+      ILTISException.Unless.assignableFrom(ICPPASTInitializerList.class, eqInitializer.getInitializerClause(), "Initializer list expected");
       return (ICPPASTInitializerList) eqInitializer.getInitializerClause();
    }
 

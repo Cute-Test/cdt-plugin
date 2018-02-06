@@ -25,7 +25,7 @@ public class Cpp03RegistrationFinder extends RegistrationFinder {
    }
 
    private static ICPPASTFunctionCallExpression getFunCall(final IASTInitializerClause pushBackArg) {
-      ILTISException.Unless.instanceOf(pushBackArg, ICPPASTFunctionCallExpression.class, "Wrong call argument type");
+      ILTISException.Unless.assignableFrom(ICPPASTFunctionCallExpression.class, pushBackArg, "Wrong call argument type");
       return (ICPPASTFunctionCallExpression) pushBackArg;
    }
 

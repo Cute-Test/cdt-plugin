@@ -65,7 +65,7 @@ public class ShadowedMemFunVerifier {
    private static ICPPMethod getCppMethodIn(final IASTDeclaration declaration) {
       final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType(declaration, ICPPASTFunctionDeclarator.class);
       final IBinding binding = funDecl.getName().resolveBinding();
-      ILTISException.Unless.instanceOf(binding, ICPPMethod.class, "Chosen member function is not valid");
+      ILTISException.Unless.assignableFrom(ICPPMethod.class, binding, "Chosen member function is not valid");
       return (ICPPMethod) binding;
    }
 
@@ -84,7 +84,7 @@ public class ShadowedMemFunVerifier {
    private ICPPClassType getChosenClassType() {
       final ICPPASTCompositeTypeSpecifier chosenClass = context.getChosenClass();
       final IBinding b = chosenClass.getName().resolveBinding();
-      ILTISException.Unless.instanceOf(b, ICPPClassType.class, "Not a valid class to extract an interface for");
+      ILTISException.Unless.assignableFrom(ICPPClassType.class, b, "Not a valid class to extract an interface for");
       return (ICPPClassType) b;
    }
 

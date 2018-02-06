@@ -51,7 +51,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
    @Override
    public Collection<MissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
       final IBinding binding = clazz.getName().resolveBinding();
-      ILTISException.Unless.instanceOf(binding, ICPPClassType.class, "Class type expected");
+      ILTISException.Unless.assignableFrom(ICPPClassType.class, binding, "Class type expected");
       return collectPureVirtualMemFuns(clazz.getTranslationUnit(), (ICPPClassType) binding);
    }
 
@@ -59,7 +59,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
       final Set<MissingMemFun> missingMethods = new LinkedHashSet<>();
 
       for (final ICPPMethod method : getPureVirtualMemFunsIn(clazz)) {
-         ILTISException.Unless.notInstanceOf(method, ICPPConstructor.class, "Ctors are not supported because they are not inherited");
+         ILTISException.Unless.notAssignableFrom(ICPPConstructor.class, method, "Ctors are not supported because they are not inherited");
          final IASTName[] declarations = ast.getDeclarationsInAST(method);
 
          if (declarations.length > 0) {

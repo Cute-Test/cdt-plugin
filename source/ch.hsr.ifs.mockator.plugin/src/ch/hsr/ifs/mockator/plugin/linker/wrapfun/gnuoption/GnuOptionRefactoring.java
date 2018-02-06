@@ -58,7 +58,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
 
    private void rememberFunName(final IASTName funName) {
       final IBinding binding = funName.resolveBinding();
-      ILTISException.Unless.instanceOf(binding, ICPPFunction.class, "Function expected");
+      ILTISException.Unless.assignableFrom(ICPPFunction.class, binding, "Function expected");
       newFunName = new ItaniumMangledNameGenerator((ICPPFunction) binding).createMangledName();
    }
 

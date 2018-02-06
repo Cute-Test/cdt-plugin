@@ -12,7 +12,7 @@ class BasicTypeDeclSpecStrategy implements DeclSpecGeneratorStrategy {
 
    @Override
    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
-      ILTISException.Unless.instanceOf(type, IBasicType.class, "This strategy can only handle basic types");
+      ILTISException.Unless.assignableFrom(IBasicType.class, type, "This strategy can only handle basic types");
       final ICPPASTSimpleDeclSpecifier simpleDeclSpec = nodeFactory.newSimpleDeclSpecifier();
       final IBasicType basicType = (IBasicType) type;
       simpleDeclSpec.setType(basicType.getKind());

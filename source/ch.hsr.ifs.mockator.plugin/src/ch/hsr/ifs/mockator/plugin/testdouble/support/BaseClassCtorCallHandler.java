@@ -37,7 +37,7 @@ public class BaseClassCtorCallHandler {
       final ICPPBase[] bases = testDouble.getBases();
       ILTISException.Unless.isFalse(bases.length < 1, "Test double is expected to at least one base class!");
       final IBinding binding = bases[0].getBaseClass(); // just consider the first one
-      ILTISException.Unless.instanceOf(binding, ICPPClassType.class, "Class type as base class expected");
+      ILTISException.Unless.assignableFrom(ICPPClassType.class, binding, "Class type as base class expected");
       baseClass = (ICPPClassType) binding;
    }
 
