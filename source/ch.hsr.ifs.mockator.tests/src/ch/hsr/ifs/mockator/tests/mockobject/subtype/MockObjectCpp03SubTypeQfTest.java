@@ -2,6 +2,8 @@ package ch.hsr.ifs.mockator.tests.mockobject.subtype;
 
 import org.junit.Ignore;
 
+import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
+
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.qf.MockObjectByFunsQuickFix;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -12,8 +14,8 @@ import ch.hsr.ifs.mockator.tests.AbstractQuickfixTest;
 public class MockObjectCpp03SubTypeQfTest extends AbstractQuickfixTest {
 
    @Override
-   protected String getProblemId() {
-      return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL.getId();
+   protected IProblemId getProblemId() {
+      return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL;
    }
 
    @Override

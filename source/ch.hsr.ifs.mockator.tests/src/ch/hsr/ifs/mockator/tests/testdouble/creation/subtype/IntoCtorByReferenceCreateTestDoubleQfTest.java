@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.tests.testdouble.creation.subtype;
 
+import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
+
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
@@ -10,8 +12,8 @@ import ch.hsr.ifs.mockator.tests.AbstractQuickfixTest;
 public class IntoCtorByReferenceCreateTestDoubleQfTest extends AbstractQuickfixTest {
 
    @Override
-   protected String getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE.getId();
+   protected IProblemId getProblemId() {
+      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
    }
 
    @Override

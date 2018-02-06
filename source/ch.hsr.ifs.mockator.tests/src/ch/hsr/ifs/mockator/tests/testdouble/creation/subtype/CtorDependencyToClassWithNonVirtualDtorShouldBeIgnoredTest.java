@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
+
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
@@ -11,8 +13,8 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 public class CtorDependencyToClassWithNonVirtualDtorShouldBeIgnoredTest extends CDTTestingCodanCheckerTest {
 
    @Override
-   protected String getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE.getId();
+   protected IProblemId getProblemId() {
+      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
    }
 
    @Test

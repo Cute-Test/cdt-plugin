@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.tests.fakeobject.staticpoly;
 
+import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
+
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.fakeobject.FakeObjectQuickFix;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -10,8 +12,8 @@ import ch.hsr.ifs.mockator.tests.AbstractQuickfixTest;
 public class FakeObjectCpp03QfTest extends AbstractQuickfixTest {
 
    @Override
-   protected String getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL.getId();
+   protected IProblemId getProblemId() {
+      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
    }
 
    @Override
