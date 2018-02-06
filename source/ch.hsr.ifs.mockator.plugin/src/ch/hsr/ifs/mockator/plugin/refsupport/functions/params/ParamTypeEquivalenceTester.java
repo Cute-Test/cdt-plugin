@@ -17,7 +17,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 
 import ch.hsr.ifs.iltis.core.functional.Functional;
-import ch.hsr.ifs.iltis.core.functional.StreamTripple;
+import ch.hsr.ifs.iltis.core.functional.StreamTriple;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.util.CPPNameConstants;
@@ -46,14 +46,14 @@ public class ParamTypeEquivalenceTester {
          return false;
       }
 
-      final Iterator<StreamTripple<IType, IType, Integer>> it = getZipedStream().iterator();
+      final Iterator<StreamTriple<IType, IType, Integer>> it = getZipedStream().iterator();
 
       while (it.hasNext()) {
-         final StreamTripple<IType, IType, Integer> tripple = it.next();
+         final StreamTriple<IType, IType, Integer> triple = it.next();
 
-         IType callerType = tripple.first();
-         IType receiverType = tripple.second();
-         final int argNo = tripple.third();
+         IType callerType = triple.first();
+         IType receiverType = triple.second();
+         Integer argNo = triple.third();
 
          if (filter != null && filter.apply(argNo, receiverType)) {
             continue;
@@ -102,7 +102,7 @@ public class ParamTypeEquivalenceTester {
       return type instanceof IPointerType;
    }
 
-   private Stream<StreamTripple<IType, IType, Integer>> getZipedStream() {
+   private Stream<StreamTriple<IType, IType, Integer>> getZipedStream() {
       return Functional.zip(caller.stream(), receiver.stream(), IntStream.rangeClosed(0, Math.max(caller.size(), receiver.size())).boxed());
    }
 
