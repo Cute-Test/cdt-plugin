@@ -41,7 +41,7 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-            OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       missingMemFuns.addAll(collectMissingMemFuns(pm));
@@ -60,9 +60,9 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
    }
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final ClassPublicVisibilityInserter inserter,
-            final IProgressMonitor pm) {
+         final IProgressMonitor pm) {
       return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), (MockObject) testDouble, rewriter, ast, cppStd, inserter,
-               hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
+            hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
    }
 
    Collection<MissingMemberFunction> getMemberFunctionsForLinkedEdit() {

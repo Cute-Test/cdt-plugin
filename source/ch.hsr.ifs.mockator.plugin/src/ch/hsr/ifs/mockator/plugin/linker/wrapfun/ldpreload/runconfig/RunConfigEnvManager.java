@@ -45,9 +45,7 @@ public class RunConfigEnvManager {
             for (final ILaunchConfiguration config : getLaunchConfigs()) {
                final Map<String, String> envVariables = getEnvVars(config.getWorkingCopy());
 
-               if (strategy.get().hasPreloadConfig(sharedLibPath, envVariables)) {
-                  return true;
-               }
+               if (strategy.get().hasPreloadConfig(sharedLibPath, envVariables)) { return true; }
             }
          } catch (final CoreException e) {}
       }
@@ -75,8 +73,7 @@ public class RunConfigEnvManager {
    }
 
    private static Map<String, String> getEnvVars(final ILaunchConfigurationWorkingCopy wc) throws CoreException {
-      return checkedCast(wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, new LinkedHashMap<>()),
-               String.class);
+      return checkedCast(wc.getAttribute(ILaunchManager.ATTR_ENVIRONMENT_VARIABLES, new LinkedHashMap<>()), String.class);
    }
 
    public void removePreloadLaunchConfig(final String sharedLibPath) {
@@ -112,9 +109,7 @@ public class RunConfigEnvManager {
    private boolean matchesProject(final ILaunchConfiguration launchConfig) throws CoreException {
       final ICProject cProject = CDebugUtils.getCProject(launchConfig);
 
-      if (cProject == null) {
-         return false;
-      }
+      if (cProject == null) { return false; }
 
       return targetProject.equals(cProject.getProject());
    }

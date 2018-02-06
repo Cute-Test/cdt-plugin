@@ -40,7 +40,7 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
 
    @Override
    protected void addContentToTu(final IASTTranslationUnit newAst, final ASTRewrite rewriter, final ICPPASTFunctionDeclarator funDecl,
-            final IProgressMonitor pm) throws CoreException {
+         final IProgressMonitor pm) throws CoreException {
       final IncludeGuardCreator guardCreator = getIncludeGuardCreator(newAst);
       addIncludeGuardsStart(newAst, rewriter, guardCreator);
       insertFunDeclInclude(funDecl, newAst, rewriter);
@@ -146,7 +146,7 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
    }
 
    private void insertFunDeclInclude(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit tu, final ASTRewrite rewriter)
-            throws CoreException {
+         throws CoreException {
       final CppIncludeResolver resolver = new CppIncludeResolver(tu, cProject, context.getIndex());
       final AstIncludeNode includeForFunDecl = resolver.resolveIncludeNode(funDecl.getTranslationUnit().getFilePath());
       rewriter.insertBefore(tu, null, includeForFunDecl, null);

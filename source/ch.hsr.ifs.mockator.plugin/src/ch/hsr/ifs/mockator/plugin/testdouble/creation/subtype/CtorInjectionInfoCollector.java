@@ -47,9 +47,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       if (initializer == null) {
          initializer = ASTUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
 
-         if (initializer == null) {
-            return Optional.empty();
-         }
+         if (initializer == null) { return Optional.empty(); }
 
          ctorArgs = list(((ICPPASTConstructorInitializer) initializer).getArguments());
       } else {
@@ -65,18 +63,14 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    private Optional<ICPPASTCompositeTypeSpecifier> findTargetClass(final IASTInitializer ctorInitializer) {
       if (isPartOf(ctorInitializer, ICPPASTNewExpression.class)) {
          return findTargetClassForNewExpression(ctorInitializer);
-      } else if (isPartOf(ctorInitializer, ICPPASTDeclarator.class)) {
-         return findTargetClassForSimpleDecl(ctorInitializer);
-      }
+      } else if (isPartOf(ctorInitializer, ICPPASTDeclarator.class)) { return findTargetClassForSimpleDecl(ctorInitializer); }
       return Optional.empty();
    }
 
    private Optional<ICPPASTFunctionDeclarator> findMatchingCtor(final List<IASTInitializerClause> ctorArgs, final int argPosOfProblemType,
-            final ICPPASTCompositeTypeSpecifier clazz) {
+         final ICPPASTCompositeTypeSpecifier clazz) {
       for (final ICPPASTFunctionDeclarator publicCtor : getPublicCtors(clazz)) {
-         if (areEquivalentExceptProblemType(ctorArgs, publicCtor, argPosOfProblemType)) {
-            return Optional.of(publicCtor);
-         }
+         if (areEquivalentExceptProblemType(ctorArgs, publicCtor, argPosOfProblemType)) { return Optional.of(publicCtor); }
       }
 
       return Optional.empty();
@@ -120,9 +114,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       final IASTSimpleDeclaration simpleDecl = ASTUtil.getAncestorOfType(ctorInitializer, IASTSimpleDeclaration.class);
       final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
 
-      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
-         return Optional.empty();
-      }
+      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
 
       final IASTName name = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName();
       return lookup.findClassDefinition(name.resolveBinding(), index);
@@ -133,9 +125,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       final IASTTypeId typeId = newExpr.getTypeId();
       final IASTDeclSpecifier declSpecifier = typeId.getDeclSpecifier();
 
-      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
-         return Optional.empty();
-      }
+      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
 
       final IASTName name = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName();
       return lookup.findClassDefinition(name.toString(), index);

@@ -149,11 +149,9 @@ public abstract class MockatorRefactoring extends CRefactoring {
    protected IIndex getIndex() {
       try {
          return super.getIndex();
-      }
-      catch (final OperationCanceledException e) {
+      } catch (final OperationCanceledException e) {
          throw new ILTISException(e).rethrowUnchecked();
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

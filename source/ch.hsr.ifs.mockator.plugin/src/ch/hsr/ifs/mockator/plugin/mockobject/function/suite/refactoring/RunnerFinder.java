@@ -67,10 +67,8 @@ public class RunnerFinder {
    }
 
    private List<IASTFunctionDefinition> getTestRunnersFunctions(final IASTFunctionDefinition mainFunc, final IProgressMonitor pm)
-            throws CoreException {
-      if (mainFunc == null) {
-         return new ArrayList<>();
-      }
+         throws CoreException {
+      if (mainFunc == null) { return new ArrayList<>(); }
 
       final IIndex index = mainFunc.getTranslationUnit().getIndex();
 
@@ -167,9 +165,7 @@ public class RunnerFinder {
             final IASTTranslationUnit ast = getAST(main[0], m);
 
             final Optional<IASTName> oMain = findDefinitionInTranslationUnit(ast, main[0]);
-            if (oMain.isPresent()) {
-               return getFunctionDefinition(oMain.get());
-            }
+            if (oMain.isPresent()) { return getFunctionDefinition(oMain.get()); }
          }
       } catch (final InterruptedException e) {
          Thread.currentThread().interrupt();
@@ -208,7 +204,7 @@ public class RunnerFinder {
    private static boolean isSame(final IIndexName iName, final IASTNodeLocation nodeLocation) {
       final Path fileName = new Path(nodeLocation.asFileLocation().getFileName());
       return iName.getNodeOffset() == nodeLocation.getNodeOffset() && iName.getNodeLength() == nodeLocation.getNodeLength() && new Path(iName
-               .getFileLocation().getFileName()).equals(fileName);
+            .getFileLocation().getFileName()).equals(fileName);
    }
 
    private static IASTFunctionDefinition getFunctionDefinition(final IASTName name) {

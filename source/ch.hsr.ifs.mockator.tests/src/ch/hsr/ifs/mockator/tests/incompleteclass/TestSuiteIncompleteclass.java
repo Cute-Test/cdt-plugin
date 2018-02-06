@@ -95,6 +95,7 @@ import ch.hsr.ifs.mockator.tests.incompleteclass.subtype.OnlyDestructorTest;
 import ch.hsr.ifs.mockator.tests.incompleteclass.subtype.OnlyPointerAndReferenceDeclarationTest;
 import ch.hsr.ifs.mockator.tests.incompleteclass.subtype.WithMultipleInheritanceHierarchiesTest;
 
+
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({

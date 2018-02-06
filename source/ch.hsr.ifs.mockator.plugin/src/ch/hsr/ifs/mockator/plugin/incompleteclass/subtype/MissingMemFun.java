@@ -69,7 +69,7 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    }
 
    private IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd,
-            final ICPPASTFunctionDeclarator newFunDecl, final ICPPASTDeclSpecifier newReturnType) {
+         final ICPPASTFunctionDeclarator newFunDecl, final ICPPASTDeclSpecifier newReturnType) {
       final IASTCompoundStatement newFunBody = nodeFactory.newCompoundStatement();
       strategy.addCallVectorRegistration(newFunBody, newFunDecl, isStatic());
       final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, getClassName());

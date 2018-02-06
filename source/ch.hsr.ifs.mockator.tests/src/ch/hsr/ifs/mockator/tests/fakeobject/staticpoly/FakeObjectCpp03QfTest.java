@@ -36,8 +36,8 @@ public class FakeObjectCpp03QfTest extends AbstractQuickfixTest {
 
    @Override
    protected String getResolutionMessage() {
-      return "<b>4 member function(s) to implement</b>:<br/>foo(const a::A&amp;) const<br/>"
-             + "foo1(const std::string&amp;) const<br/>foo2(const std::string&amp;) const<br/>operator ++()";
+      return "<b>4 member function(s) to implement</b>:<br/>foo(const a::A&amp;) const<br/>" +
+             "foo1(const std::string&amp;) const<br/>foo2(const std::string&amp;) const<br/>operator ++()";
    }
 
    @Override

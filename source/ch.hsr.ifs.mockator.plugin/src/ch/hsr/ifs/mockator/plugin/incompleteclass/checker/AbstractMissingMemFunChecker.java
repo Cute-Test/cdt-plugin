@@ -21,15 +21,13 @@ public abstract class AbstractMissingMemFunChecker extends SimpleChecker<Problem
 
    protected void markIfHasMissingMemFuns(final CheckerResult<ProblemId> result) {
       final ICPPASTCompositeTypeSpecifier clazz = (ICPPASTCompositeTypeSpecifier) result.getNode();
-      if (!hasReferencingTestFunctions(clazz)) {
-         return;
-      }
+      if (!hasReferencingTestFunctions(clazz)) { return; }
       final MissingMemFunFinder finder = getMissingMemFunsFinder();
       createCodanArgs(clazz, finder.findMissingMemberFunctions(clazz)).ifPresent((codanArgs) -> mark(clazz, codanArgs));
    }
 
    private Optional<MissingMemFunCodanArguments> createCodanArgs(final ICPPASTCompositeTypeSpecifier clazz,
-            final Collection<? extends MissingMemberFunction> missingMemFuns) {
+         final Collection<? extends MissingMemberFunction> missingMemFuns) {
       return new MissingMemFunCodanArgsProvider(getCppStandard(), missingMemFuns, clazz).createMemFunCodanArgs();
    }
 

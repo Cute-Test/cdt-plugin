@@ -64,8 +64,7 @@ public class MissingMemFunCollector {
          final Constructor<?> ctor = visitor.getConstructor(ICPPASTCompositeTypeSpecifier.class, ICPPASTTemplateParameter.class,
                ICPPASTTemplateDeclaration.class);
          return (MissingMemFunVisitor) ctor.newInstance(testDouble, templateParam, sut);
-      }
-      catch (final Exception e) {
+      } catch (final Exception e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

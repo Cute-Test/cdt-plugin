@@ -24,7 +24,8 @@ public class RemoveInitMockatorRefactoringTest extends AbstractRefactoringTest {
    protected MockatorRefactoring createRefactoring() {
       try {
          return new RemoveInitMockatorRefactoring(getActiveDocument(), getActiveCElement(), selection, cproject);
-      } catch (final Exception e) {
+      }
+      catch (final Exception e) {
          fail(e.getMessage());
       }
       return null;

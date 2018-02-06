@@ -15,6 +15,7 @@ import ch.hsr.ifs.mockator.tests.project.cdt.ProjRelPathGeneratorTest;
 import ch.hsr.ifs.mockator.tests.project.cdt.SourceFolderHandlerTest;
 import ch.hsr.ifs.mockator.tests.project.nature.NatureHandlerTest;
 
+
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({

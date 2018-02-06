@@ -50,7 +50,7 @@ class NewExpectationsInserter {
 
    private Collection<IASTStatement> createExpectationStatements(final Collection<? extends TestDoubleMemFun> memberFunctions) {
       return cppStdStrategy.createExpectationsVector(memberFunctions, createNameForExpectationsVector(), testFunction, getExpectationsVector(),
-               linkedEditStrategy);
+            linkedEditStrategy);
    }
 
    private String createNameForExpectationsVector() {
@@ -66,8 +66,7 @@ class NewExpectationsInserter {
       testFunction.accept(visitor);
       final Collection<ExpectedActualPair> assertedCalls = visitor.getExpectedActual();
 
-      if (assertedCalls.isEmpty()) {
-         return null; // insert at the end of the test function
+      if (assertedCalls.isEmpty()) { return null; // insert at the end of the test function
       }
 
       return getStatementOfFirstAssert(assertedCalls);

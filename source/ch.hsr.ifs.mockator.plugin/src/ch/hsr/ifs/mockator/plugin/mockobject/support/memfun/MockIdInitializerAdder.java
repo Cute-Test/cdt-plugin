@@ -29,9 +29,7 @@ public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinitio
 
    @Override
    public void accept(final ICPPASTFunctionDefinition ctor) {
-      if (alreadyHasMockIdInitializer(ctor)) {
-         return;
-      }
+      if (alreadyHasMockIdInitializer(ctor)) { return; }
 
       final IASTInitializerClause nextCallIdReservation = createNextCallReservation();
       final ICPPASTConstructorChainInitializer ctorInitializer = getMockIdInitializer(nextCallIdReservation);
@@ -47,9 +45,7 @@ public class MockIdInitializerAdder implements Consumer<ICPPASTFunctionDefinitio
 
    private static boolean alreadyHasMockIdInitializer(final ICPPASTFunctionDefinition ctor) {
       for (final ICPPASTConstructorChainInitializer initializer : ctor.getMemberInitializers()) {
-         if (initializer.getMemberInitializerId().toString().equals(MockatorConstants.MOCK_ID)) {
-            return true;
-         }
+         if (initializer.getMemberInitializerId().toString().equals(MockatorConstants.MOCK_ID)) { return true; }
       }
       return false;
    }

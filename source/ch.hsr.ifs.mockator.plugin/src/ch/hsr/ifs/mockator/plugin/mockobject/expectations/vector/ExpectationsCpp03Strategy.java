@@ -34,7 +34,7 @@ public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
 
    @Override
    public List<IASTStatement> createExpectationsVector(final Collection<? extends TestDoubleMemFun> memFuns, final String newExpectationsName,
-            final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
+         final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
       final List<IASTStatement> expectations = new ArrayList<>();
 
       if (!expectationsVector.isPresent()) {
@@ -48,7 +48,7 @@ public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
    }
 
    private static IASTExpressionStatement createBoostAssignInitializer(final Collection<? extends TestDoubleMemFun> memFuns, final String vectorName,
-            final LinkedEditModeStrategy linkedEdit) {
+         final LinkedEditModeStrategy linkedEdit) {
       final BoostAssignInitializerCreator creator = new BoostAssignInitializerCreator(memFuns, vectorName, linkedEdit);
       return creator.createBoostAssignInitializer();
    }

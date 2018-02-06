@@ -24,7 +24,7 @@ class TestDoubleCpp11Refactoring extends AbstractCreateTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-            OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       final ASTRewrite rewriter = createRewriter(collector, ast);
       insertBeforeCurrentStmt(createNewClassDefinition(ast), ast, rewriter);

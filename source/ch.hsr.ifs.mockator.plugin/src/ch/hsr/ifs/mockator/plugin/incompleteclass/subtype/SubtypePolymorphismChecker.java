@@ -62,9 +62,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
       private void checkForClassInstantiation(final IASTSimpleDeclaration simpleDecl) {
          final IASTDeclSpecifier declSpec = simpleDecl.getDeclSpecifier();
 
-         if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef) {
-            return;
-         }
+         if (declSpec.getStorageClass() == IASTDeclSpecifier.sc_typedef) { return; }
 
          for (final IASTDeclarator declarator : simpleDecl.getDeclarators()) {
             if (!ASTUtil.hasPointerOrRefType(declarator)) {
@@ -110,9 +108,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
          className = ((ICPPASTCompositeTypeSpecifier) declSpec).getName();
       }
 
-      if (className == null) {
-         return;
-      }
+      if (className == null) { return; }
 
       final IBinding binding = className.resolveBinding();
 
@@ -133,18 +129,14 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
 
    private void reportProblemsIfAbstract(final IType typeToCheck) {
       final IType unwindedType = CxxAstUtils.unwindTypedef(typeToCheck);
-      if (!(unwindedType instanceof ICPPClassType) || unwindedType instanceof IProblemBinding) {
-         return;
-      }
+      if (!(unwindedType instanceof ICPPClassType) || unwindedType instanceof IProblemBinding) { return; }
       getClassDefinition(unwindedType).ifPresent((clazz) -> markIfHasMissingMemFuns(new CheckerResult<>(getProblemId(), clazz)));
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> getClassDefinition(final IType type) {
       final IType realType = ASTUtil.windDownToRealType(type, false);
 
-      if (realType instanceof ICPPClassType) {
-         return lookupDefinition((ICPPClassType) realType);
-      }
+      if (realType instanceof ICPPClassType) { return lookupDefinition((ICPPClassType) realType); }
 
       return Optional.empty();
    }
@@ -173,9 +165,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
          // class and we have to mark something that we can lookup afterwards
          // to find the enclosing node
          final ICPPASTNameSpecifier spec = clazz.getBaseSpecifiers()[0].getNameSpecifier();
-         if (spec instanceof IASTName) {
-            return Optional.of((IASTName) spec);
-         }
+         if (spec instanceof IASTName) { return Optional.of((IASTName) spec); }
       }
 
       return Optional.of(clazz.getName());

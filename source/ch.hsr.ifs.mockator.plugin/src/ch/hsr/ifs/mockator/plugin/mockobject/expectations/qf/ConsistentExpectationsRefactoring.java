@@ -72,7 +72,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-            OperationCanceledException {
+         OperationCanceledException {
       final IASTTranslationUnit ast = getAST(tu(), pm);
       getSelectedName(ast).ifPresent((expectations) -> reconcileExpectations(collector, ast, expectations));
    }
@@ -85,7 +85,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
    private void consolidateExpectations(final IASTName expectationsVector, final ASTRewrite rewriter) {
       final ExpectationsReconciler reconciler = new ExpectationsReconciler(rewriter, expectationsVector, getTestFunction(expectationsVector), cppStd,
-               linkedEditMode);
+            linkedEditMode);
       reconciler.consolidateExpectations(expectationsToAdd, ca.getExpectationsToRemove());
    }
 
@@ -102,18 +102,14 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
       final ICPPASTFunctionDefinition testFunction = getTestFunction(expectationsVector);
 
       return OptionalUtil.returnIfPresentElse(getRegistrationVector(testFunction, expectationsVector), (regVector) -> finder.findCallRegistrations(
-               regVector), () -> new ArrayList<>());
+            regVector), () -> new ArrayList<>());
    }
 
    private static Optional<IASTName> getRegistrationVector(final ICPPASTFunctionDefinition testFun, final IASTName expectationsVector) {
       for (final ExpectedActualPair expectedActual : getAssertedCalls(testFun)) {
-         if (equalsName(expectedActual.actual(), expectationsVector)) {
-            return Optional.of(expectedActual.expected().getName());
-         }
+         if (equalsName(expectedActual.actual(), expectationsVector)) { return Optional.of(expectedActual.expected().getName()); }
 
-         if (equalsName(expectedActual.expected(), expectationsVector)) {
-            return Optional.of(expectedActual.actual().getName());
-         }
+         if (equalsName(expectedActual.expected(), expectationsVector)) { return Optional.of(expectedActual.actual().getName()); }
       }
 
       return Optional.empty();

@@ -45,7 +45,7 @@ public abstract class ExceptionUtil {
 
    private static void showExceptionInThread(final String title, final String message, final Throwable t) {
       final IStatus status = new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, IStatus.OK, t.getMessage() == null ? t.getClass().getName() : t
-               .getMessage(), t);
+            .getMessage(), t);
       MockatorPlugin.getDefault().getLog().log(status);
       ErrorDialog.openError(UiUtil.getWindowShell(), title, message, status);
    }

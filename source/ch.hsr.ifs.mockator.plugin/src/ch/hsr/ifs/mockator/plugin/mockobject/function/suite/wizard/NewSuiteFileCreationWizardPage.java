@@ -131,8 +131,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
             createMockSupportForFreeFunction(suiteName, sourcePath, pm);
             addSuiteToRunner(suiteName, pm);
          }
-      }
-      finally {
+      } finally {
          pm.done();
       }
    }
@@ -200,8 +199,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
             getWizard().getContainer().run(true, false, monitor -> {
                try {
                   runners = new RunnerFinder(mockatorCProject).findTestRunners(monitor);
-               }
-               catch (final CoreException e) {
+               } catch (final CoreException e) {
                   throw new InvocationTargetException(e);
                }
 
@@ -213,11 +211,9 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
             runnerStrings[i++] = func.getDeclarator().getName().toString();
          }
          return runnerStrings;
-      }
-      catch (final InvocationTargetException e) {
+      } catch (final InvocationTargetException e) {
          throw new ILTISException(e).rethrowUnchecked();
-      }
-      catch (final InterruptedException e) {
+      } catch (final InterruptedException e) {
          Thread.currentThread().interrupt();
       }
 
@@ -568,8 +564,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
                         folder = roots[0];
                      }
                   }
-               }
-               catch (final CModelException e) {
+               } catch (final CModelException e) {
                   throw new ILTISException(e).rethrowUnchecked();
                }
 

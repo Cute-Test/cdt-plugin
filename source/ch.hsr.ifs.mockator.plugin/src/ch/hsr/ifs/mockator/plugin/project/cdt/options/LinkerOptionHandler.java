@@ -32,9 +32,7 @@ public class LinkerOptionHandler extends AbstractOptionsHandler {
       return OptionalUtil.returnIfPresentElse(getToolToAnanalyze(), (tool) -> {
          final IOption flagsOption = tool.getOptionBySuperClassId(projectVariables.getLinkerOtherFlags());
 
-         if (flagsOption == null) {
-            return false;
-         }
+         if (flagsOption == null) { return false; }
 
          final Collection<String> currentFlags = getListValues(flagsOption);
 

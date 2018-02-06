@@ -19,6 +19,7 @@ import ch.hsr.ifs.mockator.tests.mockobject.subtype.SubTypeExternalProjectTest;
 import ch.hsr.ifs.mockator.tests.mockobject.subtype.SubTypeMockObjectRefactoringTest;
 import ch.hsr.ifs.mockator.tests.mockobject.togglefun.ToggleTracingFunCallRefactoringTest;
 
+
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({

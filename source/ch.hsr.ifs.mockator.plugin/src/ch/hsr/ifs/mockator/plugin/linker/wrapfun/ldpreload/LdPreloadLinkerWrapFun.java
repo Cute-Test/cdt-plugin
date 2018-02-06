@@ -108,8 +108,7 @@ public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
                   setProjectReference(proj, pm);
                   addRuntimeConfiguration(proj);
                }
-            }
-            catch (final CoreException e) {
+            } catch (final CoreException e) {
                return new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, I18N.RuntimeWrapCreateInfrastructureFailed, e);
             }
             return Status.OK_STATUS;

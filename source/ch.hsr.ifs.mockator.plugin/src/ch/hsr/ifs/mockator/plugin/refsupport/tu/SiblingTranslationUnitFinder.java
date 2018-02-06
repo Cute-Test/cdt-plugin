@@ -27,18 +27,15 @@ public class SiblingTranslationUnitFinder {
    }
 
    public Optional<String> getSiblingTuPath() throws CoreException {
-      if (ast.isHeaderUnit()) {
-         return findSiblingSourceFile();
-      }
+      if (ast.isHeaderUnit()) { return findSiblingSourceFile(); }
 
       return findSiblingHeaderFile();
    }
 
    private Optional<String> findSiblingSourceFile() throws CoreException {
       for (final IIndexInclude i : findIncludesToThisFile()) {
-         if (getBaseName(i.getIncludedBy().getLocation().getFullPath()).equals(getBaseNameOfThisFile())) {
-            return Optional.of(i.getIncludedBy().getLocation().getURI().getPath());
-         }
+         if (getBaseName(i.getIncludedBy().getLocation().getFullPath()).equals(getBaseNameOfThisFile())) { return Optional.of(i.getIncludedBy()
+               .getLocation().getURI().getPath()); }
       }
 
       return Optional.empty();

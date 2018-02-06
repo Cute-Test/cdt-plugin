@@ -63,9 +63,7 @@ public class CompilerFlagHandler extends AbstractOptionsHandler {
 
       @Override
       public String apply(final String flagToAdd, final String flags) {
-         if (!flags.contains(flagToAdd)) {
-            return flags + " " + flagToAdd;
-         }
+         if (!flags.contains(flagToAdd)) { return flags + " " + flagToAdd; }
          return flags;
       }
    }

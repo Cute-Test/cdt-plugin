@@ -39,9 +39,7 @@ abstract class AbstractOptionsHandler {
 
    protected Optional<ITool> getToolToAnanalyze() {
       for (final ITool tool : getDefaultConfiguration().getToolChain().getTools()) {
-         if (isRequestedTool(tool)) {
-            return Optional.of(tool);
-         }
+         if (isRequestedTool(tool)) { return Optional.of(tool); }
       }
 
       return Optional.empty();

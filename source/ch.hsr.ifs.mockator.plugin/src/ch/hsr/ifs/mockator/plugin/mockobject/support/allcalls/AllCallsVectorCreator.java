@@ -56,9 +56,7 @@ public class AllCallsVectorCreator {
       public static CallsVectorParent fromAstNode(final IASTNode node) {
          if (node instanceof ICPPASTNamespaceDefinition) {
             return Namespace;
-         } else if (node instanceof IASTCompoundStatement) {
-            return Function;
-         }
+         } else if (node instanceof IASTCompoundStatement) { return Function; }
 
          throw new ILTISException("Unexpected test double parent").rethrowUnchecked();
       }

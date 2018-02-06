@@ -48,12 +48,12 @@ public class MockObject extends AbstractTestDouble {
 
    public Collection<ExistingTestDoubleMemFun> getRegisteredMemFuns(final CppStandard cppStd) {
       return getPublicMemFuns().stream().filter((function) -> function.getRegisteredCall(new MockCallRegistrationFinder(cppStd)).isPresent()).collect(
-               Collectors.toList());
+            Collectors.toList());
    }
 
    @Override
    public void addToNamespace(final ICPPASTNamespaceDefinition parentNs, final IASTSimpleDeclaration testDouble,
-            final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
+         final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
       final MockObjectToNsAdder nsAdder = new MockObjectToNsAdder(cppStd, testDoubleToMove);
       nsAdder.addTestDoubleToNs(testDouble, parentNs);
       removeAllCallsVector(rewriter);
@@ -80,14 +80,12 @@ public class MockObject extends AbstractTestDouble {
 
    public boolean hasMockIdField() {
       final Collection<IASTDeclaration> mockIdField = Arrays.asList(getKlass().getMembers()).stream().filter((decl) -> isMockIdField(decl)).collect(
-               Collectors.toList());
+            Collectors.toList());
       return !mockIdField.isEmpty();
    }
 
    private static boolean isMockIdField(final IASTDeclaration declaration) {
-      if (!(declaration instanceof IASTSimpleDeclaration)) {
-         return false;
-      }
+      if (!(declaration instanceof IASTSimpleDeclaration)) { return false; }
 
       final IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
       return hasMockIdName(simpleDecl) && hasMockIdType(simpleDecl);
@@ -96,9 +94,7 @@ public class MockObject extends AbstractTestDouble {
    private static boolean hasMockIdType(final IASTSimpleDeclaration simpleDecl) {
       final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
 
-      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
-         return false;
-      }
+      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return false; }
 
       return isConstSizeT((ICPPASTNamedTypeSpecifier) declSpecifier);
    }
@@ -110,9 +106,7 @@ public class MockObject extends AbstractTestDouble {
    private static boolean hasMockIdName(final IASTSimpleDeclaration simpleDecl) {
       final IASTDeclarator[] declarators = simpleDecl.getDeclarators();
 
-      if (declarators.length != 1) {
-         return false;
-      }
+      if (declarators.length != 1) { return false; }
 
       return declarators[0].getName().toString().equals(MOCK_ID);
    }
@@ -130,7 +124,7 @@ public class MockObject extends AbstractTestDouble {
 
    public Optional<IASTName> getAllCallsVector() {
       return OptionalUtil.returnIfPresentElseEmpty(getRegistrationVector(), (vector) -> head(list(getKlass().getTranslationUnit().getDefinitionsInAST(
-               vector.resolveBinding()))));
+            vector.resolveBinding()))));
    }
 
    public String getNameForExpectationVector() {

@@ -33,7 +33,7 @@ public class FakeObject extends AbstractTestDouble {
 
    @Override
    public void addToNamespace(final ICPPASTNamespaceDefinition parentNs, final IASTSimpleDeclaration testDouble,
-            final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
+         final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
       parentNs.addDeclaration(testDouble);
    }
 }

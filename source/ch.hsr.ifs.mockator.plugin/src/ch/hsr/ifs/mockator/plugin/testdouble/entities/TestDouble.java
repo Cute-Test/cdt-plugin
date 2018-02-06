@@ -52,5 +52,5 @@ public interface TestDouble {
    IASTNode getParent();
 
    void addToNamespace(ICPPASTNamespaceDefinition parentNs, IASTSimpleDeclaration testDouble, ICPPASTCompositeTypeSpecifier toMove,
-            CppStandard cppStd, ASTRewrite rewriter);
+         CppStandard cppStd, ASTRewrite rewriter);
 }

@@ -16,9 +16,7 @@ class MacOsXPreloadRunConfig extends AbstractPreloadRunStrategy {
       final String ldPreloadLibs = envVariables.get(DYLD_INSERT_LIBRARIES);
       final String dyldLibPath = envVariables.get(DYLD_LIBRARY_PATH);
 
-      if (ldPreloadLibs == null || dyldLibPath == null) {
-         return false;
-      }
+      if (ldPreloadLibs == null || dyldLibPath == null) { return false; }
 
       return ldPreloadLibs.contains(sharedLibPath) && dyldLibPath.contains(FileUtil.getPathWithoutFilename(sharedLibPath));
    }

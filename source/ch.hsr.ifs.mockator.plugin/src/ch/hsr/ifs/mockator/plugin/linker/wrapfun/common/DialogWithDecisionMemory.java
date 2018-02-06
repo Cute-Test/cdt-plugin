@@ -58,7 +58,7 @@ public class DialogWithDecisionMemory {
    private boolean showDialog(final String title, final String msg, final IPreferenceStore store) {
       final boolean toggleState = false;
       final MessageDialogWithToggle dialog = MessageDialogWithToggle.open(MessageDialog.QUESTION, UiUtil.getWindowShell(), title, msg,
-               I18N.WrapFunctionDoNotShowAgainMsg, toggleState, store, keyStore, SWT.SHEET);
+            I18N.WrapFunctionDoNotShowAgainMsg, toggleState, store, keyStore, SWT.SHEET);
       return dialog.getReturnCode() == OK_RETURN;
    }
 

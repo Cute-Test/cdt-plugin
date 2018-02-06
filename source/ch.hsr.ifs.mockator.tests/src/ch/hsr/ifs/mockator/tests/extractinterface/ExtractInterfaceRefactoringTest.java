@@ -54,7 +54,7 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
 
    private ExtractInterfaceContext buildRefactoringContext() {
       return new ExtractInterfaceContext.ContextBuilder(getTu(getActiveCElement()), cproject, selection).replaceAllOccurences(replaceOccurrences)
-               .withRefactoringStatus(new RefactoringStatus()).withNewInterfaceName(newInterfaceName).build();
+            .withRefactoringStatus(new RefactoringStatus()).withNewInterfaceName(newInterfaceName).build();
    }
 
    @Override
@@ -107,7 +107,8 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
          final ICElement chosenClass = CoreModel.getDefault().create(chosenClassFile);
          final ITranslationUnit tu = getTu(chosenClass);
          return context.getAST(tu, new NullProgressMonitor());
-      } catch (final CoreException e) {}
+      }
+      catch (final CoreException e) {}
       fail("Not able to get AST for translation unit");
       return null;
    }
@@ -127,8 +128,8 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
 
          @Override
          public int visit(final IASTName name) {
-            if (name.isPartOfTranslationUnitFile() && SelectionHelper.isNodeInsideSelection(name, region)
-                && !(name instanceof ICPPASTQualifiedName)) {
+            if (name.isPartOfTranslationUnitFile() && SelectionHelper.isNodeInsideSelection(name, region) &&
+                !(name instanceof ICPPASTQualifiedName)) {
                names.add(name);
             }
             return PROCESS_CONTINUE;
@@ -138,9 +139,7 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
    }
 
    private Collection<IASTDeclaration> getChosenMemFuns(final ExtractInterfaceContext context) {
-      if (funNames.isEmpty()) {
-         return context.getUsedPublicMemFuns();
-      }
+      if (funNames.isEmpty()) { return context.getUsedPublicMemFuns(); }
 
       final List<IASTDeclaration> chosenMemFuns = list();
       final List<String> chosenMemFunNames = list(funNames.split(","));

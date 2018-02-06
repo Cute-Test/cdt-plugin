@@ -31,6 +31,6 @@ public class ExtractInterfaceDescriptor extends CRefactoringDescriptor {
       final boolean doReplace = Boolean.parseBoolean(getParameterMap().get(REPLACE_ALL_OCCURENCES));
       final String name = getParameterMap().get(NEW_INTERFACE_NAME);
       return new ExtractInterfaceContext.ContextBuilder(getTranslationUnit(), getCProject(), (ITextSelection) getSelection()).withRefactoringStatus(
-               status).replaceAllOccurences(doReplace).withNewInterfaceName(name).build();
+            status).replaceAllOccurences(doReplace).withNewInterfaceName(name).build();
    }
 }

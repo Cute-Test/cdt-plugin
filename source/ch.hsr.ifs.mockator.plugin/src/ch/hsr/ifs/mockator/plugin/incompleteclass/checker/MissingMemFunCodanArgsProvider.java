@@ -28,9 +28,7 @@ class MissingMemFunCodanArgsProvider {
    }
 
    public Optional<MissingMemFunCodanArguments> createMemFunCodanArgs() {
-      if (missingMemFuns.isEmpty()) {
-         return Optional.empty();
-      }
+      if (missingMemFuns.isEmpty()) { return Optional.empty(); }
 
       final Collection<MissingMemberFunction> fake = collectMissingMemFuns(getFakeCtorProvider());
       final Collection<MissingMemberFunction> mock = collectMissingMemFuns(getMockCtorProvider());

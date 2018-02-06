@@ -22,8 +22,7 @@ public class AssertEqualsInserter {
    }
 
    private AbstractAssertEqualsInserter getAssertEqualsStrategy(final ICPPASTFunctionDefinition testFunction) {
-      if (isCuteProject())
-         return new CuteAssertEqualsInserter(testFunction, context);
+      if (isCuteProject()) return new CuteAssertEqualsInserter(testFunction, context);
       else return new CAssertEqualsInserter(testFunction, context);
    }
 

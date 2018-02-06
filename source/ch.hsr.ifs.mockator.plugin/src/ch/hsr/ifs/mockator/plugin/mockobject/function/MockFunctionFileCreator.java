@@ -94,7 +94,7 @@ abstract class MockFunctionFileCreator {
    }
 
    private void insertContentForSourceFile(final String suiteName, final IASTName funToMockName, final IASTTranslationUnit newTu,
-            final ASTRewrite rewriter) throws CoreException {
+         final ASTRewrite rewriter) throws CoreException {
       insertIncludeForCurrentTu(newTu, rewriter);
       insertIncludeForMockedFun(funToMockName, newTu, rewriter);
       insertAssertIncludes(newTu, rewriter);
@@ -113,10 +113,10 @@ abstract class MockFunctionFileCreator {
    protected abstract void insertAssertIncludes(IASTTranslationUnit newTu, ASTRewrite rewriter);
 
    protected abstract void createAddtitionalTestSupport(IASTTranslationUnit newTu, ASTRewrite rewriter, ICPPASTFunctionDeclarator funDeclToMock,
-            String suiteName);
+         String suiteName);
 
    private IASTTranslationUnit createAndGetNewTu(final String suiteName, final IPath destinationPath, final String suffix, final IProgressMonitor pm)
-            throws CoreException {
+         throws CoreException {
       final IPath newFilePath = createPathForNewFile(suiteName, destinationPath, suffix);
       newlyCreatedFile = FileUtil.toIFile(newFilePath);
       final TranslationUnitCreator creator = new TranslationUnitCreator(mockatorProject.getProject(), cRefContext);
@@ -133,7 +133,7 @@ abstract class MockFunctionFileCreator {
    }
 
    private static void insertNamespaceWithCallsVector(final IASTTranslationUnit newTu, final ASTRewrite rewriter,
-            final ICPPASTNamespaceDefinition callsVectorNs, final IASTName callsVectorName) {
+         final ICPPASTNamespaceDefinition callsVectorNs, final IASTName callsVectorName) {
       final IASTSimpleDeclaration callsVector = createCallsVector(callsVectorName);
       callsVectorNs.addDeclaration(callsVector);
       rewriter.insertBefore(newTu, null, callsVectorNs, null);
@@ -193,9 +193,7 @@ abstract class MockFunctionFileCreator {
    private Optional<String> getPathToCurrentTuHeader() throws CoreException {
       final IASTTranslationUnit ast = cRefContext.getAST(originTu, pm);
 
-      if (originTu.isHeaderUnit()) {
-         return Optional.of(ast.getFilePath());
-      }
+      if (originTu.isHeaderUnit()) { return Optional.of(ast.getFilePath()); }
 
       final IFile fileForTu = FileUtil.toIFile(originTu.getPath());
       final SiblingTranslationUnitFinder finder = new SiblingTranslationUnitFinder(fileForTu, ast, cRefContext.getIndex());
@@ -203,7 +201,7 @@ abstract class MockFunctionFileCreator {
    }
 
    private ICPPASTFunctionDeclarator insertIncludeForMockedFun(final IASTName funToMockName, final IASTTranslationUnit newTu,
-            final ASTRewrite rewriter) throws CoreException {
+         final ASTRewrite rewriter) throws CoreException {
       final ICPPASTFunctionDeclarator funDecl = findFunDeclBy(funToMockName).get();
       final CppIncludeResolver resolver = new CppIncludeResolver(newTu, mockatorProject, cRefContext.getIndex());
       final String funDeclTuPath = funDecl.getTranslationUnit().getFilePath();
@@ -223,7 +221,7 @@ abstract class MockFunctionFileCreator {
    }
 
    private void insertTestFunction(final IASTTranslationUnit newTu, final ASTRewrite rewriter, final ICPPASTFunctionDefinition funToMock,
-            final IASTName funToMockName, final String fqCallsVectorName) {
+         final IASTName funToMockName, final String fqCallsVectorName) {
       final ICPPASTFunctionDeclarator funDecl = createTestFunctionDecl(funToMockName);
       final ICPPASTSimpleDeclSpecifier funDeclSpec = nodeFactory.newSimpleDeclSpecifier();
       funDeclSpec.setType(IASTSimpleDeclSpecifier.t_void);
@@ -236,7 +234,7 @@ abstract class MockFunctionFileCreator {
    }
 
    private void createExpectations(final ICPPASTFunctionDefinition functionToMock, final IASTCompoundStatement testFunBody,
-            final ICPPASTFunctionDefinition testFunction) {
+         final ICPPASTFunctionDefinition testFunction) {
       final ExistingTestDoubleMemFun testDoubleMemFun = new ExistingTestDoubleMemFun(functionToMock);
 
       for (final IASTStatement stmt : createExpectationsVector(testFunction, testDoubleMemFun)) {
@@ -256,10 +254,10 @@ abstract class MockFunctionFileCreator {
    }
 
    private Collection<IASTStatement> createExpectationsVector(final ICPPASTFunctionDefinition testFun,
-            final ExistingTestDoubleMemFun functionToMock) {
+         final ExistingTestDoubleMemFun functionToMock) {
       final Optional<IASTName> noExistingExpectations = Optional.empty();
       return getCppStdStrategy().createExpectationsVector(list(functionToMock), EXPECTED_VECTOR_NAME, testFun, noExistingExpectations,
-               LinkedEditModeStrategy.ChooseArguments);
+            LinkedEditModeStrategy.ChooseArguments);
    }
 
    private ExpectationsCppStdStrategy getCppStdStrategy() {

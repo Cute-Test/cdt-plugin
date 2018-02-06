@@ -81,8 +81,7 @@ public class CppIncludeResolver {
 
          final boolean isSystemInclude = false;
          return new IncludeInfo(getBestRelativePath(targetIncludePath), isSystemInclude);
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

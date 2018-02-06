@@ -47,7 +47,7 @@ public class BoostAssignInitializerCreator {
       final ICPPASTExpressionList expressionList = nodeFactory.newExpressionList();
       final IASTIdExpression vector = nodeFactory.newIdExpression(nodeFactory.newName(expectationsName.toCharArray()));
       final ICPPASTBinaryExpression expression = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_plusAssign, vector, createNextCall(head(
-               memFuns).get(), linkedEditStrategy));
+            memFuns).get(), linkedEditStrategy));
       expressionList.addExpression(expression);
       addAllSignatures(expressionList, tail(memFuns));
       return nodeFactory.newExpressionStatement(expressionList);

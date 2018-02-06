@@ -35,11 +35,11 @@ class FreeFunBodyStrategy extends CommonFunBodyStrategy {
    @Override
    protected IASTExpressionStatement createReinterpretCast() {
       final ICPPASTTypeId funPtr = nodeFactory.newTypeId(nodeFactory.newSimpleDeclSpecifier(), nodeFactory.newDeclarator(nodeFactory.newName(FUN_PTR
-               .toCharArray())));
+            .toCharArray())));
       final IASTIdExpression tmpPtr = nodeFactory.newIdExpression(nodeFactory.newName(TMP_PTR.toCharArray()));
       final ICPPASTCastExpression reinterpretCast = nodeFactory.newCastExpression(ICPPASTCastExpression.op_reinterpret_cast, funPtr, tmpPtr);
       return nodeFactory.newExpressionStatement(nodeFactory.newBinaryExpression(IASTBinaryExpression.op_assign, nodeFactory.newIdExpression(
-               nodeFactory.newName(ORIG_FUN.toCharArray())), reinterpretCast));
+            nodeFactory.newName(ORIG_FUN.toCharArray())), reinterpretCast));
    }
 
    @Override

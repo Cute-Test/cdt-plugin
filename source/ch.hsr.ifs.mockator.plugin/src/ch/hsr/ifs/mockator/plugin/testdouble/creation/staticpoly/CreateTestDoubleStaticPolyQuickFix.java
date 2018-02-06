@@ -24,7 +24,7 @@ public class CreateTestDoubleStaticPolyQuickFix extends AbstractCreateTestDouble
 
    @Override
    protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument document,
-            final MockatorRefactoring refactoring) {
+         final MockatorRefactoring refactoring) {
       final LinkedModeInfoCreater creator = new StaticPolyTestDoubleSupport(edit, document, getNameOfNewClass());
       return Optional.of(creator);
    }

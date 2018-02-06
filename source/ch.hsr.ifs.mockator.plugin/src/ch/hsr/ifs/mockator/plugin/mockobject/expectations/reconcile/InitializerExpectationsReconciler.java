@@ -88,9 +88,7 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    }
 
    private static IASTInitializerClause[] getArguments(final IASTInitializerClause clause) {
-      if (clause instanceof ICPPASTInitializerList) {
-         return ((ICPPASTInitializerList) clause).getClauses();
-      }
+      if (clause instanceof ICPPASTInitializerList) { return ((ICPPASTInitializerList) clause).getClauses(); }
 
       return array();
    }

@@ -57,7 +57,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
    // }
    private IASTIfStatement getLazyInit(final ICPPASTFunctionDeclarator function) {
       final ICPPASTUnaryExpression notExpr = nodeFactory.newUnaryExpression(IASTUnaryExpression.op_not, nodeFactory.newIdExpression(nodeFactory
-               .newName(ORIG_FUN.toCharArray())));
+            .newName(ORIG_FUN.toCharArray())));
       final IASTCompoundStatement then = nodeFactory.newCompoundStatement();
       then.addStatement(getDlSym(function));
       then.addStatement(createReinterpretCast());
@@ -72,7 +72,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
       args[0] = nodeFactory.newIdExpression(nodeFactory.newName("RTLD_NEXT".toCharArray()));
       args[1] = nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(getMangledFunName(function)));
       final ICPPASTFunctionCallExpression dlsymcall = nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(nodeFactory.newName("dlsym"
-               .toCharArray())), args);
+            .toCharArray())), args);
       final ICPPASTSimpleDeclSpecifier voidDeclSpec = nodeFactory.newSimpleDeclSpecifier();
       voidDeclSpec.setType(IASTSimpleDeclSpecifier.t_void);
       final IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(voidDeclSpec);

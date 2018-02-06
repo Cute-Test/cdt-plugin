@@ -51,7 +51,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
 
    @Override
    protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
-            throws CoreException {
+         throws CoreException {
       rememberFunName(funName);
       createWrapperFunction(funName, collector, getAST(tu(), pm), pm);
    }
@@ -63,7 +63,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    }
 
    private void createWrapperFunction(final IASTName funName, final ModificationCollector collector, final IASTTranslationUnit tu,
-            final IProgressMonitor pm) {
+         final IProgressMonitor pm) {
       findFunDeclaration(funName, pm).ifPresent((funDecl) -> {
          final IASTDeclSpecifier declSpecifier = ASTUtil.getDeclSpec(funDecl);
          final IASTSimpleDeclaration realFunDecl = createRealFunDecl(declSpecifier, funDecl);
@@ -101,7 +101,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    }
 
    private ICPPASTFunctionDefinition createWrappedFun(final IASTDeclSpecifier declSpec, final ICPPASTFunctionDeclarator function,
-            final IASTSimpleDeclaration realFunDecl) {
+         final IASTSimpleDeclaration realFunDecl) {
       final ICPPASTFunctionDeclarator newFunDecl = function.copy();
       disableCvQualifiers(newFunDecl);
       adjustParamNamesIfNecessary(newFunDecl);
@@ -123,7 +123,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    }
 
    private void insertWrapperFunsInCLinkage(final ModificationCollector collector, final IASTTranslationUnit ast,
-            final ICPPASTLinkageSpecification cLinkageSpec, final IASTName funName) {
+         final ICPPASTLinkageSpecification cLinkageSpec, final IASTName funName) {
       final ASTRewrite rewriter = createRewriter(collector, ast);
       final IASTNode insertionPoint = getInsertionPoint(funName);
       rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, createIfDefWrapFun(), null);
@@ -136,12 +136,12 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    }
 
    private ASTLiteralNode createIfDefWrapFun() {
-      return new ASTLiteralNode(CPPNameConstants.IFDEF_DIRECTIVE + MockatorConstants.SPACE + MockatorConstants.WRAP_MACRO_PREFIX + newFunName
-                                + NEW_LINE);
+      return new ASTLiteralNode(CPPNameConstants.IFDEF_DIRECTIVE + MockatorConstants.SPACE + MockatorConstants.WRAP_MACRO_PREFIX + newFunName +
+                                NEW_LINE);
    }
 
    private static ICPPASTLinkageSpecification wrapFunctionsInCLinkage(final IASTSimpleDeclaration realFunDecl,
-            final ICPPASTFunctionDefinition wrapFunDef) {
+         final ICPPASTFunctionDefinition wrapFunDef) {
       final ICPPASTLinkageSpecification cLinkage = createCLinkageSpec();
       cLinkage.addDeclaration(realFunDecl);
       cLinkage.addDeclaration(wrapFunDef);
@@ -151,21 +151,17 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    private static IASTNode getInsertionPoint(final IASTName funName) {
       IASTNode insertionPoint = ASTUtil.getAncestorOfType(funName, ICPPASTCompositeTypeSpecifier.class);
 
-      if (insertionPoint != null) {
-         return insertionPoint.getParent();
-      }
+      if (insertionPoint != null) { return insertionPoint.getParent(); }
 
       insertionPoint = ASTUtil.getAncestorOfType(funName, ICPPASTFunctionDefinition.class);
 
-      if (insertionPoint != null) {
-         return insertionPoint;
-      }
+      if (insertionPoint != null) { return insertionPoint; }
 
       return ASTUtil.getAncestorOfType(funName, IASTStatement.class);
    }
 
    private static IASTCompoundStatement createWrappedFunReturnStmt(final IASTSimpleDeclaration realFunDecl,
-            final ICPPASTFunctionDeclarator wrapFunDecl) {
+         final ICPPASTFunctionDeclarator wrapFunDecl) {
       final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(wrapFunDecl);
       final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType(realFunDecl, ICPPASTFunctionDeclarator.class);
       final IASTStatement delegateToRealFun = creator.createDelegate(funDecl.getName(), realFunDecl.getDeclSpecifier());
@@ -182,9 +178,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    }
 
    private static void prepareDeclSpecifier(final IASTDeclSpecifier declSpec) {
-      if (!(declSpec instanceof ICPPASTSimpleDeclSpecifier)) {
-         return;
-      }
+      if (!(declSpec instanceof ICPPASTSimpleDeclSpecifier)) { return; }
 
       final ICPPASTSimpleDeclSpecifier simpleDeclSpec = (ICPPASTSimpleDeclSpecifier) declSpec;
       simpleDeclSpec.setExplicit(false);

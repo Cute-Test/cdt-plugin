@@ -51,7 +51,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
 
    @Override
    protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
-            throws CoreException {
+         throws CoreException {
       final Optional<ICPPASTFunctionDeclarator> optFunDecl = findFunDeclaration(funName, pm);
       if (optFunDecl.isPresent()) {
          final IASTTranslationUnit newTu = createAndGetNewTu(funName.toString(), pm);

@@ -42,7 +42,7 @@ public abstract class MockatorQuickFix extends AbstractCodanCMarkerResolution im
 
    protected ICElement getCElement() {
       return OptionalUtil.returnIfPresentElse(UiUtil.getActiveCEditor(), (editor) -> (cEditor = editor).getInputCElement(), () -> cEditor
-               .getInputCElement());
+            .getInputCElement());
    }
 
    public void setRunInCurrentThread(final boolean runInCurrentThread) {

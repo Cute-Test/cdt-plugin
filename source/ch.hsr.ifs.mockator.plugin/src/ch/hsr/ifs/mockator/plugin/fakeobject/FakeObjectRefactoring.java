@@ -29,7 +29,7 @@ public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-            OperationCanceledException {
+         OperationCanceledException {
       final Collection<? extends MissingMemberFunction> missingMemFuns = collectMissingMemFuns(pm);
       final ASTRewrite rewriter = createRewriter(collector, getAST(tu(), pm));
       final ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);

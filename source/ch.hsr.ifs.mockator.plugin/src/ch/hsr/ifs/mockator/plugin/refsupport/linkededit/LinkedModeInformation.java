@@ -38,9 +38,7 @@ public class LinkedModeInformation {
    public LinkedProposalPositionGroup getGroup(final int offset) {
       for (final LinkedProposalPositionGroup group : groups) {
          for (final PositionInformation pos : group.getPositions()) {
-            if (pos.getOffset() == offset) {
-               return group;
-            }
+            if (pos.getOffset() == offset) { return group; }
          }
       }
 

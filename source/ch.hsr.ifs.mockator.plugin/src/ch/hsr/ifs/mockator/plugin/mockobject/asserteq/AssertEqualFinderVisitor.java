@@ -50,9 +50,7 @@ public class AssertEqualFinderVisitor extends ASTVisitor {
 
    @Override
    public int visit(final IASTStatement stmt) {
-      if (stmt instanceof IASTCompoundStatement || !involvesMacroExpansion(stmt)) {
-         return PROCESS_CONTINUE;
-      }
+      if (stmt instanceof IASTCompoundStatement || !involvesMacroExpansion(stmt)) { return PROCESS_CONTINUE; }
 
       for (final IASTMacroExpansionLocation loc : getMacroExpansionLocations(stmt.getNodeLocations())) {
          final Optional<AssertKind> optKind = getAssertionKind(loc);

@@ -35,7 +35,7 @@ public class FormatterOptionsLoader {
             "mockator_formatter.prefs", true));
 
       final Optional<URL> first = mockatorFile.findFirst();
-      
+
       if (!first.isPresent()) {
          fail("Mockator formatter preferences could not be found");
       }

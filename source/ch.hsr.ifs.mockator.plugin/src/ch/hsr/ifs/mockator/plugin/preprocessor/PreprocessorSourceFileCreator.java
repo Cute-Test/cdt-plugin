@@ -42,7 +42,7 @@ class PreprocessorSourceFileCreator extends PreprocessorFileCreator {
 
    @Override
    protected void addContentToTu(final IASTTranslationUnit newAst, final ASTRewrite rewriter, final ICPPASTFunctionDeclarator funDecl,
-            final IProgressMonitor pm) throws CoreException {
+         final IProgressMonitor pm) throws CoreException {
       addHeaderInclude(newAst, rewriter);
       addUndef(newAst, rewriter, null, funDecl.getName().toString());
       insertFunctionDefinition(funDecl, newAst, rewriter);

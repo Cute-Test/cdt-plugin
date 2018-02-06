@@ -52,13 +52,11 @@ public class ChangeEdit {
 
    public Optional<String> getText(final String text) {
       return OptionalUtil.returnIfPresentElseEmpty(getEdit(text), (textEdit) -> textEdit instanceof ReplaceEdit ? Optional.of(((ReplaceEdit) textEdit)
-               .getText()) : Optional.of(((InsertEdit) textEdit).getText()));
+            .getText()) : Optional.of(((InsertEdit) textEdit).getText()));
    }
 
    private static Change[] collectUnderlyingChanges(final Change change) {
-      if (change instanceof NullChange) {
-         return array();
-      }
+      if (change instanceof NullChange) { return array(); }
 
       ILTISException.Unless.assignableFrom(CompositeChange.class, change, "Composite change expected");
       final Change[] subChanges = ((CompositeChange) change).getChildren();
@@ -67,9 +65,7 @@ public class ChangeEdit {
 
       if (fstChange instanceof CompositeChange) {
          return ((CompositeChange) fstChange).getChildren();
-      } else if (fstChange instanceof TextChange) {
-         return array(fstChange);
-      }
+      } else if (fstChange instanceof TextChange) { return array(fstChange); }
 
       throw new ILTISException("Unsupported change object passed").rethrowUnchecked();
    }
@@ -80,9 +76,7 @@ public class ChangeEdit {
 
    private Optional<TextEdit> getEdit(final String text) {
       for (final TextEdit source : sources) {
-         if (isMatchingReplaceEdit(source, text) || isMatchingInsertEdit(source, text)) {
-            return Optional.of(source);
-         }
+         if (isMatchingReplaceEdit(source, text) || isMatchingInsertEdit(source, text)) { return Optional.of(source); }
       }
       return Optional.empty();
    }
@@ -92,9 +86,7 @@ public class ChangeEdit {
          if (source instanceof ReplaceEdit) {
             final ReplaceEdit replaceEdit = (ReplaceEdit) source;
 
-            if (!pattern.matcher(replaceEdit.getText()).find()) {
-               return Optional.of(replaceEdit);
-            }
+            if (!pattern.matcher(replaceEdit.getText()).find()) { return Optional.of(replaceEdit); }
          }
       }
       return Optional.empty();

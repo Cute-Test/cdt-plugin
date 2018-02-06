@@ -21,9 +21,7 @@ public class NamespaceApplier {
    public IASTNode packInSameNamespaces(final IASTSimpleDeclaration decl) {
       final Stack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
 
-      if (namespaces.isEmpty()) {
-         return decl;
-      }
+      if (namespaces.isEmpty()) { return decl; }
 
       final ICPPASTNamespaceDefinition topNs = namespaces.pop();
       ICPPASTNamespaceDefinition parentNs = topNs;

@@ -32,9 +32,7 @@ public class MockatorLibHandler {
    }
 
    public void addLibToProject() throws CoreException {
-      if (hasLib()) {
-         return;
-      }
+      if (hasLib()) { return; }
 
       final IFolder targetFolder = createMockatorFolder();
       copyLibFiles(targetFolder);

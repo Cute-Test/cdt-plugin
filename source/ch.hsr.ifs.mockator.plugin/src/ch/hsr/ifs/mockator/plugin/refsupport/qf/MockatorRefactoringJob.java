@@ -31,9 +31,7 @@ class MockatorRefactoringJob extends Job {
       try {
          final ChangeEdit changeEdit = new MockatorRefactoringExecutor().apply(refactoring, pm);
 
-         if (pm.isCanceled()) {
-            return Status.CANCEL_STATUS;
-         }
+         if (pm.isCanceled()) { return Status.CANCEL_STATUS; }
 
          UiUtil.runInDisplayThread(uiCallBack, changeEdit);
          return Status.OK_STATUS;

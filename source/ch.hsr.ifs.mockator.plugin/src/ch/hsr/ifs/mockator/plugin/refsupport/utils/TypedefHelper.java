@@ -57,9 +57,7 @@ public class TypedefHelper {
       final Set<IType> typedefs = findTypedefs(type);
       final IType candidate = getTypeCandidate(typedefs, type);
 
-      if (candidate instanceof ITypedef && candidate instanceof ICPPBinding) {
-         return ASTUtil.getQfName((ICPPBinding) candidate);
-      }
+      if (candidate instanceof ITypedef && candidate instanceof ICPPBinding) { return ASTUtil.getQfName((ICPPBinding) candidate); }
 
       return filterFilePartOfName(ASTTypeUtil.getType(candidate));
    }
@@ -81,9 +79,7 @@ public class TypedefHelper {
    }
 
    private Set<IType> findTypedefs(final IType type) throws CoreException {
-      if (!(type instanceof IBinding)) {
-         return Collections.emptySet();
-      }
+      if (!(type instanceof IBinding)) { return Collections.emptySet(); }
 
       final IIndex index = getIndex();
       try {
@@ -129,15 +125,11 @@ public class TypedefHelper {
    }
 
    private IASTSimpleDeclaration findContainingTypedef(final IASTNode node, final int recursionsLeft) {
-      if (node == null) {
-         return null;
-      }
+      if (node == null) { return null; }
 
       final IToken syntax = getSyntax(node);
 
-      if (syntax != null && syntax.getImage().equals("typedef")) {
-         return (IASTSimpleDeclaration) node.getParent();
-      }
+      if (syntax != null && syntax.getImage().equals("typedef")) { return (IASTSimpleDeclaration) node.getParent(); }
 
       return recursionsLeft > 0 ? findContainingTypedef(node.getParent(), recursionsLeft - 1) : null;
    }
@@ -158,14 +150,14 @@ public class TypedefHelper {
          final String contentId = contentType.getId();
          final URI uri = URIUtil.toURI(location.getFileName());
          return OptionalUtil.returnIfPresentElseNull(getAst(index, contentId, uri), (ast) -> ast.getNodeSelector(null).findFirstContainedNode(location
-                  .getNodeOffset(), location.getNodeLength()));
+               .getNodeOffset(), location.getNodeLength()));
       }
 
       return null;
    }
 
    private static Optional<IASTTranslationUnit> getAst(final IIndex index, final String contentId, final URI uri) throws CModelException,
-            CoreException {
+         CoreException {
       final ICProject cProject = getProjects()[0];
       final ITranslationUnit tu = new ExternalTranslationUnit(cProject, uri, contentId);
       return Optional.of(tu.getAST(index, ITranslationUnit.AST_SKIP_INDEXED_HEADERS));

@@ -36,7 +36,7 @@ class WithoutCuteFileCreator extends MockFunctionFileCreator {
 
    @Override
    protected void insertContentForHeaderFile(final IASTTranslationUnit newTu, final ASTRewrite rewriter, final IASTName functionToMock,
-            final String suiteName) {
+         final String suiteName) {
       insertTestFunDecl(functionToMock, newTu, rewriter);
    }
 
@@ -57,7 +57,7 @@ class WithoutCuteFileCreator extends MockFunctionFileCreator {
 
    @Override
    protected void createAddtitionalTestSupport(final IASTTranslationUnit newTu, final ASTRewrite rewriter,
-            final ICPPASTFunctionDeclarator funDeclToMock, final String suiteName) {}
+         final ICPPASTFunctionDeclarator funDeclToMock, final String suiteName) {}
 
    private static void insertCAssertInclude(final IASTTranslationUnit newTu, final ASTRewrite rewriter) {
       final AstIncludeNode cute = new AstIncludeNode(MockatorConstants.C_ASSERT_INCLUDE, true);
@@ -73,7 +73,7 @@ class WithoutCuteFileCreator extends MockFunctionFileCreator {
 
    private static IASTInitializerClause[] createAssertEqualParams(final String fqCallsVectorName) {
       final ICPPASTBinaryExpression binOp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_equals, createExpectation(), createActual(
-               fqCallsVectorName));
+            fqCallsVectorName));
       return new IASTInitializerClause[] { binOp };
    }
 

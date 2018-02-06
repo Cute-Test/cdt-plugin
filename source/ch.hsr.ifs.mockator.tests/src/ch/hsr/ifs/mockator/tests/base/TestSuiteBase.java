@@ -9,6 +9,7 @@ import ch.hsr.ifs.mockator.tests.base.util.ExceptionUtilTest;
 import ch.hsr.ifs.mockator.tests.base.util.PathProposalUtilTest;
 import ch.hsr.ifs.mockator.tests.base.util.StringUtilTest;
 
+
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({

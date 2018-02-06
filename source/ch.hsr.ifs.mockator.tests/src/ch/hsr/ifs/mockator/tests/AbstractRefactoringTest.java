@@ -67,7 +67,8 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
    protected IASTTranslationUnit getAst(final CRefactoringContext context) {
       try {
          return context.getAST(getTu(getActiveCElement()), new NullProgressMonitor());
-      } catch (final CoreException e) {}
+      }
+      catch (final CoreException e) {}
       fail("Not able to get AST for translation unit");
       return null;
    }
@@ -147,7 +148,8 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
       executeOnNewFiles((filePath) -> {
          try {
             getFile(filePath).delete(true, new NullProgressMonitor());
-         } catch (final CoreException e) {}
+         }
+         catch (final CoreException e) {}
       });
    }
 

@@ -70,7 +70,7 @@ public class IncludeGuardCreator {
 
    private int getIncludeGuardScheme() {
       final int scheme = PreferenceConstants.getPreference(CODE_TEMPLATES_INCLUDE_GUARD_SCHEME, cProject,
-               CODE_TEMPLATES_INCLUDE_GUARD_SCHEME_FILE_NAME);
+            CODE_TEMPLATES_INCLUDE_GUARD_SCHEME_FILE_NAME);
       return scheme;
    }
 

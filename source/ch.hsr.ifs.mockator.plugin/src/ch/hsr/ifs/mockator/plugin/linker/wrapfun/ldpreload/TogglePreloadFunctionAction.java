@@ -59,9 +59,7 @@ public class TogglePreloadFunctionAction implements IObjectActionDelegate, IMenu
 
          @Override
          public void menuShown(final MenuEvent e) {
-            if (!fillMenu) {
-               return;
-            }
+            if (!fillMenu) { return; }
 
             final Menu m = (Menu) e.widget;
 
@@ -116,7 +114,7 @@ public class TogglePreloadFunctionAction implements IObjectActionDelegate, IMenu
    private Collection<IProject> getReferencedShLibProjectsWithDlSupport() {
       try {
          return Arrays.asList(project.getReferencedProjects()).stream().filter((project) -> CdtManagedProjectType.fromProject(
-                  project) != CdtManagedProjectType.SharedLib ? false : usesDynamicLibrary(project)).collect(Collectors.toList());
+               project) != CdtManagedProjectType.SharedLib ? false : usesDynamicLibrary(project)).collect(Collectors.toList());
       } catch (final CoreException e) {
          return new ArrayList<>();
       }
@@ -133,15 +131,11 @@ public class TogglePreloadFunctionAction implements IObjectActionDelegate, IMenu
 
    @Override
    public void selectionChanged(final IAction action, final ISelection selection) {
-      if (!(selection instanceof IStructuredSelection)) {
-         return;
-      }
+      if (!(selection instanceof IStructuredSelection)) { return; }
 
       final Object obj = ((IStructuredSelection) selection).getFirstElement();
 
-      if (!(obj instanceof IProject)) {
-         return;
-      }
+      if (!(obj instanceof IProject)) { return; }
 
       project = (IProject) obj;
 

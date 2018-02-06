@@ -45,13 +45,11 @@ class MockatorRefactoringExecutor implements Function2<MockatorRefactoring, IPro
    }
 
    private static void assureChangeObjectIsValid(final Change change, final IProgressMonitor pm) throws CoreException {
-      if (!change.isValid(pm).isOK()) {
-         throw new ILTISException("Change object is invalid").rethrowUnchecked();
-      }
+      if (!change.isValid(pm).isOK()) { throw new ILTISException("Change object is invalid").rethrowUnchecked(); }
    }
 
    private static void prepareUndo(final String refactoringDesc, final Change change, final Change undoChange, final boolean success,
-            final IProgressMonitor pm) {
+         final IProgressMonitor pm) {
       undoChange.initializeValidationData(pm);
       final IUndoManager undoManager = RefactoringCore.getUndoManager();
       undoManager.changePerformed(change, success);

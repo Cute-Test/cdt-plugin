@@ -33,7 +33,7 @@ class ExtractInterfaceRunner extends RefactoringRunner {
 
    private ExtractInterfaceRefactoring createRefactoring() {
       final ExtractInterfaceContext context = new ExtractInterfaceContext.ContextBuilder((ITranslationUnit) getElement(), getProject(),
-               (ITextSelection) getSelection()).replaceAllOccurences(true).build();
+            (ITextSelection) getSelection()).replaceAllOccurences(true).build();
       return new ExtractInterfaceRefactoring(context);
    }
 }

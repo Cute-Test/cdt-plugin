@@ -44,9 +44,7 @@ public abstract class UiUtil {
 
    public static Optional<CEditor> getActiveCEditor() {
       final IEditorPart editor = getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-      if (editor instanceof ICEditor) {
-         return Optional.of((CEditor) editor);
-      }
+      if (editor instanceof ICEditor) { return Optional.of((CEditor) editor); }
       return Optional.empty();
    }
 
@@ -62,7 +60,7 @@ public abstract class UiUtil {
 
    public static Optional<IDocument> getCurrentDocument() {
       return OptionalUtil.returnIfPresentElseEmpty(getActiveCEditor(), (editor) -> Optional.of(editor.getDocumentProvider().getDocument(editor
-               .getEditorInput())));
+            .getEditorInput())));
    }
 
    public static void showInfoMessage(final String title, final String msg) {

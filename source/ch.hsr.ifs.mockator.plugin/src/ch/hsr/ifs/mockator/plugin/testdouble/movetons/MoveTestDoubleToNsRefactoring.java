@@ -47,7 +47,7 @@ public class MoveTestDoubleToNsRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-            OperationCanceledException {
+         OperationCanceledException {
       final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClassInSelection(getAST(tu(), pm));
       if (clazz.isPresent()) {
          final IASTTranslationUnit ast = getAST(tu(), pm);

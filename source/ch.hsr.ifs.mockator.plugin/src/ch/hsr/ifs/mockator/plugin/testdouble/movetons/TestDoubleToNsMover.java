@@ -40,7 +40,7 @@ class TestDoubleToNsMover {
    }
 
    private void insertTestDoubleInNamespace(final IASTSimpleDeclaration testDouble, final ICPPASTCompositeTypeSpecifier testDoubleToMove,
-            final ICPPASTFunctionDefinition testFunction) {
+         final ICPPASTFunctionDefinition testFunction) {
       final TestDoubleInNsInserter inserter = new TestDoubleInNsInserter(rewriter, cppStd);
       inserter.insertTestDouble(testDouble, testDoubleToMove, testFunction);
    }

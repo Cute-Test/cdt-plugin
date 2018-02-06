@@ -9,6 +9,7 @@ import ch.hsr.ifs.mockator.tests.fakeobject.staticpoly.FakeObjectCpp11QfTest;
 import ch.hsr.ifs.mockator.tests.fakeobject.staticpoly.FakeObjectOperatorsQfTest;
 import ch.hsr.ifs.mockator.tests.fakeobject.subtype.FakeObjectSubTypeQfTest;
 
+
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({

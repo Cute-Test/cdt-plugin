@@ -36,7 +36,7 @@ public class Cpp11RegistrationFinder extends RegistrationFinder {
 
    private ICPPASTSimpleTypeConstructorExpression getCallTypeCtor(final IASTInitializerClause pushBackArg) {
       ILTISException.Unless.assignableFrom(ICPPASTSimpleTypeConstructorExpression.class, pushBackArg, "Wrong push_back argument: " + pushBackArg
-               .getClass().getName());
+            .getClass().getName());
       final ICPPASTSimpleTypeConstructorExpression typeCtor = (ICPPASTSimpleTypeConstructorExpression) pushBackArg;
       assureIsCallType(typeCtor);
       return typeCtor;

@@ -38,9 +38,7 @@ public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate
 
    @Override
    public void run(final IAction action) {
-      if (!(isCEditorActive() && arePreconditionsSatisfied())) {
-         return;
-      }
+      if (!(isCEditorActive() && arePreconditionsSatisfied())) { return; }
 
       try {
          execute();
@@ -65,23 +63,17 @@ public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate
    private boolean isCEditorActive() {
       final IWorkbenchPart activePart = window.getActivePage().getActivePart();
 
-      if (!(activePart instanceof CEditor)) {
-         return false;
-      }
+      if (!(activePart instanceof CEditor)) { return false; }
 
       final CEditor activeEditor = (CEditor) activePart;
       final IWorkingCopy wc = getWorkingCopy(activeEditor.getEditorInput());
 
-      if (wc == null || !(wc.getResource() instanceof IFile)) {
-         return false;
-      }
+      if (wc == null || !(wc.getResource() instanceof IFile)) { return false; }
 
       cProject = wc.getCProject();
       cElement = activeEditor.getInputCElement();
 
-      if (cProject == null || cElement == null) {
-         return false;
-      }
+      if (cProject == null || cElement == null) { return false; }
 
       return true;
    }

@@ -11,20 +11,20 @@ import ch.hsr.ifs.iltis.core.data.AbstractPair;
 interface DepInjectInfoCollector {
 
    Optional<DependencyInfo> collectDependencyInfos(IASTName problemArgName);
-   
-   class DependencyInfo extends AbstractPair<IASTName, IType>{
+
+   class DependencyInfo extends AbstractPair<IASTName, IType> {
 
       public DependencyInfo(IASTName name, IType type) {
          super(name, type);
       }
-      
+
       public IASTName getName() {
          return first;
       }
-      
+
       public IType getType() {
          return second;
       }
-      
+
    }
 }

@@ -38,7 +38,7 @@ public abstract class LinkerRefactoring extends MockatorRefactoring {
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-            OperationCanceledException {
+         OperationCanceledException {
       OptionalUtil.doIfPresentT(getSelectedName(getAST(tu(), pm)), (selectedName) -> createLinkerSeamSupport(collector, selectedName, pm));
    }
 

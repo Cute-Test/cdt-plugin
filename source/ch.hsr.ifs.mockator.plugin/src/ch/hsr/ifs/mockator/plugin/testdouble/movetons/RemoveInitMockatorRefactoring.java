@@ -57,7 +57,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
       try {
          final FunctionEquivalenceVerifier verifier = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) testFunction.getDeclarator());
          final Collection<IASTFunctionDefinition> testFunctions = getTestfunctionsInTu().stream().filter((funDef) -> verifier.isEquivalent(
-                  (ICPPASTFunctionDeclarator) funDef.getDeclarator())).collect(Collectors.toList());
+               (ICPPASTFunctionDeclarator) funDef.getDeclarator())).collect(Collectors.toList());
          ILTISException.Unless.isTrue(testFunctions.size() == 1, "Was not able not unambiguously determine test function");
          return (ICPPASTFunctionDefinition) head(testFunctions).get();
       } catch (final CoreException e) {
@@ -78,9 +78,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
 
    @Override
    public Change createChange(final IProgressMonitor pm) throws CoreException {
-      if (!hasMockatorInitCall()) {
-         return new NullChange();
-      }
+      if (!hasMockatorInitCall()) { return new NullChange(); }
 
       return createDeleteChange(pm);
    }
@@ -138,7 +136,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    private IASTFunctionDefinition getMatchingTestFunction(final Collection<IASTFunctionDefinition> allTestFunctions) {
       final String testFunName = testFunction.getDeclarator().getName().toString();
       final Collection<IASTFunctionDefinition> functions = allTestFunctions.stream().filter((funDef) -> funDef.getDeclarator().getName().toString()
-               .equals(testFunName)).collect(Collectors.toList());
+            .equals(testFunName)).collect(Collectors.toList());
       ILTISException.Unless.isFalse(functions.isEmpty(), "Could not find test function");
       return head(functions).get();
    }

@@ -25,13 +25,9 @@ public class FakeObjectDefaultCtorProvider implements DefaultCtorProvider {
 
    @Override
    public Optional<? extends MissingMemberFunction> createMissingDefaultCtor(final Collection<? extends MissingMemberFunction> memFuns) {
-      if (fakeObject.getPolymorphismKind() != PolymorphismKind.SubTypePoly) {
-         return Optional.empty();
-      }
+      if (fakeObject.getPolymorphismKind() != PolymorphismKind.SubTypePoly) { return Optional.empty(); }
 
-      if (!hasBaseClassDefaultCtor() && hasOnlyImplicitDefaultCtor()) {
-         return Optional.of(new DefaultConstructor(fakeObject));
-      }
+      if (!hasBaseClassDefaultCtor() && hasOnlyImplicitDefaultCtor()) { return Optional.of(new DefaultConstructor(fakeObject)); }
 
       return Optional.empty();
    }

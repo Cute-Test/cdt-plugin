@@ -50,22 +50,18 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
    private static boolean isUnknownArgumentType(final IASTName name) {
       final IBinding binding = name.resolveBinding();
 
-      if (!isProblemBinding(binding)) {
-         return false;
-      }
+      if (!isProblemBinding(binding)) { return false; }
 
       final IASTNode parent = name.getParent();
 
-      if (!(parent instanceof IASTIdExpression || parent instanceof ICPPASTNamedTypeSpecifier)) {
-         return false;
-      }
+      if (!(parent instanceof IASTIdExpression || parent instanceof ICPPASTNamedTypeSpecifier)) { return false; }
 
       return isPartOfCtorCall(name) || isPartOfFunCall(name);
    }
 
    private static boolean isPartOfCtorCall(final IASTNode node) {
       return ASTUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || ASTUtil.getAncestorOfType(node,
-               ICPPASTInitializerList.class) != null;
+            ICPPASTInitializerList.class) != null;
    }
 
    private static boolean isPartOfFunCall(final IASTNode node) {
@@ -86,9 +82,7 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
 
    private String getInclude(final IASTTranslationUnit targetTypeAst) {
       final IASTTranslationUnit thisAst = getAst();
-      if (isInSameTu(targetTypeAst, thisAst)) {
-         return "";
-      }
+      if (isInSameTu(targetTypeAst, thisAst)) { return ""; }
       final CppIncludeResolver resolver = new CppIncludeResolver(thisAst, getCProject(), getIndex());
       return resolver.resolveIncludePath(targetTypeAst.getFilePath());
    }

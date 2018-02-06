@@ -45,9 +45,7 @@ public class ReturnStatementCreator {
          return null; // return type is void
       } else if (hasPointerReturnType(funDecl)) {
          return createNullPtr();
-      } else if (isReferenceToThis(funDecl, specifier)) {
-         return createDereferencedThisPointer();
-      }
+      } else if (isReferenceToThis(funDecl, specifier)) { return createDereferencedThisPointer(); }
 
       return createDefaultReturn(specifier);
    }
@@ -55,9 +53,7 @@ public class ReturnStatementCreator {
    private static boolean hasPointerReturnType(final ICPPASTFunctionDeclarator funDecl) {
       final IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
 
-      if (pointerOperators.length == 0) {
-         return false;
-      }
+      if (pointerOperators.length == 0) { return false; }
 
       return pointerOperators[0] instanceof IASTPointer;
    }
@@ -82,9 +78,7 @@ public class ReturnStatementCreator {
    private static boolean hasReferenceReturnType(final ICPPASTFunctionDeclarator funDecl) {
       final IASTPointerOperator[] pointerOperators = funDecl.getPointerOperators();
 
-      if (pointerOperators.length != 1) {
-         return false;
-      }
+      if (pointerOperators.length != 1) { return false; }
 
       return pointerOperators[0] instanceof ICPPASTReferenceOperator;
    }

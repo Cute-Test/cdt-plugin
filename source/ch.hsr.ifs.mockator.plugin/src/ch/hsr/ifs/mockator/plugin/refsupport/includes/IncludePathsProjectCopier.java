@@ -57,8 +57,7 @@ public class IncludePathsProjectCopier {
                includePathHandler.addInclude(include);
             }
          }
-      }
-      catch (final CModelException e) {
+      } catch (final CModelException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

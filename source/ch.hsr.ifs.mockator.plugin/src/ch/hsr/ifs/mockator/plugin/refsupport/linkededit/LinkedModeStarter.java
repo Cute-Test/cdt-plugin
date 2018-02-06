@@ -19,9 +19,7 @@ public class LinkedModeStarter implements Consumer<LinkedModeInfoCreater> {
    public void accept(final LinkedModeInfoCreater infoCreator) {
       final List<LinkedProposalPositionGroup> groups = infoCreator.createLinkedModeInfo().getGroups();
 
-      if (groups.isEmpty()) {
-         return;
-      }
+      if (groups.isEmpty()) { return; }
 
       final LinkedProposalModel model = createLinkedModel(groups);
 

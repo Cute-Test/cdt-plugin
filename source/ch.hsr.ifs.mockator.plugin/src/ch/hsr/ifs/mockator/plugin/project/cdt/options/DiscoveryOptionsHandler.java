@@ -60,7 +60,7 @@ public class DiscoveryOptionsHandler extends AbstractOptionsHandler {
    }
 
    private static void setAndSaveScannerConfig(final IScannerConfigBuilderInfo2 scannerConfig, final String providerId, final String modifiedRunArgs)
-            throws CoreException {
+         throws CoreException {
       scannerConfig.setProviderRunArguments(providerId, modifiedRunArgs);
       scannerConfig.save();
    }

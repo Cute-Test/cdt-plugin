@@ -18,9 +18,7 @@ public class AllCallsVectorFinderVisitor extends ASTVisitor {
 
    @Override
    public int visit(final IASTExpression expression) {
-      if (!(expression instanceof IASTIdExpression)) {
-         return PROCESS_CONTINUE;
-      }
+      if (!(expression instanceof IASTIdExpression)) { return PROCESS_CONTINUE; }
 
       final IASTIdExpression idExpr = (IASTIdExpression) expression;
 

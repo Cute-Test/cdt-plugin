@@ -89,8 +89,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
          final IASTTranslationUnit ast = getModelCache().getAST();
          final RegistrationCandidatesFinder finder = new RegistrationCandidatesFinder(ast, getCppStandard());
          return finder.findCallRegistrations(vector.getName());
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

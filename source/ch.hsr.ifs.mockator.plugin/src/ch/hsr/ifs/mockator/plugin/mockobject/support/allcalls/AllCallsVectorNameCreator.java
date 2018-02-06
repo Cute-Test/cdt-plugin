@@ -36,7 +36,7 @@ public class AllCallsVectorNameCreator {
 
    public String getFqNameOfAllCallsVector() {
       return OptionalUtil.returnIfPresentElse(getRegistrationVector(), (name) -> new QualifiedNameCreator(name).createQualifiedName().toString(),
-               () -> createNewFqNameForAllCallsVector().toString());
+            () -> createNewFqNameForAllCallsVector().toString());
    }
 
    private ICPPASTQualifiedName createNewFqNameForAllCallsVector() {

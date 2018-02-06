@@ -34,6 +34,7 @@ import ch.hsr.ifs.mockator.tests.testdouble.creation.subtype.PassedToFreeFunctio
 import ch.hsr.ifs.mockator.tests.testdouble.movetons.MoveToNamespaceRefactoringTest;
 import ch.hsr.ifs.mockator.tests.testdouble.movetons.RemoveInitMockatorRefactoringTest;
 
+
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({

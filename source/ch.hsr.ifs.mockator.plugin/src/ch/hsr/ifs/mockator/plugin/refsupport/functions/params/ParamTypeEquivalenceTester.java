@@ -42,9 +42,7 @@ public class ParamTypeEquivalenceTester {
    }
 
    public boolean areParametersEquivalent() {
-      if (caller.size() != receiver.size()) {
-         return false;
-      }
+      if (caller.size() != receiver.size()) { return false; }
 
       final Iterator<StreamTriple<IType, IType, Integer>> it = getZipedStream().iterator();
 
@@ -78,17 +76,13 @@ public class ParamTypeEquivalenceTester {
             receiverType = ((IArrayType) receiverType).getType();
          }
 
-         if (isPointerType(callerType) ^ isPointerType(receiverType)) {
-            return false;
-         }
+         if (isPointerType(callerType) ^ isPointerType(receiverType)) { return false; }
 
          if (isConstCharArray(callerType) && isString(receiverType)) {
             continue;
          }
 
-         if (!ASTUtil.isSameType(getUnderlyingType(receiverType), getUnderlyingType(callerType))) {
-            return false;
-         }
+         if (!ASTUtil.isSameType(getUnderlyingType(receiverType), getUnderlyingType(callerType))) { return false; }
       }
 
       return true;

@@ -10,6 +10,7 @@ import ch.hsr.ifs.mockator.tests.linker.ldpreload.LdPreloadRefactoringTest;
 import ch.hsr.ifs.mockator.tests.linker.shadowfun.ShadowFunctionRefProjectTest;
 import ch.hsr.ifs.mockator.tests.linker.shadowfun.ShadowFunctionRefactoringTest;
 
+
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({

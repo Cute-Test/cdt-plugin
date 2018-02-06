@@ -15,6 +15,6 @@ public class ProjRelPathGenerator {
    public static <T extends IResource> String getProjectRelativePath(final T folder) {
       final String projRelPath = folder.getProjectRelativePath().toString();
       return pythonFormat("${workspace_loc:%(pathSep)s${ProjName}%(pathSep)s%(projRelPath)s}", zipMap(array("pathSep", "projRelPath"), array(
-               PATH_SEGMENT_SEPARATOR, projRelPath)));
+            PATH_SEGMENT_SEPARATOR, projRelPath)));
    }
 }

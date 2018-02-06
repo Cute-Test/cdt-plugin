@@ -732,8 +732,7 @@ public class ItaniumMangledNameGenerator {
    private static String[] getQualifiedName(final ICPPBinding binding) {
       try {
          return binding.getQualifiedName();
-      }
-      catch (final DOMException e) {
+      } catch (final DOMException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

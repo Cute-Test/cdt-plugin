@@ -31,9 +31,7 @@ class ExpectationsVectorDefinitionFinder {
       return OptionalUtil.returnIfPresentElseEmpty(mockObject.getRegistrationVector(), (regVector) -> {
          for (final ExpectedActualPair expectedActual : findAssertedCallsInTestFunction()) {
             final Optional<IASTName> expVector = getExpectationsVector(expectedActual, regVector);
-            if (expVector.isPresent()) {
-               return getNameOfDefinition(expVector.get());
-            }
+            if (expVector.isPresent()) { return getNameOfDefinition(expVector.get()); }
          }
          return Optional.empty();
       });
@@ -41,7 +39,7 @@ class ExpectationsVectorDefinitionFinder {
 
    private Optional<IASTName> getNameOfDefinition(final IASTName expectationsVector) {
       return new NameFinder(testFunction).getNameMatchingCriteria((name) -> name.toString().equals(expectationsVector.toString()) && ASTUtil
-               .getAncestorOfType(name, IASTDeclarationStatement.class) != null);
+            .getAncestorOfType(name, IASTDeclarationStatement.class) != null);
    }
 
    private static Optional<IASTName> getExpectationsVector(final ExpectedActualPair expectedActual, final IASTName registrationVector) {

@@ -50,21 +50,19 @@ public class ReferencingTestFunFinder {
 
    public Collection<ICPPASTFunctionDefinition> filterTestFunctions(final Collection<ICPPASTFunctionDefinition> functions) {
       final List<ICPPASTFunctionDefinition> testFunctions = functions.stream().filter((function) -> isValidTestFunction(function)).collect(Collectors
-               .toList());
+            .toList());
       addContainingFunctionIfNecessary(testFunctions);
       return testFunctions;
    }
 
    private Collection<ICPPASTFunctionDefinition> getReferencingFunctions(final ICPPASTCompositeTypeSpecifier testDouble,
-            final CRefactoringContext context, final IProgressMonitor pm) {
+         final CRefactoringContext context, final IProgressMonitor pm) {
       final NodeLookup lookup = new NodeLookup(cProject, pm);
       return lookup.findReferencingFunctions(testDouble.getName(), context);
    }
 
    private void addContainingFunctionIfNecessary(final List<ICPPASTFunctionDefinition> testFunctions) {
-      if (!testFunctions.isEmpty()) {
-         return;
-      }
+      if (!testFunctions.isEmpty()) { return; }
 
       final ICPPASTFunctionDefinition testFunction = getContainingTestFunction(testDouble);
 
@@ -76,9 +74,7 @@ public class ReferencingTestFunFinder {
    private ICPPASTFunctionDefinition getContainingTestFunction(final ICPPASTCompositeTypeSpecifier testDouble) {
       final ICPPASTFunctionDefinition containedFunction = getFunctionParent(testDouble);
 
-      if (containedFunction != null && isValidTestFunction(containedFunction)) {
-         return containedFunction;
-      }
+      if (containedFunction != null && isValidTestFunction(containedFunction)) { return containedFunction; }
 
       return null;
    }

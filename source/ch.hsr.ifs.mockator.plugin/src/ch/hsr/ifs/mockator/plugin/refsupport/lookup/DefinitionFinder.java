@@ -70,9 +70,7 @@ class DefinitionFinder extends AbstractNodeFinder {
    private IIndexName[] lookup(final String name) throws CoreException {
       final IIndexBinding[] bind = index.findBindings(name.toCharArray(), IndexFilter.ALL, new NullProgressMonitor());
 
-      if (bind.length > 0) {
-         return index.findDefinitions(bind[0]);
-      }
+      if (bind.length > 0) { return index.findDefinitions(bind[0]); }
 
       return new IIndexName[] {};
    }
@@ -95,9 +93,7 @@ class DefinitionFinder extends AbstractNodeFinder {
 
    private boolean isInOneOfReferencingPrjects(final URI uri) throws CoreException {
       for (final IProject project : projectOrigin.getProject().getReferencedProjects()) {
-         if (ProjectUtil.isPartOfProject(uri, project)) {
-            return true;
-         }
+         if (ProjectUtil.isPartOfProject(uri, project)) { return true; }
       }
 
       return false;

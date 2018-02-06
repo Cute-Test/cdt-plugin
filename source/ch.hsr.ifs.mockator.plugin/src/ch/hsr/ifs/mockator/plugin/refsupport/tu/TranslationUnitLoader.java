@@ -68,9 +68,7 @@ public class TranslationUnitLoader {
    }
 
    private IASTTranslationUnit loadAst(final ITranslationUnit tu) throws CoreException {
-      if (context != null) {
-         return context.getAST(tu, pm);
-      }
+      if (context != null) { return context.getAST(tu, pm); }
 
       return loadAstFromTu(tu);
    }

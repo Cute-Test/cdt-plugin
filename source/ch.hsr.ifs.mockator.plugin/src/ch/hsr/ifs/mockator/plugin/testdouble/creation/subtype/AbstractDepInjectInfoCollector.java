@@ -55,22 +55,18 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
    }
 
    protected Optional<DependencyInfo> getTargetClassOfProblemType(final ICPPASTFunctionDeclarator funDecl, final int argPosOfProblemType) {
-      if (funDecl == null || funDecl.getParameters() == null || funDecl.getParameters().length <= argPosOfProblemType) {
-         return Optional.empty();
-      }
+      if (funDecl == null || funDecl.getParameters() == null || funDecl.getParameters().length <= argPosOfProblemType) { return Optional.empty(); }
 
       final ICPPASTParameterDeclaration paramForProblemArg = funDecl.getParameters()[argPosOfProblemType];
       final IType paramType = TypeCreator.byDeclarator(paramForProblemArg.getDeclarator());
       final IASTDeclSpecifier declSpecifier = paramForProblemArg.getDeclSpecifier();
 
-      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) {
-         return Optional.empty();
-      }
+      if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
 
       final ICPPASTNamedTypeSpecifier namedType = (ICPPASTNamedTypeSpecifier) declSpecifier;
 
-      return OptionalUtil.returnIfPresentElseEmpty(findClassDefinitionOfProblemType(namedType.getName()), (clazz) -> Optional.of(new DependencyInfo(clazz
-               .getName(), paramType)));
+      return OptionalUtil.returnIfPresentElseEmpty(findClassDefinitionOfProblemType(namedType.getName()), (clazz) -> Optional.of(new DependencyInfo(
+            clazz.getName(), paramType)));
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> findClassDefinitionOfProblemType(final IASTName problemTypeName) {
@@ -78,26 +74,22 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
    }
 
    private static boolean isProblemArgumentWithSameName(final IASTName name, final IASTInitializerClause initializer) {
-      if (!(initializer instanceof IASTIdExpression)) {
-         return false;
-      }
+      if (!(initializer instanceof IASTIdExpression)) { return false; }
 
       final IASTName argName = ((IASTIdExpression) initializer).getName();
       return argName.resolveBinding() instanceof IProblemBinding && argName.toString().equals(name.toString());
    }
 
    protected boolean areEquivalentExceptProblemType(final Collection<IASTInitializerClause> funArgs, final ICPPASTFunctionDeclarator funDecl,
-            final int posToIgnore) {
+         final int posToIgnore) {
       final FunArgumentsTypeCollector extractor = new FunArgumentsTypeCollector(funArgs);
       final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(extractor.getFunArgTypes(), getTypesOfFunDecl(funDecl), (pos,
-               receiverType) -> pos == posToIgnore && isPointerOrReferenceToClass(receiverType) && isConsideredAsBaseClass(receiverType));
+            receiverType) -> pos == posToIgnore && isPointerOrReferenceToClass(receiverType) && isConsideredAsBaseClass(receiverType));
       return tester.areParametersEquivalent();
    }
 
    private static boolean isPointerOrReferenceToClass(final IType type) {
-      if (!ASTUtil.hasPointerOrRefType(type)) {
-         return false;
-      }
+      if (!ASTUtil.hasPointerOrRefType(type)) { return false; }
 
       IType underlyingType = ASTUtil.unwindPointerOrRefType(type);
 
@@ -116,9 +108,7 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
    private static boolean isConsideredAsBaseClass(final IType missingArgType) {
       final IType type = ASTUtil.windDownToRealType(missingArgType, false);
 
-      if (!(type instanceof ICPPClassType)) {
-         return false;
-      }
+      if (!(type instanceof ICPPClassType)) { return false; }
 
       return new BaseClassCandidateVerifier((ICPPClassType) type).isConsideredAsBaseClass();
    }

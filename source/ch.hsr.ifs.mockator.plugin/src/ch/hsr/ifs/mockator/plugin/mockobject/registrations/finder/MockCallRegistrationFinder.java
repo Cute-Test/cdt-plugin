@@ -56,9 +56,7 @@ public class MockCallRegistrationFinder implements CallRegistrationFinder {
          private boolean hasCallsVectorType(final IASTName name) {
             final IASTNode parent = name.getParent();
 
-            if (!(parent instanceof IASTIdExpression)) {
-               return false;
-            }
+            if (!(parent instanceof IASTIdExpression)) { return false; }
 
             return new CallsVectorTypeVerifier((IASTIdExpression) parent).isVectorOfCallsVector();
          }

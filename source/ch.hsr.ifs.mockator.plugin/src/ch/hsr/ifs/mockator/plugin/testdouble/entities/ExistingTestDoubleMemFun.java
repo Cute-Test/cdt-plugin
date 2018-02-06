@@ -49,9 +49,7 @@ public class ExistingTestDoubleMemFun extends AbstractTestDoubleMemFun {
    }
 
    public void addMockSupport(final MemFunMockSupportAdder mockSupportAdder, final CallRegistrationFinder finder) {
-      if (hasAlreadyMockSupport(finder)) {
-         return;
-      }
+      if (hasAlreadyMockSupport(finder)) { return; }
 
       mockSupportAdder.addMockSupport(function);
    }

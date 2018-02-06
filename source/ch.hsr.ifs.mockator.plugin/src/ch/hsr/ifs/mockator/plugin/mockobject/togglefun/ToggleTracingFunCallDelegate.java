@@ -54,7 +54,7 @@ public class ToggleTracingFunCallDelegate extends MockatorDelegate {
 
    private void startLinkedMode(final ToggleTracingFunCallRefactoring refactoring, final ChangeEdit changeEdit) {
       final MockObjectLinkedEditModeFactory factory = new MockObjectLinkedEditModeFactory(changeEdit, list(refactoring.getToggledFunction()),
-               getCppStd(), getAssertionOrder(), Optional.empty());
+            getCppStd(), getAssertionOrder(), Optional.empty());
       new LinkedModeStarter().accept(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
    }
 }

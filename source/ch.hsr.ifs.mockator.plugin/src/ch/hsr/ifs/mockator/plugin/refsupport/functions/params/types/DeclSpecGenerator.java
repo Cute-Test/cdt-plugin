@@ -26,10 +26,8 @@ public class DeclSpecGenerator {
 
    private static DeclSpecGeneratorStrategy getStrategy(final IType type) {
       if (type instanceof ICPPTemplateInstance && hasDefaultTemplateParams((ICPPTemplateInstance) type)) return new TemplateInstDeclSpecStrategy();
-      if (type instanceof ICPPBinding)
-         return new BindingDeclSpecStrategy();
-      else if (type instanceof IBasicType)
-         return new BasicTypeDeclSpecStrategy();
+      if (type instanceof ICPPBinding) return new BindingDeclSpecStrategy();
+      else if (type instanceof IBasicType) return new BasicTypeDeclSpecStrategy();
       else return new DefaultDeclSpecStrategy();
    }
 

@@ -25,9 +25,7 @@ public abstract class TraceFunctionQuickFix extends MockatorQuickFix {
       final IncludeFileHandler includeHandler = new IncludeFileHandler(getCProject().getProject());
       final IResource siblingHeaderFile = getPathOfSiblingHeaderFile(marker);
 
-      if (siblingHeaderFile == null) {
-         return true;
-      }
+      if (siblingHeaderFile == null) { return true; }
 
       return includeHandler.hasInclude(siblingHeaderFile);
    }
@@ -46,19 +44,13 @@ public abstract class TraceFunctionQuickFix extends MockatorQuickFix {
       try {
          final ITranslationUnit tu = getTranslationUnitViaWorkspace(marker);
 
-         if (tu == null) {
-            return null;
-         }
+         if (tu == null) { return null; }
 
          // If we have a template function then the marker will be in the header file
-         if (tu.isHeaderUnit()) {
-            return tu.getResource();
-         }
+         if (tu.isHeaderUnit()) { return tu.getResource(); }
 
          final Optional<String> path = getSiblingFilePath(tu, getIndexFromMarker(marker));
-         if (path.isPresent()) {
-            return FileUtil.toIFile(path.get());
-         }
+         if (path.isPresent()) { return FileUtil.toIFile(path.get()); }
       } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }

@@ -19,9 +19,7 @@ class IncludeFinderVisitor {
    }
 
    public boolean hasIncludeStatement(final String includeName) {
-      if (includeName.isEmpty()) {
-         return true;
-      }
+      if (includeName.isEmpty()) { return true; }
 
       final IASTPreprocessorStatement[] prepStmts = tu.getAllPreprocessorStatements();
       return !(Arrays.asList(prepStmts).stream().filter(new IncludeStatementFinder(includeName)).collect(Collectors.toList())).isEmpty();
@@ -37,9 +35,7 @@ class IncludeFinderVisitor {
 
       @Override
       public boolean test(final IASTPreprocessorStatement stmt) {
-         if (!(stmt instanceof IASTPreprocessorIncludeStatement)) {
-            return false;
-         }
+         if (!(stmt instanceof IASTPreprocessorIncludeStatement)) { return false; }
 
          final IASTName foundIncludeName = ((IASTPreprocessorIncludeStatement) stmt).getName();
          return includeName.equals(foundIncludeName.toString());

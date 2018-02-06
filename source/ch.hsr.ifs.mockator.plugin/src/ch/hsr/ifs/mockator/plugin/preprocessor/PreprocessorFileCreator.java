@@ -46,7 +46,7 @@ abstract class PreprocessorFileCreator {
    }
 
    protected abstract void addContentToTu(IASTTranslationUnit newAst, ASTRewrite rewriter, ICPPASTFunctionDeclarator funDecl, IProgressMonitor pm)
-            throws CoreException;
+         throws CoreException;
 
    protected ICPPASTDeclSpecifier getReturnValue(final ICPPASTFunctionDeclarator funDecl) {
       final ICPPASTDeclSpecifier newDeclSpec = ASTUtil.getDeclSpec(funDecl).copy();

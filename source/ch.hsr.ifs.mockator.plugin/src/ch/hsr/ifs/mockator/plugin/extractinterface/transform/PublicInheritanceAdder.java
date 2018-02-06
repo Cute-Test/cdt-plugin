@@ -52,7 +52,7 @@ public class PublicInheritanceAdder implements Consumer<ExtractInterfaceContext>
    }
 
    private static void replaceOldClassWithNew(final ExtractInterfaceContext context, final ICPPASTCompositeTypeSpecifier oldClass,
-            final ICPPASTCompositeTypeSpecifier newClass) {
+         final ICPPASTCompositeTypeSpecifier newClass) {
       final IASTTranslationUnit tuOfChosenClass = context.getTuOfChosenClass();
       final ASTRewrite rewriter = context.getRewriterFor(tuOfChosenClass);
       rewriter.replace(oldClass, newClass, null);

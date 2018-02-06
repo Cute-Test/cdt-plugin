@@ -43,16 +43,14 @@ public class BaseClassCtorCallHandler {
 
    public boolean hasBaseClassDefaultCtor() {
       final Collection<ICPPConstructor> defaultCtors = Arrays.asList(baseClass.getConstructors()).stream().filter((ctor) -> ASTUtil.isDefaultCtor(
-               ctor)).collect(Collectors.toList());
+            ctor)).collect(Collectors.toList());
       return !defaultCtors.isEmpty();
    }
 
    public Optional<ICPPASTConstructorChainInitializer> getBaseClassInitializer(final CppStandard cppStd) {
       final ICPPConstructor baseCtor = getBaseCtorWithMinParams();
 
-      if (baseCtor == null) {
-         return Optional.empty();
-      }
+      if (baseCtor == null) { return Optional.empty(); }
 
       final List<IASTInitializerClause> clauses = getInitializerClauses(baseCtor, cppStd);
       return Optional.of(getInitializer(baseCtor, clauses));
@@ -60,7 +58,7 @@ public class BaseClassCtorCallHandler {
 
    private static ICPPASTConstructorChainInitializer getInitializer(final ICPPConstructor baseCtor, final List<IASTInitializerClause> initializers) {
       final ICPPASTConstructorInitializer ctorInitializer = nodeFactory.newConstructorInitializer(initializers.toArray(
-               new IASTInitializerClause[initializers.size()]));
+            new IASTInitializerClause[initializers.size()]));
       final IASTName baseCtorName = nodeFactory.newName(baseCtor.getName().toCharArray());
       return nodeFactory.newConstructorChainInitializer(baseCtorName, ctorInitializer);
    }

@@ -59,7 +59,7 @@ class Function extends AbstractStaticPolyMissingMemFun {
 
    @Override
    protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
-            final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
+         final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
       final IASTCompoundStatement newFunBody = createEmptyFunBody();
       strategy.addCallVectorRegistration(newFunBody, funDecl, isStatic);
       final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);

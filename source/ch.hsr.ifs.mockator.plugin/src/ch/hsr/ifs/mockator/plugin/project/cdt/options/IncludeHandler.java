@@ -33,9 +33,7 @@ abstract class IncludeHandler extends AbstractOptionsHandler {
       if (tool.isPresent()) {
          for (final IOption option : tool.get().getOptions()) {
             try {
-               if (option.getValueType() == getOptionType()) {
-                  return getOptionValues(option);
-               }
+               if (option.getValueType() == getOptionType()) { return getOptionValues(option); }
             } catch (final BuildException e) {}
          }
       }
@@ -50,9 +48,7 @@ abstract class IncludeHandler extends AbstractOptionsHandler {
       if (tool.isPresent()) {
          for (final IOption option : tool.get().getOptions()) {
             try {
-               if (option.getValueType() == getOptionType()) {
-                  return getOptionValues(option).contains(includePath);
-               }
+               if (option.getValueType() == getOptionType()) { return getOptionValues(option).contains(includePath); }
             } catch (final BuildException e) {}
          }
       }

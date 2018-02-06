@@ -54,7 +54,7 @@ public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDouble
    protected abstract ICPPASTDeclSpecifier createReturnType(ICPPASTFunctionDeclarator funDecl);
 
    protected abstract IASTCompoundStatement createFunBody(TestDoubleMemFunImplStrategy strategy, ICPPASTFunctionDeclarator funDecl,
-            ICPPASTDeclSpecifier specifier, CppStandard cppStd);
+         ICPPASTDeclSpecifier specifier, CppStandard cppStd);
 
    protected IASTCompoundStatement createEmptyFunBody() {
       return nodeFactory.newCompoundStatement();

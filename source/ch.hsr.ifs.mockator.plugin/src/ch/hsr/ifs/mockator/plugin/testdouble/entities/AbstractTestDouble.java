@@ -68,7 +68,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public Collection<ICPPASTFunctionDefinition> getReferencingTestFunctions(final CRefactoringContext context, final ICProject cProject,
-            final IProgressMonitor pm) {
+         final IProgressMonitor pm) {
       final ReferencingTestFunFinder testFunFinder = new ReferencingTestFunFinder(cProject, clazz);
       return testFunFinder.findByIndexLookup(context, pm);
    }
@@ -101,7 +101,7 @@ public abstract class AbstractTestDouble implements TestDouble {
 
    @Override
    public void addMissingMemFuns(final Collection<? extends MissingMemberFunction> missingMemFuns, final ClassPublicVisibilityInserter inserter,
-            final CppStandard cppStd) {
+         final CppStandard cppStd) {
       for (final MissingMemberFunction m : missingMemFuns) {
          final TestDoubleMemFunImplStrategy implStrategy = getImplStrategy(cppStd);
          inserter.insert(m.createFunctionDefinition(implStrategy, cppStd));
@@ -131,13 +131,9 @@ public abstract class AbstractTestDouble implements TestDouble {
       IASTNode currentNode = clazz;
 
       while (currentNode != null) {
-         if (currentNode instanceof ICPPASTFunctionDefinition) {
-            return ((ICPPASTFunctionDefinition) currentNode).getBody();
-         }
+         if (currentNode instanceof ICPPASTFunctionDefinition) { return ((ICPPASTFunctionDefinition) currentNode).getBody(); }
 
-         if (currentNode instanceof ICPPASTNamespaceDefinition) {
-            return currentNode;
-         }
+         if (currentNode instanceof ICPPASTNamespaceDefinition) { return currentNode; }
 
          currentNode = currentNode.getParent();
       }

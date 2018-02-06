@@ -31,13 +31,13 @@ public abstract class CdtHelper {
    }
 
    public static void setAndSaveOption(final IProject proj, final IConfiguration conf, final ITool tool, final IOption option,
-            final String newFlags) {
+         final String newFlags) {
       ManagedBuildManager.setOption(conf, tool, option, newFlags);
       saveBuildInfo(proj);
    }
 
    public static void setAndSaveOption(final IProject proj, final IConfiguration conf, final ITool tool, final IOption option,
-            final Collection<String> values) {
+         final Collection<String> values) {
       ManagedBuildManager.setOption(conf, tool, option, values.toArray(new String[values.size()]));
       saveBuildInfo(proj);
    }
