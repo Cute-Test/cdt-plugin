@@ -2,7 +2,7 @@ package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload;
 
 import org.eclipse.core.resources.IProject;
 
-import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
+import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
 
 
 class UniqueProjectNameCreator {
@@ -24,6 +24,6 @@ class UniqueProjectNameCreator {
    }
 
    private static IProject getProject(final String projectName) {
-      return ProjectUtil.getWorkspaceRoot().getProject(projectName);
+      return WorkspaceUtil.getWorkspaceRoot().getProject(projectName);
    }
 }

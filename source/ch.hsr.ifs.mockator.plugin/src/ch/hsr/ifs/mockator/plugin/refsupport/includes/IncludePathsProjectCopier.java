@@ -10,7 +10,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
+import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
 
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludePathHandler;
 
@@ -40,7 +40,7 @@ public class IncludePathsProjectCopier {
    }
 
    private static IFolder getFolder(final String include) {
-      return ProjectUtil.getWorkspaceRoot().getFolder(new Path(include));
+      return WorkspaceUtil.getWorkspaceRoot().getFolder(new Path(include));
    }
 
    private Collection<String> getSourceProjectIncludes() {
@@ -53,11 +53,12 @@ public class IncludePathsProjectCopier {
       try {
          for (final ISourceRoot sr : sourceProject.getSourceRoots()) {
             if (sr.getPath().segmentCount() > 1) {
-               final IFolder include = ProjectUtil.getWorkspaceRoot().getFolder(sr.getPath());
+               final IFolder include = WorkspaceUtil.getWorkspaceRoot().getFolder(sr.getPath());
                includePathHandler.addInclude(include);
             }
          }
-      } catch (final CModelException e) {
+      }
+      catch (final CModelException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

@@ -33,13 +33,14 @@ import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
+import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoring;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
+
 
 public abstract class MockatorRefactoring extends CRefactoring {
 
@@ -61,7 +62,7 @@ public abstract class MockatorRefactoring extends CRefactoring {
    }
 
    private static IResource[] getWorkspaceRoot() {
-      return new IResource[] { ProjectUtil.getWorkspaceRoot() };
+      return new IResource[] { WorkspaceUtil.getWorkspaceRoot() };
    }
 
    protected ITextSelection getSelection() {
@@ -99,7 +100,7 @@ public abstract class MockatorRefactoring extends CRefactoring {
 
    @Override
    protected RefactoringStatus checkFinalConditions(final IProgressMonitor subProgressMonitor, final CheckConditionsContext checkContext)
-            throws CoreException, OperationCanceledException {
+         throws CoreException, OperationCanceledException {
       return initStatus();
    }
 
@@ -111,38 +112,30 @@ public abstract class MockatorRefactoring extends CRefactoring {
    protected Optional<IASTName> getSelectedName(final IASTTranslationUnit ast) {
       final IASTNode selectedNode = getSelectedNode(ast);
 
-      if (selectedNode instanceof IASTImplicitNameOwner && ((IASTImplicitNameOwner) selectedNode).getImplicitNames().length > 0) {
-         return findOperator(selectedNode);
-      }
+      if (selectedNode instanceof IASTImplicitNameOwner && ((IASTImplicitNameOwner) selectedNode)
+            .getImplicitNames().length > 0) { return findOperator(selectedNode); }
 
-      if (selectedNode instanceof IASTName) {
-         return Optional.of((IASTName) selectedNode);
-      }
+      if (selectedNode instanceof IASTName) { return Optional.of((IASTName) selectedNode); }
 
       final IASTName name = ASTUtil.getAncestorOfType(selectedNode, IASTName.class);
 
-      if (name != null) {
-         return Optional.of(name);
-      }
+      if (name != null) { return Optional.of(name); }
 
       return last(findAllMarkedNames(ast));
    }
 
    private static Optional<IASTName> findOperator(final IASTNode selectedNode) {
       for (final IASTImplicitName iName : getNames(selectedNode)) {
-         if (iName != null && iName.isOperator()) {
-            return Optional.of((IASTName) iName);
-         }
+         if (iName != null && iName.isOperator()) { return Optional.of((IASTName) iName); }
       }
 
       return Optional.empty();
    }
 
    private static IASTImplicitName[] getNames(final IASTNode selectedNode) {
-      if (selectedNode instanceof ICPPASTUnaryExpression || selectedNode instanceof ICPPASTBinaryExpression
-          || selectedNode instanceof ICPPASTNewExpression || selectedNode instanceof ICPPASTDeleteExpression) {
-         return ((IASTImplicitNameOwner) selectedNode).getImplicitNames();
-      }
+      if (selectedNode instanceof ICPPASTUnaryExpression || selectedNode instanceof ICPPASTBinaryExpression ||
+          selectedNode instanceof ICPPASTNewExpression ||
+          selectedNode instanceof ICPPASTDeleteExpression) { return ((IASTImplicitNameOwner) selectedNode).getImplicitNames(); }
 
       return array();
    }
@@ -156,9 +149,11 @@ public abstract class MockatorRefactoring extends CRefactoring {
    protected IIndex getIndex() {
       try {
          return super.getIndex();
-      } catch (final OperationCanceledException e) {
+      }
+      catch (final OperationCanceledException e) {
          throw new ILTISException(e).rethrowUnchecked();
-      } catch (final CoreException e) {
+      }
+      catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
       }
    }

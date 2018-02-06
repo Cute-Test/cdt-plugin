@@ -44,7 +44,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
+import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -118,9 +118,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
 
    IPath getSourceFolderFullPath() {
       final String text = sourceFolderDialogField.getText();
-      if (text.length() > 0) {
-         return new Path(text).makeAbsolute();
-      }
+      if (text.length() > 0) { return new Path(text).makeAbsolute(); }
       return null;
    }
 
@@ -133,15 +131,14 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
             createMockSupportForFreeFunction(suiteName, sourcePath, pm);
             addSuiteToRunner(suiteName, pm);
          }
-      } finally {
+      }
+      finally {
          pm.done();
       }
    }
 
    private void addSuiteToRunner(final String suitename, final IProgressMonitor pm) {
-      if (!linkToRunnerCheck.isSelected()) {
-         return;
-      }
+      if (!linkToRunnerCheck.isSelected()) { return; }
 
       final IASTFunctionDefinition testRunner = runners.get(runnerComboField.getSelectionIndex());
       runnerRefactoring.setTestRunner(testRunner);
@@ -152,7 +149,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
    }
 
    private void createMockSupportForFreeFunction(final String suitename, final IPath folderPath, final IProgressMonitor pm)
-            throws OperationCanceledException {
+         throws OperationCanceledException {
       mockFunction.setSuiteName(suitename);
       mockFunction.setDestinationFolder(folderPath);
       mockFunction.execute(pm);
@@ -203,7 +200,8 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
             getWizard().getContainer().run(true, false, monitor -> {
                try {
                   runners = new RunnerFinder(mockatorCProject).findTestRunners(monitor);
-               } catch (final CoreException e) {
+               }
+               catch (final CoreException e) {
                   throw new InvocationTargetException(e);
                }
 
@@ -215,9 +213,11 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
             runnerStrings[i++] = func.getDeclarator().getName().toString();
          }
          return runnerStrings;
-      } catch (final InvocationTargetException e) {
+      }
+      catch (final InvocationTargetException e) {
          throw new ILTISException(e).rethrowUnchecked();
-      } catch (final InterruptedException e) {
+      }
+      catch (final InterruptedException e) {
          Thread.currentThread().interrupt();
       }
 
@@ -230,9 +230,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
 
    private IProject getCurrentProject() {
       final IPath folderPath = getSourceFolderFullPath();
-      if (folderPath != null) {
-         return PathUtil.getEnclosingProject(folderPath);
-      }
+      if (folderPath != null) { return PathUtil.getEnclosingProject(folderPath); }
       return null;
    }
 
@@ -252,17 +250,13 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
       }
 
       final StatusInfo headerStatus = headerFileAlreadyExists(filePath);
-      if (headerStatus != null) {
-         return headerStatus;
-      }
+      if (headerStatus != null) { return headerStatus; }
 
       final StatusInfo sourceStatus = sourceFileAlreadyExists(filePath);
-      if (sourceStatus != null) {
-         return sourceStatus;
-      }
+      if (sourceStatus != null) { return sourceStatus; }
 
       final IPath folderPath = filePath.removeLastSegments(1).makeRelative();
-      final IResource folder = ProjectUtil.getWorkspaceRoot().findMember(folderPath);
+      final IResource folder = WorkspaceUtil.getWorkspaceRoot().findMember(folderPath);
 
       if (folder == null || !folder.exists() || folder.getType() != IResource.PROJECT && folder.getType() != IResource.FOLDER) {
          status.setError(I18N.NewSuiteWizardFolder + folderPath + I18N.NewSuiteWizardNotExisting);
@@ -295,7 +289,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
 
    private static StatusInfo checkIfFileExists(final IPath filePath) {
       final StatusInfo status = new StatusInfo();
-      final IResource file = ProjectUtil.getWorkspaceRoot().findMember(filePath);
+      final IResource file = WorkspaceUtil.getWorkspaceRoot().findMember(filePath);
 
       if (file != null && file.exists()) {
          if (file.getType() == IResource.FILE) {
@@ -355,9 +349,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
    }
 
    private void handleFieldChanged(final int fields) {
-      if (fields == 0) {
-         return;
-      }
+      if (fields == 0) { return; }
 
       if (fieldChanged(fields, SOURCE_FOLDER_ID)) {
          fSourceFolderStatus = sourceFolderChanged();
@@ -410,7 +402,7 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
          return status;
       }
 
-      final IResource res = ProjectUtil.getWorkspaceRoot().findMember(folderPath);
+      final IResource res = WorkspaceUtil.getWorkspaceRoot().findMember(folderPath);
 
       if (res != null && res.exists()) {
          final int resType = res.getType();
@@ -483,18 +475,14 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
       }
 
       final SourceFolderSelectionDialog dialog = new SourceFolderSelectionDialog(getShell());
-      dialog.setInput(CoreModel.create(ProjectUtil.getWorkspaceRoot()));
+      dialog.setInput(CoreModel.create(WorkspaceUtil.getWorkspaceRoot()));
       dialog.setInitialSelection(initElement);
 
-      if (dialog.open() != Window.OK) {
-         return null;
-      }
+      if (dialog.open() != Window.OK) { return null; }
 
       final Object result = dialog.getFirstResult();
 
-      if (!(result instanceof ICElement)) {
-         return null;
-      }
+      if (!(result instanceof ICElement)) { return null; }
 
       final ICElement element = (ICElement) result;
 
@@ -502,33 +490,25 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
          final ICProject cProject = (ICProject) element;
          final ISourceRoot folder = cProject.findSourceRoot(cProject.getProject());
 
-         if (folder != null) {
-            return folder.getResource().getFullPath();
-         }
+         if (folder != null) { return folder.getResource().getFullPath(); }
       }
 
       return element.getResource().getFullPath();
    }
 
    private static ICElement getSourceFolderFromPath(IPath path) {
-      if (path == null) {
-         return null;
-      }
+      if (path == null) { return null; }
 
       while (path.segmentCount() > 0) {
-         final IResource res = ProjectUtil.getWorkspaceRoot().findMember(path);
+         final IResource res = WorkspaceUtil.getWorkspaceRoot().findMember(path);
 
          if (res != null && res.exists()) {
             final int resType = res.getType();
             if (resType == IResource.PROJECT || resType == IResource.FOLDER) {
                final ICElement elem = CoreModel.getDefault().create(res.getFullPath());
                final ICContainer sourceFolder = CModelUtil.getSourceFolder(elem);
-               if (sourceFolder != null) {
-                  return sourceFolder;
-               }
-               if (resType == IResource.PROJECT) {
-                  return elem;
-               }
+               if (sourceFolder != null) { return sourceFolder; }
+               if (resType == IResource.PROJECT) { return elem; }
             }
          }
 
@@ -588,7 +568,8 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
                         folder = roots[0];
                      }
                   }
-               } catch (final CModelException e) {
+               }
+               catch (final CModelException e) {
                   throw new ILTISException(e).rethrowUnchecked();
                }
 

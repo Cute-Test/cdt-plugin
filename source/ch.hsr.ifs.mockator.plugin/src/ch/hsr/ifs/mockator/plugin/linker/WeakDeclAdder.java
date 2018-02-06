@@ -17,7 +17,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.core.resources.IFile;
 
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
-import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
+import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
@@ -37,22 +37,17 @@ public class WeakDeclAdder {
    public void addWeakDeclAttribute(final ICPPASTFunctionDeclarator funDecl) {
       final IASTTranslationUnit tu = funDecl.getTranslationUnit();
 
-      if (!isTuPartOfWorkspace(tu)) {
-         return;
-      }
+      if (!isTuPartOfWorkspace(tu)) { return; }
 
       final ICPPASTNamedTypeSpecifier withWeakDeclSpec = createWeakDeclSpec(funDecl);
       final IASTNode funDeclParentCopy = getWeakParentCopy(funDecl, withWeakDeclSpec);
       final ASTRewrite rewriter = collector.rewriterForTranslationUnit(tu);
       rewriter.replace(funDecl.getParent(), funDeclParentCopy, null);
-      
-      //TODO remove line below
-      System.out.println("TODO remove");
    }
 
    private static boolean isTuPartOfWorkspace(final IASTTranslationUnit tuOfFunDef) {
       final URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
-      final IFile[] files = ProjectUtil.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
+      final IFile[] files = WorkspaceUtil.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
       return files.length > 0;
    }
 
