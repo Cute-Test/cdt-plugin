@@ -11,6 +11,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringContext;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.RemoveInitMockatorRefactoring;
 import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;

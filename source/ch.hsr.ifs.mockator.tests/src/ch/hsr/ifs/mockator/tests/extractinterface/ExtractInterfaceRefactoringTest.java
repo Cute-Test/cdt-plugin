@@ -30,6 +30,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.wrappers.SelectionHelper;
+
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.extractinterface.preconditions.ClassDefinitionLookup;

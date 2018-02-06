@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.preprocessor;
 
-import static ch.hsr.ifs.mockator.plugin.MockatorConstants.SPACE;
 import static ch.hsr.ifs.iltis.cpp.util.CPPNameConstants.UNDEF_DIRECTIVE;
+import static ch.hsr.ifs.mockator.plugin.MockatorConstants.SPACE;
 import static ch.hsr.ifs.mockator.plugin.base.util.PlatformUtil.SYSTEM_NEW_LINE;
 
 import org.eclipse.cdt.core.dom.ast.IASTNode;
