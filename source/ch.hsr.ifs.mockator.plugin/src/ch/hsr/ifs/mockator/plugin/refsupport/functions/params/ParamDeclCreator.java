@@ -25,7 +25,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.util.CPPNameConstants;
+import ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
 
@@ -84,7 +84,7 @@ public class ParamDeclCreator {
 
       if (stdString.isStdString(litexpr)) {
          spec = stdString.createStdStringDecl();
-         paramName = paramNameCreator.getParamName(CPPNameConstants.STD_STRING);
+         paramName = paramNameCreator.getParamName(CommonCPPConstants.STD_STRING);
          skipConstCharArray = true;
       } else {
          IType type = litexpr.getExpressionType();

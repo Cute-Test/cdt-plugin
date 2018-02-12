@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.util.CPPNameConstants;
+import ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants;
 
 
 public class StdString {
@@ -26,7 +26,7 @@ public class StdString {
    }
 
    public ICPPASTDeclSpecifier createStdStringDecl() {
-      final IASTName stdString = nodeFactory.newName(CPPNameConstants.STD_STRING.toCharArray());
+      final IASTName stdString = nodeFactory.newName(CommonCPPConstants.STD_STRING.toCharArray());
       final ICPPASTNamedTypeSpecifier declspec = nodeFactory.newTypedefNameSpecifier(stdString);
       declspec.setConst(true);
       return declspec;

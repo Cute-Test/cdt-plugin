@@ -14,7 +14,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.util.CPPNameConstants;
+import ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 
@@ -33,15 +33,15 @@ public class IncludeGuardCreator {
    }
 
    public ASTLiteralNode createIfNDef() {
-      return new ASTLiteralNode(CPPNameConstants.IFNDEF_DIRECTIVE + MockatorConstants.SPACE + includeGuardSymbol);
+      return new ASTLiteralNode(CommonCPPConstants.IFNDEF_DIRECTIVE + MockatorConstants.SPACE + includeGuardSymbol);
    }
 
    public ASTLiteralNode createDefine() {
-      return new ASTLiteralNode(CPPNameConstants.DEFINE_DIRECTIVE + MockatorConstants.SPACE + includeGuardSymbol);
+      return new ASTLiteralNode(CommonCPPConstants.DEFINE_DIRECTIVE + MockatorConstants.SPACE + includeGuardSymbol);
    }
 
    public ASTLiteralNode createEndIf() {
-      return new ASTLiteralNode(CPPNameConstants.END_IF_DIRECTIVE);
+      return new ASTLiteralNode(CommonCPPConstants.END_IF_DIRECTIVE);
    }
 
    private String generateIncludeGuardSymbol() {
