@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
+import java.util.LinkedList;
+
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -9,8 +11,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
-
-import ch.hsr.ifs.iltis.core.collections.Stack;
 
 
 public class QualifiedNameCreator {
@@ -23,10 +23,10 @@ public class QualifiedNameCreator {
    }
 
    public ICPPASTQualifiedName createQualifiedName() {
-      final Stack<IASTNode> nodes = collectQualifiedNames();
+      final LinkedList<IASTNode> nodes = collectQualifiedNames();
       final ICPPASTQualifiedName qName = nodeFactory.newQualifiedName(null);
 
-      nodes.nonConsumingStream().forEach((node) -> {
+      nodes.forEach((node) -> {
          if (node instanceof IASTCompositeTypeSpecifier) {
             qName.addName(((IASTCompositeTypeSpecifier) node).getName());
          } else if (node instanceof ICPPASTNamespaceDefinition) {
@@ -39,8 +39,8 @@ public class QualifiedNameCreator {
       return qName;
    }
 
-   private Stack<IASTNode> collectQualifiedNames() {
-      final Stack<IASTNode> qNames = new Stack<>();
+   private LinkedList<IASTNode> collectQualifiedNames() {
+      final LinkedList<IASTNode> qNames = new LinkedList<>();
       IASTNode tmpNode = name;
 
       while (tmpNode.getParent() != null && tmpNode.getParent() != name.getTranslationUnit()) {

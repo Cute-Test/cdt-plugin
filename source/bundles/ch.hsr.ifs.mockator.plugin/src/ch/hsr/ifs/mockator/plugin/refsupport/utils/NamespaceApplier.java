@@ -1,12 +1,12 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
+import java.util.LinkedList;
+
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
-
-import ch.hsr.ifs.iltis.core.collections.Stack;
 
 
 public class NamespaceApplier {
@@ -19,7 +19,7 @@ public class NamespaceApplier {
    }
 
    public IASTNode packInSameNamespaces(final IASTSimpleDeclaration decl) {
-      final Stack<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
+      final LinkedList<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
 
       if (namespaces.isEmpty()) { return decl; }
 
@@ -37,8 +37,9 @@ public class NamespaceApplier {
       return topNs;
    }
 
-   private Stack<ICPPASTNamespaceDefinition> getOriginNamespaces() {
-      final Stack<ICPPASTNamespaceDefinition> namespaces = new Stack<>();
+   private LinkedList<ICPPASTNamespaceDefinition> getOriginNamespaces() {
+      final LinkedList<ICPPASTNamespaceDefinition> namespaces = new LinkedList<>();
+//      final Stack<ICPPASTNamespaceDefinition> namespaces = new Stack<>();
 
       for (IASTNode currNode = origin; currNode != null; currNode = currNode.getParent()) {
          if (currNode instanceof ICPPASTNamespaceDefinition) {
