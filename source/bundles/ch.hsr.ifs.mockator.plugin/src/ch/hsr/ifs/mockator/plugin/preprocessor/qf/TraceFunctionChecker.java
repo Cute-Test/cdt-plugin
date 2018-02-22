@@ -32,8 +32,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.BindingTypeVerifier;
 
 public class TraceFunctionChecker extends AbstractAstFunctionChecker {
 
-   //TODO Transform
-
    @Override
    protected void processFunction(final IASTFunctionDefinition function) {
       if (!(function instanceof ICPPASTFunctionDefinition)) { return; }

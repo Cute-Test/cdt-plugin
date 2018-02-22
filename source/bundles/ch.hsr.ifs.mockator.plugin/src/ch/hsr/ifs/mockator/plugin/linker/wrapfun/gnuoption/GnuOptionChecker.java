@@ -12,7 +12,6 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
 public class GnuOptionChecker extends AbstractIndexAstChecker {
-   //TODO transform
 
    @Override
    public void processAst(final IASTTranslationUnit ast) {

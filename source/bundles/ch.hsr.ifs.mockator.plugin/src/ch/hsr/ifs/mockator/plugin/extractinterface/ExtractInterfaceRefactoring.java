@@ -54,7 +54,6 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
       try {
          handler.postProcess(status);
       }
-      //TODO check if Exception is the right replacement for ILTISException
       catch (final Exception e) {
          status.addFatalError("Extract interface refactoring failed: " + e.getMessage());
       }

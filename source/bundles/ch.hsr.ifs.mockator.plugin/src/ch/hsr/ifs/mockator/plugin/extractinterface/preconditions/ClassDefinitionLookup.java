@@ -67,7 +67,6 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
    }
 
    private static Optional<ICPPASTNamedTypeSpecifier> getNamedSpecifier(final IASTNode originalNode) {
-      //TODO use OptHelper
       final ICPPASTNamedTypeSpecifier namedSpec = ASTUtil.getAncestorOfType(originalNode, ICPPASTNamedTypeSpecifier.class);
 
       if (namedSpec != null) { return Optional.of(namedSpec); }
