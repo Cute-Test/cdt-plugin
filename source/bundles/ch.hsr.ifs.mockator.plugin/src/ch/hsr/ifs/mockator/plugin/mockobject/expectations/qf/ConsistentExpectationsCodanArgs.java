@@ -2,8 +2,6 @@ package ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf;
 
 import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
 import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
-import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.quote;
-import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.unquote;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +58,7 @@ class ConsistentExpectationsCodanArgs extends CodanArguments {
    }
 
    private static String htmlize(final MemFunSignature funCallExpectation) {
-      return quote(StringUtil.CodeString.escapeHtml(unquote(funCallExpectation.toString())));
+      return StringUtil.quote(StringUtil.CodeString.escapeHtml(StringUtil.unquote(funCallExpectation.toString())));
    }
 
    private static List<String> split(final String expectations) {

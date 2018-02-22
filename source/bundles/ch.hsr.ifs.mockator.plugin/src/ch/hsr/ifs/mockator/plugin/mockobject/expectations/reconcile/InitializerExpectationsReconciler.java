@@ -13,9 +13,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -59,7 +59,8 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    private void collectNewCalls(final ICPPASTInitializerList newCallsList) {
       for (final TestDoubleMemFun toAdd : callsToAdd) {
          final ICPPASTInitializerList call = createCallsInitializerList();
-         call.addClause(nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(toAdd.getFunctionSignature())));
+         call.addClause(nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(
+               toAdd.getFunctionSignature())));
 
          for (final IASTInitializerClause initializer : toAdd.createDefaultArguments(cppStd, linkedEdit)) {
             call.addClause(initializer);

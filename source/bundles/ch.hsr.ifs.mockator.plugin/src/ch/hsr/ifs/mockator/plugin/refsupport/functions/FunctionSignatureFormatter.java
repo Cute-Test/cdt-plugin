@@ -1,7 +1,5 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.zipMap;
 import static ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants.CONST_KEYWORD;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.COMMA;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.SPACE;
@@ -11,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
-import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterSignatureHandler;
 
 
@@ -24,8 +21,7 @@ public class FunctionSignatureFormatter {
    }
 
    public String getFunctionSignature() {
-      return StringUtil.pythonFormat("%(funName)s(%(params)s)%(const)s", zipMap(array("funName", "params", "const"), array(getFunDeclName(),
-            getParameters(), getConstDeclIfNecessary())));
+      return String.format("%s(%s)%s", getFunDeclName(), getParameters(), getConstDeclIfNecessary());
    }
 
    private String getFunDeclName() {

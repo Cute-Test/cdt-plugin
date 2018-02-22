@@ -38,8 +38,6 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
-import ch.hsr.ifs.mockator.plugin.base.util.StringUtil;
-
 
 // Implements Itanium C++ ABI name mangling according to
 // http://sourcery.mentor.com/public/cxx-abi/abi.html#mangling
@@ -717,10 +715,11 @@ public class ItaniumMangledNameGenerator {
          // ::= S_
          switch (seqId) {
          case 0:
-            return ""; // The first repetition yields an empty string after
-         // S_
+            return ""; // The first repetition yields an empty string after S_
          default:
-            return StringUtil.getBase36Value(seqId - 1);
+            final int n = seqId - 1;
+            ILTISException.Unless.isTrue(n < 36, "Value not in range for base36 conversion");
+            return Integer.toString(n, 36).toUpperCase();
          }
       }
 

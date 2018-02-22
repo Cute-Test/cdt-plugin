@@ -1,9 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.project.cdt.options;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.zipMap;
 import static ch.hsr.ifs.mockator.plugin.base.util.PlatformUtil.PATH_SEGMENT_SEPARATOR;
-import static ch.hsr.ifs.mockator.plugin.base.util.StringUtil.pythonFormat;
 
 import org.eclipse.core.resources.IResource;
 
@@ -14,7 +11,6 @@ public class ProjRelPathGenerator {
    // ${workspace_loc:/${ProjName}/mockator}
    public static <T extends IResource> String getProjectRelativePath(final T folder) {
       final String projRelPath = folder.getProjectRelativePath().toString();
-      return pythonFormat("${workspace_loc:%(pathSep)s${ProjName}%(pathSep)s%(projRelPath)s}", zipMap(array("pathSep", "projRelPath"), array(
-            PATH_SEGMENT_SEPARATOR, projRelPath)));
+      return String.format("${workspace_loc:%s${ProjName}%1$s%2$s}", PATH_SEGMENT_SEPARATOR, projRelPath);
    }
 }
