@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.mockobject.support;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
+import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 
 
@@ -10,7 +11,6 @@ import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 // #include "mockator.h"
 public class MockatorIncludeInserter {
 
-   private static final String       MOCKATOR_HEADER = "mockator.h";
    private final IASTTranslationUnit ast;
 
    public MockatorIncludeInserter(final IASTTranslationUnit ast) {
@@ -18,7 +18,7 @@ public class MockatorIncludeInserter {
    }
 
    public void insertWith(final ASTRewrite rewriter) {
-      final AstIncludeNode include = new AstIncludeNode(MOCKATOR_HEADER);
+      final AstIncludeNode include = new AstIncludeNode(MockatorConstants.MOCKATOR_HEADER);
       include.insertInTu(ast, rewriter);
    }
 }
