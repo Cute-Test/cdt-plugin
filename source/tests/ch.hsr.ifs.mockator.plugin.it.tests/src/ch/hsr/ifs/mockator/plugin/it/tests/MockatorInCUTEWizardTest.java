@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.plugin;
+package ch.hsr.ifs.mockator.plugin.it.tests;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;

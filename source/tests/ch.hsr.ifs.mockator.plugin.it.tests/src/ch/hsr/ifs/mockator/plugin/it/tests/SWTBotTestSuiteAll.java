@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.plugin;
+package ch.hsr.ifs.mockator.plugin.it.tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -13,4 +13,4 @@ import org.junit.runners.Suite.SuiteClasses;
 	CProjectsNotSupportedTest.class
 //@formatter:on
 })
-public class TestSuiteAll {}
+public class SWTBotTestSuiteAll {}

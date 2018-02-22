@@ -73,7 +73,7 @@ namespace suite {
          void foo2(const std::string & s) const
          {
          }
-         Fake& operator++() {
+         Fake& operator ++() {
            return *this;
          }
      };

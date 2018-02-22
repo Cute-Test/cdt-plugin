@@ -14,7 +14,6 @@ import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.corext.util.CModelUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.junit.Test;
@@ -22,7 +21,6 @@ import org.junit.Test;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingRefactoringTest;
-import ch.hsr.ifs.cdttesting.testsourcefile.TestSourceFile;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
 
@@ -42,7 +40,6 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
    public void setUp() throws Exception {
       addMockatorIncludePaths();
       super.setUp();
-      setFormatterOptions();
       setMockatorProjectOptions();
 
       if (needsManagedCProject) {
@@ -67,8 +64,7 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
    protected IASTTranslationUnit getAst(final CRefactoringContext context) {
       try {
          return context.getAST(getTu(getActiveCElement()), new NullProgressMonitor());
-      }
-      catch (final CoreException e) {}
+      } catch (final CoreException e) {}
       fail("Not able to get AST for translation unit");
       return null;
    }
@@ -80,25 +76,6 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
 
    private void setMockatorProjectOptions() {
       MarkMissingMemFuns.storeInProjectSettings(project, MarkMissingMemFuns.AllMemFuns);
-   }
-
-   private void setFormatterOptions() {
-      new FormatterOptionsLoader(cproject).setFormatterOptions();
-   }
-
-   @Override
-   protected void compareFiles() throws Exception {
-      for (final TestSourceFile testFile : fileMap.values()) {
-         final String expectedSource = testFile.getExpectedSource();
-         final String actualSource = getCurrentSource(testFile.getName());
-         new AssertThat(actualSource).isEqualByIgnoringWhitespace(expectedSource);
-      }
-   }
-
-   @Override
-   protected String makeProjectAbsolutePath(final String relativePath) {
-      final IPath projectPath = project.getLocation();
-      return projectPath.append(relativePath).toOSString();
    }
 
    private void activateManagedBuild() throws CoreException {
@@ -148,8 +125,7 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
       executeOnNewFiles((filePath) -> {
          try {
             getFile(filePath).delete(true, new NullProgressMonitor());
-         }
-         catch (final CoreException e) {}
+         } catch (final CoreException e) {}
       });
    }
 

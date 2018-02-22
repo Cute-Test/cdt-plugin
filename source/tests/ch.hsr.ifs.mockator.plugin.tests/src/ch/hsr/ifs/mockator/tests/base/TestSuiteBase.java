@@ -7,7 +7,6 @@ import org.junit.runners.Suite.SuiteClasses;
 import ch.hsr.ifs.mockator.tests.base.misc.DefaultCtorClassRegistryTest;
 import ch.hsr.ifs.mockator.tests.base.util.ExceptionUtilTest;
 import ch.hsr.ifs.mockator.tests.base.util.PathProposalUtilTest;
-import ch.hsr.ifs.mockator.tests.base.util.StringUtilTest;
 
 
 @RunWith(Suite.class)
@@ -18,8 +17,6 @@ import ch.hsr.ifs.mockator.tests.base.util.StringUtilTest;
    DefaultCtorClassRegistryTest.class,
    ExceptionUtilTest.class,
    PathProposalUtilTest.class,
-   StringUtilTest.class,
-   ExceptionTest.class,
    
 })
 public class TestSuiteBase {

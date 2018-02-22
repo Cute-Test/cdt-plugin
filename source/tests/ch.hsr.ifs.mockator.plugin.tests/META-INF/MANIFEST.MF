@@ -35,6 +35,4 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: ch.hsr.ifs.mockator.tests.MockatorTestPlugin
 Bundle-SymbolicName: ch.hsr.ifs.mockator.plugin.tests;singleton:=true
-Bundle-ClassPath: lib/jdepend-2.9.1.jar,
- .
 Bundle-Vendor: IFS Institut for Software

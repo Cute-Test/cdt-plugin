@@ -9,7 +9,6 @@ import ch.hsr.ifs.mockator.tests.extractinterface.TestSuiteExtractInterface;
 import ch.hsr.ifs.mockator.tests.fakeobject.TestSuiteFakeobject;
 import ch.hsr.ifs.mockator.tests.incompleteclass.TestSuiteIncompleteclass;
 import ch.hsr.ifs.mockator.tests.linker.TestSuiteLinker;
-import ch.hsr.ifs.mockator.tests.metrics.TestSuiteMetrics;
 import ch.hsr.ifs.mockator.tests.mockobject.TestSuiteMockobject;
 import ch.hsr.ifs.mockator.tests.preprocessor.TestSuitePreprocessor;
 import ch.hsr.ifs.mockator.tests.project.TestSuiteProject;
@@ -24,7 +23,6 @@ import ch.hsr.ifs.mockator.tests.testdouble.TestSuiteTestDouble;
    TestSuiteFakeobject.class,
    TestSuiteIncompleteclass.class,
    TestSuiteLinker.class,
-   TestSuiteMetrics.class,
    TestSuiteMockobject.class,
    TestSuitePreprocessor.class,
    TestSuiteProject.class,

@@ -23,8 +23,9 @@ void testSUT() {
    sut.bar(mock);                                                                                                                                                        
 }                                                                                                                                                                      
 //=
-#include <cassert>
 #include "mockator.h"
+
+#include <cassert>
 
 struct Base {
    virtual ~Base() {}

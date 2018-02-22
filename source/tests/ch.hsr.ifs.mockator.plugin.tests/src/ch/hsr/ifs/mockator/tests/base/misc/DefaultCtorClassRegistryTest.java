@@ -30,16 +30,16 @@ public class DefaultCtorClassRegistryTest {
    public void oneNonDefaultCtorYieldsException() {
       thrown.expect(ILTISException.class);
       thrown.expectMessage("Class has no default constructor: Bicycle");
-      final Set<Class<? extends Vehicle>> classes = orderPreservingSet(Car.class, Plane.class, Bicycle.class);
-      new DefaultCtorClassRegistry<>(classes).createInstances();
+      final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class, Bicycle.class);
+      new DefaultCtorClassRegistry<>(clazzes).createInstances();
    }
 
    @Test
    public void oneNotAccessibleClassYieldsException() {
       thrown.expect(ILTISException.class);
       thrown.expectMessage("No access to class Bike");
-      final Set<Class<? extends Vehicle>> classes = orderPreservingSet(Car.class, Plane.class, Bike.class);
-      new DefaultCtorClassRegistry<>(classes).createInstances();
+      final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class, Bike.class);
+      new DefaultCtorClassRegistry<>(clazzes).createInstances();
    }
 
    public static class Vehicle {}

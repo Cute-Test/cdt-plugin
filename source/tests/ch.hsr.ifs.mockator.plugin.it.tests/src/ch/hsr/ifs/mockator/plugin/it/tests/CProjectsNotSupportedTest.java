@@ -1,13 +1,16 @@
-package ch.hsr.ifs.mockator.plugin;
+package ch.hsr.ifs.mockator.plugin.it.tests;
 
 import java.io.IOException;
-import java.util.concurrent.TimeoutException;
 
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class CProjectsNotSupportedTest extends AbstractMockatorUITest {
 
    @SuppressWarnings("nls")
@@ -18,8 +21,8 @@ public class CProjectsNotSupportedTest extends AbstractMockatorUITest {
    }
 
    @SuppressWarnings("nls")
-   @Test(expected = TimeoutException.class)
-   public void emptyCProjectHasNoMockatorMenu() throws Exception {
+   @Test(expected = WidgetNotFoundException.class)
+   public void emptyCProjectHasNoMockatorMenu() {
       final SWTBotTree tree = getProjectExplorer();
       tree.select("EmptyCProject");
       tree.contextMenu("Mockator");

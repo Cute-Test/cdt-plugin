@@ -2419,7 +2419,7 @@ void testSUT(){
 
 void testSUT(){
   struct Fake {
-    Fake& operator++() {
+    Fake& operator ++() {
       return *this;
     }
   };
@@ -2453,7 +2453,7 @@ void testSUT(){
 
 void testSUT(){
   struct Fake {
-    Fake operator++(int) {
+    Fake operator ++(int) {
       return Fake();
     }
   };
@@ -2488,7 +2488,7 @@ void testSUT(){
 
 void testSUT(){
   struct Fake {
-    bool operator==(const Fake & f) const {
+    bool operator ==(const Fake & f) const {
         return bool();
     }
   };

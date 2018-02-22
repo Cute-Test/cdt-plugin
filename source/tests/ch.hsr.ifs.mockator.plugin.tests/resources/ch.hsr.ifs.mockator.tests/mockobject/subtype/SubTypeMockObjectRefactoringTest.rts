@@ -118,14 +118,14 @@ void testSUT() {
             allCalls[mock_id].push_back(call{"bar(int&)", i});
             return char{};
         }
-        void foo(const double & d)
+        void foo(const double& d)
         {
             allCalls[mock_id].push_back(call{"foo(const double&)", d});
         }
     } mock;
     SUT sut(mock);
     sut.bar();
-    calls expectedMock = {{"bar(int&)"}, {"foo(const double &)"}};
+    calls expectedMock = {{"bar(int&)"}, {"foo(const double&)"}};
     ASSERT_EQUAL(expectedMock, allCalls[1]);
 }
 

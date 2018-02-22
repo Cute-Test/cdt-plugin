@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: ch.hsr.ifs.mockator.it.tests
+Bundle-SymbolicName: ch.hsr.ifs.mockator.plugin.it.tests
 Bundle-Version: 0.0.1.qualifier
 Fragment-Host: ch.hsr.ifs.mockator.plugin;bundle-version="0.0.1"
 Bundle-Vendor: %Bundle-Vendor

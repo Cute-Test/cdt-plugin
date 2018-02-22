@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.plugin;
+package ch.hsr.ifs.mockator.plugin.it.tests;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,6 +17,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.matchers.WithText;
 import org.eclipse.swtbot.swt.finder.results.WidgetResult;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
@@ -25,9 +26,14 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
+
+import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 
 
+@RunWith(SWTBotJunit4ClassRunner.class)
 public abstract class AbstractMockatorUITest {
 
    protected static SWTWorkbenchBot bot;
@@ -37,15 +43,22 @@ public abstract class AbstractMockatorUITest {
       bot = new SWTWorkbenchBot();
    }
 
+   @AfterClass
+   public static void close() {
+      try {
+      bot.menu("File").menu("Exit").click();
+      } catch (Exception ignored) {
+         ignored.printStackTrace();
+      }
+   }
+
    @After
    public void cleanup() throws CoreException {
       for (final IProject proj : getWorkspaceRoot().getProjects()) {
-         final JoinableMonitor monitor = new JoinableMonitor();
-         proj.delete(true, monitor);
-         monitor.join();
+         proj.delete(true, new NullProgressMonitor());
       }
-      bot.menu("File").menu("Exit").click();
    }
+
 
    protected SWTBotTree getProjectExplorer() {
       return bot.viewByTitle("Project Explorer").bot().tree();
@@ -111,25 +124,4 @@ public abstract class AbstractMockatorUITest {
       bot.perspectiveByLabel("C/C++").activate();
    }
 
-   private static class JoinableMonitor extends NullProgressMonitor {
-
-      private boolean isDone = false;
-
-      @Override
-      public synchronized void done() {
-         isDone = true;
-         notifyAll();
-      }
-
-      public synchronized void join() {
-         while (!isDone) {
-            try {
-               wait();
-            }
-            catch (final InterruptedException e) {
-               Thread.currentThread().interrupt();
-            }
-         }
-      }
-   }
 }
