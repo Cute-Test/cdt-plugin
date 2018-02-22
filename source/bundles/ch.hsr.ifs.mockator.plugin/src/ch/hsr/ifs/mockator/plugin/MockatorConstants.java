@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin;
 public abstract class MockatorConstants {
 
    public static final String MOCKATOR_NS           = "mockator";
+   public static final String MOCKATOR_HEADER       = "mockator.h";
    public static final String INIT_MOCKATOR         = "INIT_MOCKATOR";
    public static final String CUTE_ASSERT_EQUAL     = "ASSERT_EQUAL";
    public static final String ASSERT_ANY_ORDER      = "ASSERT_ANY_ORDER";
