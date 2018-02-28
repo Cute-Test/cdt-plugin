@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.project.cdt;
+package ch.hsr.ifs.mockator.plugin.tests.project.cdt;
 
 import static org.junit.Assert.assertEquals;
 

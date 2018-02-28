@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.preprocessor;
+package ch.hsr.ifs.mockator.plugin.tests.preprocessor;
 
 import org.junit.Test;
 

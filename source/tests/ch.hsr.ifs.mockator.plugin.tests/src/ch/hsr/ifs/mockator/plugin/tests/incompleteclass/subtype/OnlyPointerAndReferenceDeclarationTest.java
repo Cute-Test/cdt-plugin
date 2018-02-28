@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.incompleteclass.subtype;
+package ch.hsr.ifs.mockator.plugin.tests.incompleteclass.subtype;
 
 import static org.junit.Assert.assertTrue;
 

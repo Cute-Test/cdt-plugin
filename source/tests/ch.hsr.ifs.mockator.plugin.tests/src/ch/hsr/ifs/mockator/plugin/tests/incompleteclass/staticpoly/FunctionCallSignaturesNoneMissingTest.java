@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import ch.hsr.ifs.iltis.cpp.plugin.ast.checker.helper.IProblemId;
+import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;

@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.function;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.function;
 
 import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
 
@@ -12,7 +12,7 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.LinkSuiteToRunnerRefactoring;
 import ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring.RunnerFinder;
-import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
+import ch.hsr.ifs.mockator.plugin.tests.AbstractRefactoringTest;
 
 
 public class LinkSuiteToRunnerRefactoringTest extends AbstractRefactoringTest {
@@ -29,10 +29,10 @@ public class LinkSuiteToRunnerRefactoringTest extends AbstractRefactoringTest {
    @Override
    protected Refactoring createRefactoring() {
       try {
-         final LinkSuiteToRunnerRefactoring runnerRefactoring = new LinkSuiteToRunnerRefactoring(getActiveCElement(), selection, cproject);
+         final LinkSuiteToRunnerRefactoring runnerRefactoring = new LinkSuiteToRunnerRefactoring(getActiveCElement(), selection, currentCproject);
          runnerRefactoring.setSuiteName(newSuiteName);
          runnerRefactoring.setTestRunner(getTestRunnerFunction());
-         runnerRefactoring.setDestinationPath(cproject.getPath());
+         runnerRefactoring.setDestinationPath(currentCproject.getPath());
          return runnerRefactoring;
       }
       catch (final CoreException e) {
@@ -41,7 +41,7 @@ public class LinkSuiteToRunnerRefactoringTest extends AbstractRefactoringTest {
    }
 
    private IASTFunctionDefinition getTestRunnerFunction() throws CoreException {
-      final RunnerFinder runnerFinder = new RunnerFinder(cproject);
+      final RunnerFinder runnerFinder = new RunnerFinder(currentCproject);
       final List<IASTFunctionDefinition> testRunners = runnerFinder.findTestRunners(new NullProgressMonitor());
 
       if (testRunners.isEmpty()) return null;

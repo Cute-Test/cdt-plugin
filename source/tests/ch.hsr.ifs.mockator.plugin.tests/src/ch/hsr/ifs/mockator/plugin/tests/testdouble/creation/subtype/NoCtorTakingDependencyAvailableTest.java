@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.testdouble.creation.subtype;
+package ch.hsr.ifs.mockator.plugin.tests.testdouble.creation.subtype;
 
 import static org.junit.Assert.assertTrue;
 

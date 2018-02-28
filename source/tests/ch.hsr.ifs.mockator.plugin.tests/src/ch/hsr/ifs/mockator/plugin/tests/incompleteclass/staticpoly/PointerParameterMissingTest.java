@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.incompleteclass.staticpoly;
+package ch.hsr.ifs.mockator.plugin.tests.incompleteclass.staticpoly;
 
 import org.junit.Test;
 

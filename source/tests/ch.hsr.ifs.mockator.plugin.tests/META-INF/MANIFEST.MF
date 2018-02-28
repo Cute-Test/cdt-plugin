@@ -1,6 +1,7 @@
 Bundle-ActivationPolicy: lazy
 Bundle-Name: Mockator Unit Tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Fragment-Host: ch.hsr.ifs.mockator.plugin
 Require-Bundle: ch.hsr.ifs.iltis.core,
  ch.hsr.ifs.iltis.cpp,
  org.eclipse.ui,
@@ -29,10 +30,8 @@ Require-Bundle: ch.hsr.ifs.iltis.core,
  org.eclipse.cdt.managedbuilder.ui;bundle-version="8.2.1",
  org.eclipse.cdt.managedbuilder.gnu.ui;bundle-version="8.2.1",
  ch.hsr.ifs.cute.core;bundle-version="4.6.0",
- ch.hsr.ifs.cute.ui;bundle-version="4.6.0",
- ch.hsr.ifs.mockator.plugin;bundle-version="0.0.1"
+ ch.hsr.ifs.cute.ui;bundle-version="4.6.0"
 Bundle-Version: 1.0.0.qualifier
 Bundle-ManifestVersion: 2
-Bundle-Activator: ch.hsr.ifs.mockator.tests.MockatorTestPlugin
 Bundle-SymbolicName: ch.hsr.ifs.mockator.plugin.tests;singleton:=true
 Bundle-Vendor: IFS Institut for Software

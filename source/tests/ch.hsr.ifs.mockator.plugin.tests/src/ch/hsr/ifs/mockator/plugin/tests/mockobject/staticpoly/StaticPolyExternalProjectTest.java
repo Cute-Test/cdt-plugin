@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.staticpoly;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.staticpoly;
 
 import java.util.Properties;
 

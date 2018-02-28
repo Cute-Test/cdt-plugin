@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.tests.extractinterface;
 
-import static ch.hsr.ifs.iltis.core.plugin.collections.CollectionUtil.head;
-import static ch.hsr.ifs.iltis.core.plugin.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -27,9 +27,9 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringContext;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.cpp.plugin.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.plugin.wrappers.CRefactoringContext;
-import ch.hsr.ifs.iltis.cpp.plugin.wrappers.SelectionHelper;
+import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.cpp.wrappers.SelectionHelper;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;

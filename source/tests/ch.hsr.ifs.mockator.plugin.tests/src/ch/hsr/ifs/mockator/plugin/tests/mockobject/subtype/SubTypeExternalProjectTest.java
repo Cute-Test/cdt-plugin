@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.subtype;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.subtype;
 
 import java.util.Properties;
 

@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.subtype;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.subtype;
 
 import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
 
@@ -6,7 +6,7 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.qf.MockObjectByFunsQuickFix;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
-import ch.hsr.ifs.mockator.tests.AbstractQuickfixTest;
+import ch.hsr.ifs.mockator.plugin.tests.AbstractQuickfixTest;
 
 
 public class MockObjectCpp11SubTypeQfTest extends AbstractQuickfixTest {

@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.staticpoly;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.staticpoly;
 
 import java.util.Properties;
 
@@ -6,7 +6,7 @@ import ch.hsr.ifs.mockator.plugin.mockobject.qf.MockObjectRefactoring;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
-import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
+import ch.hsr.ifs.mockator.plugin.tests.AbstractRefactoringTest;
 
 
 public class StaticPolyMockObjectRefactoringTest extends AbstractRefactoringTest {
@@ -23,6 +23,6 @@ public class StaticPolyMockObjectRefactoringTest extends AbstractRefactoringTest
 
    @Override
    protected MockatorRefactoring createRefactoring() {
-      return new MockObjectRefactoring(cppStandard, getActiveCElement(), selection, cproject, linkedEditStrategy);
+      return new MockObjectRefactoring(cppStandard, getActiveCElement(), selection, currentCproject, linkedEditStrategy);
    }
 }

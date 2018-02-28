@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.togglefun;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.togglefun;
 
 import java.util.Properties;
 
@@ -7,7 +7,7 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import ch.hsr.ifs.mockator.plugin.mockobject.togglefun.ToggleTracingFunCallRefactoring;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
+import ch.hsr.ifs.mockator.plugin.tests.AbstractRefactoringTest;
 
 
 public class ToggleTracingFunCallRefactoringTest extends AbstractRefactoringTest {
@@ -26,6 +26,6 @@ public class ToggleTracingFunCallRefactoringTest extends AbstractRefactoringTest
 
    @Override
    protected Refactoring createRefactoring() {
-      return new ToggleTracingFunCallRefactoring(cppStandard, getActiveCElement(), selection, cproject, linkedEditStrategy);
+      return new ToggleTracingFunCallRefactoring(cppStandard, getActiveCElement(), selection, currentCproject, linkedEditStrategy);
    }
 }

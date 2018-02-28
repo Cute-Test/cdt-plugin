@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.function;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.function;
 
 import java.util.Properties;
 
@@ -6,7 +6,7 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.function.MockFunctionRefactoring;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
-import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
+import ch.hsr.ifs.mockator.plugin.tests.AbstractRefactoringTest;
 
 
 public class MockFunctionRefactoringTest extends AbstractRefactoringTest {
@@ -22,6 +22,6 @@ public class MockFunctionRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {
-      return new MockFunctionRefactoring(cppStandard, getActiveCElement(), selection, cproject, cproject);
+      return new MockFunctionRefactoring(cppStandard, getActiveCElement(), selection, currentCproject, currentCproject);
    }
 }

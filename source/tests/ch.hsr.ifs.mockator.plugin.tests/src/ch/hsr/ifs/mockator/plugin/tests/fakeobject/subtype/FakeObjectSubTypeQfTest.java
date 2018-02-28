@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.tests.fakeobject.subtype;
 
-import ch.hsr.ifs.iltis.cpp.plugin.ast.checker.helper.IProblemId;
+import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.fakeobject.FakeObjectQuickFix;

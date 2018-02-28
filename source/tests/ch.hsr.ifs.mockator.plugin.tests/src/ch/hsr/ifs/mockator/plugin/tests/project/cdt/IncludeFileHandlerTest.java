@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.project.cdt;
+package ch.hsr.ifs.mockator.plugin.tests.project.cdt;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludeFileHandler;
-import ch.hsr.ifs.mockator.tests.CdtCppTestProject;
+import ch.hsr.ifs.mockator.plugin.tests.CdtCppTestProject;
 
 
 public class IncludeFileHandlerTest {

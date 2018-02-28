@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.testdouble.creation.staticpoly;
+package ch.hsr.ifs.mockator.plugin.tests.testdouble.creation.staticpoly;
 
 import static org.junit.Assert.assertTrue;
 

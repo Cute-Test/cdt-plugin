@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.convert;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.convert;
 
 import java.util.Properties;
 
@@ -7,7 +7,7 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import ch.hsr.ifs.mockator.plugin.mockobject.convert.ConvertToMockObjectRefactoring;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.project.properties.LinkedEditModeStrategy;
-import ch.hsr.ifs.mockator.tests.AbstractRefactoringTest;
+import ch.hsr.ifs.mockator.plugin.tests.AbstractRefactoringTest;
 
 
 public class ConvertToMockObjectRefactoringTest extends AbstractRefactoringTest {
@@ -26,6 +26,6 @@ public class ConvertToMockObjectRefactoringTest extends AbstractRefactoringTest 
 
    @Override
    protected Refactoring createRefactoring() {
-      return new ConvertToMockObjectRefactoring(cppStandard, getActiveCElement(), selection, cproject, linkedEditStrategy);
+      return new ConvertToMockObjectRefactoring(cppStandard, getActiveCElement(), selection, currentCproject, linkedEditStrategy);
    }
 }

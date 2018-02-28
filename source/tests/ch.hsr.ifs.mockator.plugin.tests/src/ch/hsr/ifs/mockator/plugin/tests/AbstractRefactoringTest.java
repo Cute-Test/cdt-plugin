@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.junit.Test;
 
-import ch.hsr.ifs.iltis.cpp.plugin.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.cdttesting.cdttest.CDTTestingRefactoringTest;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;

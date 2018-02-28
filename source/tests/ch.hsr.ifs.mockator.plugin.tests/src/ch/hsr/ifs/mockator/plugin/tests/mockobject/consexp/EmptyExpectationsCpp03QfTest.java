@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.mockobject.consexp;
+package ch.hsr.ifs.mockator.plugin.tests.mockobject.consexp;
 
 import org.junit.Ignore;
 
@@ -8,7 +8,7 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf.ConsistentExpectationsQuickFix;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
-import ch.hsr.ifs.mockator.tests.AbstractQuickfixTest;
+import ch.hsr.ifs.mockator.plugin.tests.AbstractQuickfixTest;
 
 
 public class EmptyExpectationsCpp03QfTest extends AbstractQuickfixTest {

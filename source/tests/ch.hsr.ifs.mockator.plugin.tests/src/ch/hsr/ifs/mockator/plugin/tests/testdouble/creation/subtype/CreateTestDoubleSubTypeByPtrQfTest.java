@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.testdouble.creation.subtype;
+package ch.hsr.ifs.mockator.plugin.tests.testdouble.creation.subtype;
 
 import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
 
@@ -6,7 +6,7 @@ import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype.CreateTestDoubleSubTypeQuickFix;
-import ch.hsr.ifs.mockator.tests.AbstractQuickfixTest;
+import ch.hsr.ifs.mockator.plugin.tests.AbstractQuickfixTest;
 
 
 public class CreateTestDoubleSubTypeByPtrQfTest extends AbstractQuickfixTest {

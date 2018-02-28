@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.linker.shadowfun;
+package ch.hsr.ifs.mockator.plugin.tests.linker.shadowfun;
 
 import org.junit.Before;
 

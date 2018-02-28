@@ -1,4 +1,4 @@
-package ch.hsr.ifs.mockator.tests.project.nature;
+package ch.hsr.ifs.mockator.plugin.tests.project.nature;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -15,7 +15,7 @@ import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
-import ch.hsr.ifs.mockator.tests.CdtCppTestProject;
+import ch.hsr.ifs.mockator.plugin.tests.CdtCppTestProject;
 
 
 public class NatureHandlerTest {
