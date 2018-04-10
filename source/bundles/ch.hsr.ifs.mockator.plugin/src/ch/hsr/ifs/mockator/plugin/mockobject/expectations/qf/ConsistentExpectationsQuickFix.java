@@ -45,7 +45,7 @@ public class ConsistentExpectationsQuickFix extends MockatorQfWithRefactoringSup
    }
 
    @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final ITextSelection selection, final CodanArguments ca) {
+   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final CodanArguments ca) {
       return new ConsistentExpectationsRefactoring(cElement, selection, getCProject(), (ConsistentExpectationsCodanArgs) ca, getCppStandard(),
             getLinkedEditStrategy());
    }

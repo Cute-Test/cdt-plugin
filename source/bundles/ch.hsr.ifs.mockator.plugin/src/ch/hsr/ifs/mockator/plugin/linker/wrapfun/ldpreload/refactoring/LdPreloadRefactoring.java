@@ -23,6 +23,7 @@ import org.eclipse.jface.text.ITextSelection;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
@@ -42,7 +43,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
    private final IProject    targetProject;
    private IFile             newFile;
 
-   public LdPreloadRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cProject,
+   public LdPreloadRefactoring(final CppStandard cppStd, final ICElement element, final Optional<ITextSelection> selection, final ICProject cProject,
                                final IProject targetProject) {
       super(element, selection, cProject);
       this.cppStd = cppStd;
@@ -55,7 +56,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
       final Optional<ICPPASTFunctionDeclarator> optFunDecl = findFunDeclaration(funName, pm);
       if (optFunDecl.isPresent()) {
          final IASTTranslationUnit newTu = createAndGetNewTu(funName.toString(), pm);
-         final ASTRewrite rewriter = createRewriter(collector, newTu);
+         final ASTRewrite rewriter = collector.rewriterForTranslationUnit(newTu);
          insertFunDeclInclude(optFunDecl.get(), newTu, rewriter);
          insertSupportingIncludes(optFunDecl.get(), newTu, rewriter);
          insertFunDefinition(createFunDefinition(optFunDecl.get()), newTu, rewriter);
@@ -73,7 +74,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
    }
 
    private static boolean isMemberFunction(final ICPPASTFunctionDeclarator funDecl) {
-      return ASTUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) != null;
+      return CPPVisitor.findAncestorWithType(funDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null) != null;
    }
 
    private void insertFunDeclInclude(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit tu, final ASTRewrite rewriter) {
@@ -93,7 +94,7 @@ public class LdPreloadRefactoring extends LinkerRefactoring {
    private IASTTranslationUnit createAndGetNewTu(final String funName, final IProgressMonitor pm) throws CoreException {
       final IPath newLocation = getPathForNewFile(funName);
       newFile = FileUtil.toIFile(newLocation);
-      final TranslationUnitCreator creator = new TranslationUnitCreator(targetProject, refactoringContext());
+      final TranslationUnitCreator creator = new TranslationUnitCreator(targetProject, refactoringContext);
       return creator.createAndGetNewTu(newLocation, pm);
    }
 

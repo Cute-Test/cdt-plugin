@@ -15,7 +15,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -83,6 +83,6 @@ public class ExistingTestDoubleMemFun extends AbstractTestDoubleMemFun {
    }
 
    public ICPPASTCompositeTypeSpecifier getContainingClass() {
-      return ASTUtil.getAncestorOfType(getFunDecl(), ICPPASTCompositeTypeSpecifier.class);
+      return CPPVisitor.findAncestorWithType(getFunDecl(), ICPPASTCompositeTypeSpecifier.class).orElse(null);
    }
 }

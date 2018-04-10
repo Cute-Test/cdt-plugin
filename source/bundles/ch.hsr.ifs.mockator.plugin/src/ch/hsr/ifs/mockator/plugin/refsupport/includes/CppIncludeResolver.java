@@ -58,15 +58,15 @@ public class CppIncludeResolver {
    }
 
    public AstIncludeNode resolveIncludeNode(final String targetIncludePath) {
-      final IncludeInfo result = getIncludePath(targetIncludePath);
+      final IncludeInfo result = getIncludeInfo(targetIncludePath);
       return new AstIncludeNode(result.getIncludePath(), result.isSystemInclude());
    }
 
    public String resolveIncludePath(final String targetIncludePath) {
-      return getIncludePath(targetIncludePath).getIncludePath();
+      return getIncludeInfo(targetIncludePath).getIncludePath();
    }
 
-   private IncludeInfo getIncludePath(final String targetIncludePath) {
+   private IncludeInfo getIncludeInfo(final String targetIncludePath) {
       try {
          final IIndexFile indexFile = getIndexFile(targetIncludePath, targetProject, index);
 

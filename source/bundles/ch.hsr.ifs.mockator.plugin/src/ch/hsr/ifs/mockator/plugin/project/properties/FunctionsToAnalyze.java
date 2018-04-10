@@ -82,7 +82,7 @@ public enum FunctionsToAnalyze implements PropertyTypeWithDefault {
 
    public static FunctionsToAnalyze fromName(final String name) {
       final FunctionsToAnalyze result = STRING_TO_ENUM.get(name);
-      ILTISException.Unless.notNull(result, String.format("Unkown function strategy '%s'", name));
+      ILTISException.Unless.notNull(String.format("Unkown function strategy '%s'", name), result);
       return result;
    }
 

@@ -4,7 +4,7 @@
    <extension
           id="ch.hsr.ifs.mockator.markerResolution"
           name="%extensionMarkerResolution.name"
-          point="ch.hsr.ifs.iltis.cpp.labeledMarkerResolution">
+          point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
       <resolution
             class="ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly.CreateTestDoubleStaticPolyQuickFix"
             problemId="ch.hsr.ifs.mockator.MissingTestDoublStaticPolyProblem">

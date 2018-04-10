@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
@@ -84,6 +84,6 @@ public class ReferencingTestFunFinder {
    }
 
    private static ICPPASTFunctionDefinition getFunctionParent(final IASTNode astNode) {
-      return ASTUtil.getAncestorOfType(astNode, ICPPASTFunctionDefinition.class);
+      return CPPVisitor.findAncestorWithType(astNode, ICPPASTFunctionDefinition.class).orElse(null);
    }
 }

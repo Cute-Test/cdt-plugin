@@ -15,7 +15,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 
 @SuppressWarnings("restriction")
@@ -34,7 +33,7 @@ public abstract class UiUtil {
 
    private static Display getDisplay() {
       final Display display = PlatformUI.getWorkbench().getDisplay();
-      ILTISException.Unless.isFalse(display == null || display.isDisposed(), "Display should not be null or already disposed");
+      ILTISException.Unless.isFalse("Display should not be null or already disposed", display == null || display.isDisposed());
       return display;
    }
 
@@ -50,7 +49,7 @@ public abstract class UiUtil {
 
    public static IWorkbenchWindow getActiveWorkbenchWindow() {
       final IWorkbenchWindow activeWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-      ILTISException.Unless.notNull(activeWindow, "Not called from the UI thread");
+      ILTISException.Unless.notNull("Not called from the UI thread", activeWindow);
       return activeWindow;
    }
 
@@ -59,8 +58,7 @@ public abstract class UiUtil {
    }
 
    public static Optional<IDocument> getCurrentDocument() {
-      return OptionalUtil.returnIfPresentElseEmpty(getActiveCEditor(), (editor) -> Optional.of(editor.getDocumentProvider().getDocument(editor
-            .getEditorInput())));
+      return getActiveCEditor().map((editor) -> editor.getDocumentProvider().getDocument(editor.getEditorInput()));
    }
 
    public static void showInfoMessage(final String title, final String msg) {

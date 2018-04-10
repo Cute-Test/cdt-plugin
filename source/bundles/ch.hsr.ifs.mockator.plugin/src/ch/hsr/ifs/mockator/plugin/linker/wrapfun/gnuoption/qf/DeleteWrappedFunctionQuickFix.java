@@ -26,7 +26,7 @@ public class DeleteWrappedFunctionQuickFix extends MockatorQfWithRefactoringSupp
    }
 
    @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final ITextSelection sel, final CodanArguments ca) {
+   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> sel, final CodanArguments ca) {
       final IDocument doc = UiUtil.getCurrentDocument().get();
       return new DeleteWrappedFunctionRefactoring(cElement, sel, getCProject(), doc);
    }

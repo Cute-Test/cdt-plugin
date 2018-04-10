@@ -25,18 +25,18 @@ public class Cpp03RegistrationFinder extends RegistrationFinder {
    }
 
    private static ICPPASTFunctionCallExpression getFunCall(final IASTInitializerClause pushBackArg) {
-      ILTISException.Unless.assignableFrom(ICPPASTFunctionCallExpression.class, pushBackArg, "Wrong call argument type");
+      ILTISException.Unless.assignableFrom("Wrong call argument type", ICPPASTFunctionCallExpression.class, pushBackArg);
       return (ICPPASTFunctionCallExpression) pushBackArg;
    }
 
    private void assureHasFunSignatureArg(final IASTInitializerClause[] funArgs) {
-      ILTISException.Unless.isTrue(funArgs.length > 0, "A call must have arguments");
-      ILTISException.Unless.isTrue(isStringLiteral(funArgs[0]), "Fun signature must be a string literal");
+      ILTISException.Unless.isTrue("A call must have arguments", funArgs.length > 0);
+      ILTISException.Unless.isTrue("Fun signature must be a string literal", isStringLiteral(funArgs[0]));
    }
 
    private static void assureIsCallType(final ICPPASTFunctionCallExpression funCall) {
       final IASTExpression funNameExpr = funCall.getFunctionNameExpression();
-      ILTISException.Unless.isTrue(isCall(funNameExpr), "Not of call type");
+      ILTISException.Unless.isTrue("Not of call type", isCall(funNameExpr));
    }
 
    private static boolean isCall(final IASTExpression functionNameExpression) {

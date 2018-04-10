@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionDelegateCallCreator;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
@@ -41,7 +41,7 @@ class MemFunBodyStrategy extends CommonFunBodyStrategy {
    }
 
    private static ICPPASTCompositeTypeSpecifier getClassOf(final ICPPASTFunctionDeclarator funDecl) {
-      return ASTUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class);
+      return CPPVisitor.findAncestorWithType(funDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null);
    }
 
    private static ICPPASTQualifiedName getFullyQualifiedNameFor(final IASTCompositeTypeSpecifier clazz) {

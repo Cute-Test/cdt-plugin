@@ -12,7 +12,6 @@ import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.text.edits.ReplaceEdit;
 
 import ch.hsr.ifs.iltis.core.data.AbstractPair;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
@@ -124,23 +123,22 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
    }
 
    private Optional<OffsetAndLength> getAssertOffsetAndLength() {
-      return OptionalUtil.returnIfPresentElseEmpty(getAssertPosition(), (assertPos) -> Optional.of(new OffsetAndLength(assertPos, assertOrder
-            .getAssertionCommand().length())));
+      return getAssertPosition().map(assertPos -> new OffsetAndLength(assertPos, assertOrder.getAssertionCommand().length()));
    }
 
    private Optional<Integer> getAssertPosition() {
-      return OptionalUtil.returnIfPresentElseEmpty(getChangeEditText(), (changeEditText) -> {
+      return getChangeEditText().map(changeEditText -> {
          final Matcher m = getAssertPattern().matcher(changeEditText);
-         return m.find() ? Optional.of(getChangeEditOffset().get() + m.start()) : Optional.empty();
+         return m.find() ? getChangeEditOffset().get() + m.start() : null;
       });
    }
 
    private Optional<String> getChangeEditText() {
-      return OptionalUtil.returnIfPresentElseEmpty(expectationsName, (name) -> changeEdit.getText(name));
+      return expectationsName.flatMap(changeEdit::getText);
    }
 
    protected Optional<Integer> getChangeEditOffset() {
-      return OptionalUtil.returnIfPresentElseEmpty(expectationsName, (name) -> Optional.of(changeEdit.getOffset(name)));
+      return expectationsName.map(changeEdit::getOffset);
    }
 
    private Pattern getAssertPattern() {
@@ -151,15 +149,15 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
    }
 
    private Optional<ExpectationVectorInfo> getExpectationVectorInfo() {
-      return OptionalUtil.returnIfPresentElseEmpty(getChangeEditText(), (changeText) -> {
+      return getChangeEditText().map(changeText -> {
          final Matcher m = getExpectationsVectorPattern().matcher(changeText);
 
          if (m.find()) {
             final int startPos = m.start(1);
             final String callSequenceVectorText = m.group(1);
-            return Optional.of(new ExpectationVectorInfo(startPos, callSequenceVectorText));
+            return new ExpectationVectorInfo(startPos, callSequenceVectorText);
          }
-         return Optional.empty();
+         return null;
       });
 
    }

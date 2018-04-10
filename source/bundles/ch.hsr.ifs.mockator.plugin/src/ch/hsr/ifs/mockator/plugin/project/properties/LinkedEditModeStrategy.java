@@ -63,7 +63,7 @@ public enum LinkedEditModeStrategy implements PropertyTypeWithDefault {
 
    public static LinkedEditModeStrategy fromName(final String name) {
       final LinkedEditModeStrategy result = STRING_TO_ENUM.get(name);
-      ILTISException.Unless.notNull(result, String.format("Unknown linked edit strategy '%s'", name));
+      ILTISException.Unless.notNull(String.format("Unknown linked edit strategy '%s'", name), result);
       return result;
    }
 

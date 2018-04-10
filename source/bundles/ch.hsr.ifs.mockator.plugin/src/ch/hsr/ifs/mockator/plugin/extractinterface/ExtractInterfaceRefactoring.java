@@ -43,7 +43,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
       context.setStatus(status);
       context.setSelectedName(getSelectedName(getAST(getTranslationUnit(), pm)));
       context.setProgressMonitor(pm);
-      context.setCRefContext(refactoringContext());
+      context.setCRefContext(refactoringContext);
       handler = new ExtractInterfaceHandler(context);
    }
 
@@ -53,8 +53,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
       try {
          handler.postProcess(status);
-      }
-      catch (final Exception e) {
+      } catch (final Exception e) {
          status.addFatalError("Extract interface refactoring failed: " + e.getMessage());
       }
 
@@ -63,7 +62,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
    @Override
    protected RefactoringDescriptor getRefactoringDescriptor() {
-      return new ExtractInterfaceDescriptor(ID, getProject().getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
+      return new ExtractInterfaceDescriptor(ID, project.getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
             getArgumentMap());
    }
 
@@ -75,7 +74,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
    private Map<String, String> getArgumentMap() {
       final Map<String, String> args = new HashMap<>();
       args.put(CRefactoringDescriptor.FILE_NAME, getTranslationUnit().getLocationURI().toString());
-      args.put(CRefactoringDescriptor.SELECTION, selectedRegion().getOffset() + "," + selectedRegion().getLength());
+      args.put(CRefactoringDescriptor.SELECTION, selectedRegion.getOffset() + "," + selectedRegion.getLength());
       args.put(ExtractInterfaceDescriptor.NEW_INTERFACE_NAME, context.getNewInterfaceName());
       args.put(ExtractInterfaceDescriptor.REPLACE_ALL_OCCURENCES, String.valueOf(context.shouldReplaceAllOccurences()));
       return args;

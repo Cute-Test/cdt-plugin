@@ -21,8 +21,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
@@ -60,7 +59,8 @@ public class MockObject extends AbstractTestDouble {
    }
 
    private void removeAllCallsVector(final ASTRewrite rewriter) {
-      getAllCallsVector().ifPresent((calls) -> rewriter.remove(ASTUtil.getAncestorOfType(calls, IASTDeclarationStatement.class), null));
+      getAllCallsVector().ifPresent((calls) -> rewriter.remove(CPPVisitor.findAncestorWithType(calls, IASTDeclarationStatement.class).orElse(null),
+            null));
    }
 
    @Override
@@ -123,8 +123,7 @@ public class MockObject extends AbstractTestDouble {
    }
 
    public Optional<IASTName> getAllCallsVector() {
-      return OptionalUtil.returnIfPresentElseEmpty(getRegistrationVector(), (vector) -> head(list(getKlass().getTranslationUnit().getDefinitionsInAST(
-            vector.resolveBinding()))));
+      return getRegistrationVector().flatMap(vector -> head(list(getKlass().getTranslationUnit().getDefinitionsInAST(vector.resolveBinding()))));
    }
 
    public String getNameForExpectationVector() {

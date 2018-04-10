@@ -9,7 +9,7 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 
@@ -46,6 +46,6 @@ class TestFunctionFinderVisitor extends ASTVisitor {
    }
 
    private static boolean isFunctionOfLocalClass(final ICPPASTFunctionDefinition function) {
-      return ASTUtil.getAncestorOfType(function.getParent(), ICPPASTFunctionDefinition.class) != null;
+      return CPPVisitor.findAncestorWithType(function.getParent(), ICPPASTFunctionDefinition.class).orElse(null) != null;
    }
 }

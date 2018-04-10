@@ -66,7 +66,7 @@ import org.eclipse.cdt.core.parser.Keywords;
 import org.eclipse.cdt.core.parser.util.CharArrayUtils;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 
 // Taken and adapted from org.eclipse.cdt.internal.core.model.ASTStringUtil;
@@ -195,7 +195,7 @@ public class ParameterSignatureHandler {
                buffer.append(Keywords.cpCOLON);
                appendExpressionString(buffer, bitFieldSize);
             }
-         } else if (ASTUtil.getAncestorOfType(declarator, ICPPASTTemplateId.class) != null) {
+         } else if (CPPVisitor.findAncestorWithType(declarator, ICPPASTTemplateId.class).orElse(null) != null) {
             buffer.append(declarator.getName());
          }
       }

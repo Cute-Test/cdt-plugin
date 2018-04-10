@@ -46,8 +46,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
 
@@ -67,7 +66,7 @@ public class ReturnTypeDeducer {
    }
 
    public ICPPASTDeclSpecifier determineReturnType(final IASTExpression funCall) {
-      return OptionalUtil.returnIfPresentElse(findPossibleReturnType(funCall), (returnType) -> returnType.copy(), () -> createDefaultReturnType());
+      return findPossibleReturnType(funCall).map(ICPPASTDeclSpecifier::copy).orElse(createDefaultReturnType());
    }
 
    private Optional<ICPPASTDeclSpecifier> findPossibleReturnType(final IASTExpression funCall) {
@@ -77,8 +76,8 @@ public class ReturnTypeDeducer {
    }
 
    private static IASTNode getNodeToAnalyse(final IASTExpression funCall) {
-      final IASTStatement stmt = ASTUtil.getAncestorOfType(funCall, IASTStatement.class);
-      ILTISException.Unless.notNull(stmt, "Could not determine return type for missing function");
+      final IASTStatement stmt = CPPVisitor.findAncestorWithType(funCall, IASTStatement.class).orElse(null);
+      ILTISException.Unless.notNull("Could not determine return type for missing function", stmt);
       return stmt;
    }
 
@@ -212,7 +211,7 @@ public class ReturnTypeDeducer {
       }
 
       private int useReturnTypeOfParentFunction(final IASTReturnStatement returnStmt) {
-         final ICPPASTFunctionDefinition function = ASTUtil.getAncestorOfType(returnStmt, ICPPASTFunctionDefinition.class);
+         final ICPPASTFunctionDefinition function = CPPVisitor.findAncestorWithType(returnStmt, ICPPASTFunctionDefinition.class).orElse(null);
          final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) function.getDeclarator();
          setPointerReturnType(getPointers(funDecl));
          final ICPPASTDeclSpecifier declSpecifier = (ICPPASTDeclSpecifier) function.getDeclSpecifier();

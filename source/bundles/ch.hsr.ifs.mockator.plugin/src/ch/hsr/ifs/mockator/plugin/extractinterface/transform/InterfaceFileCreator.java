@@ -29,7 +29,7 @@ public class InterfaceFileCreator implements Consumer<ExtractInterfaceContext> {
 
    private static IPath getUniquePathForNewFile(final ExtractInterfaceContext context) {
       final IFile classFile = CFileUtil.getFile(context.getChosenClass());
-      final PathProposalUtil proposal = new PathProposalUtil(FileUtil.getPath(classFile));
+      final PathProposalUtil proposal = new PathProposalUtil(FileUtil.getFolderPath(classFile));
       return proposal.getUniquePathForNewFile(context.getNewInterfaceName(), MockatorConstants.HEADER_SUFFIX);
    }
 

@@ -8,7 +8,6 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
 
@@ -27,13 +26,13 @@ public class CompilerFlagHandler extends AbstractOptionsHandler {
    }
 
    public String getCompilerFlags() {
-      return OptionalUtil.returnIfPresentElseNull(getToolToAnanalyze(), (tool) -> {
+      return getToolToAnanalyze().map(tool -> {
          try {
             return tool.getToolCommandFlagsString(null, null);
          } catch (final BuildException e) {
             return null;
          }
-      });
+      }).orElse(null);
    }
 
    private void toggleCompilerFlag(final Function2<String, String, String> compilerFlagOp, final String flag) {

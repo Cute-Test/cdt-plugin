@@ -31,6 +31,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
@@ -78,19 +79,19 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static boolean isPartOfExpression(final IASTName usage) {
-      return ASTUtil.getAncestorOfType(usage, ICPPASTExpression.class) != null;
+      return CPPVisitor.findAncestorWithType(usage, ICPPASTExpression.class).orElse(null) != null;
    }
 
    private static IASTDeclarator getDeclarator(final IASTNode declaration, final IASTName className) {
       if (hasTemplateId(declaration, className)) {
          final ICPPASTNamedTypeSpecifier namedType = getTypeSpecIfRefersToClass(declaration, className);
-         return ASTUtil.getChildOfType(namedType.getParent(), IASTDeclarator.class);
+         return CPPVisitor.findChildWithType(namedType.getParent(), IASTDeclarator.class).orElse(null);
       }
       return ASTUtil.getDeclaratorForNode(declaration);
    }
 
    private static boolean hasTemplateId(final IASTNode node, final IASTName className) {
-      final ICPPASTTemplateId templatedChild = ASTUtil.getChildOfType(node, ICPPASTTemplateId.class);
+      final ICPPASTTemplateId templatedChild = CPPVisitor.findChildWithType(node, ICPPASTTemplateId.class).orElse(null);
 
       if (templatedChild == null) { return false; }
 
@@ -99,7 +100,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static boolean hasTemplateId(final IASTNode node) {
-      return ASTUtil.getChildOfType(node, ICPPASTTemplateId.class) != null;
+      return CPPVisitor.findChildWithType(node, ICPPASTTemplateId.class).orElse(null) != null;
    }
 
    private static void replaceDeclarationWithNewType(final IASTName name, final ExtractInterfaceContext context) {
@@ -195,7 +196,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
    }
 
    private static void handleTemplateId(final String newName, final ASTRewrite rewriter, final IASTNode parentDecl, final IASTName astName) {
-      final ICPPASTTemplateId templateId = ASTUtil.getChildOfType(parentDecl, ICPPASTTemplateId.class);
+      final ICPPASTTemplateId templateId = CPPVisitor.findChildWithType(parentDecl, ICPPASTTemplateId.class).orElse(null);
       final IASTName templateName = templateId.getTemplateName().copy();
       final ICPPASTTemplateId newTemplateId = nodeFactory.newTemplateId(templateName);
 

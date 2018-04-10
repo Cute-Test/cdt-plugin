@@ -37,9 +37,9 @@ abstract class AbstractNodeFinder {
 
    protected Collection<IASTName> collectMatchingNames(final IBinding name) {
       final List<IASTName> names = new ArrayList<>();
-
       try {
-         for (final IIndexName iName : lookup(name)) {
+         IIndexName[] lookup = lookup(name);
+         for (final IIndexName iName : lookup) {
             findMatchingASTName(iName).ifPresent((astName) -> {
                names.add(astName);
             });
@@ -66,7 +66,8 @@ abstract class AbstractNodeFinder {
 
    protected IIndexName[] lookup(final IBinding binding) throws CoreException {
       final int flags = getLookupFlags() | IIndex.SEARCH_ACROSS_LANGUAGE_BOUNDARIES;
-      return index.findNames(binding, flags);
+      IBinding adaptedBinding = index.adaptBinding(binding);
+      return index.findNames(adaptedBinding, flags);
    }
 
    protected abstract int getLookupFlags();

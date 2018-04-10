@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
@@ -27,7 +27,7 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
 public abstract class AbstractCreateTestDoubleRefactoring extends MockatorRefactoring {
 
-   public AbstractCreateTestDoubleRefactoring(final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
+   public AbstractCreateTestDoubleRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
       super(cElement, selection, cProject);
    }
 
@@ -50,7 +50,7 @@ public abstract class AbstractCreateTestDoubleRefactoring extends MockatorRefact
    }
 
    private Optional<IASTStatement> findFirstSelectedStmt(final IASTTranslationUnit ast) {
-      final IASTStatement stmt = ASTUtil.getAncestorOfType(getSelectedNode(ast), IASTStatement.class);
+      final IASTStatement stmt = CPPVisitor.findAncestorWithType(getSelectedNode(ast), IASTStatement.class).orElse(null);
       return Optional.of(stmt);
    }
 

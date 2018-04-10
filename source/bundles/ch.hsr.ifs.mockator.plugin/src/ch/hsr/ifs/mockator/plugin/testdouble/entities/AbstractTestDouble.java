@@ -116,7 +116,7 @@ public abstract class AbstractTestDouble implements TestDouble {
    @Override
    public ICPPClassType getClassType() {
       final IBinding binding = getName().resolveBinding();
-      ILTISException.Unless.assignableFrom(ICPPClassType.class, binding, "Test double must be of class type");
+      ILTISException.Unless.assignableFrom("Test double must be of class type", ICPPClassType.class, binding);
       return (ICPPClassType) binding;
    }
 

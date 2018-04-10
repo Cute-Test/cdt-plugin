@@ -1,13 +1,12 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.gnuoption;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.ITextSelection;
-
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -23,12 +22,12 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoringRunner;
 
 public class GnuOptionLinkerWrapFun implements LinkerWrapFun {
 
-   private static final String  MISSING_GNU_LINUX_LINKER_KEY = "missingGnuLinuxLinkerInfo";
-   private final ICProject      cProject;
-   private final ITextSelection selection;
-   private final ICElement      cElement;
+   private static final String            MISSING_GNU_LINUX_LINKER_KEY = "missingGnuLinuxLinkerInfo";
+   private final ICProject                cProject;
+   private final Optional<ITextSelection> selection;
+   private final ICElement                cElement;
 
-   public GnuOptionLinkerWrapFun(final ICProject cProject, final ITextSelection selection, final ICElement cElement) {
+   public GnuOptionLinkerWrapFun(final ICProject cProject, final Optional<ITextSelection> selection, final ICElement cElement) {
       this.cProject = cProject;
       this.selection = selection;
       this.cElement = cElement;
@@ -40,10 +39,8 @@ public class GnuOptionLinkerWrapFun implements LinkerWrapFun {
    }
 
    private boolean checkForGnuLinkerOnLinux() {
-      return OptionalUtil.returnIfPresentElse(ToolChain.fromProject(cProject.getProject()), (optTc) -> optTc == ToolChain.GnuLinux && hasGnuLinker()
-                                                                                                                                                     ? true
-                                                                                                                                                     : informUser(),
-            () -> informUser());
+      return ToolChain.fromProject(cProject.getProject()).map(optTc -> optTc == ToolChain.GnuLinux && hasGnuLinker() ? true : informUser()).orElse(
+            informUser());
    }
 
    private boolean hasGnuLinker() {

@@ -34,6 +34,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.CtorArgumentsCopier;
@@ -74,7 +75,7 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    }
 
    private boolean hasDefaultInitTemplateParamMember() {
-      final ICPPASTCompositeTypeSpecifier sutClass = ASTUtil.getChildOfType(sut, ICPPASTCompositeTypeSpecifier.class);
+      final ICPPASTCompositeTypeSpecifier sutClass = CPPVisitor.findChildWithType(sut, ICPPASTCompositeTypeSpecifier.class).orElse(null);
 
       if (sutClass == null) { return false; }
 
@@ -134,7 +135,7 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    }
 
    private int handleSimpleDecl(final ICPPASTConstructorInitializer ctorInitializer) {
-      final ICPPASTDeclarator declarator = ASTUtil.getAncestorOfType(ctorInitializer, ICPPASTDeclarator.class);
+      final ICPPASTDeclarator declarator = CPPVisitor.findAncestorWithType(ctorInitializer, ICPPASTDeclarator.class).orElse(null);
 
       if (resolvesToTemplateParam(getType(declarator.getName()))) {
          addToMissingCtors(declarator.getInitializer());
@@ -145,7 +146,7 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    }
 
    private int handleNewExpression(final ICPPASTConstructorInitializer ctorInitializer) {
-      final ICPPASTNewExpression newExpr = ASTUtil.getAncestorOfType(ctorInitializer, ICPPASTNewExpression.class);
+      final ICPPASTNewExpression newExpr = CPPVisitor.findAncestorWithType(ctorInitializer, ICPPASTNewExpression.class).orElse(null);
 
       if (resolvesToTemplateParam(newExpr.getExpressionType())) {
          addToMissingCtors(newExpr.getInitializer());
@@ -156,7 +157,8 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    }
 
    private int handleCtorInitializer(final IASTInitializer initializer, final ICPPASTConstructorInitializer ctorInitializer) {
-      final ICPPASTConstructorChainInitializer ctor = ASTUtil.getAncestorOfType(ctorInitializer, ICPPASTConstructorChainInitializer.class);
+      final ICPPASTConstructorChainInitializer ctor = CPPVisitor.findAncestorWithType(ctorInitializer, ICPPASTConstructorChainInitializer.class)
+            .orElse(null);
       final IASTName memberInitializerId = ctor.getMemberInitializerId();
 
       if (resolvesToTemplateParam(getType(memberInitializerId))) {
@@ -172,8 +174,8 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    public int visit(final IASTDeclaration decl) {
       if (!(decl instanceof IASTSimpleDeclaration && ASTUtil.isPartOf(decl, ICPPASTFunctionDefinition.class))) { return PROCESS_CONTINUE; }
 
-      final ICPPASTConstructorInitializer ctorInit = ASTUtil.getChildOfType(decl, ICPPASTConstructorInitializer.class);
-      final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(decl, ICPPASTFunctionCallExpression.class);
+      final ICPPASTConstructorInitializer ctorInit = CPPVisitor.findChildWithType(decl, ICPPASTConstructorInitializer.class).orElse(null);
+      final ICPPASTFunctionCallExpression funCall = CPPVisitor.findChildWithType(decl, ICPPASTFunctionCallExpression.class).orElse(null);
 
       if (ctorInit != null || funCall != null) { return PROCESS_CONTINUE; }
 
@@ -257,9 +259,9 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
    }
 
    private static IASTNode getParent(final IASTNode ctor) {
-      final ICPPASTFunctionDefinition parentFunction = ASTUtil.getAncestorOfType(ctor, ICPPASTFunctionDefinition.class);
+      final ICPPASTFunctionDefinition parentFunction = CPPVisitor.findAncestorWithType(ctor, ICPPASTFunctionDefinition.class).orElse(null);
 
-      if (parentFunction == null) { return ASTUtil.getAncestorOfType(ctor, ICPPASTCompositeTypeSpecifier.class); }
+      if (parentFunction == null) { return CPPVisitor.findAncestorWithType(ctor, ICPPASTCompositeTypeSpecifier.class).orElse(null); }
 
       return parentFunction;
    }

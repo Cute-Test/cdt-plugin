@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.testdouble.movetons;
 import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
@@ -26,7 +27,6 @@ import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CCompositeChange;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
@@ -43,7 +43,8 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    private final IDocument           doc;
    private ICPPASTFunctionDefinition testFunction;
 
-   public RemoveInitMockatorRefactoring(final IDocument doc, final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
+   public RemoveInitMockatorRefactoring(final IDocument doc, final ICElement cElement, final Optional<ITextSelection> selection,
+                                        final ICProject cProject) {
       super(cElement, selection, cProject);
       this.doc = doc;
    }
@@ -58,7 +59,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
          final FunctionEquivalenceVerifier verifier = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) testFunction.getDeclarator());
          final Collection<IASTFunctionDefinition> testFunctions = getTestfunctionsInTu().stream().filter((funDef) -> verifier.isEquivalent(
                (ICPPASTFunctionDeclarator) funDef.getDeclarator())).collect(Collectors.toList());
-         ILTISException.Unless.isTrue(testFunctions.size() == 1, "Was not able not unambiguously determine test function");
+         ILTISException.Unless.isTrue("Was not able not unambiguously determine test function", testFunctions.size() == 1);
          return (ICPPASTFunctionDefinition) head(testFunctions).get();
       } catch (final CoreException e) {
          throw new ILTISException(e).rethrowUnchecked();
@@ -66,7 +67,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    }
 
    private Collection<IASTFunctionDefinition> getTestfunctionsInTu() throws CoreException {
-      final IASTTranslationUnit ast = getAST(tu(), new NullProgressMonitor());
+      final IASTTranslationUnit ast = getAST(tu, new NullProgressMonitor());
       final TestFunctionFinderVisitor finder = new TestFunctionFinderVisitor(getFunctionsToAnalyze());
       ast.accept(finder);
       return finder.getFunctions();
@@ -137,14 +138,13 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
       final String testFunName = testFunction.getDeclarator().getName().toString();
       final Collection<IASTFunctionDefinition> functions = allTestFunctions.stream().filter((funDef) -> funDef.getDeclarator().getName().toString()
             .equals(testFunName)).collect(Collectors.toList());
-      ILTISException.Unless.isFalse(functions.isEmpty(), "Could not find test function");
+      ILTISException.Unless.isFalse("Could not find test function", functions.isEmpty());
       return head(functions).get();
    }
 
    private Collection<IASTFunctionDefinition> getAllTestFunctions(final IProgressMonitor pm) throws CoreException {
       final TestFunctionFinderVisitor finder = new TestFunctionFinderVisitor(getFunctionsToAnalyze());
-      final IASTTranslationUnit ast = getAST(tu(), pm);
-      ast.accept(finder);
+      getAST(tu, pm).accept(finder);
       return finder.getFunctions();
    }
 
@@ -152,8 +152,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector c) throws CoreException, OperationCanceledException {}
 
    private TextFileChange createTextFileChange(final MultiTextEdit multiTextEdit, final IProgressMonitor pm) throws CoreException {
-      final IASTTranslationUnit ast = getAST(tu(), pm);
-      final TextFileChange change = new TextFileChange("Delete mockator init call", FileUtil.toIFile(ast.getFilePath()));
+      final TextFileChange change = new TextFileChange("Delete mockator init call", getIFile());
       change.setEdit(multiTextEdit);
       return change;
    }

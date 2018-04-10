@@ -10,7 +10,6 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
 
@@ -29,7 +28,7 @@ public class LinkerOptionHandler extends AbstractOptionsHandler {
    }
 
    public boolean hasLinkerFlag(final String flagName) {
-      return OptionalUtil.returnIfPresentElse(getToolToAnanalyze(), (tool) -> {
+      return getToolToAnanalyze().map(tool -> {
          final IOption flagsOption = tool.getOptionBySuperClassId(projectVariables.getLinkerOtherFlags());
 
          if (flagsOption == null) { return false; }
@@ -37,7 +36,7 @@ public class LinkerOptionHandler extends AbstractOptionsHandler {
          final Collection<String> currentFlags = getListValues(flagsOption);
 
          return currentFlags.contains(flagName);
-      }, () -> false);
+      }).orElse(false);
    }
 
    private void toggleLinkerFlag(final Function2<String, Collection<String>, Void> linkerFlagOp, final String flagName) {

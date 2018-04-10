@@ -3,6 +3,7 @@ package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload;
 import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.orderPreservingSet;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.cdt.core.model.ICElement;
@@ -17,7 +18,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
@@ -40,17 +40,17 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.FileEditorOpener;
 
 public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
 
-   private static final String  MISSING_GNU_LINUX_OR_MACOSX_KEY = "missingGnuLinuxOrMacOSXInfo";
-   private final ICProject      cProject;
-   private final ITextSelection selection;
-   private final ICElement      cElement;
-   private final CppStandard    cppStd;
-   private String               newProjectName;
+   private static final String            MISSING_GNU_LINUX_OR_MACOSX_KEY = "missingGnuLinuxOrMacOSXInfo";
+   private final ICProject                cProject;
+   private final ICElement                cElement;
+   private final CppStandard              cppStd;
+   private String                         newProjectName;
+   private final Optional<ITextSelection> selection;
 
-   public LdPreloadLinkerWrapFun(final ICProject proj, final ITextSelection sel, final ICElement el, final CppStandard std) {
+   public LdPreloadLinkerWrapFun(final ICProject proj, final Optional<ITextSelection> sel, final ICElement el, final CppStandard std) {
       cProject = proj;
-      selection = sel;
       cElement = el;
+      selection = sel;
       cppStd = std;
    }
 
@@ -60,7 +60,7 @@ public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
    }
 
    private boolean assureIsMacOrLinuxGnuToolchain() {
-      return OptionalUtil.returnIfPresentElse(ToolChain.fromProject(cProject.getProject()), (tc) -> {
+      return ToolChain.fromProject(cProject.getProject()).map((tc) -> {
          switch (tc) {
          case GnuLinux:
          case GnuMacOSX:
@@ -68,7 +68,7 @@ public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
          default:
             return informUser();
          }
-      }, () -> informUser());
+      }).orElse(informUser());
    }
 
    private boolean informUser() {
@@ -187,7 +187,7 @@ public class LdPreloadLinkerWrapFun implements LinkerWrapFun {
    }
 
    private void initNewProjectName() {
-      newProjectName = new UniqueProjectNameCreator(selection.getText() + "Lib").getUniqueProjectName();
+      newProjectName = new UniqueProjectNameCreator(selection.map(ITextSelection::getText).orElse("") + "Lib").getUniqueProjectName();
    }
 
    private static void addLibrary(final IProject project, final String libName) {

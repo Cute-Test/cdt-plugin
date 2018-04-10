@@ -3,7 +3,6 @@ package ch.hsr.ifs.mockator.plugin.extractinterface;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoring;
@@ -30,7 +29,7 @@ public class ExtractInterfaceDescriptor extends CRefactoringDescriptor {
    private ExtractInterfaceContext createContext(final RefactoringStatus status) throws CoreException {
       final boolean doReplace = Boolean.parseBoolean(getParameterMap().get(REPLACE_ALL_OCCURENCES));
       final String name = getParameterMap().get(NEW_INTERFACE_NAME);
-      return new ExtractInterfaceContext.ContextBuilder(getTranslationUnit(), getCProject(), (ITextSelection) getSelection()).withRefactoringStatus(
-            status).replaceAllOccurences(doReplace).withNewInterfaceName(name).build();
+      return new ExtractInterfaceContext.ContextBuilder(getTranslationUnit(), getSelection(), getCProject()).withRefactoringStatus(status)
+            .replaceAllOccurences(doReplace).withNewInterfaceName(name).build();
    }
 }

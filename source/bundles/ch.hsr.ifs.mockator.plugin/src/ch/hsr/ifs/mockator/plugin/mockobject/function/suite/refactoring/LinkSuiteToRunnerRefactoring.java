@@ -8,6 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.mockator.plugin.mockobject.function.suite.refactoring;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
@@ -56,7 +58,7 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
    private String                 suiteName;
    private IPath                  destinationPath;
 
-   public LinkSuiteToRunnerRefactoring(final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
+   public LinkSuiteToRunnerRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
       super(cElement, selection, cProject);
    }
 
@@ -74,7 +76,7 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      final ASTRewrite rewriter = createRewriter(collector, testRunner.getTranslationUnit());
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(testRunner.getTranslationUnit());
       changeRunnerBody(rewriter);
       addIncludeForSuite(rewriter);
    }

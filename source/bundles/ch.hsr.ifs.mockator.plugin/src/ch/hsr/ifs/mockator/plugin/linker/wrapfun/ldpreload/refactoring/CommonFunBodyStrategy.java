@@ -70,8 +70,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
    private static IASTStatement getDlSym(final ICPPASTFunctionDeclarator function) {
       final IASTInitializerClause[] args = new IASTInitializerClause[2];
       args[0] = nodeFactory.newIdExpression(nodeFactory.newName("RTLD_NEXT".toCharArray()));
-      args[1] = nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(
-            getMangledFunName(function)));
+      args[1] = nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(getMangledFunName(function)));
       final ICPPASTFunctionCallExpression dlsymcall = nodeFactory.newFunctionCallExpression(nodeFactory.newIdExpression(nodeFactory.newName("dlsym"
             .toCharArray())), args);
       final ICPPASTSimpleDeclSpecifier voidDeclSpec = nodeFactory.newSimpleDeclSpecifier();
@@ -86,7 +85,7 @@ abstract class CommonFunBodyStrategy implements LdPreloadFunBodyStrategy {
 
    private static String getMangledFunName(final ICPPASTFunctionDeclarator function) {
       final IBinding binding = function.getName().resolveBinding();
-      ILTISException.Unless.assignableFrom(ICPPFunction.class, binding, "Function expected");
+      ILTISException.Unless.assignableFrom("Function expected", ICPPFunction.class, binding);
       final ItaniumMangledNameGenerator mangledGenerator = new ItaniumMangledNameGenerator((ICPPFunction) binding);
       return mangledGenerator.createMangledName();
    }

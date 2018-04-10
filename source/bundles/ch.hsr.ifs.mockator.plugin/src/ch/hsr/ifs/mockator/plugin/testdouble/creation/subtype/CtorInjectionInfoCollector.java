@@ -27,8 +27,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.PublicMemFunFinder;
 
@@ -41,11 +41,11 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
 
    @Override
    public Optional<DependencyInfo> collectDependencyInfos(final IASTName problemArg) {
-      IASTInitializer initializer = ASTUtil.getAncestorOfType(problemArg, ICPPASTInitializerList.class);
+      IASTInitializer initializer = CPPVisitor.findAncestorWithType(problemArg, ICPPASTInitializerList.class).orElse(null);
       List<IASTInitializerClause> ctorArgs;
 
       if (initializer == null) {
-         initializer = ASTUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
+         initializer = CPPVisitor.findAncestorWithType(problemArg, ICPPASTConstructorInitializer.class).orElse(null);
 
          if (initializer == null) { return Optional.empty(); }
 
@@ -53,10 +53,9 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
       } else {
          ctorArgs = list(((ICPPASTInitializerList) initializer).getClauses());
       }
-
-      return OptionalUtil.returnIfPresentElseEmpty(findTargetClass(initializer), (clazz) -> {
+      return findTargetClass(initializer).flatMap(clazz -> {
          final int args = getArgPosOfProblemType(problemArg, ctorArgs);
-         return OptionalUtil.returnIfPresentElseEmpty(findMatchingCtor(ctorArgs, args, clazz), (ctor) -> getTargetClassOfProblemType(ctor, args));
+         return findMatchingCtor(ctorArgs, args, clazz).flatMap(ctor -> getTargetClassOfProblemType(ctor, args));
       });
    }
 
@@ -85,7 +84,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
             continue;
          }
 
-         final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType(memFun, ICPPASTFunctionDeclarator.class);
+         final ICPPASTFunctionDeclarator funDecl = CPPVisitor.findChildWithType(memFun, ICPPASTFunctionDeclarator.class).orElse(null);
 
          if (funDecl == null) {
             continue;
@@ -107,11 +106,11 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    }
 
    private static boolean isPartOf(final IASTNode node, final Class<? extends IASTNode> clazz) {
-      return ASTUtil.getAncestorOfType(node, clazz) != null;
+      return CPPVisitor.findAncestorWithType(node, clazz).orElse(null) != null;
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> findTargetClassForSimpleDecl(final IASTInitializer ctorInitializer) {
-      final IASTSimpleDeclaration simpleDecl = ASTUtil.getAncestorOfType(ctorInitializer, IASTSimpleDeclaration.class);
+      final IASTSimpleDeclaration simpleDecl = CPPVisitor.findAncestorWithType(ctorInitializer, IASTSimpleDeclaration.class).orElse(null);
       final IASTDeclSpecifier declSpecifier = simpleDecl.getDeclSpecifier();
 
       if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
@@ -121,7 +120,7 @@ class CtorInjectionInfoCollector extends AbstractDepInjectInfoCollector {
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> findTargetClassForNewExpression(final IASTInitializer ctorInitializer) {
-      final ICPPASTNewExpression newExpr = ASTUtil.getAncestorOfType(ctorInitializer, ICPPASTNewExpression.class);
+      final ICPPASTNewExpression newExpr = CPPVisitor.findAncestorWithType(ctorInitializer, ICPPASTNewExpression.class).orElse(null);
       final IASTTypeId typeId = newExpr.getTypeId();
       final IASTDeclSpecifier declSpecifier = typeId.getDeclSpecifier();
 

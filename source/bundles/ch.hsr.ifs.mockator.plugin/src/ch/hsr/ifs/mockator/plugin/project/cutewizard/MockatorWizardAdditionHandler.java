@@ -25,7 +25,7 @@ public class MockatorWizardAdditionHandler implements ICuteWizardAdditionHandler
 
    @Override
    public void configureProject(final IProject project, final IProgressMonitor pm) throws CoreException {
-      ILTISException.Unless.isTrue(isCppProject(project), "Mockator only supports C++ projects");
+      ILTISException.Unless.isTrue("Mockator only supports C++ projects", isCppProject(project));
 
       if (withMockatorSupport) {
          setCppStd(project);

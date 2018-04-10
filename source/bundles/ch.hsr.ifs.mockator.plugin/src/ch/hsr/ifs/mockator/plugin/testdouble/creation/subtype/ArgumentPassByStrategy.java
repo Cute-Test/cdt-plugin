@@ -20,7 +20,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 
 enum ArgumentPassByStrategy {
@@ -29,8 +29,8 @@ enum ArgumentPassByStrategy {
 
    @Override
    public void adaptArguments(final IASTName problemArg, final String nameOfNewInstance, final ASTRewrite rewriter) {
-      final ICPPASTConstructorInitializer ctorInit = ASTUtil.getAncestorOfType(problemArg, ICPPASTConstructorInitializer.class);
-      final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(problemArg, ICPPASTFunctionCallExpression.class);
+      final ICPPASTConstructorInitializer ctorInit = CPPVisitor.findAncestorWithType(problemArg, ICPPASTConstructorInitializer.class).orElse(null);
+      final ICPPASTFunctionCallExpression funCall = CPPVisitor.findAncestorWithType(problemArg, ICPPASTFunctionCallExpression.class).orElse(null);
 
       if (ctorInit != null) {
          adaptCtorArguments(nameOfNewInstance, rewriter, ctorInit);

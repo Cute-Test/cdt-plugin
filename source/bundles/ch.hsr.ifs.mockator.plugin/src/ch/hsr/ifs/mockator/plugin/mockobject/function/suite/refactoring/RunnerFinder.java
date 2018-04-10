@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
@@ -208,7 +209,7 @@ public class RunnerFinder {
    }
 
    private static IASTFunctionDefinition getFunctionDefinition(final IASTName name) {
-      return ASTUtil.getAncestorOfType(name, IASTFunctionDefinition.class);
+      return CPPVisitor.findAncestorWithType(name, IASTFunctionDefinition.class).orElse(null);
    }
 
    private IASTTranslationUnit getAST(final IIndexName iName, final IProgressMonitor pm) throws CoreException {

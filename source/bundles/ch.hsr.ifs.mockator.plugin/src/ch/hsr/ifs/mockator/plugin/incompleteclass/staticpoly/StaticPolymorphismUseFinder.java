@@ -14,7 +14,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.ClassInTemplateIdFinderVisitor.TemplateParamCombination;
@@ -73,7 +73,7 @@ class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Co
    }
 
    private static boolean hasClassInTemplateDecl(final ICPPASTTemplateDeclaration templateDecl) {
-      return ASTUtil.getChildOfType(templateDecl, ICPPASTCompositeTypeSpecifier.class) != null;
+      return CPPVisitor.findChildWithType(templateDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null) != null;
    }
 
    private Collection<TemplateParamCombination> getTestDoubleAsTemplateArgUsages(final IASTFunctionDefinition testFunction) {

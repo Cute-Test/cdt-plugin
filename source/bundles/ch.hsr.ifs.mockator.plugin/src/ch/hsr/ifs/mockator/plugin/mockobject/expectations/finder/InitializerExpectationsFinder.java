@@ -15,7 +15,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
@@ -32,7 +32,7 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
 
    @Override
    protected void collectExpectations(final IASTStatement expectationStmt) {
-      ILTISException.Unless.assignableFrom(IASTDeclarationStatement.class, expectationStmt, "Should be called with an declaration statement");
+      ILTISException.Unless.assignableFrom("Should be called with an declaration statement", IASTDeclarationStatement.class, expectationStmt);
       final IASTDeclarationStatement declStmt = (IASTDeclarationStatement) expectationStmt;
       final IASTDeclaration declaration = declStmt.getDeclaration();
 
@@ -47,7 +47,7 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
 
       if (matchingName == null) return;
 
-      final ICPPASTInitializerList initializer = ASTUtil.getChildOfType(declaration, ICPPASTInitializerList.class);
+      final ICPPASTInitializerList initializer = CPPVisitor.findChildWithType(declaration, ICPPASTInitializerList.class).orElse(null);
 
       if (initializer == null) return;
 
@@ -63,8 +63,8 @@ class InitializerExpectationsFinder extends AbstractExpectationsFinder {
             continue;
          }
          final IASTInitializerClause[] clauses = ((ICPPASTInitializerList) clause).getClauses();
-         ILTISException.Unless.isTrue(clauses.length > 0, "Not a valid call initializer");
-         ILTISException.Unless.isTrue(isStringLiteral(clauses[0]), "Not a string literal");
+         ILTISException.Unless.isTrue("Not a valid call initializer", clauses.length > 0);
+         ILTISException.Unless.isTrue("Not a string literal", isStringLiteral(clauses[0]));
          final MemFunCallExpectation memFunCall = toMemberFunctionCall(clauses[0]);
          callExpectations.add(memFunCall);
       }

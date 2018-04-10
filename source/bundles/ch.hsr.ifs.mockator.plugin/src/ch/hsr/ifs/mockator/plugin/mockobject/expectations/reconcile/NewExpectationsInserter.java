@@ -10,8 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
@@ -73,7 +72,7 @@ class NewExpectationsInserter {
    }
 
    private static IASTStatement getStatementOfFirstAssert(final Collection<ExpectedActualPair> assertedCalls) {
-      return OptionalUtil.returnIfPresentElseNull(head(assertedCalls), (pair) -> ASTUtil.getAncestorOfType(pair.expected(), IASTStatement.class));
+      return head(assertedCalls).flatMap(pair -> CPPVisitor.findAncestorWithType(pair.expected(), IASTStatement.class)).orElse(null);
    }
 
    private Optional<IASTName> getExpectationsVector() {

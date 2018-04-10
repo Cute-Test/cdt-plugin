@@ -21,7 +21,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.core.resources.StringUtil;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
@@ -36,7 +35,7 @@ public class ExpectationsCpp11Strategy implements ExpectationsCppStdStrategy {
    @Override
    public List<IASTStatement> createExpectationsVector(final Collection<? extends TestDoubleMemFun> memFuns, final String newExpectationsName,
          final ICPPASTFunctionDefinition testFunction, final Optional<IASTName> expectationsVector, final LinkedEditModeStrategy linkedEdit) {
-      return OptionalUtil.returnIfPresentElse(expectationsVector, () -> new ArrayList<>(), () -> getExpectations(memFuns, newExpectationsName,
+      return expectationsVector.map(foo -> (List<IASTStatement>) new ArrayList<IASTStatement>()).orElse(getExpectations(memFuns, newExpectationsName,
             linkedEdit));
    }
 

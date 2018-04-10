@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.qf;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.IWorkingCopy;
@@ -17,6 +19,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
+
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.base.util.ExceptionUtil;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -26,10 +30,10 @@ import ch.hsr.ifs.mockator.plugin.refsupport.utils.FileEditorOpener;
 @SuppressWarnings("restriction")
 public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
 
-   protected IWorkbenchWindow window;
-   protected ICProject        cProject;
-   protected ITextSelection   selection;
-   protected ICElement        cElement;
+   protected IWorkbenchWindow         window;
+   protected ICProject                cProject;
+   protected Optional<ITextSelection> selection;
+   protected ICElement                cElement;
 
    @Override
    public void init(final IWorkbenchWindow window) {
@@ -93,7 +97,7 @@ public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate
    @Override
    public void selectionChanged(final IAction action, final ISelection newSelection) {
       if (newSelection instanceof ITextSelection) {
-         selection = (ITextSelection) newSelection;
+         selection = OptionalUtil.of(newSelection).mapAs(ITextSelection.class).get();
          action.setEnabled(true);
       } else {
          action.setEnabled(false);

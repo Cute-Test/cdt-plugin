@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;
@@ -51,7 +51,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
    @Override
    public Collection<MissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
       final IBinding binding = clazz.getName().resolveBinding();
-      ILTISException.Unless.assignableFrom(ICPPClassType.class, binding, "Class type expected");
+      ILTISException.Unless.assignableFrom("Class type expected", ICPPClassType.class, binding);
       return collectPureVirtualMemFuns(clazz.getTranslationUnit(), (ICPPClassType) binding);
    }
 
@@ -59,7 +59,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
       final Set<MissingMemFun> missingMethods = new LinkedHashSet<>();
 
       for (final ICPPMethod method : getPureVirtualMemFunsIn(clazz)) {
-         ILTISException.Unless.notAssignableFrom(ICPPConstructor.class, method, "Ctors are not supported because they are not inherited");
+         ILTISException.Unless.notAssignableFrom("Ctors are not supported because they are not inherited", ICPPConstructor.class, method);
          final IASTName[] declarations = ast.getDeclarationsInAST(method);
 
          if (declarations.length > 0) {
@@ -81,7 +81,7 @@ public class SubtypeMissingMemFunFinder implements MissingMemFunFinder {
    }
 
    private static Optional<IASTSimpleDeclaration> getFunDeclarator(final IASTName name) {
-      final IASTSimpleDeclaration simpleDecl = ASTUtil.getAncestorOfType(name, IASTSimpleDeclaration.class);
+      final IASTSimpleDeclaration simpleDecl = CPPVisitor.findAncestorWithType(name, IASTSimpleDeclaration.class).orElse(null);
       return Optional.of(simpleDecl);
    }
 

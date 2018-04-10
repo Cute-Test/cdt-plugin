@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
 
@@ -46,7 +46,7 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
    }
 
    private ICPPASTCompositeTypeSpecifier getClassInTemplateDecl() {
-      return ASTUtil.getChildOfType(templateClass, ICPPASTCompositeTypeSpecifier.class);
+      return CPPVisitor.findChildWithType(templateClass, ICPPASTCompositeTypeSpecifier.class).orElse(null);
    }
 
    public Collection<ICPPASTTemplateDeclaration> getTemplateFunctions() {
@@ -94,7 +94,7 @@ class NotInlineDefMemFunFinderVisitor extends ASTVisitor {
    }
 
    private static ICPPASTTemplateDeclaration getTemplateDecl(final ICPPASTFunctionDefinition function) {
-      return ASTUtil.getAncestorOfType(function, ICPPASTTemplateDeclaration.class);
+      return CPPVisitor.findAncestorWithType(function, ICPPASTTemplateDeclaration.class).orElse(null);
    }
 
    private boolean haveEqualNumOfArgs(final ICPPASTTemplateDeclaration templateDecl) {

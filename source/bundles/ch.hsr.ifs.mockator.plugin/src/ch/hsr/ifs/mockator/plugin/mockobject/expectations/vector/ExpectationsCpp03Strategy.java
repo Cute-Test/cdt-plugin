@@ -20,7 +20,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.BoostAssignInitializerCreator;
@@ -55,7 +55,7 @@ public class ExpectationsCpp03Strategy implements ExpectationsCppStdStrategy {
 
    private static boolean hasBoostAssignInitializer(final ICPPASTFunctionDefinition testFun, final IASTName expVector) {
       return new NameFinder(testFun).getNameMatchingCriteria((name) -> {
-         final ICPPASTBinaryExpression binExp = ASTUtil.getAncestorOfType(name, ICPPASTBinaryExpression.class);
+         final ICPPASTBinaryExpression binExp = CPPVisitor.findAncestorWithType(name, ICPPASTBinaryExpression.class).orElse(null);
          return name.toString().equals(expVector.toString()) && binExp != null && binExp.getOperator() == IASTBinaryExpression.op_plusAssign;
       }).isPresent();
    }

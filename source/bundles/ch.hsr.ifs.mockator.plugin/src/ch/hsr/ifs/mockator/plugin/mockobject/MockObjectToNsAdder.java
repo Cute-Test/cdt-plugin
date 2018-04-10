@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.AllCallsVectorCreator;
@@ -41,7 +41,7 @@ class MockObjectToNsAdder {
    }
 
    private static ICPPASTCompositeTypeSpecifier getTestDoubleClass(final IASTSimpleDeclaration simpleDecl) {
-      return ASTUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      return CPPVisitor.findChildWithType(simpleDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null);
    }
 
    private IASTSimpleDeclaration createAllCallsVector() {

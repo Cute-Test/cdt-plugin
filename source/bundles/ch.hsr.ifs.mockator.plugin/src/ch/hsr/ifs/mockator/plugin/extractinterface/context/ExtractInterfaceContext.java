@@ -26,7 +26,7 @@ import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 public final class ExtractInterfaceContext {
 
    private final ICProject                              cProject;
-   private final ITextSelection                         selection;
+   private final Optional<ITextSelection>               selection;
    private final ITranslationUnit                       tuOfSelection;
    private CRefactoringContext                          refContext;
    private IProgressMonitor                             pm;
@@ -50,15 +50,15 @@ public final class ExtractInterfaceContext {
 
    public static class ContextBuilder implements Builder<ExtractInterfaceContext> {
 
-      private final ICProject        cProject;
-      private final ITextSelection   selection;
-      private final ITranslationUnit tuOfSelection;
-      private RefactoringStatus      status;
-      private boolean                replaceAllOccurences;
-      private CRefactoringContext    context;
-      private String                 newInterfaceName;
+      private final ICProject                cProject;
+      private final Optional<ITextSelection> selection;
+      private final ITranslationUnit         tuOfSelection;
+      private RefactoringStatus              status;
+      private boolean                        replaceAllOccurences;
+      private CRefactoringContext            context;
+      private String                         newInterfaceName;
 
-      public ContextBuilder(final ITranslationUnit tuOfSelection, final ICProject cProject, final ITextSelection selection) {
+      public ContextBuilder(final ITranslationUnit tuOfSelection, final Optional<ITextSelection> selection, final ICProject cProject) {
          this.tuOfSelection = tuOfSelection;
          this.cProject = cProject;
          this.selection = selection;
@@ -104,7 +104,7 @@ public final class ExtractInterfaceContext {
    }
 
    public void setSelectedName(final Optional<IASTName> name) {
-      OptionalUtil.doIfPresentElse(name, (oName) -> selectedName = oName, () -> status.addFatalError("A valid name has to be selected!"));
+      OptionalUtil.of(name).ifPresent((oName) -> selectedName = oName).ifNotPresent(() -> status.addFatalError("A valid name has to be selected!"));
    }
 
    public ITranslationUnit getTuOfSelection() {
@@ -263,7 +263,7 @@ public final class ExtractInterfaceContext {
       return interfaceFilePath;
    }
 
-   public ITextSelection getSelection() {
+   public Optional<ITextSelection> getSelection() {
       return selection;
    }
 }

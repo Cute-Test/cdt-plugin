@@ -21,8 +21,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
@@ -45,7 +45,7 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    public Optional<String> getCuteSuiteName() {
-      return OptionalUtil.returnIfPresentElseEmpty(relatedSuiteName.getNode(), (name) -> Optional.of(name.toString()));
+      return relatedSuiteName.getNode().map(IASTName::toString);
    }
 
    @Override
@@ -65,7 +65,7 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    private static boolean isCuiteSuiteName(final IASTName name) {
-      final IASTSimpleDeclaration simpleDecl = ASTUtil.getAncestorOfType(name, IASTSimpleDeclaration.class);
+      final IASTSimpleDeclaration simpleDecl = CPPVisitor.findAncestorWithType(name, IASTSimpleDeclaration.class).orElse(null);
 
       if (simpleDecl == null) { return false; }
 
@@ -87,12 +87,12 @@ class CuteSuiteFinder extends ASTVisitor {
    }
 
    private boolean matchesTestFunction(final IASTName referencingName) {
-      return OptionalUtil.returnIfPresentElse(getRegisteredFunctionName(referencingName), (registeredFunName) -> registeredFunName.equals(testFunction
-            .getDeclarator().getName().toString()), () -> false);
+      return getRegisteredFunctionName(referencingName).map((registeredFunName) -> registeredFunName.equals(testFunction.getDeclarator().getName()
+            .toString())).orElse(false);
    }
 
    private static Optional<String> getRegisteredFunctionName(final IASTName name) {
-      final IASTFunctionCallExpression funcCall = ASTUtil.getAncestorOfType(name, IASTFunctionCallExpression.class);
+      final IASTFunctionCallExpression funcCall = CPPVisitor.findAncestorWithType(name, IASTFunctionCallExpression.class).orElse(null);
       final IASTInitializerClause[] arguments = funcCall.getArguments();
 
       if (isFunctionPushBack(arguments)) { return getFunctionName(arguments); }

@@ -14,7 +14,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 
 public class MockatorInitCallCreator {
@@ -35,7 +35,7 @@ public class MockatorInitCallCreator {
    }
 
    private boolean isFunctionParent() {
-      return ASTUtil.getAncestorOfType(parent, ICPPASTFunctionDefinition.class) != null;
+      return CPPVisitor.findAncestorWithType(parent, ICPPASTFunctionDefinition.class).orElse(null) != null;
    }
 
    private static IASTNode createMockatorInitForNamespace() {

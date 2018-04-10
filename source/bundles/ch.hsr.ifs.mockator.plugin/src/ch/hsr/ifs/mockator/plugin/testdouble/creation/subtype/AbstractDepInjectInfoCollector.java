@@ -20,7 +20,6 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.FunArgumentsTypeCollector;
@@ -64,9 +63,7 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
       if (!(declSpecifier instanceof ICPPASTNamedTypeSpecifier)) { return Optional.empty(); }
 
       final ICPPASTNamedTypeSpecifier namedType = (ICPPASTNamedTypeSpecifier) declSpecifier;
-
-      return OptionalUtil.returnIfPresentElseEmpty(findClassDefinitionOfProblemType(namedType.getName()), (clazz) -> Optional.of(new DependencyInfo(
-            clazz.getName(), paramType)));
+      return findClassDefinitionOfProblemType(namedType.getName()).map((clazz) -> new DependencyInfo(clazz.getName(), paramType));
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> findClassDefinitionOfProblemType(final IASTName problemTypeName) {

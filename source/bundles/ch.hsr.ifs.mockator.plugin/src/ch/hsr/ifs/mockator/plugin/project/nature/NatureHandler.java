@@ -19,7 +19,7 @@ public class NatureHandler {
    private final IProject project;
 
    public NatureHandler(final IProject project) {
-      ILTISException.Unless.isTrue(project.exists() && project.isOpen(), "Only existing and open projects are supported");
+      ILTISException.Unless.isTrue("Only existing and open projects are supported", project.exists() && project.isOpen());
       this.project = project;
    }
 
@@ -41,7 +41,7 @@ public class NatureHandler {
 
    private static void validateNewNatures(final String[] newNatures) {
       final IStatus status = ResourcesPlugin.getWorkspace().validateNatureSet(newNatures);
-      ILTISException.Unless.isTrue(status.getCode() == IStatus.OK, status.getMessage());
+      ILTISException.Unless.isTrue(status.getMessage(), status.getCode() == IStatus.OK);
    }
 
    public void removeNature(final String natureId, final IProgressMonitor pm) throws CoreException {

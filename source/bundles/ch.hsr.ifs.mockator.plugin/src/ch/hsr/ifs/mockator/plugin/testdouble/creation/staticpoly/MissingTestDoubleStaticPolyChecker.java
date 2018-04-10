@@ -10,9 +10,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
 import ch.hsr.ifs.iltis.cpp.ast.visitor.SimpleVisitor;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
@@ -54,12 +54,12 @@ public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
    }
 
    private static boolean isTypeId(final IASTName name) {
-      final ICPPASTNamedTypeSpecifier nts = ASTUtil.getAncestorOfType(name, ICPPASTNamedTypeSpecifier.class);
-      return nts != null && ASTUtil.getAncestorOfType(nts, ICPPASTTypeId.class) != null;
+      final ICPPASTNamedTypeSpecifier nts = CPPVisitor.findAncestorWithType(name, ICPPASTNamedTypeSpecifier.class).orElse(null);
+      return nts != null && CPPVisitor.findAncestorWithType(nts, ICPPASTTypeId.class).orElse(null) != null;
    }
 
    private static boolean isPartOfTemplateId(final IASTName name) {
-      return ASTUtil.getAncestorOfType(name, ICPPASTTemplateId.class) != null;
+      return CPPVisitor.findAncestorWithType(name, ICPPASTTemplateId.class).orElse(null) != null;
    }
 
    @Override

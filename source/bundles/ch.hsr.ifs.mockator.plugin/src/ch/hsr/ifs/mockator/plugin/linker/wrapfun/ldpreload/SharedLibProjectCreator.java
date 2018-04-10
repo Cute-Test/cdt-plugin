@@ -120,7 +120,7 @@ class SharedLibProjectCreator {
 
    private IProjectType getGnuSharedLibProjType() {
       final Optional<ToolChain> tc = ToolChain.fromProject(projectToInheritFrom);
-      ILTISException.Unless.isTrue(tc.isPresent(), "Could not determine toolchain");
+      ILTISException.Unless.isTrue("Could not determine toolchain", tc.isPresent());
       final String sharedLibProjectType = tc.get().getSharedLibProjectType();
       return ManagedBuildManager.getExtensionProjectType(sharedLibProjectType);
    }

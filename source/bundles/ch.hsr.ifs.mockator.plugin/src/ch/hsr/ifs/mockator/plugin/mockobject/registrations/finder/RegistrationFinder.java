@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.StdString;
@@ -22,7 +23,8 @@ abstract class RegistrationFinder {
    public Optional<ExistingMemFunCallRegistration> findRegistration(final IASTName callsVectorUsage) {
       if (!ASTUtil.isPushBack(callsVectorUsage) || !isArrayAccess(callsVectorUsage)) { return Optional.empty(); }
 
-      final ICPPASTFunctionCallExpression funCall = ASTUtil.getAncestorOfType(callsVectorUsage, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression funCall = CPPVisitor.findAncestorWithType(callsVectorUsage, ICPPASTFunctionCallExpression.class).orElse(
+            null);
 
       if (funCall == null || funCall.getArguments().length != 1) { return Optional.empty(); }
 
@@ -33,12 +35,12 @@ abstract class RegistrationFinder {
    protected abstract ExistingMemFunCallRegistration collectRegistration(IASTInitializerClause pushBackArg);
 
    private static boolean isArrayAccess(final IASTName callsVector) {
-      return ASTUtil.getAncestorOfType(callsVector, ICPPASTArraySubscriptExpression.class) != null;
+      return CPPVisitor.findAncestorWithType(callsVector, ICPPASTArraySubscriptExpression.class).orElse(null) != null;
    }
 
    protected ExistingMemFunCallRegistration toExistingCallRegistration(final IASTInitializerClause funSignature, final IASTStatement containingStmt) {
       final String signature = String.valueOf(((IASTLiteralExpression) funSignature).getValue());
-      final ICPPASTFunctionDefinition parent = ASTUtil.getAncestorOfType(containingStmt, ICPPASTFunctionDefinition.class);
+      final ICPPASTFunctionDefinition parent = CPPVisitor.findAncestorWithType(containingStmt, ICPPASTFunctionDefinition.class).orElse(null);
       final ExistingTestDoubleMemFun memFun = new ExistingTestDoubleMemFun(parent);
       return new ExistingMemFunCallRegistration(memFun, containingStmt, signature);
    }
@@ -52,6 +54,6 @@ abstract class RegistrationFinder {
    }
 
    protected IASTStatement getContainingStmt(final IASTInitializerClause param) {
-      return ASTUtil.getAncestorOfType(param, IASTStatement.class);
+      return CPPVisitor.findAncestorWithType(param, IASTStatement.class).orElse(null);
    }
 }

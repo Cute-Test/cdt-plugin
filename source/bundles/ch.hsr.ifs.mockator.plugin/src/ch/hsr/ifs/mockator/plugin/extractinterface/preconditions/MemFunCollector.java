@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
-import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IType;
@@ -90,7 +89,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static IType getTypeOfDependency(final IASTNode dependency) {
-      final IASTSimpleDeclaration decl = ASTUtil.getAncestorOfType(dependency, IASTSimpleDeclaration.class);
+      final IASTSimpleDeclaration decl = CPPVisitor.findAncestorWithType(dependency, IASTSimpleDeclaration.class).orElse(null);
       return CPPVisitor.createType(decl.getDeclSpecifier());
    }
 
@@ -132,7 +131,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
    }
 
    private static ICPPASTFunctionDeclarator getDeclarator(final IASTDeclaration function) {
-      return ASTUtil.getChildOfType(function, IASTFunctionDeclarator.class);
+      return CPPVisitor.findChildWithType(function, ICPPASTFunctionDeclarator.class).orElse(null);
    }
 
    private static Collection<ICPPASTFunctionDeclarator> getAllMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
@@ -145,7 +144,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
          @Override
          public int visit(final IASTDeclaration decl) {
-            final ICPPASTFunctionDeclarator candidate = ASTUtil.getChildOfType(decl, ICPPASTFunctionDeclarator.class);
+            final ICPPASTFunctionDeclarator candidate = CPPVisitor.findChildWithType(decl, ICPPASTFunctionDeclarator.class).orElse(null);
 
             if (candidate != null) {
                allMemFuns.add(candidate);

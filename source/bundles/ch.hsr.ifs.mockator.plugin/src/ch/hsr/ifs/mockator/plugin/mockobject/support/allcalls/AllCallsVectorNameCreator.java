@@ -12,8 +12,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNameSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.NameFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.QualifiedNameCreator;
@@ -31,12 +29,12 @@ public class AllCallsVectorNameCreator {
    }
 
    public String getNameOfAllCallsVector() {
-      return OptionalUtil.returnIfPresentElse(getRegistrationVector(), (name) -> name.toString(), () -> createAllCallsVectorName().toString());
+      return getRegistrationVector().map(name -> name.toString()).orElse(createAllCallsVectorName().toString());
    }
 
    public String getFqNameOfAllCallsVector() {
-      return OptionalUtil.returnIfPresentElse(getRegistrationVector(), (name) -> new QualifiedNameCreator(name).createQualifiedName().toString(),
-            () -> createNewFqNameForAllCallsVector().toString());
+      return getRegistrationVector().map(name -> new QualifiedNameCreator(name).createQualifiedName().toString()).orElse(
+            createNewFqNameForAllCallsVector().toString());
    }
 
    private ICPPASTQualifiedName createNewFqNameForAllCallsVector() {

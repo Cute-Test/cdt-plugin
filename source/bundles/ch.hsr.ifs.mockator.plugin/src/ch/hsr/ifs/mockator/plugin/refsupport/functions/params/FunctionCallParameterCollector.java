@@ -10,7 +10,7 @@ import org.eclipse.cdt.core.dom.ast.IASTInitializerClause;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 
 public class FunctionCallParameterCollector {
@@ -26,7 +26,7 @@ public class FunctionCallParameterCollector {
       final List<ICPPASTParameterDeclaration> params = new ArrayList<>();
 
       for (final IASTInitializerClause arg : funCall.getArguments()) {
-         final IASTExpression idExpr = ASTUtil.getChildOfType(arg, IASTExpression.class);
+         final IASTExpression idExpr = CPPVisitor.findChildWithType(arg, IASTExpression.class).orElse(null);
 
          if (idExpr == null) {
             continue;

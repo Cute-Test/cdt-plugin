@@ -20,7 +20,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.StringUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
@@ -40,7 +40,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
 
    @Override
    public void reconcileExpectations(final IASTName expectations) {
-      final IASTExpressionStatement boostAssign = ASTUtil.getAncestorOfType(expectations, IASTExpressionStatement.class);
+      final IASTExpressionStatement boostAssign = CPPVisitor.findAncestorWithType(expectations, IASTExpressionStatement.class).orElse(null);
 
       if (boostAssign != null) {
          rewriteExistingExpectations(boostAssign);
@@ -52,7 +52,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
    private void addNewBoostAssignInitializer(final IASTName expectations) {
       final IASTExpressionStatement boostAssignInitializer = new BoostAssignInitializerCreator(callsToAdd, expectations.toString(), linkedEdit)
             .createBoostAssignInitializer();
-      final ICPPASTFunctionDefinition testFun = ASTUtil.getAncestorOfType(expectations, ICPPASTFunctionDefinition.class);
+      final ICPPASTFunctionDefinition testFun = CPPVisitor.findAncestorWithType(expectations, ICPPASTFunctionDefinition.class).orElse(null);
       final IASTExpressionStatement insertionPoint = getInsertionPointForBoostInitializer(expectations);
       rewriter.insertBefore(testFun.getBody(), insertionPoint, boostAssignInitializer, null);
    }
@@ -60,7 +60,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
    private static IASTExpressionStatement getInsertionPointForBoostInitializer(final IASTName vector) {
       final IASTName[] references = vector.getTranslationUnit().getReferences(vector.resolveBinding());
 
-      if (references.length > 0) { return ASTUtil.getAncestorOfType(references[0], IASTExpressionStatement.class); }
+      if (references.length > 0) { return CPPVisitor.findAncestorWithType(references[0], IASTExpressionStatement.class).orElse(null); }
 
       return null;
    }
@@ -137,7 +137,7 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
 
    private void collectStillRegisteredCalls(final IASTExpression expression, final List<ICPPASTFunctionCallExpression> expectations) {
       for (final IASTExpression expr : ((IASTExpressionList) expression).getExpressions()) {
-         final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(expr, ICPPASTFunctionCallExpression.class);
+         final ICPPASTFunctionCallExpression funCall = CPPVisitor.findChildWithType(expr, ICPPASTFunctionCallExpression.class).orElse(null);
          addCallIfStillRegistered(funCall, expectations);
       }
    }
@@ -148,15 +148,15 @@ class BoostVectorExpectationsReconciler extends AbstractExpectationsReconciler {
    }
 
    private static ICPPASTBinaryExpression getBinaryExpr(final IASTExpression expression) {
-      final ICPPASTBinaryExpression binExp = ASTUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
-      ILTISException.Unless.notNull(binExp, "Not a valid expectation vector assignment");
+      final ICPPASTBinaryExpression binExp = CPPVisitor.findChildWithType(expression, ICPPASTBinaryExpression.class).orElse(null);
+      ILTISException.Unless.notNull("Not a valid expectation vector assignment", binExp);
       return binExp;
    }
 
    private void addCallIfStillRegistered(final ICPPASTFunctionCallExpression fun, final List<ICPPASTFunctionCallExpression> calls) {
-      ILTISException.Unless.isTrue(fun.getArguments().length > 0, "Not a valid call expectation");
+      ILTISException.Unless.isTrue("Not a valid call expectation", fun.getArguments().length > 0);
       final IASTInitializerClause firstArg = fun.getArguments()[0];
-      ILTISException.Unless.assignableFrom(IASTLiteralExpression.class, firstArg, "Only literals allowed as 1st argument");
+      ILTISException.Unless.assignableFrom("Only literals allowed as 1st argument", IASTLiteralExpression.class, firstArg);
       final IASTLiteralExpression literal = (IASTLiteralExpression) firstArg;
 
       if (!isToBeRemoved(literal.toString())) {

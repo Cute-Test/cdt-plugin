@@ -18,8 +18,8 @@ import ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly.cppstd.Refactor
 public class CreateTestDoubleStaticPolyQuickFix extends AbstractCreateTestDoubleQuickFix {
 
    @Override
-   protected MockatorRefactoring getRefactoring(final ICElement e, final ITextSelection sel, final CodanArguments ca) {
-      return new RefactoringByStdFactory().getRefactoring(getCppStandard(), getCProject(), e, sel);
+   protected MockatorRefactoring getRefactoring(final ICElement e, final Optional<ITextSelection> sel, final CodanArguments ca) {
+      return new RefactoringByStdFactory().getRefactoring(e, sel, getCProject(), getCppStandard());
    }
 
    @Override

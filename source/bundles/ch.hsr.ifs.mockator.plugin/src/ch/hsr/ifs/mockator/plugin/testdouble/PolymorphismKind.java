@@ -21,7 +21,7 @@ public enum PolymorphismKind {
 
    public static PolymorphismKind from(final String name) {
       final PolymorphismKind kind = STRING_TO_ENUM.get(name);
-      ILTISException.Unless.notNull(kind, String.format("Unknown polymorphism name '%s'", name));
+      ILTISException.Unless.notNull(String.format("Unknown polymorphism name '%s'", name), kind);
       return kind;
    }
 

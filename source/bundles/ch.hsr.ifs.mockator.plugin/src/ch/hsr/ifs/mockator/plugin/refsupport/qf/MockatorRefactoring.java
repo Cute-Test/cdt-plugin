@@ -12,13 +12,11 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeleteExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
-import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
@@ -34,51 +32,36 @@ import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoring;
-import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
-import ch.hsr.ifs.mockator.plugin.refsupport.finder.ClassInSelectionFinder;
 
 
 public abstract class MockatorRefactoring extends CRefactoring {
 
-   protected static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final ITextSelection           selection;
+   protected static final String NO_CLASS_FOUND_IN_SELECTION = "Could not find a class in the current selection";
 
-   public MockatorRefactoring(final ICElement element, final ITextSelection selection, final ICProject project) {
+   protected static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+
+   public MockatorRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject project) {
       super(element, selection, project);
-      this.selection = selection;
       saveAllDirtyEditors();
    }
 
    private void saveAllDirtyEditors() {
       UiUtil.runInDisplayThread((ignored) -> {
          if (!IDE.saveAllEditors(getWorkspaceRoot(), false)) {
-            initStatus().addFatalError("Was not able to save all editors");
+            initStatus.addFatalError("Was not able to save all editors");
          }
-      }, initStatus());
+      }, initStatus);
    }
 
    private static IResource[] getWorkspaceRoot() {
       return new IResource[] { WorkspaceUtil.getWorkspaceRoot() };
    }
 
-   protected ITextSelection getSelection() {
-      return selection;
-   }
-
    public abstract String getDescription();
-
-   protected ASTRewrite createRewriter(final ModificationCollector collector, final IASTTranslationUnit ast) {
-      return collector.rewriterForTranslationUnit(ast);
-   }
-
-   protected Optional<ICPPASTCompositeTypeSpecifier> getClassInSelection(final IASTTranslationUnit ast) {
-      final ClassInSelectionFinder finder = new ClassInSelectionFinder(getSelection(), ast);
-      return finder.getClassInSelection();
-   }
 
    protected Optional<IASTName> checkSelectedNameIsInFunction(final RefactoringStatus status, final IProgressMonitor pm) throws CoreException {
       final Optional<IASTName> selectedName = getSelectedName(getAST(getTranslationUnit(), pm));
@@ -95,13 +78,13 @@ public abstract class MockatorRefactoring extends CRefactoring {
    }
 
    protected ICPPASTFunctionDefinition getParentFunction(final IASTName name) {
-      return ASTUtil.getAncestorOfType(name, ICPPASTFunctionDefinition.class);
+      return CPPVisitor.findAncestorWithType(name, ICPPASTFunctionDefinition.class).orElse(null);
    }
 
    @Override
    protected RefactoringStatus checkFinalConditions(final IProgressMonitor subProgressMonitor, final CheckConditionsContext checkContext)
          throws CoreException, OperationCanceledException {
-      return initStatus();
+      return initStatus;
    }
 
    @Override
@@ -117,7 +100,7 @@ public abstract class MockatorRefactoring extends CRefactoring {
 
       if (selectedNode instanceof IASTName) { return Optional.of((IASTName) selectedNode); }
 
-      final IASTName name = ASTUtil.getAncestorOfType(selectedNode, IASTName.class);
+      final IASTName name = CPPVisitor.findAncestorWithType(selectedNode, IASTName.class).orElse(null);
 
       if (name != null) { return Optional.of(name); }
 
@@ -141,8 +124,8 @@ public abstract class MockatorRefactoring extends CRefactoring {
    }
 
    protected IASTNode getSelectedNode(final IASTTranslationUnit ast) {
-      final String rootSourceOfTu = null;
-      return ast.getNodeSelector(rootSourceOfTu).findEnclosingNodeInExpansion(selection.getOffset(), selection.getLength());
+      return ast.getNodeSelector(null).findEnclosingNodeInExpansion(selection.map(ITextSelection::getOffset).orElse(-1), selection.map(
+            ITextSelection::getLength).orElse(-1));
    }
 
    @Override

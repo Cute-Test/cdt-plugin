@@ -27,7 +27,7 @@ public class MockatorPlugin extends AbstractUIPlugin {
 
    public static MockatorPlugin getDefault() {
       final Object object = plugin;
-      ILTISException.Unless.notNull(object, "Plugin not active, access not possible");
+      ILTISException.Unless.notNull("Plugin not active, access not possible", object);
       return plugin;
    }
 

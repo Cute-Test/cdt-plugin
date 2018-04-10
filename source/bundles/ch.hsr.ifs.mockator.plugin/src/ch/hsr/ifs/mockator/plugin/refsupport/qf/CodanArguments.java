@@ -12,12 +12,12 @@ public abstract class CodanArguments {
    private static final String MISMATCH_CODAN_ARGUMENTS_MSG = "Wrong number of problem arguments passed; expected: %d, got: %d";
 
    public String[] getProblemArguments(final IMarker marker) {
-      ILTISException.Unless.notNull(marker, "Marker should not be null");
+      ILTISException.Unless.notNull("Marker should not be null", marker);
       final String[] problemArguments = CodanProblemMarker.getProblemArguments(marker);
       final int actualNumArgs = problemArguments.length;
       final int expectedNumArgs = getNumOfProblemArguments();
       final String mismatchText = getMismatchText(actualNumArgs, expectedNumArgs);
-      ILTISException.Unless.isTrue(actualNumArgs == expectedNumArgs, mismatchText);
+      ILTISException.Unless.isTrue(mismatchText, actualNumArgs == expectedNumArgs);
       return problemArguments;
    }
 

@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly.cppstd;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
@@ -18,15 +20,15 @@ import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleRe
 
 class TestDoubleCpp11Refactoring extends AbstractCreateTestDoubleRefactoring {
 
-   public TestDoubleCpp11Refactoring(final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
+   public TestDoubleCpp11Refactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
       super(cElement, selection, cProject);
    }
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu(), pm);
-      final ASTRewrite rewriter = createRewriter(collector, ast);
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(ast);
       insertBeforeCurrentStmt(createNewClassDefinition(ast), ast, rewriter);
    }
 

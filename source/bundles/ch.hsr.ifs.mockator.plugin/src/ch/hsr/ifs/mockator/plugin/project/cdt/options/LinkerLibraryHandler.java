@@ -10,7 +10,6 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
 
@@ -65,7 +64,7 @@ public class LinkerLibraryHandler extends AbstractOptionsHandler {
    }
 
    public boolean hasLibrary(final String libName) {
-      return OptionalUtil.returnIfPresentElse(getToolToAnanalyze(), (tool) -> {
+      return getToolToAnanalyze().map(tool -> {
          for (final IOption option : tool.getOptions()) {
             try {
                if (option.getValueType() == IOption.LIBRARIES) {
@@ -77,7 +76,7 @@ public class LinkerLibraryHandler extends AbstractOptionsHandler {
             }
          }
          return false;
-      }, () -> false);
+      }).orElse(false);
    }
 
    @Override

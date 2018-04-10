@@ -26,9 +26,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNewExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
@@ -142,15 +142,15 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
    }
 
    private Optional<ICPPASTCompositeTypeSpecifier> lookupDefinition(final ICPPClassType type) {
-      return OptionalUtil.returnIfPresentElseEmpty(findDefinitionInAst(type), (className) -> Optional.ofNullable(getKlassOf(className)));
+      return findDefinitionInAst(type).map(SubtypePolymorphismChecker::getClazzOf);
    }
 
    private Optional<IASTName> findDefinitionInAst(final ICPPClassType type) {
       return head(list(getAst().getDefinitionsInAST(type)));
    }
 
-   private static ICPPASTCompositeTypeSpecifier getKlassOf(final IASTNode node) {
-      return ASTUtil.getAncestorOfType(node, ICPPASTCompositeTypeSpecifier.class);
+   private static ICPPASTCompositeTypeSpecifier getClazzOf(final IASTNode node) {
+      return CPPVisitor.findAncestorWithType(node, ICPPASTCompositeTypeSpecifier.class).orElse(null);
    }
 
    @Override

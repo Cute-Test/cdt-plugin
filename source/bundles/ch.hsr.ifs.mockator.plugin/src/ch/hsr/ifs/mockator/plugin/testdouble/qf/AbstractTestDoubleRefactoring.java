@@ -30,7 +30,8 @@ public abstract class AbstractTestDoubleRefactoring extends MockatorRefactoring 
    protected CppStandard cppStd;
    protected TestDouble  testDouble;
 
-   public AbstractTestDoubleRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject project) {
+   public AbstractTestDoubleRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
+                                        final ICProject project) {
       super(cElement, selection, project);
       this.cppStd = cppStd;
    }
@@ -38,7 +39,7 @@ public abstract class AbstractTestDoubleRefactoring extends MockatorRefactoring 
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<ICPPASTCompositeTypeSpecifier> classInSelection = getClassInSelection(getAST(tu(), pm));
+      final Optional<ICPPASTCompositeTypeSpecifier> classInSelection = findFirstEnclosingClass(selection);
 
       if (!classInSelection.isPresent()) {
          status.addFatalError("Could not find a class in the current selection");

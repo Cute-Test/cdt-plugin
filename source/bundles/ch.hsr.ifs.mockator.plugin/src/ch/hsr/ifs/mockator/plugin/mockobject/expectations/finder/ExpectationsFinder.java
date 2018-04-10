@@ -13,8 +13,7 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 
 import ch.hsr.ifs.iltis.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;
@@ -51,7 +50,7 @@ public class ExpectationsFinder {
          }
 
          private int collectExpectations(final IASTName name) {
-            final IASTStatement stmt = ASTUtil.getAncestorOfType(name, IASTStatement.class);
+            final IASTStatement stmt = CPPVisitor.findAncestorWithType(name, IASTStatement.class).orElse(null);
 
             if (stmt instanceof IASTDeclarationStatement) {
                new InitializerExpectationsFinder(callExpectations, expectationVector, assertedExpectation).collectExpectations(stmt);
@@ -69,10 +68,10 @@ public class ExpectationsFinder {
    }
 
    private IASTName getNameOfExpectationVector(final IASTName assertedExpectation) {
-      return OptionalUtil.returnIfPresentElse(expectationVector.getNode(), (node) -> node, () -> {
+      return expectationVector.getNode().orElseGet(() -> {
          final IBinding binding = assertedExpectation.resolveBinding();
          final IASTName[] definitions = assertedExpectation.getTranslationUnit().getDefinitionsInAST(binding);
-         ILTISException.Unless.isTrue(definitions.length > 0, "Expectation vector must have a definition");
+         ILTISException.Unless.isTrue("Expectation vector must have a definition", definitions.length > 0);
          return definitions[0];
       });
    }

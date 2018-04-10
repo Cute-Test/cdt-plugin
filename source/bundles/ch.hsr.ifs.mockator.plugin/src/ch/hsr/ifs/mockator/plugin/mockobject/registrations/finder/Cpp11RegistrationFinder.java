@@ -21,22 +21,22 @@ public class Cpp11RegistrationFinder extends RegistrationFinder {
 
    private IASTInitializerClause getFunSignatureClause(final ICPPASTSimpleTypeConstructorExpression ctor) {
       final IASTInitializer ctorInitializer = ctor.getInitializer();
-      ILTISException.Unless.assignableFrom(ICPPASTInitializerList.class, ctorInitializer, "Initializer list expected");
+      ILTISException.Unless.assignableFrom("Initializer list expected", ICPPASTInitializerList.class, ctorInitializer);
       final IASTInitializerClause[] ctorClauses = ((ICPPASTInitializerList) ctorInitializer).getClauses();
-      ILTISException.Unless.isTrue(ctorClauses.length > 0, "Empty call ctor not allowed");
+      ILTISException.Unless.isTrue("Empty call ctor not allowed", ctorClauses.length > 0);
       final IASTInitializerClause funSignature = ctorClauses[0];
-      ILTISException.Unless.isTrue(isStringLiteral(funSignature), "Fun signature must be a string literal");
+      ILTISException.Unless.isTrue("Fun signature must be a string literal", isStringLiteral(funSignature));
       return funSignature;
    }
 
    private void assureIsCallType(final ICPPASTSimpleTypeConstructorExpression typeCtor) {
       final ICPPASTDeclSpecifier declSpecifier = typeCtor.getDeclSpecifier();
-      ILTISException.Unless.isTrue(isCall(declSpecifier), "Not of call type");
+      ILTISException.Unless.isTrue("Not of call type", isCall(declSpecifier));
    }
 
    private ICPPASTSimpleTypeConstructorExpression getCallTypeCtor(final IASTInitializerClause pushBackArg) {
-      ILTISException.Unless.assignableFrom(ICPPASTSimpleTypeConstructorExpression.class, pushBackArg, "Wrong push_back argument: " + pushBackArg
-            .getClass().getName());
+      ILTISException.Unless.assignableFrom("Wrong push_back argument: " + pushBackArg.getClass().getName(),
+            ICPPASTSimpleTypeConstructorExpression.class, pushBackArg);
       final ICPPASTSimpleTypeConstructorExpression typeCtor = (ICPPASTSimpleTypeConstructorExpression) pushBackArg;
       assureIsCallType(typeCtor);
       return typeCtor;

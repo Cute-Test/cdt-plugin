@@ -7,7 +7,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 
@@ -24,7 +24,7 @@ class TestDoubleToNsMover {
 
    public void moveToNamespace(final ICPPASTCompositeTypeSpecifier testDoubleToMove) {
       final ICPPASTFunctionDefinition testFunction = getParentFunction(testDoubleToMove);
-      ILTISException.Unless.notNull(testFunction, "Test double is not a local class");
+      ILTISException.Unless.notNull("Test double is not a local class", testFunction);
       final IASTSimpleDeclaration movedTestDouble = getClassDeclaration(testDoubleToMove).copy();
       insertTestDoubleInNamespace(movedTestDouble, testDoubleToMove, testFunction);
       removeTestDoubleInFunction(testDoubleToMove);
@@ -32,11 +32,11 @@ class TestDoubleToNsMover {
    }
 
    private static ICPPASTCompositeTypeSpecifier getTestDoubleClass(final IASTSimpleDeclaration simpleDecl) {
-      return ASTUtil.getChildOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      return CPPVisitor.findChildWithType(simpleDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null);
    }
 
    private static IASTSimpleDeclaration getClassDeclaration(final ICPPASTCompositeTypeSpecifier testDouble) {
-      return ASTUtil.getAncestorOfType(testDouble, IASTSimpleDeclaration.class);
+      return CPPVisitor.findAncestorWithType(testDouble, IASTSimpleDeclaration.class).orElse(null);
    }
 
    private void insertTestDoubleInNamespace(final IASTSimpleDeclaration testDouble, final ICPPASTCompositeTypeSpecifier testDoubleToMove,
@@ -50,8 +50,8 @@ class TestDoubleToNsMover {
    }
 
    private static ICPPASTFunctionDefinition getParentFunction(final IASTCompositeTypeSpecifier testDouble) {
-      final ICPPASTFunctionDefinition testFun = ASTUtil.getAncestorOfType(testDouble, ICPPASTFunctionDefinition.class);
-      ILTISException.Unless.notNull(testFun, "Test double class must be a member of a function!");
+      final ICPPASTFunctionDefinition testFun = CPPVisitor.findAncestorWithType(testDouble, ICPPASTFunctionDefinition.class).orElse(null);
+      ILTISException.Unless.notNull("Test double class must be a member of a function!", testFun);
       return testFun;
    }
 

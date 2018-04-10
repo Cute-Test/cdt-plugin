@@ -16,8 +16,7 @@ public class AstIncludeNode extends ASTLiteralNode {
    private final String        includeName;
 
    public AstIncludeNode(final String includeName) {
-      super(getIncludeCode(includeName, false));
-      this.includeName = includeName;
+      this(includeName, false);
    }
 
    public AstIncludeNode(final String includeName, final boolean isSystemInclude) {
@@ -26,12 +25,7 @@ public class AstIncludeNode extends ASTLiteralNode {
    }
 
    public AstIncludeNode(final IASTPreprocessorIncludeStatement include) {
-      super(getIncludeCode(include));
-      includeName = getIncludeName(include);
-   }
-
-   private static String getIncludeCode(final IASTPreprocessorIncludeStatement include) {
-      return getIncludeCode(getIncludeName(include), include.isSystemInclude());
+      this(getIncludeName(include), include.isSystemInclude());
    }
 
    private static String getIncludeName(final IASTPreprocessorIncludeStatement include) {

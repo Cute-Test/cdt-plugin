@@ -12,4 +12,5 @@ public class ExtractInterfaceContribution extends CRefactoringContribution {
          final Map<String, String> args, final int flags) throws IllegalArgumentException {
       return new ExtractInterfaceDescriptor(ExtractInterfaceRefactoring.ID, proj, desc, comment, args);
    }
+
 }

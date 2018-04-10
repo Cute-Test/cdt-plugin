@@ -26,7 +26,7 @@ public abstract class CdtHelper {
 
    public static IManagedBuildInfo getManagedBuildInfo(final IProject proj) {
       final IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(proj);
-      ILTISException.Unless.notNull(info, String.format("Project '%s' does not have managed build information", proj.getName()));
+      ILTISException.Unless.notNull(String.format("Project '%s' does not have managed build information", proj.getName()), info);
       return info;
    }
 

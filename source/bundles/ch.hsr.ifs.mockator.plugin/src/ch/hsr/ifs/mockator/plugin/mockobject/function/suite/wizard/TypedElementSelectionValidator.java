@@ -31,7 +31,7 @@ class TypedElementSelectionValidator implements ISelectionStatusValidator {
 
    public TypedElementSelectionValidator(final Class<?>[] acceptedTypes, final boolean allowMultipleSelection,
                                          final Collection<Object> rejectedElements) {
-      ILTISException.Unless.notNull(acceptedTypes, "accepted types must not be null");
+      ILTISException.Unless.notNull("accepted types must not be null", acceptedTypes);
       fAcceptedTypes = acceptedTypes;
       fAllowMultipleSelection = allowMultipleSelection;
       fRejectedElements = rejectedElements;

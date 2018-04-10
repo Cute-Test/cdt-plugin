@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.MemFunCallExpectation;
@@ -35,7 +35,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
 
    @Override
    protected void collectExpectations(final IASTStatement expectationStmt) {
-      ILTISException.Unless.assignableFrom(IASTExpressionStatement.class, expectationStmt, "Should be called with an expression statement");
+      ILTISException.Unless.assignableFrom("Should be called with an expression statement", IASTExpressionStatement.class, expectationStmt);
       final IASTExpression expression = ((IASTExpressionStatement) expectationStmt).getExpression();
       final ICPPASTBinaryExpression binExpr = getBinaryExpr(expression);
 
@@ -58,7 +58,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private static ICPPASTBinaryExpression getBinaryExpr(final IASTExpression expression) {
-      return ASTUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
+      return CPPVisitor.findChildWithType(expression, ICPPASTBinaryExpression.class).orElse(null);
    }
 
    private Collection<MemFunCallExpectation> getMemFunCalls(final IASTExpression expression) {
@@ -74,7 +74,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private void collectSingleCallExpr(final IASTExpression expression, final Collection<MemFunCallExpectation> expectations) {
-      final ICPPASTBinaryExpression binExpr = ASTUtil.getChildOfType(expression, ICPPASTBinaryExpression.class);
+      final ICPPASTBinaryExpression binExpr = CPPVisitor.findChildWithType(expression, ICPPASTBinaryExpression.class).orElse(null);
       final IASTExpression operand2 = binExpr.getOperand2();
 
       if (isCallExpr(operand2)) {
@@ -84,7 +84,7 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private void collectCallsInExprList(final IASTExpression expression, final Collection<MemFunCallExpectation> callExpectations) {
-      ILTISException.Unless.assignableFrom(IASTExpressionList.class, expression, "expression list expected");
+      ILTISException.Unless.assignableFrom("expression list expected", IASTExpressionList.class, expression);
       final IASTExpression[] expressions = ((IASTExpressionList) expression).getExpressions();
       final Collection<IASTExpression> onlyCalls = filterNonCallExpressions(expressions);
       toMemberFunctionCalls(callExpectations, onlyCalls);
@@ -102,17 +102,17 @@ class BoostVectorExpectationsFinder extends AbstractExpectationsFinder {
    }
 
    private MemFunCallExpectation getMemFunCallIn(final IASTExpression expression) {
-      final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
-      ILTISException.Unless.notNull(funCall, "Function call exprected");
+      final ICPPASTFunctionCallExpression funCall = CPPVisitor.findChildWithType(expression, ICPPASTFunctionCallExpression.class).orElse(null);
+      ILTISException.Unless.notNull("Function call exprected", funCall);
       final IASTInitializerClause[] arguments = funCall.getArguments();
-      ILTISException.Unless.isTrue(arguments.length > 0, "Call objects must have a fun signature");
+      ILTISException.Unless.isTrue("Call objects must have a fun signature", arguments.length > 0);
       final IASTInitializerClause funSignature = arguments[0];
-      ILTISException.Unless.isTrue(isStringLiteral(funSignature), "Fun signature must be a string literal");
+      ILTISException.Unless.isTrue("Fun signature must be a string literal", isStringLiteral(funSignature));
       return toMemberFunctionCall(funSignature);
    }
 
    private static boolean isCallExpr(final IASTExpression expression) {
-      final ICPPASTFunctionCallExpression funCall = ASTUtil.getChildOfType(expression, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression funCall = CPPVisitor.findChildWithType(expression, ICPPASTFunctionCallExpression.class).orElse(null);
 
       if (funCall == null) { return false; }
 

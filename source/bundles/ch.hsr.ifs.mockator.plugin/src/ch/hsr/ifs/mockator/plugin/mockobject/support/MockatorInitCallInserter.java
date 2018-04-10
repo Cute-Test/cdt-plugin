@@ -6,7 +6,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.finder.MacroFinderVisitor;
@@ -46,11 +46,11 @@ class MockatorInitCallInserter {
          final IASTNode[] children = function.getBody().getChildren();
          return children.length > 0 ? children[0] : null;
       }
-      return ASTUtil.getAncestorOfType(mockObject, IASTSimpleDeclaration.class);
+      return CPPVisitor.findAncestorWithType(mockObject, IASTSimpleDeclaration.class).orElse(null);
    }
 
    private ICPPASTFunctionDefinition getFunctionParent() {
-      return ASTUtil.getAncestorOfType(mockObject, ICPPASTFunctionDefinition.class);
+      return CPPVisitor.findAncestorWithType(mockObject, ICPPASTFunctionDefinition.class).orElse(null);
    }
 
    private boolean hasMockatorInitCall() {

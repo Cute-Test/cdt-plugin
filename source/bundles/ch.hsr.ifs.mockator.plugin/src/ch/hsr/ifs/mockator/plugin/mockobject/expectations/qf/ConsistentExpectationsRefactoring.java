@@ -20,8 +20,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -43,7 +42,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    private final CppStandard                     cppStd;
    private final List<ExistingTestDoubleMemFun>  expectationsToAdd;
 
-   public ConsistentExpectationsRefactoring(final ICElement cElement, final ITextSelection selection, final ICProject project,
+   public ConsistentExpectationsRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject project,
                                             final ConsistentExpectationsCodanArgs ca, final CppStandard cppStd,
                                             final LinkedEditModeStrategy linkedEditMode) {
       super(cElement, selection, project);
@@ -56,7 +55,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<IASTName> expectationsVector = getSelectedName(getAST(tu(), pm));
+      final Optional<IASTName> expectationsVector = getSelectedName(getAST(tu, pm));
 
       if (!expectationsVector.isPresent()) {
          status.addFatalError("Not a valid name selected");
@@ -73,12 +72,12 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu(), pm);
+      final IASTTranslationUnit ast = getAST(tu, pm);
       getSelectedName(ast).ifPresent((expectations) -> reconcileExpectations(collector, ast, expectations));
    }
 
    private void reconcileExpectations(final ModificationCollector collector, final IASTTranslationUnit ast, final IASTName expectationsVector) {
-      final ASTRewrite rewriter = createRewriter(collector, ast);
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(ast);
       collectExpectationsToAdd(ast, expectationsVector);
       consolidateExpectations(expectationsVector, rewriter);
    }
@@ -101,8 +100,8 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
       final RegistrationCandidatesFinder finder = new RegistrationCandidatesFinder(ast, cppStd);
       final ICPPASTFunctionDefinition testFunction = getTestFunction(expectationsVector);
 
-      return OptionalUtil.returnIfPresentElse(getRegistrationVector(testFunction, expectationsVector), (regVector) -> finder.findCallRegistrations(
-            regVector), () -> new ArrayList<>());
+      return getRegistrationVector(testFunction, expectationsVector).map(regVector -> finder.findCallRegistrations(regVector)).orElse(
+            new ArrayList<>());
    }
 
    private static Optional<IASTName> getRegistrationVector(final ICPPASTFunctionDefinition testFun, final IASTName expectationsVector) {
@@ -126,7 +125,7 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    }
 
    private static ICPPASTFunctionDefinition getTestFunction(final IASTName expectationsVector) {
-      return ASTUtil.getAncestorOfType(expectationsVector, ICPPASTFunctionDefinition.class);
+      return CPPVisitor.findAncestorWithType(expectationsVector, ICPPASTFunctionDefinition.class).orElse(null);
    }
 
    @Override

@@ -16,7 +16,6 @@ import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 
 public class ChangeEdit {
@@ -31,7 +30,7 @@ public class ChangeEdit {
 
    private void initTextEditSource(final Change[] changes) {
       for (final Change change : changes) {
-         ILTISException.Unless.assignableFrom(TextChange.class, change, "Expected text change");
+         ILTISException.Unless.assignableFrom("Expected text change", TextChange.class, change);
          final TextEdit[] textEdits = ((TextChange) change).getEdit().getChildren();
 
          for (final TextEdit edit : textEdits) {
@@ -43,24 +42,24 @@ public class ChangeEdit {
    }
 
    public int getOffset(final String linkedModeText) {
-      return OptionalUtil.returnIfPresentElse(getEdit(linkedModeText), (edit) -> edit.getOffset(), () -> 0);
+      return getEdit(linkedModeText).map(TextEdit::getOffset).orElse(0);
    }
 
    public Optional<Integer> getAbsoluteIndex(final String linkedModeText, final String text) {
-      return OptionalUtil.returnIfPresentElseEmpty(getText(linkedModeText), (oText) -> Optional.of(getOffset(linkedModeText) + oText.indexOf(text)));
+      return getText(linkedModeText).map((oText) -> getOffset(linkedModeText) + oText.indexOf(text));
    }
 
    public Optional<String> getText(final String text) {
-      return OptionalUtil.returnIfPresentElseEmpty(getEdit(text), (textEdit) -> textEdit instanceof ReplaceEdit ? Optional.of(((ReplaceEdit) textEdit)
-            .getText()) : Optional.of(((InsertEdit) textEdit).getText()));
+      return getEdit(text).map((textEdit) -> textEdit instanceof ReplaceEdit ? ((ReplaceEdit) textEdit).getText() : ((InsertEdit) textEdit)
+            .getText());
    }
 
    private static Change[] collectUnderlyingChanges(final Change change) {
       if (change instanceof NullChange) { return array(); }
 
-      ILTISException.Unless.assignableFrom(CompositeChange.class, change, "Composite change expected");
+      ILTISException.Unless.assignableFrom("Composite change expected", CompositeChange.class, change);
       final Change[] subChanges = ((CompositeChange) change).getChildren();
-      ILTISException.Unless.isFalse(subChanges.length == 0, "No changes passed");
+      ILTISException.Unless.isFalse("No changes passed", subChanges.length == 0);
       final Change fstChange = subChanges[0];
 
       if (fstChange instanceof CompositeChange) {

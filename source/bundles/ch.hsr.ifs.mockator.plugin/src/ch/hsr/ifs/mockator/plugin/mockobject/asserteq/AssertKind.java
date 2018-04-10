@@ -19,7 +19,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTBinaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 
 import ch.hsr.ifs.iltis.core.data.AbstractPair;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.mockobject.support.allcalls.CallsVectorTypeVerifier;
@@ -31,7 +31,7 @@ public enum AssertKind {
 
    @Override
    protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-      final ICPPASTBinaryExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTBinaryExpression.class);
+      final ICPPASTBinaryExpression startingNode = CPPVisitor.findChildWithType(stmt, ICPPASTBinaryExpression.class).orElse(null);
       return ExpectedActualPair.from(collectExpectedActual(startingNode));
    }
    },
@@ -40,7 +40,7 @@ public enum AssertKind {
 
    @Override
    protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-      final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression startingNode = CPPVisitor.findChildWithType(stmt, ICPPASTFunctionCallExpression.class).orElse(null);
       return ExpectedActualPair.from(collectExpectedActual(startingNode));
    }
    },
@@ -49,7 +49,7 @@ public enum AssertKind {
 
    @Override
    protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-      final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression startingNode = CPPVisitor.findChildWithType(stmt, ICPPASTFunctionCallExpression.class).orElse(null);
       final IASTInitializerClause[] arguments = startingNode.getArguments();
 
       if (arguments.length < 2) { return Optional.empty(); }
@@ -65,7 +65,7 @@ public enum AssertKind {
 
    @Override
    protected Optional<ExpectedActualPair> getExpectedActual(final IASTStatement stmt) {
-      final ICPPASTFunctionCallExpression startingNode = ASTUtil.getChildOfType(stmt, ICPPASTFunctionCallExpression.class);
+      final ICPPASTFunctionCallExpression startingNode = CPPVisitor.findChildWithType(stmt, ICPPASTFunctionCallExpression.class).orElse(null);
       return ExpectedActualPair.from(collectExpectedActual(startingNode));
    }
    };

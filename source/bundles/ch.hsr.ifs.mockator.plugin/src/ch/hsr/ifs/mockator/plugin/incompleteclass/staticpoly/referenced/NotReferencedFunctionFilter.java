@@ -12,6 +12,7 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.FunctionEquivalenceVerifier;
@@ -33,9 +34,7 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
    public boolean test(final StaticPolyMissingMemFun memFunCall) {
       final ICPPASTFunctionDefinition sutFunction = memFunCall.getContainingFunction();
 
-      if (!shouldConsider(sutFunction)) {
-         return true;
-      }
+      if (!shouldConsider(sutFunction)) { return true; }
 
       Boolean called = cache.get(sutFunction);
 
@@ -55,22 +54,18 @@ public class NotReferencedFunctionFilter implements Predicate<StaticPolyMissingM
       final IBinding sutBinding = sutFunction.getDeclarator().getName().resolveBinding();
 
       for (final IASTName caller : calleeReferenceResolver.findCallers(sutBinding, sutFunction)) {
-         if (matches(testFunction, getFunctionDefinition(caller))) {
-            return true;
-         }
+         if (matches(testFunction, getFunctionDefinition(caller))) { return true; }
       }
 
       return false;
    }
 
    private ICPPASTFunctionDefinition getFunctionDefinition(final IASTName caller) {
-      return ASTUtil.getAncestorOfType(caller, ICPPASTFunctionDefinition.class);
+      return CPPVisitor.findAncestorWithType(caller, ICPPASTFunctionDefinition.class).orElse(null);
    }
 
    private static boolean matches(final ICPPASTFunctionDefinition functionInUse, final ICPPASTFunctionDefinition missingMemFun) {
-      if (functionInUse == null || missingMemFun == null) {
-         return false;
-      }
+      if (functionInUse == null || missingMemFun == null) { return false; }
 
       final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) functionInUse.getDeclarator());
       return checker.isEquivalent((ICPPASTFunctionDeclarator) missingMemFun.getDeclarator());

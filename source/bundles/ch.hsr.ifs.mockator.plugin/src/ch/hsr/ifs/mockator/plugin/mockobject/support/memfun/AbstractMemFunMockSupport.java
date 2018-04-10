@@ -44,7 +44,7 @@ abstract class AbstractMemFunMockSupport implements MemFunMockSupportAdder {
 
    protected IASTCompoundStatement createNewFunBody(final ICPPASTFunctionDefinition function) {
       final IASTCompoundStatement funBody = nodeFactory.newCompoundStatement();
-      ILTISException.Unless.assignableFrom(IASTCompoundStatement.class, function.getBody(), "Compound statement expected as function body");
+      ILTISException.Unless.assignableFrom("Compound statement expected as function body", IASTCompoundStatement.class, function.getBody());
       fillFunBody(funBody, function);
       return funBody;
    }

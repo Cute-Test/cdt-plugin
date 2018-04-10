@@ -43,7 +43,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
    private static final String SHADOW_FOLDER_NAME = "shadows";
    private IFile               newFile;
 
-   public ShadowFunctionRefactoring(final ICElement element, final ITextSelection selection, final ICProject cProject) {
+   public ShadowFunctionRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject cProject) {
       super(element, selection, cProject);
    }
 
@@ -55,7 +55,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
          for (final IProject refProj : getReferencingExecutables()) {
             final IASTTranslationUnit newTu = createAndGetNewTu(refProj, funName.toString(), pm);
             final ICPPASTFunctionDefinition funDef = createFunDefinition(refProj, optFunDecl.get());
-            final ASTRewrite rewriter = createRewriter(collector, newTu);
+            final ASTRewrite rewriter = collector.rewriterForTranslationUnit(newTu);
             final ICProject cProject = CProjectUtil.getCProject(refProj);
             insertFunDeclInclude(optFunDecl.get(), newTu, rewriter, cProject);
             insertFunDefinition(funDef, newTu, rewriter);
@@ -86,7 +86,7 @@ public class ShadowFunctionRefactoring extends LinkerRefactoring {
       final IFolder shadowFolder = createShadowFolder(referencingProj, pm);
       final IPath newFilePath = getPathForNewFile(shadowFolder, funName);
       newFile = FileUtil.toIFile(newFilePath);
-      final TranslationUnitCreator creator = new TranslationUnitCreator(referencingProj, refactoringContext());
+      final TranslationUnitCreator creator = new TranslationUnitCreator(referencingProj, refactoringContext);
       return creator.createAndGetNewTu(newFilePath, pm);
    }
 

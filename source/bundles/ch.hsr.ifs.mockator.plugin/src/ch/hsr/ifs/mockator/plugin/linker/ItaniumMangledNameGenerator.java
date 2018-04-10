@@ -216,7 +216,7 @@ public class ItaniumMangledNameGenerator {
 
    // <template-args> ::= I <template-arg>+ E
    private void templateArgs(final Collection<ICPPTemplateArgument> templateArgs) {
-      ILTISException.Unless.isTrue(templateArgs.size() >= 1, "templateArgs should not be called with empty template arg list");
+      ILTISException.Unless.isTrue("templateArgs should not be called with empty template arg list", templateArgs.size() >= 1);
       mangledName.append("I");
 
       for (final ICPPTemplateArgument arg : templateArgs) {
@@ -709,7 +709,7 @@ public class ItaniumMangledNameGenerator {
 
       String getBase36Value(final String type) {
          final Integer seqId = history.get(type);
-         ILTISException.Unless.notNull(seqId, "Type must have occurred once already");
+         ILTISException.Unless.notNull("Type must have occurred once already", seqId);
 
          // <substitution> ::= S <seq-id> _
          // ::= S_
@@ -718,7 +718,7 @@ public class ItaniumMangledNameGenerator {
             return ""; // The first repetition yields an empty string after S_
          default:
             final int n = seqId - 1;
-            ILTISException.Unless.isTrue(n < 36, "Value not in range for base36 conversion");
+            ILTISException.Unless.isTrue("Value not in range for base36 conversion", n < 36);
             return Integer.toString(n, 36).toUpperCase();
          }
       }

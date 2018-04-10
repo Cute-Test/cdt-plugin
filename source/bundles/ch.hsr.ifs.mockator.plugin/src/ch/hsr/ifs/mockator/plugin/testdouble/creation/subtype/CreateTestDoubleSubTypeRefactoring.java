@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.creation.subtype;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.dom.ast.IASTDeclarationStatement;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
@@ -25,7 +27,8 @@ public class CreateTestDoubleSubTypeRefactoring extends AbstractCreateTestDouble
 
    private final CreateTestDoubleSubTypeCodanArgs ca;
 
-   public CreateTestDoubleSubTypeRefactoring(final ICElement cElement, final ITextSelection sel, final CreateTestDoubleSubTypeCodanArgs ca) {
+   public CreateTestDoubleSubTypeRefactoring(final ICElement cElement, final Optional<ITextSelection> sel,
+                                             final CreateTestDoubleSubTypeCodanArgs ca) {
       super(cElement, sel, null);
       this.ca = ca;
    }
@@ -34,7 +37,7 @@ public class CreateTestDoubleSubTypeRefactoring extends AbstractCreateTestDouble
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
       final IASTTranslationUnit ast = getAST(getTranslationUnit(), pm);
-      final ASTRewrite rewriter = createRewriter(collector, ast);
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(ast);
       addIncludeIfNecessary(ast, rewriter);
       replaceKindOfPassingArgIfNecessary(ast, rewriter);
       insertBeforeCurrentStmt(createNewTestDoubleClass(), ast, rewriter);

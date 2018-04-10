@@ -14,7 +14,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.StringUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
@@ -41,14 +41,14 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    }
 
    private static IASTEqualsInitializer getEqualsInitializer(final IASTName expVector) {
-      final IASTDeclarationStatement declStmt = ASTUtil.getAncestorOfType(expVector, IASTDeclarationStatement.class);
-      final IASTEqualsInitializer eqInitializer = ASTUtil.getChildOfType(declStmt, IASTEqualsInitializer.class);
-      ILTISException.Unless.notNull(eqInitializer, "Not a valid call initialization");
+      final IASTDeclarationStatement declStmt = CPPVisitor.findAncestorWithType(expVector, IASTDeclarationStatement.class).orElse(null);
+      final IASTEqualsInitializer eqInitializer = CPPVisitor.findChildWithType(declStmt, IASTEqualsInitializer.class).orElse(null);
+      ILTISException.Unless.notNull("Not a valid call initialization", eqInitializer);
       return eqInitializer;
    }
 
    private static ICPPASTInitializerList getInitializerListFrom(final IASTEqualsInitializer eqInitializer) {
-      ILTISException.Unless.assignableFrom(ICPPASTInitializerList.class, eqInitializer.getInitializerClause(), "Initializer list expected");
+      ILTISException.Unless.assignableFrom("Initializer list expected", ICPPASTInitializerList.class, eqInitializer.getInitializerClause());
       return (ICPPASTInitializerList) eqInitializer.getInitializerClause();
    }
 
@@ -59,8 +59,7 @@ class InitializerExpectationsReconciler extends AbstractExpectationsReconciler {
    private void collectNewCalls(final ICPPASTInitializerList newCallsList) {
       for (final TestDoubleMemFun toAdd : callsToAdd) {
          final ICPPASTInitializerList call = createCallsInitializerList();
-         call.addClause(nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(
-               toAdd.getFunctionSignature())));
+         call.addClause(nodeFactory.newLiteralExpression(IASTLiteralExpression.lk_string_literal, StringUtil.quote(toAdd.getFunctionSignature())));
 
          for (final IASTInitializerClause initializer : toAdd.createDefaultArguments(cppStd, linkedEdit)) {
             call.addClause(initializer);

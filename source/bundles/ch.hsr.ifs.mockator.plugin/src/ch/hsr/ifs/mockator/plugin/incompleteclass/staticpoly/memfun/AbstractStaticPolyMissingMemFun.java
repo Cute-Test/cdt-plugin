@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
@@ -63,7 +63,7 @@ public abstract class AbstractStaticPolyMissingMemFun extends AbstractTestDouble
    @Override
    public ICPPASTFunctionDefinition getContainingFunction() {
       final IASTExpression expr = getUnderlyingExpression();
-      return ASTUtil.getAncestorOfType(expr, ICPPASTFunctionDefinition.class);
+      return CPPVisitor.findAncestorWithType(expr, ICPPASTFunctionDefinition.class).orElse(null);
    }
 
    protected abstract IASTExpression getUnderlyingExpression();

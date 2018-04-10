@@ -36,9 +36,9 @@ public abstract class MockatorQfWithRefactoringSupport extends MockatorQuickFix 
       }
    }
 
-   private ITextSelection getSelection() {
+   private Optional<ITextSelection> getSelection() {
       final int offset = getOffset(marker, document);
-      return new TextSelection(document, offset, 0);
+      return Optional.of(new TextSelection(document, offset, 0));
    }
 
    private void runInSeparateJob(final MockatorRefactoring refactoring) {
@@ -46,8 +46,7 @@ public abstract class MockatorQfWithRefactoringSupport extends MockatorQuickFix 
    }
 
    private void runInCurrentThread(final MockatorRefactoring refactoring) {
-      final NullProgressMonitor npm = new NullProgressMonitor();
-      final ChangeEdit changeEdit = new MockatorRefactoringRunner(refactoring).runInCurrentThread(npm);
+      final ChangeEdit changeEdit = new MockatorRefactoringRunner(refactoring).runInCurrentThread(new NullProgressMonitor());
       startLinkedMode(refactoring, changeEdit);
    }
 
@@ -55,7 +54,7 @@ public abstract class MockatorQfWithRefactoringSupport extends MockatorQuickFix 
       getLinkedModeCreator(edit, document, refactoring).ifPresent((linkedMode) -> new LinkedModeStarter().accept(linkedMode));
    }
 
-   protected abstract MockatorRefactoring getRefactoring(ICElement cElement, ITextSelection selection, CodanArguments ca);
+   protected abstract MockatorRefactoring getRefactoring(ICElement cElement, Optional<ITextSelection> selection, CodanArguments ca);
 
    protected abstract Optional<LinkedModeInfoCreater> getLinkedModeCreator(ChangeEdit edit, IDocument document, MockatorRefactoring refactoring);
 }

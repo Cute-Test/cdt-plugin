@@ -8,8 +8,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
@@ -28,7 +27,7 @@ class ExpectationsVectorDefinitionFinder {
    }
 
    public Optional<IASTName> findExpectationsVector() {
-      return OptionalUtil.returnIfPresentElseEmpty(mockObject.getRegistrationVector(), (regVector) -> {
+      return mockObject.getRegistrationVector().flatMap(regVector -> {
          for (final ExpectedActualPair expectedActual : findAssertedCallsInTestFunction()) {
             final Optional<IASTName> expVector = getExpectationsVector(expectedActual, regVector);
             if (expVector.isPresent()) { return getNameOfDefinition(expVector.get()); }
@@ -38,8 +37,8 @@ class ExpectationsVectorDefinitionFinder {
    }
 
    private Optional<IASTName> getNameOfDefinition(final IASTName expectationsVector) {
-      return new NameFinder(testFunction).getNameMatchingCriteria((name) -> name.toString().equals(expectationsVector.toString()) && ASTUtil
-            .getAncestorOfType(name, IASTDeclarationStatement.class) != null);
+      return new NameFinder(testFunction).getNameMatchingCriteria((name) -> name.toString().equals(expectationsVector.toString()) && CPPVisitor
+            .findAncestorWithType(name, IASTDeclarationStatement.class).orElse(null) != null);
    }
 
    private static Optional<IASTName> getExpectationsVector(final ExpectedActualPair expectedActual, final IASTName registrationVector) {

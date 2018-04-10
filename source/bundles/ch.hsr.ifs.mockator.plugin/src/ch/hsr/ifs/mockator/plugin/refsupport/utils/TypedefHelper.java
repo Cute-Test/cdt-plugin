@@ -30,7 +30,6 @@ import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 
 
@@ -149,8 +148,8 @@ public class TypedefHelper {
       if (isHeader(contentType)) {
          final String contentId = contentType.getId();
          final URI uri = URIUtil.toURI(location.getFileName());
-         return OptionalUtil.returnIfPresentElseNull(getAst(index, contentId, uri), (ast) -> ast.getNodeSelector(null).findFirstContainedNode(location
-               .getNodeOffset(), location.getNodeLength()));
+         return getAst(index, contentId, uri).map((ast) -> ast.getNodeSelector(null).findFirstContainedNode(location.getNodeOffset(), location
+               .getNodeLength())).orElse(null);
       }
 
       return null;

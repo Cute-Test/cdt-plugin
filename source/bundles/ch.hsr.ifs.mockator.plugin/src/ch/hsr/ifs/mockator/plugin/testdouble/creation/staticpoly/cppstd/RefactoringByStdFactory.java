@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.creation.staticpoly.cppstd;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.jface.text.ITextSelection;
@@ -12,8 +14,8 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
 public class RefactoringByStdFactory {
 
-   public MockatorRefactoring getRefactoring(final CppStandard std, final ICProject project, final ICElement cElement,
-         final ITextSelection selection) {
+   public MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject project,
+         final CppStandard std) {
       switch (std) {
       case Cpp03Std:
          return new TestDoubleCpp03Refactoring(cElement, selection, project);

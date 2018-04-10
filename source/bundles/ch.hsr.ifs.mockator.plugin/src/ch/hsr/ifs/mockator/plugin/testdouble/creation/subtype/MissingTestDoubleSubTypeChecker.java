@@ -13,8 +13,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.CppIncludeResolver;
@@ -60,12 +60,12 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
    }
 
    private static boolean isPartOfCtorCall(final IASTNode node) {
-      return ASTUtil.getAncestorOfType(node, ICPPASTConstructorInitializer.class) != null || ASTUtil.getAncestorOfType(node,
-            ICPPASTInitializerList.class) != null;
+      return CPPVisitor.findAncestorWithType(node, ICPPASTConstructorInitializer.class).orElse(null) != null || CPPVisitor.findAncestorWithType(node,
+            ICPPASTInitializerList.class).orElse(null) != null;
    }
 
    private static boolean isPartOfFunCall(final IASTNode node) {
-      return ASTUtil.getAncestorOfType(node, ICPPASTFunctionCallExpression.class) != null;
+      return CPPVisitor.findAncestorWithType(node, ICPPASTFunctionCallExpression.class).orElse(null) != null;
    }
 
    private void markMissingInjectedTestDouble(final IASTName name, final DependencyInfo optResult) {

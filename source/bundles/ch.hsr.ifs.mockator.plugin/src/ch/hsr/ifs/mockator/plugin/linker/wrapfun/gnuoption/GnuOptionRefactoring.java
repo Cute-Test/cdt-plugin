@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.gnuoption;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -7,7 +9,6 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
-import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
@@ -26,6 +27,7 @@ import org.eclipse.jface.text.ITextSelection;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
@@ -45,7 +47,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    private static String       NEW_LINE    = PlatformUtil.toSystemNewLine("%n");
    private String              newFunName;
 
-   public GnuOptionRefactoring(final ICElement element, final ITextSelection selection, final ICProject cproject) {
+   public GnuOptionRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject cproject) {
       super(element, selection, cproject);
    }
 
@@ -53,23 +55,22 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
          throws CoreException {
       rememberFunName(funName);
-      createWrapperFunction(funName, collector, getAST(tu(), pm), pm);
+      createWrapperFunction(funName, collector.rewriterForTranslationUnit(getAST(tu, pm)), pm);
    }
 
    private void rememberFunName(final IASTName funName) {
       final IBinding binding = funName.resolveBinding();
-      ILTISException.Unless.assignableFrom(ICPPFunction.class, binding, "Function expected");
+      ILTISException.Unless.assignableFrom("Function expected", ICPPFunction.class, binding);
       newFunName = new ItaniumMangledNameGenerator((ICPPFunction) binding).createMangledName();
    }
 
-   private void createWrapperFunction(final IASTName funName, final ModificationCollector collector, final IASTTranslationUnit tu,
-         final IProgressMonitor pm) {
+   private void createWrapperFunction(final IASTName funName, ASTRewrite rewriter, final IProgressMonitor pm) {
       findFunDeclaration(funName, pm).ifPresent((funDecl) -> {
          final IASTDeclSpecifier declSpecifier = ASTUtil.getDeclSpec(funDecl);
          final IASTSimpleDeclaration realFunDecl = createRealFunDecl(declSpecifier, funDecl);
          final ICPPASTFunctionDefinition wrapFunDef = createWrappedFun(declSpecifier, funDecl, realFunDecl);
          final ICPPASTLinkageSpecification cLinkage = wrapFunctionsInCLinkage(realFunDecl, wrapFunDef);
-         insertWrapperFunsInCLinkage(collector, tu, cLinkage, funName);
+         insertWrapperFunsInCLinkage(rewriter, cLinkage, funName);
       });
    }
 
@@ -122,9 +123,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
       newFunDecl.setVolatile(false);
    }
 
-   private void insertWrapperFunsInCLinkage(final ModificationCollector collector, final IASTTranslationUnit ast,
-         final ICPPASTLinkageSpecification cLinkageSpec, final IASTName funName) {
-      final ASTRewrite rewriter = createRewriter(collector, ast);
+   private void insertWrapperFunsInCLinkage(ASTRewrite rewriter, final ICPPASTLinkageSpecification cLinkageSpec, final IASTName funName) {
       final IASTNode insertionPoint = getInsertionPoint(funName);
       rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, createIfDefWrapFun(), null);
       rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, cLinkageSpec, null);
@@ -149,21 +148,21 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
    }
 
    private static IASTNode getInsertionPoint(final IASTName funName) {
-      IASTNode insertionPoint = ASTUtil.getAncestorOfType(funName, ICPPASTCompositeTypeSpecifier.class);
+      IASTNode insertionPoint = CPPVisitor.findAncestorWithType(funName, ICPPASTCompositeTypeSpecifier.class).orElse(null);
 
       if (insertionPoint != null) { return insertionPoint.getParent(); }
 
-      insertionPoint = ASTUtil.getAncestorOfType(funName, ICPPASTFunctionDefinition.class);
+      insertionPoint = CPPVisitor.findAncestorWithType(funName, ICPPASTFunctionDefinition.class).orElse(null);
 
       if (insertionPoint != null) { return insertionPoint; }
 
-      return ASTUtil.getAncestorOfType(funName, IASTStatement.class);
+      return CPPVisitor.findAncestorWithType(funName, IASTStatement.class).orElse(null);
    }
 
    private static IASTCompoundStatement createWrappedFunReturnStmt(final IASTSimpleDeclaration realFunDecl,
          final ICPPASTFunctionDeclarator wrapFunDecl) {
       final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(wrapFunDecl);
-      final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType(realFunDecl, ICPPASTFunctionDeclarator.class);
+      final ICPPASTFunctionDeclarator funDecl = CPPVisitor.findChildWithType(realFunDecl, ICPPASTFunctionDeclarator.class).orElse(null);
       final IASTStatement delegateToRealFun = creator.createDelegate(funDecl.getName(), realFunDecl.getDeclSpecifier());
       return ASTUtil.toCompoundStatement(delegateToRealFun);
    }

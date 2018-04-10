@@ -31,6 +31,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.OverloadableOperator;
 
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFunImplStrategy;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -124,7 +125,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
 
    private void addParameterForArrayIndex(final ICPPASTFunctionDeclarator funDecl) {
       final IASTInitializerClause argument = ((ICPPASTArraySubscriptExpression) operatorExpr).getArgument();
-      final IASTExpression expr = ASTUtil.getChildOfType(argument, IASTExpression.class);
+      final IASTExpression expr = CPPVisitor.findChildWithType(argument, IASTExpression.class).orElse(null);
       funDecl.addParameterDeclaration(ParamDeclCreator.createParameterFrom(expr, new HashMap<String, Boolean>()));
    }
 
@@ -223,7 +224,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private ICPPASTBinaryExpression getBinaryExpression() {
-      return ASTUtil.getAncestorOfType(operatorExpr, ICPPASTBinaryExpression.class);
+      return CPPVisitor.findAncestorWithType(operatorExpr, ICPPASTBinaryExpression.class).orElse(null);
    }
 
    private boolean isUnaryExpression() {
@@ -231,7 +232,7 @@ class Operator extends AbstractStaticPolyMissingMemFun {
    }
 
    private ICPPASTUnaryExpression getUnaryExpression() {
-      return ASTUtil.getAncestorOfType(operatorExpr, ICPPASTUnaryExpression.class);
+      return CPPVisitor.findAncestorWithType(operatorExpr, ICPPASTUnaryExpression.class).orElse(null);
    }
 
    private static void addEmptyIntParameter(final ICPPASTFunctionDeclarator decl) {

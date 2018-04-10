@@ -39,7 +39,7 @@ public class NamespaceApplier {
 
    private LinkedList<ICPPASTNamespaceDefinition> getOriginNamespaces() {
       final LinkedList<ICPPASTNamespaceDefinition> namespaces = new LinkedList<>();
-//      final Stack<ICPPASTNamespaceDefinition> namespaces = new Stack<>();
+      //      final Stack<ICPPASTNamespaceDefinition> namespaces = new Stack<>();
 
       for (IASTNode currNode = origin; currNode != null; currNode = currNode.getParent()) {
          if (currNode instanceof ICPPASTNamespaceDefinition) {

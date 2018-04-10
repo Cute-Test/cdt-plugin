@@ -17,7 +17,7 @@ class DefaultPropertyHandler {
          final PropertyTypeWithDefault typeWithDefault = Functional.as(enumConst);
          return typeWithDefault.isDefault();
       }).collect(Collectors.toList());
-      ILTISException.Unless.isTrue(defaults.size() == 1, "Exactly one default strategy expected");
+      ILTISException.Unless.isTrue("Exactly one default strategy expected", defaults.size() == 1);
       final E defaultType = Functional.as(head(defaults).get());
       return defaultType;
    }

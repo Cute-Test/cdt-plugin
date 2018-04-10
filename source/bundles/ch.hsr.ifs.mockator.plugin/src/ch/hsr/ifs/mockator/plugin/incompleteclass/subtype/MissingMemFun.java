@@ -16,7 +16,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;
@@ -36,8 +36,8 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    private final IASTSimpleDeclaration     simpleDecl;
 
    public MissingMemFun(final IASTSimpleDeclaration simpleDecl) {
-      funDecl = ASTUtil.getChildOfType(simpleDecl, ICPPASTFunctionDeclarator.class);
-      ILTISException.Unless.notNull(funDecl, "Not a valid function declaration");
+      funDecl = CPPVisitor.findChildWithType(simpleDecl, ICPPASTFunctionDeclarator.class).orElse(null);
+      ILTISException.Unless.notNull("Not a valid function declaration", funDecl);
       this.simpleDecl = simpleDecl;
    }
 
@@ -84,7 +84,7 @@ class MissingMemFun extends AbstractTestDoubleMemFun implements MissingMemberFun
    }
 
    private String getClassName() {
-      final ICPPASTCompositeTypeSpecifier clazz = ASTUtil.getAncestorOfType(simpleDecl, ICPPASTCompositeTypeSpecifier.class);
+      final ICPPASTCompositeTypeSpecifier clazz = CPPVisitor.findAncestorWithType(simpleDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null);
       return clazz.getName().toString();
    }
 

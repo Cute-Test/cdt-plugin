@@ -25,7 +25,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
@@ -41,14 +41,14 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
    private IPath newHeaderFilePath;
    private IPath newSourceFilePath;
 
-   public PreprocessorRefactoring(final ICElement element, final ITextSelection selection, final ICProject cproject) {
+   public PreprocessorRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject cproject) {
       super(element, selection, cproject);
    }
 
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final IASTTranslationUnit ast = getAST(tu(), pm);
+      final IASTTranslationUnit ast = getAST(tu, pm);
       final Optional<IASTName> selectedName = getSelectedName(ast);
 
       if (!selectedName.isPresent()) {
@@ -84,13 +84,13 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
    }
 
    private static boolean isFreeFunction(final ICPPASTFunctionDeclarator funDecl) {
-      return ASTUtil.getAncestorOfType(funDecl, ICPPASTCompositeTypeSpecifier.class) == null;
+      return CPPVisitor.findAncestorWithType(funDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null) == null;
    }
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      final Optional<IASTName> optSelectedName = getSelectedName(getAST(tu(), pm));
+      final Optional<IASTName> optSelectedName = getSelectedName(getAST(tu, pm));
       if (optSelectedName.isPresent()) {
          final Optional<ICPPASTFunctionDeclarator> funDecl = findFunDeclaration(optSelectedName.get(), pm);
          if (funDecl.isPresent()) {
@@ -115,7 +115,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
    private void createHeaderFile(final IProgressMonitor pm, final ModificationCollector collector, final ICPPASTFunctionDeclarator funDecl)
          throws CoreException {
       newHeaderFilePath = getProjectHeaderFilePath(funDecl);
-      final PreprocessorHeaderFileCreator creator = new PreprocessorHeaderFileCreator(collector, getProject(), refactoringContext());
+      final PreprocessorHeaderFileCreator creator = new PreprocessorHeaderFileCreator(collector, getProject(), refactoringContext);
       creator.createFile(newHeaderFilePath, funDecl, pm);
    }
 
@@ -127,8 +127,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
          throws CoreException {
       final String funDeclName = funDecl.getName().toString();
       newSourceFilePath = new TraceFileNameCreator(funDeclName, getIProject()).getSourceFilePath();
-      final PreprocessorSourceFileCreator creator = new PreprocessorSourceFileCreator(newHeaderFilePath, collector, getProject(),
-            refactoringContext());
+      final PreprocessorSourceFileCreator creator = new PreprocessorSourceFileCreator(newHeaderFilePath, collector, getProject(), refactoringContext);
       creator.createFile(newSourceFilePath, funDecl, pm);
    }
 
@@ -137,7 +136,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
          final IASTTranslationUnit tuOfFunDef = funDef.getTranslationUnit();
 
          if (isTuOfDefinitionInSameProject(tuOfFunDef)) {
-            final ASTRewrite rewriter = createRewriter(collector, tuOfFunDef);
+            final ASTRewrite rewriter = collector.rewriterForTranslationUnit(tuOfFunDef);
             final UndefMacroAdder undefAdder = new UndefMacroAdder(tuOfFunDef, rewriter, funDef);
             undefAdder.addUndefMacro(selectedName.toString());
          }
@@ -151,12 +150,12 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
 
    private Optional<ICPPASTFunctionDeclarator> findFunDeclaration(final IASTName funName, final IProgressMonitor pm) {
       final NodeLookup lookup = new NodeLookup(getProject(), pm);
-      return lookup.findFunctionDeclaration(funName, refactoringContext());
+      return lookup.findFunctionDeclaration(funName, refactoringContext);
    }
 
    private Optional<ICPPASTFunctionDefinition> findFunDefinition(final IASTName funName, final IProgressMonitor pm) {
       final NodeLookup lookup = new NodeLookup(getProject(), pm);
-      return lookup.findFunctionDefinition(funName, refactoringContext());
+      return lookup.findFunctionDefinition(funName, refactoringContext);
    }
 
    IPath getNewHeaderFilePath() {

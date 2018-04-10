@@ -46,7 +46,7 @@ class FunctionCalleeReferenceResolver {
    }
 
    public Collection<IASTName> findCallers(final IBinding binding, final IASTNode point) {
-      ILTISException.Unless.notNull(binding, "Binding must not be null");
+      ILTISException.Unless.notNull("Binding must not be null", binding);
       try {
          final List<IASTName> callers = new ArrayList<>();
          findCallersRecursively(binding, callers, point);

@@ -108,7 +108,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
          final ICPPASTTemplateParameter[] templateParams = candidate.getTemplateParameters();
 
          for (final Integer pos : positions) {
-            ILTISException.Unless.isTrue(pos < templateParams.length, "Wrong deduction of template parameter position");
+            ILTISException.Unless.isTrue("Wrong deduction of template parameter position", pos < templateParams.length);
             addToTemplateParamCombinations(candidate, templateParams[pos]);
          }
       }
@@ -119,7 +119,7 @@ class ClassInTemplateIdFinderVisitor extends ASTVisitor {
    }
 
    private static Collection<ICPPASTTemplateDeclaration> lookupInAst(final IASTName name) {
-      final ICPPASTTemplateDeclaration templateDecl = ASTUtil.getAncestorOfType(name, ICPPASTTemplateDeclaration.class);
+      final ICPPASTTemplateDeclaration templateDecl = CPPVisitor.findAncestorWithType(name, ICPPASTTemplateDeclaration.class).orElse(null);
       return list(templateDecl);
    }
 

@@ -20,7 +20,7 @@ import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleQu
 public class CreateTestDoubleSubTypeQuickFix extends AbstractCreateTestDoubleQuickFix {
 
    @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final ITextSelection selection, final CodanArguments ca) {
+   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final CodanArguments ca) {
       return new CreateTestDoubleSubTypeRefactoring(cElement, selection, (CreateTestDoubleSubTypeCodanArgs) ca);
    }
 

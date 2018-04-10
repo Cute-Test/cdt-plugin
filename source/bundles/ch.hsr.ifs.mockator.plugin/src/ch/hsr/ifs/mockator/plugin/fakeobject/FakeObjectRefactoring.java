@@ -1,6 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.fakeobject;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
@@ -23,7 +24,8 @@ import ch.hsr.ifs.mockator.plugin.testdouble.qf.AbstractTestDoubleRefactoring;
 
 public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
 
-   public FakeObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
+   public FakeObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
+                                final ICProject cProject) {
       super(cppStd, cElement, selection, cProject);
    }
 
@@ -31,7 +33,7 @@ public class FakeObjectRefactoring extends AbstractTestDoubleRefactoring {
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
       final Collection<? extends MissingMemberFunction> missingMemFuns = collectMissingMemFuns(pm);
-      final ASTRewrite rewriter = createRewriter(collector, getAST(tu(), pm));
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(getAST(tu, pm));
       final ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
       testDouble.addMissingMemFuns(missingMemFuns, inserter, cppStd);
    }

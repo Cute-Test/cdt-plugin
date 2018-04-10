@@ -73,7 +73,7 @@ public class MockatorLibHandler {
    private IFolder createMockatorFolder() throws CoreException {
       final SourceFolderHandler handler = new SourceFolderHandler(project);
       final IFolder targetFolder = handler.createFolder(MOCKATOR_TARGET_HEADER_FOLDER, new NullProgressMonitor());
-      ILTISException.Unless.isTrue(targetFolder.exists(), "Mockator library target folder must be existing");
+      ILTISException.Unless.isTrue("Mockator library target folder must be existing", targetFolder.exists());
       return targetFolder;
    }
 

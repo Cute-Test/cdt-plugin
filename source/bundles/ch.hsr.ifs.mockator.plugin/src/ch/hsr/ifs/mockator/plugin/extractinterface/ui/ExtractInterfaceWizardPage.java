@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
@@ -233,7 +233,7 @@ class ExtractInterfaceWizardPage extends UserInputWizardPage {
 
          @Override
          public String getText(final Object element) {
-            final ICPPASTFunctionDeclarator funDecl = ASTUtil.getChildOfType((IASTNode) element, ICPPASTFunctionDeclarator.class);
+            final ICPPASTFunctionDeclarator funDecl = CPPVisitor.findChildWithType((IASTNode) element, ICPPASTFunctionDeclarator.class).orElse(null);
             return getFunSignatureFor(funDecl);
          }
       };

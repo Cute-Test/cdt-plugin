@@ -23,14 +23,14 @@ import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 
 public abstract class LinkerRefactoring extends MockatorRefactoring {
 
-   public LinkerRefactoring(final ICElement element, final ITextSelection selection, final ICProject project) {
+   public LinkerRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject project) {
       super(element, selection, project);
    }
 
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final IASTTranslationUnit ast = getAST(tu(), pm);
+      final IASTTranslationUnit ast = getAST(tu, pm);
       final LinkerFunctionPreconVerifier verifier = new LinkerFunctionPreconVerifier(status, ast);
       verifier.assureSatisfiesLinkSeamProperties(getSelectedName(ast));
       return status;
@@ -39,7 +39,7 @@ public abstract class LinkerRefactoring extends MockatorRefactoring {
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      OptionalUtil.doIfPresentT(getSelectedName(getAST(tu(), pm)), (selectedName) -> createLinkerSeamSupport(collector, selectedName, pm));
+      OptionalUtil.of(getSelectedName(getAST(tu, pm))).ifPresentT((name) -> createLinkerSeamSupport(collector, name, pm));
    }
 
    protected abstract void createLinkerSeamSupport(ModificationCollector collector, IASTName selectedName, IProgressMonitor pm) throws CoreException;
@@ -51,6 +51,6 @@ public abstract class LinkerRefactoring extends MockatorRefactoring {
 
    protected Optional<ICPPASTFunctionDeclarator> findFunDeclaration(final IASTName funName, final IProgressMonitor pm) {
       final NodeLookup lookup = new NodeLookup(getProject(), pm);
-      return lookup.findFunctionDeclaration(funName, refactoringContext());
+      return lookup.findFunctionDeclaration(funName, refactoringContext);
    }
 }

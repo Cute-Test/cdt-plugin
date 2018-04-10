@@ -12,7 +12,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.testdouble.TestDoubleParentFinder;
@@ -65,13 +65,13 @@ public class AllCallsVectorInserter {
    private IASTNode getInsertionPoint(final IASTNode parent) {
       if (isPartOfFunction(parent)) {
          // right before test double
-         return ASTUtil.getAncestorOfType(mockObject, IASTDeclarationStatement.class);
+         return CPPVisitor.findAncestorWithType(mockObject, IASTDeclarationStatement.class).orElse(null);
       } else {
-         return ASTUtil.getAncestorOfType(mockObject, IASTSimpleDeclaration.class);
+         return CPPVisitor.findAncestorWithType(mockObject, IASTSimpleDeclaration.class).orElse(null);
       }
    }
 
    private static boolean isPartOfFunction(final IASTNode node) {
-      return ASTUtil.<ICPPASTFunctionDefinition>getAncestorOfType(node, ICPPASTFunctionDefinition.class) != null;
+      return CPPVisitor.findAncestorWithType(node, ICPPASTFunctionDefinition.class).orElse(null) != null;
    }
 }

@@ -67,7 +67,7 @@ public enum MarkMissingMemFuns implements PropertyTypeWithDefault {
 
    public static MarkMissingMemFuns fromName(final String name) {
       final MarkMissingMemFuns result = STRING_TO_ENUM.get(name);
-      ILTISException.Unless.notNull(result, String.format("Unknown mark missing memfun strategy '%s'", name));
+      ILTISException.Unless.notNull(String.format("Unknown mark missing memfun strategy '%s'", name), result);
       return result;
    }
 }

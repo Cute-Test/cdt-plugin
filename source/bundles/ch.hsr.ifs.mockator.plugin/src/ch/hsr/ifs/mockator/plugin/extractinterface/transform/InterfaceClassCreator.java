@@ -33,6 +33,7 @@ import org.eclipse.core.resources.IFile;
 import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.resources.CFileUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
@@ -72,7 +73,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    private static void addPureVirtualMemFuns(final Collection<IASTDeclaration> publicMemFuns, final ICPPASTCompositeTypeSpecifier newInterface,
          final ICPPASTCompositeTypeSpecifier clazz) {
       for (final IASTDeclaration memFun : publicMemFuns) {
-         final ICPPASTFunctionDeclarator oldDeclarator = ASTUtil.getChildOfType(memFun, ICPPASTFunctionDeclarator.class);
+         final ICPPASTFunctionDeclarator oldDeclarator = CPPVisitor.findChildWithType(memFun, ICPPASTFunctionDeclarator.class).orElse(null);
          final ICPPASTFunctionDeclarator newDeclarator = createNewFunDeclarator(oldDeclarator, newInterface.getName().toString(), clazz);
          final ICPPASTDeclSpecifier newDeclSpec = createNewFunDeclSpecifier(newInterface, clazz, oldDeclarator, memFun);
          final IASTSimpleDeclaration funDeclaration = nodeFactory.newSimpleDeclaration(newDeclSpec);
@@ -146,7 +147,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
 
    private static ICPPASTDeclSpecifier createNewFunDeclSpecifier(final ICPPASTCompositeTypeSpecifier newInterface,
          final ICPPASTCompositeTypeSpecifier clazz, final ICPPASTFunctionDeclarator declarator, final IASTDeclaration declaration) {
-      final ICPPASTDeclSpecifier oldDeclSpec = ASTUtil.getChildOfType(declaration, ICPPASTDeclSpecifier.class);
+      final ICPPASTDeclSpecifier oldDeclSpec = CPPVisitor.findChildWithType(declaration, ICPPASTDeclSpecifier.class).orElse(null);
       final ICPPASTDeclSpecifier newDeclSpec = oldDeclSpec.copy();
 
       if (hasPointerOrReferenceToInterface(declarator, oldDeclSpec, clazz)) {
@@ -209,6 +210,6 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
    private static IFile getInterfaceFile(final ExtractInterfaceContext context) {
       final String interfaceFilePath = context.getInterfaceFilePath();
       final IFile classFile = CFileUtil.getFile(context.getTuOfChosenClass());
-      return FileUtil.toIFile(FileUtil.getPath(classFile).append(interfaceFilePath));
+      return FileUtil.toIFile(FileUtil.getFolderPath(classFile).append(interfaceFilePath));
    }
 }

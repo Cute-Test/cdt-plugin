@@ -43,7 +43,7 @@ public class BoostAssignInitializerCreator {
    }
 
    public IASTExpressionStatement createBoostAssignInitializer() {
-      ILTISException.Unless.isFalse(memFuns.isEmpty(), "Should not be called with no fun signatures");
+      ILTISException.Unless.isFalse("Should not be called with no fun signatures", memFuns.isEmpty());
       final ICPPASTExpressionList expressionList = nodeFactory.newExpressionList();
       final IASTIdExpression vector = nodeFactory.newIdExpression(nodeFactory.newName(expectationsName.toCharArray()));
       final ICPPASTBinaryExpression expression = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_plusAssign, vector, createNextCall(head(

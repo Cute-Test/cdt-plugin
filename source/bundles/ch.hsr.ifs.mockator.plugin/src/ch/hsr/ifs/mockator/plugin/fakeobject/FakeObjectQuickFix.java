@@ -23,7 +23,7 @@ public class FakeObjectQuickFix extends AbstractTestDoubleQuickFix {
    }
 
    @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final ITextSelection selection, final CodanArguments ca) {
+   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final CodanArguments ca) {
       return new FakeObjectRefactoring(getCppStandard(), cElement, selection, getCProject());
    }
 

@@ -13,8 +13,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
@@ -25,15 +24,15 @@ import ch.hsr.ifs.mockator.plugin.testdouble.movetons.TestDoubleUsingNsHandler;
 
 class TestDoubleCpp03Refactoring extends AbstractCreateTestDoubleRefactoring {
 
-   public TestDoubleCpp03Refactoring(final ICElement cElement, final ITextSelection selection, final ICProject cProject) {
+   public TestDoubleCpp03Refactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
       super(cElement, selection, cProject);
    }
 
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu(), pm);
-      final ASTRewrite rewriter = createRewriter(collector, ast);
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(ast);
       final String newClassName = getSelectedName(ast).get().toString();
       final ICPPASTCompositeTypeSpecifier newTestDoubleClass = createNewTestDoubleClass(newClassName);
 
@@ -56,7 +55,6 @@ class TestDoubleCpp03Refactoring extends AbstractCreateTestDoubleRefactoring {
    }
 
    private Optional<ICPPASTFunctionDefinition> getSelectedTestFunction(final IASTTranslationUnit ast) {
-      return OptionalUtil.returnIfPresentElseEmpty(getSelectedName(ast), (funName) -> Optional.of((ICPPASTFunctionDefinition) ASTUtil
-            .getAncestorOfType(funName, ICPPASTFunctionDefinition.class)));
+      return getSelectedName(ast).map(funName -> CPPVisitor.findAncestorWithType(funName, ICPPASTFunctionDefinition.class).orElse(null));
    }
 }

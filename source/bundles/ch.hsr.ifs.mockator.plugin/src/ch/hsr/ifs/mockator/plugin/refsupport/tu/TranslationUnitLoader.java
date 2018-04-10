@@ -63,7 +63,7 @@ public class TranslationUnitLoader {
       }
       final Object object = tu;
 
-      ILTISException.Unless.notNull(object, "Was not able to determine translation unit for " + uri.getPath());
+      ILTISException.Unless.notNull("Was not able to determine translation unit for " + uri.getPath(), object);
       return loadAst(tu);
    }
 

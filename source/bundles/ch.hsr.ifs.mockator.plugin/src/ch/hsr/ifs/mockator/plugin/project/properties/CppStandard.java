@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.QualifiedName;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -232,11 +231,11 @@ public enum CppStandard implements PropertyTypeWithDefault {
 
    public static CppStandard fromName(final String name) {
       final CppStandard result = STRING_TO_ENUM.get(name);
-      ILTISException.Unless.notNull(result, String.format("Unknown C++ Standard '%s'", name));
+      ILTISException.Unless.notNull(String.format("Unknown C++ Standard '%s'", name), result);
       return result;
    }
 
    private static String getCpp11ExperimentalFlag(final IProject project) {
-      return OptionalUtil.returnIfPresentElseNull(ToolChain.fromProject(project), (tc) -> tc.getCdtProjectVariables().getCpp11ExperimentalFlag());
+      return ToolChain.fromProject(project).map(tc -> tc.getCdtProjectVariables().getCpp11ExperimentalFlag()).orElse(null);
    }
 }

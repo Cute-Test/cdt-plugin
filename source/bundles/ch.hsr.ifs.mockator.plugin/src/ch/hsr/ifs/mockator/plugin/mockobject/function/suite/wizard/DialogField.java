@@ -131,10 +131,10 @@ class DialogField {
    }
 
    protected static void assertCompositeNotNull(final Composite comp) {
-      ILTISException.Unless.notNull(comp, "uncreated control requested with composite null");
+      ILTISException.Unless.notNull("uncreated control requested with composite null", comp);
    }
 
    protected final void assertEnoughColumns(final int nColumns) {
-      ILTISException.Unless.isTrue(nColumns >= getNumberOfControls(), "given number of columns is too small");
+      ILTISException.Unless.isTrue("given number of columns is too small", nColumns >= getNumberOfControls());
    }
 }

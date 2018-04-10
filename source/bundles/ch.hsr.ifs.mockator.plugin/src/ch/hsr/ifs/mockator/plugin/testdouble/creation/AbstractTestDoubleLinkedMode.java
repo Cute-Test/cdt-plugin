@@ -7,8 +7,6 @@ import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInfoCreater;
 import ch.hsr.ifs.mockator.plugin.refsupport.linkededit.LinkedModeInformation;
@@ -80,7 +78,7 @@ public abstract class AbstractTestDoubleLinkedMode implements LinkedModeInfoCrea
    }
 
    private Optional<Integer> getClassSpecifierLength(final Integer startOffset) throws BadLocationException {
-      return OptionalUtil.returnIfPresentElseEmpty(getEndOfClassSpecifier(), (endOffset) -> Optional.of(endOffset - startOffset));
+      return getEndOfClassSpecifier().map(endOffset -> endOffset - startOffset);
    }
 
    private Optional<Integer> getEndOfClassSpecifier() throws BadLocationException {

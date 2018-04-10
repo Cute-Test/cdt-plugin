@@ -1,5 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.ui;
 
+import java.util.Optional;
+
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
@@ -16,7 +18,8 @@ import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceConte
 
 class ExtractInterfaceRunner extends RefactoringRunner {
 
-   public ExtractInterfaceRunner(final ITextSelection selection, final ICElement element, final IShellProvider shell, final ICProject cProject) {
+   public ExtractInterfaceRunner(final Optional<ITextSelection> selection, final ICElement element, final IShellProvider shell,
+                                 final ICProject cProject) {
       super(element, selection, shell, cProject);
    }
 
@@ -24,7 +27,7 @@ class ExtractInterfaceRunner extends RefactoringRunner {
    public void run() {
       final ExtractInterfaceRefactoring refactoring = createRefactoring();
       final RefactoringWizard wizard = createWizard(refactoring);
-      runWithContext(wizard, refactoring, SAVE_REFACTORING);
+      run(wizard, refactoring, SAVE_REFACTORING);
    }
 
    private static RefactoringWizard createWizard(final Refactoring refactoring) {
@@ -32,8 +35,8 @@ class ExtractInterfaceRunner extends RefactoringRunner {
    }
 
    private ExtractInterfaceRefactoring createRefactoring() {
-      final ExtractInterfaceContext context = new ExtractInterfaceContext.ContextBuilder((ITranslationUnit) getElement(), getProject(),
-            (ITextSelection) getSelection()).replaceAllOccurences(true).build();
+      final ExtractInterfaceContext context = new ExtractInterfaceContext.ContextBuilder((ITranslationUnit) element, selection, project)
+            .replaceAllOccurences(true).build();
       return new ExtractInterfaceRefactoring(context);
    }
 }

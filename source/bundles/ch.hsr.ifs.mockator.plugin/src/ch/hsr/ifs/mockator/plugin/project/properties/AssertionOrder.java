@@ -92,7 +92,7 @@ public enum AssertionOrder implements PropertyTypeWithDefault {
 
    public static AssertionOrder fromName(final String name) {
       final AssertionOrder result = STRING_TO_ENUM.get(name);
-      ILTISException.Unless.notNull(result, String.format("Unknown assertion order strategy '%s'", name));
+      ILTISException.Unless.notNull(String.format("Unknown assertion order strategy '%s'", name), result);
       return result;
    }
 }

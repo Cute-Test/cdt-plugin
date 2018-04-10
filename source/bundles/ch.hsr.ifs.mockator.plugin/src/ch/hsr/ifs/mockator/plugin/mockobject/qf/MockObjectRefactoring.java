@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.mockobject.qf;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
@@ -32,8 +33,8 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
    private final Collection<MissingMemberFunction> missingMemFuns;
    private final LinkedEditModeStrategy            linkedEdit;
 
-   public MockObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject cProject,
-                                final LinkedEditModeStrategy linkedEdit) {
+   public MockObjectRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
+                                final ICProject cProject, final LinkedEditModeStrategy linkedEdit) {
       super(cppStd, cElement, selection, cProject);
       this.linkedEdit = linkedEdit;
       missingMemFuns = new ArrayList<>();
@@ -42,8 +43,8 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu(), pm);
-      final ASTRewrite rewriter = createRewriter(collector, ast);
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(ast);
       missingMemFuns.addAll(collectMissingMemFuns(pm));
       final ClassPublicVisibilityInserter inserter = getPublicVisibilityInserter(rewriter);
       addMockSupport(ast, rewriter, inserter, pm);
@@ -61,7 +62,7 @@ public class MockObjectRefactoring extends AbstractTestDoubleRefactoring {
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast, final ClassPublicVisibilityInserter inserter,
          final IProgressMonitor pm) {
-      return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), (MockObject) testDouble, rewriter, ast, cppStd, inserter,
+      return new MockSupportContext.ContextBuilder(getProject(), refactoringContext, (MockObject) testDouble, rewriter, ast, cppStd, inserter,
             hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEdit).withNewExpectations(missingMemFuns).build();
    }
 

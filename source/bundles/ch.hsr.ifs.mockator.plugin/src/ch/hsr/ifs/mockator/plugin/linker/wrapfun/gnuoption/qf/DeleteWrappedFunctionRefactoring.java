@@ -2,10 +2,10 @@ package ch.hsr.ifs.mockator.plugin.linker.wrapfun.gnuoption.qf;
 
 import static ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants.END_IF_DIRECTIVE;
 
-import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import java.util.Optional;
+
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -18,7 +18,6 @@ import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.FileUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.CCompositeChange;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
@@ -30,7 +29,8 @@ class DeleteWrappedFunctionRefactoring extends MockatorRefactoring {
 
    private final IDocument doc;
 
-   public DeleteWrappedFunctionRefactoring(final ICElement element, final ITextSelection selection, final ICProject project, final IDocument doc) {
+   public DeleteWrappedFunctionRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject project,
+                                           final IDocument doc) {
       super(element, selection, project);
       this.doc = doc;
    }
@@ -38,7 +38,7 @@ class DeleteWrappedFunctionRefactoring extends MockatorRefactoring {
    @Override
    public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
       final CCompositeChange cChange = new CCompositeChange("Delete wrapped code segment");
-      final int offset = getSelection().getOffset();
+      final int offset = selection.map(ITextSelection::getOffset).orElse(-1);
       final DeleteEdit deleteEdit = new DeleteEdit(offset, getLengthOfWrappedFunCode(offset));
       final MultiTextEdit multiTextEdit = new MultiTextEdit();
       multiTextEdit.addChild(deleteEdit);
@@ -48,9 +48,7 @@ class DeleteWrappedFunctionRefactoring extends MockatorRefactoring {
    }
 
    private TextFileChange createTextFileChange(final IProgressMonitor pm, final MultiTextEdit multiTextEdit) throws CoreException {
-      final IASTTranslationUnit ast = getAST(tu(), pm);
-      final IFile tuFile = FileUtil.toIFile(ast.getFilePath());
-      final TextFileChange change = new TextFileChange("Delete wrapped function", tuFile);
+      final TextFileChange change = new TextFileChange("Delete wrapped function", getIFile());
       change.setEdit(multiTextEdit);
       return change;
    }

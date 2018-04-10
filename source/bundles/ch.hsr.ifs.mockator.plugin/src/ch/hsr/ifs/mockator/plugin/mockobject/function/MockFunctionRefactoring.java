@@ -36,8 +36,8 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
    private IFile             newFile;
    private String            suiteName;
 
-   public MockFunctionRefactoring(final CppStandard cppStd, final ICElement cElement, final ITextSelection selection, final ICProject referencedProj,
-                                  final ICProject mockatorProj) {
+   public MockFunctionRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
+                                  final ICProject referencedProj, final ICProject mockatorProj) {
       super(cElement, selection, referencedProj);
       this.cppStd = cppStd;
       this.mockatorProj = mockatorProj;
@@ -47,7 +47,7 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final IASTTranslationUnit ast = getAST(tu(), pm);
+      final IASTTranslationUnit ast = getAST(tu, pm);
       assureFunHasLinkSeamProperties(status, getSelectedName(ast), ast);
       return status;
    }
@@ -61,7 +61,7 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      final Optional<IASTName> funName = getSelectedName(getAST(tu(), pm));
+      final Optional<IASTName> funName = getSelectedName(getAST(tu, pm));
       if (funName.isPresent()) {
          final MockFunctionFileCreator fileCreator = getFileCreator(collector, pm);
          createHeaderFile(funName.get(), fileCreator);
@@ -80,7 +80,7 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
    }
 
    private void setWeakDeclPropertyIfNecessary(final IASTName funName, final ModificationCollector collector, final IProgressMonitor pm) {
-      new NodeLookup(getProject(), pm).findFunctionDeclaration(funName, refactoringContext()).ifPresent((funDecl) -> new WeakDeclAdder(collector)
+      new NodeLookup(getProject(), pm).findFunctionDeclaration(funName, refactoringContext).ifPresent((funDecl) -> new WeakDeclAdder(collector)
             .addWeakDeclAttribute(funDecl));
    }
 
@@ -92,9 +92,9 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
 
    private MockFunctionFileCreator getFileCreator(final ModificationCollector c, final IProgressMonitor pm) {
       if (hasMockatorProjectCuteNature()) {
-         return new WithCuteSuiteFileCreator(c, refactoringContext(), tu(), mockatorProj, getProject(), cppStd, pm);
+         return new WithCuteSuiteFileCreator(c, refactoringContext, tu, mockatorProj, getProject(), cppStd, pm);
       } else {
-         return new WithoutCuteFileCreator(c, refactoringContext(), tu(), mockatorProj, getProject(), cppStd, pm);
+         return new WithoutCuteFileCreator(c, refactoringContext, tu, mockatorProj, getProject(), cppStd, pm);
       }
    }
 

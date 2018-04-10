@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
 import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
@@ -44,8 +45,8 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    private final LinkedEditModeStrategy linkedEditStrategy;
    private MockObject                   newMockObject;
 
-   public ConvertToMockObjectRefactoring(final CppStandard cppStd, final ICElement element, final ITextSelection selection, final ICProject cproject,
-                                         final LinkedEditModeStrategy linkedEditStrategy) {
+   public ConvertToMockObjectRefactoring(final CppStandard cppStd, final ICElement element, final Optional<ITextSelection> selection,
+                                         final ICProject cproject, final LinkedEditModeStrategy linkedEditStrategy) {
       super(element, selection, cproject);
       this.cppStd = cppStd;
       this.linkedEditStrategy = linkedEditStrategy;
@@ -54,16 +55,13 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    @Override
    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
       final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClassInSelection(getAST(tu(), pm));
-
-      if (!clazz.isPresent()) {
-         status.addFatalError("Class could not be found in selection");
-      } else if (!isFakeObject(clazz.get())) {
-         status.addFatalError("Chosen test double must be a fake object");
-      } else {
-         newMockObject = new MockObject(clazz.get());
-      }
-
+      OptionalUtil.of(findFirstEnclosingClass(selection)).ifNotPresentT(i -> status.addFatalError(NO_CLASS_FOUND_IN_SELECTION)).ifPresent(c -> {
+         if (!isFakeObject(c)) {
+            status.addFatalError("Chosen test double must be a fake object");
+         } else {
+            newMockObject = new MockObject(c);
+         }
+      });
       return status;
    }
 
@@ -74,8 +72,8 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
    @Override
    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
          OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu(), pm);
-      final ASTRewrite rewriter = createRewriter(collector, ast);
+      final IASTTranslationUnit ast = getAST(tu, pm);
+      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(ast);
       addMockSupportToFakeObject(ast, rewriter, pm);
    }
 
@@ -90,7 +88,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
 
    private MockSupportContext buildContext(final ASTRewrite rewriter, final IASTTranslationUnit ast,
          final Collection<TestDoubleMemFun> withNewExpectations, final IProgressMonitor pm) {
-      return new MockSupportContext.ContextBuilder(getProject(), refactoringContext(), newMockObject, rewriter, ast, cppStd,
+      return new MockSupportContext.ContextBuilder(getProject(), refactoringContext, newMockObject, rewriter, ast, cppStd,
             getPublicVisibilityInserter(rewriter), hasOnlyStaticMemFuns(), pm).withLinkedEditStrategy(linkedEditStrategy).withNewExpectations(
                   withNewExpectations).build();
    }
