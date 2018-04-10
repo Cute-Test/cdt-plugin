@@ -4,3 +4,7 @@ include "base.tpd"
 location "http://www.cute-test.com/updatesite/oxygen" {
     ch.hsr.ifs.cute.feature.feature.group lazy
 }
+
+location "https://www.cevelop.com/cdt-testing/9.4.0" {
+    ch.hsr.ifs.cdttesting.feature.feature.group [9.4.0,9.5.0)
+}
