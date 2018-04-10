@@ -1,0 +1,32 @@
+variables:
+  LC_ALL: "C.UTF-8"
+  LANG: "en_US.UTF-8"
+  LANGUAGE: "en_US.UTF-8"
+  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
+
+image: fmorgner/cevelop-plugin-build:latest
+
+build:
+  stage: build
+  cache:
+    key: "CuteMavenCache"
+    paths:
+      - ./.m2/repository
+  script:
+    - mvn compile
+  artifacts:
+    paths:
+      - ./**/target/*
+
+test:
+  stage: test
+  cache:
+    key: "CuteMavenCache"
+    paths:
+      - ./.m2/repository
+    policy: pull
+  script:
+    - 'xvfb-run --server-args="-screen 0 1024x768x24" mvn test verify -Djarsigner.skip=true'
+  artifacts:
+    paths:
+      - ./ch.hsr.ifs.cute.updatesite/target/site/*
