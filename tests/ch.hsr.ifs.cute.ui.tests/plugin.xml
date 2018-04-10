@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="ch.hsr.ifs.cdttesting.testingPlugin">
+      <testResouresLocation
+            activatorClass="ch.hsr.ifs.cute.ui.tests.UiTestPlugin"
+            sourceLocation="/resources/ch.hsr.ifs.cute.ui/">
+      </testResouresLocation>
+   </extension>
+</plugin>
