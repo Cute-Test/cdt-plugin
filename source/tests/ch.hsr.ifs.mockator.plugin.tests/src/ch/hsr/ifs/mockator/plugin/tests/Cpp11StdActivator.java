@@ -46,8 +46,7 @@ public class Cpp11StdActivator {
                }
             }
          }
-      }
-      catch (final BuildException e) {
+      } catch (final BuildException e) {
          throw new RuntimeException(e);
       }
    }

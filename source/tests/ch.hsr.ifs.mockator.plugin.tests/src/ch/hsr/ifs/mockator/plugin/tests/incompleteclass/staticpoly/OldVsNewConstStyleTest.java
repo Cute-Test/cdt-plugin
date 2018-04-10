@@ -6,11 +6,11 @@ import org.junit.Test;
 
 import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
 
-import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
+import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCheckerTest;
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
-public class OldVsNewConstStyleTest extends CDTTestingCodanCheckerTest {
+public class OldVsNewConstStyleTest extends CDTTestingCheckerTest {
 
    @Override
    protected IProblemId getProblemId() {

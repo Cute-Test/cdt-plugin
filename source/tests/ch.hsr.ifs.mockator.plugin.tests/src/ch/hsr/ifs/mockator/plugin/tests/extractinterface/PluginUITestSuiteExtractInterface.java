@@ -14,5 +14,5 @@ import org.junit.runners.Suite.SuiteClasses;
    ExtractInterfaceRefactoringTest.class,
 
 })
-public class TestSuiteExtractInterface {
+public class PluginUITestSuiteExtractInterface {
 }

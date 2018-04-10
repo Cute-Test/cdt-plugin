@@ -23,7 +23,7 @@ public class CdtManagedProjectActivator {
    private final IProject project;
 
    public CdtManagedProjectActivator(final IProject project) {
-      ILTISException.Unless.notNull(project, "Project to activate managed build must not be null");
+      ILTISException.Unless.notNull("Project to activate managed build must not be null", project);
       this.project = project;
    }
 

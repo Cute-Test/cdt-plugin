@@ -49,7 +49,7 @@ struct FooInterface
     {
     }
     
-    virtual void bar(int i, double d) =0;
+    virtual void bar(int i, double d) = 0;
 };
 #endif
 
@@ -97,7 +97,7 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
@@ -110,13 +110,17 @@ newFiles=FooInterface.h
 struct /*$*/Foo/*$$*/ {
   Foo & operator =(const Foo &rhs) {
   }
+
   void foo() {
   }
+
   int bar() const {
     return 42;
   }
+
   static void ignoreStaticMemFuns1() {
   }
+
   static void ignoreStaticMemFuns2();
 };
 //=
@@ -125,13 +129,17 @@ struct /*$*/Foo/*$$*/ {
 struct Foo : FooInterface {
   Foo & operator =(const Foo &rhs) {
   }
+
   void foo() {
   }
+
   int bar() const {
     return 42;
   }
+
   static void ignoreStaticMemFuns1() {
   }
+
   static void ignoreStaticMemFuns2();
 };
 
@@ -145,9 +153,9 @@ struct FooInterface
     {
     }
     
-    virtual FooInterface & operator =(const FooInterface & rhs) =0;
-    virtual void foo() =0;
-    virtual int bar() const =0;
+    virtual FooInterface & operator =(const FooInterface & rhs) = 0;
+    virtual void foo() = 0;
+    virtual int bar() const = 0;
 };
 #endif
 
@@ -167,7 +175,7 @@ void doIt(/*$*/Foo/*$$*/& f) {
 //=
 #include "FooInterface.h"
 
-struct Foo : FooInterface {
+struct Foo: FooInterface {
   void bar() {
   }
 };
@@ -185,7 +193,7 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
@@ -195,7 +203,7 @@ newFileCreation=true
 newFiles=IFoo.h
 takeMemFuns=bar,foo
 nameOfNewInterface=IFoo
-filename=Foo.h
+primaryFile=Foo.h
 
 //@Foo.h
 struct /*$*/Foo/*$$*/ {
@@ -242,14 +250,14 @@ struct IFoo
     {
     }
 
-    virtual void bar() =0;
-    virtual void foo() =0;
+    virtual void bar() = 0;
+    virtual void foo() = 0;
 };
 #endif
 
 //!Do not replace occurrences
 //@.config
-filename=Foo.h
+primaryFile=Foo.h
 newFileCreation=true
 newFiles=Fooable.h
 takeMemFuns=bar
@@ -296,7 +304,7 @@ struct Fooable
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
@@ -304,7 +312,7 @@ struct Fooable
 //@.config
 newFileCreation=true
 newFiles=FooInterface.h
-filename=Foo.h
+primaryFile=Foo.h
 
 //@Foo.h
 struct /*$*/Foo/*$$*/ {
@@ -314,7 +322,7 @@ struct /*$*/Foo/*$$*/ {
 };
 //=
 #include "FooInterface.h"
-struct Foo : FooInterface{
+struct Foo : FooInterface {
     virtual Foo* clone() const {
         return new Foo(*this);
     }
@@ -344,7 +352,7 @@ struct FooInterface
     virtual ~FooInterface()
     {
     }
-    virtual FooInterface *clone() const =0;
+    virtual FooInterface *clone() const = 0;
 };
 #endif
 
@@ -352,7 +360,7 @@ struct FooInterface
 //@.config
 newFileCreation=true
 newFiles=FooInterface.h
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 #include <cstdlib>
@@ -406,7 +414,7 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
@@ -443,7 +451,7 @@ struct Foo_CRTPInterface
     virtual ~Foo_CRTPInterface()
     {
     }
-    virtual Foo_CRTPInterface *clone() const =0;
+    virtual Foo_CRTPInterface *clone() const = 0;
 };
 #endif
 
@@ -473,7 +481,7 @@ struct FooInterface
 {
     virtual ~FooInterface() {
     }
-    virtual void foo() throw (int) =0;
+    virtual void foo() throw (int) = 0;
 };
 #endif
 
@@ -527,7 +535,7 @@ struct FooInterface
     virtual ~FooInterface()
     {
     }
-    virtual void foo(const mappings & m) const =0;
+    virtual void foo(const mappings & m) const = 0;
 };
 #endif
 
@@ -561,7 +569,7 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
@@ -569,7 +577,7 @@ struct FooInterface
 //@.config
 newFileCreation=true
 newFiles=FooInterface.h
-filename=A.cpp
+primaryFile=A.cpp
 tuOfChosenClass=A.h
 
 //@A.h
@@ -604,13 +612,13 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
 //!Only take used member functions of pointer member variable
 //@.config
-filename=SUT.h
+primaryFile=SUT.h
 tuOfChosenClass=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
@@ -755,17 +763,17 @@ struct FooInterface
     virtual ~FooInterface()
     {
     }
-    virtual void used1(int i) const =0;
-    virtual void used2() =0;
-    virtual void used3() const =0;
-    virtual void usedOverloaded(char c) =0;
-    virtual void usedOverloaded(double d) =0;
+    virtual void used1(int i) const = 0;
+    virtual void used2() = 0;
+    virtual void used3() const = 0;
+    virtual void usedOverloaded(char c) = 0;
+    virtual void usedOverloaded(double d) = 0;
 };
 #endif
 
 //!Only take used member functions of const reference member variable
 //@.config
-filename=SUT.h
+primaryFile=SUT.h
 tuOfChosenClass=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
@@ -826,13 +834,13 @@ struct FooInterface
     virtual ~FooInterface()
     {
     }
-    virtual void constTest() const =0;
+    virtual void constTest() const = 0;
 };
 #endif
 
 //!Replace simple declarations
 //@.config
-filename=Foo.h
+primaryFile=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
 
@@ -902,13 +910,13 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
 //!Replace parameter declarations
 //@.config
-filename=Foo.h
+primaryFile=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
 
@@ -946,13 +954,13 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
 //!Replace declarations in namespaces
 //@.config
-filename=Foo.h
+primaryFile=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
 
@@ -998,7 +1006,7 @@ namespace Ns
         {
         }
 
-        virtual void bar() =0;
+        virtual void bar() = 0;
     };
 }
 #endif
@@ -1044,13 +1052,13 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
 //!Replace return types
 //@.config
-filename=Foo.h
+primaryFile=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
 
@@ -1110,13 +1118,13 @@ struct FooInterface
     {
     }
 
-    virtual FooInterface *newInstance() =0;
+    virtual FooInterface *newInstance() = 0;
 };
 #endif
 
 //!Replace interface class in template ids
 //@.config
-filename=Foo.h
+primaryFile=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
 
@@ -1172,13 +1180,13 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
 //!Extract with members having templates
 //@.config
-filename=Foo.cpp
+primaryFile=Foo.cpp
 newFileCreation=true
 newFiles=FooInterface.h
 
@@ -1220,7 +1228,7 @@ struct FooInterface {
 
 //!Extract with members having complex templates
 //@.config
-filename=Bar.cpp
+primaryFile=Bar.cpp
 newFileCreation=true
 newFiles=FooInterface.h
 
@@ -1277,7 +1285,7 @@ struct FooInterface {
 
 //!Separate declaration and definition
 //@.config
-filename=Foo.h
+primaryFile=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
 
@@ -1331,7 +1339,7 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
@@ -1372,8 +1380,8 @@ struct FooInterface
     virtual ~FooInterface()
     {
     }
-    virtual FooInterface *clone(FooInterface *foo1, Foo foo2, A a) const =0;
-    virtual A & doIt(A *a) =0;
+    virtual FooInterface *clone(FooInterface *foo1, Foo foo2, A a) const = 0;
+    virtual A & doIt(A *a) = 0;
 };
 #endif
 
@@ -1396,8 +1404,8 @@ namespace Ns1 {
 namespace Ns1 {
   namespace Ns2 {
 struct Foo: FooInterface {
-    void bar() {
-    }
+	void bar() {
+	}
 };
   }
 }
@@ -1463,13 +1471,13 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 
 //!Interface file already existing leads to new generated name
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 newFileCreation=true
 newFiles=FooInterface1.h
 
@@ -1499,13 +1507,13 @@ struct FooInterface
     {
     }
     
-    virtual void foo() =0;
+    virtual void foo() = 0;
 };
 #endif
 
 //!Only take used member functions with forward declaration
 //@.config
-filename=SUT.h
+primaryFile=SUT.h
 tuOfChosenClass=Foo.h
 newFileCreation=true
 newFiles=FooInterface.h
@@ -1579,6 +1587,6 @@ struct FooInterface
     virtual ~FooInterface()
     {
     }
-    virtual void used() =0;
+    virtual void used() = 0;
 };
 #endif

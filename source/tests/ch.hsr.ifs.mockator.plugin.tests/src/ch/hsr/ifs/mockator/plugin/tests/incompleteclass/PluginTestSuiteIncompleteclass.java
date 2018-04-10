@@ -194,5 +194,5 @@ import ch.hsr.ifs.mockator.plugin.tests.incompleteclass.subtype.WithMultipleInhe
    WithTypedefForSutTest.class,
 
 })
-public class TestSuiteIncompleteclass {
+public class PluginTestSuiteIncompleteclass {
 }

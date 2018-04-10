@@ -11,6 +11,7 @@ public class LdPreloadRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {
-      return new LdPreloadRefactoring(CppStandard.Cpp11Std, getActiveCElement(), selection, currentCproject, currentProject);
+      return new LdPreloadRefactoring(CppStandard.Cpp11Std, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+            getCurrentCProject(), getCurrentProject());
    }
 }

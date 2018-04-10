@@ -1,7 +1,7 @@
 //!New test double class for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 #include "cute.h"
@@ -43,7 +43,7 @@ void runSuite() {
 //!Without CUTE suite for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 template<typename T>
@@ -71,7 +71,7 @@ void testBar() {
 //!Into existing suite NS for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 #include "cute.h"
@@ -142,7 +142,7 @@ void runSuite() {
 //!With provided namespace for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 template<typename T>
@@ -181,7 +181,7 @@ void testBar() {
 //!With provided using namespace for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 template<typename T>
@@ -210,7 +210,7 @@ void testBar() {
 //!New test double class with C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 template<typename T>

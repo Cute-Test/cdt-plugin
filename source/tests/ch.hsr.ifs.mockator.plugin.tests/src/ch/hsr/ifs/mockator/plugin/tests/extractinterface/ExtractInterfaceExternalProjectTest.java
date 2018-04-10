@@ -6,15 +6,11 @@
  ******************************************************************************/
 package ch.hsr.ifs.mockator.plugin.tests.extractinterface;
 
-import org.junit.Before;
-
-
 public class ExtractInterfaceExternalProjectTest extends ExtractInterfaceRefactoringTest {
 
    @Override
-   @Before
-   public void setUp() throws Exception {
-      addReferencedProject("SUTProject", "SUTProject.rts");
-      super.setUp();
+   protected void initReferencedProjects() throws Exception {
+      stageReferencedProjectForBothProjects("SUTProject", "SUTProject.rts");
+      super.initReferencedProjects();
    }
 }

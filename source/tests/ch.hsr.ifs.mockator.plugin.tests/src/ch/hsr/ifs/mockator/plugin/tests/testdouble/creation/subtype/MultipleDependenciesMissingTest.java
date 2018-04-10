@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
 
-import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
+import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCheckerTest;
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
-public class MultipleDependenciesMissingTest extends CDTTestingCodanCheckerTest {
+public class MultipleDependenciesMissingTest extends CDTTestingCheckerTest {
 
    @Override
    protected IProblemId getProblemId() {
@@ -17,7 +17,7 @@ public class MultipleDependenciesMissingTest extends CDTTestingCodanCheckerTest 
 
    @Test
    public void testTestDoubleAlreadyProvided() throws Throwable {
-      assertProblemMarkerPositions(17, 18);
-      assertProblemMarkerMessages(new String[] { "Object seam \"dep1\" cannot be resolved", "Object seam \"dep2\" cannot be resolved" });
+      assertMarkerLines(17, 18);
+      assertMarkerMessages(new String[] { "Object seam \"dep1\" cannot be resolved", "Object seam \"dep2\" cannot be resolved" });
    }
 }

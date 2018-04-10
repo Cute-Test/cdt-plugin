@@ -32,7 +32,7 @@ public class IntoMemberFunctionByReferenceCreateTestDoubleQfTest extends Abstrac
    }
 
    @Override
-   protected MockatorQuickFix getQuickfix() {
+   protected MockatorQuickFix createMarkerResolution() {
       return new CreateTestDoubleSubTypeQuickFix();
    }
 

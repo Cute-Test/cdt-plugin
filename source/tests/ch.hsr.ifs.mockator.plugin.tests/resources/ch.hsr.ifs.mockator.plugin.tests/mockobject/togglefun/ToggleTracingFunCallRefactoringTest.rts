@@ -10,7 +10,7 @@ void /*$*/foo/*$$*/() {
 //!Add tracing for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -121,7 +121,7 @@ void testSUT2() {
 //!Remove tracing for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -220,7 +220,7 @@ void testSUT() {
 //!Add tracing with multiple test doubles for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 template <typename T, typename U>
 struct SUT {
@@ -360,7 +360,7 @@ void testSUT() {
 //!Add tracing without mock infrastructure for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -435,7 +435,7 @@ void testSUT() {
 //!Add tracing for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -500,7 +500,7 @@ void testSUT() {
 //!Add tracing when in Ns for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -576,7 +576,7 @@ void testSUT() {
 //!Add tracing when no expectations for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -631,7 +631,7 @@ void testSUT() {
 //!Remove tracing for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -699,7 +699,7 @@ void testSUT() {
 //@.config
 cppStandard=C++11
 linkedEditStrategy=ChooseArguments
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -761,7 +761,7 @@ void testSUT() {
 //!Remove tracing when no expectations for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -840,7 +840,7 @@ void testSUT() {
 //@.config
 cppStandard=C++03
 linkedEditStrategy=ChooseArguments
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -919,7 +919,7 @@ void testSUT() {
 //!Remove expectation vector for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>

@@ -1,6 +1,6 @@
 //!Array handling
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 namespace {
   struct A {
@@ -51,7 +51,7 @@ void testSUT(){
 
 //!Creation of function signatures for built-in types
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 void sut(T const& fake) {
@@ -102,7 +102,7 @@ void testSUT(){
 
 //!Call in ctor bug
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -143,7 +143,7 @@ void testSUT(){
 
 //!Call on function parameter
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -190,7 +190,7 @@ void testSUT(){
 
 //!Const vs. Non-Const Member Functions
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -231,7 +231,7 @@ void testSUT(){
 
 //!Creation of ctor
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -264,7 +264,7 @@ void testSUT(){
 
 //!Creation of function in class
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -299,7 +299,7 @@ void testSUT(){
 
 //!Creation of function in struct
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -333,7 +333,7 @@ void testSUT(){
 
 //!Creation of no duplicates
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -368,7 +368,7 @@ void testSUT(){
 
 //!Ctor with class type parameter bug
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 struct A {
 };
@@ -405,7 +405,7 @@ void testSUT(){
 
 //!Create default ctor when necessary
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -441,7 +441,7 @@ void testSUT(){
 
 //!Default template argument
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 struct B {};
 template <typename T = B>
@@ -476,7 +476,7 @@ void testSUT(){
 
 //!Everything in one cpp file
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 template <typename T>
 struct SUT {
@@ -513,7 +513,7 @@ void testSUT(){
 
 //!Result of function call as argument type
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 bool isPrime(int i) {
   return false;
@@ -550,7 +550,7 @@ void testSUT(){
 
 //!Ignore default template parameters
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 #include "stl_fake.h"
 
@@ -610,7 +610,7 @@ void testSUT() {
 
 //!Member function chaining bug
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -652,7 +652,7 @@ void testSUT(){
 
 //!Calling multiple member functions on SUT
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T, typename U>
 struct SUT {
@@ -696,7 +696,7 @@ void testSUT(){
 
 //!Multiple SUTs with same name but in different namespaces
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 namespace A {
   template <typename T>
@@ -740,7 +740,7 @@ void testSUT(){
 
 //!Multiple SUTs with one fake
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT1.h
 template <typename T>
 struct SUT1 {
@@ -797,7 +797,7 @@ void testSUT(){
 
 //!Not inline defined SUT member function with default ctor
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -838,7 +838,7 @@ void testSUT(){
 
 //!Not inline defined SUT member function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -880,7 +880,7 @@ void testSUT(){
 
 //!Not inline defined SUT member function with fake object parameter
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -918,7 +918,7 @@ void testSUT(){
 
 //!Overloaded member functions
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 #include "stl_fake.h"
 
@@ -961,7 +961,7 @@ void testSUT(){
 
 //!Correct parameter naming rules
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@ParameterNaming.h
 class Abesra {
 };
@@ -999,7 +999,7 @@ void testSUT(){
 
 //!Class template parameter handling
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 struct A {
 };
@@ -1042,7 +1042,7 @@ void testSUT(){
 
 //!Pointer handling
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 struct A {
 };
@@ -1110,7 +1110,7 @@ void testSUT(){
 
 //!With already provided private member function in class
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1149,7 +1149,7 @@ void testSUT(){
 
 //!With already provided private member function in struct
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1188,7 +1188,7 @@ void testSUT(){
 
 //!Bug with public visibility in class
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1239,7 +1239,7 @@ void testSUT(){
 
 //!Return type deduction
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1400,7 +1400,7 @@ void testSUT(){
 
 //!Creation of missing static member function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1433,7 +1433,7 @@ void testSUT(){
 
 //!With SUT in namespace
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 namespace N {
   template <typename T>
@@ -1469,7 +1469,7 @@ void testSUT(){
 
 //!SUT in namespace passed as argument
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 namespace NS {
   struct A {
@@ -1509,7 +1509,7 @@ void testSUT(){
 
 //!Template class as function parameter
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename A>
 struct B {
@@ -1548,7 +1548,7 @@ void testSUT() {
 
 //!SUT with template member function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 class A {
 };
@@ -1595,7 +1595,7 @@ void testSUT(){
 
 //!Temporary fake instance
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1631,7 +1631,7 @@ void testSUT(){
 
 //!Twice the same fake template argument
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T1, typename T2>
 struct SUT {
@@ -1669,7 +1669,7 @@ void testSUT(){
 
 //!Typedef with template parameter
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1704,7 +1704,7 @@ void testSUT(){
 
 //!Typedef for function arguments and return values
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1755,7 +1755,7 @@ void testSUT(){
 
 //!Use of shortest typedef where possible
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.h
 namespace B {
   class AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA {
@@ -1815,7 +1815,7 @@ void testSUT() {
 
 //!Support for user defined types
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 class A {
 };
@@ -1870,7 +1870,7 @@ void testSUT(){
 
 //!With multiple parameters
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -1913,7 +1913,7 @@ void testSUT(){
 
 //!Wrong return type bug 1
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 struct Dice {
 	int roll() const
@@ -1961,7 +1961,7 @@ void testLoosingGame() {
 
 //!Wrong return type bug 2
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 struct Dice {
 	int roll() const
@@ -2009,7 +2009,7 @@ void testLoosingGame() {
 
 //!With empty template id list in template function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 void sut(T const& t) {
@@ -2040,7 +2040,7 @@ void testSUT() {
 
 //!With function call in expression for template function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 int sut(T const& t) {
@@ -2073,7 +2073,7 @@ void testSUT() {
 
 //!With static function call bug for template function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 void sut() {
@@ -2102,7 +2102,7 @@ void testSUT() {
 
 //!With template function in namespace
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 namespace A {
   template <typename T>
@@ -2135,7 +2135,7 @@ void testSUT() {
 
 //!With explicit instantiation of template function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 void sut(T const& t) {
@@ -2166,7 +2166,7 @@ void testSUT() {
 
 //!With overloaded template functions
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 void sut(T const& t) {
@@ -2205,17 +2205,17 @@ void testSUT() {
 
 //!Bug with creating default ctor even already provided in subtype poly
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@IDependency.h
 struct Base {
 	virtual ~Base() {
 	}
-	virtual void base() =0;
+	virtual void base() = 0;
 };
 struct IDependency: Base {
 	IDependency(char c, double d);
 	IDependency(int i);
-	virtual void foo() =0;
+	virtual void foo() = 0;
 };
 
 //@SUT.h
@@ -2264,7 +2264,7 @@ void testSUT() {
 
 //!Incomplete local sub class
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@IDependency.h
 #include "stl_fake.h"
 struct A {
@@ -2272,10 +2272,10 @@ struct A {
 
 struct IDependency {
   virtual ~IDependency() {}
-  virtual void foo1(const int & i) const =0;
-  virtual A* foo2(const float & f) throw() =0;
-  virtual std::string foo3(double & d) throw(A) =0;
-  virtual void alreadyImplemented() =0;
+  virtual void foo1(const int & i) const = 0;
+  virtual A* foo2(const float & f) throw() = 0;
+  virtual std::string foo3(double & d) throw(A) = 0;
+  virtual void alreadyImplemented() = 0;
 };
 
 //@SUT.h
@@ -2325,7 +2325,7 @@ void test(){
 
 //!Non-local sub type
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@IDependency.h
 struct A {
 };
@@ -2340,9 +2340,9 @@ struct X {
 
 struct IDependency {
   virtual ~IDependency();
-  virtual Ns::B foo1(const int * i, double * d, A a) =0;
-  virtual A foo2(const float & f, Ns::B const& b, A & a) =0;
-  virtual void foo3(const float &, X, int, int) =0;
+  virtual Ns::B foo1(const int * i, double * d, A a) = 0;
+  virtual A foo2(const float & f, Ns::B const& b, A & a) = 0;
+  virtual void foo3(const float &, X, int, int) = 0;
 };
 
 //@SUT.h
@@ -2395,7 +2395,7 @@ void test(){
 
 //!Prefix operator
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -2429,7 +2429,7 @@ void testSUT(){
 
 //!Postfix operator
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -2463,7 +2463,7 @@ void testSUT(){
 
 //!Binary operator
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -2498,7 +2498,7 @@ void testSUT(){
 
 //!Missing member function return instance of itself
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -2532,7 +2532,7 @@ void testSUT(){
 
 //!Bug with temporary object as argument
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 struct A {
 };
@@ -2568,7 +2568,7 @@ void testSUT(){
 
 //!Call of member function with pointer syntax
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -2611,7 +2611,7 @@ void testSUT(){
 
 //!Call of ctor in initializer list
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 #include "stl_fake.h"
 template<typename T>
@@ -2653,7 +2653,7 @@ void testSUT(){
 
 //!SUT in namespace with non-inlined template functions
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 namespace Ns {
 template<typename T>
@@ -2699,7 +2699,7 @@ void testSUT() {
 
 //!Funcall operator vs. ctors
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template<typename T>
 struct SUT {
@@ -2736,7 +2736,7 @@ void testSUT() {
 
 //!Prefix vs. postfix operator
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -2774,7 +2774,7 @@ void testSUT() {
 
 //!Example in project report 1
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template<typename T>
 struct SUT {
@@ -2822,7 +2822,7 @@ void testSUT() {
 
 //!Example in project report 2
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 #include "stl_fake.h"
 namespace NS { struct A { }; }
@@ -2884,7 +2884,7 @@ void testSUT() {
 
 //!int vs. unsigned int issue
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 #include "stl_fake.h"
 
@@ -2920,7 +2920,7 @@ void testSUT() {
 
 //!Reuse of Template Parameter
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename S, typename T = S>
 struct SUT {
@@ -2959,7 +2959,7 @@ void testSUT() {
 
 //!Template partial specialization
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T1, typename T2>
 struct SUT {

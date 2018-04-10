@@ -18,6 +18,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -53,8 +54,9 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
    }
 
    private ExtractInterfaceContext buildRefactoringContext() {
-      return new ExtractInterfaceContext.ContextBuilder(getTu(getActiveCElement()), currentCproject, selection).replaceAllOccurences(replaceOccurrences)
-            .withRefactoringStatus(new RefactoringStatus()).withNewInterfaceName(newInterfaceName).build();
+      return new ExtractInterfaceContext.ContextBuilder(getTu(getPrimaryCElementFromCurrentProject().get()), getSelectionOfPrimaryTestFile(),
+            getCurrentCProject()).replaceAllOccurences(replaceOccurrences).withRefactoringStatus(new RefactoringStatus()).withNewInterfaceName(
+                  newInterfaceName).build();
    }
 
    @Override
@@ -100,21 +102,21 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
 
    private IASTTranslationUnit getTuOfChosenClass(final CRefactoringContext context) {
       try {
-         IFile chosenClassFile = getIFile(tuOfChosenClass);
+         IFile chosenClassFile = currentProjectHolder.getFile(tuOfChosenClass);
+         List<ICProject> referencedProjects = currentProjectHolder.getReferencedProjects();
          if (!referencedProjects.isEmpty()) {
             chosenClassFile = referencedProjects.get(0).getProject().getFile(tuOfChosenClass);
          }
          final ICElement chosenClass = CoreModel.getDefault().create(chosenClassFile);
          final ITranslationUnit tu = getTu(chosenClass);
          return context.getAST(tu, new NullProgressMonitor());
-      }
-      catch (final CoreException e) {}
+      } catch (final CoreException e) {}
       fail("Not able to get AST for translation unit");
       return null;
    }
 
    private Optional<IASTName> getSelectedName(final IASTTranslationUnit ast) {
-      final Region region = SelectionHelper.getRegion(selection);
+      final Region region = SelectionHelper.getRegion(getSelectionOfPrimaryTestFile().get());
       return head(findAllMarkedNames(ast, region));
    }
 

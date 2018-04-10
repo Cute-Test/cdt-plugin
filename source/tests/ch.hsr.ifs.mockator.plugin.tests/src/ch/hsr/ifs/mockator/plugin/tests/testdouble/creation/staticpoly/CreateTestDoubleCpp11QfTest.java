@@ -32,7 +32,7 @@ public class CreateTestDoubleCpp11QfTest extends AbstractQuickfixTest {
    }
 
    @Override
-   protected MockatorQuickFix getQuickfix() {
+   protected MockatorQuickFix createMarkerResolution() {
       return new CreateTestDoubleStaticPolyQuickFix();
    }
 

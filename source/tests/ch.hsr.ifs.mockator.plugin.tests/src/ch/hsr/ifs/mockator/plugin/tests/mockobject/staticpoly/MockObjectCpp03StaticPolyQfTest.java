@@ -32,7 +32,7 @@ public class MockObjectCpp03StaticPolyQfTest extends AbstractQuickfixTest {
    }
 
    @Override
-   protected MockatorQuickFix getQuickfix() {
+   protected MockatorQuickFix createMarkerResolution() {
       return new MockObjectByFunsQuickFix();
    }
 

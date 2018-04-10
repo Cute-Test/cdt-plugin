@@ -10,6 +10,6 @@ public class ShadowFunctionRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {
-      return new ShadowFunctionRefactoring(getActiveCElement(), selection, currentCproject);
+      return new ShadowFunctionRefactoring(getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(), getCurrentCProject());
    }
 }

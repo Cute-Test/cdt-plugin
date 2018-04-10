@@ -23,5 +23,5 @@ import ch.hsr.ifs.mockator.plugin.tests.linker.shadowfun.ShadowFunctionRefactori
    ShadowFunctionRefProjectTest.class,
 
 })
-public class TestSuiteLinker {
+public class PluginUITestSuiteLinker {
 }

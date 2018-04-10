@@ -10,6 +10,6 @@ public class GnuOptionRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {
-      return new GnuOptionRefactoring(getActiveCElement(), selection, currentCproject);
+      return new GnuOptionRefactoring(getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(), getCurrentCProject());
    }
 }

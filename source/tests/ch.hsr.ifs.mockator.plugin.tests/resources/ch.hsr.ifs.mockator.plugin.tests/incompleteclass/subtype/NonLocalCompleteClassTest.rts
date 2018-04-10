@@ -2,7 +2,7 @@
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();
-  virtual void foo() =0;
+  virtual void foo() = 0;
 };
 
 namespace testSUTNs {

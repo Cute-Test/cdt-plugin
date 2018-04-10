@@ -1,7 +1,7 @@
 //!Mock Infrastructure Already Provided For C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -72,7 +72,7 @@ void testSUT() {
 //!Already provided Mockator include directive for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -120,7 +120,7 @@ void testSUT() {
 //!Complex Mock Object for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -202,7 +202,7 @@ void testSUT() {
 //!Ctor Support Bug for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -249,7 +249,7 @@ void testSUT() {
 //!Basic Mock Object infrastructure for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -319,7 +319,7 @@ void testSUT() {
 cppStandard=C++11
 withCuteNature=False
 linkedEditStrategy=ChooseArguments
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 namespace A {
@@ -390,7 +390,7 @@ void testSUT() {
 //#ch.hsr.ifs.mockator.plugin.mockobject.MockObjectRefactoringTest
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -451,7 +451,7 @@ void testSUT() {
 //#ch.hsr.ifs.mockator.plugin.mockobject.MockObjectRefactoringTest
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -517,7 +517,7 @@ void testSUT() {
 //!STL container bug for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -573,7 +573,7 @@ void testSUT() {
 //!With multiple referencing test functions for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -661,7 +661,7 @@ void testSUT2() {
 //@.config
 cppStandard=C++11
 linkedEditStrategy=ChooseArguments
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -727,7 +727,7 @@ void testSUT() {
 //!Static function call support with C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -774,7 +774,7 @@ void testSUT() {
 //@.config
 cppStandard=C++11
 linkedEditStrategy=ChooseArguments
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -845,7 +845,7 @@ void testSUT() {
 //!With already existing mock object for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h
@@ -953,7 +953,7 @@ void testSUT() {
 //@.config
 cppStandard=C++11
 linkedEditStrategy=ChooseArguments
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T, typename U>
@@ -1080,7 +1080,7 @@ void testSUT() {
 //!Create ctor after solely static with C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -1149,7 +1149,7 @@ void testSUT() {
 //#ch.hsr.ifs.mockator.plugin.mockobject.MockObjectRefactoringTest
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 withCuteNature=true
 
 //@SUT.h

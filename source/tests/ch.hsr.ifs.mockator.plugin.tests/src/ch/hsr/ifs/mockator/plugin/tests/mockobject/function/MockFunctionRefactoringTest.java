@@ -22,6 +22,7 @@ public class MockFunctionRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {
-      return new MockFunctionRefactoring(cppStandard, getActiveCElement(), selection, currentCproject, currentCproject);
+      return new MockFunctionRefactoring(cppStandard, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+            getCurrentCProject(), getCurrentCProject());
    }
 }

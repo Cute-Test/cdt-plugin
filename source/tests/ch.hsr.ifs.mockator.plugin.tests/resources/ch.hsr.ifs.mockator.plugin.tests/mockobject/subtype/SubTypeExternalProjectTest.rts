@@ -2,7 +2,7 @@
 //@.config
 cppStandard=C++03
 linkedEditStrategy=ChooseArguments
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 #include "SUTFromOtherProject.h"

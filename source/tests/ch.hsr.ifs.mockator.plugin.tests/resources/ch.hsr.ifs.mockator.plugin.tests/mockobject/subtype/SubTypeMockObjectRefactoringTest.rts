@@ -2,13 +2,13 @@
 //@.config
 cppStandard=C++03
 linkedEditStrategy=ChooseArguments
-filename=A.cpp
+primaryFile=A.cpp
 
 //@IDependency.h
 struct IDependency {
   virtual ~IDependency();
-  virtual void bar(double) =0;
-  virtual void foo(int i) =0;
+  virtual void bar(double) = 0;
+  virtual void foo(int i) = 0;
 };
 
 //@SUT.h
@@ -68,13 +68,13 @@ void testSUT() {
 //!Basic mock object support for C++11 
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@IDependency.h
 struct IDependency {
   virtual ~IDependency();
-  virtual char bar(int&) =0;
-  virtual void foo(double const& d) =0;
+  virtual char bar(int&) = 0;
+  virtual void foo(double const& d) = 0;
 };
 
 //@SUT.h
@@ -132,13 +132,13 @@ void testSUT() {
 //!Call of base class ctor if necessary for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@Base.h
 struct Base {
   Base(int i);
   virtual ~Base();
-  virtual void bar(double) =0;
+  virtual void bar(double) = 0;
 };
 
 //@IDependency.h
@@ -149,7 +149,7 @@ struct IDependency : Base {
   IDependency(char c, double d);
   IDependency(A& a);
   virtual ~IDependency();
-  virtual void foo(int i) =0;
+  virtual void foo(int i) = 0;
 };
 
 //@SUT.h
@@ -215,13 +215,13 @@ void testSUT() {
 //!Call of base class ctor if necessary for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@Base.h
 struct Base {
   Base(int i);
   virtual ~Base();
-  virtual void bar(double) =0;
+  virtual void bar(double) = 0;
 };
 
 //@IDependency.h
@@ -232,7 +232,7 @@ struct IDependency : Base {
   IDependency(char c, double d);
   IDependency(A& a);
   virtual ~IDependency();
-  virtual void foo(int i) =0;
+  virtual void foo(int i) = 0;
 };
 
 //@SUT.h

@@ -45,7 +45,7 @@ void testSUT() {
 
 //!Fake object to separate namespace with Cute suite
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -114,7 +114,7 @@ void runSuite() {
 
 //!Fake object to separate namespace without Cute suite
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@SUT.h
 template <typename T>
 struct SUT {
@@ -159,7 +159,7 @@ void testSUT() {
 
 //!Mock object to separate namespace with Cute suite
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 cppStandard=C++11
 
 //@SUT.h
@@ -247,7 +247,7 @@ void runSuite() {
 //!Mock object to namespace already containing a mock object
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -348,7 +348,7 @@ void testSUT() {
 //!Mock object to separate namespace with subtype polymorphism
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 #include "mockator.h"
@@ -408,7 +408,7 @@ void testSUT() {
 //!Mock object to separate namespace without Cute suite
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -475,7 +475,7 @@ void testSUT() {
 //!Mock object with only static funs bug
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>

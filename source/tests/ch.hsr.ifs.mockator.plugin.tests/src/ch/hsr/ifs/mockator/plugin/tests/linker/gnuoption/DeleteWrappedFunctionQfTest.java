@@ -32,7 +32,7 @@ public class DeleteWrappedFunctionQfTest extends AbstractQuickfixTest {
    }
 
    @Override
-   protected MockatorQuickFix getQuickfix() {
+   protected MockatorQuickFix createMarkerResolution() {
       return new DeleteWrappedFunctionQuickFix();
    }
 

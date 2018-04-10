@@ -35,3 +35,4 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ch.hsr.ifs.mockator.plugin.tests;singleton:=true
 Bundle-Vendor: IFS Institut for Software
+Automatic-Module-Name: ch.hsr.ifs.mockator.plugin.tests

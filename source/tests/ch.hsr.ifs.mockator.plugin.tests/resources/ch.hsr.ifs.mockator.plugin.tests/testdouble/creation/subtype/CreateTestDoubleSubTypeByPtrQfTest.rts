@@ -1,7 +1,7 @@
 //!CreateTestDoubleSubTypeByPtrQfTest
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 struct IDependency {

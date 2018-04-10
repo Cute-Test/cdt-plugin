@@ -21,6 +21,7 @@ public class CreateTestDoubleStaticPolyTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {
-      return new RefactoringByStdFactory().getRefactoring(cppStandard, currentCproject, getActiveCElement(), selection);
+      return new RefactoringByStdFactory().getRefactoring(getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+            getCurrentCProject(), cppStandard);
    }
 }

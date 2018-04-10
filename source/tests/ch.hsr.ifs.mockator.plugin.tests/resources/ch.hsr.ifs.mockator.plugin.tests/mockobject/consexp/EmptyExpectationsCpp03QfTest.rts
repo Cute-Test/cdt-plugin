@@ -1,6 +1,6 @@
 //!EmptyExpectationsCpp03QfTest
 //@.config
-filename=main.cpp
+primaryFile=main.cpp
 //@main.cpp
 #include "mockator.h"
 template<typename T>

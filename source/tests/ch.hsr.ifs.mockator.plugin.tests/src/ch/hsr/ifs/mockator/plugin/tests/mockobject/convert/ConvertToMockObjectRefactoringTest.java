@@ -26,6 +26,7 @@ public class ConvertToMockObjectRefactoringTest extends AbstractRefactoringTest 
 
    @Override
    protected Refactoring createRefactoring() {
-      return new ConvertToMockObjectRefactoring(cppStandard, getActiveCElement(), selection, currentCproject, linkedEditStrategy);
+      return new ConvertToMockObjectRefactoring(cppStandard, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+            getCurrentCProject(), linkedEditStrategy);
    }
 }

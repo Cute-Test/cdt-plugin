@@ -1,16 +1,16 @@
 //!MockObjectCpp03SubTypeQfTest
 //@.config
-filename=main.cpp
+primaryFile=main.cpp
 //@main.cpp
 struct Base {
    virtual ~Base() {}
-   virtual void base() =0;
+   virtual void base() = 0;
 };
 struct IDependency : Base {
    virtual ~IDependency() {}
    IDependency(char c, double d);
    IDependency(int i);
-   virtual void foo() =0;
+   virtual void foo() = 0;
 };
 struct SUT {
    void bar(IDependency &d) {
@@ -38,13 +38,13 @@ void testSUT() {
 #include <cassert>
 struct Base {
    virtual ~Base() {}
-   virtual void base() =0;
+   virtual void base() = 0;
 };
 struct IDependency : Base {
    virtual ~IDependency() {}
    IDependency(char c, double d);
    IDependency(int i);
-   virtual void foo() =0;
+   virtual void foo() = 0;
 };
 struct SUT {
    void bar(IDependency &d) {

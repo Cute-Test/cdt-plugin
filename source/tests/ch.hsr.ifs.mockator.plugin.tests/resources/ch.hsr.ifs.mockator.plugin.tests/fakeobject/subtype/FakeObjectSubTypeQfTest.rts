@@ -2,13 +2,13 @@
 //@main.cpp
 struct Base {
    virtual ~Base() {}
-   virtual void base() =0;
-   virtual Base& operator ++() =0;
+   virtual void base() = 0;
+   virtual Base& operator ++() = 0;
 };
 struct IDependency : Base {
    IDependency(char c, double d);
    IDependency(int i);
-   virtual void foo() =0;
+   virtual void foo() = 0;
 };
 struct SUT {
    void bar(IDependency &d) {
@@ -25,13 +25,13 @@ void testSUT() {
 //=
 struct Base {
    virtual ~Base() {}
-   virtual void base() =0;
-   virtual Base& operator ++() =0;
+   virtual void base() = 0;
+   virtual Base& operator ++() = 0;
 };
 struct IDependency : Base {
    IDependency(char c, double d);
    IDependency(int i);
-   virtual void foo() =0;
+   virtual void foo() = 0;
 };
 struct SUT {
    void bar(IDependency &d) {

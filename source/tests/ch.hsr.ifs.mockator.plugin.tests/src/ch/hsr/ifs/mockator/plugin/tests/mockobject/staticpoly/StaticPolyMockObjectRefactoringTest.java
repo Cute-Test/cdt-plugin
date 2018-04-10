@@ -23,6 +23,7 @@ public class StaticPolyMockObjectRefactoringTest extends AbstractRefactoringTest
 
    @Override
    protected MockatorRefactoring createRefactoring() {
-      return new MockObjectRefactoring(cppStandard, getActiveCElement(), selection, currentCproject, linkedEditStrategy);
+      return new MockObjectRefactoring(cppStandard, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+            getCurrentCProject(), linkedEditStrategy);
    }
 }

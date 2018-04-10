@@ -1,7 +1,7 @@
 //!Function definition in same translation unit as calling origin
 //@.config
 fatalError=true
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 int rand() {
@@ -29,6 +29,7 @@ int bar() {
 //!Template functions cannot be traced
 //@.config
 fatalError=true
+primaryFile=A.cpp
 
 //@maxi.h
 template <typename T>
@@ -47,7 +48,7 @@ int bar() {
 //@.config
 newFileCreation=true
 newFiles=trace/mockator_rand.h,trace/mockator_rand.cpp
-filename=A.cpp
+primaryFile=A.cpp
 
 //@rand.h
 extern int rand(void);
@@ -91,7 +92,7 @@ int mockator_rand(const char *fileName, int lineNumber)
 //@.config
 newFileCreation=true
 newFiles=trace/mockator_foo.h,trace/mockator_foo.cpp
-filename=A.cpp
+primaryFile=A.cpp
 
 //@foo.h
 void foo(unsigned int) {
@@ -140,7 +141,7 @@ void mockator_foo(unsigned int i, const char *fileName, int lineNumber)
 //!Free function contained in namespace
 //@.config
 newFileCreation=true
-filename=A.cpp
+primaryFile=A.cpp
 newFiles=trace/mockator_foo.h,trace/mockator_foo.cpp
 
 //@foo.h

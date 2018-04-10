@@ -31,7 +31,7 @@ struct FooInterface
     {
     }
 
-    virtual void bar() =0;
+    virtual void bar() = 0;
 };
 #endif
 

@@ -1,6 +1,6 @@
 //!MockObjectCpp03StaticPolyQfTest
 //@.config
-filename=main.cpp
+primaryFile=main.cpp
 //@main.cpp
 template<typename T>
 struct SUT {

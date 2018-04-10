@@ -29,19 +29,19 @@ public class LinkSuiteToRunnerRefactoringTest extends AbstractRefactoringTest {
    @Override
    protected Refactoring createRefactoring() {
       try {
-         final LinkSuiteToRunnerRefactoring runnerRefactoring = new LinkSuiteToRunnerRefactoring(getActiveCElement(), selection, currentCproject);
+         final LinkSuiteToRunnerRefactoring runnerRefactoring = new LinkSuiteToRunnerRefactoring(getPrimaryCElementFromCurrentProject().get(),
+               getSelectionOfPrimaryTestFile(), getCurrentCProject());
          runnerRefactoring.setSuiteName(newSuiteName);
          runnerRefactoring.setTestRunner(getTestRunnerFunction());
-         runnerRefactoring.setDestinationPath(currentCproject.getPath());
+         runnerRefactoring.setDestinationPath(getCurrentCProject().getPath());
          return runnerRefactoring;
-      }
-      catch (final CoreException e) {
+      } catch (final CoreException e) {
          throw new AssertionError(e.getMessage(), e);
       }
    }
 
    private IASTFunctionDefinition getTestRunnerFunction() throws CoreException {
-      final RunnerFinder runnerFinder = new RunnerFinder(currentCproject);
+      final RunnerFinder runnerFinder = new RunnerFinder(getCurrentCProject());
       final List<IASTFunctionDefinition> testRunners = runnerFinder.findTestRunners(new NullProgressMonitor());
 
       if (testRunners.isEmpty()) return null;

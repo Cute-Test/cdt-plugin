@@ -43,7 +43,7 @@ public class FakeObjectCpp11QfTest extends AbstractQuickfixTest {
    public void runTest() throws Throwable {}
 
    @Override
-   protected MockatorQuickFix getQuickfix() {
+   protected MockatorQuickFix createMarkerResolution() {
       return new FakeObjectQuickFix();
    }
 

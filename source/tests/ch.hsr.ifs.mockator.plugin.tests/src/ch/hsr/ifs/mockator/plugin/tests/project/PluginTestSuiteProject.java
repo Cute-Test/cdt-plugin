@@ -33,5 +33,5 @@ import ch.hsr.ifs.mockator.plugin.tests.project.nature.NatureHandlerTest;
    NatureHandlerTest.class,
 
 })
-public class TestSuiteProject {
+public class PluginTestSuiteProject {
 }

@@ -5,8 +5,8 @@
 //@IDependency.h
 struct IDependency {
   virtual ~IDependency();
-  virtual void foo(double) =0;
-  virtual void bar(int i) =0;
+  virtual void foo(double) = 0;
+  virtual void bar(int i) = 0;
 };
 
 //@SUTFromOtherProject.h

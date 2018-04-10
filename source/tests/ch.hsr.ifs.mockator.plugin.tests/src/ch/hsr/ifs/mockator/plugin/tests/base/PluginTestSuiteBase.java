@@ -14,10 +14,10 @@ import ch.hsr.ifs.mockator.plugin.tests.base.util.PathProposalUtilTest;
 @SuiteClasses({
    
    /*Base*/
+   PathProposalUtilTest.class,
    DefaultCtorClassRegistryTest.class,
    ExceptionUtilTest.class,
-   PathProposalUtilTest.class,
    
 })
-public class TestSuiteBase {
+public class PluginTestSuiteBase {
 }

@@ -2,7 +2,7 @@
 //@.config
 fatalError=true
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 #include "SUT.h"
@@ -29,7 +29,7 @@ void testSUT() {
 //!Static Poly With C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 namespace a {
@@ -120,7 +120,7 @@ void testSUT() {
 //!Static Poly with provided Ctor for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 namespace a {
@@ -199,7 +199,7 @@ void testSUT() {
 //!Static Poly with namespace for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -271,7 +271,7 @@ void testSUT() {
 //!Static poly and fake without Ctor
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@SUT.h
 template <typename T>
@@ -337,12 +337,12 @@ void testSUT() {
 //!With subclass for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@IDependency.h
 struct IDependency {
   virtual ~IDependency();
-  virtual int foo(int const& i) const =0;
+  virtual int foo(int const& i) const = 0;
 };
 
 //@A.cpp
@@ -383,13 +383,13 @@ void testSUT() {
 //!With subclass for C++11
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@IDependency.h
 struct IDependency {
   virtual ~IDependency();
   IDependency(char c);
-  virtual int foo(int const& i) const =0;
+  virtual int foo(int const& i) const = 0;
 };
 
 //@A.cpp
@@ -431,7 +431,7 @@ void testSUT() {
 //!With multiple referencing test functions for C++03
 //@.config
 cppStandard=C++03
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 namespace testSUT {

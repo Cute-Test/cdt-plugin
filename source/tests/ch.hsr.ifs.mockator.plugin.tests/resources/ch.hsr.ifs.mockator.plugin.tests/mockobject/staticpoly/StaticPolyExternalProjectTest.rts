@@ -1,7 +1,7 @@
 //!Basic mock object static poly support with SUT in referencing project 
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 #include "SUTFromOtherProject.h"
@@ -42,7 +42,7 @@ void testSUT() {
 //!Use of template function as SUT in referencing project 
 //@.config
 cppStandard=C++11
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 #include "SUTFromOtherProject.h"

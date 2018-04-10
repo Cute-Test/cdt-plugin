@@ -1,7 +1,7 @@
 //!Function call origin in same tu as its definition 
 //@.config
 fatalError=true
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 namespace A {
@@ -36,7 +36,7 @@ void bar() {
 //@.config
 newFiles=foo.cpp,foo.h
 newFileCreation=true
-filename=sut.cpp
+primaryFile=sut.cpp
 cppStandard=C++11
 withCuteNature=true
 
@@ -98,7 +98,7 @@ extern cute::suite make_suite_foo();
 newFiles=bar.cpp,bar.h
 newFileCreation=true
 cppStandard=C++03
-filename=sut.cpp
+primaryFile=sut.cpp
 withCuteNature=true
 
 //@foobar.h
@@ -162,7 +162,7 @@ extern cute::suite make_suite_bar();
 //@.config
 newFiles=bar.cpp,bar.h
 newFileCreation=true
-filename=sut.cpp
+primaryFile=sut.cpp
 cppStandard=C++11
 withCuteNature=false
 
@@ -172,8 +172,7 @@ struct Foo {
 };
 //=
 struct Foo {
-    __attribute__((weak)) 
-  void bar(double, char);
+    __attribute__((weak)) void bar(double, char);
 };
 
 //@sut.h

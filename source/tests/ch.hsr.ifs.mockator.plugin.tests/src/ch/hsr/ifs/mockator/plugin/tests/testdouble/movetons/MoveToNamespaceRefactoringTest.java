@@ -10,6 +10,7 @@ public class MoveToNamespaceRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected MockatorRefactoring createRefactoring() {
-      return new MoveTestDoubleToNsRefactoring(CppStandard.Cpp11Std, getActiveCElement(), selection, currentCproject);
+      return new MoveTestDoubleToNsRefactoring(CppStandard.Cpp11Std, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+            getCurrentCProject());
    }
 }

@@ -1,27 +1,32 @@
 package ch.hsr.ifs.mockator.plugin.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+
+import org.eclipse.cdt.codan.core.model.IProblemReporter;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.junit.Test;
 
-import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanQuickfixTest;
+import ch.hsr.ifs.cdttesting.cdttest.CDTTestingQuickfixTest;
+import ch.hsr.ifs.cdttesting.cdttest.comparison.ASTComparison.ComparisonArg;
+import ch.hsr.ifs.cdttesting.helpers.UIThreadSyncRunnable;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 
 
-public abstract class AbstractQuickfixTest extends CDTTestingCodanQuickfixTest {
+public abstract class AbstractQuickfixTest extends CDTTestingQuickfixTest {
 
-   {
-      instantiateExpectedProject = true;
-   }
-   
    @Override
-   public void setUp() throws Exception {
-      for (final String includePath : getIncludeDirPaths()) {
-         addIncludeDirPath(includePath);
-      }
-      super.setUp();
+   protected void initAdditionalIncludes() throws Exception {
+      stageExternalIncludePathsForBothProjects(getIncludeDirPaths());
+      super.initAdditionalIncludes();
    }
 
    protected String[] getIncludeDirPaths() {
@@ -38,11 +43,27 @@ public abstract class AbstractQuickfixTest extends CDTTestingCodanQuickfixTest {
       }
       assertQfResolutionDescription(quickfix);
 
-      /*
-       * FIXME this comparison should compare includes, but somehow the call to Cpp11StdActivator.activateCpp11Support() adds a load of messed up
-       * includes. -> expected must create the same context as actual!
-       */
-      assertEqualsAST(getExpectedAST(), getCurrentAST(), true, false);
+      //FIXME Fix include-insertion system and then remove IGNORE_INCLUDE_ORDER
+      assertAllSourceFilesEqual(EnumSet.of(ComparisonArg.COMPARE_INCLUDE_DIRECTIVES, ComparisonArg.PRINT_CONTEXT_ON_FAIL,
+            ComparisonArg.PRINT_WHOLE_ASTS_ON_FAIL, ComparisonArg.IGNORE_INCLUDE_ORDER));
+   }
+
+   protected void assertProblemMarkerMessages(final String[] expectedMarkerMessages) throws CoreException {
+      assertProblemMarkerMessages(IProblemReporter.GENERIC_CODE_ANALYSIS_MARKER_TYPE, expectedMarkerMessages);
+   }
+
+   protected void assertProblemMarkerMessages(final String expectedMarkerId, final String[] expectedMarkerMessages) throws CoreException {
+      final List<String> expectedList = new ArrayList<>(Arrays.asList(expectedMarkerMessages));
+      final IMarker[] markers = findMarkers(expectedMarkerId);
+      for (final IMarker curMarker : markers) {
+         final String markerMsg = curMarker.getAttribute("message", null);
+         if (expectedList.contains(markerMsg)) {
+            expectedList.remove(markerMsg);
+         } else {
+            fail("marker-message '" + markerMsg + "' not present in given marker message list");
+         }
+      }
+      assertTrue("Not all expected messages found. Remaining: " + expectedList, expectedList.isEmpty());
    }
 
    protected abstract String[] getMarkerMessages();
@@ -53,9 +74,10 @@ public abstract class AbstractQuickfixTest extends CDTTestingCodanQuickfixTest {
 
    private MockatorQuickFix runQuickfix() throws Exception {
       setupCppProject();
-      final MockatorQuickFix quickfix = getQuickfix();
+      final IMarker[] markers = findMarkers();
+      final MockatorQuickFix quickfix = createMarkerResolution();
       quickfix.setRunInCurrentThread(true);
-      runQuickFix(quickfix);
+      UIThreadSyncRunnable.run(() -> quickfix.run(markers[0]));
       return quickfix;
    }
 
@@ -67,16 +89,17 @@ public abstract class AbstractQuickfixTest extends CDTTestingCodanQuickfixTest {
 
    protected abstract boolean isRefactoringUsed();
 
-   protected abstract MockatorQuickFix getQuickfix();
+   @Override
+   protected abstract MockatorQuickFix createMarkerResolution();
 
    private void setupCppProject() throws CoreException {
       if (isManagedBuildProjectNecessary()) {
-         final CdtManagedProjectActivator configurator = new CdtManagedProjectActivator(currentCproject.getProject());
-         configurator.activateManagedBuild();
+         new CdtManagedProjectActivator(getCurrentProject()).activateManagedBuild();
+         new CdtManagedProjectActivator(getExpectedProject()).activateManagedBuild();
 
          if (getCppStdToUse() == CppStandard.Cpp11Std) {
-            new Cpp11StdActivator(currentProject).activateCpp11Support();
-            new Cpp11StdActivator(expectedProject).activateCpp11Support();
+            new Cpp11StdActivator(getCurrentProject()).activateCpp11Support();
+            new Cpp11StdActivator(getExpectedProject()).activateCpp11Support();
          }
       }
    }

@@ -1,6 +1,6 @@
 //!Mangling of basic types
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@foo.h
 int foo(int, unsigned int, char, unsigned char, signed char, short, unsigned short, float, double, wchar_t);
 
@@ -29,7 +29,7 @@ int roll() {
 
 //!Special handling of void functions
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 void foo();
 
@@ -55,7 +55,7 @@ void bar() {
 
 //!Mangling of ctor
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Rational.h
 struct Rational {
   explicit Rational(long z, long n=1);
@@ -84,7 +84,7 @@ Rational::Rational(long z, long n) {
 
 //!Mangling of dtor
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Rational.h
 struct Rational {
   ~Rational();
@@ -113,7 +113,7 @@ Rational::~Rational() {
 
 //!Mangling of operator+
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Rational.h
 struct Rational {
   explicit Rational(long z, long n = 1);
@@ -144,7 +144,7 @@ Rational operator+(Rational r, Rational const& r2) {
 
 //!Mangling of operator-
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Rational.h
 struct Rational {
   explicit Rational(long z, long n = 1);
@@ -181,7 +181,7 @@ int calc() {
 
 //!Mangling of operator*=
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Rational.h
 struct Rational {
   explicit Rational(long z, long n = 1);
@@ -217,7 +217,7 @@ void calc() {
 
 //!Mangling of qualfied names with member functions
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 class A {
 public:
@@ -242,7 +242,7 @@ public:
 
 //!Mangling of qualfied names with namespaces
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 namespace Ns0 {
   struct X {};
@@ -283,7 +283,7 @@ void bar() {
 
 //!Mangling with substitutions for std::string
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Test.h
 #include "stl_fake.h"
 void foo(std::string const& str);
@@ -311,7 +311,7 @@ void foo(std::string const& str) {
 
 //!Mangling with substitutions for std::vector
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Test.h
 #include "stl_fake.h"
 
@@ -340,7 +340,7 @@ void foo(std::vector<std::string> const& v) {
 
 //!Mangling with substitutions for std::ostream
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Test.h
 #include "stl_fake.h"
 void foo(std::ostream const& os);
@@ -369,7 +369,7 @@ void foo(std::ostream const& os) {
 
 //!Mangling with compressions for unqualified types
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Test.h
 struct A {};
 struct B {};
@@ -397,7 +397,7 @@ void foo(A a1, A a2, A a3, B b1, B const& b2, B* b3, B b4) {
 
 //!Mangling with compressions for qualified types
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@foo.h
 namespace Ns {
 struct A {};
@@ -427,7 +427,7 @@ void foo(Ns::A const& a1, Ns::B& b, Ns::A * a2, Ns::A a3) {
 
 //!Mangling of type encodings
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@foo.h
 void foo(const int& ci, int* pi, volatile int* vi);
 
@@ -454,7 +454,7 @@ void foo(const int& ci, int* pi, volatile int* vi) {
 
 //!Wrap C function with no parameters
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 extern "C" int rand(void) throw();
 
@@ -480,7 +480,7 @@ int roll() {
 
 //!Wrap C function with parameters
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 struct _IO_FILE;
 typedef struct _IO_FILE FILE;
@@ -510,7 +510,7 @@ void handleFile() {
 
 //!Wrap void C function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 extern "C" void abort (void);
 
@@ -536,7 +536,7 @@ void leave() {
 
 //!Mangling of operator<<
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@Rational.h
 #include "stl_fake.h"
 
@@ -576,7 +576,7 @@ void calc() {
 
 //!Mangling of operator new
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 #include "stl_fake.h"
 
@@ -587,6 +587,7 @@ struct Bird {
 void createBird() {
   /*$*/new/*$$*/ Bird;
 }
+
 //=
 #include "stl_fake.h"
 
@@ -613,7 +614,7 @@ void createBird() {
 
 //!Mangling of operator delete
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 //@A.cpp
 #include "stl_fake.h"
 

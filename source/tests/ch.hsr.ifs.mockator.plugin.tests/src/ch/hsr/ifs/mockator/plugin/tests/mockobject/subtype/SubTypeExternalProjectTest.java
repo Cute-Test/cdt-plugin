@@ -2,8 +2,6 @@ package ch.hsr.ifs.mockator.plugin.tests.mockobject.subtype;
 
 import java.util.Properties;
 
-import org.junit.Before;
-
 
 public class SubTypeExternalProjectTest extends SubTypeMockObjectRefactoringTest {
 
@@ -14,9 +12,9 @@ public class SubTypeExternalProjectTest extends SubTypeMockObjectRefactoringTest
    }
 
    @Override
-   @Before
-   public void setUp() throws Exception {
-      addReferencedProject("SUTProject", "SUTProject.rts");
-      super.setUp();
+   protected void initReferencedProjects() throws Exception {
+      stageReferencedProjectForBothProjects("SUTProject", "SUTProject.rts");
+      super.initReferencedProjects();
    }
+
 }

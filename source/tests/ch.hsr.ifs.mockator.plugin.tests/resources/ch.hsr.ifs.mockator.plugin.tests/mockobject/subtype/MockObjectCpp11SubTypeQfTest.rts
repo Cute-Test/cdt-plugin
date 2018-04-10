@@ -1,14 +1,14 @@
 //!MockObjectCpp11SubTypeQfTest
 //@.config
-filename=main.cpp
+primaryFile=main.cpp
 //@main.cpp
 #include <cassert>                                                                                                                                                      
 struct Base {                                                                                                                                                           
     virtual ~Base() {}                                                                                                                                                    
-    virtual void base() =0;                                                                                                                                               
+    virtual void base() = 0;                                                                                                                                               
 };                                                                                                                                                                      
 struct IDependency : Base {                                                                                                                                             
-    virtual void foo() =0;                                                                                                                                                
+    virtual void foo() = 0;                                                                                                                                                
 };                                                                                                                                                                      
 struct SUT {                                                                                                                                                            
    void bar(IDependency &d) {                                                                                                                                            
@@ -29,10 +29,10 @@ void testSUT() {
 
 struct Base {
    virtual ~Base() {}
-   virtual void base() =0;
+   virtual void base() = 0;
 };
 struct IDependency : Base {
-   virtual void foo() =0;
+   virtual void foo() = 0;
 };
 struct SUT {
    void bar(IDependency &d) {

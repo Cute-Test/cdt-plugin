@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
 
-import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCodanCheckerTest;
+import ch.hsr.ifs.cdttesting.cdttest.CDTTestingCheckerTest;
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 
 
-public class MultipleReferencesWithSameNameBugTest extends CDTTestingCodanCheckerTest {
+public class MultipleReferencesWithSameNameBugTest extends CDTTestingCheckerTest {
 
    @Override
    protected IProblemId getProblemId() {
@@ -17,8 +17,8 @@ public class MultipleReferencesWithSameNameBugTest extends CDTTestingCodanChecke
 
    @Test
    public void runTest() throws Throwable {
-      assertProblemMarkerPositions(10, 18);
-      assertProblemMarkerMessages(new String[] { "Necessary member function(s) not existing in class Fake",
-                                                 "Necessary member function(s) not existing in class Fake" });
+      assertMarkerLines(10, 18);
+      assertMarkerMessages(new String[] { "Necessary member function(s) not existing in class Fake",
+                                          "Necessary member function(s) not existing in class Fake" });
    }
 }

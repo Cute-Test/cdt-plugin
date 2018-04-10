@@ -1,6 +1,6 @@
 //!Run-time preload of free function
 //@.config
-filename=A.cpp
+primaryFile=A.cpp
 newFiles=foo1.cpp
 newFileCreation=true
 
@@ -44,7 +44,7 @@ int foo(int i)
 //@.config
 newFiles=getValue.cpp
 newFileCreation=true
-filename=A.cpp
+primaryFile=A.cpp
 
 //@foo.h
 struct Foo {

@@ -32,7 +32,7 @@ public class IntoCtorByPointerWithSutCreateTestDoubleQfTest extends AbstractQuic
    }
 
    @Override
-   protected MockatorQuickFix getQuickfix() {
+   protected MockatorQuickFix createMarkerResolution() {
       return new CreateTestDoubleSubTypeQuickFix();
    }
 

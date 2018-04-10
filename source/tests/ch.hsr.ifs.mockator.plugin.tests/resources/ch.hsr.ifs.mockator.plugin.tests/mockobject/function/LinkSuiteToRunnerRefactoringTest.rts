@@ -1,7 +1,7 @@
 //!Missing runner causes fatal error
 //@.config
 fatalError=true
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 /*$*//*$$*/
@@ -23,7 +23,7 @@ int main(){
 //!Link suite to runner
 //@.config
 newSuiteName=foobar
-filename=A.cpp
+primaryFile=A.cpp
 
 //@A.cpp
 /*$*//*$$*/

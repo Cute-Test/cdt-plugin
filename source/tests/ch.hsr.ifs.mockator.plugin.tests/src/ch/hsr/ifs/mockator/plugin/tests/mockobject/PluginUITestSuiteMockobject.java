@@ -46,5 +46,5 @@ import ch.hsr.ifs.mockator.plugin.tests.mockobject.togglefun.ToggleTracingFunCal
    ToggleTracingFunCallRefactoringTest.class,
 
 })
-public class TestSuiteMockobject {
+public class PluginUITestSuiteMockobject {
 }

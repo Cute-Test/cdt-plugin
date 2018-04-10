@@ -1,6 +1,6 @@
 //!EmptyExpectationsCpp11QfTest
 //@.config
-filename=main.cpp
+primaryFile=main.cpp
 //@main.cpp
 #include "mockator.h"
 #include "cute.h"

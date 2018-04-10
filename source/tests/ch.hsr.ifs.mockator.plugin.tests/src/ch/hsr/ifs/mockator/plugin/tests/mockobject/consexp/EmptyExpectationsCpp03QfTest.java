@@ -39,7 +39,7 @@ public class EmptyExpectationsCpp03QfTest extends AbstractQuickfixTest {
    }
 
    @Override
-   protected MockatorQuickFix getQuickfix() {
+   protected MockatorQuickFix createMarkerResolution() {
       return new ConsistentExpectationsQuickFix();
    }
 

@@ -11,6 +11,7 @@ public class FakeObjectRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {
-      return new FakeObjectRefactoring(CppStandard.Cpp03Std, getActiveCElement(), selection, currentCproject);
+      return new FakeObjectRefactoring(CppStandard.Cpp03Std, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+            getCurrentCProject());
    }
 }

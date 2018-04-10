@@ -18,6 +18,6 @@ public class PreprocessorRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected Refactoring createRefactoring() {
-      return new PreprocessorRefactoring(getActiveCElement(), selection, currentCproject);
+      return new PreprocessorRefactoring(getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(), getCurrentCProject());
    }
 }

@@ -28,7 +28,7 @@ void /*$*/foo/*$$*/(T t);
 //!Shadow free function
 //@.config
 newFiles=shadows/foo.cpp
-filename=A.cpp
+primaryFile=A.cpp
 newFileCreation=true
 needsManagedCProject=true
 
@@ -66,7 +66,7 @@ int foo(const A & a, int *ip, char c)
 //@.config
 newFiles=shadows/foo.cpp
 newFileCreation=true
-filename=A.cpp
+primaryFile=A.cpp
 needsManagedCProject=true
 
 //@Foo.h
@@ -113,7 +113,7 @@ int Foo::foo(const Bar & boo) const
 //@.config
 newFiles=shadows/foo.cpp
 newFileCreation=true
-filename=A.cpp
+primaryFile=A.cpp
 needsManagedCProject=true
 
 //@A.h
@@ -125,8 +125,7 @@ class A {
 //=
 namespace Ns {
 class A {
-  __attribute__((weak)) 
-  void foo(int) const;
+  __attribute__((weak)) void foo(int) const;
 };
 }
 
@@ -150,15 +149,14 @@ void Ns::A::foo(int i) const
 //@.config
 newFiles=shadows/foo.cpp
 newFileCreation=true
-filename=A.cpp
+primaryFile=A.cpp
 needsManagedCProject=true
 
 //@foo.h
 bool foo(char c) {
 }
 //=
-__attribute__((weak)) 
-bool foo(char c) {
+__attribute__((weak)) bool foo(char c) {
 }
  
 //@A.cpp

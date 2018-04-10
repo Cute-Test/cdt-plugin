@@ -10,9 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
   
    /*Preprocessor*/
-   PreprocessorRefactoringTest.class,
    TraceFunctionCheckerTest.class,
 
 })
-public class TestSuitePreprocessor {
+public class PluginTestSuitePreprocessor {
 }

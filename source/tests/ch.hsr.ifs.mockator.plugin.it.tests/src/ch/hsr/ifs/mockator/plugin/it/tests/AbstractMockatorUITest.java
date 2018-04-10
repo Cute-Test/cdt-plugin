@@ -20,7 +20,6 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.matchers.WithText;
 import org.eclipse.swtbot.swt.finder.results.WidgetResult;
-import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
@@ -46,7 +45,7 @@ public abstract class AbstractMockatorUITest {
    @AfterClass
    public static void close() {
       try {
-      bot.menu("File").menu("Exit").click();
+         bot.menu("File").menu("Exit").click();
       } catch (Exception ignored) {
          ignored.printStackTrace();
       }
@@ -58,7 +57,6 @@ public abstract class AbstractMockatorUITest {
          proj.delete(true, new NullProgressMonitor());
       }
    }
-
 
    protected SWTBotTree getProjectExplorer() {
       return bot.viewByTitle("Project Explorer").bot().tree();
@@ -78,7 +76,7 @@ public abstract class AbstractMockatorUITest {
       bot.button("Refresh").click();
       //    shell.pressShortcut(SWT.ALT, 'e');
       bot.button("Finish").click();
-      bot.waitUntil(Conditions.shellCloses(shell), 10000);
+      bot.waitUntil(org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses(shell), 10000);
       CCorePlugin.getIndexManager().joinIndexer(10000, new NullProgressMonitor());
    }
 
@@ -88,7 +86,7 @@ public abstract class AbstractMockatorUITest {
 
    protected SWTBotShell createNewCppProject() {
       bot.menu("File").menu("New").menu("Project...").click();
-      bot.waitUntil(Conditions.waitForShell(WithText.withTextIgnoringCase("New Project")));
+      bot.waitUntil(org.eclipse.swtbot.swt.finder.waits.Conditions.waitForShell(WithText.withTextIgnoringCase("New Project")));
 
       final SWTBotShell shell = bot.shell("New Project")/* .activate() */;
       bot.tree().expandNode("C/C++").select("C++ Project");

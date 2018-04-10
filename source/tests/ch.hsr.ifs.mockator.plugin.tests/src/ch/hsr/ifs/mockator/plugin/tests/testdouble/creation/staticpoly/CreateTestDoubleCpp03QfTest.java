@@ -32,7 +32,7 @@ public class CreateTestDoubleCpp03QfTest extends AbstractQuickfixTest {
    }
 
    @Override
-   protected MockatorQuickFix getQuickfix() {
+   protected MockatorQuickFix createMarkerResolution() {
       return new CreateTestDoubleStaticPolyQuickFix();
    }
 
@@ -45,4 +45,5 @@ public class CreateTestDoubleCpp03QfTest extends AbstractQuickfixTest {
    protected String[] getMarkerMessages() {
       return new String[] { "Compile seam \"Fake\" cannot be resolved" };
    }
+
 }

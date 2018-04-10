@@ -9,7 +9,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
 import org.eclipse.ltk.core.refactoring.RefactoringContext;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
@@ -23,9 +24,9 @@ public class RemoveInitMockatorRefactoringTest extends AbstractRefactoringTest {
    @Override
    protected MockatorRefactoring createRefactoring() {
       try {
-         return new RemoveInitMockatorRefactoring(getActiveDocument(), getActiveCElement(), selection, currentCproject);
-      }
-      catch (final Exception e) {
+         return new RemoveInitMockatorRefactoring(currentProjectHolder.getDocument(getCurrentIFile(getNameOfPrimaryTestFile())),
+               getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(), getCurrentCProject());
+      } catch (final Exception e) {
          fail(e.getMessage());
       }
       return null;
@@ -33,9 +34,12 @@ public class RemoveInitMockatorRefactoringTest extends AbstractRefactoringTest {
 
    @Override
    protected void simulateUserInput(final RefactoringContext context) {
-      final CRefactoringContext ccontext = CRefactoringContext.wrap(context);
-      final ICPPASTFunctionDefinition testFunction = getTestFunctionIn(getAst(ccontext));
-      ((RemoveInitMockatorRefactoring) context.getRefactoring()).setTestFunction(testFunction);
+      if (context instanceof CRefactoringContext) {
+         final ICPPASTFunctionDefinition testFunction = getTestFunctionIn(getAst((CRefactoringContext) context));
+         ((RemoveInitMockatorRefactoring) context.getRefactoring()).setTestFunction(testFunction);
+      } else {
+         throw new ILTISException("Expected context to be instanceof iltis CRefactoringContext").rethrowUnchecked();
+      }
    }
 
    private static ICPPASTFunctionDefinition getTestFunctionIn(final IASTTranslationUnit ast) {
@@ -62,7 +66,7 @@ public class RemoveInitMockatorRefactoringTest extends AbstractRefactoringTest {
 
       @Override
       public int visit(final IASTDeclarator decl) {
-         final ICPPASTFunctionDefinition function = ASTUtil.getAncestorOfType(decl, ICPPASTFunctionDefinition.class);
+         final ICPPASTFunctionDefinition function = CPPVisitor.findAncestorWithType(decl, ICPPASTFunctionDefinition.class).orElse(null);
 
          if (function != null && isTestFunction(function)) {
             container.add(function);

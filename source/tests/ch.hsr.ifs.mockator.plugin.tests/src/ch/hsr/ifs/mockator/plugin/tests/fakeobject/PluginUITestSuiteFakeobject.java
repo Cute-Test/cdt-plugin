@@ -21,5 +21,5 @@ import ch.hsr.ifs.mockator.plugin.tests.fakeobject.subtype.FakeObjectSubTypeQfTe
    FakeObjectRefactoringTest.class,
 
 })
-public class TestSuiteFakeobject {
+public class PluginUITestSuiteFakeobject {
 }

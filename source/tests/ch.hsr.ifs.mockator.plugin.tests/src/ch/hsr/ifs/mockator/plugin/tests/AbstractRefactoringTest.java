@@ -12,10 +12,8 @@ import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ISourceReference;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.corext.util.CModelUtil;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.junit.Test;
 
 import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
@@ -37,8 +35,13 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
    private String[]   newFiles;
 
    @Override
+   protected void initAdditionalIncludes() throws Exception {
+      stageExternalIncludePathsForBothProjects("mockator", "cute", "stl");
+      super.initAdditionalIncludes();
+   }
+
+   @Override
    public void setUp() throws Exception {
-      addMockatorIncludePaths();
       super.setUp();
       setMockatorProjectOptions();
 
@@ -52,18 +55,12 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
    }
 
    private void addCuteNature() throws CoreException {
-      new NatureHandler(currentProject).addNature("ch.hsr.ifs.cute.ui.cutenature", new NullProgressMonitor());
-   }
-
-   private void addMockatorIncludePaths() {
-      for (final String includePath : new String[] { "mockator", "cute", "stl" }) {
-         addIncludeDirPath(includePath);
-      }
+      new NatureHandler(getCurrentProject()).addNature("ch.hsr.ifs.cute.ui.cutenature", new NullProgressMonitor());
    }
 
    protected IASTTranslationUnit getAst(final CRefactoringContext context) {
       try {
-         return context.getAST(getTu(getActiveCElement()), new NullProgressMonitor());
+         return context.getAST(getTu(getPrimaryCElementFromCurrentProject().get()), new NullProgressMonitor());
       } catch (final CoreException e) {}
       fail("Not able to get AST for translation unit");
       return null;
@@ -75,12 +72,14 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
    }
 
    private void setMockatorProjectOptions() {
-      MarkMissingMemFuns.storeInProjectSettings(currentProject, MarkMissingMemFuns.AllMemFuns);
+      MarkMissingMemFuns.storeInProjectSettings(getCurrentProject(), MarkMissingMemFuns.AllMemFuns);
    }
 
    private void activateManagedBuild() throws CoreException {
-      final CdtManagedProjectActivator configurator = new CdtManagedProjectActivator(currentCproject.getProject());
-      configurator.activateManagedBuild();
+      final CdtManagedProjectActivator expectedConfigurator = new CdtManagedProjectActivator(getExpectedProject());
+      expectedConfigurator.activateManagedBuild();
+      final CdtManagedProjectActivator currentConfigurator = new CdtManagedProjectActivator(getCurrentProject());
+      currentConfigurator.activateManagedBuild();
    }
 
    @Test
@@ -89,7 +88,7 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
       if (newFileCreation && !fatalError) {
          ensureNewFilesDoNotExist();
       }
-      openActiveFileInEditor();
+      //      openPrimaryTestFileInEditor(); //FIXME check if this is needed
       if (fatalError) {
          runRefactoringAndAssertFailure();
       } else {
@@ -101,14 +100,15 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
    }
 
    @Override
-   protected void configureTest(final Properties refProps) {
-      markerCount = Integer.valueOf(refProps.getProperty("markerCount", Integer.toString(DEFAULT_MARKER_COUNT)));
-      expectedFinalWarnings = Integer.parseInt(refProps.getProperty("expectedFinalWarnings", "0"));
-      fatalError = Boolean.valueOf(refProps.getProperty("fatalError", "false")).booleanValue();
-      newFileCreation = Boolean.valueOf(refProps.getProperty("newFileCreation", "false")).booleanValue();
-      newFiles = getNewFiles(refProps);
-      needsManagedCProject = Boolean.valueOf(refProps.getProperty("needsManagedCProject", "false")).booleanValue();
-      withCuteNature = Boolean.valueOf(refProps.getProperty("withCuteNature", "false")).booleanValue();
+   protected void configureTest(final Properties properties) {
+      markerCount = Integer.valueOf(properties.getProperty("markerCount", Integer.toString(DEFAULT_MARKER_COUNT)));
+      expectedFinalWarnings = Integer.parseInt(properties.getProperty("expectedFinalWarnings", "0"));
+      fatalError = Boolean.valueOf(properties.getProperty("fatalError", "false")).booleanValue();
+      newFileCreation = Boolean.valueOf(properties.getProperty("newFileCreation", "false")).booleanValue();
+      newFiles = getNewFiles(properties);
+      needsManagedCProject = Boolean.valueOf(properties.getProperty("needsManagedCProject", "false")).booleanValue();
+      withCuteNature = Boolean.valueOf(properties.getProperty("withCuteNature", "false")).booleanValue();
+      super.configureTest(properties);
    }
 
    @SuppressWarnings("nls")
@@ -124,26 +124,22 @@ public abstract class AbstractRefactoringTest extends CDTTestingRefactoringTest 
    private void removeFiles() {
       executeOnNewFiles((filePath) -> {
          try {
-            getFile(filePath).delete(true, new NullProgressMonitor());
+            currentProjectHolder.getFile(filePath).delete(true, new NullProgressMonitor());
          } catch (final CoreException e) {}
       });
    }
 
    private void filesDoExist() {
-      executeOnNewFiles((filePath) -> assertTrue(getFile(filePath).exists()));
+      executeOnNewFiles((filePath) -> assertTrue(currentProjectHolder.getFile(filePath).exists()));
    }
 
    private void filesDoNotExist() {
-      executeOnNewFiles((filePath) -> assertFalse(getFile(filePath).exists()));
+      executeOnNewFiles((filePath) -> assertFalse(currentProjectHolder.getFile(filePath).exists()));
    }
 
    private void executeOnNewFiles(final Consumer<String> f) {
       for (final String file : newFiles) {
          f.accept(file);
       }
-   }
-
-   private IFile getFile(final String filePath) {
-      return currentProject.getFile(new Path(filePath));
    }
 }
