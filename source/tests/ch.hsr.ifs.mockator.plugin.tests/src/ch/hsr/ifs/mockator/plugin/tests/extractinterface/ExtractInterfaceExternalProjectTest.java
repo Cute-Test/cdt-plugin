@@ -13,4 +13,5 @@ public class ExtractInterfaceExternalProjectTest extends ExtractInterfaceRefacto
       stageReferencedProjectForBothProjects("SUTProject", "SUTProject.rts");
       super.initReferencedProjects();
    }
+
 }

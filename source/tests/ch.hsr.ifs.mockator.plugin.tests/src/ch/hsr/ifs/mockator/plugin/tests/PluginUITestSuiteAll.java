@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import ch.hsr.ifs.mockator.plugin.tests.base.PluginUITestSuiteBase;
 import ch.hsr.ifs.mockator.plugin.tests.extractinterface.PluginUITestSuiteExtractInterface;
 import ch.hsr.ifs.mockator.plugin.tests.fakeobject.PluginUITestSuiteFakeobject;
 import ch.hsr.ifs.mockator.plugin.tests.linker.PluginUITestSuiteLinker;
@@ -15,6 +16,7 @@ import ch.hsr.ifs.mockator.plugin.tests.testdouble.PluginUITestSuiteTestDouble;
 @RunWith(Suite.class)
 @SuiteClasses({
    //@formatter:off
+   PluginUITestSuiteBase.class,
    PluginUITestSuiteExtractInterface.class,
    PluginUITestSuiteFakeobject.class,
    PluginUITestSuiteLinker.class,

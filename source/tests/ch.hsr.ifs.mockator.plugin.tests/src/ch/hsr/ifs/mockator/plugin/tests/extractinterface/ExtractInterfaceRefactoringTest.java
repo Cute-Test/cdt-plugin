@@ -92,19 +92,21 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
             new MemFunCollector().accept(eiContext);
          }
          eiContext.setChosenMemFuns(getChosenMemFuns(eiContext));
-         if (!tuOfChosenClass.equals("")) {
-            eiContext.setTuOfChosenClass(getTuOfChosenClass(ccontext));
-         } else {
+         if (tuOfChosenClass.equals("")) {
             eiContext.setTuOfChosenClass(ast);
+         } else {
+            eiContext.setTuOfChosenClass(getTuOfChosenClass(ccontext));
          }
       }
    }
 
    private IASTTranslationUnit getTuOfChosenClass(final CRefactoringContext context) {
       try {
-         IFile chosenClassFile = currentProjectHolder.getFile(tuOfChosenClass);
+         IFile chosenClassFile;
          List<ICProject> referencedProjects = currentProjectHolder.getReferencedProjects();
-         if (!referencedProjects.isEmpty()) {
+         if (referencedProjects.isEmpty()) {
+            chosenClassFile = currentProjectHolder.getFile(tuOfChosenClass);
+         } else {
             chosenClassFile = referencedProjects.get(0).getProject().getFile(tuOfChosenClass);
          }
          final ICElement chosenClass = CoreModel.getDefault().create(chosenClassFile);
