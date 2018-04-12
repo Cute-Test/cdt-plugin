@@ -1,11 +1,12 @@
-target "Mockator for Eclipse Oxygen" with source requirements
+target "Mockator Development-Version for Eclipse Oxygen" with source
+requirements
 
-location "http://www.cute-test.com/updatesite/oxygen" {
+location "http://www.cute-test.com/updatesite/development" {
 	ch.hsr.ifs.cute.feature.feature.group lazy
 }
 
-location "https://www.cevelop.com/cdt-testing/9.4.0" {
-	ch.hsr.ifs.cdttesting.feature.feature.group [9.4.0,9.5.0)
+location "https://www.cevelop.com/cdt-testing/development" {
+	ch.hsr.ifs.cdttesting.feature.feature.group lazy
 }
 
 location "http://download.eclipse.org/releases/oxygen" {
@@ -36,3 +37,5 @@ location "http://www.cevelop.com/iltis/core" {
 location "http://www.cevelop.com/iltis/cpp" {
 	ch.hsr.ifs.iltis.cpp.feature.feature.group lazy
 }
+
+
