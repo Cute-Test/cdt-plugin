@@ -68,8 +68,8 @@ public abstract class I18N extends NLS {
    public static String FunctionAnalyzeStrategyDesc;
    public static String AllFunctionsDesc;
    public static String TestFunctionsDesc;
-   public static String Cpp03Desc;
    public static String Cpp11Desc;
+   public static String Cpp03Desc;
    public static String OrderDependentDesc;
    public static String OrderIndependentDesc;
    public static String AssertStrategyDesc;
