@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension point="org.eclipse.ui.newWizards">
+		<category id="ch.hsr.ifs.mockator.plugin.Examples"
+			name="Mockator Examples"
+			parentCategory="org.eclipse.cdt.ui.newCWizards" />
+	</extension>
+
+	<!-- COMPILE SEAM -->
+	<extension point="org.eclipse.ui.newWizards">
+		<wizard id="ch.hsr.ifs.mockator.plugin.examples.CompileSeam"
+			name="Mockator Compile-Seam Example"
+			class="org.eclipse.emf.common.ui.wizard.ExampleInstallerWizard"
+			category="org.eclipse.ui.Examples/ch.hsr.ifs.mockator.plugin.Examples"
+			icon="icons/genproject.gif"
+			project="true">
+			<description>An example project for Mockator Compiler-Seams</description>
+		</wizard>
+	</extension>
+
+	<extension point="org.eclipse.emf.common.ui.examples">
+		<example wizardID="ch.hsr.ifs.mockator.plugin.examples.CompileSeam" pageImage="icons/genproject.gif">
+			<projectDescriptor name="mockator-compile-seam-example" contentURI="projects/ch.hsr.ifs.mockator.plugin.examples.compileseam/" description="An example project for Mockator Compiler-Seams"/>
+		</example>
+	</extension>
+	
+	<!-- MOCK FUNCTION LIBRARY -->
+	<extension point="org.eclipse.ui.newWizards">
+		<wizard id="ch.hsr.ifs.mockator.plugin.examples.MockFunction"
+			name="Mockator Mock-Function Example"
+			class="org.eclipse.emf.common.ui.wizard.ExampleInstallerWizard"
+			category="org.eclipse.ui.Examples/ch.hsr.ifs.mockator.plugin.Examples"
+			icon="icons/genproject.gif"
+			project="true">
+			<description>An example project for Mockator Mock-Function</description>
+		</wizard>
+	</extension>
+
+	<extension point="org.eclipse.emf.common.ui.examples">
+		<example wizardID="ch.hsr.ifs.mockator.plugin.examples.MockFunction" pageImage="icons/genproject.gif">
+			<projectDescriptor name="mockator-mock-function-example" contentURI="projects/ch.hsr.ifs.mockator.plugin.examples.mockfunctionlib/" description="An example project for Mockator Mock-Function"/>
+		</example>
+	</extension>
+	
+	<!-- OBJECT SEAM -->
+	<extension point="org.eclipse.ui.newWizards">
+		<wizard id="ch.hsr.ifs.mockator.plugin.examples.ObjectSeam"
+			name="Mockator Object-Seam Example"
+			class="org.eclipse.emf.common.ui.wizard.ExampleInstallerWizard"
+			category="org.eclipse.ui.Examples/ch.hsr.ifs.mockator.plugin.Examples"
+			icon="icons/genproject.gif"
+			project="true">
+			<description>An example project for Mockator Object-Seam</description>
+		</wizard>
+	</extension>
+
+	<extension point="org.eclipse.emf.common.ui.examples">
+		<example wizardID="ch.hsr.ifs.mockator.plugin.examples.MockFunction" pageImage="icons/genproject.gif">
+			<projectDescriptor name="mockator-object-seam-example" contentURI="projects/ch.hsr.ifs.mockator.plugin.examples.objectseam/" description="An example project for Mockator Object-Seam"/>
+		</example>
+	</extension>
+	
+	<!-- PREPROCESSOR SEAM -->
+	<extension point="org.eclipse.ui.newWizards">
+		<wizard id="ch.hsr.ifs.mockator.plugin.examples.PreprocessorSeam"
+			name="Mockator Preprocessor-Seam Example"
+			class="org.eclipse.emf.common.ui.wizard.ExampleInstallerWizard"
+			category="org.eclipse.ui.Examples/ch.hsr.ifs.mockator.plugin.Examples"
+			icon="icons/genproject.gif"
+			project="true">
+			<description>An example project for Mockator Preprocessor-Seam</description>
+		</wizard>
+	</extension>
+
+	<extension point="org.eclipse.emf.common.ui.examples">
+		<example wizardID="ch.hsr.ifs.mockator.plugin.examples.MockFunction" pageImage="icons/genproject.gif">
+			<projectDescriptor name="mockator-preprocessor-seam-example" contentURI="projects/ch.hsr.ifs.mockator.plugin.examples.preprocessorseam/" description="An example project for Mockator Preprocessor-Seam"/>
+		</example>
+	</extension>
+	
+	<!-- TODO add the other examples -->
+
+</plugin>

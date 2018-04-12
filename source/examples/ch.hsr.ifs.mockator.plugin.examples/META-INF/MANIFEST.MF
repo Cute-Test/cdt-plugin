@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Examples
+Bundle-SymbolicName: ch.hsr.ifs.mockator.plugin.examples;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: IFS Institute for Software
+Automatic-Module-Name: ch.hsr.ifs.mockator.plugin.examples
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.emf.common.ui;bundle-version="2.12.0"
