@@ -41,14 +41,10 @@ public abstract class AbstractMockatorUITest {
    public static void beforeClass() throws Exception {
       bot = new SWTWorkbenchBot();
    }
-
+   
    @AfterClass
-   public static void close() {
-      try {
-         bot.menu("File").menu("Exit").click();
-      } catch (Exception ignored) {
-         ignored.printStackTrace();
-      }
+   public static void sleep() {
+      bot.sleep(2000);
    }
 
    @After
