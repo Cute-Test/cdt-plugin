@@ -1,9 +1,5 @@
 package ch.hsr.ifs.mockator.plugin.project.nature;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
-
-import java.util.List;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -11,6 +7,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
+import ch.hsr.ifs.iltis.core.arrays.ArrayUtil;
 import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
@@ -27,9 +24,7 @@ public class NatureHandler {
       if (hasNature(natureId)) return;
 
       final IProjectDescription desc = getProjectDescription();
-      final List<String> natures = list(desc.getNatureIds());
-      natures.add(natureId);
-      final String[] newNatures = natures.toArray(new String[natures.size()]);
+      String[] newNatures = ArrayUtil.append(desc.getNatureIds(), natureId);
       validateNewNatures(newNatures);
       desc.setNatureIds(newNatures);
       project.setDescription(desc, pm);
@@ -46,9 +41,7 @@ public class NatureHandler {
 
    public void removeNature(final String natureId, final IProgressMonitor pm) throws CoreException {
       final IProjectDescription description = getProjectDescription();
-      final List<String> newNatures = list(description.getNatureIds());
-      newNatures.remove(natureId);
-      description.setNatureIds(newNatures.toArray(new String[newNatures.size()]));
+      description.setNatureIds(ArrayUtil.removeAndTrim(description.getNatureIds(), natureId));
       project.setDescription(description, pm);
    }
 

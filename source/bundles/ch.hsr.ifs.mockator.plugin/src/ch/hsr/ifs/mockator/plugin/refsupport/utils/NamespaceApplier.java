@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.utils;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -19,16 +19,16 @@ public class NamespaceApplier {
    }
 
    public IASTNode packInSameNamespaces(final IASTSimpleDeclaration decl) {
-      final LinkedList<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
+      final ArrayList<ICPPASTNamespaceDefinition> namespaces = getOriginNamespaces();
 
-      if (namespaces.isEmpty()) { return decl; }
+      if (namespaces.isEmpty()) return decl;
 
-      final ICPPASTNamespaceDefinition topNs = namespaces.pop();
+      final ICPPASTNamespaceDefinition topNs = namespaces.get(namespaces.size() - 1);
       ICPPASTNamespaceDefinition parentNs = topNs;
       ICPPASTNamespaceDefinition currentNs = null;
 
-      while (!namespaces.isEmpty()) {
-         currentNs = namespaces.pop();
+      for (int i = namespaces.size() - 2; i >= 0; i--) {
+         currentNs = namespaces.get(i);
          parentNs.addDeclaration(currentNs);
          parentNs = currentNs;
       }
@@ -37,13 +37,15 @@ public class NamespaceApplier {
       return topNs;
    }
 
-   private LinkedList<ICPPASTNamespaceDefinition> getOriginNamespaces() {
-      final LinkedList<ICPPASTNamespaceDefinition> namespaces = new LinkedList<>();
-      //      final Stack<ICPPASTNamespaceDefinition> namespaces = new Stack<>();
+   /**
+    * @return An ArrayList where the first element is the innermost namespace and the last one the outermost namespace
+    */
+   private ArrayList<ICPPASTNamespaceDefinition> getOriginNamespaces() {
+      final ArrayList<ICPPASTNamespaceDefinition> namespaces = new ArrayList<>();
 
       for (IASTNode currNode = origin; currNode != null; currNode = currNode.getParent()) {
          if (currNode instanceof ICPPASTNamespaceDefinition) {
-            namespaces.push(copyNamespace((ICPPASTNamespaceDefinition) currNode));
+            namespaces.add(copyNamespace((ICPPASTNamespaceDefinition) currNode));
          }
       }
 

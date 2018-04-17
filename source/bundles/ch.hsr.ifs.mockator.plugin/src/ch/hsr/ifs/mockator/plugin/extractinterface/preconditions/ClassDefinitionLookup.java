@@ -2,6 +2,7 @@ package ch.hsr.ifs.mockator.plugin.extractinterface.preconditions;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -22,54 +23,35 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
 
    @Override
    public void accept(final ExtractInterfaceContext context) {
-      final IASTName classNameToLookup = getNameOfSelectedSpecifier(context.getSelectedName());
-      ICPPASTCompositeTypeSpecifier classDefinition = null;
 
-      if (classNameToLookup != null) {
-         classDefinition = lookupInAst(classNameToLookup);
+      Optional<IASTName> nameOfSelectedSpecifier = getNameOfSelectedSpecifier(context.getSelectedName());
 
-         if (classDefinition == null) {
-            classDefinition = lookupInIndex(context, classNameToLookup);
-         }
-      }
+      OptionalUtil<ICPPASTCompositeTypeSpecifier> classDefinition = OptionalUtil.of(nameOfSelectedSpecifier).flatFlatMap(nameToLookup -> OptionalUtil
+            .of(lookupInAst(nameToLookup)).orElse(lookupInIndex(context, nameToLookup)));
 
-      if (classDefinition == null) {
-         warnUserAboutMissingClass(context.getStatus());
-      } else {
-         rememberClassInformation(context, classDefinition, getSutClass(classNameToLookup));
-      }
+      classDefinition.ifNotPresent(() -> warnUserAboutMissingClass(context.getStatus())).ifPresent(clsDef -> nameOfSelectedSpecifier.ifPresent(
+            nameToLookup -> rememberClassInformation(context, clsDef, getSutClass(nameToLookup))));
    }
 
-   private static ICPPASTCompositeTypeSpecifier lookupInAst(final IASTName classNameToLookup) {
+   private static Optional<ICPPASTCompositeTypeSpecifier> lookupInAst(final IASTName classNameToLookup) {
       final IBinding binding = classNameToLookup.resolveBinding();
 
-      for (final IASTName name : classNameToLookup.getTranslationUnit().getDefinitionsInAST(binding)) {
-         final Optional<ICPPASTCompositeTypeSpecifier> clazz = getClass(name);
-         if (clazz.isPresent()) { return clazz.get(); }
-      }
-
-      return null;
+      return Stream.of(classNameToLookup.getTranslationUnit().getDefinitionsInAST(binding)).map(name -> getClass(name)).filter(c -> c.isPresent())
+            .map(o -> o.get()).findFirst();
    }
 
-   private static ICPPASTCompositeTypeSpecifier lookupInIndex(final ExtractInterfaceContext context, final IASTName classNameToLookup) {
-      return findClassDefinition(classNameToLookup, context).orElse(null);
-   }
-
-   private static Optional<ICPPASTCompositeTypeSpecifier> findClassDefinition(final IASTName classNameToLookup,
-         final ExtractInterfaceContext context) {
+   private static Optional<ICPPASTCompositeTypeSpecifier> lookupInIndex(final ExtractInterfaceContext context, final IASTName classNameToLookup) {
       final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
       return lookup.findClassDefinition(classNameToLookup, context.getCRefContext());
    }
 
-   private static IASTName getNameOfSelectedSpecifier(final IASTName selectedName) {
-      return getNamedSpecifier(selectedName.getOriginalNode()).map(ICPPASTNamedTypeSpecifier::getName).orElse(selectedName);
+   private static Optional<IASTName> getNameOfSelectedSpecifier(final IASTName selectedName) {
+      return OptionalUtil.of(getNamedSpecifier(selectedName.getOriginalNode())).map(ICPPASTNamedTypeSpecifier::getName).orElse(selectedName).get();
    }
 
    private static Optional<ICPPASTNamedTypeSpecifier> getNamedSpecifier(final IASTNode originalNode) {
-      final ICPPASTNamedTypeSpecifier namedSpec = CPPVisitor.findAncestorWithType(originalNode, ICPPASTNamedTypeSpecifier.class).get();
-      if (namedSpec != null) return Optional.of(namedSpec);
-
-      return OptionalUtil.of(ASTUtil.getDeclarationSpecifier(originalNode)).mapAs(ICPPASTNamedTypeSpecifier.class).get();
+      return OptionalUtil.of(CPPVisitor.findAncestorWithType(originalNode, ICPPASTNamedTypeSpecifier.class)).orElse(OptionalUtil.of(ASTUtil
+            .getDeclarationSpecifier(originalNode)).mapAs(ICPPASTNamedTypeSpecifier.class)).get();
    }
 
    private static void warnUserAboutMissingClass(final RefactoringStatus status) {

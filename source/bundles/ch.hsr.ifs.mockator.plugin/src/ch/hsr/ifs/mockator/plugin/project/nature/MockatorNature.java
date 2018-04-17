@@ -29,6 +29,7 @@ public class MockatorNature implements IProjectNature {
    public void configure() throws CoreException {
       new MockatorLibHandler(project).addLibToProject();
       getCppStandard().toggleCppStdSupport(project);
+      //TODO(Tobias Stauber) remove boost dep
       addBoostRegexLibrary(project);
    }
 
@@ -39,6 +40,7 @@ public class MockatorNature implements IProjectNature {
    @Override
    public void deconfigure() throws CoreException {
       new MockatorLibHandler(project).removeLibFromProject();
+      //TODO(Tobias Stauber) remove boost dep
       removeBoostRegexLibrary(project);
    }
 
