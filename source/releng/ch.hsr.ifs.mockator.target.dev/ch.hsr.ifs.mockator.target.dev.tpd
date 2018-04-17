@@ -3,6 +3,7 @@ requirements
 
 location "http://www.cute-test.com/updatesite/development" {
 	ch.hsr.ifs.cute.feature.feature.group lazy
+	ch.hsr.ifs.cute.ui lazy
 }
 
 location "https://www.cevelop.com/cdt-testing/development" {
@@ -12,6 +13,7 @@ location "https://www.cevelop.com/cdt-testing/development" {
 location "http://download.eclipse.org/releases/oxygen" {
 	org.eclipse.emf.sdk.feature.group lazy
 	org.eclipse.equinox.common lazy
+	org.apache.log4j lazy
 }
 
 location "http://download.eclipse.org/tools/cdt/releases/9.4/" {
