@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ch.hsr.ifs.mockator.example.feature"
+      label="%featureName"
+      version="1.0.0.qualifier"
+      provider-name="%providerName"
+      plugin="ch.hsr.ifs.mockator.plugin">
+
+   <description url="%updateSiteUrl">
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <url>
+      <update label="%updateSiteName" url="http://mockator.com/update/category.xml"/>
+   </url>
+
+   <requires>
+      <import feature="ch.hsr.ifs.mockator.feature" version="1.0.0.qualifier"/>
+   </requires>
+
+   <plugin
+         id="ch.hsr.ifs.mockator.plugin.examples"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
