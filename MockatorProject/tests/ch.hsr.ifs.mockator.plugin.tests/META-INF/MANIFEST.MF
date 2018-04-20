@@ -30,7 +30,8 @@ Require-Bundle: ch.hsr.ifs.iltis.core,
  org.eclipse.cdt.managedbuilder.ui;bundle-version="8.2.1",
  org.eclipse.cdt.managedbuilder.gnu.ui;bundle-version="8.2.1",
  ch.hsr.ifs.cute.core;bundle-version="4.6.0",
- ch.hsr.ifs.cute.ui;bundle-version="4.6.0"
+ ch.hsr.ifs.cute.ui;bundle-version="4.6.0",
+ ch.hsr.ifs.iltis.testing.core
 Bundle-Version: 1.0.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ch.hsr.ifs.mockator.plugin.tests;singleton:=true
