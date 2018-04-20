@@ -6,7 +6,7 @@
    <feature url="features/ch.hsr.ifs.mockator.feature_1.0.0.qualifier.jar" id="ch.hsr.ifs.mockator.feature" version="1.0.0.qualifier">
       <category name="ch.hsr.ifs.mockator"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.mockator.example.feature_1.0.0.qualifier.jar" id="ch.hsr.ifs.mockator.example.feature" version="1.0.0.qualifier">
+   <feature url="features/ch.hsr.ifs.mockator.examples.feature_1.0.0.qualifier.jar" id="ch.hsr.ifs.mockator.examples.feature" version="1.0.0.qualifier">
       <category name="ch.hsr.ifs.mockator.examples"/>
    </feature>
    <category-def name="ch.hsr.ifs.mockator" label="Seam and Test Double Support for Eclipse CDT"/>
